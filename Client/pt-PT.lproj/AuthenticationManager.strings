@@ -1,0 +1,90 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "Depois de 1 hora";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "Depois de 1 minuto";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "Depois de 5 minutos";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "Depois de 10 minutos";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "Depois de 15 minutos";
+
+/* Label used as a setting item and title of the following screen to change the current passcode */
+"Change Passcode" = "Alterar código";
+
+/* Title of the dialog used to request the passcode */
+"Enter Passcode" = "Insira o código";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter a new passcode" = "Insira um novo código";
+
+/* Text displayed above the input field when entering a new passcode */
+"Enter a passcode" = "Insira um código";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter passcode" = "Insira o código";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "Imediatamente";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining */
+"Incorrect passcode. Try again (Attempts remaining: %d)." = "Código incorreto. Tente novamente (tentativas restantes: %d).";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app */
+"Incorrect passcode. Try again." = "Código incorreto. Tente novamente.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again in an hour." = "Atingido o n.º máximo de tentativas. Por favor, tente novamente em 1 hora.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again later." = "Atingido o n.º máximo de tentativas. Por favor, tente novamente mais tarde.";
+
+/* Error message displayed when user tries to enter the same passcode as their existing code when changing it. */
+"New passcode must be different than existing code." = "O novo código deve ser diferente do código existente.";
+
+/* Label for the Passcode item in Settings */
+"Passcode" = "Código";
+
+/* Error message displayed to user when their confirming passcode doesn't match the first code. */
+"Passcodes didn't match. Try again." = "Os códigos não coincidiram. Tente novamente.";
+
+/* Text displayed above the input field when confirming a passcode */
+"Re-enter passcode" = "Reinsira o código";
+
+/* Text displayed in the 'Interval' section, followed by the current interval setting, e.g. 'Immediately' */
+"Require Passcode" = "Requer código";
+
+/* Title of the dialog used to set a passcode */
+"Set Passcode" = "Definir código";
+
+/* Label for the Touch ID/Passcode item in Settings */
+"Touch ID & Passcode" = "Touch ID e código";
+
+/* Label used as a setting item to turn off passcode */
+"Turn Passcode Off" = "Desativar código";
+
+/* Label used as a setting item to turn on passcode */
+"Turn Passcode On" = "Ativar código";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "Desative o seu código.";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID" = "Utilizar o Touch ID";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "Utilize a sua impressão digital agora para aceder às Credenciais.";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "Utilize a sua impressão digital para aceder agora à Navegação privada.";
+
+/* Touch ID prompt subtitle when disabling Touch ID */
+"touchid.disable.reason.label" = "Utilize a sua impressão digital para desativar o Touch ID.";
+
+/* Touch ID prompt subtitle when accessing the require passcode setting */
+"touchid.require.passcode.reason.label" = "Utilize a sua impressão digital para aceder à configuração de intervalo do seu código obrigatório.";
+

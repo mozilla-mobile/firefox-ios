@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "Zapri zasebne zavihke";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won't remember any of your history or cookies, but new bookmarks will be saved." = "Firefox ne bo hranil vaše zgodovine in piškotkov, novi zaznamki pa bodo shranjeni.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "Več o tem";
+
+/* Toggled OFF accessibility value */
+"Off" = "Izključeno";
+
+/* Toggled ON accessibility value */
+"On" = "Vključeno";
+
+/* Context menu option for opening a link in a new private tab */
+"Open In New Private Tab" = "Odpri v novem zasebnem zavihku";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Zasebno brskanje";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "Zasebni način";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "Vključi ali izključi zasebni način";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "Ob koncu zasebnega brskanja";
+

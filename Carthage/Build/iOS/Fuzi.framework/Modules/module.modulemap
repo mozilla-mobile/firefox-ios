@@ -1,0 +1,10 @@
+framework module Fuzi {
+  umbrella header "Fuzi.h"
+
+  export *
+  module * { export * }
+}
+
+module Fuzi.Swift {
+    header "Fuzi-Swift.h"
+}

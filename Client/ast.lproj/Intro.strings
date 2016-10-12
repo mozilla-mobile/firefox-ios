@@ -1,0 +1,54 @@
+/* See http://mzl.la/1T8gxwo */
+"Browse multiple Web pages at the same time with tabs." = "Restola múltiples páxines web al empar coles llingüetes.";
+
+/* Title for one of the panels in the First Run tour. */
+"Choose" = "Escoyeta";
+
+/* See http://mzl.la/1T8gxwo */
+"Connect Firefox everywhere you use it." = "Coneuta Firefox en cualesquier llau que lu uses.";
+
+/* Title for one of the panels in the First Run tour. */
+"Customize" = "Personalización";
+
+/* Description for the 'Organize' panel in the First Run tour. */
+"Easily switch between open pages with tabs." = "Camuda cenciellamente ente páxines abiertes coles llingüetes.";
+
+/* Accessibility label for the image displayed in the 'Sync' panel of the First Run tour. */
+"Firefox and the cloud" = "Firefox y la ñube";
+
+/* String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3 */
+"Introductory slide %@ of %@" = "Páxina introductoria %1$@ de %2$@";
+
+/* Title for one of the panels in the First Run tour. */
+"Organize" = "Organización";
+
+/* See http://mzl.la/1T8gxwo */
+"Personalize your Firefox just the way you like in Settings." = "Personaliza Firefox del mou que te preste n'Axustes.";
+
+/* Description for the 'Customize' panel in the First Run tour. */
+"Personalize your default search engine and more in Settings." = "Personaliza'l to motor de gueta por defeutu y más n'Axustes.";
+
+/* Title for one of the panels in the First Run tour. */
+"Share" = "Compartición";
+
+/* See http://mzl.la/1T8gxwo */
+"Sign in to Firefox" = "Aniciar sesión en Firefox";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "Entamar a restolar";
+
+/* Title for one of the panels in the First Run tour. */
+"Sync your Devices." = "Sincronización de preseos";
+
+/* Description for the 'Choose' panel in the First Run tour. */
+"Tap, hold and move the Firefox icon into your dock for easy access." = "Calca, caltén y muevi l'iconu de Firefox a la to barra d'anclaxe pa un accesu fácil.";
+
+/* Accessibility label for the Settings button in the tab tray. */
+"The Settings button is at the beginning of the Tabs Tray." = "El botón d'Axustes ta nel entamu de la badexa de llingüetes.";
+
+/* Accessibility label for the UI element used to display the number of open tabs, and open the tab tray. */
+"The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs." = "El botón Amosar llingüetes ta cabo al campu de Direición y Guetar, y amuesa'l númberu actual de llingüetes abiertes.";
+
+/* Description for the 'Share' panel in the First Run tour. */
+"Use the share sheet to send links from other apps to Firefox." = "Usa la mesma fueya pa unviar mensaxes dende otres aplicaciones a Firefox.";
+

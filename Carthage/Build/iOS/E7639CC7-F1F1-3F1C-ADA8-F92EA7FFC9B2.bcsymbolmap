@@ -1,0 +1,1028 @@
+BCSymbolMap Version: 2.0
+-[NBMetadataHelper initializeHelper]
+___36-[NBMetadataHelper initializeHelper]_block_invoke
+-[NBMetadataHelper CCode2CNMap]
+-[NBMetadataHelper clearHelper]
+-[NBMetadataHelper getAllMetadata]
+-[NBMetadataHelper regionCodeFromCountryCode:]
+-[NBMetadataHelper countryCodeFromRegionCode:]
+-[NBMetadataHelper stringByTrimming:]
+-[NBMetadataHelper normalizeNonBreakingSpace:]
+-[NBMetadataHelper getMetadataForRegion:]
+-[NBMetadataHelper getMetadataForNonGeographicalRegion:]
++[NBMetadataHelper hasValue:]
+___29+[NBMetadataHelper hasValue:]_block_invoke
+-[NBMetadataHelper cachedMetaData]
+-[NBMetadataHelper setCachedMetaData:]
+-[NBMetadataHelper cachedMetaDataKey]
+-[NBMetadataHelper setCachedMetaDataKey:]
+-[NBMetadataHelper .cxx_destruct]
+_kMapCCode2CN
+_initializeHelper.onceToken
+___block_descriptor_tmp
+___block_literal_global
+_OBJC_IVAR_$_NBMetadataHelper._cachedMetaDataKey
+_OBJC_IVAR_$_NBMetadataHelper._cachedMetaData
+_hasValue:.onceToken
+_hasValue:.whitespaceCharSet
+___block_descriptor_tmp.1010
+___block_literal_global.1011
+/Users/sleroux/Library/Developer/Xcode/DerivedData/libPhoneNumber-fzcqwofecddavoeatjwefpnirjoe/Build/Intermediates/libPhoneNumber.build/Release-iphoneos/libPhoneNumber-iOS.build/Objects-normal/armv7/NBMetadataHelper.o
+Apple LLVM version 8.0.0 (clang-800.0.38)
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/libPhoneNumber-iOS/libPhoneNumber/NBMetadataHelper.m
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/libPhoneNumber-iOS
+__29+[NBMetadataHelper hasValue:]_block_invoke
+_dispatch_once
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.sdk/usr/include/dispatch/once.h
+__36-[NBMetadataHelper initializeHelper]_block_invoke
+-[NBPhoneMetadataIM init]
+-[NBPhoneMetadataHR init]
+-[NBPhoneMetadataGW init]
+-[NBPhoneMetadataIN init]
+-[NBPhoneMetadataKE init]
+-[NBPhoneMetadataLA init]
+-[NBPhoneMetadataIO init]
+-[NBPhoneMetadataHT init]
+-[NBPhoneMetadataGY init]
+-[NBPhoneMetadataLB init]
+-[NBPhoneMetadataKG init]
+-[NBPhoneMetadataHU init]
+-[NBPhoneMetadataLC init]
+-[NBPhoneMetadataIQ init]
+-[NBPhoneMetadataKH init]
+-[NBPhoneMetadataJM init]
+-[NBPhoneMetadataIR init]
+-[NBPhoneMetadataKI init]
+-[NBPhoneMetadataIS init]
+-[NBPhoneMetadataMA init]
+-[NBPhoneMetadataJO init]
+-[NBPhoneMetadataIT init]
+-[NBPhoneMetadataJP init]
+-[NBPhoneMetadataMC init]
+-[NBPhoneMetadataKM init]
+-[NBPhoneMetadataMD init]
+-[NBPhoneMetadataLI init]
+-[NBPhoneMetadata881 init]
+-[NBPhoneMetadataKN init]
+-[NBPhoneMetadataME init]
+-[NBPhoneMetadataNA init]
+-[NBPhoneMetadataMF init]
+-[NBPhoneMetadataLK init]
+-[NBPhoneMetadata882 init]
+-[NBPhoneMetadataKP init]
+-[NBPhoneMetadataMG init]
+-[NBPhoneMetadataNC init]
+-[NBPhoneMetadataMH init]
+-[NBPhoneMetadata883 init]
+-[NBPhoneMetadataKR init]
+-[NBPhoneMetadataNE init]
+-[NBPhoneMetadataNF init]
+-[NBPhoneMetadataMK init]
+-[NBPhoneMetadataNG init]
+-[NBPhoneMetadataML init]
+-[NBPhoneMetadataMM init]
+-[NBPhoneMetadataLR init]
+-[NBPhoneMetadataNI init]
+-[NBPhoneMetadataKW init]
+-[NBPhoneMetadataMN init]
+-[NBPhoneMetadataLS init]
+-[NBPhoneMetadataPA init]
+-[NBPhoneMetadataMO init]
+-[NBPhoneMetadataLT init]
+-[NBPhoneMetadataKY init]
+-[NBPhoneMetadataMP init]
+-[NBPhoneMetadataLU init]
+-[NBPhoneMetadataNL init]
+-[NBPhoneMetadataKZ init]
+-[NBPhoneMetadataMQ init]
+-[NBPhoneMetadata888 init]
+-[NBPhoneMetadataLV init]
+-[NBPhoneMetadataMR init]
+-[NBPhoneMetadataPE init]
+-[NBPhoneMetadataMS init]
+-[NBPhoneMetadataQA init]
+-[NBPhoneMetadataNO init]
+-[NBPhoneMetadataPF init]
+-[NBPhoneMetadataMT init]
+-[NBPhoneMetadataLY init]
+-[NBPhoneMetadataNP init]
+-[NBPhoneMetadataPG init]
+-[NBPhoneMetadataMU init]
+-[NBPhoneMetadataPH init]
+-[NBPhoneMetadataMV init]
+-[NBPhoneMetadataOM init]
+-[NBPhoneMetadataNR init]
+-[NBPhoneMetadataMW init]
+-[NBPhoneMetadataMX init]
+-[NBPhoneMetadataPK init]
+-[NBPhoneMetadataMY init]
+-[NBPhoneMetadataNU init]
+-[NBPhoneMetadataPL init]
+-[NBPhoneMetadataMZ init]
+-[NBPhoneMetadataPM init]
+-[NBPhoneMetadataRE init]
+-[NBPhoneMetadataSA init]
+-[NBPhoneMetadataSB init]
+-[NBPhoneMetadataNZ init]
+-[NBPhoneMetadataSC init]
+-[NBPhoneMetadataSD init]
+-[NBPhoneMetadataPR init]
+-[NBPhoneMetadataSE init]
+-[NBPhoneMetadataPS init]
+-[NBPhoneMetadataTA init]
+-[NBPhoneMetadataPT init]
+-[NBPhoneMetadataSG init]
+-[NBPhoneMetadataTC init]
+-[NBPhoneMetadataSH init]
+-[NBPhoneMetadataTD init]
+-[NBPhoneMetadataSI init]
+-[NBPhoneMetadataPW init]
+-[NBPhoneMetadataSJ init]
+-[NBPhoneMetadataUA init]
+-[NBPhoneMetadataRO init]
+-[NBPhoneMetadataSK init]
+-[NBPhoneMetadataPY init]
+-[NBPhoneMetadataTG init]
+-[NBPhoneMetadataSL init]
+-[NBPhoneMetadataTH init]
+-[NBPhoneMetadataSM init]
+-[NBPhoneMetadataSN init]
+-[NBPhoneMetadataRS init]
+-[NBPhoneMetadataTJ init]
+-[NBPhoneMetadataVA init]
+-[NBPhoneMetadataSO init]
+-[NBPhoneMetadataTK init]
+-[NBPhoneMetadataUG init]
+-[NBPhoneMetadataRU init]
+-[NBPhoneMetadataTL init]
+-[NBPhoneMetadataVC init]
+-[NBPhoneMetadata870 init]
+-[NBPhoneMetadataTM init]
+-[NBPhoneMetadataSR init]
+-[NBPhoneMetadataRW init]
+-[NBPhoneMetadataTN init]
+-[NBPhoneMetadataVE init]
+-[NBPhoneMetadataSS init]
+-[NBPhoneMetadataTO init]
+-[NBPhoneMetadataST init]
+-[NBPhoneMetadataVG init]
+-[NBPhoneMetadataSV init]
+-[NBPhoneMetadataTR init]
+-[NBPhoneMetadataVI init]
+-[NBPhoneMetadataSX init]
+-[NBPhoneMetadataWF init]
+-[NBPhoneMetadataTT init]
+-[NBPhoneMetadataSY init]
+-[NBPhoneMetadataSZ init]
+-[NBPhoneMetadataTV init]
+-[NBPhoneMetadataTW init]
+-[NBPhoneMetadataVN init]
+-[NBPhoneMetadataUS init]
+-[NBPhoneMetadataTZ init]
+-[NBPhoneMetadata878 init]
+-[NBPhoneMetadataYE init]
+-[NBPhoneMetadataZA init]
+-[NBPhoneMetadataUY init]
+-[NBPhoneMetadataVU init]
+-[NBPhoneMetadataUZ init]
+-[NBPhoneMetadataWS init]
+-[NBPhoneMetadata979 init]
+-[NBPhoneMetadataZM init]
+-[NBPhoneMetadataAC init]
+-[NBPhoneMetadataAD init]
+-[NBPhoneMetadataYT init]
+-[NBPhoneMetadataAE init]
+-[NBPhoneMetadataBA init]
+-[NBPhoneMetadataAF init]
+-[NBPhoneMetadataBB init]
+-[NBPhoneMetadataAG init]
+-[NBPhoneMetadataBD init]
+-[NBPhoneMetadataAI init]
+-[NBPhoneMetadataBE init]
+-[NBPhoneMetadataCA init]
+-[NBPhoneMetadataBF init]
+-[NBPhoneMetadataBG init]
+-[NBPhoneMetadataZW init]
+-[NBPhoneMetadataAL init]
+-[NBPhoneMetadataCC init]
+-[NBPhoneMetadataBH init]
+-[NBPhoneMetadataAM init]
+-[NBPhoneMetadataCD init]
+-[NBPhoneMetadataBI init]
+-[NBPhoneMetadataBJ init]
+-[NBPhoneMetadataAO init]
+-[NBPhoneMetadataCF init]
+-[NBPhoneMetadataCG init]
+-[NBPhoneMetadataBL init]
+-[NBPhoneMetadata800 init]
+-[NBPhoneMetadataCH init]
+-[NBPhoneMetadataBM init]
+-[NBPhoneMetadataAR init]
+-[NBPhoneMetadataCI init]
+-[NBPhoneMetadataBN init]
+-[NBPhoneMetadataDE init]
+-[NBPhoneMetadataAS init]
+-[NBPhoneMetadataBO init]
+-[NBPhoneMetadataAT init]
+-[NBPhoneMetadataCK init]
+-[NBPhoneMetadataAU init]
+-[NBPhoneMetadataCL init]
+-[NBPhoneMetadataEC init]
+-[NBPhoneMetadataBQ init]
+-[NBPhoneMetadataCM init]
+-[NBPhoneMetadataBR init]
+-[NBPhoneMetadataAW init]
+-[NBPhoneMetadataCN init]
+-[NBPhoneMetadataEE init]
+-[NBPhoneMetadataBS init]
+-[NBPhoneMetadataDJ init]
+-[NBPhoneMetadataAX init]
+-[NBPhoneMetadataCO init]
+-[NBPhoneMetadataBT init]
+-[NBPhoneMetadataDK init]
+-[NBPhoneMetadataEG init]
+-[NBPhoneMetadataAZ init]
+-[NBPhoneMetadataEH init]
+-[NBPhoneMetadataDM init]
+-[NBPhoneMetadataCR init]
+-[NBPhoneMetadataBW init]
+-[NBPhoneMetadataGA init]
+-[NBPhoneMetadataDO init]
+-[NBPhoneMetadataBY init]
+-[NBPhoneMetadataGB init]
+-[NBPhoneMetadataCU init]
+-[NBPhoneMetadataBZ init]
+-[NBPhoneMetadataCV init]
+-[NBPhoneMetadata808 init]
+-[NBPhoneMetadataGD init]
+-[NBPhoneMetadataFI init]
+-[NBPhoneMetadataCW init]
+-[NBPhoneMetadataGE init]
+-[NBPhoneMetadataFJ init]
+-[NBPhoneMetadataCX init]
+-[NBPhoneMetadataGF init]
+-[NBPhoneMetadataFK init]
+-[NBPhoneMetadataCY init]
+-[NBPhoneMetadataGG init]
+-[NBPhoneMetadataCZ init]
+-[NBPhoneMetadataGH init]
+-[NBPhoneMetadataFM init]
+-[NBPhoneMetadataER init]
+-[NBPhoneMetadataGI init]
+-[NBPhoneMetadataES init]
+-[NBPhoneMetadataFO init]
+-[NBPhoneMetadataET init]
+-[NBPhoneMetadataGL init]
+-[NBPhoneMetadataDZ init]
+-[NBPhoneMetadataGM init]
+-[NBPhoneMetadataID init]
+-[NBPhoneMetadataFR init]
+-[NBPhoneMetadataGN init]
+-[NBPhoneMetadataIE init]
+-[NBPhoneMetadataHK init]
+-[NBPhoneMetadataGP init]
+-[NBPhoneMetadataGQ init]
+-[NBPhoneMetadataGR init]
+-[NBPhoneMetadataHN init]
+-[NBPhoneMetadataJE init]
+-[NBPhoneMetadataGT init]
+-[NBPhoneMetadataGU init]
+-[NBPhoneMetadataIL init]
+/Users/sleroux/Library/Developer/Xcode/DerivedData/libPhoneNumber-fzcqwofecddavoeatjwefpnirjoe/Build/Intermediates/libPhoneNumber.build/Release-iphoneos/libPhoneNumber-iOS.build/Objects-normal/armv7/NBMetadataCore.o
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/libPhoneNumber-iOS/libPhoneNumber/NBMetadataCore.m
++[NBMetadataCoreMapper ISOCodeFromCallingNumber:]
+___49+[NBMetadataCoreMapper ISOCodeFromCallingNumber:]_block_invoke
+_ISOCodeFromCallingNumber:.onceToken
+/Users/sleroux/Library/Developer/Xcode/DerivedData/libPhoneNumber-fzcqwofecddavoeatjwefpnirjoe/Build/Intermediates/libPhoneNumber.build/Release-iphoneos/libPhoneNumber-iOS.build/Objects-normal/armv7/NBMetadataCoreMapper.o
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/libPhoneNumber-iOS/libPhoneNumber/NBMetadataCoreMapper.m
+__49+[NBMetadataCoreMapper ISOCodeFromCallingNumber:]_block_invoke
+-[NSArray(NBAdditions) safeObjectAtIndex:]
+-[NBPhoneNumberDesc initWithData:]
+-[NBPhoneNumberDesc initWithNationalNumberPattern:withPossibleNumberPattern:withExample:]
+-[NBPhoneNumberDesc init]
+-[NBPhoneNumberDesc initWithCoder:]
+-[NBPhoneNumberDesc encodeWithCoder:]
+-[NBPhoneNumberDesc description]
+-[NBPhoneNumberDesc copyWithZone:]
+-[NBPhoneNumberDesc isEqual:]
+-[NBPhoneNumberDesc nationalNumberPattern]
+-[NBPhoneNumberDesc setNationalNumberPattern:]
+-[NBPhoneNumberDesc possibleNumberPattern]
+-[NBPhoneNumberDesc setPossibleNumberPattern:]
+-[NBPhoneNumberDesc exampleNumber]
+-[NBPhoneNumberDesc setExampleNumber:]
+-[NBPhoneNumberDesc .cxx_destruct]
+_OBJC_IVAR_$_NBPhoneNumberDesc._nationalNumberPattern
+_OBJC_IVAR_$_NBPhoneNumberDesc._possibleNumberPattern
+_OBJC_IVAR_$_NBPhoneNumberDesc._exampleNumber
+/Users/sleroux/Library/Developer/Xcode/DerivedData/libPhoneNumber-fzcqwofecddavoeatjwefpnirjoe/Build/Intermediates/libPhoneNumber.build/Release-iphoneos/libPhoneNumber-iOS.build/Objects-normal/armv7/NBPhoneNumberDesc.o
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/libPhoneNumber-iOS/libPhoneNumber/NBPhoneNumberDesc.m
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/libPhoneNumber-iOS/libPhoneNumber/NBPhoneNumberDesc.h
+-[NBPhoneNumber init]
+-[NBPhoneNumber clearCountryCodeSource]
+-[NBPhoneNumber getCountryCodeSourceOrDefault]
+-[NBPhoneNumber isEqualToObject:]
+-[NBPhoneNumber hash]
+-[NBPhoneNumber isEqual:]
+-[NBPhoneNumber copyWithZone:]
+-[NBPhoneNumber initWithCoder:]
+-[NBPhoneNumber encodeWithCoder:]
+-[NBPhoneNumber description]
+-[NBPhoneNumber countryCode]
+-[NBPhoneNumber setCountryCode:]
+-[NBPhoneNumber nationalNumber]
+-[NBPhoneNumber setNationalNumber:]
+-[NBPhoneNumber extension]
+-[NBPhoneNumber setExtension:]
+-[NBPhoneNumber italianLeadingZero]
+-[NBPhoneNumber setItalianLeadingZero:]
+-[NBPhoneNumber rawInput]
+-[NBPhoneNumber setRawInput:]
+-[NBPhoneNumber countryCodeSource]
+-[NBPhoneNumber setCountryCodeSource:]
+-[NBPhoneNumber preferredDomesticCarrierCode]
+-[NBPhoneNumber setPreferredDomesticCarrierCode:]
+-[NBPhoneNumber .cxx_destruct]
+_OBJC_IVAR_$_NBPhoneNumber._countryCode
+_OBJC_IVAR_$_NBPhoneNumber._nationalNumber
+_OBJC_IVAR_$_NBPhoneNumber._extension
+_OBJC_IVAR_$_NBPhoneNumber._italianLeadingZero
+_OBJC_IVAR_$_NBPhoneNumber._rawInput
+_OBJC_IVAR_$_NBPhoneNumber._countryCodeSource
+_OBJC_IVAR_$_NBPhoneNumber._preferredDomesticCarrierCode
+l_OBJC_PROTOCOL_$_NSCopying
+l_OBJC_LABEL_PROTOCOL_$_NSCopying
+l_OBJC_PROTOCOL_$_NSCoding
+l_OBJC_LABEL_PROTOCOL_$_NSCoding
+/Users/sleroux/Library/Developer/Xcode/DerivedData/libPhoneNumber-fzcqwofecddavoeatjwefpnirjoe/Build/Intermediates/libPhoneNumber.build/Release-iphoneos/libPhoneNumber-iOS.build/Objects-normal/armv7/NBPhoneNumber.o
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/libPhoneNumber-iOS/libPhoneNumber/NBPhoneNumber.m
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/libPhoneNumber-iOS/libPhoneNumber/NBPhoneNumber.h
++[NBPhoneNumberUtil sharedInstance]
+___35+[NBPhoneNumberUtil sharedInstance]_block_invoke
+___copy_helper_block_
+___destroy_helper_block_
+-[NBPhoneNumberUtil errorWithObject:withDomain:]
+-[NBPhoneNumberUtil entireRegularExpressionWithPattern:options:error:]
+-[NBPhoneNumberUtil regularExpressionWithPattern:options:error:]
+-[NBPhoneNumberUtil componentsSeparatedByRegex:regex:]
+-[NBPhoneNumberUtil stringPositionByRegex:regex:]
+-[NBPhoneNumberUtil indexOfStringByString:target:]
+-[NBPhoneNumberUtil replaceFirstStringByRegex:regex:withTemplate:]
+-[NBPhoneNumberUtil replaceStringByRegex:regex:withTemplate:]
+-[NBPhoneNumberUtil matcheFirstByRegex:regex:]
+-[NBPhoneNumberUtil matchesByRegex:regex:]
+-[NBPhoneNumberUtil matchedStringByRegex:regex:]
+-[NBPhoneNumberUtil isStartingStringByRegex:regex:]
+-[NBPhoneNumberUtil stringByReplacingOccurrencesString:withMap:removeNonMatches:]
+-[NBPhoneNumberUtil isAllDigits:]
+-[NBPhoneNumberUtil isNumeric:]
+-[NBPhoneNumberUtil isNaN:]
+-[NBPhoneNumberUtil getNationalSignificantNumber:]
+-[NBPhoneNumberUtil init]
+-[NBPhoneNumberUtil initRegularExpressionSet]
+-[NBPhoneNumberUtil DIGIT_MAPPINGS]
+-[NBPhoneNumberUtil initNormalizationMappings]
+-[NBPhoneNumberUtil extractPossibleNumber:]
+-[NBPhoneNumberUtil isViablePhoneNumber:]
+-[NBPhoneNumberUtil normalizePhoneNumber:]
+-[NBPhoneNumberUtil normalizeSB:]
+-[NBPhoneNumberUtil normalizeDigitsOnly:]
+-[NBPhoneNumberUtil convertAlphaCharactersInNumber:]
+-[NBPhoneNumberUtil getLengthOfGeographicalAreaCode:error:]
+-[NBPhoneNumberUtil getLengthOfGeographicalAreaCode:]
+-[NBPhoneNumberUtil getLengthOfNationalDestinationCode:error:]
+-[NBPhoneNumberUtil getLengthOfNationalDestinationCode:]
+-[NBPhoneNumberUtil normalizeHelper:normalizationReplacements:removeNonMatches:]
+-[NBPhoneNumberUtil formattingRuleHasFirstGroupOnly:]
+-[NBPhoneNumberUtil isNumberGeographical:]
+-[NBPhoneNumberUtil isValidRegionCode:]
+-[NBPhoneNumberUtil hasValidCountryCallingCode:]
+-[NBPhoneNumberUtil format:numberFormat:error:]
+-[NBPhoneNumberUtil format:numberFormat:]
+-[NBPhoneNumberUtil formatByPattern:numberFormat:userDefinedFormats:error:]
+-[NBPhoneNumberUtil formatByPattern:numberFormat:userDefinedFormats:]
+-[NBPhoneNumberUtil formatNationalNumberWithCarrierCode:carrierCode:error:]
+-[NBPhoneNumberUtil formatNationalNumberWithCarrierCode:carrierCode:]
+-[NBPhoneNumberUtil getMetadataForRegionOrCallingCode:regionCode:]
+-[NBPhoneNumberUtil formatNationalNumberWithPreferredCarrierCode:fallbackCarrierCode:error:]
+-[NBPhoneNumberUtil formatNationalNumberWithPreferredCarrierCode:fallbackCarrierCode:]
+-[NBPhoneNumberUtil formatNumberForMobileDialing:regionCallingFrom:withFormatting:error:]
+-[NBPhoneNumberUtil formatNumberForMobileDialing:regionCallingFrom:withFormatting:]
+-[NBPhoneNumberUtil formatOutOfCountryCallingNumber:regionCallingFrom:error:]
+-[NBPhoneNumberUtil formatOutOfCountryCallingNumber:regionCallingFrom:]
+-[NBPhoneNumberUtil prefixNumberWithCountryCallingCode:phoneNumberFormat:formattedNationalNumber:formattedExtension:]
+-[NBPhoneNumberUtil formatInOriginalFormat:regionCallingFrom:error:]
+-[NBPhoneNumberUtil formatInOriginalFormat:regionCallingFrom:]
+-[NBPhoneNumberUtil rawInputContainsNationalPrefix:nationalPrefix:regionCode:]
+-[NBPhoneNumberUtil hasUnexpectedItalianLeadingZero:]
+-[NBPhoneNumberUtil hasFormattingPatternForNumber:]
+-[NBPhoneNumberUtil formatOutOfCountryKeepingAlphaChars:regionCallingFrom:error:]
+-[NBPhoneNumberUtil formatOutOfCountryKeepingAlphaChars:regionCallingFrom:]
+-[NBPhoneNumberUtil formatNsn:metadata:phoneNumberFormat:carrierCode:]
+-[NBPhoneNumberUtil chooseFormattingPatternForNumber:nationalNumber:]
+-[NBPhoneNumberUtil formatNsnUsingPattern:formattingPattern:numberFormat:carrierCode:]
+-[NBPhoneNumberUtil getExampleNumber:error:]
+-[NBPhoneNumberUtil getExampleNumberForType:type:error:]
+-[NBPhoneNumberUtil getExampleNumberForNonGeoEntity:error:]
+-[NBPhoneNumberUtil maybeGetFormattedExtension:metadata:numberFormat:]
+-[NBPhoneNumberUtil getNumberDescByType:type:]
+-[NBPhoneNumberUtil getNumberType:]
+-[NBPhoneNumberUtil getNumberTypeHelper:metadata:]
+-[NBPhoneNumberUtil isNumberMatchingDesc:numberDesc:]
+-[NBPhoneNumberUtil isValidNumber:]
+-[NBPhoneNumberUtil isValidNumberForRegion:regionCode:]
+-[NBPhoneNumberUtil getRegionCodeForNumber:]
+-[NBPhoneNumberUtil getRegionCodeForNumberFromRegionList:regionCodes:]
+-[NBPhoneNumberUtil getRegionCodeForCountryCode:]
+-[NBPhoneNumberUtil getRegionCodesForCountryCode:]
+-[NBPhoneNumberUtil getCountryCodeForRegion:]
+-[NBPhoneNumberUtil getCountryCodeForValidRegion:error:]
+-[NBPhoneNumberUtil getNddPrefixForRegion:stripNonDigits:]
+-[NBPhoneNumberUtil isNANPACountry:]
+-[NBPhoneNumberUtil isLeadingZeroPossible:]
+-[NBPhoneNumberUtil isAlphaNumber:]
+-[NBPhoneNumberUtil isPossibleNumber:error:]
+-[NBPhoneNumberUtil isPossibleNumber:]
+-[NBPhoneNumberUtil testNumberLengthAgainstPattern:number:]
+-[NBPhoneNumberUtil isPossibleNumberWithReason:error:]
+-[NBPhoneNumberUtil isPossibleNumberWithReason:]
+-[NBPhoneNumberUtil isPossibleNumberString:regionDialingFrom:error:]
+-[NBPhoneNumberUtil truncateTooLongNumber:]
+-[NBPhoneNumberUtil extractCountryCode:nationalNumber:]
+-[NBPhoneNumberUtil getSupportedRegions]
+___40-[NBPhoneNumberUtil getSupportedRegions]_block_invoke
+___copy_helper_block_.673
+___destroy_helper_block_.674
+-[NBPhoneNumberUtil maybeExtractCountryCode:metadata:nationalNumber:keepRawInput:phoneNumber:error:]
+-[NBPhoneNumberUtil parsePrefixAsIdd:sourceString:]
+-[NBPhoneNumberUtil maybeStripInternationalPrefixAndNormalize:possibleIddPrefix:]
+-[NBPhoneNumberUtil maybeStripNationalPrefixAndCarrierCode:metadata:carrierCode:]
+-[NBPhoneNumberUtil maybeStripExtension:]
+-[NBPhoneNumberUtil checkRegionForParsing:defaultRegion:]
+-[NBPhoneNumberUtil parse:defaultRegion:error:]
+-[NBPhoneNumberUtil parseWithPhoneCarrierRegion:error:]
+-[NBPhoneNumberUtil telephonyNetworkInfo]
+___41-[NBPhoneNumberUtil telephonyNetworkInfo]_block_invoke
+-[NBPhoneNumberUtil countryCodeByCarrier]
+-[NBPhoneNumberUtil parseAndKeepRawInput:defaultRegion:error:]
+-[NBPhoneNumberUtil parseHelper:defaultRegion:keepRawInput:checkRegion:error:]
+-[NBPhoneNumberUtil buildNationalNumberForParsing:nationalNumber:]
+-[NBPhoneNumberUtil isNumberMatch:second:error:]
+-[NBPhoneNumberUtil isNumberMatch:second:]
+-[NBPhoneNumberUtil isNationalNumberSuffixOfTheOther:second:]
+-[NBPhoneNumberUtil canBeInternationallyDialled:error:]
+-[NBPhoneNumberUtil canBeInternationallyDialled:]
+-[NBPhoneNumberUtil matchesEntirely:string:]
+-[NBPhoneNumberUtil libPhoneBundle]
+-[NBPhoneNumberUtil entireStringCacheLock]
+-[NBPhoneNumberUtil setEntireStringCacheLock:]
+-[NBPhoneNumberUtil entireStringRegexCache]
+-[NBPhoneNumberUtil setEntireStringRegexCache:]
+-[NBPhoneNumberUtil lockPatternCache]
+-[NBPhoneNumberUtil setLockPatternCache:]
+-[NBPhoneNumberUtil regexPatternCache]
+-[NBPhoneNumberUtil setRegexPatternCache:]
+-[NBPhoneNumberUtil i18nNumberFormat]
+-[NBPhoneNumberUtil setI18nNumberFormat:]
+-[NBPhoneNumberUtil i18nPhoneNumberDesc]
+-[NBPhoneNumberUtil setI18nPhoneNumberDesc:]
+-[NBPhoneNumberUtil i18nPhoneMetadata]
+-[NBPhoneNumberUtil setI18nPhoneMetadata:]
+-[NBPhoneNumberUtil PLUS_CHARS_PATTERN]
+-[NBPhoneNumberUtil setPLUS_CHARS_PATTERN:]
+-[NBPhoneNumberUtil CAPTURING_DIGIT_PATTERN]
+-[NBPhoneNumberUtil setCAPTURING_DIGIT_PATTERN:]
+-[NBPhoneNumberUtil VALID_ALPHA_PHONE_PATTERN]
+-[NBPhoneNumberUtil setVALID_ALPHA_PHONE_PATTERN:]
+-[NBPhoneNumberUtil .cxx_destruct]
+_sharedInstance.sharedOnceInstance
+_sharedInstance.onceToken
+_OBJC_IVAR_$_NBPhoneNumberUtil._entireStringCacheLock
+_OBJC_IVAR_$_NBPhoneNumberUtil._entireStringRegexCache
+_OBJC_IVAR_$_NBPhoneNumberUtil._lockPatternCache
+_OBJC_IVAR_$_NBPhoneNumberUtil._regexPatternCache
+_OBJC_IVAR_$_NBPhoneNumberUtil._PLUS_CHARS_PATTERN
+_LEADING_PLUS_CHARS_PATTERN
+_OBJC_IVAR_$_NBPhoneNumberUtil._CAPTURING_DIGIT_PATTERN
+_VALID_START_CHAR_PATTERN
+_SECOND_NUMBER_START_PATTERN
+_OBJC_IVAR_$_NBPhoneNumberUtil._VALID_ALPHA_PHONE_PATTERN
+_UNWANTED_END_CHAR_PATTERN
+_EXTN_PATTERN
+_SEPARATOR_PATTERN
+_VALID_PHONE_NUMBER_PATTERN
+_DIGIT_MAPPINGS
+_DIALLABLE_CHAR_MAPPINGS
+_ALPHA_MAPPINGS
+_ALL_NORMALIZATION_MAPPINGS
+_ALL_PLUS_NUMBER_GROUPING_SYMBOLS
+___block_descriptor_tmp.676
+_telephonyNetworkInfo.onceToken
+__telephonyNetworkInfo
+___block_descriptor_tmp.733
+_OBJC_IVAR_$_NBPhoneNumberUtil._libPhoneBundle
+_OBJC_IVAR_$_NBPhoneNumberUtil._i18nNumberFormat
+_OBJC_IVAR_$_NBPhoneNumberUtil._i18nPhoneNumberDesc
+_OBJC_IVAR_$_NBPhoneNumberUtil._i18nPhoneMetadata
+/Users/sleroux/Library/Developer/Xcode/DerivedData/libPhoneNumber-fzcqwofecddavoeatjwefpnirjoe/Build/Intermediates/libPhoneNumber.build/Release-iphoneos/libPhoneNumber-iOS.build/Objects-normal/armv7/NBPhoneNumberUtil.o
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/libPhoneNumber-iOS/libPhoneNumber/NBPhoneNumberUtil.m
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/libPhoneNumber-iOS/libPhoneNumber/NBPhoneNumberUtil.h
+NSEqualRanges
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSRange.h
+__41-[NBPhoneNumberUtil telephonyNetworkInfo]_block_invoke
+__destroy_helper_block_
+__copy_helper_block_
+__40-[NBPhoneNumberUtil getSupportedRegions]_block_invoke
+__35+[NBPhoneNumberUtil sharedInstance]_block_invoke
+-[NBNumberFormat initWithPattern:withFormat:withLeadingDigitsPatterns:withNationalPrefixFormattingRule:whenFormatting:withDomesticCarrierCodeFormattingRule:]
+-[NBNumberFormat init]
+-[NBNumberFormat description]
+-[NBNumberFormat copyWithZone:]
+-[NBNumberFormat initWithCoder:]
+-[NBNumberFormat encodeWithCoder:]
+-[NBNumberFormat pattern]
+-[NBNumberFormat setPattern:]
+-[NBNumberFormat format]
+-[NBNumberFormat setFormat:]
+-[NBNumberFormat leadingDigitsPatterns]
+-[NBNumberFormat setLeadingDigitsPatterns:]
+-[NBNumberFormat nationalPrefixFormattingRule]
+-[NBNumberFormat setNationalPrefixFormattingRule:]
+-[NBNumberFormat nationalPrefixOptionalWhenFormatting]
+-[NBNumberFormat setNationalPrefixOptionalWhenFormatting:]
+-[NBNumberFormat domesticCarrierCodeFormattingRule]
+-[NBNumberFormat setDomesticCarrierCodeFormattingRule:]
+-[NBNumberFormat .cxx_destruct]
+_OBJC_IVAR_$_NBNumberFormat._pattern
+_OBJC_IVAR_$_NBNumberFormat._format
+_OBJC_IVAR_$_NBNumberFormat._leadingDigitsPatterns
+_OBJC_IVAR_$_NBNumberFormat._nationalPrefixFormattingRule
+_OBJC_IVAR_$_NBNumberFormat._nationalPrefixOptionalWhenFormatting
+_OBJC_IVAR_$_NBNumberFormat._domesticCarrierCodeFormattingRule
+/Users/sleroux/Library/Developer/Xcode/DerivedData/libPhoneNumber-fzcqwofecddavoeatjwefpnirjoe/Build/Intermediates/libPhoneNumber.build/Release-iphoneos/libPhoneNumber-iOS.build/Objects-normal/armv7/NBNumberFormat.o
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/libPhoneNumber-iOS/libPhoneNumber/NBNumberFormat.m
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/libPhoneNumber-iOS/libPhoneNumber/NBNumberFormat.h
+-[NBPhoneMetaData init]
+-[NBPhoneMetaData description]
+-[NBPhoneMetaData initWithCoder:]
+-[NBPhoneMetaData encodeWithCoder:]
+-[NBPhoneMetaData generalDesc]
+-[NBPhoneMetaData setGeneralDesc:]
+-[NBPhoneMetaData fixedLine]
+-[NBPhoneMetaData setFixedLine:]
+-[NBPhoneMetaData mobile]
+-[NBPhoneMetaData setMobile:]
+-[NBPhoneMetaData tollFree]
+-[NBPhoneMetaData setTollFree:]
+-[NBPhoneMetaData premiumRate]
+-[NBPhoneMetaData setPremiumRate:]
+-[NBPhoneMetaData sharedCost]
+-[NBPhoneMetaData setSharedCost:]
+-[NBPhoneMetaData personalNumber]
+-[NBPhoneMetaData setPersonalNumber:]
+-[NBPhoneMetaData voip]
+-[NBPhoneMetaData setVoip:]
+-[NBPhoneMetaData pager]
+-[NBPhoneMetaData setPager:]
+-[NBPhoneMetaData uan]
+-[NBPhoneMetaData setUan:]
+-[NBPhoneMetaData emergency]
+-[NBPhoneMetaData setEmergency:]
+-[NBPhoneMetaData voicemail]
+-[NBPhoneMetaData setVoicemail:]
+-[NBPhoneMetaData noInternationalDialling]
+-[NBPhoneMetaData setNoInternationalDialling:]
+-[NBPhoneMetaData codeID]
+-[NBPhoneMetaData setCodeID:]
+-[NBPhoneMetaData countryCode]
+-[NBPhoneMetaData setCountryCode:]
+-[NBPhoneMetaData internationalPrefix]
+-[NBPhoneMetaData setInternationalPrefix:]
+-[NBPhoneMetaData preferredInternationalPrefix]
+-[NBPhoneMetaData setPreferredInternationalPrefix:]
+-[NBPhoneMetaData nationalPrefix]
+-[NBPhoneMetaData setNationalPrefix:]
+-[NBPhoneMetaData preferredExtnPrefix]
+-[NBPhoneMetaData setPreferredExtnPrefix:]
+-[NBPhoneMetaData nationalPrefixForParsing]
+-[NBPhoneMetaData setNationalPrefixForParsing:]
+-[NBPhoneMetaData nationalPrefixTransformRule]
+-[NBPhoneMetaData setNationalPrefixTransformRule:]
+-[NBPhoneMetaData sameMobileAndFixedLinePattern]
+-[NBPhoneMetaData setSameMobileAndFixedLinePattern:]
+-[NBPhoneMetaData numberFormats]
+-[NBPhoneMetaData setNumberFormats:]
+-[NBPhoneMetaData intlNumberFormats]
+-[NBPhoneMetaData setIntlNumberFormats:]
+-[NBPhoneMetaData mainCountryForCode]
+-[NBPhoneMetaData setMainCountryForCode:]
+-[NBPhoneMetaData leadingDigits]
+-[NBPhoneMetaData setLeadingDigits:]
+-[NBPhoneMetaData leadingZeroPossible]
+-[NBPhoneMetaData setLeadingZeroPossible:]
+-[NBPhoneMetaData .cxx_destruct]
+_OBJC_IVAR_$_NBPhoneMetaData._numberFormats
+_OBJC_IVAR_$_NBPhoneMetaData._intlNumberFormats
+_OBJC_IVAR_$_NBPhoneMetaData._leadingZeroPossible
+_OBJC_IVAR_$_NBPhoneMetaData._mainCountryForCode
+_OBJC_IVAR_$_NBPhoneMetaData._codeID
+_OBJC_IVAR_$_NBPhoneMetaData._countryCode
+_OBJC_IVAR_$_NBPhoneMetaData._generalDesc
+_OBJC_IVAR_$_NBPhoneMetaData._fixedLine
+_OBJC_IVAR_$_NBPhoneMetaData._mobile
+_OBJC_IVAR_$_NBPhoneMetaData._tollFree
+_OBJC_IVAR_$_NBPhoneMetaData._premiumRate
+_OBJC_IVAR_$_NBPhoneMetaData._sharedCost
+_OBJC_IVAR_$_NBPhoneMetaData._personalNumber
+_OBJC_IVAR_$_NBPhoneMetaData._voip
+_OBJC_IVAR_$_NBPhoneMetaData._pager
+_OBJC_IVAR_$_NBPhoneMetaData._uan
+_OBJC_IVAR_$_NBPhoneMetaData._emergency
+_OBJC_IVAR_$_NBPhoneMetaData._voicemail
+_OBJC_IVAR_$_NBPhoneMetaData._noInternationalDialling
+_OBJC_IVAR_$_NBPhoneMetaData._internationalPrefix
+_OBJC_IVAR_$_NBPhoneMetaData._preferredInternationalPrefix
+_OBJC_IVAR_$_NBPhoneMetaData._nationalPrefix
+_OBJC_IVAR_$_NBPhoneMetaData._preferredExtnPrefix
+_OBJC_IVAR_$_NBPhoneMetaData._nationalPrefixForParsing
+_OBJC_IVAR_$_NBPhoneMetaData._nationalPrefixTransformRule
+_OBJC_IVAR_$_NBPhoneMetaData._sameMobileAndFixedLinePattern
+_OBJC_IVAR_$_NBPhoneMetaData._leadingDigits
+/Users/sleroux/Library/Developer/Xcode/DerivedData/libPhoneNumber-fzcqwofecddavoeatjwefpnirjoe/Build/Intermediates/libPhoneNumber.build/Release-iphoneos/libPhoneNumber-iOS.build/Objects-normal/armv7/NBPhoneMetaData.o
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/libPhoneNumber-iOS/libPhoneNumber/NBPhoneMetaData.m
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/libPhoneNumber-iOS/libPhoneNumber/NBPhoneMetaData.h
+-[NBAsYouTypeFormatter init]
+-[NBAsYouTypeFormatter initWithRegionCode:]
+-[NBAsYouTypeFormatter initWithRegionCodeForTest:]
+-[NBAsYouTypeFormatter initWithRegionCode:bundle:]
+-[NBAsYouTypeFormatter initWithRegionCodeForTest:bundle:]
+-[NBAsYouTypeFormatter getMetadataForRegion_:]
+-[NBAsYouTypeFormatter maybeCreateNewTemplate_]
+-[NBAsYouTypeFormatter getAvailableFormats_:]
+-[NBAsYouTypeFormatter isFormatEligible_:]
+-[NBAsYouTypeFormatter narrowDownPossibleFormats_:]
+-[NBAsYouTypeFormatter createFormattingTemplate_:]
+-[NBAsYouTypeFormatter getFormattingTemplate_:numberFormat:]
+-[NBAsYouTypeFormatter clear]
+-[NBAsYouTypeFormatter removeLastDigitAndRememberPosition]
+-[NBAsYouTypeFormatter removeLastDigit]
+-[NBAsYouTypeFormatter inputStringAndRememberPosition:]
+-[NBAsYouTypeFormatter inputString:]
+-[NBAsYouTypeFormatter inputDigit:]
+-[NBAsYouTypeFormatter inputDigitAndRememberPosition:]
+-[NBAsYouTypeFormatter inputDigitWithOptionToRememberPosition_:rememberPosition:]
+-[NBAsYouTypeFormatter attemptToChoosePatternWithPrefixExtracted_]
+-[NBAsYouTypeFormatter ableToExtractLongerNdd_]
+-[NBAsYouTypeFormatter isDigitOrLeadingPlusSign_:]
+-[NBAsYouTypeFormatter attemptToFormatAccruedDigits_]
+-[NBAsYouTypeFormatter appendNationalNumber_:]
+-[NBAsYouTypeFormatter getRememberedPosition]
+-[NBAsYouTypeFormatter attemptToChooseFormattingPattern_]
+-[NBAsYouTypeFormatter inputAccruedNationalNumber_]
+-[NBAsYouTypeFormatter isNanpaNumberWithNationalPrefix_]
+-[NBAsYouTypeFormatter removeNationalPrefixFromNationalNumber_]
+-[NBAsYouTypeFormatter attemptToExtractIdd_]
+-[NBAsYouTypeFormatter attemptToExtractCountryCallingCode_]
+-[NBAsYouTypeFormatter normalizeAndAccrueDigitsAndPlusSign_:rememberPosition:]
+-[NBAsYouTypeFormatter inputDigitHelper_:]
+-[NBAsYouTypeFormatter description]
+-[NBAsYouTypeFormatter isSuccessfulFormatting]
+-[NBAsYouTypeFormatter DIGIT_PLACEHOLDER_]
+-[NBAsYouTypeFormatter setDIGIT_PLACEHOLDER_:]
+-[NBAsYouTypeFormatter SEPARATOR_BEFORE_NATIONAL_NUMBER_]
+-[NBAsYouTypeFormatter setSEPARATOR_BEFORE_NATIONAL_NUMBER_:]
+-[NBAsYouTypeFormatter currentOutput_]
+-[NBAsYouTypeFormatter setCurrentOutput_:]
+-[NBAsYouTypeFormatter currentFormattingPattern_]
+-[NBAsYouTypeFormatter setCurrentFormattingPattern_:]
+-[NBAsYouTypeFormatter defaultCountry_]
+-[NBAsYouTypeFormatter setDefaultCountry_:]
+-[NBAsYouTypeFormatter nationalPrefixExtracted_]
+-[NBAsYouTypeFormatter setNationalPrefixExtracted_:]
+-[NBAsYouTypeFormatter formattingTemplate_]
+-[NBAsYouTypeFormatter setFormattingTemplate_:]
+-[NBAsYouTypeFormatter accruedInput_]
+-[NBAsYouTypeFormatter setAccruedInput_:]
+-[NBAsYouTypeFormatter prefixBeforeNationalNumber_]
+-[NBAsYouTypeFormatter setPrefixBeforeNationalNumber_:]
+-[NBAsYouTypeFormatter accruedInputWithoutFormatting_]
+-[NBAsYouTypeFormatter setAccruedInputWithoutFormatting_:]
+-[NBAsYouTypeFormatter nationalNumber_]
+-[NBAsYouTypeFormatter setNationalNumber_:]
+-[NBAsYouTypeFormatter DIGIT_PATTERN_]
+-[NBAsYouTypeFormatter setDIGIT_PATTERN_:]
+-[NBAsYouTypeFormatter NATIONAL_PREFIX_SEPARATORS_PATTERN_]
+-[NBAsYouTypeFormatter setNATIONAL_PREFIX_SEPARATORS_PATTERN_:]
+-[NBAsYouTypeFormatter CHARACTER_CLASS_PATTERN_]
+-[NBAsYouTypeFormatter setCHARACTER_CLASS_PATTERN_:]
+-[NBAsYouTypeFormatter STANDALONE_DIGIT_PATTERN_]
+-[NBAsYouTypeFormatter setSTANDALONE_DIGIT_PATTERN_:]
+-[NBAsYouTypeFormatter ELIGIBLE_FORMAT_PATTERN_]
+-[NBAsYouTypeFormatter setELIGIBLE_FORMAT_PATTERN_:]
+-[NBAsYouTypeFormatter ableToFormat_]
+-[NBAsYouTypeFormatter setAbleToFormat_:]
+-[NBAsYouTypeFormatter inputHasFormatting_]
+-[NBAsYouTypeFormatter setInputHasFormatting_:]
+-[NBAsYouTypeFormatter isCompleteNumber_]
+-[NBAsYouTypeFormatter setIsCompleteNumber_:]
+-[NBAsYouTypeFormatter isExpectingCountryCallingCode_]
+-[NBAsYouTypeFormatter setIsExpectingCountryCallingCode_:]
+-[NBAsYouTypeFormatter shouldAddSpaceAfterNationalPrefix_]
+-[NBAsYouTypeFormatter setShouldAddSpaceAfterNationalPrefix_:]
+-[NBAsYouTypeFormatter phoneUtil_]
+-[NBAsYouTypeFormatter setPhoneUtil_:]
+-[NBAsYouTypeFormatter lastMatchPosition_]
+-[NBAsYouTypeFormatter setLastMatchPosition_:]
+-[NBAsYouTypeFormatter originalPosition_]
+-[NBAsYouTypeFormatter setOriginalPosition_:]
+-[NBAsYouTypeFormatter positionToRemember_]
+-[NBAsYouTypeFormatter setPositionToRemember_:]
+-[NBAsYouTypeFormatter MIN_LEADING_DIGITS_LENGTH_]
+-[NBAsYouTypeFormatter setMIN_LEADING_DIGITS_LENGTH_:]
+-[NBAsYouTypeFormatter possibleFormats_]
+-[NBAsYouTypeFormatter setPossibleFormats_:]
+-[NBAsYouTypeFormatter currentMetaData_]
+-[NBAsYouTypeFormatter setCurrentMetaData_:]
+-[NBAsYouTypeFormatter defaultMetaData_]
+-[NBAsYouTypeFormatter setDefaultMetaData_:]
+-[NBAsYouTypeFormatter EMPTY_METADATA_]
+-[NBAsYouTypeFormatter setEMPTY_METADATA_:]
+-[NBAsYouTypeFormatter .cxx_destruct]
+_OBJC_IVAR_$_NBAsYouTypeFormatter._isSuccessfulFormatting
+_OBJC_IVAR_$_NBAsYouTypeFormatter._DIGIT_PLACEHOLDER_
+_OBJC_IVAR_$_NBAsYouTypeFormatter._SEPARATOR_BEFORE_NATIONAL_NUMBER_
+_OBJC_IVAR_$_NBAsYouTypeFormatter._currentOutput_
+_OBJC_IVAR_$_NBAsYouTypeFormatter._currentFormattingPattern_
+_OBJC_IVAR_$_NBAsYouTypeFormatter._defaultCountry_
+_OBJC_IVAR_$_NBAsYouTypeFormatter._nationalPrefixExtracted_
+_OBJC_IVAR_$_NBAsYouTypeFormatter._formattingTemplate_
+_OBJC_IVAR_$_NBAsYouTypeFormatter._accruedInput_
+_OBJC_IVAR_$_NBAsYouTypeFormatter._prefixBeforeNationalNumber_
+_OBJC_IVAR_$_NBAsYouTypeFormatter._accruedInputWithoutFormatting_
+_OBJC_IVAR_$_NBAsYouTypeFormatter._nationalNumber_
+_OBJC_IVAR_$_NBAsYouTypeFormatter._DIGIT_PATTERN_
+_OBJC_IVAR_$_NBAsYouTypeFormatter._NATIONAL_PREFIX_SEPARATORS_PATTERN_
+_OBJC_IVAR_$_NBAsYouTypeFormatter._CHARACTER_CLASS_PATTERN_
+_OBJC_IVAR_$_NBAsYouTypeFormatter._STANDALONE_DIGIT_PATTERN_
+_OBJC_IVAR_$_NBAsYouTypeFormatter._ELIGIBLE_FORMAT_PATTERN_
+_OBJC_IVAR_$_NBAsYouTypeFormatter._ableToFormat_
+_OBJC_IVAR_$_NBAsYouTypeFormatter._inputHasFormatting_
+_OBJC_IVAR_$_NBAsYouTypeFormatter._isCompleteNumber_
+_OBJC_IVAR_$_NBAsYouTypeFormatter._isExpectingCountryCallingCode_
+_OBJC_IVAR_$_NBAsYouTypeFormatter._shouldAddSpaceAfterNationalPrefix_
+_OBJC_IVAR_$_NBAsYouTypeFormatter._phoneUtil_
+_OBJC_IVAR_$_NBAsYouTypeFormatter._lastMatchPosition_
+_OBJC_IVAR_$_NBAsYouTypeFormatter._originalPosition_
+_OBJC_IVAR_$_NBAsYouTypeFormatter._positionToRemember_
+_OBJC_IVAR_$_NBAsYouTypeFormatter._MIN_LEADING_DIGITS_LENGTH_
+_OBJC_IVAR_$_NBAsYouTypeFormatter._possibleFormats_
+_OBJC_IVAR_$_NBAsYouTypeFormatter._currentMetaData_
+_OBJC_IVAR_$_NBAsYouTypeFormatter._defaultMetaData_
+_OBJC_IVAR_$_NBAsYouTypeFormatter._EMPTY_METADATA_
+/Users/sleroux/Library/Developer/Xcode/DerivedData/libPhoneNumber-fzcqwofecddavoeatjwefpnirjoe/Build/Intermediates/libPhoneNumber.build/Release-iphoneos/libPhoneNumber-iOS.build/Objects-normal/armv7/NBAsYouTypeFormatter.o
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/libPhoneNumber-iOS/libPhoneNumber/NBAsYouTypeFormatter.m
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/libPhoneNumber-iOS/libPhoneNumber/NBAsYouTypeFormatter.h
++[NBMetadataCoreTestMapper ISOCodeFromCallingNumber:]
+___53+[NBMetadataCoreTestMapper ISOCodeFromCallingNumber:]_block_invoke
+/Users/sleroux/Library/Developer/Xcode/DerivedData/libPhoneNumber-fzcqwofecddavoeatjwefpnirjoe/Build/Intermediates/libPhoneNumber.build/Release-iphoneos/libPhoneNumber-iOS.build/Objects-normal/armv7/NBMetadataCoreTestMapper.o
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/libPhoneNumber-iOS/libPhoneNumber/NBMetadataCoreTestMapper.m
+__53+[NBMetadataCoreTestMapper ISOCodeFromCallingNumber:]_block_invoke
+/Users/sleroux/Library/Developer/Xcode/DerivedData/libPhoneNumber-fzcqwofecddavoeatjwefpnirjoe/Build/Intermediates/libPhoneNumber.build/Release-iphoneos/libPhoneNumber-iOS.build/Objects-normal/armv7/NBPhoneNumberDefines.o
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/libPhoneNumber-iOS/libPhoneNumber/NBPhoneNumberDefines.m
+-[NBPhoneMetaDataGenerator init]
+-[NBPhoneMetaDataGenerator generateMetadataClasses]
+-[NBPhoneMetaDataGenerator createClassWithDictionary:name:isTestData:]
+-[NBPhoneMetaDataGenerator mappingObject:]
+-[NBPhoneMetaDataGenerator genRandStringLength:]
+-[NBPhoneMetaDataGenerator indentTab:]
+-[NBPhoneMetaDataGenerator getSRCDirectoryPath]
+-[NBPhoneMetaDataGenerator documentsDirectory]
+-[NBPhoneMetaDataGenerator generateMetaData]
+-[NBPhoneMetaDataGenerator generateMetaDataWithTest]
+-[NBPhoneMetaDataGenerator parseJSON:]
+-[NBPhoneMetaDataGenerator generateSourceCodeWith:name:type:isTestData:]
+-[NBPhoneMetaDataGenerator generateMappingSourceCodeWith:name:type:isTestData:]
+-[NBPhoneMetaDataGenerator stringForSourceCode:]
+-[NBPhoneMetaDataGenerator numberForSourceCode:]
+-[NBPhoneMetaDataGenerator phoneNumberDescWithData:name:]
+-[NBPhoneMetaDataGenerator phoneNumberDescWithData:]
+-[NBPhoneMetaDataGenerator phoneNumberFormatWithData:name:]
+-[NBPhoneMetaDataGenerator phoneNumberFormatArrayWithData:name:]
+/Users/sleroux/Library/Developer/Xcode/DerivedData/libPhoneNumber-fzcqwofecddavoeatjwefpnirjoe/Build/Intermediates/libPhoneNumber.build/Release-iphoneos/libPhoneNumber-iOS.build/Objects-normal/armv7/NBPhoneMetaDataGenerator.o
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/libPhoneNumber-iOS/libPhoneNumber/NBPhoneMetaDataGenerator.m
+/Users/sleroux/Library/Developer/Xcode/DerivedData/libPhoneNumber-fzcqwofecddavoeatjwefpnirjoe/Build/Intermediates/libPhoneNumber.build/Release-iphoneos/libPhoneNumber-iOS.build/Objects-normal/armv7/libPhoneNumber_vers.o
+/Users/sleroux/Library/Developer/Xcode/DerivedData/libPhoneNumber-fzcqwofecddavoeatjwefpnirjoe/Build/Intermediates/libPhoneNumber.build/Release-iphoneos/libPhoneNumber-iOS.build/DerivedSources/libPhoneNumber_vers.c
+__ZL15__ARCLite__loadv
+__ZL30add_image_hook_autoreleasepoolPK11mach_headerl
+__ZL34__arclite_objc_autoreleasePoolPushv
+__ZL33__arclite_objc_autoreleasePoolPopPv
+__ZL19patch_lazy_pointersPK11mach_headerP7patch_tm
+__ZL42__arclite_NSArray_objectAtIndexedSubscriptP7NSArrayP13objc_selectorj
+__ZL53__arclite_NSMutableArray_setObject_atIndexedSubscriptP14NSMutableArrayP13objc_selectorP11objc_objectj
+__ZL46__arclite_NSDictionary_objectForKeyedSubscriptP12NSDictionaryP13objc_selectorP11objc_object
+__ZL47__arclite_NSOrderedSet_objectAtIndexedSubscriptP12NSOrderedSetP13objc_selectorj
+__ZL58__arclite_NSMutableOrderedSet_setObject_atIndexedSubscriptP19NSMutableOrderedSetP13objc_selectorP11objc_objectj
+__ZL58__arclite_NSMutableDictionary__setObject_forKeyedSubscriptP19NSMutableDictionaryP13objc_selectorP11objc_objectS4_
+__ZL18add_image_hook_ARCPK11mach_headerl
+__ZL36__arclite_object_setInstanceVariableP11objc_objectPKcPv
+__ZL24__arclite_object_setIvarP11objc_objectP9objc_ivarS0_
+__ZL21__arclite_object_copyP11objc_objectm
+__ZL21__arclite_objc_retainP11objc_object
+__ZL26__arclite_objc_retainBlockP11objc_object
+__ZL22__arclite_objc_releaseP11objc_object
+__ZL26__arclite_objc_autoreleaseP11objc_object
+__ZL32__arclite_objc_retainAutoreleaseP11objc_object
+__ZL37__arclite_objc_autoreleaseReturnValueP11objc_object
+__ZL43__arclite_objc_retainAutoreleaseReturnValueP11objc_object
+__ZL44__arclite_objc_retainAutoreleasedReturnValueP11objc_object
+__ZL26__arclite_objc_storeStrongPP11objc_objectS0_
+__ZL22add_image_hook_swiftV1PK11mach_headerl
+__ZL42__arclite_NSUndoManagerProxy_isKindOfClassP11objc_objectP13objc_selectorP10objc_class
+__ZL13replaceMethodP10objc_classP13objc_selectorPFP11objc_objectS4_S2_zEPS6_
+__ZL30__arclite_NSManagedObject_initP11objc_objectP13objc_selector
+__ZL41__arclite_NSManagedObject_allocWithEntityP11objc_objectP13objc_selectorS0_
+__ZL36__arclite_NSManagedObject_allocBatchP11objc_objectP13objc_selectorPS0_S0_j
+__ZL37__arclite_NSKKMS_fastIndexForKnownKeyP11objc_objectP13objc_selectorS0_
+__ZL28__arclite_NSKKMS_indexForKeyP11objc_objectP13objc_selectorS0_
+__ZL29__arclite_NSKKsD_objectForKeyP11objc_objectP13objc_selectorS0_
+__ZL35__arclite_NSKKsD_removeObjectForKeyP11objc_objectP13objc_selectorS0_
+__ZL33__arclite_NSKKsD_setObject_forKeyP11objc_objectP13objc_selectorS0_S0_
+__ZL41__arclite_NSKKsD_addEntriesFromDictionaryP11objc_objectP13objc_selectorP12NSDictionary
+__ZL28__arclite_objc_readClassPairP10objc_classPK15objc_image_info
+__ZL32__arclite_objc_allocateClassPairP10objc_classPKcm
+__ZL32__arclite_object_getIndexedIvarsP11objc_object
+__ZL23__arclite_objc_getClassPKc
+__ZL27__arclite_objc_getMetaClassPKc
+__ZL31__arclite_objc_getRequiredClassPKc
+__ZL26__arclite_objc_lookUpClassPKc
+__ZL26__arclite_objc_getProtocolPKc
+__ZL23__arclite_class_getNameP10objc_class
+__ZL26__arclite_protocol_getNameP8Protocol
+__ZL37__arclite_objc_copyClassNamesForImagePKcPj
+__ZL17transcribeMethodsP10objc_classP15glue_class_ro_t
+__ZL19transcribeProtocolsP10objc_classP15glue_class_ro_t
+__ZL20transcribePropertiesP10objc_classP15glue_class_ro_t
+__ZL14initialize_impP11objc_objectP13objc_selector
+__ZL18allocateMaybeSwiftP18glue_swift_class_tm
+__ZL22copySwiftV1MangledNamePKcb
+__ZL13demangledNamePKcb
+__ZL16scanMangledFieldRPKcS0_S1_Ri
+__ZL30arclite_uninitialized_functionv
+__ZL12cxxConstructP11objc_object
+__ZL20fixStringForCoreDataP11objc_object
+_OBJC_METACLASS_$___ARCLite__
+__ZL24OBJC_CLASS_$___ARCLite__
+__ZL31OBJC_METACLASS_RO_$___ARCLite__
+__non_lazy_classes
+__ZL27OBJC_CLASS_RO_$___ARCLite__
+__ZL11_class_name
+__ZL32OBJC_$_CLASS_METHODS___ARCLite__
+__ZL17_load_method_name
+__ZL17_load_method_type
+__ZL23NSAutoreleasePool_class
+__ZZL30add_image_hook_autoreleasepoolPK11mach_headerlE7patches
+__ZGVZL30add_image_hook_autoreleasepoolPK11mach_headerlE7patches
+l_OBJC_PROTOCOL_$___ARCLiteIndexedSubscripting__
+l_OBJC_LABEL_PROTOCOL_$___ARCLiteIndexedSubscripting__
+l_OBJC_PROTOCOL_REFERENCE_$___ARCLiteIndexedSubscripting__
+l_OBJC_PROTOCOL_$___ARCLiteKeyedSubscripting__
+l_OBJC_LABEL_PROTOCOL_$___ARCLiteKeyedSubscripting__
+l_OBJC_PROTOCOL_REFERENCE_$___ARCLiteKeyedSubscripting__
+__ZZL18add_image_hook_ARCPK11mach_headerlE7patches
+__ZGVZL18add_image_hook_ARCPK11mach_headerlE7patches
+__ZL30NSUndoManagerProxy_targetClass
+__ZL29original_NSManagedObject_init
+__ZL40original_NSManagedObject_allocWithEntity
+__ZL35original_NSManagedObject_allocBatch
+__ZL25NSMutableDictionary_class
+__ZL22NSConstantString_class
+__ZL14NSString_class
+__ZL36original_NSKKMS_fastIndexForKnownKey
+__ZL27original_NSKKMS_indexForKey
+__ZL28original_NSKKsD_objectForKey
+__ZL34original_NSKKsD_removeObjectForKey
+__ZL32original_NSKKsD_setObject_forKey
+__ZL40original_NSKKsD_addEntriesFromDictionary
+__ZZL22add_image_hook_swiftV1PK11mach_headerlE7patches
+__ZGVZL22add_image_hook_swiftV1PK11mach_headerlE7patches
+__ZL31original_objc_allocateClassPair
+__ZL31original_object_getIndexedIvars
+__ZL22original_objc_getClass
+__ZL26original_objc_getMetaClass
+__ZL30original_objc_getRequiredClass
+__ZL25original_objc_lookUpClass
+__ZL25original_objc_getProtocol
+__ZL22original_class_getName
+__ZL25original_protocol_getName
+__ZL36original_objc_copyClassNamesForImage
+__ZL12demangleLock
+__ZL9Demangled
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c++ -arch armv7 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=c++11 -Wno-trigraphs -fno-exceptions -fno-rtti -mpascal-strings -Os -Wno-missing-field-initializers -Wmissing-prototypes -Wno-implicit-atomic-properties -Wno-arc-repeated-use-of-weak -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wno-unused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wno-empty-body -Wno-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wno-constant-conversion -Wno-int-conversion -Wno-bool-conversion -Wno-enum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wno-undeclared-selector -Wno-deprecated-implementations -Wno-c++11-extensions -D NDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.Internal.sdk -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -Winvalid-offsetof -miphoneos-version-min=4.3 -g -fno-threadsafe-statics -Wno-sign-conversion -Wno-infinite-recursion -Wno-move -fembed-bitcode -iquote /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~835/TempContent/Objects/arclite.build/arclite_iOS.build/arclite_iphoneos-generated-files.hmap -I /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~835/TempContent/Objects/arclite.build/arclite_iOS.build/arclite_iphoneos-own-target-headers.hmap -I /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~835/TempContent/Objects/arclite.build/arclite_iOS.build/arclite_iphoneos-all-target-headers.hmap -iquote /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~835/TempContent/Objects/arclite.build/arclite_iOS.build/arclite_iphoneos-project-headers.hmap -I /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~835/Symbols/BuiltProducts/include -I /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~835/TempContent/Objects/arclite.build/arclite_iOS.build/DerivedSources/armv7 -I /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~835/TempContent/Objects/arclite.build/arclite_iOS.build/DerivedSources -F/Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~835/Symbols/BuiltProducts -F/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.Internal.sdk/System/Library/PrivateFrameworks -Wall -Wextra -Wno-gcc-compat -fgnu-inline-asm -MMD -MT dependencies -MF /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~835/TempContent/Objects/arclite.build/arclite_iOS.build/Objects-normal/armv7/arclite.d --serialize-diagnostics /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~835/TempContent/Objects/arclite.build/arclite_iOS.build/Objects-normal/armv7/arclite.dia -c /Library/Caches/com.apple.xbs/Sources/arclite_iOS/arclite-65/source/arclite.mm -o /Library/Caches/com.apple.xbs/Binaries/arclite_iOS/arclite_iOS-65~835/TempContent/Objects/arclite.build/arclite_iOS.build/Objects-normal/armv7/arclite.o -mlinker-version=274.1 -march=armv7a
+/Library/Caches/com.apple.xbs/Sources/arclite_iOS/arclite-65/source/arclite.mm
+/Library/Caches/com.apple.xbs/Sources/arclite_iOS/arclite-65
+fixStringForCoreData
+cxxConstruct
+arclite_uninitialized_function
+scanMangledField
+isdigit
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.Internal.sdk/usr/include/ctype.h
+__isctype
+demangledName
+copySwiftV1DemangledName
+copySwiftV1MangledName
+allocateMaybeSwift
+word_align
+isSwift
+initialize_imp
+transcribeProperties
+property_list_nth
+transcribeProtocols
+transcribeMethods
+data
+method_list_nth
+__arclite_objc_copyClassNamesForImage
+__arclite_protocol_getName
+__arclite_class_getName
+__arclite_objc_getProtocol
+__arclite_objc_lookUpClass
+__arclite_objc_getRequiredClass
+__arclite_objc_getMetaClass
+__arclite_objc_getClass
+__arclite_object_getIndexedIvars
+__arclite_objc_allocateClassPair
+metaclass
+__arclite_objc_readClassPair
+transcribeIvars
+ivar_list_nth
+max
+alignment
+ro
+fastFlags
+__arclite_NSKKsD_addEntriesFromDictionary
+__arclite_NSKKsD_setObject_forKey
+__arclite_NSKKsD_removeObjectForKey
+__arclite_NSKKsD_objectForKey
+__arclite_NSKKMS_indexForKey
+__arclite_NSKKMS_fastIndexForKnownKey
+__arclite_NSManagedObject_allocBatch
+__arclite_NSManagedObject_allocWithEntity
+__arclite_NSManagedObject_init
+replaceMethod
+__arclite_NSUndoManagerProxy_isKindOfClass
+add_image_hook_swiftV1
+patch_t<const char **(const char *, unsigned int *)>
+patch_t<const char *(Protocol *)>
+patch_t<const char *(Class)>
+patch_t<Protocol *(const char *)>
+patch_t<Class (const char *)>
+patch_t<void *(id)>
+patch_t<Class (Class, const char *, unsigned long)>
+patch_t<Class (Class, const objc_image_info *)>
+__arclite_objc_storeStrong
+__arclite_objc_release
+__arclite_objc_retain
+__arclite_objc_retainAutoreleasedReturnValue
+__arclite_objc_retainAutoreleaseReturnValue
+__arclite_objc_autoreleaseReturnValue
+__arclite_objc_retainAutorelease
+__arclite_objc_autorelease
+__arclite_objc_retainBlock
+__arclite_object_copy
+fixupCopiedReferences
+_class_getInstanceStart
+alignedInstanceStart
+__arclite_class_usesAutomaticRetainRelease
+classOrSuperClassesUseARR
+__arclite_object_setIvar
+isScannedOffset
+_ivar_getClass
+__arclite_object_setInstanceVariable
+add_image_hook_ARC
+patch_t<void (id *, id)>
+patch_t<id (id)>
+patch_t<void (id)>
+patch_t<id (id, unsigned long)>
+patch_t<void (id, objc_ivar *, id)>
+patch_t<objc_ivar *(id, const char *, void *)>
+__arclite_NSMutableDictionary__setObject_forKeyedSubscript
+__arclite_NSMutableOrderedSet_setObject_atIndexedSubscript
+__arclite_NSOrderedSet_objectAtIndexedSubscript
+__arclite_NSDictionary_objectForKeyedSubscript
+__arclite_NSMutableArray_setObject_atIndexedSubscript
+__arclite_NSArray_objectAtIndexedSubscript
+patch_lazy_pointers
+__arclite_objc_autoreleasePoolPop
+__arclite_objc_autoreleasePoolPush
+add_image_hook_autoreleasepool
+patch_t<void (void *)>
+patch_t<void *()>
+__ARCLite__load
+install_swiftV1
+install_ARC
+install_dict_nil_value
+addOrReplaceMethod
+keyedGetter
+install_subscripting
+addMethod
+indexedGetter
+install_autoreleasepool

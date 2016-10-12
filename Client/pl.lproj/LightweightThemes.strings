@@ -1,0 +1,39 @@
+/* Button shown when user wishes to view photos for theme but has not given Firefox permission to do so yet. */
+"Allow Firefox to use my Photos" = "Zezwól Firefoksowi na dostęp do Zdjęć";
+
+/* Accessibility label for back button to theme chooser */
+"Back to Themes" = "Wróć do motywów";
+
+/* Back button shown to return back to theme settings from photo picker */
+"Choose" = "Wybór motywu";
+
+/* Accessibility label for settings row to enter theme settings */
+"Choose Theme" = "Motywy";
+
+/* Accessibility label for themes subheader */
+"Default Themes" = "Domyślny motyw";
+
+/* Accessibility label for photo viewer */
+"My Photos" = "Moje zdjęcia";
+
+/* Sub header for photo options in theme chooser */
+"Photos" = "Zdjęcia";
+
+/* Button to show preview of selected theme */
+"Preview" = "Podgląd";
+
+/* Accessibility label for theme preview button */
+"Preview Theme" = "Pogląd motywu";
+
+/* Button to set selected theme as current theme */
+"Set" = "Ustaw";
+
+/* Accessibility label for set theme button */
+"Set Theme" = "Ustaw motyw";
+
+/* Settings row to enter theme settings */
+"Theme" = "Motywy";
+
+/* sub header for theme options in theme chooser */
+"Themes" = "Motywy";
+

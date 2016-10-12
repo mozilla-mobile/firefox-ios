@@ -1,0 +1,18 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "ಖಾಸಗಿ ಹಾಳೆಗಳನ್ನು ಮುಚ್ಚು";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "ಇನ್ನಷ್ಟು ಅರಿತುಕೊಳ್ಳಿ";
+
+/* Toggled OFF accessibility value */
+"Off" = "ಆಫ್";
+
+/* Toggled ON accessibility value */
+"On" = "ಆನ್";
+
+/* Context menu option for opening a link in a new private tab */
+"Open In New Private Tab" = "ಖಾಸಗಿ ಟ್ಯಾಬ್ ನಲ್ಲಿ ತೆರೆ";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "ಖಾಸಗಿ ವೀಕ್ಷಣೆ";
+

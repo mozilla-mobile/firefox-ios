@@ -1,0 +1,31 @@
+/* Message shown in the dialog prompting users if they want to clear everything */
+"Are you sure you want to clear all of your data? This will also close all open tabs." = "Biztosan törli az összes adatát? Ez az összes lapot is bezárja.";
+
+/* Settings item for clearing browsing history */
+"Browsing History" = "Böngészési előzmények";
+
+/* Settings item for clearing the cache */
+"Cache" = "Gyorsítótár";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "Mégse";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "Törlés";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "Minden törlése";
+
+/* Button in settings that clears private data for the selected items.
+   Navigation title in settings. */
+"Clear Private Data" = "Személyes adatok törlése";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Sütik";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "Kapcsolat nélküli webhelyadatok";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "Mentett bejelentkezések";
+

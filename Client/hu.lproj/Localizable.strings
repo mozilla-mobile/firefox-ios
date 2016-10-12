@@ -1,0 +1,880 @@
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "A következő felhasználónevet és jelszót kér: %@.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "A következő felhasználónevet és jelszót kér: %1$@. Az oldal üzenete: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "Névjegy";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Lap hozzáadása";
+
+/* Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Add to Reading List" = "Felvétel az olvasási listára";
+
+/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Dismiss" = "Rendben";
+
+/* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Message" = "Hiba történt a jegy Wallethez adása során. Próbálja újra később.";
+
+/* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Title" = "A jegy hozzáadása sikertelen";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "Lap hozzáadva az olvasási listához";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "Cím és keresés";
+
+/* Setting to enable third-party keyboards */
+"Allow Third-Party Keyboards" = "Külső billentyűzetek engedélyezése";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "Mindig küldjön";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "Hitelesítés szükséges";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "Vissza";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "Felugró ablakok tiltása";
+
+/* Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Bookmark" = "Könyvjelzőzés";
+
+/* Panel accessibility label */
+"Bookmarks" = "Könyvjelzők";
+
+/* Status label for the empty Bookmarks state. */
+"Bookmarks you save will show up here." = "A mentett könyvjelzők itt fognak megjelenni.";
+
+/* The label to show the location of the folder where the bookmark is located */
+"Bookmarks.Folder.Label" = "Mappa";
+
+/* The label for the location of the new folder */
+"Bookmarks.FolderLocation.Label" = "Hely";
+
+/* The label for the title of the new folder */
+"Bookmarks.FolderName.Label" = "Mappa neve";
+
+/* The button to create a new folder */
+"Bookmarks.NewFolder.Label" = "Új mappa";
+
+/* The label for the title of a bookmark */
+"Bookmarks.Title.Label" = "Cím";
+
+/* The label for the URL of a bookmark */
+"Bookmarks.URL.Label" = "URL";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "Fényerő";
+
+/* Alert Call Button */
+"Call" = "Hívás";
+
+/* Label for Cancel button */
+"Cancel" = "Mégse";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "Módosítja a színtémát.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "Módosítja a betűkészletet.";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Clear Private Data" = "Személyes adatok törlése";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Bezárás";
+
+/* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
+"Closing tab" = "Lap bezárása";
+
+/* Copy the URL from the location bar */
+"Copy Address" = "Cím másolása";
+
+/* Context menu item for copying an image to the clipboard */
+"Copy Image" = "Kép másolása";
+
+/* Context menu item for copying a link URL to the clipboard */
+"Copy Link" = "Hivatkozás másolása";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it's already there?" = "Az oldal nem adható hozzá az olvasási listához. Lehet, hogy már rajta van?";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "Az oldal nem adható hozzá az olvasási listához";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "Az oldal nem tölthető be.";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "Fiók létrehozása";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "Sötét";
+
+/* Debug option */
+"Debug: forget Sync auth state" = "Hibakeresés: Sync hitelesítési állapotának elfelejtése";
+
+/* Debug option */
+"Debug: require password" = "Hibakeresés: jelszó megkövetelése";
+
+/* Debug option */
+"Debug: require upgrade" = "Hibakeresés: frissítés megkövetelése";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "Betűméret csökkentése";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "Alapértelmezett keresőszolgáltatás";
+
+/* Pending feature; currently unused string! Checkbox label shown after multiple alerts are shown */
+"Disable additional page dialogs" = "További párbeszédablakok letiltása";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "Megjelenítési beállítások";
+
+/* Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to save the password for %@ on %@?" = "Szeretné elmenteni a jelszavát ehhez: %1$@ itt: %2$@?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"Do you want to save the password on %@?" = "Szeretné elmenteni a jelszavát itt: %@?";
+
+/* Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to update the password for %@ on %@?" = "Szeretné frissíteni a jelszavát ehhez: %1$@ itt: %2$@?";
+
+/* Prompt for updating a password with on username. The parameter is the hostname of the site. */
+"Do you want to update the password on %@?" = "Szeretné frissíteni a jelszavát itt: %@?";
+
+/* Used as a button label for crash dialog prompt */
+"Don't Send" = "Nincs küldés";
+
+/* Done button on left side of the Settings view controller title bar
+   Done editing button */
+"Done" = "Kész";
+
+/* Accessibility hint, associated to the Back button in the tab toolbar, used by assistive technology to describe the result of a double tap. */
+"Double tap and hold to open history" = "Érintse meg duplán és tartsa az előzmények megnyitásához";
+
+/* The label of the button the user will press to reject the option to open a file in another application */
+"Downloads.Alert.Cancel" = "Nem";
+
+/* The label of the button the user will press to be presented with a list of other apps to open a file in */
+"Downloads.Alert.Confirm" = "Igen";
+
+/* The message of the alert box asking the user if they want to use another app to open a file. */
+"Downloads.Alert.Message" = "A Firefox nem tudja sem letölteni, sem megjeleníteni ezt a fájl. Szeretné megnyitni egy másik appban?";
+
+/* The title of the alert box asking the user if they want to use another app to open a file. */
+"Downloads.Alert.Title" = "Firefox letöltések";
+
+/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
+"Downloads.Error.Message" = "A Firefox még nem támogatja a letöltéseket.";
+
+/* Text message in the settings table view */
+"Enter your password to connect." = "A kapcsolódáshoz adja meg jelszavát.";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "Speciális";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "Figyelmeztetés: nem tudjuk megerősíteni, hogy a kapcsolata biztonságos-e ezzel a weboldallal.";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "Lehet hibás beállítás vagy egy támadó műve. Akkor haladjon tovább, ha elfogadja a lehetséges kockázatot.";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "A(z) %@ tulajdonosa rosszul állította be a webhelyet. Hogy megvédje az információit az ellopásuktól, a Firefox nem kapcsolódott ehhez a webhelyhez.";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "Ez a kapcsolat nem megbízható";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "Ugrás vissza";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "Megtekintés mindenképp";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Setting value prop to enable third-party keyboards */
+"Firefox needs to reopen for this change to take effect." = "A Firefoxot újra meg kell nyitni a változás életbe lépéséhez.";
+
+/* Text of the 'log out firefox account' alert */
+"Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device." = "A Firefox leállítja a szinkronizációt a fiókjával, de nem töröl semmilyen böngészési adatot erről az eszközről.";
+
+/* See http://mzl.la/1G7uHo7 */
+"Firefox would like to access your Photos" = "A Firefox szeretne hozzáférni a fényképeihez";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "Előre";
+
+/* General settings section title */
+"General" = "Általános";
+
+/* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
+"Get your open tabs, bookmarks, and passwords from your other devices." = "Hozza át a nyitott lapjait, könyvjelzőit és jelszavait a többi eszközéről.";
+
+/* Pending feature; currently unused string! Button to browse to URL on the clipboard when browser is opened */
+"Go" = "Ugrás";
+
+/* Pending feature; currently unused string! Prompt message shown when browser is opened with URL on the clipboard */
+"Go to copied URL?" = "Ugrás a másolt URL-hez?";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "Súgó";
+
+/* Panel accessibility label */
+"History" = "Előzmények";
+
+/* Title for the History Panel empty state. */
+"HistoryPanel.EmptyState.Title" = "Azok a webhelyek jelennek meg itt, amelyeket nemrég látogatott meg.";
+
+/* Description for the empty synced tabs null state in the History Panel */
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "A más eszközökön lévő lapok itt jelennek meg.";
+
+/* Description for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Description" = "Jelentkezzen be a többi eszközén lévő nyitott lapok megtekintéséhez.";
+
+/* Title for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+
+/* Title for the Back to History button in the History Panel */
+"HistoryPanel.HistoryBackButton.Title" = "Előzmények";
+
+/* Title for the Recently Closed button in the History Panel */
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "Nemrég bezárt";
+
+/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d eszköz csatlakoztatva";
+
+/* Title for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Title" = "Szinkronizált eszközök";
+
+/* Button cancelling changes setting the home page for the first time. */
+"HomePage.Set.Dialog.Cancel" = "Mégse";
+
+/* Alert dialog body when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Message" = "Ezt bármikor módosíthatja a beállításokban";
+
+/* Button accepting changes setting the home page for the first time. */
+"HomePage.Set.Dialog.OK" = "Kezdőlap beállítása";
+
+/* Alert dialog title when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Title" = "Tényleg ezt az oldalt szeretné beállítani kezdőlapnak?";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Back.DiscoveryTitle" = "Vissza";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.CloseTab.DiscoveryTitle" = "Lap bezárása";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Find.DiscoveryTitle" = "Keresés";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Forward.DiscoveryTitle" = "Előre";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "Új privát lap";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewTab.DiscoveryTitle" = "Új lap";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Reload.DiscoveryTitle" = "Újratöltés";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.SelectLocationBar.DiscoveryTitle" = "Címsáv kiválasztása";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowNextTab.DiscoveryTitle" = "Következő lap megjelenítése";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Előző lap megjelenítése";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "Betűméret növelése";
+
+/* Accessibility label for the introduction tour carousel */
+"Intro Tour Carousel" = "Bevezető körhinta ablakelem";
+
+/* History tableview section header */
+"Last month" = "Múlt hónap";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "Legutóbb szinkronizálva: %@";
+
+/* History tableview section header */
+"Last week" = "Múlt hét";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "Licencek";
+
+/* Light theme setting in Reading View settings */
+"Light" = "Világos";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "Eredeti oldal betöltése";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "Tartalom betöltése…";
+
+/* Button in settings screen to disconnect from your account
+   Disconnect button in the 'log out firefox account' alert */
+"Log Out" = "Kijelentkezés";
+
+/* Title of the 'log out firefox account' alert */
+"Log Out?" = "Kijelentkezés?";
+
+/* Authentication prompt log in button */
+"Log in" = "Bejelentkezés";
+
+/* Label used as an item in Settings. When touched, the user will be navigated to the Logins/Password manager. */
+"Logins" = "Bejelentkezések";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "Nincs mentés";
+
+/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "„%1$@” bejelentkezés mentése ehhez: %2$@?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "Jelszó mentése ehhez: %@?";
+
+/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdateLogin.Title" = "„%1$@” bejelentkezés frissítése itt: %2$@?";
+
+/* Prompt for updating a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdatePassword.Title" = "Jelszó frissítése itt: %@?";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "Bejelentkezés mentése";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "Frissítés";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Úgy néz ki, hogy a Firefox előzőleg összeomlott. Szeretné helyreállítani a lapjait?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "Megjelölés olvasottként";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "Megjelölés olvasatlanként";
+
+/* Label for the button, displayed in the menu, used to toggle night mode on or off */
+"Menu.NightModeAction.Title" = "Éjszakai mód";
+
+/* Label for the button, displayed in the menu, used to turn night mode off */
+"Menu.NightModeTurnOffAction.Title" = "Éjszakai mód ki";
+
+/* Label for the button, displayed in the menu, used to turn night mode on */
+"Menu.NightModeTurnOnAction.Title" = "Éjszakai mód";
+
+/* Label for the button, displayed in the menu, used to toggle no image mode on or off */
+"Menu.NoImageModeAction.Title" = "Képek nélküli mód";
+
+/* Label for the button, displayed in the menu, used to turn no image mode off */
+"Menu.NoImageModeTurnOffAction.Title" = "Képek megjelenítése";
+
+/* Label for the button, displayed in the menu, used to turn no image mode on */
+"Menu.NoImageModeTurnOnAction.Title" = "Képek elrejtése";
+
+/* Error for a missing remote error number */
+"Missing error" = "Hiányzó hiba";
+
+/* Error for a missing remote error message */
+"Missing message" = "Hiányzó üzenet";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "Navigációs eszköztár";
+
+/* New tab [title] [url] */
+"New tab: %@: %@" = "Új lap: %1$@: %2$@";
+
+/* Prompt title for application update */
+"New version available" = "Új verzió érhető el";
+
+/* Restore Tabs Negative Action */
+"No" = "Nem";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "Nincsenek lapok";
+
+/* Label for button to cancel application update prompt */
+"Not Now" = "Most nem";
+
+/* Button to not save the user's password */
+"Not now" = "Most nem";
+
+/* Label for OK button in the application update prompt
+   OK button */
+"OK" = "Rendben";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "Rendben";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "Hoppá! A Firefox összeomlott";
+
+/* Context menu item for opening a link in a new tab */
+"Open In New Tab" = "Megnyitás új lapon";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "Beállítások megnyitása";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Nyissa meg a cikkeket olvasó nézetben a könyv ikonra kattintva a címsávban.";
+
+/* String indicating that the file can be opened in another application on the device */
+"Open in…" = "Megnyitás a következővel…";
+
+/* Opening an external URL */
+"Opening %@" = "%@ megnyitása";
+
+/* Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list). */
+"Panel Chooser" = "Panel-választó";
+
+/* Password textbox in Authentication prompt */
+"Password" = "Jelszó";
+
+/* Paste the URL into the location bar */
+"Paste" = "Beillesztés";
+
+/* Paste the URL into the location bar and visit */
+"Paste & Go" = "Beillesztés és ugrás";
+
+/* Privacy section title */
+"Privacy" = "Magánszféra";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "Adatvédelmi irányelvek";
+
+/* Title for quick-search engines settings section. */
+"Quick-search Engines" = "Gyorskeresési szolgáltatások";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "Olvasó nézet";
+
+/* Panel accessibility label */
+"Reading list" = "Olvasási lista";
+
+/* Title for the Recently Closed Tabs Panel */
+"RecentlyClosedTabsPanel.Title" = "Nemrég bezárt";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "Újratöltés";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "Eltávolítás";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "Eltávolítás az olvasási listáról";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"Remove page" = "Oldal eltávolítása";
+
+/* Action Sheet Button for Requesting the Desktop Site
+   Share action title */
+"Request Desktop Site" = "Asztali oldal kérése";
+
+/* Action Sheet Button for Requesting the Mobile Site
+   Share action title */
+"Request Mobile Site" = "Mobile weboldal kérése";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Talpatlan";
+
+/* Context menu item for saving an image */
+"Save Image" = "Kép mentése";
+
+/* Setting to enable the built-in password manager */
+"Save Logins" = "Bejelentkezések mentése";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Mentse az oldalakat az olvasási listájára, a könyv plusz ikonra kattintva az olvasó nézet vezérlőelemei közt.";
+
+/* Navigation title for search settings.
+   Open search section of settings */
+"Search" = "Keresés";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "Keressen, vagy adjon meg címet";
+
+/* The message that asks the user to Add the search provider explaining where the search engine will appear */
+"Search.ThirdPartyEngines.AddMessage" = "Az új keresési szolgáltatás a gyorskereső sávban fog megjelenni.";
+
+/* The success message that appears after a user sucessfully adds a new search engine */
+"Search.ThirdPartyEngines.AddSuccess" = "Keresési zolgáltatás hozzáadva!";
+
+/* The title that asks the user to Add the search provider */
+"Search.ThirdPartyEngines.AddTitle" = "Keresési szolgáltató hozzáadása?";
+
+/* The cancel button if you do not want to add a search engine. */
+"Search.ThirdPartyEngines.Cancel" = "Mégse";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedMessage" = "A keresési szolgáltató nem adható hozzá.";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedTitle" = "Sikertelen";
+
+/* The confirmation button */
+"Search.ThirdPartyEngines.OK" = "Rendben";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "Keresés a javaslatra";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "Biztonságos kapcsolat";
+
+/* Menu item in settings used to open input.mozilla.org where people can submit feedback */
+"Send Feedback" = "Visszajelzés küldése";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "Jelentés küldése";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "Összeomlás jelentése, hogy a Mozilla javíthassa a hibát?";
+
+/* Button title for cancelling SendTo screen */
+"SendTo.Cancel.Button" = "Mégse";
+
+/* Message in error prompt explaining why the URL is invalid. */
+"SendTo.Error.Message" = "Csak HTTP és HTTPS hivatkozásokat lehet megosztani.";
+
+/* OK button to dismiss the error prompt. */
+"SendTo.Error.OK.Button" = "OK";
+
+/* Title of error prompt displayed when an invalid URL is shared. */
+"SendTo.Error.Title" = "A hivatkozás, amit próbál megosztani, nem osztható meg.";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Szépia";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Talpas";
+
+/* Accessibility label for the Settings button in the Tab Tray.
+   Settings */
+"Settings" = "Beállítások";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "Személyes adatok törlése";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "Személyes adatok törlése";
+
+/* Title displayed in header of the setting panel. */
+"Settings.ClearPrivateData.Title" = "Személyes adatok törlése";
+
+/* Button in settings to clear the home page. */
+"Settings.HomePage.Clear.Button" = "Törlés";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
+"Settings.HomePage.SectionName" = "Kezdőlap";
+
+/* Title displayed in header of the setting panel. */
+"Settings.HomePage.Title" = "Kezdőlap beállítások";
+
+/* Label displayed under the 'Show Homepage Icon In Menu' option. It describes the effect of this setting when disabled. */
+"Settings.HomePage.UI.Toggle.Subtitle" = "Egyébként megjelenítés az eszköztárban";
+
+/* Label used as an item in Settings. User can toggle this setting to show the home page button in menu, or on toolbar. */
+"Settings.HomePage.UI.Toggle.Title" = "Kezdőlap ikon megjelenítése a menüben";
+
+/* Placeholder text in the homepage setting when no homepage has been set. */
+"Settings.HomePage.URL.Placeholder" = "Adjon meg egy weblapot";
+
+/* Title of the setting section containing the URL of the current home page. */
+"Settings.HomePage.URL.Title" = "Jelenlegi kezdőlap";
+
+/* Button in settings to use the current link on the clipboard as home page. */
+"Settings.HomePage.UseCopiedLink.Button" = "Másolt hivatkozás használata";
+
+/* Button in settings to use the current page as home page. */
+"Settings.HomePage.UseCurrent.Button" = "Aktuális oldal használata";
+
+/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
+"Settings.HomePage.UseDefault.Button" = "Alapértelmezés használata";
+
+/* A description in settings of what the new tab choice means */
+"Settings.NewTab.Description" = "Amikor megnyit egy új lapot:";
+
+/* Option in settings to show a blank page when you open a new tab */
+"Settings.NewTab.Option.BlankPage" = "Üres oldal megjelenítése";
+
+/* Option in settings to show bookmarks when you open a new tab */
+"Settings.NewTab.Option.Bookmarks" = "Könyvjelzők megjelenítése";
+
+/* Option in settings to show history when you open a new tab */
+"Settings.NewTab.Option.History" = "Előzmények megjelenítése";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.HomePage" = "Kezdőlap megjelenítése";
+
+/* Option in settings to show reading list when you open a new tab */
+"Settings.NewTab.Option.ReadingList" = "Olvasási lista megjelenítése";
+
+/* Option in settings to show top sites when you open a new tab */
+"Settings.NewTab.Option.TopSites" = "Kedvenc oldalak megjelenítése";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behaviour. */
+"Settings.NewTab.SectionName" = "Új lap";
+
+/* Title displayed in header of the setting panel. */
+"Settings.NewTab.Title" = "Új lap beállítások";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Done.Button" = "Kész";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Edit.Button" = "Szerkesztés";
+
+/* Title of link to help page to find out how to solve Sync issues */
+"Settings.TroubleShootSync.Title" = "Hibaelhárítás";
+
+/* Accessibility Label for the tab toolbar Share button */
+"Share" = "Megosztás";
+
+/* Context menu item for sharing a link URL */
+"Share Link" = "Hivatkozás megosztása";
+
+/* Button title for cancelling Share screen */
+"ShareTo.Cancel.Button" = "Mégse";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "Keresési javaslatok megjelenítése";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar
+   Accessibility Label for the tabs button in the tab toolbar */
+"Show Tabs" = "Lapok megjelenítése";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "Bevezető megjelenítése";
+
+/* Label for show search suggestions setting. */
+"Show search suggestions" = "Keresési javaslatok megjelenítése";
+
+/* Text message / button in the settings table view */
+"Sign In to Firefox" = "Jelentkezzen be a Firefoxba";
+
+/* See http://mzl.la/1Qtkf0j
+   Text message / button in the settings table view */
+"Sign in" = "Bejelentkezés";
+
+/* Clarify value prop under Sign In to Firefox in Settings. */
+"Sign in to get your tabs, bookmarks, and passwords from your other devices." = "Jelentkezzen be, hogy megkapja a lapjait, könyvjelzőit és jelszavait a többi eszközéről.";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "Leállítás";
+
+/* Support section title */
+"Support" = "Támogatás";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "A lap bezárásához legyintsen balra vagy jobbra három ujjal.";
+
+/* Sync Firefox Account */
+"Sync Now" = "Szinkronizálás most";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, bookmarks, passwords and more." = "Szinkronizálja a lapjait, könyvjelzőit, jelszavait és egyebeket.";
+
+/* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
+"Sync your tabs, passwords and more." = "Szinkronizálja a lapjait, jelszavait és egyebeket.";
+
+/* Message displayed when the user syncs for the first time */
+"Sync.FirstTimeMessage.Label" = "Az első szinkronizálás eltarthat egy darabig";
+
+/* Message displayed when the user's account is syncing with no ellipsis */
+"Sync.Syncing.Label" = "Szinkronizálás";
+
+/* Message displayed when the user's account is syncing with ellipsis at the end */
+"Sync.SyncingEllipsis.Label" = "Szinkronizálás…";
+
+/* The Bookmark sync component, used in SyncState.Partial.Title */
+"SyncState.Bookmark.Title" = "Könyvjelzők";
+
+/* The Remote Clients sync component, used in SyncState.Partial.Title */
+"SyncState.Clients.Title" = "Távoli ügyfelek";
+
+/* Title for Sync status message when synchronization failed to complete */
+"SyncState.Failed.Title" = "A szinkronizálás sikertelen";
+
+/* The History sync component, used in SyncState.Partial.Title */
+"SyncState.History.Title" = "Előzmények";
+
+/* The Logins sync component, used in SyncState.Partial.Title */
+"SyncState.Logins.Title" = "Bejelentkezések";
+
+/* Title for Sync status message when Sync failed to start. */
+"SyncState.NotStarted.Title" = "A Sync nem érhető el";
+
+/* Title for Sync status message when Sync failed due to being offline */
+"SyncState.Offline.Title" = "A Sync kapcsolat nélküli";
+
+/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
+"SyncState.Partial.Title" = "A Sync problémákat tapasztal a(z) %@ szinkronizálásakor";
+
+/* The Tabs sync component, used in SyncState.Partial.Title */
+"SyncState.Tabs.Title" = "Lapok";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "Lap %1$@ / %2$@";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "Lap %1$@ - %2$@ / %3$@";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "Lapok tálca";
+
+/* The button to undo the delete all tabs */
+"Tabs.DeleteAllUndo.Button" = "Visszavonás";
+
+/* The label indicating that all the tabs were closed */
+"Tabs.DeleteAllUndo.Title" = "%d lap bezárva";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "A lap nem jeleníthető meg olvasó nézetben.";
+
+/* Prompt message for application update */
+"There is a new version available of Firefox Aurora. Tap OK to go to the download page." = "A Firefox Aurora új változata érhető el. Érintse meg a Rendben gombot a letöltési oldalra ugráshoz.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "Hiba történt a lapok más eszközről történő elérésekor. Próbálja újra néhány pillanat múlva.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "Hiba történt az oldal átalakításakor";
+
+/* See http://mzl.la/1G7uHo7 */
+"This allows you to save the image to your Camera Roll." = "Ez lehetővé teszi, hogy mentse a képet a Filmtekercsébe.";
+
+/* Opening an external app */
+"This will open in another application" = "Ez egy másik alkalmazást fog megnyitni";
+
+/* History tableview section header */
+"Today" = "Ma";
+
+/* Accessibility label for the Menu button. */
+"Toolbar.Menu.AccessibilityLabel" = "Menü";
+
+/* Accessibility Label for the tab toolbar Homepage button */
+"Toolbar.OpenHomePage.AccessibilityLabel" = "Kezdőlap";
+
+/* Panel accessibility label */
+"Top sites" = "Kedvenc oldalak";
+
+/* Description label for the empty Top Sites state. */
+"TopSites.EmptyState.Description" = "A leggyakrabban látogatott oldalai itt fognak megjelenni.";
+
+/* The title for the empty Top Sites state */
+"TopSites.EmptyState.Title" = "Üdvözöljük a kedvenc oldalainál";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemovePage.Button" = "Oldal eltávolítása – %@";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* Button to update the user's password */
+"Update" = "Frissítés";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect." = "A kapcsolódáshoz frissítse a Firefoxot.";
+
+/* Setting to enable compact tabs in the tab overview */
+"Use Compact Tabs" = "Kompakt lapok használata";
+
+/* Username textbox in Authentication prompt */
+"Username" = "Felhasználónév";
+
+/* Text message in the settings table view */
+"Verify your email address." = "Erősítse meg az e-mail címét.";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "%1$@ verzió (%2$@)";
+
+/* View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"View" = "Megtekintés";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Webes tartalom";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "Üdvözöljük az olvasási listájában";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "Sajnálatos dolog történt.";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "Wikipédia";
+
+/* Button to save the user's password */
+"Yes" = "Igen";
+
+/* History tableview section header */
+"Yesterday" = "Tegnap";
+
+/* Error message in the remote tabs panel */
+"You don't have any tabs open in Firefox on your other devices." = "Nincs egyetlen lap sem nyitva a Firefoxban a többi eszközén.";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+
+/* Your Rights settings section title */
+"Your Rights" = "Az Ön jogai";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "számítógép";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "épp most";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "mobileszköz";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "több mint egy hónapja";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "több mint egy hete";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "elolvasva";
+
+/* Relative date for date in past week. */
+"this week" = "ezen a héten";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "ma ekkor: %@";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "olvasatlan";
+
+/* Relative date for yesterday. */
+"yesterday" = "tegnap";
+

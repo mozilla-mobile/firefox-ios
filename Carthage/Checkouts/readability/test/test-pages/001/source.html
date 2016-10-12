@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+    
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+        <title>Get your Frontend JavaScript Code Covered | Code | Nicolas Perriault</title>
+        <meta
+        name="description" content="Nicolas Perriault's homepage."/>
+            <meta name="viewport" content="width=device-width"/>
+            <link href="//fonts.googleapis.com/css?family=Asap:400,400italic,700,700italic&amp;subset=latin,latin-ext"
+            rel="stylesheet" type="text/css"/>
+            <link rel="stylesheet" type="text/css" href="/static/packed.css?1412806084"/>
+            <link rel="alternate" type="application/rss+xml" href="/code/feed/" title="Code (RSS)"/>
+            <link rel="alternate" type="application/rss+xml" href="/photography/feed/"
+            title="Photography (RSS)"/>
+            <link rel="alternate" type="application/rss+xml" href="/talks/feed/" title="Talks (RSS)"/>
+            <link rel="alternate" type="application/rss+xml" href="/carnet/feed/"
+            title="Carnet (RSS)"/>
+            <link rel="alternate" type="application/rss+xml" href="/feed/" title="Everything (RSS)"/>
+            <!--[if lt IE 9]>
+                <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+            <![endif]-->
+    </head>
+    
+    <body class="code " onload="prettyPrint()">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">Your browser is <em>ancient!</em> Please <a href="http://www.quirksmode.org/upgrade.html">upgrade</a>.</p>
+        <![endif]-->
+        <div class="container">
+            <header class="main-title">
+                 <h1><a href="/">Hi, I'm <strong>Nicolas.</strong></a></h1>
+ <small>I code stuff. I take photos. I write rants.</small>
+
+            </header>
+            <main class="contents" role="main">
+                <article lang="en" class="code" itemscope="" itemtype="http://schema.org/BlogPosting">
+                    <link itemprop="url" href="/code/2013/get-your-frontend-javascript-code-covered/"/>
+                    <header>
+                         <h2><a itemprop="name" href="/code/2013/get-your-frontend-javascript-code-covered/">Get your Frontend JavaScript Code Covered</a></h2>
+                    </header>
+                    <section>
+                        <p><strong>So finally you're <a href="/code/2013/testing-frontend-javascript-code-using-mocha-chai-and-sinon/">testing your frontend JavaScript code</a>? Great! The more you
+write tests, the more confident you are with your code… but how much precisely?
+That's where <a href="http://en.wikipedia.org/wiki/Code_coverage">code coverage</a> might
+help.</strong>
+                        </p>
+                        <p>The idea behind code coverage is to record which parts of your code (functions,
+                            statements, conditionals and so on) have been executed by your test suite,
+                            to compute metrics out of these data and usually to provide tools for navigating
+                            and inspecting them.</p>
+                        <p>Not a lot of frontend developers I know actually test their frontend code,
+                            and I can barely imagine how many of them have ever setup code coverage…
+                            Mostly because there are not many frontend-oriented tools in this area
+                            I guess.</p>
+                        <p>Actually I've only found one which provides an adapter for <a href="http://visionmedia.github.io/mocha/">Mocha</a> and
+                            actually works…</p>
+                        <blockquote class="twitter-tweet tw-align-center">
+                            <p>Drinking game for web devs:
+                                <br />(1) Think of a noun
+                                <br />(2) Google "&lt;noun&gt;.js"
+                                <br />(3) If a library with that name exists - drink</p>— Shay Friedman (@ironshay)
+                            <a
+                            href="https://twitter.com/ironshay/statuses/370525864523743232">August 22, 2013</a>
+                        </blockquote>
+                        <p><strong><a href="http://blanketjs.org/">Blanket.js</a></strong> is an <em>easy to install, easy to configure,
+and easy to use JavaScript code coverage library that works both in-browser and
+with nodejs.</em>
+                        </p>
+                        <p>Its use is dead easy, adding Blanket support to your Mocha test suite
+                            is just matter of adding this simple line to your HTML test file:</p>
+<pre><code>&lt;script src="vendor/blanket.js"
+        data-cover-adapter="vendor/mocha-blanket.js"&gt;&lt;/script&gt;
+</code></pre>
+
+                        <p>Source files: <a href="https://raw.github.com/alex-seville/blanket/master/dist/qunit/blanket.min.js">blanket.js</a>,
+                            <a
+                            href="https://raw.github.com/alex-seville/blanket/master/src/adapters/mocha-blanket.js">mocha-blanket.js</a>
+                        </p>
+                        <p>As an example, let's reuse the silly <code>Cow</code> example we used
+                            <a
+                            href="/code/2013/testing-frontend-javascript-code-using-mocha-chai-and-sinon/">in a previous episode</a>:</p>
+<pre><code>// cow.js
+(function(exports) {
+  "use strict";
+
+  function Cow(name) {
+    this.name = name || "Anon cow";
+  }
+  exports.Cow = Cow;
+
+  Cow.prototype = {
+    greets: function(target) {
+      if (!target)
+        throw new Error("missing target");
+      return this.name + " greets " + target;
+    }
+  };
+})(this);
+</code></pre>
+
+                        <p>And its test suite, powered by Mocha and <a href="http://chaijs.com/">Chai</a>:</p>
+<pre><code>var expect = chai.expect;
+
+describe("Cow", function() {
+  describe("constructor", function() {
+    it("should have a default name", function() {
+      var cow = new Cow();
+      expect(cow.name).to.equal("Anon cow");
+    });
+
+    it("should set cow's name if provided", function() {
+      var cow = new Cow("Kate");
+      expect(cow.name).to.equal("Kate");
+    });
+  });
+
+  describe("#greets", function() {
+    it("should greet passed target", function() {
+      var greetings = (new Cow("Kate")).greets("Baby");
+      expect(greetings).to.equal("Kate greets Baby");
+    });
+  });
+});
+</code></pre>
+
+                        <p>Let's create the HTML test file for it, featuring Blanket and its adapter
+                            for Mocha:</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+  &lt;title&gt;Test&lt;/title&gt;
+  &lt;link rel="stylesheet" media="all" href="vendor/mocha.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div id="mocha"&gt;&lt;/div&gt;
+  &lt;div id="messages"&gt;&lt;/div&gt;
+  &lt;div id="fixtures"&gt;&lt;/div&gt;
+  &lt;script src="vendor/mocha.js"&gt;&lt;/script&gt;
+  &lt;script src="vendor/chai.js"&gt;&lt;/script&gt;
+  &lt;script src="vendor/blanket.js"
+          data-cover-adapter="vendor/mocha-blanket.js"&gt;&lt;/script&gt;
+  &lt;script&gt;mocha.setup('bdd');&lt;/script&gt;
+  &lt;script src="cow.js" data-cover&gt;&lt;/script&gt;
+  &lt;script src="cow_test.js"&gt;&lt;/script&gt;
+  &lt;script&gt;mocha.run();&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+                        <p><strong>Notes</strong>:</p>
+                        <ul>
+                            <li>Notice the <code>data-cover</code> attribute we added to the script tag
+                                loading the source of our library;</li>
+                            <li>The HTML test file <em>must</em> be served over HTTP for the adapter to
+                                be loaded.</li>
+                        </ul>
+                        <p>Running the tests now gives us something like this:</p>
+                        <p>
+                            <img alt="screenshot" src="/static/code/2013/blanket-coverage.png"/>
+                        </p>
+                        <p>As you can see, the report at the bottom highlights that we haven't actually
+                            tested the case where an error is raised in case a target name is missing.
+                            We've been informed of that, nothing more, nothing less. We simply know
+                            we're missing a test here. Isn't this cool? I think so!</p>
+                        <p>Just remember that code coverage will only <a href="http://codebetter.com/karlseguin/2008/12/09/code-coverage-use-it-wisely/">bring you numbers</a> and
+                            raw information, not actual proofs that the whole of your <em>code logic</em> has
+                            been actually covered. If you ask me, the best inputs you can get about
+                            your code logic and implementation ever are the ones issued out of <a href="http://www.extremeprogramming.org/rules/pair.html">pair programming</a>
+sessions
+                            and <a href="http://alexgaynor.net/2013/sep/26/effective-code-review/">code reviews</a> —
+                            but that's another story.</p>
+                        <p><strong>So is code coverage silver bullet? No. Is it useful? Definitely. Happy testing!</strong>
+                        </p>
+                    </section>
+                    <aside>
+                        <p> <span class="article-author" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+                <span itemprop="name">Nicolas Perriault</span> —</span>
+                            <time
+                            datetime="2013-09-29" itemprop="datePublished">2013-09-29</time>— in <a href="/code/" itemprop="genre">Code</a>
+— <a href="/code/2013/get-your-frontend-javascript-code-covered/">Permalink</a>
+—
+                                <a
+                                rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">License</a>— <a href="http://flattr.com/submit/auto?url=https://nicolas.perriault.net/code/2013/get-your-frontend-javascript-code-covered/&amp;title=Get your Frontend JavaScript Code Covered&amp;user_id=n1k0&amp;category=software&amp;language=en">flattr this</a>
+
+                        </p>
+                    </aside>
+                    <hr/>
+                    <nav> <a class="prev" href="/code/2013/functional-javascript-for-crawling-the-web/">Functional JavaScript for crawling the Web</a>
+|
+                        <a
+                        class="next" href="/code/2013/testing-frontend-javascript-code-using-mocha-chai-and-sinon/">Testing your frontend JavaScript code using mocha, chai, and sinon</a>
+                    </nav>
+                </article>
+            </main>
+            <nav class="sidebar">
+                <ul>
+                    <li class="home"><a href="/" hreflang="en">Home</a>
+                    </li>
+                    <li class="code"><a href="/code/" hreflang="en">Code</a>
+                    </li>
+                    <li class="photography"><a href="/photography/" hreflang="en">Photography</a>
+                    </li>
+                    <li class="talks"><a href="/talks/" hreflang="en">Talks</a>
+                    </li>
+                    <li class="carnet"><a href="/carnet/" hreflang="fr">Carnet <span>fr</span></a>
+                    </li>
+                    <li class="contact"><a href="/contact/" hreflang="en">Contact</a>
+                    </li>
+                </ul>
+            </nav>
+            <footer class="site-footer">
+                <p>© 2012 Nicolas Perriault — <a href="https://twitter.com/n1k0">Tweet at me</a>
+—
+                    <a
+                    href="https://github.com/n1k0">Get my code</a>— <a href="http://500px.com/n1k0">Enjoy my pics</a>
+— <a href="/contact/">Contact me</a>
+
+                </p>
+            </footer>
+        </div>
+        <!-- /container -->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <script>
+            window.jQuery || document.write('<script src="js/libs/jquery-1.7.1.min.js"><\/script>')
+        </script>
+        <script type="text/javascript" src="/static/js/libs/prettify/prettify.js"></script>
+        <script type="text/javascript" src="/static/js/app.js"></script>
+        <script src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+    </body>
+
+</html>

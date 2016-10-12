@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "Chiudi le schede anonime";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won't remember any of your history or cookies, but new bookmarks will be saved." = "Firefox non conserverà alcuna cronologia o cookie per questa finestra. I segnalibri aggiunti verranno comunque conservati sul dispositivo.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "Ulteriori informazioni";
+
+/* Toggled OFF accessibility value */
+"Off" = "Disattivata";
+
+/* Toggled ON accessibility value */
+"On" = "Attivata";
+
+/* Context menu option for opening a link in a new private tab */
+"Open In New Private Tab" = "Apri in una nuova scheda anonima";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Navigazione anonima";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "Modalità Navigazione anonima";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "Attiva o disattiva la modalità Navigazione anonima";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "Quando si esce da Navigazione anonima";
+

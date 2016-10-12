@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "Məxfi Vərəqləri Qapat";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won't remember any of your history or cookies, but new bookmarks will be saved." = "Firefox sizin tarixçə və ya çərəzlərinizi yadda saxlamayacaq, lakin yeni əlfəcinlər yaddaşa yazılacaq.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "Ətraflı Öyrən";
+
+/* Toggled OFF accessibility value */
+"Off" = "Sönülü";
+
+/* Toggled ON accessibility value */
+"On" = "Açıq";
+
+/* Context menu option for opening a link in a new private tab */
+"Open In New Private Tab" = "Yeni Məxfi Vərəqdə aç";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Məxfi Səyahət";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "Məxfi Rejim";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "Məxfi rejimi açıb söndürür";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "Məxfi Səyahətdən çıxdıqda";
+

@@ -1,0 +1,18 @@
+/* The cancel button when confirming clear history. */
+"Cancel" = "Скасувати";
+
+/* The button that clears history even when Sync is connected. */
+"Clear" = "Стерти";
+
+/* Description of the confirmation dialog shown when a user tries to clear history that's synced to another device. */
+"History will be removed from all your connected devices. This cannot be undone." = "Історія буде вилучена з усіх ваших під'єднаних пристроїв. Це неможливо відмінити.";
+
+/* The confirmation button that clears history even when Sync is connected. */
+"OK" = "OK";
+
+/* Title of the confirmation dialog shown when a user tries to clear history that's synced to another device. */
+"Remove history from your Firefox Account?" = "Вилучити історію з вашого облікового запису Firefox?";
+
+/* Description of the confirmation dialog shown when a user tries to clear history that's synced to another device. */
+"This action will clear all of your private data, including history from your synced devices." = "Ця дія призведе до стирання всіх ваших особистих даних, включаючи історію з ваших синхронізованих пристроїв.";
+
