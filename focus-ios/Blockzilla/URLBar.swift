@@ -34,16 +34,27 @@ class URLBar: UIView {
         cancelButton.titleLabel?.font = UIConstants.fonts.smallerFont
         cancelButton.titleEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         cancelButton.addTarget(self, action: #selector(didCancel), for: .touchUpInside)
+        cancelButton.setContentCompressionResistancePriority(1000, for: .horizontal)
 
         addSubview(urlText)
+        addSubview(cancelButton)
+
         urlText.snp.makeConstraints { make in
             make.top.leading.bottom.equalTo(self).inset(UIConstants.layout.urlBarMargin)
+
+            // Two required constraints.
+            make.trailing.lessThanOrEqualTo(cancelButton.snp.leading)
             make.trailing.lessThanOrEqualTo(self).inset(UIConstants.layout.urlBarMargin)
+
+            // Because of the two required constraints above, the first optional constraint
+            // here will fail if the Cancel button has 0 width; the second will fail if the
+            // Cancel button is visible. As a result, only one of these two constraints will
+            // be in effect at a time.
+            make.trailing.equalTo(cancelButton.snp.leading).priority(500)
+            make.trailing.equalTo(self).priority(500)
         }
 
-        addSubview(cancelButton)
         cancelButton.snp.makeConstraints { make in
-            make.leading.equalTo(urlText.snp.trailing).priority(500)
             make.trailing.equalTo(self)
             make.centerY.equalTo(urlText)
             self.cancelButtonWidthConstraint = make.width.equalTo(0).constraint
