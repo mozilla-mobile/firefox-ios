@@ -617,6 +617,8 @@
 		E679FDBB1B99CF10008C220A /* PrivateBrowsingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E679FDBA1B99CF10008C220A /* PrivateBrowsingTests.swift */; };
 		E67D57031D527449003917B1 /* BatchingClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67D57021D527449003917B1 /* BatchingClient.swift */; };
 		E68AEDB01B18F81A00133D99 /* SwipeAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */; };
+		E68D6AD81DAFD1F0007E4114 /* ActivityStreamOnyxTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68D6AD61DAFD1F0007E4114 /* ActivityStreamOnyxTypes.swift */; };
+		E68D6AD91DAFD1F0007E4114 /* OnyxTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68D6AD71DAFD1F0007E4114 /* OnyxTelemetry.swift */; };
 		E68E39BE1C46F42000B85F42 /* AppSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68E39BD1C46F42000B85F42 /* AppSettingsTableViewController.swift */; };
 		E68E7ACB1CAC1D4500FDCA76 /* PagingPasscodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68E7ACA1CAC1D4500FDCA76 /* PagingPasscodeViewController.swift */; };
 		E68E7ADA1CAC207400FDCA76 /* ChangePasscodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68E7AD91CAC207400FDCA76 /* ChangePasscodeViewController.swift */; };
@@ -639,7 +641,6 @@
 		E69E06D01C765BB900D0F926 /* NSAttributedStringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E06CF1C765BB900D0F926 /* NSAttributedStringExtensions.swift */; };
 		E6A118F31C32DE98008989E8 /* SettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A118F21C32DE98008989E8 /* SettingsTests.swift */; };
 		E6A92ADB1C52A8DA00743291 /* LoginInputTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A92ADA1C52A8DA00743291 /* LoginInputTests.swift */; };
-		E6AA53041DA546A600BB66A2 /* OnyxTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6AA53031DA546A600BB66A2 /* OnyxTelemetry.swift */; };
 		E6B4C3D81C68F55C001F97E8 /* JSPrompt.html in Resources */ = {isa = PBXBuildFile; fileRef = E6B4C3D71C68F55C001F97E8 /* JSPrompt.html */; };
 		E6B4C4031C68F58B001F97E8 /* BrowserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6B4C4021C68F58B001F97E8 /* BrowserTests.swift */; };
 		E6B6DCA21CD3D370009CF713 /* CrashReporter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6B6DC941CD3D35A009CF713 /* CrashReporter.framework */; };
@@ -1719,6 +1720,8 @@
 		E67D57021D527449003917B1 /* BatchingClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatchingClient.swift; sourceTree = "<group>"; };
 		E682F53C1C89E72600ECB6B2 /* FennecAurora.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = FennecAurora.xcconfig; path = Configuration/FennecAurora.xcconfig; sourceTree = "<group>"; };
 		E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeAnimator.swift; sourceTree = "<group>"; };
+		E68D6AD61DAFD1F0007E4114 /* ActivityStreamOnyxTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityStreamOnyxTypes.swift; path = Telemetry/ActivityStreamOnyxTypes.swift; sourceTree = "<group>"; };
+		E68D6AD71DAFD1F0007E4114 /* OnyxTelemetry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OnyxTelemetry.swift; path = Telemetry/OnyxTelemetry.swift; sourceTree = "<group>"; };
 		E68E39BD1C46F42000B85F42 /* AppSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettingsTableViewController.swift; sourceTree = "<group>"; };
 		E68E7ACA1CAC1D4500FDCA76 /* PagingPasscodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingPasscodeViewController.swift; sourceTree = "<group>"; };
 		E68E7AD91CAC207400FDCA76 /* ChangePasscodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangePasscodeViewController.swift; sourceTree = "<group>"; };
@@ -1742,14 +1745,12 @@
 		E6A118F21C32DE98008989E8 /* SettingsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTests.swift; sourceTree = "<group>"; };
 		E6A92ADA1C52A8DA00743291 /* LoginInputTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginInputTests.swift; sourceTree = "<group>"; };
 		E6A99D761B20D95800006EDD /* GeometryExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeometryExtensions.swift; sourceTree = "<group>"; };
-		E6AA53031DA546A600BB66A2 /* OnyxTelemetry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnyxTelemetry.swift; sourceTree = "<group>"; };
 		E6B09CCE1C74DC4100C63FA1 /* Client.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Client.entitlements; sourceTree = "<group>"; };
 		E6B4C3D71C68F55C001F97E8 /* JSPrompt.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = JSPrompt.html; sourceTree = "<group>"; };
 		E6B4C4021C68F58B001F97E8 /* BrowserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserTests.swift; sourceTree = "<group>"; };
 		E6B6DC941CD3D35A009CF713 /* CrashReporter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CrashReporter.framework; sourceTree = "<group>"; };
 		E6B6DCA51CD3EC53009CF713 /* CrashSimulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrashSimulator.h; sourceTree = "<group>"; };
 		E6B6DCA61CD3EC53009CF713 /* CrashSimulator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrashSimulator.m; sourceTree = "<group>"; };
-		E6B8FB2D1DA451B0000EB539 /* ActivityStreamOnyxTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityStreamOnyxTypes.swift; path = Client/Frontend/Home/ActivityStreamOnyxTypes.swift; sourceTree = "<group>"; };
 		E6BE53CC1D9177B10074909A /* TestSQLiteHistoryRecommendations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSQLiteHistoryRecommendations.swift; sourceTree = "<group>"; };
 		E6CF28E61CB43B7900151AB3 /* SensitiveViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensitiveViewController.swift; sourceTree = "<group>"; };
 		E6D749001C4688D800C66ABA /* NSURLProtectionSpaceExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSURLProtectionSpaceExtensions.swift; sourceTree = "<group>"; };
@@ -3120,8 +3121,8 @@
 		E6AA53021DA542B900BB66A2 /* Onyx */ = {
 			isa = PBXGroup;
 			children = (
-				E6AA53031DA546A600BB66A2 /* OnyxTelemetry.swift */,
-				E6B8FB2D1DA451B0000EB539 /* ActivityStreamOnyxTypes.swift */,
+				E68D6AD61DAFD1F0007E4114 /* ActivityStreamOnyxTypes.swift */,
+				E68D6AD71DAFD1F0007E4114 /* OnyxTelemetry.swift */,
 			);
 			name = Onyx;
 			sourceTree = "<group>";
@@ -4963,7 +4964,7 @@
 				0BB5B2891AC0A2B90052877D /* Toolbar.swift in Sources */,
 				E6108FF91C84E91C005D25E8 /* BasePasscodeViewController.swift in Sources */,
 				E4CD9F2D1A6DC91200318571 /* TabLocationView.swift in Sources */,
-				E6B8FB2E1DA451B0000EB539 /* ActivityStreamOnyxTypes.swift in Sources */,
+				E68D6AD81DAFD1F0007E4114 /* ActivityStreamOnyxTypes.swift in Sources */,
 				0BB5B2881AC0A2B90052877D /* SnackBar.swift in Sources */,
 				7BEFC6801BFF68C30059C952 /* QuickActions.swift in Sources */,
 				0BF1B7E31AC60DEA00A7B407 /* InsetButton.swift in Sources */,
@@ -4982,7 +4983,7 @@
 				E47536ED1C85412C0022CC69 /* PrintHelper.swift in Sources */,
 				392ED7E61D0AEFEF009D9B62 /* HomePageAccessors.swift in Sources */,
 				7BA8D1C71BA037F500C8AE9E /* OpenInHelper.swift in Sources */,
-				E6AA53041DA546A600BB66A2 /* OnyxTelemetry.swift in Sources */,
+				E68D6AD91DAFD1F0007E4114 /* OnyxTelemetry.swift in Sources */,
 				E4B423BE1AB9FE6A007E66C8 /* ReaderModeCache.swift in Sources */,
 				74E36D781B71323500D69DA1 /* SettingsContentViewController.swift in Sources */,
 				742A56391D80B54A00BDB803 /* ActionOverlayTableViewController.swift in Sources */,
