@@ -21,7 +21,7 @@ class ShareExtensionHelper: NSObject {
         self.activities = activities
     }
 
-    func createActivityViewController(completionHandler: (Bool) -> Void) -> UIActivityViewController {
+    func createActivityViewController(completionHandler: (completed: Bool, activityType: String?) -> Void) -> UIActivityViewController {
         var activityItems = [AnyObject]()
 
         let printInfo = UIPrintInfo(dictionary: nil)
@@ -60,7 +60,7 @@ class ShareExtensionHelper: NSObject {
 
         activityViewController.completionWithItemsHandler = { activityType, completed, returnedItems, activityError in
             if !completed {
-                completionHandler(completed)
+                completionHandler(completed: completed, activityType: activityType)
                 return
             }
 
@@ -70,7 +70,7 @@ class ShareExtensionHelper: NSObject {
                 }
             }
 
-            completionHandler(completed)
+            completionHandler(completed: completed, activityType: activityType)
         }
         return activityViewController
     }

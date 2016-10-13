@@ -8,6 +8,7 @@ import Deferred
 import Storage
 import WebImage
 import XCGLogger
+import OnyxClient
 
 private let log = Logger.browserLogger
 private let DefaultSuggestedSitesKey = "topSites.deletedSuggestedSites"
@@ -30,6 +31,7 @@ class ActivityStreamPanel: UITableViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate? = nil
     private let profile: Profile
     private let topSitesManager = ASHorizontalScrollCellManager()
+    private var onyxSession: OnyxSession?
 
     var topSites: [Site] = []
     lazy var longPressRecognizer: UILongPressGestureRecognizer = {
@@ -80,6 +82,20 @@ class ActivityStreamPanel: UITableViewController, HomePanel {
         reloadRecentHistory()
     }
 
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.onyxSession = OnyxTelemetry.sharedClient.beginSession()
+    }
+
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+
+        if let session = onyxSession {
+            session.ping = ASOnyxPing.buildSessionPing(nil, loadReason: .newTab, unloadReason: .navigation, loadLatency: nil, page: .newTab)
+            OnyxTelemetry.sharedClient.endSession(session, sendToEndpoint: .activityStream)
+        }
+    }
+
     override func traitCollectionDidChange(previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         self.topSitesManager.currentTraits = self.traitCollection
@@ -87,7 +103,6 @@ class ActivityStreamPanel: UITableViewController, HomePanel {
             self.tableView.reloadData()
         }
     }
-
 }
 
 // MARK: -  Section management
@@ -181,6 +196,8 @@ extension ActivityStreamPanel {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         switch Section(indexPath.section) {
         case .Highlights:
+            ASOnyxPing.reportTapEvent(actionPosition: indexPath.item, source: .highlights)
+
             let site = self.history[indexPath.row]
             showSiteWithURLHandler(NSURL(string:site.url)!)
         case .TopSites:
@@ -274,13 +291,15 @@ extension ActivityStreamPanel {
             self.topSites = newSites.count > ASPanelUX.topSitesCacheSize ? Array(newSites[0..<ASPanelUX.topSitesCacheSize]) : newSites
             self.topSitesManager.currentTraits = self.view.traitCollection
             self.topSitesManager.content = self.topSites
-            self.topSitesManager.urlPressedHandler = { [unowned self] url in
+            self.topSitesManager.urlPressedHandler = { [unowned self] url, indexPath in
+                ASOnyxPing.reportTapEvent(actionPosition: indexPath.item, source: .topSites)
                 self.showSiteWithURLHandler(url)
             }
             self.topSitesManager.presentActionMenuHandler = { [unowned self] alert in
                 self.presentActionMenuHandler(alert)
             }
-            self.topSitesManager.deleteItemHandler = { [unowned self] url in
+            self.topSitesManager.deleteItemHandler = { [unowned self] url, indexPath in
+                ASOnyxPing.reportDeleteItemEvent(actionPosition: indexPath.item, source: .topSites)
                 self.hideURLFromTopSites(url)
             }
             self.tableView.reloadData()
@@ -313,6 +332,7 @@ extension ActivityStreamPanel {
     private func deleteTileForSuggestedSite(siteURL: String) {
         var deletedSuggestedSites = profile.prefs.arrayForKey(DefaultSuggestedSitesKey) as? [String] ?? []
         deletedSuggestedSites.append(siteURL)
+
         profile.prefs.setObject(deletedSuggestedSites, forKey: DefaultSuggestedSitesKey)
     }
 
@@ -347,13 +367,16 @@ extension ActivityStreamPanel {
         })
 
         let deleteFromHistoryAction = ActionOverlayTableViewAction(title: Strings.DeleteFromHistoryContextMenuTitle, iconString: "action_delete", handler: { action in
+            ASOnyxPing.reportDeleteItemEvent(actionPosition: indexPath.item, source: .highlights)
             self.profile.history.removeHistoryForURL(site.url)
         })
 
         let shareAction = ActionOverlayTableViewAction(title: Strings.ShareContextMenuTitle, iconString: "action_share", handler: { action in
             if let url = NSURL(string: site.url) {
                 let helper = ShareExtensionHelper(url: url, tab: nil, activities: [])
-                let controller = helper.createActivityViewController({ _ in })
+                let controller = helper.createActivityViewController { completed, activityType in
+                    ASOnyxPing.reportShareEvent(actionPosition: indexPath.row, source: .highlights, shareProvider: activityType)
+                }
                 self.presentViewController(controller, animated: true, completion: nil)
             }
         })
