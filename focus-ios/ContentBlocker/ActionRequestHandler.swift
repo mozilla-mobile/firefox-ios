@@ -12,24 +12,8 @@ class ActionRequestHandler: NSObject, NSExtensionRequestHandling {
         var mergedList = itemsFromFile("enabled-detector")
 
         if Settings.getToggle(.safari) {
-            if Settings.getToggle(.blockAds) {
-                mergedList.append(contentsOf: itemsFromFile("disconnect-advertising"))
-            }
-
-            if Settings.getToggle(.blockAnalytics) {
-                mergedList.append(contentsOf: itemsFromFile("disconnect-analytics"))
-            }
-
-            if Settings.getToggle(.blockSocial) {
-                mergedList.append(contentsOf: itemsFromFile("disconnect-social"))
-            }
-
-            if Settings.getToggle(.blockOther) {
-                mergedList.append(contentsOf: itemsFromFile("disconnect-content"))
-            }
-
-            if Settings.getToggle(.blockFonts) {
-                mergedList.append(contentsOf: itemsFromFile("web-fonts"))
+            for list in Utils.getEnabledLists() {
+                mergedList.append(contentsOf: itemsFromFile(list))
             }
         }
 
@@ -43,7 +27,7 @@ class ActionRequestHandler: NSObject, NSExtensionRequestHandling {
     /// Gets the dictionary form of the tracking list with the specified file name.
     fileprivate func itemsFromFile(_ name: String) -> [NSDictionary] {
         let url = Bundle.main.url(forResource: name, withExtension: "json")
-        let data = try? Data(contentsOf: url!)
-        return try! JSONSerialization.jsonObject(with: data!, options: []) as! [NSDictionary]
+        let data = try! Data(contentsOf: url!)
+        return try! JSONSerialization.jsonObject(with: data, options: []) as! [NSDictionary]
     }
 }

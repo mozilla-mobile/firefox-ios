@@ -237,7 +237,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
         func updateSetting() {
             Settings.set(sender.isOn, forToggle: toggle.setting)
-            Utils.reloadContentBlocker()
+            Utils.reloadSafariContentBlocker()
+            LocalContentBlocker.reload()
         }
 
         switch toggle.setting {

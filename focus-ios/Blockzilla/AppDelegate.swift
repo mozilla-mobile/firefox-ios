@@ -9,7 +9,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        Utils.reloadContentBlocker()
+        // Re-register the blocking lists at startup in case they've changed.
+        Utils.reloadSafariContentBlocker()
 
         LocalWebServer.sharedInstance.start()
 
@@ -19,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = rootViewController
         window?.makeKeyAndVisible()
 
-        URLProtocol.registerClass(ContentBlocker.self)
+        URLProtocol.registerClass(LocalContentBlocker.self)
 
         displaySplashAnimation()
 

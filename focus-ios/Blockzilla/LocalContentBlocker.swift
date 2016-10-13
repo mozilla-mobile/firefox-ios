@@ -4,9 +4,19 @@
 
 import Foundation
 
-class ContentBlocker: URLProtocol, URLSessionDelegate, URLSessionDataDelegate {
-    fileprivate static let blockList = BlockList()
-    fileprivate var dataTask: URLSessionDataTask?
+class LocalContentBlocker: URLProtocol, URLSessionDelegate, URLSessionDataDelegate {
+    private static var blockList = BlockList(lists: Utils.getEnabledLists())
+
+    private var dataTask: URLSessionDataTask?
+
+    static func reload() {
+        DispatchQueue.global().async {
+            let blockList = BlockList(lists: Utils.getEnabledLists())
+            DispatchQueue.main.async {
+                self.blockList = blockList
+            }
+        }
+    }
 
     override class func canonicalRequest(for request: URLRequest) -> URLRequest {
         return request
@@ -17,7 +27,7 @@ class ContentBlocker: URLProtocol, URLSessionDelegate, URLSessionDataDelegate {
     }
 
     override func startLoading() {
-        guard !ContentBlocker.blockList.isBlocked(request) else {
+        guard !LocalContentBlocker.blockList.isBlocked(request) else {
             let response = HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: ["Content-Length": "0"])
             client?.urlProtocol(self, didReceive: response!, cacheStoragePolicy: .notAllowed)
             client?.urlProtocolDidFinishLoading(self)
@@ -78,11 +88,7 @@ private class BlockRule {
 private class BlockList {
     fileprivate var blockRules = [BlockRule]()
 
-    init() {
-        let lists = ["disconnect-advertising",
-                     "disconnect-analytics",
-                     "disconnect-social"]
-
+    init(lists: [String]) {
         for filename in lists {
             let path = Bundle.main.path(forResource: filename, ofType: "json")
             let json = try? Data(contentsOf: URL(fileURLWithPath: path!))
