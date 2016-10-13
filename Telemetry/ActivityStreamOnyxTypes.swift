@@ -32,7 +32,6 @@ enum ASSourceField: String {
 
 /// A simple struct that exposes some builder functions strong typing some of the ping fields.
 struct ASOnyxPing {
-
     /// Builds an Onyx ping with strong types for Activity Stream values for events.
     ///
     /// - parameter event:          [CLICK | DELETE | BLOCK | SHARE]
@@ -44,7 +43,7 @@ struct ASOnyxPing {
     ///
     /// - returns: Onyx event ping for Activity Stream events
     static func buildEventPing(event: ASEventField, page: ASPageField, source: ASSourceField,
-                               actionPosition: Int, provider: String? = nil) -> EventPing {
+                                       actionPosition: Int, provider: String? = nil) -> EventPing {
         return EventPing(event: event.rawValue, page: page.rawValue, source: source.rawValue,
                          actionPosition: actionPosition, locale: NSLocale.currentLocale(),
                          action: "activity_stream_event", provider: provider)
@@ -60,13 +59,31 @@ struct ASOnyxPing {
     ///
     /// - returns: Onyx session ping for Activity Stream
     static func buildSessionPing(url: NSURL?, loadReason: ASLoadReasonField?,
-                                 unloadReason: ASLoadReasonField?, loadLatency: Int?,
-                                 page: ASPageField?) -> SessionPing {
+                                         unloadReason: ASLoadReasonField?, loadLatency: Int?,
+                                         page: ASPageField?) -> SessionPing {
         return SessionPing(url: url, loadReason: loadReason?.rawValue, unloadReason: unloadReason?.rawValue,
                            loadLatency: loadLatency, locale: NSLocale.currentLocale(), page: page?.rawValue,
                            action: "activity_stream_session")
     }
 }
 
-let stagingOnyxConfiguration = OnyxClientConfiguration(serverURL: "https://onyx_tiles.stage.mozaws.net".asURL!, version: 3)
-let onyxClient = OnyxClient(configuration: stagingOnyxConfiguration)
+// MARK: Ping Helpers
+extension ASOnyxPing {
+    static func reportTapEvent(actionPosition actionPosition: Int, source: ASSourceField) {
+        let eventPing = ASOnyxPing.buildEventPing(.click, page: .newTab, source: source,
+                                                  actionPosition: actionPosition)
+        OnyxTelemetry.sharedClient.sendEventPing(eventPing, toEndpoint: .activityStream)
+    }
+
+    static func reportShareEvent(actionPosition actionPosition: Int, source: ASSourceField, shareProvider: String?) {
+        let eventPing = ASOnyxPing.buildEventPing(.share, page: .newTab, source: source,
+            actionPosition: actionPosition, provider: shareProvider)
+        OnyxTelemetry.sharedClient.sendEventPing(eventPing, toEndpoint: .activityStream)
+    }
+
+    static func reportDeleteItemEvent(actionPosition actionPosition: Int, source: ASSourceField) {
+        let eventPing = ASOnyxPing.buildEventPing(.delete, page: .newTab, source: source,
+                                                  actionPosition: actionPosition)
+        OnyxTelemetry.sharedClient.sendEventPing(eventPing, toEndpoint: .activityStream)
+    }
+}
