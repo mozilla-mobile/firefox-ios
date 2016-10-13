@@ -200,6 +200,7 @@ class BoolSetting: Setting {
 class StringSetting: Setting, UITextFieldDelegate {
 
     let prefKey: String
+    private let Padding: CGFloat = 8
 
     private let prefs: Prefs
     private let defaultValue: String?
@@ -227,21 +228,17 @@ class StringSetting: Setting, UITextFieldDelegate {
             textField.accessibilityIdentifier = id + "TextField"
         }
         textField.placeholder = placeholder
+        textField.textAlignment = .Center
         textField.delegate = self
         textField.addTarget(self, action: #selector(textFieldDidChange), forControlEvents: .EditingChanged)
         cell.userInteractionEnabled = true
         cell.accessibilityTraits = UIAccessibilityTraitNone
         cell.contentView.addSubview(textField)
 
-        cell.contentView.snp_makeConstraints { make in
-            make.height.equalTo(44)
-            make.width.equalTo(cell.snp_width)
-        }
-
         textField.snp_makeConstraints { make in
-            make.height.equalTo(cell.contentView)
-            make.width.equalTo(cell.contentView).offset(-2 * SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
-            make.leading.equalTo(cell.contentView).offset(SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
+            make.height.equalTo(44)
+            make.trailing.equalTo(cell.contentView).offset(-Padding)
+            make.leading.equalTo(cell.contentView).offset(Padding)
         }
         textField.text = prefs.stringForKey(prefKey) ?? defaultValue
         textFieldDidChange(textField)
