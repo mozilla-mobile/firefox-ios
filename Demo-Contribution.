@@ -1,3 +1,9 @@
+FIREFOX:
+      Mozilla Firefox (or simply Firefox) is a free and open-source web browser developed by the Mozilla Foundation and its subsidiary, the Mozilla Corporation. 
+      Firefox is available for Windows, macOS and Linux operating systems, with its Firefox for Android available for Android (formerly Firefox for mobile, it also ran on the discontinued Firefox OS); where all of these versions use the Gecko layout engine to render web pages, which implements current and anticipated web standards. 
+      An additional version, Firefox for iOS, was released in late 2015, but this version doesn't use Gecko due to Apple's restrictions limiting third-party web browsers to the WebKit-based layout engine built into iOS.
+      
+
 Firefox for iOS [![codebeat badge](https://codebeat.co/badges/67e58b6d-bc89-4f22-ba8f-7668a9c15c5a)](https://codebeat.co/projects/github-com-mozilla-firefox-ios) [![BuddyBuild](https://dashboard.buddybuild.com/api/statusImage?appID=57bf25c0f096bc01001e21e0&branch=master&build=latest)](https://dashboard.buddybuild.com/apps/57bf25c0f096bc01001e21e0/build/latest)
 ===============
 
