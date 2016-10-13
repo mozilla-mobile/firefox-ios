@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import WebKit
+import ShimWK
 
 protocol ReadabilityTabHelperDelegate {
     func readabilityTabHelper(readabilityTabHelper: ReadabilityTabHelper, didFinishWithReadabilityResult result: ReadabilityResult)
@@ -22,7 +22,7 @@ class ReadabilityTabHelper: TabHelper {
            let readabilityTabHelperPath = NSBundle.mainBundle().pathForResource(ReadabilityTabHelper.name(), ofType: "js"),
            let readabilityTabHelperSource = try? NSMutableString(contentsOfFile: readabilityTabHelperPath, encoding: NSUTF8StringEncoding) {
             readabilityTabHelperSource.replaceOccurrencesOfString("%READABILITYJS%", withString: readabilitySource as String, options: NSStringCompareOptions.LiteralSearch, range: NSMakeRange(0, readabilityTabHelperSource.length))
-            let userScript = WKUserScript(source: readabilityTabHelperSource as String, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
+            let userScript = ShimWKUserScript(source: readabilityTabHelperSource as String, injectionTime: ShimWKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
             tab.webView!.configuration.userContentController.addUserScript(userScript)
         }
     }
@@ -31,7 +31,7 @@ class ReadabilityTabHelper: TabHelper {
         return "readabilityMessageHandler"
     }
 
-    func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    func userContentController(userContentController: ShimWKUserContentController, didReceiveScriptMessage message: ShimWKScriptMessage) {
         if let readabilityResult = ReadabilityResult(object: message.body) {
             delegate?.readabilityTabHelper(self, didFinishWithReadabilityResult: readabilityResult)
         }

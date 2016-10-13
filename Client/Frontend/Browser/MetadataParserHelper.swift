@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 import XCGLogger
-import WebKit
+import ShimWK
 
 private let log = Logger.browserLogger
 
@@ -27,11 +27,11 @@ class MetadataParserHelper: TabHelper {
            parserWrapperSource = try? NSString(contentsOfFile: parserWrapperPath, encoding: NSUTF8StringEncoding) as String {
 
             // Load in the page-metadata-parser library first so our wrapper can reference it
-            let libraryUserScript = WKUserScript(source: librarySource, injectionTime: .AtDocumentEnd, forMainFrameOnly: false)
+            let libraryUserScript = ShimWKUserScript(source: librarySource, injectionTime: .AtDocumentEnd, forMainFrameOnly: false)
             tab.webView!.configuration.userContentController.addUserScript(libraryUserScript)
 
-            // Load in our WKUserScript wrapper on top of the library second
-            let parserWrapperUserScript = WKUserScript(source: parserWrapperSource, injectionTime: .AtDocumentEnd, forMainFrameOnly: false)
+            // Load in our ShimWKUserScript wrapper on top of the library second
+            let parserWrapperUserScript = ShimWKUserScript(source: parserWrapperSource, injectionTime: .AtDocumentEnd, forMainFrameOnly: false)
             tab.webView!.configuration.userContentController.addUserScript(parserWrapperUserScript)
         }
     }
@@ -40,7 +40,7 @@ class MetadataParserHelper: TabHelper {
         return "metadataMessageHandler"
     }
 
-    func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    func userContentController(userContentController: ShimWKUserContentController, didReceiveScriptMessage message: ShimWKScriptMessage) {
         guard let dict = message.body as? [String: AnyObject],
               let url = (dict["url"] as? String)?.asURL else {
             return

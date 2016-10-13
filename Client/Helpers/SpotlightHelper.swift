@@ -6,8 +6,7 @@ import Foundation
 import Shared
 import CoreSpotlight
 import MobileCoreServices
-import WebKit
-
+import ShimWK
 
 private let log = Logger.browserLogger
 private let browsingActivityType: String = "org.mozilla.ios.firefox.browsing"
@@ -35,7 +34,7 @@ class SpotlightHelper: NSObject {
 
         if let path = NSBundle.mainBundle().pathForResource("SpotlightHelper", ofType: "js") {
             if let source = try? NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) as String {
-                let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
+                let userScript = ShimWKUserScript(source: source, injectionTime: ShimWKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
                 tab.webView!.configuration.userContentController.addUserScript(userScript)
             }
         }
@@ -124,7 +123,7 @@ extension SpotlightHelper: TabHelper {
         return "spotlightMessageHandler"
     }
 
-    func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    func userContentController(userContentController: ShimWKUserContentController, didReceiveScriptMessage message: ShimWKScriptMessage) {
         if let tab = self.tab,
             let url = tab.url,
             let payload = message.body as? [String: String] {

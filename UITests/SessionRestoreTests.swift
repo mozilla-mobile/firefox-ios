@@ -3,8 +3,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import WebKit
 import Shared
+import ShimWK
 
 class SessionRestoreTests: KIFTestCase {
     private var webRoot: String!
@@ -23,7 +23,7 @@ class SessionRestoreTests: KIFTestCase {
         jsonDict["history"] = [url1, url2, url3]
         jsonDict["currentPage"] = -1
         let escapedJSON = JSON.stringify(jsonDict, pretty: false).stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
-        let webView = tester().waitForViewWithAccessibilityLabel("Web content") as! WKWebView
+        let webView = tester().waitForViewWithAccessibilityLabel("Web content") as! ShimWKWebView
         let restoreURL = NSURL(string: "/about/sessionrestore?history=\(escapedJSON)", relativeToURL: webView.URL!)
 
         // Enter the restore URL and verify the back/forward history.

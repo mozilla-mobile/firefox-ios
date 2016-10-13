@@ -5,9 +5,9 @@
 import Foundation
 import GCDWebServers
 import Storage
-import WebKit
 import SwiftKeychainWrapper
 import Shared
+import ShimWK
 @testable import Client
 
 let LabelAddressAndSearch = "Address and Search"
@@ -108,7 +108,7 @@ extension KIFUITestActor {
     }
 
     /**
-     * Finding views by accessibility label doesn't currently work with WKWebView:
+     * Finding views by accessibility label doesn't currently work with ShimWKWebView:
      *     https://github.com/kif-framework/KIF/issues/460
      * As a workaround, inject a KIFHelper class that iterates the document and finds
      * elements with the given textContent or title.
@@ -124,7 +124,7 @@ extension KIFUITestActor {
     }
 
     /**
-     * Sets the text for a WKWebView input element with the given name.
+     * Sets the text for a ShimWKWebView input element with the given name.
      */
     func enterText(text: String, intoWebViewInputWithName inputName: String) {
         let webView = getWebViewWithKIFHelper()
@@ -144,7 +144,7 @@ extension KIFUITestActor {
     }
 
     /**
-     * Clicks a WKWebView element with the given label.
+     * Clicks a ShimWKWebView element with the given label.
      */
     func tapWebViewElementWithAccessibilityLabel(text: String) {
         let webView = getWebViewWithKIFHelper()
@@ -182,8 +182,8 @@ extension KIFUITestActor {
         return found
     }
 
-    private func getWebViewWithKIFHelper() -> WKWebView {
-        let webView = waitForViewWithAccessibilityLabel("Web content") as! WKWebView
+    private func getWebViewWithKIFHelper() -> ShimWKWebView {
+        let webView = waitForViewWithAccessibilityLabel("Web content") as! ShimWKWebView
 
         // Wait for the web view to stop loading.
         runBlock { _ in

@@ -4,10 +4,9 @@
 
 import UIKit
 import XCTest
-
+import ShimWK
 import Shared
 import Storage
-import WebKit
 import Alamofire
 
 class ClientTests: XCTestCase {
@@ -18,7 +17,7 @@ class ClientTests: XCTestCase {
         XCTAssertTrue(loc != nil, "Sync UA is as expected. Was \(ua)")
     }
 
-    // Simple test to make sure the WKWebView UA matches the expected FxiOS pattern.
+    // Simple test to make sure the ShimWKWebView UA matches the expected FxiOS pattern.
     func testUserAgent() {
         let appVersion = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as! String
 
@@ -32,7 +31,7 @@ class ClientTests: XCTestCase {
 
         let expectation = expectationWithDescription("Found Firefox user agent")
 
-        let webView = WKWebView()
+        let webView = ShimWKWebView()
         webView.evaluateJavaScript("navigator.userAgent") { result, error in
             let userAgent = result as! String
             if compare(userAgent) {
@@ -64,7 +63,7 @@ class ClientTests: XCTestCase {
             "127.0.0.1",
             ].forEach { XCTAssert(hostIsValid($0), "\($0) host should be valid.") }
 
-        // Disallowed local hosts. WKWebView will direct them to our server, but the server
+        // Disallowed local hosts. ShimWKWebView will direct them to our server, but the server
         // should reject them.
         [ "[::1]",
             "2130706433",

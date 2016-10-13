@@ -32,14 +32,14 @@ import Shared
     case FramedLink = 8
 }
 
-// WKWebView has these:
+// ShimWKWebView has these:
 /*
-WKNavigationTypeLinkActivated,
-WKNavigationTypeFormSubmitted,
-WKNavigationTypeBackForward,
-WKNavigationTypeReload,
-WKNavigationTypeFormResubmitted,
-WKNavigationTypeOther = -1,
+ShimWKNavigationTypeLinkActivated,
+ShimWKNavigationTypeFormSubmitted,
+ShimWKNavigationTypeBackForward,
+ShimWKNavigationTypeReload,
+ShimWKNavigationTypeFormResubmitted,
+ShimWKNavigationTypeOther = -1,
 */
 
 /**
