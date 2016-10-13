@@ -108,15 +108,19 @@ struct AppMenuConfiguration: MenuConfiguration {
             } else if HomePageAccessors.hasHomePage(appState) {
                 menuItems.append(AppMenuConfiguration.OpenHomePageMenuItem)
             } else {
-                menuItems.append(AppMenuConfiguration.SetHomePageMenuItem)
+                var homePageMenuItem = AppMenuConfiguration.SetHomePageMenuItem
+                if let url = tabState.url where !url.isWebPage(includeDataURIs: true) || url.isLocal {
+                    homePageMenuItem.isDisabled = true
+                }
+                menuItems.append(homePageMenuItem)
             }
             menuItems.append(AppMenuConfiguration.NewTabMenuItem)
             menuItems.append(AppMenuConfiguration.NewPrivateTabMenuItem)
-            var menuItem = tabState.isBookmarked ? AppMenuConfiguration.RemoveBookmarkMenuItem : AppMenuConfiguration.AddBookmarkMenuItem
+            var bookmarkMenuItem = tabState.isBookmarked ? AppMenuConfiguration.RemoveBookmarkMenuItem : AppMenuConfiguration.AddBookmarkMenuItem
             if let url = tabState.url where !url.isWebPage(includeDataURIs: true) || url.isLocal {
-                menuItem.isDisabled = true
+                bookmarkMenuItem.isDisabled = true
             }
-            menuItems.append(menuItem)
+            menuItems.append(bookmarkMenuItem)
             if NoImageModeHelper.isNoImageModeAvailable(appState) {
                 if NoImageModeHelper.isNoImageModeActivated(appState) {
                     menuItems.append(AppMenuConfiguration.ShowImageModeMenuItem)

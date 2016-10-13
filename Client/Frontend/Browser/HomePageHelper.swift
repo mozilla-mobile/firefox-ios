@@ -23,7 +23,7 @@ class HomePageHelper {
             return HomePageAccessors.getHomePage(prefs)
         }
         set {
-            if let url = newValue {
+            if let url = newValue where url.isWebPage(includeDataURIs: false) && !url.isLocal {
                 prefs.setString(url.absoluteString!, forKey: HomePageConstants.HomePageURLPrefKey)
             } else {
                 prefs.removeObjectForKey(HomePageConstants.HomePageURLPrefKey)
@@ -67,6 +67,7 @@ class HomePageHelper {
         alertController.addAction(UIAlertAction(title: Strings.SetHomePageDialogYes, style: .Default) { _ in
             self.currentURL = tab.url
             })
+        alertController.view.accessibilityIdentifier = "HomePageDialog"
         navigationController?.presentViewController(alertController, animated: true, completion: nil)
     }
 }

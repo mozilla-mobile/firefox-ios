@@ -287,6 +287,7 @@ extension MenuViewController: MenuItemDataSource {
         assert(indexPath.getMenuItemIndex() < menuConfig.menuItems.count, "The menu item index \(indexPath.getMenuItemIndex()) should always be less than the number of menu items \(menuConfig.menuItems.count)")
         let menuItem = menuConfig.menuItems[indexPath.getMenuItemIndex()]
         cell.menuTitleLabel.text = menuItem.title
+        cell.accessibilityIdentifier = menuItem.title
         cell.accessibilityLabel = menuItem.title
         cell.menuTitleLabel.font = menuConfig.menuFont()
         
