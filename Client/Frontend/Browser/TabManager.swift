@@ -326,6 +326,7 @@ class TabManager: NSObject {
                 // one of the about:home pages.
                 if let url = newTabChoice.url {
                     tab.loadRequest(PrivilegedRequest(URL: url))
+                    tab.url = url
                 }
             }
         }
