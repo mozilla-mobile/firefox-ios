@@ -1702,6 +1702,12 @@ extension BrowserViewController: MenuViewControllerDelegate {
             return false
         }
 
+        // Dismiss the menu if we are going into the background.
+        let state = UIApplication.sharedApplication().applicationState
+        if state != .Active {
+            return true
+        }
+
         func orientationForSize(size: CGSize) -> UIInterfaceOrientation {
             return size.height < size.width ? .LandscapeLeft : .Portrait
         }
