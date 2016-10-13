@@ -87,7 +87,7 @@ extension BrowserViewController: URLBarDelegate {
         var url = URIFixup.getURL(entry: text)
 
         if url == nil {
-            guard let escaped = text.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+            guard let escaped = text.addingPercentEncoding(withAllowedCharacters: .urlQueryParameterAllowed),
                   let searchUrl = URL(string: SearchTemplate.replacingOccurrences(of: "%s", with: escaped)) else {
                 assertionFailure("Invalid search URL")
                 return
@@ -122,7 +122,8 @@ extension BrowserViewController: BrowserToolbarDelegate {
     }
 
     func browserToolbarDidPressSend(browserToolbar: BrowserToolbar) {
-        print("TODO: Sending not yet supported.")
+        guard let url = browser.url else { return }
+        OpenUtils.openInExternalBrowser(url: url)
     }
 }
 
