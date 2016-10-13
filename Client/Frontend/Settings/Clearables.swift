@@ -4,9 +4,9 @@
 
 import Foundation
 import Shared
-import WebKit
 import Deferred
 import WebImage
+import ShimWK
 
 private let log = Logger.browserLogger
 
@@ -76,8 +76,8 @@ class CacheClearable: Clearable {
     }
 
     func clear() -> Success {
-        let dataTypes = Set([WKWebsiteDataTypeDiskCache, WKWebsiteDataTypeMemoryCache])
-        WKWebsiteDataStore.defaultDataStore().removeDataOfTypes(dataTypes, modifiedSince: NSDate.distantPast(), completionHandler: {})
+        let dataTypes = Set([ShimWKWebsiteDataTypeDiskCache, ShimWKWebsiteDataTypeMemoryCache])
+        ShimWKWebsiteDataStore.defaultDataStore().removeDataOfTypes(dataTypes, modifiedSince: NSDate.distantPast(), completionHandler: {})
 
         log.debug("CacheClearable succeeded.")
         return succeed()
@@ -118,8 +118,8 @@ class SiteDataClearable: Clearable {
     }
 
     func clear() -> Success {
-        let dataTypes = Set([WKWebsiteDataTypeOfflineWebApplicationCache])
-        WKWebsiteDataStore.defaultDataStore().removeDataOfTypes(dataTypes, modifiedSince: NSDate.distantPast(), completionHandler: {})
+        let dataTypes = Set([ShimWKWebsiteDataTypeOfflineWebApplicationCache])
+        ShimWKWebsiteDataStore.defaultDataStore().removeDataOfTypes(dataTypes, modifiedSince: NSDate.distantPast(), completionHandler: {})
 
         log.debug("SiteDataClearable succeeded.")
         return succeed()
@@ -138,8 +138,8 @@ class CookiesClearable: Clearable {
     }
 
     func clear() -> Success {
-        let dataTypes = Set([WKWebsiteDataTypeCookies, WKWebsiteDataTypeLocalStorage, WKWebsiteDataTypeSessionStorage, WKWebsiteDataTypeWebSQLDatabases, WKWebsiteDataTypeIndexedDBDatabases])
-        WKWebsiteDataStore.defaultDataStore().removeDataOfTypes(dataTypes, modifiedSince: NSDate.distantPast(), completionHandler: {})
+        let dataTypes = Set([ShimWKWebsiteDataTypeCookies, ShimWKWebsiteDataTypeLocalStorage, ShimWKWebsiteDataTypeSessionStorage, ShimWKWebsiteDataTypeWebSQLDatabases, ShimWKWebsiteDataTypeIndexedDBDatabases])
+        ShimWKWebsiteDataStore.defaultDataStore().removeDataOfTypes(dataTypes, modifiedSince: NSDate.distantPast(), completionHandler: {})
 
         log.debug("CookiesClearable succeeded.")
         return succeed()

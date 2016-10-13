@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import WebKit
+import ShimWK
 
 private let ReadabilityServiceSharedInstance = ReadabilityService()
 
@@ -16,7 +16,7 @@ enum ReadabilityOperationResult {
     case Timeout
 }
 
-class ReadabilityOperation: NSOperation, WKNavigationDelegate, ReadabilityTabHelperDelegate {
+class ReadabilityOperation: NSOperation, ShimWKNavigationDelegate, ReadabilityTabHelperDelegate {
     var url: NSURL
     var semaphore: dispatch_semaphore_t
     var result: ReadabilityOperationResult?
@@ -38,7 +38,7 @@ class ReadabilityOperation: NSOperation, WKNavigationDelegate, ReadabilityTabHel
         // and WebKit are not safe from other threads.
 
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            let configuration = WKWebViewConfiguration()
+            let configuration = ShimWKWebViewConfiguration()
             self.tab = Tab(configuration: configuration)
             self.tab.createWebview()
             self.tab.navigationDelegate = self
@@ -78,12 +78,12 @@ class ReadabilityOperation: NSOperation, WKNavigationDelegate, ReadabilityTabHel
         }
     }
 
-    func webView(webView: WKWebView, didFailNavigation navigation: WKNavigation!, withError error: NSError) {
+    func webView(webView: ShimWKWebView, didFailNavigation navigation: ShimWKNavigation!, withError error: NSError) {
         result = ReadabilityOperationResult.Error(error)
         dispatch_semaphore_signal(semaphore)
     }
 
-    func webView(webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: NSError) {
+    func webView(webView: ShimWKWebView, didFailProvisionalNavigation navigation: ShimWKNavigation!, withError error: NSError) {
         result = ReadabilityOperationResult.Error(error)
         dispatch_semaphore_signal(semaphore)
     }

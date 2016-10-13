@@ -387,6 +387,12 @@
 		D31EC05F1CC57ED80096F4AB /* localhostLoad.html in Resources */ = {isa = PBXBuildFile; fileRef = D31EC05E1CC57ED80096F4AB /* localhostLoad.html */; };
 		D31F95E91AC226CB005C9F3B /* ScreenshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31F95E81AC226CB005C9F3B /* ScreenshotHelper.swift */; };
 		D32109941B8CFD62006D5B74 /* Storage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCAE21A1ABB51F800877008 /* Storage.framework */; };
+		D326EA5C1D9C52C00050FA4E /* disconnect-advertising.json in Resources */ = {isa = PBXBuildFile; fileRef = D326EA581D9C52C00050FA4E /* disconnect-advertising.json */; };
+		D326EA5D1D9C52C00050FA4E /* disconnect-analytics.json in Resources */ = {isa = PBXBuildFile; fileRef = D326EA591D9C52C00050FA4E /* disconnect-analytics.json */; };
+		D326EA5F1D9C52C00050FA4E /* disconnect-social.json in Resources */ = {isa = PBXBuildFile; fileRef = D326EA5B1D9C52C00050FA4E /* disconnect-social.json */; };
+		D326EA611D9C52D10050FA4E /* ContentBlocker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D326EA601D9C52D10050FA4E /* ContentBlocker.swift */; };
+		D326EACD1D9C5B0A0050FA4E /* ShimWK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D38671091D95DFC500684975 /* ShimWK.framework */; };
+		D326EACE1D9C5B0A0050FA4E /* ShimWK.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = D38671091D95DFC500684975 /* ShimWK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D328175B1BD07BA900185845 /* NSCharacterSetExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32817591BD07B6F00185845 /* NSCharacterSetExtensions.swift */; };
 		D32A350E1D6530D80066DAE9 /* FxADevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32A350D1D6530D80066DAE9 /* FxADevice.swift */; };
 		D32CACED1AE04DA1000658EB /* TestSwiftData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32CACEC1AE04DA1000658EB /* TestSwiftData.swift */; };
@@ -979,6 +985,20 @@
 			remoteGlobalIDString = 9CC9673B1AD4B1B600576D13;
 			remoteInfo = KIFFramework;
 		};
+		D326EACF1D9C5B0A0050FA4E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D38670FE1D95DFC400684975 /* ShimWK.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = D38670F21D95DFC400684975;
+			remoteInfo = ShimWK;
+		};
+		D38671081D95DFC500684975 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D38670FE1D95DFC400684975 /* ShimWK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D38670F31D95DFC400684975;
+			remoteInfo = ShimWK;
+		};
 		D39FA1651A83E0EC00EE869C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
@@ -1103,6 +1123,7 @@
 				E60138671C89EB8300DF9756 /* Account.framework in Copy Frameworks */,
 				E60138661C89EB7D00DF9756 /* Storage.framework in Copy Frameworks */,
 				E60138651C89EB7600DF9756 /* Shared.framework in Copy Frameworks */,
+				D326EACE1D9C5B0A0050FA4E /* ShimWK.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1481,6 +1502,10 @@
 		D31CF65B1CC1959A001D0BD0 /* PrivilegedRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivilegedRequest.swift; sourceTree = "<group>"; };
 		D31EC05E1CC57ED80096F4AB /* localhostLoad.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = localhostLoad.html; sourceTree = "<group>"; };
 		D31F95E81AC226CB005C9F3B /* ScreenshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenshotHelper.swift; sourceTree = "<group>"; };
+		D326EA581D9C52C00050FA4E /* disconnect-advertising.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "disconnect-advertising.json"; sourceTree = "<group>"; };
+		D326EA591D9C52C00050FA4E /* disconnect-analytics.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "disconnect-analytics.json"; sourceTree = "<group>"; };
+		D326EA5B1D9C52C00050FA4E /* disconnect-social.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "disconnect-social.json"; sourceTree = "<group>"; };
+		D326EA601D9C52D10050FA4E /* ContentBlocker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentBlocker.swift; sourceTree = "<group>"; };
 		D32817591BD07B6F00185845 /* NSCharacterSetExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSCharacterSetExtensions.swift; sourceTree = "<group>"; };
 		D32A350D1D6530D80066DAE9 /* FxADevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxADevice.swift; sourceTree = "<group>"; };
 		D32CACEC1AE04DA1000658EB /* TestSwiftData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSwiftData.swift; sourceTree = "<group>"; };
@@ -1503,6 +1528,7 @@
 		D37DE2C61CA356D800A5EC69 /* CertTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CertTests.swift; sourceTree = "<group>"; };
 		D37DE2C81CA356F900A5EC69 /* testcert1.pem */ = {isa = PBXFileReference; lastKnownFileType = file; path = testcert1.pem; sourceTree = "<group>"; };
 		D37DE2C91CA356F900A5EC69 /* testcert2.pem */ = {isa = PBXFileReference; lastKnownFileType = file; path = testcert2.pem; sourceTree = "<group>"; };
+		D38670FE1D95DFC400684975 /* ShimWK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ShimWK.xcodeproj; path = ShimWK/ShimWK.xcodeproj; sourceTree = "<group>"; };
 		D38A1BEC1A9FA2CA00F6A386 /* SiteTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteTableViewController.swift; sourceTree = "<group>"; };
 		D38A1BED1A9FA2CA00F6A386 /* SiteTableViewControllerHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SiteTableViewControllerHeader.xib; sourceTree = "<group>"; };
 		D38A1EDF1CB458EC0080C842 /* CertError.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = CertError.html; sourceTree = "<group>"; };
@@ -1821,6 +1847,7 @@
 				E4B334881BBF23F3004E2BFF /* iAd.framework in Frameworks */,
 				E6231C051B90A472005ABB0D /* libxml2.2.tbd in Frameworks */,
 				E6231C031B90A466005ABB0D /* libstdc++.6.0.9.tbd in Frameworks */,
+				D326EACD1D9C5B0A0050FA4E /* ShimWK.framework in Frameworks */,
 				E6231C011B90A44F005ABB0D /* libz.tbd in Frameworks */,
 				288A2D9D1AB8B3260023ABC3 /* Shared.framework in Frameworks */,
 				2FCAE2311ABB51F800877008 /* Storage.framework in Frameworks */,
@@ -2640,6 +2667,17 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		D326EA571D9C52C00050FA4E /* Content Blocker */ = {
+			isa = PBXGroup;
+			children = (
+				D326EA581D9C52C00050FA4E /* disconnect-advertising.json */,
+				D326EA591D9C52C00050FA4E /* disconnect-analytics.json */,
+				D326EA5B1D9C52C00050FA4E /* disconnect-social.json */,
+				D326EA601D9C52D10050FA4E /* ContentBlocker.swift */,
+			);
+			path = "Content Blocker";
+			sourceTree = "<group>";
+		};
 		D34DC84C1A16C40C00D49B7B /* Providers */ = {
 			isa = PBXGroup;
 			children = (
@@ -2648,6 +2686,14 @@
 				0BD19A661A25309B0084FBA7 /* NSUserDefaultsPrefs.swift */,
 			);
 			path = Providers;
+			sourceTree = "<group>";
+		};
+		D38670FF1D95DFC400684975 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D38671091D95DFC500684975 /* ShimWK.framework */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		D38A1BEB1A9FA2CA00F6A386 /* Widgets */ = {
@@ -3138,6 +3184,7 @@
 			children = (
 				28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */,
 				D30EBB5A1C75503800105AE9 /* KIF.xcodeproj */,
+				D38670FE1D95DFC400684975 /* ShimWK.xcodeproj */,
 				0B742CC61B32491400EE9264 /* sqlcipher.xcodeproj */,
 				7B9A62B91C4002B1005C83DC /* SQLite.xcodeproj */,
 				2FA435FC1ABB83B4008031D1 /* Account */,
@@ -3305,6 +3352,7 @@
 				7BEDD28C1CB7CB12004B51F3 /* Animators */,
 				E692E3271C46E62D009D1240 /* AuthenticationManager */,
 				D3A994941A368691008AD1AC /* Browser */,
+				D326EA571D9C52C00050FA4E /* Content Blocker */,
 				7B0B1B9C1C1B69F500DF4AB5 /* Extensions */,
 				F84B22211A09122500AAB793 /* Home */,
 				E49943F31AE6879C00BF9DE4 /* Intro */,
@@ -3826,6 +3874,7 @@
 				E4D5672E1ADECE2800F1EFE7 /* PBXTargetDependency */,
 				E4BA8A341B4B0A1700BC2E95 /* PBXTargetDependency */,
 				390527551C874D35007E0BB7 /* PBXTargetDependency */,
+				D326EAD01D9C5B0A0050FA4E /* PBXTargetDependency */,
 			);
 			name = Client;
 			productName = Client;
@@ -4050,6 +4099,10 @@
 					ProjectRef = D30EBB5A1C75503800105AE9 /* KIF.xcodeproj */;
 				},
 				{
+					ProductGroup = D38670FF1D95DFC400684975 /* Products */;
+					ProjectRef = D38670FE1D95DFC400684975 /* ShimWK.xcodeproj */;
+				},
+				{
 					ProductGroup = 0B742CC71B32491400EE9264 /* Products */;
 					ProjectRef = 0B742CC61B32491400EE9264 /* sqlcipher.xcodeproj */;
 				},
@@ -4190,6 +4243,13 @@
 			fileType = wrapper.framework;
 			path = KIF.framework;
 			remoteRef = D30EBB691C75503800105AE9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D38671091D95DFC500684975 /* ShimWK.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = ShimWK.framework;
+			remoteRef = D38671081D95DFC500684975 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -4345,6 +4405,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D326EA5D1D9C52C00050FA4E /* disconnect-analytics.json in Resources */,
 				D38A1EE01CB458EC0080C842 /* CertError.html in Resources */,
 				0BA1E0301B051A07007675AF /* NetError.css in Resources */,
 				E4B7B77E1A793CF20022C5E0 /* FiraSans-SemiBold.ttf in Resources */,
@@ -4369,6 +4430,7 @@
 				0BDA568B1B26B1BE008C9B96 /* LoginsHelper.js in Resources */,
 				E4B7B7791A793CF20022C5E0 /* FiraSans-Light.ttf in Resources */,
 				D38A1BF01A9FA2CA00F6A386 /* SiteTableViewControllerHeader.xib in Resources */,
+				D326EA5C1D9C52C00050FA4E /* disconnect-advertising.json in Resources */,
 				E49BFF591B1F48C3009368CC /* Readability.js in Resources */,
 				E4CD9E9A1A68980A00318571 /* ReaderMode.js in Resources */,
 				E4424B201AC6EBE100F44C38 /* ReaderSettings.xcassets in Resources */,
@@ -4378,6 +4440,7 @@
 				D308EE561CBF0BF5006843F2 /* CertError.css in Resources */,
 				E4B7B7641A793CF20022C5E0 /* CharisSILR.ttf in Resources */,
 				2F834D161A80629A006A0B7B /* FxASignIn.js in Resources */,
+				D326EA5F1D9C52C00050FA4E /* disconnect-social.json in Resources */,
 				D3BA7E0C1B0E902A00153782 /* ContextMenu.js in Resources */,
 				3BE7274E1CCFE8A30099189F /* CustomSearchHelper.js in Resources */,
 				E4B7B7681A793CF20022C5E0 /* FiraSans-Bold.ttf in Resources */,
@@ -4878,6 +4941,7 @@
 				E68E7ADC1CAC208200FDCA76 /* SetupPasscodeViewController.swift in Sources */,
 				7B3631EA1C244FEE00D12AF9 /* Theme.swift in Sources */,
 				7BC68D321CC153920043562A /* AppMenuItem.swift in Sources */,
+				D326EA611D9C52D10050FA4E /* ContentBlocker.swift in Sources */,
 				7BC68CCD1CC152B70043562A /* MenuView.swift in Sources */,
 				E66C5B481BDA81050051AA93 /* UIImage+ImageEffects.m in Sources */,
 				E4CD9F6D1A77DD2800318571 /* ReaderModeStyleViewController.swift in Sources */,
@@ -5259,6 +5323,11 @@
 			isa = PBXTargetDependency;
 			target = F84B21BD1A090F8100AAB793 /* Client */;
 			targetProxy = 7BEB645C1C7346100092C02E /* PBXContainerItemProxy */;
+		};
+		D326EAD01D9C5B0A0050FA4E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = ShimWK;
+			targetProxy = D326EACF1D9C5B0A0050FA4E /* PBXContainerItemProxy */;
 		};
 		D39FA1661A83E0EC00EE869C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -6303,6 +6372,7 @@
 		E421F28C1A8D2BF300971276 /* FirefoxNightly */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_Nightly;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				ENABLE_BITCODE = NO;
@@ -6322,6 +6392,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**",
 				);
 				INFOPLIST_FILE = Client/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client-Bridging-Header.h";
@@ -6468,6 +6539,7 @@
 		E448FC9E1AEE7A6000869B6C /* Firefox */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				ENABLE_BITCODE = NO;
@@ -6487,6 +6559,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**",
 				);
 				INFOPLIST_FILE = Client/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client-Bridging-Header.h";
@@ -7168,6 +7241,7 @@
 		E682F5211C89E71000ECB6B2 /* FennecAurora */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				ENABLE_BITCODE = NO;
@@ -7187,6 +7261,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**",
 				);
 				INFOPLIST_FILE = Client/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client-Bridging-Header.h";
@@ -7646,6 +7721,7 @@
 		E6FCC42A1C40562400DF6113 /* FirefoxBeta */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_Beta;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				ENABLE_BITCODE = NO;
@@ -7665,6 +7741,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**",
 				);
 				INFOPLIST_FILE = Client/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client-Bridging-Header.h";
@@ -8081,6 +8158,7 @@
 		F84B21DE1A090F8100AAB793 /* Fennec */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_Developer;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				ENABLE_BITCODE = NO;
@@ -8100,6 +8178,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**",
 				);
 				INFOPLIST_FILE = Client/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client-Bridging-Header.h";

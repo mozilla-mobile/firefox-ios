@@ -3,10 +3,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import WebKit
 import GCDWebServers
 import Shared
 import Storage
+import ShimWK
 
 class ErrorPageHelper {
     static let MozDomain = "mozilla"
@@ -212,7 +212,7 @@ class ErrorPageHelper {
         })
     }
 
-    func showPage(error: NSError, forUrl url: NSURL, inWebView webView: WKWebView) {
+    func showPage(error: NSError, forUrl url: NSURL, inWebView webView: ShimWKWebView) {
         // Don't show error pages for error pages.
         if ErrorPageHelper.isErrorPageURL(url) {
             if let previousURL = ErrorPageHelper.originalURLFromQuery(url),
@@ -280,7 +280,7 @@ extension ErrorPageHelper: TabHelper {
         return "errorPageHelperMessageManager"
     }
 
-    func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    func userContentController(userContentController: ShimWKUserContentController, didReceiveScriptMessage message: ShimWKScriptMessage) {
         if let errorURL = message.frameInfo.request.URL where ErrorPageHelper.isErrorPageURL(errorURL),
            let res = message.body as? [String: String],
            let originalURL = ErrorPageHelper.originalURLFromQuery(errorURL),

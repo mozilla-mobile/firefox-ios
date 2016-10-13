@@ -6,7 +6,7 @@ import UIKit
 import Shared
 import Storage
 import ReadingList
-import WebKit
+import ShimWK
 
 protocol TabPeekDelegate: class {
     func tabPeekDidAddBookmark(tab: Tab)
@@ -15,7 +15,7 @@ protocol TabPeekDelegate: class {
     func tabPeekDidCloseTab(tab: Tab)
 }
 
-class TabPeekViewController: UIViewController, WKNavigationDelegate {
+class TabPeekViewController: UIViewController, ShimWKNavigationDelegate {
 
     private static let PreviewActionAddToBookmarks = NSLocalizedString("Add to Bookmarks", tableName: "3DTouchActions", comment: "Label for preview action on Tab Tray Tab to add current tab to Bookmarks")
     private static let PreviewActionAddToReadingList = NSLocalizedString("Add to Reading List", tableName: "3DTouchActions", comment: "Label for preview action on Tab Tray Tab to add current tab to Reading List")
@@ -110,14 +110,14 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
         screenShot?.accessibilityLabel = previewAccessibilityLabel
     }
 
-    private func setupWebView(webView: WKWebView?) {
+    private func setupWebView(webView: ShimWKWebView?) {
         guard let webView = webView, let url = webView.URL where !isIgnoredURL(url) else { return }
-        let clonedWebView = WKWebView(frame: webView.frame, configuration: webView.configuration)
+        let clonedWebView = ShimWKWebView(frame: webView.view.frame, configuration: webView.configuration)
         clonedWebView.allowsLinkPreview = false
         webView.accessibilityLabel = previewAccessibilityLabel
-        self.view.addSubview(clonedWebView)
+        self.view.addSubview(clonedWebView.view)
 
-        clonedWebView.snp_makeConstraints { make in
+        clonedWebView.view.snp_makeConstraints { make in
             make.edges.equalTo(self.view)
         }
 
@@ -166,7 +166,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
         self.ignoreURL = isIgnoredURL(displayURL)
     }
 
-    func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
+    func webView(webView: ShimWKWebView, didFinishNavigation navigation: ShimWKNavigation!) {
         screenShot?.removeFromSuperview()
         screenShot = nil
     }

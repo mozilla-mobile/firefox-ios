@@ -3,8 +3,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import WebKit
 import Shared
+import ShimWK
 
 struct NoImageModePrefsKey {
     static let NoImageModeButtonIsInMenu = PrefsKeys.KeyNoImageModeButtonIsInMenu
@@ -17,7 +17,7 @@ class NoImageModeHelper: TabHelper {
     required init(tab: Tab) {
         self.tab = tab
         if let path = NSBundle.mainBundle().pathForResource("NoImageModeHelper", ofType: "js"), source = try? NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) as String {
-            let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentStart, forMainFrameOnly: true)
+            let userScript = ShimWKUserScript(source: source, injectionTime: ShimWKUserScriptInjectionTime.AtDocumentStart, forMainFrameOnly: true)
             tab.webView!.configuration.userContentController.addUserScript(userScript)
         }
     }
@@ -30,7 +30,7 @@ class NoImageModeHelper: TabHelper {
         return "NoImageMode"
     }
 
-    func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    func userContentController(userContentController: ShimWKUserContentController, didReceiveScriptMessage message: ShimWKScriptMessage) {
         // Do nothing.
     }
 

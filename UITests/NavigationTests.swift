@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import WebKit
 
 class NavigationTests: KIFTestCase, UITextFieldDelegate {
     private var webRoot: String!
@@ -47,7 +46,7 @@ class NavigationTests: KIFTestCase, UITextFieldDelegate {
         tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url)\n")
         tester().waitForWebViewElementWithAccessibilityLabel("Top")
 
-//        var webView = tester().waitForViewWithAccessibilityLabel("Web content") as? WKWebView
+//        var webView = tester().waitForViewWithAccessibilityLabel("Web content") as? ShimWKWebView
         tester().scrollViewWithAccessibilityIdentifier("contentView", byFractionOfSizeHorizontal: -0.9, vertical: -0.9)
         tester().waitForWebViewElementWithAccessibilityLabel("Bottom")
 

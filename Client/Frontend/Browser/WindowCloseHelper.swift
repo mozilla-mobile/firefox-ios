@@ -3,7 +3,7 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import WebKit
+import ShimWK
 
 protocol WindowCloseHelperDelegate: class {
     func windowCloseHelper(windowCloseHelper: WindowCloseHelper, didRequestToCloseTab tab: Tab)
@@ -17,7 +17,7 @@ class WindowCloseHelper: TabHelper {
         self.tab = tab
         if let path = NSBundle.mainBundle().pathForResource("WindowCloseHelper", ofType: "js") {
             if let source = try? NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) as String {
-                let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
+                let userScript = ShimWKUserScript(source: source, injectionTime: ShimWKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
                 tab.webView!.configuration.userContentController.addUserScript(userScript)
             }
         }
@@ -27,7 +27,7 @@ class WindowCloseHelper: TabHelper {
         return "windowCloseHelper"
     }
 
-    func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    func userContentController(userContentController: ShimWKUserContentController, didReceiveScriptMessage message: ShimWKScriptMessage) {
         if let tab = tab {
             dispatch_async(dispatch_get_main_queue()) {
                 self.delegate?.windowCloseHelper(self, didRequestToCloseTab: tab)

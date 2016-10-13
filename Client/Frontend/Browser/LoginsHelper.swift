@@ -6,8 +6,8 @@ import Foundation
 import Shared
 import Storage
 import XCGLogger
-import WebKit
 import Deferred
+import ShimWK
 
 private let log = Logger.browserLogger
 
@@ -30,7 +30,7 @@ class LoginsHelper: TabHelper {
         self.profile = profile
 
         if let path = NSBundle.mainBundle().pathForResource("LoginsHelper", ofType: "js"), source = try? NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) as String {
-            let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: false)
+            let userScript = ShimWKUserScript(source: source, injectionTime: ShimWKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: false)
             tab.webView!.configuration.userContentController.addUserScript(userScript)
         }
     }
@@ -39,11 +39,11 @@ class LoginsHelper: TabHelper {
         return "loginsManagerMessageHandler"
     }
 
-    func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    func userContentController(userContentController: ShimWKUserContentController, didReceiveScriptMessage message: ShimWKScriptMessage) {
         guard var res = message.body as? [String: AnyObject] else { return }
         guard let type = res["type"] as? String else { return }
 
-        // We don't use the WKWebView's URL since the page can spoof the URL by using document.location
+        // We don't use the ShimWKWebView's URL since the page can spoof the URL by using document.location
         // right before requesting login data. See bug 1194567 for more context.
         if let url = message.frameInfo.request.URL {
             // Since responses go to the main frame, make sure we only listen for main frame requests

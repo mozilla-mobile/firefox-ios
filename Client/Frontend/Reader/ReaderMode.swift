@@ -4,7 +4,7 @@
 
 import Foundation
 import Shared
-import WebKit
+import ShimWK
 
 let ReaderModeProfileKeyStyle = "readermode.style"
 
@@ -203,7 +203,7 @@ struct ReadabilityResult {
     }
 }
 
-/// Delegate that contains callbacks that we have added on top of the built-in WKWebViewDelegate
+/// Delegate that contains callbacks that we have added on top of the built-in ShimWKWebViewDelegate
 protocol ReaderModeDelegate {
     func readerMode(readerMode: ReaderMode, didChangeReaderModeState state: ReaderModeState, forTab tab: Tab)
     func readerMode(readerMode: ReaderMode, didDisplayReaderizedContentForTab tab: Tab)
@@ -225,10 +225,10 @@ class ReaderMode: TabHelper {
     required init(tab: Tab) {
         self.tab = tab
 
-        // This is a WKUserScript at the moment because webView.evaluateJavaScript() fails with an unspecified error. Possibly script size related.
+        // This is a ShimWKUserScript at the moment because webView.evaluateJavaScript() fails with an unspecified error. Possibly script size related.
         if let path = NSBundle.mainBundle().pathForResource("Readability", ofType: "js") {
             if let source = try? NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) as String {
-                let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
+                let userScript = ShimWKUserScript(source: source, injectionTime: ShimWKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
                 tab.webView!.configuration.userContentController.addUserScript(userScript)
             }
         }
@@ -236,7 +236,7 @@ class ReaderMode: TabHelper {
         // This is executed after a page has been loaded. It executes Readability and then fires a script message to let us know if the page is compatible with reader mode.
         if let path = NSBundle.mainBundle().pathForResource("ReaderMode", ofType: "js") {
             if let source = try? NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) as String {
-                let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
+                let userScript = ShimWKUserScript(source: source, injectionTime: ShimWKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
                 tab.webView!.configuration.userContentController.addUserScript(userScript)
             }
         }
@@ -263,7 +263,7 @@ class ReaderMode: TabHelper {
         delegate?.readerMode(self, didChangeReaderModeState: state, forTab: tab)
     }
 
-    func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    func userContentController(userContentController: ShimWKUserContentController, didReceiveScriptMessage message: ShimWKScriptMessage) {
         if let msg = message.body as? Dictionary<String, String> {
             if let messageType = ReaderModeMessageType(rawValue: msg["Type"] ?? "") {
                 switch messageType {

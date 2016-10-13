@@ -87,6 +87,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         log.debug("Initializing telemetry…")
         Telemetry.initWithPrefs(profile.prefs)
 
+        NSURLProtocol.registerClass(ContentBlocker)
+
         if !DebugSettingsBundleOptions.disableLocalWebServer {
             log.debug("Starting web server…")
             // Set up a web server that serves us static content. Do this early so that it is ready when the UI is presented.
@@ -453,7 +455,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func setUserAgent() {
         let firefoxUA = UserAgent.defaultUserAgent()
 
-        // Set the UA for WKWebView (via defaults), the favicon fetcher, and the image loader.
+        // Set the UA for ShimWKWebView (via defaults), the favicon fetcher, and the image loader.
         // This only needs to be done once per runtime. Note that we use defaults here that are
         // readable from extensions, so they can just use the cached identifier.
         let defaults = NSUserDefaults(suiteName: AppInfo.sharedContainerIdentifier())!

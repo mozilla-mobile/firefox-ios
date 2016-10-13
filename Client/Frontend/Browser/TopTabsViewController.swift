@@ -4,7 +4,7 @@
 
 import Foundation
 import Shared
-import WebKit
+import ShimWK
 
 struct TopTabsUX {
     static let TopTabsViewHeight: CGFloat = 40
@@ -341,12 +341,12 @@ extension TopTabsViewController: TabSelectionDelegate {
     }
 }
 
-extension TopTabsViewController : WKNavigationDelegate {
-    func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
+extension TopTabsViewController : ShimWKNavigationDelegate {
+    func webView(webView: ShimWKWebView, didFinishNavigation navigation: ShimWKNavigation!) {
         collectionView.reloadData()
     }
     
-    func webView(webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+    func webView(webView: ShimWKWebView, didStartProvisionalNavigation navigation: ShimWKNavigation!) {
         collectionView.reloadData()
     }
 }

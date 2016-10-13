@@ -3,13 +3,12 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import WebKit
 import Shared
 import Storage
 import WebImage
 import Deferred
 import Sync
-
+import ShimWK
 
 class FaviconManager: TabHelper {
     static let FaviconDidLoad = "FaviconManagerFaviconDidLoad"
@@ -25,7 +24,7 @@ class FaviconManager: TabHelper {
 
         if let path = NSBundle.mainBundle().pathForResource("Favicons", ofType: "js") {
             if let source = try? NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) as String {
-                let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
+                let userScript = ShimWKUserScript(source: source, injectionTime: ShimWKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
                 tab.webView!.configuration.userContentController.addUserScript(userScript)
             }
         }
@@ -98,7 +97,7 @@ class FaviconManager: TabHelper {
         return deferred
     }
 
-    func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    func userContentController(userContentController: ShimWKUserContentController, didReceiveScriptMessage message: ShimWKScriptMessage) {
         self.tab?.favicons.removeAll(keepCapacity: false)
         if let tab = self.tab,
         let currentURL = tab.url {
