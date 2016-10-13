@@ -31,7 +31,7 @@ class ActivityStreamPanel: UITableViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate? = nil
     private let profile: Profile
     private var onyxSession: OnyxSession?
-    private let topSitesManager: ASHorizontalScrollCellManager = ASHorizontalScrollCellManager()
+    private let topSitesManager = ASHorizontalScrollCellManager()
 
     var topSites: [Site] = []
     lazy var longPressRecognizer: UILongPressGestureRecognizer = {
@@ -384,10 +384,6 @@ extension ActivityStreamPanel {
                 toApplication: UIApplication.sharedApplication())
         })
         
-        let removeAction = ActionOverlayTableViewAction(title: NSLocalizedString("Remove", comment: "Label for \"Remove\" button"), iconString: "action_remove", handler: { action in
-            self.topSitesManager.collectionView(collectionView!, deleteItemAtIndexPath: indexPath)
-        })
-        
         let deleteFromHistoryAction = ActionOverlayTableViewAction(title: Strings.DeleteFromHistoryContextMenuTitle, iconString: "action_delete", handler: { action in
             ASOnyxPing.reportDeleteItemEvent(actionPosition: indexPath.item, source: .highlights)
             self.profile.history.removeHistoryForURL(site.url)
@@ -403,20 +399,24 @@ extension ActivityStreamPanel {
             }
         })
 
+        let removeAction = ActionOverlayTableViewAction(title: NSLocalizedString("Remove", comment: "Label for \"Remove\" button"), iconString: "action_remove", handler: { action in
+            self.topSitesManager.collectionView(collectionView!, deleteItemAtIndexPath: indexPath)
+        })
+        
         let dismissAction = ActionOverlayTableViewAction(title: Strings.DismissContextMenuTitle, iconString: "action_close", handler: { action in
             self.profile.recommendations.removeHighlightForURL(site.url).uponQueue(dispatch_get_main_queue()) { _ in
-                    self.history.removeAtIndex(indexPath.row)
-                    self.tableView.beginUpdates()
-                    self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Right)
-                    self.tableView.endUpdates()
-
-                    self.tableView.reloadData()
+                self.history.removeAtIndex(indexPath.row)
+                self.tableView.beginUpdates()
+                self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Right)
+                self.tableView.endUpdates()
+                
+                self.tableView.reloadData()
                 }
         })
 
         let contextMenu : ActionOverlayTableViewController
         if let _ = collectionView {
-            contextMenu = ActionOverlayTableViewController(site: site, actions: [openInNewTabAction, openInNewPrivateTabAction, bookmarkAction, removeAction, shareAction, dismissAction])
+            contextMenu = ActionOverlayTableViewController(site: site, actions: [openInNewTabAction, openInNewPrivateTabAction, bookmarkAction, deleteFromHistoryAction, shareAction, removeAction])
         } else {
             contextMenu = ActionOverlayTableViewController(site: site, actions: [openInNewTabAction, openInNewPrivateTabAction, bookmarkAction, deleteFromHistoryAction, shareAction, dismissAction])
         }
