@@ -230,6 +230,19 @@ extension TabScrollingController: UIGestureRecognizerDelegate {
 }
 
 extension TabScrollingController: UIScrollViewDelegate {
+    enum Notifications: String {
+        case TabBeginScrollNotification = "TabBeginScrollNotification"
+        case TabBeginZoomNotification = "TabBeginZoomNotification"
+    }
+
+    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+        NSNotificationCenter.defaultCenter().postNotificationName(Notifications.TabBeginScrollNotification.rawValue, object: scrollView)
+    }
+
+    func scrollViewWillBeginZooming(scrollView: UIScrollView, withView view: UIView?) {
+        NSNotificationCenter.defaultCenter().postNotificationName(Notifications.TabBeginZoomNotification.rawValue, object: scrollView)
+    }
+
     func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         if targetContentOffset.memory.y + scrollView.frame.size.height >= scrollView.contentSize.height {
             suppressToolbarHiding = true

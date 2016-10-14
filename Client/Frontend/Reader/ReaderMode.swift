@@ -5,6 +5,7 @@
 import Foundation
 import Shared
 import WebKit
+import AVFoundation
 
 let ReaderModeProfileKeyStyle = "readermode.style"
 
@@ -147,6 +148,7 @@ struct ReadabilityResult {
     var content = ""
     var title = ""
     var credits = ""
+    var language = ""
 
     init?(object: AnyObject?) {
         if let dict = object as? NSDictionary {
@@ -167,6 +169,9 @@ struct ReadabilityResult {
             if let credits = dict["byline"] as? String {
                 self.credits = credits
             }
+            if let language = dict["language"] as? String {
+                self.language = language
+            }
         } else {
             return nil
         }
@@ -180,8 +185,9 @@ struct ReadabilityResult {
         let content = object["content"].asString
         let title = object["title"].asString
         let credits = object["credits"].asString
+        let language = object["language"].asString
 
-        if domain == nil || url == nil || content == nil || title == nil || credits == nil {
+        if domain == nil || url == nil || content == nil || title == nil || credits == nil || language == nil {
             return nil
         }
 
@@ -190,11 +196,12 @@ struct ReadabilityResult {
         self.content = content!
         self.title = title!
         self.credits = credits!
+        self.language = language!
     }
 
     /// Encode to a dictionary, which can then for example be json encoded
     func encode() -> [String:AnyObject] {
-        return ["domain": domain, "url": url, "content": content, "title": title, "credits": credits]
+        return ["domain": domain, "url": url, "content": content, "title": title, "credits": credits, "language": language]
     }
 
     /// Encode to a JSON encoded string
@@ -207,16 +214,19 @@ struct ReadabilityResult {
 protocol ReaderModeDelegate {
     func readerMode(readerMode: ReaderMode, didChangeReaderModeState state: ReaderModeState, forTab tab: Tab)
     func readerMode(readerMode: ReaderMode, didDisplayReaderizedContentForTab tab: Tab)
+    func readerMode(readerMode: ReaderMode, dictationStateDidChange state: DictationState)
 }
 
 let ReaderModeNamespace = "window.__firefox__.reader"
 
-class ReaderMode: TabHelper {
+class ReaderMode: TabHelper, ReaderModeDictationDelegate {
     var delegate: ReaderModeDelegate?
 
     private weak var tab: Tab?
     var state: ReaderModeState = ReaderModeState.Unavailable
     private var originalURL: NSURL?
+    
+    private var dictation = ReaderModeDictation()
 
     class func name() -> String {
         return "ReaderMode"
@@ -224,6 +234,8 @@ class ReaderMode: TabHelper {
 
     required init(tab: Tab) {
         self.tab = tab
+
+        self.dictation.delegate = self
 
         // This is a WKUserScript at the moment because webView.evaluateJavaScript() fails with an unspecified error. Possibly script size related.
         if let path = NSBundle.mainBundle().pathForResource("Readability", ofType: "js") {
@@ -251,6 +263,9 @@ class ReaderMode: TabHelper {
             case .PageShow:
                 if let tab = tab {
                     delegate?.readerMode(self, didDisplayReaderizedContentForTab: tab)
+                    if let webView = self.tab?.webView {
+                        dictation.parseWebView(webView)
+                    }
                 }
         }
     }
@@ -291,5 +306,150 @@ class ReaderMode: TabHelper {
                 })
             }
         }
+    }
+
+    func readerModeDictation(readerModeDictation: ReaderModeDictation, stateDidChange state: DictationState) {
+        self.delegate?.readerMode(self, dictationStateDidChange: state)
+    }
+    
+    var isDictating: Bool {
+        return dictation.state == .Playing
+    }
+    
+    func resumeDictation() {
+        switch dictation.state {
+            case .Unstarted, .Finished:
+                dictation.start()
+            case .Paused:
+                dictation.resume()
+            case .Playing:
+                break
+        }
+    }
+    
+    func pauseDictation() {
+        if self.isDictating {
+            dictation.pause()
+        }
+    }
+    
+    func endDictation() {
+        dictation.end()
+    }
+}
+
+enum DictationState {
+    case Unstarted
+    case Playing
+    case Paused
+    case Finished
+}
+
+protocol ReaderModeDictationDelegate: class {
+    func readerModeDictation(readerModeDictation: ReaderModeDictation, stateDidChange state: DictationState)
+}
+
+class ReaderModeDictation: NSObject, AVSpeechSynthesizerDelegate {
+    var state: DictationState = .Unstarted {
+        didSet {
+            self.delegate?.readerModeDictation(self, stateDidChange: self.state)
+        }
+    }
+
+    weak var delegate: ReaderModeDictationDelegate?
+
+    private let synthesiser = AVSpeechSynthesizer()
+
+    private var webView: WKWebView?
+    private var scrollObservers: [String: NSObjectProtocol] = [:]
+    private var scrollsToFollowDictation = true
+    private var contentText: String?
+    private var locale: String?
+    
+    // We need this to deal with a bug with only one AVSpeechSynthesizer being able to be running/paused at one time
+    private var cutoffPoint: Int?
+    
+    override init() {
+        super.init()
+        self.synthesiser.delegate = self
+    }
+    
+    deinit {
+        if let webView = self.webView {
+            for (notification, observer) in self.scrollObservers {
+                NSNotificationCenter.defaultCenter().removeObserver(observer, name: notification, object: webView.scrollView)
+            }
+        }
+    }
+    
+    func parseWebView(webView: WKWebView) {
+        self.webView = webView
+        webView.evaluateJavaScript("document.documentElement.lang") { result, _ in
+            if let locale = result as? String where !locale.isEmpty {
+                self.locale = locale
+            }
+        }
+        for notification in ([TabScrollingController.Notifications.TabBeginScrollNotification, TabScrollingController.Notifications.TabBeginZoomNotification].map { $0.rawValue }) {
+            scrollObservers[notification] = NSNotificationCenter.defaultCenter().addObserverForName(notification, object: webView.scrollView, queue: nil) { [unowned self] _ in
+                self.scrollsToFollowDictation = false
+                webView.evaluateJavaScript("\(ReaderModeNamespace).dictation.setScrollToDictationOn(false)", completionHandler: nil)
+            }
+        }
+        webView.evaluateJavaScript("\(ReaderModeNamespace).dictation.extractContentText()") { (result, _) in
+            self.contentText = result as? String
+        }
+    }
+    
+    private func speakUtterance(string: String) {
+        let utterance = AVSpeechUtterance(string: string)
+        utterance.voice = AVSpeechSynthesisVoice(language: self.locale ?? NSBundle.mainBundle().accessibilityLanguage ?? NSLocale.preferredLanguages().first ?? "en-GB")
+        self.synthesiser.speakUtterance(utterance)
+    }
+    
+    func start() {
+        guard let contentText = self.contentText else {
+            return
+        }
+        self.state = .Playing
+        self.scrollsToFollowDictation = true
+        self.speakUtterance(contentText)
+    }
+    
+    func resume() {
+        self.state = .Playing
+        self.scrollsToFollowDictation = true
+        if let webView = self.webView {
+            webView.evaluateJavaScript("\(ReaderModeNamespace).dictation.setScrollToDictationOn(true)", completionHandler: nil)
+        }
+        guard let contentText = self.contentText, cutoffPoint = cutoffPoint else {
+            return
+        }
+        self.speakUtterance(NSString(string: contentText).substringFromIndex(cutoffPoint))
+    }
+    
+    func pause() {
+        self.state = .Paused
+        self.synthesiser.stopSpeakingAtBoundary(.Immediate)
+    }
+
+    func end() {
+        self.state = .Finished
+        self.synthesiser.stopSpeakingAtBoundary(.Immediate)
+        webView?.evaluateJavaScript("\(ReaderModeNamespace).dictation.unmarkAllContent()", completionHandler: nil)
+    }
+    
+    func speechSynthesizer(synthesizer: AVSpeechSynthesizer, willSpeakRangeOfSpeechString characterRange: NSRange, utterance: AVSpeechUtterance) {
+        guard let webView = self.webView, contentText = self.contentText else {
+            return
+        }
+        if let range = characterRange.toRange() {
+            let offset = contentText.characters.count - utterance.speechString.characters.count
+            self.cutoffPoint = characterRange.location + offset
+            webView.evaluateJavaScript("\(ReaderModeNamespace).dictation.markDictatedContent(\(range.startIndex + offset), \(range.endIndex + offset), \(self.scrollsToFollowDictation))", completionHandler: nil)
+        }
+    }
+    
+    func speechSynthesizer(synthesizer: AVSpeechSynthesizer, didFinishSpeechUtterance utterance: AVSpeechUtterance) {
+        self.end()
     }
 }

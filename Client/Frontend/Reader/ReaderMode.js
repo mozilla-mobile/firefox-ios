@@ -56,6 +56,8 @@
             var doc = new DOMParser().parseFromString(docStr, "text/html");
             var readability = new Readability(uri, doc);
             readabilityResult = readability.parse();
+            // Readability discards locale information, so we add it in ourselves.
+            readabilityResult.language = document.documentElement.lang;
 
             debug({Type: "ReaderModeStateChange", Value: readabilityResult !== null ? "Available" : "Unavailable"});
             webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: readabilityResult !== null ? "Available" : "Unavailable"});
@@ -72,6 +74,128 @@
     function readerize() {
         return readabilityResult;
     }
+
+    // Helper functions for dealing with dictation, such as highlighting the text that is currently being spoken.
+    var dictation = {
+
+        reference: null,
+
+        anchors: null,
+
+        scrolling: {
+
+            motion: new Array(2).fill(0),
+
+            magnitude: null,
+
+            target: null,
+
+            interval: setInterval(function () {
+                var scrolling = window.__firefox__.reader.dictation.scrolling;
+                if (scrolling.target === null) {
+                    return;
+                }
+                var difference = scrolling.target - window.scrollY;
+                if (difference !== 0) {
+                    scrolling.motion[scrolling.motion.length - 1] = window.scrollY < scrolling.target ? scrolling.magnitude : -scrolling.magnitude;
+                    for (var order = scrolling.motion.length - 2; order >= 0; -- order) {
+                        scrolling.motion[order] += scrolling.motion[order + 1];
+                    }
+                    var displacement = Math.min(Math.abs(difference), Math.abs(scrolling.motion[0])) * Math.sign(scrolling.motion[0]);
+                    if (window.scrollY + displacement === scrolling.target) {
+                        scrolling.motion.fill(0);
+                    }
+                    window.scrollTo(window.scrollX, window.scrollY + displacement);
+                }
+            }, 1000 / 60)
+
+        },
+
+        extractContentText: function () {
+            var contentText = "";
+            var anchors = this.anchors = [];
+            var reference = this.reference = {};
+            var extract = function (node, content) {
+                for (var child of Array.prototype.slice.call(node.childNodes)) {
+                    switch (child.nodeType) {
+                        case Node.ELEMENT_NODE:
+                            // Content elements that we want to read from (this excludes some tags, such as <sup> to avoid reading citations)
+                            var blockElements = ["DIV", "ARTICLE", "P"], inlineElements = ["SPAN", "B", "I", "A"];
+                            if (blockElements.indexOf(child.tagName) !== -1 || inlineElements.indexOf(child.tagName) !== -1) {
+                                extract(child, content);
+                            }
+                            if (blockElements.indexOf(child.tagName) !== -1 && contentText.slice(-1) !== "\n" && !/^\s+$/.test(child.textContent)) {
+                                contentText += "\n";
+                            }
+                            break;
+                        case Node.TEXT_NODE:
+                            if (!/^\s+$/.test(child.textContent)) {
+                                var wrapper = document.createElement("span");
+                                wrapper.classList.add("dictation-wrapper");
+                                node.insertBefore(wrapper, child);
+                                wrapper.appendChild(child);
+                                anchors.push(contentText.length);
+                                reference[anchors[anchors.length - 1]] = wrapper;
+                                contentText += child.textContent;
+                            }
+                            break;
+                    }
+                }
+            }
+            extract(document.querySelector("#reader-content"));
+            return contentText;
+        },
+
+        markDictatedContent: function (start, end, scrollToViewDictation) {
+            if (this.reference === null) {
+                return;
+            }
+            var throughAnchors = [this.anchors.reduce(function (previous, next) { return next <= start ? next : previous; })].concat(this.anchors.filter(function (x) { return x > start && x < end; }));
+            for (var dictating of Array.prototype.slice.call(document.querySelectorAll(".dictating"))) {
+                dictating.parentNode.textContent = dictating.parentNode.textContent;
+            }
+            for (var anchor of throughAnchors) {
+                var contained = this.reference[anchor];
+                var preDictation = document.createElement("span"), dictation = document.createElement("span"), postDictation = document.createElement("span");
+                dictation.classList.add("dictating");
+                var textContent = contained.textContent;
+                contained.textContent = "";
+                preDictation.textContent = textContent.substring(0, start - anchor);
+                dictation.textContent = textContent.substring(start - anchor, end - anchor);
+                postDictation.textContent = textContent.substring(end - anchor);
+                for (var element of [preDictation, dictation, postDictation]) {
+                    contained.appendChild(element);
+                }
+            }
+            this.setScrollToDictationOn(scrollToViewDictation);
+        },
+
+        unmarkAllContent: function () {
+            for (var dictation of Array.prototype.slice.call(document.querySelectorAll(".dictating"))) {
+                dictation.classList.remove("dictating");
+            }
+        },
+
+        setScrollToDictationOn: function (on) {
+            // The higher the scaling, the slower the acceleration will be
+            var SCROLLING_SPEED_SCALING = 100;
+            if (on) {
+                var elements = Array.prototype.slice.call(document.querySelectorAll(".dictating"));
+                if (elements.length > 0) {
+                    var scrollPosition = elements.reduce(function (sum, dictation) { return sum + dictation.getBoundingClientRect().top }, 0);
+                    this.scrolling.target = scrollPosition / elements.length + window.scrollY - window.innerHeight / 2;
+                    this.scrolling.magnitude = Math.abs(window.scrollY - this.scrolling.target) / SCROLLING_SPEED_SCALING;
+                } else {
+                    on = false;
+                }
+            }
+            if (!on) {
+                this.scrolling.motion.fill(0);
+                this.scrolling.target = null;
+            }
+        }
+
+    };
 
     // TODO The following code only makes sense in about:reader context. It may be a good idea to move
     //   it out of this file and into for example a Reader.js.
@@ -147,11 +271,11 @@
 
     function showContent() {
         // Make the reader visible
-        var messageElement = document.getElementById('reader-message');
+        var messageElement = document.getElementById("reader-message");
         messageElement.style.display = "none";
-        var headerElement = document.getElementById('reader-header');
+        var headerElement = document.getElementById("reader-header");
         headerElement.style.display = "block"
-        var contentElement = document.getElementById('reader-content');
+        var contentElement = document.getElementById("reader-content");
         contentElement.style.display = "block";
     }
 
@@ -174,10 +298,11 @@
         DEBUG: false,
         checkReadability: checkReadability,
         readerize: readerize,
-        setStyle: setStyle
+        setStyle: setStyle,
+        dictation: dictation
     };
 
-    window.addEventListener('load', function(event) {
+    window.addEventListener("load", function(event) {
         // If this is an about:reader page that we are loading, apply the initial style to the page.
         if (document.location.href.match(readerModeURL)) {
             configureReader();
@@ -185,7 +310,7 @@
     });
 
 
-    window.addEventListener('pageshow', function(event) {
+    window.addEventListener("pageshow", function(event) {
         // If this is an about:reader page that we are showing, fire an event to the native code
         if (document.location.href.match(readerModeURL)) {
             webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderPageEvent", Value: "PageShow"});

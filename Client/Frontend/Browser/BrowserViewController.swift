@@ -291,6 +291,8 @@ class BrowserViewController: UIViewController {
     }
 
     func SELappWillResignActiveNotification() {
+        self.getReaderModeHelperForTab()?.pauseDictation()
+
         // If we are displying a private tab, hide any elements in the tab that we wouldn't want shown
         // when the app is in the home switcher
         guard let privateTab = tabManager.selectedTab where privateTab.isPrivate else {
@@ -1276,6 +1278,8 @@ class BrowserViewController: UIViewController {
     @objc private func openSettings() {
         assert(NSThread.isMainThread(), "Opening settings requires being invoked on the main thread")
 
+        self.getReaderModeHelperForTab()?.pauseDictation()
+
         let settingsTableViewController = AppSettingsTableViewController()
         settingsTableViewController.profile = profile
         settingsTableViewController.tabManager = tabManager
@@ -1289,7 +1293,6 @@ class BrowserViewController: UIViewController {
 }
 
 extension BrowserViewController: AppStateDelegate {
-
     func appDidUpdateState(appState: AppState) {
         menuViewController?.appState = appState
         toolbar?.appDidUpdateState(appState)
@@ -1419,6 +1422,7 @@ extension BrowserViewController: URLBarDelegate {
     func urlBarDidPressTabs(urlBar: URLBarView) {
         self.webViewContainerToolbar.hidden = true
         updateFindInPageVisibility(visible: false)
+        self.getReaderModeHelperForTab()?.pauseDictation()
 
         let tabTrayController = TabTrayController(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
 
@@ -2054,6 +2058,7 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         updateFindInPageVisibility(visible: false)
+        self.getReaderModeHelperForTab(previous)?.pauseDictation()
 
         navigationToolbar.updateReloadStatus(selected?.loading ?? false)
         navigationToolbar.updateBackStatus(selected?.canGoBack ?? false)
@@ -2138,6 +2143,7 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         updateFindInPageVisibility(visible: false)
+        self.getReaderModeHelperForTab()?.endDictation()
 
         // If we are going to navigate to a new page, hide the reader mode button. Unless we
         // are going to a about:reader page. Then we keep it on screen: it will change status
@@ -2539,6 +2545,10 @@ extension BrowserViewController: ReaderModeDelegate {
         self.showReaderModeBar(animated: true)
         tab.showContent(true)
     }
+
+    func readerMode(readerMode: ReaderMode, dictationStateDidChange state: DictationState) {
+        self.readerModeBar?.isDictating = readerMode.isDictating
+    }
 }
 
 // MARK: - UIPopoverPresentationControllerDelegate
@@ -2579,6 +2589,14 @@ extension BrowserViewController: ReaderModeStyleViewControllerDelegate {
 }
 
 extension BrowserViewController {
+    private func getReaderModeHelperForTab(tab: Tab? = nil) -> ReaderMode? {
+        if let readerMode = (tab ?? self.tabManager.selectedTab)?.getHelper(name: "ReaderMode") as? ReaderMode where readerMode.state == ReaderModeState.Active {
+            return readerMode
+        } else {
+            return nil
+        }
+    }
+    
     func updateReaderModeBar() {
         if let readerModeBar = readerModeBar {
             if let tab = self.tabManager.selectedTab where tab.isPrivate {
@@ -2697,41 +2715,39 @@ extension BrowserViewController {
 }
 
 extension BrowserViewController: ReaderModeBarViewDelegate {
-    func readerModeBar(readerModeBar: ReaderModeBarView, didSelectButton buttonType: ReaderModeBarButtonType) {
+    func readerModeBar(readerModeBar: ReaderModeBarView, didSelectButton buttonType: ReaderModeBarButtonType, sender: UIButton!) {
         switch buttonType {
         case .Settings:
-            if let readerMode = tabManager.selectedTab?.getHelper(name: "ReaderMode") as? ReaderMode where readerMode.state == ReaderModeState.Active {
-                var readerModeStyle = DefaultReaderModeStyle
-                if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle) {
-                    if let style = ReaderModeStyle(dict: dict) {
-                        readerModeStyle = style
-                    }
+            var readerModeStyle = DefaultReaderModeStyle
+            if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle) {
+                if let style = ReaderModeStyle(dict: dict) {
+                    readerModeStyle = style
                 }
-
-                let readerModeStyleViewController = ReaderModeStyleViewController()
-                readerModeStyleViewController.delegate = self
-                readerModeStyleViewController.readerModeStyle = readerModeStyle
-                readerModeStyleViewController.modalPresentationStyle = UIModalPresentationStyle.Popover
-
-                let setupPopover = { [unowned self] in
-                    if let popoverPresentationController = readerModeStyleViewController.popoverPresentationController {
-                        popoverPresentationController.backgroundColor = UIColor.whiteColor()
-                        popoverPresentationController.delegate = self
-                        popoverPresentationController.sourceView = readerModeBar
-                        popoverPresentationController.sourceRect = CGRect(x: readerModeBar.frame.width/2, y: UIConstants.ToolbarHeight, width: 1, height: 1)
-                        popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirection.Up
-                    }
-                }
-
-                setupPopover()
-
-                if readerModeStyleViewController.popoverPresentationController != nil {
-                    displayedPopoverController = readerModeStyleViewController
-                    updateDisplayedPopoverProperties = setupPopover
-                }
-
-                self.presentViewController(readerModeStyleViewController, animated: true, completion: nil)
             }
+
+            let readerModeStyleViewController = ReaderModeStyleViewController()
+            readerModeStyleViewController.delegate = self
+            readerModeStyleViewController.readerModeStyle = readerModeStyle
+            readerModeStyleViewController.modalPresentationStyle = UIModalPresentationStyle.Popover
+
+            let setupPopover = { [unowned self] in
+                if let popoverPresentationController = readerModeStyleViewController.popoverPresentationController {
+                    popoverPresentationController.backgroundColor = UIColor.whiteColor()
+                    popoverPresentationController.delegate = self
+                    popoverPresentationController.sourceView = readerModeBar
+                    popoverPresentationController.sourceRect = CGRect(x: readerModeBar.convertPoint(sender.bounds.center, fromView: sender).x, y: UIConstants.ToolbarHeight, width: 1, height: 1)
+                    popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirection.Up
+                }
+            }
+
+            setupPopover()
+
+            if readerModeStyleViewController.popoverPresentationController != nil {
+                displayedPopoverController = readerModeStyleViewController
+                updateDisplayedPopoverProperties = setupPopover
+            }
+
+            self.presentViewController(readerModeStyleViewController, animated: true, completion: nil)
 
         case .MarkAsRead:
             if let url = self.tabManager.selectedTab?.displayURL?.absoluteString, result = profile.readingList?.getRecordWithURL(url) {
@@ -2767,6 +2783,16 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
                     profile.readingList?.deleteRecord(record) // TODO Check result, can this fail?
                     readerModeBar.added = false
                     readerModeBar.unread = false
+            }
+        
+        case .BeginDictation, .ResumeDictation, .PauseDictation:
+            guard let readerMode = self.getReaderModeHelperForTab() else {
+                return
+            }
+            if readerMode.isDictating {
+                readerMode.pauseDictation()
+            } else {
+                readerMode.resumeDictation()
             }
         }
     }
