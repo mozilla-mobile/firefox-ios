@@ -11,5 +11,7 @@
 #import "ThirdParty/Apple/UIImage+ImageEffects.h"
 
 #import <CrashReporter/CrashReporter.h>
+#import <BuddyBuildSDK/BuddyBuildSDK.h>
+
 
 #endif
