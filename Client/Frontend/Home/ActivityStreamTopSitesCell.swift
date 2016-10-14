@@ -427,10 +427,10 @@ class ASHorizontalScrollCellManager: NSObject, UICollectionViewDelegate, UIColle
 
     var content: [Site] = []
 
-    var urlPressedHandler: ((NSURL) -> Void)?
+    var urlPressedHandler: ((NSURL, NSIndexPath) -> Void)?
     var pageChangedHandler: ((CGFloat) -> Void)?
     var presentActionMenuHandler: ((UIAlertController) -> Void)?
-    var deleteItemHandler: ((NSURL) -> Void)?
+    var deleteItemHandler: ((NSURL, NSIndexPath) -> Void)?
 
     // The current traits that define the parent ViewController. Used to determine how many rows/columns should be created.
     var currentTraits: UITraitCollection?
@@ -474,7 +474,7 @@ class ASHorizontalScrollCellManager: NSObject, UICollectionViewDelegate, UIColle
         guard let url = contentItem.url.asURL else {
             return
         }
-        urlPressedHandler?(url)
+        urlPressedHandler?(url, indexPath)
     }
 
     func scrollViewDidScroll(scrollView: UIScrollView) {
@@ -501,7 +501,7 @@ class ASHorizontalScrollCellManager: NSObject, UICollectionViewDelegate, UIColle
 
     func collectionView(collectionView: UICollectionView, deleteItemAtIndexPath indexPath: NSIndexPath) {
         let contentItem = self.content[indexPath.row]
-        self.deleteItemHandler?(contentItem.tileURL)
+        self.deleteItemHandler?(contentItem.tileURL, indexPath)
     }
 
 }
