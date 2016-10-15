@@ -263,10 +263,6 @@ class ASHorizontalScrollCell: UITableViewCell {
         self.collectionView.setContentOffset(CGPointMake(swipeCoordinate, 0), animated: true)
     }
 
-    func deleteItemAtIndexPath(indexPath: NSIndexPath) {
-        delegate?.collectionView(self.collectionView, deleteItemAtIndexPath: indexPath)
-    }
-    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -412,7 +408,6 @@ class ASHorizontalScrollCellManager: NSObject, UICollectionViewDelegate, UIColle
 
     var urlPressedHandler: ((NSURL, NSIndexPath) -> Void)?
     var pageChangedHandler: ((CGFloat) -> Void)?
-    var deleteItemHandler: ((NSURL, NSIndexPath) -> Void)?
 
     // The current traits that define the parent ViewController. Used to determine how many rows/columns should be created.
     var currentTraits: UITraitCollection?
@@ -462,11 +457,6 @@ class ASHorizontalScrollCellManager: NSObject, UICollectionViewDelegate, UIColle
     func scrollViewDidScroll(scrollView: UIScrollView) {
         let pageWidth = CGRectGetWidth(scrollView.frame)
         pageChangedHandler?(scrollView.contentOffset.x / pageWidth)
-    }
-
-    func collectionView(collectionView: UICollectionView, deleteItemAtIndexPath indexPath: NSIndexPath) {
-        let contentItem = self.content[indexPath.row]
-        self.deleteItemHandler?(contentItem.tileURL, indexPath)
     }
 
 }
