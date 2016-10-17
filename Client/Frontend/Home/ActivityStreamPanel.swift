@@ -79,7 +79,7 @@ class ActivityStreamPanel: UITableViewController, HomePanel {
         tableView.sectionHeaderHeight = UITableViewAutomaticDimension
 
         reloadTopSites()
-        reloadRecentHistory()
+        reloadHighlights()
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -260,7 +260,7 @@ extension ActivityStreamPanel {
         }
     }
 
-    private func reloadRecentHistory() {
+    private func reloadHighlights() {
         fetchHighlights().uponQueue(dispatch_get_main_queue()) { result in
             self.highlights = result.successValue?.asArray() ?? self.highlights
             self.tableView.reloadData()
@@ -382,7 +382,7 @@ extension ActivityStreamPanel {
 
         let dismissAction = ActionOverlayTableViewAction(title: Strings.DismissContextMenuTitle, iconString: "action_close", handler: { action in
             self.profile.recommendations.removeHighlightForURL(site.url).uponQueue(dispatch_get_main_queue()) { _ in
-                    self.history.removeAtIndex(indexPath.row)
+                    self.highlights.removeAtIndex(indexPath.row)
                     self.tableView.beginUpdates()
                     self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Right)
                     self.tableView.endUpdates()

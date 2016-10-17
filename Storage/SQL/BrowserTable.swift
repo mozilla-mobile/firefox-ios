@@ -45,7 +45,6 @@ let ViewHistoryVisits = "view_history_visits"
 let ViewWidestFaviconsForSites = "view_favicons_widest"
 let ViewHistoryIDsWithWidestFavicons = "view_history_id_favicon"
 let ViewIconForURL = "view_icon_for_url"
-let ViewHistoryPageMetadata = "view_history_page_metadata"
 
 let IndexHistoryShouldUpload = "idx_history_should_upload"
 let IndexVisitsSiteIDDate = "idx_visits_siteID_date"                   // Removed in v6.
