@@ -11,6 +11,8 @@ struct UIConstants {
         static let buttonHighlight = UIColor(rgb: 0x333333)
         static let cellSelected = UIColor(rgb: 0x2C6EC8)
         static let defaultFont = UIColor(rgb: 0xE1E5EA)
+        static let deleteButtonBackgroundNormal = UIColor(white: 1, alpha: 0.2)
+        static let deleteButtonBorder = UIColor(white: 1, alpha: 0.5)
         static let focusLightBlue = UIColor(rgb: 0x00A7E0)
         static let focusDarkBlue = UIColor(rgb: 0x005DA5)
         static let focusBlue = UIColor(rgb: 0x00A7E0)
@@ -29,7 +31,7 @@ struct UIConstants {
         static let toolbarBackground = UIColor(rgb: 0xEEEEEE)
         static let urlBarBackgroundLeft = UIColor(rgb: 0x9c62a7)
         static let urlBarBackgroundRight = UIColor(rgb: 0x2f2a8d)
-        static let urlTextBackground = UIColor(rgb: 0xffffff, alpha: 0.44)
+        static let urlTextBackground = UIColor(rgb: 0xffffff, alpha: 0.2)
         static let urlTextFont = UIColor.white
         static let urlTextHighlight = UIColor(rgb: 0xf27c33)
         static let urlTextPlaceholder = UIColor(rgb: 0xffffff, alpha: 0.8)
@@ -56,6 +58,7 @@ struct UIConstants {
 
     struct strings {
         static let appDescription = String(format: NSLocalizedString("%@ improves privacy and may boost page load speed and lower your mobile data usage.", comment: "Label displayed above toggles"), AppInfo.ProductName)
+        static let deleteButton = NSLocalizedString("URL.deleteButton", value: "DELETE", comment: "Delete button in the URL bar")
         static let notEnabledError = String(format: NSLocalizedString("%@ is not enabled.", comment: "Error label when the blocker is not enabled, shown in the intro and main app when disabled"), AppInfo.ProductName)
         static let openSettings = NSLocalizedString("Open Settings", comment: "Button to open the system Settings, shown in the intro and main app when disabled")
         static let labelBlockAds = NSLocalizedString("Block ad trackers", comment: "Label for toggle on main screen")
