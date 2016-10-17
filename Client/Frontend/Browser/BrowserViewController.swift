@@ -283,7 +283,9 @@ class BrowserViewController: UIViewController {
     }
 
     func SELappDidEnterBackgroundNotification() {
-        displayedPopoverController?.dismissViewControllerAnimated(false, completion: nil)
+        displayedPopoverController?.dismissViewControllerAnimated(false) {
+            self.displayedPopoverController = nil
+        }
     }
 
     func SELtappedTopArea() {
@@ -291,6 +293,11 @@ class BrowserViewController: UIViewController {
     }
 
     func SELappWillResignActiveNotification() {
+        // Dismiss any popovers that might be visible
+        displayedPopoverController?.dismissViewControllerAnimated(false) {
+            self.displayedPopoverController = nil
+        }
+
         // If we are displying a private tab, hide any elements in the tab that we wouldn't want shown
         // when the app is in the home switcher
         guard let privateTab = tabManager.selectedTab where privateTab.isPrivate else {
