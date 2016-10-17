@@ -9,7 +9,11 @@ class NavigationTests: KIFTestCase, UITextFieldDelegate {
     private var webRoot: String!
 
     override func setUp() {
+        super.setUp()
         webRoot = SimplePageServer.start()
+         BrowserUtils.dismissFirstRunUI(tester())
+        tester().tapViewWithAccessibilityLabel("Menu")
+        tester().tapViewWithAccessibilityLabel("New Tab")
     }
 
     /**
@@ -72,7 +76,8 @@ class NavigationTests: KIFTestCase, UITextFieldDelegate {
     }
 
     func testTapSignInShowsFxAFromRemoteTabPanel() {
-        tester().tapViewWithAccessibilityLabel("Synced tabs")
+        tester().tapViewWithAccessibilityLabel("History")
+        tester().tapViewWithAccessibilityLabel("Synced devices")
         tester().tapViewWithAccessibilityLabel("Sign in")
         tester().waitForViewWithAccessibilityLabel("Web content")
         tester().tapViewWithAccessibilityLabel("Cancel")
@@ -271,6 +276,8 @@ class NavigationTests: KIFTestCase, UITextFieldDelegate {
     }
 
     override func tearDown() {
-        BrowserUtils.clearHistoryItems(tester(), numberOfTests: 5)
+        super.tearDown()
+        BrowserUtils.resetToAboutHome(tester())
+        BrowserUtils.clearPrivateData(tester: tester())
     }
 }

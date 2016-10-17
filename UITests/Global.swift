@@ -213,14 +213,29 @@ extension KIFUITestActor {
 }
 
 class BrowserUtils {
+    // Needs to be in sync with Client Clearables.
+     enum Clearable: String {
+        case History = "Browsing History"
+        case Cache = "Cache"
+        case OfflineData = "Offline Website Data"
+        case Cookies = "Cookies"
+    }
+    internal static let AllClearables = Set([Clearable.History, Clearable.Cache, Clearable.OfflineData, Clearable.Cookies])
+    
     /// Close all tabs to restore the browser to startup state.
     class func resetToAboutHome(tester: KIFUITestActor) {
+        
         do {
             try tester.tryFindingTappableViewWithAccessibilityLabel("Cancel")
             tester.tapViewWithAccessibilityLabel("Cancel")
         } catch _ {
         }
-        tester.tapViewWithAccessibilityLabel("Show Tabs")
+        do {
+            try tester.tryFindingTappableViewWithAccessibilityLabel("Show Tabs")
+            tester.tapViewWithAccessibilityLabel("Show Tabs")
+        } catch _ {
+        
+        }
         let tabsView = tester.waitForViewWithAccessibilityLabel("Tabs Tray").subviews.first as! UICollectionView
 
         // Switch to Private Mode if we're not in it already.
@@ -238,9 +253,11 @@ class BrowserUtils {
         tester.tapViewWithAccessibilityLabel("Private Mode")
 
         while tabsView.numberOfItemsInSection(0) > 1 {
+            let oldCount = tabsView.numberOfItemsInSection(0)
             let cell = tabsView.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0))!
             tester.swipeViewWithAccessibilityLabel(cell.accessibilityLabel, inDirection: KIFSwipeDirection.Left)
-            tester.waitForAbsenceOfViewWithAccessibilityLabel(cell.accessibilityLabel)
+            tester.waitForAnimationsToFinish()
+            XCTAssertEqual(oldCount-1, tabsView.numberOfItemsInSection(0))
         }
 
         // When the last tab is closed, the tabs tray will automatically be closed
@@ -248,6 +265,16 @@ class BrowserUtils {
         if let cell = tabsView.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0)) {
             tester.swipeViewWithAccessibilityLabel(cell.accessibilityLabel, inDirection: KIFSwipeDirection.Left)
             tester.waitForTappableViewWithAccessibilityLabel("Show Tabs")
+        }
+    }
+    
+    //If it is a first run, first run window should be gone
+    class func dismissFirstRunUI(tester: KIFUITestActor) {
+        do {
+            try tester.tryFindingTappableViewWithAccessibilityLabel("Start Browsing")
+            tester.tapViewWithAccessibilityLabel("Start Browsing")
+        } catch {
+            //First run dialog did not appear
         }
     }
 
@@ -267,7 +294,54 @@ class BrowserUtils {
             tester.tapViewWithAccessibilityLabel("Remove")
         }
     }
+    class func openClearPrivateDataDialog(swipe: Bool, tester: KIFUITestActor) {
+        tester.tapViewWithAccessibilityLabel("Menu")
+        
+        // Need this for simulator only
+        if (swipe) {
+            tester.swipeViewWithAccessibilityLabel("Set Homepage", inDirection: KIFSwipeDirection.Left)
+        }
+        tester.tapViewWithAccessibilityLabel("Settings")
+        tester.tapViewWithAccessibilityLabel("Clear Private Data")
+    }
+    
+    class func closeClearPrivateDataDialog(tester: KIFUITestActor) {
+        tester.tapViewWithAccessibilityLabel("Settings")
+        tester.tapViewWithAccessibilityLabel("Done")
+    }
+    
+    private class func acceptClearPrivateData(tester: KIFUITestActor) {
+        tester.waitForViewWithAccessibilityLabel("OK")
+        tester.tapViewWithAccessibilityLabel("OK")
+        tester.waitForViewWithAccessibilityLabel("Clear Private Data")
+    }
+    
+    private class func cancelClearPrivateData(tester: KIFUITestActor) {
+        tester.waitForViewWithAccessibilityLabel("Clear")
+        tester.tapViewWithAccessibilityLabel("Cancel")
+        tester.waitForViewWithAccessibilityLabel("Clear Private Data")
+    }
 
+    class func clearPrivateData(clearables: Set<Clearable>? = AllClearables, swipe: Bool? = false, tester: KIFUITestActor) {
+        let AllClearables = Set([Clearable.History, Clearable.Cache, Clearable.OfflineData, Clearable.Cookies])
+    
+        openClearPrivateDataDialog(swipe!,tester: tester)
+        
+        // Disable all items that we don't want to clear.
+        for clearable in AllClearables {
+            // If we don't wait here, setOn:forSwitchWithAccessibilityLabel tries to use the UITableViewCell
+            // instead of the UISwitch. KIF bug?
+            tester.waitForViewWithAccessibilityLabel(clearable.rawValue)
+            
+            tester.setOn(clearables!.contains(clearable), forSwitchWithAccessibilityLabel: clearable.rawValue)
+        }
+        
+        tester.tapViewWithAccessibilityLabel("Clear Private Data", traits: UIAccessibilityTraitButton)
+        acceptClearPrivateData(tester)
+        
+        closeClearPrivateDataDialog(tester)
+    }
+    
     class func clearHistoryItems(tester: KIFUITestActor, numberOfTests: Int = -1) {
         resetToAboutHome(tester)
         tester.tapViewWithAccessibilityLabel("History")
@@ -474,6 +548,7 @@ class SearchUtils {
     }
 }
 
+// From iOS 10, below methods no longer works
 class DynamicFontUtils {
     // Need to leave time for the notification to propagate
     static func bumpDynamicFontSize(tester: KIFUITestActor) {
