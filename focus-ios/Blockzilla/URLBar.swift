@@ -27,6 +27,13 @@ class URLBar: UIView {
         let urlTextContainer = UIView()
         urlTextContainer.backgroundColor = UIConstants.colors.urlTextBackground
 
+        // UITextField doesn't allow customization of the clear button, so we create
+        // our own so we can use it as the rightView.
+        let clearButton = UIButton(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+        clearButton.isHidden = true
+        clearButton.setImage(#imageLiteral(resourceName: "icon_clear"), for: .normal)
+        clearButton.addTarget(self, action: #selector(didPressClear), for: .touchUpInside)
+
         urlText.font = UIConstants.fonts.urlTextFont
         urlText.tintColor = UIConstants.colors.urlTextFont
         urlText.textColor = UIConstants.colors.urlTextFont
@@ -35,7 +42,8 @@ class URLBar: UIView {
         urlText.keyboardType = .webSearch
         urlText.autocapitalizationType = .none
         urlText.autocorrectionType = .no
-        urlText.clearButtonMode = .whileEditing
+        urlText.rightView = clearButton
+        urlText.rightViewMode = .whileEditing
         urlText.autocompleteDelegate = self
 
         cancelButton.setTitle(UIConstants.strings.urlBarCancel, for: .normal)
@@ -110,6 +118,10 @@ class URLBar: UIView {
         delegate?.urlBarDidCancel(urlBar: self)
     }
 
+    @objc private func didPressClear() {
+        urlText.text = nil
+    }
+
     func focus() {
         urlText.becomeFirstResponder()
     }
@@ -171,6 +183,7 @@ extension URLBar: AutocompleteTextFieldDelegate {
     }
 
     func autocompleteTextField(_ autocompleteTextField: AutocompleteTextField, didEnterText text: String) {
+        autocompleteTextField.rightView?.isHidden = text.isEmpty
     }
 }
 
