@@ -8,6 +8,7 @@ import SnapKit
 import Storage
 import ReadingList
 import Shared
+import IGListKit
 
 struct TabTrayControllerUX {
     static let CornerRadius = CGFloat(4.0)
@@ -259,13 +260,12 @@ struct TabTrayState {
     var isPrivate: Bool = false
 }
 
-class TabTrayController: UIViewController {
+class TabTrayController: UIViewController, IGListAdapterDataSource, IGListSingleSectionControllerDelegate {
     let tabManager: TabManager
     let profile: Profile
     weak var delegate: TabTrayDelegate?
     weak var appStateDelegate: AppStateDelegate?
 
-    var collectionView: UICollectionView!
     var draggedCell: TabCell?
     var dragOffset: CGPoint = CGPointZero
     lazy var toolbar: TrayToolbar = {
@@ -276,6 +276,11 @@ class TabTrayController: UIViewController {
         toolbar.maskButton.addTarget(self, action: #selector(TabTrayController.SELdidTogglePrivateMode), forControlEvents: .TouchUpInside)
         return toolbar
     }()
+
+    lazy var adapter: IGListAdapter = {
+        return IGListAdapter(updater: IGListAdapterUpdater(), viewController: self, workingRangeSize: 0)
+    }()
+    let collectionView = IGListCollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
 
     var tabTrayState: TabTrayState {
         return TabTrayState(isPrivate: self.privateMode)
@@ -297,7 +302,6 @@ class TabTrayController: UIViewController {
 
             tabDataSource.tabs = tabsToDisplay
             toolbar.styleToolbar(isPrivate: privateMode)
-            collectionView?.reloadData()
         }
     }
 
@@ -347,8 +351,78 @@ class TabTrayController: UIViewController {
 
     func SELDynamicFontChanged(notification: NSNotification) {
         guard notification.name == NotificationDynamicFontChanged else { return }
+    }
 
-        self.collectionView.reloadData()
+
+    func objectsForListAdapter(listAdapter: IGListAdapter) -> [IGListDiffable] {
+        return self.tabsToDisplay as [IGListDiffable]
+    }
+
+    func emptyViewForListAdapter(listAdapter: IGListAdapter) -> UIView? {
+        return nil
+    }
+
+
+
+    func listAdapter(listAdapter: IGListAdapter, sectionControllerForObject object: AnyObject) -> IGListSectionController {
+        let configureBlock = { (data: AnyObject, cell: UICollectionViewCell) in
+            guard let tabCell = cell as? TabCell, let tab = data as? Tab else {
+                return
+            }
+
+//            tabCell.animator.delegate = cellDelegate
+//            tabCell.delegate = cellDelegate
+            tabCell.style = tab.isPrivate ? .Dark : .Light
+            tabCell.titleText.text = tab.displayTitle
+
+            if !tab.displayTitle.isEmpty {
+                tabCell.accessibilityLabel = tab.displayTitle
+            } else {
+                tabCell.accessibilityLabel = AboutUtils.getAboutComponent(tab.url)
+            }
+
+
+            tabCell.isAccessibilityElement = true
+            tabCell.accessibilityHint = NSLocalizedString("Swipe right or left with three fingers to close the tab.", comment: "Accessibility hint for tab tray's displayed tab.")
+
+            if let favIcon = tab.displayFavicon {
+                tabCell.favicon.sd_setImageWithURL(NSURL(string: favIcon.url)!)
+            } else {
+                var defaultFavicon = UIImage(named: "defaultFavicon")
+                if tab.isPrivate {
+                    defaultFavicon = defaultFavicon?.imageWithRenderingMode(.AlwaysTemplate)
+                    tabCell.favicon.image = defaultFavicon
+                    tabCell.favicon.tintColor = UIColor.whiteColor()
+                } else {
+                    tabCell.favicon.image = defaultFavicon
+                }
+            }
+            
+            tabCell.background.image = tab.screenshot
+
+
+
+
+        }
+
+        let sizeBlock = { (context: IGListCollectionContext?) -> CGSize in
+            let cellWidth = floor((self.collectionView.bounds.width - TabTrayControllerUX.Margin * CGFloat(1 + 1)) / CGFloat(1))
+            return CGSizeMake(cellWidth, self.cellHeightForCurrentDevice())
+        }
+        let sectionController = IGListSingleSectionController(cellClass: TabCell.self, configureBlock: configureBlock, sizeBlock: sizeBlock)
+        sectionController.selectionDelegate = self
+        return sectionController
+    }
+
+    func didSelectSingleSectionController(sectionController: IGListSingleSectionController) {
+
+    }
+
+    func didSelect(sectionController: IGListSingleSectionController) {
+        let section = adapter.sectionForObject(sectionController)
+        let tab = tabsToDisplay[Int(section)]
+        tabManager.selectTab(tab)
+        self.navigationController?.popViewControllerAnimated(true)
     }
 
 // MARK: View Controller Callbacks
@@ -357,19 +431,20 @@ class TabTrayController: UIViewController {
 
         view.accessibilityLabel = NSLocalizedString("Tabs Tray", comment: "Accessibility label for the Tabs Tray view.")
 
-        collectionView = UICollectionView(frame: view.frame, collectionViewLayout: UICollectionViewFlowLayout())
+        view.addSubview(collectionView)
+        adapter.collectionView = collectionView
+        adapter.dataSource = self
 
-        collectionView.dataSource = tabDataSource
-        collectionView.delegate = tabLayoutDelegate
-        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: UIConstants.ToolbarHeight, right: 0)
-        collectionView.registerClass(TabCell.self, forCellWithReuseIdentifier: TabCell.Identifier)
-        collectionView.backgroundColor = TabTrayControllerUX.BackgroundColor
+//        collectionView.dataSource = tabDataSource
+//        collectionView.delegate = tabLayoutDelegate
+//        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: UIConstants.ToolbarHeight, right: 0)
+//        collectionView.registerClass(TabCell.self, forCellWithReuseIdentifier: TabCell.Identifier)
+//        collectionView.backgroundColor = TabTrayControllerUX.BackgroundColor
 
         if AppConstants.MOZ_REORDER_TAB_TRAY {
             collectionView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(didLongPressTab)))
         }
 
-        view.addSubview(collectionView)
         view.addSubview(toolbar)
 
         makeConstraints()
@@ -495,6 +570,20 @@ class TabTrayController: UIViewController {
         self.presentViewController(mvc, animated: true, completion: nil)
     }
 
+    private func cellHeightForCurrentDevice() -> CGFloat {
+        let compactLayout = profile.prefs.boolForKey("CompactTabLayout") ?? true
+        let shortHeight = (compactLayout ? TabTrayControllerUX.TextBoxHeight * 6 : TabTrayControllerUX.TextBoxHeight * 5)
+
+        if self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClass.Compact {
+            return shortHeight
+        } else if self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClass.Compact {
+            return shortHeight
+        } else {
+            return TabTrayControllerUX.TextBoxHeight * 8
+        }
+    }
+
+
     func didLongPressTab(gesture: UILongPressGestureRecognizer) {
         switch gesture.state {
             case .Began:
@@ -611,10 +700,10 @@ class TabTrayController: UIViewController {
 
     func changePrivacyMode(isPrivate: Bool) {
         if isPrivate != privateMode {
-            guard let _ = collectionView else {
-                privateMode = isPrivate
-                return
-            }
+//            guard let _ = collectionView else {
+//                privateMode = isPrivate
+//                return
+//            }
             SELdidTogglePrivateMode()
         }
     }
@@ -624,15 +713,15 @@ class TabTrayController: UIViewController {
 
         // We're only doing one update here, but using a batch update lets us delay selecting the tab
         // until after its insert animation finishes.
-        self.collectionView.performBatchUpdates({ _ in
-            let tab = self.tabManager.addTab(request, isPrivate: self.privateMode)
-            self.tabManager.selectTab(tab)
-        }, completion: { finished in
-            self.toolbar.userInteractionEnabled = true
-            if finished {
-                self.navigationController?.popViewControllerAnimated(true)
-            }
-        })
+//        self.collectionView.performBatchUpdates({ _ in
+//            let tab = self.tabManager.addTab(request, isPrivate: self.privateMode)
+//            self.tabManager.selectTab(tab)
+//        }, completion: { finished in
+//            self.toolbar.userInteractionEnabled = true
+//            if finished {
+//                self.navigationController?.popViewControllerAnimated(true)
+//            }
+//        })
     }
 
     private func updateAppState() {
@@ -642,7 +731,7 @@ class TabTrayController: UIViewController {
 
     private func closeTabsForCurrentTray() {
         tabManager.removeTabsWithUndoToast(tabsToDisplay)
-        self.collectionView.reloadData()
+//        self.collectionView.reloadData()
     }
 }
 
@@ -674,7 +763,7 @@ extension TabTrayController: TabSelectionDelegate {
 
 extension TabTrayController: PresentingModalViewControllerDelegate {
     func dismissPresentedModalViewController(modalViewController: UIViewController, animated: Bool) {
-        dismissViewControllerAnimated(animated, completion: { self.collectionView.reloadData() })
+        dismissViewControllerAnimated(animated, completion: { })
     }
 }
 
@@ -693,44 +782,44 @@ extension TabTrayController: TabManagerDelegate {
         }
 
         tabDataSource.addTab(tab)
-        self.collectionView?.performBatchUpdates({ _ in
-            self.collectionView.insertItemsAtIndexPaths([NSIndexPath(forItem: index, inSection: 0)])
-        }, completion: { finished in
-            if finished {
-                tabManager.selectTab(tab)
-                // don't pop the tab tray view controller if it is not in the foreground
-                if self.presentedViewController == nil {
-                    self.navigationController?.popViewControllerAnimated(true)
-                }
-            }
-        })
+//        self.collectionView?.performBatchUpdates({ _ in
+//            self.collectionView.insertItemsAtIndexPaths([NSIndexPath(forItem: index, inSection: 0)])
+//        }, completion: { finished in
+//            if finished {
+//                tabManager.selectTab(tab)
+//                // don't pop the tab tray view controller if it is not in the foreground
+//                if self.presentedViewController == nil {
+//                    self.navigationController?.popViewControllerAnimated(true)
+//                }
+//            }
+//        })
     }
 
     func tabManager(tabManager: TabManager, didRemoveTab tab: Tab) {
         // it is possible that we are removing a tab that we are not currently displaying
         // through the Close All Tabs feature (which will close tabs that are not in our current privacy mode)
         // check this before removing the item from the collection
-        let removedIndex = tabDataSource.removeTab(tab)
-        if removedIndex > -1 {
-            self.collectionView.performBatchUpdates({
-                self.collectionView.deleteItemsAtIndexPaths([NSIndexPath(forItem: removedIndex, inSection: 0)])
-            }, completion: { finished in
-                guard finished && self.privateTabsAreEmpty() else { return }
-                self.emptyPrivateTabsView.hidden = false
-            })
-
-            // Workaround: On iOS 8.* devices, cells don't get reloaded during the deletion but after the
-            // animation has finished which causes cells that animate from above to suddenly 'appear'. This
-            // is fixed on iOS 9 but for iOS 8 we force a reload on non-visible cells during the animation.
-            if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_8_3) {
-                let visibleCount = collectionView.indexPathsForVisibleItems().count
-                var offscreenIndexPaths = [NSIndexPath]()
-                for i in 0..<(tabsToDisplay.count - visibleCount) {
-                    offscreenIndexPaths.append(NSIndexPath(forItem: i, inSection: 0))
-                }
-                self.collectionView.reloadItemsAtIndexPaths(offscreenIndexPaths)
-            }
-        }
+//        let removedIndex = tabDataSource.removeTab(tab)
+//        if removedIndex > -1 {
+//            self.collectionView.performBatchUpdates({
+//                self.collectionView.deleteItemsAtIndexPaths([NSIndexPath(forItem: removedIndex, inSection: 0)])
+//            }, completion: { finished in
+//                guard finished && self.privateTabsAreEmpty() else { return }
+//                self.emptyPrivateTabsView.hidden = false
+//            })
+//
+//            // Workaround: On iOS 8.* devices, cells don't get reloaded during the deletion but after the
+//            // animation has finished which causes cells that animate from above to suddenly 'appear'. This
+//            // is fixed on iOS 9 but for iOS 8 we force a reload on non-visible cells during the animation.
+//            if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_8_3) {
+//                let visibleCount = collectionView.indexPathsForVisibleItems().count
+//                var offscreenIndexPaths = [NSIndexPath]()
+//                for i in 0..<(tabsToDisplay.count - visibleCount) {
+//                    offscreenIndexPaths.append(NSIndexPath(forItem: i, inSection: 0))
+//                }
+//                self.collectionView.reloadItemsAtIndexPaths(offscreenIndexPaths)
+//            }
+//        }
     }
 
     func tabManagerDidAddTabs(tabManager: TabManager) {
@@ -1063,14 +1152,14 @@ extension TabTrayController: TabPeekDelegate {
     }
 
     func tabPeekDidCloseTab(tab: Tab) {
-        if let index = self.tabDataSource.tabs.indexOf(tab),
-            let cell = self.collectionView?.cellForItemAtIndexPath(NSIndexPath(forItem: index, inSection: 0)) as? TabCell {
-            cell.SELclose()
-        }
+//        if let index = self.tabDataSource.tabs.indexOf(tab),
+////            let cell = self.collectionView?.cellForItemAtIndexPath(NSIndexPath(forItem: index, inSection: 0)) as? TabCell {
+////            cell.SELclose()
+//        }
     }
 
     func tabPeekRequestsPresentationOf(viewController viewController: UIViewController) {
-        delegate?.tabTrayRequestsPresentationOf(viewController: viewController)
+//        delegate?.tabTrayRequestsPresentationOf(viewController: viewController)
     }
 }
 
@@ -1078,20 +1167,20 @@ extension TabTrayController: UIViewControllerPreviewingDelegate {
 
     func previewingContext(previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
 
-        guard let collectionView = collectionView else { return nil }
-        let convertedLocation = self.view.convertPoint(location, toView: collectionView)
-
-        guard let indexPath = collectionView.indexPathForItemAtPoint(convertedLocation),
-            let cell = collectionView.cellForItemAtIndexPath(indexPath) else { return nil }
-
-        let tab = tabDataSource.tabs[indexPath.row]
-        let tabVC = TabPeekViewController(tab: tab, delegate: self)
-        if let browserProfile = profile as? BrowserProfile {
-            tabVC.setState(withProfile: browserProfile, clientPickerDelegate: self)
-        }
-        previewingContext.sourceRect = self.view.convertRect(cell.frame, fromView: collectionView)
-
-        return tabVC
+//        guard let collectionView = collectionView else { return nil }
+//        let convertedLocation = self.view.convertPoint(location, toView: collectionView)
+//
+//        guard let indexPath = collectionView.indexPathForItemAtPoint(convertedLocation),
+//            let cell = collectionView.cellForItemAtIndexPath(indexPath) else { return nil }
+//
+//        let tab = tabDataSource.tabs[indexPath.row]
+//        let tabVC = TabPeekViewController(tab: tab, delegate: self)
+//        if let browserProfile = profile as? BrowserProfile {
+//            tabVC.setState(withProfile: browserProfile, clientPickerDelegate: self)
+//        }
+//        previewingContext.sourceRect = self.view.convertRect(cell.frame, fromView: collectionView)
+//
+        return nil
     }
 
     func previewingContext(previewingContext: UIViewControllerPreviewing, commitViewController viewControllerToCommit: UIViewController) {

@@ -6,6 +6,7 @@ import Foundation
 import WebKit
 import Storage
 import Shared
+import IGListKit
 
 import XCGLogger
 
@@ -67,6 +68,24 @@ class Tab: NSObject {
 
     /// The last title shown by this tab. Used by the tab tray to show titles for zombie tabs.
     var lastTitle: String?
+
+    override func diffIdentifier() -> NSObjectProtocol {
+        if let aurl = self.url {
+            return aurl as NSObjectProtocol
+        } else {
+            return "blank"
+        }
+    }
+
+    override func isEqual(object: IGListDiffable?) -> Bool {
+        if self === object {
+            return true
+        }
+        if let object = object as? Tab {
+            return url == object.url
+        }
+        return false
+    }
 
     /// Whether or not the desktop site was requested with the last request, reload or navigation. Note that this property needs to
     /// be managed by the web view's navigation delegate.

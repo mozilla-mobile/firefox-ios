@@ -294,15 +294,15 @@ class TopTabsBackgroundDecorationView: UICollectionReusableView {
 class TopTabsViewLayoutAttributes: UICollectionViewLayoutAttributes {
     var themeColor: UIColor?
     
-    override func isEqual(object: AnyObject?) -> Bool {
-        guard let object = object as? TopTabsViewLayoutAttributes else {
-            return false
-        }
-        if object.themeColor != self.themeColor {
-            return false
-        }
-        return super.isEqual(object)
-    }
+//    override func isEqual(object: AnyObject?) -> Bool {
+//        guard let object = object as? TopTabsViewLayoutAttributes else {
+//            return false
+//        }
+//        if object.themeColor != self.themeColor {
+//            return false
+//        }
+//        return super.isEqual(object)
+//    }
 }
 
 enum TopTabsCurveDirection {
