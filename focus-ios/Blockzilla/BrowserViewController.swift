@@ -100,7 +100,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidCancel(urlBar: URLBar) {
-        urlBar.text = browser.url?.absoluteString
+        urlBar.url = browser.url
     }
 }
 
@@ -169,7 +169,7 @@ extension BrowserViewController: BrowserDelegate {
     }
 
     func browser(_ browser: Browser, didUpdateURL url: URL?) {
-        urlBar.text = url?.absoluteString
+        urlBar.url = url
     }
 }
 

@@ -19,6 +19,7 @@ class URLBar: UIView {
     fileprivate let deleteButton = InsetButton()
     fileprivate var deleteButtonWidthConstraint: Constraint!
     fileprivate var deleteButtonTrailingConstraint: Constraint!
+    fileprivate var isEditing = false
 
     init() {
         super.init(frame: CGRect.zero)
@@ -95,23 +96,26 @@ class URLBar: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    var text: String? {
-        get {
-            return urlText.text
-        }
-
-        set {
-            urlText.text = newValue
+    var url: URL? = nil {
+        didSet {
+            if !isEditing {
+                setTextToURL()
+            }
         }
     }
 
     @objc private func didCancel() {
+        setTextToURL()
         urlText.resignFirstResponder()
         delegate?.urlBarDidCancel(urlBar: self)
     }
 
     func focus() {
         urlText.becomeFirstResponder()
+    }
+
+    fileprivate func setTextToURL() {
+        urlText.text = url?.absoluteString ?? nil
     }
 }
 
@@ -152,6 +156,14 @@ extension URLBar: AutocompleteTextFieldDelegate {
         return true
     }
 
+    func autocompleteTextFieldDidBeginEditing(_ autocompleteTextField: AutocompleteTextField) {
+        isEditing = true
+    }
+
+    func autocompleteTextFieldDidEndEditing(_ autocompleteTextField: AutocompleteTextField) {
+        isEditing = false
+    }
+
     func autocompleteTextFieldShouldReturn(_ autocompleteTextField: AutocompleteTextField) -> Bool {
         delegate?.urlBar(urlBar: self, didSubmitText: autocompleteTextField.text!)
         autocompleteTextField.resignFirstResponder()
@@ -159,7 +171,6 @@ extension URLBar: AutocompleteTextFieldDelegate {
     }
 
     func autocompleteTextField(_ autocompleteTextField: AutocompleteTextField, didEnterText text: String) {
-
     }
 }
 
