@@ -79,15 +79,13 @@ class FindInPageTests: KIFTestCase {
     }
 
     private func openFindInPageBar(webView: WKWebView) {
+        // For some reason, we sometimes have to tap the web view to make
+        // it respond to long press events (tests only).
+        webView.tapAtPoint(CGPointZero)
+
         // Make the selection menu appear. To keep things simple, the page has absolutely
         // positioned text at the top-left corner.
         webView.longPressAtPoint(CGPointZero, duration: FindInPageTests.LongPressDuration)
-
-        // For some reason, we sometimes have to tap the selection
-        // to make the selection menu appear.
-        if !tester().viewExistsWithLabel("Find in Page") {
-            webView.tapAtPoint(CGPointZero)
-        }
 
         tester().tapViewWithAccessibilityLabel("Find in Page")
         tester().waitForViewWithAccessibilityValue("nullam")
