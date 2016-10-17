@@ -13,7 +13,8 @@ protocol URLBarDelegate: class {
 class URLBar: UIView {
     weak var delegate: URLBarDelegate?
 
-    private let urlText = URLTextField()
+    let progressBar = UIProgressView(progressViewStyle: .bar)
+
     fileprivate let cancelButton = InsetButton()
     fileprivate var cancelButtonWidthConstraint: Constraint!
     fileprivate let deleteButton = InsetButton()
@@ -21,11 +22,21 @@ class URLBar: UIView {
     fileprivate var deleteButtonTrailingConstraint: Constraint!
     fileprivate var isEditing = false
 
+    private let urlText = URLTextField()
+
     init() {
         super.init(frame: CGRect.zero)
 
+        let backgroundView = GradientBackgroundView()
+        addSubview(backgroundView)
+
         let urlTextContainer = UIView()
         urlTextContainer.backgroundColor = UIConstants.colors.urlTextBackground
+        urlTextContainer.layer.cornerRadius = UIConstants.layout.urlBarCornerRadius
+        urlTextContainer.layer.shadowColor = UIConstants.colors.urlTextShadow.cgColor
+        urlTextContainer.layer.shadowOpacity = UIConstants.layout.urlBarShadowOpacity
+        urlTextContainer.layer.shadowRadius = UIConstants.layout.urlBarShadowRadius
+        urlTextContainer.layer.shadowOffset = UIConstants.layout.urlBarShadowOffset
 
         // UITextField doesn't allow customization of the clear button, so we create
         // our own so we can use it as the rightView.
@@ -37,7 +48,6 @@ class URLBar: UIView {
         urlText.font = UIConstants.fonts.urlTextFont
         urlText.tintColor = UIConstants.colors.urlTextFont
         urlText.textColor = UIConstants.colors.urlTextFont
-        urlText.layer.cornerRadius = UIConstants.layout.urlTextCornerRadius
         urlText.placeholder = UIConstants.strings.urlTextPlaceholder
         urlText.keyboardType = .webSearch
         urlText.autocapitalizationType = .none
@@ -47,14 +57,14 @@ class URLBar: UIView {
         urlText.autocompleteDelegate = self
 
         cancelButton.setTitle(UIConstants.strings.urlBarCancel, for: .normal)
-        cancelButton.titleLabel?.font = UIConstants.fonts.smallerFont
+        cancelButton.titleLabel?.font = UIConstants.fonts.cancelButton
         cancelButton.titleEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         cancelButton.addTarget(self, action: #selector(didCancel), for: .touchUpInside)
         cancelButton.setContentCompressionResistancePriority(1000, for: .horizontal)
 
         deleteButton.setTitle(UIConstants.strings.deleteButton, for: .normal)
-        deleteButton.titleLabel?.font = UIConstants.fonts.smallerFont
-        deleteButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 4)
+        deleteButton.titleLabel?.font = UIConstants.fonts.deleteButton
+        deleteButton.titleEdgeInsets = UIEdgeInsets(top: 2, left: 10, bottom: 2, right: 10)
         deleteButton.backgroundColor = UIColor.lightGray
         deleteButton.layer.borderWidth = 1
         deleteButton.layer.cornerRadius = 2
@@ -66,6 +76,13 @@ class URLBar: UIView {
         urlTextContainer.addSubview(urlText)
         urlTextContainer.addSubview(deleteButton)
         addSubview(cancelButton)
+
+        progressBar.progressTintColor = UIConstants.colors.progressBar
+        addSubview(progressBar)
+
+        backgroundView.snp.makeConstraints { make in
+            make.edges.equalTo(self)
+        }
 
         urlTextContainer.snp.makeConstraints { make in
             make.top.leading.bottom.equalTo(self).inset(UIConstants.layout.urlBarMargin)
@@ -97,6 +114,12 @@ class URLBar: UIView {
             make.trailing.equalTo(self)
             make.centerY.equalTo(urlText)
             self.cancelButtonWidthConstraint = make.size.equalTo(0).constraint
+        }
+
+        progressBar.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(self)
+            make.bottom.equalTo(self).offset(-1)
+            make.height.equalTo(1)
         }
     }
 

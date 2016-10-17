@@ -21,38 +21,42 @@ struct UIConstants {
         static let focusOrange = UIColor(rgb: 0xF26C23)
         static let focusRed = UIColor(rgb: 0xE63D2F)
         static let focusViolet = UIColor(rgb: 0x95368C)
+        static let gradientBackground = UIColor(rgb: 0x363B40)
+        static let gradientLeft = UIColor(rgb: 0xC86DD7, alpha: 0.1)
+        static let gradientRight = UIColor(rgb: 0x3023AE, alpha: 0.1)
         static let navigationButton = UIColor(rgb: 0x00A7E0)
         static let navigationTitle = UIColor(rgb: 0x61666D)
-        static let progressBar = UIColor(rgb: 0xff9500)
+        static let progressBar = UIColor(rgb: 0xC86DD7)
         static let tableSectionHeader = UIColor(rgb: 0x61666D)
         static let toggleOn = UIColor(rgb: 0x00A7E0)
         static let toggleOff = UIColor(rgb: 0x585E64)
+        static let toolbarBorder = UIColor(rgb: 0x5F6368)
         static let toolbarButtonNormal = UIColor.darkGray
-        static let toolbarBackground = UIColor(rgb: 0xEEEEEE)
-        static let urlBarBackgroundLeft = UIColor(rgb: 0x9c62a7)
-        static let urlBarBackgroundRight = UIColor(rgb: 0x2f2a8d)
-        static let urlTextBackground = UIColor(rgb: 0xffffff, alpha: 0.2)
+        static let urlTextBackground = UIColor(rgb: 0x636270)
         static let urlTextFont = UIColor.white
-        static let urlTextHighlight = UIColor(rgb: 0xf27c33)
-        static let urlTextPlaceholder = UIColor(rgb: 0xffffff, alpha: 0.8)
+        static let urlTextHighlight = UIColor(rgb: 0xC86DD7)
+        static let urlTextPlaceholder = UIColor(rgb: 0xffffff, alpha: 0.7)
+        static let urlTextShadow = UIColor.black
     }
 
     struct fonts {
-        static let defaultFont = UIFont.systemFont(ofSize: 16)
-        static let defaultFontSemibold = UIFont.systemFont(ofSize: 16, weight: UIFontWeightSemibold)
-        static let defaultFontMedium = UIFont.systemFont(ofSize: 16, weight: UIFontWeightMedium)
-        static let smallerFont = UIFont.systemFont(ofSize: 14)
-        static let smallerFontSemibold = UIFont.systemFont(ofSize: 14, weight: UIFontWeightSemibold)
+        static let cancelButton = UIFont.systemFont(ofSize: 15)
+        static let deleteButton = UIFont.systemFont(ofSize: 11)
+        static let safariInstruction = UIFont.systemFont(ofSize: 16, weight: UIFontWeightMedium)
         static let tableSectionHeader = UIFont.systemFont(ofSize: 12, weight: UIFontWeightSemibold)
-        static let urlTextFont = UIFont.systemFont(ofSize: 14)
+        static let urlTextFont = UIFont.systemFont(ofSize: 15)
     }
 
     struct layout {
+        static let browserToolbarDisabledOpacity: CGFloat = 0.3
         static let browserToolbarHeight = 44
         static let navigationDoneOffset: Float = -10
-        static let urlTextCornerRadius: CGFloat = 1.5
+        static let urlBarCornerRadius: CGFloat = 2
         static let urlBarMargin: CGFloat = 8
-        static let urlBarHeightInset: CGFloat = 12
+        static let urlBarHeightInset: CGFloat = 10
+        static let urlBarShadowOpacity: Float = 0.3
+        static let urlBarShadowRadius: CGFloat = 2
+        static let urlBarShadowOffset = CGSize(width: 0, height: 2)
         static let urlBarWidthInset: CGFloat = 8
     }
 
