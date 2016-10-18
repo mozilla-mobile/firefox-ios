@@ -24,6 +24,7 @@ struct TodayUX {
     static let copyLinkImageWidth: CGFloat = 23
     static let margin: CGFloat = 8
     static let buttonsHorizontalMarginPercentage: CGFloat = 0.1
+    static let iOS9LeftMargin: CGFloat = 40
 }
 
 @objc (TodayViewController)
@@ -77,7 +78,13 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
         button.label.font = UIFont.systemFontOfSize(TodayUX.labelTextSize)
         button.subtitleLabel.font = UIFont.systemFontOfSize(TodayUX.linkTextSize)
-
+        if #available(iOS 10, *) {
+            // no custom margin needed
+        } else {
+            button.imageView?.snp_updateConstraints { make in
+                make.left.equalTo(button.snp_left).offset(TodayUX.iOS9LeftMargin)
+            }
+        }
         return button
     }()
 
@@ -146,6 +153,9 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         updateCopiedLink()
     }
 
+    func widgetMarginInsetsForProposedMarginInsets(defaultMarginInsets: UIEdgeInsets) -> UIEdgeInsets {
+        return UIEdgeInsetsZero
+    }
 
     func updateCopiedLink() {
         if let url = self.copiedURL {
