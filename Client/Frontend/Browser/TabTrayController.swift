@@ -272,7 +272,6 @@ class TabTrayController: UIViewController, IGListAdapterDataSource, IGListSingle
         let toolbar = TrayToolbar()
         toolbar.addTabButton.addTarget(self, action: #selector(TabTrayController.SELdidClickAddTab), forControlEvents: .TouchUpInside)
         toolbar.menuButton.addTarget(self, action: #selector(TabTrayController.didTapMenu), forControlEvents: .TouchUpInside)
-
         toolbar.maskButton.addTarget(self, action: #selector(TabTrayController.SELdidTogglePrivateMode), forControlEvents: .TouchUpInside)
         return toolbar
     }()
@@ -280,7 +279,8 @@ class TabTrayController: UIViewController, IGListAdapterDataSource, IGListSingle
     lazy var adapter: IGListAdapter = {
         return IGListAdapter(updater: IGListAdapterUpdater(), viewController: self, workingRangeSize: 0)
     }()
-    let collectionView = IGListCollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
+
+    var collectionView: IGListCollectionView!
 
     var tabTrayState: TabTrayState {
         return TabTrayState(isPrivate: self.privateMode)
@@ -299,7 +299,6 @@ class TabTrayController: UIViewController, IGListAdapterDataSource, IGListSingle
             if oldValue != privateMode {
                 updateAppState()
             }
-
             tabDataSource.tabs = tabsToDisplay
             toolbar.styleToolbar(isPrivate: privateMode)
         }
@@ -362,8 +361,6 @@ class TabTrayController: UIViewController, IGListAdapterDataSource, IGListSingle
         return nil
     }
 
-
-
     func listAdapter(listAdapter: IGListAdapter, sectionControllerForObject object: AnyObject) -> IGListSectionController {
         let configureBlock = { (data: AnyObject, cell: UICollectionViewCell) in
             guard let tabCell = cell as? TabCell, let tab = data as? Tab else {
@@ -399,10 +396,6 @@ class TabTrayController: UIViewController, IGListAdapterDataSource, IGListSingle
             }
             
             tabCell.background.image = tab.screenshot
-
-
-
-
         }
 
         let sizeBlock = { (context: IGListCollectionContext?) -> CGSize in
@@ -431,15 +424,15 @@ class TabTrayController: UIViewController, IGListAdapterDataSource, IGListSingle
 
         view.accessibilityLabel = NSLocalizedString("Tabs Tray", comment: "Accessibility label for the Tabs Tray view.")
 
+        collectionView = IGListCollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: UIConstants.ToolbarHeight, right: 0)
+        collectionView.backgroundColor = TabTrayControllerUX.BackgroundColor
+
+
         view.addSubview(collectionView)
         adapter.collectionView = collectionView
         adapter.dataSource = self
 
-//        collectionView.dataSource = tabDataSource
-//        collectionView.delegate = tabLayoutDelegate
-//        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: UIConstants.ToolbarHeight, right: 0)
-//        collectionView.registerClass(TabCell.self, forCellWithReuseIdentifier: TabCell.Identifier)
-//        collectionView.backgroundColor = TabTrayControllerUX.BackgroundColor
 
         if AppConstants.MOZ_REORDER_TAB_TRAY {
             collectionView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(didLongPressTab)))
@@ -700,28 +693,19 @@ class TabTrayController: UIViewController, IGListAdapterDataSource, IGListSingle
 
     func changePrivacyMode(isPrivate: Bool) {
         if isPrivate != privateMode {
-//            guard let _ = collectionView else {
-//                privateMode = isPrivate
-//                return
-//            }
+            guard let _ = collectionView else {
+                privateMode = isPrivate
+                return
+            }
             SELdidTogglePrivateMode()
         }
     }
 
     private func openNewTab(request: NSURLRequest? = nil) {
         toolbar.userInteractionEnabled = false
-
-        // We're only doing one update here, but using a batch update lets us delay selecting the tab
-        // until after its insert animation finishes.
-//        self.collectionView.performBatchUpdates({ _ in
-//            let tab = self.tabManager.addTab(request, isPrivate: self.privateMode)
-//            self.tabManager.selectTab(tab)
-//        }, completion: { finished in
-//            self.toolbar.userInteractionEnabled = true
-//            if finished {
-//                self.navigationController?.popViewControllerAnimated(true)
-//            }
-//        })
+        let tab = self.tabManager.addTab(request, isPrivate: self.privateMode)
+        self.tabManager.selectTab(tab)
+        self.navigationController?.popViewControllerAnimated(true)
     }
 
     private func updateAppState() {
@@ -731,7 +715,6 @@ class TabTrayController: UIViewController, IGListAdapterDataSource, IGListSingle
 
     private func closeTabsForCurrentTray() {
         tabManager.removeTabsWithUndoToast(tabsToDisplay)
-//        self.collectionView.reloadData()
     }
 }
 
@@ -782,44 +765,15 @@ extension TabTrayController: TabManagerDelegate {
         }
 
         tabDataSource.addTab(tab)
-//        self.collectionView?.performBatchUpdates({ _ in
-//            self.collectionView.insertItemsAtIndexPaths([NSIndexPath(forItem: index, inSection: 0)])
-//        }, completion: { finished in
-//            if finished {
-//                tabManager.selectTab(tab)
-//                // don't pop the tab tray view controller if it is not in the foreground
-//                if self.presentedViewController == nil {
-//                    self.navigationController?.popViewControllerAnimated(true)
-//                }
-//            }
-//        })
+        tabManager.selectTab(tab)
+        self.navigationController?.popViewControllerAnimated(true)
     }
 
     func tabManager(tabManager: TabManager, didRemoveTab tab: Tab) {
         // it is possible that we are removing a tab that we are not currently displaying
         // through the Close All Tabs feature (which will close tabs that are not in our current privacy mode)
         // check this before removing the item from the collection
-//        let removedIndex = tabDataSource.removeTab(tab)
-//        if removedIndex > -1 {
-//            self.collectionView.performBatchUpdates({
-//                self.collectionView.deleteItemsAtIndexPaths([NSIndexPath(forItem: removedIndex, inSection: 0)])
-//            }, completion: { finished in
-//                guard finished && self.privateTabsAreEmpty() else { return }
-//                self.emptyPrivateTabsView.hidden = false
-//            })
-//
-//            // Workaround: On iOS 8.* devices, cells don't get reloaded during the deletion but after the
-//            // animation has finished which causes cells that animate from above to suddenly 'appear'. This
-//            // is fixed on iOS 9 but for iOS 8 we force a reload on non-visible cells during the animation.
-//            if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_8_3) {
-//                let visibleCount = collectionView.indexPathsForVisibleItems().count
-//                var offscreenIndexPaths = [NSIndexPath]()
-//                for i in 0..<(tabsToDisplay.count - visibleCount) {
-//                    offscreenIndexPaths.append(NSIndexPath(forItem: i, inSection: 0))
-//                }
-//                self.collectionView.reloadItemsAtIndexPaths(offscreenIndexPaths)
-//            }
-//        }
+        tabDataSource.removeTab(tab)
     }
 
     func tabManagerDidAddTabs(tabManager: TabManager) {
@@ -1167,18 +1121,18 @@ extension TabTrayController: UIViewControllerPreviewingDelegate {
 
     func previewingContext(previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
 
-//        guard let collectionView = collectionView else { return nil }
-//        let convertedLocation = self.view.convertPoint(location, toView: collectionView)
-//
-//        guard let indexPath = collectionView.indexPathForItemAtPoint(convertedLocation),
-//            let cell = collectionView.cellForItemAtIndexPath(indexPath) else { return nil }
-//
-//        let tab = tabDataSource.tabs[indexPath.row]
-//        let tabVC = TabPeekViewController(tab: tab, delegate: self)
-//        if let browserProfile = profile as? BrowserProfile {
-//            tabVC.setState(withProfile: browserProfile, clientPickerDelegate: self)
-//        }
-//        previewingContext.sourceRect = self.view.convertRect(cell.frame, fromView: collectionView)
+        guard let collectionView = collectionView else { return nil }
+        let convertedLocation = self.view.convertPoint(location, toView: collectionView)
+
+        guard let indexPath = collectionView.indexPathForItemAtPoint(convertedLocation),
+            let cell = collectionView.cellForItemAtIndexPath(indexPath) else { return nil }
+
+        let tab = tabDataSource.tabs[indexPath.row]
+        let tabVC = TabPeekViewController(tab: tab, delegate: self)
+        if let browserProfile = profile as? BrowserProfile {
+            tabVC.setState(withProfile: browserProfile, clientPickerDelegate: self)
+        }
+        previewingContext.sourceRect = self.view.convertRect(cell.frame, fromView: collectionView)
 //
         return nil
     }
