@@ -5,7 +5,7 @@
 import Foundation
 
 extension UIView {
-    func animateHidden(_ hidden: Bool, duration: TimeInterval) {
+    func animateHidden(_ hidden: Bool, duration: TimeInterval, completion: (() -> Void)? = nil) {
         self.isHidden = false
         UIView.setAnimationBeginsFromCurrentState(true)
         UIView.transition(with: self, duration: duration, options: UIViewAnimationOptions.curveLinear, animations: {
@@ -17,6 +17,7 @@ extension UIView {
             if finished {
                 self.isHidden = hidden
             }
+            completion?()
         })
     }
 }

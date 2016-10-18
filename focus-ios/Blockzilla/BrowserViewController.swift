@@ -9,44 +9,50 @@ import SnapKit
 private let SearchTemplate = "https://duckduckgo.com/?q=%s"
 
 class BrowserViewController: UIViewController {
-    fileprivate let browser = Browser()
+    fileprivate var browser = Browser()
     fileprivate let urlBar = URLBar()
     fileprivate let browserToolbar = BrowserToolbar()
-    fileprivate var homeView: HomeView?
+    fileprivate var homeView = HomeView()
+
+    private let urlBarContainer = UIView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        view.backgroundColor = UIConstants.colors.background
+
+        let urlBarBackground = GradientBackgroundView()
+        urlBarContainer.addSubview(urlBarBackground)
+        view.addSubview(urlBarContainer)
+
         urlBar.focus()
         urlBar.delegate = self
-        view.addSubview(urlBar)
+        urlBarContainer.addSubview(urlBar)
 
-        view.addSubview(browser.view)
-        browser.delegate = self
-
-        view.addSubview(browserToolbar)
-        browserToolbar.delegate = self
-
-        let homeView = HomeView()
-        self.homeView = homeView
-        view.addSubview(homeView)
         homeView.delegate = self
+        view.addSubview(homeView)
+
+        browser.view.isHidden = true
+        browser.delegate = self
+        view.addSubview(browser.view)
+
+        browserToolbar.isHidden = true
+        browserToolbar.alpha = 0
+        browserToolbar.delegate = self
+        browserToolbar.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(browserToolbar)
+
+        urlBarContainer.snp.makeConstraints { make in
+            make.top.leading.trailing.equalTo(view)
+        }
+
+        urlBarBackground.snp.makeConstraints { make in
+            make.edges.equalTo(urlBarContainer)
+        }
 
         urlBar.snp.makeConstraints { make in
             make.top.equalTo(topLayoutGuide.snp.bottom)
-            make.leading.trailing.equalTo(view)
-        }
-
-        UIView.animate(withDuration: 0.5) {
-            self.urlBar.snp.makeConstraints { make in
-                make.top.equalTo(self.topLayoutGuide.snp.bottom)
-            }
-            self.urlBar.layoutIfNeeded()
-        }
-
-        browser.view.snp.makeConstraints { make in
-            make.top.equalTo(urlBar.snp.bottom)
-            make.leading.trailing.bottom.equalTo(view)
+            make.leading.trailing.bottom.equalTo(urlBarContainer)
         }
 
         browserToolbar.snp.makeConstraints { make in
@@ -55,7 +61,13 @@ class BrowserViewController: UIViewController {
         }
 
         homeView.snp.makeConstraints { make in
-            make.edges.equalTo(browser.view)
+            make.top.equalTo(urlBarContainer.snp.bottom)
+            make.leading.trailing.bottom.equalTo(view)
+        }
+
+        browser.view.snp.makeConstraints { make in
+            make.top.equalTo(urlBarContainer.snp.bottom)
+            make.leading.trailing.bottom.equalTo(view)
         }
     }
 
@@ -66,6 +78,32 @@ class BrowserViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(true, animated: animated)
         super.viewWillAppear(animated)
+    }
+
+    fileprivate func resetBrowser() {
+        urlBar.url = nil
+        urlBar.progressBar.isHidden = true
+
+        view.layoutIfNeeded()
+        UIView.animate(withDuration: UIConstants.layout.deleteAnimationDuration, animations: {
+            self.browser.view.snp.remakeConstraints { make in
+                make.leading.trailing.equalTo(self.view)
+                make.height.equalTo(self.view)
+                make.top.equalTo(self.view.snp.bottom)
+            }
+
+            self.view.layoutIfNeeded()
+        }, completion: { finished in
+            self.browser.view.isHidden = true
+            self.browser.reset()
+
+            self.browser.view.snp.remakeConstraints { make in
+                make.top.equalTo(self.urlBarContainer.snp.bottom)
+                make.leading.trailing.bottom.equalTo(self.view)
+            }
+        })
+
+        browserToolbar.animateHidden(true, duration: UIConstants.layout.toolbarFadeAnimationDuration)
     }
 }
 
@@ -83,11 +121,30 @@ extension BrowserViewController: URLBarDelegate {
             url = searchUrl
         }
 
+        // If this is the first navigation, show the browser and the toolbar.
+        if browser.view.isHidden {
+            browser.view.isHidden = false
+            browserToolbar.animateHidden(false, duration: UIConstants.layout.toolbarFadeAnimationDuration)
+        }
+
         browser.loadRequest(URLRequest(url: url!))
     }
 
-    func urlBarDidCancel(urlBar: URLBar) {
+    func urlBarDidPressCancel(urlBar: URLBar) {
         urlBar.url = browser.url
+    }
+
+    func urlBarDidPressDelete(urlBar: URLBar) {
+        let alert = UIAlertController(title: nil, message: UIConstants.strings.deleteAlertMessage, preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: UIConstants.strings.deleteAlertCancelButton, style: .cancel, handler: nil)
+        let deleteAction = UIAlertAction(title: UIConstants.strings.deleteAlertDeleteButton, style: .destructive) { _ in
+            self.resetBrowser()
+        }
+        alert.addAction(cancelAction)
+        alert.addAction(deleteAction)
+        alert.preferredAction = deleteAction
+
+        present(alert, animated: true, completion: nil)
     }
 }
 
@@ -117,12 +174,6 @@ extension BrowserViewController: BrowserToolbarDelegate {
 extension BrowserViewController: BrowserDelegate {
     func browserDidStartNavigation(_ browser: Browser) {
         browserToolbar.isLoading = true
-
-        // Remove the initial view once we start navigating.
-        if let homeView = homeView {
-            homeView.removeFromSuperview()
-            self.homeView = nil
-        }
     }
 
     func browserDidFinishNavigation(_ browser: Browser) {

@@ -7,7 +7,8 @@ import SnapKit
 
 protocol URLBarDelegate: class {
     func urlBar(urlBar: URLBar, didSubmitText text: String)
-    func urlBarDidCancel(urlBar: URLBar)
+    func urlBarDidPressCancel(urlBar: URLBar)
+    func urlBarDidPressDelete(urlBar: URLBar)
 }
 
 class URLBar: UIView {
@@ -25,9 +26,6 @@ class URLBar: UIView {
 
     init() {
         super.init(frame: CGRect.zero)
-
-        let backgroundView = GradientBackgroundView()
-        addSubview(backgroundView)
 
         let urlTextContainer = UIView()
         urlTextContainer.backgroundColor = UIConstants.colors.urlTextBackground
@@ -58,9 +56,9 @@ class URLBar: UIView {
         cancelButton.setTitle(UIConstants.strings.urlBarCancel, for: .normal)
         cancelButton.titleLabel?.font = UIConstants.fonts.cancelButton
         cancelButton.titleEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
-        cancelButton.addTarget(self, action: #selector(didCancel), for: .touchUpInside)
         cancelButton.setContentHuggingPriority(1000, for: .horizontal)
         cancelButton.setContentCompressionResistancePriority(1000, for: .horizontal)
+        cancelButton.addTarget(self, action: #selector(didPressCancel), for: .touchUpInside)
 
         deleteButton.setTitle(UIConstants.strings.deleteButton, for: .normal)
         deleteButton.titleLabel?.font = UIConstants.fonts.deleteButton
@@ -72,6 +70,7 @@ class URLBar: UIView {
         deleteButton.layer.backgroundColor = UIConstants.colors.deleteButtonBackgroundNormal.cgColor
         deleteButton.setContentHuggingPriority(1000, for: .horizontal)
         deleteButton.setContentCompressionResistancePriority(1000, for: .horizontal)
+        deleteButton.addTarget(self, action: #selector(didPressDelete), for: .touchUpInside)
 
         addSubview(urlTextContainer)
         urlTextContainer.addSubview(urlText)
@@ -80,10 +79,6 @@ class URLBar: UIView {
 
         progressBar.progressTintColor = UIConstants.colors.progressBar
         addSubview(progressBar)
-
-        backgroundView.snp.makeConstraints { make in
-            make.edges.equalTo(self)
-        }
 
         urlTextContainer.snp.makeConstraints { make in
             make.top.leading.bottom.equalTo(self).inset(UIConstants.layout.urlBarMargin)
@@ -136,10 +131,14 @@ class URLBar: UIView {
         }
     }
 
-    @objc private func didCancel() {
+    @objc private func didPressCancel() {
         setTextToURL()
         urlText.resignFirstResponder()
-        delegate?.urlBarDidCancel(urlBar: self)
+        delegate?.urlBarDidPressCancel(urlBar: self)
+    }
+
+    @objc private func didPressDelete() {
+        delegate?.urlBarDidPressDelete(urlBar: self)
     }
 
     @objc private func didPressClear() {

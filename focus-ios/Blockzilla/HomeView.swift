@@ -14,8 +14,6 @@ class HomeView: UIView {
     init() {
         super.init(frame: CGRect.zero)
 
-        backgroundColor = UIConstants.colors.background
-
         let settingsButton = UIButton()
         settingsButton.setTitle(UIConstants.strings.openSettings, for: .normal)
         settingsButton.addTarget(self, action: #selector(didPressSettings), for: .touchUpInside)

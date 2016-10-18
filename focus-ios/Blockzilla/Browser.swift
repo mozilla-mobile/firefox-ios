@@ -17,13 +17,39 @@ protocol BrowserDelegate: class {
 class Browser: NSObject {
     weak var delegate: BrowserDelegate?
 
-    private let webView = UIWebView()
+    let view = UIView()
+
+    private var webView: UIWebView!
 
     override init() {
         super.init()
 
-        webView.delegate = self
+        createWebView()
+
         NotificationCenter.default.addObserver(self, selector: #selector(progressChanged(notification:)), name: Notification.Name(rawValue: "WebProgressEstimateChangedNotification"), object: nil)
+    }
+
+    private func createWebView() {
+        webView = UIWebView()
+        webView.delegate = self
+        view.addSubview(webView)
+
+        webView.snp.makeConstraints { make in
+            make.edges.equalTo(view)
+        }
+    }
+
+    func reset() {
+        webView.delegate = nil
+        webView.removeFromSuperview()
+
+        isLoading = false
+        canGoBack = false
+        canGoForward = false
+        estimatedProgress = 0
+        url = nil
+
+        createWebView()
     }
 
     func goBack() {
@@ -72,12 +98,8 @@ class Browser: NSObject {
         }
     }
 
-    var view: UIView {
-        return webView
-    }
-
     @objc private func progressChanged(notification: Notification) {
-        guard let progress = notification.userInfo?["WebProgressEstimatedProgressKey"] as? Float, progress > estimatedProgress else { return }
+        guard let progress = notification.userInfo?["WebProgressEstimatedProgressKey"] as? Float, isLoading, progress > estimatedProgress else { return }
         estimatedProgress = progress
     }
 }
