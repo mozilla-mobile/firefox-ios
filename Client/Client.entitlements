@@ -8,7 +8,7 @@
 	</array>
 	<key>keychain-access-groups</key>
 	<array>
-		<string>$(AppIdentifierPrefix)$(MOZ_BUNDLE_ID)</string>
+		<string>$(AppIdentifierPrefix)org.mozilla.ios.Fennec.thePsguy</string>
 	</array>
 </dict>
 </plist>

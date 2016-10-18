@@ -560,6 +560,7 @@ class SearchSetting: Setting {
     override func onClick(navigationController: UINavigationController?) {
         let viewController = SearchSettingsTableViewController()
         viewController.model = profile.searchEngines
+        viewController.profile = profile
         navigationController?.pushViewController(viewController, animated: true)
     }
 }
