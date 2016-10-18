@@ -12,9 +12,7 @@ protocol AutocompleteTextFieldDelegate: class {
     func autocompleteTextField(_ autocompleteTextField: AutocompleteTextField, didEnterText text: String)
     func autocompleteTextFieldShouldReturn(_ autocompleteTextField: AutocompleteTextField) -> Bool
     func autocompleteTextFieldShouldBeginEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool
-    func autocompleteTextFieldDidBeginEditing(_ autocompleteTextField: AutocompleteTextField)
     func autocompleteTextFieldShouldEndEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool
-    func autocompleteTextFieldDidEndEditing(_ autocompleteTextField: AutocompleteTextField)
 }
 
 class AutocompleteTextField: UITextField, UITextFieldDelegate {
@@ -158,14 +156,6 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         applyCompletion()
         return autocompleteDelegate?.autocompleteTextFieldShouldEndEditing(self) ?? true
-    }
-
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        autocompleteDelegate?.autocompleteTextFieldDidBeginEditing(self)
-    }
-
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        autocompleteDelegate?.autocompleteTextFieldDidEndEditing(self)
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

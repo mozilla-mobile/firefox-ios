@@ -20,7 +20,6 @@ class URLBar: UIView {
     fileprivate let deleteButton = InsetButton()
     fileprivate var deleteButtonWidthConstraint: Constraint!
     fileprivate var deleteButtonTrailingConstraint: Constraint!
-    fileprivate var isEditing = false
 
     private let urlText = URLTextField()
 
@@ -131,7 +130,7 @@ class URLBar: UIView {
 
     var url: URL? = nil {
         didSet {
-            if !isEditing {
+            if !urlText.isEditing {
                 setTextToURL()
             }
         }
@@ -193,14 +192,6 @@ extension URLBar: AutocompleteTextFieldDelegate {
         return true
     }
 
-    func autocompleteTextFieldDidBeginEditing(_ autocompleteTextField: AutocompleteTextField) {
-        isEditing = true
-    }
-
-    func autocompleteTextFieldDidEndEditing(_ autocompleteTextField: AutocompleteTextField) {
-        isEditing = false
-    }
-
     func autocompleteTextFieldShouldReturn(_ autocompleteTextField: AutocompleteTextField) -> Bool {
         delegate?.urlBar(urlBar: self, didSubmitText: autocompleteTextField.text!)
         autocompleteTextField.resignFirstResponder()
@@ -220,11 +211,24 @@ private class URLTextField: AutocompleteTextField {
     }
 
     override func textRect(forBounds bounds: CGRect) -> CGRect {
-        return bounds.insetBy(dx: UIConstants.layout.urlBarWidthInset, dy: UIConstants.layout.urlBarHeightInset)
+        return getInsetRect(forBounds: bounds)
     }
 
     override func editingRect(forBounds bounds: CGRect) -> CGRect {
-        return bounds.insetBy(dx: UIConstants.layout.urlBarWidthInset, dy: UIConstants.layout.urlBarHeightInset)
+        return getInsetRect(forBounds: bounds)
+    }
+
+    private func getInsetRect(forBounds bounds: CGRect) -> CGRect {
+        // Add internal padding.
+        let inset = bounds.insetBy(dx: UIConstants.layout.urlBarWidthInset, dy: UIConstants.layout.urlBarHeightInset)
+
+        // Add a right margin so we don't overlap with the clear button.
+        var clearButtonWidth: CGFloat = 0
+        if let clearButton = rightView, isEditing {
+            clearButtonWidth = clearButton.bounds.width + CGFloat(5)
+        }
+
+        return CGRect(x: inset.origin.x, y: inset.origin.y, width: inset.width - clearButtonWidth, height: inset.height)
     }
 
     private override func rightViewRect(forBounds bounds: CGRect) -> CGRect {
