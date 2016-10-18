@@ -9,9 +9,19 @@ class HomePageSettingsUITests: KIFTestCase {
     private var webRoot: String!
 
     override func setUp() {
+        super.setUp()
         webRoot = SimplePageServer.start()
         UIPasteboard.generalPasteboard().string = " "
+        BrowserUtils.dismissFirstRunUI(tester())
+        tester().tapViewWithAccessibilityLabel("Menu")
+        tester().tapViewWithAccessibilityLabel("New Tab")
     }
+
+    override func tearDown() {
+        super.tearDown()
+        BrowserUtils.resetToAboutHome(tester())
+        BrowserUtils.clearPrivateData(tester: tester())
+    }    
 
     func testNavigation() {
         HomePageUtils.navigateToHomePageSettings(tester())
@@ -62,6 +72,7 @@ class HomePageSettingsUITests: KIFTestCase {
         HomePageUtils.navigateFromHomePageSettings(tester())
     }
 
+    // This test will fail on simulator
     func testCurrentPage() {
         let webPageString = "\(webRoot)/numberedPage.html?page=1"
         tester().tapViewWithAccessibilityIdentifier("url")
@@ -70,7 +81,15 @@ class HomePageSettingsUITests: KIFTestCase {
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
 
         // now go to settings.
-        HomePageUtils.navigateToHomePageSettings(tester())
+        //HomePageUtils.navigateToHomePageSettings(tester())
+        tester().waitForAnimationsToFinish()
+        tester().tapViewWithAccessibilityLabel("Menu")
+        
+        // Below call is only needed for the emulator. In emulator, it does not see the settings in the next page
+        tester().swipeViewWithAccessibilityLabel("Set Homepage", inDirection:KIFSwipeDirection.Left)
+        
+        tester().tapViewWithAccessibilityLabel("Settings")
+        tester().tapViewWithAccessibilityIdentifier("HomePageSetting")
         tester().tapViewWithAccessibilityIdentifier("ClearHomePage")
         XCTAssertEqual("", HomePageUtils.homePageSetting(tester()))
 

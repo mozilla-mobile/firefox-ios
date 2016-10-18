@@ -11,10 +11,17 @@ class BrowserTests: KIFTestCase {
     private var webRoot: String!
 
     override func setUp() {
+        super.setUp()
         webRoot = SimplePageServer.start()
+        BrowserUtils.dismissFirstRunUI(tester())
+        tester().tapViewWithAccessibilityLabel("Menu")
+        tester().tapViewWithAccessibilityLabel("New Tab")
+
     }
 
     override func tearDown() {
+        BrowserUtils.resetToAboutHome(tester())
+        BrowserUtils.clearPrivateData(tester: tester())
         super.tearDown()
     }
 
@@ -31,7 +38,5 @@ class BrowserTests: KIFTestCase {
         // Check to see if the JS Prompt is dequeued and showing
         tester().waitForViewWithAccessibilityLabel("OK")
         tester().tapViewWithAccessibilityLabel("OK")
-
-        BrowserUtils.resetToAboutHome(tester())
     }
 }
