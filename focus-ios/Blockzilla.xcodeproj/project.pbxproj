@@ -29,6 +29,7 @@
 		D343DCC21C44356500D7EEE8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D343DCC41C44356500D7EEE8 /* Localizable.strings */; };
 		D34E70331DA8736300BABDCC /* AutocompleteTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34E70321DA8736300BABDCC /* AutocompleteTextField.swift */; };
 		D34E70351DA874AA00BABDCC /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34E70341DA874AA00BABDCC /* StringExtensions.swift */; };
+		D3561B2B1DB5925100A5EEAF /* GradientBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3561B2A1DB5925100A5EEAF /* GradientBackgroundView.swift */; };
 		D362D2AB1C4EAF940041980A /* rights-Focus.html in Resources */ = {isa = PBXBuildFile; fileRef = D362D2AA1C4EAF940041980A /* rights-Focus.html */; };
 		D36C1BAA1DB02EBB0073C1AB /* OpenUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D36C1BA91DB02EBB0073C1AB /* OpenUtils.swift */; };
 		D37DE55D1BCDBD6100906364 /* WaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37DE55C1BCDBD6100906364 /* WaveView.swift */; };
@@ -39,7 +40,6 @@
 		D392887F1BC5E47E0016A9A0 /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D392887E1BC5E47E0016A9A0 /* UIConstants.swift */; };
 		D3A6605A1DAF08FA002BA72A /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E251F81DAF064B005918DC /* Utils.swift */; };
 		D3A6605B1DAF0904002BA72A /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E251FA1DAF0668005918DC /* AppInfo.swift */; };
-		D3A8B1BE1DA5B56A00F450AD /* URLBarContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A8B1BD1DA5B56A00F450AD /* URLBarContainer.swift */; };
 		D3B3232D1BD16A0F00B0EEE4 /* gpl.html in Resources */ = {isa = PBXBuildFile; fileRef = D3B3232B1BD16A0F00B0EEE4 /* gpl.html */; };
 		D3B3232E1BD16A0F00B0EEE4 /* licenses.html in Resources */ = {isa = PBXBuildFile; fileRef = D3B3232C1BD16A0F00B0EEE4 /* licenses.html */; };
 		D3B323521BD1A7EE00B0EEE4 /* web-fonts.json in Resources */ = {isa = PBXBuildFile; fileRef = D3B323511BD1A7EE00B0EEE4 /* web-fonts.json */; };
@@ -135,6 +135,7 @@
 		D343DCC31C44356500D7EEE8 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D34E70321DA8736300BABDCC /* AutocompleteTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutocompleteTextField.swift; sourceTree = "<group>"; };
 		D34E70341DA874AA00BABDCC /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
+		D3561B2A1DB5925100A5EEAF /* GradientBackgroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientBackgroundView.swift; sourceTree = "<group>"; };
 		D362D26A1C47326A0041980A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D362D2AA1C4EAF940041980A /* rights-Focus.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "rights-Focus.html"; sourceTree = "<group>"; };
 		D36C1BA91DB02EBB0073C1AB /* OpenUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenUtils.swift; sourceTree = "<group>"; };
@@ -144,7 +145,6 @@
 		D392881C1BC5CF180016A9A0 /* UIColorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
 		D392887C1BC5E4510016A9A0 /* WaveHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaveHeaderView.swift; sourceTree = "<group>"; };
 		D392887E1BC5E47E0016A9A0 /* UIConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIConstants.swift; sourceTree = "<group>"; };
-		D3A8B1BD1DA5B56A00F450AD /* URLBarContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLBarContainer.swift; sourceTree = "<group>"; };
 		D3B3232B1BD16A0F00B0EEE4 /* gpl.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = gpl.html; sourceTree = "<group>"; };
 		D3B3232C1BD16A0F00B0EEE4 /* licenses.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = licenses.html; sourceTree = "<group>"; };
 		D3B323511BD1A7EE00B0EEE4 /* web-fonts.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "web-fonts.json"; path = "Lists/web-fonts.json"; sourceTree = SOURCE_ROOT; };
@@ -319,6 +319,7 @@
 				D3E2C96E1DA3093D00DEBE3D /* BrowserToolbar.swift */,
 				D3E2C8E91D9F0E6200DEBE3D /* BrowserViewController.swift */,
 				D3E2C96C1DA3077400DEBE3D /* CharacterSetExtensions.swift */,
+				D3561B2A1DB5925100A5EEAF /* GradientBackgroundView.swift */,
 				D3E3CA7C1DA827AD0079C94B /* HomeView.swift */,
 				D3E2C9681DA3024800DEBE3D /* InsetButton.swift */,
 				D3E251E71DAD714C005918DC /* InstructionsView.swift */,
@@ -334,7 +335,6 @@
 				D32F71D21BCEF67C006D44FC /* UIViewExtensions.swift */,
 				D3E2C96A1DA3069000DEBE3D /* URIFixup.swift */,
 				D3E2C9601DA2F7C600DEBE3D /* URLBar.swift */,
-				D3A8B1BD1DA5B56A00F450AD /* URLBarContainer.swift */,
 				D392887C1BC5E4510016A9A0 /* WaveHeaderView.swift */,
 				D37DE55C1BCDBD6100906364 /* WaveView.swift */,
 				E4BF2DDD1BACE8CA00DA9D68 /* Assets.xcassets */,
@@ -523,7 +523,6 @@
 				D33A1AB11BC48FAC0003D929 /* SettingsViewController.swift in Sources */,
 				D36C1BAA1DB02EBB0073C1AB /* OpenUtils.swift in Sources */,
 				D392881D1BC5CF180016A9A0 /* UIColorExtensions.swift in Sources */,
-				D3A8B1BE1DA5B56A00F450AD /* URLBarContainer.swift in Sources */,
 				D3E3CA7D1DA827AD0079C94B /* HomeView.swift in Sources */,
 				D34E70331DA8736300BABDCC /* AutocompleteTextField.swift in Sources */,
 				D3E251EB1DAD714C005918DC /* SafariInstructionsViewController.swift in Sources */,
@@ -538,6 +537,7 @@
 				D3C0EEF11BE97D9300BD89C1 /* TitleView.swift in Sources */,
 				D3E251EA1DAD714C005918DC /* InstructionsView.swift in Sources */,
 				D3E251EC1DAD714C005918DC /* IntroSlideWelcome.swift in Sources */,
+				D3561B2B1DB5925100A5EEAF /* GradientBackgroundView.swift in Sources */,
 				D3E2C96D1DA3077400DEBE3D /* CharacterSetExtensions.swift in Sources */,
 				D3E2C96F1DA3093D00DEBE3D /* BrowserToolbar.swift in Sources */,
 			);

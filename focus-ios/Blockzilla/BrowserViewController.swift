@@ -12,24 +12,17 @@ class BrowserViewController: UIViewController {
     fileprivate let browser = Browser()
     fileprivate let urlBar = URLBar()
     fileprivate let browserToolbar = BrowserToolbar()
-    fileprivate let progressBar = UIProgressView(progressViewStyle: .bar)
     fileprivate var homeView: HomeView?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let urlBarContainer = URLBarContainer()
-        view.addSubview(urlBarContainer)
-
-        urlBarContainer.addSubview(urlBar)
         urlBar.focus()
         urlBar.delegate = self
+        view.addSubview(urlBar)
 
         view.addSubview(browser.view)
         browser.delegate = self
-
-        view.addSubview(progressBar)
-        progressBar.progressTintColor = UIConstants.colors.progressBar
 
         view.addSubview(browserToolbar)
         browserToolbar.delegate = self
@@ -39,22 +32,16 @@ class BrowserViewController: UIViewController {
         view.addSubview(homeView)
         homeView.delegate = self
 
-        urlBarContainer.snp.makeConstraints { make in
-            make.top.leading.trailing.equalTo(self.view)
+        urlBar.snp.makeConstraints { make in
+            make.top.equalTo(topLayoutGuide.snp.bottom)
+            make.leading.trailing.equalTo(view)
         }
 
         UIView.animate(withDuration: 0.5) {
             self.urlBar.snp.makeConstraints { make in
                 make.top.equalTo(self.topLayoutGuide.snp.bottom)
-                make.leading.trailing.bottom.equalTo(urlBarContainer)
             }
             self.urlBar.layoutIfNeeded()
-        }
-
-        progressBar.snp.makeConstraints { make in
-            make.centerY.equalTo(urlBarContainer.snp.bottom)
-            make.leading.trailing.equalTo(self.view)
-            make.height.equalTo(1)
         }
 
         browser.view.snp.makeConstraints { make in
@@ -100,7 +87,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidCancel(urlBar: URLBar) {
-        urlBar.text = browser.url?.absoluteString
+        urlBar.url = browser.url
     }
 }
 
@@ -156,20 +143,20 @@ extension BrowserViewController: BrowserDelegate {
 
     func browser(_ browser: Browser, didUpdateEstimatedProgress estimatedProgress: Float) {
         if estimatedProgress == 0 {
-            progressBar.progress = 0
-            progressBar.animateHidden(false, duration: 0.3)
+            urlBar.progressBar.progress = 0
+            urlBar.progressBar.animateHidden(false, duration: 0.3)
             return
         }
 
-        progressBar.setProgress(estimatedProgress, animated: true)
+        urlBar.progressBar.setProgress(estimatedProgress, animated: true)
 
         if estimatedProgress == 1 {
-            progressBar.animateHidden(true, duration: 0.3)
+            urlBar.progressBar.animateHidden(true, duration: 0.3)
         }
     }
 
     func browser(_ browser: Browser, didUpdateURL url: URL?) {
-        urlBar.text = url?.absoluteString
+        urlBar.url = url
     }
 }
 
