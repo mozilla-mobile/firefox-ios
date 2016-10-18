@@ -34,8 +34,14 @@ class CustomSearchEngineForm: SettingsTableViewController {
     func addSearchEngine(searchQuery: String) {
         var iconURL: NSURL?
         var iconImage: UIImage?
-        guard searchQuery != "",
-            let url = NSURL(string: searchQuery.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLFragmentAllowedCharacterSet())!),
+        let SearchTermComponent = "%s"
+        let placeholder = "{searchTerms}"
+        var processedSearchQuery = ""
+        if searchQuery.componentsSeparatedByString(SearchTermComponent).count - 1 == 1{
+            processedSearchQuery = searchQuery.stringByReplacingOccurrencesOfString(SearchTermComponent, withString: placeholder)
+        }
+        guard processedSearchQuery != "",
+            let url = NSURL(string: processedSearchQuery.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLFragmentAllowedCharacterSet())!),
             let shortName = url.domainURL().host
             else {
                 let alert = ThirdPartySearchAlerts.failedToAddThirdPartySearch()
@@ -59,7 +65,7 @@ class CustomSearchEngineForm: SettingsTableViewController {
                     self.presentViewController(alert, animated: true, completion: nil)
                     return
                 }
-                self.profile.searchEngines.addSearchEngine(OpenSearchEngine(engineID: nil, shortName: shortName, image: iconImage!, searchTemplate: searchQuery, suggestTemplate: nil, isCustomEngine: true))
+                self.profile.searchEngines.addSearchEngine(OpenSearchEngine(engineID: nil, shortName: shortName, image: iconImage!, searchTemplate: processedSearchQuery, suggestTemplate: nil, isCustomEngine: true))
                 let Toast = SimpleToast()
                 Toast.showAlertWithText(Strings.ThirdPartySearchEngineAdded)
             }
