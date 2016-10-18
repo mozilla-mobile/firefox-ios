@@ -65,16 +65,19 @@ class Tab: NSObject {
     var restoring: Bool = false
     var pendingScreenshot = false
     var url: NSURL?
+    var _uuid: String?
+    var uuid: String {
+        if _uuid == nil {
+            _uuid = NSUUID().UUIDString
+        }
+        return _uuid!
+    }
 
     /// The last title shown by this tab. Used by the tab tray to show titles for zombie tabs.
     var lastTitle: String?
 
     override func diffIdentifier() -> NSObjectProtocol {
-        if let aurl = self.url {
-            return aurl as NSObjectProtocol
-        } else {
-            return "blank"
-        }
+        return uuid as NSObjectProtocol
     }
 
     override func isEqual(object: IGListDiffable?) -> Bool {
@@ -82,7 +85,7 @@ class Tab: NSObject {
             return true
         }
         if let object = object as? Tab {
-            return url == object.url
+            return uuid == object.uuid
         }
         return false
     }
