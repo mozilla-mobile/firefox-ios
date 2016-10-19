@@ -62,7 +62,7 @@ class URLBar: UIView {
         cancelButton.setContentCompressionResistancePriority(1000, for: .horizontal)
         cancelButton.addTarget(self, action: #selector(cancel), for: .touchUpInside)
 
-        deleteButton.setTitle(UIConstants.strings.deleteButton, for: .normal)
+        deleteButton.setTitle(UIConstants.strings.clearButton, for: .normal)
         deleteButton.titleLabel?.font = UIConstants.fonts.deleteButton
         deleteButton.titleEdgeInsets = UIEdgeInsets(top: 2, left: 10, bottom: 2, right: 10)
         deleteButton.backgroundColor = UIColor.lightGray

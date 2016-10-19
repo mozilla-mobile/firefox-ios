@@ -155,16 +155,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressDelete(urlBar: URLBar) {
-        let alert = UIAlertController(title: nil, message: UIConstants.strings.deleteAlertMessage, preferredStyle: .alert)
-        let cancelAction = UIAlertAction(title: UIConstants.strings.deleteAlertCancelButton, style: .cancel, handler: nil)
-        let deleteAction = UIAlertAction(title: UIConstants.strings.deleteAlertDeleteButton, style: .destructive) { _ in
-            self.resetBrowser()
-        }
-        alert.addAction(cancelAction)
-        alert.addAction(deleteAction)
-        alert.preferredAction = deleteAction
-
-        present(alert, animated: true, completion: nil)
+        self.resetBrowser()
     }
 
     func urlBarDidFocus(urlBar: URLBar) {

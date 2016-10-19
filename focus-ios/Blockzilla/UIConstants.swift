@@ -72,10 +72,7 @@ struct UIConstants {
 
     struct strings {
         static let appDescription = String(format: NSLocalizedString("%@ improves privacy and may boost page load speed and lower your mobile data usage.", comment: "Label displayed above toggles"), AppInfo.ProductName)
-        static let deleteButton = NSLocalizedString("URL.deleteButton", value: "DELETE", comment: "Delete button in the URL bar")
-        static let deleteAlertDeleteButton = NSLocalizedString("Delete.alertDelete", value: "Delete", comment: "Button label for deleting the session from the alert")
-        static let deleteAlertCancelButton = NSLocalizedString("Delete.alertCancel", value: "Cancel", comment: "Button label for cancelling the delete alert")
-        static let deleteAlertMessage = NSLocalizedString("Delete.alertMessage", value: "Delete your browsing history and data?", comment: "Message for the alert shown after pressing Delete")
+        static let clearButton = NSLocalizedString("URL.clearButton", value: "CLEAR", comment: "Clear button in the URL bar")
         static let notEnabledError = String(format: NSLocalizedString("%@ is not enabled.", comment: "Error label when the blocker is not enabled, shown in the intro and main app when disabled"), AppInfo.ProductName)
         static let openSettings = NSLocalizedString("Go to Settings", comment: "Button to open the system Settings, shown on the home screen and after tapping the URL bar")
         static let labelBlockAds = NSLocalizedString("Block ad trackers", comment: "Label for toggle on main screen")
