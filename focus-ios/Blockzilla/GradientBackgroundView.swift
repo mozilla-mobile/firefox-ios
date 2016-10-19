@@ -5,15 +5,24 @@
 import Foundation
 
 class GradientBackgroundView: UIView {
-    private let gradient = CAGradientLayer()
+    private let gradient: CAGradientLayer
 
     init() {
+        gradient = CAGradientLayer()
         super.init(frame: CGRect.zero)
 
         backgroundColor = UIConstants.colors.gradientBackground
-        gradient.startPoint = CGPoint.zero
-        gradient.endPoint = CGPoint(x: 1, y: 0)
+        gradient.startPoint = CGPoint(x: 0, y: 0)
+        gradient.endPoint = CGPoint(x: 1, y: 1)
         gradient.colors = [UIConstants.colors.gradientLeft.cgColor, UIConstants.colors.gradientRight.cgColor]
+        layer.insertSublayer(gradient, at: 0)
+    }
+
+    init(gradient: CAGradientLayer) {
+        self.gradient = gradient
+        super.init(frame: CGRect.zero)
+
+        backgroundColor = UIConstants.colors.gradientBackground
         layer.insertSublayer(gradient, at: 0)
     }
 

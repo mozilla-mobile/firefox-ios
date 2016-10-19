@@ -8,6 +8,7 @@ import SnapKit
 protocol URLBarDelegate: class {
     func urlBar(urlBar: URLBar, didEnterText text: String)
     func urlBar(urlBar: URLBar, didSubmitText text: String)
+    func urlBarDidPressActivateButton(urlBar: URLBar)
     func urlBarDidFocus(urlBar: URLBar)
     func urlBarDidDismiss(urlBar: URLBar)
     func urlBarDidPressDelete(urlBar: URLBar)
@@ -27,18 +28,14 @@ class URLBar: UIView {
     fileprivate var deleteButtonWidthConstraint: Constraint!
     fileprivate var deleteButtonTrailingConstraint: Constraint!
 
+    private let urlTextContainer = UIView()
     private let urlText = URLTextField()
 
     init() {
         super.init(frame: CGRect.zero)
 
-        let urlTextContainer = UIView()
         urlTextContainer.backgroundColor = UIConstants.colors.urlTextBackground
         urlTextContainer.layer.cornerRadius = UIConstants.layout.urlBarCornerRadius
-        urlTextContainer.layer.shadowColor = UIConstants.colors.urlTextShadow.cgColor
-        urlTextContainer.layer.shadowOpacity = UIConstants.layout.urlBarShadowOpacity
-        urlTextContainer.layer.shadowRadius = UIConstants.layout.urlBarShadowRadius
-        urlTextContainer.layer.shadowOffset = UIConstants.layout.urlBarShadowOffset
 
         // UITextField doesn't allow customization of the clear button, so we create
         // our own so we can use it as the rightView.
@@ -50,12 +47,12 @@ class URLBar: UIView {
         urlText.font = UIConstants.fonts.urlTextFont
         urlText.tintColor = UIConstants.colors.urlTextFont
         urlText.textColor = UIConstants.colors.urlTextFont
-        urlText.placeholder = UIConstants.strings.urlTextPlaceholder
         urlText.keyboardType = .webSearch
         urlText.autocapitalizationType = .none
         urlText.autocorrectionType = .no
         urlText.rightView = clearButton
         urlText.rightViewMode = .whileEditing
+        urlText.setContentHuggingPriority(1000, for: .vertical)
         urlText.autocompleteDelegate = self
 
         cancelButton.setTitle(UIConstants.strings.urlBarCancel, for: .normal)
@@ -82,6 +79,16 @@ class URLBar: UIView {
         urlTextContainer.addSubview(deleteButton)
         addSubview(cancelButton)
 
+        let activateButton = UIButton()
+        activateButton.setTitle(UIConstants.strings.urlTextPlaceholder, for: .normal)
+        activateButton.titleLabel?.font = UIConstants.fonts.urlTextFont
+        activateButton.setTitleColor(UIConstants.colors.urlTextPlaceholder, for: .normal)
+        activateButton.titleEdgeInsets = UIEdgeInsetsMake(0, UIConstants.layout.urlBarWidthInset, 0, 0)
+        activateButton.addTarget(self, action: #selector(didPressActivate), for: .touchUpInside)
+        addSubview(activateButton)
+
+        progressBar.isHidden = true
+        progressBar.alpha = 0
         progressBar.progressTintColor = UIConstants.colors.progressBar
         addSubview(progressBar)
 
@@ -102,6 +109,10 @@ class URLBar: UIView {
 
         urlText.snp.makeConstraints { make in
             make.leading.top.bottom.equalTo(urlTextContainer)
+        }
+
+        activateButton.snp.makeConstraints { make in
+            make.edges.equalTo(urlTextContainer)
         }
 
         deleteButton.snp.makeConstraints { make in
@@ -136,10 +147,17 @@ class URLBar: UIView {
         }
     }
 
+    var showButtons = false
+
     fileprivate func activate() {
         guard !isEditing else { return }
 
         isEditing = true
+
+        urlText.highlightAll()
+        delegate?.urlBarDidFocus(urlBar: self)
+
+        guard showButtons else { return }
 
         self.layoutIfNeeded()
         UIView.animate(withDuration: 0.3) {
@@ -153,10 +171,6 @@ class URLBar: UIView {
 
             self.layoutIfNeeded()
         }
-
-        urlText.highlightAll()
-
-        delegate?.urlBarDidFocus(urlBar: self)
     }
 
     @objc func dismiss() {
@@ -167,6 +181,8 @@ class URLBar: UIView {
         setTextToURL()
         delegate?.urlBarDidDismiss(urlBar: self)
 
+        guard showButtons else { return }
+
         self.layoutIfNeeded()
         UIView.animate(withDuration: 0.3) {
             self.cancelButton.alpha = 0
@@ -174,7 +190,6 @@ class URLBar: UIView {
 
             self.deleteButton.alpha = 1
             self.deleteButtonWidthConstraint.deactivate()
-
             self.deleteButtonTrailingConstraint.update(offset: -5)
 
             self.layoutIfNeeded()
@@ -189,8 +204,17 @@ class URLBar: UIView {
         urlText.clear()
     }
 
-    func focus() {
-        urlText.becomeFirstResponder()
+    @objc private func didPressActivate(_ button: UIButton) {
+        UIView.animate(withDuration: UIConstants.layout.urlBarMoveToTopAnimationDuration, animations: {
+            button.contentHorizontalAlignment = .left
+            self.layoutIfNeeded()
+        }, completion: { finished in
+            self.urlText.placeholder = UIConstants.strings.urlTextPlaceholder
+            button.removeFromSuperview()
+        })
+
+        self.urlText.becomeFirstResponder()
+        delegate?.urlBarDidPressActivateButton(urlBar: self)
     }
 
     fileprivate func setTextToURL() {
@@ -249,7 +273,7 @@ private class URLTextField: AutocompleteTextField {
         return CGRect(x: inset.origin.x, y: inset.origin.y, width: inset.width - clearButtonWidth, height: inset.height)
     }
 
-    private override func rightViewRect(forBounds bounds: CGRect) -> CGRect {
+    override private func rightViewRect(forBounds bounds: CGRect) -> CGRect {
         return super.rightViewRect(forBounds: bounds).offsetBy(dx: -UIConstants.layout.urlBarWidthInset, dy: 0)
     }
 }

@@ -8,29 +8,33 @@ import SnapKit
 
 class BrowserViewController: UIViewController {
     fileprivate var browser = Browser()
-    fileprivate let urlBar = URLBar()
     fileprivate let browserToolbar = BrowserToolbar()
-    fileprivate var homeView = HomeView()
+    fileprivate var homeView: HomeView?
     fileprivate let overlayView = OverlayView()
     fileprivate let searchEngine = SearchEngine()
+    fileprivate let urlBarContainer = UIView()
+    fileprivate var urlBar: URLBar!
+    fileprivate var topURLBarConstraints = [Constraint]()
 
-    private let urlBarContainer = UIView()
+    private var homeViewContainer = UIView()
+    private var browserSlideOffConstraints = [Constraint]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = UIConstants.colors.background
+        let gradient = CAGradientLayer()
+        gradient.startPoint = CGPoint(x: 0.2, y: 0)
+        gradient.endPoint = CGPoint(x: 0.8, y: 1)
+        gradient.colors = [UIConstants.colors.homeGradientLeft.cgColor, UIConstants.colors.homeGradientMiddle.cgColor, UIConstants.colors.homeGradientRight.cgColor]
+        let backgroundView = GradientBackgroundView(gradient: gradient)
+        view.addSubview(backgroundView)
 
         let urlBarBackground = GradientBackgroundView()
+        urlBarContainer.alpha = 1
         urlBarContainer.addSubview(urlBarBackground)
         view.addSubview(urlBarContainer)
 
-        urlBar.focus()
-        urlBar.delegate = self
-        urlBarContainer.addSubview(urlBar)
-
-        homeView.delegate = self
-        view.addSubview(homeView)
+        view.addSubview(homeViewContainer)
 
         browser.view.isHidden = true
         browser.delegate = self
@@ -48,17 +52,20 @@ class BrowserViewController: UIViewController {
         overlayView.backgroundColor = UIConstants.colors.overlayBackground
         view.addSubview(overlayView)
 
+        backgroundView.snp.makeConstraints { make in
+            make.edges.equalTo(view)
+        }
+
         urlBarContainer.snp.makeConstraints { make in
             make.top.leading.trailing.equalTo(view)
+
+            // Shrink the container to 0 height when there's no URL bar.
+            // This will make it animate down from the top when the URL bar is added.
+            make.height.equalTo(0).priority(500)
         }
 
         urlBarBackground.snp.makeConstraints { make in
             make.edges.equalTo(urlBarContainer)
-        }
-
-        urlBar.snp.makeConstraints { make in
-            make.top.equalTo(topLayoutGuide.snp.bottom)
-            make.leading.trailing.bottom.equalTo(urlBarContainer)
         }
 
         browserToolbar.snp.makeConstraints { make in
@@ -66,20 +73,30 @@ class BrowserViewController: UIViewController {
             make.height.equalTo(UIConstants.layout.browserToolbarHeight)
         }
 
-        homeView.snp.makeConstraints { make in
+        homeViewContainer.snp.makeConstraints { make in
             make.top.equalTo(urlBarContainer.snp.bottom)
             make.leading.trailing.bottom.equalTo(view)
         }
 
         browser.view.snp.makeConstraints { make in
-            make.top.equalTo(urlBarContainer.snp.bottom)
-            make.leading.trailing.bottom.equalTo(view)
+            make.top.equalTo(urlBarContainer.snp.bottom).priority(500)
+            make.bottom.equalTo(view).priority(500)
+            make.leading.trailing.equalTo(view)
+
+            browserSlideOffConstraints = [
+                make.top.equalTo(view.snp.bottom).constraint,
+                make.height.equalTo(view).constraint
+            ]
         }
+        browserSlideOffConstraints.forEach { $0.deactivate() }
 
         overlayView.snp.makeConstraints { make in
             make.top.equalTo(urlBarContainer.snp.bottom)
             make.leading.trailing.bottom.equalTo(view)
         }
+
+        createHomeView()
+        createURLBar()
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -91,29 +108,57 @@ class BrowserViewController: UIViewController {
         super.viewWillAppear(animated)
     }
 
+    private func createHomeView() {
+        let homeView = HomeView()
+        homeView.delegate = self
+        homeViewContainer.addSubview(homeView)
+
+        homeView.snp.makeConstraints { make in
+            make.edges.equalTo(homeViewContainer)
+        }
+
+        if let homeView = self.homeView {
+            homeView.removeFromSuperview()
+        }
+        self.homeView = homeView
+    }
+
+    private func createURLBar() {
+        urlBar = URLBar()
+        urlBar.delegate = self
+        view.insertSubview(urlBar, belowSubview: browser.view)
+
+        urlBar.snp.makeConstraints { make in
+            topURLBarConstraints = [
+                make.top.equalTo(topLayoutGuide.snp.bottom).constraint,
+                make.leading.trailing.bottom.equalTo(urlBarContainer).constraint
+            ]
+
+            // Initial centered constraints, which will effectively be deactivated when
+            // the top constraints are active because of their reduced priorities.
+            make.width.equalTo(view).multipliedBy(0.95).priority(500)
+            make.center.equalTo(view).priority(500)
+        }
+        topURLBarConstraints.forEach { $0.deactivate() }
+    }
+
     fileprivate func resetBrowser() {
-        urlBar.url = nil
-        urlBar.progressBar.isHidden = true
+        let oldURLBar = urlBar
+
+        createHomeView()
+        createURLBar()
 
         view.layoutIfNeeded()
         UIView.animate(withDuration: UIConstants.layout.deleteAnimationDuration, animations: {
-            self.browser.view.snp.remakeConstraints { make in
-                make.leading.trailing.equalTo(self.view)
-                make.height.equalTo(self.view)
-                make.top.equalTo(self.view.snp.bottom)
-            }
-
+            oldURLBar?.alpha = 0
+            self.urlBarContainer.alpha = 0
+            self.browserSlideOffConstraints.forEach { $0.activate() }
             self.view.layoutIfNeeded()
         }, completion: { finished in
+            oldURLBar?.removeFromSuperview()
             self.browser.view.isHidden = true
             self.browser.reset()
-
-            self.browser.view.snp.remakeConstraints { make in
-                make.top.equalTo(self.urlBarContainer.snp.bottom)
-                make.leading.trailing.bottom.equalTo(self.view)
-            }
-
-            self.urlBar.focus()
+            self.browserSlideOffConstraints.forEach { $0.deactivate() }
         })
 
         browserToolbar.animateHidden(true, duration: UIConstants.layout.toolbarFadeAnimationDuration)
@@ -128,8 +173,11 @@ class BrowserViewController: UIViewController {
     fileprivate func submit(url: URL) {
         // If this is the first navigation, show the browser and the toolbar.
         if browser.view.isHidden {
+            urlBar.showButtons = true
             browser.view.isHidden = false
             browserToolbar.animateHidden(false, duration: UIConstants.layout.toolbarFadeAnimationDuration)
+            homeView?.removeFromSuperview()
+            homeView = nil
         }
 
         browser.loadRequest(URLRequest(url: url))
@@ -142,11 +190,10 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBar(urlBar: URLBar, didSubmitText text: String) {
-        urlBar.dismiss()
-
         let text = text.trimmingCharacters(in: .whitespaces)
         if !text.isEmpty, let url = URIFixup.getURL(entry: text) ?? searchEngine.urlForQuery(text) {
             submit(url: url)
+            urlBar.dismiss()
         } else {
             urlBar.url = browser.url
         }
@@ -162,6 +209,15 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidFocus(urlBar: URLBar) {
         overlayView.present()
+    }
+
+    func urlBarDidPressActivateButton(urlBar: URLBar) {
+        UIView.animate(withDuration: UIConstants.layout.urlBarMoveToTopAnimationDuration) {
+            self.view.bringSubview(toFront: self.urlBar)
+            self.topURLBarConstraints.forEach { $0.activate() }
+            self.urlBarContainer.alpha = 1
+            self.view.layoutIfNeeded()
+        }
     }
 }
 
@@ -210,16 +266,20 @@ extension BrowserViewController: BrowserDelegate {
     }
 
     func browser(_ browser: Browser, didUpdateEstimatedProgress estimatedProgress: Float) {
+        // Don't update progress is the home view is visible. This prevents the centered URL bar
+        // from catching the global progress events.
+        guard homeView == nil else { return }
+
         if estimatedProgress == 0 {
             urlBar.progressBar.progress = 0
-            urlBar.progressBar.animateHidden(false, duration: 0.3)
+            urlBar.progressBar.animateHidden(false, duration: UIConstants.layout.progressVisibilityAnimationDuration)
             return
         }
 
         urlBar.progressBar.setProgress(estimatedProgress, animated: true)
 
         if estimatedProgress == 1 {
-            urlBar.progressBar.animateHidden(true, duration: 0.3)
+            urlBar.progressBar.animateHidden(true, duration: UIConstants.layout.progressVisibilityAnimationDuration)
         }
     }
 
@@ -240,13 +300,14 @@ extension BrowserViewController: OverlayViewDelegate {
     }
 
     func overlayViewDidTouchEmptyArea(_ overlayView: OverlayView) {
+        guard homeView == nil else { return }
         urlBar.dismiss()
     }
 
     func overlayView(_ overlayView: OverlayView, didSearchForQuery query: String) {
-        urlBar.dismiss()
         if let url = searchEngine.urlForQuery(query) {
             submit(url: url)
         }
+        urlBar.dismiss()
     }
 }

@@ -24,9 +24,12 @@ struct UIConstants {
         static let gradientBackground = UIColor(rgb: 0x363B40)
         static let gradientLeft = UIColor(rgb: 0xC86DD7, alpha: 0.1)
         static let gradientRight = UIColor(rgb: 0x3023AE, alpha: 0.1)
+        static let homeGradientLeft = UIColor(rgb: 0xC43B31, alpha: 0.6)
+        static let homeGradientMiddle = UIColor(rgb: 0x96368D, alpha: 0.6)
+        static let homeGradientRight = UIColor(rgb: 0x135EA4, alpha: 0.6)
         static let navigationButton = UIColor(rgb: 0x00A7E0)
         static let navigationTitle = UIColor(rgb: 0x61666D)
-        static let overlayBackground = UIColor(rgb: 0x000000, alpha: 0.8)
+        static let overlayBackground = UIColor(white: 0, alpha: 0.8)
         static let progressBar = UIColor(rgb: 0xC86DD7)
         static let settingsButtonBorder = UIColor(rgb: 0x5F6368, alpha: 0.8)
         static let tableSectionHeader = UIColor(rgb: 0x61666D)
@@ -34,10 +37,10 @@ struct UIConstants {
         static let toggleOff = UIColor(rgb: 0x585E64)
         static let toolbarBorder = UIColor(rgb: 0x5F6368)
         static let toolbarButtonNormal = UIColor.darkGray
-        static let urlTextBackground = UIColor(rgb: 0x636270)
+        static let urlTextBackground = UIColor(white: 1, alpha: 0.2)
         static let urlTextFont = UIColor.white
         static let urlTextHighlight = UIColor(rgb: 0xC86DD7)
-        static let urlTextPlaceholder = UIColor(rgb: 0xffffff, alpha: 0.7)
+        static let urlTextPlaceholder = UIColor(white: 1, alpha: 0.7)
         static let urlTextShadow = UIColor.black
     }
 
@@ -58,9 +61,11 @@ struct UIConstants {
         static let deleteAnimationDuration: TimeInterval = 0.25
         static let navigationDoneOffset: Float = -10
         static let overlayAnimationDuration: TimeInterval = 0.25
+        static let progressVisibilityAnimationDuration: TimeInterval = 0.25
         static let searchButtonInset: CGFloat = 15
         static let searchButtonAnimationDuration: TimeInterval = 0.1
         static let toolbarFadeAnimationDuration = 0.25
+        static let urlBarMoveToTopAnimationDuration: TimeInterval = 0.3
         static let urlBarCornerRadius: CGFloat = 2
         static let urlBarMargin: CGFloat = 8
         static let urlBarHeightInset: CGFloat = 10

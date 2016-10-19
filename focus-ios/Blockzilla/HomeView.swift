@@ -13,15 +13,6 @@ class HomeView: UIView {
 
     init() {
         super.init(frame: CGRect.zero)
-
-        let settingsButton = UIButton()
-        settingsButton.setTitle(UIConstants.strings.openSettings, for: .normal)
-        settingsButton.addTarget(self, action: #selector(didPressSettings), for: .touchUpInside)
-        addSubview(settingsButton)
-
-        settingsButton.snp.makeConstraints { make in
-            make.center.equalTo(self)
-        }
     }
 
     required init?(coder aDecoder: NSCoder) {
