@@ -10,7 +10,7 @@ import WebImage
 
 private let log = Logger.browserLogger
 
-class CustomSearchEngineForm: SettingsTableViewController {
+class CustomSearchViewController: SettingsTableViewController {
     
     private var urlString: String?
     

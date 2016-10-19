@@ -164,7 +164,7 @@ class SearchSettingsTableViewController: UITableViewController {
             searchEnginePicker.selectedSearchEngineName = model.defaultEngine.shortName
             navigationController?.pushViewController(searchEnginePicker, animated: true)
         } else if indexPath.section == SectionSearchAdd {
-            let customSearchEngineForm = CustomSearchEngineForm()
+            let customSearchEngineForm = CustomSearchViewController()
             customSearchEngineForm.profile = self.profile
             navigationController?.pushViewController(customSearchEngineForm, animated: true)
         }
