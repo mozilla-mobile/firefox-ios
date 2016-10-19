@@ -26,6 +26,9 @@
 		D32817251BD0689800185845 /* disconnect-social.json in Resources */ = {isa = PBXBuildFile; fileRef = D32817211BD0689800185845 /* disconnect-social.json */; };
 		D32F71D31BCEF67C006D44FC /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32F71D21BCEF67C006D44FC /* UIViewExtensions.swift */; };
 		D33A1AB11BC48FAC0003D929 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33A1AB01BC48FAC0003D929 /* SettingsViewController.swift */; };
+		D3426AE91DB7F4060016DA5A /* KeyboardHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3426AE81DB7F4060016DA5A /* KeyboardHelper.swift */; };
+		D3426AEB1DB7F8AA0016DA5A /* OverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3426AEA1DB7F8AA0016DA5A /* OverlayView.swift */; };
+		D3426AF61DB84E7A0016DA5A /* SearchEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3426AF51DB84E7A0016DA5A /* SearchEngine.swift */; };
 		D343DCC21C44356500D7EEE8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D343DCC41C44356500D7EEE8 /* Localizable.strings */; };
 		D34E70331DA8736300BABDCC /* AutocompleteTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34E70321DA8736300BABDCC /* AutocompleteTextField.swift */; };
 		D34E70351DA874AA00BABDCC /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34E70341DA874AA00BABDCC /* StringExtensions.swift */; };
@@ -132,6 +135,9 @@
 		D32817211BD0689800185845 /* disconnect-social.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-social.json"; path = "Lists/disconnect-social.json"; sourceTree = SOURCE_ROOT; };
 		D32F71D21BCEF67C006D44FC /* UIViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		D33A1AB01BC48FAC0003D929 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		D3426AE81DB7F4060016DA5A /* KeyboardHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardHelper.swift; sourceTree = "<group>"; };
+		D3426AEA1DB7F8AA0016DA5A /* OverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverlayView.swift; sourceTree = "<group>"; };
+		D3426AF51DB84E7A0016DA5A /* SearchEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchEngine.swift; sourceTree = "<group>"; };
 		D343DCC31C44356500D7EEE8 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D34E70321DA8736300BABDCC /* AutocompleteTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutocompleteTextField.swift; sourceTree = "<group>"; };
 		D34E70341DA874AA00BABDCC /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
@@ -324,9 +330,12 @@
 				D3E2C9681DA3024800DEBE3D /* InsetButton.swift */,
 				D3E251E71DAD714C005918DC /* InstructionsView.swift */,
 				D3E251E91DAD714C005918DC /* IntroSlideWelcome.swift */,
+				D3426AE81DB7F4060016DA5A /* KeyboardHelper.swift */,
 				D3E2C8F91D9F170200DEBE3D /* LocalContentBlocker.swift */,
 				D36C1BA91DB02EBB0073C1AB /* OpenUtils.swift */,
+				D3426AEA1DB7F8AA0016DA5A /* OverlayView.swift */,
 				D3E251E81DAD714C005918DC /* SafariInstructionsViewController.swift */,
+				D3426AF51DB84E7A0016DA5A /* SearchEngine.swift */,
 				D33A1AB01BC48FAC0003D929 /* SettingsViewController.swift */,
 				D34E70341DA874AA00BABDCC /* StringExtensions.swift */,
 				D3C0EEF01BE97D9300BD89C1 /* TitleView.swift */,
@@ -515,6 +524,8 @@
 				D30179C81BCD78E2009AD388 /* SCSiriWaveformView.m in Sources */,
 				D34E70351DA874AA00BABDCC /* StringExtensions.swift in Sources */,
 				D30179C31BCC6F65009AD388 /* AboutViewController.swift in Sources */,
+				D3426AEB1DB7F8AA0016DA5A /* OverlayView.swift in Sources */,
+				D3426AF61DB84E7A0016DA5A /* SearchEngine.swift in Sources */,
 				D3E2C98A1DA47D5300DEBE3D /* Browser.swift in Sources */,
 				D30179071BC6CB19009AD388 /* BlockerEnabledDetector.swift in Sources */,
 				D37DE55D1BCDBD6100906364 /* WaveView.swift in Sources */,
@@ -535,6 +546,7 @@
 				D3E2C96B1DA3069000DEBE3D /* URIFixup.swift in Sources */,
 				D3BFCB511BD1559300AD22D1 /* AboutContentViewController.swift in Sources */,
 				D3C0EEF11BE97D9300BD89C1 /* TitleView.swift in Sources */,
+				D3426AE91DB7F4060016DA5A /* KeyboardHelper.swift in Sources */,
 				D3E251EA1DAD714C005918DC /* InstructionsView.swift in Sources */,
 				D3E251EC1DAD714C005918DC /* IntroSlideWelcome.swift in Sources */,
 				D3561B2B1DB5925100A5EEAF /* GradientBackgroundView.swift in Sources */,

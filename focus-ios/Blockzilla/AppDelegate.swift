@@ -25,6 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         URLProtocol.registerClass(LocalContentBlocker.self)
 
         displaySplashAnimation()
+        KeyboardHelper.defaultHelper.startObserving()
 
         return true
     }

@@ -26,7 +26,9 @@ struct UIConstants {
         static let gradientRight = UIColor(rgb: 0x3023AE, alpha: 0.1)
         static let navigationButton = UIColor(rgb: 0x00A7E0)
         static let navigationTitle = UIColor(rgb: 0x61666D)
+        static let overlayBackground = UIColor(rgb: 0x000000, alpha: 0.8)
         static let progressBar = UIColor(rgb: 0xC86DD7)
+        static let settingsButtonBorder = UIColor(rgb: 0x5F6368, alpha: 0.8)
         static let tableSectionHeader = UIColor(rgb: 0x61666D)
         static let toggleOn = UIColor(rgb: 0x00A7E0)
         static let toggleOff = UIColor(rgb: 0x585E64)
@@ -43,6 +45,9 @@ struct UIConstants {
         static let cancelButton = UIFont.systemFont(ofSize: 15)
         static let deleteButton = UIFont.systemFont(ofSize: 11)
         static let safariInstruction = UIFont.systemFont(ofSize: 16, weight: UIFontWeightMedium)
+        static let searchButton = UIFont.systemFont(ofSize: 15)
+        static let searchButtonQuery = UIFont.boldSystemFont(ofSize: 15)
+        static let settingsButton = UIFont.systemFont(ofSize: 13)
         static let tableSectionHeader = UIFont.systemFont(ofSize: 12, weight: UIFontWeightSemibold)
         static let urlTextFont = UIFont.systemFont(ofSize: 15)
     }
@@ -52,6 +57,9 @@ struct UIConstants {
         static let browserToolbarHeight = 44
         static let deleteAnimationDuration: TimeInterval = 0.25
         static let navigationDoneOffset: Float = -10
+        static let overlayAnimationDuration: TimeInterval = 0.25
+        static let searchButtonInset: CGFloat = 15
+        static let searchButtonAnimationDuration: TimeInterval = 0.1
         static let toolbarFadeAnimationDuration = 0.25
         static let urlBarCornerRadius: CGFloat = 2
         static let urlBarMargin: CGFloat = 8
@@ -69,13 +77,14 @@ struct UIConstants {
         static let deleteAlertCancelButton = NSLocalizedString("Delete.alertCancel", value: "Cancel", comment: "Button label for cancelling the delete alert")
         static let deleteAlertMessage = NSLocalizedString("Delete.alertMessage", value: "Delete your browsing history and data?", comment: "Message for the alert shown after pressing Delete")
         static let notEnabledError = String(format: NSLocalizedString("%@ is not enabled.", comment: "Error label when the blocker is not enabled, shown in the intro and main app when disabled"), AppInfo.ProductName)
-        static let openSettings = NSLocalizedString("Open Settings", comment: "Button to open the system Settings, shown in the intro and main app when disabled")
+        static let openSettings = NSLocalizedString("Go to Settings", comment: "Button to open the system Settings, shown on the home screen and after tapping the URL bar")
         static let labelBlockAds = NSLocalizedString("Block ad trackers", comment: "Label for toggle on main screen")
         static let labelBlockAnalytics = NSLocalizedString("Block analytics trackers", comment: "Label for toggle on main screen")
         static let labelBlockSocial = NSLocalizedString("Block social trackers", comment: "Label for toggle on main screen")
         static let labelBlockOther = NSLocalizedString("Block other content trackers", comment: "Label for toggle on main screen")
         static let labelBlockFonts = NSLocalizedString("Block Web fonts", comment: "Label for toggle on main screen")
         static let labelOpenSettings = NSLocalizedString("Open Settings", comment: "Button label to open settings screen")
+        static let searchButton = NSLocalizedString("Search for %@", comment: "Label displayed for search button when typing in the URL bar")
         static let settingsTitle = NSLocalizedString("Settings.title", value: "Settings", comment: "Title for settings screen")
         static let subtitleBlockOther = NSLocalizedString("May break some videos and Web pages", comment: "Label subtitle for toggle on main screen")
         static let toggleSectionIntegration = NSLocalizedString("Settings.sectionIntegration", value: "INTEGRATION", comment: "Label for Safari integration section")

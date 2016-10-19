@@ -6,8 +6,10 @@ import Foundation
 import SnapKit
 
 protocol URLBarDelegate: class {
+    func urlBar(urlBar: URLBar, didEnterText text: String)
     func urlBar(urlBar: URLBar, didSubmitText text: String)
-    func urlBarDidPressCancel(urlBar: URLBar)
+    func urlBarDidFocus(urlBar: URLBar)
+    func urlBarDidCancel(urlBar: URLBar)
     func urlBarDidPressDelete(urlBar: URLBar)
 }
 
@@ -58,7 +60,7 @@ class URLBar: UIView {
         cancelButton.titleEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         cancelButton.setContentHuggingPriority(1000, for: .horizontal)
         cancelButton.setContentCompressionResistancePriority(1000, for: .horizontal)
-        cancelButton.addTarget(self, action: #selector(didPressCancel), for: .touchUpInside)
+        cancelButton.addTarget(self, action: #selector(cancel), for: .touchUpInside)
 
         deleteButton.setTitle(UIConstants.strings.deleteButton, for: .normal)
         deleteButton.titleLabel?.font = UIConstants.fonts.deleteButton
@@ -131,10 +133,10 @@ class URLBar: UIView {
         }
     }
 
-    @objc private func didPressCancel() {
+    @objc func cancel() {
         setTextToURL()
         urlText.resignFirstResponder()
-        delegate?.urlBarDidPressCancel(urlBar: self)
+        delegate?.urlBarDidCancel(urlBar: self)
     }
 
     @objc private func didPressDelete() {
@@ -171,6 +173,8 @@ extension URLBar: AutocompleteTextFieldDelegate {
 
         autocompleteTextField.highlightAll()
 
+        delegate?.urlBarDidFocus(urlBar: self)
+
         return true
     }
 
@@ -199,6 +203,7 @@ extension URLBar: AutocompleteTextFieldDelegate {
 
     func autocompleteTextField(_ autocompleteTextField: AutocompleteTextField, didEnterText text: String) {
         autocompleteTextField.rightView?.isHidden = text.isEmpty
+        delegate?.urlBar(urlBar: self, didEnterText: text)
     }
 }
 

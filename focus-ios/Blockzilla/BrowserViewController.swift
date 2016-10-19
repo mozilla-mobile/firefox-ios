@@ -6,13 +6,13 @@ import Foundation
 import UIKit
 import SnapKit
 
-private let SearchTemplate = "https://duckduckgo.com/?q=%s"
-
 class BrowserViewController: UIViewController {
     fileprivate var browser = Browser()
     fileprivate let urlBar = URLBar()
     fileprivate let browserToolbar = BrowserToolbar()
     fileprivate var homeView = HomeView()
+    fileprivate let overlayView = OverlayView()
+    fileprivate let searchEngine = SearchEngine()
 
     private let urlBarContainer = UIView()
 
@@ -42,6 +42,12 @@ class BrowserViewController: UIViewController {
         browserToolbar.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(browserToolbar)
 
+        overlayView.isHidden = true
+        overlayView.alpha = 0
+        overlayView.delegate = self
+        overlayView.backgroundColor = UIConstants.colors.overlayBackground
+        view.addSubview(overlayView)
+
         urlBarContainer.snp.makeConstraints { make in
             make.top.leading.trailing.equalTo(view)
         }
@@ -66,6 +72,11 @@ class BrowserViewController: UIViewController {
         }
 
         browser.view.snp.makeConstraints { make in
+            make.top.equalTo(urlBarContainer.snp.bottom)
+            make.leading.trailing.bottom.equalTo(view)
+        }
+
+        overlayView.snp.makeConstraints { make in
             make.top.equalTo(urlBarContainer.snp.bottom)
             make.leading.trailing.bottom.equalTo(view)
         }
@@ -107,33 +118,40 @@ class BrowserViewController: UIViewController {
 
         browserToolbar.animateHidden(true, duration: UIConstants.layout.toolbarFadeAnimationDuration)
     }
-}
 
-extension BrowserViewController: URLBarDelegate {
-    func urlBar(urlBar: URLBar, didSubmitText text: String) {
-        var url = URIFixup.getURL(entry: text)
+    fileprivate func showSettings() {
+        let settingsViewController = SettingsViewController()
+        navigationController!.pushViewController(settingsViewController, animated: true)
+        navigationController!.setNavigationBarHidden(false, animated: true)
+    }
 
-        if url == nil {
-            guard let escaped = text.addingPercentEncoding(withAllowedCharacters: .urlQueryParameterAllowed),
-                  let searchUrl = URL(string: SearchTemplate.replacingOccurrences(of: "%s", with: escaped)) else {
-                assertionFailure("Invalid search URL")
-                return
-            }
-
-            url = searchUrl
-        }
-
+    fileprivate func submit(url: URL) {
         // If this is the first navigation, show the browser and the toolbar.
         if browser.view.isHidden {
             browser.view.isHidden = false
             browserToolbar.animateHidden(false, duration: UIConstants.layout.toolbarFadeAnimationDuration)
         }
 
-        browser.loadRequest(URLRequest(url: url!))
+        browser.loadRequest(URLRequest(url: url))
+    }
+}
+
+extension BrowserViewController: URLBarDelegate {
+    func urlBar(urlBar: URLBar, didEnterText text: String) {
+        overlayView.searchQuery = text
     }
 
-    func urlBarDidPressCancel(urlBar: URLBar) {
+    func urlBar(urlBar: URLBar, didSubmitText text: String) {
+        let text = text.trimmingCharacters(in: .whitespaces)
+        if !text.isEmpty, let url = URIFixup.getURL(entry: text) ?? searchEngine.urlForQuery(text) {
+            submit(url: url)
+        }
+        overlayView.animateHidden(true, duration: UIConstants.layout.overlayAnimationDuration)
+    }
+
+    func urlBarDidCancel(urlBar: URLBar) {
         urlBar.url = browser.url
+        overlayView.animateHidden(true, duration: UIConstants.layout.overlayAnimationDuration)
     }
 
     func urlBarDidPressDelete(urlBar: URLBar) {
@@ -147,6 +165,13 @@ extension BrowserViewController: URLBarDelegate {
         alert.preferredAction = deleteAction
 
         present(alert, animated: true, completion: nil)
+    }
+
+    func urlBarDidFocus(urlBar: URLBar) {
+        if !browser.view.isHidden {
+            overlayView.searchQuery = ""
+            overlayView.animateHidden(false, duration: UIConstants.layout.overlayAnimationDuration)
+        }
     }
 }
 
@@ -215,8 +240,23 @@ extension BrowserViewController: BrowserDelegate {
 
 extension BrowserViewController: HomeViewDelegate {
     func homeViewDidPressSettings(homeView: HomeView) {
-        let settingsViewController = SettingsViewController()
-        navigationController!.pushViewController(settingsViewController, animated: true)
-        navigationController!.setNavigationBarHidden(false, animated: true)
+        showSettings()
+    }
+}
+
+extension BrowserViewController: OverlayViewDelegate {
+    func overlayViewDidPressSettings(_ overlayView: OverlayView) {
+        showSettings()
+    }
+
+    func overlayViewDidTouchEmptyArea(_ overlayView: OverlayView) {
+        urlBar.cancel()
+    }
+
+    func overlayView(_ overlayView: OverlayView, didSearchForQuery query: String) {
+        urlBar.cancel()
+        if let url = searchEngine.urlForQuery(query) {
+            submit(url: url)
+        }
     }
 }

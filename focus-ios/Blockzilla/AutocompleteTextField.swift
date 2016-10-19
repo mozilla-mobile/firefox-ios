@@ -35,8 +35,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
     override var text: String? {
         didSet {
-            // textDidChange is not called when directly setting the text property, so fire it manually.
-            textDidChange(textField: self)
+            updateText()
         }
     }
 
@@ -175,6 +174,11 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     }
 
     func textDidChange(textField: UITextField) {
+        updateText()
+        self.autocompleteDelegate?.autocompleteTextField(self, didEnterText: self.enteredText.trimmingCharacters(in: .whitespaces))
+    }
+
+    private func updateText() {
         if completionActive {
             // Immediately reuse the previous suggestion if it's still valid.
             setAutocompleteSuggestion(previousSuggestion)
@@ -184,8 +188,6 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
             // removeCompletionIfRequiredForEnteredString.
             enteredText = text ?? ""
         }
-        self.autocompleteDelegate?.autocompleteTextField(self, didEnterText: self.enteredText.trimmingCharacters(in: .whitespaces))
-
     }
 
     override func deleteBackward() {
