@@ -46,22 +46,20 @@ class CustomSearchViewController: SettingsTableViewController {
                 iconImage = FaviconFetcher.getDefaultFavicon(url)
             }
             
-            let alert = ThirdPartySearchAlerts.addThirdPartySearchEngine { alert in
-                SDWebImageManager.sharedManager().downloadImageWithURL(iconURL, options: SDWebImageOptions.ContinueInBackground, progress: nil) { (image, error, cacheType, success, url) in
-                    if image != nil {
-                        iconImage = image
-                    }
-                    guard iconImage != nil else {
-                        let alert = ThirdPartySearchAlerts.failedToAddThirdPartySearch()
-                        self.presentViewController(alert, animated: true, completion: nil)
-                        return
-                    }
-                    self.profile.searchEngines.addSearchEngine(OpenSearchEngine(engineID: nil, shortName: shortName, image: iconImage!, searchTemplate: processedSearchQuery, suggestTemplate: nil, isCustomEngine: true))
-                    let Toast = SimpleToast()
-                    Toast.showAlertWithText(Strings.ThirdPartySearchEngineAdded)
+            SDWebImageManager.sharedManager().downloadImageWithURL(iconURL, options: SDWebImageOptions.ContinueInBackground, progress: nil) { (image, error, cacheType, success, url) in
+                if image != nil {
+                    iconImage = image
                 }
+                guard iconImage != nil else {
+                    let alert = ThirdPartySearchAlerts.failedToAddThirdPartySearch()
+                    self.presentViewController(alert, animated: true, completion: nil)
+                    return
+                }
+                self.profile.searchEngines.addSearchEngine(OpenSearchEngine(engineID: nil, shortName: shortName, image: iconImage!, searchTemplate: processedSearchQuery, suggestTemplate: nil, isCustomEngine: true))
+                let Toast = SimpleToast()
+                Toast.showAlertWithText(Strings.ThirdPartySearchEngineAdded)
+                self.navigationController?.popViewControllerAnimated(true)
             }
-            self.presentViewController(alert, animated: true, completion: {})
         }
     }
     
