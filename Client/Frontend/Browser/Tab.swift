@@ -68,6 +68,7 @@ class Tab: NSObject {
     var _uuid: String?
     var uuid: String {
         if _uuid == nil {
+            print("UUID nill")
             _uuid = NSUUID().UUIDString
         }
         return _uuid!

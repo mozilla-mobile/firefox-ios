@@ -663,13 +663,13 @@ class TabTrayController: UIViewController, IGListAdapterDataSource {
         let scaleDownTransform = CGAffineTransformMakeScale(0.9, 0.9)
 
         let fromView: UIView
-        if !privateTabsAreEmpty(), let snapshot = collectionView.snapshotViewAfterScreenUpdates(false) {
-            snapshot.frame = collectionView.frame
-            view.insertSubview(snapshot, aboveSubview: collectionView)
-            fromView = snapshot
-        } else {
-            fromView = emptyPrivateTabsView
-        }
+//        if !privateTabsAreEmpty(), let snapshot = collectionView.snapshotViewAfterScreenUpdates(false) {
+//            snapshot.frame = collectionView.frame
+//            view.insertSubview(snapshot, aboveSubview: collectionView)
+//            fromView = snapshot
+//        } else {
+//            fromView = emptyPrivateTabsView
+//        }
 
         privateMode = !privateMode
         // If we are exiting private mode and we have the close private tabs option selected, make sure
@@ -680,36 +680,36 @@ class TabTrayController: UIViewController, IGListAdapterDataSource {
         }
 
         toolbar.maskButton.setSelected(privateMode, animated: true)
-        adapter.reloadDataWithCompletion(nil)
-        let toView: UIView
-        if !privateTabsAreEmpty(), let newSnapshot = collectionView.snapshotViewAfterScreenUpdates(!exitingPrivateMode) {
-            emptyPrivateTabsView.hidden = true
-            //when exiting private mode don't screenshot the collectionview (causes the UI to hang)
-            newSnapshot.frame = collectionView.frame
-            view.insertSubview(newSnapshot, aboveSubview: fromView)
-            collectionView.alpha = 0
-            toView = newSnapshot
-        } else {
-            emptyPrivateTabsView.hidden = false
-            toView = emptyPrivateTabsView
-        }
-        toView.alpha = 0
-        toView.transform = scaleDownTransform
+        adapter.performUpdatesAnimated(true, completion: nil)
+//        let toView: UIView
+//        if !privateTabsAreEmpty(), let newSnapshot = collectionView.snapshotViewAfterScreenUpdates(!exitingPrivateMode) {
+////            emptyPrivateTabsView.hidden = true
+//            //when exiting private mode don't screenshot the collectionview (causes the UI to hang)
+//            newSnapshot.frame = collectionView.frame
+//            view.insertSubview(newSnapshot, aboveSubview: fromView)
+//            collectionView.alpha = 0
+//            toView = newSnapshot
+//        } else {
+////            emptyPrivateTabsView.hidden = false
+//            toView = emptyPrivateTabsView
+//        }
+//        toView.alpha = 0
+//        toView.transform = scaleDownTransform
 
-        UIView.animateWithDuration(0.2, delay: 0, options: [], animations: { () -> Void in
-            fromView.transform = scaleDownTransform
-            fromView.alpha = 0
-            toView.transform = CGAffineTransformIdentity
-            toView.alpha = 1
-        }) { finished in
-            if fromView != self.emptyPrivateTabsView {
-                fromView.removeFromSuperview()
-            }
-            if toView != self.emptyPrivateTabsView {
-                toView.removeFromSuperview()
-            }
-            self.collectionView.alpha = 1
-        }
+//        UIView.animateWithDuration(0.2, delay: 0, options: [], animations: { () -> Void in
+//            fromView.transform = scaleDownTransform
+//            fromView.alpha = 0
+//            toView.transform = CGAffineTransformIdentity
+//            toView.alpha = 1
+//        }) { finished in
+//            if fromView != self.emptyPrivateTabsView {
+//                fromView.removeFromSuperview()
+//            }
+//            if toView != self.emptyPrivateTabsView {
+//                toView.removeFromSuperview()
+//            }
+//            self.collectionView.alpha = 1
+//        }
     }
 
     private func privateTabsAreEmpty() -> Bool {
@@ -783,25 +783,10 @@ extension TabTrayController: TabManagerDelegate {
     }
 
     func tabManager(tabManager: TabManager, didAddTab tab: Tab) {
-        // Get the index of the added tab from it's set (private or normal)
-        guard let index = tabsToDisplay.indexOf(tab) else { return }
-        if !privateTabsAreEmpty() {
-            emptyPrivateTabsView.hidden = true
-        }
-
-
-        tabManager.selectTab(tab)
-        self.navigationController?.popViewControllerAnimated(true)
-        adapter.performUpdatesAnimated(true, completion: nil)
-
     }
 
     func tabManager(tabManager: TabManager, didRemoveTab tab: Tab) {
-        // it is possible that we are removing a tab that we are not currently displaying
-        // through the Close All Tabs feature (which will close tabs that are not in our current privacy mode)
-        // check this before removing the item from the collection
         adapter.performUpdatesAnimated(true, completion: nil)
-
     }
 
     func tabManagerDidAddTabs(tabManager: TabManager) {
@@ -997,6 +982,7 @@ extension TabTrayController: MenuActionDelegate {
                 }
             case .OpenTopSites:
                 dispatch_async(dispatch_get_main_queue()) {
+                    //testing will remove
                     for var i = 0; i<100; i++ {
                         self.openNewTab(PrivilegedRequest(URL: HomePanelType.TopSites.localhostURL))
                     }
