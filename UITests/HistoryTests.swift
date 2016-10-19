@@ -12,8 +12,6 @@ class HistoryTests: KIFTestCase {
         super.setUp()
         webRoot = SimplePageServer.start()        //If it is a first run, first run window should be gone
         BrowserUtils.dismissFirstRunUI(tester())
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("New Tab")
     }
 
     func addHistoryItemPage(pageNo: Int) -> String {

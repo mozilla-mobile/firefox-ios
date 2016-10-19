@@ -13,8 +13,6 @@ class HomePageSettingsUITests: KIFTestCase {
         webRoot = SimplePageServer.start()
         UIPasteboard.generalPasteboard().string = " "
         BrowserUtils.dismissFirstRunUI(tester())
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("New Tab")
     }
 
     override func tearDown() {

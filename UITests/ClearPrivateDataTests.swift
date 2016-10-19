@@ -13,15 +13,13 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
 
     override func setUp() {
         super.setUp()
-        webRoot = SimplePageServer.start()        //If it is a first run, first run window should be gone
+        webRoot = SimplePageServer.start()
         BrowserUtils.dismissFirstRunUI(tester())
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("New Tab")
-
     }
 
     override func tearDown() {
         BrowserUtils.resetToAboutHome(tester())
+        BrowserUtils.clearPrivateData(tester: tester())
     }
 
     func visitSites(noOfSites noOfSites: Int) -> [(title: String, domain: String, dispDomain: String, url: String)] {
@@ -33,7 +31,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
             tester().waitForWebViewElementWithAccessibilityLabel("Page \(pageNo)")
             let dom = NSURL(string: url)!.normalizedHost()!
             let index = dom.startIndex.advancedBy(7)
-            let dispDom = dom.substringToIndex(index)
+            let dispDom = dom.substringToIndex(index)   // On IPhone, it only displays first 8 chars
             let tuple: (title: String, domain: String, dispDomain: String, url: String) = ("Page \(pageNo)", dom, dispDom, url)
             urls.append(tuple)
         }
@@ -41,8 +39,13 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         return urls
     }
 
-    func anyDomainsExistOnTopSites(domains: Set<String>) {
+    func anyDomainsExistOnTopSites(domains: Set<String>, fulldomains: Set<String>) {
         for domain in domains {
+            if self.tester().viewExistsWithLabel(domain) {
+                return
+            }
+        }
+        for domain in fulldomains {
             if self.tester().viewExistsWithLabel(domain) {
                 return
             }
@@ -53,7 +56,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
     func testRemembersToggles(swipe: Bool) {
         BrowserUtils.clearPrivateData([BrowserUtils.Clearable.History], swipe:swipe, tester: tester())
 
-        BrowserUtils.openClearPrivateDataDialog(swipe,tester: tester())
+        BrowserUtils.openClearPrivateDataDialog(swipe, tester: tester())
 
         // Ensure the toggles match our settings.
         [
@@ -72,11 +75,12 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
     func testClearsTopSitesPanel() {
         let urls = visitSites(noOfSites: 2)
         let dispDomains = Set<String>(urls.map { $0.dispDomain })
+        let fullDomains = Set<String>(urls.map { $0.domain })
 
-        //tester().tapViewWithAccessibilityLabel("Top sites")
+        tester().tapViewWithAccessibilityLabel("Top sites")
 
         // Only one will be found -- we collapse by domain.
-        anyDomainsExistOnTopSites(dispDomains)
+        anyDomainsExistOnTopSites(dispDomains, fulldomains: fullDomains)
 
         BrowserUtils.clearPrivateData([BrowserUtils.Clearable.History], swipe: false, tester: tester())
         XCTAssertFalse(tester().viewExistsWithLabel(urls[0].title), "Expected to have removed top site panel \(urls[0])")
@@ -86,10 +90,11 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
     func testDisabledHistoryDoesNotClearTopSitesPanel() {
         let urls = visitSites(noOfSites: 2)
         let dispDomains = Set<String>(urls.map { $0.dispDomain })
+        let fullDomains = Set<String>(urls.map { $0.domain })
 
-        anyDomainsExistOnTopSites(dispDomains)
+        anyDomainsExistOnTopSites(dispDomains, fulldomains: fullDomains)
         BrowserUtils.clearPrivateData(BrowserUtils.AllClearables.subtract([BrowserUtils.Clearable.History]), swipe: false, tester: tester())
-        anyDomainsExistOnTopSites(dispDomains)
+        anyDomainsExistOnTopSites(dispDomains, fulldomains: fullDomains)
     }
 
     func testClearsHistoryPanel() {
@@ -102,7 +107,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         XCTAssertTrue(tester().viewExistsWithLabel(url2), "Expected to have history row \(url2)")
 
         BrowserUtils.clearPrivateData([BrowserUtils.Clearable.History], swipe: false, tester: tester())
-
+        tester().tapViewWithAccessibilityLabel("Bookmarks")
         tester().tapViewWithAccessibilityLabel("History")
         XCTAssertFalse(tester().viewExistsWithLabel(url1), "Expected to have removed history row \(url1)")
         XCTAssertFalse(tester().viewExistsWithLabel(url2), "Expected to have removed history row \(url2)")

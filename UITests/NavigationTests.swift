@@ -11,14 +11,14 @@ class NavigationTests: KIFTestCase, UITextFieldDelegate {
     override func setUp() {
         super.setUp()
         webRoot = SimplePageServer.start()
-         BrowserUtils.dismissFirstRunUI(tester())
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("New Tab")
+        BrowserUtils.dismissFirstRunUI(tester())
     }
 
     /**
      * Tests basic page navigation with the URL bar.
+     * This only works on iPhone, not iPad
      */
+    
     func testNavigation() {
         tester().tapViewWithAccessibilityIdentifier("url")
         var textView = tester().waitForViewWithAccessibilityLabel("Address and Search") as? UITextField

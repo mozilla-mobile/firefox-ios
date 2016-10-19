@@ -12,14 +12,12 @@ class BookmarksPanelTests: KIFTestCase {
     override func setUp() {
         super.setUp()
         BrowserUtils.dismissFirstRunUI(tester())
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("New Tab")
     }
     
     override func tearDown() {
+        super.tearDown()
         BrowserUtils.resetToAboutHome(tester())
         BrowserUtils.clearPrivateData(tester: tester())
-        super.tearDown()
     }
     
     func testBookmarkPanelBufferOnly() {

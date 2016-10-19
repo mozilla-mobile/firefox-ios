@@ -16,8 +16,6 @@ class LoginManagerTests: KIFTestCase {
         webRoot = SimplePageServer.start()
         generateLogins()
         BrowserUtils.dismissFirstRunUI(tester())
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("New Tab")
     }
 
     override func tearDown() {
@@ -70,8 +68,6 @@ class LoginManagerTests: KIFTestCase {
         profile.logins.removeAll().value
     }
 
-    // This test will fail on simulator, but passes on the device because of the KIFTest issue.
-    // when the password field is filtered on, it will not update the list
     func testListFiltering() {
         openLoginManager()
         

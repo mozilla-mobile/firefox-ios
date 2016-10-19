@@ -18,6 +18,8 @@ class AuthenticationManagerTests: KIFTestCase {
     override func tearDown() {
         super.tearDown()
         PasscodeUtils.resetPasscode()
+        BrowserUtils.resetToAboutHome(tester())
+        BrowserUtils.clearPrivateData(tester: tester())
     }
 
     private func openAuthenticationManager() {

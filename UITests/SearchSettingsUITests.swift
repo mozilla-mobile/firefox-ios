@@ -6,6 +6,17 @@ import Foundation
 @testable import Client
 
 class SearchSettingsUITests: KIFTestCase {
+    
+    override func setUp() {
+        super.setUp()
+        BrowserUtils.dismissFirstRunUI(tester())
+    }
+    
+    override func tearDown() {
+        BrowserUtils.resetToAboutHome(tester())
+        BrowserUtils.clearPrivateData(tester: tester())
+    }
+    
     func testDefaultSearchEngine() {
         SearchUtils.navigateToSearchSettings(tester())
         SearchUtils.selectDefaultSearchEngineName(tester(), engineName: "Yahoo")

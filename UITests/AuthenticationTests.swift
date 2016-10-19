@@ -11,8 +11,6 @@ class AuthenticationTests: KIFTestCase {
         super.setUp()
         webRoot = SimplePageServer.start()
         BrowserUtils.dismissFirstRunUI(tester())
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("New Tab")
     }
     
     override func tearDown() {

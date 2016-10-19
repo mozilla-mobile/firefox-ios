@@ -9,8 +9,10 @@ class SecurityTests: KIFTestCase {
     private var webRoot: String!
 
     override func setUp() {
+        BrowserUtils.dismissFirstRunUI(tester())
         webRoot = SimplePageServer.start()
         super.setUp()
+        
     }
 
     override func beforeEach() {
@@ -81,7 +83,8 @@ class SecurityTests: KIFTestCase {
         tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(webRoot)\n")
     }
 
-    override func afterEach() {
+    override func tearDown() {
         BrowserUtils.resetToAboutHome(tester())
+        BrowserUtils.clearPrivateData(tester: tester())
     }
 }
