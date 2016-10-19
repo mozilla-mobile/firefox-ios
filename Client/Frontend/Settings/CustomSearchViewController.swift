@@ -7,6 +7,7 @@ import Shared
 import SnapKit
 import Storage
 import WebImage
+import Deferred
 
 private let log = Logger.browserLogger
 
@@ -19,21 +20,7 @@ class CustomSearchViewController: SettingsTableViewController {
         title = "Add Custom Search Engine"
     }
     
-    func faviconFor(url: NSURL) -> Favicon? {
-        var resultFavicon: Favicon?
-        FaviconFetcher.getForURL(url, profile: profile).uponQueue(dispatch_get_main_queue()) { result in
-            guard let favicons = result.successValue where favicons.count > 0,
-                let _ = favicons.first?.url.asURL else {
-                    return
-            }
-            resultFavicon = favicons.first!
-        }
-        return resultFavicon
-    }
-    
     func addSearchEngine(searchQuery: String) {
-        var iconURL: NSURL?
-        var iconImage: UIImage?
         let SearchTermComponent = "%s"
         let placeholder = "{searchTerms}"
         var processedSearchQuery = ""
@@ -48,30 +35,34 @@ class CustomSearchViewController: SettingsTableViewController {
                 self.presentViewController(alert, animated: true, completion: nil)
                 return
         }
-        if let favicon = faviconFor(url) {
-            iconURL = NSURL(string: favicon.url)
-        }
-            iconImage = FaviconFetcher.getDefaultFavicon(url)
         
-        let alert = ThirdPartySearchAlerts.addThirdPartySearchEngine { alert in
-            //                self.customSearchEngineButton.tintColor = UIColor.grayColor()
-            //                self.customSearchEngineButton.userInteractionEnabled = false
-            SDWebImageManager.sharedManager().downloadImageWithURL(iconURL, options: SDWebImageOptions.ContinueInBackground, progress: nil) { (image, error, cacheType, success, url) in
-                if image != nil {
-                    iconImage = image
-                }
-                guard iconImage != nil else {
-                    let alert = ThirdPartySearchAlerts.failedToAddThirdPartySearch()
-                    self.presentViewController(alert, animated: true, completion: nil)
-                    return
-                }
-                self.profile.searchEngines.addSearchEngine(OpenSearchEngine(engineID: nil, shortName: shortName, image: iconImage!, searchTemplate: processedSearchQuery, suggestTemplate: nil, isCustomEngine: true))
-                let Toast = SimpleToast()
-                Toast.showAlertWithText(Strings.ThirdPartySearchEngineAdded)
+        FaviconFetcher.getForURL(url, profile: profile).uponQueue(dispatch_get_main_queue()) { result in
+            var iconImage: UIImage?
+            var iconURL: NSURL?
+            if let favicons = result.successValue where favicons.count > 0,
+            let faviconImageURL = favicons.first?.url.asURL {
+                iconURL = faviconImageURL
+            } else {
+                iconImage = FaviconFetcher.getDefaultFavicon(url)
             }
+            
+            let alert = ThirdPartySearchAlerts.addThirdPartySearchEngine { alert in
+                SDWebImageManager.sharedManager().downloadImageWithURL(iconURL, options: SDWebImageOptions.ContinueInBackground, progress: nil) { (image, error, cacheType, success, url) in
+                    if image != nil {
+                        iconImage = image
+                    }
+                    guard iconImage != nil else {
+                        let alert = ThirdPartySearchAlerts.failedToAddThirdPartySearch()
+                        self.presentViewController(alert, animated: true, completion: nil)
+                        return
+                    }
+                    self.profile.searchEngines.addSearchEngine(OpenSearchEngine(engineID: nil, shortName: shortName, image: iconImage!, searchTemplate: processedSearchQuery, suggestTemplate: nil, isCustomEngine: true))
+                    let Toast = SimpleToast()
+                    Toast.showAlertWithText(Strings.ThirdPartySearchEngineAdded)
+                }
+            }
+            self.presentViewController(alert, animated: true, completion: {})
         }
-        
-        self.presentViewController(alert, animated: true, completion: {})
     }
     
     override func generateSettings() -> [SettingSection] {
