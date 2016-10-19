@@ -584,6 +584,12 @@ class LoginsSetting: Setting {
         super.init(title: NSAttributedString(string: loginsTitle, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]),
                    delegate: delegate)
     }
+    
+    func deselectRow () {
+        if let selectedRow = self.settings?.tableView.indexPathForSelectedRow {
+            self.settings?.tableView.deselectRowAtIndexPath(selectedRow, animated: true)
+        }
+    }
 
     override func onClick(_: UINavigationController?) {
         guard let authInfo = KeychainWrapper.defaultKeychainWrapper().authenticationInfo() else {
@@ -598,12 +604,11 @@ class LoginsSetting: Setting {
                 self.settings?.navigateToLoginsList()
             },
             cancel: {
-                if let selectedRow = self.settings?.tableView.indexPathForSelectedRow {
-                    self.settings?.tableView.deselectRowAtIndexPath(selectedRow, animated: true)
-                }
+                self.deselectRow()
             },
             fallback: {
                 AppAuthenticator.presentPasscodeAuthentication(self.navigationController, delegate: self.settings)
+                self.deselectRow()
             })
         } else {
             settings?.navigateToLoginsList()
