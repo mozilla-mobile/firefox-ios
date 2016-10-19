@@ -1221,6 +1221,8 @@ class TrayToolbar: UIView {
         var buttonToCenter: UIButton?
         addSubview(menuButton)
         buttonToCenter = menuButton
+        
+        maskButton.accessibilityIdentifier = "TabTrayController.maskButton"
 
         buttonToCenter?.snp_makeConstraints { make in
             make.center.equalTo(self)

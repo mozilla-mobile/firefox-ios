@@ -51,6 +51,7 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
         tableView.layer.cornerRadius = 10
         tableView.separatorStyle = .None
         tableView.cellLayoutMarginsFollowReadableWidth = false
+        tableView.accessibilityIdentifier = "Context Menu"
 
         tableView.snp_makeConstraints { make in
             make.center.equalTo(self.view)
