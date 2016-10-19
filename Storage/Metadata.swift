@@ -6,8 +6,8 @@ import Foundation
 import Deferred
 import Shared
 
+/// Interface for saving and retrieving metadata web content
 public protocol Metadata {
-    func metadataForSites(sites: [Site]) -> Deferred<Maybe<[PageMetadata]>>
-    func metadataForURLs(urls: [NSURL]) -> Deferred<Maybe<[PageMetadata]>>
-    func storeMetadata(metadata: PageMetadata, forPageURL: NSURL) -> Success
+    func storeMetadata(metadata: PageMetadata, forPageURL: NSURL, expireAt: UInt64) -> Success
+    func deleteExpiredMetadata() -> Success
 }

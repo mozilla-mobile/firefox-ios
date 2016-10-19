@@ -30,8 +30,6 @@ let TableQueuedTabs = "queue"
 
 let TableActivityStreamBlocklist = "activity_stream_blocklist"
 let TablePageMetadata = "page_metadata"
-let TablePageImages = "page_images"
-let TablePageMetadataImages = "page_metadata_images"
 
 let ViewBookmarksBufferOnMirror = "view_bookmarksBuffer_on_mirror"
 let ViewBookmarksBufferStructureOnMirror = "view_bookmarksBufferStructure_on_mirror"
@@ -53,8 +51,7 @@ let IndexBookmarksMirrorStructureParentIdx = "idx_bookmarksMirrorStructure_paren
 let IndexBookmarksLocalStructureParentIdx = "idx_bookmarksLocalStructure_parent_idx"     // Added in v12.
 let IndexBookmarksBufferStructureParentIdx = "idx_bookmarksBufferStructure_parent_idx"   // Added in v12.
 let IndexBookmarksMirrorStructureChild = "idx_bookmarksMirrorStructure_child"            // Added in v14.
-let IndexPageMetadataCacheKey = "idx_page_metadata_cache_key_uniqueindex" // Added in v17
-let IndexPageImagesURL = "idx_page_images_url_uniqueindex" // Added in v17
+let IndexPageMetadataCacheKey = "idx_page_metadata_cache_key_uniqueindex" // Added in v19
 
 private let AllTables: [String] = [
     TableDomains,
@@ -75,8 +72,6 @@ private let AllTables: [String] = [
 
     TableActivityStreamBlocklist,
     TablePageMetadata,
-    TablePageImages,
-    TablePageMetadataImages
 ]
 
 private let AllViews: [String] = [
@@ -100,7 +95,6 @@ private let AllIndices: [String] = [
     IndexBookmarksLocalStructureParentIdx,
     IndexBookmarksMirrorStructureParentIdx,
     IndexBookmarksMirrorStructureChild,
-    IndexPageImagesURL,
     IndexPageMetadataCacheKey
 ]
 
@@ -259,37 +253,17 @@ public class BrowserTable: Table {
             "id INTEGER PRIMARY KEY, " +
             "cache_key LONGVARCHAR UNIQUE, " +
             "site_url TEXT, " +
+            "media_url LONGVARCHAR, " +
             "title TEXT, " +
             "type VARCHAR(32), " +
             "description TEXT, " +
-            "media_url LONGVARCHAR, " +
+            "provider_name TEXT, " +
             "created_at DATETIME DEFAULT CURRENT_TIMESTAMP, " +
             "expired_at LONG" +
         ") "
 
-    let pageImagesCreate =
-        "CREATE TABLE IF NOT EXISTS \(TablePageImages) (" +
-            "id INTEGER PRIMARY KEY, " +
-            "url LONGVARCHAR UNIQUE, " +
-            "type INTEGER, " +
-            "height INTEGER, " +
-            "width INTEGER, " +
-            "color VARCHAR(32)" +
-        ")"
-
-    let pageMetadataImagesCreate =
-        "CREATE TABLE IF NOT EXISTS \(TablePageMetadataImages) (" +
-            "metadata_id INTEGER, " +
-            "image_id INTEGER, " +
-            "FOREIGN KEY(metadata_id) REFERENCES page_metadata(id) ON DELETE CASCADE, " +
-            "FOREIGN KEY(image_id) REFERENCES page_images(id) ON DELETE CASCADE" +
-        ") "
-
     let indexPageMetadataCreate =
         "CREATE UNIQUE INDEX IF NOT EXISTS \(IndexPageMetadataCacheKey) ON page_metadata (cache_key)"
-
-    let indexPageImagesCreate =
-        "CREATE UNIQUE INDEX IF NOT EXISTS \(IndexPageImagesURL) ON page_images (url)"
 
     let iconColumns = ", faviconID INTEGER REFERENCES \(TableFavicons)(id) ON DELETE SET NULL"
     let mirrorColumns = ", is_overridden TINYINT NOT NULL DEFAULT 0"
@@ -601,9 +575,6 @@ public class BrowserTable: Table {
             historyIDsWithIcon,
             iconForURL,
             pageMetadataCreate,
-            pageMetadataImagesCreate,
-            pageImagesCreate,
-            indexPageImagesCreate,
             indexPageMetadataCreate,
             self.queueTableCreate,
             self.topSitesTableCreate,
@@ -849,10 +820,7 @@ public class BrowserTable: Table {
 
                 // Adds tables/indicies for metadata content
                 pageMetadataCreate,
-                pageImagesCreate,
-                pageMetadataImagesCreate,
-                indexPageMetadataCreate,
-                indexPageImagesCreate]) {
+                indexPageMetadataCreate]) {
                 return false
             }
         }

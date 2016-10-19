@@ -6,9 +6,7 @@ import Foundation
 import Deferred
 import Shared
 
-/**
- * The sqlite-backed implementation of the metadata protocol containing images and content for pages.
- */
+/// The sqlite-backed implementation of the metadata protocol containing images and content for pages.
 public class SQLitePageMetadata {
     let db: BrowserDB
 
@@ -18,103 +16,62 @@ public class SQLitePageMetadata {
 }
 
 extension SQLitePageMetadata: Metadata {
+    // A cache key is a conveninent, readable identifier for a site in the metadata database which helps
+    // with deduping entries for the same page.
     private typealias CacheKey = String
 
-    // TODO: Theres probably a better query here. Currently, this grabs all of the metadata rows then
-    //       performs a query _per_each_object_ to grab it's associated images. To work around the immutable
-    //       object returned from the SDRow factory, there's some hackery to assign the images to the
-    //       metadata object (see extension defined below).
-    public func metadataForSites(sites: [Site]) -> Deferred<Maybe<[PageMetadata]>> {
-        let urls = sites.flatMap { $0.url.asURL }
-        return metadataForURLs(urls)
-    }
-
-    public func metadataForURLs(urls: [NSURL]) -> Deferred<Maybe<[PageMetadata]>> {
-        let cacheKeys = urls.flatMap({ cacheKeyForURL($0) })
-
-        let args: Args = cacheKeys
-        let query =
-        "SELECT pi.* " +
-        "FROM \(TablePageMetadata) as pm" +
-        "JOIN \(TablePageMetadataImages) AS pmi ON pm.id = pmi.metadata_id " +
-        "JOIN \(TablePageImages) AS pi ON pi.id = pmi.image_id" +
-        "WHERE id IN \(BrowserDB.varlist(cacheKeys.count))"
-
-        return self.db.runQuery(query, args: args, factory: SQLitePageMetadata.pageMetadataFactory) >>== { metadatas in
-            var processedMetadatas: [PageMetadata] = []
-            return walk(metadatas.asArray(), f: { metadata in
-                return self.imagesForMetadata(metadata) >>== { images in
-                    processedMetadatas.append(metadata.setImages(images.asArray()))
-                    return succeed()
-                }
-            }) >>> { return deferMaybe(processedMetadatas) }
-        }
-    }
-
-    public func storeMetadata(metadata: PageMetadata, forPageURL pageURL: NSURL) -> Success {
+    /// Persists the given PageMetadata object to browser.db in the page_metadata table.
+    ///
+    /// - parameter metadata: Metadata object
+    /// - parameter pageURL:  URL of page metadata was fetched from
+    /// - parameter expireAt: Expiration/TTL interval for when this metadata should expire at.
+    ///
+    /// - returns: Deferred on success
+    public func storeMetadata(metadata: PageMetadata, forPageURL pageURL: NSURL,
+                              expireAt: UInt64) -> Success {
         guard let cacheKey = cacheKeyForURL(pageURL) else {
             return succeed()
         }
 
-        let args: Args = [cacheKey, metadata.siteURL, metadata.title, metadata.type, metadata.description, nil, nil]
+        // Replace any matching cache_key entries if they exist
+        let selectUniqueCacheKey = "COALESCE((SELECT cache_key FROM page_metadata WHERE cache_key = ?), ?)"
+        let args: Args = [cacheKey, cacheKey, metadata.siteURL, metadata.mediaURL, metadata.title,
+                          metadata.type, metadata.description, metadata.providerName,
+                          NSNumber(unsignedLongLong: expireAt + NSDate.now())]
 
         let insert =
-        "INSERT INTO page_metadata " +
-        "(cache_key, site_url, title, type, description, media_url, expired_at) " +
-        "VALUES " +
-        "\(BrowserDB.varlist(args.count))"
+        "INSERT OR REPLACE INTO page_metadata " +
+        "(cache_key, site_url, media_url, title, type, description, provider_name, expired_at) " +
+        "VALUES ( \(selectUniqueCacheKey), ?, ?, ?, ?, ?, ?, ?)"
 
         return self.db.run(insert, withArgs: args)
     }
 
-    private func imagesForMetadata(metadata: PageMetadata) -> Deferred<Maybe<Cursor<PageMetadataImage>>> {
-        let args: Args = [metadata.id]
-        let query =
-        "SELECT pi.* " +
-        "FROM \(TablePageMetadata) as pm" +
-        "JOIN \(TablePageMetadataImages) AS pmi ON pm.id = pmi.metadata_id " +
-        "JOIN \(TablePageImages) AS pi ON pi.id = pmi.image_id" +
-        "WHERE id = ?"
-        
-        return self.db.runQuery(query, args: args, factory: SQLitePageMetadata.pageMetadataImageFactory)
+
+    /// Purges any metadata items living in page_metadata that are expired.
+    ///
+    /// - returns: Deferred on success
+    public func deleteExpiredMetadata() -> Success {
+        let sql = "DELETE FROM page_metadata WHERE expired_at <= (CAST(strftime('%s', 'now') AS LONG)*1000)"
+        return self.db.run(sql)
     }
 
-    // A cache key is a conveninent, readable identifier for a site in the metadata database which helps 
-    // with deduping entries for the same page.
     private func cacheKeyForURL(url: NSURL) -> CacheKey? {
         var key = url.normalizedHost() ?? ""
         key = key + (url.path ?? "") + (url.query ?? "")
         return key
     }
 
-    private func cacheKeyForURL(urlString: String) -> CacheKey? {
-        guard let url = urlString.asURL else {
-            return nil
-        }
-        return cacheKeyForURL(url)
-    }
-
+    // Factory method converting rows from our DB to metadata structures
     private class func pageMetadataFactory(row: SDRow) -> PageMetadata {
         let id = row["id"] as! Int
         let siteURL = row["site_url"] as! String
+        let mediaURL = row["media_url"] as? String
         let title = row["title"] as? String
         let description = row["description"] as? String
         let type = row["type"] as? String
-        return PageMetadata(id: id, siteURL: siteURL, title: title, description: description, type: type, images: [])
-    }
-
-    private class func pageMetadataImageFactory(row: SDRow) -> PageMetadataImage {
-        let imageURL = row["image_url"] as! String
-        let type = MetadataImageType(rawValue: row["type"] as! Int)!
-        let height = row["height"] as! Int
-        let width = row["width"] as! Int
-        let color = row["color"] as! String
-        return PageMetadataImage(imageURL: imageURL, type: type, height: height, width: width, color: color)
-    }
-}
-
-private extension PageMetadata {
-    func setImages(images: [PageMetadataImage]) -> PageMetadata {
-        return PageMetadata(id: id, siteURL: siteURL, title: title, description: description, type: type, images: images)
+        let providerName = row["provider_name"] as? String
+        return PageMetadata(id: id, siteURL: siteURL, mediaURL: mediaURL, title: title,
+                            description: description, type: type, providerName: providerName)
     }
 }

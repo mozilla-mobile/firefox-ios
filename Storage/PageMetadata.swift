@@ -5,23 +5,25 @@
 import Foundation
 
 /*
- * Value types representing a page's metadata and associated images
+ * Value types representing a page's metadata
  */
 public struct PageMetadata {
     public let id: Int?
     public let siteURL: String
+    public let mediaURL: String?
     public let title: String?
     public let description: String?
     public let type: String?
-    public let images: [PageMetadataImage]
+    public let providerName: String?
 
-    public init(id: Int?, siteURL: String, title: String?, description: String?, type: String?, images: [PageMetadataImage] = []) {
+    public init(id: Int?, siteURL: String, mediaURL: String?, title: String?, description: String?, type: String?, providerName: String?) {
         self.id = id
         self.siteURL = siteURL
+        self.mediaURL = mediaURL
         self.title = title
         self.description = description
         self.type = type
-        self.images = images
+        self.providerName = providerName
     }
 
     public static func fromDictionary(dict: [String: AnyObject]) -> PageMetadata? {
@@ -29,21 +31,8 @@ public struct PageMetadata {
             return nil
         }
 
-        return PageMetadata(id: nil, siteURL: siteURL, title: dict["title"] as? String,
-                            description: dict["description"] as? String, type: dict["type"] as? String)
+        return PageMetadata(id: nil, siteURL: siteURL, mediaURL: dict["image_url"] as? String,
+                            title: dict["title"] as? String, description: dict["description"] as? String,
+                            type: dict["type"] as? String, providerName: dict["provider_name"] as? String)
     }
-}
-
-public enum MetadataImageType: Int {
-    case Favicon = 1
-    case RichFavicon = 2
-    case Preview = 3
-}
-
-public struct PageMetadataImage {
-    public let imageURL: String
-    public let type: MetadataImageType
-    public let height: Int
-    public let width: Int
-    public let color: String
 }
