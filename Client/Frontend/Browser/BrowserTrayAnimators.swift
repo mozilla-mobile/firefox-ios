@@ -233,11 +233,12 @@ private func headerTransform(frame: CGRect, toFrame finalFrame: CGRect, containe
 
 //MARK: Private Helper Methods
 private func calculateCollapsedCellFrameUsingCollectionView(collectionView: UICollectionView, atIndex index: Int) -> CGRect {
-    if let attr = collectionView.collectionViewLayout.layoutAttributesForItemAtIndexPath(NSIndexPath(forItem: index, inSection: 0)) {
-        return collectionView.convertRect(attr.frame, toView: collectionView.superview)
-    } else {
-        return CGRectZero
-    }
+//    if let attr = collectionView.collectionViewLayout.layoutAttributesForItemAtIndexPath(NSIndexPath(forItem: index, inSection: 0)) {
+//        return collectionView.convertRect(attr.frame, toView: collectionView.superview)
+//    } else {
+//        return CGRectZero
+//    }
+    return CGRectZero
 }
 
 private func calculateExpandedCellFrameFromBVC(bvc: BrowserViewController) -> CGRect {

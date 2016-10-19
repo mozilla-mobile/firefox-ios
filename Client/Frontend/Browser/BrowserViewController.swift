@@ -1426,7 +1426,7 @@ extension BrowserViewController: URLBarDelegate {
             screenshotHelper.takeScreenshot(tab)
         }
 
-        self.navigationController?.pushViewController(tabTrayController, animated: true)
+        self.navigationController?.pushViewController(tabTrayController, animated: false)
         self.tabTrayController = tabTrayController
     }
 
