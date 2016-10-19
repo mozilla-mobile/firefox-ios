@@ -101,6 +101,8 @@ class BrowserViewController: UIViewController {
                 make.top.equalTo(self.urlBarContainer.snp.bottom)
                 make.leading.trailing.bottom.equalTo(self.view)
             }
+
+            self.urlBar.focus()
         })
 
         browserToolbar.animateHidden(true, duration: UIConstants.layout.toolbarFadeAnimationDuration)
