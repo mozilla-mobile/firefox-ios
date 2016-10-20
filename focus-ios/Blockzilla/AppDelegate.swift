@@ -8,6 +8,8 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
+    private var splashView: UIView?
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         BuddyBuildSDK.setup()
 
@@ -31,7 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     fileprivate func displaySplashAnimation() {
-        let splashView = UIView(frame: (window?.frame)!)
+        let splashView = UIView(frame: window!.frame)
         splashView.backgroundColor = UIConstants.colors.background
         let logoImage = UIImageView(image: UIImage(named: "Icon"))
         splashView.addSubview(logoImage)
@@ -39,19 +41,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             make.center.equalTo(splashView)
         }
 
-        window?.addSubview(splashView)
+        window!.addSubview(splashView)
 
         let animationDuration = 0.25
         UIView.animate(withDuration: animationDuration, delay: 0.0, options: UIViewAnimationOptions(), animations: {
             logoImage.layer.transform = CATransform3DMakeScale(0.8, 0.8, 1.0)
+        }, completion: { success in
+            UIView.animate(withDuration: animationDuration, delay: 0.0, options: UIViewAnimationOptions(), animations: {
+                splashView.alpha = 0
+                logoImage.layer.transform = CATransform3DMakeScale(2.0, 2.0, 1.0)
             }, completion: { success in
-                UIView.animate(withDuration: animationDuration, delay: 0.0, options: UIViewAnimationOptions(), animations: {
-                    splashView.alpha = 0
-                    logoImage.layer.transform = CATransform3DMakeScale(2.0, 2.0, 1.0)
-                    }, completion: { success in
-                        splashView.removeFromSuperview()
-                })
+                splashView.isHidden = true
+                logoImage.layer.transform = CATransform3DIdentity
+                self.splashView = splashView
+            })
         })
+    }
+
+    func applicationWillResignActive(_ application: UIApplication) {
+        splashView?.animateHidden(false, duration: 0.25)
+    }
+
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        splashView?.animateHidden(true, duration: 0.25)
     }
 }
 
