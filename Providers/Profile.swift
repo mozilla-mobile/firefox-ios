@@ -394,7 +394,7 @@ public class BrowserProfile: Profile {
     }
 
     lazy var metadata: Metadata = {
-        return SQLitePageMetadata(db: self.db)
+        return SQLiteMetadata(db: self.db)
     }()
 
     var recommendations: HistoryRecommendations {

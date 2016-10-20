@@ -7,7 +7,7 @@ import Deferred
 import Shared
 
 /// The sqlite-backed implementation of the metadata protocol containing images and content for pages.
-public class SQLitePageMetadata {
+public class SQLiteMetadata {
     let db: BrowserDB
 
     required public init(db: BrowserDB) {
@@ -15,7 +15,7 @@ public class SQLitePageMetadata {
     }
 }
 
-extension SQLitePageMetadata: Metadata {
+extension SQLiteMetadata: Metadata {
     // A cache key is a conveninent, readable identifier for a site in the metadata database which helps
     // with deduping entries for the same page.
     private typealias CacheKey = String
@@ -34,13 +34,13 @@ extension SQLitePageMetadata: Metadata {
         }
 
         // Replace any matching cache_key entries if they exist
-        let selectUniqueCacheKey = "COALESCE((SELECT cache_key FROM page_metadata WHERE cache_key = ?), ?)"
+        let selectUniqueCacheKey = "COALESCE((SELECT cache_key FROM \(TablePageMetadata) WHERE cache_key = ?), ?)"
         let args: Args = [cacheKey, cacheKey, metadata.siteURL, metadata.mediaURL, metadata.title,
                           metadata.type, metadata.description, metadata.providerName,
-                          NSNumber(unsignedLongLong: expireAt + NSDate.now())]
+                          NSNumber(unsignedLongLong: expireAt)]
 
         let insert =
-        "INSERT OR REPLACE INTO page_metadata " +
+        "INSERT OR REPLACE INTO \(TablePageMetadata)" +
         "(cache_key, site_url, media_url, title, type, description, provider_name, expired_at) " +
         "VALUES ( \(selectUniqueCacheKey), ?, ?, ?, ?, ?, ?, ?)"
 
@@ -60,18 +60,5 @@ extension SQLitePageMetadata: Metadata {
         var key = url.normalizedHost() ?? ""
         key = key + (url.path ?? "") + (url.query ?? "")
         return key
-    }
-
-    // Factory method converting rows from our DB to metadata structures
-    private class func pageMetadataFactory(row: SDRow) -> PageMetadata {
-        let id = row["id"] as! Int
-        let siteURL = row["site_url"] as! String
-        let mediaURL = row["media_url"] as? String
-        let title = row["title"] as? String
-        let description = row["description"] as? String
-        let type = row["type"] as? String
-        let providerName = row["provider_name"] as? String
-        return PageMetadata(id: id, siteURL: siteURL, mediaURL: mediaURL, title: title,
-                            description: description, type: type, providerName: providerName)
     }
 }
