@@ -68,19 +68,28 @@ class LocalContentBlocker: URLProtocol, URLSessionDelegate, URLSessionDataDelega
     }
 }
 
-private enum BlockType {
+private enum LoadType {
     case all
     case thirdParty
 }
 
+private enum ResourceType {
+    case all
+    case font
+}
+
+private let fontExtensions = ["woff", "woff2", "ttf"]
+
 private class BlockRule {
     let regex: NSRegularExpression
-    let type: BlockType
+    let loadType: LoadType
+    let resourceType: ResourceType
     let domainExceptions: [NSRegularExpression]?
 
-    init(regex: NSRegularExpression, type: BlockType, domainExceptions: [NSRegularExpression]?) {
+    init(regex: NSRegularExpression, loadType: LoadType, resourceType: ResourceType, domainExceptions: [NSRegularExpression]?) {
         self.regex = regex
-        self.type = type
+        self.loadType = loadType
+        self.resourceType = resourceType
         self.domainExceptions = domainExceptions
     }
 }
@@ -108,11 +117,15 @@ private class BlockList {
                     return try! NSRegularExpression(pattern: regex, options: [])
                 }
 
-                // "first-party" is not supported since we don't use it in any block lists.
+                // Only "third-party" is supported; other types are not used in our block lists.
                 let loadTypes = trigger["load-type"] as? [String] ?? []
-                let blockType = loadTypes.contains("third-party") ? BlockType.thirdParty : .all
+                let loadType = loadTypes.contains("third-party") ? LoadType.thirdParty : .all
 
-                blockRules.append(BlockRule(regex: filterRegex, type: blockType, domainExceptions: domainExceptions))
+                // Only "font" is supported; other types are not used in our block lists.
+                let resourceTypes = trigger["resource-type"] as? [String] ?? []
+                let resourceType = resourceTypes.contains("font") ? ResourceType.font : .all
+
+                blockRules.append(BlockRule(regex: filterRegex, loadType: loadType, resourceType: resourceType, domainExceptions: domainExceptions))
             }
         }
     }
@@ -130,10 +143,15 @@ private class BlockList {
         let documentRange = NSRange(location: 0, length: documentString.characters.count)
 
         domainSearch: for rule in blockRules {
+            // If this is a font rule, only proceed if this resource is a font.
+            if rule.resourceType == .font && !fontExtensions.contains(resourceUrl.pathExtension) {
+                continue
+            }
+
             // First, test the top-level filters to see if this URL might be blocked.
             if rule.regex.firstMatch(in: resourceString, options: .anchored, range: resourceRange) != nil {
                 // If this is a third-party load, don't block first-party sites.
-                if rule.type == .thirdParty {
+                if rule.loadType == .thirdParty {
                     if rule.regex.firstMatch(in: documentString, options: .anchored, range: documentRange) != nil {
                         continue
                     }
