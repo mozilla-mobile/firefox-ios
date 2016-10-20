@@ -19,6 +19,7 @@ class OverlayView: UIView {
     private let searchButton = InsetButton()
     private let searchBorder = UIView()
     private var bottomConstraint: Constraint!
+    private var presented = false
 
     init() {
         super.init(frame: CGRect.zero)
@@ -87,6 +88,8 @@ class OverlayView: UIView {
 
     var searchQuery: String = "" {
         didSet {
+            guard presented else { return }
+
             if searchButton.isHidden != searchQuery.isEmpty {
                 searchButton.animateHidden(searchQuery.isEmpty, duration: UIConstants.layout.searchButtonAnimationDuration)
                 searchBorder.animateHidden(searchQuery.isEmpty, duration: UIConstants.layout.searchButtonAnimationDuration)
@@ -118,6 +121,9 @@ class OverlayView: UIView {
     }
 
     @objc private func didPressSearch() {
+        // HACK: This prevents the URL from being set to the search view as the overlay disappears.
+        presented = false
+
         delegate?.overlayView(self, didSearchForQuery: searchQuery)
     }
 
@@ -128,6 +134,16 @@ class OverlayView: UIView {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         delegate?.overlayViewDidTouchEmptyArea(self)
+    }
+
+    func dismiss() {
+        presented = false
+        animateHidden(true, duration: UIConstants.layout.overlayAnimationDuration)
+    }
+
+    func present() {
+        presented = true
+        animateHidden(false, duration: UIConstants.layout.overlayAnimationDuration)
     }
 }
 

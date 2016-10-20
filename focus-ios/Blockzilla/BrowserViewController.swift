@@ -146,12 +146,12 @@ extension BrowserViewController: URLBarDelegate {
         if !text.isEmpty, let url = URIFixup.getURL(entry: text) ?? searchEngine.urlForQuery(text) {
             submit(url: url)
         }
-        overlayView.animateHidden(true, duration: UIConstants.layout.overlayAnimationDuration)
+        overlayView.dismiss()
     }
 
     func urlBarDidCancel(urlBar: URLBar) {
         urlBar.url = browser.url
-        overlayView.animateHidden(true, duration: UIConstants.layout.overlayAnimationDuration)
+        overlayView.dismiss()
     }
 
     func urlBarDidPressDelete(urlBar: URLBar) {
@@ -161,7 +161,7 @@ extension BrowserViewController: URLBarDelegate {
     func urlBarDidFocus(urlBar: URLBar) {
         if !browser.view.isHidden {
             overlayView.searchQuery = ""
-            overlayView.animateHidden(false, duration: UIConstants.layout.overlayAnimationDuration)
+            overlayView.present()
         }
     }
 }

@@ -28,6 +28,8 @@
 		D33A1AB11BC48FAC0003D929 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33A1AB01BC48FAC0003D929 /* SettingsViewController.swift */; };
 		D3426AE91DB7F4060016DA5A /* KeyboardHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3426AE81DB7F4060016DA5A /* KeyboardHelper.swift */; };
 		D3426AEB1DB7F8AA0016DA5A /* OverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3426AEA1DB7F8AA0016DA5A /* OverlayView.swift */; };
+		D3426AED1DB846310016DA5A /* DomainCompletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3426AEC1DB846310016DA5A /* DomainCompletion.swift */; };
+		D3426AEF1DB846BB0016DA5A /* topdomains.txt in Resources */ = {isa = PBXBuildFile; fileRef = D3426AEE1DB846BB0016DA5A /* topdomains.txt */; };
 		D3426AF61DB84E7A0016DA5A /* SearchEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3426AF51DB84E7A0016DA5A /* SearchEngine.swift */; };
 		D343DCC21C44356500D7EEE8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D343DCC41C44356500D7EEE8 /* Localizable.strings */; };
 		D34E70331DA8736300BABDCC /* AutocompleteTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34E70321DA8736300BABDCC /* AutocompleteTextField.swift */; };
@@ -137,6 +139,8 @@
 		D33A1AB01BC48FAC0003D929 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		D3426AE81DB7F4060016DA5A /* KeyboardHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardHelper.swift; sourceTree = "<group>"; };
 		D3426AEA1DB7F8AA0016DA5A /* OverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverlayView.swift; sourceTree = "<group>"; };
+		D3426AEC1DB846310016DA5A /* DomainCompletion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DomainCompletion.swift; sourceTree = "<group>"; };
+		D3426AEE1DB846BB0016DA5A /* topdomains.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = topdomains.txt; sourceTree = "<group>"; };
 		D3426AF51DB84E7A0016DA5A /* SearchEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchEngine.swift; sourceTree = "<group>"; };
 		D343DCC31C44356500D7EEE8 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D34E70321DA8736300BABDCC /* AutocompleteTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutocompleteTextField.swift; sourceTree = "<group>"; };
@@ -325,6 +329,7 @@
 				D3E2C96E1DA3093D00DEBE3D /* BrowserToolbar.swift */,
 				D3E2C8E91D9F0E6200DEBE3D /* BrowserViewController.swift */,
 				D3E2C96C1DA3077400DEBE3D /* CharacterSetExtensions.swift */,
+				D3426AEC1DB846310016DA5A /* DomainCompletion.swift */,
 				D3561B2A1DB5925100A5EEAF /* GradientBackgroundView.swift */,
 				D3E3CA7C1DA827AD0079C94B /* HomeView.swift */,
 				D3E2C9681DA3024800DEBE3D /* InsetButton.swift */,
@@ -346,6 +351,7 @@
 				D3E2C9601DA2F7C600DEBE3D /* URLBar.swift */,
 				D392887C1BC5E4510016A9A0 /* WaveHeaderView.swift */,
 				D37DE55C1BCDBD6100906364 /* WaveView.swift */,
+				D3426AEE1DB846BB0016DA5A /* topdomains.txt */,
 				E4BF2DDD1BACE8CA00DA9D68 /* Assets.xcassets */,
 				D343DCC41C44356500D7EEE8 /* Localizable.strings */,
 				D3BFCB3D1BD14F4E00AD22D1 /* LocalWebServer */,
@@ -474,6 +480,7 @@
 				D3E2C8FD1D9F17AC00DEBE3D /* disconnect-content.json in Resources */,
 				E4BF2E141BAE324400DA9D68 /* LaunchScreen.storyboard in Resources */,
 				D3BFCB5B1BD15CD000AD22D1 /* rights-Klar.html in Resources */,
+				D3426AEF1DB846BB0016DA5A /* topdomains.txt in Resources */,
 				D3E2C8FF1D9F17AC00DEBE3D /* web-fonts.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -519,6 +526,7 @@
 			files = (
 				D3E2C8EA1D9F0E6200DEBE3D /* BrowserViewController.swift in Sources */,
 				D3BFCB3F1BD14F5900AD22D1 /* LocalWebServer.swift in Sources */,
+				D3426AED1DB846310016DA5A /* DomainCompletion.swift in Sources */,
 				D3E251FB1DAF0668005918DC /* AppInfo.swift in Sources */,
 				E4BF2E111BAD8AC500DA9D68 /* Settings.swift in Sources */,
 				D30179C81BCD78E2009AD388 /* SCSiriWaveformView.m in Sources */,

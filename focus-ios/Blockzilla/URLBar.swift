@@ -23,6 +23,7 @@ class URLBar: UIView {
     fileprivate let deleteButton = InsetButton()
     fileprivate var deleteButtonWidthConstraint: Constraint!
     fileprivate var deleteButtonTrailingConstraint: Constraint!
+    fileprivate let domainCompletion = DomainCompletion()
 
     private let urlText = URLTextField()
 
@@ -202,6 +203,8 @@ extension URLBar: AutocompleteTextFieldDelegate {
     }
 
     func autocompleteTextField(_ autocompleteTextField: AutocompleteTextField, didEnterText text: String) {
+        let completion = domainCompletion.completion(forText: text)
+        autocompleteTextField.setAutocompleteSuggestion(completion)
         autocompleteTextField.rightView?.isHidden = text.isEmpty
         delegate?.urlBar(urlBar: self, didEnterText: text)
     }
