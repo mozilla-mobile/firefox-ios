@@ -20,6 +20,7 @@ class OverlayView: UIView {
     private let searchBorder = UIView()
     private var bottomConstraint: Constraint!
     private var presented = false
+    private var searchQuery = ""
 
     init() {
         super.init(frame: CGRect.zero)
@@ -86,30 +87,32 @@ class OverlayView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    var searchQuery: String = "" {
-        didSet {
-            guard presented else { return }
+    func setSearchQuery(query: String, animated: Bool) {
+        searchQuery = query
 
-            if searchButton.isHidden != searchQuery.isEmpty {
-                searchButton.animateHidden(searchQuery.isEmpty, duration: UIConstants.layout.searchButtonAnimationDuration)
-                searchBorder.animateHidden(searchQuery.isEmpty, duration: UIConstants.layout.searchButtonAnimationDuration)
-            }
+        let query = query.trimmingCharacters(in: .whitespaces)
 
-            // Use [ and ] to help find the position of the search query, then delete them.
-            let searchTitle = NSMutableString(string: String(format: UIConstants.strings.searchButton, "[\(searchQuery)]"))
-            let startIndex = searchTitle.range(of: "[")
-            let endIndex = searchTitle.range(of: "]", options: .backwards)
-            searchTitle.deleteCharacters(in: endIndex)
-            searchTitle.deleteCharacters(in: startIndex)
-
-            let attributedString = NSMutableAttributedString(string: searchTitle as String)
-            let queryRange = NSMakeRange(startIndex.location, searchQuery.characters.count)
-            let fullRange = NSMakeRange(0, searchTitle.length)
-            attributedString.addAttributes([NSFontAttributeName: UIConstants.fonts.searchButtonQuery], range: queryRange)
-            attributedString.addAttributes([NSForegroundColorAttributeName: UIColor.white], range: fullRange)
-
-            searchButton.setAttributedTitle(attributedString, for: .normal)
+        // Show or hide the search button depending on whether there's entered text.
+        if searchButton.isHidden != query.isEmpty {
+            let duration = animated ? UIConstants.layout.searchButtonAnimationDuration : 0
+            searchButton.animateHidden(query.isEmpty, duration: duration)
+            searchBorder.animateHidden(query.isEmpty, duration: duration)
         }
+
+        // Use [ and ] to help find the position of the search query, then delete them.
+        let searchTitle = NSMutableString(string: String(format: UIConstants.strings.searchButton, "[\(query)]"))
+        let startIndex = searchTitle.range(of: "[")
+        let endIndex = searchTitle.range(of: "]", options: .backwards)
+        searchTitle.deleteCharacters(in: endIndex)
+        searchTitle.deleteCharacters(in: startIndex)
+
+        let attributedString = NSMutableAttributedString(string: searchTitle as String)
+        let queryRange = NSMakeRange(startIndex.location, query.characters.count)
+        let fullRange = NSMakeRange(0, searchTitle.length)
+        attributedString.addAttributes([NSFontAttributeName: UIConstants.fonts.searchButtonQuery], range: queryRange)
+        attributedString.addAttributes([NSForegroundColorAttributeName: UIColor.white], range: fullRange)
+
+        searchButton.setAttributedTitle(attributedString, for: .normal)
     }
 
     fileprivate func animateWithKeyboard(keyboardState: KeyboardState) {
@@ -121,9 +124,6 @@ class OverlayView: UIView {
     }
 
     @objc private func didPressSearch() {
-        // HACK: This prevents the URL from being set to the search view as the overlay disappears.
-        presented = false
-
         delegate?.overlayView(self, didSearchForQuery: searchQuery)
     }
 
@@ -137,12 +137,12 @@ class OverlayView: UIView {
     }
 
     func dismiss() {
-        presented = false
+        setSearchQuery(query: "", animated: false)
         animateHidden(true, duration: UIConstants.layout.overlayAnimationDuration)
     }
 
     func present() {
-        presented = true
+        setSearchQuery(query: "", animated: false)
         animateHidden(false, duration: UIConstants.layout.overlayAnimationDuration)
     }
 }

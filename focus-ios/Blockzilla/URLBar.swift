@@ -9,7 +9,7 @@ protocol URLBarDelegate: class {
     func urlBar(urlBar: URLBar, didEnterText text: String)
     func urlBar(urlBar: URLBar, didSubmitText text: String)
     func urlBarDidFocus(urlBar: URLBar)
-    func urlBarDidCancel(urlBar: URLBar)
+    func urlBarDidDismiss(urlBar: URLBar)
     func urlBarDidPressDelete(urlBar: URLBar)
 }
 
@@ -21,9 +21,11 @@ class URLBar: UIView {
     fileprivate let cancelButton = InsetButton()
     fileprivate var cancelButtonWidthConstraint: Constraint!
     fileprivate let deleteButton = InsetButton()
+    fileprivate let domainCompletion = DomainCompletion()
+
+    fileprivate var isEditing = false
     fileprivate var deleteButtonWidthConstraint: Constraint!
     fileprivate var deleteButtonTrailingConstraint: Constraint!
-    fileprivate let domainCompletion = DomainCompletion()
 
     private let urlText = URLTextField()
 
@@ -61,7 +63,7 @@ class URLBar: UIView {
         cancelButton.titleEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         cancelButton.setContentHuggingPriority(1000, for: .horizontal)
         cancelButton.setContentCompressionResistancePriority(1000, for: .horizontal)
-        cancelButton.addTarget(self, action: #selector(cancel), for: .touchUpInside)
+        cancelButton.addTarget(self, action: #selector(dismiss), for: .touchUpInside)
 
         deleteButton.setTitle(UIConstants.strings.clearButton, for: .normal)
         deleteButton.titleLabel?.font = UIConstants.fonts.deleteButton
@@ -134,31 +136,11 @@ class URLBar: UIView {
         }
     }
 
-    @objc func cancel() {
-        setTextToURL()
-        urlText.resignFirstResponder()
-        delegate?.urlBarDidCancel(urlBar: self)
-    }
+    fileprivate func activate() {
+        guard !isEditing else { return }
 
-    @objc private func didPressDelete() {
-        delegate?.urlBarDidPressDelete(urlBar: self)
-    }
+        isEditing = true
 
-    @objc private func didPressClear() {
-        urlText.text = nil
-    }
-
-    func focus() {
-        urlText.becomeFirstResponder()
-    }
-
-    fileprivate func setTextToURL() {
-        urlText.text = url?.absoluteString ?? nil
-    }
-}
-
-extension URLBar: AutocompleteTextFieldDelegate {
-    func autocompleteTextFieldShouldBeginEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool {
         self.layoutIfNeeded()
         UIView.animate(withDuration: 0.3) {
             self.cancelButton.alpha = 1
@@ -172,14 +154,19 @@ extension URLBar: AutocompleteTextFieldDelegate {
             self.layoutIfNeeded()
         }
 
-        autocompleteTextField.highlightAll()
+        urlText.highlightAll()
 
         delegate?.urlBarDidFocus(urlBar: self)
-
-        return true
     }
 
-    func autocompleteTextFieldShouldEndEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool {
+    @objc func dismiss() {
+        guard isEditing else { return }
+
+        isEditing = false
+        urlText.resignFirstResponder()
+        setTextToURL()
+        delegate?.urlBarDidDismiss(urlBar: self)
+
         self.layoutIfNeeded()
         UIView.animate(withDuration: 0.3) {
             self.cancelButton.alpha = 0
@@ -192,13 +179,37 @@ extension URLBar: AutocompleteTextFieldDelegate {
 
             self.layoutIfNeeded()
         }
+    }
 
+    @objc private func didPressDelete() {
+        delegate?.urlBarDidPressDelete(urlBar: self)
+    }
+
+    @objc private func didPressClear() {
+        urlText.clear()
+    }
+
+    func focus() {
+        urlText.becomeFirstResponder()
+    }
+
+    fileprivate func setTextToURL() {
+        urlText.text = url?.absoluteString ?? nil
+    }
+}
+
+extension URLBar: AutocompleteTextFieldDelegate {
+    func autocompleteTextFieldShouldBeginEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool {
+        activate()
+        return true
+    }
+
+    func autocompleteTextFieldShouldEndEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool {
         return true
     }
 
     func autocompleteTextFieldShouldReturn(_ autocompleteTextField: AutocompleteTextField) -> Bool {
         delegate?.urlBar(urlBar: self, didSubmitText: autocompleteTextField.text!)
-        autocompleteTextField.resignFirstResponder()
         return true
     }
 

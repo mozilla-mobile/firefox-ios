@@ -11,6 +11,8 @@ class DomainCompletion {
     }()
 
     func completion(forText text: String) -> String? {
+        guard !text.isEmpty else { return nil }
+
         for domain in self.topDomains {
             if let completion = self.completion(forDomain: domain, withText: text) {
                 return completion

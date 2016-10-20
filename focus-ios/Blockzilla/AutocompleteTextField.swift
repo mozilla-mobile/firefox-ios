@@ -175,7 +175,14 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
     func textDidChange(textField: UITextField) {
         updateText()
-        self.autocompleteDelegate?.autocompleteTextField(self, didEnterText: self.enteredText.trimmingCharacters(in: .whitespaces))
+        self.autocompleteDelegate?.autocompleteTextField(self, didEnterText: self.enteredText)
+    }
+
+    func clear() {
+        removeCompletion()
+        text = ""
+        enteredText = ""
+        self.autocompleteDelegate?.autocompleteTextField(self, didEnterText: self.enteredText)
     }
 
     private func updateText() {

@@ -138,19 +138,21 @@ class BrowserViewController: UIViewController {
 
 extension BrowserViewController: URLBarDelegate {
     func urlBar(urlBar: URLBar, didEnterText text: String) {
-        overlayView.searchQuery = text
+        overlayView.setSearchQuery(query: text, animated: true)
     }
 
     func urlBar(urlBar: URLBar, didSubmitText text: String) {
+        urlBar.dismiss()
+
         let text = text.trimmingCharacters(in: .whitespaces)
         if !text.isEmpty, let url = URIFixup.getURL(entry: text) ?? searchEngine.urlForQuery(text) {
             submit(url: url)
+        } else {
+            urlBar.url = browser.url
         }
-        overlayView.dismiss()
     }
 
-    func urlBarDidCancel(urlBar: URLBar) {
-        urlBar.url = browser.url
+    func urlBarDidDismiss(urlBar: URLBar) {
         overlayView.dismiss()
     }
 
@@ -159,10 +161,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidFocus(urlBar: URLBar) {
-        if !browser.view.isHidden {
-            overlayView.searchQuery = ""
-            overlayView.present()
-        }
+        overlayView.present()
     }
 }
 
@@ -241,11 +240,11 @@ extension BrowserViewController: OverlayViewDelegate {
     }
 
     func overlayViewDidTouchEmptyArea(_ overlayView: OverlayView) {
-        urlBar.cancel()
+        urlBar.dismiss()
     }
 
     func overlayView(_ overlayView: OverlayView, didSearchForQuery query: String) {
-        urlBar.cancel()
+        urlBar.dismiss()
         if let url = searchEngine.urlForQuery(query) {
             submit(url: url)
         }
