@@ -111,7 +111,7 @@ public class MockProfile: Profile {
     }
 
     lazy var metadata: Metadata = {
-        return SQLitePageMetadata(db: self.db)
+        return SQLiteMetadata(db: self.db)
     }()
 
     lazy var isChinaEdition: Bool = {

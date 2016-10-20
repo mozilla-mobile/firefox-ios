@@ -327,7 +327,7 @@ public class BrowserProfile: Profile {
         }
 
         let defaultMetadataTTL: UInt64 = 3 * 24 * 60 * 60 * 1000 // 3 days for the metadata to live
-        self.metadata.storeMetadata(pageMetadata, forPageURL: pageURL, expireAt: defaultMetadataTTL)
+        self.metadata.storeMetadata(pageMetadata, forPageURL: pageURL, expireAt: defaultMetadataTTL + NSDate.now())
     }
 
     // These selectors run on which ever thread sent the notifications (not the main thread)
