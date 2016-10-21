@@ -162,6 +162,8 @@ class BrowserViewController: UIViewController {
         })
 
         browserToolbar.animateHidden(true, duration: UIConstants.layout.toolbarFadeAnimationDuration)
+
+        AdjustIntegration.track(eventName: .clear)
     }
 
     fileprivate func showSettings() {
@@ -181,6 +183,12 @@ class BrowserViewController: UIViewController {
         }
 
         browser.loadRequest(URLRequest(url: url))
+
+        if searchEngine.isSearchURL(url: url) {
+            AdjustIntegration.track(eventName: .search)
+        } else {
+            AdjustIntegration.track(eventName: .browse)
+        }
     }
 }
 
@@ -307,6 +315,7 @@ extension BrowserViewController: OverlayViewDelegate {
     func overlayView(_ overlayView: OverlayView, didSearchForQuery query: String) {
         if let url = searchEngine.urlForQuery(query) {
             submit(url: url)
+            AdjustIntegration.track(eventName: .search)
         }
         urlBar.dismiss()
     }

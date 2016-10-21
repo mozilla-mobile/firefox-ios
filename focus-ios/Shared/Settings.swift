@@ -11,6 +11,7 @@ enum SettingsToggle: String {
     case blockOther = "BlockOther"
     case blockFonts = "BlockFonts"
     case safari = "Safari"
+    case sendAnonymousUsageData = "SendAnonymousUsageData"
 }
 
 struct Settings {
@@ -27,6 +28,7 @@ struct Settings {
             case .blockOther: return false
             case .blockFonts: return false
             case .safari: return true
+            case .sendAnonymousUsageData: return true
         }
     }
 

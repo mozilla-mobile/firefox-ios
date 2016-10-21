@@ -23,8 +23,11 @@ class OpenUtils {
     /// Opens the URL in Firefox, if Firefox is available.
     /// Otherwise, the URL is opened in Safari.
     static func openInExternalBrowser(url: URL) {
-        if !openInFirefox(url: url) {
+        if openInFirefox(url: url) {
+            AdjustIntegration.track(eventName: .openFirefox)
+        } else {
             openInSafari(url: url)
+            AdjustIntegration.track(eventName: .openSafari)
         }
     }
 }

@@ -1,2 +1,3 @@
 github "swisspol/GCDWebServer" ~> 3.3.3
 github "SnapKit/SnapKit"       ~> 3.0.1
+github "adjust/ios_sdk"        ~> 4.10.2

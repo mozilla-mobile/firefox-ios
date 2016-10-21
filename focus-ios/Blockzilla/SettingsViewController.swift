@@ -22,6 +22,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         BlockerToggle(label: UIConstants.strings.labelBlockSocial, setting: SettingsToggle.blockSocial),
         BlockerToggle(label: UIConstants.strings.labelBlockOther, setting: SettingsToggle.blockOther, subtitle: UIConstants.strings.subtitleBlockOther),
         BlockerToggle(label: UIConstants.strings.labelBlockFonts, setting: SettingsToggle.blockFonts),
+        BlockerToggle(label: UIConstants.strings.labelSendAnonymousUsageData, setting: SettingsToggle.sendAnonymousUsageData, subtitle: UIConstants.strings.subtitleSendAnonymousUsageData),
     ]
 
     /// Used to calculate cell heights.
@@ -106,7 +107,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             }
         case 1: fallthrough
         case 2: fallthrough
-        case 3:
+        case 3: fallthrough
+        case 4:
             let toggle = toggleForIndexPath(indexPath)
             cell.textLabel?.text = toggle.label
             cell.textLabel?.numberOfLines = 0
@@ -130,6 +132,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         case 1: return 1 // Integration.
         case 2: return 4 // Privacy.
         case 3: return 1 // Performance.
+        case 4: return 1 // Support
         default:
             assertionFailure("Invalid section")
             return 0
@@ -137,7 +140,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 4
+        return 5
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -175,6 +178,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         case 1: labelText = UIConstants.strings.toggleSectionIntegration
         case 2: labelText = UIConstants.strings.toggleSectionPrivacy
         case 3: labelText = UIConstants.strings.toggleSectionPerformance
+        case 4: labelText = UIConstants.strings.toggleSectionSupport
         default: return nil
         }
 
@@ -203,7 +207,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         switch section {
         case 1: fallthrough
         case 2: fallthrough
-        case 3: return 30
+        case 3: fallthrough
+        case 4: return 30
         default: return 0
         }
     }
@@ -236,6 +241,23 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         let toggle = toggles.filter { $0.toggle == sender }.first!
 
         func updateSetting() {
+            switch toggle.setting {
+            case .safari:
+                AdjustIntegration.track(eventName: sender.isOn ? .enableSafariIntegration : .disableSafariIntegration)
+            case .blockAds:
+                AdjustIntegration.track(eventName: sender.isOn ? .enableBlockAds : .disableBlockAds)
+            case .blockAnalytics:
+                AdjustIntegration.track(eventName: sender.isOn ? .enableBlockAnalytics : .disableBlockAnalytics)
+            case .blockSocial:
+                AdjustIntegration.track(eventName: sender.isOn ? .enableBlockSocial : .disableBlockSocial)
+            case .blockOther:
+                AdjustIntegration.track(eventName: sender.isOn ? .enableBlockOther : .disableBlockOther)
+            case .blockFonts:
+                AdjustIntegration.track(eventName: sender.isOn ? .enableBlockFonts : .disableBlockFonts)
+            default:
+                break
+            }
+
             Settings.set(sender.isOn, forToggle: toggle.setting)
             Utils.reloadSafariContentBlocker()
             LocalContentBlocker.reload()

@@ -95,5 +95,8 @@ struct UIConstants {
         static let toggleSafari = NSLocalizedString("Settings.toggleSafari", value: "Safari", comment: "Safari toggle label on settings screen")
         static let urlBarCancel = NSLocalizedString("URL.cancelLabel", value: "Cancel", comment: "Label for cancel button shown when entering a URL or search")
         static let urlTextPlaceholder = NSLocalizedString("URL.placeholderText", value: "Search or enter address", comment: "Placeholder text shown in the URL bar before the user navigates to a page")
+        static let toggleSectionSupport = NSLocalizedString("Settings.supportSectionLabel", value: "SUPPORT", comment: "Section label for support toggles")
+        static let labelSendAnonymousUsageData = NSLocalizedString("Settings.toggleSendAnonymousUsageData", value: "Send anonymous usage data", comment: "Label for Send Anonymous Usage Data toggle on main screen")
+        static let subtitleSendAnonymousUsageData = NSLocalizedString("Settings.toggleSendAnonymousUsageDataSubtitle", value: "More info…", comment: "Subtitle for Send Anonymous Usage Data toggle on main screen")
     }
 }

@@ -16,4 +16,8 @@ class SearchEngine {
 
         return url
     }
+
+    func isSearchURL(url: URL) -> Bool {
+        return url.host == "duckduckgo.com"
+    }
 }
