@@ -48,7 +48,7 @@ class OverlayView: UIView {
         addSubview(settingsBackground)
 
         settingsButton.setTitle(UIConstants.strings.openSettings, for: .normal)
-        settingsButton.titleLabel?.font = UIConstants.fonts.settingsButton
+        settingsButton.titleLabel?.font = UIConstants.fonts.settingsOverlayButton
         settingsButton.titleEdgeInsets = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
         settingsButton.addTarget(self, action: #selector(didPressSettings), for: .touchUpInside)
         addSubview(settingsButton)

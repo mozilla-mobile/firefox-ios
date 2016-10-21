@@ -40,7 +40,7 @@ struct UIConstants {
         static let urlTextBackground = UIColor(white: 1, alpha: 0.2)
         static let urlTextFont = UIColor.white
         static let urlTextHighlight = UIColor(rgb: 0xC86DD7)
-        static let urlTextPlaceholder = UIColor(white: 1, alpha: 0.7)
+        static let urlTextPlaceholder = UIColor(white: 1, alpha: 0.4)
         static let urlTextShadow = UIColor.black
     }
 
@@ -50,7 +50,8 @@ struct UIConstants {
         static let safariInstruction = UIFont.systemFont(ofSize: 16, weight: UIFontWeightMedium)
         static let searchButton = UIFont.systemFont(ofSize: 15)
         static let searchButtonQuery = UIFont.boldSystemFont(ofSize: 15)
-        static let settingsButton = UIFont.systemFont(ofSize: 13)
+        static let settingsHomeButton = UIFont.systemFont(ofSize: 15)
+        static let settingsOverlayButton = UIFont.systemFont(ofSize: 13)
         static let tableSectionHeader = UIFont.systemFont(ofSize: 12, weight: UIFontWeightSemibold)
         static let urlTextFont = UIFont.systemFont(ofSize: 15)
     }

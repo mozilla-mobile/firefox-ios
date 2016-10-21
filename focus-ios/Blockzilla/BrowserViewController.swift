@@ -74,8 +74,7 @@ class BrowserViewController: UIViewController {
         }
 
         homeViewContainer.snp.makeConstraints { make in
-            make.top.equalTo(urlBarContainer.snp.bottom)
-            make.leading.trailing.bottom.equalTo(view)
+            make.edges.equalTo(view)
         }
 
         browser.view.snp.makeConstraints { make in

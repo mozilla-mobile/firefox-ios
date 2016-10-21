@@ -13,6 +13,34 @@ class HomeView: UIView {
 
     init() {
         super.init(frame: CGRect.zero)
+
+        let textLogo = UIImageView(image: #imageLiteral(resourceName: "img_focus_wordmark"))
+        addSubview(textLogo)
+
+        let iconLogo = UIImageView(image: #imageLiteral(resourceName: "img_focus_app"))
+        addSubview(iconLogo)
+
+        let settingsButton = InsetButton()
+        settingsButton.setTitle(UIConstants.strings.openSettings, for: .normal)
+        settingsButton.titleLabel?.font = UIConstants.fonts.settingsHomeButton
+        settingsButton.titleEdgeInsets = UIEdgeInsetsMake(10, 20, 10, 20)
+        settingsButton.addTarget(self, action: #selector(didPressSettings), for: .touchUpInside)
+        addSubview(settingsButton)
+
+        textLogo.snp.makeConstraints { make in
+            make.centerX.equalTo(self)
+            make.bottom.equalTo(snp.centerY).offset(-50)
+        }
+
+        iconLogo.snp.makeConstraints { make in
+            make.centerX.equalTo(self)
+            make.top.equalTo(snp.centerY).offset(50)
+        }
+
+        settingsButton.snp.makeConstraints { make in
+            make.centerX.equalTo(self)
+            make.bottom.equalTo(self).offset(-20)
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
