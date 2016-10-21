@@ -57,9 +57,10 @@ class BrowserToolbar: UIView {
         stackView.addArrangedSubview(stopReloadButton)
 
         sendButton.tintColor = UIConstants.colors.toolbarButtonNormal
-        sendButton.setImage(#imageLiteral(resourceName: "icon_openwith_active"), for: .normal)
-        sendButton.setImage(#imageLiteral(resourceName: "icon_openwith_active"), for: .highlighted)
         sendButton.addTarget(self, action: #selector(didPressSend), for: .touchUpInside)
+        let sendImage = OpenUtils.canOpenInFirefox ? #imageLiteral(resourceName: "icon_openwithfx_active") : #imageLiteral(resourceName: "icon_openwith_active")
+        sendButton.setImage(sendImage, for: .normal)
+        sendButton.setImage(sendImage, for: .highlighted)
         stackView.addArrangedSubview(sendButton)
         addSubview(stackView)
 

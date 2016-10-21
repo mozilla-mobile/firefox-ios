@@ -7,6 +7,10 @@ import Foundation
 class OpenUtils {
     private static let app = UIApplication.shared
 
+    static var canOpenInFirefox: Bool {
+        return app.canOpenURL(URL(string: "firefox://")!)
+    }
+
     private static func openInFirefox(url: URL) ->  Bool {
         guard let escaped = url.absoluteString.addingPercentEncoding(withAllowedCharacters: .urlQueryParameterAllowed),
               let firefoxURL = URL(string: "firefox://open-url?url=\(escaped)") else {
