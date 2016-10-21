@@ -31,6 +31,7 @@ class Browser: NSObject {
 
     private func createWebView() {
         webView = UIWebView()
+        webView.scalesPageToFit = true
         webView.delegate = self
         view.addSubview(webView)
 
