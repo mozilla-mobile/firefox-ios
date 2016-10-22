@@ -6,6 +6,7 @@ import Foundation
 import WebKit
 import Storage
 import Shared
+import IGListKit
 
 import XCGLogger
 
@@ -64,9 +65,31 @@ class Tab: NSObject {
     var restoring: Bool = false
     var pendingScreenshot = false
     var url: NSURL?
+    var _uuid: String?
+    var uuid: String {
+        if _uuid == nil {
+            print("UUID nill")
+            _uuid = NSUUID().UUIDString
+        }
+        return _uuid!
+    }
 
     /// The last title shown by this tab. Used by the tab tray to show titles for zombie tabs.
     var lastTitle: String?
+
+    override func diffIdentifier() -> NSObjectProtocol {
+        return uuid as NSObjectProtocol
+    }
+
+    override func isEqual(object: IGListDiffable?) -> Bool {
+        if self === object {
+            return true
+        }
+        if let object = object as? Tab {
+            return uuid == object.uuid
+        }
+        return false
+    }
 
     /// Whether or not the desktop site was requested with the last request, reload or navigation. Note that this property needs to
     /// be managed by the web view's navigation delegate.
