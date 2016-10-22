@@ -1351,7 +1351,8 @@ extension BrowserViewController: MenuActionDelegate {
             case .SharePage:
                 guard let url = tabManager.selectedTab?.url else { break }
                 let sourceView = self.navigationToolbar.menuButton
-                presentActivityViewController(url, sourceView: sourceView.superview, sourceRect: sourceView.frame, arrowDirection: .Up)
+                let tab = tabManager.selectedTab
+                presentActivityViewController(url, tab: tab, sourceView: sourceView.superview, sourceRect: sourceView.frame, arrowDirection: .Up)
             default: break
             }
         }
