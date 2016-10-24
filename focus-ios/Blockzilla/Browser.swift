@@ -19,20 +19,30 @@ class Browser: NSObject {
 
     let view = UIView()
 
-    private var webView: UIWebView!
+    fileprivate var webView: UIWebView!
 
     override init() {
         super.init()
 
         createWebView()
 
+        KeyboardHelper.defaultHelper.addDelegate(delegate: self)
+
         NotificationCenter.default.addObserver(self, selector: #selector(progressChanged(notification:)), name: Notification.Name(rawValue: "WebProgressEstimateChangedNotification"), object: nil)
+    }
+
+    var bottomInset: Float = 0 {
+        didSet {
+            webView.scrollView.contentInset.bottom = CGFloat(bottomInset)
+        }
     }
 
     private func createWebView() {
         webView = UIWebView()
         webView.scalesPageToFit = true
         webView.delegate = self
+        webView.scrollView.backgroundColor = UIConstants.colors.background
+        webView.scrollView.contentInset.bottom = CGFloat(bottomInset)
         view.addSubview(webView)
 
         webView.snp.makeConstraints { make in
@@ -157,4 +167,22 @@ extension Browser: UIWebViewDelegate {
             canGoForward = webView.canGoForward
         }
     }
+}
+
+extension Browser: KeyboardHelperDelegate {
+    public func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
+        // When an input field is focused, the web view adds 44 to the bottom inset to make room for the bottom
+        // input bar. Since this bar overlaps the browser toolbar, we don't need the additional bottom inset,
+        // so reset it here.
+        webView.scrollView.contentInset.bottom = CGFloat(bottomInset)
+    }
+
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
+        // As mentioned above, the webview adds 44 to the bottom inset during input. When the keyboard is hidden,
+        // the web view will then remove 44 from the inset to restore the original state. Since we already removed
+        // the extra inset above, reset it here to prevent it from being removed again.
+        webView.scrollView.contentInset.bottom = CGFloat(bottomInset)
+    }
+
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {}
 }

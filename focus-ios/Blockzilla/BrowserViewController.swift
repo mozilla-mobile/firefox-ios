@@ -37,6 +37,7 @@ class BrowserViewController: UIViewController {
         view.addSubview(homeViewContainer)
 
         browser.view.isHidden = true
+        browser.bottomInset = UIConstants.layout.browserToolbarHeight
         browser.delegate = self
         view.addSubview(browser.view)
 
