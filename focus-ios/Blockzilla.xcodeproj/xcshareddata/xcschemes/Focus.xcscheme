@@ -82,7 +82,7 @@
       </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
-      buildConfiguration = "FocusRelease">
+      buildConfiguration = "FocusDebug">
    </AnalyzeAction>
    <ArchiveAction
       buildConfiguration = "FocusRelease"
