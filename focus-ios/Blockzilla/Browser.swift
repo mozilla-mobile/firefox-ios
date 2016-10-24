@@ -76,6 +76,7 @@ class Browser: NSObject {
     }
 
     func loadRequest(_ request: URLRequest) {
+        isLoading = true
         webView.loadRequest(request)
     }
 
@@ -83,7 +84,17 @@ class Browser: NSObject {
         webView.stopLoading()
     }
 
-    fileprivate(set) var isLoading = false
+    fileprivate(set) var isLoading = false {
+        didSet {
+            if isLoading && !oldValue {
+                estimatedProgress = 0
+            }
+
+            if !isLoading {
+                estimatedProgress = 1
+            }
+        }
+    }
 
     fileprivate(set) var canGoBack = false {
         didSet {
@@ -97,9 +108,11 @@ class Browser: NSObject {
         }
     }
 
-    fileprivate(set) var estimatedProgress: Float = 0 {
+    fileprivate(set) var estimatedProgress: Float = -1 {
         didSet {
-            delegate?.browser(self, didUpdateEstimatedProgress: estimatedProgress)
+            if estimatedProgress != oldValue {
+                delegate?.browser(self, didUpdateEstimatedProgress: estimatedProgress)
+            }
         }
     }
 
@@ -131,10 +144,9 @@ extension Browser: UIWebViewDelegate {
 
         updateBackForwardStates(webView)
 
-        if request.mainDocumentURL == request.url, !isLoading {
+        if request.mainDocumentURL == request.url {
             isLoading = true
             delegate?.browserDidStartNavigation(self)
-            estimatedProgress = 0
         }
 
         return true

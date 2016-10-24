@@ -12,7 +12,7 @@ class BrowserViewController: UIViewController {
     fileprivate var homeView: HomeView?
     fileprivate let overlayView = OverlayView()
     fileprivate let searchEngine = SearchEngine()
-    fileprivate let urlBarContainer = UIView()
+    fileprivate let urlBarContainer = URLBarContainer()
     fileprivate var urlBar: URLBar!
     fileprivate var topURLBarConstraints = [Constraint]()
 
@@ -29,9 +29,7 @@ class BrowserViewController: UIViewController {
         let backgroundView = GradientBackgroundView(gradient: gradient)
         view.addSubview(backgroundView)
 
-        let urlBarBackground = GradientBackgroundView()
         urlBarContainer.alpha = 1
-        urlBarContainer.addSubview(urlBarBackground)
         view.addSubview(urlBarContainer)
 
         view.addSubview(homeViewContainer)
@@ -63,10 +61,6 @@ class BrowserViewController: UIViewController {
             // Shrink the container to 0 height when there's no URL bar.
             // This will make it animate down from the top when the URL bar is added.
             make.height.equalTo(0).priority(500)
-        }
-
-        urlBarBackground.snp.makeConstraints { make in
-            make.edges.equalTo(urlBarContainer)
         }
 
         browserToolbar.snp.makeConstraints { make in
@@ -209,6 +203,7 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidDismiss(urlBar: URLBar) {
         overlayView.dismiss()
+        urlBarContainer.isBright = !browser.isLoading
     }
 
     func urlBarDidPressDelete(urlBar: URLBar) {
@@ -217,6 +212,7 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidFocus(urlBar: URLBar) {
         overlayView.present()
+        urlBarContainer.isBright = false
     }
 
     func urlBarDidPressActivateButton(urlBar: URLBar) {
@@ -255,14 +251,17 @@ extension BrowserViewController: BrowserToolbarDelegate {
 extension BrowserViewController: BrowserDelegate {
     func browserDidStartNavigation(_ browser: Browser) {
         browserToolbar.isLoading = true
+        urlBarContainer.isBright = false
     }
 
     func browserDidFinishNavigation(_ browser: Browser) {
         browserToolbar.isLoading = false
+        urlBarContainer.isBright = !urlBar.isEditing
     }
 
     func browser(_ browser: Browser, didFailNavigationWithError error: Error) {
         browserToolbar.isLoading = false
+        urlBarContainer.isBright = true
     }
 
     func browser(_ browser: Browser, didUpdateCanGoBack canGoBack: Bool) {

@@ -31,6 +31,7 @@
 		D3426AED1DB846310016DA5A /* DomainCompletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3426AEC1DB846310016DA5A /* DomainCompletion.swift */; };
 		D3426AEF1DB846BB0016DA5A /* topdomains.txt in Resources */ = {isa = PBXBuildFile; fileRef = D3426AEE1DB846BB0016DA5A /* topdomains.txt */; };
 		D3426AF61DB84E7A0016DA5A /* SearchEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3426AF51DB84E7A0016DA5A /* SearchEngine.swift */; };
+		D3426B031DBAE3800016DA5A /* URLBarContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3426B021DBAE3800016DA5A /* URLBarContainer.swift */; };
 		D343DCC21C44356500D7EEE8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D343DCC41C44356500D7EEE8 /* Localizable.strings */; };
 		D34E70331DA8736300BABDCC /* AutocompleteTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34E70321DA8736300BABDCC /* AutocompleteTextField.swift */; };
 		D34E70351DA874AA00BABDCC /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34E70341DA874AA00BABDCC /* StringExtensions.swift */; };
@@ -148,6 +149,7 @@
 		D3426AEC1DB846310016DA5A /* DomainCompletion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DomainCompletion.swift; sourceTree = "<group>"; };
 		D3426AEE1DB846BB0016DA5A /* topdomains.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = topdomains.txt; sourceTree = "<group>"; };
 		D3426AF51DB84E7A0016DA5A /* SearchEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchEngine.swift; sourceTree = "<group>"; };
+		D3426B021DBAE3800016DA5A /* URLBarContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLBarContainer.swift; sourceTree = "<group>"; };
 		D343DCC31C44356500D7EEE8 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D34E70321DA8736300BABDCC /* AutocompleteTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutocompleteTextField.swift; sourceTree = "<group>"; };
 		D34E70341DA874AA00BABDCC /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
@@ -336,13 +338,13 @@
 			isa = PBXGroup;
 			children = (
 				D30179C51BCD78E1009AD388 /* Blockzilla-Bridging-Header.h */,
-				E4BF2DE21BACE8CA00DA9D68 /* Info.plist */,
-				E4BF2E131BAE324400DA9D68 /* LaunchScreen.storyboard */,
-				E47F9AED1DB9338600A93285 /* AdjustIntegration.swift */,
 				E47F9AE91DB9329D00A93285 /* Adjust-Focus.plist */,
 				E47F9AEB1DB9333200A93285 /* Adjust-Klar.plist */,
+				E4BF2DE21BACE8CA00DA9D68 /* Info.plist */,
+				E4BF2E131BAE324400DA9D68 /* LaunchScreen.storyboard */,
 				D3BFCB501BD1559300AD22D1 /* AboutContentViewController.swift */,
 				D30179C21BCC6F65009AD388 /* AboutViewController.swift */,
+				E47F9AED1DB9338600A93285 /* AdjustIntegration.swift */,
 				E4BF2DD61BACE8CA00DA9D68 /* AppDelegate.swift */,
 				D34E70321DA8736300BABDCC /* AutocompleteTextField.swift */,
 				D30179061BC6CB19009AD388 /* BlockerEnabledDetector.swift */,
@@ -370,6 +372,7 @@
 				D32F71D21BCEF67C006D44FC /* UIViewExtensions.swift */,
 				D3E2C96A1DA3069000DEBE3D /* URIFixup.swift */,
 				D3E2C9601DA2F7C600DEBE3D /* URLBar.swift */,
+				D3426B021DBAE3800016DA5A /* URLBarContainer.swift */,
 				D392887C1BC5E4510016A9A0 /* WaveHeaderView.swift */,
 				D37DE55C1BCDBD6100906364 /* WaveView.swift */,
 				D3426AEE1DB846BB0016DA5A /* topdomains.txt */,
@@ -549,6 +552,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D3E2C8EA1D9F0E6200DEBE3D /* BrowserViewController.swift in Sources */,
+				D3426B031DBAE3800016DA5A /* URLBarContainer.swift in Sources */,
 				D3BFCB3F1BD14F5900AD22D1 /* LocalWebServer.swift in Sources */,
 				D3426AED1DB846310016DA5A /* DomainCompletion.swift in Sources */,
 				D3E251FB1DAF0668005918DC /* AppInfo.swift in Sources */,

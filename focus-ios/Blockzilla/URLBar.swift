@@ -18,13 +18,13 @@ class URLBar: UIView {
     weak var delegate: URLBarDelegate?
 
     let progressBar = UIProgressView(progressViewStyle: .bar)
+    fileprivate(set) var isEditing = false
 
     fileprivate let cancelButton = InsetButton()
     fileprivate var cancelButtonWidthConstraint: Constraint!
     fileprivate let deleteButton = InsetButton()
     fileprivate let domainCompletion = DomainCompletion()
 
-    fileprivate var isEditing = false
     fileprivate var deleteButtonWidthConstraint: Constraint!
     fileprivate var deleteButtonTrailingConstraint: Constraint!
 
