@@ -615,6 +615,7 @@ class BrowserViewController: UIViewController {
     func resetBrowserChrome() {
         // animate and reset transform for tab chrome
         urlBar.updateAlphaForSubviews(1)
+        footer.alpha = 1
 
         [header,
             footer,
