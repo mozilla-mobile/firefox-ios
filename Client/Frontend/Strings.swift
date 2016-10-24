@@ -51,6 +51,9 @@ extension Strings {
     public static let SettingsClearPrivateDataTitle = NSLocalizedString("Settings.ClearPrivateData.Title", value: "Clear Private Data", comment: "Title displayed in header of the setting panel.")
     public static let SettingsSearchDoneButton = NSLocalizedString("Settings.Search.Done.Button", value: "Done", comment: "Button displayed at the top of the search settings.")
     public static let SettingsSearchEditButton = NSLocalizedString("Settings.Search.Edit.Button", value: "Edit", comment: "Button displayed at the top of the search settings.")
+    public static let SettingsSignOutButton = NSLocalizedString("Settings.SignOut.Button", value: "Sign Out", comment: "Button displayed at the bottom of settings page allowing users to Sign Out of FxA")
+    public static let SettingsSignOutDestructiveAction = NSLocalizedString("Settings.SignOut.DestructiveButton", value: "Sign Out", comment: "Destructive action button in alert when user is prompted for signing out")
+    public static let SettingsSignOutAlertTitle = NSLocalizedString("Settings.SignOut.Title", value: "Sign Out?", comment: "Title of the alert when prompting the user asking to sign out.")
 }
 
 // Error pages.
@@ -211,7 +214,6 @@ extension Strings {
 }
 
 // open in
-
 extension Strings {
     public static let OpenInDownloadHelperAlertTitle = NSLocalizedString("Downloads.Alert.Title", value: "Firefox Downloads", comment: "The title of the alert box asking the user if they want to use another app to open a file.")
     public static let OpenInDownloadHelperAlertMessage = NSLocalizedString("Downloads.Alert.Message", value: "Firefox is unable to download or display this file. Would you like to open it in another app?", comment: "The message of the alert box asking the user if they want to use another app to open a file.")
@@ -227,3 +229,8 @@ extension Strings {
     public static let RemoveBookmarkContextMenuTitle = NSLocalizedString("ActivityStream.ContextMenu.RemoveBookmark", value: "Remove Bookmark", comment: "The title for the Remove Bookmark context menu action for Activity Stream")
     public static let DismissContextMenuTitle = NSLocalizedString("ActivityStream.ContextMenu.Dismiss", value: "Dismiss", comment: "The title for the Dismiss context menu action for Activity Stream")
 }
+
+// MARK: Deprecated Strings (to be removed in next version)
+private let logOut = NSLocalizedString("Log Out", comment: "Button in settings screen to disconnect from your account")
+private let logOutQuestion = NSLocalizedString("Log Out?", comment: "Title of the 'log out firefox account' alert")
+private let logOutDestructive = NSLocalizedString("Log Out", comment: "Disconnect button in the 'log out firefox account' alert")
