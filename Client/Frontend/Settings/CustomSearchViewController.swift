@@ -14,13 +14,24 @@ private let log = Logger.browserLogger
 class CustomSearchViewController: SettingsTableViewController {
     
     private var urlString: String?
+    private var engineTitle: String?
+    
+    private var spinnerView: UIActivityIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Add Custom Search Engine"
+        let spinner = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
+        spinner.snp_makeConstraints { make in
+            make.center.equalTo(view)
+            return
+        }
+        self.spinnerView = spinner
+//        self.view.addSubview(self.spinnerView)
     }
     
     func addSearchEngine(searchQuery: String) {
+        
         let SearchTermComponent = "%s"
         let placeholder = "{searchTerms}"
         var processedSearchQuery = ""
@@ -29,7 +40,7 @@ class CustomSearchViewController: SettingsTableViewController {
         }
         guard processedSearchQuery != "",
             let url = NSURL(string: processedSearchQuery.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLFragmentAllowedCharacterSet())!),
-            let shortName = url.domainURL().host
+            let shortName = self.engineTitle
             else {
                 let alert = ThirdPartySearchAlerts.failedToAddThirdPartySearch()
                 self.presentViewController(alert, animated: true, completion: nil)
@@ -73,6 +84,16 @@ class CustomSearchViewController: SettingsTableViewController {
         }
         
         let basicSettings: [Setting] = [
+            CustomSearchEngineField(placeholder: "Title", settingDidChange: {fieldText in
+                self.engineTitle = fieldText
+                print(self.engineTitle)
+                }, settingIsValid: { text in
+                    if text != nil && text != "" {
+                        return true
+                    } else {
+                        return false
+                    }
+            }),
             CustomSearchEngineField(placeholder: "URL (Replace Query with %s)", settingDidChange: {fieldText in
                     self.urlString = fieldText
                 }, settingIsValid: { text in
@@ -93,6 +114,7 @@ class CustomSearchViewController: SettingsTableViewController {
     
     func addCustomSearchEngine() -> (UINavigationController? -> ()) {
         return { nav in
+            self.spinnerView.startAnimating()
             self.addSearchEngine(self.urlString!)
         }
     }
