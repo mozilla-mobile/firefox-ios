@@ -22,7 +22,7 @@ struct TopSiteCellUX {
  */
 class TopSiteItemCell: UICollectionViewCell {
 
-    lazy private var imageView: UIImageView = {
+    lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.masksToBounds = true
         return imageView

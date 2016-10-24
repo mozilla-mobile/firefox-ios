@@ -9,6 +9,8 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
     private var site: Site
     private var actions: [ActionOverlayTableViewAction]
     private var tableView = UITableView()
+    private var headerIconHandler: () -> UIImage?
+    private var headerIconBackgroundHandler: () -> UIColor?
     lazy var tapRecognizer: UITapGestureRecognizer = {
         let tapRecognizer = UITapGestureRecognizer()
         tapRecognizer.addTarget(self, action: #selector(ActionOverlayTableViewController.dismiss(_:)))
@@ -24,9 +26,11 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
         return visualEffectView
     }()
 
-    init(site: Site, actions: [ActionOverlayTableViewAction]) {
+    init(site: Site, actions: [ActionOverlayTableViewAction], headerIconHandler: () -> UIImage?, headerIconBackgroundHandler: () -> UIColor?) {
         self.site = site
         self.actions = actions
+        self.headerIconHandler = headerIconHandler
+        self.headerIconBackgroundHandler = headerIconBackgroundHandler
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -108,7 +112,7 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
 
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier("ActionOverlayTableViewHeader") as! ActionOverlayTableViewHeader
-        header.configureWithSite(site)
+        header.configureWithSite(site, image: headerIconHandler(), imageBackgroundColor: headerIconBackgroundHandler())
         return header
     }
 }
@@ -156,8 +160,16 @@ class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
         let siteImageView = UIImageView()
         siteImageView.contentMode = UIViewContentMode.ScaleAspectFit
         siteImageView.clipsToBounds = true
-        siteImageView.layer.cornerRadius = SimpleHighlightCellUX.CornerRadius
         return siteImageView
+    }()
+
+    lazy var siteImageBackground: UIView = {
+        let siteImageBackground = UIView()
+        siteImageBackground.layer.cornerRadius = SimpleHighlightCellUX.CornerRadius
+        siteImageBackground.layer.borderColor = SimpleHighlightCellUX.BorderColor.CGColor
+        siteImageBackground.layer.borderWidth = SimpleHighlightCellUX.BorderWidth
+        siteImageBackground.layer.masksToBounds = true
+        return siteImageBackground
     }()
 
     override init(reuseIdentifier: String?) {
@@ -173,25 +185,32 @@ class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
 
         contentView.backgroundColor = UIConstants.PanelBackgroundColor
 
-        contentView.addSubview(siteImageView)
+        contentView.addSubview(siteImageBackground)
+        siteImageBackground.addSubview(siteImageView)
         contentView.addSubview(descriptionLabel)
         contentView.addSubview(titleLabel)
 
-        siteImageView.snp_remakeConstraints { make in
+        siteImageBackground.snp_remakeConstraints { make in
             make.centerY.equalTo(contentView)
             make.leading.equalTo(contentView).offset(12)
             make.size.equalTo(SimpleHighlightCellUX.SiteImageViewSize)
         }
 
+        siteImageView.snp_remakeConstraints { make in
+            make.centerY.equalTo(contentView)
+            make.centerX.equalTo(siteImageBackground)
+            make.size.equalTo(SimpleHighlightCellUX.IconSize)
+        }
+
         titleLabel.snp_remakeConstraints { make in
-            make.leading.equalTo(siteImageView.snp_trailing).offset(12)
+            make.leading.equalTo(siteImageBackground.snp_trailing).offset(12)
             make.trailing.equalTo(contentView).inset(12)
-            make.top.equalTo(siteImageView).offset(7)
+            make.top.equalTo(siteImageBackground).offset(7)
         }
 
         descriptionLabel.snp_remakeConstraints { make in
             make.leading.equalTo(titleLabel)
-            make.bottom.equalTo(siteImageView).inset(7)
+            make.bottom.equalTo(siteImageBackground).inset(7)
         }
     }
     
@@ -199,26 +218,10 @@ class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configureWithSite(site: Site) {
-        if let icon = site.icon {
-            let url = icon.url
-            self.siteImageView.layer.borderWidth = 0
-            self.setImageWithURL(NSURL(string: url)!)
-        } else if let url = NSURL(string: site.url) {
-            self.siteImage = FaviconFetcher.getDefaultFavicon(url)
-            self.siteImageView.layer.borderWidth = SimpleHighlightCellUX.BorderWidth
-        }
+    func configureWithSite(site: Site, image: UIImage?, imageBackgroundColor: UIColor?) {
+        self.siteImageBackground.backgroundColor = imageBackgroundColor
+        self.siteImage = image
         self.titleLabel.text = site.title.characters.count <= 1 ? site.url : site.title
         self.descriptionLabel.text = site.tileURL.baseDomain()
-    }
-
-    func setImageWithURL(url: NSURL) {
-        siteImageView.sd_setImageWithURL(url) { (img, err, type, url) -> Void in
-            guard let img = img else {
-                return
-            }
-            self.siteImage = img
-        }
-        siteImageView.layer.masksToBounds = true
     }
 }

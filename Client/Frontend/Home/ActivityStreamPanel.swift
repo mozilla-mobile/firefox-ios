@@ -340,17 +340,23 @@ extension ActivityStreamPanel {
 
         let section = Section(indexPath.section)
         if section == .Highlights {
-            presentContextMenu(highlights[indexPath.row], section: section, indexPath: indexPath)
+            guard let highlightCell = tableView.cellForRowAtIndexPath(indexPath) as! SimpleHighlightCell? else { return }
+            let headerIconHandler = { return highlightCell.siteImageView.image }
+            let headerIconBackgroundHandler = { return highlightCell.siteImageView.backgroundColor }
+            presentContextMenu(highlights[indexPath.row], section: section, indexPath: indexPath, headerIconHandler: headerIconHandler, headerIconBackgroundHandler: headerIconBackgroundHandler)
         } else {
             let topSiteCell = self.tableView.cellForRowAtIndexPath(indexPath) as! ASHorizontalScrollCell
             let touchPointWithinTopSiteCell = longPressGestureRecognizer.locationInView(topSiteCell.collectionView)
             if let indexPath = topSiteCell.collectionView.indexPathForItemAtPoint(touchPointWithinTopSiteCell) {
-                presentContextMenu(self.topSitesManager.content[indexPath.item], section: section, indexPath: indexPath)
+                let topSiteItemCell = topSiteCell.collectionView.cellForItemAtIndexPath(indexPath) as! TopSiteItemCell
+                let headerIconHandler = { return topSiteItemCell.imageView.image }
+                let headerIconBackgroundHandler = { return topSiteItemCell.contentView.backgroundColor }
+                presentContextMenu(self.topSitesManager.content[indexPath.item], section: section, indexPath: indexPath, headerIconHandler: headerIconHandler, headerIconBackgroundHandler: headerIconBackgroundHandler)
             }
         }
     }
 
-    private func presentContextMenu(site: Site, section: Section, indexPath: NSIndexPath) {
+    private func presentContextMenu(site: Site, section: Section, indexPath: NSIndexPath, headerIconHandler: () -> UIImage?, headerIconBackgroundHandler: () -> UIColor?) {
         let eventSource: ASSourceField
         let indexNumber: Int
         if section == .Highlights {
@@ -424,7 +430,7 @@ extension ActivityStreamPanel {
         } else {
             actions.append(removeTopSiteAction)
         }
-        let contextMenu = ActionOverlayTableViewController(site: site, actions: actions)
+        let contextMenu = ActionOverlayTableViewController(site: site, actions: actions, headerIconHandler: headerIconHandler, headerIconBackgroundHandler: headerIconBackgroundHandler)
         contextMenu.modalPresentationStyle = .OverFullScreen
         contextMenu.modalTransitionStyle = .CrossDissolve
         self.presentViewController(contextMenu, animated: true, completion: nil)
