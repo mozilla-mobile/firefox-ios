@@ -5,7 +5,7 @@
 import Foundation
 
 class SearchEngine {
-    private let template = "https://duckduckgo.com/?q=%s"
+    private let template = "https://search.yahoo.com/yhs/search?ei=UTF-8&hspart=mozilla&hsimp=yhsm-002&p=%s&type=ios"
 
     func urlForQuery(_ query: String) -> URL? {
         guard let escaped = query.addingPercentEncoding(withAllowedCharacters: .urlQueryParameterAllowed),
@@ -18,6 +18,6 @@ class SearchEngine {
     }
 
     func isSearchURL(url: URL) -> Bool {
-        return url.host == "duckduckgo.com"
+        return url.host == "search.yahoo.com"
     }
 }

@@ -314,7 +314,6 @@ extension BrowserViewController: OverlayViewDelegate {
     func overlayView(_ overlayView: OverlayView, didSearchForQuery query: String) {
         if let url = searchEngine.urlForQuery(query) {
             submit(url: url)
-            AdjustIntegration.track(eventName: .search)
         }
         urlBar.dismiss()
     }
