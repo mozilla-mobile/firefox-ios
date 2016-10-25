@@ -53,10 +53,10 @@ private struct AdjustSettings {
         }
 
         self.appToken = appToken
-        #if RELEASE
-            self.environment = AdjustEnvironment.production
-        #else
+        #if DEBUG
             self.environment = AdjustEnvironment.sandbox
+        #else
+            self.environment = AdjustEnvironment.production
         #endif
         self.events = eventMappings
     }
