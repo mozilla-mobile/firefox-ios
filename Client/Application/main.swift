@@ -10,8 +10,8 @@ if AppConstants.IsRunningTest || AppConstants.IsRunningFastlaneSnapshot {
     appDelegate = TestAppDelegate.self
 } else {
     switch AppConstants.BuildChannel {
-    case .Aurora:
-        appDelegate = AuroraAppDelegate.self
+    case .Nightly:
+        appDelegate = NightlyAppDelegate.self
     default:
         appDelegate = AppDelegate.self
     }
