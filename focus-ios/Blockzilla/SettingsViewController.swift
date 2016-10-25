@@ -132,7 +132,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         case 1: return 1 // Integration.
         case 2: return 4 // Privacy.
         case 3: return 1 // Performance.
-        case 4: return 1 // Support
+        case 4: return 1 // Mozilla.
         default:
             assertionFailure("Invalid section")
             return 0
@@ -178,7 +178,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         case 1: labelText = UIConstants.strings.toggleSectionIntegration
         case 2: labelText = UIConstants.strings.toggleSectionPrivacy
         case 3: labelText = UIConstants.strings.toggleSectionPerformance
-        case 4: labelText = UIConstants.strings.toggleSectionSupport
+        case 4: labelText = UIConstants.strings.toggleSectionMozilla
         default: return nil
         }
 

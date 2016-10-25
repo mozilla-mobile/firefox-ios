@@ -78,8 +78,7 @@ struct UIConstants {
 
     struct strings {
         static let appDescription = String(format: NSLocalizedString("%@ improves privacy and may boost page load speed and lower your mobile data usage.", comment: "Label displayed above toggles"), AppInfo.ProductName)
-        static let clearButton = NSLocalizedString("URL.clearButton", value: "CLEAR", comment: "Clear button in the URL bar")
-        static let notEnabledError = String(format: NSLocalizedString("%@ is not enabled.", comment: "Error label when the blocker is not enabled, shown in the intro and main app when disabled"), AppInfo.ProductName)
+        static let eraseButton = NSLocalizedString("eraseButton", value: "ERASE", comment: "Erase button in the URL bar")
         static let openSettings = NSLocalizedString("Go to Settings", comment: "Button to open the system Settings, shown on the home screen and after tapping the URL bar")
         static let labelBlockAds = NSLocalizedString("Block ad trackers", comment: "Label for toggle on main screen")
         static let labelBlockAnalytics = NSLocalizedString("Block analytics trackers", comment: "Label for toggle on main screen")
@@ -87,17 +86,18 @@ struct UIConstants {
         static let labelBlockOther = NSLocalizedString("Block other content trackers", comment: "Label for toggle on main screen")
         static let labelBlockFonts = NSLocalizedString("Block Web fonts", comment: "Label for toggle on main screen")
         static let labelOpenSettings = NSLocalizedString("Open Settings", comment: "Button label to open settings screen")
+        static let labelSendAnonymousUsageData = NSLocalizedString("Settings.toggleSendAnonymousUsageData", value: "Send anonymous usage data", comment: "Label for Send Anonymous Usage Data toggle on main screen")
+        static let notEnabledError = String(format: NSLocalizedString("%@ is not enabled.", comment: "Error label when the blocker is not enabled, shown in the intro and main app when disabled"), AppInfo.ProductName)
         static let searchButton = NSLocalizedString("Search for %@", comment: "Label displayed for search button when typing in the URL bar")
         static let settingsTitle = NSLocalizedString("Settings.title", value: "Settings", comment: "Title for settings screen")
         static let subtitleBlockOther = NSLocalizedString("May break some videos and Web pages", comment: "Label subtitle for toggle on main screen")
+        static let subtitleSendAnonymousUsageData = NSLocalizedString("Settings.toggleSendAnonymousUsageDataSubtitle", value: "Learn more", comment: "Subtitle for Send Anonymous Usage Data toggle on main screen")
         static let toggleSectionIntegration = NSLocalizedString("Settings.sectionIntegration", value: "INTEGRATION", comment: "Label for Safari integration section")
+        static let toggleSectionMozilla = NSLocalizedString("Settings.sectionMozilla", value: "MOZILLA", comment: "Section label for Mozilla toggles")
         static let toggleSectionPerformance = NSLocalizedString("PERFORMANCE", comment: "Section label for performance toggles")
         static let toggleSectionPrivacy = NSLocalizedString("PRIVACY", comment: "Section label for privacy toggles")
         static let toggleSafari = NSLocalizedString("Settings.toggleSafari", value: "Safari", comment: "Safari toggle label on settings screen")
         static let urlBarCancel = NSLocalizedString("URL.cancelLabel", value: "Cancel", comment: "Label for cancel button shown when entering a URL or search")
         static let urlTextPlaceholder = NSLocalizedString("URL.placeholderText", value: "Search or enter address", comment: "Placeholder text shown in the URL bar before the user navigates to a page")
-        static let toggleSectionSupport = NSLocalizedString("Settings.supportSectionLabel", value: "SUPPORT", comment: "Section label for support toggles")
-        static let labelSendAnonymousUsageData = NSLocalizedString("Settings.toggleSendAnonymousUsageData", value: "Send anonymous usage data", comment: "Label for Send Anonymous Usage Data toggle on main screen")
-        static let subtitleSendAnonymousUsageData = NSLocalizedString("Settings.toggleSendAnonymousUsageDataSubtitle", value: "More info…", comment: "Subtitle for Send Anonymous Usage Data toggle on main screen")
     }
 }
