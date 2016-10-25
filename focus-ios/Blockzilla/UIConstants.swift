@@ -22,11 +22,9 @@ struct UIConstants {
         static let focusRed = UIColor(rgb: 0xE63D2F)
         static let focusViolet = UIColor(rgb: 0x95368C)
         static let gradientBackground = UIColor(rgb: 0x363B40)
-        static let gradientLeft = UIColor(rgb: 0xC86DD7)
-        static let gradientRight = UIColor(rgb: 0x3023AE)
-        static let homeGradientLeft = UIColor(rgb: 0xC43B31, alpha: 0.6)
-        static let homeGradientMiddle = UIColor(rgb: 0x96368D, alpha: 0.6)
-        static let homeGradientRight = UIColor(rgb: 0x135EA4, alpha: 0.6)
+        static let gradientLeft = UIColor(rgb: 0xC43B31)
+        static let gradientMiddle = UIColor(rgb: 0x96368D)
+        static let gradientRight = UIColor(rgb: 0x135EA4)
         static let navigationButton = UIColor(rgb: 0x00A7E0)
         static let navigationTitle = UIColor(rgb: 0x61666D)
         static let overlayBackground = UIColor(white: 0, alpha: 0.8)
@@ -68,6 +66,7 @@ struct UIConstants {
         static let toolbarFadeAnimationDuration = 0.25
         static let urlBarMoveToTopAnimationDuration: TimeInterval = 0.3
         static let urlBarCornerRadius: CGFloat = 2
+        static let urlBarFadeAnimationDuration: TimeInterval = 0.3
         static let urlBarMargin: CGFloat = 8
         static let urlBarHeightInset: CGFloat = 10
         static let urlBarShadowOpacity: Float = 0.3

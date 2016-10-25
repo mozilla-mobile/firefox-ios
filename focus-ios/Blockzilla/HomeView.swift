@@ -14,6 +14,9 @@ class HomeView: UIView {
     init() {
         super.init(frame: CGRect.zero)
 
+        let background = GradientBackgroundView(alpha: 0.6, startPoint: CGPoint.zero, endPoint: CGPoint(x: 1, y: 1))
+        addSubview(background)
+
         let textLogo = UIImageView(image: #imageLiteral(resourceName: "img_focus_wordmark"))
         addSubview(textLogo)
 
@@ -26,6 +29,10 @@ class HomeView: UIView {
         settingsButton.titleEdgeInsets = UIEdgeInsetsMake(10, 20, 10, 20)
         settingsButton.addTarget(self, action: #selector(didPressSettings), for: .touchUpInside)
         addSubview(settingsButton)
+
+        background.snp.makeConstraints { make in
+            make.edges.equalTo(self)
+        }
 
         textLogo.snp.makeConstraints { make in
             make.centerX.equalTo(self)

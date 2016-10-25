@@ -22,17 +22,10 @@ class BrowserViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let gradient = CAGradientLayer()
-        gradient.startPoint = CGPoint(x: 0.2, y: 0)
-        gradient.endPoint = CGPoint(x: 0.8, y: 1)
-        gradient.colors = [UIConstants.colors.homeGradientLeft.cgColor, UIConstants.colors.homeGradientMiddle.cgColor, UIConstants.colors.homeGradientRight.cgColor]
-        let backgroundView = GradientBackgroundView(gradient: gradient)
-        view.addSubview(backgroundView)
+        view.addSubview(homeViewContainer)
 
         urlBarContainer.alpha = 1
         view.addSubview(urlBarContainer)
-
-        view.addSubview(homeViewContainer)
 
         browser.view.isHidden = true
         browser.bottomInset = UIConstants.layout.browserToolbarHeight
@@ -50,10 +43,6 @@ class BrowserViewController: UIViewController {
         overlayView.delegate = self
         overlayView.backgroundColor = UIConstants.colors.overlayBackground
         view.addSubview(overlayView)
-
-        backgroundView.snp.makeConstraints { make in
-            make.edges.equalTo(view)
-        }
 
         urlBarContainer.snp.makeConstraints { make in
             make.top.leading.trailing.equalTo(view)

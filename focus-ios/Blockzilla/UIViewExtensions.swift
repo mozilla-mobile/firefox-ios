@@ -7,8 +7,7 @@ import Foundation
 extension UIView {
     func animateHidden(_ hidden: Bool, duration: TimeInterval, completion: (() -> Void)? = nil) {
         self.isHidden = false
-        UIView.setAnimationBeginsFromCurrentState(true)
-        UIView.transition(with: self, duration: duration, options: UIViewAnimationOptions.curveLinear, animations: {
+        UIView.transition(with: self, duration: duration, options: .beginFromCurrentState, animations: {
             self.alpha = hidden ? 0 : 1
         }, completion: { finished in
             // Only update the hidden state if the animation finished.

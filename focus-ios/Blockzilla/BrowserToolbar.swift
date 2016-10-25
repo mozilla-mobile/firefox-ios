@@ -20,13 +20,22 @@ class BrowserToolbar: UIView {
     private let stopReloadButton = UIButton()
     private let sendButton = UIButton()
     private let gradient = CAGradientLayer()
+    private let backgroundDark = GradientBackgroundView()
+    private let backgroundBright = GradientBackgroundView(alpha: 0.2)
 
     init() {
         super.init(frame: CGRect.zero)
 
-        let backgroundView = GradientBackgroundView()
-        backgroundView.alpha = 0.9
-        addSubview(backgroundView)
+        let background = UIView()
+        background.alpha = 0.9
+        background.backgroundColor = UIConstants.colors.background
+        addSubview(background)
+
+        background.addSubview(backgroundDark)
+
+        backgroundBright.isHidden = true
+        backgroundBright.alpha = 0
+        background.addSubview(backgroundBright)
 
         let borderView = UIView()
         borderView.backgroundColor = UIConstants.colors.toolbarBorder
@@ -73,9 +82,17 @@ class BrowserToolbar: UIView {
             make.edges.equalTo(self)
         }
 
-        backgroundView.snp.makeConstraints { make in
+        background.snp.makeConstraints { make in
             make.top.equalTo(borderView.snp.bottom)
             make.leading.trailing.bottom.equalTo(self)
+        }
+
+        backgroundDark.snp.makeConstraints { make in
+            make.edges.equalTo(background)
+        }
+
+        backgroundBright.snp.makeConstraints { make in
+            make.edges.equalTo(background)
         }
     }
 
@@ -111,6 +128,10 @@ class BrowserToolbar: UIView {
 
             stopReloadButton.setImage(image, for: .normal)
             stopReloadButton.setImage(pressedImage, for: .highlighted)
+
+            let duration = UIConstants.layout.urlBarFadeAnimationDuration
+            backgroundDark.animateHidden(!isLoading, duration: duration)
+            backgroundBright.animateHidden(isLoading, duration: duration)
         }
     }
 

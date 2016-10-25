@@ -5,8 +5,8 @@
 import Foundation
 
 class URLBarContainer: UIView {
-    let backgroundDark = GradientBackgroundView()
-    let backgroundBright = GradientBackgroundView(alpha: 0.8)
+    private let backgroundDark = GradientBackgroundView()
+    private let backgroundBright = GradientBackgroundView(alpha: 0.8)
 
     init() {
         super.init(frame: CGRect.zero)
@@ -28,8 +28,8 @@ class URLBarContainer: UIView {
 
     var isBright: Bool = false {
         didSet {
-            backgroundDark.animateHidden(isBright, duration: 0.3)
-            backgroundBright.animateHidden(!isBright, duration: 0.3)
+            backgroundDark.animateHidden(isBright, duration: UIConstants.layout.urlBarFadeAnimationDuration)
+            backgroundBright.animateHidden(!isBright, duration: UIConstants.layout.urlBarFadeAnimationDuration)
         }
     }
 
