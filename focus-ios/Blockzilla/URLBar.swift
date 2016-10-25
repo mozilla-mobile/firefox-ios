@@ -18,6 +18,7 @@ class URLBar: UIView {
     weak var delegate: URLBarDelegate?
 
     let progressBar = UIProgressView(progressViewStyle: .bar)
+    var showButtons = false
     fileprivate(set) var isEditing = false
 
     fileprivate let cancelButton = InsetButton()
@@ -147,8 +148,6 @@ class URLBar: UIView {
         }
     }
 
-    var showButtons = false
-
     fileprivate func activate() {
         guard !isEditing else { return }
 
@@ -168,6 +167,8 @@ class URLBar: UIView {
             self.deleteButtonWidthConstraint.activate()
 
             self.deleteButtonTrailingConstraint.update(offset: 0)
+
+            self.urlTextContainer.backgroundColor = UIConstants.colors.urlTextBackground
 
             self.layoutIfNeeded()
         }
@@ -191,6 +192,8 @@ class URLBar: UIView {
             self.deleteButton.alpha = 1
             self.deleteButtonWidthConstraint.deactivate()
             self.deleteButtonTrailingConstraint.update(offset: -5)
+
+            self.urlTextContainer.backgroundColor = nil
 
             self.layoutIfNeeded()
         }
