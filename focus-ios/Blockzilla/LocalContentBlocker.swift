@@ -34,9 +34,12 @@ class LocalContentBlocker: URLProtocol, URLSessionDelegate, URLSessionDataDelega
             return
         }
 
+        var mutableRequest = request
+        mutableRequest.addValue("1", forHTTPHeaderField: "DNT")
+
         let configuration = URLSessionConfiguration.default
         let session = Foundation.URLSession(configuration: configuration, delegate: self, delegateQueue: nil)
-        dataTask = session.dataTask(with: request)
+        dataTask = session.dataTask(with: mutableRequest)
         dataTask?.resume()
     }
 
