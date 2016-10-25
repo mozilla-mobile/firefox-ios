@@ -194,7 +194,7 @@
             </BuildableReference>
             <SkippedTests>
                <Test
-                  Identifier = "SessionRestoreTests/testTabRestore()">
+                  Identifier = "ViewMemoryLeakTests">
                </Test>
             </SkippedTests>
          </TestableReference>

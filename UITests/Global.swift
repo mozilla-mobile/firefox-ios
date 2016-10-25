@@ -325,7 +325,7 @@ class BrowserUtils {
     class func clearPrivateData(clearables: Set<Clearable>? = AllClearables, swipe: Bool? = false, tester: KIFUITestActor) {
         let AllClearables = Set([Clearable.History, Clearable.Cache, Clearable.OfflineData, Clearable.Cookies])
     
-        openClearPrivateDataDialog(swipe!,tester: tester)
+        openClearPrivateDataDialog(swipe!, tester: tester)
         
         // Disable all items that we don't want to clear.
         for clearable in AllClearables {
@@ -477,7 +477,8 @@ class SimplePageServer {
 }
 
 class SearchUtils {
-    static func navigateToSearchSettings(tester: KIFUITestActor, engine: String = "Yahoo") {
+    static func navigateToSearchSettings(tester: KIFUITestActor) {
+        let engine = SearchUtils.getDefaultEngine().shortName
         tester.tapViewWithAccessibilityLabel("Menu")
         tester.waitForAnimationsToFinish()
         tester.tapViewWithAccessibilityLabel("Settings")

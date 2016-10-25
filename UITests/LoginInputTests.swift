@@ -15,9 +15,6 @@ class LoginInputTests: KIFTestCase {
         profile = (UIApplication.sharedApplication().delegate as! AppDelegate).profile!
         webRoot = SimplePageServer.start()
         BrowserUtils.dismissFirstRunUI(tester())
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("New Tab")
-
     }
 
     override func tearDown() {

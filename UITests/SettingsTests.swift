@@ -10,6 +10,7 @@ class SettingsTests: KIFTestCase {
 
     override func setUp() {
         webRoot = SimplePageServer.start()
+        BrowserUtils.dismissFirstRunUI(tester())
     }
 
     override func tearDown() {

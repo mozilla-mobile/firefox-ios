@@ -9,16 +9,14 @@ class PrivateBrowsingTests: KIFTestCase {
     private var webRoot: String!
 
     override func setUp() {
+        super.setUp()
         webRoot = SimplePageServer.start()
+        BrowserUtils.dismissFirstRunUI(tester())
     }
 
     override func tearDown() {
-        do {
-            try tester().tryFindingTappableViewWithAccessibilityLabel("home")
-            tester().tapViewWithAccessibilityLabel("home")
-        } catch _ {
-        }
         BrowserUtils.resetToAboutHome(tester())
+        BrowserUtils.clearPrivateData(tester: tester())
     }
 
     func testPrivateTabDoesntTrackHistory() {
@@ -68,6 +66,7 @@ class PrivateBrowsingTests: KIFTestCase {
         tester().tapViewWithAccessibilityLabel("New Tab")
         tester().waitForAnimationsToFinish()
         var tabButton = tester().waitForViewWithAccessibilityLabel("Show Tabs") as! UIControl
+        // Since a new tab is created in setup, the total tab count here is 3
         XCTAssertEqual(tabButton.accessibilityValue, "2", "Tab count shows 2 tabs")
 
         // Add a private tab and make sure we only see the private tab in the count, and not the normal tabs
@@ -100,9 +99,14 @@ class PrivateBrowsingTests: KIFTestCase {
         tester().waitForViewWithAccessibilityLabel("Show Tabs")
         tester().tapViewWithAccessibilityLabel("Show Tabs")
 
-        emptyView = tester().waitForViewWithAccessibilityLabel("Private Browsing")
-        XCTAssertTrue(emptyView.superview!.alpha == 0)
-
+        var visible = true
+        do {
+            try tester().tryFindingViewWithAccessibilityLabel("Private Browsing")
+        } catch {
+            // Label is no longer visible when a tab is present
+            visible = false
+        }
+        XCTAssertFalse(visible)
         // Remove the private tab - do we see the empty view now?
         let tabsView = tester().waitForViewWithAccessibilityLabel("Tabs Tray").subviews.first as! UICollectionView
         while tabsView.numberOfItemsInSection(0) > 0 {
@@ -123,6 +127,9 @@ class PrivateBrowsingTests: KIFTestCase {
         tester().tapViewWithAccessibilityLabel("Show Tabs")
         tester().tapViewWithAccessibilityLabel("Menu")
         tester().tapViewWithAccessibilityLabel("Settings")
+        
+        // In simulator, need to manually scroll to so the menu is visible
+        tester().scrollViewWithAccessibilityIdentifier("HomePageSetting", byFractionOfSizeHorizontal: 0, vertical: -0.5)
         tester().setOn(true, forSwitchWithAccessibilityLabel: "Close Private Tabs, When Leaving Private Browsing")
         tester().tapViewWithAccessibilityLabel("Done")
         tester().tapViewWithAccessibilityLabel("Private Mode")
@@ -147,6 +154,7 @@ class PrivateBrowsingTests: KIFTestCase {
         // Second, make sure selecting the option to OFF will not close the tabs
         tester().tapViewWithAccessibilityLabel("Menu")
         tester().tapViewWithAccessibilityLabel("Settings")
+        tester().scrollViewWithAccessibilityIdentifier("HomePageSetting", byFractionOfSizeHorizontal: 0, vertical: -0.5)
         tester().setOn(false, forSwitchWithAccessibilityLabel: "Close Private Tabs, When Leaving Private Browsing")
         tester().tapViewWithAccessibilityLabel("Done")
         tester().tapViewWithAccessibilityLabel("Private Mode")

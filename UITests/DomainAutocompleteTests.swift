@@ -9,8 +9,6 @@ class DomainAutocompleteTests: KIFTestCase {
     override func setUp() {
         super.setUp()
         BrowserUtils.dismissFirstRunUI(tester())
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("New Tab")
     }
     
     func testAutocomplete() {

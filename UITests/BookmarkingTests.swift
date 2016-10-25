@@ -12,8 +12,6 @@ class BookmarkingTests: KIFTestCase, UITextFieldDelegate {
         super.setUp()
         webRoot = SimplePageServer.start()
         BrowserUtils.dismissFirstRunUI(tester())
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("New Tab")
     }
     
     private func bookmark() {
@@ -29,13 +27,23 @@ class BookmarkingTests: KIFTestCase, UITextFieldDelegate {
     private func checkBookmarked() {
         tester().tapViewWithAccessibilityLabel("Menu")
         tester().waitForViewWithAccessibilityLabel("Remove Bookmark")
-        tester().tapViewWithAccessibilityLabel("Close Menu")
+        do {
+            try tester().tryFindingTappableViewWithAccessibilityLabel("Close Menu")
+            tester().tapViewWithAccessibilityLabel("Close Menu")
+        } catch {
+            tester().tapViewWithAccessibilityLabel("dismiss popup")
+        }
     }
 
     private func checkUnbookmarked() {
         tester().tapViewWithAccessibilityLabel("Menu")
         tester().waitForViewWithAccessibilityLabel("Add Bookmark")
-        tester().tapViewWithAccessibilityLabel("Close Menu")
+        do {
+            try tester().tryFindingTappableViewWithAccessibilityLabel("Close Menu")
+            tester().tapViewWithAccessibilityLabel("Close Menu")
+        } catch {
+            tester().tapViewWithAccessibilityLabel("dismiss popup")
+        }
     }
 
     /**
@@ -136,8 +144,8 @@ class BookmarkingTests: KIFTestCase, UITextFieldDelegate {
     }
      */
     override func tearDown() {
+         super.tearDown()
         BrowserUtils.resetToAboutHome(tester())
         BrowserUtils.clearPrivateData(tester: tester())
-        super.tearDown()
     }
 }

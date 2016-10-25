@@ -6,18 +6,22 @@ import Foundation
 import WebKit
 import Shared
 
+
+/// This test should be disabled since session restore does not seem to work
 class SessionRestoreTests: KIFTestCase {
     private var webRoot: String!
-
+    
     override func setUp() {
+        BrowserUtils.dismissFirstRunUI(tester())
         webRoot = SimplePageServer.start()
+        super.setUp()
     }
-
+    
     func testTabRestore() {
         let url1 = "\(webRoot)/numberedPage.html?page=1"
         let url2 = "\(webRoot)/numberedPage.html?page=2"
         let url3 = "\(webRoot)/numberedPage.html?page=3"
-
+        
         // Build a session restore URL from the current homepage URL.
         var jsonDict = [String: AnyObject]()
         jsonDict["history"] = [url1, url2, url3]
@@ -25,13 +29,13 @@ class SessionRestoreTests: KIFTestCase {
         let escapedJSON = JSON.stringify(jsonDict, pretty: false).stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
         let webView = tester().waitForViewWithAccessibilityLabel("Web content") as! WKWebView
         let restoreURL = NSURL(string: "/about/sessionrestore?history=\(escapedJSON)", relativeToURL: webView.URL!)
-
+        
         // Enter the restore URL and verify the back/forward history.
         // After triggering the restore, the session should look like this:
         //   about:home, page1, *page2*, page3
         // where page2 is active.
         tester().tapViewWithAccessibilityIdentifier("url")
-        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(restoreURL!.absoluteString)\n")
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(restoreURL!.absoluteString!)\n")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 2")
         tester().tapViewWithAccessibilityLabel("Back")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
@@ -58,8 +62,9 @@ class SessionRestoreTests: KIFTestCase {
         }
         XCTAssertFalse(canGoForward, "Reached the end of browser history")
     }
-
+    
     override func tearDown() {
         BrowserUtils.resetToAboutHome(tester())
+        BrowserUtils.clearPrivateData(tester: tester())
     }
 }
