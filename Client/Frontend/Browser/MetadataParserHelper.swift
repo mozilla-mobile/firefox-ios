@@ -6,12 +6,14 @@ import Foundation
 import Shared
 import XCGLogger
 import WebKit
+import WebMetadataKit
 
 private let log = Logger.browserLogger
 
 class MetadataParserHelper: TabHelper {
     private weak var tab: Tab?
     private let profile: Profile
+    private var parser: WebMetadataParser?
 
     class func name() -> String {
         return "MetadataParserHelper"
@@ -20,20 +22,8 @@ class MetadataParserHelper: TabHelper {
     required init(tab: Tab, profile: Profile) {
         self.tab = tab
         self.profile = profile
-
-        if let libraryPath = NSBundle.mainBundle().pathForResource("page-metadata-parser.bundle", ofType: "js"),
-           let parserWrapperPath = NSBundle.mainBundle().pathForResource("MetadataParser", ofType: "js"),
-           librarySource = try? NSString(contentsOfFile: libraryPath, encoding: NSUTF8StringEncoding) as String,
-           parserWrapperSource = try? NSString(contentsOfFile: parserWrapperPath, encoding: NSUTF8StringEncoding) as String {
-
-            // Load in the page-metadata-parser library first so our wrapper can reference it
-            let libraryUserScript = WKUserScript(source: librarySource, injectionTime: .AtDocumentEnd, forMainFrameOnly: false)
-            tab.webView!.configuration.userContentController.addUserScript(libraryUserScript)
-
-            // Load in our WKUserScript wrapper on top of the library second
-            let parserWrapperUserScript = WKUserScript(source: parserWrapperSource, injectionTime: .AtDocumentEnd, forMainFrameOnly: false)
-            tab.webView!.configuration.userContentController.addUserScript(parserWrapperUserScript)
-        }
+        self.parser = WebMetadataParser()
+        self.parser?.addUserScriptsIntoWebView(tab.webView!)
     }
 
     func scriptMessageHandlerName() -> String? {
