@@ -1052,19 +1052,15 @@ extension SQLiteHistory: SyncableHistory {
         }
 
         log.debug("Wiping \(guids.count) deleted GUIDs.")
-        return self.db.run(chunk(guids, by: BrowserDB.MaxVariableNumber).flatMap { chunk in
-            return markAsDeletedStatementForGUIDS(chunk)
-        })
+        return self.db.run(chunk(guids, by: BrowserDB.MaxVariableNumber).flatMap(markAsDeletedStatementForGUIDs))
     }
 
-    private func markAsDeletedStatementForGUIDS(guids: ArraySlice<String>) -> (String, Args?) {
+    private func markAsDeletedStatementForGUIDs(guids: ArraySlice<String>) -> (String, Args?) {
         // We deliberately don't limit this to records marked as should_upload, just
         // in case a coding error leaves records with is_deleted=1 but not flagged for
         // upload -- this will catch those and throw them away.
         let inClause = BrowserDB.varlist(guids.count)
-        let sql =
-        "DELETE FROM \(TableHistory) WHERE " +
-        "is_deleted = 1 AND guid IN \(inClause)"
+        let sql = "DELETE FROM \(TableHistory) WHERE is_deleted = 1 AND guid IN \(inClause)"
 
         let args: Args = guids.map { $0 as AnyObject }
         return (sql, args)
@@ -1077,11 +1073,11 @@ extension SQLiteHistory: SyncableHistory {
 
         log.debug("Marking \(guids.count) GUIDs as synchronized. Returning timestamp \(modified).")
         return self.db.run(chunk(guids, by: BrowserDB.MaxVariableNumber).flatMap { chunk in
-            return markAsSynchronizedStatementForGUIDS(chunk, modified: modified)
+            return markAsSynchronizedStatementForGUIDs(chunk, modified: modified)
         }) >>> always(modified)
     }
 
-    private func markAsSynchronizedStatementForGUIDS(guids: ArraySlice<String>, modified: Timestamp) -> (String, Args?) {
+    private func markAsSynchronizedStatementForGUIDs(guids: ArraySlice<String>, modified: Timestamp) -> (String, Args?) {
         let inClause = BrowserDB.varlist(guids.count)
         let sql =
         "UPDATE \(TableHistory) SET " +
