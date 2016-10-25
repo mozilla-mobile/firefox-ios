@@ -38,10 +38,8 @@ extension Strings {
 
 // Activity Stream.
 extension Strings {
-    public static let ASPageControlButton = NSLocalizedString("AS.PageControl.Button", value: "Next Page", comment: "The page control button that lets you switch between pages in top sites")
-    public static let ASRemoveButton = NSLocalizedString("AS.Delete.Button", value: "Delete", comment: "Button shown in editing mode to remove this site from the top sites panel.")
-    public static let ASCancelButton = NSLocalizedString("AS.Cancel.Button", value: "Cancel", comment: "Button shown to cancel editing of top site.")
-    public static let ASHighlightsTitle =  NSLocalizedString("AS.Highlights.SectionTitle", value: "Highlights", comment: "Section title label for Highlights")
+    public static let ASPageControlButton = NSLocalizedString("ActivityStream.PageControl.Button", value: "Next Page", comment: "The page control button that lets you switch between pages in top sites")
+    public static let ASHighlightsTitle =  NSLocalizedString("ActivityStream.Highlights.SectionTitle", value: "Highlights", comment: "Section title label for Highlights")
 
     public static let OpenInNewTabContextMenuTitle = NSLocalizedString("ActivityStream.ContextMenu.OpenInNewTab", value: "Open in New Tab", comment: "The title for the Open in New Tab context menu action for Activity Stream")
     public static let OpenInNewPrivateTabContextMenuTitle = NSLocalizedString("ActivityStream.ContextMenu.OpenInNewPrivateTab", value: "Open in New Private Tab", comment: "The title for the Open in New Private Tab context menu action for Activity Stream")
