@@ -32,6 +32,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = rootViewController
         window?.makeKeyAndVisible()
 
+        WebCacheUtils.reset()
+
         URLProtocol.registerClass(LocalContentBlocker.self)
 
         displaySplashAnimation()

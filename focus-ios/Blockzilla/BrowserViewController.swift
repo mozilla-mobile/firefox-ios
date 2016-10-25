@@ -142,6 +142,8 @@ class BrowserViewController: UIViewController {
         createHomeView()
         createURLBar()
 
+        WebCacheUtils.reset()
+
         view.layoutIfNeeded()
         UIView.animate(withDuration: UIConstants.layout.deleteAnimationDuration, animations: {
             oldURLBar?.alpha = 0
