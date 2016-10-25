@@ -22,6 +22,8 @@ class SensitiveViewController: UIViewController {
         notificationCenter.addObserver(self, selector: #selector(SensitiveViewController.checkIfUserRequiresValidation), name: UIApplicationWillEnterForegroundNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(SensitiveViewController.checkIfUserRequiresValidation), name: UIApplicationDidBecomeActiveNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(SensitiveViewController.blurContents), name: UIApplicationWillResignActiveNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(SensitiveViewController.hideLogins), name: UIApplicationDidEnterBackgroundNotification, object: nil)
+
     }
 
     override func viewWillDisappear(animated: Bool) {
@@ -30,6 +32,7 @@ class SensitiveViewController: UIViewController {
         notificationCenter.removeObserver(self, name: UIApplicationWillEnterForegroundNotification, object: nil)
         notificationCenter.removeObserver(self, name: UIApplicationWillResignActiveNotification, object: nil)
         notificationCenter.removeObserver(self, name: UIApplicationDidBecomeActiveNotification, object: nil)
+        notificationCenter.removeObserver(self, name: UIApplicationDidEnterBackgroundNotification, object: nil)
     }
 
     func checkIfUserRequiresValidation() {
@@ -62,6 +65,10 @@ class SensitiveViewController: UIViewController {
             }
         )
         authState = .Presenting
+    }
+
+    func hideLogins() {
+        self.navigationController?.popToRootViewControllerAnimated(true)
     }
 
     func blurContents() {
