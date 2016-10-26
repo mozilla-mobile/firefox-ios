@@ -68,6 +68,14 @@
                BlueprintName = "StorageTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "TestSQLiteHistoryRecommendationsPerf">
+               </Test>
+               <Test
+                  Identifier = "TestSQLiteLoginsPerf">
+               </Test>
+            </SkippedTests>
          </TestableReference>
          <TestableReference
             skipped = "NO">
