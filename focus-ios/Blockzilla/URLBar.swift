@@ -20,22 +20,23 @@ class URLBar: UIView {
     let progressBar = UIProgressView(progressViewStyle: .bar)
     fileprivate(set) var isEditing = false
 
-    fileprivate let cancelButton = InsetButton()
-    fileprivate var cancelButtonWidthConstraint: Constraint!
+    fileprivate let buttonContainer = UIView()
+    fileprivate let cancelButton = UIButton()
     fileprivate let deleteButton = InsetButton()
     fileprivate let domainCompletion = DomainCompletion()
 
-    fileprivate var deleteButtonWidthConstraint: Constraint!
-    fileprivate var deleteButtonTrailingConstraint: Constraint!
-
     private let urlTextContainer = UIView()
     private let urlText = URLTextField()
+    private var showButtons = false
+    private var deleteButtonSizeConstraint: Constraint!
+    private var urlTextContainerConstraint: Constraint!
 
     init() {
         super.init(frame: CGRect.zero)
 
         urlTextContainer.backgroundColor = UIConstants.colors.urlTextBackground
         urlTextContainer.layer.cornerRadius = UIConstants.layout.urlBarCornerRadius
+        addSubview(urlTextContainer)
 
         // UITextField doesn't allow customization of the clear button, so we create
         // our own so we can use it as the rightView.
@@ -54,14 +55,21 @@ class URLBar: UIView {
         urlText.rightViewMode = .whileEditing
         urlText.setContentHuggingPriority(1000, for: .vertical)
         urlText.autocompleteDelegate = self
+        urlTextContainer.addSubview(urlText)
 
+        addSubview(buttonContainer)
+
+        cancelButton.isHidden = true
+        cancelButton.alpha = 0
         cancelButton.setTitle(UIConstants.strings.urlBarCancel, for: .normal)
         cancelButton.titleLabel?.font = UIConstants.fonts.cancelButton
-        cancelButton.titleEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         cancelButton.setContentHuggingPriority(1000, for: .horizontal)
         cancelButton.setContentCompressionResistancePriority(1000, for: .horizontal)
         cancelButton.addTarget(self, action: #selector(dismiss), for: .touchUpInside)
+        buttonContainer.addSubview(cancelButton)
 
+        deleteButton.isHidden = true
+        deleteButton.alpha = 0
         deleteButton.setTitle(UIConstants.strings.eraseButton, for: .normal)
         deleteButton.titleLabel?.font = UIConstants.fonts.deleteButton
         deleteButton.titleEdgeInsets = UIEdgeInsets(top: 2, left: 10, bottom: 2, right: 10)
@@ -73,17 +81,13 @@ class URLBar: UIView {
         deleteButton.setContentHuggingPriority(1000, for: .horizontal)
         deleteButton.setContentCompressionResistancePriority(1000, for: .horizontal)
         deleteButton.addTarget(self, action: #selector(didPressDelete), for: .touchUpInside)
-
-        addSubview(urlTextContainer)
-        urlTextContainer.addSubview(urlText)
-        urlTextContainer.addSubview(deleteButton)
-        addSubview(cancelButton)
+        buttonContainer.addSubview(deleteButton)
 
         let activateButton = UIButton()
         activateButton.setTitle(UIConstants.strings.urlTextPlaceholder, for: .normal)
         activateButton.titleLabel?.font = UIConstants.fonts.urlTextFont
         activateButton.setTitleColor(UIConstants.colors.urlTextPlaceholder, for: .normal)
-        activateButton.titleEdgeInsets = UIEdgeInsetsMake(0, UIConstants.layout.urlBarWidthInset, 0, 0)
+        activateButton.titleEdgeInsets = UIEdgeInsetsMake(0, UIConstants.layout.urlBarWidthInset, 0, UIConstants.layout.urlBarWidthInset)
         activateButton.addTarget(self, action: #selector(didPressActivate), for: .touchUpInside)
         addSubview(activateButton)
 
@@ -95,20 +99,26 @@ class URLBar: UIView {
         urlTextContainer.snp.makeConstraints { make in
             make.top.leading.bottom.equalTo(self).inset(UIConstants.layout.urlBarMargin)
 
-            // Two required constraints.
-            make.trailing.lessThanOrEqualTo(cancelButton.snp.leading)
-            make.trailing.lessThanOrEqualTo(self).inset(UIConstants.layout.urlBarMargin)
+            make.trailing.equalTo(buttonContainer.snp.leading).priority(999)
 
-            // Because of the two required constraints above, the first optional constraint
-            // here will fail if the Cancel button has 0 width; the second will fail if the
-            // Cancel button is visible. As a result, only one of these two constraints will
-            // be in effect at a time.
-            make.trailing.equalTo(cancelButton.snp.leading).priority(500)
-            make.trailing.equalTo(self).priority(500)
+            // This makes the URL bar stretch across the screen, which overrides the above trailing constraint.
+            // We deactivate this when making the first navigation, which in turn activates the above constraint.
+            urlTextContainerConstraint = make.trailing.equalTo(self).inset(UIConstants.layout.urlBarMargin).constraint
+        }
+
+        buttonContainer.snp.makeConstraints { make in
+            make.trailing.equalTo(self)
+            make.top.bottom.equalTo(urlTextContainer)
+
+            make.width.greaterThanOrEqualTo(deleteButton).inset(-UIConstants.layout.urlBarMargin)
+            make.width.greaterThanOrEqualTo(cancelButton).inset(-UIConstants.layout.urlBarMargin)
+
+            // This will shrink the container to be as small as possible.
+            make.width.equalTo(0).priority(500)
         }
 
         urlText.snp.makeConstraints { make in
-            make.leading.top.bottom.equalTo(urlTextContainer)
+            make.edges.equalTo(urlTextContainer)
         }
 
         activateButton.snp.makeConstraints { make in
@@ -116,16 +126,13 @@ class URLBar: UIView {
         }
 
         deleteButton.snp.makeConstraints { make in
-            make.leading.equalTo(urlText.snp.trailing)
-            make.centerY.equalTo(urlTextContainer)
-            self.deleteButtonTrailingConstraint = make.trailing.equalTo(urlTextContainer).constraint
-            self.deleteButtonWidthConstraint = make.size.equalTo(0).constraint
+            make.center.equalTo(buttonContainer)
+
+            deleteButtonSizeConstraint = make.size.equalTo(0).constraint
         }
 
         cancelButton.snp.makeConstraints { make in
-            make.trailing.equalTo(self)
-            make.centerY.equalTo(urlText)
-            self.cancelButtonWidthConstraint = make.size.equalTo(0).constraint
+            make.center.equalTo(buttonContainer)
         }
 
         progressBar.snp.makeConstraints { make in
@@ -147,8 +154,6 @@ class URLBar: UIView {
         }
     }
 
-    var showButtons = false
-
     fileprivate func activate() {
         guard !isEditing else { return }
 
@@ -159,16 +164,11 @@ class URLBar: UIView {
 
         guard showButtons else { return }
 
-        self.layoutIfNeeded()
-        UIView.animate(withDuration: 0.3) {
-            self.cancelButton.alpha = 1
-            self.cancelButtonWidthConstraint.deactivate()
+        cancelButton.animateHidden(false, duration: UIConstants.layout.urlBarFadeAnimationDuration)
+        deleteButton.animateHidden(true, duration: UIConstants.layout.urlBarFadeAnimationDuration)
 
-            self.deleteButton.alpha = 0
-            self.deleteButtonWidthConstraint.activate()
-
-            self.deleteButtonTrailingConstraint.update(offset: 0)
-
+        UIView.animate(withDuration: UIConstants.layout.urlBarFadeAnimationDuration) {
+            self.urlTextContainer.backgroundColor = UIConstants.colors.urlTextBackground
             self.layoutIfNeeded()
         }
     }
@@ -181,16 +181,17 @@ class URLBar: UIView {
         setTextToURL()
         delegate?.urlBarDidDismiss(urlBar: self)
 
-        guard showButtons else { return }
+        cancelButton.animateHidden(true, duration: UIConstants.layout.urlBarFadeAnimationDuration)
+        deleteButton.animateHidden(false, duration: UIConstants.layout.urlBarFadeAnimationDuration)
 
-        self.layoutIfNeeded()
-        UIView.animate(withDuration: 0.3) {
-            self.cancelButton.alpha = 0
-            self.cancelButtonWidthConstraint.activate()
+        UIView.animate(withDuration: UIConstants.layout.urlBarFadeAnimationDuration) {
+            self.urlTextContainer.backgroundColor = nil
 
-            self.deleteButton.alpha = 1
-            self.deleteButtonWidthConstraint.deactivate()
-            self.deleteButtonTrailingConstraint.update(offset: -5)
+            if !self.showButtons {
+                self.showButtons = true
+                self.urlTextContainerConstraint.deactivate()
+                self.deleteButtonSizeConstraint.deactivate()
+            }
 
             self.layoutIfNeeded()
         }

@@ -7,16 +7,15 @@ import Foundation
 class GradientBackgroundView: UIView {
     private let gradient: CAGradientLayer
 
-    init(alpha: Float = 0.1) {
+    init(alpha: Float = 0.1, startPoint: CGPoint = CGPoint(x: -0.2, y: 0), endPoint: CGPoint = CGPoint(x: 1.2, y: 1)) {
         gradient = CAGradientLayer()
         super.init(frame: CGRect.zero)
 
         backgroundColor = UIConstants.colors.gradientBackground
-        gradient.startPoint = CGPoint(x: 0, y: 0)
-        gradient.endPoint = CGPoint(x: 1, y: 1)
-        let left = UIConstants.colors.gradientLeft.withAlphaComponent(CGFloat(alpha))
-        let right = UIConstants.colors.gradientRight.withAlphaComponent(CGFloat(alpha))
-        gradient.colors = [left.cgColor, right.cgColor]
+        gradient.startPoint = startPoint
+        gradient.endPoint = endPoint
+        let gradients = [UIConstants.colors.gradientLeft, UIConstants.colors.gradientMiddle, UIConstants.colors.gradientRight]
+        gradient.colors = gradients.map { $0.withAlphaComponent(CGFloat(alpha)).cgColor }
         layer.insertSublayer(gradient, at: 0)
     }
 
