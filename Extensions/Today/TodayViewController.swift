@@ -86,7 +86,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
                 make.left.equalTo(40)
             }
         }
-                
+        
         return button
     }()
     
@@ -139,36 +139,39 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         buttonStackView.snp_makeConstraints { (make) in
             if #available(iOSApplicationExtension 10.0, *) {
                 make.left.right.equalTo(self.view)
-                make.top.equalTo(self.view).offset(TodayUX.margin)
-                //make.centerY.equalTo(extensionContext!.widgetMaximumSizeForDisplayMode(.Compact).height / 2)
+                make.top.equalTo(self.view).inset(16)
             } else {
                 make.left.right.equalTo(self.view)
                 make.top.equalTo(self.view).inset(TodayUX.margin)
             }
         }
         
-        // We always add the CopiedURL button. in viewWillAppear we will determine if there actually is a URL and adjust
-        // the layout accordingly. Having the button always there makes the code more clear.
+        // Add the CopiedURL button if we have a link on the pasteboard. In viewWillAppear we will determine if there
+        // actually is a URL and adjust the layout accordingly. Having the button always there makes the code more clear.
         
-        view.addSubview(openCopiedLinkButton)
-        openCopiedLinkButton.snp_makeConstraints(closure: { (make) in
-            if #available(iOSApplicationExtension 10.0, *) {
-                make.left.right.equalTo(self.view)
-                make.top.equalTo(extensionContext!.widgetMaximumSizeForDisplayMode(.Compact).height + TodayUX.margin)
-            } else {
-                make.left.right.equalTo(self.view)
-                make.top.equalTo(buttonStackView.snp_bottom).offset(TodayUX.margin)
-            }
-        })
+        // TODO: Is this correct? Is viewDidLoad called every time the user navigates to our widget?
+        
+        if hasCopiedURL {
+            view.addSubview(openCopiedLinkButton)
+            openCopiedLinkButton.snp_makeConstraints(closure: { (make) in
+                if #available(iOSApplicationExtension 10.0, *) {
+                    make.left.right.equalTo(self.view).inset(20)
+                    make.top.equalTo(buttonStackView.snp_bottom).offset(TodayUX.margin + TodayUX.margin)
+                } else {
+                    make.left.right.equalTo(self.view)
+                    make.top.equalTo(buttonStackView.snp_bottom).offset(TodayUX.margin)
+                }
+            })
+        }
     }
     
     @available(iOSApplicationExtension 10.0, *)
     func widgetActiveDisplayModeDidChange(activeDisplayMode: NCWidgetDisplayMode, withMaximumSize maxSize: CGSize) {
-        if activeDisplayMode == NCWidgetDisplayMode.Compact {
-            self.preferredContentSize = CGSize(width: 0.0, height: 0.0)
-        }
-        else if activeDisplayMode == NCWidgetDisplayMode.Expanded {
-            self.preferredContentSize = CGSize(width: 0.0, height: 160) // 136
+        switch activeDisplayMode {
+            case .Compact:
+                preferredContentSize = CGSizeZero
+            case .Expanded:
+                preferredContentSize = CGSize(width: 0.0, height: TodayUX.margin + buttonStackView.frame.height + TodayUX.margin + TodayUX.margin + openCopiedLinkButton.frame.height + TodayUX.margin + TodayUX.margin)
         }
     }
 
@@ -187,9 +190,9 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         } else {
             // On iOS 9 we set the widget size fixed
             if hasCopiedURL {
-                preferredContentSize = CGSize(width: 0.0, height: TodayUX.margin + self.buttonStackView.frame.height + TodayUX.margin + openCopiedLinkButton.frame.height + TodayUX.margin + TodayUX.margin)
+                preferredContentSize = CGSize(width: 0.0, height: TodayUX.margin + buttonStackView.frame.height + TodayUX.margin + openCopiedLinkButton.frame.height + TodayUX.margin + TodayUX.margin)
             } else {
-                preferredContentSize = CGSize(width: 0.0, height: TodayUX.margin + self.buttonStackView.frame.height + TodayUX.margin)
+                preferredContentSize = CGSize(width: 0.0, height: TodayUX.margin + buttonStackView.frame.height + TodayUX.margin)
             }
         }
 
@@ -202,11 +205,11 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
     func updateCopiedLink() {
         if let url = self.copiedURL {
-            self.openCopiedLinkButton.hidden = false
-            self.openCopiedLinkButton.subtitleLabel.hidden = SystemUtils.isDeviceLocked()
-            self.openCopiedLinkButton.subtitleLabel.text = url.absoluteString
+            openCopiedLinkButton.hidden = false
+            openCopiedLinkButton.subtitleLabel.hidden = SystemUtils.isDeviceLocked()
+            openCopiedLinkButton.subtitleLabel.text = url.absoluteString
         } else {
-            self.openCopiedLinkButton.hidden = true
+            openCopiedLinkButton.hidden = true
         }
     }
 
