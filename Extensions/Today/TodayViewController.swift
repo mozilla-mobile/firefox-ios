@@ -88,16 +88,16 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         return button
     }()
 
-    private lazy var widgetStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .Vertical
-        stackView.alignment = .Fill
-        stackView.spacing = 0
-        stackView.distribution = UIStackViewDistribution.Fill
-        stackView.layoutMargins = UIEdgeInsets(top: TodayUX.margin, left: TodayUX.margin, bottom: TodayUX.margin, right: TodayUX.margin)
-        stackView.layoutMarginsRelativeArrangement = true
-        return stackView
-    }()
+//    private lazy var widgetStackView: UIStackView = {
+//        let stackView = UIStackView()
+//        stackView.axis = .Vertical
+//        stackView.alignment = .Fill
+//        stackView.spacing = 0
+//        stackView.distribution = UIStackViewDistribution.Fill
+//        stackView.layoutMargins = UIEdgeInsets(top: TodayUX.margin, left: TodayUX.margin, bottom: TodayUX.margin, right: TodayUX.margin)
+//        stackView.layoutMarginsRelativeArrangement = true
+//        return stackView
+//    }()
     
     private lazy var buttonStackView: UIStackView = {
         let stackView = UIStackView()
@@ -134,22 +134,61 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if #available(iOSApplicationExtension 10.0, *) {
+            if hasCopiedURL {
+                extensionContext?.widgetLargestAvailableDisplayMode = .Expanded
+            }
+        }
 
         buttonStackView.addArrangedSubview(newTabButton)
         buttonStackView.addArrangedSubview(newPrivateTabButton)
 
-        widgetStackView.addArrangedSubview(buttonStackView)
-        widgetStackView.addArrangedSubview(openCopiedLinkButton)
+//        widgetStackView.addArrangedSubview(buttonStackView)
+//        widgetStackView.addArrangedSubview(openCopiedLinkButton)
 
-        view.addSubview(widgetStackView)
+//        view.addSubview(widgetStackView)
 
-        widgetStackView.snp_makeConstraints { make in
-            make.edges.equalTo(self.view)
+//        widgetStackView.snp_makeConstraints { make in
+//            make.edges.equalTo(self.view)
+//        }
+        
+        view.addSubview(buttonStackView)
+        buttonStackView.snp_makeConstraints { (make) in
+            make.left.right.equalTo(self.view)
+            make.top.equalTo(self.view).inset(16)
+        }
+        
+        if hasCopiedURL {
+            view.addSubview(openCopiedLinkButton)
+            openCopiedLinkButton.snp_makeConstraints(closure: { (make) in
+                make.left.right.equalTo(self.view).inset(20)
+                make.top.equalTo(buttonStackView.snp_bottom).inset(-16)
+            })
+        }
+    }
+    
+    @available(iOSApplicationExtension 10.0, *)
+    func widgetActiveDisplayModeDidChange(activeDisplayMode: NCWidgetDisplayMode, withMaximumSize maxSize: CGSize) {
+        if activeDisplayMode == NCWidgetDisplayMode.Compact {
+            self.preferredContentSize = CGSize(width: 0.0, height: 0.0)
+        }
+        else if activeDisplayMode == NCWidgetDisplayMode.Expanded {
+            self.preferredContentSize = CGSize(width: 0.0, height: 136.0)
         }
     }
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+
+        if #available(iOSApplicationExtension 10.0, *) {
+            if hasCopiedURL {
+                extensionContext?.widgetLargestAvailableDisplayMode = .Expanded
+            } else {
+                extensionContext?.widgetLargestAvailableDisplayMode = .Compact
+            }
+        }
+
         updateCopiedLink()
     }
 
@@ -223,7 +262,7 @@ class ImageButtonWithLabel: UIView {
         performLayout()
     }
 
-    func performLayout() {
+    private func performLayout() {
         addSubview(button)
         addSubview(label)
 
@@ -287,7 +326,7 @@ class ButtonWithSublabel: UIButton {
 
         subtitleLabel.lineBreakMode = .ByTruncatingTail
         subtitleLabel.snp_makeConstraints { make in
-            make.bottom.equalTo(self)
+            //make.bottom.equalTo(self)
             make.top.equalTo(titleLabel.snp_bottom)
             make.leading.trailing.equalTo(titleLabel)
         }
