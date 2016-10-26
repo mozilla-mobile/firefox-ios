@@ -160,7 +160,6 @@ class BrowserViewController: UIViewController {
     fileprivate func submit(url: URL) {
         // If this is the first navigation, show the browser and the toolbar.
         if browser.view.isHidden {
-            urlBar.showButtons = true
             browser.view.isHidden = false
             browserToolbar.animateHidden(false, duration: UIConstants.layout.toolbarFadeAnimationDuration)
             homeView?.removeFromSuperview()
@@ -264,7 +263,7 @@ extension BrowserViewController: BrowserDelegate {
     }
 
     func browser(_ browser: Browser, didUpdateEstimatedProgress estimatedProgress: Float) {
-        // Don't update progress is the home view is visible. This prevents the centered URL bar
+        // Don't update progress if the home view is visible. This prevents the centered URL bar
         // from catching the global progress events.
         guard homeView == nil else { return }
 

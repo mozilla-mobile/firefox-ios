@@ -57,7 +57,7 @@ class Browser: NSObject {
         isLoading = false
         canGoBack = false
         canGoForward = false
-        estimatedProgress = 0
+        estimatedProgress = -1
         url = nil
 
         createWebView()
