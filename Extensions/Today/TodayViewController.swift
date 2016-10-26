@@ -135,11 +135,11 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if #available(iOSApplicationExtension 10.0, *) {
-            if hasCopiedURL {
-                extensionContext?.widgetLargestAvailableDisplayMode = .Expanded
-            }
-        }
+//        if #available(iOSApplicationExtension 10.0, *) {
+//            if hasCopiedURL {
+//                extensionContext?.widgetLargestAvailableDisplayMode = .Expanded
+//            }
+//        }
 
         buttonStackView.addArrangedSubview(newTabButton)
         buttonStackView.addArrangedSubview(newPrivateTabButton)
