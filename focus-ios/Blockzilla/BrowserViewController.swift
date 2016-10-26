@@ -144,6 +144,7 @@ class BrowserViewController: UIViewController {
             self.browser.view.isHidden = true
             self.browser.reset()
             self.browserSlideOffConstraints.forEach { $0.deactivate() }
+            Toast(text: UIConstants.strings.eraseMessage).show()
         })
 
         browserToolbar.animateHidden(true, duration: UIConstants.layout.toolbarFadeAnimationDuration)

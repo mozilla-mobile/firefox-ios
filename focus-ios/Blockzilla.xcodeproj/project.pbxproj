@@ -20,6 +20,7 @@
 		D30179071BC6CB19009AD388 /* BlockerEnabledDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30179061BC6CB19009AD388 /* BlockerEnabledDetector.swift */; };
 		D30179C31BCC6F65009AD388 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30179C21BCC6F65009AD388 /* AboutViewController.swift */; };
 		D30179C81BCD78E2009AD388 /* SCSiriWaveformView.m in Sources */ = {isa = PBXBuildFile; fileRef = D30179C71BCD78E2009AD388 /* SCSiriWaveformView.m */; };
+		D30DF93E1DC1634F0064736C /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30DF93D1DC1634F0064736C /* Toast.swift */; };
 		D32817221BD0689800185845 /* disconnect-advertising.json in Resources */ = {isa = PBXBuildFile; fileRef = D328171E1BD0689800185845 /* disconnect-advertising.json */; };
 		D32817231BD0689800185845 /* disconnect-analytics.json in Resources */ = {isa = PBXBuildFile; fileRef = D328171F1BD0689800185845 /* disconnect-analytics.json */; };
 		D32817241BD0689800185845 /* disconnect-content.json in Resources */ = {isa = PBXBuildFile; fileRef = D32817201BD0689800185845 /* disconnect-content.json */; };
@@ -139,6 +140,7 @@
 		D30179C51BCD78E1009AD388 /* Blockzilla-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Blockzilla-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		D30179C61BCD78E2009AD388 /* SCSiriWaveformView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SCSiriWaveformView.h; path = SCSiriWaveformView/SCSiriWaveformView/SCSiriWaveformView.h; sourceTree = "<group>"; };
 		D30179C71BCD78E2009AD388 /* SCSiriWaveformView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SCSiriWaveformView.m; path = SCSiriWaveformView/SCSiriWaveformView/SCSiriWaveformView.m; sourceTree = "<group>"; };
+		D30DF93D1DC1634F0064736C /* Toast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		D328171E1BD0689800185845 /* disconnect-advertising.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-advertising.json"; path = "Lists/disconnect-advertising.json"; sourceTree = SOURCE_ROOT; };
 		D328171F1BD0689800185845 /* disconnect-analytics.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-analytics.json"; path = "Lists/disconnect-analytics.json"; sourceTree = SOURCE_ROOT; };
 		D32817201BD0689800185845 /* disconnect-content.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-content.json"; path = "Lists/disconnect-content.json"; sourceTree = SOURCE_ROOT; };
@@ -369,6 +371,7 @@
 				D33A1AB01BC48FAC0003D929 /* SettingsViewController.swift */,
 				D34E70341DA874AA00BABDCC /* StringExtensions.swift */,
 				D3C0EEF01BE97D9300BD89C1 /* TitleView.swift */,
+				D30DF93D1DC1634F0064736C /* Toast.swift */,
 				D392881C1BC5CF180016A9A0 /* UIColorExtensions.swift */,
 				D392887E1BC5E47E0016A9A0 /* UIConstants.swift */,
 				D32F71D21BCEF67C006D44FC /* UIViewExtensions.swift */,
@@ -571,6 +574,7 @@
 				E4BF2DD71BACE8CA00DA9D68 /* AppDelegate.swift in Sources */,
 				D3E2C9691DA3024800DEBE3D /* InsetButton.swift in Sources */,
 				F805722F1DBEE504004339C1 /* WebCacheUtils.swift in Sources */,
+				D30DF93E1DC1634F0064736C /* Toast.swift in Sources */,
 				D33A1AB11BC48FAC0003D929 /* SettingsViewController.swift in Sources */,
 				D36C1BAA1DB02EBB0073C1AB /* OpenUtils.swift in Sources */,
 				E47F9AEE1DB9338600A93285 /* AdjustIntegration.swift in Sources */,

@@ -54,7 +54,7 @@ class URLBar: UIView {
         clearButton.setImage(#imageLiteral(resourceName: "icon_clear"), for: .normal)
         clearButton.addTarget(self, action: #selector(didPressClear), for: .touchUpInside)
 
-        urlText.font = UIConstants.fonts.urlTextFont
+        urlText.font = UIConstants.fonts.urlText
         urlText.tintColor = UIConstants.colors.urlTextFont
         urlText.textColor = UIConstants.colors.urlTextFont
         urlText.keyboardType = .webSearch
@@ -94,7 +94,7 @@ class URLBar: UIView {
 
         let activateButton = UIButton()
         activateButton.setTitle(UIConstants.strings.urlTextPlaceholder, for: .normal)
-        activateButton.titleLabel?.font = UIConstants.fonts.urlTextFont
+        activateButton.titleLabel?.font = UIConstants.fonts.urlText
         activateButton.setTitleColor(UIConstants.colors.urlTextPlaceholder, for: .normal)
         activateButton.titleEdgeInsets = UIEdgeInsetsMake(0, UIConstants.layout.urlBarWidthInset, 0, UIConstants.layout.urlBarWidthInset)
         activateButton.addTarget(self, action: #selector(didPressActivate), for: .touchUpInside)

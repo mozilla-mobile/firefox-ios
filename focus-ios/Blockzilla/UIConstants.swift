@@ -31,6 +31,8 @@ struct UIConstants {
         static let progressBar = UIColor(rgb: 0xC86DD7)
         static let settingsButtonBorder = UIColor(rgb: 0x5F6368, alpha: 0.8)
         static let tableSectionHeader = UIColor(rgb: 0x61666D)
+        static let toastBackground = UIColor(white: 1, alpha: 0.2)
+        static let toastText = UIColor.white
         static let toggleOn = UIColor(rgb: 0x00A7E0)
         static let toggleOff = UIColor(rgb: 0x585E64)
         static let toolbarBorder = UIColor(rgb: 0x5F6368)
@@ -51,7 +53,8 @@ struct UIConstants {
         static let settingsHomeButton = UIFont.systemFont(ofSize: 15)
         static let settingsOverlayButton = UIFont.systemFont(ofSize: 13)
         static let tableSectionHeader = UIFont.systemFont(ofSize: 12, weight: UIFontWeightSemibold)
-        static let urlTextFont = UIFont.systemFont(ofSize: 15)
+        static let toast = UIFont.systemFont(ofSize: 12)
+        static let urlText = UIFont.systemFont(ofSize: 15)
     }
 
     struct layout {
@@ -64,6 +67,8 @@ struct UIConstants {
         static let progressVisibilityAnimationDuration: TimeInterval = 0.25
         static let searchButtonInset: CGFloat = 15
         static let searchButtonAnimationDuration: TimeInterval = 0.1
+        static let toastAnimationDuration: TimeInterval = 0.3
+        static let toastDuration: TimeInterval = 1.5
         static let toolbarFadeAnimationDuration = 0.25
         static let urlBarMoveToTopAnimationDuration: TimeInterval = 0.3
         static let urlBarCornerRadius: CGFloat = 2
@@ -78,7 +83,8 @@ struct UIConstants {
 
     struct strings {
         static let appDescription = String(format: NSLocalizedString("%@ improves privacy and may boost page load speed and lower your mobile data usage.", comment: "Label displayed above toggles"), AppInfo.ProductName)
-        static let eraseButton = NSLocalizedString("eraseButton", value: "ERASE", comment: "Erase button in the URL bar")
+        static let eraseButton = NSLocalizedString("URL.eraseButtonLabel", value: "ERASE", comment: "Erase button in the URL bar")
+        static let eraseMessage = NSLocalizedString("URL.eraseMessageLabel", value: "We've erased your browsing history.", comment: "Message shown after pressing the Erase button")
         static let openSettings = NSLocalizedString("Go to Settings", comment: "Button to open the system Settings, shown on the home screen and after tapping the URL bar")
         static let labelBlockAds = NSLocalizedString("Block ad trackers", comment: "Label for toggle on main screen")
         static let labelBlockAnalytics = NSLocalizedString("Block analytics trackers", comment: "Label for toggle on main screen")
