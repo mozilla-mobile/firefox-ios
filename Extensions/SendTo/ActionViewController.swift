@@ -47,6 +47,7 @@ class ActionViewController: UIViewController, ClientPickerViewControllerDelegate
     }
 
     func finish() {
+        self.profile.shutdown();
         self.extensionContext!.completeRequestReturningItems(nil, completionHandler: nil)
     }
 
