@@ -43,7 +43,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         let label = imageButton.label
         label.textColor = UIColor.whiteColor()
         label.font = UIFont.systemFontOfSize(TodayUX.imageButtonTextSize)
-
+        
         imageButton.sizeToFit()
         return imageButton
     }()
@@ -78,29 +78,23 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
         button.label.font = UIFont.systemFontOfSize(TodayUX.labelTextSize)
         button.subtitleLabel.font = UIFont.systemFontOfSize(TodayUX.linkTextSize)
+
         if #available(iOS 10, *) {
             // no custom margin needed
         } else {
             button.imageView?.snp_updateConstraints { make in
-                make.left.equalTo(button.snp_left).offset(TodayUX.iOS9LeftMargin)
+                make.left.equalTo(40)
             }
         }
+                
         return button
     }()
-
-//    private lazy var widgetStackView: UIStackView = {
-//        let stackView = UIStackView()
-//        stackView.axis = .Vertical
-//        stackView.alignment = .Fill
-//        stackView.spacing = 0
-//        stackView.distribution = UIStackViewDistribution.Fill
-//        stackView.layoutMargins = UIEdgeInsets(top: TodayUX.margin, left: TodayUX.margin, bottom: TodayUX.margin, right: TodayUX.margin)
-//        stackView.layoutMarginsRelativeArrangement = true
-//        return stackView
-//    }()
     
     private lazy var buttonStackView: UIStackView = {
         let stackView = UIStackView()
+        stackView.backgroundColor = UIColor.greenColor()
+        stackView.layer.borderWidth = 2
+        stackView.layer.borderColor = UIColor.redColor().CGColor
         stackView.axis = .Horizontal
         stackView.alignment = .Fill
         stackView.spacing = 0
@@ -135,37 +129,37 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        if #available(iOSApplicationExtension 10.0, *) {
-//            if hasCopiedURL {
-//                extensionContext?.widgetLargestAvailableDisplayMode = .Expanded
-//            }
-//        }
-
         buttonStackView.addArrangedSubview(newTabButton)
         buttonStackView.addArrangedSubview(newPrivateTabButton)
-
-//        widgetStackView.addArrangedSubview(buttonStackView)
-//        widgetStackView.addArrangedSubview(openCopiedLinkButton)
-
-//        view.addSubview(widgetStackView)
-
-//        widgetStackView.snp_makeConstraints { make in
-//            make.edges.equalTo(self.view)
-//        }
         
+        // On iOS 10 we center the New Tab buttons in the space for the compact widget view so that they are correctly
+        // centered. On iOS 9 we only center horizontally and then align to the top with a fixed margin.
+
         view.addSubview(buttonStackView)
         buttonStackView.snp_makeConstraints { (make) in
-            make.left.right.equalTo(self.view)
-            make.top.equalTo(self.view).inset(16)
+            if #available(iOSApplicationExtension 10.0, *) {
+                make.left.right.equalTo(self.view)
+                make.top.equalTo(self.view).offset(TodayUX.margin)
+                //make.centerY.equalTo(extensionContext!.widgetMaximumSizeForDisplayMode(.Compact).height / 2)
+            } else {
+                make.left.right.equalTo(self.view)
+                make.top.equalTo(self.view).inset(TodayUX.margin)
+            }
         }
         
-        if hasCopiedURL {
-            view.addSubview(openCopiedLinkButton)
-            openCopiedLinkButton.snp_makeConstraints(closure: { (make) in
-                make.left.right.equalTo(self.view).inset(20)
-                make.top.equalTo(buttonStackView.snp_bottom).inset(-16)
-            })
-        }
+        // We always add the CopiedURL button. in viewWillAppear we will determine if there actually is a URL and adjust
+        // the layout accordingly. Having the button always there makes the code more clear.
+        
+        view.addSubview(openCopiedLinkButton)
+        openCopiedLinkButton.snp_makeConstraints(closure: { (make) in
+            if #available(iOSApplicationExtension 10.0, *) {
+                make.left.right.equalTo(self.view)
+                make.top.equalTo(extensionContext!.widgetMaximumSizeForDisplayMode(.Compact).height + TodayUX.margin)
+            } else {
+                make.left.right.equalTo(self.view)
+                make.top.equalTo(buttonStackView.snp_bottom).offset(TodayUX.margin)
+            }
+        })
     }
     
     @available(iOSApplicationExtension 10.0, *)
@@ -174,7 +168,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
             self.preferredContentSize = CGSize(width: 0.0, height: 0.0)
         }
         else if activeDisplayMode == NCWidgetDisplayMode.Expanded {
-            self.preferredContentSize = CGSize(width: 0.0, height: 136.0)
+            self.preferredContentSize = CGSize(width: 0.0, height: 160) // 136
         }
     }
 
@@ -182,16 +176,26 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         super.viewWillAppear(animated)
 
         if #available(iOSApplicationExtension 10.0, *) {
+            // On iOS 10 there are two widget sizes. If we have a URL on the pasteboard then we ask for the
+            // Expanded size. This will add a Show More/Less button to the widget and the widget size will
+            // follow what the user chose last.
             if hasCopiedURL {
                 extensionContext?.widgetLargestAvailableDisplayMode = .Expanded
             } else {
                 extensionContext?.widgetLargestAvailableDisplayMode = .Compact
             }
+        } else {
+            // On iOS 9 we set the widget size fixed
+            if hasCopiedURL {
+                preferredContentSize = CGSize(width: 0.0, height: TodayUX.margin + self.buttonStackView.frame.height + TodayUX.margin + openCopiedLinkButton.frame.height + TodayUX.margin + TodayUX.margin)
+            } else {
+                preferredContentSize = CGSize(width: 0.0, height: TodayUX.margin + self.buttonStackView.frame.height + TodayUX.margin)
+            }
         }
 
         updateCopiedLink()
     }
-
+    
     func widgetMarginInsetsForProposedMarginInsets(defaultMarginInsets: UIEdgeInsets) -> UIEdgeInsets {
         return UIEdgeInsetsZero
     }
@@ -326,7 +330,7 @@ class ButtonWithSublabel: UIButton {
 
         subtitleLabel.lineBreakMode = .ByTruncatingTail
         subtitleLabel.snp_makeConstraints { make in
-            //make.bottom.equalTo(self)
+            make.bottom.equalTo(self)
             make.top.equalTo(titleLabel.snp_bottom)
             make.leading.trailing.equalTo(titleLabel)
         }
