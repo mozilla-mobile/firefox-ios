@@ -27,9 +27,11 @@ class URLBar: UIView {
 
     private let urlTextContainer = UIView()
     private let urlText = URLTextField()
+    private let lockIcon = UIImageView(image: #imageLiteral(resourceName: "icon_https"))
     private var showButtons = false
     private var deleteButtonSizeConstraint: Constraint!
     private var urlTextContainerConstraint: Constraint!
+    private var hideLockConstraints = [Constraint]()
 
     init() {
         super.init(frame: CGRect.zero)
@@ -37,6 +39,13 @@ class URLBar: UIView {
         urlTextContainer.backgroundColor = UIConstants.colors.urlTextBackground
         urlTextContainer.layer.cornerRadius = UIConstants.layout.urlBarCornerRadius
         addSubview(urlTextContainer)
+
+        lockIcon.isHidden = true
+        lockIcon.alpha = 0
+        lockIcon.contentMode = .center
+        lockIcon.setContentCompressionResistancePriority(1000, for: .horizontal)
+        lockIcon.setContentHuggingPriority(1000, for: .horizontal)
+        urlTextContainer.addSubview(lockIcon)
 
         // UITextField doesn't allow customization of the clear button, so we create
         // our own so we can use it as the rightView.
@@ -117,8 +126,21 @@ class URLBar: UIView {
             make.width.equalTo(0).priority(500)
         }
 
+        lockIcon.snp.makeConstraints { make in
+            make.top.bottom.equalTo(urlTextContainer)
+
+            make.leading.equalTo(urlTextContainer).inset(UIConstants.layout.lockIconInset).priority(999)
+            make.trailing.equalTo(urlText.snp.leading).inset(-UIConstants.layout.lockIconInset).priority(999)
+
+            hideLockConstraints = [
+                make.leading.equalTo(urlTextContainer.snp.leading).constraint,
+                make.trailing.equalTo(urlText.snp.leading).constraint,
+                make.width.equalTo(0).constraint
+            ]
+        }
+
         urlText.snp.makeConstraints { make in
-            make.edges.equalTo(urlTextContainer)
+            make.top.bottom.trailing.equalTo(urlTextContainer)
         }
 
         activateButton.snp.makeConstraints { make in
@@ -150,7 +172,24 @@ class URLBar: UIView {
         didSet {
             if !urlText.isEditing {
                 setTextToURL()
+                updateLockIcon()
             }
+        }
+    }
+
+    private func updateLockIcon() {
+        let visible = !isEditing && (url?.scheme == "https")
+        lockIcon.animateHidden(!visible, duration: 0.3)
+
+        self.layoutIfNeeded()
+        UIView.animate(withDuration: 0.3) {
+            if visible {
+                self.hideLockConstraints.forEach { $0.deactivate() }
+            } else {
+                self.hideLockConstraints.forEach { $0.activate() }
+            }
+
+            self.layoutIfNeeded()
         }
     }
 
@@ -162,11 +201,14 @@ class URLBar: UIView {
         urlText.highlightAll()
         delegate?.urlBarDidFocus(urlBar: self)
 
+        updateLockIcon()
+
         guard showButtons else { return }
 
         cancelButton.animateHidden(false, duration: UIConstants.layout.urlBarFadeAnimationDuration)
         deleteButton.animateHidden(true, duration: UIConstants.layout.urlBarFadeAnimationDuration)
 
+        self.layoutIfNeeded()
         UIView.animate(withDuration: UIConstants.layout.urlBarFadeAnimationDuration) {
             self.urlTextContainer.backgroundColor = UIConstants.colors.urlTextBackground
             self.layoutIfNeeded()
@@ -181,9 +223,12 @@ class URLBar: UIView {
         setTextToURL()
         delegate?.urlBarDidDismiss(urlBar: self)
 
+        updateLockIcon()
+
         cancelButton.animateHidden(true, duration: UIConstants.layout.urlBarFadeAnimationDuration)
         deleteButton.animateHidden(false, duration: UIConstants.layout.urlBarFadeAnimationDuration)
 
+        self.layoutIfNeeded()
         UIView.animate(withDuration: UIConstants.layout.urlBarFadeAnimationDuration) {
             self.urlTextContainer.backgroundColor = nil
 

@@ -185,6 +185,7 @@ extension BrowserViewController: URLBarDelegate {
         let text = text.trimmingCharacters(in: .whitespaces)
         if !text.isEmpty, let url = URIFixup.getURL(entry: text) ?? searchEngine.urlForQuery(text) {
             submit(url: url)
+            urlBar.url = url
             urlBar.dismiss()
         } else {
             urlBar.url = browser.url

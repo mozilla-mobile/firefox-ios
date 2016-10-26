@@ -58,6 +58,7 @@ struct UIConstants {
         static let browserToolbarDisabledOpacity: CGFloat = 0.3
         static let browserToolbarHeight: Float = 44
         static let deleteAnimationDuration: TimeInterval = 0.25
+        static let lockIconInset: Float = 6
         static let navigationDoneOffset: Float = -10
         static let overlayAnimationDuration: TimeInterval = 0.25
         static let progressVisibilityAnimationDuration: TimeInterval = 0.25
