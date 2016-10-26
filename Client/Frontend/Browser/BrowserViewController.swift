@@ -2202,6 +2202,12 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
+        // Fixes 1312801 - Navigating to about:srcdoc throws a "Firefox cannot open the page" alert
+        if url.scheme == "about" && url.resourceSpecifier == "srcdoc" {
+            decisionHandler(WKNavigationActionPolicy.Allow)
+            return
+        }
+
         if !navigationAction.isAllowed && navigationAction.navigationType != .BackForward {
             print("\(navigationAction.isAllowed) \(navigationAction.navigationType == .BackForward) \(navigationAction.request.URL)")
             log.warning("Denying unprivileged request: \(navigationAction.request)")
