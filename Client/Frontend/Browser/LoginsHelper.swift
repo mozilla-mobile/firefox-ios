@@ -43,6 +43,10 @@ class LoginsHelper: TabHelper {
         guard var res = message.body as? [String: AnyObject] else { return }
         guard let type = res["type"] as? String else { return }
 
+        guard UIApplication.sharedApplication().applicationState == .Active && !profile.isShutdown else {
+            return 
+        }
+
         // We don't use the WKWebView's URL since the page can spoof the URL by using document.location
         // right before requesting login data. See bug 1194567 for more context.
         if let url = message.frameInfo.request.URL {
