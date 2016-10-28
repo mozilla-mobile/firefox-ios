@@ -319,7 +319,7 @@ private class URLTextField: AutocompleteTextField {
         return CGRect(x: inset.origin.x, y: inset.origin.y, width: inset.width - clearButtonWidth, height: inset.height)
     }
 
-    override private func rightViewRect(forBounds bounds: CGRect) -> CGRect {
+    override fileprivate func rightViewRect(forBounds bounds: CGRect) -> CGRect {
         return super.rightViewRect(forBounds: bounds).offsetBy(dx: -UIConstants.layout.urlBarWidthInset, dy: 0)
     }
 }
