@@ -48,6 +48,16 @@ class LocalContentBlocker: URLProtocol, URLSessionDelegate, URLSessionDataDelega
     }
 
     func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse, completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
+        // urlSession:willPerformHTTPRedirection doesn't catch all request updates (e.g., HSTS),
+        // so handle them here instead.
+        if let originalRequest = dataTask.originalRequest,
+           let currentRequest = dataTask.currentRequest,
+           originalRequest.url != currentRequest.url,
+           (URLProtocol.property(forKey: "redirect", in: originalRequest) as? URL) != currentRequest.url {
+                performRedirect(originalRequest: originalRequest, newRequest: currentRequest, response: response)
+                return
+        }
+
         client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .allowed)
         completionHandler(.allow)
     }
@@ -75,9 +85,16 @@ class LocalContentBlocker: URLProtocol, URLSessionDelegate, URLSessionDataDelega
         client?.urlProtocolDidFinishLoading(self)
     }
 
-    func urlSession(_ session: URLSession, task: URLSessionTask, willPerformHTTPRedirection response: HTTPURLResponse, newRequest request: URLRequest, completionHandler: @escaping (URLRequest?) -> Void) {
-        client?.urlProtocol(self, wasRedirectedTo: request, redirectResponse: response)
-        completionHandler(request)
+    private func performRedirect(originalRequest: URLRequest, newRequest: URLRequest, response: URLResponse) {
+        // Xcode warns that this cast always fails. This is a lie.
+        // See https://bugs.swift.org/browse/SR-2805
+        guard let mutableRequest = originalRequest as? NSMutableURLRequest else {
+            assertionFailure("Unexpected immutable request")
+            return
+        }
+
+        URLProtocol.setProperty(true, forKey: "redirect", in: mutableRequest)
+        client?.urlProtocol(self, wasRedirectedTo: newRequest, redirectResponse: response)
     }
 }
 
