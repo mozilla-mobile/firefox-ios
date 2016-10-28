@@ -80,6 +80,8 @@ public class MockProfile: Profile {
     func shutdown() {
     }
 
+    var isShutdown: Bool = false
+
     private var dbCreated = false
     lazy var db: BrowserDB = {
         self.dbCreated = true

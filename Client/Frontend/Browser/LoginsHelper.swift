@@ -43,6 +43,15 @@ class LoginsHelper: TabHelper {
         guard var res = message.body as? [String: AnyObject] else { return }
         guard let type = res["type"] as? String else { return }
 
+        // Check to see that we're in the foreground before trying to check the logins. We want to
+        // make sure we don't try accessing the logins database while we're backgrounded to avoid
+        // the system from terminating our app due to background disk access.
+        // 
+        // See https://bugzilla.mozilla.org/show_bug.cgi?id=1307822 for details.
+        guard UIApplication.sharedApplication().applicationState == .Active && !profile.isShutdown else {
+            return 
+        }
+
         // We don't use the WKWebView's URL since the page can spoof the URL by using document.location
         // right before requesting login data. See bug 1194567 for more context.
         if let url = message.frameInfo.request.URL {
