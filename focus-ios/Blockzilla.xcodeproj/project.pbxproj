@@ -54,7 +54,6 @@
 		D3BFCB3F1BD14F5900AD22D1 /* LocalWebServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BFCB3E1BD14F5900AD22D1 /* LocalWebServer.swift */; };
 		D3BFCB511BD1559300AD22D1 /* AboutContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BFCB501BD1559300AD22D1 /* AboutContentViewController.swift */; };
 		D3BFCB5B1BD15CD000AD22D1 /* rights-Klar.html in Resources */ = {isa = PBXBuildFile; fileRef = D3BFCB5A1BD15CD000AD22D1 /* rights-Klar.html */; };
-		D3C0EEF11BE97D9300BD89C1 /* TitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C0EEF01BE97D9300BD89C1 /* TitleView.swift */; };
 		D3DA77851DC2C307009C114E /* ErrorPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3DA77841DC2C307009C114E /* ErrorPage.swift */; };
 		D3DA778C1DC2C60E009C114E /* errorPage.html in Resources */ = {isa = PBXBuildFile; fileRef = D3DA778B1DC2C60E009C114E /* errorPage.html */; };
 		D3E251EA1DAD714C005918DC /* InstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E251E71DAD714C005918DC /* InstructionsView.swift */; };
@@ -175,7 +174,6 @@
 		D3BFCB3E1BD14F5900AD22D1 /* LocalWebServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalWebServer.swift; sourceTree = "<group>"; };
 		D3BFCB501BD1559300AD22D1 /* AboutContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutContentViewController.swift; sourceTree = "<group>"; };
 		D3BFCB5A1BD15CD000AD22D1 /* rights-Klar.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "rights-Klar.html"; sourceTree = "<group>"; };
-		D3C0EEF01BE97D9300BD89C1 /* TitleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleView.swift; sourceTree = "<group>"; };
 		D3DA77841DC2C307009C114E /* ErrorPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorPage.swift; sourceTree = "<group>"; };
 		D3DA778B1DC2C60E009C114E /* errorPage.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = errorPage.html; sourceTree = "<group>"; };
 		D3E251E71DAD714C005918DC /* InstructionsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstructionsView.swift; sourceTree = "<group>"; };
@@ -376,7 +374,6 @@
 				D3426AF51DB84E7A0016DA5A /* SearchEngine.swift */,
 				D33A1AB01BC48FAC0003D929 /* SettingsViewController.swift */,
 				D34E70341DA874AA00BABDCC /* StringExtensions.swift */,
-				D3C0EEF01BE97D9300BD89C1 /* TitleView.swift */,
 				D30DF93D1DC1634F0064736C /* Toast.swift */,
 				D392881C1BC5CF180016A9A0 /* UIColorExtensions.swift */,
 				D392887E1BC5E47E0016A9A0 /* UIConstants.swift */,
@@ -597,7 +594,6 @@
 				D32F71D31BCEF67C006D44FC /* UIViewExtensions.swift in Sources */,
 				D3E2C96B1DA3069000DEBE3D /* URIFixup.swift in Sources */,
 				D3BFCB511BD1559300AD22D1 /* AboutContentViewController.swift in Sources */,
-				D3C0EEF11BE97D9300BD89C1 /* TitleView.swift in Sources */,
 				D3DA77851DC2C307009C114E /* ErrorPage.swift in Sources */,
 				D3426AE91DB7F4060016DA5A /* KeyboardHelper.swift in Sources */,
 				D3E251EA1DAD714C005918DC /* InstructionsView.swift in Sources */,
