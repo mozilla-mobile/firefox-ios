@@ -52,6 +52,8 @@ class BrowserViewController: UIViewController {
     private var findInPageBar: FindInPageBar?
     private let findInPageContainer = UIView()
 
+    private lazy var mailtoLinkHandler: MailtoLinkHandler = MailtoLinkHandler()
+
     lazy private var customSearchEngineButton: UIButton = {
         let searchButton = UIButton()
         searchButton.setImage(UIImage(named: "AddSearch")?.imageWithRenderingMode(.AlwaysTemplate), forState: .Normal)
@@ -2239,6 +2241,17 @@ extension BrowserViewController: WKNavigationDelegate {
 
         if isAppleMapsURL(url) || isStoreURL(url) {
             UIApplication.sharedApplication().openURL(url)
+            decisionHandler(WKNavigationActionPolicy.Cancel)
+            return
+        }
+
+        // Handles custom mailto URL schemes.
+        if url.scheme == "mailto" {
+            if let mailToMetadata = url.mailToMetadata(), let mailScheme = self.profile.prefs.stringForKey("MailToOption") where mailScheme != "mailto" {
+                self.mailtoLinkHandler.launchMailClientForScheme(mailScheme, metadata: mailToMetadata, defaultMailtoURL: url)
+            } else {
+                UIApplication.sharedApplication().openURL(url)
+            }
             decisionHandler(WKNavigationActionPolicy.Cancel)
             return
         }

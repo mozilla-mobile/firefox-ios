@@ -42,6 +42,12 @@
 	<false/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
+		<string>ms-outlook</string>
+		<string>airmail</string>
+		<string>italiaonline-mailto</string>
+		<string>mailru-mailto</string>
+		<string>mymail-mailto</string>
+		<string>readdle-spark</string>
 		<string>itms-books</string>
 		<string>org-appextension-feature-password-management</string>
 	</array>

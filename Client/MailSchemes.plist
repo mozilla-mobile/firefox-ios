@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>name</key>
+		<string>Mail</string>
+		<key>scheme</key>
+		<string>mailto:</string>
+	</dict>
+	<dict>
+		<key>scheme</key>
+		<string>ms-outlook://</string>
+		<key>name</key>
+		<string>MS Outlook</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Airmail</string>
+		<key>scheme</key>
+		<string>airmail://</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Mail Ru</string>
+		<key>scheme</key>
+		<string>mailru-mailto://</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>myMail</string>
+		<key>scheme</key>
+		<string>mymail-mailto://</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Spark</string>
+		<key>scheme</key>
+		<string>readdle-spark://</string>
+	</dict>
+</array>
+</plist>
