@@ -12,7 +12,7 @@
 		<key>scheme</key>
 		<string>ms-outlook://</string>
 		<key>name</key>
-		<string>MS Outlook</string>
+		<string>Outlook</string>
 	</dict>
 	<dict>
 		<key>name</key>
@@ -22,7 +22,7 @@
 	</dict>
 	<dict>
 		<key>name</key>
-		<string>Mail Ru</string>
+		<string>Mail.ru</string>
 		<key>scheme</key>
 		<string>mailru-mailto://</string>
 	</dict>
