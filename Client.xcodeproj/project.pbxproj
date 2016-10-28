@@ -3933,62 +3933,76 @@
 				TargetAttributes = {
 					2827315D1ABC9BE600AA1954 = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0800;
 					};
 					282731671ABC9BE700AA1954 = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0800;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
 					288A2D851AB8B3260023ABC3 = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0800;
 					};
 					2FA435FA1ABB83B4008031D1 = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0800;
 					};
 					2FA436041ABB83B4008031D1 = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0800;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
 					2FCAE2191ABB51F800877008 = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0800;
 					};
 					2FCAE2231ABB51F800877008 = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0800;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
 					390527491C874D35007E0BB7 = {
 						CreatedOnToolsVersion = 7.2.1;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0800;
 					};
 					3B43E3CF1D95C48D00BBA9DB = {
 						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = 43AQ936H96;
 						ProvisioningStyle = Automatic;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
 					3BFE4B061D342FB800DDF53F = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0800;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
 					7BEB64401C7345600092C02E = {
+						DevelopmentTeam = 43AQ936H96;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
 					7BEB644F1C7345990092C02E = {
+						DevelopmentTeam = 43AQ936H96;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
 					D39FA15E1A83E0EC00EE869C = {
 						CreatedOnToolsVersion = 6.1.1;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0800;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
 					E4BA8A2A1B4B0A1600BC2E95 = {
 						CreatedOnToolsVersion = 6.4;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0800;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
@@ -3998,24 +4012,29 @@
 					};
 					E4D567171ADECE2700F1EFE7 = {
 						CreatedOnToolsVersion = 6.3;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0800;
 					};
 					E4D567211ADECE2700F1EFE7 = {
 						CreatedOnToolsVersion = 6.3;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0800;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
 					E65C5BC31BEA4F6500D28BEF = {
 						CreatedOnToolsVersion = 7.1;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0800;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
 					E6F9650B1B2F1CF20034B023 = {
 						CreatedOnToolsVersion = 6.3.2;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0800;
 					};
 					F84B21BD1A090F8100AAB793 = {
 						CreatedOnToolsVersion = 6.1;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0800;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
@@ -4031,11 +4050,13 @@
 					};
 					F84B21D21A090F8100AAB793 = {
 						CreatedOnToolsVersion = 6.1;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0800;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
 					F84B22481A0920C600AAB793 = {
 						CreatedOnToolsVersion = 6.1;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0800;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
@@ -4048,6 +4069,7 @@
 					};
 					F84B225B1A09210A00AAB793 = {
 						CreatedOnToolsVersion = 6.1;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0800;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
@@ -6051,6 +6073,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6647,8 +6670,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -6656,6 +6681,8 @@
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -6672,7 +6699,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				MOZ_INTERNAL_URL_SCHEME = "firefox-nightly";
-				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lxml2",
@@ -6681,7 +6708,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				SDKROOT = iphoneos;
 				SWIFT_INCLUDE_PATHS = "$(PROJECT_DIR)/Storage/modules";
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -7117,6 +7144,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -7556,6 +7584,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = (
