@@ -411,8 +411,9 @@ class TabTrayController: UIViewController {
 
         // Update the trait collection we reference in our layout delegate
         tabLayoutDelegate.traitCollection = traitCollection
+        self.collectionView.collectionViewLayout.invalidateLayout()
     }
-    
+
     private func cancelExistingGestures() {
         if let visibleCells = self.collectionView.visibleCells() as? [TabCell] {
             for cell in visibleCells {
