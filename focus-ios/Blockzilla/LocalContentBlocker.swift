@@ -58,8 +58,18 @@ class LocalContentBlocker: URLProtocol, URLSessionDelegate, URLSessionDataDelega
 
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         if let error = error {
-            client?.urlProtocol(self, didFailWithError: error)
-            return
+            guard let request = task.currentRequest,
+                  let url = request.url,
+                  url == request.mainDocumentURL else {
+                client?.urlProtocol(self, didFailWithError: error)
+                return
+            }
+
+            // Loading error pages here over the UIWebView delegate ensures the page gets added to
+            // the UIWebView's back/forward list.
+            let errorPage = ErrorPage(error: error).data
+            client?.urlProtocol(self, didReceive: URLResponse(), cacheStoragePolicy: .notAllowed)
+            client?.urlProtocol(self, didLoad: errorPage)
         }
 
         client?.urlProtocolDidFinishLoading(self)

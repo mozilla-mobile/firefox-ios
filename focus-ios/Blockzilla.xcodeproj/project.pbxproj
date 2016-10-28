@@ -55,6 +55,8 @@
 		D3BFCB511BD1559300AD22D1 /* AboutContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BFCB501BD1559300AD22D1 /* AboutContentViewController.swift */; };
 		D3BFCB5B1BD15CD000AD22D1 /* rights-Klar.html in Resources */ = {isa = PBXBuildFile; fileRef = D3BFCB5A1BD15CD000AD22D1 /* rights-Klar.html */; };
 		D3C0EEF11BE97D9300BD89C1 /* TitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C0EEF01BE97D9300BD89C1 /* TitleView.swift */; };
+		D3DA77851DC2C307009C114E /* ErrorPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3DA77841DC2C307009C114E /* ErrorPage.swift */; };
+		D3DA778C1DC2C60E009C114E /* errorPage.html in Resources */ = {isa = PBXBuildFile; fileRef = D3DA778B1DC2C60E009C114E /* errorPage.html */; };
 		D3E251EA1DAD714C005918DC /* InstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E251E71DAD714C005918DC /* InstructionsView.swift */; };
 		D3E251EB1DAD714C005918DC /* SafariInstructionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E251E81DAD714C005918DC /* SafariInstructionsViewController.swift */; };
 		D3E251EC1DAD714C005918DC /* IntroSlideWelcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E251E91DAD714C005918DC /* IntroSlideWelcome.swift */; };
@@ -174,6 +176,8 @@
 		D3BFCB501BD1559300AD22D1 /* AboutContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutContentViewController.swift; sourceTree = "<group>"; };
 		D3BFCB5A1BD15CD000AD22D1 /* rights-Klar.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "rights-Klar.html"; sourceTree = "<group>"; };
 		D3C0EEF01BE97D9300BD89C1 /* TitleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleView.swift; sourceTree = "<group>"; };
+		D3DA77841DC2C307009C114E /* ErrorPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorPage.swift; sourceTree = "<group>"; };
+		D3DA778B1DC2C60E009C114E /* errorPage.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = errorPage.html; sourceTree = "<group>"; };
 		D3E251E71DAD714C005918DC /* InstructionsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstructionsView.swift; sourceTree = "<group>"; };
 		D3E251E81DAD714C005918DC /* SafariInstructionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SafariInstructionsViewController.swift; sourceTree = "<group>"; };
 		D3E251E91DAD714C005918DC /* IntroSlideWelcome.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroSlideWelcome.swift; sourceTree = "<group>"; };
@@ -342,6 +346,7 @@
 			isa = PBXGroup;
 			children = (
 				D30179C51BCD78E1009AD388 /* Blockzilla-Bridging-Header.h */,
+				D3DA778B1DC2C60E009C114E /* errorPage.html */,
 				E47F9AE91DB9329D00A93285 /* Adjust-Focus.plist */,
 				E47F9AEB1DB9333200A93285 /* Adjust-Klar.plist */,
 				E4BF2DE21BACE8CA00DA9D68 /* Info.plist */,
@@ -357,6 +362,7 @@
 				D3E2C8E91D9F0E6200DEBE3D /* BrowserViewController.swift */,
 				D3E2C96C1DA3077400DEBE3D /* CharacterSetExtensions.swift */,
 				D3426AEC1DB846310016DA5A /* DomainCompletion.swift */,
+				D3DA77841DC2C307009C114E /* ErrorPage.swift */,
 				D3561B2A1DB5925100A5EEAF /* GradientBackgroundView.swift */,
 				D3E3CA7C1DA827AD0079C94B /* HomeView.swift */,
 				D3E2C9681DA3024800DEBE3D /* InsetButton.swift */,
@@ -503,6 +509,7 @@
 				6616A36F1BD17EFA00C7E493 /* style.css in Resources */,
 				D3E2C8FE1D9F17AC00DEBE3D /* disconnect-social.json in Resources */,
 				D3B3232D1BD16A0F00B0EEE4 /* gpl.html in Resources */,
+				D3DA778C1DC2C60E009C114E /* errorPage.html in Resources */,
 				E47F9AEA1DB9329D00A93285 /* Adjust-Focus.plist in Resources */,
 				D343DCC21C44356500D7EEE8 /* Localizable.strings in Resources */,
 				D3E2C8FB1D9F17AC00DEBE3D /* disconnect-advertising.json in Resources */,
@@ -591,6 +598,7 @@
 				D3E2C96B1DA3069000DEBE3D /* URIFixup.swift in Sources */,
 				D3BFCB511BD1559300AD22D1 /* AboutContentViewController.swift in Sources */,
 				D3C0EEF11BE97D9300BD89C1 /* TitleView.swift in Sources */,
+				D3DA77851DC2C307009C114E /* ErrorPage.swift in Sources */,
 				D3426AE91DB7F4060016DA5A /* KeyboardHelper.swift in Sources */,
 				D3E251EA1DAD714C005918DC /* InstructionsView.swift in Sources */,
 				D3E251EC1DAD714C005918DC /* IntroSlideWelcome.swift in Sources */,
