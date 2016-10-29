@@ -69,5 +69,22 @@ class ThirdPartySearchAlerts: UIAlertController {
         alert.addAction(okayOption)
         return alert
     }
+    
+    static func incorrectCustomEngineForm() -> UIAlertController {
+        let alert = ThirdPartySearchAlerts(
+            title: Strings.CustomEngineFormErrorTitle,
+            message: Strings.CustomEngineFormErrorMessage,
+            preferredStyle: UIAlertControllerStyle.Alert
+        )
+        
+        let okayOption = UIAlertAction(
+            title: Strings.ThirdPartySearchOkayButton,
+            style: UIAlertActionStyle.Default,
+            handler: nil
+        )
+        
+        alert.addAction(okayOption)
+        return alert
+    }
 
 }

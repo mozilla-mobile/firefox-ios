@@ -21,43 +21,63 @@ class CustomSearchViewController: SettingsTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Add Custom Search Engine"
-        let spinner = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
-        spinner.snp_makeConstraints { make in
+        initSpinnerView()
+    }
+
+    func initSpinnerView(){
+        spinnerView = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
+        self.view.addSubview(spinnerView)
+        
+        spinnerView.snp_makeConstraints { make in
             make.center.equalTo(view)
             return
         }
-        self.spinnerView = spinner
-//        self.view.addSubview(self.spinnerView)
+        spinnerView.hidesWhenStopped = true
     }
     
     func addSearchEngine(searchQuery: String) {
         
-        let SearchTermComponent = "%s"
-        let placeholder = "{searchTerms}"
-        var processedSearchQuery = ""
-        if searchQuery.componentsSeparatedByString(SearchTermComponent).count - 1 == 1{
-            processedSearchQuery = searchQuery.stringByReplacingOccurrencesOfString(SearchTermComponent, withString: placeholder)
-        }
-        guard processedSearchQuery != "",
-            let url = NSURL(string: processedSearchQuery.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLFragmentAllowedCharacterSet())!),
-            let shortName = self.engineTitle
+        let processedSearchQuery = getProcessedSearchQuery(withSearchQuery: searchQuery)
+        guard processedSearchQuery != nil,
+            let url = NSURL(string: processedSearchQuery!.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLFragmentAllowedCharacterSet())!),
+            let shortName = self.engineTitle where
+            self.engineTitle != ""
             else {
-                let alert = ThirdPartySearchAlerts.failedToAddThirdPartySearch()
+                spinnerView.stopAnimating()
+                let alert = ThirdPartySearchAlerts.incorrectCustomEngineForm()
                 self.presentViewController(alert, animated: true, completion: nil)
                 return
         }
+        saveEngineWithFavicon(forProcessedQuery: processedSearchQuery!, withEncodedUrl: url ,withShortname: shortName, forProfile: profile)
+    }
+
+    func getProcessedSearchQuery(withSearchQuery searchQuery: String) -> String? {
+        let SearchTermComponent = "%s"      //Placeholder in User Entered String
+        let placeholder = "{searchTerms}"   //Placeholder looked for when using Custom Search Engine in OpenSearch.swift
         
+        if searchQuery.componentsSeparatedByString(SearchTermComponent).count - 1 == 1{
+            return searchQuery.stringByReplacingOccurrencesOfString(SearchTermComponent, withString: placeholder)
+        } else {
+            return nil
+        }
+
+    }
+    
+    func saveEngineWithFavicon(forProcessedQuery processedSearchQuery: String, withEncodedUrl url: NSURL, withShortname shortName: String ,forProfile profile: Profile) {
+        
+        spinnerView.startAnimating()
         FaviconFetcher.getForURL(url, profile: profile).uponQueue(dispatch_get_main_queue()) { result in
             var iconImage: UIImage?
             var iconURL: NSURL?
             if let favicons = result.successValue where favicons.count > 0,
-            let faviconImageURL = favicons.first?.url.asURL {
+                let faviconImageURL = favicons.first?.url.asURL {
                 iconURL = faviconImageURL
             } else {
                 iconImage = FaviconFetcher.getDefaultFavicon(url)
             }
             
             SDWebImageManager.sharedManager().downloadImageWithURL(iconURL, options: SDWebImageOptions.ContinueInBackground, progress: nil) { (image, error, cacheType, success, url) in
+                self.spinnerView.stopAnimating()
                 if image != nil {
                     iconImage = image
                 }
@@ -67,11 +87,12 @@ class CustomSearchViewController: SettingsTableViewController {
                     return
                 }
                 self.profile.searchEngines.addSearchEngine(OpenSearchEngine(engineID: nil, shortName: shortName, image: iconImage!, searchTemplate: processedSearchQuery, suggestTemplate: nil, isCustomEngine: true))
+                self.navigationController?.popViewControllerAnimated(true)
                 let Toast = SimpleToast()
                 Toast.showAlertWithText(Strings.ThirdPartySearchEngineAdded)
-                self.navigationController?.popViewControllerAnimated(true)
             }
         }
+    
     }
     
     override func generateSettings() -> [SettingSection] {
