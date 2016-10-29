@@ -91,10 +91,4 @@ class PrefsTests: XCTestCase {
         prefs1.clearAll()
         XCTAssertNil(prefs1.intForKey("foo") as! AnyObject?)
     }
-    
-    func testHomePageSettingForInternalURLs() {
-        let helper = HomePageHelper(prefs: prefs)
-        helper.currentURL = NSURL(string: "http://localhost:6571")
-        XCTAssertNil(prefs.stringForKey(HomePageConstants.HomePageURLPrefKey))
-    }
 }

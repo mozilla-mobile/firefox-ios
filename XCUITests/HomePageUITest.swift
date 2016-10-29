@@ -4,24 +4,24 @@
 
 import XCTest
 
-class HomePageTest: BaseTestCase {
-    
+class HomePageUITest: BaseTestCase {
+
     override func setUp() {
         super.setUp()
     }
-    
+
     override func tearDown() {
         super.tearDown()
     }
-    
+
     func testSetInternalURLAsHomepage() {
         let app = XCUIApplication()
-        
+
         loadWebPage("http://en.m.wikipedia.org/wiki/Main_Page")
         app.buttons["TabLocationView.readerModeButton"].tap()
         app.buttons["TabToolbar.menuButton"].tap()
         app.cells["Set Homepage"].tap()
 
-        XCTAssertFalse(app.alerts["HomePageDialog"].exists)
+        XCTAssertTrue(app.alerts.count == 0)
     }
 }

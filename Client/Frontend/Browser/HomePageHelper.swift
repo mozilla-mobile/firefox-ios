@@ -67,7 +67,6 @@ class HomePageHelper {
         alertController.addAction(UIAlertAction(title: Strings.SetHomePageDialogYes, style: .Default) { _ in
             self.currentURL = tab.url
             })
-        alertController.view.accessibilityIdentifier = "HomePageDialog"
         navigationController?.presentViewController(alertController, animated: true, completion: nil)
     }
 }
