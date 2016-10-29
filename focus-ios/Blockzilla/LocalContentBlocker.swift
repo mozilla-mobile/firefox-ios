@@ -52,9 +52,9 @@ class LocalContentBlocker: URLProtocol, URLSessionDelegate, URLSessionDataDelega
         // so handle them here instead.
         if let originalRequest = dataTask.originalRequest,
            let currentRequest = dataTask.currentRequest,
-           originalRequest.url != currentRequest.url,
-           (URLProtocol.property(forKey: "redirect", in: originalRequest) as? URL) != currentRequest.url {
-                performRedirect(originalRequest: originalRequest, newRequest: currentRequest, response: response)
+           originalRequest.url != currentRequest.url {
+                let response = URLResponse()
+                client?.urlProtocol(self, wasRedirectedTo: currentRequest, redirectResponse: response)
                 return
         }
 
@@ -83,18 +83,6 @@ class LocalContentBlocker: URLProtocol, URLSessionDelegate, URLSessionDataDelega
         }
 
         client?.urlProtocolDidFinishLoading(self)
-    }
-
-    private func performRedirect(originalRequest: URLRequest, newRequest: URLRequest, response: URLResponse) {
-        // Xcode warns that this cast always fails. This is a lie.
-        // See https://bugs.swift.org/browse/SR-2805
-        guard let mutableRequest = originalRequest as? NSMutableURLRequest else {
-            assertionFailure("Unexpected immutable request")
-            return
-        }
-
-        URLProtocol.setProperty(true, forKey: "redirect", in: mutableRequest)
-        client?.urlProtocol(self, wasRedirectedTo: newRequest, redirectResponse: response)
     }
 }
 
