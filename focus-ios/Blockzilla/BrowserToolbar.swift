@@ -4,21 +4,8 @@
 
 import Foundation
 
-protocol BrowserToolbarDelegate: class {
-    func browserToolbarDidPressBack(browserToolbar: BrowserToolbar)
-    func browserToolbarDidPressForward(browserToolbar: BrowserToolbar)
-    func browserToolbarDidPressReload(browserToolbar: BrowserToolbar)
-    func browserToolbarDidPressStop(browserToolbar: BrowserToolbar)
-    func browserToolbarDidPressSend(browserToolbar: BrowserToolbar)
-}
-
 class BrowserToolbar: UIView {
-    weak var delegate: BrowserToolbarDelegate?
-
-    private let backButton = UIButton(type: .custom)
-    private let forwardButton = UIButton()
-    private let stopReloadButton = UIButton()
-    private let sendButton = UIButton()
+    private let toolset = BrowserToolset()
     private let gradient = CAGradientLayer()
     private let backgroundDark = GradientBackgroundView()
     private let backgroundBright = GradientBackgroundView(alpha: 0.2)
@@ -45,32 +32,10 @@ class BrowserToolbar: UIView {
         let stackView = UIStackView()
         stackView.distribution = .fillEqually
 
-        backButton.tintColor = UIConstants.colors.toolbarButtonNormal
-        backButton.setImage(#imageLiteral(resourceName: "icon_back_active"), for: .normal)
-        backButton.setImage(#imageLiteral(resourceName: "icon_back_active"), for: .highlighted)
-        backButton.addTarget(self, action: #selector(didPressBack), for: .touchUpInside)
-        backButton.isEnabled = false
-        backButton.alpha = UIConstants.layout.browserToolbarDisabledOpacity
-        stackView.addArrangedSubview(backButton)
-
-        forwardButton.tintColor = UIConstants.colors.toolbarButtonNormal
-        forwardButton.setImage(#imageLiteral(resourceName: "icon_forward_active"), for: .normal)
-        forwardButton.setImage(#imageLiteral(resourceName: "icon_forward_active"), for: .highlighted)
-        forwardButton.addTarget(self, action: #selector(didPressForward), for: .touchUpInside)
-        forwardButton.isEnabled = false
-        forwardButton.alpha = UIConstants.layout.browserToolbarDisabledOpacity
-        stackView.addArrangedSubview(forwardButton)
-
-        stopReloadButton.tintColor = UIConstants.colors.toolbarButtonNormal
-        stopReloadButton.addTarget(self, action: #selector(didPressStopReload), for: .touchUpInside)
-        stackView.addArrangedSubview(stopReloadButton)
-
-        sendButton.tintColor = UIConstants.colors.toolbarButtonNormal
-        sendButton.addTarget(self, action: #selector(didPressSend), for: .touchUpInside)
-        let sendImage = OpenUtils.canOpenInFirefox ? #imageLiteral(resourceName: "icon_openwithfx_active") : #imageLiteral(resourceName: "icon_openwith_active")
-        sendButton.setImage(sendImage, for: .normal)
-        sendButton.setImage(sendImage, for: .highlighted)
-        stackView.addArrangedSubview(sendButton)
+        stackView.addArrangedSubview(toolset.backButton)
+        stackView.addArrangedSubview(toolset.forwardButton)
+        stackView.addArrangedSubview(toolset.stopReloadButton)
+        stackView.addArrangedSubview(toolset.sendButton)
         addSubview(stackView)
 
         borderView.snp.makeConstraints { make in
@@ -100,58 +65,31 @@ class BrowserToolbar: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    weak var delegate: BrowserToolsetDelegate? {
+        didSet {
+            toolset.delegate = delegate
+        }
+    }
+
     var canGoBack: Bool = false {
         didSet {
-            backButton.isEnabled = canGoBack
-            backButton.alpha = canGoBack ? 1 : UIConstants.layout.browserToolbarDisabledOpacity
+            toolset.canGoBack = canGoBack
         }
     }
 
     var canGoForward: Bool = false {
         didSet {
-            forwardButton.isEnabled = canGoForward
-            forwardButton.alpha = canGoForward ? 1 : UIConstants.layout.browserToolbarDisabledOpacity
+            toolset.canGoForward = canGoForward
         }
     }
 
     var isLoading: Bool = false {
         didSet {
-            let image: UIImage
-            let pressedImage: UIImage
-            if isLoading {
-                image = #imageLiteral(resourceName: "icon_stop_menu")
-                pressedImage = #imageLiteral(resourceName: "icon_stop_menu")
-            } else {
-                image = #imageLiteral(resourceName: "icon_refresh_menu")
-                pressedImage = #imageLiteral(resourceName: "icon_refresh_menu")
-            }
-
-            stopReloadButton.setImage(image, for: .normal)
-            stopReloadButton.setImage(pressedImage, for: .highlighted)
+            toolset.isLoading = isLoading
 
             let duration = UIConstants.layout.urlBarFadeAnimationDuration
             backgroundDark.animateHidden(!isLoading, duration: duration)
             backgroundBright.animateHidden(isLoading, duration: duration)
         }
-    }
-
-    func didPressBack() {
-        delegate?.browserToolbarDidPressBack(browserToolbar: self)
-    }
-
-    func didPressForward() {
-        delegate?.browserToolbarDidPressForward(browserToolbar: self)
-    }
-
-    func didPressStopReload() {
-        if isLoading {
-            delegate?.browserToolbarDidPressStop(browserToolbar: self)
-        } else {
-            delegate?.browserToolbarDidPressReload(browserToolbar: self)
-        }
-    }
-
-    func didPressSend() {
-        delegate?.browserToolbarDidPressSend(browserToolbar: self)
     }
 }

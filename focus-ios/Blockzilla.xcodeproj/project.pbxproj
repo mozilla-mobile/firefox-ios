@@ -38,6 +38,7 @@
 		D34E70351DA874AA00BABDCC /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34E70341DA874AA00BABDCC /* StringExtensions.swift */; };
 		D3561B2B1DB5925100A5EEAF /* GradientBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3561B2A1DB5925100A5EEAF /* GradientBackgroundView.swift */; };
 		D362D2AB1C4EAF940041980A /* rights-Focus.html in Resources */ = {isa = PBXBuildFile; fileRef = D362D2AA1C4EAF940041980A /* rights-Focus.html */; };
+		D364DC261DC4163700562991 /* BrowserToolset.swift in Sources */ = {isa = PBXBuildFile; fileRef = D364DC251DC4163700562991 /* BrowserToolset.swift */; };
 		D36C1BAA1DB02EBB0073C1AB /* OpenUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D36C1BA91DB02EBB0073C1AB /* OpenUtils.swift */; };
 		D37DE55D1BCDBD6100906364 /* WaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37DE55C1BCDBD6100906364 /* WaveView.swift */; };
 		D38D693D1C471A98003EF211 /* GCDWebServers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D38D693B1C471A98003EF211 /* GCDWebServers.framework */; };
@@ -162,6 +163,7 @@
 		D3561B2A1DB5925100A5EEAF /* GradientBackgroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientBackgroundView.swift; sourceTree = "<group>"; };
 		D362D26A1C47326A0041980A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D362D2AA1C4EAF940041980A /* rights-Focus.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "rights-Focus.html"; sourceTree = "<group>"; };
+		D364DC251DC4163700562991 /* BrowserToolset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserToolset.swift; sourceTree = "<group>"; };
 		D36C1BA91DB02EBB0073C1AB /* OpenUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenUtils.swift; sourceTree = "<group>"; };
 		D37DE55C1BCDBD6100906364 /* WaveView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaveView.swift; sourceTree = "<group>"; };
 		D38D693B1C471A98003EF211 /* GCDWebServers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GCDWebServers.framework; path = Carthage/Build/iOS/GCDWebServers.framework; sourceTree = "<group>"; };
@@ -361,6 +363,7 @@
 				D30179061BC6CB19009AD388 /* BlockerEnabledDetector.swift */,
 				D3E2C9891DA47D5300DEBE3D /* Browser.swift */,
 				D3E2C96E1DA3093D00DEBE3D /* BrowserToolbar.swift */,
+				D364DC251DC4163700562991 /* BrowserToolset.swift */,
 				D3E2C8E91D9F0E6200DEBE3D /* BrowserViewController.swift */,
 				D3E2C96C1DA3077400DEBE3D /* CharacterSetExtensions.swift */,
 				D3426AEC1DB846310016DA5A /* DomainCompletion.swift */,
@@ -588,6 +591,7 @@
 				D30DF93E1DC1634F0064736C /* Toast.swift in Sources */,
 				D33A1AB11BC48FAC0003D929 /* SettingsViewController.swift in Sources */,
 				D36C1BAA1DB02EBB0073C1AB /* OpenUtils.swift in Sources */,
+				D364DC261DC4163700562991 /* BrowserToolset.swift in Sources */,
 				E47F9AEE1DB9338600A93285 /* AdjustIntegration.swift in Sources */,
 				D392881D1BC5CF180016A9A0 /* UIColorExtensions.swift in Sources */,
 				D3E3CA7D1DA827AD0079C94B /* HomeView.swift in Sources */,

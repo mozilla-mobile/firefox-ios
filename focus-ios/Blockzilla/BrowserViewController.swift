@@ -18,6 +18,7 @@ class BrowserViewController: UIViewController {
 
     private var homeViewContainer = UIView()
     private var browserSlideOffConstraints = [Constraint]()
+    private var showsToolsetInURLBar: Bool { return UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.orientation.isLandscape }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,7 +29,7 @@ class BrowserViewController: UIViewController {
         view.addSubview(urlBarContainer)
 
         browser.view.isHidden = true
-        browser.bottomInset = UIConstants.layout.browserToolbarHeight
+        browser.bottomInset = showsToolsetInURLBar ? 0 : UIConstants.layout.browserToolbarHeight
         browser.delegate = self
         view.addSubview(browser.view)
 
@@ -109,6 +110,8 @@ class BrowserViewController: UIViewController {
     private func createURLBar() {
         urlBar = URLBar()
         urlBar.delegate = self
+        urlBar.toolsetDelegate = self
+        urlBar.showToolset = showsToolsetInURLBar
         view.insertSubview(urlBar, belowSubview: browser.view)
 
         urlBar.snp.makeConstraints { make in
@@ -162,9 +165,12 @@ class BrowserViewController: UIViewController {
         // If this is the first navigation, show the browser and the toolbar.
         if browser.view.isHidden {
             browser.view.isHidden = false
-            browserToolbar.animateHidden(false, duration: UIConstants.layout.toolbarFadeAnimationDuration)
             homeView?.removeFromSuperview()
             homeView = nil
+
+            if !showsToolsetInURLBar {
+                browserToolbar.animateHidden(false, duration: UIConstants.layout.toolbarFadeAnimationDuration)
+            }
         }
 
         browser.loadRequest(URLRequest(url: url))
@@ -175,14 +181,24 @@ class BrowserViewController: UIViewController {
             AdjustIntegration.track(eventName: .browse)
         }
     }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        guard UIDevice.current.userInterfaceIdiom == .phone else { return }
+
+        coordinator.animate(alongsideTransition: { _ in
+            self.urlBar.showToolset = self.showsToolsetInURLBar
+            self.browserToolbar.animateHidden(self.homeView != nil || self.showsToolsetInURLBar, duration: coordinator.transitionDuration)
+            self.browser.bottomInset = self.showsToolsetInURLBar ? 0 : UIConstants.layout.browserToolbarHeight
+        })
+    }
 }
 
 extension BrowserViewController: URLBarDelegate {
-    func urlBar(urlBar: URLBar, didEnterText text: String) {
+    func urlBar(_ urlBar: URLBar, didEnterText text: String) {
         overlayView.setSearchQuery(query: text, animated: true)
     }
 
-    func urlBar(urlBar: URLBar, didSubmitText text: String) {
+    func urlBar(_ urlBar: URLBar, didSubmitText text: String) {
         let text = text.trimmingCharacters(in: .whitespaces)
         if !text.isEmpty, let url = URIFixup.getURL(entry: text) ?? searchEngine.urlForQuery(text) {
             submit(url: url)
@@ -193,21 +209,21 @@ extension BrowserViewController: URLBarDelegate {
         }
     }
 
-    func urlBarDidDismiss(urlBar: URLBar) {
+    func urlBarDidDismiss(_ urlBar: URLBar) {
         overlayView.dismiss()
         urlBarContainer.isBright = !browser.isLoading
     }
 
-    func urlBarDidPressDelete(urlBar: URLBar) {
+    func urlBarDidPressDelete(_ urlBar: URLBar) {
         self.resetBrowser()
     }
 
-    func urlBarDidFocus(urlBar: URLBar) {
+    func urlBarDidFocus(_ urlBar: URLBar) {
         overlayView.present()
         urlBarContainer.isBright = false
     }
 
-    func urlBarDidPressActivateButton(urlBar: URLBar) {
+    func urlBarDidPressActivateButton(_ urlBar: URLBar) {
         UIView.animate(withDuration: UIConstants.layout.urlBarMoveToTopAnimationDuration) {
             self.view.bringSubview(toFront: self.urlBar)
             self.topURLBarConstraints.forEach { $0.activate() }
@@ -217,50 +233,64 @@ extension BrowserViewController: URLBarDelegate {
     }
 }
 
-extension BrowserViewController: BrowserToolbarDelegate {
-    func browserToolbarDidPressBack(browserToolbar: BrowserToolbar) {
+extension BrowserViewController: BrowserToolsetDelegate {
+    func browserToolsetDidPressBack(_ browserToolset: BrowserToolset) {
+        urlBar.dismiss()
         browser.goBack()
     }
 
-    func browserToolbarDidPressForward(browserToolbar: BrowserToolbar) {
+    func browserToolsetDidPressForward(_ browserToolset: BrowserToolset) {
+        urlBar.dismiss()
         browser.goForward()
     }
 
-    func browserToolbarDidPressReload(browserToolbar: BrowserToolbar) {
+    func browserToolsetDidPressReload(_ browserToolset: BrowserToolset) {
+        urlBar.dismiss()
         browser.reload()
     }
 
-    func browserToolbarDidPressStop(browserToolbar: BrowserToolbar) {
+    func browserToolsetDidPressStop(_ browserToolset: BrowserToolset) {
+        urlBar.dismiss()
         browser.stop()
     }
 
-    func browserToolbarDidPressSend(browserToolbar: BrowserToolbar) {
+    func browserToolsetDidPressSend(_ browserToolset: BrowserToolset) {
+        urlBar.dismiss()
         guard let url = browser.url else { return }
         OpenUtils.openInExternalBrowser(url: url)
+    }
+
+    func browserToolsetDidPressSettings(_ browserToolbar: BrowserToolset) {
+        showSettings()
     }
 }
 
 extension BrowserViewController: BrowserDelegate {
     func browserDidStartNavigation(_ browser: Browser) {
+        urlBar.isLoading = true
         browserToolbar.isLoading = true
         urlBarContainer.isBright = false
     }
 
     func browserDidFinishNavigation(_ browser: Browser) {
+        urlBar.isLoading = false
         browserToolbar.isLoading = false
         urlBarContainer.isBright = !urlBar.isEditing
     }
 
     func browser(_ browser: Browser, didFailNavigationWithError error: Error) {
+        urlBar.isLoading = false
         browserToolbar.isLoading = false
         urlBarContainer.isBright = true
     }
 
     func browser(_ browser: Browser, didUpdateCanGoBack canGoBack: Bool) {
+        urlBar.canGoBack = canGoBack
         browserToolbar.canGoBack = canGoBack
     }
 
     func browser(_ browser: Browser, didUpdateCanGoForward canGoForward: Bool) {
+        urlBar.canGoForward = canGoForward
         browserToolbar.canGoForward = canGoForward
     }
 

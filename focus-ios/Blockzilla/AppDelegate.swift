@@ -46,15 +46,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     fileprivate func displaySplashAnimation() {
-        let splashView = UIView(frame: window!.frame)
+        let splashView = UIView()
         splashView.backgroundColor = UIConstants.colors.background
+        window!.addSubview(splashView)
+
         let logoImage = UIImageView(image: UIImage(named: "Icon"))
         splashView.addSubview(logoImage)
+
+        splashView.snp.makeConstraints { make in
+            make.edges.equalTo(window!)
+        }
+
         logoImage.snp.makeConstraints { make in
             make.center.equalTo(splashView)
         }
-
-        window!.addSubview(splashView)
 
         let animationDuration = 0.25
         UIView.animate(withDuration: animationDuration, delay: 0.0, options: UIViewAnimationOptions(), animations: {

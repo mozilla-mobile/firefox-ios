@@ -186,7 +186,8 @@ extension Browser: KeyboardHelperDelegate {
         // When an input field is focused, the web view adds 44 to the bottom inset to make room for the bottom
         // input bar. Since this bar overlaps the browser toolbar, we don't need the additional bottom inset,
         // so reset it here.
-        webView.scrollView.contentInset.bottom = CGFloat(bottomInset)
+        let height = state.intersectionHeightForView(view: view)
+        webView.scrollView.contentInset.bottom = max(height, CGFloat(bottomInset))
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
