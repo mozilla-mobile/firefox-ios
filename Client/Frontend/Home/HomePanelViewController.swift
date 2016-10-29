@@ -78,7 +78,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 
     private var finishEditingButton: UIButton?
     private var editingPanel: HomePanel?
-    
+
     var isPrivateMode: Bool = false {
         didSet {
             if oldValue != isPrivateMode {

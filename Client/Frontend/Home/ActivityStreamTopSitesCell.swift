@@ -434,7 +434,7 @@ class ASHorizontalScrollCellManager: NSObject, UICollectionViewDelegate, UIColle
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         return 1
     }
-    
+
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.content.count
     }

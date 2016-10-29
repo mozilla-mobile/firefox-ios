@@ -392,12 +392,12 @@ extension ActivityStreamPanel {
                 withUserData: userData,
                 toApplication: UIApplication.sharedApplication())
         })
-        
+
         let deleteFromHistoryAction = ActionOverlayTableViewAction(title: Strings.DeleteFromHistoryContextMenuTitle, iconString: "action_delete", handler: { action in
             ASOnyxPing.reportDeleteItemEvent(actionPosition: indexNumber, source: eventSource)
             self.profile.history.removeHistoryForURL(site.url)
         })
-        
+
         let shareAction = ActionOverlayTableViewAction(title: Strings.ShareContextMenuTitle, iconString: "action_share", handler: { action in
             if let url = NSURL(string: site.url) {
                 let helper = ShareExtensionHelper(url: url, tab: nil, activities: [])
