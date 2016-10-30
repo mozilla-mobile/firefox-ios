@@ -119,7 +119,6 @@ public class TabToolbarHelper: NSObject {
         toolbar.menuButton.contentMode = UIViewContentMode.Center
         toolbar.menuButton.setImage(UIImage.templateImageNamed("bottomNav-menu"), forState: .Normal)
         toolbar.menuButton.accessibilityLabel = AppMenuConfiguration.MenuButtonAccessibilityLabel
-        toolbar.menuButton.accessibilityIdentifier = "TabToolbar.menuButton"
         toolbar.menuButton.addTarget(self, action: #selector(TabToolbarHelper.SELdidClickMenu), forControlEvents: UIControlEvents.TouchUpInside)
 
         setTintColor(buttonTintColor, forButtons: toolbar.actionButtons)
