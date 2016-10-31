@@ -315,12 +315,12 @@ extension ActivityStreamPanel {
         }
     }
 
-    private func hideURLFromTopSites(siteURL: NSURL) {
+    func hideURLFromTopSites(siteURL: NSURL) {
         guard let host = siteURL.normalizedHost(), let url = siteURL.absoluteString else {
             return
         }
         // if the default top sites contains the siteurl. also wipe it from default suggested sites.
-        if defaultTopSites().filter({$0.url != url}).isEmpty == false {
+        if defaultTopSites().filter({$0.url == url}).isEmpty == false {
             deleteTileForSuggestedSite(url)
         }
         profile.history.removeHostFromTopSites(host).uponQueue(dispatch_get_main_queue()) { result in
@@ -336,7 +336,7 @@ extension ActivityStreamPanel {
         profile.prefs.setObject(deletedSuggestedSites, forKey: DefaultSuggestedSitesKey)
     }
 
-    private func defaultTopSites() -> [Site] {
+    func defaultTopSites() -> [Site] {
         let suggested = SuggestedSites.asArray()
         let deleted = profile.prefs.arrayForKey(DefaultSuggestedSitesKey) as? [String] ?? []
         return suggested.filter({deleted.indexOf($0.url) == .None})
