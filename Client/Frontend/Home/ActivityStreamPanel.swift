@@ -65,7 +65,7 @@ class ActivityStreamPanel: UITableViewController, HomePanel {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.registerClass(SimpleHighlightCell.self, forCellReuseIdentifier: "HistoryCell")
+        tableView.registerClass(AlternateSimpleHighlightCell.self, forCellReuseIdentifier: "HistoryCell")
         tableView.registerClass(ASHorizontalScrollCell.self, forCellReuseIdentifier: "TopSiteCell")
         tableView.backgroundColor = ASPanelUX.backgroundColor
         tableView.separatorStyle = .None
@@ -240,8 +240,8 @@ extension ActivityStreamPanel {
     }
 
     func configureHistoryItemCell(cell: UITableViewCell, forIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let simpleHighlightCell = cell as! SimpleHighlightCell
         let site = highlights[indexPath.row]
+        let simpleHighlightCell = cell as! AlternateSimpleHighlightCell
         simpleHighlightCell.configureWithSite(site)
         return simpleHighlightCell
     }
