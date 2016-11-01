@@ -50,17 +50,7 @@ class OpenWithSettingsViewController: UITableViewController {
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        reloadMailProviderSource()
-        if let prefMailtoScheme = self.prefs.stringForKey("MailToOption") {
-            var previousChoice: Bool = false
-            mailProviderSource.forEach({ (name, scheme, enabled) in
-                if scheme == prefMailtoScheme {
-                    previousChoice = enabled
-                }
-            })
-            self.currentChoice = previousChoice ? prefMailtoScheme : mailProviderSource[0].scheme
-        }
-        tableView.reloadData()
+        appDidBecomeActive()
     }
 
     override func viewWillDisappear(animated: Bool) {
@@ -70,7 +60,23 @@ class OpenWithSettingsViewController: UITableViewController {
 
     func appDidBecomeActive() {
         reloadMailProviderSource()
+        updateCurrentChoice()
         tableView.reloadData()
+    }
+
+    func updateCurrentChoice() {
+        var previousChoiceAvailable: Bool = false
+        if let prefMailtoScheme = self.prefs.stringForKey("MailToOption") {
+            mailProviderSource.forEach({ (name, scheme, enabled) in
+                if scheme == prefMailtoScheme {
+                    previousChoiceAvailable = enabled
+                }
+            })
+        }
+        if !previousChoiceAvailable {
+            self.prefs.setString(mailProviderSource[0].scheme, forKey: "MailToOption")
+        }
+        self.currentChoice = self.prefs.stringForKey("MailToOption")!
     }
 
     func reloadMailProviderSource() {
