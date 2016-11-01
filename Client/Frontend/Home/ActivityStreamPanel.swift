@@ -340,7 +340,7 @@ extension ActivityStreamPanel {
 
         let section = Section(indexPath.section)
         if section == .Highlights {
-            guard let highlightCell = tableView.cellForRowAtIndexPath(indexPath) as! SimpleHighlightCell? else { return }
+            guard let highlightCell = tableView.cellForRowAtIndexPath(indexPath) as! AlternateSimpleHighlightCell? else { return }
             let headerIconHandler = { return highlightCell.siteImageView.image }
             let headerIconBackgroundHandler = { return highlightCell.siteImageView.backgroundColor }
             presentContextMenu(highlights[indexPath.row], section: section, indexPath: indexPath, headerIconHandler: headerIconHandler, headerIconBackgroundHandler: headerIconBackgroundHandler)

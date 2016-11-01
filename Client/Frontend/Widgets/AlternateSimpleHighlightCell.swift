@@ -58,7 +58,7 @@ class AlternateSimpleHighlightCell: UITableViewCell {
         return timeStamp
     }()
 
-    private lazy var siteImageView: UIImageView = {
+    lazy var siteImageView: UIImageView = {
         let siteImageView = UIImageView()
         siteImageView.contentMode = UIViewContentMode.ScaleAspectFit
         siteImageView.clipsToBounds = true
