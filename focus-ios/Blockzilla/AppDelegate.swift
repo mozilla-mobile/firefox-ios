@@ -21,6 +21,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             AdjustIntegration.disable()
         }
 
+        // Setup our custom user agent
+        UserAgent.setup()
+
         // Re-register the blocking lists at startup in case they've changed.
         Utils.reloadSafariContentBlocker()
 

@@ -39,6 +39,10 @@ class AppInfo {
         return Bundle.main.infoDictionary!["CFBundleName"] as! String
     }
 
+    static var ShortVersion: String {
+        return Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! String
+    }
+
     static var LanguageCode: String {
         return Bundle.main.preferredLocalizations.first!
     }
