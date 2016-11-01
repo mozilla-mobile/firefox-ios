@@ -4,7 +4,7 @@
 
 import Foundation
 
-class DomainCompletion {
+class DomainCompletion: AutocompleteTextFieldSource {
     private lazy var topDomains: [String] = {
         let filePath = Bundle.main.path(forResource: "topdomains", ofType: "txt")
         return try! String(contentsOfFile: filePath!).components(separatedBy: "\n")

@@ -64,6 +64,7 @@ class URLBar: UIView {
         urlText.rightViewMode = .whileEditing
         urlText.setContentHuggingPriority(1000, for: .vertical)
         urlText.autocompleteDelegate = self
+        urlText.source = domainCompletion
         urlTextContainer.addSubview(urlText)
 
         addSubview(buttonContainer)
@@ -198,7 +199,6 @@ class URLBar: UIView {
 
         isEditing = true
 
-        urlText.highlightAll()
         delegate?.urlBarDidFocus(urlBar: self)
 
         updateLockIcon()
@@ -247,7 +247,7 @@ class URLBar: UIView {
     }
 
     @objc private func didPressClear() {
-        urlText.clear()
+        urlText.text = nil
     }
 
     @objc private func didPressActivate(_ button: UIButton) {
@@ -271,21 +271,16 @@ class URLBar: UIView {
 extension URLBar: AutocompleteTextFieldDelegate {
     func autocompleteTextFieldShouldBeginEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool {
         activate()
-        return true
-    }
-
-    func autocompleteTextFieldShouldEndEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool {
+        autocompleteTextField.highlightAll()
         return true
     }
 
     func autocompleteTextFieldShouldReturn(_ autocompleteTextField: AutocompleteTextField) -> Bool {
-        delegate?.urlBar(urlBar: self, didSubmitText: autocompleteTextField.text!)
+        delegate?.urlBar(urlBar: self, didSubmitText: autocompleteTextField.text ?? "")
         return true
     }
 
-    func autocompleteTextField(_ autocompleteTextField: AutocompleteTextField, didEnterText text: String) {
-        let completion = domainCompletion.completion(forText: text)
-        autocompleteTextField.setAutocompleteSuggestion(completion)
+    func autocompleteTextField(_ autocompleteTextField: AutocompleteTextField, didTextChange text: String) {
         autocompleteTextField.rightView?.isHidden = text.isEmpty
         delegate?.urlBar(urlBar: self, didEnterText: text)
     }
