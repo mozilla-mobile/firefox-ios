@@ -246,6 +246,7 @@ class ASHorizontalScrollCell: UITableViewCell {
         pageControl.progress = currentPage
         if currentPage == floor(currentPage) {
             UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
+            self.setNeedsLayout()
         }
     }
 
