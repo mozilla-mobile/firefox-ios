@@ -195,3 +195,18 @@ class AlternateSimpleHighlightCell: UITableViewCell {
         }
     }
 }
+
+// Save background color on UITableViewCell "select" because it disappears in the default behavior
+extension AlternateSimpleHighlightCell {
+    override func setHighlighted(highlighted: Bool, animated: Bool) {
+        let color = self.siteImageView.backgroundColor
+        super.setHighlighted(highlighted, animated: animated)
+        self.siteImageView.backgroundColor = color
+    }
+
+    override func setSelected(selected: Bool, animated: Bool) {
+        let color = self.siteImageView.backgroundColor
+        super.setSelected(selected, animated: animated)
+        self.siteImageView.backgroundColor = color
+    }
+}

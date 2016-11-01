@@ -9,8 +9,8 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
     private var site: Site
     private var actions: [ActionOverlayTableViewAction]
     private var tableView = UITableView()
-    private var headerIconHandler: () -> UIImage?
-    private var headerIconBackgroundHandler: () -> UIColor?
+    private var headerImage: UIImage?
+    private var headerImageBackgroundColor: UIColor?
     lazy var tapRecognizer: UITapGestureRecognizer = {
         let tapRecognizer = UITapGestureRecognizer()
         tapRecognizer.addTarget(self, action: #selector(ActionOverlayTableViewController.dismiss(_:)))
@@ -26,11 +26,11 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
         return visualEffectView
     }()
 
-    init(site: Site, actions: [ActionOverlayTableViewAction], headerIconHandler: () -> UIImage?, headerIconBackgroundHandler: () -> UIColor?) {
+    init(site: Site, actions: [ActionOverlayTableViewAction], headerImage: UIImage?, headerImageBackgroundColor: UIColor?) {
         self.site = site
         self.actions = actions
-        self.headerIconHandler = headerIconHandler
-        self.headerIconBackgroundHandler = headerIconBackgroundHandler
+        self.headerImage = headerImage
+        self.headerImageBackgroundColor = headerImageBackgroundColor
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -112,7 +112,7 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
 
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier("ActionOverlayTableViewHeader") as! ActionOverlayTableViewHeader
-        header.configureWithSite(site, image: headerIconHandler(), imageBackgroundColor: headerIconBackgroundHandler())
+        header.configureWithSite(site, image: headerImage, imageBackgroundColor: headerImageBackgroundColor)
         return header
     }
 }
