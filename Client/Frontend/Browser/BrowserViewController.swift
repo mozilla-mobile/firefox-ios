@@ -2251,7 +2251,7 @@ extension BrowserViewController: WKNavigationDelegate {
 
         // Handles custom mailto URL schemes.
         if url.scheme == "mailto" {
-            if let mailToMetadata = url.mailToMetadata(), let mailScheme = self.profile.prefs.stringForKey("MailToOption") where mailScheme != "mailto" {
+            if let mailToMetadata = url.mailToMetadata(), let mailScheme = self.profile.prefs.stringForKey(PrefsKeys.KeyMailToOption) where mailScheme != "mailto" {
                 self.mailtoLinkHandler.launchMailClientForScheme(mailScheme, metadata: mailToMetadata, defaultMailtoURL: url)
             } else {
                 UIApplication.sharedApplication().openURL(url)
