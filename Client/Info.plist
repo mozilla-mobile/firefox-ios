@@ -129,8 +129,6 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
-	<key>UIApplicationShortcutWidget</key>
-	<string>nil</string>
 	<key>UTImportedTypeDeclarations</key>
 	<array>
 		<dict>
