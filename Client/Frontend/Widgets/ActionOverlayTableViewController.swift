@@ -118,26 +118,6 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
 }
 
 class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
-    var siteImage: UIImage? = nil {
-        didSet {
-            if let image = siteImage {
-                siteImageView.image = image
-                siteImageView.contentMode = UIViewContentMode.ScaleAspectFit
-
-                // Force nearest neighbor scaling for small favicons
-                if image.size.width < SimpleHighlightCellUX.NearestNeighbordScalingThreshold {
-                    siteImageView.layer.shouldRasterize = true
-                    siteImageView.layer.rasterizationScale = 2
-                    siteImageView.layer.minificationFilter = kCAFilterNearest
-                    siteImageView.layer.magnificationFilter = kCAFilterNearest
-                }
-            } else {
-                siteImageView.image = SimpleHighlightCellUX.PlaceholderImage
-                siteImageView.contentMode = UIViewContentMode.Center
-            }
-        }
-    }
-
     lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontMediumBold
@@ -158,18 +138,9 @@ class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
 
     lazy var siteImageView: UIImageView = {
         let siteImageView = UIImageView()
-        siteImageView.contentMode = UIViewContentMode.ScaleAspectFit
-        siteImageView.clipsToBounds = true
+        siteImageView.contentMode = UIViewContentMode.Center
+        siteImageView.layer.cornerRadius = SimpleHighlightCellUX.CornerRadius
         return siteImageView
-    }()
-
-    lazy var siteImageBackground: UIView = {
-        let siteImageBackground = UIView()
-        siteImageBackground.layer.cornerRadius = SimpleHighlightCellUX.CornerRadius
-        siteImageBackground.layer.borderColor = SimpleHighlightCellUX.BorderColor.CGColor
-        siteImageBackground.layer.borderWidth = SimpleHighlightCellUX.BorderWidth
-        siteImageBackground.layer.masksToBounds = true
-        return siteImageBackground
     }()
 
     override init(reuseIdentifier: String?) {
@@ -185,32 +156,25 @@ class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
 
         contentView.backgroundColor = UIConstants.PanelBackgroundColor
 
-        contentView.addSubview(siteImageBackground)
-        siteImageBackground.addSubview(siteImageView)
+        contentView.addSubview(siteImageView)
         contentView.addSubview(descriptionLabel)
         contentView.addSubview(titleLabel)
 
-        siteImageBackground.snp_remakeConstraints { make in
+        siteImageView.snp_remakeConstraints { make in
             make.centerY.equalTo(contentView)
             make.leading.equalTo(contentView).offset(12)
             make.size.equalTo(SimpleHighlightCellUX.SiteImageViewSize)
         }
 
-        siteImageView.snp_remakeConstraints { make in
-            make.centerY.equalTo(contentView)
-            make.centerX.equalTo(siteImageBackground)
-            make.size.equalTo(SimpleHighlightCellUX.IconSize)
-        }
-
         titleLabel.snp_remakeConstraints { make in
-            make.leading.equalTo(siteImageBackground.snp_trailing).offset(12)
+            make.leading.equalTo(siteImageView.snp_trailing).offset(12)
             make.trailing.equalTo(contentView).inset(12)
-            make.top.equalTo(siteImageBackground).offset(7)
+            make.top.equalTo(siteImageView).offset(7)
         }
 
         descriptionLabel.snp_remakeConstraints { make in
             make.leading.equalTo(titleLabel)
-            make.bottom.equalTo(siteImageBackground).inset(7)
+            make.bottom.equalTo(siteImageView).inset(7)
         }
     }
     
@@ -219,8 +183,8 @@ class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
     }
 
     func configureWithSite(site: Site, image: UIImage?, imageBackgroundColor: UIColor?) {
-        self.siteImageBackground.backgroundColor = imageBackgroundColor
-        self.siteImage = image
+        self.siteImageView.backgroundColor = imageBackgroundColor
+        self.siteImageView.image = image?.createScaled(SimpleHighlightCellUX.IconSize) ?? SimpleHighlightCellUX.PlaceholderImage
         self.titleLabel.text = site.title.characters.count <= 1 ? site.url : site.title
         self.descriptionLabel.text = site.tileURL.baseDomain()
     }
