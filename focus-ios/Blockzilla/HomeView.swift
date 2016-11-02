@@ -23,10 +23,9 @@ class HomeView: UIView {
         let iconLogo = UIImageView(image: #imageLiteral(resourceName: "img_focus_app"))
         addSubview(iconLogo)
 
-        let settingsButton = InsetButton()
-        settingsButton.setTitle(UIConstants.strings.openSettings, for: .normal)
-        settingsButton.titleLabel?.font = UIConstants.fonts.settingsHomeButton
-        settingsButton.titleEdgeInsets = UIEdgeInsetsMake(10, 20, 10, 20)
+        let settingsButton = UIButton()
+        settingsButton.setImage(#imageLiteral(resourceName: "icon_settings"), for: .normal)
+        settingsButton.contentEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
         settingsButton.addTarget(self, action: #selector(didPressSettings), for: .touchUpInside)
         addSubview(settingsButton)
 
@@ -45,8 +44,8 @@ class HomeView: UIView {
         }
 
         settingsButton.snp.makeConstraints { make in
-            make.centerX.equalTo(self)
-            make.bottom.equalTo(self).offset(-20)
+            make.top.equalTo(self).offset(10)
+            make.trailing.equalTo(self)
         }
     }
 

@@ -86,7 +86,6 @@ struct UIConstants {
         static let eraseButton = NSLocalizedString("URL.eraseButtonLabel", value: "ERASE", comment: "Erase button in the URL bar")
         static let eraseMessage = NSLocalizedString("URL.eraseMessageLabel", value: "We've erased your browsing history.", comment: "Message shown after pressing the Erase button")
         static let errorTryAgain = NSLocalizedString("Error.tryAgainButton", value: "Try again", comment: "Button label to reload the error page")
-        static let openSettings = NSLocalizedString("Go to Settings", comment: "Button to open the system Settings, shown on the home screen and after tapping the URL bar")
         static let labelBlockAds = NSLocalizedString("Block ad trackers", comment: "Label for toggle on main screen")
         static let labelBlockAnalytics = NSLocalizedString("Block analytics trackers", comment: "Label for toggle on main screen")
         static let labelBlockSocial = NSLocalizedString("Block social trackers", comment: "Label for toggle on main screen")

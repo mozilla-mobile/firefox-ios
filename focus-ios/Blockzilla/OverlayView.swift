@@ -14,7 +14,7 @@ protocol OverlayViewDelegate: class {
 class OverlayView: UIView {
     weak var delegate: OverlayViewDelegate?
 
-    fileprivate let settingsButton = InsetButton()
+    fileprivate let settingsButton = UIButton()
 
     private let searchButton = InsetButton()
     private let searchBorder = UIView()
@@ -33,6 +33,7 @@ class OverlayView: UIView {
         searchButton.titleLabel?.lineBreakMode = .byTruncatingTail
         searchButton.contentHorizontalAlignment = .left
         searchButton.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .normal)
+
         let padding = UIConstants.layout.searchButtonInset
         searchButton.imageEdgeInsets = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
         searchButton.titleEdgeInsets = UIEdgeInsets(top: padding, left: padding * 2, bottom: padding, right: padding)
@@ -44,18 +45,11 @@ class OverlayView: UIView {
         searchBorder.backgroundColor = UIConstants.colors.settingsButtonBorder
         addSubview(searchBorder)
 
-        let settingsBackground = GradientBackgroundView()
-        addSubview(settingsBackground)
+        settingsButton.setImage(#imageLiteral(resourceName: "icon_settings"), for: .normal)
+        settingsButton.contentEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
 
-        settingsButton.setTitle(UIConstants.strings.openSettings, for: .normal)
-        settingsButton.titleLabel?.font = UIConstants.fonts.settingsOverlayButton
-        settingsButton.titleEdgeInsets = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
         settingsButton.addTarget(self, action: #selector(didPressSettings), for: .touchUpInside)
         addSubview(settingsButton)
-
-        let settingsBorder = UIView()
-        settingsBorder.backgroundColor = UIConstants.colors.settingsButtonBorder
-        addSubview(settingsBorder)
 
         searchButton.snp.makeConstraints { make in
             make.top.leading.trailing.equalTo(self)
@@ -67,19 +61,9 @@ class OverlayView: UIView {
             make.height.equalTo(1)
         }
 
-        settingsBackground.snp.makeConstraints { make in
-            make.edges.equalTo(settingsButton)
-        }
-
         settingsButton.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(self)
+            make.trailing.equalTo(self)
             bottomConstraint = make.bottom.equalTo(self).constraint
-        }
-
-        settingsBorder.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(self)
-            make.bottom.equalTo(settingsButton.snp.top)
-            make.height.equalTo(1)
         }
     }
 
