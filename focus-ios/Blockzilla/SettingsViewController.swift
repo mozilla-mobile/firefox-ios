@@ -57,7 +57,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.backgroundColor = UIConstants.colors.background
         tableView.layoutMargins = UIEdgeInsets.zero
         tableView.separatorColor = UIColor(rgb: 0x333333)
-        tableView.allowsSelection = false
+        tableView.allowsSelection = true
         tableView.estimatedRowHeight = 44
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 44))
 
@@ -122,6 +122,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         cell.textLabel?.textColor = UIConstants.colors.defaultFont
         cell.layoutMargins = UIEdgeInsets.zero
         cell.detailTextLabel?.textColor = UIConstants.colors.navigationTitle
+        cell.selectionStyle = .none
 
         return cell
     }
@@ -210,6 +211,16 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         case 3: fallthrough
         case 4: return 30
         default: return 0
+        }
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+
+        if indexPath.section == 4 && indexPath.row == 0 {
+            if let url = SupportUtils.URLForTopic(topic: "usage-data") {
+                OpenUtils.openInExternalBrowser(url: url)
+            }
         }
     }
 
