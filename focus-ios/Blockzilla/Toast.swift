@@ -26,11 +26,14 @@ class Toast {
         label.text = text
         label.textColor = UIConstants.colors.toastText
         label.font = UIConstants.fonts.toast
+        label.numberOfLines = 0
         toast.addSubview(label)
 
         toast.snp.makeConstraints { make in
-            make.top.equalTo(window).offset(50)
+            make.bottom.equalTo(window).offset(-30)
             make.centerX.equalTo(window)
+            make.leading.greaterThanOrEqualTo(window)
+            make.trailing.lessThanOrEqualTo(window)
         }
 
         label.snp.makeConstraints { make in
