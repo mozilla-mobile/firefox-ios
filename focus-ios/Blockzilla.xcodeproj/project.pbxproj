@@ -43,6 +43,8 @@
 		D37DE55D1BCDBD6100906364 /* WaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37DE55C1BCDBD6100906364 /* WaveView.swift */; };
 		D38D693D1C471A98003EF211 /* GCDWebServers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D38D693B1C471A98003EF211 /* GCDWebServers.framework */; };
 		D38D693E1C471A98003EF211 /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D38D693C1C471A98003EF211 /* SnapKit.framework */; };
+		D38EDB961DCA8A9400E28196 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D38EDB951DCA8A9400E28196 /* LaunchScreen.storyboard */; };
+		D38EDB981DCA8CBD00E28196 /* splash.png in Resources */ = {isa = PBXBuildFile; fileRef = D38EDB971DCA8CBD00E28196 /* splash.png */; };
 		D392881D1BC5CF180016A9A0 /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D392881C1BC5CF180016A9A0 /* UIColorExtensions.swift */; };
 		D392887D1BC5E4510016A9A0 /* WaveHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D392887C1BC5E4510016A9A0 /* WaveHeaderView.swift */; };
 		D392887F1BC5E47E0016A9A0 /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D392887E1BC5E47E0016A9A0 /* UIConstants.swift */; };
@@ -90,8 +92,6 @@
 		E4BF2DF51BACE92400DA9D68 /* ContentBlocker.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E4BF2DEC1BACE92400DA9D68 /* ContentBlocker.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E4BF2E111BAD8AC500DA9D68 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF2E101BAD8AC500DA9D68 /* Settings.swift */; };
 		E4BF2E121BAD8AC500DA9D68 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF2E101BAD8AC500DA9D68 /* Settings.swift */; };
-		E4BF2E141BAE324400DA9D68 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4BF2E131BAE324400DA9D68 /* LaunchScreen.storyboard */; };
-		E4BF2E151BAE324400DA9D68 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4BF2E131BAE324400DA9D68 /* LaunchScreen.storyboard */; };
 		F805722F1DBEE504004339C1 /* WebCacheUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F805722E1DBEE504004339C1 /* WebCacheUtils.swift */; };
 /* End PBXBuildFile section */
 
@@ -168,6 +168,8 @@
 		D37DE55C1BCDBD6100906364 /* WaveView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaveView.swift; sourceTree = "<group>"; };
 		D38D693B1C471A98003EF211 /* GCDWebServers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GCDWebServers.framework; path = Carthage/Build/iOS/GCDWebServers.framework; sourceTree = "<group>"; };
 		D38D693C1C471A98003EF211 /* SnapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SnapKit.framework; path = Carthage/Build/iOS/SnapKit.framework; sourceTree = "<group>"; };
+		D38EDB951DCA8A9400E28196 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		D38EDB971DCA8CBD00E28196 /* splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = splash.png; sourceTree = "<group>"; };
 		D392881C1BC5CF180016A9A0 /* UIColorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
 		D392887C1BC5E4510016A9A0 /* WaveHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaveHeaderView.swift; sourceTree = "<group>"; };
 		D392887E1BC5E47E0016A9A0 /* UIConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIConstants.swift; sourceTree = "<group>"; };
@@ -212,7 +214,6 @@
 		E4BF2DF01BACE92400DA9D68 /* ActionRequestHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionRequestHandler.swift; sourceTree = "<group>"; };
 		E4BF2DF21BACE92400DA9D68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E4BF2E101BAD8AC500DA9D68 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Settings.swift; path = Shared/Settings.swift; sourceTree = SOURCE_ROOT; };
-		E4BF2E131BAE324400DA9D68 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F4C4943B406FCA9B74B4E186 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		F805722E1DBEE504004339C1 /* WebCacheUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebCacheUtils.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -354,7 +355,8 @@
 				E47F9AE91DB9329D00A93285 /* Adjust-Focus.plist */,
 				E47F9AEB1DB9333200A93285 /* Adjust-Klar.plist */,
 				E4BF2DE21BACE8CA00DA9D68 /* Info.plist */,
-				E4BF2E131BAE324400DA9D68 /* LaunchScreen.storyboard */,
+				D38EDB971DCA8CBD00E28196 /* splash.png */,
+				D38EDB951DCA8A9400E28196 /* LaunchScreen.storyboard */,
 				D3BFCB501BD1559300AD22D1 /* AboutContentViewController.swift */,
 				D30179C21BCC6F65009AD388 /* AboutViewController.swift */,
 				E47F9AED1DB9338600A93285 /* AdjustIntegration.swift */,
@@ -517,15 +519,16 @@
 				D3B3232D1BD16A0F00B0EEE4 /* gpl.html in Resources */,
 				D3DA778C1DC2C60E009C114E /* errorPage.html in Resources */,
 				E47F9AEA1DB9329D00A93285 /* Adjust-Focus.plist in Resources */,
+				D38EDB961DCA8A9400E28196 /* LaunchScreen.storyboard in Resources */,
 				D343DCC21C44356500D7EEE8 /* Localizable.strings in Resources */,
 				D3E2C8FB1D9F17AC00DEBE3D /* disconnect-advertising.json in Resources */,
 				D362D2AB1C4EAF940041980A /* rights-Focus.html in Resources */,
 				D3E2C8FC1D9F17AC00DEBE3D /* disconnect-analytics.json in Resources */,
 				D3E2C8FD1D9F17AC00DEBE3D /* disconnect-content.json in Resources */,
-				E4BF2E141BAE324400DA9D68 /* LaunchScreen.storyboard in Resources */,
 				D3BFCB5B1BD15CD000AD22D1 /* rights-Klar.html in Resources */,
 				E47F9AEC1DB9333200A93285 /* Adjust-Klar.plist in Resources */,
 				D3426AEF1DB846BB0016DA5A /* topdomains.txt in Resources */,
+				D38EDB981DCA8CBD00E28196 /* splash.png in Resources */,
 				D3E2C8FF1D9F17AC00DEBE3D /* web-fonts.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -539,7 +542,6 @@
 				D3BBC9ED1D7F81CB00D1751B /* enabled-detector.json in Resources */,
 				D32817221BD0689800185845 /* disconnect-advertising.json in Resources */,
 				D32817241BD0689800185845 /* disconnect-content.json in Resources */,
-				E4BF2E151BAE324400DA9D68 /* LaunchScreen.storyboard in Resources */,
 				D3B323521BD1A7EE00B0EEE4 /* web-fonts.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
