@@ -34,6 +34,7 @@ class URLBar: UIView {
 
     private var hideButtonContainerConstraint: Constraint!
     private var fullWidthURLTextConstraint: Constraint!
+    private var showSettingsConstraints = [Constraint]()
     private var hideLockConstraints = [Constraint]()
     private var hideToolsetConstraints = [Constraint]()
     private var showToolsetConstraints = [Constraint]()
@@ -125,6 +126,8 @@ class URLBar: UIView {
         toolset.backButton.snp.makeConstraints { make in
             make.leading.centerY.equalTo(self)
 
+            // Other toolset buttons are set equal to the back button size,
+            // so hiding the back button will hide them all.
             hideToolsetConstraints.append(make.size.equalTo(0).constraint)
         }
 
@@ -175,15 +178,19 @@ class URLBar: UIView {
         buttonContainer.snp.makeConstraints { make in
             make.top.bottom.equalTo(urlTextContainer)
 
-            make.width.greaterThanOrEqualTo(deleteButton).inset(-UIConstants.layout.urlBarMargin).priority(999)
-            make.width.greaterThanOrEqualTo(cancelButton).inset(-UIConstants.layout.urlBarMargin).priority(999)
-            make.width.greaterThanOrEqualTo(toolset.backButton).priority(999)
+            make.width.greaterThanOrEqualTo(deleteButton).inset(-UIConstants.layout.urlBarMargin).priority(998)
+            make.width.greaterThanOrEqualTo(cancelButton).inset(-UIConstants.layout.urlBarMargin).priority(998)
+            make.width.greaterThanOrEqualTo(toolset.backButton).priority(998)
 
-            // This will shrink the container to be as small as possible.
+            // This will shrink the container to be as small as possible while still meeting the width requirements above.
             make.width.equalTo(0).priority(500)
 
             // Keep the button container hidden until we start browsing.
-            hideButtonContainerConstraint = make.width.equalTo(UIConstants.layout.urlBarMargin).constraint
+            // Set the width equal to the URL bar margin so there's still a gap between the trailing edges...
+            hideButtonContainerConstraint = make.width.equalTo(UIConstants.layout.urlBarMargin).priority(999).constraint
+
+            /// ...unless we're showing the Settings button.
+            showSettingsConstraints.append(make.width.equalTo(0).constraint)
         }
 
         toolset.sendButton.snp.makeConstraints { make in
@@ -195,7 +202,17 @@ class URLBar: UIView {
         toolset.settingsButton.snp.makeConstraints { make in
             make.leading.equalTo(toolset.sendButton.snp.trailing)
             make.centerY.trailing.equalTo(self)
-            make.size.equalTo(toolset.backButton)
+
+            // Like the other toolset buttons, we usually want this to be equal to the back button size.
+            // But there's a one-off state after activation on iPads/landscape where we show Settings
+            // with all the other buttons hidden, so we allow this constraint to be overridden.
+            make.width.equalTo(toolset.backButton).priority(999)
+
+            // Normally, the Settings button will be equal to the other toolset widths.
+            // But there's a one-off state after activation on iPads/landscape where we show Settings
+            // with all the other buttons hidden, so we have to calculate the width manually.
+            // We have 6 buttons, and the URL text container is 50% width, so 50%/6 = 8.3333%.
+            showSettingsConstraints.append(make.width.equalTo(self).multipliedBy(0.083333).constraint)
         }
 
         deleteButton.snp.makeConstraints { make in
@@ -217,6 +234,7 @@ class URLBar: UIView {
         }
 
         showToolsetConstraints.forEach { $0.deactivate() }
+        showSettingsConstraints.forEach { $0.deactivate() }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -353,21 +371,32 @@ class URLBar: UIView {
     /// Show the URL toolset buttons if we're on iPad/landscape and not editing; hide them otherwise.
     /// This method is intended to be called inside `UIView.animate` block.
     private func updateToolsetConstraints() {
-        let isHidden = !isActivated || !showToolset
+        let isHidden = !showButtons || !showToolset
         toolset.backButton.animateHidden(isHidden, duration: 0.3)
         toolset.forwardButton.animateHidden(isHidden, duration: 0.3)
         toolset.stopReloadButton.animateHidden(isHidden, duration: 0.3)
         toolset.sendButton.animateHidden(isHidden, duration: 0.3)
-        toolset.settingsButton.animateHidden(isHidden, duration: 0.3)
+
+        // We always show the settings button in the toolset -- even before we've started browsing.
+        if isActivated && showToolset && !showButtons {
+            showSettingsConstraints.forEach { $0.activate() }
+        } else {
+            showSettingsConstraints.forEach { $0.deactivate() }
+        }
+        toolset.settingsButton.animateHidden(!showToolset, duration: 0.3)
 
         if isHidden {
+            // If we're hidden, hide the toolset buttons.
             showToolsetConstraints.forEach { $0.deactivate() }
             hideToolsetConstraints.forEach { $0.activate() }
             fullWidthURLTextConstraint.activate()
         } else {
+            // If we're visible, show the toolset buttons.
             hideToolsetConstraints.forEach { $0.deactivate() }
             showToolsetConstraints.forEach { $0.activate() }
 
+            // If we're editing, stretch the text field to the full width of its container.
+            // Otherwise it will size to fit, allowing it to be centered in the container.
             if isEditing {
                 fullWidthURLTextConstraint.activate()
             } else {
