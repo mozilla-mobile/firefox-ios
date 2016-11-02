@@ -188,10 +188,6 @@ extension ActivityStreamPanel {
         homePanelDelegate?.homePanel(self, didSelectURL: url, visitType: visitType)
     }
 
-    private func presentActionMenuHandler(alert: UIAlertController) {
-        self.presentViewController(alert, animated: true, completion: nil)
-    }
-
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         switch Section(indexPath.section) {
         case .Highlights:
