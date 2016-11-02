@@ -71,6 +71,12 @@ class OverlayView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    var showSettings: Bool = true {
+        didSet {
+            settingsButton.isHidden = !showSettings
+        }
+    }
+
     func setSearchQuery(query: String, animated: Bool) {
         searchQuery = query
 

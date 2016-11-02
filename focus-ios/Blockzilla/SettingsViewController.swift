@@ -13,7 +13,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     private var isSafariEnabled = false
     private let tableView = UITableView()
-    private let headerView = WaveHeaderView()
+    private let waveView = WaveView()
 
     private let toggles = [
         BlockerToggle(label: UIConstants.strings.toggleSafari, setting: SettingsToggle.safari),
@@ -98,24 +98,22 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "toggleCell")
+        let cell: UITableViewCell
         switch (indexPath as NSIndexPath).section {
         case 0:
-            cell.contentView.addSubview(headerView)
-            headerView.snp.makeConstraints { make in
+            cell = UITableViewCell(style: .subtitle, reuseIdentifier: "waveCell")
+            cell.contentView.addSubview(waveView)
+            waveView.snp.makeConstraints { make in
                 make.edges.equalTo(cell)
             }
-        case 1: fallthrough
-        case 2: fallthrough
-        case 3: fallthrough
-        case 4:
+        default:
+            cell = UITableViewCell(style: .subtitle, reuseIdentifier: "toggleCell")
             let toggle = toggleForIndexPath(indexPath)
             cell.textLabel?.text = toggle.label
             cell.textLabel?.numberOfLines = 0
             cell.accessoryView = PaddedSwitch(switchView: toggle.toggle)
             cell.detailTextLabel?.text = toggle.subtitle
             cell.detailTextLabel?.numberOfLines = 0
-        default: break
         }
 
         cell.backgroundColor = UIConstants.colors.background
@@ -129,7 +127,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
-        case 0: return 1 // Header view.
+        case 0: return 1 // Wave view.
         case 1: return 1 // Integration.
         case 2: return 4 // Privacy.
         case 3: return 1 // Performance.
@@ -145,8 +143,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        // Height for the wave.
         if (indexPath as NSIndexPath).section == 0 {
-            return heightForCustomCellWithView(headerView)
+            return 200
         }
 
         // We have to manually calculate the cell height since UITableViewCell doesn't correctly
@@ -234,14 +233,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             safariToggle.isEnabled = true
             self?.isSafariEnabled = enabled
         }
-    }
-
-    private func heightForCustomCellWithView(_ view: UIView) -> CGFloat {
-        // We ask for the height before we do a layout pass, so manually trigger a layout here
-        // so we can calculate the view's height.
-        view.layoutIfNeeded()
-
-        return view.systemLayoutSizeFitting(UILayoutFittingCompressedSize).height
     }
 
     @objc private func aboutClicked() {

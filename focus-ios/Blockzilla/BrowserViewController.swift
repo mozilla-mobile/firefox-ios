@@ -23,6 +23,9 @@ class BrowserViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        let background = GradientBackgroundView(alpha: 0.6, startPoint: CGPoint.zero, endPoint: CGPoint(x: 1, y: 1))
+        view.addSubview(background)
+
         view.addSubview(homeViewContainer)
 
         urlBarContainer.alpha = 1
@@ -43,7 +46,12 @@ class BrowserViewController: UIViewController {
         overlayView.alpha = 0
         overlayView.delegate = self
         overlayView.backgroundColor = UIConstants.colors.overlayBackground
+        overlayView.showSettings = !showsToolsetInURLBar
         view.addSubview(overlayView)
+
+        background.snp.makeConstraints { make in
+            make.edges.equalTo(view)
+        }
 
         urlBarContainer.snp.makeConstraints { make in
             make.top.leading.trailing.equalTo(view)
@@ -59,7 +67,8 @@ class BrowserViewController: UIViewController {
         }
 
         homeViewContainer.snp.makeConstraints { make in
-            make.edges.equalTo(view)
+            make.top.equalTo(topLayoutGuide.snp.bottom)
+            make.leading.trailing.bottom.equalTo(view)
         }
 
         browser.view.snp.makeConstraints { make in
@@ -108,6 +117,11 @@ class BrowserViewController: UIViewController {
     }
 
     private func createURLBar() {
+        guard let homeView = homeView else {
+            assertionFailure("Home view must exist to create the URL bar")
+            return
+        }
+
         urlBar = URLBar()
         urlBar.delegate = self
         urlBar.toolsetDelegate = self
@@ -123,7 +137,7 @@ class BrowserViewController: UIViewController {
             // Initial centered constraints, which will effectively be deactivated when
             // the top constraints are active because of their reduced priorities.
             make.width.equalTo(view).multipliedBy(0.95).priority(500)
-            make.center.equalTo(view).priority(500)
+            make.center.equalTo(homeView).priority(500)
         }
         topURLBarConstraints.forEach { $0.deactivate() }
     }
@@ -189,6 +203,7 @@ class BrowserViewController: UIViewController {
             self.urlBar.showToolset = self.showsToolsetInURLBar
             self.browserToolbar.animateHidden(self.homeView != nil || self.showsToolsetInURLBar, duration: coordinator.transitionDuration)
             self.browser.bottomInset = self.showsToolsetInURLBar ? 0 : UIConstants.layout.browserToolbarHeight
+            self.overlayView.showSettings = !self.showsToolsetInURLBar
         })
     }
 }

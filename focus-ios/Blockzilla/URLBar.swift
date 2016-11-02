@@ -296,10 +296,12 @@ class URLBar: UIView {
 
     private func updateLockIcon() {
         let visible = !isEditing && (url?.scheme == "https")
-        lockIcon.animateHidden(!visible, duration: 0.3)
+        let duration = UIConstants.layout.urlBarFadeAnimationDuration / 2
+
+        lockIcon.animateHidden(!visible, duration: duration)
 
         self.layoutIfNeeded()
-        UIView.animate(withDuration: 0.3) {
+        UIView.animate(withDuration: duration) {
             if visible {
                 self.hideLockConstraints.forEach { $0.deactivate() }
             } else {
@@ -377,8 +379,9 @@ class URLBar: UIView {
         toolset.stopReloadButton.animateHidden(isHidden, duration: 0.3)
         toolset.sendButton.animateHidden(isHidden, duration: 0.3)
 
-        // We always show the settings button in the toolset -- even before we've started browsing.
-        if isActivated && showToolset && !showButtons {
+        // There's a one-off state after activating but before browsing where we want to show
+        // the Settings button in the URL bar.
+        if isActivated && !showButtons && showToolset {
             showSettingsConstraints.forEach { $0.activate() }
         } else {
             showSettingsConstraints.forEach { $0.deactivate() }
@@ -411,6 +414,8 @@ class URLBar: UIView {
 
     @objc private func didPressClear() {
         urlText.text = nil
+        urlText.rightView?.isHidden = true
+        delegate?.urlBar(self, didEnterText: "")
     }
 
     @objc private func didPressActivate(_ button: UIButton) {

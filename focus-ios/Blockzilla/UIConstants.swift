@@ -47,7 +47,7 @@ struct UIConstants {
     struct fonts {
         static let cancelButton = UIFont.systemFont(ofSize: 15)
         static let deleteButton = UIFont.systemFont(ofSize: 11)
-        static let homeLabel = UIFont.systemFont(ofSize: 14)
+        static let homeLabel = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         static let safariInstruction = UIFont.systemFont(ofSize: 16, weight: UIFontWeightMedium)
         static let searchButton = UIFont.systemFont(ofSize: 15)
         static let searchButtonQuery = UIFont.boldSystemFont(ofSize: 15)
@@ -83,12 +83,11 @@ struct UIConstants {
     }
 
     struct strings {
-        static let appDescription = String(format: NSLocalizedString("%@ improves privacy and may boost page load speed and lower your mobile data usage.", comment: "Label displayed above toggles"), AppInfo.ProductName)
         static let eraseButton = NSLocalizedString("URL.eraseButtonLabel", value: "ERASE", comment: "Erase button in the URL bar")
         static let eraseMessage = NSLocalizedString("URL.eraseMessageLabel", value: "We've erased your browsing history.", comment: "Message shown after pressing the Erase button")
         static let errorTryAgain = NSLocalizedString("Error.tryAgainButton", value: "Try again", comment: "Button label to reload the error page")
-        static let homeLabel1 = NSLocalizedString("Home.descriptionLabel1", value: "Private browsing made easy.", comment: "First label for product description on the home screen")
-        static let homeLabel2 = NSLocalizedString("Home.descriptionLabel2", value: "Search. Browse. Erase. Repeat.", comment: "Second label for product description on the home screen")
+        static let homeLabel1 = NSLocalizedString("Home.descriptionLabel1", value: "Private browsing made simple.", comment: "First label for product description on the home screen")
+        static let homeLabel2 = NSLocalizedString("Home.descriptionLabel2", value: "Browse. Erase. Repeat.", comment: "Second label for product description on the home screen")
         static let labelBlockAds = NSLocalizedString("Block ad trackers", comment: "Label for toggle on main screen")
         static let labelBlockAnalytics = NSLocalizedString("Block analytics trackers", comment: "Label for toggle on main screen")
         static let labelBlockSocial = NSLocalizedString("Block social trackers", comment: "Label for toggle on main screen")

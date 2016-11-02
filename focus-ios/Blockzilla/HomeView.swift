@@ -14,9 +14,6 @@ class HomeView: UIView {
     init() {
         super.init(frame: CGRect.zero)
 
-        let background = GradientBackgroundView(alpha: 0.6, startPoint: CGPoint.zero, endPoint: CGPoint(x: 1, y: 1))
-        addSubview(background)
-
         let textLogo = UIImageView(image: #imageLiteral(resourceName: "img_focus_wordmark"))
         addSubview(textLogo)
 
@@ -25,6 +22,7 @@ class HomeView: UIView {
         description1.font = UIConstants.fonts.homeLabel
         description1.textAlignment = .center
         description1.text = UIConstants.strings.homeLabel1
+        description1.numberOfLines = 0
         addSubview(description1)
 
         let description2 = UILabel()
@@ -32,6 +30,7 @@ class HomeView: UIView {
         description2.font = UIConstants.fonts.homeLabel
         description2.textAlignment = .center
         description2.text = UIConstants.strings.homeLabel2
+        description2.numberOfLines = 0
         addSubview(description2)
 
         let settingsButton = UIButton()
@@ -39,10 +38,6 @@ class HomeView: UIView {
         settingsButton.contentEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
         settingsButton.addTarget(self, action: #selector(didPressSettings), for: .touchUpInside)
         addSubview(settingsButton)
-
-        background.snp.makeConstraints { make in
-            make.edges.equalTo(self)
-        }
 
         textLogo.snp.makeConstraints { make in
             make.centerX.equalTo(self)
@@ -60,8 +55,7 @@ class HomeView: UIView {
         }
 
         settingsButton.snp.makeConstraints { make in
-            make.top.equalTo(self).offset(10)
-            make.trailing.equalTo(self)
+            make.top.trailing.equalTo(self)
         }
     }
 
