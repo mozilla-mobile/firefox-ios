@@ -20,8 +20,19 @@ class HomeView: UIView {
         let textLogo = UIImageView(image: #imageLiteral(resourceName: "img_focus_wordmark"))
         addSubview(textLogo)
 
-        let iconLogo = UIImageView(image: #imageLiteral(resourceName: "img_focus_app"))
-        addSubview(iconLogo)
+        let description1 = UILabel()
+        description1.textColor = .white
+        description1.font = UIConstants.fonts.homeLabel
+        description1.textAlignment = .center
+        description1.text = UIConstants.strings.homeLabel1
+        addSubview(description1)
+
+        let description2 = UILabel()
+        description2.textColor = .white
+        description2.font = UIConstants.fonts.homeLabel
+        description2.textAlignment = .center
+        description2.text = UIConstants.strings.homeLabel2
+        addSubview(description2)
 
         let settingsButton = UIButton()
         settingsButton.setImage(#imageLiteral(resourceName: "icon_settings"), for: .normal)
@@ -35,12 +46,17 @@ class HomeView: UIView {
 
         textLogo.snp.makeConstraints { make in
             make.centerX.equalTo(self)
-            make.bottom.equalTo(snp.centerY).offset(-50)
+            make.bottom.equalTo(snp.centerY).offset(-60)
         }
 
-        iconLogo.snp.makeConstraints { make in
-            make.centerX.equalTo(self)
+        description1.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(self)
             make.top.equalTo(snp.centerY).offset(50)
+        }
+
+        description2.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(self)
+            make.top.equalTo(description1.snp.bottom).offset(5)
         }
 
         settingsButton.snp.makeConstraints { make in

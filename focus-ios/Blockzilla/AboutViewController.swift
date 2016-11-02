@@ -119,7 +119,7 @@ private class AboutHeaderView: UIView {
     init() {
         super.init(frame: CGRect.zero)
 
-        let logo = UIImageView(image: UIImage(named: "\(AppInfo.ProductName)Logo"))
+        let logo = UIImageView(image: #imageLiteral(resourceName: "img_focus_wordmark"))
         addSubview(logo)
 
         let descriptionLabel1 = UILabel()
@@ -166,8 +166,6 @@ private class AboutHeaderView: UIView {
         logo.snp.makeConstraints { make in
             make.centerX.equalTo(self)
             make.top.equalTo(self).offset(50)
-            make.width.equalTo(275)
-            make.height.equalTo(84)
         }
 
         descriptionLabel1.snp.makeConstraints { make in

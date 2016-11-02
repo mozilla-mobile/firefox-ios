@@ -50,7 +50,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         splashView.backgroundColor = UIConstants.colors.background
         window!.addSubview(splashView)
 
-        let logoImage = UIImageView(image: UIImage(named: "Icon"))
+        let logoImage = UIImageView(image: #imageLiteral(resourceName: "img_focus_wordmark"))
         splashView.addSubview(logoImage)
 
         splashView.snp.makeConstraints { make in
