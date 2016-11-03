@@ -47,7 +47,7 @@ public class SQLiteBookmarks: BookmarksModelFactorySource, KeywordSearchSource {
     }
 
     public func getURLForKeywordSearch(keyword: String) -> Deferred<Maybe<String>> {
-        let sql = "SELECT bmkUri FROM \(TableBookmarksBuffer) WHERE " +
+        let sql = "SELECT bmkUri FROM \(ViewBookmarksBufferOnMirror) WHERE " +
         " keyword = ?"
         let args: Args = [keyword]
         

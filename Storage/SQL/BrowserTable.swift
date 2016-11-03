@@ -336,6 +336,7 @@ public class BrowserTable: Table {
     ", mirror.title AS title" +
     ", mirror.description AS description" +
     ", mirror.bmkUri AS bmkUri" +
+    ", mirror.keyword AS keyword" +
     ", mirror.folderName AS folderName" +
     ", null AS faviconID" +
     ", 0 AS is_overridden" +
@@ -359,6 +360,7 @@ public class BrowserTable: Table {
     ", title" +
     ", description" +
     ", bmkUri" +
+    ", keyword" +
     ", folderName" +
     ", null AS faviconID" +
     ", 1 AS is_overridden" +
