@@ -46,7 +46,6 @@ class BrowserViewController: UIViewController {
         overlayView.alpha = 0
         overlayView.delegate = self
         overlayView.backgroundColor = UIConstants.colors.overlayBackground
-        overlayView.showSettings = !showsToolsetInURLBar
         view.addSubview(overlayView)
 
         background.snp.makeConstraints { make in
@@ -203,7 +202,6 @@ class BrowserViewController: UIViewController {
             self.urlBar.showToolset = self.showsToolsetInURLBar
             self.browserToolbar.animateHidden(self.homeView != nil || self.showsToolsetInURLBar, duration: coordinator.transitionDuration)
             self.browser.bottomInset = self.showsToolsetInURLBar ? 0 : UIConstants.layout.browserToolbarHeight
-            self.overlayView.showSettings = !self.showsToolsetInURLBar
         })
     }
 }

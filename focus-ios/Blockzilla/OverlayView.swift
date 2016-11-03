@@ -45,6 +45,7 @@ class OverlayView: UIView {
         searchBorder.backgroundColor = UIConstants.colors.settingsButtonBorder
         addSubview(searchBorder)
 
+        settingsButton.isHidden = (UIDevice.current.userInterfaceIdiom == .pad)
         settingsButton.setImage(#imageLiteral(resourceName: "icon_settings"), for: .normal)
         settingsButton.contentEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
 
@@ -69,12 +70,6 @@ class OverlayView: UIView {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    var showSettings: Bool = true {
-        didSet {
-            settingsButton.isHidden = !showSettings
-        }
     }
 
     func setSearchQuery(query: String, animated: Bool) {
