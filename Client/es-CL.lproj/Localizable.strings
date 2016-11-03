@@ -1,0 +1,489 @@
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "Un nombre de usuario y contraseña están siendo solicitados por %@.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "Un nombre de usuario y contraseña están siendo solicitados por %1$@. La página dice: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "Acerca de";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Añadir pestaña";
+
+/* Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Add to Reading List" = "Añadir a la Lista de lectura";
+
+/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Dismiss" = "Aceptar";
+
+/* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Message" = "Ocurrió un error al añadir el pase a Wallet. Por favor, vuelve a intentarlo más tarde.";
+
+/* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Title" = "Falló el añadir el pase";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "Página añadida a la Lista de lectura";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "Dirección y búsqueda";
+
+/* Setting to enable third-party keyboards */
+"Allow Third-Party Keyboards" = "Permitir teclados de terceros";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "Siempre enviar";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "Solicitud de identificación";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "Atrás";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "Bloquear ventanas emergentes";
+
+/* Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Bookmark" = "Enviar a marcadores";
+
+/* Panel accessibility label */
+"Bookmarks" = "Marcadores";
+
+/* Status label for the empty Bookmarks state. */
+"Bookmarks you save will show up here." = "Los marcadores que guardes serán mostrados aquí.";
+
+/* The label to show the location of the folder where the bookmark is located */
+"Bookmarks.Folder.Label" = "Carpeta";
+
+/* The label for the location of the new folder */
+"Bookmarks.FolderLocation.Label" = "Ubicación";
+
+/* The label for the title of the new folder */
+"Bookmarks.FolderName.Label" = "Nombre de la carpeta";
+
+/* The button to create a new folder */
+"Bookmarks.NewFolder.Label" = "Nueva carpeta";
+
+/* The label for the title of a bookmark */
+"Bookmarks.Title.Label" = "Título";
+
+/* The label for the URL of a bookmark */
+"Bookmarks.URL.Label" = "URL";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "Brillo";
+
+/* Alert Call Button */
+"Call" = "Llamada";
+
+/* Label for Cancel button */
+"Cancel" = "Cancelar";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "Cambiar el color del tema.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "Cambiar el tipo de fuente.";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Clear Private Data" = "Limpiar datos privados";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Cerrar";
+
+/* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
+"Closing tab" = "Cerrando pestañas";
+
+/* Copy the URL from the location bar */
+"Copy Address" = "Copiar dirección";
+
+/* Context menu item for copying an image to the clipboard */
+"Copy Image" = "Copiar imagen";
+
+/* Context menu item for copying a link URL to the clipboard */
+"Copy Link" = "Copiar enlace";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it's already there?" = "No se pudo añadir la página a la Lista de lectura. ¿Puede que ya este allí?";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "No se pudo añadir la página a la Lista de lectura";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "No se pudo cargar la página.";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "Crear una cuenta";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "Oscuro";
+
+/* Debug option */
+"Debug: forget Sync auth state" = "Depurar: olvidar estado de autentificación de Sync";
+
+/* Debug option */
+"Debug: require password" = "Depurar: requerir contraseña";
+
+/* Debug option */
+"Debug: require upgrade" = "Depurar: requerir actualización";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "Disminuir tamaño del texto";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "Motor de búsqueda predeterminado";
+
+/* Pending feature; currently unused string! Checkbox label shown after multiple alerts are shown */
+"Disable additional page dialogs" = "Desactivar diálogos adicionales de páginas";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "Mostrar ajustes";
+
+/* Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to save the password for %@ on %@?" = "¿Deseas guardar la contraseña de %1$@ en %2$@?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"Do you want to save the password on %@?" = "¿Deseas guardar la contraseña en %@?";
+
+/* Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to update the password for %@ on %@?" = "¿Deseas cambiar la contraseña de %1$@ en %2$@?";
+
+/* Prompt for updating a password with on username. The parameter is the hostname of the site. */
+"Do you want to update the password on %@?" = "¿Deseas cambiar la contraseña en %@?";
+
+/* Used as a button label for crash dialog prompt */
+"Don't Send" = "No enviar";
+
+/* Done button on left side of the Settings view controller title bar
+   Done editing button */
+"Done" = "Hecho";
+
+/* Accessibility hint, associated to the Back button in the tab toolbar, used by assistive technology to describe the result of a double tap. */
+"Double tap and hold to open history" = "Haz dos toques y mantén presionado para abrir el historial";
+
+/* The label of the button the user will press to reject the option to open a file in another application */
+"Downloads.Alert.Cancel" = "No";
+
+/* The label of the button the user will press to be presented with a list of other apps to open a file in */
+"Downloads.Alert.Confirm" = "Sí";
+
+/* The message of the alert box asking the user if they want to use another app to open a file. */
+"Downloads.Alert.Message" = "Firefox no pudo descargar o mostrar este archivo. ¿Quieres abrirlo en otra aplicación?";
+
+/* The title of the alert box asking the user if they want to use another app to open a file. */
+"Downloads.Alert.Title" = "Descargas de Firefox";
+
+/* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
+"Downloads.Error.Message" = "Las descargas no están soportadas en Firefox en este momento.";
+
+/* Text message in the settings table view */
+"Enter your password to connect." = "Ingresa tu clave para conectarte.";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "Avanzado";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "Advertencia: no podemos confirmar que tu conexión a este sitio sea segura.";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "Puede ser una mala configuración o una modificación de atacante. Procede si aceptas el riesgo potencial.";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "El dueño de %@ ha configurado su sitio de forma inadecuada. Para proteger tu información de ser robada, Firefox no se ha conectado a este sitio.";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "Esta conexión no es confiable";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "Retroceder";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "Visite el sitio de todas formas";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Setting value prop to enable third-party keyboards */
+"Firefox needs to reopen for this change to take effect." = "Es necesario que Firefox se reinicie para que este cambio sea efectivo.";
+
+/* Title for the History Panel empty state. */
+"HistoryPanel.EmptyState.Title" = "Los sitios que visitaste recientemente serán mostrados aquí.";
+
+/* Description for the empty synced tabs null state in the History Panel */
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "Tus pestañas de otros dispositivos se muestran aquí.";
+
+/* Description for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Description" = "Conéctate para ver las pestañas abiertas en tus otros dispositivos.";
+
+/* Title for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+
+/* Title for the Back to History button in the History Panel */
+"HistoryPanel.HistoryBackButton.Title" = "Historial";
+
+/* Title for the Recently Closed button in the History Panel */
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "Cerrados recientemente";
+
+/* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d dispositivo(s) conectado(s)";
+
+/* Title for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Title" = "Dispositivos sincronizados";
+
+/* Button cancelling changes setting the home page for the first time. */
+"HomePage.Set.Dialog.Cancel" = "Cancelar";
+
+/* Alert dialog body when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Message" = "Puedes cambiar esto en cualquier momento en Ajustes";
+
+/* Button accepting changes setting the home page for the first time. */
+"HomePage.Set.Dialog.OK" = "Establecer página de inicio";
+
+/* Alert dialog title when the user opens the home page for the first time. */
+"HomePage.Set.Dialog.Title" = "¿Quieres usar esta página como tu página de inicio?";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Back.DiscoveryTitle" = "Anterior";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.CloseTab.DiscoveryTitle" = "Cerrar pestaña";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Find.DiscoveryTitle" = "Buscar";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Forward.DiscoveryTitle" = "Siguiente";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "Nueva pestaña privada";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewTab.DiscoveryTitle" = "Nueva pestaña";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Reload.DiscoveryTitle" = "Recargar la página";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.SelectLocationBar.DiscoveryTitle" = "Seleccionar barra de ubicación";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowNextTab.DiscoveryTitle" = "Mostrar siguiente pestaña";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Mostrar pestaña anterior";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "No guardar";
+
+/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "¿Guardar conexión %1$@ para %2$@?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "¿Guardar contraseña para %@?";
+
+/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdateLogin.Title" = "¿Actualizar conexión %1$@ para %2$@?";
+
+/* Prompt for updating a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdatePassword.Title" = "¿Actualizar contraseña para %@?";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "Guardar conexión";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "Actualizar";
+
+/* Button to not save the user's password */
+"Not now" = "Ahora no";
+
+/* Title for the Recently Closed Tabs Panel */
+"RecentlyClosedTabsPanel.Title" = "Cerrados recientemente";
+
+/* The message that asks the user to Add the search provider explaining where the search engine will appear */
+"Search.ThirdPartyEngines.AddMessage" = "El nuevo motor de búsqueda aparecerá en la barra de búsqueda rápida.";
+
+/* The success message that appears after a user sucessfully adds a new search engine */
+"Search.ThirdPartyEngines.AddSuccess" = "¡Motor de búsqueda añadido!";
+
+/* The title that asks the user to Add the search provider */
+"Search.ThirdPartyEngines.AddTitle" = "¿Añadir proveedor de búsqueda?";
+
+/* The cancel button if you do not want to add a search engine. */
+"Search.ThirdPartyEngines.Cancel" = "Cancelar";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedMessage" = "El proveedor de búsqueda no pudo ser añadido.";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedTitle" = "Falló";
+
+/* The confirmation button */
+"Search.ThirdPartyEngines.OK" = "Aceptar";
+
+/* Button title for cancelling SendTo screen */
+"SendTo.Cancel.Button" = "Cancelar";
+
+/* Message in error prompt explaining why the URL is invalid. */
+"SendTo.Error.Message" = "Solo los enlaces HTTP y HTTPS pueden ser compartidos.";
+
+/* OK button to dismiss the error prompt. */
+"SendTo.Error.OK.Button" = "Aceptar";
+
+/* Title of error prompt displayed when an invalid URL is shared. */
+"SendTo.Error.Title" = "El enlace que estás intentando compartir no puede ser compartido.";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "Limpiar datos privados";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "Limpiar datos privados";
+
+/* Title displayed in header of the setting panel. */
+"Settings.ClearPrivateData.Title" = "Limpiar datos privados";
+
+/* Button in settings to clear the home page. */
+"Settings.HomePage.Clear.Button" = "Limpiar";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
+"Settings.HomePage.SectionName" = "Página de inicio";
+
+/* Title displayed in header of the setting panel. */
+"Settings.HomePage.Title" = "Ajustes de la página de inicio";
+
+/* Label displayed under the 'Show Homepage Icon In Menu' option. It describes the effect of this setting when disabled. */
+"Settings.HomePage.UI.Toggle.Subtitle" = "De otra forma, mostrar en la barra de herramientas";
+
+/* Label used as an item in Settings. User can toggle this setting to show the home page button in menu, or on toolbar. */
+"Settings.HomePage.UI.Toggle.Title" = "Mostrar ícono de la página de inicio en el menú";
+
+/* Placeholder text in the homepage setting when no homepage has been set. */
+"Settings.HomePage.URL.Placeholder" = "Ingresa una página";
+
+/* Title of the setting section containing the URL of the current home page. */
+"Settings.HomePage.URL.Title" = "Página de inicio actual";
+
+/* Button in settings to use the current link on the clipboard as home page. */
+"Settings.HomePage.UseCopiedLink.Button" = "Usar enlace copiado";
+
+/* Button in settings to use the current page as home page. */
+"Settings.HomePage.UseCurrent.Button" = "Usar página actual";
+
+/* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
+"Settings.HomePage.UseDefault.Button" = "Usar predeterminado";
+
+/* A description in settings of what the new tab choice means */
+"Settings.NewTab.Description" = "Cuando abres una nueva pestaña:";
+
+/* Option in settings to show a blank page when you open a new tab */
+"Settings.NewTab.Option.BlankPage" = "Mostrar una página en blanco";
+
+/* Option in settings to show bookmarks when you open a new tab */
+"Settings.NewTab.Option.Bookmarks" = "Mostrar tus marcadores";
+
+/* Option in settings to show history when you open a new tab */
+"Settings.NewTab.Option.History" = "Mostrar tu historial";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.HomePage" = "Mostrar tu página de inicio";
+
+/* Option in settings to show reading list when you open a new tab */
+"Settings.NewTab.Option.ReadingList" = "Mostrar tu Lista de lectura";
+
+/* Option in settings to show top sites when you open a new tab */
+"Settings.NewTab.Option.TopSites" = "Mostrar tus sitios frecuentes";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behaviour. */
+"Settings.NewTab.SectionName" = "Nueva pestaña";
+
+/* Title displayed in header of the setting panel. */
+"Settings.NewTab.Title" = "Ajustes de la nueva pestaña";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Done.Button" = "Hecho";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Edit.Button" = "Editar";
+
+/* Title of link to help page to find out how to solve Sync issues */
+"Settings.TroubleShootSync.Title" = "Reparación";
+
+/* Button title for cancelling Share screen */
+"ShareTo.Cancel.Button" = "Cancelar";
+
+/* Message displayed when the user syncs for the first time */
+"Sync.FirstTimeMessage.Label" = "Tu primera sincronización puede tardar un rato";
+
+/* Message displayed when the user's account is syncing with no ellipsis */
+"Sync.Syncing.Label" = "Sincronizando";
+
+/* Message displayed when the user's account is syncing with ellipsis at the end */
+"Sync.SyncingEllipsis.Label" = "Sincronizando…";
+
+/* The Bookmark sync component, used in SyncState.Partial.Title */
+"SyncState.Bookmark.Title" = "Marcadores";
+
+/* The Remote Clients sync component, used in SyncState.Partial.Title */
+"SyncState.Clients.Title" = "Clientes remotos";
+
+/* Title for Sync status message when synchronization failed to complete */
+"SyncState.Failed.Title" = "La sincronización ha fallado";
+
+/* The History sync component, used in SyncState.Partial.Title */
+"SyncState.History.Title" = "Historial";
+
+/* The Logins sync component, used in SyncState.Partial.Title */
+"SyncState.Logins.Title" = "Conexiones";
+
+/* Title for Sync status message when Sync failed to start. */
+"SyncState.NotStarted.Title" = "Sync no está disponible";
+
+/* Title for Sync status message when Sync failed due to being offline */
+"SyncState.Offline.Title" = "Sincronización está sin conexión";
+
+/* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
+"SyncState.Partial.Title" = "Sync está experimentando problemas sincronizando %@";
+
+/* The Tabs sync component, used in SyncState.Partial.Title */
+"SyncState.Tabs.Title" = "Pestañas";
+
+/* The button to undo the delete all tabs */
+"Tabs.DeleteAllUndo.Button" = "Deshacer";
+
+/* The label indicating that all the tabs were closed */
+"Tabs.DeleteAllUndo.Title" = "%d pestaña(s) cerrada(s)";
+
+/* Accessibility label for the Menu button. */
+"Toolbar.Menu.AccessibilityLabel" = "Menú";
+
+/* Accessibility Label for the tab toolbar Homepage button */
+"Toolbar.OpenHomePage.AccessibilityLabel" = "Página de inicio";
+
+/* Description label for the empty Top Sites state. */
+"TopSites.EmptyState.Description" = "Los sitios que más visitas serán mostrados aquí.";
+
+/* The title for the empty Top Sites state */
+"TopSites.EmptyState.Title" = "Bienvenido a los sitios frecuentes";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemovePage.Button" = "Eliminar página - %@";
+
+/* Button to update the user's password */
+"Update" = "Actualizar";
+
+/* Button to save the user's password */
+"Yes" = "Sí";
+

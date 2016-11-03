@@ -1,0 +1,18 @@
+/* Settings item for clearing the cache */
+"Cache" = "Kas";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "Kanselleer";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "Maak skoon";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Koekies";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "Vanlyn webwerfdata";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "Gestoorde aanmeldings";
+

@@ -1,0 +1,9 @@
+language: objective-c
+
+before_install:
+- gem install slather -N 
+
+script:
+- xctool -project libPhoneNumber.xcodeproj -scheme libPhoneNumber -destination "platform=iOS Simulator,name=iPhone 6" -sdk iphonesimulator clean build test ONLY_ACTIVE_ARCH=NO GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES  
+
+after_success: slather 

@@ -1,0 +1,117 @@
+{
+  "warnings": [
+    {
+      "file": "/Users/sleroux/development/onyx_ios/OnyxClient/OnyxPingTypes.swift",
+      "line": 18,
+      "symbol": "SessionPing.url",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sleroux/development/onyx_ios/OnyxClient/OnyxPingTypes.swift",
+      "line": 19,
+      "symbol": "SessionPing.loadReason",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sleroux/development/onyx_ios/OnyxClient/OnyxPingTypes.swift",
+      "line": 20,
+      "symbol": "SessionPing.unloadReason",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sleroux/development/onyx_ios/OnyxClient/OnyxPingTypes.swift",
+      "line": 21,
+      "symbol": "SessionPing.loadLatency",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sleroux/development/onyx_ios/OnyxClient/OnyxPingTypes.swift",
+      "line": 22,
+      "symbol": "SessionPing.locale",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sleroux/development/onyx_ios/OnyxClient/OnyxPingTypes.swift",
+      "line": 23,
+      "symbol": "SessionPing.page",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sleroux/development/onyx_ios/OnyxClient/OnyxPingTypes.swift",
+      "line": 24,
+      "symbol": "SessionPing.action",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sleroux/development/onyx_ios/OnyxClient/OnyxPingTypes.swift",
+      "line": 25,
+      "symbol": "SessionPing.sessionDuration",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sleroux/development/onyx_ios/OnyxClient/OnyxPingTypes.swift",
+      "line": 35,
+      "symbol": "SessionPing.init(url:loadReason:unloadReason:loadLatency:locale:page:action:sessionDuration:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sleroux/development/onyx_ios/OnyxClient/OnyxPingTypes.swift",
+      "line": 66,
+      "symbol": "EventPing.event",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sleroux/development/onyx_ios/OnyxClient/OnyxPingTypes.swift",
+      "line": 67,
+      "symbol": "EventPing.page",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sleroux/development/onyx_ios/OnyxClient/OnyxPingTypes.swift",
+      "line": 68,
+      "symbol": "EventPing.source",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sleroux/development/onyx_ios/OnyxClient/OnyxPingTypes.swift",
+      "line": 69,
+      "symbol": "EventPing.actionPosition",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sleroux/development/onyx_ios/OnyxClient/OnyxPingTypes.swift",
+      "line": 70,
+      "symbol": "EventPing.locale",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sleroux/development/onyx_ios/OnyxClient/OnyxPingTypes.swift",
+      "line": 71,
+      "symbol": "EventPing.action",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sleroux/development/onyx_ios/OnyxClient/OnyxPingTypes.swift",
+      "line": 79,
+      "symbol": "EventPing.init(event:page:source:actionPosition:locale:action:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    }
+  ],
+  "source_directory": "/Users/sleroux/development/onyx_ios"
+}

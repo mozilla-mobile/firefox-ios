@@ -1,0 +1,21 @@
+/* Header for the list of devices table */
+"Available devices:" = "Tillgängliga enheter:";
+
+/* Close button in top navigation bar */
+"Close" = "Stäng";
+
+/* See http://mzl.la/1ISlXnU */
+"Please open Firefox, go to Settings and sign in to continue." = "Vänligen öppna Firefox, gå till inställningar och logga in för att fortsätta.";
+
+/* Navigation bar button to Send the current page to a device */
+"Send" = "Skicka";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"Send Tab" = "Skicka flik";
+
+/* See http://mzl.la/1ISlXnU */
+"You are not signed in to your Firefox Account." = "Du är inte inloggad med ditt Firefox-konto.";
+
+/* Error message shown in the remote tabs panel */
+"You don't have any other devices connected to this Firefox Account available to sync." = "Du har inte några andra enheter anslutna till detta Firefox-konto tillgängliga för synkronisering.";
+

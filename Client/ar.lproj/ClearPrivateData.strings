@@ -1,0 +1,31 @@
+/* Message shown in the dialog prompting users if they want to clear everything */
+"Are you sure you want to clear all of your data? This will also close all open tabs." = "أمتأكد أنك تريد مسح كل بياناتك؟ سيغلق هذا كل الألسنة المفتوحة.";
+
+/* Settings item for clearing browsing history */
+"Browsing History" = "تأريخ التصفح";
+
+/* Settings item for clearing the cache */
+"Cache" = "الخبيئة";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "ألغِ";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "امحُ";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "امحُ كل شيء";
+
+/* Button in settings that clears private data for the selected items.
+   Navigation title in settings. */
+"Clear Private Data" = "امحُ البيانات الخاصة";
+
+/* Settings item for clearing cookies */
+"Cookies" = "الكعكات";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "بيانات المواقع للعمل دون اتصال";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "جلسات الولوج المحفوظة";
+

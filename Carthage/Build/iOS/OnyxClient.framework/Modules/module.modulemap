@@ -1,0 +1,10 @@
+framework module OnyxClient {
+  umbrella header "OnyxClient.h"
+
+  export *
+  module * { export * }
+}
+
+module OnyxClient.Swift {
+    header "OnyxClient-Swift.h"
+}

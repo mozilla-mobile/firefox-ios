@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller Swift-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewControllerSwift" customModule="AdjustExample_Swift" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3wE-JC-uce" userLabel="Button Track Simple Event">
+                                <rect key="frame" x="50" y="105" width="500" height="30"/>
+                                <state key="normal" title="Track Simple Event" backgroundImage="button_background">
+                                    <color key="titleColor" red="0.61568627450000002" green="0.66666666669999997" blue="0.73725490199999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="btnTrackEventSimpleTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="gSN-MT-XGj"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cbz-nV-DP7" userLabel="Button Track Revenue Event">
+                                <rect key="frame" x="50" y="150" width="500" height="30"/>
+                                <state key="normal" title="Track Revenue Event" backgroundImage="button_background">
+                                    <color key="titleColor" red="0.61568627450000002" green="0.66666666669999997" blue="0.73725490199999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="btnTrackEventRevenueTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="FSx-ra-DY3"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="efq-q3-ru1" userLabel="Button Track Callback Event">
+                                <rect key="frame" x="50" y="195" width="500" height="30"/>
+                                <state key="normal" title="Track Callback Event" backgroundImage="button_background">
+                                    <color key="titleColor" red="0.61568627450000002" green="0.66666666669999997" blue="0.73725490199999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="btnTrackEventCallbackTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="hw3-Hl-J0v"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eR0-I3-hc9" userLabel="Button Track Partner Event">
+                                <rect key="frame" x="50" y="240" width="500" height="30"/>
+                                <state key="normal" title="Track Partner Event" backgroundImage="button_background">
+                                    <color key="titleColor" red="0.61568627450000002" green="0.66666666669999997" blue="0.73725490199999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="btnTrackEventPartnerTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="zfn-84-gnW"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UYh-Ox-dBr" userLabel="Button Enable Offline Mode">
+                                <rect key="frame" x="50" y="285" width="500" height="30"/>
+                                <state key="normal" title="Enable Offline Mode" backgroundImage="button_background">
+                                    <color key="titleColor" red="0.61568627450000002" green="0.66666666669999997" blue="0.73725490199999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="btnEnableOfflineModeTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="pMF-Br-CdA"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jjt-uq-4Av" userLabel="Button Disable Offline Mode">
+                                <rect key="frame" x="50" y="330" width="500" height="30"/>
+                                <state key="normal" title="Disable Offline Mode" backgroundImage="button_background">
+                                    <color key="titleColor" red="0.61568627450000002" green="0.66666666669999997" blue="0.73725490199999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="btnDisableOfflineModeTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="wG0-ar-Zv0"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ltr-fW-v4T" userLabel="Button Enable SDK">
+                                <rect key="frame" x="50" y="375" width="500" height="30"/>
+                                <state key="normal" title="Enable SDK" backgroundImage="button_background">
+                                    <color key="titleColor" red="0.61568627450000002" green="0.66666666669999997" blue="0.73725490199999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="btnEnableSDKTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="S7C-XH-Ao0"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bpZ-9j-r3g" userLabel="Button Disable SDK">
+                                <rect key="frame" x="50" y="420" width="500" height="30"/>
+                                <state key="normal" title="Disable SDK" backgroundImage="button_background">
+                                    <color key="titleColor" red="0.61568627450000002" green="0.66666666669999997" blue="0.73725490199999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="btnDisableSDKTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="7Dk-nj-g3G"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W8c-fJ-GFW" userLabel="Button Is SDK Enabled">
+                                <rect key="frame" x="50" y="465" width="500" height="30"/>
+                                <state key="normal" title="Is SDK Enabled?" backgroundImage="button_background">
+                                    <color key="titleColor" red="0.61568627450000002" green="0.66666666669999997" blue="0.73725490199999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="btnIsSDKEnabledTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="aHX-kx-qNx"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="0.96078431372549022" green="0.96470588235294119" blue="0.97254901960784312" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="UYh-Ox-dBr" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="0B9-2L-lj8"/>
+                            <constraint firstItem="cbz-nV-DP7" firstAttribute="trailing" secondItem="3wE-JC-uce" secondAttribute="trailing" id="1Pf-hA-fH8"/>
+                            <constraint firstItem="3wE-JC-uce" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailing" constant="-50" id="44K-kS-DMj"/>
+                            <constraint firstItem="efq-q3-ru1" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="5xv-uv-eTx"/>
+                            <constraint firstItem="UYh-Ox-dBr" firstAttribute="leading" secondItem="eR0-I3-hc9" secondAttribute="leading" id="62x-tS-6DC"/>
+                            <constraint firstItem="jjt-uq-4Av" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" multiplier="1.15" id="77M-7t-LL4"/>
+                            <constraint firstItem="jjt-uq-4Av" firstAttribute="trailing" secondItem="UYh-Ox-dBr" secondAttribute="trailing" id="8nd-kB-Hwk"/>
+                            <constraint firstItem="bpZ-9j-r3g" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" multiplier="1.45" id="BLI-mw-ynO"/>
+                            <constraint firstItem="UYh-Ox-dBr" firstAttribute="trailing" secondItem="eR0-I3-hc9" secondAttribute="trailing" id="D1n-j1-FOH"/>
+                            <constraint firstItem="eR0-I3-hc9" firstAttribute="trailing" secondItem="efq-q3-ru1" secondAttribute="trailing" id="FuO-tw-Vn3"/>
+                            <constraint firstItem="ltr-fW-v4T" firstAttribute="trailing" secondItem="jjt-uq-4Av" secondAttribute="trailing" id="FxC-gn-OV6"/>
+                            <constraint firstItem="W8c-fJ-GFW" firstAttribute="leading" secondItem="bpZ-9j-r3g" secondAttribute="leading" id="Idr-Y3-hTA"/>
+                            <constraint firstItem="cbz-nV-DP7" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" multiplier="0.55" id="Jhb-kU-wsR"/>
+                            <constraint firstItem="ltr-fW-v4T" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Mdh-zZ-fPI"/>
+                            <constraint firstItem="jjt-uq-4Av" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="OM1-lG-fjS"/>
+                            <constraint firstItem="ltr-fW-v4T" firstAttribute="leading" secondItem="jjt-uq-4Av" secondAttribute="leading" id="Rbc-3g-NMM"/>
+                            <constraint firstItem="eR0-I3-hc9" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" multiplier="0.85" id="SiW-jT-7h1"/>
+                            <constraint firstItem="ltr-fW-v4T" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" multiplier="1.3" id="THo-qb-9TI"/>
+                            <constraint firstItem="cbz-nV-DP7" firstAttribute="leading" secondItem="3wE-JC-uce" secondAttribute="leading" id="Ty7-pT-0QY"/>
+                            <constraint firstItem="efq-q3-ru1" firstAttribute="leading" secondItem="cbz-nV-DP7" secondAttribute="leading" id="Wkp-h5-s79"/>
+                            <constraint firstItem="3wE-JC-uce" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="50" id="X91-iX-CdE"/>
+                            <constraint firstItem="W8c-fJ-GFW" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" multiplier="1.6" id="Xlv-cq-nnf"/>
+                            <constraint firstItem="jjt-uq-4Av" firstAttribute="leading" secondItem="UYh-Ox-dBr" secondAttribute="leading" id="abR-vA-TYc"/>
+                            <constraint firstItem="cbz-nV-DP7" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="b4q-Fh-j05"/>
+                            <constraint firstItem="W8c-fJ-GFW" firstAttribute="trailing" secondItem="bpZ-9j-r3g" secondAttribute="trailing" id="fX9-HL-vFf"/>
+                            <constraint firstItem="efq-q3-ru1" firstAttribute="trailing" secondItem="cbz-nV-DP7" secondAttribute="trailing" id="fbq-qt-0Y8"/>
+                            <constraint firstItem="bpZ-9j-r3g" firstAttribute="trailing" secondItem="ltr-fW-v4T" secondAttribute="trailing" id="fcI-nJ-vQ1"/>
+                            <constraint firstItem="W8c-fJ-GFW" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="hYa-ec-s3p"/>
+                            <constraint firstItem="bpZ-9j-r3g" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="hwK-W0-Nq9"/>
+                            <constraint firstItem="efq-q3-ru1" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" multiplier="0.7" id="kqh-U0-csq"/>
+                            <constraint firstItem="3wE-JC-uce" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="nOk-gs-6gD"/>
+                            <constraint firstItem="3wE-JC-uce" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" multiplier="0.4" id="omL-wX-2QC"/>
+                            <constraint firstItem="UYh-Ox-dBr" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="tRu-Ed-7pR"/>
+                            <constraint firstItem="bpZ-9j-r3g" firstAttribute="leading" secondItem="ltr-fW-v4T" secondAttribute="leading" id="trU-Hv-8Eg"/>
+                            <constraint firstItem="eR0-I3-hc9" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="wt0-gz-cuP"/>
+                            <constraint firstItem="eR0-I3-hc9" firstAttribute="leading" secondItem="efq-q3-ru1" secondAttribute="leading" id="yKu-Rq-WSE"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="btnDisableOfflineMode" destination="jjt-uq-4Av" id="olA-Xj-mkr"/>
+                        <outlet property="btnDisableSDK" destination="bpZ-9j-r3g" id="SOw-07-cdY"/>
+                        <outlet property="btnEnableOfflineMode" destination="UYh-Ox-dBr" id="Ikw-xf-2kd"/>
+                        <outlet property="btnEnableSDK" destination="ltr-fW-v4T" id="flp-m6-LV0"/>
+                        <outlet property="btnIsSDKEnabled" destination="W8c-fJ-GFW" id="K3V-vR-GnF"/>
+                        <outlet property="btnTrackEventCallback" destination="efq-q3-ru1" id="ahX-71-SiZ"/>
+                        <outlet property="btnTrackEventPartner" destination="eR0-I3-hc9" id="Oul-1y-lva"/>
+                        <outlet property="btnTrackEventRevenue" destination="cbz-nV-DP7" id="2y9-y2-NGS"/>
+                        <outlet property="btnTrackEventSimple" destination="3wE-JC-uce" id="awI-G7-yRS"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="366" y="512"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="button_background" width="100" height="30"/>
+    </resources>
+</document>

@@ -1,0 +1,2064 @@
+<!DOCTYPE html>
+<html class='v2' dir='ltr' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
+
+<head>
+    <meta content='width=1100' name='viewport' />
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+    <meta content='blogger' name='generator' />
+    <link href='http://siliconexposed.blogspot.tw/favicon.ico' rel='icon' type='image/x-icon' />
+    <link href='http://siliconexposed.blogspot.com/2016/05/open-verilog-flow-for-silego-greenpak4.html' rel='canonical' />
+    <link rel="alternate" type="application/atom+xml" title="Silicon Exposed - Atom" href="http://siliconexposed.blogspot.com/feeds/posts/default" />
+    <link rel="alternate" type="application/rss+xml" title="Silicon Exposed - RSS" href="http://siliconexposed.blogspot.com/feeds/posts/default?alt=rss" />
+    <link rel="service.post" type="application/atom+xml" title="Silicon Exposed - Atom" href="https://www.blogger.com/feeds/175004091875960054/posts/default" />
+
+    <link rel="alternate" type="application/atom+xml" title="Silicon Exposed - Atom" href="http://siliconexposed.blogspot.com/feeds/932306423056216142/comments/default" />
+    <!--[if IE]><script type="text/javascript" src="https://www.blogger.com/static/v1/jsbin/3382512426-ieretrofit.js"></script>
+<![endif]-->
+    <link href='https://1.bp.blogspot.com/-YIPC5jkXkDE/Vy7YPSqFKWI/AAAAAAAAAxI/a7D6Ji2GxoUvcrwUkI4RLZcr2LFQEJCTACLcB/s640/block-diagram.png' rel='image_src' />
+    <meta content='http://siliconexposed.blogspot.com/2016/05/open-verilog-flow-for-silego-greenpak4.html' property='og:url' />
+    <meta content='Open Verilog flow for Silego GreenPak4 programmable logic devices' property='og:title' />
+    <meta content='I&#39;ve written a couple of posts in the past few months but they were all for the blog at work  so I figured I&#39;m long overdue for one on Silic...' property='og:description' />
+    <meta content='https://1.bp.blogspot.com/-YIPC5jkXkDE/Vy7YPSqFKWI/AAAAAAAAAxI/a7D6Ji2GxoUvcrwUkI4RLZcr2LFQEJCTACLcB/w1200-h630-p-nu/block-diagram.png' property='og:image' />
+    <!--[if IE]> <script> (function() { var html5 = ("abbr,article,aside,audio,canvas,datalist,details," + "figure,footer,header,hgroup,mark,menu,meter,nav,output," + "progress,section,time,video").split(','); for (var i = 0; i < html5.length; i++) { document.createElement(html5[i]); } try { document.execCommand('BackgroundImageCache', false, true); } catch(e) {} })(); </script> <![endif]-->
+    <title>Silicon Exposed: Open Verilog flow for Silego GreenPak4 programmable logic devices</title>
+    <link type='text/css' rel='stylesheet' href='https://www.blogger.com/static/v1/widgets/434580396-css_bundle_v2.css' />
+    <link type='text/css' rel='stylesheet' href='https://www.blogger.com/dyn-css/authorization.css?targetBlogID=175004091875960054&zx=7186378a-33a2-4a55-8356-a1dae7b99e4e' />
+    <style id='page-skin-1' type='text/css'>
+        <!--
+        /*
+-----------------------------------------------
+Blogger Template Style
+Name:     Simple
+Designer: Josh Peterson
+URL:      www.noaesthetic.com
+----------------------------------------------- */
+        /* Variable definitions
+====================
+<Variable name="keycolor" description="Main Color" type="color" default="#66bbdd"/>
+<Group description="Page Text" selector="body">
+<Variable name="body.font" description="Font" type="font"
+default="normal normal 12px Arial, Tahoma, Helvetica, FreeSans, sans-serif"/>
+<Variable name="body.text.color" description="Text Color" type="color" default="#222222"/>
+</Group>
+<Group description="Backgrounds" selector=".body-fauxcolumns-outer">
+<Variable name="body.background.color" description="Outer Background" type="color" default="#66bbdd"/>
+<Variable name="content.background.color" description="Main Background" type="color" default="#ffffff"/>
+<Variable name="header.background.color" description="Header Background" type="color" default="transparent"/>
+</Group>
+<Group description="Links" selector=".main-outer">
+<Variable name="link.color" description="Link Color" type="color" default="#2288bb"/>
+<Variable name="link.visited.color" description="Visited Color" type="color" default="#888888"/>
+<Variable name="link.hover.color" description="Hover Color" type="color" default="#33aaff"/>
+</Group>
+<Group description="Blog Title" selector=".header h1">
+<Variable name="header.font" description="Font" type="font"
+default="normal normal 60px Arial, Tahoma, Helvetica, FreeSans, sans-serif"/>
+<Variable name="header.text.color" description="Title Color" type="color" default="#3399bb" />
+</Group>
+<Group description="Blog Description" selector=".header .description">
+<Variable name="description.text.color" description="Description Color" type="color"
+default="#777777" />
+</Group>
+<Group description="Tabs Text" selector=".tabs-inner .widget li a">
+<Variable name="tabs.font" description="Font" type="font"
+default="normal normal 14px Arial, Tahoma, Helvetica, FreeSans, sans-serif"/>
+<Variable name="tabs.text.color" description="Text Color" type="color" default="#999999"/>
+<Variable name="tabs.selected.text.color" description="Selected Color" type="color" default="#000000"/>
+</Group>
+<Group description="Tabs Background" selector=".tabs-outer .PageList">
+<Variable name="tabs.background.color" description="Background Color" type="color" default="#f5f5f5"/>
+<Variable name="tabs.selected.background.color" description="Selected Color" type="color" default="#eeeeee"/>
+</Group>
+<Group description="Post Title" selector="h3.post-title, .comments h4">
+<Variable name="post.title.font" description="Font" type="font"
+default="normal normal 22px Arial, Tahoma, Helvetica, FreeSans, sans-serif"/>
+</Group>
+<Group description="Date Header" selector=".date-header">
+<Variable name="date.header.color" description="Text Color" type="color"
+default="#666666"/>
+<Variable name="date.header.background.color" description="Background Color" type="color"
+default="transparent"/>
+<Variable name="date.header.font" description="Text Font" type="font"
+default="normal bold 11px Arial, Tahoma, Helvetica, FreeSans, sans-serif"/>
+<Variable name="date.header.padding" description="Date Header Padding" type="string" default="inherit"/>
+<Variable name="date.header.letterspacing" description="Date Header Letter Spacing" type="string" default="inherit"/>
+<Variable name="date.header.margin" description="Date Header Margin" type="string" default="inherit"/>
+</Group>
+<Group description="Post Footer" selector=".post-footer">
+<Variable name="post.footer.text.color" description="Text Color" type="color" default="#666666"/>
+<Variable name="post.footer.background.color" description="Background Color" type="color"
+default="#f9f9f9"/>
+<Variable name="post.footer.border.color" description="Shadow Color" type="color" default="#eeeeee"/>
+</Group>
+<Group description="Gadgets" selector="h2">
+<Variable name="widget.title.font" description="Title Font" type="font"
+default="normal bold 11px Arial, Tahoma, Helvetica, FreeSans, sans-serif"/>
+<Variable name="widget.title.text.color" description="Title Color" type="color" default="#000000"/>
+<Variable name="widget.alternate.text.color" description="Alternate Color" type="color" default="#999999"/>
+</Group>
+<Group description="Images" selector=".main-inner">
+<Variable name="image.background.color" description="Background Color" type="color" default="#ffffff"/>
+<Variable name="image.border.color" description="Border Color" type="color" default="#eeeeee"/>
+<Variable name="image.text.color" description="Caption Text Color" type="color" default="#666666"/>
+</Group>
+<Group description="Accents" selector=".content-inner">
+<Variable name="body.rule.color" description="Separator Line Color" type="color" default="#eeeeee"/>
+<Variable name="tabs.border.color" description="Tabs Border Color" type="color" default="transparent"/>
+</Group>
+<Variable name="body.background" description="Body Background" type="background"
+color="#ffffff" default="$(color) none repeat scroll top left"/>
+<Variable name="body.background.override" description="Body Background Override" type="string" default=""/>
+<Variable name="body.background.gradient.cap" description="Body Gradient Cap" type="url"
+default="url(https://resources.blogblog.com/blogblog/data/1kt/simple/gradients_light.png)"/>
+<Variable name="body.background.gradient.tile" description="Body Gradient Tile" type="url"
+default="url(https://resources.blogblog.com/blogblog/data/1kt/simple/body_gradient_tile_light.png)"/>
+<Variable name="content.background.color.selector" description="Content Background Color Selector" type="string" default=".content-inner"/>
+<Variable name="content.padding" description="Content Padding" type="length" default="10px" min="0" max="100px"/>
+<Variable name="content.padding.horizontal" description="Content Horizontal Padding" type="length" default="10px" min="0" max="100px"/>
+<Variable name="content.shadow.spread" description="Content Shadow Spread" type="length" default="40px" min="0" max="100px"/>
+<Variable name="content.shadow.spread.webkit" description="Content Shadow Spread (WebKit)" type="length" default="5px" min="0" max="100px"/>
+<Variable name="content.shadow.spread.ie" description="Content Shadow Spread (IE)" type="length" default="10px" min="0" max="100px"/>
+<Variable name="main.border.width" description="Main Border Width" type="length" default="0" min="0" max="10px"/>
+<Variable name="header.background.gradient" description="Header Gradient" type="url" default="none"/>
+<Variable name="header.shadow.offset.left" description="Header Shadow Offset Left" type="length" default="-1px" min="-50px" max="50px"/>
+<Variable name="header.shadow.offset.top" description="Header Shadow Offset Top" type="length" default="-1px" min="-50px" max="50px"/>
+<Variable name="header.shadow.spread" description="Header Shadow Spread" type="length" default="1px" min="0" max="100px"/>
+<Variable name="header.padding" description="Header Padding" type="length" default="30px" min="0" max="100px"/>
+<Variable name="header.border.size" description="Header Border Size" type="length" default="1px" min="0" max="10px"/>
+<Variable name="header.bottom.border.size" description="Header Bottom Border Size" type="length" default="1px" min="0" max="10px"/>
+<Variable name="header.border.horizontalsize" description="Header Horizontal Border Size" type="length" default="0" min="0" max="10px"/>
+<Variable name="description.text.size" description="Description Text Size" type="string" default="140%"/>
+<Variable name="tabs.margin.top" description="Tabs Margin Top" type="length" default="0" min="0" max="100px"/>
+<Variable name="tabs.margin.side" description="Tabs Side Margin" type="length" default="30px" min="0" max="100px"/>
+<Variable name="tabs.background.gradient" description="Tabs Background Gradient" type="url"
+default="url(https://resources.blogblog.com/blogblog/data/1kt/simple/gradients_light.png)"/>
+<Variable name="tabs.border.width" description="Tabs Border Width" type="length" default="1px" min="0" max="10px"/>
+<Variable name="tabs.bevel.border.width" description="Tabs Bevel Border Width" type="length" default="1px" min="0" max="10px"/>
+<Variable name="post.margin.bottom" description="Post Bottom Margin" type="length" default="25px" min="0" max="100px"/>
+<Variable name="image.border.small.size" description="Image Border Small Size" type="length" default="2px" min="0" max="10px"/>
+<Variable name="image.border.large.size" description="Image Border Large Size" type="length" default="5px" min="0" max="10px"/>
+<Variable name="page.width.selector" description="Page Width Selector" type="string" default=".region-inner"/>
+<Variable name="page.width" description="Page Width" type="string" default="auto"/>
+<Variable name="main.section.margin" description="Main Section Margin" type="length" default="15px" min="0" max="100px"/>
+<Variable name="main.padding" description="Main Padding" type="length" default="15px" min="0" max="100px"/>
+<Variable name="main.padding.top" description="Main Padding Top" type="length" default="30px" min="0" max="100px"/>
+<Variable name="main.padding.bottom" description="Main Padding Bottom" type="length" default="30px" min="0" max="100px"/>
+<Variable name="paging.background"
+color="#ffffff"
+description="Background of blog paging area" type="background"
+default="transparent none no-repeat scroll top center"/>
+<Variable name="footer.bevel" description="Bevel border length of footer" type="length" default="0" min="0" max="10px"/>
+<Variable name="mobile.background.overlay" description="Mobile Background Overlay" type="string"
+default="transparent none repeat scroll top left"/>
+<Variable name="mobile.background.size" description="Mobile Background Size" type="string" default="auto"/>
+<Variable name="mobile.button.color" description="Mobile Button Color" type="color" default="#ffffff" />
+<Variable name="startSide" description="Side where text starts in blog language" type="automatic" default="left"/>
+<Variable name="endSide" description="Side where text ends in blog language" type="automatic" default="right"/>
+*/
+        /* Content
+----------------------------------------------- */
+        
+        body {
+            font: normal normal 12px 'Trebuchet MS', Trebuchet, Verdana, sans-serif;
+            color: #666666;
+            background: #ffffff none repeat scroll top left;
+            padding: 0 0 0 0;
+        }
+        
+        html body .region-inner {
+            min-width: 0;
+            max-width: 100%;
+            width: auto;
+        }
+        
+        h2 {
+            font-size: 22px;
+        }
+        
+        a:link {
+            text-decoration: none;
+            color: #2288bb;
+        }
+        
+        a:visited {
+            text-decoration: none;
+            color: #888888;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+            color: #33aaff;
+        }
+        
+        .body-fauxcolumn-outer .fauxcolumn-inner {
+            background: transparent none repeat scroll top left;
+            _background-image: none;
+        }
+        
+        .body-fauxcolumn-outer .cap-top {
+            position: absolute;
+            z-index: 1;
+            height: 400px;
+            width: 100%;
+        }
+        
+        .body-fauxcolumn-outer .cap-top .cap-left {
+            width: 100%;
+            background: transparent none repeat-x scroll top left;
+            _background-image: none;
+        }
+        
+        .content-outer {
+            -moz-box-shadow: 0 0 0 rgba(0, 0, 0, .15);
+            -webkit-box-shadow: 0 0 0 rgba(0, 0, 0, .15);
+            -goog-ms-box-shadow: 0 0 0 #333333;
+            box-shadow: 0 0 0 rgba(0, 0, 0, .15);
+            margin-bottom: 1px;
+        }
+        
+        .content-inner {
+            padding: 10px 40px;
+        }
+        
+        .content-inner {
+            background-color: #ffffff;
+        }
+        /* Header
+----------------------------------------------- */
+        
+        .header-outer {
+            background: transparent none repeat-x scroll 0 -400px;
+            _background-image: none;
+        }
+        
+        .Header h1 {
+            font: normal normal 40px 'Trebuchet MS', Trebuchet, Verdana, sans-serif;
+            color: #000000;
+            text-shadow: 0 0 0 rgba(0, 0, 0, .2);
+        }
+        
+        .Header h1 a {
+            color: #000000;
+        }
+        
+        .Header .description {
+            font-size: 18px;
+            color: #000000;
+        }
+        
+        .header-inner .Header .titlewrapper {
+            padding: 22px 0;
+        }
+        
+        .header-inner .Header .descriptionwrapper {
+            padding: 0 0;
+        }
+        /* Tabs
+----------------------------------------------- */
+        
+        .tabs-inner .section:first-child {
+            border-top: 0 solid #dddddd;
+        }
+        
+        .tabs-inner .section:first-child ul {
+            margin-top: -1px;
+            border-top: 1px solid #dddddd;
+            border-left: 1px solid #dddddd;
+            border-right: 1px solid #dddddd;
+        }
+        
+        .tabs-inner .widget ul {
+            background: transparent none repeat-x scroll 0 -800px;
+            _background-image: none;
+            border-bottom: 1px solid #dddddd;
+            margin-top: 0;
+            margin-left: -30px;
+            margin-right: -30px;
+        }
+        
+        .tabs-inner .widget li a {
+            display: inline-block;
+            padding: .6em 1em;
+            font: normal normal 12px 'Trebuchet MS', Trebuchet, Verdana, sans-serif;
+            color: #000000;
+            border-left: 1px solid #ffffff;
+            border-right: 1px solid #dddddd;
+        }
+        
+        .tabs-inner .widget li:first-child a {
+            border-left: none;
+        }
+        
+        .tabs-inner .widget li.selected a,
+        .tabs-inner .widget li a:hover {
+            color: #000000;
+            background-color: #eeeeee;
+            text-decoration: none;
+        }
+        /* Columns
+----------------------------------------------- */
+        
+        .main-outer {
+            border-top: 0 solid transparent;
+        }
+        
+        .fauxcolumn-left-outer .fauxcolumn-inner {
+            border-right: 1px solid transparent;
+        }
+        
+        .fauxcolumn-right-outer .fauxcolumn-inner {
+            border-left: 1px solid transparent;
+        }
+        /* Headings
+----------------------------------------------- */
+        
+        div.widget>h2,
+        div.widget h2.title {
+            margin: 0 0 1em 0;
+            font: normal bold 11px 'Trebuchet MS', Trebuchet, Verdana, sans-serif;
+            color: #000000;
+        }
+        /* Widgets
+----------------------------------------------- */
+        
+        .widget .zippy {
+            color: #999999;
+            text-shadow: 2px 2px 1px rgba(0, 0, 0, .1);
+        }
+        
+        .widget .popular-posts ul {
+            list-style: none;
+        }
+        /* Posts
+----------------------------------------------- */
+        
+        h2.date-header {
+            font: normal bold 11px Arial, Tahoma, Helvetica, FreeSans, sans-serif;
+        }
+        
+        .date-header span {
+            background-color: #bbbbbb;
+            color: #ffffff;
+            padding: 0.4em;
+            letter-spacing: 3px;
+            margin: inherit;
+        }
+        
+        .main-inner {
+            padding-top: 35px;
+            padding-bottom: 65px;
+        }
+        
+        .main-inner .column-center-inner {
+            padding: 0 0;
+        }
+        
+        .main-inner .column-center-inner .section {
+            margin: 0 1em;
+        }
+        
+        .post {
+            margin: 0 0 45px 0;
+        }
+        
+        h3.post-title,
+        .comments h4 {
+            font: normal normal 22px 'Trebuchet MS', Trebuchet, Verdana, sans-serif;
+            margin: .75em 0 0;
+        }
+        
+        .post-body {
+            font-size: 110%;
+            line-height: 1.4;
+            position: relative;
+        }
+        
+        .post-body img,
+        .post-body .tr-caption-container,
+        .Profile img,
+        .Image img,
+        .BlogList .item-thumbnail img {
+            padding: 2px;
+            background: #ffffff;
+            border: 1px solid #eeeeee;
+            -moz-box-shadow: 1px 1px 5px rgba(0, 0, 0, .1);
+            -webkit-box-shadow: 1px 1px 5px rgba(0, 0, 0, .1);
+            box-shadow: 1px 1px 5px rgba(0, 0, 0, .1);
+        }
+        
+        .post-body img,
+        .post-body .tr-caption-container {
+            padding: 5px;
+        }
+        
+        .post-body .tr-caption-container {
+            color: #666666;
+        }
+        
+        .post-body .tr-caption-container img {
+            padding: 0;
+            background: transparent;
+            border: none;
+            -moz-box-shadow: 0 0 0 rgba(0, 0, 0, .1);
+            -webkit-box-shadow: 0 0 0 rgba(0, 0, 0, .1);
+            box-shadow: 0 0 0 rgba(0, 0, 0, .1);
+        }
+        
+        .post-header {
+            margin: 0 0 1.5em;
+            line-height: 1.6;
+            font-size: 90%;
+        }
+        
+        .post-footer {
+            margin: 20px -2px 0;
+            padding: 5px 10px;
+            color: #666666;
+            background-color: #eeeeee;
+            border-bottom: 1px solid #eeeeee;
+            line-height: 1.6;
+            font-size: 90%;
+        }
+        
+        #comments .comment-author {
+            padding-top: 1.5em;
+            border-top: 1px solid transparent;
+            background-position: 0 1.5em;
+        }
+        
+        #comments .comment-author:first-child {
+            padding-top: 0;
+            border-top: none;
+        }
+        
+        .avatar-image-container {
+            margin: .2em 0 0;
+        }
+        
+        #comments .avatar-image-container img {
+            border: 1px solid #eeeeee;
+        }
+        /* Comments
+----------------------------------------------- */
+        
+        .comments .comments-content .icon.blog-author {
+            background-repeat: no-repeat;
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEgAACxIB0t1+/AAAAAd0SU1FB9sLFwMeCjjhcOMAAAD+SURBVDjLtZSvTgNBEIe/WRRnm3U8RC1neQdsm1zSBIU9VVF1FkUguQQsD9ITmD7ECZIJSE4OZo9stoVjC/zc7ky+zH9hXwVwDpTAWWLrgS3QAe8AZgaAJI5zYAmc8r0G4AHYHQKVwII8PZrZFsBFkeRCABYiMh9BRUhnSkPTNCtVXYXURi1FpBDgArj8QU1eVXUzfnjv7yP7kwu1mYrkWlU33vs1QNu2qU8pwN0UpKoqokjWwCztrMuBhEhmh8bD5UDqur75asbcX0BGUB9/HAMB+r32hznJgXy2v0sGLBcyAJ1EK3LFcbo1s91JeLwAbwGYu7TP/3ZGfnXYPgAVNngtqatUNgAAAABJRU5ErkJggg==);
+        }
+        
+        .comments .comments-content .loadmore a {
+            border-top: 1px solid #999999;
+            border-bottom: 1px solid #999999;
+        }
+        
+        .comments .comment-thread.inline-thread {
+            background-color: #eeeeee;
+        }
+        
+        .comments .continue {
+            border-top: 2px solid #999999;
+        }
+        /* Accents
+---------------------------------------------- */
+        
+        .section-columns td.columns-cell {
+            border-left: 1px solid transparent;
+        }
+        
+        .blog-pager {
+            background: transparent url(http://www.blogblog.com/1kt/simple/paging_dot.png) repeat-x scroll top center;
+        }
+        
+        .blog-pager-older-link,
+        .home-link,
+        .blog-pager-newer-link {
+            background-color: #ffffff;
+            padding: 5px;
+        }
+        
+        .footer-outer {
+            border-top: 1px dashed #bbbbbb;
+        }
+        /* Mobile
+----------------------------------------------- */
+        
+        body.mobile {
+            background-size: auto;
+        }
+        
+        .mobile .body-fauxcolumn-outer {
+            background: transparent none repeat scroll top left;
+        }
+        
+        .mobile .body-fauxcolumn-outer .cap-top {
+            background-size: 100% auto;
+        }
+        
+        .mobile .content-outer {
+            -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, .15);
+            box-shadow: 0 0 3px rgba(0, 0, 0, .15);
+        }
+        
+        .mobile .tabs-inner .widget ul {
+            margin-left: 0;
+            margin-right: 0;
+        }
+        
+        .mobile .post {
+            margin: 0;
+        }
+        
+        .mobile .main-inner .column-center-inner .section {
+            margin: 0;
+        }
+        
+        .mobile .date-header span {
+            padding: 0.1em 10px;
+            margin: 0 -10px;
+        }
+        
+        .mobile h3.post-title {
+            margin: 0;
+        }
+        
+        .mobile .blog-pager {
+            background: transparent none no-repeat scroll top center;
+        }
+        
+        .mobile .footer-outer {
+            border-top: none;
+        }
+        
+        .mobile .main-inner,
+        .mobile .footer-inner {
+            background-color: #ffffff;
+        }
+        
+        .mobile-index-contents {
+            color: #666666;
+        }
+        
+        .mobile-link-button {
+            background-color: #2288bb;
+        }
+        
+        .mobile-link-button a:link,
+        .mobile-link-button a:visited {
+            color: #ffffff;
+        }
+        
+        .mobile .tabs-inner .section:first-child {
+            border-top: none;
+        }
+        
+        .mobile .tabs-inner .PageList .widget-content {
+            background-color: #eeeeee;
+            color: #000000;
+            border-top: 1px solid #dddddd;
+            border-bottom: 1px solid #dddddd;
+        }
+        
+        .mobile .tabs-inner .PageList .widget-content .pagelist-arrow {
+            border-left: 1px solid #dddddd;
+        }
+        
+        .codescroll {
+            overflow-x: scroll;
+            overflow-y: scroll;
+            max-height: 500px;
+            max-width: 500px;
+        }
+        
+        -->
+    </style>
+    <style id='template-skin-1' type='text/css'>
+        <!-- body {
+            min-width: 1120px;
+        }
+        
+        .content-outer,
+        .content-fauxcolumn-outer,
+        .region-inner {
+            min-width: 1120px;
+            max-width: 1120px;
+            _width: 1120px;
+        }
+        
+        .main-inner .columns {
+            padding-left: 0px;
+            padding-right: 260px;
+        }
+        
+        .main-inner .fauxcolumn-center-outer {
+            left: 0px;
+            right: 260px;
+            /* IE6 does not respect left and right together */
+            _width: expression(this.parentNode.offsetWidth - parseInt("0px") - parseInt("260px") + 'px');
+        }
+        
+        .main-inner .fauxcolumn-left-outer {
+            width: 0px;
+        }
+        
+        .main-inner .fauxcolumn-right-outer {
+            width: 260px;
+        }
+        
+        .main-inner .column-left-outer {
+            width: 0px;
+            right: 100%;
+            margin-left: -0px;
+        }
+        
+        .main-inner .column-right-outer {
+            width: 260px;
+            margin-right: -260px;
+        }
+        
+        #layout {
+            min-width: 0;
+        }
+        
+        #layout .content-outer {
+            min-width: 0;
+            width: 800px;
+        }
+        
+        #layout .region-inner {
+            min-width: 0;
+            width: auto;
+        }
+        
+        -->
+    </style>
+    <script type="text/javascript">
+        function a() {
+            var b = window.location.href,
+                c = b.split("?");
+            switch (c.length) {
+                case 1:
+                    return b + "?m=1";
+                case 2:
+                    return 0 <= c[1].search("(^|&)m=") ? null : b + "&m=1";
+                default:
+                    return null
+            }
+        }
+        var d = navigator.userAgent;
+        if (-1 != d.indexOf("Mobile") && -1 != d.indexOf("WebKit") && -1 == d.indexOf("iPad") || -1 != d.indexOf("Opera Mini") || -1 != d.indexOf("IEMobile")) {
+            var e = a();
+            e && window.location.replace(e)
+        };
+    </script>
+</head>
+
+<body class='loading variant-simplysimple'>
+    <div class='navbar section' id='navbar'>
+        <div class='widget Navbar' data-version='1' id='Navbar1'>
+            <script type="text/javascript">
+                function setAttributeOnload(object, attribute, val) {
+                    if (window.addEventListener) {
+                        window.addEventListener('load',
+                            function() {
+                                object[attribute] = val;
+                            }, false);
+                    } else {
+                        window.attachEvent('onload', function() {
+                            object[attribute] = val;
+                        });
+                    }
+                }
+            </script>
+            <div id="navbar-iframe-container"></div>
+            <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+            <script type="text/javascript">
+                gapi.load("gapi.iframes:gapi.iframes.style.bubble", function() {
+                    if (gapi.iframes && gapi.iframes.getContext) {
+                        gapi.iframes.getContext().openChild({
+                            url: 'https://www.blogger.com/navbar.g?targetBlogID\x3d175004091875960054\x26blogName\x3dSilicon+Exposed\x26publishMode\x3dPUBLISH_MODE_BLOGSPOT\x26navbarType\x3dBLUE\x26layoutType\x3dLAYOUTS\x26searchRoot\x3dhttp://siliconexposed.blogspot.com/search\x26blogLocale\x3den\x26v\x3d2\x26homepageUrl\x3dhttp://siliconexposed.blogspot.com/\x26targetPostID\x3d932306423056216142\x26blogPostOrPageUrl\x3dhttp://siliconexposed.blogspot.com/2016/05/open-verilog-flow-for-silego-greenpak4.html\x26vt\x3d-765651877583110938',
+                            where: document.getElementById("navbar-iframe-container"),
+                            id: "navbar-iframe"
+                        });
+                    }
+                });
+            </script>
+            <script type="text/javascript">
+                (function() {
+                    var script = document.createElement('script');
+                    script.type = 'text/javascript';
+                    script.src = '//pagead2.googlesyndication.com/pagead/js/google_top_exp.js';
+                    var head = document.getElementsByTagName('head')[0];
+                    if (head) {
+                        head.appendChild(script);
+                    }
+                })();
+            </script>
+        </div>
+    </div>
+    <link href='http://alexgorbatchev.com/pub/sh/2.1.364/styles/shCore.css' rel='stylesheet' type='text/css' />
+    <link href='http://alexgorbatchev.com/pub/sh/2.1.364/styles/shThemeDefault.css' rel='stylesheet' type='text/css' />
+    <script src='http://alexgorbatchev.com/pub/sh/2.1.364/scripts/shCore.js' type='text/javascript'></script>
+    <script src='http://alexgorbatchev.com/pub/sh/2.1.364/scripts/shBrushCpp.js' type='text/javascript'></script>
+    <script src='http://alexgorbatchev.com/pub/sh/2.1.364/scripts/shBrushCSharp.js' type='text/javascript'></script>
+    <script src='http://alexgorbatchev.com/pub/sh/2.1.364/scripts/shBrushCss.js' type='text/javascript'></script>
+    <script src='http://alexgorbatchev.com/pub/sh/2.1.364/scripts/shBrushJava.js' type='text/javascript'></script>
+    <script src='http://alexgorbatchev.com/pub/sh/2.1.364/scripts/shBrushJScript.js' type='text/javascript'></script>
+    <script src='http://alexgorbatchev.com/pub/sh/2.1.364/scripts/shBrushPhp.js' type='text/javascript'></script>
+    <script src='http://alexgorbatchev.com/pub/sh/2.1.364/scripts/shBrushPython.js' type='text/javascript'></script>
+    <script src='http://alexgorbatchev.com/pub/sh/2.1.364/scripts/shBrushRuby.js' type='text/javascript'></script>
+    <script src='http://alexgorbatchev.com/pub/sh/2.1.364/scripts/shBrushSql.js' type='text/javascript'></script>
+    <script src='http://alexgorbatchev.com/pub/sh/2.1.364/scripts/shBrushVb.js' type='text/javascript'></script>
+    <script src='http://alexgorbatchev.com/pub/sh/2.1.364/scripts/shBrushXml.js' type='text/javascript'></script>
+    <script src='http://alexgorbatchev.com/pub/sh/2.1.364/scripts/shBrushPerl.js' type='text/javascript'></script>
+    <script language='javascript'>
+        SyntaxHighlighter.config.bloggerMode = true;
+        //SyntaxHighlighter.config.clipboardSwf = 'http://alexgorbatchev.com/pub/sh/2.1.364/scripts/clipboard.swf';
+        SyntaxHighlighter.all();
+    </script>
+    <div class='body-fauxcolumns'>
+        <div class='fauxcolumn-outer body-fauxcolumn-outer'>
+            <div class='cap-top'>
+                <div class='cap-left'></div>
+                <div class='cap-right'></div>
+            </div>
+            <div class='fauxborder-left'>
+                <div class='fauxborder-right'></div>
+                <div class='fauxcolumn-inner'>
+                </div>
+            </div>
+            <div class='cap-bottom'>
+                <div class='cap-left'></div>
+                <div class='cap-right'></div>
+            </div>
+        </div>
+    </div>
+    <div class='content'>
+        <div class='content-fauxcolumns'>
+            <div class='fauxcolumn-outer content-fauxcolumn-outer'>
+                <div class='cap-top'>
+                    <div class='cap-left'></div>
+                    <div class='cap-right'></div>
+                </div>
+                <div class='fauxborder-left'>
+                    <div class='fauxborder-right'></div>
+                    <div class='fauxcolumn-inner'>
+                    </div>
+                </div>
+                <div class='cap-bottom'>
+                    <div class='cap-left'></div>
+                    <div class='cap-right'></div>
+                </div>
+            </div>
+        </div>
+        <div class='content-outer'>
+            <div class='content-cap-top cap-top'>
+                <div class='cap-left'></div>
+                <div class='cap-right'></div>
+            </div>
+            <div class='fauxborder-left content-fauxborder-left'>
+                <div class='fauxborder-right content-fauxborder-right'></div>
+                <div class='content-inner'>
+                    <header>
+                        <div class='header-outer'>
+                            <div class='header-cap-top cap-top'>
+                                <div class='cap-left'></div>
+                                <div class='cap-right'></div>
+                            </div>
+                            <div class='fauxborder-left header-fauxborder-left'>
+                                <div class='fauxborder-right header-fauxborder-right'></div>
+                                <div class='region-inner header-inner'>
+                                    <div class='header section' id='header'>
+                                        <div class='widget Header' data-version='1' id='Header1'>
+                                            <div id='header-inner'>
+                                                <div class='titlewrapper'>
+                                                    <h1 class='title'>
+                                                        <a href='http://siliconexposed.blogspot.tw/'>Silicon Exposed</a>
+                                                    </h1>
+                                                </div>
+                                                <div class='descriptionwrapper'>
+                                                    <p class='description'><span>
+</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class='header-cap-bottom cap-bottom'>
+                                <div class='cap-left'></div>
+                                <div class='cap-right'></div>
+                            </div>
+                        </div>
+                    </header>
+                    <div class='tabs-outer'>
+                        <div class='tabs-cap-top cap-top'>
+                            <div class='cap-left'></div>
+                            <div class='cap-right'></div>
+                        </div>
+                        <div class='fauxborder-left tabs-fauxborder-left'>
+                            <div class='fauxborder-right tabs-fauxborder-right'></div>
+                            <div class='region-inner tabs-inner'>
+                                <div class='tabs no-items section' id='crosscol'></div>
+                                <div class='tabs no-items section' id='crosscol-overflow'></div>
+                            </div>
+                        </div>
+                        <div class='tabs-cap-bottom cap-bottom'>
+                            <div class='cap-left'></div>
+                            <div class='cap-right'></div>
+                        </div>
+                    </div>
+                    <div class='main-outer'>
+                        <div class='main-cap-top cap-top'>
+                            <div class='cap-left'></div>
+                            <div class='cap-right'></div>
+                        </div>
+                        <div class='fauxborder-left main-fauxborder-left'>
+                            <div class='fauxborder-right main-fauxborder-right'></div>
+                            <div class='region-inner main-inner'>
+                                <div class='columns fauxcolumns'>
+                                    <div class='fauxcolumn-outer fauxcolumn-center-outer'>
+                                        <div class='cap-top'>
+                                            <div class='cap-left'></div>
+                                            <div class='cap-right'></div>
+                                        </div>
+                                        <div class='fauxborder-left'>
+                                            <div class='fauxborder-right'></div>
+                                            <div class='fauxcolumn-inner'>
+                                            </div>
+                                        </div>
+                                        <div class='cap-bottom'>
+                                            <div class='cap-left'></div>
+                                            <div class='cap-right'></div>
+                                        </div>
+                                    </div>
+                                    <div class='fauxcolumn-outer fauxcolumn-left-outer'>
+                                        <div class='cap-top'>
+                                            <div class='cap-left'></div>
+                                            <div class='cap-right'></div>
+                                        </div>
+                                        <div class='fauxborder-left'>
+                                            <div class='fauxborder-right'></div>
+                                            <div class='fauxcolumn-inner'>
+                                            </div>
+                                        </div>
+                                        <div class='cap-bottom'>
+                                            <div class='cap-left'></div>
+                                            <div class='cap-right'></div>
+                                        </div>
+                                    </div>
+                                    <div class='fauxcolumn-outer fauxcolumn-right-outer'>
+                                        <div class='cap-top'>
+                                            <div class='cap-left'></div>
+                                            <div class='cap-right'></div>
+                                        </div>
+                                        <div class='fauxborder-left'>
+                                            <div class='fauxborder-right'></div>
+                                            <div class='fauxcolumn-inner'>
+                                            </div>
+                                        </div>
+                                        <div class='cap-bottom'>
+                                            <div class='cap-left'></div>
+                                            <div class='cap-right'></div>
+                                        </div>
+                                    </div>
+                                    <!-- corrects IE6 width calculation -->
+                                    <div class='columns-inner'>
+                                        <div class='column-center-outer'>
+                                            <div class='column-center-inner'>
+                                                <div class='main section' id='main'>
+                                                    <div class='widget Blog' data-version='1' id='Blog1'>
+                                                        <div class='blog-posts hfeed'>
+
+                                                            <div class="date-outer">
+
+                                                                <h2 class='date-header'><span>Sunday, May 8, 2016</span></h2>
+
+                                                                <div class="date-posts">
+
+                                                                    <div class='post-outer'>
+                                                                        <div class='post hentry' itemprop='blogPost' itemscope='itemscope' itemtype='http://schema.org/BlogPosting'>
+                                                                            <meta content='https://1.bp.blogspot.com/-YIPC5jkXkDE/Vy7YPSqFKWI/AAAAAAAAAxI/a7D6Ji2GxoUvcrwUkI4RLZcr2LFQEJCTACLcB/s640/block-diagram.png' itemprop='image_url' />
+                                                                            <meta content='175004091875960054' itemprop='blogId' />
+                                                                            <meta content='932306423056216142' itemprop='postId' />
+                                                                            <a name='932306423056216142'></a>
+                                                                            <h3 class='post-title entry-title' itemprop='name'>
+                                                                                Open Verilog flow for Silego GreenPak4 programmable logic devices
+                                                                            </h3>
+                                                                            <div class='post-header'>
+                                                                                <div class='post-header-line-1'></div>
+                                                                            </div>
+                                                                            <div class='post-body entry-content' id='post-body-932306423056216142' itemprop='description articleBody'>
+                                                                                I've written a couple of posts in the past few months but they were all for <a href="http://blog.ioactive.com/search/label/Andrew%20Zonenberg">the blog at work</a> so I figured I'm long overdue for one on Silicon Exposed.<br />
+                                                                                <br />
+                                                                                <h2>
+                                                                                    So what's a GreenPak?</h2>
+                                                                                <br /> Silego Technology is a fabless semiconductor company located in the SF Bay area, which makes (among other things) a line of programmable logic devices known as GreenPak. Their <a href="http://www.silego.com/products/greenpak5.html">5th generation parts</a> were just announced, but I started this project before that happened so I'm still targeting the <a href="http://www.silego.com/products/greenpak4.html">4th generation</a>.<br />
+                                                                                <br /> GreenPak devices are kind of like itty bitty <a href="http://www.cypress.com/products/32-bit-arm-cortex-m-psoc">PSoCs</a> - they have a mixed signal fabric with an ADC, DACs, comparators, voltage references, plus a digital LUT/FF fabric and some typical digital MCU peripherals like counters and oscillators (but no CPU).<br />
+                                                                                <br /> It's actually an interesting architecture - FPGAs (including some devices marketed as CPLDs) are a 2D array of LUTs connected via wires to adjacent cells, and true (product term) CPLDs are a star topology of AND-OR arrays connected by a crossbar. GreenPak, on the other hand, is a star topology of LUTs, flipflops, and analog/digital hard IP connected to a crossbar.<br />
+                                                                                <br /> Without further ado, here's a block diagram showing all the cool stuff you get in the SLG46620V:<br />
+                                                                                <br />
+                                                                                <table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;">
+                                                                                    <tbody>
+                                                                                        <tr>
+                                                                                            <td style="text-align: center;">
+                                                                                                <a href="https://1.bp.blogspot.com/-YIPC5jkXkDE/Vy7YPSqFKWI/AAAAAAAAAxI/a7D6Ji2GxoUvcrwUkI4RLZcr2LFQEJCTACLcB/s1600/block-diagram.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="512" src="https://1.bp.blogspot.com/-YIPC5jkXkDE/Vy7YPSqFKWI/AAAAAAAAAxI/a7D6Ji2GxoUvcrwUkI4RLZcr2LFQEJCTACLcB/s640/block-diagram.png" width="640" /></a>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td class="tr-caption" style="text-align: center;">SLG46620V block diagram (from device datasheet)</td>
+                                                                                        </tr>
+                                                                                    </tbody>
+                                                                                </table>
+                                                                                They're also tiny (the SLG46620V is a 20-pin 0.4mm pitch STQFN measuring 2x3 mm, and the lower gate count SLG46140V is a mere 1.6x2 mm) and probably the cheapest programmable logic device on the market - $0.50 in low volume and less than $0.40 in larger quantities.<br />
+                                                                                <br /> The Vdd range of GreenPak4 is huge, more like what you'd expect from an MCU than an FPGA! It can run on anything from 1.8 to 5V, although performance is only specified at 1.8, 3.3, and 5V nominal voltages. There's also a dual-rail version that trades one of the GPIO pins for a second power supply pin, allowing you to interface to logic at two different voltage levels.<br />
+                                                                                <br /> To support low-cost/space-constrained applications, they even have the configuration memory on die. It's one-time programmable and needs external Vpp to program (presumably Silego didn't want to waste die area on charge pumps that would only be used once) but has a SRAM programming mode for prototyping.<br />
+                                                                                <br /> The best part is that the development software (GreenPak Designer) is free of charge and provided for all major operating systems including Linux! Unfortunately, the only supported design entry method is schematic entry and there's no way to write your design in a HDL.<br />
+                                                                                <br /> While schematics may be fine for quick tinkering on really simple designs, they quickly get unwieldy. The nightmare of a circuit shown below is just a bunch of counters hooked up to LEDs that blink at various rates.<br />
+                                                                                <br />
+                                                                                <table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;">
+                                                                                    <tbody>
+                                                                                        <tr>
+                                                                                            <td style="text-align: center;">
+                                                                                                <a href="https://1.bp.blogspot.com/-k3naUT3uXao/Vy7WFac246I/AAAAAAAAAw8/mePy_ostO8QJra5ZJrbP2WGhTlJ0B_r8gCLcB/s1600/schematic-from-hell.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="334" src="https://1.bp.blogspot.com/-k3naUT3uXao/Vy7WFac246I/AAAAAAAAAw8/mePy_ostO8QJra5ZJrbP2WGhTlJ0B_r8gCLcB/s640/schematic-from-hell.png" width="640" /></a>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td class="tr-caption" style="text-align: center;">Schematic from hell!</td>
+                                                                                        </tr>
+                                                                                    </tbody>
+                                                                                </table>
+                                                                                As if this wasn't enough of a problem, the largest GreenPak4 device (the SLG46620V) is split into two halves with limited routing between them, and the GUI doesn't help the user manage this complexity at all - you have to draw your schematic in two halves and add "cross connections" between them.<br />
+                                                                                <br /> The icing on the cake is that schematics are a pain to diff and collaborate on. Although GreenPak schematics are XML based, which is a touch better than binary, who wants to read a giant XML diff and try to figure out what's going on in the circuit?<br />
+                                                                                <br /> This isn't going to be a post on the quirks of Silego's software, though - that would be boring. As it turns out, there's one more exciting feature of these chips that I didn't mention earlier: the configuration bitstream is 100% documented in the device datasheet! This is unheard of in the programmable logic world. As Nick of Arachnid Labs <a href="http://www.arachnidlabs.com/blog/2015/03/30/greenpak/">says</a>, the chip is "just dying for someone to write a VHDL or Verilog compiler for it". As you can probably guess by from the title of this post, I've been busy doing exactly that.<br />
+                                                                                <br />
+                                                                                <h2>
+                                                                                    Great! How does it work?</h2>
+                                                                                <br /> Rather than wasting time writing a synthesizer, I decided to write a GreenPak technology library for Clifford Wolf's excellent open source synthesis tool, <a href="http://www.clifford.at/yosys/">Yosys</a>, and then make a place-and-route tool to turn that into a final netlist. The post-PAR netlist can then be loaded into GreenPak Designer in order to program the device.<br />
+                                                                                <br /> The first step of the process is to run the "synth_greenpak4" Yosys flow on the Verilog source. This runs a generic RTL synthesis pass, then some coarse-grained extraction passes to infer shift register and counter cells from behavioral logic, and finally maps the remaining logic to LUT/FF cells and outputs a JSON-formatted netlist.<br />
+                                                                                <br /> Once the design has been synthesized, my tool (named, surprisingly, gp4par) is then launched on the netlist. It begins by parsing the JSON and constructing a directed graph of cell objects in memory. A second graph, containing all of the primitives in the device and the legal connections between them, is then created based on the device specified on the command line. (As of now only the SLG46620V is supported; the SLG46621V can be added fairly easily but the SLG46140V has a slightly different microarchitecture which will require a bit more work to support.)<br />
+                                                                                <br /> After the graphs are generated, each node in the netlist graph is assigned a numeric label identifying the type of cell and each node in the device graph is assigned a list of legal labels: for example, an I/O buffer site is legal for an input buffer, output buffer, or bidirectional buffer.<br />
+                                                                                <br />
+                                                                                <table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;">
+                                                                                    <tbody>
+                                                                                        <tr>
+                                                                                            <td style="text-align: center;">
+                                                                                                <a href="https://2.bp.blogspot.com/-kIekczO693g/Vy7dBqYifXI/AAAAAAAAAxc/hMNJBs5bedIQOrBzzkhq4gbmhR-n58EQwCLcB/s1600/graph-labels.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="141" src="https://2.bp.blogspot.com/-kIekczO693g/Vy7dBqYifXI/AAAAAAAAAxc/hMNJBs5bedIQOrBzzkhq4gbmhR-n58EQwCLcB/s400/graph-labels.png" width="400" /></a>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td class="tr-caption" style="text-align: center;">Example labeling for a subset of the netlist and device graphs</td>
+                                                                                        </tr>
+                                                                                    </tbody>
+                                                                                </table>
+                                                                                The labeled nodes now need to be placed. The initial placement uses a simple greedy algorithm to create a valid (although not necessarily optimal or even routable) placement:<br />
+                                                                                <ol>
+                                                                                    <li>Loop over the cells in the netlist. If any cell has a LOC constraint, which locks the cell to a specific physical site, attempt to assign the node to the specified site. If the specified node is the wrong type, doesn't exist, or is already used by another constrained node, the constraint is invalid so fail with an error.</li>
+                                                                                    <li>Loop over all of the unconstrained cells in the netlist and assign them to the first unused site with the right label. If none are available, the design is too big for the device so fail with an error.</li>
+                                                                                </ol>
+                                                                                Once the design is placed, the placement optimizer then loops over the design and attempts to improve it. A simulated annealing algorithm is used, where changes to the design are accepted unconditionally if they make the placement better, and with a random, gradually decreasing probability if they make it worse. The optimizer terminates when the design receives a perfect score (indicating an optimal placement) or if it stops making progress for several iterations. Each iteration does the following:<br />
+                                                                                <ol>
+                                                                                    <li>Compute a score for the current design based on the number of unroutable nets, the amount of routing congestion (number of nets crossing between halves of the device), and static timing analysis (not yet implemented, always zero).</li>
+                                                                                    <li>Make a list of nodes that contributed to this score in some way (having some attached nets unroutable, crossing to the other half of the device, or failing timing).</li>
+                                                                                    <li>Remove nodes from the list that are LOC'd to a specific location since we're not allowed to move them.</li>
+                                                                                    <li>Remove nodes from the list that have only one legal placement in the device (for example, oscillator hard IP) since there's nowhere else for them to go.</li>
+                                                                                    <li>Pick a node from the remainder of the list at random. Call this our pivot.</li>
+                                                                                    <li>Find a list of candidate placements for the pivot: </li>
+                                                                                    <ol>
+                                                                                        <li>Consider all routable placements in the other half of the device.</li>
+                                                                                        <li>If none were found, consider all routable placements anywhere in the device.</li>
+                                                                                        <li>If none were found, consider all placements anywhere in the device even if they're not routable.</li>
+                                                                                    </ol>
+                                                                                    <li>Pick one of the candidates at random and move the pivot to that location. If another cell in the netlist is already there, put it in the vacant site left by the pivot.</li>
+                                                                                    <li>Re-compute the score for the design. If it's better, accept this change and start the next iteration.</li>
+                                                                                    <li>If the score is worse, accept it with a random probability which decreases as the iteration number goes up. If the change is not accepted, restore the previous placement.</li>
+                                                                                </ol>
+                                                                                After optimization, the design is checked for routability. If any edges in the netlist graph don't correspond to edges in the device graph, the user probably asked for something impossible (for example, trying to hook a flipflop's output to a comparator's reference voltage input) so fail with an error.<br />
+                                                                                <br /> The design is then routed. This is quite simple due to the crossbar structure of the device. For each edge in the netlist:<br />
+                                                                                <ol>
+                                                                                    <li>If dedicated (non-fabric) routing is used for this path, configure the destination's input mux appropriately and stop.</li>
+                                                                                    <li>If the source and destination are in the same half of the device, configure the destination's input mux appropriately and stop.</li>
+                                                                                    <li>A cross-connection must be used. Check if we already used one to bring the source signal to the other half of the device. If found, configure the destination to route from that cross-connection and stop.</li>
+                                                                                    <li>Check if we have any cross-connections left going in this direction. If they're all used, the design is unroutable due to congestion so fail with an error.</li>
+                                                                                    <li>Pick the next unused cross-connection and configure it to route from the source. Configure the destination to route from the cross-connection and stop.</li>
+                                                                                </ol>
+                                                                                Once routing is finished, run a series of post-PAR design rule checks. These currently include the following:<br />
+                                                                                <ul>
+                                                                                    <li>If any node has no loads, generate a warning</li>
+                                                                                    <li>If an I/O buffer is connected to analog hard IP, fail with an error if it's not configured in analog mode.</li>
+                                                                                    <li>Some signals (such as comparator inputs and oscillator power-down controls) are generated by a shared mux and fed to many loads. If different loads require conflicting settings for the shared mux, fail with an error.</li>
+                                                                                </ul>
+                                                                                If DRC passes with no errors, configure all of the individual cells in the netlist based on the HDL parameters. Fail with an error if an invalid configuration was requested.<br />
+                                                                                <br /> Finally, generate the bitstream from all of the per-cell configuration and write it to a file.<br />
+                                                                                <br />
+                                                                                <h2>
+                                                                                    Great, let's get started!</h2>
+                                                                                If you don't already have one, you'll need to buy a <a href="http://www.silego.com/buy/index.php?main_page=product_info&amp;products_id=388">GreenPak4 development kit</a>. The kit includes samples of the SLG46620V (among other devices) and a programmer/emulation board. While you're waiting for it to arrive, install <a href="http://www.silego.com/softdoc/software.html">GreenPak Designer</a>.<br />
+                                                                                <br /> Download and install Yosys. Although Clifford is pretty good at merging my pull requests, only <a href="https://github.com/azonenberg/yosys/">my fork on Github</a> is guaranteed to have the most up-to-date support for GreenPak devices so don't be surprised if you can't use a bleeding-edge feature with mainline Yosys.<br />
+                                                                                <br /> Download and install gp4par. You can get it from <a href="https://github.com/azonenberg/openfpga/">the Github repository</a>.<br />
+                                                                                <br /> Write your HDL, compile with Yosys, P&amp;R with gp4par, and import the bitstream into GreenPak Designer to program the target device. The most current gp4par manual is included in LaTeX source form in the source tree and is automatically built as part of the compile process. If you're just browsing, there's a <a href="http://thanatos.virtual.antikernel.net/unlisted/gp4-hdl.pdf">relatively recent PDF version</a> on my web server.<br />
+                                                                                <br /> If you'd like to see the Verilog that produced the nightmare of a schematic I showed above, <a href="https://github.com/azonenberg/openfpga/blob/master/tests/greenpak4/Blinky/Blinky.v">here it is</a>.<br />
+                                                                                <br /> Be advised that this project is still very much a work in progress and there are still a number of SLG46620V features I don't support (see the manual for exact details).<br />
+                                                                                <br />
+                                                                                <h2>
+                                                                                    I love it / it segfaulted / there's a problem in the manual!</h2>
+                                                                                Hop in our IRC channel (##openfpga on Freenode) and let me know. Feedback is great, pull requests are even better,<br />
+                                                                                <br />
+                                                                                <h2>
+                                                                                    You're competing with Silego's IDE. Have they found out and sued you yet?</h2>
+                                                                                Nope. They're fully aware of what I'm doing and are rolling out the red carpet for me. They love the idea of a HDL flow as an alternative to schematic entry and are pretty amazed at how fast it's coming together.<br />
+                                                                                <br /> After I reported a few bugs in their datasheets they decided to skip the middleman and give me direct access to the engineer who writes their documentation so that I can get faster responses. The last time I found a problem (two different parts of the datasheet contradicted each other) an updated datasheet was in my inbox and on their website by the next day. I only wish Xilinx gave me that kind of treatment!<br />
+                                                                                <br /> They've even <a href="https://twitter.com/SilegoTech/status/717018987771469824">offered me free hardware</a> to help me add support for their latest product family, although I plan to get GreenPak4 support to a more stable state before taking them up on the offer.<br />
+                                                                                <br />
+                                                                                <h2>
+                                                                                    So what's next?</h2>
+                                                                                <br /> Better testing, for starters. I have to verify functionality by hand with a DMM and oscilloscope, which is time consuming.<br />
+                                                                                <br /> My contact at Silego says they're going to be giving me documentation on the SRAM emulation interface soon, so I'm going to make a hardware-in-loop test platform that connects to my desktop and the Silego ZIF socket, and lets me load new bitstreams via a scriptable interface. It'll have FPGA-based digital I/O as well as an ADC and DAC on every device pin, plus an adjustable voltage regulator for power, so I can feed in arbitrary mixed-signal test waveforms and write PC-based unit tests to verify correct behavior.<br />
+                                                                                <br /> Other than that, I want to finish support for the SLG46620V in the next month or two. The SLG46621V will be an easy addition since only one pin and the relevant configuration bits have changed from the 46620 (I suspect they're the same die, just bonded out differently).<br />
+                                                                                <br /> Once that's done I'll have to do some more extensive work to add the SLG46140V since the architecture is a bit different (a lot of the combinatorial logic is merged into multi-function blocks). Luckily, the 46140 has a lot in common architecturally with the GreenPak5 family, so once that's done GreenPak5 will probably be a lot easier to add support for.<br />
+                                                                                <br /> My thanks go out to Clifford Wolf, whitequark, the IRC users in ##openfpga, and everyone at Silego I've worked with to help make this possible. I hope that one day this project will become mature enough that Silego will ship it as an officially supported extension to GreenPak Designer, making history by becoming the first modern programmable logic vendor to ship a fully open source synthesis and P&amp;R suite.
+                                                                                <div style='clear: both;'></div>
+                                                                            </div>
+                                                                            <div class='post-footer'>
+                                                                                <div class='post-footer-line post-footer-line-1'><span class='post-author vcard'>
+Posted by
+<span class='fn' itemprop='author' itemscope='itemscope' itemtype='http://schema.org/Person'>
+<meta content='https://www.blogger.com/profile/16821509563933020441' itemprop='url'/>
+<a class='g-profile' href='https://www.blogger.com/profile/16821509563933020441' rel='author' title='author profile'>
+<span itemprop='name'>Andrew Zonenberg</span>
+                                                                                    </a>
+                                                                                    </span>
+                                                                                    </span>
+                                                                                    <span class='post-timestamp'>
+at
+<meta content='http://siliconexposed.blogspot.com/2016/05/open-verilog-flow-for-silego-greenpak4.html' itemprop='url'/>
+<a class='timestamp-link' href='http://siliconexposed.blogspot.tw/2016/05/open-verilog-flow-for-silego-greenpak4.html' rel='bookmark' title='permanent link'><abbr class='published' itemprop='datePublished' title='2016-05-08T00:55:00-07:00'>12:55 AM</abbr></a>
+</span>
+                                                                                    <span class='post-comment-link'>
+</span>
+                                                                                    <span class='post-icons'>
+<span class='item-control blog-admin pid-382886925'>
+<a href='https://www.blogger.com/post-edit.g?blogID=175004091875960054&postID=932306423056216142&from=pencil' title='Edit Post'>
+<img alt='' class='icon-action' height='18' src='https://resources.blogblog.com/img/icon18_edit_allbkg.gif' width='18'/>
+</a>
+</span>
+                                                                                    </span>
+                                                                                    <div class='post-share-buttons goog-inline-block'>
+                                                                                        <a class='goog-inline-block share-button sb-email' href='https://www.blogger.com/share-post.g?blogID=175004091875960054&postID=932306423056216142&target=email' target='_blank' title='Email This'><span class='share-button-link-text'>Email This</span></a><a class='goog-inline-block share-button sb-blog' href='https://www.blogger.com/share-post.g?blogID=175004091875960054&postID=932306423056216142&target=blog' onclick='window.open(this.href, "_blank", "height=270,width=475"); return false;' target='_blank' title='BlogThis!'><span class='share-button-link-text'>BlogThis!</span></a><a class='goog-inline-block share-button sb-twitter' href='https://www.blogger.com/share-post.g?blogID=175004091875960054&postID=932306423056216142&target=twitter' target='_blank' title='Share to Twitter'><span class='share-button-link-text'>Share to Twitter</span></a><a class='goog-inline-block share-button sb-facebook' href='https://www.blogger.com/share-post.g?blogID=175004091875960054&postID=932306423056216142&target=facebook' onclick='window.open(this.href, "_blank", "height=430,width=640"); return false;' target='_blank' title='Share to Facebook'><span class='share-button-link-text'>Share to Facebook</span></a><a class='goog-inline-block share-button sb-pinterest' href='https://www.blogger.com/share-post.g?blogID=175004091875960054&postID=932306423056216142&target=pinterest' target='_blank' title='Share to Pinterest'><span class='share-button-link-text'>Share to Pinterest</span></a>
+                                                                                        <div class='goog-inline-block google-plus-share-container'>
+                                                                                            <g:plusone source='blogger:blog:plusone' href='http://siliconexposed.blogspot.com/2016/05/open-verilog-flow-for-silego-greenpak4.html' size='medium' width='300' annotation='inline' />
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class='post-footer-line post-footer-line-2'><span class='post-labels'>
+Labels:
+<a href='http://siliconexposed.blogspot.tw/search/label/FPGA' rel='tag'>FPGA</a>,
+<a href='http://siliconexposed.blogspot.tw/search/label/Tools' rel='tag'>Tools</a>
+</span>
+                                                                                </div>
+                                                                                <div class='post-footer-line post-footer-line-3'></div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class='comments' id='comments'>
+                                                                            <a name='comments'></a>
+                                                                            <h4>No comments:</h4>
+                                                                            <div id='Blog1_comments-block-wrapper'>
+                                                                                <dl class='avatar-comment-indent' id='comments-block'>
+                                                                                </dl>
+                                                                            </div>
+                                                                            <p class='comment-footer'>
+                                                                                <div class='comment-form'>
+                                                                                    <a name='comment-form'></a>
+                                                                                    <h4 id='comment-post-message'>Post a Comment</h4>
+                                                                                    <p>
+                                                                                    </p>
+                                                                                    <a href='https://www.blogger.com/comment-iframe.g?blogID=175004091875960054&postID=932306423056216142' id='comment-editor-src'></a>
+                                                                                    <iframe allowtransparency='true' class='blogger-iframe-colorize blogger-comment-from-post' frameborder='0' height='410px' id='comment-editor' name='comment-editor' src='' width='100%'></iframe>
+                                                                                    <script type="text/javascript" src="https://www.blogger.com/static/v1/jsbin/2870402004-comment_from_post_iframe.js"></script>
+                                                                                    <script type='text/javascript'>
+                                                                                        BLOG_CMT_createIframe('https://www.blogger.com/rpc_relay.html');
+                                                                                    </script>
+                                                                                </div>
+                                                                            </p>
+                                                                            <div id='backlinks-container'>
+                                                                                <div id='Blog1_backlinks-container'>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class='blog-pager' id='blog-pager'>
+                                                            <span id='blog-pager-older-link'>
+<a class='blog-pager-older-link' href='http://siliconexposed.blogspot.tw/2015/10/new-gpg-key.html' id='Blog1_blog-pager-older-link' title='Older Post'>Older Post</a>
+</span>
+                                                            <a class='home-link' href='http://siliconexposed.blogspot.tw/'>Home</a>
+                                                        </div>
+                                                        <div class='clear'></div>
+                                                        <div class='post-feeds'>
+                                                            <div class='feed-links'>
+                                                                Subscribe to:
+                                                                <a class='feed-link' href='http://siliconexposed.blogspot.com/feeds/932306423056216142/comments/default' target='_blank' type='application/atom+xml'>Post Comments (Atom)</a>
+                                                            </div>
+                                                        </div>
+                                                        <script type="text/javascript">
+                                                            window.___gcfg = {
+                                                                'lang': 'en'
+                                                            };
+                                                        </script>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class='column-left-outer'>
+                                            <div class='column-left-inner'>
+                                                <aside>
+                                                </aside>
+                                            </div>
+                                        </div>
+                                        <div class='column-right-outer'>
+                                            <div class='column-right-inner'>
+                                                <aside>
+                                                    <div class='sidebar section' id='sidebar-right-1'>
+                                                        <div class='widget LinkList' data-version='1' id='LinkList1'>
+                                                            <h2>References</h2>
+                                                            <div class='widget-content'>
+                                                                <ul>
+                                                                    <li><a href='http://www.twitter.com/azonenberg/'>My twitter</a></li>
+                                                                    <li><a href='http://security.cs.rpi.edu/courses/hwre-spring2014/'>CSCI 6974 - Hardware Reverse Engineering</a></li>
+                                                                    <li><a href='http://siliconpr0n.org/'>Silicon Pr0n</a></li>
+                                                                    <li><a href='http://uvicrec.blogspot.com/'>John McMaster</a></li>
+                                                                    <li><a href='http://cmosfold.blogspot.com/'>CMOSfold</a></li>
+                                                                </ul>
+                                                                <div class='clear'></div>
+                                                                <span class='widget-item-control'>
+<span class='item-control blog-admin'>
+<a class='quickedit' href='//www.blogger.com/rearrange?blogID=175004091875960054&widgetType=LinkList&widgetId=LinkList1&action=editWidget&sectionId=sidebar-right-1' onclick='return _WidgetManager._PopupConfig(document.getElementById("LinkList1"));' target='configLinkList1' title='Edit'>
+<img alt='' height='18' src='https://resources.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+</a>
+</span>
+                                                                </span>
+                                                                <div class='clear'></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class='widget BlogArchive' data-version='1' id='BlogArchive1'>
+                                                            <h2>Blog Archive</h2>
+                                                            <div class='widget-content'>
+                                                                <div id='ArchiveList'>
+                                                                    <div id='BlogArchive1_ArchiveList'>
+                                                                        <ul class='hierarchy'>
+                                                                            <li class='archivedate expanded'>
+                                                                                <a class='toggle' href='javascript:void(0)'>
+                                                                                    <span class='zippy toggle-open'>
+
+        &#9660;&#160;
+      
+</span>
+                                                                                </a>
+                                                                                <a class='post-count-link' href='http://siliconexposed.blogspot.tw/search?updated-min=2016-01-01T00:00:00-08:00&amp;updated-max=2017-01-01T00:00:00-08:00&amp;max-results=1'>
+2016
+</a>
+                                                                                <span class='post-count' dir='ltr'>(1)</span>
+                                                                                <ul class='hierarchy'>
+                                                                                    <li class='archivedate expanded'>
+                                                                                        <a class='toggle' href='javascript:void(0)'>
+                                                                                            <span class='zippy toggle-open'>
+
+        &#9660;&#160;
+      
+</span>
+                                                                                        </a>
+                                                                                        <a class='post-count-link' href='http://siliconexposed.blogspot.tw/2016_05_01_archive.html'>
+May
+</a>
+                                                                                        <span class='post-count' dir='ltr'>(1)</span>
+                                                                                        <ul class='posts'>
+                                                                                            <li><a href='http://siliconexposed.blogspot.tw/2016/05/open-verilog-flow-for-silego-greenpak4.html'>Open Verilog flow for Silego GreenPak4 programmabl...</a></li>
+                                                                                        </ul>
+                                                                                    </li>
+                                                                                </ul>
+                                                                            </li>
+                                                                        </ul>
+                                                                        <ul class='hierarchy'>
+                                                                            <li class='archivedate collapsed'>
+                                                                                <a class='toggle' href='javascript:void(0)'>
+                                                                                    <span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+                                                                                </a>
+                                                                                <a class='post-count-link' href='http://siliconexposed.blogspot.tw/search?updated-min=2015-01-01T00:00:00-08:00&amp;updated-max=2016-01-01T00:00:00-08:00&amp;max-results=8'>
+2015
+</a>
+                                                                                <span class='post-count' dir='ltr'>(8)</span>
+                                                                                <ul class='hierarchy'>
+                                                                                    <li class='archivedate collapsed'>
+                                                                                        <a class='toggle' href='javascript:void(0)'>
+                                                                                            <span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+                                                                                        </a>
+                                                                                        <a class='post-count-link' href='http://siliconexposed.blogspot.tw/2015_10_01_archive.html'>
+October
+</a>
+                                                                                        <span class='post-count' dir='ltr'>(1)</span>
+                                                                                    </li>
+                                                                                </ul>
+                                                                                <ul class='hierarchy'>
+                                                                                    <li class='archivedate collapsed'>
+                                                                                        <a class='toggle' href='javascript:void(0)'>
+                                                                                            <span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+                                                                                        </a>
+                                                                                        <a class='post-count-link' href='http://siliconexposed.blogspot.tw/2015_05_01_archive.html'>
+May
+</a>
+                                                                                        <span class='post-count' dir='ltr'>(1)</span>
+                                                                                    </li>
+                                                                                </ul>
+                                                                                <ul class='hierarchy'>
+                                                                                    <li class='archivedate collapsed'>
+                                                                                        <a class='toggle' href='javascript:void(0)'>
+                                                                                            <span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+                                                                                        </a>
+                                                                                        <a class='post-count-link' href='http://siliconexposed.blogspot.tw/2015_02_01_archive.html'>
+February
+</a>
+                                                                                        <span class='post-count' dir='ltr'>(1)</span>
+                                                                                    </li>
+                                                                                </ul>
+                                                                                <ul class='hierarchy'>
+                                                                                    <li class='archivedate collapsed'>
+                                                                                        <a class='toggle' href='javascript:void(0)'>
+                                                                                            <span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+                                                                                        </a>
+                                                                                        <a class='post-count-link' href='http://siliconexposed.blogspot.tw/2015_01_01_archive.html'>
+January
+</a>
+                                                                                        <span class='post-count' dir='ltr'>(5)</span>
+                                                                                    </li>
+                                                                                </ul>
+                                                                            </li>
+                                                                        </ul>
+                                                                        <ul class='hierarchy'>
+                                                                            <li class='archivedate collapsed'>
+                                                                                <a class='toggle' href='javascript:void(0)'>
+                                                                                    <span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+                                                                                </a>
+                                                                                <a class='post-count-link' href='http://siliconexposed.blogspot.tw/search?updated-min=2014-01-01T00:00:00-08:00&amp;updated-max=2015-01-01T00:00:00-08:00&amp;max-results=8'>
+2014
+</a>
+                                                                                <span class='post-count' dir='ltr'>(8)</span>
+                                                                                <ul class='hierarchy'>
+                                                                                    <li class='archivedate collapsed'>
+                                                                                        <a class='toggle' href='javascript:void(0)'>
+                                                                                            <span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+                                                                                        </a>
+                                                                                        <a class='post-count-link' href='http://siliconexposed.blogspot.tw/2014_10_01_archive.html'>
+October
+</a>
+                                                                                        <span class='post-count' dir='ltr'>(1)</span>
+                                                                                    </li>
+                                                                                </ul>
+                                                                                <ul class='hierarchy'>
+                                                                                    <li class='archivedate collapsed'>
+                                                                                        <a class='toggle' href='javascript:void(0)'>
+                                                                                            <span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+                                                                                        </a>
+                                                                                        <a class='post-count-link' href='http://siliconexposed.blogspot.tw/2014_09_01_archive.html'>
+September
+</a>
+                                                                                        <span class='post-count' dir='ltr'>(1)</span>
+                                                                                    </li>
+                                                                                </ul>
+                                                                                <ul class='hierarchy'>
+                                                                                    <li class='archivedate collapsed'>
+                                                                                        <a class='toggle' href='javascript:void(0)'>
+                                                                                            <span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+                                                                                        </a>
+                                                                                        <a class='post-count-link' href='http://siliconexposed.blogspot.tw/2014_08_01_archive.html'>
+August
+</a>
+                                                                                        <span class='post-count' dir='ltr'>(1)</span>
+                                                                                    </li>
+                                                                                </ul>
+                                                                                <ul class='hierarchy'>
+                                                                                    <li class='archivedate collapsed'>
+                                                                                        <a class='toggle' href='javascript:void(0)'>
+                                                                                            <span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+                                                                                        </a>
+                                                                                        <a class='post-count-link' href='http://siliconexposed.blogspot.tw/2014_03_01_archive.html'>
+March
+</a>
+                                                                                        <span class='post-count' dir='ltr'>(3)</span>
+                                                                                    </li>
+                                                                                </ul>
+                                                                                <ul class='hierarchy'>
+                                                                                    <li class='archivedate collapsed'>
+                                                                                        <a class='toggle' href='javascript:void(0)'>
+                                                                                            <span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+                                                                                        </a>
+                                                                                        <a class='post-count-link' href='http://siliconexposed.blogspot.tw/2014_02_01_archive.html'>
+February
+</a>
+                                                                                        <span class='post-count' dir='ltr'>(1)</span>
+                                                                                    </li>
+                                                                                </ul>
+                                                                                <ul class='hierarchy'>
+                                                                                    <li class='archivedate collapsed'>
+                                                                                        <a class='toggle' href='javascript:void(0)'>
+                                                                                            <span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+                                                                                        </a>
+                                                                                        <a class='post-count-link' href='http://siliconexposed.blogspot.tw/2014_01_01_archive.html'>
+January
+</a>
+                                                                                        <span class='post-count' dir='ltr'>(1)</span>
+                                                                                    </li>
+                                                                                </ul>
+                                                                            </li>
+                                                                        </ul>
+                                                                        <ul class='hierarchy'>
+                                                                            <li class='archivedate collapsed'>
+                                                                                <a class='toggle' href='javascript:void(0)'>
+                                                                                    <span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+                                                                                </a>
+                                                                                <a class='post-count-link' href='http://siliconexposed.blogspot.tw/search?updated-min=2013-01-01T00:00:00-08:00&amp;updated-max=2014-01-01T00:00:00-08:00&amp;max-results=16'>
+2013
+</a>
+                                                                                <span class='post-count' dir='ltr'>(16)</span>
+                                                                                <ul class='hierarchy'>
+                                                                                    <li class='archivedate collapsed'>
+                                                                                        <a class='toggle' href='javascript:void(0)'>
+                                                                                            <span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+                                                                                        </a>
+                                                                                        <a class='post-count-link' href='http://siliconexposed.blogspot.tw/2013_11_01_archive.html'>
+November
+</a>
+                                                                                        <span class='post-count' dir='ltr'>(2)</span>
+                                                                                    </li>
+                                                                                </ul>
+                                                                                <ul class='hierarchy'>
+                                                                                    <li class='archivedate collapsed'>
+                                                                                        <a class='toggle' href='javascript:void(0)'>
+                                                                                            <span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+                                                                                        </a>
+                                                                                        <a class='post-count-link' href='http://siliconexposed.blogspot.tw/2013_10_01_archive.html'>
+October
+</a>
+                                                                                        <span class='post-count' dir='ltr'>(2)</span>
+                                                                                    </li>
+                                                                                </ul>
+                                                                                <ul class='hierarchy'>
+                                                                                    <li class='archivedate collapsed'>
+                                                                                        <a class='toggle' href='javascript:void(0)'>
+                                                                                            <span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+                                                                                        </a>
+                                                                                        <a class='post-count-link' href='http://siliconexposed.blogspot.tw/2013_09_01_archive.html'>
+September
+</a>
+                                                                                        <span class='post-count' dir='ltr'>(5)</span>
+                                                                                    </li>
+                                                                                </ul>
+                                                                                <ul class='hierarchy'>
+                                                                                    <li class='archivedate collapsed'>
+                                                                                        <a class='toggle' href='javascript:void(0)'>
+                                                                                            <span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+                                                                                        </a>
+                                                                                        <a class='post-count-link' href='http://siliconexposed.blogspot.tw/2013_08_01_archive.html'>
+August
+</a>
+                                                                                        <span class='post-count' dir='ltr'>(5)</span>
+                                                                                    </li>
+                                                                                </ul>
+                                                                                <ul class='hierarchy'>
+                                                                                    <li class='archivedate collapsed'>
+                                                                                        <a class='toggle' href='javascript:void(0)'>
+                                                                                            <span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+                                                                                        </a>
+                                                                                        <a class='post-count-link' href='http://siliconexposed.blogspot.tw/2013_02_01_archive.html'>
+February
+</a>
+                                                                                        <span class='post-count' dir='ltr'>(1)</span>
+                                                                                    </li>
+                                                                                </ul>
+                                                                                <ul class='hierarchy'>
+                                                                                    <li class='archivedate collapsed'>
+                                                                                        <a class='toggle' href='javascript:void(0)'>
+                                                                                            <span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+                                                                                        </a>
+                                                                                        <a class='post-count-link' href='http://siliconexposed.blogspot.tw/2013_01_01_archive.html'>
+January
+</a>
+                                                                                        <span class='post-count' dir='ltr'>(1)</span>
+                                                                                    </li>
+                                                                                </ul>
+                                                                            </li>
+                                                                        </ul>
+                                                                        <ul class='hierarchy'>
+                                                                            <li class='archivedate collapsed'>
+                                                                                <a class='toggle' href='javascript:void(0)'>
+                                                                                    <span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+                                                                                </a>
+                                                                                <a class='post-count-link' href='http://siliconexposed.blogspot.tw/search?updated-min=2012-01-01T00:00:00-08:00&amp;updated-max=2013-01-01T00:00:00-08:00&amp;max-results=17'>
+2012
+</a>
+                                                                                <span class='post-count' dir='ltr'>(17)</span>
+                                                                                <ul class='hierarchy'>
+                                                                                    <li class='archivedate collapsed'>
+                                                                                        <a class='toggle' href='javascript:void(0)'>
+                                                                                            <span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+                                                                                        </a>
+                                                                                        <a class='post-count-link' href='http://siliconexposed.blogspot.tw/2012_12_01_archive.html'>
+December
+</a>
+                                                                                        <span class='post-count' dir='ltr'>(2)</span>
+                                                                                    </li>
+                                                                                </ul>
+                                                                                <ul class='hierarchy'>
+                                                                                    <li class='archivedate collapsed'>
+                                                                                        <a class='toggle' href='javascript:void(0)'>
+                                                                                            <span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+                                                                                        </a>
+                                                                                        <a class='post-count-link' href='http://siliconexposed.blogspot.tw/2012_10_01_archive.html'>
+October
+</a>
+                                                                                        <span class='post-count' dir='ltr'>(2)</span>
+                                                                                    </li>
+                                                                                </ul>
+                                                                                <ul class='hierarchy'>
+                                                                                    <li class='archivedate collapsed'>
+                                                                                        <a class='toggle' href='javascript:void(0)'>
+                                                                                            <span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+                                                                                        </a>
+                                                                                        <a class='post-count-link' href='http://siliconexposed.blogspot.tw/2012_07_01_archive.html'>
+July
+</a>
+                                                                                        <span class='post-count' dir='ltr'>(7)</span>
+                                                                                    </li>
+                                                                                </ul>
+                                                                                <ul class='hierarchy'>
+                                                                                    <li class='archivedate collapsed'>
+                                                                                        <a class='toggle' href='javascript:void(0)'>
+                                                                                            <span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+                                                                                        </a>
+                                                                                        <a class='post-count-link' href='http://siliconexposed.blogspot.tw/2012_06_01_archive.html'>
+June
+</a>
+                                                                                        <span class='post-count' dir='ltr'>(2)</span>
+                                                                                    </li>
+                                                                                </ul>
+                                                                                <ul class='hierarchy'>
+                                                                                    <li class='archivedate collapsed'>
+                                                                                        <a class='toggle' href='javascript:void(0)'>
+                                                                                            <span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+                                                                                        </a>
+                                                                                        <a class='post-count-link' href='http://siliconexposed.blogspot.tw/2012_04_01_archive.html'>
+April
+</a>
+                                                                                        <span class='post-count' dir='ltr'>(2)</span>
+                                                                                    </li>
+                                                                                </ul>
+                                                                                <ul class='hierarchy'>
+                                                                                    <li class='archivedate collapsed'>
+                                                                                        <a class='toggle' href='javascript:void(0)'>
+                                                                                            <span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+                                                                                        </a>
+                                                                                        <a class='post-count-link' href='http://siliconexposed.blogspot.tw/2012_03_01_archive.html'>
+March
+</a>
+                                                                                        <span class='post-count' dir='ltr'>(1)</span>
+                                                                                    </li>
+                                                                                </ul>
+                                                                                <ul class='hierarchy'>
+                                                                                    <li class='archivedate collapsed'>
+                                                                                        <a class='toggle' href='javascript:void(0)'>
+                                                                                            <span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+                                                                                        </a>
+                                                                                        <a class='post-count-link' href='http://siliconexposed.blogspot.tw/2012_01_01_archive.html'>
+January
+</a>
+                                                                                        <span class='post-count' dir='ltr'>(1)</span>
+                                                                                    </li>
+                                                                                </ul>
+                                                                            </li>
+                                                                        </ul>
+                                                                        <ul class='hierarchy'>
+                                                                            <li class='archivedate collapsed'>
+                                                                                <a class='toggle' href='javascript:void(0)'>
+                                                                                    <span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+                                                                                </a>
+                                                                                <a class='post-count-link' href='http://siliconexposed.blogspot.tw/search?updated-min=2011-01-01T00:00:00-08:00&amp;updated-max=2012-01-01T00:00:00-08:00&amp;max-results=5'>
+2011
+</a>
+                                                                                <span class='post-count' dir='ltr'>(5)</span>
+                                                                                <ul class='hierarchy'>
+                                                                                    <li class='archivedate collapsed'>
+                                                                                        <a class='toggle' href='javascript:void(0)'>
+                                                                                            <span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+                                                                                        </a>
+                                                                                        <a class='post-count-link' href='http://siliconexposed.blogspot.tw/2011_12_01_archive.html'>
+December
+</a>
+                                                                                        <span class='post-count' dir='ltr'>(2)</span>
+                                                                                    </li>
+                                                                                </ul>
+                                                                                <ul class='hierarchy'>
+                                                                                    <li class='archivedate collapsed'>
+                                                                                        <a class='toggle' href='javascript:void(0)'>
+                                                                                            <span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+                                                                                        </a>
+                                                                                        <a class='post-count-link' href='http://siliconexposed.blogspot.tw/2011_03_01_archive.html'>
+March
+</a>
+                                                                                        <span class='post-count' dir='ltr'>(3)</span>
+                                                                                    </li>
+                                                                                </ul>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                                <div class='clear'></div>
+                                                                <span class='widget-item-control'>
+<span class='item-control blog-admin'>
+<a class='quickedit' href='//www.blogger.com/rearrange?blogID=175004091875960054&widgetType=BlogArchive&widgetId=BlogArchive1&action=editWidget&sectionId=sidebar-right-1' onclick='return _WidgetManager._PopupConfig(document.getElementById("BlogArchive1"));' target='configBlogArchive1' title='Edit'>
+<img alt='' height='18' src='https://resources.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+</a>
+</span>
+                                                                </span>
+                                                                <div class='clear'></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class='widget LinkList' data-version='1' id='LinkList2'>
+                                                            <h2>Categories</h2>
+                                                            <div class='widget-content'>
+                                                                <ul>
+                                                                    <li><a href='http://siliconexposed.blogspot.com/search/label/Atmel'>Atmel</a></li>
+                                                                    <li><a href='http://siliconexposed.blogspot.com/search/label/BoardFab'>Board Fab</a></li>
+                                                                    <li><a href='http://siliconexposed.blogspot.com/search/label/CurrentEvents'>Current Events</a></li>
+                                                                    <li><a href='http://siliconexposed.blogspot.com/search/label/Debugging'>Debugging</a></li>
+                                                                    <li><a href='http://siliconexposed.blogspot.com/search/label/FPGA'>FPGA</a></li>
+                                                                    <li><a href='http://siliconexposed.blogspot.com/search/label/Infosec'>Infosec</a></li>
+                                                                    <li><a href='http://siliconexposed.blogspot.com/search/label/MEMS'>MEMS</a></li>
+                                                                    <li><a href='http://siliconexposed.blogspot.com/search/label/Meta-posts'>Meta-posts</a></li>
+                                                                    <li><a href='http://siliconexposed.blogspot.com/search/label/Microchip'>Microchip</a></li>
+                                                                    <li><a href='http://siliconexposed.blogspot.com/search/label/MyLab'>My Lab</a></li>
+                                                                    <li><a href='http://siliconexposed.blogspot.com/search/label/Personal'>Personal</a></li>
+                                                                    <li><a href='http://siliconexposed.blogspot.com/search/label/Teardowns'>Teardowns</a></li>
+                                                                    <li><a href='http://siliconexposed.blogspot.com/search/label/Thesis'>Thesis</a></li>
+                                                                    <li><a href='http://siliconexposed.blogspot.com/search/label/Tools'>Tools</a></li>
+                                                                    <li><a href='http://siliconexposed.blogspot.com/search/label/WetLab'>Wet Lab Work</a></li>
+                                                                    <li><a href='http://siliconexposed.blogspot.com/search/label/Xilinx'>Xilinx</a></li>
+                                                                </ul>
+                                                                <div class='clear'></div>
+                                                                <span class='widget-item-control'>
+<span class='item-control blog-admin'>
+<a class='quickedit' href='//www.blogger.com/rearrange?blogID=175004091875960054&widgetType=LinkList&widgetId=LinkList2&action=editWidget&sectionId=sidebar-right-1' onclick='return _WidgetManager._PopupConfig(document.getElementById("LinkList2"));' target='configLinkList2' title='Edit'>
+<img alt='' height='18' src='https://resources.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+</a>
+</span>
+                                                                </span>
+                                                                <div class='clear'></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class='widget PopularPosts' data-version='1' id='PopularPosts1'>
+                                                            <h2>Popular Posts</h2>
+                                                            <div class='widget-content popular-posts'>
+                                                                <ul>
+                                                                    <li>
+                                                                        <div class='item-content'>
+                                                                            <div class='item-title'><a href='http://siliconexposed.blogspot.tw/2014/10/why-apples-iphone-encryption-wont-stop.html'>Why Apple's iPhone encryption won't stop NSA (or any other intelligence agency)</a></div>
+                                                                            <div class='item-snippet'>Recent news headlines have made a big deal of Apple encrypting more of the storage on their handsets, and claiming to not have a key. Depend...</div>
+                                                                        </div>
+                                                                        <div style='clear: both;'></div>
+                                                                    </li>
+                                                                    <li>
+                                                                        <div class='item-content'>
+                                                                            <div class='item-thumbnail'>
+                                                                                <a href='http://siliconexposed.blogspot.tw/2012/07/bga-process-notes.html' target='_blank'>
+                                                                                    <img alt='' border='0' src='http://2.bp.blogspot.com/-3W1-dqxwu8w/T_DehAq9y_I/AAAAAAAAAKA/pVbX_9PZ2Fw/w72-h72-p-nu/S7302801.JPG' />
+                                                                                </a>
+                                                                            </div>
+                                                                            <div class='item-title'><a href='http://siliconexposed.blogspot.tw/2012/07/bga-process-notes.html'>BGA process notes</a></div>
+                                                                            <div class='item-snippet'>I&#39;ve gotten a lot of requests recently to share some details on my BGA assembly process, so without further ado here it is! The board ...</div>
+                                                                        </div>
+                                                                        <div style='clear: both;'></div>
+                                                                    </li>
+                                                                    <li>
+                                                                        <div class='item-content'>
+                                                                            <div class='item-thumbnail'>
+                                                                                <a href='http://siliconexposed.blogspot.tw/2014/03/getting-my-feet-wet-with-invasive.html' target='_blank'>
+                                                                                    <img alt='' border='0' src='http://3.bp.blogspot.com/-HZZBB2OVaNc/Uzm7UVm_PUI/AAAAAAAAAiw/cPfH0TUdOMM/w72-h72-p-nu/floorplan_dash.jpg' />
+                                                                                </a>
+                                                                            </div>
+                                                                            <div class='item-title'><a href='http://siliconexposed.blogspot.tw/2014/03/getting-my-feet-wet-with-invasive.html'>Getting my feet wet with invasive attacks, part 1: Target recon</a></div>
+                                                                            <div class='item-snippet'>This is part 1 of a 2-part series. Part 2, The Attack, is here . One of the reasons I&#39;ve gone a bit dark lately is that running CSCI 6...</div>
+                                                                        </div>
+                                                                        <div style='clear: both;'></div>
+                                                                    </li>
+                                                                    <li>
+                                                                        <div class='item-content'>
+                                                                            <div class='item-title'><a href='http://siliconexposed.blogspot.tw/2014/09/threat-modeling-for-fpga-software.html'>Threat modeling for FPGA software backdoors</a></div>
+                                                                            <div class='item-snippet'> I&#39;ve been interested in the security of compilers and related toolchains ever since I first read about Ken Thompson&#39;s compiler back...</div>
+                                                                        </div>
+                                                                        <div style='clear: both;'></div>
+                                                                    </li>
+                                                                </ul>
+                                                                <div class='clear'></div>
+                                                                <span class='widget-item-control'>
+<span class='item-control blog-admin'>
+<a class='quickedit' href='//www.blogger.com/rearrange?blogID=175004091875960054&widgetType=PopularPosts&widgetId=PopularPosts1&action=editWidget&sectionId=sidebar-right-1' onclick='return _WidgetManager._PopupConfig(document.getElementById("PopularPosts1"));' target='configPopularPosts1' title='Edit'>
+<img alt='' height='18' src='https://resources.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+</a>
+</span>
+                                                                </span>
+                                                                <div class='clear'></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class='widget Profile' data-version='1' id='Profile1'>
+                                                            <h2>About Me</h2>
+                                                            <div class='widget-content'>
+                                                                <a href='https://www.blogger.com/profile/16821509563933020441'><img alt='My photo' class='profile-img' height='60' src='//3.bp.blogspot.com/-p-v3ISALjLU/U0oKLSnpzZI/AAAAAAAAAo0/afHOciIedHs/s80/DSCF4378_sm.jpg' width='80' /></a>
+                                                                <dl class='profile-datablock'>
+                                                                    <dt class='profile-data'>
+<a class='profile-name-link g-profile' href='https://www.blogger.com/profile/16821509563933020441' rel='author' style='background-image: url(//www.blogger.com/img/logo-16.png);'>
+Andrew Zonenberg
+</a>
+</dt>
+                                                                </dl>
+                                                                <a class='profile-link' href='https://www.blogger.com/profile/16821509563933020441' rel='author'>View my complete profile</a>
+                                                                <div class='clear'></div>
+                                                                <span class='widget-item-control'>
+<span class='item-control blog-admin'>
+<a class='quickedit' href='//www.blogger.com/rearrange?blogID=175004091875960054&widgetType=Profile&widgetId=Profile1&action=editWidget&sectionId=sidebar-right-1' onclick='return _WidgetManager._PopupConfig(document.getElementById("Profile1"));' target='configProfile1' title='Edit'>
+<img alt='' height='18' src='https://resources.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+</a>
+</span>
+                                                                </span>
+                                                                <div class='clear'></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class='widget Followers' data-version='1' id='Followers1'>
+                                                            <h2 class='title'>Followers</h2>
+                                                            <div class='widget-content'>
+                                                                <div id='Followers1-wrapper'>
+                                                                    <div style='margin-right:2px;'>
+                                                                        <div>
+                                                                            <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+                                                                            <div id="followers-iframe-container"></div>
+                                                                            <script type="text/javascript">
+                                                                                window.followersIframe = null;
+
+                                                                                function followersIframeOpen(url) {
+                                                                                    gapi.load("gapi.iframes", function() {
+                                                                                        if (gapi.iframes && gapi.iframes.getContext) {
+                                                                                            window.followersIframe = gapi.iframes.getContext().openChild({
+                                                                                                url: url,
+                                                                                                where: document.getElementById("followers-iframe-container"),
+                                                                                                messageHandlersFilter: gapi.iframes.CROSS_ORIGIN_IFRAMES_FILTER,
+                                                                                                messageHandlers: {
+                                                                                                    '_ready': function(obj) {
+                                                                                                        window.followersIframe.getIframeEl().height = obj.height;
+                                                                                                    },
+                                                                                                    'reset': function() {
+                                                                                                        window.followersIframe.close();
+                                                                                                        followersIframeOpen("https://www.blogger.com/followers.g?blogID\x3d175004091875960054\x26colors\x3dCgt0cmFuc3BhcmVudBILdHJhbnNwYXJlbnQaBjY2NjY2NiIGMjI4OGJiKgZmZmZmZmYyBjAwMDAwMDoGNjY2NjY2QgYyMjg4YmJKBjk5OTk5OVIGMjI4OGJiWgt0cmFuc3BhcmVudA%3D%3D\x26pageSize\x3d21\x26postID\x3d932306423056216142\x26origin\x3dhttp://siliconexposed.blogspot.tw/");
+                                                                                                    },
+                                                                                                    'open': function(url) {
+                                                                                                        window.followersIframe.close();
+                                                                                                        followersIframeOpen(url);
+                                                                                                    },
+                                                                                                    'blogger-ping': function() {}
+                                                                                                }
+                                                                                            });
+                                                                                        }
+                                                                                    });
+                                                                                }
+                                                                                followersIframeOpen("https://www.blogger.com/followers.g?blogID\x3d175004091875960054\x26colors\x3dCgt0cmFuc3BhcmVudBILdHJhbnNwYXJlbnQaBjY2NjY2NiIGMjI4OGJiKgZmZmZmZmYyBjAwMDAwMDoGNjY2NjY2QgYyMjg4YmJKBjk5OTk5OVIGMjI4OGJiWgt0cmFuc3BhcmVudA%3D%3D\x26pageSize\x3d21\x26postID\x3d932306423056216142\x26origin\x3dhttp://siliconexposed.blogspot.tw/");
+                                                                            </script>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class='clear'></div>
+                                                                <span class='widget-item-control'>
+<span class='item-control blog-admin'>
+<a class='quickedit' href='//www.blogger.com/rearrange?blogID=175004091875960054&widgetType=Followers&widgetId=Followers1&action=editWidget&sectionId=sidebar-right-1' onclick='return _WidgetManager._PopupConfig(document.getElementById("Followers1"));' target='configFollowers1' title='Edit'>
+<img alt='' height='18' src='https://resources.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+</a>
+</span>
+                                                                </span>
+                                                                <div class='clear'></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </aside>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style='clear: both'></div>
+                                    <!-- columns -->
+                                </div>
+                                <!-- main -->
+                            </div>
+                        </div>
+                        <div class='main-cap-bottom cap-bottom'>
+                            <div class='cap-left'></div>
+                            <div class='cap-right'></div>
+                        </div>
+                    </div>
+                    <footer>
+                        <div class='footer-outer'>
+                            <div class='footer-cap-top cap-top'>
+                                <div class='cap-left'></div>
+                                <div class='cap-right'></div>
+                            </div>
+                            <div class='fauxborder-left footer-fauxborder-left'>
+                                <div class='fauxborder-right footer-fauxborder-right'></div>
+                                <div class='region-inner footer-inner'>
+                                    <div class='foot no-items section' id='footer-1'></div>
+                                    <table border='0' cellpadding='0' cellspacing='0' class='section-columns columns-2'>
+                                        <tbody>
+                                            <tr>
+                                                <td class='first columns-cell'>
+                                                    <div class='foot no-items section' id='footer-2-1'></div>
+                                                </td>
+                                                <td class='columns-cell'>
+                                                    <div class='foot no-items section' id='footer-2-2'></div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <!-- outside of the include in order to lock Attribution widget -->
+                                    <div class='foot section' id='footer-3'>
+                                        <div class='widget Attribution' data-version='1' id='Attribution1'>
+                                            <div class='widget-content' style='text-align: center;'>
+                                                Copyright (C) 2012-2014 Andrew Zonenberg. Content licensed under CC-BY unless otherwise stated. Simple template. Powered by <a href='https://www.blogger.com' target='_blank'>Blogger</a>.
+                                            </div>
+                                            <div class='clear'></div>
+                                            <span class='widget-item-control'>
+<span class='item-control blog-admin'>
+<a class='quickedit' href='//www.blogger.com/rearrange?blogID=175004091875960054&widgetType=Attribution&widgetId=Attribution1&action=editWidget&sectionId=footer-3' onclick='return _WidgetManager._PopupConfig(document.getElementById("Attribution1"));' target='configAttribution1' title='Edit'>
+<img alt='' height='18' src='https://resources.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+</a>
+</span>
+                                            </span>
+                                            <div class='clear'></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class='footer-cap-bottom cap-bottom'>
+                                <div class='cap-left'></div>
+                                <div class='cap-right'></div>
+                            </div>
+                        </div>
+                    </footer>
+                    <!-- content -->
+                </div>
+            </div>
+            <div class='content-cap-bottom cap-bottom'>
+                <div class='cap-left'></div>
+                <div class='cap-right'></div>
+            </div>
+        </div>
+    </div>
+    <script type='text/javascript'>
+        window.setTimeout(function() {
+            document.body.className = document.body.className.replace('loading', '');
+        }, 10);
+    </script>
+
+    <script type="text/javascript" src="https://www.blogger.com/static/v1/widgets/1235661846-widgets.js"></script>
+    <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+    <script type='text/javascript'>
+        window['__wavt'] = 'AOuZoY793GE-9u9xtXSPHiSY4FyV9plLFQ:1477551217740';
+        _WidgetManager._Init('//www.blogger.com/rearrange?blogID\x3d175004091875960054', '//siliconexposed.blogspot.tw/2016/05/open-verilog-flow-for-silego-greenpak4.html', '175004091875960054');
+        _WidgetManager._SetDataContext([{
+            'name': 'blog',
+            'data': {
+                'blogId': '175004091875960054',
+                'bloggerUrl': 'https://www.blogger.com',
+                'title': 'Silicon Exposed',
+                'pageType': 'item',
+                'postId': '932306423056216142',
+                'url': 'http://siliconexposed.blogspot.tw/2016/05/open-verilog-flow-for-silego-greenpak4.html',
+                'canonicalUrl': 'http://siliconexposed.blogspot.com/2016/05/open-verilog-flow-for-silego-greenpak4.html',
+                'homepageUrl': 'http://siliconexposed.blogspot.tw/',
+                'searchUrl': 'http://siliconexposed.blogspot.tw/search',
+                'canonicalHomepageUrl': 'http://siliconexposed.blogspot.com/',
+                'blogspotFaviconUrl': 'http://siliconexposed.blogspot.tw/favicon.ico',
+                'enabledCommentProfileImages': true,
+                'gPlusViewType': 'FILTERED_POSTMOD',
+                'adultContent': false,
+                'analyticsAccountNumber': '',
+                'useUniversalAnalytics': false,
+                'pageName': 'Open Verilog flow for Silego GreenPak4 programmable logic devices',
+                'pageTitle': 'Silicon Exposed: Open Verilog flow for Silego GreenPak4 programmable logic devices',
+                'encoding': 'UTF-8',
+                'locale': 'en',
+                'localeUnderscoreDelimited': 'en',
+                'isPrivate': false,
+                'isMobile': false,
+                'isMobileRequest': false,
+                'mobileClass': '',
+                'isPrivateBlog': false,
+                'languageDirection': 'ltr',
+                'feedLinks': '\x3clink rel\x3d\x22alternate\x22 type\x3d\x22application/atom+xml\x22 title\x3d\x22Silicon Exposed - Atom\x22 href\x3d\x22http://siliconexposed.blogspot.com/feeds/posts/default\x22 /\x3e\n\x3clink rel\x3d\x22alternate\x22 type\x3d\x22application/rss+xml\x22 title\x3d\x22Silicon Exposed - RSS\x22 href\x3d\x22http://siliconexposed.blogspot.com/feeds/posts/default?alt\x3drss\x22 /\x3e\n\x3clink rel\x3d\x22service.post\x22 type\x3d\x22application/atom+xml\x22 title\x3d\x22Silicon Exposed - Atom\x22 href\x3d\x22https://www.blogger.com/feeds/175004091875960054/posts/default\x22 /\x3e\n\n\x3clink rel\x3d\x22alternate\x22 type\x3d\x22application/atom+xml\x22 title\x3d\x22Silicon Exposed - Atom\x22 href\x3d\x22http://siliconexposed.blogspot.com/feeds/932306423056216142/comments/default\x22 /\x3e\n',
+                'meTag': '',
+                'openIdOpTag': '',
+                'postImageThumbnailUrl': 'https://1.bp.blogspot.com/-YIPC5jkXkDE/Vy7YPSqFKWI/AAAAAAAAAxI/a7D6Ji2GxoUvcrwUkI4RLZcr2LFQEJCTACLcB/s72-c/block-diagram.png',
+                'postImageUrl': 'https://1.bp.blogspot.com/-YIPC5jkXkDE/Vy7YPSqFKWI/AAAAAAAAAxI/a7D6Ji2GxoUvcrwUkI4RLZcr2LFQEJCTACLcB/s640/block-diagram.png',
+                'mobileHeadScript': '',
+                'adsenseHostId': 'ca-host-pub-1556223355139109',
+                'ieCssRetrofitLinks': '\x3c!--[if IE]\x3e\x3cscript type\x3d\x22text/javascript\x22 src\x3d\x22https://www.blogger.com/static/v1/jsbin/3382512426-ieretrofit.js\x22\x3e\x3c/script\x3e\n\x3c![endif]--\x3e',
+                'view': '',
+                'dynamicViewsCommentsSrc': '//www.blogblog.com/dynamicviews/4224c15c4e7c9321/js/comments.js',
+                'dynamicViewsScriptSrc': '//www.blogblog.com/dynamicviews/c258b0f953fb615c',
+                'plusOneApiSrc': 'https://apis.google.com/js/plusone.js',
+                'sharing': {
+                    'platforms': [{
+                        'name': 'Get link',
+                        'key': 'link',
+                        'shareMessage': 'Get link',
+                        'target': ''
+                    }, {
+                        'name': 'Facebook',
+                        'key': 'facebook',
+                        'shareMessage': 'Share to Facebook',
+                        'target': 'facebook'
+                    }, {
+                        'name': 'BlogThis!',
+                        'key': 'blogThis',
+                        'shareMessage': 'BlogThis!',
+                        'target': 'blog'
+                    }, {
+                        'name': 'Twitter',
+                        'key': 'twitter',
+                        'shareMessage': 'Share to Twitter',
+                        'target': 'twitter'
+                    }, {
+                        'name': 'Pinterest',
+                        'key': 'pinterest',
+                        'shareMessage': 'Share to Pinterest',
+                        'target': 'pinterest'
+                    }, {
+                        'name': 'Google+',
+                        'key': 'googlePlus',
+                        'shareMessage': 'Share to Google+',
+                        'target': 'googleplus'
+                    }, {
+                        'name': 'Email',
+                        'key': 'email',
+                        'shareMessage': 'Email',
+                        'target': 'email'
+                    }],
+                    'googlePlusShareButtonWidth': 300,
+                    'googlePlusBootstrap': '\x3cscript type\x3d\x22text/javascript\x22\x3ewindow.___gcfg \x3d {\x27lang\x27: \x27en\x27};\x3c/script\x3e'
+                }
+            }
+        }, {
+            'name': 'features',
+            'data': {
+                'widgetVisibility': true
+            }
+        }, {
+            'name': 'messages',
+            'data': {
+                'linkCopiedToClipboard': 'Link copied to clipboard!',
+                'postLink': 'Post Link'
+            }
+        }, {
+            'name': 'template',
+            'data': {
+                'name': 'Simple',
+                'localizedName': 'Simple',
+                'variant': 'simplysimple',
+                'isResponsive': false,
+                'isAlternateRendering': false,
+                'isCustom': false
+            }
+        }, {
+            'name': 'view',
+            'data': {
+                'classic': {
+                    'name': 'classic',
+                    'url': '?view\x3dclassic'
+                },
+                'flipcard': {
+                    'name': 'flipcard',
+                    'url': '?view\x3dflipcard'
+                },
+                'magazine': {
+                    'name': 'magazine',
+                    'url': '?view\x3dmagazine'
+                },
+                'mosaic': {
+                    'name': 'mosaic',
+                    'url': '?view\x3dmosaic'
+                },
+                'sidebar': {
+                    'name': 'sidebar',
+                    'url': '?view\x3dsidebar'
+                },
+                'snapshot': {
+                    'name': 'snapshot',
+                    'url': '?view\x3dsnapshot'
+                },
+                'timeslide': {
+                    'name': 'timeslide',
+                    'url': '?view\x3dtimeslide'
+                },
+                'isMobile': false,
+                'title': 'Open Verilog flow for Silego GreenPak4 programmable logic devices',
+                'description': 'I\x27ve written a couple of posts in the past few months but they were all for the blog at work  so I figured I\x27m long overdue for one on Silic...',
+                'featuredImage': 'https://1.bp.blogspot.com/-YIPC5jkXkDE/Vy7YPSqFKWI/AAAAAAAAAxI/a7D6Ji2GxoUvcrwUkI4RLZcr2LFQEJCTACLcB/s640/block-diagram.png',
+                'url': 'http://siliconexposed.blogspot.tw/2016/05/open-verilog-flow-for-silego-greenpak4.html',
+                'type': 'item',
+                'isSingleItem': true,
+                'isMultipleItems': false,
+                'isError': false,
+                'isPage': false,
+                'isPost': true,
+                'isHomepage': false,
+                'isArchive': false,
+                'isSearch': false,
+                'postId': 932306423056216142
+            }
+        }]);
+        _WidgetManager._RegisterWidget('_NavbarView', new _WidgetInfo('Navbar1', 'navbar', null, document.getElementById('Navbar1'), {}, 'displayModeFull'));
+        _WidgetManager._RegisterWidget('_HeaderView', new _WidgetInfo('Header1', 'header', null, document.getElementById('Header1'), {}, 'displayModeFull'));
+        _WidgetManager._RegisterWidget('_BlogView', new _WidgetInfo('Blog1', 'main', null, document.getElementById('Blog1'), {
+            'cmtInteractionsEnabled': false,
+            'lightboxEnabled': true,
+            'lightboxModuleUrl': 'https://www.blogger.com/static/v1/jsbin/1515155163-lbx.js',
+            'lightboxCssUrl': 'https://www.blogger.com/static/v1/v-css/368954415-lightbox_bundle.css'
+        }, 'displayModeFull'));
+        _WidgetManager._RegisterWidget('_LinkListView', new _WidgetInfo('LinkList1', 'sidebar-right-1', null, document.getElementById('LinkList1'), {}, 'displayModeFull'));
+        _WidgetManager._RegisterWidget('_BlogArchiveView', new _WidgetInfo('BlogArchive1', 'sidebar-right-1', null, document.getElementById('BlogArchive1'), {
+            'languageDirection': 'ltr',
+            'loadingMessage': 'Loading...'
+        }, 'displayModeFull'));
+        _WidgetManager._RegisterWidget('_LinkListView', new _WidgetInfo('LinkList2', 'sidebar-right-1', null, document.getElementById('LinkList2'), {}, 'displayModeFull'));
+        _WidgetManager._RegisterWidget('_PopularPostsView', new _WidgetInfo('PopularPosts1', 'sidebar-right-1', null, document.getElementById('PopularPosts1'), {}, 'displayModeFull'));
+        _WidgetManager._RegisterWidget('_ProfileView', new _WidgetInfo('Profile1', 'sidebar-right-1', null, document.getElementById('Profile1'), {}, 'displayModeFull'));
+        _WidgetManager._RegisterWidget('_FollowersView', new _WidgetInfo('Followers1', 'sidebar-right-1', null, document.getElementById('Followers1'), {}, 'displayModeFull'));
+        _WidgetManager._RegisterWidget('_AttributionView', new _WidgetInfo('Attribution1', 'footer-3', null, document.getElementById('Attribution1'), {}, 'displayModeFull'));
+    </script>
+</body>
+
+</html>
