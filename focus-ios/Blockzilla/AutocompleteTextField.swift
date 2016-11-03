@@ -48,7 +48,8 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         }
 
         // Do the replacement.
-        textField.text = (textField.text as NSString?)?.replacingCharacters(in: range, with: string)
+        let typedText = (textField.text as NSString?)?.replacingCharacters(in: range, with: string)
+        textField.text = typedText
 
         // Try setting a completion if we're not deleting and we're typing at the end of the text field.
         let endOfNew = range.location + string.characters.count
@@ -61,7 +62,8 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         let position = textField.position(from: textField.beginningOfDocument, offset: endOfNew)!
         textField.selectedTextRange = textField.textRange(from: position, to: position)
 
-        autocompleteDelegate?.autocompleteTextField?(self, didTextChange: textField.text ?? "")
+        // Fire the delegate with the text the user typed (not including the completion).
+        autocompleteDelegate?.autocompleteTextField?(self, didTextChange: typedText ?? "")
 
         // Always return false since we already replaced the range above.
         return false
