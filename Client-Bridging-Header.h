@@ -12,4 +12,6 @@
 
 #import <CrashReporter/CrashReporter.h>
 
+#import "Swrve.h"
+
 #endif

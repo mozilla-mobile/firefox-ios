@@ -153,6 +153,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         adjustIntegration = AdjustIntegration(profile: profile)
 
+        #if DEBUG
+            Swrve.sharedInstanceWithAppID(4308, apiKey: "RrkaG3xLPusmY4QmWuIe", launchOptions: launchOptions)
+        #endif
+
         // We need to check if the app is a clean install to use for
         // preventing the What's New URL from appearing.
         if getProfile(application).prefs.intForKey(IntroViewControllerSeenProfileKey) == nil {

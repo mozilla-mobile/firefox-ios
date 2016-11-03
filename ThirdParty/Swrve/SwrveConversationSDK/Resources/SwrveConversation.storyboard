@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <scenes>
+        <!--Swrve Conversation Item View Controller-->
+        <scene sceneID="CLA-96-pdQ">
+            <objects>
+                <viewController storyboardIdentifier="SwrveConversationItemViewController" automaticallyAdjustsScrollViewInsets="NO" id="JUa-n0-f9x" customClass="SwrveConversationItemViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="eox-xG-cbg"/>
+                        <viewControllerLayoutGuide type="bottom" id="v5R-q4-Ibm"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="cuB-Sw-8Bl">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="R67-6b-lvO">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </imageView>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="bEg-hd-mAK">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="535"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="JUa-n0-f9x" id="alo-LQ-pLG"/>
+                                    <outlet property="delegate" destination="JUa-n0-f9x" id="dFM-QN-fjN"/>
+                                </connections>
+                            </tableView>
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="frZ-g3-zoH">
+                                <rect key="frame" x="15" y="535" width="570" height="65"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wp2-wd-Bai">
+                                <rect key="frame" x="560" y="0.0" width="40" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="40" id="XQ2-cg-ghH">
+                                        <variation key="widthClass=regular" constant="50"/>
+                                        <variation key="heightClass=compact-widthClass=regular" constant="50"/>
+                                    </constraint>
+                                    <constraint firstAttribute="height" constant="40" id="nVk-Sz-dMy">
+                                        <variation key="widthClass=regular" constant="50"/>
+                                        <variation key="heightClass=compact-widthClass=regular" constant="50"/>
+                                    </constraint>
+                                </constraints>
+                                <state key="normal" image="close_button.png"/>
+                                <connections>
+                                    <action selector="cancelButtonTapped:" destination="o1t-9M-S5w" eventType="touchUpInside" id="62h-V0-gfo"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="frZ-g3-zoH" secondAttribute="trailing" constant="5" id="6Vz-iq-ZFZ"/>
+                            <constraint firstItem="frZ-g3-zoH" firstAttribute="leading" secondItem="cuB-Sw-8Bl" secondAttribute="leading" constant="5" id="7TU-y9-Qb5"/>
+                            <constraint firstItem="bEg-hd-mAK" firstAttribute="leading" secondItem="cuB-Sw-8Bl" secondAttribute="leading" id="Bbr-nw-zFy"/>
+                            <constraint firstAttribute="trailing" secondItem="bEg-hd-mAK" secondAttribute="trailing" id="N4D-p5-Jqa"/>
+                            <constraint firstItem="R67-6b-lvO" firstAttribute="leading" secondItem="cuB-Sw-8Bl" secondAttribute="leading" id="PCC-U4-24c"/>
+                            <constraint firstItem="v5R-q4-Ibm" firstAttribute="top" secondItem="frZ-g3-zoH" secondAttribute="bottom" id="Psy-04-7SS"/>
+                            <constraint firstItem="R67-6b-lvO" firstAttribute="top" secondItem="eox-xG-cbg" secondAttribute="bottom" constant="-20" id="SBH-zU-QtT"/>
+                            <constraint firstItem="frZ-g3-zoH" firstAttribute="top" secondItem="bEg-hd-mAK" secondAttribute="bottom" id="UeO-Pi-mUq"/>
+                            <constraint firstItem="v5R-q4-Ibm" firstAttribute="top" secondItem="bEg-hd-mAK" secondAttribute="bottom" constant="65" id="XmE-oJ-8sd"/>
+                            <constraint firstAttribute="trailing" secondItem="Wp2-wd-Bai" secondAttribute="trailing" id="cnS-8F-B25"/>
+                            <constraint firstItem="bEg-hd-mAK" firstAttribute="top" secondItem="cuB-Sw-8Bl" secondAttribute="topMargin" id="hjy-bg-Cjh"/>
+                            <constraint firstItem="Wp2-wd-Bai" firstAttribute="top" secondItem="cuB-Sw-8Bl" secondAttribute="topMargin" id="mvr-Oy-aY2"/>
+                            <constraint firstItem="v5R-q4-Ibm" firstAttribute="top" secondItem="R67-6b-lvO" secondAttribute="bottom" id="qO8-sK-dpq"/>
+                            <constraint firstItem="v5R-q4-Ibm" firstAttribute="top" secondItem="frZ-g3-zoH" secondAttribute="bottom" id="qW8-kx-mOx"/>
+                            <constraint firstAttribute="trailing" secondItem="R67-6b-lvO" secondAttribute="trailing" id="tBn-TO-VK7"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="buttonsView" destination="frZ-g3-zoH" id="b6e-jx-Smu"/>
+                        <outlet property="cancelButtonView" destination="Wp2-wd-Bai" id="NBD-Br-QXE"/>
+                        <outlet property="cancelButtonViewTop" destination="mvr-Oy-aY2" id="czN-hQ-j7U"/>
+                        <outlet property="contentTableView" destination="bEg-hd-mAK" id="6TM-Lh-PgO"/>
+                        <outlet property="contentTableViewTop" destination="hjy-bg-Cjh" id="tSx-Ud-YmP"/>
+                        <outlet property="fullScreenBackgroundImageView" destination="R67-6b-lvO" id="eHY-14-W0V"/>
+                        <outlet property="view" destination="cuB-Sw-8Bl" id="AEl-vr-Clw"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="o1t-9M-S5w" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="204" y="269"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="close_button.png" width="88" height="88"/>
+    </resources>
+</document>
