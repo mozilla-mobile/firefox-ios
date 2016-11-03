@@ -26,11 +26,11 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
         return visualEffectView
     }()
 
-    init(site: Site, actions: [ActionOverlayTableViewAction], headerImage: UIImage?, headerImageBackgroundColor: UIColor?) {
+    init(site: Site, actions: [ActionOverlayTableViewAction], siteImage: UIImage?, siteBGColor: UIColor?) {
         self.site = site
         self.actions = actions
-        self.headerImage = headerImage
-        self.headerImageBackgroundColor = headerImageBackgroundColor
+        self.headerImage = siteImage
+        self.headerImageBackgroundColor = siteBGColor
         super.init(nibName: nil, bundle: nil)
     }
     
