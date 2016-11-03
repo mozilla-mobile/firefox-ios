@@ -362,7 +362,7 @@ public class MockMemoryBookmarksStore: BookmarksModelFactory, ShareToDestination
     public func isBookmarked(url: String) -> Deferred<Maybe<Bool>> {
         return deferMaybe(DatabaseError(description: "Not implemented"))
     }
-    
+
     public func removeByGUID(guid: GUID) -> Success {
         return deferMaybe(DatabaseError(description: "Not implemented"))
     }
