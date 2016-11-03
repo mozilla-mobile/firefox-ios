@@ -820,7 +820,7 @@ public class UnsyncedBookmarksFallbackModelFactory: BookmarksModelFactory {
         // We don't include buffer items in this check, because we can't un-star them!
         return self.localFactory.isBookmarked(url)
     }
-    
+
     public func removeByGUID(guid: GUID) -> Success {
         return self.localFactory.removeByGUID(guid)
     }
