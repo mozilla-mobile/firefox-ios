@@ -93,6 +93,10 @@ class CorePing: TelemetryPing {
             SearchTelemetry.resetCount(profile.prefs)
         }
 
+        if let newTabChoice = self.prefs.stringForKey(NewTabAccessors.PrefKey) {
+            out["defaultNewTabExperience"] = newTabChoice
+        }
+
         payload = JSON(out)
     }
 }
