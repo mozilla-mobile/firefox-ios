@@ -426,7 +426,7 @@ extension ActivityStreamPanel {
 
         var actions = [openInNewTabAction, openInNewPrivateTabAction, bookmarkAction, shareAction]
         switch eventInfo.source {
-            case .highlights: actions.appendContentsOf([dismissHighlightAction,deleteFromHistoryAction])
+            case .highlights: actions.appendContentsOf([dismissHighlightAction, deleteFromHistoryAction])
             case .topSites: actions.append(removeTopSiteAction)
             default: break
         }
