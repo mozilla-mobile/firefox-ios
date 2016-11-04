@@ -21,7 +21,7 @@ class ActivityStreamTest: BaseTestCase {
         XCTAssertEqual(numberOfTopSites, 5, "There should be a total of 5 default Top Sites.")
     }
 
-    func testTopSitesAdd() {
+    func testActivityStreamAdd() {
         let app = XCUIApplication()
         let topSites = app.tables["Top sites"].cells["TopSitesCell"]
         let numberOfTopSites = topSites.childrenMatchingType(.Other).matchingIdentifier("TopSite").count
@@ -33,7 +33,7 @@ class ActivityStreamTest: BaseTestCase {
         XCTAssertTrue(sitesAfter == numberOfTopSites + 1, "A new site should have been added to the topSites")
     }
 
-    func testTopSitesRemove() {
+    func testActivityStreamDelete() {
         let app = XCUIApplication()
         let topSites = app.tables["Top sites"].cells["TopSitesCell"]
         let numberOfTopSites = topSites.childrenMatchingType(.Other).matchingIdentifier("TopSite").count
@@ -45,49 +45,9 @@ class ActivityStreamTest: BaseTestCase {
         XCTAssertTrue(sitesAfter == numberOfTopSites + 1, "A new site should have been added to the topSites")
 
         app.tables["Top sites"].otherElements["example"].pressForDuration(1) //example is the name of the domain. (example.com)
-        app.tables["Context Menu"].cells["Remove"].tap()
-        
+        app.sheets.elementBoundByIndex(0).buttons["Delete"].tap()
         let sitesAfterDelete = topSites.childrenMatchingType(.Other).matchingIdentifier("TopSite").count
         XCTAssertTrue(sitesAfterDelete == numberOfTopSites, "A site should have been deleted to the topSites")
-    }
-
-    func testTopSitesOpenInNewTab() {
-        let app = XCUIApplication()
-
-        loadWebPage("http://example.com")
-        app.buttons["TabToolbar.backButton"].tap()
-
-        app.tables["Top sites"].otherElements["example"].pressForDuration(1)
-        app.tables["Context Menu"].cells["Open in New Tab"].tap()
-        
-        XCTAssert(app.tables["Top sites"].exists)
-        XCTAssertFalse(app.staticTexts["Example Domain"].exists)
-        
-        app.buttons["URLBarView.tabsButton"].tap()
-        app.cells["Example Domain"].tap()
-        
-        XCTAssertFalse(app.tables["Top sites"].exists)
-        XCTAssert(app.staticTexts["Example Domain"].exists)
-    }
-
-    func testTopSitesOpenInNewPrivateTab() {
-        let app = XCUIApplication()
-        
-        loadWebPage("http://example.com")
-        app.buttons["TabToolbar.backButton"].tap()
-        
-        app.tables["Top sites"].otherElements["example"].pressForDuration(1)
-        app.tables["Context Menu"].cells["Open in New Private Tab"].tap()
-        
-        XCTAssert(app.tables["Top sites"].exists)
-        XCTAssertFalse(app.staticTexts["Example Domain"].exists)
-        
-        app.buttons["URLBarView.tabsButton"].tap()
-        app.buttons["TabTrayController.maskButton"].tap()
-        app.cells["Example Domain"].tap()
-        
-        XCTAssertFalse(app.tables["Top sites"].exists)
-        XCTAssert(app.staticTexts["Example Domain"].exists)
     }
 
     func testActivityStreamPages() {
@@ -110,7 +70,7 @@ class ActivityStreamTest: BaseTestCase {
         sleep(2)
 
         app.tables["Top sites"].otherElements["example"].pressForDuration(1)
-        app.tables["Context Menu"].cells["Remove"].tap()
+        app.sheets.elementBoundByIndex(0).buttons["Delete"].tap()
         XCTAssertFalse(pagecontrolButton.exists, "The Page Control button should disappear after an item is deleted.")
 
     }

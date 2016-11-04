@@ -14,7 +14,6 @@ struct SimpleHighlightCellUX {
     static let TitleLabelOffset = 10
     static let CellTopBottomOffset = 12
     static let SiteImageViewSize = 48
-    static let IconSize = CGSize(width: 32, height: 32)
     static let StatusIconSize = 12
     static let DescriptionLabelColor = UIColor(colorString: "919191")
     static let TimestampColor = UIColor(colorString: "D4D4D4")
@@ -53,7 +52,7 @@ class SimpleHighlightCell: UITableViewCell {
         return timeStamp
     }()
 
-    lazy var siteImageView: UIImageView = {
+    private lazy var siteImageView: UIImageView = {
         let siteImageView = UIImageView()
         siteImageView.contentMode = UIViewContentMode.ScaleAspectFit
         siteImageView.clipsToBounds = true
@@ -146,7 +145,7 @@ class SimpleHighlightCell: UITableViewCell {
                 return
             }
             // Resize an Image to a specfic size to make sure that it doesnt appear bigger than it needs to (32px) inside a larger frame (48px).
-            self.siteImageView.image = img.createScaled(SimpleHighlightCellUX.IconSize)
+            self.siteImageView.image = img.createScaled(CGSize(width: 32, height: 32))
             self.siteImageView.image?.getColors(CGSizeMake(25, 25)) { colors in
                 self.siteImageView.backgroundColor = colors.backgroundColor ?? UIColor.lightGrayColor()
             }

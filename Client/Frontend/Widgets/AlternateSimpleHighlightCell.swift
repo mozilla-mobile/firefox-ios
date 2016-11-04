@@ -58,7 +58,7 @@ class AlternateSimpleHighlightCell: UITableViewCell {
         return timeStamp
     }()
 
-    lazy var siteImageView: UIImageView = {
+    private lazy var siteImageView: UIImageView = {
         let siteImageView = UIImageView()
         siteImageView.contentMode = UIViewContentMode.ScaleAspectFit
         siteImageView.clipsToBounds = true
@@ -193,20 +193,5 @@ class AlternateSimpleHighlightCell: UITableViewCell {
         if let date = site.latestVisit?.date {
             self.timeStamp.text = NSDate.fromMicrosecondTimestamp(date).toRelativeTimeString()
         }
-    }
-}
-
-// Save background color on UITableViewCell "select" because it disappears in the default behavior
-extension AlternateSimpleHighlightCell {
-    override func setHighlighted(highlighted: Bool, animated: Bool) {
-        let color = self.siteImageView.backgroundColor
-        super.setHighlighted(highlighted, animated: animated)
-        self.siteImageView.backgroundColor = color
-    }
-
-    override func setSelected(selected: Bool, animated: Bool) {
-        let color = self.siteImageView.backgroundColor
-        super.setSelected(selected, animated: animated)
-        self.siteImageView.backgroundColor = color
     }
 }

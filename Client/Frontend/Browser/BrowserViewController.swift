@@ -1974,10 +1974,6 @@ extension BrowserViewController: HomePanelViewControllerDelegate {
     func homePanelViewControllerDidRequestToSignIn(homePanelViewController: HomePanelViewController) {
         presentSignInViewController() // TODO UX Right now the flow for sign in and create account is the same
     }
-    
-    func homePanelViewControllerDidRequestToOpenInNewTab(url: NSURL, isPrivate: Bool) {
-        self.tabManager.addTab(NSURLRequest(URL: url), afterTab: self.tabManager.selectedTab, isPrivate: isPrivate)
-    }
 }
 
 extension BrowserViewController: SearchViewControllerDelegate {

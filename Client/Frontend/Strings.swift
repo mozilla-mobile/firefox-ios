@@ -38,16 +38,10 @@ extension Strings {
 
 // Activity Stream.
 extension Strings {
-    public static let ASPageControlButton = NSLocalizedString("ActivityStream.PageControl.Button", value: "Next Page", comment: "The page control button that lets you switch between pages in top sites")
-    public static let ASHighlightsTitle =  NSLocalizedString("ActivityStream.Highlights.SectionTitle", value: "Highlights", comment: "Section title label for Highlights")
-
-    public static let OpenInNewTabContextMenuTitle = NSLocalizedString("ActivityStream.ContextMenu.OpenInNewTab", value: "Open in New Tab", comment: "The title for the Open in New Tab context menu action for Activity Stream")
-    public static let OpenInNewPrivateTabContextMenuTitle = NSLocalizedString("ActivityStream.ContextMenu.OpenInNewPrivateTab", value: "Open in New Private Tab", comment: "The title for the Open in New Private Tab context menu action for Activity Stream")
-    public static let BookmarkContextMenuTitle = NSLocalizedString("ActivityStream.ContextMenu.Bookmark", value: "Bookmark", comment: "The title for the Bookmark context menu action for Activity Stream")
-    public static let DeleteFromHistoryContextMenuTitle = NSLocalizedString("ActivityStream.ContextMenu.DeleteFromHistory", value: "Delete from History", comment: "The title for the Delete from History context menu action for Activity Stream")
-    public static let ShareContextMenuTitle = NSLocalizedString("ActivityStream.ContextMenu.Share", value: "Share", comment: "The title for the Share context menu action for Activity Stream")
-    public static let RemoveTopSiteContextMenuTitle = NSLocalizedString("ActivityStream.ContextMenu.Remove", value: "Remove", comment: "The title for the Remove Top-Site context menu action for Activity Stream")
-    public static let DismissHighlightContextMenuTitle = NSLocalizedString("ActivityStream.ContextMenu.Dismiss", value: "Dismiss", comment: "The title for the Dismiss Highlight context menu action for Activity Stream")
+    public static let ASPageControlButton = NSLocalizedString("AS.PageControl.Button", value: "Next Page", comment: "The page control button that lets you switch between pages in top sites")
+    public static let ASRemoveButton = NSLocalizedString("AS.Delete.Button", value: "Delete", comment: "Button shown in editing mode to remove this site from the top sites panel.")
+    public static let ASCancelButton = NSLocalizedString("AS.Cancel.Button", value: "Cancel", comment: "Button shown to cancel editing of top site.")
+    public static let ASHighlightsTitle =  NSLocalizedString("AS.Highlights.SectionTitle", value: "Highlights", comment: "Section title label for Highlights")
 }
 
 // Settings.
@@ -231,6 +225,15 @@ extension Strings {
     public static let OpenInDownloadHelperAlertMessage = NSLocalizedString("Downloads.Alert.Message", value: "Firefox is unable to download or display this file. Would you like to open it in another app?", comment: "The message of the alert box asking the user if they want to use another app to open a file.")
     public static let OpenInDownloadHelperAlertConfirm = NSLocalizedString("Downloads.Alert.Confirm", value: "Yes", comment: "The label of the button the user will press to be presented with a list of other apps to open a file in")
     public static let OpenInDownloadHelperAlertCancel = NSLocalizedString("Downloads.Alert.Cancel", value: "No", comment: "The label of the button the user will press to reject the option to open a file in another application")
+}
+
+// Activity Stream
+extension Strings {
+    public static let BookmarkContextMenuTitle = NSLocalizedString("ActivityStream.ContextMenu.Bookmark", value: "Bookmark", comment: "The title for the Bookmark context menu action for Activity Stream")
+    public static let DeleteFromHistoryContextMenuTitle = NSLocalizedString("ActivityStream.ContextMenu.DeleteFromHistory", value: "Delete from History", comment: "The title for the Delete from History context menu action for Activity Stream")
+    public static let ShareContextMenuTitle = NSLocalizedString("ActivityStream.ContextMenu.Share", value: "Share", comment: "The title for the Share context menu action for Activity Stream")
+    public static let RemoveBookmarkContextMenuTitle = NSLocalizedString("ActivityStream.ContextMenu.RemoveBookmark", value: "Remove Bookmark", comment: "The title for the Remove Bookmark context menu action for Activity Stream")
+    public static let DismissContextMenuTitle = NSLocalizedString("ActivityStream.ContextMenu.Dismiss", value: "Dismiss", comment: "The title for the Dismiss context menu action for Activity Stream")
 }
 
 // MARK: Deprecated Strings (to be removed in next version)

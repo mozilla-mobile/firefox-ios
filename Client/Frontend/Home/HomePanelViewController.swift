@@ -24,7 +24,6 @@ protocol HomePanelViewControllerDelegate: class {
     func homePanelViewController(HomePanelViewController: HomePanelViewController, didSelectPanel panel: Int)
     func homePanelViewControllerDidRequestToSignIn(homePanelViewController: HomePanelViewController)
     func homePanelViewControllerDidRequestToCreateAccount(homePanelViewController: HomePanelViewController)
-    func homePanelViewControllerDidRequestToOpenInNewTab(url: NSURL, isPrivate: Bool)
 }
 
 @objc
@@ -41,7 +40,6 @@ struct HomePanelUX {
 protocol HomePanelDelegate: class {
     func homePanelDidRequestToSignIn(homePanel: HomePanel)
     func homePanelDidRequestToCreateAccount(homePanel: HomePanel)
-    func homePanelDidRequestToOpenInNewTab(url: NSURL, isPrivate: Bool)
     func homePanel(homePanel: HomePanel, didSelectURL url: NSURL, visitType: VisitType)
     func homePanel(homePanel: HomePanel, didSelectURLString url: String, visitType: VisitType)
     optional func homePanelWillEnterEditingMode(homePanel: HomePanel)
@@ -309,10 +307,6 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 
     func homePanelDidRequestToSignIn(homePanel: HomePanel) {
         delegate?.homePanelViewControllerDidRequestToSignIn(self)
-    }
-    
-    func homePanelDidRequestToOpenInNewTab(url: NSURL, isPrivate: Bool) {
-        delegate?.homePanelViewControllerDidRequestToOpenInNewTab(url, isPrivate: isPrivate)
     }
 
     func homePanelWillEnterEditingMode(homePanel: HomePanel) {
