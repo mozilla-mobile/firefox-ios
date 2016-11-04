@@ -8,5 +8,18 @@ class WebCacheUtils {
     static func reset() {
         URLCache.shared.removeAllCachedResponses()
         HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
+
+        if let cachesPath = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first {
+            if let cacheFiles = try? FileManager.default.contentsOfDirectory(atPath: cachesPath) {
+                for file in cacheFiles where file != "Snapshots" {
+                    let path = (cachesPath as NSString).appendingPathComponent(file)
+                    do {
+                        try FileManager.default.removeItem(atPath: path)
+                    } catch {
+                        NSLog("Found \(path) but was unable to remove it: \(error)")
+                    }
+                }
+            }
+        }
     }
 }
