@@ -117,8 +117,8 @@ private class BlockList {
 
     init(lists: [String]) {
         for filename in lists {
-            let path = Bundle.main.path(forResource: filename, ofType: "json")
-            let json = try? Data(contentsOf: URL(fileURLWithPath: path!))
+            let path = pathForResource(filename)
+            let json = try? Data(contentsOf: URL(fileURLWithPath: path))
             let list = try! JSONSerialization.jsonObject(with: json!, options: []) as! [[String: AnyObject]]
             for rule in list {
                 let trigger = rule["trigger"] as! [String: AnyObject]
@@ -146,6 +146,16 @@ private class BlockList {
                 blockRules.append(BlockRule(regex: filterRegex, loadType: loadType, resourceType: resourceType, domainExceptions: domainExceptions))
             }
         }
+    }
+
+    private func pathForResource(_ resource: String) -> String {
+        var path: String!
+
+        DispatchQueue.main.sync {
+            path = Bundle.main.path(forResource: resource, ofType: "json")
+        }
+
+        return path
     }
 
     func isBlocked(_ request: URLRequest) -> Bool {

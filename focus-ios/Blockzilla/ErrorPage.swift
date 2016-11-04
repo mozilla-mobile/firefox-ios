@@ -11,8 +11,17 @@ class ErrorPage {
         self.error = error as NSError
     }
 
+    lazy var file: String = {
+        var file: String!
+
+        DispatchQueue.main.sync {
+            file = Bundle.main.path(forResource: "errorPage", ofType: "html")!
+        }
+
+        return file
+    }()
+
     var data: Data {
-        let file = Bundle.main.path(forResource: "errorPage", ofType: "html")!
         let page = try! String(contentsOfFile: file)
             .replacingOccurrences(of: "%messageLong%", with: error.localizedDescription)
             .replacingOccurrences(of: "%messageShort%", with: error.domain)
