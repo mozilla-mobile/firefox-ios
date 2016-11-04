@@ -60,7 +60,7 @@ class PagingMenuItemCollectionViewLayout: UICollectionViewLayout {
                     x += cellSize.width + self.interitemSpacing
                 } else {
                     cellIndex = 0
-                    x = self.interitemSpacing
+                    x = (pageWidth * CGFloat(pageIndex)) + self.interitemSpacing
                     y += cellSize.height + self.lineSpacing
                 }
             }
