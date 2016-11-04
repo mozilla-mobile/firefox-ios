@@ -107,7 +107,7 @@ private let log = Logger.syncLogger
  * We rely on SQLiteHistory having initialized the favicon table first.
  */
 public class BrowserTable: Table {
-    static let DefaultVersion = 19    // Bug 1303734.
+    static let DefaultVersion = 20    // Bug 1253656.
 
     // TableInfo fields.
     var name: String { return "BROWSER" }
@@ -823,6 +823,14 @@ public class BrowserTable: Table {
                 // Adds tables/indicies for metadata content
                 pageMetadataCreate,
                 indexPageMetadataCreate]) {
+                return false
+            }
+        }
+
+        if from < 20 && to >= 20 {
+            if !self.run(db, queries: [
+                "DROP VIEW IF EXISTS \(ViewBookmarksBufferOnMirror)",
+                self.bufferBookmarksView]) {
                 return false
             }
         }
