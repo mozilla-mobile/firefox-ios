@@ -1,0 +1,5 @@
+<SearchOverlay>
+  <replace target="//search:Param[@name='client' and @value='ff_android']">
+    <Param name="client" value="ff_ios"/>
+  </replace>
+</SearchOverlay>

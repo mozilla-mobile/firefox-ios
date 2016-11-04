@@ -187,12 +187,6 @@ class BrowserViewController: UIViewController {
         }
 
         browser.loadRequest(URLRequest(url: url))
-
-        if searchEngine.isSearchURL(url: url) {
-            AdjustIntegration.track(eventName: .search)
-        } else {
-            AdjustIntegration.track(eventName: .browse)
-        }
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -213,13 +207,23 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBar(_ urlBar: URLBar, didSubmitText text: String) {
         let text = text.trimmingCharacters(in: .whitespaces)
-        if !text.isEmpty, let url = URIFixup.getURL(entry: text) ?? searchEngine.urlForQuery(text) {
-            submit(url: url)
-            urlBar.url = url
-            urlBar.dismiss()
-        } else {
+
+        guard !text.isEmpty else {
             urlBar.url = browser.url
+            return
         }
+
+        var url = URIFixup.getURL(entry: text)
+        if url == nil {
+            AdjustIntegration.track(eventName: .search)
+            url = searchEngine.urlForQuery(text)
+        } else {
+            AdjustIntegration.track(eventName: .browse)
+        }
+
+        submit(url: url!)
+        urlBar.url = url
+        urlBar.dismiss()
     }
 
     func urlBarDidDismiss(_ urlBar: URLBar) {
@@ -348,8 +352,10 @@ extension BrowserViewController: OverlayViewDelegate {
 
     func overlayView(_ overlayView: OverlayView, didSearchForQuery query: String) {
         if let url = searchEngine.urlForQuery(query) {
+            AdjustIntegration.track(eventName: .search)
             submit(url: url)
         }
+
         urlBar.dismiss()
     }
 }

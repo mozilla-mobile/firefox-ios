@@ -1,0 +1,11 @@
+<SearchOverlay>
+  <replace target="//search:Param[@name='from' and @value='1000969a']">
+    <Param name="from" value="1000969b"/>
+  </replace>
+  <replace target="//search:Url[@type='application/x-moz-tabletsearch']">
+    <Url type="application/x-moz-tabletsearch" method="GET" template="https://m.baidu.com/s">
+      <Param name="from" value="1000969b"/>
+      <Param name="word" value="{searchTerms}"/>
+    </Url>
+  </replace>
+</SearchOverlay>

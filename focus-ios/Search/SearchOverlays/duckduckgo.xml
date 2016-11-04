@@ -1,0 +1,8 @@
+<SearchOverlay>
+  <replace target="//search:Param[@name='t' and @value='fpas']">
+    <Param name="t" value="ffip"/>
+  </replace>
+  <replace target="//search:Param[@name='t' and @value='ftas']">
+    <Param name="t" value="ffit"/>
+  </replace>
+</SearchOverlay>

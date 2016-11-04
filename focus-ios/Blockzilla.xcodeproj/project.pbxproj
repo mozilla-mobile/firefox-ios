@@ -56,6 +56,7 @@
 		D3BFCB3F1BD14F5900AD22D1 /* LocalWebServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BFCB3E1BD14F5900AD22D1 /* LocalWebServer.swift */; };
 		D3BFCB511BD1559300AD22D1 /* AboutContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BFCB501BD1559300AD22D1 /* AboutContentViewController.swift */; };
 		D3BFCB5B1BD15CD000AD22D1 /* rights-Klar.html in Resources */ = {isa = PBXBuildFile; fileRef = D3BFCB5A1BD15CD000AD22D1 /* rights-Klar.html */; };
+		D3C047BD1DCBD8ED00402FFB /* SearchEngines.plist in Resources */ = {isa = PBXBuildFile; fileRef = D3C047BC1DCBD8ED00402FFB /* SearchEngines.plist */; };
 		D3DA77851DC2C307009C114E /* ErrorPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3DA77841DC2C307009C114E /* ErrorPage.swift */; };
 		D3DA778C1DC2C60E009C114E /* errorPage.html in Resources */ = {isa = PBXBuildFile; fileRef = D3DA778B1DC2C60E009C114E /* errorPage.html */; };
 		D3E251EA1DAD714C005918DC /* InstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E251E71DAD714C005918DC /* InstructionsView.swift */; };
@@ -178,6 +179,7 @@
 		D3BFCB3E1BD14F5900AD22D1 /* LocalWebServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalWebServer.swift; sourceTree = "<group>"; };
 		D3BFCB501BD1559300AD22D1 /* AboutContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutContentViewController.swift; sourceTree = "<group>"; };
 		D3BFCB5A1BD15CD000AD22D1 /* rights-Klar.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "rights-Klar.html"; sourceTree = "<group>"; };
+		D3C047BC1DCBD8ED00402FFB /* SearchEngines.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = SearchEngines.plist; path = Search/SearchEngines.plist; sourceTree = SOURCE_ROOT; };
 		D3DA77841DC2C307009C114E /* ErrorPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorPage.swift; sourceTree = "<group>"; };
 		D3DA778B1DC2C60E009C114E /* errorPage.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = errorPage.html; sourceTree = "<group>"; };
 		D3E251E71DAD714C005918DC /* InstructionsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstructionsView.swift; sourceTree = "<group>"; };
@@ -204,7 +206,7 @@
 		E47F9AE91DB9329D00A93285 /* Adjust-Focus.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Adjust-Focus.plist"; sourceTree = "<group>"; };
 		E47F9AEB1DB9333200A93285 /* Adjust-Klar.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Adjust-Klar.plist"; sourceTree = "<group>"; };
 		E47F9AED1DB9338600A93285 /* AdjustIntegration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdjustIntegration.swift; sourceTree = "<group>"; };
-		E4BF2DD31BACE8CA00DA9D68 /* Klar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Klar.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4BF2DD31BACE8CA00DA9D68 /* Klar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = Klar.app; path = "Firefox Klar.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4BF2DD61BACE8CA00DA9D68 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E4BF2DDD1BACE8CA00DA9D68 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E4BF2DE21BACE8CA00DA9D68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -353,6 +355,7 @@
 				E47F9AE91DB9329D00A93285 /* Adjust-Focus.plist */,
 				E47F9AEB1DB9333200A93285 /* Adjust-Klar.plist */,
 				E4BF2DE21BACE8CA00DA9D68 /* Info.plist */,
+				D3C047BC1DCBD8ED00402FFB /* SearchEngines.plist */,
 				D38EDB971DCA8CBD00E28196 /* splash.png */,
 				D38EDB951DCA8A9400E28196 /* LaunchScreen.storyboard */,
 				D3BFCB501BD1559300AD22D1 /* AboutContentViewController.swift */,
@@ -512,6 +515,7 @@
 				D3B3232E1BD16A0F00B0EEE4 /* licenses.html in Resources */,
 				E4BF2DDE1BACE8CA00DA9D68 /* Assets.xcassets in Resources */,
 				6616A36F1BD17EFA00C7E493 /* style.css in Resources */,
+				D3C047BD1DCBD8ED00402FFB /* SearchEngines.plist in Resources */,
 				D3E2C8FE1D9F17AC00DEBE3D /* disconnect-social.json in Resources */,
 				D3B3232D1BD16A0F00B0EEE4 /* gpl.html in Resources */,
 				D3DA778C1DC2C60E009C114E /* errorPage.html in Resources */,

@@ -5,19 +5,25 @@
 import Foundation
 
 class SearchEngine {
-    private let template = "https://search.yahoo.com/yhs/search?ei=UTF-8&hspart=mozilla&hsimp=yhsm-002&p=%s&type=ios"
+    private lazy var template: String = {
+        let enginesPath = Bundle.main.path(forResource: "SearchEngines", ofType: "plist")!
+        let engines = NSDictionary(contentsOfFile: enginesPath) as! [String: String]
+
+        var components = Locale.preferredLanguages.first!.components(separatedBy: "-")
+        if components.count == 3 {
+            components.remove(at: 1)
+        }
+
+        return engines[components.joined(separator: "-")] ?? engines[components[0]] ?? engines["default"]!
+    }()
 
     func urlForQuery(_ query: String) -> URL? {
         guard let escaped = query.addingPercentEncoding(withAllowedCharacters: .urlQueryParameterAllowed),
-              let url = URL(string: template.replacingOccurrences(of: "%s", with: escaped)) else {
+              let url = URL(string: template.replacingOccurrences(of: "{searchTerms}", with: escaped)) else {
             assertionFailure("Invalid search URL")
             return nil
         }
 
         return url
-    }
-
-    func isSearchURL(url: URL) -> Bool {
-        return url.host == "search.yahoo.com"
     }
 }

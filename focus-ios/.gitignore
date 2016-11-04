@@ -27,5 +27,8 @@ DerivedData
 # IDEA
 .idea
 
+# Python
+*.pyc
+
 Lists/disconnect-*
 Carthage
