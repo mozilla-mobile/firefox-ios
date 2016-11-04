@@ -153,10 +153,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         adjustIntegration = AdjustIntegration(profile: profile)
 
-        #if DEBUG
-            Swrve.sharedInstanceWithAppID(4308, apiKey: "RrkaG3xLPusmY4QmWuIe", launchOptions: launchOptions)
-        #endif
-
         // We need to check if the app is a clean install to use for
         // preventing the What's New URL from appearing.
         if getProfile(application).prefs.intForKey(IntroViewControllerSeenProfileKey) == nil {
@@ -221,7 +217,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         log.debug("Setting up Adjust")
         self.adjustIntegration?.triggerApplicationDidFinishLaunchingWithOptions(launchOptions)
-        
+
+        log.debug("Setting up Swrve")
+        Swrve.sharedInstanceWithAppID(4308, apiKey: "RrkaG3xLPusmY4QmWuIe", launchOptions: launchOptions)
+
+        Swrve.sharedInstance().event("hello.world.event")
+
         log.debug("Making window key and visible…")
         self.window!.makeKeyAndVisible()
 
