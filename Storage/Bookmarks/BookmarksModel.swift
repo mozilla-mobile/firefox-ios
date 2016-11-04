@@ -62,6 +62,10 @@ public class BookmarkFolder: BookmarkNode {
     override public var canDelete: Bool {
         return false
     }
+
+    public func removeItemWithGUID(guid: GUID) -> BookmarkFolder {
+        return self
+    }
 }
 
 /**
@@ -103,6 +107,14 @@ public class BookmarksModel: BookmarksModelFactorySource {
      */
     public func selectRoot() -> Deferred<Maybe<BookmarksModel>> {
         return self.factory.modelForRoot()
+    }
+
+    /**
+     * Produce a new model with a memory-backed root with the given GUID removed from the current folder
+     */
+    public func removeGUIDFromCurrent(guid: GUID) -> BookmarksModel {
+        let memoryBackedFolder = MemoryBookmarkFolder.fromBookmarkFolder(self.current)
+        return BookmarksModel(modelFactory: self.factory, root: memoryBackedFolder.removeItemWithGUID(guid))
     }
 
     /**
@@ -206,6 +218,29 @@ public class MemoryBookmarkFolder: BookmarkFolder, SequenceType {
             return self
         }
         return MemoryBookmarkFolder(guid: self.guid, title: self.title, children: self.children + items)
+    }
+
+    /**
+     * Returns a new immutable folder with the given GUID removed
+     */
+    override public func removeItemWithGUID(guid: GUID) -> MemoryBookmarkFolder {
+        var mutableChildren = children
+        if let foundIndex = self.children.indexOf({ $0.guid == guid }) {
+            mutableChildren.removeAtIndex(foundIndex)
+        }
+        return MemoryBookmarkFolder(guid: self.guid, title: self.title, children: mutableChildren)
+    }
+}
+
+private extension MemoryBookmarkFolder {
+    static func fromBookmarkFolder(folder: BookmarkFolder) -> MemoryBookmarkFolder {
+        var children = [BookmarkNode]()
+        for childIndex in 0..<folder.count {
+            if let child = folder[childIndex] {
+                children.append(child)
+            }
+        }
+        return MemoryBookmarkFolder(guid: folder.guid, title: folder.title, children: children)
     }
 }
 
