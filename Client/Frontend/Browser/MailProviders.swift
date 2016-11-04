@@ -42,7 +42,7 @@ private func constructEmailURLString(beginningURLString: String, metadata: MailT
     return finalURLString
 }
 
-class ReaddleSparkIntegration: MailProvider {
+class ReaddleSparkIntegration : MailProvider {
     var beginningScheme = "readdle-spark://compose?"
     var supportedHeaders = [
         "subject",
@@ -58,7 +58,7 @@ class ReaddleSparkIntegration: MailProvider {
     }
 }
 
-class AirmailIntegration: MailProvider {
+class AirmailIntegration : MailProvider {
     var beginningScheme = "airmail://compose?"
     var supportedHeaders = [
         "subject",
@@ -75,7 +75,7 @@ class AirmailIntegration: MailProvider {
     }
 }
 
-class MyMailIntegration: MailProvider {
+class MyMailIntegration : MailProvider {
     var beginningScheme = "mymail-mailto://?"
     var supportedHeaders = [
         "to",
@@ -90,14 +90,14 @@ class MyMailIntegration: MailProvider {
     }
 }
 
-class MailRuIntegration: MyMailIntegration {
+class MailRuIntegration : MyMailIntegration {
     override init() {
         super.init()
         self.beginningScheme = "mailru-mailto://?"
     }
 }
 
-class MSOutlookIntegration: MailProvider {
+class MSOutlookIntegration : MailProvider {
     var beginningScheme = "ms-outlook://emails/new?"
     var supportedHeaders = [
         "to",

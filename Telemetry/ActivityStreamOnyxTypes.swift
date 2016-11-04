@@ -30,11 +30,6 @@ enum ASSourceField: String {
     case activityFeed = "ACTIVITY_FEED"
 }
 
-struct ASInfo {
-    let actionPosition: Int
-    let source: ASSourceField
-}
-
 /// A simple struct that exposes some builder functions strong typing some of the ping fields.
 struct ASOnyxPing {
     /// Builds an Onyx ping with strong types for Activity Stream values for events.
@@ -47,7 +42,8 @@ struct ASOnyxPing {
     /// - parameter provider:       (optional) Indicates share provider if applicable
     ///
     /// - returns: Onyx event ping for Activity Stream events
-    static func buildEventPing(event: ASEventField, page: ASPageField, source: ASSourceField, actionPosition: Int, provider: String? = nil) -> EventPing {
+    static func buildEventPing(event: ASEventField, page: ASPageField, source: ASSourceField,
+                                       actionPosition: Int, provider: String? = nil) -> EventPing {
         return EventPing(event: event.rawValue, page: page.rawValue, source: source.rawValue,
                          actionPosition: actionPosition, locale: NSLocale.currentLocale(),
                          action: "activity_stream_event", provider: provider)
@@ -73,18 +69,21 @@ struct ASOnyxPing {
 
 // MARK: Ping Helpers
 extension ASOnyxPing {
-    static func reportTapEvent(asEvent: ASInfo) {
-        let eventPing = ASOnyxPing.buildEventPing(.click, page: .newTab, source: asEvent.source, actionPosition: asEvent.actionPosition)
+    static func reportTapEvent(actionPosition actionPosition: Int, source: ASSourceField) {
+        let eventPing = ASOnyxPing.buildEventPing(.click, page: .newTab, source: source,
+                                                  actionPosition: actionPosition)
         OnyxTelemetry.sharedClient.sendEventPing(eventPing, toEndpoint: .activityStream)
     }
 
-    static func reportShareEvent(asEvent: ASInfo, shareProvider: String?) {
-        let eventPing = ASOnyxPing.buildEventPing(.share, page: .newTab, source: asEvent.source, actionPosition: asEvent.actionPosition, provider: shareProvider)
+    static func reportShareEvent(actionPosition actionPosition: Int, source: ASSourceField, shareProvider: String?) {
+        let eventPing = ASOnyxPing.buildEventPing(.share, page: .newTab, source: source,
+            actionPosition: actionPosition, provider: shareProvider)
         OnyxTelemetry.sharedClient.sendEventPing(eventPing, toEndpoint: .activityStream)
     }
 
-    static func reportDeleteItemEvent(asEvent: ASInfo) {
-        let eventPing = ASOnyxPing.buildEventPing(.delete, page: .newTab, source: asEvent.source, actionPosition: asEvent.actionPosition)
+    static func reportDeleteItemEvent(actionPosition actionPosition: Int, source: ASSourceField) {
+        let eventPing = ASOnyxPing.buildEventPing(.delete, page: .newTab, source: source,
+                                                  actionPosition: actionPosition)
         OnyxTelemetry.sharedClient.sendEventPing(eventPing, toEndpoint: .activityStream)
     }
 }
