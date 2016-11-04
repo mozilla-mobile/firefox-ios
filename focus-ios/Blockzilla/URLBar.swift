@@ -157,7 +157,7 @@ class URLBar: UIView {
 
         textAndLockContainer.snp.makeConstraints { make in
             make.top.bottom.equalTo(urlTextContainer)
-            make.leading.greaterThanOrEqualTo(urlTextContainer)
+            make.leading.greaterThanOrEqualTo(urlTextContainer).priority(999)
             make.trailing.lessThanOrEqualTo(urlTextContainer)
 
             centeredURLConstraint = make.centerX.equalTo(self).constraint
