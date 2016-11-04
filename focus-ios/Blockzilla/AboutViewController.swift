@@ -9,6 +9,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
     fileprivate let tableView = UITableView()
     fileprivate let headerView = AboutHeaderView()
     fileprivate let supportPath = AppInfo.isFocus ? "en-US/kb/focus" : "products/klar"
+    fileprivate let rightsFile = AppInfo.isFocus ? "rights-focus.html" : "rights-klar.html"
 
     override func viewDidLoad() {
         view.backgroundColor = UIConstants.colors.background
@@ -94,7 +95,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
             navigationController?.pushViewController(contentViewController, animated: true)
         case 2:
             let contentViewController = AboutContentViewController()
-            contentViewController.url = LocalWebServer.sharedInstance.URLForPath("/rights-\(AppInfo.ProductName).html")
+            contentViewController.url = LocalWebServer.sharedInstance.URLForPath("/\(rightsFile)")
             navigationController?.pushViewController(contentViewController, animated: true)
         default: break
         }

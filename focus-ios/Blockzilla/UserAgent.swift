@@ -46,7 +46,8 @@ class UserAgent {
 
         // Insert our product/version before Mobile/1234
         if let range = webViewUserAgent.range(of: "Mobile/") {
-            webViewUserAgent.insert(contentsOf: "\(AppInfo.ProductName)/\(AppInfo.ShortVersion) ".characters, at: range.lowerBound)
+            let productName = AppInfo.isFocus ? "Focus" : "Klar"
+            webViewUserAgent.insert(contentsOf: "\(productName)/\(AppInfo.ShortVersion) ".characters, at: range.lowerBound)
         }
 
         return webViewUserAgent
