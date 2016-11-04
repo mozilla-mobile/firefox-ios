@@ -58,7 +58,7 @@ class LocalContentBlocker: URLProtocol, URLSessionDelegate, URLSessionDataDelega
                 return
         }
 
-        client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .allowed)
+        client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .allowedInMemoryOnly)
         completionHandler(.allow)
     }
 
