@@ -95,6 +95,9 @@ class CorePing: TelemetryPing {
 
         if let newTabChoice = self.prefs.stringForKey(NewTabAccessors.PrefKey) {
             out["defaultNewTabExperience"] = newTabChoice
+
+        if let chosenEmailClient = self.prefs.stringForKey(PrefsKeys.KeyMailToOption) {
+            out["defaultMailClient"] = chosenEmailClient
         }
 
         payload = JSON(out)
