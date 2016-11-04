@@ -8,7 +8,7 @@ import UIKit
 class AboutViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, AboutHeaderViewDelegate {
     fileprivate let tableView = UITableView()
     fileprivate let headerView = AboutHeaderView()
-    fileprivate let supportPath = (AppInfo.ProductName == "Focus") ? "en-US/kb/focus" : "products/klar"
+    fileprivate let supportPath = AppInfo.isFocus ? "en-US/kb/focus" : "products/klar"
 
     override func viewDidLoad() {
         view.backgroundColor = UIConstants.colors.background

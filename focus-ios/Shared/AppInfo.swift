@@ -46,4 +46,8 @@ class AppInfo {
     static var LanguageCode: String {
         return Bundle.main.preferredLocalizations.first!
     }
+
+    static var isFocus: Bool {
+        return AppInfo.ProductName.contains("Focus")
+    }
 }
