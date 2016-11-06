@@ -43,7 +43,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         let label = imageButton.label
         label.textColor = UIColor.whiteColor()
         label.font = UIFont.systemFontOfSize(TodayUX.imageButtonTextSize)
-
+        
         imageButton.sizeToFit()
         return imageButton
     }()
@@ -78,29 +78,23 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
         button.label.font = UIFont.systemFontOfSize(TodayUX.labelTextSize)
         button.subtitleLabel.font = UIFont.systemFontOfSize(TodayUX.linkTextSize)
+
         if #available(iOS 10, *) {
             // no custom margin needed
         } else {
             button.imageView?.snp_updateConstraints { make in
-                make.left.equalTo(button.snp_left).offset(TodayUX.iOS9LeftMargin)
+                make.left.equalTo(40)
             }
         }
+        
         return button
-    }()
-
-    private lazy var widgetStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .Vertical
-        stackView.alignment = .Fill
-        stackView.spacing = 0
-        stackView.distribution = UIStackViewDistribution.Fill
-        stackView.layoutMargins = UIEdgeInsets(top: TodayUX.margin, left: TodayUX.margin, bottom: TodayUX.margin, right: TodayUX.margin)
-        stackView.layoutMarginsRelativeArrangement = true
-        return stackView
     }()
     
     private lazy var buttonStackView: UIStackView = {
         let stackView = UIStackView()
+        stackView.backgroundColor = UIColor.greenColor()
+        stackView.layer.borderWidth = 2
+        stackView.layer.borderColor = UIColor.redColor().CGColor
         stackView.axis = .Horizontal
         stackView.alignment = .Fill
         stackView.spacing = 0
@@ -134,36 +128,88 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         buttonStackView.addArrangedSubview(newTabButton)
         buttonStackView.addArrangedSubview(newPrivateTabButton)
+        
+        // On iOS 10 we center the New Tab buttons in the space for the compact widget view so that they are correctly
+        // centered. On iOS 9 we only center horizontally and then align to the top with a fixed margin.
 
-        widgetStackView.addArrangedSubview(buttonStackView)
-        widgetStackView.addArrangedSubview(openCopiedLinkButton)
-
-        view.addSubview(widgetStackView)
-
-        widgetStackView.snp_makeConstraints { make in
-            make.edges.equalTo(self.view)
+        view.addSubview(buttonStackView)
+        buttonStackView.snp_makeConstraints { (make) in
+            if #available(iOSApplicationExtension 10.0, *) {
+                make.left.right.equalTo(self.view)
+                make.top.equalTo(self.view).inset(16)
+            } else {
+                make.left.right.equalTo(self.view)
+                make.top.equalTo(self.view).inset(TodayUX.margin)
+            }
+        }
+        
+        // Add the CopiedURL button if we have a link on the pasteboard. In viewWillAppear we will determine if there
+        // actually is a URL and adjust the layout accordingly. Having the button always there makes the code more clear.
+        
+        // TODO: Is this correct? Is viewDidLoad called every time the user navigates to our widget?
+        
+        if hasCopiedURL {
+            view.addSubview(openCopiedLinkButton)
+            openCopiedLinkButton.snp_makeConstraints(closure: { (make) in
+                if #available(iOSApplicationExtension 10.0, *) {
+                    make.left.right.equalTo(self.view).inset(20)
+                    make.top.equalTo(buttonStackView.snp_bottom).offset(TodayUX.margin + TodayUX.margin)
+                } else {
+                    make.left.right.equalTo(self.view)
+                    make.top.equalTo(buttonStackView.snp_bottom).offset(TodayUX.margin)
+                }
+            })
+        }
+    }
+    
+    @available(iOSApplicationExtension 10.0, *)
+    func widgetActiveDisplayModeDidChange(activeDisplayMode: NCWidgetDisplayMode, withMaximumSize maxSize: CGSize) {
+        switch activeDisplayMode {
+            case .Compact:
+                preferredContentSize = CGSizeZero
+            case .Expanded:
+                preferredContentSize = CGSize(width: 0.0, height: TodayUX.margin + buttonStackView.frame.height + TodayUX.margin + TodayUX.margin + openCopiedLinkButton.frame.height + TodayUX.margin + TodayUX.margin)
         }
     }
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+
+        if #available(iOSApplicationExtension 10.0, *) {
+            // On iOS 10 there are two widget sizes. If we have a URL on the pasteboard then we ask for the
+            // Expanded size. This will add a Show More/Less button to the widget and the widget size will
+            // follow what the user chose last.
+            if hasCopiedURL {
+                extensionContext?.widgetLargestAvailableDisplayMode = .Expanded
+            } else {
+                extensionContext?.widgetLargestAvailableDisplayMode = .Compact
+            }
+        } else {
+            // On iOS 9 we set the widget size fixed
+            if hasCopiedURL {
+                preferredContentSize = CGSize(width: 0.0, height: TodayUX.margin + buttonStackView.frame.height + TodayUX.margin + openCopiedLinkButton.frame.height + TodayUX.margin + TodayUX.margin)
+            } else {
+                preferredContentSize = CGSize(width: 0.0, height: TodayUX.margin + buttonStackView.frame.height + TodayUX.margin)
+            }
+        }
+
         updateCopiedLink()
     }
-
+    
     func widgetMarginInsetsForProposedMarginInsets(defaultMarginInsets: UIEdgeInsets) -> UIEdgeInsets {
         return UIEdgeInsetsZero
     }
 
     func updateCopiedLink() {
         if let url = self.copiedURL {
-            self.openCopiedLinkButton.hidden = false
-            self.openCopiedLinkButton.subtitleLabel.hidden = SystemUtils.isDeviceLocked()
-            self.openCopiedLinkButton.subtitleLabel.text = url.absoluteString
+            openCopiedLinkButton.hidden = false
+            openCopiedLinkButton.subtitleLabel.hidden = SystemUtils.isDeviceLocked()
+            openCopiedLinkButton.subtitleLabel.text = url.absoluteString
         } else {
-            self.openCopiedLinkButton.hidden = true
+            openCopiedLinkButton.hidden = true
         }
     }
 
@@ -223,7 +269,7 @@ class ImageButtonWithLabel: UIView {
         performLayout()
     }
 
-    func performLayout() {
+    private func performLayout() {
         addSubview(button)
         addSubview(label)
 
