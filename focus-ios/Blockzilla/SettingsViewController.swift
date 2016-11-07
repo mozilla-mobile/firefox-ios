@@ -218,7 +218,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
         if indexPath.section == 4 && indexPath.row == 0 {
             if let url = SupportUtils.URLForTopic(topic: "usage-data") {
-                OpenUtils.openInExternalBrowser(url: url)
+                let contentViewController = AboutContentViewController(url: url)
+                navigationController?.pushViewController(contentViewController, animated: true)
             }
         }
     }
