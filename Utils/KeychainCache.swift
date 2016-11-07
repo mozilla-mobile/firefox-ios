@@ -30,7 +30,7 @@ public class KeychainCache<T: JSONLiteralConvertible> {
 
     public class func fromBranch(branch: String, withLabel label: String?, withDefault defaultValue: T? = nil, factory: JSON -> T?) -> KeychainCache<T> {
         if let l = label {
-            if let s = KeychainWrapper.defaultKeychainWrapper().stringForKey("\(branch).\(l)") {
+            if let s = KeychainWrapper.sharedAppContainerKeychain.stringForKey("\(branch).\(l)") {
                 if let t = factory(JSON.parse(s)) {
                     log.info("Read \(branch) from Keychain with label \(branch).\(l).")
                     return KeychainCache(branch: branch, label: l, value: t)
@@ -54,9 +54,9 @@ public class KeychainCache<T: JSONLiteralConvertible> {
         // TODO: PII logging.
         if let value = value {
             let jsonString = value.asJSON().toString(false)
-            KeychainWrapper.defaultKeychainWrapper().setString(jsonString, forKey: "\(branch).\(label)")
+            KeychainWrapper.sharedAppContainerKeychain.setString(jsonString, forKey: "\(branch).\(label)")
         } else {
-            KeychainWrapper.defaultKeychainWrapper().removeObjectForKey("\(branch).\(label)")
+            KeychainWrapper.sharedAppContainerKeychain.removeObjectForKey("\(branch).\(label)")
         }
     }
 }

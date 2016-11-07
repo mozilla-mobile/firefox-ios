@@ -6,6 +6,8 @@
 	<string>$(ADJUST_APP_TOKEN)</string>
 	<key>AdjustEnvironment</key>
 	<string>$(ADJUST_ENVIRONMENT)</string>
+	<key>AppIdentifierPrefix</key>
+	<string>$(APP_IDENTIFIER_PREFIX)</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
