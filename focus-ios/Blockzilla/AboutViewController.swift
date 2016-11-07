@@ -87,15 +87,14 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
         switch (indexPath as NSIndexPath).row {
         case 1:
-            let contentViewController = AboutContentViewController()
-            contentViewController.url = URL(string: "https://support.mozilla.org/\(supportPath)")
+            let url = URL(string: "https://support.mozilla.org/\(supportPath)")!
+            let contentViewController = AboutContentViewController(url: url)
             navigationController?.pushViewController(contentViewController, animated: true)
         case 2:
-            let contentViewController = AboutContentViewController()
-            contentViewController.url = LocalWebServer.sharedInstance.URLForPath("/\(rightsFile)")
+            let url = LocalWebServer.sharedInstance.URLForPath("/\(rightsFile)")!
+            let contentViewController = AboutContentViewController(url: url)
             navigationController?.pushViewController(contentViewController, animated: true)
         default: break
         }
@@ -104,8 +103,8 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
 
     fileprivate func aboutHeaderViewDidPressReadMore(_ aboutHeaderView: AboutHeaderView) {
-        let contentViewController = AboutContentViewController()
-        contentViewController.url = URL(string: "https://www.mozilla.org/\(AppInfo.LanguageCode)/about/manifesto/")
+        let url = URL(string: "https://www.mozilla.org/\(AppInfo.LanguageCode)/about/manifesto/")!
+        let contentViewController = AboutContentViewController(url: url)
         navigationController?.pushViewController(contentViewController, animated: true)
     }
 }
