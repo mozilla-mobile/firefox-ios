@@ -5,7 +5,7 @@
 import Foundation
 import GCDWebServers
 
-private let LocalResources = ["rights-Focus", "rights-Klar", "licenses", "gpl"]
+private let LocalResources = ["rights-focus", "rights-klar", "licenses", "gpl"]
 
 class LocalWebServer {
     static let sharedInstance = LocalWebServer(port: 6573)
