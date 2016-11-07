@@ -149,13 +149,7 @@ private class BlockList {
     }
 
     private func pathForResource(_ resource: String) -> String {
-        var path: String!
-
-        DispatchQueue.main.sync {
-            path = Bundle.main.path(forResource: resource, ofType: "json")
-        }
-
-        return path
+        return Bundle.main.path(forResource: resource, ofType: "json")!
     }
 
     func isBlocked(_ request: URLRequest) -> Bool {
