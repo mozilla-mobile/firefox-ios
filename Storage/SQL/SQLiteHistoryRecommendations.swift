@@ -29,6 +29,7 @@ extension SQLiteHistory: HistoryRecommendations {
             "       FROM \(TableVisits)" +
             "       WHERE date < ?" +
             "       GROUP BY siteID" +
+            "       ORDER BY visitDate DESC" +
             "   )" +
             "   LEFT JOIN \(TableHistory) ON \(TableHistory).id = s" +
             "   WHERE visitCount <= 3 AND title NOT NULL AND title != '' AND is_bookmarked == 0 AND url NOT IN" +
