@@ -17,8 +17,6 @@ class AppInfo {
     /// case of the former, it will chop off the extension identifier from the bundle since that is a suffix not part
     /// of the *base* bundle identifier.
     static var BaseBundleIdentifier: String {
-        assert(Thread.isMainThread)
-
         let bundle = Bundle.main
         let packageType = bundle.object(forInfoDictionaryKey: "CFBundlePackageType") as! NSString
         let baseBundleIdentifier = bundle.bundleIdentifier!
@@ -38,20 +36,14 @@ class AppInfo {
     }
 
     static var ProductName: String {
-        assert(Thread.isMainThread)
-
         return Bundle.main.infoDictionary!["CFBundleName"] as! String
     }
 
     static var ShortVersion: String {
-        assert(Thread.isMainThread)
-
         return Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! String
     }
 
     static var LanguageCode: String {
-        assert(Thread.isMainThread)
-
         return Bundle.main.preferredLocalizations.first!
     }
 
