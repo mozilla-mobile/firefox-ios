@@ -19,8 +19,8 @@ class BaseTestCase: XCTestCase {
 
     func restart(app: XCUIApplication) {
         app.terminate()
-        app.launchArguments.append("FIREFOX_TESTS")
-        app.launchArguments.append("RESET_FIREFOX")
+        app.launchArguments.append(LaunchArguments.Test)
+        app.launchArguments.append(LaunchArguments.ClearProfile)
         app.launch()
         sleep(1)
     }

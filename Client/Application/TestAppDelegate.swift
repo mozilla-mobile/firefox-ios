@@ -16,7 +16,7 @@ class TestAppDelegate: AppDelegate {
         }
 
         let profile = BrowserProfile(localName: "testProfile", app: application)
-        if NSProcessInfo.processInfo().arguments.contains("RESET_FIREFOX") {
+        if NSProcessInfo.processInfo().arguments.contains(LaunchArguments.ClearProfile) {
             // Use a clean profile for each test session.
             _ = try? profile.files.removeFilesInDirectory()
             profile.prefs.clearAll()
@@ -24,8 +24,8 @@ class TestAppDelegate: AppDelegate {
             // Don't show the What's New page.
             profile.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
 
-            // Skip the first run UI except when we are running Fastlane Snapshot tests
-            if !AppConstants.IsRunningFastlaneSnapshot {
+            // Skip the intro when requested by for example tests or automation
+            if AppConstants.SkipIntro {
                 profile.prefs.setInt(1, forKey: IntroViewControllerSeenProfileKey)
             }
         }
@@ -36,7 +36,7 @@ class TestAppDelegate: AppDelegate {
 
     override func application(application: UIApplication, willFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
         // If the app is running from a XCUITest reset all settings in the app
-        if NSProcessInfo.processInfo().arguments.contains("RESET_FIREFOX") {
+        if NSProcessInfo.processInfo().arguments.contains(LaunchArguments.ClearProfile) {
             resetApplication()
         }
 
