@@ -74,7 +74,7 @@ class TestAppDelegate: AppDelegate {
         let docContents = try! manager.contentsOfDirectoryAtPath(rootPath)
         for content in docContents {
             do {
-                try manager.removeItemAtURL(documents.URLByAppendingPathComponent(content))
+                try manager.removeItemAtURL(documents.URLByAppendingPathComponent(content)!)
             } catch {
                 log.debug("Couldn't delete some document contents.")
             }

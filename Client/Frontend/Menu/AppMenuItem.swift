@@ -9,6 +9,7 @@ struct AppMenuItem: MenuItem {
     let action: MenuAction
     let secondaryAction: MenuAction?
     let animation: Animatable?
+    var isDisabled: Bool
     private let iconName: String
     private let privateModeIconName: String
     private let selectedIconName: String?
@@ -36,7 +37,7 @@ struct AppMenuItem: MenuItem {
         return selectedIcon
     }
 
-    init(title: String, action: MenuAction, secondaryAction: MenuAction? = nil, icon: String, privateModeIcon: String, selectedIcon: String? = nil, animation: Animatable? = nil) {
+    init(title: String, action: MenuAction, secondaryAction: MenuAction? = nil, icon: String, privateModeIcon: String, selectedIcon: String? = nil, animation: Animatable? = nil, isDisabled: Bool = false) {
         self.title = title
         self.action = action
         self.iconName = icon
@@ -44,5 +45,6 @@ struct AppMenuItem: MenuItem {
         self.selectedIconName = selectedIcon
         self.animation = animation
         self.secondaryAction = secondaryAction
+        self.isDisabled = isDisabled
     }
 }

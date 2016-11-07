@@ -8,7 +8,6 @@ import Storage
 import ReadingList
 import WebKit
 
-@available(iOS 9.0, *)
 protocol TabPeekDelegate: class {
     func tabPeekDidAddBookmark(tab: Tab)
     func tabPeekDidAddToReadingList(tab: Tab) -> ReadingListClientRecord?
@@ -16,7 +15,6 @@ protocol TabPeekDelegate: class {
     func tabPeekDidCloseTab(tab: Tab)
 }
 
-@available(iOS 9.0, *)
 class TabPeekViewController: UIViewController, WKNavigationDelegate {
 
     private static let PreviewActionAddToBookmarks = NSLocalizedString("Add to Bookmarks", tableName: "3DTouchActions", comment: "Label for preview action on Tab Tray Tab to add current tab to Bookmarks")
@@ -63,10 +61,10 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
             // as we are only allowed 4 in total and we always want to display close tab
             if actions.count < 3 {
                 actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionCopyURL, style: .Default) { previewAction, viewController in
-                    guard let url = self.tab?.url where url.absoluteString.characters.count > 0 else { return }
+                    guard let url = self.tab?.url where url.absoluteString!.characters.count > 0 else { return }
                     let pasteBoard = UIPasteboard.generalPasteboard()
                     pasteBoard.URL = url
-                    })
+                })
             }
         }
         actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionCloseTab, style: .Destructive) { previewAction, viewController in

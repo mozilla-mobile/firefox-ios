@@ -4,6 +4,7 @@
 
 import Foundation
 import UIKit
+import Shared
 
 /**
  * Data for identifying and constructing a HomePanel.
@@ -19,7 +20,11 @@ class HomePanels {
     let enabledPanels = [
         HomePanelDescriptor(
             makeViewController: { profile in
-                TopSitesPanel(profile: profile)
+                if UIDevice.currentDevice().userInterfaceIdiom != .Pad && AppConstants.MOZ_AS_PANEL {
+                    return ActivityStreamPanel(profile: profile)
+                } else {
+                    return TopSitesPanel(profile: profile)
+                }
             },
             imageName: "TopSites",
             accessibilityLabel: NSLocalizedString("Top sites", comment: "Panel accessibility label"),
@@ -33,7 +38,7 @@ class HomePanels {
                 controller.setNavigationBarHidden(true, animated: false)
                 // this re-enables the native swipe to pop gesture on UINavigationController for embedded, navigation bar-less UINavigationControllers
                 // don't ask me why it works though, I've tried to find an answer but can't.
-                // found here, along with many other places: 
+                // found here, along with many other places:
                 // http://luugiathuy.com/2013/11/ios7-interactivepopgesturerecognizer-for-uinavigationcontroller-with-hidden-navigation-bar/
                 controller.interactivePopGestureRecognizer?.delegate = nil
                 return controller
@@ -64,5 +69,5 @@ class HomePanels {
             imageName: "ReadingList",
             accessibilityLabel: NSLocalizedString("Reading list", comment: "Panel accessibility label"),
             accessibilityIdentifier: "HomePanels.ReadingList"),
-    ]
+        ]
 }

@@ -9,8 +9,6 @@
 
 #import "ThirdParty/UIImageViewAligned/UIImageViewAligned/UIImageViewAligned.h"
 #import "ThirdParty/Apple/UIImage+ImageEffects.h"
-#import "ThirdParty/RaptureXML/RXMLElement.h"
-
 
 #import <CrashReporter/CrashReporter.h>
 

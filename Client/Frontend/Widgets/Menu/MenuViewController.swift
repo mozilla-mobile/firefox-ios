@@ -33,7 +33,8 @@ class MenuViewController: UIViewController {
 
     var appState: AppState {
         didSet {
-            if !self.isBeingDismissed() {
+            let state = UIApplication.sharedApplication().applicationState
+            if !self.isBeingDismissed() && state == .Active {
                 menuConfig = menuConfig.menuForState(appState)
                 self.reloadView()
             }
@@ -168,6 +169,10 @@ class MenuViewController: UIViewController {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         self.view.backgroundColor = popoverBackgroundColor
+
+        if presentationStyle == .Popover {
+            self.preferredContentSize = CGSizeMake(view.bounds.size.width, menuView.bounds.size.height)
+        }
     }
 
     private func reloadView() {
@@ -220,6 +225,11 @@ extension MenuViewController: MenuItemDelegate {
         }
         performMenuAction(action, withAnimation: animation, onView: menuItemCell.menuImageView)
     }
+    
+    func menuView(menuView: MenuView, shouldSelectItemAtIndexPath indexPath: NSIndexPath) -> Bool {
+        let menuItem = menuConfig.menuItems[indexPath.getMenuItemIndex()]
+        return !menuItem.isDisabled
+    }
 
     func heightForRowsInMenuView(menuView: MenuView) -> CGFloat {
         // loop through the labels for the menu items and calculate the largest
@@ -244,9 +254,7 @@ extension MenuViewController: MenuItemDelegate {
         let paragraph = NSMutableParagraphStyle()
         paragraph.lineBreakMode = NSLineBreakMode.ByWordWrapping
         paragraph.alignment = .Center
-        if #available(iOS 9.0, *) {
-            paragraph.allowsDefaultTighteningForTruncation = true
-        }
+        paragraph.allowsDefaultTighteningForTruncation = true
         let boundingBox = NSString(string: labelText).boundingRectWithSize(constraint, options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: label.font, NSParagraphStyleAttributeName: paragraph], context: context).size
         return ceil(boundingBox.height)
     }
@@ -282,10 +290,18 @@ extension MenuViewController: MenuItemDataSource {
         cell.menuTitleLabel.text = menuItem.title
         cell.accessibilityLabel = menuItem.title
         cell.menuTitleLabel.font = menuConfig.menuFont()
-        cell.menuTitleLabel.textColor = menuConfig.menuTintColor()
-        if let icon = menuItem.iconForState(appState) {
+        
+        let icon = menuItem.iconForState(appState)
+        if menuItem.isDisabled {
+            cell.menuTitleLabel.textColor = menuConfig.disabledItemTintColor()
+            
+            cell.menuImageView.image = icon?.imageWithRenderingMode(.AlwaysTemplate)
+            cell.menuImageView.tintColor = menuConfig.disabledItemTintColor()
+        } else {
+            cell.menuTitleLabel.textColor = menuConfig.menuTintColor()
             cell.menuImageView.image = icon
         }
+
         return cell
     }
 }

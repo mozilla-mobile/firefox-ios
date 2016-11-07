@@ -35,7 +35,8 @@ func failOrSucceed(err: NSError?, op: String) -> Success {
 private var ignoredSchemes = ["about"]
 
 public func isIgnoredURL(url: NSURL) -> Bool {
-    let scheme = url.scheme
+    guard let scheme = url.scheme else { return false }
+
     if let _ = ignoredSchemes.indexOf(scheme) {
         return true
     }
@@ -124,10 +125,14 @@ private let topSitesQuery = "SELECT * FROM \(TableCachedTopSites) ORDER BY frece
 extension SQLiteHistory: BrowserHistory {
     public func removeSiteFromTopSites(site: Site) -> Success {
         if let host = site.url.asURL?.normalizedHost() {
-            return db.run([("UPDATE \(TableDomains) set showOnTopSites = 0 WHERE domain = ?", [host])])
-                >>> { return self.refreshTopSitesCache() }
+            return self.removeHostFromTopSites(host)
         }
         return deferMaybe(DatabaseError(description: "Invalid url for site \(site.url)"))
+    }
+
+    public func removeHostFromTopSites(host: String) -> Success {
+        return db.run([("UPDATE \(TableDomains) set showOnTopSites = 0 WHERE domain = ?", [host])])
+            >>> { return self.refreshTopSitesCache() }
     }
 
     public func removeHistoryForURL(url: String) -> Success {
@@ -374,49 +379,6 @@ extension SQLiteHistory: BrowserHistory {
         return self.getFilteredSitesByVisitDateWithLimit(limit, whereURLContains: nil, includeIcon: true)
     }
 
-    private class func basicHistoryColumnFactory(row: SDRow) -> Site {
-        let id = row["historyID"] as! Int
-        let url = row["url"] as! String
-        let title = row["title"] as! String
-        let guid = row["guid"] as! String
-
-        // Extract a boolean from the row if it's present.
-        let iB = row["is_bookmarked"] as? Int
-        let isBookmarked: Bool? = (iB == nil) ? nil : (iB! != 0)
-
-        let site = Site(url: url, title: title, bookmarked: isBookmarked)
-        site.guid = guid
-        site.id = id
-
-        // Find the most recent visit, regardless of which column it might be in.
-        let local = row.getTimestamp("localVisitDate") ?? 0
-        let remote = row.getTimestamp("remoteVisitDate") ?? 0
-        let either = row.getTimestamp("visitDate") ?? 0
-
-        let latest = max(local, remote, either)
-        if latest > 0 {
-            site.latestVisit = Visit(date: latest, type: VisitType.Unknown)
-        }
-
-        return site
-    }
-
-    private class func iconColumnFactory(row: SDRow) -> Favicon? {
-        if let iconType = row["iconType"] as? Int,
-            let iconURL = row["iconURL"] as? String,
-            let iconDate = row["iconDate"] as? Double,
-            let _ = row["iconID"] as? Int {
-                let date = NSDate(timeIntervalSince1970: iconDate)
-                return Favicon(url: iconURL, date: date, type: IconType(rawValue: iconType)!)
-        }
-        return nil
-    }
-
-    private class func iconHistoryColumnFactory(row: SDRow) -> Site {
-        let site = basicHistoryColumnFactory(row)
-        site.icon = iconColumnFactory(row)
-        return site
-    }
 
     private func topSiteClauses() -> (String, String) {
         let whereData = "(\(TableDomains).showOnTopSites IS 1) AND (\(TableDomains).domain NOT LIKE 'r.%') "
@@ -598,11 +560,11 @@ extension SQLiteHistory: BrowserHistory {
         "INNER JOIN \(TableDomains) ON \(TableDomains).id = \(TableHistory).domain_id " +
         "INNER JOIN \(TableVisits) ON \(TableVisits).siteID = \(TableHistory).id "
 
-        if includeBookmarks && AppConstants.MOZ_AWESOMEBAR_DUPES {
+        if includeBookmarks {
             ungroupedSQL.appendContentsOf("LEFT JOIN \(ViewAllBookmarks) on \(ViewAllBookmarks).url = \(TableHistory).url ")
         }
         ungroupedSQL.appendContentsOf(whereClause.stringByReplacingOccurrencesOfString("url", withString: "\(TableHistory).url").stringByReplacingOccurrencesOfString("title", withString: "\(TableHistory).title"))
-        if includeBookmarks && AppConstants.MOZ_AWESOMEBAR_DUPES {
+        if includeBookmarks {
             ungroupedSQL.appendContentsOf(" AND \(ViewAllBookmarks).url IS NULL")
         }
         ungroupedSQL.appendContentsOf(" GROUP BY historyID")
@@ -667,7 +629,7 @@ extension SQLiteHistory: BrowserHistory {
                 "1 AS is_bookmarked",
                 "FROM", ViewAwesomebarBookmarksWithIcons,
                 whereClause,                  // The columns match, so we can reuse this.
-                AppConstants.MOZ_AWESOMEBAR_DUPES ? "GROUP BY url" : "",
+                "GROUP BY url",
                 "ORDER BY visitDate DESC LIMIT \(bookmarksLimit)",
             ].joinWithSeparator(" ")
 

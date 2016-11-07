@@ -5,7 +5,7 @@
 import Foundation
 import UIKit
 import Shared
-import SWXMLHash
+import Fuzi
 
 private let TypeSearch = "text/html"
 private let TypeSuggest = "application/x-suggestions+json"
@@ -165,27 +165,26 @@ class OpenSearchParser {
             return nil
         }
 
-        let rootName = pluginMode ? "SearchPlugin" : "OpenSearchDescription"
-        let docIndexer: XMLIndexer! = SWXMLHash.parse(data!)[rootName][0]
-
-        if docIndexer.element == nil {
-            print("Invalid XML document")
-            return nil
+        guard let indexer = try? XMLDocument(data: data!),
+            let docIndexer = indexer.root else {
+                print("Invalid XML document")
+                return nil
         }
 
-        let shortNameIndexer = docIndexer["ShortName"]
-        if shortNameIndexer.all.count != 1 {
+        let shortNameIndexer = docIndexer.children(tag: "ShortName")
+        if shortNameIndexer.count != 1 {
             print("ShortName must appear exactly once")
             return nil
         }
 
-        let shortName = shortNameIndexer.element?.text
-        if shortName == nil {
+        let shortName = shortNameIndexer[0].stringValue
+        if shortName == "" {
             print("ShortName must contain text")
             return nil
         }
 
-        let urlIndexers = docIndexer["Url"].all
+
+        let urlIndexers = docIndexer.children(tag: "Url")
         if urlIndexers.isEmpty {
             print("Url must appear at least once")
             return nil
@@ -194,7 +193,7 @@ class OpenSearchParser {
         var searchTemplate: String!
         var suggestTemplate: String?
         for urlIndexer in urlIndexers {
-            let type = urlIndexer.element?.attributes["type"]
+            let type = urlIndexer.attributes["type"]
             if type == nil {
                 print("Url element requires a type attribute", terminator: "\n")
                 return nil
@@ -205,14 +204,14 @@ class OpenSearchParser {
                 continue
             }
 
-            var template = urlIndexer.element?.attributes["template"]
+            var template = urlIndexer.attributes["template"]
             if template == nil {
                 print("Url element requires a template attribute", terminator: "\n")
                 return nil
             }
 
             if pluginMode {
-                let paramIndexers = urlIndexer["Param"].all
+                let paramIndexers = urlIndexer.children(tag: "Param")
 
                 if !paramIndexers.isEmpty {
                     template! += "?"
@@ -224,8 +223,8 @@ class OpenSearchParser {
                             firstAdded = true
                         }
 
-                        let name = paramIndexer.element?.attributes["name"]
-                        let value = paramIndexer.element?.attributes["value"]
+                        let name = paramIndexer.attributes["name"]
+                        let value = paramIndexer.attributes["value"]
                         if name == nil || value == nil {
                             print("Param element must have name and value attributes", terminator: "\n")
                             return nil
@@ -247,14 +246,14 @@ class OpenSearchParser {
             return nil
         }
 
-        let imageIndexers = docIndexer["Image"].all
+        let imageIndexers = docIndexer.children(tag: "Image")
         var largestImage = 0
         var largestImageElement: XMLElement?
 
         // TODO: For now, just use the largest icon.
         for imageIndexer in imageIndexers {
-            let imageWidth = Int(imageIndexer.element?.attributes["width"] ?? "")
-            let imageHeight = Int(imageIndexer.element?.attributes["height"] ?? "")
+            let imageWidth = Int(imageIndexer.attributes["width"] ?? "")
+            let imageHeight = Int(imageIndexer.attributes["height"] ?? "")
 
             // Only accept square images.
             if imageWidth != imageHeight {
@@ -263,10 +262,8 @@ class OpenSearchParser {
 
             if let imageWidth = imageWidth {
                 if imageWidth > largestImage {
-                    if imageIndexer.element?.text != nil {
-                        largestImage = imageWidth
-                        largestImageElement = imageIndexer.element
-                    }
+                    largestImage = imageWidth
+                    largestImageElement = imageIndexer
                 }
             }
         }
@@ -274,7 +271,7 @@ class OpenSearchParser {
         let uiImage: UIImage
 
         if let imageElement = largestImageElement,
-               imageURL = NSURL(string: imageElement.text!),
+               imageURL = NSURL(string: imageElement.stringValue),
                imageData = NSData(contentsOfURL: imageURL),
                image = UIImage.imageFromDataThreadSafe(imageData) {
             uiImage = image
@@ -283,6 +280,6 @@ class OpenSearchParser {
             return nil
         }
 
-        return OpenSearchEngine(engineID: engineID, shortName: shortName!, image: uiImage, searchTemplate: searchTemplate, suggestTemplate: suggestTemplate, isCustomEngine: false)
+        return OpenSearchEngine(engineID: engineID, shortName: shortName, image: uiImage, searchTemplate: searchTemplate, suggestTemplate: suggestTemplate, isCustomEngine: false)
     }
 }

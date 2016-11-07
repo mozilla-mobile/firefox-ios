@@ -71,7 +71,6 @@ class TabManager: NSObject {
     }()
 
     // A WKWebViewConfiguration used for private mode tabs
-    @available(iOS 9, *)
     lazy private var privateConfiguration: WKWebViewConfiguration = {
         let configuration = WKWebViewConfiguration()
         configuration.processPool = WKProcessPool()
@@ -94,11 +93,7 @@ class TabManager: NSObject {
 
     var privateTabs: [Tab] {
         assert(NSThread.isMainThread())
-        if #available(iOS 9, *) {
-            return tabs.filter { $0.isPrivate }
-        } else {
-            return []
-        }
+        return tabs.filter { $0.isPrivate }
     }
 
     init(prefs: Prefs, imageStore: DiskImageStore?) {
@@ -204,12 +199,10 @@ class TabManager: NSObject {
         }
     }
 
-    @available(iOS 9, *)
     func addTab(request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil, afterTab: Tab? = nil, isPrivate: Bool) -> Tab {
         return self.addTab(request, configuration: configuration, afterTab: afterTab, flushToDisk: true, zombie: false, isPrivate: isPrivate)
     }
 
-    @available(iOS 9, *)
     func addTabAndSelect(request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil, afterTab: Tab? = nil, isPrivate: Bool) -> Tab {
         let tab = addTab(request, configuration: configuration, afterTab: afterTab, isPrivate: isPrivate)
         selectTab(tab)
@@ -251,7 +244,6 @@ class TabManager: NSObject {
         }
     }
 
-    @available(iOS 9, *)
     private func addTab(request: NSURLRequest? = nil, configuration: WKWebViewConfiguration? = nil, afterTab: Tab? = nil, flushToDisk: Bool, zombie: Bool, isPrivate: Bool) -> Tab {
         assert(NSThread.isMainThread())
 
@@ -418,10 +410,6 @@ class TabManager: NSObject {
     }
     
     func removeTabsWithUndoToast(tabs: [Tab]) {
-        guard AppConstants.MOZ_UNDO_DELETE_TABS_TOAST else {
-            removeTabs(tabs)
-            return
-        }
         tempTabs = tabs
         var tabsCopy = tabs
         
@@ -523,9 +511,7 @@ class TabManager: NSObject {
             }
             // The default tab configurations also need to change.
             self.configuration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
-            if #available(iOS 9, *) {
-                self.privateConfiguration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
-            }
+            self.privateConfiguration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
         }
     }
 
@@ -616,7 +602,7 @@ extension TabManager {
 
     static private func tabsStateArchivePath() -> String {
         let documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
-        return NSURL(fileURLWithPath: documentsPath).URLByAppendingPathComponent("tabsState.archive").path!
+        return NSURL(fileURLWithPath: documentsPath).URLByAppendingPathComponent("tabsState.archive")!.path!
     }
 
     static func tabArchiveData() -> NSData? {
@@ -685,13 +671,8 @@ extension TabManager {
 
         var tabToSelect: Tab?
         for (_, savedTab) in savedTabs.enumerate() {
-            let tab: Tab
-            if #available(iOS 9, *) {
-                tab = self.addTab(flushToDisk: false, zombie: true, isPrivate: savedTab.isPrivate)
-            } else {
-                tab = self.addTab(flushToDisk: false, zombie: true)
-            }
-            
+            let tab = self.addTab(flushToDisk: false, zombie: true, isPrivate: savedTab.isPrivate)
+
             if let faviconURL = savedTab.faviconURL {
                 let icon = Favicon(url: faviconURL, date: NSDate(), type: IconType.NoneFound)
                 icon.width = 1

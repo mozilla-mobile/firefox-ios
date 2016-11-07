@@ -35,7 +35,6 @@ private struct ShareDialogControllerUX {
     static let NavigationBarIconSize = 38                                                           // Width and height of the icon
     static let NavigationBarBottomPadding = 12
 
-    @available(iOSApplicationExtension 8.2, *)
     static let ItemTitleFontMedium = UIFont.systemFontOfSize(15, weight: UIFontWeightMedium)
     static let ItemTitleFont = UIFont.systemFontOfSize(15)
     static let ItemTitleMaxNumberOfLines = 2

@@ -15,7 +15,7 @@ class BasePasscodeViewController: UIViewController {
     let errorPadding: CGFloat = 10
 
     init() {
-        self.authenticationInfo = KeychainWrapper.authenticationInfo()
+        self.authenticationInfo = KeychainWrapper.defaultKeychainWrapper().authenticationInfo()
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -87,6 +87,6 @@ extension BasePasscodeViewController {
         inputView.resetCode()
 
         // Store mutations on authentication info object
-        KeychainWrapper.setAuthenticationInfo(authenticationInfo)
+        KeychainWrapper.defaultKeychainWrapper().setAuthenticationInfo(authenticationInfo)
     }
 }

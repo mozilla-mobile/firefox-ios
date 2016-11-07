@@ -225,6 +225,7 @@ public class BrowserDB {
                 }
             }
 
+            self.reopenIfClosed()
             if let _ = db.transaction({ connection -> Bool in
                 for table in tables {
                     doCreate(table, connection)
@@ -379,6 +380,10 @@ extension BrowserDB {
 
     public func forceClose() {
         db.forceClose()
+    }
+
+    public func reopenIfClosed() {
+        db.reopenIfClosed()
     }
 }
 

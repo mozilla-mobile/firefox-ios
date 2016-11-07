@@ -14,19 +14,20 @@ struct URLBarViewUX {
     static let TextFieldBorderColor = UIColor(rgb: 0xBBBBBB)
     static let TextFieldActiveBorderColor = UIColor(rgb: 0x4A90E2)
     static let TextFieldContentInset = UIOffsetMake(9, 5)
-    static let LocationLeftPadding: CGFloat = 5
-    static let LocationHeight: CGFloat = 28
+    static let LocationLeftPadding = 5
+    static let LocationHeight = 28
     static let LocationContentOffset: CGFloat = 8
     static let TextFieldCornerRadius: CGFloat = 3
     static let TextFieldBorderWidth: CGFloat = 1
     // offset from edge of tabs button
     static let URLBarCurveOffset: CGFloat = 14
     static let URLBarCurveOffsetLeft: CGFloat = -10
+    // A larger offset is needed when viewing URL bar in overlay mode to get the corners right
+    static let URLBarCurveOverlayOffset: CGFloat = 8
+    static let URLBarMinimumOffsetToAnimate: CGFloat = 30
     // buffer so we dont see edges when animation overshoots with spring
     static let URLBarCurveBounceBuffer: CGFloat = 8
     static let ProgressTintColor = UIColor(red:1, green:0.32, blue:0, alpha:1)
-
-    static let MinifiedURLBarHeight: CGFloat = 26
 
     static let TabsButtonRotationOffset: CGFloat = 1.5
     static let TabsButtonHeight: CGFloat = 18.0
@@ -69,6 +70,7 @@ protocol URLBarDelegate: class {
     func urlBarDidLeaveOverlayMode(urlBar: URLBarView)
     func urlBarDidLongPressLocation(urlBar: URLBarView)
     func urlBarLocationAccessibilityActions(urlBar: URLBarView) -> [UIAccessibilityCustomAction]?
+    func urlBarDidPressScrollToTop(urlBar: URLBarView)
     func urlBar(urlBar: URLBarView, didEnterText text: String)
     func urlBar(urlBar: URLBarView, didSubmitText text: String)
     func urlBarDisplayTextForURL(url: NSURL?) -> String?
@@ -88,52 +90,6 @@ class URLBarView: UIView {
             if inOverlayMode {
                 locationContainer.layer.borderColor = locationActiveBorderColor.CGColor
             }
-        }
-    }
-
-    // The transition between the URL bar being fully displayed (1.0) and being minimised (0.0)
-    var transitionValue: CGFloat = 1.0 {
-        didSet {
-            let inverseState = 1.0 - transitionValue
-            // Interaction
-            self.locationContainer.userInteractionEnabled = transitionValue == 1.0
-
-            // Spacing
-            let offsetToHide = UIConstants.ToolbarHeight + URLBarViewUX.URLBarCurveOffset - URLBarViewUX.LocationLeftPadding
-            let offsetForState = inverseState * offsetToHide
-            if !self.topTabsIsShowing {
-                self.tabsButton.snp_updateConstraints { make in
-                    make.trailing.equalTo(offsetForState)
-                }
-            }
-            self.curveShape.snp_updateConstraints { make in
-                self.rightBarConstraint = make.right.equalTo(self.defaultRightOffset + offsetForState).constraint
-            }
-            self.locationContainer.snp_updateConstraints { make in
-                let border = (UIConstants.ToolbarHeight - URLBarViewUX.LocationHeight) / 2
-                let offset = (UIConstants.ToolbarHeight - URLBarViewUX.MinifiedURLBarHeight) / 2
-                make.top.equalTo(border + offset * inverseState)
-                make.bottom.equalTo(-border + offset * inverseState)
-            }
-            if let text = self.locationView.urlTextField.text, font = self.locationView.urlTextField.font {
-                let urlTextWidth = min(NSString(string: text).boundingRectWithSize(self.locationView.urlTextField.bounds.size, options: .TruncatesLastVisibleLine, attributes: [NSFontAttributeName: font], context: nil).width, self.locationView.urlTextField.bounds.width)
-                let maxOffset = self.bounds.width / 2 - self.locationView.convertPoint(CGPoint(x: urlTextWidth / 2 + self.locationView.urlTextLeading, y: 0), toView: self).x
-                self.locationView.urlTextField.snp_updateConstraints { make in
-                    make.leading.equalTo(self.locationView.urlTextLeading + inverseState * maxOffset)
-                    make.trailing.equalTo(self.locationView.urlTextTrailing + inverseState * maxOffset)
-                }
-                self.locationView.lockImageView.snp_updateConstraints { make in
-                    make.leading.equalTo(inverseState * maxOffset)
-                }
-            }
-
-            // Transparency
-            self.locationContainer.layer.borderColor = self.locationBorderColor.colorWithAlphaComponent(transitionValue * self.locationBorderColor.alpha).CGColor
-            self.locationView.setBackgroundAlpha(transitionValue)
-            if !self.inOverlayMode {
-                self.actionButtons.forEach { $0.alpha = transitionValue }
-            }
-            self.border.alpha = inverseState
         }
     }
 
@@ -170,7 +126,6 @@ class URLBarView: UIView {
     lazy var locationView: TabLocationView = {
         let locationView = TabLocationView()
         locationView.translatesAutoresizingMaskIntoConstraints = false
-        locationView.layer.cornerRadius = URLBarViewUX.TextFieldCornerRadius
         locationView.readerModeState = ReaderModeState.Unavailable
         locationView.delegate = self
         return locationView
@@ -179,6 +134,9 @@ class URLBarView: UIView {
     lazy var locationContainer: UIView = {
         let locationContainer = UIView()
         locationContainer.translatesAutoresizingMaskIntoConstraints = false
+
+        // Enable clipping to apply the rounded edges to subviews.
+        locationContainer.clipsToBounds = true
 
         locationContainer.layer.borderColor = self.locationBorderColor.CGColor
         locationContainer.layer.cornerRadius = URLBarViewUX.TextFieldCornerRadius
@@ -215,15 +173,14 @@ class URLBarView: UIView {
         cancelButton.alpha = 0
         return cancelButton
     }()
-    
-    private lazy var border: UIView = {
-        let border = UIView()
-        border.backgroundColor = UIConstants.BorderColor
-        border.alpha = 0
-        return border
-    }()
 
     private lazy var curveShape: CurveView = { return CurveView() }()
+
+    private lazy var scrollToTopButton: UIButton = {
+        let button = UIButton()
+        button.addTarget(self, action: #selector(URLBarView.SELtappedScrollToTopArea), forControlEvents: UIControlEvents.TouchUpInside)
+        return button
+    }()
 
     lazy var shareButton: UIButton = { return UIButton() }()
 
@@ -240,7 +197,7 @@ class URLBarView: UIView {
     lazy var homePageButton: UIButton = { return UIButton() }()
 
     lazy var actionButtons: [UIButton] = {
-        return AppConstants.MOZ_MENU ? [self.shareButton, self.menuButton, self.forwardButton, self.backButton, self.stopReloadButton, self.homePageButton] : [self.shareButton, self.bookmarkButton, self.forwardButton, self.backButton, self.stopReloadButton]
+        return [self.shareButton, self.menuButton, self.forwardButton, self.backButton, self.stopReloadButton, self.homePageButton]
     }()
 
     private var rightBarConstraint: Constraint?
@@ -269,19 +226,15 @@ class URLBarView: UIView {
     private func commonInit() {
         backgroundColor = URLBarViewUX.backgroundColorWithAlpha(0)
         addSubview(curveShape)
-        addSubview(border)
+        addSubview(scrollToTopButton)
 
         addSubview(progressBar)
         addSubview(tabsButton)
         addSubview(cancelButton)
 
         addSubview(shareButton)
-        if AppConstants.MOZ_MENU {
-            addSubview(menuButton)
-            addSubview(homePageButton)
-        } else {
-            addSubview(bookmarkButton)
-        }
+        addSubview(menuButton)
+        addSubview(homePageButton)
         addSubview(forwardButton)
         addSubview(backButton)
         addSubview(stopReloadButton)
@@ -297,15 +250,14 @@ class URLBarView: UIView {
     }
 
     private func setupConstraints() {
+        scrollToTopButton.snp_makeConstraints { make in
+            make.top.equalTo(self)
+            make.left.right.equalTo(self.locationContainer)
+        }
 
         progressBar.snp_makeConstraints { make in
             make.top.equalTo(self.snp_bottom)
             make.width.equalTo(self)
-        }
-
-        border.snp_makeConstraints { make in
-            make.bottom.left.right.equalTo(self)
-            make.height.equalTo(0.5)
         }
 
         locationView.snp_makeConstraints { make in
@@ -318,7 +270,7 @@ class URLBarView: UIView {
         }
 
         tabsButton.snp_makeConstraints { make in
-            make.centerY.equalTo(self)
+            make.centerY.equalTo(self.locationContainer)
             make.trailing.equalTo(self)
             make.size.equalTo(UIConstants.ToolbarHeight)
         }
@@ -346,35 +298,21 @@ class URLBarView: UIView {
             make.size.equalTo(backButton)
         }
 
-        if AppConstants.MOZ_MENU {
-            shareButton.snp_makeConstraints { make in
-                make.right.equalTo(self.menuButton.snp_left)
-                make.centerY.equalTo(self)
-                make.size.equalTo(backButton)
-            }
+        shareButton.snp_makeConstraints { make in
+            make.right.equalTo(self.menuButton.snp_left)
+            make.centerY.equalTo(self)
+            make.size.equalTo(backButton)
+        }
 
-            homePageButton.snp_makeConstraints { make in
-                make.center.equalTo(shareButton)
-                make.size.equalTo(shareButton)
-            }
+        homePageButton.snp_makeConstraints { make in
+            make.center.equalTo(shareButton)
+            make.size.equalTo(shareButton)
+        }
 
-            menuButton.snp_makeConstraints { make in
-                make.right.equalTo(self.tabsButton.snp_left).offset(URLBarViewUX.URLBarCurveOffsetLeft)
-                make.centerY.equalTo(self)
-                make.size.equalTo(backButton)
-            }
-        } else {
-            shareButton.snp_makeConstraints { make in
-                make.right.equalTo(self.bookmarkButton.snp_left)
-                make.centerY.equalTo(self)
-                make.size.equalTo(backButton)
-            }
-
-            bookmarkButton.snp_makeConstraints { make in
-                make.right.equalTo(self.tabsButton.snp_left).offset(URLBarViewUX.URLBarCurveOffsetLeft)
-                make.centerY.equalTo(self)
-                make.size.equalTo(backButton)
-            }
+        menuButton.snp_makeConstraints { make in
+            make.right.equalTo(self.tabsButton.snp_left).offset(URLBarViewUX.URLBarCurveOffsetLeft)
+            make.centerY.equalTo(self)
+            make.size.equalTo(backButton)
         }
     }
 
@@ -389,7 +327,7 @@ class URLBarView: UIView {
                 make.centerY.equalTo(self)
             }
         } else {
-            if topTabsIsShowing {
+            if (topTabsIsShowing) {
                 tabsButton.snp_remakeConstraints { make in
                     make.centerY.equalTo(self.locationContainer)
                     make.leading.equalTo(self.snp_trailing)
@@ -397,11 +335,7 @@ class URLBarView: UIView {
                 }
             } else {
                 tabsButton.snp_remakeConstraints { make in
-                    if self.toolbarIsShowing {
-                        make.centerY.equalTo(self)
-                    } else {
-                        make.centerY.equalTo(self.locationContainer)
-                    }
+                    make.centerY.equalTo(self.locationContainer)
                     make.trailing.equalTo(self)
                     make.size.equalTo(UIConstants.ToolbarHeight)
                 }
@@ -416,10 +350,12 @@ class URLBarView: UIView {
                     make.leading.equalTo(self).offset(URLBarViewUX.LocationLeftPadding)
                     make.trailing.equalTo(self.tabsButton.snp_leading).offset(-14)
                 }
+
+                make.height.equalTo(URLBarViewUX.LocationHeight)
+                make.centerY.equalTo(self)
             }
         }
-        // Fire the didSet handler to update the constraints regarding the minified URL bar
-        self.transitionValue = (self.transitionValue)
+
     }
 
     func createLocationTextField() {
@@ -430,7 +366,6 @@ class URLBarView: UIView {
         guard let locationTextField = locationTextField else { return }
 
         locationTextField.translatesAutoresizingMaskIntoConstraints = false
-        locationTextField.layer.cornerRadius = URLBarViewUX.TextFieldCornerRadius
         locationTextField.autocompleteDelegate = self
         locationTextField.keyboardType = UIKeyboardType.WebSearch
         locationTextField.autocorrectionType = UITextAutocorrectionType.No
@@ -468,6 +403,13 @@ class URLBarView: UIView {
             updateConstraintsIfNeeded()
         }
         updateViewsForOverlayModeAndToolbarChanges()
+    }
+
+    func updateAlphaForSubviews(alpha: CGFloat) {
+        self.tabsButton.alpha = alpha
+        self.locationContainer.alpha = alpha
+        self.backgroundColor = URLBarViewUX.backgroundColorWithAlpha(1 - alpha)
+        self.actionButtons.forEach { $0.alpha = alpha }
     }
 
     func updateTabCount(count: Int, animated: Bool = true) {
@@ -538,11 +480,7 @@ class URLBarView: UIView {
         self.bringSubviewToFront(self.locationContainer)
         self.cancelButton.hidden = false
         self.progressBar.hidden = false
-        if AppConstants.MOZ_MENU {
-            self.menuButton.hidden = !self.toolbarIsShowing
-        } else {
-            self.bookmarkButton.hidden = !self.toolbarIsShowing
-        }
+        self.menuButton.hidden = !self.toolbarIsShowing
         self.forwardButton.hidden = !self.toolbarIsShowing
         self.backButton.hidden = !self.toolbarIsShowing
         self.stopReloadButton.hidden = !self.toolbarIsShowing
@@ -552,11 +490,7 @@ class URLBarView: UIView {
         self.cancelButton.alpha = inOverlayMode ? 1 : 0
         self.progressBar.alpha = inOverlayMode || didCancel ? 0 : 1
         self.shareButton.alpha = inOverlayMode ? 0 : 1
-        if AppConstants.MOZ_MENU {
-            self.menuButton.alpha = inOverlayMode ? 0 : 1
-        } else {
-            self.bookmarkButton.alpha = inOverlayMode ? 0 : 1
-        }
+        self.menuButton.alpha = inOverlayMode ? 0 : 1
         self.forwardButton.alpha = inOverlayMode ? 0 : 1
         self.backButton.alpha = inOverlayMode ? 0 : 1
         self.stopReloadButton.alpha = inOverlayMode ? 0 : 1
@@ -590,11 +524,7 @@ class URLBarView: UIView {
     func updateViewsForOverlayModeAndToolbarChanges() {
         self.cancelButton.hidden = !inOverlayMode
         self.progressBar.hidden = inOverlayMode
-        if AppConstants.MOZ_MENU {
-            self.menuButton.hidden = !self.toolbarIsShowing || inOverlayMode
-        } else {
-            self.bookmarkButton.hidden = !self.toolbarIsShowing || inOverlayMode
-        }
+        self.menuButton.hidden = !self.toolbarIsShowing || inOverlayMode
         self.forwardButton.hidden = !self.toolbarIsShowing || inOverlayMode
         self.backButton.hidden = !self.toolbarIsShowing || inOverlayMode
         self.stopReloadButton.hidden = !self.toolbarIsShowing || inOverlayMode
@@ -627,6 +557,10 @@ class URLBarView: UIView {
     func SELdidClickCancel() {
         leaveOverlayMode(didCancel: true)
     }
+
+    func SELtappedScrollToTopArea() {
+        delegate?.urlBarDidPressScrollToTop(self)
+    }
 }
 
 extension URLBarView: TabToolbarProtocol {
@@ -654,9 +588,6 @@ extension URLBarView: TabToolbarProtocol {
     }
 
     func updatePageStatus(isWebPage isWebPage: Bool) {
-        if !AppConstants.MOZ_MENU {
-            bookmarkButton.enabled = isWebPage
-        }
         stopReloadButton.enabled = isWebPage
         shareButton.enabled = isWebPage
     }
@@ -668,7 +599,7 @@ extension URLBarView: TabToolbarProtocol {
                 return [locationTextField, cancelButton]
             } else {
                 if toolbarIsShowing {
-                    return AppConstants.MOZ_MENU ? [backButton, forwardButton, stopReloadButton, locationView, shareButton, menuButton, tabsButton, progressBar] : [backButton, forwardButton, stopReloadButton, locationView, shareButton, bookmarkButton, tabsButton, progressBar]
+                    return [backButton, forwardButton, stopReloadButton, locationView, shareButton, menuButton, tabsButton, progressBar]
                 } else {
                     return [locationView, tabsButton, progressBar]
                 }
@@ -686,7 +617,10 @@ extension URLBarView: TabLocationViewDelegate {
     }
 
     func tabLocationViewDidTapLocation(tabLocationView: TabLocationView) {
-        let locationText = delegate?.urlBarDisplayTextForURL(locationView.url)
+        var locationText = delegate?.urlBarDisplayTextForURL(locationView.url)
+        if let host = locationView.url?.host {
+            locationText = locationView.url?.absoluteString?.stringByReplacingOccurrencesOfString(host, withString: host.asciiHostToUTF8())
+        }
         enterOverlayMode(locationText, pasted: false)
     }
 
@@ -866,7 +800,7 @@ private class CurveView: UIView {
     }
 
     override func drawRect(rect: CGRect) {
-        let context = UIGraphicsGetCurrentContext()
+        guard let context = UIGraphicsGetCurrentContext() else { return }
         CGContextSaveGState(context)
         CGContextClearRect(context, rect)
         CGContextSetFillColorWithColor(context, URLBarViewUX.backgroundColorWithAlpha(1).CGColor)
@@ -941,7 +875,7 @@ class ToolbarTextField: AutocompleteTextField {
         let size = image.size
 
         UIGraphicsBeginImageContextWithOptions(size, false, 2)
-        let context = UIGraphicsGetCurrentContext()
+        let context = UIGraphicsGetCurrentContext()!
         image.drawAtPoint(CGPointZero, blendMode: CGBlendMode.Normal, alpha: 1.0)
 
         CGContextSetFillColorWithColor(context, color.CGColor)
@@ -953,8 +887,8 @@ class ToolbarTextField: AutocompleteTextField {
             CGPointZero.y,
             image.size.width,
             image.size.height)
-        CGContextFillRect(UIGraphicsGetCurrentContext(), rect)
-        let tintedImage = UIGraphicsGetImageFromCurrentImageContext()
+        CGContextFillRect(context, rect)
+        let tintedImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
         
         return tintedImage
