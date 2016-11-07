@@ -38,7 +38,7 @@ class LocalContentBlocker: URLProtocol, URLSessionDelegate, URLSessionDataDelega
         mutableRequest.addValue("1", forHTTPHeaderField: "DNT")
 
         let configuration = URLSessionConfiguration.default
-        let session = Foundation.URLSession(configuration: configuration, delegate: self, delegateQueue: nil)
+        let session = URLSession(configuration: configuration, delegate: self, delegateQueue: nil)
         dataTask = session.dataTask(with: mutableRequest)
         dataTask?.resume()
     }
@@ -55,6 +55,7 @@ class LocalContentBlocker: URLProtocol, URLSessionDelegate, URLSessionDataDelega
            originalRequest.url != currentRequest.url {
                 let response = URLResponse()
                 client?.urlProtocol(self, wasRedirectedTo: currentRequest, redirectResponse: response)
+                completionHandler(.cancel)
                 return
         }
 
@@ -72,6 +73,7 @@ class LocalContentBlocker: URLProtocol, URLSessionDelegate, URLSessionDataDelega
                   let url = request.url,
                   url == request.mainDocumentURL else {
                 client?.urlProtocol(self, didFailWithError: error)
+                session.finishTasksAndInvalidate()
                 return
             }
 
@@ -83,6 +85,7 @@ class LocalContentBlocker: URLProtocol, URLSessionDelegate, URLSessionDataDelega
         }
 
         client?.urlProtocolDidFinishLoading(self)
+        session.finishTasksAndInvalidate()
     }
 }
 
