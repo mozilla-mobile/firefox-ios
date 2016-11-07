@@ -22,7 +22,7 @@
 	</dict>
 	<dict>
 		<key>name</key>
-		<string>Mail.ru</string>
+		<string>Mail.Ru</string>
 		<key>scheme</key>
 		<string>mailru-mailto://</string>
 	</dict>
