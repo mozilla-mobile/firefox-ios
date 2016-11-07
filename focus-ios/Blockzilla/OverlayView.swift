@@ -45,10 +45,8 @@ class OverlayView: UIView {
         searchBorder.backgroundColor = UIConstants.colors.settingsButtonBorder
         addSubview(searchBorder)
 
-        settingsButton.isHidden = (UIDevice.current.userInterfaceIdiom == .pad)
         settingsButton.setImage(#imageLiteral(resourceName: "icon_settings"), for: .normal)
         settingsButton.contentEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
-
         settingsButton.addTarget(self, action: #selector(didPressSettings), for: .touchUpInside)
         addSubview(settingsButton)
 

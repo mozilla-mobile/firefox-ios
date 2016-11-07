@@ -30,12 +30,10 @@ class URLBar: UIView {
     private let urlText = URLTextField()
     private let lockIcon = UIImageView(image: #imageLiteral(resourceName: "icon_https"))
     private var showButtons = false
-    private var isActivated = false
 
     private var hideButtonContainerConstraint: Constraint!
     private var fullWidthURLTextConstraint: Constraint!
     private var centeredURLConstraint: Constraint!
-    private var showSettingsConstraints = [Constraint]()
     private var hideLockConstraints = [Constraint]()
     private var hideToolsetConstraints = [Constraint]()
     private var showToolsetConstraints = [Constraint]()
@@ -49,7 +47,6 @@ class URLBar: UIView {
         addSubview(toolset.forwardButton)
         addSubview(toolset.stopReloadButton)
         addSubview(toolset.sendButton)
-        addSubview(toolset.settingsButton)
 
         urlTextContainer.backgroundColor = UIConstants.colors.urlTextBackground
         urlTextContainer.layer.cornerRadius = UIConstants.layout.urlBarCornerRadius
@@ -124,8 +121,7 @@ class URLBar: UIView {
         progressBar.progressTintColor = UIConstants.colors.progressBar
         addSubview(progressBar)
 
-        // The URL text container is 50% width, so divide the remaining space equally among the buttons.
-        let toolsetButtonWidthMultiplier = 0.5 / 6
+        let toolsetButtonWidthMultiplier = 0.08
 
         toolset.backButton.snp.makeConstraints { make in
             make.leading.centerY.equalTo(self)
@@ -184,47 +180,22 @@ class URLBar: UIView {
         buttonContainer.snp.makeConstraints { make in
             make.top.bottom.equalTo(urlTextContainer)
 
-            make.width.greaterThanOrEqualTo(deleteButton).inset(-UIConstants.layout.urlBarMargin).priority(998)
-            make.width.greaterThanOrEqualTo(cancelButton).inset(-UIConstants.layout.urlBarMargin).priority(998)
-            make.width.greaterThanOrEqualTo(toolset.backButton).priority(998)
+            make.width.greaterThanOrEqualTo(deleteButton).inset(-UIConstants.layout.urlBarMargin).priority(999)
+            make.width.greaterThanOrEqualTo(cancelButton).inset(-UIConstants.layout.urlBarMargin).priority(999)
+            make.width.greaterThanOrEqualTo(toolset.backButton).priority(999)
 
             // This will shrink the container to be as small as possible while still meeting the width requirements above.
             make.width.equalTo(0).priority(500)
 
             // Keep the button container hidden until we start browsing.
-            // Set the width equal to the URL bar margin so there's still a gap between the trailing edges...
-            hideButtonContainerConstraint = make.width.equalTo(UIConstants.layout.urlBarMargin).priority(999).constraint
-
-            /// ...unless we're showing the Settings button (iPad only).
-            if UIDevice.current.userInterfaceIdiom == .pad {
-                showSettingsConstraints.append(make.width.equalTo(0).constraint)
-            }
+            // Set the width equal to the URL bar margin so there's still a gap between the trailing edges.
+            hideButtonContainerConstraint = make.width.equalTo(UIConstants.layout.urlBarMargin).constraint
         }
 
         toolset.sendButton.snp.makeConstraints { make in
             make.leading.equalTo(buttonContainer.snp.trailing)
-            make.centerY.equalTo(self)
-            make.size.equalTo(toolset.backButton)
-        }
-
-        toolset.settingsButton.snp.makeConstraints { make in
-            make.leading.equalTo(toolset.sendButton.snp.trailing)
             make.centerY.trailing.equalTo(self)
-
-            if UIDevice.current.userInterfaceIdiom == .phone {
-                // We don't show the Settings button on phones.
-                make.width.equalTo(0)
-            } else {
-                // Like the other toolset buttons, we usually want this to be equal to the back button size.
-                // But there's a one-off state after activation on iPads/landscape where we show Settings
-                // with all the other buttons hidden, so we allow this constraint to be overridden.
-                make.width.equalTo(toolset.backButton).priority(999)
-
-                // Normally, the Settings button will be equal to the other toolset widths.
-                // But there's a one-off state after activation on iPads/landscape where we show Settings
-                // with all the other buttons hidden, so we have to set the width manually.
-                showSettingsConstraints.append(make.width.equalTo(self).multipliedBy(toolsetButtonWidthMultiplier).constraint)
-            }
+            make.size.equalTo(toolset.backButton)
         }
 
         deleteButton.snp.makeConstraints { make in
@@ -247,7 +218,6 @@ class URLBar: UIView {
 
         centeredURLConstraint.deactivate()
         showToolsetConstraints.forEach { $0.deactivate() }
-        showSettingsConstraints.forEach { $0.deactivate() }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -392,15 +362,6 @@ class URLBar: UIView {
         toolset.stopReloadButton.animateHidden(isHidden, duration: 0.3)
         toolset.sendButton.animateHidden(isHidden, duration: 0.3)
 
-        // There's a one-off state after activating but before browsing where we want to show
-        // the Settings button in the URL bar.
-        if isActivated && !showButtons && showToolset {
-            showSettingsConstraints.forEach { $0.activate() }
-        } else {
-            showSettingsConstraints.forEach { $0.deactivate() }
-        }
-        toolset.settingsButton.animateHidden(!showToolset, duration: 0.3)
-
         if isHidden {
             centeredURLConstraint.deactivate()
             showToolsetConstraints.forEach { $0.deactivate() }
@@ -433,8 +394,6 @@ class URLBar: UIView {
     }
 
     @objc private func didPressActivate(_ button: UIButton) {
-        isActivated = true
-
         UIView.animate(withDuration: UIConstants.layout.urlBarMoveToTopAnimationDuration, animations: {
             button.contentHorizontalAlignment = .left
             self.layoutIfNeeded()

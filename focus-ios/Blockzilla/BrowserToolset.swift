@@ -10,7 +10,6 @@ protocol BrowserToolsetDelegate: class {
     func browserToolsetDidPressReload(_ browserToolbar: BrowserToolset)
     func browserToolsetDidPressStop(_ browserToolbar: BrowserToolset)
     func browserToolsetDidPressSend(_ browserToolbar: BrowserToolset)
-    func browserToolsetDidPressSettings(_ browserToolbar: BrowserToolset)
 }
 
 class BrowserToolset {
@@ -20,7 +19,6 @@ class BrowserToolset {
     let forwardButton = UIButton()
     let stopReloadButton = UIButton()
     let sendButton = UIButton()
-    let settingsButton = UIButton()
 
     init() {
         backButton.tintColor = UIConstants.colors.toolbarButtonNormal
@@ -51,9 +49,6 @@ class BrowserToolset {
         sendButton.setImage(sendImageActive, for: .highlighted)
         sendButton.setImage(sendImageInactive, for: .disabled)
         sendButton.addTarget(self, action: #selector(didPressSend), for: .touchUpInside)
-
-        settingsButton.setImage(#imageLiteral(resourceName: "icon_settings"), for: .normal)
-        settingsButton.addTarget(self, action: #selector(didPressSettings), for: .touchUpInside)
     }
 
     var canGoBack: Bool = false {
@@ -105,10 +100,5 @@ class BrowserToolset {
 
     @objc private func didPressSend() {
         delegate?.browserToolsetDidPressSend(self)
-    }
-
-
-    @objc private func didPressSettings() {
-        delegate?.browserToolsetDidPressSettings(self)
     }
 }
