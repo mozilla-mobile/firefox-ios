@@ -11,7 +11,7 @@ struct UIConstants {
         static let buttonHighlight = UIColor(rgb: 0x333333)
         static let cellSelected = UIColor(rgb: 0x2C6EC8)
         static let defaultFont = UIColor(rgb: 0xE1E5EA)
-        static let deleteButtonBackgroundNormal = UIColor(white: 1, alpha: 0.2)
+        static let deleteButtonBackground = UIColor(white: 1, alpha: 0.2)
         static let deleteButtonBorder = UIColor(white: 1, alpha: 0.5)
         static let focusLightBlue = UIColor(rgb: 0x00A7E0)
         static let focusDarkBlue = UIColor(rgb: 0x005DA5)
