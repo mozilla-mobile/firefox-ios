@@ -6,7 +6,7 @@ import Deferred
 import Foundation
 import Shared
 
-private let log = Logger.syncLogger;
+private let log = Logger.syncLogger
 
 /**
  * The kinda-immutable base interface for bookmarks and folders.
