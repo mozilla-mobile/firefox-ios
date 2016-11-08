@@ -43,6 +43,7 @@ class Browser: NSObject {
         webView.delegate = self
         webView.scrollView.backgroundColor = UIConstants.colors.background
         webView.scrollView.contentInset.bottom = CGFloat(bottomInset)
+        webView.mediaPlaybackRequiresUserAction = true
         view.addSubview(webView)
 
         webView.snp.makeConstraints { make in
