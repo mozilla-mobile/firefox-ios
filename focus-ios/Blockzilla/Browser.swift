@@ -129,6 +129,8 @@ class Browser: NSObject {
 }
 
 extension Browser: UIWebViewDelegate {
+    private static let supportedSchemes = ["http", "https", "about"]
+
     func webViewDidStartLoad(_ webView: UIWebView) {
         if estimatedProgress == 0 {
             estimatedProgress = 0.1
@@ -138,6 +140,9 @@ extension Browser: UIWebViewDelegate {
     }
 
     func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
+        // We don't currently support opening in external apps, so just ignore unsupported schemes.
+        guard let scheme = request.url?.scheme, Browser.supportedSchemes.contains(scheme.lowercased()) else { return false }
+
         if request.mainDocumentURL != url {
             url = request.mainDocumentURL
         }
