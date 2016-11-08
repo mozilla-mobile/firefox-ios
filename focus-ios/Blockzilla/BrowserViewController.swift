@@ -30,7 +30,7 @@ class BrowserViewController: UIViewController {
 
         view.addSubview(homeViewContainer)
 
-        urlBarContainer.alpha = 1
+        urlBarContainer.alpha = 0
         view.addSubview(urlBarContainer)
 
         browser.view.isHidden = true
@@ -56,10 +56,7 @@ class BrowserViewController: UIViewController {
 
         urlBarContainer.snp.makeConstraints { make in
             make.top.leading.trailing.equalTo(view)
-
-            // Shrink the container to 0 height when there's no URL bar.
-            // This will make it animate down from the top when the URL bar is added.
-            make.height.equalTo(0).priority(500)
+            make.height.equalTo(view).multipliedBy(0.6).priority(500)
         }
 
         browserToolbar.snp.makeConstraints { make in

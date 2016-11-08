@@ -71,7 +71,7 @@ struct UIConstants {
         static let toastAnimationDuration: TimeInterval = 0.3
         static let toastDuration: TimeInterval = 1.5
         static let toolbarFadeAnimationDuration = 0.25
-        static let urlBarMoveToTopAnimationDuration: TimeInterval = 0.3
+        static let urlBarMoveToTopAnimationDuration: TimeInterval = 0.25
         static let urlBarCornerRadius: CGFloat = 2
         static let urlBarFadeAnimationDuration: TimeInterval = 0.25
         static let urlBarMargin: CGFloat = 8
