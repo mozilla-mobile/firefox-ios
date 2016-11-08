@@ -98,6 +98,10 @@ extension ShareExtensionHelper: UIActivityItemSource {
     }
 
     func activityViewController(activityViewController: UIActivityViewController, dataTypeIdentifierForActivityType activityType: String?) -> String {
+        // Because of WeChat doesn't recognize our custom UTI.
+        if activityType == "com.tencent.xin.sharetimeline" {
+            return "public.url"
+        }
         // Because of our UTI declaration, this UTI now satisfies both the 1Password Extension and the usual NSURL for Share extensions.
         return "org.appextension.fill-browser-action"
     }
