@@ -6,7 +6,7 @@ import Shared
 
 private var appDelegate: AppDelegate.Type
 
-if AppConstants.IsRunningTest || AppConstants.IsRunningFastlaneSnapshot {
+if AppConstants.IsRunningTest {
     appDelegate = TestAppDelegate.self
 } else {
     switch AppConstants.BuildChannel {
