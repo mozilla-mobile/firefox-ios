@@ -18,10 +18,12 @@ class BrowserViewController: UIViewController {
 
     private var homeViewContainer = UIView()
     private var browserSlideOffConstraints = [Constraint]()
-    private var showsToolsetInURLBar: Bool { return UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.orientation.isLandscape }
+    private var showsToolsetInURLBar = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        showsToolsetInURLBar = UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.orientation.isLandscape
 
         let background = GradientBackgroundView(alpha: 0.6, startPoint: CGPoint.zero, endPoint: CGPoint(x: 1, y: 1))
         view.addSubview(background)
@@ -190,7 +192,13 @@ class BrowserViewController: UIViewController {
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+
         guard UIDevice.current.userInterfaceIdiom == .phone else { return }
+
+        // UIDevice.current.orientation isn't reliable. See https://bugzilla.mozilla.org/show_bug.cgi?id=1315370#c5
+        // As a workaround, consider the phone to be in landscape if the new width is greater than the height.
+        showsToolsetInURLBar = size.width > size.height
 
         coordinator.animate(alongsideTransition: { _ in
             self.urlBar.showToolset = self.showsToolsetInURLBar
