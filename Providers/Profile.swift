@@ -210,13 +210,8 @@ public class BrowserProfile: Profile {
         self.files = ProfileFileAccessor(localName: localName)
         self.app = app
 
-        if let baseBundleIdentifier = AppInfo.baseBundleIdentifier() {
-            self.keychain = KeychainWrapper(serviceName: baseBundleIdentifier)
-        } else {
-            log.error("Unable to get the base bundle identifier. Keychain data will not be shared.")
-            self.keychain = KeychainWrapper.defaultKeychainWrapper()
-        }
-        
+        self.keychain = KeychainWrapper.sharedAppContainerKeychain
+
         if clear {
             do {
                 try NSFileManager.defaultManager().removeItemAtPath(self.files.rootPath as String)
