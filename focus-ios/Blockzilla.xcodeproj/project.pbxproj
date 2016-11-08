@@ -61,7 +61,6 @@
 		D3DA778C1DC2C60E009C114E /* errorPage.html in Resources */ = {isa = PBXBuildFile; fileRef = D3DA778B1DC2C60E009C114E /* errorPage.html */; };
 		D3E251EA1DAD714C005918DC /* InstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E251E71DAD714C005918DC /* InstructionsView.swift */; };
 		D3E251EB1DAD714C005918DC /* SafariInstructionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E251E81DAD714C005918DC /* SafariInstructionsViewController.swift */; };
-		D3E251EC1DAD714C005918DC /* IntroSlideWelcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E251E91DAD714C005918DC /* IntroSlideWelcome.swift */; };
 		D3E251F91DAF064B005918DC /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E251F81DAF064B005918DC /* Utils.swift */; };
 		D3E251FB1DAF0668005918DC /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E251FA1DAF0668005918DC /* AppInfo.swift */; };
 		D3E2C8EA1D9F0E6200DEBE3D /* BrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E2C8E91D9F0E6200DEBE3D /* BrowserViewController.swift */; };
@@ -184,7 +183,6 @@
 		D3DA778B1DC2C60E009C114E /* errorPage.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = errorPage.html; sourceTree = "<group>"; };
 		D3E251E71DAD714C005918DC /* InstructionsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstructionsView.swift; sourceTree = "<group>"; };
 		D3E251E81DAD714C005918DC /* SafariInstructionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SafariInstructionsViewController.swift; sourceTree = "<group>"; };
-		D3E251E91DAD714C005918DC /* IntroSlideWelcome.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroSlideWelcome.swift; sourceTree = "<group>"; };
 		D3E251F81DAF064B005918DC /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Utils.swift; path = Shared/Utils.swift; sourceTree = "<group>"; };
 		D3E251FA1DAF0668005918DC /* AppInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppInfo.swift; path = Shared/AppInfo.swift; sourceTree = "<group>"; };
 		D3E2C8E91D9F0E6200DEBE3D /* BrowserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserViewController.swift; sourceTree = "<group>"; };
@@ -375,7 +373,6 @@
 				D3E3CA7C1DA827AD0079C94B /* HomeView.swift */,
 				D3E2C9681DA3024800DEBE3D /* InsetButton.swift */,
 				D3E251E71DAD714C005918DC /* InstructionsView.swift */,
-				D3E251E91DAD714C005918DC /* IntroSlideWelcome.swift */,
 				D3426AE81DB7F4060016DA5A /* KeyboardHelper.swift */,
 				D3E2C8F91D9F170200DEBE3D /* LocalContentBlocker.swift */,
 				D36C1BA91DB02EBB0073C1AB /* OpenUtils.swift */,
@@ -611,7 +608,6 @@
 				D3DA77851DC2C307009C114E /* ErrorPage.swift in Sources */,
 				D3426AE91DB7F4060016DA5A /* KeyboardHelper.swift in Sources */,
 				D3E251EA1DAD714C005918DC /* InstructionsView.swift in Sources */,
-				D3E251EC1DAD714C005918DC /* IntroSlideWelcome.swift in Sources */,
 				D3561B2B1DB5925100A5EEAF /* GradientBackgroundView.swift in Sources */,
 				D3E2C96D1DA3077400DEBE3D /* CharacterSetExtensions.swift in Sources */,
 				D3E2C96F1DA3093D00DEBE3D /* BrowserToolbar.swift in Sources */,
