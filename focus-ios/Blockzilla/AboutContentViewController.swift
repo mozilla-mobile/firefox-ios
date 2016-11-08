@@ -7,7 +7,7 @@ import SnapKit
 import UIKit
 import WebKit
 
-class AboutContentViewController: UIViewController, WKNavigationDelegate {
+class AboutContentViewController: UIViewController, UIWebViewDelegate {
     private let url: URL
 
     init(url: URL) {
@@ -24,7 +24,7 @@ class AboutContentViewController: UIViewController, WKNavigationDelegate {
 
         view.backgroundColor = UIConstants.colors.background
 
-        let webView = WKWebView()
+        let webView = UIWebView()
         webView.alpha = 0
         view.addSubview(webView)
 
@@ -32,8 +32,8 @@ class AboutContentViewController: UIViewController, WKNavigationDelegate {
             make.edges.equalTo(self.view)
         }
 
-        webView.navigationDelegate = self
-        webView.load(URLRequest(url: url))
+        webView.delegate = self
+        webView.loadRequest(URLRequest(url: url))
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -45,7 +45,15 @@ class AboutContentViewController: UIViewController, WKNavigationDelegate {
         return UIStatusBarStyle.lightContent
     }
 
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+    func webViewDidFinishLoad(_ webView: UIWebView) {
+        revealWebView(webView)
+    }
+
+    func webView(_ webView: UIWebView, didFailLoadWithError error: Error) {
+        revealWebView(webView)
+    }
+
+    private func revealWebView(_ webView: UIWebView) {
         // Add a small delay to allow the stylesheets to load and avoid flicker.
         let delayTime = DispatchTime.now() + Double(Int64(200 * Double(NSEC_PER_MSEC))) / Double(NSEC_PER_SEC)
         DispatchQueue.main.asyncAfter(deadline: delayTime) {
