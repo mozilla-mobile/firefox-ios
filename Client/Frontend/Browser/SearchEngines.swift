@@ -173,24 +173,31 @@ class SearchEngines {
         NSKeyedArchiver.archiveRootObject(customEngines, toFile: self.customEngineFilePath())
     }
 
+    /// Return all possible language identifiers in the order of most specific to least specific.
+    /// For example, zh-Hans-CN will return [zh-Hans-CN, zh-CN, zh].
+    class func possibilitiesForLanguageIdentifier(languageIdentifier: String) -> [String] {
+        var possibilities = [String]()
+        let components = languageIdentifier.componentsSeparatedByString("-")
+        if components.count == 1 {
+            // zh
+            possibilities.append(languageIdentifier)
+        } else if components.count == 2 {
+            // zh-CN
+            possibilities.append(languageIdentifier)
+            possibilities.append(components[0])
+        } else if components.count == 3 {
+            possibilities.append(languageIdentifier)
+            possibilities.append(components[0] + "-" + components[2])
+            possibilities.append(components[0])
+        }
+        return possibilities
+    }
+
     /// Return all possible paths for a language identifier in the order of most specific to least specific.
     /// For example, zh-Hans-CN with a default of en will return [zh-Hans-CN, zh-CN, zh, en]. The fallback
     /// identifier must be a known one that is guaranteed to exist in the SearchPlugins directory.
     class func directoriesForLanguageIdentifier(languageIdentifier: String, basePath: NSString, fallbackIdentifier: String) -> [String] {
-        var directories = [String]()
-        let components = languageIdentifier.componentsSeparatedByString("-")
-        if components.count == 1 {
-            // zh
-            directories.append(languageIdentifier)
-        } else if components.count == 2 {
-            // zh-CN
-            directories.append(languageIdentifier)
-            directories.append(components[0])
-        } else if components.count == 3 {
-            directories.append(languageIdentifier)
-            directories.append(components[0] + "-" + components[2])
-            directories.append(components[0])
-        }
+        var directories = possibilitiesForLanguageIdentifier(languageIdentifier)
         if !directories.contains(fallbackIdentifier) {
             directories.append(fallbackIdentifier)
         }
@@ -218,6 +225,18 @@ class SearchEngines {
         }
     }
 
+    // Return the region identifier to be used for the search engine selection.
+    class func regionIdentifierForSearchEngines() -> String {
+        let languageIdentifier = languageIdentifierForSearchEngines()
+        let components = languageIdentifier.componentsSeparatedByString("-")
+        if components.count == 2 {
+            return components[1]
+        } else if components.count == 3 {
+            return components[2]
+        }
+        // This shouldn't happen
+        return languageIdentifier
+    }
     /// Get all bundled (not custom) search engines, with the default search engine first,
     /// but the others in no particular order.
     class func getUnorderedBundledEngines() -> [OpenSearchEngine] {
@@ -238,29 +257,29 @@ class SearchEngines {
             return []
         }
 
-        let index = (searchDirectory as NSString).stringByAppendingPathComponent("list.txt")
-        let listFile = try? String(contentsOfFile: index, encoding: NSUTF8StringEncoding)
-        assert(listFile != nil, "Read the list of search engines")
+        let index = (pluginBasePath as NSString).stringByAppendingPathComponent("list.json")
+        let listFile = try! String(contentsOfFile: index, encoding: NSUTF8StringEncoding)
+        let engineJSON = SearchEnginesJSON(listFile)
 
-        let engineNames = listFile!
-            .stringByTrimmingCharactersInSet(NSCharacterSet.newlineCharacterSet())
-            .componentsSeparatedByCharactersInSet(NSCharacterSet.newlineCharacterSet())
+        let possibilities = possibilitiesForLanguageIdentifier(languageIdentifier)
+        let region = regionIdentifierForSearchEngines()
+        let engineNames = engineJSON.visibleDefaultEngines(possibilities, region: region)
+        assert(engineNames.count > 0, "No search engines")
 
         var engines = [OpenSearchEngine]()
         let parser = OpenSearchParser(pluginMode: true)
         for engineName in engineNames {
-            // Ignore hidden engines in list.txt
-            if (engineName.endsWith(":hidden")) {
-                continue
-            }
-
             // Search the current localized search plugins directory for the search engine.
             // If it doesn't exist, fall back to English.
             var fullPath = (searchDirectory as NSString).stringByAppendingPathComponent("\(engineName).xml")
             if !NSFileManager.defaultManager().fileExistsAtPath(fullPath) {
                 fullPath = fallbackDirectory.stringByAppendingPathComponent("\(engineName).xml")
             }
-            assert(NSFileManager.defaultManager().fileExistsAtPath(fullPath), "\(fullPath) exists")
+            // If a search engine doesn't exist, just ignore it. We might have entries in
+            // list.json where the files don't exist yet.
+            if (!NSFileManager.defaultManager().fileExistsAtPath(fullPath)) {
+                continue
+            }
 
             let engine = parser.parse(fullPath, engineID: engineName)
             assert(engine != nil, "Engine at \(fullPath) successfully parsed")
