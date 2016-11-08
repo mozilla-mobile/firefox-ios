@@ -29,6 +29,7 @@ class URLBar: UIView {
     private let urlTextContainer = UIView()
     private let urlText = URLTextField()
     private let lockIcon = UIImageView(image: #imageLiteral(resourceName: "icon_https"))
+    private let urlBarBackgroundView = UIView()
     private var showButtons = false
 
     private var hideButtonContainerConstraint: Constraint!
@@ -48,8 +49,10 @@ class URLBar: UIView {
         addSubview(toolset.stopReloadButton)
         addSubview(toolset.sendButton)
 
-        urlTextContainer.backgroundColor = UIConstants.colors.urlTextBackground
-        urlTextContainer.layer.cornerRadius = UIConstants.layout.urlBarCornerRadius
+        urlBarBackgroundView.backgroundColor = UIConstants.colors.urlTextBackground
+        urlBarBackgroundView.layer.cornerRadius = UIConstants.layout.urlBarCornerRadius
+        addSubview(urlBarBackgroundView)
+
         addSubview(urlTextContainer)
 
         let textAndLockContainer = UIView()
@@ -143,6 +146,10 @@ class URLBar: UIView {
             make.leading.equalTo(toolset.forwardButton.snp.trailing)
             make.centerY.equalTo(self)
             make.size.equalTo(toolset.backButton)
+        }
+
+        urlBarBackgroundView.snp.makeConstraints { make in
+            make.edges.equalTo(urlTextContainer)
         }
 
         urlTextContainer.snp.makeConstraints { make in
@@ -263,6 +270,9 @@ class URLBar: UIView {
         }
     }
 
+    /// The outer view the URL bar will shrink from/to when transitioning to/from edit mode.
+    weak var shrinkFromView: UIView?
+
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         // Since the URL text field is smaller and centered on iPads, make sure
         // that touching the surrounding area will trigger editing.
@@ -310,11 +320,14 @@ class URLBar: UIView {
 
         self.layoutIfNeeded()
         UIView.animate(withDuration: UIConstants.layout.urlBarFadeAnimationDuration) {
-            // Show the text field background when editing.
-            self.urlTextContainer.backgroundColor = UIConstants.colors.urlTextBackground
-
             // Hide the URL toolset buttons if we're on iPad/landscape.
             self.updateToolsetConstraints()
+
+            // Shrink the URL text background in from the outer URL bar.
+            self.urlBarBackgroundView.alpha = 1
+            self.urlBarBackgroundView.snp.remakeConstraints { make in
+                make.edges.equalTo(self.urlTextContainer)
+            }
 
             self.layoutIfNeeded()
         }
@@ -335,9 +348,6 @@ class URLBar: UIView {
 
         self.layoutIfNeeded()
         UIView.animate(withDuration: UIConstants.layout.urlBarFadeAnimationDuration) {
-            // Hide the text field background when we're done editing.
-            self.urlTextContainer.backgroundColor = nil
-
             // We don't show Cancel/Erase for the initial URL bar at app launch.
             // If this is the first dismissal, we've entered the browsing state, so show them.
             if !self.showButtons {
@@ -348,6 +358,12 @@ class URLBar: UIView {
 
             // Reveal the URL bar buttons on iPad/landscape.
             self.updateToolsetConstraints()
+
+            // Expand the URL text background to the outer URL bar.
+            self.urlBarBackgroundView.alpha = 0
+            self.urlBarBackgroundView.snp.remakeConstraints { make in
+                make.edges.equalTo(self.shrinkFromView ?? 0)
+            }
 
             self.layoutIfNeeded()
         }

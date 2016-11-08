@@ -126,6 +126,7 @@ class BrowserViewController: UIViewController {
         urlBar = URLBar()
         urlBar.delegate = self
         urlBar.toolsetDelegate = self
+        urlBar.shrinkFromView = urlBarContainer
         urlBar.showToolset = showsToolsetInURLBar
         view.insertSubview(urlBar, belowSubview: browser.view)
 
