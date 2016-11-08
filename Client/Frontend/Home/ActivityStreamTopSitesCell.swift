@@ -121,14 +121,18 @@ class TopSiteItemCell: UICollectionViewCell {
     }
 
     private func setImageWithURL(url: NSURL) {
+        let title = self.titleLabel.text
         imageView.sd_setImageWithURL(url) { [unowned self] (img, err, type, url) -> Void in
             guard let img = img else {
                 self.contentView.backgroundColor = FaviconFetcher.getDefaultColor(url)
                 self.imageView.image = FaviconFetcher.getDefaultFavicon(url)
                 return
             }
-            img.getColors(CGSize(width: 25, height: 25)) { colors in
-                self.contentView.backgroundColor = colors.backgroundColor ?? UIColor.lightGrayColor()
+            img.getColors(CGSize(width: 25, height: 25)) {colors in
+                //sometimes the cell could be reused by the time we get here.
+                if title == self.titleLabel.text {
+                    self.contentView.backgroundColor = colors.backgroundColor ?? UIColor.lightGrayColor()
+                }
             }
         }
     }
