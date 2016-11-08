@@ -6,6 +6,8 @@ import Deferred
 import Foundation
 import Shared
 
+private let log = Logger.syncLogger;
+
 /**
  * The kinda-immutable base interface for bookmarks and folders.
  */
@@ -63,9 +65,8 @@ public class BookmarkFolder: BookmarkNode {
         return false
     }
 
-    public func removeItemWithGUID(guid: GUID) -> MemoryBookmarkFolder {
-        let without = (0..<count).flatMap { self[$0]?.guid != guid ? self[$0] : nil }
-        return MemoryBookmarkFolder(guid: self.guid, title: self.title, children: without)
+    public func removeItemWithGUID(guid: GUID) -> BookmarkFolder? {
+        return nil
     }
 }
 
@@ -114,7 +115,11 @@ public class BookmarksModel: BookmarksModelFactorySource {
      * Produce a new model with a memory-backed root with the given GUID removed from the current folder
      */
     public func removeGUIDFromCurrent(guid: GUID) -> BookmarksModel {
-        return BookmarksModel(modelFactory: self.factory, root: self.current.removeItemWithGUID(guid))
+        if let removedRoot = self.current.removeItemWithGUID(guid) {
+            return BookmarksModel(modelFactory: self.factory, root: removedRoot)
+        }
+        log.warning("BookmarksModel.removeGUIDFromCurrent did not remove anything. Check to make sure you're not using the abstract BookmarkFolder class.")
+        return BookmarksModel(modelFactory: self.factory, root: current)
     }
 
     /**
@@ -205,6 +210,11 @@ public class MemoryBookmarkFolder: BookmarkFolder, SequenceType {
         return true
     }
 
+    override public func removeItemWithGUID(guid: GUID) -> BookmarkFolder? {
+        let without = children.filter { $0.guid != guid }
+        return MemoryBookmarkFolder(guid: self.guid, title: self.title, children: without)
+    }
+
     public func generate() -> BookmarkNodeGenerator {
         return BookmarkNodeGenerator(children: self.children)
     }
@@ -273,6 +283,14 @@ public class PrependedBookmarkFolder: BookmarkFolder {
 
     override public func itemIsEditableAtIndex(index: Int) -> Bool {
         return index > 0 && self.main.itemIsEditableAtIndex(index - 1)
+    }
+
+    override public func removeItemWithGUID(guid: GUID) -> BookmarkFolder? {
+        guard let removedFolder = main.removeItemWithGUID(guid) else {
+            log.warning("Failed to remove child item from prepended folder. Check that main folder overrides removeItemWithGUID.")
+            return nil
+        }
+        return PrependedBookmarkFolder(main: removedFolder, prepend: prepend)
     }
 }
 
