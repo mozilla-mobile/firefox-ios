@@ -384,6 +384,11 @@ class URLBar: UIView {
     }
 
     @objc private func didPressDelete() {
+        // Prevent layout issues where the user taps Erase and the URL at the same time.
+        guard !isEditing else { return }
+
+        isUserInteractionEnabled = false
+
         delegate?.urlBarDidPressDelete(self)
     }
 
@@ -413,6 +418,10 @@ class URLBar: UIView {
 
 extension URLBar: AutocompleteTextFieldDelegate {
     func autocompleteTextFieldShouldBeginEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool {
+        // shouldBeginEditing is fired out-of-band from the touch event, so check the user interaction
+        // flag here to make sure it hasn't changed.
+        guard isUserInteractionEnabled else { return false }
+
         present()
         autocompleteTextField.highlightAll()
         return true

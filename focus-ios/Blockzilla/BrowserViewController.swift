@@ -144,14 +144,19 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func resetBrowser() {
+        // We're creating a new URL bar below, so get a reference to the old one here so we can animate it.
         let oldURLBar = urlBar
 
+        // Create a new home view and URL bar that will appear behind the browser as it slides out.
         createHomeView()
         createURLBar()
 
+        // Clear the cache and cookies, starting a new session.
         WebCacheUtils.reset()
 
+        // Slide the browser off the screen, then remove it.
         view.layoutIfNeeded()
+
         UIView.animate(withDuration: UIConstants.layout.deleteAnimationDuration, animations: {
             oldURLBar?.alpha = 0
             self.urlBarContainer.alpha = 0
