@@ -301,6 +301,7 @@ extension SearchSettingsTableViewController {
 
 extension SearchSettingsTableViewController: SearchEnginePickerDelegate {
     func searchEnginePicker(searchEnginePicker: SearchEnginePicker?, didSelectSearchEngine searchEngine: OpenSearchEngine?) {
+        Swrve.sharedInstance().userUpdate(["fennec.defaultSearchEngine": searchEngine?.engineID ?? ""])
         if let engine = searchEngine {
             model.defaultEngine = engine
             self.tableView.reloadData()
