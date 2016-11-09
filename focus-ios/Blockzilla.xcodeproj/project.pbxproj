@@ -57,6 +57,7 @@
 		D3BFCB511BD1559300AD22D1 /* AboutContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BFCB501BD1559300AD22D1 /* AboutContentViewController.swift */; };
 		D3BFCB5B1BD15CD000AD22D1 /* rights-klar.html in Resources */ = {isa = PBXBuildFile; fileRef = D3BFCB5A1BD15CD000AD22D1 /* rights-klar.html */; };
 		D3C047BD1DCBD8ED00402FFB /* SearchEngines.plist in Resources */ = {isa = PBXBuildFile; fileRef = D3C047BC1DCBD8ED00402FFB /* SearchEngines.plist */; };
+		D3CD375B1DD3B51900468250 /* FirstRunViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CD375A1DD3B51900468250 /* FirstRunViewController.swift */; };
 		D3DA77851DC2C307009C114E /* ErrorPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3DA77841DC2C307009C114E /* ErrorPage.swift */; };
 		D3DA778C1DC2C60E009C114E /* errorPage.html in Resources */ = {isa = PBXBuildFile; fileRef = D3DA778B1DC2C60E009C114E /* errorPage.html */; };
 		D3E251EA1DAD714C005918DC /* InstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E251E71DAD714C005918DC /* InstructionsView.swift */; };
@@ -179,6 +180,7 @@
 		D3BFCB501BD1559300AD22D1 /* AboutContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutContentViewController.swift; sourceTree = "<group>"; };
 		D3BFCB5A1BD15CD000AD22D1 /* rights-klar.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "rights-klar.html"; sourceTree = "<group>"; };
 		D3C047BC1DCBD8ED00402FFB /* SearchEngines.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = SearchEngines.plist; path = Search/SearchEngines.plist; sourceTree = SOURCE_ROOT; };
+		D3CD375A1DD3B51900468250 /* FirstRunViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirstRunViewController.swift; sourceTree = "<group>"; };
 		D3DA77841DC2C307009C114E /* ErrorPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorPage.swift; sourceTree = "<group>"; };
 		D3DA778B1DC2C60E009C114E /* errorPage.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = errorPage.html; sourceTree = "<group>"; };
 		D3E251E71DAD714C005918DC /* InstructionsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstructionsView.swift; sourceTree = "<group>"; };
@@ -369,6 +371,7 @@
 				D3E2C96C1DA3077400DEBE3D /* CharacterSetExtensions.swift */,
 				D3426AEC1DB846310016DA5A /* DomainCompletion.swift */,
 				D3DA77841DC2C307009C114E /* ErrorPage.swift */,
+				D3CD375A1DD3B51900468250 /* FirstRunViewController.swift */,
 				D3561B2A1DB5925100A5EEAF /* GradientBackgroundView.swift */,
 				D3E3CA7C1DA827AD0079C94B /* HomeView.swift */,
 				D3E2C9681DA3024800DEBE3D /* InsetButton.swift */,
@@ -609,6 +612,7 @@
 				D3426AE91DB7F4060016DA5A /* KeyboardHelper.swift in Sources */,
 				D3E251EA1DAD714C005918DC /* InstructionsView.swift in Sources */,
 				D3561B2B1DB5925100A5EEAF /* GradientBackgroundView.swift in Sources */,
+				D3CD375B1DD3B51900468250 /* FirstRunViewController.swift in Sources */,
 				D3E2C96D1DA3077400DEBE3D /* CharacterSetExtensions.swift in Sources */,
 				D3E2C96F1DA3093D00DEBE3D /* BrowserToolbar.swift in Sources */,
 			);

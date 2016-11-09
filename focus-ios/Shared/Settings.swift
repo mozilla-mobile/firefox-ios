@@ -15,9 +15,6 @@ enum SettingsToggle: String {
 }
 
 struct Settings {
-    // No longer used, but will be set to true in existing users' settings.
-    static let keyIntroDone = "IntroDone"
-
     fileprivate static let prefs = UserDefaults(suiteName: AppInfo.SharedContainerIdentifier)!
 
     private static func defaultForToggle(_ toggle: SettingsToggle) -> Bool {

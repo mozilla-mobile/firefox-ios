@@ -27,7 +27,7 @@ class WaveView: UIView {
     init() {
         super.init(frame: CGRect.zero)
 
-        backWaveView.backgroundColor = UIConstants.colors.background
+        backWaveView.backgroundColor = UIColor.clear
         backWaveView.phaseShift = -0.022
         backWaveView.primaryWaveLineWidth = 0.5
         backWaveView.primaryWaveColor = PrimaryWaveInactiveColor
