@@ -284,6 +284,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
         switch (bookmark) {
         case let item as BookmarkItem:
+            Swrve.sharedInstance().event("bookmark.visit")
             homePanelDelegate?.homePanel(self, didSelectURLString: item.url, visitType: VisitType.Bookmark)
             break
 

@@ -1446,8 +1446,10 @@ extension BrowserViewController: URLBarDelegate {
             if let readerMode = tab.getHelper(name: "ReaderMode") as? ReaderMode {
                 switch readerMode.state {
                 case .Available:
+                    Swrve.sharedInstance().event("readerMode.enter")
                     enableReaderMode()
                 case .Active:
+                    Swrve.sharedInstance().event("readerMode.leave")
                     disableReaderMode()
                 case .Unavailable:
                     break
@@ -1657,8 +1659,10 @@ extension BrowserViewController: TabToolbarDelegate {
 
     func toggleBookmarkForTabState(tabState: TabState) {
         if tabState.isBookmarked {
+            Swrve.sharedInstance().event("bookmark.remove")
             self.removeBookmark(tabState)
         } else {
+            Swrve.sharedInstance().event("bookmark.create")
             self.addBookmark(tabState)
         }
     }

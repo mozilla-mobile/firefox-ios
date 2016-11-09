@@ -351,6 +351,7 @@ class HistoryPanelSiteTableViewController: SiteTableViewController {
             let visitType = VisitType.Typed    // Means History, too.
             if let homePanelDelegate = homePanelDelegate,
                    historyPanel = historyPanel {
+                Swrve.sharedInstance().event("history.visit")
                 homePanelDelegate.homePanel(historyPanel, didSelectURL: url, visitType: visitType)
             }
             return
