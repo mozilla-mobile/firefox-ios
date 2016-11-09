@@ -119,7 +119,7 @@ public class BookmarksModel: BookmarksModelFactorySource {
             return BookmarksModel(modelFactory: self.factory, root: removedRoot)
         }
         log.warning("BookmarksModel.removeGUIDFromCurrent did not remove anything. Check to make sure you're not using the abstract BookmarkFolder class.")
-        return BookmarksModel(modelFactory: self.factory, root: current)
+        return self
     }
 
     /**
