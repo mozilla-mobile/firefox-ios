@@ -545,6 +545,11 @@ class SQLiteBookmarkFolder: BookmarkFolder {
         self.cursor = children
         super.init(guid: guid, title: title)
     }
+
+    override func removeItemWithGUID(guid: GUID) -> BookmarkFolder? {
+        let without = cursor.asArray().filter { $0.guid != guid }
+        return MemoryBookmarkFolder(guid: self.guid, title: self.title, children: without)
+    }
 }
 
 class BookmarkFactory {

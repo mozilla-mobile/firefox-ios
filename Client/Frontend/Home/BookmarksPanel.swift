@@ -64,6 +64,11 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.tableView.accessibilityIdentifier = "Bookmarks List"
+    }
+
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
 
         // If we've not already set a source for this panel, fetch a new model from
         // the root; otherwise, just use the existing source to select a folder.
@@ -82,7 +87,6 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         } else {
             source.selectFolder(BookmarkRoots.MobileFolderGUID).upon(onModelFetched)
         }
-        self.tableView.accessibilityIdentifier = "Bookmarks List"
     }
 
     func notificationReceived(notification: NSNotification) {
@@ -366,13 +370,8 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
                 return
             }
 
-            guard let reloaded = source.reloadData().value.successValue else {
-                log.debug("Failed to reload model.")
-                return
-            }
-
             self.tableView.beginUpdates()
-            self.source = reloaded
+            self.source = source.removeGUIDFromCurrent(bookmark.guid)
             self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
             self.tableView.endUpdates()
             self.updateEmptyPanelState()
