@@ -279,7 +279,7 @@ class URLBar: UIView {
 
     private func updateLockIcon() {
         let visible = !isEditing && (url?.scheme == "https")
-        let duration = UIConstants.layout.urlBarFadeAnimationDuration / 2
+        let duration = UIConstants.layout.urlBarTransitionAnimationDuration / 2
 
         lockIcon.animateHidden(!visible, duration: duration)
 
@@ -304,12 +304,12 @@ class URLBar: UIView {
         delegate?.urlBarDidFocus(self)
 
         if showButtons {
-            cancelButton.animateHidden(false, duration: UIConstants.layout.urlBarFadeAnimationDuration)
-            deleteButton.animateHidden(true, duration: UIConstants.layout.urlBarFadeAnimationDuration)
+            cancelButton.animateHidden(false, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
+            deleteButton.animateHidden(true, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
         }
 
         self.layoutIfNeeded()
-        UIView.animate(withDuration: UIConstants.layout.urlBarFadeAnimationDuration) {
+        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration) {
             // Hide the URL toolset buttons if we're on iPad/landscape.
             self.updateToolsetConstraints()
 
@@ -338,11 +338,11 @@ class URLBar: UIView {
         self.toolset.sendButton.isEnabled = true
         delegate?.urlBarDidDismiss(self)
 
-        cancelButton.animateHidden(true, duration: UIConstants.layout.urlBarFadeAnimationDuration)
-        deleteButton.animateHidden(false, duration: UIConstants.layout.urlBarFadeAnimationDuration)
+        cancelButton.animateHidden(true, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
+        deleteButton.animateHidden(false, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
 
         self.layoutIfNeeded()
-        UIView.animate(withDuration: UIConstants.layout.urlBarFadeAnimationDuration) {
+        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration) {
             // We don't show Cancel/Erase for the initial URL bar at app launch.
             // If this is the first dismissal, we've entered the browsing state, so show them.
             if !self.showButtons {
@@ -412,7 +412,7 @@ class URLBar: UIView {
     }
 
     @objc private func didPressActivate(_ button: UIButton) {
-        UIView.animate(withDuration: UIConstants.layout.urlBarMoveToTopAnimationDuration, animations: {
+        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, animations: {
             button.contentHorizontalAlignment = .left
             self.layoutIfNeeded()
         }, completion: { finished in

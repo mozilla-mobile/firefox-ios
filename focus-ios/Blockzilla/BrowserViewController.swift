@@ -252,7 +252,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressActivateButton(_ urlBar: URLBar) {
-        UIView.animate(withDuration: UIConstants.layout.urlBarMoveToTopAnimationDuration) {
+        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration) {
             self.view.bringSubview(toFront: self.urlBar)
             self.topURLBarConstraints.forEach { $0.activate() }
             self.urlBarContainer.alpha = 1
