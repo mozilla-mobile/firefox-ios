@@ -12,8 +12,6 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
     fileprivate let rightsFile = AppInfo.isFocus ? "rights-focus.html" : "rights-klar.html"
 
     override func viewDidLoad() {
-        view.backgroundColor = UIConstants.colors.background
-
         headerView.delegate = self
 
         title = NSLocalizedString("About", comment: "Title for the About screen")
@@ -102,7 +100,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
         tableView.deselectRow(at: indexPath, animated: false)
     }
 
-    fileprivate func aboutHeaderViewDidPressReadMore(_ aboutHeaderView: AboutHeaderView) {
+    fileprivate func aboutHeaderViewDidPressLearnMore(_ aboutHeaderView: AboutHeaderView) {
         let url = URL(string: "https://www.mozilla.org/\(AppInfo.LanguageCode)/about/manifesto/")!
         let contentViewController = AboutContentViewController(url: url)
         navigationController?.pushViewController(contentViewController, animated: true)
@@ -110,7 +108,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
 }
 
 private protocol AboutHeaderViewDelegate: class {
-    func aboutHeaderViewDidPressReadMore(_ aboutHeaderView: AboutHeaderView)
+    func aboutHeaderViewDidPressLearnMore(_ aboutHeaderView: AboutHeaderView)
 }
 
 private class AboutHeaderView: UIView {
@@ -119,82 +117,73 @@ private class AboutHeaderView: UIView {
     init() {
         super.init(frame: CGRect.zero)
 
+        translatesAutoresizingMaskIntoConstraints = false
+
         let logo = UIImageView(image: #imageLiteral(resourceName: "img_focus_wordmark"))
         addSubview(logo)
 
-        let descriptionLabel1 = UILabel()
-        let descriptionLabel1Text = NSLocalizedString("%@ puts you in control and brings added privacy and performance to your mobile browsing experience.", comment: "About copy on the about page")
-        descriptionLabel1.text = String(format: descriptionLabel1Text, AppInfo.ProductName)
-        descriptionLabel1.textColor = UIConstants.colors.defaultFont
-        descriptionLabel1.font = descriptionLabel1.font.withSize(14)
-        descriptionLabel1.numberOfLines = 0
-        descriptionLabel1.textAlignment = NSTextAlignment.center
-        addSubview(descriptionLabel1)
+        let bulletStyle = NSMutableParagraphStyle()
+        bulletStyle.firstLineHeadIndent = 15
+        bulletStyle.headIndent = 29.5
+        let bulletAttributes = [NSParagraphStyleAttributeName: bulletStyle]
+        let bulletFormat = "•  %@\n"
 
-        let descriptionLabel2 = UILabel()
-        let descriptionLabel2Text = NSLocalizedString("%@ is produced by Mozilla, the people behind the Firefox Web browser.", comment: "About copy on the about page")
-        descriptionLabel2.text = String(format: descriptionLabel2Text, AppInfo.ProductName)
-        descriptionLabel2.textColor = UIConstants.colors.defaultFont
-        descriptionLabel2.font = descriptionLabel2.font.withSize(14)
-        descriptionLabel2.numberOfLines = 0
-        descriptionLabel2.textAlignment = NSTextAlignment.center
-        addSubview(descriptionLabel2)
+        let paragraph = [
+            NSAttributedString(string: String(format: UIConstants.strings.aboutTopLabel, AppInfo.ProductName) + "\n\n"),
+            NSAttributedString(string: UIConstants.strings.aboutPrivateBulletHeader + "\n"),
+            NSAttributedString(string: String(format: bulletFormat, UIConstants.strings.aboutPrivateBullet1), attributes: bulletAttributes),
+            NSAttributedString(string: String(format: bulletFormat, UIConstants.strings.aboutPrivateBullet2), attributes: bulletAttributes),
+            NSAttributedString(string: String(format: bulletFormat, UIConstants.strings.aboutPrivateBullet3 + "\n"), attributes: bulletAttributes),
+            NSAttributedString(string: UIConstants.strings.aboutSafariBulletHeader + "\n"),
+            NSAttributedString(string: String(format: bulletFormat, UIConstants.strings.aboutSafariBullet1), attributes: bulletAttributes),
+            NSAttributedString(string: String(format: bulletFormat, UIConstants.strings.aboutSafariBullet2 + "\n"), attributes: bulletAttributes),
+            NSAttributedString(string: String(format: UIConstants.strings.aboutMissionLabel, AppInfo.ProductName)),
+        ]
 
-        let descriptionLabel3 = UILabel()
-        descriptionLabel3.text = NSLocalizedString("Our mission is to foster a healthy, open Internet.", comment: "About copy on the about page")
-        descriptionLabel3.textColor = UIConstants.colors.defaultFont
-        descriptionLabel3.font = descriptionLabel3.font.withSize(14)
-        descriptionLabel3.numberOfLines = 0
-        descriptionLabel3.textAlignment = NSTextAlignment.center
-        addSubview(descriptionLabel3)
+        let attributed = NSMutableAttributedString()
+        for string in paragraph {
+            attributed.append(string)
+        }
 
-        let readMoreButton = UIButton()
-        readMoreButton.setTitle(NSLocalizedString("Read more.", comment: "Button on the about page"), for: UIControlState())
-        readMoreButton.setTitleColor(UIConstants.colors.focusBlue, for: UIControlState())
-        readMoreButton.setTitleColor(UIConstants.colors.buttonHighlight, for: UIControlState.highlighted)
-        readMoreButton.titleLabel?.font = readMoreButton.titleLabel!.font.withSize(14)
-        readMoreButton.addTarget(self, action: #selector(AboutHeaderView.clickedReadMore(_:)), for: UIControlEvents.touchUpInside)
-        addSubview(readMoreButton)
+        let aboutParagraph = UILabel()
+        aboutParagraph.attributedText = attributed
+        aboutParagraph.textColor = UIConstants.colors.defaultFont
+        aboutParagraph.font = UIConstants.fonts.aboutText
+        aboutParagraph.numberOfLines = 0
+        addSubview(aboutParagraph)
 
-        descriptionLabel3.font = descriptionLabel3.font.withSize(14)
-        descriptionLabel3.numberOfLines = 0
-        descriptionLabel3.textAlignment = NSTextAlignment.center
-        addSubview(descriptionLabel3)
-
-        translatesAutoresizingMaskIntoConstraints = false
+        let learnMoreButton = UIButton()
+        learnMoreButton.setTitle("Learn more", for: .normal)
+        learnMoreButton.setTitleColor(UIConstants.colors.focusBlue, for: .normal)
+        learnMoreButton.setTitleColor(UIConstants.colors.buttonHighlight, for: .highlighted)
+        learnMoreButton.titleLabel?.font = UIConstants.fonts.aboutText
+        learnMoreButton.addTarget(self, action: #selector(didPressLearnMore), for: .touchUpInside)
+        addSubview(learnMoreButton)
 
         logo.snp.makeConstraints { make in
             make.centerX.equalTo(self)
             make.top.equalTo(self).offset(50)
         }
 
-        descriptionLabel1.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(self).inset(30)
-
+        aboutParagraph.snp.makeConstraints { make in
             // Priority hack is needed to avoid conflicting constraints with the cell height.
             // See http://stackoverflow.com/a/25795758
             make.top.equalTo(logo.snp.bottom).offset(50).priority(999)
-        }
 
-        descriptionLabel2.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(self).inset(30)
-            make.top.equalTo(descriptionLabel1.snp.bottom).offset(15)
-        }
-
-        descriptionLabel3.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(self).inset(30)
-            make.top.equalTo(descriptionLabel2.snp.bottom).offset(15)
-        }
-
-        readMoreButton.snp.makeConstraints { make in
             make.centerX.equalTo(self)
-            make.top.equalTo(descriptionLabel3.snp.bottom).offset(-7)
+            make.width.lessThanOrEqualTo(self).inset(20)
+            make.width.lessThanOrEqualTo(315)
+        }
+
+        learnMoreButton.snp.makeConstraints { make in
+            make.top.equalTo(aboutParagraph.snp.bottom).offset(-7)
+            make.leading.equalTo(aboutParagraph)
             make.bottom.equalTo(self).inset(50)
         }
     }
 
-    @objc func clickedReadMore(_ sender: UIButton) {
-        delegate?.aboutHeaderViewDidPressReadMore(self)
+    @objc private func didPressLearnMore() {
+        delegate?.aboutHeaderViewDidPressLearnMore(self)
     }
 
     required init?(coder aDecoder: NSCoder) {
