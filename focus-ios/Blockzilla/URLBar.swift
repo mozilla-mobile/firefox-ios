@@ -31,13 +31,12 @@ class URLBar: UIView {
     private let urlBarBackgroundView = UIView()
     private var showButtons = false
 
-    private var fullWidthURLTextConstraint: Constraint!
-    private var centeredURLConstraint: Constraint!
+    private var fullWidthURLTextConstraints = [Constraint]()
+    private var centeredURLConstraints = [Constraint]()
     private var hideLockConstraints = [Constraint]()
     private var hideToolsetConstraints = [Constraint]()
     private var showToolsetConstraints = [Constraint]()
     private var isEditingConstraints = [Constraint]()
-    private var notEditingConstraints = [Constraint]()
     private var preActivationConstraints = [Constraint]()
     private var postActivationConstraints = [Constraint]()
 
@@ -108,6 +107,20 @@ class URLBar: UIView {
         deleteButton.addTarget(self, action: #selector(didPressDelete), for: .touchUpInside)
         addSubview(deleteButton)
 
+        let buttonContainer = UIView()
+        addSubview(buttonContainer)
+
+        // Create an invisible clone of the Erase button, with the same size.
+        // This will allow the button container to hold its shape when we shrink the button.
+        let hiddenDeleteButton = UIButton()
+        hiddenDeleteButton.isUserInteractionEnabled = false
+        hiddenDeleteButton.isHidden = true
+        hiddenDeleteButton.setTitle(UIConstants.strings.eraseButton, for: .normal)
+        hiddenDeleteButton.titleLabel?.font = UIConstants.fonts.deleteButton
+        hiddenDeleteButton.setContentHuggingPriority(1000, for: .horizontal)
+        hiddenDeleteButton.setContentCompressionResistancePriority(1000, for: .horizontal)
+        addSubview(hiddenDeleteButton)
+
         let activateButton = UIButton()
         activateButton.setTitle(UIConstants.strings.urlTextPlaceholder, for: .normal)
         activateButton.titleLabel?.font = UIConstants.fonts.urlText
@@ -153,8 +166,8 @@ class URLBar: UIView {
             make.leading.equalTo(toolset.stopReloadButton.snp.trailing).inset(-UIConstants.layout.urlBarMargin)
             make.top.bottom.equalTo(self).inset(UIConstants.layout.urlBarMargin)
 
-            // TODO: Comment
-            make.trailing.equalTo(self).inset(8).priority(500)
+            // Stretch the URL bar as much as we can without breaking constraints.
+            make.width.equalTo(self).priority(500)
         }
 
         textAndLockContainer.snp.makeConstraints { make in
@@ -162,8 +175,8 @@ class URLBar: UIView {
             make.leading.greaterThanOrEqualTo(urlTextContainer).priority(999)
             make.trailing.lessThanOrEqualTo(urlTextContainer)
 
-            centeredURLConstraint = make.centerX.equalTo(self).constraint
-            fullWidthURLTextConstraint = make.leading.trailing.equalTo(urlTextContainer).constraint
+            centeredURLConstraints.append(make.centerX.equalTo(self).constraint)
+            fullWidthURLTextConstraints.append(make.leading.trailing.equalTo(urlTextContainer).constraint)
         }
 
         lockIcon.snp.makeConstraints { make in
@@ -188,21 +201,35 @@ class URLBar: UIView {
             make.size.equalTo(toolset.backButton)
         }
 
+        buttonContainer.snp.makeConstraints { make in
+            make.centerY.equalTo(self)
+
+            preActivationConstraints.append(contentsOf: [
+                make.size.equalTo(0).constraint,
+                make.leading.equalTo(urlTextContainer.snp.trailing).inset(-UIConstants.layout.urlBarMargin).constraint,
+                make.trailing.equalTo(toolset.sendButton.snp.leading).constraint,
+            ])
+
+            postActivationConstraints.append(contentsOf: [
+                make.width.greaterThanOrEqualTo(hiddenDeleteButton).constraint,
+                make.width.greaterThanOrEqualTo(cancelButton).constraint,
+                make.width.greaterThanOrEqualTo(self).multipliedBy(toolsetButtonWidthMultiplier).constraint,
+                make.leading.equalTo(urlTextContainer.snp.trailing).inset(-12).constraint,
+                make.trailing.equalTo(toolset.sendButton.snp.leading).inset(-12).constraint,
+            ])
+        }
+
         deleteButton.snp.makeConstraints { make in
-            make.centerY.equalTo(urlTextContainer)
+            make.center.equalTo(buttonContainer)
             isEditingConstraints.append(make.size.equalTo(0).constraint)
-            notEditingConstraints.append(make.leading.equalTo(urlTextContainer.snp.trailing).inset(-8).constraint)
-            notEditingConstraints.append(make.trailing.equalTo(toolset.sendButton.snp.leading).inset(-8).constraint)
-            notEditingConstraints.append(make.width.greaterThanOrEqualTo(cancelButton).constraint)
+        }
+
+        hiddenDeleteButton.snp.makeConstraints { make in
+            make.center.equalTo(buttonContainer)
         }
 
         cancelButton.snp.makeConstraints { make in
-            make.center.equalTo(deleteButton)
-            isEditingConstraints.append(make.leading.equalTo(urlTextContainer.snp.trailing).inset(-8).priority(999).constraint)
-            isEditingConstraints.append(make.trailing.equalTo(toolset.sendButton.snp.leading).inset(-8).constraint)
-            preActivationConstraints.append(make.leading.equalTo(urlTextContainer.snp.trailing).constraint)
-            preActivationConstraints.append(make.size.equalTo(0).constraint)
-            postActivationConstraints.append(make.width.greaterThanOrEqualTo(self).multipliedBy(toolsetButtonWidthMultiplier).constraint)
+            make.center.equalTo(buttonContainer)
         }
 
         progressBar.snp.makeConstraints { make in
@@ -215,9 +242,8 @@ class URLBar: UIView {
             make.edges.equalTo(urlTextContainer)
         }
 
-        centeredURLConstraint.deactivate()
+        centeredURLConstraints.forEach { $0.deactivate() }
         showToolsetConstraints.forEach { $0.deactivate() }
-        notEditingConstraints.forEach { $0.deactivate() }
         postActivationConstraints.forEach { $0.deactivate() }
     }
 
@@ -318,7 +344,6 @@ class URLBar: UIView {
             self.updateToolsetConstraints()
 
             if self.showButtons {
-                self.notEditingConstraints.forEach { $0.deactivate() }
                 self.isEditingConstraints.forEach { $0.activate() }
             }
 
@@ -356,7 +381,6 @@ class URLBar: UIView {
             }
 
             self.isEditingConstraints.forEach { $0.deactivate() }
-            self.notEditingConstraints.forEach { $0.activate() }
 
             // Reveal the URL bar buttons on iPad/landscape.
             self.updateToolsetConstraints()
@@ -381,10 +405,10 @@ class URLBar: UIView {
         toolset.sendButton.animateHidden(isHidden, duration: 0.3)
 
         if isHidden {
-            centeredURLConstraint.deactivate()
+            centeredURLConstraints.forEach { $0.deactivate() }
             showToolsetConstraints.forEach { $0.deactivate() }
             hideToolsetConstraints.forEach { $0.activate() }
-            fullWidthURLTextConstraint.activate()
+            fullWidthURLTextConstraints.forEach { $0.activate() }
         } else {
             hideToolsetConstraints.forEach { $0.deactivate() }
             showToolsetConstraints.forEach { $0.activate() }
@@ -392,11 +416,11 @@ class URLBar: UIView {
             // If we're editing, stretch the text field to the full width of its container.
             // Otherwise it will size to fit, allowing it to be centered in the container.
             if isEditing {
-                centeredURLConstraint.deactivate()
-                fullWidthURLTextConstraint.activate()
+                centeredURLConstraints.forEach { $0.deactivate() }
+                fullWidthURLTextConstraints.forEach { $0.activate() }
             } else {
-                fullWidthURLTextConstraint.deactivate()
-                centeredURLConstraint.activate()
+                fullWidthURLTextConstraints.forEach { $0.deactivate() }
+                centeredURLConstraints.forEach { $0.activate() }
             }
         }
     }
