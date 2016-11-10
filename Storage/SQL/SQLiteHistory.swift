@@ -107,7 +107,7 @@ public class SQLiteHistory {
     let favicons: FaviconsTable<Favicon>
     let prefs: Prefs
 
-    required public init?(db: BrowserDB, prefs: Prefs) {
+    required public init(db: BrowserDB, prefs: Prefs) {
         self.db = db
         self.favicons = FaviconsTable<Favicon>()
         self.prefs = prefs
@@ -115,7 +115,7 @@ public class SQLiteHistory {
         // BrowserTable exists only to perform create/update etc. operations -- it's not
         // a queryable thing that needs to stick around.
         if !db.createOrUpdate(BrowserTable()) {
-            return nil
+            log.error("Unable to create or update browser table!")
         }
     }
 }

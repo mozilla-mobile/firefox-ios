@@ -116,6 +116,11 @@ public class BrowserDB {
     // Utility for table classes. They should call this when they're initialized to force
     // creation of the table in the database.
     func createOrUpdate(tables: Table...) -> Bool {
+        guard !db.closed else {
+            log.info("Database is closed - skipping schema create/updates")
+            return false
+        }
+        
         var success = true
 
         let doCreate = { (table: Table, connection: SQLiteDBConnection) -> () in
