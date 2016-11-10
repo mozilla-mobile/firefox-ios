@@ -1,0 +1,25 @@
+language: objective-c
+osx_image: xcode8
+xcode_project: OnyxClient.xcodeproj
+xcode_scheme: OnyxClient
+xcode_sdk: iphonesimulator10.0
+env:
+  global:
+  - FRAMEWORK_NAME=<OnyxClient>
+before_install:
+- brew update
+- brew outdated carthage || brew upgrade carthage
+before_script:
+- carthage bootstrap --platform ios
+before_deploy:
+- carthage build --no-skip-current
+- carthage archive $FRAMEWORK_NAME
+deploy:
+  provider: releases
+  api_key:
+    secure: itQ/Op8lPvxlvzZV6+3TuTRG4Is3LOYuKw+s4ovkoKT61BaeLXUsF6h9HkzpIW8WZnaELOc9a7EIAQF4jEqm5d97fNb5ksNt96mWnGpBBtdwZ7XYOtt88poh6tS0IqBJvBPLrbgMUqU4SUg1hpgUI4LpGnlYLlV6M66DsVh8B/vN9Gx2Mty0BAJpWT3rjc4X1i+qGvFmhThrSKKpbxlgANqrxRhuxAzJuEIUWGa5//viPNIjEzw5qcIVFJwFiPf0hpBw7gcNpYocBZRKvLigPwfJws1d9IMtcKwHkysu/wurN8sBaKnWMhdH/Gi187/bkViPLrA4I5BR8bb16X7Jdm90NTTjImOOxFsrVRwajSI7+65U3/sXjcD2qp/RepN+pN6fBT4qnt1elkXEkzjhBjt5qrSJjOThXTnwpB38/G0INPN99JwUaVmzYxMX5mFBoRzGlKAz8SYwk9+5feF1WhFHxCdS1FydipHTDxuPp+m9PL4lWlS3u4YR2cXhsMk7OildRjcNufyxxXKY+MI+ChweLCiYPEHEFRk9Tiof6+6o9sAhsjq3MRYVA/ji2mIT4LSH1acuGRATKuqgTCCw5/8ZdoAdvSKTYU4HZuGC48S3xFh7TY+7RGh9EVWYXrQIX946zVhWKnaQvrf9aw9MMacBOs5Ggfa6AAc2byUs898=
+  file: OnyxClient.framework.zip
+  skip_cleanup: true
+  on:
+    repo: mozilla-mobile/onyx_ios
+    tags: true

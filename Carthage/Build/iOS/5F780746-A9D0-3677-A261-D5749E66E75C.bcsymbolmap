@@ -1,0 +1,43 @@
+BCSymbolMap Version: 2.0
+__TTOFCSo8NSBundleCfT8forClassPMPs9AnyObject__S_
+__TMaCSo8NSBundle
+__TFCSo8NSStringCfzT14contentsOfFileSS8encodingSu_S_
+__TMaCSo8NSString
+__TFCSo12WKUserScriptCfT6sourceSS13injectionTimeOSC25WKUserScriptInjectionTime16forMainFrameOnlySb_S_
+__TMaCSo12WKUserScript
+__TTWurGVs33AutoreleasingUnsafeMutablePointerx_s12_PointerTypesFS0_g9_rawValueBp
+__TTWurGVs33AutoreleasingUnsafeMutablePointerx_s12_PointerTypesFS0_CfBpx
+__TTOFCSo8NSStringcfzT14contentsOfFileSS8encodingSu_S_
+__TTOFCSo12WKUserScriptcfT6sourceSS13injectionTimeOSC25WKUserScriptInjectionTime16forMainFrameOnlySb_S_
+__TMLCSo8NSBundle
+__TMLCSo8NSString
+__TMLCSo12WKUserScript
+__TWPurGVs33AutoreleasingUnsafeMutablePointerx_s12_PointerTypes
+__TWvdvC14WebMetadataKit17WebMetadataParserP33_023F36C584FA5F28495F6F763CAAE9A217libraryUserScriptCSo12WKUserScript
+__TWvdvC14WebMetadataKit17WebMetadataParserP33_023F36C584FA5F28495F6F763CAAE9A223parserWrapperUserScriptCSo12WKUserScript
+__TMfC14WebMetadataKit17WebMetadataParser
+__swift_FORCE_LOAD_$_swiftUIKit_$_WebMetadataKit
+__swift_FORCE_LOAD_$_swiftCoreImage_$_WebMetadataKit
+__swift_FORCE_LOAD_$_swiftDarwin_$_WebMetadataKit
+__swift_FORCE_LOAD_$_swiftCoreGraphics_$_WebMetadataKit
+__swift_FORCE_LOAD_$_swiftDispatch_$_WebMetadataKit
+__swift_FORCE_LOAD_$_swiftObjectiveC_$_WebMetadataKit
+__swift_FORCE_LOAD_$_swiftFoundation_$_WebMetadataKit
+__swift_FORCE_LOAD_$_swiftWebKit_$_WebMetadataKit
+_objc_classes
+Apple LLVM version 8.0.0 (clang-800.0.42.1)
+-emit-bc -primary-file /Users/sleroux/development/firefox-ios/Carthage/Checkouts/web_metadata_ios/WebMetadataKit/WebMetadataKit/WebMetadataParser.swift -target armv7-apple-ios9.0 -enable-objc-interop -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.1.sdk -I /Users/sleroux/Library/Developer/Xcode/DerivedData/WebMetadataKit-dvughsycvbytyhbmlhatngqdkplo/Build/Products/Release-iphoneos -F /Users/sleroux/Library/Developer/Xcode/DerivedData/WebMetadataKit-dvughsycvbytyhbmlhatngqdkplo/Build/Products/Release-iphoneos -g -import-underlying-module -module-cache-path /Users/sleroux/Library/Developer/Xcode/DerivedData/ModuleCache -serialize-debugging-options -Xcc -I/Users/sleroux/Library/Developer/Xcode/DerivedData/WebMetadataKit-dvughsycvbytyhbmlhatngqdkplo/Build/Intermediates/WebMetadataKit.build/Release-iphoneos/WebMetadataKit.build/swift-overrides.hmap -Xcc -iquote -Xcc /Users/sleroux/Library/Developer/Xcode/DerivedData/WebMetadataKit-dvughsycvbytyhbmlhatngqdkplo/Build/Intermediates/WebMetadataKit.build/Release-iphoneos/WebMetadataKit.build/WebMetadataKit-generated-files.hmap -Xcc -I/Users/sleroux/Library/Developer/Xcode/DerivedData/WebMetadataKit-dvughsycvbytyhbmlhatngqdkplo/Build/Intermediates/WebMetadataKit.build/Release-iphoneos/WebMetadataKit.build/WebMetadataKit-own-target-headers.hmap -Xcc -I/Users/sleroux/Library/Developer/Xcode/DerivedData/WebMetadataKit-dvughsycvbytyhbmlhatngqdkplo/Build/Intermediates/WebMetadataKit.build/Release-iphoneos/WebMetadataKit.build/WebMetadataKit-all-non-framework-target-headers.hmap -Xcc -ivfsoverlay -Xcc /Users/sleroux/Library/Developer/Xcode/DerivedData/WebMetadataKit-dvughsycvbytyhbmlhatngqdkplo/Build/Intermediates/WebMetadataKit.build/all-product-headers.yaml -Xcc -iquote -Xcc /Users/sleroux/Library/Developer/Xcode/DerivedData/WebMetadataKit-dvughsycvbytyhbmlhatngqdkplo/Build/Intermediates/WebMetadataKit.build/Release-iphoneos/WebMetadataKit.build/WebMetadataKit-project-headers.hmap -Xcc -I/Users/sleroux/Library/Developer/Xcode/DerivedData/WebMetadataKit-dvughsycvbytyhbmlhatngqdkplo/Build/Products/Release-iphoneos/include -Xcc -I/Users/sleroux/Library/Developer/Xcode/DerivedData/WebMetadataKit-dvughsycvbytyhbmlhatngqdkplo/Build/Intermediates/WebMetadataKit.build/Release-iphoneos/WebMetadataKit.build/DerivedSources/armv7 -Xcc -I/Users/sleroux/Library/Developer/Xcode/DerivedData/WebMetadataKit-dvughsycvbytyhbmlhatngqdkplo/Build/Intermediates/WebMetadataKit.build/Release-iphoneos/WebMetadataKit.build/DerivedSources -Xcc -ivfsoverlay -Xcc /Users/sleroux/Library/Developer/Xcode/DerivedData/WebMetadataKit-dvughsycvbytyhbmlhatngqdkplo/Build/Intermediates/WebMetadataKit.build/Release-iphoneos/WebMetadataKit.build/unextended-module-overlay.yaml -Xcc -working-directory/Users/sleroux/development/firefox-ios/Carthage/Checkouts/web_metadata_ios/WebMetadataKit -emit-module-doc-path /Users/sleroux/Library/Developer/Xcode/DerivedData/WebMetadataKit-dvughsycvbytyhbmlhatngqdkplo/Build/Intermediates/WebMetadataKit.build/Release-iphoneos/WebMetadataKit.build/Objects-normal/armv7/WebMetadataParser~partial.swiftdoc -Onone -parse-as-library -module-name WebMetadataKit -emit-module-path /Users/sleroux/Library/Developer/Xcode/DerivedData/WebMetadataKit-dvughsycvbytyhbmlhatngqdkplo/Build/Intermediates/WebMetadataKit.build/Release-iphoneos/WebMetadataKit.build/Objects-normal/armv7/WebMetadataParser~partial.swiftmodule -serialize-diagnostics-path /Users/sleroux/Library/Developer/Xcode/DerivedData/WebMetadataKit-dvughsycvbytyhbmlhatngqdkplo/Build/Intermediates/WebMetadataKit.build/Release-iphoneos/WebMetadataKit.build/Objects-normal/armv7/WebMetadataParser.dia -emit-dependencies-path /Users/sleroux/Library/Developer/Xcode/DerivedData/WebMetadataKit-dvughsycvbytyhbmlhatngqdkplo/Build/Intermediates/WebMetadataKit.build/Release-iphoneos/WebMetadataKit.build/Objects-normal/armv7/WebMetadataParser.d -o /Users/sleroux/Library/Developer/Xcode/DerivedData/WebMetadataKit-dvughsycvbytyhbmlhatngqdkplo/Build/Intermediates/WebMetadataKit.build/Release-iphoneos/WebMetadataKit.build/Objects-normal/armv7/WebMetadataParser.bc -resource-dir /Applications/Xcode.app/Contents/Developer/Toolchains/Swift_2.3.xctoolchain/usr/lib/swift
+<swift-imported-modules>
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/web_metadata_ios/WebMetadataKit
+Apple Swift version 2.3 (swiftlang-800.10.13 clang-800.0.42.1)
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/web_metadata_ios/WebMetadataKit/WebMetadataKit/WebMetadataParser.swift
+init
+WebMetadataParser.swift
+/Users/sleroux/development/firefox-ios/Carthage/Checkouts/web_metadata_ios/WebMetadataKit/WebMetadataKit
+deinit
+addUserScriptsIntoWebView
+_TMaCSo12WKUserScript
+_TMaCSo8NSString
+_TMaC14WebMetadataKit17WebMetadataParser
+_TMaCSo8NSBundle
+/Users/sleroux/Library/Developer/Xcode/DerivedData/WebMetadataKit-dvughsycvbytyhbmlhatngqdkplo/Build/Intermediates/WebMetadataKit.build/Release-iphoneos/WebMetadataKit.build/DerivedSources/WebMetadataKit_vers.c

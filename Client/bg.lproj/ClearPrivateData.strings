@@ -1,0 +1,31 @@
+/* Message shown in the dialog prompting users if they want to clear everything */
+"Are you sure you want to clear all of your data? This will also close all open tabs." = "Сигурни ли сте, че искате да заличите всичките данни? Отворените подпрозорци ще бъдат затворени.";
+
+/* Settings item for clearing browsing history */
+"Browsing History" = "История на сърфирането";
+
+/* Settings item for clearing the cache */
+"Cache" = "Cache";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "Отказ";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "Изчистване";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "Изчистване всичко";
+
+/* Button in settings that clears private data for the selected items.
+   Navigation title in settings. */
+"Clear Private Data" = "Изчистване на лични данни";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Cookies";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "Офлайн данни на страницa";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "Запазени влизания";
+

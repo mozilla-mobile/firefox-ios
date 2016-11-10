@@ -1,0 +1,10 @@
+framework module WebMetadataKit {
+  umbrella header "WebMetadataKit.h"
+
+  export *
+  module * { export * }
+}
+
+module WebMetadataKit.Swift {
+    header "WebMetadataKit-Swift.h"
+}

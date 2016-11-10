@@ -1,0 +1,91 @@
+language: objective-c
+env:
+  global:
+  - LC_CTYPE=en_US.UTF-8
+  - LANG=en_US.UTF-8
+  - WORKSPACE=Alamofire.xcworkspace
+  - IOS_SCHEME="Alamofire iOS"
+  - OSX_SCHEME="Alamofire OSX"
+  - TVOS_SCHEME="Alamofire tvOS"
+  - WATCHOS_SCHEME="Alamofire watchOS"
+  - IOS_SIM="iphonesimulator"
+  - OSX_SIM="macosx"
+  - TVOS_SIM="appletvsimulator"
+  - WATCHOS_SIM="watchsimulator"
+  - EXAMPLE_SCHEME="iOS Example"
+matrix:
+  include:
+    - os: osx
+      osx_image: xcode7.3
+      env: DESTINATION="OS=8.1,name=iPhone 4S" SCHEME="$IOS_SCHEME" SDK="${IOS_SIM}9.3" RUN_TESTS="YES" BUILD_EXAMPLE="YES" POD_LINT="YES"
+    - os: osx
+      osx_image: xcode7.3
+      env: DESTINATION="OS=8.2,name=iPhone 5" SCHEME="$IOS_SCHEME" SDK="${IOS_SIM}9.3" RUN_TESTS="YES" BUILD_EXAMPLE="YES" POD_LINT="NO"
+    - os: osx
+      osx_image: xcode7.3
+      env: DESTINATION="OS=8.3,name=iPhone 5S" SCHEME="$IOS_SCHEME" SDK="${IOS_SIM}9.3" RUN_TESTS="YES" BUILD_EXAMPLE="YES" POD_LINT="NO"
+    - os: osx
+      osx_image: xcode7.3
+      env: DESTINATION="OS=8.4,name=iPhone 6" SCHEME="$IOS_SCHEME" SDK="${IOS_SIM}9.3" RUN_TESTS="YES" BUILD_EXAMPLE="YES" POD_LINT="NO"
+    - os: osx
+      osx_image: xcode7.3
+      env: DESTINATION="OS=9.0,name=iPhone 6" SCHEME="$IOS_SCHEME" SDK="${IOS_SIM}9.3" RUN_TESTS="YES" BUILD_EXAMPLE="YES" POD_LINT="NO"
+    - os: osx
+      osx_image: xcode7.3
+      env: DESTINATION="OS=9.1,name=iPhone 6 Plus" SCHEME="$IOS_SCHEME" SDK="${IOS_SIM}9.3" RUN_TESTS="YES" BUILD_EXAMPLE="YES" POD_LINT="NO"
+    - os: osx
+      osx_image: xcode7.3
+      env: DESTINATION="OS=9.2,name=iPhone 6S" SCHEME="$IOS_SCHEME" SDK="${IOS_SIM}9.3" RUN_TESTS="YES" BUILD_EXAMPLE="YES" POD_LINT="NO"
+    - os: osx
+      osx_image: xcode7.3
+      env: DESTINATION="OS=9.3,name=iPhone 6S Plus" SCHEME="$IOS_SCHEME" SDK="${IOS_SIM}9.3" RUN_TESTS="YES" BUILD_EXAMPLE="YES" POD_LINT="NO"
+    - os: osx
+      osx_image: xcode7.3
+      env: DESTINATION="arch=x86_64" SCHEME="$OSX_SCHEME" SDK="${OSX_SIM}10.11" RUN_TESTS="YES" BUILD_EXAMPLE="NO" POD_LINT="NO"
+    - os: osx
+      osx_image: xcode7.3
+      env: DESTINATION="OS=9.2,name=Apple TV 1080p" SCHEME="$TVOS_SCHEME" SDK="${TVOS_SIM}9.2" RUN_TESTS="YES" BUILD_EXAMPLE="NO" POD_LINT="NO"
+    - os: osx
+      osx_image: xcode7.3
+      env: DESTINATION="OS=2.2,name=Apple Watch - 42mm" SCHEME="$WATCHOS_SCHEME" SDK="${WATCHOS_SIM}2.2" RUN_TESTS="NO" BUILD_EXAMPLE="NO" POD_LINT="NO"
+
+    - os: osx
+      env: DESTINATION="OS=10.0,name=iPhone 6S" SCHEME="$IOS_SCHEME" SDK="${IOS_SIM}10.0" RUN_TESTS="YES" BUILD_EXAMPLE="YES" POD_LINT="NO"
+      osx_image: xcode8
+    - os: osx
+      osx_image: xcode8
+      env: DESTINATION="arch=x86_64" SCHEME="$OSX_SCHEME" SDK="${OSX_SIM}10.12" RUN_TESTS="YES" BUILD_EXAMPLE="NO" POD_LINT="NO"
+    - os: osx
+      osx_image: xcode8
+      env: DESTINATION="OS=10.0,name=Apple TV 1080p" SCHEME="$TVOS_SCHEME" SDK="${TVOS_SIM}10.0" RUN_TESTS="YES" BUILD_EXAMPLE="NO" POD_LINT="NO"
+    - os: osx
+      osx_image: xcode8
+      env: DESTINATION="OS=3.0,name=Apple Watch - 42mm" SCHEME="$WATCHOS_SCHEME" SDK="${WATCHOS_SIM}3.0" RUN_TESTS="NO" BUILD_EXAMPLE="NO" POD_LINT="NO"
+script:
+  - set -o pipefail
+  - xcodebuild -version
+  - xcodebuild -showsdks
+
+  # Build Framework in Debug and Run Tests if specified
+  - if [ $RUN_TESTS == "YES" ]; then
+      xcodebuild -workspace "$WORKSPACE" -scheme "$SCHEME" -sdk "$SDK" -destination "$DESTINATION" -configuration Debug ONLY_ACTIVE_ARCH=NO ENABLE_TESTABILITY=YES test | xcpretty -c;
+    else
+      xcodebuild -workspace "$WORKSPACE" -scheme "$SCHEME" -sdk "$SDK" -destination "$DESTINATION" -configuration Debug ONLY_ACTIVE_ARCH=NO build | xcpretty -c;
+    fi
+
+  # Build Framework in Release and Run Tests if specified
+  - if [ $RUN_TESTS == "YES" ]; then
+      xcodebuild -workspace "$WORKSPACE" -scheme "$SCHEME" -sdk "$SDK" -destination "$DESTINATION" -configuration Release ONLY_ACTIVE_ARCH=NO ENABLE_TESTABILITY=YES test | xcpretty -c;
+    else
+      xcodebuild -workspace "$WORKSPACE" -scheme "$SCHEME" -sdk "$SDK" -destination "$DESTINATION" -configuration Release ONLY_ACTIVE_ARCH=NO build | xcpretty -c;
+    fi
+
+  # Build Example in Debug if specified
+  - if [ $BUILD_EXAMPLE == "YES" ]; then
+      xcodebuild -workspace "$WORKSPACE" -scheme "$EXAMPLE_SCHEME" -sdk "$SDK" -destination "$DESTINATION" -configuration Debug ONLY_ACTIVE_ARCH=NO build | xcpretty -c;
+    fi
+
+  # Run `pod lib lint` if specified
+  - if [ $POD_LINT == "YES" ]; then
+      pod lib lint;
+    fi

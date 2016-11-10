@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="iOSDemo" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Current Log Level" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dIL-ul-q6u">
+                                <rect key="frame" x="20" y="20" width="137" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="140-xy-loj"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0" maxValue="6" translatesAutoresizingMaskIntoConstraints="NO" id="SjH-ki-WTR">
+                                <rect key="frame" x="18" y="49" width="564" height="31"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="kXF-qP-TLJ"/>
+                                </constraints>
+                                <connections>
+                                    <action selector="logLevelSliderValueChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="Q5R-fU-W8I"/>
+                                </connections>
+                            </slider>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Generate Test Log" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1zy-OP-hRV">
+                                <rect key="frame" x="20" y="87" width="560" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="RCa-Lc-Vzf"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Whp-6F-VJf">
+                                <rect key="frame" x="20" y="116" width="560" height="51"/>
+                                <color key="backgroundColor" red="0.86274509799999999" green="0.86666666670000003" blue="0.87450980389999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="chq-fA-bP9"/>
+                                </constraints>
+                                <state key="normal" title="Verbose">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="chq-fA-bP9"/>
+                                    </mask>
+                                </variation>
+                                <connections>
+                                    <action selector="verboseButtonTouchUpInside:" destination="BYZ-38-t0r" eventType="touchUpInside" id="x8A-Nm-bet"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8IW-wu-eS0">
+                                <rect key="frame" x="20" y="175" width="560" height="52"/>
+                                <color key="backgroundColor" red="0.86274509799999999" green="0.86666666670000003" blue="0.87450980389999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="PHl-IC-bzm"/>
+                                </constraints>
+                                <state key="normal" title="Debug">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="PHl-IC-bzm"/>
+                                    </mask>
+                                </variation>
+                                <connections>
+                                    <action selector="debugButtonTouchUpInside:" destination="BYZ-38-t0r" eventType="touchUpInside" id="J6B-w6-zf0"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Th-pb-mc6">
+                                <rect key="frame" x="20" y="235" width="560" height="51"/>
+                                <color key="backgroundColor" red="0.86274509799999999" green="0.86666666670000003" blue="0.87450980389999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="s1v-E6-IPb"/>
+                                </constraints>
+                                <state key="normal" title="Info">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="s1v-E6-IPb"/>
+                                    </mask>
+                                </variation>
+                                <connections>
+                                    <action selector="infoButtonTouchUpInside:" destination="BYZ-38-t0r" eventType="touchUpInside" id="2BI-a0-XQi"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qlo-FC-GNh">
+                                <rect key="frame" x="20" y="353" width="560" height="52"/>
+                                <color key="backgroundColor" red="0.86274509799999999" green="0.86666666670000003" blue="0.87450980389999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="nFj-cw-PYe"/>
+                                </constraints>
+                                <state key="normal" title="Error">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="nFj-cw-PYe"/>
+                                    </mask>
+                                </variation>
+                                <connections>
+                                    <action selector="errorButtonTouchUpInside:" destination="BYZ-38-t0r" eventType="touchUpInside" id="j9O-hN-W0d"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="csa-Jy-lFF">
+                                <rect key="frame" x="20" y="413" width="560" height="51"/>
+                                <color key="backgroundColor" red="0.86274509799999999" green="0.86666666670000003" blue="0.87450980389999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="nR0-hM-NNM"/>
+                                </constraints>
+                                <state key="normal" title="Severe">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="nR0-hM-NNM"/>
+                                    </mask>
+                                </variation>
+                                <connections>
+                                    <action selector="severeButtonTouchUpInside:" destination="BYZ-38-t0r" eventType="touchUpInside" id="D0f-Nb-teQ"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UEf-4I-iHz">
+                                <rect key="frame" x="20" y="294" width="560" height="51"/>
+                                <color key="backgroundColor" red="0.86274509799999999" green="0.86666666670000003" blue="0.87450980389999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="Osl-ob-RXy"/>
+                                </constraints>
+                                <state key="normal" title="Warning">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="Osl-ob-RXy"/>
+                                    </mask>
+                                </variation>
+                                <connections>
+                                    <action selector="warningButtonTouchUpInside:" destination="BYZ-38-t0r" eventType="touchUpInside" id="hv5-Lk-8dh"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" verticalHuggingPriority="251" text="Debug" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MdE-sg-fKw">
+                                <rect key="frame" x="165" y="20" width="415" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="Uo3-kY-yMD"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qJe-QA-vau">
+                                <rect key="frame" x="20" y="472" width="560" height="120"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="120" id="qzM-1D-7WA"/>
+                                </constraints>
+                                <string key="text">XCGLogger will only log messages that are set for the same or higher log level. So when the current log level is set to Info for example, neither Verbose nor Debug logs will be displayed, but Info, Warning, Error and Severe logs will be displayed.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="7Th-pb-mc6" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" symbolic="YES" id="0HM-ZD-l3P"/>
+                            <constraint firstItem="Qlo-FC-GNh" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" symbolic="YES" id="0t7-cn-Rf2"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="qJe-QA-vau" secondAttribute="bottom" constant="8" symbolic="YES" id="2J4-5Y-V90"/>
+                            <constraint firstAttribute="trailing" secondItem="qJe-QA-vau" secondAttribute="trailing" constant="20" symbolic="YES" id="5mt-sQ-u7F"/>
+                            <constraint firstItem="SjH-ki-WTR" firstAttribute="top" secondItem="dIL-ul-q6u" secondAttribute="bottom" constant="8" symbolic="YES" id="6b5-dG-xq8"/>
+                            <constraint firstItem="1zy-OP-hRV" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" symbolic="YES" id="7bZ-JW-TZx"/>
+                            <constraint firstItem="UEf-4I-iHz" firstAttribute="height" secondItem="7Th-pb-mc6" secondAttribute="height" id="7zG-gS-3oW"/>
+                            <constraint firstAttribute="trailing" secondItem="Qlo-FC-GNh" secondAttribute="trailing" constant="20" symbolic="YES" id="HqA-ww-RNJ"/>
+                            <constraint firstItem="qJe-QA-vau" firstAttribute="top" secondItem="csa-Jy-lFF" secondAttribute="bottom" constant="8" symbolic="YES" id="HuD-LF-tv6"/>
+                            <constraint firstItem="8IW-wu-eS0" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" symbolic="YES" id="K4W-Th-sAB"/>
+                            <constraint firstItem="7Th-pb-mc6" firstAttribute="top" secondItem="8IW-wu-eS0" secondAttribute="bottom" constant="8" symbolic="YES" id="M6j-c6-6Ae"/>
+                            <constraint firstItem="MdE-sg-fKw" firstAttribute="leading" secondItem="dIL-ul-q6u" secondAttribute="trailing" constant="8" symbolic="YES" id="P3Q-bN-53m"/>
+                            <constraint firstItem="7Th-pb-mc6" firstAttribute="height" secondItem="8IW-wu-eS0" secondAttribute="height" id="PcK-3N-xMs"/>
+                            <constraint firstAttribute="trailing" secondItem="SjH-ki-WTR" secondAttribute="trailing" constant="20" symbolic="YES" id="RbT-B8-3ak"/>
+                            <constraint firstAttribute="trailing" secondItem="UEf-4I-iHz" secondAttribute="trailing" constant="20" symbolic="YES" id="Sia-Gj-AbA"/>
+                            <constraint firstItem="UEf-4I-iHz" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" symbolic="YES" id="TfB-a9-kNq"/>
+                            <constraint firstAttribute="trailing" secondItem="Whp-6F-VJf" secondAttribute="trailing" constant="20" symbolic="YES" id="Xc8-hU-x4E"/>
+                            <constraint firstItem="csa-Jy-lFF" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" symbolic="YES" id="aKg-f5-vdb"/>
+                            <constraint firstAttribute="trailing" secondItem="1zy-OP-hRV" secondAttribute="trailing" constant="20" symbolic="YES" id="as1-cv-lX7"/>
+                            <constraint firstItem="Qlo-FC-GNh" firstAttribute="top" secondItem="UEf-4I-iHz" secondAttribute="bottom" constant="8" symbolic="YES" id="b7W-0j-EE7"/>
+                            <constraint firstItem="UEf-4I-iHz" firstAttribute="height" secondItem="Qlo-FC-GNh" secondAttribute="height" id="bAb-Zu-eMe"/>
+                            <constraint firstItem="Whp-6F-VJf" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" symbolic="YES" id="f4R-sy-fUx"/>
+                            <constraint firstAttribute="trailing" secondItem="csa-Jy-lFF" secondAttribute="trailing" constant="20" symbolic="YES" id="g2c-Sx-p8f"/>
+                            <constraint firstItem="Whp-6F-VJf" firstAttribute="top" secondItem="1zy-OP-hRV" secondAttribute="bottom" constant="8" symbolic="YES" id="grq-Yg-Bye"/>
+                            <constraint firstAttribute="trailing" secondItem="MdE-sg-fKw" secondAttribute="trailing" constant="20" symbolic="YES" id="jw7-mN-DR5"/>
+                            <constraint firstItem="1zy-OP-hRV" firstAttribute="top" secondItem="SjH-ki-WTR" secondAttribute="bottom" constant="8" symbolic="YES" id="m9S-0r-AhK"/>
+                            <constraint firstItem="dIL-ul-q6u" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" symbolic="YES" id="mIk-QJ-GHV"/>
+                            <constraint firstItem="qJe-QA-vau" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" symbolic="YES" id="mnH-60-0g6"/>
+                            <constraint firstItem="csa-Jy-lFF" firstAttribute="height" secondItem="Qlo-FC-GNh" secondAttribute="height" id="ncx-i3-DjJ"/>
+                            <constraint firstAttribute="trailing" secondItem="7Th-pb-mc6" secondAttribute="trailing" constant="20" symbolic="YES" id="rUN-Fd-udd"/>
+                            <constraint firstItem="8IW-wu-eS0" firstAttribute="top" secondItem="Whp-6F-VJf" secondAttribute="bottom" constant="8" symbolic="YES" id="tvJ-TX-QT5"/>
+                            <constraint firstItem="MdE-sg-fKw" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="20" symbolic="YES" id="u2D-fW-wBS"/>
+                            <constraint firstItem="UEf-4I-iHz" firstAttribute="top" secondItem="7Th-pb-mc6" secondAttribute="bottom" constant="8" symbolic="YES" id="usC-hm-v59"/>
+                            <constraint firstItem="dIL-ul-q6u" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="20" symbolic="YES" id="wV0-Mo-fZX"/>
+                            <constraint firstAttribute="trailing" secondItem="8IW-wu-eS0" secondAttribute="trailing" constant="20" symbolic="YES" id="xE5-dt-x9o"/>
+                            <constraint firstItem="Whp-6F-VJf" firstAttribute="height" secondItem="8IW-wu-eS0" secondAttribute="height" id="zYm-du-BHo"/>
+                            <constraint firstItem="SjH-ki-WTR" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" symbolic="YES" id="ziX-KE-RTc"/>
+                            <constraint firstItem="csa-Jy-lFF" firstAttribute="top" secondItem="Qlo-FC-GNh" secondAttribute="bottom" constant="8" symbolic="YES" id="zjd-Xg-5mb"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="currentLogLevelLabel" destination="MdE-sg-fKw" id="EOp-6d-Iby"/>
+                        <outlet property="generateLabel" destination="1zy-OP-hRV" id="qNf-Vt-hCU"/>
+                        <outlet property="logLevelLabel" destination="dIL-ul-q6u" id="727-IS-OfK"/>
+                        <outlet property="logLevelSlider" destination="SjH-ki-WTR" id="bRx-Nw-8mu"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+    </scenes>
+</document>

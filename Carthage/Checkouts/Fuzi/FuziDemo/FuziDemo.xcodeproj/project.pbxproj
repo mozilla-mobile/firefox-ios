@@ -1,0 +1,287 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		7932B1151BA7EC67008CA6F5 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7932B1131BA7EC67008CA6F5 /* main.swift */; };
+		7932B15E1BA7FAD4008CA6F5 /* nutrition.xml in Resources */ = {isa = PBXBuildFile; fileRef = 7932B15D1BA7FAD4008CA6F5 /* nutrition.xml */; };
+		7932B1671BA85C9D008CA6F5 /* Fuzi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7932B1661BA85C9D008CA6F5 /* Fuzi.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		7932B1131BA7EC67008CA6F5 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = main.swift; path = FuziDemo/main.swift; sourceTree = SOURCE_ROOT; };
+		7932B1141BA7EC67008CA6F5 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = FuziDemo/Info.plist; sourceTree = SOURCE_ROOT; };
+		7932B15D1BA7FAD4008CA6F5 /* nutrition.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = nutrition.xml; path = FuziDemo/nutrition.xml; sourceTree = SOURCE_ROOT; };
+		7932B1661BA85C9D008CA6F5 /* Fuzi.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Fuzi.framework; path = ../build/Debug/Fuzi.framework; sourceTree = "<group>"; };
+		799EB4DD1BA42D4D00E8F920 /* FuziDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FuziDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		799EB4DA1BA42D4D00E8F920 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7932B1671BA85C9D008CA6F5 /* Fuzi.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		799EB4D41BA42D4D00E8F920 = {
+			isa = PBXGroup;
+			children = (
+				7932B1661BA85C9D008CA6F5 /* Fuzi.framework */,
+				799EB4DF1BA42D4D00E8F920 /* FuziDemo */,
+				799EB4DE1BA42D4D00E8F920 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		799EB4DE1BA42D4D00E8F920 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				799EB4DD1BA42D4D00E8F920 /* FuziDemo.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		799EB4DF1BA42D4D00E8F920 /* FuziDemo */ = {
+			isa = PBXGroup;
+			children = (
+				7932B15D1BA7FAD4008CA6F5 /* nutrition.xml */,
+				7932B1131BA7EC67008CA6F5 /* main.swift */,
+				7932B1141BA7EC67008CA6F5 /* Info.plist */,
+			);
+			name = FuziDemo;
+			path = FuzeDemo;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		799EB4DC1BA42D4D00E8F920 /* FuziDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 799EB4EA1BA42D4D00E8F920 /* Build configuration list for PBXNativeTarget "FuziDemo" */;
+			buildPhases = (
+				799EB4D91BA42D4D00E8F920 /* Sources */,
+				799EB4DA1BA42D4D00E8F920 /* Frameworks */,
+				799EB4DB1BA42D4D00E8F920 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FuziDemo;
+			productName = FuzeDemo;
+			productReference = 799EB4DD1BA42D4D00E8F920 /* FuziDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		799EB4D51BA42D4D00E8F920 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0700;
+				LastUpgradeCheck = 0800;
+				ORGANIZATIONNAME = "Ce Zheng";
+				TargetAttributes = {
+					799EB4DC1BA42D4D00E8F920 = {
+						CreatedOnToolsVersion = 7.0;
+					};
+				};
+			};
+			buildConfigurationList = 799EB4D81BA42D4D00E8F920 /* Build configuration list for PBXProject "FuziDemo" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 799EB4D41BA42D4D00E8F920;
+			productRefGroup = 799EB4DE1BA42D4D00E8F920 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				799EB4DC1BA42D4D00E8F920 /* FuziDemo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		799EB4DB1BA42D4D00E8F920 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7932B15E1BA7FAD4008CA6F5 /* nutrition.xml in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		799EB4D91BA42D4D00E8F920 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7932B1151BA7EC67008CA6F5 /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		799EB4E81BA42D4D00E8F920 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 2.3;
+			};
+			name = Debug;
+		};
+		799EB4E91BA42D4D00E8F920 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 2.3;
+			};
+			name = Release;
+		};
+		799EB4EB1BA42D4D00E8F920 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/include/libxml2",
+				);
+				INFOPLIST_FILE = FuziDemo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				OTHER_LDFLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = me.cezheng.FuzeDemo;
+				PRODUCT_NAME = FuziDemo;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		799EB4EC1BA42D4D00E8F920 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/include/libxml2",
+				);
+				INFOPLIST_FILE = FuziDemo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				OTHER_LDFLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = me.cezheng.FuzeDemo;
+				PRODUCT_NAME = FuziDemo;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		799EB4D81BA42D4D00E8F920 /* Build configuration list for PBXProject "FuziDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				799EB4E81BA42D4D00E8F920 /* Debug */,
+				799EB4E91BA42D4D00E8F920 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		799EB4EA1BA42D4D00E8F920 /* Build configuration list for PBXNativeTarget "FuziDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				799EB4EB1BA42D4D00E8F920 /* Debug */,
+				799EB4EC1BA42D4D00E8F920 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 799EB4D51BA42D4D00E8F920 /* Project object */;
+}

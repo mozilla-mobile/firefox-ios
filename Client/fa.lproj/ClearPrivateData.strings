@@ -1,0 +1,31 @@
+/* Message shown in the dialog prompting users if they want to clear everything */
+"Are you sure you want to clear all of your data? This will also close all open tabs." = "آیا مطمئنید که می‌خواهید تمام اطلاعات را پاک کنید؟ این باعث بسته شدن همه زبانه‌های باز شما می‌شود.";
+
+/* Settings item for clearing browsing history */
+"Browsing History" = "تاریخچه مرور";
+
+/* Settings item for clearing the cache */
+"Cache" = "حافظه نهان";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "لغو";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "پاک کردن";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "پاک‌کردن همه چیز";
+
+/* Button in settings that clears private data for the selected items.
+   Navigation title in settings. */
+"Clear Private Data" = "پاک‌سازی اطلاعات خصوصی";
+
+/* Settings item for clearing cookies */
+"Cookies" = "کوکی‌ها";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "اطلاعات آفلاین پایگا‌ه‌ اینترنتی";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "ورودهای ذخیره شده";
+

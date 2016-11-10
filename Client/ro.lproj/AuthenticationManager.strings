@@ -1,0 +1,90 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "După 1 oră";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "După 1 minut";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "După 5 minute";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "După 10 minute";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "După 15 minute";
+
+/* Label used as a setting item and title of the following screen to change the current passcode */
+"Change Passcode" = "Schimbă parola";
+
+/* Title of the dialog used to request the passcode */
+"Enter Passcode" = "Introdu codul de trecere";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter a new passcode" = "Introdu un cod de trecere nou";
+
+/* Text displayed above the input field when entering a new passcode */
+"Enter a passcode" = "Introdu un cod de trecere";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter passcode" = "Introdu codul de trecere";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "Imediat";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining */
+"Incorrect passcode. Try again (Attempts remaining: %d)." = "Cod de trecere incorect. Încearcă din nou (Încercări rămase: %d).";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app */
+"Incorrect passcode. Try again." = "Cod de trecere incorect. Încearcă din nou.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again in an hour." = "S-a atins numărul maxim de încercări. Te rugăm să încerci din nou într-o oră.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again later." = "S-a atins numărul maxim de încercări. Te rugăm să încerci din nou mai târziu.";
+
+/* Error message displayed when user tries to enter the same passcode as their existing code when changing it. */
+"New passcode must be different than existing code." = "Codul de trecere nou trebuie să fie diferit față de codul existent.";
+
+/* Label for the Passcode item in Settings */
+"Passcode" = "Cod de trecere";
+
+/* Error message displayed to user when their confirming passcode doesn't match the first code. */
+"Passcodes didn't match. Try again." = "Codurile de trecere nu s-au potrivit. Încearcă din nou.";
+
+/* Text displayed above the input field when confirming a passcode */
+"Re-enter passcode" = "Reintrodu codul de trecere";
+
+/* Text displayed in the 'Interval' section, followed by the current interval setting, e.g. 'Immediately' */
+"Require Passcode" = "Necesită cod de trecere";
+
+/* Title of the dialog used to set a passcode */
+"Set Passcode" = "Setează codul de trecere";
+
+/* Label for the Touch ID/Passcode item in Settings */
+"Touch ID & Passcode" = "Touch ID și cod de trecere";
+
+/* Label used as a setting item to turn off passcode */
+"Turn Passcode Off" = "Activează codul de trecere";
+
+/* Label used as a setting item to turn on passcode */
+"Turn Passcode On" = "Dezactivează codul de trecere";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "Dezactivează codul de trecere.";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID" = "Folosește Touch ID";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "Folosește amprenta ca să accesezi autentificările acum.";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "Folosește amprenta ca să accesezi navigarea privată acum.";
+
+/* Touch ID prompt subtitle when disabling Touch ID */
+"touchid.disable.reason.label" = "Folosește amprenta ca să dezactivezi Touch ID.";
+
+/* Touch ID prompt subtitle when accessing the require passcode setting */
+"touchid.require.passcode.reason.label" = "Folosește amprenta ca să accesezi configurarea intervalului necesar pentru codul de trecere.";
+

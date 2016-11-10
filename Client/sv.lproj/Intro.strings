@@ -1,0 +1,54 @@
+/* See http://mzl.la/1T8gxwo */
+"Browse multiple Web pages at the same time with tabs." = "Bläddra bland flera webbsidor samtidigt med flikar.";
+
+/* Title for one of the panels in the First Run tour. */
+"Choose" = "Välj";
+
+/* See http://mzl.la/1T8gxwo */
+"Connect Firefox everywhere you use it." = "Anslut Firefox överallt där du använder den.";
+
+/* Title for one of the panels in the First Run tour. */
+"Customize" = "Anpassa";
+
+/* Description for the 'Organize' panel in the First Run tour. */
+"Easily switch between open pages with tabs." = "Byt enkelt mellan öppna sidor med flikar.";
+
+/* Accessibility label for the image displayed in the 'Sync' panel of the First Run tour. */
+"Firefox and the cloud" = "Firefox och molnet";
+
+/* String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3 */
+"Introductory slide %@ of %@" = "Introducerande bild %1$@ av %2$@";
+
+/* Title for one of the panels in the First Run tour. */
+"Organize" = "Organisera";
+
+/* See http://mzl.la/1T8gxwo */
+"Personalize your Firefox just the way you like in Settings." = "Anpassa Firefox precis som du vill ha den i inställningarna.";
+
+/* Description for the 'Customize' panel in the First Run tour. */
+"Personalize your default search engine and more in Settings." = "Ändra din standardsökmotor och mer i inställningarna.";
+
+/* Title for one of the panels in the First Run tour. */
+"Share" = "Dela";
+
+/* See http://mzl.la/1T8gxwo */
+"Sign in to Firefox" = "Logga in till Firefox";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "Börja surfa";
+
+/* Title for one of the panels in the First Run tour. */
+"Sync your Devices." = "Synka dina enheter.";
+
+/* Description for the 'Choose' panel in the First Run tour. */
+"Tap, hold and move the Firefox icon into your dock for easy access." = "Peka, håll in och flytta ikonen för Firefox till docken för enkel åtkomst.";
+
+/* Accessibility label for the Settings button in the tab tray. */
+"The Settings button is at the beginning of the Tabs Tray." = "Inställningsknappen är i början av flikfältet.";
+
+/* Accessibility label for the UI element used to display the number of open tabs, and open the tab tray. */
+"The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs." = "Knappen för att visa flikar är bredvid adress och sökfält och visar det aktuella antalet öppna flikar.";
+
+/* Description for the 'Share' panel in the First Run tour. */
+"Use the share sheet to send links from other apps to Firefox." = "Använd menyn dela för att skicka länkar från andra appar till Firefox.";
+

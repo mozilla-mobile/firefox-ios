@@ -1,0 +1,90 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "Čez 1 uro";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "Čez 1 minuto";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "Čez 5 minut";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "Čez 10 minut";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "Čez 15 minut";
+
+/* Label used as a setting item and title of the following screen to change the current passcode */
+"Change Passcode" = "Spremeni geslo";
+
+/* Title of the dialog used to request the passcode */
+"Enter Passcode" = "Vnesite geslo";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter a new passcode" = "Vnesite novo geslo";
+
+/* Text displayed above the input field when entering a new passcode */
+"Enter a passcode" = "Vnesite geslo";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter passcode" = "Vnesite geslo";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "Takoj";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining */
+"Incorrect passcode. Try again (Attempts remaining: %d)." = "Nepravilno geslo. Poskusite znova (preostalih poskusov: %d).";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app */
+"Incorrect passcode. Try again." = "Napačno geslo. Poskusite znova.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again in an hour." = "Največje število poskusov doseženo. Poskusite znova čez eno uro.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again later." = "Največje število poskusov doseženo. Poskusite znova pozneje.";
+
+/* Error message displayed when user tries to enter the same passcode as their existing code when changing it. */
+"New passcode must be different than existing code." = "Novo geslo mora biti drugačno od obstoječega.";
+
+/* Label for the Passcode item in Settings */
+"Passcode" = "Geslo";
+
+/* Error message displayed to user when their confirming passcode doesn't match the first code. */
+"Passcodes didn't match. Try again." = "Gesli se ne ujemata. Poskusite znova.";
+
+/* Text displayed above the input field when confirming a passcode */
+"Re-enter passcode" = "Ponovno vnesite geslo";
+
+/* Text displayed in the 'Interval' section, followed by the current interval setting, e.g. 'Immediately' */
+"Require Passcode" = "Zahtevaj geslo";
+
+/* Title of the dialog used to set a passcode */
+"Set Passcode" = "Nastavi geslo";
+
+/* Label for the Touch ID/Passcode item in Settings */
+"Touch ID & Passcode" = "Touch ID in geslo";
+
+/* Label used as a setting item to turn off passcode */
+"Turn Passcode Off" = "Izključi geslo";
+
+/* Label used as a setting item to turn on passcode */
+"Turn Passcode On" = "Vključi geslo";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "Izključite svoje geslo.";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID" = "Uporabi Touch ID";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "Uporabite svoj prstni odtis za dostop do prijav.";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "Uporabite svoj prstni odtis za dostop do zasebnega brskanja.";
+
+/* Touch ID prompt subtitle when disabling Touch ID */
+"touchid.disable.reason.label" = "Uporabite svoj prstni odtis za izključitev Touch ID.";
+
+/* Touch ID prompt subtitle when accessing the require passcode setting */
+"touchid.require.passcode.reason.label" = "Uporabite svoj prstni odtis za dostop do nastavitev intervala zahtevanega gesla.";
+

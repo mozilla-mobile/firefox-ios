@@ -1,0 +1,18 @@
+/* The cancel button when confirming clear history. */
+"Cancel" = "Khansela";
+
+/* The button that clears history even when Sync is connected. */
+"Clear" = "Phimola";
+
+/* Description of the confirmation dialog shown when a user tries to clear history that's synced to another device. */
+"History will be removed from all your connected devices. This cannot be undone." = "Motlhala wa patlo o tla tlosiwa go tsweng mo didirisweng tsotlhe tsa gago tse di golaganyeng. Se ga se ka ke sa dirololwa.";
+
+/* The confirmation button that clears history even when Sync is connected. */
+"OK" = "Ee";
+
+/* Title of the confirmation dialog shown when a user tries to clear history that's synced to another device. */
+"Remove history from your Firefox Account?" = "Tlosa motlhala wa patlo go tsweng mo akhaonto ya gago ya Firefox?";
+
+/* Description of the confirmation dialog shown when a user tries to clear history that's synced to another device. */
+"This action will clear all of your private data, including history from your synced devices." = "Tiro e e tla phimola tshedimosetso ya gago e poraefete yotlhe, se se akaretsa motlhala wa patlo go tsweng mo didirisweng tse di rulagantswe ka tsamaisano.";
+

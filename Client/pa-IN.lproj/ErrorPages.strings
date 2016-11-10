@@ -1,0 +1,6 @@
+/* Shown in error pages for files that can't be shown and need to be downloaded. */
+"Open in Safari" = "Safari ਵਿੱਚ ਖੋਲ੍ਹੋ";
+
+/* Shown in error pages on a button that will try to load the page again */
+"Try again" = "ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ";
+

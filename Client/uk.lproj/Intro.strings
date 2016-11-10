@@ -1,0 +1,54 @@
+/* See http://mzl.la/1T8gxwo */
+"Browse multiple Web pages at the same time with tabs." = "Переглядайте одночасно багато веб-сторінок за допомогою вкладок.";
+
+/* Title for one of the panels in the First Run tour. */
+"Choose" = "Обирайте";
+
+/* See http://mzl.la/1T8gxwo */
+"Connect Firefox everywhere you use it." = "З'єднуйтесь з Firefox всюди, де ви його використовуєте.";
+
+/* Title for one of the panels in the First Run tour. */
+"Customize" = "Налаштовуйте";
+
+/* Description for the 'Organize' panel in the First Run tour. */
+"Easily switch between open pages with tabs." = "Легко перемикайтеся між відкритими сторінками за допомогою вкладок.";
+
+/* Accessibility label for the image displayed in the 'Sync' panel of the First Run tour. */
+"Firefox and the cloud" = "Firefox і хмара";
+
+/* String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3 */
+"Introductory slide %@ of %@" = "Вступний слайд %1$@ із %2$@";
+
+/* Title for one of the panels in the First Run tour. */
+"Organize" = "Організовуйте";
+
+/* See http://mzl.la/1T8gxwo */
+"Personalize your Firefox just the way you like in Settings." = "Налаштуйте Firefox на свій смак в Параметрах.";
+
+/* Description for the 'Customize' panel in the First Run tour. */
+"Personalize your default search engine and more in Settings." = "Налаштуйте типовий засіб пошуку й багато іншого в Параметрах.";
+
+/* Title for one of the panels in the First Run tour. */
+"Share" = "Діліться";
+
+/* See http://mzl.la/1T8gxwo */
+"Sign in to Firefox" = "Увійти в Firefox";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "Почати перегляд";
+
+/* Title for one of the panels in the First Run tour. */
+"Sync your Devices." = "Синхронізуйте свої пристрої.";
+
+/* Description for the 'Choose' panel in the First Run tour. */
+"Tap, hold and move the Firefox icon into your dock for easy access." = "Торкніться, утримайте й перемістіть піктограму Firefox у свій док для легкого доступу.";
+
+/* Accessibility label for the Settings button in the tab tray. */
+"The Settings button is at the beginning of the Tabs Tray." = "Кнопка параметрів знаходиться на початку лотка вкладок.";
+
+/* Accessibility label for the UI element used to display the number of open tabs, and open the tab tray. */
+"The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs." = "Кнопка показу вкладок знаходиться поруч з текстовим полем адреси та пошуку і показує поточну кількість відкритих вкладок.";
+
+/* Description for the 'Share' panel in the First Run tour. */
+"Use the share sheet to send links from other apps to Firefox." = "Використовуйте панель поширення для надсилання посилань з інших програм в Firefox.";
+

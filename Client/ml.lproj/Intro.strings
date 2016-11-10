@@ -1,0 +1,42 @@
+/* See http://mzl.la/1T8gxwo */
+"Browse multiple Web pages at the same time with tabs." = "പല വെബ്‌പേജുകള്‍ ഒരേ സമയം ടാബുകളില്‍ തുറക്കുക.";
+
+/* Title for one of the panels in the First Run tour. */
+"Choose" = "തെരഞ്ഞെടുക്കുക";
+
+/* Title for one of the panels in the First Run tour. */
+"Customize" = "യഥേഷ്ടമാക്കുക";
+
+/* Accessibility label for the image displayed in the 'Sync' panel of the First Run tour. */
+"Firefox and the cloud" = "ഫയര്‍ഫോക്സും ക്ലൌഡും";
+
+/* String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3 */
+"Introductory slide %@ of %@" = "പ്രാരംഭ സ്ലൈഡ് %2$@ ലെ %1$@";
+
+/* Description for the 'Customize' panel in the First Run tour. */
+"Personalize your default search engine and more in Settings." = "താങ്കളുടെ സ്വതേയുള്ള തെരച്ചില്‍ യന്ത്രം വ്യക്തിഗതമാക്കാനും മറ്റു കാര്യങ്ങള്‍ക്കും സജ്ജീകരണങ്ങളില്‍ പോവൂ.";
+
+/* Title for one of the panels in the First Run tour. */
+"Share" = "പങ്കിടുക";
+
+/* See http://mzl.la/1T8gxwo */
+"Sign in to Firefox" = "ഫയര്‍ഫോക്സിലേക്ക് പ്രവേശിക്കുക";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "ബ്രൗസിങ് തുടങ്ങൂക";
+
+/* Title for one of the panels in the First Run tour. */
+"Sync your Devices." = "താങ്കളുടെ ഡിവൈസുകള്‍ സിങ്ക് ചെയ്യുക.";
+
+/* Description for the 'Choose' panel in the First Run tour. */
+"Tap, hold and move the Firefox icon into your dock for easy access." = "എളുപ്പത്തില്‍ ഉപയോഗിക്കാനായി ഫയര്‍ഫോക്സ് ചിഹ്നം തൊട്ടുപിടിച്ചു താങ്കളുടെ ഡോക്കിലെക്ക് നീക്കുക.";
+
+/* Accessibility label for the Settings button in the tab tray. */
+"The Settings button is at the beginning of the Tabs Tray." = "സജ്ജീകരണ ബട്ടണ്‍ ടാബ്സ് ട്രേയുടെ തുടക്കത്തില്‍ ഉണ്ട്.";
+
+/* Accessibility label for the UI element used to display the number of open tabs, and open the tab tray. */
+"The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs." = "നിലവില്‍ തുറന്നിരിക്കുന്ന ടാബുകളുടെ എണ്ണം കാണിക്കുന്ന ടാബുകള്‍ കാണിക്കുക എന്ന ബട്ടണ്‍ വിലാസവും തെരച്ചിലും നല്കുന്നയിടത്തിനു അപ്പുറത്തായി ഉണ്ട്.";
+
+/* Description for the 'Share' panel in the First Run tour. */
+"Use the share sheet to send links from other apps to Firefox." = "മറ്റു ആപ്പുകളില്‍ നിന്നും ലിങ്കുകള്‍ ഫയര്‍ഫോക്സിലേക്ക് അയയ്ക്കുവാന്‍ ഷെയര്‍ഷീറ്റ് ഉപയോഗിക്കുക.";
+

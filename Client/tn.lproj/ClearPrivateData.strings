@@ -1,0 +1,31 @@
+/* Message shown in the dialog prompting users if they want to clear everything */
+"Are you sure you want to clear all of your data? This will also close all open tabs." = "A o rurifatsa gore o batla go phimola tshedimosetso ya gago yotlhe? Se se tla tswala dithebe tsotlhe tse di butsweng.";
+
+/* Settings item for clearing browsing history */
+"Browsing History" = "Motlhalapatlo";
+
+/* Settings item for clearing the cache */
+"Cache" = "Khetšhe";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "khansela";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "Phimola";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "Phimola Sengwe le sengwe";
+
+/* Button in settings that clears private data for the selected items.
+   Navigation title in settings. */
+"Clear Private Data" = "Phimola Tshedimosetso e Poraefete";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Dikhukhi";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "Tshedimosetso ya Webosaete Ntle le kgolagano";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "Matseno a Bolokilweng";
+
