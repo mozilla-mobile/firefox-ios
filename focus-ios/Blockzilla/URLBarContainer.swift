@@ -28,8 +28,8 @@ class URLBarContainer: UIView {
 
     var isBright: Bool = false {
         didSet {
-            backgroundDark.animateHidden(isBright, duration: UIConstants.layout.urlBarFadeAnimationDuration)
-            backgroundBright.animateHidden(!isBright, duration: UIConstants.layout.urlBarFadeAnimationDuration)
+            backgroundDark.animateHidden(isBright, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
+            backgroundBright.animateHidden(!isBright, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
         }
     }
 

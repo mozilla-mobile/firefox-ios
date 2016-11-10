@@ -20,7 +20,6 @@ class URLBar: UIView {
     let progressBar = UIProgressView(progressViewStyle: .bar)
     fileprivate(set) var isEditing = false
 
-    fileprivate let buttonContainer = UIView()
     fileprivate let cancelButton = UIButton()
     fileprivate let deleteButton = InsetButton()
     fileprivate let domainCompletion = DomainCompletion()
@@ -29,27 +28,30 @@ class URLBar: UIView {
     private let urlTextContainer = UIView()
     private let urlText = URLTextField()
     private let lockIcon = UIImageView(image: #imageLiteral(resourceName: "icon_https"))
+    private let urlBarBackgroundView = UIView()
     private var showButtons = false
 
-    private var hideButtonContainerConstraint: Constraint!
     private var fullWidthURLTextConstraint: Constraint!
     private var centeredURLConstraint: Constraint!
     private var hideLockConstraints = [Constraint]()
     private var hideToolsetConstraints = [Constraint]()
     private var showToolsetConstraints = [Constraint]()
+    private var isEditingConstraints = [Constraint]()
+    private var notEditingConstraints = [Constraint]()
+    private var preActivationConstraints = [Constraint]()
 
     init() {
         super.init(frame: CGRect.zero)
 
-        toolset.sendButton.isEnabled = false
-        toolset.stopReloadButton.isEnabled = false
         addSubview(toolset.backButton)
         addSubview(toolset.forwardButton)
         addSubview(toolset.stopReloadButton)
         addSubview(toolset.sendButton)
 
-        urlTextContainer.backgroundColor = UIConstants.colors.urlTextBackground
-        urlTextContainer.layer.cornerRadius = UIConstants.layout.urlBarCornerRadius
+        urlBarBackgroundView.backgroundColor = UIConstants.colors.urlTextBackground
+        urlBarBackgroundView.layer.cornerRadius = UIConstants.layout.urlBarCornerRadius
+        addSubview(urlBarBackgroundView)
+
         addSubview(urlTextContainer)
 
         let textAndLockContainer = UIView()
@@ -82,8 +84,6 @@ class URLBar: UIView {
         urlText.source = domainCompletion
         textAndLockContainer.addSubview(urlText)
 
-        addSubview(buttonContainer)
-
         cancelButton.isHidden = true
         cancelButton.alpha = 0
         cancelButton.setTitle(UIConstants.strings.urlBarCancel, for: .normal)
@@ -91,22 +91,21 @@ class URLBar: UIView {
         cancelButton.setContentHuggingPriority(1000, for: .horizontal)
         cancelButton.setContentCompressionResistancePriority(1000, for: .horizontal)
         cancelButton.addTarget(self, action: #selector(dismiss), for: .touchUpInside)
-        buttonContainer.addSubview(cancelButton)
+        addSubview(cancelButton)
 
         deleteButton.isHidden = true
         deleteButton.alpha = 0
         deleteButton.setTitle(UIConstants.strings.eraseButton, for: .normal)
         deleteButton.titleLabel?.font = UIConstants.fonts.deleteButton
         deleteButton.titleEdgeInsets = UIEdgeInsets(top: 2, left: 10, bottom: 2, right: 10)
-        deleteButton.backgroundColor = UIColor.lightGray
+        deleteButton.backgroundColor = UIConstants.colors.deleteButtonBackground
         deleteButton.layer.borderWidth = 1
         deleteButton.layer.cornerRadius = 2
         deleteButton.layer.borderColor = UIConstants.colors.deleteButtonBorder.cgColor
-        deleteButton.layer.backgroundColor = UIConstants.colors.deleteButtonBackgroundNormal.cgColor
         deleteButton.setContentHuggingPriority(1000, for: .horizontal)
         deleteButton.setContentCompressionResistancePriority(1000, for: .horizontal)
         deleteButton.addTarget(self, action: #selector(didPressDelete), for: .touchUpInside)
-        buttonContainer.addSubview(deleteButton)
+        addSubview(deleteButton)
 
         let activateButton = UIButton()
         activateButton.setTitle(UIConstants.strings.urlTextPlaceholder, for: .normal)
@@ -145,10 +144,16 @@ class URLBar: UIView {
             make.size.equalTo(toolset.backButton)
         }
 
+        urlBarBackgroundView.snp.makeConstraints { make in
+            make.edges.equalTo(urlTextContainer)
+        }
+
         urlTextContainer.snp.makeConstraints { make in
             make.leading.equalTo(toolset.stopReloadButton.snp.trailing).inset(-UIConstants.layout.urlBarMargin)
             make.top.bottom.equalTo(self).inset(UIConstants.layout.urlBarMargin)
-            make.trailing.equalTo(buttonContainer.snp.leading)
+
+            // TODO: Comment
+            make.trailing.equalTo(self).inset(8).priority(500)
         }
 
         textAndLockContainer.snp.makeConstraints { make in
@@ -177,33 +182,24 @@ class URLBar: UIView {
             make.top.bottom.trailing.equalTo(textAndLockContainer)
         }
 
-        buttonContainer.snp.makeConstraints { make in
-            make.top.bottom.equalTo(urlTextContainer)
-
-            make.width.greaterThanOrEqualTo(deleteButton).inset(-UIConstants.layout.urlBarMargin).priority(999)
-            make.width.greaterThanOrEqualTo(cancelButton).inset(-UIConstants.layout.urlBarMargin).priority(999)
-            make.width.greaterThanOrEqualTo(toolset.backButton).priority(999)
-
-            // This will shrink the container to be as small as possible while still meeting the width requirements above.
-            make.width.equalTo(0).priority(500)
-
-            // Keep the button container hidden until we start browsing.
-            // Set the width equal to the URL bar margin so there's still a gap between the trailing edges.
-            hideButtonContainerConstraint = make.width.equalTo(UIConstants.layout.urlBarMargin).constraint
-        }
-
         toolset.sendButton.snp.makeConstraints { make in
-            make.leading.equalTo(buttonContainer.snp.trailing)
             make.centerY.trailing.equalTo(self)
             make.size.equalTo(toolset.backButton)
         }
 
         deleteButton.snp.makeConstraints { make in
-            make.center.equalTo(buttonContainer)
+            make.centerY.equalTo(urlTextContainer)
+            isEditingConstraints.append(make.size.equalTo(0).constraint)
+            notEditingConstraints.append(make.leading.equalTo(urlTextContainer.snp.trailing).inset(-8).constraint)
+            notEditingConstraints.append(make.trailing.equalTo(toolset.sendButton.snp.leading).inset(-8).constraint)
         }
 
         cancelButton.snp.makeConstraints { make in
-            make.center.equalTo(buttonContainer)
+            make.center.equalTo(deleteButton)
+            isEditingConstraints.append(make.leading.equalTo(urlTextContainer.snp.trailing).inset(-8).priority(999).constraint)
+            isEditingConstraints.append(make.trailing.equalTo(toolset.sendButton.snp.leading).inset(-8).constraint)
+            preActivationConstraints.append(make.leading.equalTo(urlTextContainer.snp.trailing).constraint)
+            preActivationConstraints.append(make.size.equalTo(0).constraint)
         }
 
         progressBar.snp.makeConstraints { make in
@@ -218,6 +214,7 @@ class URLBar: UIView {
 
         centeredURLConstraint.deactivate()
         showToolsetConstraints.forEach { $0.deactivate() }
+        notEditingConstraints.forEach { $0.deactivate() }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -263,6 +260,9 @@ class URLBar: UIView {
         }
     }
 
+    /// The outer view the URL bar will shrink from/to when transitioning to/from edit mode.
+    weak var shrinkFromView: UIView?
+
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         // Since the URL text field is smaller and centered on iPads, make sure
         // that touching the surrounding area will trigger editing.
@@ -279,7 +279,7 @@ class URLBar: UIView {
 
     private func updateLockIcon() {
         let visible = !isEditing && (url?.scheme == "https")
-        let duration = UIConstants.layout.urlBarFadeAnimationDuration / 2
+        let duration = UIConstants.layout.urlBarTransitionAnimationDuration / 2
 
         lockIcon.animateHidden(!visible, duration: duration)
 
@@ -304,17 +304,25 @@ class URLBar: UIView {
         delegate?.urlBarDidFocus(self)
 
         if showButtons {
-            cancelButton.animateHidden(false, duration: UIConstants.layout.urlBarFadeAnimationDuration)
-            deleteButton.animateHidden(true, duration: UIConstants.layout.urlBarFadeAnimationDuration)
+            cancelButton.animateHidden(false, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
+            deleteButton.animateHidden(true, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
         }
 
         self.layoutIfNeeded()
-        UIView.animate(withDuration: UIConstants.layout.urlBarFadeAnimationDuration) {
-            // Show the text field background when editing.
-            self.urlTextContainer.backgroundColor = UIConstants.colors.urlTextBackground
-
+        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration) {
             // Hide the URL toolset buttons if we're on iPad/landscape.
             self.updateToolsetConstraints()
+
+            if self.showButtons {
+                self.notEditingConstraints.forEach { $0.deactivate() }
+                self.isEditingConstraints.forEach { $0.activate() }
+            }
+
+            // Shrink the URL text background in from the outer URL bar.
+            self.urlBarBackgroundView.alpha = 1
+            self.urlBarBackgroundView.snp.remakeConstraints { make in
+                make.edges.equalTo(self.urlTextContainer)
+            }
 
             self.layoutIfNeeded()
         }
@@ -330,24 +338,29 @@ class URLBar: UIView {
         self.toolset.sendButton.isEnabled = true
         delegate?.urlBarDidDismiss(self)
 
-        cancelButton.animateHidden(true, duration: UIConstants.layout.urlBarFadeAnimationDuration)
-        deleteButton.animateHidden(false, duration: UIConstants.layout.urlBarFadeAnimationDuration)
+        cancelButton.animateHidden(true, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
+        deleteButton.animateHidden(false, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
 
         self.layoutIfNeeded()
-        UIView.animate(withDuration: UIConstants.layout.urlBarFadeAnimationDuration) {
-            // Hide the text field background when we're done editing.
-            self.urlTextContainer.backgroundColor = nil
-
+        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration) {
             // We don't show Cancel/Erase for the initial URL bar at app launch.
             // If this is the first dismissal, we've entered the browsing state, so show them.
             if !self.showButtons {
                 self.showButtons = true
-                self.hideButtonContainerConstraint.deactivate()
-                self.toolset.stopReloadButton.isEnabled = true
+                self.preActivationConstraints.forEach { $0.deactivate() }
             }
+
+            self.isEditingConstraints.forEach { $0.deactivate() }
+            self.notEditingConstraints.forEach { $0.activate() }
 
             // Reveal the URL bar buttons on iPad/landscape.
             self.updateToolsetConstraints()
+
+            // Expand the URL text background to the outer URL bar.
+            self.urlBarBackgroundView.alpha = 0
+            self.urlBarBackgroundView.snp.remakeConstraints { make in
+                make.edges.equalTo(self.shrinkFromView ?? 0)
+            }
 
             self.layoutIfNeeded()
         }
@@ -399,7 +412,7 @@ class URLBar: UIView {
     }
 
     @objc private func didPressActivate(_ button: UIButton) {
-        UIView.animate(withDuration: UIConstants.layout.urlBarMoveToTopAnimationDuration, animations: {
+        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, animations: {
             button.contentHorizontalAlignment = .left
             self.layoutIfNeeded()
         }, completion: { finished in
