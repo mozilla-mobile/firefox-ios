@@ -77,8 +77,9 @@ class ActivityStreamPanel: UITableViewController, HomePanel {
         tableView.sectionFooterHeight = 0
         tableView.sectionHeaderHeight = UITableViewAutomaticDimension
 
-        reloadTopSites()
-        reloadHighlights()
+        all([reloadTopSites(), reloadHighlights()]).uponQueue(dispatch_get_main_queue()) { _ in
+            self.tableView.reloadData()
+        }
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -256,10 +257,10 @@ extension ActivityStreamPanel {
         }
     }
 
-    private func reloadHighlights() {
-        fetchHighlights().uponQueue(dispatch_get_main_queue()) { result in
+    private func reloadHighlights() -> Success {
+        return fetchHighlights().bindQueue(dispatch_get_main_queue()) { result in
             self.highlights = result.successValue?.asArray() ?? self.highlights
-            self.tableView.reloadSections(NSIndexSet(index: Section.Highlights.rawValue), withRowAnimation: .Automatic)
+            return succeed()
         }
     }
 
@@ -267,8 +268,8 @@ extension ActivityStreamPanel {
         return self.profile.recommendations.getHighlights()
     }
 
-    private func reloadTopSites() {
-        invalidateTopSites().uponQueue(dispatch_get_main_queue()) { result in
+    private func reloadTopSites() -> Success {
+        return invalidateTopSites().bindQueue(dispatch_get_main_queue()) { result in
             let defaultSites = self.defaultTopSites()
             let mySites = (result.successValue ?? [])
 
@@ -290,7 +291,7 @@ extension ActivityStreamPanel {
                 ASOnyxPing.reportTapEvent(event)
                 self.showSiteWithURLHandler(url)
             }
-            self.tableView.reloadSections(NSIndexSet(index: Section.TopSites.rawValue), withRowAnimation: .Automatic)
+            return succeed()
         }
     }
 
