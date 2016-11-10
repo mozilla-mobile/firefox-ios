@@ -20,4 +20,16 @@ extension UIView {
             completion?()
         })
     }
+
+    /// Takes a screenshot of the view with the given size.
+    func screenshot(quality: CGFloat = 1) -> UIImage? {
+        assert(0...1 ~= quality)
+
+        UIGraphicsBeginImageContextWithOptions(bounds.size, false, UIScreen.main.scale * quality)
+        drawHierarchy(in: CGRect(origin: CGPoint.zero, size: frame.size), afterScreenUpdates: false)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        return image
+    }
 }

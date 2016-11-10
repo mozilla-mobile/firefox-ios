@@ -17,7 +17,6 @@ class BrowserViewController: UIViewController {
     fileprivate var topURLBarConstraints = [Constraint]()
 
     private var homeViewContainer = UIView()
-    private var browserSlideOffConstraints = [Constraint]()
     private var showsToolsetInURLBar = false
 
     override func viewDidLoad() {
@@ -73,13 +72,7 @@ class BrowserViewController: UIViewController {
             make.top.equalTo(urlBarContainer.snp.bottom).priority(500)
             make.bottom.equalTo(view).priority(500)
             make.leading.trailing.equalTo(view)
-
-            browserSlideOffConstraints = [
-                make.top.equalTo(view.snp.bottom).constraint,
-                make.height.equalTo(view).constraint
-            ]
         }
-        browserSlideOffConstraints.forEach { $0.deactivate() }
 
         overlayView.snp.makeConstraints { make in
             make.top.equalTo(urlBarContainer.snp.bottom)
@@ -142,33 +135,47 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func resetBrowser() {
-        // We're creating a new URL bar below, so get a reference to the old one here so we can animate it.
-        let oldURLBar = urlBar
+        // Screenshot the browser, showing the screenshot on top.
+        let image = view.screenshot()
+        let screenshotView = UIImageView(image: image)
+        view.addSubview(screenshotView)
+        screenshotView.snp.makeConstraints { make in
+            make.edges.equalTo(view)
+        }
 
-        // Create a new home view and URL bar that will appear behind the browser as it slides out.
+        // Reset the views. These changes won't be immediately visible since they'll be under the screenshot.
+        browser.reset()
+        browser.view.isHidden = true
+        browserToolbar.isHidden = true
+        urlBar.removeFromSuperview()
+        urlBarContainer.alpha = 0
         createHomeView()
         createURLBar()
 
         // Clear the cache and cookies, starting a new session.
         WebCacheUtils.reset()
 
-        // Slide the browser off the screen, then remove it.
+        // Zoom out on the screenshot, then slide down, then remove it.
         view.layoutIfNeeded()
-
         UIView.animate(withDuration: UIConstants.layout.deleteAnimationDuration, animations: {
-            oldURLBar?.alpha = 0
-            self.urlBarContainer.alpha = 0
-            self.browserSlideOffConstraints.forEach { $0.activate() }
+            screenshotView.snp.remakeConstraints { make in
+                make.center.equalTo(self.view)
+                make.size.equalTo(self.view).multipliedBy(0.9)
+            }
             self.view.layoutIfNeeded()
-        }, completion: { finished in
-            oldURLBar?.removeFromSuperview()
-            self.browser.view.isHidden = true
-            self.browser.reset()
-            self.browserSlideOffConstraints.forEach { $0.deactivate() }
-            Toast(text: UIConstants.strings.eraseMessage).show()
+        }, completion: { _ in
+            UIView.animate(withDuration: UIConstants.layout.deleteAnimationDuration / 2, animations: {
+                screenshotView.snp.remakeConstraints { make in
+                    make.centerX.equalTo(self.view)
+                    make.top.equalTo(self.view.snp.bottom)
+                    make.size.equalTo(self.view).multipliedBy(0.9)
+                }
+                self.view.layoutIfNeeded()
+            }, completion: { _ in
+                Toast(text: UIConstants.strings.eraseMessage).show()
+                screenshotView.removeFromSuperview()
+            })
         })
-
-        browserToolbar.animateHidden(true, duration: UIConstants.layout.toolbarFadeAnimationDuration)
 
         AdjustIntegration.track(eventName: .clear)
     }
