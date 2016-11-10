@@ -20,5 +20,15 @@ class WebCacheUtils {
                 NSLog("Found \(path) but was unable to remove it: \(error)")
             }
         }
+
+        // Remove the in-memory history that WebKit maintains
+        if let clazz = NSClassFromString("Web" + "History") as? NSObjectProtocol {
+            if clazz.responds(to: Selector(("optional" + "Shared" + "History"))) {
+                if let webHistory = clazz.perform(Selector(("optional" + "Shared" + "History"))) {
+                    let o = webHistory.takeUnretainedValue()
+                    _ = o.perform(Selector(("remove" + "All" + "Items")))
+                }
+            }
+        }
     }
 }
