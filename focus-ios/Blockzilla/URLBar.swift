@@ -39,6 +39,7 @@ class URLBar: UIView {
     private var isEditingConstraints = [Constraint]()
     private var notEditingConstraints = [Constraint]()
     private var preActivationConstraints = [Constraint]()
+    private var postActivationConstraints = [Constraint]()
 
     init() {
         super.init(frame: CGRect.zero)
@@ -192,6 +193,7 @@ class URLBar: UIView {
             isEditingConstraints.append(make.size.equalTo(0).constraint)
             notEditingConstraints.append(make.leading.equalTo(urlTextContainer.snp.trailing).inset(-8).constraint)
             notEditingConstraints.append(make.trailing.equalTo(toolset.sendButton.snp.leading).inset(-8).constraint)
+            notEditingConstraints.append(make.width.greaterThanOrEqualTo(cancelButton).constraint)
         }
 
         cancelButton.snp.makeConstraints { make in
@@ -200,6 +202,7 @@ class URLBar: UIView {
             isEditingConstraints.append(make.trailing.equalTo(toolset.sendButton.snp.leading).inset(-8).constraint)
             preActivationConstraints.append(make.leading.equalTo(urlTextContainer.snp.trailing).constraint)
             preActivationConstraints.append(make.size.equalTo(0).constraint)
+            postActivationConstraints.append(make.width.greaterThanOrEqualTo(self).multipliedBy(toolsetButtonWidthMultiplier).constraint)
         }
 
         progressBar.snp.makeConstraints { make in
@@ -215,6 +218,7 @@ class URLBar: UIView {
         centeredURLConstraint.deactivate()
         showToolsetConstraints.forEach { $0.deactivate() }
         notEditingConstraints.forEach { $0.deactivate() }
+        postActivationConstraints.forEach { $0.deactivate() }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -348,6 +352,7 @@ class URLBar: UIView {
             if !self.showButtons {
                 self.showButtons = true
                 self.preActivationConstraints.forEach { $0.deactivate() }
+                self.postActivationConstraints.forEach { $0.activate() }
             }
 
             self.isEditingConstraints.forEach { $0.deactivate() }
