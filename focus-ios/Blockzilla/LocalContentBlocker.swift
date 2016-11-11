@@ -4,7 +4,13 @@
 
 import Foundation
 
+protocol LocalContentBlockerDelegate: class {
+    func localContentBlocker(_ localContentBlocker: LocalContentBlocker, didReceiveDataForMainDocumentURL url: URL?)
+}
+
 class LocalContentBlocker: URLProtocol, URLSessionDelegate, URLSessionDataDelegate {
+    static weak var delegate: LocalContentBlockerDelegate?
+
     private static var blockList = BlockList(lists: Utils.getEnabledLists())
 
     private var dataTask: URLSessionDataTask?
@@ -64,6 +70,11 @@ class LocalContentBlocker: URLProtocol, URLSessionDelegate, URLSessionDataDelega
     }
 
     func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
+        let mainDocumentURL = self.request.mainDocumentURL
+        DispatchQueue.main.async {
+            LocalContentBlocker.delegate?.localContentBlocker(self, didReceiveDataForMainDocumentURL: mainDocumentURL)
+        }
+
         client?.urlProtocol(self, didLoad: data)
     }
 

@@ -21,9 +21,14 @@ class Browser: NSObject {
 
     fileprivate var webView: UIWebView!
 
+    /// The main document of the latest request, which might be set before we've actually
+    /// started loading the document.
+    fileprivate var pendingURL: URL?
+
     override init() {
         super.init()
 
+        LocalContentBlocker.delegate = self
         createWebView()
 
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
@@ -120,6 +125,7 @@ class Browser: NSObject {
 
     fileprivate(set) var url: URL? = nil {
         didSet {
+            pendingURL = nil
             delegate?.browser(self, didUpdateURL: url)
         }
     }
@@ -145,10 +151,6 @@ extension Browser: UIWebViewDelegate {
         // We don't currently support opening in external apps, so just ignore unsupported schemes.
         guard let scheme = request.url?.scheme, Browser.supportedSchemes.contains(scheme.lowercased()) else { return false }
 
-        if request.mainDocumentURL != url {
-            url = request.mainDocumentURL
-        }
-
         updateBackForwardStates(webView)
 
         if request.mainDocumentURL == request.url {
@@ -156,24 +158,39 @@ extension Browser: UIWebViewDelegate {
             delegate?.browserDidStartNavigation(self)
         }
 
+        // Don't update the URL immediately since the requested page may not have started to load yet.
+        // Instead, set a pending URL that we're expected to load, and update the URL when we receive
+        // a response that matches this pending URL.
+        pendingURL = request.mainDocumentURL
+
         return true
     }
 
     func webViewDidFinishLoad(_ webView: UIWebView) {
-        updateBackForwardStates(webView)
-
         if !webView.isLoading, isLoading {
             isLoading = false
             delegate?.browserDidFinishNavigation(self)
         }
+
+        updatePostLoad()
     }
 
     func webView(_ webView: UIWebView, didFailLoadWithError error: Error) {
-        updateBackForwardStates(webView)
-
         if !webView.isLoading, isLoading {
             isLoading = false
             delegate?.browser(self, didFailNavigationWithError: error)
+        }
+
+        updatePostLoad()
+    }
+
+    private func updatePostLoad() {
+        updateBackForwardStates(webView)
+
+        // We'll usually get main document URL updates from LocalContentBlockerDelegate,
+        // but certain events won't trigger a new page load (e.g., back/forward navigation).
+        if url != webView.request?.mainDocumentURL {
+            url = webView.request?.mainDocumentURL
         }
     }
 
@@ -184,6 +201,15 @@ extension Browser: UIWebViewDelegate {
 
         if canGoForward != webView.canGoForward {
             canGoForward = webView.canGoForward
+        }
+    }
+}
+
+extension Browser: LocalContentBlockerDelegate {
+    func localContentBlocker(_ localContentBlocker: LocalContentBlocker, didReceiveDataForMainDocumentURL url: URL?) {
+        // When we receive data for a URL, update the browser's URL if it changed and we were expecting this URL.
+        if self.pendingURL == url {
+            self.url = url
         }
     }
 }
