@@ -73,6 +73,7 @@ class URLBar: UIView {
         clearButton.setImage(#imageLiteral(resourceName: "icon_clear"), for: .normal)
         clearButton.addTarget(self, action: #selector(didPressClear), for: .touchUpInside)
 
+        urlText.isUserInteractionEnabled = false
         urlText.font = UIConstants.fonts.urlText
         urlText.tintColor = UIConstants.colors.urlTextFont
         urlText.textColor = UIConstants.colors.urlTextFont
@@ -449,6 +450,7 @@ class URLBar: UIView {
             button.isHidden = true
         })
 
+        urlText.isUserInteractionEnabled = true
         urlText.becomeFirstResponder()
         delegate?.urlBarDidActivate(self)
     }
@@ -458,6 +460,7 @@ class URLBar: UIView {
         urlText.placeholder = nil
         urlText.rightView?.isHidden = true
         activateButton.isHidden = false
+        urlText.isUserInteractionEnabled = false
 
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, animations: {
             self.activateButton.contentHorizontalAlignment = .center
