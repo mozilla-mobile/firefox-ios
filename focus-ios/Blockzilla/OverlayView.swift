@@ -33,6 +33,7 @@ class OverlayView: UIView {
         searchButton.titleLabel?.lineBreakMode = .byTruncatingTail
         searchButton.contentHorizontalAlignment = .left
         searchButton.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .normal)
+        searchButton.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .highlighted)
 
         let padding = UIConstants.layout.searchButtonInset
         searchButton.imageEdgeInsets = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)

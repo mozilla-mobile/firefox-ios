@@ -23,7 +23,6 @@ class BrowserToolset {
     init() {
         backButton.tintColor = UIConstants.colors.toolbarButtonNormal
         backButton.setImage(#imageLiteral(resourceName: "icon_back_active"), for: .normal)
-        backButton.setImage(#imageLiteral(resourceName: "icon_back_active"), for: .highlighted)
         backButton.setImage(#imageLiteral(resourceName: "icon_back_inactive"), for: .disabled)
         backButton.addTarget(self, action: #selector(didPressBack), for: .touchUpInside)
         backButton.alpha = UIConstants.layout.browserToolbarDisabledOpacity
@@ -31,7 +30,6 @@ class BrowserToolset {
 
         forwardButton.tintColor = UIConstants.colors.toolbarButtonNormal
         forwardButton.setImage(#imageLiteral(resourceName: "icon_forward_active"), for: .normal)
-        forwardButton.setImage(#imageLiteral(resourceName: "icon_forward_active"), for: .highlighted)
         forwardButton.setImage(#imageLiteral(resourceName: "icon_forward_inactive"), for: .disabled)
         forwardButton.addTarget(self, action: #selector(didPressForward), for: .touchUpInside)
         forwardButton.alpha = UIConstants.layout.browserToolbarDisabledOpacity
@@ -39,14 +37,12 @@ class BrowserToolset {
 
         stopReloadButton.tintColor = UIConstants.colors.toolbarButtonNormal
         stopReloadButton.setImage(#imageLiteral(resourceName: "icon_stop_menu"), for: .normal)
-        stopReloadButton.setImage(#imageLiteral(resourceName: "icon_stop_menu"), for: .highlighted)
         stopReloadButton.addTarget(self, action: #selector(didPressStopReload), for: .touchUpInside)
 
         let sendImageActive = OpenUtils.canOpenInFirefox ? #imageLiteral(resourceName: "icon_openwithfx_active") : #imageLiteral(resourceName: "icon_openwith_active")
         let sendImageInactive = OpenUtils.canOpenInFirefox ? #imageLiteral(resourceName: "icon_openwithfx_inactive") : #imageLiteral(resourceName: "icon_openwith_inactive")
         sendButton.tintColor = UIConstants.colors.toolbarButtonNormal
         sendButton.setImage(sendImageActive, for: .normal)
-        sendButton.setImage(sendImageActive, for: .highlighted)
         sendButton.setImage(sendImageInactive, for: .disabled)
         sendButton.addTarget(self, action: #selector(didPressSend), for: .touchUpInside)
     }
@@ -67,18 +63,8 @@ class BrowserToolset {
 
     var isLoading: Bool = false {
         didSet {
-            let image: UIImage
-            let pressedImage: UIImage
-            if isLoading {
-                image = #imageLiteral(resourceName: "icon_stop_menu")
-                pressedImage = #imageLiteral(resourceName: "icon_stop_menu")
-            } else {
-                image = #imageLiteral(resourceName: "icon_refresh_menu")
-                pressedImage = #imageLiteral(resourceName: "icon_refresh_menu")
-            }
-
+            let image = isLoading ? #imageLiteral(resourceName: "icon_stop_menu") : #imageLiteral(resourceName: "icon_refresh_menu")
             stopReloadButton.setImage(image, for: .normal)
-            stopReloadButton.setImage(pressedImage, for: .highlighted)
         }
     }
 

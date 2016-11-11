@@ -22,7 +22,7 @@ class URLBar: UIView {
     var inBrowsingMode: Bool = false
     fileprivate(set) var isEditing = false
 
-    fileprivate let cancelButton = UIButton()
+    fileprivate let cancelButton = InsetButton()
     fileprivate let deleteButton = InsetButton()
     fileprivate let domainCompletion = DomainCompletion()
     fileprivate let activateButton = UIButton()
