@@ -157,19 +157,20 @@ class BrowserViewController: UIViewController {
 
         // Zoom out on the screenshot, then slide down, then remove it.
         view.layoutIfNeeded()
-        UIView.animate(withDuration: UIConstants.layout.deleteAnimationDuration, animations: {
+        UIView.animate(withDuration: UIConstants.layout.deleteAnimationDuration, delay: 0, options: .curveEaseInOut, animations: {
             screenshotView.snp.remakeConstraints { make in
                 make.center.equalTo(self.view)
                 make.size.equalTo(self.view).multipliedBy(0.9)
             }
             self.view.layoutIfNeeded()
         }, completion: { _ in
-            UIView.animate(withDuration: UIConstants.layout.deleteAnimationDuration / 2, animations: {
+            UIView.animate(withDuration: UIConstants.layout.deleteAnimationDuration, animations: {
                 screenshotView.snp.remakeConstraints { make in
                     make.centerX.equalTo(self.view)
                     make.top.equalTo(self.view.snp.bottom)
                     make.size.equalTo(self.view).multipliedBy(0.9)
                 }
+                screenshotView.alpha = 0
                 self.view.layoutIfNeeded()
             }, completion: { _ in
                 Toast(text: UIConstants.strings.eraseMessage).show()
