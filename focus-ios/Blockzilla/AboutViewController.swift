@@ -14,7 +14,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
     override func viewDidLoad() {
         headerView.delegate = self
 
-        title = NSLocalizedString("About", comment: "Title for the About screen")
+        title = UIConstants.strings.aboutTitle
 
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
@@ -48,8 +48,8 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
             headerView.snp.makeConstraints { make in
                 make.edges.equalTo(cell)
             }
-        case 1: cell.textLabel?.text = NSLocalizedString("Help", comment: "Label in About screen")
-        case 2: cell.textLabel?.text = NSLocalizedString("Your Rights", comment: "Label in About screen")
+        case 1: cell.textLabel?.text = UIConstants.strings.aboutRowHelp
+        case 2: cell.textLabel?.text = UIConstants.strings.aboutRowRights
         default: break
         }
 

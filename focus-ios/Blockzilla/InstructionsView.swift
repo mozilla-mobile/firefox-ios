@@ -8,13 +8,9 @@ class InstructionsView: UIView {
     init() {
         super.init(frame: CGRect.zero)
 
-        let settingsText = NSLocalizedString("Open Settings App", comment: "Label for instructions to enable shown on the second introduction screen")
-        let safariText = NSLocalizedString("Tap Safari, then select Content Blockers", comment: "Label for instructions to enable shown on the second introduction screen")
-        let enableText = String(format: NSLocalizedString("Enable %@", comment: "Label for instructions to enable shown on the second introduction screen"), AppInfo.ProductName)
-
-        let settingsInstruction = InstructionView(text: settingsText, image: #imageLiteral(resourceName: "instructions-cog"))
-        let safariInstruction = InstructionView(text: safariText, image: #imageLiteral(resourceName: "instructions-safari"))
-        let enableInstruction = InstructionView(text: enableText, image: #imageLiteral(resourceName: "instructions-switch"))
+        let settingsInstruction = InstructionView(text: UIConstants.strings.safariInstructionsOpen, image: #imageLiteral(resourceName: "instructions-cog"))
+        let safariInstruction = InstructionView(text: UIConstants.strings.safariInstructionsContentBlockers, image: #imageLiteral(resourceName: "instructions-safari"))
+        let enableInstruction = InstructionView(text: String(format: UIConstants.strings.safariInstructionsEnable, AppInfo.ProductName), image: #imageLiteral(resourceName: "instructions-switch"))
 
         addSubview(settingsInstruction)
         addSubview(safariInstruction)

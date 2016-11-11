@@ -34,7 +34,7 @@ private class DisabledStateView: UIView {
         super.init(frame: CGRect.zero)
 
         let label = UILabel()
-        label.text = UIConstants.strings.notEnabledError
+        label.text = UIConstants.strings.safariInstructionsNotEnabled
         label.textColor = UIConstants.colors.focusRed
         label.setContentCompressionResistancePriority(1000, for: UILayoutConstraintAxis.vertical)
         addSubview(label)

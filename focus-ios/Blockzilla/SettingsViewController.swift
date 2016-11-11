@@ -20,7 +20,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         BlockerToggle(label: UIConstants.strings.labelBlockAds, setting: SettingsToggle.blockAds),
         BlockerToggle(label: UIConstants.strings.labelBlockAnalytics, setting: SettingsToggle.blockAnalytics),
         BlockerToggle(label: UIConstants.strings.labelBlockSocial, setting: SettingsToggle.blockSocial),
-        BlockerToggle(label: UIConstants.strings.labelBlockOther, setting: SettingsToggle.blockOther, subtitle: UIConstants.strings.subtitleBlockOther),
+        BlockerToggle(label: UIConstants.strings.labelBlockOther, setting: SettingsToggle.blockOther, subtitle: UIConstants.strings.settingsToggleOtherSubtitle),
         BlockerToggle(label: UIConstants.strings.labelBlockFonts, setting: SettingsToggle.blockFonts),
         BlockerToggle(label: UIConstants.strings.labelSendAnonymousUsageData, setting: SettingsToggle.sendAnonymousUsageData, subtitle: UIConstants.strings.subtitleSendAnonymousUsageData),
     ]
@@ -43,8 +43,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         navigationBar.tintColor = UIConstants.colors.navigationButton
         navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIConstants.colors.navigationTitle]
 
-        let aboutTitle = NSLocalizedString("About", comment: "Button at top of app that goes to the About screen")
-        let aboutButton = UIBarButtonItem(title: aboutTitle, style: .plain, target: self, action: #selector(aboutClicked))
+        let aboutButton = UIBarButtonItem(title: UIConstants.strings.aboutTitle, style: .plain, target: self, action: #selector(aboutClicked))
         navigationItem.rightBarButtonItem = aboutButton
 
         view.addSubview(tableView)
@@ -272,14 +271,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             navigationController!.pushViewController(instructionsViewController, animated: true)
             updateSetting()
         case .blockOther where sender.isOn:
-            let message = NSLocalizedString("Blocking other content trackers may break some videos and Web pages.", comment: "Alert message shown when toggling the Content blocker")
-            let yes = NSLocalizedString("I Understand", comment: "Button label for accepting Content blocker alert")
-            let no = NSLocalizedString("No, Thanks", comment: "Button label for declining Content blocker alert")
-            let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.actionSheet)
-            alertController.addAction(UIAlertAction(title: yes, style: UIAlertActionStyle.destructive) { _ in
+            let alertController = UIAlertController(title: nil, message: UIConstants.strings.settingsBlockOtherMessage, preferredStyle: UIAlertControllerStyle.actionSheet)
+            alertController.addAction(UIAlertAction(title: UIConstants.strings.settingsBlockOtherYes, style: UIAlertActionStyle.destructive) { _ in
                 updateSetting()
             })
-            alertController.addAction(UIAlertAction(title: no, style: UIAlertActionStyle.default) { _ in
+            alertController.addAction(UIAlertAction(title: UIConstants.strings.settingsBlockOtherNo, style: UIAlertActionStyle.default) { _ in
                 sender.isOn = false
                 updateSetting()
             })
