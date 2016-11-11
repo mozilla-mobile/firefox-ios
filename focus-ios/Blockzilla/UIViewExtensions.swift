@@ -5,6 +5,7 @@
 import Foundation
 
 extension UIView {
+    /// Animate the opacity of the view, updating its hidden state on completion.
     func animateHidden(_ hidden: Bool, duration: TimeInterval, completion: (() -> Void)? = nil) {
         self.isHidden = false
 
@@ -31,5 +32,20 @@ extension UIView {
         UIGraphicsEndImageContext()
 
         return image
+    }
+
+    /// Returns a Boolean value indicating whether the receiver or any of its subviews is the first responder.
+    var hasFirstResponder: Bool {
+        if self.isFirstResponder {
+            return true
+        }
+
+        for subview in self.subviews {
+            if subview.hasFirstResponder {
+                return true
+            }
+        }
+
+        return false
     }
 }
