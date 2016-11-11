@@ -2,18 +2,22 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+@testable import Client
+import Storage
+import Foundation
+
 import XCTest
 
-class ActivityStreamTest: BaseTestCase {
+class ActivityStreamTest: XCTestCase {
 
-    override func setUp() {
-        super.setUp()
-    }
+    //override func setUp() {
+    //    super.setUp()
+    //}
 
-    override func tearDown() {
-        super.tearDown()
-    }
-
+    //override func tearDown() {
+    //    super.tearDown()
+    //}
+    
     func testDefaultSites() {
         let app = XCUIApplication()
         let topSites = app.tables["Top sites"].cells["TopSitesCell"]
@@ -26,7 +30,7 @@ class ActivityStreamTest: BaseTestCase {
         let topSites = app.tables["Top sites"].cells["TopSitesCell"]
         let numberOfTopSites = topSites.childrenMatchingType(.Other).matchingIdentifier("TopSite").count
 
-        loadWebPage("http://example.com")
+        //loadWebPage("http://example.com")
         app.buttons["TabToolbar.backButton"].tap()
 
         let sitesAfter = topSites.childrenMatchingType(.Other).matchingIdentifier("TopSite").count
@@ -38,7 +42,7 @@ class ActivityStreamTest: BaseTestCase {
         let topSites = app.tables["Top sites"].cells["TopSitesCell"]
         let numberOfTopSites = topSites.childrenMatchingType(.Other).matchingIdentifier("TopSite").count
 
-        loadWebPage("http://example.com")
+        //loadWebPage("http://example.com")
         app.buttons["TabToolbar.backButton"].tap()
 
         let sitesAfter = topSites.childrenMatchingType(.Other).matchingIdentifier("TopSite").count
@@ -54,7 +58,7 @@ class ActivityStreamTest: BaseTestCase {
     func testTopSitesOpenInNewTab() {
         let app = XCUIApplication()
 
-        loadWebPage("http://example.com")
+        //loadWebPage("http://example.com")
         app.buttons["TabToolbar.backButton"].tap()
 
         app.tables["Top sites"].otherElements["example"].pressForDuration(1)
@@ -73,7 +77,7 @@ class ActivityStreamTest: BaseTestCase {
     func testTopSitesOpenInNewPrivateTab() {
         let app = XCUIApplication()
         
-        loadWebPage("http://example.com")
+        //loadWebPage("http://example.com")
         app.buttons["TabToolbar.backButton"].tap()
         
         app.tables["Top sites"].otherElements["example"].pressForDuration(1)
@@ -96,10 +100,10 @@ class ActivityStreamTest: BaseTestCase {
         let pagecontrolButton = topSitesTable.buttons["pageControl"]
         XCTAssertFalse(pagecontrolButton.exists, "The Page Control button must not exist. Only 5 elements should be on the page")
 
-        loadWebPage("http://example.com")
+       // loadWebPage("http://example.com")
         app.buttons["TabToolbar.backButton"].tap()
 
-        loadWebPage("http://mozilla.org")
+      //  loadWebPage("http://mozilla.org")
         app.buttons["TabToolbar.backButton"].tap()
 
         XCTAssert(pagecontrolButton.exists, "The Page Control button must exist if more than 6 elements are displayed.")
@@ -113,6 +117,25 @@ class ActivityStreamTest: BaseTestCase {
         app.tables["Context Menu"].cells["Remove"].tap()
         XCTAssertFalse(pagecontrolButton.exists, "The Page Control button should disappear after an item is deleted.")
 
+    }
+    
+    private func addSite(history: BrowserHistory, url: String, title: String, s: Bool = true) {
+        let site = Site(url: url, title: title)
+        let visit = SiteVisit(site: site, date: NSDate.nowMicroseconds())
+        XCTAssertEqual(s, history.addLocalVisit(visit).value.isSuccess, "Site added: \(url).")
+    }
+    
+    private func clear(history: BrowserHistory) {
+        XCTAssertTrue(history.clearHistory().value.isSuccess, "History cleared.")
+    }
+
+    func testHighlights() {
+        
+        let profile = (UIApplication.sharedApplication().delegate as? AppDelegate)?.profile
+        let h = profile?.history
+        self.addSite(h!, url: "http://www.amazon.com", title: "title")
+        
+        
     }
     
     
