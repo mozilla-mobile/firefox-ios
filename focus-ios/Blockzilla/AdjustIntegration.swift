@@ -6,23 +6,23 @@ import Foundation
 import AdjustSdk
 
 enum AdjustEventName: String {
-    case browse = "Browse"
-    case search = "Search"
-    case clear = "Clear"
-    case openFirefox = "OpenInFirefox"
-    case openSafari = "OpenInSafari"
-    case enableSafariIntegration = "EnableSafariIntegration"
-    case disableSafariIntegration = "DisableSafariIntegration"
-    case enableBlockAds = "EnableBlockAds"
-    case disableBlockAds = "DisableBlockAds"
-    case enableBlockAnalytics = "EnableBlockAnalytics"
-    case disableBlockAnalytics = "DisableBlockAnalytics"
-    case enableBlockSocial = "EnableBlockSocial"
-    case disableBlockSocial = "DisableBlockSocial"
-    case enableBlockOther = "EnableBlockOther"
-    case disableBlockOther = "DisableBlockOther"
-    case enableBlockFonts = "EnableBlockFonts"
-    case disableBlockFonts = "DisableBlockFonts"
+    case browse = "Browse"                                     // When the user opens a url
+    case search = "Search"                                     // When the user does a search
+    case clear = "Clear"                                       // When the user erases the browsing history
+    case openFirefox = "OpenInFirefox"                         // When the user opens the page in Firefox
+    case openSafari = "OpenInSafari"                           // When the user opens the page in Safari
+    case enableSafariIntegration = "EnableSafariIntegration"   // When the user enables the Safari blocklist
+    case disableSafariIntegration = "DisableSafariIntegration" // When the user disables the Safari blocklist
+    case enableBlockAds = "EnableBlockAds"                     // When the user enables Block Ad Trackers
+    case disableBlockAds = "DisableBlockAds"                   // When the user disables Block Ad Trackers
+    case enableBlockAnalytics = "EnableBlockAnalytics"         // When the user enables Block Analytics Trackers
+    case disableBlockAnalytics = "DisableBlockAnalytics"       // When the user disabled Block Analytics Trackers
+    case enableBlockSocial = "EnableBlockSocial"               // When the user enables Block Social Trackers
+    case disableBlockSocial = "DisableBlockSocial"             // When the user disables Block Social Trackers
+    case enableBlockOther = "EnableBlockOther"                 // When the user enables Block Other Content Trackers
+    case disableBlockOther = "DisableBlockOther"               // When the user disables Block Other Content Trackers
+    case enableBlockFonts = "EnableBlockFonts"                 // When the user enables Block Web Fonts
+    case disableBlockFonts = "DisableBlockFonts"               // When the user disables Block Web Fonts
 }
 
 private let AdjustAppTokenKey = "AppToken"
