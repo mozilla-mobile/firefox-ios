@@ -192,6 +192,7 @@ class BrowserViewController: UIViewController {
             browser.view.isHidden = false
             homeView?.removeFromSuperview()
             homeView = nil
+            urlBar.inBrowsingMode = true
 
             if !showsToolsetInURLBar {
                 browserToolbar.animateHidden(false, duration: UIConstants.layout.toolbarFadeAnimationDuration)
@@ -258,11 +259,18 @@ extension BrowserViewController: URLBarDelegate {
         urlBarContainer.isBright = false
     }
 
-    func urlBarDidPressActivateButton(_ urlBar: URLBar) {
+    func urlBarDidActivate(_ urlBar: URLBar) {
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration) {
-            self.view.bringSubview(toFront: self.urlBar)
             self.topURLBarConstraints.forEach { $0.activate() }
             self.urlBarContainer.alpha = 1
+            self.view.layoutIfNeeded()
+        }
+    }
+
+    func urlBarDidDeactivate(_ urlBar: URLBar) {
+        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration) {
+            self.topURLBarConstraints.forEach { $0.deactivate() }
+            self.urlBarContainer.alpha = 0
             self.view.layoutIfNeeded()
         }
     }
@@ -364,7 +372,6 @@ extension BrowserViewController: OverlayViewDelegate {
     }
 
     func overlayViewDidTouchEmptyArea(_ overlayView: OverlayView) {
-        guard homeView == nil else { return }
         urlBar.dismiss()
     }
 

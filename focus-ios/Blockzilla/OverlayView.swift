@@ -121,12 +121,18 @@ class OverlayView: UIView {
 
     func dismiss() {
         setSearchQuery(query: "", animated: false)
-        animateHidden(true, duration: UIConstants.layout.overlayAnimationDuration)
+        self.isUserInteractionEnabled = false
+        animateHidden(true, duration: UIConstants.layout.overlayAnimationDuration) {
+            self.isUserInteractionEnabled = true
+        }
     }
 
     func present() {
         setSearchQuery(query: "", animated: false)
-        animateHidden(false, duration: UIConstants.layout.overlayAnimationDuration)
+        self.isUserInteractionEnabled = false
+        animateHidden(false, duration: UIConstants.layout.overlayAnimationDuration) {
+            self.isUserInteractionEnabled = true
+        }
     }
 }
 
