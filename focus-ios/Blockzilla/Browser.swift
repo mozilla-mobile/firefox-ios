@@ -176,12 +176,12 @@ extension Browser: UIWebViewDelegate {
     }
 
     func webView(_ webView: UIWebView, didFailLoadWithError error: Error) {
+        updatePostLoad()
+
         if !webView.isLoading, isLoading {
             isLoading = false
             delegate?.browser(self, didFailNavigationWithError: error)
         }
-
-        updatePostLoad()
     }
 
     private func updatePostLoad() {

@@ -316,12 +316,14 @@ extension BrowserViewController: BrowserDelegate {
     }
 
     func browserDidFinishNavigation(_ browser: Browser) {
+        urlBar.url = browser.url
         urlBar.isLoading = false
         browserToolbar.isLoading = false
         urlBarContainer.isBright = !urlBar.isEditing
     }
 
     func browser(_ browser: Browser, didFailNavigationWithError error: Error) {
+        urlBar.url = browser.url
         urlBar.isLoading = false
         browserToolbar.isLoading = false
         urlBarContainer.isBright = true
