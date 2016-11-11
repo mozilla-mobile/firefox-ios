@@ -8,15 +8,15 @@ import Foundation
 
 import XCTest
 
-class ActivityStreamTest: XCTestCase {
+class ActivityStreamTest: BaseTestCase {
 
-    //override func setUp() {
-    //    super.setUp()
-    //}
+    override func setUp() {
+        super.setUp()
+    }
 
-    //override func tearDown() {
-    //    super.tearDown()
-    //}
+    override func tearDown() {
+        super.tearDown()
+    }
     
     func testDefaultSites() {
         let app = XCUIApplication()
@@ -30,7 +30,7 @@ class ActivityStreamTest: XCTestCase {
         let topSites = app.tables["Top sites"].cells["TopSitesCell"]
         let numberOfTopSites = topSites.childrenMatchingType(.Other).matchingIdentifier("TopSite").count
 
-        //loadWebPage("http://example.com")
+        loadWebPage("http://example.com")
         app.buttons["TabToolbar.backButton"].tap()
 
         let sitesAfter = topSites.childrenMatchingType(.Other).matchingIdentifier("TopSite").count
@@ -42,7 +42,7 @@ class ActivityStreamTest: XCTestCase {
         let topSites = app.tables["Top sites"].cells["TopSitesCell"]
         let numberOfTopSites = topSites.childrenMatchingType(.Other).matchingIdentifier("TopSite").count
 
-        //loadWebPage("http://example.com")
+        loadWebPage("http://example.com")
         app.buttons["TabToolbar.backButton"].tap()
 
         let sitesAfter = topSites.childrenMatchingType(.Other).matchingIdentifier("TopSite").count
@@ -58,7 +58,7 @@ class ActivityStreamTest: XCTestCase {
     func testTopSitesOpenInNewTab() {
         let app = XCUIApplication()
 
-        //loadWebPage("http://example.com")
+        loadWebPage("http://example.com")
         app.buttons["TabToolbar.backButton"].tap()
 
         app.tables["Top sites"].otherElements["example"].pressForDuration(1)
@@ -77,7 +77,7 @@ class ActivityStreamTest: XCTestCase {
     func testTopSitesOpenInNewPrivateTab() {
         let app = XCUIApplication()
         
-        //loadWebPage("http://example.com")
+        loadWebPage("http://example.com")
         app.buttons["TabToolbar.backButton"].tap()
         
         app.tables["Top sites"].otherElements["example"].pressForDuration(1)
@@ -100,10 +100,10 @@ class ActivityStreamTest: XCTestCase {
         let pagecontrolButton = topSitesTable.buttons["pageControl"]
         XCTAssertFalse(pagecontrolButton.exists, "The Page Control button must not exist. Only 5 elements should be on the page")
 
-       // loadWebPage("http://example.com")
+        loadWebPage("http://example.com")
         app.buttons["TabToolbar.backButton"].tap()
 
-      //  loadWebPage("http://mozilla.org")
+        loadWebPage("http://mozilla.org")
         app.buttons["TabToolbar.backButton"].tap()
 
         XCTAssert(pagecontrolButton.exists, "The Page Control button must exist if more than 6 elements are displayed.")
