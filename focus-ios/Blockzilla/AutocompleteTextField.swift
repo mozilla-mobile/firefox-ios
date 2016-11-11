@@ -52,8 +52,8 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         textField.text = typedText
 
         // Try setting a completion if we're not deleting and we're typing at the end of the text field.
-        let endOfNew = range.location + string.characters.count
-        let isAtEnd = (endOfNew == textField.text?.characters.count)
+        let endOfNew = range.location + (string as NSString).length
+        let isAtEnd = (endOfNew == (textField.text as NSString?)?.length)
         if !string.isEmpty && isAtEnd, let completion = source?.completion(forText: textField.text ?? "") {
             setCompletion(completion)
         }
@@ -121,7 +121,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         // Add the completion suffix to the current text and highlight it.
         let completion = completion.substring(from: completion.index(completion.startIndex, offsetBy: text.characters.count))
         let attributed = NSMutableAttributedString(string: text + completion)
-        let range = NSMakeRange(text.characters.count, completion.characters.count)
+        let range = NSMakeRange((text as NSString).length, (completion as NSString).length)
         attributed.addAttribute(NSBackgroundColorAttributeName, value: UIConstants.colors.urlTextHighlight, range: range)
         attributedText = attributed
         completionRange = range

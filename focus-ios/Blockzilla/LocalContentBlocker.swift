@@ -174,9 +174,9 @@ private class BlockList {
         }
 
         let resourceString = resourceUrl.absoluteString
-        let resourceRange = NSRange(location: 0, length: resourceString.characters.count)
+        let resourceRange = NSMakeRange(0, (resourceString as NSString).length)
         let documentString = documentUrl.absoluteString
-        let documentRange = NSRange(location: 0, length: documentString.characters.count)
+        let documentRange = NSMakeRange(0, (documentString as NSString).length)
 
         domainSearch: for rule in blockRules {
             // If this is a font rule, only proceed if this resource is a font.
@@ -200,7 +200,7 @@ private class BlockList {
 
                 // Check the domain exceptions. If a domain exception matches, this filter does not apply.
                 for domainRegex in domainExceptions {
-                    let range = NSRange(location: 0, length: documentHost.characters.count)
+                    let range = NSMakeRange(0, (documentHost as NSString).length)
                     if domainRegex.firstMatch(in: documentHost, options: [], range: range) != nil {
                         continue domainSearch
                     }

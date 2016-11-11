@@ -90,7 +90,7 @@ class OverlayView: UIView {
         searchTitle.deleteCharacters(in: startIndex)
 
         let attributedString = NSMutableAttributedString(string: searchTitle as String)
-        let queryRange = NSMakeRange(startIndex.location, query.characters.count)
+        let queryRange = NSMakeRange(startIndex.location, (query as NSString).length)
         let fullRange = NSMakeRange(0, searchTitle.length)
         attributedString.addAttributes([NSFontAttributeName: UIConstants.fonts.searchButtonQuery], range: queryRange)
         attributedString.addAttributes([NSForegroundColorAttributeName: UIColor.white], range: fullRange)
