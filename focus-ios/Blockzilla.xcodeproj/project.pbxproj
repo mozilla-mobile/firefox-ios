@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		2825C3665AB14081B262F767 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D051AC1857A0EEEBB833D15 /* SystemConfiguration.framework */; };
-		2916D1F85A9DE2CF4997BA3B /* BuddyBuildSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 885AD5B8AB73EB0DA9702536 /* BuddyBuildSDK.framework */; };
 		2B36326E97D2E67E9C684B4B /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80D9AA926EFBD788739486EB /* CoreTelephony.framework */; };
 		2F2F84BCF076B21DE42D1F29 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C652A61E213D254A86DF5736 /* CoreMedia.framework */; };
 		34056D10515852F370C83A01 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAB8E622E994545108473554 /* QuartzCore.framework */; };
@@ -228,7 +227,6 @@
 				E47F9AE21DB927FD00A93285 /* AdjustSdk.framework in Frameworks */,
 				D38D693D1C471A98003EF211 /* GCDWebServers.framework in Frameworks */,
 				D38D693E1C471A98003EF211 /* SnapKit.framework in Frameworks */,
-				2916D1F85A9DE2CF4997BA3B /* BuddyBuildSDK.framework in Frameworks */,
 				4285B8E0671F40DA543A2E58 /* AssetsLibrary.framework in Frameworks */,
 				A57245250F88CCA4993E55B2 /* CoreText.framework in Frameworks */,
 				2B36326E97D2E67E9C684B4B /* CoreTelephony.framework in Frameworks */,
@@ -711,8 +709,13 @@
 				);
 				INFOPLIST_FILE = Blockzilla/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"-framework",
+					BuddyBuildSDK,
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus.enterprise;
 				PRODUCT_NAME = "Firefox Focus";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = BUDDYBUILD;
 				SWIFT_OBJC_BRIDGING_HEADER = "Blockzilla-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 				VALID_ARCHS = arm64;
@@ -798,8 +801,13 @@
 				);
 				INFOPLIST_FILE = Blockzilla/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"-framework",
+					BuddyBuildSDK,
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus;
 				PRODUCT_NAME = "Firefox Focus";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG BUDDYBUILD";
 				SWIFT_OBJC_BRIDGING_HEADER = "Blockzilla-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 				VALID_ARCHS = arm64;
@@ -1009,8 +1017,13 @@
 				);
 				INFOPLIST_FILE = Blockzilla/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"-framework",
+					BuddyBuildSDK,
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar;
 				PRODUCT_NAME = "Firefox Klar";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG BUDDYBUILD";
 				SWIFT_OBJC_BRIDGING_HEADER = "Blockzilla-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 				VALID_ARCHS = arm64;

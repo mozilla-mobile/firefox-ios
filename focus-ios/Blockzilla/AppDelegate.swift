@@ -14,7 +14,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private static let prefIntroVersion = 2
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        BuddyBuildSDK.setup()
+        #if BUDDYBUILD
+            BuddyBuildSDK.setup()
+        #endif
 
         // Always initialize Adjust, otherwise the SDK is in a bad state. We disable it
         // immediately so that no data is collected or sent.
