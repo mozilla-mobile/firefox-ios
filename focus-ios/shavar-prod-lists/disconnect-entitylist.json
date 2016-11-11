@@ -264,7 +264,9 @@
             "crashlytics.com",
             "tweetdeck.com",
             "twimg.com",
-            "twitter.jp"
+            "twitter.jp",
+            "digits.com",
+            "fabric.io"
         ],
         "resources": [
             "twitter.com",
@@ -272,7 +274,8 @@
             "crashlytics.com",
             "tweetdeck.com",
             "twimg.com",
-            "twitter.jp"
+            "twitter.jp",
+            "fabric.io"
         ]
     },
     "[x+1]": {
@@ -505,6 +508,14 @@
         ],
         "resources": [
             "adatus.com"
+        ]
+    },
+    "AdBrain": {
+        "properties": [
+            "adbrain.com"
+        ],
+        "resources": [
+            "adbrn.com"
         ]
     },
     "adBrite": {
@@ -909,16 +920,6 @@
             "dmtry.com"
         ]
     },
-    "AdOn Network": {
-        "properties": [
-            "adonnetwork.com",
-            "dashboardad.net"
-        ],
-        "resources": [
-            "adonnetwork.com",
-            "dashboardad.net"
-        ]
-    },
     "AdOnion": {
         "properties": [
             "adonion.com"
@@ -1129,6 +1130,22 @@
             "adtech.com",
             "adtech.de",
             "adtechus.com"
+        ]
+    },
+    "Adsrevenue": {
+        "properties": [
+            "adsrevenue.net"
+        ],
+        "resources": [
+            "adsrevenue.net"
+        ]
+    },
+    "Adsrevenue": {
+        "properties": [
+            "adsnative.com"
+        ],
+        "resources": [
+            "adsnative.com"
         ]
     },
     "Adtegrity.com": {
@@ -1365,7 +1382,8 @@
             "assoc-amazon.com",
             "alexa.com",
             "alexametrics.com",
-            "cloudfront.net"
+            "cloudfront.net",
+            "amazonaws.com"
         ],
         "resources": [
             "amazon.com",
@@ -1380,7 +1398,8 @@
             "assoc-amazon.com",
             "alexa.com",
             "alexametrics.com",
-            "cloudfront.net"
+            "cloudfront.net",
+            "amazonaws.com"
         ]
     },
     "Ambient Digital": {
@@ -1710,6 +1729,15 @@
             "connextra.com"
         ]
     },
+    "Bidswitch": {
+        "properties": [
+            "bidswitch.net",
+            "bidswitch.com"
+        ],
+        "resources": [
+            "bidswitch.net"
+        ]
+    },
     "BidVertiser": {
         "properties": [
             "bidvertiser.com"
@@ -1809,7 +1837,8 @@
         ],
         "resources": [
             "bloom-hq.com",
-            "adgear.com"
+            "adgear.com",
+            "adgrx.com"
         ]
     },
     "BloomReach": {
@@ -1968,14 +1997,6 @@
             "buysight.com",
             "permuto.com",
             "pulsemgr.com"
-        ]
-    },
-    "BuzzCity": {
-        "properties": [
-            "buzzcity.com"
-        ],
-        "resources": [
-            "buzzcity.com"
         ]
     },
     "BuzzParadise": {
@@ -2333,7 +2354,12 @@
     "Complex Media": {
         "properties": [
             "complexmedianetwork.com",
-            "complex.com"
+            "complex.com",
+            "collider.com",
+            "solecollector.com",
+            "pigeonsandplanes.com",
+            "theridechannel.com",
+            "firstwefeast.com"
         ],
         "resources": [
             "complexmedianetwork.com",
@@ -2779,6 +2805,29 @@
     "eBay": {
         "properties": [
             "ebay.com",
+            "ebay.at",
+            "ebay.ba",
+            "ebay.be",
+            "ebay.com.au",
+            "ebay.ca",
+            "ebay.ch",
+            "ebay.cn",
+            "ebay.de",
+            "ebay.es",
+            "ebay.fr",
+            "ebay.com.hk",
+            "ebay.ie",
+            "ebay.in",
+            "ebay.it",
+            "ebay.co.jp",
+            "ebay.co.kr",
+            "ebay.com.my",
+            "ebay.nl",
+            "ebay.com.ph",
+            "ebay.pl",
+            "ebay.com.sg",
+            "ebay.com.tw",
+            "ebay.co.uk",
             "gopjn.com"
         ],
         "resources": [
@@ -3097,7 +3146,8 @@
             "eyeviewdigital.com"
         ],
         "resources": [
-            "eyeviewdigital.com"
+            "eyeviewdigital.com",
+            "eyeviewads.com"
         ]
     },
     "Facilitate Digital": {
@@ -3210,14 +3260,6 @@
         "resources": [
             "flite.com",
             "widgetserver.com"
-        ]
-    },
-    "Flurry": {
-        "properties": [
-            "flurry.com"
-        ],
-        "resources": [
-            "flurry.com"
         ]
     },
     "Flytxt": {
@@ -5657,14 +5699,12 @@
     },
     "QUISMA": {
         "properties": [
-            "i-behavior.com",
             "iaded.com",
             "quisma.com",
             "quismatch.com",
             "xmladed.com"
         ],
         "resources": [
-            "i-behavior.com",
             "iaded.com",
             "quisma.com",
             "quismatch.com",
@@ -5859,7 +5899,9 @@
         ],
         "resources": [
             "rhythmnewmedia.com",
-            "rnmd.net"
+            "rnmd.net",
+            "rhythmxchange.com",
+            "1rx.io"
         ]
     },
     "RichRelevance": {
@@ -6265,7 +6307,8 @@
             "spotxchange.com"
         ],
         "resources": [
-            "spotxchange.com"
+            "spotxchange.com",
+            "spotxcdn.com"
         ]
     },
     "StarGames": {
@@ -6359,7 +6402,8 @@
         "resources": [
             "switchconcepts.com",
             "switchadhub.com",
-            "switchconcepts.co.uk"
+            "switchconcepts.co.uk",
+            "switchads.com"
         ]
     },
     "Swoop": {
@@ -8144,7 +8188,8 @@
             "newrelic.com"
         ],
         "resources": [
-            "newrelic.com"
+            "newrelic.com",
+            "nr-data.net"
         ]
     },
     "NewsRight": {
@@ -8407,6 +8452,15 @@
         ],
         "resources": [
             "4u.pl"
+        ]
+    },
+    "Tealium": {
+        "properties": [
+            "tealium.com"
+        ],
+        "resources": [
+            "tealium.com",
+            "tiqcdn.com"
         ]
     },
     "TENSQUARE": {
@@ -9279,14 +9333,6 @@
         ],
         "resources": [
             "trumba.com"
-        ]
-    },
-    "Tumblr": {
-        "properties": [
-            "tumblr.com"
-        ],
-        "resources": [
-            "tumblr.com"
         ]
     },
     "Turn": {

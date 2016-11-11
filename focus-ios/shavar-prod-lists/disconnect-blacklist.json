@@ -49,6 +49,14 @@
                 }
             },
             {
+                "ItIsATracker": {
+                    "dnt": "eff",
+                    "https://itisatracker.com/": [
+                        "itisatracker.com"
+                    ]
+                }
+            },
+            {
                 "Twitter": {
                     "https://twitter.com/": [
                         "backtype.com",
@@ -263,6 +271,13 @@
                 "Adatus": {
                     "http://www.adatus.com/": [
                         "adatus.com"
+                    ]
+                }
+            },
+            {
+                "AdBrain": {
+                    "http://www.adbrain.com/": [
+                    "adbrain.com", "adbrn.com"
                     ]
                 }
             },
@@ -813,6 +828,13 @@
                 }
             },
             {
+                "Adsnative.com": {
+                    "http://adsnative.com/": [
+                    "adsnative.com"
+                    ]
+                }
+            },
+            {
                 "Adtegrity.com": {
                     "http://www.adtegrity.com/": [
                         "adtegrity.com",
@@ -1332,6 +1354,13 @@
                 }
             },
             {
+                "Bidswitch": {
+                    "http://www.bidswitch.com/": [
+                    "bidswitch.net", "bidswitch.com"
+                    ]
+                }
+            },
+            {
                 "BidVertiser": {
                     "http://www.bidvertiser.com/": [
                         "bidvertiser.com"
@@ -1414,7 +1443,8 @@
                 "BLOOM Digital Platforms": {
                     "http://bloom-hq.com/": [
                         "adgear.com",
-                        "bloom-hq.com"
+                        "bloom-hq.com",
+                        "adgrx.com"
                     ]
                 }
             },
@@ -2495,7 +2525,8 @@
             {
                 "Eyeviewdigital": {
                     "http://www.eyeviewdigital.com/": [
-                        "eyeviewdigital.com"
+                        "eyeviewdigital.com",
+                        "eyeviewads.com"
                     ]
                 }
             },
@@ -4746,7 +4777,9 @@
                 "Rhythm": {
                     "http://rhythmnewmedia.com/": [
                         "rhythmnewmedia.com",
-                        "rnmd.net"
+                        "rnmd.net",
+                        "rhythmxchange.com", 
+                        "1rx.io"
                     ]
                 }
             },
@@ -5089,7 +5122,8 @@
             {
                 "SpotXchange": {
                     "http://www.spotxchange.com/": [
-                        "spotxchange.com"
+                        "spotxchange.com",
+                        "spotxcdn.com"
                     ]
                 }
             },
@@ -5164,7 +5198,8 @@
                         "switchadhub.com",
                         "switchconcepts.co.uk",
                         "switchconcepts.com",
-                        "ethicalads.net"
+                        "ethicalads.net",
+                        "switchads.com"
                     ]
                 }
             },
@@ -5893,14 +5928,21 @@
             {
                 "Yandex": {
                     "http://www.yandex.com/": [
-                        "web-visor.com",
-                        "moikrug.ru",
-                        "yandex.com",
-                        "yandex.ru",
-                        "yandex.st",
-                        "yandex.ua",
-                        "yandex.com.tr",
-                        "yandex.by"
+                        "metrica.yandex.com.tr",
+                        "metrika.yandex.kz",
+                        "metrika.yandex.by",
+                        "metrika.yandex.ua",
+                        "metrika.yandex.ru",
+                        "metrica.yandex.com",
+                        "advertising.yandex.ru",
+                        "advertising.yandex.com",
+                        "direct.yandex.ru",
+                        "direct.yandex.com",
+                        "appmetrika.yandex.ru",
+                        "appmetrica.yandex.com",
+                        "appmetrica.yandex.com.tr",
+                        "api-metrika.yandex.com",
+                        "api-metrika.yandex.ru"
                     ]
                 }
             },
@@ -6741,7 +6783,8 @@
             {
                 "New Relic": {
                     "http://newrelic.com/": [
-                        "newrelic.com"
+                        "newrelic.com",
+                        "nr-data.net"
                     ]
                 }
             },
@@ -6999,6 +7042,14 @@
                 }
             },
             {
+                "Tealium": {
+                    "http://tealium.com/": [
+                    "tealium.com", 
+                    "tiqcdn.com"
+                    ]
+                }
+            },
+            {
                 "TENSQUARE": {
                     "http://www.tensquare.com/": [
                         "tensquare.com"
@@ -7231,7 +7282,8 @@
                 "Amazon.com": {
                     "http://www.amazon.com/": [
                         "amazon.com",
-                        "cloudfront.net"
+                        "cloudfront.net",
+                        "amazonaws.com"
                     ]
                 }
             },
@@ -8342,6 +8394,20 @@
                         "ypolicyblog.com",
                         "yuilibrary.com",
                         "zenfs.com"
+                    ]
+                }
+            },
+            {
+                "Yandex": {
+                    "http://www.yandex.com/": [
+                        "yandex.com",
+                        "web-visor.com",
+                        "moikrug.ru",
+                        "yandex.ru",
+                        "yandex.st",
+                        "yandex.ua",
+                        "yandex.com.tr",
+                        "yandex.by"
                     ]
                 }
             },
