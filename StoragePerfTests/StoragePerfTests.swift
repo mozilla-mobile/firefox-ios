@@ -37,7 +37,7 @@ class TestSQLiteHistoryFrecencyPerf: XCTestCase {
         let files = MockFiles()
         let db = BrowserDB(filename: "browser.db", files: files)
         let prefs = MockProfilePrefs()
-        let history = SQLiteHistory(db: db, prefs: prefs)!
+        let history = SQLiteHistory(db: db, prefs: prefs)
 
         let count = 500
 
@@ -58,7 +58,7 @@ class TestSQLiteHistoryTopSitesCachePref: XCTestCase {
         let files = MockFiles()
         let db = BrowserDB(filename: "browser.db", files: files)
         let prefs = MockProfilePrefs()
-        let history = SQLiteHistory(db: db, prefs: prefs)!
+        let history = SQLiteHistory(db: db, prefs: prefs)
 
         let count = 500
 

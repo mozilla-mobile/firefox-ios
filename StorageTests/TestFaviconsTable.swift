@@ -69,7 +69,7 @@ class TestFaviconsTable: XCTestCase {
     func testFaviconsTable() {
         let files = MockFiles()
         db = BrowserDB(filename: "test.db", files: files)
-        XCTAssertTrue(db.createOrUpdate(BrowserTable()))
+        XCTAssertTrue(db.createOrUpdate(BrowserTable()) == .Success)
         let f = FaviconsTable<Favicon>()
 
         var err: NSError?

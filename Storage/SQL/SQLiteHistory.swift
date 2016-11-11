@@ -114,8 +114,14 @@ public class SQLiteHistory {
 
         // BrowserTable exists only to perform create/update etc. operations -- it's not
         // a queryable thing that needs to stick around.
-        if !db.createOrUpdate(BrowserTable()) {
-            log.error("Unable to create or update browser table!")
+        switch db.createOrUpdate(BrowserTable()) {
+        case .Failure:
+            log.error("Failed to create/update the scheme table. Aborting.")
+            fatalError()
+        case .Closed:
+            log.info("Database not created as the SQLiteConnection is closed.")
+        case .Success:
+            log.debug("Database succesfully created/updated")
         }
     }
 }
