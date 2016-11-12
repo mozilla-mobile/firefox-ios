@@ -45,12 +45,12 @@ class FirstRunViewController: UIViewController {
         button.addTarget(self, action: #selector(didPressDismiss), for: .touchUpInside)
         view.addSubview(button)
 
-        let disclaimer = UILabel()
-        disclaimer.font = UIConstants.fonts.firstRunDisclaimer
-        disclaimer.numberOfLines = 0
-        disclaimer.textColor = UIConstants.colors.firstRunDisclaimer
-        disclaimer.attributedText = NSAttributedString(string: UIConstants.strings.firstRunDisclaimer, attributes: attributes)
-        view.addSubview(disclaimer)
+//        let disclaimer = UILabel()
+//        disclaimer.font = UIConstants.fonts.firstRunDisclaimer
+//        disclaimer.numberOfLines = 0
+//        disclaimer.textColor = UIConstants.colors.firstRunDisclaimer
+//        disclaimer.attributedText = NSAttributedString(string: UIConstants.strings.firstRunDisclaimer, attributes: attributes)
+//        view.addSubview(disclaimer)
 
         let margin = 8
         let maxWidth = 315
@@ -87,12 +87,12 @@ class FirstRunViewController: UIViewController {
             make.width.equalTo(view).priority(500)
         }
 
-        disclaimer.snp.makeConstraints { make in
-            make.top.equalTo(button.snp.bottom).offset(20)
-            make.centerX.equalTo(view)
-            make.width.lessThanOrEqualTo(maxWidth)
-            make.width.lessThanOrEqualTo(view).inset(margin)
-        }
+//        disclaimer.snp.makeConstraints { make in
+//            make.top.equalTo(button.snp.bottom).offset(20)
+//            make.centerX.equalTo(view)
+//            make.width.lessThanOrEqualTo(maxWidth)
+//            make.width.lessThanOrEqualTo(view).inset(margin)
+//        }
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
