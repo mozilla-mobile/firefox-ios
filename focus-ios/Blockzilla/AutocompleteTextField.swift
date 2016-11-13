@@ -69,6 +69,22 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         return false
     }
 
+    // Some keyboards (e.g., Gboard) don't fire textField(shouldChangeCharactersIn:),
+    // when pressing backspace, so handle deletions here.
+    override func deleteBackward() {
+        if let range = completionRange {
+            // Remove the completion, but don't delete any user-typed characters.
+            applyCompletion()
+            text = (text as NSString?)?.replacingCharacters(in: range, with: "")
+        } else {
+            // If we don't have an active completion, just fall back to the default behavior.
+            super.deleteBackward()
+        }
+
+        // Fire the delegate with the text the user typed (not including the completion).
+        autocompleteDelegate?.autocompleteTextField?(self, didTextChange: text ?? "")
+    }
+
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         return autocompleteDelegate?.autocompleteTextFieldShouldBeginEditing?(self) ?? true
     }
