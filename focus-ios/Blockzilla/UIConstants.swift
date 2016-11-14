@@ -106,7 +106,7 @@ struct UIConstants {
         static let aboutTitle = NSLocalizedString("About.screenTitle", value: "About", comment: "Title for the About screen")
         static let aboutTopLabel = NSLocalizedString("About.topLabel", value: "%@ puts you in control.", comment: "Label on About screen")
         static let eraseButton = NSLocalizedString("URL.eraseButtonLabel", value: "ERASE", comment: "Erase button in the URL bar")
-        static let eraseMessage = NSLocalizedString("URL.eraseMessageLabel", value: "We've erased your browsing history.", comment: "Message shown after pressing the Erase button")
+        static let eraseMessage = NSLocalizedString("URL.eraseMessageLabel", value: "Your browsing history has been erased.", comment: "Message shown after pressing the Erase button")
         static let errorTryAgain = NSLocalizedString("Error.tryAgainButton", value: "Try again", comment: "Button label to reload the error page")
         static let firstRunButton = NSLocalizedString("FirstRun.buttonLabel", value: "OK, GOT IT!", comment: "Label on button to dismiss first run UI")
         static let firstRunMessage = NSLocalizedString("FirstRun.messageLabel2", value: "Automatically block online trackers while you browse. Then tap to erase visited pages, searches, cookies and passwords from your device. ", comment: "Message label on the first run screen")
