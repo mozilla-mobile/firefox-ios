@@ -97,6 +97,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(_ application: UIApplication) {
         splashView?.animateHidden(true, duration: 0.25)
     }
+
+    func application(_ application: UIApplication, shouldAllowExtensionPointIdentifier extensionPointIdentifier: UIApplicationExtensionPointIdentifier) -> Bool {
+        // We don't currently support third-party keyboards due to incompatibilities with our
+        // autocomplete text field (e.g., bug 1317104).
+        return extensionPointIdentifier != UIApplicationExtensionPointIdentifier.keyboard
+    }
 }
 
 extension UINavigationController {
