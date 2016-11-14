@@ -76,14 +76,15 @@ class ActivityStreamPanel: UITableViewController, HomePanel {
         tableView.estimatedSectionHeaderHeight = 15
         tableView.sectionFooterHeight = 0
         tableView.sectionHeaderHeight = UITableViewAutomaticDimension
-
-        reloadTopSites()
-        reloadHighlights()
     }
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.onyxSession = OnyxTelemetry.sharedClient.beginSession()
+
+        all([invalidateTopSites(), invalidateHighlights()]).uponQueue(dispatch_get_main_queue()) { _ in
+            self.reloadAll()
+        }
     }
 
     override func viewDidDisappear(animated: Bool) {
@@ -250,55 +251,54 @@ extension ActivityStreamPanel {
     func notificationReceived(notification: NSNotification) {
         switch notification.name {
         case NotificationProfileDidFinishSyncing, NotificationFirefoxAccountChanged, NotificationPrivateDataClearedHistory, NotificationDynamicFontChanged:
-            self.reloadTopSites()
+            self.invalidateTopSites().uponQueue(dispatch_get_main_queue()) { _ in
+                self.reloadAll()
+            }
         default:
             log.warning("Received unexpected notification \(notification.name)")
         }
     }
 
-    private func reloadHighlights() {
-        fetchHighlights().uponQueue(dispatch_get_main_queue()) { result in
+    private func reloadAll() {
+        self.tableView.reloadData()
+    }
+
+    private func invalidateHighlights() -> Success {
+        return self.profile.recommendations.getHighlights().bindQueue(dispatch_get_main_queue()) { result in
             self.highlights = result.successValue?.asArray() ?? self.highlights
-            self.tableView.reloadSections(NSIndexSet(index: Section.Highlights.rawValue), withRowAnimation: .Automatic)
+            return succeed()
         }
     }
 
-    private func fetchHighlights() -> Deferred<Maybe<Cursor<Site>>> {
-        return self.profile.recommendations.getHighlights()
-    }
-
-    private func reloadTopSites() {
-        invalidateTopSites().uponQueue(dispatch_get_main_queue()) { result in
-            let defaultSites = self.defaultTopSites()
-            let mySites = (result.successValue ?? [])
-
-            // Merge default topsites with a user's topsites.
-            let mergedSites = mySites.union(defaultSites, f: { (site) -> String in
-                return NSURL(string: site.url)?.extractDomainName() ?? ""
-            })
-
-            // Favour topsites from defaultSites as they have better favicons.
-            let newSites = mergedSites.map { site -> Site in
-                let domain = NSURL(string: site.url)?.extractDomainName() ?? ""
-                return defaultSites.find { $0.title.lowercaseString == domain } ?? site
-            }
-
-            self.topSitesManager.currentTraits = self.view.traitCollection
-            self.topSitesManager.content = newSites.count > ASPanelUX.topSitesCacheSize ? Array(newSites[0..<ASPanelUX.topSitesCacheSize]) : newSites
-            self.topSitesManager.urlPressedHandler = { [unowned self] url, indexPath in
-                let event = ASInfo(actionPosition: indexPath.item, source: .topSites)
-                ASOnyxPing.reportTapEvent(event)
-                self.showSiteWithURLHandler(url)
-            }
-            self.tableView.reloadSections(NSIndexSet(index: Section.TopSites.rawValue), withRowAnimation: .Automatic)
-        }
-    }
-
-    private func invalidateTopSites() -> Deferred<Maybe<[Site]>> {
+    private func invalidateTopSites() -> Success {
         let frecencyLimit = ASPanelUX.topSitesCacheSize
-        return self.profile.history.updateTopSitesCacheIfInvalidated() >>== { dirty in
+
+        // Update our top sites cache if it's been invalidated
+        return self.profile.history.updateTopSitesCacheIfInvalidated() >>== { _ in
             return self.profile.history.getTopSitesWithLimit(frecencyLimit) >>== { topSites in
-                return deferMaybe(topSites.asArray())
+                let mySites = topSites.asArray()
+                let defaultSites = self.defaultTopSites()
+
+                // Merge default topsites with a user's topsites.
+                let mergedSites = mySites.union(defaultSites, f: { (site) -> String in
+                    return NSURL(string: site.url)?.extractDomainName() ?? ""
+                })
+
+                // Favour topsites from defaultSites as they have better favicons.
+                let newSites = mergedSites.map { site -> Site in
+                    let domain = NSURL(string: site.url)?.extractDomainName() ?? ""
+                    return defaultSites.find { $0.title.lowercaseString == domain } ?? site
+                }
+
+                self.topSitesManager.currentTraits = self.view.traitCollection
+                self.topSitesManager.content = newSites.count > ASPanelUX.topSitesCacheSize ? Array(newSites[0..<ASPanelUX.topSitesCacheSize]) : newSites
+                self.topSitesManager.urlPressedHandler = { [unowned self] url, indexPath in
+                    let event = ASInfo(actionPosition: indexPath.item, source: .topSites)
+                    ASOnyxPing.reportTapEvent(event)
+                    self.showSiteWithURLHandler(url)
+                }
+                
+                return succeed()
             }
         }
     }
@@ -313,14 +313,18 @@ extension ActivityStreamPanel {
         }
         profile.history.removeHostFromTopSites(host).uponQueue(dispatch_get_main_queue()) { result in
             guard result.isSuccess else { return }
-            self.reloadTopSites()
+            self.invalidateTopSites().uponQueue(dispatch_get_main_queue()) { _ in
+                self.reloadAll()
+            }
         }
     }
 
     func hideFromHighlights(site: Site) {
         profile.recommendations.removeHighlightForURL(site.url).uponQueue(dispatch_get_main_queue()) { result in
             guard result.isSuccess else { return }
-            self.reloadHighlights()
+            self.invalidateHighlights().uponQueue(dispatch_get_main_queue()) { _ in
+                self.reloadAll()
+            }
         }
     }
 
