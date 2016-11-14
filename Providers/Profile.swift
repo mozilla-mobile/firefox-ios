@@ -1278,8 +1278,8 @@ public class BrowserProfile: Profile {
         func greenLight() -> () -> Bool {
             let start = NSDate.now()
 
-            // Give it one minute to run before we stop.
-            let stopBy = start + OneMinuteInMilliseconds
+            // Give it two minutes to run before we stop.
+            let stopBy = start + (2 * OneMinuteInMilliseconds)
             log.debug("Checking green light. Backgrounded: \(self.backgrounded).")
             return {
                 NSDate.now() < stopBy &&
