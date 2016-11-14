@@ -54,7 +54,7 @@ public class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
         return HistoryStorageVersion
     }
 
-    private let batchSize: Int = 500  // A balance between number of requests and per-request size.
+    private let batchSize: Int = 1000  // A balance between number of requests and per-request size.
 
     private func mask(maxFailures: Int) -> Maybe<()> -> Success {
         var failures = 0
