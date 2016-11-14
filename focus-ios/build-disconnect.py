@@ -11,7 +11,7 @@ import urlparse
 
 
 def url_filter(resource):
-    return "^https?://(.+\\.)?" + resource.replace(".", "\\.")
+    return "^https?://([^/]+\\.)?" + resource.replace(".", "\\.")
 
 
 def unless_domain(properties):
