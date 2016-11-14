@@ -187,7 +187,7 @@
         <note>Erase button in the URL bar</note>
       </trans-unit>
       <trans-unit id="URL.eraseMessageLabel">
-        <source>We've erased your browsing history.</source>
+        <source>Your browsing history has been erased.</source>
         <note>Message shown after pressing the Erase button</note>
       </trans-unit>
       <trans-unit id="URL.placeholderText">
