@@ -116,7 +116,7 @@ public class SQLiteHistory {
         // a queryable thing that needs to stick around.
         switch db.createOrUpdate(BrowserTable()) {
         case .Failure:
-            log.error("Failed to create/update the scheme table. Aborting.")
+            log.error("Failed to create/update DB schema!")
             fatalError()
         case .Closed:
             log.info("Database not created as the SQLiteConnection is closed.")

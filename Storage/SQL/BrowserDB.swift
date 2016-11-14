@@ -74,7 +74,7 @@ public class BrowserDB {
         case .Closed:
             log.info("Database not created as the SQLiteConnection is closed.")
         case .Success:
-            log.debug("db: \(file) with secret = \(secretKey) has been created")
+            log.debug("db: \(file) has been created")
         }
     }
 
