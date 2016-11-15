@@ -365,14 +365,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         var taskId: UIBackgroundTaskIdentifier = 0
         taskId = application.beginBackgroundTaskWithExpirationHandler { _ in
             log.warning("Running out of background time, but we have a profile shutdown pending.")
-            self.shutdownProfileIfBackgrounded(application)
+            self.shutdownProfileWhenNotActive(application)
             application.endBackgroundTask(taskId)
         }
 
         if profile.hasSyncableAccount() {
             let backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
             profile.syncManager.syncEverything().uponQueue(backgroundQueue) { _ in
-                self.shutdownProfileIfBackgrounded(application)
+                self.shutdownProfileWhenNotActive(application)
                 application.endBackgroundTask(taskId)
             }
         } else {
@@ -381,11 +381,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
-    private func shutdownProfileIfBackgrounded(application: UIApplication) {
-        // Only shutdown the profile if we are still in the background
-        if application.applicationState == UIApplicationState.Background {
-            profile?.shutdown()
+    private func shutdownProfileWhenNotActive(application: UIApplication) {
+        // Only shutdown the profile if we are not in the foreground
+        guard application.applicationState != UIApplicationState.Active else {
+            return
         }
+
+        profile?.shutdown()
     }
 
     func applicationWillResignActive(application: UIApplication) {
