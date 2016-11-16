@@ -181,20 +181,19 @@ class Tab: NSObject {
         if let sessionData = self.sessionData {
             restoring = true
 
-            var updatedURLs = [String]()
+            var urls = [String]()
             for url in sessionData.urls {
-                guard let updatedURL = WebServer.sharedInstance.updateLocalURL(url),
-                      let urlString = updatedURL.absoluteString else {
+                guard let urlString = url.absoluteString else {
                     assertionFailure("Invalid session URL: \(url)")
                     continue
                 }
-                updatedURLs.append(urlString)
+                urls.append(urlString)
             }
 
             let currentPage = sessionData.currentPage
             self.sessionData = nil
             var jsonDict = [String: AnyObject]()
-            jsonDict["history"] = updatedURLs
+            jsonDict["history"] = urls
             jsonDict["currentPage"] = currentPage
             let escapedJSON = JSON.stringify(jsonDict, pretty: false).stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
             let restoreURL = NSURL(string: "\(WebServer.sharedInstance.base)/about/sessionrestore?history=\(escapedJSON)")

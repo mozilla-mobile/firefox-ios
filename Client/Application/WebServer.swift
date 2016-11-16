@@ -58,17 +58,4 @@ class WebServer {
     func URLForResource(resource: String, module: String) -> String {
         return "\(base)/\(module)/\(resource)"
     }
-
-    /// Return a full url, as an NSURL, for a resource in a module. No check is done to find out if the resource actually exist.
-    func URLForResource(resource: String, module: String) -> NSURL {
-        return NSURL(string: "\(base)/\(module)/\(resource)")!
-    }
-
-    func updateLocalURL(url: NSURL) -> NSURL? {
-        let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false)
-        if components?.host == "localhost" && components?.scheme == "http" {
-            components?.port = WebServer.sharedInstance.server.port
-        }
-        return components?.URL
-    }
 }
