@@ -18,9 +18,27 @@ class WebServer {
         return "http://localhost:\(server.port)"
     }
 
+    /// The private credentials for accessing resources on this Web server.
+    let credentials: NSURLCredential
+
+    /// A random, transient token used for authenticating requests.
+    /// Other apps are able to make requests to our local Web server,
+    /// so this prevents them from accessing any resources.
+    private let sessionToken = NSUUID().UUIDString
+
+    init() {
+        credentials = NSURLCredential(user: sessionToken, password: "", persistence: .ForSession)
+    }
+
     func start() throws -> Bool {
         if !server.running {
-            try server.startWithOptions([GCDWebServerOption_Port: 6571, GCDWebServerOption_BindToLocalhost: true, GCDWebServerOption_AutomaticallySuspendInBackground: true])
+            try server.startWithOptions([
+                GCDWebServerOption_Port: 6571,
+                GCDWebServerOption_BindToLocalhost: true,
+                GCDWebServerOption_AutomaticallySuspendInBackground: true,
+                GCDWebServerOption_AuthenticationMethod: GCDWebServerAuthenticationMethod_Basic,
+                GCDWebServerOption_AuthenticationAccounts: [sessionToken: ""]
+            ])
         }
         return server.running
     }
