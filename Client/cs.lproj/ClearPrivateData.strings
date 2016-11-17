@@ -1,0 +1,31 @@
+/* Message shown in the dialog prompting users if they want to clear everything */
+"Are you sure you want to clear all of your data? This will also close all open tabs." = "Opravdu chcete vymazat všechna svá data? Také tím zavřete otevřené panely.";
+
+/* Settings item for clearing browsing history */
+"Browsing History" = "Historie prohlížení";
+
+/* Settings item for clearing the cache */
+"Cache" = "Mezipaměť";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "Zrušit";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "Vymazat";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "Vymazat vše";
+
+/* Button in settings that clears private data for the selected items.
+   Navigation title in settings. */
+"Clear Private Data" = "Vymazat soukromá data";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Cookies";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "Offline obsah";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "Uložená přihlášení";
+

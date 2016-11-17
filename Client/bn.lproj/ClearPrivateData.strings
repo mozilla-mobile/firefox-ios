@@ -1,0 +1,31 @@
+/* Message shown in the dialog prompting users if they want to clear everything */
+"Are you sure you want to clear all of your data? This will also close all open tabs." = "আপনি কি নিশ্চিত যে আপনি আপনার সব তথ্য মুছে দিতে চান? এর ফলে আপনার সব কটি ট্যাব বন্ধ হয়ে যাবে।";
+
+/* Settings item for clearing browsing history */
+"Browsing History" = "ব্রাউজিং ইতিহাস";
+
+/* Settings item for clearing the cache */
+"Cache" = "ক্যাশে";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "বাতিল";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "পরিষ্কার করুন";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "সবকিছু মুছুন";
+
+/* Button in settings that clears private data for the selected items.
+   Navigation title in settings. */
+"Clear Private Data" = "ব্যাক্তিগত তথ্য মুছুন";
+
+/* Settings item for clearing cookies */
+"Cookies" = "কুকি";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "অফলাইন ওয়েবসাইটের তথ্য";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "সংরক্ষিত লগইন";
+

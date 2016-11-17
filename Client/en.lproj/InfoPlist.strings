@@ -1,9 +1,10 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+"NSCameraUsageDescription" = "This lets you take and upload photos.";
 
-NSLocationWhenInUseUsageDescription = "Websites you visit may request your location.";
-NSPhotoLibraryUsageDescription = "This lets you save and upload photos.";
-NSCameraUsageDescription = "This lets you take and upload photos.";
-ShortcutItemTitleNewTab = "New Tab";
-ShortcutItemTitleNewPrivateTab = "New Private Tab";
+"NSLocationWhenInUseUsageDescription" = "Websites you visit may request your location.";
+
+"NSPhotoLibraryUsageDescription" = "This lets you save and upload photos.";
+
+"ShortcutItemTitleNewPrivateTab" = "New Private Tab";
+
+"ShortcutItemTitleNewTab" = "New Tab";
+

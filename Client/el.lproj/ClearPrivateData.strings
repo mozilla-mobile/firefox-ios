@@ -1,0 +1,28 @@
+/* Settings item for clearing browsing history */
+"Browsing History" = "Ιστορικό Περιήγησης";
+
+/* Settings item for clearing the cache */
+"Cache" = "Προσωρινή μνήμη";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "Άκυρο";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "Εκκαθάριση";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "Εκκαθάριση όλων";
+
+/* Button in settings that clears private data for the selected items.
+   Navigation title in settings. */
+"Clear Private Data" = "Διαγραφή ιδιωτικών δεδομένων";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Cοokies";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "Δεδομένα ιστοσελίδων";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "Αποθηκευμένοι λογαριασμοί";
+

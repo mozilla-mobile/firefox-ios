@@ -1,0 +1,90 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "Po 1 valandos";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "Po 1 minutės";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "Po 5 minučių";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "Po 10 minučių";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "Po 15 minučių";
+
+/* Label used as a setting item and title of the following screen to change the current passcode */
+"Change Passcode" = "Keisti apsaugos kodą";
+
+/* Title of the dialog used to request the passcode */
+"Enter Passcode" = "Įveskite apsaugos kodą";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter a new passcode" = "Įveskite naują apsaugos kodą";
+
+/* Text displayed above the input field when entering a new passcode */
+"Enter a passcode" = "Įveskite apsaugos kodą";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter passcode" = "Įveskite apsaugos kodą";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "Nedelsiant";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining */
+"Incorrect passcode. Try again (Attempts remaining: %d)." = "Neteisingas apsaugos kodas. Bandykite dar kartą (liko bandymų: %d).";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app */
+"Incorrect passcode. Try again." = "Neteisingas apsaugos kodas. Bandykite dar kartą.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again in an hour." = "Pasiektas bandymų limitas. Bandykite po valandos.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again later." = "Pasiektas bandymų limitas. Bandykite vėliau.";
+
+/* Error message displayed when user tries to enter the same passcode as their existing code when changing it. */
+"New passcode must be different than existing code." = "Naujas apsaugos kodas turi skirtis nuo esamo.";
+
+/* Label for the Passcode item in Settings */
+"Passcode" = "Apsaugos kodas";
+
+/* Error message displayed to user when their confirming passcode doesn't match the first code. */
+"Passcodes didn't match. Try again." = "Apsaugos kodai nesutampa. Bandykite dar kartą.";
+
+/* Text displayed above the input field when confirming a passcode */
+"Re-enter passcode" = "Pakartokite apsaugos kodą";
+
+/* Text displayed in the 'Interval' section, followed by the current interval setting, e.g. 'Immediately' */
+"Require Passcode" = "Reikalauti apsaugos kodo";
+
+/* Title of the dialog used to set a passcode */
+"Set Passcode" = "Nustatyti apsaugos kodą";
+
+/* Label for the Touch ID/Passcode item in Settings */
+"Touch ID & Passcode" = "„Touch ID“ ir apsaugos kodas";
+
+/* Label used as a setting item to turn off passcode */
+"Turn Passcode Off" = "Išjungti apsaugos kodą";
+
+/* Label used as a setting item to turn on passcode */
+"Turn Passcode On" = "Įjungti apsaugos kodą";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "Išjunkite savo apsaugos kodą.";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID" = "Naudoti „Touch ID“";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "Naudokite piršto atspaudą norėdami dabar prieiti prie prisijungimų.";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "Naudokite piršto atspaudą norėdami dabar prieiti prie privačiojo naršymo.";
+
+/* Touch ID prompt subtitle when disabling Touch ID */
+"touchid.disable.reason.label" = "Norėdami išjungti „Touch ID“, naudokite savo piršto atspaudą.";
+
+/* Touch ID prompt subtitle when accessing the require passcode setting */
+"touchid.require.passcode.reason.label" = "Norėdami pasiekti reikalaujamo apsaugos kodo intervalo nuostatas, naudokite savo piršto atspaudą.";
+

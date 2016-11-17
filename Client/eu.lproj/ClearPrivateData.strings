@@ -1,0 +1,31 @@
+/* Message shown in the dialog prompting users if they want to clear everything */
+"Are you sure you want to clear all of your data? This will also close all open tabs." = "Ziur zaude zure datu pribatu guztiak garbitu nahi dituzula? Ekintza honek irekitako fitxak ere itxiko ditu.";
+
+/* Settings item for clearing browsing history */
+"Browsing History" = "Nabigatze-historia";
+
+/* Settings item for clearing the cache */
+"Cache" = "Cachea";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "Utzi";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "Garbitu";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "Garbitu guztia";
+
+/* Button in settings that clears private data for the selected items.
+   Navigation title in settings. */
+"Clear Private Data" = "Garbitu datu pribatuak";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Cookieak";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "Lineaz kanpoko datuak";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "Gordetako saio-hasierak";
+

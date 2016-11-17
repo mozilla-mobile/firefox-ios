@@ -1,0 +1,31 @@
+/* Message shown in the dialog prompting users if they want to clear everything */
+"Are you sure you want to clear all of your data? This will also close all open tabs." = "คุณแน่ใจหรือไม่ที่จะล้างข้อมูลทั้งหมดของคุณ? สิ่งนี้จะเป็นการปิดแท็บที่เปิดอยู่ทั้งหมดด้วย";
+
+/* Settings item for clearing browsing history */
+"Browsing History" = "ประวัติการท่องเว็บ";
+
+/* Settings item for clearing the cache */
+"Cache" = "แคช";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "ยกเลิก";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "ล้าง";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "ล้างทุกอย่าง";
+
+/* Button in settings that clears private data for the selected items.
+   Navigation title in settings. */
+"Clear Private Data" = "ล้างข้อมูลส่วนตัว";
+
+/* Settings item for clearing cookies */
+"Cookies" = "คุกกี้";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "ข้อมูลเว็บไซต์ออฟไลน์";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "การเข้าสู่ระบบที่บันทึกไว้";
+

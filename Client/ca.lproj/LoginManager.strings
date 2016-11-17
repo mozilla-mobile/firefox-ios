@@ -1,0 +1,48 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Segur?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Cancel·la";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Neteja la cerca";
+
+/* Copy password text selection menu item */
+"Copy" = "Copia";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Suprimeix";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "Desmarca-ho tot";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Entra al mode de cerca";
+
+/* Hide password text selection menu item */
+"Hide" = "Amaga";
+
+/* Footer label describing when the current login was last modified with the timestamp as the parameter. */
+"Last modified %@" = "Darrera modificació: %@";
+
+/* Title for Logins List View screen. */
+"Logins" = "Inicis de sessió";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Mostra";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Cerca";
+
+/* Label for the button used to select all logins. */
+"Select All" = "Marca-ho tot";
+
+/* Label displayed above the password row in Login Detail View. */
+"password" = "contrasenya";
+
+/* Label displayed above the username row in Login Detail View. */
+"username" = "nom d'usuari";
+
+/* Label displayed above the website row in Login Detail View. */
+"website" = "lloc web";
+

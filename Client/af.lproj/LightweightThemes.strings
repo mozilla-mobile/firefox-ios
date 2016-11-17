@@ -1,0 +1,15 @@
+/* Pending feature; currently unused string! Sub header for photo options in theme chooser */
+"Photos" = "Foto's";
+
+/* Pending feature; currently unused string! Button to show preview of selected theme */
+"Preview" = "Voorskou";
+
+/* Pending feature; currently unused string! Button to set selected theme as current theme */
+"Set" = "Stel";
+
+/* Pending feature; currently unused string! Settings row to enter theme settings */
+"Theme" = "Tema";
+
+/* Pending feature; currently unused string! sub header for theme options in theme chooser */
+"Themes" = "Temas";
+

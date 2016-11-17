@@ -1,0 +1,90 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "1 óra után";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "1 perc után";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "5 perc után";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "10 perc után";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "15 perc után";
+
+/* Label used as a setting item and title of the following screen to change the current passcode */
+"Change Passcode" = "Jelkód módosítása";
+
+/* Title of the dialog used to request the passcode */
+"Enter Passcode" = "Írja be a jelkódot";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter a new passcode" = "Írja be az új jelkódot";
+
+/* Text displayed above the input field when entering a new passcode */
+"Enter a passcode" = "Írjon be egy jelkódot";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter passcode" = "Írja be a jelkódot";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "Azonnal";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining */
+"Incorrect passcode. Try again (Attempts remaining: %d)." = "Helytelen jelkód. Próbálja meg újra (%d kísérlet maradt).";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app */
+"Incorrect passcode. Try again." = "Helytelen jelkód. Próbálja meg újra.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again in an hour." = "Elérte a kísérletek maximális számát. Próbálja meg újra egy óra múlva.";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again later." = "Elérte a kísérletek maximális számát. Próbálja meg újra később.";
+
+/* Error message displayed when user tries to enter the same passcode as their existing code when changing it. */
+"New passcode must be different than existing code." = "Az új jelkódnak különböznie kell a régitől.";
+
+/* Label for the Passcode item in Settings */
+"Passcode" = "Jelkód";
+
+/* Error message displayed to user when their confirming passcode doesn't match the first code. */
+"Passcodes didn't match. Try again." = "A jelkódok nem egyeznek. Próbálja meg újra.";
+
+/* Text displayed above the input field when confirming a passcode */
+"Re-enter passcode" = "Írja be újra a jelkódot";
+
+/* Text displayed in the 'Interval' section, followed by the current interval setting, e.g. 'Immediately' */
+"Require Passcode" = "Jelkód kérése";
+
+/* Title of the dialog used to set a passcode */
+"Set Passcode" = "Jelkód beállítása";
+
+/* Label for the Touch ID/Passcode item in Settings */
+"Touch ID & Passcode" = "Touch ID és jelkód";
+
+/* Label used as a setting item to turn off passcode */
+"Turn Passcode Off" = "Jelkód kikapcsolása";
+
+/* Label used as a setting item to turn on passcode */
+"Turn Passcode On" = "Jelkód bekapcsolása";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "A jelkódja kikapcsolása.";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID" = "Touch ID használata";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "Használja az ujjlenyomatát, hogy most hozzáférjen a bejelentkezésekhez.";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "Használja az ujjlenyomatát, hogy most hozzáférjen a privát böngészéshez.";
+
+/* Touch ID prompt subtitle when disabling Touch ID */
+"touchid.disable.reason.label" = "Használja az ujjlenyomatát a Touch ID letiltásához.";
+
+/* Touch ID prompt subtitle when accessing the require passcode setting */
+"touchid.require.passcode.reason.label" = "Használja az ujjlenyomatát, hogy hozzáférjen a jelkód megkövetelési időköz beállításához.";
+

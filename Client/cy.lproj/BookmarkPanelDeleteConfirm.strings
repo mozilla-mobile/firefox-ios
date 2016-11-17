@@ -1,0 +1,12 @@
+/* Main body of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
+"Are you sure you want to delete it and its contents?" = "Ydych chi'n siŵr eich bod am ei ddileu a'i gynnwys i gyd?";
+
+/* Button label to cancel deletion when the user tried to delete a non-empty folder. */
+"Cancel" = "Diddymu";
+
+/* Button label for the button that deletes a folder and all of its children. */
+"Delete" = "Dileu";
+
+/* Title of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
+"This folder isn't empty." = "Nid yw'r ffolder yn wag.";
+

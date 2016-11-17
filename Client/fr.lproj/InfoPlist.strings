@@ -1,0 +1,10 @@
+"NSCameraUsageDescription" = "Ceci vous permet de prendre des photos et de les envoyer.";
+
+"NSLocationWhenInUseUsageDescription" = "Les sites web que vous visitez peuvent demander à connaître votre emplacement.";
+
+"NSPhotoLibraryUsageDescription" = "Ceci vous permet d’enregistrer des photos et de les envoyer.";
+
+"ShortcutItemTitleNewPrivateTab" = "Nouvel onglet privé";
+
+"ShortcutItemTitleNewTab" = "Nouvel onglet";
+

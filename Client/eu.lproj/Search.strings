@@ -1,0 +1,18 @@
+/* Label for search engine buttons. The argument corresponds to the name of the search engine. */
+"%@ search" = "%@ bilaketa";
+
+/* For search suggestions prompt. This string should be short so it fits nicely on the prompt row. */
+"No" = "Ez";
+
+/* Label for search settings button. */
+"Search Settings" = "Bilaketa-ezarpenak";
+
+/* Accessibility label for image of default search engine displayed left to the actual search suggestions from the engine. The parameter substituted for \"%@\" is the name of the search engine. E.g.: Search suggestions from Google */
+"Search suggestions from %@" = "%@ bilaketa-motorraren bilaketa-iradokizunak";
+
+/* Prompt shown before enabling provider search queries */
+"Turn on search suggestions?" = "Gaitu bilaketa-iradokizunak?";
+
+/* For search suggestions prompt. This string should be short so it fits nicely on the prompt row. */
+"Yes" = "Bai";
+

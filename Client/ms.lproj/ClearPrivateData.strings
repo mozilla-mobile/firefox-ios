@@ -1,0 +1,31 @@
+/* Message shown in the dialog prompting users if they want to clear everything */
+"Are you sure you want to clear all of your data? This will also close all open tabs." = "Adakah anda pasti anda mahu membuang semua data anda? Ini juga akan menutup semua tab yang terbuka.";
+
+/* Settings item for clearing browsing history */
+"Browsing History" = "Sejarah Pelayaran";
+
+/* Settings item for clearing the cache */
+"Cache" = "Cache";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "Batal";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "Buang";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "Buang Semua";
+
+/* Button in settings that clears private data for the selected items.
+   Navigation title in settings. */
+"Clear Private Data" = "Buang Data Peribadi";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Kuki";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "Data Laman web Luar talian";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "Log Masuk Tersimpan";
+
