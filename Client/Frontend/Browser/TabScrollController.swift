@@ -40,6 +40,9 @@ class TabScrollingController: NSObject {
     var headerTopConstraint: Constraint?
     var toolbarsShowing: Bool { return headerTopOffset == 0 }
     private var suppressToolbarHiding: Bool = false
+    private var isZoomedOut: Bool = false
+    private var lastZoomedScale: CGFloat = 0
+    private var isUserZoom: Bool = false
 
     private var headerTopOffset: CGFloat = 0 {
         didSet {
@@ -119,6 +122,33 @@ class TabScrollingController: NSObject {
             }
         }
     }
+
+    func updateMinimumZoom() {
+        guard let scrollView = scrollView else {
+            return
+        }
+        self.isZoomedOut = roundNum(scrollView.zoomScale) == roundNum(scrollView.minimumZoomScale)
+        self.lastZoomedScale = self.isZoomedOut ? 0 : scrollView.zoomScale
+    }
+
+    func setMinimumZoom() {
+        guard let scrollView = scrollView else {
+            return
+        }
+        if self.isZoomedOut && roundNum(scrollView.zoomScale) != roundNum(scrollView.minimumZoomScale) {
+            scrollView.zoomScale = scrollView.minimumZoomScale
+        }
+    }
+
+    func resetZoomState() {
+        self.isZoomedOut = false
+        self.lastZoomedScale = 0
+    }
+
+    private func roundNum(num: CGFloat) -> CGFloat {
+        return round(100 * num) / 100
+    }
+
 }
 
 private extension TabScrollingController {
@@ -251,6 +281,31 @@ extension TabScrollingController: UIScrollViewDelegate {
         }
 
         suppressToolbarHiding = false
+    }
+
+    func scrollViewDidZoom(scrollView: UIScrollView) {
+        // Only mess with the zoom level if the user did not initate the zoom via a zoom gesture
+        if self.isUserZoom {
+            return
+        }
+
+        //scrollViewDidZoom will be called multiple times when a rotation happens.
+        // In that case ALWAYS reset to the minimum zoom level if the previous state was zoomed out (isZoomedOut=true)
+        if isZoomedOut {
+            scrollView.zoomScale = scrollView.minimumZoomScale
+        } else if roundNum(scrollView.zoomScale) > roundNum(self.lastZoomedScale) {
+            //When we have manually zoomed in we want to preserve that scale. 
+            //But sometimes when we rotate a larger zoomScale is appled. In that case apply the lastZoomedScale
+            scrollView.zoomScale = self.lastZoomedScale
+        }
+    }
+
+    func scrollViewWillBeginZooming(scrollView: UIScrollView, withView view: UIView?) {
+        self.isUserZoom = true
+    }
+
+    func scrollViewDidEndZooming(scrollView: UIScrollView, withView view: UIView?, atScale scale: CGFloat) {
+        self.isUserZoom = false
     }
 
     func scrollViewShouldScrollToTop(scrollView: UIScrollView) -> Bool {
