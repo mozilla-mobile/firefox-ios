@@ -136,14 +136,15 @@ class BrowserViewController: UIViewController {
             self.displayedPopoverController = nil
         }
 
-        guard let displayedPopoverController = self.displayedPopoverController else {
-            return
-        }
-
-        coordinator.animateAlongsideTransition(nil) { context in
-            self.updateDisplayedPopoverProperties?()
-            self.presentViewController(displayedPopoverController, animated: true, completion: nil)
-        }
+        coordinator.animateAlongsideTransition({context in
+            self.scrollController.updateMinimumZoom()
+            if let popover = self.displayedPopoverController {
+                self.updateDisplayedPopoverProperties?()
+                self.presentViewController(popover, animated: true, completion: nil)
+            }
+            }, completion: { _ in
+                self.scrollController.setMinimumZoom()
+        })
     }
 
     override func didReceiveMemoryWarning() {
@@ -269,20 +270,9 @@ class BrowserViewController: UIViewController {
         }
 
         displayedPopoverController?.dismissViewControllerAnimated(true, completion: nil)
-
-        // WKWebView looks like it has a bug where it doesn't invalidate it's visible area when the user
-        // performs a device rotation. Since scrolling calls
-        // _updateVisibleContentRects (https://github.com/WebKit/webkit/blob/master/Source/WebKit2/UIProcess/API/Cocoa/WKWebView.mm#L1430)
-        // this method nudges the web view's scroll view by a single pixel to force it to invalidate.
-        if let scrollView = self.tabManager.selectedTab?.webView?.scrollView {
-            let contentOffset = scrollView.contentOffset
-            coordinator.animateAlongsideTransition({ context in
-                scrollView.setContentOffset(CGPoint(x: contentOffset.x, y: contentOffset.y + 1), animated: true)
-                self.scrollController.showToolbars(animated: false)
-            }, completion: { context in
-                scrollView.setContentOffset(CGPoint(x: contentOffset.x, y: contentOffset.y), animated: false)
-            })
-        }
+        coordinator.animateAlongsideTransition({ context in
+            self.scrollController.showToolbars(animated: false)
+            }, completion: nil)
     }
 
     func SELappDidEnterBackgroundNotification() {
@@ -2320,6 +2310,7 @@ extension BrowserViewController: WKNavigationDelegate {
         guard let tab = tabManager[webView] else { return }
 
         tab.url = webView.URL
+        self.scrollController.resetZoomState()
 
         if tabManager.selectedTab === tab {
             updateUIForReaderHomeStateForTab(tab)
