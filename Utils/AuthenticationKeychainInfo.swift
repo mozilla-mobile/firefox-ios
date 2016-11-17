@@ -10,7 +10,7 @@ public let AllowedPasscodeFailedAttempts = 3
 
 // Passcode intervals with rawValue in seconds.
 public enum PasscodeInterval: Int {
-    case Immediately    = 0
+    case Immediately    = 2
     case OneMinute      = 60
     case FiveMinutes    = 300
     case TenMinutes     = 600
