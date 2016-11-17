@@ -179,7 +179,7 @@ class AlternateSimpleHighlightCell: UITableViewCell {
             self.siteImageView.image = FaviconFetcher.getDefaultFavicon(url)
             self.siteImageView.backgroundColor = FaviconFetcher.getDefaultColor(url)
         }
-        self.domainLabel.text = site.tileURL.extractDomainName()
+        self.domainLabel.text = site.tileURL.hostSLD
         self.titleLabel.text = site.title.characters.count <= 1 ? site.url : site.title
 
         if let bookmarked = site.bookmarked where bookmarked {
