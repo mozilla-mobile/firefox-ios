@@ -409,6 +409,17 @@ class ExportBrowserDataSetting: HiddenSetting {
     }
 }
 
+class EnableBookmarkMergingSetting: HiddenSetting {
+    override var title: NSAttributedString? {
+        // Not localized for now.
+        return NSAttributedString(string: "Enable Bidirectional Bookmark Sync ", attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
+    }
+
+    override func onClick(navigationController: UINavigationController?) {
+        AppConstants.shouldMergeBookmarks = true
+    }
+}
+
 // Show the current version of Firefox
 class VersionSetting: Setting {
     unowned let settings: SettingsTableViewController
