@@ -66,6 +66,8 @@
 	<string>This lets you save and upload photos.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>This lets you take and upload photos.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This lets you take and upload videos.</string>
 	<key>NSUserActivityTypes</key>
 	<array>
 		<string>org.mozilla.ios.firefox.browsing</string>
