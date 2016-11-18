@@ -2193,14 +2193,7 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
-        // Fixes 1261457 - Rich text editor fails because requests to about:blank are blocked
-        if url.scheme == "about" && url.resourceSpecifier == "blank" {
-            decisionHandler(WKNavigationActionPolicy.Allow)
-            return
-        }
-
-        // Fixes 1312801 - Navigating to about:srcdoc throws a "Firefox cannot open the page" alert
-        if url.scheme == "about" && url.resourceSpecifier == "srcdoc" {
+        if url.scheme == "about" {
             decisionHandler(WKNavigationActionPolicy.Allow)
             return
         }
