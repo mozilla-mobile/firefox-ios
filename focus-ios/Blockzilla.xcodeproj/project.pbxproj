@@ -227,7 +227,7 @@
 		E47F9AE91DB9329D00A93285 /* Adjust-Focus.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Adjust-Focus.plist"; sourceTree = "<group>"; };
 		E47F9AEB1DB9333200A93285 /* Adjust-Klar.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Adjust-Klar.plist"; sourceTree = "<group>"; };
 		E47F9AED1DB9338600A93285 /* AdjustIntegration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdjustIntegration.swift; sourceTree = "<group>"; };
-		E4BF2DD31BACE8CA00DA9D68 /* Klar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = Klar.app; path = "Firefox Klar.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4BF2DD31BACE8CA00DA9D68 /* Firefox Klar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Firefox Klar.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4BF2DD61BACE8CA00DA9D68 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E4BF2DDD1BACE8CA00DA9D68 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E4BF2DE21BACE8CA00DA9D68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -389,7 +389,7 @@
 		E4BF2DD41BACE8CA00DA9D68 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E4BF2DD31BACE8CA00DA9D68 /* Klar.app */,
+				E4BF2DD31BACE8CA00DA9D68 /* Firefox Klar.app */,
 				E4BF2DEC1BACE92400DA9D68 /* ContentBlocker.appex */,
 				0BA39A831DD2B8E4005F970A /* XCUITest.xctest */,
 			);
@@ -503,7 +503,7 @@
 			);
 			name = Blockzilla;
 			productName = Blockzilla;
-			productReference = E4BF2DD31BACE8CA00DA9D68 /* Klar.app */;
+			productReference = E4BF2DD31BACE8CA00DA9D68 /* Firefox Klar.app */;
 			productType = "com.apple.product-type.application";
 		};
 		E4BF2DEB1BACE92400DA9D68 /* ContentBlocker */ = {
@@ -1118,6 +1118,142 @@
 			};
 			name = FocusEnterprise;
 		};
+		D3C70C691DDFB22900CEE458 /* KlarEnterprise */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 9G8J6YA743;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = KlarEnterprise;
+		};
+		D3C70C6A1DDFB22900CEE458 /* KlarEnterprise */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = BlockzillaEnterprise.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				ENABLE_NS_ASSERTIONS = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)",
+				);
+				INFOPLIST_FILE = Blockzilla/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"-framework",
+					BuddyBuildSDK,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar.enterprise;
+				PRODUCT_NAME = "Firefox Klar";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = BUDDYBUILD;
+				SWIFT_OBJC_BRIDGING_HEADER = "Blockzilla-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
+				VALID_ARCHS = arm64;
+			};
+			name = KlarEnterprise;
+		};
+		D3C70C6B1DDFB22900CEE458 /* KlarEnterprise */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = BlockzillaEnterprise.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				INFOPLIST_FILE = ContentBlocker/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus.enterprise.ContentBlocker;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				VALID_ARCHS = arm64;
+			};
+			name = KlarEnterprise;
+		};
+		D3C70C6C1DDFB22900CEE458 /* KlarEnterprise */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = XCUITest/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = mozilla.XCUITest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
+				TEST_TARGET_NAME = Blockzilla;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = KlarEnterprise;
+		};
 		D3E872AB1C471F7900BF4DE4 /* FocusDebug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1475,6 +1611,7 @@
 				0BA39A8D1DD2B8E4005F970A /* KlarRelease */,
 				0BA39A8E1DD2B8E4005F970A /* FocusRelease */,
 				0BA39A8F1DD2B8E4005F970A /* FocusEnterprise */,
+				D3C70C6C1DDFB22900CEE458 /* KlarEnterprise */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = FocusRelease;
@@ -1487,6 +1624,7 @@
 				E4BF2DE41BACE8CA00DA9D68 /* KlarRelease */,
 				D3E872AE1C471F7F00BF4DE4 /* FocusRelease */,
 				D316DB111DA705FF006FA26B /* FocusEnterprise */,
+				D3C70C691DDFB22900CEE458 /* KlarEnterprise */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = FocusRelease;
@@ -1499,6 +1637,7 @@
 				E4BF2DE71BACE8CA00DA9D68 /* KlarRelease */,
 				D3E872AF1C471F7F00BF4DE4 /* FocusRelease */,
 				D316DB121DA705FF006FA26B /* FocusEnterprise */,
+				D3C70C6A1DDFB22900CEE458 /* KlarEnterprise */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = FocusRelease;
@@ -1511,6 +1650,7 @@
 				E4BF2DF81BACE92400DA9D68 /* KlarRelease */,
 				D3E872B01C471F7F00BF4DE4 /* FocusRelease */,
 				D316DB131DA705FF006FA26B /* FocusEnterprise */,
+				D3C70C6B1DDFB22900CEE458 /* KlarEnterprise */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = FocusRelease;
