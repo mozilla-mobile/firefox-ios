@@ -1,106 +1,135 @@
-/* Button at top of app that goes to the About screen
-   Title for the About screen */
-"About" = "Über";
+/* Label on About screen */
+"About.missionLabel" = "%@ wird von Mozilla entwickelt. Wir setzen uns für ein gesundes, offenes Internet ein.";
 
-/* Label for toggle on main screen */
-"Block Web fonts" = "Web-Schriftarten blockieren";
+/* Label on About screen */
+"About.privateBullet1" = "Suchen und Surfen direkt in der App";
 
-/* Label for toggle on main screen */
-"Block ad trackers" = "Verfolgung durch Werbung blockieren";
+/* Label on About screen */
+"About.privateBullet2" = "Verfolger blockieren (oder Einstellungen ändern, um Verfolger zuzulassen)";
 
-/* Label for toggle on main screen */
-"Block analytics trackers" = "Verfolgung durch Statistiken blockieren";
+/* Label on About screen */
+"About.privateBullet3" = "Entfernen löscht Cookies sowie Such- und Surf-Chronik";
 
-/* Label for toggle on main screen */
-"Block other content trackers" = "Verfolgung durch sonstige Inhalte blockieren";
+/* Label on About screen */
+"About.privateBulletHeader" = "Als privaten Browser verwenden:";
 
-/* Label for toggle on main screen */
-"Block social trackers" = "Verfolgung durch soziale Medien blockieren";
+/* Label for row in About screen */
+"About.rowHelp" = "Hilfe";
+
+/* Label for row in About screen */
+"About.rowRights" = "Ihre Rechte";
+
+/* Label on About screen */
+"About.safariBullet1" = "Verfolger blockieren, um Datenschutz zu verbessern";
+
+/* Label on About screen */
+"About.safariBullet2" = "Web-Schriftarten blockieren, um Seitengröße zu verringern";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "Als Safari-Erweiterung nutzen:";
+
+/* Title for the About screen */
+"About.screenTitle" = "Über";
+
+/* Label on About screen */
+"About.topLabel" = "Mit %@ haben Sie die Kontrolle.";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "Erneut versuchen";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.buttonLabel" = "OK, verstanden!";
+
+/* Message label shown under the button in the first run UI */
+"FirstRun.disclaimerMessage" = "Hinweis: Die verwendeten Websites und Dienste können während des Surfens trotzdem Daten über Sie sammeln.";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabel1" = "Surfen Sie, als würde niemand zusehen.";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabel2" = "Blockieren Sie automatisch Online-Verfolger während des Surfens. Tippen Sie dann auf „Entfernen“, um besuchte Seiten, Suchbegriffe, Cookies und Passwörter von Ihrem Gerät zu löschen.";
+
+/* First label for product description on the home screen */
+"Home.descriptionLabel1" = "Automatischer Privater Modus.";
+
+/* Second label for product description on the home screen */
+"Home.descriptionLabel2" = "Surfen. Löschen. Wiederholen.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "Tippen Sie auf „Safari“ und wählen Sie „Inhaltsblocker“";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "%@ aktivieren";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ ist nicht aktiviert.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "Einstellungs-App öffnen";
 
 /* Alert message shown when toggling the Content blocker */
-"Blocking other content trackers may break some videos and Web pages." = "Eventuell funktionieren durch das Blockieren sonstiger Verfolgung einige Videos und Websites nicht mehr.";
-
-/* Text displayed at the final step of the intro screen */
-"Checking installation…" = "Installation wird überprüft…";
-
-/* Button at top of app that goes to the About screen */
-"Done" = "Fertig";
-
-/* Label for instructions to enable shown on the second introduction screen */
-"Enable %@" = "%@ by Firefox aktivieren";
-
-/* Instructions shown in main app when Focus is disabled in system settings */
-"Enable %@ in" = "Aktivieren Sie %@ in";
-
-/* Description text shown on the welcome slide of the tour */
-"%@ helps you improve the privacy and performance of your mobile browsing experience. You control what types of page content are allowed." = "%@ hilft Ihnen bei der Verbesserung des Schutzes Ihrer Daten und der Leistung, während Sie surfen. Sie bestimmen, welche Arten von Seiteninhalten erlaubt sind.";
-
-/* Label displayed above toggles */
-"%@ improves privacy and may boost page load speed and lower your mobile data usage." = "%@ verbessert den Datenschutz und kann die Ladegeschwindigkeit der Seite verbessern sowie das benötigte Datenvolumen senken.";
-
-/* Text displayed at the final step of the intro screen */
-"%@ is enabled!" = "%@ ist aktiv!";
-
-/* Error label when Focus is not enabled, shown in the intro and main app when Focus is disabled */
-"%@ is not enabled." = "%@ ist nicht aktiviert.";
-
-/* About copy on the about page */
-"%@ is produced by Mozilla, the people behind the Firefox Web browser." = "%@ wird von Mozilla entwickelt, den Menschen hinter dem Web-Browser Firefox.";
-
-/* Notice label show on second introduction screen */
-"%@ must be enabled in Settings to work." = "Um verfügbar zu sein, muss %@ in der Einstellungen-App aktiviert werden.";
-
-/* About copy on the about page */
-"%@ puts you in control and brings added privacy and performance to your mobile browsing experience." = "%@ lässt Sie entscheiden und hilft Ihnen bei der Verbesserung des Schutzes Ihrer Daten und der Leistung, während Sie surfen.";
-
-/* Button to close the intro screen */
-"Get Started" = "Einführung";
-
-/* Label in About screen */
-"Help" = "Hilfe";
-
-/* Button label for accepting Content blocker alert */
-"I Understand" = "OK";
-
-/* Label for toggle on main screen */
-"May break some videos and Web pages" = "Kann Wiedergabe einiger Videos und Websites stören";
+"Settings.blockOtherMessage" = "Blockieren von Inhaltsverfolgern kann einige Videos und Webseiten stören.";
 
 /* Button label for declining Content blocker alert */
-"No, Thanks" = "Abbrechen";
+"Settings.blockOtherNo" = "Nein, danke";
 
-/* Button to open the system Settings, shown in the intro and main app when Focus is disabled */
-"Open Settings" = "Einstellungen öffnen";
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "Ich habe verstanden";
 
-/* Label for instructions to enable shown on the second introduction screen */
-"Open Settings App" = "Einstellungen-App öffnen";
+/* Title for settings screen */
+"Settings.screenTitle" = "Einstellungen";
 
-/* About copy on the about page */
-"Our mission is to foster a healthy, open Internet." = "Unser Ziel ist es, ein offenes, organisches Internet zu fördern.";
+/* Label for Safari integration section */
+"Settings.sectionIntegration" = "INTEGRATION";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
 
 /* Section label for performance toggles */
-"PERFORMANCE" = "LEISTUNG";
+"Settings.sectionPerformance" = "LEISTUNG";
 
 /* Section label for privacy toggles */
-"PRIVACY" = "DATENSCHUTZ";
+"Settings.sectionPrivacy" = "DATENSCHUTZ";
 
-/* Button on the about page */
-"Read more." = "Weitere Informationen";
+/* Label for toggle on main screen */
+"Settings.toggleBlockAds" = "Werbeverfolgung blockieren";
 
-/* Instructions shown in main app when Focus is disabled in system settings */
-"Settings → Safari → Content Blockers" = "Einstellungen → Safari → Inhalts-Blocker";
+/* Label for toggle on main screen */
+"Settings.toggleBlockAnalytics" = "Analyseverfolgung blockieren";
 
-/* Label in About screen */
-"Setup Instructions" = "Einrichtungsanleitung";
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Web-Schriftarten blockieren";
 
-/* Button at top of the last intro screen when Focus is not enabled */
-"Skip" = "Überspringen";
+/* Label for toggle on main screen */
+"Settings.toggleBlockOther" = "Andere Inhaltsverfolgung blockieren";
 
-/* Label for instructions to enable shown on the second introduction screen */
-"Tap Safari, then select Content Blockers" = "Tippen Sie auf Safari, dann auf Inhalts-Blocker";
+/* Label for toggle on main screen */
+"Settings.toggleBlockSocial" = "Verfolgung sozialer Netzwerke blockieren";
 
-/* Text displayed above Focus description when first launching the app */
-"Welcome" = "Willkommen";
+/* Label subtitle for toggle on main screen */
+"Settings.toggleOtherSubtitle" = "Kann einige Videos und Webseiten stören";
 
-/* Label in About screen */
-"Your Rights" = "Ihre Rechte";
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageData" = "Anonyme Nutzungsdaten senden";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "Mehr erfahren";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "Abbrechen";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "ENTFERNEN";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "Die Surf-Chronik wurde gelöscht.";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Suche oder Adresse eingeben";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Suchen nach %@";
 

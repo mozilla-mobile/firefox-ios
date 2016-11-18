@@ -1,8 +1,18 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+/* (No Commment) */
+"CFBundleName" = "$(PRODUCT_NAME)";
 
-NSLocationWhenInUseUsageDescription = "Von Ihnen besuchte Websites können Ihren Standort abfragen.";
-NSPhotoLibraryUsageDescription = "Hiermit können Sie Fotos speichern und hochladen.";
-NSCameraUsageDescription = "Hiermit können Sie Fotos machen und hochladen.";
-NSMicrophoneUsageDescription = "Hiermit können Sie Videos aufnehmen und hochladen.";
+/* (No Commment) */
+"CFBundleShortVersionString" = "2.0";
+
+/* (No Commment) */
+"NSCameraUsageDescription" = "Hiermit können Sie Fotos machen und hochladen.";
+
+/* (No Commment) */
+"NSLocationWhenInUseUsageDescription" = "Von Ihnen besuchte Websites können Ihren Standort abfragen.";
+
+/* (No Commment) */
+"NSMicrophoneUsageDescription" = "Hiermit können Sie Videos aufnehmen und hochladen.";
+
+/* (No Commment) */
+"NSPhotoLibraryUsageDescription" = "Hiermit können Sie Fotos speichern und hochladen.";
+
