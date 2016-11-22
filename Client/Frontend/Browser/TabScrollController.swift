@@ -35,6 +35,7 @@ class TabScrollingController: NSObject {
     weak var footer: UIView?
     weak var urlBar: URLBarView?
     weak var snackBars: UIView?
+    weak var webViewContainerToolbar: UIView?
 
     var footerBottomConstraint: Constraint?
     var headerTopConstraint: Constraint?
@@ -189,6 +190,8 @@ private extension TabScrollingController {
             if gesture.state == .Ended || gesture.state == .Cancelled {
                 lastContentOffset = 0
             }
+            
+            showOrHideWebViewContainerToolbar()
         }
     }
 
@@ -250,6 +253,14 @@ private extension TabScrollingController {
     func checkScrollHeightIsLargeEnoughForScrolling() -> Bool {
         return (UIScreen.mainScreen().bounds.size.height + 2 * UIConstants.ToolbarHeight) < scrollView?.contentSize.height
     }
+    
+    func showOrHideWebViewContainerToolbar() {
+        if contentOffset.y >= webViewContainerToolbar?.frame.height {
+            webViewContainerToolbar?.hidden = true
+        } else {
+            webViewContainerToolbar?.hidden = false
+        }
+    }
 }
 
 extension TabScrollingController: UIGestureRecognizerDelegate {
@@ -306,10 +317,16 @@ extension TabScrollingController: UIScrollViewDelegate {
 
     func scrollViewDidEndZooming(scrollView: UIScrollView, withView view: UIView?, atScale scale: CGFloat) {
         self.isUserZoom = false
+        showOrHideWebViewContainerToolbar()
+    }
+
+    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+        showOrHideWebViewContainerToolbar()
     }
 
     func scrollViewShouldScrollToTop(scrollView: UIScrollView) -> Bool {
         showToolbars(animated: true)
+        webViewContainerToolbar?.hidden = false
         return true
     }
 }
