@@ -14,7 +14,8 @@ class HomeView: UIView {
     init() {
         super.init(frame: CGRect.zero)
 
-        let textLogo = UIImageView(image: #imageLiteral(resourceName: "img_focus_wordmark"))
+        let wordmark = AppInfo.isFocus ? #imageLiteral(resourceName: "img_focus_wordmark") : #imageLiteral(resourceName: "img_klar_wordmark")
+        let textLogo = UIImageView(image: wordmark)
         addSubview(textLogo)
 
         let description1 = UILabel()

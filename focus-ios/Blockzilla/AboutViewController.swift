@@ -119,7 +119,8 @@ private class AboutHeaderView: UIView {
 
         translatesAutoresizingMaskIntoConstraints = false
 
-        let logo = UIImageView(image: #imageLiteral(resourceName: "img_focus_wordmark"))
+        let wordmark = AppInfo.isFocus ? #imageLiteral(resourceName: "img_focus_wordmark") : #imageLiteral(resourceName: "img_klar_wordmark")
+        let logo = UIImageView(image: wordmark)
         addSubview(logo)
 
         let bulletStyle = NSMutableParagraphStyle()
