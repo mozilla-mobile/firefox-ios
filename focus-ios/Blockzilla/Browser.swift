@@ -19,7 +19,7 @@ class Browser: NSObject {
 
     let view = UIView()
 
-    fileprivate var webView: UIWebView!
+    fileprivate var webView: UIWebView?
 
     /// The main document of the latest request, which might be set before we've actually
     /// started loading the document.
@@ -38,13 +38,13 @@ class Browser: NSObject {
 
     var bottomInset: Float = 0 {
         didSet {
-            webView.scrollView.contentInset.bottom = CGFloat(bottomInset)
-            webView.scrollView.scrollIndicatorInsets.bottom = CGFloat(bottomInset)
+            webView?.scrollView.contentInset.bottom = CGFloat(bottomInset)
+            webView?.scrollView.scrollIndicatorInsets.bottom = CGFloat(bottomInset)
         }
     }
 
     private func createWebView() {
-        webView = UIWebView()
+        let webView = UIWebView()
         webView.scalesPageToFit = true
         webView.delegate = self
         webView.scrollView.backgroundColor = UIConstants.colors.background
@@ -55,11 +55,15 @@ class Browser: NSObject {
         webView.snp.makeConstraints { make in
             make.edges.equalTo(view)
         }
+
+        self.webView = webView
     }
 
     func reset() {
-        webView.delegate = nil
-        webView.removeFromSuperview()
+        webView?.loadRequest(URLRequest(url: URL(string: "about:blank")!))
+        webView?.delegate = nil
+        webView?.removeFromSuperview()
+        webView = nil
 
         isLoading = false
         canGoBack = false
@@ -67,28 +71,32 @@ class Browser: NSObject {
         estimatedProgress = -1
         url = nil
 
-        createWebView()
+        // WebKit apparently requires a small delay between recreating web views before
+        // the back/forward cache is purged (see bug 1319297).
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.createWebView()
+        }
     }
 
     func goBack() {
-        return webView.goBack()
+        webView?.goBack()
     }
 
     func goForward() {
-        return webView.goForward()
+        webView?.goForward()
     }
 
     func reload() {
-        webView.reload()
+        webView?.reload()
     }
 
     func loadRequest(_ request: URLRequest) {
         isLoading = true
-        webView.loadRequest(request)
+        webView?.loadRequest(request)
     }
 
     func stop() {
-        webView.stopLoading()
+        webView?.stopLoading()
     }
 
     fileprivate(set) var isLoading = false {
@@ -185,6 +193,8 @@ extension Browser: UIWebViewDelegate {
     }
 
     private func updatePostLoad() {
+        guard let webView = webView else { return }
+
         updateBackForwardStates(webView)
 
         // We'll usually get main document URL updates from LocalContentBlockerDelegate,
@@ -217,7 +227,7 @@ extension Browser: LocalContentBlockerDelegate {
 extension Browser: KeyboardHelperDelegate {
     public func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
         // Only update the insets if the keyboard is being presented for this browser.
-        guard webView.hasFirstResponder else { return }
+        guard let webView = webView, webView.hasFirstResponder else { return }
 
         // When an input field is focused, the web view adds 44 to the bottom inset to make room for the bottom
         // input bar. Since this bar overlaps the browser toolbar, we don't need the additional bottom inset,
@@ -231,6 +241,8 @@ extension Browser: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {}
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {
+        guard let webView = webView else { return }
+
         // As mentioned above, the webview adds 44 to the bottom inset during input. When the keyboard is hidden,
         // the web view will then remove 44 from the inset to restore the original state. Since we already removed
         // the extra inset above, reset it here to prevent it from being removed again.
