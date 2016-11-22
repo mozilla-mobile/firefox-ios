@@ -260,22 +260,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         var url: String?
         var isPrivate: Bool = false
+        var fxaParams: [String: String] = [
+            "view" : "",
+            "email" : "",
+            "code" : ""
+        ]
         for item in (components.queryItems ?? []) as [NSURLQueryItem] {
             switch item.name {
             case "url":
                 url = item.value
             case "private":
                 isPrivate = NSString(string: item.value ?? "false").boolValue
+            case "fxa":
+                fxaParams["view"] = item.value;
+            case "email":
+                fxaParams["email"] = item.value;
+            case "access_code":
+                fxaParams["access_code"] = item.value;
             default: ()
             }
         }
-
+        
         let params: LaunchParams
 
         if let url = url, newURL = NSURL(string: url) {
-            params = LaunchParams(url: newURL, isPrivate: isPrivate)
+            params = LaunchParams(url: newURL, isPrivate: isPrivate, fxaParams: nil)
+        } else if((fxaParams["view"]) != ""){
+            params = LaunchParams(url: nil, isPrivate: nil, fxaParams: fxaParams)
         } else {
-            params = LaunchParams(url: nil, isPrivate: isPrivate)
+            params = LaunchParams(url: nil, isPrivate: isPrivate, fxaParams: nil)
         }
 
         if application.applicationState == .Active {
@@ -291,8 +304,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func launchFromURL(params: LaunchParams) {
         let isPrivate = params.isPrivate ?? false
+        let fxaParams = params.fxaParams ?? nil
+        let fxaView = fxaParams?["view"]
+        
         if let newURL = params.url {
             self.browserViewController.switchToTabForURLOrOpen(newURL, isPrivate: isPrivate, isPrivileged: false)
+        } else if((fxaView) != nil) {
+            self.browserViewController.presentSignInViewController((fxaParams)!);
         } else {
             self.browserViewController.openBlankNewTabAndFocus(isPrivate: isPrivate)
         }
@@ -614,4 +632,5 @@ extension AppDelegate: MFMailComposeViewControllerDelegate {
 struct LaunchParams {
     let url: NSURL?
     let isPrivate: Bool?
+    let fxaParams: NSDictionary?
 }
