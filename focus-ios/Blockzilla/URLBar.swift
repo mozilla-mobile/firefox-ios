@@ -473,7 +473,17 @@ class URLBar: UIView {
     }
 
     fileprivate func setTextToURL() {
-        urlText.text = url?.absoluteString ?? nil
+        var displayURL: String? = nil
+
+        if let url = url {
+            // Strip the username/password to prevent domain spoofing.
+            var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+            components?.user = nil
+            components?.password = nil
+            displayURL = components?.url?.absoluteString
+        }
+
+        urlText.text = displayURL
     }
 }
 
