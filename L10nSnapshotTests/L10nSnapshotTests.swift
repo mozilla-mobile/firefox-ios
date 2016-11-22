@@ -4,81 +4,7 @@
 
 import XCTest
 
-/**
- * IMPORTANT THING TO NOTE WHEN WRITING TESTS IN THIS CLASS:
- * Does your test run in more than 1 language?
- * If your test will only run successfully in 1 language then this test WILL NOT WORK
- * for the l10n snapshots as they will be run in EVERY LANGUAGE we localise for.
- * When writing your test, run against at least 2 different languages before submitting for Code Review.
- * Thank You.
- */
-class L10nSnapshotTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
-
-        // In UI tests it is usually best to stop immediately when a failure occurs.
-        continueAfterFailure = false
-
-        let app = XCUIApplication()
-        setupSnapshot(app)
-        app.launch()
-    }
-
-    func loadWebPage(url: String, waitForLoadToFinish: Bool = true) {
-        let LoadingTimeout: NSTimeInterval = 60
-        let exists = NSPredicate(format: "exists = true")
-        let loaded = NSPredicate(format: "value BEGINSWITH '100'")
-
-        let app = XCUIApplication()
-
-        UIPasteboard.generalPasteboard().string = url
-        app.textFields["url"].pressForDuration(2.0)
-        app.sheets.elementBoundByIndex(0).buttons.elementBoundByIndex(0).tap()
-
-        if waitForLoadToFinish {
-            let progressIndicator = app.progressIndicators.elementBoundByIndex(0)
-            expectationForPredicate(exists, evaluatedWithObject: progressIndicator, handler: nil)
-            expectationForPredicate(loaded, evaluatedWithObject: progressIndicator, handler: nil)
-            waitForExpectationsWithTimeout(LoadingTimeout, handler: nil)
-        }
-    }
-
-    func loadWebPage(url: String, waitForOtherElementWithAriaLabel ariaLabel: String) {
-        let app = XCUIApplication()
-        UIPasteboard.generalPasteboard().string = url
-        app.textFields["url"].pressForDuration(2.0)
-        app.sheets.elementBoundByIndex(0).buttons.elementBoundByIndex(0).tap()
-
-        sleep(3) // TODO Otherwise we detect the body in the currently loaded document, before the new page has loaded
-
-        let webView = app.webViews.elementBoundByIndex(0)
-        let element = webView.otherElements[ariaLabel]
-        expectationForPredicate(NSPredicate(format: "exists == 1"), evaluatedWithObject: element, handler: nil)
-
-        waitForExpectationsWithTimeout(5.0) { (error) -> Void in
-            if error != nil {
-                XCTFail("Failed to detect element with ariaLabel=\(ariaLabel) on \(url): \(error)")
-            }
-        }
-    }
-
-    func test01Intro() {
-        let app = XCUIApplication()
-        snapshot("01Intro-1")
-        app.scrollViews["IntroViewController.scrollView"].swipeLeft()
-        sleep(2)
-        snapshot("01Intro-2")
-        app.scrollViews["IntroViewController.scrollView"].swipeLeft()
-        sleep(2)
-        snapshot("01Intro-3")
-        app.scrollViews["IntroViewController.scrollView"].swipeLeft()
-        sleep(2)
-        snapshot("01Intro-4")
-        app.scrollViews["IntroViewController.scrollView"].swipeLeft()
-        sleep(2)
-        snapshot("01Intro-5")
-    }
-
+class L10nSnapshotTests: L10nBaseSnapshotTests {
     func test02DefaultTopSites() {
         snapshot("02DefaultTopSites-01")
     }
@@ -245,12 +171,6 @@ class L10nSnapshotTests: XCTestCase {
         snapshot("14SetHomepage-01", waitForLoadingIndicator: false)
     }
 
-    func test15LocationDialog() {
-        loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/geolocation.html", waitForOtherElementWithAriaLabel: "body")
-        snapshot("15LocationDialog-01")
-        loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/index.html", waitForOtherElementWithAriaLabel: "body")
-    }
-
     func test17PasswordSnackbar() {
         let app = XCUIApplication()
         loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/password.html", waitForOtherElementWithAriaLabel: "body")
@@ -261,18 +181,5 @@ class L10nSnapshotTests: XCTestCase {
         loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/password.html", waitForOtherElementWithAriaLabel: "body")
         app.webViews.elementBoundByIndex(0).buttons["submit"].tap()
         snapshot("17PasswordSnackbar-02")
-    }
-}
-
-extension XCUIElement {
-    func scrollToElement(element: XCUIElement) {
-        while !element.visible() {
-            swipeUp()
-        }
-    }
-    
-    func visible() -> Bool {
-        guard self.exists && !CGRectIsEmpty(self.frame) else { return false }
-        return CGRectContainsRect(XCUIApplication().windows.elementBoundByIndex(0).frame, self.frame)
     }
 }
