@@ -14,6 +14,12 @@ class WebCacheUtils {
             FileManager.default.removeItemAndContents(path: cachesPath)
         }
 
+        // Delete other cookies, such as .binarycookies files.
+        if let libraryPath = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true).first {
+            let cookiesPath = (libraryPath as NSString).appendingPathComponent("Cookies")
+            FileManager.default.removeItemAndContents(path: cookiesPath)
+        }
+
         // Remove the in-memory history that WebKit maintains.
         if let clazz = NSClassFromString("Web" + "History") as? NSObjectProtocol {
             if clazz.responds(to: Selector(("optional" + "Shared" + "History"))) {
