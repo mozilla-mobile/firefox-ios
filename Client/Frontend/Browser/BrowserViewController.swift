@@ -1543,17 +1543,16 @@ extension BrowserViewController: URLBarDelegate {
     func urlBar(urlBar: URLBarView, didSubmitText text: String) {
         let trimmedText = text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
         
-        guard trimmedText.contains(" ") else {
+        guard let possibleKeywordQuerySeparatorSpace = trimmedText.characters.indexOf(" ") else {
             submitText(text)
             return
         }
 
-        let possibleKeywordQuerySeparatorSpace = trimmedText.characters.indexOf(" ")!
         let possibleKeyword = trimmedText.substringToIndex(possibleKeywordQuerySeparatorSpace)
         let possibleQuery = trimmedText.substringFromIndex(possibleKeywordQuerySeparatorSpace.successor())
         
-        profile.bookmarks.getURLForKeywordSearch(possibleKeyword).uponQueue(dispatch_get_main_queue()) {
-                if let urlString = $0.successValue {
+        profile.bookmarks.getURLForKeywordSearch(possibleKeyword).uponQueue(dispatch_get_main_queue()) { result in
+                if let urlString = result.successValue {
                     let engine = self.profile.searchEngines.defaultEngine
 
                     guard let url = engine.searchURLForQuery(possibleQuery, searchTemplate: urlString) else {
