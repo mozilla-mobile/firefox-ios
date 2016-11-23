@@ -68,6 +68,7 @@ class ActivityStreamPanel: UITableViewController, HomePanel {
         tableView.registerClass(AlternateSimpleHighlightCell.self, forCellReuseIdentifier: "HistoryCell")
         tableView.registerClass(ASHorizontalScrollCell.self, forCellReuseIdentifier: "TopSiteCell")
         tableView.backgroundColor = ASPanelUX.backgroundColor
+        tableView.keyboardDismissMode = .OnDrag
         tableView.separatorStyle = .None
         tableView.delegate = self
         tableView.dataSource = self
