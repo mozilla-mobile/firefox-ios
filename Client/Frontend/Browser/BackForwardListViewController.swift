@@ -7,20 +7,14 @@ import WebKit
 import Storage
 import SnapKit
 
+struct BackForwardViewUX {
+    static let RowHeight = 50
+    static let BackgroundColor = UIColor(colorLiteralRed: 1, green: 1, blue: 1, alpha: 0.4)
+    static let BackgroundColorPrivate = UIColor(colorLiteralRed: 0.5, green: 0.5, blue: 0.5, alpha: 0.4)
+}
+
 class BackForwardListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate {
-    
-    enum BackForwardType {
-        case Forward
-        case Current
-        case Backward
-    }
-    
-    struct BackForwardViewUX {
-        static let RowHeight = 50
-        static let BackgroundColor = UIColor(colorLiteralRed: 1, green: 1, blue: 1, alpha: 0.4)
-        static let BackgroundColorPrivate = UIColor(colorLiteralRed: 0.5, green: 0.5, blue: 0.5, alpha: 0.4)
-    }
-    
+
     private let BackForwardListCellIdentifier = "BackForwardListViewController"
     private var profile: Profile
     private lazy var sites = [String: Site]()
@@ -52,8 +46,9 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     
     var tabManager: TabManager!
     weak var bvc: BrowserViewController?
-    var listData = [(item:WKBackForwardListItem, type:BackForwardType)]()
-    
+    var currentItem: WKBackForwardListItem?
+    var listData = [WKBackForwardListItem]()
+
     var tableHeight: CGFloat {
         get {
             assert(NSThread.isMainThread(), "tableHeight interacts with UIKit components - cannot call from background thread.")
@@ -75,39 +70,51 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         super.init(nibName: nil, bundle: nil)
         
         loadSites(backForwardList)
+        loadSitesFromProfile()
     }
-    
-    func loadSites(backForwardList: WKBackForwardList) {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.addSubview(shadow)
+        view.addSubview(tableView)
+        self.snappedToBottom = self.bvc?.toolbar != nil
+        tableView.snp_makeConstraints { make in
+            make.height.equalTo(0)
+            make.left.right.equalTo(self.view)
+        }
+        shadow.snp_makeConstraints { make in
+            make.left.right.equalTo(self.view)
+        }
+        remakeVerticalConstraints()
+        view.layoutIfNeeded()
+        scrollTableViewToIndex(currentRow)
+        setupDismissTap()
+    }
+
+    func loadSitesFromProfile() {
         let sql = profile.favicons as! SQLiteHistory
-        var urls: [String] = [String]()
-        
-        for page in backForwardList.forwardList.reverse() {
-            urls.append(page.URL.absoluteString!)
-            listData.append((page, .Forward))
-        }
-        
-        if let currentPage = backForwardList.currentItem {
-            currentRow = listData.count
-            urls.append(currentPage.URL.absoluteString!)
-            listData.append((currentPage, .Current))
-        }
-        for page in backForwardList.backList.reverse() {
-            urls.append(page.URL.absoluteString!)
-            listData.append((page, .Backward))
-        }
-        
-        listData = listData.filter { !(($0.item.title ?? "").isEmpty && $0.item.URL.baseDomain()?.contains("localhost") ?? false)}
-        
+        let urls = self.listData.flatMap {$0.URL.isLocal ? $0.URL.getQuery()["url"]?.unescape() : $0.URL.absoluteString}
+
         sql.getSitesForURLs(urls).uponQueue(dispatch_get_main_queue()) { result in
-            if let cursor = result.successValue {
-                for cursorSite in cursor {
-                    if let site = cursorSite, let url = site?.url {
-                        self.sites[url] = site
-                    }
-                }
-                self.tableView.reloadData()
+            guard let results = result.successValue else {
+                return
             }
+            // Add all results into the sites dictionary
+            results.flatMap({$0}).forEach({site in
+                if let url = site?.url {
+                    self.sites[url] = site
+                }
+            })
+            self.tableView.reloadData()
         }
+    }
+
+    func loadSites(bfList: WKBackForwardList) {
+        let items = bfList.forwardList.reverse() + [bfList.currentItem].flatMap({$0}) + bfList.backList.reverse()
+        self.currentItem = bfList.currentItem
+
+        //error url's are OK as they are used to populate history on session restore.
+        listData = items.filter({ return !($0.URL.isLocal && $0.URL.path != "/errors/error.html")})
     }
     
     func scrollTableViewToIndex(index: Int) {
@@ -180,25 +187,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
             }
         }
     }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.addSubview(shadow)
-        view.addSubview(tableView)
-        self.snappedToBottom = self.bvc?.toolbar != nil 
-        tableView.snp_makeConstraints { make in
-            make.height.equalTo(0)
-            make.left.right.equalTo(self.view)
-        }
-        shadow.snp_makeConstraints { make in
-            make.left.right.equalTo(self.view)
-        }
-        remakeVerticalConstraints()
-        view.layoutIfNeeded()
-        scrollTableViewToIndex(currentRow)
-        setupDismissTap()
-    }
-    
+
     func setupDismissTap() {
         let tap = UITapGestureRecognizer(target: self, action: #selector(BackForwardListViewController.handleTap))
         tap.cancelsTouchesInView = false
@@ -222,24 +211,27 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     }
     
     // MARK: - Table view
-    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return listData.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
        let cell = self.tableView.dequeueReusableCellWithIdentifier(BackForwardListCellIdentifier, forIndexPath: indexPath) as! BackForwardTableViewCell
-        let item = listData[indexPath.item].item
-        
-        if let site = sites[item.URL.absoluteString!] {
+        let item = listData[indexPath.item]
+        let urlString = item.URL.isLocal ? item.URL.getQuery()["url"]?.unescape() : item.URL.absoluteString
+        guard let url = urlString else {
+            return cell // This should never happen.
+        }
+
+        if let site = sites[url] {
             cell.site = site
         } else {
-            cell.site = Site(url: item.initialURL.absoluteString!, title: item.title ?? "")
+            cell.site = Site(url: url, title: item.title ?? "")
         }
         
-        cell.isCurrentTab = (listData[indexPath.item].type == .Current)
-        cell.connectingBackwards = (indexPath.item != listData.count-1)
-        cell.connectingForwards = (indexPath.item != 0)
+        cell.isCurrentTab = listData[indexPath.item] == self.currentItem
+        cell.connectingBackwards = indexPath.item != listData.count-1
+        cell.connectingForwards = indexPath.item != 0
         cell.isPrivate = isPrivate
         
         cell.setNeedsDisplay()
@@ -248,7 +240,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     }
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tabManager.selectedTab?.goToBackForwardListItem(listData[indexPath.item].item)
+        tabManager.selectedTab?.goToBackForwardListItem(listData[indexPath.item])
         dismissViewControllerAnimated(true, completion: nil)
     }
     

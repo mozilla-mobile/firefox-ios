@@ -17,10 +17,6 @@
    */
   (function () {
       function getRestoreURL(url) {
-          // If the URL is already an internally hosted page, we can restore it directly.
-          if (url.indexOf(document.location.origin) === 0) {
-              return url;
-          }
           // Otherwise, push an error page to trigger a redirect when loaded.
           return '/errors/error.html?url=' + escape(url);
       }
