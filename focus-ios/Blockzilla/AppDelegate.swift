@@ -97,7 +97,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
-        splashView?.animateHidden(false, duration: 0.25)
+        splashView?.animateHidden(false, duration: 0)
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
