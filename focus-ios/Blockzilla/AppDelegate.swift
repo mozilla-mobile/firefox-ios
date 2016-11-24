@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // immediately so that no data is collected or sent.
         AdjustIntegration.applicationDidFinishLaunching()
         if !Settings.getToggle(.sendAnonymousUsageData) {
-            AdjustIntegration.disable()
+            AdjustIntegration.enabled = false
         }
 
         // Disable localStorage.

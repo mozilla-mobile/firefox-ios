@@ -265,6 +265,12 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             LocalContentBlocker.reload()
         }
 
+        // First check if the user changed the anonymous usage data setting and follow that choice right
+        // here. Otherwise it will be delayed until the application restarts.
+        if toggle.setting == .sendAnonymousUsageData {
+            AdjustIntegration.enabled = sender.isOn
+        }
+
         switch toggle.setting {
         case .safari where sender.isOn && !isSafariEnabled:
             let instructionsViewController = SafariInstructionsViewController()

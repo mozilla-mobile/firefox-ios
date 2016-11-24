@@ -79,8 +79,13 @@ class AdjustIntegration {
         }
     }
 
-    public static func disable() {
-        Adjust.setEnabled(false)
+    public static var enabled: Bool {
+        get {
+            return Adjust.isEnabled()
+        }
+        set {
+            Adjust.setEnabled(newValue)
+        }
     }
 
     public static func track(eventName: AdjustEventName) {
