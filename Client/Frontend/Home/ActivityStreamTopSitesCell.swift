@@ -174,7 +174,7 @@ class ASHorizontalScrollCell: UITableViewCell {
         layout.itemSize = ASHorizontalScrollCellUX.TopSiteItemSize
         let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         collectionView.registerClass(TopSiteItemCell.self, forCellWithReuseIdentifier: ASHorizontalScrollCellUX.TopSiteCellIdentifier)
-        collectionView.backgroundColor = UIColor.clearColor()
+        collectionView.backgroundColor = ASHorizontalScrollCellUX.BackgroundColor
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.isAccessibilityElement = false
         collectionView.pagingEnabled = true
@@ -225,7 +225,7 @@ class ASHorizontalScrollCell: UITableViewCell {
 
         isAccessibilityElement = false
         accessibilityIdentifier = "TopSitesCell"
-        backgroundColor = UIColor.clearColor()
+        backgroundColor = ASHorizontalScrollCellUX.BackgroundColor
         contentView.addSubview(collectionView)
         contentView.addSubview(pageControl)
         self.selectionStyle = UITableViewCellSelectionStyle.None
@@ -246,10 +246,6 @@ class ASHorizontalScrollCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         let layout = collectionView.collectionViewLayout as! HorizontalFlowLayout
-
-        if gradientBG.superlayer == nil {
-            self.contentView.layer.insertSublayer(gradientBG, atIndex: 0)
-        }
 
         pageControl.pageCount = layout.numberOfPages()
         pageControl.hidden = pageControl.pageCount <= 1
