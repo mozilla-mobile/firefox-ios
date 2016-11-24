@@ -54,5 +54,6 @@
 	<string>This lets you take and upload photos.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This lets you take and upload videos.</string>
+        <key>ITSAppUsesNonExemptEncryption</key><false/>
 </dict>
 </plist>
