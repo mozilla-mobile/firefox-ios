@@ -154,7 +154,7 @@ private class AboutHeaderView: UIView {
         addSubview(aboutParagraph)
 
         let learnMoreButton = UIButton()
-        learnMoreButton.setTitle("Learn more", for: .normal)
+        learnMoreButton.setTitle(UIConstants.strings.aboutLearnMoreButton, for: .normal)
         learnMoreButton.setTitleColor(UIConstants.colors.focusBlue, for: .normal)
         learnMoreButton.setTitleColor(UIConstants.colors.buttonHighlight, for: .highlighted)
         learnMoreButton.titleLabel?.font = UIConstants.fonts.aboutText

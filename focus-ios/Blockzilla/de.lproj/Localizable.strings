@@ -1,3 +1,7 @@
+/* Button on About screen */
+
+"About.learnMoreButton" = "Mehr erfahren";
+
 /* Label on About screen */
 "About.missionLabel" = "%@ wird von Mozilla entwickelt. Wir setzen uns für ein gesundes, offenes Internet ein.";
 
