@@ -98,6 +98,9 @@
 		E4BF2E111BAD8AC500DA9D68 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF2E101BAD8AC500DA9D68 /* Settings.swift */; };
 		E4BF2E121BAD8AC500DA9D68 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF2E101BAD8AC500DA9D68 /* Settings.swift */; };
 		F805722F1DBEE504004339C1 /* WebCacheUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F805722E1DBEE504004339C1 /* WebCacheUtils.swift */; };
+		F84AFE751DE77FE6005C4DD1 /* LaunchScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = F84AFE721DE77FE6005C4DD1 /* LaunchScreen.png */; };
+		F84AFE761DE77FE6005C4DD1 /* LaunchScreen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F84AFE731DE77FE6005C4DD1 /* LaunchScreen@2x.png */; };
+		F84AFE771DE77FE6005C4DD1 /* LaunchScreen@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = F84AFE741DE77FE6005C4DD1 /* LaunchScreen@3x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -239,6 +242,9 @@
 		E4BF2E101BAD8AC500DA9D68 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Settings.swift; path = Shared/Settings.swift; sourceTree = SOURCE_ROOT; };
 		F4C4943B406FCA9B74B4E186 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		F805722E1DBEE504004339C1 /* WebCacheUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebCacheUtils.swift; sourceTree = "<group>"; };
+		F84AFE721DE77FE6005C4DD1 /* LaunchScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LaunchScreen.png; sourceTree = "<group>"; };
+		F84AFE731DE77FE6005C4DD1 /* LaunchScreen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LaunchScreen@2x.png"; sourceTree = "<group>"; };
+		F84AFE741DE77FE6005C4DD1 /* LaunchScreen@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LaunchScreen@3x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -450,6 +456,9 @@
 				F805722E1DBEE504004339C1 /* WebCacheUtils.swift */,
 				D3426AEE1DB846BB0016DA5A /* topdomains.txt */,
 				E4BF2DDD1BACE8CA00DA9D68 /* Assets.xcassets */,
+				F84AFE721DE77FE6005C4DD1 /* LaunchScreen.png */,
+				F84AFE731DE77FE6005C4DD1 /* LaunchScreen@2x.png */,
+				F84AFE741DE77FE6005C4DD1 /* LaunchScreen@3x.png */,
 				E40AFC761DDDE96D00DA5651 /* InfoPlist.strings */,
 				D343DCC41C44356500D7EEE8 /* Localizable.strings */,
 				D3BFCB3D1BD14F4E00AD22D1 /* LocalWebServer */,
@@ -493,12 +502,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E4BF2DE51BACE8CA00DA9D68 /* Build configuration list for PBXNativeTarget "Blockzilla" */;
 			buildPhases = (
+				F84AFE711DE77ACC005C4DD1 /* Run Script (Copy Wordmark) */,
 				E4BF2DCF1BACE8CA00DA9D68 /* Sources */,
 				E4BF2DD01BACE8CA00DA9D68 /* Frameworks */,
 				E4BF2DD11BACE8CA00DA9D68 /* Resources */,
 				E4BF2DF91BACE92400DA9D68 /* Embed App Extensions */,
 				D39288751BC5D1BF0016A9A0 /* Copy Frameworks */,
-				D38D693F1C471AC7003EF211 /* ShellScript */,
+				D38D693F1C471AC7003EF211 /* Run Script (Carthage) */,
 			);
 			buildRules = (
 			);
@@ -607,7 +617,9 @@
 				D3C047BD1DCBD8ED00402FFB /* SearchEngines.plist in Resources */,
 				D3E2C8FE1D9F17AC00DEBE3D /* disconnect-social.json in Resources */,
 				D3B3232D1BD16A0F00B0EEE4 /* gpl.html in Resources */,
+				F84AFE751DE77FE6005C4DD1 /* LaunchScreen.png in Resources */,
 				D3DA778C1DC2C60E009C114E /* errorPage.html in Resources */,
+				F84AFE761DE77FE6005C4DD1 /* LaunchScreen@2x.png in Resources */,
 				E47F9AEA1DB9329D00A93285 /* Adjust-Focus.plist in Resources */,
 				D38EDB961DCA8A9400E28196 /* LaunchScreen.storyboard in Resources */,
 				E40AFC741DDDE96D00DA5651 /* InfoPlist.strings in Resources */,
@@ -619,6 +631,7 @@
 				D3BFCB5B1BD15CD000AD22D1 /* rights-klar.html in Resources */,
 				E47F9AEC1DB9333200A93285 /* Adjust-Klar.plist in Resources */,
 				D3426AEF1DB846BB0016DA5A /* topdomains.txt in Resources */,
+				F84AFE771DE77FE6005C4DD1 /* LaunchScreen@3x.png in Resources */,
 				D3E2C8FF1D9F17AC00DEBE3D /* web-fonts.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -640,7 +653,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		D38D693F1C471AC7003EF211 /* ShellScript */ = {
+		D38D693F1C471AC7003EF211 /* Run Script (Carthage) */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -650,11 +663,26 @@
 				"$(SRCROOT)/Carthage/Build/iOS/GCDWebServers.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/AdjustSdk.framework",
 			);
+			name = "Run Script (Carthage)";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+		F84AFE711DE77ACC005C4DD1 /* Run Script (Copy Wordmark) */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script (Copy Wordmark)";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ \"$PRODUCT_NAME\" = \"Firefox Klar\" ]; then\n  cp -v \"$SRCROOT/Blockzilla/Assets.xcassets/img_klar_wordmark.imageset/img_klar_wordmark.png\" \\\n    \"$SRCROOT/Blockzilla/LaunchScreen.png\"\n  cp -v \"$SRCROOT/Blockzilla/Assets.xcassets/img_klar_wordmark.imageset/img_klar_wordmark@2x.png\" \\\n    \"$SRCROOT/Blockzilla/LaunchScreen@2x.png\"\n  cp -v \"$SRCROOT/Blockzilla/Assets.xcassets/img_klar_wordmark.imageset/img_klar_wordmark@3x.png\" \\\n    \"$SRCROOT/Blockzilla/LaunchScreen@3x.png\"\nelse\n  cp -v \"$SRCROOT/Blockzilla/Assets.xcassets/img_focus_wordmark.imageset/img_focus_wordmark.png\" \\\n    \"$SRCROOT/Blockzilla/LaunchScreen.png\"\n  cp -v \"$SRCROOT/Blockzilla/Assets.xcassets/img_focus_wordmark.imageset/img_focus_wordmark@2x.png\" \\\n    \"$SRCROOT/Blockzilla/LaunchScreen@2x.png\"\n  cp -v \"$SRCROOT/Blockzilla/Assets.xcassets/img_focus_wordmark.imageset/img_focus_wordmark@3x.png\" \\\n    \"$SRCROOT/Blockzilla/LaunchScreen@3x.png\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
