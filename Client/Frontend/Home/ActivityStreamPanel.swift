@@ -279,12 +279,12 @@ extension ActivityStreamPanel {
 
             // Merge default topsites with a user's topsites.
             let mergedSites = mySites.union(defaultSites, f: { (site) -> String in
-                return NSURL(string: site.url)?.extractDomainName() ?? ""
+                return NSURL(string: site.url)?.hostSLD ?? ""
             })
 
             // Favour topsites from defaultSites as they have better favicons.
             let newSites = mergedSites.map { site -> Site in
-                let domain = NSURL(string: site.url)?.extractDomainName() ?? ""
+                let domain = NSURL(string: site.url)?.hostSLD ?? ""
                 return defaultSites.find { $0.title.lowercaseString == domain } ?? site
             }
 
