@@ -24,6 +24,22 @@ class BaseTestCase: XCTestCase {
         app.launch()
         sleep(1)
     }
+    
+    //If it is a first run, first run window should be gone
+    func dismissFirstRunUI() {
+        let firstRunUI = XCUIApplication().buttons["Start Browsing"]
+        
+        if (firstRunUI.exists) {
+            firstRunUI.tap()
+        }
+    }
+    
+    func waitforExistence(element: XCUIElement) {
+        let exists = NSPredicate(format: "exists == true")
+        
+        expectationForPredicate(exists, evaluatedWithObject: element, handler: nil)
+        waitForExpectationsWithTimeout(20, handler: nil)
+    }
 
     func loadWebPage(url: String, waitForLoadToFinish: Bool = true) {
         let loaded = NSPredicate(format: "value BEGINSWITH '100'")
@@ -35,7 +51,7 @@ class BaseTestCase: XCTestCase {
         app.sheets.elementBoundByIndex(0).buttons.elementBoundByIndex(0).tap()
 
         if waitForLoadToFinish {
-            let finishLoadingTimeout: NSTimeInterval = 10
+            let finishLoadingTimeout: NSTimeInterval = 30
             
             let progressIndicator = app.progressIndicators.elementBoundByIndex(0)
             expectationForPredicate(loaded, evaluatedWithObject: progressIndicator, handler: nil)

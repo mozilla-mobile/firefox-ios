@@ -8,6 +8,7 @@ class HomePageUITest: BaseTestCase {
 
     override func setUp() {
         super.setUp()
+        dismissFirstRunUI()
     }
 
     override func tearDown() {
