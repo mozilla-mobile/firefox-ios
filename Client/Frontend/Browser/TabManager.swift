@@ -67,6 +67,7 @@ class TabManager: NSObject {
         let configuration = WKWebViewConfiguration()
         configuration.processPool = WKProcessPool()
         configuration.preferences.javaScriptCanOpenWindowsAutomatically = !(self.prefs.boolForKey("blockPopups") ?? true)
+        configuration.allowsInlineMediaPlayback = true
         return configuration
     }()
 
@@ -76,6 +77,7 @@ class TabManager: NSObject {
         configuration.processPool = WKProcessPool()
         configuration.preferences.javaScriptCanOpenWindowsAutomatically = !(self.prefs.boolForKey("blockPopups") ?? true)
         configuration.websiteDataStore = WKWebsiteDataStore.nonPersistentDataStore()
+        configuration.allowsInlineMediaPlayback = true
         return configuration
     }()
 
