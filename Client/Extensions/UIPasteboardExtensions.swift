@@ -21,5 +21,13 @@ extension UIPasteboard {
     private func imageTypeKey(isGIF: Bool) -> String {
         return (isGIF ? kUTTypeGIF : kUTTypePNG) as String
     }
-
+    
+    public var copiedURL: NSURL? {
+        if let copiedString = string,
+            url = NSURL(string: copiedString) where url.isWebPage() {
+            return url
+        } else {
+            return nil
+        }
+    }
 }
