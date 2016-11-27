@@ -326,6 +326,7 @@ class TabManager: NSObject {
                 // one of the about:home pages.
                 if let url = newTabChoice.url {
                     tab.loadRequest(PrivilegedRequest(URL: url))
+                    tab.url = url
                 }
             }
         }
@@ -671,7 +672,8 @@ extension TabManager {
 
         var tabToSelect: Tab?
         for (_, savedTab) in savedTabs.enumerate() {
-            let tab = self.addTab(flushToDisk: false, zombie: true, isPrivate: savedTab.isPrivate)
+            // Provide an empty request to prevent a new tab from loading the home screen
+            let tab = self.addTab(NSURLRequest(), configuration: nil, afterTab: nil, flushToDisk: false, zombie: true, isPrivate: savedTab.isPrivate)
 
             if let faviconURL = savedTab.faviconURL {
                 let icon = Favicon(url: faviconURL, date: NSDate(), type: IconType.NoneFound)

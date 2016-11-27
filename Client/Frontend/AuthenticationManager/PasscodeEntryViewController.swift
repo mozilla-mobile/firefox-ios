@@ -41,6 +41,16 @@ class PasscodeEntryViewController: BasePasscodeViewController {
         }
     }
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        if authenticationInfo?.isLocked() ?? false {
+            passcodePane.codeInputView.userInteractionEnabled = false
+            passcodePane.codeInputView.resignFirstResponder()
+        } else {
+             passcodePane.codeInputView.becomeFirstResponder()
+        }
+    }
+
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         self.view.endEditing(true)

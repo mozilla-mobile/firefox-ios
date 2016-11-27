@@ -45,6 +45,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
             SearchSetting(settings: self),
             NewTabPageSetting(settings: self),
             HomePageSetting(settings: self),
+            OpenWithSetting(settings: self),
             BoolSetting(prefs: prefs, prefKey: "blockPopups", defaultValue: true,
                 titleText: NSLocalizedString("Block Pop-up Windows", comment: "Block pop-up windows setting")),
             BoolSetting(prefs: prefs, prefKey: "saveLogins", defaultValue: true,
@@ -120,6 +121,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 YourRightsSetting(),
                 ExportBrowserDataSetting(settings: self),
                 DeleteExportedDataSetting(settings: self),
+                EnableBookmarkMergingSetting(settings: self)
             ])]
             
             if (profile.hasAccount()) {

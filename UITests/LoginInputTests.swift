@@ -14,12 +14,14 @@ class LoginInputTests: KIFTestCase {
         super.setUp()
         profile = (UIApplication.sharedApplication().delegate as! AppDelegate).profile!
         webRoot = SimplePageServer.start()
+        BrowserUtils.dismissFirstRunUI(tester())
     }
 
     override func tearDown() {
         super.tearDown()
-        BrowserUtils.resetToAboutHome(tester())
         clearLogins()
+        BrowserUtils.resetToAboutHome(tester())
+        BrowserUtils.clearPrivateData(tester: tester())
     }
 
     private func clearLogins() {

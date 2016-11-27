@@ -14,10 +14,11 @@ class ActionRequestHandler: NSObject, NSExtensionRequestHandling {
             (item, error) -> Void in
             if let item = item where error == nil && item.isShareable {
                 let profile = BrowserProfile(localName: "profile", app: nil)
-                profile.queue.addToQueue(item)
+                profile.queue.addToQueue(item).uponQueue(dispatch_get_main_queue()) { _ in
+                    profile.shutdown()
+                    context.completeRequestReturningItems([], completionHandler: nil)
+                }
             }
-
-            context.completeRequestReturningItems([], completionHandler: nil)
         })
     }
 }

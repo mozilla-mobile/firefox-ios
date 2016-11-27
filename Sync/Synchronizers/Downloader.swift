@@ -206,7 +206,7 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
                 }
             }
 
-            log.debug("Got success response with \(response.metadata.records) records.")
+            log.debug("Got success response with \(response.metadata.records ?? 0) records.")
 
             // Store the incoming records for collection.
             self.store(response.value)

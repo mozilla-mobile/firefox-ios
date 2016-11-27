@@ -33,11 +33,13 @@ public struct SyncCommand: Equatable {
         self.commandID = id
     }
 
-
-    public static func fromShareItem(shareItem: ShareItem, withAction action: String) -> SyncCommand {
+    /**
+     * Sent displayURI commands include the sender client GUID.
+     */
+    public static func displayURIFromShareItem(shareItem: ShareItem, asClient sender: GUID) -> SyncCommand {
         let jsonObj: [String: AnyObject] = [
-            "command": action,
-            "args": [shareItem.url, "", shareItem.title ?? ""]
+            "command": "displayURI",
+            "args": [shareItem.url, sender, shareItem.title ?? ""]
         ]
         return SyncCommand(value: JSON.stringify(jsonObj, pretty: false))
     }

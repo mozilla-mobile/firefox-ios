@@ -9,9 +9,11 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
     private var webRoot: String!
 
     override func setUp() {
+        super.setUp()
         // We undo the localhost/127.0.0.1 switch in order to get 'localhost' in accessibility labels.
         webRoot = SimplePageServer.start()
-                                  .stringByReplacingOccurrencesOfString("127.0.0.1", withString: "localhost", options: NSStringCompareOptions(), range: nil)
+            .stringByReplacingOccurrencesOfString("127.0.0.1", withString: "localhost", options: NSStringCompareOptions(), range: nil)
+        BrowserUtils.dismissFirstRunUI(tester())
     }
 
     /**
@@ -52,6 +54,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
         tester().tapViewWithAccessibilityLabel("Cancel")
     }
 
+    /*
     func testChangingDyamicFontOnReadingList() {
         // Load a page
         tester().tapViewWithAccessibilityIdentifier("url")
@@ -84,12 +87,14 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
         tester().waitForWebViewElementWithAccessibilityLabel("Readable page")
         tester().tapViewWithAccessibilityLabel("Remove from Reading List")
     }
+ */
 
     func testReadingListAutoMarkAsRead() {
         // Load a page
         tester().tapViewWithAccessibilityIdentifier("url")
         let url1 = "\(webRoot)/readablePage.html"
-        tester().clearTextFromAndThenEnterText("\(url1)\n", intoViewWithAccessibilityLabel: "Address and Search")
+        //tester().clearTextFromAndThenEnterText("\(url1)\n", intoViewWithAccessibilityLabel: "Address and Search")
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url1)\n")
         tester().waitForWebViewElementWithAccessibilityLabel("Readable Page")
 
         // Add it to the reading list
@@ -116,7 +121,8 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
     }
 
     override func tearDown() {
-        DynamicFontUtils.restoreDynamicFontSize(tester())
-        BrowserUtils.clearHistoryItems(tester(), numberOfTests: 5)
+        //DynamicFontUtils.restoreDynamicFontSize(tester())
+        BrowserUtils.resetToAboutHome(tester())
+        BrowserUtils.clearPrivateData(tester: tester())
     }
 }

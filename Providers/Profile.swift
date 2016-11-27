@@ -143,6 +143,7 @@ protocol Profile: class {
     var searchEngines: SearchEngines { get }
     var files: FileAccessor { get }
     var history: protocol<BrowserHistory, SyncableHistory, ResettableSyncStorage> { get }
+    var metadata: Metadata { get }
     var recommendations: HistoryRecommendations { get }
     var favicons: Favicons { get }
     var readingList: ReadingListService? { get }
@@ -150,6 +151,8 @@ protocol Profile: class {
     var certStore: CertStore { get }
     var recentlyClosedTabs: ClosedTabsStore { get }
 
+    var isShutdown: Bool { get }
+    
     func shutdown()
     func reopen()
 
@@ -186,6 +189,7 @@ protocol Profile: class {
 public class BrowserProfile: Profile {
     private let name: String
     private let keychain: KeychainWrapper
+    var isShutdown = false
 
     internal let files: FileAccessor
 
@@ -206,13 +210,8 @@ public class BrowserProfile: Profile {
         self.files = ProfileFileAccessor(localName: localName)
         self.app = app
 
-        if let baseBundleIdentifier = AppInfo.baseBundleIdentifier() {
-            self.keychain = KeychainWrapper(serviceName: baseBundleIdentifier)
-        } else {
-            log.error("Unable to get the base bundle identifier. Keychain data will not be shared.")
-            self.keychain = KeychainWrapper.defaultKeychainWrapper()
-        }
-        
+        self.keychain = KeychainWrapper.sharedAppContainerKeychain
+
         if clear {
             do {
                 try NSFileManager.defaultManager().removeItemAtPath(self.files.rootPath as String)
@@ -268,7 +267,8 @@ public class BrowserProfile: Profile {
 
     func reopen() {
         log.debug("Reopening profile.")
-
+        isShutdown = false
+        
         if dbCreated {
             db.reopenIfClosed()
         }
@@ -280,6 +280,7 @@ public class BrowserProfile: Profile {
 
     func shutdown() {
         log.debug("Shutting down profile.")
+        isShutdown = true
 
         if self.dbCreated {
             db.forceClose()
@@ -318,24 +319,15 @@ public class BrowserProfile: Profile {
             return
         }
 
-        if let metadata = metadataFromNotification(notification) {
-            // TODO: Store metadata content into database.
-        }
-    }
-
-    private func metadataFromNotification(notification: NSNotification) -> PageMetadata? {
-        guard let url = notification.userInfo?["metadata_url"] as? NSURL else {
-            return nil
+        guard let metadataDict = notification.userInfo?["metadata"] as? [String: AnyObject],
+              let pageURL = (metadataDict["url"] as? String)?.asURL,
+              let pageMetadata = PageMetadata.fromDictionary(metadataDict) else {
+            log.debug("Metadata notification doesn't contain any metadata!")
+            return
         }
 
-        return PageMetadata(
-            url: url,
-            title: notification.userInfo?["metadata_title"] as? String,
-            description: notification.userInfo?["metadata_description"] as? String,
-            imageURL: notification.userInfo?["metadata_image_url"] as? NSURL,
-            type: notification.userInfo?["metadata_type"] as? String,
-            iconURL: notification.userInfo?["metadata_icon_url"] as? NSURL
-        )
+        let defaultMetadataTTL: UInt64 = 3 * 24 * 60 * 60 * 1000 // 3 days for the metadata to live
+        self.metadata.storeMetadata(pageMetadata, forPageURL: pageURL, expireAt: defaultMetadataTTL + NSDate.now())
     }
 
     // These selectors run on which ever thread sent the notifications (not the main thread)
@@ -390,7 +382,7 @@ public class BrowserProfile: Profile {
      * that this is initialized first.
      */
     private lazy var places: protocol<BrowserHistory, Favicons, SyncableHistory, ResettableSyncStorage, HistoryRecommendations> = {
-        return SQLiteHistory(db: self.db, prefs: self.prefs)!
+        return SQLiteHistory(db: self.db, prefs: self.prefs)
     }()
 
     var favicons: Favicons {
@@ -400,6 +392,10 @@ public class BrowserProfile: Profile {
     var history: protocol<BrowserHistory, SyncableHistory, ResettableSyncStorage> {
         return self.places
     }
+
+    lazy var metadata: Metadata = {
+        return SQLiteMetadata(db: self.db)
+    }()
 
     var recommendations: HistoryRecommendations {
         return self.places
@@ -476,8 +472,9 @@ public class BrowserProfile: Profile {
     }
 
     public func sendItems(items: [ShareItem], toClients clients: [RemoteClient]) {
+        let id = DeviceInfo.clientIdentifier(self.prefs)
         let commands = items.map { item in
-            SyncCommand.fromShareItem(item, withAction: "displayURI")
+            SyncCommand.displayURIFromShareItem(item, asClient: id)
         }
         self.remoteClientsAndTabs.insertCommands(commands, forClients: clients) >>> { self.syncManager.syncClients() }
     }
@@ -1281,8 +1278,8 @@ public class BrowserProfile: Profile {
         func greenLight() -> () -> Bool {
             let start = NSDate.now()
 
-            // Give it one minute to run before we stop.
-            let stopBy = start + OneMinuteInMilliseconds
+            // Give it two minutes to run before we stop.
+            let stopBy = start + (2 * OneMinuteInMilliseconds)
             log.debug("Checking green light. Backgrounded: \(self.backgrounded).")
             return {
                 NSDate.now() < stopBy &&

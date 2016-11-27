@@ -52,10 +52,13 @@ class BrowserViewController: UIViewController {
     private var findInPageBar: FindInPageBar?
     private let findInPageContainer = UIView()
 
+    private lazy var mailtoLinkHandler: MailtoLinkHandler = MailtoLinkHandler()
+
     lazy private var customSearchEngineButton: UIButton = {
         let searchButton = UIButton()
         searchButton.setImage(UIImage(named: "AddSearch")?.imageWithRenderingMode(.AlwaysTemplate), forState: .Normal)
         searchButton.addTarget(self, action: #selector(BrowserViewController.addCustomSearchEngineForFocusedElement), forControlEvents: .TouchUpInside)
+        searchButton.accessibilityIdentifier = "BrowserViewController.customSearchEngineButton"
         return searchButton
     }()
 
@@ -133,14 +136,15 @@ class BrowserViewController: UIViewController {
             self.displayedPopoverController = nil
         }
 
-        guard let displayedPopoverController = self.displayedPopoverController else {
-            return
-        }
-
-        coordinator.animateAlongsideTransition(nil) { context in
-            self.updateDisplayedPopoverProperties?()
-            self.presentViewController(displayedPopoverController, animated: true, completion: nil)
-        }
+        coordinator.animateAlongsideTransition({context in
+            self.scrollController.updateMinimumZoom()
+            if let popover = self.displayedPopoverController {
+                self.updateDisplayedPopoverProperties?()
+                self.presentViewController(popover, animated: true, completion: nil)
+            }
+            }, completion: { _ in
+                self.scrollController.setMinimumZoom()
+        })
     }
 
     override func didReceiveMemoryWarning() {
@@ -266,24 +270,15 @@ class BrowserViewController: UIViewController {
         }
 
         displayedPopoverController?.dismissViewControllerAnimated(true, completion: nil)
-
-        // WKWebView looks like it has a bug where it doesn't invalidate it's visible area when the user
-        // performs a device rotation. Since scrolling calls
-        // _updateVisibleContentRects (https://github.com/WebKit/webkit/blob/master/Source/WebKit2/UIProcess/API/Cocoa/WKWebView.mm#L1430)
-        // this method nudges the web view's scroll view by a single pixel to force it to invalidate.
-        if let scrollView = self.tabManager.selectedTab?.webView?.scrollView {
-            let contentOffset = scrollView.contentOffset
-            coordinator.animateAlongsideTransition({ context in
-                scrollView.setContentOffset(CGPoint(x: contentOffset.x, y: contentOffset.y + 1), animated: true)
-                self.scrollController.showToolbars(animated: false)
-            }, completion: { context in
-                scrollView.setContentOffset(CGPoint(x: contentOffset.x, y: contentOffset.y), animated: false)
-            })
-        }
+        coordinator.animateAlongsideTransition({ context in
+            self.scrollController.showToolbars(animated: false)
+            }, completion: nil)
     }
 
     func SELappDidEnterBackgroundNotification() {
-        displayedPopoverController?.dismissViewControllerAnimated(false, completion: nil)
+        displayedPopoverController?.dismissViewControllerAnimated(false) {
+            self.displayedPopoverController = nil
+        }
     }
 
     func SELtappedTopArea() {
@@ -291,6 +286,11 @@ class BrowserViewController: UIViewController {
     }
 
     func SELappWillResignActiveNotification() {
+        // Dismiss any popovers that might be visible
+        displayedPopoverController?.dismissViewControllerAnimated(false) {
+            self.displayedPopoverController = nil
+        }
+
         // If we are displying a private tab, hide any elements in the tab that we wouldn't want shown
         // when the app is in the home switcher
         guard let privateTab = tabManager.selectedTab where privateTab.isPrivate else {
@@ -419,6 +419,7 @@ class BrowserViewController: UIViewController {
         scrollController.header = header
         scrollController.footer = footer
         scrollController.snackBars = snackBars
+        scrollController.webViewContainerToolbar = webViewContainerToolbar
 
         log.debug("BVC updating toolbar state…")
         self.updateToolbarStateForTraitCollection(self.traitCollection)
@@ -615,6 +616,7 @@ class BrowserViewController: UIViewController {
     func resetBrowserChrome() {
         // animate and reset transform for tab chrome
         urlBar.updateAlphaForSubviews(1)
+        footer.alpha = 1
 
         [header,
             footer,
@@ -933,7 +935,7 @@ class BrowserViewController: UIViewController {
             if tab.url?.origin == webView.URL?.origin {
                 tab.url = webView.URL
 
-                if tab === tabManager.selectedTab {
+                if tab === tabManager.selectedTab && !tab.restoring {
                     updateUIForReaderHomeStateForTab(tab)
                 }
             }
@@ -1094,7 +1096,7 @@ class BrowserViewController: UIViewController {
 
         let helper = ShareExtensionHelper(url: url, tab: tab, activities: activities)
 
-        let controller = helper.createActivityViewController({ [unowned self] completed in
+        let controller = helper.createActivityViewController({ [unowned self] completed, _ in
             // After dismissing, check to see if there were any prompts we queued up
             self.showQueuedAlertIfAvailable()
 
@@ -1344,7 +1346,8 @@ extension BrowserViewController: MenuActionDelegate {
             case .SharePage:
                 guard let url = tabManager.selectedTab?.url else { break }
                 let sourceView = self.navigationToolbar.menuButton
-                presentActivityViewController(url, sourceView: sourceView.superview, sourceRect: sourceView.frame, arrowDirection: .Up)
+                let tab = tabManager.selectedTab
+                presentActivityViewController(url, tab: tab, sourceView: sourceView.superview, sourceRect: sourceView.frame, arrowDirection: .Up)
             default: break
             }
         }
@@ -1702,6 +1705,12 @@ extension BrowserViewController: MenuViewControllerDelegate {
             return false
         }
 
+        // Dismiss the menu if we are going into the background.
+        let state = UIApplication.sharedApplication().applicationState
+        if state != .Active {
+            return true
+        }
+
         func orientationForSize(size: CGSize) -> UIInterfaceOrientation {
             return size.height < size.width ? .LandscapeLeft : .Portrait
         }
@@ -1761,6 +1770,10 @@ extension BrowserViewController: TabDelegate {
         let windowCloseHelper = WindowCloseHelper(tab: tab)
         windowCloseHelper.delegate = self
         tab.addHelper(windowCloseHelper, name: WindowCloseHelper.name())
+
+        let sessionRestoreHelper = SessionRestoreHelper(tab: tab)
+        sessionRestoreHelper.delegate = self
+        tab.addHelper(sessionRestoreHelper, name: SessionRestoreHelper.name())
 
         let findInPageHelper = FindInPageHelper(tab: tab)
         findInPageHelper.delegate = self
@@ -1952,6 +1965,10 @@ extension BrowserViewController: HomePanelViewControllerDelegate {
 
     func homePanelViewControllerDidRequestToSignIn(homePanelViewController: HomePanelViewController) {
         presentSignInViewController() // TODO UX Right now the flow for sign in and create account is the same
+    }
+    
+    func homePanelViewControllerDidRequestToOpenInNewTab(url: NSURL, isPrivate: Bool) {
+        self.tabManager.addTab(NSURLRequest(URL: url), afterTab: self.tabManager.selectedTab, isPrivate: isPrivate)
     }
 }
 
@@ -2177,13 +2194,13 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
-        // Fixes 1261457 - Rich text editor fails because requests to about:blank are blocked
-        if url.scheme == "about" && url.resourceSpecifier == "blank" {
+        if url.scheme == "about" {
             decisionHandler(WKNavigationActionPolicy.Allow)
             return
         }
 
         if !navigationAction.isAllowed && navigationAction.navigationType != .BackForward {
+            print("\(navigationAction.isAllowed) \(navigationAction.navigationType == .BackForward) \(navigationAction.request.URL)")
             log.warning("Denying unprivileged request: \(navigationAction.request)")
             decisionHandler(WKNavigationActionPolicy.Cancel)
             return
@@ -2213,6 +2230,17 @@ extension BrowserViewController: WKNavigationDelegate {
 
         if isAppleMapsURL(url) || isStoreURL(url) {
             UIApplication.sharedApplication().openURL(url)
+            decisionHandler(WKNavigationActionPolicy.Cancel)
+            return
+        }
+
+        // Handles custom mailto URL schemes.
+        if url.scheme == "mailto" {
+            if let mailToMetadata = url.mailToMetadata(), let mailScheme = self.profile.prefs.stringForKey(PrefsKeys.KeyMailToOption) where mailScheme != "mailto" {
+                self.mailtoLinkHandler.launchMailClientForScheme(mailScheme, metadata: mailToMetadata, defaultMailtoURL: url)
+            } else {
+                UIApplication.sharedApplication().openURL(url)
+            }
             decisionHandler(WKNavigationActionPolicy.Cancel)
             return
         }
@@ -2280,6 +2308,7 @@ extension BrowserViewController: WKNavigationDelegate {
         guard let tab = tabManager[webView] else { return }
 
         tab.url = webView.URL
+        self.scrollController.resetZoomState()
 
         if tabManager.selectedTab === tab {
             updateUIForReaderHomeStateForTab(tab)
@@ -2463,6 +2492,14 @@ extension BrowserViewController: WKUIDelegate {
 
         if let url = error.userInfo[NSURLErrorFailingURLErrorKey] as? NSURL {
             ErrorPageHelper().showPage(error, forUrl: url, inWebView: webView)
+
+            // If the local web server isn't working for some reason (Firefox cellular data is
+            // disabled in settings, for example), we'll fail to load the session restore URL.
+            // We rely on loading that page to get the restore callback to reset the restoring
+            // flag, so if we fail to load that page, reset it here.
+            if AboutUtils.getAboutComponent(url) == "sessionrestore" {
+                tabManager.tabs.filter { $0.webView == webView }.first?.restoring = false
+            }
         }
     }
 
@@ -3118,6 +3155,16 @@ extension BrowserViewController: KeyboardHelperDelegate {
             UIView.setAnimationCurve(state.animationCurve)
             self.findInPageContainer.layoutIfNeeded()
             self.snackBars.layoutIfNeeded()
+        }
+    }
+}
+
+extension BrowserViewController: SessionRestoreHelperDelegate {
+    func sessionRestoreHelper(helper: SessionRestoreHelper, didRestoreSessionForTab tab: Tab) {
+        tab.restoring = false
+
+        if let tab = tabManager.selectedTab where tab.webView === tab.webView {
+            updateUIForReaderHomeStateForTab(tab)
         }
     }
 }

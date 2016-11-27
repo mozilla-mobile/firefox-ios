@@ -365,20 +365,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         var taskId: UIBackgroundTaskIdentifier = 0
         taskId = application.beginBackgroundTaskWithExpirationHandler { _ in
             log.warning("Running out of background time, but we have a profile shutdown pending.")
-            profile.shutdown()
+            self.shutdownProfileWhenNotActive(application)
             application.endBackgroundTask(taskId)
         }
 
         if profile.hasSyncableAccount() {
             let backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
             profile.syncManager.syncEverything().uponQueue(backgroundQueue) { _ in
-                profile.shutdown()
+                self.shutdownProfileWhenNotActive(application)
                 application.endBackgroundTask(taskId)
             }
         } else {
             profile.shutdown()
             application.endBackgroundTask(taskId)
         }
+    }
+
+    private func shutdownProfileWhenNotActive(application: UIApplication) {
+        // Only shutdown the profile if we are not in the foreground
+        guard application.applicationState != UIApplicationState.Active else {
+            return
+        }
+
+        profile?.shutdown()
     }
 
     func applicationWillResignActive(application: UIApplication) {
@@ -438,6 +447,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ErrorPageHelper.register(server, certStore: profile.certStore)
         AboutHomeHandler.register(server)
         AboutLicenseHandler.register(server)
+        SessionRestoreHandler.register(server)
 
         // Bug 1223009 was an issue whereby CGDWebserver crashed when moving to a background task
         // catching and handling the error seemed to fix things, but we're not sure why.

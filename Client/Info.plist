@@ -6,6 +6,8 @@
 	<string>$(ADJUST_APP_TOKEN)</string>
 	<key>AdjustEnvironment</key>
 	<string>$(ADJUST_ENVIRONMENT)</string>
+	<key>AppIdentifierPrefix</key>
+	<string>$(APP_IDENTIFIER_PREFIX)</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -21,7 +23,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>6.0</string>
+	<string>7.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -42,6 +44,12 @@
 	<false/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
+		<string>ms-outlook</string>
+		<string>airmail</string>
+		<string>italiaonline-mailto</string>
+		<string>mailru-mailto</string>
+		<string>mymail-mailto</string>
+		<string>readdle-spark</string>
 		<string>itms-books</string>
 		<string>org-appextension-feature-password-management</string>
 	</array>
@@ -54,6 +62,12 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Websites you visit may request your location.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This lets you save and upload photos.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>This lets you take and upload photos.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This lets you take and upload videos.</string>
 	<key>NSUserActivityTypes</key>
 	<array>
 		<string>org.mozilla.ios.firefox.browsing</string>

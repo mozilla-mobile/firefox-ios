@@ -80,6 +80,8 @@ public class MockProfile: Profile {
     func shutdown() {
     }
 
+    var isShutdown: Bool = false
+
     private var dbCreated = false
     lazy var db: BrowserDB = {
         self.dbCreated = true
@@ -91,7 +93,7 @@ public class MockProfile: Profile {
      * collection of tables.
      */
     private lazy var places: protocol<BrowserHistory, Favicons, SyncableHistory, ResettableSyncStorage, HistoryRecommendations> = {
-        return SQLiteHistory(db: self.db, prefs: MockProfilePrefs())!
+        return SQLiteHistory(db: self.db, prefs: MockProfilePrefs())
     }()
 
     var favicons: Favicons {
@@ -109,6 +111,10 @@ public class MockProfile: Profile {
     var recommendations: HistoryRecommendations {
         return self.places
     }
+
+    lazy var metadata: Metadata = {
+        return SQLiteMetadata(db: self.db)
+    }()
 
     lazy var isChinaEdition: Bool = {
         return NSLocale.currentLocale().localeIdentifier == "zh_CN"

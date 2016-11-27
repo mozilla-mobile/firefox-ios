@@ -11,6 +11,7 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
 
     override func setUp() {
         webRoot = SimplePageServer.start()
+        BrowserUtils.dismissFirstRunUI(tester())
     }
 
     /**
@@ -149,7 +150,8 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
             let value = UIInterfaceOrientation.Portrait.rawValue
             UIDevice.currentDevice().setValue(value, forKey: "orientation")
         }
-
         BrowserUtils.resetToAboutHome(tester())
+        BrowserUtils.clearPrivateData(tester: tester())
+        
     }
 }

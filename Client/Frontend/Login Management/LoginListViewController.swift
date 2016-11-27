@@ -267,10 +267,17 @@ private extension LoginListViewController {
 // MARK: - LoginDataSourceObserver
 extension LoginListViewController: LoginDataSourceObserver {
     func loginSectionsDidUpdate() {
-        self.loadingStateView.hidden = true
-        self.tableView.reloadData()
-        self.activeLoginQuery = nil
-        self.navigationItem.rightBarButtonItem?.enabled = self.loginDataSource.count > 0
+        loadingStateView.hidden = true
+        tableView.reloadData()
+        activeLoginQuery = nil
+        navigationItem.rightBarButtonItem?.enabled = loginDataSource.count > 0
+        restoreSelectedRows()
+    }
+    
+    func restoreSelectedRows() {
+        for path in self.loginSelectionController.selectedIndexPaths {
+            tableView.selectRowAtIndexPath(path, animated: false, scrollPosition: .None)
+        }
     }
 }
 

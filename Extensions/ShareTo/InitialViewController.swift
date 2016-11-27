@@ -54,6 +54,7 @@ class InitialViewController: UIViewController, ShareControllerDelegate {
     }
 
     func finish() {
+        self.profile.shutdown()
         self.extensionContext!.completeRequestReturningItems([], completionHandler: nil)
     }
 

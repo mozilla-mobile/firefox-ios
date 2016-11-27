@@ -38,10 +38,16 @@ extension Strings {
 
 // Activity Stream.
 extension Strings {
-    public static let ASPageControlButton = NSLocalizedString("AS.PageControl.Button", value: "Next Page", comment: "The page control button that lets you switch between pages in top sites")
-    public static let ASRemoveButton = NSLocalizedString("AS.Delete.Button", value: "Delete", comment: "Button shown in editing mode to remove this site from the top sites panel.")
-    public static let ASCancelButton = NSLocalizedString("AS.Cancel.Button", value: "Cancel", comment: "Button shown to cancel editing of top site.")
-    public static let ASHighlightsTitle =  NSLocalizedString("AS.Highlights.SectionTitle", value: "Highlights", comment: "Section title label for Highlights")
+    public static let ASPageControlButton = NSLocalizedString("ActivityStream.PageControl.Button", value: "Next Page", comment: "The page control button that lets you switch between pages in top sites")
+    public static let ASHighlightsTitle =  NSLocalizedString("ActivityStream.Highlights.SectionTitle", value: "Highlights", comment: "Section title label for Highlights")
+
+    public static let OpenInNewTabContextMenuTitle = NSLocalizedString("ActivityStream.ContextMenu.OpenInNewTab", value: "Open in New Tab", comment: "The title for the Open in New Tab context menu action for Activity Stream")
+    public static let OpenInNewPrivateTabContextMenuTitle = NSLocalizedString("ActivityStream.ContextMenu.OpenInNewPrivateTab", value: "Open in New Private Tab", comment: "The title for the Open in New Private Tab context menu action for Activity Stream")
+    public static let BookmarkContextMenuTitle = NSLocalizedString("ActivityStream.ContextMenu.Bookmark", value: "Bookmark", comment: "The title for the Bookmark context menu action for Activity Stream")
+    public static let DeleteFromHistoryContextMenuTitle = NSLocalizedString("ActivityStream.ContextMenu.DeleteFromHistory", value: "Delete from History", comment: "The title for the Delete from History context menu action for Activity Stream")
+    public static let ShareContextMenuTitle = NSLocalizedString("ActivityStream.ContextMenu.Share", value: "Share", comment: "The title for the Share context menu action for Activity Stream")
+    public static let RemoveFromASContextMenuTitle = NSLocalizedString("ActivityStream.ContextMenu.Remove", value: "Remove", comment: "The title for the Remove content from Activity Stream context menu item")
+
 }
 
 // Settings.
@@ -51,6 +57,9 @@ extension Strings {
     public static let SettingsClearPrivateDataTitle = NSLocalizedString("Settings.ClearPrivateData.Title", value: "Clear Private Data", comment: "Title displayed in header of the setting panel.")
     public static let SettingsSearchDoneButton = NSLocalizedString("Settings.Search.Done.Button", value: "Done", comment: "Button displayed at the top of the search settings.")
     public static let SettingsSearchEditButton = NSLocalizedString("Settings.Search.Edit.Button", value: "Edit", comment: "Button displayed at the top of the search settings.")
+    public static let SettingsSignOutButton = NSLocalizedString("Settings.SignOut.Button", value: "Sign Out", comment: "Button displayed at the bottom of settings page allowing users to Sign Out of FxA")
+    public static let SettingsSignOutDestructiveAction = NSLocalizedString("Settings.SignOut.DestructiveButton", value: "Sign Out", comment: "Destructive action button in alert when user is prompted for signing out")
+    public static let SettingsSignOutAlertTitle = NSLocalizedString("Settings.SignOut.Title", value: "Sign Out?", comment: "Title of the alert when prompting the user asking to sign out.")
 }
 
 // Error pages.
@@ -161,6 +170,12 @@ extension Strings {
     public static let SettingsNewTabDescription = NSLocalizedString("Settings.NewTab.Description", value: "When you open a New Tab:", comment: "A description in settings of what the new tab choice means")
 }
 
+// Open With Settings
+extension Strings {
+    public static let SettingsOpenWithSectionName = NSLocalizedString("Settings.OpenWith.SectionName", value: "Open With", comment: "Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behaviour.")
+    public static let SettingsOpenWithPageTitle = NSLocalizedString("Settings.OpenWith.PageTitle", value: "Open mail links in", comment: "Title for Open With Settings")
+}
+
 // Third Party Search Engines
 extension Strings {
     public static let ThirdPartySearchEngineAdded = NSLocalizedString("Search.ThirdPartyEngines.AddSuccess", value: "Added Search engine!", comment: "The success message that appears after a user sucessfully adds a new search engine")
@@ -211,7 +226,6 @@ extension Strings {
 }
 
 // open in
-
 extension Strings {
     public static let OpenInDownloadHelperAlertTitle = NSLocalizedString("Downloads.Alert.Title", value: "Firefox Downloads", comment: "The title of the alert box asking the user if they want to use another app to open a file.")
     public static let OpenInDownloadHelperAlertMessage = NSLocalizedString("Downloads.Alert.Message", value: "Firefox is unable to download or display this file. Would you like to open it in another app?", comment: "The message of the alert box asking the user if they want to use another app to open a file.")
@@ -219,9 +233,7 @@ extension Strings {
     public static let OpenInDownloadHelperAlertCancel = NSLocalizedString("Downloads.Alert.Cancel", value: "No", comment: "The label of the button the user will press to reject the option to open a file in another application")
 }
 
-// Activity Stream
-extension Strings {
-    public static let BookmarkContextMenuTitle = NSLocalizedString("ActivityStream.ContextMenu.Bookmark", value: "Bookmark", comment: "The title for the Bookmark context menu action for Activity Stream")
-    public static let DeleteFromHistoryContextMenuTitle = NSLocalizedString("ActivityStream.ContextMenu.DeleteFromHistory", value: "Delete from History", comment: "The title for the Delete from History context menu action for Activity Stream")
-    public static let ShareContextMenuTitle = NSLocalizedString("ActivityStream.ContextMenu.Share", value: "Share", comment: "The title for the Share context menu action for Activity Stream")
-}
+// MARK: Deprecated Strings (to be removed in next version)
+private let logOut = NSLocalizedString("Log Out", comment: "Button in settings screen to disconnect from your account")
+private let logOutQuestion = NSLocalizedString("Log Out?", comment: "Title of the 'log out firefox account' alert")
+private let logOutDestructive = NSLocalizedString("Log Out", comment: "Disconnect button in the 'log out firefox account' alert")

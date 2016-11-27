@@ -28,6 +28,9 @@ let TableVisits = "visits"
 let TableFaviconSites = "favicon_sites"
 let TableQueuedTabs = "queue"
 
+let TableActivityStreamBlocklist = "activity_stream_blocklist"
+let TablePageMetadata = "page_metadata"
+
 let ViewBookmarksBufferOnMirror = "view_bookmarksBuffer_on_mirror"
 let ViewBookmarksBufferStructureOnMirror = "view_bookmarksBufferStructure_on_mirror"
 let ViewBookmarksLocalOnMirror = "view_bookmarksLocal_on_mirror"
@@ -48,6 +51,7 @@ let IndexBookmarksMirrorStructureParentIdx = "idx_bookmarksMirrorStructure_paren
 let IndexBookmarksLocalStructureParentIdx = "idx_bookmarksLocalStructure_parent_idx"     // Added in v12.
 let IndexBookmarksBufferStructureParentIdx = "idx_bookmarksBufferStructure_parent_idx"   // Added in v12.
 let IndexBookmarksMirrorStructureChild = "idx_bookmarksMirrorStructure_child"            // Added in v14.
+let IndexPageMetadataCacheKey = "idx_page_metadata_cache_key_uniqueindex" // Added in v19
 
 private let AllTables: [String] = [
     TableDomains,
@@ -64,8 +68,10 @@ private let AllTables: [String] = [
     TableBookmarksLocalStructure,
     TableBookmarksMirror,
     TableBookmarksMirrorStructure,
-
     TableQueuedTabs,
+
+    TableActivityStreamBlocklist,
+    TablePageMetadata,
 ]
 
 private let AllViews: [String] = [
@@ -79,7 +85,7 @@ private let AllViews: [String] = [
     ViewAllBookmarks,
     ViewAwesomebarBookmarks,
     ViewAwesomebarBookmarksWithIcons,
-    ViewHistoryVisits,
+    ViewHistoryVisits
 ]
 
 private let AllIndices: [String] = [
@@ -89,6 +95,7 @@ private let AllIndices: [String] = [
     IndexBookmarksLocalStructureParentIdx,
     IndexBookmarksMirrorStructureParentIdx,
     IndexBookmarksMirrorStructureChild,
+    IndexPageMetadataCacheKey
 ]
 
 private let AllTablesIndicesAndViews: [String] = AllViews + AllIndices + AllTables
@@ -100,7 +107,7 @@ private let log = Logger.syncLogger
  * We rely on SQLiteHistory having initialized the favicon table first.
  */
 public class BrowserTable: Table {
-    static let DefaultVersion = 17    // Bug 1298918.
+    static let DefaultVersion = 19    // Bug 1303734.
 
     // TableInfo fields.
     var name: String { return "BROWSER" }
@@ -233,6 +240,30 @@ public class BrowserTable: Table {
             "url TEXT NOT NULL UNIQUE, " +
             "title TEXT" +
         ") "
+
+    let activityStreamBlocklistCreate =
+        "CREATE TABLE IF NOT EXISTS \(TableActivityStreamBlocklist) (" +
+            "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "url TEXT NOT NULL UNIQUE, " +
+            "created_at DATETIME DEFAULT CURRENT_TIMESTAMP " +
+        ") "
+
+    let pageMetadataCreate =
+        "CREATE TABLE IF NOT EXISTS \(TablePageMetadata) (" +
+            "id INTEGER PRIMARY KEY, " +
+            "cache_key LONGVARCHAR UNIQUE, " +
+            "site_url TEXT, " +
+            "media_url LONGVARCHAR, " +
+            "title TEXT, " +
+            "type VARCHAR(32), " +
+            "description TEXT, " +
+            "provider_name TEXT, " +
+            "created_at DATETIME DEFAULT CURRENT_TIMESTAMP, " +
+            "expired_at LONG" +
+        ") "
+
+    let indexPageMetadataCreate =
+        "CREATE UNIQUE INDEX IF NOT EXISTS \(IndexPageMetadataCacheKey) ON page_metadata (cache_key)"
 
     let iconColumns = ", faviconID INTEGER REFERENCES \(TableFavicons)(id) ON DELETE SET NULL"
     let mirrorColumns = ", is_overridden TINYINT NOT NULL DEFAULT 0"
@@ -543,6 +574,8 @@ public class BrowserTable: Table {
             widestFavicons,
             historyIDsWithIcon,
             iconForURL,
+            pageMetadataCreate,
+            indexPageMetadataCreate,
             self.queueTableCreate,
             self.topSitesTableCreate,
             self.localBookmarksView,
@@ -553,6 +586,7 @@ public class BrowserTable: Table {
             historyVisitsView,
             awesomebarBookmarksView,
             awesomebarBookmarksWithIconsView,
+            activityStreamBlocklistCreate
         ]
 
         assert(queries.count == AllTablesIndicesAndViews.count, "Did you forget to add your table, index, or view to the list?")
@@ -768,6 +802,25 @@ public class BrowserTable: Table {
                 // Adds the local_modified, server_modified times to the local bookmarks view
                 "DROP VIEW IF EXISTS \(ViewBookmarksLocalOnMirror)",
                 self.localBookmarksView]) {
+                return false
+            }
+        }
+
+        if from < 18 && to >= 18 {
+            if !self.run(db, queries: [
+
+                // Adds the Activity Stream blocklist table
+                activityStreamBlocklistCreate]) {
+                return false
+            }
+        }
+        
+        if from < 19 && to >= 19 {
+            if !self.run(db, queries: [
+
+                // Adds tables/indicies for metadata content
+                pageMetadataCreate,
+                indexPageMetadataCreate]) {
                 return false
             }
         }

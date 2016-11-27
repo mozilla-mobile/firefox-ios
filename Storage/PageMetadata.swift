@@ -4,20 +4,35 @@
 
 import Foundation
 
+/*
+ * Value types representing a page's metadata
+ */
 public struct PageMetadata {
-    public let url: NSURL
+    public let id: Int?
+    public let siteURL: String
+    public let mediaURL: String?
     public let title: String?
     public let description: String?
-    public let imageURL: NSURL?
     public let type: String?
-    public let iconURL: NSURL?
+    public let providerName: String?
 
-    public init(url: NSURL, title: String?, description: String?, imageURL: NSURL?, type: String?, iconURL: NSURL?) {
-        self.url = url
+    public init(id: Int?, siteURL: String, mediaURL: String?, title: String?, description: String?, type: String?, providerName: String?) {
+        self.id = id
+        self.siteURL = siteURL
+        self.mediaURL = mediaURL
         self.title = title
         self.description = description
-        self.imageURL = imageURL
         self.type = type
-        self.iconURL = iconURL
+        self.providerName = providerName
+    }
+
+    public static func fromDictionary(dict: [String: AnyObject]) -> PageMetadata? {
+        guard let siteURL = dict["url"] as? String else {
+            return nil
+        }
+
+        return PageMetadata(id: nil, siteURL: siteURL, mediaURL: dict["image_url"] as? String,
+                            title: dict["title"] as? String, description: dict["description"] as? String,
+                            type: dict["type"] as? String, providerName: dict["provider_name"] as? String)
     }
 }

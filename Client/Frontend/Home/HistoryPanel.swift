@@ -44,12 +44,14 @@ class HistoryPanel: UIViewController, HomePanel {
     private lazy var recentlyClosedTabsButton: RecentlyClosedTabsButton = {
         let button = RecentlyClosedTabsButton()
         button.addTarget(self, action: #selector(HistoryPanel.recentlyClosedTabsCellWasTapped), forControlEvents: .TouchUpInside)
+        button.accessibilityIdentifier = "HistoryPanel.recentlyClosedTabsCell"
         return button
     }()
 
     private lazy var syncedTabsButton: SyncedTabsButton = {
         let button = SyncedTabsButton()
         button.addTarget(self, action: #selector(HistoryPanel.syncedTabsCellWasTapped), forControlEvents: .TouchUpInside)
+        button.accessibilityIdentifier = "HistoryPanel.syncedTabsButton"
         return button
     }()
 

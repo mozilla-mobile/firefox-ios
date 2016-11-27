@@ -484,6 +484,7 @@ class URLBarView: UIView {
         self.forwardButton.hidden = !self.toolbarIsShowing
         self.backButton.hidden = !self.toolbarIsShowing
         self.stopReloadButton.hidden = !self.toolbarIsShowing
+        self.homePageButton.hidden = !self.toolbarIsShowing
     }
 
     func transitionToOverlay(didCancel: Bool = false) {
@@ -494,6 +495,7 @@ class URLBarView: UIView {
         self.forwardButton.alpha = inOverlayMode ? 0 : 1
         self.backButton.alpha = inOverlayMode ? 0 : 1
         self.stopReloadButton.alpha = inOverlayMode ? 0 : 1
+        self.homePageButton.alpha = inOverlayMode ? 0 : 1
 
         let borderColor = inOverlayMode ? locationActiveBorderColor : locationBorderColor
         locationContainer.layer.borderColor = borderColor.CGColor
@@ -618,8 +620,10 @@ extension URLBarView: TabLocationViewDelegate {
 
     func tabLocationViewDidTapLocation(tabLocationView: TabLocationView) {
         var locationText = delegate?.urlBarDisplayTextForURL(locationView.url)
-        if let host = locationView.url?.host {
-            locationText = locationView.url?.absoluteString?.stringByReplacingOccurrencesOfString(host, withString: host.asciiHostToUTF8())
+
+        // Make sure to use the result from urlBarDisplayTextForURL as it is responsible for extracting out search terms when on a search page
+        if let text = locationText, let url = NSURL(string: text), let host = url.host {
+            locationText = url.absoluteString?.stringByReplacingOccurrencesOfString(host, withString: host.asciiHostToUTF8())
         }
         enterOverlayMode(locationText, pasted: false)
     }

@@ -7,6 +7,9 @@ import WebKit
 @testable import Storage
 @testable import Client
 
+// This test is only for devices that does not have Panel implementation (e.g. iPad):
+// https://github.com/mozilla-mobile/firefox-ios/blob/master/Client/Frontend/Home/HomePanels.swift#L23
+// When running on iPhone, this test will fail, because the Collectionview does not have an identifier
 class TopTabsTests: KIFTestCase {
     private var webRoot: String!
     let numberOfTabs = 4
@@ -15,12 +18,13 @@ class TopTabsTests: KIFTestCase {
     override func setUp() {
         super.setUp()
         webRoot = SimplePageServer.start()
+         BrowserUtils.dismissFirstRunUI(tester())
     }
     
     override func tearDown() {
         super.tearDown()
         BrowserUtils.resetToAboutHome(tester())
-        clearPrivateDataFromHome()
+        BrowserUtils.clearPrivateData(tester: tester())
     }
     
     private func clearPrivateDataFromHome() {
@@ -48,15 +52,15 @@ class TopTabsTests: KIFTestCase {
         guard topTabsEnabled() else {
             return
         }
-        
-        testAddTab()
-        testUndoCloseAll()
-        testSwitchTabs()
-        testPrivateModeButton()
-        testCloseTab()
+    
+        AddTab()
+        UndoCloseAll()
+        SwitchTabs()
+        PrivateModeButton()
+        CloseTab()
     }
     
-    private func testAddTab() {
+    private func AddTab() {
         tester().waitForTappableViewWithAccessibilityLabel("Show Tabs", value: "1", traits: UIAccessibilityTraitButton)
         
         tester().tapViewWithAccessibilityIdentifier("url")
@@ -71,7 +75,7 @@ class TopTabsTests: KIFTestCase {
         tester().waitForTappableViewWithAccessibilityLabel("Show Tabs", value: String(1+numberOfTabs), traits: UIAccessibilityTraitButton)
     }
     
-    private func testUndoCloseAll() {
+    private func UndoCloseAll() {
         tester().tapViewWithAccessibilityLabel("Show Tabs")
         tester().tapViewWithAccessibilityLabel("Menu")
         tester().tapViewWithAccessibilityLabel("Close All Tabs")
@@ -79,7 +83,7 @@ class TopTabsTests: KIFTestCase {
         tester().tapViewWithAccessibilityLabel("Undo")
     }
     
-    private func testSwitchTabs() {
+    private func SwitchTabs() {
         let urlField = tester().waitForViewWithAccessibilityIdentifier("url") as! UITextField
         
         tester().tapViewWithAccessibilityLabel("Page 2")
@@ -91,7 +95,7 @@ class TopTabsTests: KIFTestCase {
         XCTAssertEqual(urlField.text, "\(webRoot)/numberedPage.html?page=1")
     }
     
-    private func testPrivateModeButton() {
+    private func PrivateModeButton() {
         let tabManager = (UIApplication.sharedApplication().delegate as! AppDelegate).tabManager
         
         tester().tapViewWithAccessibilityLabel("Private Mode")
@@ -105,7 +109,7 @@ class TopTabsTests: KIFTestCase {
         XCTAssertFalse(tabManager.selectedTab!.isPrivate)
     }
     
-    private func testCloseTab() {
+    private func CloseTab() {
         tester().tapViewWithAccessibilityLabel("Remove page - New Tab")
         for i in 0...(numberOfTabs-1) {
             tester().tapViewWithAccessibilityLabel("Remove page - Page \(i)")

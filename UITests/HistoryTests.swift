@@ -9,7 +9,9 @@ class HistoryTests: KIFTestCase {
     private var webRoot: String!
 
     override func setUp() {
-        webRoot = SimplePageServer.start()
+        super.setUp()
+        webRoot = SimplePageServer.start()        //If it is a first run, first run window should be gone
+        BrowserUtils.dismissFirstRunUI(tester())
     }
 
     func addHistoryItemPage(pageNo: Int) -> String {
@@ -55,6 +57,8 @@ class HistoryTests: KIFTestCase {
         tester().tapViewWithAccessibilityLabel("Cancel")
     }
 
+    //Disabled since font size cannot be changed from iOS 10
+    /*
     func testChangingDynamicFontOnHistory() {
         _ = addHistoryItems(2)
 
@@ -73,6 +77,7 @@ class HistoryTests: KIFTestCase {
         XCTAssertGreaterThan(bigSize!, size!)
         XCTAssertGreaterThanOrEqual(size!, smallSize!)
     }
+    */
 
     func testDeleteHistoryItemFromListWith2Items() {
         // add 2 history items
@@ -109,7 +114,7 @@ class HistoryTests: KIFTestCase {
         let urlToDelete = "Page \(102), \(webRoot)/numberedPage.html?page=\(102)"
 
         tester().tapViewWithAccessibilityLabel("History")
-
+        tester().waitForViewWithAccessibilityLabel(urlToDelete)
         tester().swipeViewWithAccessibilityLabel(urlToDelete, inDirection: KIFSwipeDirection.Left)
         tester().tapViewWithAccessibilityLabel("Remove")
 
@@ -121,7 +126,9 @@ class HistoryTests: KIFTestCase {
     }
 
     override func tearDown() {
-        DynamicFontUtils.restoreDynamicFontSize(tester())
-        BrowserUtils.clearHistoryItems(tester(), numberOfTests: 2)
+        //DynamicFontUtils.restoreDynamicFontSize(tester())
+        super.tearDown()
+        BrowserUtils.resetToAboutHome(tester())
+        BrowserUtils.clearPrivateData(tester: tester())
     }
 }

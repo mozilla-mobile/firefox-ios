@@ -8,84 +8,44 @@ import WebKit
 import UIKit
 import GCDWebServers
 
-// Needs to be in sync with Client Clearables.
-private enum Clearable: String {
-    case History = "Browsing History"
-    case Cache = "Cache"
-    case OfflineData = "Offline Website Data"
-    case Cookies = "Cookies"
-}
-
-private let AllClearables = Set([Clearable.History, Clearable.Cache, Clearable.OfflineData, Clearable.Cookies])
-
 class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
     private var webRoot: String!
 
     override func setUp() {
+        super.setUp()
         webRoot = SimplePageServer.start()
+        BrowserUtils.dismissFirstRunUI(tester())
     }
 
     override func tearDown() {
-        BrowserUtils.clearHistoryItems(tester())
+        BrowserUtils.resetToAboutHome(tester())
+        BrowserUtils.clearPrivateData(tester: tester())
     }
 
-    private func openClearPrivateDataDialog() {
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("Settings")
-        tester().tapViewWithAccessibilityLabel("Clear Private Data")
-    }
-
-    private func closeClearPrivateDataDialog() {
-        tester().tapViewWithAccessibilityLabel("Settings")
-        tester().tapViewWithAccessibilityLabel("Done")
-    }
-
-    private func acceptClearPrivateData() {
-        tester().waitForViewWithAccessibilityLabel("OK")
-        tester().tapViewWithAccessibilityLabel("OK")
-        tester().waitForViewWithAccessibilityLabel("Clear Private Data")
-    }
-
-    private func cancelClearPrivateData() {
-        tester().waitForViewWithAccessibilityLabel("Clear")
-        tester().tapViewWithAccessibilityLabel("Cancel")
-        tester().waitForViewWithAccessibilityLabel("Clear Private Data")
-    }
-
-    private func clearPrivateData(clearables: Set<Clearable>) {
-        openClearPrivateDataDialog()
-
-        // Disable all items that we don't want to clear.
-        for clearable in AllClearables {
-            // If we don't wait here, setOn:forSwitchWithAccessibilityLabel tries to use the UITableViewCell
-            // instead of the UISwitch. KIF bug?
-            tester().waitForViewWithAccessibilityLabel(clearable.rawValue)
-
-            tester().setOn(clearables.contains(clearable), forSwitchWithAccessibilityLabel: clearable.rawValue)
-        }
-
-        tester().tapViewWithAccessibilityLabel("Clear Private Data", traits: UIAccessibilityTraitButton)
-        acceptClearPrivateData()
-
-        closeClearPrivateDataDialog()
-    }
-
-    func visitSites(noOfSites noOfSites: Int) -> [(title: String, domain: String, url: String)] {
-        var urls: [(title: String, domain: String, url: String)] = []
+    func visitSites(noOfSites noOfSites: Int) -> [(title: String, domain: String, dispDomain: String, url: String)] {
+        var urls: [(title: String, domain: String, dispDomain: String, url: String)] = []
         for pageNo in 1...noOfSites {
             tester().tapViewWithAccessibilityIdentifier("url")
             let url = "\(webRoot)/numberedPage.html?page=\(pageNo)"
             tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url)\n")
             tester().waitForWebViewElementWithAccessibilityLabel("Page \(pageNo)")
-            let tuple: (title: String, domain: String, url: String) = ("Page \(pageNo)", NSURL(string: url)!.normalizedHost()!, url)
+            let dom = NSURL(string: url)!.normalizedHost()!
+            let index = dom.startIndex.advancedBy(7)
+            let dispDom = dom.substringToIndex(index)   // On IPhone, it only displays first 8 chars
+            let tuple: (title: String, domain: String, dispDomain: String, url: String) = ("Page \(pageNo)", dom, dispDom, url)
             urls.append(tuple)
         }
         BrowserUtils.resetToAboutHome(tester())
         return urls
     }
 
-    func anyDomainsExistOnTopSites(domains: Set<String>) {
+    func anyDomainsExistOnTopSites(domains: Set<String>, fulldomains: Set<String>) {
         for domain in domains {
+            if self.tester().viewExistsWithLabel(domain) {
+                return
+            }
+        }
+        for domain in fulldomains {
             if self.tester().viewExistsWithLabel(domain) {
                 return
             }
@@ -93,47 +53,48 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         XCTFail("Couldn't find any domains in top sites.")
     }
 
-    func testRemembersToggles() {
-        clearPrivateData([Clearable.History])
+    func testRemembersToggles(swipe: Bool) {
+        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.History], swipe:swipe, tester: tester())
 
-        openClearPrivateDataDialog()
+        BrowserUtils.openClearPrivateDataDialog(swipe, tester: tester())
 
         // Ensure the toggles match our settings.
         [
-            (Clearable.Cache, "0"),
-            (Clearable.Cookies, "0"),
-            (Clearable.OfflineData, "0"),
-            (Clearable.History, "1"),
-        ].forEach { clearable, value in
-            XCTAssertEqual(value, tester().waitForViewWithAccessibilityLabel(clearable.rawValue).accessibilityValue)
+            (BrowserUtils.Clearable.Cache, "0"),
+            (BrowserUtils.Clearable.Cookies, "0"),
+            (BrowserUtils.Clearable.OfflineData, "0"),
+            (BrowserUtils.Clearable.History, "1")
+        ].forEach { clearable, switchValue in
+            XCTAssertNotNil(tester().waitForViewWithAccessibilityLabel(clearable.rawValue, value: switchValue, traits: UIAccessibilityTraitNone))
         }
 
 
-        closeClearPrivateDataDialog()
+        BrowserUtils.closeClearPrivateDataDialog(tester())
     }
 
     func testClearsTopSitesPanel() {
         let urls = visitSites(noOfSites: 2)
-        let domains = Set<String>(urls.map { $0.domain })
+        let dispDomains = Set<String>(urls.map { $0.dispDomain })
+        let fullDomains = Set<String>(urls.map { $0.domain })
 
         tester().tapViewWithAccessibilityLabel("Top sites")
 
         // Only one will be found -- we collapse by domain.
-        anyDomainsExistOnTopSites(domains)
+        anyDomainsExistOnTopSites(dispDomains, fulldomains: fullDomains)
 
-        clearPrivateData([Clearable.History])
-
+        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.History], swipe: false, tester: tester())
         XCTAssertFalse(tester().viewExistsWithLabel(urls[0].title), "Expected to have removed top site panel \(urls[0])")
         XCTAssertFalse(tester().viewExistsWithLabel(urls[1].title), "We shouldn't find the other URL, either.")
     }
 
     func testDisabledHistoryDoesNotClearTopSitesPanel() {
         let urls = visitSites(noOfSites: 2)
-        let domains = Set<String>(urls.map { $0.domain })
+        let dispDomains = Set<String>(urls.map { $0.dispDomain })
+        let fullDomains = Set<String>(urls.map { $0.domain })
 
-        anyDomainsExistOnTopSites(domains)
-        clearPrivateData(AllClearables.subtract([Clearable.History]))
-        anyDomainsExistOnTopSites(domains)
+        anyDomainsExistOnTopSites(dispDomains, fulldomains: fullDomains)
+        BrowserUtils.clearPrivateData(BrowserUtils.AllClearables.subtract([BrowserUtils.Clearable.History]), swipe: false, tester: tester())
+        anyDomainsExistOnTopSites(dispDomains, fulldomains: fullDomains)
     }
 
     func testClearsHistoryPanel() {
@@ -145,8 +106,8 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         XCTAssertTrue(tester().viewExistsWithLabel(url1), "Expected to have history row \(url1)")
         XCTAssertTrue(tester().viewExistsWithLabel(url2), "Expected to have history row \(url2)")
 
-        clearPrivateData([Clearable.History])
-
+        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.History], swipe: false, tester: tester())
+        tester().tapViewWithAccessibilityLabel("Bookmarks")
         tester().tapViewWithAccessibilityLabel("History")
         XCTAssertFalse(tester().viewExistsWithLabel(url1), "Expected to have removed history row \(url1)")
         XCTAssertFalse(tester().viewExistsWithLabel(url2), "Expected to have removed history row \(url2)")
@@ -161,7 +122,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         XCTAssertTrue(tester().viewExistsWithLabel(url1), "Expected to have history row \(url1)")
         XCTAssertTrue(tester().viewExistsWithLabel(url2), "Expected to have history row \(url2)")
 
-        clearPrivateData(AllClearables.subtract([Clearable.History]))
+        BrowserUtils.clearPrivateData(BrowserUtils.AllClearables.subtract([BrowserUtils.Clearable.History]), swipe: false, tester: tester())
 
         XCTAssertTrue(tester().viewExistsWithLabel(url1), "Expected to not have removed history row \(url1)")
         XCTAssertTrue(tester().viewExistsWithLabel(url2), "Expected to not have removed history row \(url2)")
@@ -183,14 +144,14 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         XCTAssertEqual(cookies.sessionStorage, "foo=bar")
 
         // Verify that cookies are not cleared when Cookies is deselected.
-        clearPrivateData(AllClearables.subtract([Clearable.Cookies]))
+        BrowserUtils.clearPrivateData(BrowserUtils.AllClearables.subtract([BrowserUtils.Clearable.Cookies]), swipe: true, tester: tester())
         cookies = getCookies(webView)
         XCTAssertEqual(cookies.cookie, "foo=bar")
         XCTAssertEqual(cookies.localStorage, "foo=bar")
         XCTAssertEqual(cookies.sessionStorage, "foo=bar")
 
         // Verify that cookies are cleared when Cookies is selected.
-        clearPrivateData([Clearable.Cookies])
+        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.Cookies], swipe: true, tester: tester())
         cookies = getCookies(webView)
         XCTAssertEqual(cookies.cookie, "")
         XCTAssertNil(cookies.localStorage)
@@ -209,12 +170,12 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         let requests = cachedServer.requests
 
         // Verify that clearing non-cache items will keep the page in the cache.
-        clearPrivateData(AllClearables.subtract([Clearable.Cache]))
+        BrowserUtils.clearPrivateData(BrowserUtils.AllClearables.subtract([BrowserUtils.Clearable.Cache]), swipe: true, tester: tester())
         webView.reload()
         XCTAssertEqual(cachedServer.requests, requests)
 
         // Verify that clearing the cache will fire a new request.
-        clearPrivateData([Clearable.Cache])
+        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.Cache], swipe: true, tester: tester())
         webView.reload()
         XCTAssertEqual(cachedServer.requests, requests + 1)
     }

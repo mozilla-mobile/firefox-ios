@@ -497,8 +497,12 @@ public class BookmarkBasePayload: CleartextPayloadJSON, MirrorItemable {
         }
 
         if !(self["parentName"].isString || self.id == "places") {
-            log.warning("Not the places root and missing parent name.")
-            return false
+            if (self["parentid"].asString! == "places") {
+                log.debug("Accepting root with missing parent name.")
+            } else {
+                log.warning("Not the places root and missing parent name.")
+                return false
+            }
         }
 
         if !self.hasRequiredStringFields(BookmarkBasePayload.requiredStringFields) {

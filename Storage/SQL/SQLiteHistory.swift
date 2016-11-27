@@ -107,15 +107,21 @@ public class SQLiteHistory {
     let favicons: FaviconsTable<Favicon>
     let prefs: Prefs
 
-    required public init?(db: BrowserDB, prefs: Prefs) {
+    required public init(db: BrowserDB, prefs: Prefs) {
         self.db = db
         self.favicons = FaviconsTable<Favicon>()
         self.prefs = prefs
 
         // BrowserTable exists only to perform create/update etc. operations -- it's not
         // a queryable thing that needs to stick around.
-        if !db.createOrUpdate(BrowserTable()) {
-            return nil
+        switch db.createOrUpdate(BrowserTable()) {
+        case .Failure:
+            log.error("Failed to create/update DB schema!")
+            fatalError()
+        case .Closed:
+            log.info("Database not created as the SQLiteConnection is closed.")
+        case .Success:
+            log.debug("Database succesfully created/updated")
         }
     }
 }
@@ -1047,37 +1053,37 @@ extension SQLiteHistory: SyncableHistory {
     }
 
     public func markAsDeleted(guids: [GUID]) -> Success {
-        // TODO: support longer GUID lists.
-        assert(guids.count < BrowserDB.MaxVariableNumber)
-
         if guids.isEmpty {
             return succeed()
         }
 
         log.debug("Wiping \(guids.count) deleted GUIDs.")
+        return self.db.run(chunk(guids, by: BrowserDB.MaxVariableNumber).flatMap(markAsDeletedStatementForGUIDs))
+    }
 
+    private func markAsDeletedStatementForGUIDs(guids: ArraySlice<String>) -> (String, Args?) {
         // We deliberately don't limit this to records marked as should_upload, just
         // in case a coding error leaves records with is_deleted=1 but not flagged for
         // upload -- this will catch those and throw them away.
         let inClause = BrowserDB.varlist(guids.count)
-        let sql =
-        "DELETE FROM \(TableHistory) WHERE " +
-        "is_deleted = 1 AND guid IN \(inClause)"
+        let sql = "DELETE FROM \(TableHistory) WHERE is_deleted = 1 AND guid IN \(inClause)"
 
         let args: Args = guids.map { $0 as AnyObject }
-        return self.db.run(sql, withArgs: args)
+        return (sql, args)
     }
 
     public func markAsSynchronized(guids: [GUID], modified: Timestamp) -> Deferred<Maybe<Timestamp>> {
-        // TODO: support longer GUID lists.
-        assert(guids.count < 99)
-
         if guids.isEmpty {
             return deferMaybe(modified)
         }
 
         log.debug("Marking \(guids.count) GUIDs as synchronized. Returning timestamp \(modified).")
+        return self.db.run(chunk(guids, by: BrowserDB.MaxVariableNumber).flatMap { chunk in
+            return markAsSynchronizedStatementForGUIDs(chunk, modified: modified)
+        }) >>> always(modified)
+    }
 
+    private func markAsSynchronizedStatementForGUIDs(guids: ArraySlice<String>, modified: Timestamp) -> (String, Args?) {
         let inClause = BrowserDB.varlist(guids.count)
         let sql =
         "UPDATE \(TableHistory) SET " +
@@ -1085,7 +1091,7 @@ extension SQLiteHistory: SyncableHistory {
         "WHERE guid IN \(inClause)"
 
         let args: Args = guids.map { $0 as AnyObject }
-        return self.db.run(sql, withArgs: args) >>> always(modified)
+        return (sql, args)
     }
 
     public func doneApplyingRecordsAfterDownload() -> Success {

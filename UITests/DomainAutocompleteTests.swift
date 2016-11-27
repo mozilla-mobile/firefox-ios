@@ -6,6 +6,11 @@ import Foundation
 import Shared
 
 class DomainAutocompleteTests: KIFTestCase {
+    override func setUp() {
+        super.setUp()
+        BrowserUtils.dismissFirstRunUI(tester())
+    }
+    
     func testAutocomplete() {
         BrowserUtils.addHistoryEntry("Mozilla", url: NSURL(string: "http://mozilla.org/")!)
         BrowserUtils.addHistoryEntry("Yahoo", url: NSURL(string: "http://www.yahoo.com/")!)
@@ -108,11 +113,13 @@ class DomainAutocompleteTests: KIFTestCase {
     }
 
     override func tearDown() {
+        super.tearDown()
         do {
             try tester().tryFindingTappableViewWithAccessibilityLabel("Cancel")
             tester().tapViewWithAccessibilityLabel("Cancel")
         } catch _ {
         }
-        BrowserUtils.clearHistoryItems(tester())
+        BrowserUtils.resetToAboutHome(tester())
+        BrowserUtils.clearPrivateData(tester: tester())
     }
 }

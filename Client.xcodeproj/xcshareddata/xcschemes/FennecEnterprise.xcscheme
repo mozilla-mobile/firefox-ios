@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0700"
+   LastUpgradeVersion = "0800"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -20,80 +20,10 @@
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "F84B21D21A090F8100AAB793"
-               BuildableName = "ClientTests.xctest"
-               BlueprintName = "ClientTests"
-               ReferencedContainer = "container:Client.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "2FA436041ABB83B4008031D1"
-               BuildableName = "AccountTests.xctest"
-               BlueprintName = "AccountTests"
-               ReferencedContainer = "container:Client.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "282731671ABC9BE700AA1954"
-               BuildableName = "SyncTests.xctest"
-               BlueprintName = "SyncTests"
-               ReferencedContainer = "container:Client.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E4D567211ADECE2700F1EFE7"
-               BuildableName = "ReadingListTests.xctest"
-               BlueprintName = "ReadingListTests"
-               ReferencedContainer = "container:Client.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E6F9650B1B2F1CF20034B023"
-               BuildableName = "SharedTests.xctest"
-               BlueprintName = "SharedTests"
-               ReferencedContainer = "container:Client.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
-      buildConfiguration = "Fennec"
+      buildConfiguration = "FennecEnterprise"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "NO">
@@ -107,41 +37,6 @@
                BlueprintName = "ClientTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
-            <SkippedTests>
-               <Test
-                  Identifier = "FxAClientTests/testLoginSuccess()">
-               </Test>
-            </SkippedTests>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "2FA436041ABB83B4008031D1"
-               BuildableName = "AccountTests.xctest"
-               BlueprintName = "AccountTests"
-               ReferencedContainer = "container:Client.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "282731671ABC9BE700AA1954"
-               BuildableName = "SyncTests.xctest"
-               BlueprintName = "SyncTests"
-               ReferencedContainer = "container:Client.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "2FCAE2231ABB51F800877008"
-               BuildableName = "StorageTests.xctest"
-               BlueprintName = "StorageTests"
-               ReferencedContainer = "container:Client.xcodeproj">
-            </BuildableReference>
          </TestableReference>
          <TestableReference
             skipped = "NO">
@@ -160,6 +55,72 @@
                BlueprintIdentifier = "E6F9650B1B2F1CF20034B023"
                BuildableName = "SharedTests.xctest"
                BlueprintName = "SharedTests"
+               ReferencedContainer = "container:Client.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "2FCAE2231ABB51F800877008"
+               BuildableName = "StorageTests.xctest"
+               BlueprintName = "StorageTests"
+               ReferencedContainer = "container:Client.xcodeproj">
+            </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "TestSQLiteHistoryRecommendationsPerf">
+               </Test>
+               <Test
+                  Identifier = "TestSQLiteLoginsPerf">
+               </Test>
+            </SkippedTests>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "282731671ABC9BE700AA1954"
+               BuildableName = "SyncTests.xctest"
+               BlueprintName = "SyncTests"
+               ReferencedContainer = "container:Client.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "28F9520519D0F9FB00DCE892"
+               BuildableName = "FxATests.xctest"
+               BlueprintName = "FxATests"
+               ReferencedContainer = "container:FxA/FxA.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "3B43E3CF1D95C48D00BBA9DB"
+               BuildableName = "StoragePerfTests.xctest"
+               BlueprintName = "StoragePerfTests"
+               ReferencedContainer = "container:Client.xcodeproj">
+            </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "TestSQLiteHistoryFrecencyPerf">
+               </Test>
+               <Test
+                  Identifier = "TestSQLiteHistoryTopSitesCachePref">
+               </Test>
+            </SkippedTests>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "2FA436041ABB83B4008031D1"
+               BuildableName = "AccountTests.xctest"
+               BlueprintName = "AccountTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -175,11 +136,11 @@
       </MacroExpansion>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "-AppleLocale es_US"
+            argument = "-AppleLanguages (English)"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "-AppleLanguages (English)"
+            argument = "-AppleLocale es_US"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
@@ -187,7 +148,7 @@
       </AdditionalOptions>
    </TestAction>
    <LaunchAction
-      buildConfiguration = "Fennec"
+      buildConfiguration = "FennecEnterprise"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
@@ -206,11 +167,18 @@
             ReferencedContainer = "container:Client.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "OS_ACTIVITY_MODE"
+            value = "disable"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
-      buildConfiguration = "Fennec"
+      buildConfiguration = "FennecEnterprise"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
@@ -227,10 +195,10 @@
       </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
-      buildConfiguration = "Fennec">
+      buildConfiguration = "FennecEnterprise">
    </AnalyzeAction>
    <ArchiveAction
-      buildConfiguration = "Fennec"
+      buildConfiguration = "FennecEnterprise"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>

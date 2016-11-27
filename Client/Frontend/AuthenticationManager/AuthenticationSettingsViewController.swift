@@ -10,37 +10,53 @@ import LocalAuthentication
 
 private let logger = Logger.browserLogger
 
-private func presentNavAsFormSheet(presented: UINavigationController, presenter: UINavigationController?) {
+private func presentNavAsFormSheet(presented: UINavigationController, presenter: UINavigationController?, settings: AuthenticationSettingsViewController?) {
     presented.modalPresentationStyle = .FormSheet
-    presenter?.presentViewController(presented, animated: true, completion: nil)
+    presenter?.presentViewController(presented, animated: true, completion: {
+        if let selectedRow = settings?.tableView.indexPathForSelectedRow {
+            settings?.tableView.deselectRowAtIndexPath(selectedRow, animated: false)
+        }
+    })
 }
 
 class TurnPasscodeOnSetting: Setting {
+    weak var settings: AuthenticationSettingsViewController?
+
     init(settings: SettingsTableViewController, delegate: SettingsDelegate? = nil) {
+        self.settings = settings as? AuthenticationSettingsViewController
         super.init(title: NSAttributedString.tableRowTitle(AuthenticationStrings.turnOnPasscode),
                    delegate: delegate)
     }
 
     override func onClick(navigationController: UINavigationController?) {
         presentNavAsFormSheet(UINavigationController(rootViewController: SetupPasscodeViewController()),
-                              presenter: navigationController)
+                              presenter: navigationController,
+                              settings: settings)
     }
 }
 
 class TurnPasscodeOffSetting: Setting {
+    weak var settings: AuthenticationSettingsViewController?
+
     init(settings: SettingsTableViewController, delegate: SettingsDelegate? = nil) {
+        self.settings = settings as? AuthenticationSettingsViewController
         super.init(title: NSAttributedString.tableRowTitle(AuthenticationStrings.turnOffPasscode),
                    delegate: delegate)
     }
 
     override func onClick(navigationController: UINavigationController?) {
         presentNavAsFormSheet(UINavigationController(rootViewController: RemovePasscodeViewController()),
-                              presenter: navigationController)
+                              presenter: navigationController,
+                              settings: settings)
     }
 }
 
 class ChangePasscodeSetting: Setting {
+    weak var settings: AuthenticationSettingsViewController?
+
     init(settings: SettingsTableViewController, delegate: SettingsDelegate? = nil, enabled: Bool) {
+        self.settings = settings as? AuthenticationSettingsViewController
+
         let attributedTitle: NSAttributedString = (enabled ?? false) ?
             NSAttributedString.tableRowTitle(AuthenticationStrings.changePasscode) :
             NSAttributedString.disabledTableRowTitle(AuthenticationStrings.changePasscode)
@@ -52,11 +68,14 @@ class ChangePasscodeSetting: Setting {
 
     override func onClick(navigationController: UINavigationController?) {
         presentNavAsFormSheet(UINavigationController(rootViewController: ChangePasscodeViewController()),
-                              presenter: navigationController)
+                              presenter: navigationController,
+                              settings: settings)
     }
 }
 
 class RequirePasscodeSetting: Setting {
+    weak var settings: AuthenticationSettingsViewController?
+
     private weak var navigationController: UINavigationController?
 
     override var accessoryType: UITableViewCellAccessoryType { return .DisclosureIndicator }
@@ -74,11 +93,19 @@ class RequirePasscodeSetting: Setting {
 
     init(settings: SettingsTableViewController, delegate: SettingsDelegate? = nil, enabled: Bool? = nil) {
         self.navigationController = settings.navigationController
+        self.settings = settings as? AuthenticationSettingsViewController
+
         let title = AuthenticationStrings.requirePasscode
         let attributedTitle = (enabled ?? true) ? NSAttributedString.tableRowTitle(title) : NSAttributedString.disabledTableRowTitle(title)
         super.init(title: attributedTitle,
                    delegate: delegate,
                    enabled: enabled)
+    }
+    
+    func deselectRow () {
+        if let selectedRow = self.settings?.tableView.indexPathForSelectedRow {
+            self.settings?.tableView.deselectRowAtIndexPath(selectedRow, animated: true)
+        }
     }
 
     override func onClick(_: UINavigationController?) {
@@ -96,6 +123,7 @@ class RequirePasscodeSetting: Setting {
             cancel: nil,
             fallback: {
                 AppAuthenticator.presentPasscodeAuthentication(self.navigationController, delegate: self)
+                self.deselectRow()
             })
         } else {
             self.navigateToRequireInterval()

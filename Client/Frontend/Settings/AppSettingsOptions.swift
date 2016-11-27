@@ -51,22 +51,22 @@ class DisconnectSetting: WithAccountSetting {
     override var textAlignment: NSTextAlignment { return .Center }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Log Out", comment: "Button in settings screen to disconnect from your account"), attributes: [NSForegroundColorAttributeName: UIConstants.DestructiveRed])
+        return NSAttributedString(string: Strings.SettingsSignOutButton, attributes: [NSForegroundColorAttributeName: UIConstants.DestructiveRed])
     }
 
-    override var accessibilityIdentifier: String? { return "LogOut" }
+    override var accessibilityIdentifier: String? { return "SignOut" }
 
     override func onClick(navigationController: UINavigationController?) {
         let alertController = UIAlertController(
-            title: NSLocalizedString("Log Out?", comment: "Title of the 'log out firefox account' alert"),
-            message: NSLocalizedString("Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device.", comment: "Text of the 'log out firefox account' alert"),
+            title: Strings.SettingsSignOutAlertTitle,
+            message: NSLocalizedString("Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device.", comment: "Text of the 'sign out firefox account' alert"),
             preferredStyle: UIAlertControllerStyle.Alert)
         alertController.addAction(
             UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .Cancel) { (action) in
                 // Do nothing.
             })
         alertController.addAction(
-            UIAlertAction(title: NSLocalizedString("Log Out", comment: "Disconnect button in the 'log out firefox account' alert"), style: .Destructive) { (action) in
+            UIAlertAction(title: Strings.SettingsSignOutDestructiveAction, style: .Destructive) { (action) in
                 self.settings.profile.removeAccount()
                 self.settings.settings = self.settings.generateSettings()
                 self.settings.SELfirefoxAccountDidChange()
@@ -409,6 +409,17 @@ class ExportBrowserDataSetting: HiddenSetting {
     }
 }
 
+class EnableBookmarkMergingSetting: HiddenSetting {
+    override var title: NSAttributedString? {
+        // Not localized for now.
+        return NSAttributedString(string: "Enable Bidirectional Bookmark Sync ", attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
+    }
+
+    override func onClick(navigationController: UINavigationController?) {
+        AppConstants.shouldMergeBookmarks = true
+    }
+}
+
 // Show the current version of Firefox
 class VersionSetting: Setting {
     unowned let settings: SettingsTableViewController
@@ -584,6 +595,12 @@ class LoginsSetting: Setting {
         super.init(title: NSAttributedString(string: loginsTitle, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]),
                    delegate: delegate)
     }
+    
+    func deselectRow () {
+        if let selectedRow = self.settings?.tableView.indexPathForSelectedRow {
+            self.settings?.tableView.deselectRowAtIndexPath(selectedRow, animated: true)
+        }
+    }
 
     override func onClick(_: UINavigationController?) {
         guard let authInfo = KeychainWrapper.defaultKeychainWrapper().authenticationInfo() else {
@@ -598,12 +615,11 @@ class LoginsSetting: Setting {
                 self.settings?.navigateToLoginsList()
             },
             cancel: {
-                if let selectedRow = self.settings?.tableView.indexPathForSelectedRow {
-                    self.settings?.tableView.deselectRowAtIndexPath(selectedRow, animated: true)
-                }
+                self.deselectRow()
             },
             fallback: {
                 AppAuthenticator.presentPasscodeAuthentication(self.navigationController, delegate: self.settings)
+                self.deselectRow()
             })
         } else {
             settings?.navigateToLoginsList()
@@ -712,7 +728,7 @@ class HomePageSetting: Setting {
 
     override var accessoryType: UITableViewCellAccessoryType { return .DisclosureIndicator }
 
-    override var accessibilityIdentifier: String? { return "HomePageSetting" }
+    override var accessibilityIdentifier: String? { return "Homepage" }
 
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
@@ -727,7 +743,6 @@ class HomePageSetting: Setting {
         viewController.tabManager = tabManager
         navigationController?.pushViewController(viewController, animated: true)
     }
-
 }
 
 class NewTabPageSetting: Setting {
@@ -735,7 +750,7 @@ class NewTabPageSetting: Setting {
 
     override var accessoryType: UITableViewCellAccessoryType { return .DisclosureIndicator }
 
-    override var accessibilityIdentifier: String? { return "NewTabPage.Setting" }
+    override var accessibilityIdentifier: String? { return "NewTab" }
 
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
@@ -747,5 +762,23 @@ class NewTabPageSetting: Setting {
         let viewController = NewTabChoiceViewController(prefs: profile.prefs)
         navigationController?.pushViewController(viewController, animated: true)
     }
-    
+}
+
+class OpenWithSetting: Setting {
+    let profile: Profile
+
+    override var accessoryType: UITableViewCellAccessoryType { return .DisclosureIndicator }
+
+    override var accessibilityIdentifier: String? { return "OpenWith.Setting" }
+
+    init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
+
+        super.init(title: NSAttributedString(string: Strings.SettingsOpenWithSectionName, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]))
+    }
+
+    override func onClick(navigationController: UINavigationController?) {
+        let viewController = OpenWithSettingsViewController(prefs: profile.prefs)
+        navigationController?.pushViewController(viewController, animated: true)
+    }
 }

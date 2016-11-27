@@ -11,11 +11,15 @@ class BrowserTests: KIFTestCase {
     private var webRoot: String!
 
     override func setUp() {
+        super.setUp()
         webRoot = SimplePageServer.start()
+        BrowserUtils.dismissFirstRunUI(tester())
     }
 
     override func tearDown() {
         super.tearDown()
+        BrowserUtils.resetToAboutHome(tester())
+        BrowserUtils.clearPrivateData(tester: tester())
     }
 
     func testDisplaySharesheetWhileJSPromptOccurs() {
@@ -26,12 +30,15 @@ class BrowserTests: KIFTestCase {
         // Show share sheet and wait for the JS prompt to fire
         tester().tapViewWithAccessibilityLabel("Share")
         tester().waitForTimeInterval(5)
-        tester().tapViewWithAccessibilityLabel("Cancel")
-
+        do {
+            try tester().tryFindingTappableViewWithAccessibilityLabel("Cancel")
+            tester().tapViewWithAccessibilityLabel("Cancel")
+        } catch {
+            tester().tapViewWithAccessibilityLabel("dismiss popup")
+        }
+        
         // Check to see if the JS Prompt is dequeued and showing
         tester().waitForViewWithAccessibilityLabel("OK")
         tester().tapViewWithAccessibilityLabel("OK")
-
-        BrowserUtils.resetToAboutHome(tester())
     }
 }

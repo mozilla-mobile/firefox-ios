@@ -8,6 +8,18 @@ import Foundation
 import WebKit
 
 class BookmarksPanelTests: KIFTestCase {
+    
+    override func setUp() {
+        super.setUp()
+        BrowserUtils.dismissFirstRunUI(tester())
+    }
+    
+    override func tearDown() {
+        super.tearDown()
+        BrowserUtils.resetToAboutHome(tester())
+        BrowserUtils.clearPrivateData(tester: tester())
+    }
+    
     func testBookmarkPanelBufferOnly() {
         // Insert some data into the buffer. There will be nothing in the mirror, but we can still
         // show Desktop Bookmarks.

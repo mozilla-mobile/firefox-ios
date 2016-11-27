@@ -9,6 +9,8 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
     private var site: Site
     private var actions: [ActionOverlayTableViewAction]
     private var tableView = UITableView()
+    private var headerImage: UIImage?
+    private var headerImageBackgroundColor: UIColor?
     lazy var tapRecognizer: UITapGestureRecognizer = {
         let tapRecognizer = UITapGestureRecognizer()
         tapRecognizer.addTarget(self, action: #selector(ActionOverlayTableViewController.dismiss(_:)))
@@ -24,9 +26,11 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
         return visualEffectView
     }()
 
-    init(site: Site, actions: [ActionOverlayTableViewAction]) {
+    init(site: Site, actions: [ActionOverlayTableViewAction], siteImage: UIImage?, siteBGColor: UIColor?) {
         self.site = site
         self.actions = actions
+        self.headerImage = siteImage
+        self.headerImageBackgroundColor = siteBGColor
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -51,6 +55,7 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
         tableView.layer.cornerRadius = 10
         tableView.separatorStyle = .None
         tableView.cellLayoutMarginsFollowReadableWidth = false
+        tableView.accessibilityIdentifier = "Context Menu"
 
         tableView.snp_makeConstraints { make in
             make.center.equalTo(self.view)
@@ -107,32 +112,12 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
 
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier("ActionOverlayTableViewHeader") as! ActionOverlayTableViewHeader
-        header.configureWithSite(site)
+        header.configureWithSite(site, image: headerImage, imageBackgroundColor: headerImageBackgroundColor)
         return header
     }
 }
 
 class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
-    var siteImage: UIImage? = nil {
-        didSet {
-            if let image = siteImage {
-                siteImageView.image = image
-                siteImageView.contentMode = UIViewContentMode.ScaleAspectFit
-
-                // Force nearest neighbor scaling for small favicons
-                if image.size.width < SimpleHighlightCellUX.NearestNeighbordScalingThreshold {
-                    siteImageView.layer.shouldRasterize = true
-                    siteImageView.layer.rasterizationScale = 2
-                    siteImageView.layer.minificationFilter = kCAFilterNearest
-                    siteImageView.layer.magnificationFilter = kCAFilterNearest
-                }
-            } else {
-                siteImageView.image = SimpleHighlightCellUX.PlaceholderImage
-                siteImageView.contentMode = UIViewContentMode.Center
-            }
-        }
-    }
-
     lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontMediumBold
@@ -153,8 +138,7 @@ class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
 
     lazy var siteImageView: UIImageView = {
         let siteImageView = UIImageView()
-        siteImageView.contentMode = UIViewContentMode.ScaleAspectFit
-        siteImageView.clipsToBounds = true
+        siteImageView.contentMode = UIViewContentMode.Center
         siteImageView.layer.cornerRadius = SimpleHighlightCellUX.CornerRadius
         return siteImageView
     }()
@@ -198,26 +182,10 @@ class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configureWithSite(site: Site) {
-        if let icon = site.icon {
-            let url = icon.url
-            self.siteImageView.layer.borderWidth = 0
-            self.setImageWithURL(NSURL(string: url)!)
-        } else if let url = NSURL(string: site.url) {
-            self.siteImage = FaviconFetcher.getDefaultFavicon(url)
-            self.siteImageView.layer.borderWidth = SimpleHighlightCellUX.BorderWidth
-        }
+    func configureWithSite(site: Site, image: UIImage?, imageBackgroundColor: UIColor?) {
+        self.siteImageView.backgroundColor = imageBackgroundColor
+        self.siteImageView.image = image?.createScaled(SimpleHighlightCellUX.IconSize) ?? SimpleHighlightCellUX.PlaceholderImage
         self.titleLabel.text = site.title.characters.count <= 1 ? site.url : site.title
         self.descriptionLabel.text = site.tileURL.baseDomain()
-    }
-
-    func setImageWithURL(url: NSURL) {
-        siteImageView.sd_setImageWithURL(url) { (img, err, type, url) -> Void in
-            guard let img = img else {
-                return
-            }
-            self.siteImage = img
-        }
-        siteImageView.layer.masksToBounds = true
     }
 }
