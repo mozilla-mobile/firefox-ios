@@ -28,7 +28,7 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
     func testHistoryHighlights() {
         let db = BrowserDB(filename: "browser.db", files: files)
         let prefs = MockProfilePrefs()
-        let history = SQLiteHistory(db: db, prefs: prefs)!
+        let history = SQLiteHistory(db: db, prefs: prefs)
 
         let startTime = NSDate.nowMicroseconds()
         let oneHourAgo = startTime - oneHourInMicroseconds
@@ -88,7 +88,7 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
     func testBookmarkHighlights() {
         let db = BrowserDB(filename: "browser.db", files: files)
         let prefs = MockProfilePrefs()
-        let history = SQLiteHistory(db: db, prefs: prefs)!
+        let history = SQLiteHistory(db: db, prefs: prefs)
         let bookmarks = SQLiteBookmarkBufferStorage(db: db)
 
         let startTime = NSDate.nowMicroseconds()
@@ -141,7 +141,7 @@ class TestSQLiteHistoryRecommendationsPerf: XCTestCase {
         let files = MockFiles()
         let db = BrowserDB(filename: "browser.db", files: files)
         let prefs = MockProfilePrefs()
-        let history = SQLiteHistory(db: db, prefs: prefs)!
+        let history = SQLiteHistory(db: db, prefs: prefs)
         let bookmarks = SQLiteBookmarkBufferStorage(db: db)
 
         let count = 500

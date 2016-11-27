@@ -839,7 +839,7 @@ class TestSQLiteHistory: XCTestCase {
     func testHistoryLocalAndRemoteVisits() {
         let db = BrowserDB(filename: "browser.db", files: files)
         let prefs = MockProfilePrefs()
-        let history = SQLiteHistory(db: db, prefs: prefs)!
+        let history = SQLiteHistory(db: db, prefs: prefs)
 
         let siteL = Site(url: "http://url1/", title: "title local only")
         let siteR = Site(url: "http://url2/", title: "title remote only")
@@ -932,7 +932,7 @@ class TestSQLiteHistory: XCTestCase {
     func testUpgradesWithData() {
         let db = BrowserDB(filename: "browser-v6-data.db", files: files)
 
-        XCTAssertTrue(db.createOrUpdate(BrowserTableV6()), "Creating browser table version 6")
+        XCTAssertTrue(db.createOrUpdate(BrowserTableV6()) == .Success, "Creating browser table version 6")
 
         // Insert some data.
         let queries = [
@@ -947,11 +947,11 @@ class TestSQLiteHistory: XCTestCase {
         XCTAssertTrue(db.run(queries).value.isSuccess)
 
         // And we can upgrade to the current version.
-        XCTAssertTrue(db.createOrUpdate(BrowserTable()), "Upgrading browser table from version 6")
+        XCTAssertTrue(db.createOrUpdate(BrowserTable()) == .Success, "Upgrading browser table from version 6")
 
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
-        let results = history?.getSitesByLastVisit(10).value.successValue
+        let results = history.getSitesByLastVisit(10).value.successValue
         XCTAssertNotNil(results)
         XCTAssertEqual(results![0]?.url, "http://www.example.com")
 
@@ -961,7 +961,7 @@ class TestSQLiteHistory: XCTestCase {
     func testDomainUpgrade() {
         let db = BrowserDB(filename: "browser.db", files: files)
         let prefs = MockProfilePrefs()
-        let history = SQLiteHistory(db: db, prefs: prefs)!
+        let history = SQLiteHistory(db: db, prefs: prefs)
 
         let site = Site(url: "http://www.example.com/test1.1", title: "title one")
         var err: NSError? = nil
@@ -990,7 +990,7 @@ class TestSQLiteHistory: XCTestCase {
     func testDomains() {
         let db = BrowserDB(filename: "browser.db", files: files)
         let prefs = MockProfilePrefs()
-        let history = SQLiteHistory(db: db, prefs: prefs)!
+        let history = SQLiteHistory(db: db, prefs: prefs)
 
         let initialGuid = Bytes.generateGUID()
         let site11 = Site(url: "http://www.example.com/test1.1", title: "title one")
@@ -1027,7 +1027,7 @@ class TestSQLiteHistory: XCTestCase {
     func testHistoryIsSynced() {
         let db = BrowserDB(filename: "historysynced.db", files: files)
         let prefs = MockProfilePrefs()
-        let history = SQLiteHistory(db: db, prefs: prefs)!
+        let history = SQLiteHistory(db: db, prefs: prefs)
 
         let initialGUID = Bytes.generateGUID()
         let site = Place(guid: initialGUID, url: "http://www.example.com/test1.3", title: "title")
@@ -1044,7 +1044,7 @@ class TestSQLiteHistory: XCTestCase {
     func testHistoryTable() {
         let db = BrowserDB(filename: "browser.db", files: files)
         let prefs = MockProfilePrefs()
-        let history = SQLiteHistory(db: db, prefs: prefs)!
+        let history = SQLiteHistory(db: db, prefs: prefs)
         let bookmarks = SQLiteBookmarks(db: db)
 
         let site1 = Site(url: "http://url1/", title: "title one")
@@ -1167,7 +1167,7 @@ class TestSQLiteHistory: XCTestCase {
     func testFaviconTable() {
         let db = BrowserDB(filename: "browser.db", files: files)
         let prefs = MockProfilePrefs()
-        let history = SQLiteHistory(db: db, prefs: prefs)!
+        let history = SQLiteHistory(db: db, prefs: prefs)
         let bookmarks = SQLiteBookmarks(db: db)
 
         let expectation = self.expectationWithDescription("First.")
@@ -1230,7 +1230,7 @@ class TestSQLiteHistory: XCTestCase {
     func testTopSitesCache() {
         let db = BrowserDB(filename: "browser.db", files: files)
         let prefs = MockProfilePrefs()
-        let history = SQLiteHistory(db: db, prefs: prefs)!
+        let history = SQLiteHistory(db: db, prefs: prefs)
 
         history.setTopSitesCacheSize(20)
         history.clearTopSitesCache().value
@@ -1317,7 +1317,7 @@ class TestSQLiteHistoryTransactionUpdate: XCTestCase {
         let files = MockFiles()
         let db = BrowserDB(filename: "browser.db", files: files)
         let prefs = MockProfilePrefs()
-        let history = SQLiteHistory(db: db, prefs: prefs)!
+        let history = SQLiteHistory(db: db, prefs: prefs)
 
         history.clearHistory().value
         let site = Site(url: "http://site/foo", title: "AA")
@@ -1336,7 +1336,7 @@ class TestSQLiteHistoryFilterSplitting: XCTestCase {
         let files = MockFiles()
         let db = BrowserDB(filename: "browser.db", files: files)
         let prefs = MockProfilePrefs()
-        return SQLiteHistory(db: db, prefs: prefs)!
+        return SQLiteHistory(db: db, prefs: prefs)
     }()
 
     func testWithSingleWord() {

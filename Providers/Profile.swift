@@ -210,13 +210,8 @@ public class BrowserProfile: Profile {
         self.files = ProfileFileAccessor(localName: localName)
         self.app = app
 
-        if let baseBundleIdentifier = AppInfo.baseBundleIdentifier() {
-            self.keychain = KeychainWrapper(serviceName: baseBundleIdentifier)
-        } else {
-            log.error("Unable to get the base bundle identifier. Keychain data will not be shared.")
-            self.keychain = KeychainWrapper.defaultKeychainWrapper()
-        }
-        
+        self.keychain = KeychainWrapper.sharedAppContainerKeychain
+
         if clear {
             do {
                 try NSFileManager.defaultManager().removeItemAtPath(self.files.rootPath as String)
@@ -387,7 +382,7 @@ public class BrowserProfile: Profile {
      * that this is initialized first.
      */
     private lazy var places: protocol<BrowserHistory, Favicons, SyncableHistory, ResettableSyncStorage, HistoryRecommendations> = {
-        return SQLiteHistory(db: self.db, prefs: self.prefs)!
+        return SQLiteHistory(db: self.db, prefs: self.prefs)
     }()
 
     var favicons: Favicons {
@@ -477,8 +472,9 @@ public class BrowserProfile: Profile {
     }
 
     public func sendItems(items: [ShareItem], toClients clients: [RemoteClient]) {
+        let id = DeviceInfo.clientIdentifier(self.prefs)
         let commands = items.map { item in
-            SyncCommand.fromShareItem(item, withAction: "displayURI")
+            SyncCommand.displayURIFromShareItem(item, asClient: id)
         }
         self.remoteClientsAndTabs.insertCommands(commands, forClients: clients) >>> { self.syncManager.syncClients() }
     }
@@ -1282,8 +1278,8 @@ public class BrowserProfile: Profile {
         func greenLight() -> () -> Bool {
             let start = NSDate.now()
 
-            // Give it one minute to run before we stop.
-            let stopBy = start + OneMinuteInMilliseconds
+            // Give it two minutes to run before we stop.
+            let stopBy = start + (2 * OneMinuteInMilliseconds)
             log.debug("Checking green light. Backgrounded: \(self.backgrounded).")
             return {
                 NSDate.now() < stopBy &&

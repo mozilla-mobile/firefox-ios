@@ -67,7 +67,7 @@ public class SwiftData {
     /// A simple state flag to track whether we should accept new connection requests.
     /// If a connection request is made while the database is closed, a
     /// FailedSQLiteDBConnection will be returned.
-    private var closed = false
+    private(set) var closed = false
 
     init(filename: String, key: String? = nil, prevKey: String? = nil) {
         self.filename = filename

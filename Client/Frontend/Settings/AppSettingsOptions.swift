@@ -409,6 +409,17 @@ class ExportBrowserDataSetting: HiddenSetting {
     }
 }
 
+class EnableBookmarkMergingSetting: HiddenSetting {
+    override var title: NSAttributedString? {
+        // Not localized for now.
+        return NSAttributedString(string: "Enable Bidirectional Bookmark Sync ", attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
+    }
+
+    override func onClick(navigationController: UINavigationController?) {
+        AppConstants.shouldMergeBookmarks = true
+    }
+}
+
 // Show the current version of Firefox
 class VersionSetting: Setting {
     unowned let settings: SettingsTableViewController
@@ -718,7 +729,7 @@ class HomePageSetting: Setting {
 
     override var accessoryType: UITableViewCellAccessoryType { return .DisclosureIndicator }
 
-    override var accessibilityIdentifier: String? { return "HomePageSetting" }
+    override var accessibilityIdentifier: String? { return "Homepage" }
 
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
@@ -740,7 +751,7 @@ class NewTabPageSetting: Setting {
 
     override var accessoryType: UITableViewCellAccessoryType { return .DisclosureIndicator }
 
-    override var accessibilityIdentifier: String? { return "NewTabPage.Setting" }
+    override var accessibilityIdentifier: String? { return "NewTab" }
 
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile

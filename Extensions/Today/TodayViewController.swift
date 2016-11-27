@@ -37,11 +37,10 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
         let button = imageButton.button
 
-        button.setImage(UIImage(named: "new_tab_button_normal"), forState: .Normal)
-        button.setImage(UIImage(named: "new_tab_button_highlight"), forState: .Highlighted)
+        button.setImage(UIImage(named: "new_tab_button_normal")?.imageWithRenderingMode(.AlwaysTemplate), forState: .Normal)
+        button.setImage(UIImage(named: "new_tab_button_highlight")?.imageWithRenderingMode(.AlwaysTemplate), forState: .Highlighted)
 
         let label = imageButton.label
-        label.textColor = UIColor.whiteColor()
         label.font = UIFont.systemFontOfSize(TodayUX.imageButtonTextSize)
 
         imageButton.sizeToFit()
@@ -58,6 +57,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         button.setImage(UIImage(named: "new_private_tab_button_highlight"), forState: .Highlighted)
 
         let label = imageButton.label
+        label.tintColor = TodayUX.privateBrowsingColor
         label.textColor = TodayUX.privateBrowsingColor
         label.font = UIFont.systemFontOfSize(TodayUX.imageButtonTextSize)
         imageButton.sizeToFit()
@@ -74,7 +74,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         button.setBackgroundColor(UIColor.clearColor(), forState: .Normal)
         button.setBackgroundColor(TodayUX.backgroundHightlightColor, forState: .Highlighted)
 
-        button.setImage(UIImage(named: "copy_link_icon"), forState: .Normal)
+        button.setImage(UIImage(named: "copy_link_icon")?.imageWithRenderingMode(.AlwaysTemplate), forState: .Normal)
 
         button.label.font = UIFont.systemFontOfSize(TodayUX.labelTextSize)
         button.subtitleLabel.font = UIFont.systemFontOfSize(TodayUX.linkTextSize)
@@ -92,7 +92,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         let stackView = UIStackView()
         stackView.axis = .Vertical
         stackView.alignment = .Fill
-        stackView.spacing = 0
+        stackView.spacing = TodayUX.margin / 2
         stackView.distribution = UIStackViewDistribution.Fill
         stackView.layoutMargins = UIEdgeInsets(top: TodayUX.margin, left: TodayUX.margin, bottom: TodayUX.margin, right: TodayUX.margin)
         stackView.layoutMarginsRelativeArrangement = true
@@ -135,16 +135,31 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        // on iOS10 widgetView will be a UIVisualEffectView and on ios9 it will just be the main self.view
+        let widgetView: UIView!
+        if #available(iOSApplicationExtension 10.0, *) {
+            self.extensionContext?.widgetLargestAvailableDisplayMode = .Compact
+            let effectView = UIVisualEffectView(effect: UIVibrancyEffect.widgetPrimaryVibrancyEffect())
+            self.view.addSubview(effectView)
+            effectView.snp_makeConstraints { make in
+                make.edges.equalTo(self.view)
+            }
+            widgetView = effectView.contentView
+        } else {
+            widgetView = self.view
+            self.view.tintColor = UIColor.whiteColor()
+            openCopiedLinkButton.label.textColor = UIColor.whiteColor()
+        }
+
         buttonStackView.addArrangedSubview(newTabButton)
         buttonStackView.addArrangedSubview(newPrivateTabButton)
 
         widgetStackView.addArrangedSubview(buttonStackView)
         widgetStackView.addArrangedSubview(openCopiedLinkButton)
 
-        view.addSubview(widgetStackView)
-
+        widgetView.addSubview(widgetStackView)
         widgetStackView.snp_makeConstraints { make in
-            make.edges.equalTo(self.view)
+            make.edges.equalTo(widgetView)
         }
     }
 
@@ -239,6 +254,7 @@ class ImageButtonWithLabel: UIView {
         label.numberOfLines = 1
         label.lineBreakMode = .ByWordWrapping
         label.textAlignment = .Center
+        label.textColor = UIColor.whiteColor()
     }
 
     func addTarget(target: AnyObject?, action: Selector, forControlEvents events: UIControlEvents) {
@@ -265,7 +281,6 @@ class ButtonWithSublabel: UIButton {
 
     private func performLayout() {
         let titleLabel = self.label
-        titleLabel.textColor = UIColor.whiteColor()
 
         self.titleLabel?.removeFromSuperview()
         addSubview(titleLabel)

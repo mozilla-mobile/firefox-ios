@@ -22,7 +22,7 @@ struct TopSiteCellUX {
  */
 class TopSiteItemCell: UICollectionViewCell {
 
-    lazy private var imageView: UIImageView = {
+    lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.masksToBounds = true
         return imageView
@@ -121,20 +121,24 @@ class TopSiteItemCell: UICollectionViewCell {
     }
 
     private func setImageWithURL(url: NSURL) {
+        let title = self.titleLabel.text
         imageView.sd_setImageWithURL(url) { [unowned self] (img, err, type, url) -> Void in
             guard let img = img else {
                 self.contentView.backgroundColor = FaviconFetcher.getDefaultColor(url)
                 self.imageView.image = FaviconFetcher.getDefaultFavicon(url)
                 return
             }
-            img.getColors(CGSize(width: 25, height: 25)) { colors in
-                self.contentView.backgroundColor = colors.backgroundColor ?? UIColor.lightGrayColor()
+            img.getColors(CGSize(width: 25, height: 25)) {colors in
+                //sometimes the cell could be reused by the time we get here.
+                if title == self.titleLabel.text {
+                    self.contentView.backgroundColor = colors.backgroundColor ?? UIColor.lightGrayColor()
+                }
             }
         }
     }
 
     func configureWithTopSiteItem(site: Site) {
-        titleLabel.text = site.tileURL.extractDomainName()
+        titleLabel.text = site.tileURL.hostSLD
         accessibilityLabel = titleLabel.text
         if let suggestedSite = site as? SuggestedSite {
             let img = UIImage(named: suggestedSite.faviconImagePath!)
@@ -169,12 +173,12 @@ struct ASHorizontalScrollCellUX {
  */
 class ASHorizontalScrollCell: UITableViewCell {
 
-    lazy private var collectionView: UICollectionView = {
+    lazy var collectionView: UICollectionView = {
         let layout  = HorizontalFlowLayout()
         layout.itemSize = ASHorizontalScrollCellUX.TopSiteItemSize
         let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         collectionView.registerClass(TopSiteItemCell.self, forCellWithReuseIdentifier: ASHorizontalScrollCellUX.TopSiteCellIdentifier)
-        collectionView.backgroundColor = ASHorizontalScrollCellUX.BackgroundColor
+        collectionView.backgroundColor = UIColor.clearColor()
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.isAccessibilityElement = false
         collectionView.pagingEnabled = true
@@ -193,12 +197,11 @@ class ASHorizontalScrollCell: UITableViewCell {
         return pageControl
     }()
 
-    lazy private var longPress: UILongPressGestureRecognizer = {
-        let press = UILongPressGestureRecognizer(target: self, action: #selector(ASHorizontalScrollCell.handleLongPress(_:)))
-        press.minimumPressDuration = 0.5
-        press.delegate = self
-        press.delaysTouchesBegan = true
-        return press
+    lazy private var gradientBG: CAGradientLayer = {
+        let gradient: CAGradientLayer = CAGradientLayer()
+        gradient.frame = self.contentView.bounds
+        gradient.colors = [UIColor.whiteColor().CGColor, UIColor(colorString: "f9f9f9").CGColor]
+        return gradient
     }()
 
     lazy private var pageControlPress: UITapGestureRecognizer = {
@@ -225,11 +228,10 @@ class ASHorizontalScrollCell: UITableViewCell {
 
         isAccessibilityElement = false
         accessibilityIdentifier = "TopSitesCell"
-        backgroundColor = ASHorizontalScrollCellUX.BackgroundColor
+        backgroundColor = UIColor.clearColor()
         contentView.addSubview(collectionView)
         contentView.addSubview(pageControl)
         self.selectionStyle = UITableViewCellSelectionStyle.None
-        collectionView.addGestureRecognizer(self.longPress)
         pageControl.addGestureRecognizer(self.pageControlPress)
 
         collectionView.snp_makeConstraints { make in
@@ -247,6 +249,10 @@ class ASHorizontalScrollCell: UITableViewCell {
         super.layoutSubviews()
         let layout = collectionView.collectionViewLayout as! HorizontalFlowLayout
 
+        if gradientBG.superlayer == nil {
+            self.contentView.layer.insertSublayer(gradientBG, atIndex: 0)
+        }
+
         pageControl.pageCount = layout.numberOfPages()
         pageControl.hidden = pageControl.pageCount <= 1
     }
@@ -255,6 +261,7 @@ class ASHorizontalScrollCell: UITableViewCell {
         pageControl.progress = currentPage
         if currentPage == floor(currentPage) {
             UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
+            self.setNeedsLayout()
         }
     }
 
@@ -270,18 +277,6 @@ class ASHorizontalScrollCell: UITableViewCell {
         }
         let swipeCoordinate = CGFloat(pageControl.currentPage) * self.collectionView.frame.size.width
         self.collectionView.setContentOffset(CGPointMake(swipeCoordinate, 0), animated: true)
-    }
-
-    func handleLongPress(gestureRecognizer: UILongPressGestureRecognizer) {
-        guard gestureRecognizer.state == .Began else {
-            return //gesture not done
-        }
-
-        let p = gestureRecognizer.locationInView(self.collectionView)
-        guard let indexPath = self.collectionView.indexPathForItemAtPoint(p), let delegate = delegate else {
-            return //false click
-        }
-        delegate.collectionView(self.collectionView, showContextMenuFor: indexPath)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -429,8 +424,6 @@ class ASHorizontalScrollCellManager: NSObject, UICollectionViewDelegate, UIColle
 
     var urlPressedHandler: ((NSURL, NSIndexPath) -> Void)?
     var pageChangedHandler: ((CGFloat) -> Void)?
-    var presentActionMenuHandler: ((UIAlertController) -> Void)?
-    var deleteItemHandler: ((NSURL, NSIndexPath) -> Void)?
 
     // The current traits that define the parent ViewController. Used to determine how many rows/columns should be created.
     var currentTraits: UITraitCollection?
@@ -480,28 +473,6 @@ class ASHorizontalScrollCellManager: NSObject, UICollectionViewDelegate, UIColle
     func scrollViewDidScroll(scrollView: UIScrollView) {
         let pageWidth = CGRectGetWidth(scrollView.frame)
         pageChangedHandler?(scrollView.contentOffset.x / pageWidth)
-    }
-
-    func collectionView(collectionView: UICollectionView, showContextMenuFor indexPath: NSIndexPath) {
-        //Show a context menu with options for the topsite
-        let contentItem = content[indexPath.row]
-
-        let alertController = UIAlertController(title: contentItem.url, message: nil, preferredStyle: .ActionSheet)
-
-        let cancelAction = UIAlertAction(title: Strings.ASCancelButton, style: .Cancel, handler: nil)
-        alertController.addAction(cancelAction)
-
-        let deleteAction = UIAlertAction(title: Strings.ASRemoveButton, style: .Destructive, handler: { (alert: UIAlertAction) -> Void in
-            self.collectionView(collectionView, deleteItemAtIndexPath: indexPath)
-        })
-        alertController.addAction(deleteAction)
-        // Because ASHorizontalScrollCellManager is not a UIViewController we cannot present a AlertController on it.
-        self.presentActionMenuHandler?(alertController)
-    }
-
-    func collectionView(collectionView: UICollectionView, deleteItemAtIndexPath indexPath: NSIndexPath) {
-        let contentItem = self.content[indexPath.row]
-        self.deleteItemHandler?(contentItem.tileURL, indexPath)
     }
 
 }

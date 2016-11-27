@@ -58,6 +58,7 @@ class BrowserViewController: UIViewController {
         let searchButton = UIButton()
         searchButton.setImage(UIImage(named: "AddSearch")?.imageWithRenderingMode(.AlwaysTemplate), forState: .Normal)
         searchButton.addTarget(self, action: #selector(BrowserViewController.addCustomSearchEngineForFocusedElement), forControlEvents: .TouchUpInside)
+        searchButton.accessibilityIdentifier = "BrowserViewController.customSearchEngineButton"
         return searchButton
     }()
 
@@ -135,14 +136,15 @@ class BrowserViewController: UIViewController {
             self.displayedPopoverController = nil
         }
 
-        guard let displayedPopoverController = self.displayedPopoverController else {
-            return
-        }
-
-        coordinator.animateAlongsideTransition(nil) { context in
-            self.updateDisplayedPopoverProperties?()
-            self.presentViewController(displayedPopoverController, animated: true, completion: nil)
-        }
+        coordinator.animateAlongsideTransition({context in
+            self.scrollController.updateMinimumZoom()
+            if let popover = self.displayedPopoverController {
+                self.updateDisplayedPopoverProperties?()
+                self.presentViewController(popover, animated: true, completion: nil)
+            }
+            }, completion: { _ in
+                self.scrollController.setMinimumZoom()
+        })
     }
 
     override func didReceiveMemoryWarning() {
@@ -268,20 +270,9 @@ class BrowserViewController: UIViewController {
         }
 
         displayedPopoverController?.dismissViewControllerAnimated(true, completion: nil)
-
-        // WKWebView looks like it has a bug where it doesn't invalidate it's visible area when the user
-        // performs a device rotation. Since scrolling calls
-        // _updateVisibleContentRects (https://github.com/WebKit/webkit/blob/master/Source/WebKit2/UIProcess/API/Cocoa/WKWebView.mm#L1430)
-        // this method nudges the web view's scroll view by a single pixel to force it to invalidate.
-        if let scrollView = self.tabManager.selectedTab?.webView?.scrollView {
-            let contentOffset = scrollView.contentOffset
-            coordinator.animateAlongsideTransition({ context in
-                scrollView.setContentOffset(CGPoint(x: contentOffset.x, y: contentOffset.y + 1), animated: true)
-                self.scrollController.showToolbars(animated: false)
-            }, completion: { context in
-                scrollView.setContentOffset(CGPoint(x: contentOffset.x, y: contentOffset.y), animated: false)
-            })
-        }
+        coordinator.animateAlongsideTransition({ context in
+            self.scrollController.showToolbars(animated: false)
+            }, completion: nil)
     }
 
     func SELappDidEnterBackgroundNotification() {
@@ -428,6 +419,7 @@ class BrowserViewController: UIViewController {
         scrollController.header = header
         scrollController.footer = footer
         scrollController.snackBars = snackBars
+        scrollController.webViewContainerToolbar = webViewContainerToolbar
 
         log.debug("BVC updating toolbar state…")
         self.updateToolbarStateForTraitCollection(self.traitCollection)
@@ -1974,6 +1966,10 @@ extension BrowserViewController: HomePanelViewControllerDelegate {
     func homePanelViewControllerDidRequestToSignIn(homePanelViewController: HomePanelViewController) {
         presentSignInViewController() // TODO UX Right now the flow for sign in and create account is the same
     }
+    
+    func homePanelViewControllerDidRequestToOpenInNewTab(url: NSURL, isPrivate: Bool) {
+        self.tabManager.addTab(NSURLRequest(URL: url), afterTab: self.tabManager.selectedTab, isPrivate: isPrivate)
+    }
 }
 
 extension BrowserViewController: SearchViewControllerDelegate {
@@ -2198,14 +2194,7 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
-        // Fixes 1261457 - Rich text editor fails because requests to about:blank are blocked
-        if url.scheme == "about" && url.resourceSpecifier == "blank" {
-            decisionHandler(WKNavigationActionPolicy.Allow)
-            return
-        }
-
-        // Fixes 1312801 - Navigating to about:srcdoc throws a "Firefox cannot open the page" alert
-        if url.scheme == "about" && url.resourceSpecifier == "srcdoc" {
+        if url.scheme == "about" {
             decisionHandler(WKNavigationActionPolicy.Allow)
             return
         }
@@ -2247,7 +2236,7 @@ extension BrowserViewController: WKNavigationDelegate {
 
         // Handles custom mailto URL schemes.
         if url.scheme == "mailto" {
-            if let mailToMetadata = url.mailToMetadata(), let mailScheme = self.profile.prefs.stringForKey("MailToOption") where mailScheme != "mailto" {
+            if let mailToMetadata = url.mailToMetadata(), let mailScheme = self.profile.prefs.stringForKey(PrefsKeys.KeyMailToOption) where mailScheme != "mailto" {
                 self.mailtoLinkHandler.launchMailClientForScheme(mailScheme, metadata: mailToMetadata, defaultMailtoURL: url)
             } else {
                 UIApplication.sharedApplication().openURL(url)
@@ -2319,6 +2308,7 @@ extension BrowserViewController: WKNavigationDelegate {
         guard let tab = tabManager[webView] else { return }
 
         tab.url = webView.URL
+        self.scrollController.resetZoomState()
 
         if tabManager.selectedTab === tab {
             updateUIForReaderHomeStateForTab(tab)

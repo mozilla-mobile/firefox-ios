@@ -13,10 +13,10 @@ public enum AppBuildChannel {
 }
 
 public struct AppConstants {
-    public static let IsRunningTest = NSClassFromString("XCTestCase") != nil || NSProcessInfo.processInfo().arguments.contains("FIREFOX_TESTS")
+    public static let IsRunningTest = NSClassFromString("XCTestCase") != nil || NSProcessInfo.processInfo().arguments.contains(LaunchArguments.Test)
 
-    // True if this process is executed as part of a Fastlane Snapshot test
-    public static let IsRunningFastlaneSnapshot = NSProcessInfo.processInfo().arguments.contains("FASTLANE_SNAPSHOT")
+    public static let SkipIntro = NSProcessInfo.processInfo().arguments.contains(LaunchArguments.SkipIntro)
+    public static let ClearProfile = NSProcessInfo.processInfo().arguments.contains(LaunchArguments.ClearProfile)
 
     /// Build Channel.
     public static let BuildChannel: AppBuildChannel = {
@@ -34,7 +34,7 @@ public struct AppConstants {
     }()
 
     /// Whether we just mirror (false) or actively merge and upload (true).
-    public static let shouldMergeBookmarks = false
+    public static var shouldMergeBookmarks = false
 
     /// Flag indiciating if we are running in Debug mode or not.
     public static let isDebug: Bool = {

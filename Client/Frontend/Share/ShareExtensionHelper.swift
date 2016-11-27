@@ -14,6 +14,8 @@ class ShareExtensionHelper: NSObject {
     private let selectedURL: NSURL
     private var onePasswordExtensionItem: NSExtensionItem!
     private let activities: [UIActivity]
+    // Wechat share extension doesn't like our default data ID which is a modified to support password managers.
+    private let customDataTypeIdentifers = ["com.tencent.xin.sharetimeline"]
 
     init(url: NSURL, tab: Tab?, activities: [UIActivity]) {
         self.selectedURL = url
@@ -98,6 +100,10 @@ extension ShareExtensionHelper: UIActivityItemSource {
     }
 
     func activityViewController(activityViewController: UIActivityViewController, dataTypeIdentifierForActivityType activityType: String?) -> String {
+        //for these customDataID's load the default public.url because they don't seem to work properly with the 1Password UTI.
+        if let type = activityType where customDataTypeIdentifers.contains(type) {
+            return "public.url"
+        }
         // Because of our UTI declaration, this UTI now satisfies both the 1Password Extension and the usual NSURL for Share extensions.
         return "org.appextension.fill-browser-action"
     }
