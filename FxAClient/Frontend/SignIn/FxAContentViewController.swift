@@ -22,11 +22,7 @@ protocol FxAContentViewControllerDelegate: class {
  * fxa-content-server git repository.
  */
 class FxAContentViewController: SettingsContentViewController, WKScriptMessageHandler {
-    var fxaOptions: [String: String] = [
-        "view": "",
-        "email": "",
-        "access_code": ""
-    ]
+    var fxaOptions = FxALaunchParams()
 
     private enum RemoteCommand: String {
         case CanLinkAccount = "can_link_account"
@@ -119,8 +115,8 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         self.timer = nil
         self.isLoaded = true
         
-        fillField("email", value: self.fxaOptions["email"])
-        fillField("access_code", value: self.fxaOptions["access_code"])
+        fillField("email", value: self.fxaOptions.email)
+        fillField("access_code", value: self.fxaOptions.access_code)
     }
     
     // Attempt to fill out a field in content view

@@ -257,26 +257,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             log.warning("Cannot handle \(components.scheme) URL scheme")
             return false
         }
+        
+        // Extract optional FxA deep-linking options
+        let fxaQuery = url.getQuery()
+        let fxaParams: FxALaunchParams
+        fxaParams = FxALaunchParams(view: fxaQuery["fxa"], email: fxaQuery["email"], access_code: fxaQuery["access_code"])
+        
+        if(fxaParams.view != nil){
+            launchFxAFromURL(fxaParams)
+            return true
+        }
 
         var url: String?
         var isPrivate: Bool = false
-        var fxaParams: [String: String] = [
-            "view" : "",
-            "email" : "",
-            "code" : ""
-        ]
+        
         for item in (components.queryItems ?? []) as [NSURLQueryItem] {
             switch item.name {
             case "url":
                 url = item.value
             case "private":
                 isPrivate = NSString(string: item.value ?? "false").boolValue
-            case "fxa":
-                fxaParams["view"] = item.value;
-            case "email":
-                fxaParams["email"] = item.value;
-            case "access_code":
-                fxaParams["access_code"] = item.value;
             default: ()
             }
         }
@@ -284,11 +284,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let params: LaunchParams
 
         if let url = url, newURL = NSURL(string: url) {
-            params = LaunchParams(url: newURL, isPrivate: isPrivate, fxaParams: nil)
-        } else if((fxaParams["view"]) != ""){
-            params = LaunchParams(url: nil, isPrivate: nil, fxaParams: fxaParams)
+            params = LaunchParams(url: newURL, isPrivate: isPrivate)
         } else {
-            params = LaunchParams(url: nil, isPrivate: isPrivate, fxaParams: nil)
+            params = LaunchParams(url: nil, isPrivate: isPrivate)
         }
 
         if application.applicationState == .Active {
@@ -301,16 +299,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         return true
     }
+    
+    func launchFxAFromURL(params: FxALaunchParams) {
+        let view = params.view ?? nil
+        if (view != nil) {
+            self.browserViewController.presentSignInViewController(params)
+        }
+    }
 
     func launchFromURL(params: LaunchParams) {
         let isPrivate = params.isPrivate ?? false
-        let fxaParams = params.fxaParams ?? nil
-        let fxaView = fxaParams?["view"]
-        
         if let newURL = params.url {
             self.browserViewController.switchToTabForURLOrOpen(newURL, isPrivate: isPrivate, isPrivileged: false)
-        } else if((fxaView) != nil) {
-            self.browserViewController.presentSignInViewController((fxaParams)!);
         } else {
             self.browserViewController.openBlankNewTabAndFocus(isPrivate: isPrivate)
         }
@@ -629,8 +629,13 @@ extension AppDelegate: MFMailComposeViewControllerDelegate {
     }
 }
 
+struct FxALaunchParams {
+    var view: String?
+    var email: String?
+    var access_code: String?
+}
+
 struct LaunchParams {
     let url: NSURL?
     let isPrivate: Bool?
-    let fxaParams: NSDictionary?
 }
