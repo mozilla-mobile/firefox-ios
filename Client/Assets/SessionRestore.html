@@ -17,6 +17,10 @@
    */
   (function () {
       function getRestoreURL(url) {
+          // If the url already points to an error page just return the url as is
+          if (url.indexOf(document.location.origin + '/errors/error.html') === 0) {
+               return url;
+           }
           // Otherwise, push an error page to trigger a redirect when loaded.
           return '/errors/error.html?url=' + escape(url);
       }

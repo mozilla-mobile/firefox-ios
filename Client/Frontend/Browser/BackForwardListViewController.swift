@@ -114,7 +114,8 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         self.currentItem = bfList.currentItem
 
         //error url's are OK as they are used to populate history on session restore.
-        listData = items.filter({ return !($0.URL.isLocal && $0.URL.path != "/errors/error.html")})
+        listData = items.filter({return !($0.URL.isLocal && (ErrorPageHelper.originalURLFromQuery($0.URL)?.isLocal ?? true))})
+
     }
     
     func scrollTableViewToIndex(index: Int) {
