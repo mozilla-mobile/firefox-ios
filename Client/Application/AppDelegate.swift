@@ -214,9 +214,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         var shouldPerformAdditionalDelegateHandling = true
 
         log.debug("Did finish launching.")
-        
+
         log.debug("Setting up Adjust")
         self.adjustIntegration?.triggerApplicationDidFinishLaunchingWithOptions(launchOptions)
+
+        #if BUDDYBUILD
+            log.debug("Setting up BuddyBuild SDK")
+            BuddyBuildSDK.setup()
+        #endif
         
         log.debug("Making window key and visible…")
         self.window!.makeKeyAndVisible()
