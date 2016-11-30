@@ -1542,7 +1542,7 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBar(urlBar: URLBarView, didSubmitText text: String) {
         let trimmedText = text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-        
+
         guard let possibleKeywordQuerySeparatorSpace = trimmedText.characters.indexOf(" ") else {
             submitText(text)
             return
@@ -1550,25 +1550,25 @@ extension BrowserViewController: URLBarDelegate {
 
         let possibleKeyword = trimmedText.substringToIndex(possibleKeywordQuerySeparatorSpace)
         let possibleQuery = trimmedText.substringFromIndex(possibleKeywordQuerySeparatorSpace.successor())
-        
+
         profile.bookmarks.getURLForKeywordSearch(possibleKeyword).uponQueue(dispatch_get_main_queue()) { result in
-                if let urlString = result.successValue {
+            if var urlString = result.successValue,
+                let escapedQuery = possibleQuery.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.SearchTermsAllowedCharacterSet()),
+                let range = urlString.rangeOfString("%s") {
+                urlString.replaceRange(range, with: escapedQuery)
+
+                if let url = NSURL(string: urlString) {
                     let engine = self.profile.searchEngines.defaultEngine
-
-                    guard let url = engine.searchURLForQuery(possibleQuery, searchTemplate: urlString) else {
-                            log.error("Error handling keyword search entry: \"\(text)\".")
-                            return
-                    }
-
                     Telemetry.recordEvent(SearchTelemetry.makeEvent(engine: engine, source: .URLBar))
-                    
                     self.finishEditingAndSubmit(url, visitType: VisitType.Typed)
-                } else {
-                    self.submitText(text)
+                    return
                 }
+            }
+
+            self.submitText(text)
         }
     }
-    
+
     private func submitText(text: String) {
         let engine = profile.searchEngines.defaultEngine
         let url: NSURL

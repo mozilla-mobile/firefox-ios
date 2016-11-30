@@ -8,4 +8,8 @@ extension NSCharacterSet {
     public static func URLAllowedCharacterSet() -> NSCharacterSet {
         return NSCharacterSet(charactersInString: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&'()*+,;=%")
     }
+
+    public static func SearchTermsAllowedCharacterSet() -> NSCharacterSet {
+        return NSCharacterSet(charactersInString: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789*-_.")
+    }
 }
