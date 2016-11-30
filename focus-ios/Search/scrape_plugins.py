@@ -11,6 +11,7 @@ import json
 import os
 import requests
 import shutil
+import sys
 import subprocess
 import urllib
 
@@ -20,26 +21,26 @@ EN_PLUGINS_FILE_URL = "https://hg.mozilla.org/releases/mozilla-aurora/raw-file/d
 # Paths for plugins in the l10n repos.
 L10N_PLUGINS_FILE_URL = "https://hg.mozilla.org/releases/l10n/mozilla-aurora/%s/raw-file/default/mobile/searchplugins/%%s"
 
+# TODO: Download list from Android repo once the mobile list is in the tree.
+LIST_PATH = "./list.json"
+
 ns = { "search": "http://www.mozilla.org/2006/browser/search/" }
 
-enTemplateCache = {}
-
 def main():
-    with open('list.json') as list:
+    # Remove and recreate the SearchPlugins directory.
+    if os.path.exists("SearchPlugins"):
+        shutil.rmtree("SearchPlugins")
+    os.makedirs("SearchPlugins")
+
+    with open(LIST_PATH) as list:
         plugins = json.load(list)
 
     engines = {}
 
+    # Import engines from the l10n repos.
     locales = plugins["locales"]
     supportedLocales = getSupportedLocales()
-
     for locale in locales:
-        if locale in supportedLocales:
-            print("adding %s..." % locale)
-        else:
-            print("skipping %s" % locale)
-            continue
-
         regions = locales[locale]
         for region in regions:
             if region == "default":
@@ -48,56 +49,72 @@ def main():
                 language = locale.split("-")[0]
                 code = ("%s-%s" % (language, region))
 
-            engine = regions[region]["visibleDefaultEngines"][0]
-            engines[code] = getTemplate(locale, engine)
+            if code in supportedLocales:
+                print("adding %s..." % code)
+            else:
+                print("skipping %s" % code)
+                continue
 
-    print("adding default...")
-    engine = plugins["default"]["visibleDefaultEngines"][0]
-    engines["default"] = getTemplate("default", engine)
+            visibleEngines = regions[region]["visibleDefaultEngines"]
+            downloadEngines(code, L10nScraper(locale), visibleEngines)
+            engines[code] = visibleEngines
 
-    savePlist(engines)
+    # Import default engines from the core repo.
+    print("adding defaults...")
+    defaultEngines = EnScraper().getFileList()
+    downloadEngines("default", EnScraper(), defaultEngines)
+    engines['default'] = plugins['default']['visibleDefaultEngines']
 
-def getTemplate(locale, engine):
-    filename = engine + '.xml'
+    # Make sure fallback directories contain any skipped engines.
+    verifyEngines(engines)
 
-    downloadedFile = L10nScraper(locale).getFile(filename)
-    if downloadedFile.getcode() == 404:
-        return getEnTemplate(filename)
+    # Write the list of engine names for each locale.
+    writeList(engines)
 
-    if downloadedFile.getcode() != 200:
-        raise Exception("Could not find %s for en-US" % filename)
+def downloadEngines(locale, scraper, engines):
+    directory = os.path.join("SearchPlugins", locale)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
 
-    return parseTemplate(filename, downloadedFile.read())
+    for engine in engines:
+        file = engine + ".xml"
+        path = os.path.join(directory, file)
+        downloadedFile = scraper.getFile(file)
+        if downloadedFile == None:
+            print("  skipping: %s..." % file)
+            continue
 
-def getEnTemplate(filename):
-    if filename in enTemplateCache:
-        return enTemplateCache[filename]
+        print("  downloading: %s..." % file)
+        name, extension = os.path.splitext(file)
 
-    downloadedFile = EnScraper().getFile(filename)
-    if downloadedFile.getcode() != 200:
-        raise Exception("Could not find %s for en-US" % filename)
+        # Apply iOS-specific overlays for this engine if they are defined.
+        if extension == ".xml":
+            engine = name.split("-")[0]
+            overlay = overlayForEngine(engine)
+            if overlay:
+                plugin = etree.parse(downloadedFile)
+                overlay.apply(plugin)
+                contents = etree.tostring(plugin.getroot(), encoding="utf-8", pretty_print=True)
+                with open(path, "w") as outfile:
+                    outfile.write(contents)
+                continue
 
-    template = parseTemplate(filename, downloadedFile.read())
-    enTemplateCache[filename] = template
-    return template
+        # Otherwise, just use the downloaded file as is.
+        shutil.move(downloadedFile, path)
 
-def parseTemplate(filename, xml):
-    plugin = etree.fromstring(xml)
-
-    # Apply iOS-specific overlays for this engine if they are defined.
-    name, _ = os.path.splitext(filename)
-    engine = name.split("-")[0]
-    overlay = overlayForEngine(engine)
-    if overlay:
-        overlay.apply(plugin)
-
-    path = "//search:Url[@type='text/html']"
-    urlElement = plugin.xpath(path, namespaces=ns)[0]
-    base = urlElement.get('template')
-    params = []
-    for param in urlElement.getchildren():
-        params.append('%s=%s' % (param.get('name'), param.get('value')))
-    return base + '?' + '&'.join(params)
+def verifyEngines(engines):
+    print("verifying engines...")
+    error = False
+    for locale in engines:
+        dirs = [locale, locale.split('-')[0], 'default']
+        dirs = map(lambda dir: os.path.join('SearchPlugins', dir), dirs)
+        for engine in engines[locale]:
+            file = engine + '.xml'
+            if not any(os.path.exists(os.path.join(dir, file)) for dir in dirs):
+                error = True
+                print("  ERROR: missing engine %s for locale %s" % (engine, locale))
+    if not error:
+        print("  OK!")
 
 def getSupportedLocales():
     supportedLocales = subprocess.Popen("./get_supported_locales.swift", stdout=subprocess.PIPE).communicate()[0]
@@ -109,15 +126,18 @@ def overlayForEngine(engine):
         return None
     return Overlay(path)
 
-def savePlist(engines):
+def writeList(engines):
     root = etree.Element('dict')
     for locale in sorted(engines.keys()):
         key = etree.Element('key')
         key.text = locale
         root.append(key)
-        value = etree.Element('string')
-        value.text = engines[locale]
-        root.append(value)
+        values = etree.Element('array')
+        for engine in engines[locale]:
+            value = etree.Element('string')
+            value.text = engine
+            values.append(value)
+        root.append(values)
 
     plist = etree.tostring(root, encoding="utf-8", pretty_print=True)
     with open("SearchEngines.plist", "w") as outfile:
@@ -128,7 +148,23 @@ class Scraper:
     def pluginsFileURL(self): pass
 
     def getFile(self, file):
-        return urllib.urlopen(self.pluginsFileURL % file)
+        path = self.pluginsFileURL % file
+        handle = urllib.urlopen(path)
+        if handle.code != 200:
+            return None
+
+        result = urllib.urlretrieve(path)
+        return result[0]
+
+    def getFileList(self):
+        response = requests.get(self.pluginsFileURL % '')
+        if not response.ok:
+            raise Exception("error: could not read plugins directory")
+
+        lines = response.content.strip().split('\n')
+        lines = map(lambda line: line.split(' ')[-1], lines)
+        lines = filter(lambda f: f.endswith('.xml'), lines)
+        return map(lambda f: f[:-4], lines)
 
 class L10nScraper(Scraper):
     def __init__(self, locale):
@@ -175,4 +211,4 @@ class Overlay:
 
 
 if __name__ == "__main__":
-        main()
+    main()
