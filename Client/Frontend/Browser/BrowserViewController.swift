@@ -1541,16 +1541,22 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBar(urlBar: URLBarView, didSubmitText text: String) {
-        // If we can't make a valid URL, do a search query.
-        // If we still don't have a valid URL, something is broken. Give up.
         let engine = profile.searchEngines.defaultEngine
-        guard let url = URIFixup.getURL(text) ??
-                        engine.searchURLForQuery(text) else {
+        let url: NSURL
+
+        if let fixupURL = URIFixup.getURL(text) {
+            // The user entered a URL, so use it.
+            url = fixupURL
+        } else if let searchURL = engine.searchURLForQuery(text) {
+            // We couldn't build a URL, so do a search query.
+            url = searchURL
+            Telemetry.recordEvent(SearchTelemetry.makeEvent(engine: engine, source: .URLBar))
+        } else {
+            // We still don't have a valid URL, so something is broken. Give up.
             log.error("Error handling URL entry: \"\(text)\".")
+            assertionFailure("Couldn't generate search URL: \(text)")
             return
         }
-
-        Telemetry.recordEvent(SearchTelemetry.makeEvent(engine: engine, source: .URLBar))
 
         finishEditingAndSubmit(url, visitType: VisitType.Typed)
     }
