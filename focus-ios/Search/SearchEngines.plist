@@ -1,212 +1,717 @@
 <dict>
   <key>ar</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>wikipedia-ar</string>
+    <string>twitter</string>
+  </array>
   <key>as</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo-in</string>
+    <string>bing</string>
+    <string>google</string>
+    <string>amazon-in</string>
+    <string>wikipedia-as</string>
+  </array>
   <key>az</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>bing</string>
+    <string>amazondotcom</string>
+    <string>azerdict</string>
+    <string>duckduckgo</string>
+    <string>wikipedia-az</string>
+  </array>
   <key>be</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>be.wikipedia.org</string>
+    <string>bing</string>
+    <string>tut.by</string>
+    <string>yahoo</string>
+    <string>yandex.by</string>
+  </array>
   <key>be-BY</key>
-  <string>https://yandex.by/yandsearch?clid=2186727&amp;text={searchTerms}</string>
-  <key>be-KZ</key>
-  <string>https://yandex.by/yandsearch?clid=2186727&amp;text={searchTerms}</string>
-  <key>be-RU</key>
-  <string>https://yandex.by/yandsearch?clid=2186727&amp;text={searchTerms}</string>
-  <key>be-TR</key>
-  <string>https://yandex.by/yandsearch?clid=2186727&amp;text={searchTerms}</string>
-  <key>be-UA</key>
-  <string>https://yandex.by/yandsearch?clid=2186727&amp;text={searchTerms}</string>
+  <array>
+    <string>yandex.by</string>
+    <string>google-nocodes</string>
+    <string>be.wikipedia.org</string>
+    <string>bing</string>
+    <string>tut.by</string>
+    <string>yahoo</string>
+  </array>
   <key>bn-IN</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo-in</string>
+    <string>bing</string>
+    <string>amazondotcom</string>
+    <string>rediff</string>
+    <string>wikipedia-bn</string>
+  </array>
   <key>br</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo-france</string>
+    <string>bing</string>
+    <string>twitter</string>
+    <string>wikipedia-br</string>
+  </array>
   <key>ca</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>twitter</string>
+    <string>wikipedia-ca</string>
+    <string>diec2</string>
+  </array>
   <key>cs</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>duckduckgo</string>
+    <string>heureka-cz</string>
+    <string>mapy-cz</string>
+    <string>seznam-cz</string>
+    <string>twitter</string>
+    <string>wikipedia-cz</string>
+  </array>
   <key>cy</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo-en-GB</string>
+    <string>bing</string>
+    <string>amazon-en-GB</string>
+    <string>duckduckgo</string>
+    <string>wikipedia-cy</string>
+  </array>
   <key>da</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>amazon-co-uk</string>
+    <string>twitter</string>
+    <string>wikipedia-da</string>
+  </array>
   <key>de</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo-de</string>
+    <string>bing</string>
+    <string>amazon-de</string>
+    <string>duckduckgo</string>
+    <string>qwant</string>
+    <string>twitter</string>
+    <string>wikipedia-de</string>
+  </array>
   <key>default</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo</string>
+    <string>bing</string>
+    <string>amazondotcom</string>
+    <string>duckduckgo</string>
+    <string>twitter</string>
+    <string>wikipedia</string>
+  </array>
   <key>dsb</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo-de</string>
+    <string>bing</string>
+    <string>amazon-de</string>
+    <string>twitter</string>
+    <string>wikipedia-dsb</string>
+  </array>
   <key>el</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>skroutz</string>
+    <string>twitter</string>
+    <string>wikipedia-el</string>
+  </array>
   <key>en-CA</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8</string>
+  <array>
+    <string>google-nocodes</string>
+    <string>yahoo</string>
+    <string>bing</string>
+    <string>amazondotcom</string>
+    <string>duckduckgo</string>
+    <string>twitter</string>
+    <string>wikipedia</string>
+  </array>
   <key>en-GB</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo-en-GB</string>
+    <string>bing</string>
+    <string>amazon-en-GB</string>
+    <string>duckduckgo</string>
+    <string>qwant</string>
+    <string>twitter</string>
+    <string>wikipedia</string>
+  </array>
   <key>en-US</key>
-  <string>https://search.yahoo.com/yhs/search?ei=UTF-8&amp;hspart=mozilla&amp;hsimp=yhsm-002&amp;p={searchTerms}&amp;type=ios</string>
+  <array>
+    <string>yahoo</string>
+    <string>google-nocodes</string>
+    <string>bing</string>
+    <string>amazondotcom</string>
+    <string>duckduckgo</string>
+    <string>twitter</string>
+    <string>wikipedia</string>
+  </array>
   <key>en-ZA</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>twitter</string>
+    <string>wikipedia</string>
+  </array>
   <key>eo</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo</string>
+    <string>bing</string>
+    <string>duckduckgo</string>
+    <string>reta-vortaro</string>
+    <string>twitter</string>
+    <string>wikipedia-eo</string>
+  </array>
   <key>es-AR</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>mercadolibre-ar</string>
+    <string>twitter</string>
+    <string>wikipedia-es</string>
+  </array>
   <key>es-CL</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo-cl</string>
+    <string>bing</string>
+    <string>drae</string>
+    <string>mercadolibre-cl</string>
+    <string>twitter</string>
+    <string>wikipedia-es</string>
+  </array>
   <key>es-ES</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo-es</string>
+    <string>bing</string>
+    <string>duckduckgo</string>
+    <string>twitter</string>
+    <string>wikipedia-es</string>
+  </array>
   <key>es-MX</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo-mx</string>
+    <string>bing</string>
+    <string>amazondotcom</string>
+    <string>duckduckgo</string>
+    <string>mercadolibre-mx</string>
+    <string>twitter</string>
+    <string>wikipedia-es</string>
+  </array>
   <key>et</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>amazon-co-uk</string>
+    <string>twitter</string>
+    <string>wikipedia-et</string>
+  </array>
   <key>eu</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo-es</string>
+    <string>bing</string>
+    <string>elebila</string>
+    <string>wikipedia-eu</string>
+  </array>
   <key>fa</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>wikipedia-fa</string>
+    <string>yahoo</string>
+  </array>
   <key>ff</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo-france</string>
+    <string>bing</string>
+    <string>amazon-france</string>
+    <string>wikipedia-fr</string>
+  </array>
   <key>fi</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>twitter</string>
+    <string>wikipedia-fi</string>
+    <string>yahoo-fi</string>
+    <string>amazondotcom</string>
+  </array>
   <key>fr</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo-france</string>
+    <string>bing</string>
+    <string>duckduckgo</string>
+    <string>qwant</string>
+    <string>twitter</string>
+    <string>wikipedia-fr</string>
+  </array>
   <key>fy-NL</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>wikipedia-fy-NL</string>
+    <string>bolcom-fy-NL</string>
+  </array>
   <key>ga-IE</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>amazon-en-GB</string>
+    <string>tearma</string>
+    <string>twitter</string>
+    <string>wikipedia-ga-IE</string>
+  </array>
   <key>gd</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo-en-GB</string>
+    <string>bing</string>
+    <string>duckduckgo</string>
+    <string>faclair-beag</string>
+    <string>wikipedia-gd</string>
+  </array>
   <key>gl</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo-es</string>
+    <string>bing</string>
+    <string>amazondotcom</string>
+    <string>twitter</string>
+    <string>wikipedia-gl</string>
+  </array>
   <key>gu-IN</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo-in</string>
+    <string>bing</string>
+    <string>amazon-in</string>
+    <string>wikipedia-gu</string>
+  </array>
   <key>he</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>twitter</string>
+    <string>wikipedia-he</string>
+  </array>
   <key>hi-IN</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo-in</string>
+    <string>bing</string>
+    <string>amazon-in</string>
+    <string>twitter</string>
+    <string>wikipedia-hi</string>
+  </array>
   <key>hr</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo</string>
+    <string>bing</string>
+    <string>amazon-en-GB</string>
+    <string>duckduckgo</string>
+    <string>twitter</string>
+    <string>wikipedia-hr</string>
+  </array>
   <key>hsb</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo-de</string>
+    <string>bing</string>
+    <string>amazon-de</string>
+    <string>twitter</string>
+    <string>wikipedia-hsb</string>
+  </array>
   <key>hu</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>sztaki-en-hu</string>
+    <string>vatera</string>
+    <string>twitter</string>
+    <string>wikipedia-hu</string>
+  </array>
   <key>hy-AM</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo</string>
+    <string>bing</string>
+    <string>amazondotcom</string>
+    <string>list-am</string>
+    <string>wikipedia-hy-AM</string>
+  </array>
   <key>id</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo-id</string>
+    <string>bing</string>
+    <string>twitter</string>
+    <string>wikipedia-id</string>
+  </array>
   <key>is</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo</string>
+    <string>bing</string>
+    <string>amazondotcom</string>
+    <string>leit-is</string>
+    <string>wikipedia-is</string>
+  </array>
   <key>it</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>twitter</string>
+    <string>wikipedia-it</string>
+  </array>
   <key>ja</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>amazon-jp</string>
+    <string>bing</string>
+    <string>twitter-ja</string>
+    <string>wikipedia-ja</string>
+    <string>yahoo-jp</string>
+  </array>
   <key>ka</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo</string>
+    <string>bing</string>
+    <string>amazondotcom</string>
+    <string>duckduckgo</string>
+    <string>wikipedia-ka</string>
+  </array>
   <key>kk</key>
-  <string>https://yandex.kz/yandsearch?clid=2186727&amp;text={searchTerms}</string>
-  <key>kk-BY</key>
-  <string>https://yandex.kz/yandsearch?clid=2186727&amp;text={searchTerms}</string>
-  <key>kk-KZ</key>
-  <string>https://yandex.kz/yandsearch?clid=2186727&amp;text={searchTerms}</string>
-  <key>kk-RU</key>
-  <string>https://yandex.kz/yandsearch?clid=2186727&amp;text={searchTerms}</string>
-  <key>kk-TR</key>
-  <string>https://yandex.kz/yandsearch?clid=2186727&amp;text={searchTerms}</string>
-  <key>kk-UA</key>
-  <string>https://yandex.kz/yandsearch?clid=2186727&amp;text={searchTerms}</string>
+  <array>
+    <string>yandex</string>
+    <string>google</string>
+    <string>yahoo</string>
+    <string>bing</string>
+    <string>twitter</string>
+    <string>wikipedia-kk</string>
+  </array>
   <key>kn</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo-in</string>
+    <string>bing</string>
+    <string>amazon-in</string>
+    <string>twitter</string>
+    <string>wikipedia-kn</string>
+    <string>wiktionary-kn</string>
+  </array>
   <key>ko</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>danawa-kr</string>
+    <string>twitter</string>
+    <string>daum-kr</string>
+    <string>naver-kr</string>
+  </array>
   <key>lo</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo</string>
+    <string>bing</string>
+    <string>twitter</string>
+    <string>wikipedia-lo</string>
+  </array>
   <key>lt</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>twitter</string>
+    <string>wikipedia-lt</string>
+  </array>
   <key>lv</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>salidzinilv</string>
+    <string>sslv</string>
+    <string>twitter</string>
+    <string>wikipedia-lv</string>
+  </array>
   <key>ml</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo-in</string>
+    <string>bing</string>
+    <string>duckduckgo</string>
+    <string>twitter</string>
+    <string>wikipedia-ml</string>
+  </array>
   <key>mr</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo-in</string>
+    <string>bing</string>
+    <string>amazon-in</string>
+    <string>rediff</string>
+    <string>wikipedia-mr</string>
+  </array>
   <key>ms</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo</string>
+    <string>bing</string>
+    <string>amazondotcom</string>
+    <string>twitter</string>
+    <string>wikipedia-ms</string>
+  </array>
   <key>my</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo</string>
+    <string>bing</string>
+    <string>amazondotcom</string>
+    <string>twitter</string>
+    <string>wikipedia-my</string>
+  </array>
   <key>nb-NO</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>duckduckgo</string>
+    <string>gulesider-mobile-NO</string>
+    <string>twitter</string>
+    <string>wikipedia-NO</string>
+  </array>
   <key>nl</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>wikipedia-nl</string>
+    <string>bolcom-nl</string>
+  </array>
   <key>nn-NO</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>duckduckgo</string>
+    <string>gulesider-mobile-NO</string>
+    <string>twitter</string>
+    <string>wikipedia-NN</string>
+  </array>
   <key>or</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo-in</string>
+    <string>bing</string>
+    <string>amazon-in</string>
+    <string>wikipedia-or</string>
+    <string>wiktionary-or</string>
+  </array>
   <key>pl</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>bing</string>
+    <string>duckduckgo</string>
+    <string>twitter</string>
+    <string>wikipedia-pl</string>
+  </array>
   <key>pt-BR</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo-br</string>
+    <string>bing</string>
+    <string>twitter</string>
+    <string>wikipedia-br</string>
+  </array>
   <key>pt-PT</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>wikipedia-ptpt</string>
+  </array>
   <key>rm</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo-ch</string>
+    <string>bing</string>
+    <string>duckduckgo</string>
+    <string>leo_ende_de</string>
+    <string>pledarigrond</string>
+    <string>wikipedia-rm</string>
+  </array>
   <key>ro</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>twitter</string>
+    <string>wikipedia-ro</string>
+  </array>
   <key>ru</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yandex-ru</string>
+    <string>twitter</string>
+    <string>wikipedia-ru</string>
+  </array>
   <key>ru-BY</key>
-  <string>https://yandex.ru/yandsearch?clid=2186727&amp;text={searchTerms}</string>
+  <array>
+    <string>yandex-ru</string>
+    <string>google-nocodes</string>
+    <string>twitter</string>
+    <string>wikipedia-ru</string>
+  </array>
   <key>ru-KZ</key>
-  <string>https://yandex.ru/yandsearch?clid=2186727&amp;text={searchTerms}</string>
+  <array>
+    <string>yandex-ru</string>
+    <string>google-nocodes</string>
+    <string>twitter</string>
+    <string>wikipedia-ru</string>
+  </array>
   <key>ru-RU</key>
-  <string>https://yandex.ru/yandsearch?clid=2186727&amp;text={searchTerms}</string>
-  <key>ru-TR</key>
-  <string>https://yandex.ru/yandsearch?clid=2186727&amp;text={searchTerms}</string>
+  <array>
+    <string>yandex-ru</string>
+    <string>google-nocodes</string>
+    <string>twitter</string>
+    <string>wikipedia-ru</string>
+  </array>
   <key>ru-UA</key>
-  <string>https://yandex.ru/yandsearch?clid=2186727&amp;text={searchTerms}</string>
+  <array>
+    <string>yandex-ru</string>
+    <string>google-nocodes</string>
+    <string>twitter</string>
+    <string>wikipedia-ru</string>
+  </array>
   <key>sk</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>azet-sk</string>
+    <string>slovnik-sk</string>
+    <string>twitter</string>
+    <string>wikipedia-sk</string>
+  </array>
   <key>sl</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>ceneje</string>
+    <string>odpiralni</string>
+    <string>twitter</string>
+    <string>wikipedia-sl</string>
+  </array>
   <key>sq</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo</string>
+    <string>bing</string>
+    <string>amazon-en-GB</string>
+    <string>twitter</string>
+    <string>wikipedia-sq</string>
+  </array>
   <key>sr</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo</string>
+    <string>bing</string>
+    <string>duckduckgo</string>
+    <string>twitter</string>
+    <string>wikipedia-sr</string>
+  </array>
   <key>sv-SE</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>prisjakt-sv-SE</string>
+    <string>twitter</string>
+    <string>wikipedia-sv-SE</string>
+  </array>
   <key>ta</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo-in</string>
+    <string>bing</string>
+    <string>amazon-in</string>
+    <string>duckduckgo</string>
+    <string>wikipedia-ta</string>
+    <string>wiktionary-ta</string>
+  </array>
   <key>te</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo-in</string>
+    <string>bing</string>
+    <string>amazon-in</string>
+    <string>wikipedia-te</string>
+    <string>wiktionary-te</string>
+  </array>
   <key>th</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>twitter</string>
+    <string>wikipedia-th</string>
+  </array>
   <key>tr</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
-  <key>tr-BY</key>
-  <string>https://yandex.com.tr/yandsearch?clid=2186727&amp;text={searchTerms}</string>
-  <key>tr-KZ</key>
-  <string>https://yandex.com.tr/yandsearch?clid=2186727&amp;text={searchTerms}</string>
-  <key>tr-RU</key>
-  <string>https://yandex.com.tr/yandsearch?clid=2186727&amp;text={searchTerms}</string>
+  <array>
+    <string>google</string>
+    <string>yandex-tr</string>
+    <string>twitter</string>
+    <string>wikipedia-tr</string>
+  </array>
   <key>tr-TR</key>
-  <string>https://yandex.com.tr/yandsearch?clid=2186727&amp;text={searchTerms}</string>
-  <key>tr-UA</key>
-  <string>https://yandex.com.tr/yandsearch?clid=2186727&amp;text={searchTerms}</string>
+  <array>
+    <string>yandex-tr</string>
+    <string>google-nocodes</string>
+    <string>twitter</string>
+    <string>wikipedia-tr</string>
+  </array>
   <key>uk</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
-  <key>uk-BY</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8</string>
-  <key>uk-KZ</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8</string>
-  <key>uk-RU</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8</string>
-  <key>uk-TR</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8</string>
+  <array>
+    <string>google</string>
+    <string>twitter</string>
+    <string>wikipedia-uk</string>
+    <string>yandex-market</string>
+  </array>
   <key>uk-UA</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8</string>
+  <array>
+    <string>google-nocodes</string>
+    <string>twitter</string>
+    <string>wikipedia-uk</string>
+    <string>yandex-market</string>
+  </array>
   <key>ur</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo-in</string>
+    <string>bing</string>
+    <string>amazon-in</string>
+    <string>duckduckgo</string>
+    <string>twitter</string>
+    <string>wikipedia-ur</string>
+  </array>
   <key>uz</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8&amp;client=firefox-b</string>
+  <array>
+    <string>google</string>
+    <string>yahoo</string>
+    <string>bing</string>
+    <string>amazondotcom</string>
+    <string>twitter</string>
+    <string>wikipedia-uz</string>
+  </array>
   <key>zh-CN</key>
-  <string>https://m.baidu.com/s?from=1000969b&amp;word={searchTerms}</string>
+  <array>
+    <string>baidu</string>
+    <string>google-nocodes</string>
+    <string>bing</string>
+    <string>taobao</string>
+    <string>wikipedia-zh-CN</string>
+  </array>
   <key>zh-HK</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8</string>
+  <array>
+    <string>google-nocodes</string>
+    <string>bing</string>
+    <string>duckduckgo</string>
+    <string>wikipedia-zh-TW</string>
+  </array>
   <key>zh-TW</key>
-  <string>https://www.google.com/search?q={searchTerms}&amp;ie=utf-8&amp;oe=utf-8</string>
+  <array>
+    <string>google-nocodes</string>
+    <string>bing</string>
+    <string>duckduckgo</string>
+    <string>wikipedia-zh-TW</string>
+  </array>
 </dict>
