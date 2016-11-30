@@ -1,0 +1,23 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>Wikipedia (gd)</ShortName>
+<InputEncoding>UTF-8</InputEncoding>
+<Image width="16" height="16">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAQAAABIkb+zAAAEXElEQVR4Ae3cA4xs2QJG4b9aj41n27Zt27Zt27Zt27Zt+2KM5lXP924qOzs56VPjKSRnrfhv7NUsp08v98+PsxwT4nJ+nPunl8KZ8/WYQL+eMydJrx5/EhN603lAHpVJ5bzZNp035uyZXM7Uy3LmM7ms9CITzVRGQRfQBXQBXUAX0AV0AV1AF9AFdAFdQBfQBXQBXcBMjgU7M5+1vqtZyXqmc/IsZDEL+53LP3KRPCCv62+rWd7vnpx6v/M5Vd935OF5R+6RtRyeQ3NYNjKTxZw2p8tiduR8uWfemY3+dkjWM5fFLPU/8q9yrRwbHLP39WkHamPD5z1WnNMb/dpW/uAdbipu413+qcl2H3N3cXFv9DNNtvmg68uxMY6dPfewTZNvOauouqEdULlTY532IgqHua+ZxnoHm4ANj63biRNQPZedVPY5nTR1BXsVbNuyTlsDqy4tW/wK4NYiJ01AXMlm+wGrL1cDnWbLejC4m7T4DvAOOSkD4v0qztGyLzpUweOk4UXAp6XV72DNmU7qgPPao+DJ0uLTFPzXXGN5I9acU1o8vb14jZzUAfFeBdvMtuwLDlfwIKme2248T1p9MvY59zACLqcy4Kf5eQr+ZbYRfrAFaXHaf/FRGUZAfE/Bzwf8OKwpuJ/0vYRNPEpavT248rACbqfimtLiqxT8w4yIz+Of5qTV7+LHMqyAaf9R8Clp8ex2K7iXuAa4q7R6aXCH4QXE4xVsOq+0+DYFfzXth/ilnrT6Tvzb9DADlqwqDPjTd377FHwI3EBaPb0NPFaGGRBvoLBiUVr8EFS+KgN8KpYtDjvgQo6i8Hhp8ZJUjnIZaXXGNrxKhh0QX6TwHzPS4uco/FtPWr0T9jnPKAJuOOiCc/UqVG4jrf4AH5dRBPT8UWHg3/BvUfhl635ZcNXRBMSDqFxFWvwklVu07O/BT2RUAad0GIWPtexXgMpPt+xntAt3Gl1AvJjCPufasn4d/6NyY2n4DPzXzCgDzmEvhVdIw+tj02X8nsIPGvus7Xi8jDIgPkLhSPON5ad4t7gbletJ9S71n+BIA65C5dGal1g3nENM+weF70j1R3iNjDogfkrhn6br5dU/4UXS94EtF7+vUC8IjjzgrlRuJ33v27j2dTLbKXxd+r4Pn5RRB9RfxsL3y4H/i0dI9TFUrirOZDeuPh4B8TQqVyjH/ZtZqZ7KIRS+JJ6Fn8k4BNRL9IUPmncwbr/1b37lanbiLuMTEG+nsNfb8cOWq0DLFA7E/8yMU8AlNLnaoP/alSfKOAXEN6h8Qlo8k3UKq5bGLeAWFPa6oLT6Ogqvk3ELmPJ3wOtlgOe0B2w6//gFxCPBsjPIQN8JPi3jGDDvSDxVDPaCNnFNOdGczrNzIrEnRyR5XPZlMIdmKofnpTnx6B783QV0ARNOF9AFdAFdQBfQBXQBXUAX0AV0AV3A6OgCVjLJrEzlj5lk/jiVt2eSefvEvzTJxL84zMS/PM//Af1pBRpQAkXBAAAAAElFTkSuQmCC</Image>
+<Url type="application/x-suggestions+json" method="GET" template="https://gd.wikipedia.org/w/api.php">
+  <Param name="action" value="opensearch"/>
+  <Param name="search" value="{searchTerms}"/>
+</Url>
+<Url type="text/html" method="GET" template="https://gd.wikipedia.org/wiki/Sònraichte:Search">
+  <Param name="search" value="{searchTerms}"/>
+  <Param name="sourceid" value="Mozilla-search"/>
+</Url>
+<!-- Search activity -->
+<Url type="text/html" method="GET" rel="mobile" template="https://gd.m.wikipedia.org/wiki/Sònraichte:Search">
+  <Param name="search" value="{searchTerms}"/>
+  <Param name="sourceid" value="Mozilla-search"/>
+</Url>
+<SearchForm>https://gd.wikipedia.org/wiki/Sònraichte:Search</SearchForm>
+</SearchPlugin>
