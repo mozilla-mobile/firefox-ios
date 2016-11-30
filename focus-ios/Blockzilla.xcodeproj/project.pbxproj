@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0B70C1631DE6128900CEF7E0 /* WebsiteMemoryTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B70C1621DE6128900CEF7E0 /* WebsiteMemoryTest.swift */; };
 		0BA39A861DD2B8E4005F970A /* WebsiteAccessTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA39A851DD2B8E4005F970A /* WebsiteAccessTest.swift */; };
 		0BBBED411DD3823C00F9C565 /* BaseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BBBED401DD3823C00F9C565 /* BaseTestCase.swift */; };
 		0BBBED431DD3B78300F9C565 /* SettingAppearanceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BBBED421DD3B78300F9C565 /* SettingAppearanceTest.swift */; };
@@ -145,6 +146,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0B70C1621DE6128900CEF7E0 /* WebsiteMemoryTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebsiteMemoryTest.swift; sourceTree = "<group>"; };
 		0BA39A831DD2B8E4005F970A /* XCUITest.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = XCUITest.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0BA39A851DD2B8E4005F970A /* WebsiteAccessTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebsiteAccessTest.swift; sourceTree = "<group>"; };
 		0BA39A871DD2B8E4005F970A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -288,6 +290,7 @@
 		0BA39A841DD2B8E4005F970A /* XCUITest */ = {
 			isa = PBXGroup;
 			children = (
+				0B70C1621DE6128900CEF7E0 /* WebsiteMemoryTest.swift */,
 				D3C70C611DDE785300CEE458 /* InfoPlist.strings */,
 				0BBBED3F1DD3821600F9C565 /* Utils */,
 				0BA39A851DD2B8E4005F970A /* WebsiteAccessTest.swift */,
@@ -693,6 +696,7 @@
 			files = (
 				0BBBED431DD3B78300F9C565 /* SettingAppearanceTest.swift in Sources */,
 				0BBBED411DD3823C00F9C565 /* BaseTestCase.swift in Sources */,
+				0B70C1631DE6128900CEF7E0 /* WebsiteMemoryTest.swift in Sources */,
 				0BA39A861DD2B8E4005F970A /* WebsiteAccessTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
