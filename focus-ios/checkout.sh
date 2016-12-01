@@ -6,5 +6,4 @@
 
 ./build-disconnect.py
 
-carthage checkout
-carthage build --platform iOS
+carthage bootstrap --platform iOS

@@ -11,7 +11,7 @@ class BrowserViewController: UIViewController {
     fileprivate let browserToolbar = BrowserToolbar()
     fileprivate var homeView: HomeView?
     fileprivate let overlayView = OverlayView()
-    fileprivate let searchEngine = SearchEngine()
+    fileprivate let searchEngineManager = SearchEngineManager()
     fileprivate let urlBarContainer = URLBarContainer()
     fileprivate var urlBar: URLBar!
     fileprivate var topURLBarConstraints = [Constraint]()
@@ -236,7 +236,7 @@ extension BrowserViewController: URLBarDelegate {
         var url = URIFixup.getURL(entry: text)
         if url == nil {
             AdjustIntegration.track(eventName: .search)
-            url = searchEngine.urlForQuery(text)
+            url = searchEngineManager.activeEngine.urlForQuery(text)
         } else {
             AdjustIntegration.track(eventName: .browse)
         }
@@ -379,7 +379,7 @@ extension BrowserViewController: OverlayViewDelegate {
     }
 
     func overlayView(_ overlayView: OverlayView, didSearchForQuery query: String) {
-        if let url = searchEngine.urlForQuery(query) {
+        if let url = searchEngineManager.activeEngine.urlForQuery(query) {
             AdjustIntegration.track(eventName: .search)
             submit(url: url)
         }

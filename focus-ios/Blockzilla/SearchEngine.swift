@@ -5,25 +5,34 @@
 import Foundation
 
 class SearchEngine {
-    private lazy var template: String = {
-        let enginesPath = Bundle.main.path(forResource: "SearchEngines", ofType: "plist")!
-        let engines = NSDictionary(contentsOfFile: enginesPath) as! [String: String]
+    let name: String
+    let image: UIImage?
 
-        var components = Locale.preferredLanguages.first!.components(separatedBy: "-")
-        if components.count == 3 {
-            components.remove(at: 1)
-        }
+    private let searchTemplate: String
+    private let suggestionsTemplate: String?
 
-        return engines[components.joined(separator: "-")] ?? engines[components[0]] ?? engines["default"]!
-    }()
+    init(name: String, image: UIImage?, searchTemplate: String, suggestionsTemplate: String?) {
+        self.name = name
+        self.image = image
+        self.searchTemplate = searchTemplate
+        self.suggestionsTemplate = suggestionsTemplate
+    }
 
     func urlForQuery(_ query: String) -> URL? {
-        guard let escaped = query.addingPercentEncoding(withAllowedCharacters: .urlQueryParameterAllowed),
-              let url = URL(string: template.replacingOccurrences(of: "{searchTerms}", with: escaped)) else {
+        guard let escaped = query.addingPercentEncoding(withAllowedCharacters: .urlQueryParameterAllowed) else {
             assertionFailure("Invalid search URL")
             return nil
         }
 
-        return url
+        let localeString = NSLocale.current.identifier
+        guard let urlString = searchTemplate.replacingOccurrences(of: "{searchTerms}", with: escaped)
+            .replacingOccurrences(of: "{moz:locale}", with: localeString)
+            .addingPercentEncoding(withAllowedCharacters: .urlAllowed) else
+        {
+            assertionFailure("Invalid search URL")
+            return nil
+        }
+
+        return URL(string: urlString)
     }
 }
