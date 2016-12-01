@@ -1558,8 +1558,6 @@ extension BrowserViewController: URLBarDelegate {
                 urlString.replaceRange(range, with: escapedQuery)
 
                 if let url = NSURL(string: urlString) {
-                    let engine = self.profile.searchEngines.defaultEngine
-                    Telemetry.recordEvent(SearchTelemetry.makeEvent(engine: engine, source: .URLBar))
                     self.finishEditingAndSubmit(url, visitType: VisitType.Typed)
                     return
                 }
