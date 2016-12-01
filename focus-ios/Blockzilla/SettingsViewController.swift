@@ -7,13 +7,15 @@ import SnapKit
 import UIKit
 
 class SettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+    fileprivate let tableView = UITableView()
+
     // Hold a strong reference to the block detector so it isn't deallocated
     // in the middle of its detection.
     private let detector = BlockerEnabledDetector.makeInstance()
 
     private var isSafariEnabled = false
-    private let tableView = UITableView()
     private let waveView = WaveView()
+    private let searchEngineManager: SearchEngineManager
 
     private let toggles = [
         BlockerToggle(label: UIConstants.strings.toggleSafari, setting: SettingsToggle.safari),
@@ -31,6 +33,15 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         cell.accessoryView = PaddedSwitch(switchView: UISwitch())
         return cell
     }()
+
+    init(searchEngineManager: SearchEngineManager) {
+        self.searchEngineManager = searchEngineManager
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         view.backgroundColor = UIConstants.colors.background
@@ -55,7 +66,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.delegate = self
         tableView.backgroundColor = UIConstants.colors.background
         tableView.layoutMargins = UIEdgeInsets.zero
-        tableView.separatorColor = UIColor(rgb: 0x333333)
+        tableView.separatorColor = UIConstants.colors.settingsSeparator
         tableView.allowsSelection = true
         tableView.estimatedRowHeight = 44
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 44))
@@ -90,7 +101,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     fileprivate func toggleForIndexPath(_ indexPath: IndexPath) -> BlockerToggle {
         var index = (indexPath as NSIndexPath).row
-        for i in 1..<(indexPath as NSIndexPath).section {
+        for i in 2..<(indexPath as NSIndexPath).section {
             index += tableView.numberOfRows(inSection: i)
         }
         return toggles[index]
@@ -102,9 +113,14 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         case 0:
             cell = UITableViewCell(style: .subtitle, reuseIdentifier: "waveCell")
             cell.contentView.addSubview(waveView)
+            cell.selectionStyle = .none
             waveView.snp.makeConstraints { make in
                 make.edges.equalTo(cell)
             }
+        case 1:
+            cell = UITableViewCell(style: .subtitle, reuseIdentifier: "searchCell")
+            cell.textLabel?.text = searchEngineManager.activeEngine.name
+            cell.accessoryType = .disclosureIndicator
         default:
             cell = UITableViewCell(style: .subtitle, reuseIdentifier: "toggleCell")
             let toggle = toggleForIndexPath(indexPath)
@@ -113,13 +129,13 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             cell.accessoryView = PaddedSwitch(switchView: toggle.toggle)
             cell.detailTextLabel?.text = toggle.subtitle
             cell.detailTextLabel?.numberOfLines = 0
+            cell.selectionStyle = .none
         }
 
         cell.backgroundColor = UIConstants.colors.background
-        cell.textLabel?.textColor = UIConstants.colors.defaultFont
+        cell.textLabel?.textColor = UIConstants.colors.settingsTextLabel
         cell.layoutMargins = UIEdgeInsets.zero
-        cell.detailTextLabel?.textColor = UIConstants.colors.navigationTitle
-        cell.selectionStyle = .none
+        cell.detailTextLabel?.textColor = UIConstants.colors.settingsDetailLabel
 
         return cell
     }
@@ -127,10 +143,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0: return 1 // Wave view.
-        case 1: return 1 // Integration.
-        case 2: return 4 // Privacy.
-        case 3: return 1 // Performance.
-        case 4: return 1 // Mozilla.
+        case 1: return 1 // Search Engine.
+        case 2: return 1 // Integration.
+        case 3: return 4 // Privacy.
+        case 4: return 1 // Performance.
+        case 5: return 1 // Mozilla.
         default:
             assertionFailure("Invalid section")
             return 0
@@ -138,13 +155,18 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 5
+        return 6
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         // Height for the wave.
-        if (indexPath as NSIndexPath).section == 0 {
+        if indexPath.section == 0 {
             return 200
+        }
+
+        // Height for the Search Engine row.
+        if indexPath.section == 1 {
+            return 44
         }
 
         // We have to manually calculate the cell height since UITableViewCell doesn't correctly
@@ -174,10 +196,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         let labelText: String
 
         switch section {
-        case 1: labelText = UIConstants.strings.toggleSectionIntegration
-        case 2: labelText = UIConstants.strings.toggleSectionPrivacy
-        case 3: labelText = UIConstants.strings.toggleSectionPerformance
-        case 4: labelText = UIConstants.strings.toggleSectionMozilla
+        case 1: labelText = UIConstants.strings.settingsSearchSection
+        case 2: labelText = UIConstants.strings.toggleSectionIntegration
+        case 3: labelText = UIConstants.strings.toggleSectionPrivacy
+        case 4: labelText = UIConstants.strings.toggleSectionPerformance
+        case 5: labelText = UIConstants.strings.toggleSectionMozilla
         default: return nil
         }
 
@@ -207,7 +230,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         case 1: fallthrough
         case 2: fallthrough
         case 3: fallthrough
-        case 4: return 30
+        case 4: fallthrough
+        case 5: return 30
         default: return 0
         }
     }
@@ -215,11 +239,16 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
 
-        if indexPath.section == 4 && indexPath.row == 0 {
-            if let url = SupportUtils.URLForTopic(topic: "usage-data") {
-                let contentViewController = AboutContentViewController(url: url)
-                navigationController?.pushViewController(contentViewController, animated: true)
-            }
+        switch indexPath.section {
+        case 1:
+            let searchSettingsViewController = SearchSettingsViewController(searchEngineManager: searchEngineManager)
+            searchSettingsViewController.delegate = self
+            navigationController?.pushViewController(searchSettingsViewController, animated: true)
+        case 5:
+            guard let url = SupportUtils.URLForTopic(topic: "usage-data") else { break }
+            let contentViewController = AboutContentViewController(url: url)
+            navigationController?.pushViewController(contentViewController, animated: true)
+        default: break
         }
     }
 
@@ -291,6 +320,12 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         default:
             updateSetting()
         }
+    }
+}
+
+extension SettingsViewController: SearchSettingsViewControllerDelegate {
+    func searchSettingsViewController(_ searchSettingsViewController: SearchSettingsViewController, didSelectEngine engine: SearchEngine) {
+        tableView.cellForRow(at: IndexPath(row: 0, section: 1))?.textLabel?.text = engine.name
     }
 }
 

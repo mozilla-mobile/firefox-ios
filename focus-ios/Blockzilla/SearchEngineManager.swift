@@ -5,9 +5,12 @@
 import Foundation
 
 class SearchEngineManager {
+    private static let prefKeyEngine = "prefKeyEngine"
+
+    private let prefs: UserDefaults
     let engines: [SearchEngine]
 
-    init() {
+    init(prefs: UserDefaults) {
         self.prefs = prefs
 
         // Get the directories to look for engines, from most to least specific.
@@ -33,6 +36,13 @@ class SearchEngineManager {
     }
 
     var activeEngine: SearchEngine {
-        return engines.first!
+        get {
+            let selectName = prefs.string(forKey: SearchEngineManager.prefKeyEngine)
+            return engines.first { $0.name == selectName } ?? engines.first!
+        }
+
+        set {
+            prefs.set(newValue.name, forKey: SearchEngineManager.prefKeyEngine)
+        }
     }
 }

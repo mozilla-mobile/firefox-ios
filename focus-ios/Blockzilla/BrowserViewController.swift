@@ -11,7 +11,7 @@ class BrowserViewController: UIViewController {
     fileprivate let browserToolbar = BrowserToolbar()
     fileprivate var homeView: HomeView?
     fileprivate let overlayView = OverlayView()
-    fileprivate let searchEngineManager = SearchEngineManager()
+    fileprivate let searchEngineManager = SearchEngineManager(prefs: UserDefaults.standard)
     fileprivate let urlBarContainer = URLBarContainer()
     fileprivate var urlBar: URLBar!
     fileprivate var topURLBarConstraints = [Constraint]()
@@ -182,7 +182,7 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func showSettings() {
-        let settingsViewController = SettingsViewController()
+        let settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager)
         navigationController!.pushViewController(settingsViewController, animated: true)
         navigationController!.setNavigationBarHidden(false, animated: true)
     }
