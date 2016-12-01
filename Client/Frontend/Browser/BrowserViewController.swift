@@ -1541,10 +1541,16 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBar(urlBar: URLBarView, didSubmitText text: String) {
-        let trimmedText = text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        if let fixupURL = URIFixup.getURL(text) {
+            // The user entered a URL, so use it.
+            finishEditingAndSubmit(fixupURL, visitType: VisitType.Typed)
+            return
+        }
 
+        // We couldn't build a URL, so check for a matching search keyword.
+        let trimmedText = text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
         guard let possibleKeywordQuerySeparatorSpace = trimmedText.characters.indexOf(" ") else {
-            submitText(text)
+            submitSearchText(text)
             return
         }
 
@@ -1563,29 +1569,22 @@ extension BrowserViewController: URLBarDelegate {
                 }
             }
 
-            self.submitText(text)
+            self.submitSearchText(text)
         }
     }
 
-    private func submitText(text: String) {
+    private func submitSearchText(text: String) {
         let engine = profile.searchEngines.defaultEngine
-        let url: NSURL
 
-        if let fixupURL = URIFixup.getURL(text) {
-            // The user entered a URL, so use it.
-            url = fixupURL
-        } else if let searchURL = engine.searchURLForQuery(text) {
-            // We couldn't build a URL, so do a search query.
-            url = searchURL
+        if let searchURL = engine.searchURLForQuery(text) {
+            // We couldn't find a matching search keyword, so do a search query.
             Telemetry.recordEvent(SearchTelemetry.makeEvent(engine: engine, source: .URLBar))
+            finishEditingAndSubmit(searchURL, visitType: VisitType.Typed)
         } else {
             // We still don't have a valid URL, so something is broken. Give up.
             log.error("Error handling URL entry: \"\(text)\".")
             assertionFailure("Couldn't generate search URL: \(text)")
-            return
         }
-
-        finishEditingAndSubmit(url, visitType: VisitType.Typed)
     }
 
     func urlBarDidEnterOverlayMode(urlBar: URLBarView) {
