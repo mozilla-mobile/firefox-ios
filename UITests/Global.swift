@@ -595,7 +595,7 @@ class HomePageUtils {
         tester.waitForAnimationsToFinish()
         tester.tapViewWithAccessibilityLabel("Menu")
         tester.tapViewWithAccessibilityLabel("Settings")
-        tester.tapViewWithAccessibilityIdentifier("HomePageSetting")
+        tester.tapViewWithAccessibilityIdentifier("Homepage")
     }
 
     static func homePageSetting(tester: KIFUITestActor) -> String? {

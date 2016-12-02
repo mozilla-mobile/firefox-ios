@@ -24,7 +24,7 @@ class HomePageSettingsUITests: KIFTestCase {
     func testNavigation() {
         HomePageUtils.navigateToHomePageSettings(tester())
         // if we can't find the home paget text view, then this will time out.
-        tester().tapViewWithAccessibilityIdentifier("HomePageSetting")
+        XCTAssertTrue(tester().viewExistsWithLabel("Homepage Settings"),"title should be visible")
         HomePageUtils.navigateFromHomePageSettings(tester())
     }
 
@@ -33,7 +33,7 @@ class HomePageSettingsUITests: KIFTestCase {
         tester().tapViewWithAccessibilityIdentifier("ClearHomePage")
         XCTAssertEqual("", HomePageUtils.homePageSetting(tester()))
 
-        tester().tapViewWithAccessibilityIdentifier("HomePageSetting")
+        tester().tapViewWithAccessibilityLabel("Enter a webpage")
 
         let webPageString = "http://www.mozilla.com/typing"
         tester().enterTextIntoCurrentFirstResponder(webPageString)
@@ -54,7 +54,7 @@ class HomePageSettingsUITests: KIFTestCase {
         tester().tapViewWithAccessibilityIdentifier("ClearHomePage")
         XCTAssertEqual("", HomePageUtils.homePageSetting(tester()))
 
-        tester().tapViewWithAccessibilityIdentifier("HomePageSetting")
+        tester().tapViewWithAccessibilityLabel("Enter a webpage")
 
         let webPageString = "not a webpage"
         tester().enterTextIntoCurrentFirstResponder(webPageString)
@@ -68,35 +68,6 @@ class HomePageSettingsUITests: KIFTestCase {
         // teardown.
         tester().tapViewWithAccessibilityIdentifier("ClearHomePage")
         HomePageUtils.navigateFromHomePageSettings(tester())
-    }
-
-    // This test will fail on simulator
-    func testCurrentPage() {
-        let webPageString = "\(webRoot)/numberedPage.html?page=1"
-        tester().tapViewWithAccessibilityIdentifier("url")
-
-        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(webPageString)\n")
-        tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
-
-        // now go to settings.
-        //HomePageUtils.navigateToHomePageSettings(tester())
-        tester().waitForAnimationsToFinish()
-        tester().tapViewWithAccessibilityLabel("Menu")
-        
-        // Below call is only needed for the emulator. In emulator, it does not see the settings in the next page
-        tester().swipeViewWithAccessibilityLabel("Set Homepage", inDirection:KIFSwipeDirection.Left)
-        
-        tester().tapViewWithAccessibilityLabel("Settings")
-        tester().tapViewWithAccessibilityIdentifier("HomePageSetting")
-        tester().tapViewWithAccessibilityIdentifier("ClearHomePage")
-        XCTAssertEqual("", HomePageUtils.homePageSetting(tester()))
-
-        tester().tapViewWithAccessibilityIdentifier("UseCurrentTab")
-        XCTAssertEqual(webPageString, HomePageUtils.homePageSetting(tester()))
-
-        tester().tapViewWithAccessibilityIdentifier("ClearHomePage")
-        HomePageUtils.navigateFromHomePageSettings(tester())
-        BrowserUtils.resetToAboutHome(tester())
     }
 
     func testClipboard() {
