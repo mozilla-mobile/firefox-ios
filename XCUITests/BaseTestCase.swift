@@ -40,6 +40,21 @@ class BaseTestCase: XCTestCase {
         expectationForPredicate(exists, evaluatedWithObject: element, handler: nil)
         waitForExpectationsWithTimeout(20, handler: nil)
     }
+    
+    func waitforNoExistence(element: XCUIElement) {
+        let exists = NSPredicate(format: "exists != true")
+        
+        expectationForPredicate(exists, evaluatedWithObject: element, handler: nil)
+        waitForExpectationsWithTimeout(20, handler: nil)
+    }
+    
+    func waitForValueContains(element:XCUIElement, value:String) {
+        let predicateText = "value CONTAINS " + "'" + value + "'"
+        let valueCheck = NSPredicate(format: predicateText)
+        
+        expectationForPredicate(valueCheck, evaluatedWithObject: element, handler: nil)
+        waitForExpectationsWithTimeout(20, handler: nil)
+    }
 
     func loadWebPage(url: String, waitForLoadToFinish: Bool = true) {
         let loaded = NSPredicate(format: "value BEGINSWITH '100'")
