@@ -50,6 +50,8 @@ class LoginListViewController: SensitiveViewController {
 
     private let loadingStateView = LoadingLoginsView()
 
+    private var deleteAlert: UIAlertController?
+
     // Titles for selection/deselect/delete buttons
     private let deselectAllTitle = NSLocalizedString("Deselect All", tableName: "LoginManager", comment: "Label for the button used to deselect all logins.")
     private let selectAllTitle = NSLocalizedString("Select All", tableName: "LoginManager", comment: "Label for the button used to select all logins.")
@@ -86,6 +88,7 @@ class LoginListViewController: SensitiveViewController {
 
         let notificationCenter = NSNotificationCenter.defaultCenter()
         notificationCenter.addObserver(self, selector: #selector(LoginListViewController.remoteLoginsDidChange), name: NotificationDataRemoteLoginChangesWereApplied, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(LoginListViewController.dismissAlertController), name: UIApplicationDidEnterBackgroundNotification, object: nil)
 
         automaticallyAdjustsScrollViewInsets = false
         self.view.backgroundColor = UIColor.whiteColor()
@@ -151,6 +154,7 @@ class LoginListViewController: SensitiveViewController {
         notificationCenter.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
         notificationCenter.removeObserver(self, name: NotificationDataLoginDidChange, object: nil)
         notificationCenter.removeObserver(self, name: NotificationDataRemoteLoginChangesWereApplied, object: nil)
+        notificationCenter.removeObserver(self, name: UIApplicationDidEnterBackgroundNotification, object: nil)
     }
 
     private func toggleDeleteBarButton() {
@@ -191,6 +195,10 @@ private extension LoginListViewController {
         loadLogins()
     }
 
+    @objc func dismissAlertController() {
+        self.deleteAlert?.dismissViewControllerAnimated(false, completion: nil)
+    }
+
     func loadLogins(query: String? = nil) {
         loadingStateView.hidden = false
 
@@ -222,7 +230,7 @@ private extension LoginListViewController {
 
     @objc func tappedDelete() {
         profile.logins.hasSyncedLogins().uponQueue(dispatch_get_main_queue()) { yes in
-            let deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
+            self.deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
                 // Delete here
                 let guidsToDelete = self.loginSelectionController.selectedIndexPaths.map { indexPath in
                     self.loginDataSource.loginAtIndexPath(indexPath)!.guid
@@ -234,7 +242,7 @@ private extension LoginListViewController {
                 }
             }, hasSyncedLogins: yes.successValue ?? true)
 
-            self.presentViewController(deleteAlert, animated: true, completion: nil)
+            self.presentViewController(self.deleteAlert!, animated: true, completion: nil)
         }
     }
 
