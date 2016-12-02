@@ -76,7 +76,9 @@ public class AuthenticationKeychainInfo: NSObject, NSCoding {
         self.passcode = aDecoder.decodeObjectForKey("passcode") as? String
         self.failedAttempts = aDecoder.decodeIntegerForKey("failedAttempts")
         self.useTouchID = aDecoder.decodeBoolForKey("useTouchID")
-        if let interval = aDecoder.decodeObjectForKey("requiredPasscodeInterval") as? NSNumber {
+        if var interval = aDecoder.decodeObjectForKey("requiredPasscodeInterval") as? NSNumber {
+            // We have updated the immediate lockout value to 2 from 0 due to timing issues with systemUptime()
+            interval = interval == 0 ? 2 : interval
             self.requiredPasscodeInterval = PasscodeInterval(rawValue: interval.integerValue)
         }
     }
