@@ -1,0 +1,12 @@
+"NSCameraUsageDescription" = "Esto te permite hacer fotos y subirlas.";
+
+"NSLocationWhenInUseUsageDescription" = "Los sitios web que visites pueden solicitar conocer tu ubicación.";
+
+"NSMicrophoneUsageDescription" = "Esto te permite realizar y subir vídeos.";
+
+"NSPhotoLibraryUsageDescription" = "Esto te permite guardar fotos y subirlas.";
+
+"ShortcutItemTitleNewPrivateTab" = "Nueva pestaña privada";
+
+"ShortcutItemTitleNewTab" = "Nueva pestaña";
+

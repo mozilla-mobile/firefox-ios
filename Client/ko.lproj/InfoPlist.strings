@@ -1,0 +1,12 @@
+"NSCameraUsageDescription" = "사진을 찍고 업로드 할 수 있게 합니다.";
+
+"NSLocationWhenInUseUsageDescription" = "방문한 웹사이트에서 위치 정보를 요청할 수 있습니다.";
+
+"NSMicrophoneUsageDescription" = "동영상을 찍고 업로드 할 수 있게 합니다.";
+
+"NSPhotoLibraryUsageDescription" = "사진을 저장하고 업로드 할 수 있게 합니다.";
+
+"ShortcutItemTitleNewPrivateTab" = "새 사생활 탭";
+
+"ShortcutItemTitleNewTab" = "새 탭";
+

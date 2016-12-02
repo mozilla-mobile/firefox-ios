@@ -1,0 +1,42 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "ಖಚಿತವೆ?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "ರದ್ದು ಮಾಡು";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "ಹುಡುಕನ್ನು ಅಳಿಸು";
+
+/* Copy password text selection menu item */
+"Copy" = "ನಕಲಿಸು";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "ಅಳಿಸು";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "ಎಲ್ಲಾ ಆಯ್ಕೆಯನ್ನು ರದ್ದು ಮಾಡು";
+
+/* Hide password text selection menu item */
+"Hide" = "ಅಡಗಿಸು";
+
+/* Footer label describing when the current login was last modified with the timestamp as the parameter. */
+"Last modified %@" = "ಕೊನೆಯ ಮಾರ್ಪಾಟು %@";
+
+/* Title for Logins List View screen. */
+"Logins" = "ಲಾಗಿನ್‌ಗಳು";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "ಹುಡುಕು";
+
+/* Label for the button used to select all logins. */
+"Select All" = "ಎಲ್ಲವನ್ನೂ ಆರಿಸು";
+
+/* Label displayed above the password row in Login Detail View. */
+"password" = "ಗುಪ್ತಪದ";
+
+/* Label displayed above the username row in Login Detail View. */
+"username" = "ಬಳಕೆದಾರನ ಹೆಸರು";
+
+/* Label displayed above the website row in Login Detail View. */
+"website" = "ಜಾಲತಾಣ";
+

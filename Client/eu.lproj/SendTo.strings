@@ -1,0 +1,21 @@
+/* Header for the list of devices table */
+"Available devices:" = "Gailu erabilgarriak:";
+
+/* Close button in top navigation bar */
+"Close" = "Itxi";
+
+/* See http://mzl.la/1ISlXnU */
+"Please open Firefox, go to Settings and sign in to continue." = "Jarraitzeko, ireki Firefox, joan ezarpenetara eta hasi saioa.";
+
+/* Navigation bar button to Send the current page to a device */
+"Send" = "Bidali";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"Send Tab" = "Bidali fitxa";
+
+/* See http://mzl.la/1ISlXnU */
+"You are not signed in to your Firefox Account." = "Ez duzu zure Firefox kontuan saiorik hasi.";
+
+/* Error message shown in the remote tabs panel */
+"You don't have any other devices connected to this Firefox Account available to sync." = "Ez daukazu Firefox kontu honetara sinkronizatzeko konektatutako beste gailurik.";
+

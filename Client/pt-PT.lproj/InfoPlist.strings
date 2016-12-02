@@ -1,0 +1,12 @@
+"NSCameraUsageDescription" = "Isto deixa-o tirar e carregar fotos.";
+
+"NSLocationWhenInUseUsageDescription" = "Os websites que visita poderão solicitar a sua localização.";
+
+"NSMicrophoneUsageDescription" = "Isto deixa-o tirar e carregar vídeos.";
+
+"NSPhotoLibraryUsageDescription" = "Isto permite-lhe guardar e carregar fotos.";
+
+"ShortcutItemTitleNewPrivateTab" = "Novo separador privado";
+
+"ShortcutItemTitleNewTab" = "Novo separador";
+

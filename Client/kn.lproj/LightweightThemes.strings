@@ -1,0 +1,36 @@
+/* Pending feature; currently unused string! Accessibility label for back button to theme chooser */
+"Back to Themes" = "ಥೀಮ್‌ಗಳಿಗೆ ಹಿಂದಿರುಗಿ";
+
+/* Pending feature; currently unused string! Back button shown to return back to theme settings from photo picker */
+"Choose" = "ಆಯ್ಕೆ ಮಾಡು";
+
+/* Pending feature; currently unused string! Accessibility label for settings row to enter theme settings */
+"Choose Theme" = "ಥೀಮ್ ಆಯ್ಕೆ ಮಾಡು";
+
+/* Pending feature; currently unused string! Accessibility label for themes subheader */
+"Default Themes" = "ಪೂರ್ವನಿಯೋಜಿತ ಥೀಮ್‌ಗಳು";
+
+/* Pending feature; currently unused string! Accessibility label for photo viewer */
+"My Photos" = "ನನ್ನ ಫೋಟೋಗಳು‍";
+
+/* Pending feature; currently unused string! Sub header for photo options in theme chooser */
+"Photos" = "ಫೋಟೋಗಳು";
+
+/* Pending feature; currently unused string! Button to show preview of selected theme */
+"Preview" = "ಮುನ್ನೋಟ";
+
+/* Pending feature; currently unused string! Accessibility label for theme preview button */
+"Preview Theme" = "ಥೀಮ್ ಮುನ್ನೋಟ";
+
+/* Pending feature; currently unused string! Button to set selected theme as current theme */
+"Set" = "ಹೊಂದಿಸು";
+
+/* Pending feature; currently unused string! Accessibility label for set theme button */
+"Set Theme" = "ಥೀಮ್ ಹೊಂದಿಸು";
+
+/* Pending feature; currently unused string! Settings row to enter theme settings */
+"Theme" = "ಥೀಮ್";
+
+/* Pending feature; currently unused string! sub header for theme options in theme chooser */
+"Themes" = "ಥೀಮ್‌ಗಳು";
+

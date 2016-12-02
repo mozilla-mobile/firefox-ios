@@ -1,0 +1,31 @@
+/* Message shown in the dialog prompting users if they want to clear everything */
+"Are you sure you want to clear all of your data? This will also close all open tabs." = "Ertu viss að þú viljir eyða öllum gögnunum þínum? Þetta val mun einnig loka öllum opnum flipum.";
+
+/* Settings item for clearing browsing history */
+"Browsing History" = "Ferill vafra";
+
+/* Settings item for clearing the cache */
+"Cache" = "Flýtiminni";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "Hætta við";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "Hreinsa";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "Hreinsa allt";
+
+/* Button in settings that clears private data for the selected items.
+   Navigation title in settings. */
+"Clear Private Data" = "Hreinsa persónuleg gögn";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Smákökur";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "Ónettengd vefgögn";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "Vistaðar innskráningar";
+

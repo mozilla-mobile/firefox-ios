@@ -1,0 +1,13 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "Atlikta";
+
+/* Share action title
+   Text selection menu item */
+"Find in Page" = "Rasti tinklalapyje";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "Kitas rezultatas tinklalapyje";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "Ankstesnis rezultatas tinklalapyje";
+

@@ -1,0 +1,16 @@
+/* The name of the folder that contains desktop bookmarks in the menu. This should match bookmarks.folder.menu.label on Android. */
+"Bookmarks Menu" = "Yer imleri menüsü";
+
+/* The name of the folder that contains desktop bookmarks in the toolbar. This should match bookmarks.folder.toolbar.label on Android. */
+"Bookmarks Toolbar" = "Yer imi araç çubuğu";
+
+/* The title of the folder that contains mobile bookmarks. This should match bookmarks.folder.mobile.label on Android. */
+"Mobile Bookmarks" = "Mobil yer imleri";
+
+/* The name of the folder that contains unsorted desktop bookmarks. This should match bookmarks.folder.unfiled.label on Android. */
+"Unsorted Bookmarks" = "Sıralanmamış yer imleri";
+
+/* The default name for bookmark folders without titles.
+   The default name for bookmark nodes without titles. */
+"Untitled" = "Başlıksız";
+

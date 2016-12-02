@@ -1,0 +1,12 @@
+"NSCameraUsageDescription" = "Consente di scattare e caricare foto.";
+
+"NSLocationWhenInUseUsageDescription" = "I siti web visitati potrebbero richiedere la posizione corrente.";
+
+"NSMicrophoneUsageDescription" = "Consente di registrare e caricare video.";
+
+"NSPhotoLibraryUsageDescription" = "Consente di salvare e caricare foto.";
+
+"ShortcutItemTitleNewPrivateTab" = "Nuova scheda anonima";
+
+"ShortcutItemTitleNewTab" = "Nuova scheda";
+

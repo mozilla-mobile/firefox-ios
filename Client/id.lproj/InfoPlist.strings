@@ -1,0 +1,12 @@
+"NSCameraUsageDescription" = "Ini dapat digunakan untuk mengambil dan mengunggah foto.";
+
+"NSLocationWhenInUseUsageDescription" = "Situs web yang Anda kunjungi dapat meminta lokasi Anda.";
+
+"NSMicrophoneUsageDescription" = "Ini dapat digunakan untuk mengambil dan mengunggah video.";
+
+"NSPhotoLibraryUsageDescription" = "Ini dapat digunakan untuk menyimpan dan mengunggah foto.";
+
+"ShortcutItemTitleNewPrivateTab" = "Tab Pribadi Baru";
+
+"ShortcutItemTitleNewTab" = "Tab Baru";
+

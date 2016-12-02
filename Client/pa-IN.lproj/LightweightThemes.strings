@@ -1,0 +1,39 @@
+/* Pending feature; currently unused string! Button shown when user wishes to view photos for theme but has not given Firefox permission to do so yet. */
+"Allow Firefox to use my Photos" = "ਮੇਰੀਆਂ ਫ਼ੋੋਟੋਆਂ ਨੂੰ ਵਰਤਣ ਲਈ ਫਾਇਰਫਾਕਸ ਨੂੰ ਮਨਜ਼ੂਰੀ ਦਿਓ";
+
+/* Pending feature; currently unused string! Accessibility label for back button to theme chooser */
+"Back to Themes" = "ਥੀਮਸ 'ਤੇ ਵਾਪਸ";
+
+/* Pending feature; currently unused string! Back button shown to return back to theme settings from photo picker */
+"Choose" = "ਚੁਣੋ";
+
+/* Pending feature; currently unused string! Accessibility label for settings row to enter theme settings */
+"Choose Theme" = "ਥੀਮ ਨੂੰ ਚੁਣੋ";
+
+/* Pending feature; currently unused string! Accessibility label for themes subheader */
+"Default Themes" = "ਡਿਫਾਲਟ ਥੀਮਸ";
+
+/* Pending feature; currently unused string! Accessibility label for photo viewer */
+"My Photos" = "ਮੇਰੀਆਂ ਫ਼ੋਟੋਆਂ";
+
+/* Pending feature; currently unused string! Sub header for photo options in theme chooser */
+"Photos" = "ਫ਼ੋਟੋਆਂ";
+
+/* Pending feature; currently unused string! Button to show preview of selected theme */
+"Preview" = "ਝਲਕ";
+
+/* Pending feature; currently unused string! Accessibility label for theme preview button */
+"Preview Theme" = "ਥੀਮ ਝਲਕ";
+
+/* Pending feature; currently unused string! Button to set selected theme as current theme */
+"Set" = "ਸੈੱਟ ਕਰੋ";
+
+/* Pending feature; currently unused string! Accessibility label for set theme button */
+"Set Theme" = "ਥੀਮ ਸੈੱਟ ਕਰੋ";
+
+/* Pending feature; currently unused string! Settings row to enter theme settings */
+"Theme" = "ਥੀਮ";
+
+/* Pending feature; currently unused string! sub header for theme options in theme chooser */
+"Themes" = "ਥੀਮਸ";
+

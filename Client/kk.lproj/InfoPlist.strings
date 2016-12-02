@@ -1,0 +1,12 @@
+"NSCameraUsageDescription" = "Бұл арқылы фотоларды түсіріп, жүктеуге болады.";
+
+"NSLocationWhenInUseUsageDescription" = "Шолудағы веб-сайттар сізден географиялық мәліметтерді жіберуді сұрау мүмкін.";
+
+"NSMicrophoneUsageDescription" = "Бұл арқылы видеоларды түсіріп, жүктеуге болады.";
+
+"NSPhotoLibraryUsageDescription" = "Бұл арқылы фотоларды сақтап, жүктеуге болады.";
+
+"ShortcutItemTitleNewPrivateTab" = "Жаңа жекелік беті";
+
+"ShortcutItemTitleNewTab" = "Жаңа бет";
+

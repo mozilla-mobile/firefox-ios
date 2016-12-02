@@ -1,0 +1,12 @@
+"NSCameraUsageDescription" = "Pozwoli to robić i wgrywać zdjęcia.";
+
+"NSLocationWhenInUseUsageDescription" = "Pozwoli to odwiedzanym stronom żądać informacji o położeniu.";
+
+"NSMicrophoneUsageDescription" = "Pozwoli to kręcić i wgrywać filmy.";
+
+"NSPhotoLibraryUsageDescription" = "Pozwoli to zachowywać i wgrywać zdjęcia.";
+
+"ShortcutItemTitleNewPrivateTab" = "Nowa karta prywatna";
+
+"ShortcutItemTitleNewTab" = "Nowa karta";
+
