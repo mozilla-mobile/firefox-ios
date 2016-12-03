@@ -129,4 +129,57 @@ class ThirdPartySearchTest: BaseTestCase {
         XCTAssertFalse(app.scrollViews.otherElements.buttons["developer.mozilla.org search"].exists)
 
     }
+    
+    func testCustomEngineFromCorrectTemplate() {
+        let app = XCUIApplication()
+        
+        app.buttons["Menu"].tap()
+        app.collectionViews.cells["Settings"].tap()
+        let tablesQuery = app.tables
+        tablesQuery.cells["Search"].tap()
+        app.tables.cells["customEngineViewButton"].tap()
+        app.textFields["customEngineTitle"].tap()
+        app.typeText("Feeling Lucky")
+        app.textFields["customEngineUrl"].tap()
+        app.typeText("http://www.google.com/search?q=%s&btnI")
+        
+        tablesQuery.cells["saveCustomEngine"].tap()
+        
+        waitforExistence(app.navigationBars["Search"])
+        XCTAssert(app.navigationBars["Search"].buttons["Settings"].exists)
+        
+        app.navigationBars["Search"].buttons["Settings"].tap()
+        app.navigationBars["Settings"].buttons["AppSettingsTableViewController.navigationItem.leftBarButtonItem"].tap()
+        
+        // Perform a search using a custom search engine
+        tabTrayButton(forApp: app).tap()
+        app.buttons["TabTrayController.addTabButton"].tap()
+        app.textFields["url"].tap()
+        app.typeText("strange charm")
+        print(app.scrollViews.otherElements.buttons.debugDescription)
+        
+        app.scrollViews.otherElements.buttons["Feeling Lucky search"].tap()
+        // Ensure that correct search is done
+        let url = app.textFields["url"].value as! String
+        XCTAssert(url.hasSuffix("&btnI"), "The URL should indicate that the search was performed on MDN and not the default")
+    }
+    
+    func testCustomEngineFromIncorrectTemplate() {
+        let app = XCUIApplication()
+        
+        app.buttons["Menu"].tap()
+        app.collectionViews.cells["Settings"].tap()
+        let tablesQuery = app.tables
+        tablesQuery.cells["Search"].tap()
+        app.tables.cells["customEngineViewButton"].tap()
+        app.textFields["customEngineTitle"].tap()
+        app.typeText("Feeling Lucky")
+        app.textFields["customEngineUrl"].tap()
+        app.typeText("http://www.google.com/search?q=&btnI") //Occurunces of %s != 1
+        
+        tablesQuery.cells["saveCustomEngine"].tap()
+        
+        waitforExistence(app.alerts.elementBoundByIndex(0))
+        XCTAssert(app.alerts.elementBoundByIndex(0 ).label == "Failed")
+    }
 }
