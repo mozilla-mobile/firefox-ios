@@ -18,6 +18,9 @@ struct ASPanelUX {
     static let backgroundColor = UIColor(white: 1.0, alpha: 0.5)
     static let topSitesCacheSize = 12
     static let historySize = 10
+    static let rowHeight: CGFloat = 65
+    static let sectionHeight: CGFloat = 15
+    static let footerHeight: CGFloat = 0
 
     // These ratios repersent how much space the topsites require.
     // They are calculated from the iphone 5 which requires 220px of vertical height on a 320px width screen.
@@ -32,6 +35,8 @@ class ActivityStreamPanel: UITableViewController, HomePanel {
     private let profile: Profile
     private var onyxSession: OnyxSession?
     private let topSitesManager = ASHorizontalScrollCellManager()
+    private var isInitialLoad = true //Prevents intro views from flickering while content is loading
+    private let events = [NotificationFirefoxAccountChanged, NotificationProfileDidFinishSyncing, NotificationPrivateDataClearedHistory, NotificationDynamicFontChanged]
 
     lazy var longPressRecognizer: UILongPressGestureRecognizer = {
         return UILongPressGestureRecognizer(target: self, action: #selector(ActivityStreamPanel.longPress(_:)))
@@ -44,17 +49,11 @@ class ActivityStreamPanel: UITableViewController, HomePanel {
         super.init(style: .Grouped)
         view.addGestureRecognizer(longPressRecognizer)
         self.profile.history.setTopSitesCacheSize(Int32(ASPanelUX.topSitesCacheSize))
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(TopSitesPanel.notificationReceived(_:)), name: NotificationFirefoxAccountChanged, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(TopSitesPanel.notificationReceived(_:)), name: NotificationProfileDidFinishSyncing, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(TopSitesPanel.notificationReceived(_:)), name: NotificationPrivateDataClearedHistory, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(TopSitesPanel.notificationReceived(_:)), name: NotificationDynamicFontChanged, object: nil)
+        events.forEach { NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(TopSitesPanel.notificationReceived(_:)), name: $0, object: nil) }
     }
 
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationPrivateDataClearedHistory, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationDynamicFontChanged, object: nil)
+        events.forEach { NSNotificationCenter.defaultCenter().removeObserver(self, name: $0, object: nil) }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -64,8 +63,8 @@ class ActivityStreamPanel: UITableViewController, HomePanel {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.registerClass(AlternateSimpleHighlightCell.self, forCellReuseIdentifier: "HistoryCell")
-        tableView.registerClass(ASHorizontalScrollCell.self, forCellReuseIdentifier: "TopSiteCell")
+        Section.allValues.forEach { tableView.registerClass(Section($0.rawValue).cellType, forCellReuseIdentifier: Section($0.rawValue).cellIdentifier) }
+
         tableView.backgroundColor = ASPanelUX.backgroundColor
         tableView.keyboardDismissMode = .OnDrag
         tableView.separatorStyle = .None
@@ -73,9 +72,9 @@ class ActivityStreamPanel: UITableViewController, HomePanel {
         tableView.dataSource = self
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.separatorInset = UIEdgeInsetsZero
-        tableView.estimatedRowHeight = 65
-        tableView.estimatedSectionHeaderHeight = 15
-        tableView.sectionFooterHeight = 0
+        tableView.estimatedRowHeight = ASPanelUX.rowHeight
+        tableView.estimatedSectionHeaderHeight = ASPanelUX.sectionHeight
+        tableView.sectionFooterHeight = ASPanelUX.footerHeight
         tableView.sectionHeaderHeight = UITableViewAutomaticDimension
     }
 
@@ -84,6 +83,7 @@ class ActivityStreamPanel: UITableViewController, HomePanel {
         self.onyxSession = OnyxTelemetry.sharedClient.beginSession()
 
         all([invalidateTopSites(), invalidateHighlights()]).uponQueue(dispatch_get_main_queue()) { _ in
+            self.isInitialLoad = false
             self.reloadAll()
         }
     }
@@ -112,13 +112,16 @@ extension ActivityStreamPanel {
     enum Section: Int {
         case TopSites
         case Highlights
+        case HighlightIntro
 
-        static let count = 2
+        static let count = 3
+        static let allValues = [TopSites, Highlights, HighlightIntro]
 
         var title: String? {
             switch self {
             case .Highlights: return Strings.ASHighlightsTitle
             case .TopSites: return nil
+            case .HighlightIntro: return nil
             }
         }
 
@@ -126,6 +129,7 @@ extension ActivityStreamPanel {
             switch self {
             case .Highlights: return 40
             case .TopSites: return 0
+            case .HighlightIntro: return 2
             }
         }
 
@@ -138,6 +142,7 @@ extension ActivityStreamPanel {
                 } else {
                     return CGFloat(Int(width / ASPanelUX.TopSiteSingleRowRatio)) + ASPanelUX.PageControlOffsetSize
                 }
+            case .HighlightIntro: return UITableViewAutomaticDimension
             }
         }
 
@@ -149,6 +154,10 @@ extension ActivityStreamPanel {
                 return view
             case .TopSites:
                 return nil
+            case .HighlightIntro:
+                let view = ASHeaderView()
+                view.title = title
+                return view
             }
         }
 
@@ -156,6 +165,15 @@ extension ActivityStreamPanel {
             switch self {
             case .TopSites: return "TopSiteCell"
             case .Highlights: return "HistoryCell"
+            case .HighlightIntro: return "HighlightIntroCell"
+            }
+        }
+
+        var cellType: UITableViewCell.Type {
+            switch self {
+            case .TopSites: return ASHorizontalScrollCell.self
+            case .Highlights: return AlternateSimpleHighlightCell.self
+            case .HighlightIntro: return HighlightIntroCell.self
             }
         }
 
@@ -174,6 +192,10 @@ extension ActivityStreamPanel {
 extension ActivityStreamPanel {
 
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        // If the highlights section is empty. Don't show the header
+        if section == Section.Highlights.rawValue && highlights.isEmpty {
+            return 0
+        }
         return Section(section).headerHeight
     }
 
@@ -197,7 +219,7 @@ extension ActivityStreamPanel {
             ASOnyxPing.reportTapEvent(event)
             let site = self.highlights[indexPath.row]
             showSiteWithURLHandler(NSURL(string:site.url)!)
-        case .TopSites:
+        case .TopSites, .HighlightIntro:
             return
         } 
     }
@@ -215,7 +237,9 @@ extension ActivityStreamPanel {
             case .TopSites:
                 return topSitesManager.content.isEmpty ? 0 : 1
             case .Highlights:
-                 return self.highlights.count
+                return self.highlights.count
+            case .HighlightIntro:
+                return self.highlights.isEmpty && !self.isInitialLoad ? 1 : 0
         }
     }
 
@@ -228,6 +252,8 @@ extension ActivityStreamPanel {
             return configureTopSitesCell(cell, forIndexPath: indexPath)
         case .Highlights:
             return configureHistoryItemCell(cell, forIndexPath: indexPath)
+        case .HighlightIntro:
+            return configureHighlightIntroCell(cell, forIndexPath: indexPath)
         }
     }
 
@@ -244,6 +270,11 @@ extension ActivityStreamPanel {
         return simpleHighlightCell
     }
 
+    func configureHighlightIntroCell(cell: UITableViewCell, forIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let introCell = cell as! HighlightIntroCell
+        //The cell is configured on creation. No need to configure
+        return introCell
+    }
 }
 
 // MARK: - Data Management
@@ -355,6 +386,8 @@ extension ActivityStreamPanel {
             let pointInTopSite = longPressGestureRecognizer.locationInView(topSiteCell.collectionView)
             guard let topSiteIndexPath = topSiteCell.collectionView.indexPathForItemAtPoint(pointInTopSite) else { return }
             contextMenuForTopSiteCellWithIndexPath(topSiteIndexPath)
+        case .HighlightIntro:
+            break
         }
     }
 
