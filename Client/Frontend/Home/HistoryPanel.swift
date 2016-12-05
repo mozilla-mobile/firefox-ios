@@ -141,6 +141,10 @@ class HistoryPanelSiteTableViewController: SiteTableViewController {
 
     var refreshControl: UIRefreshControl?
 
+    lazy var longPressRecognizer: UILongPressGestureRecognizer = {
+        return UILongPressGestureRecognizer(target: self, action: #selector(HistoryPanelSiteTableViewController.longPress(_:)))
+    }()
+
     private lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverlayView()
 
     private let QueryLimit = 100
@@ -158,6 +162,7 @@ class HistoryPanelSiteTableViewController: SiteTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.addGestureRecognizer(longPressRecognizer)
         tableView.accessibilityIdentifier = "History List"
     }
 
@@ -328,6 +333,40 @@ class HistoryPanelSiteTableViewController: SiteTableViewController {
         return overlayView
     }
 
+    @objc private func longPress(longPressGestureRecognizer: UILongPressGestureRecognizer) {
+        guard longPressGestureRecognizer.state == UIGestureRecognizerState.Began else { return }
+        let touchPoint = longPressGestureRecognizer.locationInView(tableView)
+        guard let indexPath = tableView.indexPathForRowAtPoint(touchPoint) else { return }
+        guard let site = siteForIndexPath(indexPath) else { return }
+        guard let cell = tableView.cellForRowAtIndexPath(indexPath) else { return }
+        let siteImage = cell.imageView?.image
+
+        presentContextMenu(site, siteImage: siteImage, siteBGColor: nil, indexPath: indexPath)
+    }
+
+    private func presentContextMenu(site: Site, siteImage: UIImage?, siteBGColor: UIColor?,indexPath: NSIndexPath) {
+        guard let siteURL = NSURL(string: site.url) else { return }
+
+        let openInNewTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewTabContextMenuTitle, iconString: "action_new_tab") { action in
+            self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
+        }
+
+        let openInNewPrivateTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "action_new_private_tab") { action in
+            self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
+        }
+
+        let removeAction = ActionOverlayTableViewAction(title: "Remove", iconString: "action_remove_bookmark", handler: { action in
+            self.removeHistoryForURL(nil, indexPath: indexPath)
+        })
+
+        let actions = [openInNewTabAction, openInNewPrivateTabAction, removeAction]
+        //        homePanelDelegate?.homePanel(historyPanel!, didLongPressSite: site, siteImage: siteImage, siteBGColor: siteBGColor, actions: actions)
+        let contextMenu = ActionOverlayTableViewController(site: site, actions: actions, siteImage: siteImage, siteBGColor: siteBGColor)
+        contextMenu.modalPresentationStyle = .OverFullScreen
+        contextMenu.modalTransitionStyle = .CrossDissolve
+        self.presentViewController(contextMenu, animated: true, completion: nil)
+    }
+
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
         if let site = siteForIndexPath(indexPath) {
@@ -450,93 +489,95 @@ class HistoryPanelSiteTableViewController: SiteTableViewController {
         // Intentionally blank. Required to use UITableViewRowActions
     }
 
-    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
-        let title = NSLocalizedString("Remove", tableName: "HistoryPanel", comment: "Action button for deleting history entries in the history panel.")
+    private func removeHistoryForURL(action: UITableViewRowAction?, indexPath: NSIndexPath) {
+        if let site = self.siteForIndexPath(indexPath) {
+            // Why the dispatches? Because we call success and failure on the DB
+            // queue, and so calling anything else that calls through to the DB will
+            // deadlock. This problem will go away when the history API switches to
+            // Deferred instead of using callbacks.
+            self.profile.history.removeHistoryForURL(site.url)
+                .upon { res in
+                    self.fetchData().uponQueue(dispatch_get_main_queue()) { result in
+                        // If a section will be empty after removal, we must remove the section itself.
+                        if let data = result.successValue {
 
-        let delete = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: title, handler: { (action, indexPath) in
-            if let site = self.siteForIndexPath(indexPath) {
-                // Why the dispatches? Because we call success and failure on the DB
-                // queue, and so calling anything else that calls through to the DB will
-                // deadlock. This problem will go away when the history API switches to
-                // Deferred instead of using callbacks.
-                self.profile.history.removeHistoryForURL(site.url)
-                    .upon { res in
-                        self.fetchData().uponQueue(dispatch_get_main_queue()) { result in
-                            // If a section will be empty after removal, we must remove the section itself.
-                            if let data = result.successValue {
+                            let oldCategories = self.categories
+                            self.data = data
+                            self.computeSectionOffsets()
 
-                                let oldCategories = self.categories
-                                self.data = data
-                                self.computeSectionOffsets()
+                            let sectionsToDelete = NSMutableIndexSet()
+                            var rowsToDelete = [NSIndexPath]()
+                            let sectionsToAdd = NSMutableIndexSet()
+                            var rowsToAdd = [NSIndexPath]()
 
-                                let sectionsToDelete = NSMutableIndexSet()
-                                var rowsToDelete = [NSIndexPath]()
-                                let sectionsToAdd = NSMutableIndexSet()
-                                var rowsToAdd = [NSIndexPath]()
+                            for (index, category) in self.categories.enumerate() {
+                                let oldCategory = oldCategories[index]
 
-                                for (index, category) in self.categories.enumerate() {
-                                    let oldCategory = oldCategories[index]
+                                // don't bother if we're not displaying this category
+                                if oldCategory.section == nil && category.section == nil {
+                                    continue
+                                }
 
-                                    // don't bother if we're not displaying this category
-                                    if oldCategory.section == nil && category.section == nil {
-                                        continue
-                                    }
+                                // 1. add a new section if the section didn't previously exist
+                                if oldCategory.section == nil && category.section != oldCategory.section {
+                                    log.debug("adding section \(category.section)")
+                                    sectionsToAdd.addIndex(category.section!)
+                                }
 
-                                    // 1. add a new section if the section didn't previously exist
-                                    if oldCategory.section == nil && category.section != oldCategory.section {
-                                        log.debug("adding section \(category.section)")
-                                        sectionsToAdd.addIndex(category.section!)
-                                    }
+                                // 2. add a new row if there are more rows now than there were before
+                                if oldCategory.rows < category.rows {
+                                    log.debug("adding row to \(category.section) at \(category.rows-1)")
+                                    rowsToAdd.append(NSIndexPath(forRow: category.rows-1, inSection: category.section!))
+                                }
 
-                                    // 2. add a new row if there are more rows now than there were before
-                                    if oldCategory.rows < category.rows {
-                                        log.debug("adding row to \(category.section) at \(category.rows-1)")
-                                        rowsToAdd.append(NSIndexPath(forRow: category.rows-1, inSection: category.section!))
-                                    }
-
-                                    // if we're dealing with the section where the row was deleted:
-                                    // 1. if the category no longer has a section, then we need to delete the entire section
-                                    // 2. delete a row if the number of rows has been reduced
-                                    // 3. delete the selected row and add a new one on the bottom of the section if the number of rows has stayed the same
-                                    if oldCategory.section == indexPath.section {
-                                        if category.section == nil {
-                                            log.debug("deleting section \(indexPath.section)")
-                                            sectionsToDelete.addIndex(indexPath.section)
-                                        } else if oldCategory.section == category.section {
-                                            if oldCategory.rows > category.rows {
-                                                log.debug("deleting row from \(category.section) at \(indexPath.row)")
-                                                rowsToDelete.append(indexPath)
-                                            } else if category.rows == oldCategory.rows {
-                                                log.debug("in section \(category.section), removing row at \(indexPath.row) and inserting row at \(category.rows-1)")
-                                                rowsToDelete.append(indexPath)
-                                                rowsToAdd.append(NSIndexPath(forRow: category.rows-1, inSection: indexPath.section))
-                                            }
+                                // if we're dealing with the section where the row was deleted:
+                                // 1. if the category no longer has a section, then we need to delete the entire section
+                                // 2. delete a row if the number of rows has been reduced
+                                // 3. delete the selected row and add a new one on the bottom of the section if the number of rows has stayed the same
+                                if oldCategory.section == indexPath.section {
+                                    if category.section == nil {
+                                        log.debug("deleting section \(indexPath.section)")
+                                        sectionsToDelete.addIndex(indexPath.section)
+                                    } else if oldCategory.section == category.section {
+                                        if oldCategory.rows > category.rows {
+                                            log.debug("deleting row from \(category.section) at \(indexPath.row)")
+                                            rowsToDelete.append(indexPath)
+                                        } else if category.rows == oldCategory.rows {
+                                            log.debug("in section \(category.section), removing row at \(indexPath.row) and inserting row at \(category.rows-1)")
+                                            rowsToDelete.append(indexPath)
+                                            rowsToAdd.append(NSIndexPath(forRow: category.rows-1, inSection: indexPath.section))
                                         }
                                     }
                                 }
-
-                                tableView.beginUpdates()
-                                if sectionsToAdd.count > 0 {
-                                    tableView.insertSections(sectionsToAdd, withRowAnimation: UITableViewRowAnimation.Left)
-                                }
-                                if sectionsToDelete.count > 0 {
-                                    tableView.deleteSections(sectionsToDelete, withRowAnimation: UITableViewRowAnimation.Right)
-                                }
-                                if !rowsToDelete.isEmpty {
-                                    tableView.deleteRowsAtIndexPaths(rowsToDelete, withRowAnimation: UITableViewRowAnimation.Right)
-                                }
-
-                                if !rowsToAdd.isEmpty {
-                                    tableView.insertRowsAtIndexPaths(rowsToAdd, withRowAnimation: UITableViewRowAnimation.Right)
-                                }
-
-                                tableView.endUpdates()
-                                self.updateEmptyPanelState()
                             }
+
+                            self.tableView.beginUpdates()
+                            if sectionsToAdd.count > 0 {
+                                self.tableView.insertSections(sectionsToAdd, withRowAnimation: UITableViewRowAnimation.Left)
+                            }
+                            if sectionsToDelete.count > 0 {
+                                self.tableView.deleteSections(sectionsToDelete, withRowAnimation: UITableViewRowAnimation.Right)
+                            }
+                            if !rowsToDelete.isEmpty {
+                                self.tableView.deleteRowsAtIndexPaths(rowsToDelete, withRowAnimation: UITableViewRowAnimation.Right)
+                            }
+
+                            if !rowsToAdd.isEmpty {
+                                self.tableView.insertRowsAtIndexPaths(rowsToAdd, withRowAnimation: UITableViewRowAnimation.Right)
+                            }
+
+                            self.tableView.endUpdates()
+                            self.updateEmptyPanelState()
                         }
-                }
+                    }
             }
-        })
+        }
+    }
+
+    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
+        let title = NSLocalizedString("Remove", tableName: "HistoryPanel", comment: "Action button for deleting history entries in the history panel.")
+
+        let delete = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: title, handler: removeHistoryForURL)
         return [delete]
     }
 }

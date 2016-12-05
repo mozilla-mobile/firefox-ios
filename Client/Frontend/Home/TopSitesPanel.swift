@@ -29,7 +29,7 @@ struct TopSitesPanelUX {
 }
 
 class TopSitesPanel: UIViewController {
-    weak var homePanelDelegate: HomePanelDelegate?
+    weak var homePanelDelegate: HomePanelDelegate? /*EditableHomePanelDelegate*/
     private lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverlayView()
     private var collection: TopSitesCollectionView? = nil
     private lazy var dataSource: TopSitesDataSource = {
@@ -52,6 +52,7 @@ class TopSitesPanel: UIViewController {
 
                 if editingThumbnails {
                     homePanelDelegate?.homePanelWillEnterEditingMode?(self)
+//                    homePanelDelegate?.homePanelWillEnterEditingMode(self)
                 }
 
                 updateAllRemoveButtonStates()
@@ -338,7 +339,7 @@ class TopSitesPanel: UIViewController {
     }
 }
 
-extension TopSitesPanel: HomePanel {
+extension TopSitesPanel: HomePanel /*EditableHomePanel*/ {
     func endEditing() {
         editingThumbnails = false
     }

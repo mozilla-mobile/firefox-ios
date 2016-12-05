@@ -483,8 +483,13 @@ private class RemoteTabsTableViewController: UITableViewController {
         }
     }
 
+    lazy var longPressRecognizer: UILongPressGestureRecognizer = {
+        return UILongPressGestureRecognizer(target: self, action: #selector(RemoteTabsTableViewController.longPress(_:)))
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.addGestureRecognizer(longPressRecognizer)
         tableView.registerClass(TwoLineHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: RemoteClientIdentifier)
         tableView.registerClass(TwoLineTableViewCell.self, forCellReuseIdentifier: RemoteTabIdentifier)
 
@@ -583,5 +588,38 @@ private class RemoteTabsTableViewController: UITableViewController {
                 self.endRefreshing()
             }
         }
+    }
+
+    @objc private func longPress(longPressGestureRecognizer: UILongPressGestureRecognizer) {
+        guard longPressGestureRecognizer.state == UIGestureRecognizerState.Began else { return }
+        let touchPoint = longPressGestureRecognizer.locationInView(tableView)
+        guard let indexPath = tableView.indexPathForRowAtPoint(touchPoint) else { return }
+
+        guard let tab = (tableViewDelegate as? RemoteTabsPanelClientAndTabsDataSource)?.tabAtIndexPath(indexPath) else { return }
+        let site = Site(url: String(tab.URL), title: tab.title)
+
+        guard let tabCell = tableView.cellForRowAtIndexPath(indexPath) else { return }
+        let siteImage = tabCell.imageView?.image
+
+        presentContextMenu(site, siteImage: siteImage, siteBGColor: nil)
+    }
+
+    private func presentContextMenu(site: Site, siteImage: UIImage?, siteBGColor: UIColor?) {
+        guard let siteURL = NSURL(string: site.url) else { return }
+
+        let openInNewTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewTabContextMenuTitle, iconString: "action_new_tab") { action in
+            self.remoteTabsPanel?.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
+        }
+
+        let openInNewPrivateTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "action_new_private_tab") { action in
+            self.remoteTabsPanel?.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
+        }
+
+        let actions = [openInNewTabAction, openInNewPrivateTabAction]
+        //        homePanelDelegate?.homePanel(self, didLongPressSite: site, siteImage: siteImage, siteBGColor: siteBGColor, actions: actions)
+        let contextMenu = ActionOverlayTableViewController(site: site, actions: actions, siteImage: siteImage, siteBGColor: siteBGColor)
+        contextMenu.modalPresentationStyle = .OverFullScreen
+        contextMenu.modalTransitionStyle = .CrossDissolve
+        self.presentViewController(contextMenu, animated: true, completion: nil)
     }
 }

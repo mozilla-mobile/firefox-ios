@@ -33,6 +33,10 @@ protocol HomePanel: class {
     optional func endEditing()
 }
 
+//protocol EditableHomePanel: HomePanel {
+//    func endEditing()
+//}
+
 struct HomePanelUX {
     static let EmptyTabContentOffset = -180
 }
@@ -45,7 +49,13 @@ protocol HomePanelDelegate: class {
     func homePanel(homePanel: HomePanel, didSelectURL url: NSURL, visitType: VisitType)
     func homePanel(homePanel: HomePanel, didSelectURLString url: String, visitType: VisitType)
     optional func homePanelWillEnterEditingMode(homePanel: HomePanel)
+//    func homePanel(homePanel: HomePanel, didLongPressSite site: Site, siteImage: UIImage?, siteBGColor: UIColor?, actions: [ActionOverlayTableViewAction])
+//    optional func homePanelWillEnterEditingMode(homePanel: EditableHomePanel)
 }
+
+//protocol EditableHomePanelDelegate: HomePanelDelegate {
+//    func homePanelWillEnterEditingMode(homePanel: EditableHomePanel)
+//}
 
 struct HomePanelState {
     var isPrivate: Bool = false
@@ -63,7 +73,7 @@ enum HomePanelType: Int {
     }
 }
 
-class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelDelegate {
+class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelDelegate/*, EditableHomePanelDelegate*/ {
     var profile: Profile!
     var notificationToken: NSObjectProtocol!
     var panels: [HomePanelDescriptor]!
@@ -77,7 +87,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     private var buttons: [UIButton] = []
 
     private var finishEditingButton: UIButton?
-    private var editingPanel: HomePanel?
+    private var editingPanel: HomePanel? /*EditableHomePanel*/
 
     var isPrivateMode: Bool = false {
         didSet {
@@ -240,6 +250,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     func endEditing(sender: UIButton!) {
         toggleEditingMode(false)
         editingPanel?.endEditing?()
+//        editingPanel?.endEditing()
         editingPanel = nil
     }
 
@@ -319,7 +330,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         delegate?.homePanelViewControllerDidRequestToOpenInNewTab(url, isPrivate: isPrivate)
     }
 
-    func homePanelWillEnterEditingMode(homePanel: HomePanel) {
+    func homePanelWillEnterEditingMode(homePanel: HomePanel /*EditableHomePanel*/) {
         editingPanel = homePanel
         toggleEditingMode(true)
     }
@@ -353,5 +364,12 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
                 self.finishEditingButton = nil
             }
         })
+    }
+
+    func homePanel(homePanel: HomePanel, didLongPressSite site: Site, siteImage: UIImage?, siteBGColor: UIColor?, actions: [ActionOverlayTableViewAction]) {
+        let contextMenu = ActionOverlayTableViewController(site: site, actions: actions, siteImage: siteImage, siteBGColor: siteBGColor)
+        contextMenu.modalPresentationStyle = .OverFullScreen
+        contextMenu.modalTransitionStyle = .CrossDissolve
+        self.presentViewController(contextMenu, animated: true, completion: nil)
     }
 }

@@ -182,6 +182,10 @@ class ReadingListPanel: UITableViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate? = nil
     var profile: Profile!
 
+    lazy var longPressRecognizer: UILongPressGestureRecognizer = {
+        return UILongPressGestureRecognizer(target: self, action: #selector(ReadingListPanel.longPress(_:)))
+    }()
+
     private lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverview()
 
     private var records: [ReadingListClientRecord]?
@@ -199,6 +203,7 @@ class ReadingListPanel: UITableViewController, HomePanel {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        tableView.addGestureRecognizer(longPressRecognizer)
         tableView.accessibilityIdentifier = "ReadingTable"
         tableView.estimatedRowHeight = ReadingListTableViewCellUX.RowHeight
         tableView.rowHeight = UITableViewAutomaticDimension
@@ -359,6 +364,43 @@ class ReadingListPanel: UITableViewController, HomePanel {
         return overlayView
     }
 
+
+    @objc private func longPress(longPressGestureRecognizer: UILongPressGestureRecognizer) {
+        guard longPressGestureRecognizer.state == UIGestureRecognizerState.Began else { return }
+        let touchPoint = longPressGestureRecognizer.locationInView(tableView)
+        guard let indexPath = tableView.indexPathForRowAtPoint(touchPoint) else { return }
+        guard let record = records?[indexPath.row] else { return }
+        let site = Site(url: record.url, title: record.title)
+
+        guard let recordURL = NSURL(string: record.url) else { return }
+        let siteImage = FaviconFetcher.getDefaultFavicon(recordURL)
+
+        presentContextMenu(site, siteImage: siteImage, siteBGColor: nil, indexPath: indexPath)
+    }
+
+    private func presentContextMenu(site: Site, siteImage: UIImage?, siteBGColor: UIColor?, indexPath: NSIndexPath) {
+        guard let siteURL = NSURL(string: site.url) else { return }
+
+        let openInNewTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewTabContextMenuTitle, iconString: "action_new_tab") { action in
+            self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
+        }
+
+        let openInNewPrivateTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "action_new_private_tab") { action in
+            self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
+        }
+
+        let removeAction = ActionOverlayTableViewAction(title: Strings.RemoveContextMenuTitle, iconString: "action_remove", handler: { action in
+            self.deleteItem(atIndex: indexPath)
+        })
+
+        let actions = [openInNewTabAction, openInNewPrivateTabAction, removeAction]
+        //        homePanelDelegate?.homePanel(self, didLongPressSite: site, siteImage: siteImage, siteBGColor: siteBGColor, actions: actions)
+        let contextMenu = ActionOverlayTableViewController(site: site, actions: actions, siteImage: siteImage, siteBGColor: siteBGColor)
+        contextMenu.modalPresentationStyle = .OverFullScreen
+        contextMenu.modalTransitionStyle = .CrossDissolve
+        self.presentViewController(contextMenu, animated: true, completion: nil)
+    }
+
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -436,5 +478,4 @@ class ReadingListPanel: UITableViewController, HomePanel {
             }
         }
     }
-
 }

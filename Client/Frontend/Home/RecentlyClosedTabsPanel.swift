@@ -76,18 +76,60 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
     var recentlyClosedTabs: [ClosedTab] = []
     weak var recentlyClosedTabsPanel: RecentlyClosedTabsPanel?
 
+    lazy var longPressRecognizer: UILongPressGestureRecognizer = {
+        return UILongPressGestureRecognizer(target: self, action: #selector(RecentlyClosedTabsPanelSiteTableViewController.longPress(_:)))
+    }()
+
     init() {
         super.init(nibName: nil, bundle: nil)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.addGestureRecognizer(longPressRecognizer)
         tableView.accessibilityIdentifier = "Recently Closed Tabs List"
         self.recentlyClosedTabs = profile.recentlyClosedTabs.tabs
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    @objc private func longPress(longPressGestureRecognizer: UILongPressGestureRecognizer) {
+        guard longPressGestureRecognizer.state == UIGestureRecognizerState.Began else { return }
+        let touchPoint = longPressGestureRecognizer.locationInView(tableView)
+        guard let indexPath = tableView.indexPathForRowAtPoint(touchPoint) else { return }
+        let closedTab = recentlyClosedTabs[indexPath.row]
+        let site: Site
+        if let title = closedTab.title {
+            site = Site(url: String(closedTab.url), title: title)
+        } else {
+            site = Site(url: String(closedTab.url), title: "")
+        }
+
+        guard let tabCell = super.tableView.cellForRowAtIndexPath(indexPath) else { return }
+        let siteImage = tabCell.imageView?.image
+
+        presentContextMenu(site, siteImage: siteImage, siteBGColor: nil)
+    }
+
+    private func presentContextMenu(site: Site, siteImage: UIImage?, siteBGColor: UIColor?) {
+        guard let siteURL = NSURL(string: site.url) else { return }
+
+        let openInNewTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewTabContextMenuTitle, iconString: "action_new_tab") { action in
+            self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
+        }
+
+        let openInNewPrivateTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "action_new_private_tab") { action in
+            self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
+        }
+
+        let actions = [openInNewTabAction, openInNewPrivateTabAction]
+        //        homePanelDelegate?.homePanel(recentlyClosedTabsPanel!, didLongPressSite: site, siteImage: siteImage, siteBGColor: siteBGColor, actions: actions)
+        let contextMenu = ActionOverlayTableViewController(site: site, actions: actions, siteImage: siteImage, siteBGColor: siteBGColor)
+        contextMenu.modalPresentationStyle = .OverFullScreen
+        contextMenu.modalTransitionStyle = .CrossDissolve
+        self.presentViewController(contextMenu, animated: true, completion: nil)
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {

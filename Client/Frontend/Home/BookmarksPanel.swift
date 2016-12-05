@@ -39,6 +39,10 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     var source: BookmarksModel?
     var parentFolders = [BookmarkFolder]()
     var bookmarkFolder: BookmarkFolder?
+
+    lazy var longPressRecognizer: UILongPressGestureRecognizer = {
+        return UILongPressGestureRecognizer(target: self, action: #selector(BookmarksPanel.longPress(_:)))
+    }()
     private lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverlayView()
 
     private let BookmarkFolderCellIdentifier = "BookmarkFolderIdentifier"
@@ -64,6 +68,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.addGestureRecognizer(longPressRecognizer)
         self.tableView.accessibilityIdentifier = "Bookmarks List"
     }
 
@@ -177,6 +182,48 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     override func reloadData() {
         self.source?.reloadData().upon(onModelFetched)
+    }
+
+    @objc private func longPress(longPressGestureRecognizer: UILongPressGestureRecognizer) {
+        guard longPressGestureRecognizer.state == UIGestureRecognizerState.Began else { return }
+        let touchPoint = longPressGestureRecognizer.locationInView(tableView)
+        guard let indexPath = tableView.indexPathForRowAtPoint(touchPoint) else { return }
+        guard let bookmarkItem = source?.current[indexPath.row] as? BookmarkItem else { return }
+        guard let cell = tableView.cellForRowAtIndexPath(indexPath) else { return }
+        let site = Site(url: bookmarkItem.url, title: bookmarkItem.title)
+        let siteImage = cell.imageView?.image
+
+        presentContextMenu(site, siteImage: siteImage, siteBGColor: nil, indexPath: indexPath)
+    }
+
+    private func presentContextMenu(site: Site, siteImage: UIImage?, siteBGColor: UIColor?, indexPath: NSIndexPath) {
+        guard let siteURL = NSURL(string: site.url) else { return }
+
+        let openInNewTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewTabContextMenuTitle, iconString: "action_new_tab") { action in
+            self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
+        }
+
+        let openInNewPrivateTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "action_new_private_tab") { action in
+            self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
+        }
+
+        // Only local bookmarks can be removed
+        let actions: [ActionOverlayTableViewAction]
+        guard let source = source else { return }
+        if source.current.itemIsEditableAtIndex(indexPath.row) {
+            let removeAction = ActionOverlayTableViewAction(title: "Remove", iconString: "action_remove_bookmark", handler: { action in
+                self.deleteBookmark(nil, indexPath: indexPath)
+            })
+            actions = [openInNewTabAction, openInNewPrivateTabAction, removeAction]
+        } else {
+            actions = [openInNewTabAction, openInNewPrivateTabAction]
+        }
+
+//        homePanelDelegate?.homePanel(self, didLongPressSite: site, siteImage: siteImage, siteBGColor: siteBGColor, actions: actions)
+        let contextMenu = ActionOverlayTableViewController(site: site, actions: actions, siteImage: siteImage, siteBGColor: siteBGColor)
+        contextMenu.modalPresentationStyle = .OverFullScreen
+        contextMenu.modalTransitionStyle = .CrossDissolve
+        self.presentViewController(contextMenu, animated: true, completion: nil)
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -333,49 +380,51 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         return .None
     }
 
+    func deleteBookmark(action: UITableViewRowAction?, indexPath: NSIndexPath) {
+        guard let bookmark = source!.current[indexPath.row] else {
+            return
+        }
+
+        assert(!(bookmark is BookmarkFolder))
+        if bookmark is BookmarkFolder {
+            // TODO: check whether the folder is empty (excluding separators). If it isn't
+            // then we must ask the user to confirm. Bug 1232810.
+            log.debug("Not deleting folder.")
+            return
+        }
+
+        log.debug("Removing rows \(indexPath).")
+
+        // Block to do this -- this is UI code.
+        guard let factory = source!.modelFactory.value.successValue else {
+            log.error("Couldn't get model factory. This is unexpected.")
+            self.onModelFailure(DatabaseError(description: "Unable to get factory."))
+            return
+        }
+
+        if let err = factory.removeByGUID(bookmark.guid).value.failureValue {
+            log.debug("Failed to remove \(bookmark.guid).")
+            self.onModelFailure(err)
+            return
+        }
+
+        self.tableView.beginUpdates()
+        self.source = source!.removeGUIDFromCurrent(bookmark.guid)
+        self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
+        self.tableView.endUpdates()
+        self.updateEmptyPanelState()
+
+        NSNotificationCenter.defaultCenter().postNotificationName(BookmarkStatusChangedNotification, object: bookmark, userInfo:["added": false])
+    }
+
     func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
-        guard let source = self.source else {
+        guard let _ = self.source else {
             return [AnyObject]()
         }
 
         let title = NSLocalizedString("Delete", tableName: "BookmarkPanel", comment: "Action button for deleting bookmarks in the bookmarks panel.")
 
-        let delete = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: title, handler: { (action, indexPath) in
-            guard let bookmark = source.current[indexPath.row] else {
-                return
-            }
-
-            assert(!(bookmark is BookmarkFolder))
-            if bookmark is BookmarkFolder {
-                // TODO: check whether the folder is empty (excluding separators). If it isn't
-                // then we must ask the user to confirm. Bug 1232810.
-                log.debug("Not deleting folder.")
-                return
-            }
-
-            log.debug("Removing rows \(indexPath).")
-
-            // Block to do this -- this is UI code.
-            guard let factory = source.modelFactory.value.successValue else {
-                log.error("Couldn't get model factory. This is unexpected.")
-                self.onModelFailure(DatabaseError(description: "Unable to get factory."))
-                return
-            }
-
-            if let err = factory.removeByGUID(bookmark.guid).value.failureValue {
-                log.debug("Failed to remove \(bookmark.guid).")
-                self.onModelFailure(err)
-                return
-            }
-
-            self.tableView.beginUpdates()
-            self.source = source.removeGUIDFromCurrent(bookmark.guid)
-            self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
-            self.tableView.endUpdates()
-            self.updateEmptyPanelState()
-
-            NSNotificationCenter.defaultCenter().postNotificationName(BookmarkStatusChangedNotification, object: bookmark, userInfo:["added": false])
-        })
+        let delete = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: title, handler: deleteBookmark)
 
         return [delete]
     }
