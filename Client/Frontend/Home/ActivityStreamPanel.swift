@@ -37,7 +37,7 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
     fileprivate var showHighlightIntro = false
     fileprivate var sessionStart: Timestamp?
 
-    lazy var longPressRecognizer: UILongPressGestureRecognizer = {
+    fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
         return UILongPressGestureRecognizer(target: self, action: #selector(ActivityStreamPanel.longPress(_:)))
     }()
 
@@ -489,36 +489,18 @@ extension ActivityStreamPanel: DataObserverDelegate {
 
         switch Section(indexPath.section) {
         case .highlights:
-            let sourceView = self.collectionView?.cellForItem(at: indexPath)
-            presentContextMenuForHighlightCell(with: indexPath, and: sourceView)
+            presentContextMenu(for: indexPath)
         case .topSites:
             let topSiteCell = self.collectionView?.cellForItem(at: indexPath) as! ASHorizontalScrollCell
             let pointInTopSite = longPressGestureRecognizer.location(in: topSiteCell.collectionView)
             guard let topSiteIndexPath = topSiteCell.collectionView.indexPathForItem(at: pointInTopSite) else { return }
-            let sourceView = topSiteCell.collectionView.cellForItem(at: topSiteIndexPath)
-            presentContextMenuForTopSiteCell(with: topSiteIndexPath, and: sourceView)
+            presentContextMenu(for: topSiteIndexPath)
         case .highlightIntro:
             break
         }
     }
 
-    func presentContextMenu(_ contextMenu: ActionOverlayTableViewController) {
-        contextMenu.modalPresentationStyle = .overFullScreen
-        contextMenu.modalTransitionStyle = .crossDissolve
-        self.present(contextMenu, animated: true, completion: nil)
-    }
-
-    func presentContextMenuForTopSiteCell(with indexPath: IndexPath, and sourceView: UIView?) {
-        let site = self.topSitesManager.content[indexPath.item]
-        presentContextMenu(for: site, atIndex: indexPath.item, forSection: .topSites, with: sourceView)
-    }
-
-    func presentContextMenuForHighlightCell(with indexPath: IndexPath, and sourceView: UIView? ) {
-        let site = highlights[indexPath.row]
-        presentContextMenu(for: site, atIndex: indexPath.row, forSection: .highlights, with: sourceView)
-    }
-
-    fileprivate func fetchBookmarkStatusThenPresentContextMenu(for site: Site, atIndex index: Int, forSection section: Section, with sourceView: UIView?) {
+    fileprivate func fetchBookmarkStatusThenPresentContextMenu(for site: Site, with indexPath: IndexPath, forSection section: Section, completionHandler: @escaping () -> ActionOverlayTableViewController?) {
         profile.bookmarks.modelFactory >>== {
             $0.isBookmarked(site.url).uponQueue(.main) { result in
                 guard let isBookmarked = result.successValue else {
@@ -526,48 +508,76 @@ extension ActivityStreamPanel: DataObserverDelegate {
                     return
                 }
                 site.setBookmarked(isBookmarked)
-                self.presentContextMenu(for: site, atIndex: index, forSection: section, with: sourceView)
+                self.presentContextMenu(for: site, with: indexPath, completionHandler: completionHandler)
             }
         }
     }
 
-    func presentContextMenu(for site: Site, atIndex index: Int, forSection section: Section, with sourceView: UIView?) {
-        guard let _ = site.bookmarked else {
-            fetchBookmarkStatusThenPresentContextMenu(for: site, atIndex: index, forSection: section, with: sourceView)
+    func selectItemAtIndex(_ index: Int, inSection section: Section) {
+        switch section {
+        case .highlights:
+            telemetry.reportEvent(.Click, source: .Highlights, position: index)
+            let site = self.highlights[index]
+            showSiteWithURLHandler(URL(string:site.url)!)
+        case .topSites, .highlightIntro:
             return
         }
-        guard let contextMenu = contextMenu(for: site, atIndex: index, forSection: section, with: sourceView) else {
-            return
-        }
+    }
+}
 
-        self.presentContextMenu(contextMenu)
+extension ActivityStreamPanel: HomePanelContextMenu {
+    func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> ActionOverlayTableViewController?) {
+        guard let _ = site.bookmarked else {
+            fetchBookmarkStatusThenPresentContextMenu(for: site, with: indexPath, forSection: Section(indexPath.section), completionHandler: completionHandler)
+            return
+        }
+        guard let contextMenu = completionHandler() else { return }
+        self.present(contextMenu, animated: true, completion: nil)
     }
 
-    func contextMenu(for site: Site, atIndex index: Int, forSection section: Section, with sourceView: UIView?) -> ActionOverlayTableViewController? {
+    func getSiteDetails(for indexPath: IndexPath) -> Site? {
+        let site: Site
 
-        guard let siteURL = URL(string: site.url) else {
+        switch Section(indexPath.section) {
+        case .highlights:
+            site = highlights[indexPath.row]
+        case .topSites:
+            site = topSitesManager.content[indexPath.item]
+        case .highlightIntro:
             return nil
         }
 
+        return site
+    }
+
+    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [ActionOverlayTableViewAction]? {
+        guard let siteURL = URL(string: site.url) else { return nil }
+
         let pingSource: ASPingSource
-        switch section {
+        let index: Int
+        let sourceView: UIView?
+        
+        switch Section(indexPath.section) {
         case .topSites:
             pingSource = .TopSites
+            sourceView = self.collectionView?.cellForItem(at: indexPath)
+            index = indexPath.item
         case .highlights:
             pingSource = .Highlights
+            index = indexPath.row
+            sourceView = topSiteCell.collectionView.cellForItem(at: indexPath)
         case .highlightIntro:
-            pingSource = .HighlightsIntro
+            return nil
         }
 
         let openInNewTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewTabContextMenuTitle, iconString: "action_new_tab") { action in
             self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
-            self.telemetry.reportEvent(.NewTab, source: pingSource, position: index)
         }
-
+        
         let openInNewPrivateTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "action_new_private_tab") { action in
             self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
         }
-
+        
         let bookmarkAction: ActionOverlayTableViewAction
         if site.bookmarked ?? false {
             bookmarkAction = ActionOverlayTableViewAction(title: Strings.RemoveBookmarkContextMenuTitle, iconString: "action_bookmark_remove", handler: { action in
@@ -619,35 +629,25 @@ extension ActivityStreamPanel: DataObserverDelegate {
             self.present(controller, animated: true, completion: nil)
         })
 
-        let removeTopSiteAction = ActionOverlayTableViewAction(title: Strings.RemoveFromASContextMenuTitle, iconString: "action_close", handler: { action in
+        let removeTopSiteAction = ActionOverlayTableViewAction(title: Strings.RemoveContextMenuTitle, iconString: "action_remove", handler: { action in
             self.telemetry.reportEvent(.Remove, source: pingSource, position: index)
             self.hideURLFromTopSites(site.tileURL)
         })
 
-        let dismissHighlightAction = ActionOverlayTableViewAction(title: Strings.RemoveFromASContextMenuTitle, iconString: "action_close", handler: { action in
+        let dismissHighlightAction = ActionOverlayTableViewAction(title: Strings.RemoveContextMenuTitle, iconString: "action_remove", handler: { action in
             self.telemetry.reportEvent(.Dismiss, source: pingSource, position: index)
             self.hideFromHighlights(site)
         })
 
         var actions = [openInNewTabAction, openInNewPrivateTabAction, bookmarkAction, shareAction]
-        switch section {
+
+        switch Section(indexPath.section) {
         case .highlights: actions.append(contentsOf: [dismissHighlightAction, deleteFromHistoryAction])
         case .topSites: actions.append(removeTopSiteAction)
-        case .highlightIntro: break
+        case .highlightIntro: return nil
         }
-
-        return ActionOverlayTableViewController(site: site, actions: actions)
-    }
-
-    func selectItemAtIndex(_ index: Int, inSection section: Section) {
-        switch section {
-        case .highlights:
-            telemetry.reportEvent(.Click, source: .Highlights, position: index)
-            let site = self.highlights[index]
-            showSiteWithURLHandler(URL(string:site.url)!)
-        case .topSites, .highlightIntro:
-            return
-        }
+        
+        return actions
     }
 }
 
