@@ -43,14 +43,13 @@ extension Strings {
     public static let ASPageControlButton = NSLocalizedString("ActivityStream.PageControl.Button", value: "Next Page", comment: "The page control button that lets you switch between pages in top sites")
     public static let ASHighlightsTitle =  NSLocalizedString("ActivityStream.Highlights.SectionTitle", value: "Highlights", comment: "Section title label for Highlights")
 
-    public static let OpenInNewTabContextMenuTitle = NSLocalizedString("ActivityStream.ContextMenu.OpenInNewTab", value: "Open in New Tab", comment: "The title for the Open in New Tab context menu action for Activity Stream")
-    public static let OpenInNewPrivateTabContextMenuTitle = NSLocalizedString("ActivityStream.ContextMenu.OpenInNewPrivateTab", value: "Open in New Private Tab", comment: "The title for the Open in New Private Tab context menu action for Activity Stream")
-    public static let BookmarkContextMenuTitle = NSLocalizedString("ActivityStream.ContextMenu.Bookmark", value: "Bookmark", comment: "The title for the Bookmark context menu action for Activity Stream")
-    public static let DeleteFromHistoryContextMenuTitle = NSLocalizedString("ActivityStream.ContextMenu.DeleteFromHistory", value: "Delete from History", comment: "The title for the Delete from History context menu action for Activity Stream")
-    public static let ShareContextMenuTitle = NSLocalizedString("ActivityStream.ContextMenu.Share", value: "Share", comment: "The title for the Share context menu action for Activity Stream")
-    public static let RemoveFromASContextMenuTitle = NSLocalizedString("ActivityStream.ContextMenu.Remove", value: "Remove", comment: "The title for the Remove content from Activity Stream context menu item")
-
-
+// Home Panel Context Menu.
+    public static let OpenInNewTabContextMenuTitle = NSLocalizedString("HomePanel.ContextMenu.OpenInNewTab", value: "Open in New Tab", comment: "The title for the Open in New Tab context menu action for sites in Home Panels")
+    public static let OpenInNewPrivateTabContextMenuTitle = NSLocalizedString("HomePanel.ContextMenu.OpenInNewPrivateTab", value: "Open in New Private Tab", comment: "The title for the Open in New Private Tab context menu action for sites in Home Panels")
+    public static let BookmarkContextMenuTitle = NSLocalizedString("HomePanel.ContextMenu.Bookmark", value: "Bookmark", comment: "The title for the Bookmark context menu action for sites in Home Panels")
+    public static let DeleteFromHistoryContextMenuTitle = NSLocalizedString("HomePanel.ContextMenu.DeleteFromHistory", value: "Delete from History", comment: "The title for the Delete from History context menu action for sites in Home Panels")
+    public static let ShareContextMenuTitle = NSLocalizedString("HomePanel.ContextMenu.Share", value: "Share", comment: "The title for the Share context menu action for sites in Home Panels")
+    public static let RemoveContextMenuTitle = NSLocalizedString("HomePanel.ContextMenu.Remove", value: "Remove", comment: "The title for the Remove content menu action for sites in Home Panels")
 }
 
 // Settings.

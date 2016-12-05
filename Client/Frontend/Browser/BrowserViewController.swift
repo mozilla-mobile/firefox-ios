@@ -2014,7 +2014,7 @@ extension BrowserViewController: HomePanelViewControllerDelegate {
     }
     
     func homePanelViewControllerDidRequestToOpenInNewTab(url: NSURL, isPrivate: Bool) {
-        self.tabManager.addTab(NSURLRequest(URL: url), afterTab: self.tabManager.selectedTab, isPrivate: isPrivate)
+        self.tabManager.addTab(PrivilegedRequest(URL: url), afterTab: self.tabManager.selectedTab, isPrivate: isPrivate)
     }
 }
 

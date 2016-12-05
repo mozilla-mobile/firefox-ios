@@ -76,18 +76,32 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
     var recentlyClosedTabs: [ClosedTab] = []
     weak var recentlyClosedTabsPanel: RecentlyClosedTabsPanel?
 
+    private lazy var longPressRecognizer: UILongPressGestureRecognizer = {
+        return UILongPressGestureRecognizer(target: self, action: #selector(RecentlyClosedTabsPanelSiteTableViewController.longPress(_:)))
+    }()
+
     init() {
         super.init(nibName: nil, bundle: nil)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.addGestureRecognizer(longPressRecognizer)
         tableView.accessibilityIdentifier = "Recently Closed Tabs List"
         self.recentlyClosedTabs = profile.recentlyClosedTabs.tabs
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    @objc private func longPress(longPressGestureRecognizer: UILongPressGestureRecognizer) {
+        guard longPressGestureRecognizer.state == UIGestureRecognizerState.Began else { return }
+        let touchPoint = longPressGestureRecognizer.locationInView(tableView)
+        guard let indexPath = tableView.indexPathForRowAtPoint(touchPoint) else { return }
+
+        guard let contextMenu = createContextMenu(indexPath) else { return }
+        self.presentViewController(contextMenu, animated: true, completion: nil)
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -126,4 +140,26 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
         return profile.recentlyClosedTabs.tabs.count
     }
 
+}
+
+extension RecentlyClosedTabsPanelSiteTableViewController: HomePanelContextMenu {
+    func getSiteDetails(indexPath: NSIndexPath) -> Site? {
+        let closedTab = recentlyClosedTabs[indexPath.row]
+        let site: Site
+        if let title = closedTab.title {
+            site = Site(url: String(closedTab.url), title: title)
+        } else {
+            site = Site(url: String(closedTab.url), title: "")
+        }
+        return site
+    }
+
+    func getImageDetails(indexPath: NSIndexPath) -> (siteImage: UIImage?, siteBGColor: UIColor?) {
+        guard let tabCell = super.tableView.cellForRowAtIndexPath(indexPath) else { return (nil, nil) }
+        return (tabCell.imageView?.image, tabCell.imageView?.backgroundColor)
+    }
+
+    func getContextMenuActions(site: Site, indexPath: NSIndexPath) -> [ActionOverlayTableViewAction]? {
+        return getDefaultContextMenuActions(site, homePanelDelegate: homePanelDelegate)
+    }
 }
