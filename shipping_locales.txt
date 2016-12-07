@@ -1,11 +1,15 @@
 ast
 az
 bg
+bn-BD
 br
+ca
 cs
 cy
 da
 de
+es-CL
+eu
 dsb
 en-GB
 en-US
@@ -22,6 +26,7 @@ id
 is
 it
 ja
+kab
 kk
 km
 ko
