@@ -220,8 +220,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         log.debug("Setting up Swrve")
         Swrve.sharedInstanceWithAppID(4308, apiKey: "RrkaG3xLPusmY4QmWuIe", launchOptions: launchOptions)
-
-        Swrve.sharedInstance().event("hello.world.event")
+        Swrve.sharedInstance().userUpdate(["fennec.signedIn": profile?.hasAccount() ?? false])
 
         log.debug("Making window key and visible…")
         self.window!.makeKeyAndVisible()
