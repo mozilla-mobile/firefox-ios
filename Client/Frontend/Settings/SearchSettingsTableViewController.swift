@@ -20,7 +20,6 @@ class SearchSettingsTableViewController: UITableViewController {
     private let NumberOfSections = 3
     private let IconSize = CGSize(width: OpenSearchEngine.PreferredIconSize, height: OpenSearchEngine.PreferredIconSize)
     private let SectionHeaderIdentifier = "SectionHeaderIdentifier"
-    
     private var showDeletion = false
     
     var profile: Profile?
@@ -107,7 +106,7 @@ class SearchSettingsTableViewController: UITableViewController {
             cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
             cell.editingAccessoryType = UITableViewCellAccessoryType.DisclosureIndicator
             cell.accessibilityLabel = NSLocalizedString("Add Custom Search Engine", comment: "Accessibility label for 'Add Custom Search Engine' option.")
-            cell.accessibilityValue = "Add custom search engine."
+            cell.accessibilityIdentifier = "customEngineViewButton"
             cell.textLabel?.text = "Add Custom Search Engine"
             cell.imageView?.image = UIImage(named: "bottomNav-NewTab")
         } else {
