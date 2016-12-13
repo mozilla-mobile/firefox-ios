@@ -269,11 +269,11 @@ public class BrowserProfile: Profile {
         log.debug("Reopening profile.")
         isShutdown = false
         
-        if dbCreated {
+        if BrowserProfile.dbCreated {
             db.reopenIfClosed()
         }
 
-        if loginsDBCreated {
+        if BrowserProfile.loginsDBCreated {
             loginsDB.reopenIfClosed()
         }
     }
@@ -282,11 +282,11 @@ public class BrowserProfile: Profile {
         log.debug("Shutting down profile.")
         isShutdown = true
 
-        if self.dbCreated {
+        if BrowserProfile.dbCreated {
             db.forceClose()
         }
 
-        if self.loginsDBCreated {
+        if BrowserProfile.loginsDBCreated {
             loginsDB.forceClose()
         }
     }
@@ -361,7 +361,7 @@ public class BrowserProfile: Profile {
         }
     }()
 
-    private var dbCreated = false
+    private static var dbCreated = false
     var db: BrowserDB {
         struct Singleton {
             static var token: dispatch_once_t = 0
@@ -369,7 +369,7 @@ public class BrowserProfile: Profile {
         }
         dispatch_once(&Singleton.token) {
             Singleton.instance = BrowserDB(filename: "browser.db", files: self.files)
-            self.dbCreated = true
+            BrowserProfile.dbCreated = true
         }
         return Singleton.instance
     }
@@ -506,7 +506,7 @@ public class BrowserProfile: Profile {
         return Singleton.instance
     }
 
-    private var loginsDBCreated = false
+    private static var loginsDBCreated = false
     private lazy var loginsDB: BrowserDB = {
         struct Singleton {
             static var token: dispatch_once_t = 0
@@ -514,7 +514,7 @@ public class BrowserProfile: Profile {
         }
         dispatch_once(&Singleton.token) {
             Singleton.instance = BrowserDB(filename: "logins.db", secretKey: self.loginsKey, files: self.files)
-            self.loginsDBCreated = true
+            BrowserProfile.loginsDBCreated = true
         }
         return Singleton.instance
     }()
