@@ -20,6 +20,7 @@ class ActionViewController: UIViewController, ClientPickerViewControllerDelegate
         view.backgroundColor = UIColor.whiteColor()
 
         super.viewDidLoad()
+        profile.reopen()
 
         guard profile.hasAccount() else {
             let instructionsViewController = InstructionsViewController()
