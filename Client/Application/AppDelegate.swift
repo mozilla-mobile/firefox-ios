@@ -301,10 +301,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func launchFxAFromURL(params: FxALaunchParams) {
-        let view = params.view ?? nil
-        if (view != nil) {
-            self.browserViewController.presentSignInViewController(params)
+        guard params.view != nil else {
+            return
         }
+        self.browserViewController.presentSignInViewController(params)
     }
 
     func launchFromURL(params: LaunchParams) {

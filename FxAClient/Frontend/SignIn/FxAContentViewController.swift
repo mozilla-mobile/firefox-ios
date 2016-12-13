@@ -121,13 +121,11 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     
     // Attempt to fill out a field in content view
     private func fillField(className: String?, value: String?){
-        if(className == nil || value == nil){
+        guard let name = className, let val = value else {
             return
         }
-        let script = "$('.\(className!)').val('\(value!)');";
-        webView.evaluateJavaScript(script, completionHandler: { (res, error) -> Void in
-            return
-        })
+        let script = "$('.\(name)').val('\(val)');";
+        webView.evaluateJavaScript(script, completionHandler: nil)
     }
 
     // Handle a message coming from the content server.
