@@ -263,7 +263,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let fxaParams: FxALaunchParams
         fxaParams = FxALaunchParams(view: fxaQuery["fxa"], email: fxaQuery["email"], access_code: fxaQuery["access_code"])
         
-        if(fxaParams.view != nil){
+        if fxaParams.view != nil {
             launchFxAFromURL(fxaParams)
             return true
         }
