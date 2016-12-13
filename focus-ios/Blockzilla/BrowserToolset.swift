@@ -15,10 +15,10 @@ protocol BrowserToolsetDelegate: class {
 class BrowserToolset {
     weak var delegate: BrowserToolsetDelegate?
 
-    let backButton = UIButton()
-    let forwardButton = UIButton()
-    let stopReloadButton = UIButton()
-    let sendButton = UIButton()
+    let backButton = InsetButton()
+    let forwardButton = InsetButton()
+    let stopReloadButton = InsetButton()
+    let sendButton = InsetButton()
 
     init() {
         backButton.tintColor = UIConstants.colors.toolbarButtonNormal
@@ -26,6 +26,7 @@ class BrowserToolset {
         backButton.setImage(#imageLiteral(resourceName: "icon_back_inactive"), for: .disabled)
         backButton.addTarget(self, action: #selector(didPressBack), for: .touchUpInside)
         backButton.alpha = UIConstants.layout.browserToolbarDisabledOpacity
+        backButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         backButton.isEnabled = false
 
         forwardButton.tintColor = UIConstants.colors.toolbarButtonNormal
@@ -33,17 +34,18 @@ class BrowserToolset {
         forwardButton.setImage(#imageLiteral(resourceName: "icon_forward_inactive"), for: .disabled)
         forwardButton.addTarget(self, action: #selector(didPressForward), for: .touchUpInside)
         forwardButton.alpha = UIConstants.layout.browserToolbarDisabledOpacity
+        forwardButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         forwardButton.isEnabled = false
 
         stopReloadButton.tintColor = UIConstants.colors.toolbarButtonNormal
         stopReloadButton.setImage(#imageLiteral(resourceName: "icon_stop_menu"), for: .normal)
+        stopReloadButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         stopReloadButton.addTarget(self, action: #selector(didPressStopReload), for: .touchUpInside)
 
-        let sendImageActive = OpenUtils.canOpenInFirefox ? #imageLiteral(resourceName: "icon_openwithfx_active") : #imageLiteral(resourceName: "icon_openwith_active")
-        let sendImageInactive = OpenUtils.canOpenInFirefox ? #imageLiteral(resourceName: "icon_openwithfx_inactive") : #imageLiteral(resourceName: "icon_openwith_inactive")
         sendButton.tintColor = UIConstants.colors.toolbarButtonNormal
-        sendButton.setImage(sendImageActive, for: .normal)
-        sendButton.setImage(sendImageInactive, for: .disabled)
+        sendButton.setImage(#imageLiteral(resourceName: "icon_openwith_active"), for: .normal)
+        sendButton.setImage(#imageLiteral(resourceName: "icon_openwith_inactive"), for: .disabled)
+        sendButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         sendButton.addTarget(self, action: #selector(didPressSend), for: .touchUpInside)
     }
 

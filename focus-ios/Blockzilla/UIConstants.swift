@@ -85,6 +85,7 @@ struct UIConstants {
         static let toastAnimationDuration: TimeInterval = 0.3
         static let toastDuration: TimeInterval = 1.5
         static let toolbarFadeAnimationDuration = 0.25
+        static let toolbarButtonInsets = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
         static let urlBarCornerRadius: CGFloat = 2
         static let urlBarTransitionAnimationDuration: TimeInterval = 0.2
         static let urlBarMargin: CGFloat = 8
@@ -124,6 +125,10 @@ struct UIConstants {
         static let labelBlockOther = NSLocalizedString("Settings.toggleBlockOther", value: "Block other content trackers", comment: "Label for toggle on main screen")
         static let labelBlockFonts = NSLocalizedString("Settings.toggleBlockFonts", value: "Block Web fonts", comment: "Label for toggle on main screen")
         static let labelSendAnonymousUsageData = NSLocalizedString("Settings.toggleSendAnonymousUsageData", value: "Send anonymous usage data", comment: "Label for Send Anonymous Usage Data toggle on main screen")
+        static let openCancel = NSLocalizedString("Open.Cancel", value: "Cancel", comment: "Label in share alert to cancel the alert")
+        static let openFirefox = NSLocalizedString("Open.Firefox", value: "Firefox", comment: "Label in share alert to open the URL in Firefox")
+        static let openSafari = NSLocalizedString("Open.Safari", value: "Safari", comment: "Label in share alert to open the URL in Safari")
+        static let openShare = NSLocalizedString("Open.Share", value: "Share…", comment: "Label in share alert to open the system share menu")
         static let safariInstructionsContentBlockers = NSLocalizedString("Safari.instructionsContentBlockers", value: "Tap Safari, then select Content Blockers", comment: "Label for instructions to enable Safari, shown when enabling Safari Integration in Settings")
         static let safariInstructionsEnable = NSLocalizedString("Safari.instructionsEnable", value: "Enable %@", comment: "Label for instructions to enable Safari, shown when enabling Safari Integration in Settings")
         static let safariInstructionsOpen = NSLocalizedString("Safari.instructionsOpen", value: "Open Settings App", comment: "Label for instructions to enable Safari, shown when enabling Safari Integration in Settings")

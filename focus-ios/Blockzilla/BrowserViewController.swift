@@ -299,9 +299,13 @@ extension BrowserViewController: BrowserToolsetDelegate {
     }
 
     func browserToolsetDidPressSend(_ browserToolset: BrowserToolset) {
-        urlBar.dismiss()
         guard let url = browser.url else { return }
-        OpenUtils.openInExternalBrowser(url: url)
+
+        let alert = OpenUtils.buildShareAlert(url: url, anchor: browserToolset.sendButton) { shareActivity in
+            self.present(shareActivity, animated: true, completion: nil)
+        }
+
+        present(alert, animated: true, completion: nil)
     }
 
     func browserToolsetDidPressSettings(_ browserToolbar: BrowserToolset) {

@@ -6,32 +6,59 @@ import Foundation
 
 class OpenUtils {
     private static let app = UIApplication.shared
+    private static let firefoxAppStoreURL = URL(string: "https://itunes.apple.com/app/id989804926")!
 
-    static var canOpenInFirefox: Bool {
+    private static var canOpenInFirefox: Bool {
         return app.canOpenURL(URL(string: "firefox://")!)
     }
 
-    private static func openInFirefox(url: URL) ->  Bool {
+    private static func openInFirefox(url: URL) {
         guard let escaped = url.absoluteString.addingPercentEncoding(withAllowedCharacters: .urlQueryParameterAllowed),
-              let firefoxURL = URL(string: "firefox://open-url?url=\(escaped)") else {
-            return false
+              let firefoxURL = URL(string: "firefox://open-url?url=\(escaped)"),
+              app.canOpenURL(firefoxURL) else {
+            return
         }
 
-        return app.openURL(firefoxURL)
+        AdjustIntegration.track(eventName: .openFirefox)
+        app.openURL(firefoxURL)
     }
 
     private static func openInSafari(url: URL) {
+        AdjustIntegration.track(eventName: .openSafari)
         app.openURL(url)
     }
 
-    /// Opens the URL in Firefox, if Firefox is available.
-    /// Otherwise, the URL is opened in Safari.
-    static func openInExternalBrowser(url: URL) {
-        if openInFirefox(url: url) {
-            AdjustIntegration.track(eventName: .openFirefox)
-        } else {
-            openInSafari(url: url)
-            AdjustIntegration.track(eventName: .openSafari)
-        }
+    static func buildShareAlert(url: URL, anchor: UIView, shareCallback: @escaping (UIActivityViewController) -> ()) -> UIAlertController {
+        let alert = UIAlertController(title: url.absoluteString, message: nil, preferredStyle: .actionSheet)
+
+        alert.addAction(UIAlertAction(title: UIConstants.strings.openFirefox, style: .default) { _ in
+            // If Firefox isn't installed, launch the URL to download it in the App Store.
+            guard OpenUtils.canOpenInFirefox else {
+                UIApplication.shared.openURL(firefoxAppStoreURL)
+                return
+            }
+
+            OpenUtils.openInFirefox(url: url)
+        })
+
+        alert.addAction(UIAlertAction(title: UIConstants.strings.openSafari, style: .default) { _ in
+            OpenUtils.openInSafari(url: url)
+        })
+
+        alert.addAction(UIAlertAction(title: UIConstants.strings.openShare, style: .default) { _ in
+            let controller = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+            controller.popoverPresentationController?.sourceView = anchor
+            controller.popoverPresentationController?.sourceRect = anchor.bounds
+            controller.popoverPresentationController?.permittedArrowDirections = .up
+            shareCallback(controller)
+        })
+
+        alert.addAction(UIAlertAction(title: UIConstants.strings.openCancel, style: .cancel, handler: nil))
+
+        alert.popoverPresentationController?.sourceView = anchor
+        alert.popoverPresentationController?.sourceRect = anchor.bounds
+        alert.popoverPresentationController?.permittedArrowDirections = .up
+
+        return alert
     }
 }
