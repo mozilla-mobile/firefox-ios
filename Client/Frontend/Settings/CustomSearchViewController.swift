@@ -24,9 +24,9 @@ class CustomSearchViewController: SettingsTableViewController {
         initSpinnerView()
     }
 
-    func initSpinnerView(){
+    func initSpinnerView() {
         spinnerView = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
-        self.view.addSubview (spinnerView)
+        self.view.addSubview(spinnerView)
         
         spinnerView.snp_makeConstraints { make in
             make.center.equalTo(view)
