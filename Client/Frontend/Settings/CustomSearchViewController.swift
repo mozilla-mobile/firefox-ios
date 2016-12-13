@@ -26,7 +26,7 @@ class CustomSearchViewController: SettingsTableViewController {
 
     func initSpinnerView(){
         spinnerView = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
-        self.view.addSubview(spinnerView)
+        self.view.addSubview (spinnerView)
         
         spinnerView.snp_makeConstraints { make in
             make.center.equalTo(view)
@@ -47,7 +47,7 @@ class CustomSearchViewController: SettingsTableViewController {
                 let alert = ThirdPartySearchAlerts.incorrectCustomEngineForm()
                 self.presentViewController(alert, animated: true, completion: nil)
                 return
-        }
+            }
         saveEngineWithFavicon(forProcessedQuery: processedSearchQuery!, withEncodedUrl: url ,withShortname: shortName, forProfile: profile)
     }
 

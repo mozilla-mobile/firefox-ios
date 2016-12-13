@@ -48,7 +48,7 @@ class BaseTestCase: XCTestCase {
         waitForExpectationsWithTimeout(20, handler: nil)
     }
     
-    func waitForValueContains(element:XCUIElement, value:String) {
+    func waitForValueContains(element: XCUIElement, value: String) {
         let predicateText = "value CONTAINS " + "'" + value + "'"
         let valueCheck = NSPredicate(format: predicateText)
         
