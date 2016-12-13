@@ -12,12 +12,12 @@ protocol SearchEnginePickerDelegate: class {
 
 class SearchSettingsTableViewController: UITableViewController {
     private let SectionDefault = 0
-    private let SectionSearchAdd = 2
     private let ItemDefaultEngine = 0
     private let ItemDefaultSuggestions = 1
+    private let ItemAddCustomSearch = 2
     private let NumberOfItemsInSectionDefault = 2
     private let SectionOrder = 1
-    private let NumberOfSections = 3
+    private let NumberOfSections = 2
     private let IconSize = CGSize(width: OpenSearchEngine.PreferredIconSize, height: OpenSearchEngine.PreferredIconSize)
     private let SectionHeaderIdentifier = "SectionHeaderIdentifier"
     
@@ -98,39 +98,40 @@ class SearchSettingsTableViewController: UITableViewController {
                 toggle.on = model.shouldShowSearchSuggestions
                 cell.editingAccessoryView = toggle
                 cell.selectionStyle = .None
-
             default:
                 // Should not happen.
                 break
             }
-        } else if indexPath.section == SectionSearchAdd {
-            cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
-            cell.editingAccessoryType = UITableViewCellAccessoryType.DisclosureIndicator
-            cell.accessibilityLabel = NSLocalizedString("Add Custom Search Engine", comment: "Accessibility label for 'Add Custom Search Engine' option.")
-            cell.accessibilityValue = "Add custom search engine."
-            cell.textLabel?.text = "Add Custom Search Engine"
-            cell.imageView?.image = UIImage(named: "bottomNav-NewTab")
         } else {
             // The default engine is not a quick search engine.
             let index = indexPath.item + 1
-            engine = model.orderedEngines[index]
+            if index < model.orderedEngines.count{
+                engine = model.orderedEngines[index]
 
-            cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
-            cell.showsReorderControl = true
+                cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
+                cell.showsReorderControl = true
 
-            let toggle = UISwitch()
-            toggle.onTintColor = UIConstants.ControlTintColor
-            // This is an easy way to get from the toggle control to the corresponding index.
-            toggle.tag = index
-            toggle.addTarget(self, action: #selector(SearchSettingsTableViewController.didToggleEngine(_:)), forControlEvents: UIControlEvents.ValueChanged)
-            toggle.on = model.isEngineEnabled(engine)
+                let toggle = UISwitch()
+                toggle.onTintColor = UIConstants.ControlTintColor
+                // This is an easy way to get from the toggle control to the corresponding index.
+                toggle.tag = index
+                toggle.addTarget(self, action: #selector(SearchSettingsTableViewController.didToggleEngine(_:)), forControlEvents: UIControlEvents.ValueChanged)
+                toggle.on = model.isEngineEnabled(engine)
 
-            cell.editingAccessoryView = toggle
-            cell.textLabel?.text = engine.shortName
-            cell.textLabel?.adjustsFontSizeToFitWidth = true
-            cell.textLabel?.minimumScaleFactor = 0.5
-            cell.imageView?.image = engine.image.createScaled(IconSize)
-            cell.selectionStyle = .None
+                cell.editingAccessoryView = toggle
+                cell.textLabel?.text = engine.shortName
+                cell.textLabel?.adjustsFontSizeToFitWidth = true
+                cell.textLabel?.minimumScaleFactor = 0.5
+                cell.imageView?.image = engine.image.createScaled(IconSize)
+                cell.selectionStyle = .None
+            } else {
+                cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
+                cell.editingAccessoryType = UITableViewCellAccessoryType.DisclosureIndicator
+                cell.accessibilityLabel = NSLocalizedString("Add Custom Search Engine", comment: "Accessibility label for 'Add Custom Search Engine' option.")
+                cell.accessibilityValue = "Add custom search engine."
+                cell.textLabel?.textColor = UIColor(red: 0/255, green: 122/255, blue: 255/255, alpha: 1.0)
+                cell.textLabel?.text = "Add Search Engine"
+            }
         }
 
         // So that the seperator line goes all the way to the left edge.
@@ -146,11 +147,10 @@ class SearchSettingsTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == SectionDefault {
             return NumberOfItemsInSectionDefault
-        } else if section == SectionSearchAdd {
-            return 1
         } else {
             // The first engine -- the default engine -- is not shown in the quick search engine list.
-            return model.orderedEngines.count - 1
+            // But the option to add Custom Engine is.
+            return model.orderedEngines.count
         }
     }
 
@@ -163,7 +163,7 @@ class SearchSettingsTableViewController: UITableViewController {
             searchEnginePicker.delegate = self
             searchEnginePicker.selectedSearchEngineName = model.defaultEngine.shortName
             navigationController?.pushViewController(searchEnginePicker, animated: true)
-        } else if indexPath.section == SectionSearchAdd {
+        } else if indexPath.item + 1 == model.orderedEngines.count {
             let customSearchEngineForm = CustomSearchViewController()
             customSearchEngineForm.profile = self.profile
             navigationController?.pushViewController(customSearchEngineForm, animated: true)
@@ -173,7 +173,7 @@ class SearchSettingsTableViewController: UITableViewController {
 
     // Don't show delete button on the left.
     override func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
-        if (indexPath.section == SectionDefault || indexPath.section == SectionSearchAdd) {
+        if (indexPath.section == SectionDefault || indexPath.item + 1 == model.orderedEngines.count) {
             return UITableViewCellEditingStyle.None
         }
 
@@ -207,8 +207,6 @@ class SearchSettingsTableViewController: UITableViewController {
         var sectionTitle: String
         if section == SectionDefault {
             sectionTitle = NSLocalizedString("Default Search Engine", comment: "Title for default search engine settings section.")
-        } else if section == SectionSearchAdd {
-            sectionTitle = NSLocalizedString("Custom Search Engines", comment: "Title for Add Custom Search Engine Section.")
         } else {
             sectionTitle = NSLocalizedString("Quick-Search Engines", comment: "Title for quick-search engines settings section.")
         }
@@ -218,7 +216,7 @@ class SearchSettingsTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        if indexPath.section == SectionDefault || indexPath.section == SectionSearchAdd {
+        if indexPath.section == SectionDefault || indexPath.item + 1 == model.orderedEngines.count {
             return false
         } else {
             return true
@@ -241,7 +239,8 @@ class SearchSettingsTableViewController: UITableViewController {
             return sourceIndexPath
         }
 
-        if sourceIndexPath.section == SectionSearchAdd || proposedDestinationIndexPath.section == SectionSearchAdd {
+        //Can't drag/drop over "Add Custom Engine button"
+        if sourceIndexPath.item + 1 == model.orderedEngines.count || proposedDestinationIndexPath.item + 1 == model.orderedEngines.count {
             return sourceIndexPath
         }
 
