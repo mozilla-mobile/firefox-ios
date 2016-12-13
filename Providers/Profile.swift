@@ -361,6 +361,15 @@ public class BrowserProfile: Profile {
         }
     }()
 
+    /**
+     * For safety and efficiency, we only allow each database to be opened once. It
+     * looks like you can create multiple Profile instances, each pointing to a
+     * different database, but that's not currently the case.
+     *
+     * These `dbCreated` flags are an implementation detail to avoid opening a DB
+     * only to immediately close it -- they reflect whether the singleton DB instances
+     * have been assigned.
+     */
     private static var dbCreated = false
     var db: BrowserDB {
         struct Singleton {
