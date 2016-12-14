@@ -202,7 +202,7 @@ public class SeparatorPayload: BookmarkBasePayload {
             hasDupe: self.hasDupe,
             // TODO: these might need to be weakened if real-world data is dirty.
             parentID: self["parentid"].asString!,
-            parentName: self["parentName"].asString!,
+            parentName: self["parentName"].asString,
             pos: self["pos"].asInt!
         )
     }
@@ -368,7 +368,7 @@ public class BookmarkPayload: BookmarkBasePayload {
             hasDupe: self.hasDupe,
             // TODO: these might need to be weakened if real-world data is dirty.
             parentID: self["parentid"].asString!,
-            parentName: self["parentName"].asString!,
+            parentName: self["parentName"].asString,
             title: self["title"].asString ?? "",
             description: self["description"].asString,
             URI: self["bmkUri"].asString!,
@@ -426,7 +426,7 @@ public class BookmarkQueryPayload: BookmarkPayload {
             modified: modified,
             hasDupe: self.hasDupe,
             parentID: self["parentid"].asString!,
-            parentName: self["parentName"].asString!,
+            parentName: self["parentName"].asString,
             title: self["title"].asString ?? "",
             description: self["description"].asString,
             URI: self["bmkUri"].asString!,
@@ -500,8 +500,8 @@ public class BookmarkBasePayload: CleartextPayloadJSON, MirrorItemable {
             if (self["parentid"].asString! == "places") {
                 log.debug("Accepting root with missing parent name.")
             } else {
-                log.warning("Not the places root and missing parent name.")
-                return false
+                // Bug 1318414.
+                log.warning("Accepting bookmark with missing parent name.")
             }
         }
 
