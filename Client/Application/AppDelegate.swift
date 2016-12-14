@@ -214,9 +214,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         var shouldPerformAdditionalDelegateHandling = true
 
         log.debug("Did finish launching.")
-        
+
         log.debug("Setting up Adjust")
         self.adjustIntegration?.triggerApplicationDidFinishLaunchingWithOptions(launchOptions)
+
+        #if BUDDYBUILD
+            log.debug("Setting up BuddyBuild SDK")
+            BuddyBuildSDK.setup()
+        #endif
         
         log.debug("Making window key and visible…")
         self.window!.makeKeyAndVisible()
@@ -257,9 +262,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             log.warning("Cannot handle \(components.scheme) URL scheme")
             return false
         }
+        
+        // Extract optional FxA deep-linking options
+        let fxaQuery = url.getQuery()
+        let fxaParams: FxALaunchParams
+        fxaParams = FxALaunchParams(view: fxaQuery["fxa"], email: fxaQuery["email"], access_code: fxaQuery["access_code"])
+        
+        if fxaParams.view != nil {
+            launchFxAFromURL(fxaParams)
+            return true
+        }
 
         var url: String?
         var isPrivate: Bool = false
+        
         for item in (components.queryItems ?? []) as [NSURLQueryItem] {
             switch item.name {
             case "url":
@@ -269,7 +285,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             default: ()
             }
         }
-
+        
         let params: LaunchParams
 
         if let url = url, newURL = NSURL(string: url) {
@@ -287,6 +303,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         return true
+    }
+    
+    func launchFxAFromURL(params: FxALaunchParams) {
+        guard params.view != nil else {
+            return
+        }
+        self.browserViewController.presentSignInViewController(params)
     }
 
     func launchFromURL(params: LaunchParams) {
@@ -618,6 +641,12 @@ extension AppDelegate: MFMailComposeViewControllerDelegate {
         controller.dismissViewControllerAnimated(true, completion: nil)
         startApplication(application!, withLaunchOptions: self.launchOptions)
     }
+}
+
+struct FxALaunchParams {
+    var view: String?
+    var email: String?
+    var access_code: String?
 }
 
 struct LaunchParams {

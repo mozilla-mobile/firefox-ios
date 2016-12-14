@@ -155,6 +155,11 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         updateCopiedLink()
     }
 
+    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        let edge = size.width * TodayUX.buttonsHorizontalMarginPercentage
+        buttonStackView.layoutMargins = UIEdgeInsets(top: 0, left: edge, bottom: 0, right: edge)
+    }
+
     func widgetMarginInsetsForProposedMarginInsets(defaultMarginInsets: UIEdgeInsets) -> UIEdgeInsets {
         return UIEdgeInsetsZero
     }

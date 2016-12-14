@@ -50,7 +50,7 @@ struct ASOnyxPing {
     static func buildEventPing(event: ASEventField, page: ASPageField, source: ASSourceField, actionPosition: Int, provider: String? = nil) -> EventPing {
         return EventPing(event: event.rawValue, page: page.rawValue, source: source.rawValue,
                          actionPosition: actionPosition, locale: NSLocale.currentLocale(),
-                         action: "activity_stream_event", provider: provider)
+                         action: "activity_stream_mobile", provider: provider)
     }
 
     /// Builds an Onyx ping with strong types for Activity Stream values for session pings.
@@ -67,7 +67,7 @@ struct ASOnyxPing {
                                          page: ASPageField?) -> SessionPing {
         return SessionPing(url: url, loadReason: loadReason?.rawValue, unloadReason: unloadReason?.rawValue,
                            loadLatency: loadLatency, locale: NSLocale.currentLocale(), page: page?.rawValue,
-                           action: "activity_stream_session")
+                           action: "activity_stream_mobile")
     }
 }
 

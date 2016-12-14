@@ -1541,16 +1541,22 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBar(urlBar: URLBarView, didSubmitText text: String) {
-        // If we can't make a valid URL, do a search query.
-        // If we still don't have a valid URL, something is broken. Give up.
         let engine = profile.searchEngines.defaultEngine
-        guard let url = URIFixup.getURL(text) ??
-                        engine.searchURLForQuery(text) else {
+        let url: NSURL
+
+        if let fixupURL = URIFixup.getURL(text) {
+            // The user entered a URL, so use it.
+            url = fixupURL
+        } else if let searchURL = engine.searchURLForQuery(text) {
+            // We couldn't build a URL, so do a search query.
+            url = searchURL
+            Telemetry.recordEvent(SearchTelemetry.makeEvent(engine: engine, source: .URLBar))
+        } else {
+            // We still don't have a valid URL, so something is broken. Give up.
             log.error("Error handling URL entry: \"\(text)\".")
+            assertionFailure("Couldn't generate search URL: \(text)")
             return
         }
-
-        Telemetry.recordEvent(SearchTelemetry.makeEvent(engine: engine, source: .URLBar))
 
         finishEditingAndSubmit(url, visitType: VisitType.Typed)
     }
@@ -1960,11 +1966,13 @@ extension BrowserViewController: HomePanelViewControllerDelegate {
     }
 
     func homePanelViewControllerDidRequestToCreateAccount(homePanelViewController: HomePanelViewController) {
-        presentSignInViewController() // TODO UX Right now the flow for sign in and create account is the same
+        let fxaOptions = FxALaunchParams(view: "signup", email: nil, access_code: nil)
+        presentSignInViewController(fxaOptions) // TODO UX Right now the flow for sign in and create account is the same
     }
 
     func homePanelViewControllerDidRequestToSignIn(homePanelViewController: HomePanelViewController) {
-        presentSignInViewController() // TODO UX Right now the flow for sign in and create account is the same
+        let fxaOptions = FxALaunchParams(view: "signin", email: nil, access_code: nil)
+        presentSignInViewController(fxaOptions) // TODO UX Right now the flow for sign in and create account is the same
     }
     
     func homePanelViewControllerDidRequestToOpenInNewTab(url: NSURL, isPrivate: Bool) {
@@ -2288,6 +2296,12 @@ extension BrowserViewController: WKNavigationDelegate {
               challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodNTLM,
               let tab = tabManager[webView] else {
             completionHandler(NSURLSessionAuthChallengeDisposition.PerformDefaultHandling, nil)
+            return
+        }
+
+        // If this is a request to our local web server, use our private credentials.
+        if challenge.protectionSpace.host == "localhost" && challenge.protectionSpace.port == Int(WebServer.sharedInstance.server.port) {
+            completionHandler(.UseCredential, WebServer.sharedInstance.credentials)
             return
         }
 
@@ -2823,7 +2837,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
         }
     }
 
-    func presentSignInViewController() {
+    func presentSignInViewController(fxaOptions: FxALaunchParams) {
         // Show the settings page if we have already signed in. If we haven't then show the signin page
         let vcToPresent: UIViewController
         if profile.hasAccount() {
@@ -2835,6 +2849,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
             let signInVC = FxAContentViewController()
             signInVC.delegate = self
             signInVC.url = profile.accountConfiguration.signInURL
+            signInVC.fxaOptions = fxaOptions
             signInVC.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: #selector(BrowserViewController.dismissSignInViewController))
             vcToPresent = signInVC
         }
@@ -2850,7 +2865,8 @@ extension BrowserViewController: IntroViewControllerDelegate {
 
     func introViewControllerDidRequestToLogin(introViewController: IntroViewController) {
         introViewController.dismissViewControllerAnimated(true, completion: { () -> Void in
-            self.presentSignInViewController()
+            let fxaOptions = FxALaunchParams(view: "signup", email: nil, access_code: nil)
+            self.presentSignInViewController(fxaOptions)
         })
     }
 }

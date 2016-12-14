@@ -331,7 +331,7 @@ public struct BookmarkMirrorItem: Equatable {
         // TODO: this should never be nil!
         if let parentID = self.parentID {
             out["parentid"] = BookmarkRoots.translateOutgoingRootGUID(parentID)
-            take("parentName", titleForSpecialGUID(parentID) ?? self.parentName)
+            take("parentName", titleForSpecialGUID(parentID) ?? self.parentName ?? "")
         }
 
         func takeBookmarkFields() {
@@ -432,7 +432,7 @@ public struct BookmarkMirrorItem: Equatable {
             faviconID: nil, localModified: nil, syncStatus: nil)
     }
 
-    public static func separator(guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: String, pos: Int) -> BookmarkMirrorItem {
+    public static func separator(guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: String?, pos: Int) -> BookmarkMirrorItem {
         let id = BookmarkRoots.translateIncomingRootGUID(guid)
         let parent = BookmarkRoots.translateIncomingRootGUID(parentID)
 
@@ -447,7 +447,7 @@ public struct BookmarkMirrorItem: Equatable {
             faviconID: nil, localModified: nil, syncStatus: nil)
     }
 
-    public static func bookmark(guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: String, title: String, description: String?, URI: String, tags: String, keyword: String?) -> BookmarkMirrorItem {
+    public static func bookmark(guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: String?, title: String, description: String?, URI: String, tags: String, keyword: String?) -> BookmarkMirrorItem {
         let id = BookmarkRoots.translateIncomingRootGUID(guid)
         let parent = BookmarkRoots.translateIncomingRootGUID(parentID)
 
@@ -462,7 +462,7 @@ public struct BookmarkMirrorItem: Equatable {
             faviconID: nil, localModified: nil, syncStatus: nil)
     }
 
-    public static func query(guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: String, title: String, description: String?, URI: String, tags: String, keyword: String?, folderName: String?, queryID: String?) -> BookmarkMirrorItem {
+    public static func query(guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: String?, title: String, description: String?, URI: String, tags: String, keyword: String?, folderName: String?, queryID: String?) -> BookmarkMirrorItem {
         let id = BookmarkRoots.translateIncomingRootGUID(guid)
         let parent = BookmarkRoots.translateIncomingRootGUID(parentID)
 
