@@ -324,7 +324,7 @@ private extension BookmarkMirrorItem {
             self.isDeleted ? 1 : 0,
             self.hasDupe ? 1 : 0,
             self.parentID,
-            self.parentName,
+            self.parentName ?? "",     // Workaround for dirty data before Bug 1318414.
             self.feedURI,
             self.siteURI,
             self.pos,
