@@ -122,10 +122,23 @@ public class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
     }
 
     private func uploadModifiedPlaces(places: [(Place, [Visit])], lastTimestamp: Timestamp, fromStorage storage: SyncableHistory, withServer storageClient: Sync15CollectionClient<HistoryPayload>) -> DeferredTimestamp {
-        return self.uploadRecords(places.map(makeHistoryRecord), lastTimestamp: lastTimestamp, storageClient: storageClient) { result, lastModified in
-            // We don't do anything with failed.
-            storage.markAsSynchronized(result.success, modified: lastModified ?? lastTimestamp)
+        log.info("Preparing upload…")
+
+        // Build sequences of 1000 history items, sequence by sequence
+        // These will be uploaded in smaller batches by the upload batcher, but we chunk here
+        // in order to bound peak memory usage when we call makeHistoryRecord below.
+        let toUpload = chunk(places, by: 1000)
+        let perChunk: (ArraySlice<(Place, [Visit])>, Timestamp) -> DeferredTimestamp = { (records, timestamp) in
+            let recs = records.map(makeHistoryRecord)
+            log.info("Uploading \(recs.count) history items…")
+            return self.uploadRecords(recs, lastTimestamp: timestamp, storageClient: storageClient) { result, lastModified in
+                // We don't do anything with failed.
+                return storage.markAsSynchronized(result.success, modified: lastModified ?? timestamp)
+            }
         }
+
+        let start = deferMaybe(lastTimestamp)
+        return walk(toUpload, start: start, f: perChunk)
     }
 
     private func uploadDeletedPlaces(guids: [GUID], lastTimestamp: Timestamp, fromStorage storage: SyncableHistory, withServer storageClient: Sync15CollectionClient<HistoryPayload>) -> DeferredTimestamp {
@@ -147,6 +160,7 @@ public class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
                 if !guids.isEmpty {
                     workWasDone = true
                 }
+                log.info("Uploading \(guids.count) deleted places.")
                 return self.uploadDeletedPlaces(guids, lastTimestamp: timestamp, fromStorage: storage, withServer: storageClient)
             }
         }
@@ -157,6 +171,7 @@ public class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
                     if !places.isEmpty {
                         workWasDone = true
                     }
+                    log.info("Uploading \(places.count) modified places.")
                     return self.uploadModifiedPlaces(places, lastTimestamp: timestamp, fromStorage: storage, withServer: storageClient)
             }
         }
