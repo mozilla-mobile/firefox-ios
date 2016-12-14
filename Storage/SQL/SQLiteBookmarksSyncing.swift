@@ -438,8 +438,11 @@ public class SQLiteBookmarkBufferStorage: BookmarkBufferStorage {
             "folderName = ?, queryId = ? " +
             "WHERE guid = ?"
 
+            // We used to use INSERT OR IGNORE here, but it muffles legitimate errors. The only
+            // real use for that is/was to catch duplicates, but the UPDATE we run first should
+            // serve that purpose just as well.
             let insert =
-            "INSERT OR IGNORE INTO \(TableBookmarksBuffer) " +
+            "INSERT INTO \(TableBookmarksBuffer) " +
             "(type, server_modified, is_deleted, hasDupe, parentid, parentName, " +
              "feedUri, siteUri, pos, title, description, bmkUri, tags, keyword, folderName, queryId, guid) " +
             "VALUES " +
