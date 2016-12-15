@@ -161,7 +161,7 @@ class ThirdPartySearchTest: BaseTestCase {
         app.scrollViews.otherElements.buttons["Feeling Lucky search"].tap()
         // Ensure that correct search is done
         let url = app.textFields["url"].value as! String
-        XCTAssert(url.hasSuffix("&btnI"), "The URL should indicate that the search was performed on MDN and not the default")
+        XCTAssert(url.hasSuffix("&btnI"), "The URL should indicate that the search was performed using IFL")
     }
     
     func testCustomEngineFromIncorrectTemplate() {

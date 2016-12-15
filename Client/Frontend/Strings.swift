@@ -238,6 +238,11 @@ extension Strings {
     public static let OpenInDownloadHelperAlertCancel = NSLocalizedString("Downloads.Alert.Cancel", value: "No", comment: "The label of the button the user will press to reject the option to open a file in another application")
 }
 
+// open in
+extension Strings {
+    public static let SettingsAddCustomEngineTitle = NSLocalizedString("Settings.AddCustomEngine.Title", value: "Add Custom Search Engine", comment: "The title of the `AddCustomSearchEngine` view.")
+}
+
 // MARK: Deprecated Strings (to be removed in next version)
 private let logOut = NSLocalizedString("Log Out", comment: "Button in settings screen to disconnect from your account")
 private let logOutQuestion = NSLocalizedString("Log Out?", comment: "Title of the 'log out firefox account' alert")

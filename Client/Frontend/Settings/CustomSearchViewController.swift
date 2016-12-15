@@ -14,89 +14,70 @@ private let log = Logger.browserLogger
 class CustomSearchViewController: SettingsTableViewController {
     
     private var urlString: String?
-    private var engineTitle: String?
-    
-    private var spinnerView: UIActivityIndicatorView!
+    private var engineTitle = ""
+    private var spinnerView = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Add Custom Search Engine"
+        title = Strings.SettingsAddCustomEngineTitle
         initSpinnerView()
     }
 
-    func initSpinnerView() {
-        spinnerView = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
-        self.view.addSubview(spinnerView)
-        
+    func initSpinnerView(){
+        view.addSubview(spinnerView)
         spinnerView.snp_makeConstraints { make in
             make.center.equalTo(view)
-            return
         }
         spinnerView.hidesWhenStopped = true
     }
-    
-    func addSearchEngine(searchQuery: String) {
-        
-        let processedSearchQuery = getProcessedSearchQuery(withSearchQuery: searchQuery)
-        guard processedSearchQuery != nil,
-            let url = NSURL(string: processedSearchQuery!.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLFragmentAllowedCharacterSet())!),
-            let shortName = self.engineTitle where
-            self.engineTitle != ""
-            else {
-                spinnerView.stopAnimating()
+
+    private func addSearchEngine(searchQuery: String, title: String) {
+        spinnerView.startAnimating()
+        createEngine(forQuery: searchQuery, andName: title).uponQueue(dispatch_get_main_queue()) { result in
+            self.spinnerView.stopAnimating()
+            guard let engine = result.successValue else {
                 let alert = ThirdPartySearchAlerts.incorrectCustomEngineForm()
                 self.presentViewController(alert, animated: true, completion: nil)
                 return
             }
-        saveEngineWithFavicon(forProcessedQuery: processedSearchQuery!, withEncodedUrl: url ,withShortname: shortName, forProfile: profile)
+            self.profile.searchEngines.addSearchEngine(engine)
+            self.navigationController?.popViewControllerAnimated(true)
+            SimpleToast().showAlertWithText(Strings.ThirdPartySearchEngineAdded)
+        }
     }
 
-    func getProcessedSearchQuery(withSearchQuery searchQuery: String) -> String? {
+
+    func createEngine(forQuery query: String, andName name: String) -> Deferred<Maybe<OpenSearchEngine>> {
+        let deferred = Deferred<Maybe<OpenSearchEngine>>()
+        guard let template = getSearchTemplate(withString: query),
+            let url = NSURL(string: template.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLFragmentAllowedCharacterSet())!) where url.isWebPage() else {
+                deferred.fill(Maybe(failure: FaviconError()))
+                return deferred
+        }
+        FaviconFetcher.fetchFavImageForURL(forURL: url, profile: profile).uponQueue(dispatch_get_main_queue()) { result in
+            let image = result.successValue ?? FaviconFetcher.getDefaultFavicon(url)
+            let engine = OpenSearchEngine(engineID: nil, shortName: name, image: image, searchTemplate: template, suggestTemplate: nil, isCustomEngine: true)
+
+            //Make sure a valid scheme is used
+            let url = engine.searchURLForQuery("test")
+            let maybe = (url == nil) ? Maybe(failure: FaviconError()) : Maybe(success: engine)
+            deferred.fill(maybe)
+        }
+        return deferred
+    }
+
+    func getSearchTemplate(withString query: String) -> String? {
         let SearchTermComponent = "%s"      //Placeholder in User Entered String
         let placeholder = "{searchTerms}"   //Placeholder looked for when using Custom Search Engine in OpenSearch.swift
-        
-        if searchQuery.componentsSeparatedByString(SearchTermComponent).count - 1 == 1{
-            return searchQuery.stringByReplacingOccurrencesOfString(SearchTermComponent, withString: placeholder)
-        } else {
-            return nil
-        }
 
-    }
-    
-    func saveEngineWithFavicon(forProcessedQuery processedSearchQuery: String, withEncodedUrl url: NSURL, withShortname shortName: String ,forProfile profile: Profile) {
-        
-        spinnerView.startAnimating()
-        FaviconFetcher.getForURL(url, profile: profile).uponQueue(dispatch_get_main_queue()) { result in
-            var iconImage: UIImage?
-            var iconURL: NSURL?
-            if let favicons = result.successValue where favicons.count > 0,
-                let faviconImageURL = favicons.first?.url.asURL {
-                iconURL = faviconImageURL
-            } else {
-                iconImage = FaviconFetcher.getDefaultFavicon(url)
-            }
-            
-            SDWebImageManager.sharedManager().downloadImageWithURL(iconURL, options: SDWebImageOptions.ContinueInBackground, progress: nil) { (image, error, cacheType, success, url) in
-                self.spinnerView.stopAnimating()
-                if image != nil {
-                    iconImage = image
-                }
-                guard iconImage != nil else {
-                    let alert = ThirdPartySearchAlerts.failedToAddThirdPartySearch()
-                    self.presentViewController(alert, animated: true, completion: nil)
-                    return
-                }
-                self.profile.searchEngines.addSearchEngine(OpenSearchEngine(engineID: nil, shortName: shortName, image: iconImage!, searchTemplate: processedSearchQuery, suggestTemplate: nil, isCustomEngine: true))
-                self.navigationController?.popViewControllerAnimated(true)
-                let Toast = SimpleToast()
-                Toast.showAlertWithText(Strings.ThirdPartySearchEngineAdded)
-            }
+        if query.contains(SearchTermComponent) {
+            return query.stringByReplacingOccurrencesOfString(SearchTermComponent, withString: placeholder)
         }
-    
+        return nil
     }
-    
+
     override func generateSettings() -> [SettingSection] {
-        
+
         func URLFromString(string: String?) -> NSURL? {
             guard let string = string else {
                 return nil
@@ -105,8 +86,7 @@ class CustomSearchViewController: SettingsTableViewController {
         }
         
         let titleField = CustomSearchEngineField(placeholder: "Title", settingDidChange: {fieldText in
-            self.engineTitle = fieldText
-            print(self.engineTitle)
+            self.engineTitle = fieldText!
             }, settingIsValid: { text in
                 if text != nil && text != "" {
                     return true
@@ -141,7 +121,7 @@ class CustomSearchViewController: SettingsTableViewController {
             self.view.endEditing(true)
             self.spinnerView.startAnimating()
             if let url = self.urlString {
-                self.addSearchEngine(url)
+                self.addSearchEngine(url, title: self.engineTitle)
             }
         }
     }
@@ -152,6 +132,7 @@ class CustomSearchViewController: SettingsTableViewController {
 class CustomSearchEngineField: Setting, UITextFieldDelegate {
     
     private let Padding: CGFloat = 8
+    private let TextFieldHeight: CGFloat = 44
 
     private let defaultValue: String?
     private let placeholder: String
@@ -184,11 +165,10 @@ class CustomSearchEngineField: Setting, UITextFieldDelegate {
         cell.contentView.addSubview(textField)
         
         textField.snp_makeConstraints { make in
-            make.height.equalTo(44)
+            make.height.equalTo(TextFieldHeight)
             make.trailing.equalTo(cell.contentView).offset(-Padding)
             make.leading.equalTo(cell.contentView).offset(Padding)
         }
-//        textField.text = prefs.stringForKey(prefKey) ?? defaultValue
         textFieldDidChange(textField)
     }
     

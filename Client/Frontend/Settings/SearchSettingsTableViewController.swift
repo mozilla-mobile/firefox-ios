@@ -20,7 +20,6 @@ class SearchSettingsTableViewController: UITableViewController {
     private let NumberOfSections = 2
     private let IconSize = CGSize(width: OpenSearchEngine.PreferredIconSize, height: OpenSearchEngine.PreferredIconSize)
     private let SectionHeaderIdentifier = "SectionHeaderIdentifier"
-    
     private var showDeletion = false
     
     var profile: Profile?
