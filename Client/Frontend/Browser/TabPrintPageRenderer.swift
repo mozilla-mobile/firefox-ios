@@ -39,7 +39,7 @@ class TabPrintPageRenderer: UIPrintPageRenderer {
         let headerRect = UIEdgeInsetsInsetRect(paperRect, headerInsets)
 
         // url on left
-        self.drawTextAtPoint(tab!.displayURL?.absoluteString ?? "", rect: headerRect, onLeft: true)
+        self.drawTextAtPoint(tab!.url?.displayURL?.absoluteString ?? "", rect: headerRect, onLeft: true)
 
         // page number on right
         let pageNumberString = "\(pageIndex + 1)"

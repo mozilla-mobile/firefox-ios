@@ -54,32 +54,4 @@ struct ReaderModeUtils {
         }
         return nil
     }
-
-    static func isReaderModeURL(url: NSURL) -> Bool {
-        let scheme = url.scheme, host = url.host, path = url.path
-        return scheme == "http" && host == "localhost" && path == "/reader-mode/page"
-    }
-
-    static func decodeURL(url: NSURL) -> NSURL? {
-        if ReaderModeUtils.isReaderModeURL(url) {
-            if let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false), queryItems = components.queryItems where queryItems.count == 1 {
-                if let queryItem = queryItems.first, value = queryItem.value {
-                    return NSURL(string: value)
-                }
-            }
-        }
-        return nil
-    }
-
-    static func encodeURL(url: NSURL?) -> NSURL? {
-        let baseReaderModeURL: String = WebServer.sharedInstance.URLForResource("page", module: "reader-mode")
-        if let absoluteString = url?.absoluteString {
-            if let encodedURL = absoluteString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet()) {
-                if let aboutReaderURL = NSURL(string: "\(baseReaderModeURL)?url=\(encodedURL)") {
-                    return aboutReaderURL
-                }
-            }
-        }
-        return nil
-    }
 }

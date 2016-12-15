@@ -655,7 +655,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     }
 
     private func configureCell(cell: ThumbnailCell, forSuggestedSite site: SuggestedSite) {
-        let title = site.title.isEmpty ? NSURL(string: site.url)?.normalizedHostAndPath() : site.title
+        let title = site.title.isEmpty ? NSURL(string: site.url)?.normalizedHostAndPath : site.title
         cell.textLabel.text = title
         cell.imageWrapper.backgroundColor = site.backgroundColor
         cell.imageView.contentMode = .ScaleAspectFit
@@ -753,7 +753,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     }
 
     private func extractDomainURL(url: String) -> String {
-        return NSURL(string: url)?.normalizedHost() ?? url
+        return NSURL(string: url)?.normalizedHost ?? url
     }
 
     @objc func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
