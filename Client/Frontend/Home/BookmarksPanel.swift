@@ -40,7 +40,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     var parentFolders = [BookmarkFolder]()
     var bookmarkFolder: BookmarkFolder?
 
-    lazy var longPressRecognizer: UILongPressGestureRecognizer = {
+    private lazy var longPressRecognizer: UILongPressGestureRecognizer = {
         return UILongPressGestureRecognizer(target: self, action: #selector(BookmarksPanel.longPress(_:)))
     }()
     private lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverlayView()
@@ -69,6 +69,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.addGestureRecognizer(longPressRecognizer)
+
         self.tableView.accessibilityIdentifier = "Bookmarks List"
     }
 
@@ -188,41 +189,8 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         guard longPressGestureRecognizer.state == UIGestureRecognizerState.Began else { return }
         let touchPoint = longPressGestureRecognizer.locationInView(tableView)
         guard let indexPath = tableView.indexPathForRowAtPoint(touchPoint) else { return }
-        guard let bookmarkItem = source?.current[indexPath.row] as? BookmarkItem else { return }
-        guard let cell = tableView.cellForRowAtIndexPath(indexPath) else { return }
-        let site = Site(url: bookmarkItem.url, title: bookmarkItem.title)
-        let siteImage = cell.imageView?.image
 
-        presentContextMenu(site, siteImage: siteImage, siteBGColor: nil, indexPath: indexPath)
-    }
-
-    private func presentContextMenu(site: Site, siteImage: UIImage?, siteBGColor: UIColor?, indexPath: NSIndexPath) {
-        guard let siteURL = NSURL(string: site.url) else { return }
-
-        let openInNewTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewTabContextMenuTitle, iconString: "action_new_tab") { action in
-            self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
-        }
-
-        let openInNewPrivateTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "action_new_private_tab") { action in
-            self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
-        }
-
-        // Only local bookmarks can be removed
-        let actions: [ActionOverlayTableViewAction]
-        guard let source = source else { return }
-        if source.current.itemIsEditableAtIndex(indexPath.row) {
-            let removeAction = ActionOverlayTableViewAction(title: "Remove", iconString: "action_remove_bookmark", handler: { action in
-                self.deleteBookmark(nil, indexPath: indexPath)
-            })
-            actions = [openInNewTabAction, openInNewPrivateTabAction, removeAction]
-        } else {
-            actions = [openInNewTabAction, openInNewPrivateTabAction]
-        }
-
-//        homePanelDelegate?.homePanel(self, didLongPressSite: site, siteImage: siteImage, siteBGColor: siteBGColor, actions: actions)
-        let contextMenu = ActionOverlayTableViewController(site: site, actions: actions, siteImage: siteImage, siteBGColor: siteBGColor)
-        contextMenu.modalPresentationStyle = .OverFullScreen
-        contextMenu.modalTransitionStyle = .CrossDissolve
+        guard let contextMenu = createContextMenu(indexPath) else { return }
         self.presentViewController(contextMenu, animated: true, completion: nil)
     }
 
@@ -427,6 +395,33 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         let delete = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: title, handler: deleteBookmark)
 
         return [delete]
+    }
+}
+
+extension BookmarksPanel: HomePanelContextMenu {
+    func getSiteDetails(indexPath: NSIndexPath) -> Site? {
+        guard let bookmarkItem = source?.current[indexPath.row] as? BookmarkItem else { return nil }
+        return Site(url: bookmarkItem.url, title: bookmarkItem.title)
+    }
+
+    func getImageDetails(indexPath: NSIndexPath) -> (siteImage: UIImage?, siteBGColor: UIColor?) {
+        guard let cell = tableView.cellForRowAtIndexPath(indexPath) else { return (nil, nil) }
+        return (cell.imageView?.image, nil)
+    }
+
+    func getContextMenuActions(site: Site, indexPath: NSIndexPath) -> [ActionOverlayTableViewAction]? {
+        guard var actions = getDefaultContextMenuActions(site, homePanelDelegate: homePanelDelegate) else { return nil }
+
+        // Only local bookmarks can be removed
+        guard let source = source else { return nil }
+        if source.current.itemIsEditableAtIndex(indexPath.row) {
+            let removeAction = ActionOverlayTableViewAction(title: "Remove", iconString: "action_remove_bookmark", handler: { action in
+                self.deleteBookmark(nil, indexPath: indexPath)
+            })
+            actions.append(removeAction)
+        }
+
+        return actions
     }
 }
 

@@ -182,7 +182,7 @@ class ReadingListPanel: UITableViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate? = nil
     var profile: Profile!
 
-    lazy var longPressRecognizer: UILongPressGestureRecognizer = {
+    private lazy var longPressRecognizer: UILongPressGestureRecognizer = {
         return UILongPressGestureRecognizer(target: self, action: #selector(ReadingListPanel.longPress(_:)))
     }()
 
@@ -369,35 +369,8 @@ class ReadingListPanel: UITableViewController, HomePanel {
         guard longPressGestureRecognizer.state == UIGestureRecognizerState.Began else { return }
         let touchPoint = longPressGestureRecognizer.locationInView(tableView)
         guard let indexPath = tableView.indexPathForRowAtPoint(touchPoint) else { return }
-        guard let record = records?[indexPath.row] else { return }
-        let site = Site(url: record.url, title: record.title)
 
-        guard let recordURL = NSURL(string: record.url) else { return }
-        let siteImage = FaviconFetcher.getDefaultFavicon(recordURL)
-
-        presentContextMenu(site, siteImage: siteImage, siteBGColor: nil, indexPath: indexPath)
-    }
-
-    private func presentContextMenu(site: Site, siteImage: UIImage?, siteBGColor: UIColor?, indexPath: NSIndexPath) {
-        guard let siteURL = NSURL(string: site.url) else { return }
-
-        let openInNewTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewTabContextMenuTitle, iconString: "action_new_tab") { action in
-            self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
-        }
-
-        let openInNewPrivateTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "action_new_private_tab") { action in
-            self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
-        }
-
-        let removeAction = ActionOverlayTableViewAction(title: Strings.RemoveContextMenuTitle, iconString: "action_remove", handler: { action in
-            self.deleteItem(atIndex: indexPath)
-        })
-
-        let actions = [openInNewTabAction, openInNewPrivateTabAction, removeAction]
-        //        homePanelDelegate?.homePanel(self, didLongPressSite: site, siteImage: siteImage, siteBGColor: siteBGColor, actions: actions)
-        let contextMenu = ActionOverlayTableViewController(site: site, actions: actions, siteImage: siteImage, siteBGColor: siteBGColor)
-        contextMenu.modalPresentationStyle = .OverFullScreen
-        contextMenu.modalTransitionStyle = .CrossDissolve
+        guard let contextMenu = createContextMenu(indexPath) else { return }
         self.presentViewController(contextMenu, animated: true, completion: nil)
     }
 
@@ -477,5 +450,29 @@ class ReadingListPanel: UITableViewController, HomePanel {
                 }
             }
         }
+    }
+}
+
+extension ReadingListPanel: HomePanelContextMenu {
+    func getSiteDetails(indexPath: NSIndexPath) -> Site? {
+        guard let record = records?[indexPath.row] else { return nil }
+        return Site(url: record.url, title: record.title)
+    }
+
+    func getImageDetails(indexPath: NSIndexPath) -> (siteImage: UIImage?, siteBGColor: UIColor?) {
+        guard let record = records?[indexPath.row] else { return (nil, nil) }
+        guard let recordURL = NSURL(string: record.url) else { return (nil, nil) }
+        return (FaviconFetcher.getDefaultFavicon(recordURL), nil)
+    }
+
+    func getContextMenuActions(site: Site, indexPath: NSIndexPath) -> [ActionOverlayTableViewAction]? {
+        guard var actions = getDefaultContextMenuActions(site, homePanelDelegate: homePanelDelegate) else { return nil }
+
+        let removeAction: ActionOverlayTableViewAction = ActionOverlayTableViewAction(title: Strings.RemoveContextMenuTitle, iconString: "action_remove", handler: { action in
+            self.deleteItem(atIndex: indexPath)
+        })
+
+        actions.append(removeAction)
+        return actions
     }
 }

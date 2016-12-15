@@ -141,7 +141,7 @@ class HistoryPanelSiteTableViewController: SiteTableViewController {
 
     var refreshControl: UIRefreshControl?
 
-    lazy var longPressRecognizer: UILongPressGestureRecognizer = {
+    private lazy var longPressRecognizer: UILongPressGestureRecognizer = {
         return UILongPressGestureRecognizer(target: self, action: #selector(HistoryPanelSiteTableViewController.longPress(_:)))
     }()
 
@@ -337,33 +337,8 @@ class HistoryPanelSiteTableViewController: SiteTableViewController {
         guard longPressGestureRecognizer.state == UIGestureRecognizerState.Began else { return }
         let touchPoint = longPressGestureRecognizer.locationInView(tableView)
         guard let indexPath = tableView.indexPathForRowAtPoint(touchPoint) else { return }
-        guard let site = siteForIndexPath(indexPath) else { return }
-        guard let cell = tableView.cellForRowAtIndexPath(indexPath) else { return }
-        let siteImage = cell.imageView?.image
 
-        presentContextMenu(site, siteImage: siteImage, siteBGColor: nil, indexPath: indexPath)
-    }
-
-    private func presentContextMenu(site: Site, siteImage: UIImage?, siteBGColor: UIColor?,indexPath: NSIndexPath) {
-        guard let siteURL = NSURL(string: site.url) else { return }
-
-        let openInNewTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewTabContextMenuTitle, iconString: "action_new_tab") { action in
-            self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
-        }
-
-        let openInNewPrivateTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "action_new_private_tab") { action in
-            self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
-        }
-
-        let removeAction = ActionOverlayTableViewAction(title: "Remove", iconString: "action_remove_bookmark", handler: { action in
-            self.removeHistoryForURL(nil, indexPath: indexPath)
-        })
-
-        let actions = [openInNewTabAction, openInNewPrivateTabAction, removeAction]
-        //        homePanelDelegate?.homePanel(historyPanel!, didLongPressSite: site, siteImage: siteImage, siteBGColor: siteBGColor, actions: actions)
-        let contextMenu = ActionOverlayTableViewController(site: site, actions: actions, siteImage: siteImage, siteBGColor: siteBGColor)
-        contextMenu.modalPresentationStyle = .OverFullScreen
-        contextMenu.modalTransitionStyle = .CrossDissolve
+        guard let contextMenu = createContextMenu(indexPath) else { return }
         self.presentViewController(contextMenu, animated: true, completion: nil)
     }
 
@@ -579,6 +554,28 @@ class HistoryPanelSiteTableViewController: SiteTableViewController {
 
         let delete = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: title, handler: removeHistoryForURL)
         return [delete]
+    }
+}
+
+extension HistoryPanelSiteTableViewController: HomePanelContextMenu {
+    func getSiteDetails(indexPath: NSIndexPath) -> Site? {
+        return siteForIndexPath(indexPath)
+    }
+
+    func getImageDetails(indexPath: NSIndexPath) -> (siteImage: UIImage?, siteBGColor: UIColor?) {
+        guard let cell = tableView.cellForRowAtIndexPath(indexPath) else { return (nil, nil) }
+        return (cell.imageView?.image, nil)
+    }
+
+    func getContextMenuActions(site: Site, indexPath: NSIndexPath) -> [ActionOverlayTableViewAction]? {
+        guard var actions = getDefaultContextMenuActions(site, homePanelDelegate: homePanelDelegate) else { return nil }
+
+        let removeAction = ActionOverlayTableViewAction(title: "Remove", iconString: "action_remove_bookmark", handler: { action in
+            self.removeHistoryForURL(nil, indexPath: indexPath)
+        })
+
+        actions.append(removeAction)
+        return actions
     }
 }
 

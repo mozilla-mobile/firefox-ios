@@ -33,10 +33,6 @@ protocol HomePanel: class {
     optional func endEditing()
 }
 
-//protocol EditableHomePanel: HomePanel {
-//    func endEditing()
-//}
-
 struct HomePanelUX {
     static let EmptyTabContentOffset = -180
 }
@@ -49,13 +45,7 @@ protocol HomePanelDelegate: class {
     func homePanel(homePanel: HomePanel, didSelectURL url: NSURL, visitType: VisitType)
     func homePanel(homePanel: HomePanel, didSelectURLString url: String, visitType: VisitType)
     optional func homePanelWillEnterEditingMode(homePanel: HomePanel)
-//    func homePanel(homePanel: HomePanel, didLongPressSite site: Site, siteImage: UIImage?, siteBGColor: UIColor?, actions: [ActionOverlayTableViewAction])
-//    optional func homePanelWillEnterEditingMode(homePanel: EditableHomePanel)
 }
-
-//protocol EditableHomePanelDelegate: HomePanelDelegate {
-//    func homePanelWillEnterEditingMode(homePanel: EditableHomePanel)
-//}
 
 struct HomePanelState {
     var isPrivate: Bool = false
@@ -73,7 +63,7 @@ enum HomePanelType: Int {
     }
 }
 
-class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelDelegate/*, EditableHomePanelDelegate*/ {
+class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelDelegate {
     var profile: Profile!
     var notificationToken: NSObjectProtocol!
     var panels: [HomePanelDescriptor]!
@@ -87,7 +77,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     private var buttons: [UIButton] = []
 
     private var finishEditingButton: UIButton?
-    private var editingPanel: HomePanel? /*EditableHomePanel*/
+    private var editingPanel: HomePanel?
 
     var isPrivateMode: Bool = false {
         didSet {
@@ -250,7 +240,6 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     func endEditing(sender: UIButton!) {
         toggleEditingMode(false)
         editingPanel?.endEditing?()
-//        editingPanel?.endEditing()
         editingPanel = nil
     }
 
@@ -371,5 +360,41 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         contextMenu.modalPresentationStyle = .OverFullScreen
         contextMenu.modalTransitionStyle = .CrossDissolve
         self.presentViewController(contextMenu, animated: true, completion: nil)
+    }
+}
+
+protocol HomePanelContextMenu {
+    func getSiteDetails(indexPath: NSIndexPath) -> Site?
+    func getImageDetails(indexPath: NSIndexPath) -> (siteImage: UIImage?, siteBGColor: UIColor?)
+    func getContextMenuActions(site: Site, indexPath: NSIndexPath) -> [ActionOverlayTableViewAction]?
+    func createContextMenu(indexPath: NSIndexPath) -> ActionOverlayTableViewController?
+}
+
+extension HomePanelContextMenu {
+    func createContextMenu(indexPath: NSIndexPath) -> ActionOverlayTableViewController? {
+        guard let site = getSiteDetails(indexPath) else { return nil }
+        let imageDetails = getImageDetails(indexPath)
+        let siteImage = imageDetails.siteImage
+        let siteBGColor = imageDetails.siteBGColor
+        guard let actions = getContextMenuActions(site, indexPath: indexPath) else { return nil }
+
+        let contextMenu = ActionOverlayTableViewController(site: site, actions: actions, siteImage: siteImage, siteBGColor: siteBGColor)
+        contextMenu.modalPresentationStyle = .OverFullScreen
+        contextMenu.modalTransitionStyle = .CrossDissolve
+        return contextMenu
+    }
+
+    func getDefaultContextMenuActions(site: Site, homePanelDelegate: HomePanelDelegate?) -> [ActionOverlayTableViewAction]? {
+        guard let siteURL = NSURL(string: site.url) else { return nil }
+
+        let openInNewTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewTabContextMenuTitle, iconString: "action_new_tab") { action in
+            homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
+        }
+
+        let openInNewPrivateTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "action_new_private_tab") { action in
+            homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
+        }
+
+        return [openInNewTabAction, openInNewPrivateTabAction]
     }
 }

@@ -40,7 +40,7 @@ class ActivityStreamPanel: UITableViewController, HomePanel {
 
     private var sessionStart: Timestamp?
 
-    lazy var longPressRecognizer: UILongPressGestureRecognizer = {
+    private lazy var longPressRecognizer: UILongPressGestureRecognizer = {
         return UILongPressGestureRecognizer(target: self, action: #selector(ActivityStreamPanel.longPress(_:)))
     }()
 
@@ -52,7 +52,6 @@ class ActivityStreamPanel: UITableViewController, HomePanel {
                                                             sessionsTracker: PingCentre.clientForTopic(.ActivityStreamSessions, clientID: profile.clientID))
 
         super.init(style: .Grouped)
-        view.addGestureRecognizer(longPressRecognizer)
         self.profile.history.setTopSitesCacheSize(Int32(ASPanelUX.topSitesCacheSize))
         events.forEach { NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(TopSitesPanel.notificationReceived(_:)), name: $0, object: nil) }
     }
@@ -70,6 +69,7 @@ class ActivityStreamPanel: UITableViewController, HomePanel {
 
         Section.allValues.forEach { tableView.registerClass(Section($0.rawValue).cellType, forCellReuseIdentifier: Section($0.rawValue).cellIdentifier) }
 
+        tableView.addGestureRecognizer(longPressRecognizer)
         tableView.backgroundColor = ASPanelUX.backgroundColor
         tableView.keyboardDismissMode = .OnDrag
         tableView.separatorStyle = .None
@@ -369,22 +369,23 @@ extension ActivityStreamPanel {
         return suggested.filter({deleted.indexOf($0.url) == .None})
     }
 
-
     @objc private func longPress(longPressGestureRecognizer: UILongPressGestureRecognizer) {
         guard longPressGestureRecognizer.state == UIGestureRecognizerState.Began else { return }
-        let touchPoint = longPressGestureRecognizer.locationInView(self.view)
+        let touchPoint = longPressGestureRecognizer.locationInView(tableView)
         guard let indexPath = tableView.indexPathForRowAtPoint(touchPoint) else { return }
 
         var contextMenu: ActionOverlayTableViewController? = nil
 
         switch Section(indexPath.section) {
         case .Highlights:
-            contextMenu = contextMenuForHighlightCellWithIndexPath(indexPath)
+            guard let contextMenu = createContextMenu(indexPath) else { return }
+            self.presentViewController(contextMenu, animated: true, completion: nil)
         case .TopSites:
             let topSiteCell = self.tableView.cellForRowAtIndexPath(indexPath) as! ASHorizontalScrollCell
             let pointInTopSite = longPressGestureRecognizer.locationInView(topSiteCell.collectionView)
             guard let topSiteIndexPath = topSiteCell.collectionView.indexPathForItemAtPoint(pointInTopSite) else { return }
-            contextMenu = contextMenuForTopSiteCellWithIndexPath(topSiteIndexPath)
+            guard let contextMenu = createContextMenu(topSiteIndexPath) else { return }
+            self.presentViewController(contextMenu, animated: true, completion: nil)
         case .HighlightIntro:
             break
         }
@@ -393,55 +394,60 @@ extension ActivityStreamPanel {
             presentContextMenu(contextMenuToShow)
         }
     }
+}
 
-    func presentContextMenu(contextMenu: ActionOverlayTableViewController) {
-        contextMenu.modalPresentationStyle = .OverFullScreen
-        contextMenu.modalTransitionStyle = .CrossDissolve
-        self.presentViewController(contextMenu, animated: true, completion: nil)
-    }
+extension ActivityStreamPanel: HomePanelContextMenu {
+    func getSiteDetails(indexPath: NSIndexPath) -> Site? {
+        let site: Site
 
-    func contextMenuForTopSiteCellWithIndexPath(indexPath: NSIndexPath) -> ActionOverlayTableViewController? {
-        let topsiteIndex = NSIndexPath(forRow: 0, inSection: Section.TopSites.rawValue)
-        guard let topSiteCell = self.tableView.cellForRowAtIndexPath(topsiteIndex) as? ASHorizontalScrollCell else { return nil }
-        guard let topSiteItemCell = topSiteCell.collectionView.cellForItemAtIndexPath(indexPath) as? TopSiteItemCell else { return nil }
-        let siteImage = topSiteItemCell.imageView.image
-        let siteBGColor = topSiteItemCell.contentView.backgroundColor
-
-        let site = self.topSitesManager.content[indexPath.item]
-        return contextMenuForSite(site, atIndex: indexPath.item, forSection: .TopSites, siteImage: siteImage, siteBGColor: siteBGColor)
-    }
-
-    func contextMenuForHighlightCellWithIndexPath(indexPath: NSIndexPath) -> ActionOverlayTableViewController? {
-        guard let highlightCell = tableView.cellForRowAtIndexPath(indexPath) as? AlternateSimpleHighlightCell else { return nil }
-        let siteImage = highlightCell.siteImageView.image
-        let siteBGColor = highlightCell.siteImageView.backgroundColor
-
-        let site = highlights[indexPath.row]
-        return contextMenuForSite(site, atIndex: indexPath.row, forSection: .Highlights, siteImage: siteImage, siteBGColor: siteBGColor)
-    }
-    
-    func contextMenuForSite(site: Site, atIndex index: Int, forSection section: Section, siteImage: UIImage?, siteBGColor: UIColor?) -> ActionOverlayTableViewController? {
-        guard let siteURL = NSURL(string: site.url) else {
+        switch Section(indexPath.section) {
+        case .Highlights:
+            site = highlights[indexPath.row]
+        case .TopSites:
+            site = topSitesManager.content[indexPath.item]
+        case .HighlightIntro:
             return nil
         }
 
-        let pingSource: ASPingSource
-        switch section {
-        case .TopSites:
-            pingSource = .TopSites
+        return site
+    }
+
+    func getImageDetails(indexPath: NSIndexPath) -> (siteImage: UIImage?, siteBGColor: UIColor?) {
+        let siteImage: UIImage?
+        let siteBGColor: UIColor?
+
+        switch Section(indexPath.section) {
         case .Highlights:
-            pingSource = .Highlights
+            guard let highlightCell = tableView.cellForRowAtIndexPath(indexPath) as? AlternateSimpleHighlightCell else { return (nil, nil) }
+            siteImage = highlightCell.siteImageView.image
+            siteBGColor = highlightCell.siteImageView.backgroundColor
+        case .TopSites:
+            let topsiteIndex = NSIndexPath(forRow: 0, inSection: Section.TopSites.rawValue)
+            guard let topSiteCell = self.tableView.cellForRowAtIndexPath(topsiteIndex) as? ASHorizontalScrollCell else { return (nil, nil) }
+            guard let topSiteItemCell = topSiteCell.collectionView.cellForItemAtIndexPath(indexPath) as? TopSiteItemCell else { return (nil, nil) }
+            siteImage = topSiteItemCell.imageView.image
+            siteBGColor = topSiteItemCell.contentView.backgroundColor
         case .HighlightIntro:
-            pingSource = .HighlightsIntro
+            return (nil, nil)
         }
 
-        let openInNewTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewTabContextMenuTitle, iconString: "action_new_tab") { action in
-            self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
+        return (siteImage, siteBGColor)
+    }
+
+    func getContextMenuActions(site: Site, indexPath: NSIndexPath) -> [ActionOverlayTableViewAction]? {
+        guard let siteURL = NSURL(string: site.url) else { return nil }
+        let eventInfo: ASInfo
+
+        switch Section(indexPath.section) {
+        case .Highlights:
+            eventInfo = ASInfo(actionPosition: indexPath.row, source: .highlights)
+        case .TopSites:
+            eventInfo = ASInfo(actionPosition: indexPath.item, source: .topSites)
+        case .HighlightIntro:
+            return nil
         }
 
-        let openInNewPrivateTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "action_new_private_tab") { action in
-            self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
-        }
+        guard var actions = getDefaultContextMenuActions(site, homePanelDelegate: homePanelDelegate) else { return nil }
 
         let bookmarkAction = ActionOverlayTableViewAction(title: Strings.BookmarkContextMenuTitle, iconString: "action_bookmark", handler: { action in
             let shareItem = ShareItem(url: site.url, title: site.title, favicon: site.icon)
@@ -451,8 +457,8 @@ extension ActivityStreamPanel {
                 userData[QuickActions.TabTitleKey] = title
             }
             QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.OpenLastBookmark,
-                withUserData: userData,
-                toApplication: UIApplication.sharedApplication())
+                                                                                withUserData: userData,
+                                                                                toApplication: UIApplication.sharedApplication())
         })
 
         let deleteFromHistoryAction = ActionOverlayTableViewAction(title: Strings.DeleteFromHistoryContextMenuTitle, iconString: "action_delete", handler: { action in
@@ -478,18 +484,15 @@ extension ActivityStreamPanel {
             self.hideFromHighlights(site)
         })
 
-        var actions = [openInNewTabAction, openInNewPrivateTabAction, bookmarkAction, shareAction]
-        switch section {
-            case .Highlights: actions.appendContentsOf([dismissHighlightAction, deleteFromHistoryAction])
-            case .TopSites: actions.append(removeTopSiteAction)
-            case .HighlightIntro: break
-        }
+        actions.appendContentsOf([bookmarkAction, shareAction])
 
-//        homePanelDelegate?.homePanel(self, didLongPressSite: site, siteImage: siteImage, siteBGColor: siteBGColor, actions: actions)
-        let contextMenu = ActionOverlayTableViewController(site: site, actions: actions, siteImage: siteImage, siteBGColor: siteBGColor)
-        contextMenu.modalPresentationStyle = .OverFullScreen
-        contextMenu.modalTransitionStyle = .CrossDissolve
-        self.presentViewController(contextMenu, animated: true, completion: nil)
+        switch Section(indexPath.section) {
+        case .Highlights: actions.appendContentsOf([dismissHighlightAction, deleteFromHistoryAction])
+        case .TopSites: actions.append(removeTopSiteAction)
+        case .HighlightIntro: return nil
+        }
+        
+        return actions
     }
 
     func selectItemAtIndex(index: Int, inSection section: Section) {
