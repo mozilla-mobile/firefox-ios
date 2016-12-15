@@ -127,9 +127,12 @@ class PrivateBrowsingTests: KIFTestCase {
         tester().tapViewWithAccessibilityLabel("Show Tabs")
         tester().tapViewWithAccessibilityLabel("Menu")
         tester().tapViewWithAccessibilityLabel("Settings")
+        tester().waitForViewWithAccessibilityLabel("Privacy")
         
         // In simulator, need to manually scroll to so the menu is visible
-        tester().scrollViewWithAccessibilityIdentifier("HomePageSetting", byFractionOfSizeHorizontal: 0, vertical: -0.5)
+        tester().scrollViewWithAccessibilityLabel("Privacy", byFractionOfSizeHorizontal: 0, vertical: -3)
+        
+        tester().waitForViewWithAccessibilityLabel("Close Private Tabs, When Leaving Private Browsing")
         tester().setOn(true, forSwitchWithAccessibilityLabel: "Close Private Tabs, When Leaving Private Browsing")
         tester().tapViewWithAccessibilityLabel("Done")
         tester().tapViewWithAccessibilityLabel("Private Mode")
@@ -154,7 +157,9 @@ class PrivateBrowsingTests: KIFTestCase {
         // Second, make sure selecting the option to OFF will not close the tabs
         tester().tapViewWithAccessibilityLabel("Menu")
         tester().tapViewWithAccessibilityLabel("Settings")
-        tester().scrollViewWithAccessibilityIdentifier("HomePageSetting", byFractionOfSizeHorizontal: 0, vertical: -0.5)
+        tester().waitForViewWithAccessibilityLabel("Privacy")
+        tester().scrollViewWithAccessibilityLabel("Privacy", byFractionOfSizeHorizontal: 0, vertical: -3)
+        tester().waitForViewWithAccessibilityLabel("Close Private Tabs, When Leaving Private Browsing")
         tester().setOn(false, forSwitchWithAccessibilityLabel: "Close Private Tabs, When Leaving Private Browsing")
         tester().tapViewWithAccessibilityLabel("Done")
         tester().tapViewWithAccessibilityLabel("Private Mode")
