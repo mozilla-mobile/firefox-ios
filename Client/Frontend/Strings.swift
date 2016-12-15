@@ -240,7 +240,11 @@ extension Strings {
 
 // open in
 extension Strings {
+    public static let SettingsAddCustomEngine = NSLocalizedString("Settings.AddCustomEngine", value: "Add Search Engine", comment: "The cell text in Search Settings.")
     public static let SettingsAddCustomEngineTitle = NSLocalizedString("Settings.AddCustomEngine.Title", value: "Add Custom Search Engine", comment: "The title of the `AddCustomSearchEngine` view.")
+    public static let SettingsAddCustomEngineURLPlaceholder = NSLocalizedString("Settings.AddCustomEngine.URLPlaceholder", value: "URL (Replace Query with %s)", comment: "The placeholder for URL Field.")
+    public static let SettingsAddCustomEngineSectionTitle = NSLocalizedString("Settings.AddCustomEngine.SectionTitle", value: "Custom Engine Details", comment: "The title of the text fields' section.")
+    public static let SettingsAddCustomEngineSaveButtonText = NSLocalizedString("Settings.AddCustomEngine.SaveButtonText", value: "Save", comment: "The text on the Save button.")
 }
 
 // MARK: Deprecated Strings (to be removed in next version)

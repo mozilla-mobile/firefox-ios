@@ -86,43 +86,40 @@ class CustomSearchViewController: SettingsTableViewController {
         }
         
         let titleField = CustomSearchEngineField(placeholder: "Title", settingDidChange: {fieldText in
-            self.engineTitle = fieldText!
+            guard let title = fieldText else {
+                return
+            }
+            self.engineTitle = title
             }, settingIsValid: { text in
-                if text != nil && text != "" {
-                    return true
-                } else {
-                    return false
-                }
+                return text != nil && text != ""
         })
         titleField.textField.accessibilityIdentifier = "customEngineTitle"
         
-        let urlField = CustomSearchEngineField(placeholder: "URL (Replace Query with %s)", settingDidChange: {fieldText in
+        let urlField = CustomSearchEngineField(placeholder: Strings.SettingsAddCustomEngineURLPlaceholder, settingDidChange: {fieldText in
             self.urlString = fieldText
             }, settingIsValid: { text in
                 //Can check url text text validity here.
                 return true
         })
+        urlField.textField.autocapitalizationType = .None
         urlField.textField.accessibilityIdentifier = "customEngineUrl"
         
         let basicSettings: [Setting] = [ titleField, urlField]
         
         let settings: [SettingSection] = [
-            SettingSection(title: NSAttributedString(string: "Custom Engine URL"), children: basicSettings),
+            SettingSection(title: NSAttributedString(string: Strings.SettingsAddCustomEngineSectionTitle), children: basicSettings),
             SettingSection(children: [
-            ButtonSetting(title: NSAttributedString(string: "Save"), accessibilityIdentifier: "saveCustomEngine", onClick: addCustomSearchEngine())
+                ButtonSetting(title: NSAttributedString(string: Strings.SettingsAddCustomEngineSaveButtonText), accessibilityIdentifier: "saveCustomEngine", onClick: addCustomSearchEngine)
                 ])
         ]
         
         return settings
     }
     
-    func addCustomSearchEngine() -> (UINavigationController? -> ()) {
-        return { nav in
+    func addCustomSearchEngine(nav: UINavigationController?) {
             self.view.endEditing(true)
-            self.spinnerView.startAnimating()
             if let url = self.urlString {
                 self.addSearchEngine(url, title: self.engineTitle)
-            }
         }
     }
     
@@ -169,7 +166,6 @@ class CustomSearchEngineField: Setting, UITextFieldDelegate {
             make.trailing.equalTo(cell.contentView).offset(-Padding)
             make.leading.equalTo(cell.contentView).offset(Padding)
         }
-        textFieldDidChange(textField)
     }
     
     override func onClick(navigationController: UINavigationController?) {
