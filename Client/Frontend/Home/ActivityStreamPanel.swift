@@ -457,8 +457,8 @@ extension ActivityStreamPanel: HomePanelContextMenu {
                 userData[QuickActions.TabTitleKey] = title
             }
             QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.OpenLastBookmark,
-                                                                                withUserData: userData,
-                                                                                toApplication: UIApplication.sharedApplication())
+                withUserData: userData,
+                toApplication: UIApplication.sharedApplication())
         })
 
         let deleteFromHistoryAction = ActionOverlayTableViewAction(title: Strings.DeleteFromHistoryContextMenuTitle, iconString: "action_delete", handler: { action in

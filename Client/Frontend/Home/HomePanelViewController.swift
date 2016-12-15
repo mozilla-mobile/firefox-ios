@@ -319,7 +319,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         delegate?.homePanelViewControllerDidRequestToOpenInNewTab(url, isPrivate: isPrivate)
     }
 
-    func homePanelWillEnterEditingMode(homePanel: HomePanel /*EditableHomePanel*/) {
+    func homePanelWillEnterEditingMode(homePanel: HomePanel) {
         editingPanel = homePanel
         toggleEditingMode(true)
     }

@@ -348,8 +348,22 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         return .None
     }
 
-    func deleteBookmark(action: UITableViewRowAction?, indexPath: NSIndexPath) {
-        guard let bookmark = source!.current[indexPath.row] else {
+    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
+        guard let _ = source else {
+            return [AnyObject]()
+        }
+
+        let title = NSLocalizedString("Delete", tableName: "BookmarkPanel", comment: "Action button for deleting bookmarks in the bookmarks panel.")
+
+        let delete = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: title, handler: { (action, indexPath) in
+            self.deleteBookmark(indexPath)
+        })
+
+        return [delete]
+    }
+
+    func deleteBookmark(indexPath: NSIndexPath) {
+        guard let bookmark = source?.current[indexPath.row] else {
             return
         }
 
@@ -364,7 +378,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         log.debug("Removing rows \(indexPath).")
 
         // Block to do this -- this is UI code.
-        guard let factory = source!.modelFactory.value.successValue else {
+        guard let factory = source?.modelFactory.value.successValue else {
             log.error("Couldn't get model factory. This is unexpected.")
             self.onModelFailure(DatabaseError(description: "Unable to get factory."))
             return
@@ -377,24 +391,12 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         }
 
         self.tableView.beginUpdates()
-        self.source = source!.removeGUIDFromCurrent(bookmark.guid)
+        self.source = source?.removeGUIDFromCurrent(bookmark.guid)
         self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
         self.tableView.endUpdates()
         self.updateEmptyPanelState()
 
         NSNotificationCenter.defaultCenter().postNotificationName(BookmarkStatusChangedNotification, object: bookmark, userInfo:["added": false])
-    }
-
-    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
-        guard let _ = self.source else {
-            return [AnyObject]()
-        }
-
-        let title = NSLocalizedString("Delete", tableName: "BookmarkPanel", comment: "Action button for deleting bookmarks in the bookmarks panel.")
-
-        let delete = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: title, handler: deleteBookmark)
-
-        return [delete]
     }
 }
 
@@ -416,7 +418,7 @@ extension BookmarksPanel: HomePanelContextMenu {
         guard let source = source else { return nil }
         if source.current.itemIsEditableAtIndex(indexPath.row) {
             let removeAction = ActionOverlayTableViewAction(title: "Remove", iconString: "action_remove_bookmark", handler: { action in
-                self.deleteBookmark(nil, indexPath: indexPath)
+                self.deleteBookmark(indexPath)
             })
             actions.append(removeAction)
         }
