@@ -867,7 +867,7 @@ private class TabManagerDataSource: NSObject, UICollectionViewDataSource {
         if !tab.displayTitle.isEmpty {
             tabCell.accessibilityLabel = tab.displayTitle
         } else {
-            tabCell.accessibilityLabel = AboutUtils.getAboutComponent(tab.url)
+            tabCell.accessibilityLabel = tab.url?.getAboutComponent() ?? "" // Not sure why we do this, makes no sense I think.
         }
 
         if AppConstants.MOZ_REORDER_TAB_TRAY {

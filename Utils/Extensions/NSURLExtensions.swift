@@ -181,6 +181,31 @@ extension NSURL {
         }
     }
 
+    public func displayURL() -> NSURL? {
+        if self.isReaderModeURL() {
+            return self.decodeReaderModeURL()?.havingRemovedAuthorisationComponents()
+        }
+
+        if self.isErrorPageURL() {
+            let decodedURL = self.originalURLFromErrorPageURL()
+            if !decodedURL!.isAboutURL() {
+                return decodedURL?.havingRemovedAuthorisationComponents()
+            } else {
+                return nil
+            }
+        }
+
+        if !self.isAboutURL() {
+            return self.havingRemovedAuthorisationComponents()
+        }
+
+        return nil
+    }
+
+    public func displayString() -> String? {
+        return displayURL()?.absoluteString
+    }
+
     /**
     Returns the base domain from a given hostname. The base domain name is defined as the public domain suffix
     with the base private domain attached to the front. For example, for the URL www.bbc.co.uk, the base domain
@@ -289,6 +314,82 @@ extension NSURL {
             return url
         }
         return self
+    }
+}
+
+// Extensions to deal with ReaderMode URLs
+
+extension NSURL {
+    public func isReaderModeURL() -> Bool {
+        let scheme = self.scheme, host = self.host, path = self.path
+        return scheme == "http" && host == "localhost" && path == "/reader-mode/page"
+    }
+
+    public func decodeReaderModeURL() -> NSURL? {
+        if self.isReaderModeURL() {
+            if let components = NSURLComponents(URL: self, resolvingAgainstBaseURL: false), queryItems = components.queryItems where queryItems.count == 1 {
+                if let queryItem = queryItems.first, value = queryItem.value {
+                    return NSURL(string: value)
+                }
+            }
+        }
+        return nil
+    }
+
+    public func encodeReaderModeURL(baseReaderModeURL: String) -> NSURL? {
+        if let absoluteString = self.absoluteString {
+            if let encodedURL = absoluteString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet()) {
+                if let aboutReaderURL = NSURL(string: "\(baseReaderModeURL)?url=\(encodedURL)") {
+                    return aboutReaderURL
+                }
+            }
+        }
+        return nil
+    }
+}
+
+// Helpers to deal with ErrorPage URLs
+
+extension NSURL {
+    public func isErrorPageURL() -> Bool {
+        if let host = self.host, path = self.path {
+            return self.scheme == "http" && host == "localhost" && path == "/errors/error.html"
+        }
+        return false
+    }
+
+    public func originalURLFromErrorPageURL() -> NSURL? {
+        let components = NSURLComponents(URL: self, resolvingAgainstBaseURL: false)
+        if let queryURL = components?.queryItems?.find({ $0.name == "url" })?.value {
+            return NSURL(string: queryURL)
+        }
+
+        return nil
+    }
+}
+
+// Helpers to deal with About URLs
+
+extension NSURL {
+    private static let AboutPath = "/about/"
+
+    public func isAboutHomeURL() -> Bool {
+        return self.getAboutComponent() == "home"
+    }
+
+    public func isAboutURL() -> Bool {
+        return self.getAboutComponent() != nil
+    }
+
+    /// If the URI is an about: URI, return the path after "about/" in the URI.
+    /// For example, return "home" for "http://localhost:1234/about/home/#panel=0".
+    public func getAboutComponent() -> String? {
+        if let scheme = self.scheme, host = self.host, path = self.path {
+            if scheme == "http" && host == "localhost" && path.startsWith(NSURL.AboutPath) {
+                return path.substringFromIndex(NSURL.AboutPath.endIndex)
+            }
+        }
+        return nil
     }
 }
 

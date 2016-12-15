@@ -293,7 +293,7 @@ extension TopTabsViewController: UICollectionViewDataSource {
             } else {
                 tabCell.titleText.text = tab.webView?.URL?.absoluteDisplayString()
             }
-            tabCell.accessibilityLabel = AboutUtils.getAboutComponent(tab.url)
+            tabCell.accessibilityLabel = tab.url?.getAboutComponent() ?? ""
             tabCell.closeButton.accessibilityLabel = String(format: Strings.TopSitesRemoveButtonAccessibilityLabel, tabCell.titleText.text ?? "")
         } else {
             tabCell.accessibilityLabel = tab.displayTitle

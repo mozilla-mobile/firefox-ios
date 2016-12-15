@@ -274,25 +274,7 @@ class Tab: NSObject {
     }
 
     var displayURL: NSURL? {
-        if let url = url {
-            if ReaderModeUtils.isReaderModeURL(url) {
-                return ReaderModeUtils.decodeURL(url)?.havingRemovedAuthorisationComponents()
-            }
-
-            if ErrorPageHelper.isErrorPageURL(url) {
-                let decodedURL = ErrorPageHelper.originalURLFromQuery(url)
-                if !AboutUtils.isAboutURL(decodedURL) {
-                    return decodedURL?.havingRemovedAuthorisationComponents()
-                } else {
-                    return nil
-                }
-            }
-
-            if !AboutUtils.isAboutURL(url) {
-                return url.havingRemovedAuthorisationComponents()
-            }
-        }
-        return nil
+        return url?.displayURL()
     }
 
     var canGoBack: Bool {

@@ -92,8 +92,8 @@ extension ShareExtensionHelper: UIActivityItemSource {
         } else {
             // Return the URL for the selected tab. If we are in reader view then decode
             // it so that we copy the original and not the internal localhost one.
-            if let url = selectedTab?.displayURL where ReaderModeUtils.isReaderModeURL(url) {
-                return ReaderModeUtils.decodeURL(url)
+            if let url = selectedTab?.displayURL where url.isReaderModeURL() {
+                return url.decodeReaderModeURL()
             }
             return selectedTab?.displayURL ?? selectedURL
         }

@@ -34,7 +34,7 @@ private extension TrayToBrowserAnimator {
         toggleWebViewVisibility(show: false, usingTabManager: bvc.tabManager)
         bvc.homePanelController?.view.hidden = true
         bvc.webViewContainerBackdrop.hidden = true
-        if let url = selectedTab.url where ReaderModeUtils.isReaderModeURL(url) == false {
+        if let url = selectedTab.url where !url.isReaderModeURL() {
             bvc.hideReaderModeBar(animated: false)
         }
 
@@ -247,7 +247,7 @@ private func calculateExpandedCellFrameFromBVC(bvc: BrowserViewController) -> CG
     // there is no toolbar for home panels
     if !bvc.shouldShowFooterForTraitCollection(bvc.traitCollection) {
         return frame
-    } else if AboutUtils.isAboutURL(bvc.tabManager.selectedTab?.url) && bvc.toolbar == nil {
+    } else if let url = bvc.tabManager.selectedTab?.url where url.isAboutURL() && bvc.toolbar == nil {
         frame.size.height += UIConstants.ToolbarHeight
     }
 
@@ -255,7 +255,12 @@ private func calculateExpandedCellFrameFromBVC(bvc: BrowserViewController) -> CG
 }
 
 private func shouldDisplayFooterForBVC(bvc: BrowserViewController) -> Bool {
-    return bvc.shouldShowFooterForTraitCollection(bvc.traitCollection) && !AboutUtils.isAboutURL(bvc.tabManager.selectedTab?.url)
+    if bvc.shouldShowFooterForTraitCollection(bvc.traitCollection) {
+        if let url = bvc.tabManager.selectedTab?.url {
+            return !url.isAboutURL()
+        }
+    }
+    return false;
 }
 
 private func toggleWebViewVisibility(show show: Bool, usingTabManager tabManager: TabManager) {
