@@ -89,6 +89,8 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     private func onCanLinkAccount(data: JSON) {
         //    // We need to confirm a relink - see shouldAllowRelink for more
         //    let ok = shouldAllowRelink(accountData.email);
+        self.navigationItem.setHidesBackButton(true, animated: false)
+        self.navigationItem.leftBarButtonItem = nil
         let ok = true
         injectData("message", content: ["status": "can_link_account", "data": ["ok": ok]]);
     }
