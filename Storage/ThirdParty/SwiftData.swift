@@ -104,7 +104,7 @@ public class SwiftData {
      * close a database connection and run a block of code inside it.
      */
     func withConnection(flags: SwiftData.Flags, synchronous: Bool=true, cb: (db: SQLiteDBConnection) -> NSError?) -> NSError? {
-        let conn: ConcreteSQLiteDBConnection?
+        weak var conn: ConcreteSQLiteDBConnection?
 
         if SwiftData.ReuseConnections {
             conn = getSharedConnection()
@@ -113,39 +113,33 @@ public class SwiftData {
             conn = ConcreteSQLiteDBConnection(filename: filename, flags: flags.toSQL(), key: self.key, prevKey: self.prevKey)
         }
 
-        guard let connection = conn else {
-            // Run the callback with a fake failed connection.
-            // Yeah, that means we have an error return value but we still run the callback.
-            let failed = FailedSQLiteDBConnection()
-            let queue = self.sharedConnectionQueue
-            let noConnection = NSError(domain: "mozilla", code: 0, userInfo: [NSLocalizedDescriptionKey: "Could not create a connection"])
-
-            if synchronous {
-                var error: NSError? = nil
-                dispatch_sync(queue) {
-                    error = cb(db: failed)
-                }
-                return error ?? noConnection
-            }
-
-            dispatch_async(queue) {
-                cb(db: failed)
-            }
-
-            return noConnection
-        }
+        // Initialize in case we encounter a nil connection when we go to run the dispatch blocks
+        let failed = FailedSQLiteDBConnection()
+        let queue = self.sharedConnectionQueue
+        let noConnection = NSError(domain: "mozilla", code: 0, userInfo: [NSLocalizedDescriptionKey: "Could not create a connection"])
 
         if synchronous {
             var error: NSError? = nil
-            dispatch_sync(connection.queue) {
+            dispatch_sync(queue) {
+                guard let connection = conn else {
+                    error = cb(db: failed) ?? noConnection
+                    return
+                }
+
                 error = cb(db: connection)
             }
             return error
         }
 
-        dispatch_async(connection.queue) {
+        dispatch_async(queue) {
+            guard let connection = conn else {
+                cb(db: failed)
+                return
+            }
+                
             cb(db: connection)
         }
+
         return nil
     }
 
