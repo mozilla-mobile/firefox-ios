@@ -293,7 +293,7 @@ extension TabScrollingController: UIScrollViewDelegate {
         // In that case ALWAYS reset to the minimum zoom level if the previous state was zoomed out (isZoomedOut=true)
         if isZoomedOut {
             scrollView.zoomScale = scrollView.minimumZoomScale
-        } else if roundNum(scrollView.zoomScale) > roundNum(self.lastZoomedScale) {
+        } else if roundNum(scrollView.zoomScale) > roundNum(self.lastZoomedScale) && self.lastZoomedScale != 0 {
             //When we have manually zoomed in we want to preserve that scale. 
             //But sometimes when we rotate a larger zoomScale is appled. In that case apply the lastZoomedScale
             scrollView.zoomScale = self.lastZoomedScale
