@@ -14,7 +14,7 @@ class OpenUtils {
 
     private static func openInFirefox(url: URL) {
         guard let escaped = url.absoluteString.addingPercentEncoding(withAllowedCharacters: .urlQueryParameterAllowed),
-              let firefoxURL = URL(string: "firefox://open-url?url=\(escaped)"),
+              let firefoxURL = URL(string: "firefox://open-url?url=\(escaped)&private=true"),
               app.canOpenURL(firefoxURL) else {
             return
         }
