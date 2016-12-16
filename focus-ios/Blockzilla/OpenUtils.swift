@@ -6,8 +6,6 @@ import Foundation
 
 class OpenUtils {
     private static let app = UIApplication.shared
-    private static let firefoxAppStoreURL = URL(string: "https://app.adjust.com/gs1ao4")!
-    private static let focusAppStoreURL = URL(string: "https://app.adjust.com/c04cts")!
 
     private static var canOpenInFirefox: Bool {
         return app.canOpenURL(URL(string: "firefox://")!)
@@ -35,7 +33,7 @@ class OpenUtils {
         alert.addAction(UIAlertAction(title: UIConstants.strings.openFirefox, style: .default) { _ in
             // If Firefox isn't installed, launch the URL to download it in the App Store.
             guard OpenUtils.canOpenInFirefox else {
-                UIApplication.shared.openURL(firefoxAppStoreURL)
+                UIApplication.shared.openURL(AppInfo.config.firefoxAppStoreURL)
                 return
             }
 

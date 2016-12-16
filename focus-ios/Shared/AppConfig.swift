@@ -7,6 +7,7 @@ import UIKit
 
 protocol AppConfig {
     var adjustFile: String { get }
+    var firefoxAppStoreURL: URL { get }
     var productName: String { get }
     var rightsFile: String { get }
     var supportPath: String { get }
@@ -15,6 +16,7 @@ protocol AppConfig {
 
 struct FocusAppConfig: AppConfig {
     let adjustFile = "Adjust-Focus"
+    let firefoxAppStoreURL = URL(string: "https://app.adjust.com/gs1ao4")!
     let productName = "Focus"
     let rightsFile = "rights-focus.html"
     let supportPath = "en-US/kb/focus"
@@ -23,6 +25,7 @@ struct FocusAppConfig: AppConfig {
 
 struct KlarAppConfig: AppConfig {
     let adjustFile = "Adjust-Klar"
+    let firefoxAppStoreURL = URL(string: "https://app.adjust.com/c04cts")!
     let productName = "Klar"
     let rightsFile = "rights-klar.html"
     let supportPath = "products/klar"
