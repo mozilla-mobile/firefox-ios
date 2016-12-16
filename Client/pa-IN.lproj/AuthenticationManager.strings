@@ -1,0 +1,90 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "1 ਘੰਟੇ ਤੋਂਂ ਬਾਅਦ";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "1 ਮਿੰਟ ਤੋਂ ਬਾਅਦ";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "5 ਮਿੰਟਾਂ ਤੋਂ ਬਾਅਦ";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "10 ਮਿੰਟਾਂ ਤੋਂ ਬਾਅਦ";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "15 ਮਿੰਟਾਂ ਤੋਂ ਬਾਅਦ";
+
+/* Label used as a setting item and title of the following screen to change the current passcode */
+"Change Passcode" = "ਪਾਸਕੋਡ ਬਦਲੋ";
+
+/* Title of the dialog used to request the passcode */
+"Enter Passcode" = "ਪਾਸਕੋਡ ਦਰਜ ਕਰੋ";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter a new passcode" = "ਇੱਕ ਨਵਾਂ ਪਾਸਕੋਡ ਦਰਜ ਕਰੋ";
+
+/* Text displayed above the input field when entering a new passcode */
+"Enter a passcode" = "ਇੱਕ ਪਾਸਕੋਡ ਦਰਜ ਕਰੋ";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter passcode" = "ਪਾਸਕੋਡ ਦਰਜ ਕਰੋ";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "ਤੁਰੰਤ";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining */
+"Incorrect passcode. Try again (Attempts remaining: %d)." = "ਗਲਤ ਪਾਸਕੋਡ। ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ (ਬਾਕੀ ਰਹਿੰਦੇ ਜਤਨ: %d)।";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app */
+"Incorrect passcode. Try again." = "ਗਲਤ ਪਾਸਕੋਡ। ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again in an hour." = "ਅਧਿਕਤਮ ਜਤਨ ਹੋ ਗਏ ਹਨ। ਕਿਰਪਾ ਕਰਕੇ ਇੱਕ ਘੰਟੇ ਵਿੱਚ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।";
+
+/* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
+"Maximum attempts reached. Please try again later." = "ਅਧਿਕਤਮ ਜਤਨ ਹੋ ਗਏ ਹਨ। ਕਿਰਪਾ ਕਰਕੇ ਬਾਅਦ ਵਿੱਚ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।";
+
+/* Error message displayed when user tries to enter the same passcode as their existing code when changing it. */
+"New passcode must be different than existing code." = "ਨਵਾਂ ਪਾਸਕੋਡ ਮੌਜੂਦਾ ਪਾਸਕੋਡ ਤੋਂ ਵੱਖਰਾ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ।";
+
+/* Label for the Passcode item in Settings */
+"Passcode" = "ਪਾਸਕੋਡ";
+
+/* Error message displayed to user when their confirming passcode doesn't match the first code. */
+"Passcodes didn't match. Try again." = "ਪਾਸਕੋਡ ਮੇਲ ਨਹੀਂ ਖਾਂਦਾ ਸੀ। ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।";
+
+/* Text displayed above the input field when confirming a passcode */
+"Re-enter passcode" = "ਪਾਸਕੋਡ ਨੂੰ ਮੁੜ ਦਰਜ ਕਰੋ";
+
+/* Text displayed in the 'Interval' section, followed by the current interval setting, e.g. 'Immediately' */
+"Require Passcode" = "ਪਾਸਕੋਡ ਦੀ ਲੋੜ ਹੈ";
+
+/* Title of the dialog used to set a passcode */
+"Set Passcode" = "ਪਾਸਕੋਡ ਸੈੱਟ ਕਰੋ";
+
+/* Label for the Touch ID/Passcode item in Settings */
+"Touch ID & Passcode" = "ਟੱਚ ID 'ਤੇ ਪਾਸਕੋਡ";
+
+/* Label used as a setting item to turn off passcode */
+"Turn Passcode Off" = "ਪਾਸਕੋਡ ਨੂੰ ਬੰਦ ਕਰੋ";
+
+/* Label used as a setting item to turn on passcode */
+"Turn Passcode On" = "ਪਾਸਕੋਡ ਨੂੰ ਚਾਲੂ ਕਰੋ";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "ਆਪਣੇ ਪਾਸਕੋਡ ਨੂੰ ਬੰਦ ਕਰੋ।";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID" = "ਟੱਚ ID ਨੂੰ ਵਰਤੋਂ";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "ਹੁਣ ਲਾਗਇਨ ਨੂੰ ਵਰਤਣ ਲਈ ਫਿੰਗਰ-ਪਰਿੰਟ ਨੂੰ ਵਰਤੋਂ।";
+
+/* Touch ID prompt subtitle when accessing private browsing */
+"Use your fingerprint to access Private Browsing now." = "ਹੁਣ ਪ੍ਰਾਈਵੇਟ ਬਰਾਊਜ਼ਿੰਗ ਨੂੰ ਵਰਤਣ ਲਈ ਆਪਣੇ ਫਿੰਗਰ-ਪਰਿੰਟ ਨੂੰ ਵਰਤੋਂ।";
+
+/* Touch ID prompt subtitle when disabling Touch ID */
+"touchid.disable.reason.label" = "ਟੱਚ ID ਨੂੰ ਅਸਮਰੱਥ ਕਰਨ ਲਈ ਆਪਣੇ ਫਿੰਗਰਪਰਿੰਟ ਨੂੰ ਵਰਤੋਂ।";
+
+/* Touch ID prompt subtitle when accessing the require passcode setting */
+"touchid.require.passcode.reason.label" = "ਤੁਹਾਡੇ ਚਾਹੀਦੇ ਪਾਸਕੋਡ ਅੰਤਰਾਲ ਦੀ ਸੰਰਚਨਾ ਵਾਸਤੇ ਪਹੁੰਚ ਕਰਨ ਲਈ ਆਪਣੇ ਫਿੰਗਰਪਰਿੰਟ ਨੂੰ ਵਰਤੋਂ।";
+

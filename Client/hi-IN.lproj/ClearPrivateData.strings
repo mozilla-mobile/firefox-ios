@@ -1,0 +1,9 @@
+/* Settings item for clearing browsing history */
+"Browsing History" = "ब्राउज़िंग इतिहास";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "रद्द करें";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "ऑफ़ाइल वेबसाइट आँकड़ा";
+

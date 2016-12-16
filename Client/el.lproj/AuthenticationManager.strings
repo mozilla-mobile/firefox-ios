@@ -1,0 +1,57 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "Μετά από 1 ώρα";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "Μετά από 1 λεπτό";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "Μετά από 5 λεπτά";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "Μετά από 10 λεπτά";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "Μετά από 15 λεπτά";
+
+/* Label used as a setting item and title of the following screen to change the current passcode */
+"Change Passcode" = "Αλλαγή Συνθηματικού";
+
+/* Title of the dialog used to request the passcode */
+"Enter Passcode" = "Εισαγωγή Συνθηματικού";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter a new passcode" = "Εισάγετε νέο συνθηματικό";
+
+/* Text displayed above the input field when entering a new passcode */
+"Enter a passcode" = "Εισάγετε συνθηματικό";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter passcode" = "Εισάγετε συνθηματικό";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "Αμέσως";
+
+/* Label for the Passcode item in Settings */
+"Passcode" = "Συνθηματικό";
+
+/* Error message displayed to user when their confirming passcode doesn't match the first code. */
+"Passcodes didn't match. Try again." = "Τα συνθηματικά δεν ταιριάζουν. Δοκιμάστε ξανά.";
+
+/* Text displayed in the 'Interval' section, followed by the current interval setting, e.g. 'Immediately' */
+"Require Passcode" = "Απαίτηση συνθηματικού";
+
+/* Title of the dialog used to set a passcode */
+"Set Passcode" = "Ορισμός συνθηματικού";
+
+/* Label used as a setting item to turn off passcode */
+"Turn Passcode Off" = "Απενεργοποίηση συνθηματικού";
+
+/* Label used as a setting item to turn on passcode */
+"Turn Passcode On" = "Ενεργοποίηση συνθηματικού";
+
+/* Touch ID prompt subtitle when turning off passcode */
+"Turn off your passcode." = "Απενεργοποίηση συνθηματικού.";
+
+/* List section title for when to use Touch ID */
+"Use Touch ID" = "Χρήση Touch ID";
+

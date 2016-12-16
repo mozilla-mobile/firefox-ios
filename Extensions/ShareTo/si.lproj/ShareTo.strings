@@ -1,0 +1,9 @@
+/* Add button in the share dialog */
+"Add" = "එක් කරන්න";
+
+/* On/off toggle to select adding this url to your bookmarks */
+"Add to Bookmarks" = "පිටු සලකුණු එක් කරන්න";
+
+/* On/off toggle to select adding this url to your reading list */
+"Add to Reading List" = "කියවන ලැයිස්තුවට එක් කරන්න";
+

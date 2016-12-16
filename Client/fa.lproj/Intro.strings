@@ -1,0 +1,54 @@
+/* See http://mzl.la/1T8gxwo */
+"Browse multiple Web pages at the same time with tabs." = "با زبانه‌ها چندین صفحه‌ی وب را در یک زمان مرور کنید.";
+
+/* Title for one of the panels in the First Run tour. */
+"Choose" = "انتخاب";
+
+/* See http://mzl.la/1T8gxwo */
+"Connect Firefox everywhere you use it." = "به فایرفاکس متصل شوید هر جا که از آن استفاده می‌کنید.";
+
+/* Title for one of the panels in the First Run tour. */
+"Customize" = "سفارشی‌سازی";
+
+/* Description for the 'Organize' panel in the First Run tour. */
+"Easily switch between open pages with tabs." = "با زبانه‌ها به آسانی بین صفحات وب باز جابجا شوید.";
+
+/* Accessibility label for the image displayed in the 'Sync' panel of the First Run tour. */
+"Firefox and the cloud" = "فایرفاکس و ابر";
+
+/* String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3 */
+"Introductory slide %@ of %@" = "اسلاید مقدماتی %1$@ از %2$@";
+
+/* Title for one of the panels in the First Run tour. */
+"Organize" = "سازمان‌دهی";
+
+/* See http://mzl.la/1T8gxwo */
+"Personalize your Firefox just the way you like in Settings." = "سفارشی سازی فایرفاکس خودتان به شیوه که می پسندید در تنظیمات.";
+
+/* Description for the 'Customize' panel in the First Run tour. */
+"Personalize your default search engine and more in Settings." = "شخصی‌سازی موتور جست‌و‌جو پیش فرض شما و موارد بیشتر در تنظیمات.";
+
+/* Title for one of the panels in the First Run tour. */
+"Share" = "اشتراک‌گذاری";
+
+/* See http://mzl.la/1T8gxwo */
+"Sign in to Firefox" = "ورود به فایرفاکس";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "شروع وب‌گردی";
+
+/* Title for one of the panels in the First Run tour. */
+"Sync your Devices." = "همگام سازی دستگاه‌ها.";
+
+/* Description for the 'Choose' panel in the First Run tour. */
+"Tap, hold and move the Firefox icon into your dock for easy access." = "برای دسترسی آسان بر روی آیکن فایرفاکس را تپ کنید، نگه دارید و به داک خودتان منتقل کنید.";
+
+/* Accessibility label for the Settings button in the tab tray. */
+"The Settings button is at the beginning of the Tabs Tray." = "دکمه تنظیمات در ابتدا بخش زبانه‌ها.";
+
+/* Accessibility label for the UI element used to display the number of open tabs, and open the tab tray. */
+"The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs." = "دکمه نمایش زبانه‌ها کنار فیلد متنی جستجو و آدرس است و تعداد زبانه‌های باز جاری را نمایش می‌دهد.";
+
+/* Description for the 'Share' panel in the First Run tour. */
+"Use the share sheet to send links from other apps to Firefox." = "از صفحه اشتراک گذاری برای ارسال پیوندها از سایر برنامه‌ها به فایرفاکس استفاده کنید.";
+

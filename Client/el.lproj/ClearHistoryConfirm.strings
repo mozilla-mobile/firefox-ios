@@ -1,0 +1,9 @@
+/* The cancel button when confirming clear history. */
+"Cancel" = "Ακύρωση";
+
+/* The button that clears history even when Sync is connected. */
+"Clear" = "Εκκαθάριση";
+
+/* The confirmation button that clears history even when Sync is connected. */
+"OK" = "ΟΚ";
+

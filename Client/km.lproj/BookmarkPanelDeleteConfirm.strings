@@ -1,0 +1,12 @@
+/* Main body of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
+"Are you sure you want to delete it and its contents?" = "តើ​អ្នក​ប្រាកដ​ជា​ចង់​លុប​វា និង​មាតិកា​របស់​វា​ឬ?";
+
+/* Button label to cancel deletion when the user tried to delete a non-empty folder. */
+"Cancel" = "បោះបង់";
+
+/* Button label for the button that deletes a folder and all of its children. */
+"Delete" = "លុប";
+
+/* Title of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
+"This folder isn't empty." = "ថត​នេះ​មិន​ទទេ​ទេ។";
+

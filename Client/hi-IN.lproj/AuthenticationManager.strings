@@ -1,0 +1,42 @@
+/* 'After 1 hour' interval item for selecting when to require passcode */
+"After 1 hour" = "1 घंटे बाद";
+
+/* 'After 1 minute' interval item for selecting when to require passcode */
+"After 1 minute" = "1 मिनट बाद";
+
+/* 'After 5 minutes' interval item for selecting when to require passcode */
+"After 5 minutes" = "5 मिनट बाद";
+
+/* 'After 10 minutes' interval item for selecting when to require passcode */
+"After 10 minutes" = "10 मिनट बाद";
+
+/* 'After 15 minutes' interval item for selecting when to require passcode */
+"After 15 minutes" = "15 मिनट बाद";
+
+/* Label used as a setting item and title of the following screen to change the current passcode */
+"Change Passcode" = "पासकोड बदलें";
+
+/* Title of the dialog used to request the passcode */
+"Enter Passcode" = "पासकोड प्रविष्ट करें";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter a new passcode" = "एक नया पासकोड प्रविष्ट करें";
+
+/* Text displayed above the input field when entering a new passcode */
+"Enter a passcode" = "एक पासकोड प्रविष्ट करें";
+
+/* Text displayed above the input field when changing the existing passcode */
+"Enter passcode" = "पासकोड प्रविष्ट करें";
+
+/* 'Immediately' interval item for selecting when to require passcode */
+"Immediately" = "तुरंत";
+
+/* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app */
+"Incorrect passcode. Try again." = "गलत पासकोड. दोबारा कोशिश करें.";
+
+/* Label for the Passcode item in Settings */
+"Passcode" = "पासकोड";
+
+/* Text displayed in the 'Interval' section, followed by the current interval setting, e.g. 'Immediately' */
+"Require Passcode" = "पासकोड की आवश्यकता है";
+

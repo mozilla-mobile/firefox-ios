@@ -1,0 +1,6 @@
+/* The cancel button when confirming clear history. */
+"Cancel" = "रद्द करें";
+
+/* Title of the confirmation dialog shown when a user tries to clear history that's synced to another device. */
+"Remove history from your Firefox Account?" = "अपने Firefox खाते से इतिहास मिटायें?";
+
