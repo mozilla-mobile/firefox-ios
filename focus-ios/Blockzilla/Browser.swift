@@ -159,12 +159,20 @@ extension Browser: UIWebViewDelegate {
         // We don't currently support opening in external apps, so just ignore unsupported schemes.
         guard let scheme = request.url?.scheme, Browser.supportedSchemes.contains(scheme.lowercased()) else { return false }
 
-        updateBackForwardStates(webView)
-
-        if request.mainDocumentURL == request.url {
-            isLoading = true
-            delegate?.browserDidStartNavigation(self)
+        // If the load isn't on the main frame, we don't need any other special handling.
+        guard request.mainDocumentURL == request.url else {
+            return true
         }
+
+        // We can't detect universal links, so just disable them.
+        if navigationType == .linkClicked {
+            loadRequest(request)
+            return false
+        }
+
+        isLoading = true
+        delegate?.browserDidStartNavigation(self)
+        updateBackForwardStates(webView)
 
         // Don't update the URL immediately since the requested page may not have started to load yet.
         // Instead, set a pending URL that we're expected to load, and update the URL when we receive
