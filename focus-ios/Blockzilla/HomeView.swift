@@ -14,7 +14,7 @@ class HomeView: UIView {
     init() {
         super.init(frame: CGRect.zero)
 
-        let wordmark = AppInfo.isFocus ? #imageLiteral(resourceName: "img_focus_wordmark") : #imageLiteral(resourceName: "img_klar_wordmark")
+        let wordmark = AppInfo.config.wordmark
         let textLogo = UIImageView(image: wordmark)
         addSubview(textLogo)
 

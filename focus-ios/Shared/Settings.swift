@@ -15,7 +15,7 @@ enum SettingsToggle: String {
 }
 
 struct Settings {
-    fileprivate static let prefs = UserDefaults(suiteName: AppInfo.SharedContainerIdentifier)!
+    fileprivate static let prefs = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
 
     private static func defaultForToggle(_ toggle: SettingsToggle) -> Bool {
         switch toggle {

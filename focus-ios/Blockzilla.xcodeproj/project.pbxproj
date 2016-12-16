@@ -41,6 +41,8 @@
 		D34E70331DA8736300BABDCC /* AutocompleteTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34E70321DA8736300BABDCC /* AutocompleteTextField.swift */; };
 		D34E70351DA874AA00BABDCC /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34E70341DA874AA00BABDCC /* StringExtensions.swift */; };
 		D3561B2B1DB5925100A5EEAF /* GradientBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3561B2A1DB5925100A5EEAF /* GradientBackgroundView.swift */; };
+		D35C11471E04AADA005FFFEF /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35C11461E04AADA005FFFEF /* AppConfig.swift */; };
+		D35C11481E04AB14005FFFEF /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35C11461E04AADA005FFFEF /* AppConfig.swift */; };
 		D362D2AB1C4EAF940041980A /* rights-focus.html in Resources */ = {isa = PBXBuildFile; fileRef = D362D2AA1C4EAF940041980A /* rights-focus.html */; };
 		D364DC261DC4163700562991 /* BrowserToolset.swift in Sources */ = {isa = PBXBuildFile; fileRef = D364DC251DC4163700562991 /* BrowserToolset.swift */; };
 		D36C1BAA1DB02EBB0073C1AB /* OpenUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D36C1BA91DB02EBB0073C1AB /* OpenUtils.swift */; };
@@ -180,6 +182,7 @@
 		D34E70321DA8736300BABDCC /* AutocompleteTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutocompleteTextField.swift; sourceTree = "<group>"; };
 		D34E70341DA874AA00BABDCC /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		D3561B2A1DB5925100A5EEAF /* GradientBackgroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientBackgroundView.swift; sourceTree = "<group>"; };
+		D35C11461E04AADA005FFFEF /* AppConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppConfig.swift; path = Shared/AppConfig.swift; sourceTree = "<group>"; };
 		D362D26A1C47326A0041980A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D362D2AA1C4EAF940041980A /* rights-focus.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "rights-focus.html"; sourceTree = "<group>"; };
 		D364DC251DC4163700562991 /* BrowserToolset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserToolset.swift; sourceTree = "<group>"; };
@@ -331,6 +334,7 @@
 		D33A1A391BC476D40003D929 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				D35C11461E04AADA005FFFEF /* AppConfig.swift */,
 				D3E251FA1DAF0668005918DC /* AppInfo.swift */,
 				E4BF2E101BAD8AC500DA9D68 /* Settings.swift */,
 				D3E251F81DAF064B005918DC /* Utils.swift */,
@@ -748,6 +752,7 @@
 				D34E70331DA8736300BABDCC /* AutocompleteTextField.swift in Sources */,
 				D3E251EB1DAD714C005918DC /* SafariInstructionsViewController.swift in Sources */,
 				D3E2C8FA1D9F170200DEBE3D /* LocalContentBlocker.swift in Sources */,
+				D35C11471E04AADA005FFFEF /* AppConfig.swift in Sources */,
 				D3E2C9611DA2F7C600DEBE3D /* URLBar.swift in Sources */,
 				E40AFB141DC939FF00DA5651 /* SupportUtils.swift in Sources */,
 				D392887F1BC5E47E0016A9A0 /* UIConstants.swift in Sources */,
@@ -770,6 +775,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4BF2E121BAD8AC500DA9D68 /* Settings.swift in Sources */,
+				D35C11481E04AB14005FFFEF /* AppConfig.swift in Sources */,
 				D3A6605B1DAF0904002BA72A /* AppInfo.swift in Sources */,
 				E4BF2DF11BACE92400DA9D68 /* ActionRequestHandler.swift in Sources */,
 				D3A6605A1DAF08FA002BA72A /* Utils.swift in Sources */,

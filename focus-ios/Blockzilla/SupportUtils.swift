@@ -15,6 +15,6 @@ public struct SupportUtils {
         guard let escapedTopic = topic.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlPathAllowed), let languageIdentifier = Locale.preferredLanguages.first else {
             return nil
         }
-        return URL(string: "https://support.mozilla.org/1/mobile/\(AppInfo.ShortVersion)/iOS/\(languageIdentifier)/\(escapedTopic)")
+        return URL(string: "https://support.mozilla.org/1/mobile/\(AppInfo.shortVersion)/iOS/\(languageIdentifier)/\(escapedTopic)")
     }
 }

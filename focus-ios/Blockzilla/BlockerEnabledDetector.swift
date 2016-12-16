@@ -81,7 +81,7 @@ private class BlockerEnabledDetector9: BlockerEnabledDetector, SFSafariViewContr
 @available(iOS 10.0, *)
 private class BlockerEnabledDetector10: BlockerEnabledDetector {
     override func detectEnabled(_ parentView: UIView, callback: @escaping EnabledCallback) {
-        SFContentBlockerManager.getStateOfContentBlocker(withIdentifier: AppInfo.ContentBlockerBundleIdentifier) { state, error in
+        SFContentBlockerManager.getStateOfContentBlocker(withIdentifier: AppInfo.contentBlockerBundleIdentifier) { state, error in
             DispatchQueue.main.async {
                 guard let state = state else {
                     print("Detection error: \(error!.localizedDescription)")

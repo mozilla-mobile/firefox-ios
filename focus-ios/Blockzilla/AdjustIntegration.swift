@@ -66,7 +66,7 @@ class AdjustIntegration {
     fileprivate static var adjustSettings: AdjustSettings?
 
     public static func applicationDidFinishLaunching() {
-        if let url = Bundle.main.url(forResource: AppInfo.isFocus ? "Adjust-Focus" : "Adjust-Klar", withExtension: "plist"),
+        if let url = Bundle.main.url(forResource: AppInfo.config.adjustFile, withExtension: "plist"),
            let settings = AdjustSettings(contentsOf: url) {
             adjustSettings = settings
 

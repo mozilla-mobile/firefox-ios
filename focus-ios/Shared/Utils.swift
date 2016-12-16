@@ -7,7 +7,7 @@ import SafariServices
 
 class Utils {
     static func reloadSafariContentBlocker() {
-        let identifier = AppInfo.ContentBlockerBundleIdentifier
+        let identifier = AppInfo.contentBlockerBundleIdentifier
         SFContentBlockerManager.reloadContentBlocker(withIdentifier: identifier) { error in
             if let error = error {
                 NSLog("Failed to reload \(identifier): \(error.localizedDescription)")

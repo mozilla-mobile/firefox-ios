@@ -8,8 +8,6 @@ import UIKit
 class AboutViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, AboutHeaderViewDelegate {
     fileprivate let tableView = UITableView()
     fileprivate let headerView = AboutHeaderView()
-    fileprivate let supportPath = AppInfo.isFocus ? "en-US/kb/focus" : "products/klar"
-    fileprivate let rightsFile = AppInfo.isFocus ? "rights-focus.html" : "rights-klar.html"
 
     override func viewDidLoad() {
         headerView.delegate = self
@@ -87,11 +85,11 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch (indexPath as NSIndexPath).row {
         case 1:
-            let url = URL(string: "https://support.mozilla.org/\(supportPath)")!
+            let url = URL(string: "https://support.mozilla.org/\(AppInfo.config.supportPath)")!
             let contentViewController = AboutContentViewController(url: url)
             navigationController?.pushViewController(contentViewController, animated: true)
         case 2:
-            let url = LocalWebServer.sharedInstance.URLForPath("/\(rightsFile)")!
+            let url = LocalWebServer.sharedInstance.URLForPath("/\(AppInfo.config.rightsFile)")!
             let contentViewController = AboutContentViewController(url: url)
             navigationController?.pushViewController(contentViewController, animated: true)
         default: break
@@ -101,7 +99,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
 
     fileprivate func aboutHeaderViewDidPressLearnMore(_ aboutHeaderView: AboutHeaderView) {
-        let url = URL(string: "https://www.mozilla.org/\(AppInfo.LanguageCode)/about/manifesto/")!
+        let url = URL(string: "https://www.mozilla.org/\(AppInfo.languageCode)/about/manifesto/")!
         let contentViewController = AboutContentViewController(url: url)
         navigationController?.pushViewController(contentViewController, animated: true)
     }
@@ -119,8 +117,7 @@ private class AboutHeaderView: UIView {
 
         translatesAutoresizingMaskIntoConstraints = false
 
-        let wordmark = AppInfo.isFocus ? #imageLiteral(resourceName: "img_focus_wordmark") : #imageLiteral(resourceName: "img_klar_wordmark")
-        let logo = UIImageView(image: wordmark)
+        let logo = UIImageView(image: AppInfo.config.wordmark)
         addSubview(logo)
 
         let bulletStyle = NSMutableParagraphStyle()
@@ -130,7 +127,7 @@ private class AboutHeaderView: UIView {
         let bulletFormat = "•  %@\n"
 
         let paragraph = [
-            NSAttributedString(string: String(format: UIConstants.strings.aboutTopLabel, AppInfo.ProductName) + "\n\n"),
+            NSAttributedString(string: String(format: UIConstants.strings.aboutTopLabel, AppInfo.productName) + "\n\n"),
             NSAttributedString(string: UIConstants.strings.aboutPrivateBulletHeader + "\n"),
             NSAttributedString(string: String(format: bulletFormat, UIConstants.strings.aboutPrivateBullet1), attributes: bulletAttributes),
             NSAttributedString(string: String(format: bulletFormat, UIConstants.strings.aboutPrivateBullet2), attributes: bulletAttributes),
@@ -138,7 +135,7 @@ private class AboutHeaderView: UIView {
             NSAttributedString(string: UIConstants.strings.aboutSafariBulletHeader + "\n"),
             NSAttributedString(string: String(format: bulletFormat, UIConstants.strings.aboutSafariBullet1), attributes: bulletAttributes),
             NSAttributedString(string: String(format: bulletFormat, UIConstants.strings.aboutSafariBullet2 + "\n"), attributes: bulletAttributes),
-            NSAttributedString(string: String(format: UIConstants.strings.aboutMissionLabel, AppInfo.ProductName)),
+            NSAttributedString(string: String(format: UIConstants.strings.aboutMissionLabel, AppInfo.productName)),
         ]
 
         let attributed = NSMutableAttributedString()

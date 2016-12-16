@@ -6,7 +6,8 @@ import Foundation
 
 class OpenUtils {
     private static let app = UIApplication.shared
-    private static let firefoxAppStoreURL = URL(string: "https://itunes.apple.com/app/id989804926")!
+    private static let firefoxAppStoreURL = URL(string: "https://app.adjust.com/gs1ao4")!
+    private static let focusAppStoreURL = URL(string: "https://app.adjust.com/c04cts")!
 
     private static var canOpenInFirefox: Bool {
         return app.canOpenURL(URL(string: "firefox://")!)
