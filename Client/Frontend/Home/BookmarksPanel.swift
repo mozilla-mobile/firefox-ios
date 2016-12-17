@@ -195,10 +195,8 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             }
             if let url = bookmark.favicon?.url.asURL where url.scheme == "asset" {
                 cell.imageView?.image = UIImage(named: url.host!)
-            } else if let bookmarkURL = NSURL(string: item.url) {
-                cell.imageView?.setIcon(bookmark.favicon, withPlaceholder: FaviconFetcher.getDefaultFavicon(bookmarkURL))
             } else {
-                cell.imageView?.setIcon(bookmark.favicon, withPlaceholder: FaviconFetcher.defaultFavicon)
+                cell.imageView?.setIcon(bookmark.favicon, forURL: NSURL(string: item.url))
             }
             return cell
         case is BookmarkSeparator:
