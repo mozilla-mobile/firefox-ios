@@ -38,6 +38,7 @@ class HomeView: UIView {
         settingsButton.setImage(#imageLiteral(resourceName: "icon_settings"), for: .normal)
         settingsButton.contentEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
         settingsButton.addTarget(self, action: #selector(didPressSettings), for: .touchUpInside)
+        settingsButton.accessibilityLabel = UIConstants.strings.browserSettings
         addSubview(settingsButton)
 
         textLogo.snp.makeConstraints { make in

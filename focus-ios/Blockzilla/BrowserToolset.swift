@@ -27,6 +27,7 @@ class BrowserToolset {
         backButton.addTarget(self, action: #selector(didPressBack), for: .touchUpInside)
         backButton.alpha = UIConstants.layout.browserToolbarDisabledOpacity
         backButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
+        backButton.accessibilityLabel = UIConstants.strings.browserBack
         backButton.isEnabled = false
 
         forwardButton.tintColor = UIConstants.colors.toolbarButtonNormal
@@ -35,6 +36,7 @@ class BrowserToolset {
         forwardButton.addTarget(self, action: #selector(didPressForward), for: .touchUpInside)
         forwardButton.alpha = UIConstants.layout.browserToolbarDisabledOpacity
         forwardButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
+        forwardButton.accessibilityLabel = UIConstants.strings.browserForward
         forwardButton.isEnabled = false
 
         stopReloadButton.tintColor = UIConstants.colors.toolbarButtonNormal
@@ -47,6 +49,7 @@ class BrowserToolset {
         sendButton.setImage(#imageLiteral(resourceName: "icon_openwith_inactive"), for: .disabled)
         sendButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         sendButton.addTarget(self, action: #selector(didPressSend), for: .touchUpInside)
+        sendButton.accessibilityLabel = UIConstants.strings.browserShare
     }
 
     var canGoBack: Bool = false {
@@ -65,8 +68,13 @@ class BrowserToolset {
 
     var isLoading: Bool = false {
         didSet {
-            let image = isLoading ? #imageLiteral(resourceName: "icon_stop_menu") : #imageLiteral(resourceName: "icon_refresh_menu")
-            stopReloadButton.setImage(image, for: .normal)
+            if isLoading {
+                stopReloadButton.setImage(#imageLiteral(resourceName: "icon_stop_menu"), for: .normal)
+                stopReloadButton.accessibilityLabel = UIConstants.strings.browserStop
+            } else {
+                stopReloadButton.setImage(#imageLiteral(resourceName: "icon_refresh_menu"), for: .normal)
+                stopReloadButton.accessibilityLabel = UIConstants.strings.browserReload
+            }
         }
     }
 
