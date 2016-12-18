@@ -161,11 +161,19 @@ class CustomSearchEngineField: Setting, UITextFieldDelegate {
         cell.userInteractionEnabled = true
         cell.accessibilityTraits = UIAccessibilityTraitNone
         cell.contentView.addSubview(textField)
+        cell.textLabel?.text = placeholder.componentsSeparatedByString(" ")[0] //dont actually do this haha
+
+        //make sure when you change to UITextview taht the placeholder text lines up with the textlabel text
         
         textField.snp_makeConstraints { make in
             make.height.equalTo(TextFieldHeight)
             make.trailing.equalTo(cell.contentView).offset(-Padding)
+            make.leading.equalTo(cell.contentView).offset(80) // The constants here can be added to the top of this class
+        }
+        cell.textLabel?.snp_remakeConstraints { make in
+            make.trailing.equalTo(textField.snp_leading).offset(-Padding)
             make.leading.equalTo(cell.contentView).offset(Padding)
+            make.height.equalTo(44)
         }
     }
     
