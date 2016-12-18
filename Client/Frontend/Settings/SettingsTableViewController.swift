@@ -17,6 +17,8 @@ private let Bug1204635_S4 = NSLocalizedString("Cancel", tableName: "ClearPrivate
 // A base setting class that shows a title. You probably want to subclass this, not use it directly.
 class Setting: NSObject {
     private var _title: NSAttributedString?
+    private var _footerTitle: NSAttributedString?
+    private var _cellHeight: CGFloat?
 
     weak var delegate: SettingsDelegate?
 
@@ -25,6 +27,8 @@ class Setting: NSObject {
 
     // The title shown on the pref.
     var title: NSAttributedString? { return _title }
+    var footerTitle: NSAttributedString? { return _footerTitle }
+    var cellHeight: CGFloat? { return _cellHeight}
     private(set) var accessibilityIdentifier: String?
 
     // An optional second line of text shown on the pref.
@@ -81,8 +85,10 @@ class Setting: NSObject {
         }
     }
 
-    init(title: NSAttributedString? = nil, delegate: SettingsDelegate? = nil, enabled: Bool? = nil) {
+    init(title: NSAttributedString? = nil, footerTitle: NSAttributedString? = nil, cellHeight: CGFloat? = nil, delegate: SettingsDelegate? = nil, enabled: Bool? = nil) {
         self._title = title
+        self._footerTitle = footerTitle
+        self._cellHeight = cellHeight
         self.delegate = delegate
         self.enabled = enabled ?? true
     }
@@ -92,9 +98,9 @@ class Setting: NSObject {
 class SettingSection: Setting {
     private let children: [Setting]
 
-    init(title: NSAttributedString? = nil, children: [Setting]) {
+    init(title: NSAttributedString? = nil, footerTitle: NSAttributedString? = nil, cellHeight: CGFloat? = nil, children: [Setting]) {
         self.children = children
-        super.init(title: title)
+        super.init(title: title, footerTitle: footerTitle, cellHeight: cellHeight)
     }
 
     var count: Int {
@@ -412,7 +418,9 @@ class SettingsTableViewController: UITableViewController {
         
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: Identifier)
         tableView.registerClass(SettingsTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderIdentifier)
-        tableView.tableFooterView = SettingsTableFooterView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 128))
+        let tableFooter = SettingsTableFooterView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 128))
+        tableFooter.showTopBorder = false
+        tableView.tableFooterView = tableFooter
         
         tableView.separatorColor = UIConstants.TableViewSeparatorColor
         tableView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
@@ -515,6 +523,26 @@ class SettingsTableViewController: UITableViewController {
 
         return headerView
     }
+    
+    override func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let footerView = tableView.dequeueReusableHeaderFooterViewWithIdentifier(SectionHeaderIdentifier) as! SettingsTableSectionHeaderFooterView
+        let sectionSetting = settings[section]
+        if let sectionFooter = sectionSetting.footerTitle?.string {
+            footerView.titleLabel.text = sectionFooter
+        }
+        footerView.titleAlignment = .Top
+        footerView.showBottomBorder = false
+        footerView.showBottomBorder = false
+        return footerView
+    }
+    
+    override func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        let sectionSetting = settings[section]
+        if let _ = sectionSetting.footerTitle?.string {
+            return 44
+        }
+        return 0
+    }
 
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         let section = settings[indexPath.section]
@@ -522,6 +550,9 @@ class SettingsTableViewController: UITableViewController {
         // the title text label.
         if let setting = section[indexPath.row] where setting is BoolSetting && setting.status != nil {
             return calculateStatusCellHeightForSetting(setting)
+        }
+        if let setting = section[indexPath.row], let height = setting.cellHeight{
+            return height
         }
 
         return UITableViewAutomaticDimension
@@ -570,12 +601,18 @@ class SettingsTableFooterView: UIView {
         topBorder.backgroundColor = UIConstants.SeparatorColor.CGColor
         return topBorder
     }()
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = UIConstants.TableViewHeaderBackgroundColor
         layer.addSublayer(topBorder)
         addSubview(logo)
+    }
+    
+    var showTopBorder: Bool = true {
+        didSet {
+            topBorder.hidden = !showTopBorder
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {

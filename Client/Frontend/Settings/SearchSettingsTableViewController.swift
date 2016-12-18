@@ -128,7 +128,6 @@ class SearchSettingsTableViewController: UITableViewController {
                 cell.editingAccessoryType = UITableViewCellAccessoryType.DisclosureIndicator
                 cell.accessibilityLabel = Strings.SettingsAddCustomEngineTitle
                 cell.accessibilityValue = Strings.SettingsAddCustomEngineTitle
-                cell.textLabel?.textColor = UIColor(red: 0/255, green: 122/255, blue: 255/255, alpha: 1.0)
                 cell.textLabel?.text = Strings.SettingsAddCustomEngine
             }
         }

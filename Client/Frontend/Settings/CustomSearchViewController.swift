@@ -95,23 +95,23 @@ class CustomSearchViewController: SettingsTableViewController {
         })
         titleField.textField.accessibilityIdentifier = "customEngineTitle"
         
-        let urlField = CustomSearchEngineField(placeholder: Strings.SettingsAddCustomEngineURLPlaceholder, settingDidChange: {fieldText in
+        let urlField = CustomSearchEngineField(placeholder: Strings.SettingsAddCustomEngineURLPlaceholder, height: 120, settingDidChange: {fieldText in
             self.urlString = fieldText
             }, settingIsValid: { text in
                 //Can check url text text validity here.
                 return true
         })
+        
         urlField.textField.autocapitalizationType = .None
         urlField.textField.accessibilityIdentifier = "customEngineUrl"
         
         let basicSettings: [Setting] = [ titleField, urlField]
         
         let settings: [SettingSection] = [
-            SettingSection(title: NSAttributedString(string: Strings.SettingsAddCustomEngineSectionTitle), children: basicSettings),
-            SettingSection(children: [
-                ButtonSetting(title: NSAttributedString(string: Strings.SettingsAddCustomEngineSaveButtonText), accessibilityIdentifier: "saveCustomEngine", onClick: addCustomSearchEngine)
-                ])
+            SettingSection(footerTitle: NSAttributedString(string: Strings.SettingsAddCustomEngineFooter), children: basicSettings)
         ]
+        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Save, target: self, action: #selector(self.addCustomSearchEngine(_:)))
         
         return settings
     }
@@ -129,7 +129,7 @@ class CustomSearchViewController: SettingsTableViewController {
 class CustomSearchEngineField: Setting, UITextFieldDelegate {
     
     private let Padding: CGFloat = 8
-    private let TextFieldHeight: CGFloat = 44
+    private var TextFieldHeight: CGFloat = 44
 
     private let defaultValue: String?
     private let placeholder: String
@@ -138,12 +138,13 @@ class CustomSearchEngineField: Setting, UITextFieldDelegate {
     
     let textField = UITextField()
     
-    init(defaultValue: String? = nil, placeholder: String, settingIsValid isValueValid: (String? -> Bool)? = nil, settingDidChange: (String? -> Void)? = nil) {
+    init(defaultValue: String? = nil, placeholder: String, height: CGFloat = 44, settingIsValid isValueValid: (String? -> Bool)? = nil, settingDidChange: (String? -> Void)? = nil) {
         self.defaultValue = defaultValue
+        self.TextFieldHeight = height
         self.settingDidChange = settingDidChange
         self.settingIsValid = isValueValid
         self.placeholder = placeholder
-        super.init()
+        super.init(cellHeight: TextFieldHeight)
     }
     
     override func onConfigureCell(cell: UITableViewCell) {
