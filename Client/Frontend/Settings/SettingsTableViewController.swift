@@ -532,10 +532,10 @@ class SettingsTableViewController: UITableViewController {
         }
         footerView.titleAlignment = .Top
         footerView.showBottomBorder = false
-        footerView.showBottomBorder = false
         return footerView
     }
-    
+
+    //is this needed?
     override func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         let sectionSetting = settings[section]
         if let _ = sectionSetting.footerTitle?.string {

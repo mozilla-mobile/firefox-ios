@@ -105,7 +105,7 @@ class CustomSearchViewController: SettingsTableViewController {
         urlField.textField.autocapitalizationType = .None
         urlField.textField.accessibilityIdentifier = "customEngineUrl"
         
-        let basicSettings: [Setting] = [ titleField, urlField]
+        let basicSettings: [Setting] = [titleField, urlField]
         
         let settings: [SettingSection] = [
             SettingSection(footerTitle: NSAttributedString(string: Strings.SettingsAddCustomEngineFooter), children: basicSettings)
