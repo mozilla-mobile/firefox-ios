@@ -331,6 +331,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return
         }
 
+        profile?.reopen()
+
         NightModeHelper.restoreNightModeBrightness((self.profile?.prefs)!, toForeground: true)
         self.profile?.syncManager.applicationDidBecomeActive()
 
@@ -388,8 +390,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         if profile.hasSyncableAccount() {
-            let backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
-            profile.syncManager.syncEverything().uponQueue(backgroundQueue) { _ in
+            profile.syncManager.syncEverything().uponQueue(dispatch_get_main_queue()) { _ in
                 self.shutdownProfileWhenNotActive(application)
                 application.endBackgroundTask(taskId)
             }
@@ -420,7 +421,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         resetForegroundStartTime()
 
-        profile?.reopen()
     }
 
     private func resetForegroundStartTime() {
