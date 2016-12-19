@@ -291,6 +291,9 @@ class BrowserViewController: UIViewController {
             self.displayedPopoverController = nil
         }
 
+        // Dismiss menu if presenting
+        menuViewController?.dismissViewControllerAnimated(true, completion: nil)
+
         // If we are displying a private tab, hide any elements in the tab that we wouldn't want shown
         // when the app is in the home switcher
         guard let privateTab = tabManager.selectedTab where privateTab.isPrivate else {
