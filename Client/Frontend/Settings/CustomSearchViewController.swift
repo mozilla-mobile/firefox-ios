@@ -85,7 +85,7 @@ class CustomSearchViewController: SettingsTableViewController {
             return NSURL(string: string)
         }
         
-        let titleField = CustomSearchEngineField(placeholder: "Title", settingDidChange: {fieldText in
+        let titleField = CustomSearchEngineField(placeholder: Strings.SettingsAddCustomEngineTitlePlaceholder, labelText: Strings.SettingsAddCustomEngineTitleLabel, settingDidChange: {fieldText in
             guard let title = fieldText else {
                 return
             }
@@ -95,7 +95,7 @@ class CustomSearchViewController: SettingsTableViewController {
         })
         titleField.textField.accessibilityIdentifier = "customEngineTitle"
         
-        let urlField = CustomSearchEngineField(placeholder: Strings.SettingsAddCustomEngineURLPlaceholder, height: 120, settingDidChange: {fieldText in
+        let urlField = CustomSearchEngineTextView(placeholder: Strings.SettingsAddCustomEngineURLPlaceholder, labelText: Strings.SettingsAddCustomEngineURLLabel, height: 133, settingDidChange: {fieldText in
             self.urlString = fieldText
             }, settingIsValid: { text in
                 //Can check url text text validity here.
@@ -117,12 +117,11 @@ class CustomSearchViewController: SettingsTableViewController {
     }
     
     func addCustomSearchEngine(nav: UINavigationController?) {
-            self.view.endEditing(true)
-            if let url = self.urlString {
-                self.addSearchEngine(url, title: self.engineTitle)
+        self.view.endEditing(true)
+        if let url = self.urlString {
+            self.addSearchEngine(url, title: self.engineTitle)
         }
     }
-    
 }
 
 
@@ -133,17 +132,19 @@ class CustomSearchEngineField: Setting, UITextFieldDelegate {
 
     private let defaultValue: String?
     private let placeholder: String
+    private let labelText: String
     private let settingDidChange: (String? -> Void)?
     private let settingIsValid: (String? -> Bool)?
     
     let textField = UITextField()
     
-    init(defaultValue: String? = nil, placeholder: String, height: CGFloat = 44, settingIsValid isValueValid: (String? -> Bool)? = nil, settingDidChange: (String? -> Void)? = nil) {
+    init(defaultValue: String? = nil, placeholder: String, labelText: String, height: CGFloat = 44, settingIsValid isValueValid: (String? -> Bool)? = nil, settingDidChange: (String? -> Void)? = nil) {
         self.defaultValue = defaultValue
         self.TextFieldHeight = height
         self.settingDidChange = settingDidChange
         self.settingIsValid = isValueValid
         self.placeholder = placeholder
+        self.labelText = labelText
         super.init(cellHeight: TextFieldHeight)
     }
     
@@ -161,8 +162,9 @@ class CustomSearchEngineField: Setting, UITextFieldDelegate {
         cell.userInteractionEnabled = true
         cell.accessibilityTraits = UIAccessibilityTraitNone
         cell.contentView.addSubview(textField)
-        cell.textLabel?.text = placeholder.componentsSeparatedByString(" ")[0] //dont actually do this haha
-
+        cell.textLabel?.text = labelText
+        cell.selectionStyle = .None
+        
         //make sure when you change to UITextview taht the placeholder text lines up with the textlabel text
         
         textField.snp_makeConstraints { make in
@@ -207,5 +209,100 @@ class CustomSearchEngineField: Setting, UITextFieldDelegate {
     
     @objc func textFieldDidEndEditing(textField: UITextField) {
         settingDidChange?(textField.text)
+    }
+}
+
+class CustomSearchEngineTextView: Setting, UITextViewDelegate {
+    
+    private let Padding: CGFloat = 8
+    private var TextFieldHeight: CGFloat = 44
+    
+    private let defaultValue: String?
+    private let placeholder: String
+    private let labelText: String
+    private let settingDidChange: (String? -> Void)?
+    private let settingIsValid: (String? -> Bool)?
+    
+    let textField = UITextView()
+    
+    init(defaultValue: String? = nil, placeholder: String, labelText: String, height: CGFloat = 44, settingIsValid isValueValid: (String? -> Bool)? = nil, settingDidChange: (String? -> Void)? = nil) {
+        self.defaultValue = defaultValue
+        self.TextFieldHeight = height
+        self.settingDidChange = settingDidChange
+        self.settingIsValid = isValueValid
+        self.placeholder = placeholder
+        self.labelText = labelText
+        super.init(cellHeight: TextFieldHeight)
+    }
+    
+    override func onConfigureCell(cell: UITableViewCell) {
+        super.onConfigureCell(cell)
+        if let id = accessibilityIdentifier {
+            textField.accessibilityIdentifier = id + "TextField"
+        }
+//        textField.placeholder = placeholder
+        textField.textAlignment = .Left
+        textField.keyboardType = .URL
+        textField.autocorrectionType = .No
+        textField.delegate = self
+        cell.userInteractionEnabled = true
+        cell.accessibilityTraits = UIAccessibilityTraitNone
+        cell.contentView.addSubview(textField)
+        cell.textLabel?.text = labelText
+        cell.selectionStyle = .None
+        
+        //make sure when you change to UITextview taht the placeholder text lines up with the textlabel text
+        
+        textField.snp_makeConstraints { make in
+            make.height.equalTo(TextFieldHeight)
+            make.trailing.equalTo(cell.contentView).offset(-Padding)
+            make.leading.equalTo(cell.contentView).offset(80) // The constants here can be added to the top of this class
+        }
+        cell.textLabel?.snp_remakeConstraints { make in
+            make.trailing.equalTo(textField.snp_leading).offset(-Padding)
+            make.leading.equalTo(cell.contentView).offset(Padding)
+            make.height.equalTo(44)
+        }
+    }
+    
+    override func onClick(navigationController: UINavigationController?) {
+        textField.becomeFirstResponder()
+    }
+    
+    private func isValid(value: String?) -> Bool {
+        guard let test = settingIsValid else {
+            return true
+        }
+        return test(prepareValidValue(userInput: value))
+    }
+    
+    /// This gives subclasses an opportunity to treat the user input string
+    /// before it is saved or tested.
+    /// Default implementation does nothing.
+    func prepareValidValue(userInput value: String?) -> String? {
+        return value
+    }
+    
+    func textViewDidBeginEditing(textView: UITextView) {
+//        if textView.text == "Placeholder" {               //Is this a good approach to adding a placeholder to a UITextView?
+//            textView.text = ""
+//            textView.textAlignment = .Natural
+//            textView.textColor = UIColor.blackColor()
+//        }
+    }
+    
+    func textViewDidChange(textView: UITextView) {
+//        if textView.text == "" {
+//            textView.text = "Placeholder"
+//            textView.textAlignment = .Center
+//            textView.textColor = UIColor.lightGrayColor()
+//        }
+        settingDidChange?(textView.text)
+        let color = isValid(textField.text) ? UIConstants.TableViewRowTextColor : UIConstants.DestructiveRed
+        textField.textColor = color
+    }
+    
+    func textViewDidEndEditing(textView: UITextView) {
+        settingDidChange?(textView.text)
     }
 }
