@@ -134,6 +134,61 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         XCTAssertEqual(highlights.count, 1)
         XCTAssertEqual(highlights[0]!.title, "A Bookmark")
     }
+
+    /*
+     * Verify that we do not return a highlight if
+     * its domain is in the blacklist
+     *
+     */
+    func testBlacklistHighlights() {
+        let db = BrowserDB(filename: "browser.db", files: files)
+        let prefs = MockProfilePrefs()
+        let history = SQLiteHistory(db: db, prefs: prefs)
+
+        let startTime = NSDate.nowMicroseconds()
+        let oneHourAgo = startTime - oneHourInMicroseconds
+        let fifteenMinutesAgo = startTime - 15 * microsecondsPerMinute
+
+        /*
+         * Site A: 1 visit, 1 hour ago = highlight that is on the blacklist
+         * Site B: 1 visits, 15 minutes ago = non-highlight
+         * Site C: 3 visits, 1 hour ago = highlight that is on the blacklist
+         * Site D: 4 visits, 1 hour ago = non-highlight
+         */
+        let siteA = Site(url: "http://www.google.com", title: "A")
+        let siteB = Site(url: "http://siteB/", title: "B")
+        let siteC = Site(url: "http://www.search.yahoo.com/", title: "C")
+        let siteD = Site(url: "http://siteD/", title: "D")
+
+        let siteVisitA1 = SiteVisit(site: siteA, date: oneHourAgo, type: .Link)
+        let siteVisitB1 = SiteVisit(site: siteB, date: fifteenMinutesAgo, type: .Link)
+
+        let siteVisitC1 = SiteVisit(site: siteC, date: oneHourAgo, type: .Link)
+        let siteVisitC2 = SiteVisit(site: siteC, date: oneHourAgo + 1000, type: .Link)
+        let siteVisitC3 = SiteVisit(site: siteC, date: oneHourAgo + 2000, type: .Link)
+
+        let siteVisitD1 = SiteVisit(site: siteD, date: oneHourAgo, type: .Link)
+        let siteVisitD2 = SiteVisit(site: siteD, date: oneHourAgo + 1000, type: .Link)
+        let siteVisitD3 = SiteVisit(site: siteD, date: oneHourAgo + 2000, type: .Link)
+        let siteVisitD4 = SiteVisit(site: siteD, date: oneHourAgo + 3000, type: .Link)
+
+        history.clearHistory().succeeded()
+        history.addLocalVisit(siteVisitA1).succeeded()
+
+        history.addLocalVisit(siteVisitB1).succeeded()
+
+        history.addLocalVisit(siteVisitC1).succeeded()
+        history.addLocalVisit(siteVisitC2).succeeded()
+        history.addLocalVisit(siteVisitC3).succeeded()
+
+        history.addLocalVisit(siteVisitD1).succeeded()
+        history.addLocalVisit(siteVisitD2).succeeded()
+        history.addLocalVisit(siteVisitD3).succeeded()
+        history.addLocalVisit(siteVisitD4).succeeded()
+
+        let highlights = history.getHighlights().value.successValue!
+        XCTAssertEqual(highlights.count, 0)
+    }
 }
 
 class TestSQLiteHistoryRecommendationsPerf: XCTestCase {
