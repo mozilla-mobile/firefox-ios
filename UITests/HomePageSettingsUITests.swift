@@ -24,7 +24,7 @@ class HomePageSettingsUITests: KIFTestCase {
     func testNavigation() {
         HomePageUtils.navigateToHomePageSettings(tester())
         // if we can't find the home paget text view, then this will time out.
-        XCTAssertTrue(tester().viewExistsWithLabel("Homepage Settings"),"title should be visible")
+        XCTAssertTrue(tester().viewExistsWithLabel("Homepage Settings"), "title should be visible")
         HomePageUtils.navigateFromHomePageSettings(tester())
     }
 
