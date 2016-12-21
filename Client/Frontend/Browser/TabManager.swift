@@ -780,7 +780,7 @@ extension TabManager : WKNavigationDelegate {
         // as we current handle tab restore as error page redirects then this ensures that we don't
         // call storeChanges unnecessarily on startup
         if let url = webView.URL {
-            if !url.isErrorPageURL() {
+            if !url.isErrorPageURL {
                 storeChanges()
             }
         }

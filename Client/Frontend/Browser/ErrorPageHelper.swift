@@ -133,7 +133,7 @@ class ErrorPageHelper {
         self.certStore = certStore
 
         server.registerHandlerForMethod("GET", module: "errors", resource: "error.html", handler: { (request) -> GCDWebServerResponse! in
-            guard let url = request.URL.originalURLFromErrorPageURL() else {
+            guard let url = request.URL.originalURLFromErrorURL else {
                 return GCDWebServerResponse(statusCode: 404)
             }
 
@@ -214,8 +214,8 @@ class ErrorPageHelper {
 
     func showPage(error: NSError, forUrl url: NSURL, inWebView webView: WKWebView) {
         // Don't show error pages for error pages.
-        if url.isErrorPageURL() {
-            if let previousURL = url.originalURLFromErrorPageURL(),
+        if url.isErrorPageURL {
+            if let previousURL = url.originalURLFromErrorURL,
                let index = ErrorPageHelper.redirecting.indexOf(previousURL) {
                 ErrorPageHelper.redirecting.removeAtIndex(index)
             }
@@ -265,9 +265,9 @@ extension ErrorPageHelper: TabHelper {
     }
 
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        if let errorURL = message.frameInfo.request.URL where errorURL.isErrorPageURL(),
+        if let errorURL = message.frameInfo.request.URL where errorURL.isErrorPageURL,
            let res = message.body as? [String: String],
-           let originalURL = errorURL.originalURLFromErrorPageURL(),
+           let originalURL = errorURL.originalURLFromErrorURL,
            let type = res["type"] {
 
             switch type {

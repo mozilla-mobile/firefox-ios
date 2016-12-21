@@ -837,7 +837,7 @@ public class BrowserTable: Table {
         var pairs = Args()
         pairs.reserveCapacity(cursor.count * 2)
         for url in cursor {
-            if let url = url, host = url.asURL?.normalizedHost() {
+            if let url = url, host = url.asURL?.normalizedHost {
                 pairs.append(url)
                 pairs.append(host)
             }

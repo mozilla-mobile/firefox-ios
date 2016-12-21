@@ -139,12 +139,9 @@ extension NSURL {
     }
 
     public var origin: String? {
-        guard isWebPage(includeDataURIs: false),
-              let hostPort = self.hostPort,
-              let scheme = scheme else {
+        guard isWebPage(includeDataURIs: false), let hostPort = self.hostPort, let scheme = scheme else {
             return nil
         }
-
         return "\(scheme)://\(hostPort)"
     }
 
@@ -154,20 +151,20 @@ extension NSURL {
      * E.g., https://m.foo.com/bar/baz?noo=abc#123  => foo
      **/
     public var hostSLD: String {
-        guard let publicSuffix = self.publicSuffix(), let baseDomain = self.baseDomain() else {
-            return self.normalizedHost() ?? self.URLString
+        guard let publicSuffix = self.publicSuffix, let baseDomain = self.baseDomain else {
+            return self.normalizedHost ?? self.URLString
         }
         return baseDomain.stringByReplacingOccurrencesOfString(".\(publicSuffix)", withString: "")
     }
 
-    public func normalizedHostAndPath() -> String? {
-        if let normalizedHost = self.normalizedHost() {
+    public var normalizedHostAndPath: String? {
+        if let normalizedHost = self.normalizedHost {
             return normalizedHost + (self.path ?? "/")
         }
         return nil
     }
 
-    public func absoluteDisplayString() -> String? {
+    public var absoluteDisplayString: String? {
         var urlString = self.absoluteString
         // For http URLs, get rid of the trailing slash if the path is empty or '/'
         if (self.scheme == "http" || self.scheme == "https") && (self.path == "/" || self.path == nil) && urlString!.endsWith("/") {
@@ -181,30 +178,29 @@ extension NSURL {
         }
     }
 
-    public func displayURL() -> NSURL? {
-        if self.isReaderModeURL() {
-            return self.decodeReaderModeURL()?.havingRemovedAuthorisationComponents()
+    public var displayURL: NSURL? {
+        if self.isReaderModeURL {
+            return self.decodeReaderModeURL?.havingRemovedAuthorisationComponents()
         }
 
-        if self.isErrorPageURL() {
-            let decodedURL = self.originalURLFromErrorPageURL()
-            if !decodedURL!.isAboutURL() {
-                return decodedURL?.havingRemovedAuthorisationComponents()
+        if self.isErrorPageURL {
+            if let decodedURL = self.originalURLFromErrorURL {
+                return decodedURL.displayURL
             } else {
                 return nil
             }
         }
 
-        if !self.isAboutURL() {
+        if !self.isAboutURL {
             return self.havingRemovedAuthorisationComponents()
         }
 
         return nil
     }
 
-    public func displayString() -> String? {
-        return displayURL()?.absoluteString
-    }
+//    public func displayString() -> String? {
+//        return displayURL()?.absoluteString
+//    }
 
     /**
     Returns the base domain from a given hostname. The base domain name is defined as the public domain suffix
@@ -213,7 +209,7 @@ extension NSURL {
 
     :returns: The base domain string for the given host name.
     */
-    public func baseDomain() -> String? {
+    public var baseDomain: String? {
         guard !isIPv6, let host = host else { return nil }
 
         // If this is just a hostname and not a FQDN, use the entire hostname.
@@ -231,8 +227,8 @@ extension NSURL {
      *
      * Any failure? Return this URL.
      */
-    public func domainURL() -> NSURL {
-        if let normalized = self.normalizedHost() {
+    public var domainURL: NSURL {
+        if let normalized = self.normalizedHost {
             // Use NSURLComponents instead of NSURL since the former correctly preserves
             // brackets for IPv6 hosts, whereas the latter escapes them.
             let components = NSURLComponents()
@@ -244,11 +240,12 @@ extension NSURL {
         return self
     }
 
-    public func normalizedHost() -> String? {
+    public var normalizedHost: String? {
         // Use components.host instead of self.host since the former correctly preserves
         // brackets for IPv6 hosts, whereas the latter strips them.
-        guard let components = NSURLComponents(URL: self, resolvingAgainstBaseURL: false),
-              var host = components.host else { return nil }
+        guard let components = NSURLComponents(URL: self, resolvingAgainstBaseURL: false), var host = components.host where host != "" else {
+            return nil
+        }
 
         if let range = host.rangeOfString("^(www|mobile|m)\\.", options: .RegularExpressionSearch) {
             host.replaceRange(range, with: "")
@@ -263,7 +260,7 @@ extension NSURL {
 
     :returns: The public suffix for within the given hostname.
     */
-    public func publicSuffix() -> String? {
+    public var publicSuffix: String? {
         if let host = self.host {
             return publicSuffixFromHost(host, withAdditionalParts: 0)
         } else {
@@ -272,10 +269,8 @@ extension NSURL {
     }
 
     public func isWebPage(includeDataURIs includeDataURIs: Bool = true) -> Bool {
-        let httpSchemes = ["http", "https"]
-        let dataSchemes = ["data"]
-
-        if let scheme = scheme where httpSchemes.contains(scheme) || (includeDataURIs && dataSchemes.contains(scheme)) {
+        let schemes = includeDataURIs ? ["http", "https", "data"] : ["http", "https"]
+        if let scheme = scheme where schemes.contains(scheme) {
             return true
         }
 
@@ -283,6 +278,9 @@ extension NSURL {
     }
 
     public var isLocal: Bool {
+        guard isWebPage(includeDataURIs: false) else {
+            return false
+        }
         // iOS forwards hostless URLs (e.g., http://:6571) to localhost.
         guard let host = host where !host.isEmpty else {
             return true
@@ -320,13 +318,13 @@ extension NSURL {
 // Extensions to deal with ReaderMode URLs
 
 extension NSURL {
-    public func isReaderModeURL() -> Bool {
+    public var isReaderModeURL: Bool {
         let scheme = self.scheme, host = self.host, path = self.path
         return scheme == "http" && host == "localhost" && path == "/reader-mode/page"
     }
 
-    public func decodeReaderModeURL() -> NSURL? {
-        if self.isReaderModeURL() {
+    public var decodeReaderModeURL: NSURL? {
+        if self.isReaderModeURL {
             if let components = NSURLComponents(URL: self, resolvingAgainstBaseURL: false), queryItems = components.queryItems where queryItems.count == 1 {
                 if let queryItem = queryItems.first, value = queryItem.value {
                     return NSURL(string: value)
@@ -351,46 +349,49 @@ extension NSURL {
 // Helpers to deal with ErrorPage URLs
 
 extension NSURL {
-    public func isErrorPageURL() -> Bool {
+    public var isErrorPageURL: Bool {
         if let host = self.host, path = self.path {
             return self.scheme == "http" && host == "localhost" && path == "/errors/error.html"
         }
         return false
     }
 
-    public func originalURLFromErrorPageURL() -> NSURL? {
+    public var originalURLFromErrorURL: NSURL? {
         let components = NSURLComponents(URL: self, resolvingAgainstBaseURL: false)
         if let queryURL = components?.queryItems?.find({ $0.name == "url" })?.value {
             return NSURL(string: queryURL)
         }
-
         return nil
     }
 }
 
 // Helpers to deal with About URLs
-
 extension NSURL {
-    private static let AboutPath = "/about/"
-
-    public func isAboutHomeURL() -> Bool {
-        return self.getAboutComponent() == "home"
+    public var isAboutHomeURL: Bool {
+        if let urlString = self.getQuery()["url"]?.unescape() where isErrorPageURL {
+            let url = NSURL(string: urlString) ?? self
+            return url.aboutComponent == "home"
+        }
+        return self.aboutComponent == "home"
     }
 
-    public func isAboutURL() -> Bool {
-        return self.getAboutComponent() != nil
+    public var isAboutURL: Bool {
+        return self.aboutComponent != nil
     }
 
     /// If the URI is an about: URI, return the path after "about/" in the URI.
     /// For example, return "home" for "http://localhost:1234/about/home/#panel=0".
-    public func getAboutComponent() -> String? {
-        if let scheme = self.scheme, host = self.host, path = self.path {
-            if scheme == "http" && host == "localhost" && path.startsWith(NSURL.AboutPath) {
-                return path.substringFromIndex(NSURL.AboutPath.endIndex)
-            }
+    public var aboutComponent: String? {
+        let aboutPath = "/about/"
+        guard let scheme = self.scheme, host = self.host, path = self.path else {
+            return nil
+        }
+        if scheme == "http" && host == "localhost" && path.startsWith(aboutPath) {
+            return path.substringFromIndex(aboutPath.endIndex)
         }
         return nil
     }
+
 }
 
 //MARK: Private Helpers

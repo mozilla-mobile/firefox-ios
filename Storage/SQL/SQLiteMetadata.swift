@@ -57,7 +57,7 @@ extension SQLiteMetadata: Metadata {
     }
 
     private func cacheKeyForURL(url: NSURL) -> CacheKey? {
-        var key = url.normalizedHost() ?? ""
+        var key = url.normalizedHost ?? ""
         key = key + (url.path ?? "") + (url.query ?? "")
         return key
     }

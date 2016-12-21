@@ -80,7 +80,7 @@ class ShareExtensionHelper: NSObject {
 
 extension ShareExtensionHelper: UIActivityItemSource {
     func activityViewControllerPlaceholderItem(activityViewController: UIActivityViewController) -> AnyObject {
-        if let displayURL = selectedTab?.displayURL {
+        if let displayURL = selectedTab?.url?.displayURL {
             return displayURL
         }
         return selectedURL
@@ -92,10 +92,10 @@ extension ShareExtensionHelper: UIActivityItemSource {
         } else {
             // Return the URL for the selected tab. If we are in reader view then decode
             // it so that we copy the original and not the internal localhost one.
-            if let url = selectedTab?.displayURL where url.isReaderModeURL() {
-                return url.decodeReaderModeURL()
+            if let url = selectedTab?.url?.displayURL where url.isReaderModeURL {
+                return url.decodeReaderModeURL
             }
-            return selectedTab?.displayURL ?? selectedURL
+            return selectedTab?.url?.displayURL ?? selectedURL
         }
     }
 
