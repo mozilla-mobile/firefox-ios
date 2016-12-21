@@ -192,11 +192,15 @@ extension ActivityStreamPanel {
 extension ActivityStreamPanel {
 
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        // If the highlights section is empty. Don't show the header
-        if section == Section.Highlights.rawValue && highlights.isEmpty {
-            return 0
+        // Depending on if highlights are present. Hide certain section headers.
+        switch Section(section) {
+            case .Highlights:
+                return highlights.isEmpty ? 0 : Section(section).headerHeight
+            case .HighlightIntro:
+                return !highlights.isEmpty ? 0 : Section(section).headerHeight
+            case .TopSites:
+                return Section(section).headerHeight
         }
-        return Section(section).headerHeight
     }
 
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -505,7 +509,7 @@ class ASHeaderView: UIView {
         addSubview(titleLabel)
 
         titleLabel.snp_makeConstraints { make in
-            make.edges.equalTo(self).offset(UIEdgeInsets(top: ASHeaderViewUX.TitleTopInset, left: ASHeaderViewUX.Insets, bottom: 0, right: -ASHeaderViewUX.Insets))
+            make.edges.equalTo(self).offset(UIEdgeInsets(top: ASHeaderViewUX.TitleTopInset, left: ASHeaderViewUX.Insets, bottom: 0, right: -ASHeaderViewUX.Insets)).priorityMedium()
         }
 
         let seperatorLine = UIView()

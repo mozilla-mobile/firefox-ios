@@ -249,6 +249,7 @@ class ASHorizontalScrollCell: UITableViewCell {
         super.layoutSubviews()
         let layout = collectionView.collectionViewLayout as! HorizontalFlowLayout
 
+        gradientBG.frame = self.contentView.bounds
         if gradientBG.superlayer == nil {
             self.contentView.layer.insertSublayer(gradientBG, atIndex: 0)
         }
