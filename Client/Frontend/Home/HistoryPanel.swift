@@ -28,7 +28,7 @@ private struct HistoryPanelUX {
     private static let SyncedTabsCellChevronInset: CGFloat = 20
     private static let SyncedTabsCellChevronSize: CGFloat = 20
     private static let SyncedTabsCellImageSize: CGFloat = 32
-    private static let SyncedTabsCellHeight: CGFloat = 60
+    private static let SyncedTabsCellHeight: CGFloat = 44
     private static let SyncedTabsCellChevronLineWidth: CGFloat = 4.0
     private static let SyncedTabsCellChevronColor = UIColor(red: 92/255, green: 92/255, blue: 92/255, alpha: 1.0)
 }

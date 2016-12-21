@@ -6,11 +6,11 @@ import UIKit
 import Storage
 
 struct SiteTableViewControllerUX {
-    static let HeaderHeight = CGFloat(25)
-    static let RowHeight = CGFloat(58)
+    static let HeaderHeight = CGFloat(32)
+    static let RowHeight = CGFloat(44)
     static let HeaderBorderColor = UIColor(rgb: 0xCFD5D9).colorWithAlphaComponent(0.8)
     static let HeaderTextColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor(rgb: 0x232323)
-    static let HeaderBackgroundColor = UIColor(rgb: 0xECF0F3).colorWithAlphaComponent(0.3)
+    static let HeaderBackgroundColor = UIColor(rgb: 0xf7f8f7).colorWithAlphaComponent(0.3)
     static let HeaderFont = UIFont.systemFontOfSize(12, weight: UIFontWeightMedium)
     static let HeaderTextMargin = CGFloat(10)
 }
@@ -31,7 +31,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView {
 
         topBorder.backgroundColor = UIColor.whiteColor()
         bottomBorder.backgroundColor = SiteTableViewControllerUX.HeaderBorderColor
-        contentView.backgroundColor = UIColor.whiteColor()
+        contentView.backgroundColor = UIColor(rgb: 0xf7f8f7)
 
         titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
         titleLabel.textColor = SiteTableViewControllerUX.HeaderTextColor
@@ -93,7 +93,7 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
 
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.registerClass(HistoryTableViewCell.self, forCellReuseIdentifier: CellIdentifier)
+        tableView.registerClass(SiteTableViewCell.self, forCellReuseIdentifier: CellIdentifier)
         tableView.registerClass(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: HeaderIdentifier)
         tableView.layoutMargins = UIEdgeInsetsZero
         tableView.keyboardDismissMode = UIScrollViewKeyboardDismissMode.OnDrag
