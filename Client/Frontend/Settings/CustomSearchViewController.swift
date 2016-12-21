@@ -215,6 +215,8 @@ class CustomSearchEngineField: Setting, UITextFieldDelegate {
 class CustomSearchEngineTextView: Setting, UITextViewDelegate {
     
     private let Padding: CGFloat = 8
+    private let TextFieldOffset: CGFloat = 80
+    private let TextLabelHeight: CGFloat = 44
     private var TextFieldHeight: CGFloat = 44
     
     private let defaultValue: String?
@@ -224,6 +226,7 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
     private let settingIsValid: (String? -> Bool)?
     
     let textField = UITextView()
+    let placeholderLabel = UILabel()
     
     init(defaultValue: String? = nil, placeholder: String, labelText: String, height: CGFloat = 44, settingIsValid isValueValid: (String? -> Bool)? = nil, settingDidChange: (String? -> Void)? = nil) {
         self.defaultValue = defaultValue
@@ -232,6 +235,7 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
         self.settingIsValid = isValueValid
         self.placeholder = placeholder
         self.labelText = labelText
+        textField.addSubview(placeholderLabel)
         super.init(cellHeight: TextFieldHeight)
     }
     
@@ -240,8 +244,13 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
         if let id = accessibilityIdentifier {
             textField.accessibilityIdentifier = id + "TextField"
         }
-//        textField.placeholder = placeholder
-        textField.textAlignment = .Left
+
+        placeholderLabel.textColor = UIColor(red: 0.0, green: 0.0, blue: 0.0980392, alpha: 0.22)
+        placeholderLabel.text = placeholder
+        placeholderLabel.frame = CGRect(x: 0, y: 0, width: textField.frame.width, height: TextLabelHeight)
+        textField.font = placeholderLabel.font
+        
+        textField.textContainer.lineFragmentPadding = 0
         textField.keyboardType = .URL
         textField.autocorrectionType = .No
         textField.delegate = self
@@ -251,17 +260,15 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
         cell.textLabel?.text = labelText
         cell.selectionStyle = .None
         
-        //make sure when you change to UITextview taht the placeholder text lines up with the textlabel text
-        
         textField.snp_makeConstraints { make in
             make.height.equalTo(TextFieldHeight)
             make.trailing.equalTo(cell.contentView).offset(-Padding)
-            make.leading.equalTo(cell.contentView).offset(80) // The constants here can be added to the top of this class
+            make.leading.equalTo(cell.contentView).offset(TextFieldOffset)
         }
         cell.textLabel?.snp_remakeConstraints { make in
             make.trailing.equalTo(textField.snp_leading).offset(-Padding)
             make.leading.equalTo(cell.contentView).offset(Padding)
-            make.height.equalTo(44)
+            make.height.equalTo(TextLabelHeight)
         }
     }
     
@@ -284,25 +291,18 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
     }
     
     func textViewDidBeginEditing(textView: UITextView) {
-//        if textView.text == "Placeholder" {               //Is this a good approach to adding a placeholder to a UITextView?
-//            textView.text = ""
-//            textView.textAlignment = .Natural
-//            textView.textColor = UIColor.blackColor()
-//        }
+        placeholderLabel.hidden = textField.text != ""
     }
     
     func textViewDidChange(textView: UITextView) {
-//        if textView.text == "" {
-//            textView.text = "Placeholder"
-//            textView.textAlignment = .Center
-//            textView.textColor = UIColor.lightGrayColor()
-//        }
+        placeholderLabel.hidden = textField.text != ""
         settingDidChange?(textView.text)
         let color = isValid(textField.text) ? UIConstants.TableViewRowTextColor : UIConstants.DestructiveRed
         textField.textColor = color
     }
     
     func textViewDidEndEditing(textView: UITextView) {
+        placeholderLabel.hidden = textField.text != ""
         settingDidChange?(textView.text)
     }
 }
