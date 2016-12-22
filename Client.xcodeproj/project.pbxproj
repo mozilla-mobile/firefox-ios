@@ -598,11 +598,9 @@
 		E62A56EC1DBE8D32004703EA /* WebMetadataKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E62A56DC1DBE88C3004703EA /* WebMetadataKit.framework */; };
 		E62CFB3D1C89EFF700C01324 /* FxA.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 28CE83D01A1D1D5100576538 /* FxA.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E6327A641BF6438E008D12E0 /* DebugSettingsBundleOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6327A631BF6438E008D12E0 /* DebugSettingsBundleOptions.swift */; };
-		E633E2331C21E293001FFF6C /* FXSnapshotTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E633E2321C21E293001FFF6C /* FXSnapshotTestCase.swift */; };
 		E633E2DA1C21EAF8001FFF6C /* LoginDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E633E2D91C21EAF8001FFF6C /* LoginDetailViewController.swift */; };
 		E633E37A1C2204BE001FFF6C /* LoginManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E633E3791C2204BE001FFF6C /* LoginManagerTests.swift */; };
 		E635D25E1B729DEE0078962F /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E635D25D1B729DEE0078962F /* Logger.swift */; };
-		E63ED7B41BFCD9800097D08E /* LoginTableViewCellRefTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63ED7B31BFCD9800097D08E /* LoginTableViewCellRefTests.swift */; };
 		E63ED7D81BFCD9990097D08E /* LoginTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63ED7D71BFCD9990097D08E /* LoginTableViewCell.swift */; };
 		E63ED8091BFCF9770097D08E /* SwiftSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65C5B9A1BEA4E7100D28BEF /* SwiftSupport.swift */; };
 		E63ED8E11BFD25580097D08E /* LoginListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63ED8E01BFD25580097D08E /* LoginListViewController.swift */; };
@@ -615,7 +613,6 @@
 		E65072A41B273824001A0AC6 /* GeometryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A99D761B20D95800006EDD /* GeometryExtensions.swift */; };
 		E653422D1C5944F90039DD9E /* BrowserPrompts.swift in Sources */ = {isa = PBXBuildFile; fileRef = E653422C1C5944F90039DD9E /* BrowserPrompts.swift */; };
 		E65607611C08B4E200534B02 /* SearchInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65607601C08B4E200534B02 /* SearchInputView.swift */; };
-		E65C5BC71BEA4F6500D28BEF /* NativeRefTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65C5BC61BEA4F6500D28BEF /* NativeRefTests.swift */; };
 		E65C5BD31BEA4F8A00D28BEF /* FBSnapshotTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = E65C5B951BEA4E7100D28BEF /* FBSnapshotTestCase.m */; };
 		E65C5BD41BEA4F8A00D28BEF /* FBSnapshotTestCasePlatform.m in Sources */ = {isa = PBXBuildFile; fileRef = E65C5B971BEA4E7100D28BEF /* FBSnapshotTestCasePlatform.m */; };
 		E65C5BD51BEA4F8A00D28BEF /* FBSnapshotTestController.m in Sources */ = {isa = PBXBuildFile; fileRef = E65C5B991BEA4E7100D28BEF /* FBSnapshotTestController.m */; };
@@ -629,7 +626,6 @@
 		E660BE061BB0666D009AC090 /* InnerStrokedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E660BE051BB0666D009AC090 /* InnerStrokedView.swift */; };
 		E6619A9D1DA693AB0063EAD6 /* OnyxClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6619A9C1DA693AB0063EAD6 /* OnyxClient.framework */; };
 		E663D5781BB341C4001EF30E /* ToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E663D5771BB341C4001EF30E /* ToggleButton.swift */; };
-		E66464911C10CA9C00AF05CE /* SearchInputViewRefTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E66464901C10CA9C00AF05CE /* SearchInputViewRefTests.swift */; };
 		E66464EE1C10D98000AF05CE /* AssertionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E66464ED1C10D98000AF05CE /* AssertionUtils.swift */; };
 		E664B45A1CD7ECDB0045A6A4 /* NotificationRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E664B4591CD7ECDB0045A6A4 /* NotificationRootViewController.swift */; };
 		E66C5B481BDA81050051AA93 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = E66C5B471BDA81050051AA93 /* UIImage+ImageEffects.m */; };
@@ -647,7 +643,6 @@
 		E68E7ADC1CAC208200FDCA76 /* SetupPasscodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68E7ADB1CAC208200FDCA76 /* SetupPasscodeViewController.swift */; };
 		E68E7ADE1CAC208A00FDCA76 /* RemovePasscodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68E7ADD1CAC208A00FDCA76 /* RemovePasscodeViewController.swift */; };
 		E6927EC01C7B6FB800D03F75 /* ErrorToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6927EBF1C7B6FB800D03F75 /* ErrorToast.swift */; };
-		E6927ECF1C7B722300D03F75 /* ErrorToastRefTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6927ECE1C7B722300D03F75 /* ErrorToastRefTests.swift */; };
 		E692E3291C46E62D009D1240 /* AuthenticationSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E692E3281C46E62D009D1240 /* AuthenticationSettingsViewController.swift */; };
 		E692E3371C46E86A009D1240 /* AppSettingsOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E692E3361C46E86A009D1240 /* AppSettingsOptions.swift */; };
 		E6955FAC1DD0DAA700569555 /* KeychainWrapperExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6955FAB1DD0DAA700569555 /* KeychainWrapperExtensions.swift */; };
@@ -1712,11 +1707,9 @@
 		E6231C041B90A472005ABB0D /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
 		E62A56DC1DBE88C3004703EA /* WebMetadataKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebMetadataKit.framework; path = Carthage/Build/iOS/WebMetadataKit.framework; sourceTree = "<group>"; };
 		E6327A631BF6438E008D12E0 /* DebugSettingsBundleOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugSettingsBundleOptions.swift; sourceTree = "<group>"; };
-		E633E2321C21E293001FFF6C /* FXSnapshotTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FXSnapshotTestCase.swift; sourceTree = "<group>"; };
 		E633E2D91C21EAF8001FFF6C /* LoginDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginDetailViewController.swift; path = ../Settings/LoginDetailViewController.swift; sourceTree = "<group>"; };
 		E633E3791C2204BE001FFF6C /* LoginManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginManagerTests.swift; sourceTree = "<group>"; };
 		E635D25D1B729DEE0078962F /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
-		E63ED7B31BFCD9800097D08E /* LoginTableViewCellRefTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginTableViewCellRefTests.swift; sourceTree = "<group>"; };
 		E63ED7D71BFCD9990097D08E /* LoginTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginTableViewCell.swift; sourceTree = "<group>"; };
 		E63ED8E01BFD25580097D08E /* LoginListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginListViewController.swift; sourceTree = "<group>"; };
 		E63F71871DB7FBE200A995C9 /* TestSQLiteMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSQLiteMetadata.swift; sourceTree = "<group>"; };
@@ -1735,15 +1728,12 @@
 		E65C5B991BEA4E7100D28BEF /* FBSnapshotTestController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FBSnapshotTestController.m; sourceTree = "<group>"; };
 		E65C5B9A1BEA4E7100D28BEF /* SwiftSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftSupport.swift; sourceTree = "<group>"; };
 		E65C5BC41BEA4F6500D28BEF /* NativeRefTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NativeRefTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E65C5BC61BEA4F6500D28BEF /* NativeRefTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeRefTests.swift; sourceTree = "<group>"; };
 		E65C5BD81BEA522600D28BEF /* UIImage+Compare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Compare.h"; sourceTree = "<group>"; };
 		E65C5BD91BEA522600D28BEF /* UIImage+Compare.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Compare.m"; sourceTree = "<group>"; };
 		E65C5BDA1BEA522600D28BEF /* UIImage+Diff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Diff.h"; sourceTree = "<group>"; };
 		E65C5BDB1BEA522600D28BEF /* UIImage+Diff.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Diff.m"; sourceTree = "<group>"; };
 		E65C5BDC1BEA522600D28BEF /* UIImage+Snapshot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Snapshot.h"; sourceTree = "<group>"; };
 		E65C5BDD1BEA522600D28BEF /* UIImage+Snapshot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Snapshot.m"; sourceTree = "<group>"; };
-		E65C5BE21BEA525800D28BEF /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E65C5BE31BEA525800D28BEF /* NativeRefTests-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NativeRefTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		E65D89171C8647420006EA35 /* AppAuthenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppAuthenticator.swift; sourceTree = "<group>"; };
 		E65D89591C8753CE0006EA35 /* SystemUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SystemUtils.swift; sourceTree = "<group>"; };
 		E65D89801C8778940006EA35 /* AuthenticationKeychainInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationKeychainInfo.swift; sourceTree = "<group>"; };
@@ -1752,7 +1742,6 @@
 		E6619A9C1DA693AB0063EAD6 /* OnyxClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OnyxClient.framework; path = Carthage/Build/iOS/OnyxClient.framework; sourceTree = "<group>"; };
 		E6639F171BF11E17002D0853 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		E663D5771BB341C4001EF30E /* ToggleButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToggleButton.swift; sourceTree = "<group>"; };
-		E66464901C10CA9C00AF05CE /* SearchInputViewRefTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchInputViewRefTests.swift; sourceTree = "<group>"; };
 		E66464ED1C10D98000AF05CE /* AssertionUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssertionUtils.swift; sourceTree = "<group>"; };
 		E664B4591CD7ECDB0045A6A4 /* NotificationRootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NotificationRootViewController.swift; path = Notifications/NotificationRootViewController.swift; sourceTree = "<group>"; };
 		E66C5B461BDA81050051AA93 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
@@ -1771,7 +1760,6 @@
 		E68E7ADB1CAC208200FDCA76 /* SetupPasscodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetupPasscodeViewController.swift; sourceTree = "<group>"; };
 		E68E7ADD1CAC208A00FDCA76 /* RemovePasscodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemovePasscodeViewController.swift; sourceTree = "<group>"; };
 		E6927EBF1C7B6FB800D03F75 /* ErrorToast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorToast.swift; sourceTree = "<group>"; };
-		E6927ECE1C7B722300D03F75 /* ErrorToastRefTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorToastRefTests.swift; sourceTree = "<group>"; };
 		E692E3281C46E62D009D1240 /* AuthenticationSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationSettingsViewController.swift; sourceTree = "<group>"; };
 		E692E3361C46E86A009D1240 /* AppSettingsOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettingsOptions.swift; sourceTree = "<group>"; };
 		E6955FAB1DD0DAA700569555 /* KeychainWrapperExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainWrapperExtensions.swift; sourceTree = "<group>"; };
@@ -3101,28 +3089,6 @@
 			path = ThirdParty/FBSnapshotTestCase;
 			sourceTree = "<group>";
 		};
-		E65C5BC51BEA4F6500D28BEF /* NativeRefTests */ = {
-			isa = PBXGroup;
-			children = (
-				E65C5BC61BEA4F6500D28BEF /* NativeRefTests.swift */,
-				E633E2321C21E293001FFF6C /* FXSnapshotTestCase.swift */,
-				E66464901C10CA9C00AF05CE /* SearchInputViewRefTests.swift */,
-				E63ED7B31BFCD9800097D08E /* LoginTableViewCellRefTests.swift */,
-				E6927ECE1C7B722300D03F75 /* ErrorToastRefTests.swift */,
-				E65C5BE11BEA525800D28BEF /* Other */,
-			);
-			path = NativeRefTests;
-			sourceTree = "<group>";
-		};
-		E65C5BE11BEA525800D28BEF /* Other */ = {
-			isa = PBXGroup;
-			children = (
-				E65C5BE21BEA525800D28BEF /* Info.plist */,
-				E65C5BE31BEA525800D28BEF /* NativeRefTests-Bridging-Header.h */,
-			);
-			path = Other;
-			sourceTree = "<group>";
-		};
 		E664B4581CD7ECBB0045A6A4 /* Notifications */ = {
 			isa = PBXGroup;
 			children = (
@@ -3236,7 +3202,6 @@
 				F8708D1E1A0970990051AB07 /* Extensions */,
 				7B604FC11C496005006EEEC3 /* Frameworks */,
 				28CE83B71A1D1D3200576538 /* FxAClient */,
-				E65C5BC51BEA4F6500D28BEF /* NativeRefTests */,
 				F84B21BF1A090F8100AAB793 /* Products */,
 				D34DC84C1A16C40C00D49B7B /* Providers */,
 				E4D567191ADECE2700F1EFE7 /* ReadingList */,
@@ -3996,7 +3961,7 @@
 				TargetAttributes = {
 					2827315D1ABC9BE600AA1954 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 9G8J6YA743;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0800;
 					};
 					282731671ABC9BE700AA1954 = {
@@ -4007,12 +3972,12 @@
 					};
 					288A2D851AB8B3260023ABC3 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 9G8J6YA743;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0800;
 					};
 					2FA435FA1ABB83B4008031D1 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 9G8J6YA743;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0800;
 					};
 					2FA436041ABB83B4008031D1 = {
@@ -4023,7 +3988,7 @@
 					};
 					2FCAE2191ABB51F800877008 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 9G8J6YA743;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0800;
 					};
 					2FCAE2231ABB51F800877008 = {
@@ -4034,7 +3999,7 @@
 					};
 					390527491C874D35007E0BB7 = {
 						CreatedOnToolsVersion = 7.2.1;
-						DevelopmentTeam = 9G8J6YA743;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
 					};
@@ -4046,7 +4011,7 @@
 					};
 					3BFE4B061D342FB800DDF53F = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0800;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -4066,7 +4031,7 @@
 					};
 					E4BA8A2A1B4B0A1600BC2E95 = {
 						CreatedOnToolsVersion = 6.4;
-						DevelopmentTeam = 9G8J6YA743;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -4077,7 +4042,7 @@
 					};
 					E4D567171ADECE2700F1EFE7 = {
 						CreatedOnToolsVersion = 6.3;
-						DevelopmentTeam = 9G8J6YA743;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0800;
 					};
 					E4D567211ADECE2700F1EFE7 = {
@@ -4099,7 +4064,7 @@
 					};
 					F84B21BD1A090F8100AAB793 = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = 9G8J6YA743;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -4122,7 +4087,7 @@
 					};
 					F84B22481A0920C600AAB793 = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = 9G8J6YA743;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -4136,7 +4101,7 @@
 					};
 					F84B225B1A09210A00AAB793 = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = 9G8J6YA743;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -4982,17 +4947,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E66464911C10CA9C00AF05CE /* SearchInputViewRefTests.swift in Sources */,
 				E65C5BDE1BEA522600D28BEF /* UIImage+Compare.m in Sources */,
-				E65C5BC71BEA4F6500D28BEF /* NativeRefTests.swift in Sources */,
 				E65C5BDF1BEA522600D28BEF /* UIImage+Diff.m in Sources */,
-				E633E2331C21E293001FFF6C /* FXSnapshotTestCase.swift in Sources */,
 				E65C5BE01BEA522600D28BEF /* UIImage+Snapshot.m in Sources */,
 				E65C5BD51BEA4F8A00D28BEF /* FBSnapshotTestController.m in Sources */,
 				E65C5BD41BEA4F8A00D28BEF /* FBSnapshotTestCasePlatform.m in Sources */,
-				E6927ECF1C7B722300D03F75 /* ErrorToastRefTests.swift in Sources */,
 				E63ED8091BFCF9770097D08E /* SwiftSupport.swift in Sources */,
-				E63ED7B41BFCD9800097D08E /* LoginTableViewCellRefTests.swift in Sources */,
 				E65C5BD31BEA4F8A00D28BEF /* FBSnapshotTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
