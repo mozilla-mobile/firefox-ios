@@ -55,6 +55,8 @@ class LoginDetailViewController: SensitiveViewController {
     private weak var usernameField: UITextField?
     private weak var passwordField: UITextField?
 
+    private var deleteAlert: UIAlertController?
+
     weak var settingsDelegate: SettingsDelegate?
 
     init(profile: Profile, login: Login) {
@@ -64,6 +66,7 @@ class LoginDetailViewController: SensitiveViewController {
 
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(LoginDetailViewController.SELwillShowMenuController), name: UIMenuControllerWillShowMenuNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(LoginDetailViewController.SELwillHideMenuController), name: UIMenuControllerWillHideMenuNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(LoginDetailViewController.dismissAlertController), name: UIApplicationDidEnterBackgroundNotification, object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -112,6 +115,7 @@ class LoginDetailViewController: SensitiveViewController {
         notificationCenter.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
         notificationCenter.removeObserver(self, name: UIMenuControllerWillShowMenuNotification, object: nil)
         notificationCenter.removeObserver(self, name: UIMenuControllerWillHideMenuNotification, object: nil)
+        notificationCenter.removeObserver(self, name: UIApplicationDidEnterBackgroundNotification, object: nil)
     }
 
     override func viewDidLayoutSubviews() {
@@ -291,15 +295,19 @@ extension LoginDetailViewController: KeyboardHelperDelegate {
 // MARK: - Selectors
 extension LoginDetailViewController {
 
+    @objc func dismissAlertController() {
+        self.deleteAlert?.dismissViewControllerAnimated(false, completion: nil)
+    }
+
     func deleteLogin() {
         profile.logins.hasSyncedLogins().uponQueue(dispatch_get_main_queue()) { yes in
-            let deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
+            self.deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
                 self.profile.logins.removeLoginByGUID(self.login.guid).uponQueue(dispatch_get_main_queue()) { _ in
                     self.navigationController?.popViewControllerAnimated(true)
                 }
             }, hasSyncedLogins: yes.successValue ?? true)
 
-            self.presentViewController(deleteAlert, animated: true, completion: nil)
+            self.presentViewController(self.deleteAlert!, animated: true, completion: nil)
         }
     }
 

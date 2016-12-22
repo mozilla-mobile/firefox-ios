@@ -58,6 +58,7 @@ class BrowserViewController: UIViewController {
         let searchButton = UIButton()
         searchButton.setImage(UIImage(named: "AddSearch")?.imageWithRenderingMode(.AlwaysTemplate), forState: .Normal)
         searchButton.addTarget(self, action: #selector(BrowserViewController.addCustomSearchEngineForFocusedElement), forControlEvents: .TouchUpInside)
+        searchButton.accessibilityIdentifier = "BrowserViewController.customSearchEngineButton"
         return searchButton
     }()
 
@@ -135,14 +136,15 @@ class BrowserViewController: UIViewController {
             self.displayedPopoverController = nil
         }
 
-        guard let displayedPopoverController = self.displayedPopoverController else {
-            return
-        }
-
-        coordinator.animateAlongsideTransition(nil) { context in
-            self.updateDisplayedPopoverProperties?()
-            self.presentViewController(displayedPopoverController, animated: true, completion: nil)
-        }
+        coordinator.animateAlongsideTransition({context in
+            self.scrollController.updateMinimumZoom()
+            if let popover = self.displayedPopoverController {
+                self.updateDisplayedPopoverProperties?()
+                self.presentViewController(popover, animated: true, completion: nil)
+            }
+            }, completion: { _ in
+                self.scrollController.setMinimumZoom()
+        })
     }
 
     override func didReceiveMemoryWarning() {
@@ -268,20 +270,9 @@ class BrowserViewController: UIViewController {
         }
 
         displayedPopoverController?.dismissViewControllerAnimated(true, completion: nil)
-
-        // WKWebView looks like it has a bug where it doesn't invalidate it's visible area when the user
-        // performs a device rotation. Since scrolling calls
-        // _updateVisibleContentRects (https://github.com/WebKit/webkit/blob/master/Source/WebKit2/UIProcess/API/Cocoa/WKWebView.mm#L1430)
-        // this method nudges the web view's scroll view by a single pixel to force it to invalidate.
-        if let scrollView = self.tabManager.selectedTab?.webView?.scrollView {
-            let contentOffset = scrollView.contentOffset
-            coordinator.animateAlongsideTransition({ context in
-                scrollView.setContentOffset(CGPoint(x: contentOffset.x, y: contentOffset.y + 1), animated: true)
-                self.scrollController.showToolbars(animated: false)
-            }, completion: { context in
-                scrollView.setContentOffset(CGPoint(x: contentOffset.x, y: contentOffset.y), animated: false)
-            })
-        }
+        coordinator.animateAlongsideTransition({ context in
+            self.scrollController.showToolbars(animated: false)
+            }, completion: nil)
     }
 
     func SELappDidEnterBackgroundNotification() {
@@ -299,6 +290,9 @@ class BrowserViewController: UIViewController {
         displayedPopoverController?.dismissViewControllerAnimated(false) {
             self.displayedPopoverController = nil
         }
+
+        // Dismiss menu if presenting
+        menuViewController?.dismissViewControllerAnimated(true, completion: nil)
 
         // If we are displying a private tab, hide any elements in the tab that we wouldn't want shown
         // when the app is in the home switcher
@@ -428,6 +422,7 @@ class BrowserViewController: UIViewController {
         scrollController.header = header
         scrollController.footer = footer
         scrollController.snackBars = snackBars
+        scrollController.webViewContainerToolbar = webViewContainerToolbar
 
         log.debug("BVC updating toolbar state…")
         self.updateToolbarStateForTraitCollection(self.traitCollection)
@@ -1556,16 +1551,22 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBar(urlBar: URLBarView, didSubmitText text: String) {
-        // If we can't make a valid URL, do a search query.
-        // If we still don't have a valid URL, something is broken. Give up.
         let engine = profile.searchEngines.defaultEngine
-        guard let url = URIFixup.getURL(text) ??
-                        engine.searchURLForQuery(text) else {
+        let url: NSURL
+
+        if let fixupURL = URIFixup.getURL(text) {
+            // The user entered a URL, so use it.
+            url = fixupURL
+        } else if let searchURL = engine.searchURLForQuery(text) {
+            // We couldn't build a URL, so do a search query.
+            url = searchURL
+            Telemetry.recordEvent(SearchTelemetry.makeEvent(engine: engine, source: .URLBar))
+        } else {
+            // We still don't have a valid URL, so something is broken. Give up.
             log.error("Error handling URL entry: \"\(text)\".")
+            assertionFailure("Couldn't generate search URL: \(text)")
             return
         }
-
-        Telemetry.recordEvent(SearchTelemetry.makeEvent(engine: engine, source: .URLBar))
 
         finishEditingAndSubmit(url, visitType: VisitType.Typed)
     }
@@ -1977,11 +1978,13 @@ extension BrowserViewController: HomePanelViewControllerDelegate {
     }
 
     func homePanelViewControllerDidRequestToCreateAccount(homePanelViewController: HomePanelViewController) {
-        presentSignInViewController() // TODO UX Right now the flow for sign in and create account is the same
+        let fxaOptions = FxALaunchParams(view: "signup", email: nil, access_code: nil)
+        presentSignInViewController(fxaOptions) // TODO UX Right now the flow for sign in and create account is the same
     }
 
     func homePanelViewControllerDidRequestToSignIn(homePanelViewController: HomePanelViewController) {
-        presentSignInViewController() // TODO UX Right now the flow for sign in and create account is the same
+        let fxaOptions = FxALaunchParams(view: "signin", email: nil, access_code: nil)
+        presentSignInViewController(fxaOptions) // TODO UX Right now the flow for sign in and create account is the same
     }
     
     func homePanelViewControllerDidRequestToOpenInNewTab(url: NSURL, isPrivate: Bool) {
@@ -2211,14 +2214,7 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
-        // Fixes 1261457 - Rich text editor fails because requests to about:blank are blocked
-        if url.scheme == "about" && url.resourceSpecifier == "blank" {
-            decisionHandler(WKNavigationActionPolicy.Allow)
-            return
-        }
-
-        // Fixes 1312801 - Navigating to about:srcdoc throws a "Firefox cannot open the page" alert
-        if url.scheme == "about" && url.resourceSpecifier == "srcdoc" {
+        if url.scheme == "about" {
             decisionHandler(WKNavigationActionPolicy.Allow)
             return
         }
@@ -2260,7 +2256,7 @@ extension BrowserViewController: WKNavigationDelegate {
 
         // Handles custom mailto URL schemes.
         if url.scheme == "mailto" {
-            if let mailToMetadata = url.mailToMetadata(), let mailScheme = self.profile.prefs.stringForKey("MailToOption") where mailScheme != "mailto" {
+            if let mailToMetadata = url.mailToMetadata(), let mailScheme = self.profile.prefs.stringForKey(PrefsKeys.KeyMailToOption) where mailScheme != "mailto" {
                 self.mailtoLinkHandler.launchMailClientForScheme(mailScheme, metadata: mailToMetadata, defaultMailtoURL: url)
             } else {
                 UIApplication.sharedApplication().openURL(url)
@@ -2315,6 +2311,12 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
+        // If this is a request to our local web server, use our private credentials.
+        if challenge.protectionSpace.host == "localhost" && challenge.protectionSpace.port == Int(WebServer.sharedInstance.server.port) {
+            completionHandler(.UseCredential, WebServer.sharedInstance.credentials)
+            return
+        }
+
         // The challenge may come from a background tab, so ensure it's the one visible.
         tabManager.selectTab(tab)
 
@@ -2332,6 +2334,7 @@ extension BrowserViewController: WKNavigationDelegate {
         guard let tab = tabManager[webView] else { return }
 
         tab.url = webView.URL
+        self.scrollController.resetZoomState()
 
         if tabManager.selectedTab === tab {
             updateUIForReaderHomeStateForTab(tab)
@@ -2846,7 +2849,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
         }
     }
 
-    func presentSignInViewController() {
+    func presentSignInViewController(fxaOptions: FxALaunchParams) {
         // Show the settings page if we have already signed in. If we haven't then show the signin page
         let vcToPresent: UIViewController
         if profile.hasAccount() {
@@ -2858,6 +2861,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
             let signInVC = FxAContentViewController()
             signInVC.delegate = self
             signInVC.url = profile.accountConfiguration.signInURL
+            signInVC.fxaOptions = fxaOptions
             signInVC.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: #selector(BrowserViewController.dismissSignInViewController))
             vcToPresent = signInVC
         }
@@ -2873,7 +2877,8 @@ extension BrowserViewController: IntroViewControllerDelegate {
 
     func introViewControllerDidRequestToLogin(introViewController: IntroViewController) {
         introViewController.dismissViewControllerAnimated(true, completion: { () -> Void in
-            self.presentSignInViewController()
+            let fxaOptions = FxALaunchParams(view: "signup", email: nil, access_code: nil)
+            self.presentSignInViewController(fxaOptions)
         })
     }
 }

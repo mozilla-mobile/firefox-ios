@@ -18,9 +18,27 @@ class WebServer {
         return "http://localhost:\(server.port)"
     }
 
+    /// The private credentials for accessing resources on this Web server.
+    let credentials: NSURLCredential
+
+    /// A random, transient token used for authenticating requests.
+    /// Other apps are able to make requests to our local Web server,
+    /// so this prevents them from accessing any resources.
+    private let sessionToken = NSUUID().UUIDString
+
+    init() {
+        credentials = NSURLCredential(user: sessionToken, password: "", persistence: .ForSession)
+    }
+
     func start() throws -> Bool {
         if !server.running {
-            try server.startWithOptions([GCDWebServerOption_Port: 6571, GCDWebServerOption_BindToLocalhost: true, GCDWebServerOption_AutomaticallySuspendInBackground: true])
+            try server.startWithOptions([
+                GCDWebServerOption_Port: 6571,
+                GCDWebServerOption_BindToLocalhost: true,
+                GCDWebServerOption_AutomaticallySuspendInBackground: true,
+                GCDWebServerOption_AuthenticationMethod: GCDWebServerAuthenticationMethod_Basic,
+                GCDWebServerOption_AuthenticationAccounts: [sessionToken: ""]
+            ])
         }
         return server.running
     }
@@ -57,18 +75,5 @@ class WebServer {
     /// Return a full url, as a string, for a resource in a module. No check is done to find out if the resource actually exist.
     func URLForResource(resource: String, module: String) -> String {
         return "\(base)/\(module)/\(resource)"
-    }
-
-    /// Return a full url, as an NSURL, for a resource in a module. No check is done to find out if the resource actually exist.
-    func URLForResource(resource: String, module: String) -> NSURL {
-        return NSURL(string: "\(base)/\(module)/\(resource)")!
-    }
-
-    func updateLocalURL(url: NSURL) -> NSURL? {
-        let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false)
-        if components?.host == "localhost" && components?.scheme == "http" {
-            components?.port = WebServer.sharedInstance.server.port
-        }
-        return components?.URL
     }
 }

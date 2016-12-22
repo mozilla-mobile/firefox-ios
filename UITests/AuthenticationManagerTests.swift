@@ -192,6 +192,7 @@ class AuthenticationManagerTests: KIFTestCase {
         tester().tapViewWithAccessibilityLabel("Back")
 
         // Trying again should display passcode screen since we've set the interval to be immediately.
+        tester().waitForViewWithAccessibilityLabel("Logins")
         tester().tapViewWithAccessibilityLabel("Logins")
         tester().waitForViewWithAccessibilityLabel("Enter Passcode")
         tester().tapViewWithAccessibilityLabel("Cancel")
