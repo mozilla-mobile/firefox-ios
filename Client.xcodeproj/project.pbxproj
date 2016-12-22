@@ -2291,9 +2291,13 @@
 			children = (
 				E66C5B451BDA81050051AA93 /* Apple */,
 				288A2D7F1AB8B2B20023ABC3 /* Box */,
+				28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */,
 				E65C5B8B1BEA4E7100D28BEF /* FBSnapshotTestCase */,
+				D30EBB5A1C75503800105AE9 /* KIF.xcodeproj */,
 				E6B6DC931CD3D35A009CF713 /* PLCrashReporter */,
 				288A2D7E1AB8B2AD0023ABC3 /* Result */,
+				0B742CC61B32491400EE9264 /* sqlcipher.xcodeproj */,
+				7B9A62B91C4002B1005C83DC /* SQLite.xcodeproj */,
 				0B1C05D41A798B1F004C78B0 /* UIImageViewAligned */,
 				28CE842F1A1E571900576538 /* json.swift */,
 				3B6889C41D66950E002AC85E /* UIImageColors.swift */,
@@ -3190,10 +3194,6 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
-				28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */,
-				D30EBB5A1C75503800105AE9 /* KIF.xcodeproj */,
-				0B742CC61B32491400EE9264 /* sqlcipher.xcodeproj */,
-				7B9A62B91C4002B1005C83DC /* SQLite.xcodeproj */,
 				2FA435FC1ABB83B4008031D1 /* Account */,
 				2FA4360B1ABB83B4008031D1 /* AccountTests */,
 				F84B21C01A090F8100AAB793 /* Client */,
