@@ -2592,6 +2592,12 @@
 		7B604FC11C496005006EEEC3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E6231C041B90A472005ABB0D /* libxml2.2.tbd */,
+				E6231C021B90A466005ABB0D /* libstdc++.6.0.9.tbd */,
+				E6231C001B90A44F005ABB0D /* libz.tbd */,
+				D39FA16B1A83E17800EE869C /* CoreGraphics.framework */,
+				0B8E0FF31A932BD500161DC3 /* ImageIO.framework */,
+				D36998881AD70A0A00650C6C /* IOKit.framework */,
 				E62A56DC1DBE88C3004703EA /* WebMetadataKit.framework */,
 				E6619A9C1DA693AB0063EAD6 /* OnyxClient.framework */,
 				3BA9A0221D2C208C00BD418C /* Fuzi.framework */,
@@ -3030,19 +3036,6 @@
 			name = Configuration;
 			sourceTree = "<group>";
 		};
-		E6231BFF1B90A34F005ABB0D /* System Dependencies */ = {
-			isa = PBXGroup;
-			children = (
-				E6231C041B90A472005ABB0D /* libxml2.2.tbd */,
-				E6231C021B90A466005ABB0D /* libstdc++.6.0.9.tbd */,
-				E6231C001B90A44F005ABB0D /* libz.tbd */,
-				D39FA16B1A83E17800EE869C /* CoreGraphics.framework */,
-				0B8E0FF31A932BD500161DC3 /* ImageIO.framework */,
-				D36998881AD70A0A00650C6C /* IOKit.framework */,
-			);
-			name = "System Dependencies";
-			sourceTree = "<group>";
-		};
 		E63ED8DF1BFD254E0097D08E /* Login Management */ = {
 			isa = PBXGroup;
 			children = (
@@ -3212,7 +3205,6 @@
 				2FCAE22A1ABB51F800877008 /* StorageTests */,
 				28CE83B91A1D1D3200576538 /* Sync */,
 				28C077911A3B05C200834FE5 /* SyncTests */,
-				E6231BFF1B90A34F005ABB0D /* System Dependencies */,
 				28BFA7101C8E5C1A0017C2BD /* Telemetry */,
 				28CE83EF1A1D246900576538 /* Third-Party Source */,
 				D39FA1601A83E0EC00EE869C /* UITests */,
