@@ -4369,7 +4369,7 @@
 				TargetAttributes = {
 					2827315D1ABC9BE600AA1954 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0800;
 					};
 					282731671ABC9BE700AA1954 = {
@@ -4380,12 +4380,12 @@
 					};
 					288A2D851AB8B3260023ABC3 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0800;
 					};
 					2FA435FA1ABB83B4008031D1 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0800;
 					};
 					2FA436041ABB83B4008031D1 = {
@@ -4396,7 +4396,7 @@
 					};
 					2FCAE2191ABB51F800877008 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0800;
 					};
 					2FCAE2231ABB51F800877008 = {
@@ -4407,7 +4407,7 @@
 					};
 					390527491C874D35007E0BB7 = {
 						CreatedOnToolsVersion = 7.2.1;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
 					};
@@ -4439,7 +4439,7 @@
 					};
 					E4BA8A2A1B4B0A1600BC2E95 = {
 						CreatedOnToolsVersion = 6.4;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -4450,7 +4450,7 @@
 					};
 					E4D567171ADECE2700F1EFE7 = {
 						CreatedOnToolsVersion = 6.3;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0800;
 					};
 					E4D567211ADECE2700F1EFE7 = {
@@ -4472,7 +4472,7 @@
 					};
 					F84B21BD1A090F8100AAB793 = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -4485,6 +4485,9 @@
 							com.apple.Keychain = {
 								enabled = 1;
 							};
+							com.apple.Push = {
+								enabled = 1;
+							};
 						};
 					};
 					F84B21D21A090F8100AAB793 = {
@@ -4495,7 +4498,7 @@
 					};
 					F84B22481A0920C600AAB793 = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -4509,7 +4512,7 @@
 					};
 					F84B225B1A09210A00AAB793 = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {

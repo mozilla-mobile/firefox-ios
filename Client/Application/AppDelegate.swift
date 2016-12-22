@@ -219,7 +219,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.adjustIntegration?.triggerApplicationDidFinishLaunchingWithOptions(launchOptions)
 
         log.debug("Setting up Swrve")
-        Swrve.sharedInstanceWithAppID(4308, apiKey: "RrkaG3xLPusmY4QmWuIe", launchOptions: launchOptions)
+        let swrveConfig = SwrveConfig()
+        swrveConfig.pushEnabled = true
+        Swrve.sharedInstanceWithAppID(4308, apiKey: "RrkaG3xLPusmY4QmWuIe", config: swrveConfig, launchOptions: launchOptions)
         Swrve.sharedInstance().userUpdate(["fennec.signedIn": profile?.hasAccount() ?? false])
 
         log.debug("Making window key and visible…")
