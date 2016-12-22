@@ -156,7 +156,6 @@
 		2F13E77F1AC0BFF200D75081 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F13E77E1AC0BFF200D75081 /* StringExtensions.swift */; };
 		2F13E79B1AC0C02700D75081 /* StringExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F13E79A1AC0C02700D75081 /* StringExtensionsTests.swift */; };
 		2F14E13A1ABB890800FF98DB /* Account-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F14E1391ABB890800FF98DB /* Account-Bridging-Header.h */; };
-		2F14E2521ABC8D2B00FF98DB /* signedInUser.json in Resources */ = {isa = PBXBuildFile; fileRef = 2F3444B81AB22E8000FD9731 /* signedInUser.json */; };
 		2F1A3DE11ABE3C90002F1E15 /* FxALoginStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1A3DE01ABE3C90002F1E15 /* FxALoginStateMachine.swift */; };
 		2F1A3DFE1ABE3C9C002F1E15 /* FxALoginStateMachineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1A3DFD1ABE3C9C002F1E15 /* FxALoginStateMachineTests.swift */; };
 		2F3724C61ABF3C01007607FA /* LiveStorageClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3724C41ABF3C01007607FA /* LiveStorageClientTests.swift */; };
@@ -634,6 +633,7 @@
 		E689C6F81E0C6E72008BAADB /* FxASignIn.js in Resources */ = {isa = PBXBuildFile; fileRef = E689C6F71E0C6E72008BAADB /* FxASignIn.js */; };
 		E689C6FA1E0C6E98008BAADB /* FxAContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E689C6F91E0C6E98008BAADB /* FxAContentViewController.swift */; };
 		E689C6FE1E0C6FE0008BAADB /* ClientTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = E689C6FB1E0C6FD0008BAADB /* ClientTelemetry.swift */; };
+		E689C72C1E0C74A8008BAADB /* signedInUser.json in Resources */ = {isa = PBXBuildFile; fileRef = E689C72B1E0C74A8008BAADB /* signedInUser.json */; };
 		E68AEDB01B18F81A00133D99 /* SwipeAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */; };
 		E68D6AD81DAFD1F0007E4114 /* ActivityStreamOnyxTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68D6AD61DAFD1F0007E4114 /* ActivityStreamOnyxTypes.swift */; };
 		E68D6AD91DAFD1F0007E4114 /* OnyxTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68D6AD71DAFD1F0007E4114 /* OnyxTelemetry.swift */; };
@@ -1307,7 +1307,6 @@
 		2F1A3DE01ABE3C90002F1E15 /* FxALoginStateMachine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = FxALoginStateMachine.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		2F1A3DFD1ABE3C9C002F1E15 /* FxALoginStateMachineTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = FxALoginStateMachineTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		2F3444561AB22A4B00FD9731 /* TimeConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeConstants.swift; sourceTree = "<group>"; };
-		2F3444B81AB22E8000FD9731 /* signedInUser.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = signedInUser.json; path = ../signedInUser.json; sourceTree = "<group>"; };
 		2F3724C41ABF3C01007607FA /* LiveStorageClientTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = LiveStorageClientTests.swift; path = SyncTests/LiveStorageClientTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		2F3724C51ABF3C01007607FA /* StorageClientTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StorageClientTests.swift; path = SyncTests/StorageClientTests.swift; sourceTree = "<group>"; };
 		2F3724E21ABF3C19007607FA /* Info.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Info.swift; sourceTree = "<group>"; };
@@ -1754,6 +1753,7 @@
 		E689C7001E0C716F008BAADB /* Client.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Client.entitlements; sourceTree = "<group>"; };
 		E689C7151E0C72FA008BAADB /* Cartfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
 		E689C7161E0C72FA008BAADB /* Cartfile.resolved */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile.resolved; sourceTree = "<group>"; };
+		E689C72B1E0C74A8008BAADB /* signedInUser.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = signedInUser.json; sourceTree = "<group>"; };
 		E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeAnimator.swift; sourceTree = "<group>"; };
 		E68D6AD61DAFD1F0007E4114 /* ActivityStreamOnyxTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityStreamOnyxTypes.swift; path = Telemetry/ActivityStreamOnyxTypes.swift; sourceTree = "<group>"; };
 		E68D6AD71DAFD1F0007E4114 /* OnyxTelemetry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OnyxTelemetry.swift; path = Telemetry/OnyxTelemetry.swift; sourceTree = "<group>"; };
@@ -2385,7 +2385,7 @@
 		2FA4360C1ABB83B4008031D1 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				2F3444B81AB22E8000FD9731 /* signedInUser.json */,
+				E689C72B1E0C74A8008BAADB /* signedInUser.json */,
 				2FA4360D1ABB83B4008031D1 /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -4326,7 +4326,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2F14E2521ABC8D2B00FF98DB /* signedInUser.json in Resources */,
+				E689C72C1E0C74A8008BAADB /* signedInUser.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
