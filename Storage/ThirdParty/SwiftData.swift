@@ -110,15 +110,7 @@ public class SwiftData {
          * decides to dealloc it, we should respect that since the deinit method of the connection is tied
          * to the app lifecycle. This is to prevent background disk access causing springboard crashes.
          */
-        weak var conn: ConcreteSQLiteDBConnection?
-
-        if SwiftData.ReuseConnections {
-            conn = getSharedConnection()
-        } else {
-            log.debug(">>> Creating non-shared SQLiteDBConnection for \(self.filename) on thread \(NSThread.currentThread()).")
-            conn = ConcreteSQLiteDBConnection(filename: filename, flags: flags.toSQL(), key: self.key, prevKey: self.prevKey)
-        }
-
+        weak var conn = getSharedConnection()
         let queue = self.sharedConnectionQueue
         if synchronous {
             var error: NSError? = nil
@@ -127,7 +119,9 @@ public class SwiftData {
                  * By the time this dispatch block runs, it is possible the user has backgrounded the app
                  * and the connection has been dealloc'ed since we last grabbed the reference
                  */
-                guard let connection = conn else {
+
+                guard let connection = SwiftData.ReuseConnections ? conn :
+                    ConcreteSQLiteDBConnection(filename: filename, flags: flags.toSQL(), key: self.key, prevKey: self.prevKey) else {
                     error = cb(db: FailedSQLiteDBConnection()) ?? NSError(domain: "mozilla",
                                                                           code: 0,
                                                                           userInfo: [NSLocalizedDescriptionKey: "Could not create a connection"])
@@ -140,7 +134,8 @@ public class SwiftData {
         }
 
         dispatch_async(queue) {
-            guard let connection = conn else {
+            guard let connection = SwiftData.ReuseConnections ? conn :
+                    ConcreteSQLiteDBConnection(filename: self.filename, flags: flags.toSQL(), key: self.key, prevKey: self.prevKey) else {
                 cb(db: FailedSQLiteDBConnection())
                 return
             }
