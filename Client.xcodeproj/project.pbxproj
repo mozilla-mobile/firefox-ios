@@ -1751,6 +1751,7 @@
 		E689C6F71E0C6E72008BAADB /* FxASignIn.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = FxASignIn.js; sourceTree = "<group>"; };
 		E689C6F91E0C6E98008BAADB /* FxAContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAContentViewController.swift; sourceTree = "<group>"; };
 		E689C6FB1E0C6FD0008BAADB /* ClientTelemetry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClientTelemetry.swift; path = Telemetry/ClientTelemetry.swift; sourceTree = "<group>"; };
+		E689C7001E0C716F008BAADB /* Client.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Client.entitlements; sourceTree = "<group>"; };
 		E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeAnimator.swift; sourceTree = "<group>"; };
 		E68D6AD61DAFD1F0007E4114 /* ActivityStreamOnyxTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityStreamOnyxTypes.swift; path = Telemetry/ActivityStreamOnyxTypes.swift; sourceTree = "<group>"; };
 		E68D6AD71DAFD1F0007E4114 /* OnyxTelemetry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OnyxTelemetry.swift; path = Telemetry/OnyxTelemetry.swift; sourceTree = "<group>"; };
@@ -1777,7 +1778,6 @@
 		E6A118F21C32DE98008989E8 /* SettingsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTests.swift; sourceTree = "<group>"; };
 		E6A92ADA1C52A8DA00743291 /* LoginInputTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginInputTests.swift; sourceTree = "<group>"; };
 		E6A99D761B20D95800006EDD /* GeometryExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeometryExtensions.swift; sourceTree = "<group>"; };
-		E6B09CCE1C74DC4100C63FA1 /* Client.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Client.entitlements; sourceTree = "<group>"; };
 		E6B4C3D71C68F55C001F97E8 /* JSPrompt.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = JSPrompt.html; sourceTree = "<group>"; };
 		E6B4C4021C68F58B001F97E8 /* BrowserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserTests.swift; sourceTree = "<group>"; };
 		E6B6DC941CD3D35A009CF713 /* CrashReporter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CrashReporter.framework; sourceTree = "<group>"; };
@@ -3017,7 +3017,6 @@
 		E60961841B62B7E100DD640F /* Configuration */ = {
 			isa = PBXGroup;
 			children = (
-				E6B09CCE1C74DC4100C63FA1 /* Client.entitlements */,
 				E60961861B62B8A700DD640F /* Fennec.xcconfig */,
 				E6DCC1ED1DCBB6AA00CEC4B7 /* FennecEnterprise.xcconfig */,
 				E60961881B62B8BE00DD640F /* FirefoxNightly.xcconfig */,
@@ -3098,6 +3097,14 @@
 			name = Apple;
 			path = ThirdParty/Apple;
 			sourceTree = SOURCE_ROOT;
+		};
+		E689C6FF1E0C716F008BAADB /* Entitlements */ = {
+			isa = PBXGroup;
+			children = (
+				E689C7001E0C716F008BAADB /* Client.entitlements */,
+			);
+			path = Entitlements;
+			sourceTree = "<group>";
 		};
 		E68E7ADF1CAC209000FDCA76 /* PasscodeConfiguration */ = {
 			isa = PBXGroup;
@@ -3248,9 +3255,10 @@
 			children = (
 				F84B22431A09165600AAB793 /* Info.plist */,
 				E4D8F3B21ACDD5150005A2E4 /* InfoPlist.strings */,
-				E60961841B62B7E100DD640F /* Configuration */,
 				F84B21EB1A0910F600AAB793 /* Assets */,
 				F84B21E41A0910F600AAB793 /* Application */,
+				E60961841B62B7E100DD640F /* Configuration */,
+				E689C6FF1E0C716F008BAADB /* Entitlements */,
 				28EADE5C1AFC3A6D007FB2FB /* Extensions */,
 				F84B21F11A0910F600AAB793 /* Frontend */,
 				39A359BD1BFCCE7B006B9E87 /* Helpers */,
@@ -6162,7 +6170,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/$(PRODUCT_NAME:rfc1034identifier).entitlements";
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/Entitlements/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6769,7 +6777,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/$(PRODUCT_NAME:rfc1034identifier).entitlements";
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/Entitlements/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -7241,7 +7249,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_Developer;
-				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/$(PRODUCT_NAME:rfc1034identifier).entitlements";
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/Entitlements/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -7867,7 +7875,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_Beta;
-				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/$(PRODUCT_NAME:rfc1034identifier).entitlements";
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/Entitlements/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -8314,7 +8322,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_Developer;
-				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/$(PRODUCT_NAME:rfc1034identifier).entitlements";
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/Entitlements/$(PRODUCT_NAME:rfc1034identifier).entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
