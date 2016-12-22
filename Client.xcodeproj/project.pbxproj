@@ -1752,6 +1752,8 @@
 		E689C6F91E0C6E98008BAADB /* FxAContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAContentViewController.swift; sourceTree = "<group>"; };
 		E689C6FB1E0C6FD0008BAADB /* ClientTelemetry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClientTelemetry.swift; path = Telemetry/ClientTelemetry.swift; sourceTree = "<group>"; };
 		E689C7001E0C716F008BAADB /* Client.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Client.entitlements; sourceTree = "<group>"; };
+		E689C7151E0C72FA008BAADB /* Cartfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
+		E689C7161E0C72FA008BAADB /* Cartfile.resolved */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile.resolved; sourceTree = "<group>"; };
 		E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeAnimator.swift; sourceTree = "<group>"; };
 		E68D6AD61DAFD1F0007E4114 /* ActivityStreamOnyxTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityStreamOnyxTypes.swift; path = Telemetry/ActivityStreamOnyxTypes.swift; sourceTree = "<group>"; };
 		E68D6AD71DAFD1F0007E4114 /* OnyxTelemetry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OnyxTelemetry.swift; path = Telemetry/OnyxTelemetry.swift; sourceTree = "<group>"; };
@@ -3187,6 +3189,8 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
+				E689C7151E0C72FA008BAADB /* Cartfile */,
+				E689C7161E0C72FA008BAADB /* Cartfile.resolved */,
 				2FA435FC1ABB83B4008031D1 /* Account */,
 				2FA4360B1ABB83B4008031D1 /* AccountTests */,
 				F84B21C01A090F8100AAB793 /* Client */,
