@@ -8,6 +8,7 @@ class ThirdPartySearchTest: BaseTestCase {
 
     override func setUp() {
         super.setUp()
+        dismissFirstRunUI()
     }
 
     override func tearDown() {
@@ -99,6 +100,9 @@ class ThirdPartySearchTest: BaseTestCase {
         app.buttons["TabTrayController.addTabButton"].tap()
         app.textFields["url"].tap()
         app.typeText("window")
+        
+        // For timing issue, we need a wait statement
+        waitforExistence(app.scrollViews.otherElements.buttons["developer.mozilla.org search"])
         XCTAssert(app.scrollViews.otherElements.buttons["developer.mozilla.org search"].exists)
         app.typeText("\r")
 
@@ -117,10 +121,12 @@ class ThirdPartySearchTest: BaseTestCase {
         app.navigationBars["Settings"].buttons["AppSettingsTableViewController.navigationItem.leftBarButtonItem"].tap()
 
         // Perform a search to check
+        XCUIApplication().buttons["TabTrayController.addTabButton"].tap()
+        
         app.textFields["url"].tap()
         app.typeText("window")
+        sleep(2)
         XCTAssertFalse(app.scrollViews.otherElements.buttons["developer.mozilla.org search"].exists)
 
     }
-
 }

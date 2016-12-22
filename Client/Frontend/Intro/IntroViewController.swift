@@ -113,6 +113,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         scrollView.pagingEnabled = true
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.contentSize = CGSize(width: scaledWidthOfSlide * CGFloat(IntroViewControllerUX.NumberOfCards), height: scaledHeightOfSlide)
+        scrollView.accessibilityIdentifier = "IntroViewController.scrollView"
         view.addSubview(scrollView)
 
         slideContainer = UIView()
@@ -133,7 +134,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         pageControl.pageIndicatorTintColor = UIColor.blackColor().colorWithAlphaComponent(0.3)
         pageControl.currentPageIndicatorTintColor = UIColor.blackColor()
         pageControl.numberOfPages = IntroViewControllerUX.NumberOfCards
-        pageControl.accessibilityIdentifier = "pageControl"
+        pageControl.accessibilityIdentifier = "IntroViewController.pageControl"
         pageControl.addTarget(self, action: #selector(IntroViewController.changePage), forControlEvents: UIControlEvents.ValueChanged)
 
         view.addSubview(pageControl)

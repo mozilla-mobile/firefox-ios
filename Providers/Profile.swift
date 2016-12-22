@@ -210,13 +210,8 @@ public class BrowserProfile: Profile {
         self.files = ProfileFileAccessor(localName: localName)
         self.app = app
 
-        if let baseBundleIdentifier = AppInfo.baseBundleIdentifier() {
-            self.keychain = KeychainWrapper(serviceName: baseBundleIdentifier)
-        } else {
-            log.error("Unable to get the base bundle identifier. Keychain data will not be shared.")
-            self.keychain = KeychainWrapper.defaultKeychainWrapper()
-        }
-        
+        self.keychain = KeychainWrapper.sharedAppContainerKeychain
+
         if clear {
             do {
                 try NSFileManager.defaultManager().removeItemAtPath(self.files.rootPath as String)
@@ -274,11 +269,11 @@ public class BrowserProfile: Profile {
         log.debug("Reopening profile.")
         isShutdown = false
         
-        if dbCreated {
+        if BrowserProfile.dbCreated {
             db.reopenIfClosed()
         }
 
-        if loginsDBCreated {
+        if BrowserProfile.loginsDBCreated {
             loginsDB.reopenIfClosed()
         }
     }
@@ -287,11 +282,11 @@ public class BrowserProfile: Profile {
         log.debug("Shutting down profile.")
         isShutdown = true
 
-        if self.dbCreated {
+        if BrowserProfile.dbCreated {
             db.forceClose()
         }
 
-        if self.loginsDBCreated {
+        if BrowserProfile.loginsDBCreated {
             loginsDB.forceClose()
         }
     }
@@ -366,7 +361,16 @@ public class BrowserProfile: Profile {
         }
     }()
 
-    private var dbCreated = false
+    /**
+     * For safety and efficiency, we only allow each database to be opened once. It
+     * looks like you can create multiple Profile instances, each pointing to a
+     * different database, but that's not currently the case.
+     *
+     * These `dbCreated` flags are an implementation detail to avoid opening a DB
+     * only to immediately close it -- they reflect whether the singleton DB instances
+     * have been assigned.
+     */
+    private static var dbCreated = false
     var db: BrowserDB {
         struct Singleton {
             static var token: dispatch_once_t = 0
@@ -374,7 +378,7 @@ public class BrowserProfile: Profile {
         }
         dispatch_once(&Singleton.token) {
             Singleton.instance = BrowserDB(filename: "browser.db", files: self.files)
-            self.dbCreated = true
+            BrowserProfile.dbCreated = true
         }
         return Singleton.instance
     }
@@ -387,7 +391,7 @@ public class BrowserProfile: Profile {
      * that this is initialized first.
      */
     private lazy var places: protocol<BrowserHistory, Favicons, SyncableHistory, ResettableSyncStorage, HistoryRecommendations> = {
-        return SQLiteHistory(db: self.db, prefs: self.prefs)!
+        return SQLiteHistory(db: self.db, prefs: self.prefs)
     }()
 
     var favicons: Favicons {
@@ -511,7 +515,7 @@ public class BrowserProfile: Profile {
         return Singleton.instance
     }
 
-    private var loginsDBCreated = false
+    private static var loginsDBCreated = false
     private lazy var loginsDB: BrowserDB = {
         struct Singleton {
             static var token: dispatch_once_t = 0
@@ -519,7 +523,7 @@ public class BrowserProfile: Profile {
         }
         dispatch_once(&Singleton.token) {
             Singleton.instance = BrowserDB(filename: "logins.db", secretKey: self.loginsKey, files: self.files)
-            self.loginsDBCreated = true
+            BrowserProfile.loginsDBCreated = true
         }
         return Singleton.instance
     }()
@@ -1283,8 +1287,8 @@ public class BrowserProfile: Profile {
         func greenLight() -> () -> Bool {
             let start = NSDate.now()
 
-            // Give it one minute to run before we stop.
-            let stopBy = start + OneMinuteInMilliseconds
+            // Give it two minutes to run before we stop.
+            let stopBy = start + (2 * OneMinuteInMilliseconds)
             log.debug("Checking green light. Backgrounded: \(self.backgrounded).")
             return {
                 NSDate.now() < stopBy &&

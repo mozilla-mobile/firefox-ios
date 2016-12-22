@@ -23,7 +23,7 @@ class HomePageHelper {
             return HomePageAccessors.getHomePage(prefs)
         }
         set {
-            if let url = newValue {
+            if let url = newValue where url.isWebPage(includeDataURIs: false) && !url.isLocal {
                 prefs.setString(url.absoluteString!, forKey: HomePageConstants.HomePageURLPrefKey)
             } else {
                 prefs.removeObjectForKey(HomePageConstants.HomePageURLPrefKey)

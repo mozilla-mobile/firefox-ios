@@ -121,20 +121,24 @@ class TopSiteItemCell: UICollectionViewCell {
     }
 
     private func setImageWithURL(url: NSURL) {
+        let title = self.titleLabel.text
         imageView.sd_setImageWithURL(url) { [unowned self] (img, err, type, url) -> Void in
             guard let img = img else {
                 self.contentView.backgroundColor = FaviconFetcher.getDefaultColor(url)
                 self.imageView.image = FaviconFetcher.getDefaultFavicon(url)
                 return
             }
-            img.getColors(CGSize(width: 25, height: 25)) { colors in
-                self.contentView.backgroundColor = colors.backgroundColor ?? UIColor.lightGrayColor()
+            img.getColors(CGSize(width: 25, height: 25)) {colors in
+                //sometimes the cell could be reused by the time we get here.
+                if title == self.titleLabel.text {
+                    self.contentView.backgroundColor = colors.backgroundColor ?? UIColor.lightGrayColor()
+                }
             }
         }
     }
 
     func configureWithTopSiteItem(site: Site) {
-        titleLabel.text = site.tileURL.extractDomainName()
+        titleLabel.text = site.tileURL.hostSLD
         accessibilityLabel = titleLabel.text
         if let suggestedSite = site as? SuggestedSite {
             let img = UIImage(named: suggestedSite.faviconImagePath!)
@@ -174,7 +178,7 @@ class ASHorizontalScrollCell: UITableViewCell {
         layout.itemSize = ASHorizontalScrollCellUX.TopSiteItemSize
         let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         collectionView.registerClass(TopSiteItemCell.self, forCellWithReuseIdentifier: ASHorizontalScrollCellUX.TopSiteCellIdentifier)
-        collectionView.backgroundColor = ASHorizontalScrollCellUX.BackgroundColor
+        collectionView.backgroundColor = UIColor.clearColor()
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.isAccessibilityElement = false
         collectionView.pagingEnabled = true
@@ -191,6 +195,13 @@ class ASHorizontalScrollCell: UITableViewCell {
         pageControl.accessibilityLabel = Strings.ASPageControlButton
         pageControl.accessibilityTraits = UIAccessibilityTraitButton
         return pageControl
+    }()
+
+    lazy private var gradientBG: CAGradientLayer = {
+        let gradient: CAGradientLayer = CAGradientLayer()
+        gradient.frame = self.contentView.bounds
+        gradient.colors = [UIColor.whiteColor().CGColor, UIColor(colorString: "f9f9f9").CGColor]
+        return gradient
     }()
 
     lazy private var pageControlPress: UITapGestureRecognizer = {
@@ -217,7 +228,7 @@ class ASHorizontalScrollCell: UITableViewCell {
 
         isAccessibilityElement = false
         accessibilityIdentifier = "TopSitesCell"
-        backgroundColor = ASHorizontalScrollCellUX.BackgroundColor
+        backgroundColor = UIColor.clearColor()
         contentView.addSubview(collectionView)
         contentView.addSubview(pageControl)
         self.selectionStyle = UITableViewCellSelectionStyle.None
@@ -237,6 +248,11 @@ class ASHorizontalScrollCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         let layout = collectionView.collectionViewLayout as! HorizontalFlowLayout
+
+        gradientBG.frame = self.contentView.bounds
+        if gradientBG.superlayer == nil {
+            self.contentView.layer.insertSublayer(gradientBG, atIndex: 0)
+        }
 
         pageControl.pageCount = layout.numberOfPages()
         pageControl.hidden = pageControl.pageCount <= 1

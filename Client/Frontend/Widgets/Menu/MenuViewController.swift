@@ -100,6 +100,8 @@ class MenuViewController: UIViewController {
         menuView.menuColor = menuConfig.menuBackgroundColor()
         menuView.tintColor = menuConfig.menuTintColor()
 
+        menuView.accessibilityIdentifier = "MenuViewController.menuView"
+
         switch presentationStyle {
         case .Popover:
             menuView.toolbar.clipsToBounds = false
@@ -288,6 +290,7 @@ extension MenuViewController: MenuItemDataSource {
         let menuItem = menuConfig.menuItems[indexPath.getMenuItemIndex()]
         cell.menuTitleLabel.text = menuItem.title
         cell.accessibilityLabel = menuItem.title
+        cell.accessibilityIdentifier = menuItem.accessibilityIdentifier
         cell.menuTitleLabel.font = menuConfig.menuFont()
         
         let icon = menuItem.iconForState(appState)
@@ -320,6 +323,7 @@ extension MenuViewController: MenuToolbarDataSource {
         let buttonImageView = UIImageView(image: item.iconForState(appState)?.imageWithRenderingMode(.AlwaysTemplate))
         buttonImageView.contentMode = .ScaleAspectFit
         buttonImageView.accessibilityLabel = item.title
+        buttonImageView.accessibilityIdentifier = item.accessibilityIdentifier
         return buttonImageView
     }
 }

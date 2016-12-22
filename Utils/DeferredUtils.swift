@@ -124,7 +124,7 @@ public func effect<T, U>(f: T -> U) -> T -> Deferred<Maybe<T>> {
  * Return a single Deferred that represents the sequential chaining of
  * f over the provided items, with the return value chained through.
  */
-public func walk<T, U>(items: [T], start: Deferred<Maybe<U>>, f: (T, U) -> Deferred<Maybe<U>>) -> Deferred<Maybe<U>> {
+public func walk<T, U, S: SequenceType where S.Generator.Element == T>(items: S, start: Deferred<Maybe<U>>, f: (T, U) -> Deferred<Maybe<U>>) -> Deferred<Maybe<U>> {
     let fs = items.map { item in
         return { val in
             f(item, val)

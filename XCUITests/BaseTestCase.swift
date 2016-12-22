@@ -14,15 +14,47 @@ class BaseTestCase: XCTestCase {
     }
 
     override func tearDown() {
+        XCUIApplication().terminate()
         super.tearDown()
     }
 
     func restart(app: XCUIApplication) {
         app.terminate()
-        app.launchArguments.append("FIREFOX_TESTS")
-        app.launchArguments.append("RESET_FIREFOX")
+        app.launchArguments.append(LaunchArguments.Test)
+        app.launchArguments.append(LaunchArguments.ClearProfile)
         app.launch()
         sleep(1)
+    }
+    
+    //If it is a first run, first run window should be gone
+    func dismissFirstRunUI() {
+        let firstRunUI = XCUIApplication().buttons["Start Browsing"]
+        
+        if (firstRunUI.exists) {
+            firstRunUI.tap()
+        }
+    }
+    
+    func waitforExistence(element: XCUIElement) {
+        let exists = NSPredicate(format: "exists == true")
+        
+        expectationForPredicate(exists, evaluatedWithObject: element, handler: nil)
+        waitForExpectationsWithTimeout(20, handler: nil)
+    }
+    
+    func waitforNoExistence(element: XCUIElement) {
+        let exists = NSPredicate(format: "exists != true")
+        
+        expectationForPredicate(exists, evaluatedWithObject: element, handler: nil)
+        waitForExpectationsWithTimeout(20, handler: nil)
+    }
+    
+    func waitForValueContains(element: XCUIElement, value: String) {
+        let predicateText = "value CONTAINS " + "'" + value + "'"
+        let valueCheck = NSPredicate(format: predicateText)
+        
+        expectationForPredicate(valueCheck, evaluatedWithObject: element, handler: nil)
+        waitForExpectationsWithTimeout(20, handler: nil)
     }
 
     func loadWebPage(url: String, waitForLoadToFinish: Bool = true) {
@@ -35,7 +67,7 @@ class BaseTestCase: XCTestCase {
         app.sheets.elementBoundByIndex(0).buttons.elementBoundByIndex(0).tap()
 
         if waitForLoadToFinish {
-            let finishLoadingTimeout: NSTimeInterval = 10
+            let finishLoadingTimeout: NSTimeInterval = 30
             
             let progressIndicator = app.progressIndicators.elementBoundByIndex(0)
             expectationForPredicate(loaded, evaluatedWithObject: progressIndicator, handler: nil)

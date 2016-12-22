@@ -12,10 +12,10 @@ private let OnyxProductionConfiguration = OnyxClientConfiguration(serverURL: "ht
 struct OnyxTelemetry {
     static private let configuration: OnyxClientConfiguration = {
         switch AppConstants.BuildChannel {
-            case .Nightly:  return OnyxStagingConfiguration
+            case .Nightly:  return OnyxProductionConfiguration
             case .Beta:     return OnyxProductionConfiguration
             case .Release:  return OnyxProductionConfiguration
-            default:        return OnyxStagingConfiguration
+            default:        return OnyxProductionConfiguration
         }
     }()
 
