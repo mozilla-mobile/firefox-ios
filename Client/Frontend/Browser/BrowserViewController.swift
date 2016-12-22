@@ -1104,7 +1104,7 @@ class BrowserViewController: UIViewController {
 
         let helper = ShareExtensionHelper(url: url, tab: tab, activities: activities)
 
-        let controller = helper.createActivityViewController({ [unowned self] completed, _ in
+        let controller = helper.createActivityViewController({ [unowned self] completed, activityType in
             // After dismissing, check to see if there were any prompts we queued up
             self.showQueuedAlertIfAvailable()
 
@@ -1115,6 +1115,8 @@ class BrowserViewController: UIViewController {
             self.updateDisplayedPopoverProperties = nil
 
             if completed {
+                Swrve.sharedInstance().event("ShareCompleted", payload: ["activityType": activityType ?? ""])
+
                 // We don't know what share action the user has chosen so we simply always
                 // update the toolbar and reader mode bar to reflect the latest status.
                 if let tab = tab {
@@ -1140,6 +1142,7 @@ class BrowserViewController: UIViewController {
             updateDisplayedPopoverProperties = setupPopover
         }
 
+        Swrve.sharedInstance().event("ShareStarted")
         self.presentViewController(controller, animated: true, completion: nil)
     }
 
@@ -1312,9 +1315,11 @@ extension BrowserViewController: MenuActionDelegate {
         if let menuAction = AppMenuAction(rawValue: action.action) {
             switch menuAction {
             case .OpenNewNormalTab:
+                Swrve.sharedInstance().event("OpenNewNormalTab")
                 self.openURLInNewTab(nil, isPrivate: false, isPrivileged: true)
             // this is a case that is only available in iOS9
             case .OpenNewPrivateTab:
+                Swrve.sharedInstance().event("OpenNewPrivateTab")
                 self.openURLInNewTab(nil, isPrivate: true, isPrivileged: true)
             case .FindInPage:
                 self.updateFindInPageVisibility(visible: true)
