@@ -32,6 +32,7 @@ public extension UIImageView {
             self.image = FaviconFetcher.defaultFavicon
             self.backgroundColor = UIColor.whiteColor()
         }
+        self.highlightedImage = self.image
     }
 }
 
