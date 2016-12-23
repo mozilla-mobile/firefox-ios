@@ -38,6 +38,8 @@
 		0BB5B30B1AC0AD1F0052877D /* LoginsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB5B30A1AC0AD1F0052877D /* LoginsHelper.swift */; };
 		0BB5B3601AC0D6360052877D /* BookmarkingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB5B35F1AC0D6360052877D /* BookmarkingTests.swift */; };
 		0BD19A671A25309B0084FBA7 /* NSUserDefaultsPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* NSUserDefaultsPrefs.swift */; };
+		0BD612891E0DDD1A0040BC6A /* SimplePageServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD612881E0DDD1A0040BC6A /* SimplePageServer.swift */; };
+		0BD6129A1E0DDE0A0040BC6A /* WebAuthenticationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD612991E0DDE0A0040BC6A /* WebAuthenticationTest.swift */; };
 		0BDA568B1B26B1BE008C9B96 /* LoginsHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 0BDA568A1B26B1BE008C9B96 /* LoginsHelper.js */; };
 		0BDA56B01B26B1D5008C9B96 /* TestLogins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDA56AE1B26B1D5008C9B96 /* TestLogins.swift */; };
 		0BDA56B21B26B1E4008C9B96 /* Logins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDA56B11B26B1E4008C9B96 /* Logins.swift */; };
@@ -1210,6 +1212,8 @@
 		0BB5B30A1AC0AD1F0052877D /* LoginsHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = LoginsHelper.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		0BB5B35F1AC0D6360052877D /* BookmarkingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarkingTests.swift; sourceTree = "<group>"; };
 		0BD19A661A25309B0084FBA7 /* NSUserDefaultsPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUserDefaultsPrefs.swift; sourceTree = "<group>"; };
+		0BD612881E0DDD1A0040BC6A /* SimplePageServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimplePageServer.swift; sourceTree = "<group>"; };
+		0BD612991E0DDE0A0040BC6A /* WebAuthenticationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebAuthenticationTest.swift; sourceTree = "<group>"; };
 		0BDA568A1B26B1BE008C9B96 /* LoginsHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = LoginsHelper.js; sourceTree = "<group>"; };
 		0BDA56AE1B26B1D5008C9B96 /* TestLogins.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestLogins.swift; sourceTree = "<group>"; };
 		0BDA56B11B26B1E4008C9B96 /* Logins.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Logins.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -2559,6 +2563,7 @@
 			isa = PBXGroup;
 			children = (
 				3BF4B8E81D38497A00493393 /* BaseTestCase.swift */,
+				0BD612881E0DDD1A0040BC6A /* SimplePageServer.swift */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -2566,6 +2571,7 @@
 		3BFE4B081D342FB900DDF53F /* XCUITests */ = {
 			isa = PBXGroup;
 			children = (
+				0BD612991E0DDE0A0040BC6A /* WebAuthenticationTest.swift */,
 				0B3D670D1E09B90B00C1EFC7 /* AuthenticationTest.swift */,
 				0B729D361E047D6A008E6859 /* HomePageSettingsTest.swift */,
 				3BF4B8DA1D38493300493393 /* Utils */,
@@ -4004,7 +4010,7 @@
 					};
 					282731671ABC9BE700AA1954 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0800;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -4031,7 +4037,7 @@
 					};
 					2FCAE2231ABB51F800877008 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0800;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -4049,7 +4055,7 @@
 					};
 					3BFE4B061D342FB800DDF53F = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0800;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -4119,7 +4125,7 @@
 					};
 					F84B21D21A090F8100AAB793 = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0800;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -4873,6 +4879,8 @@
 				0B3D670E1E09B90B00C1EFC7 /* AuthenticationTest.swift in Sources */,
 				0B729D371E047D6A008E6859 /* HomePageSettingsTest.swift in Sources */,
 				55A747171DC46FC400CE1B57 /* HomePageUITest.swift in Sources */,
+				0BD6129A1E0DDE0A0040BC6A /* WebAuthenticationTest.swift in Sources */,
+				0BD612891E0DDD1A0040BC6A /* SimplePageServer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
