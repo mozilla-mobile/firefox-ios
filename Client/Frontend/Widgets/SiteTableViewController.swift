@@ -29,7 +29,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView {
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
 
-        topBorder.backgroundColor = UIColor.whiteColor()
+        topBorder.backgroundColor = SiteTableViewControllerUX.HeaderBorderColor
         bottomBorder.backgroundColor = SiteTableViewControllerUX.HeaderBorderColor
         contentView.backgroundColor = UIColor(rgb: 0xf7f8f7)
 

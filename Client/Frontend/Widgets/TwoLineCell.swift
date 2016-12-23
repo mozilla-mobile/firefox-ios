@@ -56,6 +56,9 @@ class TwoLineTableViewCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         separatorInset = UIEdgeInsets(top: 0, left: TwoLineCellUX.ImageSize + 2 * TwoLineCellUX.BorderViewMargin, bottom: 0, right: 0)
+        self.textLabel!.alpha = 1
+        self.imageView!.alpha = 1
+        self.selectionStyle = .Default
         twoLineHelper.setupDynamicFonts()
     }
 
