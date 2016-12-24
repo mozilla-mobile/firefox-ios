@@ -17,11 +17,13 @@ class SearchSettingsTableViewController: UITableViewController {
     private let ItemDefaultSuggestions = 1
     private let NumberOfItemsInSectionDefault = 2
     private let SectionOrder = 1
-    private let NumberOfSections = 2
+    private let NumberOfSections = 3
     private let IconSize = CGSize(width: OpenSearchEngine.PreferredIconSize, height: OpenSearchEngine.PreferredIconSize)
     private let SectionHeaderIdentifier = "SectionHeaderIdentifier"
-
     private var showDeletion = false
+    
+    var profile: Profile?
+    var tabManager: TabManager?
 
     private var isEditable: Bool {
         // If the default engine is a custom one, make sure we have more than one since we can't edit the default. 
@@ -100,6 +102,13 @@ class SearchSettingsTableViewController: UITableViewController {
                 // Should not happen.
                 break
             }
+        } else if indexPath.section == SectionSearchAdd {
+            cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
+            cell.editingAccessoryType = UITableViewCellAccessoryType.DisclosureIndicator
+            cell.accessibilityLabel = NSLocalizedString("Add Custom Search Engine", comment: "Accessibility label for 'Add Custom Search Engine' option.")
+            cell.accessibilityIdentifier = "customEngineViewButton"
+            cell.textLabel?.text = "Add Custom Search Engine"
+            cell.imageView?.image = UIImage(named: "bottomNav-NewTab")
         } else {
             // The default engine is not a quick search engine.
             let index = indexPath.item + 1
@@ -153,6 +162,10 @@ class SearchSettingsTableViewController: UITableViewController {
             searchEnginePicker.delegate = self
             searchEnginePicker.selectedSearchEngineName = model.defaultEngine.shortName
             navigationController?.pushViewController(searchEnginePicker, animated: true)
+        } else if indexPath.section == SectionSearchAdd {
+            let customSearchEngineForm = CustomSearchViewController()
+            customSearchEngineForm.profile = self.profile
+            navigationController?.pushViewController(customSearchEngineForm, animated: true)
         }
         return nil
     }
@@ -193,6 +206,8 @@ class SearchSettingsTableViewController: UITableViewController {
         var sectionTitle: String
         if section == SectionDefault {
             sectionTitle = NSLocalizedString("Default Search Engine", comment: "Title for default search engine settings section.")
+        } else if section == SectionSearchAdd {
+            sectionTitle = NSLocalizedString("Custom Search Engines", comment: "Title for Add Custom Search Engine Section.")
         } else {
             sectionTitle = NSLocalizedString("Quick-Search Engines", comment: "Title for quick-search engines settings section.")
         }
