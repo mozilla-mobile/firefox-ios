@@ -430,6 +430,7 @@ class BrowserViewController: UIViewController {
         log.debug("BVC setting up constraints…")
         setupConstraints()
         log.debug("BVC done.")
+        self.tabManager.BrowserObject = self
     }
 
     private func setupConstraints() {
