@@ -417,7 +417,7 @@ extension BookmarksPanel: HomePanelContextMenu {
         // Only local bookmarks can be removed
         guard let source = source else { return nil }
         if source.current.itemIsEditableAtIndex(indexPath.row) {
-            let removeAction = ActionOverlayTableViewAction(title: "Remove", iconString: "action_remove_bookmark", handler: { action in
+            let removeAction = ActionOverlayTableViewAction(title: "Remove", iconString: "action_bookmark_remove", handler: { action in
                 self.deleteBookmark(indexPath)
             })
             actions.append(removeAction)

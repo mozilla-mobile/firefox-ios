@@ -572,7 +572,7 @@ extension HistoryPanelSiteTableViewController: HomePanelContextMenu {
     func getContextMenuActions(site: Site, indexPath: NSIndexPath) -> [ActionOverlayTableViewAction]? {
         guard var actions = getDefaultContextMenuActions(site, homePanelDelegate: homePanelDelegate) else { return nil }
 
-        let removeAction = ActionOverlayTableViewAction(title: "Remove", iconString: "action_remove_bookmark", handler: { action in
+        let removeAction = ActionOverlayTableViewAction(title: "Remove", iconString: "action_remove", handler: { action in
             self.removeHistoryForURL(indexPath)
         })
 

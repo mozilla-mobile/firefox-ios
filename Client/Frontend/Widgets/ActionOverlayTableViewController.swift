@@ -52,7 +52,7 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
         tableView.registerClass(ActionOverlayTableViewCell.self, forCellReuseIdentifier: "ActionOverlayTableViewCell")
         tableView.registerClass(ActionOverlayTableViewHeader.self, forHeaderFooterViewReuseIdentifier: "ActionOverlayTableViewHeader")
         tableView.backgroundColor = UIConstants.PanelBackgroundColor
-        tableView.scrollEnabled = false
+        tableView.scrollEnabled = true
         tableView.layer.cornerRadius = 10
         tableView.separatorStyle = .None
         tableView.cellLayoutMarginsFollowReadableWidth = false
@@ -61,7 +61,8 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
         tableView.snp_makeConstraints { make in
             make.center.equalTo(self.view)
             make.width.equalTo(290)
-            make.height.equalTo(74 + actions.count * 56)
+            make.height.lessThanOrEqualTo(UIScreen.mainScreen().bounds.size.height).priorityHigh()
+            make.height.equalTo(74 + actions.count * 56).priorityLow()
         }
     }
 
@@ -74,6 +75,22 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
         // explicitly nil out its references to us to avoid crashes. Bug 1218826.
         tableView.dataSource = nil
         tableView.delegate = nil
+    }
+
+    override func updateViewConstraints() {
+        tableView.snp_updateConstraints { make in
+            make.height.lessThanOrEqualTo(UIScreen.mainScreen().bounds.size.height).priorityHigh()
+        }
+        super.updateViewConstraints()
+    }
+
+    override func traitCollectionDidChange(previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        if self.traitCollection.verticalSizeClass != previousTraitCollection?.verticalSizeClass
+            || self.traitCollection.horizontalSizeClass != previousTraitCollection?.horizontalSizeClass {
+            updateViewConstraints()
+        }
     }
 
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
