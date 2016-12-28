@@ -44,7 +44,7 @@ class OpenUtils {
             OpenUtils.openInSafari(url: url)
         })
 
-        alert.addAction(UIAlertAction(title: UIConstants.strings.openShare, style: .default) { _ in
+        alert.addAction(UIAlertAction(title: UIConstants.strings.openMore, style: .default) { _ in
             let controller = UIActivityViewController(activityItems: [url], applicationActivities: nil)
             controller.popoverPresentationController?.sourceView = anchor
             controller.popoverPresentationController?.sourceRect = anchor.bounds
