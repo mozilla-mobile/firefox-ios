@@ -233,6 +233,13 @@ class ReaderMode: TabHelper {
             }
         }
 
+        if let path = NSBundle.mainBundle().pathForResource("ReaderWorker", ofType: "js") {
+            if let source = try? NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) as String {
+                let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
+                tab.webView!.configuration.userContentController.addUserScript(userScript)
+            }
+        }
+
         // This is executed after a page has been loaded. It executes Readability and then fires a script message to let us know if the page is compatible with reader mode.
         if let path = NSBundle.mainBundle().pathForResource("ReaderMode", ofType: "js") {
             if let source = try? NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) as String {

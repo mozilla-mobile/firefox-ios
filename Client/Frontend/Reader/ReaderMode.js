@@ -53,13 +53,17 @@
             // document.cloneNode() can cause the webview to break (bug 1128774).
             // Serialize and then parse the document instead.
             var docStr = new XMLSerializer().serializeToString(document);
-            var doc = new DOMParser().parseFromString(docStr, "text/html");
-            var readability = new Readability(uri, doc);
-            readabilityResult = readability.parse();
-
-            debug({Type: "ReaderModeStateChange", Value: readabilityResult !== null ? "Available" : "Unavailable"});
-            webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: readabilityResult !== null ? "Available" : "Unavailable"});
-
+            
+            // Obtain a blob URL reference to our worker 'file'.
+            var workerContent = new Blob([window.__firefox_readability_worker__]);
+            var blobURL = window.URL.createObjectURL(workerContent);
+            var worker = new Worker(blobURL);
+            worker.onmessage = function(e) {
+                readabilityResult = e.data
+                debug({Type: "ReaderModeStateChange", Value: readabilityResult !== null ? "Available" : "Unavailable"});
+                webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: readabilityResult !== null ? "Available" : "Unavailable"});
+            };
+            worker.postMessage([docStr, uri]); // Start the worker.
             return;
         }
 
