@@ -7,11 +7,13 @@
 //
 
 import XCTest
+import GCDWebServers
 
 class WebAuthenticationTest: BaseTestCase {
 private var webRoot: String!
         
     override func setUp() {
+       
         super.setUp()
         dismissFirstRunUI()
         webRoot = SimplePageServer.start()
