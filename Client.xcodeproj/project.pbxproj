@@ -13,6 +13,10 @@
 		0B3E7D951B27A7CE00E2E84D /* AboutHomeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3E7D931B27A7CE00E2E84D /* AboutHomeHandler.swift */; };
 		0B3E7DB81B27A7F600E2E84D /* AboutUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3E7DB51B27A7E900E2E84D /* AboutUtils.swift */; };
 		0B3E7DBA1B27AB4C00E2E84D /* MockLogins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3E7DB91B27AB4C00E2E84D /* MockLogins.swift */; };
+		0B4F346F1E144F0500DE038C /* GCDWebServers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BA4A9451C4CED780091D032 /* GCDWebServers.framework */; };
+		0B4F34711E144F0500DE038C /* GCDWebServers.framework.dSYM in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B4F34701E144F0500DE038C /* GCDWebServers.framework.dSYM */; };
+		0B4F34721E14511A00DE038C /* GCDWebServers.framework.dSYM in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0B4F34701E144F0500DE038C /* GCDWebServers.framework.dSYM */; };
+		0B4F34731E14511A00DE038C /* GCDWebServers.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7BA4A9451C4CED780091D032 /* GCDWebServers.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		0B5142CC1AE1BAF50014D0B3 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B5142CB1AE1BAF50014D0B3 /* UIViewExtensions.swift */; };
 		0B54BD191B698B7C004C822C /* SuggestedSites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B54BD181B698B7C004C822C /* SuggestedSites.swift */; };
 		0B5A93041B1E60B4004F47A2 /* DeferredDBOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B5A93031B1E60B4004F47A2 /* DeferredDBOperation.swift */; };
@@ -43,7 +47,6 @@
 		0BDA56B01B26B1D5008C9B96 /* TestLogins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDA56AE1B26B1D5008C9B96 /* TestLogins.swift */; };
 		0BDA56B21B26B1E4008C9B96 /* Logins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDA56B11B26B1E4008C9B96 /* Logins.swift */; };
 		0BDA56B41B26B203008C9B96 /* SQLiteLogins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDA56B31B26B203008C9B96 /* SQLiteLogins.swift */; };
-		0BE995061E141866007D4B0B /* GCDWebServers.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7BA4A9451C4CED780091D032 /* GCDWebServers.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		0BE995081E141FDD007D4B0B /* findPage.html in Resources */ = {isa = PBXBuildFile; fileRef = D343DCFD1C446BDB00D7EEE8 /* findPage.html */; };
 		0BE995091E141FDD007D4B0B /* JSPrompt.html in Resources */ = {isa = PBXBuildFile; fileRef = E6B4C3D71C68F55C001F97E8 /* JSPrompt.html */; };
 		0BE9950A1E141FDD007D4B0B /* localhostLoad.html in Resources */ = {isa = PBXBuildFile; fileRef = D31EC05E1CC57ED80096F4AB /* localhostLoad.html */; };
@@ -56,7 +59,6 @@
 		0BE995111E141FDD007D4B0B /* youtube.ico in Resources */ = {isa = PBXBuildFile; fileRef = E67422C41CFF2D39009E8373 /* youtube.ico */; };
 		0BE995121E141FDD007D4B0B /* KIFHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = D3E171C11A841EAD00AB44CD /* KIFHelper.js */; };
 		0BE995131E142056007D4B0B /* image.png in Resources */ = {isa = PBXBuildFile; fileRef = A83E5B191C1DA8BF0026D912 /* image.png */; };
-		0BE995141E142636007D4B0B /* GCDWebServers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BA4A9451C4CED780091D032 /* GCDWebServers.framework */; };
 		0BF0DB941A8545800039F300 /* URLBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF0DB931A8545800039F300 /* URLBarView.swift */; };
 		0BF1B7E31AC60DEA00A7B407 /* InsetButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF1B7E21AC60DEA00A7B407 /* InsetButton.swift */; };
 		0BF42D371A7C0B8E00889E28 /* FaviconManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF42D361A7C0B8E00889E28 /* FaviconManager.swift */; };
@@ -1145,7 +1147,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				0BE995061E141866007D4B0B /* GCDWebServers.framework in CopyFiles */,
+				0B4F34721E14511A00DE038C /* GCDWebServers.framework.dSYM in CopyFiles */,
+				0B4F34731E14511A00DE038C /* GCDWebServers.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1210,6 +1213,7 @@
 		0B3E7D931B27A7CE00E2E84D /* AboutHomeHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutHomeHandler.swift; sourceTree = "<group>"; };
 		0B3E7DB51B27A7E900E2E84D /* AboutUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutUtils.swift; sourceTree = "<group>"; };
 		0B3E7DB91B27AB4C00E2E84D /* MockLogins.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MockLogins.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		0B4F34701E144F0500DE038C /* GCDWebServers.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = GCDWebServers.framework.dSYM; path = Carthage/Build/iOS/GCDWebServers.framework.dSYM; sourceTree = "<group>"; };
 		0B5142CB1AE1BAF50014D0B3 /* UIViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		0B54BD181B698B7C004C822C /* SuggestedSites.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuggestedSites.swift; sourceTree = "<group>"; };
 		0B5A92E31B1E6075004F47A2 /* Cancellable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cancellable.swift; sourceTree = "<group>"; };
@@ -1987,7 +1991,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0BE995141E142636007D4B0B /* GCDWebServers.framework in Frameworks */,
+				0B4F34711E144F0500DE038C /* GCDWebServers.framework.dSYM in Frameworks */,
+				0B4F346F1E144F0500DE038C /* GCDWebServers.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2639,6 +2644,7 @@
 		7B604FC11C496005006EEEC3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0B4F34701E144F0500DE038C /* GCDWebServers.framework.dSYM */,
 				E62A56DC1DBE88C3004703EA /* WebMetadataKit.framework */,
 				E6619A9C1DA693AB0063EAD6 /* OnyxClient.framework */,
 				3BA9A0221D2C208C00BD418C /* Fuzi.framework */,
@@ -3769,6 +3775,7 @@
 				3BFE4B041D342FB800DDF53F /* Frameworks */,
 				3BFE4B051D342FB800DDF53F /* Resources */,
 				0BE995051E14183F007D4B0B /* CopyFiles */,
+				0B4F346E1E144E4600DE038C /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -4612,6 +4619,20 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		0B4F346E1E144E4600DE038C /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/GCDWebServers.framework",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
 		7B604F8F1C494AAA006EEEC3 /* Copy Carthage Dependencies */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
