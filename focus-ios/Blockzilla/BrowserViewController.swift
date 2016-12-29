@@ -15,6 +15,7 @@ class BrowserViewController: UIViewController {
     fileprivate let urlBarContainer = URLBarContainer()
     fileprivate var urlBar: URLBar!
     fileprivate var topURLBarConstraints = [Constraint]()
+    fileprivate let requestHandler = RequestHandler()
 
     private var homeViewContainer = UIView()
     private var showsToolsetInURLBar = false
@@ -364,6 +365,12 @@ extension BrowserViewController: BrowserDelegate {
 
     func browser(_ browser: Browser, didUpdateURL url: URL?) {
         urlBar.url = url
+    }
+
+    func browser(_ browser: Browser, shouldStartLoadWith request: URLRequest) -> Bool {
+        return requestHandler.handle(request: request) { alert in
+            present(alert, animated: true, completion: nil)
+        }
     }
 }
 

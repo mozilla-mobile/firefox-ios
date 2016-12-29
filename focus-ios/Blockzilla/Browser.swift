@@ -12,6 +12,7 @@ protocol BrowserDelegate: class {
     func browser(_ browser: Browser, didUpdateCanGoForward canGoForward: Bool)
     func browser(_ browser: Browser, didUpdateEstimatedProgress estimatedProgress: Float)
     func browser(_ browser: Browser, didUpdateURL url: URL?)
+    func browser(_ browser: Browser, shouldStartLoadWith request: URLRequest) -> Bool
 }
 
 class Browser: NSObject {
@@ -145,8 +146,6 @@ class Browser: NSObject {
 }
 
 extension Browser: UIWebViewDelegate {
-    private static let supportedSchemes = ["http", "https", "about"]
-
     func webViewDidStartLoad(_ webView: UIWebView) {
         if estimatedProgress == 0 {
             estimatedProgress = 0.1
@@ -156,8 +155,7 @@ extension Browser: UIWebViewDelegate {
     }
 
     func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
-        // We don't currently support opening in external apps, so just ignore unsupported schemes.
-        guard let scheme = request.url?.scheme, Browser.supportedSchemes.contains(scheme.lowercased()) else { return false }
+        guard delegate?.browser(self, shouldStartLoadWith: request) ?? true else { return false }
 
         // If the load isn't on the main frame, we don't need any other special handling.
         guard request.mainDocumentURL == request.url else {
@@ -172,6 +170,7 @@ extension Browser: UIWebViewDelegate {
 
         isLoading = true
         delegate?.browserDidStartNavigation(self)
+
         updateBackForwardStates(webView)
 
         // Don't update the URL immediately since the requested page may not have started to load yet.
