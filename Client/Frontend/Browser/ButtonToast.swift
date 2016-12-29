@@ -15,6 +15,18 @@ struct ButtonToastUX {
     static let ToastButtonBorderWidth: CGFloat = 1
 }
 
+private class CustomButton : UIButton {
+    override var highlighted: Bool {
+        didSet {
+            if highlighted {
+                self.backgroundColor = UIColor.whiteColor()
+            } else  {
+                self.backgroundColor = UIColor.clearColor()
+            }
+        }
+    }
+}
+
 class ButtonToast: UIView {
     
     private var dismissed = false
@@ -60,11 +72,12 @@ class ButtonToast: UIView {
         label.numberOfLines = 0
         toast.addSubview(label)
         
-        let button = UIButton()
+        let button = CustomButton()
         button.layer.cornerRadius = ButtonToastUX.ToastButtonBorderRadius
         button.layer.borderWidth = ButtonToastUX.ToastButtonBorderWidth
         button.layer.borderColor = UIColor.whiteColor().CGColor
         button.setTitle(buttonText, forState: .Normal)
+        button.setTitleColor(self.toast.backgroundColor, forState: .Highlighted)
         button.titleLabel?.font = SimpleToastUX.ToastFont
         
         let recognizer = UITapGestureRecognizer(target: self, action:#selector(ButtonToast.buttonPressed(_:)))
