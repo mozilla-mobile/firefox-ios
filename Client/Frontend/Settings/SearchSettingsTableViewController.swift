@@ -88,6 +88,8 @@ class SearchSettingsTableViewController: UITableViewController {
                 cell.accessibilityValue = engine.shortName
                 cell.textLabel?.text = engine.shortName
                 cell.imageView?.image = engine.image.createScaled(IconSize)
+                cell.imageView?.layer.cornerRadius = 4
+                cell.imageView?.layer.masksToBounds = true
             case ItemDefaultSuggestions:
                 cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
                 cell.textLabel?.text = NSLocalizedString("Show Search Suggestions", comment: "Label for show search suggestions setting.")
@@ -122,6 +124,8 @@ class SearchSettingsTableViewController: UITableViewController {
                 cell.textLabel?.adjustsFontSizeToFitWidth = true
                 cell.textLabel?.minimumScaleFactor = 0.5
                 cell.imageView?.image = engine.image.createScaled(IconSize)
+                cell.imageView?.layer.cornerRadius = 4
+                cell.imageView?.layer.masksToBounds = true
                 cell.selectionStyle = .None
             } else {
                 cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)

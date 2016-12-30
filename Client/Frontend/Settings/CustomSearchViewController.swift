@@ -11,24 +11,29 @@ import Deferred
 
 private let log = Logger.browserLogger
 
+class CustomSearchError: MaybeErrorType {
+    internal var description: String {
+        return "Search Engine Not Added"
+    }
+}
+
 class CustomSearchViewController: SettingsTableViewController {
     
     private var urlString: String?
     private var engineTitle = ""
-    private var spinnerView = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
+    private lazy var spinnerView: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
+        spinner.hidesWhenStopped = true
+        return spinner
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         title = Strings.SettingsAddCustomEngineTitle
-        initSpinnerView()
-    }
-
-    func initSpinnerView(){
         view.addSubview(spinnerView)
         spinnerView.snp_makeConstraints { make in
-            make.center.equalTo(view)
+            make.center.equalTo(self.view.snp_center)
         }
-        spinnerView.hidesWhenStopped = true
     }
 
     private func addSearchEngine(searchQuery: String, title: String) {
@@ -51,7 +56,7 @@ class CustomSearchViewController: SettingsTableViewController {
         let deferred = Deferred<Maybe<OpenSearchEngine>>()
         guard let template = getSearchTemplate(withString: query),
             let url = NSURL(string: template.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLFragmentAllowedCharacterSet())!) where url.isWebPage() else {
-                deferred.fill(Maybe(failure: FaviconError()))
+                deferred.fill(Maybe(failure: CustomSearchError()))
                 return deferred
         }
         FaviconFetcher.fetchFavImageForURL(forURL: url, profile: profile).uponQueue(dispatch_get_main_queue()) { result in
@@ -60,7 +65,7 @@ class CustomSearchViewController: SettingsTableViewController {
 
             //Make sure a valid scheme is used
             let url = engine.searchURLForQuery("test")
-            let maybe = (url == nil) ? Maybe(failure: FaviconError()) : Maybe(success: engine)
+            let maybe = (url == nil) ? Maybe(failure: CustomSearchError()) : Maybe(success: engine)
             deferred.fill(maybe)
         }
         return deferred
@@ -85,7 +90,7 @@ class CustomSearchViewController: SettingsTableViewController {
             return NSURL(string: string)
         }
         
-        let titleField = CustomSearchEngineField(placeholder: Strings.SettingsAddCustomEngineTitlePlaceholder, labelText: Strings.SettingsAddCustomEngineTitleLabel, settingDidChange: {fieldText in
+        let titleField = CustomSearchEngineTextView(placeholder: Strings.SettingsAddCustomEngineTitlePlaceholder, labelText: Strings.SettingsAddCustomEngineTitleLabel, settingDidChange: {fieldText in
             guard let title = fieldText else {
                 return
             }
@@ -94,7 +99,7 @@ class CustomSearchViewController: SettingsTableViewController {
                 return text != nil && text != ""
         })
         titleField.textField.accessibilityIdentifier = "customEngineTitle"
-        
+
         let urlField = CustomSearchEngineTextView(placeholder: Strings.SettingsAddCustomEngineURLPlaceholder, labelText: Strings.SettingsAddCustomEngineURLLabel, height: 133, settingDidChange: {fieldText in
             self.urlString = fieldText
             }, settingIsValid: { text in
@@ -121,94 +126,6 @@ class CustomSearchViewController: SettingsTableViewController {
         if let url = self.urlString {
             self.addSearchEngine(url, title: self.engineTitle)
         }
-    }
-}
-
-
-class CustomSearchEngineField: Setting, UITextFieldDelegate {
-    
-    private let Padding: CGFloat = 8
-    private var TextFieldHeight: CGFloat = 44
-
-    private let defaultValue: String?
-    private let placeholder: String
-    private let labelText: String
-    private let settingDidChange: (String? -> Void)?
-    private let settingIsValid: (String? -> Bool)?
-    
-    let textField = UITextField()
-    
-    init(defaultValue: String? = nil, placeholder: String, labelText: String, height: CGFloat = 44, settingIsValid isValueValid: (String? -> Bool)? = nil, settingDidChange: (String? -> Void)? = nil) {
-        self.defaultValue = defaultValue
-        self.TextFieldHeight = height
-        self.settingDidChange = settingDidChange
-        self.settingIsValid = isValueValid
-        self.placeholder = placeholder
-        self.labelText = labelText
-        super.init(cellHeight: TextFieldHeight)
-    }
-    
-    override func onConfigureCell(cell: UITableViewCell) {
-        super.onConfigureCell(cell)
-        if let id = accessibilityIdentifier {
-            textField.accessibilityIdentifier = id + "TextField"
-        }
-        textField.placeholder = placeholder
-        textField.textAlignment = .Left
-        textField.keyboardType = .URL
-        textField.autocorrectionType = .No
-        textField.delegate = self
-        textField.addTarget(self, action: #selector(textFieldDidChange), forControlEvents: .EditingChanged)
-        cell.userInteractionEnabled = true
-        cell.accessibilityTraits = UIAccessibilityTraitNone
-        cell.contentView.addSubview(textField)
-        cell.textLabel?.text = labelText
-        cell.selectionStyle = .None
-        
-        //make sure when you change to UITextview taht the placeholder text lines up with the textlabel text
-        
-        textField.snp_makeConstraints { make in
-            make.height.equalTo(TextFieldHeight)
-            make.trailing.equalTo(cell.contentView).offset(-Padding)
-            make.leading.equalTo(cell.contentView).offset(80) // The constants here can be added to the top of this class
-        }
-        cell.textLabel?.snp_remakeConstraints { make in
-            make.trailing.equalTo(textField.snp_leading).offset(-Padding)
-            make.leading.equalTo(cell.contentView).offset(Padding)
-            make.height.equalTo(44)
-        }
-    }
-    
-    override func onClick(navigationController: UINavigationController?) {
-        textField.becomeFirstResponder()
-    }
-    
-    private func isValid(value: String?) -> Bool {
-        guard let test = settingIsValid else {
-            return true
-        }
-        return test(prepareValidValue(userInput: value))
-    }
-    
-    /// This gives subclasses an opportunity to treat the user input string
-    /// before it is saved or tested.
-    /// Default implementation does nothing.
-    func prepareValidValue(userInput value: String?) -> String? {
-        return value
-    }
-    
-    @objc func textFieldDidChange(textField: UITextField) {
-        settingDidChange?(textField.text)
-        let color = isValid(textField.text) ? UIConstants.TableViewRowTextColor : UIConstants.DestructiveRed
-        textField.textColor = color
-    }
-    
-    @objc func textFieldShouldReturn(textField: UITextField) -> Bool {
-        return isValid(textField.text)
-    }
-    
-    @objc func textFieldDidEndEditing(textField: UITextField) {
-        settingDidChange?(textField.text)
     }
 }
 
@@ -282,10 +199,7 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
         }
         return test(prepareValidValue(userInput: value))
     }
-    
-    /// This gives subclasses an opportunity to treat the user input string
-    /// before it is saved or tested.
-    /// Default implementation does nothing.
+
     func prepareValidValue(userInput value: String?) -> String? {
         return value
     }
