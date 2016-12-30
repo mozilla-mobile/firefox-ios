@@ -408,7 +408,7 @@ extension BookmarksPanel: HomePanelContextMenu {
 
     func getImageDetails(indexPath: NSIndexPath) -> (siteImage: UIImage?, siteBGColor: UIColor?) {
         guard let cell = tableView.cellForRowAtIndexPath(indexPath) else { return (nil, nil) }
-        return (cell.imageView?.image, nil)
+        return (cell.imageView?.image, cell.imageView?.backgroundColor)
     }
 
     func getContextMenuActions(site: Site, indexPath: NSIndexPath) -> [ActionOverlayTableViewAction]? {

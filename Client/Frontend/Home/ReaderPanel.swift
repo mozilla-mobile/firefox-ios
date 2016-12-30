@@ -462,7 +462,7 @@ extension ReadingListPanel: HomePanelContextMenu {
     func getImageDetails(indexPath: NSIndexPath) -> (siteImage: UIImage?, siteBGColor: UIColor?) {
         guard let record = records?[indexPath.row] else { return (nil, nil) }
         guard let recordURL = NSURL(string: record.url) else { return (nil, nil) }
-        return (FaviconFetcher.getDefaultFavicon(recordURL), nil)
+        return (FaviconFetcher.getDefaultFavicon(recordURL), FaviconFetcher.getDefaultColor(recordURL))
     }
 
     func getContextMenuActions(site: Site, indexPath: NSIndexPath) -> [ActionOverlayTableViewAction]? {

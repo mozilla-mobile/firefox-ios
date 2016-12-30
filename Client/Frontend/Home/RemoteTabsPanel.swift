@@ -608,7 +608,7 @@ extension RemoteTabsTableViewController: HomePanelContextMenu {
 
     func getImageDetails(indexPath: NSIndexPath) -> (siteImage: UIImage?, siteBGColor: UIColor?) {
         guard let tabCell = tableView.cellForRowAtIndexPath(indexPath) else { return (nil, nil) }
-        return (tabCell.imageView?.image, nil)
+        return (tabCell.imageView?.image, tabCell.imageView?.backgroundColor)
     }
 
     func getContextMenuActions(site: Site, indexPath: NSIndexPath) -> [ActionOverlayTableViewAction]? {
