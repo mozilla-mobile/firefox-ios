@@ -104,7 +104,13 @@ public class SwiftData {
      * close a database connection and run a block of code inside it.
      */
     func withConnection(flags: SwiftData.Flags, synchronous: Bool=true, cb: (db: SQLiteDBConnection) -> NSError?) -> NSError? {
-        let conn: ConcreteSQLiteDBConnection?
+        /**
+         * We use a weak reference here instead of strongly retaining the connection because we don't want
+         * any control over when the connection deallocs. If the only owner of the connection (SwiftData)
+         * decides to dealloc it, we should respect that since the deinit method of the connection is tied
+         * to the app lifecycle. This is to prevent background disk access causing springboard crashes.
+         */
+        weak var conn: ConcreteSQLiteDBConnection?
 
         if SwiftData.ReuseConnections {
             conn = getSharedConnection()
@@ -113,39 +119,35 @@ public class SwiftData {
             conn = ConcreteSQLiteDBConnection(filename: filename, flags: flags.toSQL(), key: self.key, prevKey: self.prevKey)
         }
 
-        guard let connection = conn else {
-            // Run the callback with a fake failed connection.
-            // Yeah, that means we have an error return value but we still run the callback.
-            let failed = FailedSQLiteDBConnection()
-            let queue = self.sharedConnectionQueue
-            let noConnection = NSError(domain: "mozilla", code: 0, userInfo: [NSLocalizedDescriptionKey: "Could not create a connection"])
-
-            if synchronous {
-                var error: NSError? = nil
-                dispatch_sync(queue) {
-                    error = cb(db: failed)
-                }
-                return error ?? noConnection
-            }
-
-            dispatch_async(queue) {
-                cb(db: failed)
-            }
-
-            return noConnection
-        }
-
+        let queue = self.sharedConnectionQueue
         if synchronous {
             var error: NSError? = nil
-            dispatch_sync(connection.queue) {
+            dispatch_sync(queue) {
+                /**
+                 * By the time this dispatch block runs, it is possible the user has backgrounded the app
+                 * and the connection has been dealloc'ed since we last grabbed the reference
+                 */
+                guard let connection = conn else {
+                    error = cb(db: FailedSQLiteDBConnection()) ?? NSError(domain: "mozilla",
+                                                                          code: 0,
+                                                                          userInfo: [NSLocalizedDescriptionKey: "Could not create a connection"])
+                    return
+                }
+
                 error = cb(db: connection)
             }
             return error
         }
 
-        dispatch_async(connection.queue) {
+        dispatch_async(queue) {
+            guard let connection = conn else {
+                cb(db: FailedSQLiteDBConnection())
+                return
+            }
+                
             cb(db: connection)
         }
+
         return nil
     }
 

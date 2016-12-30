@@ -7,6 +7,7 @@ import XCTest
 class ActivityStreamTest: BaseTestCase {
 
     override func setUp() {
+        
         super.setUp()
         dismissFirstRunUI()
     }
@@ -81,7 +82,7 @@ class ActivityStreamTest: BaseTestCase {
         app.tables["Context Menu"].cells["Open in New Private Tab"].tap()
         
         XCTAssert(app.tables["Top sites"].exists)
-        XCTAssertFalse(app.staticTexts["Example Domain"].exists)
+        XCTAssertFalse(app.staticTexts["example"].exists)
         
         app.buttons["URLBarView.tabsButton"].tap()
         app.buttons["TabTrayController.maskButton"].tap()

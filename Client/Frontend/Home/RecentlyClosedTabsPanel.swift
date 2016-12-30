@@ -92,17 +92,13 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
-        if let cell = cell as? TwoLineTableViewCell {
-            cell.setLines(recentlyClosedTabs[indexPath.row].title ?? "", detailText: recentlyClosedTabs[indexPath.row].url.absoluteString)
-            cell.imageView?.sd_setImageWithURL((recentlyClosedTabs[indexPath.row].faviconURL ?? "").asURL) { (img, err, type, url) -> Void in
-                guard img != nil else {
-                    if let url = NSURL(string: self.recentlyClosedTabs[indexPath.row].faviconURL ?? "") {
-                        cell.imageView?.setIcon(nil, withPlaceholder: FaviconFetcher.getDefaultFavicon(url))
-                    }
-                    return
-                }
-            }
+        guard let twoLineCell = cell as? TwoLineTableViewCell else {
+            return cell
         }
+        let tab = recentlyClosedTabs[indexPath.row]
+        twoLineCell.setLines(tab.title, detailText: tab.url.absoluteString)
+        let site: Favicon? = (tab.faviconURL != nil) ? Favicon(url: tab.faviconURL!, type: .Guess) : nil
+        cell.imageView?.setIcon(site, forURL: tab.url)
 
         return cell
     }

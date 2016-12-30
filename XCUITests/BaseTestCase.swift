@@ -14,6 +14,7 @@ class BaseTestCase: XCTestCase {
     }
 
     override func tearDown() {
+        XCUIApplication().terminate()
         super.tearDown()
     }
 

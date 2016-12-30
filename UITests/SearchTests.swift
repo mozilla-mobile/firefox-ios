@@ -209,7 +209,7 @@ class SearchTests: KIFTestCase {
     }
 
     private func waitForPotentialDebounce(tester: KIFUITestActor) {
-        tester.waitForTimeInterval(0.3)
+        tester.waitForTimeInterval(1.3)
     }
 
     private func resetSuggestionsPrompt() {

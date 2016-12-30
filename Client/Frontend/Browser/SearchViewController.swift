@@ -533,7 +533,7 @@ extension SearchViewController {
                     let isBookmark = site.bookmarked ?? false
                     cell.setLines(site.title, detailText: site.url)
                     cell.setRightBadge(isBookmark ? self.bookmarkedBadge : nil)
-                    cell.imageView?.setIcon(site.icon, withPlaceholder: FaviconFetcher.getDefaultFavicon(site.tileURL))
+                    cell.imageView?.setIcon(site.icon, forURL: site.tileURL)
                 }
             }
             return cell
