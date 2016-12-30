@@ -138,13 +138,13 @@ class ThirdPartySearchTest: BaseTestCase {
         let tablesQuery = app.tables
         tablesQuery.cells["Search"].tap()
         app.tables.cells["customEngineViewButton"].tap()
-        app.textFields["customEngineTitle"].tap()
+        app.textViews["customEngineTitle"].tap()
         app.typeText("Feeling Lucky")
-        app.textFields["customEngineUrl"].tap()
+        app.textViews["customEngineUrl"].tap()
         app.typeText("http://www.google.com/search?q=%s&btnI")
         
-        tablesQuery.cells["saveCustomEngine"].tap()
-        
+        app.navigationBars.buttons["customEngineSaveButton"].tap()
+
         waitforExistence(app.navigationBars["Search"])
         XCTAssert(app.navigationBars["Search"].buttons["Settings"].exists)
         
@@ -172,14 +172,14 @@ class ThirdPartySearchTest: BaseTestCase {
         let tablesQuery = app.tables
         tablesQuery.cells["Search"].tap()
         app.tables.cells["customEngineViewButton"].tap()
-        app.textFields["customEngineTitle"].tap()
+        app.textViews["customEngineTitle"].tap()
         app.typeText("Feeling Lucky")
-        app.textFields["customEngineUrl"].tap()
+        app.textViews["customEngineUrl"].tap()
         app.typeText("http://www.google.com/search?q=&btnI") //Occurunces of %s != 1
-        
-        tablesQuery.cells["saveCustomEngine"].tap()
+
+        app.navigationBars.buttons["customEngineSaveButton"].tap()
         
         waitforExistence(app.alerts.elementBoundByIndex(0))
-        XCTAssert(app.alerts.elementBoundByIndex(0 ).label == "Failed")
+        XCTAssert(app.alerts.elementBoundByIndex(0).label == "Failed")
     }
 }

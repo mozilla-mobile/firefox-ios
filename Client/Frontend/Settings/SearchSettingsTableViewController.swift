@@ -131,7 +131,7 @@ class SearchSettingsTableViewController: UITableViewController {
                 cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
                 cell.editingAccessoryType = UITableViewCellAccessoryType.DisclosureIndicator
                 cell.accessibilityLabel = Strings.SettingsAddCustomEngineTitle
-                cell.accessibilityValue = Strings.SettingsAddCustomEngineTitle
+                cell.accessibilityIdentifier = "customEngineViewButton"
                 cell.textLabel?.text = Strings.SettingsAddCustomEngine
             }
         }
