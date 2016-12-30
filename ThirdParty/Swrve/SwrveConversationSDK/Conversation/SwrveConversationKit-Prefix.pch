@@ -1,0 +1,10 @@
+//
+// Prefix header for all source files of the 'SwrveConversationKit' target in the 'SwrveConversationKit' project
+//
+//
+
+#ifdef __OBJC__
+    #import <Foundation/Foundation.h>
+    #import "SwrveSetup.h"
+    #import "UINavigationController+KeyboardResponderFix.h"
+#endif

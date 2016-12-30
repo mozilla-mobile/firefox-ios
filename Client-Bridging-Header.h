@@ -13,4 +13,6 @@
 #import <CrashReporter/CrashReporter.h>
 #import <BuddyBuildSDK/BuddyBuildSDK.h>
 
+#import "Swrve.h"
+
 #endif

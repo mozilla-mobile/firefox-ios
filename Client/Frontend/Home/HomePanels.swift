@@ -20,7 +20,7 @@ class HomePanels {
     let enabledPanels = [
         HomePanelDescriptor(
             makeViewController: { profile in
-                if UIDevice.currentDevice().userInterfaceIdiom != .Pad && AppConstants.MOZ_AS_PANEL {
+                if UIDevice.currentDevice().userInterfaceIdiom != .Pad && Swrve.sharedInstance().resourceManager.getAttributeAsBool("activityStream", ofResource: "FeatureFlags", withDefault: false) {
                     return ActivityStreamPanel(profile: profile)
                 } else {
                     return TopSitesPanel(profile: profile)

@@ -82,6 +82,7 @@ class NewTabChoiceViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         currentChoice = newTabOptions[indexPath.row]
+        Swrve.sharedInstance().userUpdate(["fennec.defaultNewTabExperience": currentChoice.rawValue])
         tableView.reloadData()
     }
 }

@@ -218,6 +218,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         log.debug("Setting up Adjust")
         self.adjustIntegration?.triggerApplicationDidFinishLaunchingWithOptions(launchOptions)
 
+        log.debug("Setting up Swrve")
+        let swrveConfig = SwrveConfig()
+        swrveConfig.pushEnabled = true
+        Swrve.sharedInstanceWithAppID(4308, apiKey: "RrkaG3xLPusmY4QmWuIe", config: swrveConfig, launchOptions: launchOptions)
+        Swrve.sharedInstance().userUpdate(["fennec.signedIn": profile?.hasAccount() ?? false])
+
         #if BUDDYBUILD
             log.debug("Setting up BuddyBuild SDK")
             BuddyBuildSDK.setup()

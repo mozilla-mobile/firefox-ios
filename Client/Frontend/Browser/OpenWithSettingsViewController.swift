@@ -55,6 +55,7 @@ class OpenWithSettingsViewController: UITableViewController {
 
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
+        Swrve.sharedInstance().userUpdate(["fennec.defaultMailCient": currentChoice])
         self.prefs.setString(currentChoice, forKey: PrefsKeys.KeyMailToOption)
     }
 
@@ -75,6 +76,7 @@ class OpenWithSettingsViewController: UITableViewController {
         }
         
         if !previousChoiceAvailable {
+            Swrve.sharedInstance().userUpdate(["fennec.defaultMailCient": mailProviderSource[0].scheme])
             self.prefs.setString(mailProviderSource[0].scheme, forKey: PrefsKeys.KeyMailToOption)
         }
 
