@@ -289,6 +289,16 @@ class NSURLExtensionsTests: XCTestCase {
         goodurls.forEach { XCTAssertEqual(NSURL(string:$0.0)!.havingRemovedAuthorisationComponents().absoluteString, $0.1) }
     }
 
+    func testwithoutPath() {
+        let urls = [
+            ("https://mail.mymail.com/inbox", "https://mail.mymail.com/"),
+            ("http://www.mymail.com/", "http://www.mymail.com/"),
+            ("https://www.example.com/longurlwithquery?item=1&item2=2", "https://www.example.com/")
+        ]
+
+        urls.forEach { XCTAssertEqual(NSURL(string:$0.0)!.withoutPath.absoluteString, $0.1) }
+    }
+
     func testschemeIsValid() {
         let goodurls = [
             "http://localhost:6571/reader-mode/page",

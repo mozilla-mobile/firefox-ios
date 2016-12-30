@@ -251,6 +251,18 @@ extension NSURL {
     }
 
     /**
+     For example for the url http://www.bbc.co.uk/some/article.html, It would return http://www.bbc.co.uk/
+     :returns: Returns the url with the path removed
+     */
+    public var withoutPath: NSURL {
+        let newURL = NSURLComponents()
+        newURL.scheme = self.scheme
+        newURL.host = self.host
+        newURL.path = "/"
+        return newURL.URL ?? self
+    }
+
+    /**
     Returns the public portion of the host name determined by the public suffix list found here: https://publicsuffix.org/list/. 
     For example for the url www.bbc.co.uk, based on the entries in the TLD list, the public suffix would return co.uk.
 

@@ -331,7 +331,7 @@ extension ActivityStreamPanel {
                 self.topSitesManager.urlPressedHandler = { [unowned self] url, indexPath in
                     let event = ASInfo(actionPosition: indexPath.item, source: .topSites)
                     ASOnyxPing.reportTapEvent(event)
-                    self.showSiteWithURLHandler(url)
+                    self.showSiteWithURLHandler(url.withoutPath)
                 }
                 
                 return succeed()
@@ -403,8 +403,12 @@ extension ActivityStreamPanel {
         let siteBGColor = topSiteItemCell.contentView.backgroundColor
 
         let site = self.topSitesManager.content[indexPath.item]
+        let domainURL = NSURL(string: site.url)?.withoutPath.absoluteString ?? site.url
+
+        //construct a new site so we can use a modified url for the menu
+        let newSite = Site(url: domainURL, title: site.title, bookmarked: site.bookmarked)
         let eventSource = ASInfo(actionPosition: indexPath.item, source: .topSites)
-        presentContextMenu(site, eventInfo: eventSource, siteImage: siteImage, siteBGColor: siteBGColor)
+        presentContextMenu(newSite, eventInfo: eventSource, siteImage: siteImage, siteBGColor: siteBGColor)
     }
 
     private func contextMenuForHighlightCellWithIndexPath(indexPath: NSIndexPath) {
