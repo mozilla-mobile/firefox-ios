@@ -26,7 +26,7 @@ class HomePageSettingsTest: BaseTestCase {
         
         // Accessing https means that it is routed
         waitForValueContains(app.textFields["url"], value: "https://www.google")
-        let currentURL = app.textFields["url"].value as! String
+        let currentURL: String = app.textFields["url"].value as! String
         app.buttons["TabToolbar.menuButton"].tap()
         app.pageIndicators["page 1 of 2"].tap()
         

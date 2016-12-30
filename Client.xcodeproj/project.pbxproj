@@ -245,6 +245,7 @@
 		39E65D371CA5CB0E00C63CE3 /* AsyncReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E65D351CA5CAF200C63CE3 /* AsyncReducer.swift */; };
 		39F6D0701CD3B0770055D949 /* HomePageSettingsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39F6D06F1CD3B0770055D949 /* HomePageSettingsUITests.swift */; };
 		3B0943811D6CC4FC004F24E1 /* FilledPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0943801D6CC4FC004F24E1 /* FilledPageControl.swift */; };
+		3B3780BD1E16D8E300530B6A /* CustomSearchEnginesTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3780BC1E16D8E300530B6A /* CustomSearchEnginesTest.swift */; };
 		3B43E3D31D95C48D00BBA9DB /* StoragePerfTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B43E3D21D95C48D00BBA9DB /* StoragePerfTests.swift */; };
 		3B4AA24B1D8B8C4C00A2E008 /* ArrayExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B4AA24A1D8B8C4C00A2E008 /* ArrayExtensionTests.swift */; };
 		3B546EC01D95ECAE00BDBE36 /* ActivityStreamTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B546EBF1D95ECAE00BDBE36 /* ActivityStreamTest.swift */; };
@@ -264,6 +265,7 @@
 		3BFCBF201E04B1C50070C042 /* UIImageViewExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFCBF1F1E04B1C50070C042 /* UIImageViewExtensionsTests.swift */; };
 		3BFE4B501D34673D00DDF53F /* ThirdPartySearchTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFE4B4F1D34673D00DDF53F /* ThirdPartySearchTest.swift */; };
 		4A59B58AD11B5EE1F80BBDEB /* TestHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */; };
+		4D3341941DB62DBA00BC3FDC /* CustomSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D3341931DB62DBA00BC3FDC /* CustomSearchViewController.swift */; };
 		4F514FD41ACD8F2C0022D7EA /* HistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F514FD31ACD8F2C0022D7EA /* HistoryTests.swift */; };
 		4F97573B1AFA6F37006ECC24 /* readerContent.html in Resources */ = {isa = PBXBuildFile; fileRef = 4F9757391AFA6F37006ECC24 /* readerContent.html */; };
 		4F97573C1AFA6F37006ECC24 /* ReaderViewUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F97573A1AFA6F37006ECC24 /* ReaderViewUITests.swift */; };
@@ -1399,6 +1401,7 @@
 		39E65D351CA5CAF200C63CE3 /* AsyncReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncReducer.swift; sourceTree = "<group>"; };
 		39F6D06F1CD3B0770055D949 /* HomePageSettingsUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomePageSettingsUITests.swift; sourceTree = "<group>"; };
 		3B0943801D6CC4FC004F24E1 /* FilledPageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FilledPageControl.swift; path = ThirdParty/FilledPageControl.swift; sourceTree = "<group>"; };
+		3B3780BC1E16D8E300530B6A /* CustomSearchEnginesTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomSearchEnginesTest.swift; sourceTree = "<group>"; };
 		3B43E3D01D95C48D00BBA9DB /* StoragePerfTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StoragePerfTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B43E3D21D95C48D00BBA9DB /* StoragePerfTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoragePerfTests.swift; sourceTree = "<group>"; };
 		3B43E3D41D95C48D00BBA9DB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1420,6 +1423,7 @@
 		3BFE4B0B1D342FB900DDF53F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3BFE4B4F1D34673D00DDF53F /* ThirdPartySearchTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThirdPartySearchTest.swift; sourceTree = "<group>"; };
 		4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHistory.swift; sourceTree = "<group>"; };
+		4D3341931DB62DBA00BC3FDC /* CustomSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomSearchViewController.swift; sourceTree = "<group>"; };
 		4F514FD31ACD8F2C0022D7EA /* HistoryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryTests.swift; sourceTree = "<group>"; };
 		4F9757391AFA6F37006ECC24 /* readerContent.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = readerContent.html; sourceTree = "<group>"; };
 		4F97573A1AFA6F37006ECC24 /* ReaderViewUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReaderViewUITests.swift; sourceTree = "<group>"; };
@@ -2346,6 +2350,7 @@
 				D3E8EEE71B97A87A001900FB /* ClearPrivateDataTableViewController.swift */,
 				39AC59191CC574AA0042C2F5 /* HomePageSettingsViewController.swift */,
 				2F44FCCA1A9E972E00FD20CC /* SearchEnginePicker.swift */,
+				4D3341931DB62DBA00BC3FDC /* CustomSearchViewController.swift */,
 				2F44FCC61A9E8CF500FD20CC /* SearchSettingsTableViewController.swift */,
 				74E36D771B71323500D69DA1 /* SettingsContentViewController.swift */,
 				2F44FC711A9E840300FD20CC /* SettingsNavigationController.swift */,
@@ -3312,6 +3317,7 @@
 				3B6F40171DC7849C00656CC6 /* ActivityStreamTests.swift */,
 				E696FE501C47F86E00EC007C /* AuthenticatorTests.swift */,
 				F84B21D91A090F8100AAB793 /* ClientTests.swift */,
+				3B3780BC1E16D8E300530B6A /* CustomSearchEnginesTest.swift */,
 				D3D488581ABB54CD00A93597 /* FileAccessorTests.swift */,
 				7BC7B4BD1C904BF90046E9D2 /* MenuTests.swift */,
 				281B2BE91ADF4D90002917DC /* MockProfile.swift */,
@@ -5146,6 +5152,7 @@
 				E660BDD91BB06521009AC090 /* TabsButton.swift in Sources */,
 				2F44FCCB1A9E972E00FD20CC /* SearchEnginePicker.swift in Sources */,
 				2F834D1A1A80629A006A0B7B /* FxAContentViewController.swift in Sources */,
+				4D3341941DB62DBA00BC3FDC /* CustomSearchViewController.swift in Sources */,
 				E68E7ACB1CAC1D4500FDCA76 /* PagingPasscodeViewController.swift in Sources */,
 				D34DC8531A16C40C00D49B7B /* Profile.swift in Sources */,
 				392ED6B71D06E85E009D9B62 /* NewTabChoiceViewController.swift in Sources */,
@@ -5248,6 +5255,7 @@
 				A83E5B1D1C1DA8D80026D912 /* UIPasteboardExtensionsTests.swift in Sources */,
 				28D52E2F1BCDF53900187A1D /* ResetTests.swift in Sources */,
 				E696FE511C47F86E00EC007C /* AuthenticatorTests.swift in Sources */,
+				3B3780BD1E16D8E300530B6A /* CustomSearchEnginesTest.swift in Sources */,
 				3B6F40181DC7849C00656CC6 /* ActivityStreamTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
