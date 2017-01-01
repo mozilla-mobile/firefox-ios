@@ -9,6 +9,7 @@ import Shared
 import Storage
 import WebKit
 import Alamofire
+@testable import Client
 
 class ClientTests: XCTestCase {
 
@@ -79,7 +80,7 @@ class ClientTests: XCTestCase {
         let expectation = expectationWithDescription("Validate host for \(host)")
         let request = NSURLRequest(URL: NSURL(string: "http://\(host):6571/about/license")!)
         var response: NSHTTPURLResponse?
-        Alamofire.request(request).response { (req, res, data, error) -> Void in
+        Alamofire.request(request).authenticate(usingCredential: WebServer.sharedInstance.credentials).response { (req, res, data, error) -> Void in
             response = res
             expectation.fulfill()
         }

@@ -50,6 +50,10 @@ public enum Direction {
     }
 }
 
+public protocol KeywordSearchSource {
+    func getURLForKeywordSearch(keyword: String) -> Deferred<Maybe<String>>
+}
+
 public class SQLiteBookmarksModelFactory: BookmarksModelFactory {
     private let bookmarks: SQLiteBookmarks
     private let direction: Direction
@@ -826,7 +830,7 @@ public class UnsyncedBookmarksFallbackModelFactory: BookmarksModelFactory {
     }
 }
 
-public class MergedSQLiteBookmarks: BookmarksModelFactorySource {
+public class MergedSQLiteBookmarks: BookmarksModelFactorySource, KeywordSearchSource {
     let local: SQLiteBookmarks
     let buffer: SQLiteBookmarkBufferStorage
 
@@ -847,5 +851,9 @@ public class MergedSQLiteBookmarks: BookmarksModelFactorySource {
     public init(db: BrowserDB) {
         self.local = SQLiteBookmarks(db: db)
         self.buffer = SQLiteBookmarkBufferStorage(db: db)
+    }
+
+    public func getURLForKeywordSearch(keyword: String) -> Deferred<Maybe<String>> {
+        return self.local.getURLForKeywordSearch(keyword)
     }
 }

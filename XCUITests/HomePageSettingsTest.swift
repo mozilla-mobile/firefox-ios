@@ -25,8 +25,8 @@ class HomePageSettingsTest: BaseTestCase {
         app.textFields["address"].typeText("www.google.com\r")
         
         // Accessing https means that it is routed
-        waitForValueContains(app.textFields["url"],value: "https://www.google")
-        let currentURL:String = app.textFields["url"].value as! String
+        waitForValueContains(app.textFields["url"], value: "https://www.google")
+        let currentURL = app.textFields["url"].value as! String
         app.buttons["TabToolbar.menuButton"].tap()
         app.pageIndicators["page 1 of 2"].tap()
         
@@ -51,7 +51,7 @@ class HomePageSettingsTest: BaseTestCase {
         // Go to google website
         app.textFields["url"].tap()
         app.textFields["address"].typeText("www.google.com\r")
-        waitForValueContains(app.textFields["url"],value: "https://www.google")
+        waitForValueContains(app.textFields["url"], value: "https://www.google")
         
         // Check the Homepage icon is present in menu by default
         let tabtoolbarMenubuttonButton = app.buttons["TabToolbar.menuButton"]

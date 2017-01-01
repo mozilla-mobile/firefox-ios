@@ -7,13 +7,32 @@ import Storage
 import WebImage
 
 public extension UIImageView {
-    public func setIcon(icon: Favicon?, withPlaceholder placeholder: UIImage) {
-        if let icon = icon {
-            let imageURL = NSURL(string: icon.url)
-            self.sd_setImageWithURL(imageURL, placeholderImage: placeholder)
+
+    public func setIcon(icon: Favicon?, forURL url: NSURL?) {
+        self.backgroundColor = UIColor.clearColor()
+        setDefaultIcon(url)
+        guard let icon = icon else {
             return
         }
-        self.image = placeholder
+        let imageURL = NSURL(string: icon.url)
+        self.sd_setHighlightedImageWithURL(imageURL) { (img, error, type, url) in
+            guard let image = img else {
+                return
+            }
+            self.image = image
+            self.backgroundColor = UIColor.whiteColor()
+        }
+    }
+
+    private func setDefaultIcon(url: NSURL?) {
+        if let url = url {
+            self.image = FaviconFetcher.getDefaultFavicon(url)
+            self.backgroundColor = FaviconFetcher.getDefaultColor(url)
+        } else {
+            self.image = FaviconFetcher.defaultFavicon
+            self.backgroundColor = UIColor.whiteColor()
+        }
+        self.highlightedImage = self.image
     }
 }
 

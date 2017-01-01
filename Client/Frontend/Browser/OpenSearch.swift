@@ -9,7 +9,6 @@ import Fuzi
 
 private let TypeSearch = "text/html"
 private let TypeSuggest = "application/x-suggestions+json"
-private let SearchTermsAllowedCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789*-_."
 
 class OpenSearchEngine: NSObject, NSCoding {
     static let PreferredIconSize = 30
@@ -119,8 +118,7 @@ class OpenSearchEngine: NSObject, NSCoding {
     }
 
     private func getURLFromTemplate(searchTemplate: String, query: String) -> NSURL? {
-        let allowedCharacters = NSCharacterSet(charactersInString: SearchTermsAllowedCharacters)
-        if let escapedQuery = query.stringByAddingPercentEncodingWithAllowedCharacters(allowedCharacters) {
+        if let escapedQuery = query.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.SearchTermsAllowedCharacterSet()) {
             // Escape the search template as well in case it contains not-safe characters like symbols
             let templateAllowedSet = NSMutableCharacterSet()
             templateAllowedSet.formUnionWithCharacterSet(NSCharacterSet.URLAllowedCharacterSet())

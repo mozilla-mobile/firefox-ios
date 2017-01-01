@@ -211,6 +211,27 @@ public class FaviconFetcher: NSObject, NSXMLParserDelegate {
         return deferred
     }
 
+    // Returns a single Favicon UIImage for a given URL
+    class func fetchFavImageForURL(forURL url: NSURL, profile: Profile) -> Deferred<Maybe<UIImage>> {
+        let deferred = Deferred<Maybe<UIImage>>()
+        FaviconFetcher.getForURL(url.domainURL(), profile: profile).uponQueue(dispatch_get_main_queue()) { result in
+            var iconURL: NSURL?
+            if let favicons = result.successValue where favicons.count > 0, let faviconImageURL = favicons.first?.url.asURL {
+                iconURL = faviconImageURL
+            } else {
+                return deferred.fill(Maybe(failure: FaviconError()))
+            }
+            SDWebImageManager.sharedManager().downloadImageWithURL(iconURL, options: SDWebImageOptions.ContinueInBackground, progress: nil) { (image, error, cacheType, success, url) in
+                if image != nil {
+                    deferred.fill(Maybe(success: image))
+                } else {
+                    deferred.fill(Maybe(failure: FaviconError()))
+                }
+            }
+        }
+        return deferred
+    }
+
     // Returns the default favicon for a site based on the first letter of the site's domain
     class func getDefaultFavicon(url: NSURL) -> UIImage {
         guard let character = url.baseDomain()?.characters.first else {
@@ -229,7 +250,6 @@ public class FaviconFetcher: NSObject, NSXMLParserDelegate {
         faviconLabel.textAlignment = .Center
         faviconLabel.font = UIFont.systemFontOfSize(18, weight: UIFontWeightMedium)
         faviconLabel.textColor = UIColor.whiteColor()
-        faviconLabel.backgroundColor = getDefaultColor(url)
         UIGraphicsBeginImageContextWithOptions(faviconLabel.bounds.size, false, 0.0)
         faviconLabel.layer.renderInContext(UIGraphicsGetCurrentContext()!)
         faviconImage = UIGraphicsGetImageFromCurrentImageContext()!

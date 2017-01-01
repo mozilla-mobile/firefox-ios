@@ -291,6 +291,9 @@ class BrowserViewController: UIViewController {
             self.displayedPopoverController = nil
         }
 
+        // Dismiss menu if presenting
+        menuViewController?.dismissViewControllerAnimated(true, completion: nil)
+
         // If we are displying a private tab, hide any elements in the tab that we wouldn't want shown
         // when the app is in the home switcher
         guard let privateTab = tabManager.selectedTab where privateTab.isPrivate else {
@@ -1541,24 +1544,50 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBar(urlBar: URLBarView, didSubmitText text: String) {
-        let engine = profile.searchEngines.defaultEngine
-        let url: NSURL
-
         if let fixupURL = URIFixup.getURL(text) {
             // The user entered a URL, so use it.
-            url = fixupURL
-        } else if let searchURL = engine.searchURLForQuery(text) {
-            // We couldn't build a URL, so do a search query.
-            url = searchURL
+            finishEditingAndSubmit(fixupURL, visitType: VisitType.Typed)
+            return
+        }
+
+        // We couldn't build a URL, so check for a matching search keyword.
+        let trimmedText = text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        guard let possibleKeywordQuerySeparatorSpace = trimmedText.characters.indexOf(" ") else {
+            submitSearchText(text)
+            return
+        }
+
+        let possibleKeyword = trimmedText.substringToIndex(possibleKeywordQuerySeparatorSpace)
+        let possibleQuery = trimmedText.substringFromIndex(possibleKeywordQuerySeparatorSpace.successor())
+
+        profile.bookmarks.getURLForKeywordSearch(possibleKeyword).uponQueue(dispatch_get_main_queue()) { result in
+            if var urlString = result.successValue,
+                let escapedQuery = possibleQuery.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.SearchTermsAllowedCharacterSet()),
+                let range = urlString.rangeOfString("%s") {
+                urlString.replaceRange(range, with: escapedQuery)
+
+                if let url = NSURL(string: urlString) {
+                    self.finishEditingAndSubmit(url, visitType: VisitType.Typed)
+                    return
+                }
+            }
+
+            self.submitSearchText(text)
+        }
+    }
+
+    private func submitSearchText(text: String) {
+        let engine = profile.searchEngines.defaultEngine
+
+        if let searchURL = engine.searchURLForQuery(text) {
+            // We couldn't find a matching search keyword, so do a search query.
             Telemetry.recordEvent(SearchTelemetry.makeEvent(engine: engine, source: .URLBar))
+            finishEditingAndSubmit(searchURL, visitType: VisitType.Typed)
         } else {
             // We still don't have a valid URL, so something is broken. Give up.
             log.error("Error handling URL entry: \"\(text)\".")
             assertionFailure("Couldn't generate search URL: \(text)")
-            return
         }
-
-        finishEditingAndSubmit(url, visitType: VisitType.Typed)
     }
 
     func urlBarDidEnterOverlayMode(urlBar: URLBarView) {
