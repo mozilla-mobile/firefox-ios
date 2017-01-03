@@ -2,7 +2,7 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd">
   <file original="Blockzilla/Info.plist" source-language="en" datatype="plaintext">
     <header>
-      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="8.1" build-num="8B62"/>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="8.2.1" build-num="8C1002"/>
     </header>
     <body>
       <trans-unit id="CFBundleName">
@@ -11,11 +11,23 @@
       <trans-unit id="CFBundleShortVersionString">
         <source>2.0</source>
       </trans-unit>
+      <trans-unit id="NSCameraUsageDescription">
+        <source>This lets you take and upload photos.</source>
+      </trans-unit>
+      <trans-unit id="NSLocationWhenInUseUsageDescription">
+        <source>Websites you visit may request your location.</source>
+      </trans-unit>
+      <trans-unit id="NSMicrophoneUsageDescription">
+        <source>This lets you take and upload videos.</source>
+      </trans-unit>
+      <trans-unit id="NSPhotoLibraryUsageDescription">
+        <source>This lets you save and upload photos.</source>
+      </trans-unit>
     </body>
   </file>
   <file original="Blockzilla/en.lproj/Localizable.strings" source-language="en" datatype="plaintext">
     <header>
-      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="8.1" build-num="8B62"/>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="8.2.1" build-num="8C1002"/>
     </header>
     <body>
       <trans-unit id="About.learnMoreButton">
@@ -70,6 +82,30 @@
         <source>%@ puts you in control.</source>
         <note>Label on About screen</note>
       </trans-unit>
+      <trans-unit id="Browser.backLabel">
+        <source>Back</source>
+        <note>Accessibility label for the back button</note>
+      </trans-unit>
+      <trans-unit id="Browser.forwardLabel">
+        <source>Forward</source>
+        <note>Accessibility label for the forward button</note>
+      </trans-unit>
+      <trans-unit id="Browser.reloadLabel">
+        <source>Reload</source>
+        <note>Accessibility label for the reload button</note>
+      </trans-unit>
+      <trans-unit id="Browser.settingsLabel">
+        <source>Settings</source>
+        <note>Accessibility label for the settings button</note>
+      </trans-unit>
+      <trans-unit id="Browser.shareLabel">
+        <source>Share</source>
+        <note>Accessibility label for the share button</note>
+      </trans-unit>
+      <trans-unit id="Browser.stopLabel">
+        <source>Stop</source>
+        <note>Accessibility label for the stop button</note>
+      </trans-unit>
       <trans-unit id="Error.tryAgainButton">
         <source>Try again</source>
         <note>Button label to reload the error page</note>
@@ -82,12 +118,12 @@
         <source>To be clear, the sites and services you use can still learn about you as you browse.</source>
         <note>Message label shown under the button in the first run UI</note>
       </trans-unit>
-      <trans-unit id="FirstRun.messageLabel1">
-        <source>Browse like no one’s watching.</source>
+      <trans-unit id="FirstRun.messageLabelDescription">
+        <source>Automatically block online trackers while you browse. Then tap to erase visited pages, searches, cookies and passwords from your device.</source>
         <note>Message label on the first run screen</note>
       </trans-unit>
-      <trans-unit id="FirstRun.messageLabel2">
-        <source>Automatically block online trackers while you browse. Then tap to erase visited pages, searches, cookies and passwords from your device. </source>
+      <trans-unit id="FirstRun.messageLabelTagline">
+        <source>Browse like no one’s watching.</source>
         <note>Message label on the first run screen</note>
       </trans-unit>
       <trans-unit id="Home.descriptionLabel1">
@@ -97,6 +133,22 @@
       <trans-unit id="Home.descriptionLabel2">
         <source>Browse. Erase. Repeat.</source>
         <note>Second label for product description on the home screen</note>
+      </trans-unit>
+      <trans-unit id="Open.Cancel">
+        <source>Cancel</source>
+        <note>Label in share alert to cancel the alert</note>
+      </trans-unit>
+      <trans-unit id="Open.Firefox">
+        <source>Firefox (Private Browsing)</source>
+        <note>Label in share alert to open the URL in Firefox</note>
+      </trans-unit>
+      <trans-unit id="Open.More">
+        <source>More</source>
+        <note>Label in share alert to open the full system share menu</note>
+      </trans-unit>
+      <trans-unit id="Open.Safari">
+        <source>Safari</source>
+        <note>Label in share alert to open the URL in Safari</note>
       </trans-unit>
       <trans-unit id="Safari.instructionsContentBlockers">
         <source>Tap Safari, then select Content Blockers</source>
@@ -129,6 +181,14 @@
       <trans-unit id="Settings.screenTitle">
         <source>Settings</source>
         <note>Title for settings screen</note>
+      </trans-unit>
+      <trans-unit id="Settings.searchSection">
+        <source>SEARCH ENGINE</source>
+        <note>Title for the search engine row</note>
+      </trans-unit>
+      <trans-unit id="Settings.searchTitle">
+        <source>Search Engine</source>
+        <note>Title for the search engine selection screen</note>
       </trans-unit>
       <trans-unit id="Settings.sectionIntegration">
         <source>INTEGRATION</source>
@@ -206,7 +266,7 @@
   </file>
   <file original="ContentBlocker/Info.plist" source-language="en" datatype="plaintext">
     <header>
-      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="8.1" build-num="8B62"/>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="8.2.1" build-num="8C1002"/>
     </header>
     <body>
       <trans-unit id="CFBundleDisplayName">
@@ -217,6 +277,19 @@
       </trans-unit>
       <trans-unit id="CFBundleShortVersionString">
         <source>2.0</source>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="XCUITest/Info.plist" source-language="en" datatype="plaintext">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="8.2.1" build-num="8C1002"/>
+    </header>
+    <body>
+      <trans-unit id="CFBundleName">
+        <source>$(PRODUCT_NAME)</source>
+      </trans-unit>
+      <trans-unit id="CFBundleShortVersionString">
+        <source>1.0</source>
       </trans-unit>
     </body>
   </file>
