@@ -122,7 +122,6 @@ struct UIConstants {
         static let firstRunButton = NSLocalizedString("FirstRun.buttonLabel", value: "OK, GOT IT!", comment: "Label on button to dismiss first run UI")
         static let firstRunMessage = NSLocalizedString("FirstRun.messageLabelDescription", value: "Automatically block online trackers while you browse. Then tap to erase visited pages, searches, cookies and passwords from your device.", comment: "Message label on the first run screen")
         static let firstRunTitle = NSLocalizedString("FirstRun.messageLabelTagline", value: "Browse like no one’s watching.", comment: "Message label on the first run screen")
-        static let firstRunDisclaimer = NSLocalizedString("FirstRun.disclaimerMessage", value: "To be clear, the sites and services you use can still learn about you as you browse.", comment: "Message label shown under the button in the first run UI")
         static let homeLabel1 = NSLocalizedString("Home.descriptionLabel1", value: "Automatic private browsing.", comment: "First label for product description on the home screen")
         static let homeLabel2 = NSLocalizedString("Home.descriptionLabel2", value: "Browse. Erase. Repeat.", comment: "Second label for product description on the home screen")
         static let labelBlockAds = NSLocalizedString("Settings.toggleBlockAds", value: "Block ad trackers", comment: "Label for toggle on main screen")
