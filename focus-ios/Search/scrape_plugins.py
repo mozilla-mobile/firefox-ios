@@ -76,6 +76,14 @@ def downloadEngines(locale, scraper, engines):
     if not os.path.exists(directory):
         os.makedirs(directory)
 
+    # Always include DuckDuckGo.
+    if "duckduckgo" not in engines:
+        for i, engine in reversed(list(enumerate(engines))):
+            if i > 0 and "duckduckgo" < engine:
+                continue
+            engines.insert(i + 1, "duckduckgo")
+            break
+
     for engine in engines:
         file = engine + ".xml"
         path = os.path.join(directory, file)
