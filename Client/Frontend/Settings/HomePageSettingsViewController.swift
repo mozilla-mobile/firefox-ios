@@ -39,7 +39,7 @@ class HomePageSettingsViewController: SettingsTableViewController {
             return NSURL(string: string)
         }
 
-        let currentTabURL = self.tabManager.selectedTab?.displayURL
+        let currentTabURL = self.tabManager.selectedTab?.url?.displayURL
         let clipboardURL = URLFromString(UIPasteboard.generalPasteboard().string)
 
         var basicSettings: [Setting] = [

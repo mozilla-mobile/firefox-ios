@@ -186,6 +186,6 @@ class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
         self.siteImageView.backgroundColor = imageBackgroundColor
         self.siteImageView.image = image?.createScaled(SimpleHighlightCellUX.IconSize) ?? SimpleHighlightCellUX.PlaceholderImage
         self.titleLabel.text = site.title.characters.count <= 1 ? site.url : site.title
-        self.descriptionLabel.text = site.tileURL.baseDomain()
+        self.descriptionLabel.text = site.tileURL.baseDomain
     }
 }

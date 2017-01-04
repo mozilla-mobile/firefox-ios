@@ -216,7 +216,7 @@ class TabLocationView: UIView {
     }
 
     private func updateTextWithURL() {
-        if let httplessURL = url?.absoluteDisplayString(), let baseDomain = url?.baseDomain() {
+        if let httplessURL = url?.absoluteDisplayString, let baseDomain = url?.baseDomain {
             // Highlight the base domain of the current URL.
             let attributedString = NSMutableAttributedString(string: httplessURL)
             let nsRange = NSMakeRange(0, httplessURL.characters.count)

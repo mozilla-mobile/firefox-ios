@@ -109,7 +109,7 @@ class Tab: NSObject {
     }
 
     class func toTab(tab: Tab) -> RemoteTab? {
-        if let displayURL = tab.displayURL where RemoteTab.shouldIncludeURL(displayURL) {
+        if let displayURL = tab.url?.displayURL where RemoteTab.shouldIncludeURL(displayURL) {
             let history = Array(tab.historyList.filter(RemoteTab.shouldIncludeURL).reverse())
             return RemoteTab(clientGUID: nil,
                 URL: displayURL,
@@ -248,7 +248,7 @@ class Tab: NSObject {
         }
 
         guard let lastTitle = lastTitle where !lastTitle.isEmpty else {
-            return displayURL?.absoluteString ??  ""
+            return self.url?.displayURL?.absoluteString ??  ""
         }
 
         return lastTitle
@@ -271,28 +271,6 @@ class Tab: NSObject {
             }
         }
         return largest
-    }
-
-    var displayURL: NSURL? {
-        if let url = url {
-            if ReaderModeUtils.isReaderModeURL(url) {
-                return ReaderModeUtils.decodeURL(url)?.havingRemovedAuthorisationComponents()
-            }
-
-            if ErrorPageHelper.isErrorPageURL(url) {
-                let decodedURL = ErrorPageHelper.originalURLFromQuery(url)
-                if !AboutUtils.isAboutURL(decodedURL) {
-                    return decodedURL?.havingRemovedAuthorisationComponents()
-                } else {
-                    return nil
-                }
-            }
-
-            if !AboutUtils.isAboutURL(url) {
-                return url.havingRemovedAuthorisationComponents()
-            }
-        }
-        return nil
     }
 
     var canGoBack: Bool {
