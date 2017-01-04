@@ -288,12 +288,12 @@ extension TopTabsViewController: UICollectionViewDataSource {
         tabCell.titleText.text = tab.displayTitle
         
         if tab.displayTitle.isEmpty {
-            if (tab.webView?.URL?.baseDomain()?.contains("localhost") ?? true) {
+            if (tab.webView?.URL?.baseDomain?.contains("localhost") ?? true) {
                 tabCell.titleText.text = AppMenuConfiguration.NewTabTitleString
             } else {
-                tabCell.titleText.text = tab.webView?.URL?.absoluteDisplayString()
+                tabCell.titleText.text = tab.webView?.URL?.absoluteDisplayString
             }
-            tabCell.accessibilityLabel = AboutUtils.getAboutComponent(tab.url)
+            tabCell.accessibilityLabel = tab.url?.aboutComponent ?? ""
             tabCell.closeButton.accessibilityLabel = String(format: Strings.TopSitesRemoveButtonAccessibilityLabel, tabCell.titleText.text ?? "")
         } else {
             tabCell.accessibilityLabel = tab.displayTitle

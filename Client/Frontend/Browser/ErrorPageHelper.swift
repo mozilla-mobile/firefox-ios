@@ -133,7 +133,7 @@ class ErrorPageHelper {
         self.certStore = certStore
 
         server.registerHandlerForMethod("GET", module: "errors", resource: "error.html", handler: { (request) -> GCDWebServerResponse! in
-            guard let url = ErrorPageHelper.originalURLFromQuery(request.URL) else {
+            guard let url = request.URL.originalURLFromErrorURL else {
                 return GCDWebServerResponse(statusCode: 404)
             }
 
@@ -214,8 +214,8 @@ class ErrorPageHelper {
 
     func showPage(error: NSError, forUrl url: NSURL, inWebView webView: WKWebView) {
         // Don't show error pages for error pages.
-        if ErrorPageHelper.isErrorPageURL(url) {
-            if let previousURL = ErrorPageHelper.originalURLFromQuery(url),
+        if url.isErrorPageURL {
+            if let previousURL = url.originalURLFromErrorURL,
                let index = ErrorPageHelper.redirecting.indexOf(previousURL) {
                 ErrorPageHelper.redirecting.removeAtIndex(index)
             }
@@ -253,22 +253,6 @@ class ErrorPageHelper {
         components.queryItems = queryItems
         webView.loadRequest(PrivilegedRequest(URL: components.URL!))
     }
-
-    class func isErrorPageURL(url: NSURL) -> Bool {
-        if let host = url.host, path = url.path {
-            return url.scheme == "http" && host == "localhost" && path == "/errors/error.html"
-        }
-        return false
-    }
-
-    class func originalURLFromQuery(url: NSURL) -> NSURL? {
-        let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false)
-        if let queryURL = components?.queryItems?.find({ $0.name == "url" })?.value {
-            return NSURL(string: queryURL)
-        }
-
-        return nil
-    }
 }
 
 extension ErrorPageHelper: TabHelper {
@@ -281,9 +265,9 @@ extension ErrorPageHelper: TabHelper {
     }
 
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        if let errorURL = message.frameInfo.request.URL where ErrorPageHelper.isErrorPageURL(errorURL),
+        if let errorURL = message.frameInfo.request.URL where errorURL.isErrorPageURL,
            let res = message.body as? [String: String],
-           let originalURL = ErrorPageHelper.originalURLFromQuery(errorURL),
+           let originalURL = errorURL.originalURLFromErrorURL,
            let type = res["type"] {
 
             switch type {

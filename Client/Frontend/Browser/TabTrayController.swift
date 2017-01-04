@@ -867,7 +867,7 @@ private class TabManagerDataSource: NSObject, UICollectionViewDataSource {
         if !tab.displayTitle.isEmpty {
             tabCell.accessibilityLabel = tab.displayTitle
         } else {
-            tabCell.accessibilityLabel = AboutUtils.getAboutComponent(tab.url)
+            tabCell.accessibilityLabel = tab.url?.aboutComponent ?? "" // If there is no title we are most likely on a home panel.
         }
 
         if AppConstants.MOZ_REORDER_TAB_TRAY {

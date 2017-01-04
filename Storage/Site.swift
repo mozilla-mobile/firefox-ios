@@ -66,7 +66,7 @@ public class Site: Identifiable {
     var guid: String? = nil
 
     public var tileURL: NSURL {
-        return NSURL(string: url)?.domainURL() ?? NSURL(string: "about:blank")!
+        return NSURL(string: url)?.domainURL ?? NSURL(string: "about:blank")!
     }
 
     public let url: String

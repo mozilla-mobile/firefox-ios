@@ -208,7 +208,7 @@ class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
             self.siteImageView.layer.borderWidth = SimpleHighlightCellUX.BorderWidth
         }
         self.titleLabel.text = site.title.characters.count <= 1 ? site.url : site.title
-        self.descriptionLabel.text = site.tileURL.baseDomain()
+        self.descriptionLabel.text = site.tileURL.baseDomain
     }
 
     func setImageWithURL(url: NSURL) {

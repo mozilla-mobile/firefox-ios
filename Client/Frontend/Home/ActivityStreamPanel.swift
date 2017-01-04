@@ -316,7 +316,7 @@ extension ActivityStreamPanel {
     }
 
     func hideURLFromTopSites(siteURL: NSURL) {
-        guard let host = siteURL.normalizedHost(), let url = siteURL.absoluteString else {
+        guard let host = siteURL.normalizedHost, let url = siteURL.absoluteString else {
             return
         }
         // if the default top sites contains the siteurl. also wipe it from default suggested sites.

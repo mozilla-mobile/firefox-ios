@@ -124,7 +124,7 @@ private let topSitesQuery = "SELECT * FROM \(TableCachedTopSites) ORDER BY frece
 
 extension SQLiteHistory: BrowserHistory {
     public func removeSiteFromTopSites(site: Site) -> Success {
-        if let host = site.url.asURL?.normalizedHost() {
+        if let host = site.url.asURL?.normalizedHost {
             return self.removeHostFromTopSites(host)
         }
         return deferMaybe(DatabaseError(description: "Invalid url for site \(site.url)"))
@@ -192,7 +192,7 @@ extension SQLiteHistory: BrowserHistory {
         //
         // Note that we will never match against a deleted item, because deleted items have no URL,
         // so we don't need to unset is_deleted here.
-        if let host = site.url.asURL?.normalizedHost() {
+        if let host = site.url.asURL?.normalizedHost {
             let update = "UPDATE \(TableHistory) SET title = ?, local_modified = ?, should_upload = 1, domain_id = (SELECT id FROM \(TableDomains) where domain = ?) WHERE url = ?"
             let updateArgs: Args? = [site.title, time, host, site.url]
             if Logger.logPII {
@@ -210,7 +210,7 @@ extension SQLiteHistory: BrowserHistory {
 
     private func insertSite(site: Site, atTime time: NSNumber, withConnection conn: SQLiteDBConnection) -> Int {
 
-        if let host = site.url.asURL?.normalizedHost() {
+        if let host = site.url.asURL?.normalizedHost {
             if let error = conn.executeChange("INSERT OR IGNORE INTO \(TableDomains) (domain) VALUES (?)", withArgs: [host]) {
                 log.warning("Domain insertion failed with \(error.localizedDescription)")
                 return 0
@@ -925,7 +925,7 @@ extension SQLiteHistory: SyncableHistory {
 
             // The record doesn't exist locally. Insert it.
             log.verbose("Inserting remote history item for guid \(place.guid).")
-            if let host = place.url.asURL?.normalizedHost() {
+            if let host = place.url.asURL?.normalizedHost {
                 if Logger.logPII {
                     log.debug("Inserting: \(place.url).")
                 }

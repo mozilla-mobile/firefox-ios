@@ -213,7 +213,7 @@ public class FaviconFetcher: NSObject, NSXMLParserDelegate {
 
     // Returns the default favicon for a site based on the first letter of the site's domain
     class func getDefaultFavicon(url: NSURL) -> UIImage {
-        guard let character = url.baseDomain()?.characters.first else {
+        guard let character = url.baseDomain?.characters.first else {
             return defaultFavicon
         }
 
@@ -240,7 +240,7 @@ public class FaviconFetcher: NSObject, NSXMLParserDelegate {
 
     // Returns a color based on the url's hash
     class func getDefaultColor(url: NSURL) -> UIColor {
-        guard let hash = url.baseDomain()?.hashValue else {
+        guard let hash = url.baseDomain?.hashValue else {
             return UIColor.grayColor()
         }
         let index = abs(hash) % (UIConstants.DefaultColorStrings.count - 1)
