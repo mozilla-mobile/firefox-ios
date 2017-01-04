@@ -107,7 +107,7 @@ class SearchSettingsTableViewController: UITableViewController {
         } else {
             // The default engine is not a quick search engine.
             let index = indexPath.item + 1
-            if index < model.orderedEngines.count{
+            if index < model.orderedEngines.count {
                 engine = model.orderedEngines[index]
 
                 cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)

@@ -551,7 +551,7 @@ class SettingsTableViewController: UITableViewController {
         if let setting = section[indexPath.row] where setting is BoolSetting && setting.status != nil {
             return calculateStatusCellHeightForSetting(setting)
         }
-        if let setting = section[indexPath.row], let height = setting.cellHeight{
+        if let setting = section[indexPath.row], let height = setting.cellHeight {
             return height
         }
 
