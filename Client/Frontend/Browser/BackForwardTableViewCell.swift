@@ -20,6 +20,8 @@ class BackForwardTableViewCell: UITableViewCell {
     lazy var faviconView: UIImageView = {
         let faviconView = UIImageView(image: FaviconFetcher.defaultFavicon)
         faviconView.backgroundColor = UIColor.whiteColor()
+        faviconView.layer.cornerRadius = 6
+        faviconView.layer.masksToBounds = true
         return faviconView
     }()
     
@@ -29,13 +31,7 @@ class BackForwardTableViewCell: UITableViewCell {
         label.font = label.font.fontWithSize(BackForwardViewCellUX.fontSize)
         return label
     }()
-    
-    lazy var bg: UIView = {
-        let bg = UIView(frame: CGRect.zero)
-        bg.backgroundColor = BackForwardViewCellUX.bgColor
-        return bg
-    }()
-    
+
     var connectingForwards = true
     var connectingBackwards = true
     
@@ -43,10 +39,6 @@ class BackForwardTableViewCell: UITableViewCell {
         didSet {
             if(isCurrentTab) {
                 label.font = UIFont(name:"HelveticaNeue-Bold", size: BackForwardViewCellUX.fontSize)
-                bg.snp_updateConstraints { make in
-                    make.height.equalTo(BackForwardViewCellUX.faviconWidth+BackForwardViewCellUX.borderBold)
-                    make.width.equalTo(BackForwardViewCellUX.faviconWidth+BackForwardViewCellUX.borderBold)
-                }
             }
         }
     }
@@ -75,8 +67,7 @@ class BackForwardTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = UIColor.clearColor()
         selectionStyle = .None
-        
-        contentView.addSubview(bg)
+
         contentView.addSubview(faviconView)
         contentView.addSubview(label)
         
@@ -91,13 +82,6 @@ class BackForwardTableViewCell: UITableViewCell {
             make.centerY.equalTo(self)
             make.leading.equalTo(faviconView.snp_trailing).offset(BackForwardViewCellUX.labelPadding)
             make.trailing.equalTo(self.snp_trailing).offset(-BackForwardViewCellUX.labelPadding)
-        }
-        
-        bg.snp_makeConstraints { make in
-            make.height.equalTo(BackForwardViewCellUX.faviconWidth+BackForwardViewCellUX.borderSmall)
-            make.width.equalTo(BackForwardViewCellUX.faviconWidth+BackForwardViewCellUX.borderSmall)
-            make.centerX.equalTo(faviconView)
-            make.centerY.equalTo(faviconView)
         }
     }
     
@@ -144,10 +128,5 @@ class BackForwardTableViewCell: UITableViewCell {
         connectingBackwards = true
         isCurrentTab = false
         label.font = UIFont(name:"HelveticaNeue", size: BackForwardViewCellUX.fontSize)
-        
-        bg.snp_updateConstraints { make in
-            make.height.equalTo(BackForwardViewCellUX.faviconWidth+BackForwardViewCellUX.borderSmall)
-            make.width.equalTo(BackForwardViewCellUX.faviconWidth+BackForwardViewCellUX.borderSmall)
-        }
     }
 }
