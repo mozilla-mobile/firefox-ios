@@ -330,9 +330,7 @@ class HistoryPanelSiteTableViewController: SiteTableViewController {
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
-        let category = self.categories[indexPath.section]
-
-        if let site = data[indexPath.row + category.offset] {
+        if let site = siteForIndexPath(indexPath) {
             if let cell = cell as? TwoLineTableViewCell {
                 cell.setLines(site.title, detailText: site.url)
                 cell.imageView?.setIcon(site.icon, forURL: site.tileURL)
