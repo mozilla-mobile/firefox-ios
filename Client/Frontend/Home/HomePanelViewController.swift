@@ -14,7 +14,6 @@ private struct HomePanelViewControllerUX {
     static let ButtonContainerBorderColor = UIColor.blackColor().colorWithAlphaComponent(0.1)
     static let BackgroundColorNormalMode = UIConstants.PanelBackgroundColor
     static let BackgroundColorPrivateMode = UIConstants.PrivateModeAssistantToolbarBackgroundColor
-    static let EditDoneButtonRightPadding: CGFloat = -12
     static let ToolbarButtonDeselectedColorNormalMode = UIColor(white: 0.2, alpha: 0.5)
     static let ToolbarButtonDeselectedColorPrivateMode = UIColor(white: 0.9, alpha: 1)
 }
@@ -27,24 +26,20 @@ protocol HomePanelViewControllerDelegate: class {
     func homePanelViewControllerDidRequestToOpenInNewTab(url: NSURL, isPrivate: Bool)
 }
 
-@objc
 protocol HomePanel: class {
     weak var homePanelDelegate: HomePanelDelegate? { get set }
-    optional func endEditing()
 }
 
 struct HomePanelUX {
     static let EmptyTabContentOffset = -180
 }
 
-@objc
 protocol HomePanelDelegate: class {
     func homePanelDidRequestToSignIn(homePanel: HomePanel)
     func homePanelDidRequestToCreateAccount(homePanel: HomePanel)
     func homePanelDidRequestToOpenInNewTab(url: NSURL, isPrivate: Bool)
     func homePanel(homePanel: HomePanel, didSelectURL url: NSURL, visitType: VisitType)
     func homePanel(homePanel: HomePanel, didSelectURLString url: String, visitType: VisitType)
-    optional func homePanelWillEnterEditingMode(homePanel: HomePanel)
 }
 
 struct HomePanelState {
@@ -75,9 +70,6 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     private var buttonContainerBottomBorderView: UIView!
     private var controllerContainerView: UIView!
     private var buttons: [UIButton] = []
-
-    private var finishEditingButton: UIButton?
-    private var editingPanel: HomePanel?
 
     var isPrivateMode: Bool = false {
         didSet {
@@ -237,12 +229,6 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         }
     }
 
-    func endEditing(sender: UIButton!) {
-        toggleEditingMode(false)
-        editingPanel?.endEditing?()
-        editingPanel = nil
-    }
-
     private func updateButtons() {
         // Remove any existing buttons if we're rebuilding the toolbar.
         for button in buttons {
@@ -317,42 +303,6 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     
     func homePanelDidRequestToOpenInNewTab(url: NSURL, isPrivate: Bool) {
         delegate?.homePanelViewControllerDidRequestToOpenInNewTab(url, isPrivate: isPrivate)
-    }
-
-    func homePanelWillEnterEditingMode(homePanel: HomePanel) {
-        editingPanel = homePanel
-        toggleEditingMode(true)
-    }
-
-    func toggleEditingMode(editing: Bool) {
-        let translateDown = CGAffineTransformMakeTranslation(0, UIConstants.ToolbarHeight)
-        let translateUp = CGAffineTransformMakeTranslation(0, -UIConstants.ToolbarHeight)
-
-        if editing {
-            let button = UIButton(type: UIButtonType.System)
-            button.setTitle(NSLocalizedString("Done", comment: "Done editing button"), forState: UIControlState.Normal)
-            button.addTarget(self, action: #selector(HomePanelViewController.endEditing(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-            button.transform = translateDown
-            button.titleLabel?.textAlignment = .Right
-            button.tintColor = self.isPrivateMode ? UIConstants.PrivateModeActionButtonTintColor : UIConstants.SystemBlueColor
-            self.buttonContainerView.addSubview(button)
-            button.snp_makeConstraints { make in
-                make.right.equalTo(self.buttonContainerView).offset(HomePanelViewControllerUX.EditDoneButtonRightPadding)
-                make.centerY.equalTo(self.buttonContainerView)
-            }
-            self.buttonContainerView.layoutIfNeeded()
-            finishEditingButton = button
-        }
-
-        UIView.animateWithDuration(0.4, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: [UIViewAnimationOptions.AllowUserInteraction, UIViewAnimationOptions.CurveEaseInOut], animations: { () -> Void in
-            self.buttons.forEach { $0.transform = editing ? translateUp : CGAffineTransformIdentity }
-            self.finishEditingButton?.transform = editing ? CGAffineTransformIdentity : translateDown
-        }, completion: { _ in
-            if !editing {
-                self.finishEditingButton?.removeFromSuperview()
-                self.finishEditingButton = nil
-            }
-        })
     }
 
     func homePanel(homePanel: HomePanel, didLongPressSite site: Site, siteImage: UIImage?, siteBGColor: UIColor?, actions: [ActionOverlayTableViewAction]) {

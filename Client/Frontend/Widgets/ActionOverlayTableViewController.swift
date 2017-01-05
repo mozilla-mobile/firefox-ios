@@ -4,6 +4,7 @@
 
 import Foundation
 import Storage
+import Shared
 
 class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     private(set) var actions: [ActionOverlayTableViewAction]
@@ -157,6 +158,7 @@ class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
     lazy var siteImageView: UIImageView = {
         let siteImageView = UIImageView()
         siteImageView.contentMode = UIViewContentMode.Center
+        siteImageView.clipsToBounds = true
         siteImageView.layer.cornerRadius = SimpleHighlightCellUX.CornerRadius
         return siteImageView
     }()
@@ -201,9 +203,16 @@ class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
     }
 
     func configureWithSite(site: Site, image: UIImage?, imageBackgroundColor: UIColor?) {
-        self.siteImageView.backgroundColor = imageBackgroundColor
-        self.siteImageView.image = image?.createScaled(SimpleHighlightCellUX.IconSize) ?? SimpleHighlightCellUX.PlaceholderImage
-        self.titleLabel.text = site.title.characters.count <= 1 ? site.url : site.title
-        self.descriptionLabel.text = site.tileURL.baseDomain
+        siteImageView.backgroundColor = imageBackgroundColor
+
+        if AppConstants.MOZ_AS_PANEL {
+            siteImageView.image = image?.createScaled(SimpleHighlightCellUX.IconSize) ?? SimpleHighlightCellUX.PlaceholderImage
+        } else {
+            siteImageView.image = image ?? SimpleHighlightCellUX.PlaceholderImage
+            siteImageView.contentMode = UIViewContentMode.ScaleAspectFill
+        }
+
+        titleLabel.text = site.title.characters.count <= 1 ? site.url : site.title
+        descriptionLabel.text = site.tileURL.baseDomain
     }
 }
