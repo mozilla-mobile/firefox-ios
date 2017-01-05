@@ -37,6 +37,15 @@ protocol TopTabCellDelegate: class {
 class TopTabsViewController: UIViewController {
     let tabManager: TabManager
     weak var delegate: TopTabsDelegate?
+
+    /*This is dumb. I dont want to do this. Here's why I have no other choice. 
+        - TopTabsVC likes to animate its own changes. Thats cool. After you press the add tab button it'll add the new tab and neatly scroll to it.
+        - Tabs can still be opened from outside of this button (menu/Today widget). Animating these in means using the TabManager delegates.
+        - But the TabManager delegate methods are also triggered when the add tab button within this VC is pressed. So I need a way of knowing if an animation is already taken care of or not.
+        - Overall though this really needs a rework. Majority of state changes happen simply by reloading the entire table without animations. This is because its hard to deal with changes to the data store which is managed by TabManager.
+     */
+    private var isAnimating = false
+
     var isPrivate = false
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: TopTabsViewLayout())
@@ -103,8 +112,10 @@ class TopTabsViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = tabLayoutDelegate
         collectionView.reloadData()
-        dispatch_async(dispatch_get_main_queue()) { 
+        dispatch_async(dispatch_get_main_queue()) {
+            self.isAnimating = true
              self.scrollToCurrentTab(false, centerCell: true)
+            self.isAnimating = false
         }
     }
     
@@ -174,6 +185,7 @@ class TopTabsViewController: UIViewController {
     }
     
     func newTabTapped() {
+        self.isAnimating = true
         if let currentTab = tabManager.selectedTab, let index = tabsToDisplay.indexOf(currentTab),
             let cell  = collectionView.cellForItemAtIndexPath(NSIndexPath(forItem: index, inSection: 0)) as? TopTabCell {
             cell.selectedTab = false
@@ -190,6 +202,7 @@ class TopTabsViewController: UIViewController {
                 if finished {
                     self.privateModeButton.enabled = true
                     self.scrollToCurrentTab()
+                    self.isAnimating = false
                 }
         })
     }
@@ -213,6 +226,8 @@ class TopTabsViewController: UIViewController {
         guard let currentTab = tabManager.selectedTab, let index = tabsToDisplay.indexOf(currentTab) where !collectionView.frame.isEmpty else {
             return
         }
+        assert(NSThread.isMainThread(), "Opening settings requires being invoked on the main thread")
+
         if let frame = collectionView.layoutAttributesForItemAtIndexPath(NSIndexPath(forRow: index, inSection: 0))?.frame {
             if centerCell {
                 collectionView.scrollToItemAtIndexPath(NSIndexPath(forItem: index, inSection: 0), atScrollPosition: .CenteredHorizontally, animated: false)
@@ -246,6 +261,7 @@ extension TopTabsViewController: TopTabCellDelegate {
         guard let indexPath = collectionView.indexPathForCell(cell) else {
             return
         }
+        self.isAnimating = true
         let tab = tabsToDisplay[indexPath.item]
         var selectedTab = false
         if tab == tabManager.selectedTab {
@@ -256,6 +272,7 @@ extension TopTabsViewController: TopTabCellDelegate {
             tabManager.removeTab(tab)
             tabManager.selectTab(tabsToDisplay.first)
             collectionView.reloadData()
+            self.isAnimating = false
         } else {
             var nextTab: Tab
             let currentIndex = indexPath.item
@@ -272,6 +289,7 @@ extension TopTabsViewController: TopTabCellDelegate {
                 self.collectionView.deleteItemsAtIndexPaths([indexPath])
                 }, completion: { finished in
                     self.collectionView.reloadData()
+                    self.isAnimating = false
             })
         }
     }
@@ -334,10 +352,7 @@ extension TopTabsViewController: TabSelectionDelegate {
     func didSelectTabAtIndex(index: Int) {
         let tab = tabsToDisplay[index]
         tabManager.selectTab(tab)
-        collectionView.reloadData()
-        collectionView.setNeedsDisplay()
         delegate?.topTabsDidChangeTab()
-        scrollToCurrentTab()
     }
 }
 
@@ -358,14 +373,22 @@ extension TopTabsViewController: TabManagerDelegate {
         } else {
             lastNormalTab = selected
         }
+        if !self.isAnimating {
+            self.isAnimating = true
+
+            self.collectionView.reloadData()
+            self.collectionView.setNeedsDisplay()
+
+            //This hack is required so that tabs opened from menu/TodayWidget scroll to the end correctly.
+            self.performSelector(#selector(TopTabsViewController.scrollToCurrentTab(_:centerCell:)), withObject: false, afterDelay: 0.1)
+            self.isAnimating = false
+        }
     }
     func tabManager(tabManager: TabManager, didCreateTab tab: Tab) {}
     func tabManager(tabManager: TabManager, didAddTab tab: Tab) {}
     func tabManager(tabManager: TabManager, didRemoveTab tab: Tab) {}
     func tabManagerDidRestoreTabs(tabManager: TabManager) {}
-    func tabManagerDidAddTabs(tabManager: TabManager) {
-        collectionView.reloadData()
-    }
+    func tabManagerDidAddTabs(tabManager: TabManager) {}
     func tabManagerDidRemoveAllTabs(tabManager: TabManager, toast: ButtonToast?) {
         if let privateTab = lastPrivateTab where !tabManager.tabs.contains(privateTab) {
             lastPrivateTab = nil
