@@ -40,8 +40,6 @@ class WeakTabManagerDelegate {
 class TabManager: NSObject {
     private var delegates = [WeakTabManagerDelegate]()
     weak var stateDelegate: TabManagerStateDelegate?
-    var BrowserObject : BrowserViewController?
-
 
     func addDelegate(delegate: TabManagerDelegate) {
         assert(NSThread.isMainThread())
@@ -322,7 +320,6 @@ class TabManager: NSObject {
                 tab.loadRequest(NSURLRequest(URL: url))
             case .BlankPage:
                 // Do nothing: we're already seeing a blank page.
-            self.BrowserObject!.urlBar.enterOverlayMode("", pasted: false)
                 break
             default:
                 // The common case, where the NewTabPage enum defines

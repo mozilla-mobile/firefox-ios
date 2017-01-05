@@ -430,7 +430,6 @@ class BrowserViewController: UIViewController {
         log.debug("BVC setting up constraints…")
         setupConstraints()
         log.debug("BVC done.")
-        self.tabManager.BrowserObject = self
     }
 
     private func setupConstraints() {
@@ -1048,6 +1047,11 @@ class BrowserViewController: UIViewController {
 
         switchToPrivacyMode(isPrivate: isPrivate)
         tabManager.addTabAndSelect(request, isPrivate: isPrivate)
+        if request == nil {
+            if NewTabAccessors.getNewTabPage(self.profile.prefs) == .BlankPage {
+                self.urlBar.enterOverlayMode("", pasted: false)
+            }
+        }
     }
 
     func openBlankNewTabAndFocus(isPrivate isPrivate: Bool = false) {
