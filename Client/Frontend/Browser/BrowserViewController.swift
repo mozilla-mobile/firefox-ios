@@ -16,6 +16,8 @@ import ReadingList
 import MobileCoreServices
 import WebImage
 
+import Leanplum
+
 private let log = Logger.browserLogger
 
 private let KVOLoading = "loading"
@@ -1106,7 +1108,7 @@ class BrowserViewController: UIViewController {
 
         let helper = ShareExtensionHelper(url: url, tab: tab, activities: activities)
 
-        let controller = helper.createActivityViewController({ [unowned self] completed, _ in
+        let controller = helper.createActivityViewController({ [unowned self] completed, activityType in
             // After dismissing, check to see if there were any prompts we queued up
             self.showQueuedAlertIfAvailable()
 
@@ -1117,12 +1119,15 @@ class BrowserViewController: UIViewController {
             self.updateDisplayedPopoverProperties = nil
 
             if completed {
+                Leanplum.track("ShareCompleted", withParameters: ["activityType": activityType ?? ""])
                 // We don't know what share action the user has chosen so we simply always
                 // update the toolbar and reader mode bar to reflect the latest status.
                 if let tab = tab {
                     self.updateURLBarDisplayURL(tab)
                 }
                 self.updateReaderModeBar()
+            } else {
+                Leanplum.track("ShareCanceled");
             }
         })
 
@@ -1142,6 +1147,7 @@ class BrowserViewController: UIViewController {
             updateDisplayedPopoverProperties = setupPopover
         }
 
+        Leanplum.track("ShareStarted")
         self.presentViewController(controller, animated: true, completion: nil)
     }
 
@@ -1314,9 +1320,11 @@ extension BrowserViewController: MenuActionDelegate {
         if let menuAction = AppMenuAction(rawValue: action.action) {
             switch menuAction {
             case .OpenNewNormalTab:
+                Leanplum.track("OpenNewNormalTab")
                 self.openURLInNewTab(nil, isPrivate: false, isPrivileged: true)
             // this is a case that is only available in iOS9
             case .OpenNewPrivateTab:
+                Leanplum.track("OpenNewPrivateTab")
                 self.openURLInNewTab(nil, isPrivate: true, isPrivileged: true)
             case .FindInPage:
                 self.updateFindInPageVisibility(visible: true)
@@ -1448,8 +1456,10 @@ extension BrowserViewController: URLBarDelegate {
             if let readerMode = tab.getHelper(name: "ReaderMode") as? ReaderMode {
                 switch readerMode.state {
                 case .Available:
+                    Leanplum.track("EnterReaderMode")
                     enableReaderMode()
                 case .Active:
+                    Leanplum.track("LeaveReaderMode")
                     disableReaderMode()
                 case .Unavailable:
                     break
@@ -1691,8 +1701,10 @@ extension BrowserViewController: TabToolbarDelegate {
 
     func toggleBookmarkForTabState(tabState: TabState) {
         if tabState.isBookmarked {
+            Leanplum.track("RemoveBookmark")
             self.removeBookmark(tabState)
         } else {
+            Leanplum.track("AddBookmark")
             self.addBookmark(tabState)
         }
     }

@@ -9,6 +9,8 @@ import Storage
 import ReadingList
 import Shared
 
+import Leanplum
+
 struct TabTrayControllerUX {
     static let CornerRadius = CGFloat(4.0)
     static let BackgroundColor = UIConstants.AppBackgroundColor
@@ -626,6 +628,11 @@ class TabTrayController: UIViewController {
         // We're only doing one update here, but using a batch update lets us delay selecting the tab
         // until after its insert animation finishes.
         self.collectionView.performBatchUpdates({ _ in
+            if self.privateMode {
+                Leanplum.track("OpenNewPrivateTab")
+            } else {
+                Leanplum.track("OpenNewNormalTab")
+            }
             let tab = self.tabManager.addTab(request, isPrivate: self.privateMode)
             self.tabManager.selectTab(tab)
         }, completion: { finished in
