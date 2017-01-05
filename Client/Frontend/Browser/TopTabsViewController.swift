@@ -7,7 +7,7 @@ import Shared
 import WebKit
 
 struct TopTabsUX {
-    static let TopTabsViewHeight: CGFloat = 40
+    static let TopTabsViewHeight: CGFloat = 42
     static let TopTabsBackgroundNormalColor = UIColor(red: 235/255, green: 235/255, blue: 235/255, alpha: 1)
     static let TopTabsBackgroundPrivateColor = UIColor(red: 90/255, green: 90/255, blue: 90/255, alpha: 1)
     static let TopTabsBackgroundNormalColorInactive = UIColor(red: 178/255, green: 178/255, blue: 178/255, alpha: 1)
