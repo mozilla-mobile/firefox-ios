@@ -270,10 +270,10 @@ extension AppMenuConfiguration {
 
 
     static let NewTabTitleString = NSLocalizedString("Menu.NewTabAction.Title", value: "New Tab", tableName: "Menu", comment: "Label for the button, displayed in the menu, used to open a new tab")
-    static let NewTabTitleVariable = LPVar.define("Menu.NewTabAction.Title", withString: NewTabTitleString)
+    static let NewTabTitleVariable = LPVar.define("MenuNewTabActionTitle", withString: NewTabTitleString)
 
     static let NewPrivateTabTitleString = NSLocalizedString("Menu.NewPrivateTabAction.Title", value: "New Private Tab", tableName: "Menu", comment: "Label for the button, displayed in the menu, used to open a new private tab.")
-    static let NewPrivateTabTitleVariable = LPVar.define("Menu.NewPrivateTabAction.Title", withString: NewPrivateTabTitleString)
+    static let NewPrivateTabTitleVariable = LPVar.define("MenuNewPrivateTabActionTitle", withString: NewPrivateTabTitleString)
 
     static let AddBookmarkTitleString = NSLocalizedString("Menu.AddBookmarkAction.Title", value: "Add Bookmark", tableName: "Menu", comment: "Label for the button, displayed in the menu, used to create a bookmark for the current website.")
     static let RemoveBookmarkTitleString = NSLocalizedString("Menu.RemoveBookmarkAction.Title", value: "Remove Bookmark", tableName: "Menu", comment: "Label for the button, displayed in the menu, used to delete an existing bookmark for the current website.")
