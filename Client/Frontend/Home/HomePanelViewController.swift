@@ -206,14 +206,18 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     private func hideCurrentPanel() {
         if let panel = childViewControllers.first {
             panel.willMoveToParentViewController(nil)
+            panel.beginAppearanceTransition(false, animated: false)
             panel.view.removeFromSuperview()
+            panel.endAppearanceTransition()
             panel.removeFromParentViewController()
         }
     }
 
     private func showPanel(panel: UIViewController) {
         addChildViewController(panel)
+        panel.beginAppearanceTransition(true, animated: false)
         controllerContainerView.addSubview(panel.view)
+        panel.endAppearanceTransition()
         panel.view.snp_makeConstraints { make in
             make.top.equalTo(self.buttonContainerView.snp_bottom)
             make.left.right.bottom.equalTo(self.view)
