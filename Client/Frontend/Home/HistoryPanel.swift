@@ -464,7 +464,7 @@ class HistoryPanelSiteTableViewController: SiteTableViewController {
         // Intentionally blank. Required to use UITableViewRowActions
     }
 
-    private func removeHistoryForURL(indexPath: NSIndexPath) {
+    private func removeHistoryForURLAtIndexPath(indexPath: NSIndexPath) {
         if let site = self.siteForIndexPath(indexPath) {
             // Why the dispatches? Because we call success and failure on the DB
             // queue, and so calling anything else that calls through to the DB will
@@ -553,7 +553,7 @@ class HistoryPanelSiteTableViewController: SiteTableViewController {
         let title = NSLocalizedString("Remove", tableName: "HistoryPanel", comment: "Action button for deleting history entries in the history panel.")
 
         let delete = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: title, handler: { (action, indexPath) in
-            self.removeHistoryForURL(indexPath)
+            self.removeHistoryForURLAtIndexPath(indexPath)
         })
         return [delete]
     }
@@ -573,7 +573,7 @@ extension HistoryPanelSiteTableViewController: HomePanelContextMenu {
         guard var actions = getDefaultContextMenuActions(site, homePanelDelegate: homePanelDelegate) else { return nil }
 
         let removeAction = ActionOverlayTableViewAction(title: "Remove", iconString: "action_remove", handler: { action in
-            self.removeHistoryForURL(indexPath)
+            self.removeHistoryForURLAtIndexPath(indexPath)
         })
 
         actions.append(removeAction)

@@ -6,6 +6,11 @@ import Foundation
 import Storage
 import Shared
 
+private struct ActionOverlayTableViewUX {
+    static let HeaderHeight: CGFloat = 74
+    static let RowHeight: CGFloat = 56
+}
+
 class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     private(set) var actions: [ActionOverlayTableViewAction]
 
@@ -54,6 +59,7 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
         tableView.registerClass(ActionOverlayTableViewHeader.self, forHeaderFooterViewReuseIdentifier: "ActionOverlayTableViewHeader")
         tableView.backgroundColor = UIConstants.PanelBackgroundColor
         tableView.scrollEnabled = true
+        tableView.bounces = false
         tableView.layer.cornerRadius = 10
         tableView.separatorStyle = .None
         tableView.cellLayoutMarginsFollowReadableWidth = false
@@ -63,7 +69,7 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
             make.center.equalTo(self.view)
             make.width.equalTo(290)
             make.height.lessThanOrEqualTo(UIScreen.mainScreen().bounds.size.height).priorityHigh()
-            make.height.equalTo(74 + actions.count * 56).priorityLow()
+            make.height.equalTo(ActionOverlayTableViewUX.HeaderHeight + CGFloat(actions.count) * ActionOverlayTableViewUX.RowHeight).priorityLow()
         }
     }
 
@@ -115,11 +121,11 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
     }
 
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 56
+        return ActionOverlayTableViewUX.RowHeight
     }
 
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 74
+        return ActionOverlayTableViewUX.HeaderHeight
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
