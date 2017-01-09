@@ -18,6 +18,24 @@ extension SQLiteHistory: HistoryRecommendations {
         let thirtyMinutesAgo = NSNumber(unsignedLongLong: now - 30 * microsecondsPerMinute)
         let threeDaysAgo = NSNumber(unsignedLongLong: now - (60 * microsecondsPerMinute) * 24 * 3)
 
+        let blacklistedHosts: [AnyObject?] = [
+            "google.com",
+            "google.ca",
+            "calendar.google.com",
+            "mail.google.com",
+            "mail.yahoo.com",
+            "search.yahoo.com",
+            "localhost",
+            "t.co"
+        ]
+
+        var blacklistSubquery = ""
+        if (blacklistedHosts.count > 0) {
+            blacklistSubquery = "SELECT " + "\(TableDomains).id" +
+                " FROM " + "\(TableDomains)" +
+                " WHERE " + "\(TableDomains).domain" + " IN " + BrowserDB.varlist(blacklistedHosts.count)
+        }
+
         let siteProjection = "historyID, url, title, guid, visitCount, visitDate, is_bookmarked"
         let nonRecentHistory =
             "SELECT \(siteProjection) FROM (" +
@@ -34,6 +52,8 @@ extension SQLiteHistory: HistoryRecommendations {
             "   LEFT JOIN \(TableHistory) ON \(TableHistory).id = s" +
             "   WHERE visitCount <= 3 AND title NOT NULL AND title != '' AND is_bookmarked == 0 AND url NOT IN" +
             "       (SELECT \(TableActivityStreamBlocklist).url FROM \(TableActivityStreamBlocklist))" +
+            "        AND \(TableHistory).domain_id NOT IN ("
+                    + blacklistSubquery + ")" +
             "   LIMIT \(historyLimit)" +
             ")"
 
@@ -57,7 +77,12 @@ extension SQLiteHistory: HistoryRecommendations {
             "LEFT JOIN \(ViewHistoryIDsWithWidestFavicons) ON \(ViewHistoryIDsWithWidestFavicons).id = historyID " +
             "GROUP BY url"
 
-        return self.db.runQuery(highlightsQuery, args: [thirtyMinutesAgo, threeDaysAgo, threeDaysAgo], factory: SQLiteHistory.iconHistoryColumnFactory)
+        var args: [AnyObject?] = []
+        args.append(thirtyMinutesAgo)
+        args.appendContentsOf(blacklistedHosts)
+        args.append(threeDaysAgo)
+        args.append(threeDaysAgo)
+        return self.db.runQuery(highlightsQuery, args: args, factory: SQLiteHistory.iconHistoryColumnFactory)
     }
 
     public func removeHighlightForURL(url: String) -> Success {
