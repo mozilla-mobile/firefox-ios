@@ -12,6 +12,7 @@ class WebsiteAccessTests: BaseTestCase {
     }
     
     override func tearDown() {
+        XCUIApplication().terminate()
         super.tearDown()
     }
  

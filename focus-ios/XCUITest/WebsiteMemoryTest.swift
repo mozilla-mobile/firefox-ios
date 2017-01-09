@@ -12,6 +12,7 @@ class WebsiteMemoryTest: BaseTestCase {
     }
     
     override func tearDown() {
+        XCUIApplication().terminate()
         super.tearDown()
     }
     
@@ -87,9 +88,6 @@ class WebsiteMemoryTest: BaseTestCase {
         // enable location
         locationTrigger.tap()
         app.tap()   // This is where above interruption handlers are triggered.
-        
-        // make sure 'Unknown' text is gone
-        waitforNoExistence(element: app.staticTexts["Unknown"])
         
         app.buttons["ERASE"].tap()
         waitforExistence(element: app.staticTexts["Your browsing history has been erased."])

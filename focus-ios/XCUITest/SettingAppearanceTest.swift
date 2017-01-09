@@ -12,6 +12,7 @@ class SettingAppearanceTest: BaseTestCase {
     }
     
     override func tearDown() {
+        XCUIApplication().terminate()
         super.tearDown()
     }
     
@@ -19,7 +20,7 @@ class SettingAppearanceTest: BaseTestCase {
     func testCheckSetting() {
         let app = XCUIApplication()
        
-        app.buttons["icon settings"].tap()
+        app.buttons["Settings"].tap()
         
         // Check About page
         app.navigationBars["Settings"].buttons["About"].tap()
@@ -28,7 +29,7 @@ class SettingAppearanceTest: BaseTestCase {
         
         // Check Help page, wait until the webpage is shown
         tablesQuery.staticTexts["Help"].tap()
-        waitforExistence(element: app.staticTexts["Focus by Firefox | How to"])
+        waitforExistence(element: app.staticTexts["What is Firefox Focus?"])
         let firefoxFocusAboutcontentviewNavigationBar = app.navigationBars["Firefox_Focus.AboutContentView"]
         firefoxFocusAboutcontentviewNavigationBar.buttons["About"].tap()
         
@@ -53,6 +54,10 @@ class SettingAppearanceTest: BaseTestCase {
         XCTAssert(app.staticTexts["Enable Firefox Focus"].exists)
         app.navigationBars["Firefox_Focus.SafariInstructionsView"].buttons["Settings"].tap()
         
+        // Swipe up
+        waitforExistence(element: app.tables.switches["Block ad trackers"])
+        app.tables.children(matching: .cell).element(boundBy: 0).swipeUp()
+        
         XCTAssertEqual(app.tables.switches["Block ad trackers"].value as! String, "1")
         XCTAssertEqual(app.tables.switches["Block analytics trackers"].value as! String, "1")
         XCTAssertEqual(app.tables.switches["Block social trackers"].value as! String, "1")
@@ -63,16 +68,14 @@ class SettingAppearanceTest: BaseTestCase {
         otherContentSwitch.tap()
         let sheetsQuery = app.sheets
         
-        // Say No this time, the switch should remain disabled
-        sheetsQuery.buttons["No, Thanks"].tap()
-        XCTAssertEqual(otherContentSwitch.value as! String, "0")
-        
         // Say yes this time, the switch should be enabled
-        otherContentSwitch.tap()
         sheetsQuery.buttons["I Understand"].tap()
         XCTAssertEqual(otherContentSwitch.value as! String, "1")
-        
-        // Put back to original state
         otherContentSwitch.tap()
+        
+        // Say No this time, the switch should remain disabled
+        otherContentSwitch.tap()
+        sheetsQuery.buttons["No, Thanks"].tap()
+        XCTAssertEqual(otherContentSwitch.value as! String, "0")
     }
 }
