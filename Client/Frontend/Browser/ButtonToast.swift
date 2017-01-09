@@ -15,7 +15,7 @@ struct ButtonToastUX {
     static let ToastButtonBorderWidth: CGFloat = 1
 }
 
-private class CustomButton : UIButton {
+private class HighlightableButton : UIButton {
     override var highlighted: Bool {
         didSet {
             if highlighted {
@@ -72,7 +72,7 @@ class ButtonToast: UIView {
         label.numberOfLines = 0
         toast.addSubview(label)
         
-        let button = CustomButton()
+        let button = HighlightableButton()
         button.layer.cornerRadius = ButtonToastUX.ToastButtonBorderRadius
         button.layer.borderWidth = ButtonToastUX.ToastButtonBorderWidth
         button.layer.borderColor = UIColor.whiteColor().CGColor
