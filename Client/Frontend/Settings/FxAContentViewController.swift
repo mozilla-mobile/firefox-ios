@@ -90,7 +90,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         //    // We need to confirm a relink - see shouldAllowRelink for more
         //    let ok = shouldAllowRelink(accountData.email);
         let ok = true
-        injectData("message", content: ["status": "can_link_account", "data": ["ok": ok]]);
+        injectData("message", content: ["status": "can_link_account", "data": ["ok": ok]])
     }
 
     // We're not signed in to a Firefox Account at this time, which we signal by returning an error.
@@ -120,11 +120,11 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     }
     
     // Attempt to fill out a field in content view
-    private func fillField(className: String?, value: String?){
+    private func fillField(className: String?, value: String?) {
         guard let name = className, let val = value else {
             return
         }
-        let script = "$('.\(name)').val('\(val)');";
+        let script = "$('.\(name)').val('\(val)');"
         webView.evaluateJavaScript(script, completionHandler: nil)
     }
 
@@ -189,7 +189,7 @@ LeakAvoider prevents leaks with WKUserContentController
 http://stackoverflow.com/questions/26383031/wkwebview-causes-my-view-controller-to-leak
 */
 
-class LeakAvoider : NSObject, WKScriptMessageHandler {
+class LeakAvoider: NSObject, WKScriptMessageHandler {
     weak var delegate: WKScriptMessageHandler?
 
     init(delegate: WKScriptMessageHandler) {
