@@ -7,6 +7,8 @@ import Storage
 import Shared
 import XCGLogger
 
+import Leanplum
+
 private let log = Logger.browserLogger
 
 let BookmarkStatusChangedNotification = "BookmarkStatusChangedNotification"
@@ -286,6 +288,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
         switch (bookmark) {
         case let item as BookmarkItem:
+            Leanplum.track("VisitBookmark")
             homePanelDelegate?.homePanel(self, didSelectURLString: item.url, visitType: VisitType.Bookmark)
             break
 

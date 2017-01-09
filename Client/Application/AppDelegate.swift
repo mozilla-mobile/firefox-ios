@@ -11,6 +11,9 @@ import WebImage
 import SwiftKeychainWrapper
 import LocalAuthentication
 
+import Leanplum
+import AdSupport
+
 private let log = Logger.browserLogger
 
 let LatestAppVersionProfileKey = "latestAppVersion"
@@ -222,7 +225,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             log.debug("Setting up BuddyBuild SDK")
             BuddyBuildSDK.setup()
         #endif
-        
+
+
+
+        Leanplum.setDeviceId(ASIdentifierManager.sharedManager().advertisingIdentifier.UUIDString)
+        Leanplum.setAppId("app_MUd3n2yw07Lg5hy0f8hRXuj1jI5ml17ww3haFrbKUBw", withDevelopmentKey:"dev_CqOHfdrK6vLrq09CTxKdeOTTGFohQaZvVuym91HYIJg")
+        Leanplum.syncResourcesAsync(true)
+        //Leanplum.trackAllAppScreens() // This causes a LOT of traffic and should probably not be used
+        Leanplum.start()
+
+
+
         log.debug("Making window key and visible…")
         self.window!.makeKeyAndVisible()
 

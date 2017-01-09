@@ -9,6 +9,8 @@ import Storage
 import XCGLogger
 import Deferred
 
+import Leanplum
+
 private let log = Logger.browserLogger
 
 private func getDate(dayOffset dayOffset: Int) -> NSDate {
@@ -351,6 +353,7 @@ class HistoryPanelSiteTableViewController: SiteTableViewController {
             let visitType = VisitType.Typed    // Means History, too.
             if let homePanelDelegate = homePanelDelegate,
                    historyPanel = historyPanel {
+                Leanplum.track("VisitHistory")
                 homePanelDelegate.homePanel(historyPanel, didSelectURL: url, visitType: visitType)
             }
             return

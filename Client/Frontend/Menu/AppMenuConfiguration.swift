@@ -5,6 +5,8 @@
 import Foundation
 import Shared
 
+import Leanplum
+
 enum AppMenuAction: String {
     case OpenNewNormalTab = "OpenNewNormalTab"
     case OpenNewPrivateTab = "OpenNewPrivateTab"
@@ -187,11 +189,11 @@ struct AppMenuConfiguration: MenuConfiguration {
 extension AppMenuConfiguration {
 
     private static var NewTabMenuItem: MenuItem {
-        return AppMenuItem(title: NewTabTitleString, accessibilityIdentifier: "NewTabMenuItem", action: MenuAction(action: AppMenuAction.OpenNewNormalTab.rawValue), icon: "menu-NewTab", privateModeIcon: "menu-NewTab-pbm")
+        return AppMenuItem(title: NewTabTitleVariable?.stringValue() ?? NewTabTitleString, accessibilityIdentifier: "NewTabMenuItem", action: MenuAction(action: AppMenuAction.OpenNewNormalTab.rawValue), icon: "menu-NewTab", privateModeIcon: "menu-NewTab-pbm")
     }
 
     private static var NewPrivateTabMenuItem: MenuItem {
-        return AppMenuItem(title: NewPrivateTabTitleString, accessibilityIdentifier: "NewPrivateTabMenuItem", action:  MenuAction(action: AppMenuAction.OpenNewPrivateTab.rawValue), icon: "menu-NewPrivateTab", privateModeIcon: "menu-NewPrivateTab-pbm")
+        return AppMenuItem(title: NewPrivateTabTitleVariable?.stringValue() ?? NewPrivateTabTitleString, accessibilityIdentifier: "NewPrivateTabMenuItem", action:  MenuAction(action: AppMenuAction.OpenNewPrivateTab.rawValue), icon: "menu-NewPrivateTab", privateModeIcon: "menu-NewPrivateTab-pbm")
     }
 
     private static var AddBookmarkMenuItem: MenuItem {
@@ -266,8 +268,13 @@ extension AppMenuConfiguration {
         return  AppMenuToolbarItem(title: ReadingListTitleString, accessibilityIdentifier: "ReadingListMenuToolbarItem", action:  MenuAction(action: AppMenuAction.OpenReadingList.rawValue), icon: "menu-panel-ReadingList")
     }
 
+
     static let NewTabTitleString = NSLocalizedString("Menu.NewTabAction.Title", value: "New Tab", tableName: "Menu", comment: "Label for the button, displayed in the menu, used to open a new tab")
+    static let NewTabTitleVariable = LPVar.define("MenuNewTabActionTitle", withString: NewTabTitleString)
+
     static let NewPrivateTabTitleString = NSLocalizedString("Menu.NewPrivateTabAction.Title", value: "New Private Tab", tableName: "Menu", comment: "Label for the button, displayed in the menu, used to open a new private tab.")
+    static let NewPrivateTabTitleVariable = LPVar.define("MenuNewPrivateTabActionTitle", withString: NewPrivateTabTitleString)
+
     static let AddBookmarkTitleString = NSLocalizedString("Menu.AddBookmarkAction.Title", value: "Add Bookmark", tableName: "Menu", comment: "Label for the button, displayed in the menu, used to create a bookmark for the current website.")
     static let RemoveBookmarkTitleString = NSLocalizedString("Menu.RemoveBookmarkAction.Title", value: "Remove Bookmark", tableName: "Menu", comment: "Label for the button, displayed in the menu, used to delete an existing bookmark for the current website.")
     static let FindInPageTitleString = NSLocalizedString("Menu.FindInPageAction.Title", value: "Find In Page", tableName: "Menu", comment: "Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page.")
