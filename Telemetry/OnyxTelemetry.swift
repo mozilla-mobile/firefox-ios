@@ -4,7 +4,6 @@
 
 import Foundation
 import Shared
-import OnyxClient
 
 private let OnyxStagingConfiguration = OnyxClientConfiguration(serverURL: "https://onyx_tiles.stage.mozaws.net".asURL!, version: 3)
 private let OnyxProductionConfiguration = OnyxClientConfiguration(serverURL: "https://tiles.services.mozilla.com".asURL!, version: 3)

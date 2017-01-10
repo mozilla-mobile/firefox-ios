@@ -8,7 +8,6 @@ import Deferred
 import Storage
 import WebImage
 import XCGLogger
-import OnyxClient
 
 private let log = Logger.browserLogger
 private let DefaultSuggestedSitesKey = "topSites.deletedSuggestedSites"
