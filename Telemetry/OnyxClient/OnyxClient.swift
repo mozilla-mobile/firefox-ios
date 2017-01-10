@@ -4,6 +4,23 @@
 
 import Foundation
 import Alamofire
+import Shared
+
+private let OnyxStagingConfiguration = OnyxClientConfiguration(serverURL: "https://onyx_tiles.stage.mozaws.net".asURL!, version: 3)
+private let OnyxProductionConfiguration = OnyxClientConfiguration(serverURL: "https://tiles.services.mozilla.com".asURL!, version: 3)
+
+struct OnyxTelemetry {
+    static private let configuration: OnyxClientConfiguration = {
+        switch AppConstants.BuildChannel {
+            case .Nightly:  return OnyxProductionConfiguration
+            case .Beta:     return OnyxProductionConfiguration
+            case .Release:  return OnyxProductionConfiguration
+            default:        return OnyxProductionConfiguration
+        }
+    }()
+
+    static var sharedClient = OnyxClient(configuration: configuration)
+}
 
 public enum OnyxEndpoint: String {
     case activityStream = "links/activity-stream-mobile"
