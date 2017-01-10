@@ -166,6 +166,24 @@ public struct AppConstants {
             return true
         #endif
     }()
+
+    /// Enables support for International Domain Names (IDN)
+    /// Disabled because of https://bugzilla.mozilla.org/show_bug.cgi?id=1312294
+    public static let MOZ_PUNYCODE: Bool = {
+        #if MOZ_CHANNEL_RELEASE
+            return false
+        #elseif MOZ_CHANNEL_BETA
+            return false
+        #elseif MOZ_CHANNEL_NIGHTLY
+            return true
+        #elseif MOZ_CHANNEL_FENNEC
+            return true
+        #elseif MOZ_CHANNEL_AURORA
+            return true
+        #else
+            return true
+        #endif
+    }()
     
     ///  Enables/disables deep linking form fill for FxA
     public static let MOZ_FXA_DEEP_LINK_FORM_FILL: Bool = {

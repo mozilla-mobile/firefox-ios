@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Shared
 
 class URIFixup {
     static func getURL(entry: String) -> NSURL? {
@@ -43,7 +44,7 @@ class URIFixup {
 
     static func punycodedURL(string: String) -> NSURL? {
         let components = NSURLComponents(string: string)
-        components?.host = components?.host?.utf8HostToAscii()
+        components?.host = AppConstants.MOZ_PUNYCODE ? components?.host?.utf8HostToAscii() : components?.host
         return components?.URL
     }
 }
