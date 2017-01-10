@@ -114,9 +114,11 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         self.timer?.invalidate()
         self.timer = nil
         self.isLoaded = true
-        
-        fillField("email", value: self.fxaOptions.email)
-        fillField("access_code", value: self.fxaOptions.access_code)
+
+        if AppConstants.MOZ_FXA_DEEP_LINK_FORM_FILL {
+            fillField("email", value: self.fxaOptions.email)
+            fillField("access_code", value: self.fxaOptions.access_code)
+        }
     }
     
     // Attempt to fill out a field in content view
