@@ -262,15 +262,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             log.warning("Cannot handle \(components.scheme) URL scheme")
             return false
         }
-        
-        // Extract optional FxA deep-linking options
-        let fxaQuery = url.getQuery()
-        let fxaParams: FxALaunchParams
-        fxaParams = FxALaunchParams(view: fxaQuery["fxa"], email: fxaQuery["email"], access_code: fxaQuery["access_code"])
-        
-        if fxaParams.view != nil {
-            launchFxAFromURL(fxaParams)
-            return true
+
+
+        if AppConstants.MOZ_FXA_DEEP_LINK_FORM_FILL {
+            // Extract optional FxA deep-linking options
+            let fxaQuery = url.getQuery()
+            let fxaParams: FxALaunchParams
+            fxaParams = FxALaunchParams(view: fxaQuery["fxa"], email: fxaQuery["email"], access_code: fxaQuery["access_code"])
+            
+            if fxaParams.view != nil {
+                launchFxAFromURL(fxaParams)
+                return true
+            }
         }
 
         var url: String?
