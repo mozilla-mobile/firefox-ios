@@ -282,7 +282,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             // Ensure valid code passed, if validation fails don't fill code
             if fxaParams.access_code != nil {
-                let alphaNumericRegEx = "[A-Z0-9a-z]"
+                let alphaNumericRegEx = "[A-Z0-9a-z]+"
                 let alphaNumericTest = NSPredicate(format:"SELF MATCHES %@", alphaNumericRegEx)
                 if (!alphaNumericTest.evaluateWithObject(fxaParams.access_code)) {
                     log.warning("Invalid access_code \(fxaParams.access_code) passed to FxA deeplinking scheme")
