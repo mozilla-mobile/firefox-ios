@@ -267,8 +267,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if AppConstants.MOZ_FXA_DEEP_LINK_FORM_FILL {
             // Extract optional FxA deep-linking options
             let fxaQuery = url.getQuery()
-            let fxaParams: FxALaunchParams
+            var fxaParams: FxALaunchParams
             fxaParams = FxALaunchParams(view: fxaQuery["fxa"], email: fxaQuery["email"], access_code: fxaQuery["access_code"])
+            
+            // Ensure valid email passed, if validation fails don't fill email
+            if fxaParams.email != nil {
+                let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
+                let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+                if (!emailTest.evaluateWithObject(fxaParams.email)) {
+                    log.warning("Invalid email \(fxaParams.email) passed to FxA deeplinking scheme")
+                    fxaParams.email = nil
+                }
+            }
+            
+            // Ensure valid code passed, if validation fails don't fill code
+            if fxaParams.access_code != nil {
+                let alphaNumericRegEx = "[A-Z0-9a-z]"
+                let alphaNumericTest = NSPredicate(format:"SELF MATCHES %@", alphaNumericRegEx)
+                if (!alphaNumericTest.evaluateWithObject(fxaParams.access_code)) {
+                    log.warning("Invalid access_code \(fxaParams.access_code) passed to FxA deeplinking scheme")
+                    fxaParams.access_code = nil
+                }
+            }
             
             if fxaParams.view != nil {
                 launchFxAFromURL(fxaParams)
