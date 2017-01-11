@@ -11,6 +11,8 @@ class URLBarContainer: UIView {
     init() {
         super.init(frame: CGRect.zero)
 
+        backgroundColor = .black
+
         addSubview(backgroundDark)
 
         backgroundBright.isHidden = true

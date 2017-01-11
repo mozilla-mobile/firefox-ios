@@ -17,8 +17,22 @@ class BrowserViewController: UIViewController {
     fileprivate var topURLBarConstraints = [Constraint]()
     fileprivate let requestHandler = RequestHandler()
 
+    fileprivate var toolbarBottomConstraint: Constraint!
+    fileprivate var urlBarTopConstraint: Constraint!
+    fileprivate var lastScrollOffset = CGPoint.zero
+    fileprivate var lastScrollTranslation = CGPoint.zero
+    fileprivate var scrollBarOffsetAlpha: CGFloat = 0
+    fileprivate var scrollBarState: URLBarScrollState = .expanded
+
+    fileprivate enum URLBarScrollState {
+        case collapsed
+        case expanded
+        case transitioning
+        case animating
+    }
+
     private var homeViewContainer = UIView()
-    private var showsToolsetInURLBar = false
+    fileprivate var showsToolsetInURLBar = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,13 +44,12 @@ class BrowserViewController: UIViewController {
 
         view.addSubview(homeViewContainer)
 
-        urlBarContainer.alpha = 0
-        view.addSubview(urlBarContainer)
-
         browser.view.isHidden = true
-        browser.bottomInset = showsToolsetInURLBar ? 0 : UIConstants.layout.browserToolbarHeight
         browser.delegate = self
         view.addSubview(browser.view)
+
+        urlBarContainer.alpha = 0
+        view.addSubview(urlBarContainer)
 
         browserToolbar.isHidden = true
         browserToolbar.alpha = 0
@@ -60,8 +73,9 @@ class BrowserViewController: UIViewController {
         }
 
         browserToolbar.snp.makeConstraints { make in
-            make.leading.trailing.bottom.equalTo(view)
+            make.leading.trailing.equalTo(view)
             make.height.equalTo(UIConstants.layout.browserToolbarHeight)
+            toolbarBottomConstraint = make.bottom.equalTo(view).constraint
         }
 
         homeViewContainer.snp.makeConstraints { make in
@@ -71,7 +85,7 @@ class BrowserViewController: UIViewController {
 
         browser.view.snp.makeConstraints { make in
             make.top.equalTo(urlBarContainer.snp.bottom).priority(500)
-            make.bottom.equalTo(view).priority(500)
+            make.bottom.equalTo(browserToolbar.snp.top).priority(500)
             make.leading.trailing.equalTo(view)
         }
 
@@ -119,11 +133,12 @@ class BrowserViewController: UIViewController {
         urlBar.toolsetDelegate = self
         urlBar.shrinkFromView = urlBarContainer
         urlBar.showToolset = showsToolsetInURLBar
-        view.insertSubview(urlBar, belowSubview: browser.view)
+        view.insertSubview(urlBar, aboveSubview: urlBarContainer)
 
         urlBar.snp.makeConstraints { make in
+            urlBarTopConstraint = make.top.equalTo(topLayoutGuide.snp.bottom).constraint
             topURLBarConstraints = [
-                make.top.equalTo(topLayoutGuide.snp.bottom).constraint,
+                urlBarTopConstraint,
                 make.leading.trailing.bottom.equalTo(urlBarContainer).constraint
             ]
 
@@ -216,7 +231,6 @@ class BrowserViewController: UIViewController {
         coordinator.animate(alongsideTransition: { _ in
             self.urlBar.showToolset = self.showsToolsetInURLBar
             self.browserToolbar.animateHidden(self.homeView != nil || self.showsToolsetInURLBar, duration: coordinator.transitionDuration)
-            self.browser.bottomInset = self.showsToolsetInURLBar ? 0 : UIConstants.layout.browserToolbarHeight
         })
     }
 }
@@ -319,6 +333,7 @@ extension BrowserViewController: BrowserDelegate {
         urlBar.isLoading = true
         browserToolbar.isLoading = true
         urlBarContainer.isBright = false
+        showToolbars()
     }
 
     func browserDidFinishNavigation(_ browser: Browser) {
@@ -370,6 +385,115 @@ extension BrowserViewController: BrowserDelegate {
     func browser(_ browser: Browser, shouldStartLoadWith request: URLRequest) -> Bool {
         return requestHandler.handle(request: request) { alert in
             present(alert, animated: true, completion: nil)
+        }
+    }
+
+    func browser(_ browser: Browser, scrollViewDidScroll scrollView: UIScrollView) {
+        let translation = scrollView.panGestureRecognizer.translation(in: scrollView)
+        let isDragging = scrollView.panGestureRecognizer.state != .possible
+
+        // This will be 0 if we're moving but not dragging (i.e., gliding after dragging).
+        let dragDelta = translation.y - lastScrollTranslation.y
+
+        // This will match dragDelta unless the URL bar is transitioning.
+        let offsetDelta = scrollView.contentOffset.y - lastScrollOffset.y
+
+        lastScrollOffset = scrollView.contentOffset
+        lastScrollTranslation = translation
+
+        guard scrollBarState != .animating, !scrollView.isZooming else { return }
+
+        guard scrollView.contentOffset.y + scrollView.frame.height < scrollView.contentSize.height && (scrollView.contentOffset.y > 0 || scrollBarOffsetAlpha > 0) else {
+            // We're overscrolling, so don't do anything.
+            return
+        }
+
+        if !isDragging && offsetDelta < 0 {
+            // We're gliding up after dragging, so fully show the toolbars.
+            showToolbars()
+            return
+        }
+
+        let pageExtendsBeyondScrollView = scrollView.frame.height + UIConstants.layout.browserToolbarHeight + UIConstants.layout.urlBarHeight < scrollView.contentSize.height
+        let toolbarsHiddenAtTopOfPage = scrollView.contentOffset.y <= 0 && scrollBarOffsetAlpha > 0
+
+        guard isDragging, (dragDelta < 0 && pageExtendsBeyondScrollView) || toolbarsHiddenAtTopOfPage || scrollBarState == .transitioning else { return }
+
+        let lastOffsetAlpha = scrollBarOffsetAlpha
+        scrollBarOffsetAlpha = (0 ... 1).clamp(scrollBarOffsetAlpha - dragDelta / UIConstants.layout.urlBarHeight)
+        switch scrollBarOffsetAlpha {
+        case 0:
+            scrollBarState = .expanded
+        case 1:
+            scrollBarState = .collapsed
+        default:
+            scrollBarState = .transitioning
+        }
+
+        self.urlBar.alpha = max(0, (1 - scrollBarOffsetAlpha * 2))
+        self.urlBarTopConstraint.update(offset: -scrollBarOffsetAlpha * UIConstants.layout.urlBarHeight)
+        self.toolbarBottomConstraint.update(offset: scrollBarOffsetAlpha * UIConstants.layout.browserToolbarHeight)
+        scrollView.bounds.origin.y += (lastOffsetAlpha - scrollBarOffsetAlpha) * UIConstants.layout.urlBarHeight
+        lastScrollOffset = scrollView.contentOffset
+    }
+
+    private func showToolbars() {
+        guard let scrollView = browser.scrollView else { return }
+
+        scrollBarState = .animating
+        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .allowUserInteraction, animations: { _ in
+            self.urlBar.alpha = 1
+            self.urlBarTopConstraint.update(offset: 0)
+            self.toolbarBottomConstraint.update(inset: 0)
+            scrollView.bounds.origin.y += self.scrollBarOffsetAlpha * UIConstants.layout.urlBarHeight
+            self.scrollBarOffsetAlpha = 0
+            self.view.layoutIfNeeded()
+        }, completion: { _ in
+            self.scrollBarState = .expanded
+        })
+    }
+
+    private func hideToolbars() {
+        guard let scrollView = browser.scrollView else { return }
+
+        scrollBarState = .animating
+        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .allowUserInteraction, animations: { _ in
+            self.urlBar.alpha = 0
+            self.urlBarTopConstraint.update(offset: -UIConstants.layout.urlBarHeight)
+            self.toolbarBottomConstraint.update(offset: UIConstants.layout.browserToolbarHeight)
+            scrollView.bounds.origin.y += (self.scrollBarOffsetAlpha - 1) * UIConstants.layout.urlBarHeight
+            self.scrollBarOffsetAlpha = 1
+            self.view.layoutIfNeeded()
+        }, completion: { _ in
+            self.scrollBarState = .collapsed
+        })
+    }
+
+    func browser(_ browser: Browser, scrollViewWillBeginDragging scrollView: UIScrollView) {
+        lastScrollOffset = scrollView.contentOffset
+        lastScrollTranslation = scrollView.panGestureRecognizer.translation(in: scrollView)
+    }
+
+    func browser(_ browser: Browser, scrollViewDidEndDragging scrollView: UIScrollView) {
+        snapToolbars(scrollView: scrollView)
+    }
+
+    func browserShouldScrollToTop(_ browser: Browser) -> Bool {
+        guard scrollBarOffsetAlpha == 0 else {
+            showToolbars()
+            return false
+        }
+
+        return true
+    }
+
+    private func snapToolbars(scrollView: UIScrollView) {
+        guard scrollBarState == .transitioning else { return }
+
+        if scrollBarOffsetAlpha < 0.05 || scrollView.contentOffset.y < UIConstants.layout.urlBarHeight {
+            showToolbars()
+        } else {
+            hideToolbars()
         }
     }
 }

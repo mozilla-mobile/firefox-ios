@@ -74,7 +74,7 @@ struct UIConstants {
 
     struct layout {
         static let browserToolbarDisabledOpacity: CGFloat = 0.3
-        static let browserToolbarHeight: Float = 44
+        static let browserToolbarHeight: CGFloat = 44
         static let deleteAnimationDuration: TimeInterval = 0.15
         static let lockIconInset: Float = 6
         static let navigationDoneOffset: Float = -10
@@ -87,6 +87,7 @@ struct UIConstants {
         static let toolbarFadeAnimationDuration = 0.25
         static let toolbarButtonInsets = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
         static let urlBarCornerRadius: CGFloat = 2
+        static let urlBarHeight: CGFloat = 54
         static let urlBarTransitionAnimationDuration: TimeInterval = 0.2
         static let urlBarMargin: CGFloat = 8
         static let urlBarHeightInset: CGFloat = 10

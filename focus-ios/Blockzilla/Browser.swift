@@ -13,12 +13,20 @@ protocol BrowserDelegate: class {
     func browser(_ browser: Browser, didUpdateEstimatedProgress estimatedProgress: Float)
     func browser(_ browser: Browser, didUpdateURL url: URL?)
     func browser(_ browser: Browser, shouldStartLoadWith request: URLRequest) -> Bool
+    func browser(_ browser: Browser, scrollViewWillBeginDragging scrollView: UIScrollView)
+    func browser(_ browser: Browser, scrollViewDidEndDragging scrollView: UIScrollView)
+    func browser(_ browser: Browser, scrollViewDidScroll scrollView: UIScrollView)
+    func browserShouldScrollToTop(_ browser: Browser) -> Bool
 }
 
 class Browser: NSObject {
     weak var delegate: BrowserDelegate?
 
     let view = UIView()
+
+    var scrollView: UIScrollView? {
+        return webView?.scrollView
+    }
 
     fileprivate var webView: UIWebView?
 
@@ -32,25 +40,17 @@ class Browser: NSObject {
         LocalContentBlocker.delegate = self
         createWebView()
 
-        KeyboardHelper.defaultHelper.addDelegate(delegate: self)
-
         NotificationCenter.default.addObserver(self, selector: #selector(progressChanged(notification:)), name: Notification.Name(rawValue: "WebProgressEstimateChangedNotification"), object: nil)
-    }
-
-    var bottomInset: Float = 0 {
-        didSet {
-            webView?.scrollView.contentInset.bottom = CGFloat(bottomInset)
-            webView?.scrollView.scrollIndicatorInsets.bottom = CGFloat(bottomInset)
-        }
     }
 
     private func createWebView() {
         let webView = UIWebView()
         webView.scalesPageToFit = true
-        webView.delegate = self
-        webView.scrollView.backgroundColor = UIConstants.colors.background
-        webView.scrollView.contentInset.bottom = CGFloat(bottomInset)
         webView.mediaPlaybackRequiresUserAction = true
+        webView.scrollView.backgroundColor = UIConstants.colors.background
+        webView.scrollView.layer.masksToBounds = false
+        webView.scrollView.delegate = self
+        webView.delegate = self
         view.addSubview(webView)
 
         webView.snp.makeConstraints { make in
@@ -231,29 +231,20 @@ extension Browser: LocalContentBlockerDelegate {
     }
 }
 
-extension Browser: KeyboardHelperDelegate {
-    public func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
-        // Only update the insets if the keyboard is being presented for this browser.
-        guard let webView = webView, webView.hasFirstResponder else { return }
-
-        // When an input field is focused, the web view adds 44 to the bottom inset to make room for the bottom
-        // input bar. Since this bar overlaps the browser toolbar, we don't need the additional bottom inset,
-        // so reset it here.
-        let inset = max(state.intersectionHeightForView(view: view), CGFloat(bottomInset))
-        webView.scrollView.contentInset.bottom = inset
-        webView.scrollView.scrollIndicatorInsets.bottom = inset
+extension Browser: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        delegate?.browser(self, scrollViewDidScroll: scrollView)
     }
 
-    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {}
-    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {}
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        delegate?.browser(self, scrollViewWillBeginDragging: scrollView)
+    }
 
-    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {
-        guard let webView = webView else { return }
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        delegate?.browser(self, scrollViewDidEndDragging: scrollView)
+    }
 
-        // As mentioned above, the webview adds 44 to the bottom inset during input. When the keyboard is hidden,
-        // the web view will then remove 44 from the inset to restore the original state. Since we already removed
-        // the extra inset above, reset it here to prevent it from being removed again.
-        webView.scrollView.contentInset.bottom = CGFloat(bottomInset)
-        webView.scrollView.scrollIndicatorInsets.bottom = CGFloat(bottomInset)
+    func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
+        return delegate?.browserShouldScrollToTop(self) ?? true
     }
 }

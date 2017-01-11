@@ -42,6 +42,7 @@
 		D34E70331DA8736300BABDCC /* AutocompleteTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34E70321DA8736300BABDCC /* AutocompleteTextField.swift */; };
 		D34E70351DA874AA00BABDCC /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34E70341DA874AA00BABDCC /* StringExtensions.swift */; };
 		D3561B2B1DB5925100A5EEAF /* GradientBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3561B2A1DB5925100A5EEAF /* GradientBackgroundView.swift */; };
+		D35A0E021E26C94F00297884 /* ClosedRangeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35A0E011E26C94F00297884 /* ClosedRangeExtensions.swift */; };
 		D35C11471E04AADA005FFFEF /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35C11461E04AADA005FFFEF /* AppConfig.swift */; };
 		D35C11481E04AB14005FFFEF /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35C11461E04AADA005FFFEF /* AppConfig.swift */; };
 		D362D2AB1C4EAF940041980A /* rights-focus.html in Resources */ = {isa = PBXBuildFile; fileRef = D362D2AA1C4EAF940041980A /* rights-focus.html */; };
@@ -184,6 +185,7 @@
 		D34E70321DA8736300BABDCC /* AutocompleteTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutocompleteTextField.swift; sourceTree = "<group>"; };
 		D34E70341DA874AA00BABDCC /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		D3561B2A1DB5925100A5EEAF /* GradientBackgroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientBackgroundView.swift; sourceTree = "<group>"; };
+		D35A0E011E26C94F00297884 /* ClosedRangeExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClosedRangeExtensions.swift; sourceTree = "<group>"; };
 		D35C11461E04AADA005FFFEF /* AppConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppConfig.swift; path = Shared/AppConfig.swift; sourceTree = "<group>"; };
 		D362D26A1C47326A0041980A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D362D2AA1C4EAF940041980A /* rights-focus.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "rights-focus.html"; sourceTree = "<group>"; };
@@ -444,6 +446,7 @@
 				D364DC251DC4163700562991 /* BrowserToolset.swift */,
 				D3E2C8E91D9F0E6200DEBE3D /* BrowserViewController.swift */,
 				D3E2C96C1DA3077400DEBE3D /* CharacterSetExtensions.swift */,
+				D35A0E011E26C94F00297884 /* ClosedRangeExtensions.swift */,
 				D3426AEC1DB846310016DA5A /* DomainCompletion.swift */,
 				D3DA77841DC2C307009C114E /* ErrorPage.swift */,
 				D30AEEBA1DE4CB1B0096A2E7 /* FileManagerExtensions.swift */,
@@ -755,6 +758,7 @@
 				D3E3CA7D1DA827AD0079C94B /* HomeView.swift in Sources */,
 				D34E70331DA8736300BABDCC /* AutocompleteTextField.swift in Sources */,
 				D3E251EB1DAD714C005918DC /* SafariInstructionsViewController.swift in Sources */,
+				D35A0E021E26C94F00297884 /* ClosedRangeExtensions.swift in Sources */,
 				D3E2C8FA1D9F170200DEBE3D /* LocalContentBlocker.swift in Sources */,
 				D35C11471E04AADA005FFFEF /* AppConfig.swift in Sources */,
 				D3E2C9611DA2F7C600DEBE3D /* URLBar.swift in Sources */,

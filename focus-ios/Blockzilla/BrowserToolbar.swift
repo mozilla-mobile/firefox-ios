@@ -6,7 +6,6 @@ import Foundation
 
 class BrowserToolbar: UIView {
     private let toolset = BrowserToolset()
-    private let gradient = CAGradientLayer()
     private let backgroundDark = GradientBackgroundView()
     private let backgroundBright = GradientBackgroundView(alpha: 0.2)
 
