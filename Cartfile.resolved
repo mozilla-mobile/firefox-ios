@@ -1,5 +1,6 @@
 github "Alamofire/Alamofire" "3.5.0"
 github "sleroux/Deferred" "7d3d3230133db71544e60dfa7fa3d095361398db"
+github "google/EarlGrey" "1.6.2"
 github "cezheng/Fuzi" "0.4.0"
 github "swisspol/GCDWebServer" "3.3.2"
 github "kif-framework/KIF" "v3.5.1"

@@ -180,7 +180,8 @@ class ASHorizontalScrollCell: UITableViewCell {
         collectionView.registerClass(TopSiteItemCell.self, forCellWithReuseIdentifier: ASHorizontalScrollCellUX.TopSiteCellIdentifier)
         collectionView.backgroundColor = UIColor.clearColor()
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.isAccessibilityElement = false
+        collectionView.isAccessibilityElement = true
+        collectionView.accessibilityIdentifier = "AS Top Sites View"
         collectionView.pagingEnabled = true
         return collectionView
     }()
