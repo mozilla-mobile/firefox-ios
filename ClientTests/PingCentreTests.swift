@@ -60,7 +60,7 @@ class PingCentreTests: XCTestCase {
         configuration.protocolClasses!.insert(MockingURLProtocol.self, atIndex: 0)
 
         self.manager = Manager(configuration: configuration)
-        self.client = DefaultPingCentreImpl(topic: mockTopic, endpoint: .Staging, manager: self.manager)
+        self.client = DefaultPingCentreImpl(topic: mockTopic, endpoint: .Staging, clientID: "fakeID",manager: self.manager)
     }
 
     override func tearDown() {
