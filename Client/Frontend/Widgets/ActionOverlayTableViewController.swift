@@ -6,8 +6,9 @@ import Foundation
 import Storage
 
 class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    private(set) var actions: [ActionOverlayTableViewAction]
+
     private var site: Site
-    private var actions: [ActionOverlayTableViewAction]
     private var tableView = UITableView()
     private var headerImage: UIImage?
     private var headerImageBackgroundColor: UIColor?

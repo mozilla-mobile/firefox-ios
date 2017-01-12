@@ -9,6 +9,10 @@ public class AppInfo {
         return NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as! String
     }
 
+    public static var buildNumber: String {
+        return NSBundle.mainBundle().objectForInfoDictionaryKey(String(kCFBundleVersionKey)) as! String
+    }
+
     public static var majorAppVersion: String {
         return appVersion.componentsSeparatedByString(".").first ?? "0"
     }
