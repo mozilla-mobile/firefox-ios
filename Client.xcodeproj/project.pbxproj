@@ -629,6 +629,7 @@
 		E66464EE1C10D98000AF05CE /* AssertionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E66464ED1C10D98000AF05CE /* AssertionUtils.swift */; };
 		E664B45A1CD7ECDB0045A6A4 /* NotificationRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E664B4591CD7ECDB0045A6A4 /* NotificationRootViewController.swift */; };
 		E66BD00C1E2678B40075DC07 /* PingCentreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E66BD00B1E2678B40075DC07 /* PingCentreTests.swift */; };
+		E66BD0391E267A960075DC07 /* JSONSchema.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E66BD0361E267A7A0075DC07 /* JSONSchema.framework */; };
 		E66C5B481BDA81050051AA93 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = E66C5B471BDA81050051AA93 /* UIImage+ImageEffects.m */; };
 		E67422C51CFF2D39009E8373 /* youtube.ico in Resources */ = {isa = PBXBuildFile; fileRef = E67422C41CFF2D39009E8373 /* youtube.ico */; };
 		E677F0451D9423FB00ECF1FB /* SQLiteMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E677F0441D9423FB00ECF1FB /* SQLiteMetadata.swift */; };
@@ -1083,6 +1084,20 @@
 			proxyType = 1;
 			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
 			remoteInfo = Client;
+		};
+		E66BD0351E267A7A0075DC07 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E66BD0231E267A7A0075DC07 /* JSONSchema.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 27CF7EE91A9B9EDA0063FDE4;
+			remoteInfo = JSONSchema;
+		};
+		E66BD0371E267A7A0075DC07 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E66BD0231E267A7A0075DC07 /* JSONSchema.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 27CF7EF41A9B9EDA0063FDE4;
+			remoteInfo = JSONSchemaTests;
 		};
 		E6CB64CB1DA42C2900887098 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1872,6 +1887,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E66BD0391E267A960075DC07 /* JSONSchema.framework in Frameworks */,
 				E62A56EC1DBE8D32004703EA /* WebMetadataKit.framework in Frameworks */,
 				E6619A9D1DA693AB0063EAD6 /* OnyxClient.framework in Frameworks */,
 				7B8A47F61D01D3B400C07734 /* PassKit.framework in Frameworks */,
@@ -2305,6 +2321,7 @@
 				28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */,
 				E65C5B8B1BEA4E7100D28BEF /* FBSnapshotTestCase */,
 				D30EBB5A1C75503800105AE9 /* KIF.xcodeproj */,
+				E66BD01C1E267A7A0075DC07 /* JSONSchema */,
 				E6B6DC931CD3D35A009CF713 /* PLCrashReporter */,
 				288A2D7E1AB8B2AD0023ABC3 /* Result */,
 				0B742CC61B32491400EE9264 /* sqlcipher.xcodeproj */,
@@ -3107,6 +3124,201 @@
 				E664B4591CD7ECDB0045A6A4 /* NotificationRootViewController.swift */,
 			);
 			name = Notifications;
+			sourceTree = "<group>";
+		};
+		E66BD01C1E267A7A0075DC07 /* JSONSchema */ = {
+			isa = PBXGroup;
+			children = (
+				E66BD01D1E267A7A0075DC07 /* CHANGELOG.md */,
+				E66BD01E1E267A7A0075DC07 /* Configurations */,
+				E66BD0221E267A7A0075DC07 /* JSONSchema.podspec */,
+				E66BD0231E267A7A0075DC07 /* JSONSchema.xcodeproj */,
+				E66BD0261E267A7A0075DC07 /* LICENSE */,
+				E66BD0271E267A7A0075DC07 /* Package.swift */,
+				E66BD0281E267A7A0075DC07 /* README.md */,
+				E66BD0291E267A7A0075DC07 /* Sources */,
+				E66BD02E1E267A7A0075DC07 /* Tests */,
+			);
+			name = JSONSchema;
+			path = ThirdParty/JSONSchema;
+			sourceTree = "<group>";
+		};
+		E66BD01E1E267A7A0075DC07 /* Configurations */ = {
+			isa = PBXGroup;
+			children = (
+				E66BD01F1E267A7A0075DC07 /* UniversalFramework_Base.xcconfig */,
+				E66BD0201E267A7A0075DC07 /* UniversalFramework_Framework.xcconfig */,
+				E66BD0211E267A7A0075DC07 /* UniversalFramework_Test.xcconfig */,
+			);
+			path = Configurations;
+			sourceTree = "<group>";
+		};
+		E66BD0241E267A7A0075DC07 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E66BD0361E267A7A0075DC07 /* JSONSchema.framework */,
+				E66BD0381E267A7A0075DC07 /* JSONSchemaTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E66BD0291E267A7A0075DC07 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				E66BD02A1E267A7A0075DC07 /* Info.plist */,
+				E66BD02B1E267A7A0075DC07 /* JSONSchema.h */,
+				E66BD02C1E267A7A0075DC07 /* JSONSchema.swift */,
+				E66BD02D1E267A7A0075DC07 /* Validators.swift */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		E66BD02E1E267A7A0075DC07 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				E66BD0C71E267BD40075DC07 /* Cases */,
+				E66BD0301E267A7A0075DC07 /* Info.plist */,
+				E66BD0311E267A7A0075DC07 /* JSONSchemaCases.swift */,
+				E66BD0321E267A7A0075DC07 /* JSONSchemaTests.swift */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		E66BD0C71E267BD40075DC07 /* Cases */ = {
+			isa = PBXGroup;
+			children = (
+				E66BD0C81E267BD40075DC07 /* .gitignore */,
+				E66BD0C91E267BD40075DC07 /* .travis.yml */,
+				E66BD0CA1E267BD40075DC07 /* bin */,
+				E66BD0CC1E267BD40075DC07 /* LICENSE */,
+				E66BD0CD1E267BD40075DC07 /* README.md */,
+				E66BD0CE1E267BD40075DC07 /* remotes */,
+				E66BD0D31E267BD40075DC07 /* tests */,
+			);
+			path = Cases;
+			sourceTree = "<group>";
+		};
+		E66BD0CA1E267BD40075DC07 /* bin */ = {
+			isa = PBXGroup;
+			children = (
+				E66BD0CB1E267BD40075DC07 /* jsonschema_suite */,
+			);
+			path = bin;
+			sourceTree = "<group>";
+		};
+		E66BD0CE1E267BD40075DC07 /* remotes */ = {
+			isa = PBXGroup;
+			children = (
+				E66BD0CF1E267BD40075DC07 /* folder */,
+				E66BD0D11E267BD40075DC07 /* integer.json */,
+				E66BD0D21E267BD40075DC07 /* subSchemas.json */,
+			);
+			path = remotes;
+			sourceTree = "<group>";
+		};
+		E66BD0CF1E267BD40075DC07 /* folder */ = {
+			isa = PBXGroup;
+			children = (
+				E66BD0D01E267BD40075DC07 /* folderInteger.json */,
+			);
+			path = folder;
+			sourceTree = "<group>";
+		};
+		E66BD0D31E267BD40075DC07 /* tests */ = {
+			isa = PBXGroup;
+			children = (
+				E66BD0D41E267BD40075DC07 /* draft3 */,
+				E66BD0F11E267BD40075DC07 /* draft4 */,
+			);
+			path = tests;
+			sourceTree = "<group>";
+		};
+		E66BD0D41E267BD40075DC07 /* draft3 */ = {
+			isa = PBXGroup;
+			children = (
+				E66BD0D51E267BD40075DC07 /* additionalItems.json */,
+				E66BD0D61E267BD40075DC07 /* additionalProperties.json */,
+				E66BD0D71E267BD40075DC07 /* default.json */,
+				E66BD0D81E267BD40075DC07 /* dependencies.json */,
+				E66BD0D91E267BD40075DC07 /* disallow.json */,
+				E66BD0DA1E267BD40075DC07 /* divisibleBy.json */,
+				E66BD0DB1E267BD40075DC07 /* enum.json */,
+				E66BD0DC1E267BD40075DC07 /* extends.json */,
+				E66BD0DD1E267BD40075DC07 /* items.json */,
+				E66BD0DE1E267BD40075DC07 /* maximum.json */,
+				E66BD0DF1E267BD40075DC07 /* maxItems.json */,
+				E66BD0E01E267BD40075DC07 /* maxLength.json */,
+				E66BD0E11E267BD40075DC07 /* minimum.json */,
+				E66BD0E21E267BD40075DC07 /* minItems.json */,
+				E66BD0E31E267BD40075DC07 /* minLength.json */,
+				E66BD0E41E267BD40075DC07 /* optional */,
+				E66BD0E91E267BD40075DC07 /* pattern.json */,
+				E66BD0EA1E267BD40075DC07 /* patternProperties.json */,
+				E66BD0EB1E267BD40075DC07 /* properties.json */,
+				E66BD0EC1E267BD40075DC07 /* ref.json */,
+				E66BD0ED1E267BD40075DC07 /* refRemote.json */,
+				E66BD0EE1E267BD40075DC07 /* required.json */,
+				E66BD0EF1E267BD40075DC07 /* type.json */,
+				E66BD0F01E267BD40075DC07 /* uniqueItems.json */,
+			);
+			path = draft3;
+			sourceTree = "<group>";
+		};
+		E66BD0E41E267BD40075DC07 /* optional */ = {
+			isa = PBXGroup;
+			children = (
+				E66BD0E51E267BD40075DC07 /* bignum.json */,
+				E66BD0E61E267BD40075DC07 /* format.json */,
+				E66BD0E71E267BD40075DC07 /* jsregex.json */,
+				E66BD0E81E267BD40075DC07 /* zeroTerminatedFloats.json */,
+			);
+			path = optional;
+			sourceTree = "<group>";
+		};
+		E66BD0F11E267BD40075DC07 /* draft4 */ = {
+			isa = PBXGroup;
+			children = (
+				E66BD0F21E267BD40075DC07 /* additionalItems.json */,
+				E66BD0F31E267BD40075DC07 /* additionalProperties.json */,
+				E66BD0F41E267BD40075DC07 /* allOf.json */,
+				E66BD0F51E267BD40075DC07 /* anyOf.json */,
+				E66BD0F61E267BD40075DC07 /* default.json */,
+				E66BD0F71E267BD40075DC07 /* definitions.json */,
+				E66BD0F81E267BD40075DC07 /* dependencies.json */,
+				E66BD0F91E267BD40075DC07 /* enum.json */,
+				E66BD0FA1E267BD40075DC07 /* items.json */,
+				E66BD0FB1E267BD40075DC07 /* maximum.json */,
+				E66BD0FC1E267BD40075DC07 /* maxItems.json */,
+				E66BD0FD1E267BD40075DC07 /* maxLength.json */,
+				E66BD0FE1E267BD40075DC07 /* maxProperties.json */,
+				E66BD0FF1E267BD40075DC07 /* minimum.json */,
+				E66BD1001E267BD40075DC07 /* minItems.json */,
+				E66BD1011E267BD40075DC07 /* minLength.json */,
+				E66BD1021E267BD40075DC07 /* minProperties.json */,
+				E66BD1031E267BD40075DC07 /* multipleOf.json */,
+				E66BD1041E267BD40075DC07 /* not.json */,
+				E66BD1051E267BD40075DC07 /* oneOf.json */,
+				E66BD1061E267BD40075DC07 /* optional */,
+				E66BD10A1E267BD40075DC07 /* pattern.json */,
+				E66BD10B1E267BD40075DC07 /* patternProperties.json */,
+				E66BD10C1E267BD40075DC07 /* properties.json */,
+				E66BD10D1E267BD40075DC07 /* ref.json */,
+				E66BD10E1E267BD40075DC07 /* refRemote.json */,
+				E66BD10F1E267BD40075DC07 /* required.json */,
+				E66BD1101E267BD40075DC07 /* type.json */,
+				E66BD1111E267BD40075DC07 /* uniqueItems.json */,
+			);
+			path = draft4;
+			sourceTree = "<group>";
+		};
+		E66BD1061E267BD40075DC07 /* optional */ = {
+			isa = PBXGroup;
+			children = (
+				E66BD1071E267BD40075DC07 /* bignum.json */,
+				E66BD1081E267BD40075DC07 /* format.json */,
+				E66BD1091E267BD40075DC07 /* zeroTerminatedFloats.json */,
+			);
+			path = optional;
 			sourceTree = "<group>";
 		};
 		E66C5B451BDA81050051AA93 /* Apple */ = {
@@ -4151,6 +4363,10 @@
 					ProjectRef = 28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */;
 				},
 				{
+					ProductGroup = E66BD0241E267A7A0075DC07 /* Products */;
+					ProjectRef = E66BD0231E267A7A0075DC07 /* JSONSchema.xcodeproj */;
+				},
+				{
 					ProductGroup = D30EBB5B1C75503800105AE9 /* Products */;
 					ProjectRef = D30EBB5A1C75503800105AE9 /* KIF.xcodeproj */;
 				},
@@ -4295,6 +4511,20 @@
 			fileType = wrapper.framework;
 			path = KIF.framework;
 			remoteRef = D30EBB691C75503800105AE9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E66BD0361E267A7A0075DC07 /* JSONSchema.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = JSONSchema.framework;
+			remoteRef = E66BD0351E267A7A0075DC07 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E66BD0381E267A7A0075DC07 /* JSONSchemaTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = JSONSchemaTests.xctest;
+			remoteRef = E66BD0371E267A7A0075DC07 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		E6CB64CC1DA42C2900887098 /* KIFFrameworkConsumer.app */ = {

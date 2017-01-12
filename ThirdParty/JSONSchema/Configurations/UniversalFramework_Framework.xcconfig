@@ -1,0 +1,18 @@
+//
+//  UniversalFramework_Framework.xcconfig
+//  Mockingjay
+//
+//  Created by Marius Rackwitz on 29/11/14.
+//  Copyright (c) 2014 Marius Rackwitz. All rights reserved.
+//
+
+#include "UniversalFramework_Base.xcconfig"
+
+// iOS-specific default settings
+CODE_SIGN_IDENTITY[sdk=iphoneos*]             = iPhone Developer
+TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]  = 1,2
+TARGETED_DEVICE_FAMILY[sdk=iphone*]           = 1,2
+
+// OSX-specific default settings
+FRAMEWORK_VERSION[sdk=macosx*]                = A
+COMBINE_HIDPI_IMAGES[sdk=macosx*]             = YES
