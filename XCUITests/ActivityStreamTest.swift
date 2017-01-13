@@ -2,6 +2,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+@testable import Client
+import Storage
+import Foundation
+
 import XCTest
 
 class ActivityStreamTest: BaseTestCase {
@@ -15,7 +19,7 @@ class ActivityStreamTest: BaseTestCase {
     override func tearDown() {
         super.tearDown()
     }
-
+    
     func testDefaultSites() {
         let app = XCUIApplication()
         let topSites = app.tables["Top sites"].cells["TopSitesCell"]
@@ -115,6 +119,25 @@ class ActivityStreamTest: BaseTestCase {
         app.tables["Context Menu"].cells["Remove"].tap()
         XCTAssertFalse(pagecontrolButton.exists, "The Page Control button should disappear after an item is deleted.")
 
+    }
+    
+    private func addSite(history: BrowserHistory, url: String, title: String, s: Bool = true) {
+        let site = Site(url: url, title: title)
+        let visit = SiteVisit(site: site, date: NSDate.nowMicroseconds())
+        XCTAssertEqual(s, history.addLocalVisit(visit).value.isSuccess, "Site added: \(url).")
+    }
+    
+    private func clear(history: BrowserHistory) {
+        XCTAssertTrue(history.clearHistory().value.isSuccess, "History cleared.")
+    }
+
+    func testHighlights() {
+        
+        let profile = (UIApplication.sharedApplication().delegate as? AppDelegate)?.profile
+        let h = profile?.history
+        self.addSite(h!, url: "http://www.amazon.com", title: "title")
+        
+        
     }
     
     
