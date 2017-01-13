@@ -23,12 +23,12 @@ public struct ReadingListClientRecord: Equatable {
         }
 
         let serverMetadata = ReadingListServerMetadata(row: row)
-        let url = row.valueForKeyPath("url") as? String
-        let title = row.valueForKeyPath("title") as? String
-        let addedBy = row.valueForKeyPath("added_by") as? String
-        let unread = row.valueForKeyPath("unread") as? Bool
-        let archived = row.valueForKeyPath("archived") as? Bool
-        let favorite = row.valueForKeyPath("favorite") as? Bool
+        let url = row.value(forKeyPath: "url") as? String
+        let title = row.value(forKeyPath: "title") as? String
+        let addedBy = row.value(forKeyPath: "added_by") as? String
+        let unread = row.value(forKeyPath: "unread") as? Bool
+        let archived = row.value(forKeyPath: "archived") as? Bool
+        let favorite = row.value(forKeyPath: "favorite") as? Bool
 
         if clientMetadata == nil || url == nil || title == nil || addedBy == nil || unread == nil {
             return nil

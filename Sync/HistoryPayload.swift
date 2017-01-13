@@ -6,8 +6,8 @@ import Foundation
 import Shared
 import Storage
 
-public class HistoryPayload: CleartextPayloadJSON {
-    public class func fromJSON(json: JSON) -> HistoryPayload? {
+open class HistoryPayload: CleartextPayloadJSON {
+    open class func fromJSON(_ json: JSON) -> HistoryPayload? {
         let p = HistoryPayload(json)
         if p.isValid() {
             return p
@@ -15,7 +15,7 @@ public class HistoryPayload: CleartextPayloadJSON {
         return nil
     }
 
-    override public func isValid() -> Bool {
+    override open func isValid() -> Bool {
         if !super.isValid() {
             return false
         }
@@ -29,7 +29,7 @@ public class HistoryPayload: CleartextPayloadJSON {
                self["visits"].isArray
     }
 
-    public func asPlace() -> Place {
+    open func asPlace() -> Place {
         return Place(guid: self.id, url: self.histURI, title: self.title)
     }
 
@@ -37,11 +37,11 @@ public class HistoryPayload: CleartextPayloadJSON {
         return optFilter(self["visits"].asArray!.map(Visit.fromJSON))
     }
 
-    private var histURI: String {
+    fileprivate var histURI: String {
         return self["histUri"].asString!
     }
 
-    var historyURI: NSURL {
+    var historyURI: URL {
         return self.histURI.asURL!
     }
 
@@ -49,7 +49,7 @@ public class HistoryPayload: CleartextPayloadJSON {
         return self["title"].asString ?? ""
     }
 
-    override public func equalPayloads(obj: CleartextPayloadJSON) -> Bool {
+    override open func equalPayloads(_ obj: CleartextPayloadJSON) -> Bool {
         if let p = obj as? HistoryPayload {
             if !super.equalPayloads(p) {
                 return false

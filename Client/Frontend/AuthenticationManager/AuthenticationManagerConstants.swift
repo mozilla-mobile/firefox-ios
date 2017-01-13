@@ -80,14 +80,14 @@ struct AuthenticationStrings {
 
     static let requirePasscodeTouchReason =
         NSLocalizedString("touchid.require.passcode.reason.label",
-                          value: "Use your fingerprint to access configuring your required passcode interval.",
                           tableName: "AuthenticationManager",
+                          value: "Use your fingerprint to access configuring your required passcode interval.",
                           comment: "Touch ID prompt subtitle when accessing the require passcode setting")
 
     static let disableTouchReason =
         NSLocalizedString("touchid.disable.reason.label",
-                          value: "Use your fingerprint to disable Touch ID.",
                           tableName: "AuthenticationManager",
+                          value: "Use your fingerprint to disable Touch ID.",
                           comment: "Touch ID prompt subtitle when disabling Touch ID")
 
     static let wrongPasscodeError =

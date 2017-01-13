@@ -7,11 +7,11 @@ import Shared
 import Storage
 
 struct HighlightCellUX {
-    static let BorderColor = UIColor.blackColor().colorWithAlphaComponent(0.1)
+    static let BorderColor = UIColor.black.withAlphaComponent(0.1)
     static let BorderWidth = CGFloat(0.5)
-    static let LabelColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor(rgb: 0x353535)
+    static let LabelColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.black : UIColor(rgb: 0x353535)
     static let LabelBackgroundColor = UIColor(white: 1.0, alpha: 0.5)
-    static let LabelAlignment: NSTextAlignment = .Left
+    static let LabelAlignment: NSTextAlignment = .left
     static let SelectedOverlayColor = UIColor(white: 0.0, alpha: 0.25)
     static let PlaceholderImage = UIImage(named: "defaultTopSiteIcon")
     static let CornerRadius: CGFloat = 3
@@ -23,7 +23,7 @@ class HighlightCell: UITableViewCell {
         didSet {
             if let image = siteImage {
                 siteImageView.image = image
-                siteImageView.contentMode = UIViewContentMode.ScaleAspectFit
+                siteImageView.contentMode = UIViewContentMode.scaleAspectFit
 
                 // Force nearest neighbor scaling for small favicons
                 if image.size.width < HighlightCellUX.NearestNeighbordScalingThreshold {
@@ -34,14 +34,14 @@ class HighlightCell: UITableViewCell {
                 }
             } else {
                 siteImageView.image = HighlightCellUX.PlaceholderImage
-                siteImageView.contentMode = UIViewContentMode.Center
+                siteImageView.contentMode = UIViewContentMode.center
             }
         }
     }
 
     lazy var titleLabel: UILabel = {
         let textLabel = UILabel()
-        textLabel.setContentHuggingPriority(1000, forAxis: UILayoutConstraintAxis.Vertical)
+        textLabel.setContentHuggingPriority(1000, for: UILayoutConstraintAxis.vertical)
         textLabel.font = DynamicFontHelper.defaultHelper.DeviceFontMediumBold
         textLabel.textColor = HighlightCellUX.LabelColor
         textLabel.textAlignment = HighlightCellUX.LabelAlignment
@@ -51,7 +51,7 @@ class HighlightCell: UITableViewCell {
 
     lazy var timeStamp: UILabel = {
         let textLabel = UILabel()
-        textLabel.setContentHuggingPriority(1000, forAxis: UILayoutConstraintAxis.Vertical)
+        textLabel.setContentHuggingPriority(1000, for: UILayoutConstraintAxis.vertical)
         textLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallActivityStream
         textLabel.textColor = UIColor(colorString: "D4D4D4")
         textLabel.textAlignment = HighlightCellUX.LabelAlignment
@@ -60,7 +60,7 @@ class HighlightCell: UITableViewCell {
 
     lazy var siteImageView: UIImageView = {
         let siteImageView = UIImageView()
-        siteImageView.contentMode = UIViewContentMode.ScaleAspectFit
+        siteImageView.contentMode = UIViewContentMode.scaleAspectFit
         siteImageView.clipsToBounds = true
         siteImageView.layer.cornerRadius = HighlightCellUX.CornerRadius
         return siteImageView
@@ -68,7 +68,7 @@ class HighlightCell: UITableViewCell {
 
     lazy var statusIcon: UIImageView = {
         let siteImageView = UIImageView()
-        siteImageView.contentMode = UIViewContentMode.ScaleAspectFit
+        siteImageView.contentMode = UIViewContentMode.scaleAspectFit
         siteImageView.clipsToBounds = true
         siteImageView.layer.cornerRadius = HighlightCellUX.CornerRadius
         return siteImageView
@@ -76,18 +76,18 @@ class HighlightCell: UITableViewCell {
 
     lazy var descriptionLabel: UILabel = {
         let textLabel = UILabel()
-        textLabel.setContentHuggingPriority(1000, forAxis: UILayoutConstraintAxis.Vertical)
+        textLabel.setContentHuggingPriority(1000, for: UILayoutConstraintAxis.vertical)
         textLabel.font = DynamicFontHelper.defaultHelper.DeviceFontDescriptionActivityStream
         textLabel.textColor = UIColor(colorString: "919191")
-        textLabel.textAlignment = .Left
+        textLabel.textAlignment = .left
         textLabel.numberOfLines = 1
         return textLabel
     }()
 
     lazy var backgroundImage: UIImageView = {
         let backgroundImage = UIImageView()
-        backgroundImage.contentMode = UIViewContentMode.ScaleAspectFill
-        backgroundImage.layer.borderColor = HighlightCellUX.BorderColor.CGColor
+        backgroundImage.contentMode = UIViewContentMode.scaleAspectFill
+        backgroundImage.layer.borderColor = HighlightCellUX.BorderColor.cgColor
         backgroundImage.layer.borderWidth = HighlightCellUX.BorderWidth
         backgroundImage.layer.cornerRadius = HighlightCellUX.CornerRadius
         backgroundImage.clipsToBounds = true
@@ -97,13 +97,13 @@ class HighlightCell: UITableViewCell {
     lazy var selectedOverlay: UIView = {
         let selectedOverlay = UIView()
         selectedOverlay.backgroundColor = HighlightCellUX.SelectedOverlayColor
-        selectedOverlay.hidden = true
+        selectedOverlay.isHidden = true
         return selectedOverlay
     }()
 
-    override var selected: Bool {
+    override var isSelected: Bool {
         didSet {
-            self.selectedOverlay.hidden = !selected
+            self.selectedOverlay.isHidden = !isSelected
         }
     }
 
@@ -111,7 +111,7 @@ class HighlightCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         layer.shouldRasterize = true
-        layer.rasterizationScale = UIScreen.mainScreen().scale
+        layer.rasterizationScale = UIScreen.main.scale
 
         isAccessibilityElement = true
         contentView.addSubview(selectedOverlay)
@@ -172,23 +172,23 @@ class HighlightCell: UITableViewCell {
         siteImageView.layer.borderWidth = 0
     }
 
-    func setImageWithURL(url: NSURL) {
-        siteImageView.sd_setImageWithURL(url) { (img, err, type, url) -> Void in
+    func setImageWithURL(_ url: URL) {
+        siteImageView.sd_setImage(with: url) { (img, err, type, url) -> Void in
             guard let img = img else {
                 return
             }
             self.siteImage = img
         }
-        backgroundImage.sd_setImageWithURL(NSURL(string: "http://lorempixel.com/640/480/?r=" + String(arc4random())))
+        backgroundImage.sd_setImage(with: URL(string: "http://lorempixel.com/640/480/?r=" + String(arc4random())))
         siteImageView.layer.masksToBounds = true
     }
 
-    func configureHighlightCell(site: Site) {
+    func configureHighlightCell(_ site: Site) {
         if let icon = site.icon {
             let url = icon.url
-            self.setImageWithURL(NSURL(string: url)!)
+            self.setImageWithURL(URL(string: url)!)
         } else {
-            self.siteImage = FaviconFetcher.getDefaultFavicon(NSURL(string: site.url)!)
+            self.siteImage = FaviconFetcher.getDefaultFavicon(URL(string: site.url)!)
             self.siteImageView.layer.borderWidth = 0.5
         }
         self.titleLabel.text = site.title.characters.count <= 1 ? site.url : site.title
@@ -208,7 +208,7 @@ class HighlightIntroCell: UITableViewCell {
     lazy var titleLabel: UILabel = {
         let textLabel = UILabel()
         textLabel.font = DynamicFontHelper.defaultHelper.DeviceFontMediumBold
-        textLabel.textColor = UIColor.blackColor()
+        textLabel.textColor = UIColor.black
         textLabel.numberOfLines = 1
         textLabel.adjustsFontSizeToFitWidth = true
         textLabel.minimumScaleFactor = 0.8
@@ -224,7 +224,7 @@ class HighlightIntroCell: UITableViewCell {
     lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.font = DynamicFontHelper.defaultHelper.DeviceFontDescriptionActivityStream
-        label.textColor = UIColor.darkGrayColor()
+        label.textColor = UIColor.darkGray
         label.numberOfLines = 0
         return label
     }()
@@ -232,7 +232,7 @@ class HighlightIntroCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
-        self.selectionStyle = .None
+        self.selectionStyle = .none
         contentView.addSubview(titleLabel)
         contentView.addSubview(mainImageView)
         contentView.addSubview(descriptionLabel)

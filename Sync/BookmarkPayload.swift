@@ -10,7 +10,7 @@ import XCGLogger
 private let log = Logger.syncLogger
 
 public protocol MirrorItemable {
-    func toMirrorItem(modified: Timestamp) -> BookmarkMirrorItem
+    func toMirrorItem(_ modified: Timestamp) -> BookmarkMirrorItem
 }
 
 extension BookmarkMirrorItem {
@@ -18,7 +18,7 @@ extension BookmarkMirrorItem {
         return BookmarkType.somePayloadFromJSON(self.asJSON())
     }
 
-    func asPayloadWithChildren(children: [GUID]?) -> BookmarkBasePayload {
+    func asPayloadWithChildren(_ children: [GUID]?) -> BookmarkBasePayload {
         let remappedChildren: [GUID]?
         if let children = children {
             if BookmarkRoots.RootGUID == self.guid {
@@ -56,11 +56,11 @@ public enum BookmarkType: String {
     case microsummary     // Dead: now a bookmark.
 
     // The result might be invalid, but it won't be nil.
-    public static func somePayloadFromJSON(json: JSON) -> BookmarkBasePayload {
+    public static func somePayloadFromJSON(_ json: JSON) -> BookmarkBasePayload {
         return payloadFromJSON(json) ?? BookmarkBasePayload(json)
     }
 
-    public static func payloadFromJSON(json: JSON) -> BookmarkBasePayload? {
+    public static func payloadFromJSON(_ json: JSON) -> BookmarkBasePayload? {
         if json["deleted"].asBool ?? false {
             // Deleted records won't have a type.
             return BookmarkBasePayload(json)
@@ -90,7 +90,7 @@ public enum BookmarkType: String {
         }
     }
 
-    public static func isValid(type: String?) -> Bool {
+    public static func isValid(_ type: String?) -> Bool {
         guard let type = type else {
             return false
         }
@@ -99,23 +99,23 @@ public enum BookmarkType: String {
     }
 }
 
-public class LivemarkPayload: BookmarkBasePayload {
-    public var feedURI: String? {
+open class LivemarkPayload: BookmarkBasePayload {
+    open var feedURI: String? {
         return self["feedUri"].asString
     }
 
-    public var siteURI: String? {
+    open var siteURI: String? {
         return self["siteUri"].asString
     }
 
-    override public func isValid() -> Bool {
+    override open func isValid() -> Bool {
         if !super.isValid() {
             return false
         }
         return self.hasRequiredStringFields(["feedUri", "siteUri"])
     }
 
-    override public func equalPayloads(obj: CleartextPayloadJSON) -> Bool {
+    override open func equalPayloads(_ obj: CleartextPayloadJSON) -> Bool {
         guard let p = obj as? LivemarkPayload else {
             return false
         }
@@ -139,7 +139,7 @@ public class LivemarkPayload: BookmarkBasePayload {
         return true
     }
 
-    override public func toMirrorItem(modified: Timestamp) -> BookmarkMirrorItem {
+    override open func toMirrorItem(_ modified: Timestamp) -> BookmarkMirrorItem {
         if self.deleted {
             return BookmarkMirrorItem.deleted(.Livemark, guid: self.id, modified: modified)
         }
@@ -159,8 +159,8 @@ public class LivemarkPayload: BookmarkBasePayload {
     }
 }
 
-public class SeparatorPayload: BookmarkBasePayload {
-    override public func isValid() -> Bool {
+open class SeparatorPayload: BookmarkBasePayload {
+    override open func isValid() -> Bool {
         if !super.isValid() {
             return false
         }
@@ -171,7 +171,7 @@ public class SeparatorPayload: BookmarkBasePayload {
         return true
     }
 
-    override public func equalPayloads(obj: CleartextPayloadJSON) -> Bool {
+    override open func equalPayloads(_ obj: CleartextPayloadJSON) -> Bool {
         guard let p = obj as? SeparatorPayload else {
             return false
         }
@@ -191,7 +191,7 @@ public class SeparatorPayload: BookmarkBasePayload {
         return true
     }
 
-    override public func toMirrorItem(modified: Timestamp) -> BookmarkMirrorItem {
+    override open func toMirrorItem(_ modified: Timestamp) -> BookmarkMirrorItem {
         if self.deleted {
             return BookmarkMirrorItem.deleted(.Separator, guid: self.id, modified: modified)
         }
@@ -208,12 +208,12 @@ public class SeparatorPayload: BookmarkBasePayload {
     }
 }
 
-public class FolderPayload: BookmarkBasePayload {
-    private var childrenAreValid: Bool {
+open class FolderPayload: BookmarkBasePayload {
+    fileprivate var childrenAreValid: Bool {
         return self.hasStringArrayField("children")
     }
 
-    override public func isValid() -> Bool {
+    override open func isValid() -> Bool {
         if !super.isValid() {
             return false
         }
@@ -236,11 +236,11 @@ public class FolderPayload: BookmarkBasePayload {
         return true
     }
 
-    public var children: [String] {
+    open var children: [String] {
         return self["children"].asArray!.map { $0.asString! }
     }
 
-    override public func equalPayloads(obj: CleartextPayloadJSON) -> Bool {
+    override open func equalPayloads(_ obj: CleartextPayloadJSON) -> Bool {
         guard let p = obj as? FolderPayload else {
             return false
         }
@@ -268,7 +268,7 @@ public class FolderPayload: BookmarkBasePayload {
         return true
     }
 
-    override public func toMirrorItem(modified: Timestamp) -> BookmarkMirrorItem {
+    override open func toMirrorItem(_ modified: Timestamp) -> BookmarkMirrorItem {
         if self.deleted {
             return BookmarkMirrorItem.deleted(.Folder, guid: self.id, modified: modified)
         }
@@ -287,14 +287,14 @@ public class FolderPayload: BookmarkBasePayload {
     }
 }
 
-public class BookmarkPayload: BookmarkBasePayload {
-    private static let requiredBookmarkStringFields = ["bmkUri"]
+open class BookmarkPayload: BookmarkBasePayload {
+    fileprivate static let requiredBookmarkStringFields = ["bmkUri"]
 
     // Title *should* be required, but can be missing for queries. Great.
-    private static let optionalBookmarkStringFields = ["title", "keyword", "description"]
-    private static let optionalBookmarkBooleanFields = ["loadInSidebar"]
+    fileprivate static let optionalBookmarkStringFields = ["title", "keyword", "description"]
+    fileprivate static let optionalBookmarkBooleanFields = ["loadInSidebar"]
 
-    override public func isValid() -> Bool {
+    override open func isValid() -> Bool {
         if !super.isValid() {
             return false
         }
@@ -316,7 +316,7 @@ public class BookmarkPayload: BookmarkBasePayload {
         return self.hasOptionalBooleanFields(BookmarkPayload.optionalBookmarkBooleanFields)
     }
 
-    override public func equalPayloads(obj: CleartextPayloadJSON) -> Bool {
+    override open func equalPayloads(_ obj: CleartextPayloadJSON) -> Bool {
         guard let p = obj as? BookmarkPayload else {
             return false
         }
@@ -357,7 +357,7 @@ public class BookmarkPayload: BookmarkBasePayload {
         return "[]"
     }()
 
-    override public func toMirrorItem(modified: Timestamp) -> BookmarkMirrorItem {
+    override open func toMirrorItem(_ modified: Timestamp) -> BookmarkMirrorItem {
         if self.deleted {
             return BookmarkMirrorItem.deleted(.Bookmark, guid: self.id, modified: modified)
         }
@@ -378,8 +378,8 @@ public class BookmarkPayload: BookmarkBasePayload {
     }
 }
 
-public class BookmarkQueryPayload: BookmarkPayload {
-    override public func isValid() -> Bool {
+open class BookmarkQueryPayload: BookmarkPayload {
+    override open func isValid() -> Bool {
         if !super.isValid() {
             return false
         }
@@ -392,7 +392,7 @@ public class BookmarkQueryPayload: BookmarkPayload {
         return true
     }
 
-    override public func equalPayloads(obj: CleartextPayloadJSON) -> Bool {
+    override open func equalPayloads(_ obj: CleartextPayloadJSON) -> Bool {
         guard let p = obj as? BookmarkQueryPayload else {
             return false
         }
@@ -416,7 +416,7 @@ public class BookmarkQueryPayload: BookmarkPayload {
         return true
     }
 
-    override public func toMirrorItem(modified: Timestamp) -> BookmarkMirrorItem {
+    override open func toMirrorItem(_ modified: Timestamp) -> BookmarkMirrorItem {
         if self.deleted {
             return BookmarkMirrorItem.deleted(.Query, guid: self.id, modified: modified)
         }
@@ -438,27 +438,27 @@ public class BookmarkQueryPayload: BookmarkPayload {
     }
 }
 
-public class BookmarkBasePayload: CleartextPayloadJSON, MirrorItemable {
-    private static let requiredStringFields: [String] = ["parentid", "type"]
-    private static let optionalBooleanFields: [String] = ["hasDupe"]
+open class BookmarkBasePayload: CleartextPayloadJSON, MirrorItemable {
+    fileprivate static let requiredStringFields: [String] = ["parentid", "type"]
+    fileprivate static let optionalBooleanFields: [String] = ["hasDupe"]
 
-    static func deletedPayload(guid: GUID) -> BookmarkBasePayload {
+    static func deletedPayload(_ guid: GUID) -> BookmarkBasePayload {
         let remappedGUID = BookmarkRoots.translateOutgoingRootGUID(guid)
         return BookmarkBasePayload(JSON(["id": remappedGUID, "deleted": true]))
     }
 
-    func hasStringArrayField(name: String) -> Bool {
+    func hasStringArrayField(_ name: String) -> Bool {
         guard let arr = self[name].asArray else {
             return false
         }
         return arr.every { $0.isString }
     }
 
-    func hasRequiredStringFields(fields: [String]) -> Bool {
+    func hasRequiredStringFields(_ fields: [String]) -> Bool {
         return fields.every { self[$0].isString }
     }
 
-    func hasOptionalStringFields(fields: [String]) -> Bool {
+    func hasOptionalStringFields(_ fields: [String]) -> Bool {
         return fields.every { field in
             let val = self[field]
             // Yup, 404 is not found, so this means "string or nothing".
@@ -470,7 +470,7 @@ public class BookmarkBasePayload: CleartextPayloadJSON, MirrorItemable {
         }
     }
 
-    func hasOptionalBooleanFields(fields: [String]) -> Bool {
+    func hasOptionalBooleanFields(_ fields: [String]) -> Bool {
         return fields.every { field in
             let val = self[field]
             // Yup, 404 is not found, so this means "boolean or nothing".
@@ -482,7 +482,7 @@ public class BookmarkBasePayload: CleartextPayloadJSON, MirrorItemable {
         }
     }
 
-    override public func isValid() -> Bool {
+    override open func isValid() -> Bool {
         if !super.isValid() {
             return false
         }
@@ -513,14 +513,14 @@ public class BookmarkBasePayload: CleartextPayloadJSON, MirrorItemable {
         return self.hasOptionalBooleanFields(BookmarkBasePayload.optionalBooleanFields)
     }
 
-    public var hasDupe: Bool {
+    open var hasDupe: Bool {
         return self["hasDupe"].asBool ?? false
     }
 
     /**
      * This only makes sense for valid payloads.
      */
-    override public func equalPayloads(obj: CleartextPayloadJSON) -> Bool {
+    override open func equalPayloads(_ obj: CleartextPayloadJSON) -> Bool {
         guard let p = obj as? BookmarkBasePayload else {
             return false
         }
@@ -540,7 +540,7 @@ public class BookmarkBasePayload: CleartextPayloadJSON, MirrorItemable {
         // If either record is deleted, these other fields might be missing.
         // But we just checked, so we're good to roll on.
 
-        let same: String -> Bool = { field in
+        let same: (String) -> Bool = { field in
             let left = self[field].asString
             let right = p[field].asString
             return left == right
@@ -558,7 +558,7 @@ public class BookmarkBasePayload: CleartextPayloadJSON, MirrorItemable {
     }
 
     // This goes here because extensions cannot override methods yet.
-    public func toMirrorItem(modified: Timestamp) -> BookmarkMirrorItem {
+    open func toMirrorItem(_ modified: Timestamp) -> BookmarkMirrorItem {
         precondition(self.deleted, "Non-deleted items should have a specific type.")
         return BookmarkMirrorItem.deleted(.Bookmark, guid: self.id, modified: modified)
     }

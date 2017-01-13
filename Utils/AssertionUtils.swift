@@ -9,6 +9,6 @@ import Foundation
 
  - parameter message: Message to display in case of assertion.
  */
-public func assertIsMainThread(message: String) {
-    assert(NSThread.isMainThread(), message)
+public func assertIsMainThread(_ message: String) {
+    assert(Thread.isMainThread, message)
 }

@@ -38,24 +38,24 @@ public protocol RemoteClientsAndTabs: SyncCommands {
     func getClientGUIDs() -> Deferred<Maybe<Set<GUID>>>
     func getClients() -> Deferred<Maybe<[RemoteClient]>>
     func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>>
-    func getTabsForClientWithGUID(guid: GUID?) -> Deferred<Maybe<[RemoteTab]>>
-    func insertOrUpdateClient(client: RemoteClient) -> Deferred<Maybe<()>>
-    func insertOrUpdateClients(clients: [RemoteClient]) -> Deferred<Maybe<()>>
+    func getTabsForClientWithGUID(_ guid: GUID?) -> Deferred<Maybe<[RemoteTab]>>
+    func insertOrUpdateClient(_ client: RemoteClient) -> Deferred<Maybe<()>>
+    func insertOrUpdateClients(_ clients: [RemoteClient]) -> Deferred<Maybe<()>>
 
     // Returns number of tabs inserted.
-    func insertOrUpdateTabs(tabs: [RemoteTab]) -> Deferred<Maybe<Int>> // Insert into the local client.
-    func insertOrUpdateTabsForClientGUID(clientGUID: String?, tabs: [RemoteTab]) -> Deferred<Maybe<Int>>
+    func insertOrUpdateTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>> // Insert into the local client.
+    func insertOrUpdateTabsForClientGUID(_ clientGUID: String?, tabs: [RemoteTab]) -> Deferred<Maybe<Int>>
 }
 
 public struct RemoteTab: Equatable {
     public let clientGUID: String?
-    public let URL: NSURL
+    public let URL: Foundation.URL
     public let title: String
-    public let history: [NSURL]
+    public let history: [Foundation.URL]
     public let lastUsed: Timestamp
-    public let icon: NSURL?
+    public let icon: Foundation.URL?
 
-    public static func shouldIncludeURL(url: NSURL) -> Bool {
+    public static func shouldIncludeURL(_ url: Foundation.URL) -> Bool {
         let scheme = url.scheme
         if scheme == "about" {
             return false
@@ -64,7 +64,7 @@ public struct RemoteTab: Equatable {
             return false
         }
 
-        if let hostname = url.host?.lowercaseString {
+        if let hostname = url.host?.lowercased() {
             if hostname == "localhost" {
                 return false
             }
@@ -73,7 +73,7 @@ public struct RemoteTab: Equatable {
         return false
     }
 
-    public init(clientGUID: String?, URL: NSURL, title: String, history: [NSURL], lastUsed: Timestamp, icon: NSURL?) {
+    public init(clientGUID: String?, URL: Foundation.URL, title: String, history: [Foundation.URL], lastUsed: Timestamp, icon: Foundation.URL?) {
         self.clientGUID = clientGUID
         self.URL = URL
         self.title = title
@@ -82,7 +82,7 @@ public struct RemoteTab: Equatable {
         self.icon = icon
     }
 
-    public func withClientGUID(clientGUID: String?) -> RemoteTab {
+    public func withClientGUID(_ clientGUID: String?) -> RemoteTab {
         return RemoteTab(clientGUID: clientGUID, URL: URL, title: title, history: history, lastUsed: lastUsed, icon: icon)
     }
 }

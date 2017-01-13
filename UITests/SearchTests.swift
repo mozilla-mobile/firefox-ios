@@ -22,8 +22,8 @@ class SearchTests: KIFTestCase {
         var found: Bool
 
         // Ensure that the prompt appears.
-        tester().tapViewWithAccessibilityIdentifier("url")
-        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("foobar")
+        tester().tapView(withAccessibilityIdentifier: "url")
+        tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "foobar")
         found = tester().viewExistsWithLabel(LabelPrompt)
         XCTAssertTrue(found, "Prompt is shown")
 
@@ -33,26 +33,26 @@ class SearchTests: KIFTestCase {
         XCTAssertFalse(found, "No suggestion shown before prompt selection")
 
         // Ensure that suggestions are visible after selecting Yes.
-        tester().tapViewWithAccessibilityLabel("Yes")
+        tester().tapView(withAccessibilityLabel: "Yes")
         found = tester().waitForViewWithAccessibilityHint(HintSuggestionButton) != nil
         XCTAssertTrue(found, "Found suggestions after choosing Yes")
 
-        tester().tapViewWithAccessibilityLabel("Cancel")
+        tester().tapView(withAccessibilityLabel: "Cancel")
 
         // Return to the search screen, and make sure our choice was remembered.
         found = tester().viewExistsWithLabel(LabelPrompt)
 
         XCTAssertFalse(found, "Prompt is not shown")
-        tester().tapViewWithAccessibilityIdentifier("url")
-        tester().clearTextFromAndThenEnterText("foobar", intoViewWithAccessibilityLabel: LabelAddressAndSearch)
+        tester().tapView(withAccessibilityIdentifier: "url")
+        tester().clearText(fromAndThenEnterText: "foobar", intoViewWithAccessibilityLabel: LabelAddressAndSearch)
         found = tester().waitForViewWithAccessibilityHint(HintSuggestionButton) != nil
         XCTAssertTrue(found, "Search suggestions are still enabled")
-        tester().tapViewWithAccessibilityLabel("Cancel")
+        tester().tapView(withAccessibilityLabel: "Cancel")
         resetSuggestionsPrompt()
 
         // Ensure that the prompt appears.
-        tester().tapViewWithAccessibilityIdentifier("url")
-        tester().clearTextFromAndThenEnterText("foobar", intoViewWithAccessibilityLabel: LabelAddressAndSearch)
+        tester().tapView(withAccessibilityIdentifier: "url")
+        tester().clearText(fromAndThenEnterText: "foobar", intoViewWithAccessibilityLabel: LabelAddressAndSearch)
 
         found = tester().viewExistsWithLabel(LabelPrompt)
         XCTAssertTrue(found, "Prompt is shown")
@@ -63,7 +63,7 @@ class SearchTests: KIFTestCase {
         XCTAssertFalse(found, "No suggestion buttons are shown")
 
         // Ensure that no suggestions are visible after selecting No.
-        tester().tapViewWithAccessibilityLabel("No")
+        tester().tapView(withAccessibilityLabel: "No")
         waitForPotentialDebounce(tester())
         found = tester().tryFindingViewWithAccessibilityHint(HintSuggestionButton)
         XCTAssertFalse(found, "No suggestions after choosing No")
@@ -94,8 +94,8 @@ class SearchTests: KIFTestCase {
         var found: Bool
         
         // Ensure that the prompt appears.
-        tester().tapViewWithAccessibilityIdentifier("url")
-        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("foobar")
+        tester().tapView(withAccessibilityIdentifier: "url")
+        tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "foobar")
         found = tester().viewExistsWithLabel(LabelPrompt)
         XCTAssertTrue(found, "Prompt is shown")
 
@@ -105,15 +105,15 @@ class SearchTests: KIFTestCase {
         XCTAssertFalse(found, "No suggestion shown before prompt selection")
 
         // Ensure that suggestions are visible after selecting Yes.
-        tester().tapViewWithAccessibilityLabel("Yes")
+        tester().tapView(withAccessibilityLabel: "Yes")
         waitForPotentialDebounce(tester())
         found = tester().tryFindingViewWithAccessibilityHint(HintSuggestionButton)
         XCTAssertTrue(found, "Found suggestions after choosing Yes")
         found = tester().viewExistsWithLabel(LabelYahooSearchIcon)
         XCTAssertTrue(found, "Found search provider icon")
 
-        tester().tapViewWithAccessibilityLabel("Address and Search")
-        tester().enterTextIntoCurrentFirstResponder("/")
+        tester().tapView(withAccessibilityLabel: "Address and Search")
+        tester().enterText(intoCurrentFirstResponder: "/")
 
         // Wait for debounce in case
         waitForPotentialDebounce(tester())
@@ -122,11 +122,11 @@ class SearchTests: KIFTestCase {
         found = tester().viewExistsWithLabel(LabelYahooSearchIcon)
         XCTAssertFalse(found, "Found no search provider icon")
 
-        tester().tapViewWithAccessibilityLabel("Address and Search")
-        tester().enterTextIntoCurrentFirstResponder(" ")
+        tester().tapView(withAccessibilityLabel: "Address and Search")
+        tester().enterText(intoCurrentFirstResponder: " ")
 
         // Wait for debounce in case
-        tester().waitForTimeInterval(0.3)
+        tester().wait(forTimeInterval: 0.3)
 
         found = tester().viewExistsWithLabel(LabelYahooSearchIcon)
         XCTAssertTrue(found, "Found search provider icon after making input url invalid")
@@ -137,62 +137,62 @@ class SearchTests: KIFTestCase {
         let testURL = "\(webRoot)/numberedPage.html?page=1"
 
         // Verify that Paste & Go goes to the URL.
-        UIPasteboard.generalPasteboard().string = testURL
-        tester().longPressViewWithAccessibilityIdentifier("url", duration: 1)
-        tester().tapViewWithAccessibilityLabel("Paste & Go")
+        UIPasteboard.general.string = testURL
+        tester().longPressView(withAccessibilityIdentifier: "url", duration: 1)
+        tester().tapView(withAccessibilityLabel: "Paste & Go")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
 
         // Verify that Paste shows the search controller with prompt.
         var promptFound = tester().viewExistsWithLabel(LabelPrompt)
 
         XCTAssertFalse(promptFound, "Search prompt is not shown")
-        UIPasteboard.generalPasteboard().string = "http"
-        tester().longPressViewWithAccessibilityIdentifier("url", duration: 1)
-        tester().tapViewWithAccessibilityLabel("Paste")
-        promptFound = tester().waitForViewWithAccessibilityLabel(LabelPrompt) != nil
+        UIPasteboard.general.string = "http"
+        tester().longPressView(withAccessibilityIdentifier: "url", duration: 1)
+        tester().tapView(withAccessibilityLabel: "Paste")
+        promptFound = tester().waitForView(withAccessibilityLabel: LabelPrompt) != nil
         XCTAssertTrue(promptFound, "Search prompt is shown")
 
         // Verify that Paste triggers an autocompletion, with the correct highlighted portion.
-        let textField = tester().waitForViewWithAccessibilityLabel(LabelAddressAndSearch) as! UITextField
+        let textField = tester().waitForView(withAccessibilityLabel: LabelAddressAndSearch) as! UITextField
         let expectedString = "\(webRoot)/"
-        let endingString = expectedString.substringFromIndex(expectedString.startIndex.advancedBy("http".characters.count))
+        let endingString = expectedString.substring(from: expectedString.characters.index(expectedString.startIndex, offsetBy: "http".characters.count))
         BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "http", completion: endingString)
 
-        tester().tapViewWithAccessibilityLabel("Cancel", traits: UIAccessibilityTraitButton)
+        tester().tapView(withAccessibilityLabel: "Cancel", traits: UIAccessibilityTraitButton)
 
         // Verify that Copy Address copies the text to the clipboard.
-        XCTAssertNotEqual(UIPasteboard.generalPasteboard().string!, testURL, "URL is not in clipboard")
-        tester().longPressViewWithAccessibilityIdentifier("url", duration: 1)
-        tester().tapViewWithAccessibilityLabel("Copy Address")
-        XCTAssertEqual(UIPasteboard.generalPasteboard().string!, testURL, "URL is in clipboard")
+        XCTAssertNotEqual(UIPasteboard.general.string!, testURL, "URL is not in clipboard")
+        tester().longPressView(withAccessibilityIdentifier: "url", duration: 1)
+        tester().tapView(withAccessibilityLabel: "Copy Address")
+        XCTAssertEqual(UIPasteboard.general.string!, testURL, "URL is in clipboard")
 
         // Verify that in-editing Paste shows the search controller with prompt.
-        tester().tapViewWithAccessibilityIdentifier("url")
+        tester().tapView(withAccessibilityIdentifier: "url")
         tester().clearTextFromFirstResponder()
-        tester().waitForAbsenceOfViewWithAccessibilityLabel(LabelPrompt)
+        tester().waitForAbsenceOfView(withAccessibilityLabel: LabelPrompt)
         promptFound = tester().viewExistsWithLabel(LabelPrompt)
         XCTAssertFalse(promptFound, "Search prompt is not shown")
-        tester().tapViewWithAccessibilityLabel(LabelAddressAndSearch)
-        tester().tapViewWithAccessibilityLabel("Paste")
-        promptFound = tester().waitForViewWithAccessibilityLabel(LabelPrompt) != nil
+        tester().tapView(withAccessibilityLabel: LabelAddressAndSearch)
+        tester().tapView(withAccessibilityLabel: "Paste")
+        promptFound = tester().waitForView(withAccessibilityLabel: LabelPrompt) != nil
         XCTAssertTrue(promptFound, "Search prompt is shown")
     }
 
-    func searchForTerms(terms: String, withSearchEngine engine: String) {
+    func searchForTerms(_ terms: String, withSearchEngine engine: String) {
         SearchUtils.navigateToSearchSettings(tester())
         SearchUtils.selectDefaultSearchEngineName(tester(), engineName: engine)
-        tester().tapViewWithAccessibilityLabel("Settings")
-        tester().tapViewWithAccessibilityLabel("Done")
+        tester().tapView(withAccessibilityLabel: "Settings")
+        tester().tapView(withAccessibilityLabel: "Done")
 
-        tester().tapViewWithAccessibilityIdentifier("url")
-        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(terms)\n")
-        tester().waitForTimeInterval(3.0)
+        tester().tapView(withAccessibilityIdentifier: "url")
+        tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "\(terms)\n")
+        tester().wait(forTimeInterval: 3.0)
 
-        tester().tapViewWithAccessibilityIdentifier("url")
-        let textField = tester().waitForViewWithAccessibilityLabel(LabelAddressAndSearch) as! UITextField
-        let pos = textField.text!.lowercaseString.rangeOfString("foobar")
+        tester().tapView(withAccessibilityIdentifier: "url")
+        let textField = tester().waitForView(withAccessibilityLabel: LabelAddressAndSearch) as! UITextField
+        let pos = textField.text!.lowercased().range(of: "foobar")
         XCTAssertTrue(pos != nil)
-        tester().tapViewWithAccessibilityLabel("Cancel")
+        tester().tapView(withAccessibilityLabel: "Cancel")
         BrowserUtils.resetToAboutHome(tester())
     }
 
@@ -208,15 +208,15 @@ class SearchTests: KIFTestCase {
         //searchForTerms(searchTerms, withSearchEngine: "Bing")
     }
 
-    private func waitForPotentialDebounce(tester: KIFUITestActor) {
-        tester.waitForTimeInterval(1.3)
+    fileprivate func waitForPotentialDebounce(_ tester: KIFUITestActor) {
+        tester.wait(forTimeInterval: 1.3)
     }
 
-    private func resetSuggestionsPrompt() {
-        NSNotificationCenter.defaultCenter().postNotificationName("SearchEnginesPromptReset", object: nil)
+    fileprivate func resetSuggestionsPrompt() {
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "SearchEnginesPromptReset"), object: nil)
     }
 
-    private func getFirstSuggestionButton(tester: KIFUITestActor) -> UIButton? {
+    fileprivate func getFirstSuggestionButton(_ tester: KIFUITestActor) -> UIButton? {
         return tester.waitForViewWithAccessibilityHint(HintSuggestionButton) as? UIButton
     }
 
@@ -227,8 +227,8 @@ class SearchTests: KIFTestCase {
         if SearchUtils.getDefaultEngine().shortName != "Yahoo" {
             SearchUtils.navigateToSearchSettings(tester())
             SearchUtils.selectDefaultSearchEngineName(tester(), engineName: "Yahoo")
-            tester().tapViewWithAccessibilityLabel("Settings")
-            tester().tapViewWithAccessibilityLabel("Done")
+            tester().tapView(withAccessibilityLabel: "Settings")
+            tester().tapView(withAccessibilityLabel: "Done")
         }
         
         BrowserUtils.resetToAboutHome(tester())

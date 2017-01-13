@@ -6,7 +6,7 @@ import Storage
 struct TopSiteCellUX {
     static let TitleHeight: CGFloat = 32
     static let TitleBackgroundColor = UIColor(colorLiteralRed: 1, green: 1, blue: 1, alpha: 0.7)
-    static let TitleTextColor = UIColor.blackColor()
+    static let TitleTextColor = UIColor.black
     static let TitleFont = DynamicFontHelper.defaultHelper.DefaultSmallFont
     static let SelectedOverlayColor = UIColor(white: 0.0, alpha: 0.25)
     static let CellCornerRadius: CGFloat = 4
@@ -28,32 +28,32 @@ class TopSiteItemCell: UICollectionViewCell {
         return imageView
     }()
 
-    lazy private var titleLabel: UILabel = {
+    lazy fileprivate var titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.layer.masksToBounds = true
-        titleLabel.textAlignment = .Center
+        titleLabel.textAlignment = .center
         titleLabel.font = TopSiteCellUX.TitleFont
         titleLabel.textColor = TopSiteCellUX.TitleTextColor
-        titleLabel.backgroundColor = UIColor.clearColor()
+        titleLabel.backgroundColor = UIColor.clear
         return titleLabel
     }()
 
     lazy var selectedOverlay: UIView = {
         let selectedOverlay = UIView()
         selectedOverlay.backgroundColor = TopSiteCellUX.OverlayColor
-        selectedOverlay.hidden = true
+        selectedOverlay.isHidden = true
         return selectedOverlay
     }()
 
     lazy var titleBorder: CALayer = {
         let border = CALayer()
-        border.backgroundColor = TopSiteCellUX.BorderColor.CGColor
+        border.backgroundColor = TopSiteCellUX.BorderColor.cgColor
         return border
     }()
 
-    override var selected: Bool {
+    override var isSelected: Bool {
         didSet {
-            self.selectedOverlay.hidden = !selected
+            self.selectedOverlay.isHidden = !isSelected
         }
     }
 
@@ -65,7 +65,7 @@ class TopSiteItemCell: UICollectionViewCell {
         contentView.layer.masksToBounds = true
 
         contentView.layer.borderWidth = TopSiteCellUX.BorderWidth
-        contentView.layer.borderColor = TopSiteCellUX.BorderColor.CGColor
+        contentView.layer.borderColor = TopSiteCellUX.BorderColor.cgColor
 
         let titleWrapper = UIView()
         titleWrapper.backgroundColor = TopSiteCellUX.TitleBackgroundColor
@@ -99,14 +99,14 @@ class TopSiteItemCell: UICollectionViewCell {
         }
 
         // The titleBorder must appear ABOVE the titleLabel. Meaning it must be 0.5 pixels above of the titleWrapper frame.
-        titleBorder.frame = CGRectMake(0, CGRectGetHeight(self.frame) - TopSiteCellUX.TitleHeight -  TopSiteCellUX.BorderWidth, CGRectGetWidth(self.frame), TopSiteCellUX.BorderWidth)
+        titleBorder.frame = CGRect(x: 0, y: self.frame.height - TopSiteCellUX.TitleHeight -  TopSiteCellUX.BorderWidth, width: self.frame.width, height: TopSiteCellUX.BorderWidth)
         self.contentView.layer.addSublayer(titleBorder)
 
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        titleBorder.frame = CGRectMake(0, frame.height - TopSiteCellUX.TitleHeight -  TopSiteCellUX.BorderWidth, frame.width, TopSiteCellUX.BorderWidth)
+        titleBorder.frame = CGRect(x: 0, y: frame.height - TopSiteCellUX.TitleHeight -  TopSiteCellUX.BorderWidth, width: frame.width, height: TopSiteCellUX.BorderWidth)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -115,14 +115,14 @@ class TopSiteItemCell: UICollectionViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        contentView.backgroundColor = UIColor.lightGrayColor()
+        contentView.backgroundColor = UIColor.lightGray
         imageView.image = nil
         titleLabel.text = ""
     }
 
-    private func setImageWithURL(url: NSURL) {
+    fileprivate func setImageWithURL(_ url: URL) {
         let title = self.titleLabel.text
-        imageView.sd_setImageWithURL(url) { [unowned self] (img, err, type, url) -> Void in
+        imageView.sd_setImage(with: url) { [unowned self] (img, err, type, url) -> Void in
             guard let img = img else {
                 self.contentView.backgroundColor = FaviconFetcher.getDefaultColor(url)
                 self.imageView.image = FaviconFetcher.getDefaultFavicon(url)
@@ -131,13 +131,13 @@ class TopSiteItemCell: UICollectionViewCell {
             img.getColors(CGSize(width: 25, height: 25)) {colors in
                 //sometimes the cell could be reused by the time we get here.
                 if title == self.titleLabel.text {
-                    self.contentView.backgroundColor = colors.backgroundColor ?? UIColor.lightGrayColor()
+                    self.contentView.backgroundColor = colors.backgroundColor ?? UIColor.lightGray
                 }
             }
         }
     }
 
-    func configureWithTopSiteItem(site: Site) {
+    func configureWithTopSiteItem(_ site: Site) {
         titleLabel.text = site.tileURL.hostSLD
         accessibilityLabel = titleLabel.text
         if let suggestedSite = site as? SuggestedSite {
@@ -147,7 +147,7 @@ class TopSiteItemCell: UICollectionViewCell {
             // Once we remove the old TopSitesPanel we can change the values of amazon/wikipedia to be white instead of black.
             contentView.backgroundColor = suggestedSite.backgroundColor.isBlackOrWhite ? UIColor.whiteColor() : suggestedSite.backgroundColor
         } else {
-            guard let url = site.icon?.url, favURL = url.asURL else {
+            guard let url = site.icon?.url, let favURL = url.asURL else {
                 let siteURL = site.url.asURL!
                 self.contentView.backgroundColor = FaviconFetcher.getDefaultColor(siteURL)
                 self.imageView.image = FaviconFetcher.getDefaultFavicon(siteURL)
@@ -162,7 +162,7 @@ class TopSiteItemCell: UICollectionViewCell {
 struct ASHorizontalScrollCellUX {
     static let TopSiteCellIdentifier = "TopSiteItemCell"
     static let TopSiteItemSize = CGSize(width: 99, height: 99)
-    static let BackgroundColor = UIColor.whiteColor()
+    static let BackgroundColor = UIColor.white
     static let PageControlRadius: CGFloat = 3
     static let PageControlSize = CGSize(width: 30, height: 15)
     static let PageControlOffset: CGFloat = -20
@@ -177,19 +177,19 @@ class ASHorizontalScrollCell: UITableViewCell {
         let layout  = HorizontalFlowLayout()
         layout.itemSize = ASHorizontalScrollCellUX.TopSiteItemSize
         let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
-        collectionView.registerClass(TopSiteItemCell.self, forCellWithReuseIdentifier: ASHorizontalScrollCellUX.TopSiteCellIdentifier)
-        collectionView.backgroundColor = UIColor.clearColor()
+        collectionView.register(TopSiteItemCell.self, forCellWithReuseIdentifier: ASHorizontalScrollCellUX.TopSiteCellIdentifier)
+        collectionView.backgroundColor = UIColor.clear
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.isAccessibilityElement = false
-        collectionView.pagingEnabled = true
+        collectionView.isPagingEnabled = true
         return collectionView
     }()
 
-    lazy private var pageControl: FilledPageControl = {
+    lazy fileprivate var pageControl: FilledPageControl = {
         let pageControl = FilledPageControl()
-        pageControl.tintColor = UIColor.grayColor()
+        pageControl.tintColor = UIColor.gray
         pageControl.indicatorRadius = ASHorizontalScrollCellUX.PageControlRadius
-        pageControl.userInteractionEnabled = true
+        pageControl.isUserInteractionEnabled = true
         pageControl.isAccessibilityElement = true
         pageControl.accessibilityIdentifier = "pageControl"
         pageControl.accessibilityLabel = Strings.ASPageControlButton
@@ -197,14 +197,14 @@ class ASHorizontalScrollCell: UITableViewCell {
         return pageControl
     }()
 
-    lazy private var gradientBG: CAGradientLayer = {
+    lazy fileprivate var gradientBG: CAGradientLayer = {
         let gradient: CAGradientLayer = CAGradientLayer()
         gradient.frame = self.contentView.bounds
-        gradient.colors = [UIColor.whiteColor().CGColor, UIColor(colorString: "f9f9f9").CGColor]
+        gradient.colors = [UIColor.white.CGColor, UIColor(colorString: "f9f9f9").CGColor]
         return gradient
     }()
 
-    lazy private var pageControlPress: UITapGestureRecognizer = {
+    lazy fileprivate var pageControlPress: UITapGestureRecognizer = {
         let press = UITapGestureRecognizer(target: self, action: #selector(ASHorizontalScrollCell.handlePageTap(_:)))
         press.delegate = self
         return press
@@ -217,7 +217,7 @@ class ASHorizontalScrollCell: UITableViewCell {
             delegate?.pageChangedHandler = { [weak self] progress in
                 self?.currentPageChanged(progress)
             }
-            dispatch_async(dispatch_get_main_queue()) {
+            DispatchQueue.main.async {
                 self.collectionView.reloadData()
             }
         }
@@ -228,10 +228,10 @@ class ASHorizontalScrollCell: UITableViewCell {
 
         isAccessibilityElement = false
         accessibilityIdentifier = "TopSitesCell"
-        backgroundColor = UIColor.clearColor()
+        backgroundColor = UIColor.clear
         contentView.addSubview(collectionView)
         contentView.addSubview(pageControl)
-        self.selectionStyle = UITableViewCellSelectionStyle.None
+        self.selectionStyle = UITableViewCellSelectionStyle.none
         pageControl.addGestureRecognizer(self.pageControlPress)
 
         collectionView.snp_makeConstraints { make in
@@ -251,14 +251,14 @@ class ASHorizontalScrollCell: UITableViewCell {
 
         gradientBG.frame = self.contentView.bounds
         if gradientBG.superlayer == nil {
-            self.contentView.layer.insertSublayer(gradientBG, atIndex: 0)
+            self.contentView.layer.insertSublayer(gradientBG, at: 0)
         }
 
         pageControl.pageCount = layout.numberOfPages()
-        pageControl.hidden = pageControl.pageCount <= 1
+        pageControl.isHidden = pageControl.pageCount <= 1
     }
 
-    func currentPageChanged(currentPage: CGFloat) {
+    func currentPageChanged(_ currentPage: CGFloat) {
         pageControl.progress = currentPage
         if currentPage == floor(currentPage) {
             UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
@@ -266,7 +266,7 @@ class ASHorizontalScrollCell: UITableViewCell {
         }
     }
 
-    func handlePageTap(gesture: UITapGestureRecognizer) {
+    func handlePageTap(_ gesture: UITapGestureRecognizer) {
         guard pageControl.pageCount > 1 else {
             return
         }
@@ -277,7 +277,7 @@ class ASHorizontalScrollCell: UITableViewCell {
             pageControl.progress = CGFloat(pageControl.currentPage - 1)
         }
         let swipeCoordinate = CGFloat(pageControl.currentPage) * self.collectionView.frame.size.width
-        self.collectionView.setContentOffset(CGPointMake(swipeCoordinate, 0), animated: true)
+        self.collectionView.setContentOffset(CGPoint(x: swipeCoordinate, y: 0), animated: true)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -292,14 +292,14 @@ class ASHorizontalScrollCell: UITableViewCell {
 
 class HorizontalFlowLayout: UICollectionViewLayout {
     var itemSize = CGSize.zero
-    private var cellCount = 0
-    private var boundsSize = CGSize.zero
-    private var insets = UIEdgeInsetsZero
-    private let minimumInsets: CGFloat = 20
+    fileprivate var cellCount = 0
+    fileprivate var boundsSize = CGSize.zero
+    fileprivate var insets = UIEdgeInsets.zero
+    fileprivate let minimumInsets: CGFloat = 20
 
-    override func prepareLayout() {
-        super.prepareLayout()
-        cellCount = self.collectionView!.numberOfItemsInSection(0)
+    override func prepare() {
+        super.prepare()
+        cellCount = self.collectionView!.numberOfItems(inSection: 0)
         boundsSize = self.collectionView!.bounds.size
     }
 
@@ -309,7 +309,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
         return itemsPerPage == 0 ? 0 : Int(ceil(Double(cellCount) / Double(itemsPerPage)))
     }
 
-    override func collectionViewContentSize() -> CGSize {
+    override var collectionViewContentSize : CGSize {
         let contentSize = boundsSize
         let horizontalItemsCount = maxHorizontalItemsCount()
         let verticalItemsCount = maxVerticalItemsCount()
@@ -353,28 +353,28 @@ class HorizontalFlowLayout: UICollectionViewLayout {
         }
     }
 
-    override func layoutAttributesForElementsInRect(rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-        super.layoutAttributesForElementsInRect(rect)
+    override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+        super.layoutAttributesForElements(in: rect)
         var allAttributes = [UICollectionViewLayoutAttributes]()
         for i in 0 ..< cellCount {
-            let indexPath = NSIndexPath(forRow: i, inSection: 0)
+            let indexPath = IndexPath(row: i, section: 0)
             let attr = self.computeLayoutAttributesForCellAtIndexPath(indexPath)
             allAttributes.append(attr)
         }
         return allAttributes
     }
 
-    override func layoutAttributesForItemAtIndexPath(indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
+    override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         return self.computeLayoutAttributesForCellAtIndexPath(indexPath)
     }
 
-    override func shouldInvalidateLayoutForBoundsChange(newBounds: CGRect) -> Bool {
+    override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
         // Sometimes when the topsiteCell isnt on the screen the newbounds that it tries to layout in is very tiny
         // Resulting in incorrect layouts. So only layout when the width is greater than 320.
         return newBounds.width <= 320
     }
 
-    func computeLayoutAttributesForCellAtIndexPath(indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes {
+    func computeLayoutAttributesForCellAtIndexPath(_ indexPath: IndexPath) -> UICollectionViewLayoutAttributes {
         let row = indexPath.row
         let bounds = self.collectionView!.bounds
 
@@ -387,7 +387,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
         let rowPosition = (row / horizontalItemsCount) % verticalItemsCount
         let itemPage = Int(floor(Double(row)/Double(itemsPerPage)))
 
-        let attr = UICollectionViewLayoutAttributes(forCellWithIndexPath: indexPath)
+        let attr = UICollectionViewLayoutAttributes(forCellWith: indexPath)
 
         var frame = CGRect.zero
         frame.origin.x = CGFloat(itemPage) * bounds.size.width + CGFloat(columnPosition) * (itemSize.width + insets.left) + insets.left
@@ -403,8 +403,8 @@ class HorizontalFlowLayout: UICollectionViewLayout {
     Defines the number of items to show in topsites for different size classes.
 */
 struct ASTopSiteSourceUX {
-    static let verticalItemsForTraitSizes = [UIUserInterfaceSizeClass.Compact : 1, UIUserInterfaceSizeClass.Regular : 2, UIUserInterfaceSizeClass.Unspecified: 0]
-    static let horizontalItemsForTraitSizes = [UIUserInterfaceSizeClass.Compact : 3, UIUserInterfaceSizeClass.Regular : 5, UIUserInterfaceSizeClass.Unspecified: 0]
+    static let verticalItemsForTraitSizes = [UIUserInterfaceSizeClass.compact : 1, UIUserInterfaceSizeClass.regular : 2, UIUserInterfaceSizeClass.unspecified: 0]
+    static let horizontalItemsForTraitSizes = [UIUserInterfaceSizeClass.compact : 3, UIUserInterfaceSizeClass.regular : 5, UIUserInterfaceSizeClass.unspecified: 0]
     static let maxNumberOfPages = 2
     static let CellIdentifier = "TopSiteItemCell"
 }
@@ -423,7 +423,7 @@ class ASHorizontalScrollCellManager: NSObject, UICollectionViewDelegate, UIColle
 
     var content: [Site] = []
 
-    var urlPressedHandler: ((NSURL, NSIndexPath) -> Void)?
+    var urlPressedHandler: ((URL, IndexPath) -> Void)?
     var pageChangedHandler: ((CGFloat) -> Void)?
 
     // The current traits that define the parent ViewController. Used to determine how many rows/columns should be created.
@@ -442,28 +442,28 @@ class ASHorizontalScrollCellManager: NSObject, UICollectionViewDelegate, UIColle
             return 0
         }
         // An iPhone 5 in both landscape/portrait is considered compactWidth which means we need to let the layout determine how many items to show based on actual width.
-        if traits.horizontalSizeClass == .Compact && traits.verticalSizeClass == .Compact {
-            return ASTopSiteSourceUX.horizontalItemsForTraitSizes[.Regular]!
+        if traits.horizontalSizeClass == .compact && traits.verticalSizeClass == .compact {
+            return ASTopSiteSourceUX.horizontalItemsForTraitSizes[.regular]!
         }
         return ASTopSiteSourceUX.horizontalItemsForTraitSizes[traits.horizontalSizeClass]!
     }
 
-    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
 
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.content.count
     }
 
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(ASTopSiteSourceUX.CellIdentifier, forIndexPath: indexPath) as! TopSiteItemCell
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ASTopSiteSourceUX.CellIdentifier, for: indexPath) as! TopSiteItemCell
         let contentItem = content[indexPath.row]
         cell.configureWithTopSiteItem(contentItem)
         return cell
     }
 
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let contentItem = content[indexPath.row]
         guard let url = contentItem.url.asURL else {
             return
@@ -471,8 +471,8 @@ class ASHorizontalScrollCellManager: NSObject, UICollectionViewDelegate, UIColle
         urlPressedHandler?(url, indexPath)
     }
 
-    func scrollViewDidScroll(scrollView: UIScrollView) {
-        let pageWidth = CGRectGetWidth(scrollView.frame)
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let pageWidth = scrollView.frame.width
         pageChangedHandler?(scrollView.contentOffset.x / pageWidth)
     }
 

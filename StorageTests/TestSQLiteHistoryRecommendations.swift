@@ -30,7 +30,7 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
-        let startTime = NSDate.nowMicroseconds()
+        let startTime = Date.nowMicroseconds()
         let oneHourAgo = startTime - oneHourInMicroseconds
         let fifteenMinutesAgo = startTime - 15 * microsecondsPerMinute
 
@@ -91,7 +91,7 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         let history = SQLiteHistory(db: db, prefs: prefs)
         let bookmarks = SQLiteBookmarkBufferStorage(db: db)
 
-        let startTime = NSDate.nowMicroseconds()
+        let startTime = Date.nowMicroseconds()
         let oneHourAgo = startTime - oneHourInMicroseconds
         let fourDaysAgo = startTime - 4 * oneDayInMicroseconds
 
@@ -145,7 +145,7 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
-        let startTime = NSDate.nowMicroseconds()
+        let startTime = Date.nowMicroseconds()
         let oneHourAgo = startTime - oneHourInMicroseconds
         let fifteenMinutesAgo = startTime - 15 * microsecondsPerMinute
 
@@ -212,7 +212,7 @@ class TestSQLiteHistoryRecommendationsPerf: XCTestCase {
     }
 }
 
-private func populateForRecommendationCalculations(history: SQLiteHistory, bookmarks: SQLiteBookmarkBufferStorage, historyCount: Int, bookmarkCount: Int) {
+private func populateForRecommendationCalculations(_ history: SQLiteHistory, bookmarks: SQLiteBookmarkBufferStorage, historyCount: Int, bookmarkCount: Int) {
     let baseMillis: UInt64 = baseInstantInMillis - 20000
 
     for i in 0..<historyCount {

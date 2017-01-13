@@ -5,21 +5,21 @@
 import UIKit
 
 public protocol AccessibilityActionsSource: class {
-    func accessibilityCustomActionsForView(view: UIView) -> [UIAccessibilityCustomAction]?
+    func accessibilityCustomActionsForView(_ view: UIView) -> [UIAccessibilityCustomAction]?
 }
 
-public class AccessibleAction {
-    public let name: String
-    public let handler: () -> Bool
+open class AccessibleAction {
+    open let name: String
+    open let handler: () -> Bool
 
-    public init(name: String, handler: () -> Bool) {
+    public init(name: String, handler: @escaping () -> Bool) {
         self.name = name
         self.handler = handler
     }
 }
 
 extension AccessibleAction { // UIAccessibilityCustomAction
-    @objc private func SELperformAccessibilityAction() -> Bool {
+    @objc fileprivate func SELperformAccessibilityAction() -> Bool {
         return handler()
     }
 
@@ -30,11 +30,11 @@ extension AccessibleAction { // UIAccessibilityCustomAction
 
 
 extension AccessibleAction { // UIAlertAction
-    private var alertActionHandler: (UIAlertAction!) -> Void {
+    fileprivate var alertActionHandler: (UIAlertAction!) -> Void {
         return { (_: UIAlertAction!) -> Void in self.handler() }
     }
 
-    public func alertAction(style style: UIAlertActionStyle) -> UIAlertAction {
+    public func alertAction(style: UIAlertActionStyle) -> UIAlertAction {
         return UIAlertAction(title: name, style: style, handler: alertActionHandler)
     }
 }

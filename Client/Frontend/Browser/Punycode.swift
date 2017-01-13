@@ -14,15 +14,15 @@ private let prefixPunycode = "xn--"
 private let asciiPunycode = [Character]("abcdefghijklmnopqrstuvwxyz0123456789".characters)
 
 extension String {
-    private func toValue(index: Int) -> Character {
+    fileprivate func toValue(_ index: Int) -> Character {
         return asciiPunycode[index]
     }
 
-    private func toIndex(value: Character) -> Int {
-        return asciiPunycode.indexOf(value)!
+    fileprivate func toIndex(_ value: Character) -> Int {
+        return asciiPunycode.index(of: value)!
     }
 
-    private func adapt(delta: Int, numPoints: Int, firstTime: Bool) -> Int {
+    fileprivate func adapt(_ delta: Int, numPoints: Int, firstTime: Bool) -> Int {
         let skew = 38
         let damp = firstTime ? 700 : 2
         var delta = delta
@@ -36,14 +36,14 @@ extension String {
         return k + ((base - tMin + 1) * delta) / (delta + skew)
     }
 
-    private func encode(input: String) -> String {
+    fileprivate func encode(_ input: String) -> String {
         var output = ""
         var d: Int = 0
         var extendedChars = [Int]()
         for c in input.unicodeScalars {
             if Int(c.value) < initialN {
                 d += 1
-                output.append(c)
+                output.append(String(c))
             } else {
                 extendedChars.append(Int(c.value))
             }
@@ -116,16 +116,16 @@ extension String {
         return output
     }
 
-    private func decode(punycode: String) -> String {
+    fileprivate func decode(_ punycode: String) -> String {
         var input = [Character](punycode.characters)
         var output = [Character]()
         var i = 0
         var n = initialN
         var bias = initialBias
         var pos = 0
-        if let ipos = input.indexOf(delimiter) {
+        if let ipos = input.index(of: delimiter) {
             pos = ipos
-            output.appendContentsOf(input[0 ..< pos])
+            output.append(contentsOf: input[0 ..< pos])
             pos += 1
         }
         var outputLength = output.count
@@ -149,13 +149,13 @@ extension String {
             bias = adapt(i - oldi, numPoints: outputLength, firstTime: (oldi == 0))
             n = n + i / outputLength
             i = i % outputLength
-            output.insert(Character(UnicodeScalar(n)), atIndex: i)
+            output.insert(Character(UnicodeScalar(n)!), at: i)
             i += 1
         }
         return String(output)
     }
 
-    private func isValidUnicodeScala(s: String) -> Bool {
+    fileprivate func isValidUnicodeScala(_ s: String) -> Bool {
         for c in s.unicodeScalars {
             let ci = Int(c.value)
             if ci >= initialN {
@@ -165,7 +165,7 @@ extension String {
         return true
     }
 
-    private func isValidPunycodeScala(s: String) -> Bool {
+    fileprivate func isValidPunycodeScala(_ s: String) -> Bool {
         return s.hasPrefix(prefixPunycode)
     }
 
@@ -173,26 +173,26 @@ extension String {
         if isValidUnicodeScala(self) {
             return self
         }
-        var labels = self.componentsSeparatedByString(".")
-        for (i, part) in labels.enumerate() {
+        var labels = self.components(separatedBy: ".")
+        for (i, part) in labels.enumerated() {
             if !isValidUnicodeScala(part) {
                 let a = encode(part)
                 labels[i] = prefixPunycode + a
             }
         }
-        let resultString = labels.joinWithSeparator(".")
+        let resultString = labels.joined(separator: ".")
         return resultString
     }
 
     public func asciiHostToUTF8() -> String {
-        var labels = self.componentsSeparatedByString(".")
-        for (index, part) in labels.enumerate() {
+        var labels = self.components(separatedBy: ".")
+        for (index, part) in labels.enumerated() {
             if isValidPunycodeScala(part) {
-                let changeStr = part.substringFromIndex(part.startIndex.advancedBy(4))
+                let changeStr = part.substring(from: part.characters.index(part.startIndex, offsetBy: 4))
                 labels[index] = decode(changeStr)
             }
         }
-        let resultString = labels.joinWithSeparator(".")
+        let resultString = labels.joined(separator: ".")
         return resultString
     }
 }

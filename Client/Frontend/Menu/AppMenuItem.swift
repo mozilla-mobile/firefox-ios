@@ -11,30 +11,30 @@ struct AppMenuItem: MenuItem {
     let secondaryAction: MenuAction?
     let animation: Animatable?
     var isDisabled: Bool
-    private let iconName: String
-    private let privateModeIconName: String
-    private let selectedIconName: String?
+    fileprivate let iconName: String
+    fileprivate let privateModeIconName: String
+    fileprivate let selectedIconName: String?
 
-    private var icon: UIImage? {
+    fileprivate var icon: UIImage? {
         return UIImage(named: iconName)
     }
 
-    private var privateModeIcon: UIImage? {
+    fileprivate var privateModeIcon: UIImage? {
         return UIImage(named: privateModeIconName)
     }
 
-    private var selectedIcon: UIImage? {
+    fileprivate var selectedIcon: UIImage? {
         guard let selectedIconName = selectedIconName else {
             return nil
         }
         return UIImage(named: selectedIconName)
     }
 
-    func iconForState(appState: AppState) -> UIImage? {
+    func iconForState(_ appState: AppState) -> UIImage? {
         return appState.ui.isPrivate() ? privateModeIcon : icon
     }
 
-    func selectedIconForState(appState: AppState) -> UIImage? {
+    func selectedIconForState(_ appState: AppState) -> UIImage? {
         return selectedIcon
     }
 

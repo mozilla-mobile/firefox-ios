@@ -32,7 +32,7 @@ extension Deferred where T: Succeedable {
 }
 
 extension BrowserDB {
-    func assertQueryReturns(query: String, int: Int) {
+    func assertQueryReturns(_ query: String, int: Int) {
         XCTAssertEqual(int, self.runQuery(query, args: nil, factory: IntFactory).value.successValue![0])
     }
 }
@@ -92,8 +92,8 @@ extension BrowserDB {
 }
 
 extension BrowserDB {
-    func getGUIDs(sql: String) -> [GUID] {
-        func guidFactory(row: SDRow) -> GUID {
+    func getGUIDs(_ sql: String) -> [GUID] {
+        func guidFactory(_ row: SDRow) -> GUID {
             return row[0] as! GUID
         }
 
@@ -104,9 +104,9 @@ extension BrowserDB {
         return cursor.asArray()
     }
 
-    func getPositionsForChildrenOfParent(parent: GUID, fromTable table: String) -> [GUID: Int] {
+    func getPositionsForChildrenOfParent(_ parent: GUID, fromTable table: String) -> [GUID: Int] {
         let args: Args = [parent]
-        let factory: SDRow -> (GUID, Int) = {
+        let factory: (SDRow) -> (GUID, Int) = {
             return ($0["child"] as! GUID, $0["idx"] as! Int)
         }
         let cursor = self.runQuery("SELECT child, idx FROM \(table) WHERE parent = ?", args: args, factory: factory).value.successValue!
@@ -119,19 +119,19 @@ extension BrowserDB {
         })
     }
 
-    func isLocallyDeleted(guid: GUID) -> Bool? {
+    func isLocallyDeleted(_ guid: GUID) -> Bool? {
         let args: Args = [guid]
         let cursor = self.runQuery("SELECT is_deleted FROM \(TableBookmarksLocal) WHERE guid = ?", args: args, factory: { $0.getBoolean("is_deleted") }).value.successValue!
         return cursor[0]
     }
 
-    func isOverridden(guid: GUID) -> Bool? {
+    func isOverridden(_ guid: GUID) -> Bool? {
         let args: Args = [guid]
         let cursor = self.runQuery("SELECT is_overridden FROM \(TableBookmarksMirror) WHERE guid = ?", args: args, factory: { $0.getBoolean("is_overridden") }).value.successValue!
         return cursor[0]
     }
 
-    func getSyncStatusForGUID(guid: GUID) -> SyncStatus? {
+    func getSyncStatusForGUID(_ guid: GUID) -> SyncStatus? {
         let args: Args = [guid]
         let cursor = self.runQuery("SELECT sync_status FROM \(TableBookmarksLocal) WHERE guid = ?", args: args, factory: { $0[0] as! Int }).value.successValue!
         if let raw = cursor[0] {
@@ -140,17 +140,17 @@ extension BrowserDB {
         return nil
     }
 
-    func getRecordByURL(url: String, fromTable table: String) -> BookmarkMirrorItem {
+    func getRecordByURL(_ url: String, fromTable table: String) -> BookmarkMirrorItem {
         let args: Args = [url]
         return self.runQuery("SELECT * FROM \(table) WHERE bmkUri = ?", args: args, factory: BookmarkFactory.mirrorItemFactory).value.successValue![0]!
     }
 
-    func getRecordByGUID(guid: GUID, fromTable table: String) -> BookmarkMirrorItem {
+    func getRecordByGUID(_ guid: GUID, fromTable table: String) -> BookmarkMirrorItem {
         let args: Args = [guid]
         return self.runQuery("SELECT * FROM \(table) WHERE guid = ?", args: args, factory: BookmarkFactory.mirrorItemFactory).value.successValue![0]!
     }
 
-    func getChildrenOfFolder(folder: GUID) -> [GUID] {
+    func getChildrenOfFolder(_ folder: GUID) -> [GUID] {
         let args: Args = [folder]
         let sql =
         "SELECT child FROM \(ViewBookmarksLocalStructureOnMirror) " +

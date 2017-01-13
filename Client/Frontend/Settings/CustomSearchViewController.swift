@@ -19,10 +19,10 @@ class CustomSearchError: MaybeErrorType {
 
 class CustomSearchViewController: SettingsTableViewController {
 
-    private var urlString: String?
-    private var engineTitle = ""
-    private lazy var spinnerView: UIActivityIndicatorView = {
-        let spinner = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
+    fileprivate var urlString: String?
+    fileprivate var engineTitle = ""
+    fileprivate lazy var spinnerView: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView(activityIndicatorStyle: .gray)
         spinner.hidesWhenStopped = true
         return spinner
     }()
@@ -36,9 +36,9 @@ class CustomSearchViewController: SettingsTableViewController {
         }
     }
 
-    private func addSearchEngine(searchQuery: String, title: String) {
+    fileprivate func addSearchEngine(_ searchQuery: String, title: String) {
         spinnerView.startAnimating()
-        createEngine(forQuery: searchQuery, andName: title).uponQueue(dispatch_get_main_queue()) { result in
+        createEngine(forQuery: searchQuery, andName: title).uponQueue(DispatchQueue.main) { result in
             self.spinnerView.stopAnimating()
             guard let engine = result.successValue else {
                 let alert = ThirdPartySearchAlerts.incorrectCustomEngineForm()
@@ -55,11 +55,11 @@ class CustomSearchViewController: SettingsTableViewController {
     func createEngine(forQuery query: String, andName name: String) -> Deferred<Maybe<OpenSearchEngine>> {
         let deferred = Deferred<Maybe<OpenSearchEngine>>()
         guard let template = getSearchTemplate(withString: query),
-            let url = NSURL(string: template.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLFragmentAllowedCharacterSet())!) where url.isWebPage() else {
+            let url = URL(string: template.stringByAddingPercentEncodingWithAllowedCharacters(CharacterSet.URLFragmentAllowedCharacterSet())!), url.isWebPage() else {
                 deferred.fill(Maybe(failure: CustomSearchError()))
                 return deferred
         }
-        FaviconFetcher.fetchFavImageForURL(forURL: url, profile: profile).uponQueue(dispatch_get_main_queue()) { result in
+        FaviconFetcher.fetchFavImageForURL(forURL: url, profile: profile).uponQueue(DispatchQueue.main) { result in
             let image = result.successValue ?? FaviconFetcher.getDefaultFavicon(url)
             let engine = OpenSearchEngine(engineID: nil, shortName: name, image: image, searchTemplate: template, suggestTemplate: nil, isCustomEngine: true)
 
@@ -76,18 +76,18 @@ class CustomSearchViewController: SettingsTableViewController {
         let placeholder = "{searchTerms}"   //Placeholder looked for when using Custom Search Engine in OpenSearch.swift
 
         if query.contains(SearchTermComponent) {
-            return query.stringByReplacingOccurrencesOfString(SearchTermComponent, withString: placeholder)
+            return query.replacingOccurrences(of: SearchTermComponent, with: placeholder)
         }
         return nil
     }
 
     override func generateSettings() -> [SettingSection] {
 
-        func URLFromString(string: String?) -> NSURL? {
+        func URLFromString(_ string: String?) -> URL? {
             guard let string = string else {
                 return nil
             }
-            return NSURL(string: string)
+            return URL(string: string)
         }
 
         let titleField = CustomSearchEngineTextView(placeholder: Strings.SettingsAddCustomEngineTitlePlaceholder, labelText: Strings.SettingsAddCustomEngineTitleLabel, settingDidChange: {fieldText in
@@ -116,13 +116,13 @@ class CustomSearchViewController: SettingsTableViewController {
             SettingSection(footerTitle: NSAttributedString(string: "http://youtube.com/search?q=%s"), children: basicSettings)
         ]
 
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Save, target: self, action: #selector(self.addCustomSearchEngine(_:)))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(self.addCustomSearchEngine(_:)))
         self.navigationItem.rightBarButtonItem?.accessibilityIdentifier = "customEngineSaveButton"
 
         return settings
     }
 
-    func addCustomSearchEngine(nav: UINavigationController?) {
+    func addCustomSearchEngine(_ nav: UINavigationController?) {
         self.view.endEditing(true)
         if let url = self.urlString {
             self.addSearchEngine(url, title: self.engineTitle)
@@ -132,21 +132,21 @@ class CustomSearchViewController: SettingsTableViewController {
 
 class CustomSearchEngineTextView: Setting, UITextViewDelegate {
 
-    private let Padding: CGFloat = 8
-    private let TextFieldOffset: CGFloat = 80
-    private let TextLabelHeight: CGFloat = 44
-    private var TextFieldHeight: CGFloat = 44
+    fileprivate let Padding: CGFloat = 8
+    fileprivate let TextFieldOffset: CGFloat = 80
+    fileprivate let TextLabelHeight: CGFloat = 44
+    fileprivate var TextFieldHeight: CGFloat = 44
 
-    private let defaultValue: String?
-    private let placeholder: String
-    private let labelText: String
-    private let settingDidChange: (String? -> Void)?
-    private let settingIsValid: (String? -> Bool)?
+    fileprivate let defaultValue: String?
+    fileprivate let placeholder: String
+    fileprivate let labelText: String
+    fileprivate let settingDidChange: ((String?) -> Void)?
+    fileprivate let settingIsValid: ((String?) -> Bool)?
 
     let textField = UITextView()
     let placeholderLabel = UILabel()
 
-    init(defaultValue: String? = nil, placeholder: String, labelText: String, height: CGFloat = 44, settingIsValid isValueValid: (String? -> Bool)? = nil, settingDidChange: (String? -> Void)? = nil) {
+    init(defaultValue: String? = nil, placeholder: String, labelText: String, height: CGFloat = 44, settingIsValid isValueValid: ((String?) -> Bool)? = nil, settingDidChange: ((String?) -> Void)? = nil) {
         self.defaultValue = defaultValue
         self.TextFieldHeight = height
         self.settingDidChange = settingDidChange
@@ -157,7 +157,7 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
         super.init(cellHeight: TextFieldHeight)
     }
 
-    override func onConfigureCell(cell: UITableViewCell) {
+    override func onConfigureCell(_ cell: UITableViewCell) {
         super.onConfigureCell(cell)
         if let id = accessibilityIdentifier {
             textField.accessibilityIdentifier = id + "TextField"
@@ -170,13 +170,13 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
 
         textField.textContainer.lineFragmentPadding = 0
         textField.keyboardType = .URL
-        textField.autocorrectionType = .No
+        textField.autocorrectionType = .no
         textField.delegate = self
-        cell.userInteractionEnabled = true
+        cell.isUserInteractionEnabled = true
         cell.accessibilityTraits = UIAccessibilityTraitNone
         cell.contentView.addSubview(textField)
         cell.textLabel?.text = labelText
-        cell.selectionStyle = .None
+        cell.selectionStyle = .none
 
         textField.snp_makeConstraints { make in
             make.height.equalTo(TextFieldHeight)
@@ -190,11 +190,11 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
         }
     }
 
-    override func onClick(navigationController: UINavigationController?) {
+    override func onClick(_ navigationController: UINavigationController?) {
         textField.becomeFirstResponder()
     }
 
-    private func isValid(value: String?) -> Bool {
+    fileprivate func isValid(_ value: String?) -> Bool {
         guard let test = settingIsValid else {
             return true
         }
@@ -205,19 +205,19 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
         return value
     }
 
-    func textViewDidBeginEditing(textView: UITextView) {
-        placeholderLabel.hidden = textField.text != ""
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        placeholderLabel.isHidden = textField.text != ""
     }
 
-    func textViewDidChange(textView: UITextView) {
-        placeholderLabel.hidden = textField.text != ""
+    func textViewDidChange(_ textView: UITextView) {
+        placeholderLabel.isHidden = textField.text != ""
         settingDidChange?(textView.text)
         let color = isValid(textField.text) ? UIConstants.TableViewRowTextColor : UIConstants.DestructiveRed
         textField.textColor = color
     }
 
-    func textViewDidEndEditing(textView: UITextView) {
-        placeholderLabel.hidden = textField.text != ""
+    func textViewDidEndEditing(_ textView: UITextView) {
+        placeholderLabel.isHidden = textField.text != ""
         settingDidChange?(textView.text)
     }
 }

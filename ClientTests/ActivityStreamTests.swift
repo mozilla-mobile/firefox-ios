@@ -14,7 +14,7 @@ class ActivityStreamTests: XCTestCase {
         let ASPanel = ActivityStreamPanel(profile: profile)
         let siteToDelete = ASPanel.defaultTopSites()[0]
 
-        ASPanel.hideURLFromTopSites(NSURL(string: siteToDelete.url)!)
+        ASPanel.hideURLFromTopSites(URL(string: siteToDelete.url)!)
         let newSites = ASPanel.defaultTopSites()
 
         XCTAssertFalse(newSites.contains(siteToDelete, f: { (a, b) -> Bool in
@@ -27,7 +27,7 @@ class ActivityStreamTests: XCTestCase {
         let ASPanel = ActivityStreamPanel(profile: profile)
         let defaultSites = ASPanel.defaultTopSites()
         defaultSites.forEach({
-            ASPanel.hideURLFromTopSites(NSURL(string: $0.url)!)
+            ASPanel.hideURLFromTopSites(URL(string: $0.url)!)
         })
 
         let newSites = ASPanel.defaultTopSites()

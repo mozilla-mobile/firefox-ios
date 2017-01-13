@@ -47,9 +47,9 @@ struct ASOnyxPing {
     /// - parameter provider:       (optional) Indicates share provider if applicable
     ///
     /// - returns: Onyx event ping for Activity Stream events
-    static func buildEventPing(event: ASEventField, page: ASPageField, source: ASSourceField, actionPosition: Int, provider: String? = nil) -> EventPing {
+    static func buildEventPing(_ event: ASEventField, page: ASPageField, source: ASSourceField, actionPosition: Int, provider: String? = nil) -> EventPing {
         return EventPing(event: event.rawValue, page: page.rawValue, source: source.rawValue,
-                         actionPosition: actionPosition, locale: NSLocale.currentLocale(),
+                         actionPosition: actionPosition, locale: Locale.current,
                          action: "activity_stream_mobile", provider: provider)
     }
 
@@ -62,28 +62,28 @@ struct ASOnyxPing {
     /// - parameter page:            [NEW_TAB | TIMELINE_ALL]
     ///
     /// - returns: Onyx session ping for Activity Stream
-    static func buildSessionPing(url: NSURL?, loadReason: ASLoadReasonField?,
+    static func buildSessionPing(_ url: URL?, loadReason: ASLoadReasonField?,
                                          unloadReason: ASLoadReasonField?, loadLatency: Int?,
                                          page: ASPageField?) -> SessionPing {
         return SessionPing(url: url, loadReason: loadReason?.rawValue, unloadReason: unloadReason?.rawValue,
-                           loadLatency: loadLatency, locale: NSLocale.currentLocale(), page: page?.rawValue,
+                           loadLatency: loadLatency, locale: Locale.current, page: page?.rawValue,
                            action: "activity_stream_mobile")
     }
 }
 
 // MARK: Ping Helpers
 extension ASOnyxPing {
-    static func reportTapEvent(asEvent: ASInfo) {
+    static func reportTapEvent(_ asEvent: ASInfo) {
         let eventPing = ASOnyxPing.buildEventPing(.click, page: .newTab, source: asEvent.source, actionPosition: asEvent.actionPosition)
         OnyxTelemetry.sharedClient.sendEventPing(eventPing, toEndpoint: .activityStream)
     }
 
-    static func reportShareEvent(asEvent: ASInfo, shareProvider: String?) {
+    static func reportShareEvent(_ asEvent: ASInfo, shareProvider: String?) {
         let eventPing = ASOnyxPing.buildEventPing(.share, page: .newTab, source: asEvent.source, actionPosition: asEvent.actionPosition, provider: shareProvider)
         OnyxTelemetry.sharedClient.sendEventPing(eventPing, toEndpoint: .activityStream)
     }
 
-    static func reportDeleteItemEvent(asEvent: ASInfo) {
+    static func reportDeleteItemEvent(_ asEvent: ASInfo) {
         let eventPing = ASOnyxPing.buildEventPing(.delete, page: .newTab, source: asEvent.source, actionPosition: asEvent.actionPosition)
         OnyxTelemetry.sharedClient.sendEventPing(eventPing, toEndpoint: .activityStream)
     }

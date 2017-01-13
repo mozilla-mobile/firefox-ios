@@ -9,13 +9,13 @@ import Storage
 import XCTest
 
 class TestHistory: ProfileTest {
-    private func addSite(history: BrowserHistory, url: String, title: String, s: Bool = true) {
+    fileprivate func addSite(_ history: BrowserHistory, url: String, title: String, s: Bool = true) {
         let site = Site(url: url, title: title)
-        let visit = SiteVisit(site: site, date: NSDate.nowMicroseconds())
+        let visit = SiteVisit(site: site, date: Date.nowMicroseconds())
         XCTAssertEqual(s, history.addLocalVisit(visit).value.isSuccess, "Site added: \(url).")
     }
 
-    private func innerCheckSites(history: BrowserHistory, callback: (cursor: Cursor<Site>) -> Void) {
+    fileprivate func innerCheckSites(_ history: BrowserHistory, callback: (_ cursor: Cursor<Site>) -> Void) {
         // Retrieve the entry
         history.getSitesByLastVisit(100).upon {
             XCTAssertTrue($0.isSuccess)
@@ -24,7 +24,7 @@ class TestHistory: ProfileTest {
     }
 
 
-    private func checkSites(history: BrowserHistory, urls: [String: String], s: Bool = true) {
+    fileprivate func checkSites(_ history: BrowserHistory, urls: [String: String], s: Bool = true) {
         // Retrieve the entry.
         if let cursor = history.getSitesByLastVisit(100).value.successValue {
             XCTAssertEqual(cursor.status, CursorStatus.Success, "Returned success \(cursor.statusMessage).")
@@ -42,12 +42,12 @@ class TestHistory: ProfileTest {
         }
     }
 
-    private func clear(history: BrowserHistory) {
+    fileprivate func clear(_ history: BrowserHistory) {
         XCTAssertTrue(history.clearHistory().value.isSuccess, "History cleared.")
     }
 
-    private func checkVisits(history: BrowserHistory, url: String) {
-        let expectation = self.expectationWithDescription("Wait for history")
+    fileprivate func checkVisits(_ history: BrowserHistory, url: String) {
+        let expectation = self.expectation(description: "Wait for history")
         history.getSitesByLastVisit(100).upon { result in
             XCTAssertTrue(result.isSuccess)
             history.getSitesByFrecencyWithHistoryLimit(100, whereURLContains: url).upon { result in
@@ -58,7 +58,7 @@ class TestHistory: ProfileTest {
                 expectation.fulfill()
             }
         }
-        self.waitForExpectationsWithTimeout(100, handler: nil)
+        self.waitForExpectations(timeout: 100, handler: nil)
     }
 
     // This is a very basic test. Adds an entry. Retrieves it, and then clears the database
@@ -168,7 +168,7 @@ class TestHistory: ProfileTest {
 
 
     // Runs a random command on a database. Calls cb when finished.
-    private func runRandom(inout history: BrowserHistory, cmdIn: Int, cb: () -> Void) {
+    fileprivate func runRandom(_ history: inout BrowserHistory, cmdIn: Int, cb: @escaping () -> Void) {
         var cmd = cmdIn
         if cmd < 0 {
             cmd = Int(arc4random() % 5)
@@ -194,7 +194,7 @@ class TestHistory: ProfileTest {
 
     // Calls numCmds random methods on this database. val is a counter used by this interally (i.e. always pass zero for it).
     // Calls cb when finished.
-    private func runMultiRandom(inout history: BrowserHistory, val: Int, numCmds: Int, cb: () -> Void) {
+    fileprivate func runMultiRandom(_ history: inout BrowserHistory, val: Int, numCmds: Int, cb: @escaping () -> Void) {
         if val == numCmds {
             cb()
             return
@@ -206,11 +206,11 @@ class TestHistory: ProfileTest {
     }
 
     // Helper for starting a new thread running NumCmds random methods on it. Calls cb when done.
-    private func runRandom(inout history: BrowserHistory, queue: dispatch_queue_t, cb: () -> Void) {
-        dispatch_async(queue) {
+    fileprivate func runRandom(_ history: inout BrowserHistory, queue: DispatchQueue, cb: @escaping () -> Void) {
+        queue.async {
             // Each thread creates its own history provider
             self.runMultiRandom(&history, val: 0, numCmds: self.NumCmds) { _ in
-                dispatch_async(dispatch_get_main_queue(), cb)
+                DispatchQueue.main.async(execute: cb)
             }
         }
     }

@@ -6,7 +6,7 @@ import Foundation
 import WebKit
 
 class HistoryTests: KIFTestCase {
-    private var webRoot: String!
+    fileprivate var webRoot: String!
 
     override func setUp() {
         super.setUp()
@@ -14,16 +14,16 @@ class HistoryTests: KIFTestCase {
         BrowserUtils.dismissFirstRunUI(tester())
     }
 
-    func addHistoryItemPage(pageNo: Int) -> String {
+    func addHistoryItemPage(_ pageNo: Int) -> String {
         // Load a page
-        tester().tapViewWithAccessibilityIdentifier("url")
+        tester().tapView(withAccessibilityIdentifier: "url")
         let url = "\(webRoot)/numberedPage.html?page=\(pageNo)"
-        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url)\n")
+        tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "\(url)\n")
         tester().waitForWebViewElementWithAccessibilityLabel("Page \(pageNo)")
         return "Page \(pageNo), \(url)"
     }
 
-    func addHistoryItems(noOfItemsToAdd: Int) -> [String] {
+    func addHistoryItems(_ noOfItemsToAdd: Int) -> [String] {
         var urls = [String]()
         for index in 1...noOfItemsToAdd {
             urls.append(addHistoryItemPage(index))
@@ -39,22 +39,22 @@ class HistoryTests: KIFTestCase {
         _ = addHistoryItems(2)
 
         // Check that both appear in the history home panel
-        tester().tapViewWithAccessibilityIdentifier("url")
-        tester().tapViewWithAccessibilityLabel("History")
+        tester().tapView(withAccessibilityIdentifier: "url")
+        tester().tapView(withAccessibilityLabel: "History")
 
 
-        let firstHistoryRow = tester().waitForCellAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), inTableViewWithAccessibilityIdentifier: "History List")
-        XCTAssertNotNil(firstHistoryRow.imageView?.image)
-        XCTAssertEqual(firstHistoryRow.textLabel!.text!, "Page 2")
-        XCTAssertEqual(firstHistoryRow.detailTextLabel!.text!, "\(webRoot)/numberedPage.html?page=2")
+        let firstHistoryRow = tester().waitForCell(at: IndexPath(row: 0, section: 0), inTableViewWithAccessibilityIdentifier: "History List")
+        XCTAssertNotNil(firstHistoryRow?.imageView?.image)
+        XCTAssertEqual(firstHistoryRow?.textLabel!.text!, "Page 2")
+        XCTAssertEqual(firstHistoryRow?.detailTextLabel!.text!, "\(webRoot)/numberedPage.html?page=2")
 
 
-        let secondHistoryRow = tester().waitForCellAtIndexPath(NSIndexPath(forRow: 1, inSection: 0), inTableViewWithAccessibilityIdentifier: "History List")
-        XCTAssertNotNil(secondHistoryRow.imageView?.image)
-        XCTAssertEqual(secondHistoryRow.textLabel!.text!, "Page 1")
-        XCTAssertEqual(secondHistoryRow.detailTextLabel!.text!, "\(webRoot)/numberedPage.html?page=1")
+        let secondHistoryRow = tester().waitForCell(at: IndexPath(row: 1, section: 0), inTableViewWithAccessibilityIdentifier: "History List")
+        XCTAssertNotNil(secondHistoryRow?.imageView?.image)
+        XCTAssertEqual(secondHistoryRow?.textLabel!.text!, "Page 1")
+        XCTAssertEqual(secondHistoryRow?.detailTextLabel!.text!, "\(webRoot)/numberedPage.html?page=1")
 
-        tester().tapViewWithAccessibilityLabel("Cancel")
+        tester().tapView(withAccessibilityLabel: "Cancel")
     }
 
     //Disabled since font size cannot be changed from iOS 10
@@ -86,42 +86,42 @@ class HistoryTests: KIFTestCase {
         let urls = addHistoryItems(2)
 
         // Check that both appear in the history home panel
-        tester().tapViewWithAccessibilityIdentifier("url")
-        tester().tapViewWithAccessibilityLabel("History")
+        tester().tapView(withAccessibilityIdentifier: "url")
+        tester().tapView(withAccessibilityLabel: "History")
 
-        tester().swipeViewWithAccessibilityLabel(urls[0], inDirection: KIFSwipeDirection.Left)
-        tester().tapViewWithAccessibilityLabel("Remove")
+        tester().swipeView(withAccessibilityLabel: urls[0], in: KIFSwipeDirection.left)
+        tester().tapView(withAccessibilityLabel: "Remove")
 
-        let secondHistoryRow = tester().waitForCellAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), inTableViewWithAccessibilityIdentifier: "History List")
-        XCTAssertNotNil(secondHistoryRow.imageView?.image)
+        let secondHistoryRow = tester().waitForCell(at: IndexPath(row: 0, section: 0), inTableViewWithAccessibilityIdentifier: "History List")
+        XCTAssertNotNil(secondHistoryRow?.imageView?.image)
 
-        if let keyWindow = UIApplication.sharedApplication().keyWindow {
-            XCTAssertNil(keyWindow.accessibilityElementWithLabel(urls[0]), "page 1 should have been deleted")
+        if let keyWindow = UIApplication.shared.keyWindow {
+            XCTAssertNil(keyWindow.accessibilityElement(withLabel: urls[0]), "page 1 should have been deleted")
         }
 
-        tester().tapViewWithAccessibilityLabel("Cancel")
+        tester().tapView(withAccessibilityLabel: "Cancel")
     }
 
     func testDeleteHistoryItemFromListWithMoreThan100Items() {
         do {
-            try tester().tryFindingTappableViewWithAccessibilityLabel("Top sites")
-            tester().tapViewWithAccessibilityLabel("Top sites")
+            try tester().tryFindingTappableView(withAccessibilityLabel: "Top sites")
+            tester().tapView(withAccessibilityLabel: "Top sites")
         } catch _ {
         }
         for pageNo in 1...102 {
-            BrowserUtils.addHistoryEntry("Page \(pageNo)", url: NSURL(string: "\(webRoot)/numberedPage.html?page=\(pageNo)")!)
+            BrowserUtils.addHistoryEntry("Page \(pageNo)", url: URL(string: "\(webRoot)/numberedPage.html?page=\(pageNo)")!)
         }
         let urlToDelete = "Page \(102), \(webRoot)/numberedPage.html?page=\(102)"
 
-        tester().tapViewWithAccessibilityLabel("History")
-        tester().waitForViewWithAccessibilityLabel(urlToDelete)
-        tester().swipeViewWithAccessibilityLabel(urlToDelete, inDirection: KIFSwipeDirection.Left)
-        tester().tapViewWithAccessibilityLabel("Remove")
+        tester().tapView(withAccessibilityLabel: "History")
+        tester().waitForView(withAccessibilityLabel: urlToDelete)
+        tester().swipeView(withAccessibilityLabel: urlToDelete, in: KIFSwipeDirection.left)
+        tester().tapView(withAccessibilityLabel: "Remove")
 
-        let secondHistoryRow = tester().waitForCellAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), inTableViewWithAccessibilityIdentifier: "History List")
-        XCTAssertNotNil(secondHistoryRow.imageView?.image)
-        if let keyWindow = UIApplication.sharedApplication().keyWindow {
-            XCTAssertNil(keyWindow.accessibilityElementWithLabel(urlToDelete), "page 102 should have been deleted")
+        let secondHistoryRow = tester().waitForCell(at: IndexPath(row: 0, section: 0), inTableViewWithAccessibilityIdentifier: "History List")
+        XCTAssertNotNil(secondHistoryRow?.imageView?.image)
+        if let keyWindow = UIApplication.shared.keyWindow {
+            XCTAssertNil(keyWindow.accessibilityElement(withLabel: urlToDelete), "page 102 should have been deleted")
         }
     }
 

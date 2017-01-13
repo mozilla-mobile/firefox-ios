@@ -14,23 +14,23 @@ class SyncCommandsTable<T>: GenericTable<SyncCommand> {
         "id INTEGER PRIMARY KEY AUTOINCREMENT",
         "client_guid TEXT NOT NULL",
         "value TEXT NOT NULL",
-        ].joinWithSeparator(",")
+        ].joined(separator: ",")
     }
 
 
-    override func getInsertAndArgs(inout item: SyncCommand) -> (String, [AnyObject?])? {
+    override func getInsertAndArgs(_ item: inout SyncCommand) -> (String, [AnyObject?])? {
         let args: [AnyObject?] = [item.clientGUID!, item.value]
         return ("INSERT INTO \(name) (client_guid, value) VALUES (?, ?)", args)
     }
 
-    override func getDeleteAndArgs(inout item: SyncCommand?) -> (String, [AnyObject?])? {
+    override func getDeleteAndArgs(_ item: inout SyncCommand?) -> (String, [AnyObject?])? {
         if let item = item {
             return ("DELETE FROM \(name) WHERE client_guid = ?", [item.clientGUID!])
         }
         return ("DELETE FROM \(name)", [])
     }
 
-    override var factory: ((row: SDRow) -> SyncCommand)? {
+    override var factory: ((_ row: SDRow) -> SyncCommand)? {
         return { row -> SyncCommand in
             return SyncCommand(
                 id: row["command_id"] as? Int,
@@ -39,15 +39,15 @@ class SyncCommandsTable<T>: GenericTable<SyncCommand> {
         }
     }
 
-    override func getQueryAndArgs(options: QueryOptions?) -> (String, [AnyObject?])? {
+    override func getQueryAndArgs(_ options: QueryOptions?) -> (String, [AnyObject?])? {
         let sql = "SELECT * FROM \(name)"
         if let opts = options,
             let filter: AnyObject = options?.filter {
-                let args: [AnyObject?] = ["\(filter)"]
+                let args: [AnyObject?] = ["\(filter)" as Optional<AnyObject>]
                 switch opts.filterType {
-                case .Guid :
+                case .guid :
                     return (sql + " WHERE client_guid = ?", args)
-                case .Id:
+                case .id:
                     return (sql + " WHERE id = ?", args)
                 default:
                     break

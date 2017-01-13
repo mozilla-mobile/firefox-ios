@@ -7,26 +7,26 @@ import Alamofire
 import Shared
 
 extension Request {
-    public func responsePartialParsedJSON(completionHandler: Response<JSON, JSONSerializeError> -> ()) -> Self {
+    public func responsePartialParsedJSON(_ completionHandler: (Response<JSON, JSONSerializeError>) -> ()) -> Self {
         return self.response(responseSerializer: parsedJSONResponseSerializer(), completionHandler: completionHandler)
     }
 
-    public func responsePartialParsedJSON(queue queue: dispatch_queue_t, completionHandler: Response<JSON, JSONSerializeError> -> ()) -> Self {
+    public func responsePartialParsedJSON(queue: DispatchQueue, completionHandler: (Response<JSON, JSONSerializeError>) -> ()) -> Self {
         return self.response(queue: queue, responseSerializer: partialParsedJSONResponseSerializer(), completionHandler: completionHandler)
     }
 
-    public func responseParsedJSON(partial: Bool, completionHandler: Response<JSON, JSONSerializeError> -> ()) -> Self {
+    public func responseParsedJSON(_ partial: Bool, completionHandler: (Response<JSON, JSONSerializeError>) -> ()) -> Self {
         return self.response(responseSerializer: parsedJSONResponseSerializer(), completionHandler: completionHandler)
     }
 
-    public func responseParsedJSON(queue queue: dispatch_queue_t, completionHandler: Response<JSON, JSONSerializeError> -> ()) -> Self {
+    public func responseParsedJSON(queue: DispatchQueue, completionHandler: (Response<JSON, JSONSerializeError>) -> ()) -> Self {
         return self.response(queue: queue, responseSerializer: parsedJSONResponseSerializer(), completionHandler: completionHandler)
     }
 }
 
-public enum JSONSerializeError: ErrorType {
-    case NoData
-    case ParseError
+public enum JSONSerializeError: Error {
+    case noData
+    case parseError
 }
 
 private func parsedJSONResponseSerializer() -> ResponseSerializer<JSON, JSONSerializeError> {

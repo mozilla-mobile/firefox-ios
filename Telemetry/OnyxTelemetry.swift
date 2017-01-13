@@ -10,7 +10,7 @@ private let OnyxStagingConfiguration = OnyxClientConfiguration(serverURL: "https
 private let OnyxProductionConfiguration = OnyxClientConfiguration(serverURL: "https://tiles.services.mozilla.com".asURL!, version: 3)
 
 struct OnyxTelemetry {
-    static private let configuration: OnyxClientConfiguration = {
+    static fileprivate let configuration: OnyxClientConfiguration = {
         switch AppConstants.BuildChannel {
             case .Nightly:  return OnyxProductionConfiguration
             case .Beta:     return OnyxProductionConfiguration

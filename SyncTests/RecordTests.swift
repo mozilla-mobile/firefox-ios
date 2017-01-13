@@ -13,7 +13,7 @@ class RecordTests: XCTestCase {
     func testGUIDs() {
         let s = Bytes.generateGUID()
         print("Got GUID: \(s)", terminator: "\n")
-        XCTAssertEqual(12, s.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
+        XCTAssertEqual(12, s.lengthOfBytesUsingEncoding(String.Encoding.utf8))
     }
 
     func testEnvelopeNullTTL() {
@@ -46,7 +46,7 @@ class RecordTests: XCTestCase {
         let invalidPayload = "{\"id\": \"abcdefghijkl\", \"collection\": \"clients\", \"payload\": \"invalid\"}"
         let emptyPayload = "{\"id\": \"abcdefghijkl\", \"collection\": \"clients\", \"payload\": \"{}\"}"
 
-        let clientBody: [String: AnyObject] = ["id": "abcdefghijkl", "name": "Foobar", "commands": [], "type": "mobile"]
+        let clientBody: [String: AnyObject] = ["id": "abcdefghijkl" as AnyObject, "name": "Foobar" as AnyObject, "commands": [], "type": "mobile"]
         let clientBodyString = JSON(clientBody).toString(false)
         let clientRecord: [String : AnyObject] = ["id": "abcdefghijkl", "collection": "clients", "payload": clientBodyString]
         let clientPayload = JSON(clientRecord).toString(false)
@@ -274,7 +274,7 @@ class RecordTests: XCTestCase {
         XCTAssertEqual(feedURI, livemark.feedURI)
         XCTAssertEqual(siteURI, livemark.siteURI)
 
-        let m = (livemark as MirrorItemable).toMirrorItem(NSDate.now())
+        let m = (livemark as MirrorItemable).toMirrorItem(Date.now())
         XCTAssertEqual("http://fxfeeds.mozilla.com/en-US/firefox/headlines.xml", m.feedURI)
         XCTAssertEqual("http://www.bbc.co.uk/go/rss/int/news/-/news/", m.siteURI)
     }
@@ -375,7 +375,7 @@ class RecordTests: XCTestCase {
         XCTAssertEqual(feedURI, livemark.feedURI)
         XCTAssertEqual(siteURI, livemark.siteURI)
 
-        let m = (livemark as MirrorItemable).toMirrorItem(NSDate.now())
+        let m = (livemark as MirrorItemable).toMirrorItem(Date.now())
         XCTAssertEqual("http://fxfeeds.mozilla.com/en-US/firefox/headlines.xml", m.feedURI)
         XCTAssertEqual("http://www.bbc.co.uk/go/rss/int/news/-/news/", m.siteURI)
     }
@@ -403,7 +403,7 @@ class RecordTests: XCTestCase {
         let str = "{\"title\":\"Downloads\",\"parentName\":\"\",\"bmkUri\":\"place:transition=7&sort=4\",\"id\":\"7gdp9S1okhKf\",\"parentid\":\"rq6WHyfHkoUV\",\"type\":\"query\"}"
         let query = BookmarkType.payloadFromJSON(JSON(string: str))
         XCTAssertTrue(query is BookmarkQueryPayload)
-        let mirror = query?.toMirrorItem(NSDate.now())
+        let mirror = query?.toMirrorItem(Date.now())
         let roundtrip = mirror?.asPayload()
         XCTAssertTrue(roundtrip! is BookmarkQueryPayload)
     }
@@ -427,7 +427,7 @@ class RecordTests: XCTestCase {
         let q = BookmarkType.payloadFromJSON(query)
         XCTAssertTrue(q is BookmarkQueryPayload)
         XCTAssertTrue(q is MirrorItemable)
-        guard let item = (q as? MirrorItemable)?.toMirrorItem(NSDate.now()) else {
+        guard let item = (q as? MirrorItemable)?.toMirrorItem(Date.now()) else {
             XCTFail("Not mirrorable!")
             return
         }
@@ -443,7 +443,7 @@ class RecordTests: XCTestCase {
         // Items keep their GUID until they're written into the mirror table.
         XCTAssertEqual("places", p!.id)
 
-        guard let pMirror = (p as? MirrorItemable)?.toMirrorItem(NSDate.now()) else {
+        guard let pMirror = (p as? MirrorItemable)?.toMirrorItem(Date.now()) else {
             XCTFail("Not mirrorable!")
             return
         }

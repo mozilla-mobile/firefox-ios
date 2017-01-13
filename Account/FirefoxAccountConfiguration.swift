@@ -12,10 +12,10 @@ public enum FirefoxAccountConfigurationLabel: String {
 
     public func toConfiguration() -> FirefoxAccountConfiguration {
         switch self {
-        case LatestDev: return LatestDevFirefoxAccountConfiguration()
-        case StableDev: return StableDevFirefoxAccountConfiguration()
-        case Production: return ProductionFirefoxAccountConfiguration()
-        case ChinaEdition: return ChinaEditionFirefoxAccountConfiguration()
+        case .LatestDev: return LatestDevFirefoxAccountConfiguration()
+        case .StableDev: return StableDevFirefoxAccountConfiguration()
+        case .Production: return ProductionFirefoxAccountConfiguration()
+        case .ChinaEdition: return ChinaEditionFirefoxAccountConfiguration()
         }
     }
 }
@@ -31,19 +31,19 @@ public protocol FirefoxAccountConfiguration {
 
     /// A Firefox Account exists on a particular server.  The auth endpoint should speak the protocol documented at
     /// https://github.com/mozilla/fxa-auth-server/blob/02f88502700b0c5ef5a4768a8adf332f062ad9bf/docs/api.md
-    var authEndpointURL: NSURL { get }
+    var authEndpointURL: URL { get }
 
     /// The associated oauth server should speak the protocol documented at
     /// https://github.com/mozilla/fxa-oauth-server/blob/6cc91e285fc51045a365dbacb3617ef29093dbc3/docs/api.md
-    var oauthEndpointURL: NSURL { get }
+    var oauthEndpointURL: URL { get }
 
-    var profileEndpointURL: NSURL { get }
+    var profileEndpointURL: URL { get }
 
     /// The associated content server should speak the protocol implemented (but not yet documented) at
     /// https://github.com/mozilla/fxa-content-server/blob/161bff2d2b50bac86ec46c507e597441c8575189/app/scripts/models/auth_brokers/fx-desktop.js
-    var signInURL: NSURL { get }
-    var settingsURL: NSURL { get }
-    var forceAuthURL: NSURL { get }
+    var signInURL: URL { get }
+    var settingsURL: URL { get }
+    var forceAuthURL: URL { get }
 
     var sync15Configuration: Sync15Configuration { get }
 }
@@ -54,13 +54,13 @@ public struct LatestDevFirefoxAccountConfiguration: FirefoxAccountConfiguration 
 
     public let label = FirefoxAccountConfigurationLabel.LatestDev
 
-    public let authEndpointURL = NSURL(string: "https://latest.dev.lcip.org/auth/v1")!
-    public let oauthEndpointURL = NSURL(string: "https://oauth-latest.dev.lcip.org")!
-    public let profileEndpointURL = NSURL(string: "https://latest.dev.lcip.org/profile")!
+    public let authEndpointURL = URL(string: "https://latest.dev.lcip.org/auth/v1")!
+    public let oauthEndpointURL = URL(string: "https://oauth-latest.dev.lcip.org")!
+    public let profileEndpointURL = URL(string: "https://latest.dev.lcip.org/profile")!
 
-    public let signInURL = NSURL(string: "https://latest.dev.lcip.org/signin?service=sync&context=fx_ios_v1")!
-    public let settingsURL = NSURL(string: "https://latest.dev.lcip.org/settings?context=fx_ios_v1")!
-    public let forceAuthURL = NSURL(string: "https://latest.dev.lcip.org/force_auth?service=sync&context=fx_ios_v1")!
+    public let signInURL = URL(string: "https://latest.dev.lcip.org/signin?service=sync&context=fx_ios_v1")!
+    public let settingsURL = URL(string: "https://latest.dev.lcip.org/settings?context=fx_ios_v1")!
+    public let forceAuthURL = URL(string: "https://latest.dev.lcip.org/force_auth?service=sync&context=fx_ios_v1")!
 
     public let sync15Configuration: Sync15Configuration = StageSync15Configuration()
 }
@@ -71,13 +71,13 @@ public struct StableDevFirefoxAccountConfiguration: FirefoxAccountConfiguration 
 
     public let label = FirefoxAccountConfigurationLabel.StableDev
 
-    public let authEndpointURL = NSURL(string: "https://stable.dev.lcip.org/auth/v1")!
-    public let oauthEndpointURL = NSURL(string: "https://oauth-stable.dev.lcip.org")!
-    public let profileEndpointURL = NSURL(string: "https://stable.dev.lcip.org/profile")!
+    public let authEndpointURL = URL(string: "https://stable.dev.lcip.org/auth/v1")!
+    public let oauthEndpointURL = URL(string: "https://oauth-stable.dev.lcip.org")!
+    public let profileEndpointURL = URL(string: "https://stable.dev.lcip.org/profile")!
 
-    public let signInURL = NSURL(string: "https://stable.dev.lcip.org/signin?service=sync&context=fx_ios_v1")!
-    public let settingsURL = NSURL(string: "https://stable.dev.lcip.org/settings?context=fx_ios_v1")!
-    public let forceAuthURL = NSURL(string: "https://stable.dev.lcip.org/force_auth?service=sync&context=fx_ios_v1")!
+    public let signInURL = URL(string: "https://stable.dev.lcip.org/signin?service=sync&context=fx_ios_v1")!
+    public let settingsURL = URL(string: "https://stable.dev.lcip.org/settings?context=fx_ios_v1")!
+    public let forceAuthURL = URL(string: "https://stable.dev.lcip.org/force_auth?service=sync&context=fx_ios_v1")!
 
     public let sync15Configuration: Sync15Configuration = StageSync15Configuration()
 }
@@ -88,13 +88,13 @@ public struct StageFirefoxAccountConfiguration: FirefoxAccountConfiguration {
 
     public let label = FirefoxAccountConfigurationLabel.Production
 
-    public let authEndpointURL = NSURL(string: "https://api.accounts.firefox.com/v1")!
-    public let oauthEndpointURL = NSURL(string: "https://oauth.accounts.firefox.com/v1")!
-    public let profileEndpointURL = NSURL(string: "https://profile.accounts.firefox.com/v1")!
+    public let authEndpointURL = URL(string: "https://api.accounts.firefox.com/v1")!
+    public let oauthEndpointURL = URL(string: "https://oauth.accounts.firefox.com/v1")!
+    public let profileEndpointURL = URL(string: "https://profile.accounts.firefox.com/v1")!
 
-    public let signInURL = NSURL(string: "https://accounts.firefox.com/signin?service=sync&context=fx_ios_v1")!
-    public let settingsURL = NSURL(string: "https://accounts.firefox.com/settings?context=fx_ios_v1")!
-    public let forceAuthURL = NSURL(string: "https://accounts.firefox.com/force_auth?service=sync&context=fx_ios_v1")!
+    public let signInURL = URL(string: "https://accounts.firefox.com/signin?service=sync&context=fx_ios_v1")!
+    public let settingsURL = URL(string: "https://accounts.firefox.com/settings?context=fx_ios_v1")!
+    public let forceAuthURL = URL(string: "https://accounts.firefox.com/force_auth?service=sync&context=fx_ios_v1")!
 
     public let sync15Configuration: Sync15Configuration = StageSync15Configuration()
 }
@@ -105,13 +105,13 @@ public struct ProductionFirefoxAccountConfiguration: FirefoxAccountConfiguration
 
     public let label = FirefoxAccountConfigurationLabel.Production
 
-    public let authEndpointURL = NSURL(string: "https://api.accounts.firefox.com/v1")!
-    public let oauthEndpointURL = NSURL(string: "https://oauth.accounts.firefox.com/v1")!
-    public let profileEndpointURL = NSURL(string: "https://profile.accounts.firefox.com/v1")!
+    public let authEndpointURL = URL(string: "https://api.accounts.firefox.com/v1")!
+    public let oauthEndpointURL = URL(string: "https://oauth.accounts.firefox.com/v1")!
+    public let profileEndpointURL = URL(string: "https://profile.accounts.firefox.com/v1")!
 
-    public let signInURL = NSURL(string: "https://accounts.firefox.com/signin?service=sync&context=fx_ios_v1")!
-    public let settingsURL = NSURL(string: "https://accounts.firefox.com/settings?context=fx_ios_v1")!
-    public let forceAuthURL = NSURL(string: "https://accounts.firefox.com/force_auth?service=sync&context=fx_ios_v1")!
+    public let signInURL = URL(string: "https://accounts.firefox.com/signin?service=sync&context=fx_ios_v1")!
+    public let settingsURL = URL(string: "https://accounts.firefox.com/settings?context=fx_ios_v1")!
+    public let forceAuthURL = URL(string: "https://accounts.firefox.com/force_auth?service=sync&context=fx_ios_v1")!
 
     public let sync15Configuration: Sync15Configuration = ProductionSync15Configuration()
 }
@@ -122,13 +122,13 @@ public struct ChinaEditionFirefoxAccountConfiguration: FirefoxAccountConfigurati
 
     public let label = FirefoxAccountConfigurationLabel.ChinaEdition
 
-    public let authEndpointURL = NSURL(string: "https://api-accounts.firefox.com.cn/v1")!
-    public let oauthEndpointURL = NSURL(string: "https://oauth.firefox.com.cn/v1")!
-    public let profileEndpointURL = NSURL(string: "https://profile.firefox.com.cn/v1")!
+    public let authEndpointURL = URL(string: "https://api-accounts.firefox.com.cn/v1")!
+    public let oauthEndpointURL = URL(string: "https://oauth.firefox.com.cn/v1")!
+    public let profileEndpointURL = URL(string: "https://profile.firefox.com.cn/v1")!
 
-    public let signInURL = NSURL(string: "https://accounts.firefox.com.cn/signin?service=sync&context=fx_ios_v1")!
-    public let settingsURL = NSURL(string: "https://accounts.firefox.com.cn/settings?context=fx_ios_v1")!
-    public let forceAuthURL = NSURL(string: "https://accounts.firefox.com.cn/force_auth?service=sync&context=fx_ios_v1")!
+    public let signInURL = URL(string: "https://accounts.firefox.com.cn/signin?service=sync&context=fx_ios_v1")!
+    public let settingsURL = URL(string: "https://accounts.firefox.com.cn/settings?context=fx_ios_v1")!
+    public let forceAuthURL = URL(string: "https://accounts.firefox.com.cn/force_auth?service=sync&context=fx_ios_v1")!
 
     public let sync15Configuration: Sync15Configuration = ChinaEditionSync15Configuration()
 }
@@ -137,24 +137,24 @@ public struct ChinaEditionSync15Configuration: Sync15Configuration {
     public init() {
     }
 
-    public let tokenServerEndpointURL = NSURL(string: "https://sync.firefox.com.cn/token/1.0/sync/1.5")!
+    public let tokenServerEndpointURL = URL(string: "https://sync.firefox.com.cn/token/1.0/sync/1.5")!
 }
 
 public protocol Sync15Configuration {
     init()
-    var tokenServerEndpointURL: NSURL { get }
+    var tokenServerEndpointURL: URL { get }
 }
 
 public struct ProductionSync15Configuration: Sync15Configuration {
     public init() {
     }
 
-    public let tokenServerEndpointURL = NSURL(string: "https://token.services.mozilla.com/1.0/sync/1.5")!
+    public let tokenServerEndpointURL = URL(string: "https://token.services.mozilla.com/1.0/sync/1.5")!
 }
 
 public struct StageSync15Configuration: Sync15Configuration {
     public init() {
     }
 
-    public let tokenServerEndpointURL = NSURL(string: "https://token.stage.mozaws.net/1.0/sync/1.5")!
+    public let tokenServerEndpointURL = URL(string: "https://token.stage.mozaws.net/1.0/sync/1.5")!
 }

@@ -12,8 +12,8 @@ import WebKit
 // When running on iPhone, this test will fail, because the Collectionview does not have an identifier, and 
 // the deletion method is different
 class TopSitesTests: KIFTestCase {
-    private var webRoot: String!
-    private var profile: Profile!
+    fileprivate var webRoot: String!
+    fileprivate var profile: Profile!
 
     override func setUp() {
         profile = (UIApplication.sharedApplication().delegate as! AppDelegate).profile!
@@ -22,12 +22,12 @@ class TopSitesTests: KIFTestCase {
         BrowserUtils.dismissFirstRunUI(tester())
     }
 
-    private func extractTextSizeFromThumbnail(thumbnail: ThumbnailCell) -> CGFloat? {
+    fileprivate func extractTextSizeFromThumbnail(_ thumbnail: ThumbnailCell) -> CGFloat? {
         return thumbnail.textLabel.font.pointSize
     }
 
-    private func accessibilityLabelsForAllTopSites(collection: UICollectionView) -> [String] {
-        return collection.visibleCells().reduce([], combine: { arr, cell in
+    fileprivate func accessibilityLabelsForAllTopSites(_ collection: UICollectionView) -> [String] {
+        return collection.visibleCells.reduce([], { arr, cell in
             if let label = cell.accessibilityLabel {
                 return arr + [label]
             }
@@ -56,30 +56,30 @@ class TopSitesTests: KIFTestCase {
 */
     func testRemovingSite() {
         // Switch to the Bookmarks panel so we can later reload Top Sites.
-        tester().tapViewWithAccessibilityLabel("Bookmarks")
+        tester().tapView(withAccessibilityLabel: "Bookmarks")
 
         // Load a set of dummy domains.
         for i in 1...10 {
-            BrowserUtils.addHistoryEntry("", url: NSURL(string: "https://test\(i).com")!)
+            BrowserUtils.addHistoryEntry("", url: URL(string: "https://test\(i).com")!)
         }
 
         // Switch back to the Top Sites panel.
-        tester().tapViewWithAccessibilityLabel("Top sites")
+        tester().tapView(withAccessibilityLabel: "Top sites")
 
         // Remove the first site and verify that all other sites shift to replace it.
-        let collection = tester().waitForViewWithAccessibilityIdentifier("Top Sites View") as! UICollectionView
+        let collection = tester().waitForView(withAccessibilityIdentifier: "Top Sites View") as! UICollectionView
 
         // Get the first cell (test10.com).
-        let cell = collection.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0))!
+        let cell = collection.cellForItem(at: IndexPath(item: 0, section: 0))!
 
         let cellToDeleteLabel = cell.accessibilityLabel
-        tester().longPressViewWithAccessibilityLabel(cellToDeleteLabel, duration: 1)
-        tester().waitForViewWithAccessibilityLabel("Remove page - \(cellToDeleteLabel!)")
-        cell.tapAtPoint(CGPointZero)
+        tester().longPressView(withAccessibilityLabel: cellToDeleteLabel, duration: 1)
+        tester().waitForView(withAccessibilityLabel: "Remove page - \(cellToDeleteLabel!)")
+        cell.tap(at: CGPoint.zero)
 
         // Close editing mode.
-        tester().tapViewWithAccessibilityLabel("Done")
-        tester().waitForAbsenceOfViewWithAccessibilityLabel("Remove page")
+        tester().tapView(withAccessibilityLabel: "Done")
+        tester().waitForAbsenceOfView(withAccessibilityLabel: "Remove page")
 
         let postDeletedLabels = accessibilityLabelsForAllTopSites(collection)
         XCTAssertFalse(postDeletedLabels.contains(cellToDeleteLabel!))
@@ -87,22 +87,22 @@ class TopSitesTests: KIFTestCase {
 
     func testRemovingSuggestedSites() {
         // Switch to the Bookmarks panel so we can later reload Top Sites.
-        tester().tapViewWithAccessibilityLabel("Bookmarks")
-        tester().tapViewWithAccessibilityLabel("Top sites")
+        tester().tapView(withAccessibilityLabel: "Bookmarks")
+        tester().tapView(withAccessibilityLabel: "Top sites")
 
-        var collection = tester().waitForViewWithAccessibilityIdentifier("Top Sites View") as! UICollectionView
-        let firstCell = collection.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0))!
+        var collection = tester().waitForView(withAccessibilityIdentifier: "Top Sites View") as! UICollectionView
+        let firstCell = collection.cellForItem(at: IndexPath(item: 0, section: 0))!
         let cellToDeleteLabel = firstCell.accessibilityLabel
-        tester().longPressViewWithAccessibilityLabel(cellToDeleteLabel, duration: 1)
-        tester().tapViewWithAccessibilityLabel("Remove page - \(cellToDeleteLabel!)")
+        tester().longPressView(withAccessibilityLabel: cellToDeleteLabel, duration: 1)
+        tester().tapView(withAccessibilityLabel: "Remove page - \(cellToDeleteLabel!)")
         tester().waitForAnimationsToFinish()
 
         // Close editing mode
-        tester().tapViewWithAccessibilityLabel("Done")
+        tester().tapView(withAccessibilityLabel: "Done")
 
         // Verify that the tile we removed is removed
 
-        collection = tester().waitForViewWithAccessibilityIdentifier("Top Sites View") as! UICollectionView
+        collection = tester().waitForView(withAccessibilityIdentifier: "Top Sites View") as! UICollectionView
         XCTAssertFalse(accessibilityLabelsForAllTopSites(collection).contains(cellToDeleteLabel!))
     }
 

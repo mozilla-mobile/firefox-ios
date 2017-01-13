@@ -18,12 +18,12 @@ class HomePageHelper {
 
     let prefs: Prefs
 
-    var currentURL: NSURL? {
+    var currentURL: URL? {
         get {
             return HomePageAccessors.getHomePage(prefs)
         }
         set {
-            if let url = newValue where url.isWebPage(includeDataURIs: false) && !url.isLocal {
+            if let url = newValue, url.isWebPage(includeDataURIs: false) && !url.isLocal {
                 prefs.setString(url.absoluteString!, forKey: HomePageConstants.HomePageURLPrefKey)
             } else {
                 prefs.removeObjectForKey(HomePageConstants.HomePageURLPrefKey)
@@ -41,13 +41,13 @@ class HomePageHelper {
         self.prefs = prefs
     }
 
-    func openHomePage(tab: Tab) {
+    func openHomePage(_ tab: Tab) {
         guard let url = currentURL else {
             // this should probably never happen.
             log.error("User requested a homepage that wasn't a valid URL")
             return
         }
-        tab.loadRequest(NSURLRequest(URL: url))
+        tab.loadRequest(URLRequest(url: url))
     }
 
     func openHomePage(inTab tab: Tab, withNavigationController navigationController: UINavigationController?) {

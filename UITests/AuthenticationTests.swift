@@ -5,7 +5,7 @@
 import Foundation
 
 class AuthenticationTests: KIFTestCase {
-    private var webRoot: String!
+    fileprivate var webRoot: String!
 
     override func setUp() {
         super.setUp()
@@ -32,23 +32,23 @@ class AuthenticationTests: KIFTestCase {
         tester().waitForWebViewElementWithAccessibilityLabel("auth fail")
 
         // Enter valid credentials and ensure the page loads.
-        tester().tapViewWithAccessibilityLabel("Reload")
+        tester().tapView(withAccessibilityLabel: "Reload")
         enterCredentials(usernameValue: "Username", passwordValue: "Password", username: "user", password: "pass")
         tester().waitForWebViewElementWithAccessibilityLabel("logged in")
 
         // Save the credentials.
-        tester().tapViewWithAccessibilityLabel("Save Login")
+        tester().tapView(withAccessibilityLabel: "Save Login")
 
         logOut()
         loadAuthPage()
 
         // Make sure the credentials were saved and auto-filled.
-        tester().tapViewWithAccessibilityLabel("Log in")
+        tester().tapView(withAccessibilityLabel: "Log in")
         tester().waitForWebViewElementWithAccessibilityLabel("logged in")
 
         // Add a private tab.
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("New Private Tab")
+        tester().tapView(withAccessibilityLabel: "Menu")
+        tester().tapView(withAccessibilityLabel: "New Private Tab")
 
         loadAuthPage()
 
@@ -60,22 +60,22 @@ class AuthenticationTests: KIFTestCase {
 
     }
 
-    private func loadAuthPage() {
-        tester().tapViewWithAccessibilityIdentifier("url")
-        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(webRoot)/auth.html\n")
+    fileprivate func loadAuthPage() {
+        tester().tapView(withAccessibilityIdentifier: "url")
+        tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "\(webRoot)/auth.html\n")
     }
 
-    private func logOut() {
-        tester().tapViewWithAccessibilityIdentifier("url")
-        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(webRoot)/auth.html?logout=1\n")
-        tester().tapViewWithAccessibilityLabel("Cancel")
+    fileprivate func logOut() {
+        tester().tapView(withAccessibilityIdentifier: "url")
+        tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "\(webRoot)/auth.html?logout=1\n")
+        tester().tapView(withAccessibilityLabel: "Cancel")
     }
 
-    private func enterCredentials(usernameValue usernameValue: String, passwordValue: String, username: String, password: String) {
+    fileprivate func enterCredentials(usernameValue: String, passwordValue: String, username: String, password: String) {
         let usernameField = tester().waitForViewWithAccessibilityValue(usernameValue) as! UITextField
         let passwordField = tester().waitForViewWithAccessibilityValue(passwordValue) as! UITextField
         usernameField.text = username
         passwordField.text = password
-        tester().tapViewWithAccessibilityLabel("Log in")
+        tester().tapView(withAccessibilityLabel: "Log in")
     }
 }

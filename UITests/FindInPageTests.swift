@@ -6,9 +6,9 @@ import Foundation
 import WebKit
 
 class FindInPageTests: KIFTestCase {
-    private static let LongPressDuration: NSTimeInterval = 2
+    fileprivate static let LongPressDuration: TimeInterval = 2
     
-    private var webRoot: String!
+    fileprivate var webRoot: String!
     
     override func setUp() {
         webRoot = SimplePageServer.start()
@@ -26,9 +26,9 @@ class FindInPageTests: KIFTestCase {
     func testFindFromSelection() {
         let testURL = "\(webRoot)/findPage.html"
         
-        tester().tapViewWithAccessibilityIdentifier("url")
-        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(testURL)\n")
-        let webView = tester().waitForViewWithAccessibilityLabel("Web content") as! WKWebView
+        tester().tapView(withAccessibilityIdentifier: "url")
+        tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "\(testURL)\n")
+        let webView = tester().waitForView(withAccessibilityLabel: "Web content") as! WKWebView
         tester().waitForWebViewElementWithAccessibilityLabel("nullam")
         
         // Ensure the find-in-page bar is visible by looking at views.
@@ -38,85 +38,85 @@ class FindInPageTests: KIFTestCase {
         XCTAssertTrue(tester().viewExistsWithLabel("Previous in-page result"))
         
         // Test previous/next buttons.
-        try! tester().tryFindingViewWithAccessibilityLabel("1/4")
+        try! tester().tryFindingView(withAccessibilityLabel: "1/4")
         clickFindNext()
-        try! tester().tryFindingViewWithAccessibilityLabel("2/4")
+        try! tester().tryFindingView(withAccessibilityLabel: "2/4")
         clickFindNext()
-        try! tester().tryFindingViewWithAccessibilityLabel("3/4")
+        try! tester().tryFindingView(withAccessibilityLabel: "3/4")
         clickFindNext()
-        try! tester().tryFindingViewWithAccessibilityLabel("4/4")
+        try! tester().tryFindingView(withAccessibilityLabel: "4/4")
         clickFindNext()
-        try! tester().tryFindingViewWithAccessibilityLabel("1/4")
+        try! tester().tryFindingView(withAccessibilityLabel: "1/4")
         clickFindPrevious()
-        try! tester().tryFindingViewWithAccessibilityLabel("4/4")
+        try! tester().tryFindingView(withAccessibilityLabel: "4/4")
         clickFindPrevious()
-        try! tester().tryFindingViewWithAccessibilityLabel("3/4")
+        try! tester().tryFindingView(withAccessibilityLabel: "3/4")
         clickFindPrevious()
-        try! tester().tryFindingViewWithAccessibilityLabel("2/4")
+        try! tester().tryFindingView(withAccessibilityLabel: "2/4")
         clickFindPrevious()
-        try! tester().tryFindingViewWithAccessibilityLabel("1/4")
+        try! tester().tryFindingView(withAccessibilityLabel: "1/4")
         
         // Test a query with no matches.
         let findTextField = tester().waitForViewWithAccessibilityValue("nullam") as! UITextField
         findTextField.becomeFirstResponder()
-        tester().enterTextIntoCurrentFirstResponder("z")
-        let resultsView = tester().waitForViewWithAccessibilityLabel("0/0")
-        XCTAssertFalse(resultsView.hidden)
+        tester().enterText(intoCurrentFirstResponder: "z")
+        let resultsView = tester().waitForView(withAccessibilityLabel: "0/0")
+        XCTAssertFalse((resultsView?.isHidden)!)
         tester().clearTextFromFirstResponder()
-        XCTAssertTrue(resultsView.hidden)
+        XCTAssertTrue((resultsView?.isHidden)!)
         
         // Make sure the selection menu still works with the bar already visible.
         openFindInPageBar(webView)
-        try! tester().tryFindingViewWithAccessibilityLabel("1/4")
+        try! tester().tryFindingView(withAccessibilityLabel: "1/4")
         
         // Make sure the bar disappears when reloading.
-        tester().tapViewWithAccessibilityLabel("Reload")
-        tester().waitForAbsenceOfViewWithAccessibilityLabel("nullam")
+        tester().tapView(withAccessibilityLabel: "Reload")
+        tester().waitForAbsenceOfView(withAccessibilityLabel: "nullam")
         
         // Make sure the bar disappears when opening the tabs tray.
         openFindInPageBar(webView)
-        tester().tapViewWithAccessibilityLabel("Show Tabs")
-        tester().tapViewWithAccessibilityLabel("Find Page")
-        tester().waitForAbsenceOfViewWithAccessibilityLabel("nullam")
+        tester().tapView(withAccessibilityLabel: "Show Tabs")
+        tester().tapView(withAccessibilityLabel: "Find Page")
+        tester().waitForAbsenceOfView(withAccessibilityLabel: "nullam")
         
         // Test that Done dismisses the toolbar.
         openFindInPageBar(webView)
-        tester().tapViewWithAccessibilityLabel("Done")
+        tester().tapView(withAccessibilityLabel: "Done")
         XCTAssertFalse(tester().viewExistsWithLabel("Done"))
         XCTAssertFalse(tester().viewExistsWithLabel("Next in-page result"))
         XCTAssertFalse(tester().viewExistsWithLabel("Previous in-page result"))
     }
     
-    private func openFindInPageBar(webView: WKWebView) {
+    fileprivate func openFindInPageBar(_ webView: WKWebView) {
         // For some reason, we sometimes have to tap the web view to make
         // it respond to long press events (tests only).
-        webView.tapAtPoint(CGPointZero)
+        webView.tap(at: CGPoint.zero)
 
         // Make the selection menu appear. To keep things simple, the page has absolutely
         // positioned text at the top-left corner.
-        webView.longPressAtPoint(CGPointZero, duration: FindInPageTests.LongPressDuration)
+        webView.longPress(at: CGPoint.zero, duration: FindInPageTests.LongPressDuration)
 
-        tester().tapViewWithAccessibilityLabel("Find in Page")
+        tester().tapView(withAccessibilityLabel: "Find in Page")
         tester().waitForViewWithAccessibilityValue("nullam")
     }
     
-    private func clickFindNext() {
-        tester().tapViewWithAccessibilityLabel("Next in-page result")
+    fileprivate func clickFindNext() {
+        tester().tapView(withAccessibilityLabel: "Next in-page result")
     }
     
-    private func clickFindPrevious() {
-        tester().tapViewWithAccessibilityLabel("Previous in-page result")
+    fileprivate func clickFindPrevious() {
+        tester().tapView(withAccessibilityLabel: "Previous in-page result")
     }
     
     func testOpenFindInPageFromMenu() {
         let testURL = "\(webRoot)/findPage.html"
         
-        tester().tapViewWithAccessibilityIdentifier("url")
-        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(testURL)\n")
+        tester().tapView(withAccessibilityIdentifier: "url")
+        tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "\(testURL)\n")
         tester().waitForWebViewElementWithAccessibilityLabel("nullam")
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("Find In Page")
+        tester().tapView(withAccessibilityLabel: "Menu")
+        tester().tapView(withAccessibilityLabel: "Find In Page")
         XCTAssertTrue(tester().viewExistsWithLabel("Done"))
-        tester().tapViewWithAccessibilityLabel("Done")
+        tester().tapView(withAccessibilityLabel: "Done")
     }
 }

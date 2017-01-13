@@ -10,7 +10,7 @@ class ThirdPartySearchAlerts: UIAlertController {
     /**
     Allows the keyboard to pop back up after an alertview.
     **/
-    override func canBecomeFirstResponder() -> Bool {
+    override var canBecomeFirstResponder : Bool {
         return false
     }
 
@@ -22,7 +22,7 @@ class ThirdPartySearchAlerts: UIAlertController {
      - returns: UIAlertController for asking the user to add a search engine
      **/
 
-    static func addThirdPartySearchEngine(okayCallback: (UIAlertAction) -> Void) -> UIAlertController {
+    static func addThirdPartySearchEngine(_ okayCallback: (UIAlertAction) -> Void) -> UIAlertController {
         let alert = ThirdPartySearchAlerts(
             title: Strings.ThirdPartySearchAddTitle,
             message: Strings.ThirdPartySearchAddMessage,

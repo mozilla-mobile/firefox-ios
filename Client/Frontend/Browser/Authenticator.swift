@@ -12,9 +12,9 @@ private let LogInButtonTitle  = NSLocalizedString("Log in", comment: "Authentica
 private let log = Logger.browserLogger
 
 class Authenticator {
-    private static let MaxAuthenticationAttempts = 3
+    fileprivate static let MaxAuthenticationAttempts = 3
 
-    static func handleAuthRequest(viewController: UIViewController, challenge: NSURLAuthenticationChallenge, loginsHelper: LoginsHelper?) -> Deferred<Maybe<LoginData>> {
+    static func handleAuthRequest(_ viewController: UIViewController, challenge: NSURLAuthenticationChallenge, loginsHelper: LoginsHelper?) -> Deferred<Maybe<LoginData>> {
         // If there have already been too many login attempts, we'll just fail.
         if challenge.previousFailureCount >= Authenticator.MaxAuthenticationAttempts {
             return deferMaybe(LoginDataError(description: "Too many attempts to open site"))
@@ -52,7 +52,7 @@ class Authenticator {
         return self.promptForUsernamePassword(viewController, credentials: nil, protectionSpace: challenge.protectionSpace, loginsHelper: nil)
     }
 
-    static func findMatchingCredentialsForChallenge(challenge: NSURLAuthenticationChallenge, fromLoginsProvider loginsProvider: BrowserLogins) -> Deferred<Maybe<NSURLCredential?>> {
+    static func findMatchingCredentialsForChallenge(_ challenge: NSURLAuthenticationChallenge, fromLoginsProvider loginsProvider: BrowserLogins) -> Deferred<Maybe<NSURLCredential?>> {
         return loginsProvider.getLoginsForProtectionSpace(challenge.protectionSpace) >>== { cursor in
             guard cursor.count >= 1 else {
                 return deferMaybe(nil)
@@ -96,7 +96,7 @@ class Authenticator {
         }
     }
 
-    private static func promptForUsernamePassword(viewController: UIViewController, credentials: NSURLCredential?, protectionSpace: NSURLProtectionSpace, loginsHelper: LoginsHelper?) -> Deferred<Maybe<LoginData>> {
+    fileprivate static func promptForUsernamePassword(_ viewController: UIViewController, credentials: NSURLCredential?, protectionSpace: NSURLProtectionSpace, loginsHelper: LoginsHelper?) -> Deferred<Maybe<LoginData>> {
         if protectionSpace.host.isEmpty {
             print("Unable to show a password prompt without a hostname")
             return deferMaybe(LoginDataError(description: "Unable to show a password prompt without a hostname"))
@@ -117,10 +117,10 @@ class Authenticator {
 
         // Add a button to log in.
         let action = UIAlertAction(title: LogInButtonTitle,
-            style: UIAlertActionStyle.Default) { (action) -> Void in
-                guard let user = alert.textFields?[0].text, pass = alert.textFields?[1].text else { deferred.fill(Maybe(failure: LoginDataError(description: "Username and Password required"))); return }
+            style: UIAlertActionStyle.default) { (action) -> Void in
+                guard let user = alert.textFields?[0].text, let pass = alert.textFields?[1].text else { deferred.fill(Maybe(failure: LoginDataError(description: "Username and Password required"))); return }
 
-                let login = Login.createWithCredential(NSURLCredential(user: user, password: pass, persistence: .ForSession), protectionSpace: protectionSpace)
+                let login = Login.createWithCredential(URLCredential(user: user, password: pass, persistence: .ForSession), protectionSpace: protectionSpace)
                 deferred.fill(Maybe(success: login))
                 loginsHelper?.setCredentials(login)
         }
@@ -133,15 +133,15 @@ class Authenticator {
         alert.addAction(cancel)
 
         // Add a username textfield.
-        alert.addTextFieldWithConfigurationHandler { (textfield) -> Void in
+        alert.addTextField { (textfield) -> Void in
             textfield.placeholder = NSLocalizedString("Username", comment: "Username textbox in Authentication prompt")
             textfield.text = credentials?.user
         }
 
         // Add a password textfield.
-        alert.addTextFieldWithConfigurationHandler { (textfield) -> Void in
+        alert.addTextField { (textfield) -> Void in
             textfield.placeholder = NSLocalizedString("Password", comment: "Password textbox in Authentication prompt")
-            textfield.secureTextEntry = true
+            textfield.isSecureTextEntry = true
             textfield.text = credentials?.password
         }
 

@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-public class BasePayloadJSON: JSON {
+open class BasePayloadJSON: JSON {
     required public init(_ jsonString: String) {
         super.init(JSON.parse(jsonString))
     }
@@ -15,7 +15,7 @@ public class BasePayloadJSON: JSON {
     }
 
     // Override me.
-    private func isValid() -> Bool {
+    fileprivate func isValid() -> Bool {
         return !isError
     }
 }
@@ -25,17 +25,17 @@ public class BasePayloadJSON: JSON {
  * "In addition to these custom collection object structures, the
  *  Encrypted DataObject adds fields like id and deleted."
  */
-public class CleartextPayloadJSON: BasePayloadJSON {
+open class CleartextPayloadJSON: BasePayloadJSON {
     // Override me.
-    override public func isValid() -> Bool {
+    override open func isValid() -> Bool {
         return super.isValid() && self["id"].isString
     }
 
-    public var id: String {
+    open var id: String {
         return self["id"].asString!
     }
 
-    public var deleted: Bool {
+    open var deleted: Bool {
         let d = self["deleted"]
         if d.isBool {
             return d.asBool!
@@ -46,7 +46,7 @@ public class CleartextPayloadJSON: BasePayloadJSON {
 
     // Override me.
     // Doesn't check id. Should it?
-    public func equalPayloads (obj: CleartextPayloadJSON) -> Bool {
+    open func equalPayloads (_ obj: CleartextPayloadJSON) -> Bool {
         return self.deleted == obj.deleted
     }
 }

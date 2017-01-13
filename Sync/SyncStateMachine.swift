@@ -41,7 +41,7 @@ private let DefaultEngines: [String: Int] = [
 private let DefaultDeclined: [String] = [String]()
 
 // public for testing.
-public func createMetaGlobalWithEngineConfiguration(engineConfiguration: EngineConfiguration) -> MetaGlobal {
+public func createMetaGlobalWithEngineConfiguration(_ engineConfiguration: EngineConfiguration) -> MetaGlobal {
     var engines: [String: EngineMeta] = [:]
     for engine in engineConfiguration.enabled {
         // We take this device's version, or, if we don't know the correct version, 0.  Another client should recognize
@@ -68,7 +68,7 @@ public typealias ReadyDeferred = Deferred<Maybe<Ready>>
 // acknowledge that a Sync client occasionally must migrate between two servers, preserving
 // some state from the last.
 // The resultant 'Ready' will be able to provide a suitably initialized storage client.
-public class SyncStateMachine {
+open class SyncStateMachine {
     // The keys are used as a set, to prevent cycles in the state machine.
     var stateLabelsSeen = [SyncStateLabel: Bool]()
     var stateLabelSequence = [SyncStateLabel]()
@@ -79,13 +79,13 @@ public class SyncStateMachine {
         self.scratchpadPrefs = prefs.branch("scratchpad")
     }
 
-    public class func clearStateFromPrefs(prefs: Prefs) {
+    open class func clearStateFromPrefs(_ prefs: Prefs) {
         log.debug("Clearing all Sync prefs.")
         Scratchpad.clearFromPrefs(prefs.branch("scratchpad")) // XXX this is convoluted.
         prefs.clearAll()
     }
 
-    private func advanceFromState(state: SyncState) -> ReadyDeferred {
+    fileprivate func advanceFromState(_ state: SyncState) -> ReadyDeferred {
         log.info("advanceFromState: \(state.label)")
 
         // Record visibility before taking any action.
@@ -105,8 +105,8 @@ public class SyncStateMachine {
         return state.advance() >>== self.advanceFromState
     }
 
-    public func toReady(authState: SyncAuthState) -> ReadyDeferred {
-        let token = authState.token(NSDate.now(), canBeExpired: false)
+    open func toReady(_ authState: SyncAuthState) -> ReadyDeferred {
+        let token = authState.token(Date.now(), canBeExpired: false)
         return chainDeferred(token, f: { (token, kB) in
             log.debug("Got token from auth state.")
             if Logger.logPII {
@@ -212,15 +212,15 @@ public protocol SyncState {
 /*
  * Base classes to avoid repeating initializers all over the place.
  */
-public class BaseSyncState: SyncState {
-    public var label: SyncStateLabel { return SyncStateLabel.Stub }
+open class BaseSyncState: SyncState {
+    open var label: SyncStateLabel { return SyncStateLabel.Stub }
 
-    public let client: Sync15StorageClient!
+    open let client: Sync15StorageClient!
     let token: TokenServerToken    // Maybe expired.
     var scratchpad: Scratchpad
 
     // TODO: 304 for i/c.
-    public func getInfoCollections() -> Deferred<Maybe<InfoCollections>> {
+    open func getInfoCollections() -> Deferred<Maybe<InfoCollections>> {
         return chain(self.client.getInfoCollections(), f: {
             return $0.value
         })
@@ -233,7 +233,7 @@ public class BaseSyncState: SyncState {
         log.info("Inited \(self.label.rawValue)")
     }
 
-    public func synchronizer<T: Synchronizer>(synchronizerClass: T.Type, delegate: SyncDelegate, prefs: Prefs) -> T {
+    open func synchronizer<T: Synchronizer>(_ synchronizerClass: T.Type, delegate: SyncDelegate, prefs: Prefs) -> T {
         return T(scratchpad: self.scratchpad, delegate: delegate, basePrefs: prefs)
     }
 
@@ -249,13 +249,13 @@ public class BaseSyncState: SyncState {
         log.info("Inited \(self.label.rawValue)")
     }
 
-    public func advance() -> Deferred<Maybe<SyncState>> {
+    open func advance() -> Deferred<Maybe<SyncState>> {
         return deferMaybe(StubStateError())
     }
 }
 
-public class BaseSyncStateWithInfo: BaseSyncState {
-    public let info: InfoCollections
+open class BaseSyncStateWithInfo: BaseSyncState {
+    open let info: InfoCollections
 
     init(client: Sync15StorageClient, scratchpad: Scratchpad, token: TokenServerToken, info: InfoCollections) {
         self.info = info
@@ -273,56 +273,56 @@ public class BaseSyncStateWithInfo: BaseSyncState {
  */
 public protocol SyncError: MaybeErrorType {}
 
-public class UnknownError: SyncError {
-    public var description: String {
+open class UnknownError: SyncError {
+    open var description: String {
         return "Unknown error."
     }
 }
 
-public class StateMachineCycleError: SyncError {
-    public var description: String {
+open class StateMachineCycleError: SyncError {
+    open var description: String {
         return "The Sync state machine encountered a cycle. This is a coding error."
     }
 }
 
-public class CouldNotFetchMetaGlobalError: SyncError {
-    public var description: String {
+open class CouldNotFetchMetaGlobalError: SyncError {
+    open var description: String {
         return "Could not fetch meta/global."
     }
 }
 
-public class CouldNotFetchKeysError: SyncError {
-    public var description: String {
+open class CouldNotFetchKeysError: SyncError {
+    open var description: String {
         return "Could not fetch crypto/keys."
     }
 }
 
-public class StubStateError: SyncError {
-    public var description: String {
+open class StubStateError: SyncError {
+    open var description: String {
         return "Unexpectedly reached a stub state. This is a coding error."
     }
 }
 
-public class ClientUpgradeRequiredError: SyncError {
+open class ClientUpgradeRequiredError: SyncError {
     let targetStorageVersion: Int
 
     public init(target: Int) {
         self.targetStorageVersion = target
     }
 
-    public var description: String {
+    open var description: String {
         return "Client upgrade required to work with storage version \(self.targetStorageVersion)."
     }
 }
 
-public class InvalidKeysError: SyncError {
+open class InvalidKeysError: SyncError {
     let keys: Keys
 
     public init(_ keys: Keys) {
         self.keys = keys
     }
 
-    public var description: String {
+    open var description: String {
         return "Downloaded crypto/keys, but couldn't parse them."
     }
 }
@@ -342,8 +342,8 @@ public protocol RecoverableSyncState: SyncState {
  * server's meta/global; if an engine is selected locally but not declined
  * remotely, then we'll need to upload a new meta/global and sync that engine.
  */
-public class ChangedServerError: RecoverableSyncState {
-    public var label: SyncStateLabel { return SyncStateLabel.ChangedServer }
+open class ChangedServerError: RecoverableSyncState {
+    open var label: SyncStateLabel { return SyncStateLabel.ChangedServer }
 
     let newToken: TokenServerToken
     let newScratchpad: Scratchpad
@@ -353,7 +353,7 @@ public class ChangedServerError: RecoverableSyncState {
         self.newScratchpad = Scratchpad(b: scratchpad.syncKeyBundle, persistingTo: scratchpad.prefs)
     }
 
-    public func advance() -> Deferred<Maybe<SyncState>> {
+    open func advance() -> Deferred<Maybe<SyncState>> {
         // TODO: mutate local storage to allow for a fresh start.
         let state = InitialWithLiveToken(scratchpad: newScratchpad.checkpoint(), token: newToken)
         return deferMaybe(state)
@@ -363,18 +363,18 @@ public class ChangedServerError: RecoverableSyncState {
 /**
  * Recovery: same as for changed server, but no need to upload a new meta/global.
  */
-public class SyncIDChangedError: RecoverableSyncState {
-    public var label: SyncStateLabel { return SyncStateLabel.SyncIDChanged }
+open class SyncIDChangedError: RecoverableSyncState {
+    open var label: SyncStateLabel { return SyncStateLabel.SyncIDChanged }
 
-    private let previousState: BaseSyncStateWithInfo
-    private let newMetaGlobal: Fetched<MetaGlobal>
+    fileprivate let previousState: BaseSyncStateWithInfo
+    fileprivate let newMetaGlobal: Fetched<MetaGlobal>
 
     public init(previousState: BaseSyncStateWithInfo, newMetaGlobal: Fetched<MetaGlobal>) {
         self.previousState = previousState
         self.newMetaGlobal = newMetaGlobal
     }
 
-    public func advance() -> Deferred<Maybe<SyncState>> {
+    open func advance() -> Deferred<Maybe<SyncState>> {
         // TODO: mutate local storage to allow for a fresh start.
         let s = self.previousState.scratchpad.evolve().setGlobal(self.newMetaGlobal).setKeys(nil).build().checkpoint()
         let state = HasMetaGlobal(client: self.previousState.client, scratchpad: s, token: self.previousState.token, info: self.previousState.info)
@@ -385,16 +385,16 @@ public class SyncIDChangedError: RecoverableSyncState {
 /**
  * Recovery: configure the server.
  */
-public class ServerConfigurationRequiredError: RecoverableSyncState {
-    public var label: SyncStateLabel { return SyncStateLabel.ServerConfigurationRequired }
+open class ServerConfigurationRequiredError: RecoverableSyncState {
+    open var label: SyncStateLabel { return SyncStateLabel.ServerConfigurationRequired }
 
-    private let previousState: BaseSyncStateWithInfo
+    fileprivate let previousState: BaseSyncStateWithInfo
 
     public init(previousState: BaseSyncStateWithInfo) {
         self.previousState = previousState
     }
 
-    public func advance() -> Deferred<Maybe<SyncState>> {
+    open func advance() -> Deferred<Maybe<SyncState>> {
         let client = self.previousState.client
         let s = self.previousState.scratchpad.evolve()
                 .setGlobal(nil)
@@ -418,68 +418,68 @@ public class ServerConfigurationRequiredError: RecoverableSyncState {
 /**
  * Recovery: wipe the server (perhaps unnecessarily) and proceed to configure the server.
  */
-public class FreshStartRequiredError: RecoverableSyncState {
-    public var label: SyncStateLabel { return SyncStateLabel.FreshStartRequired }
+open class FreshStartRequiredError: RecoverableSyncState {
+    open var label: SyncStateLabel { return SyncStateLabel.FreshStartRequired }
 
-    private let previousState: BaseSyncStateWithInfo
+    fileprivate let previousState: BaseSyncStateWithInfo
 
     public init(previousState: BaseSyncStateWithInfo) {
         self.previousState = previousState
     }
 
-    public func advance() -> Deferred<Maybe<SyncState>> {
+    open func advance() -> Deferred<Maybe<SyncState>> {
         let client = self.previousState.client
         return client.wipeStorage()
             >>> { return deferMaybe(ServerConfigurationRequiredError(previousState: self.previousState)) }
     }
 }
 
-public class MissingMetaGlobalError: RecoverableSyncState {
-    public var label: SyncStateLabel { return SyncStateLabel.MissingMetaGlobal }
+open class MissingMetaGlobalError: RecoverableSyncState {
+    open var label: SyncStateLabel { return SyncStateLabel.MissingMetaGlobal }
 
-    private let previousState: BaseSyncStateWithInfo
-
-    public init(previousState: BaseSyncStateWithInfo) {
-        self.previousState = previousState
-    }
-
-    public func advance() -> Deferred<Maybe<SyncState>> {
-        return deferMaybe(FreshStartRequiredError(previousState: self.previousState))
-    }
-}
-
-public class MissingCryptoKeysError: RecoverableSyncState {
-    public var label: SyncStateLabel { return SyncStateLabel.MissingCryptoKeys }
-
-    private let previousState: BaseSyncStateWithInfo
+    fileprivate let previousState: BaseSyncStateWithInfo
 
     public init(previousState: BaseSyncStateWithInfo) {
         self.previousState = previousState
     }
 
-    public func advance() -> Deferred<Maybe<SyncState>> {
+    open func advance() -> Deferred<Maybe<SyncState>> {
         return deferMaybe(FreshStartRequiredError(previousState: self.previousState))
     }
 }
 
-public class RemoteUpgradeRequired: RecoverableSyncState {
-    public var label: SyncStateLabel { return SyncStateLabel.RemoteUpgradeRequired }
+open class MissingCryptoKeysError: RecoverableSyncState {
+    open var label: SyncStateLabel { return SyncStateLabel.MissingCryptoKeys }
 
-    private let previousState: BaseSyncStateWithInfo
+    fileprivate let previousState: BaseSyncStateWithInfo
 
     public init(previousState: BaseSyncStateWithInfo) {
         self.previousState = previousState
     }
 
-    public func advance() -> Deferred<Maybe<SyncState>> {
+    open func advance() -> Deferred<Maybe<SyncState>> {
         return deferMaybe(FreshStartRequiredError(previousState: self.previousState))
     }
 }
 
-public class ClientUpgradeRequired: RecoverableSyncState {
-    public var label: SyncStateLabel { return SyncStateLabel.ClientUpgradeRequired }
+open class RemoteUpgradeRequired: RecoverableSyncState {
+    open var label: SyncStateLabel { return SyncStateLabel.RemoteUpgradeRequired }
 
-    private let previousState: BaseSyncStateWithInfo
+    fileprivate let previousState: BaseSyncStateWithInfo
+
+    public init(previousState: BaseSyncStateWithInfo) {
+        self.previousState = previousState
+    }
+
+    open func advance() -> Deferred<Maybe<SyncState>> {
+        return deferMaybe(FreshStartRequiredError(previousState: self.previousState))
+    }
+}
+
+open class ClientUpgradeRequired: RecoverableSyncState {
+    open var label: SyncStateLabel { return SyncStateLabel.ClientUpgradeRequired }
+
+    fileprivate let previousState: BaseSyncStateWithInfo
     let targetStorageVersion: Int
 
     public init(previousState: BaseSyncStateWithInfo, target: Int) {
@@ -487,7 +487,7 @@ public class ClientUpgradeRequired: RecoverableSyncState {
         self.targetStorageVersion = target
     }
 
-    public func advance() -> Deferred<Maybe<SyncState>> {
+    open func advance() -> Deferred<Maybe<SyncState>> {
         return deferMaybe(ClientUpgradeRequiredError(target: self.targetStorageVersion))
     }
 }
@@ -496,8 +496,8 @@ public class ClientUpgradeRequired: RecoverableSyncState {
  * Non-error states.
  */
 
-public class InitialWithLiveToken: BaseSyncState {
-    public override var label: SyncStateLabel { return SyncStateLabel.InitialWithLiveToken }
+open class InitialWithLiveToken: BaseSyncState {
+    open override var label: SyncStateLabel { return SyncStateLabel.InitialWithLiveToken }
 
     // This looks totally redundant, but try taking it out, I dare you.
     public override init(scratchpad: Scratchpad, token: TokenServerToken) {
@@ -509,11 +509,11 @@ public class InitialWithLiveToken: BaseSyncState {
         super.init(client: client, scratchpad: scratchpad, token: token)
     }
 
-    func advanceWithInfo(info: InfoCollections) -> SyncState {
+    func advanceWithInfo(_ info: InfoCollections) -> SyncState {
         return InitialWithLiveTokenAndInfo(scratchpad: self.scratchpad, token: self.token, info: info)
     }
 
-    override public func advance() -> Deferred<Maybe<SyncState>> {
+    override open func advance() -> Deferred<Maybe<SyncState>> {
         return chain(getInfoCollections(), f: self.advanceWithInfo)
     }
 }
@@ -534,20 +534,20 @@ public class InitialWithLiveToken: BaseSyncState {
  * This states are similar in purpose to GlobalSession.processMetaGlobal in Android Sync.
  */
 
-public class ResolveMetaGlobalVersion: BaseSyncStateWithInfo {
+open class ResolveMetaGlobalVersion: BaseSyncStateWithInfo {
     let fetched: Fetched<MetaGlobal>
 
     init(fetched: Fetched<MetaGlobal>, client: Sync15StorageClient, scratchpad: Scratchpad, token: TokenServerToken, info: InfoCollections) {
         self.fetched = fetched
         super.init(client: client, scratchpad: scratchpad, token: token, info: info)
     }
-    public override var label: SyncStateLabel { return SyncStateLabel.ResolveMetaGlobalVersion }
+    open override var label: SyncStateLabel { return SyncStateLabel.ResolveMetaGlobalVersion }
 
-    class func fromState(state: BaseSyncStateWithInfo, fetched: Fetched<MetaGlobal>) -> ResolveMetaGlobalVersion {
+    class func fromState(_ state: BaseSyncStateWithInfo, fetched: Fetched<MetaGlobal>) -> ResolveMetaGlobalVersion {
         return ResolveMetaGlobalVersion(fetched: fetched, client: state.client, scratchpad: state.scratchpad, token: state.token, info: state.info)
     }
 
-    override public func advance() -> Deferred<Maybe<SyncState>> {
+    override open func advance() -> Deferred<Maybe<SyncState>> {
         // First: check storage version.
         let v = fetched.value.storageVersion
         if v > StorageVersionCurrent {
@@ -566,20 +566,20 @@ public class ResolveMetaGlobalVersion: BaseSyncStateWithInfo {
     }
 }
 
-public class ResolveMetaGlobalContent: BaseSyncStateWithInfo {
+open class ResolveMetaGlobalContent: BaseSyncStateWithInfo {
     let fetched: Fetched<MetaGlobal>
 
     init(fetched: Fetched<MetaGlobal>, client: Sync15StorageClient, scratchpad: Scratchpad, token: TokenServerToken, info: InfoCollections) {
         self.fetched = fetched
         super.init(client: client, scratchpad: scratchpad, token: token, info: info)
     }
-    public override var label: SyncStateLabel { return SyncStateLabel.ResolveMetaGlobalContent }
+    open override var label: SyncStateLabel { return SyncStateLabel.ResolveMetaGlobalContent }
 
-    class func fromState(state: BaseSyncStateWithInfo, fetched: Fetched<MetaGlobal>) -> ResolveMetaGlobalContent {
+    class func fromState(_ state: BaseSyncStateWithInfo, fetched: Fetched<MetaGlobal>) -> ResolveMetaGlobalContent {
         return ResolveMetaGlobalContent(fetched: fetched, client: state.client, scratchpad: state.scratchpad, token: state.token, info: state.info)
     }
 
-    override public func advance() -> Deferred<Maybe<SyncState>> {
+    override open func advance() -> Deferred<Maybe<SyncState>> {
         // Check global syncID and contents.
         if let previous = self.scratchpad.global?.value {
             // Do checks that only apply when we're coming from a previous meta/global.
@@ -595,22 +595,22 @@ public class ResolveMetaGlobalContent: BaseSyncStateWithInfo {
             let previousEngines = Set(previous.engines.keys)
             let remoteEngines = Set(fetched.value.engines.keys)
 
-            for engine in previousEngines.subtract(remoteEngines) {
+            for engine in previousEngines.subtracting(remoteEngines) {
                 log.info("Remote meta/global disabled previously enabled engine \(engine).")
-                b.localCommands.insert(.DisableEngine(engine: engine))
+                b.localCommands.insert(.disableEngine(engine: engine))
             }
 
-            for engine in remoteEngines.subtract(previousEngines) {
+            for engine in remoteEngines.subtracting(previousEngines) {
                 log.info("Remote meta/global enabled previously disabled engine \(engine).")
-                b.localCommands.insert(.EnableEngine(engine: engine))
+                b.localCommands.insert(.enableEngine(engine: engine))
             }
 
-            for engine in remoteEngines.intersect(previousEngines) {
+            for engine in remoteEngines.intersection(previousEngines) {
                 let remoteEngine = fetched.value.engines[engine]!
                 let previousEngine = previous.engines[engine]!
                 if previousEngine.syncID != remoteEngine.syncID {
                     log.info("Remote sync ID for \(engine) has changed. Resetting local.")
-                    b.localCommands.insert(.ResetEngine(engine: engine))
+                    b.localCommands.insert(.resetEngine(engine: engine))
                 }
             }
 
@@ -624,7 +624,7 @@ public class ResolveMetaGlobalContent: BaseSyncStateWithInfo {
     }
 }
 
-private func processFailure(failure: MaybeErrorType?) -> MaybeErrorType {
+private func processFailure(_ failure: MaybeErrorType?) -> MaybeErrorType {
     if let failure = failure as? ServerInBackoffError {
         log.warning("Server in backoff. Bailing out. \(failure.description)")
         return failure
@@ -647,12 +647,12 @@ private func processFailure(failure: MaybeErrorType?) -> MaybeErrorType {
     return failure ?? UnknownError()
 }
 
-public class InitialWithLiveTokenAndInfo: BaseSyncStateWithInfo {
-    public override var label: SyncStateLabel { return SyncStateLabel.InitialWithLiveTokenAndInfo }
+open class InitialWithLiveTokenAndInfo: BaseSyncStateWithInfo {
+    open override var label: SyncStateLabel { return SyncStateLabel.InitialWithLiveTokenAndInfo }
 
     // This method basically hops over HasMetaGlobal, because it's not a state
     // that we expect consumers to know about.
-    override public func advance() -> Deferred<Maybe<SyncState>> {
+    override open func advance() -> Deferred<Maybe<SyncState>> {
         // Either m/g and c/k are in our local cache, and they're up-to-date with i/c,
         // or we need to fetch them.
         // Cached and not changed in i/c? Use that.
@@ -704,20 +704,20 @@ public class InitialWithLiveTokenAndInfo: BaseSyncStateWithInfo {
     }
 }
 
-public class HasMetaGlobal: BaseSyncStateWithInfo {
-    public override var label: SyncStateLabel { return SyncStateLabel.HasMetaGlobal }
+open class HasMetaGlobal: BaseSyncStateWithInfo {
+    open override var label: SyncStateLabel { return SyncStateLabel.HasMetaGlobal }
 
-    class func fromState(state: BaseSyncStateWithInfo) -> HasMetaGlobal {
+    class func fromState(_ state: BaseSyncStateWithInfo) -> HasMetaGlobal {
         return HasMetaGlobal(client: state.client, scratchpad: state.scratchpad, token: state.token, info: state.info)
     }
 
-    class func fromState(state: BaseSyncStateWithInfo, scratchpad: Scratchpad) -> HasMetaGlobal {
+    class func fromState(_ state: BaseSyncStateWithInfo, scratchpad: Scratchpad) -> HasMetaGlobal {
         return HasMetaGlobal(client: state.client, scratchpad: scratchpad, token: state.token, info: state.info)
     }
 
-    override public func advance() -> Deferred<Maybe<SyncState>> {
+    override open func advance() -> Deferred<Maybe<SyncState>> {
         // Check if crypto/keys is fresh in the cache already.
-        if let keys = self.scratchpad.keys where keys.value.valid {
+        if let keys = self.scratchpad.keys, keys.value.valid {
             if let cryptoModified = self.info.modified("crypto") {
                 // Both of these are server timestamps. If the record we stored was fetched after the last time the record was modified, as represented by the "crypto" entry in info/collections, and we're fetching from the
                 // same server, then the record must be identical, and we can use it directly.  If are ever additional records in the crypto collection, this will fetch keys too frequently.  In that case, we should use X-I-U-S and expect some 304 responses.
@@ -747,11 +747,11 @@ public class HasMetaGlobal: BaseSyncStateWithInfo {
     }
 }
 
-public class NeedsFreshCryptoKeys: BaseSyncStateWithInfo {
-    public override var label: SyncStateLabel { return SyncStateLabel.NeedsFreshCryptoKeys }
+open class NeedsFreshCryptoKeys: BaseSyncStateWithInfo {
+    open override var label: SyncStateLabel { return SyncStateLabel.NeedsFreshCryptoKeys }
     let staleCollectionKeys: Keys?
 
-    class func fromState(state: BaseSyncStateWithInfo, scratchpad: Scratchpad, staleCollectionKeys: Keys?) -> NeedsFreshCryptoKeys {
+    class func fromState(_ state: BaseSyncStateWithInfo, scratchpad: Scratchpad, staleCollectionKeys: Keys?) -> NeedsFreshCryptoKeys {
         return NeedsFreshCryptoKeys(client: state.client, scratchpad: scratchpad, token: state.token, info: state.info, keys: staleCollectionKeys)
     }
 
@@ -760,7 +760,7 @@ public class NeedsFreshCryptoKeys: BaseSyncStateWithInfo {
         super.init(client: client, scratchpad: scratchpad, token: token, info: info)
     }
 
-    override public func advance() -> Deferred<Maybe<SyncState>> {
+    override open func advance() -> Deferred<Maybe<SyncState>> {
         // Fetch crypto/keys.
         return self.client.getCryptoKeys(self.scratchpad.syncKeyBundle, ifUnmodifiedSince: nil).bind { result in
             if let resp = result.successValue {
@@ -789,11 +789,11 @@ public class NeedsFreshCryptoKeys: BaseSyncStateWithInfo {
     }
 }
 
-public class HasFreshCryptoKeys: BaseSyncStateWithInfo {
-    public override var label: SyncStateLabel { return SyncStateLabel.HasFreshCryptoKeys }
+open class HasFreshCryptoKeys: BaseSyncStateWithInfo {
+    open override var label: SyncStateLabel { return SyncStateLabel.HasFreshCryptoKeys }
     let collectionKeys: Keys
 
-    class func fromState(state: BaseSyncStateWithInfo, scratchpad: Scratchpad, collectionKeys: Keys) -> HasFreshCryptoKeys {
+    class func fromState(_ state: BaseSyncStateWithInfo, scratchpad: Scratchpad, collectionKeys: Keys) -> HasFreshCryptoKeys {
         return HasFreshCryptoKeys(client: state.client, scratchpad: scratchpad, token: state.token, info: state.info, keys: collectionKeys)
     }
 
@@ -802,7 +802,7 @@ public class HasFreshCryptoKeys: BaseSyncStateWithInfo {
         super.init(client: client, scratchpad: scratchpad, token: token, info: info)
     }
 
-    override public func advance() -> Deferred<Maybe<SyncState>> {
+    override open func advance() -> Deferred<Maybe<SyncState>> {
         return deferMaybe(Ready(client: self.client, scratchpad: self.scratchpad, token: self.token, info: self.info, keys: self.collectionKeys))
     }
 }
@@ -814,8 +814,8 @@ public protocol EngineStateChanges {
     func clearLocalCommands()
 }
 
-public class Ready: BaseSyncStateWithInfo {
-    public override var label: SyncStateLabel { return SyncStateLabel.Ready }
+open class Ready: BaseSyncStateWithInfo {
+    open override var label: SyncStateLabel { return SyncStateLabel.Ready }
     let collectionKeys: Keys
 
     public init(client: Sync15StorageClient, scratchpad: Scratchpad, token: TokenServerToken, info: InfoCollections, keys: Keys) {
@@ -829,41 +829,41 @@ extension Ready: EngineStateChanges {
         var needReset: Set<String> = Set()
         for command in self.scratchpad.localCommands {
             switch command {
-            case let .ResetAllEngines(except: except):
-                needReset.unionInPlace(Set(LocalEngines).subtract(except))
-            case let .ResetEngine(engine):
+            case let .resetAllEngines(except: except):
+                needReset.formUnion(Set(LocalEngines).subtracting(except))
+            case let .resetEngine(engine):
                 needReset.insert(engine)
-            case .EnableEngine, .DisableEngine:
+            case .enableEngine, .disableEngine:
                 break
             }
         }
-        return Array(needReset).sort()
+        return Array(needReset).sorted()
     }
 
     public func enginesEnabled() -> [String] {
         var engines: Set<String> = Set()
         for command in self.scratchpad.localCommands {
             switch command {
-            case let .EnableEngine(engine):
+            case let .enableEngine(engine):
                 engines.insert(engine)
             default:
                 break
             }
         }
-        return Array(engines).sort()
+        return Array(engines).sorted()
     }
 
     public func enginesDisabled() -> [String] {
         var engines: Set<String> = Set()
         for command in self.scratchpad.localCommands {
             switch command {
-            case let .DisableEngine(engine):
+            case let .disableEngine(engine):
                 engines.insert(engine)
             default:
                 break
             }
         }
-        return Array(engines).sort()
+        return Array(engines).sorted()
     }
 
     public func clearLocalCommands() {

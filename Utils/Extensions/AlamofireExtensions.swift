@@ -6,10 +6,10 @@ import Alamofire
 import Foundation
 
 public extension Alamofire.Manager {
-    public static func managerWithUserAgent(userAgent: String, configuration: NSURLSessionConfiguration) -> Alamofire.Manager {
-        var defaultHeaders = Alamofire.Manager.sharedInstance.session.configuration.HTTPAdditionalHeaders ?? [:]
+    public static func managerWithUserAgent(_ userAgent: String, configuration: URLSessionConfiguration) -> Alamofire.Manager {
+        var defaultHeaders = Alamofire.Manager.sharedInstance.session.configuration.httpAdditionalHeaders ?? [:]
         defaultHeaders["User-Agent"] = userAgent
-        configuration.HTTPAdditionalHeaders = defaultHeaders
+        configuration.httpAdditionalHeaders = defaultHeaders
 
         return Alamofire.Manager(configuration: configuration)
     }

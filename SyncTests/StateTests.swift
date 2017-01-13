@@ -8,7 +8,7 @@ import Shared
 
 import XCTest
 
-func compareScratchpads(tuple: (lhs: Scratchpad, rhs: Scratchpad)) {
+func compareScratchpads(_ tuple: (lhs: Scratchpad, rhs: Scratchpad)) {
     // This one is set in the constructor!
     XCTAssertEqual(tuple.lhs.syncKeyBundle, tuple.rhs.syncKeyBundle)
 
@@ -30,7 +30,7 @@ func compareScratchpads(tuple: (lhs: Scratchpad, rhs: Scratchpad)) {
     XCTAssertEqual(tuple.lhs.engineConfiguration, tuple.rhs.engineConfiguration)
 }
 
-func roundtrip(s: Scratchpad) -> (Scratchpad, rhs: Scratchpad) {
+func roundtrip(_ s: Scratchpad) -> (Scratchpad, rhs: Scratchpad) {
     let prefs = MockProfilePrefs()
     s.pickle(prefs)
     return (s, rhs: Scratchpad.restoreFromPrefs(prefs, syncKeyBundle: s.syncKeyBundle)!)

@@ -13,28 +13,28 @@ private let log = Logger.syncLogger
 private let DeviceRegistrationVersion = 1
 
 public enum FxADeviceRegistrationResult {
-    case Registered
-    case Updated
-    case AlreadyRegistered
+    case registered
+    case updated
+    case alreadyRegistered
 }
 
 public enum FxADeviceRegistratorError: MaybeErrorType {
-    case AccountDeleted
-    case CurrentDeviceNotFound
-    case InvalidSession
-    case UnknownDevice
+    case accountDeleted
+    case currentDeviceNotFound
+    case invalidSession
+    case unknownDevice
 
     public var description: String {
         switch self {
-        case AccountDeleted: return "Account no longer exists."
-        case CurrentDeviceNotFound: return "Current device not found."
-        case InvalidSession: return "Session token was invalid."
-        case UnknownDevice: return "Unknown device."
+        case .accountDeleted: return "Account no longer exists."
+        case .currentDeviceNotFound: return "Current device not found."
+        case .invalidSession: return "Session token was invalid."
+        case .unknownDevice: return "Unknown device."
         }
     }
 }
 
-public class FxADeviceRegistration: NSObject, NSCoding {
+open class FxADeviceRegistration: NSObject, NSCoding {
     /// The device identifier identifying this device.  A device is uniquely identified
     /// across the lifetime of a Firefox Account.
     let id: String
@@ -53,26 +53,25 @@ public class FxADeviceRegistration: NSObject, NSCoding {
     }
 
     public convenience required init(coder: NSCoder) {
-        let id = coder.decodeObjectForKey("id") as! String
-        let version = coder.decodeObjectForKey("version") as! Int
-        let lastRegistered = (coder.decodeObjectForKey("lastRegistered") as! NSNumber).unsignedLongLongValue
+        let id = coder.decodeObject(forKey: "id") as! String
+        let version = coder.decodeObject(forKey: "version") as! Int
+        let lastRegistered = (coder.decodeObject(forKey: "lastRegistered") as! NSNumber).uint64Value
         self.init(id: id, version: version, lastRegistered: lastRegistered)
     }
 
-    public func encodeWithCoder(aCoder: NSCoder) {
-        aCoder.encodeObject(id, forKey: "id")
-        aCoder.encodeObject(version, forKey: "version")
+    open func encode(with aCoder: NSCoder) {
+        aCoder.encode(id, forKey: "id")
+        aCoder.encode(version, forKey: "version")
         aCoder.encodeObject(NSNumber(unsignedLongLong: lastRegistered), forKey: "lastRegistered")
     }
 }
 
-public class FxADeviceRegistrator {
-    public static func registerOrUpdateDevice(account: FirefoxAccount, sessionToken: NSData, client: FxAClient10? = nil) -> Deferred<Maybe<FxADeviceRegistrationResult>> {
+open class FxADeviceRegistrator {
+    open static func registerOrUpdateDevice(_ account: FirefoxAccount, sessionToken: NSData, client: FxAClient10? = nil) -> Deferred<Maybe<FxADeviceRegistrationResult>> {
         // If we've already registered, the registration version is up-to-date, *and* we've (re-)registered
         // within the last week, do nothing. We re-register weekly as a sanity check.
-        if let registration = account.deviceRegistration
-            where registration.version == DeviceRegistrationVersion &&
-            NSDate.now() < registration.lastRegistered + OneWeekInMilliseconds {
+        if let registration = account.deviceRegistration, registration.version == DeviceRegistrationVersion &&
+            Date.now() < registration.lastRegistered + OneWeekInMilliseconds {
                 return deferMaybe(FxADeviceRegistrationResult.AlreadyRegistered)
         }
 
@@ -82,10 +81,10 @@ public class FxADeviceRegistrator {
         let registrationResult: FxADeviceRegistrationResult
         if let registration = account.deviceRegistration {
             device = FxADevice.forUpdate(name, id: registration.id)
-            registrationResult = FxADeviceRegistrationResult.Updated
+            registrationResult = FxADeviceRegistrationResult.updated
         } else {
             device = FxADevice.forRegister(name, type: "mobile")
-            registrationResult = FxADeviceRegistrationResult.Registered
+            registrationResult = FxADeviceRegistrationResult.registered
         }
 
         let registeredDevice = client.registerOrUpdateDevice(sessionToken, device: device)
@@ -128,7 +127,7 @@ public class FxADeviceRegistrator {
         }
     }
 
-    private static func recoverFromDeviceSessionConflict(account: FirefoxAccount, client: FxAClient10, sessionToken: NSData) -> Deferred<Maybe<FxADeviceRegistration>> {
+    fileprivate static func recoverFromDeviceSessionConflict(_ account: FirefoxAccount, client: FxAClient10, sessionToken: NSData) -> Deferred<Maybe<FxADeviceRegistration>> {
         // FxA has already associated this session with a different device id.
         // Perhaps we were beaten in a race to register. Handle the conflict:
         //   1. Fetch the list of devices for the current user from FxA.
@@ -146,7 +145,7 @@ public class FxADeviceRegistrator {
         }
     }
 
-    private static func recoverFromTokenError(account: FirefoxAccount, client: FxAClient10) -> Deferred<Maybe<FxADeviceRegistration>> {
+    fileprivate static func recoverFromTokenError(_ account: FirefoxAccount, client: FxAClient10) -> Deferred<Maybe<FxADeviceRegistration>> {
         return client.status(account.uid) >>== { status in
             if !status.exists {
                 // TODO: Should be in an "I have an iOS account, but the FxA is gone." state.
@@ -160,7 +159,7 @@ public class FxADeviceRegistrator {
         }
     }
 
-    private static func recoverFromUnknownDevice(account: FirefoxAccount) -> Deferred<Maybe<FxADeviceRegistration>> {
+    fileprivate static func recoverFromUnknownDevice(_ account: FirefoxAccount) -> Deferred<Maybe<FxADeviceRegistration>> {
         // FxA did not recognize the device ID. Handle it by clearing the registration on the account data.
         // At next sync or next sign-in, registration is retried and should succeed.
         log.warning("Unknown device ID. Clearing the local device data.")

@@ -12,12 +12,12 @@ struct NoImageModePrefsKey {
 }
 
 class NoImageModeHelper: TabHelper {
-    private weak var tab: Tab?
+    fileprivate weak var tab: Tab?
 
     required init(tab: Tab) {
         self.tab = tab
-        if let path = NSBundle.mainBundle().pathForResource("NoImageModeHelper", ofType: "js"), source = try? NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) as String {
-            let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentStart, forMainFrameOnly: true)
+        if let path = Bundle.main.path(forResource: "NoImageModeHelper", ofType: "js"), let source = try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String {
+            let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.atDocumentStart, forMainFrameOnly: true)
             tab.webView!.configuration.userContentController.addUserScript(userScript)
         }
     }
@@ -30,15 +30,15 @@ class NoImageModeHelper: TabHelper {
         return "NoImageMode"
     }
 
-    func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
         // Do nothing.
     }
 
-    static func isNoImageModeAvailable(state: AppState) -> Bool {
+    static func isNoImageModeAvailable(_ state: AppState) -> Bool {
         return state.prefs.boolForKey(NoImageModePrefsKey.NoImageModeButtonIsInMenu) ?? AppConstants.MOZ_NO_IMAGE_MODE
     }
 
-    static func isNoImageModeActivated(state: AppState) -> Bool {
+    static func isNoImageModeActivated(_ state: AppState) -> Bool {
         return state.prefs.boolForKey(NoImageModePrefsKey.NoImageModeStatus) ?? false
     }
 }

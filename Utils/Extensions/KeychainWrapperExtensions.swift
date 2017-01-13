@@ -6,7 +6,7 @@ import Foundation
 import SwiftKeychainWrapper
 
 let baseBundleIdentifier = AppInfo.baseBundleIdentifier()!
-let accessGroupPrefix = NSBundle.mainBundle().objectForInfoDictionaryKey("AppIdentifierPrefix") as! String
+let accessGroupPrefix = Bundle.main.object(forInfoDictionaryKey: "AppIdentifierPrefix") as! String
 let accessGroupIdentifier = AppInfo.keychainAccessGroupWithPrefix(accessGroupPrefix)!
 private var sharedAppKeychainWrapper = KeychainWrapper(serviceName: baseBundleIdentifier, accessGroup: accessGroupIdentifier)
 

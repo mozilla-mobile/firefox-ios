@@ -12,17 +12,17 @@ import Deferred
 import XCTest
 
 
-public class TabManagerMockProfile: MockProfile {
+open class TabManagerMockProfile: MockProfile {
     var numberOfTabsStored = 0
-    override func storeTabs(tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
+    override func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
         numberOfTabsStored = tabs.count
         return deferMaybe(tabs.count)
     }
 }
 
-public class MockTabManagerStateDelegate: TabManagerStateDelegate {
+open class MockTabManagerStateDelegate: TabManagerStateDelegate {
     var numberOfTabsStored = 0
-    func tabManagerWillStoreTabs(tabs: [Tab]) {
+    func tabManagerWillStoreTabs(_ tabs: [Tab]) {
         numberOfTabsStored = tabs.count
     }
 }
@@ -49,8 +49,8 @@ class TabManagerTests: XCTestCase {
         // add some non-private tabs to the tab manager
         for _ in 0..<3 {
             let tab = Tab(configuration: configuration)
-            tab.url = NSURL(string: "http://yahoo.com")!
-            manager.configureTab(tab, request: NSURLRequest(URL: tab.url!), flushToDisk: false, zombie: false)
+            tab.url = URL(string: "http://yahoo.com")!
+            manager.configureTab(tab, request: URLRequest(URL: tab.url!), flushToDisk: false, zombie: false)
         }
 
         manager.storeChanges()
@@ -70,8 +70,8 @@ class TabManagerTests: XCTestCase {
         // add some non-private tabs to the tab manager
         for _ in 0..<3 {
             let tab = Tab(configuration: configuration, isPrivate: true)
-            tab.url = NSURL(string: "http://yahoo.com")!
-            manager.configureTab(tab, request: NSURLRequest(URL: tab.url!), flushToDisk: false, zombie: false)
+            tab.url = URL(string: "http://yahoo.com")!
+            manager.configureTab(tab, request: URLRequest(URL: tab.url!), flushToDisk: false, zombie: false)
         }
 
         manager.storeChanges()

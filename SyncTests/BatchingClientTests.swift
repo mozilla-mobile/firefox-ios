@@ -10,14 +10,14 @@ import Deferred
 import XCTest
 
 // Always return a gigantic encoded payload.
-private func massivify<T>(record: Record<T>) -> JSON? {
+private func massivify<T>(_ record: Record<T>) -> JSON? {
     return JSON([
         "id": record.id,
         "foo": String(count: Sync15StorageClient.maxRecordSizeBytes + 1, repeatedValue: "X" as Character)
     ])
 }
 
-private func basicSerializer<T>(record: Record<T>) -> String {
+private func basicSerializer<T>(_ record: Record<T>) -> String {
     return JSON([
         "id": record.id,
         "payload": record.payload
@@ -25,7 +25,7 @@ private func basicSerializer<T>(record: Record<T>) -> String {
 }
 
 // Create a basic record with an ID and a title that is the `Site$ID`.
-private func createRecordWithID(id: String) -> Record<CleartextPayloadJSON> {
+private func createRecordWithID(_ id: String) -> Record<CleartextPayloadJSON> {
     let jsonString = "{\"id\":\"\(id)\",\"title\": \"\(id)\"}"
     return Record<CleartextPayloadJSON>(id: id,
                                         payload: CleartextPayloadJSON(JSON.parse(jsonString)),
@@ -34,20 +34,20 @@ private func createRecordWithID(id: String) -> Record<CleartextPayloadJSON> {
                                         ttl: 1_000_000)
 }
 
-private func assertLinesMatchRecords<T>(lines: [String], records: [Record<T>], serializer: (Record<T>) -> String) {
+private func assertLinesMatchRecords<T>(_ lines: [String], records: [Record<T>], serializer: (Record<T>) -> String) {
     guard lines.count == records.count else {
         XCTFail("Number of lines mismatch number of records")
         return
     }
 
-    lines.enumerate().forEach { index, line in
+    lines.enumerated().forEach { index, line in
         let record = records[index]
         XCTAssertEqual(line, serializer(record))
     }
 }
 
 
-private func deferEmptyResponse(batchToken batchToken: BatchToken? = nil, lastModified: Timestamp? = nil) -> Deferred<Maybe<StorageResponse<POSTResult>>> {
+private func deferEmptyResponse(batchToken: BatchToken? = nil, lastModified: Timestamp? = nil) -> Deferred<Maybe<StorageResponse<POSTResult>>> {
     var headers = [String: NSNumber]()
     if let lastModified = lastModified {
         headers["X-Last-Modified"] = NSNumber(unsignedLongLong: lastModified)
@@ -59,7 +59,7 @@ private func deferEmptyResponse(batchToken batchToken: BatchToken? = nil, lastMo
 }
 
 // Small helper operator for comparing query parameters below
-private func ==(param1: NSURLQueryItem, param2: NSURLQueryItem) -> Bool {
+private func ==(param1: URLQueryItem, param2: URLQueryItem) -> Bool {
     return param1.name == param2.name && param1.value == param2.value
 }
 
@@ -75,7 +75,7 @@ class Sync15BatchClientTests: XCTestCase {
                                       ifUnmodifiedSince: nil,
                                       serializeRecord: serializeRecord,
                                       uploader: uploader,
-                                      onCollectionUploaded: { _ in deferMaybe(NSDate.now())})
+                                      onCollectionUploaded: { _ in deferMaybe(Date.now())})
 
         let record = createRecordWithID("A")
         let result = batch.addRecords([record]).value
@@ -89,7 +89,7 @@ class Sync15BatchClientTests: XCTestCase {
                                       ifUnmodifiedSince: nil,
                                       serializeRecord: { _ in nil },
                                       uploader: uploader,
-                                      onCollectionUploaded: { _ in deferMaybe(NSDate.now())})
+                                      onCollectionUploaded: { _ in deferMaybe(Date.now())})
 
         let record = createRecordWithID("A")
         let result = batch.addRecords([record]).value
@@ -115,7 +115,7 @@ class Sync15BatchClientTests: XCTestCase {
                                       ifUnmodifiedSince: 10_000,
                                       serializeRecord: basicSerializer,
                                       uploader: uploader,
-                                      onCollectionUploaded: { _ in deferMaybe(NSDate.now())})
+                                      onCollectionUploaded: { _ in deferMaybe(Date.now())})
 
         let record = createRecordWithID("A")
         batch.addRecords([record]).succeeded()
@@ -164,7 +164,7 @@ class Sync15BatchClientTests: XCTestCase {
                                       ifUnmodifiedSince: 10_000_000,
                                       serializeRecord: basicSerializer,
                                       uploader: uploader,
-                                      onCollectionUploaded: { _ in deferMaybe(NSDate.now())})
+                                      onCollectionUploaded: { _ in deferMaybe(Date.now())})
 
         let recordA = createRecordWithID("A")
         let recordB = createRecordWithID("B")

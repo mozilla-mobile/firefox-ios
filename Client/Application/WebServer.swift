@@ -19,20 +19,20 @@ class WebServer {
     }
 
     /// The private credentials for accessing resources on this Web server.
-    let credentials: NSURLCredential
+    let credentials: URLCredential
 
     /// A random, transient token used for authenticating requests.
     /// Other apps are able to make requests to our local Web server,
     /// so this prevents them from accessing any resources.
-    private let sessionToken = NSUUID().UUIDString
+    fileprivate let sessionToken = UUID().uuidString
 
     init() {
-        credentials = NSURLCredential(user: sessionToken, password: "", persistence: .ForSession)
+        credentials = URLCredential(user: sessionToken, password: "", persistence: .forSession)
     }
 
     func start() throws -> Bool {
-        if !server.running {
-            try server.startWithOptions([
+        if !server.isRunning {
+            try server.start(options: [
                 GCDWebServerOption_Port: 6571,
                 GCDWebServerOption_BindToLocalhost: true,
                 GCDWebServerOption_AutomaticallySuspendInBackground: true,
@@ -40,40 +40,40 @@ class WebServer {
                 GCDWebServerOption_AuthenticationAccounts: [sessionToken: ""]
             ])
         }
-        return server.running
+        return server.isRunning
     }
 
     /// Convenience method to register a dynamic handler. Will be mounted at $base/$module/$resource
-    func registerHandlerForMethod(method: String, module: String, resource: String, handler: (request: GCDWebServerRequest!) -> GCDWebServerResponse!) {
+    func registerHandlerForMethod(_ method: String, module: String, resource: String, handler: @escaping (_ request: GCDWebServerRequest?) -> GCDWebServerResponse!) {
         // Prevent serving content if the requested host isn't a whitelisted local host.
         let wrappedHandler = {(request: GCDWebServerRequest!) -> GCDWebServerResponse! in
             guard request.URL.isLocal else {
                 return GCDWebServerResponse(statusCode: 403)
             }
 
-            return handler(request: request)
+            return handler(request)
         }
 
-        server.addHandlerForMethod(method, path: "/\(module)/\(resource)", requestClass: GCDWebServerRequest.self, processBlock: wrappedHandler)
+        server.addHandler(forMethod: method, path: "/\(module)/\(resource)", request: GCDWebServerRequest.self, processBlock: wrappedHandler)
     }
 
     /// Convenience method to register a resource in the main bundle. Will be mounted at $base/$module/$resource
-    func registerMainBundleResource(resource: String, module: String) {
-        if let path = NSBundle.mainBundle().pathForResource(resource, ofType: nil) {
-            server.addGETHandlerForPath("/\(module)/\(resource)", filePath: path, isAttachment: false, cacheAge: UInt.max, allowRangeRequests: true)
+    func registerMainBundleResource(_ resource: String, module: String) {
+        if let path = Bundle.main.path(forResource: resource, ofType: nil) {
+            server.addGETHandler(forPath: "/\(module)/\(resource)", filePath: path, isAttachment: false, cacheAge: UInt.max, allowRangeRequests: true)
         }
     }
 
     /// Convenience method to register all resources in the main bundle of a specific type. Will be mounted at $base/$module/$resource
-    func registerMainBundleResourcesOfType(type: String, module: String) {
-        for path: NSString in NSBundle.pathsForResourcesOfType(type, inDirectory: NSBundle.mainBundle().bundlePath) {
+    func registerMainBundleResourcesOfType(_ type: String, module: String) {
+        for path: NSString in Bundle.paths(forResourcesOfType: type, inDirectory: Bundle.main.bundlePath) {
             let resource = path.lastPathComponent
-            server.addGETHandlerForPath("/\(module)/\(resource)", filePath: path as String, isAttachment: false, cacheAge: UInt.max, allowRangeRequests: true)
+            server.addGETHandler(forPath: "/\(module)/\(resource)", filePath: path as String, isAttachment: false, cacheAge: UInt.max, allowRangeRequests: true)
         }
     }
 
     /// Return a full url, as a string, for a resource in a module. No check is done to find out if the resource actually exist.
-    func URLForResource(resource: String, module: String) -> String {
+    func URLForResource(_ resource: String, module: String) -> String {
         return "\(base)/\(module)/\(resource)"
     }
 

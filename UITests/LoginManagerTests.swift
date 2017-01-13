@@ -8,7 +8,7 @@ import Storage
 
 class LoginManagerTests: KIFTestCase {
 
-    private var webRoot: String!
+    fileprivate var webRoot: String!
 
     override func setUp() {
         super.setUp()
@@ -25,20 +25,20 @@ class LoginManagerTests: KIFTestCase {
         BrowserUtils.resetToAboutHome(tester())
     }
 
-    private func openLoginManager() {
-        tester().tapViewWithAccessibilityLabel("Show Tabs")
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("Settings")
-        tester().tapViewWithAccessibilityLabel("Logins")
+    fileprivate func openLoginManager() {
+        tester().tapView(withAccessibilityLabel: "Show Tabs")
+        tester().tapView(withAccessibilityLabel: "Menu")
+        tester().tapView(withAccessibilityLabel: "Settings")
+        tester().tapView(withAccessibilityLabel: "Logins")
     }
 
-    private func closeLoginManager() {
-        tester().tapViewWithAccessibilityLabel("Back")
-        tester().tapViewWithAccessibilityLabel("Done")
-        tester().tapViewWithAccessibilityLabel("home")
+    fileprivate func closeLoginManager() {
+        tester().tapView(withAccessibilityLabel: "Back")
+        tester().tapView(withAccessibilityLabel: "Done")
+        tester().tapView(withAccessibilityLabel: "home")
     }
 
-    private func generateLogins() {
+    fileprivate func generateLogins() {
         let profile = (UIApplication.sharedApplication().delegate as! AppDelegate).profile!
 
         let prefixes = "abcdefghijk"
@@ -55,7 +55,7 @@ class LoginManagerTests: KIFTestCase {
         }
     }
 
-    private func generateStringListWithFormat(format: String, numRange: Range<Int>, prefixes: String) -> [String] {
+    fileprivate func generateStringListWithFormat(_ format: String, numRange: Range<Int>, prefixes: String) -> [String] {
         return prefixes.characters.map { char in
             return numRange.map { num in
                 return String(format: format, "\(char)", num)
@@ -63,7 +63,7 @@ class LoginManagerTests: KIFTestCase {
         } .flatMap { $0 }
     }
 
-    private func clearLogins() {
+    fileprivate func clearLogins() {
         let profile = (UIApplication.sharedApplication().delegate as! AppDelegate).profile!
         profile.logins.removeAll().value
     }
@@ -71,59 +71,59 @@ class LoginManagerTests: KIFTestCase {
     func testListFiltering() {
         openLoginManager()
         
-        var list = tester().waitForViewWithAccessibilityIdentifier("Login List") as! UITableView
+        var list = tester().waitForView(withAccessibilityIdentifier: "Login List") as! UITableView
         
         // Filter by username
-        tester().waitForViewWithAccessibilityLabel("a0@email.com, http://a0.com")
-        tester().tapViewWithAccessibilityLabel("Enter Search Mode")
+        tester().waitForView(withAccessibilityLabel: "a0@email.com, http://a0.com")
+        tester().tapView(withAccessibilityLabel: "Enter Search Mode")
         tester().waitForAnimationsToFinish()
         
         // In simulator, the typing is too fast for the screen to be updated properly -
         // pausing after 'password' (which all login password contains) to update the screen seems to make the test reliable
-        tester().enterTextIntoCurrentFirstResponder("k10")
+        tester().enterText(intoCurrentFirstResponder: "k10")
         tester().waitForAnimationsToFinish()
-        tester().enterTextIntoCurrentFirstResponder("@email.com")
+        tester().enterText(intoCurrentFirstResponder: "@email.com")
         tester().waitForAnimationsToFinish()
-        list = tester().waitForViewWithAccessibilityIdentifier("Login List") as! UITableView
-        tester().waitForViewWithAccessibilityLabel("k10@email.com")
+        list = tester().waitForView(withAccessibilityIdentifier: "Login List") as! UITableView
+        tester().waitForView(withAccessibilityLabel: "k10@email.com")
         
-        XCTAssertEqual(list.numberOfRowsInSection(0), 1)
+        XCTAssertEqual(list.numberOfRows(inSection: 0), 1)
         
-        tester().tapViewWithAccessibilityLabel("Clear Search")
+        tester().tapView(withAccessibilityLabel: "Clear Search")
         // Filter by hostname
-        tester().waitForViewWithAccessibilityLabel("a0@email.com, http://a0.com")
-        tester().tapViewWithAccessibilityLabel("Enter Search Mode")
+        tester().waitForView(withAccessibilityLabel: "a0@email.com, http://a0.com")
+        tester().tapView(withAccessibilityLabel: "Enter Search Mode")
         tester().waitForAnimationsToFinish()
-        tester().enterTextIntoCurrentFirstResponder("http://k10")
+        tester().enterText(intoCurrentFirstResponder: "http://k10")
         tester().waitForAnimationsToFinish()
-        tester().enterTextIntoCurrentFirstResponder(".com")
+        tester().enterText(intoCurrentFirstResponder: ".com")
         tester().waitForAnimationsToFinish()
-        list = tester().waitForViewWithAccessibilityIdentifier("Login List") as! UITableView
-        tester().waitForViewWithAccessibilityLabel("k10@email.com")
-        XCTAssertEqual(list.numberOfRowsInSection(0), 1)
+        list = tester().waitForView(withAccessibilityIdentifier: "Login List") as! UITableView
+        tester().waitForView(withAccessibilityLabel: "k10@email.com")
+        XCTAssertEqual(list.numberOfRows(inSection: 0), 1)
         
-        tester().tapViewWithAccessibilityLabel("Clear Search")
+        tester().tapView(withAccessibilityLabel: "Clear Search")
         // Filter by password
-        tester().waitForViewWithAccessibilityLabel("a0@email.com, http://a0.com")
-        tester().tapViewWithAccessibilityLabel("Enter Search Mode")
+        tester().waitForView(withAccessibilityLabel: "a0@email.com, http://a0.com")
+        tester().tapView(withAccessibilityLabel: "Enter Search Mode")
         tester().waitForAnimationsToFinish()
-        tester().enterTextIntoCurrentFirstResponder("password")
+        tester().enterText(intoCurrentFirstResponder: "password")
         tester().waitForAnimationsToFinish()
-        tester().enterTextIntoCurrentFirstResponder("d9")
-        list = tester().waitForViewWithAccessibilityIdentifier("Login List") as! UITableView
-        tester().waitForViewWithAccessibilityLabel("d9@email.com")
-        XCTAssertEqual(list.numberOfRowsInSection(0), 1)
+        tester().enterText(intoCurrentFirstResponder: "d9")
+        list = tester().waitForView(withAccessibilityIdentifier: "Login List") as! UITableView
+        tester().waitForView(withAccessibilityLabel: "d9@email.com")
+        XCTAssertEqual(list.numberOfRows(inSection: 0), 1)
         
-        tester().tapViewWithAccessibilityLabel("Clear Search")
+        tester().tapView(withAccessibilityLabel: "Clear Search")
         // Filter by something that doesn't match anything
-        tester().waitForViewWithAccessibilityLabel("a0@email.com, http://a0.com")
-        tester().tapViewWithAccessibilityLabel("Enter Search Mode")
-        tester().enterTextIntoCurrentFirstResponder("thisdoesntmatch")
-        tester().waitForViewWithAccessibilityIdentifier("Login List")
+        tester().waitForView(withAccessibilityLabel: "a0@email.com, http://a0.com")
+        tester().tapView(withAccessibilityLabel: "Enter Search Mode")
+        tester().enterText(intoCurrentFirstResponder: "thisdoesntmatch")
+        tester().waitForView(withAccessibilityIdentifier: "Login List")
         
         // KIFTest has a bug where waitForViewWithAccessibilityLabel causes the lists to appear again on device,
         // so checking the number of rows instead
-        tester().waitForViewWithAccessibilityLabel("No logins found")
+        tester().waitForView(withAccessibilityLabel: "No logins found")
         let loginCount = countOfRowsInTableView(list)
         XCTAssertEqual(loginCount, 0)
         
@@ -134,22 +134,22 @@ class LoginManagerTests: KIFTestCase {
         openLoginManager()
 
         // Swipe the index view to navigate to bottom section
-        tester().waitForViewWithAccessibilityLabel("a0@email.com, http://a0.com")
-        tester().swipeViewWithAccessibilityLabel("table index", inDirection: KIFSwipeDirection.Down)
-        tester().waitForViewWithAccessibilityLabel("k0@email.com, http://k0.com")
+        tester().waitForView(withAccessibilityLabel: "a0@email.com, http://a0.com")
+        tester().swipeView(withAccessibilityLabel: "table index", in: KIFSwipeDirection.down)
+        tester().waitForView(withAccessibilityLabel: "k0@email.com, http://k0.com")
         closeLoginManager()
     }
 
     func testDetailPasswordMenuOptions() {
         openLoginManager()
 
-        tester().waitForViewWithAccessibilityLabel("a0@email.com, http://a0.com")
-        tester().tapViewWithAccessibilityLabel("a0@email.com, http://a0.com")
+        tester().waitForView(withAccessibilityLabel: "a0@email.com, http://a0.com")
+        tester().tapView(withAccessibilityLabel: "a0@email.com, http://a0.com")
 
-        tester().waitForViewWithAccessibilityLabel("password")
+        tester().waitForView(withAccessibilityLabel: "password")
 
-        let list = tester().waitForViewWithAccessibilityIdentifier("Login Detail List") as! UITableView
-        var passwordCell = list.cellForRowAtIndexPath(NSIndexPath(forRow: 2, inSection: 0)) as! LoginTableViewCell
+        let list = tester().waitForView(withAccessibilityIdentifier: "Login Detail List") as! UITableView
+        var passwordCell = list.cellForRowAtIndexPath(IndexPath(forRow: 2, inSection: 0)) as! LoginTableViewCell
 
         // longPressViewWithAcessibilityLabel fails when called directly because the cell is not a descendant in the
         // responder chain since it's a cell so instead use the underlying longPressAtPoint method.
@@ -158,41 +158,41 @@ class LoginManagerTests: KIFTestCase {
 
         // Tap the 'Reveal' menu option
         passwordCell.longPressAtPoint(centerOfCell, duration: 1)
-        tester().waitForViewWithAccessibilityLabel("Reveal")
-        tester().tapViewWithAccessibilityLabel("Reveal")
+        tester().waitForView(withAccessibilityLabel: "Reveal")
+        tester().tapView(withAccessibilityLabel: "Reveal")
 
-        passwordCell = list.cellForRowAtIndexPath(NSIndexPath(forRow: 2, inSection: 0)) as! LoginTableViewCell
+        passwordCell = list.cellForRowAtIndexPath(IndexPath(forRow: 2, inSection: 0)) as! LoginTableViewCell
         XCTAssertFalse(passwordCell.descriptionLabel.secureTextEntry)
 
         // Tap the 'Hide' menu option
         passwordCell.longPressAtPoint(centerOfCell, duration: 2)
-        tester().waitForViewWithAccessibilityLabel("Hide")
-        tester().tapViewWithAccessibilityLabel("Hide")
+        tester().waitForView(withAccessibilityLabel: "Hide")
+        tester().tapView(withAccessibilityLabel: "Hide")
 
-        passwordCell = list.cellForRowAtIndexPath(NSIndexPath(forRow: 2, inSection: 0)) as! LoginTableViewCell
+        passwordCell = list.cellForRowAtIndexPath(IndexPath(forRow: 2, inSection: 0)) as! LoginTableViewCell
         XCTAssertTrue(passwordCell.descriptionLabel.secureTextEntry)
 
         // Tap the 'Copy' menu option
         passwordCell.longPressAtPoint(centerOfCell, duration: 2)
-        tester().waitForViewWithAccessibilityLabel("Copy")
-        tester().tapViewWithAccessibilityLabel("Copy")
+        tester().waitForView(withAccessibilityLabel: "Copy")
+        tester().tapView(withAccessibilityLabel: "Copy")
 
-        XCTAssertEqual(UIPasteboard.generalPasteboard().string, "passworda0")
+        XCTAssertEqual(UIPasteboard.general.string, "passworda0")
 
-        tester().tapViewWithAccessibilityLabel("Back")
+        tester().tapView(withAccessibilityLabel: "Back")
         closeLoginManager()
     }
 
     func testDetailWebsiteMenuCopy() {
         openLoginManager()
 
-        tester().waitForViewWithAccessibilityLabel("a0@email.com, http://a0.com")
-        tester().tapViewWithAccessibilityLabel("a0@email.com, http://a0.com")
+        tester().waitForView(withAccessibilityLabel: "a0@email.com, http://a0.com")
+        tester().tapView(withAccessibilityLabel: "a0@email.com, http://a0.com")
 
-        tester().waitForViewWithAccessibilityLabel("password")
+        tester().waitForView(withAccessibilityLabel: "password")
 
-        let list = tester().waitForViewWithAccessibilityIdentifier("Login Detail List") as! UITableView
-        let websiteCell = list.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0)) as! LoginTableViewCell
+        let list = tester().waitForView(withAccessibilityIdentifier: "Login Detail List") as! UITableView
+        let websiteCell = list.cellForRowAtIndexPath(IndexPath(forRow: 0, inSection: 0)) as! LoginTableViewCell
 
         // longPressViewWithAcessibilityLabel fails when called directly because the cell is not a descendant in the
         // responder chain since it's a cell so instead use the underlying longPressAtPoint method.
@@ -201,31 +201,31 @@ class LoginManagerTests: KIFTestCase {
         // Tap the 'Copy' menu option
         websiteCell.longPressAtPoint(centerOfCell, duration: 1)
         websiteCell.longPressAtPoint(centerOfCell, duration: 1)
-        tester().waitForViewWithAccessibilityLabel("Copy")
-        tester().tapViewWithAccessibilityLabel("Copy")
+        tester().waitForView(withAccessibilityLabel: "Copy")
+        tester().tapView(withAccessibilityLabel: "Copy")
 
-        XCTAssertEqual(UIPasteboard.generalPasteboard().string, "http://a0.com")
+        XCTAssertEqual(UIPasteboard.general.string, "http://a0.com")
 
         // Tap the 'Open & Fill' menu option - just checks to make sure we navigate to the web page
         websiteCell.longPressAtPoint(centerOfCell, duration: 1)
-        tester().waitForViewWithAccessibilityLabel("Open & Fill")
-        tester().tapViewWithAccessibilityLabel("Open & Fill")
+        tester().waitForView(withAccessibilityLabel: "Open & Fill")
+        tester().tapView(withAccessibilityLabel: "Open & Fill")
 
-        tester().waitForTimeInterval(2)
-        tester().waitForViewWithAccessibilityLabel("a0.com")
+        tester().wait(forTimeInterval: 2)
+        tester().waitForView(withAccessibilityLabel: "a0.com")
 
     }
 
     func testOpenAndFillFromNormalContext() {
         openLoginManager()
 
-        tester().waitForViewWithAccessibilityLabel("a0@email.com, http://a0.com")
-        tester().tapViewWithAccessibilityLabel("a0@email.com, http://a0.com")
+        tester().waitForView(withAccessibilityLabel: "a0@email.com, http://a0.com")
+        tester().tapView(withAccessibilityLabel: "a0@email.com, http://a0.com")
 
-        tester().waitForViewWithAccessibilityLabel("password")
+        tester().waitForView(withAccessibilityLabel: "password")
 
-        let list = tester().waitForViewWithAccessibilityIdentifier("Login Detail List") as! UITableView
-        let websiteCell = list.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0)) as! LoginTableViewCell
+        let list = tester().waitForView(withAccessibilityIdentifier: "Login Detail List") as! UITableView
+        let websiteCell = list.cellForRowAtIndexPath(IndexPath(forRow: 0, inSection: 0)) as! LoginTableViewCell
 
         // longPressViewWithAcessibilityLabel fails when called directly because the cell is not a descendant in the
         // responder chain since it's a cell so instead use the underlying longPressAtPoint method.
@@ -234,28 +234,28 @@ class LoginManagerTests: KIFTestCase {
         // Tap the 'Open & Fill' menu option - just checks to make sure we navigate to the web page
         websiteCell.longPressAtPoint(centerOfCell, duration: 2)
         websiteCell.longPressAtPoint(centerOfCell, duration: 2)
-        tester().waitForViewWithAccessibilityLabel("Open & Fill")
-        tester().tapViewWithAccessibilityLabel("Open & Fill")
+        tester().waitForView(withAccessibilityLabel: "Open & Fill")
+        tester().tapView(withAccessibilityLabel: "Open & Fill")
 
-        tester().waitForTimeInterval(2)
-        tester().waitForViewWithAccessibilityLabel("a0.com")
+        tester().wait(forTimeInterval: 2)
+        tester().waitForView(withAccessibilityLabel: "a0.com")
     }
 
     func testOpenAndFillFromPrivateContext() {
-        tester().tapViewWithAccessibilityLabel("Show Tabs")
-        tester().tapViewWithAccessibilityLabel("Private Mode")
+        tester().tapView(withAccessibilityLabel: "Show Tabs")
+        tester().tapView(withAccessibilityLabel: "Private Mode")
 
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("Settings")
-        tester().tapViewWithAccessibilityLabel("Logins")
+        tester().tapView(withAccessibilityLabel: "Menu")
+        tester().tapView(withAccessibilityLabel: "Settings")
+        tester().tapView(withAccessibilityLabel: "Logins")
 
-        tester().waitForViewWithAccessibilityLabel("a0@email.com, http://a0.com")
-        tester().tapViewWithAccessibilityLabel("a0@email.com, http://a0.com")
+        tester().waitForView(withAccessibilityLabel: "a0@email.com, http://a0.com")
+        tester().tapView(withAccessibilityLabel: "a0@email.com, http://a0.com")
 
-        tester().waitForViewWithAccessibilityLabel("password")
+        tester().waitForView(withAccessibilityLabel: "password")
 
-        let list = tester().waitForViewWithAccessibilityIdentifier("Login Detail List") as! UITableView
-        let websiteCell = list.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0)) as! LoginTableViewCell
+        let list = tester().waitForView(withAccessibilityIdentifier: "Login Detail List") as! UITableView
+        let websiteCell = list.cellForRowAtIndexPath(IndexPath(forRow: 0, inSection: 0)) as! LoginTableViewCell
 
         // longPressViewWithAcessibilityLabel fails when called directly because the cell is not a descendant in the
         // responder chain since it's a cell so instead use the underlying longPressAtPoint method.
@@ -264,23 +264,23 @@ class LoginManagerTests: KIFTestCase {
         // Tap the 'Open & Fill' menu option - just checks to make sure we navigate to the web page
         websiteCell.longPressAtPoint(centerOfCell, duration: 1)
         websiteCell.longPressAtPoint(centerOfCell, duration: 1)
-        tester().waitForViewWithAccessibilityLabel("Open & Fill")
-        tester().tapViewWithAccessibilityLabel("Open & Fill")
+        tester().waitForView(withAccessibilityLabel: "Open & Fill")
+        tester().tapView(withAccessibilityLabel: "Open & Fill")
 
-        tester().waitForTimeInterval(2)
-        tester().waitForViewWithAccessibilityLabel("a0.com")
+        tester().wait(forTimeInterval: 2)
+        tester().waitForView(withAccessibilityLabel: "a0.com")
     }
 
     func testDetailUsernameMenuOptions() {
         openLoginManager()
 
-        tester().waitForViewWithAccessibilityLabel("a0@email.com, http://a0.com")
-        tester().tapViewWithAccessibilityLabel("a0@email.com, http://a0.com")
+        tester().waitForView(withAccessibilityLabel: "a0@email.com, http://a0.com")
+        tester().tapView(withAccessibilityLabel: "a0@email.com, http://a0.com")
 
-        tester().waitForViewWithAccessibilityLabel("password")
+        tester().waitForView(withAccessibilityLabel: "password")
 
-        let list = tester().waitForViewWithAccessibilityIdentifier("Login Detail List") as! UITableView
-        let usernameCell = list.cellForRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 0)) as! LoginTableViewCell
+        let list = tester().waitForView(withAccessibilityIdentifier: "Login Detail List") as! UITableView
+        let usernameCell = list.cellForRowAtIndexPath(IndexPath(forRow: 1, inSection: 0)) as! LoginTableViewCell
 
         // longPressViewWithAcessibilityLabel fails when called directly because the cell is not a descendant in the
         // responder chain since it's a cell so instead use the underlying longPressAtPoint method.
@@ -289,106 +289,106 @@ class LoginManagerTests: KIFTestCase {
         // Tap the 'Copy' menu option
         usernameCell.longPressAtPoint(centerOfCell, duration: 1)
         usernameCell.longPressAtPoint(centerOfCell, duration: 1)
-        tester().waitForViewWithAccessibilityLabel("Copy")
-        tester().tapViewWithAccessibilityLabel("Copy")
+        tester().waitForView(withAccessibilityLabel: "Copy")
+        tester().tapView(withAccessibilityLabel: "Copy")
 
-        XCTAssertEqual(UIPasteboard.generalPasteboard().string, "a0@email.com")
+        XCTAssertEqual(UIPasteboard.general.string, "a0@email.com")
 
-        tester().tapViewWithAccessibilityLabel("Back")
+        tester().tapView(withAccessibilityLabel: "Back")
         closeLoginManager()
     }
 
     func testListSelection() {
         openLoginManager()
 
-        tester().tapViewWithAccessibilityLabel("Edit")
+        tester().tapView(withAccessibilityLabel: "Edit")
         tester().waitForAnimationsToFinish()
 
         // Select one entry
-        let firstIndexPath = NSIndexPath(forRow: 0, inSection: 0)
-        tester().tapRowAtIndexPath(firstIndexPath, inTableViewWithAccessibilityIdentifier: "Login List")
-        tester().waitForViewWithAccessibilityLabel("Delete")
+        let firstIndexPath = IndexPath(row: 0, section: 0)
+        tester().tapRow(at: firstIndexPath, inTableViewWithAccessibilityIdentifier: "Login List")
+        tester().waitForView(withAccessibilityLabel: "Delete")
 
-        let list = tester().waitForViewWithAccessibilityIdentifier("Login List") as! UITableView
-        let firstCell = list.cellForRowAtIndexPath(firstIndexPath)!
-        XCTAssertTrue(firstCell.selected)
+        let list = tester().waitForView(withAccessibilityIdentifier: "Login List") as! UITableView
+        let firstCell = list.cellForRow(at: firstIndexPath)!
+        XCTAssertTrue(firstCell.isSelected)
 
         // Deselect first row
-        tester().tapRowAtIndexPath(firstIndexPath, inTableViewWithAccessibilityIdentifier: "Login List")
-        XCTAssertFalse(firstCell.selected)
+        tester().tapRow(at: firstIndexPath, inTableViewWithAccessibilityIdentifier: "Login List")
+        XCTAssertFalse(firstCell.isSelected)
 
         // Cancel
-        tester().tapViewWithAccessibilityLabel("Cancel")
-        tester().waitForViewWithAccessibilityLabel("Edit")
+        tester().tapView(withAccessibilityLabel: "Cancel")
+        tester().waitForView(withAccessibilityLabel: "Edit")
 
         // Select multiple logins
-        tester().tapViewWithAccessibilityLabel("Edit")
+        tester().tapView(withAccessibilityLabel: "Edit")
         tester().waitForAnimationsToFinish()
 
-        let pathsToSelect = (0..<3).map { NSIndexPath(forRow: $0, inSection: 0) }
+        let pathsToSelect = (0..<3).map { IndexPath(row: $0, section: 0) }
         pathsToSelect.forEach { path in
-            tester().tapRowAtIndexPath(path, inTableViewWithAccessibilityIdentifier: "Login List")
+            tester().tapRow(at: path, inTableViewWithAccessibilityIdentifier: "Login List")
         }
-        tester().waitForViewWithAccessibilityLabel("Delete")
+        tester().waitForView(withAccessibilityLabel: "Delete")
 
         pathsToSelect.forEach { path in
-            XCTAssertTrue(list.cellForRowAtIndexPath(path)!.selected)
+            XCTAssertTrue(list.cellForRow(at: path)!.isSelected)
         }
 
         // Deselect only first row
-        tester().tapRowAtIndexPath(firstIndexPath, inTableViewWithAccessibilityIdentifier: "Login List")
-        XCTAssertFalse(firstCell.selected)
+        tester().tapRow(at: firstIndexPath, inTableViewWithAccessibilityIdentifier: "Login List")
+        XCTAssertFalse(firstCell.isSelected)
 
         // Make sure delete is still showing
-        tester().waitForViewWithAccessibilityLabel("Delete")
+        tester().waitForView(withAccessibilityLabel: "Delete")
 
         // Deselect the rest
         let pathsWithoutFirst = pathsToSelect[1..<pathsToSelect.count]
         pathsWithoutFirst.forEach { path in
-            tester().tapRowAtIndexPath(path, inTableViewWithAccessibilityIdentifier: "Login List")
+            tester().tapRow(at: path, inTableViewWithAccessibilityIdentifier: "Login List")
         }
 
         // Cancel
-        tester().tapViewWithAccessibilityLabel("Cancel")
-        tester().waitForViewWithAccessibilityLabel("Edit")
+        tester().tapView(withAccessibilityLabel: "Cancel")
+        tester().waitForView(withAccessibilityLabel: "Edit")
 
-        tester().tapViewWithAccessibilityLabel("Edit")
+        tester().tapView(withAccessibilityLabel: "Edit")
 
         // Select all using select all button
-        tester().tapViewWithAccessibilityLabel("Select All")
+        tester().tapView(withAccessibilityLabel: "Select All")
         list.visibleCells.forEach { cell in
-            XCTAssertTrue(cell.selected)
+            XCTAssertTrue(cell.isSelected)
         }
-        tester().waitForViewWithAccessibilityLabel("Delete")
+        tester().waitForView(withAccessibilityLabel: "Delete")
 
         // Deselect all using button
-        tester().tapViewWithAccessibilityLabel("Deselect All")
+        tester().tapView(withAccessibilityLabel: "Deselect All")
         list.visibleCells.forEach { cell in
-            XCTAssertFalse(cell.selected)
+            XCTAssertFalse(cell.isSelected)
         }
-        tester().tapViewWithAccessibilityLabel("Cancel")
-        tester().waitForViewWithAccessibilityLabel("Edit")
+        tester().tapView(withAccessibilityLabel: "Cancel")
+        tester().waitForView(withAccessibilityLabel: "Edit")
 
         // Finally, test selections get persisted after cells recycle
-        tester().tapViewWithAccessibilityLabel("Edit")
-        let firstInEachSection = (0..<3).map { NSIndexPath(forRow: 0, inSection: $0) }
+        tester().tapView(withAccessibilityLabel: "Edit")
+        let firstInEachSection = (0..<3).map { IndexPath(row: 0, section: $0) }
         firstInEachSection.forEach { path in
-            tester().tapRowAtIndexPath(path, inTableViewWithAccessibilityIdentifier: "Login List")
+            tester().tapRow(at: path, inTableViewWithAccessibilityIdentifier: "Login List")
         }
 
         // Go up, down and back up to for some recyling
-        tester().scrollViewWithAccessibilityIdentifier("Login List", byFractionOfSizeHorizontal: 0, vertical: 1)
-        tester().scrollViewWithAccessibilityIdentifier("Login List", byFractionOfSizeHorizontal: 0, vertical: -1)
-        tester().scrollViewWithAccessibilityIdentifier("Login List", byFractionOfSizeHorizontal: 0, vertical: 1)
+        tester().scrollView(withAccessibilityIdentifier: "Login List", byFractionOfSizeHorizontal: 0, vertical: 1)
+        tester().scrollView(withAccessibilityIdentifier: "Login List", byFractionOfSizeHorizontal: 0, vertical: -1)
+        tester().scrollView(withAccessibilityIdentifier: "Login List", byFractionOfSizeHorizontal: 0, vertical: 1)
 
-        XCTAssertTrue(list.cellForRowAtIndexPath(firstInEachSection[0])!.selected)
+        XCTAssertTrue(list.cellForRow(at: firstInEachSection[0])!.isSelected)
 
         firstInEachSection.forEach { path in
-            tester().tapRowAtIndexPath(path, inTableViewWithAccessibilityIdentifier: "Login List")
+            tester().tapRow(at: path, inTableViewWithAccessibilityIdentifier: "Login List")
         }
 
-        tester().tapViewWithAccessibilityLabel("Cancel")
-        tester().waitForViewWithAccessibilityLabel("Edit")
+        tester().tapView(withAccessibilityLabel: "Cancel")
+        tester().waitForView(withAccessibilityLabel: "Edit")
 
         closeLoginManager()
     }
@@ -396,50 +396,50 @@ class LoginManagerTests: KIFTestCase {
     func testListSelectAndDelete() {
         openLoginManager()
 
-        let list = tester().waitForViewWithAccessibilityIdentifier("Login List") as! UITableView
+        let list = tester().waitForView(withAccessibilityIdentifier: "Login List") as! UITableView
         let oldLoginCount = countOfRowsInTableView(list)
 
-        tester().tapViewWithAccessibilityLabel("Edit")
+        tester().tapView(withAccessibilityLabel: "Edit")
         tester().waitForAnimationsToFinish()
 
         // Select and delete one entry
-        let firstIndexPath = NSIndexPath(forRow: 0, inSection: 0)
-        tester().tapRowAtIndexPath(firstIndexPath, inTableViewWithAccessibilityIdentifier: "Login List")
-        tester().waitForViewWithAccessibilityLabel("Delete")
+        let firstIndexPath = IndexPath(row: 0, section: 0)
+        tester().tapRow(at: firstIndexPath, inTableViewWithAccessibilityIdentifier: "Login List")
+        tester().waitForView(withAccessibilityLabel: "Delete")
 
-        let firstCell = list.cellForRowAtIndexPath(firstIndexPath)!
-        XCTAssertTrue(firstCell.selected)
+        let firstCell = list.cellForRow(at: firstIndexPath)!
+        XCTAssertTrue(firstCell.isSelected)
 
-        tester().tapViewWithAccessibilityLabel("Delete")
+        tester().tapView(withAccessibilityLabel: "Delete")
         tester().waitForAnimationsToFinish()
 
-        tester().waitForViewWithAccessibilityLabel("Are you sure?")
-        tester().tapViewWithAccessibilityLabel("Delete")
+        tester().waitForView(withAccessibilityLabel: "Are you sure?")
+        tester().tapView(withAccessibilityLabel: "Delete")
         tester().waitForAnimationsToFinish()
 
-        tester().waitForViewWithAccessibilityLabel("Edit")
+        tester().waitForView(withAccessibilityLabel: "Edit")
 
         var newLoginCount = countOfRowsInTableView(list)
         XCTAssertEqual(oldLoginCount - 1, newLoginCount)
 
         // Select and delete multiple entries
-        tester().tapViewWithAccessibilityLabel("Edit")
+        tester().tapView(withAccessibilityLabel: "Edit")
         tester().waitForAnimationsToFinish()
 
-        let multiplePaths = (0..<3).map { NSIndexPath(forRow: $0, inSection: 0) }
+        let multiplePaths = (0..<3).map { IndexPath(row: $0, section: 0) }
 
         multiplePaths.forEach { path in
-            tester().tapRowAtIndexPath(path, inTableViewWithAccessibilityIdentifier: "Login List")
+            tester().tapRow(at: path, inTableViewWithAccessibilityIdentifier: "Login List")
         }
 
-        tester().tapViewWithAccessibilityLabel("Delete")
+        tester().tapView(withAccessibilityLabel: "Delete")
         tester().waitForAnimationsToFinish()
 
-        tester().waitForViewWithAccessibilityLabel("Are you sure?")
-        tester().tapViewWithAccessibilityLabel("Delete")
+        tester().waitForView(withAccessibilityLabel: "Are you sure?")
+        tester().tapView(withAccessibilityLabel: "Delete")
         tester().waitForAnimationsToFinish()
 
-        tester().waitForViewWithAccessibilityLabel("Edit")
+        tester().waitForView(withAccessibilityLabel: "Edit")
 
         newLoginCount = countOfRowsInTableView(list)
         XCTAssertEqual(oldLoginCount - 4, newLoginCount)
@@ -449,24 +449,24 @@ class LoginManagerTests: KIFTestCase {
     func testSelectAllCancelAndEdit() {
         openLoginManager()
 
-        tester().waitForViewWithAccessibilityLabel("Edit")
-        tester().tapViewWithAccessibilityLabel("Edit")
+        tester().waitForView(withAccessibilityLabel: "Edit")
+        tester().tapView(withAccessibilityLabel: "Edit")
 
         // Select all using select all button
-        let list = tester().waitForViewWithAccessibilityIdentifier("Login List") as! UITableView
-        tester().tapViewWithAccessibilityLabel("Select All")
+        let list = tester().waitForView(withAccessibilityIdentifier: "Login List") as! UITableView
+        tester().tapView(withAccessibilityLabel: "Select All")
         list.visibleCells.forEach { cell in
-            XCTAssertTrue(cell.selected)
+            XCTAssertTrue(cell.isSelected)
         }
 
-        tester().waitForViewWithAccessibilityLabel("Deselect All")
-        tester().tapViewWithAccessibilityLabel("Cancel")
-        tester().tapViewWithAccessibilityLabel("Edit")
+        tester().waitForView(withAccessibilityLabel: "Deselect All")
+        tester().tapView(withAccessibilityLabel: "Cancel")
+        tester().tapView(withAccessibilityLabel: "Edit")
 
         // Make sure the state of the button is 'Select All' since we cancelled mid-way previously.
-        tester().waitForViewWithAccessibilityLabel("Select All")
+        tester().waitForView(withAccessibilityLabel: "Select All")
 
-        tester().tapViewWithAccessibilityLabel("Cancel")
+        tester().tapView(withAccessibilityLabel: "Cancel")
 
         closeLoginManager()
     }
@@ -474,13 +474,13 @@ class LoginManagerTests: KIFTestCase {
     func testLoginListShowsNoResults() {
         openLoginManager()
 
-        tester().waitForViewWithAccessibilityLabel("a0@email.com, http://a0.com")
-        let list = tester().waitForViewWithAccessibilityIdentifier("Login List") as! UITableView
+        tester().waitForView(withAccessibilityLabel: "a0@email.com, http://a0.com")
+        let list = tester().waitForView(withAccessibilityIdentifier: "Login List") as! UITableView
         let oldLoginCount = countOfRowsInTableView(list)
         
         // Find something that doesn't exist
-        tester().tapViewWithAccessibilityLabel("Enter Search Mode")
-        tester().enterTextIntoCurrentFirstResponder("asdfasdf")
+        tester().tapView(withAccessibilityLabel: "Enter Search Mode")
+        tester().enterText(intoCurrentFirstResponder: "asdfasdf")
         
         // KIFTest has a bug where waitForViewWithAccessibilityLabel causes the lists to appear again on device,
         // so checking the number of rows instead
@@ -490,18 +490,18 @@ class LoginManagerTests: KIFTestCase {
         XCTAssertEqual(loginCount, 0)
         
         
-        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("")
+        tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "")
 
         // Erase search and make sure we see results instead
-        tester().waitForViewWithAccessibilityLabel("a0@email.com, http://a0.com")
+        tester().waitForView(withAccessibilityLabel: "a0@email.com, http://a0.com")
 
         closeLoginManager()
     }
 
-    private func countOfRowsInTableView(tableView: UITableView) -> Int {
+    fileprivate func countOfRowsInTableView(_ tableView: UITableView) -> Int {
         var count = 0
         (0..<tableView.numberOfSections).forEach { section in
-            count += tableView.numberOfRowsInSection(section)
+            count += tableView.numberOfRows(inSection: section)
         }
         return count
     }
@@ -512,42 +512,42 @@ class LoginManagerTests: KIFTestCase {
     func testEditingDetailUsingReturnForNavigation() {
         openLoginManager()
 
-        tester().waitForViewWithAccessibilityLabel("a0@email.com, http://a0.com")
-        tester().tapViewWithAccessibilityLabel("a0@email.com, http://a0.com")
+        tester().waitForView(withAccessibilityLabel: "a0@email.com, http://a0.com")
+        tester().tapView(withAccessibilityLabel: "a0@email.com, http://a0.com")
 
-        tester().waitForViewWithAccessibilityLabel("password")
+        tester().waitForView(withAccessibilityLabel: "password")
 
-        let list = tester().waitForViewWithAccessibilityIdentifier("Login Detail List") as! UITableView
+        let list = tester().waitForView(withAccessibilityIdentifier: "Login Detail List") as! UITableView
 
-        tester().tapViewWithAccessibilityLabel("Edit")
+        tester().tapView(withAccessibilityLabel: "Edit")
 
         // Check that we've selected the username field
-        var firstResponder = UIApplication.sharedApplication().keyWindow?.firstResponder()
-        let usernameCell = list.cellForRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 0)) as! LoginTableViewCell
+        var firstResponder = UIApplication.shared.keyWindow?.firstResponder()
+        let usernameCell = list.cellForRowAtIndexPath(IndexPath(forRow: 1, inSection: 0)) as! LoginTableViewCell
         let usernameField = usernameCell.descriptionLabel
 
         XCTAssertEqual(usernameField, firstResponder)
-        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("changedusername")
-        tester().tapViewWithAccessibilityLabel("Next")
+        tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "changedusername")
+        tester().tapView(withAccessibilityLabel: "Next")
 
-        firstResponder = UIApplication.sharedApplication().keyWindow?.firstResponder()
-        let passwordCell = list.cellForRowAtIndexPath(NSIndexPath(forRow: 2, inSection: 0)) as! LoginTableViewCell
+        firstResponder = UIApplication.shared.keyWindow?.firstResponder()
+        let passwordCell = list.cellForRowAtIndexPath(IndexPath(forRow: 2, inSection: 0)) as! LoginTableViewCell
         let passwordField = passwordCell.descriptionLabel
 
         // Check that we've navigated to the password field upon return and that the password is no longer displaying as dots
         XCTAssertEqual(passwordField, firstResponder)
         XCTAssertFalse(passwordField.secureTextEntry)
 
-        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("changedpassword")
-        tester().tapViewWithAccessibilityLabel("Done")
+        tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "changedpassword")
+        tester().tapView(withAccessibilityLabel: "Done")
 
         // Go back and find the changed login
-        tester().tapViewWithAccessibilityLabel("Back")
-        tester().tapViewWithAccessibilityLabel("Enter Search Mode")
-        tester().enterTextIntoCurrentFirstResponder("changedusername")
+        tester().tapView(withAccessibilityLabel: "Back")
+        tester().tapView(withAccessibilityLabel: "Enter Search Mode")
+        tester().enterText(intoCurrentFirstResponder: "changedusername")
 
-        let loginsList = tester().waitForViewWithAccessibilityIdentifier("Login List") as! UITableView
-        XCTAssertEqual(loginsList.numberOfRowsInSection(0), 1)
+        let loginsList = tester().waitForView(withAccessibilityIdentifier: "Login List") as! UITableView
+        XCTAssertEqual(loginsList.numberOfRows(inSection: 0), 1)
 
         closeLoginManager()
     }
@@ -555,34 +555,34 @@ class LoginManagerTests: KIFTestCase {
     func testEditingDetailUpdatesPassword() {
         openLoginManager()
 
-        tester().waitForViewWithAccessibilityLabel("a0@email.com, http://a0.com")
-        tester().tapViewWithAccessibilityLabel("a0@email.com, http://a0.com")
+        tester().waitForView(withAccessibilityLabel: "a0@email.com, http://a0.com")
+        tester().tapView(withAccessibilityLabel: "a0@email.com, http://a0.com")
 
-        tester().waitForViewWithAccessibilityLabel("password")
+        tester().waitForView(withAccessibilityLabel: "password")
 
-        let list = tester().waitForViewWithAccessibilityIdentifier("Login Detail List") as! UITableView
+        let list = tester().waitForView(withAccessibilityIdentifier: "Login Detail List") as! UITableView
 
-        tester().tapViewWithAccessibilityLabel("Edit")
+        tester().tapView(withAccessibilityLabel: "Edit")
 
         // Check that we've selected the username field
-        var firstResponder = UIApplication.sharedApplication().keyWindow?.firstResponder()
-        let usernameCell = list.cellForRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 0)) as! LoginTableViewCell
+        var firstResponder = UIApplication.shared.keyWindow?.firstResponder()
+        let usernameCell = list.cellForRowAtIndexPath(IndexPath(forRow: 1, inSection: 0)) as! LoginTableViewCell
         let usernameField = usernameCell.descriptionLabel
 
         XCTAssertEqual(usernameField, firstResponder)
-        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("changedusername")
-        tester().tapViewWithAccessibilityLabel("Next")
+        tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "changedusername")
+        tester().tapView(withAccessibilityLabel: "Next")
 
-        firstResponder = UIApplication.sharedApplication().keyWindow?.firstResponder()
-        var passwordCell = list.cellForRowAtIndexPath(NSIndexPath(forRow: 2, inSection: 0)) as! LoginTableViewCell
+        firstResponder = UIApplication.shared.keyWindow?.firstResponder()
+        var passwordCell = list.cellForRowAtIndexPath(IndexPath(forRow: 2, inSection: 0)) as! LoginTableViewCell
         let passwordField = passwordCell.descriptionLabel
 
         // Check that we've navigated to the password field upon return and that the password is no longer displaying as dots
         XCTAssertEqual(passwordField, firstResponder)
         XCTAssertFalse(passwordField.secureTextEntry)
 
-        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("changedpassword")
-        tester().tapViewWithAccessibilityLabel("Done")
+        tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "changedpassword")
+        tester().tapView(withAccessibilityLabel: "Done")
 
         // longPressViewWithAcessibilityLabel fails when called directly because the cell is not a descendant in the
         // responder chain since it's a cell so instead use the underlying longPressAtPoint method.
@@ -592,13 +592,13 @@ class LoginManagerTests: KIFTestCase {
         // Tap the 'Reveal' menu option
         passwordCell.longPressAtPoint(centerOfCell, duration: 1)
         passwordCell.longPressAtPoint(centerOfCell, duration: 1)
-        tester().waitForViewWithAccessibilityLabel("Reveal")
-        tester().tapViewWithAccessibilityLabel("Reveal")
+        tester().waitForView(withAccessibilityLabel: "Reveal")
+        tester().tapView(withAccessibilityLabel: "Reveal")
 
-        passwordCell = list.cellForRowAtIndexPath(NSIndexPath(forRow: 2, inSection: 0)) as! LoginTableViewCell
+        passwordCell = list.cellForRowAtIndexPath(IndexPath(forRow: 2, inSection: 0)) as! LoginTableViewCell
         XCTAssertEqual(passwordCell.descriptionLabel.text, "changedpassword")
 
-        tester().tapViewWithAccessibilityLabel("Back")
+        tester().tapView(withAccessibilityLabel: "Back")
         closeLoginManager()
     }
 
@@ -606,23 +606,23 @@ class LoginManagerTests: KIFTestCase {
 
         openLoginManager()
 
-        var list = tester().waitForViewWithAccessibilityIdentifier("Login List") as! UITableView
-        var firstRow = list.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0)) as! LoginTableViewCell
+        var list = tester().waitForView(withAccessibilityIdentifier: "Login List") as! UITableView
+        var firstRow = list.cellForRowAtIndexPath(IndexPath(forRow: 0, inSection: 0)) as! LoginTableViewCell
         XCTAssertEqual(firstRow.descriptionLabel.text, "http://a0.com")
 
-        tester().waitForViewWithAccessibilityLabel("a0@email.com, http://a0.com")
-        tester().tapViewWithAccessibilityLabel("a0@email.com, http://a0.com")
-        tester().tapViewWithAccessibilityLabel("Delete")
+        tester().waitForView(withAccessibilityLabel: "a0@email.com, http://a0.com")
+        tester().tapView(withAccessibilityLabel: "a0@email.com, http://a0.com")
+        tester().tapView(withAccessibilityLabel: "Delete")
 
         // Verify that we are looking at the non-synced alert dialog
-        tester().waitForViewWithAccessibilityLabel("Are you sure?")
-        tester().waitForViewWithAccessibilityLabel("Logins will be permanently removed.")
+        tester().waitForView(withAccessibilityLabel: "Are you sure?")
+        tester().waitForView(withAccessibilityLabel: "Logins will be permanently removed.")
 
-        tester().tapViewWithAccessibilityLabel("Delete")
+        tester().tapView(withAccessibilityLabel: "Delete")
         tester().waitForAnimationsToFinish()
 
-        list = tester().waitForViewWithAccessibilityIdentifier("Login List") as! UITableView
-        firstRow = list.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0)) as! LoginTableViewCell
+        list = tester().waitForView(withAccessibilityIdentifier: "Login List") as! UITableView
+        firstRow = list.cellForRowAtIndexPath(IndexPath(forRow: 0, inSection: 0)) as! LoginTableViewCell
         XCTAssertEqual(firstRow.descriptionLabel.text, "http://a1.com")
 
         closeLoginManager()
@@ -631,43 +631,43 @@ class LoginManagerTests: KIFTestCase {
     func testLoginDetailDisplaysLastModified() {
         openLoginManager()
 
-        tester().waitForViewWithAccessibilityLabel("a0@email.com, http://a0.com")
-        tester().tapViewWithAccessibilityLabel("a0@email.com, http://a0.com")
+        tester().waitForView(withAccessibilityLabel: "a0@email.com, http://a0.com")
+        tester().tapView(withAccessibilityLabel: "a0@email.com, http://a0.com")
 
-        tester().waitForViewWithAccessibilityLabel("password")
+        tester().waitForView(withAccessibilityLabel: "password")
 
         XCTAssertTrue(tester().viewExistsWithLabelPrefixedBy("Last modified"))
-        tester().tapViewWithAccessibilityLabel("Back")
+        tester().tapView(withAccessibilityLabel: "Back")
         closeLoginManager()
     }
 
     func testPreventBlankPasswordInDetail() {
         openLoginManager()
 
-        tester().waitForViewWithAccessibilityLabel("a0@email.com, http://a0.com")
-        tester().tapViewWithAccessibilityLabel("a0@email.com, http://a0.com")
+        tester().waitForView(withAccessibilityLabel: "a0@email.com, http://a0.com")
+        tester().tapView(withAccessibilityLabel: "a0@email.com, http://a0.com")
 
-        tester().waitForViewWithAccessibilityLabel("password")
+        tester().waitForView(withAccessibilityLabel: "password")
 
-        let list = tester().waitForViewWithAccessibilityIdentifier("Login Detail List") as! UITableView
+        let list = tester().waitForView(withAccessibilityIdentifier: "Login Detail List") as! UITableView
 
-        tester().tapViewWithAccessibilityLabel("Edit")
+        tester().tapView(withAccessibilityLabel: "Edit")
 
         // Check that we've selected the username field
-        var passwordCell = list.cellForRowAtIndexPath(NSIndexPath(forRow: 2, inSection: 0)) as! LoginTableViewCell
+        var passwordCell = list.cellForRowAtIndexPath(IndexPath(forRow: 2, inSection: 0)) as! LoginTableViewCell
         var passwordField = passwordCell.descriptionLabel
 
-        tester().tapViewWithAccessibilityLabel("Next")
-        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("")
-        tester().tapViewWithAccessibilityLabel("Done")
+        tester().tapView(withAccessibilityLabel: "Next")
+        tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "")
+        tester().tapView(withAccessibilityLabel: "Done")
 
-        passwordCell = list.cellForRowAtIndexPath(NSIndexPath(forRow: 2, inSection: 0)) as! LoginTableViewCell
+        passwordCell = list.cellForRowAtIndexPath(IndexPath(forRow: 2, inSection: 0)) as! LoginTableViewCell
         passwordField = passwordCell.descriptionLabel
 
         // Confirm that when entering a blank password we revert back to the original
         XCTAssertEqual(passwordField.text, "passworda0")
 
-        tester().tapViewWithAccessibilityLabel("Back")
+        tester().tapView(withAccessibilityLabel: "Back")
         closeLoginManager()
     }
 
@@ -675,23 +675,23 @@ class LoginManagerTests: KIFTestCase {
         openLoginManager()
 
         // Check that edit button is enabled when entries are present
-        tester().waitForViewWithAccessibilityLabel("Edit")
-        tester().tapViewWithAccessibilityLabel("Edit")
+        tester().waitForView(withAccessibilityLabel: "Edit")
+        tester().tapView(withAccessibilityLabel: "Edit")
 
         // Select all using select all button
-        tester().tapViewWithAccessibilityLabel("Select All")
+        tester().tapView(withAccessibilityLabel: "Select All")
 
         // Delete all entries
-        tester().waitForViewWithAccessibilityLabel("Delete")
-        tester().tapViewWithAccessibilityLabel("Delete")
+        tester().waitForView(withAccessibilityLabel: "Delete")
+        tester().tapView(withAccessibilityLabel: "Delete")
         tester().waitForAnimationsToFinish()
 
-        tester().waitForViewWithAccessibilityLabel("Are you sure?")
-        tester().tapViewWithAccessibilityLabel("Delete")
+        tester().waitForView(withAccessibilityLabel: "Are you sure?")
+        tester().tapView(withAccessibilityLabel: "Delete")
         tester().waitForAnimationsToFinish()
 
         // Check that edit button has been disabled
-        tester().waitForViewWithAccessibilityLabel("Edit", traits: UIAccessibilityTraitNotEnabled)
+        tester().waitForView(withAccessibilityLabel: "Edit", traits: UIAccessibilityTraitNotEnabled)
 
         closeLoginManager()
     }

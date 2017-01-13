@@ -17,11 +17,11 @@ private let log = Logger.syncLogger
  *
  * into a new JSON object resulting from decrypting and parsing the ciphertext.
  */
-public class EncryptedJSON: JSON {
+open class EncryptedJSON: JSON {
     var _cleartext: JSON?               // Cache decrypted cleartext.
-    var _ciphertextBytes: NSData?       // Cache decoded ciphertext.
-    var _hmacBytes: NSData?             // Cache decoded HMAC.
-    var _ivBytes: NSData?               // Cache decoded IV.
+    var _ciphertextBytes: Data?       // Cache decoded ciphertext.
+    var _hmacBytes: Data?             // Cache decoded HMAC.
+    var _ivBytes: Data?               // Cache decoded IV.
 
     var valid: Bool = false
     var validated: Bool = false
@@ -38,7 +38,7 @@ public class EncryptedJSON: JSON {
         super.init(json)
     }
 
-    private func validate() -> Bool {
+    fileprivate func validate() -> Bool {
         if validated {
             return valid
         }
@@ -59,17 +59,17 @@ public class EncryptedJSON: JSON {
         }
     }
 
-    public func isValid() -> Bool {
+    open func isValid() -> Bool {
         return !isError &&
             self.validate()
     }
 
-    func fromBase64(str: String) -> NSData {
+    func fromBase64(_ str: String) -> Data {
         let b = Bytes.decodeBase64(str)
         return b
     }
 
-    var ciphertextB64: NSData? {
+    var ciphertextB64: Data? {
         if let ct = self["ciphertext"].asString {
             return Bytes.dataFromBase64(ct)
         } else {
@@ -77,7 +77,7 @@ public class EncryptedJSON: JSON {
         }
     }
 
-    var ciphertext: NSData {
+    var ciphertext: Data {
         if (_ciphertextBytes != nil) {
             return _ciphertextBytes!
         }
@@ -86,16 +86,16 @@ public class EncryptedJSON: JSON {
         return _ciphertextBytes!
     }
 
-    var hmac: NSData {
+    var hmac: Data {
         if (_hmacBytes != nil) {
             return _hmacBytes!
         }
 
-        _hmacBytes = NSData(base16EncodedString: self["hmac"].asString!, options: NSDataBase16DecodingOptions.Default)
+        _hmacBytes = Data(base16EncodedString: self["hmac"].asString!, options: NSDataBase16DecodingOptions.Default)
         return _hmacBytes!
     }
 
-    var iv: NSData {
+    var iv: Data {
         if (_ivBytes != nil) {
             return _ivBytes!
         }
@@ -105,7 +105,7 @@ public class EncryptedJSON: JSON {
     }
 
     // Returns nil on error.
-    public var cleartext: JSON? {
+    open var cleartext: JSON? {
         if (_cleartext != nil) {
             return _cleartext
         }

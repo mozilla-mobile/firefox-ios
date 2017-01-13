@@ -6,11 +6,11 @@ import Foundation
 import Storage
 
 class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    private var site: Site
-    private var actions: [ActionOverlayTableViewAction]
-    private var tableView = UITableView()
-    private var headerImage: UIImage?
-    private var headerImageBackgroundColor: UIColor?
+    fileprivate var site: Site
+    fileprivate var actions: [ActionOverlayTableViewAction]
+    fileprivate var tableView = UITableView()
+    fileprivate var headerImage: UIImage?
+    fileprivate var headerImageBackgroundColor: UIColor?
     lazy var tapRecognizer: UITapGestureRecognizer = {
         let tapRecognizer = UITapGestureRecognizer()
         tapRecognizer.addTarget(self, action: #selector(ActionOverlayTableViewController.dismiss(_:)))
@@ -20,7 +20,7 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
     }()
 
     lazy var visualEffectView: UIVisualEffectView = {
-        let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
+        let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
         visualEffectView.frame = self.view.bounds
         visualEffectView.alpha = 0.90
         return visualEffectView
@@ -41,19 +41,19 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = UIColor.clearColor().colorWithAlphaComponent(0.4)
+        view.backgroundColor = UIColor.clear.withAlphaComponent(0.4)
         view.addGestureRecognizer(tapRecognizer)
         view.addSubview(tableView)
 
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.keyboardDismissMode = UIScrollViewKeyboardDismissMode.OnDrag
-        tableView.registerClass(ActionOverlayTableViewCell.self, forCellReuseIdentifier: "ActionOverlayTableViewCell")
-        tableView.registerClass(ActionOverlayTableViewHeader.self, forHeaderFooterViewReuseIdentifier: "ActionOverlayTableViewHeader")
+        tableView.keyboardDismissMode = UIScrollViewKeyboardDismissMode.onDrag
+        tableView.register(ActionOverlayTableViewCell.self, forCellReuseIdentifier: "ActionOverlayTableViewCell")
+        tableView.register(ActionOverlayTableViewHeader.self, forHeaderFooterViewReuseIdentifier: "ActionOverlayTableViewHeader")
         tableView.backgroundColor = UIConstants.PanelBackgroundColor
-        tableView.scrollEnabled = false
+        tableView.isScrollEnabled = false
         tableView.layer.cornerRadius = 10
-        tableView.separatorStyle = .None
+        tableView.separatorStyle = .none
         tableView.cellLayoutMarginsFollowReadableWidth = false
         tableView.accessibilityIdentifier = "Context Menu"
 
@@ -64,8 +64,8 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
         }
     }
 
-    func dismiss(gestureRecognizer: UIGestureRecognizer) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+    func dismiss(_ gestureRecognizer: UIGestureRecognizer) {
+        self.dismiss(animated: true, completion: nil)
     }
 
     deinit {
@@ -75,15 +75,15 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
         tableView.delegate = nil
     }
 
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return actions.count
     }
 
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let action = actions[indexPath.row]
         guard let handler = actions[indexPath.row].handler else {
             return
@@ -91,27 +91,27 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
         return handler(action)
     }
 
-    func tableView(tableView: UITableView, hasFullWidthSeparatorForRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, hasFullWidthSeparatorForRowAtIndexPath indexPath: IndexPath) -> Bool {
         return true
     }
 
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 56
     }
 
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 74
     }
 
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("ActionOverlayTableViewCell", forIndexPath: indexPath) as! ActionOverlayTableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ActionOverlayTableViewCell", for: indexPath) as! ActionOverlayTableViewCell
         let action = actions[indexPath.row]
         cell.configureCell(action.title, imageString: action.iconString)
         return cell
     }
 
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier("ActionOverlayTableViewHeader") as! ActionOverlayTableViewHeader
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "ActionOverlayTableViewHeader") as! ActionOverlayTableViewHeader
         header.configureWithSite(site, image: headerImage, imageBackgroundColor: headerImageBackgroundColor)
         return header
     }
@@ -122,7 +122,7 @@ class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
         let titleLabel = UILabel()
         titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontMediumBold
         titleLabel.textColor = SimpleHighlightCellUX.LabelColor
-        titleLabel.textAlignment = .Left
+        titleLabel.textAlignment = .left
         titleLabel.numberOfLines = 3
         return titleLabel
     }()
@@ -131,14 +131,14 @@ class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
         let titleLabel = UILabel()
         titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontDescriptionActivityStream
         titleLabel.textColor = SimpleHighlightCellUX.DescriptionLabelColor
-        titleLabel.textAlignment = .Left
+        titleLabel.textAlignment = .left
         titleLabel.numberOfLines = 1
         return titleLabel
     }()
 
     lazy var siteImageView: UIImageView = {
         let siteImageView = UIImageView()
-        siteImageView.contentMode = UIViewContentMode.Center
+        siteImageView.contentMode = UIViewContentMode.center
         siteImageView.layer.cornerRadius = SimpleHighlightCellUX.CornerRadius
         return siteImageView
     }()
@@ -147,7 +147,7 @@ class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
         super.init(reuseIdentifier: reuseIdentifier)
 
         layer.shouldRasterize = true
-        layer.rasterizationScale = UIScreen.mainScreen().scale
+        layer.rasterizationScale = UIScreen.main.scale
 
         isAccessibilityElement = true
 
@@ -182,7 +182,7 @@ class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configureWithSite(site: Site, image: UIImage?, imageBackgroundColor: UIColor?) {
+    func configureWithSite(_ site: Site, image: UIImage?, imageBackgroundColor: UIColor?) {
         self.siteImageView.backgroundColor = imageBackgroundColor
         self.siteImageView.image = image?.createScaled(SimpleHighlightCellUX.IconSize) ?? SimpleHighlightCellUX.PlaceholderImage
         self.titleLabel.text = site.title.characters.count <= 1 ? site.url : site.title
