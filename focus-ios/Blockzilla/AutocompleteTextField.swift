@@ -22,8 +22,12 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     /// The range of the current completion, or nil if there is no active completion.
     private var completionRange: NSRange?
 
+    // The last string used as a replacement in shouldChangeCharactersInRange.
+    private var lastReplacement: String?
+
     init() {
         super.init(frame: CGRect.zero)
+        addTarget(self, action: #selector(textDidChange), for: .editingChanged)
         delegate = self
     }
 
@@ -35,54 +39,40 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         didSet {
             applyCompletion()
             super.text = text
+            autocompleteDelegate?.autocompleteTextField?(self, didTextChange: text ?? "")
         }
     }
 
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        var range = range
+        lastReplacement = string
+        return true
+    }
 
-        // If we have an active completion range, use that instead.
-        if let completionRange = completionRange {
-            range = completionRange
-            applyCompletion()
-        }
-
-        // Do the replacement.
-        let typedText = (textField.text as NSString?)?.replacingCharacters(in: range, with: string)
-        textField.text = typedText
+    @objc private func textDidChange() {
+        removeCompletion()
 
         // Try setting a completion if we're not deleting and we're typing at the end of the text field.
-        let endOfNew = range.location + (string as NSString).length
-        let isAtEnd = (endOfNew == (textField.text as NSString?)?.length)
-        if !string.isEmpty && isAtEnd, let completion = source?.completion(forText: textField.text ?? "") {
+        let isAtEnd = selectedTextRange?.start == endOfDocument
+        let textBeforeCompletion = text
+        let isEmpty = lastReplacement?.isEmpty ?? true
+        if !isEmpty, isAtEnd, markedTextRange == nil, let completion = source?.completion(forText: text ?? "") {
             setCompletion(completion)
         }
 
-        // Move the caret to the end of the updated range.
-        let position = textField.position(from: textField.beginningOfDocument, offset: endOfNew)!
-        textField.selectedTextRange = textField.textRange(from: position, to: position)
-
         // Fire the delegate with the text the user typed (not including the completion).
-        autocompleteDelegate?.autocompleteTextField?(self, didTextChange: typedText ?? "")
-
-        // Always return false since we already replaced the range above.
-        return false
+        autocompleteDelegate?.autocompleteTextField?(self, didTextChange: textBeforeCompletion ?? "")
     }
 
-    // Some keyboards (e.g., Gboard) don't fire textField(shouldChangeCharactersIn:),
-    // when pressing backspace, so handle deletions here.
     override func deleteBackward() {
-        if let range = completionRange {
-            // Remove the completion, but don't delete any user-typed characters.
-            applyCompletion()
-            text = (text as NSString?)?.replacingCharacters(in: range, with: "")
-        } else {
-            // If we don't have an active completion, just fall back to the default behavior.
-            super.deleteBackward()
+        lastReplacement = nil
+
+        guard completionRange == nil else {
+            // If we have an active completion, delete it without deleting any user-typed characters.
+            removeCompletion()
+            return
         }
 
-        // Fire the delegate with the text the user typed (not including the completion).
-        autocompleteDelegate?.autocompleteTextField?(self, didTextChange: text ?? "")
+        super.deleteBackward()
     }
 
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
@@ -116,6 +106,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
     private func applyCompletion() {
         guard completionRange != nil else { return }
+
         completionRange = nil
 
         // Clear the current completion, then set the text without the attributed style.
@@ -126,6 +117,18 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
         // Move the cursor to the end of the completion.
         selectedTextRange = textRange(from: endOfDocument, to: endOfDocument)
+    }
+
+    private func removeCompletion() {
+        guard let completionRange = completionRange else { return }
+
+        applyCompletion()
+        text = (text as NSString?)?.replacingCharacters(in: completionRange, with: "")
+    }
+
+    override func setMarkedText(_ markedText: String?, selectedRange: NSRange) {
+        removeCompletion()
+        super.setMarkedText(markedText, selectedRange: selectedRange)
     }
 
     private func setCompletion(_ completion: String) {
