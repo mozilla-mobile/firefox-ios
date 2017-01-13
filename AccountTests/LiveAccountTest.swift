@@ -15,21 +15,21 @@ import XCTest
  */
 public class LiveAccountTest: XCTestCase {
     lazy var signedInUser: JSON? = {
-        if let path = NSBundle(forClass: self.dynamicType).pathForResource("signedInUser.json", ofType: nil) {
-            if let contents = try? String(contentsOfFile: path, encoding: NSUTF8StringEncoding) {
-                let json = JSON.parse(contents)
-                if json.isError {
-                    return nil
-                }
-                if let email = json["email"].asString {
-                    return json
-                } else {
-                    // This is the standard case: signedInUser.json is {}.
-                    return nil
-                }
-            }
-        }
-        XCTFail("Expected to read signedInUser.json!")
+//        if let path = NSBundle(forClass: self.dynamicType).pathForResource("signedInUser.json", ofType: nil) {
+//            if let contents = try? String(contentsOfFile: path, encoding: NSUTF8StringEncoding) {
+//                let json = JSON.parse(contents)
+//                if json.isError {
+//                    return nil
+//                }
+//                if let email = json["email"].asString {
+//                    return json
+//                } else {
+//                    // This is the standard case: signedInUser.json is {}.
+//                    return nil
+//                }
+//            }
+//        }
+//        XCTFail("Expected to read signedInUser.json!")
         return nil
     }()
 

@@ -588,7 +588,6 @@
 		E60D032A1D5118DB002FE3F6 /* SyncStatusResolverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60D03291D5118DB002FE3F6 /* SyncStatusResolverTests.swift */; };
 		E6108FF91C84E91C005D25E8 /* BasePasscodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6108FF81C84E91C005D25E8 /* BasePasscodeViewController.swift */; };
 		E61453BE1B750A1700C3F9D7 /* RollingFileLoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61453BD1B750A1700C3F9D7 /* RollingFileLoggerTests.swift */; };
-		E619FB311E292BED00882B20 /* signedInUser.json in Resources */ = {isa = PBXBuildFile; fileRef = E619FB2F1E292BE100882B20 /* signedInUser.json */; };
 		E6231C011B90A44F005ABB0D /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E6231C001B90A44F005ABB0D /* libz.tbd */; };
 		E6231C031B90A466005ABB0D /* libstdc++.6.0.9.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E6231C021B90A466005ABB0D /* libstdc++.6.0.9.tbd */; };
 		E6231C051B90A472005ABB0D /* libxml2.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E6231C041B90A472005ABB0D /* libxml2.2.tbd */; };
@@ -4334,7 +4333,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E619FB311E292BED00882B20 /* signedInUser.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
