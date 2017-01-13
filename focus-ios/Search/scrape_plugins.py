@@ -65,6 +65,9 @@ def main():
     downloadEngines("default", EnScraper(), defaultEngines)
     engines['default'] = plugins['default']['visibleDefaultEngines']
 
+    # Remove Bing.
+    if "bing" in engines['default']: engines['default'].remove('bing')
+
     # Make sure fallback directories contain any skipped engines.
     verifyEngines(engines)
 
@@ -76,10 +79,15 @@ def downloadEngines(locale, scraper, engines):
     if not os.path.exists(directory):
         os.makedirs(directory)
 
+    # Remove Bing.
+    if 'bing' in engines: engines.remove('bing')
+
     # Always include DuckDuckGo.
     if "duckduckgo" not in engines:
+        lastEngine = '~'
         for i, engine in reversed(list(enumerate(engines))):
-            if i > 0 and "duckduckgo" < engine:
+            if i > 0 and "duckduckgo" < engine and engine < lastEngine and not engine.startswith("google"):
+                lastEngine = engine
                 continue
             engines.insert(i + 1, "duckduckgo")
             break
