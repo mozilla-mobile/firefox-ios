@@ -1,10 +1,4 @@
 /* (No Commment) */
-"CFBundleName" = "$(PRODUCT_NAME)";
-
-/* (No Commment) */
-"CFBundleShortVersionString" = "2.0";
-
-/* (No Commment) */
 "NSCameraUsageDescription" = "This lets you take and upload photos.";
 
 /* (No Commment) */
