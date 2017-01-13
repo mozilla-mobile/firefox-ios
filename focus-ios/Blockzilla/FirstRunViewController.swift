@@ -43,6 +43,7 @@ class FirstRunViewController: UIViewController {
         button.layer.borderColor = UIConstants.colors.firstRunButtonBorder.cgColor
         button.layer.cornerRadius = 3
         button.addTarget(self, action: #selector(didPressDismiss), for: .touchUpInside)
+        button.accessibilityIdentifier = "FirstRunViewController.button"
         view.addSubview(button)
 
         let margin = 8

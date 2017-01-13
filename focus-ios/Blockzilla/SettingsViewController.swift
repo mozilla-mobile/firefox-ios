@@ -55,6 +55,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIConstants.colors.navigationTitle]
 
         let aboutButton = UIBarButtonItem(title: UIConstants.strings.aboutTitle, style: .plain, target: self, action: #selector(aboutClicked))
+        aboutButton.accessibilityIdentifier = "SettingsViewController.aboutButton"
         navigationItem.rightBarButtonItem = aboutButton
 
         view.addSubview(tableView)
@@ -121,6 +122,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             cell = UITableViewCell(style: .subtitle, reuseIdentifier: "searchCell")
             cell.textLabel?.text = searchEngineManager.activeEngine.name
             cell.accessoryType = .disclosureIndicator
+            cell.accessibilityIdentifier = "SettingsViewController.searchCell"
         default:
             cell = UITableViewCell(style: .subtitle, reuseIdentifier: "toggleCell")
             let toggle = toggleForIndexPath(indexPath)
@@ -356,5 +358,6 @@ private class BlockerToggle {
         self.label = label
         self.setting = setting
         self.subtitle = subtitle
+        toggle.accessibilityIdentifier = "BlockerToggle.\(setting.rawValue)"
     }
 }

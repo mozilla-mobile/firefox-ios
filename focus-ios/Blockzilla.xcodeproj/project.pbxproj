@@ -64,8 +64,6 @@
 		D3BFCB511BD1559300AD22D1 /* AboutContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BFCB501BD1559300AD22D1 /* AboutContentViewController.swift */; };
 		D3BFCB5B1BD15CD000AD22D1 /* rights-klar.html in Resources */ = {isa = PBXBuildFile; fileRef = D3BFCB5A1BD15CD000AD22D1 /* rights-klar.html */; };
 		D3C047BD1DCBD8ED00402FFB /* SearchEngines.plist in Resources */ = {isa = PBXBuildFile; fileRef = D3C047BC1DCBD8ED00402FFB /* SearchEngines.plist */; };
-		D3C70C5F1DDE785300CEE458 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D3C70C611DDE785300CEE458 /* InfoPlist.strings */; };
-		D3C70C641DDE785400CEE458 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D3C70C661DDE785400CEE458 /* InfoPlist.strings */; };
 		D3CD375B1DD3B51900468250 /* FirstRunViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CD375A1DD3B51900468250 /* FirstRunViewController.swift */; };
 		D3DA77851DC2C307009C114E /* ErrorPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3DA77841DC2C307009C114E /* ErrorPage.swift */; };
 		D3DA778C1DC2C60E009C114E /* errorPage.html in Resources */ = {isa = PBXBuildFile; fileRef = D3DA778B1DC2C60E009C114E /* errorPage.html */; };
@@ -96,6 +94,8 @@
 		E40AFB101DC9014700DA5651 /* UserAgent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40AFB0F1DC9014700DA5651 /* UserAgent.swift */; };
 		E40AFB141DC939FF00DA5651 /* SupportUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40AFB131DC939FF00DA5651 /* SupportUtils.swift */; };
 		E40AFC741DDDE96D00DA5651 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E40AFC761DDDE96D00DA5651 /* InfoPlist.strings */; };
+		E44A346A1E0A18C100BFD777 /* SnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44A34691E0A18C100BFD777 /* SnapshotTests.swift */; };
+		E44A34761E0A198000BFD777 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44A34751E0A198000BFD777 /* SnapshotHelper.swift */; };
 		E47F9AE21DB927FD00A93285 /* AdjustSdk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E47F9AE11DB927FD00A93285 /* AdjustSdk.framework */; };
 		E47F9AE71DB929D800A93285 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E47F9AE51DB929D800A93285 /* AdSupport.framework */; };
 		E47F9AE81DB929D800A93285 /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E47F9AE61DB929D800A93285 /* iAd.framework */; };
@@ -116,6 +116,13 @@
 
 /* Begin PBXContainerItemProxy section */
 		0BA39A881DD2B8E4005F970A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E4BF2DCB1BACE8CA00DA9D68 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E4BF2DD21BACE8CA00DA9D68;
+			remoteInfo = Blockzilla;
+		};
+		E44A346C1E0A18C100BFD777 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E4BF2DCB1BACE8CA00DA9D68 /* Project object */;
 			proxyType = 1;
@@ -205,8 +212,6 @@
 		D3BFCB501BD1559300AD22D1 /* AboutContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutContentViewController.swift; sourceTree = "<group>"; };
 		D3BFCB5A1BD15CD000AD22D1 /* rights-klar.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "rights-klar.html"; sourceTree = "<group>"; };
 		D3C047BC1DCBD8ED00402FFB /* SearchEngines.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = SearchEngines.plist; path = Search/SearchEngines.plist; sourceTree = SOURCE_ROOT; };
-		D3C70C601DDE785300CEE458 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		D3C70C651DDE785400CEE458 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D3C70C671DDE795300CEE458 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D3C70C711DDFCA4800CEE458 /* Klar.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Klar.entitlements; sourceTree = "<group>"; };
 		D3C70C721DDFCA7000CEE458 /* KlarEnterprise.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = KlarEnterprise.entitlements; sourceTree = "<group>"; };
@@ -237,6 +242,10 @@
 		E40AFB0F1DC9014700DA5651 /* UserAgent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserAgent.swift; sourceTree = "<group>"; };
 		E40AFB131DC939FF00DA5651 /* SupportUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SupportUtils.swift; sourceTree = "<group>"; };
 		E40AFC791DDDE98300DA5651 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		E44A34671E0A18C100BFD777 /* ScreenshotTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = ScreenshotTests.xctest; path = SnapshotTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E44A34691E0A18C100BFD777 /* SnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotTests.swift; sourceTree = "<group>"; };
+		E44A346B1E0A18C100BFD777 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E44A34751E0A198000BFD777 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnapshotHelper.swift; sourceTree = "<group>"; };
 		E47F9AE11DB927FD00A93285 /* AdjustSdk.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdjustSdk.framework; path = Carthage/Build/iOS/AdjustSdk.framework; sourceTree = "<group>"; };
 		E47F9AE51DB929D800A93285 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		E47F9AE61DB929D800A93285 /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
@@ -260,6 +269,13 @@
 
 /* Begin PBXFrameworksBuildPhase section */
 		0BA39A801DD2B8E4005F970A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E44A34641E0A18C100BFD777 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -301,7 +317,6 @@
 			isa = PBXGroup;
 			children = (
 				0B70C1621DE6128900CEF7E0 /* WebsiteMemoryTest.swift */,
-				D3C70C611DDE785300CEE458 /* InfoPlist.strings */,
 				0BBBED3F1DD3821600F9C565 /* Utils */,
 				0BA39A851DD2B8E4005F970A /* WebsiteAccessTest.swift */,
 				0BBBED421DD3B78300F9C565 /* SettingAppearanceTest.swift */,
@@ -393,6 +408,17 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		E44A34681E0A18C100BFD777 /* SnapshotTests */ = {
+			isa = PBXGroup;
+			children = (
+				E44A34691E0A18C100BFD777 /* SnapshotTests.swift */,
+				E44A34751E0A198000BFD777 /* SnapshotHelper.swift */,
+				E44A346B1E0A18C100BFD777 /* Info.plist */,
+			);
+			name = SnapshotTests;
+			path = ScreenshotTests;
+			sourceTree = "<group>";
+		};
 		E4BF2DCA1BACE8CA00DA9D68 = {
 			isa = PBXGroup;
 			children = (
@@ -408,6 +434,7 @@
 				D33A1A391BC476D40003D929 /* Shared */,
 				D30179D31BCDA5EE009AD388 /* ThirdParty */,
 				0BA39A841DD2B8E4005F970A /* XCUITest */,
+				E44A34681E0A18C100BFD777 /* SnapshotTests */,
 			);
 			sourceTree = "<group>";
 		};
@@ -417,6 +444,7 @@
 				E4BF2DD31BACE8CA00DA9D68 /* Klar.app */,
 				E4BF2DEC1BACE92400DA9D68 /* ContentBlocker.appex */,
 				0BA39A831DD2B8E4005F970A /* XCUITest.xctest */,
+				E44A34671E0A18C100BFD777 /* ScreenshotTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -491,7 +519,6 @@
 		E4BF2DED1BACE92400DA9D68 /* ContentBlocker */ = {
 			isa = PBXGroup;
 			children = (
-				D3C70C661DDE785400CEE458 /* InfoPlist.strings */,
 				D3BBC9EC1D7F81CB00D1751B /* enabled-detector.json */,
 				E4BF2DF21BACE92400DA9D68 /* Info.plist */,
 				E4BF2DF01BACE92400DA9D68 /* ActionRequestHandler.swift */,
@@ -518,6 +545,24 @@
 			name = XCUITest;
 			productName = XCUITest;
 			productReference = 0BA39A831DD2B8E4005F970A /* XCUITest.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		E44A34661E0A18C100BFD777 /* SnapshotTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E44A34741E0A18C100BFD777 /* Build configuration list for PBXNativeTarget "SnapshotTests" */;
+			buildPhases = (
+				E44A34631E0A18C100BFD777 /* Sources */,
+				E44A34641E0A18C100BFD777 /* Frameworks */,
+				E44A34651E0A18C100BFD777 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E44A346D1E0A18C100BFD777 /* PBXTargetDependency */,
+			);
+			name = SnapshotTests;
+			productName = ScreenshotTests;
+			productReference = E44A34671E0A18C100BFD777 /* ScreenshotTests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 		E4BF2DD21BACE8CA00DA9D68 /* Blockzilla */ = {
@@ -564,12 +609,18 @@
 		E4BF2DCB1BACE8CA00DA9D68 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0810;
+				LastSwiftUpdateCheck = 0820;
 				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = Mozilla;
 				TargetAttributes = {
 					0BA39A821DD2B8E4005F970A = {
 						CreatedOnToolsVersion = 8.1;
+						DevelopmentTeam = 43AQ936H96;
+						ProvisioningStyle = Automatic;
+						TestTargetID = E4BF2DD21BACE8CA00DA9D68;
+					};
+					E44A34661E0A18C100BFD777 = {
+						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = 43AQ936H96;
 						ProvisioningStyle = Automatic;
 						TestTargetID = E4BF2DD21BACE8CA00DA9D68;
@@ -615,6 +666,7 @@
 				E4BF2DD21BACE8CA00DA9D68 /* Blockzilla */,
 				E4BF2DEB1BACE92400DA9D68 /* ContentBlocker */,
 				0BA39A821DD2B8E4005F970A /* XCUITest */,
+				E44A34661E0A18C100BFD777 /* SnapshotTests */,
 			);
 		};
 /* End PBXProject section */
@@ -624,7 +676,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D3C70C5F1DDE785300CEE458 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E44A34651E0A18C100BFD777 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -663,7 +721,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D32817251BD0689800185845 /* disconnect-social.json in Resources */,
-				D3C70C641DDE785400CEE458 /* InfoPlist.strings in Resources */,
 				D32817231BD0689800185845 /* disconnect-analytics.json in Resources */,
 				D3BBC9ED1D7F81CB00D1751B /* enabled-detector.json in Resources */,
 				D32817221BD0689800185845 /* disconnect-advertising.json in Resources */,
@@ -718,6 +775,15 @@
 				0BBBED411DD3823C00F9C565 /* BaseTestCase.swift in Sources */,
 				0B70C1631DE6128900CEF7E0 /* WebsiteMemoryTest.swift in Sources */,
 				0BA39A861DD2B8E4005F970A /* WebsiteAccessTest.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E44A34631E0A18C100BFD777 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E44A346A1E0A18C100BFD777 /* SnapshotTests.swift in Sources */,
+				E44A34761E0A198000BFD777 /* SnapshotHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -798,6 +864,11 @@
 			target = E4BF2DD21BACE8CA00DA9D68 /* Blockzilla */;
 			targetProxy = 0BA39A881DD2B8E4005F970A /* PBXContainerItemProxy */;
 		};
+		E44A346D1E0A18C100BFD777 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E4BF2DD21BACE8CA00DA9D68 /* Blockzilla */;
+			targetProxy = E44A346C1E0A18C100BFD777 /* PBXContainerItemProxy */;
+		};
 		E4BF2DF41BACE92400DA9D68 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = E4BF2DEB1BACE92400DA9D68 /* ContentBlocker */;
@@ -813,22 +884,6 @@
 				D362D26A1C47326A0041980A /* en */,
 			);
 			name = Localizable.strings;
-			sourceTree = "<group>";
-		};
-		D3C70C611DDE785300CEE458 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				D3C70C601DDE785300CEE458 /* de */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		D3C70C661DDE785400CEE458 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				D3C70C651DDE785400CEE458 /* de */,
-			);
-			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 		E40AFC761DDDE96D00DA5651 /* InfoPlist.strings */ = {
@@ -1495,6 +1550,307 @@
 			};
 			name = FocusRelease;
 		};
+		E44A346E1E0A18C100BFD777 /* KlarDebug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = ScreenshotTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.blockzilla.ScreenshotTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
+				TEST_TARGET_NAME = Blockzilla;
+			};
+			name = KlarDebug;
+		};
+		E44A346F1E0A18C100BFD777 /* FocusDebug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = ScreenshotTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.blockzilla.ScreenshotTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
+				TEST_TARGET_NAME = Blockzilla;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = FocusDebug;
+		};
+		E44A34701E0A18C100BFD777 /* KlarRelease */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = ScreenshotTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.blockzilla.ScreenshotTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
+				TEST_TARGET_NAME = Blockzilla;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = KlarRelease;
+		};
+		E44A34711E0A18C100BFD777 /* FocusRelease */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = ScreenshotTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.blockzilla.ScreenshotTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
+				TEST_TARGET_NAME = Blockzilla;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = FocusRelease;
+		};
+		E44A34721E0A18C100BFD777 /* FocusEnterprise */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = ScreenshotTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.blockzilla.ScreenshotTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
+				TEST_TARGET_NAME = Blockzilla;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = FocusEnterprise;
+		};
+		E44A34731E0A18C100BFD777 /* KlarEnterprise */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = ScreenshotTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.blockzilla.ScreenshotTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
+				TEST_TARGET_NAME = Blockzilla;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = KlarEnterprise;
+		};
 		E4BF2DE31BACE8CA00DA9D68 /* KlarDebug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1682,6 +2038,19 @@
 				0BA39A8E1DD2B8E4005F970A /* FocusRelease */,
 				0BA39A8F1DD2B8E4005F970A /* FocusEnterprise */,
 				D3C70C701DDFC48100CEE458 /* KlarEnterprise */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = FocusRelease;
+		};
+		E44A34741E0A18C100BFD777 /* Build configuration list for PBXNativeTarget "SnapshotTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E44A346E1E0A18C100BFD777 /* KlarDebug */,
+				E44A346F1E0A18C100BFD777 /* FocusDebug */,
+				E44A34701E0A18C100BFD777 /* KlarRelease */,
+				E44A34711E0A18C100BFD777 /* FocusRelease */,
+				E44A34721E0A18C100BFD777 /* FocusEnterprise */,
+				E44A34731E0A18C100BFD777 /* KlarEnterprise */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = FocusRelease;

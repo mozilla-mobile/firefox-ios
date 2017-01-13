@@ -50,6 +50,7 @@ class BrowserToolset {
         sendButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         sendButton.addTarget(self, action: #selector(didPressSend), for: .touchUpInside)
         sendButton.accessibilityLabel = UIConstants.strings.browserShare
+        sendButton.accessibilityIdentifier = "BrowserToolset.sendButton"
     }
 
     var canGoBack: Bool = false {

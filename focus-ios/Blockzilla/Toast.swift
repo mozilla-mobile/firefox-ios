@@ -27,6 +27,7 @@ class Toast {
         label.textColor = UIConstants.colors.toastText
         label.font = UIConstants.fonts.toast
         label.numberOfLines = 0
+        label.accessibilityIdentifier = "Toast.label"
         toast.addSubview(label)
 
         toast.snp.makeConstraints { make in

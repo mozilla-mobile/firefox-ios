@@ -85,6 +85,7 @@ class URLBar: UIView {
         urlText.setContentHuggingPriority(1000, for: .vertical)
         urlText.autocompleteDelegate = self
         urlText.source = domainCompletion
+        urlText.accessibilityIdentifier = "URLBar.urlText"
         textAndLockContainer.addSubview(urlText)
 
         cancelButton.isHidden = true
@@ -108,6 +109,7 @@ class URLBar: UIView {
         deleteButton.setContentHuggingPriority(1000, for: .horizontal)
         deleteButton.setContentCompressionResistancePriority(1000, for: .horizontal)
         deleteButton.addTarget(self, action: #selector(didPressDelete), for: .touchUpInside)
+        deleteButton.accessibilityIdentifier = "URLBar.deleteButton"
         addSubview(deleteButton)
 
         let buttonContainer = UIView()
@@ -129,6 +131,7 @@ class URLBar: UIView {
         activateButton.setTitleColor(UIConstants.colors.urlTextPlaceholder, for: .normal)
         activateButton.titleEdgeInsets = UIEdgeInsetsMake(0, UIConstants.layout.urlBarWidthInset, 0, UIConstants.layout.urlBarWidthInset)
         activateButton.addTarget(self, action: #selector(didPressActivate), for: .touchUpInside)
+        activateButton.accessibilityIdentifier = "URLBar.activateButton"
         addSubview(activateButton)
 
         progressBar.isHidden = true
