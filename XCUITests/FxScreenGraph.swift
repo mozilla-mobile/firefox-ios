@@ -15,9 +15,24 @@ let FirstRun = "OptionalFirstRun"
 let HomePageSettings = "HomePageSettings"
 let PasscodeSettings = "PasscodeSettings"
 let PasscodeIntervalSettings = "PasscodeIntervalSettings"
+let SearchSettings = "SearchSettings"
+let NewTabSettings = "NewTabSettings"
+let ClearPrivateDataSettings = "ClearPrivateDataSettings"
 let LoginsSettings = "LoginsSettings"
+let OpenWithSettings = "OpenWithSettings"
 let NewTabScreen = "NewTabScreen"
 let NewTabMenu = "NewTabMenu"
+
+let allSettingsScreens = [
+    SettingsScreen,
+    HomePageSettings,
+    PasscodeSettings,
+    SearchSettings,
+    NewTabSettings,
+    ClearPrivateDataSettings,
+    LoginsSettings,
+    OpenWithSettings,
+]
 
 func createScreenGraph(app: XCUIApplication, url: String = "https://www.mozilla.org/en-US/book/") -> ScreenGraph {
     let map = ScreenGraph(app)
@@ -38,37 +53,53 @@ func createScreenGraph(app: XCUIApplication, url: String = "https://www.mozilla.
         }
 
         scene.tap(app.buttons["TabToolbar.menuButton"], to: NewTabMenu)
+        scene.gesture(to: TabTray) {
+            app.buttons["URLBarView.tabsButton"].tap()
+        }
     }
 
     map.createScene(NewTabMenu) { scene in
         scene.gesture(to: SettingsScreen) {
-            let collectionViewsQuery = app.collectionViews
-            collectionViewsQuery.cells["SettingsMenuItem"].tap()
+            app.collectionViews.cells["SettingsMenuItem"].tap()
         }
         scene.tap(app.buttons["Close Menu"], to: NewTabScreen)
         scene.dismissOnUse = true
     }
 
+    let navigationControllerBackAction = {
+        app.navigationBars.elementBoundByIndex(0).buttons.elementBoundByIndex(0).tap()
+    }
+
     map.createScene(SettingsScreen) { scene in
         let table = app.tables["AppSettingsTableViewController.tableView"]
 
-        scene.tap(table.staticTexts["Homepage"], to: HomePageSettings)
+        scene.tap(table.cells["Search"], to: SearchSettings)
+        scene.tap(table.cells["NewTab"], to: NewTabSettings)
+        scene.tap(table.cells["Homepage"], to: HomePageSettings)
         scene.tap(table.cells["TouchIDPasscode"], to: PasscodeSettings)
         scene.tap(table.cells["Logins"], to: LoginsSettings)
+        scene.tap(table.cells["ClearPrivateData"], to: ClearPrivateDataSettings)
+        scene.tap(table.cells["OpenWith.Setting"], to: OpenWithSettings)
 
-        scene.backAction = {
-            app.navigationBars["Settings"].buttons["AppSettingsTableViewController.navigationItem.leftBarButtonItem"].tap()
-        }
+        scene.tap(table.cells.staticTexts["Show Tour"], to: FirstRun)
+
+        scene.backAction = navigationControllerBackAction
+    }
+
+    map.createScene(SearchSettings) { scene in
+        scene.backAction = navigationControllerBackAction
+    }
+
+    map.createScene(NewTabSettings) { scene in
+        scene.backAction = navigationControllerBackAction
     }
 
     map.createScene(HomePageSettings) { scene in
-        scene.backAction = {
-            app.navigationBars["Homepage Settings"].buttons["Settings"].tap()
-        }
+        scene.backAction = navigationControllerBackAction
     }
 
     map.createScene(PasscodeSettings) { scene in
-        scene.tap(app.navigationBars["Passcode"].buttons["Settings"], to: SettingsScreen)
+        scene.backAction = navigationControllerBackAction
 
         scene.tap(app.tables["AuthenticationManager.settingsTableView"].staticTexts["Require Passcode"], to: PasscodeIntervalSettings)
     }
@@ -98,22 +129,41 @@ func createScreenGraph(app: XCUIApplication, url: String = "https://www.mozilla.
         }
     }
 
+    map.createScene(ClearPrivateDataSettings) { scene in
+        scene.backAction = navigationControllerBackAction
+    }
+
+    map.createScene(OpenWithSettings) { scene in
+        scene.backAction = navigationControllerBackAction
+    }
+
     map.createScene(TabTray) { scene in
+        scene.gesture(to: TabTrayMenu) {
+            app.buttons["TabTrayController.menuButton"].tap()
+        }
     }
 
     map.createScene(TabTrayMenu) { scene in
+        scene.gesture(to: SettingsScreen) {
+            let collectionViewsQuery = app.collectionViews
+            collectionViewsQuery.cells["SettingsMenuItem"].tap()
+        }
         scene.tap(app.buttons["Close Menu"], to: TabTray)
+        scene.dismissOnUse = true
     }
 
     map.createScene(BrowserTab) { scene in
         scene.tap(app.buttons["TabToolbar.menuButton"], to: BrowserTabMenu)
-
-        scene.tap(app.buttons["Show Tabs"], to: TabTray)
+        scene.gesture(to: TabTray) {
+            app.buttons["URLBarView.tabsButton"].tap()
+        }
     }
 
     map.createScene(BrowserTabMenu) { scene in
         scene.tap(app.buttons["Close Menu"], to: BrowserTab)
-        scene.tap(app.pageIndicators["page 1 of 2"], to: BrowserTabMenu2)
+        scene.gesture(to: BrowserTabMenu2) {
+            app.otherElements["MenuViewController.menuView"].swipeLeft()
+        }
         scene.dismissOnUse = true
     }
 
