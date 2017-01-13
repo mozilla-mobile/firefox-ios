@@ -1,189 +1,189 @@
 /* Button on About screen */
-"About.learnMoreButton" = "Learn more";
+"About.learnMoreButton" = "Ďalšie informácie";
 
 /* Label on About screen */
-"About.missionLabel" = "%@ is produced by Mozilla. Our mission is to foster a healthy, open Internet.";
+"About.missionLabel" = "%@ vyvíja Mozilla. Naša misia je podporovať zdravý a otvorený internet.";
 
 /* Label on About screen */
-"About.privateBullet1" = "Search and browse right in the app";
+"About.privateBullet1" = "Vyhľadávajte a prehliadajte priamo prostredníctvom aplikácie";
 
 /* Label on About screen */
-"About.privateBullet2" = "Block trackers (or update settings to allow trackers)";
+"About.privateBullet2" = "Blokujte sledovacie prvky (v nastaveniach môžete sledovacie prvky povoliť)";
 
 /* Label on About screen */
-"About.privateBullet3" = "Erase to delete cookies as well as search and browsing history";
+"About.privateBullet3" = "Vymažte cookies, históriu vyhľadávania a prehliadania";
 
 /* Label on About screen */
-"About.privateBulletHeader" = "Use it as a private browser:";
+"About.privateBulletHeader" = "Používajte ho ako prehliadač:";
 
 /* Label for row in About screen */
-"About.rowHelp" = "Help";
+"About.rowHelp" = "Pomocník";
 
 /* Label for row in About screen */
-"About.rowRights" = "Your Rights";
+"About.rowRights" = "Vaše práva";
 
 /* Label on About screen */
-"About.safariBullet1" = "Block trackers for improved privacy";
+"About.safariBullet1" = "Vylepšite svoje súkromie blokovaním sledovacích prvkov";
 
 /* Label on About screen */
-"About.safariBullet2" = "Block Web fonts to reduce page size";
+"About.safariBullet2" = "Zmenšite veľkosť stránok blokovaním webových písiem";
 
 /* Label on About screen */
-"About.safariBulletHeader" = "Use it as a Safari extension:";
+"About.safariBulletHeader" = "Používajte ho ako rozšírenie pre Safari:";
 
 /* Title for the About screen */
-"About.screenTitle" = "About";
+"About.screenTitle" = "O aplikácii";
 
 /* Label on About screen */
-"About.topLabel" = "%@ puts you in control.";
+"About.topLabel" = "%@ vám dáva kontrolu.";
 
 /* Accessibility label for the back button */
-"Browser.backLabel" = "Back";
+"Browser.backLabel" = "Naspäť";
 
 /* Accessibility label for the forward button */
-"Browser.forwardLabel" = "Forward";
+"Browser.forwardLabel" = "Dopredu";
 
 /* Accessibility label for the reload button */
-"Browser.reloadLabel" = "Reload";
+"Browser.reloadLabel" = "Obnoviť";
 
 /* Accessibility label for the settings button */
-"Browser.settingsLabel" = "Settings";
+"Browser.settingsLabel" = "Nastavenia";
 
 /* Accessibility label for the share button */
-"Browser.shareLabel" = "Share";
+"Browser.shareLabel" = "Zdieľať";
 
 /* Accessibility label for the stop button */
-"Browser.stopLabel" = "Stop";
+"Browser.stopLabel" = "Zastaviť";
 
 /* Button label to reload the error page */
-"Error.tryAgainButton" = "Try again";
+"Error.tryAgainButton" = "Skúsiť znova";
 
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.callButton" = "Call";
+"ExternalLink.callButton" = "Zavolať";
 
 /* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.cancelButton" = "Cancel";
+"ExternalLink.cancelButton" = "Zrušiť";
 
 /* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.emailButton" = "Email";
+"ExternalLink.emailButton" = "Poslať e-mail";
 
 /* Dialog title used for Maps/App Store links. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.messageTitle" = "You are now leaving Firefox Focus.";
+"ExternalLink.messageTitle" = "Opúšťate Firefox Focus.";
 
 /* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openAppStoreButton" = "Open App Store";
+"ExternalLink.openAppStoreButton" = "Otvoriť App Store";
 
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openMapsButton" = "Open Maps";
+"ExternalLink.openMapsButton" = "Otvoriť Mapy";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "OK, GOT IT!";
+"FirstRun.buttonLabel" = "OK, ROZUMIEM!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Automatically block online trackers while you browse. Then tap to erase visited pages, searches, cookies and passwords from your device.";
+"FirstRun.messageLabelDescription" = "Automaticky počas prehliadania blokujte sledovacie prvky. Potom jedným ťuknutím z vášho zariadenia vymažte zoznam navštívených stránok, výsledky vyhľadávania, cookies a heslá.";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelTagline" = "Browse like no one’s watching.";
+"FirstRun.messageLabelTagline" = "Prehliadajte, akoby sa nikto nepozeral.";
 
 /* First label for product description on the home screen */
-"Home.descriptionLabel1" = "Automatic private browsing.";
+"Home.descriptionLabel1" = "Automatické súkromné prehliadanie.";
 
 /* Second label for product description on the home screen */
-"Home.descriptionLabel2" = "Browse. Erase. Repeat.";
+"Home.descriptionLabel2" = "Prehliadajte. Vymažte históriu. Opakujte.";
 
 /* Label in share alert to cancel the alert */
-"Open.Cancel" = "Cancel";
+"Open.Cancel" = "Zrušiť";
 
 /* Label in share alert to open the URL in Firefox */
-"Open.Firefox" = "Firefox (Private Browsing)";
+"Open.Firefox" = "Firefox (súkromné prehliadanie)";
 
 /* Label in share alert to open the full system share menu */
-"Open.More" = "More";
+"Open.More" = "Viac";
 
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsContentBlockers" = "Tap Safari, then select Content Blockers";
+"Safari.instructionsContentBlockers" = "Ťuknite na Safari a vyberte Blokátory obsahu";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsEnable" = "Enable %@";
+"Safari.instructionsEnable" = "Povoľte %@";
 
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
-"Safari.instructionsNotEnabled" = "%@ is not enabled.";
+"Safari.instructionsNotEnabled" = "%@ nie je povolený.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsOpen" = "Open Settings App";
+"Safari.instructionsOpen" = "Otvorte aplikáciu Nastavenia";
 
 /* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Blocking other content trackers may break some videos and Web pages.";
+"Settings.blockOtherMessage" = "Blokovanie ostatných sledovacích prvkov môže rozbiť niektoré videá a webové stránky.";
 
 /* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "No, Thanks";
+"Settings.blockOtherNo" = "Nie, ďakujem";
 
 /* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "I Understand";
+"Settings.blockOtherYes" = "Rozumiem";
 
 /* Title for settings screen */
-"Settings.screenTitle" = "Settings";
+"Settings.screenTitle" = "Nastavenia";
 
 /* Title for the search engine row */
-"Settings.searchSection" = "SEARCH ENGINE";
+"Settings.searchSection" = "VYHĽADÁVACÍ MODUL";
 
 /* Title for the search engine selection screen */
-"Settings.searchTitle" = "Search Engine";
+"Settings.searchTitle" = "Vyhľadávací modul";
 
 /* Label for Safari integration section */
-"Settings.sectionIntegration" = "INTEGRATION";
+"Settings.sectionIntegration" = "INTEGRÁCIA";
 
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";
 
 /* Section label for performance toggles */
-"Settings.sectionPerformance" = "PERFORMANCE";
+"Settings.sectionPerformance" = "VÝKON";
 
 /* Section label for privacy toggles */
-"Settings.sectionPrivacy" = "PRIVACY";
+"Settings.sectionPrivacy" = "SÚKROMIE";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Block ad trackers";
+"Settings.toggleBlockAds" = "Blokovať reklamné sledovacie prvky";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Block analytics trackers";
+"Settings.toggleBlockAnalytics" = "Blokovať analytické sledovacie prvky";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "Block Web fonts";
+"Settings.toggleBlockFonts" = "Blokovať webové písma";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Block other content trackers";
+"Settings.toggleBlockOther" = "Blokovať ostatné sledovacie prvky";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Block social trackers";
+"Settings.toggleBlockSocial" = "Blokovať sledovacie prvky sociálnych sietí";
 
 /* Label subtitle for toggle on main screen */
-"Settings.toggleOtherSubtitle" = "May break some videos and Web pages";
+"Settings.toggleOtherSubtitle" = "Toto môže rozbiť niektoré videá a webové stránky";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
 /* Label for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageData" = "Send anonymous usage data";
+"Settings.toggleSendAnonymousUsageData" = "Odosielať anonymné údaje o používaní";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageDataSubtitle" = "Learn more";
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "Ďalšie informácie";
 
 /* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "Cancel";
+"URL.cancelLabel" = "Zrušiť";
 
 /* Erase button in the URL bar */
-"URL.eraseButtonLabel" = "ERASE";
+"URL.eraseButtonLabel" = "VYMAZAŤ";
 
 /* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "Your browsing history has been erased.";
+"URL.eraseMessageLabel" = "Vaša história prehliadania bola vymazaná.";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "Search or enter address";
+"URL.placeholderText" = "Zadajte adresu alebo výraz vyhľadávania";
 
 /* Label displayed for search button when typing in the URL bar */
-"URL.searchLabel" = "Search for %@";
+"URL.searchLabel" = "Vyhľadať %@";
 

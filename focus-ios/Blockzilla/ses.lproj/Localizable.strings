@@ -1,189 +1,189 @@
 /* Button on About screen */
-"About.learnMoreButton" = "Learn more";
+"About.learnMoreButton" = "Ka bay ka tonton";
 
 /* Label on About screen */
-"About.missionLabel" = "%@ is produced by Mozilla. Our mission is to foster a healthy, open Internet.";
+"About.missionLabel" = "Mozilla ma %@ tee. Ir anniya ti ka interneti baanoo nda feeriyanoo sahãndi.";
 
 /* Label on About screen */
-"About.privateBullet1" = "Search and browse right in the app";
+"About.privateBullet1" = "Ceeci nda naaru porogaramoo hunday ra";
 
 /* Label on About screen */
-"About.privateBullet2" = "Block trackers (or update settings to allow trackers)";
+"About.privateBullet2" = "Ganakey gagay (wala kayandiyaney taagandi ka ganakey noo fondo)";
 
 /* Label on About screen */
-"About.privateBullet3" = "Erase to delete cookies as well as search and browsing history";
+"About.privateBullet3" = "Tuusu ka aleewa tuusu, ceeci nda naaruyan taariki da kaa";
 
 /* Label on About screen */
-"About.privateBulletHeader" = "Use it as a private browser:";
+"About.privateBulletHeader" = "Goy nd'a sutura ceeciyan se:";
 
 /* Label for row in About screen */
-"About.rowHelp" = "Help";
+"About.rowHelp" = "Faaba";
 
 /* Label for row in About screen */
-"About.rowRights" = "Your Rights";
+"About.rowRights" = "War alhakey";
 
 /* Label on About screen */
-"About.safariBullet1" = "Block trackers for improved privacy";
+"About.safariBullet1" = "Ganakey gagay ka war suturaa tonton";
 
 /* Label on About screen */
-"About.safariBullet2" = "Block Web fonts to reduce page size";
+"About.safariBullet2" = "Interneti šigira gagay ka moɲoo kaccandi";
 
 /* Label on About screen */
-"About.safariBulletHeader" = "Use it as a Safari extension:";
+"About.safariBulletHeader" = "A ka goy sanda Safari dobuyan:";
 
 /* Title for the About screen */
-"About.screenTitle" = "About";
+"About.screenTitle" = "A ga";
 
 /* Label on About screen */
-"About.topLabel" = "%@ puts you in control.";
+"About.topLabel" = "%@ ka war noo juwaloo.";
 
 /* Accessibility label for the back button */
-"Browser.backLabel" = "Back";
+"Browser.backLabel" = "Banda";
 
 /* Accessibility label for the forward button */
-"Browser.forwardLabel" = "Forward";
+"Browser.forwardLabel" = "Jine";
 
 /* Accessibility label for the reload button */
-"Browser.reloadLabel" = "Reload";
+"Browser.reloadLabel" = "Dam taaga";
 
 /* Accessibility label for the settings button */
-"Browser.settingsLabel" = "Settings";
+"Browser.settingsLabel" = "Kayandiyaney";
 
 /* Accessibility label for the share button */
-"Browser.shareLabel" = "Share";
+"Browser.shareLabel" = "Žemna";
 
 /* Accessibility label for the stop button */
-"Browser.stopLabel" = "Stop";
+"Browser.stopLabel" = "Kay";
 
 /* Button label to reload the error page */
-"Error.tryAgainButton" = "Try again";
+"Error.tryAgainButton" = "Ceeci koyne";
 
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.callButton" = "Call";
+"ExternalLink.callButton" = "Ciya";
 
 /* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.cancelButton" = "Cancel";
+"ExternalLink.cancelButton" = "Naŋ";
 
 /* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.emailButton" = "Email";
+"ExternalLink.emailButton" = "Bataga";
 
 /* Dialog title used for Maps/App Store links. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.messageTitle" = "You are now leaving Firefox Focus.";
+"ExternalLink.messageTitle" = "War goo ma fatta Firefox Focus ra.";
 
 /* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openAppStoreButton" = "Open App Store";
+"ExternalLink.openAppStoreButton" = "App Store feeri";
 
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openMapsButton" = "Open Maps";
+"ExternalLink.openMapsButton" = "Kanandey feeri";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "OK, GOT IT!";
+"FirstRun.buttonLabel" = "AYYO, AY FAHAM!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Automatically block online trackers while you browse. Then tap to erase visited pages, searches, cookies and passwords from your device.";
+"FirstRun.messageLabelDescription" = "Ga interneti ganakey gagay nda boŋse waati kaŋ war ga naaru. Adiši karkar ka moo gunantey, ceeciyaney, aleewawey nda šennikufaley tuusu war jinaa ga.";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelTagline" = "Browse like no one’s watching.";
+"FirstRun.messageLabelTagline" = "Naaru sanda boro kul šii ma guna.";
 
 /* First label for product description on the home screen */
-"Home.descriptionLabel1" = "Automatic private browsing.";
+"Home.descriptionLabel1" = "Sutura naaruyan nda nga boŋ.";
 
 /* Second label for product description on the home screen */
-"Home.descriptionLabel2" = "Browse. Erase. Repeat.";
+"Home.descriptionLabel2" = "Naaru. Tuusu. Filla.";
 
 /* Label in share alert to cancel the alert */
-"Open.Cancel" = "Cancel";
+"Open.Cancel" = "Naŋ";
 
 /* Label in share alert to open the URL in Firefox */
-"Open.Firefox" = "Firefox (Private Browsing)";
+"Open.Firefox" = "Firefox (Sutura naaruyan)";
 
 /* Label in share alert to open the full system share menu */
-"Open.More" = "More";
+"Open.More" = "Ka tonton";
 
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsContentBlockers" = "Tap Safari, then select Content Blockers";
+"Safari.instructionsContentBlockers" = "Safari karkar, de ma gundekuna gagaykey suuba";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsEnable" = "Enable %@";
+"Safari.instructionsEnable" = "%@ tunandi";
 
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
-"Safari.instructionsNotEnabled" = "%@ is not enabled.";
+"Safari.instructionsNotEnabled" = "%@ mana tunandi.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsOpen" = "Open Settings App";
+"Safari.instructionsOpen" = "Kayandiyaney porogaramoo feeri";
 
 /* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Blocking other content trackers may break some videos and Web pages.";
+"Settings.blockOtherMessage" = "Gundekuna tana ganakey gagayyan ga hin widewo nda interneti moo fooyaŋ kayri.";
 
 /* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "No, Thanks";
+"Settings.blockOtherNo" = "Kalaa, naŋ yaada";
 
 /* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "I Understand";
+"Settings.blockOtherYes" = "Ay ga faham";
 
 /* Title for settings screen */
-"Settings.screenTitle" = "Settings";
+"Settings.screenTitle" = "Kayandiyaney";
 
 /* Title for the search engine row */
-"Settings.searchSection" = "SEARCH ENGINE";
+"Settings.searchSection" = "CEECIJINAY";
 
 /* Title for the search engine selection screen */
-"Settings.searchTitle" = "Search Engine";
+"Settings.searchTitle" = "Ceecijinay";
 
 /* Label for Safari integration section */
-"Settings.sectionIntegration" = "INTEGRATION";
+"Settings.sectionIntegration" = "MARGAYAN";
 
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";
 
 /* Section label for performance toggles */
-"Settings.sectionPerformance" = "PERFORMANCE";
+"Settings.sectionPerformance" = "TEEYAN SAHÃ";
 
 /* Section label for privacy toggles */
-"Settings.sectionPrivacy" = "PRIVACY";
+"Settings.sectionPrivacy" = "SUTURA";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Block ad trackers";
+"Settings.toggleBlockAds" = "Feeyan ganakey gagay";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Block analytics trackers";
+"Settings.toggleBlockAnalytics" = "Korošiyan ganakey gagay";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "Block Web fonts";
+"Settings.toggleBlockFonts" = "Interneti šigira gagay";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Block other content trackers";
+"Settings.toggleBlockOther" = "Gundekuna tana ganakey gagay";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Block social trackers";
+"Settings.toggleBlockSocial" = "Jamaa ganakey gagay";
 
 /* Label subtitle for toggle on main screen */
-"Settings.toggleOtherSubtitle" = "May break some videos and Web pages";
+"Settings.toggleOtherSubtitle" = "Ga hin ka widewo nda interneti moo fooyaŋ kayri";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
 /* Label for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageData" = "Send anonymous usage data";
+"Settings.toggleSendAnonymousUsageData" = "Sanba goyyan bayhaya bila nda maa";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageDataSubtitle" = "Learn more";
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "Ka bay ka tonton";
 
 /* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "Cancel";
+"URL.cancelLabel" = "Naŋ";
 
 /* Erase button in the URL bar */
-"URL.eraseButtonLabel" = "ERASE";
+"URL.eraseButtonLabel" = "TUUSU";
 
 /* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "Your browsing history has been erased.";
+"URL.eraseMessageLabel" = "War naaruyan taarikoo n' ka tuusandi.";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "Search or enter address";
+"URL.placeholderText" = "Ceeci wala aderesu dam";
 
 /* Label displayed for search button when typing in the URL bar */
-"URL.searchLabel" = "Search for %@";
+"URL.searchLabel" = "Wa %@ ceeci";
 

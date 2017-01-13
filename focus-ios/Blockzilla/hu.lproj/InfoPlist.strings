@@ -1,0 +1,12 @@
+/* (No Commment) */
+"NSCameraUsageDescription" = "Ez lehetővé teszi, hogy fényképeket készítsen és töltsön fel.";
+
+/* (No Commment) */
+"NSLocationWhenInUseUsageDescription" = "A meglátogatott webhelyek kérhetik az Ön helyét.";
+
+/* (No Commment) */
+"NSMicrophoneUsageDescription" = "Ez lehetővé teszi, hogy videókat készítsen és töltsön fel.";
+
+/* (No Commment) */
+"NSPhotoLibraryUsageDescription" = "Ez lehetővé teszi, hogy fényképeket mentsen és töltsön fel.";
+

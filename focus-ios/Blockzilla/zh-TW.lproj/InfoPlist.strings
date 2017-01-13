@@ -1,0 +1,12 @@
+/* (No Commment) */
+"NSCameraUsageDescription" = "此權限讓您可拍照與上傳圖片。";
+
+/* (No Commment) */
+"NSLocationWhenInUseUsageDescription" = "您造訪的網站可能會向您請求您的所在位置。";
+
+/* (No Commment) */
+"NSMicrophoneUsageDescription" = "讓您可拍攝並上傳影片。";
+
+/* (No Commment) */
+"NSPhotoLibraryUsageDescription" = "讓您可儲存並上傳圖片。";
+

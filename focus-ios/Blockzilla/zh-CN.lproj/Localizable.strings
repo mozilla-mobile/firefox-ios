@@ -1,189 +1,189 @@
 /* Button on About screen */
-"About.learnMoreButton" = "Learn more";
+"About.learnMoreButton" = "详细了解";
 
 /* Label on About screen */
-"About.missionLabel" = "%@ is produced by Mozilla. Our mission is to foster a healthy, open Internet.";
+"About.missionLabel" = "%@ 由 Mozilla 出品。我们的使命是促成健康、开放的互联网。";
 
 /* Label on About screen */
-"About.privateBullet1" = "Search and browse right in the app";
+"About.privateBullet1" = "在应用中搜索和浏览";
 
 /* Label on About screen */
-"About.privateBullet2" = "Block trackers (or update settings to allow trackers)";
+"About.privateBullet2" = "屏蔽跟踪器（或设置为允许跟踪器）";
 
 /* Label on About screen */
-"About.privateBullet3" = "Erase to delete cookies as well as search and browsing history";
+"About.privateBullet3" = "自动删除 Cookie 及搜索和浏览记录";
 
 /* Label on About screen */
-"About.privateBulletHeader" = "Use it as a private browser:";
+"About.privateBulletHeader" = "使用它作为隐私浏览器：";
 
 /* Label for row in About screen */
-"About.rowHelp" = "Help";
+"About.rowHelp" = "帮助";
 
 /* Label for row in About screen */
-"About.rowRights" = "Your Rights";
+"About.rowRights" = "您的权利";
 
 /* Label on About screen */
-"About.safariBullet1" = "Block trackers for improved privacy";
+"About.safariBullet1" = "屏蔽跟踪器以保障隐私";
 
 /* Label on About screen */
-"About.safariBullet2" = "Block Web fonts to reduce page size";
+"About.safariBullet2" = "屏蔽网络字体以减少页面大小";
 
 /* Label on About screen */
-"About.safariBulletHeader" = "Use it as a Safari extension:";
+"About.safariBulletHeader" = "使用它作为 Safari 扩展：";
 
 /* Title for the About screen */
-"About.screenTitle" = "About";
+"About.screenTitle" = "关于";
 
 /* Label on About screen */
-"About.topLabel" = "%@ puts you in control.";
+"About.topLabel" = "%@ 让您掌控线上生活。";
 
 /* Accessibility label for the back button */
-"Browser.backLabel" = "Back";
+"Browser.backLabel" = "后退";
 
 /* Accessibility label for the forward button */
-"Browser.forwardLabel" = "Forward";
+"Browser.forwardLabel" = "前进";
 
 /* Accessibility label for the reload button */
-"Browser.reloadLabel" = "Reload";
+"Browser.reloadLabel" = "重新载入";
 
 /* Accessibility label for the settings button */
-"Browser.settingsLabel" = "Settings";
+"Browser.settingsLabel" = "设置";
 
 /* Accessibility label for the share button */
-"Browser.shareLabel" = "Share";
+"Browser.shareLabel" = "分享";
 
 /* Accessibility label for the stop button */
-"Browser.stopLabel" = "Stop";
+"Browser.stopLabel" = "停止";
 
 /* Button label to reload the error page */
-"Error.tryAgainButton" = "Try again";
+"Error.tryAgainButton" = "重试";
 
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.callButton" = "Call";
+"ExternalLink.callButton" = "拨叫";
 
 /* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.cancelButton" = "Cancel";
+"ExternalLink.cancelButton" = "取消";
 
 /* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.emailButton" = "Email";
+"ExternalLink.emailButton" = "发邮件";
 
 /* Dialog title used for Maps/App Store links. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.messageTitle" = "You are now leaving Firefox Focus.";
+"ExternalLink.messageTitle" = "您即将离开 Firefox Focus。";
 
 /* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openAppStoreButton" = "Open App Store";
+"ExternalLink.openAppStoreButton" = "打开 App Store";
 
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openMapsButton" = "Open Maps";
+"ExternalLink.openMapsButton" = "打开地图";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "OK, GOT IT!";
+"FirstRun.buttonLabel" = "明白了";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Automatically block online trackers while you browse. Then tap to erase visited pages, searches, cookies and passwords from your device.";
+"FirstRun.messageLabelDescription" = "在您浏览时自动屏蔽在线跟踪器。点按即可清除您的设备上的访问记录、搜索记录、Cookie 以及保存的密码。";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelTagline" = "Browse like no one’s watching.";
+"FirstRun.messageLabelTagline" = "安心浏览。";
 
 /* First label for product description on the home screen */
-"Home.descriptionLabel1" = "Automatic private browsing.";
+"Home.descriptionLabel1" = "自动化隐私浏览。";
 
 /* Second label for product description on the home screen */
-"Home.descriptionLabel2" = "Browse. Erase. Repeat.";
+"Home.descriptionLabel2" = "无痕浏览，无需劳心。";
 
 /* Label in share alert to cancel the alert */
-"Open.Cancel" = "Cancel";
+"Open.Cancel" = "取消";
 
 /* Label in share alert to open the URL in Firefox */
-"Open.Firefox" = "Firefox (Private Browsing)";
+"Open.Firefox" = "Firefox (隐私浏览)";
 
 /* Label in share alert to open the full system share menu */
-"Open.More" = "More";
+"Open.More" = "更多";
 
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsContentBlockers" = "Tap Safari, then select Content Blockers";
+"Safari.instructionsContentBlockers" = "点按 Safari，然后选择“内容拦截器”";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsEnable" = "Enable %@";
+"Safari.instructionsEnable" = "启用 %@";
 
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
-"Safari.instructionsNotEnabled" = "%@ is not enabled.";
+"Safari.instructionsNotEnabled" = "%@ 未启用。";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsOpen" = "Open Settings App";
+"Safari.instructionsOpen" = "打开“设置”应用";
 
 /* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Blocking other content trackers may break some videos and Web pages.";
+"Settings.blockOtherMessage" = "“屏蔽其他内容拦截器”可能影响某些视频和网页。";
 
 /* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "No, Thanks";
+"Settings.blockOtherNo" = "不用了";
 
 /* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "I Understand";
+"Settings.blockOtherYes" = "我已了解";
 
 /* Title for settings screen */
-"Settings.screenTitle" = "Settings";
+"Settings.screenTitle" = "设置";
 
 /* Title for the search engine row */
-"Settings.searchSection" = "SEARCH ENGINE";
+"Settings.searchSection" = "搜索引擎";
 
 /* Title for the search engine selection screen */
-"Settings.searchTitle" = "Search Engine";
+"Settings.searchTitle" = "搜索引擎";
 
 /* Label for Safari integration section */
-"Settings.sectionIntegration" = "INTEGRATION";
+"Settings.sectionIntegration" = "整合";
 
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";
 
 /* Section label for performance toggles */
-"Settings.sectionPerformance" = "PERFORMANCE";
+"Settings.sectionPerformance" = "性能";
 
 /* Section label for privacy toggles */
-"Settings.sectionPrivacy" = "PRIVACY";
+"Settings.sectionPrivacy" = "隐私";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Block ad trackers";
+"Settings.toggleBlockAds" = "屏蔽广告跟踪器";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Block analytics trackers";
+"Settings.toggleBlockAnalytics" = "屏蔽分析跟踪器";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "Block Web fonts";
+"Settings.toggleBlockFonts" = "屏蔽网络字体";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Block other content trackers";
+"Settings.toggleBlockOther" = "屏蔽其他内容跟踪器";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Block social trackers";
+"Settings.toggleBlockSocial" = "屏蔽社交跟踪器";
 
 /* Label subtitle for toggle on main screen */
-"Settings.toggleOtherSubtitle" = "May break some videos and Web pages";
+"Settings.toggleOtherSubtitle" = "可能影响某些视频和网页";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
 /* Label for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageData" = "Send anonymous usage data";
+"Settings.toggleSendAnonymousUsageData" = "发送匿名使用统计";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageDataSubtitle" = "Learn more";
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "详细了解";
 
 /* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "Cancel";
+"URL.cancelLabel" = "取消";
 
 /* Erase button in the URL bar */
-"URL.eraseButtonLabel" = "ERASE";
+"URL.eraseButtonLabel" = "擦除";
 
 /* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "Your browsing history has been erased.";
+"URL.eraseMessageLabel" = "您的浏览记录已清除。";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "Search or enter address";
+"URL.placeholderText" = "搜索或输入地址";
 
 /* Label displayed for search button when typing in the URL bar */
-"URL.searchLabel" = "Search for %@";
+"URL.searchLabel" = "搜索 %@";
 

@@ -1,5 +1,4 @@
 /* Button on About screen */
-
 "About.learnMoreButton" = "Mehr erfahren";
 
 /* Label on About screen */
@@ -38,26 +37,71 @@
 /* Label on About screen */
 "About.topLabel" = "Mit %@ haben Sie die Kontrolle.";
 
+/* Accessibility label for the back button */
+"Browser.backLabel" = "Zurück";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "Vor";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "Neu laden";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "Einstellungen";
+
+/* Accessibility label for the share button */
+"Browser.shareLabel" = "Teilen";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "Stopp";
+
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "Erneut versuchen";
+
+/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.callButton" = "Anrufen";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "Abbrechen";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "E-Mail";
+
+/* Dialog title used for Maps/App Store links. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.messageTitle" = "Sie verlassen jetzt Firefox Klar.";
+
+/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openAppStoreButton" = "App Store öffnen";
+
+/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openMapsButton" = "Karten öffnen";
 
 /* Label on button to dismiss first run UI */
 "FirstRun.buttonLabel" = "OK, verstanden!";
 
-/* Message label shown under the button in the first run UI */
-"FirstRun.disclaimerMessage" = "Hinweis: Die verwendeten Websites und Dienste können während des Surfens trotzdem Daten über Sie sammeln.";
+/* Message label on the first run screen */
+"FirstRun.messageLabelDescription" = "Blockieren Sie automatisch Online-Verfolgung beim Surfen. Durch Tippen können Sie dann besuchte Seiten, Suchanfragen, Cookies und Passwörter von Ihrem Gerät löschen.";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabel1" = "Surfen Sie, als würde niemand zusehen.";
-
-/* Message label on the first run screen */
-"FirstRun.messageLabel2" = "Blockieren Sie automatisch Online-Verfolger während des Surfens. Tippen Sie dann auf „Entfernen“, um besuchte Seiten, Suchbegriffe, Cookies und Passwörter von Ihrem Gerät zu löschen.";
+"FirstRun.messageLabelTagline" = "Surfen Sie, als würde niemand zusehen.";
 
 /* First label for product description on the home screen */
 "Home.descriptionLabel1" = "Automatischer Privater Modus.";
 
 /* Second label for product description on the home screen */
 "Home.descriptionLabel2" = "Surfen. Löschen. Wiederholen.";
+
+/* Label in share alert to cancel the alert */
+"Open.Cancel" = "Abbrechen";
+
+/* Label in share alert to open the URL in Firefox */
+"Open.Firefox" = "Firefox (Privater Modus)";
+
+/* Label in share alert to open the full system share menu */
+"Open.More" = "Mehr";
+
+/* Label in share alert to open the URL in Safari */
+"Open.Safari" = "Safari";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Tippen Sie auf „Safari“ und wählen Sie „Inhaltsblocker“";
@@ -82,6 +126,12 @@
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Einstellungen";
+
+/* Title for the search engine row */
+"Settings.searchSection" = "SUCHMASCHINE";
+
+/* Title for the search engine selection screen */
+"Settings.searchTitle" = "Suchmaschine";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "INTEGRATION";

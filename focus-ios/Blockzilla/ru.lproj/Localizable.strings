@@ -1,0 +1,171 @@
+/* Button on About screen */
+"About.learnMoreButton" = "Подробнее";
+
+/* Label on About screen */
+"About.missionLabel" = "%@ создан Mozilla. Нашей миссией является обеспечение здоровья и открытости Интернета.";
+
+/* Label on About screen */
+"About.privateBullet1" = "Ищите и сёрфите прямо из приложения";
+
+/* Label on About screen */
+"About.privateBullet2" = "Блокируйте трекеры (или обновите параметры, чтобы разрешить трекеры)";
+
+/* Label on About screen */
+"About.privateBullet3" = "Стирайте, чтобы удалить куки, а также историю поиска и веб-сёрфинга";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "Используйте его как приватный браузер:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "Справка";
+
+/* Label for row in About screen */
+"About.rowRights" = "Ваши права";
+
+/* Label on About screen */
+"About.safariBullet1" = "Блокируйте трекеры для повышения приватности";
+
+/* Label on About screen */
+"About.safariBullet2" = "Блокируйте веб-шрифты для уменьшения размера страниц";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "Используйте его как расширение Safari:";
+
+/* Title for the About screen */
+"About.screenTitle" = "О программе";
+
+/* Label on About screen */
+"About.topLabel" = "%@ передаёт контроль в ваши руки.";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "Назад";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "Вперёд";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "Обновить";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "Параметры";
+
+/* Accessibility label for the share button */
+"Browser.shareLabel" = "Поделиться";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "Остановить";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "Попробовать снова";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.buttonLabel" = "Я понял!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelDescription" = "Автоматически блокируйте онлайн-трекеры во время веб-сёрфинга. Затем нажмите, чтобы стереть посещённые страницы, поиски, куки и пароли со своего устройства.";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "Сёрфите Интернет не опасаясь слежки.";
+
+/* First label for product description on the home screen */
+"Home.descriptionLabel1" = "Автоматический приватный просмотр.";
+
+/* Second label for product description on the home screen */
+"Home.descriptionLabel2" = "Просмотреть. Стереть. Повторить.";
+
+/* Label in share alert to cancel the alert */
+"Open.Cancel" = "Отмена";
+
+/* Label in share alert to open the URL in Firefox */
+"Open.Firefox" = "Firefox (Приватный просмотр)";
+
+/* Label in share alert to open the full system share menu */
+"Open.More" = "Ещё";
+
+/* Label in share alert to open the URL in Safari */
+"Open.Safari" = "Safari";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "Нажмите Safari, затем выберите Правила блокирования контента";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "Включите %@";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ не включено.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "Открыть параметры приложения";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Блокирование других трекеров содержимого может нарушить работу некоторых видео и веб-страниц.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "Нет, спасибо";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "Я понимаю";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "Параметры";
+
+/* Title for the search engine row */
+"Settings.searchSection" = "ПОИСКОВАЯ СИСТЕМА";
+
+/* Title for the search engine selection screen */
+"Settings.searchTitle" = "Поисковая система";
+
+/* Label for Safari integration section */
+"Settings.sectionIntegration" = "ИНТЕГРАЦИЯ";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for performance toggles */
+"Settings.sectionPerformance" = "ПРОИЗВОДИТЕЛЬНОСТЬ";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "ПРИВАТНОСТЬ";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAds" = "Блокировать трекеры рекламы";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAnalytics" = "Блокировать трекеры аналитики";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Блокировать веб-шрифты";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockOther" = "Блокировать другие трекеры содержимого";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockSocial" = "Блокировать социальные трекеры";
+
+/* Label subtitle for toggle on main screen */
+"Settings.toggleOtherSubtitle" = "Может нарушить работу некоторых видео и веб-страниц";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageData" = "Отправлять анонимные данные об использовании";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "Подробнее";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "Отмена";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "СТЕРЕТЬ";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "Ваша история посещения сайтов была стёрта.";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Поиск или адрес";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Поиск %@";
+

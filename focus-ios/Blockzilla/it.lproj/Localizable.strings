@@ -1,189 +1,189 @@
 /* Button on About screen */
-"About.learnMoreButton" = "Learn more";
+"About.learnMoreButton" = "Ulteriori informazioni";
 
 /* Label on About screen */
-"About.missionLabel" = "%@ is produced by Mozilla. Our mission is to foster a healthy, open Internet.";
+"About.missionLabel" = "%@ è realizzato da Mozilla. La nostra missione è promuovere un Internet integro e aperto.";
 
 /* Label on About screen */
-"About.privateBullet1" = "Search and browse right in the app";
+"About.privateBullet1" = "Cerca e naviga direttamente nell’app.";
 
 /* Label on About screen */
-"About.privateBullet2" = "Block trackers (or update settings to allow trackers)";
+"About.privateBullet2" = "Blocca il tracciamento (o aggiorna le impostazioni per consentirlo).";
 
 /* Label on About screen */
-"About.privateBullet3" = "Erase to delete cookies as well as search and browsing history";
+"About.privateBullet3" = "Utilizza “Elimina” per rimuovere i cookie così come la cronologia di ricerca e navigazione.";
 
 /* Label on About screen */
-"About.privateBulletHeader" = "Use it as a private browser:";
+"About.privateBulletHeader" = "Utilizzalo per la navigazione anonima:";
 
 /* Label for row in About screen */
-"About.rowHelp" = "Help";
+"About.rowHelp" = "Guida";
 
 /* Label for row in About screen */
-"About.rowRights" = "Your Rights";
+"About.rowRights" = "I tuoi diritti";
 
 /* Label on About screen */
-"About.safariBullet1" = "Block trackers for improved privacy";
+"About.safariBullet1" = "Blocca gli elementi traccianti per una maggiore privacy.";
 
 /* Label on About screen */
-"About.safariBullet2" = "Block Web fonts to reduce page size";
+"About.safariBullet2" = "Blocca i font scaricati dal Web per ridurre la dimensione delle pagine.";
 
 /* Label on About screen */
-"About.safariBulletHeader" = "Use it as a Safari extension:";
+"About.safariBulletHeader" = "Utilizzalo come estensione per Safari:";
 
 /* Title for the About screen */
-"About.screenTitle" = "About";
+"About.screenTitle" = "Informazioni su";
 
 /* Label on About screen */
-"About.topLabel" = "%@ puts you in control.";
+"About.topLabel" = "Prendi il controllo con %@.";
 
 /* Accessibility label for the back button */
-"Browser.backLabel" = "Back";
+"Browser.backLabel" = "Indietro";
 
 /* Accessibility label for the forward button */
-"Browser.forwardLabel" = "Forward";
+"Browser.forwardLabel" = "Avanti";
 
 /* Accessibility label for the reload button */
-"Browser.reloadLabel" = "Reload";
+"Browser.reloadLabel" = "Ricarica";
 
 /* Accessibility label for the settings button */
-"Browser.settingsLabel" = "Settings";
+"Browser.settingsLabel" = "Impostazioni";
 
 /* Accessibility label for the share button */
-"Browser.shareLabel" = "Share";
+"Browser.shareLabel" = "Condividi";
 
 /* Accessibility label for the stop button */
-"Browser.stopLabel" = "Stop";
+"Browser.stopLabel" = "Interrompi";
 
 /* Button label to reload the error page */
-"Error.tryAgainButton" = "Try again";
+"Error.tryAgainButton" = "Riprova";
 
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.callButton" = "Call";
+"ExternalLink.callButton" = "Chiama";
 
 /* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.cancelButton" = "Cancel";
+"ExternalLink.cancelButton" = "Annulla";
 
 /* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.emailButton" = "Email";
 
 /* Dialog title used for Maps/App Store links. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.messageTitle" = "You are now leaving Firefox Focus.";
+"ExternalLink.messageTitle" = "Si sta uscendo da Firefox Focus.";
 
 /* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openAppStoreButton" = "Open App Store";
+"ExternalLink.openAppStoreButton" = "Apri App Store";
 
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openMapsButton" = "Open Maps";
+"ExternalLink.openMapsButton" = "Apri Mappe";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "OK, GOT IT!";
+"FirstRun.buttonLabel" = "OK, tutto chiaro.";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Automatically block online trackers while you browse. Then tap to erase visited pages, searches, cookies and passwords from your device.";
+"FirstRun.messageLabelDescription" = "Blocca automaticamente gli elementi in grado di tracciarti durante la navigazione. Poi, con un semplice tocco, elimina le pagine visitate, i cookie e le password dal dispositivo.";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelTagline" = "Browse like no one’s watching.";
+"FirstRun.messageLabelTagline" = "Naviga come se nessuno ti stesse guardando.";
 
 /* First label for product description on the home screen */
-"Home.descriptionLabel1" = "Automatic private browsing.";
+"Home.descriptionLabel1" = "Navigazione anonima in automatico.";
 
 /* Second label for product description on the home screen */
-"Home.descriptionLabel2" = "Browse. Erase. Repeat.";
+"Home.descriptionLabel2" = "Naviga. Elimina. Ripeti.";
 
 /* Label in share alert to cancel the alert */
-"Open.Cancel" = "Cancel";
+"Open.Cancel" = "Annulla";
 
 /* Label in share alert to open the URL in Firefox */
-"Open.Firefox" = "Firefox (Private Browsing)";
+"Open.Firefox" = "Firefox (navigazione anonima)";
 
 /* Label in share alert to open the full system share menu */
-"Open.More" = "More";
+"Open.More" = "Altro";
 
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsContentBlockers" = "Tap Safari, then select Content Blockers";
+"Safari.instructionsContentBlockers" = "Tocca Safari, poi seleziona Blocchi dei contenuti";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsEnable" = "Enable %@";
+"Safari.instructionsEnable" = "Attiva %@";
 
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
-"Safari.instructionsNotEnabled" = "%@ is not enabled.";
+"Safari.instructionsNotEnabled" = "%@ non è attivo.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsOpen" = "Open Settings App";
+"Safari.instructionsOpen" = "Apri le impostazioni";
 
 /* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Blocking other content trackers may break some videos and Web pages.";
+"Settings.blockOtherMessage" = "Il blocco di questi contenuti traccianti potrebbe causare il malfunzionamento di alcuni video e pagine web.";
 
 /* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "No, Thanks";
+"Settings.blockOtherNo" = "No, grazie";
 
 /* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "I Understand";
+"Settings.blockOtherYes" = "Comprendo il rischio";
 
 /* Title for settings screen */
-"Settings.screenTitle" = "Settings";
+"Settings.screenTitle" = "Impostazioni";
 
 /* Title for the search engine row */
-"Settings.searchSection" = "SEARCH ENGINE";
+"Settings.searchSection" = "MOTORE DI RICERCA";
 
 /* Title for the search engine selection screen */
-"Settings.searchTitle" = "Search Engine";
+"Settings.searchTitle" = "Motore di ricerca";
 
 /* Label for Safari integration section */
-"Settings.sectionIntegration" = "INTEGRATION";
+"Settings.sectionIntegration" = "INTEGRAZIONE";
 
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";
 
 /* Section label for performance toggles */
-"Settings.sectionPerformance" = "PERFORMANCE";
+"Settings.sectionPerformance" = "PRESTAZIONI";
 
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "PRIVACY";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Block ad trackers";
+"Settings.toggleBlockAds" = "Blocca pubblicità traccianti";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Block analytics trackers";
+"Settings.toggleBlockAnalytics" = "Blocca analytics traccianti";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "Block Web fonts";
+"Settings.toggleBlockFonts" = "Blocca web font";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Block other content trackers";
+"Settings.toggleBlockOther" = "Blocca altri contenuti traccianti";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Block social trackers";
+"Settings.toggleBlockSocial" = "Blocca traccianti social";
 
 /* Label subtitle for toggle on main screen */
-"Settings.toggleOtherSubtitle" = "May break some videos and Web pages";
+"Settings.toggleOtherSubtitle" = "Alcuni video e pagine web potrebbero non funzionare";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
 /* Label for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageData" = "Send anonymous usage data";
+"Settings.toggleSendAnonymousUsageData" = "Invia dati anonimi sull’uso";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageDataSubtitle" = "Learn more";
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "Ulteriori informazioni";
 
 /* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "Cancel";
+"URL.cancelLabel" = "Annulla";
 
 /* Erase button in the URL bar */
-"URL.eraseButtonLabel" = "ERASE";
+"URL.eraseButtonLabel" = "ELIMINA";
 
 /* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "Your browsing history has been erased.";
+"URL.eraseMessageLabel" = "La cronologia di navigazione è stata eliminata.";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "Search or enter address";
+"URL.placeholderText" = "Cerca o inserisci un indirizzo";
 
 /* Label displayed for search button when typing in the URL bar */
-"URL.searchLabel" = "Search for %@";
+"URL.searchLabel" = "Cerca %@";
 

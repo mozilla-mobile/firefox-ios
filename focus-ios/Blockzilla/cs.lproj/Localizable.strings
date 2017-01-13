@@ -1,0 +1,171 @@
+/* Button on About screen */
+"About.learnMoreButton" = "Zjistit více";
+
+/* Label on About screen */
+"About.missionLabel" = "%@ je vyvíjen Mozillou. Naše mise je podporovat zdravý a otevřený internet.";
+
+/* Label on About screen */
+"About.privateBullet1" = "Vyhledávejte a prohlížejte přímo v aplikaci";
+
+/* Label on About screen */
+"About.privateBullet2" = "Blokujte sledovací prvky (nebo aktualizujte nastavení pro povolení sledovacích prvků)";
+
+/* Label on About screen */
+"About.privateBullet3" = "Vymažte pro smazání cookies a historie vyhledávání a prohlížení";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "Používejte ho jako soukromý prohlížeč:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "Nápověda";
+
+/* Label for row in About screen */
+"About.rowRights" = "Vaše práva";
+
+/* Label on About screen */
+"About.safariBullet1" = "Blokovat sledovací prvky pro vylepšení soukromí";
+
+/* Label on About screen */
+"About.safariBullet2" = "Blokovat webová písma pro zmenšení velikosti stránky";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "Používejte ho jako rozšíření Safari:";
+
+/* Title for the About screen */
+"About.screenTitle" = "O aplikaci";
+
+/* Label on About screen */
+"About.topLabel" = "%@ vám dává kontrolu.";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "Zpět";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "Vpřed";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "Obnovit";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "Nastavení";
+
+/* Accessibility label for the share button */
+"Browser.shareLabel" = "Sdílet";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "Zastavit";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "Zkusit znovu";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.buttonLabel" = "OK, MÁME TO!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelDescription" = "Automaticky blokuje sledovací prvky zatímco prohlížíte. Poté klepněte pro vymazání zobrazených stránek, vyhledávání, souborů cookie a hesel z vašeho zařízení.";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "Procházejte jako když se nikdo nedivá.";
+
+/* First label for product description on the home screen */
+"Home.descriptionLabel1" = "Automatické anonymní prohlížení.";
+
+/* Second label for product description on the home screen */
+"Home.descriptionLabel2" = "Procházejte. Smažte. Opakujte.";
+
+/* Label in share alert to cancel the alert */
+"Open.Cancel" = "Zrušit";
+
+/* Label in share alert to open the URL in Firefox */
+"Open.Firefox" = "Firefox (anonymní prohlížení)";
+
+/* Label in share alert to open the full system share menu */
+"Open.More" = "Více";
+
+/* Label in share alert to open the URL in Safari */
+"Open.Safari" = "Safari";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "Klepněte na Safari a poté vyberte Blokátory obsahu";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "Povolte %@";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ není povolen.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "Otevřete Nastavení";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Blokování ostatních sledovacích prvků může rozbít některá videa a webové stránky.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "Ne, děkuji";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "Rozumím";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "Nastavení";
+
+/* Title for the search engine row */
+"Settings.searchSection" = "VYHLEDÁVACÍ MODUL";
+
+/* Title for the search engine selection screen */
+"Settings.searchTitle" = "Vyhledávací modul";
+
+/* Label for Safari integration section */
+"Settings.sectionIntegration" = "INTEGRACE";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for performance toggles */
+"Settings.sectionPerformance" = "VÝKON";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "SOUKROMÍ";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAds" = "Blokovat sledující reklamy";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAnalytics" = "Blokovat analytické prvky";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Blokovat webové fonty";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockOther" = "Blokovat ostatní sledující prvky";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockSocial" = "Blokovat sledující prvky sociálních sítí";
+
+/* Label subtitle for toggle on main screen */
+"Settings.toggleOtherSubtitle" = "Může rozbít některá videa a webové stránky";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageData" = "Odesílat anonymní data o používání";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "Zjistit více";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "Zrušit";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "VYMAZAT";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "Vaše historie procházení byla vymazána.";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Zadejte hledání nebo adresu";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Hledat %@";
+

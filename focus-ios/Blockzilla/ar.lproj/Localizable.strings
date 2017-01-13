@@ -1,0 +1,171 @@
+/* Button on About screen */
+"About.learnMoreButton" = "اطّلع على المزيد";
+
+/* Label on About screen */
+"About.missionLabel" = "%@ منتج من موزيلا. مهمتنا تشجيع إنترنت مفتوح و صحي.";
+
+/* Label on About screen */
+"About.privateBullet1" = "ابحث و تصفح مباشرة في التطبيق";
+
+/* Label on About screen */
+"About.privateBullet2" = "احظر المتعقبات (أو حدّث الإعدادات للسماح بالمتعقبات)";
+
+/* Label on About screen */
+"About.privateBullet3" = "امسح أو احذف الكعكات بالإضافة إلى حذف تأريخ البحث و التصفح";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "استخدمه كمتصفح خاص:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "مساعدة";
+
+/* Label for row in About screen */
+"About.rowRights" = "حقوقك";
+
+/* Label on About screen */
+"About.safariBullet1" = "احظر المتعقبات لتحسين الخصوصية";
+
+/* Label on About screen */
+"About.safariBullet2" = "احظر خطوط الوب لتقليل حجم الصفحات";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "استخدمه كامتداد لمتصفح سفاري:";
+
+/* Title for the About screen */
+"About.screenTitle" = "عن";
+
+/* Label on About screen */
+"About.topLabel" = "يعطيك %@ الدفة.";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "السابق";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "التالي";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "أعد التحميل";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "الإعدادات";
+
+/* Accessibility label for the share button */
+"Browser.shareLabel" = "شارك";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "أوقف";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "أعِد المحاولة";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.buttonLabel" = "حسنا، فهمت!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelDescription" = "احظر متعقبات الإنترنت تلقائيًا أثناء التصفح. ثم انقر لمسح الصفحات التي زرتها، و تأريخ البحث، و الكعكات، و كلمات السر من جهازك.";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "تصفح و لا أحد يراقبك.";
+
+/* First label for product description on the home screen */
+"Home.descriptionLabel1" = "تصفح خاص تلقائي.";
+
+/* Second label for product description on the home screen */
+"Home.descriptionLabel2" = "تصفح. امسح. كرر.";
+
+/* Label in share alert to cancel the alert */
+"Open.Cancel" = "ألغِ";
+
+/* Label in share alert to open the URL in Firefox */
+"Open.Firefox" = "فَيَرفُكس (التصفح الخاص)";
+
+/* Label in share alert to open the full system share menu */
+"Open.More" = "المزيد";
+
+/* Label in share alert to open the URL in Safari */
+"Open.Safari" = "سفاري";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "انقر على سفاري ثم اختر ”أدوات حظر المحتوى“";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "فعّل %@";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "‏%@ ليس مفعّلا.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "افتح تطبيق الإعدادات";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "حظر متعقبات المحتوى الأخرى قد يعطل بعض الڤديو و صفحات الوب.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "لا، شكرًا";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "أفهم هذا";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "الإعدادات";
+
+/* Title for the search engine row */
+"Settings.searchSection" = "محرك البحث";
+
+/* Title for the search engine selection screen */
+"Settings.searchTitle" = "محرك البحث";
+
+/* Label for Safari integration section */
+"Settings.sectionIntegration" = "التكامل";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "موزيلا";
+
+/* Section label for performance toggles */
+"Settings.sectionPerformance" = "الأداء";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "الخصوصية";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAds" = "احظر متعقبات الإعلانات";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAnalytics" = "احظر متعقبات التحليلات";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "احظر خطوط الوب";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockOther" = "احظر متعقبات المحتوى الأخرى";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockSocial" = "احظر المتعقبات الاجتماعية";
+
+/* Label subtitle for toggle on main screen */
+"Settings.toggleOtherSubtitle" = "قد يعطل بعض الڤديو و صفحات الوب";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "سفاري";
+
+/* Label for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageData" = "أرسل بيانات استخدام مجهّلة";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "اطّلع على المزيد";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "ألغِ";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "امسح";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "لقد مسح تأريخ تصفحك.";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "ابحث أو أدخل عنوانا";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "ابحث عن %@";
+

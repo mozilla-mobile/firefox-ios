@@ -1,0 +1,12 @@
+/* (No Commment) */
+"NSCameraUsageDescription" = "Ceci vous permet de prendre des photos et de les envoyer.";
+
+/* (No Commment) */
+"NSLocationWhenInUseUsageDescription" = "Les sites web que vous visitez peuvent demander à connaître votre emplacement.";
+
+/* (No Commment) */
+"NSMicrophoneUsageDescription" = "Ceci vous permet de prendre des vidéos et de les envoyer.";
+
+/* (No Commment) */
+"NSPhotoLibraryUsageDescription" = "Ceci vous permet d’enregistrer des photos et de les envoyer.";
+

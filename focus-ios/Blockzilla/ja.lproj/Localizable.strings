@@ -1,0 +1,45 @@
+/* Button on About screen */
+"About.learnMoreButton" = "詳しくはこちら";
+
+/* Label for row in About screen */
+"About.rowHelp" = "ヘルプ";
+
+/* Label for row in About screen */
+"About.rowRights" = "あなたの権利";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "戻る";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "進む";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "再読み込み";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "環境設定";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "中止";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "再試行";
+
+/* Label in share alert to cancel the alert */
+"Open.Cancel" = "キャンセル";
+
+/* Label in share alert to open the URL in Safari */
+"Open.Safari" = "Safari";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "環境設定";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "詳しくはこちら";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "キャンセル";
+

@@ -1,0 +1,189 @@
+/* Button on About screen */
+"About.learnMoreButton" = "Докладніше";
+
+/* Label on About screen */
+"About.missionLabel" = "%@ створено в Mozilla. Нашою місією є сприяння розвитку здорового, відкритого Інтернету.";
+
+/* Label on About screen */
+"About.privateBullet1" = "Пошук і перегляд прямо в програмі";
+
+/* Label on About screen */
+"About.privateBullet2" = "Блокувати стеження (або оновіть наштування, щоб дозволити стеження)";
+
+/* Label on About screen */
+"About.privateBullet3" = "Очистіть для видалення куків, разом з історією пошуку і перегляду";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "Використовувати як приватний браузер:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "Допомога";
+
+/* Label for row in About screen */
+"About.rowRights" = "Ваші права";
+
+/* Label on About screen */
+"About.safariBullet1" = "Блокувати стеження для покращення приватності";
+
+/* Label on About screen */
+"About.safariBullet2" = "Блокувати веб-шрифти для зменшення розміру сторінки";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "Використовувати в якості розширення для Safari:";
+
+/* Title for the About screen */
+"About.screenTitle" = "Про";
+
+/* Label on About screen */
+"About.topLabel" = "%@ надає вам контроль.";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "Назад";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "Вперед";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "Перезавантажити";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "Параметри";
+
+/* Accessibility label for the share button */
+"Browser.shareLabel" = "Поділитися";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "Стоп";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "Спробувати знову";
+
+/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.callButton" = "Виклик";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "Скасувати";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "Е-пошта";
+
+/* Dialog title used for Maps/App Store links. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.messageTitle" = "Ви виходите з Firefox Focus.";
+
+/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openAppStoreButton" = "Відкрити App Store";
+
+/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openMapsButton" = "Відкрити карти";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.buttonLabel" = "ГАРАЗД, ЗРОЗУМІЛО!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelDescription" = "Автоматично блокувати стеження онлайн під час перегляду. Потім торкніться, щоб стерти відвідані сторінки, пошукові запити, куки й паролі з вашого пристрою.";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "Переглядайте без думки, що за вами хтось спостерігає.";
+
+/* First label for product description on the home screen */
+"Home.descriptionLabel1" = "Автоматичний приватний перегляд.";
+
+/* Second label for product description on the home screen */
+"Home.descriptionLabel2" = "Переглядайте. Стирайте. Повторюйте знову.";
+
+/* Label in share alert to cancel the alert */
+"Open.Cancel" = "Скасувати";
+
+/* Label in share alert to open the URL in Firefox */
+"Open.Firefox" = "Firefox (Приватний перегляд)";
+
+/* Label in share alert to open the full system share menu */
+"Open.More" = "Більше";
+
+/* Label in share alert to open the URL in Safari */
+"Open.Safari" = "Safari";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "Оберіть Safari, потім оберіть Блокування вмісту";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "Увімкніть %@";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ не увімкнено.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "Відкрийте параметри";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Блокування інших елементів стеження може пошкодити деякі відео або веб-сторінки.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "Ні, дякую";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "Я розумію";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "Параметри";
+
+/* Title for the search engine row */
+"Settings.searchSection" = "ЗАСІБ ПОШУКУ";
+
+/* Title for the search engine selection screen */
+"Settings.searchTitle" = "Засіб пошуку";
+
+/* Label for Safari integration section */
+"Settings.sectionIntegration" = "ІНТЕГРАЦІЯ";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for performance toggles */
+"Settings.sectionPerformance" = "ШВИДКОДІЯ";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "ПРИВАТНІСТЬ";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAds" = "Блокувати рекламу зі стеженням";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAnalytics" = "Блокувати аналітику зі стеженням";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Блокувати веб-шрифти";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockOther" = "Блокувати інші елементи стеження";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockSocial" = "Блокувати стеження соціальних мереж";
+
+/* Label subtitle for toggle on main screen */
+"Settings.toggleOtherSubtitle" = "Може пошкодити деякі відео і веб-сторінки";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageData" = "Надсилати анонімні дані використання";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "Докладніше";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "Скасувати";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "СТЕРТИ";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "Ваша історія перегляду була очищена.";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Введіть запит чи адресу";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Шукати %@";
+
