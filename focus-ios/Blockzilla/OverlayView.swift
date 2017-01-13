@@ -31,13 +31,21 @@ class OverlayView: UIView {
         searchButton.alpha = 0
         searchButton.titleLabel?.font = UIConstants.fonts.searchButton
         searchButton.titleLabel?.lineBreakMode = .byTruncatingTail
-        searchButton.contentHorizontalAlignment = .left
+        if UIView.userInterfaceLayoutDirection(for: searchButton.semanticContentAttribute) == .rightToLeft {
+            searchButton.contentHorizontalAlignment = .right
+        } else {
+            searchButton.contentHorizontalAlignment = .left
+        }
         searchButton.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .normal)
         searchButton.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .highlighted)
 
         let padding = UIConstants.layout.searchButtonInset
         searchButton.imageEdgeInsets = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
-        searchButton.titleEdgeInsets = UIEdgeInsets(top: padding, left: padding * 2, bottom: padding, right: padding)
+        if UIView.userInterfaceLayoutDirection(for: searchButton.semanticContentAttribute) == .rightToLeft {
+            searchButton.titleEdgeInsets = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding * 2)
+        } else {
+            searchButton.titleEdgeInsets = UIEdgeInsets(top: padding, left: padding * 2, bottom: padding, right: padding)
+        }
         searchButton.addTarget(self, action: #selector(didPressSearch), for: .touchUpInside)
         addSubview(searchButton)
 
