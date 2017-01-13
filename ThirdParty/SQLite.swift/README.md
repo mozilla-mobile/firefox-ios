@@ -1,11 +1,13 @@
-# SQLite.swift [![Build Status][Badge]][Travis]
+# SQLite.swift
+
+[![Build Status][Badge]][Travis] [![CocoaPods Version](https://cocoapod-badges.herokuapp.com/v/SQLite.swift/badge.png)](http://cocoadocs.org/docsets/SQLite.swift) [![Swift](https://img.shields.io/badge/swift-3-orange.svg?style=flat)](https://developer.apple.com/swift/) [![Platform](https://cocoapod-badges.herokuapp.com/p/SQLite.swift/badge.png)](http://cocoadocs.org/docsets/SQLite.swift) [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage) [![Join the chat at https://gitter.im/stephencelis/SQLite.swift](https://badges.gitter.im/stephencelis/SQLite.swift.svg)](https://gitter.im/stephencelis/SQLite.swift)
 
 A type-safe, [Swift][]-language layer over [SQLite3][].
 
 [SQLite.swift][] provides compile-time confidence in SQL statement
 syntax _and_ intent.
 
-[Badge]: https://img.shields.io/travis/stephencelis/SQLite.swift/swift-2.svg?style=flat
+[Badge]: https://img.shields.io/travis/stephencelis/SQLite.swift/master.svg?style=flat
 [Travis]: https://travis-ci.org/stephencelis/SQLite.swift
 [Swift]: https://developer.apple.com/swift/
 [SQLite3]: http://www.sqlite.org
@@ -21,9 +23,10 @@ syntax _and_ intent.
  - A lightweight, uncomplicated query and parameter binding interface
  - Developer-friendly error handling and debugging
  - [Full-text search][] support
- - [SQLCipher](#sqlcipher) support
  - [Well-documented][See Documentation]
  - Extensively tested
+ - SQLCipher support via CocoaPods
+ - Active support at [StackOverflow](http://stackoverflow.com/questions/tagged/sqlite.swift), and [Gitter Chat Room](https://gitter.im/stephencelis/SQLite.swift) (_experimental_)
 
 [Full-text search]: Documentation/Index.md#full-text-search
 [See Documentation]: Documentation/Index.md#sqliteswift-documentation
@@ -56,15 +59,15 @@ let insert = users.insert(name <- "Alice", email <- "alice@mac.com")
 let rowid = try db.run(insert)
 // INSERT INTO "users" ("name", "email") VALUES ('Alice', 'alice@mac.com')
 
-for user in db.prepare(users) {
-    println("id: \(user[id]), name: \(user[name]), email: \(user[email])")
+for user in try db.prepare(users) {
+    print("id: \(user[id]), name: \(user[name]), email: \(user[email])")
     // id: 1, name: Optional("Alice"), email: alice@mac.com
 }
 // SELECT * FROM "users"
 
 let alice = users.filter(id == rowid)
 
-try db.run(alice.update(email <- email.replace("mac.com", "me.com")))
+try db.run(alice.update(email <- email.replace("mac.com", with: "me.com")))
 // UPDATE "users" SET "email" = replace("email", 'mac.com', 'me.com')
 // WHERE ("id" = 1)
 
@@ -79,17 +82,17 @@ SQLite.swift also works as a lightweight, Swift-friendly wrapper over the C
 API.
 
 ``` swift
-let stmt = db.prepare("INSERT INTO users (email) VALUES (?)")
+let stmt = try db.prepare("INSERT INTO users (email) VALUES (?)")
 for email in ["betty@icloud.com", "cathy@icloud.com"] {
-    stmt.run(email)
+    try stmt.run(email)
 }
 
 db.totalChanges    // 3
 db.changes         // 1
 db.lastInsertRowid // 3
 
-for row in db.prepare("SELECT id, email FROM users") {
-    println("id: \(row[0]), email: \(row[1])")
+for row in try db.prepare("SELECT id, email FROM users") {
+    print("id: \(row[0]), email: \(row[1])")
     // id: Optional(2), email: Optional("betty@icloud.com")
     // id: Optional(3), email: Optional("cathy@icloud.com")
 }
@@ -102,16 +105,13 @@ interactively, from the Xcode project’s playground.
 
 ![SQLite.playground Screen Shot](Documentation/Resources/playground@2x.png)
 
+For a more comprehensive example, see [this article](http://masteringswift.blogspot.com/2015/09/create-data-access-layer-with.html) and the [companion repository](https://github.com/hoffmanjon/SQLiteDataAccessLayer2/tree/master).
 
 ## Installation
 
-> _Note:_ SQLite.swift requires Swift 2 (and [Xcode][] 7) or greater.
->
-> The following instructions apply to targets that support embedded
-> Swift frameworks. To use SQLite.swift in iOS 7 or an OS X command line
-> tool, please read the [Frameworkless Targets][] section of the
-> documentation.
-
+> _Note:_ SQLite.swift requires Swift 3 (and [Xcode][] 8) or greater. If you absolutely
+> need compatibility with Swift 2.3 you can use the [swift-2.3][] branch or older
+> released versions. New development will happen exclusively on the master/Swift 3 branch.
 
 ### Carthage
 
@@ -123,7 +123,7 @@ install SQLite.swift with Carthage:
  2. Update your Cartfile to include the following:
 
     ```
-    github "stephencelis/SQLite.swift" "swift-2"
+    github "stephencelis/SQLite.swift" ~> 0.11.2
     ```
 
  3. Run `carthage update` and [add the appropriate framework][Carthage Usage].
@@ -139,27 +139,48 @@ install SQLite.swift with Carthage:
 [CocoaPods][] is a dependency manager for Cocoa projects. To install
 SQLite.swift with CocoaPods:
 
- 1. Make sure CocoaPods is [installed][CocoaPods Installation]. (SQLite.swift
-    requires version 0.37 or greater.)
+ 1. Verify that your copy of Xcode is installed and active in the default location (`/Applications/Xcode.app`).
 
- 2. Update your Podfile to include the following:
+    ```sh
+    sudo xcode-select --switch /Applications/Xcode.app
+    ```
+
+ 2. Make sure CocoaPods is [installed][CocoaPods Installation]. (SQLite.swift requires version 1.0.0 or greater.)
+
+    ``` sh
+    # Using the default Ruby install will require you to use sudo when
+    # installing and updating gems.
+    [sudo] gem install cocoapods
+    ```
+
+ 3. Update your Podfile to include the following:
 
     ``` ruby
     use_frameworks!
 
-    pod 'SQLite.swift',
-      git: 'https://github.com/stephencelis/SQLite.swift.git'
-
-    # instead, for SQLCipher support
-    pod 'SQLiteCipher.swift',
-      git: 'https://github.com/stephencelis/SQLite.swift.git'
+    target 'YourAppTargetName' do
+        pod 'SQLite.swift', '~> 0.11.2'
+    end
     ```
 
- 3. Run `pod install`.
+ 4. Run `pod install --repo-update`.
 
 [CocoaPods]: https://cocoapods.org
 [CocoaPods Installation]: https://guides.cocoapods.org/using/getting-started.html#getting-started
 
+### Swift Package Manager
+
+The [Swift Package Manager][] is a tool for managing the distribution of Swift code.
+
+1. Add the following to your `Package.swift` file:
+
+```swift
+dependencies: [
+    .Package(url: "https://github.com/stephencelis/SQLite.swift.git", majorVersion: 0, minor: 11)
+]
+```
+
+[Swift Package Manager]: https://swift.org/package-manager
 
 ### Manual
 
@@ -168,51 +189,32 @@ To install SQLite.swift as an Xcode sub-project:
  1. Drag the **SQLite.xcodeproj** file into your own project.
     ([Submodule][], clone, or [download][] the project first.)
 
-    ![](Documentation/Resources/installation@2x.png)
+    ![Installation Screen Shot](Documentation/Resources/installation@2x.png)
 
- 2. In your target’s **Build Phases**, add **SQLite** to the **Target
-    Dependencies** build phase.
+ 2. In your target’s **General** tab, click the **+** button under **Linked
+    Frameworks and Libraries**.
 
- 3. Add **SQLite.framework** to the **Link Binary With Libraries** build
-    phase.
+ 3. Select the appropriate **SQLite.framework** for your platform.
 
- 4. Add **SQLite.framework** to a **Copy Files** build phase with a
-    **Frameworks** destination. (Add a new build phase if need be.)
+ 4. **Add**.
 
-[Frameworkless Targets]: Documentation/Index.md#frameworkless-targets
+Some additional steps are required to install the application on an actual device:
+
+ 5. In the **General** tab, click the **+** button under **Embedded Binaries**.
+
+ 6. Select the appropriate **SQLite.framework** for your platform.
+
+ 7. **Add**.
+
+
 [Xcode]: https://developer.apple.com/xcode/downloads/
 [Submodule]: http://git-scm.com/book/en/Git-Tools-Submodules
 [download]: https://github.com/stephencelis/SQLite.swift/archive/master.zip
 
 
-#### SQLCipher
-
-> _Note_: To install with CocoaPods, [see above](#cocoapods).
-
-To install SQLite.swift with [SQLCipher][] support:
-
- 1. Make sure the **sqlcipher** working copy is checked out in Xcode. If
-    **sqlcipher.xcodeproj** is unavailable (_i.e._, it appears red), go to the
-    **Source Control** menu and select **Check Out sqlcipher…** from the
-    **sqlcipher** menu item.
-
- 2. Follow [the instructions above](#manual) with the **SQLiteCipher** target,
-    instead.
-
-> _Note:_ By default, SQLCipher compiles [without support for full-text
-> search][]. If you intend to use [FTS4][], make sure you add the
-> following to **Other C Flags** in the **Build Settings** of the
-> **sqlcipher** target (in the **sqlcipher.xcodeproj** project):
->
->  - `-DSQLITE_ENABLE_FTS4`
->  - `-DSQLITE_ENABLE_FTS3_PARENTHESIS`
-
-[SQLCipher]: http://sqlcipher.net
-[without support for full-text search]: https://github.com/sqlcipher/sqlcipher/issues/102
-[FTS4]: http://www.sqlite.org/fts3.html
-
-
 ## Communication
+
+[See the planning document] for a roadmap and existing feature requests.
 
 [Read the contributing guidelines][]. The _TL;DR_ (but please; _R_):
 
@@ -221,6 +223,7 @@ To install SQLite.swift with [SQLCipher][] support:
  - Found a **bug** or have a **feature request**? [Open an issue][].
  - Want to **contribute**? [Submit a pull request][].
 
+[See the planning document]: /Documentation/Planning.md
 [Read the contributing guidelines]: ./CONTRIBUTING.md#contributing
 [Ask on Stack Overflow]: http://stackoverflow.com/questions/tagged/sqlite.swift
 [Open an issue]: https://github.com/stephencelis/SQLite.swift/issues/new
@@ -238,16 +241,23 @@ To install SQLite.swift with [SQLCipher][] support:
 SQLite.swift is available under the MIT license. See [the LICENSE
 file](./LICENSE.txt) for more information.
 
+## Related
+
+These projects enhance or use SQLite.swift:
+
+ - [SQLiteMigrationManager.swift](https://github.com/garriguv/SQLiteMigrationManager.swift) (inspired by [FMDBMigrationManager](https://github.com/layerhq/FMDBMigrationManager))
+
 
 ## Alternatives
 
 Looking for something else? Try another Swift wrapper (or [FMDB][]):
 
  - [Camembert](https://github.com/remirobert/Camembert)
- - [EonilSQLite3](https://github.com/Eonil/SQLite3)
+ - [GRDB](https://github.com/groue/GRDB.swift)
  - [SQLiteDB](https://github.com/FahimF/SQLiteDB)
  - [Squeal](https://github.com/nerdyc/Squeal)
  - [SwiftData](https://github.com/ryanfowler/SwiftData)
  - [SwiftSQLite](https://github.com/chrismsimpson/SwiftSQLite)
 
 [FMDB]: https://github.com/ccgus/fmdb
+[swift-2.3]: https://github.com/stephencelis/SQLite.swift/tree/swift-2.3
