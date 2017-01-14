@@ -11,7 +11,7 @@
 "About.privateBullet2" = "Rhwystro tracwyr (neu ddiweddaru'r gosodiadau i ganiatáu tracwyr)";
 
 /* Label on About screen */
-"About.privateBullet3" = "Dileu er mwyn dileu cwcis yn ogystal â hanes chwilio a phori.";
+"About.privateBullet3" = "Dileu er mwyn dileu cwcis yn ogystal â hanes chwilio a phori";
 
 /* Label on About screen */
 "About.privateBulletHeader" = "Ei ddefnyddio fel porwr preifat:";
@@ -23,7 +23,7 @@
 "About.rowRights" = "Eich Hawliau";
 
 /* Label on About screen */
-"About.safariBullet1" = "Rhwystro tracwyr i well preifatrwydd";
+"About.safariBullet1" = "Rhwystro tracwyr ar gyfer gwell preifatrwydd";
 
 /* Label on About screen */
 "About.safariBullet2" = "Rhwystro ffontiau Gwe i leihau maint tudalen";
@@ -35,7 +35,7 @@
 "About.screenTitle" = "Ynghylch";
 
 /* Label on About screen */
-"About.topLabel" = "Chi sy'n rheoli gyda %@";
+"About.topLabel" = "Chi sy'n rheoli gyda %@.";
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Nôl";
@@ -68,7 +68,7 @@
 "ExternalLink.emailButton" = "E-bost";
 
 /* Dialog title used for Maps/App Store links. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.messageTitle" = "Rydych nawr yn gadael Firefox Focus";
+"ExternalLink.messageTitle" = "Rydych nawr yn gadael Firefox Focus.";
 
 /* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openAppStoreButton" = "Agor yr App Store";
@@ -77,19 +77,19 @@
 "ExternalLink.openMapsButton" = "Agor Maps";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "IAWRN, RWY'N DEALL!";
+"FirstRun.buttonLabel" = "IAWN, RWY'N DEALL!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Rhwystrwch tracwyr ar-lein yn awtomatig wrthi chi bori. Yna tapiwch i ddileu tudalennau, chwilio, cwcis a chyfrineiriau oddi ar eich dyfais";
+"FirstRun.messageLabelDescription" = "Rhwystrwch tracwyr ar-lein yn awtomatig wrth i chi bori. Gallwch dapio i ddileu tudalennau, chwilio, cwcis a chyfrineiriau oddi ar eich dyfais.";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelTagline" = "Pori fel petai neb yn eich gwylio";
+"FirstRun.messageLabelTagline" = "Pori fel petai neb yn eich gwylio.";
 
 /* First label for product description on the home screen */
-"Home.descriptionLabel1" = "Pori preifat awtomatig";
+"Home.descriptionLabel1" = "Pori preifat awtomatig.";
 
 /* Second label for product description on the home screen */
-"Home.descriptionLabel2" = "Pori. Dileu. Eto.";
+"Home.descriptionLabel2" = "Pori. Dileu. Ailadrodd.";
 
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Diddymu";
@@ -113,7 +113,7 @@
 "Safari.instructionsNotEnabled" = "Nid yw %@ wedi ei alluogi.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsOpen" = "Agor Ap Gosodiadau";
+"Safari.instructionsOpen" = "Agor Gosodiadau'r Ap";
 
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Gall rwystro tracwyr cynnwys eraill dorri rhai fideos a thudalennau Gwe.";
@@ -134,7 +134,7 @@
 "Settings.searchTitle" = "Peiriant Chwilio";
 
 /* Label for Safari integration section */
-"Settings.sectionIntegration" = "INTIGREIDDIO";
+"Settings.sectionIntegration" = "INTEGREIDDIO";
 
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";
@@ -167,7 +167,7 @@
 "Settings.toggleSafari" = "Safari";
 
 /* Label for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageData" = "Anfon data defnydd dienw:";
+"Settings.toggleSendAnonymousUsageData" = "Anfon data defnydd dienw";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.toggleSendAnonymousUsageDataSubtitle" = "Dysgu rhagor";

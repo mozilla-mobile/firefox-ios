@@ -1,11 +1,38 @@
 /* Button on About screen */
-"About.learnMoreButton" = "詳しくはこちら";
+"About.learnMoreButton" = "詳細情報";
+
+/* Label on About screen */
+"About.missionLabel" = "%@ は Mozilla による製品です。私たちの使命は、健全でオープンなインターネットを育成することです。";
+
+/* Label on About screen */
+"About.privateBullet1" = "アプリ内で検索とブラウジングします";
+
+/* Label on About screen */
+"About.privateBullet2" = "追跡をブロック (または設定を変更して追跡を許可) します";
+
+/* Label on About screen */
+"About.privateBullet3" = "検索履歴やページの表示履歴に加えて Cookie を消去します";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "プライベートブラウザーとして使用すると:";
 
 /* Label for row in About screen */
 "About.rowHelp" = "ヘルプ";
 
 /* Label for row in About screen */
 "About.rowRights" = "あなたの権利";
+
+/* Label on About screen */
+"About.safariBullet1" = "追跡をブロックしてプライバシーを保護します";
+
+/* Label on About screen */
+"About.safariBullet2" = "ウェブフォントをブロックしてページのデータ転送量を削減します";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "Safari の拡張機能として使用すると:";
+
+/* Title for the About screen */
+"About.screenTitle" = "製品情報";
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "戻る";
@@ -19,27 +46,117 @@
 /* Accessibility label for the settings button */
 "Browser.settingsLabel" = "環境設定";
 
+/* Accessibility label for the share button */
+"Browser.shareLabel" = "共有";
+
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "中止";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "再試行";
 
+/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.callButton" = "発信";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "キャンセル";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "メール送信";
+
+/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openAppStoreButton" = "アプリストアを開く";
+
+/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openMapsButton" = "マップを開く";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelDescription" = "ブラウジング中のオンライン追跡を自動的にブロックします。タップするだけで、訪問したページ、検索履歴、Cookie、パスワードを端末から消去できます。";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "誰にも監視されないブラウジング。";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "キャンセル";
+
+/* Label in share alert to open the URL in Firefox */
+"Open.Firefox" = "Firefox (プライベートブラウジング)";
 
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
 
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "Safari をタップし、コンテンツブロッカーを選択してください";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "%@ を有効化する";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ が有効化されていません。";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "環境設定アプリを開く";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "他の追跡コンテンツをブロックすると、動画やウェブページが正常に表示されない場合があります。";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "環境設定";
+
+/* Title for the search engine row */
+"Settings.searchSection" = "検索エンジン";
+
+/* Title for the search engine selection screen */
+"Settings.searchTitle" = "検索エンジン";
+
+/* Label for Safari integration section */
+"Settings.sectionIntegration" = "統合";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "プライバシー";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAds" = "追跡広告をブロック";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAnalytics" = "アクセス解析をブロック";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "ウェブフォントをブロック";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockOther" = "他の追跡コンテンツをブロック";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockSocial" = "ソーシャル追跡をブロック";
+
+/* Label subtitle for toggle on main screen */
+"Settings.toggleOtherSubtitle" = "動画やウェブページが正常に表示されない場合があります";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
+/* Label for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageData" = "利用データを匿名で送信する";
+
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageDataSubtitle" = "詳しくはこちら";
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "詳細情報";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "キャンセル";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "消去";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "ページの表示履歴が消去されました。";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "検索語またはアドレスを入力";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "%@ を検索";
 

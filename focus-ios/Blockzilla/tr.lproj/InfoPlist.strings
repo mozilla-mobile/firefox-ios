@@ -1,0 +1,12 @@
+/* (No Commment) */
+"NSCameraUsageDescription" = "Fotoğraf çekmenizi ve yüklemenizi sağlar.";
+
+/* (No Commment) */
+"NSLocationWhenInUseUsageDescription" = "Ziyaret ettiğiniz web siteleri konumunuzu isteyebilir.";
+
+/* (No Commment) */
+"NSMicrophoneUsageDescription" = "Video çekmenizi ve yüklemenizi sağlar.";
+
+/* (No Commment) */
+"NSPhotoLibraryUsageDescription" = "Fotoğrafları kaydetmenizi ve yüklemenizi sağlar.";
+

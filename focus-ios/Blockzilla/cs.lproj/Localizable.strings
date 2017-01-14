@@ -23,10 +23,10 @@
 "About.rowRights" = "Vaše práva";
 
 /* Label on About screen */
-"About.safariBullet1" = "Blokovat sledovací prvky pro vylepšení soukromí";
+"About.safariBullet1" = "Blokujte sledující prvky pro vylepšení soukromí";
 
 /* Label on About screen */
-"About.safariBullet2" = "Blokovat webová písma pro zmenšení velikosti stránky";
+"About.safariBullet2" = "Blokujte webové fonty pro zmenšení velikosti stránky";
 
 /* Label on About screen */
 "About.safariBulletHeader" = "Používejte ho jako rozšíření Safari:";
@@ -58,14 +58,32 @@
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "Zkusit znovu";
 
+/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.callButton" = "Volat";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "Zrušit";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "E-mail";
+
+/* Dialog title used for Maps/App Store links. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.messageTitle" = "Nyní opouštíte Firefox Focus.";
+
+/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openAppStoreButton" = "Otevřít App Store";
+
+/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openMapsButton" = "Otevřít Mapy";
+
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "OK, MÁME TO!";
+"FirstRun.buttonLabel" = "OK, CHÁPU!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Automaticky blokuje sledovací prvky zatímco prohlížíte. Poté klepněte pro vymazání zobrazených stránek, vyhledávání, souborů cookie a hesel z vašeho zařízení.";
+"FirstRun.messageLabelDescription" = "Automaticky blokuje sledovací prvky, zatímco prohlížíte. Poté stačí klepnout pro vymazání zobrazených stránek, vyhledávání, souborů cookie a hesel z vašeho zařízení.";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelTagline" = "Procházejte jako když se nikdo nedivá.";
+"FirstRun.messageLabelTagline" = "Procházejte, jako když se nikdo nedivá.";
 
 /* First label for product description on the home screen */
 "Home.descriptionLabel1" = "Automatické anonymní prohlížení.";
@@ -98,7 +116,7 @@
 "Safari.instructionsOpen" = "Otevřete Nastavení";
 
 /* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Blokování ostatních sledovacích prvků může rozbít některá videa a webové stránky.";
+"Settings.blockOtherMessage" = "Blokování ostatních sledujících prvků může rozbít některá videa a webové stránky.";
 
 /* Button label for declining Content blocker alert */
 "Settings.blockOtherNo" = "Ne, děkuji";
@@ -164,7 +182,7 @@
 "URL.eraseMessageLabel" = "Vaše historie procházení byla vymazána.";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "Zadejte hledání nebo adresu";
+"URL.placeholderText" = "Hledat nebo vložit adresu";
 
 /* Label displayed for search button when typing in the URL bar */
 "URL.searchLabel" = "Hledat %@";

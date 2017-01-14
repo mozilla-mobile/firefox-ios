@@ -83,7 +83,7 @@
 "FirstRun.messageLabelDescription" = "Automatycznie blokuj śledzące elementy podczas przeglądania stron. Wystarczy stuknąć, aby usunąć z urządzenia odwiedzone strony, wyszukiwania i hasła.";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelTagline" = "Przeglądaj jak gdyby nikt nie patrzył.";
+"FirstRun.messageLabelTagline" = "Przeglądaj jak gdyby nikt nie patrzył";
 
 /* First label for product description on the home screen */
 "Home.descriptionLabel1" = "Automatyczne przeglądanie prywatne.";

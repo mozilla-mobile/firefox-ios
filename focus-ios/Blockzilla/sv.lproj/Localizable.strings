@@ -26,7 +26,7 @@
 "About.safariBullet1" = "Blockera trackers för förbättrad integritet";
 
 /* Label on About screen */
-"About.safariBullet2" = "Blockera webbteckensnitt för att minska sidstorlek";
+"About.safariBullet2" = "Blockera webbtypsnitt för att minska sidstorlek";
 
 /* Label on About screen */
 "About.safariBulletHeader" = "Använd som ett Safari tillägg:";
@@ -152,7 +152,7 @@
 "Settings.toggleBlockAnalytics" = "Blockera analys trackers";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "Blockera webbteckensnitt";
+"Settings.toggleBlockFonts" = "Blockera webbtypsnitt";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockOther" = "Blockera andra innehållstrackers";

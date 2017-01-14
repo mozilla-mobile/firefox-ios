@@ -80,10 +80,10 @@
 "FirstRun.buttonLabel" = "Paham!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Memblokir pelacak daring secara otomatis ketika Anda menjelajah. Kemudian ketuk untuk menghapus laman yang dikunjungi, pencarian, kuki, dan sandi dari perangkat Anda.";
+"FirstRun.messageLabelDescription" = "Blokir pelacak daring secara otomatis ketika Anda menjelajah. Kemudian ketuk untuk menghapus laman yang dikunjungi, pencarian, kuki, dan sandi dari perangkat Anda.";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelTagline" = "Menjelajah seperti tanpa ada yang mengawasi.";
+"FirstRun.messageLabelTagline" = "Jelajahi web seperti tanpa ada yang mengawasi.";
 
 /* First label for product description on the home screen */
 "Home.descriptionLabel1" = "Penjelajahan pribadi secara otomatis.";
@@ -116,13 +116,13 @@
 "Safari.instructionsOpen" = "Buka Aplikasi Pengaturan";
 
 /* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Memblokir konten pelacak lainnya mungkin menghentikan beberapa video dan laman Web.";
+"Settings.blockOtherMessage" = "Memblokir pelacak konten lainnya mungkin menghentikan beberapa video dan laman Web.";
 
 /* Button label for declining Content blocker alert */
 "Settings.blockOtherNo" = "Tidak, terima kasih";
 
 /* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Saya Paham";
+"Settings.blockOtherYes" = "Paham";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Pengaturan";

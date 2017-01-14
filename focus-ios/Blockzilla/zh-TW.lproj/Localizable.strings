@@ -80,16 +80,16 @@
 "FirstRun.buttonLabel" = "好，知道了！";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "在您上網時自動封鎖線上追蹤器，然後點擊清除裝置中造訪過的頁面、搜尋紀錄、Cookie、儲存的密碼。";
+"FirstRun.messageLabelDescription" = "自動在您上網時封鎖線上追蹤器；只要一點即可清除裝置中造訪過的頁面、搜尋、Cookie、密碼等紀錄。";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelTagline" = "上網時，彷彿沒有人看著你。";
+"FirstRun.messageLabelTagline" = "讓上網時不被偷看。";
 
 /* First label for product description on the home screen */
-"Home.descriptionLabel1" = "自動進入隱私瀏覽模式。";
+"Home.descriptionLabel1" = "自動進入隱私瀏覽模式，";
 
 /* Second label for product description on the home screen */
-"Home.descriptionLabel2" = "瀏覽、清除、重複";
+"Home.descriptionLabel2" = "結束瀏覽後自動清除紀錄。";
 
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "取消";
@@ -119,7 +119,7 @@
 "Settings.blockOtherMessage" = "封鎖其他的內容追蹤器可能會影響網頁與影片載入。";
 
 /* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "不，謝了";
+"Settings.blockOtherNo" = "不，那不要了";
 
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes" = "知道了";
@@ -146,10 +146,10 @@
 "Settings.sectionPrivacy" = "隱私";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "封鎖廣告追蹤器";
+"Settings.toggleBlockAds" = "封鎖廣告型追蹤器";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "封鎖統計追蹤器";
+"Settings.toggleBlockAnalytics" = "封鎖分析型追蹤器";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "封鎖網路字型";
@@ -158,7 +158,7 @@
 "Settings.toggleBlockOther" = "封鎖其他內容追蹤器";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "封鎖社交追蹤器";
+"Settings.toggleBlockSocial" = "封鎖社交型追蹤器";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "可能會影響網頁與影片載入";

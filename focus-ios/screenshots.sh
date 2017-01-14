@@ -1,6 +1,6 @@
 #!/bin/bash
 
-LANGUAGES="ar,az,cs,cy,de,en-US,es-CL,es-ES,fr,hu,id,it,ja,kab,pl,pt-BR,ru,ses,sk,sl,sv-SE,uk,zh-CN,zh-TW"
+LANGUAGES="ar,az,cs,cy,de,en-US,es-CL,es-ES,fr,hu,id,it,ja,kab,nl,pl,pt-BR,ru,ses,sk,sl,sv-SE,tr,uk,zh-CN,zh-TW"
 
 TS=`date +%Y%m%d-%H%M`
 

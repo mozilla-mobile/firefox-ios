@@ -116,7 +116,7 @@
 "Safari.instructionsOpen" = "Ouvrez l’application Réglages";
 
 /* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Bloquer les autres traqueurs de contenu peut empêcher certaines vidéos et certaines pages web de s’afficher correctement.";
+"Settings.blockOtherMessage" = "Bloquer les autres traqueurs de contenu peut empêcher certaines vidéos et pages web de s’afficher correctement.";
 
 /* Button label for declining Content blocker alert */
 "Settings.blockOtherNo" = "Annuler";
@@ -161,7 +161,7 @@
 "Settings.toggleBlockSocial" = "Bloquer les traqueurs de réseaux sociaux";
 
 /* Label subtitle for toggle on main screen */
-"Settings.toggleOtherSubtitle" = "Peut empêcher certaines vidéos et certaines pages web de s’afficher correctement.";
+"Settings.toggleOtherSubtitle" = "Peut empêcher certaines vidéos et pages web de s’afficher correctement.";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";

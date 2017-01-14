@@ -58,8 +58,26 @@
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "أعِد المحاولة";
 
+/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.callButton" = "اتصل";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "ألغِ";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "أرسل بريدًا";
+
+/* Dialog title used for Maps/App Store links. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.messageTitle" = "تغادر الآن فَيرفُكس فوكَس.";
+
+/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openAppStoreButton" = "افتح متجر التطبيقات";
+
+/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openMapsButton" = "افتح الخرائط";
+
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "حسنا، فهمت!";
+"FirstRun.buttonLabel" = "شكرا، فهمت.";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "احظر متعقبات الإنترنت تلقائيًا أثناء التصفح. ثم انقر لمسح الصفحات التي زرتها، و تأريخ البحث، و الكعكات، و كلمات السر من جهازك.";
