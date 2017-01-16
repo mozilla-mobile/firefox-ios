@@ -1,5 +1,5 @@
 github "Alamofire/Alamofire"                ~> 4.0
-github "bignerdranch/Deferred"              "3.0.0-rc.2"
+github "sleroux/Deferred"                   "Swift3.0"
 github "SnapKit/SnapKit"                    "3.1.2"
 
 github "rs/SDWebImage"                      "3.7.4"
