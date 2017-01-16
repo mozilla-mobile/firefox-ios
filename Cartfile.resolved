@@ -1,5 +1,5 @@
 github "Alamofire/Alamofire" "4.2.0"
-github "bignerdranch/Deferred" "3.0.0-rc.2"
+github "sleroux/Deferred" "7e152275ba8b2c1a4097ffaa6471380ffa96de26"
 github "cezheng/Fuzi" "1.0.1"
 github "swisspol/GCDWebServer" "3.3.2"
 github "kif-framework/KIF" "v3.5.1"
