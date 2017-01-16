@@ -105,6 +105,7 @@
 		E4BC84F11E2A862400833B45 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E4BC84F31E2A862400833B45 /* InfoPlist.strings */; };
 		E4BC84F61E2A862600833B45 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E4BC84F81E2A862600833B45 /* InfoPlist.strings */; };
 		E4BC84FB1E2A862700833B45 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E4BC84FD1E2A862700833B45 /* InfoPlist.strings */; };
+		E4BC854E1E2D2C4800833B45 /* MarketingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BC854D1E2D2C4800833B45 /* MarketingTests.swift */; };
 		E4BF2DD71BACE8CA00DA9D68 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF2DD61BACE8CA00DA9D68 /* AppDelegate.swift */; };
 		E4BF2DDE1BACE8CA00DA9D68 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4BF2DDD1BACE8CA00DA9D68 /* Assets.xcassets */; };
 		E4BF2DF11BACE92400DA9D68 /* ActionRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF2DF01BACE92400DA9D68 /* ActionRequestHandler.swift */; };
@@ -381,6 +382,7 @@
 		E4BC854A1E2A87BE00833B45 /* zh-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-TW"; path = "zh-TW.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		E4BC854B1E2A87BF00833B45 /* zh-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-TW"; path = "zh-TW.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		E4BC854C1E2A87BF00833B45 /* zh-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-TW"; path = "zh-TW.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		E4BC854D1E2D2C4800833B45 /* MarketingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarketingTests.swift; sourceTree = "<group>"; };
 		E4BF2DD31BACE8CA00DA9D68 /* Klar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = Klar.app; path = "Firefox Klar.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4BF2DD61BACE8CA00DA9D68 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E4BF2DDD1BACE8CA00DA9D68 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -543,6 +545,7 @@
 			children = (
 				E4BC84F81E2A862600833B45 /* InfoPlist.strings */,
 				E44A34691E0A18C100BFD777 /* SnapshotTests.swift */,
+				E4BC854D1E2D2C4800833B45 /* MarketingTests.swift */,
 				E44A34751E0A198000BFD777 /* SnapshotHelper.swift */,
 				E44A346B1E0A18C100BFD777 /* Info.plist */,
 			);
@@ -919,6 +922,7 @@
 			files = (
 				E44A346A1E0A18C100BFD777 /* SnapshotTests.swift in Sources */,
 				E44A34761E0A198000BFD777 /* SnapshotHelper.swift in Sources */,
+				E4BC854E1E2D2C4800833B45 /* MarketingTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
