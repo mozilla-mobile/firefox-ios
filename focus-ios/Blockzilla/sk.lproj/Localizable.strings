@@ -182,7 +182,7 @@
 "URL.eraseMessageLabel" = "Vaša história prehliadania bola vymazaná.";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "Zadajte adresu alebo výraz vyhľadávania";
+"URL.placeholderText" = "Zadajte vyhľadávanie alebo adresu";
 
 /* Label displayed for search button when typing in the URL bar */
 "URL.searchLabel" = "Vyhľadať %@";

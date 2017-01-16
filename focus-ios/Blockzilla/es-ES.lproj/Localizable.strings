@@ -5,16 +5,16 @@
 "About.missionLabel" = "%@ está producido por Mozilla. Nuestra misión es promover un Internet íntegro y abierto.";
 
 /* Label on About screen */
-"About.privateBullet1" = "Buscar y navegar directamente desde la app";
+"About.privateBullet1" = "Busca y navega directamente desde la app";
 
 /* Label on About screen */
-"About.privateBullet2" = "Bloquear rastreadores (o cambiar los ajustes para permitirlos)";
+"About.privateBullet2" = "Bloquea rastreadores (o cambia los ajustes para permitirlos)";
 
 /* Label on About screen */
-"About.privateBullet3" = "Eliminar cookies y el historial de búsqueda y navegación";
+"About.privateBullet3" = "Elimina cookies y el historial de búsqueda y navegación";
 
 /* Label on About screen */
-"About.privateBulletHeader" = "Usarlo como navegador privado:";
+"About.privateBulletHeader" = "Úsalo como navegador privado:";
 
 /* Label for row in About screen */
 "About.rowHelp" = "Ayuda";
@@ -23,13 +23,13 @@
 "About.rowRights" = "Tus derechos";
 
 /* Label on About screen */
-"About.safariBullet1" = "Bloquear rastreadores para una privacidad mejorada";
+"About.safariBullet1" = "Bloquea rastreadores para una privacidad mejorada";
 
 /* Label on About screen */
-"About.safariBullet2" = "Bloquear fuentes web para reducir el peso de las páginas";
+"About.safariBullet2" = "Bloquea fuentes web para reducir el peso de las páginas";
 
 /* Label on About screen */
-"About.safariBulletHeader" = "Usarlo como extensión de Safari:";
+"About.safariBulletHeader" = "Úsalo como extensión de Safari:";
 
 /* Title for the About screen */
 "About.screenTitle" = "Acerca de";
@@ -107,13 +107,13 @@
 "Safari.instructionsContentBlockers" = "Toca Safari, luego selecciona Bloqueadores de contenido";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsEnable" = "Activar %@";
+"Safari.instructionsEnable" = "Activa %@";
 
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
 "Safari.instructionsNotEnabled" = "%@ no está activado.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsOpen" = "Abrir app de Ajustes";
+"Safari.instructionsOpen" = "Abre la app de Ajustes";
 
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Bloquear otros rastreadores de contenido puede interferir con algunos vídeos y páginas web.";

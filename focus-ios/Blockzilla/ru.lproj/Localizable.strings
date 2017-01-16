@@ -80,7 +80,7 @@
 "FirstRun.buttonLabel" = "Я понял!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Автоматически блокируйте онлайн-трекеры во время веб-сёрфинга. Затем нажмите, чтобы стереть посещённые страницы, поиски, куки и пароли со своего устройства.";
+"FirstRun.messageLabelDescription" = "Автоматически блокируйте онлайн-трекеры во время веб-сёрфинга. Затем нажмите кнопку, чтобы стереть посещённые страницы, поиски, куки и пароли со своего устройства.";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "Сёрфите Интернет не опасаясь слежки.";
@@ -110,10 +110,10 @@
 "Safari.instructionsEnable" = "Включите %@";
 
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
-"Safari.instructionsNotEnabled" = "%@ не включено.";
+"Safari.instructionsNotEnabled" = "%@ не включён.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsOpen" = "Открыть параметры приложения";
+"Safari.instructionsOpen" = "Откройте параметры приложения";
 
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Блокирование других трекеров содержимого может нарушить работу некоторых видео и веб-страниц.";
