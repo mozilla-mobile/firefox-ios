@@ -89,7 +89,7 @@
 "Home.descriptionLabel1" = "自動進入隱私瀏覽模式，";
 
 /* Second label for product description on the home screen */
-"Home.descriptionLabel2" = "結束瀏覽後自動清除紀錄。";
+"Home.descriptionLabel2" = "無痕瀏覽，不留足跡。";
 
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "取消";
