@@ -104,14 +104,16 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         return deferred
     }
 
-    open func insertOrUpdateClients(_ clients: [RemoteClient]) -> Deferred<Maybe<()>> {
-        let deferred = Deferred<Maybe<()>>(defaultQueue: DispatchQueue.main)
+    open func insertOrUpdateClients(_ clients: [RemoteClient]) -> Deferred<Maybe<Int>> {
+        let deferred = Deferred<Maybe<Int>>(defaultQueue: DispatchQueue.main)
 
         var err: NSError?
 
         // TODO: insert multiple clients in a single query.
         // ORM systems are foolish.
         let _ = db.transaction(&err) { connection, _ in
+            var succeeded = 0
+
             // Update or insert client records.
             for client in clients {
 
@@ -125,17 +127,19 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
                     log.warning("insertOrUpdateClients failed: \(databaseError)")
                     deferred.fill(Maybe(failure: databaseError))
                     return false
+                } else {
+                    succeeded += 1
                 }
             }
 
-            deferred.fill(Maybe(success: ()))
+            deferred.fill(Maybe(success: succeeded))
             return true
         }
 
         return deferred
     }
 
-    open func insertOrUpdateClient(_ client: RemoteClient) -> Deferred<Maybe<()>> {
+    open func insertOrUpdateClient(_ client: RemoteClient) -> Deferred<Maybe<Int>> {
         return insertOrUpdateClients([client])
     }
 

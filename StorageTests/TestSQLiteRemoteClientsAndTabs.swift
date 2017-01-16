@@ -58,12 +58,12 @@ open class MockRemoteClientsAndTabs: RemoteClientsAndTabs {
         return succeed()
     }
 
-    open func insertOrUpdateClients(_ clients: [RemoteClient]) -> Success {
-        return succeed()
+    open func insertOrUpdateClients(_ clients: [RemoteClient]) -> Deferred<Maybe<Int>> {
+        return deferMaybe(0)
     }
 
-    open func insertOrUpdateClient(_ client: RemoteClient) -> Success {
-        return succeed()
+    open func insertOrUpdateClient(_ client: RemoteClient) -> Deferred<Maybe<Int>> {
+        return deferMaybe(0)
     }
 
     open func insertOrUpdateTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {

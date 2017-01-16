@@ -218,7 +218,7 @@ class SyncNowSetting: WithAccountSetting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         NotificationCenter.default.post(name: Notification.Name(rawValue: SyncNowSetting.NotificationUserInitiatedSyncManually), object: nil)
-        profile.syncManager.syncEverything()
+        profile.syncManager.syncEverything(why: .user)
     }
 }
 

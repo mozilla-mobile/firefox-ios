@@ -220,10 +220,8 @@ open class BaseSyncState: SyncState {
     var scratchpad: Scratchpad
 
     // TODO: 304 for i/c.
-    open func getInfoCollections() -> Deferred<Maybe<InfoCollections>> {
-        return chain(self.client.getInfoCollections(), f: {
-            return $0.value
-        })
+    open func getInfoCollectionResponse() -> Deferred<Maybe<StorageResponse<InfoCollections>>> {
+        return self.client.getInfoCollections()
     }
 
     public init(client: Sync15StorageClient, scratchpad: Scratchpad, token: TokenServerToken) {
@@ -255,15 +253,23 @@ open class BaseSyncState: SyncState {
 }
 
 open class BaseSyncStateWithInfo: BaseSyncState {
-    open let info: InfoCollections
+    open var info: InfoCollections {
+        return infoCollectionsResponse.value
+    }
 
-    init(client: Sync15StorageClient, scratchpad: Scratchpad, token: TokenServerToken, info: InfoCollections) {
-        self.info = info
+    open var infoMetadata: ResponseMetadata {
+        return infoCollectionsResponse.metadata
+    }
+
+    fileprivate let infoCollectionsResponse: StorageResponse<InfoCollections>
+
+    init(client: Sync15StorageClient, scratchpad: Scratchpad, token: TokenServerToken, infoCollectionsResponse: StorageResponse<InfoCollections>) {
+        self.infoCollectionsResponse = infoCollectionsResponse
         super.init(client: client, scratchpad: scratchpad, token: token)
     }
 
-    init(scratchpad: Scratchpad, token: TokenServerToken, info: InfoCollections) {
-        self.info = info
+    init(scratchpad: Scratchpad, token: TokenServerToken, infoCollectionsResponse: StorageResponse<InfoCollections>) {
+        self.infoCollectionsResponse = infoCollectionsResponse
         super.init(scratchpad: scratchpad, token: token)
     }
 }
@@ -377,7 +383,7 @@ open class SyncIDChangedError: RecoverableSyncState {
     open func advance() -> Deferred<Maybe<SyncState>> {
         // TODO: mutate local storage to allow for a fresh start.
         let s = self.previousState.scratchpad.evolve().setGlobal(self.newMetaGlobal).setKeys(nil).build().checkpoint()
-        let state = HasMetaGlobal(client: self.previousState.client, scratchpad: s, token: self.previousState.token, info: self.previousState.info)
+        let state = HasMetaGlobal(client: self.previousState.client, scratchpad: s, token: self.previousState.token, infoCollectionsResponse: self.previousState.infoCollectionsResponse)
         return deferMaybe(state)
     }
 }
@@ -509,12 +515,12 @@ open class InitialWithLiveToken: BaseSyncState {
         super.init(client: client, scratchpad: scratchpad, token: token)
     }
 
-    func advanceWithInfo(_ info: InfoCollections) -> SyncState {
-        return InitialWithLiveTokenAndInfo(scratchpad: self.scratchpad, token: self.token, info: info)
+    func advanceWithInfo(_ infoCollectionsResponse: StorageResponse<InfoCollections>) -> SyncState {
+        return InitialWithLiveTokenAndInfo(scratchpad: self.scratchpad, token: self.token, infoCollectionsResponse: infoCollectionsResponse)
     }
 
     override open func advance() -> Deferred<Maybe<SyncState>> {
-        return chain(getInfoCollections(), f: self.advanceWithInfo)
+        return chain(getInfoCollectionResponse(), f: self.advanceWithInfo)
     }
 }
 
@@ -537,14 +543,16 @@ open class InitialWithLiveToken: BaseSyncState {
 open class ResolveMetaGlobalVersion: BaseSyncStateWithInfo {
     let fetched: Fetched<MetaGlobal>
 
-    init(fetched: Fetched<MetaGlobal>, client: Sync15StorageClient, scratchpad: Scratchpad, token: TokenServerToken, info: InfoCollections) {
+    init(fetched: Fetched<MetaGlobal>, client: Sync15StorageClient, scratchpad: Scratchpad,
+         token: TokenServerToken, infoCollectionsResponse: StorageResponse<InfoCollections>) {
         self.fetched = fetched
-        super.init(client: client, scratchpad: scratchpad, token: token, info: info)
+        super.init(client: client, scratchpad: scratchpad, token: token, infoCollectionsResponse: infoCollectionsResponse)
     }
+
     open override var label: SyncStateLabel { return SyncStateLabel.ResolveMetaGlobalVersion }
 
     class func fromState(_ state: BaseSyncStateWithInfo, fetched: Fetched<MetaGlobal>) -> ResolveMetaGlobalVersion {
-        return ResolveMetaGlobalVersion(fetched: fetched, client: state.client, scratchpad: state.scratchpad, token: state.token, info: state.info)
+        return ResolveMetaGlobalVersion(fetched: fetched, client: state.client, scratchpad: state.scratchpad, token: state.token, infoCollectionsResponse: state.infoCollectionsResponse)
     }
 
     override open func advance() -> Deferred<Maybe<SyncState>> {
@@ -569,14 +577,16 @@ open class ResolveMetaGlobalVersion: BaseSyncStateWithInfo {
 open class ResolveMetaGlobalContent: BaseSyncStateWithInfo {
     let fetched: Fetched<MetaGlobal>
 
-    init(fetched: Fetched<MetaGlobal>, client: Sync15StorageClient, scratchpad: Scratchpad, token: TokenServerToken, info: InfoCollections) {
+    init(fetched: Fetched<MetaGlobal>, client: Sync15StorageClient, scratchpad: Scratchpad,
+         token: TokenServerToken, infoCollectionsResponse: StorageResponse<InfoCollections>) {
         self.fetched = fetched
-        super.init(client: client, scratchpad: scratchpad, token: token, info: info)
+        super.init(client: client, scratchpad: scratchpad, token: token, infoCollectionsResponse: infoCollectionsResponse)
     }
+
     open override var label: SyncStateLabel { return SyncStateLabel.ResolveMetaGlobalContent }
 
     class func fromState(_ state: BaseSyncStateWithInfo, fetched: Fetched<MetaGlobal>) -> ResolveMetaGlobalContent {
-        return ResolveMetaGlobalContent(fetched: fetched, client: state.client, scratchpad: state.scratchpad, token: state.token, info: state.info)
+        return ResolveMetaGlobalContent(fetched: fetched, client: state.client, scratchpad: state.scratchpad, token: state.token, infoCollectionsResponse: state.infoCollectionsResponse)
     }
 
     override open func advance() -> Deferred<Maybe<SyncState>> {
@@ -708,11 +718,11 @@ open class HasMetaGlobal: BaseSyncStateWithInfo {
     open override var label: SyncStateLabel { return SyncStateLabel.HasMetaGlobal }
 
     class func fromState(_ state: BaseSyncStateWithInfo) -> HasMetaGlobal {
-        return HasMetaGlobal(client: state.client, scratchpad: state.scratchpad, token: state.token, info: state.info)
+        return HasMetaGlobal(client: state.client, scratchpad: state.scratchpad, token: state.token, infoCollectionsResponse: state.infoCollectionsResponse)
     }
 
     class func fromState(_ state: BaseSyncStateWithInfo, scratchpad: Scratchpad) -> HasMetaGlobal {
-        return HasMetaGlobal(client: state.client, scratchpad: scratchpad, token: state.token, info: state.info)
+        return HasMetaGlobal(client: state.client, scratchpad: scratchpad, token: state.token, infoCollectionsResponse: state.infoCollectionsResponse)
     }
 
     override open func advance() -> Deferred<Maybe<SyncState>> {
@@ -752,12 +762,12 @@ open class NeedsFreshCryptoKeys: BaseSyncStateWithInfo {
     let staleCollectionKeys: Keys?
 
     class func fromState(_ state: BaseSyncStateWithInfo, scratchpad: Scratchpad, staleCollectionKeys: Keys?) -> NeedsFreshCryptoKeys {
-        return NeedsFreshCryptoKeys(client: state.client, scratchpad: scratchpad, token: state.token, info: state.info, keys: staleCollectionKeys)
+        return NeedsFreshCryptoKeys(client: state.client, scratchpad: scratchpad, token: state.token, infoCollectionsResponse: state.infoCollectionsResponse, keys: staleCollectionKeys)
     }
 
-    public init(client: Sync15StorageClient, scratchpad: Scratchpad, token: TokenServerToken, info: InfoCollections, keys: Keys?) {
+    public init(client: Sync15StorageClient, scratchpad: Scratchpad, token: TokenServerToken, infoCollectionsResponse: StorageResponse<InfoCollections>, keys: Keys?) {
         self.staleCollectionKeys = keys
-        super.init(client: client, scratchpad: scratchpad, token: token, info: info)
+        super.init(client: client, scratchpad: scratchpad, token: token, infoCollectionsResponse: infoCollectionsResponse)
     }
 
     override open func advance() -> Deferred<Maybe<SyncState>> {
@@ -794,16 +804,16 @@ open class HasFreshCryptoKeys: BaseSyncStateWithInfo {
     let collectionKeys: Keys
 
     class func fromState(_ state: BaseSyncStateWithInfo, scratchpad: Scratchpad, collectionKeys: Keys) -> HasFreshCryptoKeys {
-        return HasFreshCryptoKeys(client: state.client, scratchpad: scratchpad, token: state.token, info: state.info, keys: collectionKeys)
+        return HasFreshCryptoKeys(client: state.client, scratchpad: scratchpad, token: state.token, infoCollectionsResponse: state.infoCollectionsResponse, keys: collectionKeys)
     }
 
-    public init(client: Sync15StorageClient, scratchpad: Scratchpad, token: TokenServerToken, info: InfoCollections, keys: Keys) {
+    public init(client: Sync15StorageClient, scratchpad: Scratchpad, token: TokenServerToken, infoCollectionsResponse: StorageResponse<InfoCollections>, keys: Keys) {
         self.collectionKeys = keys
-        super.init(client: client, scratchpad: scratchpad, token: token, info: info)
+        super.init(client: client, scratchpad: scratchpad, token: token, infoCollectionsResponse: infoCollectionsResponse)
     }
 
     override open func advance() -> Deferred<Maybe<SyncState>> {
-        return deferMaybe(Ready(client: self.client, scratchpad: self.scratchpad, token: self.token, info: self.info, keys: self.collectionKeys))
+        return deferMaybe(Ready(client: self.client, scratchpad: self.scratchpad, token: self.token, infoCollectionsResponse: self.infoCollectionsResponse, keys: self.collectionKeys))
     }
 }
 
@@ -818,9 +828,9 @@ open class Ready: BaseSyncStateWithInfo {
     open override var label: SyncStateLabel { return SyncStateLabel.Ready }
     let collectionKeys: Keys
 
-    public init(client: Sync15StorageClient, scratchpad: Scratchpad, token: TokenServerToken, info: InfoCollections, keys: Keys) {
+    public init(client: Sync15StorageClient, scratchpad: Scratchpad, token: TokenServerToken, infoCollectionsResponse: StorageResponse<InfoCollections>, keys: Keys) {
         self.collectionKeys = keys
-        super.init(client: client, scratchpad: scratchpad, token: token, info: info)
+        super.init(client: client, scratchpad: scratchpad, token: token, infoCollectionsResponse: infoCollectionsResponse)
     }
 }
 

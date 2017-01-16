@@ -267,19 +267,26 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
 
         let iUS: Timestamp? = ifUnmodifiedSince ?? ((lastUpload == 0) ? nil : lastUpload)
 
+        var uploadStats = SyncUploadStats()
         return storageClient.put(getOurClientRecord(), ifUnmodifiedSince: iUS)
             >>== { resp in
                 if let ts = resp.metadata.lastModifiedMilliseconds {
                     // Protocol says this should always be present for success responses.
                     log.debug("Client record upload succeeded. New timestamp: \(ts).")
                     self.clientRecordLastUpload = ts
+                    uploadStats.sent += 1
+                } else {
+                    uploadStats.sentFailed += 1
                 }
+                self.statsSession.recordUploadStats(uploadStats)
                 return succeed()
         }
     }
 
     fileprivate func applyStorageResponse(_ response: StorageResponse<[Record<ClientPayload>]>, toLocalClients localClients: RemoteClientsAndTabs, withServer storageClient: Sync15CollectionClient<ClientPayload>) -> Success {
         log.debug("Applying clients response.")
+
+        var downloadStats = SyncDownloadStats()
 
         let records = response.value
         let responseTimestamp = response.metadata.lastModifiedMilliseconds
@@ -308,10 +315,18 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
             }
         }
 
+        downloadStats.applied += toInsert.count
+
         // Apply remote changes.
         // Collect commands from our own record and reupload if necessary.
         // Then run the commands and return.
         return localClients.insertOrUpdateClients(toInsert)
+            >>== { succeeded in
+                downloadStats.succeeded += succeeded
+                downloadStats.failed += (toInsert.count - succeeded)
+                self.statsSession.recordDownloadStats(downloadStats)
+                return succeed()
+            }
             >>== { self.processCommandsFromRecord(ours, withServer: storageClient) }
             >>== { (shouldUpload, commands) in
                 return self.maybeUploadOurRecord(shouldUpload, ifUnmodifiedSince: ours?.modified, toServer: storageClient)
@@ -352,19 +367,21 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
 
         if !self.remoteHasChanges(info) {
             log.debug("No remote changes for clients. (Last fetched \(self.lastFetched).)")
+            statsSession.start()
             return self.maybeUploadOurRecord(false, ifUnmodifiedSince: nil, toServer: clientsClient)
                 >>> { self.uploadClientCommands(toLocalClients: localClients, withServer: clientsClient) }
-                >>> { deferMaybe(.completed) }
+                >>> { deferMaybe(self.completedWithStats) }
         }
 
         // TODO: some of the commands we process might involve wiping collections or the
         // entire profile. We should model this as an explicit status, and return it here
         // instead of .completed.
+        statsSession.start()
         return clientsClient.getSince(self.lastFetched)
             >>== { response in
                 return self.wipeIfNecessary(localClients)
                     >>> { self.applyStorageResponse(response, toLocalClients: localClients, withServer: clientsClient) }
             }
-            >>> { deferMaybe(.completed) }
+            >>> { deferMaybe(self.completedWithStats) }
     }
 }

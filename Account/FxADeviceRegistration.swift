@@ -37,7 +37,7 @@ public enum FxADeviceRegistratorError: MaybeErrorType {
 open class FxADeviceRegistration: NSObject, NSCoding {
     /// The device identifier identifying this device.  A device is uniquely identified
     /// across the lifetime of a Firefox Account.
-    let id: String
+    public let id: String
 
     /// The version of the device registration. We use this to re-register
     /// devices after we update what we send on device registration.
