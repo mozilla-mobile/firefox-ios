@@ -173,9 +173,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             sendCorePing()
         }
 
-        let settings = UIUserNotificationSettings()
-        application.registerUserNotificationSettings(settings)
-        application.registerForRemoteNotifications()
+        if AppConstants.MOZ_PUSH {
+            // registerForUserNotifications(application)
+            registerForRemoteNotifications(application)
+        }
 
         log.debug("Done with setting up the application.")
         return true
@@ -248,28 +249,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         log.debug("Done with applicationDidFinishLaunching.")
 
         return shouldPerformAdditionalDelegateHandling
-    }
-
-    func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
-        let APNsToken = deviceToken.hexEncodedString
-        let configuration = StagePushConfiguration()
-        let pushClient = PushClient(endpointURL: configuration.endpointURL)
-        pushClient.register(APNsToken).upon { result in
-            guard result.isSuccess else {
-                print("fail: \(result.failureValue!)")
-                return
-            }
-
-            let registration = result.successValue!
-            print("endpoint: \(registration.endpoint)")
-            print("secret: \(registration.secret)")
-            print("uaid: \(registration.uaid)")
-            print("channelID: \(registration.channelID)")
-        }
-    }
-
-    func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
-        print("failed to register. \(error.description)")
     }
 
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
@@ -669,6 +648,62 @@ extension AppDelegate: MFMailComposeViewControllerDelegate {
         // Dismiss the view controller and start the app up
         controller.dismissViewControllerAnimated(true, completion: nil)
         startApplication(application!, withLaunchOptions: self.launchOptions)
+    }
+}
+
+extension AppDelegate {
+    private func registerForUserNotifications(application: UIApplication) {
+        // Step 1. Ask the user if we can display any UI for notifications.
+        let settings = UIUserNotificationSettings(forTypes: [.Alert, .Sound, .Badge], categories: nil)
+        application.registerUserNotificationSettings(settings)
+    }
+
+    func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
+        // Step 2. Check if we've been granted permission to display notifications.
+        guard notificationSettings.types != .None else {
+            // Step 2a. The user has not given us permission to display notifications.
+            return
+        }
+        // Step 3. We still have permission to show notifications to the user.
+    }
+}
+
+extension AppDelegate {
+    func registerForRemoteNotifications(application: UIApplication) {
+        // Step 1. Attempt to tell Apple that we want to receive push notifications.
+        application.registerForRemoteNotifications()
+    }
+
+    func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
+        // Step 2. Now that we've registered for APNS with Apple, it's given us a token which we need to tell the mozilla push server about.
+        let apnsToken = deviceToken.hexEncodedString
+
+        // TODO: move into AppConstants.
+        let configuration = StagePushConfiguration()
+        let pushClient = PushClient(endpointURL: configuration.endpointURL)
+        pushClient.register(apnsToken).upon { result in
+            guard result.isSuccess else {
+                print("fail: \(result.failureValue!)")
+                return
+            }
+            // Step 3. We've now told the push server about us.
+            let registration = result.successValue!
+            print("endpoint: \(registration.endpoint)")
+            print("secret: \(registration.secret)")
+            print("uaid: \(registration.uaid)")
+            print("channelID: \(registration.channelID)")
+        }
+    }
+
+    func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
+        // Step 2a. Something went wrong with registering with Apple.
+        print("failed to register. \(error.description)")
+    }
+
+    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
+        // TODO decode the push notification and then:
+        // TODO route to open a new tab or
+        // TODO direct to open a websocket.
     }
 }
 
