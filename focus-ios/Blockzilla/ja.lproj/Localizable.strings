@@ -71,7 +71,7 @@
 "ExternalLink.messageTitle" = "Firefox Focus から別のアプリを開きます。";
 
 /* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openAppStoreButton" = "アプリストアを開く";
+"ExternalLink.openAppStoreButton" = "App Store を開く";
 
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "マップを開く";
