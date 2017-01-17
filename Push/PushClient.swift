@@ -25,6 +25,7 @@ import Shared
 public let PushClientErrorDomain = "org.mozilla.push.error"
 private let PushClientUnknownError = NSError(domain: PushClientErrorDomain, code: 999,
                                              userInfo: [NSLocalizedDescriptionKey: "Invalid server response"])
+private let log = Logger.browserLogger
 
 public struct PushRemoteError {
     let code: Int
@@ -74,43 +75,113 @@ public class PushClient {
         self.endpointURL = endpointURL
     }
 
-    func register(APNsToken: String) -> Deferred<Maybe<PushRegistration>> {
-        let deferred = Deferred<Maybe<PushRegistration>>()
+}
 
-        let registerURL = endpointURL.URLByAppendingPathComponent("registration")
-        print("register URL: \(registerURL)")
+extension PushClient {
+    func register(apnsToken: String) -> Deferred<Maybe<PushRegistration>> {
+        if let creds = getCredentials() {
+            return updateUAID(apnsToken, creds: creds) >>> { deferMaybe(creds) }
+        } else {
+            return registerUAID(apnsToken)
+        }
+    }
+
+    func registerUAID(apnsToken: String) -> Deferred<Maybe<PushRegistration>> {
+        //  POST /v1/{type}/{app_id}/registration
+        let registerURL = endpointURL.URLByAppendingPathComponent("registration")!
 
         let mutableURLRequest = NSMutableURLRequest(URL: registerURL)
         mutableURLRequest.HTTPMethod = Method.POST.rawValue
 
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        let parameters = ["token": APNsToken]
+        let parameters = ["token": apnsToken]
         mutableURLRequest.HTTPBody = JSON(parameters).toString().utf8EncodedData
 
-        alamofire.request(mutableURLRequest)
+        return sendRequest(mutableURLRequest) >>== { json in
+            guard let response = PushRegistration.fromJSON(json) else {
+                return deferMaybe(PushClientError.Local(PushClientUnknownError))
+            }
+            self.storeCredentials(response)
+            return deferMaybe(response)
+        }
+    }
+
+    func updateUAID(apnsToken: String, creds: PushRegistration) -> Deferred<Maybe<PushRegistration>> {
+        //  PUT /v1/{type}/{app_id}/registration/{uaid}
+        let registerURL = endpointURL.URLByAppendingPathComponent("registration/\(creds.uaid)")!
+        let mutableURLRequest = NSMutableURLRequest(URL: registerURL)
+
+        mutableURLRequest.HTTPMethod = Method.PUT.rawValue
+        mutableURLRequest.addValue("Bearer \(creds.secret)", forHTTPHeaderField: "Authorization")
+
+        mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let parameters = ["token": apnsToken]
+        mutableURLRequest.HTTPBody = JSON(parameters).toString().utf8EncodedData
+
+        return sendRequest(mutableURLRequest) >>== { json in
+            guard let response = PushRegistration.fromJSON(json) else {
+                return deferMaybe(PushClientError.Local(PushClientUnknownError))
+            }
+            return deferMaybe(response)
+        }
+    }
+
+    func unregister() -> Success {
+        guard let creds = getCredentials() else {
+            return succeed()
+        }
+
+        //  DELETE /v1/{type}/{app_id}/registration/{uaid}
+        let unregisterURL = endpointURL.URLByAppendingPathComponent("registration/\(creds.uaid)")
+
+        let mutableURLRequest = NSMutableURLRequest(URL: unregisterURL!)
+        mutableURLRequest.HTTPMethod = Method.DELETE.rawValue
+        mutableURLRequest.addValue("Bearer \(creds.secret)", forHTTPHeaderField: "Authorization")
+
+        return sendRequest(mutableURLRequest) >>> succeed
+    }
+}
+
+/// Credential management
+extension PushClient {
+    private func getCredentials() -> PushRegistration? {
+        return nil
+    }
+
+    private func storeCredentials(creds: PushRegistration) {
+        // TODO
+    }
+
+    private func deleteCredentials() {
+        // TODO
+    }
+}
+
+/// Utilities
+extension PushClient {
+    private func sendRequest(request: NSURLRequest) -> Deferred<Maybe<JSON>> {
+        log.info("\(request.HTTPMethod) \(request.URLString)")
+        let deferred = Deferred<Maybe<JSON>>()
+        alamofire.request(request)
             .validate(contentType: ["application/json"])
-            .responseJSON { request, response, result in
+            .responseJSON { response in
                 // Don't cancel requests just because our client is deallocated.
                 withExtendedLifetime(self.alamofire) {
-                    if let error = result.error as? NSError {
-                        deferred.fill(Maybe(failure: PushClientError.Local(error)))
-                        return
+                    let result = response.result
+                    if let error = result.error {
+                        return deferred.fill(Maybe(failure: PushClientError.Local(error)))
                     }
 
-                    if let data = result.value {
-                        let json = JSON(data)
-                        if let remoteError = PushRemoteError.fromJSON(json) {
-                            deferred.fill(Maybe(failure: PushClientError.Remote(remoteError)))
-                            return
-                        }
-
-                        if let response = PushRegistration.fromJSON(json) {
-                            deferred.fill(Maybe(success: response))
-                            return
-                        }
+                    guard let data = response.data else {
+                        return deferred.fill(Maybe(failure: PushClientError.Local(PushClientUnknownError)))
                     }
 
-                    deferred.fill(Maybe(failure: PushClientError.Local(PushClientUnknownError)))
+                    let json = JSON(data)
+                    if let remoteError = PushRemoteError.fromJSON(json) {
+                        return deferred.fill(Maybe(failure: PushClientError.Remote(remoteError)))
+                    }
+
+                    deferred.fill(Maybe(success: json))
                 }
         }
 
