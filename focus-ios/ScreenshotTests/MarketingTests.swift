@@ -13,7 +13,7 @@ class MarketingTests: XCTestCase {
         app.launch()
     }
 
-    func test01Settings() {
+    func testMarketingScreenshots() {
         let app = XCUIApplication()
 
         if UIDevice.current.userInterfaceIdiom == .pad {
@@ -21,7 +21,8 @@ class MarketingTests: XCTestCase {
         }
 
         app.buttons["FirstRunViewController.button"].tap()
+        snapshot("01Home")
         app.buttons["HomeView.settingsButton"].tap()
-        snapshot("01Settings")
+        snapshot("02Settings")
     }
 }

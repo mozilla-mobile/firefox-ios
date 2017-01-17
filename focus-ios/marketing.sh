@@ -5,7 +5,7 @@ LANGUAGES="es-ES,fr,id,it,ja,pt-BR,ru,zh-CH,en-US"
 TS=`date +%Y%m%d-%H%M`
 
 for PRODUCT in Focus Klar; do
-  for DEVICE in "iPhone 7" "iPhone 7 Plus" "iPad Pro (9.7-inch)" "iPad Pro (12.9-inch)"; do
+  for DEVICE in "iPhone 7 Plus" "iPad Pro (12.9-inch)"; do
     echo "Snapshotting $PRODUCT on $DEVICE"
         DEVICEDIR="${DEVICE// /}"
         mkdir -p "screenshots/$TS/$PRODUCT/$DEVICEDIR"
