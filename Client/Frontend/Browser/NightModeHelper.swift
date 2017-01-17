@@ -36,7 +36,7 @@ class NightModeHelper: TabHelper {
     }
 
     static func setNightModeBrightness(prefs: Prefs, enabled: Bool) {
-        let nightModeBrightness: CGFloat = 0.2
+        let nightModeBrightness: CGFloat = min(0.2, CGFloat(UIScreen.mainScreen().brightness))
         if (enabled) {
             if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
                 appDelegate.systemBrightness = CGFloat(UIScreen.mainScreen().brightness)
