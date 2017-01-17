@@ -23,6 +23,9 @@ public protocol PushConfiguration {
 
     /// The associated autopush server should speak the protocol documented at
     /// http://autopush.readthedocs.io/en/latest/http.html#push-service-http-api
+    /// /v1/{type}/{app_id}
+    /// type == apns
+    /// app_id == the “platform” or “channel” of development (e.g. “firefox”, “beta”, “gecko”, etc.)
     var endpointURL: NSURL { get }
 }
 
