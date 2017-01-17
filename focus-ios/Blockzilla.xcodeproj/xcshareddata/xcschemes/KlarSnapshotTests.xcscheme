@@ -37,6 +37,11 @@
                BlueprintName = "SnapshotTests"
                ReferencedContainer = "container:Blockzilla.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "MarketingTests">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
       <MacroExpansion>
