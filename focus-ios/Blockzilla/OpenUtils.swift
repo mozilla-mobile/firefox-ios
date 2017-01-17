@@ -22,6 +22,11 @@ class OpenUtils {
         app.openURL(firefoxURL)
     }
 
+    private static func openFirefoxInstall() {
+        AdjustIntegration.track(eventName: .openFirefoxInstall)
+        UIApplication.shared.openURL(AppInfo.config.firefoxAppStoreURL)
+    }
+
     private static func openInSafari(url: URL) {
         AdjustIntegration.track(eventName: .openSafari)
         app.openURL(url)
@@ -32,19 +37,21 @@ class OpenUtils {
 
         alert.addAction(UIAlertAction(title: UIConstants.strings.openFirefox, style: .default) { _ in
             // If Firefox isn't installed, launch the URL to download it in the App Store.
-            guard OpenUtils.canOpenInFirefox else {
-                UIApplication.shared.openURL(AppInfo.config.firefoxAppStoreURL)
+            guard canOpenInFirefox else {
+                openFirefoxInstall()
                 return
             }
 
-            OpenUtils.openInFirefox(url: url)
+            openInFirefox(url: url)
         })
 
         alert.addAction(UIAlertAction(title: UIConstants.strings.openSafari, style: .default) { _ in
-            OpenUtils.openInSafari(url: url)
+            openInSafari(url: url)
         })
 
         alert.addAction(UIAlertAction(title: UIConstants.strings.openMore, style: .default) { _ in
+            AdjustIntegration.track(eventName: .openSystemShare)
+
             let controller = UIActivityViewController(activityItems: [url], applicationActivities: nil)
             controller.popoverPresentationController?.sourceView = anchor
             controller.popoverPresentationController?.sourceRect = anchor.bounds

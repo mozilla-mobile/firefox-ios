@@ -11,6 +11,8 @@ enum AdjustEventName: String {
     case clear = "Clear"                                       // When the user erases the browsing history
     case openFirefox = "OpenInFirefox"                         // When the user opens the page in Firefox
     case openSafari = "OpenInSafari"                           // When the user opens the page in Safari
+    case openFirefoxInstall = "OpenFirefoxInstall"             // When the user opens the App Store page for Firefox
+    case openSystemShare = "OpenSystemShare"                   // When the user opens the system share menu
     case enableSafariIntegration = "EnableSafariIntegration"   // When the user enables the Safari blocklist
     case disableSafariIntegration = "DisableSafariIntegration" // When the user disables the Safari blocklist
     case enableBlockAds = "EnableBlockAds"                     // When the user enables Block Ad Trackers
