@@ -449,9 +449,9 @@ class TabManager: NSObject {
         guard let tempTabs = self.tempTabs where tempTabs.count ?? 0 > 0 else {
             return
         }
-        
         let tabsCopy = normalTabs
         restoreTabs(tempTabs)
+        self.isRestoring = true
         for tab in tempTabs {
             tab.showContent(true)
         }
@@ -459,6 +459,10 @@ class TabManager: NSObject {
             removeTabs(tabsCopy)
         }
         selectTab(tempTabs.first)
+        self.isRestoring = false
+        for delegate in delegates {
+            delegate.get()?.tabManagerDidRestoreTabs(self)
+        }
         self.tempTabs?.removeAll()
         tabs.first?.createWebview()
     }
