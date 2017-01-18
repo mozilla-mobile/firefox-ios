@@ -231,7 +231,6 @@ class BrowserViewController: UIViewController {
                     make.height.equalTo(TopTabsUX.TopTabsViewHeight)
                 }
                 self.topTabsViewController = topTabsViewController
-                tabManager.addNavigationDelegate(topTabsViewController)
             }
             topTabsContainer.snp_updateConstraints { make in
                 make.height.equalTo(TopTabsUX.TopTabsViewHeight)
@@ -2035,6 +2034,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
 }
 
 extension BrowserViewController: TabManagerDelegate {
+
     func tabManager(tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?) {
         // Remove the old accessibilityLabel. Since this webview shouldn't be visible, it doesn't need it
         // and having multiple views with the same label confuses tests.
@@ -2049,7 +2049,6 @@ extension BrowserViewController: TabManagerDelegate {
 
         if let tab = selected, webView = tab.webView {
             updateURLBarDisplayURL(tab)
-
             if tab.isPrivate {
                 readerModeCache = MemoryReaderModeCache.sharedInstance
                 applyTheme(Theme.PrivateMode)
@@ -3239,7 +3238,6 @@ extension BrowserViewController: TabTrayDelegate {
         self.addBookmark(tab.tabState)
     }
 
-
     func tabTrayDidAddToReadingList(tab: Tab) -> ReadingListClientRecord? {
         guard let url = tab.url?.absoluteString where url.characters.count > 0 else { return nil }
         return profile.readingList?.createRecordWithURL(url, title: tab.title ?? url, addedBy: UIDevice.currentDevice().name).successValue
@@ -3257,6 +3255,7 @@ extension BrowserViewController: Themeable {
         urlBar.applyTheme(themeName)
         toolbar?.applyTheme(themeName)
         readerModeBar?.applyTheme(themeName)
+
         topTabsViewController?.applyTheme(themeName)
 
         switch(themeName) {
@@ -3402,12 +3401,11 @@ extension BrowserViewController: TopTabsDelegate {
         self.urlBarDidPressTabs(urlBar)
     }
     
-    func topTabsDidPressNewTab() {
-        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
+    func topTabsDidPressNewTab(isPrivate: Bool) {
         openBlankNewTab(isPrivate: isPrivate)
     }
 
-    func topTabsDidPressPrivateModeButton(cachedTab: Tab?) {
+    func topTabsDidPressPrivateModeButton() {
         guard let selectedTab = tabManager.selectedTab else {
             return
         }
@@ -3416,18 +3414,6 @@ extension BrowserViewController: TopTabsDelegate {
         if selectedTab.isPrivate {
             if profile.prefs.boolForKey("settings.closePrivateTabs") ?? false {
                 tabManager.removeAllPrivateTabsAndNotify(false)
-            }
-        }
-        
-        if let tab = cachedTab {
-            tabManager.selectTab(tab)
-        } else if selectedTab.isPrivate {
-            tabManager.selectTab(tabManager.normalTabs.last)
-        } else {
-            if let privateTab = tabManager.privateTabs.last {
-                tabManager.selectTab(privateTab)
-            } else {
-                openBlankNewTab(isPrivate: true)
             }
         }
     }
