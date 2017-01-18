@@ -28,9 +28,9 @@ public class Bytes {
             .stringByReplacingOccurrencesOfString("+", withString: "-", options: NSStringCompareOptions(), range: nil)
     }
 
-    public class func decodeBase64(b64: String) -> NSData {
+    public class func decodeBase64(b64: String) -> NSData? {
         return NSData(base64EncodedString: b64,
-                      options: NSDataBase64DecodingOptions())!
+                      options: NSDataBase64DecodingOptions())
     }
 
     /**

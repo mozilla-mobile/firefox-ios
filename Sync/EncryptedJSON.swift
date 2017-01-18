@@ -38,51 +38,80 @@ public class EncryptedJSON: JSON {
         super.init(json)
     }
 
+    // For validating HMAC: the raw ciphertext as bytes without decoding.
+    private var ciphertextB64: NSData? {
+        if let ct = self["ciphertext"].asString {
+            return Bytes.dataFromBase64(ct)
+        }
+        return nil
+    }
+
+    /**
+     * You probably want to call validate() and then use .ciphertext.
+     */
+    private var ciphertextBytes: NSData? {
+        return Bytes.decodeBase64(self["ciphertext"].asString!)
+    }
+
     private func validate() -> Bool {
         if validated {
             return valid
         }
 
-        valid = self["ciphertext"].isString &&
-            self["hmac"].isString &&
-            self["IV"].isString
-        if (!valid) {
-            validated = true
+        defer { validated = true }
+
+        guard self["ciphertext"].isString &&
+              self["hmac"].isString &&
+              self["IV"].isString else {
+            valid = false
             return false
         }
 
-        validated = true
-        if let ciphertextForHMAC = self.ciphertextB64 {
-            return keyBundle.verify(hmac: self.hmac, ciphertextB64: ciphertextForHMAC)
-        } else {
+        guard let ciphertextForHMAC = self.ciphertextB64 else {
+            valid = false
             return false
         }
+
+        guard keyBundle.verify(hmac: self.hmac, ciphertextB64: ciphertextForHMAC) else {
+            valid = false
+            return false
+        }
+
+        // I guess we called validate twice…
+        if self._ciphertextBytes != nil {
+            valid = true
+            return true
+        }
+
+        // Also verify that the ciphertext is valid base64. Do this by
+        // retrieving the value in a failable way, leaving the accessors
+        // to take the dangerous/simple path.
+        // We can force-unwrap self["ciphertext"] because we already checked
+        // it when verifying the HMAC above.
+        guard let data = self.ciphertextBytes else {
+            log.error("Unable to decode ciphertext base64 in record \(self["id"].asString ?? "<unknown>")")
+            valid = false
+            return false
+        }
+
+        self._ciphertextBytes = data
+        valid = true
+        return valid
     }
 
     public func isValid() -> Bool {
-        return !isError &&
-            self.validate()
+        return !isError && self.validate()
     }
 
-    func fromBase64(str: String) -> NSData {
-        let b = Bytes.decodeBase64(str)
-        return b
-    }
-
-    var ciphertextB64: NSData? {
-        if let ct = self["ciphertext"].asString {
-            return Bytes.dataFromBase64(ct)
-        } else {
-            return nil
-        }
-    }
-
+    /**
+     * Make sure you call isValid first. This API force-unwraps for simplicity.
+     */
     var ciphertext: NSData {
         if (_ciphertextBytes != nil) {
             return _ciphertextBytes!
         }
 
-        _ciphertextBytes = fromBase64(self["ciphertext"].asString!)
+        _ciphertextBytes = self.ciphertextBytes
         return _ciphertextBytes!
     }
 
@@ -100,7 +129,7 @@ public class EncryptedJSON: JSON {
             return _ivBytes!
         }
 
-        _ivBytes = fromBase64(self["IV"].asString!)
+        _ivBytes = Bytes.decodeBase64(self["IV"].asString!)
         return _ivBytes!
     }
 
@@ -110,7 +139,7 @@ public class EncryptedJSON: JSON {
             return _cleartext
         }
 
-        if (!validate()) {
+        if (!isValid()) {
             log.error("Failed to validate.")
             return nil
         }
