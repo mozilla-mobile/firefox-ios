@@ -87,7 +87,7 @@ class RecordTests: XCTestCase {
 
         let inputString = "{\"sortindex\": 131, \"payload\": \"{\\\"ciphertext\\\":\\\"YJB4dr0vZEIWPirfU2FCJvfzeSLiOP5QWasol2R6ILUxdHsJWuUuvTZVhxYQfTVNou6hVV67jfAvi5Cs+bqhhQsv7icZTiZhPTiTdVGt+uuMotxauVA5OryNGVEZgCCTvT3upzhDFdDbJzVd9O3/gU/b7r/CmAHykX8bTlthlbWeZ8oz6gwHJB5tPRU15nM/m/qW1vyKIw5pw/ZwtAy630AieRehGIGDk+33PWqsfyuT4EUFY9/Ly+8JlnqzxfiBCunIfuXGdLuqTjJOxgrK8mI4wccRFEdFEnmHvh5x7fjl1ID52qumFNQl8zkB75C8XK25alXqwvRR6/AQSP+BgQ==\\\",\\\"IV\\\":\\\"v/0BFgicqYQsd70T39rraA==\\\",\\\"hmac\\\":\\\"59605ed696f6e0e6e062a03510cff742bf6b50d695c042e8372a93f4c2d37dac\\\"}\", \"id\": \"0-P9fabp9vJD\", \"modified\": 1326254123.65}"
 
-        let keyBundle = KeyBundle(encKeyB64: b64E, hmacKeyB64: b64H)
+        let keyBundle = KeyBundle(encKeyB64: b64E, hmacKeyB64: b64H)!
         let decryptClient = keyBundle.factory({ CleartextPayloadJSON($0) })
         let encryptClient = keyBundle.serializer({ $0 })   // It's already a JSON.
 
@@ -120,6 +120,12 @@ class RecordTests: XCTestCase {
         } else {
             XCTFail("No record.")
         }
+
+        // Test invalid Base64.
+        let badInputString =  "{\"sortindex\": 131, \"payload\": \"{\\\"ciphertext\\\":\\\"~~~YJB4dr0vZEIWPirfU2FCJvfzeSLiOP5QWasol2R6ILUxdHsJWuUuvTZVhxYQfTVNou6hVV67jfAvi5Cs+bqhhQsv7icZTiZhPTiTdVGt+uuMotxauVA5OryNGVEZgCCTvT3upzhDFdDbJzVd9O3/gU/b7r/CmAHykX8bTlthlbWeZ8oz6gwHJB5tPRU15nM/m/qW1vyKIw5pw/ZwtAy630AieRehGIGDk+33PWqsfyuT4EUFY9/Ly+8JlnqzxfiBCunIfuXGdLuqTjJOxgrK8mI4wccRFEdFEnmHvh5x7fjl1ID52qumFNQl8zkB75C8XK25alXqwvRR6/AQSP+BgQ==\\\",\\\"IV\\\":\\\"v/0BFgicqYQsd70T39rraA==\\\",\\\"hmac\\\":\\\"59605ed696f6e0e6e062a03510cff742bf6b50d695c042e8372a93f4c2d37dac\\\"}\", \"id\": \"0-P9fabp9vJD\", \"modified\": 1326254123.65}"
+        let badEnvelope = EnvelopeJSON(badInputString)
+        XCTAssertTrue(badEnvelope.isValid())      // It's a valid envelope containing nonsense ciphertext.
+        XCTAssertNil(toRecord(badEnvelope))       // Even though the envelope is valid, the payload is invalid, so we can't construct a record.
     }
 
     func testMeta() {
