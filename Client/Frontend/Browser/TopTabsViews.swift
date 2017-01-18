@@ -85,7 +85,7 @@ class TopTabCell: UICollectionViewCell {
         bezierView.snp_makeConstraints { make in
             make.centerY.centerX.equalTo(self)
             make.height.equalTo(self)
-            make.width.equalTo(frame.width+TopTabsUX.TopTabsBackgroundPadding)
+            make.width.equalTo(frame.width + TopTabsUX.TopTabsBackgroundPadding + 3)
         }
         favicon.snp_makeConstraints { make in
             make.centerY.equalTo(self)
@@ -274,6 +274,7 @@ class TopTabsBackgroundDecorationView: UICollectionReusableView {
         init(right: Bool) {
             self.right = right
             super.init(frame: CGRectZero)
+            self.backgroundColor = UIColor.clearColor()
         }
         
         required init?(coder aDecoder: NSCoder) {
@@ -282,10 +283,8 @@ class TopTabsBackgroundDecorationView: UICollectionReusableView {
         
         override func drawRect(rect: CGRect) {
             super.drawRect(rect)
-            
             let bezierPath = UIBezierPath.topTabsCurve(frame.width, height: frame.height, direction: right ? .Right : .Left)
-            
-            self.themeColor.setFill()
+            themeColor.setFill()
             bezierPath.fill()
         }
     }
