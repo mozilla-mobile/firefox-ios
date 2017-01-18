@@ -1,4 +1,7 @@
 /* (No Commment) */
+"CFBundleName" = "$(PRODUCT_NAME)";
+
+/* (No Commment) */
 "NSCameraUsageDescription" = "这允许您拍摄和上传照片。";
 
 /* (No Commment) */

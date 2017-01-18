@@ -1,0 +1,15 @@
+/* (No Commment) */
+"CFBundleName" = "$(PRODUCT_NAME)";
+
+/* (No Commment) */
+"NSCameraUsageDescription" = "Tio ĉi permesas al vi preni fotojn.";
+
+/* (No Commment) */
+"NSLocationWhenInUseUsageDescription" = "Vizititaj retejoj povas peti vian pozicion.";
+
+/* (No Commment) */
+"NSMicrophoneUsageDescription" = "Tio ĉi permesas al vi preni kaj alŝuti filmetojn.";
+
+/* (No Commment) */
+"NSPhotoLibraryUsageDescription" = "Tio ĉi permesas al vi konservi kaj alŝuti fotojn.";
+

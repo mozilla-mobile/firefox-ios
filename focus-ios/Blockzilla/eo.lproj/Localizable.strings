@@ -1,189 +1,189 @@
 /* Button on About screen */
-"About.learnMoreButton" = "Dysgu rhagor";
+"About.learnMoreButton" = "Pli da informo";
 
 /* Label on About screen */
-"About.missionLabel" = "Mae %@ yn cael ei gynhyrchu gan Mozilla. Ein amcan yw hyrwyddo Rhyngrwyd iach ac agored.";
+"About.missionLabel" = "%@ estas kreita de Mozilla. Nia misio estas stimuli sanan kaj malfermitan interreton.";
 
 /* Label on About screen */
-"About.privateBullet1" = "Chwilio a phori o fewn yr ap";
+"About.privateBullet1" = "Serĉi kaj retumi rekte en la programo";
 
 /* Label on About screen */
-"About.privateBullet2" = "Rhwystro tracwyr (neu ddiweddaru'r gosodiadau i ganiatáu tracwyr)";
+"About.privateBullet2" = "Bloki spurilojn (aŭ agordi por permesi spurilojn)";
 
 /* Label on About screen */
-"About.privateBullet3" = "Dileu er mwyn dileu cwcis yn ogystal â hanes chwilio a phori";
+"About.privateBullet3" = "Forigi por viŝi kuketojn kaj historion, kaj serĉan kaj retuman";
 
 /* Label on About screen */
-"About.privateBulletHeader" = "Ei ddefnyddio fel porwr preifat:";
+"About.privateBulletHeader" = "Uzi ĝin kiel privatan retumilon:";
 
 /* Label for row in About screen */
-"About.rowHelp" = "Cymorth";
+"About.rowHelp" = "Helpo";
 
 /* Label for row in About screen */
-"About.rowRights" = "Eich Hawliau";
+"About.rowRights" = "Viaj rajtoj";
 
 /* Label on About screen */
-"About.safariBullet1" = "Rhwystro tracwyr ar gyfer gwell preifatrwydd";
+"About.safariBullet1" = "Bloki spurilojn por plibonigita privateco";
 
 /* Label on About screen */
-"About.safariBullet2" = "Rhwystro ffontiau Gwe i leihau maint tudalen";
+"About.safariBullet2" = "Bloki teksaĵajn tiparojn por etigi la grandon de paĝo";
 
 /* Label on About screen */
-"About.safariBulletHeader" = "Ei ddefnyddio fel estyniad Safari:";
+"About.safariBulletHeader" = "Uzi kiel etendaĵon de Safari:";
 
 /* Title for the About screen */
-"About.screenTitle" = "Ynghylch";
+"About.screenTitle" = "Pri";
 
 /* Label on About screen */
-"About.topLabel" = "Chi sy'n rheoli gyda %@.";
+"About.topLabel" = "%@ transdonas al vi la regadon.";
 
 /* Accessibility label for the back button */
-"Browser.backLabel" = "Nôl";
+"Browser.backLabel" = "Reen";
 
 /* Accessibility label for the forward button */
-"Browser.forwardLabel" = "Ymlaen";
+"Browser.forwardLabel" = "Antaŭen";
 
 /* Accessibility label for the reload button */
-"Browser.reloadLabel" = "Ail-lwytho";
+"Browser.reloadLabel" = "Reŝargi";
 
 /* Accessibility label for the settings button */
-"Browser.settingsLabel" = "Gosodiadau";
+"Browser.settingsLabel" = "Agordoj";
 
 /* Accessibility label for the share button */
-"Browser.shareLabel" = "Rhannu";
+"Browser.shareLabel" = "Dividi";
 
 /* Accessibility label for the stop button */
-"Browser.stopLabel" = "Atal";
+"Browser.stopLabel" = "Haltigi";
 
 /* Button label to reload the error page */
-"Error.tryAgainButton" = "Ceisiwch eto";
+"Error.tryAgainButton" = "Klopodi denove";
 
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.callButton" = "Galw";
+"ExternalLink.callButton" = "Voki";
 
 /* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.cancelButton" = "Diddymu";
+"ExternalLink.cancelButton" = "Nuligi";
 
 /* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.emailButton" = "E-bost";
+"ExternalLink.emailButton" = "Retpoŝto";
 
 /* Dialog title used for Maps/App Store links. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.messageTitle" = "Rydych nawr yn gadael Firefox Focus.";
+"ExternalLink.messageTitle" = "Vi nun forlasas Firefox Focus.";
 
 /* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openAppStoreButton" = "Agor yr App Store";
+"ExternalLink.openAppStoreButton" = "Malfermi vendejon de programoj";
 
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openMapsButton" = "Agor Maps";
+"ExternalLink.openMapsButton" = "Malfermi mapojn";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "IAWN, RWY'N DEALL!";
+"FirstRun.buttonLabel" = "Bone, mi komprenis!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Rhwystrwch tracwyr ar-lein yn awtomatig wrth i chi bori. Gallwch dapio i ddileu tudalennau, chwilio, cwcis a chyfrineiriau oddi ar eich dyfais.";
+"FirstRun.messageLabelDescription" = "Aŭtomate bloki retajn spurilojn dum vi retumas. Poste tuŝetu por forigi vizititajn paĝojn, serĉojn, kuketojn kaj pasvortojn el via aparato.";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelTagline" = "Pori fel petai neb yn eich gwylio.";
+"FirstRun.messageLabelTagline" = "Retumi, kvazaŭ neniu vin rigardus.";
 
 /* First label for product description on the home screen */
-"Home.descriptionLabel1" = "Pori preifat awtomatig.";
+"Home.descriptionLabel1" = "Aŭtomata privata retumo.";
 
 /* Second label for product description on the home screen */
-"Home.descriptionLabel2" = "Pori. Dileu. Ac Eto.";
+"Home.descriptionLabel2" = "Retumi. Viŝi. Ripeti.";
 
 /* Label in share alert to cancel the alert */
-"Open.Cancel" = "Diddymu";
+"Open.Cancel" = "Nuligi";
 
 /* Label in share alert to open the URL in Firefox */
-"Open.Firefox" = "Firefox (Pori Preifat)";
+"Open.Firefox" = "Firefox (privata retumo)";
 
 /* Label in share alert to open the full system share menu */
-"Open.More" = "Rhagor";
+"Open.More" = "Pli";
 
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsContentBlockers" = "Tapiwch Safari, yna dewis Content Blockers";
+"Safari.instructionsContentBlockers" = "Tuŝetu Safari, poste elektu \"Blokiloj de enhavo\"";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsEnable" = "Galluogi %@";
+"Safari.instructionsEnable" = "Aktivigi %@";
 
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
-"Safari.instructionsNotEnabled" = "Nid yw %@ wedi ei alluogi.";
+"Safari.instructionsNotEnabled" = "%@ ne estas aktiva.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsOpen" = "Agor Gosodiadau'r Ap";
+"Safari.instructionsOpen" = "Malfermi la agordan programon";
 
 /* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Gall rwystro tracwyr cynnwys eraill dorri rhai fideos a thudalennau Gwe.";
+"Settings.blockOtherMessage" = "Blokado de aliaj spuriloj de enhavo povus paneigi filmetojn kaj retpaĝojn.";
 
 /* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Na, Dim Diolch";
+"Settings.blockOtherNo" = "Ne, dankon";
 
 /* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Rwy'n Deall";
+"Settings.blockOtherYes" = "Mi komprenas";
 
 /* Title for settings screen */
-"Settings.screenTitle" = "Gosodiadau";
+"Settings.screenTitle" = "Agordoj";
 
 /* Title for the search engine row */
-"Settings.searchSection" = "PEIRIANT CHWILIO";
+"Settings.searchSection" = "SERĈILO";
 
 /* Title for the search engine selection screen */
-"Settings.searchTitle" = "Peiriant Chwilio";
+"Settings.searchTitle" = "Serĉilo";
 
 /* Label for Safari integration section */
-"Settings.sectionIntegration" = "INTEGREIDDIO";
+"Settings.sectionIntegration" = "INTEGRO";
 
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";
 
 /* Section label for performance toggles */
-"Settings.sectionPerformance" = "PERFFORMIAD";
+"Settings.sectionPerformance" = "EFIKECO";
 
 /* Section label for privacy toggles */
-"Settings.sectionPrivacy" = "PREIFATRWYDD";
+"Settings.sectionPrivacy" = "PRIVATECO";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Rhwystro tracwyr hysbysebion";
+"Settings.toggleBlockAds" = "Bloki reklamajn spurilojn";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Rhwystro tracwyr dadansoddi";
+"Settings.toggleBlockAnalytics" = "Bloki retanalizajn spurilojn";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "Rhwystro ffontiau Gwe";
+"Settings.toggleBlockFonts" = "Bloki Teksaĵajn tiparojn";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Rhwystro tracwyr cynnwys eraill";
+"Settings.toggleBlockOther" = "Bloki aliajn spurilojn de enhavo";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Rhwystro tracwyr cymdeithasol";
+"Settings.toggleBlockSocial" = "Bloki retsociajn spurilojn";
 
 /* Label subtitle for toggle on main screen */
-"Settings.toggleOtherSubtitle" = "Gall dorri rhai fideos a thudalennau Gwe";
+"Settings.toggleOtherSubtitle" = "Tio ĉi povas paneigi kelkajn filmetojn kaj retpaĝojn";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
 /* Label for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageData" = "Anfon data defnydd dienw";
+"Settings.toggleSendAnonymousUsageData" = "Send anonimigitajn datumojn pri uzo";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageDataSubtitle" = "Dysgu rhagor";
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "Pli da informo";
 
 /* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "Diddymu";
+"URL.cancelLabel" = "Nuligi";
 
 /* Erase button in the URL bar */
-"URL.eraseButtonLabel" = "DILEU";
+"URL.eraseButtonLabel" = "FORIGI";
 
 /* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "Mae eich hanes pori wedi cael ei ddileu.";
+"URL.eraseMessageLabel" = "Via retuma historio estis forigita.";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "Chwilio neu gyfeiriad";
+"URL.placeholderText" = "Serĉu aŭ tajpu adreson";
 
 /* Label displayed for search button when typing in the URL bar */
-"URL.searchLabel" = "Chwilio am %@";
+"URL.searchLabel" = "Serĉu %@";
 

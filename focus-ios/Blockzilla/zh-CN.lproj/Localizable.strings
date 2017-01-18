@@ -80,10 +80,10 @@
 "FirstRun.buttonLabel" = "明白了";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "在您浏览时自动屏蔽在线跟踪器。点按即可清除您的设备上的访问记录、搜索记录、Cookie 以及保存的密码。";
+"FirstRun.messageLabelDescription" = "在您浏览时自动屏蔽在线跟踪器。一按即可清除您的设备上的访问记录、搜索记录、Cookie 以及保存的密码。";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelTagline" = "安心浏览。";
+"FirstRun.messageLabelTagline" = "安心浏览";
 
 /* First label for product description on the home screen */
 "Home.descriptionLabel1" = "自动化隐私浏览。";
@@ -182,7 +182,7 @@
 "URL.eraseMessageLabel" = "您的浏览记录已清除。";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "搜索或输入地址";
+"URL.placeholderText" = "搜索或输入网址";
 
 /* Label displayed for search button when typing in the URL bar */
 "URL.searchLabel" = "搜索 %@";

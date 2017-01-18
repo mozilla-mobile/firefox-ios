@@ -1,1 +1,6 @@
-/* No Strings */
+/* (No Commment) */
+"CFBundleDisplayName" = "$(PRODUCT_NAME)";
+
+/* (No Commment) */
+"CFBundleName" = "$(PRODUCT_NAME)";
+
