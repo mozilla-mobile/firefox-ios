@@ -11,7 +11,7 @@ private let log = Logger.browserLogger
 
 protocol TabManagerDelegate: class {
     func tabManager(tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?)
-    func tabManager(tabManager: TabManager, didCreateTab tab: Tab)
+    func tabManager(tabManager: TabManager, willAddTab tab: Tab)
     func tabManager(tabManager: TabManager, didAddTab tab: Tab)
     func tabManager(tabManager: TabManager, didRemoveTab tab: Tab)
     func tabManagerDidRestoreTabs(tabManager: TabManager)
@@ -284,9 +284,7 @@ class TabManager: NSObject {
     func configureTab(tab: Tab, request: NSURLRequest?, afterTab parent: Tab? = nil, flushToDisk: Bool, zombie: Bool) {
         assert(NSThread.isMainThread())
 
-        for delegate in delegates {
-            delegate.get()?.tabManager(self, didCreateTab: tab)
-        }
+        delegates.forEach { $0.get()?.tabManager(self, willAddTab: tab) }
 
         if parent == nil || parent?.isPrivate != tab.isPrivate {
             tabs.append(tab)
@@ -299,9 +297,7 @@ class TabManager: NSObject {
             tabs.insert(tab, atIndex: insertIndex)
         }
 
-        for delegate in delegates {
-            delegate.get()?.tabManager(self, didAddTab: tab)
-        }
+        delegates.forEach { $0.get()?.tabManager(self, didAddTab: tab) }
 
         if !zombie {
             tab.createWebview()

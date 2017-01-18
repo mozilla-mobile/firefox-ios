@@ -2127,7 +2127,7 @@ extension BrowserViewController: TabManagerDelegate {
         updateInContentHomePanel(selected?.url)
     }
 
-    func tabManager(tabManager: TabManager, didCreateTab tab: Tab) {
+    func tabManager(tabManager: TabManager, willAddTab tab: Tab) {
     }
 
     func tabManager(tabManager: TabManager, didAddTab tab: Tab) {
