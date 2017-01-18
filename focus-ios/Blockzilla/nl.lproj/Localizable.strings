@@ -2,7 +2,7 @@
 "About.learnMoreButton" = "Meer info";
 
 /* Label on About screen */
-"About.missionLabel" = "%@ wordt gemaakt door Mozilla. Onze missie is het verzorgen van een gezond, open internet.";
+"About.missionLabel" = "%@ wordt gemaakt door Mozilla. Onze missie is het verzorgen van een gezond en open internet.";
 
 /* Label on About screen */
 "About.privateBullet1" = "Rechtstreeks vanuit de app zoeken en browsen";

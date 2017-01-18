@@ -83,7 +83,7 @@
 "FirstRun.messageLabelDescription" = "Bloquea automáticamente rastreadores en línea mientras navegas. Luego toca para eliminar de tu dispositivo las páginas visitadas, búsquedas, cookies y contraseñas.";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelTagline" = "Navega como si no te observara nadie.";
+"FirstRun.messageLabelTagline" = "Navega sin que nadie te observe.";
 
 /* First label for product description on the home screen */
 "Home.descriptionLabel1" = "Navegación privada automática.";
