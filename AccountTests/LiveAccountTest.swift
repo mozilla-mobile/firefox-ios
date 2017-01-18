@@ -10,11 +10,11 @@ import Deferred
 
 import XCTest
 
+// Note: All live account tests have been disabled. Please see https://bugzilla.mozilla.org/show_bug.cgi?id=1332028.
+
 /*
  * A base test type for tests that need a live Firefox Account.
  */
-
-
 public class LiveAccountTest: XCTestCase {
     lazy var signedInUser: JSON? = {
         if let path = NSBundle(forClass: self.dynamicType).pathForResource("signedInUser.json", ofType: nil) {
