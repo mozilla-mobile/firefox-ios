@@ -13,6 +13,8 @@ import XCTest
 /*
  * A base test type for tests that need a live Firefox Account.
  */
+
+
 public class LiveAccountTest: XCTestCase {
     lazy var signedInUser: JSON? = {
         if let path = NSBundle(forClass: self.dynamicType).pathForResource("signedInUser.json", ofType: nil) {
