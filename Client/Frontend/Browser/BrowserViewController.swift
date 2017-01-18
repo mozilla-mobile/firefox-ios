@@ -1054,12 +1054,14 @@ class BrowserViewController: UIViewController {
 
         switchToPrivacyMode(isPrivate: isPrivate)
         tabManager.addTabAndSelect(request, isPrivate: isPrivate)
+        if url == nil && NewTabAccessors.getNewTabPage(profile.prefs) == .BlankPage {
+            urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
+        }
     }
 
-    func openBlankNewTabAndFocus(isPrivate isPrivate: Bool = false) {
+    func openBlankNewTab(isPrivate isPrivate: Bool = false) {
         popToBVC()
         openURLInNewTab(nil, isPrivate: isPrivate, isPrivileged: true)
-        urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
     }
 
     private func popToBVC() {
@@ -1217,10 +1219,10 @@ class BrowserViewController: UIViewController {
     }
 
     func newTab() {
-        openBlankNewTabAndFocus(isPrivate: false)
+        openBlankNewTab(isPrivate: false)
     }
     func newPrivateTab() {
-        openBlankNewTabAndFocus(isPrivate: true)
+        openBlankNewTab(isPrivate: true)
     }
 
     func closeTab() {
@@ -3398,7 +3400,7 @@ extension BrowserViewController: TopTabsDelegate {
     
     func topTabsDidPressNewTab() {
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        openBlankNewTabAndFocus(isPrivate: isPrivate)
+        openBlankNewTab(isPrivate: isPrivate)
     }
 
     func topTabsDidPressPrivateModeButton(cachedTab: Tab?) {
@@ -3421,7 +3423,7 @@ extension BrowserViewController: TopTabsDelegate {
             if let privateTab = tabManager.privateTabs.last {
                 tabManager.selectTab(privateTab)
             } else {
-                openBlankNewTabAndFocus(isPrivate: true)
+                openBlankNewTab(isPrivate: true)
             }
         }
     }

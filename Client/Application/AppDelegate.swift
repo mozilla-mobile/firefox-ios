@@ -320,7 +320,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let newURL = params.url {
             self.browserViewController.switchToTabForURLOrOpen(newURL, isPrivate: isPrivate, isPrivileged: false)
         } else {
-            self.browserViewController.openBlankNewTabAndFocus(isPrivate: isPrivate)
+            self.browserViewController.openBlankNewTab(isPrivate: isPrivate)
         }
     }
 
