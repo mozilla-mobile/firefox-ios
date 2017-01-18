@@ -4,6 +4,17 @@
 
 import Foundation
 
+class Seperator: UICollectionReusableView {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.2)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
 class TopTabCell: UICollectionViewCell {
     enum Style {
         case Light
@@ -16,14 +27,6 @@ class TopTabCell: UICollectionViewCell {
         didSet {
             if style != oldValue {
                 applyStyle(style)
-            }
-        }
-    }
-    
-    var seperatorLine: Bool = false {
-        didSet {
-            if seperatorLine != oldValue {
-                setNeedsDisplay()
             }
         }
     }
@@ -136,22 +139,7 @@ class TopTabCell: UICollectionViewCell {
     func closeTab() {
         delegate?.tabCellDidClose(self)
     }
-    
-    override func drawRect(rect: CGRect) {
-        super.drawRect(rect)
-        guard seperatorLine else {
-            return
-        }
-        guard let context = UIGraphicsGetCurrentContext() else { return }
-        CGContextSaveGState(context)
-        CGContextSetLineCap(context, CGLineCap.Square)
-        CGContextSetStrokeColorWithColor(context, UIColor.whiteColor().colorWithAlphaComponent(0.2).CGColor)
-        CGContextSetLineWidth(context, 1.0)
-        CGContextMoveToPoint(context, 0, TopTabsUX.BackgroundSeparatorLinePadding)
-        CGContextAddLineToPoint(context, 0, frame.size.height-TopTabsUX.BackgroundSeparatorLinePadding)
-        CGContextStrokePath(context)
-        CGContextRestoreGState(context)
-    }
+
 }
 
 private class BezierView: UIView {

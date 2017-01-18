@@ -301,13 +301,7 @@ extension TopTabsViewController: UICollectionViewDataSource {
         }
 
         tabCell.selectedTab = (tab == tabManager.selectedTab)
-        
-        if index > 0 && index < tabsToDisplay.count && tabsToDisplay[index] != tabManager.selectedTab && tabsToDisplay[index-1] != tabManager.selectedTab {
-            tabCell.seperatorLine = true
-        } else {
-            tabCell.seperatorLine = false
-        }
-        
+
         if let favIcon = tab.displayFavicon,
            let url = NSURL(string: favIcon.url) {
             tabCell.favicon.sd_setImageWithURL(url)
