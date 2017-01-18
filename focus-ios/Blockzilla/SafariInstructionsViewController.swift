@@ -59,7 +59,7 @@ private class DisabledStateView: UIView {
 
         instructionsView.snp.makeConstraints { make in
             make.centerX.equalTo(self)
-            make.width.equalTo(220)
+            make.width.equalTo(250)
             make.top.equalTo(label.snp.bottom).offset(50)
             make.bottom.equalTo(self)
         }
