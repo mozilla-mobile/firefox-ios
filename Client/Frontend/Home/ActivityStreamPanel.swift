@@ -408,6 +408,21 @@ extension ActivityStreamPanel {
         let siteBGColor = topSiteItemCell.contentView.backgroundColor
 
         let site = self.topSitesManager.content[indexPath.item]
+
+        if site.bookmarked == nil {
+            profile.bookmarks.modelFactory >>== {
+                $0.isBookmarked(site.url).uponQueue(dispatch_get_main_queue()) { result in
+                    guard let bookmarked = result.successValue else {
+                        log.error("Error getting bookmark status: \(result.failureValue).")
+                        return
+                    }
+                    if let contextMenuToShow = self.contextMenuForSite(site, atIndex: indexPath.item, forSection: .TopSites, siteImage: siteImage, siteBGColor: siteBGColor, isBookmarked: bookmarked) {
+                        self.presentContextMenu(contextMenuToShow)
+                    }
+                }
+            }
+            return nil
+        }
         return contextMenuForSite(site, atIndex: indexPath.item, forSection: .TopSites, siteImage: siteImage, siteBGColor: siteBGColor)
     }
 
@@ -417,10 +432,25 @@ extension ActivityStreamPanel {
         let siteBGColor = highlightCell.siteImageView.backgroundColor
 
         let site = highlights[indexPath.row]
+
+        if site.bookmarked == nil {
+            profile.bookmarks.modelFactory >>== {
+                $0.isBookmarked(site.url).uponQueue(dispatch_get_main_queue()) { result in
+                    guard let bookmarked = result.successValue else {
+                        log.error("Error getting bookmark status: \(result.failureValue).")
+                        return
+                    }
+                    if let contextMenuToShow = self.contextMenuForSite(site, atIndex: indexPath.row, forSection: .Highlights, siteImage: siteImage, siteBGColor: siteBGColor, isBookmarked: bookmarked) {
+                        self.presentContextMenu(contextMenuToShow)
+                    }
+                }
+            }
+            return nil
+        }
         return contextMenuForSite(site, atIndex: indexPath.row, forSection: .Highlights, siteImage: siteImage, siteBGColor: siteBGColor)
     }
     
-    func contextMenuForSite(site: Site, atIndex index: Int, forSection section: Section, siteImage: UIImage?, siteBGColor: UIColor?) -> ActionOverlayTableViewController? {
+    func contextMenuForSite(site: Site, atIndex index: Int, forSection section: Section, siteImage: UIImage?, siteBGColor: UIColor?, isBookmarked: Bool = false) -> ActionOverlayTableViewController? {
         guard let siteURL = NSURL(string: site.url) else {
             return nil
         }
@@ -443,17 +473,27 @@ extension ActivityStreamPanel {
             self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
         }
 
-        let bookmarkAction = ActionOverlayTableViewAction(title: Strings.BookmarkContextMenuTitle, iconString: "action_bookmark", handler: { action in
-            let shareItem = ShareItem(url: site.url, title: site.title, favicon: site.icon)
-            self.profile.bookmarks.shareItem(shareItem)
-            var userData = [QuickActions.TabURLKey: shareItem.url]
-            if let title = shareItem.title {
-                userData[QuickActions.TabTitleKey] = title
-            }
-            QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.OpenLastBookmark,
-                withUserData: userData,
-                toApplication: UIApplication.sharedApplication())
-        })
+        let bookmarkAction: ActionOverlayTableViewAction
+        if isBookmarked {
+            bookmarkAction = ActionOverlayTableViewAction(title: Strings.RemoveBookmarkContextMenuTitle, iconString: "action_bookmark_remove", handler: { action in
+                guard let absoluteString = siteURL.absoluteString else { return }
+                self.profile.bookmarks.modelFactory >>== {
+                    $0.removeByURL(absoluteString)
+                }
+            })
+        } else {
+            bookmarkAction = ActionOverlayTableViewAction(title: Strings.BookmarkContextMenuTitle, iconString: "action_bookmark", handler: { action in
+                let shareItem = ShareItem(url: site.url, title: site.title, favicon: site.icon)
+                self.profile.bookmarks.shareItem(shareItem)
+                var userData = [QuickActions.TabURLKey: shareItem.url]
+                if let title = shareItem.title {
+                    userData[QuickActions.TabTitleKey] = title
+                }
+                QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.OpenLastBookmark,
+                    withUserData: userData,
+                    toApplication: UIApplication.sharedApplication())
+            })
+        }
 
         let deleteFromHistoryAction = ActionOverlayTableViewAction(title: Strings.DeleteFromHistoryContextMenuTitle, iconString: "action_delete", handler: { action in
             self.telemetry.reportEvent(.Delete, source: pingSource, position: index)
