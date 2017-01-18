@@ -2139,6 +2139,9 @@ extension BrowserViewController: TabManagerDelegate {
         tab.appStateDelegate = self
     }
 
+    func tabManager(tabManager: TabManager, willRemoveTab tab: Tab) {
+    }
+
     func tabManager(tabManager: TabManager, didRemoveTab tab: Tab) {
         updateTabCountUsingTabManager(tabManager)
         // tabDelegate is a weak ref (and the tab's webView may not be destroyed yet)
