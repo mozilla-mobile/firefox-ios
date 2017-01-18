@@ -108,7 +108,7 @@ public class LiveAccountTest: XCTestCase {
     func account(email: String, password: String, configuration: FirefoxAccountConfiguration) -> Deferred<Maybe<FirefoxAccount>> {
         let client = FxAClient10(endpoint: configuration.authEndpointURL)
         let emailUTF8 = email.utf8EncodedData
-        let passwordUTF8 = email.utf8EncodedData
+        let passwordUTF8 = password.utf8EncodedData
         let quickStretchedPW = FxAClient10.quickStretchPW(emailUTF8, password: passwordUTF8)
         let login = client.login(emailUTF8, quickStretchedPW: quickStretchedPW, getKeys: true)
         return login.bind { result in
@@ -123,7 +123,7 @@ public class LiveAccountTest: XCTestCase {
 
     func getTestAccount() -> Deferred<Maybe<FirefoxAccount>> {
         // TODO: Use signedInUser.json here.  It's hard to include the same resource file in two Xcode targets.
-        return self.account("testtesto@mockmyid.com", password: "testtesto@mockmyid.com",
+        return self.account("998797987.sync@restmail.net", password: "998797987.sync@restmail.net",
             configuration: ProductionFirefoxAccountConfiguration())
     }
 
