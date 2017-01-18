@@ -451,6 +451,7 @@ extension ActivityStreamPanel {
     }
     
     func contextMenuForSite(site: Site, atIndex index: Int, forSection section: Section, siteImage: UIImage?, siteBGColor: UIColor?, isBookmarked: Bool = false) -> ActionOverlayTableViewController? {
+        
         guard let siteURL = NSURL(string: site.url) else {
             return nil
         }
@@ -474,11 +475,12 @@ extension ActivityStreamPanel {
         }
 
         let bookmarkAction: ActionOverlayTableViewAction
-        if isBookmarked {
+        if site.bookmarked ?? false {
             bookmarkAction = ActionOverlayTableViewAction(title: Strings.RemoveBookmarkContextMenuTitle, iconString: "action_bookmark_remove", handler: { action in
                 guard let absoluteString = siteURL.absoluteString else { return }
                 self.profile.bookmarks.modelFactory >>== {
                     $0.removeByURL(absoluteString)
+                    site.setBookmarked(false)
                 }
             })
         } else {
@@ -492,6 +494,7 @@ extension ActivityStreamPanel {
                 QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.OpenLastBookmark,
                     withUserData: userData,
                     toApplication: UIApplication.sharedApplication())
+                site.setBookmarked(true)
             })
         }
 
