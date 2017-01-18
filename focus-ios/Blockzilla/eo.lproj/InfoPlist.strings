@@ -1,7 +1,4 @@
 /* (No Commment) */
-"CFBundleName" = "$(PRODUCT_NAME)";
-
-/* (No Commment) */
 "NSCameraUsageDescription" = "Tio ĉi permesas al vi preni fotojn.";
 
 /* (No Commment) */
