@@ -40,6 +40,10 @@
 		<string>w67hjo</string>
 		<key>DisableSafariIntegration</key>
 		<string>8a1gtl</string>
+		<key>OpenSystemShare</key>
+		<string>b42cgh</string>
+		<key>OpenFirefoxInstall</key>
+		<string>6r6cx6</string>
 	</dict>
 </dict>
 </plist>
