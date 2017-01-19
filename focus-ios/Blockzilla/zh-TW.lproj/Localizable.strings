@@ -8,13 +8,13 @@
 "About.privateBullet1" = "直接在程式中搜尋、瀏覽";
 
 /* Label on About screen */
-"About.privateBullet2" = "封鎖追蹤器（也可調整設定允許追蹤器）";
+"About.privateBullet2" = "封鎖追蹤器（也可調整設定，允許追蹤器）";
 
 /* Label on About screen */
 "About.privateBullet3" = "清除 Cookie、搜尋紀錄、上網紀錄";
 
 /* Label on About screen */
-"About.privateBulletHeader" = "可當作私密瀏覽器使用";
+"About.privateBulletHeader" = "可當作私密瀏覽器使用:";
 
 /* Label for row in About screen */
 "About.rowHelp" = "說明";
