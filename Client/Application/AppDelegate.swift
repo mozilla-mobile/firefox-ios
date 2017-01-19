@@ -680,8 +680,9 @@ extension AppDelegate {
 
         // TODO: move into AppConstants.
         let configuration = StagePushConfiguration()
-        let pushClient = PushClient(endpointURL: configuration.endpointURL)
-        pushClient.register(apnsToken).upon { result in
+
+        let pushManager = PushManager(endpointURL: configuration.endpointURL)
+        pushManager.register(apnsToken).upon { result in
             guard result.isSuccess else {
                 print("fail: \(result.failureValue!)")
                 return

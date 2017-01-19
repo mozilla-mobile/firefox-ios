@@ -77,15 +77,7 @@ public class PushClient {
 
 }
 
-extension PushClient {
-    func register(apnsToken: String) -> Deferred<Maybe<PushRegistration>> {
-        if let creds = getCredentials() {
-            return updateUAID(apnsToken, creds: creds) >>> { deferMaybe(creds) }
-        } else {
-            return registerUAID(apnsToken)
-        }
-    }
-
+public extension PushClient {
     func registerUAID(apnsToken: String) -> Deferred<Maybe<PushRegistration>> {
         //  POST /v1/{type}/{app_id}/registration
         let registerURL = endpointURL.URLByAppendingPathComponent("registration")!
@@ -101,7 +93,7 @@ extension PushClient {
             guard let response = PushRegistration.fromJSON(json) else {
                 return deferMaybe(PushClientError.Local(PushClientUnknownError))
             }
-            self.storeCredentials(response)
+
             return deferMaybe(response)
         }
     }
@@ -126,11 +118,7 @@ extension PushClient {
         }
     }
 
-    func unregister() -> Success {
-        guard let creds = getCredentials() else {
-            return succeed()
-        }
-
+    public func unregister(creds: PushRegistration) -> Success {
         //  DELETE /v1/{type}/{app_id}/registration/{uaid}
         let unregisterURL = endpointURL.URLByAppendingPathComponent("registration/\(creds.uaid)")
 
@@ -139,21 +127,6 @@ extension PushClient {
         mutableURLRequest.addValue("Bearer \(creds.secret)", forHTTPHeaderField: "Authorization")
 
         return sendRequest(mutableURLRequest) >>> succeed
-    }
-}
-
-/// Credential management
-extension PushClient {
-    private func getCredentials() -> PushRegistration? {
-        return nil
-    }
-
-    private func storeCredentials(creds: PushRegistration) {
-        // TODO
-    }
-
-    private func deleteCredentials() {
-        // TODO
     }
 }
 
