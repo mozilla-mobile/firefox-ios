@@ -186,6 +186,20 @@ protocol Profile: class {
     var isChinaEdition: Bool { get }
 }
 
+private let PrefKeyClientID = "PrefKeyClientID"
+extension Profile {
+    var clientID: String {
+        let clientID: String
+        if let id = prefs.stringForKey(PrefKeyClientID) {
+            clientID = id
+        } else {
+            clientID = NSUUID().UUIDString
+            prefs.setString(clientID, forKey: PrefKeyClientID)
+        }
+        return clientID
+    }
+}
+
 public class BrowserProfile: Profile {
     private let name: String
     private let keychain: KeychainWrapper
