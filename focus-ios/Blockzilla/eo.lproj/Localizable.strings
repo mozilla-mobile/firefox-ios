@@ -5,16 +5,16 @@
 "About.missionLabel" = "%@ estas kreita de Mozilla. Nia misio estas stimuli sanan kaj malfermitan interreton.";
 
 /* Label on About screen */
-"About.privateBullet1" = "Serĉi kaj retumi rekte en la programo";
+"About.privateBullet1" = "Serĉu kaj retumi rekte en la programo";
 
 /* Label on About screen */
-"About.privateBullet2" = "Bloki spurilojn (aŭ agordi por permesi spurilojn)";
+"About.privateBullet2" = "Bloku spurilojn (aŭ agordu por permesi spurilojn)";
 
 /* Label on About screen */
-"About.privateBullet3" = "Forigi por viŝi kuketojn kaj historion, kaj serĉan kaj retuman";
+"About.privateBullet3" = "Viŝu por forigi kuketojn kaj historion, kaj serĉan kaj retuman";
 
 /* Label on About screen */
-"About.privateBulletHeader" = "Uzi ĝin kiel privatan retumilon:";
+"About.privateBulletHeader" = "Uzu ĝin kiel privatan retumilon:";
 
 /* Label for row in About screen */
 "About.rowHelp" = "Helpo";
@@ -23,13 +23,13 @@
 "About.rowRights" = "Viaj rajtoj";
 
 /* Label on About screen */
-"About.safariBullet1" = "Bloki spurilojn por plibonigita privateco";
+"About.safariBullet1" = "Bloku spurilojn por plibonigita privateco";
 
 /* Label on About screen */
-"About.safariBullet2" = "Bloki teksaĵajn tiparojn por etigi la grandon de paĝo";
+"About.safariBullet2" = "Bloku teksaĵajn tiparojn por malgrandigi la paĝon";
 
 /* Label on About screen */
-"About.safariBulletHeader" = "Uzi kiel etendaĵon de Safari:";
+"About.safariBulletHeader" = "Uzu ĝin kiel etendaĵon de Safari:";
 
 /* Title for the About screen */
 "About.screenTitle" = "Pri";
@@ -71,25 +71,25 @@
 "ExternalLink.messageTitle" = "Vi nun forlasas Firefox Focus.";
 
 /* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openAppStoreButton" = "Malfermi vendejon de programoj";
+"ExternalLink.openAppStoreButton" = "Malfermi programvendejon";
 
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Malfermi mapojn";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "Bone, mi komprenis!";
+"FirstRun.buttonLabel" = "En ordo, mi komprenis!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Aŭtomate bloki retajn spurilojn dum vi retumas. Poste tuŝetu por forigi vizititajn paĝojn, serĉojn, kuketojn kaj pasvortojn el via aparato.";
+"FirstRun.messageLabelDescription" = "Aŭtomate bloku retajn spurilojn dum vi retumas. Poste tuŝetu por forigi vizititajn paĝojn, serĉojn, kuketojn kaj pasvortojn el via aparato.";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelTagline" = "Retumi, kvazaŭ neniu vin rigardus.";
+"FirstRun.messageLabelTagline" = "Retumu, kvazaŭ neniu vin rigardus.";
 
 /* First label for product description on the home screen */
 "Home.descriptionLabel1" = "Aŭtomata privata retumo.";
 
 /* Second label for product description on the home screen */
-"Home.descriptionLabel2" = "Retumi. Viŝi. Ripeti.";
+"Home.descriptionLabel2" = "Retumu. Viŝu. Ripetu.";
 
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Nuligi";
@@ -104,19 +104,19 @@
 "Open.Safari" = "Safari";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsContentBlockers" = "Tuŝetu Safari, poste elektu \"Blokiloj de enhavo\"";
+"Safari.instructionsContentBlockers" = "Tuŝetu Safari, poste elektu \"Enhavaj blokiloj\"";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsEnable" = "Aktivigi %@";
+"Safari.instructionsEnable" = "Aktivigu %@";
 
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
 "Safari.instructionsNotEnabled" = "%@ ne estas aktiva.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsOpen" = "Malfermi la agordan programon";
+"Safari.instructionsOpen" = "Malfermu la agordan programon";
 
 /* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Blokado de aliaj spuriloj de enhavo povus paneigi filmetojn kaj retpaĝojn.";
+"Settings.blockOtherMessage" = "Blokado de aliaj enhavaj spuriloj povus paneigi filmetojn kaj retpaĝojn.";
 
 /* Button label for declining Content blocker alert */
 "Settings.blockOtherNo" = "Ne, dankon";
@@ -152,13 +152,13 @@
 "Settings.toggleBlockAnalytics" = "Bloki retanalizajn spurilojn";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "Bloki Teksaĵajn tiparojn";
+"Settings.toggleBlockFonts" = "Bloki teksaĵajn tiparojn";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Bloki aliajn spurilojn de enhavo";
+"Settings.toggleBlockOther" = "Bloki aliajn enhavajn spurilojn";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Bloki retsociajn spurilojn";
+"Settings.toggleBlockSocial" = "Bloki spurilojn de interkonaj retejoj";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Tio ĉi povas paneigi kelkajn filmetojn kaj retpaĝojn";
@@ -167,7 +167,7 @@
 "Settings.toggleSafari" = "Safari";
 
 /* Label for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageData" = "Send anonimigitajn datumojn pri uzo";
+"Settings.toggleSendAnonymousUsageData" = "Sendi anonimigitajn datumojn pri uzo";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.toggleSendAnonymousUsageDataSubtitle" = "Pli da informo";
