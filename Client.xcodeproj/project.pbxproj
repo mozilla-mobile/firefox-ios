@@ -10,6 +10,10 @@
 		03CCC9181AF05E7300DBF30D /* RelativeDatesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CCC9171AF05E7300DBF30D /* RelativeDatesTests.swift */; };
 		0B1C05D71A798B1F004C78B0 /* UIImageViewAligned.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B1C05D61A798B1F004C78B0 /* UIImageViewAligned.m */; };
 		0B3D670E1E09B90B00C1EFC7 /* AuthenticationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3D670D1E09B90B00C1EFC7 /* AuthenticationTest.swift */; };
+		0B3E57351E1612AD0041CAEF /* EarlGreyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3E57341E1612AD0041CAEF /* EarlGreyTests.swift */; };
+		0B3E577D1E16134F0041CAEF /* EarlGrey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3E577C1E16134F0041CAEF /* EarlGrey.swift */; };
+		0B3E57841E162A270041CAEF /* EarlGrey.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0B3E57831E162A270041CAEF /* EarlGrey.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		0B3E57851E162A480041CAEF /* EarlGrey.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B3E57831E162A270041CAEF /* EarlGrey.framework */; };
 		0B3E7D951B27A7CE00E2E84D /* AboutHomeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3E7D931B27A7CE00E2E84D /* AboutHomeHandler.swift */; };
 		0B3E7DBA1B27AB4C00E2E84D /* MockLogins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3E7DB91B27AB4C00E2E84D /* MockLogins.swift */; };
 		0B5142CC1AE1BAF50014D0B3 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B5142CB1AE1BAF50014D0B3 /* UIViewExtensions.swift */; };
@@ -704,6 +708,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		0B3E57371E1612AE0041CAEF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
+			remoteInfo = Client;
+		};
 		0B742CCB1B32491400EE9264 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0B742CC61B32491400EE9264 /* sqlcipher.xcodeproj */;
@@ -1120,6 +1131,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		0B3E57801E1629BD0041CAEF /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(TEST_HOST)/..";
+			dstSubfolderSpec = 0;
+			files = (
+				0B3E57841E162A270041CAEF /* EarlGrey.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		2F3444EC1AB2378200FD9731 /* Copy Files */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1178,6 +1199,67 @@
 		0B1C05D51A798B1F004C78B0 /* UIImageViewAligned.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIImageViewAligned.h; sourceTree = "<group>"; };
 		0B1C05D61A798B1F004C78B0 /* UIImageViewAligned.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIImageViewAligned.m; sourceTree = "<group>"; };
 		0B3D670D1E09B90B00C1EFC7 /* AuthenticationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationTest.swift; sourceTree = "<group>"; };
+		0B3E57321E1612AD0041CAEF /* EarlGreyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EarlGreyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		0B3E57341E1612AD0041CAEF /* EarlGreyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EarlGreyTests.swift; sourceTree = "<group>"; };
+		0B3E57361E1612AE0041CAEF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0B3E57411E1612D30041CAEF /* 09ADAC1F-E669-356D-9AE2-1477EDD44813.bcsymbolmap */ = {isa = PBXFileReference; lastKnownFileType = text; path = "09ADAC1F-E669-356D-9AE2-1477EDD44813.bcsymbolmap"; sourceTree = "<group>"; };
+		0B3E57421E1612D30041CAEF /* 0E0B9754-1B33-3483-B215-4B224370D4A8.bcsymbolmap */ = {isa = PBXFileReference; lastKnownFileType = text; path = "0E0B9754-1B33-3483-B215-4B224370D4A8.bcsymbolmap"; sourceTree = "<group>"; };
+		0B3E57431E1612D30041CAEF /* 32F6DC18-DE5E-39AB-B6BF-AF8D267116CB.bcsymbolmap */ = {isa = PBXFileReference; lastKnownFileType = text; path = "32F6DC18-DE5E-39AB-B6BF-AF8D267116CB.bcsymbolmap"; sourceTree = "<group>"; };
+		0B3E57441E1612D30041CAEF /* 40740C08-BA40-3829-9FEF-30B8898BC54E.bcsymbolmap */ = {isa = PBXFileReference; lastKnownFileType = text; path = "40740C08-BA40-3829-9FEF-30B8898BC54E.bcsymbolmap"; sourceTree = "<group>"; };
+		0B3E57451E1612D30041CAEF /* 482AE68F-A1CC-3167-B07F-83A62CD92844.bcsymbolmap */ = {isa = PBXFileReference; lastKnownFileType = text; path = "482AE68F-A1CC-3167-B07F-83A62CD92844.bcsymbolmap"; sourceTree = "<group>"; };
+		0B3E57461E1612D30041CAEF /* 57FE50A4-888E-3690-A80F-179859CB3479.bcsymbolmap */ = {isa = PBXFileReference; lastKnownFileType = text; path = "57FE50A4-888E-3690-A80F-179859CB3479.bcsymbolmap"; sourceTree = "<group>"; };
+		0B3E57471E1612D30041CAEF /* 5CA9654A-BC82-3122-B7B1-5A0127BE246D.bcsymbolmap */ = {isa = PBXFileReference; lastKnownFileType = text; path = "5CA9654A-BC82-3122-B7B1-5A0127BE246D.bcsymbolmap"; sourceTree = "<group>"; };
+		0B3E57481E1612D30041CAEF /* 5DED9BC3-BC2E-39A3-914A-CB69B97E462B.bcsymbolmap */ = {isa = PBXFileReference; lastKnownFileType = text; path = "5DED9BC3-BC2E-39A3-914A-CB69B97E462B.bcsymbolmap"; sourceTree = "<group>"; };
+		0B3E57491E1612D30041CAEF /* 6F5EF63E-08DC-30E5-9C59-466BC2A558F9.bcsymbolmap */ = {isa = PBXFileReference; lastKnownFileType = text; path = "6F5EF63E-08DC-30E5-9C59-466BC2A558F9.bcsymbolmap"; sourceTree = "<group>"; };
+		0B3E574A1E1612D30041CAEF /* 7B02A10A-5716-3F63-BF88-02E93D615661.bcsymbolmap */ = {isa = PBXFileReference; lastKnownFileType = text; path = "7B02A10A-5716-3F63-BF88-02E93D615661.bcsymbolmap"; sourceTree = "<group>"; };
+		0B3E574B1E1612D30041CAEF /* 96B53A8E-3C1A-3637-A7C7-82FF7D25D1EC.bcsymbolmap */ = {isa = PBXFileReference; lastKnownFileType = text; path = "96B53A8E-3C1A-3637-A7C7-82FF7D25D1EC.bcsymbolmap"; sourceTree = "<group>"; };
+		0B3E574C1E1612D30041CAEF /* 989F5196-02C0-3280-8081-02C0E44F2EBE.bcsymbolmap */ = {isa = PBXFileReference; lastKnownFileType = text; path = "989F5196-02C0-3280-8081-02C0E44F2EBE.bcsymbolmap"; sourceTree = "<group>"; };
+		0B3E574D1E1612D30041CAEF /* A833D6A1-6172-3A60-9E5F-5C9B54F61A45.bcsymbolmap */ = {isa = PBXFileReference; lastKnownFileType = text; path = "A833D6A1-6172-3A60-9E5F-5C9B54F61A45.bcsymbolmap"; sourceTree = "<group>"; };
+		0B3E574E1E1612D30041CAEF /* A9E47DE1-111B-38A8-8F64-4A101AE64B2D.bcsymbolmap */ = {isa = PBXFileReference; lastKnownFileType = text; path = "A9E47DE1-111B-38A8-8F64-4A101AE64B2D.bcsymbolmap"; sourceTree = "<group>"; };
+		0B3E574F1E1612D30041CAEF /* AdjustSdk.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AdjustSdk.framework; sourceTree = "<group>"; };
+		0B3E57501E1612D30041CAEF /* AdjustSdk.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; path = AdjustSdk.framework.dSYM; sourceTree = "<group>"; };
+		0B3E57511E1612D30041CAEF /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Alamofire.framework; sourceTree = "<group>"; };
+		0B3E57521E1612D30041CAEF /* Alamofire.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; path = Alamofire.framework.dSYM; sourceTree = "<group>"; };
+		0B3E57531E1612D30041CAEF /* BC770453-9326-3CCC-90B0-FFB391C52905.bcsymbolmap */ = {isa = PBXFileReference; lastKnownFileType = text; path = "BC770453-9326-3CCC-90B0-FFB391C52905.bcsymbolmap"; sourceTree = "<group>"; };
+		0B3E57541E1612D30041CAEF /* C1B43946-02A8-33F2-B5B1-BEC2011F292C.bcsymbolmap */ = {isa = PBXFileReference; lastKnownFileType = text; path = "C1B43946-02A8-33F2-B5B1-BEC2011F292C.bcsymbolmap"; sourceTree = "<group>"; };
+		0B3E57551E1612D30041CAEF /* CB8AF39F-E99D-3E8F-AE8F-8FF04F148760.bcsymbolmap */ = {isa = PBXFileReference; lastKnownFileType = text; path = "CB8AF39F-E99D-3E8F-AE8F-8FF04F148760.bcsymbolmap"; sourceTree = "<group>"; };
+		0B3E57561E1612D30041CAEF /* D097F19B-FB57-35D7-B421-C571D8EA3C8A.bcsymbolmap */ = {isa = PBXFileReference; lastKnownFileType = text; path = "D097F19B-FB57-35D7-B421-C571D8EA3C8A.bcsymbolmap"; sourceTree = "<group>"; };
+		0B3E57571E1612D30041CAEF /* D36710F3-E8A0-3708-9B4A-159626573135.bcsymbolmap */ = {isa = PBXFileReference; lastKnownFileType = text; path = "D36710F3-E8A0-3708-9B4A-159626573135.bcsymbolmap"; sourceTree = "<group>"; };
+		0B3E57581E1612D30041CAEF /* DA8208AC-4CB3-3383-A600-DE92F7177D85.bcsymbolmap */ = {isa = PBXFileReference; lastKnownFileType = text; path = "DA8208AC-4CB3-3383-A600-DE92F7177D85.bcsymbolmap"; sourceTree = "<group>"; };
+		0B3E57591E1612D30041CAEF /* Deferred.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Deferred.framework; sourceTree = "<group>"; };
+		0B3E575A1E1612D30041CAEF /* Deferred.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; path = Deferred.framework.dSYM; sourceTree = "<group>"; };
+		0B3E575B1E1612D30041CAEF /* E102B8F1-F195-3903-8CEC-57F346DF3512.bcsymbolmap */ = {isa = PBXFileReference; lastKnownFileType = text; path = "E102B8F1-F195-3903-8CEC-57F346DF3512.bcsymbolmap"; sourceTree = "<group>"; };
+		0B3E575C1E1612D30041CAEF /* E63B9EC5-AB69-3747-98B5-130ACC01A9C4.bcsymbolmap */ = {isa = PBXFileReference; lastKnownFileType = text; path = "E63B9EC5-AB69-3747-98B5-130ACC01A9C4.bcsymbolmap"; sourceTree = "<group>"; };
+		0B3E575D1E1612D30041CAEF /* EarlGrey.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = EarlGrey.framework; sourceTree = "<group>"; };
+		0B3E575E1E1612D30041CAEF /* EarlGrey.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; path = EarlGrey.framework.dSYM; sourceTree = "<group>"; };
+		0B3E575F1E1612D30041CAEF /* EB4C6B45-35EE-3E07-8992-1303EC211195.bcsymbolmap */ = {isa = PBXFileReference; lastKnownFileType = text; path = "EB4C6B45-35EE-3E07-8992-1303EC211195.bcsymbolmap"; sourceTree = "<group>"; };
+		0B3E57601E1612D30041CAEF /* F099AA8F-6F07-339F-9268-00AC6DAD51E0.bcsymbolmap */ = {isa = PBXFileReference; lastKnownFileType = text; path = "F099AA8F-6F07-339F-9268-00AC6DAD51E0.bcsymbolmap"; sourceTree = "<group>"; };
+		0B3E57611E1612D30041CAEF /* F3A19A90-CA42-348C-B47F-8435B862ECA7.bcsymbolmap */ = {isa = PBXFileReference; lastKnownFileType = text; path = "F3A19A90-CA42-348C-B47F-8435B862ECA7.bcsymbolmap"; sourceTree = "<group>"; };
+		0B3E57621E1612D30041CAEF /* FB236E82-5087-3B54-BC8F-8906C7252BC7.bcsymbolmap */ = {isa = PBXFileReference; lastKnownFileType = text; path = "FB236E82-5087-3B54-BC8F-8906C7252BC7.bcsymbolmap"; sourceTree = "<group>"; };
+		0B3E57631E1612D30041CAEF /* Fuzi.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fuzi.framework; sourceTree = "<group>"; };
+		0B3E57641E1612D30041CAEF /* Fuzi.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; path = Fuzi.framework.dSYM; sourceTree = "<group>"; };
+		0B3E57651E1612D30041CAEF /* GCDWebServers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GCDWebServers.framework; sourceTree = "<group>"; };
+		0B3E57661E1612D30041CAEF /* GCDWebServers.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; path = GCDWebServers.framework.dSYM; sourceTree = "<group>"; };
+		0B3E57671E1612D30041CAEF /* KIF.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = KIF.framework; sourceTree = "<group>"; };
+		0B3E57681E1612D30041CAEF /* KIF.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; path = KIF.framework.dSYM; sourceTree = "<group>"; };
+		0B3E57691E1612D30041CAEF /* libPhoneNumber.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = libPhoneNumber.framework; sourceTree = "<group>"; };
+		0B3E576A1E1612D30041CAEF /* libPhoneNumber.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; path = libPhoneNumber.framework.dSYM; sourceTree = "<group>"; };
+		0B3E576B1E1612D30041CAEF /* OnePasswordExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OnePasswordExtension.framework; sourceTree = "<group>"; };
+		0B3E576C1E1612D30041CAEF /* OnePasswordExtension.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; path = OnePasswordExtension.framework.dSYM; sourceTree = "<group>"; };
+		0B3E576D1E1612D30041CAEF /* OnyxClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OnyxClient.framework; sourceTree = "<group>"; };
+		0B3E576E1E1612D30041CAEF /* OnyxClient.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; path = OnyxClient.framework.dSYM; sourceTree = "<group>"; };
+		0B3E576F1E1612D30041CAEF /* SnapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SnapKit.framework; sourceTree = "<group>"; };
+		0B3E57701E1612D30041CAEF /* SnapKit.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; path = SnapKit.framework.dSYM; sourceTree = "<group>"; };
+		0B3E57711E1612D30041CAEF /* SwiftKeychainWrapper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SwiftKeychainWrapper.framework; sourceTree = "<group>"; };
+		0B3E57721E1612D30041CAEF /* SwiftKeychainWrapper.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; path = SwiftKeychainWrapper.framework.dSYM; sourceTree = "<group>"; };
+		0B3E57731E1612D30041CAEF /* WebImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WebImage.framework; sourceTree = "<group>"; };
+		0B3E57741E1612D30041CAEF /* WebImage.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; path = WebImage.framework.dSYM; sourceTree = "<group>"; };
+		0B3E57751E1612D30041CAEF /* WebMetadataKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WebMetadataKit.framework; sourceTree = "<group>"; };
+		0B3E57761E1612D30041CAEF /* WebMetadataKit.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; path = WebMetadataKit.framework.dSYM; sourceTree = "<group>"; };
+		0B3E57771E1612D30041CAEF /* XCGLogger.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = XCGLogger.framework; sourceTree = "<group>"; };
+		0B3E57781E1612D30041CAEF /* XCGLogger.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; path = XCGLogger.framework.dSYM; sourceTree = "<group>"; };
+		0B3E577C1E16134F0041CAEF /* EarlGrey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EarlGrey.swift; sourceTree = "<group>"; };
+		0B3E57831E162A270041CAEF /* EarlGrey.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EarlGrey.framework; path = Carthage/Build/iOS/EarlGrey.framework; sourceTree = "<group>"; };
 		0B3E7D931B27A7CE00E2E84D /* AboutHomeHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutHomeHandler.swift; sourceTree = "<group>"; };
 		0B3E7DB91B27AB4C00E2E84D /* MockLogins.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MockLogins.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		0B5142CB1AE1BAF50014D0B3 /* UIViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
@@ -1204,6 +1286,7 @@
 		0BB5B2BB1AC0AB9F0052877D /* UIImageExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageExtensions.swift; sourceTree = "<group>"; };
 		0BB5B30A1AC0AD1F0052877D /* LoginsHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = LoginsHelper.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		0BB5B35F1AC0D6360052877D /* BookmarkingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarkingTests.swift; sourceTree = "<group>"; };
+		0BC59AC01E17022A00B71A6B /* GCDWebServers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GCDWebServers.framework; path = Carthage/Build/iOS/GCDWebServers.framework; sourceTree = "<group>"; };
 		0BD19A661A25309B0084FBA7 /* NSUserDefaultsPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUserDefaultsPrefs.swift; sourceTree = "<group>"; };
 		0BDA568A1B26B1BE008C9B96 /* LoginsHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = LoginsHelper.js; sourceTree = "<group>"; };
 		0BDA56AE1B26B1D5008C9B96 /* TestLogins.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestLogins.swift; sourceTree = "<group>"; };
@@ -1835,6 +1918,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		0B3E572F1E1612AD0041CAEF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0B3E57851E162A480041CAEF /* EarlGrey.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		2827315A1ABC9BE600AA1954 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -1944,13 +2035,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		3B43E3CD1D95C48D00BBA9DB /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3BFE4B041D342FB800DDF53F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -2084,6 +2168,88 @@
 			);
 			name = UIImageViewAligned;
 			path = ThirdParty/UIImageViewAligned/UIImageViewAligned;
+			sourceTree = "<group>";
+		};
+		0B3E57331E1612AD0041CAEF /* EarlGreyTests */ = {
+			isa = PBXGroup;
+			children = (
+				0B3E577C1E16134F0041CAEF /* EarlGrey.swift */,
+				0B3E57341E1612AD0041CAEF /* EarlGreyTests.swift */,
+				0B3E57361E1612AE0041CAEF /* Info.plist */,
+			);
+			path = EarlGreyTests;
+			sourceTree = "<group>";
+		};
+		0B3E573F1E1612D30041CAEF /* Build */ = {
+			isa = PBXGroup;
+			children = (
+				0B3E57401E1612D30041CAEF /* iOS */,
+			);
+			name = Build;
+			path = Carthage/Build;
+			sourceTree = "<group>";
+		};
+		0B3E57401E1612D30041CAEF /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				0B3E57411E1612D30041CAEF /* 09ADAC1F-E669-356D-9AE2-1477EDD44813.bcsymbolmap */,
+				0B3E57421E1612D30041CAEF /* 0E0B9754-1B33-3483-B215-4B224370D4A8.bcsymbolmap */,
+				0B3E57431E1612D30041CAEF /* 32F6DC18-DE5E-39AB-B6BF-AF8D267116CB.bcsymbolmap */,
+				0B3E57441E1612D30041CAEF /* 40740C08-BA40-3829-9FEF-30B8898BC54E.bcsymbolmap */,
+				0B3E57451E1612D30041CAEF /* 482AE68F-A1CC-3167-B07F-83A62CD92844.bcsymbolmap */,
+				0B3E57461E1612D30041CAEF /* 57FE50A4-888E-3690-A80F-179859CB3479.bcsymbolmap */,
+				0B3E57471E1612D30041CAEF /* 5CA9654A-BC82-3122-B7B1-5A0127BE246D.bcsymbolmap */,
+				0B3E57481E1612D30041CAEF /* 5DED9BC3-BC2E-39A3-914A-CB69B97E462B.bcsymbolmap */,
+				0B3E57491E1612D30041CAEF /* 6F5EF63E-08DC-30E5-9C59-466BC2A558F9.bcsymbolmap */,
+				0B3E574A1E1612D30041CAEF /* 7B02A10A-5716-3F63-BF88-02E93D615661.bcsymbolmap */,
+				0B3E574B1E1612D30041CAEF /* 96B53A8E-3C1A-3637-A7C7-82FF7D25D1EC.bcsymbolmap */,
+				0B3E574C1E1612D30041CAEF /* 989F5196-02C0-3280-8081-02C0E44F2EBE.bcsymbolmap */,
+				0B3E574D1E1612D30041CAEF /* A833D6A1-6172-3A60-9E5F-5C9B54F61A45.bcsymbolmap */,
+				0B3E574E1E1612D30041CAEF /* A9E47DE1-111B-38A8-8F64-4A101AE64B2D.bcsymbolmap */,
+				0B3E574F1E1612D30041CAEF /* AdjustSdk.framework */,
+				0B3E57501E1612D30041CAEF /* AdjustSdk.framework.dSYM */,
+				0B3E57511E1612D30041CAEF /* Alamofire.framework */,
+				0B3E57521E1612D30041CAEF /* Alamofire.framework.dSYM */,
+				0B3E57531E1612D30041CAEF /* BC770453-9326-3CCC-90B0-FFB391C52905.bcsymbolmap */,
+				0B3E57541E1612D30041CAEF /* C1B43946-02A8-33F2-B5B1-BEC2011F292C.bcsymbolmap */,
+				0B3E57551E1612D30041CAEF /* CB8AF39F-E99D-3E8F-AE8F-8FF04F148760.bcsymbolmap */,
+				0B3E57561E1612D30041CAEF /* D097F19B-FB57-35D7-B421-C571D8EA3C8A.bcsymbolmap */,
+				0B3E57571E1612D30041CAEF /* D36710F3-E8A0-3708-9B4A-159626573135.bcsymbolmap */,
+				0B3E57581E1612D30041CAEF /* DA8208AC-4CB3-3383-A600-DE92F7177D85.bcsymbolmap */,
+				0B3E57591E1612D30041CAEF /* Deferred.framework */,
+				0B3E575A1E1612D30041CAEF /* Deferred.framework.dSYM */,
+				0B3E575B1E1612D30041CAEF /* E102B8F1-F195-3903-8CEC-57F346DF3512.bcsymbolmap */,
+				0B3E575C1E1612D30041CAEF /* E63B9EC5-AB69-3747-98B5-130ACC01A9C4.bcsymbolmap */,
+				0B3E575D1E1612D30041CAEF /* EarlGrey.framework */,
+				0B3E575E1E1612D30041CAEF /* EarlGrey.framework.dSYM */,
+				0B3E575F1E1612D30041CAEF /* EB4C6B45-35EE-3E07-8992-1303EC211195.bcsymbolmap */,
+				0B3E57601E1612D30041CAEF /* F099AA8F-6F07-339F-9268-00AC6DAD51E0.bcsymbolmap */,
+				0B3E57611E1612D30041CAEF /* F3A19A90-CA42-348C-B47F-8435B862ECA7.bcsymbolmap */,
+				0B3E57621E1612D30041CAEF /* FB236E82-5087-3B54-BC8F-8906C7252BC7.bcsymbolmap */,
+				0B3E57631E1612D30041CAEF /* Fuzi.framework */,
+				0B3E57641E1612D30041CAEF /* Fuzi.framework.dSYM */,
+				0B3E57651E1612D30041CAEF /* GCDWebServers.framework */,
+				0B3E57661E1612D30041CAEF /* GCDWebServers.framework.dSYM */,
+				0B3E57671E1612D30041CAEF /* KIF.framework */,
+				0B3E57681E1612D30041CAEF /* KIF.framework.dSYM */,
+				0B3E57691E1612D30041CAEF /* libPhoneNumber.framework */,
+				0B3E576A1E1612D30041CAEF /* libPhoneNumber.framework.dSYM */,
+				0B3E576B1E1612D30041CAEF /* OnePasswordExtension.framework */,
+				0B3E576C1E1612D30041CAEF /* OnePasswordExtension.framework.dSYM */,
+				0B3E576D1E1612D30041CAEF /* OnyxClient.framework */,
+				0B3E576E1E1612D30041CAEF /* OnyxClient.framework.dSYM */,
+				0B3E576F1E1612D30041CAEF /* SnapKit.framework */,
+				0B3E57701E1612D30041CAEF /* SnapKit.framework.dSYM */,
+				0B3E57711E1612D30041CAEF /* SwiftKeychainWrapper.framework */,
+				0B3E57721E1612D30041CAEF /* SwiftKeychainWrapper.framework.dSYM */,
+				0B3E57731E1612D30041CAEF /* WebImage.framework */,
+				0B3E57741E1612D30041CAEF /* WebImage.framework.dSYM */,
+				0B3E57751E1612D30041CAEF /* WebMetadataKit.framework */,
+				0B3E57761E1612D30041CAEF /* WebMetadataKit.framework.dSYM */,
+				0B3E57771E1612D30041CAEF /* XCGLogger.framework */,
+				0B3E57781E1612D30041CAEF /* XCGLogger.framework.dSYM */,
+			);
+			path = iOS;
 			sourceTree = "<group>";
 		};
 		0B742CC71B32491400EE9264 /* Products */ = {
@@ -2603,12 +2769,16 @@
 		7B604FC11C496005006EEEC3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+<<<<<<< fed42f727d51c1c1537859efd50455c3aa8f1542
 				E6231C041B90A472005ABB0D /* libxml2.2.tbd */,
 				E6231C021B90A466005ABB0D /* libstdc++.6.0.9.tbd */,
 				E6231C001B90A44F005ABB0D /* libz.tbd */,
 				D39FA16B1A83E17800EE869C /* CoreGraphics.framework */,
 				0B8E0FF31A932BD500161DC3 /* ImageIO.framework */,
 				D36998881AD70A0A00650C6C /* IOKit.framework */,
+=======
+				0B3E573F1E1612D30041CAEF /* Build */,
+>>>>>>> simple one-line test
 				E62A56DC1DBE88C3004703EA /* WebMetadataKit.framework */,
 				E6619A9C1DA693AB0063EAD6 /* OnyxClient.framework */,
 				3BA9A0221D2C208C00BD418C /* Fuzi.framework */,
@@ -3198,11 +3368,18 @@
 			children = (
 				E689C7151E0C72FA008BAADB /* Cartfile */,
 				E689C7161E0C72FA008BAADB /* Cartfile.resolved */,
+				0BC59AC01E17022A00B71A6B /* GCDWebServers.framework */,
+				0B3E57831E162A270041CAEF /* EarlGrey.framework */,
+				28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */,
+				D30EBB5A1C75503800105AE9 /* KIF.xcodeproj */,
+				0B742CC61B32491400EE9264 /* sqlcipher.xcodeproj */,
+				7B9A62B91C4002B1005C83DC /* SQLite.xcodeproj */,
 				2FA435FC1ABB83B4008031D1 /* Account */,
 				2FA4360B1ABB83B4008031D1 /* AccountTests */,
 				F84B21C01A090F8100AAB793 /* Client */,
 				F84B21D61A090F8100AAB793 /* ClientTests */,
 				F8708D1E1A0970990051AB07 /* Extensions */,
+				0B3E57331E1612AD0041CAEF /* EarlGreyTests */,
 				7B604FC11C496005006EEEC3 /* Frameworks */,
 				F84B21BF1A090F8100AAB793 /* Products */,
 				D34DC84C1A16C40C00D49B7B /* Providers */,
@@ -3249,6 +3426,7 @@
 				3905274A1C874D35007E0BB7 /* Today.appex */,
 				3BFE4B071D342FB800DDF53F /* XCUITests.xctest */,
 				3B43E3D01D95C48D00BBA9DB /* StoragePerfTests.xctest */,
+				0B3E57321E1612AD0041CAEF /* EarlGreyTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3525,6 +3703,25 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		0B3E57311E1612AD0041CAEF /* EarlGreyTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0B3E57391E1612AE0041CAEF /* Build configuration list for PBXNativeTarget "EarlGreyTests" */;
+			buildPhases = (
+				0B3E572E1E1612AD0041CAEF /* Sources */,
+				0B3E572F1E1612AD0041CAEF /* Frameworks */,
+				0B3E57301E1612AD0041CAEF /* Resources */,
+				0B3E57801E1629BD0041CAEF /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				0B3E57381E1612AE0041CAEF /* PBXTargetDependency */,
+			);
+			name = EarlGreyTests;
+			productName = EarlGreyTests;
+			productReference = 0B3E57321E1612AD0041CAEF /* EarlGreyTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		2827315D1ABC9BE600AA1954 /* Sync */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 282731971ABC9BE800AA1954 /* Build configuration list for PBXNativeTarget "Sync" */;
@@ -3704,7 +3901,6 @@
 			buildConfigurationList = 3BFE4B201D342FB900DDF53F /* Build configuration list for PBXNativeTarget "XCUITests" */;
 			buildPhases = (
 				3BFE4B031D342FB800DDF53F /* Sources */,
-				3BFE4B041D342FB800DDF53F /* Frameworks */,
 				3BFE4B051D342FB800DDF53F /* Resources */,
 			);
 			buildRules = (
@@ -3959,10 +4155,16 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftMigration = 0700;
-				LastSwiftUpdateCheck = 0800;
+				LastSwiftUpdateCheck = 0820;
 				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = Mozilla;
 				TargetAttributes = {
+					0B3E57311E1612AD0041CAEF = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = 43AQ936H96;
+						ProvisioningStyle = Automatic;
+						TestTargetID = F84B21BD1A090F8100AAB793;
+					};
 					2827315D1ABC9BE600AA1954 = {
 						CreatedOnToolsVersion = 6.2;
 						DevelopmentTeam = 43AQ936H96;
@@ -3970,7 +4172,7 @@
 					};
 					282731671ABC9BE700AA1954 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0800;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -3986,7 +4188,7 @@
 					};
 					2FA436041ABB83B4008031D1 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0800;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -3997,7 +4199,7 @@
 					};
 					2FCAE2231ABB51F800877008 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0800;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -4009,7 +4211,7 @@
 					};
 					3B43E3CF1D95C48D00BBA9DB = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						ProvisioningStyle = Automatic;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -4051,7 +4253,7 @@
 					};
 					E4D567211ADECE2700F1EFE7 = {
 						CreatedOnToolsVersion = 6.3;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0800;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -4063,7 +4265,7 @@
 					};
 					E6F9650B1B2F1CF20034B023 = {
 						CreatedOnToolsVersion = 6.3.2;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0800;
 					};
 					F84B21BD1A090F8100AAB793 = {
@@ -4085,7 +4287,7 @@
 					};
 					F84B21D21A090F8100AAB793 = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0800;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -4172,6 +4374,7 @@
 				7BEB644F1C7345990092C02E /* MarketingUITests */,
 				3BFE4B061D342FB800DDF53F /* XCUITests */,
 				3B43E3CF1D95C48D00BBA9DB /* StoragePerfTests */,
+				0B3E57311E1612AD0041CAEF /* EarlGreyTests */,
 			);
 		};
 /* End PBXProject section */
@@ -4299,6 +4502,13 @@
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
+		0B3E57301E1612AD0041CAEF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		2827315C1ABC9BE600AA1954 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -4581,6 +4791,15 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		0B3E572E1E1612AD0041CAEF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0B3E577D1E16134F0041CAEF /* EarlGrey.swift in Sources */,
+				0B3E57351E1612AD0041CAEF /* EarlGreyTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		282731591ABC9BE600AA1954 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -5250,6 +5469,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		0B3E57381E1612AE0041CAEF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F84B21BD1A090F8100AAB793 /* Client */;
+			targetProxy = 0B3E57371E1612AE0041CAEF /* PBXContainerItemProxy */;
+		};
 		0B742CCE1B32493800EE9264 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = sqlcipher;
@@ -5474,6 +5698,263 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		0B3E573A1E1612AE0041CAEF /* Fennec */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = EarlGreyTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = mozilla.EarlGreyTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 2.3;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
+			};
+			name = Fennec;
+		};
+		0B3E573B1E1612AE0041CAEF /* FennecEnterprise */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = EarlGreyTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = mozilla.EarlGreyTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 2.3;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = FennecEnterprise;
+		};
+		0B3E573C1E1612AE0041CAEF /* Firefox */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = EarlGreyTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = mozilla.EarlGreyTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 2.3;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Firefox;
+		};
+		0B3E573D1E1612AE0041CAEF /* FirefoxBeta */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = EarlGreyTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = mozilla.EarlGreyTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 2.3;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = FirefoxBeta;
+		};
+		0B3E573E1E1612AE0041CAEF /* FirefoxNightly */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = EarlGreyTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = mozilla.EarlGreyTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 2.3;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = FirefoxNightly;
+		};
 		282731771ABC9BE800AA1954 /* Fennec */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -8455,6 +8936,18 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		0B3E57391E1612AE0041CAEF /* Build configuration list for PBXNativeTarget "EarlGreyTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0B3E573A1E1612AE0041CAEF /* Fennec */,
+				0B3E573B1E1612AE0041CAEF /* FennecEnterprise */,
+				0B3E573C1E1612AE0041CAEF /* Firefox */,
+				0B3E573D1E1612AE0041CAEF /* FirefoxBeta */,
+				0B3E573E1E1612AE0041CAEF /* FirefoxNightly */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Fennec;
+		};
 		282731971ABC9BE800AA1954 /* Build configuration list for PBXNativeTarget "Sync" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

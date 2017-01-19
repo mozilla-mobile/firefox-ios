@@ -13,3 +13,4 @@ github "AgileBits/onepassword-extension" "d99f5d7a4c7328f8e3a8d1e7aff455d1072e0c
 github "mozilla/readability" "ac878bf7c15b47d67e7b947584ca108398dd48a4"
 github "mozilla-mobile/web_metadata_ios" "0.0.6"
 github "mozilla-mobile/onyx_ios" "0.0.5"
+github "google/EarlGrey" "1.2.0"
