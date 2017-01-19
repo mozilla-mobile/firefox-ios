@@ -5,6 +5,7 @@
 import Foundation
 
 public enum PushConfigurationLabel: String {
+    case Developer = "Developer"
     case Stage = "Stage"
     case Production = "Production"
 
@@ -12,13 +13,12 @@ public enum PushConfigurationLabel: String {
         switch self {
         case Stage: return StagePushConfiguration()
         case Production: return ProductionPushConfiguration()
+        case Developer: return DeveloperPushConfiguration()
         }
     }
 }
 
 public protocol PushConfiguration {
-    init()
-
     var label: PushConfigurationLabel { get }
 
     /// The associated autopush server should speak the protocol documented at
@@ -29,17 +29,17 @@ public protocol PushConfiguration {
     var endpointURL: NSURL { get }
 }
 
+public struct DeveloperPushConfiguration: PushConfiguration {
+    public let label = PushConfigurationLabel.Developer
+    public let endpointURL = NSURL(string: "https://updates-autopush.dev.mozaws.net/v1/apns/dev")!
+}
 
 public struct StagePushConfiguration: PushConfiguration {
-    public init() {}
-
     public let label = PushConfigurationLabel.Stage
-    public let endpointURL = NSURL(string: "https://updates-autopush.stage.mozaws.net/v1/apns/0")!
+    public let endpointURL = NSURL(string: "https://updates-autopush.dev.mozaws.net/v1/apns/stage")!
 }
 
 public struct ProductionPushConfiguration: PushConfiguration {
-    public init() {}
-
     public let label = PushConfigurationLabel.Production
-    public let endpointURL = NSURL(string: "https://updates.push.services.mozilla.com/v1/apns/0")!
+    public let endpointURL = NSURL(string: "https://updates.push.services.mozilla.com/v1/apns/firefox")!
 }
