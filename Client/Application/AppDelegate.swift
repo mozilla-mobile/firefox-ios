@@ -173,11 +173,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             sendCorePing()
         }
 
-        if AppConstants.MOZ_PUSH {
-            // registerForUserNotifications(application)
-            registerForRemoteNotifications(application)
-        }
-
         log.debug("Done with setting up the application.")
         return true
     }
@@ -664,12 +659,22 @@ extension AppDelegate {
             // Step 2a. The user has not given us permission to display notifications.
             return
         }
+
+        if AppConstants.MOZ_PUSH {
+            log.info("Registering for push notifications")
+            registerForRemoteNotifications(application)
+        }
         // Step 3. We still have permission to show notifications to the user.
     }
 }
 
 extension AppDelegate {
     func registerForRemoteNotifications(application: UIApplication) {
+        // TODO: if we've signed in, we may have already registered for push notifications,
+        // but thrown away the result. We need to register each time.
+        // TODO: if we've agreed to notifications, but then revoked those permissions, 
+        // then we need to unregister for send tab and push notifications
+        
         // Step 1. Attempt to tell Apple that we want to receive push notifications.
         application.registerForRemoteNotifications()
     }
@@ -705,6 +710,7 @@ extension AppDelegate {
         // TODO decode the push notification and then:
         // TODO route to open a new tab or
         // TODO direct to open a websocket.
+        log.info("userInfo: \(userInfo)")
     }
 }
 
