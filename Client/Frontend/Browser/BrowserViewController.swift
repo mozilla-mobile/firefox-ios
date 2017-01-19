@@ -1284,6 +1284,9 @@ class BrowserViewController: UIViewController {
         guard let tab = tabManager.selectedTab else {
             return .Loading
         }
+        if tab.url == nil {
+            return .EmptyTab
+        }
         return .Tab(tabState: tab.tabState)
     }
 
