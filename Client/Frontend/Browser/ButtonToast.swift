@@ -15,12 +15,12 @@ struct ButtonToastUX {
     static let ToastButtonBorderWidth: CGFloat = 1
 }
 
-private class HighlightableButton : UIButton {
+private class HighlightableButton: UIButton {
     override var highlighted: Bool {
         didSet {
             if highlighted {
                 self.backgroundColor = UIColor.whiteColor()
-            } else  {
+            } else {
                 self.backgroundColor = UIColor.clearColor()
             }
         }
