@@ -133,7 +133,7 @@ public extension PushClient {
 /// Utilities
 extension PushClient {
     private func sendRequest(request: NSURLRequest) -> Deferred<Maybe<JSON>> {
-        log.info("\(request.HTTPMethod) \(request.URLString)")
+        log.info("\(request.HTTPMethod!) \(request.URLString)")
         let deferred = Deferred<Maybe<JSON>>()
         alamofire.request(request)
             .validate(contentType: ["application/json"])
@@ -149,7 +149,8 @@ extension PushClient {
                         return deferred.fill(Maybe(failure: PushClientError.Local(PushClientUnknownError)))
                     }
 
-                    let json = JSON(data)
+                    let json = JSON(data: data)
+                    
                     if let remoteError = PushRemoteError.fromJSON(json) {
                         return deferred.fill(Maybe(failure: PushClientError.Remote(remoteError)))
                     }
