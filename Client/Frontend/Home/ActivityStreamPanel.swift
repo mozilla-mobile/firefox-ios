@@ -412,11 +412,12 @@ extension ActivityStreamPanel {
         if site.bookmarked == nil {
             profile.bookmarks.modelFactory >>== {
                 $0.isBookmarked(site.url).uponQueue(dispatch_get_main_queue()) { result in
-                    guard let bookmarked = result.successValue else {
+                    guard let isBookmarked = result.successValue else {
                         log.error("Error getting bookmark status: \(result.failureValue).")
                         return
                     }
-                    if let contextMenuToShow = self.contextMenuForSite(site, atIndex: indexPath.item, forSection: .TopSites, siteImage: siteImage, siteBGColor: siteBGColor, isBookmarked: bookmarked) {
+                    site.setBookmarked(isBookmarked)
+                    if let contextMenuToShow = self.contextMenuForSite(site, atIndex: indexPath.item, forSection: .TopSites, siteImage: siteImage, siteBGColor: siteBGColor, isBookmarked: isBookmarked) {
                         self.presentContextMenu(contextMenuToShow)
                     }
                 }
@@ -436,11 +437,12 @@ extension ActivityStreamPanel {
         if site.bookmarked == nil {
             profile.bookmarks.modelFactory >>== {
                 $0.isBookmarked(site.url).uponQueue(dispatch_get_main_queue()) { result in
-                    guard let bookmarked = result.successValue else {
+                    guard let isBookmarked = result.successValue else {
                         log.error("Error getting bookmark status: \(result.failureValue).")
                         return
                     }
-                    if let contextMenuToShow = self.contextMenuForSite(site, atIndex: indexPath.row, forSection: .Highlights, siteImage: siteImage, siteBGColor: siteBGColor, isBookmarked: bookmarked) {
+                    site.setBookmarked(isBookmarked)
+                    if let contextMenuToShow = self.contextMenuForSite(site, atIndex: indexPath.row, forSection: .Highlights, siteImage: siteImage, siteBGColor: siteBGColor, isBookmarked: isBookmarked) {
                         self.presentContextMenu(contextMenuToShow)
                     }
                 }
