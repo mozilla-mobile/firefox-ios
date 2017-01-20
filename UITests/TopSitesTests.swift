@@ -39,7 +39,8 @@ class TopSitesTests: KIFTestCase {
         EarlGrey().selectElementWithMatcher(grey_accessibilityLabel("Bookmarks")).performAction(grey_tap())
         EarlGrey().selectElementWithMatcher(grey_accessibilityLabel("Top sites")).performAction(grey_tap())
         
-        let collection = tester().waitForViewWithAccessibilityIdentifier("AS Top Sites View") as! UICollectionView
+        let topSiteCell = tester().waitForViewWithAccessibilityIdentifier("TopSitesCell") as! ASHorizontalScrollCell
+		let collection = topSiteCell.collectionView
         let firstCell = collection.visibleCells().first!
 		
 		// Delete the site, and verify that the tile we removed is removed
@@ -53,7 +54,9 @@ class TopSitesTests: KIFTestCase {
         
         // Delete all of the suggested tiles (with suggested site, they are marked hidden,
 		// not removed completely)
-        var collection = tester().waitForViewWithAccessibilityIdentifier("AS Top Sites View") as! UICollectionView
+        var topSiteCell = tester().waitForViewWithAccessibilityIdentifier("TopSitesCell") as! ASHorizontalScrollCell
+		var collection = topSiteCell.collectionView
+
         while collection.visibleCells().count > 0 {
             let firstCell = collection.visibleCells().first!
             if (firstCell.isVisibleInViewHierarchy() == false) {
@@ -71,8 +74,9 @@ class TopSitesTests: KIFTestCase {
         EarlGrey().selectElementWithMatcher(grey_accessibilityLabel("Bookmarks")).performAction(grey_tap())
         EarlGrey().selectElementWithMatcher(grey_accessibilityLabel("Top sites")).performAction(grey_tap())
         
-        collection = tester().waitForViewWithAccessibilityIdentifier("AS Top Sites View") as! UICollectionView
-        // 1 topsite from history is populated: no default topsites are re-populated
+		topSiteCell = tester().waitForViewWithAccessibilityIdentifier("TopSitesCell") as! ASHorizontalScrollCell
+		collection = topSiteCell.collectionView
+		// 1 topsite from history is populated: no default topsites are re-populated
         XCTAssertEqual(collection.visibleCells().count, 1)
         
         // Delete the history item cell for cleanup
@@ -107,9 +111,10 @@ class TopSitesTests: KIFTestCase {
     
     private func deleteHistoryTopsite(siteCount: Int = 1) {
         
-        for _ in 1...siteCount {
-			var collection = self.tester().waitForViewWithAccessibilityIdentifier("AS Top Sites View") as! UICollectionView
-            let firstCell = collection.visibleCells().first!
+		let topSiteCell = tester().waitForViewWithAccessibilityIdentifier("TopSitesCell") as! ASHorizontalScrollCell
+		let collection = topSiteCell.collectionView
+		for _ in 1...siteCount {
+			let firstCell = collection.visibleCells().first!
 			let accessibilityLabel = firstCell.accessibilityLabel
 			
 			EarlGrey().selectElementWithMatcher(grey_accessibilityLabel(accessibilityLabel))
@@ -119,15 +124,13 @@ class TopSitesTests: KIFTestCase {
 			EarlGrey().selectElementWithMatcher(grey_accessibilityLabel("Remove"))
 				.inRoot(grey_kindOfClass(NSClassFromString("Client.ActionOverlayTableViewCell")))
 				.performAction(grey_tap())
-        
+
 			let disappeared = GREYCondition(name: "Wait for icon to disappear", block: { _ in
-				collection = self.tester().waitForViewWithAccessibilityIdentifier("AS Top Sites View") as! UICollectionView
-				for index in 1...collection.visibleCells().count {
-					if (collection.visibleCells()[index-1].accessibilityLabel == accessibilityLabel) {
-						return false
-					}
-				}
-				return true
+				var errorOrNil: NSError?
+				 EarlGrey().selectElementWithMatcher(grey_accessibilityLabel(accessibilityLabel))
+				.assertWithMatcher(grey_notNil(), error: &errorOrNil)
+				let success = errorOrNil != nil
+				return success
 			}).waitWithTimeout(5)
 			
 			GREYAssertTrue(disappeared, reason: "Failed to disappear")
