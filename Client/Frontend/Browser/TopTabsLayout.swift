@@ -1,7 +1,6 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
-
 import Foundation
 
 class TopTabsLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout {
@@ -42,7 +41,7 @@ class TopTabsViewLayout: UICollectionViewFlowLayout {
         self.minimumLineSpacing = 2
         scrollDirection = UICollectionViewScrollDirection.Horizontal
         registerClass(TopTabsBackgroundDecorationView.self, forDecorationViewOfKind: TopTabsBackgroundDecorationView.Identifier)
-        registerClass(Seperator.self, forDecorationViewOfKind: "Seperator")
+        registerClass(TopTabsSeparator.self, forDecorationViewOfKind: TopTabsSeparatorUX.Identifier)
     }
     
     override func shouldInvalidateLayoutForBoundsChange(newBounds: CGRect) -> Bool {
@@ -54,11 +53,11 @@ class TopTabsViewLayout: UICollectionViewFlowLayout {
         if let attr = self.decorationAttributeArr[indexPath.row] {
             return attr
         } else {
-            // Sometimes decoration views will be requested for rows that might not exist. Just show an empty seperator.
-            let seperatorAttr = UICollectionViewLayoutAttributes(forDecorationViewOfKind: "Seperator", withIndexPath: indexPath)
-            seperatorAttr.frame = CGRect.zero
-            seperatorAttr.zIndex = -1
-            return seperatorAttr
+            // Sometimes decoration views will be requested for rows that might not exist. Just show an empty separator.
+            let separatorAttr = UICollectionViewLayoutAttributes(forDecorationViewOfKind: TopTabsSeparatorUX.Identifier, withIndexPath: indexPath)
+            separatorAttr.frame = CGRect.zero
+            separatorAttr.zIndex = -1
+            return separatorAttr
         }
     }
 
@@ -73,19 +72,19 @@ class TopTabsViewLayout: UICollectionViewFlowLayout {
         decorationAttributes.zIndex = -1
         decorationAttributes.themeColor = self.themeColor
 
-        // Create attributes for the Tab Seperator.
-        var seperatorArr: [Int: UICollectionViewLayoutAttributes] = [:]
+        // Create attributes for the Tab Separator.
+        var separatorArr: [Int: UICollectionViewLayoutAttributes] = [:]
         for i in attributes {
             if i.indexPath.item > 0 {
-                let sep = UICollectionViewLayoutAttributes(forDecorationViewOfKind: "Seperator", withIndexPath: i.indexPath)
-                sep.frame = CGRect(x: i.frame.origin.x - 2, y: i.frame.size.height / 4 , width: 1, height: i.frame.size.height / 2)
+                let sep = UICollectionViewLayoutAttributes(forDecorationViewOfKind: TopTabsSeparatorUX.Identifier, withIndexPath: i.indexPath)
+                sep.frame = CGRect(x: i.frame.origin.x - 2, y: i.frame.size.height / 4, width: TopTabsSeparatorUX.Width, height: i.frame.size.height / 2)
                 sep.zIndex = -1
-                seperatorArr[i.indexPath.row] = sep
+                separatorArr[i.indexPath.row] = sep
                 attributes.append(sep)
             }
         }
 
-        self.decorationAttributeArr = seperatorArr
+        self.decorationAttributeArr = separatorArr
         attributes.append(decorationAttributes)
         return attributes
     }

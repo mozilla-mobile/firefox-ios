@@ -3405,7 +3405,7 @@ extension BrowserViewController: TopTabsDelegate {
         openBlankNewTab(isPrivate: isPrivate)
     }
 
-    func topTabsDidPressPrivateModeButton() {
+    func topTabsDidTogglePrivateMode() {
         guard let selectedTab = tabManager.selectedTab else {
             return
         }

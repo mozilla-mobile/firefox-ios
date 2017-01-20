@@ -27,7 +27,7 @@ public class MockTabManagerStateDelegate: TabManagerStateDelegate {
     }
 }
 
-struct methodSpy {
+struct MethodSpy {
     let functionName: String
     let method: ((tabs: [Tab?]) -> Void)?
 
@@ -47,7 +47,15 @@ public class MockTabManagerDelegate: TabManagerDelegate {
     //this array represents the order in which delegate methods should be called.
     //each delegate method will pop the first struct from the array. If the method name doesn't match the struct then the order is incorrect
     //Then it evaluates the method closure which will return true/false depending on if the tabs are correct
-    var methodCatchers: [methodSpy] = []
+    var methodCatchers: [MethodSpy] = []
+
+    func expect(methods: [MethodSpy]) {
+        self.methodCatchers = methods
+    }
+
+    func verify(message: String) {
+        XCTAssertTrue(methodCatchers.isEmpty, message)
+    }
 
     func testDelegateMethodWithName(name: String, tabs: [Tab?]) {
         guard let spy = self.methodCatchers.first else {
@@ -65,10 +73,6 @@ public class MockTabManagerDelegate: TabManagerDelegate {
         testDelegateMethodWithName(#function, tabs: [selected, previous])
     }
 
-    func tabManager(tabManager: TabManager, didCreateTab tab: Tab) {
-        testDelegateMethodWithName(#function, tabs: [tab])
-    }
-
     func tabManager(tabManager: TabManager, didAddTab tab: Tab) {
         testDelegateMethodWithName(#function, tabs: [tab])
     }
@@ -82,7 +86,7 @@ public class MockTabManagerDelegate: TabManagerDelegate {
     }
 
     func tabManager(tabManager: TabManager, willRemoveTab tab: Tab) {
-
+        testDelegateMethodWithName(#function, tabs: [tab])
     }
 
     func tabManager(tabManager: TabManager, willAddTab tab: Tab) {
@@ -100,6 +104,11 @@ public class MockTabManagerDelegate: TabManagerDelegate {
 
 
 class TabManagerTests: XCTestCase {
+
+    let willRemove = MethodSpy(functionName: "tabManager(_:willRemoveTab:)")
+    let didRemove = MethodSpy(functionName: "tabManager(_:didRemoveTab:)")
+    let willAdd = MethodSpy(functionName: "tabManager(_:willAddTab:)")
+    let didAdd = MethodSpy(functionName: "tabManager(_:didAddTab:)")
 
     override func setUp() {
         super.setUp()
@@ -157,11 +166,9 @@ class TabManagerTests: XCTestCase {
         let delegate = MockTabManagerDelegate()
         manager.addDelegate(delegate)
 
-        let willCreate = methodSpy(functionName: "tabManager(_:willAddTab:)")
-        let didAdd = methodSpy(functionName: "tabManager(_:didAddTab:)")
-        delegate.methodCatchers = [willCreate, didAdd]
+        delegate.expect([willAdd, didAdd])
         manager.addTab()
-        XCTAssertTrue(delegate.methodCatchers.isEmpty, "Not all delegate methods were called")
+        delegate.verify("Not all delegate methods were called")
     }
 
     func testDidDeleteLastTab() {
@@ -174,19 +181,16 @@ class TabManagerTests: XCTestCase {
         manager.selectTab(tab)
         manager.addDelegate(delegate)
 
-        let didRemove = methodSpy(functionName: "tabManager(_:didRemoveTab:)")
-        let didCreate = methodSpy(functionName: "tabManager(_:willAddTab:)")
-        let didAdd = methodSpy(functionName: "tabManager(_:didAddTab:)")
-        let didSelect = methodSpy(functionName: "tabManager(_:didSelectedTabChange:previous:)") { tabs in
+        let didSelect = MethodSpy(functionName: "tabManager(_:didSelectedTabChange:previous:)") { tabs in
             let next = tabs[0]!
             let previous = tabs[1]!
             XCTAssertTrue(previous != next)
             XCTAssertTrue(previous == tab)
             XCTAssertFalse(next.isPrivate)
         }
-        delegate.methodCatchers = [didRemove, didCreate, didAdd, didSelect]
+        delegate.expect([willRemove, didRemove, willAdd, didAdd, didSelect])
         manager.removeTab(tab)
-        XCTAssertTrue(delegate.methodCatchers.isEmpty, "Not all delegate methods were called")
+        delegate.verify("Not all delegate methods were called")
     }
 
 
@@ -202,8 +206,7 @@ class TabManagerTests: XCTestCase {
         manager.selectTab(privateTab)
         manager.addDelegate(delegate)
 
-        let didRemove = methodSpy(functionName: "tabManager(_:didRemoveTab:)")
-        let didSelect = methodSpy(functionName: "tabManager(_:didSelectedTabChange:previous:)") { tabs in
+        let didSelect = MethodSpy(functionName: "tabManager(_:didSelectedTabChange:previous:)") { tabs in
             let next = tabs[0]!
             let previous = tabs[1]!
             XCTAssertTrue(previous != next)
@@ -212,9 +215,9 @@ class TabManagerTests: XCTestCase {
             XCTAssertTrue(previous.isPrivate)
             XCTAssertTrue(manager.selectedTab == next)
         }
-        delegate.methodCatchers = [didRemove, didSelect]
+        delegate.expect([willRemove, didRemove, didSelect])
         manager.removeTab(privateTab)
-        XCTAssertTrue(delegate.methodCatchers.isEmpty, "Not all delegate methods were called")
+        delegate.verify("Not all delegate methods were called")
     }
 
     func testDeleteNonSelectedTab() {
@@ -229,11 +232,10 @@ class TabManagerTests: XCTestCase {
         let deleteTab = manager.addTab()
         manager.addDelegate(delegate)
 
-        let didRemove = methodSpy(functionName: "tabManager(_:didRemoveTab:)")
-        delegate.methodCatchers = [didRemove]
+        delegate.expect([willRemove, didRemove])
         manager.removeTab(deleteTab)
 
-        XCTAssertTrue(delegate.methodCatchers.isEmpty, "Not all delegate methods were called")
+        delegate.verify("Not all delegate methods were called")
     }
 
     func testDeleteLastTab() {
@@ -248,17 +250,16 @@ class TabManagerTests: XCTestCase {
         let newSelectedTab = manager.tabs[8]
         manager.addDelegate(delegate)
 
-        let didRemove = methodSpy(functionName: "tabManager(_:didRemoveTab:)")
-        let didSelect = methodSpy(functionName: "tabManager(_:didSelectedTabChange:previous:)") { tabs in
+        let didSelect = MethodSpy(functionName: "tabManager(_:didSelectedTabChange:previous:)") { tabs in
             let next = tabs[0]!
             let previous = tabs[1]!
             XCTAssertEqual(deleteTab, previous)
             XCTAssertEqual(next, newSelectedTab)
         }
-        delegate.methodCatchers = [didRemove, didSelect]
+        delegate.expect([willRemove, didRemove, didSelect])
         manager.removeTab(manager.tabs.last!)
 
-        XCTAssertTrue(delegate.methodCatchers.isEmpty, "Not all delegate methods were called")
+        delegate.verify("Not all delegate methods were called")
     }
 
 
@@ -274,17 +275,15 @@ class TabManagerTests: XCTestCase {
         let newSelectedTab = manager.tabs[1]
         manager.addDelegate(delegate)
 
-        let didRemove = methodSpy(functionName: "tabManager(_:didRemoveTab:)")
-        let didSelect = methodSpy(functionName: "tabManager(_:didSelectedTabChange:previous:)") { tabs in
+        let didSelect = MethodSpy(functionName: "tabManager(_:didSelectedTabChange:previous:)") { tabs in
             let next = tabs[0]!
             let previous = tabs[1]!
             XCTAssertEqual(deleteTab, previous)
             XCTAssertEqual(next, newSelectedTab)
         }
-        delegate.methodCatchers = [didRemove, didSelect]
+        delegate.expect([willRemove, didRemove, didSelect])
         manager.removeTab(manager.tabs.first!)
-
-        XCTAssertTrue(delegate.methodCatchers.isEmpty, "Not all delegate methods were called")
+        delegate.verify("Not all delegate methods were called")
     }
 
     // Private tabs and regular tabs are in the same tabs array.
@@ -303,17 +302,16 @@ class TabManagerTests: XCTestCase {
         manager.selectTab(manager.tabs.last)
         manager.addDelegate(delegate)
 
-        let didRemove = methodSpy(functionName: "tabManager(_:didRemoveTab:)")
-        let didSelect = methodSpy(functionName: "tabManager(_:didSelectedTabChange:previous:)") { tabs in
+        let didSelect = MethodSpy(functionName: "tabManager(_:didSelectedTabChange:previous:)") { tabs in
             let next = tabs[0]!
             let previous = tabs[1]!
             XCTAssertEqual(deleted, previous)
             XCTAssertEqual(next, newSelected)
         }
-        delegate.methodCatchers = [didRemove, didSelect]
+        delegate.expect([willRemove, didRemove, didSelect])
         manager.removeTab(manager.tabs.last!)
 
-        XCTAssertTrue(delegate.methodCatchers.isEmpty, "Not all delegate methods were called")
+        delegate.verify("Not all delegate methods were called")
     }
 
     func testTabsIndexClosingFirst() {
@@ -330,17 +328,15 @@ class TabManagerTests: XCTestCase {
         manager.selectTab(manager.tabs.first)
         manager.addDelegate(delegate)
 
-        let didRemove = methodSpy(functionName: "tabManager(_:didRemoveTab:)")
-        let didSelect = methodSpy(functionName: "tabManager(_:didSelectedTabChange:previous:)") { tabs in
+        let didSelect = MethodSpy(functionName: "tabManager(_:didSelectedTabChange:previous:)") { tabs in
             let next = tabs[0]!
             let previous = tabs[1]!
             XCTAssertEqual(deleted, previous)
             XCTAssertEqual(next, newSelected)
         }
-        delegate.methodCatchers = [didRemove, didSelect]
+        delegate.expect([willRemove, didRemove, didSelect])
         manager.removeTab(manager.tabs.first!)
-
-        XCTAssertTrue(delegate.methodCatchers.isEmpty, "Not all delegate methods were called")
+        delegate.verify("Not all delegate methods were called")
     }
 
 }

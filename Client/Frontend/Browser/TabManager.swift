@@ -187,10 +187,7 @@ class TabManager: NSObject {
         assert(tab === selectedTab, "Expected tab is selected")
         selectedTab?.createWebview()
 
-        for delegate in delegates {
-            delegate.get()?.tabManager(self, didSelectedTabChange: tab, previous: previous)
-        }
-
+        delegates.forEach { $0.get()?.tabManager(self, didSelectedTabChange: tab, previous: previous) }
     }
 
     func expireSnackbars() {
@@ -241,9 +238,7 @@ class TabManager: NSObject {
         self.selectTab(tab)
 
         // Notify that we bulk-loaded so we can adjust counts.
-        for delegate in delegates {
-            delegate.get()?.tabManagerDidAddTabs(self)
-        }
+        delegates.forEach { $0.get()?.tabManagerDidAddTabs(self) }
     }
 
     private func addTab(request: NSURLRequest? = nil, configuration: WKWebViewConfiguration? = nil, afterTab: Tab? = nil, flushToDisk: Bool, zombie: Bool, isPrivate: Bool) -> Tab {
@@ -371,7 +366,6 @@ class TabManager: NSObject {
             if tabIndex == viableTabs.count {
                 tabIndex -= 1
             }
-            // 7 < 8
             if tabIndex < viableTabs.count && !viableTabs.isEmpty {
                 _selectedIndex = tabs.indexOf(viableTabs[tabIndex]) ?? -1
             } else {
@@ -440,9 +434,8 @@ class TabManager: NSObject {
                 self.eraseUndoCache()
             })
         }
-        for delegate in delegates {
-            delegate.get()?.tabManagerDidRemoveAllTabs(self, toast: toast)
-        }
+
+        delegates.forEach { $0.get()?.tabManagerDidRemoveAllTabs(self, toast: toast) }
     }
     
     func undoCloseTabs() {
@@ -460,9 +453,7 @@ class TabManager: NSObject {
         }
         selectTab(tempTabs.first)
         self.isRestoring = false
-        for delegate in delegates {
-            delegate.get()?.tabManagerDidRestoreTabs(self)
-        }
+        delegates.forEach { $0.get()?.tabManagerDidRestoreTabs(self) }
         self.tempTabs?.removeAll()
         tabs.first?.createWebview()
     }

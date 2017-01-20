@@ -4,10 +4,15 @@
 
 import Foundation
 
-class Seperator: UICollectionReusableView {
+struct TopTabsSeparatorUX {
+    static let Identifier = "Separator"
+    static let Color = UIColor.whiteColor().colorWithAlphaComponent(0.2)
+    static let Width: CGFloat = 1
+}
+class TopTabsSeparator: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.2)
+        self.backgroundColor = TopTabsSeparatorUX.Color
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -84,11 +89,14 @@ class TopTabCell: UICollectionViewCell {
         contentView.addSubview(self.closeButton)
         contentView.addSubview(self.titleText)
         contentView.addSubview(self.favicon)
-        
+
+        // The tab needs to be slightly bigger in order for the background view not to appear underneath
+        // https://bugzilla.mozilla.org/show_bug.cgi?id=1320135
+        let bezierOffset: CGFloat = 3
         bezierView.snp_makeConstraints { make in
             make.centerY.centerX.equalTo(self)
             make.height.equalTo(self)
-            make.width.equalTo(frame.width + TopTabsUX.TopTabsBackgroundPadding + 3)
+            make.width.equalTo(frame.width + TopTabsUX.TopTabsBackgroundPadding + bezierOffset)
         }
         favicon.snp_makeConstraints { make in
             make.centerY.equalTo(self)
