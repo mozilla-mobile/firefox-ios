@@ -374,8 +374,6 @@ extension ActivityStreamPanel {
         let touchPoint = longPressGestureRecognizer.locationInView(tableView)
         guard let indexPath = tableView.indexPathForRowAtPoint(touchPoint) else { return }
 
-        var contextMenu: ActionOverlayTableViewController? = nil
-
         switch Section(indexPath.section) {
         case .Highlights:
             guard let contextMenu = createContextMenu(indexPath) else { return }
@@ -388,10 +386,6 @@ extension ActivityStreamPanel {
             self.presentViewController(contextMenu, animated: true, completion: nil)
         case .HighlightIntro:
             break
-        }
-
-        if let contextMenuToShow = contextMenu {
-            presentContextMenu(contextMenuToShow)
         }
     }
 }
@@ -436,13 +430,16 @@ extension ActivityStreamPanel: HomePanelContextMenu {
 
     func getContextMenuActions(site: Site, indexPath: NSIndexPath) -> [ActionOverlayTableViewAction]? {
         guard let siteURL = NSURL(string: site.url) else { return nil }
-        let eventInfo: ASInfo
 
+        let pingSource: ASPingSource
+        let index: Int
         switch Section(indexPath.section) {
-        case .Highlights:
-            eventInfo = ASInfo(actionPosition: indexPath.row, source: .highlights)
         case .TopSites:
-            eventInfo = ASInfo(actionPosition: indexPath.item, source: .topSites)
+            pingSource = .TopSites
+            index = indexPath.item
+        case .Highlights:
+            pingSource = .Highlights
+            index = indexPath.row
         case .HighlightIntro:
             return nil
         }
