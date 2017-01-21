@@ -4,6 +4,22 @@
 
 import Foundation
 
+struct TopTabsSeparatorUX {
+    static let Identifier = "Separator"
+    static let Color = UIColor.whiteColor().colorWithAlphaComponent(0.2)
+    static let Width: CGFloat = 1
+}
+class TopTabsSeparator: UICollectionReusableView {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.backgroundColor = TopTabsSeparatorUX.Color
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
 class TopTabCell: UICollectionViewCell {
     enum Style {
         case Light
@@ -16,14 +32,6 @@ class TopTabCell: UICollectionViewCell {
         didSet {
             if style != oldValue {
                 applyStyle(style)
-            }
-        }
-    }
-    
-    var seperatorLine: Bool = false {
-        didSet {
-            if seperatorLine != oldValue {
-                setNeedsDisplay()
             }
         }
     }
@@ -81,11 +89,14 @@ class TopTabCell: UICollectionViewCell {
         contentView.addSubview(self.closeButton)
         contentView.addSubview(self.titleText)
         contentView.addSubview(self.favicon)
-        
+
+        // The tab needs to be slightly bigger in order for the background view not to appear underneath
+        // https://bugzilla.mozilla.org/show_bug.cgi?id=1320135
+        let bezierOffset: CGFloat = 3
         bezierView.snp_makeConstraints { make in
             make.centerY.centerX.equalTo(self)
             make.height.equalTo(self)
-            make.width.equalTo(frame.width+TopTabsUX.TopTabsBackgroundPadding)
+            make.width.equalTo(frame.width + TopTabsUX.TopTabsBackgroundPadding + bezierOffset)
         }
         favicon.snp_makeConstraints { make in
             make.centerY.equalTo(self)
@@ -136,22 +147,7 @@ class TopTabCell: UICollectionViewCell {
     func closeTab() {
         delegate?.tabCellDidClose(self)
     }
-    
-    override func drawRect(rect: CGRect) {
-        super.drawRect(rect)
-        guard seperatorLine else {
-            return
-        }
-        guard let context = UIGraphicsGetCurrentContext() else { return }
-        CGContextSaveGState(context)
-        CGContextSetLineCap(context, CGLineCap.Square)
-        CGContextSetStrokeColorWithColor(context, UIColor.whiteColor().colorWithAlphaComponent(0.2).CGColor)
-        CGContextSetLineWidth(context, 1.0)
-        CGContextMoveToPoint(context, 0, TopTabsUX.BackgroundSeparatorLinePadding)
-        CGContextAddLineToPoint(context, 0, frame.size.height-TopTabsUX.BackgroundSeparatorLinePadding)
-        CGContextStrokePath(context)
-        CGContextRestoreGState(context)
-    }
+
 }
 
 private class BezierView: UIView {
@@ -274,6 +270,7 @@ class TopTabsBackgroundDecorationView: UICollectionReusableView {
         init(right: Bool) {
             self.right = right
             super.init(frame: CGRectZero)
+            self.backgroundColor = UIColor.clearColor()
         }
         
         required init?(coder aDecoder: NSCoder) {
@@ -282,10 +279,8 @@ class TopTabsBackgroundDecorationView: UICollectionReusableView {
         
         override func drawRect(rect: CGRect) {
             super.drawRect(rect)
-            
             let bezierPath = UIBezierPath.topTabsCurve(frame.width, height: frame.height, direction: right ? .Right : .Left)
-            
-            self.themeColor.setFill()
+            themeColor.setFill()
             bezierPath.fill()
         }
     }

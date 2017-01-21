@@ -62,10 +62,9 @@ class TopTabsTests: KIFTestCase {
     
     private func AddTab() {
         tester().waitForTappableViewWithAccessibilityLabel("Show Tabs", value: "1", traits: UIAccessibilityTraitButton)
-        
-        tester().tapViewWithAccessibilityIdentifier("url")
-        
+
         for i in 0..<numberOfTabs {
+            tester().tapViewWithAccessibilityIdentifier("url")
             let url = "\(webRoot)/numberedPage.html?page=\(i)"
             tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url)\n")
             tester().waitForWebViewElementWithAccessibilityLabel("Page \(i)")

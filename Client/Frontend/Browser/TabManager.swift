@@ -11,9 +11,11 @@ private let log = Logger.browserLogger
 
 protocol TabManagerDelegate: class {
     func tabManager(tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?)
-    func tabManager(tabManager: TabManager, didCreateTab tab: Tab)
+    func tabManager(tabManager: TabManager, willAddTab tab: Tab)
     func tabManager(tabManager: TabManager, didAddTab tab: Tab)
+    func tabManager(tabManager: TabManager, willRemoveTab tab: Tab)
     func tabManager(tabManager: TabManager, didRemoveTab tab: Tab)
+
     func tabManagerDidRestoreTabs(tabManager: TabManager)
     func tabManagerDidAddTabs(tabManager: TabManager)
     func tabManagerDidRemoveAllTabs(tabManager: TabManager, toast: ButtonToast?)
@@ -166,14 +168,13 @@ class TabManager: NSObject {
         return nil
     }
 
-    func selectTab(tab: Tab?) {
+    func selectTab(tab: Tab?, previous: Tab? = nil) {
         assert(NSThread.isMainThread())
+        let previous = previous ?? selectedTab
 
-        if selectedTab === tab {
+        if previous === tab {
             return
         }
-
-        let previous = selectedTab
 
         if let tab = tab {
             _selectedIndex = tabs.indexOf(tab) ?? -1
@@ -186,9 +187,7 @@ class TabManager: NSObject {
         assert(tab === selectedTab, "Expected tab is selected")
         selectedTab?.createWebview()
 
-        for delegate in delegates {
-            delegate.get()?.tabManager(self, didSelectedTabChange: tab, previous: previous)
-        }
+        delegates.forEach { $0.get()?.tabManager(self, didSelectedTabChange: tab, previous: previous) }
     }
 
     func expireSnackbars() {
@@ -239,9 +238,7 @@ class TabManager: NSObject {
         self.selectTab(tab)
 
         // Notify that we bulk-loaded so we can adjust counts.
-        for delegate in delegates {
-            delegate.get()?.tabManagerDidAddTabs(self)
-        }
+        delegates.forEach { $0.get()?.tabManagerDidAddTabs(self) }
     }
 
     private func addTab(request: NSURLRequest? = nil, configuration: WKWebViewConfiguration? = nil, afterTab: Tab? = nil, flushToDisk: Bool, zombie: Bool, isPrivate: Bool) -> Tab {
@@ -284,9 +281,7 @@ class TabManager: NSObject {
     func configureTab(tab: Tab, request: NSURLRequest?, afterTab parent: Tab? = nil, flushToDisk: Bool, zombie: Bool) {
         assert(NSThread.isMainThread())
 
-        for delegate in delegates {
-            delegate.get()?.tabManager(self, didCreateTab: tab)
-        }
+        delegates.forEach { $0.get()?.tabManager(self, willAddTab: tab) }
 
         if parent == nil || parent?.isPrivate != tab.isPrivate {
             tabs.append(tab)
@@ -299,9 +294,7 @@ class TabManager: NSObject {
             tabs.insert(tab, atIndex: insertIndex)
         }
 
-        for delegate in delegates {
-            delegate.get()?.tabManager(self, didAddTab: tab)
-        }
+        delegates.forEach { $0.get()?.tabManager(self, didAddTab: tab) }
 
         if !zombie {
             tab.createWebview()
@@ -345,57 +338,59 @@ class TabManager: NSObject {
     ///   is removed.
     private func removeTab(tab: Tab, flushToDisk: Bool, notify: Bool) {
         assert(NSThread.isMainThread())
-        // If the removed tab was selected, find the new tab to select.
-        if tab === selectedTab {
-            let viableTabs: [Tab] = tab.isPrivate ? privateTabs : normalTabs
-            if let index = viableTabs.indexOf(tab) {
-                if index + 1 < viableTabs.count {
-                    selectTab(viableTabs[index + 1])
-                } else if index - 1 >= 0 {
-                    selectTab(viableTabs[index - 1])
-                } else {
-                    assert(viableTabs.count == 1, "Removing last tab")
-                    selectTab(nil)
-                }
-            }
+
+        let oldSelectedTab = selectedTab
+
+        if notify {
+            delegates.forEach { $0.get()?.tabManager(self, willRemoveTab: tab) }
         }
+
+        // The index of the tab in its respective tab grouping. Used to figure out which tab is next
+        var tabIndex: Int = -1
+        if let oldTab = oldSelectedTab {
+            tabIndex = (tab.isPrivate ? privateTabs.indexOf(oldTab) : normalTabs.indexOf(oldTab)) ?? -1
+        }
+
 
         let prevCount = count
-        var removeIndex = -1
-        for i in 0..<count {
-            if tabs[i] === tab {
-                removeIndex = i
-                tabs.removeAtIndex(i)
-                break
+        if let removalIndex = tabs.indexOf({ $0 === tab }) {
+            tabs.removeAtIndex(removalIndex)
+        }
+
+        let viableTabs: [Tab] = tab.isPrivate ? privateTabs : normalTabs
+
+        //If the last item was deleted then select the last tab. Otherwise the _selectedIndex is already correct
+        if let oldTab = oldSelectedTab where tab !== oldTab {
+            _selectedIndex = tabs.indexOf(oldTab) ?? -1
+        } else {
+            if tabIndex == viableTabs.count {
+                tabIndex -= 1
+            }
+            if tabIndex < viableTabs.count && !viableTabs.isEmpty {
+                _selectedIndex = tabs.indexOf(viableTabs[tabIndex]) ?? -1
+            } else {
+                _selectedIndex = -1
             }
         }
-        if _selectedIndex > removeIndex && _selectedIndex > 0 {
-            _selectedIndex -= 1
-        }
-        assert(count == prevCount - 1, "Tab removed")
 
-        if tab != selectedTab {
-            _selectedIndex = selectedTab == nil ? -1 : tabs.indexOf(selectedTab!) ?? 0
-        }
+        assert(count == prevCount - 1, "Make sure the tab count was actually removed")
 
-        // There's still some time between this and the webView being destroyed.
-        // We don't want to pick up any stray events.
+        // There's still some time between this and the webView being destroyed. We don't want to pick up any stray events.
         tab.webView?.navigationDelegate = nil
 
         if notify {
-            for delegate in delegates {
-                delegate.get()?.tabManager(self, didRemoveTab: tab)
-            }
+            delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab) }
         }
 
-        // Make sure we never reach 0 normal tabs
-        let viableTabs: [Tab] = tab.isPrivate ? privateTabs : normalTabs
-        if viableTabs.count == 0 {
-            if !tab.isPrivate {
-                addTab()
-            } else {
-                selectTab(tabs.last)
-            }
+        if !tab.isPrivate && viableTabs.isEmpty {
+            addTab()
+        }
+
+        // If the removed tab was selected, find the new tab to select.
+        if selectedTab != nil {
+            selectTab(selectedTab, previous: oldSelectedTab)
+        } else {
+            selectTab(tabs.last, previous: oldSelectedTab)
         }
 
         if flushToDisk {
@@ -439,18 +434,17 @@ class TabManager: NSObject {
                 self.eraseUndoCache()
             })
         }
-        for delegate in delegates {
-            delegate.get()?.tabManagerDidRemoveAllTabs(self, toast: toast)
-        }
+
+        delegates.forEach { $0.get()?.tabManagerDidRemoveAllTabs(self, toast: toast) }
     }
     
     func undoCloseTabs() {
         guard let tempTabs = self.tempTabs where tempTabs.count ?? 0 > 0 else {
             return
         }
-        
         let tabsCopy = normalTabs
         restoreTabs(tempTabs)
+        self.isRestoring = true
         for tab in tempTabs {
             tab.showContent(true)
         }
@@ -458,6 +452,8 @@ class TabManager: NSObject {
             removeTabs(tabsCopy)
         }
         selectTab(tempTabs.first)
+        self.isRestoring = false
+        delegates.forEach { $0.get()?.tabManagerDidRestoreTabs(self) }
         self.tempTabs?.removeAll()
         tabs.first?.createWebview()
     }
