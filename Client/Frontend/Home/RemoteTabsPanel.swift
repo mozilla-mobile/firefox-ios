@@ -563,7 +563,7 @@ private class RemoteTabsTableViewController: UITableViewController {
 
             // Otherwise, fetch the tabs cloud if it's been more than 1 minute since last sync
             let lastSyncTime = self.profile.prefs.timestampForKey(PrefsKeys.KeyLastRemoteTabSyncTime)
-            if NSDate.now() - (lastSyncTime ?? 0) > OneMinuteInMilliseconds && !(self.refreshControl?.refreshing ?? false) {
+            if NSDate.now() > (lastSyncTime ?? 0) && NSDate.now() - (lastSyncTime ?? 0) > OneMinuteInMilliseconds && !(self.refreshControl?.refreshing ?? false) {
                 self.startRefreshing()
                 self.profile.getClientsAndTabs().uponQueue(dispatch_get_main_queue()) { result in
                     // We set the last sync time to now, regardless of whether the sync was successful, to avoid trying to sync over
