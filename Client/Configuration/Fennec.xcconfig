@@ -5,7 +5,7 @@
 MOZ_BUNDLE_DISPLAY_NAME = Fennec ($(USER))
 
 // Bundle Identifier
-MOZ_BUNDLE_ID = org.mozilla.ios.Fennec
+MOZ_BUNDLE_ID = org.huayu.ios.Fennec
 
 // Flag to indicate if we want to include the debug settings bundle or not
 INCLUDE_SETTINGS_BUNDLE = YES
