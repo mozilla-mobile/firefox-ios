@@ -632,6 +632,12 @@ class TabTrayController: UIViewController {
             self.toolbar.userInteractionEnabled = true
             if finished {
                 self.navigationController?.popViewControllerAnimated(true)
+
+                if request == nil && NewTabAccessors.getNewTabPage(self.profile.prefs) == .BlankPage {
+                    if let bvc = self.navigationController?.topViewController as? BrowserViewController {
+                        bvc.urlBar.tabLocationViewDidTapLocation(bvc.urlBar.locationView)
+                    }
+                }
             }
         })
     }
@@ -683,7 +689,10 @@ extension TabTrayController: TabManagerDelegate {
     func tabManager(tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?) {
     }
 
-    func tabManager(tabManager: TabManager, didCreateTab tab: Tab) {
+    func tabManager(tabManager: TabManager, willAddTab tab: Tab) {
+    }
+
+    func tabManager(tabManager: TabManager, willRemoveTab tab: Tab) {
     }
 
     func tabManager(tabManager: TabManager, didAddTab tab: Tab) {

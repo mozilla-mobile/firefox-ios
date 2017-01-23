@@ -6,18 +6,18 @@
 @testable import Storage
 import Foundation
 import WebKit
+import EarlGrey
 
 class BookmarksPanelTests: KIFTestCase {
     
     override func setUp() {
         super.setUp()
-        BrowserUtils.dismissFirstRunUI(tester())
-    }
-    
+		BrowserUtils.dismissFirstRunUI()
+	}
+	
     override func tearDown() {
         super.tearDown()
-        BrowserUtils.resetToAboutHome(tester())
-        BrowserUtils.clearPrivateData(tester: tester())
+		BrowserUtils.resetToAboutHome(tester())
     }
     
     func testBookmarkPanelBufferOnly() {
@@ -45,16 +45,19 @@ class BookmarksPanelTests: KIFTestCase {
 
         XCTAssertTrue(bookmarks.applyRecords(recordsA).value.isSuccess)
 
-        tester().tapViewWithAccessibilityLabel("Bookmarks")
-        tester().tapViewWithAccessibilityLabel("Desktop Bookmarks")
-        tester().tapViewWithAccessibilityLabel("Bookmarks Toolbar")
-        tester().waitForViewWithAccessibilityLabel("AAA")
-        tester().waitForViewWithAccessibilityLabel("Some Livemark")
-
+        EarlGrey().selectElementWithMatcher(grey_accessibilityLabel("Bookmarks")).performAction(grey_tap())
+        EarlGrey().selectElementWithMatcher(grey_accessibilityLabel("Desktop Bookmarks")).performAction(grey_tap())
+        EarlGrey().selectElementWithMatcher(grey_accessibilityLabel("Bookmarks Toolbar")).performAction(grey_tap())
+        EarlGrey().selectElementWithMatcher(grey_accessibilityLabel("AAA"))
+        .assertWithMatcher(grey_sufficientlyVisible())
+        EarlGrey().selectElementWithMatcher(grey_accessibilityLabel("Some Livemark"))
+            .assertWithMatcher(grey_sufficientlyVisible())
+        
         // When we tap the livemark, we load the siteURI.
-        tester().tapViewWithAccessibilityLabel("Some Livemark")
-
+        EarlGrey().selectElementWithMatcher(grey_accessibilityLabel("Some Livemark")).performAction(grey_tap())
+        
         // … so we show the truncated URL.
-        tester().waitForViewWithAccessibilityLabel("example.org/news")
+        EarlGrey().selectElementWithMatcher(grey_accessibilityLabel("example.org/news"))
+            .assertWithMatcher(grey_sufficientlyVisible())
     }
 }

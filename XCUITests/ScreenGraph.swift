@@ -50,7 +50,7 @@ extension ScreenGraph {
      * Method for creating a ScreenGraphNode in the graph. The node should be accompanied by a closure 
      * used to document the exits out of this node to other nodes.
      */
-    func createScene(name: String, file: String = #file, line: UInt = #line, builder: (ScreenGraphNode) -> ()){
+    func createScene(name: String, file: String = #file, line: UInt = #line, builder: (ScreenGraphNode) -> ()) {
         let scene = ScreenGraphNode(map: self, name: name, builder: builder)
         scene.file = file
         scene.line = line

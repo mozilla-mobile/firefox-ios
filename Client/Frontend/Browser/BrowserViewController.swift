@@ -138,6 +138,7 @@ class BrowserViewController: UIViewController {
 
         coordinator.animateAlongsideTransition({context in
             self.scrollController.updateMinimumZoom()
+            self.topTabsViewController?.scrollToCurrentTab(false, centerCell: false)
             if let popover = self.displayedPopoverController {
                 self.updateDisplayedPopoverProperties?()
                 self.presentViewController(popover, animated: true, completion: nil)
@@ -230,7 +231,6 @@ class BrowserViewController: UIViewController {
                     make.height.equalTo(TopTabsUX.TopTabsViewHeight)
                 }
                 self.topTabsViewController = topTabsViewController
-                tabManager.addNavigationDelegate(topTabsViewController)
             }
             topTabsContainer.snp_updateConstraints { make in
                 make.height.equalTo(TopTabsUX.TopTabsViewHeight)
@@ -1054,12 +1054,14 @@ class BrowserViewController: UIViewController {
 
         switchToPrivacyMode(isPrivate: isPrivate)
         tabManager.addTabAndSelect(request, isPrivate: isPrivate)
+        if url == nil && NewTabAccessors.getNewTabPage(profile.prefs) == .BlankPage {
+            urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
+        }
     }
 
-    func openBlankNewTabAndFocus(isPrivate isPrivate: Bool = false) {
+    func openBlankNewTab(isPrivate isPrivate: Bool = false) {
         popToBVC()
         openURLInNewTab(nil, isPrivate: isPrivate, isPrivileged: true)
-        urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
     }
 
     private func popToBVC() {
@@ -1217,10 +1219,10 @@ class BrowserViewController: UIViewController {
     }
 
     func newTab() {
-        openBlankNewTabAndFocus(isPrivate: false)
+        openBlankNewTab(isPrivate: false)
     }
     func newPrivateTab() {
-        openBlankNewTabAndFocus(isPrivate: true)
+        openBlankNewTab(isPrivate: true)
     }
 
     func closeTab() {
@@ -2032,6 +2034,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
 }
 
 extension BrowserViewController: TabManagerDelegate {
+
     func tabManager(tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?) {
         // Remove the old accessibilityLabel. Since this webview shouldn't be visible, it doesn't need it
         // and having multiple views with the same label confuses tests.
@@ -2046,7 +2049,6 @@ extension BrowserViewController: TabManagerDelegate {
 
         if let tab = selected, webView = tab.webView {
             updateURLBarDisplayURL(tab)
-
             if tab.isPrivate {
                 readerModeCache = MemoryReaderModeCache.sharedInstance
                 applyTheme(Theme.PrivateMode)
@@ -2125,7 +2127,7 @@ extension BrowserViewController: TabManagerDelegate {
         updateInContentHomePanel(selected?.url)
     }
 
-    func tabManager(tabManager: TabManager, didCreateTab tab: Tab) {
+    func tabManager(tabManager: TabManager, willAddTab tab: Tab) {
     }
 
     func tabManager(tabManager: TabManager, didAddTab tab: Tab) {
@@ -2135,6 +2137,9 @@ extension BrowserViewController: TabManagerDelegate {
         }
         tab.tabDelegate = self
         tab.appStateDelegate = self
+    }
+
+    func tabManager(tabManager: TabManager, willRemoveTab tab: Tab) {
     }
 
     func tabManager(tabManager: TabManager, didRemoveTab tab: Tab) {
@@ -3233,7 +3238,6 @@ extension BrowserViewController: TabTrayDelegate {
         self.addBookmark(tab.tabState)
     }
 
-
     func tabTrayDidAddToReadingList(tab: Tab) -> ReadingListClientRecord? {
         guard let url = tab.url?.absoluteString where url.characters.count > 0 else { return nil }
         return profile.readingList?.createRecordWithURL(url, title: tab.title ?? url, addedBy: UIDevice.currentDevice().name).successValue
@@ -3251,6 +3255,7 @@ extension BrowserViewController: Themeable {
         urlBar.applyTheme(themeName)
         toolbar?.applyTheme(themeName)
         readerModeBar?.applyTheme(themeName)
+
         topTabsViewController?.applyTheme(themeName)
 
         switch(themeName) {
@@ -3396,12 +3401,11 @@ extension BrowserViewController: TopTabsDelegate {
         self.urlBarDidPressTabs(urlBar)
     }
     
-    func topTabsDidPressNewTab() {
-        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        openBlankNewTabAndFocus(isPrivate: isPrivate)
+    func topTabsDidPressNewTab(isPrivate: Bool) {
+        openBlankNewTab(isPrivate: isPrivate)
     }
 
-    func topTabsDidPressPrivateModeButton(cachedTab: Tab?) {
+    func topTabsDidTogglePrivateMode() {
         guard let selectedTab = tabManager.selectedTab else {
             return
         }
@@ -3410,18 +3414,6 @@ extension BrowserViewController: TopTabsDelegate {
         if selectedTab.isPrivate {
             if profile.prefs.boolForKey("settings.closePrivateTabs") ?? false {
                 tabManager.removeAllPrivateTabsAndNotify(false)
-            }
-        }
-        
-        if let tab = cachedTab {
-            tabManager.selectTab(tab)
-        } else if selectedTab.isPrivate {
-            tabManager.selectTab(tabManager.normalTabs.last)
-        } else {
-            if let privateTab = tabManager.privateTabs.last {
-                tabManager.selectTab(privateTab)
-            } else {
-                openBlankNewTabAndFocus(isPrivate: true)
             }
         }
     }

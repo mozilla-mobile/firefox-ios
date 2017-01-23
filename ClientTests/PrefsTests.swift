@@ -9,10 +9,16 @@ import Shared
 import XCTest
 
 class PrefsTests: XCTestCase {
-    let prefs = NSUserDefaultsPrefs(prefix: "PrefsTests")
+    var prefs: NSUserDefaultsPrefs!
 
     override func setUp() {
+        super.setUp()
+        prefs = NSUserDefaultsPrefs(prefix: "PrefsTests")
+    }
+
+    override func tearDown() {
         prefs.clearAll()
+        super.tearDown()
     }
 
     func testClearPrefs() {
