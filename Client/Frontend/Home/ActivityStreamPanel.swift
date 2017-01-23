@@ -375,22 +375,16 @@ extension ActivityStreamPanel {
         let touchPoint = longPressGestureRecognizer.locationInView(self.view)
         guard let indexPath = tableView.indexPathForRowAtPoint(touchPoint) else { return }
 
-        var contextMenu: ActionOverlayTableViewController? = nil
-
         switch Section(indexPath.section) {
         case .Highlights:
-            contextMenu = contextMenuForHighlightCellWithIndexPath(indexPath)
+            presentContextMenuForHighlightCellWithIndexPath(indexPath)
         case .TopSites:
             let topSiteCell = self.tableView.cellForRowAtIndexPath(indexPath) as! ASHorizontalScrollCell
             let pointInTopSite = longPressGestureRecognizer.locationInView(topSiteCell.collectionView)
             guard let topSiteIndexPath = topSiteCell.collectionView.indexPathForItemAtPoint(pointInTopSite) else { return }
-            contextMenu = contextMenuForTopSiteCellWithIndexPath(topSiteIndexPath)
+            presentContextMenuForTopSiteCellWithIndexPath(topSiteIndexPath)
         case .HighlightIntro:
             break
-        }
-
-        if let contextMenuToShow = contextMenu {
-            presentContextMenu(contextMenuToShow)
         }
     }
 
@@ -400,34 +394,24 @@ extension ActivityStreamPanel {
         self.presentViewController(contextMenu, animated: true, completion: nil)
     }
 
-    func contextMenuForTopSiteCellWithIndexPath(indexPath: NSIndexPath) -> ActionOverlayTableViewController? {
+    func presentContextMenuForTopSiteCellWithIndexPath(indexPath: NSIndexPath) {
         let topsiteIndex = NSIndexPath(forRow: 0, inSection: Section.TopSites.rawValue)
-        guard let topSiteCell = self.tableView.cellForRowAtIndexPath(topsiteIndex) as? ASHorizontalScrollCell else { return nil }
-        guard let topSiteItemCell = topSiteCell.collectionView.cellForItemAtIndexPath(indexPath) as? TopSiteItemCell else { return nil }
+        guard let topSiteCell = self.tableView.cellForRowAtIndexPath(topsiteIndex) as? ASHorizontalScrollCell else { return }
+        guard let topSiteItemCell = topSiteCell.collectionView.cellForItemAtIndexPath(indexPath) as? TopSiteItemCell else { return }
         let siteImage = topSiteItemCell.imageView.image
         let siteBGColor = topSiteItemCell.contentView.backgroundColor
 
         let site = self.topSitesManager.content[indexPath.item]
-
-        if site.bookmarked == nil {
-            fetchBookmarkStatusThenPresentContextMenu(site, atIndex: indexPath.item, forSection: .TopSites, siteImage: siteImage, siteBGColor: siteBGColor)
-            return nil
-        }
-        return contextMenuForSite(site, atIndex: indexPath.item, forSection: .TopSites, siteImage: siteImage, siteBGColor: siteBGColor)
+        presentContextMenuForSite(site, atIndex: indexPath.item, forSection: .TopSites, siteImage: siteImage, siteBGColor: siteBGColor)
     }
 
-    func contextMenuForHighlightCellWithIndexPath(indexPath: NSIndexPath) -> ActionOverlayTableViewController? {
-        guard let highlightCell = tableView.cellForRowAtIndexPath(indexPath) as? AlternateSimpleHighlightCell else { return nil }
+    func presentContextMenuForHighlightCellWithIndexPath(indexPath: NSIndexPath) {
+        guard let highlightCell = tableView.cellForRowAtIndexPath(indexPath) as? AlternateSimpleHighlightCell else { return }
         let siteImage = highlightCell.siteImageView.image
         let siteBGColor = highlightCell.siteImageView.backgroundColor
 
         let site = highlights[indexPath.row]
-
-        if site.bookmarked == nil {
-            fetchBookmarkStatusThenPresentContextMenu(site, atIndex: indexPath.row, forSection: .Highlights, siteImage: siteImage, siteBGColor: siteBGColor)
-            return nil
-        }
-        return contextMenuForSite(site, atIndex: indexPath.row, forSection: .Highlights, siteImage: siteImage, siteBGColor: siteBGColor)
+        presentContextMenuForSite(site, atIndex: indexPath.row, forSection: .Highlights, siteImage: siteImage, siteBGColor: siteBGColor)
     }
 
     private func fetchBookmarkStatusThenPresentContextMenu(site: Site, atIndex index: Int, forSection section: Section, siteImage: UIImage?, siteBGColor: UIColor?) {
@@ -438,17 +422,19 @@ extension ActivityStreamPanel {
                     return
                 }
                 site.setBookmarked(isBookmarked)
-                if let contextMenuToShow = self.contextMenuForSite(site, atIndex: index, forSection: section, siteImage: siteImage, siteBGColor: siteBGColor, isBookmarked: isBookmarked) {
-                    self.presentContextMenu(contextMenuToShow)
-                }
+                self.presentContextMenuForSite(site, atIndex: index, forSection: section, siteImage: siteImage, siteBGColor: siteBGColor)
             }
         }
     }
 
 
-    func contextMenuForSite(site: Site, atIndex index: Int, forSection section: Section, siteImage: UIImage?, siteBGColor: UIColor?, isBookmarked: Bool = false) -> ActionOverlayTableViewController? {
+    func presentContextMenuForSite(site: Site, atIndex index: Int, forSection section: Section, siteImage: UIImage?, siteBGColor: UIColor?) {
+        guard let _ = site.bookmarked else {
+            fetchBookmarkStatusThenPresentContextMenu(site, atIndex: index, forSection: section, siteImage: siteImage, siteBGColor: siteBGColor)
+            return
+        }
         guard let siteURL = NSURL(string: site.url) else {
-            return nil
+            return
         }
 
         let pingSource: ASPingSource
@@ -523,7 +509,7 @@ extension ActivityStreamPanel {
             case .HighlightIntro: break
         }
 
-        return ActionOverlayTableViewController(site: site, actions: actions, siteImage: siteImage, siteBGColor: siteBGColor)
+        presentContextMenu(ActionOverlayTableViewController(site: site, actions: actions, siteImage: siteImage, siteBGColor: siteBGColor))
     }
 
     func selectItemAtIndex(index: Int, inSection section: Section) {
