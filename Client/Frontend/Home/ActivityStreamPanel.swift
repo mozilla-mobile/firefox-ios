@@ -427,14 +427,22 @@ extension ActivityStreamPanel {
         }
     }
 
-
     func presentContextMenuForSite(site: Site, atIndex index: Int, forSection section: Section, siteImage: UIImage?, siteBGColor: UIColor?) {
         guard let _ = site.bookmarked else {
             fetchBookmarkStatusThenPresentContextMenu(site, atIndex: index, forSection: section, siteImage: siteImage, siteBGColor: siteBGColor)
             return
         }
-        guard let siteURL = NSURL(string: site.url) else {
+        guard let contextMenu = contextMenuForSite(site, atIndex: index, forSection: section, siteImage: siteImage, siteBGColor: siteBGColor) else {
             return
+        }
+
+        self.presentContextMenu(contextMenu)
+    }
+
+    func contextMenuForSite(site: Site, atIndex index: Int, forSection section: Section, siteImage: UIImage?, siteBGColor: UIColor?) -> ActionOverlayTableViewController? {
+
+        guard let siteURL = NSURL(string: site.url) else {
+            return nil
         }
 
         let pingSource: ASPingSource
@@ -509,7 +517,7 @@ extension ActivityStreamPanel {
             case .HighlightIntro: break
         }
 
-        presentContextMenu(ActionOverlayTableViewController(site: site, actions: actions, siteImage: siteImage, siteBGColor: siteBGColor))
+        return ActionOverlayTableViewController(site: site, actions: actions, siteImage: siteImage, siteBGColor: siteBGColor)
     }
 
     func selectItemAtIndex(index: Int, inSection section: Section) {
