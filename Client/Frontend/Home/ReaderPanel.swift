@@ -182,6 +182,10 @@ class ReadingListPanel: UITableViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate? = nil
     var profile: Profile!
 
+    private lazy var longPressRecognizer: UILongPressGestureRecognizer = {
+        return UILongPressGestureRecognizer(target: self, action: #selector(ReadingListPanel.longPress(_:)))
+    }()
+
     private lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverview()
 
     private var records: [ReadingListClientRecord]?
@@ -199,6 +203,7 @@ class ReadingListPanel: UITableViewController, HomePanel {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        tableView.addGestureRecognizer(longPressRecognizer)
         tableView.accessibilityIdentifier = "ReadingTable"
         tableView.estimatedRowHeight = ReadingListTableViewCellUX.RowHeight
         tableView.rowHeight = UITableViewAutomaticDimension
@@ -359,6 +364,16 @@ class ReadingListPanel: UITableViewController, HomePanel {
         return overlayView
     }
 
+
+    @objc private func longPress(longPressGestureRecognizer: UILongPressGestureRecognizer) {
+        guard longPressGestureRecognizer.state == UIGestureRecognizerState.Began else { return }
+        let touchPoint = longPressGestureRecognizer.locationInView(tableView)
+        guard let indexPath = tableView.indexPathForRowAtPoint(touchPoint) else { return }
+
+        guard let contextMenu = createContextMenu(indexPath) else { return }
+        self.presentViewController(contextMenu, animated: true, completion: nil)
+    }
+
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -436,5 +451,28 @@ class ReadingListPanel: UITableViewController, HomePanel {
             }
         }
     }
+}
 
+extension ReadingListPanel: HomePanelContextMenu {
+    func getSiteDetails(indexPath: NSIndexPath) -> Site? {
+        guard let record = records?[indexPath.row] else { return nil }
+        return Site(url: record.url, title: record.title)
+    }
+
+    func getImageDetails(indexPath: NSIndexPath) -> (siteImage: UIImage?, siteBGColor: UIColor?) {
+        guard let record = records?[indexPath.row] else { return (nil, nil) }
+        guard let recordURL = NSURL(string: record.url) else { return (nil, nil) }
+        return (FaviconFetcher.getDefaultFavicon(recordURL), FaviconFetcher.getDefaultColor(recordURL))
+    }
+
+    func getContextMenuActions(site: Site, indexPath: NSIndexPath) -> [ActionOverlayTableViewAction]? {
+        guard var actions = getDefaultContextMenuActions(site, homePanelDelegate: homePanelDelegate) else { return nil }
+
+        let removeAction: ActionOverlayTableViewAction = ActionOverlayTableViewAction(title: Strings.RemoveContextMenuTitle, iconString: "action_remove", handler: { action in
+            self.deleteItem(atIndex: indexPath)
+        })
+
+        actions.append(removeAction)
+        return actions
+    }
 }
