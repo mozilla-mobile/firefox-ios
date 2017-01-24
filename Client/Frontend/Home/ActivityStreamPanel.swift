@@ -218,7 +218,13 @@ extension ActivityStreamPanel {
         homePanelDelegate?.homePanel(self, didSelectURL: url, visitType: visitType)
     }
 
+    override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        self.longPressRecognizer.isEnabled = false
+        return indexPath
+    }
+
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
         selectItemAtIndex(indexPath.item, inSection: Section(indexPath.section))
     }
 }
@@ -323,6 +329,7 @@ extension ActivityStreamPanel {
                 self.topSitesManager.currentTraits = self.view.traitCollection
                 self.topSitesManager.content = newSites.count > ASPanelUX.topSitesCacheSize ? Array(newSites[0..<ASPanelUX.topSitesCacheSize]) : newSites
                 self.topSitesManager.urlPressedHandler = { [unowned self] url, indexPath in
+                    self.longPressRecognizer.isEnabled = false
                     self.telemetry.reportEvent(.Click, source: .TopSites, position: indexPath.item)
                     self.showSiteWithURLHandler(url as URL)
                 }
