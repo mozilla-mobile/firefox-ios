@@ -51,6 +51,7 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
         view.backgroundColor = UIColor.clearColor().colorWithAlphaComponent(0.4)
         view.addGestureRecognizer(tapRecognizer)
         view.addSubview(tableView)
+        view.accessibilityIdentifier = "Action Overlay"
 
         tableView.delegate = self
         tableView.dataSource = self
@@ -73,7 +74,7 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
     }
 
     private func setHeightConstraint(make: ConstraintMaker) {
-        make.height.lessThanOrEqualTo(UIScreen.mainScreen().bounds.size.height).priorityHigh()
+        make.height.lessThanOrEqualTo(view.bounds.height)
         make.height.equalTo(ActionOverlayTableViewUX.HeaderHeight + CGFloat(actions.count) * ActionOverlayTableViewUX.RowHeight).priorityLow()
     }
 
