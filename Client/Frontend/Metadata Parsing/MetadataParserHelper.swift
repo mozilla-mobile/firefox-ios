@@ -6,14 +6,12 @@ import Foundation
 import Shared
 import XCGLogger
 import WebKit
-import WebMetadataKit
 
 private let log = Logger.browserLogger
 
 class MetadataParserHelper: TabHelper {
     private weak var tab: Tab?
     private let profile: Profile
-    private var parser: WebMetadataParser?
 
     class func name() -> String {
         return "MetadataParserHelper"
@@ -22,8 +20,9 @@ class MetadataParserHelper: TabHelper {
     required init(tab: Tab, profile: Profile) {
         self.tab = tab
         self.profile = profile
-        self.parser = WebMetadataParser()
-        self.parser?.addUserScriptsIntoWebView(tab.webView!)
+
+        tab.injectUserScriptWith("page-metadata-parser")
+        tab.injectUserScriptWith("MetadataHelper")
     }
 
     func scriptMessageHandlerName() -> String? {

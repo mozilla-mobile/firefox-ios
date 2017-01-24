@@ -252,6 +252,9 @@
 		3B546EC01D95ECAE00BDBE36 /* ActivityStreamTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B546EBF1D95ECAE00BDBE36 /* ActivityStreamTest.swift */; };
 		3B6889C51D66950E002AC85E /* UIImageColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6889C41D66950E002AC85E /* UIImageColors.swift */; };
 		3B6F40181DC7849C00656CC6 /* ActivityStreamTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6F40171DC7849C00656CC6 /* ActivityStreamTests.swift */; };
+		3B8163A41E37DE7A005008D6 /* MetadataHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 3B8163A11E37DE7A005008D6 /* MetadataHelper.js */; };
+		3B8163A51E37DE7A005008D6 /* MetadataParserHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B8163A21E37DE7A005008D6 /* MetadataParserHelper.swift */; };
+		3B8163A61E37DE7A005008D6 /* page-metadata-parser.js in Resources */ = {isa = PBXBuildFile; fileRef = 3B8163A31E37DE7A005008D6 /* page-metadata-parser.js */; };
 		3B8351FF1E26F03900818081 /* TopTabsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B8351FE1E26F03900818081 /* TopTabsTests.swift */; };
 		3BA9A0231D2C208C00BD418C /* Fuzi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BA9A0221D2C208C00BD418C /* Fuzi.framework */; };
 		3BA9A0311D2C2C0400BD418C /* Fuzi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BA9A0221D2C208C00BD418C /* Fuzi.framework */; };
@@ -596,7 +599,6 @@
 		E6231C051B90A472005ABB0D /* libxml2.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E6231C041B90A472005ABB0D /* libxml2.2.tbd */; };
 		E6231C071B90A712005ABB0D /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E6231C001B90A44F005ABB0D /* libz.tbd */; };
 		E6231C081B90A71E005ABB0D /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E6231C001B90A44F005ABB0D /* libz.tbd */; };
-		E62A56EC1DBE8D32004703EA /* WebMetadataKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E62A56DC1DBE88C3004703EA /* WebMetadataKit.framework */; };
 		E62CFB3D1C89EFF700C01324 /* FxA.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 28CE83D01A1D1D5100576538 /* FxA.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E6327A641BF6438E008D12E0 /* DebugSettingsBundleOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6327A631BF6438E008D12E0 /* DebugSettingsBundleOptions.swift */; };
 		E633E2DA1C21EAF8001FFF6C /* LoginDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E633E2D91C21EAF8001FFF6C /* LoginDetailViewController.swift */; };
@@ -684,7 +686,6 @@
 		E6F965421B2F25110034B023 /* NSMutableAttributedStringExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F965411B2F25110034B023 /* NSMutableAttributedStringExtensionsTests.swift */; };
 		E6F9659C1B2F5F800034B023 /* effective_tld_names.dat in Resources */ = {isa = PBXBuildFile; fileRef = E6F9659B1B2F5F800034B023 /* effective_tld_names.dat */; };
 		E6F9659E1B2F63A20034B023 /* NSStringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F9659D1B2F63A20034B023 /* NSStringExtensions.swift */; };
-		E6FF6AC21D8705110070C294 /* MetadataParserHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FF6AC11D8705110070C294 /* MetadataParserHelper.swift */; };
 		E6FF6AC61D8708F70070C294 /* MetadataParser.js in Resources */ = {isa = PBXBuildFile; fileRef = E6FF6AC51D8708F70070C294 /* MetadataParser.js */; };
 		E6FF6ACA1D873CFF0070C294 /* PageMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FF6AC91D873CFF0070C294 /* PageMetadata.swift */; };
 		F35B8D2B1D6380EA008E3D61 /* SessionRestore.html in Resources */ = {isa = PBXBuildFile; fileRef = F35B8D2A1D6380EA008E3D61 /* SessionRestore.html */; };
@@ -1431,6 +1432,9 @@
 		3B546EBF1D95ECAE00BDBE36 /* ActivityStreamTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityStreamTest.swift; sourceTree = "<group>"; };
 		3B6889C41D66950E002AC85E /* UIImageColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIImageColors.swift; path = ThirdParty/UIImageColors.swift; sourceTree = "<group>"; };
 		3B6F40171DC7849C00656CC6 /* ActivityStreamTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityStreamTests.swift; sourceTree = "<group>"; };
+		3B8163A11E37DE7A005008D6 /* MetadataHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = MetadataHelper.js; path = "Metadata Parsing/MetadataHelper.js"; sourceTree = "<group>"; };
+		3B8163A21E37DE7A005008D6 /* MetadataParserHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MetadataParserHelper.swift; path = "Metadata Parsing/MetadataParserHelper.swift"; sourceTree = "<group>"; };
+		3B8163A31E37DE7A005008D6 /* page-metadata-parser.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = "page-metadata-parser.js"; path = "Metadata Parsing/page-metadata-parser.js"; sourceTree = "<group>"; };
 		3B8351FE1E26F03900818081 /* TopTabsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopTabsTests.swift; sourceTree = "<group>"; };
 		3BA9A0221D2C208C00BD418C /* Fuzi.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Fuzi.framework; path = Carthage/Build/iOS/Fuzi.framework; sourceTree = "<group>"; };
 		3BB50E101D6274CD004B33DF /* ActivityStreamTopSitesCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityStreamTopSitesCell.swift; sourceTree = "<group>"; };
@@ -1737,7 +1741,6 @@
 		E6231C001B90A44F005ABB0D /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		E6231C021B90A466005ABB0D /* libstdc++.6.0.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.6.0.9.tbd"; path = "usr/lib/libstdc++.6.0.9.tbd"; sourceTree = SDKROOT; };
 		E6231C041B90A472005ABB0D /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
-		E62A56DC1DBE88C3004703EA /* WebMetadataKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebMetadataKit.framework; path = Carthage/Build/iOS/WebMetadataKit.framework; sourceTree = "<group>"; };
 		E6327A631BF6438E008D12E0 /* DebugSettingsBundleOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugSettingsBundleOptions.swift; sourceTree = "<group>"; };
 		E633E2D91C21EAF8001FFF6C /* LoginDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginDetailViewController.swift; path = ../Settings/LoginDetailViewController.swift; sourceTree = "<group>"; };
 		E633E3791C2204BE001FFF6C /* LoginManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginManagerTests.swift; sourceTree = "<group>"; };
@@ -1918,7 +1921,6 @@
 		E6F9659B1B2F5F800034B023 /* effective_tld_names.dat */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = effective_tld_names.dat; path = ../effective_tld_names.dat; sourceTree = "<group>"; };
 		E6F9659D1B2F63A20034B023 /* NSStringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSStringExtensions.swift; sourceTree = "<group>"; };
 		E6FCC43C1C40565200DF6113 /* FirefoxBeta.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = FirefoxBeta.xcconfig; path = Configuration/FirefoxBeta.xcconfig; sourceTree = "<group>"; };
-		E6FF6AC11D8705110070C294 /* MetadataParserHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetadataParserHelper.swift; sourceTree = "<group>"; };
 		E6FF6AC51D8708F70070C294 /* MetadataParser.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = MetadataParser.js; sourceTree = "<group>"; };
 		E6FF6AC91D873CFF0070C294 /* PageMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageMetadata.swift; sourceTree = "<group>"; };
 		F35B8D2A1D6380EA008E3D61 /* SessionRestore.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = SessionRestore.html; sourceTree = "<group>"; };
@@ -1978,7 +1980,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E62A56EC1DBE8D32004703EA /* WebMetadataKit.framework in Frameworks */,
 				7B8A47F61D01D3B400C07734 /* PassKit.framework in Frameworks */,
 				E6B6DCA21CD3D370009CF713 /* CrashReporter.framework in Frameworks */,
 				A862970A1C9EE1020000B594 /* libPhoneNumber.framework in Frameworks */,
@@ -2656,6 +2657,16 @@
 			path = StoragePerfTests;
 			sourceTree = "<group>";
 		};
+		3BA22FA91E37CD0F00275993 /* Metadata Parsing */ = {
+			isa = PBXGroup;
+			children = (
+				3B8163A11E37DE7A005008D6 /* MetadataHelper.js */,
+				3B8163A21E37DE7A005008D6 /* MetadataParserHelper.swift */,
+				3B8163A31E37DE7A005008D6 /* page-metadata-parser.js */,
+			);
+			name = "Metadata Parsing";
+			sourceTree = "<group>";
+		};
 		3BF4B8DA1D38493300493393 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -2721,7 +2732,6 @@
 				D39FA16B1A83E17800EE869C /* CoreGraphics.framework */,
 				0B8E0FF31A932BD500161DC3 /* ImageIO.framework */,
 				D36998881AD70A0A00650C6C /* IOKit.framework */,
-				E62A56DC1DBE88C3004703EA /* WebMetadataKit.framework */,
 				E6619A9C1DA693AB0063EAD6 /* OnyxClient.framework */,
 				3BA9A0221D2C208C00BD418C /* Fuzi.framework */,
 				7B8A47F51D01D3B400C07734 /* PassKit.framework */,
@@ -2968,7 +2978,6 @@
 				D3B6923E1B9F9A58004B87A4 /* FindInPageHelper.swift */,
 				A93067E71D0FE18E00C49C6E /* NightModeHelper.swift */,
 				39DD030C1CD53E1900BC09B3 /* HomePageHelper.swift */,
-				E6FF6AC11D8705110070C294 /* MetadataParserHelper.swift */,
 				A9072B7F1D07B34100459960 /* NoImageModeHelper.swift */,
 				D3C3696D1CC6B78800348A61 /* LocalRequestHelper.swift */,
 				0BB5B30A1AC0AD1F0052877D /* LoginsHelper.swift */,
@@ -3680,6 +3689,7 @@
 				E49943F31AE6879C00BF9DE4 /* Intro */,
 				E63ED8DF1BFD254E0097D08E /* Login Management */,
 				7BC7B4571C903A6A0046E9D2 /* Menu */,
+				3BA22FA91E37CD0F00275993 /* Metadata Parsing */,
 				E664B4581CD7ECBB0045A6A4 /* Notifications */,
 				F84B21F51A0910F600AAB793 /* Reader */,
 				2F44FC551A9E83E200FD20CC /* Settings */,
@@ -4337,7 +4347,7 @@
 					};
 					D39FA15E1A83E0EC00EE869C = {
 						CreatedOnToolsVersion = 6.1.1;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0800;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -4791,6 +4801,7 @@
 				D37524871C6E8B5A00A5F6C2 /* topdomains.txt in Resources */,
 				E4B7B7621A793CF20022C5E0 /* CharisSILBI.ttf in Resources */,
 				7B4980A81CE363ED0017547C /* Settings.xcassets in Resources */,
+				3B8163A61E37DE7A005008D6 /* page-metadata-parser.js in Resources */,
 				E4A961361AC052DE0069AD6F /* ReadabilityTabHelper.js in Resources */,
 				E4B7B7861A793CF20022C5E0 /* FiraSans-UltraLight.ttf in Resources */,
 				2F44FB2C1A9D5D8500FD20CC /* Home.xcassets in Resources */,
@@ -4804,6 +4815,7 @@
 				E4CD9E9A1A68980A00318571 /* ReaderMode.js in Resources */,
 				E4424B201AC6EBE100F44C38 /* ReaderSettings.xcassets in Resources */,
 				D30684F11C84F12A002D8D82 /* SearchPlugins in Resources */,
+				3B8163A41E37DE7A005008D6 /* MetadataHelper.js in Resources */,
 				E47536FC1C85415F0022CC69 /* PrintHelper.js in Resources */,
 				74821FFE1DB6D3AC00EEEA72 /* MailSchemes.plist in Resources */,
 				E6FF6AC61D8708F70070C294 /* MetadataParser.js in Resources */,
@@ -4880,7 +4892,6 @@
 				"$(SRCROOT)/Carthage/Build/iOS/SwiftKeychainWrapper.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/libPhoneNumber.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Fuzi.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/WebMetadataKit.framework",
 			);
 			name = "Copy Carthage Dependencies";
 			outputPaths = (
@@ -5416,7 +5427,6 @@
 				7BC68CC81CC152B70043562A /* MenuItemView.swift in Sources */,
 				E4252A0E1AF01AE40028C684 /* Swizzling.m in Sources */,
 				D3972BF41C22412B00035B87 /* TitleActivityItemProvider.swift in Sources */,
-				E6FF6AC21D8705110070C294 /* MetadataParserHelper.swift in Sources */,
 				D38A1BEE1A9FA2CA00F6A386 /* SiteTableViewController.swift in Sources */,
 				7BA0601B1C0F4DE200DFADB6 /* TabPeekViewController.swift in Sources */,
 				E40AFC671DD1199F00DA5651 /* LaunchArguments.swift in Sources */,
@@ -5499,6 +5509,7 @@
 				E40FAB0C1A7ABB77009CB80D /* WebServer.swift in Sources */,
 				59A68D66379CFA85C4EAF00B /* TwoLineCell.swift in Sources */,
 				E49943F51AE6879C00BF9DE4 /* IntroViewController.swift in Sources */,
+				3B8163A51E37DE7A005008D6 /* MetadataParserHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
