@@ -173,6 +173,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             sendCorePing()
         }
 
+        let settings = UIUserNotificationSettings()
+        application.registerUserNotificationSettings(settings)
+        application.registerForRemoteNotifications()
+
         log.debug("Done with setting up the application.")
         return true
     }
@@ -244,6 +248,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         log.debug("Done with applicationDidFinishLaunching.")
 
         return shouldPerformAdditionalDelegateHandling
+    }
+
+    func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
+        let APNsToken = deviceToken.hexEncodedString
+        let configuration = StagePushConfiguration()
+        let pushClient = PushClient(endpointURL: configuration.endpointURL)
+        pushClient.register(APNsToken).upon { result in
+            guard result.isSuccess else {
+                print("fail: \(result.failureValue!)")
+                return
+            }
+
+            let registration = result.successValue!
+            print("endpoint: \(registration.endpoint)")
+            print("secret: \(registration.secret)")
+            print("uaid: \(registration.uaid)")
+            print("channelID: \(registration.channelID)")
+        }
+    }
+
+    func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
+        print("failed to register. \(error.description)")
     }
 
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {

@@ -406,6 +406,10 @@
 		D32A350E1D6530D80066DAE9 /* FxADevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32A350D1D6530D80066DAE9 /* FxADevice.swift */; };
 		D32CACED1AE04DA1000658EB /* TestSwiftData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32CACEC1AE04DA1000658EB /* TestSwiftData.swift */; };
 		D331DFCA1CB6E9EE009B5DA2 /* OldStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D331DFC91CB6E9EE009B5DA2 /* OldStrings.swift */; };
+		D336BA0B1D6E5C8000D90E13 /* PushConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D336BA0A1D6E5C8000D90E13 /* PushConfiguration.swift */; };
+		D336BA2C1D6E637C00D90E13 /* PushClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D336BA2B1D6E637C00D90E13 /* PushClient.swift */; };
+		D336BA301D6E645A00D90E13 /* PushRegistration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D336BA2F1D6E645A00D90E13 /* PushRegistration.swift */; };
+		D336BA321D6E6A8200D90E13 /* PushManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D336BA311D6E6A8200D90E13 /* PushManager.swift */; };
 		D339C2831AD354B400C087BD /* Loader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D339C2821AD354B400C087BD /* Loader.swift */; };
 		D33B5B7C1AF1AFC100F4DDE6 /* SearchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33B5B7B1AF1AFC100F4DDE6 /* SearchTests.swift */; };
 		D343DCD91C445EE600D7EEE8 /* FindInPageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D343DCD81C445EE600D7EEE8 /* FindInPageTests.swift */; };
@@ -1566,6 +1570,10 @@
 		D32A350D1D6530D80066DAE9 /* FxADevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxADevice.swift; sourceTree = "<group>"; };
 		D32CACEC1AE04DA1000658EB /* TestSwiftData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSwiftData.swift; sourceTree = "<group>"; };
 		D331DFC91CB6E9EE009B5DA2 /* OldStrings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OldStrings.swift; sourceTree = "<group>"; };
+		D336BA0A1D6E5C8000D90E13 /* PushConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PushConfiguration.swift; path = Push/PushConfiguration.swift; sourceTree = "<group>"; };
+		D336BA2B1D6E637C00D90E13 /* PushClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PushClient.swift; path = Push/PushClient.swift; sourceTree = "<group>"; };
+		D336BA2F1D6E645A00D90E13 /* PushRegistration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PushRegistration.swift; path = Push/PushRegistration.swift; sourceTree = "<group>"; };
+		D336BA311D6E6A8200D90E13 /* PushManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PushManager.swift; path = Push/PushManager.swift; sourceTree = "<group>"; };
 		D339C2821AD354B400C087BD /* Loader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Loader.swift; sourceTree = "<group>"; };
 		D33B5B7B1AF1AFC100F4DDE6 /* SearchTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTests.swift; sourceTree = "<group>"; };
 		D343DCD81C445EE600D7EEE8 /* FindInPageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindInPageTests.swift; sourceTree = "<group>"; };
@@ -2834,6 +2842,17 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		D336B9F51D6E5A8B00D90E13 /* Push */ = {
+			isa = PBXGroup;
+			children = (
+				D336BA2B1D6E637C00D90E13 /* PushClient.swift */,
+				D336BA0A1D6E5C8000D90E13 /* PushConfiguration.swift */,
+				D336BA2F1D6E645A00D90E13 /* PushRegistration.swift */,
+				D336BA311D6E6A8200D90E13 /* PushManager.swift */,
+			);
+			name = Push;
+			sourceTree = "<group>";
+		};
 		D34DC84C1A16C40C00D49B7B /* Providers */ = {
 			isa = PBXGroup;
 			children = (
@@ -3511,6 +3530,7 @@
 				7B604FC11C496005006EEEC3 /* Frameworks */,
 				F84B21BF1A090F8100AAB793 /* Products */,
 				D34DC84C1A16C40C00D49B7B /* Providers */,
+				D336B9F51D6E5A8B00D90E13 /* Push */,
 				E4D567191ADECE2700F1EFE7 /* ReadingList */,
 				E4D567281ADECE2800F1EFE7 /* ReadingListTests */,
 				E4E0BB141AFBC9E4008D6260 /* Shared */,
@@ -4387,6 +4407,9 @@
 								enabled = 1;
 							};
 							com.apple.Keychain = {
+								enabled = 1;
+							};
+							com.apple.Push = {
 								enabled = 1;
 							};
 						};
@@ -5312,6 +5335,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E68E39BE1C46F42000B85F42 /* AppSettingsTableViewController.swift in Sources */,
+				D336BA0B1D6E5C8000D90E13 /* PushConfiguration.swift in Sources */,
 				D39ABDFE1CC6F35F003A319E /* CorePing.swift in Sources */,
 				E640E86A1C73A47C00C5F072 /* PasscodeViews.swift in Sources */,
 				E692E3371C46E86A009D1240 /* AppSettingsOptions.swift in Sources */,
@@ -5351,6 +5375,7 @@
 				E68E7ADE1CAC208A00FDCA76 /* RemovePasscodeViewController.swift in Sources */,
 				E46C51C31B41ADD800EB349F /* Try.m in Sources */,
 				74C027451B2A348C001B1E88 /* SessionData.swift in Sources */,
+				D336BA2C1D6E637C00D90E13 /* PushClient.swift in Sources */,
 				D314E7F71A37B98700426A76 /* TabToolbar.swift in Sources */,
 				E60D03181D511398002FE3F6 /* SyncStatusResolver.swift in Sources */,
 				7B31E6851CBC09DC00A57805 /* MenuPresentationAnimator.swift in Sources */,
@@ -5421,6 +5446,7 @@
 				7BA0601B1C0F4DE200DFADB6 /* TabPeekViewController.swift in Sources */,
 				E40AFC671DD1199F00DA5651 /* LaunchArguments.swift in Sources */,
 				D3994A4A1C22813200E2A03C /* FindInPageActivity.swift in Sources */,
+				D336BA321D6E6A8200D90E13 /* PushManager.swift in Sources */,
 				E6D8D5E71B569D70009E5A58 /* BrowserTrayAnimators.swift in Sources */,
 				E63ED7D81BFCD9990097D08E /* LoginTableViewCell.swift in Sources */,
 				3BB50E201D627539004B33DF /* ActivityStreamPanel.swift in Sources */,
@@ -5433,6 +5459,7 @@
 				2F44FCCB1A9E972E00FD20CC /* SearchEnginePicker.swift in Sources */,
 				E68E7ACB1CAC1D4500FDCA76 /* PagingPasscodeViewController.swift in Sources */,
 				D34DC8531A16C40C00D49B7B /* Profile.swift in Sources */,
+				D336BA301D6E645A00D90E13 /* PushRegistration.swift in Sources */,
 				392ED6B71D06E85E009D9B62 /* NewTabChoiceViewController.swift in Sources */,
 				E4B3348C1BC01D8F004E2BFF /* AdjustIntegration.swift in Sources */,
 				7FB63CC91C08B27E0047F9A4 /* DynamicFontHelper.swift in Sources */,
