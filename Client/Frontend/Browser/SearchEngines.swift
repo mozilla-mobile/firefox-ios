@@ -223,10 +223,10 @@ class SearchEngines {
     class func getUnorderedBundledEngines() -> [OpenSearchEngine] {
         let pluginBasePath: NSString = (NSBundle.mainBundle().resourcePath! as NSString).stringByAppendingPathComponent("SearchPlugins")
         let languageIdentifier = languageIdentifierForSearchEngines()
-        let fallbackDirectory: NSString = pluginBasePath.stringByAppendingPathComponent("en")
+        let fallbackDirectory: NSString = pluginBasePath.stringByAppendingPathComponent("en-US")
 
         var directory: String?
-        for path in directoriesForLanguageIdentifier(languageIdentifier, basePath: pluginBasePath, fallbackIdentifier: "en") {
+        for path in directoriesForLanguageIdentifier(languageIdentifier, basePath: pluginBasePath, fallbackIdentifier: "en-US") {
             if NSFileManager.defaultManager().fileExistsAtPath(path) {
                 directory = path
                 break

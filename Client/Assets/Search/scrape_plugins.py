@@ -41,7 +41,7 @@ def main():
     os.makedirs("SearchPlugins")
 
     # Import en-US engines from the core repo.
-    downloadLocale("en", EnScraper())
+    downloadLocale("en-US", EnScraper())
 
     # Import engines from the l10n repos.
     response = requests.get(L10N_LOCALE_LIST_URL)
@@ -97,7 +97,7 @@ def downloadLocale(locale, scraper):
 
 def verifyEngines():
     print("verifying engines...")
-    enDir = os.path.join("SearchPlugins", "en")
+    enDir = os.path.join("SearchPlugins", "en-US")
     for locale in os.listdir("SearchPlugins"):
         if locale.startswith("."): continue
         localeDir = os.path.join("SearchPlugins", locale)
