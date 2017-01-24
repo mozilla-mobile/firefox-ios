@@ -189,6 +189,41 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         let highlights = history.getHighlights().value.successValue!
         XCTAssertEqual(highlights.count, 0)
     }
+
+    /*
+     * Verify that we return the most recent highlight per domain
+     */
+    func testMostRecentUniqueDomainReturnedInHighlights() {
+        let db = BrowserDB(filename: "browser.db", files: files)
+        let prefs = MockProfilePrefs()
+        let history = SQLiteHistory(db: db, prefs: prefs)
+
+        let startTime = NSDate.nowMicroseconds()
+        let oneHourAgo = startTime - oneHourInMicroseconds
+        let twoHoursAgo = startTime - 2 * oneHourInMicroseconds
+
+        /*
+         * Site A: 1 visit, 1 hour ago = highlight
+         * Site C: 2 visits, 2 hours ago = highlight with the same domain
+         */
+        let siteA = Site(url: "http://www.foo.com/", title: "A")
+        let siteC = Site(url: "http://m.foo.com/", title: "C")
+
+        let siteVisitA1 = SiteVisit(site: siteA, date: oneHourAgo, type: .Link)
+
+        let siteVisitC1 = SiteVisit(site: siteC, date: twoHoursAgo, type: .Link)
+        let siteVisitC2 = SiteVisit(site: siteC, date: twoHoursAgo + 1000, type: .Link)
+
+        history.clearHistory().succeeded()
+        history.addLocalVisit(siteVisitA1).succeeded()
+
+        history.addLocalVisit(siteVisitC1).succeeded()
+        history.addLocalVisit(siteVisitC2).succeeded()
+
+        let highlights = history.getHighlights().value.successValue!
+        XCTAssertEqual(highlights.count, 1)
+        XCTAssertEqual(highlights[0]!.title, "A")
+    }
 }
 
 class TestSQLiteHistoryRecommendationsPerf: XCTestCase {
