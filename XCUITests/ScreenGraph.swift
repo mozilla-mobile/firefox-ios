@@ -19,16 +19,16 @@ import Foundation
 import GameplayKit
 import XCTest
 
-typealias Edge = (XCTestCase, String, UInt) -> ()
-typealias SceneBuilder = (ScreenGraphNode) -> ()
-typealias NodeVisitor = (String) -> ()
+typealias Edge = (XCTestCase, String, UInt) -> Void
+typealias SceneBuilder = (ScreenGraphNode) -> Void
+typealias NodeVisitor = (String) -> Void
 
 /**
  * ScreenGraph
  * This is the main interface to building a graph of screens/app states and how to navigate between them.
  * The ScreenGraph will be used as a map to navigate the test agent around the app.
  */
-public class ScreenGraph {
+open class ScreenGraph {
     let app: XCUIApplication
     var initialSceneName: String?
 
@@ -50,7 +50,7 @@ extension ScreenGraph {
      * Method for creating a ScreenGraphNode in the graph. The node should be accompanied by a closure 
      * used to document the exits out of this node to other nodes.
      */
-    func createScene(name: String, file: String = #file, line: UInt = #line, builder: (ScreenGraphNode) -> ()) {
+    func createScene(_ name: String, file: String = #file, line: UInt = #line, builder: @escaping (ScreenGraphNode) -> Void) {
         let scene = ScreenGraphNode(map: self, name: name, builder: builder)
         scene.file = file
         scene.line = line
@@ -64,7 +64,7 @@ extension ScreenGraph {
      * Create a new navigator object. Navigator objects are the main way of getting around the app.
      * Typically, you'll do this in `TestCase.setUp()`
      */
-    func navigator(xcTest: XCTestCase, startingAt: String? = nil, file: String = #file, line: UInt = #line) -> Navigator {
+    func navigator(_ xcTest: XCTestCase, startingAt: String? = nil, file: String = #file, line: UInt = #line) -> Navigator {
         buildGkGraph()
         var current: ScreenGraphNode?
         if let name = startingAt ?? initialSceneName {
@@ -72,13 +72,13 @@ extension ScreenGraph {
         }
 
         if current == nil {
-            xcTest.recordFailureWithDescription("The app's initial state couldn't be established.",
+            xcTest.recordFailure(withDescription: "The app's initial state couldn't be established.",
                 inFile: file, atLine: line, expected: false)
         }
         return Navigator(self, xcTest: xcTest, initialScene: current!)
     }
 
-    private func buildGkGraph() {
+    fileprivate func buildGkGraph() {
         if isReady {
             return
         }
@@ -87,7 +87,7 @@ extension ScreenGraph {
 
         // Construct all the GKGraphNodes, and add them to the GKGraph.
         let scenes = namedScenes.values
-        gkGraph.addNodes(scenes.map { $0.gkNode })
+        gkGraph.add(scenes.map { $0.gkNode })
 
         // Now, use the scene builders to collect edge actions and destinations.
         scenes.forEach { scene in
@@ -96,12 +96,12 @@ extension ScreenGraph {
 
         scenes.forEach { scene in
             let gkNodes = scene.edges.keys.flatMap { self.namedScenes[$0]?.gkNode } as [GKGraphNode]
-            scene.gkNode.addConnectionsToNodes(gkNodes, bidirectional: false)
+            scene.gkNode.addConnections(to: gkNodes, bidirectional: false)
         }
     }
 }
 
-typealias Gesture = () -> ()
+typealias Gesture = () -> Void
 
 /**
  * The ScreenGraph is made up of nodes. It is not possible to init these directly, only by creating 
@@ -112,18 +112,18 @@ typealias Gesture = () -> ()
  */
 class ScreenGraphNode {
     let name: String
-    private let builder: SceneBuilder
-    private let gkNode: GKGraphNode
-    private var edges: [String: Edge] = [:]
+    fileprivate let builder: SceneBuilder
+    fileprivate let gkNode: GKGraphNode
+    fileprivate var edges: [String: Edge] = [:]
 
-    private weak var map: ScreenGraph?
+    fileprivate weak var map: ScreenGraph?
 
     // Iff this node has a backAction, this store temporarily stores 
     // the node we were at before we got to this one. This becomes the node we return to when the backAction is 
     // invoked.
-    private weak var returnNode: ScreenGraphNode?
+    fileprivate weak var returnNode: ScreenGraphNode?
 
-    private var hasBack: Bool {
+    fileprivate var hasBack: Bool {
         return backAction != nil
     }
 
@@ -140,20 +140,20 @@ class ScreenGraphNode {
      */
     var dismissOnUse: Bool = false
 
-    var existsWhen: XCUIElement? = nil
+    var existsWhen: XCUIElement?
 
-    private var line: UInt!
+    fileprivate var line: UInt!
 
-    private var file: String!
+    fileprivate var file: String!
 
-    private init(map: ScreenGraph, name: String, builder: SceneBuilder) {
+    fileprivate init(map: ScreenGraph, name: String, builder: @escaping SceneBuilder) {
         self.map = map
         self.name = name
         self.gkNode = GKGraphNode()
         self.builder = builder
     }
 
-    private func addEdge(dest: String, by edge: Edge) {
+    fileprivate func addEdge(_ dest: String, by edge: @escaping Edge) {
         edges[dest] = edge
         // by this time, we should've added all nodes in to the gkGraph.
 
@@ -167,14 +167,14 @@ private let hittablePredicate = NSPredicate(format: "hittable == true")
 private let noopNodeVisitor: NodeVisitor = { _ in }
 
 extension ScreenGraphNode {
-    private func waitForElement(element: XCUIElement, withTest xcTest: XCTestCase, handler: XCWaitCompletionHandler) {
+    fileprivate func waitForElement(_ element: XCUIElement, withTest xcTest: XCTestCase, handler: @escaping XCWaitCompletionHandler) {
         if element.exists {
             return
         }
         // TODO I'm not satisfied that this is working as expected.
-        xcTest.expectationForPredicate(existsPredicate,
-                                       evaluatedWithObject: element, handler: nil)
-        xcTest.waitForExpectationsWithTimeout(5, handler: handler)
+        xcTest.expectation(for: existsPredicate,
+                                       evaluatedWith: element, handler: nil)
+        xcTest.waitForExpectations(timeout: 5, handler: handler)
     }
 }
 
@@ -186,12 +186,12 @@ extension ScreenGraphNode {
      * @param withElement – optional, but if provided will attempt to verify it is there before performing the action.
      * @param to – the destination node.
      */
-    func gesture(withElement element: XCUIElement? = nil, to nodeName: String, file declFile: String = #file, line declLine: UInt = #line, g: () -> ()) {
+    func gesture(withElement element: XCUIElement? = nil, to nodeName: String, file declFile: String = #file, line declLine: UInt = #line, g: @escaping () -> Void) {
         addEdge(nodeName) { xcTest, file, line in
             if let el = element {
                 self.waitForElement(el, withTest: xcTest) { _ in
-                    xcTest.recordFailureWithDescription("Cannot find \(el)", inFile: declFile, atLine: declLine, expected: false)
-                    xcTest.recordFailureWithDescription("Cannot get from \(self.name) to \(nodeName). See \(declFile)", inFile: file, atLine: line, expected: false)
+                    xcTest.recordFailure(withDescription: "Cannot find \(el)", inFile: declFile, atLine: declLine, expected: false)
+                    xcTest.recordFailure(withDescription: "Cannot get from \(self.name) to \(nodeName). See \(declFile)", inFile: file, atLine: line, expected: false)
                 }
             }
             g()
@@ -210,44 +210,44 @@ extension ScreenGraphNode {
      * @param element - the element to tap
      * @param to – the destination node.
      */
-    func tap(element: XCUIElement, to nodeName: String, file: String = #file, line: UInt = #line) {
+    func tap(_ element: XCUIElement, to nodeName: String, file: String = #file, line: UInt = #line) {
         self.gesture(withElement: element, to: nodeName, file: file, line: line) {
             // TODO check if this element is enabled
             element.tap()
         }
     }
 
-    func doubleTap(element: XCUIElement, to nodeName: String, file: String = #file, line: UInt = #line) {
+    func doubleTap(_ element: XCUIElement, to nodeName: String, file: String = #file, line: UInt = #line) {
         self.gesture(withElement: element, to: nodeName, file: file, line: line) {
             element.doubleTap()
         }
     }
 
-    func typeText(text: String, into element: XCUIElement, to nodeName: String, file: String = #file, line: UInt = #line) {
+    func typeText(_ text: String, into element: XCUIElement, to nodeName: String, file: String = #file, line: UInt = #line) {
         self.gesture(withElement: element, to: nodeName, file: file, line: line) {
             element.typeText(text)
         }
     }
 
-    func swipeLeft(element: XCUIElement, to nodeName: String, file: String = #file, line: UInt = #line) {
+    func swipeLeft(_ element: XCUIElement, to nodeName: String, file: String = #file, line: UInt = #line) {
         self.gesture(withElement: element, to: nodeName, file: file, line: line) {
             element.swipeLeft()
         }
     }
 
-    func swipeRight(element: XCUIElement, to nodeName: String, file: String = #file, line: UInt = #line) {
+    func swipeRight(_ element: XCUIElement, to nodeName: String, file: String = #file, line: UInt = #line) {
         self.gesture(withElement: element, to: nodeName, file: file, line: line) {
             element.swipeRight()
         }
     }
 
-    func swipeUp(element: XCUIElement, to nodeName: String, file: String = #file, line: UInt = #line) {
+    func swipeUp(_ element: XCUIElement, to nodeName: String, file: String = #file, line: UInt = #line) {
         self.gesture(withElement: element, to: nodeName, file: file, line: line) {
             element.swipeUp()
         }
     }
 
-    func swipeDown(element: XCUIElement, to nodeName: String, file: String = #file, line: UInt = #line) {
+    func swipeDown(_ element: XCUIElement, to nodeName: String, file: String = #file, line: UInt = #line) {
         self.gesture(withElement: element, to: nodeName, file: file, line: line) {
             element.swipeDown()
         }
@@ -260,12 +260,12 @@ extension ScreenGraphNode {
  * navigator, you can re-sync app with navigator my telling it which node it is now at, using the `nowAt` method.
  */
 class Navigator {
-    private let map: ScreenGraph
-    private var currentScene: ScreenGraphNode
-    private var returnToRecentScene: ScreenGraphNode
-    private let xcTest: XCTestCase
+    fileprivate let map: ScreenGraph
+    fileprivate var currentScene: ScreenGraphNode
+    fileprivate var returnToRecentScene: ScreenGraphNode
+    fileprivate let xcTest: XCTestCase
 
-    private init(_ map: ScreenGraph, xcTest: XCTestCase, initialScene: ScreenGraphNode) {
+    fileprivate init(_ map: ScreenGraph, xcTest: XCTestCase, initialScene: ScreenGraphNode) {
         self.map = map
         self.xcTest = xcTest
         self.currentScene = initialScene
@@ -275,7 +275,7 @@ class Navigator {
     /**
      * Move the application to the named node.
      */
-    func goto(nodeName: String, file: String = #file, line: UInt = #line) {
+    func goto(_ nodeName: String, file: String = #file, line: UInt = #line) {
         goto(nodeName, file: file, line: line, visitWith: noopNodeVisitor)
     }
 
@@ -283,16 +283,16 @@ class Navigator {
      * Move the application to the named node, wth an optional node visitor closure, which is called each time the
      * node changes.
      */
-    func goto(nodeName: String, file: String = #file, line: UInt = #line, visitWith nodeVisitor: NodeVisitor) {
+    func goto(_ nodeName: String, file: String = #file, line: UInt = #line, visitWith nodeVisitor: NodeVisitor) {
         let gkSrc = currentScene.gkNode
         guard let gkDest = map.namedScenes[nodeName]?.gkNode else {
-            xcTest.recordFailureWithDescription("Cannot route to \(nodeName), because it doesn't exist", inFile: file, atLine: line, expected: false)
+            xcTest.recordFailure(withDescription: "Cannot route to \(nodeName), because it doesn't exist", inFile: file, atLine: line, expected: false)
             return
         }
 
-        var gkPath = map.gkGraph.findPathFromNode(gkSrc, toNode: gkDest)
+        var gkPath = map.gkGraph.findPath(from: gkSrc, to: gkDest)
         guard gkPath.count > 0 else {
-            xcTest.recordFailureWithDescription("Cannot route from \(currentScene.name) to \(nodeName)", inFile: file, atLine: line, expected: false)
+            xcTest.recordFailure(withDescription: "Cannot route from \(currentScene.name) to \(nodeName)", inFile: file, atLine: line, expected: false)
             return
         }
 
@@ -311,7 +311,7 @@ class Navigator {
             if let testElement = nextScene.existsWhen {
                 nextScene.waitForElement(testElement, withTest: xcTest) { _ in
                     // TODO report error in the correct place in the graph.
-                    self.xcTest.recordFailureWithDescription("Cannot find \(testElement) in \(nextScene.name)",
+                    self.xcTest.recordFailure(withDescription: "Cannot find \(testElement) in \(nextScene.name)",
                         inFile: nextScene.file,
                         atLine: nextScene.line,
                         expected: false)
@@ -321,7 +321,7 @@ class Navigator {
             if nextScene.hasBack {
                 if nextScene.returnNode == nil {
                     nextScene.returnNode = returnToRecentScene
-                    nextScene.gkNode.addConnectionsToNodes([ returnToRecentScene.gkNode ], bidirectional: false)
+                    nextScene.gkNode.addConnections(to: [ returnToRecentScene.gkNode ], bidirectional: false)
                     nextScene.gesture(to: returnToRecentScene.name, g: nextScene.backAction!)
                 }
             }
@@ -329,7 +329,7 @@ class Navigator {
             if currentScene.hasBack {
                 if nextScene.name == currentScene.returnNode?.name {
                     currentScene.returnNode = nil
-                    currentScene.gkNode.removeConnectionsToNodes([ nextScene.gkNode ], bidirectional: false)
+                    currentScene.gkNode.removeConnections(to: [ nextScene.gkNode ], bidirectional: false)
                 }
             }
             nodeVisitor(currentScene.name)
@@ -343,9 +343,9 @@ class Navigator {
      * or you should be using `scene.dismissOnUse = true`.
      * Also useful if you're using XCUIElement taps directly to navigate from one node to another.
      */
-    func nowAt(nodeName: String, file: String = #file, line: UInt = #line) {
+    func nowAt(_ nodeName: String, file: String = #file, line: UInt = #line) {
         guard let newScene = map.namedScenes[nodeName] else {
-            xcTest.recordFailureWithDescription("Cannot force to unknown \(nodeName). Currently at \(currentScene.name)", inFile: file, atLine: line, expected: false)
+            xcTest.recordFailure(withDescription: "Cannot force to unknown \(nodeName). Currently at \(currentScene.name)", inFile: file, atLine: line, expected: false)
             return
         }
         currentScene = newScene
@@ -354,7 +354,7 @@ class Navigator {
     /**
      * Visit the named nodes, calling the NodeVisitor the first time it is encountered.
      */
-    func visitNodes(nodes: [String], file: String = #file, line: UInt = #line, f: NodeVisitor) {
+    func visitNodes(_ nodes: [String], file: String = #file, line: UInt = #line, f: NodeVisitor) {
         var visitedNodes = Set<String>()
         let desiredNodes = Set<String>(nodes)
         nodes.forEach { node in
@@ -375,7 +375,7 @@ class Navigator {
      * 
      * Some nodes may not be immediately available, depending on the state of the app.
      */
-    func visitAll(file: String = #file, line: UInt = #line, f: NodeVisitor) {
+    func visitAll(_ file: String = #file, line: UInt = #line, f: NodeVisitor) {
         let nodes: [String] = self.map.namedScenes.keys.map { $0 } // keys can't be coerced into a [String]
         self.visitNodes(nodes, file: file, line: line, f: f)
     }
@@ -384,7 +384,7 @@ class Navigator {
      * Move the app back to its initial state.
      * This may not be possible.
      */
-    func revert(file: String = #file, line: UInt = #line) {
+    func revert(_ file: String = #file, line: UInt = #line) {
         if let initial = self.map.initialSceneName {
             self.goto(initial, file: file, line: line)
         }

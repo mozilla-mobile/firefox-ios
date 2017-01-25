@@ -38,9 +38,9 @@ class CertTests: XCTestCase {
         XCTAssert(certStore.containsCertificate(cert1, forOrigin: origin1))
     }
 
-    private func getCertificate(file: String) -> SecCertificateRef {
-        let path = NSBundle(forClass: self.dynamicType).pathForResource(file, ofType: "pem")
-        let data = NSData(contentsOfFile: path!)
-        return SecCertificateCreateWithData(nil, data!)!
+    fileprivate func getCertificate(_ file: String) -> SecCertificate {
+        let path = Bundle(for: type(of: self)).path(forResource: file, ofType: "pem")
+        let data = try? Data(contentsOf: URL(fileURLWithPath: path!))
+        return SecCertificateCreateWithData(nil, data! as CFData)!
     }
 }

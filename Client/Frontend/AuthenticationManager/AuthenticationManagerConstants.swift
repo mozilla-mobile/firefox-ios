@@ -9,12 +9,12 @@ import Shared
 extension PasscodeInterval {
     var settingTitle: String {
         switch self {
-        case .Immediately:      return AuthenticationStrings.immediately
-        case .OneMinute:        return AuthenticationStrings.oneMinute
-        case .FiveMinutes:      return AuthenticationStrings.fiveMinutes
-        case .TenMinutes:       return AuthenticationStrings.tenMinutes
-        case .FifteenMinutes:   return AuthenticationStrings.fifteenMinutes
-        case .OneHour:          return AuthenticationStrings.oneHour
+        case .immediately:      return AuthenticationStrings.immediately
+        case .oneMinute:        return AuthenticationStrings.oneMinute
+        case .fiveMinutes:      return AuthenticationStrings.fiveMinutes
+        case .tenMinutes:       return AuthenticationStrings.tenMinutes
+        case .fifteenMinutes:   return AuthenticationStrings.fifteenMinutes
+        case .oneHour:          return AuthenticationStrings.oneHour
         }
     }
 }
@@ -80,14 +80,14 @@ struct AuthenticationStrings {
 
     static let requirePasscodeTouchReason =
         NSLocalizedString("touchid.require.passcode.reason.label",
-                          value: "Use your fingerprint to access configuring your required passcode interval.",
                           tableName: "AuthenticationManager",
+                          value: "Use your fingerprint to access configuring your required passcode interval.",
                           comment: "Touch ID prompt subtitle when accessing the require passcode setting")
 
     static let disableTouchReason =
         NSLocalizedString("touchid.disable.reason.label",
-                          value: "Use your fingerprint to disable Touch ID.",
                           tableName: "AuthenticationManager",
+                          value: "Use your fingerprint to disable Touch ID.",
                           comment: "Touch ID prompt subtitle when disabling Touch ID")
 
     static let wrongPasscodeError =

@@ -55,7 +55,7 @@ class DiskImageStoreTests: XCTestCase {
     }
 
     private func makeImageWithColor(color: UIColor) -> UIImage {
-        let rect = CGRectMake(0, 0, 1, 1)
+        let rect = CGRect(x: 0, y: 0, width: 1, height: 1)
         UIGraphicsBeginImageContext(rect.size)
         let context = UIGraphicsGetCurrentContext()
         CGContextSetFillColorWithColor(context, color.CGColor)
@@ -66,24 +66,24 @@ class DiskImageStoreTests: XCTestCase {
     }
 
     private func getImage(key: String) -> UIImage? {
-        let expectation = expectationWithDescription("Get succeeded")
+        let expectation = self.expectation(description: "Get succeeded")
         var image: UIImage?
         store.get(key).upon {
             image = $0.successValue
             expectation.fulfill()
         }
-        waitForExpectationsWithTimeout(10, handler: nil)
+        waitForExpectations(timeout: 10, handler: nil)
         return image
     }
 
     private func putImage(key: String, image: UIImage) -> Bool {
-        let expectation = expectationWithDescription("Put succeeded")
+        let expectation = self.expectation(description: "Put succeeded")
         var success = false
         store.put(key, image: image).upon {
             success = $0.isSuccess
             expectation.fulfill()
         }
-        waitForExpectationsWithTimeout(10, handler: nil)
+        waitForExpectations(timeout: 10, handler: nil)
         return success
     }
 

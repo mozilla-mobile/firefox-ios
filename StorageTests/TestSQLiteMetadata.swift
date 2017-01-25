@@ -17,7 +17,7 @@ class TestSQLiteMetadata: XCTestCase {
     override func setUp() {
         super.setUp()
         self.db = BrowserDB(filename: "foo.db", files: self.files)
-        XCTAssertTrue(db.createOrUpdate(BrowserTable()) == .Success)
+        XCTAssertTrue(db.createOrUpdate(BrowserTable()) == .success)
         
         self.metadata = SQLiteMetadata(db: db)
     }
@@ -31,7 +31,7 @@ class TestSQLiteMetadata: XCTestCase {
         let site = "http://test.com"
         let page = PageMetadata(id: nil, siteURL: site, mediaURL: "http://image.com",
                                 title: "Test", description: "Test Description", type: nil, providerName: nil)
-        self.metadata.storeMetadata(page, forPageURL: site.asURL!, expireAt: NSDate.now() + 3000).succeeded()
+        self.metadata.storeMetadata(page, forPageURL: site.asURL!, expireAt: Date.now() + 3000).succeeded()
         let results = metadataFromDB(self.db).value.successValue!
         XCTAssertEqual(results.count, 1)
         let metadata = results[0]!
@@ -49,7 +49,7 @@ class TestSQLiteMetadata: XCTestCase {
         let metadataA2 = PageMetadata(id: nil, siteURL: siteA, mediaURL: "http://image.com",
                                       title: "Second Visit", description: "A new description", type: nil, providerName: nil)
 
-        self.metadata.storeMetadata(metadataA1, forPageURL: siteA.asURL!, expireAt: NSDate.now() + 3000).succeeded()
+        self.metadata.storeMetadata(metadataA1, forPageURL: siteA.asURL!, expireAt: Date.now() + 3000).succeeded()
 
         let initialResults = metadataFromDB(self.db).value.successValue!
         XCTAssertEqual(initialResults.count, 1)
@@ -60,8 +60,8 @@ class TestSQLiteMetadata: XCTestCase {
         XCTAssertEqual(initialA.description, "")
         XCTAssertNil(initialA.mediaURL)
         
-        self.metadata.storeMetadata(metadataB, forPageURL: siteB.asURL!, expireAt: NSDate.now() + 3000).succeeded()
-        self.metadata.storeMetadata(metadataA2, forPageURL: siteA.asURL!, expireAt: NSDate.now() + 3000).succeeded()
+        self.metadata.storeMetadata(metadataB, forPageURL: siteB.asURL!, expireAt: Date.now() + 3000).succeeded()
+        self.metadata.storeMetadata(metadataA2, forPageURL: siteA.asURL!, expireAt: Date.now() + 3000).succeeded()
         
         let results = metadataFromDB(self.db).value.successValue!
 
@@ -80,7 +80,7 @@ class TestSQLiteMetadata: XCTestCase {
     }
 
     func testExpirationPurging() {
-        let baseTime = NSDate.now()
+        let baseTime = Date.now()
         let siteA = "http://test.com/site/A"
         let metadataA = PageMetadata(id: nil, siteURL: siteA, mediaURL: nil,
                                      title: "Test", description: "Test Description", type: nil, providerName: nil)
@@ -93,16 +93,16 @@ class TestSQLiteMetadata: XCTestCase {
     }
 }
 
-private func metadataFromDB(db: BrowserDB) -> Deferred<Maybe<Cursor<PageMetadata>>> {
+private func metadataFromDB(_ db: BrowserDB) -> Deferred<Maybe<Cursor<PageMetadata>>> {
     let sql = "SELECT * FROM page_metadata"
     return db.runQuery(sql, args: nil, factory: pageMetadataFactory)
 }
 
-private func removeAllMetadata(db: BrowserDB) -> Success {
+private func removeAllMetadata(_ db: BrowserDB) -> Success {
     return db.run("DELETE FROM \(TablePageMetadata)")
 }
 
-private func pageMetadataFactory(row: SDRow) -> PageMetadata {
+private func pageMetadataFactory(_ row: SDRow) -> PageMetadata {
     let id = row["id"] as! Int
     let siteURL = row["site_url"] as! String
     let mediaURL = row["media_url"] as? String

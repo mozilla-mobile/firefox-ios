@@ -6,7 +6,7 @@ import Foundation
 import WebKit
 
 class SecurityTests: KIFTestCase {
-    private var webRoot: String!
+    fileprivate var webRoot: String!
 
     override func setUp() {
         BrowserUtils.dismissFirstRunUI(tester())
@@ -17,9 +17,9 @@ class SecurityTests: KIFTestCase {
 
     override func beforeEach() {
         let testURL = "\(webRoot)/localhostLoad.html"
-        tester().tapViewWithAccessibilityIdentifier("url")
-        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(testURL)\n")
-        tester().waitForViewWithAccessibilityLabel("Web content") as! WKWebView
+        tester().tapView(withAccessibilityIdentifier: "url")
+        tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "\(testURL)\n")
+        tester().waitForView(withAccessibilityLabel: "Web content") as! WKWebView
         tester().waitForWebViewElementWithAccessibilityLabel("Session exploit")
     }
 
@@ -27,11 +27,11 @@ class SecurityTests: KIFTestCase {
     /// in the current tab. Make sure nothing happens.
     func testSessionExploit() {
         tester().tapWebViewElementWithAccessibilityLabel("Session exploit")
-        tester().waitForTimeInterval(1)
+        tester().wait(forTimeInterval: 1)
 
         // Make sure the URL doesn't change.
-        let webView = tester().waitForViewWithAccessibilityLabel("Web content") as! WKWebView
-        XCTAssertEqual(webView.URL!.path, "/localhostLoad.html")
+        let webView = tester().waitForView(withAccessibilityLabel: "Web content") as! WKWebView
+        XCTAssertEqual(webView.url!.path, "/localhostLoad.html")
 
         // Also make sure the XSS alert doesn't appear.
         XCTAssertFalse(tester().viewExistsWithLabel("Local page loaded"))
@@ -41,12 +41,12 @@ class SecurityTests: KIFTestCase {
     /// in a new tab via window.open(). Make sure nothing happens.
     func testErrorExploit() {
         // We should only have one tab open.
-        tester().waitForTappableViewWithAccessibilityLabel("Show Tabs", value: "1", traits: UIAccessibilityTraitButton)
+        tester().waitForTappableView(withAccessibilityLabel: "Show Tabs", value: "1", traits: UIAccessibilityTraitButton)
 
         tester().tapWebViewElementWithAccessibilityLabel("Error exploit")
 
         // Make sure a new tab wasn't opened.
-        tester().waitForTappableViewWithAccessibilityLabel("Show Tabs", value: "1", traits: UIAccessibilityTraitButton)
+        tester().waitForTappableView(withAccessibilityLabel: "Show Tabs", value: "1", traits: UIAccessibilityTraitButton)
     }
 
     /// Tap the New tab exploit button, which tries to piggyback off of an error page
@@ -54,11 +54,11 @@ class SecurityTests: KIFTestCase {
     /// but we shouldn't be able to load session restore.
     func testWindowExploit() {
         tester().tapWebViewElementWithAccessibilityLabel("New tab exploit")
-        tester().waitForTimeInterval(1)
-        let webView = tester().waitForViewWithAccessibilityLabel("Web content") as! WKWebView
+        tester().wait(forTimeInterval: 1)
+        let webView = tester().waitForView(withAccessibilityLabel: "Web content") as! WKWebView
 
         // Make sure the URL doesn't change.
-        XCTAssertEqual(webView.URL!.path, "/errors/error.html")
+        XCTAssertEqual(webView.url!.path, "/errors/error.html")
 
         // Also make sure the XSS alert doesn't appear.
         XCTAssertFalse(tester().viewExistsWithLabel("Local page loaded"))
@@ -71,7 +71,7 @@ class SecurityTests: KIFTestCase {
         tester().tapWebViewElementWithAccessibilityLabel("URL spoof")
 
         // Wait for the window to open.
-        tester().waitForTappableViewWithAccessibilityLabel("Show Tabs", value: "2", traits: UIAccessibilityTraitButton)
+        tester().waitForTappableView(withAccessibilityLabel: "Show Tabs", value: "2", traits: UIAccessibilityTraitButton)
         tester().waitForAnimationsToFinish()
 
         // Make sure the URL bar doesn't show the URL since it hasn't loaded.
@@ -79,8 +79,8 @@ class SecurityTests: KIFTestCase {
 
         // Since the newly opened tab doesn't have a URL/title we can't find its accessibility
         // element to close it in teardown. Workaround: load another page first.
-        tester().tapViewWithAccessibilityIdentifier("url")
-        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(webRoot)\n")
+        tester().tapView(withAccessibilityIdentifier: "url")
+        tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "\(webRoot)\n")
     }
 
     override func tearDown() {

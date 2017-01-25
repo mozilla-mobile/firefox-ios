@@ -9,48 +9,48 @@ import Storage
 
 @objc
 protocol LoginTableViewCellDelegate: class {
-    func didSelectOpenAndFillForCell(cell: LoginTableViewCell)
-    func shouldReturnAfterEditingDescription(cell: LoginTableViewCell) -> Bool
+    func didSelectOpenAndFillForCell(_ cell: LoginTableViewCell)
+    func shouldReturnAfterEditingDescription(_ cell: LoginTableViewCell) -> Bool
 }
 
 private struct LoginTableViewCellUX {
-    static let highlightedLabelFont = UIFont.systemFontOfSize(12)
+    static let highlightedLabelFont = UIFont.systemFont(ofSize: 12)
     static let highlightedLabelTextColor = UIConstants.SystemBlueColor
     static let highlightedLabelEditingTextColor = UIConstants.TableViewHeaderTextColor
 
-    static let descriptionLabelFont = UIFont.systemFontOfSize(16)
-    static let descriptionLabelTextColor = UIColor.blackColor()
+    static let descriptionLabelFont = UIFont.systemFont(ofSize: 16)
+    static let descriptionLabelTextColor = UIColor.black
 
     static let HorizontalMargin: CGFloat = 14
     static let IconImageSize: CGFloat = 34
 
     static let indentWidth: CGFloat = 44
-    static let IndentAnimationDuration: NSTimeInterval = 0.2
+    static let IndentAnimationDuration: TimeInterval = 0.2
 
     static let editingDescriptionIndent: CGFloat = IconImageSize + HorizontalMargin
 }
 
 enum LoginTableViewCellStyle {
-    case IconAndBothLabels
-    case NoIconAndBothLabels
-    case IconAndDescriptionLabel
+    case iconAndBothLabels
+    case noIconAndBothLabels
+    case iconAndDescriptionLabel
 }
 
 class LoginTableViewCell: UITableViewCell {
 
-    private let labelContainer = UIView()
+    fileprivate let labelContainer = UIView()
 
-    weak var delegate: LoginTableViewCellDelegate? = nil
+    weak var delegate: LoginTableViewCellDelegate?
 
     lazy var descriptionLabel: UITextField = {
         let label = UITextField()
         label.font = LoginTableViewCellUX.descriptionLabelFont
         label.textColor = LoginTableViewCellUX.descriptionLabelTextColor
-        label.textAlignment = .Left
-        label.backgroundColor = UIColor.whiteColor()
-        label.userInteractionEnabled = false
-        label.autocapitalizationType = .None
-        label.autocorrectionType = .No
+        label.textAlignment = .left
+        label.backgroundColor = UIColor.white
+        label.isUserInteractionEnabled = false
+        label.autocapitalizationType = .none
+        label.autocorrectionType = .no
         label.accessibilityElementsHidden = true
         label.adjustsFontSizeToFitWidth = false
         label.delegate = self
@@ -60,34 +60,34 @@ class LoginTableViewCell: UITableViewCell {
     // Exposing this label as internal/public causes the Xcode 7.2.1 compiler optimizer to
     // produce a EX_BAD_ACCESS error when dequeuing the cell. For now, this label is made private
     // and the text property is exposed using a get/set property below.
-    private lazy var highlightedLabel: UILabel = {
+    fileprivate lazy var highlightedLabel: UILabel = {
         let label = UILabel()
         label.font = LoginTableViewCellUX.highlightedLabelFont
         label.textColor = LoginTableViewCellUX.highlightedLabelTextColor
-        label.textAlignment = .Left
-        label.backgroundColor = UIColor.whiteColor()
+        label.textAlignment = .left
+        label.backgroundColor = UIColor.white
         label.numberOfLines = 1
         return label
     }()
 
-    private lazy var iconImageView: UIImageView = {
+    fileprivate lazy var iconImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.backgroundColor = UIColor.whiteColor()
-        imageView.contentMode = .ScaleAspectFit
+        imageView.backgroundColor = UIColor.white
+        imageView.contentMode = .scaleAspectFit
         return imageView
     }()
 
-    private var showingIndent: Bool = false
+    fileprivate var showingIndent: Bool = false
 
-    private var customIndentView = UIView()
+    fileprivate var customIndentView = UIView()
 
-    private var customCheckmarkIcon = UIImageView(image: UIImage(named: "loginUnselected"))
+    fileprivate var customCheckmarkIcon = UIImageView(image: UIImage(named: "loginUnselected"))
 
     /// Override the default accessibility label since it won't include the description by default
     /// since it's a UITextField acting as a label.
     override var accessibilityLabel: String? {
         get {
-            if descriptionLabel.secureTextEntry {
+            if descriptionLabel.isSecureTextEntry {
                 return highlightedLabel.text ?? ""
             } else {
                 return "\(highlightedLabel.text ?? ""), \(descriptionLabel.text ?? "")"
@@ -98,7 +98,7 @@ class LoginTableViewCell: UITableViewCell {
         }
     }
 
-    var style: LoginTableViewCellStyle = .IconAndBothLabels {
+    var style: LoginTableViewCellStyle = .iconAndBothLabels {
         didSet {
             if style != oldValue {
                 configureLayoutForStyle(style)
@@ -115,19 +115,19 @@ class LoginTableViewCell: UITableViewCell {
             NSFontAttributeName: LoginTableViewCellUX.descriptionLabelFont
         ]
 
-        return descriptionText.sizeWithAttributes(attributes)
+        return descriptionText.size(attributes: attributes)
     }
 
     var displayDescriptionAsPassword: Bool = false {
         didSet {
-            descriptionLabel.secureTextEntry = displayDescriptionAsPassword
+            descriptionLabel.isSecureTextEntry = displayDescriptionAsPassword
         }
     }
 
     var editingDescription: Bool = false {
         didSet {
             if editingDescription != oldValue {
-                descriptionLabel.userInteractionEnabled = editingDescription
+                descriptionLabel.isUserInteractionEnabled = editingDescription
 
                 highlightedLabel.textColor = editingDescription ?
                     LoginTableViewCellUX.highlightedLabelEditingTextColor : LoginTableViewCellUX.highlightedLabelTextColor
@@ -151,10 +151,10 @@ class LoginTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         indentationWidth = 0
-        selectionStyle = .None
+        selectionStyle = .none
 
-        contentView.backgroundColor = UIColor.whiteColor()
-        labelContainer.backgroundColor = UIColor.whiteColor()
+        contentView.backgroundColor = UIColor.white
+        labelContainer.backgroundColor = UIColor.white
 
         labelContainer.addSubview(highlightedLabel)
         labelContainer.addSubview(descriptionLabel)
@@ -175,10 +175,10 @@ class LoginTableViewCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         delegate = nil
-        descriptionLabel.secureTextEntry = false
-        descriptionLabel.keyboardType = .Default
-        descriptionLabel.returnKeyType = .Default
-        descriptionLabel.userInteractionEnabled = false
+        descriptionLabel.isSecureTextEntry = false
+        descriptionLabel.keyboardType = .default
+        descriptionLabel.returnKeyType = .default
+        descriptionLabel.isUserInteractionEnabled = false
     }
 
     override func layoutSubviews() {
@@ -186,7 +186,7 @@ class LoginTableViewCell: UITableViewCell {
 
         // Adjust indent frame
         var indentFrame = CGRect(
-            origin: CGPointZero,
+            origin: CGPoint.zero,
             size: CGSize(width: LoginTableViewCellUX.indentWidth, height: frame.height))
 
         if !showingIndent {
@@ -202,79 +202,79 @@ class LoginTableViewCell: UITableViewCell {
         contentView.frame = contentFrame
     }
 
-    private func configureLayoutForStyle(style: LoginTableViewCellStyle) {
+    fileprivate func configureLayoutForStyle(_ style: LoginTableViewCellStyle) {
         switch style {
-        case .IconAndBothLabels:
-            iconImageView.snp_remakeConstraints { make in
+        case .iconAndBothLabels:
+            iconImageView.snp.remakeConstraints { make in
                 make.centerY.equalTo(contentView)
                 make.left.equalTo(contentView).offset(LoginTableViewCellUX.HorizontalMargin)
                 make.height.width.equalTo(LoginTableViewCellUX.IconImageSize)
             }
 
-            labelContainer.snp_remakeConstraints { make in
+            labelContainer.snp.remakeConstraints { make in
                 make.centerY.equalTo(contentView)
                 make.right.equalTo(contentView).offset(-LoginTableViewCellUX.HorizontalMargin)
-                make.left.equalTo(iconImageView.snp_right).offset(LoginTableViewCellUX.HorizontalMargin)
+                make.left.equalTo(iconImageView.snp.right).offset(LoginTableViewCellUX.HorizontalMargin)
             }
 
-            highlightedLabel.snp_remakeConstraints { make in
+            highlightedLabel.snp.remakeConstraints { make in
                 make.left.top.equalTo(labelContainer)
-                make.bottom.equalTo(descriptionLabel.snp_top)
+                make.bottom.equalTo(descriptionLabel.snp.top)
                 make.width.equalTo(labelContainer)
             }
 
-            descriptionLabel.snp_remakeConstraints { make in
+            descriptionLabel.snp.remakeConstraints { make in
                 make.left.bottom.equalTo(labelContainer)
-                make.top.equalTo(highlightedLabel.snp_bottom)
+                make.top.equalTo(highlightedLabel.snp.bottom)
                 make.width.equalTo(labelContainer)
             }
-        case .IconAndDescriptionLabel:
-            iconImageView.snp_remakeConstraints { make in
+        case .iconAndDescriptionLabel:
+            iconImageView.snp.remakeConstraints { make in
                 make.centerY.equalTo(contentView)
                 make.left.equalTo(contentView).offset(LoginTableViewCellUX.HorizontalMargin)
                 make.height.width.equalTo(LoginTableViewCellUX.IconImageSize)
             }
 
-            labelContainer.snp_remakeConstraints { make in
+            labelContainer.snp.remakeConstraints { make in
                 make.centerY.equalTo(contentView)
                 make.right.equalTo(contentView).offset(-LoginTableViewCellUX.HorizontalMargin)
-                make.left.equalTo(iconImageView.snp_right).offset(LoginTableViewCellUX.HorizontalMargin)
+                make.left.equalTo(iconImageView.snp.right).offset(LoginTableViewCellUX.HorizontalMargin)
             }
 
-            highlightedLabel.snp_remakeConstraints { make in
+            highlightedLabel.snp.remakeConstraints { make in
                 make.height.width.equalTo(0)
             }
 
-            descriptionLabel.snp_remakeConstraints { make in
+            descriptionLabel.snp.remakeConstraints { make in
                 make.top.left.bottom.equalTo(labelContainer)
                 make.width.equalTo(labelContainer)
             }
-        case .NoIconAndBothLabels:
+        case .noIconAndBothLabels:
             // Currently we only support modifying the description for this layout which is why
             // we factor in the editingOffset when calculating the constraints.
             let editingOffset = editingDescription ? LoginTableViewCellUX.editingDescriptionIndent : 0
 
-            iconImageView.snp_remakeConstraints { make in
+            iconImageView.snp.remakeConstraints { make in
                 make.centerY.equalTo(contentView)
                 make.left.equalTo(contentView).offset(LoginTableViewCellUX.HorizontalMargin)
                 make.height.width.equalTo(0)
             }
 
-            labelContainer.snp_remakeConstraints { make in
+            labelContainer.snp.remakeConstraints { make in
                 make.centerY.equalTo(contentView)
                 make.right.equalTo(contentView).offset(-LoginTableViewCellUX.HorizontalMargin)
-                make.left.equalTo(iconImageView.snp_right).offset(editingOffset)
+                make.left.equalTo(iconImageView.snp.right).offset(editingOffset)
             }
 
-            highlightedLabel.snp_remakeConstraints { make in
+            highlightedLabel.snp.remakeConstraints { make in
                 make.left.top.equalTo(labelContainer)
-                make.bottom.equalTo(descriptionLabel.snp_top)
+                make.bottom.equalTo(descriptionLabel.snp.top)
                 make.width.equalTo(labelContainer)
             }
 
-            descriptionLabel.snp_remakeConstraints { make in
+            descriptionLabel.snp.remakeConstraints { make in
                 make.left.bottom.equalTo(labelContainer)
-                make.top.equalTo(highlightedLabel.snp_bottom)
+                make.top.equalTo(highlightedLabel.snp.bottom)
                 make.width.equalTo(labelContainer)
             }
         }
@@ -282,7 +282,7 @@ class LoginTableViewCell: UITableViewCell {
         setNeedsUpdateConstraints()
     }
 
-    override func setEditing(editing: Bool, animated: Bool) {
+    override func setEditing(_ editing: Bool, animated: Bool) {
         showingIndent = editing
 
         let adjustConstraints = { [unowned self] in
@@ -298,10 +298,10 @@ class LoginTableViewCell: UITableViewCell {
             self.customIndentView.frame = indentFrame
         }
 
-        animated ? UIView.animateWithDuration(LoginTableViewCellUX.IndentAnimationDuration, animations: adjustConstraints) : adjustConstraints()
+        animated ? UIView.animate(withDuration: LoginTableViewCellUX.IndentAnimationDuration, animations: adjustConstraints) : adjustConstraints()
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         customCheckmarkIcon.image = UIImage(named: selected ? "loginSelected" : "loginUnselected")
     }
@@ -310,27 +310,27 @@ class LoginTableViewCell: UITableViewCell {
 // MARK: - Menu Selectors
 extension LoginTableViewCell: MenuHelperInterface {
 
-    func menuHelperReveal(sender: NSNotification) {
+    func menuHelperReveal(_ sender: Notification) {
         displayDescriptionAsPassword = false
     }
 
-    func menuHelperSecure(sender: NSNotification) {
+    func menuHelperSecure(_ sender: Notification) {
         displayDescriptionAsPassword = true
     }
 
-    func menuHelperCopy(sender: NSNotification) {
+    func menuHelperCopy(_ sender: Notification) {
         // Copy description text to clipboard
-        UIPasteboard.generalPasteboard().string = descriptionLabel.text
+        UIPasteboard.general.string = descriptionLabel.text
     }
 
-    func menuHelperOpenAndFill(sender: NSNotification) {
+    func menuHelperOpenAndFill(_ sender: Notification) {
         delegate?.didSelectOpenAndFillForCell(self)
     }
 }
 
 // MARK: - Cell Decorators
 extension LoginTableViewCell {
-    func updateCellWithLogin(login: LoginData) {
+    func updateCellWithLogin(_ login: LoginData) {
         descriptionLabel.text = login.hostname
         highlightedLabel.text = login.username
         iconImageView.image = UIImage(named: "faviconFox")
@@ -338,19 +338,19 @@ extension LoginTableViewCell {
 }
 
 extension LoginTableViewCell: UITextFieldDelegate {
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         return self.delegate?.shouldReturnAfterEditingDescription(self) ?? true
     }
 
-    func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
-        if descriptionLabel.secureTextEntry {
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        if descriptionLabel.isSecureTextEntry {
             displayDescriptionAsPassword = false
         }
         return true
     }
 
-    func textFieldDidEndEditing(textField: UITextField) {
-        if descriptionLabel.secureTextEntry {
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if descriptionLabel.isSecureTextEntry {
             displayDescriptionAsPassword = true
         }
     }

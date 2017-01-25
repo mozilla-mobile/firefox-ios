@@ -9,7 +9,7 @@ import Account
 
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
 class AppSettingsTableViewController: SettingsTableViewController {
-    private let SectionHeaderIdentifier = "SectionHeaderIdentifier"
+    fileprivate let SectionHeaderIdentifier = "SectionHeaderIdentifier"
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -17,8 +17,8 @@ class AppSettingsTableViewController: SettingsTableViewController {
         navigationItem.title = NSLocalizedString("Settings", comment: "Settings")
         navigationItem.leftBarButtonItem = UIBarButtonItem(
             title: NSLocalizedString("Done", comment: "Done button on left side of the Settings view controller title bar"),
-            style: UIBarButtonItemStyle.Done,
-            target: navigationController, action: Selector("SELdone"))
+            style: UIBarButtonItemStyle.done,
+            target: navigationController, action: #selector((navigationController as! SettingsNavigationController).SELdone))
         navigationItem.leftBarButtonItem?.accessibilityIdentifier = "AppSettingsTableViewController.navigationItem.leftBarButtonItem"
 
         tableView.accessibilityIdentifier = "AppSettingsTableViewController.tableView"
@@ -29,7 +29,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
 
         let privacyTitle = NSLocalizedString("Privacy", comment: "Privacy section title")
         let accountDebugSettings: [Setting]
-        if AppConstants.BuildChannel != .Aurora {
+        if AppConstants.BuildChannel != .aurora {
             accountDebugSettings = [
                 // Debug settings:
                 RequirePasswordDebugSetting(settings: self),
@@ -66,7 +66,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
         // There is nothing to show in the Customize section if we don't include the compact tab layout
         // setting on iPad. When more options are added that work on both device types, this logic can
         // be changed.
-        if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
+        if UIDevice.current.userInterfaceIdiom == .phone {
             generalSettings +=  [
                 BoolSetting(prefs: prefs, prefKey: "CompactTabLayout", defaultValue: true,
                     titleText: NSLocalizedString("Use Compact Tabs", comment: "Setting to enable compact tabs in the tab overview"))
@@ -106,7 +106,6 @@ class AppSettingsTableViewController: SettingsTableViewController {
             PrivacyPolicySetting()
         ]
 
-
         settings += [
             SettingSection(title: NSAttributedString(string: privacyTitle), children: privacySettings),
             SettingSection(title: NSAttributedString(string: NSLocalizedString("Support", comment: "Support section title")), children: [
@@ -135,19 +134,19 @@ class AppSettingsTableViewController: SettingsTableViewController {
         return settings
     }
 
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if !profile.hasAccount() {
-            let headerView = tableView.dequeueReusableHeaderFooterViewWithIdentifier(SectionHeaderIdentifier) as! SettingsTableSectionHeaderFooterView
+            let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as! SettingsTableSectionHeaderFooterView
             let sectionSetting = settings[section]
             headerView.titleLabel.text = sectionSetting.title?.string
 
             switch section {
                 // Hide the bottom border for the Sign In to Firefox value prop
                 case 1:
-                    headerView.titleAlignment = .Top
+                    headerView.titleAlignment = .top
                     headerView.titleLabel.numberOfLines = 0
                     headerView.showBottomBorder = false
-                    headerView.titleLabel.snp_updateConstraints { make in
+                    headerView.titleLabel.snp.updateConstraints { make in
                         make.right.equalTo(headerView).offset(-50)
                     }
 
@@ -174,7 +173,7 @@ extension AppSettingsTableViewController {
 
 extension AppSettingsTableViewController: PasscodeEntryDelegate {
     @objc func passcodeValidationDidSucceed() {
-        navigationController?.dismissViewControllerAnimated(true) {
+        navigationController?.dismiss(animated: true) {
             self.navigateToLoginsList()
         }
     }

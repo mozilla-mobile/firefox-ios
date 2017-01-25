@@ -9,14 +9,14 @@ import Shared
 import Storage
 
 class ActionRequestHandler: NSObject, NSExtensionRequestHandling {
-    func beginRequestWithExtensionContext(context: NSExtensionContext) {
-        ExtensionUtils.extractSharedItemFromExtensionContext(context, completionHandler: {
-            (item, error) -> Void in
-            if let item = item where error == nil && item.isShareable {
+
+    public func beginRequest(with context: NSExtensionContext) {
+        ExtensionUtils.extractSharedItemFromExtensionContext(context, completionHandler: { (item, error) -> Void in
+            if let item = item, error == nil && item.isShareable {
                 let profile = BrowserProfile(localName: "profile", app: nil)
-                profile.queue.addToQueue(item).uponQueue(dispatch_get_main_queue()) { _ in
+                profile.queue.addToQueue(item).uponQueue(DispatchQueue.main) { _ in
                     profile.shutdown()
-                    context.completeRequestReturningItems([], completionHandler: nil)
+                    context.completeRequest(returningItems: [], completionHandler: nil)
                 }
             }
         })

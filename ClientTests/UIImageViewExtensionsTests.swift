@@ -11,15 +11,14 @@ import GCDWebServers
 
 @testable import Client
 
-
 class UIImageViewExtensionsTests: XCTestCase {
 
     override func setUp() {
-        SDWebImageDownloader.sharedDownloader().urlCredential = WebServer.sharedInstance.credentials
+        SDWebImageDownloader.shared().urlCredential = WebServer.sharedInstance.credentials
     }
 
     func testsetIcon() {
-        let url = NSURL(string: "http://mozilla.com")
+        let url = URL(string: "http://mozilla.com")
         let imageView = UIImageView()
 
         let goodIcon = FaviconFetcher.getDefaultFavicon(url!)
@@ -28,10 +27,10 @@ class UIImageViewExtensionsTests: XCTestCase {
         XCTAssertEqual(imageView.image!, goodIcon, "The correct default favicon should be applied")
         XCTAssertEqual(imageView.backgroundColor, correctColor, "The correct default color should be applied")
 
-        imageView.setIcon(nil, forURL: NSURL(string: "http://mozilla.com/blahblah"))
+        imageView.setIcon(nil, forURL: URL(string: "http://mozilla.com/blahblah"))
         XCTAssertEqual(imageView.image!, goodIcon, "The same icon should be applied to all urls with the same domain")
 
-        imageView.setIcon(nil, forURL: NSURL(string: "b"))
+        imageView.setIcon(nil, forURL: URL(string: "b"))
         XCTAssertEqual(imageView.image, FaviconFetcher.defaultFavicon, "The default favicon should be applied when no information is given about the icon")
     }
 
@@ -42,35 +41,35 @@ class UIImageViewExtensionsTests: XCTestCase {
         }
 
         let favImageView = UIImageView()
-        favImageView.setIcon(Favicon(url: "http://localhost:6571/favicon/icon", type: .Guess), forURL: NSURL(string: "http://localhost:6571"))
+        favImageView.setIcon(Favicon(url: "http://localhost:6571/favicon/icon", type: .guess), forURL: URL(string: "http://localhost:6571"))
 
-        let expect = expectationWithDescription("UIImageView async load")
+        let expect = expectation(description: "UIImageView async load")
         let time = Int64(2 * Double(NSEC_PER_SEC))
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, time), dispatch_get_main_queue()) {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(time) / Double(NSEC_PER_SEC)) {
             let a = UIImagePNGRepresentation(favImageView.image!)
             XCTAssertEqual(imageData, a, "The correct favicon should be applied to the UIImageView")
             expect.fulfill()
         }
-        waitForExpectationsWithTimeout(5, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testAsyncSetIconFail() {
         let favImageView = UIImageView()
 
-        let gFavURL = NSURL(string: "https://www.google.com/noicon.ico")
-        let gURL = NSURL(string: "http://google.com")
+        let gFavURL = URL(string: "https://www.google.com/noicon.ico")
+        let gURL = URL(string: "http://google.com")
         let correctImage = FaviconFetcher.getDefaultFavicon(gURL!)
 
-        favImageView.setIcon(Favicon(url: gFavURL!.absoluteString!, type: .Guess), forURL: gURL)
+        favImageView.setIcon(Favicon(url: gFavURL!.absoluteString, type: .guess), forURL: gURL)
 
-        let expect = expectationWithDescription("UIImageView async load")
+        let expect = expectation(description: "UIImageView async load")
         let time = Int64(2 * Double(NSEC_PER_SEC))
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, time), dispatch_get_main_queue()) {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(time) / Double(NSEC_PER_SEC)) {
             let b = UIImagePNGRepresentation(correctImage) // we need to convert to png in order to compare
             let a = UIImagePNGRepresentation(favImageView.image!)
             XCTAssertEqual(b, a, "The correct default favicon should be applied to the UIImageView")
             expect.fulfill()
         }
-        waitForExpectationsWithTimeout(5, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 }
