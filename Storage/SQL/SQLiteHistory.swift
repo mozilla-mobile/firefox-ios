@@ -703,9 +703,9 @@ extension SQLiteHistory: Favicons {
         var err: NSError? = nil
 
         db.withWritableConnection(&err) { (conn, inout err: NSError?) -> Int in
-            err = conn.executeChange("DELETE FROM \(TableFaviconSites)", withArgs: nil)
+            err = conn.executeChange("DELETE FROM \(TableFaviconSites) WHERE url NOT IN (SELETE url FROM \(TableBookmarks))", withArgs: nil)
             if err == nil {
-                err = conn.executeChange("DELETE FROM \(TableFavicons)", withArgs: nil)
+                err = conn.executeChange("DELETE FROM \(TableFavicons) WHERE url NOT IN (SELETE url FROM \(TableBookmarks))", withArgs: nil)
             }
             return 1
         }
