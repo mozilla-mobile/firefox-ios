@@ -13,16 +13,16 @@ private let log = Logger.syncLogger
 
 public struct SyncAuthStateCache {
     let token: TokenServerToken
-    let forKey: NSData
+    let forKey: Data
     let expiresAt: Timestamp
 }
 
 public protocol SyncAuthState {
     func invalidate()
-    func token(now: Timestamp, canBeExpired: Bool) -> Deferred<Maybe<(token: TokenServerToken, forKey: NSData)>>
+    func token(_ now: Timestamp, canBeExpired: Bool) -> Deferred<Maybe<(token: TokenServerToken, forKey: NSData)>>
 }
 
-public func syncAuthStateCachefromJSON(json: JSON) -> SyncAuthStateCache? {
+public func syncAuthStateCachefromJSON(_ json: JSON) -> SyncAuthStateCache? {
     if let version = json["version"].asInt {
         if version != CurrentSyncAuthStateCacheVersion {
             log.warning("Sync Auth State Cache is wrong version; dropping.")
@@ -30,8 +30,8 @@ public func syncAuthStateCachefromJSON(json: JSON) -> SyncAuthStateCache? {
         }
         if let
             token = TokenServerToken.fromJSON(json["token"]),
-            forKey = json["forKey"].asString?.hexDecodedData,
-            expiresAt = json["expiresAt"].asInt64 {
+            let forKey = json["forKey"].asString?.hexDecodedData,
+            let expiresAt = json["expiresAt"].asInt64 {
             return SyncAuthStateCache(token: token, forKey: forKey, expiresAt: Timestamp(expiresAt))
         }
     }
@@ -49,9 +49,9 @@ extension SyncAuthStateCache: JSONLiteralConvertible {
     }
 }
 
-public class FirefoxAccountSyncAuthState: SyncAuthState {
-    private let account: FirefoxAccount
-    private let cache: KeychainCache<SyncAuthStateCache>
+open class FirefoxAccountSyncAuthState: SyncAuthState {
+    fileprivate let account: FirefoxAccount
+    fileprivate let cache: KeychainCache<SyncAuthStateCache>
 
     init(account: FirefoxAccount, cache: KeychainCache<SyncAuthStateCache>) {
         self.account = account
@@ -59,7 +59,7 @@ public class FirefoxAccountSyncAuthState: SyncAuthState {
     }
 
     // If a token gives you a 401, invalidate it and request a new one.
-    public func invalidate() {
+    open func invalidate() {
         log.info("Invalidating cached token server token.")
         self.cache.value = nil
     }
@@ -69,7 +69,7 @@ public class FirefoxAccountSyncAuthState: SyncAuthState {
     //
     // It's tricky to get Swift to recurse into a closure that captures from the environment without
     // segfaulting the compiler, so we pass everything around, like barbarians.
-    private func generateAssertionAndFetchTokenAt(audience: String, client: TokenServerClient, clientState: String?, married: MarriedState,
+    fileprivate func generateAssertionAndFetchTokenAt(_ audience: String, client: TokenServerClient, clientState: String?, married: MarriedState,
             now: Timestamp, retryCount: Int) -> Deferred<Maybe<TokenServerToken>> {
         let assertion = married.generateAssertionForAudience(audience, now: now)
         return client.token(assertion, clientState: clientState).bind { result in
@@ -92,7 +92,7 @@ public class FirefoxAccountSyncAuthState: SyncAuthState {
         }
     }
 
-    public func token(now: Timestamp, canBeExpired: Bool) -> Deferred<Maybe<(token: TokenServerToken, forKey: NSData)>> {
+    open func token(_ now: Timestamp, canBeExpired: Bool) -> Deferred<Maybe<(token: TokenServerToken, forKey: NSData)>> {
         if let value = cache.value {
             // Give ourselves some room to do work.
             let isExpired = value.expiresAt < now + 5 * OneMinuteInMilliseconds

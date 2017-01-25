@@ -20,31 +20,31 @@ let AccountSchemaVersion = 1
 ///
 /// Non-sensitive but persistent data should be maintained outside of
 /// the account itself.
-public class FirefoxAccount {
+open class FirefoxAccount {
     /// The email address identifying the account.  A Firefox Account is uniquely identified on a particular server
     /// (auth endpoint) by its email address.
-    public let email: String
+    open let email: String
 
     /// The auth endpoint user identifier identifying the account.  A Firefox Account is uniquely identified on a
     /// particular server (auth endpoint) by its assigned uid.
-    public let uid: String
+    open let uid: String
 
-    public var deviceRegistration: FxADeviceRegistration?
+    open var deviceRegistration: FxADeviceRegistration?
 
-    public let configuration: FirefoxAccountConfiguration
+    open let configuration: FirefoxAccountConfiguration
 
-    private let stateCache: KeychainCache<FxAState>
-    public var syncAuthState: SyncAuthState! // We can't give a reference to self if this is a let.
+    fileprivate let stateCache: KeychainCache<FxAState>
+    open var syncAuthState: SyncAuthState! // We can't give a reference to self if this is a let.
 
     // To prevent advance() consumers racing, we maintain a shared advance() deferred (`advanceDeferred`).  If an
     // advance() is in progress, the shared deferred will be returned.  (Multiple consumers can chain off a single
     // deferred safely.)  If no advance() is in progress, a new shared deferred will be scheduled and returned.  To
     // prevent data races against the shared deferred, advance() locks accesses to `advanceDeferred` using
     // `advanceLock`.
-    private var advanceLock = OSSpinLock()
-    private var advanceDeferred: Deferred<FxAState>? = nil
+    fileprivate var advanceLock = OSSpinLock()
+    fileprivate var advanceDeferred: Deferred<FxAState>? = nil
 
-    public var actionNeeded: FxAActionNeeded {
+    open var actionNeeded: FxAActionNeeded {
         return stateCache.value!.actionNeeded
     }
 
@@ -63,7 +63,7 @@ public class FirefoxAccount {
             cache: KeychainCache.fromBranch("account.syncAuthState", withLabel: self.stateCache.label, factory: syncAuthStateCachefromJSON))
     }
 
-    public class func fromConfigurationAndJSON(configuration: FirefoxAccountConfiguration, data: JSON) -> FirefoxAccount? {
+    open class func fromConfigurationAndJSON(_ configuration: FirefoxAccountConfiguration, data: JSON) -> FirefoxAccount? {
         guard let email = data["email"].asString ,
             let uid = data["uid"].asString,
             let sessionToken = data["sessionToken"].asString?.hexDecodedData,
@@ -78,19 +78,19 @@ public class FirefoxAccount {
             sessionToken: sessionToken, keyFetchToken: keyFetchToken, unwrapkB: unwrapkB)
     }
 
-    public class func fromConfigurationAndLoginResponse(configuration: FirefoxAccountConfiguration,
-            response: FxALoginResponse, unwrapkB: NSData) -> FirefoxAccount {
+    open class func fromConfigurationAndLoginResponse(_ configuration: FirefoxAccountConfiguration,
+            response: FxALoginResponse, unwrapkB: Data) -> FirefoxAccount {
         return FirefoxAccount.fromConfigurationAndParameters(configuration,
             email: response.remoteEmail, uid: response.uid, deviceRegistration: nil, verified: response.verified,
-            sessionToken: response.sessionToken, keyFetchToken: response.keyFetchToken, unwrapkB: unwrapkB)
+            sessionToken: response.sessionToken as Data, keyFetchToken: response.keyFetchToken as Data, unwrapkB: unwrapkB)
     }
 
-    private class func fromConfigurationAndParameters(configuration: FirefoxAccountConfiguration,
+    fileprivate class func fromConfigurationAndParameters(_ configuration: FirefoxAccountConfiguration,
             email: String, uid: String, deviceRegistration: FxADeviceRegistration?, verified: Bool,
-            sessionToken: NSData, keyFetchToken: NSData, unwrapkB: NSData) -> FirefoxAccount {
+            sessionToken: Data, keyFetchToken: Data, unwrapkB: Data) -> FirefoxAccount {
         var state: FxAState! = nil
         if !verified {
-            let now = NSDate.now()
+            let now = Date.now()
             state = EngagedBeforeVerifiedState(knownUnverifiedAt: now,
                 lastNotifiedUserAt: now,
                 sessionToken: sessionToken,
@@ -116,18 +116,18 @@ public class FirefoxAccount {
         return account
     }
 
-    public func asDictionary() -> [String: AnyObject] {
+    open func asDictionary() -> [String: AnyObject] {
         var dict: [String: AnyObject] = [:]
-        dict["version"] = AccountSchemaVersion
-        dict["email"] = email
-        dict["uid"] = uid
+        dict["version"] = AccountSchemaVersion as AnyObject?
+        dict["email"] = email as AnyObject?
+        dict["uid"] = uid as AnyObject?
         dict["deviceRegistration"] = deviceRegistration
-        dict["configurationLabel"] = configuration.label.rawValue
+        dict["configurationLabel"] = configuration.label.rawValue as AnyObject?
         dict["stateKeyLabel"] = stateCache.label
         return dict
     }
 
-    public class func fromDictionary(dictionary: [String: AnyObject]) -> FirefoxAccount? {
+    open class func fromDictionary(_ dictionary: [String: AnyObject]) -> FirefoxAccount? {
         if let version = dictionary["version"] as? Int {
             if version == AccountSchemaVersion {
                 return FirefoxAccount.fromDictionaryV1(dictionary)
@@ -136,15 +136,15 @@ public class FirefoxAccount {
         return nil
     }
 
-    private class func fromDictionaryV1(dictionary: [String: AnyObject]) -> FirefoxAccount? {
+    fileprivate class func fromDictionaryV1(_ dictionary: [String: AnyObject]) -> FirefoxAccount? {
         var configurationLabel: FirefoxAccountConfigurationLabel? = nil
         if let rawValue = dictionary["configurationLabel"] as? String {
             configurationLabel = FirefoxAccountConfigurationLabel(rawValue: rawValue)
         }
         if let
             configurationLabel = configurationLabel,
-            email = dictionary["email"] as? String,
-            uid = dictionary["uid"] as? String {
+            let email = dictionary["email"] as? String,
+            let uid = dictionary["uid"] as? String {
                 let deviceRegistration = dictionary["deviceRegistration"] as? FxADeviceRegistration
                 let stateCache = KeychainCache.fromBranch("account.state", withLabel: dictionary["stateKeyLabel"] as? String, withDefault: SeparatedState(), factory: stateFromJSON)
                 return FirefoxAccount(
@@ -157,16 +157,16 @@ public class FirefoxAccount {
     }
 
     public enum AccountError: MaybeErrorType {
-        case NotMarried
+        case notMarried
 
         public var description: String {
             switch self {
-            case NotMarried: return "Not married."
+            case .notMarried: return "Not married."
             }
         }
     }
 
-    public func advance() -> Deferred<FxAState> {
+    open func advance() -> Deferred<FxAState> {
         OSSpinLockLock(&advanceLock)
         if let deferred = advanceDeferred {
             // We already have an advance() in progress.  This consumer can chain from it.
@@ -205,7 +205,7 @@ public class FirefoxAccount {
         deferred.upon { _ in
             // This advance() is complete.  Clear the shared deferred.
             OSSpinLockLock(&self.advanceLock)
-            if let existingDeferred = self.advanceDeferred where existingDeferred === deferred {
+            if let existingDeferred = self.advanceDeferred, existingDeferred === deferred {
                 // The guard should not be needed, but should prevent trampling racing consumers.
                 self.advanceDeferred = nil
                 log.debug("advance() completed and shared deferred is existing deferred; clearing shared deferred.")
@@ -217,7 +217,7 @@ public class FirefoxAccount {
         return deferred
     }
 
-    public func marriedState() -> Deferred<Maybe<MarriedState>> {
+    open func marriedState() -> Deferred<Maybe<MarriedState>> {
         return advance().map { newState in
             if newState.label == FxAStateLabel.Married {
                 if let married = newState as? MarriedState {
@@ -228,19 +228,19 @@ public class FirefoxAccount {
         }
     }
 
-    public func makeSeparated() -> Bool {
+    open func makeSeparated() -> Bool {
         log.info("Making Account State be Separated.")
         self.stateCache.value = SeparatedState()
         return true
     }
 
-    public func makeDoghouse() -> Bool {
+    open func makeDoghouse() -> Bool {
         log.info("Making Account State be Doghouse.")
         self.stateCache.value = DoghouseState()
         return true
     }
 
-    public func makeCohabitingWithoutKeyPair() -> Bool {
+    open func makeCohabitingWithoutKeyPair() -> Bool {
         if let married = self.stateCache.value as? MarriedState {
             log.info("Making Account State be CohabitingWithoutKeyPair.")
             self.stateCache.value = married.withoutKeyPair()

@@ -20,7 +20,7 @@ class FirefoxAccountTests: XCTestCase {
             "configurationLabel": FirefoxAccountConfigurationLabel.Production.rawValue,
             "email": "testtest@test.com",
             "uid": "uid",
-            "deviceRegistration": FxADeviceRegistration(id: "bogus-device", version: 0, lastRegistered: NSDate.now())
+            "deviceRegistration": FxADeviceRegistration(id: "bogus-device", version: 0, lastRegistered: Date.now())
         ]
 
         let account1 = FirefoxAccount(
