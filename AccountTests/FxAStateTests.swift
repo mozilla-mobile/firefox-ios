@@ -60,7 +60,7 @@ class FxAStateTests: XCTestCase {
         for stateLabel in FxAStateLabel.allValues {
             let state = FxAStateTests.stateForLabel(stateLabel)
             let d = state.asJSON()
-            if let e = stateFromJSON(d)?.asJSON() {
+            if let e = state(fromJSON:d)?.asJSON() {
                 // We can't compare arbitrary Swift Dictionary instances directly, but the following appears to work.
                 XCTAssertEqual(
                     NSDictionary(dictionary: JSON.unwrap(d) as! [String: AnyObject]),

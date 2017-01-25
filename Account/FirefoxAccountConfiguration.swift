@@ -5,17 +5,17 @@
 import Foundation
 
 public enum FirefoxAccountConfigurationLabel: String {
-    case LatestDev = "LatestDev"
-    case StableDev = "StableDev"
-    case Production = "Production"
-    case ChinaEdition = "ChinaEdition"
+    case latestDev = "LatestDev"
+    case stableDev = "StableDev"
+    case production = "Production"
+    case chinaEdition = "ChinaEdition"
 
     public func toConfiguration() -> FirefoxAccountConfiguration {
         switch self {
-        case .LatestDev: return LatestDevFirefoxAccountConfiguration()
-        case .StableDev: return StableDevFirefoxAccountConfiguration()
-        case .Production: return ProductionFirefoxAccountConfiguration()
-        case .ChinaEdition: return ChinaEditionFirefoxAccountConfiguration()
+        case .latestDev: return LatestDevFirefoxAccountConfiguration()
+        case .stableDev: return StableDevFirefoxAccountConfiguration()
+        case .production: return ProductionFirefoxAccountConfiguration()
+        case .chinaEdition: return ChinaEditionFirefoxAccountConfiguration()
         }
     }
 }

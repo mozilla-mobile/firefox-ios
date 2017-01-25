@@ -87,7 +87,7 @@ open class FxADeviceRegistrator {
             registrationResult = FxADeviceRegistrationResult.registered
         }
 
-        let registeredDevice = client.registerOrUpdateDevice(sessionToken, device: device)
+        let registeredDevice = client.registerOrUpdate(device: device, withSessionToken: sessionToken)
         let registration: Deferred<Maybe<FxADeviceRegistration>> = registeredDevice.bind { result in
             if let device = result.successValue {
                 return deferMaybe(FxADeviceRegistration(id: device.id!, version: DeviceRegistrationVersion, lastRegistered: NSDate.now()))
@@ -136,7 +136,7 @@ open class FxADeviceRegistrator {
         //      version on the account data and return the correct device id. At next
         //      sync or next sign-in, registration is retried and should succeed.
         log.warning("Device session conflict. Attempting to find the current device ID…")
-        return client.devices(sessionToken) >>== { response in
+        return client.devices(devices: sessionToken) >>== { response in
             guard let currentDevice = response.devices.find({ $0.isCurrentDevice }) else {
                 return deferMaybe(FxADeviceRegistratorError.CurrentDeviceNotFound)
             }
@@ -146,7 +146,7 @@ open class FxADeviceRegistrator {
     }
 
     fileprivate static func recoverFromTokenError(_ account: FirefoxAccount, client: FxAClient10) -> Deferred<Maybe<FxADeviceRegistration>> {
-        return client.status(account.uid) >>== { status in
+        return client.status(forUID: account.uid) >>== { status in
             if !status.exists {
                 // TODO: Should be in an "I have an iOS account, but the FxA is gone." state.
                 // This will do for now...

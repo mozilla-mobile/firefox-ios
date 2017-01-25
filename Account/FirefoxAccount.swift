@@ -63,7 +63,7 @@ open class FirefoxAccount {
             cache: KeychainCache.fromBranch("account.syncAuthState", withLabel: self.stateCache.label, factory: syncAuthStateCachefromJSON))
     }
 
-    open class func fromConfigurationAndJSON(_ configuration: FirefoxAccountConfiguration, data: JSON) -> FirefoxAccount? {
+    open class func from(_ configuration: FirefoxAccountConfiguration, andJSON data: JSON) -> FirefoxAccount? {
         guard let email = data["email"].asString ,
             let uid = data["uid"].asString,
             let sessionToken = data["sessionToken"].asString?.hexDecodedData,
@@ -78,15 +78,15 @@ open class FirefoxAccount {
             sessionToken: sessionToken, keyFetchToken: keyFetchToken, unwrapkB: unwrapkB)
     }
 
-    open class func fromConfigurationAndLoginResponse(_ configuration: FirefoxAccountConfiguration,
-            response: FxALoginResponse, unwrapkB: Data) -> FirefoxAccount {
+    open class func from(_ configuration: FirefoxAccountConfiguration,
+            andLoginResponse response: FxALoginResponse, unwrapkB: Data) -> FirefoxAccount {
         return FirefoxAccount.fromConfigurationAndParameters(configuration,
             email: response.remoteEmail, uid: response.uid, deviceRegistration: nil, verified: response.verified,
             sessionToken: response.sessionToken as Data, keyFetchToken: response.keyFetchToken as Data, unwrapkB: unwrapkB)
     }
 
-    fileprivate class func fromConfigurationAndParameters(_ configuration: FirefoxAccountConfiguration,
-            email: String, uid: String, deviceRegistration: FxADeviceRegistration?, verified: Bool,
+    fileprivate class func from(_ configuration: FirefoxAccountConfiguration,
+            andParametersWithEmail email: String, uid: String, deviceRegistration: FxADeviceRegistration?, verified: Bool,
             sessionToken: Data, keyFetchToken: Data, unwrapkB: Data) -> FirefoxAccount {
         var state: FxAState! = nil
         if !verified {
@@ -116,18 +116,18 @@ open class FirefoxAccount {
         return account
     }
 
-    open func asDictionary() -> [String: AnyObject] {
-        var dict: [String: AnyObject] = [:]
-        dict["version"] = AccountSchemaVersion as AnyObject?
-        dict["email"] = email as AnyObject?
-        dict["uid"] = uid as AnyObject?
+    open func asDictionary() -> [String: Any] {
+        var dict: [String: Any] = [:]
+        dict["version"] = AccountSchemaVersion
+        dict["email"] = email
+        dict["uid"] = uid
         dict["deviceRegistration"] = deviceRegistration
-        dict["configurationLabel"] = configuration.label.rawValue as AnyObject?
+        dict["configurationLabel"] = configuration.label.rawValue
         dict["stateKeyLabel"] = stateCache.label
         return dict
     }
 
-    open class func fromDictionary(_ dictionary: [String: AnyObject]) -> FirefoxAccount? {
+    open class func fromDictionary(_ dictionary: [String: Any]) -> FirefoxAccount? {
         if let version = dictionary["version"] as? Int {
             if version == AccountSchemaVersion {
                 return FirefoxAccount.fromDictionaryV1(dictionary)
@@ -136,7 +136,7 @@ open class FirefoxAccount {
         return nil
     }
 
-    fileprivate class func fromDictionaryV1(_ dictionary: [String: AnyObject]) -> FirefoxAccount? {
+    fileprivate class func fromDictionaryV1(_ dictionary: [String: Any]) -> FirefoxAccount? {
         var configurationLabel: FirefoxAccountConfigurationLabel? = nil
         if let rawValue = dictionary["configurationLabel"] as? String {
             configurationLabel = FirefoxAccountConfigurationLabel(rawValue: rawValue)
@@ -192,7 +192,7 @@ open class FirefoxAccount {
             let client = FxAClient10(endpoint: self.configuration.authEndpointURL)
             let stateMachine = FxALoginStateMachine(client: client)
             let now = NSDate.now()
-            return stateMachine.advanceFromState(cachedState, now: now).map { newState in
+            return stateMachine.advance(fromState: cachedState, now: now).map { newState in
                 self.stateCache.value = newState
                 return newState
             }

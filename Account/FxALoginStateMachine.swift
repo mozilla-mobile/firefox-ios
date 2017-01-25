@@ -37,19 +37,19 @@ class FxALoginStateMachine {
         self.client = client
     }
 
-    func advanceFromState(_ state: FxAState, now: Timestamp) -> Deferred<FxAState> {
+    func advance(fromState state: FxAState, now: Timestamp) -> Deferred<FxAState> {
         stateLabelsSeen.updateValue(true, forKey: state.label)
-        return self.advanceOneState(state, now: now).bind { (newState: FxAState) in
+        return self.advanceOne(fromState: state, now: now).bind { (newState: FxAState) in
             let labelAlreadySeen = self.stateLabelsSeen.updateValue(true, forKey: newState.label) != nil
             if labelAlreadySeen {
                 // Last stop!
                 return Deferred(value: newState)
             }
-            return self.advanceFromState(newState, now: now)
+            return self.advance(fromState: newState, now: now)
         }
     }
 
-    fileprivate func advanceOneState(_ state: FxAState, now: Timestamp) -> Deferred<FxAState> {
+    fileprivate func advanceOne(_ state: FxAState, now: Timestamp) -> Deferred<FxAState> {
         // For convenience.  Without type annotation, Swift complains about types not being exact.
         let separated: Deferred<FxAState> = Deferred(value: SeparatedState())
         let doghouse: Deferred<FxAState> = Deferred(value: DoghouseState())
@@ -57,22 +57,22 @@ class FxALoginStateMachine {
 
         log.info("Advancing from state: \(state.label.rawValue)")
         switch state.label {
-        case .Married:
+        case .married:
             let state = state as! MarriedState
             log.debug("Checking key pair freshness.")
             if state.isKeyPairExpired(now) {
                 log.info("Key pair has expired; transitioning to CohabitingBeforeKeyPair.")
-                return advanceOneState(state.withoutKeyPair(), now: now)
+                return advanceOne(fromState: state.withoutKeyPair(), now: now)
             }
             log.debug("Checking certificate freshness.")
             if state.isCertificateExpired(now) {
                 log.info("Certificate has expired; transitioning to CohabitingAfterKeyPair.")
-                return advanceOneState(state.withoutCertificate(), now: now)
+                return advanceOne(fromState: state.withoutCertificate(), now: now)
             }
             log.info("Key pair and certificate are fresh; staying Married.")
             return same
 
-        case .CohabitingBeforeKeyPair:
+        case .cohabitingBeforeKeyPair:
             let state = state as! CohabitingBeforeKeyPairState
             log.debug("Generating key pair.")
             return self.client.keyPair().bind { result in
@@ -88,7 +88,7 @@ class FxALoginStateMachine {
                 }
             }
 
-        case .CohabitingAfterKeyPair:
+        case .cohabitingAfterKeyPair:
             let state = state as! CohabitingAfterKeyPairState
             log.debug("Signing public key.")
             return client.sign(state.sessionToken, publicKey: state.keyPair.publicKey).bind { result in
@@ -128,7 +128,7 @@ class FxALoginStateMachine {
                 }
             }
 
-        case .EngagedBeforeVerified, .EngagedAfterVerified:
+        case .engagedBeforeVerified, .EngagedAfterVerified:
             let state = state as! ReadyForKeys
             log.debug("Fetching keys.")
             return client.keys(state.keyFetchToken).bind { result in
@@ -175,7 +175,7 @@ class FxALoginStateMachine {
                 }
             }
 
-        case .Separated, .Doghouse:
+        case .separated, .doghouse:
             // We can't advance from the separated state (we need user input) or the doghouse (we need a client upgrade).
             log.warning("User interaction required; not transitioning.")
             return same

@@ -13,23 +13,23 @@ let StateSchemaVersion = 1
 // behaviour, and the state's behaviour accumulates, so each state is a class.  Switch on the
 // label to get exhaustive cases.
 public enum FxAStateLabel: String {
-    case EngagedBeforeVerified = "engagedBeforeVerified"
-    case EngagedAfterVerified = "engagedAfterVerified"
-    case CohabitingBeforeKeyPair = "cohabitingBeforeKeyPair"
-    case CohabitingAfterKeyPair = "cohabitingAfterKeyPair"
-    case Married = "married"
-    case Separated = "separated"
-    case Doghouse = "doghouse"
+    case engagedBeforeVerified = "engagedBeforeVerified"
+    case engagedAfterVerified = "engagedAfterVerified"
+    case cohabitingBeforeKeyPair = "cohabitingBeforeKeyPair"
+    case cohabitingAfterKeyPair = "cohabitingAfterKeyPair"
+    case married = "married"
+    case separated = "separated"
+    case doghouse = "doghouse"
 
     // See http://stackoverflow.com/a/24137319
     static let allValues: [FxAStateLabel] = [
-        EngagedBeforeVerified,
-        EngagedAfterVerified,
-        CohabitingBeforeKeyPair,
-        CohabitingAfterKeyPair,
-        Married,
-        Separated,
-        Doghouse,
+        engagedBeforeVerified,
+        engagedAfterVerified,
+        cohabitingBeforeKeyPair,
+        cohabitingAfterKeyPair,
+        married,
+        separated,
+        doghouse,
     ]
 }
 
@@ -40,19 +40,19 @@ public enum FxAActionNeeded {
     case needsUpgrade
 }
 
-func stateFromJSON(_ json: JSON) -> FxAState? {
+func state(fromJSON json: JSON) -> FxAState? {
     if json.isError {
         return nil
     }
     if let version = json["version"].asInt {
         if version == StateSchemaVersion {
-            return stateFromJSONV1(json)
+            return stateV1(fromJSON:json)
         }
     }
     return nil
 }
 
-func stateFromJSONV1(_ json: JSON) -> FxAState? {
+func stateV1(fromJSON json: JSON) -> FxAState? {
     if let labelString = json["label"].asString {
         if let label = FxAStateLabel(rawValue:  labelString) {
             switch label {
@@ -129,13 +129,13 @@ open class FxAState: JSONLiteralConvertible {
     open var actionNeeded: FxAActionNeeded {
         // Kind of nice to have this in one place.
         switch label {
-        case .EngagedBeforeVerified: return .needsVerification
-        case .EngagedAfterVerified: return .none
-        case .CohabitingBeforeKeyPair: return .none
-        case .CohabitingAfterKeyPair: return .none
-        case .Married: return .none
-        case .Separated: return .needsPassword
-        case .Doghouse: return .needsUpgrade
+        case .engagedBeforeVerified: return .needsVerification
+        case .engagedAfterVerified: return .none
+        case .cohabitingBeforeKeyPair: return .none
+        case .cohabitingAfterKeyPair: return .none
+        case .married: return .none
+        case .separated: return .needsPassword
+        case .doghouse: return .needsUpgrade
         }
     }
 

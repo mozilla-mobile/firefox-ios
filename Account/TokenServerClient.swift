@@ -79,14 +79,14 @@ extension TokenServerError: MaybeErrorType {
 }
 
 open class TokenServerClient {
-    let URL: Foundation.URL
+    let URL: URL
 
-    public init(URL: Foundation.URL? = nil) {
-        self.URL = URL ?? ProductionSync15Configuration().tokenServerEndpointURL as URL
+    public init(URL: URL? = nil) {
+        self.URL = URL ?? ProductionSync15Configuration().tokenServerEndpointURL
     }
 
-    open class func getAudienceForURL(_ URL: Foundation.URL) -> String {
-        if let port = (URL as NSURL).port {
+    open class func getAudience(forURL URL: URL) -> String {
+        if let port = URL.port {
             return "\(URL.scheme!)://\(URL.host!):\(port)"
         } else {
             return "\(URL.scheme!)://\(URL.host!)"
@@ -101,7 +101,7 @@ open class TokenServerClient {
         }
     }
 
-    fileprivate class func remoteErrorFromJSON(_ json: JSON, statusCode: Int, remoteTimestampHeader: String?) -> TokenServerError? {
+    fileprivate class func remoteError(fromJSON json: JSON, statusCode: Int, remoteTimestampHeader: String?) -> TokenServerError? {
         if json.isError {
             return nil
         }
@@ -112,7 +112,7 @@ open class TokenServerClient {
             remoteTimestamp: parseTimestampHeader(remoteTimestampHeader))
     }
 
-    fileprivate class func tokenFromJSON(_ json: JSON, remoteTimestampHeader: String?) -> TokenServerToken? {
+    fileprivate class func token(fromJSON json: JSON, remoteTimestampHeader: String?) -> TokenServerToken? {
         if json.isError {
             return nil
         }
@@ -131,14 +131,14 @@ open class TokenServerClient {
 
     lazy fileprivate var alamofire: Alamofire.Manager = {
         let ua = UserAgent.tokenServerClientUserAgent
-        let configuration = NSURLSessionConfiguration.ephemeralSessionConfiguration()
+        let configuration = URLSessionConfiguration.ephemeral
         return Alamofire.Manager.managerWithUserAgent(ua, configuration: configuration)
     }()
 
     open func token(_ assertion: String, clientState: String? = nil) -> Deferred<Maybe<TokenServerToken>> {
         let deferred = Deferred<Maybe<TokenServerToken>>()
 
-        let mutableURLRequest = NSMutableURLRequest(url: URL)
+        let mutableURLRequest = URLRequest(url: URL)
         mutableURLRequest.setValue("BrowserID " + assertion, forHTTPHeaderField: "Authorization")
         if let clientState = clientState {
             mutableURLRequest.setValue(clientState, forHTTPHeaderField: "X-Client-State")
@@ -159,13 +159,13 @@ open class TokenServerClient {
                             let json = JSON(data)
                             let remoteTimestampHeader = response.response?.allHeaderFields["x-timestamp"] as? String
 
-                            if let remoteError = TokenServerClient.remoteErrorFromJSON(json, statusCode: response.response!.statusCode,
+                            if let remoteError = TokenServerClient.remoteError(fromJSON: json, statusCode: response.response!.statusCode,
                                 remoteTimestampHeader: remoteTimestampHeader) {
                                     deferred.fill(Maybe(failure: remoteError))
                                     return
                             }
 
-                            if let token = TokenServerClient.tokenFromJSON(json, remoteTimestampHeader: remoteTimestampHeader) {
+                            if let token = TokenServerClient.token(fromJSON: json, remoteTimestampHeader: remoteTimestampHeader) {
                                 deferred.fill(Maybe(success: token))
                                 return
                             }
