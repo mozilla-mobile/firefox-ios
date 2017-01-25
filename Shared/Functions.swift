@@ -3,7 +3,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 // Pipelining.
-infix operator |> { associativity left }
+precedencegroup PipelinePrecedence {
+    associativity: left
+}
+infix operator |> : PipelinePrecedence
+
 public func |> <T, U>(x: T, f: (T) -> U) -> U {
     return f(x)
 }

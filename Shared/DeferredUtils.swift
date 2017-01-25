@@ -6,7 +6,20 @@ import Deferred
 // Haskell, baby.
 
 // Monadic bind/flatMap operator for Deferred.
-infix operator >>== { associativity left precedence 160 }
+precedencegroup MonadicBindPrecedence {
+    associativity: left
+    higherThan: MonadicDoPrecedence
+    lowerThan: BitwiseShiftPrecedence
+}
+
+precedencegroup MonadicDoPrecedence {
+    associativity: left
+    higherThan: MultiplicationPrecedence
+}
+
+infix operator >>== : MonadicBindPrecedence
+infix operator >>> : MonadicDoPrecedence
+
 public func >>== <T, U>(x: Deferred<Maybe<T>>, f: @escaping (T) -> Deferred<Maybe<U>>) -> Deferred<Maybe<U>> {
     return chainDeferred(x, f: f)
 }
@@ -21,7 +34,6 @@ public func >>== <T>(x: Deferred<Maybe<T>>, f: @escaping (T) -> ()) {
 }
 
 // Monadic `do` for Deferred.
-infix operator >>> { associativity left precedence 150 }
 public func >>> <T, U>(x: Deferred<Maybe<T>>, f: @escaping () -> Deferred<Maybe<U>>) -> Deferred<Maybe<U>> {
     return x.bind { res in
         if res.isSuccess {
@@ -115,7 +127,7 @@ public func accumulate<T>(_ thunks: [() -> Deferred<Maybe<T>>]) -> Deferred<Mayb
  */
 public func effect<T, U>(_ f: @escaping (T) -> U) -> (T) -> Deferred<Maybe<T>> {
     return { t in
-        f(t)
+        let _ = f(t)
         return deferMaybe(t)
     }
 }
