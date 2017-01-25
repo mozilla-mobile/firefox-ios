@@ -467,6 +467,8 @@ class TabManager: NSObject {
             self.removeTab(tab, flushToDisk: false, notify: true)
         }
         storeChanges()
+
+        _selectedIndex = 0
     }
     
     func removeAll() {
