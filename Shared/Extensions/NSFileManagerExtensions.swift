@@ -26,8 +26,8 @@ public extension FileManager {
 
         // If we run into an issue getting an enumerator for the given URL, capture the error and bail out later.
         var enumeratorError: NSError?
-        let errorHandler: (URL, NSError?) -> Bool = { _, error in
-            enumeratorError = error
+        let errorHandler: (URL, Error) -> Bool = { _, error in
+            enumeratorError = error as NSError
             return false
         }
 
@@ -94,9 +94,8 @@ public extension FileManager {
     }
 
     func removeItemInDirectory(_ directory: String, named: String) throws {
-        if let file = URL(fileURLWithPath: directory).appendingPathComponent(named).path {
-            try self.removeItem(atPath: file)
-        }
+        let file = URL(fileURLWithPath: directory).appendingPathComponent(named).path
+        try self.removeItem(atPath: file)
     }
 
     fileprivate func errorWithCode(_ code: NSFileManagerExtensionsErrorCodes, underlyingError error: NSError? = nil) -> NSError {
