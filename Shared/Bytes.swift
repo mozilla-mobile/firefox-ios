@@ -13,7 +13,7 @@ open class Bytes {
     open class func generateRandomBytes(_ len: UInt) -> Data {
         let len = Int(len)
         let data: NSMutableData! = NSMutableData(length: len)
-        let bytes = UnsafeMutablePointer<UInt8>(data.mutableBytes)
+        let bytes = data.mutableBytes.assumingMemoryBound(to: UInt8.self)
         let result: Int32 = SecRandomCopyBytes(kSecRandomDefault, len, bytes)
 
         assert(result == 0, "Random byte generation failed.")
