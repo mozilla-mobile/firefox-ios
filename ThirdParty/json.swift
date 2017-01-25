@@ -47,7 +47,7 @@ extension JSON {
     public convenience init(data:Data) {
         do {
             // Try parsing some valid JSON
-            let obj = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments)
+            let obj = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments) as AnyObject
             self.init(obj)
         }
         catch let error as NSError {
@@ -121,7 +121,7 @@ extension JSON {
             return self
         case let ary as NSArray:
             if 0 <= idx && idx < ary.count {
-                return JSON(ary[idx])
+                return JSON(ary[idx] as AnyObject)
             }
             return JSON(NSError(
                 domain:"JSONErrorDomain", code:404, userInfo:[
@@ -141,7 +141,7 @@ extension JSON {
         case _ as NSError:
             return self
         case let dic as NSDictionary:
-            if let val:AnyObject = dic[key] { return JSON(val) }
+            if let val = dic.value(forKey: key) as AnyObject? { return JSON(val) }
             return JSON(NSError(
                 domain:"JSONErrorDomain", code:404, userInfo:[
                     NSLocalizedDescriptionKey:
@@ -309,7 +309,9 @@ extension JSON {
     switch _value {
     case let o as NSArray:
         var result = [JSON]()
-        for v:AnyObject in o { result.append(JSON(v)) }
+        o.forEach { v in
+            result.append(JSON(v as AnyObject))
+        }
         return result
     default:
         return nil
@@ -323,7 +325,7 @@ extension JSON {
         var result = [String:JSON]()
         for (ko, v) in o {
             if let k = ko as? String {
-                result[k] = JSON(v)
+                result[k] = JSON(v as AnyObject)
             }
         }
         return result
@@ -351,16 +353,16 @@ extension JSON {
     // gives all values content in JSON object.
     public var allValues:JSON{
         if(self._value.allValues == nil) {
-            return JSON([])
+            return JSON(NSArray())
         }
-        return JSON(self._value.allValues)
+        return JSON(self._value.allValues as AnyObject)
     }
     // gives all keys content in JSON object.
     public var allKeys:JSON{
         if(self._value.allKeys == nil) {
-            return JSON([])
+            return JSON(NSArray())
         }
-        return JSON(self._value.allKeys)
+        return JSON(self._value.allKeys as AnyObject)
     }
 }
 
@@ -372,14 +374,14 @@ extension JSON : Sequence {
             return AnyIterator() {
                 i += 1
                 if i == o.count { return nil }
-                return (i, JSON(o[i]))
+                return (i as AnyObject, JSON(o[i] as AnyObject))
             }
         case let o as NSDictionary:
             let ks = o.allKeys.reversed()
             return AnyIterator() {
                 if ks.isEmpty { return nil }
                 if let k = ks.last as? String {
-                    return (k, JSON(o.value(forKey: k)!))
+                    return (k as AnyObject, JSON(o.value(forKey: k)! as AnyObject))
                 } else {
                     return nil
                 }
