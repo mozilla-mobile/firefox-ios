@@ -87,10 +87,14 @@ extension URL {
             ?? 0
     }
 
-    public func getResourceValueForKey(_ key: String) -> AnyObject? {
-        var val: AnyObject?
+    public func getResourceValueForKey(_ key: String) -> Any? {
+        let resourceKey = URLResourceKey(key)
+        let keySet = Set<URLResourceKey>([resourceKey])
+
+        var val: Any?
         do {
-            try getResourceValue(&val, forKey: URLResourceKey(rawValue: key))
+            let values = try resourceValues(forKeys: keySet)
+            val = values.allValues[resourceKey]
         } catch _ {
             return nil
         }
@@ -176,14 +180,14 @@ extension URL {
      **/
     public var hostSLD: String {
         guard let publicSuffix = self.publicSuffix, let baseDomain = self.baseDomain else {
-            return self.normalizedHost ?? self.URLString
+            return self.normalizedHost ?? self.absoluteString
         }
         return baseDomain.replacingOccurrences(of: ".\(publicSuffix)", with: "")
     }
 
     public var normalizedHostAndPath: String? {
         if let normalizedHost = self.normalizedHost {
-            return normalizedHost + (self.path ?? "/")
+            return normalizedHost + self.path
         }
         return nil
     }
@@ -191,11 +195,11 @@ extension URL {
     public var absoluteDisplayString: String? {
         var urlString = self.absoluteString
         // For http URLs, get rid of the trailing slash if the path is empty or '/'
-        if (self.scheme == "http" || self.scheme == "https") && (self.path == "/" || self.path == nil) && urlString.endsWith("/") {
+        if (self.scheme == "http" || self.scheme == "https") && (self.path == "/") && urlString.endsWith("/") {
             urlString = urlString.substring(to: urlString.characters.index(urlString.endIndex, offsetBy: -1))
         }
         // If it's basic http, strip out the string but leave anything else in
-        if urlString.hasPrefix("http://") ?? false {
+        if urlString.hasPrefix("http://") {
             return urlString.substring(from: urlString.characters.index(urlString.startIndex, offsetBy: 7))
         } else {
             return urlString
@@ -323,7 +327,7 @@ extension URL {
     }
 
     public func havingRemovedAuthorisationComponents() -> URL {
-        guard let urlComponents = URLComponents(url: self, resolvingAgainstBaseURL: false) else {
+        guard var urlComponents = URLComponents(url: self, resolvingAgainstBaseURL: false) else {
             return self
         }
         urlComponents.user = nil
@@ -355,11 +359,9 @@ extension URL {
     }
 
     public func encodeReaderModeURL(_ baseReaderModeURL: String) -> URL? {
-        if let absoluteString = self.absoluteString {
-            if let encodedURL = absoluteString.addingPercentEncoding(withAllowedCharacters: CharacterSet.alphanumerics) {
-                if let aboutReaderURL = URL(string: "\(baseReaderModeURL)?url=\(encodedURL)") {
-                    return aboutReaderURL
-                }
+        if let encodedURL = absoluteString.addingPercentEncoding(withAllowedCharacters: CharacterSet.alphanumerics) {
+            if let aboutReaderURL = URL(string: "\(baseReaderModeURL)?url=\(encodedURL)") {
+                return aboutReaderURL
             }
         }
         return nil
@@ -370,7 +372,7 @@ extension URL {
 
 extension URL {
     public var isErrorPageURL: Bool {
-        if let host = self.host, let path = self.path {
+        if let host = self.host {
             return self.scheme == "http" && host == "localhost" && path == "/errors/error.html"
         }
         return false
@@ -403,7 +405,7 @@ extension URL {
     /// For example, return "home" for "http://localhost:1234/about/home/#panel=0".
     public var aboutComponent: String? {
         let aboutPath = "/about/"
-        guard let scheme = self.scheme, let host = self.host, let path = self.path else {
+        guard let scheme = self.scheme, let host = self.host else {
             return nil
         }
         if scheme == "http" && host == "localhost" && path.startsWith(aboutPath) {
