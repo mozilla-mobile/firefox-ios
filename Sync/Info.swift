@@ -4,19 +4,20 @@
 
 import Foundation
 import Shared
+import SwiftyJSON
 
-public class InfoCollections {
-    private let collections: [String: Timestamp]
+open class InfoCollections {
+    fileprivate let collections: [String: Timestamp]
 
     init(collections: [String: Timestamp]) {
         self.collections = collections
     }
 
-    public class func fromJSON(json: JSON) -> InfoCollections? {
-        if let dict = json.asDictionary {
+    open class func fromJSON(_ json: JSON) -> InfoCollections? {
+        if let dict = json.dictionary {
             var coll = [String: Timestamp]()
             for (key, value) in dict {
-                if let value = value.asDouble {
+                if let value = value.double {
                     coll[key] = Timestamp(value * 1000)
                 } else {
                     return nil       // Invalid, so bail out.
@@ -27,11 +28,11 @@ public class InfoCollections {
         return nil
     }
 
-    public func collectionNames() -> [String] {
+    open func collectionNames() -> [String] {
         return Array(self.collections.keys)
     }
 
-    public func modified(collection: String) -> Timestamp? {
+    open func modified(_ collection: String) -> Timestamp? {
         return self.collections[collection]
     }
 
@@ -39,7 +40,7 @@ public class InfoCollections {
     // collections. If no collections are specified, they're considered the same
     // if the other I/C has the same values for this I/C's collections, and
     // they have the same collection array.
-    public func same(other: InfoCollections, collections: [String]?) -> Bool {
+    open func same(_ other: InfoCollections, collections: [String]?) -> Bool {
         if let collections = collections {
             return collections.every({ self.modified($0) == other.modified($0) })
         }

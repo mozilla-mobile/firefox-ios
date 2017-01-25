@@ -9,25 +9,24 @@ import Storage
 import XCTest
 
 class TestHistory: ProfileTest {
-    private func addSite(history: BrowserHistory, url: String, title: String, s: Bool = true) {
+    fileprivate func addSite(_ history: BrowserHistory, url: String, title: String, s: Bool = true) {
         let site = Site(url: url, title: title)
-        let visit = SiteVisit(site: site, date: NSDate.nowMicroseconds())
+        let visit = SiteVisit(site: site, date: Date.nowMicroseconds())
         XCTAssertEqual(s, history.addLocalVisit(visit).value.isSuccess, "Site added: \(url).")
     }
 
-    private func innerCheckSites(history: BrowserHistory, callback: (cursor: Cursor<Site>) -> Void) {
+    fileprivate func innerCheckSites(_ history: BrowserHistory, callback: @escaping (_ cursor: Cursor<Site>) -> Void) {
         // Retrieve the entry
         history.getSitesByLastVisit(100).upon {
             XCTAssertTrue($0.isSuccess)
-            callback(cursor: $0.successValue!)
+            callback($0.successValue!)
         }
     }
 
-
-    private func checkSites(history: BrowserHistory, urls: [String: String], s: Bool = true) {
+    fileprivate func checkSites(_ history: BrowserHistory, urls: [String: String], s: Bool = true) {
         // Retrieve the entry.
         if let cursor = history.getSitesByLastVisit(100).value.successValue {
-            XCTAssertEqual(cursor.status, CursorStatus.Success, "Returned success \(cursor.statusMessage).")
+            XCTAssertEqual(cursor.status, CursorStatus.success, "Returned success \(cursor.statusMessage).")
             XCTAssertEqual(cursor.count, urls.count, "Cursor has \(urls.count) entries.")
 
             for index in 0..<cursor.count {
@@ -42,23 +41,23 @@ class TestHistory: ProfileTest {
         }
     }
 
-    private func clear(history: BrowserHistory) {
+    fileprivate func clear(_ history: BrowserHistory) {
         XCTAssertTrue(history.clearHistory().value.isSuccess, "History cleared.")
     }
 
-    private func checkVisits(history: BrowserHistory, url: String) {
-        let expectation = self.expectationWithDescription("Wait for history")
+    fileprivate func checkVisits(_ history: BrowserHistory, url: String) {
+        let expectation = self.expectation(description: "Wait for history")
         history.getSitesByLastVisit(100).upon { result in
             XCTAssertTrue(result.isSuccess)
             history.getSitesByFrecencyWithHistoryLimit(100, whereURLContains: url).upon { result in
                 XCTAssertTrue(result.isSuccess)
                 let cursor = result.successValue!
-                XCTAssertEqual(cursor.status, CursorStatus.Success, "returned success \(cursor.statusMessage)")
+                XCTAssertEqual(cursor.status, CursorStatus.success, "returned success \(cursor.statusMessage)")
                 // XXX - We don't allow querying much info about visits here anymore, so there isn't a lot to do
                 expectation.fulfill()
             }
         }
-        self.waitForExpectationsWithTimeout(100, handler: nil)
+        self.waitForExpectations(timeout: 100, handler: nil)
     }
 
     // This is a very basic test. Adds an entry. Retrieves it, and then clears the database
@@ -93,7 +92,7 @@ class TestHistory: ProfileTest {
             let h = profile.history
             var j = 0
 
-            self.measureBlock({ () -> Void in
+            self.measure({ () -> Void in
                 for _ in 0...self.NumCmds {
                     self.addSite(h, url: "https://someurl\(j).com/", title: "title \(j)")
                     j += 1
@@ -116,7 +115,7 @@ class TestHistory: ProfileTest {
                 j += 1
             }
 
-            self.measureBlock({ () -> Void in
+            self.measure({ () -> Void in
                 self.checkSites(h, urls: urls)
                 return
             })
@@ -129,10 +128,10 @@ class TestHistory: ProfileTest {
     // the results. Just look for crashes.
     func testRandomThreading() {
         withTestProfile { profile -> Void in
-            let queue = dispatch_queue_create("My Queue", DISPATCH_QUEUE_CONCURRENT)
+            let queue = DispatchQueue(label: "My Queue", qos: DispatchQoS.default, attributes: DispatchQueue.Attributes.concurrent, autoreleaseFrequency: DispatchQueue.AutoreleaseFrequency.inherit, target: nil)
             var counter = 0
 
-            let expectation = self.expectationWithDescription("Wait for history")
+            let expectation = self.expectation(description: "Wait for history")
             for _ in 0..<self.NumThreads {
                 var history = profile.history as BrowserHistory
                 self.runRandom(&history, queue: queue, cb: { () -> Void in
@@ -142,18 +141,18 @@ class TestHistory: ProfileTest {
                     }
                 })
             }
-            self.waitForExpectationsWithTimeout(10, handler: nil)
+            self.waitForExpectations(timeout: 10, handler: nil)
         }
     }
 
     // Same as testRandomThreading, but uses one history connection for all threads
     func testRandomThreading2() {
         withTestProfile { profile -> Void in
-            let queue = dispatch_queue_create("My Queue", DISPATCH_QUEUE_CONCURRENT)
+            let queue = DispatchQueue(label: "My Queue", qos: DispatchQoS.default, attributes: DispatchQueue.Attributes.concurrent, autoreleaseFrequency: DispatchQueue.AutoreleaseFrequency.inherit, target: nil)
             var history = profile.history as BrowserHistory
             var counter = 0
 
-            let expectation = self.expectationWithDescription("Wait for history")
+            let expectation = self.expectation(description: "Wait for history")
             for _ in 0..<self.NumThreads {
                 self.runRandom(&history, queue: queue, cb: { () -> Void in
                     counter += 1
@@ -162,13 +161,12 @@ class TestHistory: ProfileTest {
                     }
                 })
             }
-            self.waitForExpectationsWithTimeout(10, handler: nil)
+            self.waitForExpectations(timeout: 10, handler: nil)
         }
     }
 
-
     // Runs a random command on a database. Calls cb when finished.
-    private func runRandom(inout history: BrowserHistory, cmdIn: Int, cb: () -> Void) {
+    fileprivate func runRandom(_ history: inout BrowserHistory, cmdIn: Int, cb: @escaping () -> Void) {
         var cmd = cmdIn
         if cmd < 0 {
             cmd = Int(arc4random() % 5)
@@ -194,23 +192,25 @@ class TestHistory: ProfileTest {
 
     // Calls numCmds random methods on this database. val is a counter used by this interally (i.e. always pass zero for it).
     // Calls cb when finished.
-    private func runMultiRandom(inout history: BrowserHistory, val: Int, numCmds: Int, cb: () -> Void) {
+    fileprivate func runMultiRandom(_ history: inout BrowserHistory, val: Int, numCmds: Int, cb: @escaping () -> Void) {
         if val == numCmds {
             cb()
             return
         } else {
-            runRandom(&history, cmdIn: -1) { _ in
+            runRandom(&history, cmdIn: -1) { [history]_ in
+                var history = history
                 self.runMultiRandom(&history, val: val+1, numCmds: numCmds, cb: cb)
             }
         }
     }
 
     // Helper for starting a new thread running NumCmds random methods on it. Calls cb when done.
-    private func runRandom(inout history: BrowserHistory, queue: dispatch_queue_t, cb: () -> Void) {
-        dispatch_async(queue) {
+    fileprivate func runRandom(_ history: inout BrowserHistory, queue: DispatchQueue, cb: @escaping () -> Void) {
+        queue.async { [history] in
+            var history = history
             // Each thread creates its own history provider
             self.runMultiRandom(&history, val: 0, numCmds: self.NumCmds) { _ in
-                dispatch_async(dispatch_get_main_queue(), cb)
+                DispatchQueue.main.async(execute: cb)
             }
         }
     }

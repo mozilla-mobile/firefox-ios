@@ -8,18 +8,18 @@ import Foundation
 ///
 /// TODO: In the Android code this is a subclass of MozResponse - Which has a bunch of other useful shortcuts. Maybe we should do that too? Or for the sake of simplicity, move some of those functions (which ones do we need?) into this class
 class ReadingListResponse {
-    var response: NSHTTPURLResponse
-    var json: AnyObject?
+    var response: HTTPURLResponse
+    var json: [String: Any]?
 
-    init?(response: NSHTTPURLResponse, json: AnyObject?) {
+    init?(response: HTTPURLResponse, json: [String: Any]) {
         self.response = response
         self.json = json
     }
 
     var lastModified: Int64? {
         get {
-            if let lastModified = response.allHeaderFields["Last-Modified"] as? NSString {
-                return lastModified.longLongValue
+            if let lastModified = response.allHeaderFields["Last-Modified"] as? String {
+                return Int64(lastModified)
             } else {
                 return nil
             }

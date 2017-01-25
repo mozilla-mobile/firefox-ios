@@ -8,7 +8,7 @@ import UIKit
 import Deferred
 import XCGLogger
 
-private var log = XCGLogger.defaultInstance()
+private var log = XCGLogger.default
 
 private class DiskImageStoreErrorType: MaybeErrorType {
     let description: String
@@ -20,12 +20,12 @@ private class DiskImageStoreErrorType: MaybeErrorType {
 /**
  * Disk-backed key-value image store.
  */
-public class DiskImageStore {
-    private let files: FileAccessor
-    private let filesDir: String
-    private let queue = dispatch_queue_create("DiskImageStore", DISPATCH_QUEUE_CONCURRENT)
-    private let quality: CGFloat
-    private var keys: Set<String>
+open class DiskImageStore {
+    fileprivate let files: FileAccessor
+    fileprivate let filesDir: String
+    fileprivate let queue = DispatchQueue(label: "DiskImageStore", attributes: DispatchQueue.Attributes.concurrent)
+    fileprivate let quality: CGFloat
+    fileprivate var keys: Set<String>
 
     required public init(files: FileAccessor, namespace: String, quality: Float) {
         self.files = files
@@ -34,7 +34,7 @@ public class DiskImageStore {
 
         // Build an in-memory set of keys from the existing images on disk.
         var keys = [String]()
-        if let fileEnumerator = NSFileManager.defaultManager().enumeratorAtPath(filesDir) {
+        if let fileEnumerator = FileManager.default.enumerator(atPath: filesDir) {
             for file in fileEnumerator {
                 keys.append(file as! String)
             }
@@ -43,15 +43,15 @@ public class DiskImageStore {
     }
 
     /// Gets an image for the given key if it is in the store.
-    public func get(key: String) -> Deferred<Maybe<UIImage>> {
+    open func get(_ key: String) -> Deferred<Maybe<UIImage>> {
         if !keys.contains(key) {
             return deferMaybe(DiskImageStoreErrorType(description: "Image key not found"))
         }
 
         return deferDispatchAsync(queue) { () -> Deferred<Maybe<UIImage>> in
-            let imagePath = (self.filesDir as NSString).stringByAppendingPathComponent(key)
-            if let data = NSData(contentsOfFile: imagePath),
-                   image = UIImage.imageFromDataThreadSafe(data) {
+            let imagePath = URL(fileURLWithPath: self.filesDir).appendingPathComponent(key)
+            if let data = try? Data(contentsOf: imagePath),
+                   let image = UIImage.imageFromDataThreadSafe(data) {
                 return deferMaybe(image)
             }
 
@@ -62,17 +62,20 @@ public class DiskImageStore {
     /// Adds an image for the given key.
     /// This put is asynchronous; the image is not recorded in the cache until the write completes.
     /// Does nothing if this key already exists in the store.
-    public func put(key: String, image: UIImage) -> Success {
+    @discardableResult open func put(_ key: String, image: UIImage) -> Success {
         if keys.contains(key) {
             return deferMaybe(DiskImageStoreErrorType(description: "Key already in store"))
         }
 
         return deferDispatchAsync(queue) { () -> Success in
-            let imagePath = (self.filesDir as NSString).stringByAppendingPathComponent(key)
+            let imageURL = URL(fileURLWithPath: self.filesDir).appendingPathComponent(key)
             if let data = UIImageJPEGRepresentation(image, self.quality) {
-                if data.writeToFile(imagePath, atomically: false) {
+                do {
+                    try data.write(to: imageURL, options: .noFileProtection)
                     self.keys.insert(key)
                     return succeed()
+                } catch {
+                    log.error("Unable to write image to disk: \(error)")
                 }
             }
 
@@ -81,18 +84,18 @@ public class DiskImageStore {
     }
 
     /// Clears all images from the cache, excluding the given set of keys.
-    public func clearExcluding(keys: Set<String>) {
-        let keysToDelete = self.keys.subtract(keys)
+    open func clearExcluding(_ keys: Set<String>) {
+        let keysToDelete = self.keys.subtracting(keys)
 
         for key in keysToDelete {
-            let path = NSString(string: filesDir).stringByAppendingPathComponent(key)
+            let url = URL(fileURLWithPath: filesDir).appendingPathComponent(key)
             do {
-                try NSFileManager.defaultManager().removeItemAtPath(path)
+                try FileManager.default.removeItem(at: url)
             } catch {
-                log.warning("Failed to remove DiskImageStore item at \(path): \(error)")
+                log.warning("Failed to remove DiskImageStore item at \(url.absoluteString): \(error)")
             }
         }
 
-        self.keys = self.keys.intersect(keys)
+        self.keys = self.keys.intersection(keys)
     }
 }

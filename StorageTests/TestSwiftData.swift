@@ -20,7 +20,7 @@ class TestSwiftData: XCTestCase {
             try files.remove("testSwiftData.db")
         } catch _ {
         }
-        testDB = (try! (files.getAndEnsureDirectory() as NSString)).stringByAppendingPathComponent("testSwiftData.db")
+        testDB = (try! (files.getAndEnsureDirectory() as NSString)).appendingPathComponent("testSwiftData.db")
         swiftData = SwiftData(filename: testDB)
         let table = BrowserTable()
 
@@ -28,7 +28,7 @@ class TestSwiftData: XCTestCase {
         XCTAssert(SwiftData.ReuseConnections, "Reusing database connections")
         XCTAssert(SwiftData.EnableWAL, "WAL enabled")
 
-        swiftData!.withConnection(SwiftData.Flags.ReadWriteCreate) { db in
+        swiftData!.withConnection(SwiftData.Flags.readWriteCreate) { db in
             let f = FaviconsTable<Favicon>()
             f.create(db)    // Because BrowserTable needs it.
             table.create(db)
@@ -89,11 +89,11 @@ class TestSwiftData: XCTestCase {
         XCTAssertNil(writeDuringRead(true), "Insertion succeeded")
     }
 
-    private func writeDuringRead(safeQuery: Bool = false, closeTimeout: UInt64? = nil) -> NSError? {
+    fileprivate func writeDuringRead(_ safeQuery: Bool = false, closeTimeout: UInt64? = nil) -> NSError? {
 
         // Query the database and hold the cursor.
         var c: Cursor<SDRow>!
-        let error = swiftData!.withConnection(SwiftData.Flags.ReadOnly) { db in
+        let error = swiftData!.withConnection(SwiftData.Flags.readOnly) { db in
             if safeQuery {
                 c = db.executeQuery("SELECT * FROM history", factory: { $0 })
             } else {
@@ -109,8 +109,8 @@ class TestSwiftData: XCTestCase {
 
         // Close the cursor after a delay if there's a close timeout set.
         if let closeTimeout = closeTimeout {
-            let queue = dispatch_queue_create("cursor timeout queue", DISPATCH_QUEUE_SERIAL)
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(closeTimeout * NSEC_PER_SEC)), queue) {
+            let queue = DispatchQueue(label: "cursor timeout queue", attributes: [])
+            queue.asyncAfter(deadline: DispatchTime.now() + Double(Int64(closeTimeout * NSEC_PER_SEC)) / Double(NSEC_PER_SEC)) {
                 c.close()
             }
         }
@@ -119,8 +119,8 @@ class TestSwiftData: XCTestCase {
         return addSite(BrowserTable(), url: "http://url/\(urlCounter)", title: "title\(urlCounter)")
     }
 
-    private func addSite(table: BrowserTable, url: String, title: String) -> NSError? {
-        return swiftData!.withConnection(SwiftData.Flags.ReadWrite) { connection -> NSError? in
+    fileprivate func addSite(_ table: BrowserTable, url: String, title: String) -> NSError? {
+        return swiftData!.withConnection(SwiftData.Flags.readWrite) { connection -> NSError? in
             let args: Args = [Bytes.generateGUID(), url, title]
             return connection.executeChange("INSERT INTO history (guid, url, title, is_deleted, should_upload) VALUES (?, ?, ?, 0, 0)", withArgs: args)
         }
@@ -135,8 +135,8 @@ class TestSwiftData: XCTestCase {
         } catch _ {
         }
         let path = testDB
-        func verifyData(swiftData: SwiftData) -> NSError? {
-            return swiftData.withConnection(SwiftData.Flags.ReadOnly) { db in
+        func verifyData(_ swiftData: SwiftData) -> NSError? {
+            return swiftData.withConnection(SwiftData.Flags.readOnly) { db in
                 return nil
             }
         }
@@ -168,7 +168,7 @@ class TestSwiftData: XCTestCase {
         XCTAssertNil(t[3], "Subscript three returns nil")
 
         // Test status data with default initializer
-        XCTAssertEqual(t.status, CursorStatus.Success, "Cursor as correct status")
+        XCTAssertEqual(t.status, CursorStatus.success, "Cursor as correct status")
         XCTAssertEqual(t.statusMessage, "Success", "Cursor as correct status message")
         XCTAssertEqual(t.count, 3, "Cursor as correct size")
 
@@ -180,8 +180,8 @@ class TestSwiftData: XCTestCase {
         }
 
         // Test creating a failed cursor
-        let t2 = ArrayCursor<String>(data: data, status: CursorStatus.Failure, statusMessage: "Custom status message")
-        XCTAssertEqual(t2.status, CursorStatus.Failure, "Cursor as correct status")
+        let t2 = ArrayCursor<String>(data: data, status: CursorStatus.failure, statusMessage: "Custom status message")
+        XCTAssertEqual(t2.status, CursorStatus.failure, "Cursor as correct status")
         XCTAssertEqual(t2.statusMessage, "Custom status message", "Cursor as correct status message")
         XCTAssertEqual(t2.count, 0, "Cursor as correct size")
 

@@ -24,7 +24,7 @@ private struct AuralProgressBarUX {
 }
 
 class AuralProgressBar {
-    private class UI {
+    fileprivate class UI {
         let engine: AVAudioEngine
         let progressPlayer: AVAudioPlayerNode
         let tickPlayer: AVAudioPlayerNode
@@ -32,7 +32,7 @@ class AuralProgressBar {
         var _tickBuffer: AVAudioPCMBuffer?
         var tickBuffer: AVAudioPCMBuffer {
             if _tickBuffer == nil {
-                _tickBuffer = UI.tone(tickPlayer.outputFormatForBus(0), pitch: AuralProgressBarUX.TickFrequency, volume: AuralProgressBarUX.TickVolume, duration: AuralProgressBarUX.TickDuration, period: AuralProgressBarUX.TickPeriod)
+                _tickBuffer = UI.tone(tickPlayer.outputFormat(forBus: 0), pitch: AuralProgressBarUX.TickFrequency, volume: AuralProgressBarUX.TickVolume, duration: AuralProgressBarUX.TickDuration, period: AuralProgressBarUX.TickPeriod)
             }
             return _tickBuffer!
         }
@@ -42,26 +42,26 @@ class AuralProgressBar {
 
             tickPlayer = AVAudioPlayerNode()
             tickPlayer.pan = -Float(AuralProgressBarUX.TickProgressPanSpread)
-            engine.attachNode(tickPlayer)
+            engine.attach(tickPlayer)
 
             progressPlayer = AVAudioPlayerNode()
             progressPlayer.pan = +Float(AuralProgressBarUX.TickProgressPanSpread)
-            engine.attachNode(progressPlayer)
+            engine.attach(progressPlayer)
 
             connectPlayerNodes()
 
-            NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(UI.handleAudioEngineConfigurationDidChangeNotification(_:)), name: AVAudioEngineConfigurationChangeNotification, object: nil)
-            NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(UI.handleAudioSessionInterruptionNotification(_:)), name: AVAudioSessionInterruptionNotification, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(UI.handleAudioEngineConfigurationDidChangeNotification(_:)), name: NSNotification.Name.AVAudioEngineConfigurationChange, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(UI.handleAudioSessionInterruptionNotification(_:)), name: NSNotification.Name.AVAudioSessionInterruption, object: nil)
         }
 
         deinit {
-            NSNotificationCenter.defaultCenter().removeObserver(self, name: AVAudioEngineConfigurationChangeNotification, object: nil)
-            NSNotificationCenter.defaultCenter().removeObserver(self, name: AVAudioSessionInterruptionNotification, object: nil)
+            NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVAudioEngineConfigurationChange, object: nil)
+            NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVAudioSessionInterruption, object: nil)
         }
 
         func connectPlayerNodes() {
             let mainMixer = engine.mainMixerNode
-            engine.connect(tickPlayer, to: mainMixer, format: mainMixer.outputFormatForBus(0))
+            engine.connect(tickPlayer, to: mainMixer, format: mainMixer.outputFormat(forBus: 0))
             engine.connect(progressPlayer, to: mainMixer, format: tickBuffer.format)
         }
 
@@ -71,7 +71,7 @@ class AuralProgressBar {
         }
 
         func startEngine() {
-            if !engine.running {
+            if !engine.isRunning {
                 do {
                     try engine.start()
                 } catch {
@@ -80,17 +80,17 @@ class AuralProgressBar {
             }
         }
 
-        @objc func handleAudioSessionInterruptionNotification(notification: NSNotification) {
+        @objc func handleAudioSessionInterruptionNotification(_ notification: Notification) {
             if let interruptionTypeValue = notification.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt {
                 if let interruptionType = AVAudioSessionInterruptionType(rawValue: interruptionTypeValue) {
                     switch interruptionType {
-                    case .Began:
+                    case .began:
                         tickPlayer.stop()
                         progressPlayer.stop()
-                    case .Ended:
+                    case .ended:
                         if let interruptionOptionValue = notification.userInfo?[AVAudioSessionInterruptionOptionKey] as? UInt {
                             let interruptionOption = AVAudioSessionInterruptionOptions(rawValue: interruptionOptionValue)
-                            if interruptionOption == .ShouldResume {
+                            if interruptionOption == .shouldResume {
                                 startEngine()
                             }
                         }
@@ -99,7 +99,7 @@ class AuralProgressBar {
             }
         }
 
-        @objc func handleAudioEngineConfigurationDidChangeNotification(notification: NSNotification) {
+        @objc func handleAudioEngineConfigurationDidChangeNotification(_ notification: Notification) {
             disconnectPlayerNodes()
             connectPlayerNodes()
         }
@@ -109,7 +109,7 @@ class AuralProgressBar {
                 try engine.start()
                 tickPlayer.play()
                 progressPlayer.play()
-                tickPlayer.scheduleBuffer(tickBuffer, atTime: nil, options: AVAudioPlayerNodeBufferOptions.Loops) { }
+                tickPlayer.scheduleBuffer(tickBuffer, at: nil, options: AVAudioPlayerNodeBufferOptions.loops) { }
             } catch {
                 log.error("Unable to start AVAudioEngine. Tick & Progress player will not play : \(error)")
             }
@@ -121,22 +121,22 @@ class AuralProgressBar {
             engine.stop()
         }
 
-        func playProgress(progress: Double) {
+        func playProgress(_ progress: Double) {
             // using exp2 and log2 instead of exp and log as "log" clashes with XCGLogger.log
             let pitch = AuralProgressBarUX.ProgressStartFrequency * exp2(log2(AuralProgressBarUX.ProgressEndFrequency/AuralProgressBarUX.ProgressStartFrequency) * progress)
-            let buffer = UI.tone(progressPlayer.outputFormatForBus(0), pitch: pitch, volume: AuralProgressBarUX.ProgressVolume, duration: AuralProgressBarUX.ProgressDuration)
-            progressPlayer.scheduleBuffer(buffer, atTime: nil, options: .Interrupts) { }
+            let buffer = UI.tone(progressPlayer.outputFormat(forBus: 0), pitch: pitch, volume: AuralProgressBarUX.ProgressVolume, duration: AuralProgressBarUX.ProgressDuration)
+            progressPlayer.scheduleBuffer(buffer, at: nil, options: .interrupts) { }
         }
 
-        class func tone(format: AVAudioFormat, pitch: Double, volume: Double, duration: Double, period: Double? = nil) -> AVAudioPCMBuffer {
+        class func tone(_ format: AVAudioFormat, pitch: Double, volume: Double, duration: Double, period: Double? = nil) -> AVAudioPCMBuffer {
             // adjust durations to the nearest lower multiple of one pitch frequency's semiperiod to have tones end gracefully with 0 value
             let duration = Double(Int(duration * 2*pitch)) / (2*pitch)
             let pitchFrames = Int(duration * format.sampleRate)
             let frames = Int((period ?? duration) * format.sampleRate)
-            let buffer = AVAudioPCMBuffer(PCMFormat: format, frameCapacity: AVAudioFrameCount(frames))
+            let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(frames))
             buffer.frameLength = buffer.frameCapacity
             for channel in 0..<Int(format.channelCount) {
-                let channelData = buffer.floatChannelData[channel]
+                let channelData = buffer.floatChannelData?[channel]
                 var i = 0
                 for frame in 0..<frames {
                     // TODO: consider some attack-sustain-release to make the tones sound little less "sharp" and robotic
@@ -144,7 +144,7 @@ class AuralProgressBar {
                     if frame < pitchFrames {
                         val = volume * sin(pitch*Double(frame)*2*M_PI/format.sampleRate)
                     }
-                    channelData[i] = Float(val)
+                    channelData?[i] = Float(val)
                     i += buffer.stride
                 }
             }
@@ -152,7 +152,7 @@ class AuralProgressBar {
         }
     }
 
-    private let ui = UI()
+    fileprivate let ui = UI()
 
     var progress: Double? {
         didSet {

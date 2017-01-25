@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import SwiftyJSON
 
 public struct FxADevice {
     let name: String
@@ -11,18 +12,18 @@ public struct FxADevice {
     let type: String?
     let isCurrentDevice: Bool
 
-    private init(name: String, id: String?, type: String?, isCurrentDevice: Bool = false) {
+    fileprivate init(name: String, id: String?, type: String?, isCurrentDevice: Bool = false) {
         self.name = name
         self.id = id
         self.type = type
         self.isCurrentDevice = isCurrentDevice
     }
 
-    static func forRegister(name: String, type: String) -> FxADevice {
+    static func forRegister(_ name: String, type: String) -> FxADevice {
         return FxADevice(name: name, id: nil, type: type)
     }
 
-    static func forUpdate(name: String, id: String) -> FxADevice {
+    static func forUpdate(_ name: String, id: String) -> FxADevice {
         return FxADevice(name: name, id: id, type: nil)
     }
 
@@ -32,18 +33,18 @@ public struct FxADevice {
         parameters["id"] = id
         parameters["type"] = type
 
-        return JSON(parameters)
+        return JSON(parameters as NSDictionary)
     }
 
-    static func fromJSON(json: JSON) -> FxADevice? {
-        guard !json.isError,
-            let id = json["id"].asString,
-            let name = json["name"].asString,
-            let type = json["type"].asString else {
+    static func fromJSON(_ json: JSON) -> FxADevice? {
+        guard json.error == nil,
+            let id = json["id"].string,
+            let name = json["name"].string,
+            let type = json["type"].string else {
                 return nil
         }
 
-        let isCurrentDevice = json["isCurrentDevice"].asBool ?? false
+        let isCurrentDevice = json["isCurrentDevice"].bool ?? false
         return FxADevice(name: name, id: id, type: type, isCurrentDevice: isCurrentDevice)
     }
 }

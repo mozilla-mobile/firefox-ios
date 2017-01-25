@@ -20,7 +20,7 @@ class HistoryBackButton: UIButton {
     }()
 
     lazy var chevron: ChevronView = {
-        let chevron = ChevronView(direction: .Left)
+        let chevron = ChevronView(direction: .left)
         chevron.tintColor = UIConstants.HighlightBlue
         chevron.lineWidth = HistoryBackButtonUX.HistoryHistoryBackButtonHeaderChevronLineWidth
         return chevron
@@ -31,34 +31,34 @@ class HistoryBackButton: UIButton {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        userInteractionEnabled = true
+        isUserInteractionEnabled = true
 
         addSubview(topBorder)
         addSubview(chevron)
         addSubview(title)
 
-        backgroundColor = UIColor.whiteColor()
+        backgroundColor = UIColor.white
 
-        chevron.snp_makeConstraints { make in
+        chevron.snp.makeConstraints { make in
             make.leading.equalTo(self).offset(HistoryBackButtonUX.HistoryHistoryBackButtonHeaderChevronInset)
             make.centerY.equalTo(self)
             make.size.equalTo(HistoryBackButtonUX.HistoryHistoryBackButtonHeaderChevronSize)
         }
 
-        title.snp_makeConstraints { make in
-            make.leading.equalTo(chevron.snp_trailing).offset(HistoryBackButtonUX.HistoryHistoryBackButtonHeaderChevronInset)
+        title.snp.makeConstraints { make in
+            make.leading.equalTo(chevron.snp.trailing).offset(HistoryBackButtonUX.HistoryHistoryBackButtonHeaderChevronInset)
             make.trailing.greaterThanOrEqualTo(self).offset(-HistoryBackButtonUX.HistoryHistoryBackButtonHeaderChevronInset)
             make.centerY.equalTo(self)
         }
 
-        topBorder.snp_makeConstraints { make in
+        topBorder.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self)
             make.top.equalTo(self).offset(-0.5)
             make.height.equalTo(0.5)
         }
     }
 
-    private func createBorderView() -> UIView {
+    fileprivate func createBorderView() -> UIView {
         let view = UIView()
         view.backgroundColor = SiteTableViewControllerUX.HeaderBorderColor
         return view

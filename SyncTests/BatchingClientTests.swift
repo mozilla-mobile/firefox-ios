@@ -8,27 +8,28 @@ import Deferred
 @testable import Sync
 
 import XCTest
+import SwiftyJSON
 
 // Always return a gigantic encoded payload.
-private func massivify<T>(record: Record<T>) -> JSON? {
+private func massivify<T>(_ record: Record<T>) -> JSON? {
     return JSON([
         "id": record.id,
-        "foo": String(count: Sync15StorageClient.maxRecordSizeBytes + 1, repeatedValue: "X" as Character)
+        "foo": String(repeating: "X", count: Sync15StorageClient.maxRecordSizeBytes + 1)
     ])
 }
 
 private func basicSerializer<T>(record: Record<T>) -> String {
-    return JSON([
+    return JSON(object: [
         "id": record.id,
-        "payload": record.payload
-    ]).toString()
+        "payload": record.payload.json.dictionaryObject as Any
+    ]).rawString()!
 }
 
 // Create a basic record with an ID and a title that is the `Site$ID`.
 private func createRecordWithID(id: String) -> Record<CleartextPayloadJSON> {
     let jsonString = "{\"id\":\"\(id)\",\"title\": \"\(id)\"}"
     return Record<CleartextPayloadJSON>(id: id,
-                                        payload: CleartextPayloadJSON(JSON.parse(jsonString)),
+                                        payload: CleartextPayloadJSON(JSON(parseJSON: jsonString)),
                                         modified: 10_000,
                                         sortindex: 123,
                                         ttl: 1_000_000)
@@ -40,17 +41,16 @@ private func assertLinesMatchRecords<T>(lines: [String], records: [Record<T>], s
         return
     }
 
-    lines.enumerate().forEach { index, line in
+    lines.enumerated().forEach { index, line in
         let record = records[index]
         XCTAssertEqual(line, serializer(record))
     }
 }
 
-
-private func deferEmptyResponse(batchToken batchToken: BatchToken? = nil, lastModified: Timestamp? = nil) -> Deferred<Maybe<StorageResponse<POSTResult>>> {
-    var headers = [String: NSNumber]()
+private func deferEmptyResponse(token batchToken: BatchToken? = nil, lastModified: Timestamp? = nil) -> Deferred<Maybe<StorageResponse<POSTResult>>> {
+    var headers = [String: Any]()
     if let lastModified = lastModified {
-        headers["X-Last-Modified"] = NSNumber(unsignedLongLong: lastModified)
+        headers["X-Last-Modified"] = lastModified
     }
 
     return deferMaybe(
@@ -69,15 +69,15 @@ class Sync15BatchClientTests: XCTestCase {
 
     func testAddLargeRecordFails() {
         let uploader: BatchUploadFunction = { _ in deferEmptyResponse(lastModified: 10_000) }
-        let serializeRecord = { massivify($0)?.toString() }
+        let serializeRecord = { massivify($0)?.rawString() }
 
         let batch = Sync15BatchClient(config: miniConfig,
                                       ifUnmodifiedSince: nil,
                                       serializeRecord: serializeRecord,
                                       uploader: uploader,
-                                      onCollectionUploaded: { _ in deferMaybe(NSDate.now())})
+                                      onCollectionUploaded: { _ in deferMaybe(Date() as! MaybeErrorType)})
 
-        let record = createRecordWithID("A")
+        let record = createRecordWithID(id: "A")
         let result = batch.addRecords([record]).value
         XCTAssertTrue(result.isFailure)
         XCTAssertTrue(result.failureValue! is RecordTooLargeError)
@@ -89,9 +89,9 @@ class Sync15BatchClientTests: XCTestCase {
                                       ifUnmodifiedSince: nil,
                                       serializeRecord: { _ in nil },
                                       uploader: uploader,
-                                      onCollectionUploaded: { _ in deferMaybe(NSDate.now())})
+                                      onCollectionUploaded: { _ in deferMaybe(Date.now())})
 
-        let record = createRecordWithID("A")
+        let record = createRecordWithID(id: "A")
         let result = batch.addRecords([record]).value
         XCTAssertTrue(result.isFailure)
         XCTAssertTrue(result.failureValue! is SerializeRecordFailure)
@@ -115,9 +115,9 @@ class Sync15BatchClientTests: XCTestCase {
                                       ifUnmodifiedSince: 10_000,
                                       serializeRecord: basicSerializer,
                                       uploader: uploader,
-                                      onCollectionUploaded: { _ in deferMaybe(NSDate.now())})
+                                      onCollectionUploaded: { _ in deferMaybe(Date.now())})
 
-        let record = createRecordWithID("A")
+        let record = createRecordWithID(id: "A")
         batch.addRecords([record]).succeeded()
         let result = batch.endBatch().value
 
@@ -164,11 +164,11 @@ class Sync15BatchClientTests: XCTestCase {
                                       ifUnmodifiedSince: 10_000_000,
                                       serializeRecord: basicSerializer,
                                       uploader: uploader,
-                                      onCollectionUploaded: { _ in deferMaybe(NSDate.now())})
+                                      onCollectionUploaded: { _ in deferMaybe(Date.now())})
 
-        let recordA = createRecordWithID("A")
-        let recordB = createRecordWithID("B")
-        let recordC = createRecordWithID("C")
+        let recordA = createRecordWithID(id: "A")
+        let recordB = createRecordWithID(id: "B")
+        let recordC = createRecordWithID(id: "C")
         let allRecords = [recordA, recordB, recordC]
 
         batch.addRecords([recordA, recordB, recordC]).succeeded()
@@ -178,7 +178,7 @@ class Sync15BatchClientTests: XCTestCase {
         XCTAssertEqual(requestCount, 3)
 
         // Validate contents sent to the server
-        assertLinesMatchRecords(linesSent, records: allRecords, serializer: basicSerializer)
+        assertLinesMatchRecords(lines: linesSent, records: allRecords, serializer: basicSerializer)
 
         // Validate the last IUS we got is the last request
         XCTAssertEqual(lastIUS, 30_000_000)
@@ -198,7 +198,7 @@ class Sync15BatchClientTests: XCTestCase {
 
         let collectionUploaded: (POSTResult, Timestamp?) -> DeferredTimestamp = { _ in
             uploadedCollectionCount += 1
-            return deferMaybe(NSDate.now())
+            return deferMaybe(Date.now())
         }
 
         // Setup a configuration so we each payload would be one record
@@ -216,8 +216,8 @@ class Sync15BatchClientTests: XCTestCase {
                                       uploader: uploader,
                                       onCollectionUploaded: collectionUploaded)
 
-        let recordA = createRecordWithID("A")
-        let recordB = createRecordWithID("B")
+        let recordA = createRecordWithID(id: "A")
+        let recordB = createRecordWithID(id: "B")
         let allRecords = [recordA, recordB]
 
         batch.addRecords([recordA, recordB]).succeeded()
@@ -227,7 +227,7 @@ class Sync15BatchClientTests: XCTestCase {
         XCTAssertEqual(requestCount, 2)
 
         // Validate contents sent to the server
-        assertLinesMatchRecords(linesSent, records: allRecords, serializer: basicSerializer)
+        assertLinesMatchRecords(lines: linesSent, records: allRecords, serializer: basicSerializer)
 
         // Validate we only made 2 calls to collection uploaded since we're doing single POSTs
         XCTAssertEqual(uploadedCollectionCount, 2)
@@ -243,7 +243,7 @@ class Sync15BatchClientTests: XCTestCase {
         var linesSent = [String]()
 
         let allRecords: [Record<CleartextPayloadJSON>] = "ABCDEF".characters.reduce([]) { list, char in
-            return list + [createRecordWithID(String(char))]
+            return list + [createRecordWithID(id: String(char))]
         }
 
         // Since we never return a batch token, the batch client won't batch upload and default to single POSTs
@@ -252,24 +252,24 @@ class Sync15BatchClientTests: XCTestCase {
             requestCount += 1
             switch requestCount {
             case 1:
-                let expected = NSURLQueryItem(name: "batch", value: "true")
+                let expected = URLQueryItem(name: "batch", value: "true")
                 XCTAssertEqual(expected, queryParams![0])
                 XCTAssertEqual(ius, 10_000)
-                assertLinesMatchRecords(lines, records: Array(allRecords[0..<2]), serializer: basicSerializer)
-                return deferEmptyResponse(batchToken: "1", lastModified: 10_000)
+                assertLinesMatchRecords(lines: lines, records: Array(allRecords[0..<2]), serializer: basicSerializer)
+                return deferEmptyResponse(token: "1", lastModified: 10_000)
             case 2:
-                let expected = NSURLQueryItem(name: "batch", value: "1")
+                let expected = URLQueryItem(name: "batch", value: "1")
                 XCTAssertEqual(expected, queryParams![0])
                 XCTAssertEqual(ius, 10_000_000)
-                assertLinesMatchRecords(lines, records: Array(allRecords[2..<4]), serializer: basicSerializer)
-                return deferEmptyResponse(batchToken: "1", lastModified: 10_000)
+                assertLinesMatchRecords(lines: lines, records: Array(allRecords[2..<4]), serializer: basicSerializer)
+                return deferEmptyResponse(token: "1", lastModified: 10_000)
             case 3:
-                let expectedBatch = NSURLQueryItem(name: "batch", value: "1")
-                let expectedCommit = NSURLQueryItem(name: "commit", value: "true")
+                let expectedBatch = URLQueryItem(name: "batch", value: "1")
+                let expectedCommit = URLQueryItem(name: "commit", value: "true")
                 XCTAssertEqual(expectedBatch, queryParams![0])
                 XCTAssertEqual(expectedCommit, queryParams![1])
                 XCTAssertEqual(ius, 10_000_000)
-                assertLinesMatchRecords(lines, records: Array(allRecords[4..<6]), serializer: basicSerializer)
+                assertLinesMatchRecords(lines: lines, records: Array(allRecords[4..<6]), serializer: basicSerializer)
                 return deferEmptyResponse(lastModified: 20_000)
             default:
                 XCTFail()
@@ -279,7 +279,7 @@ class Sync15BatchClientTests: XCTestCase {
 
         let collectionUploaded: (POSTResult, Timestamp?) -> DeferredTimestamp = { _ in
             uploadedCollectionCount += 1
-            return deferMaybe(NSDate.now())
+            return deferMaybe(Date.now())
         }
 
         // Setup a configuration so we send 2 records per each payload
@@ -304,7 +304,7 @@ class Sync15BatchClientTests: XCTestCase {
         XCTAssertEqual(requestCount, 3)
 
         // Validate contents sent to the server
-        assertLinesMatchRecords(linesSent, records: allRecords, serializer: basicSerializer)
+        assertLinesMatchRecords(lines: linesSent, records: allRecords, serializer: basicSerializer)
 
         // Validate we only made one call to the collection upload callback
         XCTAssertEqual(uploadedCollectionCount, 2)
@@ -320,7 +320,7 @@ class Sync15BatchClientTests: XCTestCase {
         var linesSent = [String]()
 
         let allRecords: [Record<CleartextPayloadJSON>] = "ABC".characters.reduce([]) { list, char in
-            return list + [createRecordWithID(String(char))]
+            return list + [createRecordWithID(id: String(char))]
         }
 
         // Since we never return a batch token, the batch client won't batch upload and default to single POSTs
@@ -329,18 +329,18 @@ class Sync15BatchClientTests: XCTestCase {
             requestCount += 1
             switch requestCount {
             case 1:
-                let expected = NSURLQueryItem(name: "batch", value: "true")
+                let expected = URLQueryItem(name: "batch", value: "true")
                 XCTAssertEqual(expected, queryParams![0])
                 XCTAssertEqual(ius, 10_000)
-                assertLinesMatchRecords(lines, records: Array(allRecords[0..<2]), serializer: basicSerializer)
-                return deferEmptyResponse(batchToken: "1", lastModified: 10_000)
+                assertLinesMatchRecords(lines: lines, records: Array(allRecords[0..<2]), serializer: basicSerializer)
+                return deferEmptyResponse(token: "1", lastModified: 10_000)
             case 2:
-                let expectedBatch = NSURLQueryItem(name: "batch", value: "1")
-                let expectedCommit = NSURLQueryItem(name: "commit", value: "true")
+                let expectedBatch = URLQueryItem(name: "batch", value: "1")
+                let expectedCommit = URLQueryItem(name: "commit", value: "true")
                 XCTAssertEqual(expectedBatch, queryParams![0])
                 XCTAssertEqual(expectedCommit, queryParams![1])
                 XCTAssertEqual(ius, 10_000_000)
-                assertLinesMatchRecords(lines, records: Array(allRecords[2..<3]), serializer: basicSerializer)
+                assertLinesMatchRecords(lines: lines, records: Array(allRecords[2..<3]), serializer: basicSerializer)
                 return deferEmptyResponse(lastModified: 20_000)
             default:
                 XCTFail()
@@ -350,7 +350,7 @@ class Sync15BatchClientTests: XCTestCase {
 
         let collectionUploaded: (POSTResult, Timestamp?) -> DeferredTimestamp = { _ in
             uploadedCollectionCount += 1
-            return deferMaybe(NSDate.now())
+            return deferMaybe(Date.now())
         }
 
         // Setup a configuration so we send 2 records per each payload
@@ -375,7 +375,7 @@ class Sync15BatchClientTests: XCTestCase {
         XCTAssertEqual(requestCount, 2)
 
         // Validate contents sent to the server
-        assertLinesMatchRecords(linesSent, records: allRecords, serializer: basicSerializer)
+        assertLinesMatchRecords(lines: linesSent, records: allRecords, serializer: basicSerializer)
 
         // Validate we only made one call to the collection upload callback
         XCTAssertEqual(uploadedCollectionCount, 2)
@@ -391,7 +391,7 @@ class Sync15BatchClientTests: XCTestCase {
         var linesSent = [String]()
 
         let allRecords: [Record<CleartextPayloadJSON>] = "ABCDE".characters.reduce([]) { list, char in
-            return list + [createRecordWithID(String(char))]
+            return list + [createRecordWithID(id: String(char))]
         }
 
         // Since we never return a batch token, the batch client won't batch upload and default to single POSTs
@@ -400,24 +400,24 @@ class Sync15BatchClientTests: XCTestCase {
             requestCount += 1
             switch requestCount {
             case 1:
-                let expected = NSURLQueryItem(name: "batch", value: "true")
+                let expected = URLQueryItem(name: "batch", value: "true")
                 XCTAssertEqual(expected, queryParams![0])
                 XCTAssertEqual(ius, 10_000)
-                assertLinesMatchRecords(lines, records: Array(allRecords[0..<2]), serializer: basicSerializer)
-                return deferEmptyResponse(batchToken: "1", lastModified: 10_000)
+                assertLinesMatchRecords(lines: lines, records: Array(allRecords[0..<2]), serializer: basicSerializer)
+                return deferEmptyResponse(token: "1", lastModified: 10_000)
             case 2:
-                let expectedBatch = NSURLQueryItem(name: "batch", value: "1")
+                let expectedBatch = URLQueryItem(name: "batch", value: "1")
                 XCTAssertEqual(expectedBatch, queryParams![0])
                 XCTAssertEqual(ius, 10_000_000)
-                assertLinesMatchRecords(lines, records: Array(allRecords[2..<4]), serializer: basicSerializer)
+                assertLinesMatchRecords(lines: lines, records: Array(allRecords[2..<4]), serializer: basicSerializer)
                 return deferEmptyResponse(lastModified: 10_000)
             case 3:
-                let expectedBatch = NSURLQueryItem(name: "batch", value: "1")
-                let expectedCommit = NSURLQueryItem(name: "commit", value: "true")
+                let expectedBatch = URLQueryItem(name: "batch", value: "1")
+                let expectedCommit = URLQueryItem(name: "commit", value: "true")
                 XCTAssertEqual(expectedBatch, queryParams![0])
                 XCTAssertEqual(expectedCommit, queryParams![1])
                 XCTAssertEqual(ius, 10_000_000)
-                assertLinesMatchRecords(lines, records: [allRecords[4]], serializer: basicSerializer)
+                assertLinesMatchRecords(lines: lines, records: [allRecords[4]], serializer: basicSerializer)
                 return deferEmptyResponse(lastModified: 20_000)
             default:
                 XCTFail()
@@ -427,7 +427,7 @@ class Sync15BatchClientTests: XCTestCase {
 
         let collectionUploaded: (POSTResult, Timestamp?) -> DeferredTimestamp = { _ in
             uploadedCollectionCount += 1
-            return deferMaybe(NSDate.now())
+            return deferMaybe(Date.now())
         }
 
         // Setup a configuration so we send 2 records per each payload
@@ -452,7 +452,7 @@ class Sync15BatchClientTests: XCTestCase {
         XCTAssertEqual(requestCount, 3)
 
         // Validate contents sent to the server
-        assertLinesMatchRecords(linesSent, records: allRecords, serializer: basicSerializer)
+        assertLinesMatchRecords(lines: linesSent, records: allRecords, serializer: basicSerializer)
 
         // Validate we only made one call to the collection upload callback
         XCTAssertEqual(uploadedCollectionCount, 2)
@@ -467,7 +467,7 @@ class Sync15BatchClientTests: XCTestCase {
         var uploadedCollectionCount = 0
         var linesSent = [String]()
 
-        let recordA = createRecordWithID("A")
+        let recordA = createRecordWithID(id: "A")
 
         // Since we never return a batch token, the batch client won't batch upload and default to single POSTs
         let uploader: BatchUploadFunction = { lines, ius, queryParams in
@@ -476,7 +476,7 @@ class Sync15BatchClientTests: XCTestCase {
             switch requestCount {
             case 1:
                 XCTAssertEqual(ius, 10_000)
-                assertLinesMatchRecords(lines, records: [recordA], serializer: basicSerializer)
+                assertLinesMatchRecords(lines: lines, records: [recordA], serializer: basicSerializer)
                 return deferEmptyResponse(lastModified: 20_000)
             default:
                 XCTFail()
@@ -486,7 +486,7 @@ class Sync15BatchClientTests: XCTestCase {
 
         let collectionUploaded: (POSTResult, Timestamp?) -> DeferredTimestamp = { _ in
             uploadedCollectionCount += 1
-            return deferMaybe(NSDate.now())
+            return deferMaybe(Date.now())
         }
 
         // Setup a configuration so we send 2 records per each payload
@@ -511,7 +511,7 @@ class Sync15BatchClientTests: XCTestCase {
         XCTAssertEqual(requestCount, 1)
 
         // Validate contents sent to the server
-        assertLinesMatchRecords(linesSent, records: [recordA], serializer: basicSerializer)
+        assertLinesMatchRecords(lines: linesSent, records: [recordA], serializer: basicSerializer)
 
         // Validate we only made one call to the collection upload callback
         XCTAssertEqual(uploadedCollectionCount, 1)
@@ -524,7 +524,7 @@ class Sync15BatchClientTests: XCTestCase {
         var linesSent = [String]()
 
         let allRecords: [Record<CleartextPayloadJSON>] = "ABCDEFGHIJKL".characters.reduce([]) { list, char in
-            return list + [createRecordWithID(String(char))]
+            return list + [createRecordWithID(id: String(char))]
         }
 
         // For each upload, verify that we are getting the correct queryParams and records to be sent.
@@ -533,38 +533,38 @@ class Sync15BatchClientTests: XCTestCase {
             requestCount += 1
             switch requestCount {
             case 1:
-                let expected = NSURLQueryItem(name: "batch", value: "true")
+                let expected = URLQueryItem(name: "batch", value: "true")
                 XCTAssertEqual(expected, queryParams![0])
-                assertLinesMatchRecords(lines, records: Array(allRecords[0..<2]), serializer: basicSerializer)
-                return deferEmptyResponse(batchToken: "1", lastModified: 20_000)
+                assertLinesMatchRecords(lines: lines, records: Array(allRecords[0..<2]), serializer: basicSerializer)
+                return deferEmptyResponse(token: "1", lastModified: 20_000)
             case 2:
-                let expectedBatch = NSURLQueryItem(name: "batch", value: "1")
+                let expectedBatch = URLQueryItem(name: "batch", value: "1")
                 XCTAssertEqual(expectedBatch, queryParams![0])
-                assertLinesMatchRecords(lines, records: Array(allRecords[2..<4]), serializer: basicSerializer)
+                assertLinesMatchRecords(lines: lines, records: Array(allRecords[2..<4]), serializer: basicSerializer)
                 return deferEmptyResponse(lastModified: 20_000)
             case 3:
-                let expectedBatch = NSURLQueryItem(name: "batch", value: "1")
-                let expectedCommit = NSURLQueryItem(name: "commit", value: "true")
+                let expectedBatch = URLQueryItem(name: "batch", value: "1")
+                let expectedCommit = URLQueryItem(name: "commit", value: "true")
                 XCTAssertEqual(expectedBatch, queryParams![0])
                 XCTAssertEqual(expectedCommit, queryParams![1])
-                assertLinesMatchRecords(lines, records: Array(allRecords[4..<6]), serializer: basicSerializer)
+                assertLinesMatchRecords(lines: lines, records: Array(allRecords[4..<6]), serializer: basicSerializer)
                 return deferEmptyResponse(lastModified: 20_000)
             case 4:
-                let expected = NSURLQueryItem(name: "batch", value: "true")
+                let expected = URLQueryItem(name: "batch", value: "true")
                 XCTAssertEqual(expected, queryParams![0])
-                assertLinesMatchRecords(lines, records: Array(allRecords[6..<8]), serializer: basicSerializer)
-                return deferEmptyResponse(batchToken: "2", lastModified: 30_000)
+                assertLinesMatchRecords(lines: lines, records: Array(allRecords[6..<8]), serializer: basicSerializer)
+                return deferEmptyResponse(token: "2", lastModified: 30_000)
             case 5:
-                let expectedBatch = NSURLQueryItem(name: "batch", value: "2")
+                let expectedBatch = URLQueryItem(name: "batch", value: "2")
                 XCTAssertEqual(expectedBatch, queryParams![0])
-                assertLinesMatchRecords(lines, records: Array(allRecords[8..<10]), serializer: basicSerializer)
+                assertLinesMatchRecords(lines: lines, records: Array(allRecords[8..<10]), serializer: basicSerializer)
                 return deferEmptyResponse(lastModified: 30_000)
             case 6:
-                let expectedBatch = NSURLQueryItem(name: "batch", value: "2")
-                let expectedCommit = NSURLQueryItem(name: "commit", value: "true")
+                let expectedBatch = URLQueryItem(name: "batch", value: "2")
+                let expectedCommit = URLQueryItem(name: "commit", value: "true")
                 XCTAssertEqual(expectedBatch, queryParams![0])
                 XCTAssertEqual(expectedCommit, queryParams![1])
-                assertLinesMatchRecords(lines, records: Array(allRecords[10..<12]), serializer: basicSerializer)
+                assertLinesMatchRecords(lines: lines, records: Array(allRecords[10..<12]), serializer: basicSerializer)
                 return deferEmptyResponse(lastModified: 30_000)
             default:
                 XCTFail()
@@ -574,7 +574,7 @@ class Sync15BatchClientTests: XCTestCase {
 
         let collectionUploaded: (POSTResult, Timestamp?) -> DeferredTimestamp = { _ in
             uploadedCollectionCount += 1
-            return deferMaybe(NSDate.now())
+            return deferMaybe(Date.now())
         }
 
         // Setup a configuration so each batch supports two payloads of two records each
@@ -599,7 +599,7 @@ class Sync15BatchClientTests: XCTestCase {
         XCTAssertEqual(requestCount, 6)
 
         // Validate contents sent to the server
-        assertLinesMatchRecords(linesSent, records: allRecords, serializer: basicSerializer)
+        assertLinesMatchRecords(lines: linesSent, records: allRecords, serializer: basicSerializer)
 
         // Validate we only called collection uploaded when we start and finish a batch. The uploads inside
         // a batch should not trigger the callback.

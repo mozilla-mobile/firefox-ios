@@ -9,5 +9,5 @@ protocol MenuToolbarItem {
     var accessibilityIdentifier: String { get }
     var action: MenuAction { get }
     var secondaryAction: MenuAction? { get }
-    func iconForState(appState: AppState) -> UIImage?
+    func iconForState(_ appState: AppState) -> UIImage?
 }
