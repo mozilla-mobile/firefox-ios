@@ -35,17 +35,17 @@ extension SystemUtils {
     // and not accessible from extension when the device is locked. Thus, we can tell if an extension is being run
     // when the device is locked.
     public static func onFirstRun() {
-        guard let lockFileURL = lockedDeviceURL,
-                let lockFile = lockFileURL.path else {
-                    return
+        guard let lockFileURL = lockedDeviceURL else {
+            return
         }
-
+        
+        let lockFile = lockFileURL.path
         let fm = FileManager.default
         if fm.fileExists(atPath: lockFile) {
             return
         }
         let contents = "Device is unlocked".data(using: String.Encoding.utf8)
-        fm.createFile(atPath: lockFile, contents: contents, attributes: [FileAttributeKey.protectionKey : FileProtectionType.complete])
+        fm.createFile(atPath: lockFile, contents: contents, attributes: [FileAttributeKey.protectionKey.rawValue : FileProtectionType.complete])
     }
 
     fileprivate static var lockedDeviceURL: URL? {

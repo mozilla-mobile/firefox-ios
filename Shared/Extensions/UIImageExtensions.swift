@@ -23,7 +23,7 @@ extension UIImage {
     /// in certain cases so we have to synchronize calls (see bug 1223132).
     public static func imageFromGIFDataThreadSafe(_ data: Data) -> UIImage? {
         imageLock.lock()
-        let image = UIImage.sd_animatedGIFWithData(data)
+        let image = UIImage.sd_animatedGIF(with: data)
         imageLock.unlock()
         return image
     }

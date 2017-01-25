@@ -50,7 +50,7 @@ open class PhoneNumberFormatter {
 
     func formatForNumber(_ number: NBPhoneNumber) -> NBEPhoneNumberFormat {
         assert(number.countryCodeSource != nil, "The phone number's country code source must be filled during parsing")
-        if NBECountryCodeSource(rawValue: number.countryCodeSource.integerValue) == .FROM_DEFAULT_COUNTRY {
+        if NBECountryCodeSource(rawValue: number.countryCodeSource.intValue) == .FROM_DEFAULT_COUNTRY {
             return .NATIONAL
         }
         return .INTERNATIONAL
