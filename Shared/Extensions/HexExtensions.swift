@@ -43,10 +43,11 @@ private let HexDigits: [String] = ["0", "1", "2", "3", "4", "5", "6", "7", "8", 
 extension Data {
     public var hexEncodedString: String {
         let result = NSMutableString(capacity: count * 2)
-        let p = UnsafePointer<UInt8>(bytes)
-        for i in 0..<count {
-            result.append(HexDigits[Int((p[i] & 0xf0) >> 4)])
-            result.append(HexDigits[Int(p[i] & 0x0f)])
+        withUnsafeBytes { (p: UnsafePointer<UInt8>) in
+            for i in 0..<count {
+                result.append(HexDigits[Int((p[i] & 0xf0) >> 4)])
+                result.append(HexDigits[Int(p[i] & 0x0f)])
+            }
         }
         return String(result)
     }
@@ -54,7 +55,7 @@ extension Data {
     public static func randomOfLength(_ length: UInt) -> Data? {
         let length = Int(length)
         if let data = NSMutableData(length: length) {
-            _ = SecRandomCopyBytes(kSecRandomDefault, length, UnsafeMutablePointer<UInt8>(data.mutableBytes))
+            _ = SecRandomCopyBytes(kSecRandomDefault, length, data.mutableBytes.assumingMemoryBound(to: UInt8.self))
             return (NSData(data: data as Data) as Data)
         } else {
             return nil
