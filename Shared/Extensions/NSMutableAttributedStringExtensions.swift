@@ -14,7 +14,7 @@ extension NSMutableAttributedString {
         self.attributeSubstring(substring, forAttribute: UIAccessibilitySpeechAttributePitch, withValue: pitchValue)
     }
 
-    fileprivate func attributeSubstring(_ substring: String, forAttribute attribute: String, withValue value: AnyObject) {
+    private func attributeSubstring(_ substring: String, forAttribute attribute: String, withValue value: AnyObject) {
         let nsString = self.string as NSString
         let range = nsString.range(of: substring)
         self.addAttribute(attribute, value: value, range: range)

@@ -14,7 +14,7 @@ import Foundation
  * the type T. Make sure to use a class type.
  */
 open class WeakList<T: AnyObject>: Sequence {
-    fileprivate var items = [WeakRef<T>]()
+    private var items = [WeakRef<T>]()
 
     public init() {}
 

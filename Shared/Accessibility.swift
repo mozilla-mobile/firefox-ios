@@ -19,7 +19,7 @@ open class AccessibleAction {
 }
 
 extension AccessibleAction { // UIAccessibilityCustomAction
-    @objc fileprivate func SELperformAccessibilityAction() -> Bool {
+    @objc private func SELperformAccessibilityAction() -> Bool {
         return handler()
     }
 
@@ -30,7 +30,7 @@ extension AccessibleAction { // UIAccessibilityCustomAction
 
 
 extension AccessibleAction { // UIAlertAction
-    fileprivate var alertActionHandler: (UIAlertAction!) -> Void {
+    private var alertActionHandler: (UIAlertAction!) -> Void {
         return { (_: UIAlertAction!) -> Void in
             let _ = self.handler()
         }

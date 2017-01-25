@@ -11,7 +11,7 @@ import Foundation
 public struct KeyboardState {
     public let animationDuration: Double
     public let animationCurve: UIViewAnimationCurve
-    fileprivate let userInfo: [AnyHashable: Any]
+    private let userInfo: [AnyHashable: Any]
 
     fileprivate init(_ userInfo: [AnyHashable: Any]) {
         self.userInfo = userInfo

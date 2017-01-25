@@ -30,15 +30,15 @@ open class AsyncReducer<T, U> {
     public typealias Combine = (T, U) -> Deferred<Maybe<T>>
     fileprivate let lock = NSRecursiveLock()
 
-    fileprivate let dispatchQueue: DispatchQueue
-    fileprivate let combine: Combine
+    private let dispatchQueue: DispatchQueue
+    private let combine: Combine
 
-    fileprivate let initialValueDeferred: Deferred<Maybe<T>>
+    private let initialValueDeferred: Deferred<Maybe<T>>
     open let terminal: Deferred<Maybe<T>> = Deferred()
 
-    fileprivate var queuedItems: [U] = []
+    private var queuedItems: [U] = []
 
-    fileprivate var isStarted: Bool = false
+    private var isStarted: Bool = false
 
     /**
      * Has this task queue finished?

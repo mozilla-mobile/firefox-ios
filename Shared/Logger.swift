@@ -50,7 +50,7 @@ public extension Logger {
         return nil
     }
 
-    static fileprivate func fileLoggerWithName(_ name: String) -> XCGLogger {
+    static private func fileLoggerWithName(_ name: String) -> XCGLogger {
         let log = XCGLogger()
         if let logFileURL = urlForLogNamed(name) {
             let fileDestination = FileDestination(
@@ -63,7 +63,7 @@ public extension Logger {
         return log
     }
 
-    static fileprivate func urlForLogNamed(_ name: String) -> URL? {
+    static private func urlForLogNamed(_ name: String) -> URL? {
         guard let logDir = Logger.logFileDirectoryPath() else {
             return nil
         }

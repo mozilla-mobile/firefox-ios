@@ -48,7 +48,7 @@ extension SystemUtils {
         fm.createFile(atPath: lockFile, contents: contents, attributes: [FileAttributeKey.protectionKey.rawValue : FileProtectionType.complete])
     }
 
-    fileprivate static var lockedDeviceURL: URL? {
+    private static var lockedDeviceURL: URL? {
         guard let groupIdentifier = AppInfo.sharedContainerIdentifier() else {
             return nil
         }

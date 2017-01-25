@@ -6,7 +6,7 @@ import AVFoundation
 import UIKit
 
 open class UserAgent {
-    fileprivate static var defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier())!
+    private static var defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier())!
 
     open static var syncUserAgent: String {
         let appName = DeviceInfo.appName()

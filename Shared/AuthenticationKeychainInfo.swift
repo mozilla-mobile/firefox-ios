@@ -99,7 +99,7 @@ open class AuthenticationKeychainInfo: NSObject, NSCoding {
 
 // MARK: - API
 public extension AuthenticationKeychainInfo {
-    fileprivate func resetLockoutState() {
+    private func resetLockoutState() {
         self.failedAttempts = 0
         self.lockOutInterval = nil
     }

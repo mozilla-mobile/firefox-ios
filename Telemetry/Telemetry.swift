@@ -16,7 +16,7 @@ public protocol TelemetryEvent {
 }
 
 open class Telemetry {
-    fileprivate static var prefs: Prefs?
+    private static var prefs: Prefs?
 
     open class func initWithPrefs(_ prefs: Prefs) {
         assert(self.prefs == nil, "Prefs already initialized")
