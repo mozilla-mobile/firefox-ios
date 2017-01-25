@@ -312,7 +312,10 @@ class TabManager: NSObject {
                 let url = HomePageAccessors.getHomePage(prefs)!
                 tab.loadRequest(NSURLRequest(URL: url))
             case .BlankPage:
-                // Do nothing: we're already seeing a blank page.
+                // Focus on the editable locationTextField
+                if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
+                    appDelegate.browserViewController.urlBar.enterOverlayMode("", pasted: false)
+                }
                 break
             default:
                 // The common case, where the NewTabPage enum defines
