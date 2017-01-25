@@ -4,7 +4,7 @@
 
 import Foundation
 
-public extension SetGenerator {
+public extension SetIterator {
     mutating func take(_ n: Int) -> [Element]? {
         precondition(n >= 0)
 
