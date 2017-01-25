@@ -4,7 +4,7 @@
 
 import Foundation
 
-extension NSScanner {
+extension Scanner {
     public func scanUnsignedLongLong() -> UInt64? {
         var value: UInt64 = 0
         if scanUnsignedLongLong(&value) {
@@ -15,7 +15,7 @@ extension NSScanner {
 
     public func scanLongLong() -> Int64? {
         var value: Int64 = 0
-        if scanLongLong(&value) {
+        if scanInt64(&value) {
             return value
         }
         return nil

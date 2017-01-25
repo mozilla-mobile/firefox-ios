@@ -9,40 +9,40 @@ public typealias GUID = String
 /**
  * Utilities for futzing with bytes and such.
  */
-public class Bytes {
-    public class func generateRandomBytes(len: UInt) -> NSData {
+open class Bytes {
+    open class func generateRandomBytes(_ len: UInt) -> Data {
         let len = Int(len)
         let data: NSMutableData! = NSMutableData(length: len)
         let bytes = UnsafeMutablePointer<UInt8>(data.mutableBytes)
         let result: Int32 = SecRandomCopyBytes(kSecRandomDefault, len, bytes)
 
         assert(result == 0, "Random byte generation failed.")
-        return data
+        return data as Data
     }
 
-    public class func generateGUID() -> GUID {
+    open class func generateGUID() -> GUID {
         // Turns the standard NSData encoding into the URL-safe variant that Sync expects.
         return generateRandomBytes(9)
-            .base64EncodedStringWithOptions(NSDataBase64EncodingOptions())
-            .stringByReplacingOccurrencesOfString("/", withString: "_", options: NSStringCompareOptions(), range: nil)
-            .stringByReplacingOccurrencesOfString("+", withString: "-", options: NSStringCompareOptions(), range: nil)
+            .base64EncodedString(options: NSData.Base64EncodingOptions())
+            .replacingOccurrences(of: "/", with: "_", options: NSString.CompareOptions(), range: nil)
+            .replacingOccurrences(of: "+", with: "-", options: NSString.CompareOptions(), range: nil)
     }
 
-    public class func decodeBase64(b64: String) -> NSData? {
-        return NSData(base64EncodedString: b64,
-                      options: NSDataBase64DecodingOptions())
+    open class func decodeBase64(_ b64: String) -> Data? {
+        return Data(base64Encoded: b64,
+                      options: NSData.Base64DecodingOptions())
     }
 
     /**
      * Turn a string of base64 characters into an NSData *without decoding*.
      * This is to allow HMAC to be computed of the raw base64 string.
      */
-    public class func dataFromBase64(b64: String) -> NSData? {
-        return b64.dataUsingEncoding(NSASCIIStringEncoding, allowLossyConversion: false)
+    open class func dataFromBase64(_ b64: String) -> Data? {
+        return b64.data(using: String.Encoding.ascii, allowLossyConversion: false)
     }
 
-    func fromHex(str: String) -> NSData {
+    func fromHex(_ str: String) -> Data {
        // TODO
-        return NSData()
+        return Data()
     }
 }

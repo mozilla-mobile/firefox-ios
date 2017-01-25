@@ -12,18 +12,18 @@ private let ServerURL = "https://incoming.telemetry.mozilla.org".asURL!
 private let AppName = "Fennec"
 
 public protocol TelemetryEvent {
-    func record(prefs: Prefs)
+    func record(_ prefs: Prefs)
 }
 
-public class Telemetry {
-    private static var prefs: Prefs?
+open class Telemetry {
+    fileprivate static var prefs: Prefs?
 
-    public class func initWithPrefs(prefs: Prefs) {
+    open class func initWithPrefs(_ prefs: Prefs) {
         assert(self.prefs == nil, "Prefs already initialized")
         self.prefs = prefs
     }
 
-    public class func recordEvent(event: TelemetryEvent) {
+    open class func recordEvent(_ event: TelemetryEvent) {
         guard let prefs = prefs else {
             assertionFailure("Prefs not initialized")
             return
@@ -32,30 +32,30 @@ public class Telemetry {
         event.record(prefs)
     }
 
-    public class func sendPing(ping: TelemetryPing) {
+    open class func sendPing(_ ping: TelemetryPing) {
         let payload = ping.payload.toString()
 
-        let docID = NSUUID().UUIDString
+        let docID = UUID().uuidString
         let docType = "core"
-        let appVersion = NSBundle.mainBundle().infoDictionary!["CFBundleShortVersionString"] as! String
-        let buildID = NSBundle.mainBundle().objectForInfoDictionaryKey(kCFBundleVersionKey as String) as! String
+        let appVersion = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! String
+        let buildID = Bundle.main.object(forInfoDictionaryKey: kCFBundleVersionKey as String) as! String
 
         let channel: String
         switch AppConstants.BuildChannel {
-        case .Nightly: channel = "nightly"
-        case .Beta: channel = "beta"
-        case .Release: channel = "release"
+        case .nightly: channel = "nightly"
+        case .beta: channel = "beta"
+        case .release: channel = "release"
         default: channel = "default"
         }
 
         let path = "/submit/telemetry/\(docID)/\(docType)/\(AppName)/\(appVersion)/\(channel)/\(buildID)"
-        let url = ServerURL.URLByAppendingPathComponent(path)
-        let request = NSMutableURLRequest(URL: url!)
+        let url = ServerURL.appendingPathComponent(path)
+        let request = NSMutableURLRequest(url: url!)
 
         log.debug("Ping URL: \(url)")
         log.debug("Ping payload: \(payload)")
 
-        guard let body = payload.dataUsingEncoding(NSUTF8StringEncoding) else {
+        guard let body = payload.data(using: String.Encoding.utf8) else {
             log.error("Invalid data!")
             assertionFailure()
             return
@@ -66,9 +66,9 @@ public class Telemetry {
             return
         }
 
-        request.HTTPMethod = "POST"
-        request.HTTPBody = body
-        request.addValue(GCDWebServerFormatRFC822(NSDate()), forHTTPHeaderField: "Date")
+        request.httpMethod = "POST"
+        request.httpBody = body
+        request.addValue(GCDWebServerFormatRFC822(Date()), forHTTPHeaderField: "Date")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         Alamofire.Manager.sharedInstance.request(request).response { (request, response, data, error) in

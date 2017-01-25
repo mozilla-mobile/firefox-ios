@@ -5,18 +5,18 @@
 import UIKit
 
 public enum AppBuildChannel {
-    case Release
-    case Beta
-    case Nightly
-    case Developer
-    case Aurora
+    case release
+    case beta
+    case nightly
+    case developer
+    case aurora
 }
 
 public struct AppConstants {
-    public static let IsRunningTest = NSClassFromString("XCTestCase") != nil || NSProcessInfo.processInfo().arguments.contains(LaunchArguments.Test)
+    public static let IsRunningTest = NSClassFromString("XCTestCase") != nil || ProcessInfo.processInfo.arguments.contains(LaunchArguments.Test)
 
-    public static let SkipIntro = NSProcessInfo.processInfo().arguments.contains(LaunchArguments.SkipIntro)
-    public static let ClearProfile = NSProcessInfo.processInfo().arguments.contains(LaunchArguments.ClearProfile)
+    public static let SkipIntro = ProcessInfo.processInfo.arguments.contains(LaunchArguments.SkipIntro)
+    public static let ClearProfile = ProcessInfo.processInfo.arguments.contains(LaunchArguments.ClearProfile)
 
     /// Build Channel.
     public static let BuildChannel: AppBuildChannel = {

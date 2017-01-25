@@ -5,9 +5,9 @@
 import Foundation
 import libPhoneNumber
 
-public class PhoneNumberFormatter {
+open class PhoneNumberFormatter {
 
-    private let util: NBPhoneNumberUtil
+    fileprivate let util: NBPhoneNumberUtil
 
     // MARK: - Object Lifecycle
 
@@ -23,10 +23,10 @@ public class PhoneNumberFormatter {
 
     /// Tries to convert a phone number to a region-specific format. For national numbers the country code is guessed from the current carrier and
     /// region settings. If parsing, validating or formatting fails, the input string is returned.
-    public func formatPhoneNumber(rawNumber: String, fallbackLocale: NSLocale = NSLocale.currentLocale()) -> String {
+    open func formatPhoneNumber(_ rawNumber: String, fallbackLocale: Locale = Locale.current) -> String {
         let countryCode = guessCurrentCountryCode(fallbackLocale)
 
-        guard let parsedNumber = try? util.parseAndKeepRawInput(rawNumber, defaultRegion: countryCode) where util.isValidNumber(parsedNumber) else {
+        guard let parsedNumber = try? util.parseAndKeepRawInput(rawNumber, defaultRegion: countryCode), util.isValidNumber(parsedNumber) else {
             return rawNumber
         }
 
@@ -41,14 +41,14 @@ public class PhoneNumberFormatter {
 
     // MARK: - Helpers
 
-    func guessCurrentCountryCode(fallbackLocale: NSLocale) -> String {
-        if let carrierCode = util.countryCodeByCarrier() where !carrierCode.isEmpty && carrierCode != NB_UNKNOWN_REGION {
+    func guessCurrentCountryCode(_ fallbackLocale: Locale) -> String {
+        if let carrierCode = util.countryCodeByCarrier(), !carrierCode.isEmpty && carrierCode != NB_UNKNOWN_REGION {
             return carrierCode
         }
-        return fallbackLocale.objectForKey(NSLocaleCountryCode) as! String
+        return (fallbackLocale as NSLocale).object(forKey: NSLocale.Key.countryCode) as! String
     }
 
-    func formatForNumber(number: NBPhoneNumber) -> NBEPhoneNumberFormat {
+    func formatForNumber(_ number: NBPhoneNumber) -> NBEPhoneNumberFormat {
         assert(number.countryCodeSource != nil, "The phone number's country code source must be filled during parsing")
         if NBECountryCodeSource(rawValue: number.countryCodeSource.integerValue) == .FROM_DEFAULT_COUNTRY {
             return .NATIONAL

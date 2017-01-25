@@ -12,11 +12,11 @@ public protocol JSONLiteralConvertible {
     func asJSON() -> JSON
 }
 
-public class KeychainCache<T: JSONLiteralConvertible> {
-    public let branch: String
-    public let label: String
+open class KeychainCache<T: JSONLiteralConvertible> {
+    open let branch: String
+    open let label: String
 
-    public var value: T? {
+    open var value: T? {
         didSet {
             checkpoint()
         }
@@ -28,7 +28,7 @@ public class KeychainCache<T: JSONLiteralConvertible> {
         self.value = value
     }
 
-    public class func fromBranch(branch: String, withLabel label: String?, withDefault defaultValue: T? = nil, factory: JSON -> T?) -> KeychainCache<T> {
+    open class func fromBranch(_ branch: String, withLabel label: String?, withDefault defaultValue: T? = nil, factory: (JSON) -> T?) -> KeychainCache<T> {
         if let l = label {
             if let s = KeychainWrapper.sharedAppContainerKeychain.stringForKey("\(branch).\(l)") {
                 if let t = factory(JSON.parse(s)) {
@@ -49,7 +49,7 @@ public class KeychainCache<T: JSONLiteralConvertible> {
         return KeychainCache(branch: branch, label: label, value: defaultValue)
     }
 
-    public func checkpoint() {
+    open func checkpoint() {
         log.info("Storing \(self.branch) in Keychain with label \(self.branch).\(self.label).")
         // TODO: PII logging.
         if let value = value {

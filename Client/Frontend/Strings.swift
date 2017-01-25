@@ -8,25 +8,25 @@ public struct Strings {}
 
 /// Return the main application bundle. Even if called from an extension. If for some reason we cannot find the
 /// application bundle, the current bundle is returned, which will then result in an English base language string.
-private func applicationBundle() -> NSBundle {
-    let bundle = NSBundle.mainBundle()
-    guard bundle.bundleURL.pathExtension == "appex", let applicationBundleURL = bundle.bundleURL.URLByDeletingLastPathComponent?.URLByDeletingLastPathComponent else {
+private func applicationBundle() -> Bundle {
+    let bundle = Bundle.main
+    guard bundle.bundleURL.pathExtension == "appex", let applicationBundleURL = (bundle.bundleURL as NSURL).deletingLastPathComponent?.deletingLastPathComponent() else {
         return bundle
     }
-    return NSBundle(URL: applicationBundleURL) ?? bundle
+    return Bundle(url: applicationBundleURL) ?? bundle
 }
 
 // SendTo extension.
 extension Strings {
-    public static let SendToCancelButton = NSLocalizedString("SendTo.Cancel.Button", value: "Cancel", bundle: applicationBundle(), comment: "Button title for cancelling SendTo screen")
-    public static let SendToErrorOKButton = NSLocalizedString("SendTo.Error.OK.Button", value: "OK", bundle: applicationBundle(), comment: "OK button to dismiss the error prompt.")
-    public static let SendToErrorTitle = NSLocalizedString("SendTo.Error.Title", value: "The link you are trying to share cannot be shared.", bundle: applicationBundle(), comment: "Title of error prompt displayed when an invalid URL is shared.")
-    public static let SendToErrorMessage = NSLocalizedString("SendTo.Error.Message", value: "Only HTTP and HTTPS links can be shared.", bundle: applicationBundle(), comment: "Message in error prompt explaining why the URL is invalid.")
+    public static let SendToCancelButton = NSLocalizedString("SendTo.Cancel.Button", bundle: applicationBundle(), value: "Cancel", comment: "Button title for cancelling SendTo screen")
+    public static let SendToErrorOKButton = NSLocalizedString("SendTo.Error.OK.Button", bundle: applicationBundle(), value: "OK", comment: "OK button to dismiss the error prompt.")
+    public static let SendToErrorTitle = NSLocalizedString("SendTo.Error.Title", bundle: applicationBundle(), value: "The link you are trying to share cannot be shared.", comment: "Title of error prompt displayed when an invalid URL is shared.")
+    public static let SendToErrorMessage = NSLocalizedString("SendTo.Error.Message", bundle: applicationBundle(), value: "Only HTTP and HTTPS links can be shared.", comment: "Message in error prompt explaining why the URL is invalid.")
 }
 
 // ShareTo extension.
 extension Strings {
-    public static let ShareToCancelButton = NSLocalizedString("ShareTo.Cancel.Button", value: "Cancel", bundle: applicationBundle(), comment: "Button title for cancelling Share screen")
+    public static let ShareToCancelButton = NSLocalizedString("ShareTo.Cancel.Button", bundle: applicationBundle(), value: "Cancel", comment: "Button title for cancelling Share screen")
 }
 
 // Top Sites.
@@ -110,7 +110,7 @@ extension Strings {
     public static let FirefoxSyncFailedTitle = NSLocalizedString("SyncState.Failed.Title", value: "Syncing has failed", comment: "Title for Sync status message when synchronization failed to complete")
     public static let FirefoxSyncTroubleshootTitle = NSLocalizedString("Settings.TroubleShootSync.Title", value: "Troubleshoot", comment: "Title of link to help page to find out how to solve Sync issues")
 
-    public static func localizedStringForSyncComponent(componentName: String) -> String? {
+    public static func localizedStringForSyncComponent(_ componentName: String) -> String? {
         switch componentName {
         case "bookmarks":
             return NSLocalizedString("SyncState.Bookmark.Title", value: "Bookmarks", comment: "The Bookmark sync component, used in SyncState.Partial.Title")
