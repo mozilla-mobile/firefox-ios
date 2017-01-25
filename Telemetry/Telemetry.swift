@@ -50,7 +50,7 @@ open class Telemetry {
 
         let path = "/submit/telemetry/\(docID)/\(docType)/\(AppName)/\(appVersion)/\(channel)/\(buildID)"
         let url = ServerURL.appendingPathComponent(path)
-        let request = NSMutableURLRequest(url: url!)
+        var request = URLRequest(url: url)
 
         log.debug("Ping URL: \(url)")
         log.debug("Ping payload: \(payload)")
@@ -71,8 +71,8 @@ open class Telemetry {
         request.addValue(GCDWebServerFormatRFC822(Date()), forHTTPHeaderField: "Date")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
-        Alamofire.Manager.sharedInstance.request(request).response { (request, response, data, error) in
-            log.debug("Ping response: \(response?.statusCode ?? -1).")
+        SessionManager.default.request(request).response { response in
+            log.debug("Ping response: \(response.response?.statusCode ?? -1).")
         }
     }
 }
