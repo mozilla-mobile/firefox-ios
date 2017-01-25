@@ -21,15 +21,15 @@ public struct AppConstants {
     /// Build Channel.
     public static let BuildChannel: AppBuildChannel = {
         #if MOZ_CHANNEL_RELEASE
-            return AppBuildChannel.Release
+            return AppBuildChannel.release
         #elseif MOZ_CHANNEL_BETA
-            return AppBuildChannel.Beta
+            return AppBuildChannel.beta
         #elseif MOZ_CHANNEL_NIGHTLY
-            return AppBuildChannel.Nightly
+            return AppBuildChannel.nightly
         #elseif MOZ_CHANNEL_FENNEC
-            return AppBuildChannel.Developer
+            return AppBuildChannel.developer
         #elseif MOZ_CHANNEL_AURORA
-            return AppBuildChannel.Aurora
+            return AppBuildChannel.aurora
         #endif
     }()
 

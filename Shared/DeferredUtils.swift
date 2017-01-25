@@ -48,7 +48,7 @@ public func always<T>(_ t: T) -> () -> Deferred<Maybe<T>> {
 }
 
 public func deferMaybe<T>(_ s: T) -> Deferred<Maybe<T>> {
-    return Deferred(filledWith: Maybe(success: s))
+    return Deferred(value: Maybe(success: s))
 }
 
 public func deferMaybe<T>(_ e: MaybeErrorType) -> Deferred<Maybe<T>> {
