@@ -8,46 +8,45 @@ import WebImage
 
 public extension UIImageView {
 
-    public func setIcon(icon: Favicon?, forURL url: NSURL?) {
-        self.backgroundColor = UIColor.clearColor()
+    public func setIcon(_ icon: Favicon?, forURL url: URL?) {
+        self.backgroundColor = UIColor.clear
         setDefaultIcon(url)
         guard let icon = icon else {
             return
         }
-        let imageURL = NSURL(string: icon.url)
-        self.sd_setHighlightedImageWithURL(imageURL) { (img, error, type, url) in
+        let imageURL = URL(string: icon.url)
+        self.sd_setHighlightedImage(with: imageURL, options: []) { (img, error, type, url) in
             guard let image = img else {
                 return
             }
             self.image = image
-            self.backgroundColor = UIColor.whiteColor()
+            self.backgroundColor = UIColor.white
         }
     }
 
-    private func setDefaultIcon(url: NSURL?) {
+    fileprivate func setDefaultIcon(_ url: URL?) {
         if let url = url {
             self.image = FaviconFetcher.getDefaultFavicon(url)
             self.backgroundColor = FaviconFetcher.getDefaultColor(url)
         } else {
             self.image = FaviconFetcher.defaultFavicon
-            self.backgroundColor = UIColor.whiteColor()
+            self.backgroundColor = UIColor.white
         }
         self.highlightedImage = self.image
     }
 }
 
-
-public class ImageOperation: NSObject, SDWebImageOperation {
-    public var cacheOperation: NSOperation?
+open class ImageOperation: NSObject, SDWebImageOperation {
+    open var cacheOperation: Operation?
 
     var cancelled: Bool {
         if let cacheOperation = cacheOperation {
-            return cacheOperation.cancelled
+            return cacheOperation.isCancelled
         }
         return false
     }
 
-    @objc public func cancel() {
+    @objc open func cancel() {
         if let cacheOperation = cacheOperation {
             cacheOperation.cancel()
         }
@@ -55,17 +54,17 @@ public class ImageOperation: NSObject, SDWebImageOperation {
 }
 
 // This is an extension to SDWebImage's api to allow passing in a cache to be used for lookup.
-public typealias CompletionBlock = (img: UIImage?, err: NSError, type: SDImageCacheType, key: String) -> Void
+public typealias CompletionBlock = (_ img: UIImage?, _ err: NSError, _ type: SDImageCacheType, _ key: String) -> Void
 extension UIImageView {
     // This is a helper function for custom async loaders. It starts an operation that will check for the image in
     // a cache (either one passed in or the default if none is specified). If its found in the cache its returned,
     // otherwise, block is run and should return an image to show.
-    private func runBlockIfNotInCache(key: String, cache: SDImageCache, completed: CompletionBlock, block: () -> UIImage?) {
+    fileprivate func runBlockIfNotInCache(_ key: String, cache: SDImageCache, completed: @escaping CompletionBlock, block: @escaping () -> UIImage?) {
         self.sd_cancelCurrentImageLoad()
 
         let operation = ImageOperation()
 
-        operation.cacheOperation = cache.queryDiskCacheForKey(key, done: { (image, cacheType) -> Void in
+        operation.cacheOperation = cache.queryDiskCache(forKey: key, done: { (image, cacheType) -> Void in
             let err = NSError(domain: "UIImage+Extensions.runBlockIfNotInCache", code: 0, userInfo: nil)
             // If this was cancelled, don't bother notifying the caller
             if operation.cancelled {
@@ -81,17 +80,17 @@ extension UIImageView {
                 let image = block()
                 if image != nil {
                     self.image = image
-                    cache.storeImage(image, forKey: key)
+                    cache.store(image, forKey: key)
                 }
             }
 
-            completed(img: image, err: err, type: cacheType, key: key)
+            completed(image, err, cacheType, key)
         })
 
         self.sd_setImageLoadOperation(operation, forKey: "UIImageViewImageLoad")
     }
 
-    public func moz_getImageFromCache(key: String, cache: SDImageCache, completed: CompletionBlock) {
+    public func moz_getImageFromCache(_ key: String, cache: SDImageCache, completed: @escaping CompletionBlock) {
         // This cache is filled outside of here. If we don't find the key in it, nothing to do here.
         runBlockIfNotInCache(key, cache: cache, completed: completed) { _ in return nil}
     }

@@ -12,21 +12,21 @@ import XCTest
 
 class SyncAuthStateTests: LiveAccountTest {
     func testLive() {
-        let e = self.expectationWithDescription("Wait for token.")
-        syncAuthState(NSDate.now()).upon { result in
+        let e = self.expectation(description: "Wait for token.")
+        syncAuthState(Date.now()).upon { result in
             if let (token, forKey) = result.successValue {
-                let uidString = NSNumber(unsignedLongLong: token.uid).stringValue
+                let uidString = NSNumber(value: token.uid).stringValue
                 XCTAssertTrue(token.api_endpoint.endsWith(uidString))
                 XCTAssertNotNil(forKey)
             } else {
                 if let error = result.failureValue as? AccountError {
-                    XCTAssertEqual(error, AccountError.NoSignedInUser)
+                    XCTAssertEqual(error, AccountError.noSignedInUser)
                 } else {
                     XCTAssertEqual(result.failureValue!.description, "")
                 }
             }
             e.fulfill()
         }
-        self.waitForExpectationsWithTimeout(10, handler: nil)
+        self.waitForExpectations(timeout: 10, handler: nil)
     }
 }

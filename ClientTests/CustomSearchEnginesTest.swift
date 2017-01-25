@@ -31,8 +31,8 @@ class CustomSearchEnginesTest: XCTestCase {
         let q = "http://www.google.ca/?#q=%s"
         let title = "YASE"
 
-        let expectation = expectationWithDescription("Waiting on favicon fetching")
-        customSearchEngineForm.createEngine(forQuery: q, andName: title).uponQueue(dispatch_get_main_queue()) { result in
+        let expectation = self.expectation(description: "Waiting on favicon fetching")
+        customSearchEngineForm.createEngine(forQuery: q, andName: title).uponQueue(DispatchQueue.main) { result in
             XCTAssertNotNil(result.successValue, "Make sure the new engine is not nil")
             let engine = result.successValue!
             XCTAssertEqual(engine.shortName, title)
@@ -40,7 +40,7 @@ class CustomSearchEnginesTest: XCTestCase {
             XCTAssertEqual(engine.searchTemplate, "http://www.google.ca/?#q={searchTerms}")
             expectation.fulfill()
         }
-        waitForExpectationsWithTimeout(5, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testaddSearchEngineFailure() {
@@ -50,11 +50,11 @@ class CustomSearchEnginesTest: XCTestCase {
         let q = "isthisvalid.com/hhh%s"
         let title = "YASE"
 
-        let expectation = expectationWithDescription("Waiting on favicon fetching")
-        customSearchEngineForm.createEngine(forQuery: q, andName: title).uponQueue(dispatch_get_main_queue()) { result in
+        let expectation = self.expectation(description: "Waiting on favicon fetching")
+        customSearchEngineForm.createEngine(forQuery: q, andName: title).uponQueue(DispatchQueue.main) { result in
             XCTAssertNil(result.successValue, "Make sure the new engine is nil")
             expectation.fulfill()
         }
-        waitForExpectationsWithTimeout(5, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 }

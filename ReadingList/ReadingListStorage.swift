@@ -5,7 +5,6 @@
 import Foundation
 import Shared
 
-
 class ReadingListStorageError: MaybeErrorType {
     var message: String
     init(_ message: String) {
@@ -24,9 +23,9 @@ protocol ReadingListStorage {
     // These are the used by the application
     func getUnreadRecords() -> Maybe<[ReadingListClientRecord]>
     func getAvailableRecords() -> Maybe<[ReadingListClientRecord]>
-    func deleteRecord(record: ReadingListClientRecord) -> Maybe<Void>
+    func deleteRecord(_ record: ReadingListClientRecord) -> Maybe<Void>
     func deleteAllRecords() -> Maybe<Void>
-    func createRecordWithURL(url: String, title: String, addedBy: String) -> Maybe<ReadingListClientRecord>
-    func getRecordWithURL(url: String) -> Maybe<ReadingListClientRecord?>
-    func updateRecord(record: ReadingListClientRecord, unread: Bool) -> Maybe<ReadingListClientRecord?>
+    func createRecordWithURL(_ url: String, title: String, addedBy: String) -> Maybe<ReadingListClientRecord>
+    func getRecordWithURL(_ url: String) -> Maybe<ReadingListClientRecord?>
+    func updateRecord(_ record: ReadingListClientRecord, unread: Bool) -> Maybe<ReadingListClientRecord?>
 }

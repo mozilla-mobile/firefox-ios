@@ -7,41 +7,41 @@ import SnapKit
 import SwiftKeychainWrapper
 
 enum AuthenticationState {
-    case NotAuthenticating
-    case Presenting
+    case notAuthenticating
+    case presenting
 }
 
 class SensitiveViewController: UIViewController {
     var promptingForTouchID: Bool = false
     var backgroundedBlur: UIImageView?
-    var authState: AuthenticationState = .NotAuthenticating
+    var authState: AuthenticationState = .notAuthenticating
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.addObserver(self, selector: #selector(SensitiveViewController.checkIfUserRequiresValidation), name: UIApplicationWillEnterForegroundNotification, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(SensitiveViewController.checkIfUserRequiresValidation), name: UIApplicationDidBecomeActiveNotification, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(SensitiveViewController.blurContents), name: UIApplicationWillResignActiveNotification, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(SensitiveViewController.hideLogins), name: UIApplicationDidEnterBackgroundNotification, object: nil)
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(SensitiveViewController.checkIfUserRequiresValidation), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(SensitiveViewController.checkIfUserRequiresValidation), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(SensitiveViewController.blurContents), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(SensitiveViewController.hideLogins), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
 
     }
 
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.removeObserver(self, name: UIApplicationWillEnterForegroundNotification, object: nil)
-        notificationCenter.removeObserver(self, name: UIApplicationWillResignActiveNotification, object: nil)
-        notificationCenter.removeObserver(self, name: UIApplicationDidBecomeActiveNotification, object: nil)
-        notificationCenter.removeObserver(self, name: UIApplicationDidEnterBackgroundNotification, object: nil)
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.removeObserver(self, name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+        notificationCenter.removeObserver(self, name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
+        notificationCenter.removeObserver(self, name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        notificationCenter.removeObserver(self, name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
     }
 
     func checkIfUserRequiresValidation() {
-        guard authState != .Presenting else {
+        guard authState != .presenting else {
             return
         }
 
-        presentedViewController?.dismissViewControllerAnimated(false, completion: nil)
-        guard let authInfo = KeychainWrapper.defaultKeychainWrapper().authenticationInfo() where authInfo.requiresValidation() else {
+        presentedViewController?.dismiss(animated: false, completion: nil)
+        guard let authInfo = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo(), authInfo.requiresValidation() else {
             removeBackgroundedBlur()
             return
         }
@@ -51,24 +51,24 @@ class SensitiveViewController: UIViewController {
             touchIDReason: AuthenticationStrings.loginsTouchReason,
             success: {
                 self.promptingForTouchID = false
-                self.authState = .NotAuthenticating
+                self.authState = .notAuthenticating
                 self.removeBackgroundedBlur()
             },
             cancel: {
                 self.promptingForTouchID = false
-                self.authState = .NotAuthenticating
-                self.navigationController?.popToRootViewControllerAnimated(true)
+                self.authState = .notAuthenticating
+                let _ = self.navigationController?.popToRootViewController(animated: true)
             },
             fallback: {
                 self.promptingForTouchID = false
                 AppAuthenticator.presentPasscodeAuthentication(self.navigationController, delegate: self)
             }
         )
-        authState = .Presenting
+        authState = .presenting
     }
 
     func hideLogins() {
-        self.navigationController?.popToRootViewControllerAnimated(true)
+        let _ = self.navigationController?.popToRootViewController(animated: true)
     }
 
     func blurContents() {
@@ -84,15 +84,15 @@ class SensitiveViewController: UIViewController {
         }
     }
 
-    private func addBlurredContent() -> UIImageView? {
+    fileprivate func addBlurredContent() -> UIImageView? {
         guard let snapshot = view.screenshot() else {
             return nil
         }
 
-        let blurredSnapshot = snapshot.applyBlurWithRadius(10, blurType: BOXFILTER, tintColor: UIColor.init(white: 1, alpha: 0.3), saturationDeltaFactor: 1.8, maskImage: nil)
+        let blurredSnapshot = snapshot.applyBlur(withRadius: 10, blurType: BOXFILTER, tintColor: UIColor(white: 1, alpha: 0.3), saturationDeltaFactor: 1.8, maskImage: nil)
         let blurView = UIImageView(image: blurredSnapshot)
         view.addSubview(blurView)
-        blurView.snp_makeConstraints { $0.edges.equalTo(self.view) }
+        blurView.snp.makeConstraints { $0.edges.equalTo(self.view) }
         view.layoutIfNeeded()
 
         return blurView
@@ -103,13 +103,13 @@ class SensitiveViewController: UIViewController {
 extension SensitiveViewController: PasscodeEntryDelegate {
     func passcodeValidationDidSucceed() {
         removeBackgroundedBlur()
-        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
-        self.authState = .NotAuthenticating
+        self.navigationController?.dismiss(animated: true, completion: nil)
+        self.authState = .notAuthenticating
     }
 
     func userDidCancelValidation() {
-        self.navigationController?.popToRootViewControllerAnimated(false)
-        self.authState = .NotAuthenticating
+        let _ = self.navigationController?.popToRootViewController(animated: false)
+        self.authState = .notAuthenticating
     }
 }
 

@@ -7,13 +7,13 @@ import UIKit
 private let maxNumberOfItemsPerPage = 6
 
 protocol MenuViewControllerDelegate: class {
-    func menuViewControllerDidDismiss(menuViewController: MenuViewController)
-    func shouldCloseMenu(menuViewController: MenuViewController, forRotationToNewSize size: CGSize, forTraitCollection traitCollection: UITraitCollection) -> Bool
+    func menuViewControllerDidDismiss(_ menuViewController: MenuViewController)
+    func shouldCloseMenu(_ menuViewController: MenuViewController, forRotationToNewSize size: CGSize, forTraitCollection traitCollection: UITraitCollection) -> Bool
 }
 
 enum MenuViewPresentationStyle {
-    case Popover
-    case Modal
+    case popover
+    case modal
 }
 
 class MenuViewController: UIViewController {
@@ -33,7 +33,7 @@ class MenuViewController: UIViewController {
 
     var appState: AppState {
         didSet {
-            if !self.isBeingDismissed() {
+            if !self.isBeingDismissed {
                 menuConfig = menuConfig.menuForState(appState)
                 self.reloadView()
             }
@@ -51,15 +51,15 @@ class MenuViewController: UIViewController {
                 return
             }
 
-            menuView.snp_remakeConstraints { make in
+            menuView.snp.remakeConstraints { make in
                 make.centerX.equalTo(view)
-                make.width.equalTo(fixedWidth)
+                make.width.equalTo(fixedWidth).priority(50)
                 make.bottom.equalTo(view)
             }
         }
     }
 
-    private let popoverBackgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.4)
+    fileprivate let popoverBackgroundColor = UIColor.black.withAlphaComponent(0.4)
 
     init(withAppState appState: AppState, presentationStyle: MenuViewPresentationStyle) {
         self.appState = appState
@@ -75,7 +75,7 @@ class MenuViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = popoverBackgroundColor.colorWithAlphaComponent(0.0)
+        self.view.backgroundColor = popoverBackgroundColor.withAlphaComponent(0.0)
         popoverPresentationController?.backgroundColor = menuConfig.menuBackgroundColor()
 
         let gesture = UITapGestureRecognizer(target: self, action: #selector(self.tapToDismissMenu(_:)))
@@ -93,7 +93,7 @@ class MenuViewController: UIViewController {
 
         menuView.toolbarColor = menuConfig.toolbarColor()
         menuView.toolbar.tintColor = menuConfig.toolbarTintColor()
-        menuView.toolbar.layer.shadowColor = menuConfig.shadowColor().CGColor
+        menuView.toolbar.layer.shadowColor = menuConfig.shadowColor().cgColor
         menuView.toolbar.layer.shadowOpacity = 0.4
         menuView.toolbar.layer.shadowRadius = 0
 
@@ -103,32 +103,32 @@ class MenuViewController: UIViewController {
         menuView.accessibilityIdentifier = "MenuViewController.menuView"
 
         switch presentationStyle {
-        case .Popover:
+        case .popover:
             menuView.toolbar.clipsToBounds = false
             // add a shadow to the tp[ of the toolbar
             menuView.toolbar.layer.shadowOffset = CGSize(width: 0, height: -2)
-            menuView.snp_makeConstraints { make in
+            menuView.snp.makeConstraints { make in
                 make.top.left.right.equalTo(view)
             }
-        case .Modal:
-            menuView.cornerRadius = CGSizeMake(5.0, 5.0)
-            menuView.cornersToRound = [.TopLeft, .TopRight]
+        case .modal:
+            menuView.cornerRadius = CGSize(width: 5.0, height: 5.0)
+            menuView.cornersToRound = [.topLeft, .topRight]
             menuView.toolbar.clipsToBounds = false
             // add a shadow to the bottom of the toolbar
             menuView.toolbar.layer.shadowOffset = CGSize(width: 0, height: 2)
 
-            menuView.openMenuImage.image = menuConfig.menuIcon()?.imageWithRenderingMode(.AlwaysTemplate)
+            menuView.openMenuImage.image = menuConfig.menuIcon()?.withRenderingMode(.alwaysTemplate)
             menuView.openMenuImage.tintColor = menuConfig.toolbarTintColor()
             menuView.openMenuImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tapToDismissMenu(_:))))
             setupDefaultModalMenuConstraints()
         }
     }
 
-    private func setupDefaultModalMenuConstraints() {
-        menuView.snp_remakeConstraints { make in
-            make.left.equalTo(view.snp_left).offset(24)
-            make.right.equalTo(view.snp_right).offset(-24)
-            make.bottom.equalTo(view.snp_bottom)
+    fileprivate func setupDefaultModalMenuConstraints() {
+        menuView.snp.remakeConstraints { make in
+            make.left.equalTo(view.snp.left).offset(24).priority(25)
+            make.right.equalTo(view.snp.right).offset(-24).priority(25)
+            make.bottom.equalTo(view.snp.bottom)
         }
     }
 
@@ -137,24 +137,24 @@ class MenuViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    @objc private func tapToDismissMenu(recognizer: UITapGestureRecognizer) {
-        if recognizer.state == UIGestureRecognizerState.Ended {
+    @objc fileprivate func tapToDismissMenu(_ recognizer: UITapGestureRecognizer) {
+        if recognizer.state == UIGestureRecognizerState.ended {
             dismissMenu()
         }
     }
 
-    private func dismissMenu() {
-        view.backgroundColor = UIColor.clearColor()
-        self.dismissViewControllerAnimated(true, completion: {
+    fileprivate func dismissMenu() {
+        view.backgroundColor = UIColor.clear
+        self.dismiss(animated: true, completion: {
             self.view.backgroundColor = self.popoverBackgroundColor
             self.delegate?.menuViewControllerDidDismiss(self)
         })
     }
 
-    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
         if delegate?.shouldCloseMenu(self, forRotationToNewSize: size, forTraitCollection: self.traitCollection) ?? false {
-            self.dismissViewControllerAnimated(false, completion: {
+            self.dismiss(animated: false, completion: {
                 self.delegate?.menuViewControllerDidDismiss(self)
             })
         }
@@ -162,36 +162,36 @@ class MenuViewController: UIViewController {
 
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        if presentationStyle == .Popover {
-            self.preferredContentSize = CGSizeMake(view.bounds.size.width, menuView.bounds.size.height)
+        if presentationStyle == .popover {
+            self.preferredContentSize = CGSize(width: view.bounds.size.width, height: menuView.bounds.size.height)
         }
     }
 
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.view.backgroundColor = popoverBackgroundColor
 
-        if presentationStyle == .Popover {
-            self.preferredContentSize = CGSizeMake(view.bounds.size.width, menuView.bounds.size.height)
+        if presentationStyle == .popover {
+            self.preferredContentSize = CGSize(width: view.bounds.size.width, height: menuView.bounds.size.height)
         }
     }
 
-    private func reloadView() {
+    fileprivate func reloadView() {
         menuView.setNeedsReload()
     }
 
-    private func performMenuAction(action: MenuAction) {
+    fileprivate func performMenuAction(_ action: MenuAction) {
         // this is so that things can happen while the menu is dismissing, but not before the menu is dismissed
         // waiting for the menu to dismiss felt too long (menu dismissed, then thing happened)
         // whereas this way things happen as the menu is dismissing, but the menu is already dismissed
         // to performing actions that do things like open other modal views can still occur and they feel snappy
-        dispatch_async(dispatch_get_main_queue()) {
+        DispatchQueue.main.async {
             self.actionDelegate?.performMenuAction(action, withAppState: self.appState)
         }
         dismissMenu()
     }
 
-    private func performMenuAction(action: MenuAction, withAnimation animation: Animatable, onView view: UIView) {
+    fileprivate func performMenuAction(_ action: MenuAction, withAnimation animation: Animatable, onView view: UIView) {
         animation.animateFromView(view, offset: nil) { finished in
             self.performMenuAction(action)
         }
@@ -199,15 +199,15 @@ class MenuViewController: UIViewController {
 
 }
 extension MenuViewController: MenuItemDelegate {
-    func menuView(menu: MenuView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    func menuView(_ menu: MenuView, didSelectItemAtIndexPath indexPath: IndexPath) {
         return self.menuView(menu, didPerformActionAtIndexPath: indexPath, animatedIfPossible: true) { $0.action }
     }
 
-    func menuView(menuView: MenuView, didLongPressItemAtIndexPath indexPath: NSIndexPath) {
+    func menuView(_ menuView: MenuView, didLongPressItemAtIndexPath indexPath: IndexPath) {
         return self.menuView(menuView, didPerformActionAtIndexPath: indexPath, animatedIfPossible: false) { $0.secondaryAction }
     }
 
-    private func menuView(menu: MenuView, didPerformActionAtIndexPath indexPath: NSIndexPath, animatedIfPossible: Bool, withActionResolver actionFinder: MenuItem -> MenuAction?) {
+    fileprivate func menuView(_ menu: MenuView, didPerformActionAtIndexPath indexPath: IndexPath, animatedIfPossible: Bool, withActionResolver actionFinder: (MenuItem) -> MenuAction?) {
         let menuItem = menuConfig.menuItems[indexPath.getMenuItemIndex()]
         guard let action = actionFinder(menuItem) else {
             return
@@ -217,25 +217,25 @@ extension MenuViewController: MenuItemDelegate {
         if let icon = menuItem.selectedIconForState(appState) {
             menuItemCell.menuImageView.image = icon
         } else {
-            menuItemCell.menuImageView.image = menuItemCell.menuImageView.image?.imageWithRenderingMode(.AlwaysTemplate)
+            menuItemCell.menuImageView.image = menuItemCell.menuImageView.image?.withRenderingMode(.alwaysTemplate)
             menuItemCell.menuImageView.tintColor = menuConfig.selectedItemTintColor()
         }
 
-        guard let animation = menuItem.animation where animatedIfPossible else {
+        guard let animation = menuItem.animation, animatedIfPossible else {
             return performMenuAction(action)
         }
         performMenuAction(action, withAnimation: animation, onView: menuItemCell.menuImageView)
     }
     
-    func menuView(menuView: MenuView, shouldSelectItemAtIndexPath indexPath: NSIndexPath) -> Bool {
+    func menuView(_ menuView: MenuView, shouldSelectItemAtIndexPath indexPath: IndexPath) -> Bool {
         let menuItem = menuConfig.menuItems[indexPath.getMenuItemIndex()]
         return !menuItem.isDisabled
     }
 
-    func heightForRowsInMenuView(menuView: MenuView) -> CGFloat {
+    func heightForRowsInMenuView(_ menuView: MenuView) -> CGFloat {
         // loop through the labels for the menu items and calculate the largest
         var largestLabel: CGFloat = 0
-        let label = UILabel(frame: CGRect(x: 0, y: 0, width: view.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).width, height: 0))
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: view.systemLayoutSizeFitting(UILayoutFittingCompressedSize).width, height: 0))
         label.font = menuConfig.menuFont()
         for item in menuConfig.menuItems {
             label.text = item.title
@@ -245,29 +245,29 @@ extension MenuViewController: MenuItemDelegate {
         return max(menuConfig.minMenuRowHeight(), largestLabel)
     }
 
-    func getLabelHeight(label: UILabel) -> CGFloat {
+    func getLabelHeight(_ label: UILabel) -> CGFloat {
 
         guard let labelText = label.text else {
             return 0
         }
-        let constraint = CGSizeMake(label.frame.width > 0 ? label.frame.width : menuConfig.minMenuRowHeight() - 20, CGFloat.max)
+        let constraint = CGSize(width: label.frame.width > 0 ? label.frame.width : menuConfig.minMenuRowHeight() - 20, height: CGFloat.greatestFiniteMagnitude)
         let context = NSStringDrawingContext()
         let paragraph = NSMutableParagraphStyle()
-        paragraph.lineBreakMode = NSLineBreakMode.ByWordWrapping
-        paragraph.alignment = .Center
+        paragraph.lineBreakMode = NSLineBreakMode.byWordWrapping
+        paragraph.alignment = .center
         paragraph.allowsDefaultTighteningForTruncation = true
-        let boundingBox = NSString(string: labelText).boundingRectWithSize(constraint, options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: label.font, NSParagraphStyleAttributeName: paragraph], context: context).size
+        let boundingBox = NSString(string: labelText).boundingRect(with: constraint, options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: [NSFontAttributeName: label.font, NSParagraphStyleAttributeName: paragraph], context: context).size
         return ceil(boundingBox.height)
     }
 }
 
 extension MenuViewController: MenuItemDataSource {
-    func numberOfPagesInMenuView(menuView: MenuView) -> Int {
+    func numberOfPagesInMenuView(_ menuView: MenuView) -> Int {
         let menuItems = menuConfig.menuItems
         return Int(ceil(Double(menuItems.count) / Double(maxNumberOfItemsPerPage)))
     }
 
-    func numberOfItemsPerRowInMenuView(menuView: MenuView) -> Int {
+    func numberOfItemsPerRowInMenuView(_ menuView: MenuView) -> Int {
         // return the minimum between the max number of items in the row and the actual number of items
         // for the first page. This allows us to set the number of items per row to be the correct 
         // value when the total number of items < max number of items in the row
@@ -275,7 +275,7 @@ extension MenuViewController: MenuItemDataSource {
         return min(menuConfig.numberOfItemsInRow, self.menuView(menuView, numberOfItemsForPage: 0))
     }
 
-    func menuView(menuView: MenuView, numberOfItemsForPage page: Int) -> Int {
+    func menuView(_ menuView: MenuView, numberOfItemsForPage page: Int) -> Int {
         let menuItems = menuConfig.menuItems
         let pageStartIndex = page * maxNumberOfItemsPerPage
         if (pageStartIndex + maxNumberOfItemsPerPage) > menuItems.count {
@@ -284,7 +284,7 @@ extension MenuViewController: MenuItemDataSource {
         return maxNumberOfItemsPerPage
     }
 
-    func menuView(menuView: MenuView, menuItemCellForIndexPath indexPath: NSIndexPath) -> MenuItemCollectionViewCell {
+    func menuView(_ menuView: MenuView, menuItemCellForIndexPath indexPath: IndexPath) -> MenuItemCollectionViewCell {
         let cell = menuView.dequeueReusableCellForIndexPath(indexPath)
         assert(indexPath.getMenuItemIndex() < menuConfig.menuItems.count, "The menu item index \(indexPath.getMenuItemIndex()) should always be less than the number of menu items \(menuConfig.menuItems.count)")
         let menuItem = menuConfig.menuItems[indexPath.getMenuItemIndex()]
@@ -297,7 +297,7 @@ extension MenuViewController: MenuItemDataSource {
         if menuItem.isDisabled {
             cell.menuTitleLabel.textColor = menuConfig.disabledItemTintColor()
             
-            cell.menuImageView.image = icon?.imageWithRenderingMode(.AlwaysTemplate)
+            cell.menuImageView.image = icon?.withRenderingMode(.alwaysTemplate)
             cell.menuImageView.tintColor = menuConfig.disabledItemTintColor()
         } else {
             cell.menuTitleLabel.textColor = menuConfig.menuTintColor()
@@ -309,19 +309,19 @@ extension MenuViewController: MenuItemDataSource {
 }
 
 extension MenuViewController: MenuToolbarDataSource {
-    func numberOfToolbarItemsInMenuView(menuView: MenuView) -> Int {
+    func numberOfToolbarItemsInMenuView(_ menuView: MenuView) -> Int {
         guard let menuToolbarItems = menuConfig.menuToolbarItems else { return 0 }
         return menuToolbarItems.count
     }
 
-    func menuView(menuView: MenuView, buttonForItemAtIndex index: Int) -> UIView {
+    func menuView(_ menuView: MenuView, buttonForItemAtIndex index: Int) -> UIView {
         // this should never happen - if we don't have any toolbar items then we shouldn't get this far
         guard let menuToolbarItems = menuConfig.menuToolbarItems else {
             return UIView()
         }
         let item = menuToolbarItems[index]
-        let buttonImageView = UIImageView(image: item.iconForState(appState)?.imageWithRenderingMode(.AlwaysTemplate))
-        buttonImageView.contentMode = .ScaleAspectFit
+        let buttonImageView = UIImageView(image: item.iconForState(appState)?.withRenderingMode(.alwaysTemplate))
+        buttonImageView.contentMode = .scaleAspectFit
         buttonImageView.accessibilityLabel = item.title
         buttonImageView.accessibilityIdentifier = item.accessibilityIdentifier
         return buttonImageView
@@ -329,12 +329,12 @@ extension MenuViewController: MenuToolbarDataSource {
 }
 
 extension MenuViewController: MenuToolbarItemDelegate {
-    func menuView(menuView: MenuView, didSelectItemAtIndex index: Int) {
+    func menuView(_ menuView: MenuView, didSelectItemAtIndex index: Int) {
         let menuToolbarItem = menuConfig.menuToolbarItems![index]
         return performMenuAction(menuToolbarItem.action)
     }
 
-    func menuView(menuView: MenuView, didLongPressItemAtIndex index: Int) {
+    func menuView(_ menuView: MenuView, didLongPressItemAtIndex index: Int) {
         let menuToolbarItem = menuConfig.menuToolbarItems![index]
         guard let action = menuToolbarItem.secondaryAction else {
             return
@@ -344,10 +344,10 @@ extension MenuViewController: MenuToolbarItemDelegate {
 }
 
 extension MenuViewController: UIGestureRecognizerDelegate {
-    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceiveTouch touch: UITouch) -> Bool {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
         let gestureView = gestureRecognizer.view
-        let loc = touch.locationInView(gestureView)
-        guard let tappedView = gestureView?.hitTest(loc, withEvent: nil) where tappedView == view || tappedView == menuView.openMenuImage else {
+        let loc = touch.location(in: gestureView)
+        guard let tappedView = gestureView?.hitTest(loc, with: nil), tappedView == view || tappedView == menuView.openMenuImage else {
             return false
         }
 
@@ -355,7 +355,7 @@ extension MenuViewController: UIGestureRecognizerDelegate {
     }
 }
 
-private extension NSIndexPath {
+private extension IndexPath {
     func getMenuItemIndex() -> Int {
         return (section * maxNumberOfItemsPerPage) + item
     }

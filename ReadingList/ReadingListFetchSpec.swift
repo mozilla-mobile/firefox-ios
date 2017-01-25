@@ -13,19 +13,19 @@ class ReadingListFetchSpec {
         self.queryString = queryString
     }
 
-    func getURL(serviceURL serviceURL: NSURL) -> NSURL? {
-        if let components = NSURLComponents(URL: serviceURL, resolvingAgainstBaseURL: true) {
+    func getURL(serviceURL: URL) -> URL? {
+        if var components = URLComponents(url: serviceURL, resolvingAgainstBaseURL: true) {
             components.query = queryString
-            return components.URL
+            return components.url
         }
         return nil
     }
 
-    func getURL(serviceURL serviceURL: NSURL, path: String) -> NSURL? {
-        if let components = NSURLComponents(URL: serviceURL, resolvingAgainstBaseURL: true) {
+    func getURL(serviceURL: URL, path: String) -> URL? {
+        if var components = URLComponents(url: serviceURL, resolvingAgainstBaseURL: true) {
             components.path = path
             components.query = queryString
-            return components.URL
+            return components.url
         }
         return nil
     }
@@ -33,14 +33,14 @@ class ReadingListFetchSpec {
     // This should really generate a dictionary of values that we can pass to NSURLComponents instead of building the query string by hand
 
     class Builder {
-        var buffer = ""
+        var buffer: String = ""
         var first = true
 
         func build() -> ReadingListFetchSpec {
             return ReadingListFetchSpec(queryString: buffer)
         }
 
-        private func ampersand() {
+        fileprivate func ampersand() {
             if first {
                 first = false
                 return
@@ -48,14 +48,14 @@ class ReadingListFetchSpec {
             buffer += "&"
         }
 
-        func setUnread(unread: Bool) -> Builder {
+        func setUnread(_ unread: Bool) -> Builder {
             ampersand()
             buffer += "unread="
             buffer += unread ? "true" : "false"
             return self
         }
 
-        func setStatus(status: String, not: Bool) -> Builder {
+        func setStatus(_ status: String, not: Bool) -> Builder {
             ampersand()
             if not {
                 buffer += "not_"
@@ -65,7 +65,7 @@ class ReadingListFetchSpec {
             return self
         }
 
-        private func qualifyAttribute(attribute: String, withQualifier qualifier: String, value: String) -> Builder {
+        fileprivate func qualifyAttribute(_ attribute: String, withQualifier qualifier: String, value: String) -> Builder {
             ampersand()
             buffer += qualifier
             buffer += attribute
@@ -74,13 +74,13 @@ class ReadingListFetchSpec {
             return self
         }
 
-        func setMinAttribute(attribute: String, value: String) -> Builder {
-            qualifyAttribute(attribute, withQualifier: "min_", value: value)
+        func setMinAttribute(_ attribute: String, value: String) -> Builder {
+            let _ = qualifyAttribute(attribute, withQualifier: "min_", value: value)
             return self
         }
 
-        func setMaxAttribute(attribute: String, value: String) -> Builder {
-            qualifyAttribute(attribute, withQualifier: "max_", value: value)
+        func setMaxAttribute(_ attribute: String, value: String) -> Builder {
+            let _ = qualifyAttribute(attribute, withQualifier: "max_", value: value)
             return self
         }
     }

@@ -10,7 +10,7 @@ import Shared
  * Data for identifying and constructing a HomePanel.
  */
 struct HomePanelDescriptor {
-    let makeViewController: (profile: Profile) -> UIViewController
+    let makeViewController: (_ profile: Profile) -> UIViewController
     let imageName: String
     let accessibilityLabel: String
     let accessibilityIdentifier: String
@@ -20,7 +20,7 @@ class HomePanels {
     let enabledPanels = [
         HomePanelDescriptor(
             makeViewController: { profile in
-                if UIDevice.currentDevice().userInterfaceIdiom != .Pad && AppConstants.MOZ_AS_PANEL {
+                if UIDevice.current.userInterfaceIdiom != .pad && AppConstants.MOZ_AS_PANEL {
                     return ActivityStreamPanel(profile: profile)
                 } else {
                     return TopSitesPanel(profile: profile)

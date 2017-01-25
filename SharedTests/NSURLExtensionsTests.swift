@@ -8,7 +8,7 @@ import XCTest
 
 class NSURLExtensionsTests: XCTestCase {
     func testRemovesHTTPFromURL() {
-        let url = NSURL(string: "http://google.com")
+        let url = URL(string: "http://google.com")
         if let actual = url?.absoluteDisplayString {
             XCTAssertEqual(actual, "google.com")
         } else {
@@ -17,7 +17,7 @@ class NSURLExtensionsTests: XCTestCase {
     }
 
     func testRemovesHTTPAndTrailingSlashFromURL() {
-        let url = NSURL(string: "http://google.com/")
+        let url = URL(string: "http://google.com/")
         if let actual = url?.absoluteDisplayString {
             XCTAssertEqual(actual, "google.com")
         } else {
@@ -26,7 +26,7 @@ class NSURLExtensionsTests: XCTestCase {
     }
 
     func testRemovesHTTPButNotTrailingSlashFromURL() {
-        let url = NSURL(string: "http://google.com/foo/")
+        let url = URL(string: "http://google.com/foo/")
         if let actual = url?.absoluteDisplayString {
             XCTAssertEqual(actual, "google.com/foo/")
         } else {
@@ -35,7 +35,7 @@ class NSURLExtensionsTests: XCTestCase {
     }
 
     func testKeepsHTTPSInURL() {
-        let url = NSURL(string: "https://google.com")
+        let url = URL(string: "https://google.com")
         if let actual = url?.absoluteDisplayString {
             XCTAssertEqual(actual, "https://google.com")
         } else {
@@ -44,7 +44,7 @@ class NSURLExtensionsTests: XCTestCase {
     }
 
     func testKeepsHTTPSAndRemovesTrailingSlashInURL() {
-        let url = NSURL(string: "https://google.com/")
+        let url = URL(string: "https://google.com/")
         if let actual = url?.absoluteDisplayString {
             XCTAssertEqual(actual, "https://google.com")
         } else {
@@ -53,7 +53,7 @@ class NSURLExtensionsTests: XCTestCase {
     }
 
     func testKeepsHTTPSAndTrailingSlashInURL() {
-        let url = NSURL(string: "https://google.com/foo/")
+        let url = URL(string: "https://google.com/foo/")
         if let actual = url?.absoluteDisplayString {
             XCTAssertEqual(actual, "https://google.com/foo/")
         } else {
@@ -62,7 +62,7 @@ class NSURLExtensionsTests: XCTestCase {
     }
 
     func testKeepsAboutSchemeInURL() {
-        let url = NSURL(string: "about:home")
+        let url = URL(string: "about:home")
         if let actual = url?.absoluteDisplayString {
             XCTAssertEqual(actual, "about:home")
         } else {
@@ -191,8 +191,8 @@ class NSURLExtensionsTests: XCTestCase {
             "http://localhost:6571/errors/error.html?url=http%3A//mozilla.com/about/home/%23panel%3D1",
             ]
 
-        goodurls.forEach { XCTAssertTrue(NSURL(string:$0)!.isAboutHomeURL, $0) }
-        badurls.forEach { XCTAssertFalse(NSURL(string:$0)!.isAboutHomeURL, $0) }
+        goodurls.forEach { XCTAssertTrue(URL(string:$0)!.isAboutHomeURL, $0) }
+        badurls.forEach { XCTAssertFalse(URL(string:$0)!.isAboutHomeURL, $0) }
     }
 
     func testisAboutURL() {
@@ -207,8 +207,8 @@ class NSURLExtensionsTests: XCTestCase {
             "http://localhost:6571/errors/error.html?url=http%3A//mozilla.com/about/home/%23panel%3D1",
             ]
 
-        goodurls.forEach { XCTAssertTrue(NSURL(string:$0)!.isAboutURL, $0) }
-        badurls.forEach { XCTAssertFalse(NSURL(string:$0)!.isAboutURL, $0) }
+        goodurls.forEach { XCTAssertTrue(URL(string:$0)!.isAboutURL, $0) }
+        badurls.forEach { XCTAssertFalse(URL(string:$0)!.isAboutURL, $0) }
     }
 
     func testisErrorPage() {
@@ -222,14 +222,14 @@ class NSURLExtensionsTests: XCTestCase {
             "http://localhost:1234/about/home/#panel=0"
         ]
 
-        goodurls.forEach { XCTAssertTrue(NSURL(string:$0)!.isErrorPageURL, $0) }
-        badurls.forEach { XCTAssertFalse(NSURL(string:$0)!.isErrorPageURL, $0) }
+        goodurls.forEach { XCTAssertTrue(URL(string:$0)!.isErrorPageURL, $0) }
+        badurls.forEach { XCTAssertFalse(URL(string:$0)!.isErrorPageURL, $0) }
     }
 
     func testoriginalURLFromErrorURL() {
         let goodurls = [
-            ("http://localhost:6571/errors/error.html?url=http%3A//mozilla.com", NSURL(string: "http://mozilla.com")),
-            ("http://localhost:6571/errors/error.html?url=http%3A//localhost%3A6571/about/home/%23panel%3D1", NSURL(string: "http://localhost:6571/about/home/#panel=1")),
+            ("http://localhost:6571/errors/error.html?url=http%3A//mozilla.com", URL(string: "http://mozilla.com")),
+            ("http://localhost:6571/errors/error.html?url=http%3A//localhost%3A6571/about/home/%23panel%3D1", URL(string: "http://localhost:6571/about/home/#panel=1")),
             ]
         let badurls = [
             "http://google.com",
@@ -238,10 +238,9 @@ class NSURLExtensionsTests: XCTestCase {
             "http://localhost:6571/errors/error.html"
         ]
 
-        goodurls.forEach { XCTAssertEqual(NSURL(string:$0.0)!.originalURLFromErrorURL, $0.1) }
-        badurls.forEach { XCTAssertNil(NSURL(string:$0)!.originalURLFromErrorURL) }
+        goodurls.forEach { XCTAssertEqual(URL(string:$0.0)!.originalURLFromErrorURL, $0.1) }
+        badurls.forEach { XCTAssertNil(URL(string:$0)!.originalURLFromErrorURL) }
     }
-
 
     func testisReaderModeURL() {
         let goodurls = [
@@ -254,13 +253,13 @@ class NSURLExtensionsTests: XCTestCase {
             "http://localhost:1234/about/home/#panel=0"
         ]
 
-        goodurls.forEach { XCTAssertTrue(NSURL(string:$0)!.isReaderModeURL, $0) }
-        badurls.forEach { XCTAssertFalse(NSURL(string:$0)!.isReaderModeURL, $0) }
+        goodurls.forEach { XCTAssertTrue(URL(string:$0)!.isReaderModeURL, $0) }
+        badurls.forEach { XCTAssertFalse(URL(string:$0)!.isReaderModeURL, $0) }
     }
 
     func testdecodeReaderModeURL() {
         let goodurls = [
-            ("http://localhost:6571/reader-mode/page?url=https%3A%2F%2Fen%2Em%2Ewikipedia%2Eorg%2Fwiki%2FMain%5FPage", NSURL(string: "https://en.m.wikipedia.org/wiki/Main_Page"))
+            ("http://localhost:6571/reader-mode/page?url=https%3A%2F%2Fen%2Em%2Ewikipedia%2Eorg%2Fwiki%2FMain%5FPage", URL(string: "https://en.m.wikipedia.org/wiki/Main_Page"))
         ]
         let badurls = [
             "http://google.com",
@@ -269,15 +268,15 @@ class NSURLExtensionsTests: XCTestCase {
             "http://localhost:6571/reader-mode/page"
         ]
 
-        goodurls.forEach { XCTAssertEqual(NSURL(string:$0.0)!.decodeReaderModeURL, $0.1) }
-        badurls.forEach { XCTAssertNil(NSURL(string:$0)!.decodeReaderModeURL, $0) }    }
+        goodurls.forEach { XCTAssertEqual(URL(string:$0.0)!.decodeReaderModeURL, $0.1) }
+        badurls.forEach { XCTAssertNil(URL(string:$0)!.decodeReaderModeURL, $0) }    }
 
     func testencodeReaderModeURL() {
         let ReaderURL = "http://localhost:6571/reader-mode/page"
         let goodurls = [
-            ("https://en.m.wikipedia.org/wiki/Main_Page", NSURL(string: "http://localhost:6571/reader-mode/page?url=https%3A%2F%2Fen%2Em%2Ewikipedia%2Eorg%2Fwiki%2FMain%5FPage"))
+            ("https://en.m.wikipedia.org/wiki/Main_Page", URL(string: "http://localhost:6571/reader-mode/page?url=https%3A%2F%2Fen%2Em%2Ewikipedia%2Eorg%2Fwiki%2FMain%5FPage"))
             ]
-        goodurls.forEach { XCTAssertEqual(NSURL(string:$0.0)!.encodeReaderModeURL(ReaderURL), $0.1) }
+        goodurls.forEach { XCTAssertEqual(URL(string:$0.0)!.encodeReaderModeURL(ReaderURL), $0.1) }
     }
 
     func testhavingRemovedAuthorisationComponents() {
@@ -286,7 +285,7 @@ class NSURLExtensionsTests: XCTestCase {
             ("https://www.example.com/noauth", "https://www.example.com/noauth")
         ]
 
-        goodurls.forEach { XCTAssertEqual(NSURL(string:$0.0)!.havingRemovedAuthorisationComponents().absoluteString, $0.1) }
+        goodurls.forEach { XCTAssertEqual(URL(string:$0.0)!.havingRemovedAuthorisationComponents().absoluteString, $0.1) }
     }
 
     func testschemeIsValid() {
@@ -301,8 +300,8 @@ class NSURLExtensionsTests: XCTestCase {
             "leet://codes.com"
         ]
 
-        goodurls.forEach { XCTAssertTrue(NSURL(string:$0)!.schemeIsValid, $0) }
-        badurls.forEach { XCTAssertFalse(NSURL(string:$0)!.schemeIsValid, $0) }
+        goodurls.forEach { XCTAssertTrue(URL(string:$0)!.schemeIsValid, $0) }
+        badurls.forEach { XCTAssertFalse(URL(string:$0)!.schemeIsValid, $0) }
     }
 
     func testisLocal() {
@@ -319,8 +318,8 @@ class NSURLExtensionsTests: XCTestCase {
             "hax://localhost:6571/about"
         ]
 
-        goodurls.forEach { XCTAssertTrue(NSURL(string:$0)!.isLocal, $0) }
-        badurls.forEach { XCTAssertFalse(NSURL(string:$0)!.isLocal, $0) }
+        goodurls.forEach { XCTAssertTrue(URL(string:$0)!.isLocal, $0) }
+        badurls.forEach { XCTAssertFalse(URL(string:$0)!.isLocal, $0) }
     }
 
     func testisWebPage() {
@@ -336,8 +335,8 @@ class NSURLExtensionsTests: XCTestCase {
             "hax://localhost:6571/about"
         ]
 
-        goodurls.forEach { XCTAssertTrue(NSURL(string:$0)!.isWebPage(), $0) }
-        badurls.forEach { XCTAssertFalse(NSURL(string:$0)!.isWebPage(), $0) }
+        goodurls.forEach { XCTAssertTrue(URL(string:$0)!.isWebPage(), $0) }
+        badurls.forEach { XCTAssertFalse(URL(string:$0)!.isWebPage(), $0) }
     }
 
     func testdomainURL() {
@@ -346,7 +345,7 @@ class NSURLExtensionsTests: XCTestCase {
             ("https://mail.example.com/index.html", "https://mail.example.com/"),
             ("https://mail.example.co.uk/index.html", "https://mail.example.co.uk/"),
         ]
-        urls.forEach { XCTAssertEqual(NSURL(string:$0.0)!.domainURL.absoluteString, $0.1) }
+        urls.forEach { XCTAssertEqual(URL(string:$0.0)!.domainURL.absoluteString, $0.1) }
     }
 
     func testdisplayURL() {
@@ -363,8 +362,8 @@ class NSURLExtensionsTests: XCTestCase {
 
         ]
 
-        goodurls.forEach { XCTAssertEqual(NSURL(string:$0.0)!.displayURL?.absoluteString, $0.1) }
-        badurls.forEach { XCTAssertNil(NSURL(string:$0)!.displayURL) }
+        goodurls.forEach { XCTAssertEqual(URL(string:$0.0)!.displayURL?.absoluteString, $0.1) }
+        badurls.forEach { XCTAssertNil(URL(string:$0)!.displayURL) }
     }
 
     func testnormalizedHostAndPath() {
@@ -379,8 +378,8 @@ class NSURLExtensionsTests: XCTestCase {
             "http://:6571/about/home",
         ]
 
-        goodurls.forEach { XCTAssertEqual(NSURL(string:$0.0)!.normalizedHostAndPath, $0.1) }
-        badurls.forEach { XCTAssertNil(NSURL(string:$0)!.normalizedHostAndPath) }
+        goodurls.forEach { XCTAssertEqual(URL(string:$0.0)!.normalizedHostAndPath, $0.1) }
+        badurls.forEach { XCTAssertNil(URL(string:$0)!.normalizedHostAndPath) }
     }
 
     func testhostSLD() {
@@ -389,7 +388,7 @@ class NSURLExtensionsTests: XCTestCase {
             ("https://m.foo.com/bar/baz?noo=abc#123", "foo"),
             ("https://user:pass@m.foo.com/bar/baz?noo=abc#123", "foo"),
         ]
-        urls.forEach { XCTAssertEqual(NSURL(string:$0.0)!.hostSLD, $0.1) }
+        urls.forEach { XCTAssertEqual(URL(string:$0.0)!.hostSLD, $0.1) }
     }
 
     func testorigin() {
@@ -401,8 +400,8 @@ class NSURLExtensionsTests: XCTestCase {
         let badurls = [
             "data://google.com"
         ]
-        urls.forEach { XCTAssertEqual(NSURL(string:$0.0)!.origin, $0.1) }
-        badurls.forEach { XCTAssertNil(NSURL(string:$0)!.origin) }
+        urls.forEach { XCTAssertEqual(URL(string:$0.0)!.origin, $0.1) }
+        badurls.forEach { XCTAssertNil(URL(string:$0)!.origin) }
     }
 
     func testhostPort() {
@@ -416,12 +415,12 @@ class NSURLExtensionsTests: XCTestCase {
             "blah",
             "http://"
         ]
-        urls.forEach { XCTAssertEqual(NSURL(string:$0.0)!.hostPort, $0.1) }
-        badurls.forEach { XCTAssertNil(NSURL(string:$0)!.hostPort) }
+        urls.forEach { XCTAssertEqual(URL(string:$0.0)!.hostPort, $0.1) }
+        badurls.forEach { XCTAssertNil(URL(string:$0)!.hostPort) }
     }
 
     func testgetQuery() {
-        let url = NSURL(string: "http://example.com/path?a=1&b=2&c=3")!
+        let url = URL(string: "http://example.com/path?a=1&b=2&c=3")!
         let params = ["a": "1", "b": "2", "c": "3"]
 
         let urlParams = url.getQuery()
@@ -429,10 +428,10 @@ class NSURLExtensionsTests: XCTestCase {
     }
 
     func testwithQueryParams() {
-        let url = NSURL(string: "http://example.com/path")!
+        let url = URL(string: "http://example.com/path")!
         let params = ["a": "1", "b": "2", "c": "3"]
 
-        let newURL = url.withQueryParams(params.map { NSURLQueryItem(name: $0, value: $1) })
+        let newURL = url.withQueryParams(params.map { URLQueryItem(name: $0, value: $1) })
 
         //make sure the new url has all the right params.
         let newURLParams = newURL.getQuery()
@@ -440,8 +439,8 @@ class NSURLExtensionsTests: XCTestCase {
     }
 
     func testWithQueryParam() {
-        let urlA = NSURL(string: "http://foo.com/bar/")!
-        let urlB = NSURL(string: "http://bar.com/noo")!
+        let urlA = URL(string: "http://foo.com/bar/")!
+        let urlB = URL(string: "http://bar.com/noo")!
         let urlC = urlA.withQueryParam("ppp", value: "123")
         let urlD = urlB.withQueryParam("qqq", value: "123")
         let urlE = urlC.withQueryParam("rrr", value: "aaa")

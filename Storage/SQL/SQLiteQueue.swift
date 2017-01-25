@@ -9,30 +9,30 @@ import Deferred
 
 private let log = Logger.syncLogger
 
-public class SQLiteQueue: TabQueue {
+open class SQLiteQueue: TabQueue {
     let db: BrowserDB
 
     public init(db: BrowserDB) {
         // BrowserTable exists only to perform create/update etc. operations -- it's not
         // a queryable thing that needs to stick around.
-        db.createOrUpdate(BrowserTable())
+        let _ = db.createOrUpdate(BrowserTable())
         self.db = db
     }
 
-    public func addToQueue(tab: ShareItem) -> Success {
+    open func addToQueue(_ tab: ShareItem) -> Success {
         let args: Args = [tab.url, tab.title]
         return db.run("INSERT OR IGNORE INTO \(TableQueuedTabs) (url, title) VALUES (?, ?)", withArgs: args)
     }
 
-    private func factory(row: SDRow) -> ShareItem {
+    fileprivate func factory(_ row: SDRow) -> ShareItem {
         return ShareItem(url: row["url"] as! String, title: row["title"] as? String, favicon: nil)
     }
 
-    public func getQueuedTabs() -> Deferred<Maybe<Cursor<ShareItem>>> {
+    open func getQueuedTabs() -> Deferred<Maybe<Cursor<ShareItem>>> {
         return db.runQuery("SELECT url, title FROM \(TableQueuedTabs)", args: nil, factory: self.factory)
     }
 
-    public func clearQueuedTabs() -> Success {
+    open func clearQueuedTabs() -> Success {
         return db.run("DELETE FROM \(TableQueuedTabs)")
     }
 }

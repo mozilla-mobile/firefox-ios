@@ -8,4 +8,4 @@
 
 import Foundation
 
-public typealias MaybeErrorType = protocol<ErrorType, CustomStringConvertible>
+public typealias MaybeErrorType = Error & CustomStringConvertible

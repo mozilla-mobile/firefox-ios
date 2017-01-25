@@ -12,22 +12,22 @@ import Foundation
 /// Note that not all applications use the Subject. For example OmniFocus ignores it, so we need to do both.
 
 class TitleActivityItemProvider: UIActivityItemProvider {
-    static let activityTypesToIgnore = [UIActivityTypeCopyToPasteboard, UIActivityTypeMessage, UIActivityTypeMail]
+    static let activityTypesToIgnore = [UIActivityType.copyToPasteboard, UIActivityType.message, UIActivityType.mail]
 
     init(title: String) {
         super.init(placeholderItem: title)
     }
 
-    override func item() -> AnyObject {
+    override var item : Any {
         if let activityType = activityType {
             if TitleActivityItemProvider.activityTypesToIgnore.contains(activityType) {
                 return NSNull()
             }
         }
-        return placeholderItem!
+        return placeholderItem! as AnyObject
     }
 
-    override func activityViewController(activityViewController: UIActivityViewController, subjectForActivityType activityType: String?) -> String {
+    override func activityViewController(_ activityViewController: UIActivityViewController, subjectForActivityType activityType: UIActivityType?) -> String {
         return placeholderItem as! String
     }
 }

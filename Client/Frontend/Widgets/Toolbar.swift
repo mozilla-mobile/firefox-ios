@@ -8,25 +8,25 @@ class Toolbar: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = UIColor.clearColor()
+        self.backgroundColor = UIColor.clear
 
         // Allow the view to redraw itself on rotation changes
-        contentMode = UIViewContentMode.Redraw
+        contentMode = UIViewContentMode.redraw
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func drawLine(context: CGContextRef, width: CGFloat, start: CGPoint, end: CGPoint) {
-        CGContextSetStrokeColorWithColor(context, UIConstants.BorderColor.CGColor)
-        CGContextSetLineWidth(context, width * (1 / UIScreen.mainScreen().scale) )
-        CGContextMoveToPoint(context, start.x, start.y)
-        CGContextAddLineToPoint(context, end.x, end.y)
-        CGContextStrokePath(context)
+    fileprivate func drawLine(_ context: CGContext, width: CGFloat, start: CGPoint, end: CGPoint) {
+        context.setStrokeColor(UIConstants.BorderColor.cgColor)
+        context.setLineWidth(width * (1 / UIScreen.main.scale) )
+        context.move(to: CGPoint(x: start.x, y: start.y))
+        context.addLine(to: CGPoint(x: end.x, y: end.y))
+        context.strokePath()
     }
 
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         if let context = UIGraphicsGetCurrentContext() {
             if drawTopBorder {
                 drawLine(context, width: 1, start: CGPoint(x: 0, y: 0), end: CGPoint(x: frame.width, y: 0))
@@ -53,11 +53,11 @@ class Toolbar: UIView {
         }
     }
 
-    func addButtons(buttons: UIButton...) {
+    func addButtons(_ buttons: UIButton...) {
         for button in buttons {
-            button.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-            button.setTitleColor(UIColor.grayColor(), forState: UIControlState.Disabled)
-            button.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
+            button.setTitleColor(UIColor.black, for: UIControlState())
+            button.setTitleColor(UIColor.gray, for: UIControlState.disabled)
+            button.imageView?.contentMode = UIViewContentMode.scaleAspectFit
             addSubview(button)
         }
     }
@@ -65,9 +65,9 @@ class Toolbar: UIView {
     override func updateConstraints() {
         var prev: UIView? = nil
         for view in self.subviews {
-            view.snp_remakeConstraints { make in
+            view.snp.remakeConstraints { make in
                 if let prev = prev {
-                    make.left.equalTo(prev.snp_right)
+                    make.left.equalTo(prev.snp.right)
                 } else {
                     make.left.equalTo(self)
                 }

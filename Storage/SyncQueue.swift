@@ -4,6 +4,7 @@
 
 import Shared
 import Deferred
+import SwiftyJSON
 
 public struct SyncCommand: Equatable {
     public let value: String
@@ -36,15 +37,15 @@ public struct SyncCommand: Equatable {
     /**
      * Sent displayURI commands include the sender client GUID.
      */
-    public static func displayURIFromShareItem(shareItem: ShareItem, asClient sender: GUID) -> SyncCommand {
-        let jsonObj: [String: AnyObject] = [
+    public static func displayURIFromShareItem(_ shareItem: ShareItem, asClient sender: GUID) -> SyncCommand {
+        let jsonObj: [String: Any] = [
             "command": "displayURI",
             "args": [shareItem.url, sender, shareItem.title ?? ""]
         ]
-        return SyncCommand(value: JSON.stringify(jsonObj, pretty: false))
+        return SyncCommand(value: JSON(object: jsonObj).rawString()!)
     }
 
-    public func withClientGUID(clientGUID: String?) -> SyncCommand {
+    public func withClientGUID(_ clientGUID: String?) -> SyncCommand {
         return SyncCommand(id: self.commandID, value: self.value, clientGUID: clientGUID)
     }
 }
@@ -55,10 +56,10 @@ public func ==(lhs: SyncCommand, rhs: SyncCommand) -> Bool {
 
 public protocol SyncCommands {
     func deleteCommands() -> Success
-    func deleteCommands(clientGUID: GUID) -> Success
+    func deleteCommands(_ clientGUID: GUID) -> Success
 
     func getCommands() -> Deferred<Maybe<[GUID: [SyncCommand]]>>
 
-    func insertCommand(command: SyncCommand, forClients clients: [RemoteClient]) -> Deferred<Maybe<Int>>
-    func insertCommands(commands: [SyncCommand], forClients clients: [RemoteClient]) -> Deferred<Maybe<Int>>
+    func insertCommand(_ command: SyncCommand, forClients clients: [RemoteClient]) -> Deferred<Maybe<Int>>
+    func insertCommands(_ commands: [SyncCommand], forClients clients: [RemoteClient]) -> Deferred<Maybe<Int>>
 }

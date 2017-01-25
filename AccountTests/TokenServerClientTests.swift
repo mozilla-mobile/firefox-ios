@@ -19,12 +19,12 @@ class TokenServerClientTests: LiveAccountTest {
         let error = NSError(domain: "test", code: 123, userInfo: nil)
         XCTAssertEqual(
             "<TokenServerError.Local Error Domain=test Code=123 \"The operation couldn’t be completed. (test error 123.)\">",
-            TokenServerError.Local(error).description)
+            TokenServerError.local(error).description)
     }
 
     func testAudienceForEndpoint() {
-        func audienceFor(endpoint: String) -> String {
-            return TokenServerClient.getAudienceForURL(NSURL(string: endpoint)!)
+        func audienceFor(_ endpoint: String) -> String {
+            return TokenServerClient.getAudience(forURL: URL(string: endpoint)!)
         }
 
         // Sub-domains and path components.
@@ -50,14 +50,14 @@ class TokenServerClientTests: LiveAccountTest {
     }
 
     func testTokenSuccess() {
-        let audience = TokenServerClient.getAudienceForURL(ProductionSync15Configuration().tokenServerEndpointURL)
+        let audience = TokenServerClient.getAudience(forURL: ProductionSync15Configuration().tokenServerEndpointURL)
 
         withCertificate { expectation, emailUTF8, keyPair, certificate in
-            let assertion = JSONWebTokenUtils.createAssertionWithPrivateKeyToSignWith(keyPair.privateKey,
+            let assertion = JSONWebTokenUtils.createAssertionWithPrivateKeyToSign(with: keyPair.privateKey,
                 certificate: certificate, audience: audience)
 
             let client = TokenServerClient()
-            client.token(assertion).upon { result in
+            client.token(assertion!).upon { result in
                 if let token = result.successValue {
                     XCTAssertNotNil(token.id)
                     XCTAssertNotNil(token.key)
@@ -71,13 +71,13 @@ class TokenServerClientTests: LiveAccountTest {
                 expectation.fulfill()
             }
         }
-        self.waitForExpectationsWithTimeout(100, handler: nil)
+        self.waitForExpectations(timeout: 100, handler: nil)
     }
 
     func testTokenFailure() {
         withVerifiedAccount { _, _ in
             // Account details aren't used, but we want to skip when we're not running live tests.
-            let e = self.expectationWithDescription("")
+            let e = self.expectation(description: "")
 
             let assertion = "BAD ASSERTION"
 
@@ -88,12 +88,12 @@ class TokenServerClientTests: LiveAccountTest {
                 } else {
                     if let error = result.failureValue as? TokenServerError {
                         switch error {
-                        case let .Remote(code, status, remoteTimestamp):
+                        case let .remote(code, status, remoteTimestamp):
                             XCTAssertEqual(code, Int32(401)) // Bad auth.
                             XCTAssertEqual(status!, "error")
                             XCTAssertFalse(remoteTimestamp == nil)
-                            XCTAssertTrue(remoteTimestamp >= 1429121686000) // Not a special timestamp; just a sanity check.
-                        case let .Local(error):
+                            XCTAssertTrue(remoteTimestamp! >= 1429121686000) // Not a special timestamp; just a sanity check.
+                        case let .local(error):
                             XCTAssertNil(error)
                         }
                     } else {
@@ -103,6 +103,6 @@ class TokenServerClientTests: LiveAccountTest {
                 e.fulfill()
             }
         }
-        self.waitForExpectationsWithTimeout(10, handler: nil)
+        self.waitForExpectations(timeout: 10, handler: nil)
     }
 }
