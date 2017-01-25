@@ -39,11 +39,9 @@ public extension String {
 
     func escape() -> String {
         let raw: NSString = self as NSString
-        let str = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
-            raw,
-            "[]." as CFString!, ":/?&=;+!@#$()',*" as CFString!,
-            CFStringConvertNSStringEncodingToEncoding(String.Encoding.utf8.rawValue))
-        return str as! String
+        let allowedEscapes = CharacterSet(charactersIn: ":/?&=;+!@#$()',*")
+        let str = raw.addingPercentEncoding(withAllowedCharacters: allowedEscapes)
+        return str as String!
     }
 
     func unescape() -> String {
