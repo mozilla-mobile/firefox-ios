@@ -94,7 +94,7 @@ public func chunk<T>(_ arr: [T], by: Int) -> [ArraySlice<T>] {
 
     let s = stride(from: 0, to: count, by: step)
     return s.map {
-        arr[$0..<$0.advancedBy(step, limit: count)]
+        arr[$0..<$0.advanced(by: step)]
     }
 }
 
