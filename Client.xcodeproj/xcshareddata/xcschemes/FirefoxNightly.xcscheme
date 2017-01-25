@@ -141,10 +141,10 @@
             </BuildableReference>
             <SkippedTests>
                <Test
-                  Identifier = "BookmarkingTests">
+                  Identifier = "AuthenticationTests">
                </Test>
                <Test
-                  Identifier = "BrowserTests">
+                  Identifier = "BookmarkingTests">
                </Test>
                <Test
                   Identifier = "ClearPrivateDataTests">
@@ -156,13 +156,7 @@
                   Identifier = "FindInPageTests">
                </Test>
                <Test
-                  Identifier = "HistoryTests">
-               </Test>
-               <Test
                   Identifier = "HomePageSettingsUITests">
-               </Test>
-               <Test
-                  Identifier = "LoginInputTests">
                </Test>
                <Test
                   Identifier = "LoginManagerTests">
@@ -177,19 +171,13 @@
                   Identifier = "ReaderViewUITests">
                </Test>
                <Test
-                  Identifier = "ReadingListTests">
-               </Test>
-               <Test
                   Identifier = "SearchSettingsUITests">
                </Test>
                <Test
                   Identifier = "SearchTests">
                </Test>
                <Test
-                  Identifier = "SecurityTests">
-               </Test>
-               <Test
-                  Identifier = "SessionRestoreTests">
+                  Identifier = "SecurityTests/testWindowExploit()">
                </Test>
                <Test
                   Identifier = "SettingsTests">
