@@ -116,7 +116,7 @@ open class FirefoxAccountSyncAuthState: SyncAuthState {
             if let married = result.successValue {
                 log.info("Account is in Married state; generating assertion.")
                 let tokenServerEndpointURL = self.account.configuration.sync15Configuration.tokenServerEndpointURL
-                let audience = TokenServerClient.getAudienceForURL(tokenServerEndpointURL)
+                let audience = TokenServerClient.getAudience(forURL: tokenServerEndpointURL)
                 let client = TokenServerClient(URL: tokenServerEndpointURL)
                 let clientState = FxAClient10.computeClientState(married.kB)
                 log.debug("Fetching token server token.")

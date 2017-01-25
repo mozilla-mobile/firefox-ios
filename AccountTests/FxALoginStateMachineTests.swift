@@ -102,7 +102,7 @@ class FxALoginStateMachineTests: XCTestCase {
             let e = expectationWithDescription("Wait for login state machine.")
             let state = FxAStateTests.stateForLabel(stateLabel)
             withMachineAndClient { stateMachine, _ in
-                stateMachine.advanceFromState(state, now: 0).upon { newState in
+                stateMachine.advance(fromState: state, now: 0).upon { newState in
                     XCTAssertEqual(newState.label, stateLabel)
                     e.fulfill()
                 }
@@ -116,7 +116,7 @@ class FxALoginStateMachineTests: XCTestCase {
         let e = self.expectation(description: "Wait for login state machine.")
         let engagedState = (FxAStateTests.stateForLabel(.EngagedBeforeVerified) as! EngagedBeforeVerifiedState)
         withMachine(MockFxALoginClientBeforeVerification()) { stateMachine in
-            stateMachine.advanceFromState(engagedState, now: engagedState.knownUnverifiedAt).upon { newState in
+            stateMachine.advance(fromState: engagedState, now: engagedState.knownUnverifiedAt).upon { newState in
                 XCTAssertEqual(newState.label.rawValue, engagedState.label.rawValue)
                 e.fulfill()
             }
@@ -132,7 +132,7 @@ class FxALoginStateMachineTests: XCTestCase {
             let engagedState = (FxAStateTests.stateForLabel(.EngagedAfterVerified) as! EngagedAfterVerifiedState).withUnwrapKey(unwrapkB)
 
             let e = self.expectationWithDescription("Wait for login state machine.")
-            stateMachine.advanceFromState(engagedState, now: 0).upon { newState in
+            stateMachine.advance(fromState: engagedState, now: 0).upon { newState in
                 XCTAssertEqual(newState.label.rawValue, FxAStateLabel.Married.rawValue)
                 if let newState = newState as? MarriedState {
                     // We get kA from the client directly.
@@ -152,7 +152,7 @@ class FxALoginStateMachineTests: XCTestCase {
             let engagedState = FxAStateTests.stateForLabel(.EngagedAfterVerified)
 
             let e = self.expectationWithDescription("Wait for login state machine.")
-            stateMachine.advanceFromState(engagedState, now: 0).upon { newState in
+            stateMachine.advance(fromState: engagedState, now: 0).upon { newState in
                 XCTAssertEqual(newState.label.rawValue, engagedState.label.rawValue)
                 e.fulfill()
             }
@@ -165,7 +165,7 @@ class FxALoginStateMachineTests: XCTestCase {
         let e = self.expectation(description: "Wait for login state machine.")
         let state = (FxAStateTests.stateForLabel(.CohabitingAfterKeyPair) as! CohabitingAfterKeyPairState)
         withMachine(MockFxALoginClientDuringOutage()) { stateMachine in
-            stateMachine.advanceFromState(state, now: 0).upon { newState in
+            stateMachine.advance(fromState: state, now: 0).upon { newState in
                 XCTAssertEqual(newState.label.rawValue, state.label.rawValue)
                 e.fulfill()
             }
@@ -178,7 +178,7 @@ class FxALoginStateMachineTests: XCTestCase {
         let e = self.expectation(description: "Wait for login state machine.")
         let state = (FxAStateTests.stateForLabel(.CohabitingAfterKeyPair) as! CohabitingAfterKeyPairState)
         withMachine(MockFxALoginClientWithoutNetwork()) { stateMachine in
-            stateMachine.advanceFromState(state, now: 0).upon { newState in
+            stateMachine.advance(fromState: state, now: 0).upon { newState in
                 XCTAssertEqual(newState.label.rawValue, state.label.rawValue)
                 e.fulfill()
             }
@@ -190,7 +190,7 @@ class FxALoginStateMachineTests: XCTestCase {
         // Advancing from a healthy Married state is easy.
         let e = self.expectation(description: "Wait for login state machine.")
         withMachineAndClient { stateMachine, _ in
-            stateMachine.advanceFromState(self.marriedState, now: 0).upon { newState in
+            stateMachine.advance(fromState: self.marriedState, now: 0).upon { newState in
                 XCTAssertEqual(newState.label, FxAStateLabel.Married)
                 e.fulfill()
             }
@@ -203,7 +203,7 @@ class FxALoginStateMachineTests: XCTestCase {
         let e = self.expectation(description: "Wait for login state machine.")
         let now = self.marriedState.certificateExpiresAt + OneWeekInMilliseconds + 1
         withMachineAndClient { stateMachine, _ in
-            stateMachine.advanceFromState(self.marriedState, now: now).upon { newState in
+            stateMachine.advance(fromState: self.marriedState, now: now).upon { newState in
                 XCTAssertEqual(newState.label.rawValue, FxAStateLabel.Married.rawValue)
                 if let newState = newState as? MarriedState {
                     // We should have a fresh certificate.
@@ -221,7 +221,7 @@ class FxALoginStateMachineTests: XCTestCase {
         let e = self.expectation(description: "Wait for login state machine.")
         let now = self.marriedState.certificateExpiresAt + OneMonthInMilliseconds + 1
         withMachineAndClient { stateMachine, _ in
-            stateMachine.advanceFromState(self.marriedState, now: now).upon { newState in
+            stateMachine.advance(fromState: self.marriedState, now: now).upon { newState in
                 XCTAssertEqual(newState.label.rawValue, FxAStateLabel.Married.rawValue)
                 if let newState = newState as? MarriedState {
                     // We should have a fresh key pair (and certificate, but we don't verify that).
@@ -239,7 +239,7 @@ class FxALoginStateMachineTests: XCTestCase {
         let e = self.expectation(description: "Wait for login state machine.")
         let now = self.marriedState.certificateExpiresAt + OneDayInMilliseconds + 1
         withMachine(MockFxALoginClientAfterPasswordChange()) { stateMachine in
-            stateMachine.advanceFromState(self.marriedState, now: now).upon { newState in
+            stateMachine.advance(fromState: self.marriedState, now: now).upon { newState in
                 XCTAssertEqual(newState.label.rawValue, FxAStateLabel.Separated.rawValue)
                 e.fulfill()
             }

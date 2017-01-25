@@ -24,7 +24,7 @@ class TokenServerClientTests: LiveAccountTest {
 
     func testAudienceForEndpoint() {
         func audienceFor(_ endpoint: String) -> String {
-            return TokenServerClient.getAudienceForURL(URL(string: endpoint)!)
+            return TokenServerClient.getAudience(forURL: URL(string: endpoint)!)
         }
 
         // Sub-domains and path components.
@@ -50,7 +50,7 @@ class TokenServerClientTests: LiveAccountTest {
     }
 
     func testTokenSuccess() {
-        let audience = TokenServerClient.getAudienceForURL(ProductionSync15Configuration().tokenServerEndpointURL)
+        let audience = TokenServerClient.getAudience(forURL: ProductionSync15Configuration().tokenServerEndpointURL)
 
         withCertificate { expectation, emailUTF8, keyPair, certificate in
             let assertion = JSONWebTokenUtils.createAssertionWithPrivateKeyToSignWith(keyPair.privateKey,

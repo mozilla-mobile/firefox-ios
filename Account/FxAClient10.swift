@@ -103,9 +103,9 @@ public struct RemoteError {
 }
 
 open class FxAClient10 {
-    let URL: Foundation.URL
+    let URL: URL
 
-    public init(endpoint: Foundation.URL? = nil) {
+    public init(endpoint: URL? = nil) {
         self.URL = endpoint ?? ProductionFirefoxAccountConfiguration().authEndpointURL as URL
     }
 
@@ -126,7 +126,7 @@ open class FxAClient10 {
     }
 
     open class func quickStretchPW(_ email: Data, password: Data) -> Data {
-        let salt: NSMutableData = NSData(data: KW("quickStretch")) as Data as Data
+        let salt = Data(data: KW("quickStretch"))
         salt.appendData(":".utf8EncodedData)
         salt.append(email)
         return (password as NSData).derivePBKDF2HMACSHA256Key(withSalt: salt as Data!, iterations: 1000, length: 32)
@@ -139,7 +139,7 @@ open class FxAClient10 {
         return bytes!
     }
 
-    fileprivate class func remoteErrorFromJSON(_ json: JSON, statusCode: Int) -> RemoteError? {
+    fileprivate class func remoteError(fromJSON json: JSON, statusCode: Int) -> RemoteError? {
         if json.isError || 200 <= statusCode && statusCode <= 299 {
             return nil
         }
@@ -155,7 +155,7 @@ open class FxAClient10 {
         return nil
     }
 
-    fileprivate class func loginResponseFromJSON(_ json: JSON) -> FxALoginResponse? {
+    fileprivate class func loginResponse(fromJSON json: JSON) -> FxALoginResponse? {
         guard !json.isError,
             let uid = json["uid"].asString,
             let verified = json["verified"].asBool,
@@ -168,7 +168,7 @@ open class FxAClient10 {
             sessionToken: sessionToken.hexDecodedData, keyFetchToken: keyFetchToken.hexDecodedData)
     }
 
-    fileprivate class func keysResponseFromJSON(_ keyRequestKey: Data, json: JSON) -> FxAKeysResponse? {
+    fileprivate class func keysResponse(fromJSON keyRequestKey: Data, json: JSON) -> FxAKeysResponse? {
         guard !json.isError,
             let bundle = json["bundle"].asString else {
                 return nil
@@ -202,7 +202,7 @@ open class FxAClient10 {
         return FxAKeysResponse(kA: kA, wrapkB: wrapkB)
     }
 
-    fileprivate class func signResponseFromJSON(_ json: JSON) -> FxASignResponse? {
+    fileprivate class func signResponse(fromJSON json: JSON) -> FxASignResponse? {
         guard !json.isError,
             let cert = json["cert"].asString else {
                 return nil
@@ -211,7 +211,7 @@ open class FxAClient10 {
         return FxASignResponse(certificate: cert)
     }
 
-    fileprivate class func statusResponseFromJSON(_ json: JSON) -> FxAStatusResponse? {
+    fileprivate class func statusResponse(fromJSON json: JSON) -> FxAStatusResponse? {
         guard !json.isError,
             let exists = json["exists"].asBool else {
                 return nil
@@ -220,7 +220,7 @@ open class FxAClient10 {
         return FxAStatusResponse(exists: exists)
     }
 
-    fileprivate class func devicesResponseFromJSON(_ json: JSON) -> FxADevicesResponse? {
+    fileprivate class func devicesResponse(fromJSON json: JSON) -> FxADevicesResponse? {
         guard !json.isError,
             let jsonDevices = json.asArray else {
                 return nil
@@ -247,13 +247,13 @@ open class FxAClient10 {
             "authPW": authPW.base16EncodedStringWithOptions(NSDataBase16EncodingOptions.LowerCase),
         ]
 
-        var URL: Foundation.URL = self.URL.appendingPathComponent("/account/login")
+        var URL: URL = self.URL.appendingPathComponent("/account/login")
         if getKeys {
             var components = URLComponents(url: URL, resolvingAgainstBaseURL: false)!
             components.query = "keys=true"
             URL = components.url!
         }
-        let mutableURLRequest = NSMutableURLRequest(url: URL)
+        let mutableURLRequest = URLRequest(url: URL)
         mutableURLRequest.HTTPMethod = Method.POST.rawValue
 
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -264,7 +264,7 @@ open class FxAClient10 {
 
     open func keys(_ keyFetchToken: NSData) -> Deferred<Maybe<FxAKeysResponse>> {
         let URL = self.URL.appendingPathComponent("/account/keys")
-        let mutableURLRequest = NSMutableURLRequest(url: URL)
+        let mutableURLRequest = URLRequest(url: URL)
         mutableURLRequest.HTTPMethod = Method.GET.rawValue
 
         let salt: Data = Data()
@@ -284,7 +284,7 @@ open class FxAClient10 {
         ]
 
         let URL = self.URL.appendingPathComponent("/certificate/sign")
-        let mutableURLRequest = NSMutableURLRequest(url: URL)
+        let mutableURLRequest = URLRequest(url: URL)
         mutableURLRequest.HTTPMethod = Method.POST.rawValue
 
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -298,9 +298,9 @@ open class FxAClient10 {
         return makeRequest(mutableURLRequest, responseHandler: FxAClient10.signResponseFromJSON)
     }
 
-    open func status(_ uid: String) -> Deferred<Maybe<FxAStatusResponse>> {
+    open func status(forUID uid: String) -> Deferred<Maybe<FxAStatusResponse>> {
         let statusURL = self.URL.URLByAppendingPathComponent("/account/status")!.withQueryParam("uid", value: uid)
-        let mutableURLRequest = NSMutableURLRequest(URL: statusURL)
+        let mutableURLRequest = URLRequest(URL: statusURL)
         mutableURLRequest.HTTPMethod = Method.GET.rawValue
 
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -308,9 +308,9 @@ open class FxAClient10 {
         return makeRequest(mutableURLRequest, responseHandler: FxAClient10.statusResponseFromJSON)
     }
 
-    open func devices(_ sessionToken: NSData) -> Deferred<Maybe<FxADevicesResponse>> {
+    open func devices(withSessionToken sessionToken: NSData) -> Deferred<Maybe<FxADevicesResponse>> {
         let URL = self.URL.appendingPathComponent("/account/devices")
-        let mutableURLRequest = NSMutableURLRequest(url: URL)
+        let mutableURLRequest = URLRequest(url: URL)
         mutableURLRequest.HTTPMethod = Method.GET.rawValue
 
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -323,9 +323,9 @@ open class FxAClient10 {
         return makeRequest(mutableURLRequest, responseHandler: FxAClient10.devicesResponseFromJSON)
     }
 
-    open func registerOrUpdateDevice(_ sessionToken: NSData, device: FxADevice) -> Deferred<Maybe<FxADevice>> {
+    open func registerOrUpdate(device: FxADevice, withSessionToken sessionToken: NSData) -> Deferred<Maybe<FxADevice>> {
         let URL = self.URL.appendingPathComponent("/account/device")
-        let mutableURLRequest = NSMutableURLRequest(url: URL)
+        let mutableURLRequest = URLRequest(url: URL)
         mutableURLRequest.HTTPMethod = Method.POST.rawValue
 
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -339,7 +339,7 @@ open class FxAClient10 {
         return makeRequest(mutableURLRequest, responseHandler: FxADevice.fromJSON)
     }
 
-    fileprivate func makeRequest<T>(_ request: NSMutableURLRequest, responseHandler: (JSON) -> T?) -> Deferred<Maybe<T>> {
+    fileprivate func makeRequest<T>(_ request: URLRequest, responseHandler: (JSON) -> T?) -> Deferred<Maybe<T>> {
         let deferred = Deferred<Maybe<T>>()
 
         alamofire.request(request)
@@ -353,7 +353,7 @@ open class FxAClient10 {
 
                     if let data = response.result.value {
                         let json = JSON(data)
-                        if let remoteError = FxAClient10.remoteErrorFromJSON(json, statusCode: response.response!.statusCode) {
+                        if let remoteError = FxAClient10.remoteError(fromJSON: json, statusCode: response.response!.statusCode) {
                             deferred.fill(Maybe(failure: FxAClientError.Remote(remoteError)))
                             return
                         }

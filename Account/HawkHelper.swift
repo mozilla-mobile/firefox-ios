@@ -7,7 +7,7 @@ import FxA
 import Shared
 
 open class HawkHelper {
-    fileprivate let NonceLengthInBytes: UInt = 8
+    fileprivate let nonceLengthInBytes: UInt = 8
 
     let id: String
     let key: Data
@@ -25,7 +25,7 @@ open class HawkHelper {
 
     // Produce a HAWK value suitable for an "Authorization: value" header.
     func getAuthorizationValueFor(_ request: URLRequest, at timestampInSeconds: Int64) -> String {
-        let nonce = Data.randomOfLength(NonceLengthInBytes)!.base64EncodedString
+        let nonce = Data.randomOfLength(nonceLengthInBytes)!.base64EncodedString
         let extra = ""
         return getAuthorizationValueFor(request, at: timestampInSeconds, nonce: nonce, extra: extra)
     }
