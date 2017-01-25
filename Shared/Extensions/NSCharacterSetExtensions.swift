@@ -4,12 +4,12 @@
 
 import Foundation
 
-extension NSCharacterSet {
-    public static func URLAllowedCharacterSet() -> NSCharacterSet {
-        return NSCharacterSet(charactersInString: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&'()*+,;=%")
+extension CharacterSet {
+    public static func URLAllowedCharacterSet() -> CharacterSet {
+        return CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&'()*+,;=%")
     }
 
-    public static func SearchTermsAllowedCharacterSet() -> NSCharacterSet {
-        return NSCharacterSet(charactersInString: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789*-_.")
+    public static func SearchTermsAllowedCharacterSet() -> CharacterSet {
+        return CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789*-_.")
     }
 }

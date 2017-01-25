@@ -11,7 +11,7 @@ public final class Box<T>: BoxType, CustomStringConvertible {
 
 
 	/// Constructs a `Box` with the given `value`.
-	public class func unit(value: T) -> Box<T> {
+	public class func unit(_ value: T) -> Box<T> {
 		return Box(value)
 	}
 
@@ -20,7 +20,7 @@ public final class Box<T>: BoxType, CustomStringConvertible {
 	public let value: T
 
 	/// Constructs a new Box by transforming `value` by `f`.
-	public func map<U>(f: T -> U) -> Box<U> {
+	public func map<U>(_ f: (T) -> U) -> Box<U> {
 		return Box<U>(f(value))
 	}
 
@@ -28,6 +28,6 @@ public final class Box<T>: BoxType, CustomStringConvertible {
 	// MARK: Printable
 
 	public var description: String {
-		return String(value)
+		return String(describing: value)
 	}
 }

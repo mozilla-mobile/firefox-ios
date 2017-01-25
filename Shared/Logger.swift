@@ -23,7 +23,7 @@ public extension Logger {
     /// Logger used for logging database errors such as corruption
     static let corruptLogger: RollingFileLogger = {
         let logger = RollingFileLogger(filenameRoot: "corruptLogger", logDirectoryPath: Logger.logFileDirectoryPath())
-        logger.newLogWithDate(NSDate())
+        logger.newLogWithDate(Date())
         return logger
     }()
 
@@ -33,11 +33,11 @@ public extension Logger {
     :returns: Directory path where log files are stored
     */
     static func logFileDirectoryPath() -> String? {
-        if let cacheDir = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true).first {
+        if let cacheDir = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first {
             let logDir = "\(cacheDir)/Logs"
-            if !NSFileManager.defaultManager().fileExistsAtPath(logDir) {
+            if !FileManager.default.fileExists(atPath: logDir) {
                 do {
-                    try NSFileManager.defaultManager().createDirectoryAtPath(logDir, withIntermediateDirectories: false, attributes: nil)
+                    try FileManager.default.createDirectory(atPath: logDir, withIntermediateDirectories: false, attributes: nil)
                     return logDir
                 } catch _ as NSError {
                     return nil
@@ -50,7 +50,7 @@ public extension Logger {
         return nil
     }
 
-    static private func fileLoggerWithName(name: String) -> XCGLogger {
+    static fileprivate func fileLoggerWithName(_ name: String) -> XCGLogger {
         let log = XCGLogger()
         if let logFileURL = urlForLogNamed(name) {
             let fileDestination = XCGFileLogDestination(
@@ -63,12 +63,12 @@ public extension Logger {
         return log
     }
 
-    static private func urlForLogNamed(name: String) -> NSURL? {
+    static fileprivate func urlForLogNamed(_ name: String) -> URL? {
         guard let logDir = Logger.logFileDirectoryPath() else {
             return nil
         }
 
-        return NSURL(string: "\(logDir)/\(name).log")
+        return URL(string: "\(logDir)/\(name).log")
     }
 
     /**
@@ -77,8 +77,8 @@ public extension Logger {
 
      - returns: Tuples of filenames to each file's contexts in a NSData object
      */
-    static func diskLogFilenamesAndData() throws -> [(String, NSData?)] {
-        var filenamesAndURLs = [(String, NSURL)]()
+    static func diskLogFilenamesAndData() throws -> [(String, Data?)] {
+        var filenamesAndURLs = [(String, URL)]()
         filenamesAndURLs.append(("browser", urlForLogNamed("browser")!))
         filenamesAndURLs.append(("keychain", urlForLogNamed("keychain")!))
 
@@ -90,7 +90,7 @@ public extension Logger {
         } catch _ {
         }
 
-        return filenamesAndURLs.map { ($0, NSData(contentsOfFile: $1.absoluteString!)) }
+        return filenamesAndURLs.map { ($0, try? Data(contentsOf: URL(fileURLWithPath: $1.absoluteString))) }
     }
 }
 

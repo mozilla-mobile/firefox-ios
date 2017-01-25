@@ -16,16 +16,16 @@ public protocol LoaderListener: class {
  * Base implementation for a "push" data model.
  * Interested clients add themselves as listeners for data changes.
  */
-public class Loader<T, ListenerType: LoaderListener where T == ListenerType.T> {
-    private let listeners = WeakList<ListenerType>()
+open class Loader<T, ListenerType: LoaderListener> where T == ListenerType.T {
+    fileprivate let listeners = WeakList<ListenerType>()
 
     public init() {}
 
-    public func addListener(listener: ListenerType) {
+    open func addListener(_ listener: ListenerType) {
         listeners.insert(listener)
     }
 
-    public func load(data: T) {
+    open func load(_ data: T) {
         for listener in listeners {
             listener.loader(dataLoaded: data)
         }

@@ -5,9 +5,9 @@
 import Foundation
 import Deferred
 
-private let DefaultDispatchQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
+private let DefaultDispatchQueue = DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.default)
 
-public func asyncReducer<T, U>(initialValue: T, combine: (T, U) -> Deferred<Maybe<T>>) -> AsyncReducer<T, U> {
+public func asyncReducer<T, U>(_ initialValue: T, combine: (T, U) -> Deferred<Maybe<T>>) -> AsyncReducer<T, U> {
     return AsyncReducer(initialValue: initialValue, combine: combine)
 }
 
@@ -25,36 +25,36 @@ public func asyncReducer<T, U>(initialValue: T, combine: (T, U) -> Deferred<Mayb
  *
  * Once the terminal has been filled, no more items can be appended, and `append` methods will error.
  */
-public class AsyncReducer<T, U> {
+open class AsyncReducer<T, U> {
     // T is the accumulator. U is the input value. The returned T is the new accumulated value.
     public typealias Combine = (T, U) -> Deferred<Maybe<T>>
-    private let lock = NSRecursiveLock()
+    fileprivate let lock = NSRecursiveLock()
 
-    private let dispatchQueue: dispatch_queue_t
-    private let combine: Combine
+    fileprivate let dispatchQueue: DispatchQueue
+    fileprivate let combine: Combine
 
-    private let initialValueDeferred: Deferred<Maybe<T>>
-    public let terminal: Deferred<Maybe<T>> = Deferred()
+    fileprivate let initialValueDeferred: Deferred<Maybe<T>>
+    open let terminal: Deferred<Maybe<T>> = Deferred()
 
-    private var queuedItems: [U] = []
+    fileprivate var queuedItems: [U] = []
 
-    private var isStarted: Bool = false
+    fileprivate var isStarted: Bool = false
 
     /**
      * Has this task queue finished?
      * Once the task queue has finished, it cannot have more tasks appended.
      */
-    public var isFilled: Bool {
+    open var isFilled: Bool {
         lock.lock()
         defer { lock.unlock() }
         return terminal.isFilled
     }
 
-    public convenience init(initialValue: T, queue: dispatch_queue_t = DefaultDispatchQueue, combine: Combine) {
+    public convenience init(initialValue: T, queue: DispatchQueue = DefaultDispatchQueue, combine: Combine) {
         self.init(initialValue: deferMaybe(initialValue), queue: queue, combine: combine)
     }
 
-    public init(initialValue: Deferred<Maybe<T>>, queue: dispatch_queue_t = DefaultDispatchQueue, combine: Combine) {
+    public init(initialValue: Deferred<Maybe<T>>, queue: DispatchQueue = DefaultDispatchQueue, combine: @escaping Combine) {
         self.dispatchQueue = queue
         self.combine = combine
         self.initialValueDeferred = initialValue
@@ -62,12 +62,12 @@ public class AsyncReducer<T, U> {
 
     // This is always protected by a lock, so we don't need to 
     // take another one.
-    private func ensureStarted() {
+    fileprivate func ensureStarted() {
         if self.isStarted {
             return
         }
 
-        func queueNext(deferredValue: Deferred<Maybe<T>>) {
+        func queueNext(_ deferredValue: Deferred<Maybe<T>>) {
             deferredValue.uponQueue(dispatchQueue, block: continueMaybe)
         }
 
@@ -77,7 +77,7 @@ public class AsyncReducer<T, U> {
             return queuedItems.isEmpty ? nil : queuedItems.removeFirst()
         }
 
-        func continueMaybe(res: Maybe<T>) {
+        func continueMaybe(_ res: Maybe<T>) {
             lock.lock()
             defer { lock.unlock() }
 
@@ -110,7 +110,7 @@ public class AsyncReducer<T, U> {
      *
      * @throws AlreadyFilled if the queue has finished already.
      */
-    public func append(items: U...) throws -> Deferred<Maybe<T>> {
+    open func append(_ items: U...) throws -> Deferred<Maybe<T>> {
         return try append(items)
     }
 
@@ -119,21 +119,21 @@ public class AsyncReducer<T, U> {
      *
      * @throws AlreadyFilled if the queue has already finished.
      */
-    public func append(items: [U]) throws -> Deferred<Maybe<T>> {
+    open func append(_ items: [U]) throws -> Deferred<Maybe<T>> {
         lock.lock()
         defer { lock.unlock() }
 
         if terminal.isFilled {
-            throw ReducerError.AlreadyFilled
+            throw ReducerError.alreadyFilled
         }
 
-        queuedItems.appendContentsOf(items)
+        queuedItems.append(contentsOf: items)
         ensureStarted()
 
         return terminal
     }
 }
 
-enum ReducerError: ErrorType {
-    case AlreadyFilled
+enum ReducerError: Error {
+    case alreadyFilled
 }

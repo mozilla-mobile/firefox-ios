@@ -26,14 +26,14 @@ public protocol MutableBoxType: BoxType {
 /// Equality of `BoxType`s of `Equatable` types.
 ///
 /// We cannot declare that e.g. `Box<T: Equatable>` conforms to `Equatable`, so this is a relatively ad hoc definition.
-public func == <B: BoxType where B.Value: Equatable> (lhs: B, rhs: B) -> Bool {
+public func == <B: BoxType> (lhs: B, rhs: B) -> Bool where B.Value: Equatable {
 	return lhs.value == rhs.value
 }
 
 /// Inequality of `BoxType`s of `Equatable` types.
 ///
 /// We cannot declare that e.g. `Box<T: Equatable>` conforms to `Equatable`, so this is a relatively ad hoc definition.
-public func != <B: BoxType where B.Value: Equatable> (lhs: B, rhs: B) -> Bool {
+public func != <B: BoxType> (lhs: B, rhs: B) -> Bool where B.Value: Equatable {
 	return lhs.value != rhs.value
 }
 
@@ -41,6 +41,6 @@ public func != <B: BoxType where B.Value: Equatable> (lhs: B, rhs: B) -> Bool {
 // MARK: Map
 
 /// Maps the value of a box into a new box.
-public func map<B: BoxType, C: BoxType>(v: B, f: B.Value -> C.Value) -> C {
+public func map<B: BoxType, C: BoxType>(_ v: B, f: (B.Value) -> C.Value) -> C {
 	return C(f(v.value))
 }

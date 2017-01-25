@@ -13,8 +13,8 @@ import Foundation
  * This class crashes at runtime with EXC_BAD_ACCESS if a protocol is given as
  * the type T. Make sure to use a class type.
  */
-public class WeakList<T: AnyObject>: SequenceType {
-    private var items = [WeakRef<T>]()
+open class WeakList<T: AnyObject>: Sequence {
+    fileprivate var items = [WeakRef<T>]()
 
     public init() {}
 
@@ -24,7 +24,7 @@ public class WeakList<T: AnyObject>: SequenceType {
      * been deallocated) to reuse them, so this class may not be appropriate in situations where
      * insertion is frequent.
      */
-    public func insert(item: T) {
+    open func insert(_ item: T) {
         for wrapper in items {
             // Reuse any existing slots that have been deallocated.
             if wrapper.value == nil {
@@ -36,10 +36,10 @@ public class WeakList<T: AnyObject>: SequenceType {
         items.append(WeakRef(item))
     }
 
-    public func generate() -> AnyGenerator<T> {
+    open func makeIterator() -> AnyIterator<T> {
         var index = 0
 
-        return AnyGenerator() {
+        return AnyIterator() {
             if index >= self.items.count {
                 return nil
             }

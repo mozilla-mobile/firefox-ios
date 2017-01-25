@@ -7,27 +7,27 @@
 //
 import Foundation
 /// init
-public class JSON {
-    private let _value:AnyObject
+open class JSON {
+    fileprivate let _value:AnyObject
     /// unwraps the JSON object
-    public class func unwrap(obj:AnyObject) -> AnyObject {
+    open class func unwrap(_ obj:AnyObject) -> AnyObject {
         switch obj {
         case let json as JSON:
             return json._value
         case let ary as NSArray:
             var ret = [AnyObject]()
             for v in ary {
-                ret.append(unwrap(v))
+                ret.append(unwrap(v as AnyObject))
             }
-            return ret
+            return ret as AnyObject
         case let dict as NSDictionary:
             var ret = [String:AnyObject]()
             for (ko, v) in dict {
                 if let k = ko as? String {
-                    ret[k] = unwrap(v)
+                    ret[k] = unwrap(v as AnyObject)
                 }
             }
-            return ret
+            return ret as AnyObject
         default:
             return obj
         }
@@ -44,10 +44,10 @@ extension JSON {
     public typealias NSError = Foundation.NSError
     public class var null:NSNull { return NSNull() }
     /// constructs JSON object from data
-    public convenience init(data:NSData) {
+    public convenience init(data:Data) {
         do {
             // Try parsing some valid JSON
-            let obj = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments)
+            let obj = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments)
             self.init(obj)
         }
         catch let error as NSError {
@@ -58,20 +58,20 @@ extension JSON {
     }
     /// constructs JSON object from string
     public convenience init(string:String) {
-        let enc:NSStringEncoding = NSUTF8StringEncoding
-        self.init(data: string.dataUsingEncoding(enc)!)
+        let enc:String.Encoding = String.Encoding.utf8
+        self.init(data: string.data(using: enc)!)
     }
     /// parses string to the JSON object
     /// same as JSON(string:String)
-    public class func parse(string:String)->JSON {
+    public class func parse(_ string:String)->JSON {
         return JSON(string:string)
     }
     /// constructs JSON object from the content of NSURL
-    public convenience init(nsurl:NSURL) {
-        var enc:NSStringEncoding = NSUTF8StringEncoding
+    public convenience init(nsurl:URL) {
+        var enc:String.Encoding = String.Encoding.utf8
         do {
             let str = try String(NSString(
-                contentsOfURL:nsurl, usedEncoding:&enc))
+                contentsOf:nsurl, usedEncoding:&enc.rawValue))
             self.init(string:str)
         } catch let error as NSError {
             self.init(error)
@@ -79,12 +79,12 @@ extension JSON {
     }
     /// fetch the JSON string from NSURL and parse it
     /// same as JSON(nsurl:NSURL)
-    public class func fromNSURL(nsurl:NSURL) -> JSON {
+    public class func fromNSURL(_ nsurl:URL) -> JSON {
         return JSON(nsurl:nsurl)
     }
     /// constructs JSON object from the content of URL
     public convenience init(url:String) {
-        if let nsurl = NSURL(string:url) as NSURL? {
+        if let nsurl = URL(string:url) as URL? {
             self.init(nsurl:nsurl)
         } else {
             self.init(NSError(
@@ -96,13 +96,13 @@ extension JSON {
         }
     }
     /// fetch the JSON string from URL in the string
-    public class func fromURL(url:String) -> JSON {
+    public class func fromURL(_ url:String) -> JSON {
         return JSON(url:url)
     }
     /// does what JSON.stringify in ES5 does.
     /// when the 2nd argument is set to true it pretty prints
-    public class func stringify(obj:AnyObject, pretty:Bool=false) -> String! {
-        if !NSJSONSerialization.isValidJSONObject(obj) {
+    public class func stringify(_ obj:AnyObject, pretty:Bool=false) -> String! {
+        if !JSONSerialization.isValidJSONObject(obj) {
             return JSON(NSError(
                 domain:"JSONErrorDomain",
                 code:422,
@@ -166,7 +166,7 @@ extension JSON {
     case is NSError:        return "NSError"
     case is NSNull:         return "NSNull"
     case let o as NSNumber:
-        switch String.fromCString(o.objCType)! {
+        switch String(cString: o.objCType) {
         case "c", "C":              return "Bool"
         case "q", "l", "i", "s":    return "Int"
         case "Q", "L", "I", "S":    return "UInt"
@@ -193,7 +193,7 @@ extension JSON {
     /// check if self is any type of number
     public var isNumber:     Bool {
     if let o = _value as? NSNumber {
-        let t = String.fromCString(o.objCType)!
+        let t = String(cString: o.objCType)
         return  t != "c" && t != "C"
     }
     return false
@@ -220,7 +220,7 @@ extension JSON {
     public var asBool:Bool? {
     switch _value {
     case let o as NSNumber:
-        switch String.fromCString(o.objCType)! {
+        switch String(cString: o.objCType) {
         case "c", "C":  return Bool(o.boolValue)
         default:
             return nil
@@ -232,11 +232,11 @@ extension JSON {
     public var asInt:Int? {
     switch _value {
     case let o as NSNumber:
-        switch String.fromCString(o.objCType)! {
+        switch String(cString: o.objCType) {
         case "c", "C":
             return nil
         default:
-            return Int(o.longLongValue)
+            return Int(o.int64Value)
         }
     default: return nil
         }
@@ -245,11 +245,11 @@ extension JSON {
     public var asInt32:Int32? {
     switch _value {
     case let o as NSNumber:
-        switch String.fromCString(o.objCType)! {
+        switch String(cString: o.objCType) {
         case "c", "C":
             return nil
         default:
-            return Int32(o.longLongValue)
+            return Int32(o.int64Value)
         }
     default: return nil
         }
@@ -258,11 +258,11 @@ extension JSON {
     public var asInt64:Int64? {
     switch _value {
     case let o as NSNumber:
-        switch String.fromCString(o.objCType)! {
+        switch String(cString: o.objCType) {
         case "c", "C":
             return nil
         default:
-            return Int64(o.longLongValue)
+            return Int64(o.int64Value)
         }
     default: return nil
         }
@@ -271,7 +271,7 @@ extension JSON {
     public var asFloat:Float? {
     switch _value {
     case let o as NSNumber:
-        switch String.fromCString(o.objCType)! {
+        switch String(cString: o.objCType) {
         case "c", "C":
             return nil
         default:
@@ -284,7 +284,7 @@ extension JSON {
     public var asDouble:Double? {
     switch _value {
     case let o as NSNumber:
-        switch String.fromCString(o.objCType)! {
+        switch String(cString: o.objCType) {
         case "c", "C":
             return nil
         default:
@@ -331,11 +331,11 @@ extension JSON {
         }
     }
     /// Yields date from string
-    public var asDate:NSDate? {
+    public var asDate:Date? {
         if let dateString = _value as? String {
-            let dateFormatter = NSDateFormatter()
+            let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZ"
-            return dateFormatter.dateFromString(dateString)
+            return dateFormatter.date(from: dateString)
         }
         return nil
     }
@@ -364,49 +364,49 @@ extension JSON {
     }
 }
 
-extension JSON : SequenceType {
-    public func generate()->AnyGenerator<(AnyObject,JSON)?> {
+extension JSON : Sequence {
+    public func makeIterator()->AnyIterator<(AnyObject,JSON)?> {
         switch _value {
         case let o as NSArray:
             var i = -1
-            return AnyGenerator() {
+            return AnyIterator() {
                 i += 1
                 if i == o.count { return nil }
                 return (i, JSON(o[i]))
             }
         case let o as NSDictionary:
-            let ks = o.allKeys.reverse()
-            return AnyGenerator() {
+            let ks = o.allKeys.reversed()
+            return AnyIterator() {
                 if ks.isEmpty { return nil }
                 if let k = ks.last as? String {
-                    return (k, JSON(o.valueForKey(k)!))
+                    return (k, JSON(o.value(forKey: k)!))
                 } else {
                     return nil
                 }
             }
         default:
-            return AnyGenerator() { nil }
+            return AnyIterator() { nil }
         }
     }
     public func mutableCopyOfTheObject() -> AnyObject {
-        return _value.mutableCopy()
+        return _value.mutableCopy as AnyObject
     }
 }
 extension JSON : CustomStringConvertible {
     /// stringifies self.
     /// if pretty:true it pretty prints
-    public func toString(pretty:Bool=false)->String {
+    public func toString(_ pretty:Bool=false)->String {
         switch _value {
         case is NSError: return "\(_value)"
         case is NSNull: return "null"
         case let o as NSNumber:
-            switch String.fromCString(o.objCType)! {
+            switch String(cString: o.objCType) {
             case "c", "C":
                 return o.boolValue.description
             case "q", "l", "i", "s":
-                return o.longLongValue.description
+                return o.int64Value.description
             case "Q", "L", "I", "S":
-                return o.unsignedLongLongValue.description
+                return o.uint64Value.description
             default:
                 switch o.doubleValue {
                 case 0.0/0.0:   return "0.0/0.0"    // NaN
@@ -419,13 +419,13 @@ extension JSON : CustomStringConvertible {
         case let o as NSString:
             return o.debugDescription
         default:
-            let opts: NSJSONWritingOptions = pretty
-                ? NSJSONWritingOptions.PrettyPrinted : []
-            if let data = try! NSJSONSerialization.dataWithJSONObject(
-                _value, options:opts
-                ) as NSData? {
+            let opts: JSONSerialization.WritingOptions = pretty
+                ? JSONSerialization.WritingOptions.prettyPrinted : []
+            if let data = try! JSONSerialization.data(
+                withJSONObject: _value, options:opts
+                ) as Data? {
                     if let result = NSString(
-                        data:data, encoding:NSUTF8StringEncoding
+                        data:data, encoding:String.Encoding.utf8.rawValue
                         ) as? String {
                             return result
                     }

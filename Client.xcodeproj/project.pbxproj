@@ -4281,7 +4281,7 @@
 					288A2D851AB8B3260023ABC3 = {
 						CreatedOnToolsVersion = 6.2;
 						DevelopmentTeam = 43AQ936H96;
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 0820;
 					};
 					2FA435FA1ABB83B4008031D1 = {
 						CreatedOnToolsVersion = 6.2;
@@ -5851,7 +5851,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Fennec;
 		};
@@ -6621,7 +6621,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Firefox;
 		};
@@ -7239,7 +7239,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 			};
 			name = FirefoxNightly;
 		};
@@ -7730,7 +7730,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 			};
 			name = FennecEnterprise;
 		};
@@ -8373,7 +8373,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 			};
 			name = FirefoxBeta;
 		};

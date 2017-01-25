@@ -15,16 +15,16 @@ public struct SystemUtils {
 
      - returns: Time interval since last reboot.
      */
-    public static func systemUptime() -> NSTimeInterval {
+    public static func systemUptime() -> TimeInterval {
         var boottime = timeval()
         var mib = [CTL_KERN, KERN_BOOTTIME]
-        var size = strideof(timeval)
+        var size = MemoryLayout<timeval>.stride
         var now = time_t()
         time(&now)
 
         sysctl(&mib, u_int(mib.count), &boottime, &size, nil, 0)
-        let tv_sec: time_t = withUnsafePointer(&boottime.tv_sec) { $0.memory }
-        return NSTimeInterval(now - tv_sec)
+        let tv_sec: time_t = withUnsafePointer(to: &boottime.tv_sec) { $0.pointee }
+        return TimeInterval(now - tv_sec)
     }
 }
 
@@ -36,24 +36,24 @@ extension SystemUtils {
     // when the device is locked.
     public static func onFirstRun() {
         guard let lockFileURL = lockedDeviceURL,
-                lockFile = lockFileURL.path else {
+                let lockFile = lockFileURL.path else {
                     return
         }
 
-        let fm = NSFileManager.defaultManager()
-        if fm.fileExistsAtPath(lockFile) {
+        let fm = FileManager.default
+        if fm.fileExists(atPath: lockFile) {
             return
         }
-        let contents = "Device is unlocked".dataUsingEncoding(NSUTF8StringEncoding)
-        fm.createFileAtPath(lockFile, contents: contents, attributes: [NSFileProtectionKey : NSFileProtectionComplete])
+        let contents = "Device is unlocked".data(using: String.Encoding.utf8)
+        fm.createFile(atPath: lockFile, contents: contents, attributes: [FileAttributeKey.protectionKey : FileProtectionType.complete])
     }
 
-    private static var lockedDeviceURL: NSURL? {
+    fileprivate static var lockedDeviceURL: URL? {
         guard let groupIdentifier = AppInfo.sharedContainerIdentifier() else {
             return nil
         }
-        let directoryURL = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(groupIdentifier)
-        return directoryURL?.URLByAppendingPathComponent("security.dummy")
+        let directoryURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: groupIdentifier)
+        return directoryURL?.appendingPathComponent("security.dummy")
     }
 
     public static func isDeviceLocked() -> Bool {
@@ -61,7 +61,7 @@ extension SystemUtils {
             return true
         }
         do {
-            let _ = try NSData(contentsOfURL: lockFileURL, options: .DataReadingMappedIfSafe)
+            let _ = try Data(contentsOf: lockFileURL, options: .mappedIfSafe)
             return false
         } catch let err as NSError {
             return err.code == 257
