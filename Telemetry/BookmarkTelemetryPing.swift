@@ -12,8 +12,8 @@ public func makeAdHocBookmarkMergePing(_ bundle: Bundle, clientID: String, attem
         "id": clientID as AnyObject,
         "attempt": Int(attempt) as AnyObject,
         "success": !anyFailed as AnyObject,
-        "date": Date().description(with: nil),
-        "clientCount": clientCount,
+        "date": Date().description as AnyObject,
+        "clientCount": clientCount as AnyObject,
     ]
 
     if let bufferRows = bufferRows {
@@ -26,21 +26,26 @@ public func makeAdHocBookmarkMergePing(_ bundle: Bundle, clientID: String, attem
         }
     }
 
-    return JSON(out)
+    return JSON(out as AnyObject)
 }
 
 public func makeAdHocSyncStatusPing(_ bundle: Bundle, clientID: String, statusObject: [String: String]?, engineResults: [String: String]?, resultsFailure: MaybeErrorType?, clientCount: Int) -> JSON {
+
+    let statusObject: AnyObject = statusObject as AnyObject? ?? JSON.null
+    let engineResults: AnyObject = (engineResults as AnyObject? ?? JSON.null)
+    let resultsFailure: AnyObject = (resultsFailure?.description as AnyObject? ?? JSON.null)
+
     let out: [String: AnyObject] = [
-        "v": 1,
-        "appV": AppInfo.appVersion,
-        "build": bundle.object(forInfoDictionaryKey: "BuildID") as? String ?? "unknown",
-        "id": clientID,
-        "date": Date().description(with: nil),
-        "clientCount": clientCount,
-        "statusObject": statusObject ?? JSON.null,
-        "engineResults": engineResults ?? JSON.null,
-        "resultsFailure": resultsFailure?.description ?? JSON.null
+        "v": 1 as AnyObject,
+        "appV": AppInfo.appVersion as AnyObject,
+        "build": (bundle.object(forInfoDictionaryKey: "BuildID") as? String ?? "unknown") as AnyObject,
+        "id": clientID as AnyObject,
+        "date": Date().description as AnyObject,
+        "clientCount": clientCount as AnyObject,
+        "statusObject": statusObject,
+        "engineResults": engineResults,
+        "resultsFailure": resultsFailure
     ]
 
-    return JSON(out)
+    return JSON(out as AnyObject)
 }
