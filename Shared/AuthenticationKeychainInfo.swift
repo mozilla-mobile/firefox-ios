@@ -35,15 +35,15 @@ public enum PasscodeInterval: Int {
 public extension KeychainWrapper {
     func authenticationInfo() -> AuthenticationKeychainInfo? {
         NSKeyedUnarchiver.setClass(AuthenticationKeychainInfo.self, forClassName: "AuthenticationKeychainInfo")
-        return objectForKey(KeychainKeyAuthenticationInfo) as? AuthenticationKeychainInfo
+        return object(forKey: KeychainKeyAuthenticationInfo) as? AuthenticationKeychainInfo
     }
 
     func setAuthenticationInfo(_ info: AuthenticationKeychainInfo?) {
         NSKeyedArchiver.setClassName("AuthenticationKeychainInfo", for: AuthenticationKeychainInfo.self)
         if let info = info {
-            setObject(info, forKey: KeychainKeyAuthenticationInfo)
+            set(info, forKey: KeychainKeyAuthenticationInfo)
         } else {
-            removeObjectForKey(KeychainKeyAuthenticationInfo)
+            removeObject(forKey: KeychainKeyAuthenticationInfo)
         }
     }
 }
