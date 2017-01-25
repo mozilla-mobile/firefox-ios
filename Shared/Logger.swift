@@ -55,7 +55,7 @@ public extension Logger {
         if let logFileURL = urlForLogNamed(name) {
             let fileDestination = FileDestination(
                 owner: log,
-                writeToFile: logFileURL.absoluteString!,
+                writeToFile: logFileURL.absoluteString,
                 identifier: "com.mozilla.firefox.filelogger.\(name)"
             )
             log.add(destination: fileDestination)
