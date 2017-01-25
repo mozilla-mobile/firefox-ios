@@ -53,12 +53,12 @@ public extension Logger {
     static fileprivate func fileLoggerWithName(_ name: String) -> XCGLogger {
         let log = XCGLogger()
         if let logFileURL = urlForLogNamed(name) {
-            let fileDestination = XCGFileLogDestination(
+            let fileDestination = FileDestination(
                 owner: log,
                 writeToFile: logFileURL.absoluteString!,
                 identifier: "com.mozilla.firefox.filelogger.\(name)"
             )
-            log.addLogDestination(fileDestination)
+            log.add(destination: fileDestination)
         }
         return log
     }

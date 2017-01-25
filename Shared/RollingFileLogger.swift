@@ -41,8 +41,8 @@ open class RollingFileLogger: XCGLogger {
         }
 
         if let filename = filenameWithRoot(root, withDate: date) {
-            removeLogDestination(fileLogIdentifierWithRoot(root))
-            addLogDestination(XCGFileLogDestination(owner: self, writeToFile: filename, identifier: fileLogIdentifierWithRoot(root)))
+            remove(destinationWithIdentifier: fileLogIdentifierWithRoot(root))
+            add(destination: FileDestination(owner: self, writeToFile: filename, identifier: fileLogIdentifierWithRoot(root)))
             info("Created file destination for logger with root: \(self.root) and timestamp: \(date)")
         } else {
             error("Failed to create a new log with root name: \(self.root) and timestamp: \(date)")
