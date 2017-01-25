@@ -344,8 +344,6 @@
 		A83E5B1B1C1DA8BF0026D912 /* image.png in Resources */ = {isa = PBXBuildFile; fileRef = A83E5B191C1DA8BF0026D912 /* image.png */; };
 		A83E5B1D1C1DA8D80026D912 /* UIPasteboardExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83E5B1C1C1DA8D80026D912 /* UIPasteboardExtensionsTests.swift */; };
 		A83E5B1E1C1DAAAA0026D912 /* UIPasteboardExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83E5AB61C1D993D0026D912 /* UIPasteboardExtensions.swift */; };
-		A86296E81C9EDF8B0000B594 /* libPhoneNumber.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8F9B1F11C9B49610028AAF8 /* libPhoneNumber.framework */; };
-		A862970A1C9EE1020000B594 /* libPhoneNumber.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8F9B1F11C9B49610028AAF8 /* libPhoneNumber.framework */; };
 		A9072B801D07B34100459960 /* NoImageModeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9072B7F1D07B34100459960 /* NoImageModeHelper.swift */; };
 		A91528D21D0E637600CD0425 /* NoImageModeHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = A91528D11D0E637600CD0425 /* NoImageModeHelper.js */; };
 		A93067D91D0FE15E00C49C6E /* NightModeHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = A93067D81D0FE15E00C49C6E /* NightModeHelper.js */; };
@@ -664,6 +662,7 @@
 		E6B4C4031C68F58B001F97E8 /* BrowserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6B4C4021C68F58B001F97E8 /* BrowserTests.swift */; };
 		E6B6DCA21CD3D370009CF713 /* CrashReporter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6B6DC941CD3D35A009CF713 /* CrashReporter.framework */; };
 		E6BE53CD1D9177B10074909A /* TestSQLiteHistoryRecommendations.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BE53CC1D9177B10074909A /* TestSQLiteHistoryRecommendations.swift */; };
+		E6C191F11E38F810000A213B /* libPhoneNumberiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6C191F01E38F7EE000A213B /* libPhoneNumberiOS.framework */; };
 		E6C70E171E2830CC00F8DB57 /* PingCentre.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6C70E151E2830CC00F8DB57 /* PingCentre.swift */; };
 		E6C70E181E2830CC00F8DB57 /* Topics.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6C70E161E2830CC00F8DB57 /* Topics.swift */; };
 		E6C70E801E28313000F8DB57 /* JSONSchema.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E6C70E7D1E28311300F8DB57 /* JSONSchema.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -1504,7 +1503,6 @@
 		A83E5B181C1DA8BF0026D912 /* image.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = image.gif; sourceTree = "<group>"; };
 		A83E5B191C1DA8BF0026D912 /* image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = image.png; sourceTree = "<group>"; };
 		A83E5B1C1C1DA8D80026D912 /* UIPasteboardExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIPasteboardExtensionsTests.swift; sourceTree = "<group>"; };
-		A8F9B1F11C9B49610028AAF8 /* libPhoneNumber.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libPhoneNumber.framework; path = Carthage/Build/iOS/libPhoneNumber.framework; sourceTree = "<group>"; };
 		A9072B7F1D07B34100459960 /* NoImageModeHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoImageModeHelper.swift; sourceTree = "<group>"; };
 		A91528D11D0E637600CD0425 /* NoImageModeHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = NoImageModeHelper.js; sourceTree = "<group>"; };
 		A93067D81D0FE15E00C49C6E /* NightModeHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = NightModeHelper.js; sourceTree = "<group>"; };
@@ -1780,7 +1778,6 @@
 		E65D89171C8647420006EA35 /* AppAuthenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppAuthenticator.swift; sourceTree = "<group>"; };
 		E660BDD81BB06521009AC090 /* TabsButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabsButton.swift; sourceTree = "<group>"; };
 		E660BE051BB0666D009AC090 /* InnerStrokedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InnerStrokedView.swift; sourceTree = "<group>"; };
-		E6619A9C1DA693AB0063EAD6 /* OnyxClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OnyxClient.framework; path = Carthage/Build/iOS/OnyxClient.framework; sourceTree = "<group>"; };
 		E6639F171BF11E17002D0853 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		E663D5771BB341C4001EF30E /* ToggleButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToggleButton.swift; sourceTree = "<group>"; };
 		E664B4591CD7ECDB0045A6A4 /* NotificationRootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NotificationRootViewController.swift; path = Notifications/NotificationRootViewController.swift; sourceTree = "<group>"; };
@@ -1816,6 +1813,9 @@
 		E6B4C4021C68F58B001F97E8 /* BrowserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserTests.swift; sourceTree = "<group>"; };
 		E6B6DC941CD3D35A009CF713 /* CrashReporter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CrashReporter.framework; sourceTree = "<group>"; };
 		E6BE53CC1D9177B10074909A /* TestSQLiteHistoryRecommendations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSQLiteHistoryRecommendations.swift; sourceTree = "<group>"; };
+		E6C191D41E38F7B7000A213B /* Cartfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
+		E6C191D51E38F7B7000A213B /* Cartfile.resolved */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile.resolved; sourceTree = "<group>"; };
+		E6C191F01E38F7EE000A213B /* libPhoneNumberiOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libPhoneNumberiOS.framework; path = Carthage/Build/iOS/libPhoneNumberiOS.framework; sourceTree = "<group>"; };
 		E6C70E151E2830CC00F8DB57 /* PingCentre.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PingCentre.swift; sourceTree = "<group>"; };
 		E6C70E161E2830CC00F8DB57 /* Topics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Topics.swift; sourceTree = "<group>"; };
 		E6C70E1A1E28311300F8DB57 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
@@ -1967,6 +1967,7 @@
 				7BA4A9641C4CFE840091D032 /* Deferred.framework in Frameworks */,
 				7BA4A94C1C4CF03B0091D032 /* SwiftKeychainWrapper.framework in Frameworks */,
 				7B604FBC1C495E1E006EEEC3 /* XCGLogger.framework in Frameworks */,
+				E6C191F11E38F810000A213B /* libPhoneNumberiOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1977,7 +1978,6 @@
 				E62A56EC1DBE8D32004703EA /* WebMetadataKit.framework in Frameworks */,
 				7B8A47F61D01D3B400C07734 /* PassKit.framework in Frameworks */,
 				E6B6DCA21CD3D370009CF713 /* CrashReporter.framework in Frameworks */,
-				A862970A1C9EE1020000B594 /* libPhoneNumber.framework in Frameworks */,
 				7B604F861C494983006EEEC3 /* Alamofire.framework in Frameworks */,
 				7B604F9B1C4950F2006EEEC3 /* WebImage.framework in Frameworks */,
 				3BA9A0231D2C208C00BD418C /* Fuzi.framework in Frameworks */,
@@ -2141,7 +2141,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A86296E81C9EDF8B0000B594 /* libPhoneNumber.framework in Frameworks */,
 				E6231C081B90A71E005ABB0D /* libz.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2696,10 +2695,9 @@
 				0B8E0FF31A932BD500161DC3 /* ImageIO.framework */,
 				D36998881AD70A0A00650C6C /* IOKit.framework */,
 				E62A56DC1DBE88C3004703EA /* WebMetadataKit.framework */,
-				E6619A9C1DA693AB0063EAD6 /* OnyxClient.framework */,
 				3BA9A0221D2C208C00BD418C /* Fuzi.framework */,
+				E6C191F01E38F7EE000A213B /* libPhoneNumberiOS.framework */,
 				7B8A47F51D01D3B400C07734 /* PassKit.framework */,
-				A8F9B1F11C9B49610028AAF8 /* libPhoneNumber.framework */,
 				7BA4A9631C4CFE840091D032 /* Deferred.framework */,
 				7BA4A94B1C4CF03B0091D032 /* SwiftKeychainWrapper.framework */,
 				7BA4A9491C4CEFC70091D032 /* OnePasswordExtension.framework */,
@@ -3499,6 +3497,8 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
+				E6C191D41E38F7B7000A213B /* Cartfile */,
+				E6C191D51E38F7B7000A213B /* Cartfile.resolved */,
 				2FA435FC1ABB83B4008031D1 /* Account */,
 				2FA4360B1ABB83B4008031D1 /* AccountTests */,
 				F84B21C01A090F8100AAB793 /* Client */,
