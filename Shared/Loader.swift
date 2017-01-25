@@ -17,7 +17,7 @@ public protocol LoaderListener: class {
  * Interested clients add themselves as listeners for data changes.
  */
 open class Loader<T, ListenerType: LoaderListener> where T == ListenerType.T {
-    fileprivate let listeners = WeakList<ListenerType>()
+    private let listeners = WeakList<ListenerType>()
 
     public init() {}
 

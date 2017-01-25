@@ -71,7 +71,7 @@ open class MockProfilePrefs: Prefs {
         return MockProfilePrefs(things: self.things, prefix: self.prefix + branch + ".")
     }
 
-    fileprivate func name(_ name: String) -> String {
+    private func name(_ name: String) -> String {
         return self.prefix + name
     }
 

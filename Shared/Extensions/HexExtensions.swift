@@ -24,7 +24,7 @@ extension String {
         return result as Data
     }
 
-    fileprivate func hexCharToByte(_ c: CChar) -> UInt8? {
+    private func hexCharToByte(_ c: CChar) -> UInt8? {
         if c >= 48 && c <= 57 { // 0 - 9
             return UInt8(c - 48)
         }

@@ -7,7 +7,7 @@ import libPhoneNumberiOS
 
 open class PhoneNumberFormatter {
 
-    fileprivate let util: NBPhoneNumberUtil
+    private let util: NBPhoneNumberUtil
 
     // MARK: - Object Lifecycle
 

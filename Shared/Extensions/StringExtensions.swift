@@ -70,7 +70,7 @@ public extension String {
         return self
     }
 
-    fileprivate var stringWithAdditionalEscaping: String {
+    private var stringWithAdditionalEscaping: String {
         return self.replacingOccurrences(of: "|", with: "%7C", options: NSString.CompareOptions(), range: nil)
     }
 

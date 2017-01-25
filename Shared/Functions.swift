@@ -196,7 +196,7 @@ public func jsonsToStrings(_ arr: [JSON]?) -> [String]? {
 
 // Encapsulate a callback in a way that we can use it with NSTimer.
 private class Callback {
-    fileprivate let handler:()->()
+    private let handler:()->()
 
     init(handler:@escaping ()->()) {
         self.handler = handler
