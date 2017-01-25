@@ -31,7 +31,9 @@ extension AccessibleAction { // UIAccessibilityCustomAction
 
 extension AccessibleAction { // UIAlertAction
     fileprivate var alertActionHandler: (UIAlertAction!) -> Void {
-        return { (_: UIAlertAction!) -> Void in self.handler() }
+        return { (_: UIAlertAction!) -> Void in
+            let _ = self.handler()
+        }
     }
 
     public func alertAction(style: UIAlertActionStyle) -> UIAlertAction {
