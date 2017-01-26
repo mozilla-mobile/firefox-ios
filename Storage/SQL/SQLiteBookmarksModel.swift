@@ -712,7 +712,7 @@ class BookmarkFactory {
 
 
 extension SQLiteBookmarks: SearchableBookmarks {
-    public func bookmarksByURL(_ url: NSURL) -> Deferred<Maybe<Cursor<BookmarkItem>>> {
+    public func bookmarksByURL(_ url: URL) -> Deferred<Maybe<Cursor<BookmarkItem>>> {
         let inner =
         "SELECT id, type, guid, bmkUri, title, faviconID FROM \(TableBookmarksLocal) " +
         "WHERE " +
