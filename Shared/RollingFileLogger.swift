@@ -14,7 +14,7 @@ open class RollingFileLogger: XCGLogger {
 
     let fileLogIdentifierPrefix = "com.mozilla.firefox.filelogger."
 
-    fileprivate static let DateFormatter: Foundation.DateFormatter = {
+    fileprivate static let DateFormatter: DateFormatter = {
         let formatter = Foundation.DateFormatter()
         formatter.dateFormat = "yyyyMMdd'T'HHmmssZ"
         return formatter
