@@ -57,7 +57,7 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
         return ("DELETE FROM \(name)", [])
     }
 
-    override var factory: ((row: SDRow) -> RemoteClient)? {
+    override var factory: ((SDRow) -> RemoteClient)? {
         return { row -> RemoteClient in
             return RemoteClient(guid: row["guid"] as? String,
                                 name: row["name"] as! String,
@@ -138,7 +138,7 @@ class RemoteTabsTable<T>: GenericTable<RemoteTab> {
         return ("DELETE FROM \(name)", [])
     }
 
-    override var factory: ((row: SDRow) -> RemoteTab)? {
+    override var factory: ((SDRow) -> RemoteTab)? {
         return { row -> RemoteTab in
             return RemoteTab(
                 clientGUID: row["client_guid"] as? String,
