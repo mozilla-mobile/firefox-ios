@@ -69,8 +69,8 @@ open class Visit: Hashable {
 
     open class func fromJSON(_ json: JSON) -> Visit? {
         if let type = json["type"].asInt,
-               typeEnum = VisitType(rawValue: type),
-               date = json["date"].asInt64 where date >= 0 {
+           let typeEnum = VisitType(rawValue: type),
+           let date = json["date"].asInt64, date >= 0 {
                 return Visit(date: MicrosecondTimestamp(date), type: typeEnum)
         }
         return nil
@@ -103,7 +103,7 @@ open class SiteVisit: Visit {
 }
 
 public func ==(lhs: SiteVisit, rhs: SiteVisit) -> Bool {
-    if let lhsID = lhs.id, rhsID = rhs.id {
+    if let lhsID = lhs.id, let rhsID = rhs.id {
         if lhsID != rhsID {
             return false
         }
