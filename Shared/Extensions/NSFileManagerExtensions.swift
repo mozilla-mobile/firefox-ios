@@ -46,7 +46,7 @@ public extension FileManager {
         return directoryEnumerator
     }
 
-    private func sizeForItemURL(_ url: AnyObject, withPrefix prefix: String) throws -> Int64 {
+    private func sizeForItemURL(_ url: Any, withPrefix prefix: String) throws -> Int64 {
         guard let itemURL = url as? URL else {
             throw errorWithCode(.enumeratorElementNotURL)
         }
@@ -56,7 +56,7 @@ public extension FileManager {
             return 0
         }
 
-        return (url as? URL)?.allocatedFileSize() ?? 0
+        return itemURL.allocatedFileSize()
     }
 
     func allocatedSizeOfDirectoryAtURL(_ url: URL, forFilesPrefixedWith prefix: String, isLargerThanBytes threshold: Int64) throws -> Bool {
