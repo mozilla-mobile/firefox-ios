@@ -29,7 +29,8 @@ class HawkHelperTests: XCTestCase {
         let timestamp = Int64(1353832234)
         let nonce = "j4h3g2"
         let extra = "some-app-ext-data"
-        let req = Alamofire.request(.GET, URL(string: "http://example.com:8000/resource/1?b=1&a=2")!)
+
+        let req = Alamofire.request(URL(string: "http://example.com:8000/resource/1?b=1&a=2")!)
         let expected = "hawk.1.header\n" +
             "1353832234\n" +
             "j4h3g2\n" +
@@ -39,14 +40,14 @@ class HawkHelperTests: XCTestCase {
             "8000\n" +
             "\n" +
             "some-app-ext-data\n"
-        XCTAssertEqual(HawkHelper.getRequestStringFor(req.request!, timestampString: String(timestamp), nonce: nonce, hash: "", extra: extra).componentsSeparatedByString("\n"),
-            expected.componentsSeparatedByString("\n"))
+        XCTAssertEqual(HawkHelper.getRequestStringFor(req.request!, timestampString: String(timestamp), nonce: nonce, hash: "", extra: extra).components(separatedBy: "\n"),
+            expected.components(separatedBy: "\n"))
     }
 
     func testSpecWithoutPayloadExample() {
         let helper = HawkHelper(id: "dh37fgj492je",
             key: "werxhqb98rpaxn39848xrunpaw3489ruxnpa98w4rxn".utf8EncodedData)
-        let req = Alamofire.request(.GET, URL(string: "http://example.com:8000/resource/1?b=1&a=2")!)
+        let req = Alamofire.request(URL(string: "http://example.com:8000/resource/1?b=1&a=2")!)
         let timestamp = Int64(1353832234)
         let nonce = "j4h3g2"
         let extra = "some-app-ext-data"
@@ -59,13 +60,8 @@ class HawkHelperTests: XCTestCase {
         let helper = HawkHelper(id: "dh37fgj492je",
             key: "werxhqb98rpaxn39848xrunpaw3489ruxnpa98w4rxn".utf8EncodedData)
         let body = "Thank you for flying Hawk"
-        let req = Alamofire.request(.POST, URL(string: "http://example.com:8000/resource/1?b=1&a=2")!,
-            parameters: [:], encoding: .Custom({ convertible, params in
-                // This just makes a POST with a body string.
-                let mutableRequest = convertible.URLRequest.copy() as! NSMutableURLRequest
-                mutableRequest.HTTPBody = body.utf8EncodedData
-                return (mutableRequest, nil)
-            }))
+
+        let req = Alamofire.request("http://example.com:8000/resource/1?b=1&a=2", method: .post, parameters: [:], encoding: URF8BodyEncoding(body: body))
         let timestamp = Int64(1353832234)
         let nonce = "j4h3g2"
         let extra = "some-app-ext-data"
@@ -81,5 +77,14 @@ class HawkHelperTests: XCTestCase {
         XCTAssertEqual("text/html", HawkHelper.getBaseContentTypeFor("text/html;charset=UTF-8"))
         XCTAssertEqual("text/html", HawkHelper.getBaseContentTypeFor("text/html; charset=UTF-8"))
         XCTAssertEqual("text/html", HawkHelper.getBaseContentTypeFor("text/html ;charset=UTF-8"))
+    }
+}
+
+struct URF8BodyEncoding: ParameterEncoding {
+    var body: String
+    func encode(_ urlRequest: URLRequestConvertible, with parameters: Parameters?) throws -> URLRequest {
+        var mutableRequest = urlRequest.urlRequest
+        mutableRequest?.httpBody = body.utf8EncodedData
+        return mutableRequest!
     }
 }
