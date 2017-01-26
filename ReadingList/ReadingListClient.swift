@@ -57,7 +57,7 @@ class ReadingListClient {
     func getRecordWithGuid(_ guid: String, ifModifiedSince: ReadingListTimestamp?, completion: @escaping (ReadingListGetRecordResult) -> Void) {
         if let url = URL(string: guid, relativeTo: articlesBaseURL) {
             SessionManager.default.request(createRequest("GET", url, ifModifiedSince: ifModifiedSince)).responseJSON(options: [], completionHandler: { response -> Void in
-                if let json = response.result.value as AnyObject?, let response = response.response {
+                if let json = response.result.value as? [String: Any], let response = response.response {
                     switch response.statusCode {
                         case 200:
                             completion(.success(ReadingListRecordResponse(response: response, json: json)!))
@@ -84,7 +84,7 @@ class ReadingListClient {
     func getAllRecordsWithFetchSpec(_ fetchSpec: ReadingListFetchSpec, ifModifiedSince: ReadingListTimestamp?, completion: @escaping (ReadingListGetAllRecordsResult) -> Void) {
         if let url = fetchSpec.getURL(serviceURL: serviceURL, path: "/v1/articles") {
             SessionManager.default.request(createRequest("GET", url)).responseJSON(options: [], completionHandler: { response -> Void in
-                if let json = response.result.value as AnyObject?, let response = response.response {
+                if let json = response.result.value as? [String: Any], let response = response.response {
                     switch response.statusCode {
                     case 200:
                         completion(.success(ReadingListRecordsResponse(response: response, json: json)!))
@@ -111,7 +111,7 @@ class ReadingListClient {
 
     func addRecord(_ record: ReadingListClientRecord, completion: @escaping (ReadingListAddRecordResult) -> Void) {
         SessionManager.default.request(createRequest("POST", articlesURL, json: record.json)).responseJSON(options: [], completionHandler: { response in
-            if let json = response.result.value as AnyObject?, let response = response.response {
+            if let json = response.result.value as? [String: Any], let response = response.response {
                 switch response.statusCode {
                     case 200, 201: // TODO Should we have different results for these? Do we care about 200 vs 201?
                         completion(.success(ReadingListRecordResponse(response: response, json: json)!))
@@ -136,7 +136,7 @@ class ReadingListClient {
 
     func batchAddRecords(_ records: [ReadingListClientRecord], completion: @escaping (ReadingListBatchAddRecordsResult) -> Void) {
         SessionManager.default.request(createRequest("POST", batchURL, json: recordsToBatchJSON(records))).responseJSON(options: [], completionHandler: { response in
-            if let json = response.result.value as AnyObject?, let response = response.response {
+            if let json = response.result.value as? [String: Any], let response = response.response {
                 switch response.statusCode {
                 case 200:
                     completion(.success(ReadingListBatchRecordResponse(response: response, json: json)!))
@@ -152,7 +152,7 @@ class ReadingListClient {
     func deleteRecordWithGuid(_ guid: String, ifUnmodifiedSince: ReadingListTimestamp?, completion: @escaping (ReadingListDeleteRecordResult) -> Void) {
         if let url = URL(string: guid, relativeTo: articlesBaseURL) {
             SessionManager.default.request(createRequest("DELETE", url, ifUnmodifiedSince: ifUnmodifiedSince)).responseJSON(options: [], completionHandler: { response in
-                if let json = response.result.value as AnyObject?, let response = response.response {
+                if let json = response.result.value as? [String: Any], let response = response.response {
                     switch response.statusCode {
                         case 200:
                             completion(.success(ReadingListRecordResponse(response: response, json: json)!))

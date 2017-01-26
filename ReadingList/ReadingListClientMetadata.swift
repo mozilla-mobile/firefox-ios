@@ -10,9 +10,8 @@ public struct ReadingListClientMetadata: Equatable {
     /// A client timestamp
     public var lastModified: ReadingListTimestamp
 
-    public init?(row: AnyObject) {
-        guard let row = row as? NSDictionary,
-            let id = row["client_id"] as? Int64,
+    public init?(row: [String: Any]) {
+        guard let id = row["client_id"] as? Int64,
             let lastModified = row["client_last_modified"] as? Int64 else {
             return nil
         }

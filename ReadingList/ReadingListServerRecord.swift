@@ -15,8 +15,8 @@ struct ReadingListServerRecord {
     let favorite: Bool
 
     /// Initializer for when a record is loaded from server-sent json
-    init?(json: AnyObject) {
-        guard let json = json as? NSDictionary,
+    init?(json: [String: Any]?) {
+        guard let json = json,
             let serverMetadata = ReadingListServerMetadata(json: json),
             let url = json["url"] as? String,
             let title = json["title"] as? String,

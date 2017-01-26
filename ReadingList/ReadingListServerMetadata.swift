@@ -14,21 +14,15 @@ public struct ReadingListServerMetadata: Equatable {
     }
 
     /// Initialize from server record.
-    init?(json: AnyObject) {
-        guard let json = json as? NSDictionary else {
-            return nil
-        }
+    init?(json: [String: Any]) {
         self.init(data: json)
     }
 
-    init?(row: AnyObject) {
-        guard let row = row as? NSDictionary else {
-            return nil
-        }
+    init?(row: [String: Any]) {
         self.init(data: row)
     }
 
-    private init?(data: NSDictionary) {
+    private init?(data: [String: Any]) {
         guard let guid = data["id"] as? String,
             let lastModified = data["last_modified"] as? Int64 else {
                 return nil
