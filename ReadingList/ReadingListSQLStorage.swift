@@ -31,9 +31,9 @@ class ReadingListSQLStorage: ReadingListStorage {
 
         items = Table("items")
         do {
-            try db.run(items.create(temporary: false, ifNotExists: true, block: { t in
+            try db.run(items.create(temporary: false, ifNotExists: true, block: { (t: SQLite.TableBuilder) in
                 // Client Metadata
-                t.column(ItemColumns.ClientId, primaryKey: .Autoincrement)
+                t.column(ItemColumns.ClientId, primaryKey: .autoincrement)
                 t.column(ItemColumns.ClientLastModified)
                 // Server Metadata
                 t.column(ItemColumns.Id) // TODO Unique but may be null?
@@ -52,19 +52,39 @@ class ReadingListSQLStorage: ReadingListStorage {
     }
 
     func getAllRecords() -> Maybe<[ReadingListClientRecord]> {
-        return Maybe(success: Array(db.prepare(items)).map {ReadingListClientRecord(row: self.rowToDictionary($0))!})
+        do {
+            let preparedItems = try db.prepare(items)
+            return Maybe(success: Array(preparedItems).map {ReadingListClientRecord(row: self.rowToDictionary($0))!})
+        } catch {
+            return Maybe(failure: ReadingListStorageError("Can't fetch all records: \(error)"))
+        }
     }
 
     func getNewRecords() -> Maybe<[ReadingListClientRecord]> {
-        return Maybe(success: Array(db.prepare(items.filter(ItemColumns.Id == nil))).map {ReadingListClientRecord(row: self.rowToDictionary($0))!})
+        do {
+            let preparedItems = try db.prepare(items.filter(ItemColumns.Id == nil))
+            return Maybe(success: Array(preparedItems).map {ReadingListClientRecord(row: self.rowToDictionary($0))!})
+        } catch {
+            return Maybe(failure: ReadingListStorageError("Can't fetch all records: \(error)"))
+        }
     }
 
     func getUnreadRecords() -> Maybe<[ReadingListClientRecord]> {
-        return Maybe(success: Array(db.prepare(items.filter(ItemColumns.Unread == true))).map {ReadingListClientRecord(row: self.rowToDictionary($0))!})
+        do {
+            let preparedItems = try db.prepare(items.filter(ItemColumns.Unread == true))
+            return Maybe(success: Array(preparedItems).map {ReadingListClientRecord(row: self.rowToDictionary($0))!})
+        } catch {
+            return Maybe(failure: ReadingListStorageError("Can't fetch all records: \(error)"))
+        }
     }
 
     func getAvailableRecords() -> Maybe<[ReadingListClientRecord]> {
-        return Maybe(success: Array(db.prepare(items.order(ItemColumns.ClientLastModified.desc))).map {ReadingListClientRecord(row: self.rowToDictionary($0))!})
+        do {
+            let preparedItems = try db.prepare(items.order(ItemColumns.ClientLastModified.desc))
+            return Maybe(success: Array(preparedItems).map {ReadingListClientRecord(row: self.rowToDictionary($0))!})
+        } catch {
+            return Maybe(failure: ReadingListStorageError("Can't fetch all records: \(error)"))
+        }
     }
 
     func deleteRecord(_ record: ReadingListClientRecord) -> Maybe<Void> {
@@ -92,7 +112,8 @@ class ReadingListSQLStorage: ReadingListStorage {
 
         do {
             let id = try db.run(insert)
-            if let item = Array(db.prepare(items.filter(ItemColumns.ClientId == id))).first {
+            let preparedItems = try db.prepare(items.filter(ItemColumns.ClientId == id))
+            if let item = Array(preparedItems).first {
                 if let record = ReadingListClientRecord(row: rowToDictionary(item)) {
                     return Maybe(success: record)
                 } else {
@@ -107,14 +128,19 @@ class ReadingListSQLStorage: ReadingListStorage {
     }
 
     func getRecordWithURL(_ url: String) -> Maybe<ReadingListClientRecord?> {
-        if let item = Array(db.prepare(items.filter(ItemColumns.Url == url))).first {
-            if let record = ReadingListClientRecord(row: rowToDictionary(item)) {
-                return Maybe(success: record)
+        do {
+            let preparedItems = try db.prepare(items.filter(ItemColumns.Url == url))
+            if let item = Array(preparedItems).first {
+                if let record = ReadingListClientRecord(row: rowToDictionary(item)) {
+                    return Maybe(success: record)
+                } else {
+                    return Maybe(failure: ReadingListStorageError("Can't create RLCR from row"))
+                }
             } else {
-                return Maybe(failure: ReadingListStorageError("Can't create RLCR from row"))
+                return Maybe(success: nil)
             }
-        } else {
-            return Maybe(success: nil)
+        } catch {
+            return Maybe(failure: ReadingListStorageError("Can't fetch: \(error)"))
         }
     }
 
@@ -122,7 +148,8 @@ class ReadingListSQLStorage: ReadingListStorage {
         let query = items.filter(ItemColumns.ClientId == record.clientMetadata.id).update(ItemColumns.Unread <- unread)
         do {
             try db.run(query)
-            if let item = Array(db.prepare(items.filter(ItemColumns.ClientId == record.clientMetadata.id))).first {
+            let preparedItems = try db.prepare(items.filter(ItemColumns.ClientId == record.clientMetadata.id))
+            if let item = Array(preparedItems).first {
                 if let record = ReadingListClientRecord(row: rowToDictionary(item)) {
                     return Maybe(success: record)
                 } else {
@@ -136,8 +163,8 @@ class ReadingListSQLStorage: ReadingListStorage {
         }
     }
 
-    fileprivate func rowToDictionary(_ row: Row) -> AnyObject {
-        var result = [String:AnyObject]()
+    fileprivate func rowToDictionary(_ row: Row) -> Any {
+        var result = [String:Any]()
         result["client_id"] = NSNumber(value: row.get(ItemColumns.ClientId))
         result["client_last_modified"] = NSNumber(value: row.get(ItemColumns.ClientLastModified))
         result["id"] = row.get(ItemColumns.Id)
@@ -148,6 +175,6 @@ class ReadingListSQLStorage: ReadingListStorage {
         result["archived"] = row.get(ItemColumns.Archived)
         result["favorite"] = row.get(ItemColumns.Favorite)
         result["unread"] = row.get(ItemColumns.Unread)
-        return result as NSDictionary
+        return result
     }
 }
