@@ -26,7 +26,7 @@ extension SQLiteHistory: HistoryRecommendations {
             "mail.yahoo.com" as Optional<AnyObject>,
             "search.yahoo.com" as Optional<AnyObject>,
             "localhost" as Optional<AnyObject>,
-            "t.co"
+            "t.co" as Optional<AnyObject>
         ]
 
         var blacklistSubquery = ""

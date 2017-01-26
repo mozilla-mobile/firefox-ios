@@ -332,7 +332,7 @@ open class SQLiteLogins: BrowserLogins {
             // Add wildcards to change query to 'contains in' and add them to args. We need 6 args because
             // we include the where clause twice: Once for the local table and another for the remote.
             args = (0..<6).map { _ in
-                return "%\(query)%" as String?
+                return "%\(query)%" as NSString?
             }
 
             searchClauses.append("username LIKE ? ")
@@ -370,11 +370,11 @@ open class SQLiteLogins: BrowserLogins {
             login.passwordField as Optional<AnyObject>,
             login.username as Optional<AnyObject>,
             login.password as Optional<AnyObject>,
-            login.guid,
-            dateMicro,            // timeCreated
-            dateMicro,            // timeLastUsed
-            dateMicro,            // timePasswordChanged
-            dateMilli,            // localModified
+            login.guid as Optional<AnyObject>,
+            dateMicro as Optional<AnyObject>,            // timeCreated
+            dateMicro as Optional<AnyObject>,            // timeLastUsed
+            dateMicro as Optional<AnyObject>,            // timePasswordChanged
+            dateMilli as Optional<AnyObject>,            // localModified
         ]
 
         let sql =
@@ -489,7 +489,7 @@ open class SQLiteLogins: BrowserLogins {
             new.password as Optional<AnyObject>,
             new.hostname as Optional<AnyObject>,
             new.username as Optional<AnyObject>,
-            guid,
+            guid as Optional<AnyObject>,
         ]
 
         let update =
@@ -645,11 +645,11 @@ extension SQLiteLogins: SyncableLogins {
             login.passwordField as Optional<AnyObject>,
             NSNumber(unsignedLongLong: login.timeLastUsed),
             NSNumber(unsignedLongLong: login.timePasswordChanged),
-            login.timesUsed,
-            login.password,
-            login.hostname,
-            login.username,
-            login.guid,
+            login.timesUsed as Optional<AnyObject>,
+            login.password as Optional<AnyObject>,
+            login.hostname as Optional<AnyObject>,
+            login.username as Optional<AnyObject>,
+            login.guid as Optional<AnyObject>,
         ]
 
         let update =
@@ -754,10 +754,10 @@ extension SQLiteLogins: SyncableLogins {
             NSNumber(unsignedLongLong: login.timeLastUsed),
             NSNumber(unsignedLongLong: login.timePasswordChanged),
             NSNumber(unsignedLongLong: login.timeCreated),
-            login.password,
-            login.hostname,
-            login.username,
-            login.guid,
+            login.password as Optional<AnyObject>,
+            login.hostname as Optional<AnyObject>,
+            login.username as Optional<AnyObject>,
+            login.guid as Optional<AnyObject>,
         ]
         return args
     }
