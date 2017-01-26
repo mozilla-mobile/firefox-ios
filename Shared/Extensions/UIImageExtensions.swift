@@ -35,7 +35,7 @@ extension UIImage {
 
         // Look for "GIF" header to identify GIF images
         var header = [UInt8](repeating: 0, count: 3)
-        (data as NSData).getBytes(&header, length: 3 * MemoryLayout<UInt8>.size)
+        data.copyBytes(to: &header, count: 3 * MemoryLayout<UInt8>.size)
         return header == [0x47, 0x49, 0x46]
     }
 
