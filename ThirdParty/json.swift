@@ -8,33 +8,38 @@
 import Foundation
 /// init
 open class JSON {
-    fileprivate let _value:AnyObject
+    fileprivate let _value:Any
+
+    fileprivate var _objValue: AnyObject {
+        return self._value as AnyObject
+    }
+
     /// unwraps the JSON object
-    open class func unwrap(_ obj:AnyObject) -> AnyObject {
+    open class func unwrap(_ obj:Any) -> Any {
         switch obj {
         case let json as JSON:
             return json._value
         case let ary as NSArray:
-            var ret = [AnyObject]()
+            var ret = [Any]()
             for v in ary {
-                ret.append(unwrap(v as AnyObject))
+                ret.append(unwrap(v as Any))
             }
-            return ret as AnyObject
+            return ret as Any
         case let dict as NSDictionary:
-            var ret = [String:AnyObject]()
+            var ret = [String:Any]()
             for (ko, v) in dict {
                 if let k = ko as? String {
-                    ret[k] = unwrap(v as AnyObject)
+                    ret[k] = unwrap(v as Any)
                 }
             }
-            return ret as AnyObject
+            return ret as Any
         default:
             return obj
         }
     }
     /// pass the object that was returned from
     /// NSJSONSerialization
-    public init(_ obj:AnyObject) { self._value = JSON.unwrap(obj) }
+    public init(_ obj:Any) { self._value = JSON.unwrap(obj) }
     /// pass the JSON object for another instance
     public init(_ json:JSON){ self._value = json._value }
 }
@@ -47,7 +52,7 @@ extension JSON {
     public convenience init(data:Data) {
         do {
             // Try parsing some valid JSON
-            let obj = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments) as AnyObject
+            let obj = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments) as Any
             self.init(obj)
         }
         catch let error as NSError {
@@ -68,10 +73,8 @@ extension JSON {
     }
     /// constructs JSON object from the content of NSURL
     public convenience init(nsurl:URL) {
-        var enc:String.Encoding = String.Encoding.utf8
         do {
-            let str = try String(NSString(
-                contentsOf:nsurl, usedEncoding:&enc.rawValue))
+            let str = try String(contentsOf: nsurl, encoding: String.Encoding.utf8)
             self.init(string:str)
         } catch let error as NSError {
             self.init(error)
@@ -84,7 +87,7 @@ extension JSON {
     }
     /// constructs JSON object from the content of URL
     public convenience init(url:String) {
-        if let nsurl = URL(string:url) as URL? {
+        if let nsurl = URL(string:url) {
             self.init(nsurl:nsurl)
         } else {
             self.init(NSError(
@@ -101,7 +104,7 @@ extension JSON {
     }
     /// does what JSON.stringify in ES5 does.
     /// when the 2nd argument is set to true it pretty prints
-    public class func stringify(_ obj:AnyObject, pretty:Bool=false) -> String! {
+    public class func stringify(_ obj:Any, pretty:Bool=false) -> String! {
         if !JSONSerialization.isValidJSONObject(obj) {
             return JSON(NSError(
                 domain:"JSONErrorDomain",
@@ -121,7 +124,7 @@ extension JSON {
             return self
         case let ary as NSArray:
             if 0 <= idx && idx < ary.count {
-                return JSON(ary[idx] as AnyObject)
+                return JSON(ary[idx] as Any)
             }
             return JSON(NSError(
                 domain:"JSONErrorDomain", code:404, userInfo:[
@@ -141,7 +144,7 @@ extension JSON {
         case _ as NSError:
             return self
         case let dic as NSDictionary:
-            if let val = dic.value(forKey: key) as AnyObject? { return JSON(val) }
+            if let val = dic.value(forKey: key) as Any? { return JSON(val) }
             return JSON(NSError(
                 domain:"JSONErrorDomain", code:404, userInfo:[
                     NSLocalizedDescriptionKey:
@@ -155,7 +158,7 @@ extension JSON {
             }
     }
     /// access json data object
-    public var data:AnyObject? {
+    public var data:Any? {
         return self.isError ? nil : self._value
     }
     /// Gives the type name as string.
@@ -310,7 +313,7 @@ extension JSON {
     case let o as NSArray:
         var result = [JSON]()
         o.forEach { v in
-            result.append(JSON(v as AnyObject))
+            result.append(JSON(v as Any))
         }
         return result
     default:
@@ -325,7 +328,7 @@ extension JSON {
         var result = [String:JSON]()
         for (ko, v) in o {
             if let k = ko as? String {
-                result[k] = JSON(v as AnyObject)
+                result[k] = JSON(v as Any)
             }
         }
         return result
@@ -352,36 +355,36 @@ extension JSON {
     }
     // gives all values content in JSON object.
     public var allValues:JSON{
-        if(self._value.allValues == nil) {
+        if(_objValue.allValues == nil) {
             return JSON(NSArray())
         }
-        return JSON(self._value.allValues as AnyObject)
+        return JSON(_objValue.allValues)
     }
     // gives all keys content in JSON object.
     public var allKeys:JSON{
-        if(self._value.allKeys == nil) {
+        if(_objValue.allKeys == nil) {
             return JSON(NSArray())
         }
-        return JSON(self._value.allKeys as AnyObject)
+        return JSON(_objValue.allKeys)
     }
 }
 
 extension JSON : Sequence {
-    public func makeIterator()->AnyIterator<(AnyObject,JSON)?> {
+    public func makeIterator()->AnyIterator<(Any,JSON)?> {
         switch _value {
         case let o as NSArray:
             var i = -1
             return AnyIterator() {
                 i += 1
                 if i == o.count { return nil }
-                return (i as AnyObject, JSON(o[i] as AnyObject))
+                return (i as Any, JSON(o[i] as Any))
             }
         case let o as NSDictionary:
             let ks = o.allKeys.reversed()
             return AnyIterator() {
                 if ks.isEmpty { return nil }
                 if let k = ks.last as? String {
-                    return (k as AnyObject, JSON(o.value(forKey: k)! as AnyObject))
+                    return (k as Any, JSON(o.value(forKey: k)! as Any))
                 } else {
                     return nil
                 }
@@ -390,8 +393,8 @@ extension JSON : Sequence {
             return AnyIterator() { nil }
         }
     }
-    public func mutableCopyOfTheObject() -> AnyObject {
-        return _value.mutableCopy as AnyObject
+    public func mutableCopyOfTheObject() -> Any {
+        return _objValue.mutableCopy as Any
     }
 }
 extension JSON : CustomStringConvertible {
