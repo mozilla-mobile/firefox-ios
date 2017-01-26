@@ -102,15 +102,15 @@ open class HawkHelper {
 
     class func getPayloadHashFor(_ request: URLRequest) -> String {
         if let body = request.httpBody {
-            let d = NSMutableData()
+            var d = Data()
             func append(_ s: String) {
                 let data = s.utf8EncodedData
-                d.appendBytes(data.bytes, length: data.length)
+                d.appendBytes(fromData: data)
             }
             append("hawk.1.payload\n")
             append(getBaseContentTypeFor(request.value(forHTTPHeaderField: "Content-Type")))
             append("\n") // Trailing newline is specified by Hawk.
-            d.append((body as NSData).bytes, length: body.count)
+            d.appendBytes(fromData: body)
             append("\n") // Trailing newline is specified by Hawk.
             return d.sha256.base64EncodedString
         } else {
@@ -139,10 +139,10 @@ open class HawkHelper {
     }
 }
 
-extension NSMutableURLRequest {
-    func addAuthorizationHeader(forHKDFSHA256Key bytes: Data) {
-        let tokenId = bytes.subdata(in: NSMakeRange(0 * KeyLength, KeyLength))
-        let reqHMACKey = bytes.subdata(in: NSMakeRange(1 * KeyLength, KeyLength))
+extension URLRequest {
+    mutating func addAuthorizationHeader(forHKDFSHA256Key bytes: Data) {
+        let tokenId = bytes.subdata(in: Range(uncheckedBounds:(lower: 0 * KeyLength, upper: KeyLength)))
+        let reqHMACKey = bytes.subdata(in:Range(uncheckedBounds:(lower: 1 * KeyLength, upper: KeyLength)))
         let hawkHelper = HawkHelper(id: tokenId.hexEncodedString, key: reqHMACKey)
         let hawkValue = hawkHelper.getAuthorizationValueFor(self)
         setValue(hawkValue, forHTTPHeaderField: "Authorization")

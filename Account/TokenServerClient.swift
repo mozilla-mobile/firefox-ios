@@ -50,9 +50,9 @@ public struct TokenServerToken {
             "api_endpoint": api_endpoint as AnyObject,
             "uid": NSNumber(value: uid as UInt64),
             "duration": NSNumber(value: durationInSeconds as UInt64),
-            "remoteTimestamp": NSNumber(unsignedLongLong: remoteTimestamp),
+            "remoteTimestamp": NSNumber(value: remoteTimestamp),
         ]
-        return JSON(D)
+        return JSON(D as NSDictionary)
     }
 }
 
@@ -66,7 +66,7 @@ enum TokenServerError {
 extension TokenServerError: MaybeErrorType {
     var description: String {
         switch self {
-        case let Remote(code: code, status: status, remoteTimestamp: _):
+        case let .remote(code: code, status: status, remoteTimestamp: _):
             if let status = status {
                 return "<TokenServerError.Remote \(code): \(status)>"
             } else {
@@ -108,7 +108,7 @@ open class TokenServerClient {
         if 200 <= statusCode && statusCode <= 299 {
             return nil
         }
-        return TokenServerError.Remote(code: Int32(statusCode), status: json["status"].asString,
+        return TokenServerError.remote(code: Int32(statusCode), status: json["status"].asString,
             remoteTimestamp: parseTimestampHeader(remoteTimestampHeader))
     }
 
@@ -129,16 +129,16 @@ open class TokenServerClient {
         return nil
     }
 
-    lazy fileprivate var alamofire: Alamofire.Manager = {
+    lazy fileprivate var alamofire: SessionManager = {
         let ua = UserAgent.tokenServerClientUserAgent
         let configuration = URLSessionConfiguration.ephemeral
-        return Alamofire.Manager.managerWithUserAgent(ua, configuration: configuration)
+        return SessionManager.managerWithUserAgent(ua, configuration: configuration)
     }()
 
     open func token(_ assertion: String, clientState: String? = nil) -> Deferred<Maybe<TokenServerToken>> {
         let deferred = Deferred<Maybe<TokenServerToken>>()
 
-        let mutableURLRequest = URLRequest(url: URL)
+        var mutableURLRequest = URLRequest(url: URL)
         mutableURLRequest.setValue("BrowserID " + assertion, forHTTPHeaderField: "Authorization")
         if let clientState = clientState {
             mutableURLRequest.setValue(clientState, forHTTPHeaderField: "X-Client-State")
@@ -151,11 +151,11 @@ open class TokenServerClient {
                     // Don't cancel requests just because our Manager is deallocated.
                     withExtendedLifetime(self.alamofire) {
                         if let error = response.result.error {
-                            deferred.fill(Maybe(failure: TokenServerError.Local(error)))
+                            deferred.fill(Maybe(failure: TokenServerError.local(error as NSError)))
                             return
                         }
 
-                        if let data: AnyObject = response.result.value { // Declaring the type quiets a Swift warning about inferring AnyObject.
+                        if let data = response.result.value as AnyObject? { // Declaring the type quiets a Swift warning about inferring AnyObject.
                             let json = JSON(data)
                             let remoteTimestampHeader = response.response?.allHeaderFields["x-timestamp"] as? String
 

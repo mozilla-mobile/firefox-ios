@@ -73,19 +73,19 @@ open class FirefoxAccount {
         }
 
         let verified = data["verified"].asBool ?? false
-        return FirefoxAccount.fromConfigurationAndParameters(configuration,
-            email: email, uid: uid, deviceRegistration: nil, verified: verified,
+        return FirefoxAccount.from(configuration: configuration,
+            andParametersWithEmail: email, uid: uid, deviceRegistration: nil, verified: verified,
             sessionToken: sessionToken, keyFetchToken: keyFetchToken, unwrapkB: unwrapkB)
     }
 
     open class func from(_ configuration: FirefoxAccountConfiguration,
             andLoginResponse response: FxALoginResponse, unwrapkB: Data) -> FirefoxAccount {
-        return FirefoxAccount.fromConfigurationAndParameters(configuration,
-            email: response.remoteEmail, uid: response.uid, deviceRegistration: nil, verified: response.verified,
+        return FirefoxAccount.from(configuration: configuration,
+            andParametersWithEmail: response.remoteEmail, uid: response.uid, deviceRegistration: nil, verified: response.verified,
             sessionToken: response.sessionToken as Data, keyFetchToken: response.keyFetchToken as Data, unwrapkB: unwrapkB)
     }
 
-    fileprivate class func from(_ configuration: FirefoxAccountConfiguration,
+    fileprivate class func from(configuration: FirefoxAccountConfiguration,
             andParametersWithEmail email: String, uid: String, deviceRegistration: FxADeviceRegistration?, verified: Bool,
             sessionToken: Data, keyFetchToken: Data, unwrapkB: Data) -> FirefoxAccount {
         var state: FxAState! = nil
@@ -146,7 +146,7 @@ open class FirefoxAccount {
             let email = dictionary["email"] as? String,
             let uid = dictionary["uid"] as? String {
                 let deviceRegistration = dictionary["deviceRegistration"] as? FxADeviceRegistration
-                let stateCache = KeychainCache.fromBranch("account.state", withLabel: dictionary["stateKeyLabel"] as? String, withDefault: SeparatedState(), factory: stateFromJSON)
+                let stateCache = KeychainCache.fromBranch("account.state", withLabel: dictionary["stateKeyLabel"] as? String, withDefault: SeparatedState(), factory: state)
                 return FirefoxAccount(
                     configuration: configurationLabel.toConfiguration(),
                     email: email, uid: uid,
@@ -179,10 +179,9 @@ open class FirefoxAccount {
         let cachedState = stateCache.value!
         var registration = succeed()
         if let session = cachedState as? TokenState {
-            registration = FxADeviceRegistrator.registerOrUpdateDevice(self, sessionToken: session.sessionToken).bind { result in
-                if result.successValue != FxADeviceRegistrationResult.AlreadyRegistered {
-                    let notification = NSNotification(name: NotificationFirefoxAccountDeviceRegistrationUpdated, object: nil)
-                    NSNotificationCenter.defaultCenter().postNotification(notification)
+            registration = FxADeviceRegistrator.registerOrUpdateDevice(self, sessionToken: session.sessionToken as NSData).bind { result in
+                if result.successValue != FxADeviceRegistrationResult.alreadyRegistered {
+                    NotificationCenter.default.post(name: NotificationFirefoxAccountDeviceRegistrationUpdated, object: nil)
                 }
                 return succeed()
             }
@@ -191,7 +190,7 @@ open class FirefoxAccount {
         let deferred: Deferred<FxAState> = registration.bind { _ in
             let client = FxAClient10(endpoint: self.configuration.authEndpointURL)
             let stateMachine = FxALoginStateMachine(client: client)
-            let now = NSDate.now()
+            let now = Date.now()
             return stateMachine.advance(fromState: cachedState, now: now).map { newState in
                 self.stateCache.value = newState
                 return newState
@@ -219,12 +218,12 @@ open class FirefoxAccount {
 
     open func marriedState() -> Deferred<Maybe<MarriedState>> {
         return advance().map { newState in
-            if newState.label == FxAStateLabel.Married {
+            if newState.label == FxAStateLabel.married {
                 if let married = newState as? MarriedState {
                     return Maybe(success: married)
                 }
             }
-            return Maybe(failure: AccountError.NotMarried)
+            return Maybe(failure: AccountError.notMarried)
         }
     }
 

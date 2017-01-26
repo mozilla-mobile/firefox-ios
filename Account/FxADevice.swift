@@ -32,7 +32,7 @@ public struct FxADevice {
         parameters["id"] = id
         parameters["type"] = type
 
-        return JSON(parameters)
+        return JSON(parameters as NSDictionary)
     }
 
     static func fromJSON(_ json: JSON) -> FxADevice? {

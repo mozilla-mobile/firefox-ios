@@ -20,13 +20,6 @@ protocol FxALoginClient {
     func sign(_ sessionToken: Data, publicKey: PublicKey) -> Deferred<Maybe<FxASignResponse>>
 }
 
-extension FxAClient10: FxALoginClient {
-    func keyPair() -> Deferred<Maybe<KeyPair>> {
-        let result = RSAKeyPair.generate(withModulusSize: 2048) // TODO: debate key size and extract this constant.
-        return Deferred(value: Maybe(success: result))
-    }
-}
-
 class FxALoginStateMachine {
     let client: FxALoginClient
 
@@ -49,7 +42,7 @@ class FxALoginStateMachine {
         }
     }
 
-    fileprivate func advanceOne(_ state: FxAState, now: Timestamp) -> Deferred<FxAState> {
+    fileprivate func advanceOne(fromState state: FxAState, now: Timestamp) -> Deferred<FxAState> {
         // For convenience.  Without type annotation, Swift complains about types not being exact.
         let separated: Deferred<FxAState> = Deferred(value: SeparatedState())
         let doghouse: Deferred<FxAState> = Deferred(value: DoghouseState())
@@ -102,7 +95,7 @@ class FxALoginStateMachine {
                 } else {
                     if let error = result.failureValue as? FxAClientError {
                         switch error {
-                        case let .Remote(remoteError):
+                        case let .remote(remoteError):
                             if remoteError.isUpgradeRequired {
                                 log.error("Upgrade required: \(error.description)!  Transitioning to Doghouse.")
                                 return doghouse
@@ -116,7 +109,7 @@ class FxALoginStateMachine {
                                 log.error("Unknown error: \(error.description).  Transitioning to Separated.")
                                 return separated
                             }
-                        case let .Local(localError) where localError.domain == NSURLErrorDomain:
+                        case let .local(localError) where localError.domain == NSURLErrorDomain:
                             log.warning("Local networking error: \(result.failureValue!).  Assuming transient and not transitioning.")
                             return same
                         default:
@@ -128,7 +121,7 @@ class FxALoginStateMachine {
                 }
             }
 
-        case .engagedBeforeVerified, .EngagedAfterVerified:
+        case .engagedBeforeVerified, .engagedAfterVerified:
             let state = state as! ReadyForKeys
             log.debug("Fetching keys.")
             return client.keys(state.keyFetchToken).bind { result in
@@ -146,7 +139,7 @@ class FxALoginStateMachine {
                     if let error = result.failureValue as? FxAClientError {
                         log.error("Error \(error.description) \(error.description)")
                         switch error {
-                        case let .Remote(remoteError):
+                        case let .remote(remoteError):
                             if remoteError.isUpgradeRequired {
                                 log.error("Upgrade required: \(error.description)!  Transitioning to Doghouse.")
                                 return doghouse
@@ -163,7 +156,7 @@ class FxALoginStateMachine {
                                 log.error("Unknown error: \(error.description).  Transitioning to Separated.")
                                 return separated
                             }
-                        case let .Local(localError) where localError.domain == NSURLErrorDomain:
+                        case let .local(localError) where localError.domain == NSURLErrorDomain:
                             log.warning("Local networking error: \(result.failureValue!).  Assuming transient and not transitioning.")
                             return same
                         default:
