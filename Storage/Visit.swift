@@ -8,13 +8,13 @@ import Shared
 // These are taken from the Places docs
 // http://mxr.mozilla.org/mozilla-central/source/toolkit/components/places/nsINavHistoryService.idl#1187
 @objc public enum VisitType: Int {
-    case Unknown = 0
+    case unknown = 0
 
     /**
      * This transition type means the user followed a link and got a new toplevel
      * window.
      */
-    case Link = 1
+    case link = 1
 
     /**
      * This transition type means that the user typed the page's URL in the
@@ -22,14 +22,14 @@ import Shared
      * it from a history query (from the History sidebar, History menu,
      * or history query in the personal toolbar or Places organizer).
      */
-    case Typed = 2
+    case typed = 2
 
-    case Bookmark = 3
-    case Embed = 4
-    case PermanentRedirect = 5
-    case TemporaryRedirect = 6
-    case Download = 7
-    case FramedLink = 8
+    case bookmark = 3
+    case embed = 4
+    case permanentRedirect = 5
+    case temporaryRedirect = 6
+    case download = 7
+    case framedLink = 8
 }
 
 // WKWebView has these:
@@ -54,11 +54,11 @@ WKNavigationTypeOther = -1,
  * to reach the UI: we care about "last visited", "visit count", or just
  * "places ordered by frecency" — we don't care about lists of visits.)
  */
-public class Visit: Hashable {
-    public let date: MicrosecondTimestamp
-    public let type: VisitType
+open class Visit: Hashable {
+    open let date: MicrosecondTimestamp
+    open let type: VisitType
 
-    public var hashValue: Int {
+    open var hashValue: Int {
         return date.hashValue ^ type.hashValue
     }
 
@@ -67,7 +67,7 @@ public class Visit: Hashable {
         self.type = type
     }
 
-    public class func fromJSON(json: JSON) -> Visit? {
+    open class func fromJSON(_ json: JSON) -> Visit? {
         if let type = json["type"].asInt,
                typeEnum = VisitType(rawValue: type),
                date = json["date"].asInt64 where date >= 0 {
@@ -76,7 +76,7 @@ public class Visit: Hashable {
         return nil
     }
 
-    public func toJSON() -> JSON {
+    open func toJSON() -> JSON {
         let d = NSNumber(unsignedLongLong: self.date)
         let o: [String: AnyObject] = ["type": self.type.rawValue, "date": d]
         return JSON(o)
@@ -88,11 +88,11 @@ public func ==(lhs: Visit, rhs: Visit) -> Bool {
            lhs.type == rhs.type
 }
 
-public class SiteVisit: Visit {
+open class SiteVisit: Visit {
     var id: Int? = nil
-    public let site: Site
+    open let site: Site
 
-    public override var hashValue: Int {
+    open override var hashValue: Int {
         return date.hashValue ^ type.hashValue ^ (id?.hashValue ?? 0) ^ (site.id ?? 0)
     }
 
