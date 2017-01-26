@@ -10,15 +10,15 @@ private let log = Logger.syncLogger
 
 // A protocol for information about a particular table. This is used as a type to be stored by TableTable.
 protocol TableInfo {
-    var name: String { get }
+    var name: NSString { get }
     var version: Int { get }
 }
 
 // A wrapper class for table info coming from the TableTable. This should ever only be used internally.
 class TableInfoWrapper: TableInfo {
-    let name: String
+    let name: NSString
     let version: Int
-    init(name: String, version: Int) {
+    init(name: NSString, version: Int) {
         self.name = name
         self.version = version
     }
@@ -70,9 +70,9 @@ open class QueryOptions {
     // The way to sort the query
     open var sort: QuerySort = .none
 
-    public init(filter: AnyObject? = nil, FilterType: FilterType = .none, sort: QuerySort = .none) {
+    public init(filter: AnyObject? = nil, filterType: FilterType = .none, sort: QuerySort = .none) {
         self.filter = filter
-        self.FilterType = FilterType
+        self.filterType = filterType
         self.sort = sort
     }
 }
@@ -100,7 +100,7 @@ class GenericTable<T>: BaseTable {
     typealias DataType = T
 
     // Implementors need override these methods
-    var name: String { return "" }
+    var name: NSString { return "" }
     var version: Int { return 0 }
     var rows: String { return "" }
     var factory: ((SDRow) -> DataType)? {
