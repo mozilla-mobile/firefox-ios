@@ -14,18 +14,18 @@ extension SQLiteHistory: HistoryRecommendations {
         let historyLimit = limit - bookmarkLimit
 
         let microsecondsPerMinute: UInt64 = 60_000_000 // 1000 * 1000 * 60
-        let now = NSDate.nowMicroseconds()
-        let thirtyMinutesAgo = NSNumber(unsignedLongLong: now - 30 * microsecondsPerMinute)
-        let threeDaysAgo = NSNumber(unsignedLongLong: now - (60 * microsecondsPerMinute) * 24 * 3)
+        let now = Date.nowMicroseconds()
+        let thirtyMinutesAgo = NSNumber(value: now - 30 * microsecondsPerMinute)
+        let threeDaysAgo = NSNumber(value: now - (60 * microsecondsPerMinute) * 24 * 3)
 
         let blacklistedHosts: [AnyObject?] = [
-            "google.com",
-            "google.ca",
-            "calendar.google.com",
-            "mail.google.com",
-            "mail.yahoo.com",
-            "search.yahoo.com",
-            "localhost",
+            "google.com" as Optional<AnyObject>,
+            "google.ca" as Optional<AnyObject>,
+            "calendar.google.com" as Optional<AnyObject>,
+            "mail.google.com" as Optional<AnyObject>,
+            "mail.yahoo.com" as Optional<AnyObject>,
+            "search.yahoo.com" as Optional<AnyObject>,
+            "localhost" as Optional<AnyObject>,
             "t.co"
         ]
 
@@ -86,13 +86,13 @@ extension SQLiteHistory: HistoryRecommendations {
 
         var args: [AnyObject?] = []
         args.append(thirtyMinutesAgo)
-        args.appendContentsOf(blacklistedHosts)
+        args.append(contentsOf: blacklistedHosts)
         args.append(threeDaysAgo)
         args.append(threeDaysAgo)
         return self.db.runQuery(highlightsQuery, args: args, factory: SQLiteHistory.iconHistoryColumnFactory)
     }
 
-    public func removeHighlightForURL(url: String) -> Success {
+    public func removeHighlightForURL(_ url: String) -> Success {
         return self.db.run([("INSERT INTO \(TableActivityStreamBlocklist) (url) VALUES (?)", [url])])
     }
 }

@@ -15,37 +15,37 @@ class SchemaTable: GenericTable<TableInfo> {
         "name TEXT NOT NULL UNIQUE, " +
         "version INTEGER NOT NULL" }
 
-    override func getInsertAndArgs(inout item: TableInfo) -> (String, [AnyObject?])? {
+    override func getInsertAndArgs(_ item: inout TableInfo) -> (String, [AnyObject?])? {
         var args = [AnyObject?]()
-        args.append(item.name)
-        args.append(item.version)
+        args.append(item.name as AnyObject?)
+        args.append(item.version as AnyObject?)
         return ("INSERT INTO \(name) (name, version) VALUES (?,?)", args)
     }
 
-    override func getUpdateAndArgs(inout item: TableInfo) -> (String, [AnyObject?])? {
+    override func getUpdateAndArgs(_ item: inout TableInfo) -> (String, [AnyObject?])? {
         var args = [AnyObject?]()
-        args.append(item.version)
-        args.append(item.name)
+        args.append(item.version as AnyObject?)
+        args.append(item.name as AnyObject?)
         return ("UPDATE \(name) SET version = ? WHERE name = ?", args)
     }
 
-    override func getDeleteAndArgs(inout item: TableInfo?) -> (String, [AnyObject?])? {
+    override func getDeleteAndArgs(_ item: inout TableInfo?) -> (String, [AnyObject?])? {
         var args = [AnyObject?]()
         var sql = "DELETE FROM \(name)"
         if let table = item {
-            args.append(table.name)
+            args.append(table.name as AnyObject?)
             sql += " WHERE name = ?"
         }
         return (sql, args)
     }
 
-    override var factory: ((row: SDRow) -> TableInfo)? {
+    override var factory: ((_ row: SDRow) -> TableInfo)? {
         return { row -> TableInfo in
             return TableInfoWrapper(name: row["name"] as! String, version: row["version"] as! Int)
         }
     }
 
-    override func getQueryAndArgs(options: QueryOptions?) -> (String, [AnyObject?])? {
+    override func getQueryAndArgs(_ options: QueryOptions?) -> (String, [AnyObject?])? {
         var args = [AnyObject?]()
         if let filter: AnyObject = options?.filter {
             args.append(filter)
