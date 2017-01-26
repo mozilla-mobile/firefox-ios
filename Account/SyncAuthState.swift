@@ -19,7 +19,7 @@ public struct SyncAuthStateCache {
 
 public protocol SyncAuthState {
     func invalidate()
-    func token(_ now: Timestamp, canBeExpired: Bool) -> Deferred<Maybe<(token: TokenServerToken, forKey: NSData)>>
+    func token(_ now: Timestamp, canBeExpired: Bool) -> Deferred<Maybe<(token: TokenServerToken, forKey: Data)>>
 }
 
 public func syncAuthStateCachefromJSON(_ json: JSON) -> SyncAuthStateCache? {
@@ -44,8 +44,8 @@ extension SyncAuthStateCache: JSONLiteralConvertible {
             "version": CurrentSyncAuthStateCacheVersion,
             "token": token.asJSON(),
             "forKey": forKey.hexEncodedString,
-            "expiresAt": NSNumber(unsignedLongLong: expiresAt),
-        ])
+            "expiresAt": NSNumber(value: expiresAt),
+        ] as NSDictionary)
     }
 }
 
@@ -76,7 +76,7 @@ open class FirefoxAccountSyncAuthState: SyncAuthState {
             if retryCount > 0 {
                 if let tokenServerError = result.failureValue as? TokenServerError {
                     switch tokenServerError {
-                    case let .Remote(code, status, remoteTimestamp) where code == 401 && status == "invalid-timestamp":
+                    case let .remote(code, status, remoteTimestamp) where code == 401 && status == "invalid-timestamp":
                         if let remoteTimestamp = remoteTimestamp {
                             let skew = Int64(remoteTimestamp) - Int64(now) // Without casts, runtime crash due to overflow.
                             log.info("Token server responded with 401/invalid-timestamp: retrying with remote timestamp \(remoteTimestamp), which is local timestamp + skew = \(now) + \(skew).")
@@ -92,7 +92,7 @@ open class FirefoxAccountSyncAuthState: SyncAuthState {
         }
     }
 
-    open func token(_ now: Timestamp, canBeExpired: Bool) -> Deferred<Maybe<(token: TokenServerToken, forKey: NSData)>> {
+    open func token(_ now: Timestamp, canBeExpired: Bool) -> Deferred<Maybe<(token: TokenServerToken, forKey: Data)>> {
         if let value = cache.value {
             // Give ourselves some room to do work.
             let isExpired = value.expiresAt < now + 5 * OneMinuteInMilliseconds

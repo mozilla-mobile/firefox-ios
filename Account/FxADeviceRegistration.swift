@@ -62,7 +62,7 @@ open class FxADeviceRegistration: NSObject, NSCoding {
     open func encode(with aCoder: NSCoder) {
         aCoder.encode(id, forKey: "id")
         aCoder.encode(version, forKey: "version")
-        aCoder.encodeObject(NSNumber(unsignedLongLong: lastRegistered), forKey: "lastRegistered")
+        aCoder.encode(NSNumber(value: lastRegistered), forKey: "lastRegistered")
     }
 }
 
@@ -72,7 +72,7 @@ open class FxADeviceRegistrator {
         // within the last week, do nothing. We re-register weekly as a sanity check.
         if let registration = account.deviceRegistration, registration.version == DeviceRegistrationVersion &&
             Date.now() < registration.lastRegistered + OneWeekInMilliseconds {
-                return deferMaybe(FxADeviceRegistrationResult.AlreadyRegistered)
+                return deferMaybe(FxADeviceRegistrationResult.alreadyRegistered)
         }
 
         let client = client ?? FxAClient10(endpoint: account.configuration.authEndpointURL)
@@ -90,12 +90,12 @@ open class FxADeviceRegistrator {
         let registeredDevice = client.registerOrUpdate(device: device, withSessionToken: sessionToken)
         let registration: Deferred<Maybe<FxADeviceRegistration>> = registeredDevice.bind { result in
             if let device = result.successValue {
-                return deferMaybe(FxADeviceRegistration(id: device.id!, version: DeviceRegistrationVersion, lastRegistered: NSDate.now()))
+                return deferMaybe(FxADeviceRegistration(id: device.id!, version: DeviceRegistrationVersion, lastRegistered: Date.now()))
             }
 
             // Recover from the error -- if we can.
             if let error = result.failureValue as? FxAClientError,
-               case .Remote(let remoteError) = error {
+               case .remote(let remoteError) = error {
                 switch (remoteError.code) {
                 case FxAccountRemoteError.DeviceSessionConflict:
                     return recoverFromDeviceSessionConflict(account, client: client, sessionToken: sessionToken)
@@ -114,10 +114,10 @@ open class FxADeviceRegistrator {
         // Post-recovery. We either registered or we didn't, but update the account either way.
         return registration.bind { result in
             switch result {
-            case .Success(let registration):
+            case .success(let registration):
                 account.deviceRegistration = registration.value
                 return deferMaybe(registrationResult)
-            case .Failure(let error):
+            case .failure(let error):
                 log.error("Device registration failed: \(error.description)")
                 if let registration = account.deviceRegistration {
                     account.deviceRegistration = FxADeviceRegistration(id: registration.id, version: 0, lastRegistered: registration.lastRegistered)
@@ -136,26 +136,24 @@ open class FxADeviceRegistrator {
         //      version on the account data and return the correct device id. At next
         //      sync or next sign-in, registration is retried and should succeed.
         log.warning("Device session conflict. Attempting to find the current device ID…")
-        return client.devices(devices: sessionToken) >>== { response in
+        return client.devices(withSessionToken: sessionToken) >>== { response in
             guard let currentDevice = response.devices.find({ $0.isCurrentDevice }) else {
-                return deferMaybe(FxADeviceRegistratorError.CurrentDeviceNotFound)
+                return deferMaybe(FxADeviceRegistratorError.currentDeviceNotFound)
             }
 
-            return deferMaybe(FxADeviceRegistration(id: currentDevice.id!, version: 0, lastRegistered: NSDate.now()))
+            return deferMaybe(FxADeviceRegistration(id: currentDevice.id!, version: 0, lastRegistered: Date.now()))
         }
     }
 
     fileprivate static func recoverFromTokenError(_ account: FirefoxAccount, client: FxAClient10) -> Deferred<Maybe<FxADeviceRegistration>> {
         return client.status(forUID: account.uid) >>== { status in
+            let _ = account.makeDoghouse()
             if !status.exists {
                 // TODO: Should be in an "I have an iOS account, but the FxA is gone." state.
                 // This will do for now...
-                account.makeDoghouse()
-                return deferMaybe(FxADeviceRegistratorError.AccountDeleted)
+                return deferMaybe(FxADeviceRegistratorError.accountDeleted)
             }
-
-            account.makeDoghouse()
-            return deferMaybe(FxADeviceRegistratorError.InvalidSession)
+            return deferMaybe(FxADeviceRegistratorError.invalidSession)
         }
     }
 
@@ -164,6 +162,6 @@ open class FxADeviceRegistrator {
         // At next sync or next sign-in, registration is retried and should succeed.
         log.warning("Unknown device ID. Clearing the local device data.")
         account.deviceRegistration = nil
-        return deferMaybe(FxADeviceRegistratorError.UnknownDevice)
+        return deferMaybe(FxADeviceRegistratorError.unknownDevice)
     }
 }

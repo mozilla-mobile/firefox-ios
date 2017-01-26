@@ -52,7 +52,7 @@ public struct LatestDevFirefoxAccountConfiguration: FirefoxAccountConfiguration 
     public init() {
     }
 
-    public let label = FirefoxAccountConfigurationLabel.LatestDev
+    public let label = FirefoxAccountConfigurationLabel.latestDev
 
     public let authEndpointURL = URL(string: "https://latest.dev.lcip.org/auth/v1")!
     public let oauthEndpointURL = URL(string: "https://oauth-latest.dev.lcip.org")!
@@ -69,7 +69,7 @@ public struct StableDevFirefoxAccountConfiguration: FirefoxAccountConfiguration 
     public init() {
     }
 
-    public let label = FirefoxAccountConfigurationLabel.StableDev
+    public let label = FirefoxAccountConfigurationLabel.stableDev
 
     public let authEndpointURL = URL(string: "https://stable.dev.lcip.org/auth/v1")!
     public let oauthEndpointURL = URL(string: "https://oauth-stable.dev.lcip.org")!
@@ -86,7 +86,7 @@ public struct StageFirefoxAccountConfiguration: FirefoxAccountConfiguration {
     public init() {
     }
 
-    public let label = FirefoxAccountConfigurationLabel.Production
+    public let label = FirefoxAccountConfigurationLabel.production
 
     public let authEndpointURL = URL(string: "https://api.accounts.firefox.com/v1")!
     public let oauthEndpointURL = URL(string: "https://oauth.accounts.firefox.com/v1")!
@@ -103,7 +103,7 @@ public struct ProductionFirefoxAccountConfiguration: FirefoxAccountConfiguration
     public init() {
     }
 
-    public let label = FirefoxAccountConfigurationLabel.Production
+    public let label = FirefoxAccountConfigurationLabel.production
 
     public let authEndpointURL = URL(string: "https://api.accounts.firefox.com/v1")!
     public let oauthEndpointURL = URL(string: "https://oauth.accounts.firefox.com/v1")!
@@ -120,7 +120,7 @@ public struct ChinaEditionFirefoxAccountConfiguration: FirefoxAccountConfigurati
     public init() {
     }
 
-    public let label = FirefoxAccountConfigurationLabel.ChinaEdition
+    public let label = FirefoxAccountConfigurationLabel.chinaEdition
 
     public let authEndpointURL = URL(string: "https://api-accounts.firefox.com.cn/v1")!
     public let oauthEndpointURL = URL(string: "https://oauth.firefox.com.cn/v1")!
