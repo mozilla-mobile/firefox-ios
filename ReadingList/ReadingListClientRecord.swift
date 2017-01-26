@@ -16,19 +16,19 @@ public struct ReadingListClientRecord: Equatable {
     public let favorite: Bool
 
     /// Initializer for when a record is loaded from a database row
-    public init?(row: Any) {
-        let clientMetadata = ReadingListClientMetadata(row: row)
-        if clientMetadata == nil {
+    public init?(row: AnyObject) {
+        guard let clientMetadata = ReadingListClientMetadata(row: row),
+            let serverMetadata = ReadingListServerMetadata(row: row),
+            let rowDict = row as? NSDictionary else {
             return nil
         }
 
-        guard let serverMetadata = ReadingListServerMetadata(row: row),
-            let url = row.value(forKeyPath: "url") as? String,
-            let title = row.value(forKeyPath: "title") as? String,
-            let addedBy = row.value(forKeyPath: "added_by") as? String,
-            let unread = row.value(forKeyPath: "unread") as? Bool,
-            let archived = row.value(forKeyPath: "archived") as? Bool,
-            let favorite = row.value(forKeyPath: "favorite") as? Bool else {
+        guard let url = rowDict["url"] as? String,
+            let title = rowDict["title"] as? String,
+            let addedBy = rowDict["added_by"] as? String,
+            let unread = rowDict["unread"] as? Bool,
+            let archived = rowDict["archived"] as? Bool,
+            let favorite = rowDict["favorite"] as? Bool else {
             return nil
         }
 
@@ -44,7 +44,7 @@ public struct ReadingListClientRecord: Equatable {
         self.favorite = favorite
     }
 
-    public var json: Any {
+    public var json: AnyObject {
         get {
             let json = NSMutableDictionary()
             json["url"] = url

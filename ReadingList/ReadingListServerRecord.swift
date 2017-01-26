@@ -16,28 +16,26 @@ struct ReadingListServerRecord {
 
     /// Initializer for when a record is loaded from server-sent json
     init?(json: AnyObject) {
-        let serverMetadata = ReadingListServerMetadata(json: json)
-
-        let url = json.value(forKeyPath: "url") as? String
-        let title = json.value(forKeyPath: "title") as? String
-        let addedBy = json.value(forKeyPath: "added_by") as? String
-        let unread = json.value(forKeyPath: "unread") as? Bool
-        let archived = json.value(forKeyPath: "archived") as? Bool
-        let favorite = json.value(forKeyPath: "favorite") as? Bool
-
-        if serverMetadata == nil || url == nil || title == nil || addedBy == nil || unread == nil {
+        guard let json = json as? NSDictionary,
+            let serverMetadata = ReadingListServerMetadata(json: json),
+            let url = json["url"] as? String,
+            let title = json["title"] as? String,
+            let addedBy = json["added_by"] as? String,
+            let unread = json["unread"] as? Bool,
+            let archived = json["archived"] as? Bool,
+            let favorite = json["favorite"] as? Bool else {
             return nil
         }
 
         self.serverMetadata = serverMetadata
 
-        self.url = url!
-        self.title = title!
-        self.addedBy = addedBy!
+        self.url = url
+        self.title = title
+        self.addedBy = addedBy
 
-        self.unread = unread!
-        self.archived = archived!
-        self.favorite = favorite!
+        self.unread = unread
+        self.archived = archived
+        self.favorite = favorite
     }
 
 }

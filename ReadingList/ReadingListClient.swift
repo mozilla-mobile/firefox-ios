@@ -57,7 +57,7 @@ class ReadingListClient {
     func getRecordWithGuid(_ guid: String, ifModifiedSince: ReadingListTimestamp?, completion: @escaping (ReadingListGetRecordResult) -> Void) {
         if let url = URL(string: guid, relativeTo: articlesBaseURL) {
             SessionManager.default.request(createRequest("GET", url, ifModifiedSince: ifModifiedSince)).responseJSON(options: [], completionHandler: { response -> Void in
-                if let json = response.result.value, let response = response.response {
+                if let json = response.result.value as AnyObject?, let response = response.response {
                     switch response.statusCode {
                         case 200:
                             completion(.success(ReadingListRecordResponse(response: response, json: json)!))
@@ -84,7 +84,7 @@ class ReadingListClient {
     func getAllRecordsWithFetchSpec(_ fetchSpec: ReadingListFetchSpec, ifModifiedSince: ReadingListTimestamp?, completion: @escaping (ReadingListGetAllRecordsResult) -> Void) {
         if let url = fetchSpec.getURL(serviceURL: serviceURL, path: "/v1/articles") {
             SessionManager.default.request(createRequest("GET", url)).responseJSON(options: [], completionHandler: { response -> Void in
-                if let json = response.result.value, let response = response.response {
+                if let json = response.result.value as AnyObject?, let response = response.response {
                     switch response.statusCode {
                     case 200:
                         completion(.success(ReadingListRecordsResponse(response: response, json: json)!))
@@ -111,7 +111,7 @@ class ReadingListClient {
 
     func addRecord(_ record: ReadingListClientRecord, completion: @escaping (ReadingListAddRecordResult) -> Void) {
         SessionManager.default.request(createRequest("POST", articlesURL, json: record.json)).responseJSON(options: [], completionHandler: { response in
-            if let json = response.result.value, let response = response.response {
+            if let json = response.result.value as AnyObject?, let response = response.response {
                 switch response.statusCode {
                     case 200, 201: // TODO Should we have different results for these? Do we care about 200 vs 201?
                         completion(.success(ReadingListRecordResponse(response: response, json: json)!))
@@ -127,16 +127,16 @@ class ReadingListClient {
     }
 
     /// Build the JSON body for POST /v1/batch { defaults: {}, request: [ {body: {} } ] }
-    fileprivate func recordsToBatchJSON(_ records: [ReadingListClientRecord]) -> Any {
+    fileprivate func recordsToBatchJSON(_ records: [ReadingListClientRecord]) -> AnyObject {
         return [
             "defaults": ["method": "POST", "path": "/v1/articles", "headers": ["Content-Type": "application/json"]],
             "requests": records.map { ["body": $0.json] }
-        ]
+        ] as NSDictionary
     }
 
     func batchAddRecords(_ records: [ReadingListClientRecord], completion: @escaping (ReadingListBatchAddRecordsResult) -> Void) {
         SessionManager.default.request(createRequest("POST", batchURL, json: recordsToBatchJSON(records))).responseJSON(options: [], completionHandler: { response in
-            if let json = response.result.value, let response = response.response {
+            if let json = response.result.value as AnyObject?, let response = response.response {
                 switch response.statusCode {
                 case 200:
                     completion(.success(ReadingListBatchRecordResponse(response: response, json: json)!))
@@ -152,7 +152,7 @@ class ReadingListClient {
     func deleteRecordWithGuid(_ guid: String, ifUnmodifiedSince: ReadingListTimestamp?, completion: @escaping (ReadingListDeleteRecordResult) -> Void) {
         if let url = URL(string: guid, relativeTo: articlesBaseURL) {
             SessionManager.default.request(createRequest("DELETE", url, ifUnmodifiedSince: ifUnmodifiedSince)).responseJSON(options: [], completionHandler: { response in
-                if let json = response.result.value, let response = response.response {
+                if let json = response.result.value as AnyObject?, let response = response.response {
                     switch response.statusCode {
                         case 200:
                             completion(.success(ReadingListRecordResponse(response: response, json: json)!))
@@ -176,7 +176,7 @@ class ReadingListClient {
         deleteRecordWithGuid(guid, ifUnmodifiedSince: nil, completion: completion)
     }
 
-    func createRequest(_ method: String, _ url: URL, ifUnmodifiedSince: ReadingListTimestamp? = nil, ifModifiedSince: ReadingListTimestamp? = nil, json: Any? = nil) -> URLRequest {
+    func createRequest(_ method: String, _ url: URL, ifUnmodifiedSince: ReadingListTimestamp? = nil, ifModifiedSince: ReadingListTimestamp? = nil, json: AnyObject? = nil) -> URLRequest {
         let request = NSMutableURLRequest(url: url)
         request.httpMethod = method
         if let ifUnmodifiedSince = ifUnmodifiedSince {
@@ -189,7 +189,7 @@ class ReadingListClient {
             request.setValue(value, forHTTPHeaderField: headerField)
         }
         request.addValue("application/json", forHTTPHeaderField: "Accept")
-        if let json: Any = json {
+        if let json = json {
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             do {
                 request.httpBody = try JSONSerialization.data(withJSONObject: json, options: JSONSerialization.WritingOptions.prettyPrinted)
