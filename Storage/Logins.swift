@@ -248,7 +248,7 @@ open class Login: CustomStringConvertible, LoginData, LoginUsageData, Equatable 
         let scheme = hostnameURL?.scheme ?? ""
 
         // We should ignore any SSL or normal web ports in the URL.
-        var port = hostnameURL?.port?.integerValue ?? 0
+        var port = hostnameURL?.port ?? 0
         if port == 443 || port == 80 {
             port = 0
         }
