@@ -402,7 +402,7 @@ extension SQLiteBookmarks {
             >>== { parentsCursor in
                 let parents = parentsCursor.asArray()
                 log.debug("Overriding parents: \(parents).")
-                let (sql, args) = self.getSQLToOverrideFolders(parents, atModifiedTime: NSDate.now())
+                let (sql, args) = self.getSQLToOverrideFolders(parents, atModifiedTime: Date.now())
                 return self.db.run(sql.map { ($0, args) })
         }
     }
@@ -450,7 +450,7 @@ extension SQLiteBookmarks {
                 // Then delete the children's children, so we don't leave orphans. This is
                 // recursive, so by the time this succeeds we know that all of these records
                 // have no remaining children.
-                let (overrideSQL, overrideArgs) = self.getSQLToOverrideNonFolders(childGUIDs, atModifiedTime: NSDate.now())
+                let (overrideSQL, overrideArgs) = self.getSQLToOverrideNonFolders(childGUIDs, atModifiedTime: Date.now())
 
                 return self.deleteChildrenOfGUIDs(childGUIDs)
                     >>> { self.db.run(overrideSQL.map { ($0, overrideArgs) }) }
