@@ -419,7 +419,7 @@ extension SQLiteBookmarks {
             return succeed()
         }
 
-        precondition(BookmarkRoots.All.intersect(guids).isEmpty, "You can't even touch the roots for removal.")
+        precondition(BookmarkRoots.All.intersection(guids).isEmpty, "You can't even touch the roots for removal.")
 
         log.debug("Deleting children of \(guids).")
 
