@@ -104,7 +104,7 @@ class RemoteTabsTable<T>: GenericTable<RemoteTab> {
         return []
     }
 
-    override func getInsertAndArgs(item: inout RemoteTab) -> (String, [AnyObject?])? {
+    override func getInsertAndArgs(_ item: inout RemoteTab) -> (String, [AnyObject?])? {
         let args: Args = [
             item.clientGUID,
             item.URL.absoluteString,
@@ -116,7 +116,7 @@ class RemoteTabsTable<T>: GenericTable<RemoteTab> {
         return ("INSERT INTO \(name) (client_guid, url, title, history, last_used) VALUES (?, ?, ?, ?, ?)", args)
     }
 
-    override func getUpdateAndArgs(item: inout RemoteTab) -> (String, [AnyObject?])? {
+    override func getUpdateAndArgs(_ item: inout RemoteTab) -> (String, [AnyObject?])? {
         let args: Args = [
             item.title,
             RemoteTabsTable.convertHistoryToString(item.history),
@@ -130,7 +130,7 @@ class RemoteTabsTable<T>: GenericTable<RemoteTab> {
         return ("UPDATE \(name) SET title = ?, history = ?, last_used = ? WHERE client_guid IS ? AND url = ?", args)
     }
 
-    override func getDeleteAndArgs(item: inout RemoteTab?) -> (String, [AnyObject?])? {
+    override func getDeleteAndArgs(_ item: inout RemoteTab?) -> (String, [AnyObject?])? {
         if let item = item {
             return ("DELETE FROM \(name) WHERE client_guid = IS AND url = ?", [item.clientGUID, item.URL.absoluteString])
         }
