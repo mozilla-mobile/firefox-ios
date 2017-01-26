@@ -370,7 +370,6 @@
 		D31CF65C1CC1959A001D0BD0 /* PrivilegedRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31CF65B1CC1959A001D0BD0 /* PrivilegedRequest.swift */; };
 		D31EC05F1CC57ED80096F4AB /* localhostLoad.html in Resources */ = {isa = PBXBuildFile; fileRef = D31EC05E1CC57ED80096F4AB /* localhostLoad.html */; };
 		D31F95E91AC226CB005C9F3B /* ScreenshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31F95E81AC226CB005C9F3B /* ScreenshotHelper.swift */; };
-		D32109941B8CFD62006D5B74 /* Storage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCAE21A1ABB51F800877008 /* Storage.framework */; };
 		D32A350E1D6530D80066DAE9 /* FxADevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32A350D1D6530D80066DAE9 /* FxADevice.swift */; };
 		D32CACED1AE04DA1000658EB /* TestSwiftData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32CACEC1AE04DA1000658EB /* TestSwiftData.swift */; };
 		D331DFCA1CB6E9EE009B5DA2 /* OldStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D331DFC91CB6E9EE009B5DA2 /* OldStrings.swift */; };
@@ -897,40 +896,47 @@
 			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
 			remoteInfo = Client;
 		};
-		7B10AAB01E3A15030002DD08 /* PBXContainerItemProxy */ = {
+		7B10AAE51E3A57F90002DD08 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 7B9A62B91C4002B1005C83DC /* SQLite.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = EE247ADD1C3F04ED00AE3E12;
 			remoteInfo = "SQLiteTests iOS";
 		};
-		7B10AAB21E3A15030002DD08 /* PBXContainerItemProxy */ = {
+		7B10AAE71E3A57F90002DD08 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 7B9A62B91C4002B1005C83DC /* SQLite.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = EE247B451C3F3ED000AE3E12;
 			remoteInfo = "SQLiteTests Mac";
 		};
-		7B10AAB41E3A15030002DD08 /* PBXContainerItemProxy */ = {
+		7B10AAE91E3A57F90002DD08 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 7B9A62B91C4002B1005C83DC /* SQLite.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 03A65E5A1C6BB0F50062603F;
 			remoteInfo = "SQLite tvOS";
 		};
-		7B10AAB61E3A15030002DD08 /* PBXContainerItemProxy */ = {
+		7B10AAEB1E3A57F90002DD08 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 7B9A62B91C4002B1005C83DC /* SQLite.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 03A65E631C6BB0F60062603F;
 			remoteInfo = "SQLiteTests tvOS";
 		};
-		7B10AAB81E3A15030002DD08 /* PBXContainerItemProxy */ = {
+		7B10AAED1E3A57F90002DD08 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 7B9A62B91C4002B1005C83DC /* SQLite.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = A121AC451CA35C79005A31D1;
 			remoteInfo = "SQLite watchOS";
+		};
+		7B10AAEF1E3A58C80002DD08 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 288A2D851AB8B3260023ABC3;
+			remoteInfo = Shared;
 		};
 		7B9A62DA1C4002B1005C83DC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1022,13 +1028,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = E4D567171ADECE2700F1EFE7;
 			remoteInfo = ReadingList;
-		};
-		E4D567261ADECE2800F1EFE7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
-			remoteInfo = Client;
 		};
 		E4D5672D1ADECE2800F1EFE7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -2102,7 +2101,6 @@
 			files = (
 				E60222E31C6E57B20061C436 /* SQLite.framework in Frameworks */,
 				7B604F911C494B3C006EEEC3 /* Alamofire.framework in Frameworks */,
-				D32109941B8CFD62006D5B74 /* Storage.framework in Frameworks */,
 				E4483B5A1ADED63300B485A7 /* Shared.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2723,12 +2721,12 @@
 			isa = PBXGroup;
 			children = (
 				7B9A62DB1C4002B1005C83DC /* SQLite.framework */,
-				7B10AAB11E3A15030002DD08 /* SQLiteTests iOS.xctest */,
+				7B10AAE61E3A57F90002DD08 /* SQLiteTests iOS.xctest */,
 				7B9A62DF1C4002B1005C83DC /* SQLite.framework */,
-				7B10AAB31E3A15030002DD08 /* SQLiteTests Mac.xctest */,
-				7B10AAB51E3A15030002DD08 /* SQLite.framework */,
-				7B10AAB71E3A15030002DD08 /* SQLiteTests tvOS.xctest */,
-				7B10AAB91E3A15030002DD08 /* SQLite.framework */,
+				7B10AAE81E3A57F90002DD08 /* SQLiteTests Mac.xctest */,
+				7B10AAEA1E3A57F90002DD08 /* SQLite.framework */,
+				7B10AAEC1E3A57F90002DD08 /* SQLiteTests tvOS.xctest */,
+				7B10AAEE1E3A57F90002DD08 /* SQLite.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -4119,8 +4117,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				7B10AAF01E3A58C80002DD08 /* PBXTargetDependency */,
 				E4D567251ADECE2700F1EFE7 /* PBXTargetDependency */,
-				E4D567271ADECE2800F1EFE7 /* PBXTargetDependency */,
 			);
 			name = ReadingListTests;
 			productName = ReadingListTests;
@@ -4347,12 +4345,12 @@
 					E4D567171ADECE2700F1EFE7 = {
 						CreatedOnToolsVersion = 6.3;
 						DevelopmentTeam = 43AQ936H96;
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 0820;
 					};
 					E4D567211ADECE2700F1EFE7 = {
 						CreatedOnToolsVersion = 6.3;
 						DevelopmentTeam = 43AQ936H96;
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 0820;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
 					E65C5BC31BEA4F6500D28BEF = {
@@ -4502,39 +4500,39 @@
 			remoteRef = 28CE83D11A1D1D5100576538 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		7B10AAB11E3A15030002DD08 /* SQLiteTests iOS.xctest */ = {
+		7B10AAE61E3A57F90002DD08 /* SQLiteTests iOS.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = "SQLiteTests iOS.xctest";
-			remoteRef = 7B10AAB01E3A15030002DD08 /* PBXContainerItemProxy */;
+			remoteRef = 7B10AAE51E3A57F90002DD08 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		7B10AAB31E3A15030002DD08 /* SQLiteTests Mac.xctest */ = {
+		7B10AAE81E3A57F90002DD08 /* SQLiteTests Mac.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = "SQLiteTests Mac.xctest";
-			remoteRef = 7B10AAB21E3A15030002DD08 /* PBXContainerItemProxy */;
+			remoteRef = 7B10AAE71E3A57F90002DD08 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		7B10AAB51E3A15030002DD08 /* SQLite.framework */ = {
+		7B10AAEA1E3A57F90002DD08 /* SQLite.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = SQLite.framework;
-			remoteRef = 7B10AAB41E3A15030002DD08 /* PBXContainerItemProxy */;
+			remoteRef = 7B10AAE91E3A57F90002DD08 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		7B10AAB71E3A15030002DD08 /* SQLiteTests tvOS.xctest */ = {
+		7B10AAEC1E3A57F90002DD08 /* SQLiteTests tvOS.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = "SQLiteTests tvOS.xctest";
-			remoteRef = 7B10AAB61E3A15030002DD08 /* PBXContainerItemProxy */;
+			remoteRef = 7B10AAEB1E3A57F90002DD08 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		7B10AAB91E3A15030002DD08 /* SQLite.framework */ = {
+		7B10AAEE1E3A57F90002DD08 /* SQLite.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = SQLite.framework;
-			remoteRef = 7B10AAB81E3A15030002DD08 /* PBXContainerItemProxy */;
+			remoteRef = 7B10AAED1E3A57F90002DD08 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		7B9A62DB1C4002B1005C83DC /* SQLite.framework */ = {
@@ -5682,6 +5680,11 @@
 			target = F84B21BD1A090F8100AAB793 /* Client */;
 			targetProxy = 3BFE4B0C1D342FB900DDF53F /* PBXContainerItemProxy */;
 		};
+		7B10AAF01E3A58C80002DD08 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 288A2D851AB8B3260023ABC3 /* Shared */;
+			targetProxy = 7B10AAEF1E3A58C80002DD08 /* PBXContainerItemProxy */;
+		};
 		7B9A62F91C400303005C83DC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "SQLite iOS";
@@ -5716,11 +5719,6 @@
 			isa = PBXTargetDependency;
 			target = E4D567171ADECE2700F1EFE7 /* ReadingList */;
 			targetProxy = E4D567241ADECE2700F1EFE7 /* PBXContainerItemProxy */;
-		};
-		E4D567271ADECE2800F1EFE7 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = F84B21BD1A090F8100AAB793 /* Client */;
-			targetProxy = E4D567261ADECE2800F1EFE7 /* PBXContainerItemProxy */;
 		};
 		E4D5672E1ADECE2800F1EFE7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -6776,7 +6774,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Firefox;
 		};
@@ -6794,7 +6792,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Firefox;
@@ -6868,7 +6866,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Fennec;
 		};
@@ -6881,7 +6879,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Fennec;
@@ -7339,7 +7337,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 			};
 			name = FirefoxNightly;
 		};
@@ -7469,7 +7467,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = FirefoxNightly;
@@ -7825,7 +7823,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 			};
 			name = FennecEnterprise;
 		};
@@ -7943,7 +7941,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = FennecEnterprise;
@@ -8528,7 +8526,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 			};
 			name = FirefoxBeta;
 		};
@@ -8546,7 +8544,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = FirefoxBeta;
