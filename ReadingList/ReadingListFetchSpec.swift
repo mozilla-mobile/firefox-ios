@@ -33,7 +33,7 @@ class ReadingListFetchSpec {
     // This should really generate a dictionary of values that we can pass to NSURLComponents instead of building the query string by hand
 
     class Builder {
-        var buffer = ""
+        var buffer: String = ""
         var first = true
 
         func build() -> ReadingListFetchSpec {

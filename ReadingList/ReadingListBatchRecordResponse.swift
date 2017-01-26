@@ -7,19 +7,18 @@ import Foundation
 class ReadingListBatchRecordResponse: ReadingListResponse {
     var responses: [ReadingListRecordResponse] = [ReadingListRecordResponse]()
 
-    override init?(response: HTTPURLResponse, json: AnyObject?) {
+    override init?(response: HTTPURLResponse, json: [String: Any]) {
         super.init(response: response, json: json)
-        guard let json = json as? NSDictionary,
-            let responses = json["responses"] as? [AnyObject] else {
+        guard let responses = json["responses"] as? [[String: Any]] else {
             return nil
         }
 
         for resp in responses {
-            guard let body = resp.value(forKeyPath: "body") as? NSDictionary,
-                let statusCode = resp.value(forKeyPath: "status") as? Int,
-                let path = resp.value(forKeyPath: "path") as? String,
+            guard let body = resp["body"] as? [String: Any],
+                let statusCode = resp["status"] as? Int,
+                let path = resp["path"] as? String,
                 let url = URL(string: path, relativeTo: self.response.url),
-                let headers = resp.value(forKeyPath: "headers") as? [String:String],
+                let headers = resp["headers"] as? [String: String],
                 let r = HTTPURLResponse(url: url, statusCode: statusCode, httpVersion: "1.1", headerFields: headers),
                 let recordResponse = ReadingListRecordResponse(response: r, json: body) else {
                     return nil
