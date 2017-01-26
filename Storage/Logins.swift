@@ -51,11 +51,11 @@ public enum NonCommutativeLoginField: Indexable {
             return 3
         case .formSubmitURL:
             return 4
-        case .TimeCreated:
+        case .timeCreated:
             return 5
-        case .TimeLastUsed:
+        case .timeLastUsed:
             return 6
-        case .TimePasswordChanged:
+        case .timePasswordChanged:
             return 7
         }
     }
@@ -376,13 +376,13 @@ open class Login: CustomStringConvertible, LoginData, LoginUsageData, Equatable 
             nonCommutative.append(NonCommutativeLoginField.formSubmitURL(to: self.formSubmitURL))
         }
         if self.timeCreated > 0 && self.timeCreated != from.timeCreated {
-            nonCommutative.append(NonCommutativeLoginField.TimeCreated(to: self.timeCreated))
+            nonCommutative.append(NonCommutativeLoginField.timeCreated(to: self.timeCreated))
         }
         if self.timeLastUsed > 0 && self.timeLastUsed != from.timeLastUsed {
-            nonCommutative.append(NonCommutativeLoginField.TimeLastUsed(to: self.timeLastUsed))
+            nonCommutative.append(NonCommutativeLoginField.timeLastUsed(to: self.timeLastUsed))
         }
         if self.timeLastUsed > 0 && self.timePasswordChanged != from.timePasswordChanged {
-            nonCommutative.append(NonCommutativeLoginField.TimePasswordChanged(to: self.timePasswordChanged))
+            nonCommutative.append(NonCommutativeLoginField.timePasswordChanged(to: self.timePasswordChanged))
         }
 
         var nonConflicting = [NonConflictingLoginField]()
@@ -499,13 +499,13 @@ open class Login: CustomStringConvertible, LoginData, LoginUsageData, Equatable 
             case let .formSubmitURL(to):
                 formSubmitURL = to
                 break
-            case let .TimeCreated(to):
+            case let .timeCreated(to):
                 timeCreated = to
                 break
-            case let .TimeLastUsed(to):
+            case let .timeLastUsed(to):
                 timeLastUsed = to
                 break
-            case let .TimePasswordChanged(to):
+            case let .timePasswordChanged(to):
                 timePasswordChanged = to
                 break
             }
