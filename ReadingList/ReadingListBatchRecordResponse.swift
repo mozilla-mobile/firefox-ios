@@ -7,7 +7,7 @@ import Foundation
 class ReadingListBatchRecordResponse: ReadingListResponse {
     var responses: [ReadingListRecordResponse] = [ReadingListRecordResponse]()
 
-    override init?(response: HTTPURLResponse, json: AnyObject?) {
+    override init?(response: HTTPURLResponse, json: Any?) {
         super.init(response: response, json: json)
         if let responses = json?.value(forKeyPath: "responses") as? [AnyObject] {
             for response in responses {
