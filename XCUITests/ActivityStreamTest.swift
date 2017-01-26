@@ -117,5 +117,17 @@ class ActivityStreamTest: BaseTestCase {
 
     }
     
-    
+    func testContextMenuInLandscape() {
+        XCUIDevice.sharedDevice().orientation = .LandscapeLeft
+        let app = XCUIApplication()
+
+        loadWebPage("http://example.com")
+        app.buttons["URLBarView.backButton"].tap()
+        app.tables["Top sites"].otherElements["example"].pressForDuration(1)
+
+        let contextMenuHeight = app.tables["Context Menu"].frame.size.height
+        let parentViewHeight = app.otherElements["Action Overlay"].frame.size.height
+
+        XCTAssertLessThanOrEqual(contextMenuHeight, parentViewHeight)
+    }
 }

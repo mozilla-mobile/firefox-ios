@@ -190,7 +190,11 @@ class URLBarView: UIView {
 
     lazy var forwardButton: UIButton = { return UIButton() }()
 
-    lazy var backButton: UIButton = { return UIButton() }()
+    lazy var backButton: UIButton = {
+        let backButton = UIButton()
+        backButton.accessibilityIdentifier = "URLBarView.backButton"
+        return backButton
+    }()
 
     lazy var stopReloadButton: UIButton = { return UIButton() }()
 
