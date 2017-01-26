@@ -156,7 +156,7 @@ open class SQLiteLogins: BrowserLogins {
         let hostnameURL = hostnameString.asURL
 
         let scheme = hostnameURL?.scheme
-        let port = hostnameURL?.port?.integerValue ?? 0
+        let port = hostnameURL?.port ?? 0
 
         // Check for malformed hostname urls in the DB
         let host: String
