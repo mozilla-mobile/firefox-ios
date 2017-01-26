@@ -5,7 +5,7 @@
 import Foundation
 
 class ReadingListRecordsResponse: ReadingListResponse {
-    override init?(response: NSHTTPURLResponse, json: AnyObject?) {
+    override init?(response: HTTPURLResponse, json: AnyObject?) {
         super.init(response: response, json: json)
     }
 
@@ -20,7 +20,7 @@ class ReadingListRecordsResponse: ReadingListResponse {
         get {
             if let json: AnyObject = self.json as? NSDictionary {
                 var records = [ReadingListServerRecord]()
-                if let items = json.valueForKeyPath("items") as? NSArray {
+                if let items = json.value(forKeyPath: "items") as? NSArray {
                     for item in items {
                         if let _ = item as? NSDictionary {
                             if let record = ReadingListServerRecord(json: item) {

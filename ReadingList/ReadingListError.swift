@@ -6,12 +6,12 @@ import Foundation
 import Shared
 
 // TODO This needs to encapsulate an NSError eventually
-public class ReadingListError: MaybeErrorType {
+open class ReadingListError: MaybeErrorType {
     var message: String
     init(_ message: String) {
         self.message = message
     }
-    public var description: String {
+    open var description: String {
         return message
     }
 }

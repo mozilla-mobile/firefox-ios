@@ -5,7 +5,7 @@
 import Foundation
 
 class ReadingListRecordResponse: ReadingListResponse {
-    override init?(response: NSHTTPURLResponse, json: AnyObject?) {
+    override init?(response: HTTPURLResponse, json: AnyObject?) {
         super.init(response: response, json: json)
     }
 
