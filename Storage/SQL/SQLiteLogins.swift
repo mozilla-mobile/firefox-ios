@@ -537,13 +537,13 @@ open class SQLiteLogins: BrowserLogins {
         // Immediately delete anything that's marked as new -- i.e., it's never reached
         // the server.
         let delete =
-        "DELETE FROM \(TableLoginsLocal) WHERE guid IN \(inClause) AND sync_status = \(SyncStatus.New.rawValue)"
+        "DELETE FROM \(TableLoginsLocal) WHERE guid IN \(inClause) AND sync_status = \(SyncStatus.new.rawValue)"
 
         // Otherwise, mark it as changed.
         let update =
         "UPDATE \(TableLoginsLocal) SET " +
         " local_modified = \(nowMillis)" +
-        ", sync_status = \(SyncStatus.Changed.rawValue)" +
+        ", sync_status = \(SyncStatus.changed.rawValue)" +
         ", is_deleted = 1" +
         ", password = ''" +
         ", hostname = ''" +
@@ -558,7 +558,7 @@ open class SQLiteLogins: BrowserLogins {
         let insert =
         "INSERT OR IGNORE INTO \(TableLoginsLocal) " +
             "(guid, local_modified, is_deleted, sync_status, hostname, timeCreated, timePasswordChanged, password, username) " +
-        "SELECT guid, \(nowMillis), 1, \(SyncStatus.Changed.rawValue), '', timeCreated, \(nowMillis)000, '', '' FROM \(TableLoginsMirror) WHERE guid IN \(inClause)"
+        "SELECT guid, \(nowMillis), 1, \(SyncStatus.changed.rawValue), '', timeCreated, \(nowMillis)000, '', '' FROM \(TableLoginsMirror) WHERE guid IN \(inClause)"
 
         let args: Args = guids.map { $0 as AnyObject }
         return [
@@ -586,14 +586,14 @@ open class SQLiteLogins: BrowserLogins {
 
         // Mark anything we haven't already deleted.
         let update =
-        "UPDATE \(TableLoginsLocal) SET local_modified = \(nowMillis), sync_status = \(SyncStatus.Changed.rawValue), is_deleted = 1, password = '', hostname = '', username = '' WHERE is_deleted = 0"
+        "UPDATE \(TableLoginsLocal) SET local_modified = \(nowMillis), sync_status = \(SyncStatus.changed.rawValue), is_deleted = 1, password = '', hostname = '', username = '' WHERE is_deleted = 0"
 
         // Copy all the remaining rows from our mirror, marking them as locally deleted. The
         // OR IGNORE will cause conflicts due to non-unique guids to be dropped, preserving
         // anything we already deleted.
         let insert =
         "INSERT OR IGNORE INTO \(TableLoginsLocal) (guid, local_modified, is_deleted, sync_status, hostname, timeCreated, timePasswordChanged, password, username) " +
-        "SELECT guid, \(nowMillis), 1, \(SyncStatus.Changed.rawValue), '', timeCreated, \(nowMillis)000, '', '' FROM \(TableLoginsMirror)"
+        "SELECT guid, \(nowMillis), 1, \(SyncStatus.changed.rawValue), '', timeCreated, \(nowMillis)000, '', '' FROM \(TableLoginsMirror)"
 
         // After that, we mark all of the mirror rows as overridden.
         return self.db.run(delete)
@@ -987,7 +987,7 @@ extension SQLiteLogins: ResettableSyncStorage {
         >>> { self.db.run("DELETE FROM \(TableLoginsMirror)") }
 
         // Mark all of the local data as new.
-        >>> { self.db.run("UPDATE \(TableLoginsLocal) SET sync_status = \(SyncStatus.New.rawValue)") }
+        >>> { self.db.run("UPDATE \(TableLoginsLocal) SET sync_status = \(SyncStatus.new.rawValue)") }
     }
 }
 

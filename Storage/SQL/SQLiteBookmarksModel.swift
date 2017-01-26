@@ -494,7 +494,7 @@ extension SQLiteBookmarks {
         ", parentName = NULL" +
         ", folderName = NULL" +
         ", queryId = NULL" +
-        " WHERE \(whereFragment) AND sync_status = \(SyncStatus.Changed.rawValue)"
+        " WHERE \(whereFragment) AND sync_status = \(SyncStatus.changed.rawValue)"
 
         return sql
     }
