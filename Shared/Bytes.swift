@@ -12,12 +12,11 @@ public typealias GUID = String
 open class Bytes {
     open class func generateRandomBytes(_ len: UInt) -> Data {
         let len = Int(len)
-        let data: NSMutableData! = NSMutableData(length: len)
-        let bytes = data.mutableBytes.assumingMemoryBound(to: UInt8.self)
-        let result: Int32 = SecRandomCopyBytes(kSecRandomDefault, len, bytes)
-
-        assert(result == 0, "Random byte generation failed.")
-        return data as Data
+        var data = Data(count: len)
+        data.withUnsafeMutableBytes { (p: UnsafeMutablePointer<UInt8>) in
+            assert(SecRandomCopyBytes(kSecRandomDefault, len, p) == 0, "Random byte generation failed.")
+        }
+        return data
     }
 
     open class func generateGUID() -> GUID {
