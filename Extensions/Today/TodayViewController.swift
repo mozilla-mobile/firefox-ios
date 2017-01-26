@@ -81,8 +81,8 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         if #available(iOS 10, *) {
             // no custom margin needed
         } else {
-            button.imageView?.snp_updateConstraints { make in
-                make.left.equalTo(button.snp_left).offset(TodayUX.iOS9LeftMargin)
+            button.imageView?.snp.updateConstraints { make in
+                make.left.equalTo(button.snp.left).offset(TodayUX.iOS9LeftMargin)
             }
         }
         return button
@@ -141,7 +141,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
             self.extensionContext?.widgetLargestAvailableDisplayMode = .compact
             let effectView = UIVisualEffectView(effect: UIVibrancyEffect.widgetPrimary())
             self.view.addSubview(effectView)
-            effectView.snp_makeConstraints { make in
+            effectView.snp.makeConstraints { make in
                 make.edges.equalTo(self.view)
             }
             widgetView = effectView.contentView
@@ -158,7 +158,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         widgetStackView.addArrangedSubview(openCopiedLinkButton)
 
         widgetView.addSubview(widgetStackView)
-        widgetStackView.snp_makeConstraints { make in
+        widgetStackView.snp.makeConstraints { make in
             make.edges.equalTo(widgetView)
         }
     }
@@ -247,12 +247,12 @@ class ImageButtonWithLabel: UIView {
         addSubview(button)
         addSubview(label)
 
-        button.snp_makeConstraints { make in
+        button.snp.makeConstraints { make in
             make.top.left.centerX.equalTo(self)
         }
 
-        label.snp_makeConstraints { make in
-            make.top.equalTo(button.snp_bottom)
+        label.snp.makeConstraints { make in
+            make.top.equalTo(button.snp.bottom)
             make.leading.trailing.bottom.equalTo(self)
         }
 
@@ -295,20 +295,20 @@ class ButtonWithSublabel: UIButton {
         subtitleLabel.textColor = UIColor.lightGray
         self.addSubview(subtitleLabel)
 
-        imageView.snp_makeConstraints { make in
+        imageView.snp.makeConstraints { make in
             make.centerY.left.equalTo(self)
             make.width.equalTo(TodayUX.copyLinkImageWidth)
         }
 
-        titleLabel.snp_makeConstraints { make in
-            make.left.equalTo(imageView.snp_right).offset(TodayUX.margin)
+        titleLabel.snp.makeConstraints { make in
+            make.left.equalTo(imageView.snp.right).offset(TodayUX.margin)
             make.trailing.top.equalTo(self)
         }
 
         subtitleLabel.lineBreakMode = .byTruncatingTail
-        subtitleLabel.snp_makeConstraints { make in
+        subtitleLabel.snp.makeConstraints { make in
             make.bottom.equalTo(self)
-            make.top.equalTo(titleLabel.snp_bottom)
+            make.top.equalTo(titleLabel.snp.bottom)
             make.leading.trailing.equalTo(titleLabel)
         }
     }
