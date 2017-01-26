@@ -17,8 +17,8 @@ import XCTest
  */
 open class LiveAccountTest: XCTestCase {
     lazy var signedInUser: JSON? = {
-        if let path = NSBundle(forClass: type(of: self)).pathForResource("signedInUser.json", ofType: nil) {
-            if let contents = try? String(contentsOfFile: path, encoding: NSUTF8StringEncoding) {
+        if let path = Bundle(for: type(of: self)).path(forResource: "signedInUser.json", ofType: nil) {
+            if let contents = try? String(contentsOfFile: path, encoding: String.Encoding.utf8) {
                 let json = JSON.parse(contents)
                 if json.isError {
                     return nil
@@ -66,15 +66,15 @@ open class LiveAccountTest: XCTestCase {
         withVerifiedAccount { emailUTF8, quickStretchedPW in
             let expectation = self.expectation(description: "withCertificate")
 
-            let keyPair = RSAKeyPair.generate(withModulusSize: 1024)
+            let keyPair = RSAKeyPair.generate(withModulusSize: 1024)!
             let client = FxAClient10()
             let login: Deferred<Maybe<FxALoginResponse>> = client.login(emailUTF8, quickStretchedPW: quickStretchedPW, getKeys: true)
             let sign: Deferred<Maybe<FxASignResponse>> = login.bind { (result: Maybe<FxALoginResponse>) in
                 switch result {
-                case let .Failure(error):
+                case let .failure(error):
                     expectation.fulfill()
-                    return Deferred(value: .Failure(error))
-                case let .Success(loginResponse):
+                    return Deferred(value: .failure(error))
+                case let .success(loginResponse):
                     return client.sign(loginResponse.value.sessionToken, publicKey: keyPair.publicKey)
                 }
             }
@@ -114,7 +114,7 @@ open class LiveAccountTest: XCTestCase {
         return login.bind { result in
             if let response = result.successValue {
                 let unwrapkB = FxAClient10.computeUnwrapKey(quickStretchedPW)
-                return Deferred(value: Maybe(success: FirefoxAccount.fromConfigurationAndLoginResponse(configuration, response: response, unwrapkB: unwrapkB)))
+                return Deferred(value: Maybe(success: FirefoxAccount.from(configuration, andLoginResponse: response, unwrapkB: unwrapkB)))
             } else {
                 return Deferred(value: Maybe(failure: result.failureValue!))
             }
@@ -139,7 +139,7 @@ open class LiveAccountTest: XCTestCase {
         }
     }
 
-    open func syncAuthState(_ now: Timestamp) -> Deferred<Maybe<(token: TokenServerToken, forKey: NSData)>> {
+    open func syncAuthState(_ now: Timestamp) -> Deferred<Maybe<(token: TokenServerToken, forKey: Data)>> {
         return getAuthState(now).bind { result in
             if let authState = result.successValue {
                 return authState.token(now, canBeExpired: false)
