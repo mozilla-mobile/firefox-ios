@@ -12,7 +12,6 @@
 		0B21E8061E26CCB7000C8779 /* EarlGrey.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0B21E8051E26CCB7000C8779 /* EarlGrey.framework */; };
 		0B3D670E1E09B90B00C1EFC7 /* AuthenticationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3D670D1E09B90B00C1EFC7 /* AuthenticationTest.swift */; };
 		0B3E7D951B27A7CE00E2E84D /* AboutHomeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3E7D931B27A7CE00E2E84D /* AboutHomeHandler.swift */; };
-		0B3E7DBA1B27AB4C00E2E84D /* MockLogins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3E7DB91B27AB4C00E2E84D /* MockLogins.swift */; };
 		0B54BD191B698B7C004C822C /* SuggestedSites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B54BD181B698B7C004C822C /* SuggestedSites.swift */; };
 		0B5A93041B1E60B4004F47A2 /* DeferredDBOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B5A93031B1E60B4004F47A2 /* DeferredDBOperation.swift */; };
 		0B5A93081B1E64F3004F47A2 /* TestDeferredSqlite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B5A93071B1E64F3004F47A2 /* TestDeferredSqlite.swift */; };
@@ -638,6 +637,7 @@
 		E677F0451D9423FB00ECF1FB /* SQLiteMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E677F0441D9423FB00ECF1FB /* SQLiteMetadata.swift */; };
 		E677F0541D94247300ECF1FB /* Metadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E677F0531D94247300ECF1FB /* Metadata.swift */; };
 		E679FDBB1B99CF10008C220A /* PrivateBrowsingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E679FDBA1B99CF10008C220A /* PrivateBrowsingTests.swift */; };
+		E67A77261E3A84D800A5B198 /* MockLogins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3E7DB91B27AB4C00E2E84D /* MockLogins.swift */; };
 		E67D57031D527449003917B1 /* BatchingClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67D57021D527449003917B1 /* BatchingClient.swift */; };
 		E689C6F81E0C6E72008BAADB /* FxASignIn.js in Resources */ = {isa = PBXBuildFile; fileRef = E689C6F71E0C6E72008BAADB /* FxASignIn.js */; };
 		E689C6FA1E0C6E98008BAADB /* FxAContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E689C6F91E0C6E98008BAADB /* FxAContentViewController.swift */; };
@@ -5051,7 +5051,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2FCAE2621ABB531100877008 /* History.swift in Sources */,
-				0B3E7DBA1B27AB4C00E2E84D /* MockLogins.swift in Sources */,
 				28126F6E1C2F94F9006466CC /* SQLiteBookmarksModel.swift in Sources */,
 				0BDA56B21B26B1E4008C9B96 /* Logins.swift in Sources */,
 				0BDA56B41B26B203008C9B96 /* SQLiteLogins.swift in Sources */,
@@ -5107,6 +5106,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				28D158AD1AFD90E500F9C065 /* TestSQLiteBookmarks.swift in Sources */,
+				E67A77261E3A84D800A5B198 /* MockLogins.swift in Sources */,
 				E63F71881DB7FBE200A995C9 /* TestSQLiteMetadata.swift in Sources */,
 				2FCAE2851ABB533A00877008 /* TestSQLiteRemoteClientsAndTabs.swift in Sources */,
 				0B5A93081B1E64F3004F47A2 /* TestDeferredSqlite.swift in Sources */,
