@@ -13,10 +13,10 @@ class ReadingListStorageTestCase: XCTestCase {
     var storage: ReadingListStorage!
 
     override func setUp() {
-        let path = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true).first!
-        if NSFileManager.defaultManager().fileExistsAtPath("\(path)/ReadingList.db") {
+        let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+        if FileManager.default.fileExists(atPath: "\(path)/ReadingList.db") {
             do {
-                try NSFileManager.defaultManager().removeItemAtPath("\(path)/ReadingList.db")
+                try FileManager.default.removeItem(atPath: "\(path)/ReadingList.db")
             } catch _ {
                 XCTFail("Cannot remove old \(path)/ReadingList.db")
             }
@@ -170,7 +170,7 @@ class ReadingListStorageTestCase: XCTestCase {
 
     // Helpers that croak if the storage call was not succesful
 
-    func createRecordWithURL(url: String, title: String, addedBy: String) -> Maybe<ReadingListClientRecord> {
+    func createRecordWithURL(_ url: String, title: String, addedBy: String) -> Maybe<ReadingListClientRecord> {
         let result = storage.createRecordWithURL(url, title: title, addedBy: addedBy)
         XCTAssertTrue(result.isSuccess)
         return result
@@ -188,7 +188,7 @@ class ReadingListStorageTestCase: XCTestCase {
         return result
     }
 
-    func updateRecord(record: ReadingListClientRecord, unread: Bool) -> Maybe<ReadingListClientRecord?> {
+    func updateRecord(_ record: ReadingListClientRecord, unread: Bool) -> Maybe<ReadingListClientRecord?> {
         let result = storage.updateRecord(record, unread: unread)
         XCTAssertTrue(result.isSuccess)
         return result
