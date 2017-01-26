@@ -163,8 +163,8 @@ class ReadingListSQLStorage: ReadingListStorage {
         }
     }
 
-    fileprivate func rowToDictionary(_ row: Row) -> AnyObject {
-        let result = NSMutableDictionary()
+    fileprivate func rowToDictionary(_ row: Row) -> [String: Any] {
+        var result: [String: Any] = [:]
         result["client_id"] = NSNumber(value: row.get(ItemColumns.ClientId))
         result["client_last_modified"] = NSNumber(value: row.get(ItemColumns.ClientLastModified))
         result["id"] = row.get(ItemColumns.Id)

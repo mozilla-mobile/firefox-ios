@@ -16,19 +16,18 @@ public struct ReadingListClientRecord: Equatable {
     public let favorite: Bool
 
     /// Initializer for when a record is loaded from a database row
-    public init?(row: AnyObject) {
+    public init?(row: [String: Any]) {
         guard let clientMetadata = ReadingListClientMetadata(row: row),
-            let serverMetadata = ReadingListServerMetadata(row: row),
-            let rowDict = row as? NSDictionary else {
+            let serverMetadata = ReadingListServerMetadata(row: row) else {
             return nil
         }
 
-        guard let url = rowDict["url"] as? String,
-            let title = rowDict["title"] as? String,
-            let addedBy = rowDict["added_by"] as? String,
-            let unread = rowDict["unread"] as? Bool,
-            let archived = rowDict["archived"] as? Bool,
-            let favorite = rowDict["favorite"] as? Bool else {
+        guard let url = row["url"] as? String,
+            let title = row["title"] as? String,
+            let addedBy = row["added_by"] as? String,
+            let unread = row["unread"] as? Bool,
+            let archived = row["archived"] as? Bool,
+            let favorite = row["favorite"] as? Bool else {
             return nil
         }
 
