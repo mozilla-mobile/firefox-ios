@@ -789,7 +789,7 @@ class SDRow: Sequence {
                 ret = Data(bytes: UnsafePointer<UInt8>(blob), count: Int(size))
             }
         case SQLITE_FLOAT:
-            ret = Double(sqlite3_column_double(statement., i)) as AnyObject?
+            ret = Double(sqlite3_column_double(statement.pointer, i)) as AnyObject?
         default:
             log.warning("SwiftData Warning -> Column: \(index) is of an unrecognized type, returning nil")
         }

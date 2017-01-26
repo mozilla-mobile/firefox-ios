@@ -25,7 +25,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
 
         var err: NSError?
         db.transaction(&err) { connection, _ in
-            f(conn: connection, err: &err)
+            f(connection, &err)
             if let err = err {
                 let databaseError = DatabaseError(err: err)
                 log.debug("Wipe failed: \(databaseError)")

@@ -8,7 +8,7 @@ import UIKit
 import Deferred
 import XCGLogger
 
-private var log = XCGLogger.defaultInstance()
+private var log = XCGLogger.default
 
 private class DiskImageStoreErrorType: MaybeErrorType {
     let description: String

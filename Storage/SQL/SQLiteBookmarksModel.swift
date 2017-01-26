@@ -277,7 +277,7 @@ extension SQLiteBookmarks {
             "FROM (", values, ") AS bookmarks",
             "LEFT OUTER JOIN favicons ON bookmarks.faviconID = favicons.id",
             "ORDER BY title ASC",
-            ].joinWithSeparator(" ")
+            ].joined(separator: " ")
 
         let sql = (includeIcon ? withIcon : values) + " ORDER BY title ASC"
         return self.db.runQuery(sql, args: args, factory: BookmarkFactory.factory)

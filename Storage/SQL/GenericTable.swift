@@ -48,11 +48,11 @@ protocol Table: SectionCreator, SectionUpdater {
  * or something else interesting.
  */
 protocol BaseTable: Table {
-    associatedtype Type
-    func insert(_ db: SQLiteDBConnection, item: Type?, err: inout NSError?) -> Int?
-    func update(_ db: SQLiteDBConnection, item: Type?, err: inout NSError?) -> Int
-    func delete(_ db: SQLiteDBConnection, item: Type?, err: inout NSError?) -> Int
-    func query(_ db: SQLiteDBConnection, options: QueryOptions?) -> Cursor<Type>
+    associatedtype DataType
+    func insert(_ db: SQLiteDBConnection, item: DataType?, err: inout NSError?) -> Int?
+    func update(_ db: SQLiteDBConnection, item: DataType?, err: inout NSError?) -> Int
+    func delete(_ db: SQLiteDBConnection, item: DataType?, err: inout NSError?) -> Int
+    func query(_ db: SQLiteDBConnection, options: QueryOptions?) -> Cursor<DataType>
 }
 
 
@@ -70,9 +70,9 @@ open class QueryOptions {
     // The way to sort the query
     open var sort: QuerySort = .none
 
-    public init(filter: AnyObject? = nil, filterType: FilterType = .none, sort: QuerySort = .none) {
+    public init(filter: AnyObject? = nil, FilterType: FilterType = .none, sort: QuerySort = .none) {
         self.filter = filter
-        self.filterType = filterType
+        self.FilterType = FilterType
         self.sort = sort
     }
 }
@@ -97,27 +97,27 @@ enum TableResult {
 
 
 class GenericTable<T>: BaseTable {
-    typealias Type = T
+    typealias DataType = T
 
     // Implementors need override these methods
     var name: String { return "" }
     var version: Int { return 0 }
     var rows: String { return "" }
-    var factory: ((SDRow) -> Type)? {
+    var factory: ((SDRow) -> DataType)? {
         return nil
     }
 
     // These methods take an inout object to avoid some runtime crashes that seem to be due
     // to using generics. Yay Swift!
-    func getInsertAndArgs(_ item: inout Type) -> (String, [AnyObject?])? {
+    func getInsertAndArgs(_ item: inout DataType) -> (String, [AnyObject?])? {
         return nil
     }
 
-    func getUpdateAndArgs(_ item: inout Type) -> (String, [AnyObject?])? {
+    func getUpdateAndArgs(_ item: inout DataType) -> (String, [AnyObject?])? {
         return nil
     }
 
-    func getDeleteAndArgs(_ item: inout Type?) -> (String, [AnyObject?])? {
+    func getDeleteAndArgs(_ item: inout DataType?) -> (String, [AnyObject?])? {
         return nil
     }
 
@@ -158,7 +158,7 @@ class GenericTable<T>: BaseTable {
      * Returns nil or the last inserted row ID.
      * err will be nil if there was no error (e.g., INSERT OR IGNORE).
      */
-    func insert(_ db: SQLiteDBConnection, item: Type?, err: inout NSError?) -> Int? {
+    func insert(_ db: SQLiteDBConnection, item: DataType?, err: inout NSError?) -> Int? {
         if var site = item {
             if let (query, args) = getInsertAndArgs(&site) {
                 let previous = db.lastInsertedRowID
@@ -182,7 +182,7 @@ class GenericTable<T>: BaseTable {
         return -1
     }
 
-    func update(_ db: SQLiteDBConnection, item: Type?, err: inout NSError?) -> Int {
+    func update(_ db: SQLiteDBConnection, item: DataType?, err: inout NSError?) -> Int {
         if var item = item {
             if let (query, args) = getUpdateAndArgs(&item) {
                 if let error = db.executeChange(query, withArgs: args) {
@@ -201,8 +201,8 @@ class GenericTable<T>: BaseTable {
         return 0
     }
 
-    func delete(_ db: SQLiteDBConnection, item: Type?, err: inout NSError?) -> Int {
-        if var item: Type? = item {
+    func delete(_ db: SQLiteDBConnection, item: DataType?, err: inout NSError?) -> Int {
+        if var item: DataType? = item {
             if let (query, args) = getDeleteAndArgs(&item) {
                 if let error = db.executeChange(query, withArgs: args) {
                     print(error.description)
@@ -216,7 +216,7 @@ class GenericTable<T>: BaseTable {
         return 0
     }
 
-    func query(_ db: SQLiteDBConnection, options: QueryOptions?) -> Cursor<Type> {
+    func query(_ db: SQLiteDBConnection, options: QueryOptions?) -> Cursor<DataType> {
         if let (query, args) = getQueryAndArgs(options) {
             if let factory = self.factory {
                 let c =  db.executeQuery(query, factory: factory, withArgs: args)
