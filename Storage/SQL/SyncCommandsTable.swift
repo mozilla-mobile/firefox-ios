@@ -7,7 +7,7 @@ import Shared
 let TableSyncCommands = "commands"
 
 class SyncCommandsTable<T>: GenericTable<SyncCommand> {
-    override var name: String { return TableSyncCommands }
+    override var name: NSString { return TableSyncCommands }
     override var version: Int { return 1 }
 
     override var rows: String { return [

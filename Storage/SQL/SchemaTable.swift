@@ -8,7 +8,7 @@ import Foundation
 // to let us handle table upgrades when the table is first accessed, rather than when the database
 // itself is created.
 class SchemaTable: GenericTable<TableInfo> {
-    override var name: String { return "tableList" }
+    override var name: NSString { return "tableList" }
     override var version: Int { return 1 }
 
     override var rows: String { return "id INTEGER PRIMARY KEY AUTOINCREMENT, " +

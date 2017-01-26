@@ -9,7 +9,7 @@ let TableClients = "clients"
 let TableTabs = "tabs"
 
 class RemoteClientsTable<T>: GenericTable<RemoteClient> {
-    override var name: String { return TableClients }
+    override var name: NSString { return TableClients as NSString }
     override var version: Int { return 1 }
 
     // TODO: index on guid and last_modified.
@@ -24,7 +24,7 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
     }
 
     // TODO: this won't work correctly with NULL fields.
-    override func getInsertAndArgs(item: inout RemoteClient) -> (String, [AnyObject?])? {
+    override func getInsertAndArgs(_ item: inout RemoteClient) -> (String, [AnyObject?])? {
         let args: Args = [
             item.guid,
             item.name,
@@ -36,7 +36,7 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
         return ("INSERT INTO \(name) (guid, name, modified, type, formfactor, os) VALUES (?, ?, ?, ?, ?, ?)", args)
     }
 
-    override func getUpdateAndArgs(item: inout RemoteClient) -> (String, [AnyObject?])? {
+    override func getUpdateAndArgs(_ item: inout RemoteClient) -> (String, [AnyObject?])? {
         let args: Args = [
             item.name,
             NSNumber(unsignedLongLong: item.modified),
@@ -49,7 +49,7 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
         return ("UPDATE \(name) SET name = ?, modified = ?, type = ?, formfactor = ?, os = ? WHERE guid = ?", args)
     }
 
-    override func getDeleteAndArgs(item: inout RemoteClient?) -> (String, [AnyObject?])? {
+    override func getDeleteAndArgs(_ item: inout RemoteClient?) -> (String, [AnyObject?])? {
         if let item = item {
             return ("DELETE FROM \(name) WHERE guid = ?", [item.guid])
         }
@@ -68,13 +68,13 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
         }
     }
 
-    override func getQueryAndArgs(options: QueryOptions?) -> (String, [AnyObject?])? {
+    override func getQueryAndArgs(_ options: QueryOptions?) -> (String, [AnyObject?])? {
         return ("SELECT * FROM \(name) ORDER BY modified DESC", [])
     }
 }
 
 class RemoteTabsTable<T>: GenericTable<RemoteTab> {
-    override var name: String { return TableTabs }
+    override var name: NSString { return TableTabs }
     override var version: Int { return 2 }
 
     // TODO: index on id, client_guid, last_used, and position.
@@ -151,7 +151,7 @@ class RemoteTabsTable<T>: GenericTable<RemoteTab> {
         }
     }
 
-    override func getQueryAndArgs(options: QueryOptions?) -> (String, [AnyObject?])? {
+    override func getQueryAndArgs(_ options: QueryOptions?) -> (String, [AnyObject?])? {
         // Per-client chunks, each chunk in client-order.
         return ("SELECT * FROM \(name) WHERE client_guid IS NOT NULL ORDER BY client_guid DESC, last_used DESC", [])
     }

@@ -27,10 +27,9 @@ fileprivate func >= <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
   }
 }
 
-
 // This is our default favicons store.
 class FaviconsTable<T>: GenericTable<Favicon> {
-    override var name: String { return TableFavicons }
+    override var name: NSString { return TableFavicons }
     override var rows: String { return "" }
     override func create(_ db: SQLiteDBConnection) -> Bool {
         // Nothing to do: BrowserTable does it all.
