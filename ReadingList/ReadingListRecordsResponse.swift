@@ -5,7 +5,7 @@
 import Foundation
 
 class ReadingListRecordsResponse: ReadingListResponse {
-    override init?(response: HTTPURLResponse, json: AnyObject?) {
+    override init?(response: HTTPURLResponse, json: Any?) {
         super.init(response: response, json: json)
     }
 

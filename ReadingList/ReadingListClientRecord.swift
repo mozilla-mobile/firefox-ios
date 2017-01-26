@@ -16,37 +16,35 @@ public struct ReadingListClientRecord: Equatable {
     public let favorite: Bool
 
     /// Initializer for when a record is loaded from a database row
-    public init?(row: AnyObject) {
+    public init?(row: Any) {
         let clientMetadata = ReadingListClientMetadata(row: row)
         if clientMetadata == nil {
             return nil
         }
 
-        let serverMetadata = ReadingListServerMetadata(row: row)
-        let url = row.value(forKeyPath: "url") as? String
-        let title = row.value(forKeyPath: "title") as? String
-        let addedBy = row.value(forKeyPath: "added_by") as? String
-        let unread = row.value(forKeyPath: "unread") as? Bool
-        let archived = row.value(forKeyPath: "archived") as? Bool
-        let favorite = row.value(forKeyPath: "favorite") as? Bool
-
-        if clientMetadata == nil || url == nil || title == nil || addedBy == nil || unread == nil {
+        guard let serverMetadata = ReadingListServerMetadata(row: row),
+            let url = row.value(forKeyPath: "url") as? String,
+            let title = row.value(forKeyPath: "title") as? String,
+            let addedBy = row.value(forKeyPath: "added_by") as? String,
+            let unread = row.value(forKeyPath: "unread") as? Bool,
+            let archived = row.value(forKeyPath: "archived") as? Bool,
+            let favorite = row.value(forKeyPath: "favorite") as? Bool else {
             return nil
         }
 
-        self.clientMetadata = clientMetadata!
+        self.clientMetadata = clientMetadata
         self.serverMetadata = serverMetadata
 
-        self.url = url!
-        self.title = title!
-        self.addedBy = addedBy!
+        self.url = url
+        self.title = title
+        self.addedBy = addedBy
 
-        self.unread = unread!
-        self.archived = archived!
-        self.favorite = favorite!
+        self.unread = unread
+        self.archived = archived
+        self.favorite = favorite
     }
 
-    public var json: AnyObject {
+    public var json: Any {
         get {
             let json = NSMutableDictionary()
             json["url"] = url
