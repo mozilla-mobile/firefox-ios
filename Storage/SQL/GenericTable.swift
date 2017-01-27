@@ -10,16 +10,16 @@ private let log = Logger.syncLogger
 
 // A protocol for information about a particular table. This is used as a type to be stored by TableTable.
 protocol TableInfo {
-    var name: NSString { get }
+    var name: String { get }
     var version: Int { get }
 }
 
 // A wrapper class for table info coming from the TableTable. This should ever only be used internally.
 class TableInfoWrapper: TableInfo {
-    let name: NSString
+    let name: String
     let version: Int
     init(name: String, version: Int) {
-        self.name = name as NSString
+        self.name = name
         self.version = version
     }
 }
@@ -95,12 +95,13 @@ enum TableResult {
     case failed             // Table creation failed.
 }
 
+private let _name = ""
 
 class GenericTable<T>: BaseTable {
     typealias DataType = T
 
     // Implementors need override these methods
-    var name: NSString { return "" }
+    var name: String { return _name }
     var version: Int { return 0 }
     var rows: String { return "" }
     var factory: ((SDRow) -> DataType)? {

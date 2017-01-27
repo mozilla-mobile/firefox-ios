@@ -22,7 +22,7 @@ private let DeletedHostnameIndexQuery =
 "CREATE INDEX IF NOT EXISTS \(IndexLoginsDeletedHostname) ON \(TableLoginsLocal) (is_deleted, hostname)"
 
 private class LoginsTable: Table {
-    var name: NSString { return "LOGINS" }
+    var name: String { return "LOGINS" }
     var version: Int { return 3 }
 
     func run(_ db: SQLiteDBConnection, sql: String, args: Args? = nil) -> Bool {

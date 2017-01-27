@@ -7,7 +7,7 @@ import Shared
 let TableSyncCommands = "commands"
 
 class SyncCommandsTable<T>: GenericTable<SyncCommand> {
-    override var name: NSString { return TableSyncCommands as NSString }
+    override var name: String { return TableSyncCommands }
     override var version: Int { return 1 }
 
     override var rows: String { return [
@@ -18,12 +18,12 @@ class SyncCommandsTable<T>: GenericTable<SyncCommand> {
     }
 
 
-    override func getInsertAndArgs(_ item: inout SyncCommand) -> (String,Args)? {
+    override func getInsertAndArgs(_ item: inout SyncCommand) -> (sql: String, args: Args)? {
         let args:Args = [item.clientGUID! , item.value ]
         return ("INSERT INTO \(name) (client_guid, value) VALUES (?, ?)", args)
     }
 
-    override func getDeleteAndArgs(_ item: inout SyncCommand?) -> (String,Args)? {
+    override func getDeleteAndArgs(_ item: inout SyncCommand?) -> (sql: String, args: Args)? {
         if let item = item {
             return ("DELETE FROM \(name) WHERE client_guid = ?", [item.clientGUID])
         }
@@ -39,7 +39,7 @@ class SyncCommandsTable<T>: GenericTable<SyncCommand> {
         }
     }
 
-    override func getQueryAndArgs(_ options: QueryOptions?) -> (String,Args)? {
+    override func getQueryAndArgs(_ options: QueryOptions?) -> (sql: String, args: Args)? {
         let sql = "SELECT * FROM \(name)"
         if let opts = options,
             let filter: Any = options?.filter {

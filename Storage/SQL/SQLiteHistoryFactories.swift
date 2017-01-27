@@ -19,8 +19,8 @@ extension SQLiteHistory {
         let iB = row["is_bookmarked"] as? Int
         let isBookmarked: Bool? = (iB == nil) ? nil : (iB! != 0)
 
-        let site = Site(url: url as NSString, title: title as NSString, bookmarked: isBookmarked)
-        site.guid = guid as NSString?
+        let site = Site(url: url, title: title, bookmarked: isBookmarked)
+        site.guid = guid
         site.id = id
 
         // Find the most recent visit, regardless of which column it might be in.
@@ -42,7 +42,7 @@ extension SQLiteHistory {
             let iconDate = row["iconDate"] as? Double,
             let _ = row["iconID"] as? Int {
                 let date = Date(timeIntervalSince1970: iconDate)
-                return Favicon(url: iconURL as NSString, date: date, type: IconType(rawValue: iconType)!)
+                return Favicon(url: iconURL, date: date, type: IconType(rawValue: iconType)!)
         }
         return nil
     }

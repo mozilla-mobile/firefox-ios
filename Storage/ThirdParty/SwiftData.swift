@@ -773,7 +773,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
     }
 
     func executeQueryUnsafe<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: Args?) -> Cursor<T> {
-        return self.executeQuery(sqlStr, factory: factory, withArgs: args)
+        return self.executeQueryUnsafe(sqlStr, factory: factory, withArgs: args)
     }
 
     /**

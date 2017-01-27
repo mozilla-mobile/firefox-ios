@@ -29,7 +29,7 @@ fileprivate func >= <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 
 // This is our default favicons store.
 class FaviconsTable<T>: GenericTable<Favicon> {
-    override var name: NSString { return TableFavicons as NSString }
+    override var name: String { return TableFavicons }
     override var rows: String { return "" }
     override func create(_ db: SQLiteDBConnection) -> Bool {
         // Nothing to do: BrowserTable does it all.
@@ -69,7 +69,7 @@ class FaviconsTable<T>: GenericTable<Favicon> {
 
     override var factory: ((_ row: SDRow) -> Favicon)? {
         return { row -> Favicon in
-            let icon = Favicon(url: row["url"] as! String as NSString, date: Date(timeIntervalSince1970: row["date"] as! Double), type: IconType(rawValue: row["type"] as! Int)!)
+            let icon = Favicon(url: row["url"] as! String, date: Date(timeIntervalSince1970: row["date"] as! Double), type: IconType(rawValue: row["type"] as! Int)!)
             icon.id = row["id"] as? Int
             return icon
         }

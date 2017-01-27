@@ -562,7 +562,7 @@ class BookmarkFactory {
            let date = row["iconDate"] as? Double,
            let faviconType = row["iconType"] as? Int,
            let type = IconType(rawValue: faviconType) {
-                bookmark.favicon = Favicon(url: faviconURL as NSString,
+                bookmark.favicon = Favicon(url: faviconURL,
                                            date: Date(timeIntervalSince1970: date),
                                            type: type)
         }

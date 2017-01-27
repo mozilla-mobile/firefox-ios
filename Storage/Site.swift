@@ -44,15 +44,15 @@ public enum IconType: Int {
 }
 
 open class Favicon: Identifiable {
-    open var id: Int? = nil
+    open var id: Int?
 
-    open let url: NSString
+    open let url: String
     open let date: Date
     open var width: Int?
     open var height: Int?
     open let type: IconType
 
-    public init(url: NSString, date: Date = Date(), type: IconType) {
+    public init(url: String, date: Date = Date(), type: IconType) {
         self.url = url
         self.date = date
         self.type = type
@@ -62,25 +62,25 @@ open class Favicon: Identifiable {
 // TODO: Site shouldn't have all of these optional decorators. Include those in the
 // cursor results, perhaps as a tuple.
 open class Site: Identifiable {
-    open var id: Int? = nil
-    var guid: NSString? = nil
+    open var id: Int?
+    var guid: String?
 
     open var tileURL: URL {
         return URL(string: url as String)!.domainURL
     }
 
-    open let url: NSString
-    open let title: NSString
+    open let url: String
+    open let title: String
      // Sites may have multiple favicons. We'll return the largest.
     open var icon: Favicon?
     open var latestVisit: Visit?
     open fileprivate(set) var bookmarked: Bool?
 
-    public convenience init(url: NSString, title: NSString) {
+    public convenience init(url: String, title: String) {
         self.init(url: url, title: title, bookmarked: false)
     }
 
-    public init(url: NSString, title: NSString, bookmarked: Bool?) {
+    public init(url: String, title: String, bookmarked: Bool?) {
         self.url = url
         self.title = title
         self.bookmarked = bookmarked

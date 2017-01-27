@@ -9,7 +9,7 @@ let TableClients = "clients"
 let TableTabs = "tabs"
 
 class RemoteClientsTable<T>: GenericTable<RemoteClient> {
-    override var name: NSString { return TableClients as NSString }
+    override var name: String { return TableClients as String }
     override var version: Int { return 1 }
 
     // TODO: index on guid and last_modified.
@@ -75,7 +75,7 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
 }
 
 class RemoteTabsTable<T>: GenericTable<RemoteTab> {
-    override var name: NSString { return TableTabs as NSString }
+    override var name: String { return TableTabs }
     override var version: Int { return 2 }
 
     // TODO: index on id, client_guid, last_used, and position.

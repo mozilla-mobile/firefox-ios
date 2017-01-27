@@ -110,7 +110,7 @@ open class BrowserTable: Table {
     static let DefaultVersion = 21    // Bug 1253656.
 
     // TableInfo fields.
-    var name: NSString { return "BROWSER" }
+    var name: String { return "BROWSER" }
     var version: Int { return BrowserTable.DefaultVersion }
 
     let sqliteVersion: Int32
