@@ -62,7 +62,7 @@ extension SQLiteBookmarks {
                           "SELECT guid, type, bmkUri, title, parentid, parentName, " +
                           "feedUri, siteUri, pos, description, tags, keyword, folderName, queryId, " +
                           "is_deleted, " +
-                          "\(modified) AS local_modified, \(SyncStatus.Changed.rawValue) AS sync_status, faviconID " +
+                          "\(modified) AS local_modified, \(SyncStatus.changed.rawValue) AS sync_status, faviconID " +
                           "FROM \(TableBookmarksMirror) WHERE guid IN \(vars)"
 
         // Copy its mirror structure.
@@ -93,7 +93,7 @@ extension SQLiteBookmarks {
         "SELECT guid, type, bmkUri, title, parentid, parentName, " +
         "feedUri, siteUri, pos, description, tags, keyword, folderName, queryId, " +
         "is_deleted, " +
-        "\(modified) AS local_modified, \(SyncStatus.Changed.rawValue) AS sync_status, faviconID " +
+        "\(modified) AS local_modified, \(SyncStatus.changed.rawValue) AS sync_status, faviconID " +
         "FROM \(TableBookmarksMirror) WHERE guid IN \(vars) AND is_overridden = 0"
 
         // Mark as overridden.
@@ -140,13 +140,13 @@ extension SQLiteBookmarks {
         //// Insert the new bookmark and icon without touching structure.
         var args: Args = [
             newGUID as Optional<AnyObject>,
-            BookmarkNodeType.Bookmark.rawValue as Optional<AnyObject>,
+            BookmarkNodeType.bookmark.rawValue as Optional<AnyObject>,
             urlString as Optional<AnyObject>,
             title as Optional<AnyObject>,
             parent as Optional<AnyObject>,
             parentTitle as Optional<AnyObject>,
             Date.nowNumber(),
-            SyncStatus.New.rawValue as Optional<AnyObject>,
+            SyncStatus.new.rawValue as Optional<AnyObject>,
         ]
 
         let faviconID: Int?
@@ -287,7 +287,7 @@ extension SQLiteBookmarks {
     /**
      * Assumption: the provided folder GUID exists in either the local table or the mirror table.
      */
-    func insertBookmark(_ url: NSURL, title: String, favicon: Favicon?, intoFolder parent: GUID, withTitle parentTitle: String) -> Success {
+    func insertBookmark(_ url: URL, title: String, favicon: Favicon?, intoFolder parent: GUID, withTitle parentTitle: String) -> Success {
         log.debug("Inserting bookmark task on thread \(Thread.current)")
         let deferred = Success()
 
@@ -424,7 +424,7 @@ open class SQLiteBookmarkBufferStorage: BookmarkBufferStorage {
         let deleted = records.filter { $0.isDeleted }.map { $0.guid }
         let values = records.map { $0.getUpdateOrInsertArgs() }
         let children = records.filter { !$0.isDeleted }.flatMap { $0.getChildrenArgs() }
-        let folders = records.filter { $0.type == BookmarkNodeType.Folder }.map { $0.guid }
+        let folders = records.filter { $0.type == BookmarkNodeType.folder }.map { $0.guid }
 
         var err: NSError?
         self.db.transaction(&err) { (conn, err) -> Bool in
@@ -862,12 +862,12 @@ extension SQLiteBookmarks {
             if let type = BookmarkNodeType(rawValue: typeCode) {
                 switch type {
                 case .folder:
-                    return BookmarkTreeNode.Folder(guid: guid, children: [])
+                    return BookmarkTreeNode.folder(guid: guid, children: [])
                 default:
-                    return BookmarkTreeNode.NonFolder(guid: guid)
+                    return BookmarkTreeNode.nonFolder(guid: guid)
                 }
             } else {
-                return BookmarkTreeNode.Unknown(guid: guid)
+                return BookmarkTreeNode.unknown(guid: guid)
             }
         }
 
@@ -1004,7 +1004,7 @@ extension MergedSQLiteBookmarks {
                     "FROM \(TableBookmarksBuffer)",
                     "WHERE guid IN",
                     varlist
-                    ].joinWithSeparator(" ")
+                    ].joined(separator: " ")
                 change(copySQL, args: args)
             }
 
@@ -1028,7 +1028,7 @@ extension MergedSQLiteBookmarks {
                     "0 AS server_modified",
                     "FROM \(TableBookmarksLocal) WHERE guid IN",
                     varlist,
-                    ].joinWithSeparator(" ")
+                    ].joinedWithSeparator(separator: " ")
                 change(copySQL, args: args)
             }
 
@@ -1046,7 +1046,7 @@ extension MergedSQLiteBookmarks {
                     "UPDATE \(TableBookmarksMirror) SET server_modified = \(time)",
                     "WHERE guid IN",
                     varlist,
-                ].joinWithSeparator(" ")
+                ].joined(separator: " ")
                 change(updateSQL, args: args)
             }
 
@@ -1132,8 +1132,8 @@ extension MergedSQLiteBookmarks {
             if !op.mirrorStructures.isEmpty {
                 let structureRows =
                 op.mirrorStructures.flatMap { (parent, children) in
-                    return children.enumerate().map { (idx, child) -> Args in
-                        let vals: Args = [parent, child, idx]
+                    return children.enumerated().map { (idx, child) -> Args in
+                        let vals: Args = [parent as AnyObject, child as AnyObject, idx as AnyObject]
                         return vals
                     }
                 }

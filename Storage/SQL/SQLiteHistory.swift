@@ -115,12 +115,12 @@ open class SQLiteHistory {
         // BrowserTable exists only to perform create/update etc. operations -- it's not
         // a queryable thing that needs to stick around.
         switch db.createOrUpdate(BrowserTable()) {
-        case .Failure:
+        case .failure:
             log.error("Failed to create/update DB schema!")
             fatalError()
-        case .Closed:
+        case .closed:
             log.info("Database not created as the SQLiteConnection is closed.")
-        case .Success:
+        case .success:
             log.debug("Database succesfully created/updated")
         }
     }
@@ -440,7 +440,7 @@ extension SQLiteHistory: BrowserHistory {
                                                       includeIcon: Bool = true) -> Deferred<Maybe<Cursor<Site>>> {
         let args: Args?
         let whereClause: String
-        if let filter = filter?.stringByTrimmingCharactersInSet(CharacterSet.whitespaceCharacterSet()), !filter.isEmpty {
+        if let filter = filter?.trimmingCharacters(in: CharacterSet.whitespaceCharacterSet()), !filter.isEmpty {
             let perWordFragment = "((\(TableHistory).url LIKE ?) OR (\(TableHistory).title LIKE ?))"
             let perWordArgs: (String) -> Args = { ["%\($0)%" as Optional<AnyObject>, "%\($0)%" as Optional<AnyObject>] }
             let (filterFragment, filterArgs) = computeWhereFragmentWithFilter(filter, perWordFragment: perWordFragment, perWordArgs: perWordArgs)

@@ -30,7 +30,7 @@ extension SQLiteHistory {
 
         let latest = max(local, remote, either)
         if latest > 0 {
-            site.latestVisit = Visit(date: latest, type: VisitType.Unknown)
+            site.latestVisit = Visit(date: latest, type: VisitType.unknown)
         }
 
         return site

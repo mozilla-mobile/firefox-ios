@@ -719,7 +719,7 @@ open class BrowserTable: Table {
             "(guid, type, bmkUri, title, faviconID, local_modified, sync_status, parentid, parentName) " +
             "SELECT guid, type, url AS bmkUri, title, faviconID, " +
             "\(modified) AS local_modified, \(status) AS sync_status, ?, '' " +
-            "FROM \(_TableBookmarks) WHERE type IS \(BookmarkNodeType.Bookmark.rawValue)"
+            "FROM \(_TableBookmarks) WHERE type IS \(BookmarkNodeType.bookmark.rawValue)"
 
             // Create structure for our migrated bookmarks.
             // In order to get contiguous positions (idx), we first insert everything we just migrated under

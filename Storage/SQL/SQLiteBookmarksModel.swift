@@ -86,7 +86,7 @@ open class SQLiteBookmarksModelFactory: BookmarksModelFactory {
         return self.getChildren(guid)
             >>== { cursor in
 
-            if cursor.status == .Failure {
+            if cursor.status == .failure {
                 return deferMaybe(DatabaseError(description: "Couldn't get children: \(cursor.statusMessage)."))
             }
 
@@ -463,7 +463,7 @@ extension SQLiteBookmarks {
 
                         // If a bookmark is New, delete it outright.
                         let deleteNew =
-                        "DELETE FROM \(TableBookmarksLocal) WHERE guid IN \(childVarlist) AND sync_status = \(SyncStatus.New.rawValue)"
+                        "DELETE FROM \(TableBookmarksLocal) WHERE guid IN \(childVarlist) AND sync_status = \(SyncStatus.new.rawValue)"
 
                         // If a bookmark is Changed, mark it as deleted and bump its modified time.
                         let markChanged = self.getMarkDeletedSQLWithWhereFragment("guid IN \(childVarlist)")
@@ -753,7 +753,7 @@ extension SQLiteBookmarks {
             ].joined(separator: " ")
         return self.db.runQuery(sql, args: parents, factory: { $0[0] as! Int == 1 })
             >>== { row in
-                guard row.status == .Success,
+                guard row.status == .success,
                     let result = row[0] else {
                         // if the query did not succeed, we should return false so that we can use local bookmarks
                         return deferMaybe(false)

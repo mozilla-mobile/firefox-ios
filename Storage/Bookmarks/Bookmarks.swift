@@ -406,7 +406,7 @@ public struct BookmarkMirrorItem: Equatable {
         let id = BookmarkRoots.translateIncomingRootGUID(guid)
         let parent = BookmarkRoots.translateIncomingRootGUID(parentID)
 
-        return BookmarkMirrorItem(guid: id, type: .Folder, serverModified: modified,
+        return BookmarkMirrorItem(guid: id, type: .folder, serverModified: modified,
             isDeleted: false, hasDupe: hasDupe, parentID: parent, parentName: parentName,
             feedURI: nil, siteURI: nil,
             pos: nil,
@@ -421,7 +421,7 @@ public struct BookmarkMirrorItem: Equatable {
         let id = BookmarkRoots.translateIncomingRootGUID(guid)
         let parent = BookmarkRoots.translateIncomingRootGUID(parentID)
 
-        return BookmarkMirrorItem(guid: id, type: .Livemark, serverModified: modified,
+        return BookmarkMirrorItem(guid: id, type: .livemark, serverModified: modified,
             isDeleted: false, hasDupe: hasDupe, parentID: parent, parentName: parentName,
             feedURI: feedURI, siteURI: siteURI,
             pos: nil,
@@ -436,7 +436,7 @@ public struct BookmarkMirrorItem: Equatable {
         let id = BookmarkRoots.translateIncomingRootGUID(guid)
         let parent = BookmarkRoots.translateIncomingRootGUID(parentID)
 
-        return BookmarkMirrorItem(guid: id, type: .Separator, serverModified: modified,
+        return BookmarkMirrorItem(guid: id, type: .separator, serverModified: modified,
             isDeleted: false, hasDupe: hasDupe, parentID: parent, parentName: parentName,
             feedURI: nil, siteURI: nil,
             pos: pos,
@@ -451,7 +451,7 @@ public struct BookmarkMirrorItem: Equatable {
         let id = BookmarkRoots.translateIncomingRootGUID(guid)
         let parent = BookmarkRoots.translateIncomingRootGUID(parentID)
 
-        return BookmarkMirrorItem(guid: id, type: .Bookmark, serverModified: modified,
+        return BookmarkMirrorItem(guid: id, type: .bookmark, serverModified: modified,
             isDeleted: false, hasDupe: hasDupe, parentID: parent, parentName: parentName,
             feedURI: nil, siteURI: nil,
             pos: nil,
@@ -466,7 +466,7 @@ public struct BookmarkMirrorItem: Equatable {
         let id = BookmarkRoots.translateIncomingRootGUID(guid)
         let parent = BookmarkRoots.translateIncomingRootGUID(parentID)
 
-        return BookmarkMirrorItem(guid: id, type: .Query, serverModified: modified,
+        return BookmarkMirrorItem(guid: id, type: .query, serverModified: modified,
             isDeleted: false, hasDupe: hasDupe, parentID: parent, parentName: parentName,
             feedURI: nil, siteURI: nil,
             pos: nil,
