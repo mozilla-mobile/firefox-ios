@@ -111,13 +111,13 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
 
         // TODO: insert multiple clients in a single query.
         // ORM systems are foolish.
-        db.transaction(&err) { connection, _ in
+        let _ = db.transaction(&err) { connection, _ in
             // Update or insert client records.
             for client in clients {
 
                 let updated = self.clients.update(connection, item: client, err: &err)
                 if err == nil && updated == 0 {
-                    self.clients.insert(connection, item: client, err: &err)
+                    let _ = self.clients.insert(connection, item: client, err: &err)
                 }
 
                 if let err = err {
@@ -251,8 +251,8 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
 
     open func deleteCommands() -> Success {
         var err: NSError?
-        db.transaction(&err) { connection, _ in
-            self.commands.delete(connection, item: nil, err: &err)
+        let _ = db.transaction(&err) { connection, _ in
+            let _ = self.commands.delete(connection, item: nil, err: &err)
             if let _ = err {
                 return false
             }
@@ -264,8 +264,8 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
 
     open func deleteCommands(_ clientGUID: GUID) -> Success {
         var err: NSError?
-        db.transaction(&err) { connection, _ in
-            self.commands.delete(connection, item: SyncCommand(id: nil, value: "", clientGUID: clientGUID), err: &err)
+        let _ = db.transaction(&err) { connection, _ in
+            let _ = self.commands.delete(connection, item: SyncCommand(id: nil, value: "", clientGUID: clientGUID), err: &err)
             if let _ = err {
                 return false
             }
@@ -282,7 +282,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     open func insertCommands(_ commands: [SyncCommand], forClients clients: [RemoteClient]) -> Deferred<Maybe<Int>> {
         var err: NSError?
         var numberOfInserts = 0
-        db.transaction(&err) { connection, _ in
+        let _ = db.transaction(&err) { connection, _ in
             // Update or insert client records.
             for command in commands {
                 for client in clients {
@@ -344,8 +344,8 @@ extension SQLiteRemoteClientsAndTabs: ResettableSyncStorage {
 
     public func clear() -> Success {
         return self.doWipe { (conn, err: inout NSError?) -> Void in
-            self.tabs.delete(conn, item: nil, err: &err)
-            self.clients.delete(conn, item: nil, err: &err)
+            let _ = self.tabs.delete(conn, item: nil, err: &err)
+            let _ = self.clients.delete(conn, item: nil, err: &err)
         }
     }
 }
