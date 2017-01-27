@@ -641,6 +641,24 @@ extension AppDelegate: MFMailComposeViewControllerDelegate {
     }
 }
 
+extension AppDelegate {
+    func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
+        FxALoginHelper.sharedInstance?.userDidRegister(notificationSettings: notificationSettings)
+    }
+}
+
+extension AppDelegate {
+    func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
+        let apnsToken = deviceToken.hexEncodedString
+        FxALoginHelper.sharedInstance?.apnsRegisterDidSucceed(apnsToken: apnsToken)
+    }
+
+    func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
+        print("failed to register. \(error.description)")
+        FxALoginHelper.sharedInstance?.apnsRegisterDidFail()
+    }
+}
+
 struct FxALaunchParams {
     var view: String?
     var email: String?
