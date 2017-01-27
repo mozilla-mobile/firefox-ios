@@ -35,7 +35,10 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
 
     weak var delegate: FxAContentViewControllerDelegate?
 
-    init() {
+    let profile: Profile
+
+    init(profile: Profile) {
+        self.profile = profile
         super.init(backgroundColor: UIColor(red: 242 / 255.0, green: 242 / 255.0, blue: 242 / 255.0, alpha: 1.0), title: NSAttributedString(string: "Firefox Accounts"))
     }
 
@@ -108,7 +111,16 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     // The user has signed in to a Firefox Account.  We're done!
     fileprivate func onLogin(_ data: JSON) {
         injectData("message", content: ["status": "login"])
-        self.delegate?.contentViewControllerDidSignIn(self, data: data)
+
+        let app = UIApplication.shared
+        let helper = FxALoginHelper.createSharedInstance(app, profile: profile)
+        helper.userDidLogin(data).uponQueue(dispatch_get_main_queue()) { res in
+            if res.isSuccess {
+                self.delegate?.contentViewControllerDidSignIn(self, data: data)
+            } else {
+                self.delegate?.contentViewControllerDidCancel(self)
+            }
+        }
     }
 
     // The content server page is ready to be shown.
