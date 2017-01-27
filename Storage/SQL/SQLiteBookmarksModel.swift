@@ -7,7 +7,7 @@ import Foundation
 import Shared
 
 private let log = Logger.syncLogger
-private let desktopBookmarksLabel = NSLocalizedString("Desktop Bookmarks", tableName: "BookmarkPanel", comment: "The folder name for the virtual folder that contains all desktop bookmarks.")
+private let desktopBookmarksLabel: String = NSLocalizedString("Desktop Bookmarks", tableName: "BookmarkPanel", comment: "The folder name for the virtual folder that contains all desktop bookmarks.")
 
 public enum Direction {
     case buffer
@@ -562,7 +562,7 @@ class BookmarkFactory {
            let date = row["iconDate"] as? Double,
            let faviconType = row["iconType"] as? Int,
            let type = IconType(rawValue: faviconType) {
-                bookmark.favicon = Favicon(url: faviconURL,
+                bookmark.favicon = Favicon(url: faviconURL as NSString,
                                            date: Date(timeIntervalSince1970: date),
                                            type: type)
         }

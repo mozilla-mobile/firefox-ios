@@ -88,7 +88,7 @@ func getLocalFrecencySQL() -> String {
 
 extension SDRow {
     func getTimestamp(_ column: String) -> Timestamp? {
-        return (self[column] as? NSNumber)?.uint64Value
+        return self[column] as? UInt64
     }
 
     func getBoolean(_ column: String) -> Bool {
@@ -130,7 +130,7 @@ private let topSitesQuery = "SELECT * FROM \(TableCachedTopSites) ORDER BY frece
 
 extension SQLiteHistory: BrowserHistory {
     public func removeSiteFromTopSites(_ site: Site) -> Success {
-        if let host = site.url.asURL?.normalizedHost {
+        if let host = (site.url as String).asURL?.normalizedHost {
             return self.removeHostFromTopSites(host)
         }
         return deferMaybe(DatabaseError(description: "Invalid url for site \(site.url)"))
@@ -170,12 +170,12 @@ extension SQLiteHistory: BrowserHistory {
         var error: NSError? = nil
 
         // Don't store visits to sites with about: protocols
-        if isIgnoredURL(site.url) {
+        if isIgnoredURL(site.url as String) {
             return deferMaybe(IgnoredSiteError())
         }
 
         db.withWritableConnection(&error) { (conn, err: inout NSError?) -> Int in
-            let now = Date.nowNumber()
+            let now = Date.now()
 
             let i = self.updateSite(site, atTime: now, withConnection: conn)
             if i > 0 {
@@ -189,7 +189,7 @@ extension SQLiteHistory: BrowserHistory {
         return failOrSucceed(error, op: "Record site")
     }
 
-    func updateSite(_ site: Site, atTime time: NSNumber, withConnection conn: SQLiteDBConnection) -> Int {
+    func updateSite(_ site: Site, atTime time: Timestamp, withConnection conn: SQLiteDBConnection) -> Int {
         // We know we're adding a new visit, so we'll need to upload this record.
         // If we ever switch to per-visit change flags, this should turn into a CASE statement like
         //   CASE WHEN title IS ? THEN max(should_upload, 1) ELSE should_upload END
@@ -197,9 +197,9 @@ extension SQLiteHistory: BrowserHistory {
         //
         // Note that we will never match against a deleted item, because deleted items have no URL,
         // so we don't need to unset is_deleted here.
-        if let host = site.url.asURL?.normalizedHost {
+        if let host = (site.url as String).asURL?.normalizedHost {
             let update = "UPDATE \(TableHistory) SET title = ?, local_modified = ?, should_upload = 1, domain_id = (SELECT id FROM \(TableDomains) where domain = ?) WHERE url = ?"
-            let updateArgs: Args? = [site.title   , time, host   , site.url   ]
+            let updateArgs: Args? = [site.title, time, host   , site.url   ]
             if Logger.logPII {
                 log.debug("Setting title to \(site.title) for URL \(site.url)")
             }
@@ -213,9 +213,9 @@ extension SQLiteHistory: BrowserHistory {
         return 0
     }
 
-    fileprivate func insertSite(_ site: Site, atTime time: NSNumber, withConnection conn: SQLiteDBConnection) -> Int {
+    fileprivate func insertSite(_ site: Site, atTime time: Timestamp, withConnection conn: SQLiteDBConnection) -> Int {
 
-        if let host = site.url.asURL?.normalizedHost {
+        if let host = (site.url as String).asURL?.normalizedHost {
             if let error = conn.executeChange("INSERT OR IGNORE INTO \(TableDomains) (domain) VALUES (?)", withArgs: [host]) {
                 log.warning("Domain insertion failed with \(error.localizedDescription)")
                 return 0
@@ -247,7 +247,7 @@ extension SQLiteHistory: BrowserHistory {
             // collision with an existing visit, and it would really suck to error out for that reason.
             let insert = "INSERT OR IGNORE INTO \(TableVisits) (siteID, date, type, is_local) VALUES (" +
                          "(SELECT id FROM \(TableHistory) WHERE url = ?), ?, ?, 1)"
-            let realDate = NSNumber(value: visit.date)
+            let realDate = visit.date
             let insertArgs: Args? = [visit.site.url, realDate, visit.type.rawValue]
             error = conn.executeChange(insert, withArgs: insertArgs)
             if error != nil {
@@ -833,7 +833,7 @@ extension SQLiteHistory: SyncableHistory {
         return self.getSiteIDForGUID(guid)
             >>== { (siteID: Int) -> Success in
             let visitArgs = visits.map { (visit: Visit) -> Args in
-                let realDate = NSNumber(value: visit.date)
+                let realDate = visit.date
                 let isLocal = 0
                 let args: Args = [siteID   , realDate, visit.type.rawValue   , isLocal   ]
                 return args
@@ -892,7 +892,7 @@ extension SQLiteHistory: SyncableHistory {
         //        which one wins.
 
         // We use this throughout.
-        let serverModified = NSNumber(value: modified)
+        let serverModified = modified
 
         // Check to see if our modified time is unchanged, if the record exists locally, etc.
         let insertWithMetadata = { (metadata: HistoryMetadata?) -> Deferred<Maybe<GUID>> in

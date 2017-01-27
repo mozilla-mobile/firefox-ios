@@ -15,10 +15,10 @@ extension SQLiteHistory: HistoryRecommendations {
 
         let microsecondsPerMinute: UInt64 = 60_000_000 // 1000 * 1000 * 60
         let now = Date.nowMicroseconds()
-        let thirtyMinutesAgo = NSNumber(value: now - 30 * microsecondsPerMinute)
-        let threeDaysAgo = NSNumber(value: now - (60 * microsecondsPerMinute) * 24 * 3)
+        let thirtyMinutesAgo: UInt64 = now - 30 * microsecondsPerMinute
+        let threeDaysAgo: UInt64 = now - (60 * microsecondsPerMinute) * 24 * 3
 
-        let blacklistedHosts: [ArgValue?] = [
+        let blacklistedHosts: Args = [
             "google.com"   ,
             "google.ca"   ,
             "calendar.google.com"   ,
@@ -83,7 +83,7 @@ extension SQLiteHistory: HistoryRecommendations {
             "FROM ( \(nonRecentHistory) UNION ALL \(bookmarkHighlights) ) " +
             "LEFT JOIN \(ViewHistoryIDsWithWidestFavicons) ON \(ViewHistoryIDsWithWidestFavicons).id = historyID " +
             "GROUP BY url"
-        let otherArgs = [threeDaysAgo, threeDaysAgo] as [ArgValue?]
+        let otherArgs = [threeDaysAgo, threeDaysAgo] as Args
         let args: Args = [thirtyMinutesAgo] + blacklistedHosts + otherArgs
         return self.db.runQuery(highlightsQuery, args: args, factory: SQLiteHistory.iconHistoryColumnFactory)
     }

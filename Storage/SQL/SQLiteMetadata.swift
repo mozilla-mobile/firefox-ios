@@ -37,7 +37,7 @@ extension SQLiteMetadata: Metadata {
         let selectUniqueCacheKey = "COALESCE((SELECT cache_key FROM \(TablePageMetadata) WHERE cache_key = ?), ?)"
         let args: Args = [cacheKey   , cacheKey   , metadata.siteURL   , metadata.mediaURL   , metadata.title   ,
                           metadata.type   , metadata.description, metadata.providerName,
-                          NSNumber(value: expireAt)]
+                          expireAt]
 
         let insert =
         "INSERT OR REPLACE INTO \(TablePageMetadata)" +

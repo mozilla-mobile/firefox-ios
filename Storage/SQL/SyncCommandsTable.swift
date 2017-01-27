@@ -42,7 +42,7 @@ class SyncCommandsTable<T>: GenericTable<SyncCommand> {
     override func getQueryAndArgs(_ options: QueryOptions?) -> (String,Args)? {
         let sql = "SELECT * FROM \(name)"
         if let opts = options,
-            let filter: AnyObject = options?.filter {
+            let filter: Any = options?.filter {
                 let args:Args = ["\(filter)" ]
                 switch opts.filterType {
                 case .guid :

@@ -18,8 +18,8 @@ protocol TableInfo {
 class TableInfoWrapper: TableInfo {
     let name: NSString
     let version: Int
-    init(name: NSString, version: Int) {
-        self.name = name
+    init(name: String, version: Int) {
+        self.name = name as NSString
         self.version = version
     }
 }
@@ -62,7 +62,7 @@ public enum QuerySort {
 
 open class QueryOptions {
     // A filter string to apploy to the query
-    open var filter: AnyObject? = nil
+    open var filter: Any? = nil
 
     // Allows for customizing how the filter is applied (i.e. only urls or urls and titles?)
     open var filterType: FilterType = .none
@@ -70,7 +70,7 @@ open class QueryOptions {
     // The way to sort the query
     open var sort: QuerySort = .none
 
-    public init(filter: AnyObject? = nil, filterType: FilterType = .none, sort: QuerySort = .none) {
+    public init(filter: Any? = nil, filterType: FilterType = .none, sort: QuerySort = .none) {
         self.filter = filter
         self.filterType = filterType
         self.sort = sort
@@ -146,7 +146,7 @@ class GenericTable<T>: BaseTable {
 
     func drop(_ db: SQLiteDBConnection) -> Bool {
         let sqlStr = "DROP TABLE IF EXISTS \(name)"
-        let args =  [AnyObject?]()
+        let args =  Args()
         let err = db.executeChange(sqlStr, withArgs: args)
         if err != nil {
             log.error("Error dropping \(self.name): \(err)")

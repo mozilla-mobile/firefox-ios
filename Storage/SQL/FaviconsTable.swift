@@ -69,7 +69,7 @@ class FaviconsTable<T>: GenericTable<Favicon> {
 
     override var factory: ((_ row: SDRow) -> Favicon)? {
         return { row -> Favicon in
-            let icon = Favicon(url: row["url"] as! String, date: Date(timeIntervalSince1970: row["date"] as! Double), type: IconType(rawValue: row["type"] as! Int)!)
+            let icon = Favicon(url: row["url"] as! String as NSString, date: Date(timeIntervalSince1970: row["date"] as! Double), type: IconType(rawValue: row["type"] as! Int)!)
             icon.id = row["id"] as? Int
             return icon
         }
@@ -77,7 +77,7 @@ class FaviconsTable<T>: GenericTable<Favicon> {
 
     override func getQueryAndArgs(_ options: QueryOptions?) -> (sql: String, args: Args)? {
         var args = Args()
-        if let filter: AnyObject = options?.filter {
+        if let filter: Any = options?.filter {
             args.append("%\(filter)%"  )
             return ("SELECT id, url, date, type FROM \(TableFavicons) WHERE url LIKE ?", args)
         }
@@ -86,7 +86,7 @@ class FaviconsTable<T>: GenericTable<Favicon> {
 
     func getIDFor(_ db: SQLiteDBConnection, obj: Favicon) -> Int? {
         let opts = QueryOptions()
-        opts.filter = obj.url as AnyObject?  
+        opts.filter = obj.url  
 
         let cursor = query(db, options: opts)
         if (cursor.count != 1) {

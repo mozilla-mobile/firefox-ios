@@ -26,7 +26,7 @@ private class LoginsTable: Table {
     var version: Int { return 3 }
 
     func run(_ db: SQLiteDBConnection, sql: String, args: Args? = nil) -> Bool {
-        let err = db.executeChange(sql, withArgs: args?.map({$0?.toObject()}))
+        let err = db.executeChange(sql, withArgs: args)
         if err != nil {
             log.error("Error running SQL in LoginsTable. \(err?.localizedDescription)")
             log.error("SQL was \(sql)")
@@ -115,9 +115,9 @@ private class LoginsTable: Table {
 open class SQLiteLogins: BrowserLogins {
 
     fileprivate let db: BrowserDB
-    fileprivate static let MainColumns = "guid, username, password, hostname, httpRealm, formSubmitURL, usernameField, passwordField"
-    fileprivate static let MainWithLastUsedColumns = MainColumns + ", timeLastUsed, timesUsed"
-    fileprivate static let LoginColumns = MainColumns + ", timeCreated, timeLastUsed, timePasswordChanged, timesUsed"
+    fileprivate static let MainColumns: String = "guid, username, password, hostname, httpRealm, formSubmitURL, usernameField, passwordField"
+    fileprivate static let MainWithLastUsedColumns: String = MainColumns + ", timeLastUsed, timesUsed"
+    fileprivate static let LoginColumns: String = MainColumns + ", timeCreated, timeLastUsed, timePasswordChanged, timesUsed"
 
     public init(db: BrowserDB) {
         self.db = db
@@ -359,8 +359,8 @@ open class SQLiteLogins: BrowserLogins {
 
         let nowMicro = Date.nowMicroseconds()
         let nowMilli = nowMicro / 1000
-        let dateMicro = NSNumber(value: nowMicro)
-        let dateMilli = NSNumber(value: nowMilli)
+        let dateMicro = nowMicro
+        let dateMilli = nowMilli
 
         let args: Args = [
             login.hostname   ,
@@ -475,8 +475,8 @@ open class SQLiteLogins: BrowserLogins {
         // at least for the time being.
         let nowMicro = Date.nowMicroseconds()
         let nowMilli = nowMicro / 1000
-        let dateMicro = NSNumber(value: nowMicro)
-        let dateMilli = NSNumber(value: nowMilli)
+        let dateMicro = nowMicro
+        let dateMilli = nowMilli
 
         let args: Args = [
             dateMilli,            // local_modified
@@ -520,7 +520,7 @@ open class SQLiteLogins: BrowserLogins {
 
         let nowMicro = Date.nowMicroseconds()
         let nowMilli = nowMicro / 1000
-        let args: Args = [NSNumber(value: nowMicro), NSNumber(value: nowMilli), guid   ]
+        let args: Args = [nowMicro, nowMilli, guid   ]
 
         return self.ensureLocalOverlayExistsForGUID(guid)
            >>> { self.markMirrorAsOverridden(guid) }
@@ -635,7 +635,7 @@ extension SQLiteLogins: SyncableLogins {
     }
 
     fileprivate func storeReconciledLogin(_ login: Login) -> Success {
-        let dateMilli = NSNumber(value: Date.now())
+        let dateMilli = Date.now()
 
         let args: Args = [
             dateMilli,            // local_modified
@@ -643,8 +643,8 @@ extension SQLiteLogins: SyncableLogins {
             login.formSubmitURL   ,
             login.usernameField   ,
             login.passwordField   ,
-            NSNumber(value: login.timeLastUsed),
-            NSNumber(value: login.timePasswordChanged),
+            login.timeLastUsed,
+            login.timePasswordChanged,
             login.timesUsed   ,
             login.password   ,
             login.hostname   ,
@@ -745,15 +745,15 @@ extension SQLiteLogins: SyncableLogins {
     // N.B., the final guid is sometimes a WHERE and sometimes inserted.
     fileprivate func mirrorArgs(_ login: ServerLogin) -> Args {
         let args: Args = [
-            NSNumber(value: login.serverModified),
+            login.serverModified,
             login.httpRealm   ,
             login.formSubmitURL   ,
             login.usernameField   ,
             login.passwordField   ,
             login.timesUsed   ,
-            NSNumber(value: login.timeLastUsed),
-            NSNumber(value: login.timePasswordChanged),
-            NSNumber(value: login.timeCreated),
+            login.timeLastUsed,
+            login.timePasswordChanged,
+            login.timeCreated,
             login.password   ,
             login.hostname   ,
             login.username   ,

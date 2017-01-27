@@ -188,7 +188,7 @@ open class MemoryBookmarkFolder: BookmarkFolder, Sequence {
         get {
             if let path = Bundle.main.path(forResource: "bookmarkFolder", ofType: "png") {
                 let url = URL(fileURLWithPath: path)
-                return Favicon(url: url.absoluteString, date: Date(), type: IconType.local)
+                return Favicon(url: url.absoluteString as NSString, date: Date(), type: IconType.local)
             }
             return nil
         }
@@ -253,7 +253,7 @@ open class MemoryBookmarksSink: ShareToDestination {
 
 private extension SuggestedSite {
     func asBookmark() -> BookmarkNode {
-        let b = BookmarkItem(guid: self.guid ?? Bytes.generateGUID(), title: self.title, url: self.url)
+        let b = BookmarkItem(guid: self.guid as? String ?? Bytes.generateGUID(), title: self.title as String, url: self.url as String)
         b.favicon = self.icon
         return b
     }

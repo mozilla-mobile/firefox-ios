@@ -46,13 +46,13 @@ public enum IconType: Int {
 open class Favicon: Identifiable {
     open var id: Int? = nil
 
-    open let url: String
+    open let url: NSString
     open let date: Date
     open var width: Int?
     open var height: Int?
     open let type: IconType
 
-    public init(url: String, date: Date = Date(), type: IconType) {
+    public init(url: NSString, date: Date = Date(), type: IconType) {
         self.url = url
         self.date = date
         self.type = type
@@ -63,24 +63,24 @@ open class Favicon: Identifiable {
 // cursor results, perhaps as a tuple.
 open class Site: Identifiable {
     open var id: Int? = nil
-    var guid: String? = nil
+    var guid: NSString? = nil
 
     open var tileURL: URL {
-        return URL(string: url)!.domainURL
+        return URL(string: url as String)!.domainURL
     }
 
-    open let url: String
-    open let title: String
+    open let url: NSString
+    open let title: NSString
      // Sites may have multiple favicons. We'll return the largest.
     open var icon: Favicon?
     open var latestVisit: Visit?
     open fileprivate(set) var bookmarked: Bool?
 
-    public convenience init(url: String, title: String) {
+    public convenience init(url: NSString, title: NSString) {
         self.init(url: url, title: title, bookmarked: false)
     }
 
-    public init(url: String, title: String, bookmarked: Bool?) {
+    public init(url: NSString, title: NSString, bookmarked: Bool?) {
         self.url = url
         self.title = title
         self.bookmarked = bookmarked
