@@ -327,7 +327,7 @@ public struct BookmarkMirrorItem: Equatable {
             return JSON(out)
         }
 
-        out["hasDupe"] = self.hasDupe  
+        out["hasDupe"] = self.hasDupe
 
         // TODO: this should never be nil!
         if let parentID = self.parentID {

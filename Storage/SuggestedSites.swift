@@ -5,7 +5,6 @@
 import UIKit
 import Shared
 
-
 open class SuggestedSite: Site {
     open let wordmark: Favicon
     open let backgroundColor: UIColor

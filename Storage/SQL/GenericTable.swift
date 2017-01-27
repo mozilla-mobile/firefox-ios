@@ -55,7 +55,6 @@ protocol BaseTable: Table {
     func query(_ db: SQLiteDBConnection, options: QueryOptions?) -> Cursor<DataType>
 }
 
-
 public enum QuerySort {
     case none, lastVisit, frecency
 }
@@ -77,7 +76,6 @@ open class QueryOptions {
     }
 }
 
-
 public enum FilterType {
     case exactUrl
     case url
@@ -95,13 +93,11 @@ enum TableResult {
     case failed             // Table creation failed.
 }
 
-private let _name = ""
-
 class GenericTable<T>: BaseTable {
     typealias DataType = T
 
     // Implementors need override these methods
-    var name: String { return _name }
+    var name: String { return "" }
     var version: Int { return 0 }
     var rows: String { return "" }
     var factory: ((SDRow) -> DataType)? {
@@ -110,19 +106,19 @@ class GenericTable<T>: BaseTable {
 
     // These methods take an inout object to avoid some runtime crashes that seem to be due
     // to using generics. Yay Swift!
-    func getInsertAndArgs(_ item: inout DataType) -> (sql: String, args: Args)? {
+    func getInsertAndArgs(_ item: inout DataType) -> (String, Args)? {
         return nil
     }
 
-    func getUpdateAndArgs(_ item: inout DataType) -> (sql: String, args: Args)? {
+    func getUpdateAndArgs(_ item: inout DataType) -> (String, Args)? {
         return nil
     }
 
-    func getDeleteAndArgs(_ item: inout DataType?) -> (sql: String, args: Args)? {
+    func getDeleteAndArgs(_ item: inout DataType?) -> (String, Args)? {
         return nil
     }
 
-    func getQueryAndArgs(_ options: QueryOptions?) -> (sql: String, args: Args)? {
+    func getQueryAndArgs(_ options: QueryOptions?) -> (String, Args)? {
         return nil
     }
 

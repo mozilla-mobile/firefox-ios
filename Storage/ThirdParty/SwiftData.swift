@@ -296,20 +296,13 @@ private class SQLiteDBStatement {
 protocol SQLiteDBConnection {
     var lastInsertedRowID: Int { get }
     var numberOfRowsModified: Int { get }
-    func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T)) -> Cursor<T>
 
     func executeChange(_ sqlStr: String) -> NSError?
-    func executeQuery<T>(_ sqlStr: String) -> Cursor<T>
-
-
-    func executeChange(_ sqlStr: String, withArgs args: [AnyObject?]?) -> NSError?
     func executeChange(_ sqlStr: String, withArgs args: Args?) -> NSError?
 
 
-    func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: [AnyObject?]?) -> Cursor<T>
+    func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T)) -> Cursor<T>
     func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: Args?) -> Cursor<T>
-
-    func executeQueryUnsafe<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: [AnyObject?]?) -> Cursor<T>
     func executeQueryUnsafe<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: Args?) -> Cursor<T>
 
     func interrupt()
@@ -335,19 +328,10 @@ class FailedSQLiteDBConnection: SQLiteDBConnection {
     func executeChange(_ sqlStr: String) -> NSError? {
         return self.fail("Non-open connection; can't execute change.")
     }
-    func executeChange(_ sqlStr: String, withArgs args: [AnyObject?]?) -> NSError? {
-        return self.fail("Non-open connection; can't execute change.")
-    }
     func executeQuery<T>(_ sqlStr: String) -> Cursor<T> {
         return Cursor<T>(err: self.fail("Non-open connection; can't execute query."))
     }
     func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T)) -> Cursor<T> {
-        return Cursor<T>(err: self.fail("Non-open connection; can't execute query."))
-    }
-    func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: [AnyObject?]?) -> Cursor<T> {
-        return Cursor<T>(err: self.fail("Non-open connection; can't execute query."))
-    }
-    func executeQueryUnsafe<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: [AnyObject?]?) -> Cursor<T> {
         return Cursor<T>(err: self.fail("Non-open connection; can't execute query."))
     }
     func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: Args?) -> Cursor<T> {
@@ -366,11 +350,6 @@ class FailedSQLiteDBConnection: SQLiteDBConnection {
 }
 
 open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
-
-
-    func executeChange(_ sqlStr: String, withArgs args: Args?) -> NSError? {
-        return self.executeChange(sqlStr, withArgs: args)
-    }
 
     fileprivate var sqliteDB: OpaquePointer? = nil
     fileprivate let filename: String
@@ -553,7 +532,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
 
     deinit {
         log.debug("deinit: closing connection on thread \(Thread.current).")
-        self.queue.sync {
+        let _ = self.queue.sync {
             self.closeCustomConnection()
         }
     }
@@ -644,20 +623,11 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
     }
 
     open func executeChange(_ sqlStr: String) -> NSError? {
-        return self.executeChange(sqlStr)
-    }
-
-    open func executeQuery<T>(_ sqlStr: String) -> Cursor<T> {
-        return self.executeQuery(sqlStr, withArgs: nil)
-    }
-
-
-    open func executeQuery<T>(_ sqlStr: String, withArgs args: Args?) -> Cursor<T> {
-        return self.executeQuery(sqlStr, withArgs: args)
+        return self.executeChange(sqlStr, withArgs: nil)
     }
 
     /// Executes a change on the database.
-    open func executeChange(_ sqlStr: String, withArgs args: [AnyObject?]?) -> NSError? {
+    open func executeChange(_ sqlStr: String, withArgs args: Args?) -> NSError? {
         var error: NSError?
         let statement: SQLiteDBStatement?
         do {
@@ -694,15 +664,9 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         return self.executeQuery(sqlStr, factory: factory)
     }
 
-
-
-    func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: Args? = nil) -> Cursor<T> {
-        return self.executeQuery(sqlStr, factory: factory, withArgs: args)
-    }
-
     /// Queries the database.
     /// Returns a cursor pre-filled with the complete result set.
-    func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: [AnyObject?]?) -> Cursor<T> {
+    func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: Args?) -> Cursor<T> {
         var error: NSError?
         let statement: SQLiteDBStatement?
         do {
@@ -772,16 +736,16 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         }
     }
 
-    func executeQueryUnsafe<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: Args?) -> Cursor<T> {
-        return self.executeQueryUnsafe(sqlStr, factory: factory, withArgs: args)
-    }
+//    func executeQueryUnsafe<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: Args?) -> Cursor<T> {
+//        return self.executeQueryUnsafe(sqlStr, factory: factory, withArgs: args)
+//    }
 
     /**
      * Queries the database.
      * Returns a live cursor that holds the query statement and database connection.
      * Instances of this class *must not* leak outside of the connection queue!
      */
-    func executeQueryUnsafe<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: [AnyObject?]?) -> Cursor<T> {
+    func executeQueryUnsafe<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: Args?) -> Cursor<T> {
         var error: NSError?
         let statement: SQLiteDBStatement?
         do {

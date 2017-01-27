@@ -104,10 +104,9 @@ class DeferredDBOperation<T>: Deferred<Maybe<T>>, Cancellable {
 
     func cancel() {
         self.cancelled = true
-        self.connectionLock.withReadLock({ connection -> () in
+        self.connectionLock.withReadLock({ connection -> Void in
             connection?.interrupt()
             return ()
         })
     }
 }
-

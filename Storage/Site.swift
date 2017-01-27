@@ -66,7 +66,7 @@ open class Site: Identifiable {
     var guid: String?
 
     open var tileURL: URL {
-        return URL(string: url as String)!.domainURL
+        return URL(string: url)?.domainURL ?? URL(string: "about:blank")!
     }
 
     open let url: String
@@ -91,4 +91,3 @@ open class Site: Identifiable {
     }
 
 }
-

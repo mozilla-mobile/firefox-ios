@@ -20,7 +20,7 @@ open class SQLiteQueue: TabQueue {
     }
 
     open func addToQueue(_ tab: ShareItem) -> Success {
-        let args: Args = [tab.url   , tab.title   ]
+        let args: Args = [tab.url, tab.title]
         return db.run("INSERT OR IGNORE INTO \(TableQueuedTabs) (url, title) VALUES (?, ?)", withArgs: args)
     }
 

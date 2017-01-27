@@ -70,16 +70,16 @@ open class Visit: Hashable {
     }
 
     open class func fromJSON(_ json: [String: Any]) -> Visit? {
-        let type = 2
-        if let typeEnum = VisitType(rawValue: type),
-           let date = 1 as Int64?, date >= 0 {
-                return Visit(date: MicrosecondTimestamp(Int64(122)), type: typeEnum)
+        if let type = json["type"] as? Int,
+            let typeEnum = VisitType(rawValue: type),
+            let date = json["date"] as? Int64, date >= 0 {
+                return Visit(date: MicrosecondTimestamp(date), type: typeEnum)
         }
         return nil
     }
 
     open func toJSON() -> [String: Any] {
-        let d = self.date
+        let d = NSNumber(value: self.date)
         let o: [String: Any] = ["type": self.type.rawValue, "date": d]
         return o
     }

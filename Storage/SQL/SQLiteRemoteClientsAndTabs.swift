@@ -17,14 +17,14 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
 
     public init(db: BrowserDB) {
         self.db = db
-        self.db.createOrUpdate(clients, tabs, commands)
+        let _ = self.db.createOrUpdate(clients, tabs, commands)
     }
 
-    fileprivate func doWipe(_ f: @escaping (_ conn: SQLiteDBConnection, _ err: inout NSError?) -> ()) -> Deferred<Maybe<()>> {
+    fileprivate func doWipe(_ f: @escaping (_ conn: SQLiteDBConnection, _ err: inout NSError?) -> Void) -> Deferred<Maybe<()>> {
         let deferred = Deferred<Maybe<()>>(defaultQueue: DispatchQueue.main)
 
         var err: NSError?
-        db.transaction(&err) { connection, _ in
+        let _ = db.transaction(&err) { connection, _ in
             f(connection, &err)
             if let err = err {
                 let databaseError = DatabaseError(err: err)
@@ -40,13 +40,13 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     }
 
     open func wipeClients() -> Deferred<Maybe<()>> {
-        return self.doWipe { (conn, err: inout NSError?) -> () in
-            self.clients.delete(conn, item: nil, err: &err)
+        return self.doWipe { (conn, err: inout NSError?) -> Void in
+            let _ = self.clients.delete(conn, item: nil, err: &err)
         }
     }
 
     open func wipeRemoteTabs() -> Deferred<Maybe<()>> {
-        return self.doWipe { (conn, err: inout NSError?) -> () in
+        return self.doWipe { (conn, err: inout NSError?) -> Void in
             if let error = conn.executeChange("DELETE FROM \(self.tabs.name) WHERE client_guid IS NOT NULL", withArgs: nil as Args?) {
                 err = error
             }
@@ -54,8 +54,8 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     }
 
     open func wipeTabs() -> Deferred<Maybe<()>> {
-        return self.doWipe { (conn, err: inout NSError?) -> () in
-            self.tabs.delete(conn, item: nil, err: &err)
+        return self.doWipe { (conn, err: inout NSError?) -> Void in
+            let _ = self.tabs.delete(conn, item: nil, err: &err)
         }
     }
 
@@ -67,11 +67,11 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         let deferred = Deferred<Maybe<Int>>(defaultQueue: DispatchQueue.main)
 
         let deleteQuery = "DELETE FROM \(self.tabs.name) WHERE client_guid IS ?"
-        let deleteArgs: Args = [clientGUID!]
+        let deleteArgs: Args = [clientGUID]
 
         var err: NSError?
 
-        db.transaction(&err) { connection, _ in
+        let _ = db.transaction(&err) { connection, _ in
             // Delete any existing tabs.
             if let _ = connection.executeChange(deleteQuery, withArgs: deleteArgs) {
                 log.warning("Deleting existing tabs failed.")
@@ -170,7 +170,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         let clientArgs: Args?
         if let _ = guid {
             tabsSQL = "SELECT * FROM \(TableTabs) WHERE client_guid = ?"
-            clientArgs = [guid!]
+            clientArgs = [guid]
         } else {
             tabsSQL = "SELECT * FROM \(TableTabs) WHERE client_guid IS NULL"
             clientArgs = nil
@@ -343,7 +343,7 @@ extension SQLiteRemoteClientsAndTabs: ResettableSyncStorage {
     }
 
     public func clear() -> Success {
-        return self.doWipe { (conn, err: inout NSError?) -> () in
+        return self.doWipe { (conn, err: inout NSError?) -> Void in
             self.tabs.delete(conn, item: nil, err: &err)
             self.clients.delete(conn, item: nil, err: &err)
         }

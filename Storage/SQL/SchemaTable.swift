@@ -15,21 +15,21 @@ class SchemaTable: GenericTable<TableInfo> {
         "name TEXT NOT NULL UNIQUE, " +
         "version INTEGER NOT NULL" }
 
-    override func getInsertAndArgs(_ item: inout TableInfo) -> (sql: String, args: Args)? {
+    override func getInsertAndArgs(_ item: inout TableInfo) -> (String, Args)? {
         var args = Args()
         args.append(item.name as String )
         args.append(item.version  )
         return ("INSERT INTO \(name) (name, version) VALUES (?,?)", args)
     }
 
-    override func getUpdateAndArgs(_ item: inout TableInfo) -> (sql: String, args: Args)? {
+    override func getUpdateAndArgs(_ item: inout TableInfo) -> (String, Args)? {
         var args = Args()
         args.append(item.version  )
         args.append(item.name  as String )
         return ("UPDATE \(name) SET version = ? WHERE name = ?", args)
     }
 
-    override func getDeleteAndArgs(_ item: inout TableInfo?) -> (sql: String, args: Args)? {
+    override func getDeleteAndArgs(_ item: inout TableInfo?) -> (String, Args)? {
         var args = Args()
         var sql = "DELETE FROM \(name)"
         if let table = item {
@@ -45,7 +45,7 @@ class SchemaTable: GenericTable<TableInfo> {
         }
     }
 
-    override func getQueryAndArgs(_ options: QueryOptions?) -> (sql: String, args: Args)? {
+    override func getQueryAndArgs(_ options: QueryOptions?) -> (String, Args)? {
         var args = Args()
         if let filter: Any = options?.filter {
             args.append(filter)

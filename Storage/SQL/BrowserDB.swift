@@ -9,7 +9,7 @@ import Shared
 import Deferred
 // FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
 // Consider refactoring the code to use the non-optional operators.
-fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+fileprivate func < <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
   switch (lhs, rhs) {
   case let (l?, r?):
     return l < r
@@ -22,7 +22,7 @@ fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 
 // FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
 // Consider refactoring the code to use the non-optional operators.
-fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+fileprivate func > <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
   switch (lhs, rhs) {
   case let (l?, r?):
     return l > r
@@ -31,13 +31,11 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
   }
 }
 
-
 public let NotificationDatabaseWasRecreated = "NotificationDatabaseWasRecreated"
 
 private let log = Logger.syncLogger
 
 public typealias Args = [Any?]
-
 
 protocol Changeable {
     func run(_ sql: String, withArgs args: Args?) -> Success
@@ -159,10 +157,10 @@ open class BrowserDB {
             log.info("Database is closed - skipping schema create/updates")
             return .closed
         }
-        
+
         var success = true
 
-        let doCreate = { (table: Table, connection: SQLiteDBConnection) -> () in
+        let doCreate = { (table: Table, connection: SQLiteDBConnection) -> Void in
             switch self.createTable(connection, table: table) {
             case .created:
                 success = true
@@ -322,14 +320,14 @@ open class BrowserDB {
 extension BrowserDB {
     func vacuum() {
         log.debug("Vacuuming a BrowserDB.")
-        db.withConnection(SwiftData.Flags.readWriteCreate, synchronous: true) { connection in
+        let _ = db.withConnection(SwiftData.Flags.readWriteCreate, synchronous: true) { connection in
             return connection.vacuum()
         }
     }
 
     func checkpoint() {
         log.debug("Checkpointing a BrowserDB.")
-        db.transaction(synchronous: true) { connection in
+        let _ = db.transaction(synchronous: true) { connection in
             connection.checkpoint()
             return true
         }
@@ -473,18 +471,18 @@ extension BrowserDB: Changeable {
 extension BrowserDB: Queryable {
 
     func runQuery<T>(_ sql: String, args: Args?, factory: @escaping (SDRow) -> T) -> Deferred<Maybe<Cursor<T>>> {
-        return runWithConnection { (connection, err) -> Cursor<T> in
+        return runWithConnection { (connection, _) -> Cursor<T> in
             return connection.executeQuery(sql, factory: factory, withArgs: args)
         }
     }
 
-    func queryReturnsResults(_ sql: String, args: Args?=nil) -> Deferred<Maybe<Bool>> {
-        return self.runQuery(sql, args: args, factory: { row in true })
+    func queryReturnsResults(_ sql: String, args: Args? = nil) -> Deferred<Maybe<Bool>> {
+        return self.runQuery(sql, args: args, factory: { _ in true })
          >>== { deferMaybe($0[0] ?? false) }
     }
 
-    func queryReturnsNoResults(_ sql: String, args: Args?=nil) -> Deferred<Maybe<Bool>> {
-        return self.runQuery(sql, args: nil, factory: { row in false })
+    func queryReturnsNoResults(_ sql: String, args: Args? = nil) -> Deferred<Maybe<Bool>> {
+        return self.runQuery(sql, args: nil, factory: { _ in false })
           >>== { deferMaybe($0[0] ?? true) }
     }
 }
@@ -495,7 +493,7 @@ extension SQLiteDBConnection {
         let inClause = BrowserDB.varlist(names.count)
         let tablesSQL = "SELECT name FROM sqlite_master WHERE type = 'table' AND name IN \(inClause)"
 
-        let res = self.executeQuery(tablesSQL, factory: StringFactory, withArgs: names.map  { $0 })
+        let res = self.executeQuery(tablesSQL, factory: StringFactory, withArgs: names)
         log.debug("\(res.count) tables exist. Expected \(count)")
         return res.count > 0
     }
