@@ -12,19 +12,19 @@ public protocol PerhapsNoOp {
     var isNoOp: Bool { get }
 }
 
-public class LocalOverrideCompletionOp: PerhapsNoOp {
-    public var processedLocalChanges: Set<GUID> = Set()                // These can be deleted when we're run. Mark mirror as non-overridden, too.
+open class LocalOverrideCompletionOp: PerhapsNoOp {
+    open var processedLocalChanges: Set<GUID> = Set()                // These can be deleted when we're run. Mark mirror as non-overridden, too.
 
-    public var mirrorItemsToDelete: Set<GUID> = Set()                  // These were locally or remotely deleted.
-    public var mirrorItemsToInsert: [GUID: BookmarkMirrorItem] = [:]   // These were locally or remotely added.
-    public var mirrorItemsToUpdate: [GUID: BookmarkMirrorItem] = [:]   // These were already in the mirror, but changed.
-    public var mirrorStructures: [GUID: [GUID]] = [:]                  // New or changed structure.
+    open var mirrorItemsToDelete: Set<GUID> = Set()                  // These were locally or remotely deleted.
+    open var mirrorItemsToInsert: [GUID: BookmarkMirrorItem] = [:]   // These were locally or remotely added.
+    open var mirrorItemsToUpdate: [GUID: BookmarkMirrorItem] = [:]   // These were already in the mirror, but changed.
+    open var mirrorStructures: [GUID: [GUID]] = [:]                  // New or changed structure.
 
-    public var mirrorValuesToCopyFromBuffer: Set<GUID> = Set()         // No need to synthesize BookmarkMirrorItem instances in memory.
-    public var mirrorValuesToCopyFromLocal: Set<GUID> = Set()
-    public var modifiedTimes: [Timestamp: [GUID]] = [:]                // Only for copy.
+    open var mirrorValuesToCopyFromBuffer: Set<GUID> = Set()         // No need to synthesize BookmarkMirrorItem instances in memory.
+    open var mirrorValuesToCopyFromLocal: Set<GUID> = Set()
+    open var modifiedTimes: [Timestamp: [GUID]] = [:]                // Only for copy.
 
-    public var isNoOp: Bool {
+    open var isNoOp: Bool {
         return processedLocalChanges.isEmpty &&
                mirrorValuesToCopyFromBuffer.isEmpty &&
                mirrorValuesToCopyFromLocal.isEmpty &&
@@ -34,7 +34,7 @@ public class LocalOverrideCompletionOp: PerhapsNoOp {
                mirrorStructures.isEmpty
     }
 
-    public func setModifiedTime(time: Timestamp, guids: [GUID]) {
+    open func setModifiedTime(_ time: Timestamp, guids: [GUID]) {
         var forCopy: [GUID] = self.modifiedTimes[time] ?? []
         for guid in guids {
             // This saves us doing an UPDATE on these items.
@@ -56,10 +56,10 @@ public class LocalOverrideCompletionOp: PerhapsNoOp {
     }
 }
 
-public class BufferCompletionOp: PerhapsNoOp {
-    public var processedBufferChanges: Set<GUID> = Set()    // These can be deleted when we're run.
+open class BufferCompletionOp: PerhapsNoOp {
+    open var processedBufferChanges: Set<GUID> = Set()    // These can be deleted when we're run.
 
-    public var isNoOp: Bool {
+    open var isNoOp: Bool {
         return self.processedBufferChanges.isEmpty
     }
 

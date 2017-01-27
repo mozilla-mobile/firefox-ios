@@ -8,7 +8,7 @@ import XCGLogger
 import Deferred
 
 private let log = Logger.syncLogger
-private let DeferredQueue = dispatch_queue_create("BrowserDBQueue", DISPATCH_QUEUE_SERIAL)
+private let DeferredQueue = DispatchQueue(label: "BrowserDBQueue", attributes: [])
 
 /**
     This class is written to mimick an NSOperation, but also provide Deferred capabilities as well.
@@ -27,7 +27,7 @@ private let DeferredQueue = dispatch_queue_create("BrowserDBQueue", DISPATCH_QUE
 */
 class DeferredDBOperation<T>: Deferred<Maybe<T>>, Cancellable {
     /// Cancelled is wrapping a ReadWrite lock to make access to it thread-safe.
-    private var cancelledLock = LockProtected<Bool>(item: false)
+    fileprivate var cancelledLock = LockProtected<Bool>(item: false)
     var cancelled: Bool {
         get {
             return self.cancelledLock.withReadLock({ cancelled -> Bool in
@@ -43,8 +43,8 @@ class DeferredDBOperation<T>: Deferred<Maybe<T>>, Cancellable {
     }
 
     /// Executing is wrapping a ReadWrite lock to make access to it thread-safe.
-    private var connectionLock = LockProtected<SQLiteDBConnection?>(item: nil)
-    private var connection: SQLiteDBConnection? {
+    fileprivate var connectionLock = LockProtected<SQLiteDBConnection?>(item: nil)
+    fileprivate var connection: SQLiteDBConnection? {
         get {
             // We want to avoid leaking this connection. If you want access to it,
             // you should use a read/write lock directly.
@@ -58,21 +58,21 @@ class DeferredDBOperation<T>: Deferred<Maybe<T>>, Cancellable {
         }
     }
 
-    private var db: SwiftData
-    private var block: (connection: SQLiteDBConnection, inout err: NSError?) -> T
+    fileprivate var db: SwiftData
+    fileprivate var block: (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> T
 
-    init(db: SwiftData, block: (connection: SQLiteDBConnection, inout err: NSError?) -> T) {
+    init(db: SwiftData, block: @escaping (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> T) {
         self.block = block
         self.db = db
         super.init()
     }
 
-    func start(onQueue queue: dispatch_queue_t = DeferredQueue) -> DeferredDBOperation<T> {
-        dispatch_async(queue, self.main)
+    func start(onQueue queue: DispatchQueue = DeferredQueue) -> DeferredDBOperation<T> {
+        queue.async(execute: self.main)
         return self
     }
 
-    private func main() {
+    fileprivate func main() {
         if self.cancelled {
             let err = NSError(domain: "mozilla", code: 9, userInfo: [NSLocalizedDescriptionKey: "Operation was cancelled before starting"])
             fill(Maybe(failure: DatabaseError(err: err)))
@@ -80,14 +80,14 @@ class DeferredDBOperation<T>: Deferred<Maybe<T>>, Cancellable {
         }
 
         var result: T? = nil
-        let err = db.withConnection(SwiftData.Flags.ReadWriteCreate) { (db) -> NSError? in
+        let err = db.withConnection(SwiftData.Flags.readWriteCreate) { (db) -> NSError? in
             self.connection = db
             if self.cancelled {
                 return NSError(domain: "mozilla", code: 9, userInfo: [NSLocalizedDescriptionKey: "Operation was cancelled before starting"])
             }
 
             var error: NSError? = nil
-            result = self.block(connection: db, err: &error)
+            result = self.block(db, &error)
             if error == nil {
                 log.verbose("Modified rows: \(db.numberOfRowsModified).")
             }

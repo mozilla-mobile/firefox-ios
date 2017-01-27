@@ -7,7 +7,7 @@ import Deferred
 import Shared
 
 /// The sqlite-backed implementation of the metadata protocol containing images and content for pages.
-public class SQLiteMetadata {
+open class SQLiteMetadata {
     let db: BrowserDB
 
     required public init(db: BrowserDB) {
@@ -18,7 +18,7 @@ public class SQLiteMetadata {
 extension SQLiteMetadata: Metadata {
     // A cache key is a conveninent, readable identifier for a site in the metadata database which helps
     // with deduping entries for the same page.
-    private typealias CacheKey = String
+    fileprivate typealias CacheKey = String
 
     /// Persists the given PageMetadata object to browser.db in the page_metadata table.
     ///
@@ -27,17 +27,17 @@ extension SQLiteMetadata: Metadata {
     /// - parameter expireAt: Expiration/TTL interval for when this metadata should expire at.
     ///
     /// - returns: Deferred on success
-    public func storeMetadata(metadata: PageMetadata, forPageURL pageURL: NSURL,
+    public func storeMetadata(_ metadata: PageMetadata, forPageURL pageURL: URL,
                               expireAt: UInt64) -> Success {
-        guard let cacheKey = cacheKeyForURL(pageURL) else {
+        guard let cacheKey = cacheKeyForURL(pageURL as URL) else {
             return succeed()
         }
 
         // Replace any matching cache_key entries if they exist
         let selectUniqueCacheKey = "COALESCE((SELECT cache_key FROM \(TablePageMetadata) WHERE cache_key = ?), ?)"
-        let args: Args = [cacheKey, cacheKey, metadata.siteURL, metadata.mediaURL, metadata.title,
-                          metadata.type, metadata.description, metadata.providerName,
-                          NSNumber(unsignedLongLong: expireAt)]
+        let args: Args = [cacheKey   , cacheKey   , metadata.siteURL   , metadata.mediaURL   , metadata.title   ,
+                          metadata.type   , metadata.description, metadata.providerName,
+                          expireAt]
 
         let insert =
         "INSERT OR REPLACE INTO \(TablePageMetadata)" +
@@ -56,7 +56,7 @@ extension SQLiteMetadata: Metadata {
         return self.db.run(sql)
     }
 
-    private func cacheKeyForURL(url: NSURL) -> CacheKey? {
+    fileprivate func cacheKeyForURL(_ url: URL) -> CacheKey? {
         var key = url.normalizedHost ?? ""
         key = key + (url.path ?? "") + (url.query ?? "")
         return key

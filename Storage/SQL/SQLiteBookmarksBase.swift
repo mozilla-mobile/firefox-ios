@@ -18,22 +18,22 @@ class NoSuchSearchKeywordError: MaybeErrorType {
     }
 }
 
-public class SQLiteBookmarks: BookmarksModelFactorySource, KeywordSearchSource {
+open class SQLiteBookmarks: BookmarksModelFactorySource, KeywordSearchSource {
     let db: BrowserDB
     let favicons: FaviconsTable<Favicon>
 
-    static let defaultFolderTitle = NSLocalizedString("Untitled", tableName: "Storage", comment: "The default name for bookmark folders without titles.")
-    static let defaultItemTitle = NSLocalizedString("Untitled", tableName: "Storage", comment: "The default name for bookmark nodes without titles.")
+    static let defaultFolderTitle: String = NSLocalizedString("Untitled", tableName: "Storage", comment: "The default name for bookmark folders without titles.")
+    static let defaultItemTitle: String = NSLocalizedString("Untitled", tableName: "Storage", comment: "The default name for bookmark nodes without titles.")
 
-    public lazy var modelFactory: Deferred<Maybe<BookmarksModelFactory>> =
-        deferMaybe(SQLiteBookmarksModelFactory(bookmarks: self, direction: .Local))
+    open lazy var modelFactory: Deferred<Maybe<BookmarksModelFactory>> =
+        deferMaybe(SQLiteBookmarksModelFactory(bookmarks: self, direction: .local))
 
     public init(db: BrowserDB) {
         self.db = db
         self.favicons = FaviconsTable<Favicon>()
     }
     
-    public func isBookmarked(url: String, direction: Direction) -> Deferred<Maybe<Bool>> {
+    open func isBookmarked(_ url: String, direction: Direction) -> Deferred<Maybe<Bool>> {
         let sql = "SELECT id FROM " +
             "(SELECT id FROM \(direction.valueTable) WHERE " +
             " bmkUri = ? AND is_deleted IS NOT 1" +
@@ -46,14 +46,14 @@ public class SQLiteBookmarks: BookmarksModelFactorySource, KeywordSearchSource {
         return self.db.queryReturnsResults(sql, args: args)
     }
 
-    public func getURLForKeywordSearch(keyword: String) -> Deferred<Maybe<String>> {
+    open func getURLForKeywordSearch(_ keyword: String) -> Deferred<Maybe<String>> {
         let sql = "SELECT bmkUri FROM \(ViewBookmarksBufferOnMirror) WHERE " +
         " keyword = ?"
         let args: Args = [keyword]
         
         return self.db.runQuery(sql, args: args, factory: { $0["bmkUri"] as! String })
             >>== { cursor in
-                if cursor.status == .Success {
+                if cursor.status == .success {
                     if let str = cursor[0] {
                         return deferMaybe(str)
                     }

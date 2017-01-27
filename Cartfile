@@ -1,18 +1,18 @@
-github "Alamofire/Alamofire"                "3.5.0"
-github "sleroux/Deferred"                   "Swift2.3"
-github "SnapKit/SnapKit"                    "0.22.0"
+github "Alamofire/Alamofire"                ~> 4.0
+github "sleroux/Deferred"                   "Swift3.0"
+github "SnapKit/SnapKit"                    "3.1.2"
 
 github "rs/SDWebImage"                      "3.7.4"
 github "swisspol/GCDWebServer"              "3.3.2"
 github "kif-framework/KIF"                  "v3.5.1"
 github "adjust/ios_sdk"                     "v4.10.2"
-github "AgileBits/onepassword-extension"    "add-framework-support"
-github "iziz/libPhoneNumber-iOS"            "0.8.11"
+github "AgileBits/onepassword-extension"    "new/carthage+ios10"
+github "iziz/libPhoneNumber-iOS"            "0.9.2"
 
 github "mozilla-mobile/web_metadata_ios"    "0.0.6"
 github "mozilla/readability"                "master"
 
-github "jrendel/SwiftKeychainWrapper"       "Swift2.3"
-github "thebnich/XCGLogger"                 "trycatch"
-github "cezheng/Fuzi"               "0.4.0"
-github "google/EarlGrey" "1.6.2"
+github "jrendel/SwiftKeychainWrapper"       "3.0.1"
+github "DaveWoodCom/XCGLogger"              "Version_4.0.0"
+github "cezheng/Fuzi"                       "1.0.1"
+github "SwiftyJSON/SwiftyJSON"              "3.1.4"
