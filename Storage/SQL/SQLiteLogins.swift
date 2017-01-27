@@ -121,7 +121,7 @@ open class SQLiteLogins: BrowserLogins {
 
     public init(db: BrowserDB) {
         self.db = db
-        db.createOrUpdate(LoginsTable())
+        let _ = db.createOrUpdate(LoginsTable())
     }
 
     fileprivate class func populateLogin(_ login: Login, row: SDRow) {
