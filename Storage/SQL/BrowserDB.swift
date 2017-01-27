@@ -36,36 +36,7 @@ public let NotificationDatabaseWasRecreated = "NotificationDatabaseWasRecreated"
 
 private let log = Logger.syncLogger
 
-public protocol ArgValue {
-    func toObject() -> AnyObject
-}
-
-extension String: ArgValue {
-    public func toObject() -> AnyObject {
-        return self as AnyObject
-    }
-}
-
-extension Int: ArgValue {
-    public func toObject() -> AnyObject {
-        return self as AnyObject
-    }
-}
-
-extension NSNumber: ArgValue {
-    public func toObject() -> AnyObject {
-        return self as AnyObject
-    }
-}
-
-extension Date: ArgValue {
-    public func toObject() -> AnyObject {
-        return self as AnyObject
-    }
-}
-
-
-public typealias Args = [ArgValue?]
+public typealias Args = [Any?]
 
 
 protocol Changeable {
@@ -113,7 +84,7 @@ open class BrowserDB {
         self.schemaTable = SchemaTable()
         self.secretKey = secretKey
 
-        let file = ((try! files.getAndEnsureDirectory()) as NSString).appendingPathComponent(filename)
+        let file = URL(fileURLWithPath: (try! files.getAndEnsureDirectory())).appendingPathComponent(filename).path
         self.db = SwiftData(filename: file, key: secretKey, prevKey: nil)
 
         if AppConstants.BuildChannel == .developer && secretKey != nil {
@@ -503,7 +474,7 @@ extension BrowserDB: Queryable {
 
     func runQuery<T>(_ sql: String, args: Args?, factory: @escaping (SDRow) -> T) -> Deferred<Maybe<Cursor<T>>> {
         return runWithConnection { (connection, err) -> Cursor<T> in
-            return connection.executeQuery(sql, factory: factory, withArgs: args?.flatMap( { $0?.toObject() }))
+            return connection.executeQuery(sql, factory: factory, withArgs: args)
         }
     }
 

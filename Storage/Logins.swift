@@ -283,7 +283,7 @@ open class Login: CustomStringConvertible, LoginData, LoginUsageData, Equatable 
         ]
     }
 
-    open class func fromScript(_ url: URL, script: [String: AnyObject]) -> LoginData? {
+    open class func fromScript(_ url: URL, script: [String: Any]) -> LoginData? {
         guard let username = script["username"] as? String,
               let password = script["password"] as? String else {
                 return nil
@@ -318,7 +318,7 @@ open class Login: CustomStringConvertible, LoginData, LoginUsageData, Equatable 
 
             // If the URI explicitly specified a port, only include it when
             // it's not the default. (We never want "http://foo.com:80")
-            if let port = (uri as NSURL).port {
+            if let port = uri.port {
                 realm? += ":\(port)"
             }
         } else {

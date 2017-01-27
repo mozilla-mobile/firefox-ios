@@ -9,7 +9,7 @@ let TableClients = "clients"
 let TableTabs = "tabs"
 
 class RemoteClientsTable<T>: GenericTable<RemoteClient> {
-    override var name: NSString { return TableClients as NSString }
+    override var name: String { return TableClients as String }
     override var version: Int { return 1 }
 
     // TODO: index on guid and last_modified.
@@ -28,7 +28,7 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
         let args: Args = [
             item.guid,
             item.name,
-            NSNumber(value: item.modified),
+            item.modified,
             item.type,
             item.formfactor,
             item.os,
@@ -39,7 +39,7 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
     override func getUpdateAndArgs(_ item: inout RemoteClient) -> (sql: String, args: Args)? {
         let args: Args = [
             item.name,
-            NSNumber(value: item.modified),
+            item.modified,
             item.type,
             item.formfactor,
             item.os,
@@ -61,7 +61,7 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
         return { row -> RemoteClient in
             let guid = row["guid"] as? String
             let name = row["name"] as! String
-            let mod = Timestamp((row["modified"] as! NSNumber).int64Value)
+            let mod = Timestamp(row["modified"] as! UInt64)
             let type = row["type"] as? String
             let form = row["formfactor"] as? String
             let os = row["os"] as? String
@@ -75,7 +75,7 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
 }
 
 class RemoteTabsTable<T>: GenericTable<RemoteTab> {
-    override var name: NSString { return TableTabs as NSString }
+    override var name: String { return TableTabs }
     override var version: Int { return 2 }
 
     // TODO: index on id, client_guid, last_used, and position.
@@ -93,7 +93,7 @@ class RemoteTabsTable<T>: GenericTable<RemoteTab> {
         let historyAsStrings = optFilter(history.map { $0.absoluteString })
 
         let data = try! JSONSerialization.data(withJSONObject: historyAsStrings, options: [])
-        return NSString(data: data, encoding: String.Encoding.utf8.rawValue) as? String
+        return String(data: data, encoding: String.Encoding(rawValue: String.Encoding.utf8.rawValue))
     }
 
     private func convertStringToHistory(_ history: String?) -> [URL] {
@@ -111,7 +111,7 @@ class RemoteTabsTable<T>: GenericTable<RemoteTab> {
             item.URL.absoluteString,
             item.title,
             RemoteTabsTable.convertHistoryToString(item.history),
-            NSNumber(value: item.lastUsed),
+            item.lastUsed,
         ]
 
         return ("INSERT INTO \(name) (client_guid, url, title, history, last_used) VALUES (?, ?, ?, ?, ?)", args)
@@ -121,7 +121,7 @@ class RemoteTabsTable<T>: GenericTable<RemoteTab> {
         let args: Args = [
             item.title,
             RemoteTabsTable.convertHistoryToString(item.history),
-            NSNumber(value: item.lastUsed),
+            item.lastUsed,
 
             // Key by (client_guid, url) rather than (transient) id.
             item.clientGUID,

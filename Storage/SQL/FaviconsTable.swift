@@ -29,7 +29,7 @@ fileprivate func >= <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 
 // This is our default favicons store.
 class FaviconsTable<T>: GenericTable<Favicon> {
-    override var name: NSString { return TableFavicons as NSString }
+    override var name: String { return TableFavicons }
     override var rows: String { return "" }
     override func create(_ db: SQLiteDBConnection) -> Bool {
         // Nothing to do: BrowserTable does it all.
@@ -77,7 +77,7 @@ class FaviconsTable<T>: GenericTable<Favicon> {
 
     override func getQueryAndArgs(_ options: QueryOptions?) -> (sql: String, args: Args)? {
         var args = Args()
-        if let filter: AnyObject = options?.filter {
+        if let filter: Any = options?.filter {
             args.append("%\(filter)%"  )
             return ("SELECT id, url, date, type FROM \(TableFavicons) WHERE url LIKE ?", args)
         }
@@ -86,7 +86,7 @@ class FaviconsTable<T>: GenericTable<Favicon> {
 
     func getIDFor(_ db: SQLiteDBConnection, obj: Favicon) -> Int? {
         let opts = QueryOptions()
-        opts.filter = obj.url as AnyObject?  
+        opts.filter = obj.url  
 
         let cursor = query(db, options: opts)
         if (cursor.count != 1) {

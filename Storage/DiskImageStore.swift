@@ -49,9 +49,9 @@ open class DiskImageStore {
         }
 
         return deferDispatchAsync(queue) { () -> Deferred<Maybe<UIImage>> in
-            let imagePath = (self.filesDir as NSString).appendingPathComponent(key)
-            if let data = NSData(contentsOfFile: imagePath),
-                   let image = UIImage.imageFromDataThreadSafe(data as Data) {
+            let imagePath = URL(fileURLWithPath: self.filesDir).appendingPathComponent(key)
+            if let data = try? Data(contentsOf: imagePath),
+                   let image = UIImage.imageFromDataThreadSafe(data) {
                 return deferMaybe(image)
             }
 
@@ -68,7 +68,7 @@ open class DiskImageStore {
         }
 
         return deferDispatchAsync(queue) { () -> Success in
-            let imagePath = (self.filesDir as NSString).appendingPathComponent(key)
+            let imagePath = URL(fileURLWithPath: self.filesDir).appendingPathComponent(key).absoluteString
             if let data = UIImageJPEGRepresentation(image, self.quality) {
                 do {
                     try data.write(to: URL(fileURLWithPath: imagePath), options: Data.WritingOptions.noFileProtection)
@@ -88,7 +88,7 @@ open class DiskImageStore {
         let keysToDelete = self.keys.subtracting(keys)
 
         for key in keysToDelete {
-            let path = NSString(string: filesDir).appendingPathComponent(key)
+            let path = URL(fileURLWithPath: filesDir).appendingPathComponent(key).absoluteString
             do {
                 try FileManager.default.removeItem(atPath: path)
             } catch {

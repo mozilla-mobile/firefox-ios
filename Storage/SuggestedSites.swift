@@ -11,7 +11,7 @@ open class SuggestedSite: Site {
     open let backgroundColor: UIColor
 
     override open var tileURL: URL {
-        return URL(string: url) ?? URL(string: "about:blank")!
+        return URL(string: url as String) ?? URL(string: "about:blank")!
     }
 
     let trackingId: Int

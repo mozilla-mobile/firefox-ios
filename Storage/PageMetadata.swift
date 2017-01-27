@@ -26,7 +26,7 @@ public struct PageMetadata {
         self.providerName = providerName
     }
 
-    public static func fromDictionary(_ dict: [String: AnyObject]) -> PageMetadata? {
+    public static func fromDictionary(_ dict: [String: Any]) -> PageMetadata? {
         guard let siteURL = dict["url"] as? String else {
             return nil
         }

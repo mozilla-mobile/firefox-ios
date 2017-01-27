@@ -213,8 +213,8 @@ extension SQLiteBookmarks {
         // TODO: these can be merged into a single query.
         let mirrorStatusSQL = "SELECT is_overridden FROM \(TableBookmarksMirror) WHERE guid = ?"
         let localStatusSQL = "SELECT sync_status, is_deleted FROM \(TableBookmarksLocal) WHERE guid = ?"
-        let mirrorStatus = conn.executeQuery(mirrorStatusSQL, factory: overriddenFactory, withArgs: parentArgs.flatMap({$0?.toObject()}))[0]
-        let localStatus = conn.executeQuery(localStatusSQL, factory: localStatusFactory, withArgs: parentArgs.flatMap({$0?.toObject()}))[0]
+        let mirrorStatus = conn.executeQuery(mirrorStatusSQL, factory: overriddenFactory, withArgs: parentArgs)[0]
+        let localStatus = conn.executeQuery(localStatusSQL, factory: localStatusFactory, withArgs: parentArgs)[0]
 
         let parentExistsInMirror = mirrorStatus != nil
         let parentExistsLocally = localStatus != nil
@@ -320,7 +320,7 @@ private extension BookmarkMirrorItem {
     func getUpdateOrInsertArgs() -> Args {
         let args: Args = [
             self.type.rawValue   ,
-            NSNumber(value: self.serverModified),
+            self.serverModified,
             self.isDeleted ? 1 : 0   ,
             self.hasDupe ? 1 : 0,
             self.parentID,

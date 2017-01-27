@@ -8,7 +8,7 @@ import Foundation
 // to let us handle table upgrades when the table is first accessed, rather than when the database
 // itself is created.
 class SchemaTable: GenericTable<TableInfo> {
-    override var name: NSString { return "tableList" as NSString }
+    override var name: String { return "tableList" }
     override var version: Int { return 1 }
 
     override var rows: String { return "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -41,13 +41,13 @@ class SchemaTable: GenericTable<TableInfo> {
 
     override var factory: ((_ row: SDRow) -> TableInfo)? {
         return { row -> TableInfo in
-            return TableInfoWrapper(name: row["name"] as! NSString, version: row["version"] as! Int)
+            return TableInfoWrapper(name: row["name"] as! String, version: row["version"] as! Int)
         }
     }
 
     override func getQueryAndArgs(_ options: QueryOptions?) -> (sql: String, args: Args)? {
         var args = Args()
-        if let filter: ArgValue = options?.filter as? ArgValue {
+        if let filter: Any = options?.filter {
             args.append(filter)
             return ("SELECT name, version FROM \(name) WHERE name = ?", args)
         }
