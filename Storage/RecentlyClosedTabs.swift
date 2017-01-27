@@ -9,8 +9,8 @@ open class ClosedTabsStore {
     let prefs: Prefs
 
     lazy open var tabs: [ClosedTab] = {
-        guard let tabsArray: Data = self.prefs.objectForKey("recentlyClosedTabs"),
-              let unarchivedArray = NSKeyedUnarchiver.unarchiveObject(with: tabsArray) as? [ClosedTab] else {
+        guard let tabsArray: AnyObject = self.prefs.objectForKey("recentlyClosedTabs"),
+              let unarchivedArray = NSKeyedUnarchiver.unarchiveObject(with: tabsArray as! Data) as? [ClosedTab] else {
             return []
         }
         return unarchivedArray
@@ -27,7 +27,7 @@ open class ClosedTabsStore {
             tabs.removeLast()
         }
         let archivedTabsArray = NSKeyedArchiver.archivedData(withRootObject: tabs)
-        prefs.setObject(archivedTabsArray as AnyObject?, forKey: "recentlyClosedTabs")
+        prefs.setObject(archivedTabsArray as AnyObject?  , forKey: "recentlyClosedTabs")
     }
 
     open func clearTabs() {
@@ -42,10 +42,12 @@ open class ClosedTab: NSObject, NSCoding {
     open let faviconURL: String?
 
     var jsonDictionary: [String: AnyObject] {
+        let title = (self.title ?? "") as AnyObject
+        let faviconURL = (self.faviconURL   ?? "") as AnyObject
         let json: [String: AnyObject] = [
-            "title": title as AnyObject? ?? "" as AnyObject,
+            "title": title ,
             "url": url as AnyObject,
-            "faviconURL": faviconURL as AnyObject? ?? "" as AnyObject,
+            "faviconURL": faviconURL
         ]
         return json
     }

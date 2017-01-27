@@ -27,7 +27,7 @@ extension SQLiteMetadata: Metadata {
     /// - parameter expireAt: Expiration/TTL interval for when this metadata should expire at.
     ///
     /// - returns: Deferred on success
-    public func storeMetadata(_ metadata: PageMetadata, forPageURL pageURL: NSURL,
+    public func storeMetadata(_ metadata: PageMetadata, forPageURL pageURL: URL,
                               expireAt: UInt64) -> Success {
         guard let cacheKey = cacheKeyForURL(pageURL as URL) else {
             return succeed()
@@ -35,9 +35,9 @@ extension SQLiteMetadata: Metadata {
 
         // Replace any matching cache_key entries if they exist
         let selectUniqueCacheKey = "COALESCE((SELECT cache_key FROM \(TablePageMetadata) WHERE cache_key = ?), ?)"
-        let args: Args = [cacheKey as Optional<AnyObject>, cacheKey as Optional<AnyObject>, metadata.siteURL as Optional<AnyObject>, metadata.mediaURL as Optional<AnyObject>, metadata.title as Optional<AnyObject>,
-                          metadata.type as Optional<AnyObject>, metadata.description, metadata.providerName,
-                          NSNumber(unsignedLongLong: expireAt)]
+        let args: Args = [cacheKey   , cacheKey   , metadata.siteURL   , metadata.mediaURL   , metadata.title   ,
+                          metadata.type   , metadata.description, metadata.providerName,
+                          NSNumber(value: expireAt)]
 
         let insert =
         "INSERT OR REPLACE INTO \(TablePageMetadata)" +

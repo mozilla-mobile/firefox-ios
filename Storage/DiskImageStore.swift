@@ -70,9 +70,12 @@ open class DiskImageStore {
         return deferDispatchAsync(queue) { () -> Success in
             let imagePath = (self.filesDir as NSString).appendingPathComponent(key)
             if let data = UIImageJPEGRepresentation(image, self.quality) {
-                if data.writeToFile(imagePath, atomically: false) {
+                do {
+                    try data.write(to: URL(fileURLWithPath: imagePath), options: Data.WritingOptions.noFileProtection)
                     self.keys.insert(key)
                     return succeed()
+                } catch {
+                    log.error("Unable to write image to disk: \(error)")
                 }
             }
 

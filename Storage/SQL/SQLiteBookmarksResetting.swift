@@ -70,7 +70,7 @@ extension SQLiteBookmarks {
         //    deletion now. Optional: keep them around if they're non-uploaded changes.
         let removeLocalDeletions =
         "DELETE FROM \(TableBookmarksLocal) WHERE is_deleted IS 1 " +
-            (preserveDeletions ? "AND sync_status IS NOT \(SyncStatus.Changed.rawValue)" : "")
+            (preserveDeletions ? "AND sync_status IS NOT \(SyncStatus.changed.rawValue)" : "")
 
         // 3. Mark everything in local as New.
         let markLocalAsNew =

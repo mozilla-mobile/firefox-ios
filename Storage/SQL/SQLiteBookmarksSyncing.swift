@@ -50,7 +50,7 @@ extension SQLiteBookmarks {
         }
 
         let vars = BrowserDB.varlist(folders.count)
-        let args: Args = folders.map { $0 as AnyObject }
+        let args: Args = folders.map { $0 }
 
         // Copy it to the local table.
         // Most of these will be NULL, because we're only dealing with folders,
@@ -82,7 +82,7 @@ extension SQLiteBookmarks {
         }
 
         let vars = BrowserDB.varlist(records.count)
-        let args: Args = records.map { $0 as AnyObject }
+        let args: Args = records.map  { $0 }
 
         // Copy any that aren't overridden to the local table.
         let overrideSQL =
@@ -135,18 +135,18 @@ extension SQLiteBookmarks {
         let urlString = url.absoluteString
         let newGUID = Bytes.generateGUID()
         let now = Date.now()
-        let parentArgs: Args = [parent as Optional<AnyObject>]
+        let parentArgs: Args = [parent   ]
 
         //// Insert the new bookmark and icon without touching structure.
         var args: Args = [
-            newGUID as Optional<AnyObject>,
-            BookmarkNodeType.bookmark.rawValue as Optional<AnyObject>,
-            urlString as Optional<AnyObject>,
-            title as Optional<AnyObject>,
-            parent as Optional<AnyObject>,
-            parentTitle as Optional<AnyObject>,
+            newGUID   ,
+            BookmarkNodeType.bookmark.rawValue   ,
+            urlString   ,
+            title   ,
+            parent   ,
+            parentTitle   ,
             Date.nowNumber(),
-            SyncStatus.new.rawValue as Optional<AnyObject>,
+            SyncStatus.new.rawValue   ,
         ]
 
         let faviconID: Int?
@@ -165,10 +165,10 @@ extension SQLiteBookmarks {
         let iconValue: String
         if let faviconID = faviconID {
             iconValue = "?"
-            args.append(faviconID as AnyObject?)
+            args.append(faviconID  )
         } else {
             iconValue = "(SELECT iconID FROM \(ViewIconForURL) WHERE url = ?)"
-            args.append(urlString as AnyObject?)
+            args.append(urlString  )
         }
 
         let insertSQL = "INSERT INTO \(TableBookmarksLocal) " +
@@ -213,8 +213,8 @@ extension SQLiteBookmarks {
         // TODO: these can be merged into a single query.
         let mirrorStatusSQL = "SELECT is_overridden FROM \(TableBookmarksMirror) WHERE guid = ?"
         let localStatusSQL = "SELECT sync_status, is_deleted FROM \(TableBookmarksLocal) WHERE guid = ?"
-        let mirrorStatus = conn.executeQuery(mirrorStatusSQL, factory: overriddenFactory, withArgs: parentArgs)[0]
-        let localStatus = conn.executeQuery(localStatusSQL, factory: localStatusFactory, withArgs: parentArgs)[0]
+        let mirrorStatus = conn.executeQuery(mirrorStatusSQL, factory: overriddenFactory, withArgs: parentArgs.flatMap({$0?.toObject()}))[0]
+        let localStatus = conn.executeQuery(localStatusSQL, factory: localStatusFactory, withArgs: parentArgs.flatMap({$0?.toObject()}))[0]
 
         let parentExistsInMirror = mirrorStatus != nil
         let parentExistsLocally = localStatus != nil
@@ -271,7 +271,7 @@ extension SQLiteBookmarks {
         let newIndex = "(SELECT (COALESCE(MAX(idx), -1) + 1) AS newIndex FROM \(TableBookmarksLocalStructure) WHERE parent = ?)"
         let structureSQL = "INSERT INTO \(TableBookmarksLocalStructure) (parent, child, idx) " +
                            "VALUES (?, ?, \(newIndex))"
-        let structureArgs: Args = [parent as Optional<AnyObject>, newGUID as Optional<AnyObject>, parent as Optional<AnyObject>]
+        let structureArgs: Args = [parent   , newGUID   , parent   ]
 
         if !change(structureSQL, args: structureArgs, desc: "Error adding new item \(newGUID) to local structure.") {
             return false
@@ -311,7 +311,7 @@ private extension BookmarkMirrorItem {
         let parent = self.guid
         var idx = 0
         return self.children?.map { child in
-            let ret: Args = [parent as Optional<AnyObject>, child as Optional<AnyObject>, idx as Optional<AnyObject>]
+            let ret: Args = [parent   , child   , idx   ]
             idx += 1
             return ret
         } ?? []
@@ -319,9 +319,9 @@ private extension BookmarkMirrorItem {
 
     func getUpdateOrInsertArgs() -> Args {
         let args: Args = [
-            self.type.rawValue as Optional<AnyObject>,
-            NSNumber(unsignedLongLong: self.serverModified),
-            self.isDeleted ? 1 : 0 as Optional<AnyObject>,
+            self.type.rawValue   ,
+            NSNumber(value: self.serverModified),
+            self.isDeleted ? 1 : 0   ,
             self.hasDupe ? 1 : 0,
             self.parentID,
             self.parentName ?? "",     // Workaround for dirty data before Bug 1318414.
@@ -349,7 +349,7 @@ private func deleteStructureForGUIDs(_ guids: [GUID], fromTable table: String, c
         let inList = Array<String>(repeating: "?", count: chunk.count).joined(separator: ", ")
         let delStructure = "DELETE FROM \(table) WHERE parent IN (\(inList))"
 
-        let args: Args = chunk.flatMap { $0 as AnyObject }
+        let args: Args = chunk.flatMap  { $0 }
         if let error = connection.executeChange(delStructure, withArgs: args) {
             log.error("Updating structure: \(error.description).")
             return error
@@ -526,7 +526,7 @@ extension SQLiteBookmarkBufferStorage: BufferItemSource {
 
 extension BrowserDB {
     fileprivate func getMirrorItemFromTable(_ table: String, guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>> {
-        let args: Args = [guid as Optional<AnyObject>]
+        let args: Args = [guid   ]
         let sql = "SELECT * FROM \(table) WHERE guid = ?"
         return self.runQuery(sql, args: args, factory: BookmarkFactory.mirrorItemFactory)
           >>== { cursor in
@@ -551,7 +551,7 @@ extension BrowserDB {
             }
         }
 
-        let args: Args = guids.map { $0 as AnyObject }
+        let args: Args = guids.map  { $0 }
         if args.count < BrowserDB.MaxVariableNumber {
             return accumulate(args) >>> { deferMaybe(acc) }
         }
@@ -787,7 +787,8 @@ extension SQLiteBookmarkBufferStorage {
         }.allSucceed()
 
         deferred.upon { success in
-            notificationCenter.postNotificationName(NotificationBookmarkBufferValidated, object: Box(validations))
+            let name = Notification.Name(NotificationBookmarkBufferValidated)
+            notificationCenter.post(name: name, object: Box(validations))
         }
 
         return deferred
@@ -927,7 +928,7 @@ public extension SQLiteBookmarkBufferStorage {
         var queries: [(sql: String, args: Args?)] = []
         op.processedBufferChanges.subsetsOfSize(BrowserDB.MaxVariableNumber).forEach { guids in
             let varlist = BrowserDB.varlist(guids.count)
-            let args: Args = guids.map { $0 as AnyObject }
+            let args: Args = guids.map  { $0 }
             queries.append((sql: "DELETE FROM \(TableBookmarksBufferStructure) WHERE parent IN \(varlist)", args: args))
             queries.append((sql: "DELETE FROM \(TableBookmarksBuffer) WHERE guid IN \(varlist)", args: args))
         }
@@ -972,7 +973,7 @@ extension MergedSQLiteBookmarks {
             op.mirrorItemsToDelete
               .withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
                 guard err == nil else { return }
-                let args: Args = guids.map { $0 as AnyObject }
+                let args: Args = guids.map  { $0 }
                 let varlist = BrowserDB.varlist(guids.count)
 
                 let sqlMirrorStructure = "DELETE FROM \(TableBookmarksMirrorStructure) WHERE parent IN \(varlist)"
@@ -993,7 +994,7 @@ extension MergedSQLiteBookmarks {
             // This is one reason why the local override step needs to be processed before the buffer is cleared.
             op.mirrorValuesToCopyFromBuffer
               .withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
-                let args: Args = guids.map { $0 as AnyObject }
+                let args: Args = guids.map  { $0 }
                 let varlist = BrowserDB.varlist(guids.count)
                 let copySQL = [
                     "INSERT OR REPLACE INTO \(TableBookmarksMirror)",
@@ -1014,10 +1015,9 @@ extension MergedSQLiteBookmarks {
 
             op.mirrorValuesToCopyFromLocal
               .withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
-                let args: Args = guids.map { $0 as AnyObject }
+                let args: Args = guids.map  { $0 }
                 let varlist = BrowserDB.varlist(guids.count)
                 let copySQL = [
-                    // TODO: parentid might well be wrong.
                     "INSERT OR REPLACE INTO \(TableBookmarksMirror)",
                     "(guid, type, parentid, parentName, feedUri, siteUri, pos, title, description,",
                     "bmkUri, tags, keyword, folderName, queryId, faviconID, server_modified)",
@@ -1027,8 +1027,8 @@ extension MergedSQLiteBookmarks {
                     // This will be fixed up in batches after the initial copy.
                     "0 AS server_modified",
                     "FROM \(TableBookmarksLocal) WHERE guid IN",
-                    varlist,
-                    ].joinedWithSeparator(separator: " ")
+                    varlist
+                    ].joined(separator: " ")
                 change(copySQL, args: args)
             }
 
@@ -1040,7 +1040,7 @@ extension MergedSQLiteBookmarks {
                 precondition(guids.count < BrowserDB.MaxVariableNumber)
 
                 log.debug("Swizzling server modified time to \(time) for \(guids.count) GUIDs.")
-                let args: Args = guids.map { $0 as AnyObject }
+                let args: Args = guids.map  { $0 }
                 let varlist = BrowserDB.varlist(guids.count)
                 let updateSQL = [
                     "UPDATE \(TableBookmarksMirror) SET server_modified = \(time)",
@@ -1058,7 +1058,7 @@ extension MergedSQLiteBookmarks {
             op.processedLocalChanges
               .withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
                 guard err == nil else { return }
-                let args: Args = guids.map { $0 as AnyObject }
+                let args: Args = guids.map  { $0 }
                 let varlist = BrowserDB.varlist(guids.count)
 
                 let sqlLocalStructure = "DELETE FROM \(TableBookmarksLocalStructure) WHERE parent IN \(varlist)"
@@ -1133,7 +1133,7 @@ extension MergedSQLiteBookmarks {
                 let structureRows =
                 op.mirrorStructures.flatMap { (parent, children) in
                     return children.enumerated().map { (idx, child) -> Args in
-                        let vals: Args = [parent as AnyObject, child as AnyObject, idx as AnyObject]
+                        let vals: Args = [parent, child, idx]
                         return vals
                     }
                 }

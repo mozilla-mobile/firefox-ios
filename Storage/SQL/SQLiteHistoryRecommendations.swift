@@ -18,15 +18,15 @@ extension SQLiteHistory: HistoryRecommendations {
         let thirtyMinutesAgo = NSNumber(value: now - 30 * microsecondsPerMinute)
         let threeDaysAgo = NSNumber(value: now - (60 * microsecondsPerMinute) * 24 * 3)
 
-        let blacklistedHosts: [AnyObject?] = [
-            "google.com" as Optional<AnyObject>,
-            "google.ca" as Optional<AnyObject>,
-            "calendar.google.com" as Optional<AnyObject>,
-            "mail.google.com" as Optional<AnyObject>,
-            "mail.yahoo.com" as Optional<AnyObject>,
-            "search.yahoo.com" as Optional<AnyObject>,
-            "localhost" as Optional<AnyObject>,
-            "t.co" as Optional<AnyObject>
+        let blacklistedHosts: [ArgValue?] = [
+            "google.com"   ,
+            "google.ca"   ,
+            "calendar.google.com"   ,
+            "mail.google.com"   ,
+            "mail.yahoo.com"   ,
+            "search.yahoo.com"   ,
+            "localhost"   ,
+            "t.co"   
         ]
 
         var blacklistSubquery = ""
@@ -83,12 +83,8 @@ extension SQLiteHistory: HistoryRecommendations {
             "FROM ( \(nonRecentHistory) UNION ALL \(bookmarkHighlights) ) " +
             "LEFT JOIN \(ViewHistoryIDsWithWidestFavicons) ON \(ViewHistoryIDsWithWidestFavicons).id = historyID " +
             "GROUP BY url"
-
-        var args: [AnyObject?] = []
-        args.append(thirtyMinutesAgo)
-        args.append(contentsOf: blacklistedHosts)
-        args.append(threeDaysAgo)
-        args.append(threeDaysAgo)
+        let otherArgs = [threeDaysAgo, threeDaysAgo] as [ArgValue?]
+        let args: Args = [thirtyMinutesAgo] + blacklistedHosts + otherArgs
         return self.db.runQuery(highlightsQuery, args: args, factory: SQLiteHistory.iconHistoryColumnFactory)
     }
 

@@ -168,14 +168,14 @@ open class SQLiteBookmarksModelFactory: BookmarksModelFactory {
         // for a while after you mark the last desktop child as deleted.
         let parents: Args = [
             // Local.
-            BookmarkRoots.MenuFolderGUID as Optional<AnyObject>,
-            BookmarkRoots.ToolbarFolderGUID as Optional<AnyObject>,
-            BookmarkRoots.UnfiledFolderGUID as Optional<AnyObject>,
+            BookmarkRoots.MenuFolderGUID  ,
+            BookmarkRoots.ToolbarFolderGUID  ,
+            BookmarkRoots.UnfiledFolderGUID  ,
 
             // Mirror.
-            BookmarkRoots.MenuFolderGUID as Optional<AnyObject>,
-            BookmarkRoots.ToolbarFolderGUID as Optional<AnyObject>,
-            BookmarkRoots.UnfiledFolderGUID as Optional<AnyObject>,
+            BookmarkRoots.MenuFolderGUID  ,
+            BookmarkRoots.ToolbarFolderGUID  ,
+            BookmarkRoots.UnfiledFolderGUID  ,
         ]
 
         let sql =
@@ -259,7 +259,7 @@ extension SQLiteBookmarks {
 
     fileprivate func getRecordsWithGUIDs(_ guids: [GUID], direction: Direction, includeIcon: Bool) -> Deferred<Maybe<Cursor<BookmarkNode>>> {
 
-        let args: Args = guids.map { $0 as AnyObject }
+        let args: Args = guids.map { $0 }
         let varlist = BrowserDB.varlist(args.count)
         let values =
         "SELECT -1 AS id, guid, type, is_deleted, parentid, parentName, feedUri, pos, title, bmkUri, siteUri, folderName, faviconID, (\(isEditableExpression(direction))) AS isEditable " +
@@ -313,10 +313,10 @@ extension SQLiteBookmarks {
         let args: Args
         let exclusion: String
         if let excludingGUIDs = excludingGUIDs {
-            args = ([parentGUID] + excludingGUIDs).map { $0 as AnyObject }
+            args = ([parentGUID] + excludingGUIDs).map { $0 }
             exclusion = "\(typeFilter) AND vals.guid NOT IN " + BrowserDB.varlist(excludingGUIDs.count)
         } else {
-            args = [parentGUID as Optional<AnyObject>]
+            args = [parentGUID  ]
             exclusion = typeFilter
         }
 
@@ -353,10 +353,9 @@ extension SQLiteBookmarks {
     // This is only used from tests.
     func clearBookmarks() -> Success {
         log.warning("CALLING clearBookmarks -- this should only be used from tests.")
-        return self.db.run([
-            ("DELETE FROM \(TableBookmarksLocal) WHERE parentid IS NOT ?", [BookmarkRoots.RootGUID]),
-            self.favicons.getCleanupCommands()
-        ])
+        let name = (sql: "DELETE FROM \(TableBookmarksLocal) WHERE parentid IS NOT ?", args: [BookmarkRoots.RootGUID] as Args?)
+        let favs = self.favicons.getCleanupCommands()
+        return self.db.run([name, favs])
     }
 
     public func removeGUIDs(_ guids: [GUID]) -> Success {
@@ -382,7 +381,7 @@ extension SQLiteBookmarks {
 
     fileprivate func nonDeletedGUIDsForURL(_ url: String) -> Deferred<Maybe<([GUID])>> {
         let sql = "SELECT DISTINCT guid FROM \(ViewBookmarksLocalOnMirror) WHERE bmkUri = ? AND is_deleted = 0"
-        let args: Args = [url as Optional<AnyObject>]
+        let args: Args = [url  ]
 
         return self.db.runQuery(sql, args: args, factory: { $0[0] as! GUID }) >>== { guids in
             return deferMaybe(guids.asArray())
@@ -396,7 +395,7 @@ extension SQLiteBookmarks {
         let getParentsSQL =
         "SELECT DISTINCT parent FROM \(ViewBookmarksLocalStructureOnMirror) " +
         "WHERE child IN \(BrowserDB.varlist(guids.count)) AND is_overridden = 0"
-        let getParentsArgs: Args = guids.map { $0 as AnyObject }
+        let getParentsArgs: Args = guids.map { $0 }
 
         return self.db.runQuery(getParentsSQL, args: getParentsArgs, factory: { $0[0] as! GUID })
             >>== { parentsCursor in
@@ -423,7 +422,7 @@ extension SQLiteBookmarks {
 
         log.debug("Deleting children of \(guids).")
 
-        let topArgs: Args = guids.map { $0 as AnyObject }
+        let topArgs: Args = guids.map { $0 }
         let topVarlist = BrowserDB.varlist(topArgs.count)
         let query =
         "SELECT child FROM \(ViewBookmarksLocalStructureOnMirror) " +
@@ -440,7 +439,7 @@ extension SQLiteBookmarks {
                     return succeed()
                 }
 
-                let childArgs: Args = childGUIDs.map { $0 as AnyObject }
+                let childArgs: Args = childGUIDs.map { $0 }
                 let childVarlist = BrowserDB.varlist(childArgs.count)
 
                 // Mirror the children if they're not already.
@@ -502,7 +501,7 @@ extension SQLiteBookmarks {
      * This depends on the record's parent already being overridden if necessary.
      */
     fileprivate func removeLocalByGUID(_ guid: GUID) -> Success {
-        let args: Args = [guid as Optional<AnyObject>]
+        let args: Args = [guid  ]
 
         // Find the index we're currently occupying.
         let previousIndexSubquery = "SELECT idx FROM \(TableBookmarksLocalStructure) WHERE child = ?"
@@ -729,7 +728,7 @@ extension SQLiteBookmarks: SearchableBookmarks {
         "LEFT OUTER JOIN favicons ON bookmarks.faviconID = favicons.id"
 
         let u = url.absoluteString
-        let args: Args = [u as Optional<AnyObject>, u as Optional<AnyObject>]
+        let args: Args = [u  , u  ]
         return db.runQuery(sql, args: args, factory: BookmarkFactory.itemFactory)
     }
 }
@@ -740,10 +739,10 @@ extension SQLiteBookmarks {
     // children of the roots.
     func hasOnlyUnmergedRemoteBookmarks() -> Deferred<Maybe<Bool>> {
         let parents: Args = [
-            BookmarkRoots.MenuFolderGUID as Optional<AnyObject>,
-            BookmarkRoots.ToolbarFolderGUID as Optional<AnyObject>,
-            BookmarkRoots.UnfiledFolderGUID as Optional<AnyObject>,
-            BookmarkRoots.MobileFolderGUID as Optional<AnyObject>,
+            BookmarkRoots.MenuFolderGUID  ,
+            BookmarkRoots.ToolbarFolderGUID  ,
+            BookmarkRoots.UnfiledFolderGUID  ,
+            BookmarkRoots.MobileFolderGUID  ,
         ]
         let sql = [
             "SELECT",
