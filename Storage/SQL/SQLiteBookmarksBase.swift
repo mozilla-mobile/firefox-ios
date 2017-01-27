@@ -26,7 +26,7 @@ open class SQLiteBookmarks: BookmarksModelFactorySource, KeywordSearchSource {
     static let defaultItemTitle = NSLocalizedString("Untitled", tableName: "Storage", comment: "The default name for bookmark nodes without titles.")
 
     open lazy var modelFactory: Deferred<Maybe<BookmarksModelFactory>> =
-        deferMaybe(SQLiteBookmarksModelFactory(bookmarks: self, direction: .Local))
+        deferMaybe(SQLiteBookmarksModelFactory(bookmarks: self, direction: .local))
 
     public init(db: BrowserDB) {
         self.db = db
@@ -53,7 +53,7 @@ open class SQLiteBookmarks: BookmarksModelFactorySource, KeywordSearchSource {
         
         return self.db.runQuery(sql, args: args, factory: { $0["bmkUri"] as! String })
             >>== { cursor in
-                if cursor.status == .Success {
+                if cursor.status == .success {
                     if let str = cursor[0] {
                         return deferMaybe(str)
                     }

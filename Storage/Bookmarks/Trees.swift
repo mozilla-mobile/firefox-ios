@@ -17,11 +17,11 @@ public enum BookmarkTreeNode: Equatable {
     // Because shared associated values between enum cases aren't possible.
     public var recordGUID: GUID {
         switch self {
-        case let .Folder(guid, _):
+        case let .folder(guid, _):
             return guid
-        case let .NonFolder(guid):
+        case let .nonFolder(guid):
             return guid
-        case let .Unknown(guid):
+        case let .unknown(guid):
             return guid
         }
     }
@@ -31,30 +31,30 @@ public enum BookmarkTreeNode: Equatable {
     }
 
     public var isUnknown: Bool {
-        if case .Unknown = self {
+        if case .unknown = self {
             return true
         }
         return false
     }
 
     public var children: [BookmarkTreeNode]? {
-        if case let .Folder(_, children) = self {
+        if case let .folder(_, children) = self {
             return children
         }
         return nil
     }
 
     public func hasChildList(_ nodes: [BookmarkTreeNode]) -> Bool {
-        if case let .Folder(_, ours) = self {
-            return ours.elementsEqual(nodes, isEquivalent: { $0.recordGUID == $1.recordGUID })
+        if case let .folder(_, ours) = self {
+            return ours.elementsEqual(nodes, by: { $0.recordGUID == $1.recordGUID })
         }
         return false
     }
 
     public func hasSameChildListAs(_ other: BookmarkTreeNode) -> Bool {
-        if case let .Folder(_, ours) = self {
-            if case let .Folder(_, theirs) = other {
-                return ours.elementsEqual(theirs, isEquivalent: { $0.recordGUID == $1.recordGUID })
+        if case let .folder(_, ours) = self {
+            if case let .folder(_, theirs) = other {
+                return ours.elementsEqual(theirs, by: { $0.recordGUID == $1.recordGUID })
             }
         }
         return false
@@ -63,12 +63,12 @@ public enum BookmarkTreeNode: Equatable {
     // Returns false for unknowns.
     public func isSameTypeAs(_ other: BookmarkTreeNode) -> Bool {
         switch self {
-        case .Folder:
-            if case .Folder = other {
+        case .folder:
+            if case .folder = other {
                 return true
             }
-        case .NonFolder:
-            if case .NonFolder = other {
+        case .nonFolder:
+            if case .nonFolder = other {
                 return true
             }
         default:
@@ -80,18 +80,18 @@ public enum BookmarkTreeNode: Equatable {
 
 public func == (lhs: BookmarkTreeNode, rhs: BookmarkTreeNode) -> Bool {
     switch lhs {
-    case let .Folder(guid, children):
-        if case let .Folder(rguid, rchildren) = rhs {
+    case let .folder(guid, children):
+        if case let .folder(rguid, rchildren) = rhs {
             return guid == rguid && children == rchildren
         }
         return false
-    case let .NonFolder(guid):
-        if case let .NonFolder(rguid) = rhs {
+    case let .nonFolder(guid):
+        if case let .nonFolder(rguid) = rhs {
             return guid == rguid
         }
         return false
-    case let .Unknown(guid):
-        if case let .Unknown(rguid) = rhs {
+    case let .unknown(guid):
+        if case let .unknown(rguid) = rhs {
             return guid == rguid
         }
         return false
@@ -216,7 +216,7 @@ public struct BookmarkTree {
             nodes[guid] = node
 
             switch node {
-            case .Folder:
+            case .folder:
                 // If we end up here, it's because this folder is empty, and it won't
                 // appear in structure. Assert to make sure that's true!
                 assert(pseudoTree[guid] == nil)
@@ -244,11 +244,11 @@ public struct BookmarkTree {
                     // The child is itself a folder.
                     remainingFolders.insert(row.child)
                 default:
-                    nodes[row.child] = BookmarkTreeNode.NonFolder(guid: row.child)
+                    nodes[row.child] = BookmarkTreeNode.nonFolder(guid: row.child)
                 }
             } else {
                 // This will be the case if we've shadowed a folder; we indirectly reference the original rows.
-                nodes[row.child] = BookmarkTreeNode.Unknown(guid: row.child)
+                nodes[row.child] = BookmarkTreeNode.unknown(guid: row.child)
             }
         }
 
@@ -289,7 +289,7 @@ public struct BookmarkTree {
             }
 
             if !remainingFolders.contains(guid) {
-                let node = BookmarkTreeNode.Unknown(guid: guid)
+                let node = BookmarkTreeNode.unknown(guid: guid)
                 nodes[guid] = node
                 return node
             }
@@ -299,7 +299,7 @@ public struct BookmarkTree {
             pseudoTree.removeValue(forKey: guid)
             remainingFolders.remove(guid)
 
-            let node = BookmarkTreeNode.Folder(guid: guid, children: childGUIDs.map(nodeForGUID))
+            let node = BookmarkTreeNode.folder(guid: guid, children: childGUIDs.map(nodeForGUID))
             nodes[guid] = node
             return node
         }
