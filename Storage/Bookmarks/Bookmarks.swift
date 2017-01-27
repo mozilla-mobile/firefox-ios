@@ -312,25 +312,25 @@ public struct BookmarkMirrorItem: Equatable {
     public func asJSONWithChildren(_ children: [GUID]?) -> JSON {
         var out: [String: AnyObject] = [:]
 
-        out["id"] = BookmarkRoots.translateOutgoingRootGUID(self.guid) as AnyObject?
+        out["id"] = BookmarkRoots.translateOutgoingRootGUID(self.guid)  as AnyObject
 
         func take(_ key: String, _ val: String?) {
             guard let val = val else {
                 return
             }
-            out[key] = val as AnyObject?
+            out[key] = val as AnyObject?  
         }
 
         if self.isDeleted {
-            out["deleted"] = true as AnyObject?
+            out["deleted"] = true as AnyObject?  
             return JSON(out)
         }
 
-        out["hasDupe"] = self.hasDupe as AnyObject?
+        out["hasDupe"] = self.hasDupe as AnyObject?  
 
         // TODO: this should never be nil!
         if let parentID = self.parentID {
-            out["parentid"] = BookmarkRoots.translateOutgoingRootGUID(parentID) as AnyObject?
+            out["parentid"] = BookmarkRoots.translateOutgoingRootGUID(parentID) as AnyObject?  
             take("parentName", titleForSpecialGUID(parentID) ?? self.parentName ?? "")
         }
 
@@ -341,12 +341,12 @@ public struct BookmarkMirrorItem: Equatable {
             if let tags = self.tags {
                 let tagsJSON = JSON.parse(tags)
                 if let tagsArray = tagsJSON.asArray, tagsArray.every({ $0.isString }) {
-                    out["tags"] = tagsArray as AnyObject?
+                    out["tags"] = tagsArray as AnyObject?  
                 } else {
-                    out["tags"] = []
+                    out["tags"] = [] as AnyObject
                 }
             } else {
-                out["tags"] = []
+                out["tags"] = [] as AnyObject
             }
             take("keyword", self.keyword)
         }
@@ -358,9 +358,9 @@ public struct BookmarkMirrorItem: Equatable {
                 if BookmarkRoots.RootGUID == self.guid {
                     // Only the root contains roots, and so only its children
                     // need to be translated.
-                    out["children"] = children.map(BookmarkRoots.translateOutgoingRootGUID)
+                    out["children"] = children.map(BookmarkRoots.translateOutgoingRootGUID) as AnyObject
                 } else {
-                    out["children"] = children as AnyObject?
+                    out["children"] = children as AnyObject
                 }
             }
         }
@@ -368,29 +368,29 @@ public struct BookmarkMirrorItem: Equatable {
         switch self.type {
 
         case .query:
-            out["type"] = "query" as AnyObject?
+            out["type"] = "query" as AnyObject?  
             take("folderName", self.folderName)
             take("queryId", self.queryID)
             takeBookmarkFields()
 
         case .bookmark:
-            out["type"] = "bookmark" as AnyObject?
+            out["type"] = "bookmark" as AnyObject?  
             takeBookmarkFields()
 
         case .livemark:
-            out["type"] = "livemark" as AnyObject?
+            out["type"] = "livemark" as AnyObject?  
             take("siteUri", self.siteURI)
             take("feedUri", self.feedURI)
             takeFolderFields()
 
         case .folder:
-            out["type"] = "folder" as AnyObject?
+            out["type"] = "folder" as AnyObject?  
             takeFolderFields()
 
         case .separator:
-            out["type"] = "separator" as AnyObject?
+            out["type"] = "separator" as AnyObject?  
             if let pos = self.pos {
-                out["pos"] = pos as AnyObject?
+                out["pos"] = pos as AnyObject?  
             }
 
         case .dynamicContainer:

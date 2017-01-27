@@ -109,19 +109,19 @@ class GenericTable<T>: BaseTable {
 
     // These methods take an inout object to avoid some runtime crashes that seem to be due
     // to using generics. Yay Swift!
-    func getInsertAndArgs(_ item: inout DataType) -> (String, [AnyObject?])? {
+    func getInsertAndArgs(_ item: inout DataType) -> (sql: String, args: Args)? {
         return nil
     }
 
-    func getUpdateAndArgs(_ item: inout DataType) -> (String, [AnyObject?])? {
+    func getUpdateAndArgs(_ item: inout DataType) -> (sql: String, args: Args)? {
         return nil
     }
 
-    func getDeleteAndArgs(_ item: inout DataType?) -> (String, [AnyObject?])? {
+    func getDeleteAndArgs(_ item: inout DataType?) -> (sql: String, args: Args)? {
         return nil
     }
 
-    func getQueryAndArgs(_ options: QueryOptions?) -> (String, [AnyObject?])? {
+    func getQueryAndArgs(_ options: QueryOptions?) -> (sql: String, args: Args)? {
         return nil
     }
 

@@ -47,7 +47,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
 
     open func wipeRemoteTabs() -> Deferred<Maybe<()>> {
         return self.doWipe { (conn, err: inout NSError?) -> () in
-            if let error = conn.executeChange("DELETE FROM \(self.tabs.name) WHERE client_guid IS NOT NULL", withArgs: nil) {
+            if let error = conn.executeChange("DELETE FROM \(self.tabs.name) WHERE client_guid IS NOT NULL", withArgs: nil as Args?) {
                 err = error
             }
         }
@@ -67,13 +67,13 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         let deferred = Deferred<Maybe<Int>>(defaultQueue: DispatchQueue.main)
 
         let deleteQuery = "DELETE FROM \(self.tabs.name) WHERE client_guid IS ?"
-        let deleteArgs: [AnyObject?] = [clientGUID as Optional<AnyObject>]
+        let deleteArgs: Args = [clientGUID!]
 
         var err: NSError?
 
         db.transaction(&err) { connection, _ in
             // Delete any existing tabs.
-            if let _ = connection.executeChange(deleteQuery, withArgs: deleteArgs) {
+            if let _ = connection.executeChange(deleteQuery, withArgs: deleteArgs.flatMap({ $0?.toObject() })) {
                 log.warning("Deleting existing tabs failed.")
                 deferred.fill(Maybe(failure: DatabaseError(err: err)))
                 return false
@@ -85,7 +85,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
             for tab in tabs {
                 // We trust that each tab's clientGUID matches the supplied client!
                 // Really tabs shouldn't have a GUID at all. Future cleanup!
-                if self.tabs.insert(connection, item: tab, err: &err) > 0 {
+                if self.tabs.insert(connection, item: tab, err: &err)! > 0 {
                     inserted += 1
                 } else {
                     if let err = err {
@@ -170,7 +170,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         let clientArgs: Args?
         if let _ = guid {
             tabsSQL = "SELECT * FROM \(TableTabs) WHERE client_guid = ?"
-            clientArgs = [guid as Optional<AnyObject>]
+            clientArgs = [guid!]
         } else {
             tabsSQL = "SELECT * FROM \(TableTabs) WHERE client_guid IS NULL"
             clientArgs = nil

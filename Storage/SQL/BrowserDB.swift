@@ -36,7 +36,37 @@ public let NotificationDatabaseWasRecreated = "NotificationDatabaseWasRecreated"
 
 private let log = Logger.syncLogger
 
-public typealias Args = [AnyObject?]
+public protocol ArgValue {
+    func toObject() -> AnyObject
+}
+
+extension String: ArgValue {
+    public func toObject() -> AnyObject {
+        return self as AnyObject
+    }
+}
+
+extension Int: ArgValue {
+    public func toObject() -> AnyObject {
+        return self as AnyObject
+    }
+}
+
+extension NSNumber: ArgValue {
+    public func toObject() -> AnyObject {
+        return self as AnyObject
+    }
+}
+
+extension Date: ArgValue {
+    public func toObject() -> AnyObject {
+        return self as AnyObject
+    }
+}
+
+
+public typealias Args = [ArgValue?]
+
 
 protocol Changeable {
     func run(_ sql: String, withArgs args: Args?) -> Success
@@ -292,13 +322,13 @@ open class BrowserDB {
         err = db.withConnection(flags) { connection in
             // An error may occur if the internet connection is dropped.
             var err: NSError? = nil
-            res = callback(connection: connection, err: &err)
+            res = callback(connection, &err)
             return err
         }
         return res
     }
 
-    func withWritableConnection<T>(_ err: inout NSError?, callback: (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> T) -> T {
+    func withWritableConnection<T>(_ err: inout NSError?, callback: @escaping (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> T) -> T {
         return withConnection(flags: SwiftData.Flags.readWrite, err: &err, callback: callback)
     }
 
@@ -470,9 +500,10 @@ extension BrowserDB: Changeable {
 }
 
 extension BrowserDB: Queryable {
+
     func runQuery<T>(_ sql: String, args: Args?, factory: @escaping (SDRow) -> T) -> Deferred<Maybe<Cursor<T>>> {
         return runWithConnection { (connection, err) -> Cursor<T> in
-            return connection.executeQuery(sql, factory: factory, withArgs: args)
+            return connection.executeQuery(sql, factory: factory, withArgs: args?.map( { $0.toObject() }))
         }
     }
 
@@ -493,7 +524,7 @@ extension SQLiteDBConnection {
         let inClause = BrowserDB.varlist(names.count)
         let tablesSQL = "SELECT name FROM sqlite_master WHERE type = 'table' AND name IN \(inClause)"
 
-        let res = self.executeQuery(tablesSQL, factory: StringFactory, withArgs: names.map { $0 as AnyObject })
+        let res = self.executeQuery(tablesSQL, factory: StringFactory, withArgs: names.map  { $0 })
         log.debug("\(res.count) tables exist. Expected \(count)")
         return res.count > 0
     }
