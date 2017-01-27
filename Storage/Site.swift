@@ -44,7 +44,7 @@ public enum IconType: Int {
 }
 
 open class Favicon: Identifiable {
-    open var id: Int? = nil
+    open var id: Int?
 
     open let url: String
     open let date: Date
@@ -62,11 +62,11 @@ open class Favicon: Identifiable {
 // TODO: Site shouldn't have all of these optional decorators. Include those in the
 // cursor results, perhaps as a tuple.
 open class Site: Identifiable {
-    open var id: Int? = nil
-    var guid: String? = nil
+    open var id: Int?
+    var guid: String?
 
     open var tileURL: URL {
-        return URL(string: url)!.domainURL
+        return URL(string: url as String)!.domainURL
     }
 
     open let url: String

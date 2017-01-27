@@ -73,7 +73,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
 
         db.transaction(&err) { connection, _ in
             // Delete any existing tabs.
-            if let _ = connection.executeChange(deleteQuery, withArgs: deleteArgs.flatMap({ $0?.toObject() })) {
+            if let _ = connection.executeChange(deleteQuery, withArgs: deleteArgs) {
                 log.warning("Deleting existing tabs failed.")
                 deferred.fill(Maybe(failure: DatabaseError(err: err)))
                 return false

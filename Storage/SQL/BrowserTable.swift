@@ -6,10 +6,10 @@ import Foundation
 import Shared
 import XCGLogger
 
-let BookmarksFolderTitleMobile = NSLocalizedString("Mobile Bookmarks", tableName: "Storage", comment: "The title of the folder that contains mobile bookmarks. This should match bookmarks.folder.mobile.label on Android.")
-let BookmarksFolderTitleMenu = NSLocalizedString("Bookmarks Menu", tableName: "Storage", comment: "The name of the folder that contains desktop bookmarks in the menu. This should match bookmarks.folder.menu.label on Android.")
-let BookmarksFolderTitleToolbar = NSLocalizedString("Bookmarks Toolbar", tableName: "Storage", comment: "The name of the folder that contains desktop bookmarks in the toolbar. This should match bookmarks.folder.toolbar.label on Android.")
-let BookmarksFolderTitleUnsorted = NSLocalizedString("Unsorted Bookmarks", tableName: "Storage", comment: "The name of the folder that contains unsorted desktop bookmarks. This should match bookmarks.folder.unfiled.label on Android.")
+let BookmarksFolderTitleMobile: String = NSLocalizedString("Mobile Bookmarks", tableName: "Storage", comment: "The title of the folder that contains mobile bookmarks. This should match bookmarks.folder.mobile.label on Android.")
+let BookmarksFolderTitleMenu: String = NSLocalizedString("Bookmarks Menu", tableName: "Storage", comment: "The name of the folder that contains desktop bookmarks in the menu. This should match bookmarks.folder.menu.label on Android.")
+let BookmarksFolderTitleToolbar: String = NSLocalizedString("Bookmarks Toolbar", tableName: "Storage", comment: "The name of the folder that contains desktop bookmarks in the toolbar. This should match bookmarks.folder.toolbar.label on Android.")
+let BookmarksFolderTitleUnsorted: String = NSLocalizedString("Unsorted Bookmarks", tableName: "Storage", comment: "The name of the folder that contains unsorted desktop bookmarks. This should match bookmarks.folder.unfiled.label on Android.")
 
 let _TableBookmarks = "bookmarks"                                      // Removed in v12. Kept for migration.
 let TableBookmarksMirror = "bookmarksMirror"                           // Added in v9.
@@ -110,7 +110,7 @@ open class BrowserTable: Table {
     static let DefaultVersion = 21    // Bug 1253656.
 
     // TableInfo fields.
-    var name: NSString { return "BROWSER" }
+    var name: String { return "BROWSER" }
     var version: Int { return BrowserTable.DefaultVersion }
 
     let sqliteVersion: Int32

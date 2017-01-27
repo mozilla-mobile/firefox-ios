@@ -224,7 +224,7 @@ private class SQLiteDBStatement {
     var pointer: OpaquePointer? = nil
     fileprivate let connection: ConcreteSQLiteDBConnection
 
-    init(connection: ConcreteSQLiteDBConnection, query: String, args: [AnyObject?]?) throws {
+    init(connection: ConcreteSQLiteDBConnection, query: String, args: [Any?]?) throws {
         self.connection = connection
 
         let status = sqlite3_prepare_v2(connection.sqliteDB, query, -1, &pointer, nil)
@@ -239,7 +239,7 @@ private class SQLiteDBStatement {
     }
 
     /// Binds arguments to the statement.
-    fileprivate func bind(_ objects: [AnyObject?]) -> NSError? {
+    fileprivate func bind(_ objects: [Any?]) -> NSError? {
         let count = Int(sqlite3_bind_parameter_count(pointer))
         if (count < objects.count) {
             return connection.createErr("During: Bind", status: 202)
@@ -262,12 +262,12 @@ private class SQLiteDBStatement {
                 typealias CFunction = @convention(c) (UnsafeMutableRawPointer?) -> Void
                 let transient = unsafeBitCast(-1, to: CFunction.self)
                 status = sqlite3_bind_text(pointer, Int32(index+1), (obj as! String).cString(using: String.Encoding.utf8)!, -1, transient)
-            } else if obj is NSData {
+            } else if obj is Data {
                 status = sqlite3_bind_blob(pointer, Int32(index+1), ((obj as! Data) as NSData).bytes, -1, nil)
-            } else if obj is NSDate {
+            } else if obj is Date {
                 let timestamp = (obj as! Date).timeIntervalSince1970
                 status = sqlite3_bind_double(pointer, Int32(index+1), timestamp)
-            } else if obj === nil {
+            } else if obj == nil {
                 status = sqlite3_bind_null(pointer, Int32(index+1))
             }
 
@@ -697,7 +697,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
 
 
     func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: Args? = nil) -> Cursor<T> {
-        return self.executeQuery(sqlStr, factory: factory, withArgs: args?.map({$0?.toObject()}))
+        return self.executeQuery(sqlStr, factory: factory, withArgs: args)
     }
 
     /// Queries the database.
@@ -740,7 +740,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
 
             logger.error("Integrity check:")
 
-            let args: [AnyObject?]? = nil
+            let args: [Any?]? = nil
             let messages = self.executeQueryUnsafe("PRAGMA integrity_check", factory: StringFactory, withArgs: args)
             defer { messages.close() }
 
@@ -773,7 +773,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
     }
 
     func executeQueryUnsafe<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: Args?) -> Cursor<T> {
-        return self.executeQuery(sqlStr, factory: factory, withArgs: args?.flatMap({$0?.toObject()}))
+        return self.executeQueryUnsafe(sqlStr, factory: factory, withArgs: args)
     }
 
     /**
@@ -824,26 +824,26 @@ class SDRow: Sequence {
     }
 
     // Return the value at this index in the row
-    fileprivate func getValue(_ index: Int) -> AnyObject? {
+    fileprivate func getValue(_ index: Int) -> Any? {
         let i = Int32(index)
 
         let type = sqlite3_column_type(statement.pointer, i)
-        var ret: AnyObject? = nil
+        var ret: Any? = nil
 
         switch type {
         case SQLITE_NULL, SQLITE_INTEGER:
-            ret = NSNumber(value: sqlite3_column_int64(statement.pointer, i) as Int64)
+            ret = sqlite3_column_int64(statement.pointer, i)
         case SQLITE_TEXT:
             if let text = sqlite3_column_text(statement.pointer, i) {
-                return String(cString: text) as AnyObject?
+                return String(cString: text)
             }
         case SQLITE_BLOB:
             if let blob = sqlite3_column_blob(statement.pointer, i) {
                 let size = sqlite3_column_bytes(statement.pointer, i)
-                ret = Data(bytes: blob, count: Int(size)) as AnyObject?
+                ret = Data(bytes: blob, count: Int(size))
             }
         case SQLITE_FLOAT:
-            ret = Double(sqlite3_column_double(statement.pointer, i)) as AnyObject?  
+            ret = Double(sqlite3_column_double(statement.pointer, i))
         default:
             log.warning("SwiftData Warning -> Column: \(index) is of an unrecognized type, returning nil")
         }
@@ -852,13 +852,13 @@ class SDRow: Sequence {
     }
 
     // Accessor getting column 'key' in the row
-    subscript(key: Int) -> AnyObject? {
+    subscript(key: Int) -> Any? {
         return getValue(key)
     }
 
     // Accessor getting a named column in the row. This (currently) depends on
     // the columns array passed into this Row to find the correct index.
-    subscript(key: String) -> AnyObject? {
+    subscript(key: String) -> Any? {
         get {
             if let index = columnNames.index(of: key) {
                 return getValue(index)

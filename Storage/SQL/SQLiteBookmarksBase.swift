@@ -22,8 +22,8 @@ open class SQLiteBookmarks: BookmarksModelFactorySource, KeywordSearchSource {
     let db: BrowserDB
     let favicons: FaviconsTable<Favicon>
 
-    static let defaultFolderTitle = NSLocalizedString("Untitled", tableName: "Storage", comment: "The default name for bookmark folders without titles.")
-    static let defaultItemTitle = NSLocalizedString("Untitled", tableName: "Storage", comment: "The default name for bookmark nodes without titles.")
+    static let defaultFolderTitle: String = NSLocalizedString("Untitled", tableName: "Storage", comment: "The default name for bookmark folders without titles.")
+    static let defaultItemTitle: String = NSLocalizedString("Untitled", tableName: "Storage", comment: "The default name for bookmark nodes without titles.")
 
     open lazy var modelFactory: Deferred<Maybe<BookmarksModelFactory>> =
         deferMaybe(SQLiteBookmarksModelFactory(bookmarks: self, direction: .local))
