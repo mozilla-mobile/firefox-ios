@@ -2162,6 +2162,18 @@ extension BrowserViewController: TabManagerDelegate {
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
         updateTabCountUsingTabManager(tabManager)
     }
+
+    func showButtonToast(buttonToast: ButtonToast, afterWaiting delay: Double = 0) {
+        let time = dispatch_time(dispatch_time_t(DISPATCH_TIME_NOW), Int64(delay * Double(NSEC_PER_SEC)))
+        dispatch_after(time, dispatch_get_main_queue()) {
+            self.view.addSubview(buttonToast)
+            buttonToast.snp_makeConstraints { make in
+                make.left.right.equalTo(self.view)
+                make.bottom.equalTo(self.webViewContainer)
+            }
+            buttonToast.showToast()
+        }
+    }
     
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
         guard !tabTrayController.privateMode else {
@@ -2178,6 +2190,7 @@ extension BrowserViewController: TabManagerDelegate {
                 }
                 undoToast.showToast()
             }
+            showButtonToast(undoToast, afterWaiting: ButtonToastUX.ToastDelay)
         }
     }
 
@@ -2959,7 +2972,15 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                 let openNewTabAction =  UIAlertAction(title: newTabTitle, style: UIAlertActionStyle.default) { (action: UIAlertAction) in
                     self.scrollController.showToolbars(animated: !self.scrollController.toolbarsShowing, completion: { _ in
                         self.tabManager.addTab(URLRequest(url: url as URL), afterTab: currentTab)
+                        let tab = self.tabManager.addTab(NSURLRequest(URL: url), afterTab: currentTab)
+                        let toast = ButtonToast(labelText: NSLocalizedString("New Tab opened", comment: "Button toast label for switching to fresh New Tab"), buttonText: NSLocalizedString("Switch", comment: "Button toast button for switching to fresh New Tab"), completion: { buttonPressed in
+                            if (buttonPressed) {
+                                self.tabManager.selectTab(tab)
+                            }
+                        })
+                        self.showButtonToast(toast)
                     })
+
                 }
                 actionSheetController.addAction(openNewTabAction)
             }
@@ -2968,6 +2989,13 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             let openNewPrivateTabAction =  UIAlertAction(title: openNewPrivateTabTitle, style: UIAlertActionStyle.default) { (action: UIAlertAction) in
                 self.scrollController.showToolbars(animated: !self.scrollController.toolbarsShowing, completion: { _ in
                     self.tabManager.addTab(URLRequest(url: url as URL), afterTab: currentTab, isPrivate: true)
+                    let tab = self.tabManager.addTab(NSURLRequest(URL: url), afterTab: currentTab, isPrivate: true)
+                    let toast = ButtonToast(labelText: NSLocalizedString("New Private Tab opened", comment: "Button toast label for switching to fresh New Private Tab"), buttonText: NSLocalizedString("Switch", comment: "Button toast button for switching to fresh New Private Tab"), completion: { buttonPressed in
+                        if (buttonPressed) {
+                            self.tabManager.selectTab(tab)
+                        }
+                    })
+                    self.showButtonToast(toast)
                 })
             }
             actionSheetController.addAction(openNewPrivateTabAction)
