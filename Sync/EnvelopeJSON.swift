@@ -5,8 +5,8 @@
 import Foundation
 import Shared
 
-public class EnvelopeJSON {
-    private let json: JSON
+open class EnvelopeJSON {
+    fileprivate let json: JSON
 
     public init(_ jsonString: String) {
         self.json = JSON.parse(jsonString)
@@ -16,31 +16,31 @@ public class EnvelopeJSON {
         self.json = json
     }
 
-    public func isValid() -> Bool {
+    open func isValid() -> Bool {
         return !self.json.isError &&
             self.json["id"].isString &&
             //self["collection"].isString &&
             self.json["payload"].isString
     }
 
-    public var id: String {
+    open var id: String {
         return self.json["id"].asString!
     }
 
-    public var collection: String {
+    open var collection: String {
         return self.json["collection"].asString ?? ""
     }
 
-    public var payload: String {
+    open var payload: String {
         return self.json["payload"].asString!
     }
 
-    public var sortindex: Int {
+    open var sortindex: Int {
         let s = self.json["sortindex"]
         return s.asInt ?? 0
     }
 
-    public var modified: Timestamp {
+    open var modified: Timestamp {
         if (self.json["modified"].isInt) {
             return Timestamp(self.json["modified"].asInt!) * 1000
         }
@@ -52,11 +52,11 @@ public class EnvelopeJSON {
         return 0
     }
 
-    public func toString() -> String {
+    open func toString() -> String {
         return self.json.toString()
     }
 
-    public func withModified(now: Timestamp) -> EnvelopeJSON {
+    open func withModified(_ now: Timestamp) -> EnvelopeJSON {
         if var d = self.json.asDictionary {
             d["modified"] = JSON(Double(now) / 1000)
             return EnvelopeJSON(JSON(d))

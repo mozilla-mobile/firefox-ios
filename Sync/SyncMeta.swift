@@ -9,7 +9,7 @@ import Shared
 // Note that EngineConfiguration is not enough to evolve an existing meta/global:
 // a meta/global generated from this will have different syncIDs and will
 // always use this device's engine versions.
-public class EngineConfiguration: Equatable {
+open class EngineConfiguration: Equatable {
     let enabled: [String]
     let declined: [String]
     public init(enabled: [String], declined: [String]) {
@@ -17,7 +17,7 @@ public class EngineConfiguration: Equatable {
         self.declined = declined
     }
 
-    public class func fromJSON(json: JSON) -> EngineConfiguration? {
+    open class func fromJSON(_ json: JSON) -> EngineConfiguration? {
         if json.isError {
             return nil
         }
@@ -29,8 +29,8 @@ public class EngineConfiguration: Equatable {
         return nil
     }
 
-    public func toJSON() -> JSON {
-        let json: [String: AnyObject] = ["enabled": self.enabled, "declined": self.declined]
+    open func toJSON() -> JSON {
+        let json: [String: AnyObject] = ["enabled": self.enabled as AnyObject, "declined": self.declined as AnyObject]
         return JSON(json)
     }
 }
@@ -41,7 +41,7 @@ public func ==(lhs: EngineConfiguration, rhs: EngineConfiguration) -> Bool {
 
 extension EngineConfiguration: CustomStringConvertible {
     public var description: String {
-        return "EngineConfiguration(enabled: \(self.enabled.sort()), declined: \(self.declined.sort()))"
+        return "EngineConfiguration(enabled: \(self.enabled.sorted()), declined: \(self.declined.sorted()))"
     }
 }
 
@@ -51,7 +51,7 @@ public struct EngineMeta: Equatable {
     let version: Int
     let syncID: String
 
-    public static func fromJSON(json: JSON) -> EngineMeta? {
+    public static func fromJSON(_ json: JSON) -> EngineMeta? {
         if let syncID = json["syncID"].asString {
             if let version = json["version"].asInt {
                 return EngineMeta(version: version, syncID: syncID)
@@ -60,7 +60,7 @@ public struct EngineMeta: Equatable {
         return nil
     }
 
-    public static func mapFromJSON(map: [String: JSON]?) -> [String: EngineMeta]? {
+    public static func mapFromJSON(_ map: [String: JSON]?) -> [String: EngineMeta]? {
         if let map = map {
             return optFilter(mapValues(map, f: EngineMeta.fromJSON))
         }
@@ -68,7 +68,7 @@ public struct EngineMeta: Equatable {
     }
 
     public func toJSON() -> JSON {
-        let json: [String: AnyObject] = ["version": self.version, "syncID": self.syncID]
+        let json: [String: AnyObject] = ["version": self.version as AnyObject, "syncID": self.syncID as AnyObject]
         return JSON(json)
     }
 }
@@ -85,7 +85,7 @@ public struct MetaGlobal: Equatable {
 
     // TODO: is it more useful to support partial globals?
     // TODO: how do we return error states here?
-    public static func fromJSON(json: JSON) -> MetaGlobal? {
+    public static func fromJSON(_ json: JSON) -> MetaGlobal? {
         if json.isError {
             return nil
         }
@@ -117,7 +117,7 @@ public struct MetaGlobal: Equatable {
         return CleartextPayloadJSON(json)
     }
 
-    public func withSyncID(syncID: String) -> MetaGlobal {
+    public func withSyncID(_ syncID: String) -> MetaGlobal {
         return MetaGlobal(syncID: syncID, storageVersion: self.storageVersion, engines: self.engines, declined: self.declined)
     }
 
@@ -136,7 +136,7 @@ public func ==(lhs: MetaGlobal, rhs: MetaGlobal) -> Bool {
 /**
  * Encapsulates a meta/global, identity-derived keys, and keys.
  */
-public class SyncMeta {
+open class SyncMeta {
     let syncKey: KeyBundle
 
     var keys: Keys?

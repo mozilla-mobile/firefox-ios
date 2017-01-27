@@ -9,21 +9,21 @@ import XCGLogger
 
 private let log = Logger.browserLogger
 
-public class TabsPayload: CleartextPayloadJSON {
-    public class Tab {
+open class TabsPayload: CleartextPayloadJSON {
+    open class Tab {
         let title: String
         let urlHistory: [String]
         let lastUsed: Timestamp
         let icon: String?
 
-        private init(title: String, urlHistory: [String], lastUsed: Timestamp, icon: String?) {
+        fileprivate init(title: String, urlHistory: [String], lastUsed: Timestamp, icon: String?) {
             self.title = title
             self.urlHistory = urlHistory
             self.lastUsed = lastUsed
             self.icon = icon
         }
 
-        func toRemoteTabForClient(guid: GUID) -> RemoteTab? {
+        func toRemoteTabForClient(_ guid: GUID) -> RemoteTab? {
             let urls = optFilter(urlHistory.map({ $0.asURL }))
             if urls.isEmpty {
                 log.debug("Bug 1201875 - Discarding tab as history has no conforming URLs.")
@@ -33,12 +33,12 @@ public class TabsPayload: CleartextPayloadJSON {
             return RemoteTab(clientGUID: guid, URL: urls[0], title: self.title, history: urls, lastUsed: self.lastUsed, icon: self.icon?.asURL)
         }
 
-        class func remoteTabFromJSON(json: JSON, clientGUID: GUID) -> RemoteTab? {
+        class func remoteTabFromJSON(_ json: JSON, clientGUID: GUID) -> RemoteTab? {
             return fromJSON(json)?.toRemoteTabForClient(clientGUID)
         }
 
-        class func fromJSON(json: JSON) -> Tab? {
-            func getLastUsed(json: JSON) -> Timestamp? {
+        class func fromJSON(_ json: JSON) -> Tab? {
+            func getLastUsed(_ json: JSON) -> Timestamp? {
                 // This might be a string or a number.
                 if let num = json["lastUsed"].asNumber {
                     return Timestamp(num * 1000)
@@ -62,7 +62,7 @@ public class TabsPayload: CleartextPayloadJSON {
         }
     }
 
-    override public func isValid() -> Bool {
+    override open func isValid() -> Bool {
         if !super.isValid() {
             return false
         }
@@ -100,7 +100,7 @@ public class TabsPayload: CleartextPayloadJSON {
         return self["clientName"].asString!
     }
 
-    override public func equalPayloads(obj: CleartextPayloadJSON) -> Bool {
+    override open func equalPayloads(_ obj: CleartextPayloadJSON) -> Bool {
         if !(obj is TabsPayload) {
             return false
         }

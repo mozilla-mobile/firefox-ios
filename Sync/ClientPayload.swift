@@ -5,8 +5,8 @@
 import Foundation
 import Shared
 
-public class ClientPayload: CleartextPayloadJSON {
-    override public func isValid() -> Bool {
+open class ClientPayload: CleartextPayloadJSON {
+    override open func isValid() -> Bool {
         if !super.isValid() {
             return false
         }
@@ -31,7 +31,7 @@ public class ClientPayload: CleartextPayloadJSON {
         return self["type"].asString!
     }
     
-    override public func equalPayloads(obj: CleartextPayloadJSON) -> Bool {
+    override open func equalPayloads(_ obj: CleartextPayloadJSON) -> Bool {
         if !(obj is ClientPayload) {
             return false
         }

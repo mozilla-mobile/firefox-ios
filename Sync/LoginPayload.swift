@@ -8,20 +8,20 @@ import XCGLogger
 
 private let log = Logger.syncLogger
 
-public class LoginPayload: CleartextPayloadJSON {
-    private static let OptionalStringFields = [
+open class LoginPayload: CleartextPayloadJSON {
+    fileprivate static let OptionalStringFields = [
         "formSubmitURL",
         "httpRealm",
     ]
 
-    private static let OptionalNumericFields = [
+    fileprivate static let OptionalNumericFields = [
         "timeLastUsed",
         "timeCreated",
         "timePasswordChanged",
         "timesUsed",
     ]
 
-    private static let RequiredStringFields = [
+    fileprivate static let RequiredStringFields = [
         "hostname",
         "username",
         "password",
@@ -29,7 +29,7 @@ public class LoginPayload: CleartextPayloadJSON {
         "passwordField",
     ]
 
-    public class func fromJSON(json: JSON) -> LoginPayload? {
+    open class func fromJSON(_ json: JSON) -> LoginPayload? {
         let p = LoginPayload(json)
         if p.isValid() {
             return p
@@ -37,7 +37,7 @@ public class LoginPayload: CleartextPayloadJSON {
         return nil
     }
 
-    override public func isValid() -> Bool {
+    override open func isValid() -> Bool {
         if !super.isValid() {
             return false
         }
@@ -78,59 +78,59 @@ public class LoginPayload: CleartextPayloadJSON {
         return true
     }
 
-    public var hostname: String {
+    open var hostname: String {
         return self["hostname"].asString!
     }
 
-    public var username: String {
+    open var username: String {
         return self["username"].asString!
     }
 
-    public var password: String {
+    open var password: String {
         return self["password"].asString!
     }
 
-    public var usernameField: String {
+    open var usernameField: String {
         return self["usernameField"].asString!
     }
 
-    public var passwordField: String {
+    open var passwordField: String {
         return self["passwordField"].asString!
     }
 
-    public var formSubmitURL: String? {
+    open var formSubmitURL: String? {
         return self["formSubmitURL"].asString
     }
 
-    public var httpRealm: String? {
+    open var httpRealm: String? {
         return self["httpRealm"].asString
     }
 
-    private func timestamp(field: String) -> Timestamp? {
+    fileprivate func timestamp(_ field: String) -> Timestamp? {
         let json = self[field]
-        if let i = json.asInt64 where i > 0 {
+        if let i = json.asInt64, i > 0 {
             return Timestamp(i)
         }
         return nil
     }
 
-    public var timesUsed: Int? {
+    open var timesUsed: Int? {
         return self["timesUsed"].asInt
     }
 
-    public var timeCreated: Timestamp? {
+    open var timeCreated: Timestamp? {
         return self.timestamp("timeCreated")
     }
 
-    public var timeLastUsed: Timestamp? {
+    open var timeLastUsed: Timestamp? {
         return self.timestamp("timeLastUsed")
     }
 
-    public var timePasswordChanged: Timestamp? {
+    open var timePasswordChanged: Timestamp? {
         return self.timestamp("timePasswordChanged")
     }
 
-    override public func equalPayloads(obj: CleartextPayloadJSON) -> Bool {
+    override open func equalPayloads(_ obj: CleartextPayloadJSON) -> Bool {
         if let p = obj as? LoginPayload {
             if !super.equalPayloads(p) {
                 return false

@@ -14,7 +14,7 @@ class Uploader {
     /**
      * Upload just about anything that can be turned into something we can upload.
      */
-    func sequentialPosts<T>(items: [T], by: Int, lastTimestamp: Timestamp, storageOp: ([T], Timestamp) -> DeferredTimestamp) -> DeferredTimestamp {
+    func sequentialPosts<T>(_ items: [T], by: Int, lastTimestamp: Timestamp, storageOp: @escaping ([T], Timestamp) -> DeferredTimestamp) -> DeferredTimestamp {
 
         // This needs to be a real Array, not an ArraySlice,
         // for the types to line up.
@@ -36,11 +36,11 @@ class Uploader {
     }
 }
 
-public class IndependentRecordSynchronizer: TimestampedSingleCollectionSynchronizer {
+open class IndependentRecordSynchronizer: TimestampedSingleCollectionSynchronizer {
     /**
      * Just like the usual applyIncomingToStorage, but doesn't fast-forward the timestamp.
      */
-    func applyIncomingRecords<T>(records: [T], apply: T -> Success) -> Success {
+    func applyIncomingRecords<T>(_ records: [T], apply: @escaping (T) -> Success) -> Success {
         if records.isEmpty {
             log.debug("No records; done applying.")
             return succeed()
@@ -49,7 +49,7 @@ public class IndependentRecordSynchronizer: TimestampedSingleCollectionSynchroni
         return walk(records, f: apply)
     }
 
-    func applyIncomingToStorage<T>(records: [T], fetched: Timestamp, apply: T -> Success) -> Success {
+    func applyIncomingToStorage<T>(_ records: [T], fetched: Timestamp, apply: (T) -> Success) -> Success {
         func done() -> Success {
             log.debug("Bumping fetch timestamp to \(fetched).")
             self.lastFetched = fetched
@@ -83,7 +83,7 @@ extension TimestampedSingleCollectionSynchronizer {
      * In order to implement the latter, we'd need to chain the date from getSince in place of the
      * 0 in the call to uploadOutgoingFromStorage in each synchronizer.
      */
-    func uploadRecords<T>(records: [Record<T>], lastTimestamp: Timestamp, storageClient: Sync15CollectionClient<T>, onUpload: (POSTResult, Timestamp?) -> DeferredTimestamp) -> DeferredTimestamp {
+    func uploadRecords<T>(_ records: [Record<T>], lastTimestamp: Timestamp, storageClient: Sync15CollectionClient<T>, onUpload: (POSTResult, Timestamp?) -> DeferredTimestamp) -> DeferredTimestamp {
         if records.isEmpty {
             log.debug("No modified records to upload.")
             return deferMaybe(lastTimestamp)
