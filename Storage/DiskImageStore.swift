@@ -71,7 +71,7 @@ open class DiskImageStore {
             let imagePath = URL(fileURLWithPath: self.filesDir).appendingPathComponent(key).absoluteString
             if let data = UIImageJPEGRepresentation(image, self.quality) {
                 do {
-                    try data.write(to: URL(fileURLWithPath: imagePath), options: Data.WritingOptions.noFileProtection)
+                    try data.write(to: URL(fileURLWithPath: imagePath), options: .noFileProtection)
                     self.keys.insert(key)
                     return succeed()
                 } catch {

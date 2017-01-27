@@ -262,7 +262,6 @@ public struct BookmarkTree {
                 }
             }
 
-
             // Note that we don't check whether the input already contained the roots; we
             // never change them, so it's safe to do this unconditionally.
             setVirtual(BookmarkRoots.RootGUID)

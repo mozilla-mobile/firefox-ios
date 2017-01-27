@@ -9,8 +9,8 @@ open class ClosedTabsStore {
     let prefs: Prefs
 
     lazy open var tabs: [ClosedTab] = {
-        guard let tabsArray: Any = self.prefs.objectForKey("recentlyClosedTabs") as Any?,
-              let unarchivedArray = NSKeyedUnarchiver.unarchiveObject(with: tabsArray as! Data) as? [ClosedTab] else {
+        guard let tabsArray: Data = self.prefs.objectForKey("recentlyClosedTabs") as Any? as? Data,
+              let unarchivedArray = NSKeyedUnarchiver.unarchiveObject(with: tabsArray) as? [ClosedTab] else {
             return []
         }
         return unarchivedArray
@@ -43,12 +43,8 @@ open class ClosedTab: NSObject, NSCoding {
 
     var jsonDictionary: [String: Any] {
         let title = (self.title ?? "")
-        let faviconURL = (self.faviconURL   ?? "")
-        let json: [String: Any] = [
-            "title": title ,
-            "url": url,
-            "faviconURL": faviconURL
-        ]
+        let faviconURL = (self.faviconURL ?? "")
+        let json: [String: Any] = ["title": title, "url": url, "faviconURL": faviconURL]
         return json
     }
 

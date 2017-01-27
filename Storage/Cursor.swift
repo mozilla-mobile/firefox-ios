@@ -32,33 +32,16 @@ open class Cursor<T>: TypedCursor {
 
     // Extra status information
     open var status: CursorStatus
-    private var _msg: String!
-
-    public var statusMessage: String {
-        get {
-            return self._msg
-        }
-        set(v){
-             self._msg = v;
-        }
-    }
+    public var statusMessage: String
 
     init(err: NSError) {
         self.status = .failure
         self.statusMessage = err.description
     }
 
-    public init(status: CursorStatus?, msg: String?) {
-        if let stat = status {
-            self.status = stat
-        } else {
-            self.status = CursorStatus.success
-        }
-        if let msg = msg {
-            self._msg = msg
-        } else {
-            self._msg = ""
-        }
+    public init(status: CursorStatus = .success, msg: String = "") {
+        self.statusMessage = msg
+        self.status = status
     }
 
     // Collection iteration and access functions

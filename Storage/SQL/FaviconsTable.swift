@@ -5,7 +5,7 @@
 import Foundation
 // FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
 // Consider refactoring the code to use the non-optional operators.
-fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+fileprivate func < <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
   switch (lhs, rhs) {
   case let (l?, r?):
     return l < r
@@ -18,7 +18,7 @@ fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 
 // FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
 // Consider refactoring the code to use the non-optional operators.
-fileprivate func >= <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+fileprivate func >= <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
   switch (lhs, rhs) {
   case let (l?, r?):
     return l >= r
@@ -36,30 +36,30 @@ class FaviconsTable<T>: GenericTable<Favicon> {
         return true
     }
 
-    override func getInsertAndArgs(_ item: inout Favicon) -> (sql: String, args: Args)? {
+    override func getInsertAndArgs(_ item: inout Favicon) -> (String, Args)? {
         var args: Args = []
-        args.append(item.url  )
-        args.append(item.width  )
-        args.append(item.height  )
+        args.append(item.url)
+        args.append(item.width)
+        args.append(item.height)
         args.append(item.date)
-        args.append(item.type.rawValue  )
+        args.append(item.type.rawValue)
         return ("INSERT INTO \(TableFavicons) (url, width, height, date, type) VALUES (?,?,?,?,?)", args)
     }
 
-    override func getUpdateAndArgs(_ item: inout Favicon) -> (sql: String, args: Args)? {
+    override func getUpdateAndArgs(_ item: inout Favicon) -> (String, Args)? {
         var args = Args()
-        args.append(item.width  )
-        args.append(item.height  )
+        args.append(item.width)
+        args.append(item.height)
         args.append(item.date)
-        args.append(item.type.rawValue  )
-        args.append(item.url  )
+        args.append(item.type.rawValue)
+        args.append(item.url)
         return ("UPDATE \(TableFavicons) SET width = ?, height = ?, date = ?, type = ? WHERE url = ?", args)
     }
 
-    override func getDeleteAndArgs(_ item: inout Favicon?) -> (sql: String, args: Args)? {
+    override func getDeleteAndArgs(_ item: inout Favicon?) -> (String, Args)? {
         var args = Args()
         if let icon = item {
-            args.append(icon.url  )
+            args.append(icon.url)
             return ("DELETE FROM \(TableFavicons) WHERE url = ?", args)
         }
 
@@ -75,10 +75,10 @@ class FaviconsTable<T>: GenericTable<Favicon> {
         }
     }
 
-    override func getQueryAndArgs(_ options: QueryOptions?) -> (sql: String, args: Args)? {
+    override func getQueryAndArgs(_ options: QueryOptions?) -> (String, Args)? {
         var args = Args()
         if let filter: Any = options?.filter {
-            args.append("%\(filter)%"  )
+            args.append("%\(filter)%")
             return ("SELECT id, url, date, type FROM \(TableFavicons) WHERE url LIKE ?", args)
         }
         return ("SELECT id, url, date, type FROM \(TableFavicons)", args)
@@ -86,7 +86,7 @@ class FaviconsTable<T>: GenericTable<Favicon> {
 
     func getIDFor(_ db: SQLiteDBConnection, obj: Favicon) -> Int? {
         let opts = QueryOptions()
-        opts.filter = obj.url  
+        opts.filter = obj.url
 
         let cursor = query(db, options: opts)
         if (cursor.count != 1) {
