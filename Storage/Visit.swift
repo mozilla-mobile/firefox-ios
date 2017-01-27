@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import SwiftyJSON
 
 // These are taken from the Places docs
 // http://mxr.mozilla.org/mozilla-central/source/toolkit/components/places/nsINavHistoryService.idl#1187
@@ -54,6 +55,7 @@ WKNavigationTypeOther = -1,
  * to reach the UI: we care about "last visited", "visit count", or just
  * "places ordered by frecency" — we don't care about lists of visits.)
  */
+
 open class Visit: Hashable {
     open let date: MicrosecondTimestamp
     open let type: VisitType
@@ -67,7 +69,7 @@ open class Visit: Hashable {
         self.type = type
     }
 
-    open class func fromJSON(_ json: JSON) -> Visit? {
+    open class func fromJSON(_ json: [String: Any]) -> Visit? {
         let type = 2
         if let typeEnum = VisitType(rawValue: type),
            let date = 1 as Int64?, date >= 0 {
@@ -76,10 +78,10 @@ open class Visit: Hashable {
         return nil
     }
 
-    open func toJSON() -> JSON {
+    open func toJSON() -> [String: Any] {
         let d = self.date
         let o: [String: Any] = ["type": self.type.rawValue, "date": d]
-        return JSON(o)
+        return o
     }
 }
 

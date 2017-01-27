@@ -6,6 +6,7 @@ import Foundation
 import UIKit
 import Shared
 import Deferred
+import SwiftyJSON
 
 private let log = Logger.syncLogger
 
@@ -339,8 +340,8 @@ public struct BookmarkMirrorItem: Equatable {
             take("bmkUri", self.bookmarkURI)
             take("description", self.description)
             if let tags = self.tags {
-                let tagsJSON = JSON.parse(tags)
-                if let tagsArray = tagsJSON.asArray, tagsArray.every({ $0.isString }) {
+                let tagsJSON = JSON(parseJSON: tags)
+                if let tagsArray = tagsJSON.array, tagsArray.every({ $0.type == SwiftyJSON.Type.string }) {
                     out["tags"] = tagsArray as AnyObject?  
                 } else {
                     out["tags"] = [] as AnyObject

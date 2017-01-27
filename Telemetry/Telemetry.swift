@@ -6,6 +6,7 @@ import Alamofire
 import Foundation
 import GCDWebServers
 import XCGLogger
+import SwiftyJSON
 
 private let log = Logger.browserLogger
 private let ServerURL = "https://incoming.telemetry.mozilla.org".asURL!
@@ -33,7 +34,7 @@ open class Telemetry {
     }
 
     open class func sendPing(_ ping: TelemetryPing) {
-        let payload = ping.payload.toString()
+        let payload = ping.payload.rawString()
 
         let docID = UUID().uuidString
         let docType = "core"
@@ -55,7 +56,7 @@ open class Telemetry {
         log.debug("Ping URL: \(url)")
         log.debug("Ping payload: \(payload)")
 
-        guard let body = payload.data(using: String.Encoding.utf8) else {
+        guard let body = payload?.data(using: String.Encoding.utf8) else {
             log.error("Invalid data!")
             assertionFailure()
             return
