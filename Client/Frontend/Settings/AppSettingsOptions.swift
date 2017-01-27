@@ -282,7 +282,7 @@ class AccountStatusSetting: WithAccountSetting {
 
         if let account = profile.getAccount() {
             switch account.actionNeeded {
-            case .NeedsVerification:
+            case .NeedsVerification, .None:
                 let cs = NSURLComponents(URL: account.configuration.settingsURL, resolvingAgainstBaseURL: false)
                 cs?.queryItems?.append(NSURLQueryItem(name: "email", value: account.email))
                 viewController.url = cs?.URL
@@ -290,7 +290,7 @@ class AccountStatusSetting: WithAccountSetting {
                 let cs = NSURLComponents(URL: account.configuration.forceAuthURL, resolvingAgainstBaseURL: false)
                 cs?.queryItems?.append(NSURLQueryItem(name: "email", value: account.email))
                 viewController.url = cs?.URL
-            case .None, .NeedsUpgrade:
+            case .NeedsUpgrade:
                 // In future, we'll want to link to /settings and an upgrade page, respectively.
                 return
             }
