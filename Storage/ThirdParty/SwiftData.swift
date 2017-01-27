@@ -259,7 +259,7 @@ private class SQLiteDBStatement {
             } else if obj is Bool {
                 status = sqlite3_bind_int(pointer, Int32(index+1), (obj as! Bool) ? 1 : 0)
             } else if obj is String {
-                typealias CFunction = @convention(c) (UnsafeMutableRawPointer) -> Void
+                typealias CFunction = @convention(c) (UnsafeMutableRawPointer?) -> Void
                 let transient = unsafeBitCast(-1, to: CFunction.self)
                 status = sqlite3_bind_text(pointer, Int32(index+1), (obj as! String).cString(using: String.Encoding.utf8)!, -1, transient)
             } else if obj is NSData {
@@ -296,7 +296,7 @@ private class SQLiteDBStatement {
 protocol SQLiteDBConnection {
     var lastInsertedRowID: Int { get }
     var numberOfRowsModified: Int { get }
-    func executeQuery<T>(_ sqlStr: String, factory: ((SDRow) -> T)) -> Cursor<T>
+    func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T)) -> Cursor<T>
 
     func executeChange(_ sqlStr: String) -> NSError?
     func executeQuery<T>(_ sqlStr: String) -> Cursor<T>
@@ -306,11 +306,11 @@ protocol SQLiteDBConnection {
     func executeChange(_ sqlStr: String, withArgs args: Args?) -> NSError?
 
 
-    func executeQuery<T>(_ sqlStr: String, factory: ((SDRow) -> T), withArgs args: [AnyObject?]?) -> Cursor<T>
-    func executeQuery<T>(_ sqlStr: String, factory: ((SDRow) -> T), withArgs args: Args?) -> Cursor<T>
+    func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: [AnyObject?]?) -> Cursor<T>
+    func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: Args?) -> Cursor<T>
 
-    func executeQueryUnsafe<T>(_ sqlStr: String, factory: ((SDRow) -> T), withArgs args: [AnyObject?]?) -> Cursor<T>
-    func executeQueryUnsafe<T>(_ sqlStr: String, factory: ((SDRow) -> T), withArgs args: Args?) -> Cursor<T>
+    func executeQueryUnsafe<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: [AnyObject?]?) -> Cursor<T>
+    func executeQueryUnsafe<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: Args?) -> Cursor<T>
 
     func interrupt()
     func checkpoint()
@@ -341,19 +341,19 @@ class FailedSQLiteDBConnection: SQLiteDBConnection {
     func executeQuery<T>(_ sqlStr: String) -> Cursor<T> {
         return Cursor<T>(err: self.fail("Non-open connection; can't execute query."))
     }
-    func executeQuery<T>(_ sqlStr: String, factory: ((SDRow) -> T)) -> Cursor<T> {
+    func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T)) -> Cursor<T> {
         return Cursor<T>(err: self.fail("Non-open connection; can't execute query."))
     }
-    func executeQuery<T>(_ sqlStr: String, factory: ((SDRow) -> T), withArgs args: [AnyObject?]?) -> Cursor<T> {
+    func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: [AnyObject?]?) -> Cursor<T> {
         return Cursor<T>(err: self.fail("Non-open connection; can't execute query."))
     }
-    func executeQueryUnsafe<T>(_ sqlStr: String, factory: ((SDRow) -> T), withArgs args: [AnyObject?]?) -> Cursor<T> {
+    func executeQueryUnsafe<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: [AnyObject?]?) -> Cursor<T> {
         return Cursor<T>(err: self.fail("Non-open connection; can't execute query."))
     }
-    func executeQuery<T>(_ sqlStr: String, factory: ((SDRow) -> T), withArgs args: Args?) -> Cursor<T> {
+    func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: Args?) -> Cursor<T> {
         return Cursor<T>(err: self.fail("Non-open connection; can't execute query."))
     }
-    func executeQueryUnsafe<T>(_ sqlStr: String, factory: ((SDRow) -> T), withArgs args: Args?) -> Cursor<T> {
+    func executeQueryUnsafe<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: Args?) -> Cursor<T> {
         return Cursor<T>(err: self.fail("Non-open connection; can't execute query."))
     }
 
@@ -366,6 +366,7 @@ class FailedSQLiteDBConnection: SQLiteDBConnection {
 }
 
 open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
+
 
     func executeChange(_ sqlStr: String, withArgs args: Args?) -> NSError? {
         return self.executeChange(sqlStr, withArgs: args)
@@ -413,7 +414,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         sqlite3_interrupt(sqliteDB)
     }
 
-    fileprivate func pragma<T: Equatable>(_ pragma: String, expected: T?, factory: (SDRow) -> T, message: String) throws {
+    fileprivate func pragma<T: Equatable>(_ pragma: String, expected: T?, factory: @escaping (SDRow) -> T, message: String) throws {
         let cursorResult = self.pragma(pragma, factory: factory)
         if cursorResult != expected {
             log.error("\(message): \(cursorResult), \(expected)")
@@ -689,19 +690,19 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         return error
     }
 
-    func executeQuery<T>(_ sqlStr: String, factory: ((SDRow) -> T)) -> Cursor<T> {
+    func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T)) -> Cursor<T> {
         return self.executeQuery(sqlStr, factory: factory)
     }
 
 
 
-    func executeQuery<T>(_ sqlStr: String, factory: ((SDRow) -> T), withArgs args: Args? = nil) -> Cursor<T> {
+    func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: Args? = nil) -> Cursor<T> {
         return self.executeQuery(sqlStr, factory: factory, withArgs: args?.map({$0?.toObject()}))
     }
 
     /// Queries the database.
     /// Returns a cursor pre-filled with the complete result set.
-    func executeQuery<T>(_ sqlStr: String, factory: ((SDRow) -> T), withArgs args: [AnyObject?]?) -> Cursor<T> {
+    func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: [AnyObject?]?) -> Cursor<T> {
         var error: NSError?
         let statement: SQLiteDBStatement?
         do {
@@ -729,7 +730,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
     }
 
     func writeCorruptionInfoForDBNamed(_ dbFilename: String, toLogger logger: XCGLogger) {
-        DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.default).sync {
+        DispatchQueue.global(qos: DispatchQoS.default.qosClass).sync {
             guard !SwiftData.corruptionLogsWritten.contains(dbFilename) else { return }
 
             logger.error("Corrupt DB detected! DB filename: \(dbFilename)")
@@ -738,7 +739,9 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
             logger.error("DB file size: \(dbFileSize) bytes")
 
             logger.error("Integrity check:")
-            let messages = self.executeQueryUnsafe("PRAGMA integrity_check", factory: StringFactory, withArgs: nil)
+
+            let args: [AnyObject?]? = nil
+            let messages = self.executeQueryUnsafe("PRAGMA integrity_check", factory: StringFactory, withArgs: args)
             defer { messages.close() }
 
             if messages.status == CursorStatus.success {
@@ -769,8 +772,8 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         }
     }
 
-    func executeQueryUnsafe<T>(_ sqlStr: String, factory: ((SDRow) -> T), withArgs args: Args?) -> Cursor<T> {
-        return self.executeQuery(sqlStr, factory: factory, withArgs: args?.map({$0.toObject()}))
+    func executeQueryUnsafe<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: Args?) -> Cursor<T> {
+        return self.executeQuery(sqlStr, factory: factory, withArgs: args?.flatMap({$0?.toObject()}))
     }
 
     /**
@@ -778,7 +781,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
      * Returns a live cursor that holds the query statement and database connection.
      * Instances of this class *must not* leak outside of the connection queue!
      */
-    func executeQueryUnsafe<T>(_ sqlStr: String, factory: ((SDRow) -> T), withArgs args: [AnyObject?]?) -> Cursor<T> {
+    func executeQueryUnsafe<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: [AnyObject?]?) -> Cursor<T> {
         var error: NSError?
         let statement: SQLiteDBStatement?
         do {
@@ -831,13 +834,13 @@ class SDRow: Sequence {
         case SQLITE_NULL, SQLITE_INTEGER:
             ret = NSNumber(value: sqlite3_column_int64(statement.pointer, i) as Int64)
         case SQLITE_TEXT:
-            let text = UnsafePointer<Int8>(sqlite3_column_text(statement.pointer, i))
-            ret = String(cString: text!) as AnyObject?  
+            if let text = sqlite3_column_text(statement.pointer, i) {
+                return String(cString: text) as AnyObject?
+            }
         case SQLITE_BLOB:
-            let blob = sqlite3_column_blob(statement.pointer, i)
-            if blob != nil {
+            if let blob = sqlite3_column_blob(statement.pointer, i) {
                 let size = sqlite3_column_bytes(statement.pointer, i)
-                ret = Data(bytes: UnsafePointer<UInt8>(blob), count: Int(size))
+                ret = Data(bytes: blob, count: Int(size)) as AnyObject?
             }
         case SQLITE_FLOAT:
             ret = Double(sqlite3_column_double(statement.pointer, i)) as AnyObject?  

@@ -75,7 +75,7 @@ protocol Changeable {
 }
 
 protocol Queryable {
-    func runQuery<T>(_ sql: String, args: Args?, factory: (SDRow) -> T) -> Deferred<Maybe<Cursor<T>>>
+    func runQuery<T>(_ sql: String, args: Args?, factory: @escaping (SDRow) -> T) -> Deferred<Maybe<Cursor<T>>>
 }
 
 public enum DatabaseOpResult {
@@ -332,15 +332,15 @@ open class BrowserDB {
         return withConnection(flags: SwiftData.Flags.readWrite, err: &err, callback: callback)
     }
 
-    func withReadableConnection<T>(_ err: inout NSError?, callback: (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> Cursor<T>) -> Cursor<T> {
+    func withReadableConnection<T>(_ err: inout NSError?, callback: @escaping (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> Cursor<T>) -> Cursor<T> {
         return withConnection(flags: SwiftData.Flags.readOnly, err: &err, callback: callback)
     }
 
-    func transaction(_ err: inout NSError?, callback: (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> Bool) -> NSError? {
+    func transaction(_ err: inout NSError?, callback: @escaping (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> Bool) -> NSError? {
         return self.transaction(synchronous: true, err: &err, callback: callback)
     }
 
-    func transaction(synchronous: Bool=true, err: inout NSError?, callback: (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> Bool) -> NSError? {
+    func transaction(synchronous: Bool=true, err: inout NSError?, callback: @escaping (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> Bool) -> NSError? {
         return db.transaction(synchronous: synchronous) { connection in
             var err: NSError? = nil
             return callback(connection, &err)
@@ -435,7 +435,7 @@ extension BrowserDB {
         return walk(chunks, f: { insertChunk(Array($0)) })
     }
 
-    func runWithConnection<T>(_ block: (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> T) -> Deferred<Maybe<T>> {
+    func runWithConnection<T>(_ block: @escaping (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> T) -> Deferred<Maybe<T>> {
         return DeferredDBOperation(db: self.db, block: block).start()
     }
 
@@ -503,7 +503,7 @@ extension BrowserDB: Queryable {
 
     func runQuery<T>(_ sql: String, args: Args?, factory: @escaping (SDRow) -> T) -> Deferred<Maybe<Cursor<T>>> {
         return runWithConnection { (connection, err) -> Cursor<T> in
-            return connection.executeQuery(sql, factory: factory, withArgs: args?.map( { $0.toObject() }))
+            return connection.executeQuery(sql, factory: factory, withArgs: args?.flatMap( { $0?.toObject() }))
         }
     }
 

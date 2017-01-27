@@ -61,7 +61,7 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
         return { row -> RemoteClient in
             let guid = row["guid"] as? String
             let name = row["name"] as! String
-            let mod = (row["modified"] as! NSNumber).value
+            let mod = Timestamp((row["modified"] as! NSNumber).int64Value)
             let type = row["type"] as? String
             let form = row["formfactor"] as? String
             let os = row["os"] as? String
@@ -92,13 +92,13 @@ class RemoteTabsTable<T>: GenericTable<RemoteTab> {
     private static func convertHistoryToString(_ history: [URL]) -> String? {
         let historyAsStrings = optFilter(history.map { $0.absoluteString })
 
-        let data = try! JSONSerialization.dataWithJSONObject(historyAsStrings, options: [])
-        return NSString(data: data, encoding: NSUTF8StringEncoding) as? String
+        let data = try! JSONSerialization.data(withJSONObject: historyAsStrings, options: [])
+        return NSString(data: data, encoding: String.Encoding.utf8.rawValue) as? String
     }
 
     private func convertStringToHistory(_ history: String?) -> [URL] {
-        if let data = history?.dataUsingEncoding(NSUTF8StringEncoding) {
-            if let urlStrings = try! NSJSONSerialization.JSONObjectWithData(data, options: [NSJSONReadingOptions.AllowFragments]) as? [String] {
+        if let data = history?.data(using: String.Encoding.utf8) {
+            if let urlStrings = try! JSONSerialization.jsonObject(with: data, options: [JSONSerialization.ReadingOptions.allowFragments]) as? [String] {
                 return optFilter(urlStrings.map { URL(string: $0) })
             }
         }

@@ -37,11 +37,11 @@ public struct SyncCommand: Equatable {
      * Sent displayURI commands include the sender client GUID.
      */
     public static func displayURIFromShareItem(_ shareItem: ShareItem, asClient sender: GUID) -> SyncCommand {
-        let jsonObj: [String: AnyObject] = [
-            "command": "displayURI" as AnyObject,
-            "args": [shareItem.url, sender, shareItem.title ?? ""] as AnyObject
+        let jsonObj: [String: Any] = [
+            "command": "displayURI",
+            "args": [shareItem.url, sender, shareItem.title ?? ""]
         ]
-        return SyncCommand(value: JSON.stringify(jsonObj, pretty: false))
+        return SyncCommand(value: JSON.stringify(jsonObj as AnyObject, pretty: false))
     }
 
     public func withClientGUID(_ clientGUID: String?) -> SyncCommand {

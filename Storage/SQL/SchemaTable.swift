@@ -47,7 +47,7 @@ class SchemaTable: GenericTable<TableInfo> {
 
     override func getQueryAndArgs(_ options: QueryOptions?) -> (sql: String, args: Args)? {
         var args = Args()
-        if let filter: AnyObject = options?.filter {
+        if let filter: ArgValue = options?.filter as? ArgValue {
             args.append(filter)
             return ("SELECT name, version FROM \(name) WHERE name = ?", args)
         }
