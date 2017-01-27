@@ -196,9 +196,9 @@ open class BrowserDB {
                     default:
                         log.error("Update failed for \(table.name). Dropping and recreating.")
 
-                        table.drop(connection)
+                        let _ = table.drop(connection)
                         var err: NSError? = nil
-                        self.schemaTable.delete(connection, item: table, err: &err)
+                        let _ = self.schemaTable.delete(connection, item: table, err: &err)
 
                         doCreate(table, connection)
                     }

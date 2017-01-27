@@ -305,7 +305,7 @@ public struct BookmarkTree {
 
         // Process every record.
         // Do the not-tops first: shallower recursion.
-        notTops.forEach({ nodeForGUID($0) })
+        let _ = notTops.forEach({ nodeForGUID($0) })
 
         let subtrees = tops.map(nodeForGUID)        // These will all be folders.
 

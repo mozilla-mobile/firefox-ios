@@ -136,11 +136,11 @@ open class SwiftData {
         queue.async {
             guard let connection = SwiftData.ReuseConnections ? conn :
                     ConcreteSQLiteDBConnection(filename: self.filename, flags: flags.toSQL(), key: self.key, prevKey: self.prevKey) else {
-                cb(FailedSQLiteDBConnection())
+                let _ = cb(FailedSQLiteDBConnection())
                 return
             }
                 
-            cb(connection)
+            let _ = cb(connection)
         }
 
         return nil
@@ -165,7 +165,7 @@ open class SwiftData {
                 log.verbose("Op in transaction succeeded. Committing.")
                 if let err = db.executeChange("COMMIT") {
                     log.error("COMMIT failed. Rolling back.")
-                    db.executeChange("ROLLBACK")
+                    let _ = db.executeChange("ROLLBACK")
                     return err
                 }
             } else {
@@ -362,7 +362,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         }
 
         set {
-            executeChange("PRAGMA user_version = \(newValue)")
+            let _ = executeChange("PRAGMA user_version = \(newValue)")
         }
     }
 
@@ -409,7 +409,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
 
     fileprivate func prepareShared() {
         if SwiftData.EnableForeignKeys {
-            pragma("foreign_keys=ON", factory: IntFactory)
+            let _ = pragma("foreign_keys=ON", factory: IntFactory)
         }
 
         // Retry queries before returning locked errors.
@@ -451,7 +451,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         // because it needs to be set from day one.
 
         let desiredPageSize = 32 * 1024
-        pragma("page_size=\(desiredPageSize)", factory: IntFactory)
+        let _ = pragma("page_size=\(desiredPageSize)", factory: IntFactory)
 
         let currentPageSize = pragma("page_size", factory: IntFactory)
 
