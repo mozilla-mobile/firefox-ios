@@ -7,7 +7,7 @@ import Shared
 let TableSyncCommands = "commands"
 
 class SyncCommandsTable<T>: GenericTable<SyncCommand> {
-    override var name: NSString { return TableSyncCommands }
+    override var name: NSString { return TableSyncCommands as NSString }
     override var version: Int { return 1 }
 
     override var rows: String { return [
@@ -18,14 +18,14 @@ class SyncCommandsTable<T>: GenericTable<SyncCommand> {
     }
 
 
-    override func getInsertAndArgs(_ item: inout SyncCommand) -> (String, [AnyObject?])? {
-        let args: [AnyObject?] = [item.clientGUID! as Optional<AnyObject>, item.value as Optional<AnyObject>]
+    override func getInsertAndArgs(_ item: inout SyncCommand) -> (String,Args)? {
+        let args:Args = [item.clientGUID! , item.value ]
         return ("INSERT INTO \(name) (client_guid, value) VALUES (?, ?)", args)
     }
 
-    override func getDeleteAndArgs(_ item: inout SyncCommand?) -> (String, [AnyObject?])? {
+    override func getDeleteAndArgs(_ item: inout SyncCommand?) -> (String,Args)? {
         if let item = item {
-            return ("DELETE FROM \(name) WHERE client_guid = ?", [item.clientGUID!])
+            return ("DELETE FROM \(name) WHERE client_guid = ?", [item.clientGUID])
         }
         return ("DELETE FROM \(name)", [])
     }
@@ -39,11 +39,11 @@ class SyncCommandsTable<T>: GenericTable<SyncCommand> {
         }
     }
 
-    override func getQueryAndArgs(_ options: QueryOptions?) -> (String, [AnyObject?])? {
+    override func getQueryAndArgs(_ options: QueryOptions?) -> (String,Args)? {
         let sql = "SELECT * FROM \(name)"
         if let opts = options,
             let filter: AnyObject = options?.filter {
-                let args: [AnyObject?] = ["\(filter)" as Optional<AnyObject>]
+                let args:Args = ["\(filter)" ]
                 switch opts.filterType {
                 case .guid :
                     return (sql + " WHERE client_guid = ?", args)

@@ -240,7 +240,7 @@ public struct BookmarkTree {
 
             if let type = row.type {
                 switch type {
-                case .Folder:
+                case .folder:
                     // The child is itself a folder.
                     remainingFolders.insert(row.child)
                 default:
@@ -272,7 +272,7 @@ public struct BookmarkTree {
 
             pseudoTree[BookmarkRoots.RootGUID] = BookmarkRoots.RootChildren
             tops.insert(BookmarkRoots.RootGUID)
-            notTops.unionInPlace(BookmarkRoots.RootChildren)
+            notTops.formUnion(Set(BookmarkRoots.RootChildren))
             remainingFolders.formUnion(BookmarkRoots.All)
             BookmarkRoots.RootChildren.forEach {
                 parents[$0] = BookmarkRoots.RootGUID

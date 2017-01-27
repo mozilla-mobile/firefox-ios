@@ -102,10 +102,7 @@ open class FileAccessor {
 
     open func copy(_ fromRelativePath: String, toAbsolutePath: String) throws -> Bool {
         let fromPath = rootPath.appendingPathComponent(fromRelativePath)
-        guard let dest = NSURL.fileURLWithPath(toAbsolutePath).deletingLastPathComponent().path else {
-            return false
-        }
-
+        let dest = URL(fileURLWithPath: toAbsolutePath).deletingLastPathComponent().path
         try createDir(dest)
         try FileManager.default.copyItem(atPath: fromPath, toPath: toAbsolutePath)
         return true
