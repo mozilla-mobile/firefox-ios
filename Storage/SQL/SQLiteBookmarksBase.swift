@@ -41,7 +41,7 @@ open class SQLiteBookmarks: BookmarksModelFactorySource, KeywordSearchSource {
             " SELECT id FROM \(TableBookmarksMirror) WHERE " +
             " bmkUri = ? AND is_deleted IS NOT 1 AND is_overridden IS NOT 1" +
             " LIMIT 1)"
-        let args: Args = [url   , url   ]
+        let args: Args = [url, url]
         
         return self.db.queryReturnsResults(sql, args: args)
     }
@@ -49,7 +49,7 @@ open class SQLiteBookmarks: BookmarksModelFactorySource, KeywordSearchSource {
     open func getURLForKeywordSearch(_ keyword: String) -> Deferred<Maybe<String>> {
         let sql = "SELECT bmkUri FROM \(ViewBookmarksBufferOnMirror) WHERE " +
         " keyword = ?"
-        let args: Args = [keyword   ]
+        let args: Args = [keyword]
         
         return self.db.runQuery(sql, args: args, factory: { $0["bmkUri"] as! String })
             >>== { cursor in

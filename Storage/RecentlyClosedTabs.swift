@@ -9,8 +9,8 @@ open class ClosedTabsStore {
     let prefs: Prefs
 
     lazy open var tabs: [ClosedTab] = {
-        guard let tabsArray: Any = self.prefs.objectForKey("recentlyClosedTabs") as Any?,
-              let unarchivedArray = NSKeyedUnarchiver.unarchiveObject(with: tabsArray as! Data) as? [ClosedTab] else {
+        guard let tabsArray: Data = self.prefs.objectForKey("recentlyClosedTabs") as Any? as? Data,
+              let unarchivedArray = NSKeyedUnarchiver.unarchiveObject(with: tabsArray) as? [ClosedTab] else {
             return []
         }
         return unarchivedArray

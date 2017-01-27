@@ -50,7 +50,7 @@ extension SQLiteBookmarks {
         }
 
         let vars = BrowserDB.varlist(folders.count)
-        let args: Args = folders.map { $0 }
+        let args: Args = folders
 
         // Copy it to the local table.
         // Most of these will be NULL, because we're only dealing with folders,

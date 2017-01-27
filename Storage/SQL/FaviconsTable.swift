@@ -38,28 +38,28 @@ class FaviconsTable<T>: GenericTable<Favicon> {
 
     override func getInsertAndArgs(_ item: inout Favicon) -> (sql: String, args: Args)? {
         var args: Args = []
-        args.append(item.url  )
-        args.append(item.width  )
-        args.append(item.height  )
+        args.append(item.url)
+        args.append(item.width)
+        args.append(item.height)
         args.append(item.date)
-        args.append(item.type.rawValue  )
+        args.append(item.type.rawValue)
         return ("INSERT INTO \(TableFavicons) (url, width, height, date, type) VALUES (?,?,?,?,?)", args)
     }
 
     override func getUpdateAndArgs(_ item: inout Favicon) -> (sql: String, args: Args)? {
         var args = Args()
-        args.append(item.width  )
-        args.append(item.height  )
+        args.append(item.width)
+        args.append(item.height)
         args.append(item.date)
-        args.append(item.type.rawValue  )
-        args.append(item.url  )
+        args.append(item.type.rawValue)
+        args.append(item.url)
         return ("UPDATE \(TableFavicons) SET width = ?, height = ?, date = ?, type = ? WHERE url = ?", args)
     }
 
     override func getDeleteAndArgs(_ item: inout Favicon?) -> (sql: String, args: Args)? {
         var args = Args()
         if let icon = item {
-            args.append(icon.url  )
+            args.append(icon.url)
             return ("DELETE FROM \(TableFavicons) WHERE url = ?", args)
         }
 

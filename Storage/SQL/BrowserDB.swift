@@ -322,14 +322,14 @@ open class BrowserDB {
 extension BrowserDB {
     func vacuum() {
         log.debug("Vacuuming a BrowserDB.")
-        db.withConnection(SwiftData.Flags.readWriteCreate, synchronous: true) { connection in
+        let _ = db.withConnection(SwiftData.Flags.readWriteCreate, synchronous: true) { connection in
             return connection.vacuum()
         }
     }
 
     func checkpoint() {
         log.debug("Checkpointing a BrowserDB.")
-        db.transaction(synchronous: true) { connection in
+        let _ = db.transaction(synchronous: true) { connection in
             connection.checkpoint()
             return true
         }
@@ -478,12 +478,12 @@ extension BrowserDB: Queryable {
         }
     }
 
-    func queryReturnsResults(_ sql: String, args: Args?=nil) -> Deferred<Maybe<Bool>> {
+    func queryReturnsResults(_ sql: String, args: Args? = nil) -> Deferred<Maybe<Bool>> {
         return self.runQuery(sql, args: args, factory: { row in true })
          >>== { deferMaybe($0[0] ?? false) }
     }
 
-    func queryReturnsNoResults(_ sql: String, args: Args?=nil) -> Deferred<Maybe<Bool>> {
+    func queryReturnsNoResults(_ sql: String, args: Args? = nil) -> Deferred<Maybe<Bool>> {
         return self.runQuery(sql, args: nil, factory: { row in false })
           >>== { deferMaybe($0[0] ?? true) }
     }
@@ -495,7 +495,7 @@ extension SQLiteDBConnection {
         let inClause = BrowserDB.varlist(names.count)
         let tablesSQL = "SELECT name FROM sqlite_master WHERE type = 'table' AND name IN \(inClause)"
 
-        let res = self.executeQuery(tablesSQL, factory: StringFactory, withArgs: names.map  { $0 })
+        let res = self.executeQuery(tablesSQL, factory: StringFactory, withArgs: names)
         log.debug("\(res.count) tables exist. Expected \(count)")
         return res.count > 0
     }

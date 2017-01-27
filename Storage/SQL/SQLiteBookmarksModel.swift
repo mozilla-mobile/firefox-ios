@@ -168,14 +168,14 @@ open class SQLiteBookmarksModelFactory: BookmarksModelFactory {
         // for a while after you mark the last desktop child as deleted.
         let parents: Args = [
             // Local.
-            BookmarkRoots.MenuFolderGUID  ,
-            BookmarkRoots.ToolbarFolderGUID  ,
-            BookmarkRoots.UnfiledFolderGUID  ,
+            BookmarkRoots.MenuFolderGUID,
+            BookmarkRoots.ToolbarFolderGUID,
+            BookmarkRoots.UnfiledFolderGUID,
 
             // Mirror.
-            BookmarkRoots.MenuFolderGUID  ,
-            BookmarkRoots.ToolbarFolderGUID  ,
-            BookmarkRoots.UnfiledFolderGUID  ,
+            BookmarkRoots.MenuFolderGUID,
+            BookmarkRoots.ToolbarFolderGUID,
+            BookmarkRoots.UnfiledFolderGUID,
         ]
 
         let sql =
@@ -259,7 +259,7 @@ extension SQLiteBookmarks {
 
     fileprivate func getRecordsWithGUIDs(_ guids: [GUID], direction: Direction, includeIcon: Bool) -> Deferred<Maybe<Cursor<BookmarkNode>>> {
 
-        let args: Args = guids.map { $0 }
+        let args: Args = guids
         let varlist = BrowserDB.varlist(args.count)
         let values =
         "SELECT -1 AS id, guid, type, is_deleted, parentid, parentName, feedUri, pos, title, bmkUri, siteUri, folderName, faviconID, (\(isEditableExpression(direction))) AS isEditable " +
@@ -316,7 +316,7 @@ extension SQLiteBookmarks {
             args = ([parentGUID] + excludingGUIDs).map { $0 }
             exclusion = "\(typeFilter) AND vals.guid NOT IN " + BrowserDB.varlist(excludingGUIDs.count)
         } else {
-            args = [parentGUID  ]
+            args = [parentGUID]
             exclusion = typeFilter
         }
 
@@ -395,7 +395,7 @@ extension SQLiteBookmarks {
         let getParentsSQL =
         "SELECT DISTINCT parent FROM \(ViewBookmarksLocalStructureOnMirror) " +
         "WHERE child IN \(BrowserDB.varlist(guids.count)) AND is_overridden = 0"
-        let getParentsArgs: Args = guids.map { $0 }
+        let getParentsArgs: Args = guids
 
         return self.db.runQuery(getParentsSQL, args: getParentsArgs, factory: { $0[0] as! GUID })
             >>== { parentsCursor in
@@ -422,7 +422,7 @@ extension SQLiteBookmarks {
 
         log.debug("Deleting children of \(guids).")
 
-        let topArgs: Args = guids.map { $0 }
+        let topArgs: Args = guids
         let topVarlist = BrowserDB.varlist(topArgs.count)
         let query =
         "SELECT child FROM \(ViewBookmarksLocalStructureOnMirror) " +
@@ -439,7 +439,7 @@ extension SQLiteBookmarks {
                     return succeed()
                 }
 
-                let childArgs: Args = childGUIDs.map { $0 }
+                let childArgs: Args = childGUIDs
                 let childVarlist = BrowserDB.varlist(childArgs.count)
 
                 // Mirror the children if they're not already.

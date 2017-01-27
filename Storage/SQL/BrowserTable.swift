@@ -185,9 +185,9 @@ open class BrowserTable: Table {
         var structureArgs = Args()
         structureArgs.reserveCapacity(BookmarkRoots.RootChildren.count * 3)
         BookmarkRoots.RootChildren.forEach { guid in
-            structureArgs.append(BookmarkRoots.RootGUID  )
-            structureArgs.append(guid  )
-            structureArgs.append(idx  )
+            structureArgs.append(BookmarkRoots.RootGUID)
+            structureArgs.append(guid)
+            structureArgs.append(idx)
             idx += 1
         }
 
@@ -713,7 +713,7 @@ open class BrowserTable: Table {
 
             // We don't specify a title, expecting it to be generated on the fly, because we're smarter than Android.
             // We also don't migrate the 'id' column; we'll generate new ones that won't conflict with our roots.
-            let migrateArgs: Args = [BookmarkRoots.MobileFolderGUID   ]
+            let migrateArgs: Args = [BookmarkRoots.MobileFolderGUID]
             let migrateLocal =
             "INSERT INTO \(TableBookmarksLocal) " +
             "(guid, type, bmkUri, title, faviconID, local_modified, sync_status, parentid, parentName) " +

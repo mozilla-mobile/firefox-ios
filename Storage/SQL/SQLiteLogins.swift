@@ -560,7 +560,7 @@ open class SQLiteLogins: BrowserLogins {
             "(guid, local_modified, is_deleted, sync_status, hostname, timeCreated, timePasswordChanged, password, username) " +
         "SELECT guid, \(nowMillis), 1, \(SyncStatus.changed.rawValue), '', timeCreated, \(nowMillis)000, '', '' FROM \(TableLoginsMirror) WHERE guid IN \(inClause)"
 
-        let args: Args = guids.map { $0 }
+        let args: Args = guids
         return [
             (delete, args),
             (update, args),
