@@ -421,6 +421,7 @@ class BrowserViewController: UIViewController {
         view.addSubview(findInPageContainer)
         
         clipboardBar = ClipboardBar()
+        clipboardBar.delegate = self
         view.addSubview(clipboardBar)
         
         clipboardBarDisplayHandler = ClipboardBarDisplayHandler(clipboardBar: clipboardBar, prefs: profile.prefs)
@@ -1319,6 +1320,13 @@ class BrowserViewController: UIViewController {
         controller.popoverDelegate = self
         controller.modalPresentationStyle = UIModalPresentationStyle.FormSheet
         self.presentViewController(controller, animated: true, completion: nil)
+    }
+}
+
+extension BrowserViewController: ClipboardBarDelegate {
+    func didPressGoButtonWithURL(url: NSURL) {
+        clipboardBarDisplayHandler.hideBar()
+        openURLInNewTab(url, isPrivileged: false)
     }
 }
 

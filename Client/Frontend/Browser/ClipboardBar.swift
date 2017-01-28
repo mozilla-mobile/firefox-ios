@@ -1,8 +1,12 @@
 
 import UIKit
 
+protocol ClipboardBarDelegate: class {
+    func didPressGoButtonWithURL(url: NSURL)
+}
+
 class ClipboardBar: UIView {
-    
+    weak var delegate: ClipboardBarDelegate?
     let titleLabel = UILabel()
     let urlLabel = UILabel()
     let goButton = UIButton()
@@ -51,7 +55,11 @@ class ClipboardBar: UIView {
     }
     
     func goButtonPressed() {
-        print("Go")
+        guard let urlStringValue = urlString,
+            url = NSURL(string: urlStringValue) else {
+            return
+        }
+        delegate?.didPressGoButtonWithURL(url)
     }
     
     func setupLayout() {
@@ -80,8 +88,5 @@ class ClipboardBar: UIView {
         urlLabel.bottomAnchor.constraintEqualToAnchor(containerView.bottomAnchor).active = true
         urlLabel.trailingAnchor.constraintEqualToAnchor(goButton.leadingAnchor, constant: -margin).active = true
         urlLabel.leadingAnchor.constraintEqualToAnchor(containerView.leadingAnchor).active = true
-        
-        
-        
     }
 }
