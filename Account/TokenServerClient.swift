@@ -6,6 +6,7 @@ import Alamofire
 import Shared
 import Foundation
 import Deferred
+import SwiftyJSON
 
 let TokenServerClientErrorDomain = "org.mozilla.token.error"
 let TokenServerClientUnknownError = TokenServerError.local(
@@ -31,12 +32,12 @@ public struct TokenServerToken {
 
     public static func fromJSON(_ json: JSON) -> TokenServerToken? {
         if let
-            id = json["id"].asString,
-            let key = json["key"].asString,
-            let api_endpoint = json["api_endpoint"].asString,
-            let uid = json["uid"].asInt64,
-            let durationInSeconds = json["duration"].asInt64,
-            let remoteTimestamp = json["remoteTimestamp"].asInt64 {
+            id = json["id"].string,
+            let key = json["key"].string,
+            let api_endpoint = json["api_endpoint"].string,
+            let uid = json["uid"].int64,
+            let durationInSeconds = json["duration"].int64,
+            let remoteTimestamp = json["remoteTimestamp"].int64 {
                 return TokenServerToken(id: id, key: key, api_endpoint: api_endpoint, uid: UInt64(uid),
                     durationInSeconds: UInt64(durationInSeconds), remoteTimestamp: Timestamp(remoteTimestamp))
         }
@@ -102,27 +103,27 @@ open class TokenServerClient {
     }
 
     fileprivate class func remoteError(fromJSON json: JSON, statusCode: Int, remoteTimestampHeader: String?) -> TokenServerError? {
-        if json.isError {
+        if json.error != nil {
             return nil
         }
         if 200 <= statusCode && statusCode <= 299 {
             return nil
         }
-        return TokenServerError.remote(code: Int32(statusCode), status: json["status"].asString,
+        return TokenServerError.remote(code: Int32(statusCode), status: json["status"].string,
             remoteTimestamp: parseTimestampHeader(remoteTimestampHeader))
     }
 
     fileprivate class func token(fromJSON json: JSON, remoteTimestampHeader: String?) -> TokenServerToken? {
-        if json.isError {
+        if json.error != nil {
             return nil
         }
         if let
             remoteTimestamp = parseTimestampHeader(remoteTimestampHeader), // A token server that is not providing its timestamp is not healthy.
-            let id = json["id"].asString,
-            let key = json["key"].asString,
-            let api_endpoint = json["api_endpoint"].asString,
-            let uid = json["uid"].asInt,
-            let durationInSeconds = json["duration"].asInt64, durationInSeconds > 0 {
+            let id = json["id"].string,
+            let key = json["key"].string,
+            let api_endpoint = json["api_endpoint"].string,
+            let uid = json["uid"].int,
+            let durationInSeconds = json["duration"].int64, durationInSeconds > 0 {
             return TokenServerToken(id: id, key: key, api_endpoint: api_endpoint, uid: UInt64(uid),
                 durationInSeconds: UInt64(durationInSeconds), remoteTimestamp: remoteTimestamp)
         }
