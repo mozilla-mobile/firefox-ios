@@ -5,6 +5,7 @@
 import Foundation
 import FxA
 import Shared
+import SwiftyJSON
 
 // The version of the state schema we persist.
 let StateSchemaVersion = 1
@@ -41,10 +42,10 @@ public enum FxAActionNeeded {
 }
 
 func state(fromJSON json: JSON) -> FxAState? {
-    if json.isError {
+    if json.error != nil {
         return nil
     }
-    if let version = json["version"].asInt {
+    if let version = json["version"].int {
         if version == StateSchemaVersion {
             return stateV1(fromJSON:json)
         }
@@ -53,16 +54,16 @@ func state(fromJSON json: JSON) -> FxAState? {
 }
 
 func stateV1(fromJSON json: JSON) -> FxAState? {
-    if let labelString = json["label"].asString {
+    if let labelString = json["label"].string {
         if let label = FxAStateLabel(rawValue:  labelString) {
             switch label {
             case .engagedBeforeVerified:
                 if let
-                    sessionToken = json["sessionToken"].asString?.hexDecodedData,
-                    let keyFetchToken = json["keyFetchToken"].asString?.hexDecodedData,
-                    let unwrapkB = json["unwrapkB"].asString?.hexDecodedData,
-                    let knownUnverifiedAt = json["knownUnverifiedAt"].asInt64,
-                    let lastNotifiedUserAt = json["lastNotifiedUserAt"].asInt64 {
+                    sessionToken = json["sessionToken"].string?.hexDecodedData,
+                    let keyFetchToken = json["keyFetchToken"].string?.hexDecodedData,
+                    let unwrapkB = json["unwrapkB"].string?.hexDecodedData,
+                    let knownUnverifiedAt = json["knownUnverifiedAt"].int64,
+                    let lastNotifiedUserAt = json["lastNotifiedUserAt"].int64 {
                     return EngagedBeforeVerifiedState(
                         knownUnverifiedAt: UInt64(knownUnverifiedAt), lastNotifiedUserAt: UInt64(lastNotifiedUserAt),
                         sessionToken: sessionToken, keyFetchToken: keyFetchToken, unwrapkB: unwrapkB)
@@ -70,42 +71,42 @@ func stateV1(fromJSON json: JSON) -> FxAState? {
 
             case .engagedAfterVerified:
                 if let
-                    sessionToken = json["sessionToken"].asString?.hexDecodedData,
-                    let keyFetchToken = json["keyFetchToken"].asString?.hexDecodedData,
-                    let unwrapkB = json["unwrapkB"].asString?.hexDecodedData {
+                    sessionToken = json["sessionToken"].string?.hexDecodedData,
+                    let keyFetchToken = json["keyFetchToken"].string?.hexDecodedData,
+                    let unwrapkB = json["unwrapkB"].string?.hexDecodedData {
                     return EngagedAfterVerifiedState(sessionToken: sessionToken, keyFetchToken: keyFetchToken, unwrapkB: unwrapkB)
                 }
 
             case .cohabitingBeforeKeyPair:
                 if let
-                    sessionToken = json["sessionToken"].asString?.hexDecodedData,
-                    let kA = json["kA"].asString?.hexDecodedData,
-                    let kB = json["kB"].asString?.hexDecodedData {
+                    sessionToken = json["sessionToken"].string?.hexDecodedData,
+                    let kA = json["kA"].string?.hexDecodedData,
+                    let kB = json["kB"].string?.hexDecodedData {
                     return CohabitingBeforeKeyPairState(sessionToken: sessionToken, kA: kA, kB: kB)
                 }
 
             case .cohabitingAfterKeyPair:
                 if let
-                    sessionToken = json["sessionToken"].asString?.hexDecodedData,
-                    let kA = json["kA"].asString?.hexDecodedData,
-                    let kB = json["kB"].asString?.hexDecodedData,
-                    let keyPairJSON = JSON.unwrap(json["keyPair"]) as? [String: AnyObject],
+                    sessionToken = json["sessionToken"].string?.hexDecodedData,
+                    let kA = json["kA"].string?.hexDecodedData,
+                    let kB = json["kB"].string?.hexDecodedData,
+                    let keyPairJSON = json["keyPair"].dictionaryObject as? [String: AnyObject],
                     let keyPair = RSAKeyPair(jsonRepresentation: keyPairJSON),
-                    let keyPairExpiresAt = json["keyPairExpiresAt"].asInt64 {
+                    let keyPairExpiresAt = json["keyPairExpiresAt"].int64 {
                         return CohabitingAfterKeyPairState(sessionToken: sessionToken, kA: kA, kB: kB,
                             keyPair: keyPair, keyPairExpiresAt: UInt64(keyPairExpiresAt))
                 }
 
             case .married:
                 if let
-                    sessionToken = json["sessionToken"].asString?.hexDecodedData,
-                    let kA = json["kA"].asString?.hexDecodedData,
-                    let kB = json["kB"].asString?.hexDecodedData,
-                    let keyPairJSON = JSON.unwrap(json["keyPair"]) as? [String: AnyObject],
+                    sessionToken = json["sessionToken"].string?.hexDecodedData,
+                    let kA = json["kA"].string?.hexDecodedData,
+                    let kB = json["kB"].string?.hexDecodedData,
+                    let keyPairJSON = json["keyPair"].dictionaryObject as? [String: AnyObject],
                     let keyPair = RSAKeyPair(jsonRepresentation: keyPairJSON),
-                    let keyPairExpiresAt = json["keyPairExpiresAt"].asInt64,
-                    let certificate = json["certificate"].asString,
-                    let certificateExpiresAt = json["certificateExpiresAt"].asInt64 {
+                    let keyPairExpiresAt = json["keyPairExpiresAt"].int64,
+                    let certificate = json["certificate"].string,
+                    let certificateExpiresAt = json["certificateExpiresAt"].int64 {
                     return MarriedState(sessionToken: sessionToken, kA: kA, kB: kB,
                         keyPair: keyPair, keyPairExpiresAt: UInt64(keyPairExpiresAt),
                         certificate: certificate, certificateExpiresAt: UInt64(certificateExpiresAt))
@@ -165,7 +166,7 @@ open class TokenState: FxAState {
     }
 
     open override func asJSON() -> JSON {
-        var d: [String: JSON] = super.asJSON().asDictionary!
+        var d: [String: JSON] = super.asJSON().dictionary!
         d["sessionToken"] = JSON(sessionToken.hexEncodedString as NSString)
         return JSON(d as NSDictionary)
     }
@@ -183,7 +184,7 @@ open class ReadyForKeys: TokenState {
     }
 
     open override func asJSON() -> JSON {
-        var d: [String: JSON] = super.asJSON().asDictionary!
+        var d: [String: JSON] = super.asJSON().dictionary!
         d["keyFetchToken"] = JSON(keyFetchToken.hexEncodedString as NSString)
         d["unwrapkB"] = JSON(unwrapkB.hexEncodedString as NSString)
         return JSON(d as NSDictionary)
@@ -205,7 +206,7 @@ open class EngagedBeforeVerifiedState: ReadyForKeys {
     }
 
     open override func asJSON() -> JSON {
-        var d = super.asJSON().asDictionary!
+        var d = super.asJSON().dictionary!
         d["knownUnverifiedAt"] = JSON(NSNumber(value: knownUnverifiedAt))
         d["lastNotifiedUserAt"] = JSON(NSNumber(value: lastNotifiedUserAt))
         return JSON(d as NSDictionary)
@@ -242,7 +243,7 @@ open class TokenAndKeys: TokenState {
     }
 
     open override func asJSON() -> JSON {
-        var d = super.asJSON().asDictionary!
+        var d = super.asJSON().dictionary!
         d["kA"] = JSON(kA.hexEncodedString as NSString)
         d["kB"] = JSON(kB.hexEncodedString as NSString)
         return JSON(d as NSDictionary)
@@ -266,7 +267,7 @@ open class TokenKeysAndKeyPair: TokenAndKeys {
     }
 
     open override func asJSON() -> JSON {
-        var d = super.asJSON().asDictionary!
+        var d = super.asJSON().dictionary!
         d["keyPair"] = JSON(keyPair.jsonRepresentation() as NSDictionary)
         d["keyPairExpiresAt"] = JSON(NSNumber(value: keyPairExpiresAt))
         return JSON(d as NSDictionary)
@@ -294,7 +295,7 @@ open class MarriedState: TokenKeysAndKeyPair {
     }
 
     open override func asJSON() -> JSON {
-        var d = super.asJSON().asDictionary!
+        var d = super.asJSON().dictionary!
         d["certificate"] = JSON(certificate as NSString)
         d["certificateExpiresAt"] = JSON(NSNumber(value: certificateExpiresAt))
         return JSON(d as NSDictionary)

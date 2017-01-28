@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import SwiftyJSON
 
 public struct FxADevice {
     let name: String
@@ -36,14 +37,14 @@ public struct FxADevice {
     }
 
     static func fromJSON(_ json: JSON) -> FxADevice? {
-        guard !json.isError,
-            let id = json["id"].asString,
-            let name = json["name"].asString,
-            let type = json["type"].asString else {
+        guard json.error == nil,
+            let id = json["id"].string,
+            let name = json["name"].string,
+            let type = json["type"].string else {
                 return nil
         }
 
-        let isCurrentDevice = json["isCurrentDevice"].asBool ?? false
+        let isCurrentDevice = json["isCurrentDevice"].boolValue ?? false
         return FxADevice(name: name, id: id, type: type, isCurrentDevice: isCurrentDevice)
     }
 }

@@ -6,6 +6,7 @@ import Foundation
 import Shared
 import XCGLogger
 import Deferred
+import SwiftyJSON
 
 private let log = Logger.syncLogger
 
@@ -64,15 +65,15 @@ open class FirefoxAccount {
     }
 
     open class func from(_ configuration: FirefoxAccountConfiguration, andJSON data: JSON) -> FirefoxAccount? {
-        guard let email = data["email"].asString ,
-            let uid = data["uid"].asString,
-            let sessionToken = data["sessionToken"].asString?.hexDecodedData,
-            let keyFetchToken = data["keyFetchToken"].asString?.hexDecodedData,
-            let unwrapkB = data["unwrapBKey"].asString?.hexDecodedData else {
+        guard let email = data["email"].string ,
+            let uid = data["uid"].string,
+            let sessionToken = data["sessionToken"].string?.hexDecodedData,
+            let keyFetchToken = data["keyFetchToken"].string?.hexDecodedData,
+            let unwrapkB = data["unwrapBKey"].string?.hexDecodedData else {
                 return nil
         }
 
-        let verified = data["verified"].asBool ?? false
+        let verified = data["verified"].bool ?? false
         return FirefoxAccount.from(configuration: configuration,
             andParametersWithEmail: email, uid: uid, deviceRegistration: nil, verified: verified,
             sessionToken: sessionToken, keyFetchToken: keyFetchToken, unwrapkB: unwrapkB)
@@ -116,7 +117,7 @@ open class FirefoxAccount {
         return account
     }
 
-    open func asDictionary() -> [String: Any] {
+    open func dictionary() -> [String: Any] {
         var dict: [String: Any] = [:]
         dict["version"] = AccountSchemaVersion
         dict["email"] = email

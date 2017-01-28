@@ -6,6 +6,7 @@ import Foundation
 import Shared
 import XCGLogger
 import Deferred
+import SwiftyJSON
 
 private let CurrentSyncAuthStateCacheVersion = 1
 
@@ -23,15 +24,15 @@ public protocol SyncAuthState {
 }
 
 public func syncAuthStateCachefromJSON(_ json: JSON) -> SyncAuthStateCache? {
-    if let version = json["version"].asInt {
+    if let version = json["version"].int {
         if version != CurrentSyncAuthStateCacheVersion {
             log.warning("Sync Auth State Cache is wrong version; dropping.")
             return nil
         }
         if let
             token = TokenServerToken.fromJSON(json["token"]),
-            let forKey = json["forKey"].asString?.hexDecodedData,
-            let expiresAt = json["expiresAt"].asInt64 {
+            let forKey = json["forKey"].string?.hexDecodedData,
+            let expiresAt = json["expiresAt"].int64 {
             return SyncAuthStateCache(token: token, forKey: forKey, expiresAt: Timestamp(expiresAt))
         }
     }
