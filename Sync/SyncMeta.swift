@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import SwiftyJSON
 
 // Our engine choices need to persist across server changes.
 // Note that EngineConfiguration is not enough to evolve an existing meta/global:
@@ -18,11 +19,11 @@ open class EngineConfiguration: Equatable {
     }
 
     open class func fromJSON(_ json: JSON) -> EngineConfiguration? {
-        if json.isError {
+        if json.isError() {
             return nil
         }
-        if let enabled = jsonsToStrings(json["enabled"].asArray) {
-            if let declined = jsonsToStrings(json["declined"].asArray) {
+        if let enabled = jsonsToStrings(json["enabled"].array) {
+            if let declined = jsonsToStrings(json["declined"].array) {
                 return EngineConfiguration(enabled: enabled, declined: declined)
             }
         }
@@ -52,8 +53,8 @@ public struct EngineMeta: Equatable {
     let syncID: String
 
     public static func fromJSON(_ json: JSON) -> EngineMeta? {
-        if let syncID = json["syncID"].asString {
-            if let version = json["version"].asInt {
+        if let syncID = json["syncID"].string {
+            if let version = json["version"].int {
                 return EngineMeta(version: version, syncID: syncID)
             }
         }
@@ -86,13 +87,13 @@ public struct MetaGlobal: Equatable {
     // TODO: is it more useful to support partial globals?
     // TODO: how do we return error states here?
     public static func fromJSON(_ json: JSON) -> MetaGlobal? {
-        if json.isError {
+        if json.isError() {
             return nil
         }
-        if let syncID = json["syncID"].asString {
-            if let storageVersion = json["storageVersion"].asInt {
-                let engines = EngineMeta.mapFromJSON(json["engines"].asDictionary) ?? [:]
-                let declined = json["declined"].asArray ?? []
+        if let syncID = json["syncID"].string {
+            if let storageVersion = json["storageVersion"].int {
+                let engines = EngineMeta.mapFromJSON(json["engines"].dictionary) ?? [:]
+                let declined = json["declined"].array ?? []
                 return MetaGlobal(syncID: syncID,
                                   storageVersion: storageVersion,
                                   engines: engines,

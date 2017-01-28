@@ -42,7 +42,7 @@ open class LoginPayload: CleartextPayloadJSON {
             return false
         }
 
-        if self["deleted"].asBool ?? false {
+        if self["deleted"].bool ?? false {
             return true
         }
 
@@ -79,43 +79,43 @@ open class LoginPayload: CleartextPayloadJSON {
     }
 
     open var hostname: String {
-        return self["hostname"].asString!
+        return self["hostname"].string!
     }
 
     open var username: String {
-        return self["username"].asString!
+        return self["username"].string!
     }
 
     open var password: String {
-        return self["password"].asString!
+        return self["password"].string!
     }
 
     open var usernameField: String {
-        return self["usernameField"].asString!
+        return self["usernameField"].string!
     }
 
     open var passwordField: String {
-        return self["passwordField"].asString!
+        return self["passwordField"].string!
     }
 
     open var formSubmitURL: String? {
-        return self["formSubmitURL"].asString
+        return self["formSubmitURL"].string
     }
 
     open var httpRealm: String? {
-        return self["httpRealm"].asString
+        return self["httpRealm"].string
     }
 
     fileprivate func timestamp(_ field: String) -> Timestamp? {
         let json = self[field]
-        if let i = json.asInt64, i > 0 {
+        if let i = json.int64, i > 0 {
             return Timestamp(i)
         }
         return nil
     }
 
     open var timesUsed: Int? {
-        return self["timesUsed"].asInt
+        return self["timesUsed"].int
     }
 
     open var timeCreated: Timestamp? {
@@ -144,7 +144,7 @@ open class LoginPayload: CleartextPayloadJSON {
             // But we just checked, so we're good to roll on.
 
             return LoginPayload.RequiredStringFields.every({ field in
-                p[field].asString == self[field].asString
+                p[field].string == self[field].string
             })
 
             // TODO: optional fields.

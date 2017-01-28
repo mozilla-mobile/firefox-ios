@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import SwiftyJSON
 
 open class InfoCollections {
     fileprivate let collections: [String: Timestamp]
@@ -13,10 +14,10 @@ open class InfoCollections {
     }
 
     open class func fromJSON(_ json: JSON) -> InfoCollections? {
-        if let dict = json.asDictionary {
+        if let dict = json.dictionary {
             var coll = [String: Timestamp]()
             for (key, value) in dict {
-                if let value = value.asDouble {
+                if let value = value.double {
                     coll[key] = Timestamp(value * 1000)
                 } else {
                     return nil       // Invalid, so bail out.

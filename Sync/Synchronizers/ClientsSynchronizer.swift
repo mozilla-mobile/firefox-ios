@@ -7,6 +7,7 @@ import Shared
 import Storage
 import XCGLogger
 import Deferred
+import SwiftyJSON
 
 private let log = Logger.syncLogger
 let ClientsStorageVersion = 1
@@ -37,9 +38,9 @@ open class WipeCommand: Command {
     }
 
     open static func commandFromSyncCommand(_ syncCommand: SyncCommand) -> Command? {
-        let json = JSON.parse(syncCommand.value)
-        if let name = json["command"].asString,
-            let args = json["args"].asArray {
+        let json = JSON(parseJSON: syncCommand.value)
+        if let name = json["command"].string,
+            let args = json["args"].array {
                 return WipeCommand.fromName(name, args: args)
         }
         return nil
@@ -51,8 +52,8 @@ open class DisplayURICommand: Command {
     let title: String
 
     public init?(command: String, args: [JSON]) {
-        if let uri = args[0].asString?.asURL,
-            let title = args[2].asString {
+        if let uri = args[0].string?.asURL,
+            let title = args[2].string {
                 self.uri = uri
                 self.title = title
         } else {
@@ -73,9 +74,9 @@ open class DisplayURICommand: Command {
     }
 
     open static func commandFromSyncCommand(_ syncCommand: SyncCommand) -> Command? {
-        let json = JSON.parse(syncCommand.value)
-        if let name = json["command"].asString,
-            let args = json["args"].asArray {
+        let json = JSON(parseJSON: syncCommand.value)
+        if let name = json["command"].string,
+            let args = json["args"].array {
                 return DisplayURICommand.fromName(name, args: args)
         }
         return nil
@@ -120,7 +121,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
         let guid = self.scratchpad.clientGUID
         let formfactor = formFactorString()
         
-        let json = JSON([
+        let json = JSON(object: [
             "id": guid,
             "version": AppInfo.appVersion,
             "protocols": ["1.5"],
@@ -128,7 +129,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
             "os": "iOS",
             "commands": [JSON](),
             "type": "mobile",
-            "appPackage": Bundle.mainBundle().bundleIdentifier ?? "org.mozilla.ios.FennecUnknown",
+            "appPackage": Bundle.main.bundleIdentifier ?? "org.mozilla.ios.FennecUnknown",
             "application": DeviceInfo.appName(),
             "device": DeviceInfo.deviceModel(),
             "formfactor": formfactor])
@@ -156,7 +157,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
     fileprivate func clientRecordToLocalClientEntry(_ record: Record<ClientPayload>) -> RemoteClient {
         let modified = record.modified
         let payload = record.payload
-        return RemoteClient(json: payload, modified: modified)
+        return RemoteClient(json: payload._json, modified: modified)
     }
 
     // If this is a fresh start, do a wipe.
@@ -182,8 +183,8 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
             let commands = record.payload.commands
             if !commands.isEmpty {
                 func parse(_ json: JSON) -> Command? {
-                    if let name = json["command"].asString,
-                        let args = json["args"].asArray,
+                    if let name = json["command"].string,
+                        let args = json["args"].array,
                         let constructor = Commands[name] {
                             return constructor(name, args)
                     }
@@ -217,8 +218,8 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
         return fetch.bind() { result in
             if let response = result.successValue, response.value.payload.isValid() {
                 let record = response.value
-                if var clientRecord = record.payload.asDictionary {
-                    clientRecord["commands"] = JSON(record.payload.commands + commands.map { JSON.parse($0.value) })
+                if var clientRecord = record.payload._json.dictionary {
+                    clientRecord["commands"] = JSON(record.payload.commands + commands.map { JSON(parseJSON: $0.value) })
                     let uploadRecord = Record(id: clientGUID, payload: ClientPayload(JSON(clientRecord)), ttl: ThreeWeeksInSeconds)
                     return storageClient.put(uploadRecord, ifUnmodifiedSince: record.modified)
                         >>== { resp in
@@ -231,7 +232,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
             } else {
                 if let failure = result.failureValue {
                     log.warning("Failed to fetch record with GUID \(clientGUID).")
-                    if failure is NotFound<NSHTTPURLResponse> {
+                    if failure is NotFound<HTTPURLResponse> {
                         log.debug("Not waiting to see if the client comes back.")
 
                         // TODO: keep these around and retry, expiring after a while.
@@ -239,7 +240,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
                         return deleteCommands()
                     }
 
-                    if failure is BadRequestError<NSHTTPURLResponse> {
+                    if failure is BadRequestError<HTTPURLResponse> {
                         log.debug("We made a bad request. Throwing away queued commands.")
                         return deleteCommands()
                     }
@@ -318,7 +319,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
                     >>> {
                         log.debug("Running \(commands.count) commands.")
                         for (command) in commands {
-                            command.run(self)
+                            let _ = command.run(self)
                         }
                         self.lastFetched = responseTimestamp!
                         return succeed()
@@ -331,16 +332,16 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
 
         if let reason = self.reasonToNotSync(storageClient) {
             switch reason {
-            case .EngineRemotelyNotEnabled:
+            case .engineRemotelyNotEnabled:
                 // This is a hard error for us.
                 return deferMaybe(FatalError(message: "clients not mentioned in meta/global. Server wiped?"))
             default:
-                return deferMaybe(SyncStatus.NotStarted(reason))
+                return deferMaybe(SyncStatus.notStarted(reason))
             }
         }
 
         let keys = self.scratchpad.keys?.value
-        let encoder = RecordEncoder<ClientPayload>(decode: { ClientPayload($0) }, encode: { $0 })
+        let encoder = RecordEncoder<ClientPayload>(decode: { ClientPayload($0) }, encode: { $0._json })
         let encrypter = keys?.encrypter(self.collection, encoder: encoder)
         if encrypter == nil {
             log.error("Couldn't make clients encrypter.")
@@ -353,7 +354,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
             log.debug("No remote changes for clients. (Last fetched \(self.lastFetched).)")
             return self.maybeUploadOurRecord(false, ifUnmodifiedSince: nil, toServer: clientsClient)
                 >>> { self.uploadClientCommands(toLocalClients: localClients, withServer: clientsClient) }
-                >>> { deferMaybe(.Completed) }
+                >>> { deferMaybe(.completed) }
         }
 
         // TODO: some of the commands we process might involve wiping collections or the
@@ -364,6 +365,6 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
                 return self.wipeIfNecessary(localClients)
                     >>> { self.applyStorageResponse(response, toLocalClients: localClients, withServer: clientsClient) }
             }
-            >>> { deferMaybe(.Completed) }
+            >>> { deferMaybe(.completed) }
     }
 }

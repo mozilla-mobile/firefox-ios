@@ -4,20 +4,21 @@
 
 import Foundation
 import Shared
+import SwiftyJSON
 
 open class KeysPayload: CleartextPayloadJSON {
     override open func isValid() -> Bool {
         // We should also call super.isValid(), but that'll fail:
         // Global is external, but doesn't have external or weak linkage!
         // Swift compiler bug #18422804.
-        return !isError &&
-               self["default"].isArray
+        return !_json.isError() &&
+               self["default"].type == Type.array
     }
     
     fileprivate func keyBundleFromPair(_ input: JSON) -> KeyBundle? {
-        if let pair: [JSON] = input.asArray {
-            if let encKey = pair[0].asString {
-                if let hmacKey = pair[1].asString {
+        if let pair: [JSON] = input.array {
+            if let encKey = pair[0].string {
+                if let hmacKey = pair[1].string {
                     return KeyBundle(encKeyB64: encKey, hmacKeyB64: hmacKey)
                 }
             }
@@ -30,7 +31,7 @@ open class KeysPayload: CleartextPayloadJSON {
     }
 
     var collectionKeys: [String: KeyBundle] {
-        if let collections: [String: JSON] = self["collections"].asDictionary {
+        if let collections: [String: JSON] = self["collections"].dictionary {
             return optFilter(mapValues(collections, f: self.keyBundleFromPair))
         }
         return [:]

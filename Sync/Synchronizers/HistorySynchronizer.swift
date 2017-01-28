@@ -7,6 +7,7 @@ import Shared
 import Storage
 import XCGLogger
 import Deferred
+import SwiftyJSON
 
 private let log = Logger.syncLogger
 private let HistoryTTLInSeconds = 5184000                   // 60 days.
@@ -199,7 +200,7 @@ open class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
 
         if !greenLight() {
             log.info("Green light turned red. Stopping history download.")
-            return deferMaybe(.Partial)
+            return deferMaybe(.partial)
         }
 
         func applyBatched() -> Success {
@@ -210,7 +211,7 @@ open class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
         func onBatchResult(_ result: Maybe<DownloadEndState>) -> SyncResult {
             guard let end = result.successValue else {
                 log.warning("Got failure: \(result.failureValue!)")
-                return deferMaybe(.Completed)
+                return deferMaybe(.completed)
             }
 
             switch end {
@@ -218,7 +219,7 @@ open class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
                 log.info("Done with batched mirroring.")
                 return applyBatched()
                    >>> history.doneApplyingRecordsAfterDownload
-                   >>> { deferMaybe(.Completed) }
+                   >>> { deferMaybe(.completed) }
             case .Incomplete:
                 log.debug("Running another batch.")
                 // This recursion is fine because Deferred always pushes callbacks onto a queue.
@@ -226,11 +227,11 @@ open class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
                    >>> { self.go(info, greenLight: greenLight, downloader: downloader, history: history) }
             case .Interrupted:
                 log.info("Interrupted. Aborting batching this time.")
-                return deferMaybe(.Partial)
+                return deferMaybe(.partial)
             case .NoNewData:
                 log.info("No new data. No need to continue batching.")
                 downloader.advance()
-                return deferMaybe(.Completed)
+                return deferMaybe(.completed)
             }
         }
 
@@ -238,12 +239,12 @@ open class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
                          .bind(onBatchResult)
     }
 
-    open func synchronizeLocalHistory(_ history: SyncableHistory, withServer storageClient: Sync15StorageClient, info: InfoCollections, greenLight: () -> Bool) -> SyncResult {
+    open func synchronizeLocalHistory(_ history: SyncableHistory, withServer storageClient: Sync15StorageClient, info: InfoCollections, greenLight: @escaping () -> Bool) -> SyncResult {
         if let reason = self.reasonToNotSync(storageClient) {
-            return deferMaybe(.NotStarted(reason))
+            return deferMaybe(.notStarted(reason))
         }
 
-        let encoder = RecordEncoder<HistoryPayload>(decode: { HistoryPayload($0) }, encode: { $0 })
+        let encoder = RecordEncoder<HistoryPayload>(decode: { HistoryPayload($0) }, encode: { $0._json })
 
         guard let historyClient = self.collectionClient(encoder, storageClient: storageClient) else {
             log.error("Couldn't make history factory.")
@@ -265,19 +266,19 @@ open class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
         return self.go(info, greenLight: greenLight, downloader: downloader, history: history)
             >>== { syncResult in
                 switch syncResult {
-                case .Completed:
+                case .completed:
                     // When we're done downloading, we can upload.
                     return self.uploadOutgoingFromStorage(history,
                                                           lastTimestamp: 0,
                                                           withServer: historyClient)
-                       >>> { deferMaybe(.Completed) }
+                       >>> { deferMaybe(.completed) }
 
                 // If we didn't finish downloading, do nothing further -- just pass
                 // through the download result.
-                case .NotStarted(_):
+                case .notStarted(_):
                     return deferMaybe(syncResult)
 
-                case .Partial:
+                case .partial:
                     log.debug("Didn't finish downloading history; not uploading yet.")
                     return deferMaybe(syncResult)
                 }

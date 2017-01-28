@@ -7,6 +7,7 @@ import Shared
 import Storage
 import XCGLogger
 import Deferred
+import SwiftyJSON
 
 private let log = Logger.syncLogger
 let TabsStorageVersion = 1
@@ -40,7 +41,7 @@ open class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchroniz
             "tabs": jsonTabs
         ])
         if Logger.logPII {
-            log.verbose("Sending tabs JSON \(tabsJSON.toString(true))")
+            log.verbose("Sending tabs JSON \(tabsJSON.rawString())")
         }
         let payload = TabsPayload(tabsJSON)
         return Record(id: guid, payload: payload, ttl: ThreeWeeksInSeconds)
@@ -137,24 +138,24 @@ open class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchroniz
         }
 
         if let reason = self.reasonToNotSync(storageClient) {
-            return deferMaybe(SyncStatus.NotStarted(reason))
+            return deferMaybe(SyncStatus.notStarted(reason))
         }
 
         let keys = self.scratchpad.keys?.value
-        let encoder = RecordEncoder<TabsPayload>(decode: { TabsPayload($0) }, encode: { $0 })
+        let encoder = RecordEncoder<TabsPayload>(decode: { TabsPayload($0) }, encode: { $0._json })
         if let encrypter = keys?.encrypter(self.collection, encoder: encoder) {
             let tabsClient = storageClient.clientForCollection(self.collection, encrypter: encrypter)
 
             if !self.remoteHasChanges(info) {
                 // upload local tabs if they've changed or we're in a fresh start.
-                uploadOurTabs(localTabs, toServer: tabsClient)
-                return deferMaybe(.Completed)
+                let _ = uploadOurTabs(localTabs, toServer: tabsClient)
+                return deferMaybe(.completed)
             }
 
             return tabsClient.getSince(self.lastFetched)
                 >>== onResponseReceived
                 >>> { self.uploadOurTabs(localTabs, toServer: tabsClient) }
-                >>> { deferMaybe(.Completed) }
+                >>> { deferMaybe(.completed) }
         }
 
         log.error("Couldn't make tabs factory.")
@@ -178,9 +179,9 @@ extension RemoteTab {
     public func toJSON() -> JSON? {
         let tabHistory = optFilter(history.map { $0.absoluteString })
         if !tabHistory.isEmpty {
-            return JSON([
+            return JSON(object: [
                 "title": title,
-                "icon": icon?.absoluteString ?? NSNull(),
+                "icon": icon?.absoluteString as Any? ?? NSNull(),
                 "urlHistory": tabHistory,
                 "lastUsed": lastUsed.description,
                 ])

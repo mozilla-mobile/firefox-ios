@@ -41,7 +41,7 @@ class TrivialBookmarkStorer: BookmarkStorer {
 
             items.forEach { (guid, item) in
                 let payload = item.asPayloadWithChildren(itemsWithNewChildren[guid])
-                let mappedGUID = payload["id"].asString ?? guid
+                let mappedGUID = payload["id"].string ?? guid
                 let record = Record<BookmarkBasePayload>(id: mappedGUID, payload: payload)
                 records.append(record)
             }
@@ -91,10 +91,10 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
 
     open func synchronizeBookmarksToStorage(_ storage: SyncableBookmarks & LocalItemSource & MirrorItemSource, usingBuffer buffer: BookmarkBufferStorage & BufferItemSource, withServer storageClient: Sync15StorageClient, info: InfoCollections, greenLight: @escaping () -> Bool) -> SyncResult {
         if let reason = self.reasonToNotSync(storageClient) {
-            return deferMaybe(.NotStarted(reason))
+            return deferMaybe(.notStarted(reason))
         }
 
-        let encoder = RecordEncoder<BookmarkBasePayload>(decode: BookmarkType.somePayloadFromJSON, encode: { $0 })
+        let encoder = RecordEncoder<BookmarkBasePayload>(decode: BookmarkType.somePayloadFromJSON, encode: { $0._json })
 
         guard let bookmarksClient = self.collectionClient(encoder, storageClient: storageClient) else {
             log.error("Couldn't make bookmarks factory.")
@@ -109,30 +109,30 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
               >>== effect { timestamp in
                 // We need to advance our batching downloader timestamp to match. See Bug 1253458.
                 self.setTimestamp(timestamp)
-                mirrorer.advanceNextDownloadTimestampTo(timestamp)
+                mirrorer.advanceNextDownloadTimestampTo(timestamp: timestamp)
             }
         })
 
-        let doMirror = mirrorer.go(info, greenLight: greenLight)
+        let doMirror = mirrorer.go(info: info, greenLight: greenLight)
 
         let run: SyncResult
         if !AppConstants.shouldMergeBookmarks {
-            if case .Release = AppConstants.BuildChannel {
+            if case .release = AppConstants.BuildChannel {
                 // On release, just mirror; don't validate.
                 run = doMirror
             } else {
                 run = doMirror >>== effect({ result in
                     // Just validate to report statistics.
-                    if case .Completed = result {
+                    if case .completed = result {
                         log.debug("Validating completed buffer download.")
-                        buffer.validate()
+                        let _ = buffer.validate()
                     }
                 })
             }
         } else {
             run = doMirror >>== { result in
                 // Only bother trying to sync if the mirror operation wasn't interrupted or partial.
-                if case .Completed = result {
+                if case .completed = result {
                     let applier = MergeApplier(buffer: buffer, storage: storage, client: storer, greenLight: greenLight)
                     return applier.go()
                 }
@@ -141,7 +141,7 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
         }
 
         run.upon { result in
-            let end = NSDate.nowMicroseconds()
+            let end = Date.nowMicroseconds()
             let duration = end - start
             log.info("Bookmark \(AppConstants.shouldMergeBookmarks ? "sync" : "mirroring") took \(duration)µs. Result was \(result.successValue?.description ?? result.failureValue?.description ?? "failure")")
         }
@@ -173,12 +173,12 @@ class MergeApplier {
     func go() -> SyncResult {
         guard self.greenLight() else {
             log.info("Green light turned red; not merging bookmarks.")
-            return deferMaybe(SyncStatus.Completed)
+            return deferMaybe(SyncStatus.completed)
         }
 
         return self.merger.merge()
           >>== self.applyResult
-           >>> always(SyncStatus.Completed)
+           >>> always(SyncStatus.completed)
     }
 }
 

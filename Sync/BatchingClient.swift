@@ -25,14 +25,14 @@ private let log = Logger.syncLogger
 private typealias UploadRecord = (guid: GUID, payload: String, sizeBytes: Int)
 private typealias DeferredResponse = Deferred<Maybe<StorageResponse<POSTResult>>>
 
-typealias BatchUploadFunction = (_ lines: [String], _ ifUnmodifiedSince: Timestamp?, _ queryParams: [NSURLQueryItem]?) -> Deferred<Maybe<StorageResponse<POSTResult>>>
+typealias BatchUploadFunction = (_ lines: [String], _ ifUnmodifiedSince: Timestamp?, _ queryParams: [URLQueryItem]?) -> Deferred<Maybe<StorageResponse<POSTResult>>>
 
 private let commitParam = URLQueryItem(name: "commit", value: "true")
 
 private enum AccumulateRecordError: MaybeErrorType {
     var description: String {
         switch self {
-        case .Full:
+        case .full:
             return "Batch or payload is full."
         case .unknown:
             return "Unknown errored while trying to accumulate records in batch"
@@ -120,7 +120,7 @@ open class Sync15BatchClient<T: CleartextPayloadJSON> {
         do {
             // Try to add the record to our buffer
             try accumulateRecord(record)
-        } catch AccumulateRecordError.Full(let uploadOp) {
+        } catch AccumulateRecordError.full(let uploadOp) {
             // When we're full, run the upload and try to add the record
             // after uploading since we've made room for it.
             return uploadOp >>> { self.accumulateOrUpload(record) }
@@ -134,17 +134,17 @@ open class Sync15BatchClient<T: CleartextPayloadJSON> {
     fileprivate func accumulateRecord(_ record: UploadRecord) throws {
         guard let token = self.batchToken else {
             guard addToPost(record) else {
-                throw AccumulateRecordError.Full(uploadOp: self.start())
+                throw AccumulateRecordError.full(uploadOp: self.start())
             }
             return
         }
 
         guard fitsInBatch(record) else {
-            throw AccumulateRecordError.Full(uploadOp: self.commitBatch(token))
+            throw AccumulateRecordError.full(uploadOp: self.commitBatch(token))
         }
 
         guard addToPost(record) else {
-            throw AccumulateRecordError.Full(uploadOp: self.postInBatch(token))
+            throw AccumulateRecordError.full(uploadOp: self.postInBatch(token))
         }
 
         addToBatch(record)
@@ -219,7 +219,7 @@ open class Sync15BatchClient<T: CleartextPayloadJSON> {
     fileprivate func moveForward(_ response: StorageResponse<POSTResult>) {
         let lastModified = response.metadata.lastModifiedMilliseconds
         self.ifUnmodifiedSince = lastModified
-        self.onCollectionUploaded(response.value, lastModified)
+        let _ = self.onCollectionUploaded(response.value, lastModified)
     }
 
     fileprivate func resetBatch() {

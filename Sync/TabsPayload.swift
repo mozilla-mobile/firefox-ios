@@ -6,6 +6,7 @@ import Foundation
 import Shared
 import Storage
 import XCGLogger
+import SwiftyJSON
 
 private let log = Logger.browserLogger
 
@@ -40,11 +41,11 @@ open class TabsPayload: CleartextPayloadJSON {
         class func fromJSON(_ json: JSON) -> Tab? {
             func getLastUsed(_ json: JSON) -> Timestamp? {
                 // This might be a string or a number.
-                if let num = json["lastUsed"].asNumber {
+                if let num = json["lastUsed"].int64 {
                     return Timestamp(num * 1000)
                 }
 
-                if let num = json["lastUsed"].asString {
+                if let num = json["lastUsed"].string {
                     // Try parsing.
                     return decimalSecondsStringToTimestamp(num)
                 }
@@ -52,10 +53,10 @@ open class TabsPayload: CleartextPayloadJSON {
                 return nil
             }
 
-            if let title = json["title"].asString,
-               let urlHistory = jsonsToStrings(json["urlHistory"].asArray),
+            if let title = json["title"].string,
+               let urlHistory = jsonsToStrings(json["urlHistory"].array),
                let lastUsed = getLastUsed(json) {
-                return Tab(title: title, urlHistory: urlHistory, lastUsed: lastUsed, icon: json["icon"].asString)
+                return Tab(title: title, urlHistory: urlHistory, lastUsed: lastUsed, icon: json["icon"].string)
             }
 
             return nil
@@ -67,12 +68,12 @@ open class TabsPayload: CleartextPayloadJSON {
             return false
         }
 
-        if self["deleted"].asBool ?? false {
+        if self["deleted"].bool ?? false {
             return true
         }
 
-        return self["clientName"].isString &&
-               self["tabs"].isArray
+        return self["clientName"].type == Type.string &&
+               self["tabs"].type == Type.array
     }
 
     // Eventually it'd be nice to unify RemoteTab and Tab. We want to kill the GUID in RemoteTab,
@@ -80,8 +81,8 @@ open class TabsPayload: CleartextPayloadJSON {
     // lives in Storage, and Tab is more closely tied to TabsPayload.
 
     var remoteTabs: [RemoteTab] {
-        if let clientGUID = self["id"].asString {
-            let payloadTabs = self["tabs"].asArray!
+        if let clientGUID = self["id"].string {
+            let payloadTabs = self["tabs"].arrayValue
             let remoteTabs = optFilter(payloadTabs.map({ Tab.remoteTabFromJSON($0, clientGUID: clientGUID) }))
             if payloadTabs.count != remoteTabs.count {
                 log.debug("Bug 1201875 - Missing remote tabs from sync")
@@ -93,11 +94,11 @@ open class TabsPayload: CleartextPayloadJSON {
     }
 
     var tabs: [Tab] {
-        return optFilter(self["tabs"].asArray!.map(Tab.fromJSON))
+        return optFilter(self["tabs"].arrayValue.map(Tab.fromJSON))
     }
 
     var clientName: String {
-        return self["clientName"].asString!
+        return self["clientName"].string!
     }
 
     override open func equalPayloads(_ obj: CleartextPayloadJSON) -> Bool {

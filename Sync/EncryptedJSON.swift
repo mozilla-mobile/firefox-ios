@@ -7,6 +7,7 @@ import Shared
 import FxA
 import Account
 import XCGLogger
+import SwiftyJSON
 
 private let log = Logger.syncLogger
 
@@ -17,7 +18,8 @@ private let log = Logger.syncLogger
  *
  * into a new JSON object resulting from decrypting and parsing the ciphertext.
  */
-open class EncryptedJSON: JSON {
+open class EncryptedJSON {
+    var _json: JSON
     var _cleartext: JSON?               // Cache decrypted cleartext.
     var _ciphertextBytes: Data?       // Cache decoded ciphertext.
     var _hmacBytes: Data?             // Cache decoded HMAC.
@@ -30,17 +32,17 @@ open class EncryptedJSON: JSON {
 
     public init(json: String, keyBundle: KeyBundle) {
         self.keyBundle = keyBundle
-        super.init(JSON.parse(json))
+        self._json = JSON.init(parseJSON: json)
     }
 
     public init(json: JSON, keyBundle: KeyBundle) {
         self.keyBundle = keyBundle
-        super.init(json)
+        self._json = json
     }
 
     // For validating HMAC: the raw ciphertext as bytes without decoding.
     fileprivate var ciphertextB64: Data? {
-        if let ct = self["ciphertext"].asString {
+        if let ct = self["ciphertext"].string {
             return Bytes.dataFromBase64(ct)
         }
         return nil
@@ -50,7 +52,7 @@ open class EncryptedJSON: JSON {
      * You probably want to call validate() and then use .ciphertext.
      */
     fileprivate var ciphertextBytes: Data? {
-        return Bytes.decodeBase64(self["ciphertext"].asString!)
+        return Bytes.decodeBase64(self["ciphertext"].string!)
     }
 
     fileprivate func validate() -> Bool {
@@ -60,9 +62,9 @@ open class EncryptedJSON: JSON {
 
         defer { validated = true }
 
-        guard self["ciphertext"].isString &&
-              self["hmac"].isString &&
-              self["IV"].isString else {
+        guard self["ciphertext"].type == .string &&
+              self["hmac"].type == .string &&
+              self["IV"].type == .string else {
             valid = false
             return false
         }
@@ -89,7 +91,7 @@ open class EncryptedJSON: JSON {
         // We can force-unwrap self["ciphertext"] because we already checked
         // it when verifying the HMAC above.
         guard let data = self.ciphertextBytes else {
-            log.error("Unable to decode ciphertext base64 in record \(self["id"].asString ?? "<unknown>")")
+            log.error("Unable to decode ciphertext base64 in record \(self["id"].string ?? "<unknown>")")
             valid = false
             return false
         }
@@ -100,7 +102,7 @@ open class EncryptedJSON: JSON {
     }
 
     open func isValid() -> Bool {
-        return !isError && self.validate()
+        return !_json.isError() && self.validate()
     }
 
     /**
@@ -120,7 +122,7 @@ open class EncryptedJSON: JSON {
             return _hmacBytes!
         }
 
-        _hmacBytes = Data(base16EncodedString: self["hmac"].asString!, options: NSDataBase16DecodingOptions.Default)
+        _hmacBytes = self["hmac"].stringValue.data(using: String.Encoding.utf16)
         return _hmacBytes!
     }
 
@@ -129,7 +131,7 @@ open class EncryptedJSON: JSON {
             return _ivBytes!
         }
 
-        _ivBytes = Bytes.decodeBase64(self["IV"].asString!)
+        _ivBytes = Bytes.decodeBase64(self["IV"].string!)
         return _ivBytes!
     }
 
@@ -151,7 +153,18 @@ open class EncryptedJSON: JSON {
             return nil
         }
 
-        _cleartext = JSON.parse(decrypted!)
+        _cleartext = JSON(parseJSON: decrypted!)
         return _cleartext!
+    }
+
+
+    subscript(key: String) -> JSON {
+        get {
+            return _json[key]
+        }
+
+        set {
+            _json[key] = newValue
+        }
     }
 }

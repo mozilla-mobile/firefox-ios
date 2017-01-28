@@ -6,6 +6,7 @@ import Foundation
 import Shared
 import XCGLogger
 import SwiftKeychainWrapper
+import SwiftyJSON
 
 private let log = Logger.syncLogger
 
@@ -44,7 +45,7 @@ public enum LocalCommand: CustomStringConvertible, Hashable {
     public func toJSON() -> JSON {
         switch (self) {
         case let .resetAllEngines(except):
-            return JSON(["type": "ResetAllEngines", "except": Array(except).sort()])
+            return JSON(["type": "ResetAllEngines", "except": Array(except).sorted()])
 
         case let .resetEngine(engine):
             return JSON(["type": "ResetEngine", "engine": engine])
@@ -58,31 +59,31 @@ public enum LocalCommand: CustomStringConvertible, Hashable {
     }
 
     public static func fromJSON(_ json: JSON) -> LocalCommand? {
-        if json.isError {
+        if json.isError() {
             return nil
         }
-        guard let type = json["type"].asString else {
+        guard let type = json["type"].string else {
             return nil
         }
         switch type {
         case "ResetAllEngines":
-            if let except = json["except"].asArray, except.every({$0.isString}) {
-                return .ResetAllEngines(except: Set(except.map({$0.asString!})))
+            if let except = json["except"].array, except.every({$0.type == Type.string}) {
+                return .resetAllEngines(except: Set(except.map({$0.stringValue})))
             }
             return nil
         case "ResetEngine":
-            if let engine = json["engine"].asString {
-                return .ResetEngine(engine: engine)
+            if let engine = json["engine"].string {
+                return .resetEngine(engine: engine)
             }
             return nil
         case "EnableEngine":
-            if let engine = json["engine"].asString {
-                return .EnableEngine(engine: engine)
+            if let engine = json["engine"].string {
+                return .enableEngine(engine: engine)
             }
             return nil
         case "DisableEngine":
-            if let engine = json["engine"].asString {
-                return .DisableEngine(engine: engine)
+            if let engine = json["engine"].string {
+                return .disableEngine(engine: engine)
             }
             return nil
         default:
@@ -91,7 +92,7 @@ public enum LocalCommand: CustomStringConvertible, Hashable {
     }
 
     public var description: String {
-        return self.toJSON().toString()
+        return self.toJSON().description
     }
 
     public var hashValue: Int {
@@ -394,8 +395,8 @@ open class Scratchpad {
 
         if let mg = prefs.stringForKey(PrefGlobal) {
             if let mgTS = prefs.unsignedLongForKey(PrefGlobalTS) {
-                if let global = MetaGlobal.fromJSON(JSON.parse(mg)) {
-                    b.setGlobal(Fetched(value: global, timestamp: mgTS))
+                if let global = MetaGlobal.fromJSON(JSON(parseJSON: mg)) {
+                    let _ = b.setGlobal(Fetched(value: global, timestamp: mgTS))
                 } else {
                     log.error("Malformed meta/global in prefs. Ignoring.")
                 }
@@ -408,12 +409,12 @@ open class Scratchpad {
         if let keyLabel = prefs.stringForKey(PrefKeyLabel) {
             b.keyLabel = keyLabel
             if let ckTS = prefs.unsignedLongForKey(PrefKeysTS) {
-                if let keys = KeychainWrapper.defaultKeychainWrapper.stringForKey("keys." + keyLabel) {
+                if let keys = KeychainWrapper.sharedAppContainerKeychain.string(forKey: "keys." + keyLabel) {
                     // We serialize as JSON.
                     let keys = Keys(payload: KeysPayload(keys))
                     if keys.valid {
                         log.debug("Read keys from Keychain with label \(keyLabel).")
-                        b.setKeys(Fetched(value: keys, timestamp: ckTS))
+                        let _ = b.setKeys(Fetched(value: keys, timestamp: ckTS))
                     } else {
                         log.error("Invalid keys extracted from Keychain. Discarding.")
                     }
@@ -434,11 +435,11 @@ open class Scratchpad {
         }()
 
         if let localCommands: [String] = prefs.stringArrayForKey(PrefLocalCommands) {
-            b.localCommands = Set(localCommands.flatMap({LocalCommand.fromJSON(JSON.parse($0))}))
+            b.localCommands = Set(localCommands.flatMap({LocalCommand.fromJSON(JSON(parseJSON: $0))}))
         }
 
         if let engineConfigurationString = prefs.stringForKey(PrefEngineConfiguration) {
-            if let engineConfiguration = EngineConfiguration.fromJSON(JSON.parse(engineConfigurationString)) {
+            if let engineConfiguration = EngineConfiguration.fromJSON(JSON(parseJSON: engineConfigurationString)) {
                 b.engineConfiguration = engineConfiguration
             } else {
                 log.error("Invalid engineConfiguration found in prefs. Discarding.")
@@ -454,7 +455,7 @@ open class Scratchpad {
     open class func clearFromPrefs(_ prefs: Prefs) {
         if let keyLabel = prefs.stringForKey(PrefKeyLabel) {
             log.debug("Removing saved key from keychain.")
-            KeychainWrapper.defaultKeychainWrapper.removeObjectForKey(keyLabel)
+            KeychainWrapper.sharedAppContainerKeychain.removeObject(forKey: keyLabel)
         } else {
             log.debug("No key label; nothing to remove from keychain.")
         }
@@ -488,7 +489,7 @@ open class Scratchpad {
         prefs.setInt(1, forKey: PrefVersion)
         if let global = global {
             prefs.setLong(global.timestamp, forKey: PrefGlobalTS)
-            prefs.setString(global.value.asPayload().toString(), forKey: PrefGlobal)
+            prefs.setString(global.value.asPayload()._json.rawString()!, forKey: PrefGlobal)
         } else {
             prefs.removeObjectForKey(PrefGlobal)
             prefs.removeObjectForKey(PrefGlobalTS)
@@ -496,28 +497,28 @@ open class Scratchpad {
 
         // We store the meat of your keys in the Keychain, using a random identifier that we persist in prefs.
         prefs.setString(self.keyLabel, forKey: PrefKeyLabel)
-        if let keys = self.keys {
-            let payload = keys.value.asPayload().toString(false)
+        if let keys = self.keys,
+            let payload = keys.value.asPayload()._json.rawString() {
             let label = "keys." + self.keyLabel
             log.debug("Storing keys in Keychain with label \(label).")
             prefs.setString(self.keyLabel, forKey: PrefKeyLabel)
             prefs.setLong(keys.timestamp, forKey: PrefKeysTS)
 
             // TODO: I could have sworn that we could specify kSecAttrAccessibleAfterFirstUnlock here.
-            KeychainWrapper.defaultKeychainWrapper().setString(payload, forKey: label)
+            KeychainWrapper.sharedAppContainerKeychain.set(payload, forKey: label)
         } else {
             log.debug("Removing keys from Keychain.")
-            KeychainWrapper.defaultKeychainWrapper.removeObjectForKey(self.keyLabel)
+            KeychainWrapper.sharedAppContainerKeychain.removeObject(forKey: self.keyLabel)
         }
 
         prefs.setString(clientName, forKey: PrefClientName)
         prefs.setString(clientGUID, forKey: PrefClientGUID)
 
-        let localCommands: [String] = Array(self.localCommands).map({$0.toJSON().toString()})
+        let localCommands: [String] = Array(self.localCommands).map({$0.toJSON().rawString()!})
         prefs.setObject(localCommands, forKey: PrefLocalCommands)
 
         if let engineConfiguration = self.engineConfiguration {
-            prefs.setString(engineConfiguration.toJSON().toString(), forKey: PrefEngineConfiguration)
+            prefs.setString(engineConfiguration.toJSON().rawString()!, forKey: PrefEngineConfiguration)
         } else {
             prefs.removeObjectForKey(PrefEngineConfiguration)
         }

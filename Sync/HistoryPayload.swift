@@ -5,6 +5,7 @@
 import Foundation
 import Shared
 import Storage
+import SwiftyJSON
 
 open class HistoryPayload: CleartextPayloadJSON {
     open class func fromJSON(_ json: JSON) -> HistoryPayload? {
@@ -20,7 +21,7 @@ open class HistoryPayload: CleartextPayloadJSON {
             return false
         }
 
-        if self["deleted"].asBool ?? false {
+        if self["deleted"].bool ?? false {
             return true
         }
 
@@ -38,7 +39,7 @@ open class HistoryPayload: CleartextPayloadJSON {
     }
 
     fileprivate var histURI: String {
-        return self["histUri"].asString!
+        return self["histUri"].string!
     }
 
     var historyURI: URL {
@@ -46,7 +47,7 @@ open class HistoryPayload: CleartextPayloadJSON {
     }
 
     var title: String {
-        return self["title"].asString ?? ""
+        return self["title"].string ?? ""
     }
 
     override open func equalPayloads(_ obj: CleartextPayloadJSON) -> Bool {

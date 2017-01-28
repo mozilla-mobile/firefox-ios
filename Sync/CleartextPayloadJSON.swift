@@ -4,19 +4,31 @@
 
 import Foundation
 import Shared
+import SwiftyJSON
 
-open class BasePayloadJSON: JSON {
+open class BasePayloadJSON {
+    var _json: JSON
     required public init(_ jsonString: String) {
-        super.init(JSON.parse(jsonString))
+        self._json = JSON.init(parseJSON: jsonString)
     }
 
-    override public init(_ json: JSON) {
-        super.init(json)
+    public init(_ json: JSON) {
+        self._json = json
     }
 
     // Override me.
     fileprivate func isValid() -> Bool {
-        return !isError
+        return self._json.error == nil
+    }
+
+    subscript(key: String) -> JSON {
+        get {
+            return _json[key]
+        }
+
+        set {
+            _json[key] = newValue
+        }
     }
 }
 
@@ -28,17 +40,17 @@ open class BasePayloadJSON: JSON {
 open class CleartextPayloadJSON: BasePayloadJSON {
     // Override me.
     override open func isValid() -> Bool {
-        return super.isValid() && self["id"].isString
+        return super.isValid() && _json["id"].isStringOrNull()
     }
 
     open var id: String {
-        return self["id"].asString!
+        return _json["id"].string!
     }
 
     open var deleted: Bool {
-        let d = self["deleted"]
-        if d.isBool {
-            return d.asBool!
+        let d = _json["deleted"]
+        if let bool = d.bool {
+            return bool
         } else {
             return false
         }
@@ -51,8 +63,40 @@ open class CleartextPayloadJSON: BasePayloadJSON {
     }
 }
 
-extension JSON {
-    public var isStringOrNull: Bool {
-        return self.isString || self.isNull
+public extension JSON {
+    func isStringOrNull() -> Bool {
+        return isNull() || isString()
+    }
+
+    func isError() -> Bool {
+        return self.error != nil
+    }
+
+    func isString() -> Bool {
+        return self.type == .string
+    }
+
+    func isBool() -> Bool {
+        return self.type == .bool
+    }
+
+    func isArray() -> Bool {
+        return self.type == .array
+    }
+
+    func isDictionary() -> Bool {
+        return self.type == .dictionary
+    }
+
+    func isNull() -> Bool {
+        return self.type == .null
+    }
+
+    func isInt() -> Bool {
+        return self.type == .number && self.int != nil
+    }
+
+    func isDouble() -> Bool {
+        return self.type == .number && self.double != nil
     }
 }
