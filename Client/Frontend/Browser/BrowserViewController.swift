@@ -43,6 +43,8 @@ class BrowserViewController: UIViewController {
     var readerModeCache: ReaderModeCache
     private var statusBarOverlay: UIView!
     private(set) var toolbar: TabToolbar?
+    var clipboardBar: ClipboardBar!
+    var clipboardBarDisplayHandler: ClipboardBarDisplayHandler!
     private var searchController: SearchViewController?
     private var screenshotHelper: ScreenshotHelper!
     private var homePanelIsInline = false
@@ -413,11 +415,16 @@ class BrowserViewController: UIViewController {
         searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
 
         footer = UIView()
-        self.view.addSubview(footer)
-        self.view.addSubview(snackBars)
+        view.addSubview(footer)
+        view.addSubview(snackBars)
         snackBars.backgroundColor = UIColor.clearColor()
-        self.view.addSubview(findInPageContainer)
-
+        view.addSubview(findInPageContainer)
+        
+        clipboardBar = ClipboardBar()
+        view.addSubview(clipboardBar)
+        
+        clipboardBarDisplayHandler = ClipboardBarDisplayHandler(clipboardBar: clipboardBar, prefs: profile.prefs)
+        
         scrollController.urlBar = urlBar
         scrollController.header = header
         scrollController.footer = footer
@@ -425,7 +432,7 @@ class BrowserViewController: UIViewController {
         scrollController.webViewContainerToolbar = webViewContainerToolbar
 
         log.debug("BVC updating toolbar state…")
-        self.updateToolbarStateForTraitCollection(self.traitCollection)
+        updateToolbarStateForTraitCollection(traitCollection)
 
         log.debug("BVC setting up constraints…")
         setupConstraints()
@@ -531,12 +538,14 @@ class BrowserViewController: UIViewController {
 
         log.debug("Updating tab count.")
         updateTabCountUsingTabManager(tabManager, animated: false)
+        clipboardBarDisplayHandler.displayBarIfNecessary()
         log.debug("BVC done.")
 
         NSNotificationCenter.defaultCenter().addObserver(self,
                                                          selector: #selector(BrowserViewController.openSettings),
                                                          name: NotificationStatusNotificationTapped,
                                                          object: nil)
+        
     }
 
     private func showRestoreTabsAlert() {
@@ -608,6 +617,7 @@ class BrowserViewController: UIViewController {
 
     override func viewWillDisappear(animated: Bool) {
         screenshotHelper.viewIsVisible = false
+        clipboardBarDisplayHandler.hideBar()
         super.viewWillDisappear(animated)
     }
 
@@ -622,6 +632,7 @@ class BrowserViewController: UIViewController {
         footer.alpha = 1
 
         [header,
+            clipboardBar,
             footer,
             readerModeBar,
             footerBackdrop,
@@ -661,6 +672,7 @@ class BrowserViewController: UIViewController {
             }
         }
 
+   
         // Setup the bottom toolbar
         toolbar?.snp_remakeConstraints { make in
             make.edges.equalTo(self.footerBackground!)
@@ -682,6 +694,20 @@ class BrowserViewController: UIViewController {
             make.bottom.left.right.equalTo(self.footer)
             make.height.equalTo(UIConstants.ToolbarHeight)
         }
+        
+        clipboardBar.snp_remakeConstraints { make in
+            make.leading.trailing.equalTo(self.view)
+            make.height.equalTo(UIConstants.ClipboardBarHeight)
+            print("BOOL \(self.homePanelIsInline)")
+          
+            if homePanelController != nil && !self.homePanelIsInline {
+                make.bottom.equalTo(self.view.snp_bottom)
+            } else {
+                make.bottom.equalTo(self.footer.snp_top)
+ 
+            }
+        }
+
         urlBar.setNeedsUpdateConstraints()
 
         // Remake constraints even if we're already showing the home controller.
@@ -725,6 +751,7 @@ class BrowserViewController: UIViewController {
             addChildViewController(homePanelController)
             view.addSubview(homePanelController.view)
             homePanelController.didMoveToParentViewController(self)
+            view.bringSubviewToFront(clipboardBar)
         }
         guard let homePanelController = self.homePanelController else {
             assertionFailure("homePanelController is still nil after assignment.")
@@ -773,6 +800,8 @@ class BrowserViewController: UIViewController {
                 if let readerMode = self.tabManager.selectedTab?.getHelper(name: ReaderMode.name()) as? ReaderMode where readerMode.state == .Active {
                     self.showReaderModeBar(animated: false)
                 }
+                self.view.setNeedsUpdateConstraints()
+
             })
         }
     }
@@ -2669,7 +2698,7 @@ extension BrowserViewController {
             view.insertSubview(readerModeBar, belowSubview: header)
             self.readerModeBar = readerModeBar
         }
-
+        clipboardBarDisplayHandler.hideBar()
         updateReaderModeBar()
 
         self.updateViewConstraints()

@@ -20,6 +20,7 @@ public struct UIConstants {
     static let PrivateModeToolbarTintColor = UIColor(red: 74 / 255, green: 74 / 255, blue: 74 / 255, alpha: 1)
 
     static let ToolbarHeight: CGFloat = 44
+    static let ClipboardBarHeight: CGFloat = 52
     static let DefaultRowHeight: CGFloat = 58
     static let DefaultPadding: CGFloat = 10
     static let SnackbarButtonHeight: CGFloat = 48
