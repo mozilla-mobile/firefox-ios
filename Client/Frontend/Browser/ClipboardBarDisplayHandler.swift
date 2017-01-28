@@ -2,12 +2,21 @@
 import Foundation
 import Shared
 
+public struct UserDefaultClipboardKey {
+    public static let KeyLastSavedURL = "KeylastSavedURL"
+}
+
 class ClipboardBarDisplayHandler {
     private let clipboardBar: ClipboardBar
     var sessionStarted = true
     var prefs: Prefs
-    //var preferences: Prefs
     var isClipboardBarVisible: Bool { return !clipboardBar.hidden }
+    var lastDisplayedURL: String? {
+        if let value = NSUserDefaults.standardUserDefaults().objectForKey(UserDefaultClipboardKey.KeyLastSavedURL) as? String {
+            return value
+        }
+        return nil
+    }
     
     init(clipboardBar: ClipboardBar, prefs: Prefs) {
         self.clipboardBar = clipboardBar
@@ -38,9 +47,32 @@ class ClipboardBarDisplayHandler {
          )
     }
     
+    func saveLastDisplayedURL(url: String?) {
+        if let urlString = url {
+            NSUserDefaults.standardUserDefaults().setObject(urlString, forKey: UserDefaultClipboardKey.KeyLastSavedURL)
+        } else {
+            NSUserDefaults.standardUserDefaults().removeObjectForKey(UserDefaultClipboardKey.KeyLastSavedURL)
+        }
+        NSUserDefaults.standardUserDefaults().synchronize()
+    }
+    
+    //If we already displayed this URL on the previous session
+    //We shouldn't display it again
+    func wasClipboardURLAlreadyDisplayed() -> Bool {
+        guard let clipboardURL = UIPasteboard.generalPasteboard().copiedURL?.absoluteString ,
+        let savedURL = lastDisplayedURL else {
+            return false
+        }
+        if clipboardURL == savedURL {
+            return true
+        }
+        return false
+    }
+    
     func displayBarIfNecessary() {
         let allowClipboard = (prefs.boolForKey(PrefsKeys.KeyClipboardOption) ?? true)
-        if !sessionStarted || !allowClipboard || UIPasteboard.generalPasteboard().copiedURL == nil {
+        
+        if !sessionStarted || !allowClipboard || UIPasteboard.generalPasteboard().copiedURL == nil || wasClipboardURLAlreadyDisplayed() {
             hideBar()
             return
         }
@@ -49,7 +81,7 @@ class ClipboardBarDisplayHandler {
         clipboardBar.alpha = 1.0;
         sessionStarted = false
         clipboardBar.urlString = UIPasteboard.generalPasteboard().copiedURL?.absoluteString
-        
+        saveLastDisplayedURL(clipboardBar.urlString)
         let seconds = 10.0
         let popTime = dispatch_time(DISPATCH_TIME_NOW, Int64(seconds * Double(NSEC_PER_SEC)))
         dispatch_after(popTime, dispatch_get_main_queue()) { [weak self] in
