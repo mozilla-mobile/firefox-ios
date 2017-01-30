@@ -2963,12 +2963,15 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                 let openNewTabAction =  UIAlertAction(title: newTabTitle, style: UIAlertActionStyle.Default) { (action: UIAlertAction) in
                     self.scrollController.showToolbars(animated: !self.scrollController.toolbarsShowing, completion: { _ in
                         let tab = self.tabManager.addTab(NSURLRequest(URL: url), afterTab: currentTab)
-                        let toast = ButtonToast(labelText: NSLocalizedString("New Tab opened", comment: "Button toast label for switching to fresh New Tab"), buttonText: NSLocalizedString("Switch", comment: "Button toast button for switching to fresh New Tab"), completion: { buttonPressed in
-                            if (buttonPressed) {
-                                self.tabManager.selectTab(tab)
-                            }
-                        })
-                        self.showButtonToast(toast)
+                        if self.topTabsViewController == nil {
+                            // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
+                            let toast = ButtonToast(labelText: Strings.ContextMenuButtonToastNewTabOpenedLabelText, buttonText: Strings.ContextMenuButtonToastNewTabOpenedButtonText, completion: { buttonPressed in
+                                if (buttonPressed) {
+                                    self.tabManager.selectTab(tab)
+                                }
+                            })
+                            self.showButtonToast(toast)
+                        }
                     })
 
                 }
@@ -2979,12 +2982,15 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             let openNewPrivateTabAction =  UIAlertAction(title: openNewPrivateTabTitle, style: UIAlertActionStyle.Default) { (action: UIAlertAction) in
                 self.scrollController.showToolbars(animated: !self.scrollController.toolbarsShowing, completion: { _ in
                     let tab = self.tabManager.addTab(NSURLRequest(URL: url), afterTab: currentTab, isPrivate: true)
-                    let toast = ButtonToast(labelText: NSLocalizedString("New Private Tab opened", comment: "Button toast label for switching to fresh New Private Tab"), buttonText: NSLocalizedString("Switch", comment: "Button toast button for switching to fresh New Private Tab"), completion: { buttonPressed in
-                        if (buttonPressed) {
-                            self.tabManager.selectTab(tab)
-                        }
-                    })
-                    self.showButtonToast(toast)
+                    if self.topTabsViewController == nil {
+                        // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
+                        let toast = ButtonToast(labelText: Strings.ContextMenuButtonToastNewPrivateTabOpenedLabelText, buttonText: Strings.ContextMenuButtonToastNewPrivateTabOpenedButtonText, completion: { buttonPressed in
+                            if (buttonPressed) {
+                                self.tabManager.selectTab(tab)
+                            }
+                        })
+                        self.showButtonToast(toast)
+                    }
                 })
             }
             actionSheetController.addAction(openNewPrivateTabAction)
