@@ -166,7 +166,7 @@ open class BaseCollectionSynchronizer {
         let now = Date.now()
         if let until = client.backoff.isInBackoff(now) {
             let remaining = (until - now) / 1000
-            return .Backoff(remainingSeconds: Int(remaining))
+            return .backoff(remainingSeconds: Int(remaining))
         }
 
         if let metaGlobal = self.scratchpad.global?.value {
@@ -225,7 +225,7 @@ open class TimestampedSingleCollectionSynchronizer: BaseCollectionSynchronizer, 
     }
 
     open func remoteHasChanges(_ info: InfoCollections) -> Bool {
-        return info.modified(self.collection) > self.lastFetched
+        return info.modified(self.collection)! > self.lastFetched
     }
 }
 

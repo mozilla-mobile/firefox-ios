@@ -56,7 +56,7 @@ open class Record<T: CleartextPayloadJSON> {
         }
 
         if !payload.isValid() {
-            log.warning("Invalid payload \(payload.toString(true)).")
+            log.warning("Invalid payload \(payload._json.rawString()).")
         }
 
         return Record<T>(envelope: envelope, payload: payload)

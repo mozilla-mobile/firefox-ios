@@ -40,15 +40,15 @@ open class BasePayloadJSON {
 open class CleartextPayloadJSON: BasePayloadJSON {
     // Override me.
     override open func isValid() -> Bool {
-        return super.isValid() && _json["id"].isStringOrNull()
+        return super.isValid() && self["id"].isStringOrNull()
     }
 
     open var id: String {
-        return _json["id"].string!
+        return self["id"].string!
     }
 
     open var deleted: Bool {
-        let d = _json["deleted"]
+        let d = self["deleted"]
         if let bool = d.bool {
             return bool
         } else {
@@ -94,6 +94,10 @@ public extension JSON {
 
     func isInt() -> Bool {
         return self.type == .number && self.int != nil
+    }
+
+    func isNumber() -> Bool {
+        return self.type == .number && self.number != nil
     }
 
     func isDouble() -> Bool {

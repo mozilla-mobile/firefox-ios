@@ -359,7 +359,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
 
         // TODO: some of the commands we process might involve wiping collections or the
         // entire profile. We should model this as an explicit status, and return it here
-        // instead of .Completed.
+        // instead of .completed.
         return clientsClient.getSince(self.lastFetched)
             >>== { response in
                 return self.wipeIfNecessary(localClients)

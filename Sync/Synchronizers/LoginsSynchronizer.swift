@@ -7,6 +7,7 @@ import Shared
 import Storage
 import XCGLogger
 import Deferred
+import SwiftyJSON
 
 private let log = Logger.syncLogger
 let PasswordsStorageVersion = 1
@@ -35,13 +36,13 @@ func makeLoginRecord(_ login: Login) -> Record<LoginPayload> {
     let tPC = NSNumber(value: login.timePasswordChanged / 1000)
     let tC = NSNumber(value: login.timeCreated / 1000)
 
-    let dict: [String: AnyObject] = [
+    let dict: [String: Any] = [
         "id": id,
         "hostname": login.hostname,
-        "httpRealm": login.httpRealm ?? JSON.null,
-        "formSubmitURL": login.formSubmitURL ?? JSON.null,
+        "httpRealm": login.httpRealm as Any,
+        "formSubmitURL": login.formSubmitURL as Any,
         "username": login.username ?? "",
-        "password": login.password,
+        "password": login.password ,
         "usernameField": login.usernameField ?? "",
         "passwordField": login.passwordField ?? "",
         "timesUsed": login.timesUsed,
@@ -156,10 +157,10 @@ open class LoginsSynchronizer: IndependentRecordSynchronizer, Synchronizer {
 
     open func synchronizeLocalLogins(_ logins: SyncableLogins, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> SyncResult {
         if let reason = self.reasonToNotSync(storageClient) {
-            return deferMaybe(.NotStarted(reason))
+            return deferMaybe(.notStarted(reason))
         }
 
-        let encoder = RecordEncoder<LoginPayload>(decode: { LoginPayload($0) }, encode: { $0 })
+        let encoder = RecordEncoder<LoginPayload>(decode: { LoginPayload($0) }, encode: { $0._json })
         guard let passwordsClient = self.collectionClient(encoder, storageClient: storageClient) else {
             log.error("Couldn't make logins factory.")
             return deferMaybe(FatalError(message: "Couldn't make logins factory."))
@@ -183,6 +184,6 @@ open class LoginsSynchronizer: IndependentRecordSynchronizer, Synchronizer {
             // to the last successfully applied record timestamp, no matter where we fail.
             // There's no need to do the upload before bumping -- the storage of local changes is stable.
             >>> { self.uploadOutgoingFromStorage(logins, lastTimestamp: 0, withServer: passwordsClient) }
-            >>> { return deferMaybe(.Completed) }
+            >>> { return deferMaybe(.completed) }
     }
 }

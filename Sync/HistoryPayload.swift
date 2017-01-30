@@ -25,17 +25,18 @@ open class HistoryPayload: CleartextPayloadJSON {
             return true
         }
 
-        return self["histUri"].isString &&      // TODO: validate URI.
-               self["title"].isStringOrNull &&
-               self["visits"].isArray
-    }
+        return self["histUri"].string != nil &&      // TODO: validate URI.
+               self["title"].isStringOrNull() &&
+               self["visits"].isArray()
+        }
 
     open func asPlace() -> Place {
         return Place(guid: self.id, url: self.histURI, title: self.title)
     }
 
     var visits: [Visit] {
-        return optFilter(self["visits"].asArray!.map(Visit.fromJSON))
+        let visits = self["visits"].arrayObject as! [[String: Any]]
+        return optFilter(visits.map(Visit.fromJSON))
     }
 
     fileprivate var histURI: String {

@@ -181,8 +181,8 @@ class MergedTreeNode {
     var hasMirror: Bool { return self.mirror != nil }
     var hasRemote: Bool { return self.remote != nil }
 
-    var valueState: MergeState<BookmarkMirrorItem> = MergeState.Unknown
-    var structureState: MergeState<BookmarkTreeNode> = MergeState.Unknown
+    var valueState: MergeState<BookmarkMirrorItem> = MergeState.unknown
+    var structureState: MergeState<BookmarkTreeNode> = MergeState.unknown
 
     var hasDecidedChildren: Bool {
         return !self.structureState.isUnknown
@@ -192,22 +192,22 @@ class MergedTreeNode {
 
     // One-sided constructors.
     static func forRemote(_ remote: BookmarkTreeNode, mirror: BookmarkTreeNode?=nil) -> MergedTreeNode {
-        let n = MergedTreeNode(guid: remote.recordGUID, mirror: mirror, structureState: MergeState.Remote)
+        let n = MergedTreeNode(guid: remote.recordGUID, mirror: mirror, structureState: MergeState.remote)
         n.remote = remote
-        n.valueState = MergeState.Remote
+        n.valueState = MergeState.remote
         return n
     }
 
     static func forLocal(_ local: BookmarkTreeNode, mirror: BookmarkTreeNode?=nil) -> MergedTreeNode {
-        let n = MergedTreeNode(guid: local.recordGUID, mirror: mirror, structureState: MergeState.Local)
+        let n = MergedTreeNode(guid: local.recordGUID, mirror: mirror, structureState: MergeState.local)
         n.local = local
-        n.valueState = MergeState.Local
+        n.valueState = MergeState.local
         return n
     }
 
     static func forUnchanged(_ mirror: BookmarkTreeNode) -> MergedTreeNode {
-        let n = MergedTreeNode(guid: mirror.recordGUID, mirror: mirror, structureState: MergeState.Unchanged)
-        n.valueState = MergeState.Unchanged
+        let n = MergedTreeNode(guid: mirror.recordGUID, mirror: mirror, structureState: MergeState.unchanged)
+        n.valueState = MergeState.unchanged
         return n
     }
 
@@ -226,33 +226,33 @@ class MergedTreeNode {
     // merged tree. You need to use `mergedChildren` instead.
     fileprivate var decidedStructure: BookmarkTreeNode? {
         switch self.structureState {
-        case .Unknown:
+        case .unknown:
             return nil
-        case .Unchanged:
+        case .unchanged:
             return self.mirror
-        case .Remote:
+        case .remote:
             return self.remote
-        case .Local:
+        case .local:
             return self.local
-        case let .New(node):
+        case let .new(node):
             return node
         }
     }
 
     func asUnmergedTreeNode() -> BookmarkTreeNode {
-        return self.decidedStructure ?? BookmarkTreeNode.Unknown(guid: self.guid)
+        return self.decidedStructure ?? BookmarkTreeNode.unknown(guid: self.guid)
     }
 
     // Recursive. Starts returning Unknown when nodes haven't been processed.
     func asMergedTreeNode() -> BookmarkTreeNode {
         guard let decided = self.decidedStructure,
               let merged = self.mergedChildren else {
-            return BookmarkTreeNode.Unknown(guid: self.guid)
+            return BookmarkTreeNode.unknown(guid: self.guid)
         }
 
-        if case .Folder = decided {
+        if case .folder = decided {
             let children = merged.map { $0.asMergedTreeNode() }
-            return BookmarkTreeNode.Folder(guid: self.guid, children: children)
+            return BookmarkTreeNode.folder(guid: self.guid, children: children)
         }
 
         return decided
@@ -308,7 +308,7 @@ class MergedTree {
             guard let children = node.mergedChildren else {
                 return
             }
-            out.unionInPlace(children.map { $0.guid })
+            out.formUnion(Set(children.map { $0.guid }))
             children.forEach(acc)
         }
         acc(self.root)
@@ -316,8 +316,8 @@ class MergedTree {
     }
 
     init(mirrorRoot: BookmarkTreeNode) {
-        self.root = MergedTreeNode(guid: mirrorRoot.recordGUID, mirror: mirrorRoot, structureState: MergeState.Unchanged)
-        self.root.valueState = MergeState.Unchanged
+        self.root = MergedTreeNode(guid: mirrorRoot.recordGUID, mirror: mirrorRoot, structureState: MergeState.unchanged)
+        self.root.valueState = MergeState.unchanged
     }
 
     func dump() {

@@ -215,20 +215,20 @@ open class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
             }
 
             switch end {
-            case .Complete:
+            case .complete:
                 log.info("Done with batched mirroring.")
                 return applyBatched()
                    >>> history.doneApplyingRecordsAfterDownload
                    >>> { deferMaybe(.completed) }
-            case .Incomplete:
+            case .incomplete:
                 log.debug("Running another batch.")
                 // This recursion is fine because Deferred always pushes callbacks onto a queue.
                 return applyBatched()
                    >>> { self.go(info, greenLight: greenLight, downloader: downloader, history: history) }
-            case .Interrupted:
+            case .interrupted:
                 log.info("Interrupted. Aborting batching this time.")
                 return deferMaybe(.partial)
-            case .NoNewData:
+            case .noNewData:
                 log.info("No new data. No need to continue batching.")
                 downloader.advance()
                 return deferMaybe(.completed)

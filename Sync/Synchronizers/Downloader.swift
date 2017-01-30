@@ -121,13 +121,13 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
     func go(_ info: InfoCollections, limit: Int) -> Deferred<Maybe<DownloadEndState>> {
         guard let modified = info.modified(self.collection) else {
             log.debug("No server modified time for collection \(self.collection).")
-            return deferMaybe(.NoNewData)
+            return deferMaybe(.noNewData)
         }
 
         log.debug("Modified: \(modified); last \(self.lastModified).")
         if modified == self.lastModified {
             log.debug("No more data to batch-download.")
-            return deferMaybe(.NoNewData)
+            return deferMaybe(.noNewData)
         }
 
         // If the caller hasn't advanced after the last batch, strange things will happen --
@@ -168,7 +168,7 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
             // Conflict. Start again.
             log.warning("Server contents changed during offset-based batching. Stepping back.")
             self.nextFetchParameters = nil
-            return deferMaybe(.Interrupted)
+            return deferMaybe(.interrupted)
         }
 
         func handleSuccess(_ response: StorageResponse<[Record<T>]>) -> Deferred<Maybe<DownloadEndState>> {
@@ -211,7 +211,7 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
             // Store the incoming records for collection.
             self.store(response.value)
 
-            return deferMaybe(nextOffset == nil ? .Complete : .Incomplete)
+            return deferMaybe(nextOffset == nil ? .complete : .incomplete)
         }
 
         return fetch.bind { result in
@@ -224,8 +224,8 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
 }
 
 public enum DownloadEndState: String {
-    case Complete                         // We're done. Records are waiting for you.
-    case Incomplete                       // applyBatch was called, and we think there are more records.
-    case NoNewData                        // There were no records.
-    case Interrupted                      // We got a 412 conflict when fetching the next batch.
+    case complete                         // We're done. Records are waiting for you.
+    case incomplete                       // applyBatch was called, and we think there are more records.
+    case noNewData                        // There were no records.
+    case interrupted                      // We got a 412 conflict when fetching the next batch.
 }

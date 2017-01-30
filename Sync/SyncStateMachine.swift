@@ -395,7 +395,7 @@ open class ServerConfigurationRequiredError: RecoverableSyncState {
     }
 
     open func advance() -> Deferred<Maybe<SyncState>> {
-        let client = self.previousState.client
+        let client = self.previousState.client!
         let s = self.previousState.scratchpad.evolve()
                 .setGlobal(nil)
                 .addLocalCommandsFromKeys(nil)
@@ -428,7 +428,7 @@ open class FreshStartRequiredError: RecoverableSyncState {
     }
 
     open func advance() -> Deferred<Maybe<SyncState>> {
-        let client = self.previousState.client
+        let client = self.previousState.client!
         return client.wipeStorage()
             >>> { return deferMaybe(ServerConfigurationRequiredError(previousState: self.previousState)) }
     }
@@ -778,7 +778,7 @@ open class NeedsFreshCryptoKeys: BaseSyncStateWithInfo {
                 return deferMaybe(HasFreshCryptoKeys.fromState(self, scratchpad: s, collectionKeys: collectionKeys))
             }
 
-            if let _ = result.failureValue as? NotFound<NSHTTPURLResponse> {
+            if let _ = result.failureValue as? NotFound<HTTPURLResponse> {
                 // No crypto/keys?  We can handle this.  Wipe and upload both meta/global and crypto/keys.
                 return deferMaybe(MissingCryptoKeysError(previousState: self))
             }

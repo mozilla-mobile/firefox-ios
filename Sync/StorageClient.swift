@@ -770,7 +770,7 @@ open class Sync15CollectionClient<T: CleartextPayloadJSON> {
                 return
             }
 
-            guard let arr = json.asArray else {
+            guard let arr = json.array else {
                 log.warning("Non-array response.")
                 deferred.fill(Maybe(failure: RecordParseError()))
                 return
