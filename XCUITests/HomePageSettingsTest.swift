@@ -11,7 +11,7 @@ class HomePageSettingsTest: BaseTestCase {
     override func setUp() {
         super.setUp()
         app = XCUIApplication()
-        navigator = createScreenGraph(app, url: "www.mozilla.com").navigator(self)
+        navigator = createScreenGraph(app).navigator(self)
     }
     
     override func tearDown() {

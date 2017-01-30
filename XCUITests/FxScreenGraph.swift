@@ -47,6 +47,8 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
     }
 
     map.createScene(NewTabScreen) { scene in
+        // This is used for opening BrowserTab with default mozilla URL
+        // For custom URL, should use Navigator.openNewURL
         scene.gesture(to: BrowserTab) {
             app.textFields["url"].tap()
             app.textFields["address"].typeText(url + "\r")
@@ -81,8 +83,6 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
         scene.tap(table.cells["ClearPrivateData"], to: ClearPrivateDataSettings)
         scene.tap(table.cells["OpenWith.Setting"], to: OpenWithSettings)
 
-        scene.tap(table.cells.staticTexts["Show Tour"], to: FirstRun)
-
         scene.backAction = navigationControllerBackAction
     }
 
@@ -100,7 +100,7 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
 
     map.createScene(PasscodeSettings) { scene in
         scene.backAction = navigationControllerBackAction
-
+        
         scene.tap(app.tables["AuthenticationManager.settingsTableView"].staticTexts["Require Passcode"], to: PasscodeIntervalSettings)
     }
 
@@ -141,6 +141,9 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
         scene.gesture(to: TabTrayMenu) {
             app.buttons["TabTrayController.menuButton"].tap()
         }
+        scene.gesture(to: NewTabScreen) {
+            app.buttons["TabTrayController.addTabButton"].tap()
+        }
     }
 
     map.createScene(TabTrayMenu) { scene in
@@ -172,10 +175,27 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
             let collectionViewsQuery = app.collectionViews
             collectionViewsQuery.cells["SettingsMenuItem"].tap()
         }
+        scene.gesture(to: BrowserTabMenu) {
+            app.otherElements["MenuViewController.menuView"].swipeRight()
+        }
+        scene.tap(app.buttons["Close Menu"], to: BrowserTab)
         scene.dismissOnUse = true
     }
 
     map.initialSceneName = FirstRun
 
     return map
+}
+
+// For visiting BrowserTab with specific URL.
+// Invoking this method in BrowserTab will create another tab,
+// as that is the shortest path to itself
+extension Navigator {
+    func openNewURL(urlString: String) {
+        self.goto(NewTabScreen)
+        let app = XCUIApplication()
+        app.textFields["url"].tap()
+        app.textFields["address"].typeText(urlString + "\r")
+        self.nowAt(BrowserTab)
+    }
 }
