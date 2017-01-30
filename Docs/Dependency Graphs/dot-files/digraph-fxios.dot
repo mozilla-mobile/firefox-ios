@@ -42,8 +42,8 @@ digraph FxiOS {
   "Account" -> "ClientTests"
   "Client" -> "ClientTests"
   "Client" -> "UITests"
-  "ViewLater" -> "Client"
-  "Today" -> "Client"
-  "ShareTo" -> "Client"
-  "SendTo" -> "Client"
+  "Client" -> "ShareTo"
+  "Client" -> "SendTo"
+  "Client" -> "ViewLater"
+  "Client" -> "Today"
 }
