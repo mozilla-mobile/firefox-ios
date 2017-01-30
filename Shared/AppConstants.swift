@@ -4,12 +4,12 @@
 
 import UIKit
 
-public enum AppBuildChannel {
-    case release
-    case beta
-    case nightly
-    case developer
-    case aurora
+public enum AppBuildChannel: String {
+    case release = "release"
+    case beta = "beta"
+    case nightly = "nightly"
+    case developer = "developer"
+    case aurora = "aurora"
 }
 
 public struct AppConstants {

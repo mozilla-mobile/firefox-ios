@@ -30,9 +30,10 @@ extension PingCentreTopic {
                 // Application metadata
                 "app_version": ["type": "string"],
                 "build": ["type": "string"],
-                "locale": ["type": "string"]
+                "locale": ["type": "string"],
+                "release_channel": ["type": "string"]
             ],
-            "required": ["app_version", "build", "locale", "event"]
+            "required": ["app_version", "build", "locale", "event", "release_channel"]
         ])
 
         return PingCentreTopic(name: "activity-stream-mobile-events", schema: schema)
@@ -48,9 +49,10 @@ extension PingCentreTopic {
                 // Application metadata
                 "app_version": ["type": "string"],
                 "build": ["type": "string"],
-                "locale": ["type": "string"]
+                "locale": ["type": "string"],
+                "release_channel": ["type": "string"]
             ],
-            "required": ["app_version", "build", "locale", "session_duration"]
+            "required": ["app_version", "build", "locale", "session_duration", "release_channel"]
         ])
 
         return PingCentreTopic(name: "activity-stream-mobile-sessions", schema: schema)
