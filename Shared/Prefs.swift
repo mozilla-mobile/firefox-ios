@@ -33,17 +33,17 @@ public protocol Prefs {
     func setInt(_ value: Int32, forKey defaultName: String)
     func setString(_ value: String, forKey defaultName: String)
     func setBool(_ value: Bool, forKey defaultName: String)
-    func setObject(_ value: AnyObject?, forKey defaultName: String)
+    func setObject(_ value: Any?, forKey defaultName: String)
     func stringForKey(_ defaultName: String) -> String?
-    func objectForKey<T: AnyObject>(_ defaultName: String) -> T?
+    func objectForKey<T: Any>(_ defaultName: String) -> T?
     func boolForKey(_ defaultName: String) -> Bool?
     func intForKey(_ defaultName: String) -> Int32?
     func timestampForKey(_ defaultName: String) -> Timestamp?
     func longForKey(_ defaultName: String) -> Int64?
     func unsignedLongForKey(_ defaultName: String) -> UInt64?
     func stringArrayForKey(_ defaultName: String) -> [String]?
-    func arrayForKey(_ defaultName: String) -> [AnyObject]?
-    func dictionaryForKey(_ defaultName: String) -> [String : AnyObject]?
+    func arrayForKey(_ defaultName: String) -> [Any]?
+    func dictionaryForKey(_ defaultName: String) -> [String : Any]?
     func removeObjectForKey(_ defaultName: String)
     func clearAll()
 }
@@ -99,7 +99,7 @@ open class MockProfilePrefs: Prefs {
         things[name(defaultName)] = value
     }
 
-    open func setObject(_ value: AnyObject?, forKey defaultName: String) {
+    open func setObject(_ value: Any?, forKey defaultName: String) {
         things[name(defaultName)] = value
     }
 
@@ -111,7 +111,7 @@ open class MockProfilePrefs: Prefs {
         return things[name(defaultName)] as? Bool
     }
 
-    open func objectForKey<T: AnyObject>(_ defaultName: String) -> T? {
+    open func objectForKey<T: Any>(_ defaultName: String) -> T? {
         return things[name(defaultName)] as? T
     }
     
@@ -120,25 +120,25 @@ open class MockProfilePrefs: Prefs {
     }
 
     open func unsignedLongForKey(_ defaultName: String) -> UInt64? {
-        let num = things[name(defaultName)] as? NSNumber
+        let num = things[name(defaultName)] as? UInt64
         if let num = num {
-            return num.uint64Value
+            return num
         }
         return nil
     }
 
     open func longForKey(_ defaultName: String) -> Int64? {
-        let num = things[name(defaultName)] as? NSNumber
+        let num = things[name(defaultName)] as? Int64
         if let num = num {
-            return num.int64Value
+            return num
         }
         return nil
     }
 
     open func intForKey(_ defaultName: String) -> Int32? {
-        let num = things[name(defaultName)] as? NSNumber
+        let num = things[name(defaultName)] as? Int32
         if let num = num {
-            return num.int32Value
+            return num
         }
         return nil
     }
@@ -152,19 +152,19 @@ open class MockProfilePrefs: Prefs {
         return nil
     }
 
-    open func arrayForKey(_ defaultName: String) -> [AnyObject]? {
-        let r: AnyObject? = things.object(forKey: defaultName) as AnyObject?
+    open func arrayForKey(_ defaultName: String) -> [Any]? {
+        let r: Any? = things.object(forKey: defaultName) as Any?
         if (r == nil) {
             return nil
         }
-        if let arr = r as? [AnyObject] {
+        if let arr = r as? [Any] {
             return arr
         }
         return nil
     }
 
-    open func dictionaryForKey(_ defaultName: String) -> [String : AnyObject]? {
-        return things.object(forKey: name(defaultName)) as? [String: AnyObject]
+    open func dictionaryForKey(_ defaultName: String) -> [String : Any]? {
+        return things.object(forKey: name(defaultName)) as? [String: Any]
     }
 
     open func removeObjectForKey(_ defaultName: String) {

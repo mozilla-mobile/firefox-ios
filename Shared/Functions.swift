@@ -1,6 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+import SwiftyJSON
 
 // Pipelining.
 precedencegroup PipelinePrecedence {
@@ -188,7 +189,8 @@ public func findOneValue<K, V>(_ map: [K: V], f: (V) -> Bool) -> V? {
 public func jsonsToStrings(_ arr: [JSON]?) -> [String]? {
     if let arr = arr {
         return optFilter(arr.map { j in
-            return j.asString
+            return j.stringValue
+
             })
     }
     return nil
