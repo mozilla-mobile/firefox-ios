@@ -566,7 +566,8 @@ struct ActivityStreamTracker {
             "action_position": position,
             "app_version": AppInfo.appVersion,
             "build": AppInfo.buildNumber,
-            "locale": Locale.current.identifier
+            "locale": Locale.current.identifier,
+            "release_channel": AppConstants.BuildChannel.rawValue
         ]
 
         if let provider = shareProvider {
@@ -579,9 +580,10 @@ struct ActivityStreamTracker {
     func reportSessionStop(_ duration: UInt64) {
         sessionsTracker.sendPing([
             "session_duration": NSNumber(value: duration),
-            "app_version": AppInfo.appVersion as AnyObject,
-            "build": AppInfo.buildNumber as AnyObject,
-            "locale": Locale.current.identifier as AnyObject
+            "app_version": AppInfo.appVersion,
+            "build": AppInfo.buildNumber,
+            "locale": Locale.current.identifier,
+            "release_channel": AppConstants.BuildChannel.rawValue
         ], validate: true)
     }
 }
