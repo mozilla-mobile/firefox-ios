@@ -59,15 +59,15 @@ class ProfileFileAccessor: FileAccessor {
         let profileDirName = "profile.\(localName)"
 
         // Bug 1147262: First option is for device, second is for simulator.
-        var rootPath: NSString
-        if let sharedContainerIdentifier = AppInfo.sharedContainerIdentifier(), let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: sharedContainerIdentifier), let path = url.path {
-            rootPath = path as NSString
+        var rootPath: String
+        if let sharedContainerIdentifier = AppInfo.sharedContainerIdentifier(), let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: sharedContainerIdentifier) {
+            rootPath = url.path
         } else {
             log.error("Unable to find the shared container. Defaulting profile location to ~/Documents instead.")
-            rootPath = (NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)[0]) as NSString
+            rootPath = (NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)[0])
         }
 
-        super.init(rootPath: rootPath.appendingPathComponent(profileDirName))
+        super.init(rootPath: URL(string: rootPath)!.appendingPathComponent(profileDirName).absoluteString)
     }
 }
 
@@ -647,7 +647,7 @@ public class BrowserProfile: Profile {
 
         sentTabsCategory.setActions([bookmarkAction, viewAction], for: UIUserNotificationActionContext.minimal)
 
-        app?.registerUserNotificationSettings(UIUserNotificationSettings(forTypes: UIUserNotificationType.Alert, categories: [sentTabsCategory]))
+        UIUserNotificationSettings(types: UIUserNotificationType.alert, categories: [sentTabsCategory])
         app?.registerForRemoteNotifications()
     }
 
@@ -705,13 +705,13 @@ public class BrowserProfile: Profile {
         var isSyncing: Bool {
             syncLock.lock()
             defer { syncLock.unlock() }
-            return syncDisplayState != nil && syncDisplayState! == .InProgress
+            return syncDisplayState != nil && syncDisplayState! == .inProgress
         }
 
         var syncDisplayState: SyncDisplayState?
 
         // The dispatch queue for coordinating syncing and resetting the database.
-        private let syncQueue = dispatch_queue_create("com.mozilla.firefox.sync", DISPATCH_QUEUE_SERIAL)
+        private let syncQueue = DispatchQueue(label: "com.mozilla.firefox.sync")
 
         private typealias EngineResults = [(EngineIdentifier, SyncStatus)]
         private typealias EngineTasks = [(EngineIdentifier, SyncFunction)]
@@ -901,11 +901,9 @@ public class BrowserProfile: Profile {
             }
         }
 
-        func doInBackgroundAfter(millis millis: Int64, _ block: dispatch_block_t) {
-            let delay = millis * Int64(NSEC_PER_MSEC)
-            let when = dispatch_time(dispatch_time_t(DispatchTime.now()), delay)
-            let queue = DispatchQueue.global(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
-            dispatch_after(when, queue, block)
+        func doInBackgroundAfter(millis millis: Int64, _ block: @escaping (Void) -> ()) {
+            let queue = DispatchQueue.global(qos: DispatchQoS.background.qosClass)
+            queue.asyncAfter(deadline: .now() + .milliseconds(millis), execute: block)
         }
 
         @objc
@@ -931,12 +929,12 @@ public class BrowserProfile: Profile {
                 // then reset the database on the same serial queue.
                 if let reducer = self.syncReducer, !reducer.isFilled {
                     reducer.terminal.upon { _ in
-                        self.syncQueue.asynchronously(execute: resetDatabase)
+                        self.syncQueue.async(execute: resetDatabase)
                     }
                 } else {
                     // Otherwise, reset the database on the sync queue now
                     // Sync can't start while this is still going on.
-                    self.syncQueue.asynchronously(execute: resetDatabase)
+                    self.syncQueue.async(execute: resetDatabase)
                 }
             }
         }
@@ -946,14 +944,12 @@ public class BrowserProfile: Profile {
         @objc func onLoginDidChange(notification: NSNotification) {
             log.debug("Login did change.")
             if (Date.now() - lastTriggeredLoginSync) > OneMinuteInMilliseconds {
-                lastTriggeredLoginSync = NSDate.new()
+                lastTriggeredLoginSync = Date.now()
 
                 // Give it a few seconds.
-                let when: dispatch_time_t = dispatch_time(dispatch_time_t(DispatchTime.now()), SyncConstants.SyncDelayTriggered)
-
                 // Trigger on the main queue. The bulk of the sync work runs in the background.
                 let greenLight = self.greenLight()
-                dispatch_after(when, DispatchQueue.main) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(SyncConstants.SyncDelayTriggered)) {
                     if greenLight() {
                         self.syncLogins()
                     }
@@ -978,13 +974,13 @@ public class BrowserProfile: Profile {
         @objc func onStartSyncing(notification: NSNotification) {
             syncLock.lock()
             defer { syncLock.unlock() }
-            syncDisplayState = .InProgress
+            syncDisplayState = .inProgress
         }
 
         @objc func onFinishSyncing(notification: NSNotification) {
             syncLock.lock()
             defer { syncLock.unlock() }
-            if let syncState = syncDisplayState, syncState == .Good {
+            if let syncState = syncDisplayState, syncState == .good {
                 self.lastSyncFinishTime = Date.now()
             }
         }
@@ -1155,7 +1151,7 @@ public class BrowserProfile: Profile {
         private func sync(label: EngineIdentifier, function: @escaping SyncFunction) -> SyncResult {
             return syncSeveral(synchronizers: [(label, function)]) >>== { statuses in
                 let status = statuses.find { label == $0.0 }?.1
-                return deferMaybe(status ?? .NotStarted(.Unknown))
+                return deferMaybe(status ?? .NotStarted(.unknown))
             }
         }
 
@@ -1186,7 +1182,7 @@ public class BrowserProfile: Profile {
                         return deferMaybe(statuses)
                     }
 
-                    return self.syncWith(remaining) >>== { deferMaybe(statuses + $0) }
+                    return self.syncWith(synchronizers: remaining) >>== { deferMaybe(statuses + $0) }
                 }
 
                 reducer.terminal.upon(self.endSyncing)
