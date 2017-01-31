@@ -339,7 +339,7 @@ open class Sync15StorageClient {
         }
     }
 
-    func errorWrap<T, U, V: Error>(_ deferred: Deferred<Maybe<T>>, handler: (Response<U, V>) -> ()) -> (Response<U, V>) -> () {
+    func errorWrap<T, U>(_ deferred: Deferred<Maybe<T>>, handler: @escaping (DataResponse<U>) -> ()) -> (DataResponse<U>) -> () {
         return { response in
             log.verbose("Response is \(response.response).")
 
@@ -417,7 +417,7 @@ open class Sync15StorageClient {
         return SessionManager.managerWithUserAgent(ua, configuration: configuration)
     }()
 
-    func requestGET(_ url: URL) -> Request {
+    func requestGET(_ url: URL) -> DataRequest {
         var req = URLRequest(url: url as URL)
         req.httpMethod = URLRequest.Method.get.rawValue
         req.setValue("application/json", forHTTPHeaderField: "Accept")
@@ -426,7 +426,7 @@ open class Sync15StorageClient {
                         .validate(contentType: ["application/json"])
     }
 
-    func requestDELETE(_ url: URL) -> Request {
+    func requestDELETE(_ url: URL) -> DataRequest {
         var req = URLRequest(url: url as URL)
         req.httpMethod = URLRequest.Method.delete.rawValue
         req.setValue("1", forHTTPHeaderField: "X-Confirm-Delete")
@@ -478,7 +478,7 @@ open class Sync15StorageClient {
         return false
     }
 
-    fileprivate func doOp<T>(_ op: (URL) -> Request, path: String, f: @escaping (JSON) -> T?) -> Deferred<Maybe<StorageResponse<T>>> {
+    fileprivate func doOp<T>(_ op: (URL) -> DataRequest, path: String, f: @escaping (JSON) -> T?) -> Deferred<Maybe<StorageResponse<T>>> {
 
         let deferred = Deferred<Maybe<StorageResponse<T>>>(defaultQueue: self.resultQueue)
 
@@ -492,10 +492,11 @@ open class Sync15StorageClient {
             url = self.serverURI // No trailing slash.
         } else {
             url = self.serverURI.appendingPathComponent(path)
+
         }
 
         let req = op(url)
-        let handler = self.errorWrap(deferred) { (response: Response<JSON, JSONSerializeError>) in
+        let handler = self.errorWrap(deferred) { (response: DataResponse<JSON>) in
             if let json: JSON = response.result.value {
                 if let v = f(json) {
                     let storageResponse = StorageResponse<T>(value: v, response: response.response!)
@@ -522,13 +523,12 @@ open class Sync15StorageClient {
     fileprivate func putResource<T>(_ URL: Foundation.URL, body: JSON, ifUnmodifiedSince: Timestamp?, parser: @escaping (String) -> T?) -> Deferred<Maybe<StorageResponse<T>>> {
 
         let deferred = Deferred<Maybe<StorageResponse<T>>>(defaultQueue: self.resultQueue)
-
         if self.checkBackoff(deferred) {
             return deferred
         }
 
-        let req = self.requestPUT(URL, body: body, ifUnmodifiedSince: ifUnmodifiedSince)
-        let handler = self.errorWrap(deferred) { (response: Response<String, NSError>) in
+        let req = self.requestPUT(URL, body: body, ifUnmodifiedSince: ifUnmodifiedSince) as! DataRequest
+        let handler = self.errorWrap(deferred) { (response: DataResponse<String>) in
             if let data = response.result.value {
                 if let v = parser(data) {
                     let storageResponse = StorageResponse<T>(value: v, response: response.response!)
@@ -538,11 +538,9 @@ open class Sync15StorageClient {
                 }
                 return
             }
-
             deferred.fill(Maybe(failure: RecordParseError()))
         }
-
-        req.responseString(encoding: nil, completionHandler: handler)
+        req.responseString(completionHandler: handler)
         return deferred
     }
 
@@ -666,8 +664,8 @@ open class Sync15CollectionClient<T: CleartextPayloadJSON> {
             requestURI = self.collectionURI
         }
 
-        let req = client.requestPOST(requestURI, body: lines, ifUnmodifiedSince: ifUnmodifiedSince)
-        req.responsePartialParsedJSON(queue: collectionQueue, completionHandler: self.client.errorWrap(deferred) { (response: Response<JSON, JSONSerializeError>) in
+        let req = client.requestPOST(requestURI, body: lines, ifUnmodifiedSince: ifUnmodifiedSince) as! DataRequest
+        req.responsePartialParsedJSON(queue: collectionQueue, completionHandler: self.client.errorWrap(deferred) { (response: DataResponse<JSON>) in
             if let json: JSON = response.result.value,
                let result = POSTResult.fromJSON(json) {
                 let storageResponse = StorageResponse(value: result, response: response.response!)
@@ -704,7 +702,7 @@ open class Sync15CollectionClient<T: CleartextPayloadJSON> {
         }
 
         let req = client.requestGET(uriForRecord(guid))
-        req.responsePartialParsedJSON(queue:collectionQueue, completionHandler: self.client.errorWrap(deferred) { (response: Response<JSON, JSONSerializeError>) in
+        req.responsePartialParsedJSON(queue:collectionQueue, completionHandler: self.client.errorWrap(deferred) { (response: DataResponse<JSON>) in
 
             if let json: JSON = response.result.value {
                 let envelope = EnvelopeJSON(json)
@@ -761,7 +759,7 @@ open class Sync15CollectionClient<T: CleartextPayloadJSON> {
         log.debug("Issuing GET with newer = \(since), offset = \(offset), sort = \(sort).")
         let req = client.requestGET(self.collectionURI.withQueryParams(params))
 
-        req.responsePartialParsedJSON(queue: collectionQueue, completionHandler: self.client.errorWrap(deferred) { (response: Response<JSON, JSONSerializeError>) in
+        let _ = req.responsePartialParsedJSON(queue: collectionQueue, completionHandler: self.client.errorWrap(deferred) { (response: DataResponse<JSON>) in
 
             log.verbose("Response is \(response).")
             guard let json: JSON = response.result.value else {
