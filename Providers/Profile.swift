@@ -783,23 +783,23 @@ public class BrowserProfile: Profile {
                         clientCount: clientCount
                     )
 
-                    let payload = ping.toString()
+                    let payload = ping.stringValue
 
                     log.debug("Payload is: \(payload)")
-                    guard let body = payload.dataUsingEncoding(String.Encoding.utf8) else {
+                    guard let body = payload.data(using: String.Encoding.utf8) else {
                         log.debug("Invalid JSON!")
                         return
                     }
 
                     let url = "https://mozilla-anonymous-sync-metrics.moo.mx/post/syncstatus".asURL!
-                    let request = NSMutableURLRequest(url: url)
+                    var request = URLRequest(url: url)
                     request.httpMethod = "POST"
-                    request.HTTPBody = body
+                    request.httpBody = body
                     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
-                    Alamofire.Manager.sharedInstance.request(request).response { (request, response, data, error) in
-                        log.debug("Sync Status upload response: \(response?.statusCode ?? -1).")
-                    }
+                    SessionManager.default.request(request).responseData(completionHandler: { response in
+                        log.debug("Sync Status upload response: \(response.response?.statusCode ?? -1).")
+                    })
                 }
             }
 
@@ -853,22 +853,22 @@ public class BrowserProfile: Profile {
 
                     let id = DeviceInfo.clientIdentifier(self.prefs)
                     let ping = makeAdHocBookmarkMergePing(Bundle.main, clientID: id, attempt: attempt, bufferRows: bufferRows, valid: validations, clientCount: clientCount)
-                    let payload = ping.toString()
+                    let payload = ping.stringValue
 
                     log.debug("Payload is: \(payload)")
-                    guard let body = payload.dataUsingEncoding(String.Encoding.utf8) else {
+                    guard let body = payload.data(using: String.Encoding.utf8) else {
                         log.debug("Invalid JSON!")
                         return
                     }
 
                     let url = "https://mozilla-anonymous-sync-metrics.moo.mx/post/bookmarkvalidation".asURL!
-                    let request = NSMutableURLRequest(url: url)
+                    var request = URLRequest(url: url)
                     request.httpMethod = "POST"
-                    request.HTTPBody = body
+                    request.httpBody = body
                     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
-                    Alamofire.Manager.sharedInstance.request(request).response { (request, response, data, error) in
-                        log.debug("Bookmark validation upload response: \(response?.statusCode ?? -1).")
+                    SessionManager.default.request(request).responseData { response in
+                        log.debug("Bookmark validation upload response: \(response.response?.statusCode ?? -1).")
                     }
                 }
             }
@@ -1124,8 +1124,8 @@ public class BrowserProfile: Profile {
 
         func takeActionsOnEngineStateChanges<T: EngineStateChanges>(changes: T) -> Deferred<Maybe<T>> {
             var needReset = Set<String>(changes.collectionsThatNeedLocalReset())
-            needReset.unionInPlace(changes.enginesDisabled())
-            needReset.unionInPlace(changes.enginesEnabled())
+            needReset.formUnion(changes.enginesDisabled())
+            needReset.formUnion(changes.enginesEnabled())
             if needReset.isEmpty {
                 log.debug("No collections need reset. Moving on.")
                 return deferMaybe(changes)
@@ -1151,7 +1151,7 @@ public class BrowserProfile: Profile {
         private func sync(label: EngineIdentifier, function: @escaping SyncFunction) -> SyncResult {
             return syncSeveral(synchronizers: [(label, function)]) >>== { statuses in
                 let status = statuses.find { label == $0.0 }?.1
-                return deferMaybe(status ?? .NotStarted(.unknown))
+                return deferMaybe(status ?? .notStarted(.unknown))
             }
         }
 
