@@ -101,7 +101,7 @@ class OpenSearchEngine: NSObject, NSCoding {
         if isSearchURLForEngine(url) {
             if let key = searchQueryComponentKey,
                 let value = url?.getQuery()[key] {
-                return value.stringByReplacingOccurrencesOfString("+", withString: " ").stringByRemovingPercentEncoding
+                return value.replacingOccurrences(of: "+", with: " ").removingPercentEncoding
             }
         }
         return nil
@@ -118,7 +118,7 @@ class OpenSearchEngine: NSObject, NSCoding {
     }
 
     fileprivate func getURLFromTemplate(_ searchTemplate: String, query: String) -> URL? {
-        if let escapedQuery = query.stringByAddingPercentEncodingWithAllowedCharacters(CharacterSet.SearchTermsAllowedCharacterSet()) {
+        if let escapedQuery = query.addingPercentEncoding(withAllowedCharacters: CharacterSet.SearchTermsAllowedCharacterSet()) {
             // Escape the search template as well in case it contains not-safe characters like symbols
             let templateAllowedSet = NSMutableCharacterSet()
             templateAllowedSet.formUnion(with: CharacterSet.URLAllowedCharacterSet())
@@ -129,8 +129,8 @@ class OpenSearchEngine: NSObject, NSCoding {
             if let encodedSearchTemplate = searchTemplate.addingPercentEncoding(withAllowedCharacters: templateAllowedSet as CharacterSet) {
                 let localeString = Locale.current.identifier
                 let urlString = encodedSearchTemplate
-                    .stringByReplacingOccurrencesOfString(SearchTermComponent, withString: escapedQuery, options: NSString.CompareOptions.LiteralSearch, range: nil)
-                    .stringByReplacingOccurrencesOfString(LocaleTermComponent, withString: localeString, options: NSString.CompareOptions.LiteralSearch, range: nil)
+                    .replacingOccurrences(of: SearchTermComponent, with: escapedQuery, options: String.CompareOptions.literal, range: nil)
+                    .replacingOccurrences(of: LocaleTermComponent, with: localeString, options: String.CompareOptions.literal, range: nil)
                 return URL(string: urlString)
             }
         }
