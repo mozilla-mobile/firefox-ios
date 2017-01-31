@@ -7,6 +7,8 @@ import Deferred
 import Foundation
 import Shared
 
+private let applicationDidRequestUserNotificationPermissionPrefKey = "applicationDidRequestUserNotificationPermissionPrefKey"
+
 /// This class manages the from successful login for FxAccounts to 
 /// asking the user for notification permissions, registering for 
 /// remote push notifications (APNS), registering for WebPush notifcations
@@ -58,6 +60,45 @@ class FxALoginHelper {
         return deferred
     }
 
+    func applicationDidLoadProfile() -> Success {
+        guard AppConstants.MOZ_FXA_PUSH else {
+            return finishNormally()
+        }
+
+        guard let account = profile?.getAccount() else {
+            // There's no account, no further action.
+            return finishNormally()
+        }
+
+        if let _ = account.pushRegistration {
+            // We have an account, and it's already registered for push notifications.
+            return finishNormally()
+        }
+
+        // Now: we have an account that does not have push notifications set up.
+        // however, we need to deal with cases of asking for permissions too frequently.
+        let asked = profile?.prefs.boolForKey(applicationDidRequestUserNotificationPermissionPrefKey) ?? true
+        let permitted = application!.currentUserNotificationSettings()!.types != .None
+
+        // If we've never asked(*), then we should probably ask.
+        // If we've asked already, then we should not ask again.
+        // TODO: add UI to tell the user to go flip the Setting app.
+        // (*) if we asked in a prior release, and the user was ok with it, then there is no harm asking again.
+        // If the user denied permission, or flipped permissions in the Settings app, then 
+        // we'll bug them once, but this is probably unavoidable.
+        if asked && !permitted {
+            return finishNormally()
+        }
+
+        // By the time we reach here, we haven't registered for APNS
+        // Either we've never asked the user, or the user declined, then re-enabled
+        // the notification in the Settings app.
+
+        self.account = account
+        requestUserNotifications()
+        return deferred
+    }
+
     private func requestUserNotifications() {
         let viewAction = UIMutableUserNotificationAction()
         viewAction.identifier = SentTabAction.View.rawValue
@@ -90,6 +131,9 @@ class FxALoginHelper {
     }
 
     func userDidRegister(notificationSettings notificationSettings: UIUserNotificationSettings) {
+        // Record that we have asked the user, and they have given an answer.
+        profile?.prefs.setBool(true, forKey: applicationDidRequestUserNotificationPermissionPrefKey)
+
         guard notificationSettings.types != .None else {
             return readyForSyncing()
         }
@@ -131,8 +175,13 @@ class FxALoginHelper {
                 account.advance()
             }
         }
+        finishNormally()
+    }
+
+    func finishNormally() -> Success {
         FxALoginHelper.sharedInstance = nil
         deferred.fill(Maybe(success: ()))
+        return deferred
     }
 
     func loginDidFail() {
