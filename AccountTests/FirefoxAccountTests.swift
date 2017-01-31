@@ -20,7 +20,8 @@ class FirefoxAccountTests: XCTestCase {
             "configurationLabel": FirefoxAccountConfigurationLabel.production.rawValue,
             "email": "testtest@test.com",
             "uid": "uid",
-            "deviceRegistration": FxADeviceRegistration(id: "bogus-device", version: 0, lastRegistered: Date.now())
+            "deviceRegistration": FxADeviceRegistration(id: "bogus-device", version: 0, lastRegistered: Date.now()),
+            "pushRegistration": PushRegistration(uaid: "bogus-device-uaid", secret: "secret", endpoint: NSURL(string: "https://mozilla.com")!, channelID: "channelID"),
         ]
 
         let account1 = FirefoxAccount(
@@ -30,6 +31,9 @@ class FirefoxAccountTests: XCTestCase {
                 deviceRegistration: (d["deviceRegistration"] as! FxADeviceRegistration),
                 stateKeyLabel: Bytes.generateGUID(),
                 state: SeparatedState())
+
+        account1.pushRegistration = d["pushRegistration"] as? PushRegistration
+
         let d1 = account1.dictionary()
 
         let account2 = FirefoxAccount.fromDictionary(d1)

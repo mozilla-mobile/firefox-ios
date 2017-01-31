@@ -5,11 +5,36 @@
 import Foundation
 import Shared
 
-public struct PushRegistration {
+public class PushRegistration: NSObject, NSCoding {
     let endpoint: NSURL
     let uaid: String
     let secret: String
     let channelID: String
+
+    public init(uaid: String, secret: String, endpoint: NSURL, channelID: String) {
+        self.uaid = uaid
+        self.secret = secret
+        self.endpoint = endpoint
+        self.channelID = channelID
+    }
+
+    @objc public convenience required init?(coder aDecoder: NSCoder) {
+        guard let uaid = aDecoder.decodeObjectForKey("uaid") as? String,
+            let secret = aDecoder.decodeObjectForKey("secret") as? String,
+            let urlString = aDecoder.decodeObjectForKey("endpoint") as? String,
+            let endpoint = NSURL(string: urlString),
+            let channelID = aDecoder.decodeObjectForKey("channelID") as? String else {
+                fatalError("Cannot decode registration")
+        }
+        self.init(uaid: uaid, secret: secret, endpoint: endpoint, channelID: channelID)
+    }
+
+    @objc public func encodeWithCoder(aCoder: NSCoder) {
+        aCoder.encodeObject(uaid, forKey: "uaid")
+        aCoder.encodeObject(secret, forKey: "secret")
+        aCoder.encodeObject(endpoint.absoluteString, forKey: "endpoint")
+        aCoder.encodeObject(channelID, forKey: "channelID")
+    }
 
     // TODO ???
     //     protected final @NonNull Map<String, PushSubscription> subscriptions;
@@ -23,7 +48,7 @@ public struct PushRegistration {
             return nil
         }
 
-        return PushRegistration(endpoint: endpoint, uaid: uaid, secret: secret, channelID: channelID)
+        return PushRegistration(uaid: uaid, secret: secret, endpoint: endpoint, channelID: channelID)
     }
 
     func toJSON() -> JSON {
