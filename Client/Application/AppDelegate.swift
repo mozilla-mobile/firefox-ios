@@ -177,6 +177,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             sendCorePing()
         }
 
+        let fxaLoginHelper = FxALoginHelper.createSharedInstance(application, profile: profile)
+        fxaLoginHelper.applicationDidLoadProfile()
+
         log.debug("Done with setting up the application.")
         return true
     }
