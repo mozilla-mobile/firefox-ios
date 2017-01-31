@@ -19,7 +19,8 @@ class FxALoginHelper {
     private weak var application: UIApplication?
     private weak var profile: Profile?
 
-    private var data: JSON!
+    private var account: FirefoxAccount!
+    private var pushRegistration: PushRegistration!
 
     static private(set) var sharedInstance: FxALoginHelper?
 
@@ -45,8 +46,14 @@ class FxALoginHelper {
             return deferred
         }
 
-        self.data = data
+        // TODO: Error handling.
+        guard let profile = profile,
+            let account = FirefoxAccount.fromConfigurationAndJSON(profile.accountConfiguration, data: data) else {
+            self.loginDidFail()
+            return deferred
+        }
 
+        self.account = account
         requestUserNotifications()
         return deferred
     }
@@ -87,9 +94,12 @@ class FxALoginHelper {
             return readyForSyncing()
         }
 
-        application?.registerForRemoteNotifications()
+        if AppConstants.MOZ_FXA_PUSH {
+            application?.registerForRemoteNotifications()
+        } else {
+            readyForSyncing()
+        }
     }
-
 
     func apnsRegisterDidSucceed(apnsToken apnsToken: String) {
         pushClient.register(apnsToken).upon { res in
@@ -101,22 +111,20 @@ class FxALoginHelper {
     }
 
     func apnsRegisterDidFail() {
-        self.readyForSyncing()
+        readyForSyncing()
     }
 
     func pushRegistrationDidSucceed(apnsToken apnsToken: String, pushRegistration: PushRegistration) {
-
+        account.pushRegistration = pushRegistration
+        readyForSyncing()
     }
 
     func pushRegistrationDidFail() {
-
+        readyForSyncing()
     }
 
     func readyForSyncing() {
-        if let profile = self.profile, let data = data {
-            // TODO: Error handling.
-            let account = FirefoxAccount.fromConfigurationAndJSON(profile.accountConfiguration, data: data)!
-            
+        if let profile = self.profile, let account = account {
             profile.setAccount(account)
             // account.advance is idempotent.
             if let account = profile.getAccount() {
