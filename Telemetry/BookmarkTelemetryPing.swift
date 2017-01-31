@@ -1,6 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+import SwiftyJSON
 
 public func makeAdHocBookmarkMergePing(_ bundle: Bundle, clientID: String, attempt: Int32, bufferRows: Int?, valid: [String: Bool], clientCount: Int) -> JSON {
     let anyFailed = valid.reduce(false, { $0 || $1.1 })

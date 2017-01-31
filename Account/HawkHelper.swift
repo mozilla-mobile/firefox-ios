@@ -83,7 +83,7 @@ open class HawkHelper {
         s.append("\n")
         append(url.host!)
         if let port = (url as NSURL).port {
-            append(port.stringValue)
+            append(String(describing: port))
         } else {
             if url.scheme?.lowercased() == "https" {
                 append("443")
@@ -105,12 +105,12 @@ open class HawkHelper {
             var d = Data()
             func append(_ s: String) {
                 let data = s.utf8EncodedData
-                d.appendBytes(fromData: data)
+                d.append(data)
             }
             append("hawk.1.payload\n")
             append(getBaseContentTypeFor(request.value(forHTTPHeaderField: "Content-Type")))
             append("\n") // Trailing newline is specified by Hawk.
-            d.appendBytes(fromData: body)
+            d.append(body)
             append("\n") // Trailing newline is specified by Hawk.
             return d.sha256.base64EncodedString
         } else {

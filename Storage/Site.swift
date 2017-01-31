@@ -9,50 +9,50 @@ public protocol Identifiable: Equatable {
     var id: Int? { get set }
 }
 
-public func ==<T where T: Identifiable>(lhs: T, rhs: T) -> Bool {
+public func ==<T>(lhs: T, rhs: T) -> Bool where T: Identifiable {
     return lhs.id == rhs.id
 }
 
 public enum IconType: Int {
-    public func isPreferredTo (other: IconType) -> Bool {
+    public func isPreferredTo (_ other: IconType) -> Bool {
         return rank > other.rank
     }
 
-    private var rank: Int {
+    fileprivate var rank: Int {
         switch self {
-        case .AppleIconPrecomposed:
+        case .appleIconPrecomposed:
             return 5
-        case .AppleIcon:
+        case .appleIcon:
             return 4
-        case .Icon:
+        case .icon:
             return 3
-        case .Local:
+        case .local:
             return 2
-        case .Guess:
+        case .guess:
             return 1
-        case .NoneFound:
+        case .noneFound:
             return 0
         }
     }
 
-    case Icon = 0
-    case AppleIcon = 1
-    case AppleIconPrecomposed = 2
-    case Guess = 3
-    case Local = 4
-    case NoneFound = 5
+    case icon = 0
+    case appleIcon = 1
+    case appleIconPrecomposed = 2
+    case guess = 3
+    case local = 4
+    case noneFound = 5
 }
 
-public class Favicon: Identifiable {
-    public var id: Int? = nil
+open class Favicon: Identifiable {
+    open var id: Int?
 
-    public let url: String
-    public let date: NSDate
-    public var width: Int?
-    public var height: Int?
-    public let type: IconType
+    open let url: String
+    open let date: Date
+    open var width: Int?
+    open var height: Int?
+    open let type: IconType
 
-    public init(url: String, date: NSDate = NSDate(), type: IconType) {
+    public init(url: String, date: Date = Date(), type: IconType) {
         self.url = url
         self.date = date
         self.type = type
@@ -61,20 +61,20 @@ public class Favicon: Identifiable {
 
 // TODO: Site shouldn't have all of these optional decorators. Include those in the
 // cursor results, perhaps as a tuple.
-public class Site: Identifiable {
-    public var id: Int? = nil
-    var guid: String? = nil
+open class Site: Identifiable {
+    open var id: Int?
+    var guid: String?
 
-    public var tileURL: NSURL {
-        return NSURL(string: url)?.domainURL ?? NSURL(string: "about:blank")!
+    open var tileURL: URL {
+        return URL(string: url)?.domainURL ?? URL(string: "about:blank")!
     }
 
-    public let url: String
-    public let title: String
+    open let url: String
+    open let title: String
      // Sites may have multiple favicons. We'll return the largest.
-    public var icon: Favicon?
-    public var latestVisit: Visit?
-    public private(set) var bookmarked: Bool?
+    open var icon: Favicon?
+    open var latestVisit: Visit?
+    open fileprivate(set) var bookmarked: Bool?
 
     public convenience init(url: String, title: String) {
         self.init(url: url, title: title, bookmarked: false)
@@ -86,9 +86,8 @@ public class Site: Identifiable {
         self.bookmarked = bookmarked
     }
 
-    public func setBookmarked(bookmarked: Bool) {
+    open func setBookmarked(_ bookmarked: Bool) {
         self.bookmarked = bookmarked
     }
 
 }
-
