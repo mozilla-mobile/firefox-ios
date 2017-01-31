@@ -6,6 +6,7 @@ import Foundation
 import Shared
 
 open class NSUserDefaultsPrefs: Prefs {
+
     fileprivate let prefixWithDot: String
     fileprivate let userDefaults: UserDefaults
 
@@ -59,7 +60,7 @@ open class NSUserDefaultsPrefs: Prefs {
         setObject(value as AnyObject?, forKey: defaultName)
     }
 
-    open func setObject(_ value: AnyObject?, forKey defaultName: String) {
+    open func setObject(_ value: Any?, forKey defaultName: String) {
         userDefaults.set(value, forKey: qualifyKey(defaultName))
     }
 
@@ -96,7 +97,7 @@ open class NSUserDefaultsPrefs: Prefs {
         return nsNumberForKey(defaultName)?.int64Value
     }
 
-    open func objectForKey<T: AnyObject>(_ defaultName: String) -> T? {
+    open func objectForKey<T: Any>(_ defaultName: String) -> T? {
         return userDefaults.object(forKey: qualifyKey(defaultName)) as? T
     }
 
@@ -112,12 +113,12 @@ open class NSUserDefaultsPrefs: Prefs {
         return nil
     }
 
-    open func arrayForKey(_ defaultName: String) -> [AnyObject]? {
-        return userDefaults.array(forKey: qualifyKey(defaultName)) as [AnyObject]?
+    open func arrayForKey(_ defaultName: String) -> [Any]? {
+        return userDefaults.array(forKey: qualifyKey(defaultName)) as [Any]?
     }
 
-    open func dictionaryForKey(_ defaultName: String) -> [String : AnyObject]? {
-        return userDefaults.dictionary(forKey: qualifyKey(defaultName)) as [String : AnyObject]?
+    open func dictionaryForKey(_ defaultName: String) -> [String : Any]? {
+        return userDefaults.dictionary(forKey: qualifyKey(defaultName)) as [String : Any]?
     }
 
     open func removeObjectForKey(_ defaultName: String) {
