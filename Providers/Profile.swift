@@ -606,7 +606,8 @@ public class BrowserProfile: Profile {
 
     func flushAccount() {
         if let account = account {
-            self.keychain.setObject(account.asDictionary(), forKey: name + ".account")
+            // Will this cause issues with people migrating?
+            self.keychain.set(account.dictionary() as NSCoding, forKey: name + ".account")
         }
     }
 
@@ -892,9 +893,10 @@ public class BrowserProfile: Profile {
             }
         }
 
-        func doInBackgroundAfter(millis millis: Int64, _ block: @escaping (Void) -> ()) {
+        func doInBackgroundAfter(_ millis: Int64, _ block: @escaping (Void) -> ()) {
             let queue = DispatchQueue.global(qos: DispatchQoS.background.qosClass)
-            queue.asyncAfter(deadline: .now() + .milliseconds(millis), execute: block)
+            //Pretty ambiguous here. I'm thinking .now was DispatchTime.now() and not Date.now()
+            queue.asyncAfter(deadline: DispatchTime.now() + DispatchTimeInterval.milliseconds(Int(millis)), execute: block)
         }
 
         @objc
@@ -1140,17 +1142,10 @@ public class BrowserProfile: Profile {
          * Runs the single provided synchronization function and returns its status.
          */
         private func sync(label: EngineIdentifier, function: @escaping SyncFunction) -> SyncResult {
-            return syncSeveral(synchronizers: [(label, function)]) >>== { statuses in
+            return syncSeveral([(label, function)]) >>== { statuses in
                 let status = statuses.find { label == $0.0 }?.1
                 return deferMaybe(status ?? .notStarted(.unknown))
             }
-        }
-
-        /**
-         * Convenience method for syncSeveral([(EngineIdentifier, SyncFunction)])
-         */
-        private func syncSeveral(synchronizers: (EngineIdentifier, SyncFunction)...) -> Deferred<Maybe<[(EngineIdentifier, SyncStatus)]>> {
-            return syncSeveral(synchronizers: synchronizers)
         }
 
         /**
@@ -1159,7 +1154,7 @@ public class BrowserProfile: Profile {
          * The statuses returned will be a superset of the ones that are requested here.
          * While a sync is ongoing, each engine from successive calls to this method will only be called once.
          */
-        private func syncSeveral(synchronizers: [(EngineIdentifier, SyncFunction)]) -> Deferred<Maybe<[(EngineIdentifier, SyncStatus)]>> {
+        private func syncSeveral(_ synchronizers: [(EngineIdentifier, SyncFunction)]) -> Deferred<Maybe<[(EngineIdentifier, SyncStatus)]>> {
             syncLock.lock()
             defer { syncLock.unlock() }
 
@@ -1208,7 +1203,7 @@ public class BrowserProfile: Profile {
             log.info("Syncing \(synchronizers.map { $0.0 })")
             let authState = account.syncAuthState
             let delegate = self.profile.getSyncDelegate()
-            let readyDeferred = SyncStateMachine(prefs: self.prefsForSync).toReady(authState)
+            let readyDeferred = SyncStateMachine(prefs: self.prefsForSync).toReady(authState!)
 
             let function: (SyncDelegate, Prefs, Ready) -> Deferred<Maybe<[EngineStatus]>> = { delegate, syncPrefs, ready in
                 let thunks = synchronizers.map { (i, f) in
@@ -1226,13 +1221,13 @@ public class BrowserProfile: Profile {
         }
 
         func syncEverything() -> Success {
-            return self.syncSeveral(
+            return self.syncSeveral([
                 ("clients", self.syncClientsWithDelegate),
                 ("tabs", self.syncTabsWithDelegate),
                 ("logins", self.syncLoginsWithDelegate),
                 ("bookmarks", self.mirrorBookmarksWithDelegate),
                 ("history", self.syncHistoryWithDelegate)
-            ) >>> succeed
+            ]) >>> succeed
         }
 
         func syncEverythingSoon() {
@@ -1260,10 +1255,10 @@ public class BrowserProfile: Profile {
         }
 
         func syncClientsThenTabs() -> SyncResult {
-            return self.syncSeveral(
+            return self.syncSeveral([
                 ("clients", self.syncClientsWithDelegate),
                 ("tabs", self.syncTabsWithDelegate)
-            ) >>== { statuses in
+            ]) >>== { statuses in
                 let status = statuses.find { "tabs" == $0.0 }
                 return deferMaybe(status!.1)
             }
