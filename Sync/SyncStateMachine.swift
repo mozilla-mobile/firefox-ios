@@ -239,8 +239,8 @@ open class BaseSyncState: SyncState {
 
     // This isn't a convenience initializer 'cos subclasses can't call convenience initializers.
     public init(scratchpad: Scratchpad, token: TokenServerToken) {
-        let workQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
-        let resultQueue = dispatch_get_main_queue()
+        let workQueue = DispatchQueue.global()
+        let resultQueue = DispatchQueue.main
         let backoff = scratchpad.backoffStorage
         let client = Sync15StorageClient(token: token, workQueue: workQueue, resultQueue: resultQueue, backoff: backoff)
         self.scratchpad = scratchpad
