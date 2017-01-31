@@ -23,7 +23,7 @@ public protocol SyncableBookmarks: class, ResettableSyncStorage, AccountRemovalD
     func applyLocalOverrideCompletionOp(_ op: LocalOverrideCompletionOp, itemSources: ItemSources) -> Success
 }
 
-public let NotificationBookmarkBufferValidated = "NotificationBookmarkBufferValidated"
+public let NotificationBookmarkBufferValidated = Notification.Name("NotificationBookmarkBufferValidated")
 
 public protocol BookmarkBufferStorage: class {
     func isEmpty() -> Deferred<Maybe<Bool>>

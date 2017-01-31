@@ -785,8 +785,7 @@ extension SQLiteBookmarkBufferStorage {
         }.allSucceed()
 
         deferred.upon { _ in
-            let name = Notification.Name(NotificationBookmarkBufferValidated)
-            notificationCenter.post(name: name, object: Box(validations))
+            notificationCenter.post(name: NotificationBookmarkBufferValidated, object: Box(validations))
         }
 
         return deferred

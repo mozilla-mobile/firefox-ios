@@ -15,8 +15,9 @@ import Deferred
 
 private let log = Logger.syncLogger
 
-public let NotificationProfileDidStartSyncing = "NotificationProfileDidStartSyncing"
-public let NotificationProfileDidFinishSyncing = "NotificationProfileDidFinishSyncing"
+public let NotificationProfileDidStartSyncing = Notification.Name("NotificationProfileDidStartSyncing")
+public let NotificationProfileDidFinishSyncing = Notification.Name("NotificationProfileDidFinishSyncing")
+
 public let ProfileRemoteTabsSyncDelay: TimeInterval = 0.1
 
 public protocol SyncManager {
@@ -234,10 +235,11 @@ public class BrowserProfile: Profile {
         }
 
         let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(BrowserProfile.onLocationChange(_:)), name: NotificationOnLocationChange, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(BrowserProfile.onPageMetadataFetched(_:)), name: NotificationOnPageMetadataFetched, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(BrowserProfile.onProfileDidFinishSyncing(_:)), name: NotificationProfileDidFinishSyncing, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(BrowserProfile.onPrivateDataClearedHistory(_:)), name: NotificationPrivateDataClearedHistory, object: nil)
+
+        notificationCenter.addObserver(self, selector: #selector(onLocationChange(notification:)), name: NotificationOnLocationChange, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(onPageMetadataFetched(notification:)), name: NotificationOnPageMetadataFetched, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(onProfileDidFinishSyncing(notification:)), name: NotificationProfileDidFinishSyncing, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(onPrivateDataClearedHistory(notification:)), name: NotificationPrivateDataClearedHistory, object: nil)
 
 
         // If the profile dir doesn't exist yet, this is first run (for this profile).
@@ -803,8 +805,8 @@ public class BrowserProfile: Profile {
 
         }
 
-        private func notifySyncing(notification: String) {
-            NotificationCenter.defaultCenter.postNotification(NSNotification(name: notification, object: syncDisplayState?.asObject()))
+        private func notifySyncing(notification: Notification.Name) {
+            NotificationCenter.default.post(name: notification, object: syncDisplayState?.asObject())
         }
 
         init(profile: BrowserProfile) {
@@ -814,11 +816,11 @@ public class BrowserProfile: Profile {
             super.init()
 
             let center = NotificationCenter.default
-            center.addObserver(self, selector: #selector(BrowserSyncManager.onDatabaseWasRecreated(_:)), name: NotificationDatabaseWasRecreated, object: nil)
-            center.addObserver(self, selector: #selector(BrowserSyncManager.onLoginDidChange(_:)), name: NotificationDataLoginDidChange, object: nil)
-            center.addObserver(self, selector: #selector(BrowserSyncManager.onStartSyncing(_:)), name: NotificationProfileDidStartSyncing, object: nil)
-            center.addObserver(self, selector: #selector(BrowserSyncManager.onFinishSyncing(_:)), name: NotificationProfileDidFinishSyncing, object: nil)
-            center.addObserver(self, selector: #selector(BrowserSyncManager.onBookmarkBufferValidated(_:)), name: NotificationBookmarkBufferValidated, object: nil)
+            center.addObserver(self, selector: #selector(onDatabaseWasRecreated(notification:)), name: NotificationDatabaseWasRecreated, object: nil)
+            center.addObserver(self, selector: #selector(onLoginDidChange(notification:)), name: NotificationDataLoginDidChange, object: nil)
+            center.addObserver(self, selector: #selector(onStartSyncing(notification:)), name: NotificationProfileDidStartSyncing, object: nil)
+            center.addObserver(self, selector: #selector(onFinishSyncing(notification:)), name: NotificationProfileDidFinishSyncing, object: nil)
+            center.addObserver(self, selector: #selector(onBookmarkBufferValidated(notification:)), name: NotificationBookmarkBufferValidated, object: nil)
         }
 
         func onBookmarkBufferValidated(notification: NSNotification) {
