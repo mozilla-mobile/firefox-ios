@@ -10,7 +10,7 @@ import XCGLogger
 
 private let log = Logger.syncLogger
 
-typealias UploadFunction = ([Record<BookmarkBasePayload>], _ lastTimestamp: Timestamp?, _ onUpload: (POSTResult, Timestamp?) -> DeferredTimestamp) -> DeferredTimestamp
+typealias UploadFunction = ([Record<BookmarkBasePayload>], _ lastTimestamp: Timestamp?, _ onUpload: @escaping (POSTResult, Timestamp?) -> DeferredTimestamp) -> DeferredTimestamp
 
 class TrivialBookmarkStorer: BookmarkStorer {
     let uploader: UploadFunction
