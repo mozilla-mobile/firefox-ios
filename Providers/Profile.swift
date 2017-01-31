@@ -731,7 +731,7 @@ public class BrowserProfile: Profile {
             if let syncResult = result {
                 syncDisplayState = SyncStatusResolver(engineResults: syncResult).resolveResults()
             } else {
-                syncDisplayState = .Good
+                syncDisplayState = .good
             }
 
             reportEndSyncingStatus(syncDisplayState, engineResults: result)
@@ -741,7 +741,7 @@ public class BrowserProfile: Profile {
 
         private func reportEndSyncingStatus(displayState: SyncDisplayState?, engineResults: Maybe<EngineResults>?) {
             // We don't send this ad hoc telemetry on the release channel.
-            guard AppConstants.BuildChannel != AppBuildChannel.Release else {
+            guard AppConstants.BuildChannel != AppBuildChannel.release else {
                 return
             }
 
@@ -824,7 +824,7 @@ public class BrowserProfile: Profile {
 
         func onBookmarkBufferValidated(notification: NSNotification) {
             // We don't send this ad hoc telemetry on the release channel.
-            guard AppConstants.BuildChannel != AppBuildChannel.Release else {
+            guard AppConstants.BuildChannel != AppBuildChannel.release else {
                 return
             }
 
@@ -1201,7 +1201,7 @@ public class BrowserProfile: Profile {
             } catch let error {
                 log.error("Synchronizers appended after sync was finished. This is a bug. \(error)")
                 let statuses = synchronizers.map {
-                    ($0.0, SyncStatus.NotStarted(.Unknown))
+                    ($0.0, SyncStatus.notStarted(.unknown))
                 }
                 return deferMaybe(statuses)
             }
@@ -1212,7 +1212,7 @@ public class BrowserProfile: Profile {
             guard let account = self.profile.account else {
                 log.info("No account to sync with.")
                 let statuses = synchronizers.map {
-                    ($0.0, SyncStatus.NotStarted(.NoAccount))
+                    ($0.0, SyncStatus.notStarted(.noAccount))
                 }
                 return deferMaybe(statuses)
             }
