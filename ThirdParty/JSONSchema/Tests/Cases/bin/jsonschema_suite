@@ -113,7 +113,7 @@ class SanityTests(unittest.TestCase):
         print("Found %s test files" % len(cls.test_files))
         assert cls.test_files, "Didn't find the test files!"
 
-    def test_all_files_are_valid_json(self):
+    def test_all_files_are_validjson(self):
         for path in self.test_files:
             with open(path) as test_file:
                 try:

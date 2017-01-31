@@ -157,7 +157,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
     fileprivate func clientRecordToLocalClientEntry(_ record: Record<ClientPayload>) -> RemoteClient {
         let modified = record.modified
         let payload = record.payload
-        return RemoteClient(json: payload._json, modified: modified)
+        return RemoteClient(json: payload.json, modified: modified)
     }
 
     // If this is a fresh start, do a wipe.
@@ -218,7 +218,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
         return fetch.bind() { result in
             if let response = result.successValue, response.value.payload.isValid() {
                 let record = response.value
-                if var clientRecord = record.payload._json.dictionary {
+                if var clientRecord = record.payload.json.dictionary {
                     clientRecord["commands"] = JSON(record.payload.commands + commands.map { JSON(parseJSON: $0.value) })
                     let uploadRecord = Record(id: clientGUID, payload: ClientPayload(JSON(clientRecord)), ttl: ThreeWeeksInSeconds)
                     return storageClient.put(uploadRecord, ifUnmodifiedSince: record.modified)
@@ -341,7 +341,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
         }
 
         let keys = self.scratchpad.keys?.value
-        let encoder = RecordEncoder<ClientPayload>(decode: { ClientPayload($0) }, encode: { $0._json })
+        let encoder = RecordEncoder<ClientPayload>(decode: { ClientPayload($0) }, encode: { $0.json })
         let encrypter = keys?.encrypter(self.collection, encoder: encoder)
         if encrypter == nil {
             log.error("Couldn't make clients encrypter.")

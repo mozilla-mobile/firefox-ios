@@ -165,7 +165,7 @@ open class SeparatorPayload: BookmarkBasePayload {
         if !super.isValid() {
             return false
         }
-        if self["pos"].int == nil {
+        if self["pos"].isInt() {
             log.warning("Separator \(self.id) missing pos.")
             return false
         }
@@ -211,7 +211,7 @@ open class SeparatorPayload: BookmarkBasePayload {
 
 open class FolderPayload: BookmarkBasePayload {
     fileprivate var childrenAreValid: Bool {
-        return self.hstringArrayField("children")
+        return self.hasStringArrayField("children")
     }
 
     override open func isValid() -> Bool {
@@ -305,7 +305,7 @@ open class BookmarkPayload: BookmarkBasePayload {
             return false
         }
 
-        if !self.hstringArrayField("tags") {
+        if !self.hasStringArrayField("tags") {
             log.warning("Bookmark \(self.id) missing tags array. We'll replace with an empty array.")
             // Ignore.
         }
@@ -448,7 +448,7 @@ open class BookmarkBasePayload: CleartextPayloadJSON, MirrorItemable {
         return BookmarkBasePayload(JSON(["id": remappedGUID, "deleted": true]))
     }
 
-    func hstringArrayField(_ name: String) -> Bool {
+    func hasStringArrayField(_ name: String) -> Bool {
         guard let arr = self[name].array else {
             return false
         }

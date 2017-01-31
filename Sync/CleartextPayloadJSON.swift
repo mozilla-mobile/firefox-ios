@@ -7,27 +7,27 @@ import Shared
 import SwiftyJSON
 
 open class BasePayloadJSON {
-    var _json: JSON
+    var json: JSON
     required public init(_ jsonString: String) {
-        self._json = JSON.init(parseJSON: jsonString)
+        self.json = JSON.init(parseJSON: jsonString)
     }
 
     public init(_ json: JSON) {
-        self._json = json
+        self.json = json
     }
 
     // Override me.
     fileprivate func isValid() -> Bool {
-        return self._json.error == nil
+        return self.json.error == nil
     }
 
     subscript(key: String) -> JSON {
         get {
-            return _json[key]
+            return json[key]
         }
 
         set {
-            _json[key] = newValue
+            json[key] = newValue
         }
     }
 }

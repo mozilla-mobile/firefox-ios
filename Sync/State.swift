@@ -489,7 +489,7 @@ open class Scratchpad {
         prefs.setInt(1, forKey: PrefVersion)
         if let global = global {
             prefs.setLong(global.timestamp, forKey: PrefGlobalTS)
-            prefs.setString(global.value.asPayload()._json.rawString()!, forKey: PrefGlobal)
+            prefs.setString(global.value.asPayload().json.rawString()!, forKey: PrefGlobal)
         } else {
             prefs.removeObjectForKey(PrefGlobal)
             prefs.removeObjectForKey(PrefGlobalTS)
@@ -498,7 +498,7 @@ open class Scratchpad {
         // We store the meat of your keys in the Keychain, using a random identifier that we persist in prefs.
         prefs.setString(self.keyLabel, forKey: PrefKeyLabel)
         if let keys = self.keys,
-            let payload = keys.value.asPayload()._json.rawString() {
+            let payload = keys.value.asPayload().json.rawString() {
             let label = "keys." + self.keyLabel
             log.debug("Storing keys in Keychain with label \(label).")
             prefs.setString(self.keyLabel, forKey: PrefKeyLabel)

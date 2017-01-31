@@ -19,7 +19,7 @@ private let log = Logger.syncLogger
  * into a new JSON object resulting from decrypting and parsing the ciphertext.
  */
 open class EncryptedJSON {
-    var _json: JSON
+    var json: JSON
     var _cleartext: JSON?               // Cache decrypted cleartext.
     var _ciphertextBytes: Data?       // Cache decoded ciphertext.
     var _hmacBytes: Data?             // Cache decoded HMAC.
@@ -32,12 +32,12 @@ open class EncryptedJSON {
 
     public init(json: String, keyBundle: KeyBundle) {
         self.keyBundle = keyBundle
-        self._json = JSON.init(parseJSON: json)
+        self.json = JSON.init(parseJSON: json)
     }
 
     public init(json: JSON, keyBundle: KeyBundle) {
         self.keyBundle = keyBundle
-        self._json = json
+        self.json = json
     }
 
     // For validating HMAC: the raw ciphertext as bytes without decoding.
@@ -102,7 +102,7 @@ open class EncryptedJSON {
     }
 
     open func isValid() -> Bool {
-        return !_json.isError() && self.validate()
+        return !json.isError() && self.validate()
     }
 
     /**
@@ -160,11 +160,11 @@ open class EncryptedJSON {
 
     subscript(key: String) -> JSON {
         get {
-            return _json[key]
+            return json[key]
         }
 
         set {
-            _json[key] = newValue
+            json[key] = newValue
         }
     }
 }

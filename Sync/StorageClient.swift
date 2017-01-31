@@ -574,7 +574,7 @@ open class Sync15StorageClient {
 
     func getCryptoKeys(_ syncKeyBundle: KeyBundle, ifUnmodifiedSince: Timestamp?) -> Deferred<Maybe<StorageResponse<Record<KeysPayload>>>> {
         let syncKey = Keys(defaultBundle: syncKeyBundle)
-        let encoder = RecordEncoder<KeysPayload>(decode: { KeysPayload($0) }, encode: { $0._json })
+        let encoder = RecordEncoder<KeysPayload>(decode: { KeysPayload($0) }, encode: { $0.json })
         let encrypter = syncKey.encrypter("keys", encoder: encoder)
         let client = self.clientForCollection("crypto", encrypter: encrypter)
         return client.get("keys")
@@ -582,11 +582,11 @@ open class Sync15StorageClient {
 
     func uploadMetaGlobal(_ metaGlobal: MetaGlobal, ifUnmodifiedSince: Timestamp?) -> Deferred<Maybe<StorageResponse<Timestamp>>> {
         let payload = metaGlobal.asPayload()
-        if payload._json.isError() {
+        if payload.json.isError() {
             return Deferred(value: Maybe(failure: MalformedMetaGlobalError()))
         }
 
-        let record: JSON = JSON(object: ["payload": payload._json.rawString() ?? JSON.null as Any, "id": "global"])
+        let record: JSON = JSON(object: ["payload": payload.json.rawString() ?? JSON.null as Any, "id": "global"])
         return putResource("storage/meta/global", body: record, ifUnmodifiedSince: ifUnmodifiedSince, parser: decimalSecondsStringToTimestamp)
     }
 
@@ -594,7 +594,7 @@ open class Sync15StorageClient {
     // encrypted with the bulk key bundle (including possibly a per-collection bulk key) stored in crypto/keys.
     func uploadCryptoKeys(_ keys: Keys, withSyncKeyBundle syncKeyBundle: KeyBundle, ifUnmodifiedSince: Timestamp?) -> Deferred<Maybe<StorageResponse<Timestamp>>> {
         let syncKey = Keys(defaultBundle: syncKeyBundle)
-        let encoder = RecordEncoder<KeysPayload>(decode: { KeysPayload($0) }, encode: { $0._json })
+        let encoder = RecordEncoder<KeysPayload>(decode: { KeysPayload($0) }, encode: { $0.json })
         let encrypter = syncKey.encrypter("keys", encoder: encoder)
         let client = self.clientForCollection("crypto", encrypter: encrypter)
 

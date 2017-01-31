@@ -142,7 +142,7 @@ open class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchroniz
         }
 
         let keys = self.scratchpad.keys?.value
-        let encoder = RecordEncoder<TabsPayload>(decode: { TabsPayload($0) }, encode: { $0._json })
+        let encoder = RecordEncoder<TabsPayload>(decode: { TabsPayload($0) }, encode: { $0.json })
         if let encrypter = keys?.encrypter(self.collection, encoder: encoder) {
             let tabsClient = storageClient.clientForCollection(self.collection, encrypter: encrypter)
 

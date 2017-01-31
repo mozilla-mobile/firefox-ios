@@ -11,7 +11,7 @@ open class KeysPayload: CleartextPayloadJSON {
         // We should also call super.isValid(), but that'll fail:
         // Global is external, but doesn't have external or weak linkage!
         // Swift compiler bug #18422804.
-        return !_json.isError() &&
+        return !json.isError() &&
                self["default"].type == Type.array
     }
     

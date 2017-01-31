@@ -160,7 +160,7 @@ open class LoginsSynchronizer: IndependentRecordSynchronizer, Synchronizer {
             return deferMaybe(.notStarted(reason))
         }
 
-        let encoder = RecordEncoder<LoginPayload>(decode: { LoginPayload($0) }, encode: { $0._json })
+        let encoder = RecordEncoder<LoginPayload>(decode: { LoginPayload($0) }, encode: { $0.json })
         guard let passwordsClient = self.collectionClient(encoder, storageClient: storageClient) else {
             log.error("Couldn't make logins factory.")
             return deferMaybe(FatalError(message: "Couldn't make logins factory."))

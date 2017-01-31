@@ -94,7 +94,7 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
             return deferMaybe(.notStarted(reason))
         }
 
-        let encoder = RecordEncoder<BookmarkBasePayload>(decode: BookmarkType.somePayloadFromJSON, encode: { $0._json })
+        let encoder = RecordEncoder<BookmarkBasePayload>(decode: BookmarkType.somePayloadFromJSON, encode: { $0.json })
 
         guard let bookmarksClient = self.collectionClient(encoder, storageClient: storageClient) else {
             log.error("Couldn't make bookmarks factory.")

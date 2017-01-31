@@ -244,7 +244,7 @@ open class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
             return deferMaybe(.notStarted(reason))
         }
 
-        let encoder = RecordEncoder<HistoryPayload>(decode: { HistoryPayload($0) }, encode: { $0._json })
+        let encoder = RecordEncoder<HistoryPayload>(decode: { HistoryPayload($0) }, encode: { $0.json })
 
         guard let historyClient = self.collectionClient(encoder, storageClient: storageClient) else {
             log.error("Couldn't make history factory.")
