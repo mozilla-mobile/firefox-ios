@@ -12,6 +12,7 @@ import Sync
 import XCGLogger
 import SwiftKeychainWrapper
 import Deferred
+import SwiftyJSON
 
 private let log = Logger.syncLogger
 
@@ -80,7 +81,7 @@ class CommandStoringSyncDelegate: SyncDelegate {
 
     public func displaySentTabForURL(_ URL: URL, title: String) {
         let item = ShareItem(url: URL.absoluteString, title: title, favicon: nil)
-        self.profile.queue.addToQueue(item)
+        let _ = self.profile.queue.addToQueue(item)
     }
 }
 
@@ -202,7 +203,7 @@ extension Profile {
 
 public class BrowserProfile: Profile {
     private let name: String
-    private let keychain: KeychainWrapper
+    fileprivate let keychain: KeychainWrapper
     var isShutdown = false
 
     internal let files: FileAccessor
@@ -386,17 +387,11 @@ public class BrowserProfile: Profile {
      * have been assigned.
      */
     private static var dbCreated = false
-    var db: BrowserDB {
-        struct Singleton {
-            static var token: dispatch_once_t = 0
-            static var instance: BrowserDB!
-        }
-        dispatch_once(&Singleton.token) {
-            Singleton.instance = BrowserDB(filename: "browser.db", files: self.files)
-            BrowserProfile.dbCreated = true
-        }
-        return Singleton.instance
-    }
+    lazy var db: BrowserDB = {
+        let db = BrowserDB(filename: "browser.db", files: self.files)
+        BrowserProfile.dbCreated = true
+        return db
+    }()
 
     /**
      * Favicons, history, and bookmarks are all stored in one intermeshed
@@ -503,44 +498,40 @@ public class BrowserProfile: Profile {
         self.remoteClientsAndTabs.insertCommands(commands, forClients: clients) >>> { self.syncManager.syncClients() }
     }
 
-    lazy var logins: protocol<BrowserLogins, SyncableLogins, ResettableSyncStorage> = {
+    lazy var logins: BrowserLogins & SyncableLogins & ResettableSyncStorage = {
         return SQLiteLogins(db: self.loginsDB)
     }()
 
     // This is currently only used within the dispatch_once block in loginsDB, so we don't
     // have to worry about races giving us two keys. But if this were ever to be used
     // elsewhere, it'd be unsafe, so we wrap this in a dispatch_once, too.
-    private var loginsKey: String? {
+    lazy private var loginsKey: String? = {
         let key = "sqlcipher.key.logins.db"
-        struct Singleton {
-            static var token: dispatch_once_t = 0
-            static var instance: String!
-        }
-        dispatch_once(&Singleton.token) {
-            if self.keychain.hasValueForKey(key) {
-                let value = self.keychain.stringForKey(key)
-                Singleton.instance = value
-            } else {
-                let Length: UInt = 256
-                let secret = Bytes.generateRandomBytes(Length).base64EncodedString
-                self.keychain.setString(secret, forKey: key)
-                Singleton.instance = secret
-            }
-        }
-        return Singleton.instance
-    }
+        return key
+//
+//        struct Singleton {
+//            static var token: dispatch_once_t = 0
+//            static var instance: String!
+//        }
+//        dispatch_once(&Singleton.token) {
+//            if self.keychain.hasValueForKey(key) {
+//                let value = self.keychain.stringForKey(key)
+//                Singleton.instance = value
+//            } else {
+//                let Length: UInt = 256
+//                let secret = Bytes.generateRandomBytes(Length).base64EncodedString
+//                self.keychain.setString(secret, forKey: key)
+//                Singleton.instance = secret
+//            }
+//        }
+//        return Singleton.instance
+    }()
 
     private static var loginsDBCreated = false
     private lazy var loginsDB: BrowserDB = {
-        struct Singleton {
-            static var token: dispatch_once_t = 0
-            static var instance: BrowserDB!
-        }
-        dispatch_once(&Singleton.token) {
-            Singleton.instance = BrowserDB(filename: "logins.db", secretKey: self.loginsKey, files: self.files)
-            BrowserProfile.loginsDBCreated = true
-        }
-        return Singleton.instance
+        let db = BrowserDB(filename: "logins.db", secretKey: self.loginsKey, files: self.files)
+        BrowserProfile.loginsDBCreated = true
+        return db
     }()
 
     lazy var isChinaEdition: Bool = {
@@ -555,7 +546,7 @@ public class BrowserProfile: Profile {
     }
 
     private lazy var account: FirefoxAccount? = {
-        if let dictionary = self.keychain.objectForKey(self.name + ".account") as? [String: AnyObject] {
+        if let dictionary = self.keychain.object(forKey: self.name + ".account") as? [String: AnyObject] {
             return FirefoxAccount.fromDictionary(dictionary)
         }
         return nil
@@ -575,7 +566,7 @@ public class BrowserProfile: Profile {
 
     func removeAccountMetadata() {
         self.prefs.removeObjectForKey(PrefsKeys.KeyLastRemoteTabSyncTime)
-        self.keychain.removeObjectForKey(self.name + ".account")
+        self.keychain.removeObject(forKey: self.name + ".account")
     }
 
     func removeExistingAuthenticationInfo() {
@@ -756,7 +747,7 @@ public class BrowserProfile: Profile {
                 return
             }
 
-            self.doInBackgroundAfter(millis: 300) {
+            self.doInBackgroundAfter(300) {
                 self.profile.remoteClientsAndTabs.getClientGUIDs() >>== { clients in
                     // We would love to include the version and OS etc. of each remote client,
                     // but we don't store that information. For now, just do a count.
@@ -845,7 +836,7 @@ public class BrowserProfile: Profile {
             // Capture the buffer count ASAP, not in the delayed op, because the merge could wipe it!
             let bufferRows = (self.profile.bookmarks as? MergedSQLiteBookmarks)?.synchronousBufferCount()
 
-            self.doInBackgroundAfter(millis: 300) {
+            self.doInBackgroundAfter(300) {
                 self.profile.remoteClientsAndTabs.getClientGUIDs() >>== { clients in
                     // We would love to include the version and OS etc. of each remote client,
                     // but we don't store that information. For now, just do a count.
@@ -922,7 +913,7 @@ public class BrowserProfile: Profile {
                 }
             }
 
-            self.doInBackgroundAfter(millis: 300) {
+            self.doInBackgroundAfter(300) {
                 self.syncLock.lock()
                 defer { self.syncLock.unlock() }
                 // If we're syncing already, then wait for sync to end, 
@@ -1245,7 +1236,7 @@ public class BrowserProfile: Profile {
         }
 
         func syncEverythingSoon() {
-            self.doInBackgroundAfter(millis: SyncConstants.SyncOnForegroundAfterMillis) {
+            self.doInBackgroundAfter(SyncConstants.SyncOnForegroundAfterMillis) {
                 log.debug("Running delayed startup sync.")
                 self.syncEverything()
             }
