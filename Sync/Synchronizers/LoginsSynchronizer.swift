@@ -90,7 +90,7 @@ open class LoginsSynchronizer: IndependentRecordSynchronizer, Synchronizer {
     }
 
     func applyIncomingToStorage(_ storage: SyncableLogins, records: [Record<LoginPayload>], fetched: Timestamp) -> Success {
-        return self.applyIncomingToStorage(records as! SyncableLogins, records: fetched) { rec in
+        return self.applyIncomingToStorage(records, fetched: fetched) { rec in
             let guid = rec.id
             let payload = rec.payload
 

@@ -92,7 +92,7 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
             return self.prefs.timestampForKey("baseTimestamp") ?? 0
         }
         set (value) {
-            self.prefs.setTimestamp(value ?? 0, forKey: "baseTimestamp")
+            self.prefs.setTimestamp(value, forKey: "baseTimestamp")
         }
     }
 
@@ -102,7 +102,7 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
             return self.prefs.timestampForKey("lastModified") ?? 0
         }
         set (value) {
-            self.prefs.setTimestamp(value ?? 0, forKey: "lastModified")
+            self.prefs.setTimestamp(value, forKey: "lastModified")
         }
     }
 

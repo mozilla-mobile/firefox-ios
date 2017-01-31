@@ -83,47 +83,49 @@ open class KeyBundle: Hashable {
         let iv = iv ?? Bytes.generateRandomBytes(16)
 
         let (success, b, copied) = self.crypt(cleartext, iv: iv, op: CCOperation(kCCEncrypt))
+        let byteCount = cleartext.count + kCCBlockSizeAES128
         if success == CCCryptorStatus(kCCSuccess) {
             // Hooray!
             let d = Data(bytes: b, count: Int(copied))
-            b.destroy()
+            b.deallocate(bytes: byteCount, alignedTo: MemoryLayout<Void>.size)
             return (d, iv)
         }
 
-        b.destroy()
+        b.deallocate(bytes: byteCount, alignedTo: MemoryLayout<Void>.size)
         return nil
     }
 
     // You *must* verify HMAC before calling this.
     open func decrypt(_ ciphertext: Data, iv: Data) -> String? {
         let (success, b, copied) = self.crypt(ciphertext, iv: iv, op: CCOperation(kCCDecrypt))
+        let byteCount = ciphertext.count + kCCBlockSizeAES128
         if success == CCCryptorStatus(kCCSuccess) {
             // Hooray!
-            let d = Data(bytesNoCopy: b, length: Int(copied))
-            let s = NSString(data: d, encoding: String.Encoding.utf8)
-            b.destroy()
+            let d = Data(bytes: b, count: Int(copied))
+            let s = NSString(data: d, encoding: String.Encoding.utf8.rawValue)
+            b.deallocate(bytes: byteCount, alignedTo: MemoryLayout<Void>.size)
             return s as String?
         }
 
-        b.destroy()
+        b.deallocate(bytes: byteCount, alignedTo: MemoryLayout<Void>.size)
         return nil
     }
 
 
     fileprivate func crypt(_ input: Data, iv: Data, op: CCOperation) -> (status: CCCryptorStatus, buffer: UnsafeMutableRawPointer, count: Int) {
         let resultSize = input.count + kCCBlockSizeAES128
-        let result = UnsafeMutableRawPointer.alloc(resultSize)
         var copied: Int = 0
+        let result = UnsafeMutableRawPointer.allocate(bytes: resultSize, alignedTo: MemoryLayout<Void>.size)
 
         let success: CCCryptorStatus =
         CCCrypt(op,
                 CCHmacAlgorithm(kCCAlgorithmAES128),
                 CCOptions(kCCOptionPKCS7Padding),
-                encKey.bytes,
+                encKey.getBytes(),
                 kCCKeySizeAES256,
-                iv.bytes,
-                input.bytes,
-                input.length,
+                iv.getBytes(),
+                input.getBytes(),
+                input.count,
                 result,
                 resultSize,
                 &copied

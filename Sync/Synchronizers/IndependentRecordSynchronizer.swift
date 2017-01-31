@@ -49,7 +49,7 @@ open class IndependentRecordSynchronizer: TimestampedSingleCollectionSynchronize
         return walk(records, f: apply)
     }
 
-    func applyIncomingToStorage<T>(_ records: [T], fetched: Timestamp, apply: (T) -> Success) -> Success {
+    func applyIncomingToStorage<T>(_ records: [T], fetched: Timestamp, apply: @escaping (T) -> Success) -> Success {
         func done() -> Success {
             log.debug("Bumping fetch timestamp to \(fetched).")
             self.lastFetched = fetched
@@ -83,7 +83,7 @@ extension TimestampedSingleCollectionSynchronizer {
      * In order to implement the latter, we'd need to chain the date from getSince in place of the
      * 0 in the call to uploadOutgoingFromStorage in each synchronizer.
      */
-    func uploadRecords<T>(_ records: [Record<T>], lastTimestamp: Timestamp, storageClient: Sync15CollectionClient<T>, onUpload: (POSTResult, Timestamp?) -> DeferredTimestamp) -> DeferredTimestamp {
+    func uploadRecords<T>(_ records: [Record<T>], lastTimestamp: Timestamp, storageClient: Sync15CollectionClient<T>, onUpload: @escaping (POSTResult, Timestamp?) -> DeferredTimestamp) -> DeferredTimestamp {
         if records.isEmpty {
             log.debug("No modified records to upload.")
             return deferMaybe(lastTimestamp)
