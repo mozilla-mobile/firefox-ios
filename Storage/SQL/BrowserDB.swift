@@ -31,7 +31,7 @@ fileprivate func > <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
   }
 }
 
-public let NotificationDatabaseWasRecreated = "NotificationDatabaseWasRecreated"
+public let NotificationDatabaseWasRecreated = Notification.Name("NotificationDatabaseWasRecreated")
 
 private let log = Logger.syncLogger
 
@@ -253,8 +253,7 @@ open class BrowserDB {
 
                 // Notify the world that we moved the database. This allows us to
                 // reset sync and start over in the case of corruption.
-                let notification = NotificationDatabaseWasRecreated
-                notify = Notification(name: Notification.Name(rawValue: notification), object: self.filename)
+                notify = Notification(name: NotificationDatabaseWasRecreated , object: self.filename)
             } catch _ {
                 success = false
             }
