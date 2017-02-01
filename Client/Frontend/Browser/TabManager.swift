@@ -310,7 +310,7 @@ class TabManager: NSObject {
                 // We definitely have a homepage if we've got here 
                 // (so we can safely dereference it).
                 let url = HomePageAccessors.getHomePage(prefs)!
-                tab.loadRequest(URLRequest(URL: url))
+                tab.loadRequest(URLRequest(url: url))
             case .blankPage:
                 // Do nothing: we're already seeing a blank page.
                 break
@@ -532,7 +532,7 @@ extension TabManager {
         var jsonDictionary: [String: AnyObject] {
             let title: String = self.title ?? "null"
             let faviconURL: String = self.faviconURL ?? "null"
-            let uuid: String = String(self.screenshotUUID ?? "null")
+            let uuid: String = self.screenshotUUID?.uuidString ?? "null"
 
             var json: [String: AnyObject] = [
                 "title": title as AnyObject,
@@ -672,7 +672,7 @@ extension TabManager {
             let tab = self.addTab(URLRequest(), configuration: nil, afterTab: nil, flushToDisk: false, zombie: true, isPrivate: savedTab.isPrivate)
 
             if let faviconURL = savedTab.faviconURL {
-                let icon = Favicon(url: faviconURL, date: Date(), type: IconType.NoneFound)
+                let icon = Favicon(url: faviconURL, date: Date(), type: IconType.noneFound)
                 icon.width = 1
                 tab.favicons.append(icon)
             }
@@ -682,7 +682,7 @@ extension TabManager {
             if let screenshotUUID = savedTab.screenshotUUID,
                let imageStore = self.imageStore {
                 tab.screenshotUUID = screenshotUUID
-                imageStore.get(screenshotUUID.UUIDString) >>== { screenshot in
+                imageStore.get(screenshotUUID.uuidString) >>== { screenshot in
                     if tab.screenshotUUID == screenshotUUID {
                         tab.setScreenshot(screenshot, revUUID: false)
                     }

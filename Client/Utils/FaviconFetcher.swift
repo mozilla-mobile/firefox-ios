@@ -146,7 +146,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
                 }
 
                 if (href.endsWith(".ico")) {
-                    iconType = .Guess
+                    iconType = .guess
                 }
 
                 if let type = iconType, !bestType.isPreferredTo(type), let iconUrl = NSURL(string: href, relativeTo: url as URL), let absoluteString = iconUrl.absoluteString {
@@ -164,7 +164,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
 
                 // If we haven't got any options icons, then use the default at the root of the domain.
                 if let url = NSURL(string: "/favicon.ico", relativeTo: url as URL), icons.isEmpty, let absoluteString = url.absoluteString {
-                    let icon = Favicon(url: absoluteString, date: NSDate() as Date, type: .Guess)
+                    let icon = Favicon(url: absoluteString, date: NSDate() as Date, type: .guess)
                     icons = [icon]
                 }
 

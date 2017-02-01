@@ -85,7 +85,11 @@ class OpenWithSettingsViewController: UITableViewController {
 
     func reloadMailProviderSource() {
         if let path = Bundle.main.path(forResource: "MailSchemes", ofType: "plist"), let dictRoot = NSArray(contentsOfFile: path) {
-            mailProviderSource = dictRoot.map {  dict in (name: dict["name"] as! String, scheme: dict["scheme"] as! String, enabled: canOpenMailScheme(dict["scheme"] as! String)) }
+            mailProviderSource = dictRoot.map {  dict in
+                let nsDict = dict as! NSDictionary
+                return (name: nsDict["name"] as! String, scheme: nsDict["scheme"] as! String,
+                        enabled: canOpenMailScheme(nsDict["scheme"] as! String))
+            }
         }
     }
 

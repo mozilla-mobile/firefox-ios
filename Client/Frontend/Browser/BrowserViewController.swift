@@ -471,7 +471,7 @@ class BrowserViewController: UIViewController {
         }
 
         header.snp.makeConstraints { make in
-            scrollController.headerTopConstraint = make.top.equalTo(snp.topLayoutGuideBottom).constraint
+            scrollController.headerTopConstraint = make.top.equalTo(self.topLayoutGuide.snp.bottom).constraint
             make.left.right.equalTo(self.view)
         }
 

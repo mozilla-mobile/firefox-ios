@@ -30,7 +30,10 @@ extension UIColor {
 
     fileprivate var isDarkColor: Bool {
         let RGB = self.cgColor.components
-        return (0.2126 * RGB[0] + 0.7152 * RGB[1] + 0.0722 * RGB[2]) < 0.5
+        let r = 0.2126 * RGB[0]
+        let g = 0.7152 * RGB[1]
+        let b = 0.0722 * RGB[2]
+        return r + g + b < 0.5
     }
 
     public var isBlackOrWhite: Bool {
@@ -72,8 +75,17 @@ extension UIColor {
         let bg = self.cgColor.components
         let fg = compareColor.cgColor.components
 
-        let bgLum = 0.2126 * bg[0] + 0.7152 * bg[1] + 0.0722 * bg[2]
-        let fgLum = 0.2126 * fg[0] + 0.7152 * fg[1] + 0.0722 * fg[2]
+
+        let bgLumR = 0.2126 * bg[0]
+        let bgLumG = 0.7152 * bg[1]
+        let bgLumB = 0.0722 * bg[2]
+        let bgLum = bgLumR + bgLumG + bgLumB
+
+
+        let fgLumR = 0.2126 * fg[0]
+        let fgLumG = 0.7152 * fg[1]
+        let fgLumB = 0.0722 * fg[2]
+        let fgLum = fgLumR + fgLumG + fgLumB
 
         let bgGreater = bgLum > fgLum
         let nom = bgGreater ? bgLum : fgLum

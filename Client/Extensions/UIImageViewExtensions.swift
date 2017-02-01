@@ -20,7 +20,7 @@ public extension UIImageView {
                 return
             }
             self.image = image
-            self.backgroundColor = UIColor.whiteColor()
+            self.backgroundColor = UIColor.white
         }
     }
 
