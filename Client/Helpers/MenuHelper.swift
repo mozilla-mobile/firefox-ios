@@ -5,28 +5,28 @@
 import Foundation
 
 @objc public protocol MenuHelperInterface {
-    optional func menuHelperCopy(sender: NSNotification)
-    optional func menuHelperOpenAndFill(sender: NSNotification)
-    optional func menuHelperReveal(sender: NSNotification)
-    optional func menuHelperSecure(sender: NSNotification)
-    optional func menuHelperFindInPage(sender: NSNotification)
+    @objc optional func menuHelperCopy(_ sender: Notification)
+    @objc optional func menuHelperOpenAndFill(_ sender: Notification)
+    @objc optional func menuHelperReveal(_ sender: Notification)
+    @objc optional func menuHelperSecure(_ sender: Notification)
+    @objc optional func menuHelperFindInPage(_ sender: Notification)
 }
 
-public class MenuHelper: NSObject {
-    public static let SelectorCopy: Selector = #selector(MenuHelperInterface.menuHelperCopy(_:))
-    public static let SelectorHide: Selector = #selector(MenuHelperInterface.menuHelperSecure(_:))
-    public static let SelectorOpenAndFill: Selector = #selector(MenuHelperInterface.menuHelperOpenAndFill(_:))
-    public static let SelectorReveal: Selector = #selector(MenuHelperInterface.menuHelperReveal(_:))
-    public static let SelectorFindInPage: Selector = #selector(MenuHelperInterface.menuHelperFindInPage(_:))
+open class MenuHelper: NSObject {
+    open static let SelectorCopy: Selector = #selector(MenuHelperInterface.menuHelperCopy(_:))
+    open static let SelectorHide: Selector = #selector(MenuHelperInterface.menuHelperSecure(_:))
+    open static let SelectorOpenAndFill: Selector = #selector(MenuHelperInterface.menuHelperOpenAndFill(_:))
+    open static let SelectorReveal: Selector = #selector(MenuHelperInterface.menuHelperReveal(_:))
+    open static let SelectorFindInPage: Selector = #selector(MenuHelperInterface.menuHelperFindInPage(_:))
 
-    public class var defaultHelper: MenuHelper {
+    open class var defaultHelper: MenuHelper {
         struct Singleton {
             static let instance = MenuHelper()
         }
         return Singleton.instance
     }
 
-    public func setItems() {
+    open func setItems() {
         let revealPasswordTitle = NSLocalizedString("Reveal", tableName: "LoginManager", comment: "Reveal password text selection menu item")
         let revealPasswordItem = UIMenuItem(title: revealPasswordTitle, action: MenuHelper.SelectorReveal)
 
@@ -42,6 +42,6 @@ public class MenuHelper: NSObject {
         let findInPageTitle = NSLocalizedString("Find in Page", tableName: "FindInPage", comment: "Text selection menu item")
         let findInPageItem = UIMenuItem(title: findInPageTitle, action: MenuHelper.SelectorFindInPage)
 
-        UIMenuController.sharedMenuController().menuItems = [copyItem, revealPasswordItem, hidePasswordItem, openAndFillItem, findInPageItem]
+        UIMenuController.shared.menuItems = [copyItem, revealPasswordItem, hidePasswordItem, openAndFillItem, findInPageItem]
     }
 }

@@ -11,7 +11,7 @@ struct NewTabAccessors {
     static let PrefKey = PrefsKeys.KeyNewTab
     static let Default = NewTabPage.TopSites
 
-    static func getNewTabPage(prefs: Prefs) -> NewTabPage {
+    static func getNewTabPage(_ prefs: Prefs) -> NewTabPage {
         guard let raw = prefs.stringForKey(PrefKey) else {
             return Default
         }
@@ -24,7 +24,7 @@ struct NewTabAccessors {
         return option
     }
 
-    static func getNewTabPage(state: AppState) -> NewTabPage {
+    static func getNewTabPage(_ state: AppState) -> NewTabPage {
         return getNewTabPage(Accessors.getPrefs(state))
     }
 }
@@ -58,23 +58,23 @@ enum NewTabPage: String {
     var homePanelType: HomePanelType? {
         switch self {
         case .TopSites:
-            return HomePanelType.TopSites
+            return HomePanelType.topSites
         case .Bookmarks:
-            return HomePanelType.Bookmarks
+            return HomePanelType.bookmarks
         case .History:
-            return HomePanelType.History
+            return HomePanelType.history
         case .ReadingList:
-            return HomePanelType.ReadingList
+            return HomePanelType.readingList
         default:
             return nil
         }
     }
 
-    var url: NSURL? {
+    var url: URL? {
         guard let homePanel = self.homePanelType else {
             return nil
         }
-        return homePanel.localhostURL
+        return homePanel.localhostURL as URL
     }
 
     static let allValues = [BlankPage, TopSites, Bookmarks, History, ReadingList, HomePage]

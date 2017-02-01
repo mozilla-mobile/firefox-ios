@@ -8,32 +8,32 @@ import SwiftKeychainWrapper
 import LocalAuthentication
 
 class AppAuthenticator {
-    static func presentAuthenticationUsingInfo(authenticationInfo: AuthenticationKeychainInfo, touchIDReason: String, success: (() -> Void)?, cancel: (() -> Void)?, fallback: (() -> Void)?) {
+    static func presentAuthenticationUsingInfo(_ authenticationInfo: AuthenticationKeychainInfo, touchIDReason: String, success: (() -> Void)?, cancel: (() -> Void)?, fallback: (() -> Void)?) {
         if authenticationInfo.useTouchID {
             let localAuthContext = LAContext()
             localAuthContext.localizedFallbackTitle = AuthenticationStrings.enterPasscode
-            localAuthContext.evaluatePolicy(.DeviceOwnerAuthenticationWithBiometrics, localizedReason: touchIDReason) { didSucceed, error in
+            localAuthContext.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: touchIDReason) { didSucceed, error in
                 if didSucceed {
                     // Update our authentication info's last validation timestamp so we don't ask again based
                     // on the set required interval
                     authenticationInfo.recordValidation()
-                    KeychainWrapper.defaultKeychainWrapper().setAuthenticationInfo(authenticationInfo)
-                    dispatch_async(dispatch_get_main_queue()) {
+                    KeychainWrapper.defaultKeychainWrapper.setAuthenticationInfo(authenticationInfo)
+                    DispatchQueue.main.async {
                         success?()
                     }
                     return
                 }
 
                 guard let authError = error,
-                          code = LAError(rawValue: authError.code) else {
+                          let code = LAError.Code(rawValue: authError.code) else {
                     return
                 }
 
-                dispatch_async(dispatch_get_main_queue()) {
+                DispatchQueue.main.async {
                     switch code {
-                    case .UserFallback, .TouchIDNotEnrolled, .TouchIDNotAvailable, .TouchIDLockout:
+                    case .userFallback, .touchIDNotEnrolled, .touchIDNotAvailable, .touchIDLockout:
                         fallback?()
-                    case .UserCancel:
+                    case .userCancel:
                         cancel?()
                     default:
                         cancel?()
@@ -45,11 +45,11 @@ class AppAuthenticator {
         }
     }
 
-    static func presentPasscodeAuthentication(presentingNavController: UINavigationController?, delegate: PasscodeEntryDelegate?) {
+    static func presentPasscodeAuthentication(_ presentingNavController: UINavigationController?, delegate: PasscodeEntryDelegate?) {
         let passcodeVC = PasscodeEntryViewController()
         passcodeVC.delegate = delegate
         let navController = UINavigationController(rootViewController: passcodeVC)
-        navController.modalPresentationStyle = .FormSheet
-        presentingNavController?.presentViewController(navController, animated: true, completion: nil)
+        navController.modalPresentationStyle = .formSheet
+        presentingNavController?.present(navController, animated: true, completion: nil)
     }
 }

@@ -10,7 +10,7 @@ class ThirdPartySearchAlerts: UIAlertController {
     /**
     Allows the keyboard to pop back up after an alertview.
     **/
-    override func canBecomeFirstResponder() -> Bool {
+    override var canBecomeFirstResponder : Bool {
         return false
     }
 
@@ -22,22 +22,22 @@ class ThirdPartySearchAlerts: UIAlertController {
      - returns: UIAlertController for asking the user to add a search engine
      **/
 
-    static func addThirdPartySearchEngine(okayCallback: (UIAlertAction) -> Void) -> UIAlertController {
+    static func addThirdPartySearchEngine(_ okayCallback: @escaping (UIAlertAction) -> Void) -> UIAlertController {
         let alert = ThirdPartySearchAlerts(
             title: Strings.ThirdPartySearchAddTitle,
             message: Strings.ThirdPartySearchAddMessage,
-            preferredStyle: UIAlertControllerStyle.Alert
+            preferredStyle: UIAlertControllerStyle.alert
         )
 
         let noOption = UIAlertAction(
             title: Strings.ThirdPartySearchCancelButton,
-            style: UIAlertActionStyle.Cancel,
+            style: UIAlertActionStyle.cancel,
             handler: nil
         )
 
         let okayOption = UIAlertAction(
             title: Strings.ThirdPartySearchOkayButton,
-            style: UIAlertActionStyle.Default,
+            style: UIAlertActionStyle.default,
             handler: okayCallback
         )
 
@@ -57,12 +57,12 @@ class ThirdPartySearchAlerts: UIAlertController {
         let alert = ThirdPartySearchAlerts(
             title: Strings.ThirdPartySearchFailedTitle,
             message: Strings.ThirdPartySearchFailedMessage,
-            preferredStyle: UIAlertControllerStyle.Alert
+            preferredStyle: UIAlertControllerStyle.alert
         )
 
         let okayOption = UIAlertAction(
             title: Strings.ThirdPartySearchOkayButton,
-            style: UIAlertActionStyle.Default,
+            style: UIAlertActionStyle.default,
             handler: nil
         )
 
@@ -74,12 +74,12 @@ class ThirdPartySearchAlerts: UIAlertController {
         let alert = ThirdPartySearchAlerts(
             title: Strings.CustomEngineFormErrorTitle,
             message: Strings.CustomEngineFormErrorMessage,
-            preferredStyle: UIAlertControllerStyle.Alert
+            preferredStyle: UIAlertControllerStyle.alert
         )
         
         let okayOption = UIAlertAction(
             title: Strings.ThirdPartySearchOkayButton,
-            style: UIAlertActionStyle.Default,
+            style: UIAlertActionStyle.default,
             handler: nil
         )
         
