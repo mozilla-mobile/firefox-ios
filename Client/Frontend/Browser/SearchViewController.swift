@@ -180,7 +180,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         // If we're not showing search suggestions, the default search engine won't be visible
         // at the top of the table. Show it with the others in the bottom search bar.
         if isPrivate || !searchEngines.shouldShowSearchSuggestions {
-            engines.insert(searchEngines.defaultEngine, at: 0)
+            engines?.insert(searchEngines.defaultEngine, at: 0)
         }
 
         return engines!

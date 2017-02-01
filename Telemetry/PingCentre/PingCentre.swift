@@ -76,7 +76,7 @@ class DefaultPingCentreImpl: PingCentreClient {
         self.validationQueue = validationQueue
     }
 
-    func sendPing(_ data: [String: Any], validate: Bool) -> Success {
+    public func sendPing(_ data: [String: Any], validate: Bool) -> Success {
         var payload = data
         payload["topic"] = topic.name
         payload["client_id"] = clientID

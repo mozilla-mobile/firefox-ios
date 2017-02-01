@@ -1082,7 +1082,7 @@ class BrowserViewController: UIViewController {
 
         switchToPrivacyMode(isPrivate: isPrivate)
         tabManager.addTabAndSelect(request, isPrivate: isPrivate)
-        if url == nil && NewTabAccessors.getNewTabPage(profile.prefs) == .BlankPage {
+        if url == nil && NewTabAccessors.getNewTabPage(profile.prefs) == .blankPage {
             urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
         }
     }
@@ -1630,7 +1630,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidEnterOverlayMode(_ urlBar: URLBarView) {
-        if .BlankPage == NewTabAccessors.getNewTabPage(profile.prefs) {
+        if .blankPage == NewTabAccessors.getNewTabPage(profile.prefs) {
             UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
         } else {
             showHomePanelController(inline: false)
