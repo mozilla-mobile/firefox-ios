@@ -6,6 +6,8 @@ import Account
 import Shared
 import UIKit
 import XCGLogger
+import SwiftyJSON
+
 
 
 // The following are only here because we use master for L10N and otherwise these strings would disappear from the v1.0 release

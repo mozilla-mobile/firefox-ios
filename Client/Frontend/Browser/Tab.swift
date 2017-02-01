@@ -6,7 +6,7 @@ import Foundation
 import WebKit
 import Storage
 import Shared
-
+import SwiftyJSON
 import XCGLogger
 
 private let log = Logger.browserLogger

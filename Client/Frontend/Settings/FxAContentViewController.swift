@@ -7,6 +7,7 @@ import Shared
 import SnapKit
 import UIKit
 import WebKit
+import SwiftyJSON
 
 protocol FxAContentViewControllerDelegate: class {
     func contentViewControllerDidSignIn(_ viewController: FxAContentViewController, data: JSON) -> Void
