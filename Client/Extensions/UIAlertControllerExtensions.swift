@@ -63,7 +63,7 @@ extension UIAlertController {
 
     - returns: UIAlertController for asking the user to restore tabs after a crash
     */
-    class func restoreTabsAlert(_ okayCallback: @escaping UIAlertActionCallback, noCallback: @escaping UIAlertActionCallback) -> UIAlertController {
+    class func restoreTabsAlert(okayCallback: @escaping UIAlertActionCallback, noCallback: @escaping UIAlertActionCallback) -> UIAlertController {
         let alert = UIAlertController(
             title: NSLocalizedString("Well, this is embarrassing.", comment: "Restore Tabs Prompt Title"),
             message: NSLocalizedString("Looks like Firefox crashed previously. Would you like to restore your tabs?", comment: "Restore Tabs Prompt Description"),
@@ -87,7 +87,7 @@ extension UIAlertController {
         return alert
     }
 
-    class func clearPrivateDataAlert(_ okayCallback: @escaping (UIAlertAction) -> Void) -> UIAlertController {
+    class func clearPrivateDataAlert(okayCallback: @escaping (UIAlertAction) -> Void) -> UIAlertController {
         let alert = UIAlertController(
             title: "",
             message: NSLocalizedString("This action will clear all of your private data. It cannot be undone.", tableName: "ClearPrivateDataConfirm", comment: "Description of the confirmation dialog shown when a user tries to clear their private data."),
@@ -119,7 +119,7 @@ extension UIAlertController {
      - returns: UIAlertController for asking the user to restore tabs after a crash
      */
 
-    class func clearSyncedHistoryAlert(_ okayCallback: @escaping (UIAlertAction) -> Void) -> UIAlertController {
+    class func clearSyncedHistoryAlert(okayCallback: @escaping (UIAlertAction) -> Void) -> UIAlertController {
         let alert = UIAlertController(
             title: "",
             message: NSLocalizedString("This action will clear all of your private data, including history from your synced devices.", tableName: "ClearHistoryConfirm", comment: "Description of the confirmation dialog shown when a user tries to clear history that's synced to another device."),

@@ -86,7 +86,7 @@ class ContextMenuHelper: NSObject, TabHelper, UIGestureRecognizerDelegate {
 
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         // Hack to detect the built-in text selection gesture recognizer.
-        if let otherDelegate = otherGestureRecognizer.delegate, String(otherDelegate).contains("_UIKeyboardBasedNonEditableTextSelectionGestureController") {
+        if let otherDelegate = otherGestureRecognizer.delegate, String(describing: otherDelegate).contains("_UIKeyboardBasedNonEditableTextSelectionGestureController") {
             selectionGestureRecognizer = otherGestureRecognizer
         }
 

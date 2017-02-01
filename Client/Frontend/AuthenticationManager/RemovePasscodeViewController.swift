@@ -38,7 +38,7 @@ class RemovePasscodeViewController: PagingPasscodeViewController, PasscodeInputV
     func passcodeInputView(_ inputView: PasscodeInputView, didFinishEnteringCode code: String) {
         if code != authenticationInfo?.passcode {
             panes[currentPaneIndex].shakePasscode()
-            failIncorrectPasscode(inputView: inputView)
+            failIncorrectPasscode(inputView)
             return
         }
 

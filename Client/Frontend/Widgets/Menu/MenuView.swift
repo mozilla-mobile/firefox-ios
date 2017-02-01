@@ -319,7 +319,7 @@ class MenuView: UIView {
             let cornerRadius = cornerRadius else { return }
         // if we have no toolbar items, we won't display a toolbar so we should round the corners of the menuContainerView
         if toolbarItems.count == 0 {
-            menuContainerView.addRoundedCorners(cornersToRound: cornersToRound, cornerRadius: cornerRadius, color: menuColor)
+            menuContainerView.addRoundedCorners(cornersToRound, cornerRadius: cornerRadius, color: menuColor)
         } else {
             toolbar.cornerRadius = cornerRadius
             toolbar.cornersToRound = cornersToRound
