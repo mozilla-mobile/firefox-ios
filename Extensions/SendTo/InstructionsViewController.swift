@@ -13,16 +13,16 @@ struct InstructionsViewControllerUX {
 }
 
 protocol InstructionsViewControllerDelegate: class {
-    func instructionsViewControllerDidClose(instructionsViewController: InstructionsViewController)
+    func instructionsViewControllerDidClose(_ instructionsViewController: InstructionsViewController)
 }
 
-private func highlightLink(s: NSString, withColor color: UIColor) -> NSAttributedString {
+private func highlightLink(s: String, withColor color: UIColor) -> NSAttributedString {
     let start = s.range(of: "<")
     if start.location == NSNotFound {
         return NSAttributedString(string: s as String)
     }
 
-    var s: NSString = s.replacingCharacters(in: start, with: "") as NSString
+    var s: String = s.replacingCharacters(in: start, with: "")
     let end = s.range(of: ">")
     s = s.replacingCharacters(in: end, with: "") as NSString
     let a = NSMutableAttributedString(string: s as String)
@@ -31,7 +31,7 @@ private func highlightLink(s: NSString, withColor color: UIColor) -> NSAttribute
     return a
 }
 
-func setupHelpView(view: UIView, introText: String, showMeText: String) {
+func setupHelpView(_ view: UIView, introText: String, showMeText: String) {
     let imageView = UIImageView()
     imageView.image = UIImage(named: "emptySync")
     view.addSubview(imageView)
@@ -74,7 +74,7 @@ class InstructionsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        edgesForExtendedLayout = .none
+        edgesForExtendedLayout = UIRectEdge.none
         view.backgroundColor = UIColor.white
 
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Close", tableName: "SendTo", comment: "Close button in top navigation bar"), style: UIBarButtonItemStyle.done, target: self, action: #selector(InstructionsViewController.close))

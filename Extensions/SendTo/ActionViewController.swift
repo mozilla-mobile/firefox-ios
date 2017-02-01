@@ -52,20 +52,20 @@ class ActionViewController: UIViewController, ClientPickerViewControllerDelegate
         self.extensionContext!.completeRequest(returningItems: nil, completionHandler: nil)
     }
 
-    func clientPickerViewController(clientPickerViewController: ClientPickerViewController, didPickClients clients: [RemoteClient]) {
+    func clientPickerViewController(_ clientPickerViewController: ClientPickerViewController, didPickClients clients: [RemoteClient]) {
         // TODO: hook up Send Tab via Sync.
         // profile?.clients.sendItem(self.sharedItem!, toClients: clients)
         if let item = sharedItem {
-            self.profile.sendItems([item], toClients: clients)
+            self.profile.sendItems(items: [item], toClients: clients)
         }
         finish()
     }
     
-    func clientPickerViewControllerDidCancel(clientPickerViewController: ClientPickerViewController) {
+    func clientPickerViewControllerDidCancel(_ clientPickerViewController: ClientPickerViewController) {
         finish()
     }
 
-    func instructionsViewControllerDidClose(instructionsViewController: InstructionsViewController) {
+    func instructionsViewControllerDidClose(_ instructionsViewController: InstructionsViewController) {
         finish()
     }
 }
