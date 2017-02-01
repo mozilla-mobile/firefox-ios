@@ -29,9 +29,9 @@ class ToggleButton: UIButton {
         if selected {
             var rect = CGRect(origin: CGPoint.zero, size: UX.BackgroundSize)
             rect.center = maskShapeLayer.position
-            CGPathAddEllipseInRect(path, nil, rect)
+            path.addEllipse(in: rect)
         } else {
-            CGPathAddEllipseInRect(path, nil, CGRect(origin: maskShapeLayer.position, size: CGSize.zero))
+            path.addEllipse(in: CGRect(origin: maskShapeLayer.position, size: CGSize.zero))
         }
         self.maskShapeLayer.path = path
     }
@@ -44,14 +44,14 @@ class ToggleButton: UIButton {
             let animation = CAKeyframeAnimation(keyPath: "path")
 
             let startPath = CGMutablePath()
-            CGPathAddEllipseInRect(startPath, nil, CGRect(origin: maskShapeLayer.position, size: CGSize.zero))
+            startPath.addEllipse(in: CGRect(origin: maskShapeLayer.position, size: CGSize.zero))
 
             let largerPath = CGMutablePath()
             let largerBounds = endFrame.insetBy(dx: -UX.ExpandDelta, dy: -UX.ExpandDelta)
-            CGPathAddEllipseInRect(largerPath, nil, largerBounds)
+            largerPath.addEllipse(in: largerBounds)
 
             let endPath = CGMutablePath()
-            CGPathAddEllipseInRect(endPath, nil, endFrame)
+            endPath.addEllipse(in: endFrame)
 
             animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
             animation.values = [
@@ -68,12 +68,12 @@ class ToggleButton: UIButton {
             animation.fillMode = kCAFillModeForwards
 
             let fromPath = CGMutablePath()
-            CGPathAddEllipseInRect(fromPath, nil, endFrame)
+            fromPath.addEllipse(in: endFrame)
             animation.fromValue = fromPath
             animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
 
             let toPath = CGMutablePath()
-            CGPathAddEllipseInRect(toPath, nil, CGRect(origin: self.maskShapeLayer.bounds.center, size: CGSize.zero))
+            toPath.addEllipse(in: CGRect(origin: self.maskShapeLayer.bounds.center, size: CGSize.zero))
 
             self.maskShapeLayer.path = toPath
             self.maskShapeLayer.add(animation, forKey: "shrink")
