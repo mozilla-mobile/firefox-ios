@@ -19,7 +19,7 @@ class SearchTelemetry {
 
     fileprivate init() {}
 
-    class func makeEvent(engine: OpenSearchEngine, source: Source) -> TelemetryEvent {
+    class func makeEvent(_ engine: OpenSearchEngine, source: Source) -> TelemetryEvent {
         let engineID = engine.engineID ?? "other"
         return SearchTelemetryEvent(engineWithSource: "\(engineID).\(source.rawValue)")
     }

@@ -75,7 +75,7 @@ class DefaultPingCentreImpl: PingCentreClient {
     fileprivate static let queueLabel = "org.mozilla.pingcentre.validationQueue"
 
     init(topic: PingCentreTopic, endpoint: Endpoint, clientID: String,
-         validationQueue: DispatchQueue = dispatch_queue_create(queueLabel, nil),
+         validationQueue: DispatchQueue = DispatchQueue(queueLabel, nil),
          manager: SessionManager = SessionManager()) {
         self.topic = topic
         self.clientID = clientID
@@ -106,7 +106,7 @@ class DefaultPingCentreImpl: PingCentreClient {
             return deferred
         }
         
-        self.manager.request(request)
+        self.manager.request(request as! URLRequestConvertible)
                     .validate(statusCode: 200..<300)
                     .response(queue: dispatch_get_global_queue(DispatchQueue.GlobalQueuePriority.default, 0)) { _, _, _, error in
             if let e = error {

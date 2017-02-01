@@ -11,7 +11,7 @@ import WebKit
 protocol TabPeekDelegate: class {
     func tabPeekDidAddBookmark(_ tab: Tab)
     func tabPeekDidAddToReadingList(_ tab: Tab) -> ReadingListClientRecord?
-    func tabPeekRequestsPresentationOf(viewController: UIViewController)
+    func tabPeekRequestsPresentationOf(_ viewController: UIViewController)
     func tabPeekDidCloseTab(_ tab: Tab)
 }
 
@@ -54,7 +54,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
             if self.hasRemoteClients {
                 actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionSendToDevice, style: .default) { previewAction, viewController in
                     guard let clientPicker = self.clientPicker else { return }
-                    self.delegate?.tabPeekRequestsPresentationOf(viewController: clientPicker)
+                    self.delegate?.tabPeekRequestsPresentationOf(clientPicker)
                     })
             }
             // only add the copy URL action if we don't already have 3 items in our list

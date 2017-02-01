@@ -417,7 +417,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
     }
 }
 
-private class IntroOverlayScrollView: UIScrollView {
+fileprivate class IntroOverlayScrollView: UIScrollView {
     weak var signinButton: UIButton?
 
     fileprivate override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {

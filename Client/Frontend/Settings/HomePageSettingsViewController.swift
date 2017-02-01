@@ -64,7 +64,7 @@ class HomePageSettingsViewController: SettingsTableViewController {
                 onClick: setHomePage(nil)),
             ]
 
-        var settings: [SettingSection] = [
+        let settings: [SettingSection] = [
             SettingSection(title: NSAttributedString(string: Strings.SettingsHomePageURLSectionTitle), children: basicSettings),
             SettingSection(children: [
                 BoolSetting(prefs: prefs,

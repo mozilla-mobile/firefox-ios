@@ -43,7 +43,7 @@ class NotificationRootViewController: UIViewController {
         notificationCenter.addObserver(self, selector: #selector(NotificationRootViewController.didStartSyncing), name: NotificationProfileDidStartSyncing, object: nil)
         notificationCenter.addObserver(self, selector: #selector(NotificationRootViewController.didFinishSyncing(_:)), name: NotificationProfileDidFinishSyncing, object: nil)
         notificationCenter.addObserver(self, selector: #selector(NotificationRootViewController.fxaAccountDidChange), name: NotificationFirefoxAccountChanged, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(NotificationRootViewController.userDidInitiateSync), name: NSNotification.Name(rawValue: SyncNowSetting.NotificationUserInitiatedSyncManually), object: nil)
+        notificationCenter.addObserver(self, selector: #selector(NotificationRootViewController.userDidInitiateSync), name: Notification.Name(rawValue: SyncNowSetting.NotificationUserInitiatedSyncManually), object: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -54,7 +54,7 @@ class NotificationRootViewController: UIViewController {
         notificationCenter.removeObserver(self, name: NotificationProfileDidStartSyncing, object: nil)
         notificationCenter.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
         notificationCenter.removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
-        notificationCenter.removeObserver(self, name: NSNotification.Name(rawValue: SyncNowSetting.NotificationUserInitiatedSyncManually), object: nil)
+        notificationCenter.removeObserver(self, name: Notification.Name(rawValue: SyncNowSetting.NotificationUserInitiatedSyncManually), object: nil)
     }
 }
 
@@ -103,7 +103,7 @@ extension NotificationRootViewController {
 
 // MARK: - Notification API
 extension NotificationRootViewController {
-    func showStatusNotification(animated: Bool = true, duration: NotificationDuration = .short, withEllipsis: Bool = false) {
+    func showStatusNotification(_ animated: Bool = true, duration: NotificationDuration = .short, withEllipsis: Bool = false) {
         assert(Thread.isMainThread, "Showing notifications must occur on the UI Thread.")
 
         if let activeTimer = notificationTimer {
@@ -141,7 +141,7 @@ extension NotificationRootViewController {
         notificationTimer = timer
     }
 
-    func hideStatusNotification(animated: Bool = true) {
+    func hideStatusNotification(_ animated: Bool = true) {
         assert(Thread.isMainThread, "Hiding notifications must occur on the UI Thread.")
 
         if let activeTimer = notificationTimer {
@@ -217,8 +217,8 @@ private extension NotificationRootViewController {
         DispatchQueue.main.async {
             self.notificationView.titleLabel.text = self.syncTitle ?? Strings.SyncingMessageWithoutEllipsis
             if self.showingNotification {
-                self.hideStatusNotification(animated: false)
-                self.showStatusNotification(animated: false, withEllipsis: true)
+                self.hideStatusNotification(false)
+                self.showStatusNotification(false, withEllipsis: true)
             } else {
                 self.showStatusNotification(withEllipsis: true)
             }
@@ -247,7 +247,7 @@ private extension NotificationRootViewController {
         defer {
             if let syncMessage = notificationView.titleLabel.attributedText {
                 DispatchQueue.main.async {
-                    self.showStatusNotification(animated: !self.showingNotification, duration: .short, withEllipsis: false)
+                    self.showStatusNotification(!self.showingNotification, duration: .short, withEllipsis: false)
                 }
             } else if showingNotification {
                 showNotificationForSync = false

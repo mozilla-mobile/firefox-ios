@@ -72,7 +72,7 @@ extension BasePasscodeViewController {
         displayError(useNewPasscodeError)
     }
 
-    func failIncorrectPasscode(inputView: PasscodeInputView) {
+    func failIncorrectPasscode(_ inputView: PasscodeInputView) {
         authenticationInfo?.recordFailedAttempt()
         let numberOfAttempts = authenticationInfo?.failedAttempts ?? 0
         if numberOfAttempts == AllowedPasscodeFailedAttempts {

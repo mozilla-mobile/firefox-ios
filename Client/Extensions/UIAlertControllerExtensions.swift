@@ -20,7 +20,7 @@ extension UIAlertController {
     - returns: UIAlertController for opting into crash reporting after a crash occurred
     */
     class func crashOptInAlert(
-        sendReportCallback: @escaping UIAlertActionCallback,
+        _ sendReportCallback: @escaping UIAlertActionCallback,
         alwaysSendCallback: @escaping UIAlertActionCallback,
         dontSendCallback: @escaping UIAlertActionCallback) -> UIAlertController {
 
@@ -63,7 +63,7 @@ extension UIAlertController {
 
     - returns: UIAlertController for asking the user to restore tabs after a crash
     */
-    class func restoreTabsAlert(okayCallback: @escaping UIAlertActionCallback, noCallback: @escaping UIAlertActionCallback) -> UIAlertController {
+    class func restoreTabsAlert(_ okayCallback: @escaping UIAlertActionCallback, noCallback: @escaping UIAlertActionCallback) -> UIAlertController {
         let alert = UIAlertController(
             title: NSLocalizedString("Well, this is embarrassing.", comment: "Restore Tabs Prompt Title"),
             message: NSLocalizedString("Looks like Firefox crashed previously. Would you like to restore your tabs?", comment: "Restore Tabs Prompt Description"),

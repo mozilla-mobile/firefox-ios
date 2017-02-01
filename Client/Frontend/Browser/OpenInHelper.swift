@@ -35,7 +35,7 @@ protocol OpenInHelper {
 struct OpenIn {
     static let helpers: [OpenInHelper.Type] = [OpenPdfInHelper.self, OpenPassBookHelper.self, ShareFileHelper.self]
     
-    static func helperForResponse(response: URLResponse) -> OpenInHelper? {
+    static func helperForResponse(_ response: URLResponse) -> OpenInHelper? {
         return helpers.flatMap { $0.init(response: response) }.first
     }
 }
@@ -43,13 +43,13 @@ struct OpenIn {
 class ShareFileHelper: NSObject, OpenInHelper {
     var openInView: UIView? = nil
 
-    private var url: NSURL
+    fileprivate var url: URL
     var pathExtension: String?
 
     required init?(response: URLResponse) {
         guard let MIMEType = response.mimeType, !(MIMEType == MimeType.PASS.rawValue || MIMEType == MimeType.PDF.rawValue),
             let responseURL = response.url else { return nil }
-        url = responseURL as NSURL
+        url = (responseURL as NSURL) as URL
         super.init()
     }
 
@@ -76,7 +76,7 @@ class ShareFileHelper: NSObject, OpenInHelper {
 class OpenPassBookHelper: NSObject, OpenInHelper {
     var openInView: UIView? = nil
 
-    private var url: URL
+    fileprivate var url: URL
 
     required init?(response: URLResponse) {
         guard let MIMEType = response.mimeType, MIMEType == MimeType.PASS.rawValue && PKAddPassesViewController.canAddPasses(),
@@ -114,9 +114,9 @@ class OpenPassBookHelper: NSObject, OpenInHelper {
 }
 
 class OpenPdfInHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDelegate {
-    private var url: URL
-    private var docController: UIDocumentInteractionController? = nil
-    private var openInURL: URL?
+    fileprivate var url: URL
+    fileprivate var docController: UIDocumentInteractionController? = nil
+    fileprivate var openInURL: URL?
 
     lazy var openInView: UIView? = getOpenInView(self)()
 
@@ -124,17 +124,17 @@ class OpenPdfInHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDe
         return URL(string: NSTemporaryDirectory())!.appendingPathComponent("pdfs")
     }()
 
-    private var filepath: URL?
+    fileprivate var filepath: URL?
 
     required init?(response: URLResponse) {
         guard let MIMEType = response.mimeType, MIMEType == MimeType.PDF.rawValue && UIApplication.shared.canOpenURL(URL(string: "itms-books:")!),
             let responseURL = response.url else { return nil }
         url = responseURL
         super.init()
-        setFilePath(suggestedFilename: response.suggestedFilename ?? url.lastPathComponent )
+        setFilePath(response.suggestedFilename ?? url.lastPathComponent )
     }
 
-    private func setFilePath(suggestedFilename: String) {
+    fileprivate func setFilePath(_ suggestedFilename: String) {
         var filename = suggestedFilename
         let pathExtension = filename.asURL?.pathExtension
         if pathExtension == nil {

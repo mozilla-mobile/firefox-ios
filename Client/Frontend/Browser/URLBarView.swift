@@ -591,7 +591,7 @@ extension URLBarView: TabToolbarProtocol {
         }
     }
 
-    func updatePageStatus(isWebPage: Bool) {
+    func updatePageStatus(_ isWebPage: Bool) {
         stopReloadButton.isEnabled = isWebPage
         shareButton.isEnabled = isWebPage
     }

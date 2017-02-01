@@ -252,7 +252,7 @@ protocol TabTrayDelegate: class {
     func tabTrayDidDismiss(_ tabTray: TabTrayController)
     func tabTrayDidAddBookmark(_ tab: Tab)
     func tabTrayDidAddToReadingList(_ tab: Tab) -> ReadingListClientRecord?
-    func tabTrayRequestsPresentationOf(viewController: UIViewController)
+    func tabTrayRequestsPresentationOf(_ viewController: UIViewController)
 }
 
 struct TabTrayState {
@@ -296,7 +296,7 @@ class TabTrayController: UIViewController {
             }
 
             tabDataSource.tabs = tabsToDisplay
-            toolbar.styleToolbar(isPrivate: privateMode)
+            toolbar.styleToolbar(privateMode)
             collectionView?.reloadData()
         }
     }
@@ -823,7 +823,7 @@ extension TabTrayController: SettingsDelegate {
     }
 }
 
-private class TabManagerDataSource: NSObject, UICollectionViewDataSource {
+fileprivate class TabManagerDataSource: NSObject, UICollectionViewDataSource {
     unowned var cellDelegate: TabCellDelegate & SwipeAnimatorDelegate
     fileprivate var tabs: [Tab]
     fileprivate var tabManager: TabManager
@@ -919,7 +919,7 @@ private class TabManagerDataSource: NSObject, UICollectionViewDataSource {
     func didSelectTabAtIndex(_ index: Int)
 }
 
-private class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout {
+fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout {
     weak var tabSelectionDelegate: TabSelectionDelegate?
 
     fileprivate var traitCollection: UITraitCollection
@@ -989,7 +989,7 @@ struct EmptyPrivateTabsViewUX {
 }
 
 // View we display when there are no private tabs created
-private class EmptyPrivateTabsView: UIView {
+fileprivate class EmptyPrivateTabsView: UIView {
     fileprivate lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = EmptyPrivateTabsViewUX.TitleColor
@@ -1079,8 +1079,8 @@ extension TabTrayController: TabPeekDelegate {
         }
     }
 
-    func tabPeekRequestsPresentationOf(viewController: UIViewController) {
-        delegate?.tabTrayRequestsPresentationOf(viewController: viewController)
+    func tabPeekRequestsPresentationOf(_ viewController: UIViewController) {
+        delegate?.tabTrayRequestsPresentationOf(viewController)
     }
 }
 
@@ -1252,14 +1252,14 @@ class TrayToolbar: UIView {
             make.size.equalTo(toolbarButtonSize)
         }
 
-        styleToolbar(isPrivate: false)
+        styleToolbar(false)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    fileprivate func styleToolbar(isPrivate: Bool) {
+    fileprivate func styleToolbar(_ isPrivate: Bool) {
         addTabButton.tintColor = isPrivate ? .white : .darkGray
         menuButton.tintColor = isPrivate ? .white : .darkGray
         backgroundColor = isPrivate ? UIConstants.PrivateModeToolbarTintColor : .white

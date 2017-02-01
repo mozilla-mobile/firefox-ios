@@ -368,7 +368,7 @@ extension LoginListViewController: SearchInputViewDelegate {
 }
 
 /// Controller that keeps track of selected indexes
-private class ListSelectionController: NSObject {
+fileprivate class ListSelectionController: NSObject {
 
     fileprivate unowned let tableView: UITableView
 
@@ -566,7 +566,7 @@ class LoginDataSource: NSObject, UITableViewDataSource {
 }
 
 /// Empty state view when there is no logins to display.
-private class NoLoginsView: UIView {
+fileprivate class NoLoginsView: UIView {
 
     // We use the search bar height to maintain visual balance with the whitespace on this screen. The
     // title label is centered visually using the empty view + search bar height as the size to center with.
@@ -603,7 +603,7 @@ private class NoLoginsView: UIView {
 }
 
 /// View to display to the user while we are loading the logins
-private class LoadingLoginsView: UIView {
+fileprivate class LoadingLoginsView: UIView {
 
     var searchBarHeight: CGFloat = 0 {
         didSet {

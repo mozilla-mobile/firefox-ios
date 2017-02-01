@@ -86,7 +86,7 @@ class TopSiteItemCell: UICollectionViewCell {
         imageView.snp.makeConstraints { make in
             make.size.equalTo(TopSiteCellUX.IconSize)
             // Add an offset to the image to make it appear centered with the titleLabel
-            make.center.equalTo(self.snp.center).offset(UIEdgeInsets(top: -TopSiteCellUX.TitleHeight/2, left: 0, bottom: 0, right: 0))
+            make.center.equalTo(self.snp.center).offset(UIEdgeInsets(top: -TopSiteCellUX.TitleHeight/2, left: 0, bottom: 0, right: 0) as! ConstraintOffsetTarget)
         }
 
         selectedOverlay.snp.makeConstraints { make in

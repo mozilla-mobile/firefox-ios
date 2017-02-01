@@ -133,22 +133,22 @@ class ErrorPageHelper {
         self.certStore = certStore
 
         server.registerHandlerForMethod("GET", module: "errors", resource: "error.html", handler: { (request) -> GCDWebServerResponse! in
-            guard let url = request.URL.originalURLFromErrorURL else {
+            guard let url = request?.url.originalURLFromErrorURL else {
                 return GCDWebServerResponse(statusCode: 404)
             }
 
-            guard let index = self.redirecting.indexOf(url) else {
+            guard let index = self.redirecting.index(of: url) else {
                 return GCDWebServerDataResponse(redirect: url, permanent: false)
             }
 
-            self.redirecting.removeAtIndex(index)
+            self.redirecting.remove(at: index)
 
-            guard let code = request.query["code"] as? String,
+            guard let code = request?.query["code"] as? String,
                   let errCode = Int(code),
-                  let errDescription = request.query["description"] as? String,
-                  let errURLString = request.query["url"] as? String,
+                  let errDescription = request?.query["description"] as? String,
+                  let errURLString = request?.query["url"] as? String,
                   let errURLDomain = URL(string: errURLString)?.host,
-                  var errDomain = request.query["domain"] as? String else {
+                  var errDomain = request?.query["domain"] as? String else {
                 return GCDWebServerResponse(statusCode: 404)
             }
 
@@ -175,7 +175,7 @@ class ErrorPageHelper {
                 }
                 errDomain = ""
             } else if CertErrors.contains(errCode) {
-                guard let certError = request.query["certerror"] as? String else {
+                guard let certError = request?.query["certerror"] as? String else {
                     return GCDWebServerResponse(statusCode: 404)
                 }
 
@@ -195,9 +195,9 @@ class ErrorPageHelper {
             variables["actions"] = actions
 
             let response = GCDWebServerDataResponse(htmlTemplate: asset, variables: variables)
-            response.setValue("no cache", forAdditionalHeader: "Pragma")
-            response.setValue("no-cache,must-revalidate", forAdditionalHeader: "Cache-Control")
-            response.setValue(Date().description, forAdditionalHeader: "Expires")
+            response?.setValue("no cache", forAdditionalHeader: "Pragma")
+            response?.setValue("no-cache,must-revalidate", forAdditionalHeader: "Cache-Control")
+            response?.setValue(Date().description, forAdditionalHeader: "Expires")
             return response
         })
 

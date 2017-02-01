@@ -118,7 +118,7 @@ class Tab: NSObject {
                 lastUsed: NSDate.now(),
                 icon: nil)
         } else if let sessionData = tab.sessionData, !sessionData.urls.isEmpty {
-            let history = Array(sessionData.urls.filter(RemoteTab.shouldIncludeURL).reverse())
+            let history = Array(sessionData.urls.filter(RemoteTab.shouldIncludeURL).reversed())
             if let displayURL = history.first {
                 return RemoteTab(clientGUID: nil,
                     URL: displayURL,
@@ -312,7 +312,7 @@ class Tab: NSObject {
             webView?.customUserAgent = userAgent
 
             // Reload the initial URL to avoid UA specific redirection
-            loadRequest(PrivilegedRequest(url: currentItem.initialURL, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 60))
+            loadRequest(PrivilegedRequest(url: currentItem.initialURL, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 60) as URLRequest)
             return
         }
 
@@ -331,8 +331,8 @@ class Tab: NSObject {
         helperManager!.addHelper(helper, name: name)
     }
 
-    func getHelper(name: String) -> TabHelper? {
-        return helperManager?.getHelper(name: name)
+    func getHelper(_ name: String) -> TabHelper? {
+        return helperManager?.getHelper(name)
     }
 
     func hideContent(_ animated: Bool = false) {
@@ -486,7 +486,7 @@ private class HelperManager: NSObject, WKScriptMessageHandler {
         }
     }
 
-    func getHelper(name: String) -> TabHelper? {
+    func getHelper(_ name: String) -> TabHelper? {
         return helpers[name]
     }
 }

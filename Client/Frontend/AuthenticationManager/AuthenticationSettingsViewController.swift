@@ -203,11 +203,11 @@ class TouchIDSetting: Setting {
                 fallback: self.touchIDFallback
             )
         } else {
-            toggleTouchID(enabled: true)
+            toggleTouchID(true)
         }
     }
 
-    func toggleTouchID(enabled: Bool) {
+    func toggleTouchID(_ enabled: Bool) {
         authInfo?.useTouchID = enabled
         KeychainWrapper.sharedAppContainerKeychain.setAuthenticationInfo(authInfo)
         switchControl?.setOn(enabled, animated: true)
@@ -328,7 +328,7 @@ extension AuthenticationSettingsViewController: PasscodeEntryDelegate {
     }
 
     func touchIDAuthenticationSucceeded() {
-        getTouchIDSetting()?.toggleTouchID(enabled: false)
+        getTouchIDSetting()?.toggleTouchID(false)
     }
 
     func fallbackOnTouchIDFailure() {
@@ -336,7 +336,7 @@ extension AuthenticationSettingsViewController: PasscodeEntryDelegate {
     }
 
     @objc func passcodeValidationDidSucceed() {
-        getTouchIDSetting()?.toggleTouchID(enabled: false)
+        getTouchIDSetting()?.toggleTouchID(false)
         navigationController?.dismiss(animated: true, completion: nil)
     }
 }
