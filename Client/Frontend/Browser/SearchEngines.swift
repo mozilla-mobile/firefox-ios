@@ -297,7 +297,7 @@ class SearchEngines {
 
             // nil < N for all non-nil values of N.
             if index1 == nil || index2 == nil {
-                return index1! > index2!
+                return index1 ?? -1 > index2 ?? -1
             }
 
             return index1! < index2!
