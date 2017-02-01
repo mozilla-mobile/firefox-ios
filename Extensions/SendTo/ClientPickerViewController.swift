@@ -8,8 +8,8 @@ import Storage
 import SnapKit
 
 protocol ClientPickerViewControllerDelegate {
-    func clientPickerViewControllerDidCancel(clientPickerViewController: ClientPickerViewController) -> Void
-    func clientPickerViewController(clientPickerViewController: ClientPickerViewController, didPickClients clients: [RemoteClient]) -> Void
+    func clientPickerViewControllerDidCancel(_ clientPickerViewController: ClientPickerViewController) -> Void
+    func clientPickerViewController(_ clientPickerViewController: ClientPickerViewController, didPickClients clients: [RemoteClient]) -> Void
 }
 
 struct ClientPickerViewControllerUX {
@@ -58,15 +58,15 @@ class ClientPickerViewController: UITableViewController {
         tableView.register(ClientPickerTableViewHeaderCell.self, forCellReuseIdentifier: ClientPickerTableViewHeaderCell.CellIdentifier)
         tableView.register(ClientPickerTableViewCell.self, forCellReuseIdentifier: ClientPickerTableViewCell.CellIdentifier)
         tableView.register(ClientPickerNoClientsTableViewCell.self, forCellReuseIdentifier: ClientPickerNoClientsTableViewCell.CellIdentifier)
-        tableView.tableFooterView = UIView(frame: CGRectZero)
+        tableView.tableFooterView = UIView(frame: CGRect.zero)
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if let refreshControl = refreshControl {
             refreshControl.beginRefreshing()
             let height = -(refreshControl.bounds.size.height + (self.navigationController?.navigationBar.bounds.size.height ?? 0))
-            self.tableView.contentOffset = CGPointMake(0, height)
+            self.tableView.contentOffset = CGPoint(x: 0, y: height)
         }
         reloadClients()
     }
@@ -161,7 +161,7 @@ class ClientPickerViewController: UITableViewController {
                 }
 
                 self.clients = c
-                DispatchQueue.main.asynchronously(DispatchQueue.main) {
+                DispatchQueue.main.async {
                     if self.clients.count == 0 {
                         self.navigationItem.rightBarButtonItem = nil
                     } else {
@@ -211,8 +211,8 @@ class ClientPickerTableViewHeaderCell: UITableViewCell {
         }
 
         preservesSuperviewLayoutMargins = false
-        layoutMargins = UIEdgeInsetsZero
-        separatorInset = UIEdgeInsetsZero
+        layoutMargins = UIEdgeInsets.zero
+        separatorInset = UIEdgeInsets.zero
     }
 
     required init(coder aDecoder: NSCoder) {
@@ -274,7 +274,7 @@ class ClientPickerNoClientsTableViewCell: UITableViewCell {
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupHelpView(contentView,
+        setupHelpView(view: contentView,
             introText: NSLocalizedString("You don't have any other devices connected to this Firefox Account available to sync.", tableName: "SendTo", comment: "Error message shown in the remote tabs panel"),
             showMeText: "") // TODO We used to have a 'show me how to ...' text here. But, we cannot open web pages from the extension. So this is clear for now until we decide otherwise.
         // Move the separator off screen
