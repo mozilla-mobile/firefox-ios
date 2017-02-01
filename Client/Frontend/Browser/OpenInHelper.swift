@@ -47,7 +47,7 @@ class ShareFileHelper: NSObject, OpenInHelper {
     var pathExtension: String?
 
     required init?(response: NSURLResponse) {
-        guard let MIMEType = response.MIMEType where !(MIMEType == MimeType.PASS.rawValue || MIMEType == MimeType.PDF.rawValue),
+        guard let MIMEType = response.MIMEType, !(MIMEType == MimeType.PASS.rawValue || MIMEType == MimeType.PDF.rawValue),
             let responseURL = response.URL else { return nil }
         url = responseURL
         super.init()
@@ -62,7 +62,7 @@ class ShareFileHelper: NSObject, OpenInHelper {
         alertController.addAction(UIAlertAction(title: Strings.OpenInDownloadHelperAlertConfirm, style: .Default) { (action) in
             let objectsToShare = [self.url]
             let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
-            if let sourceView = self.openInView, popoverController = activityVC.popoverPresentationController {
+            if let sourceView = self.openInView, let popoverController = activityVC.popoverPresentationController {
                 popoverController.sourceView = sourceView
                 popoverController.sourceRect = CGRect(origin: CGPoint(x: CGRectGetMidX(sourceView.bounds), y: CGRectGetMaxY(sourceView.bounds)), size: CGSizeZero)
                 popoverController.permittedArrowDirections = .Up
@@ -79,7 +79,7 @@ class OpenPassBookHelper: NSObject, OpenInHelper {
     private var url: NSURL
 
     required init?(response: NSURLResponse) {
-        guard let MIMEType = response.MIMEType where MIMEType == MimeType.PASS.rawValue && PKAddPassesViewController.canAddPasses(),
+        guard let MIMEType = response.MIMEType, MIMEType == MimeType.PASS.rawValue && PKAddPassesViewController.canAddPasses(),
             let responseURL = response.URL else { return nil }
         url = responseURL
         super.init()
@@ -195,7 +195,7 @@ class OpenPdfInHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDe
 
     func open() {
         createLocalCopyOfPDF()
-        guard let _parentView = self.openInView!.superview, docController = self.docController else { log.error("view doesn't have a superview so can't open anything"); return }
+        guard let _parentView = self.openInView!.superview, let docController = self.docController else { log.error("view doesn't have a superview so can't open anything"); return }
         // iBooks should be installed by default on all devices we care about, so regardless of whether or not there are other pdf-capable
         // apps on this device, if we can open in iBooks we can open this PDF
         // simulators do not have iBooks so the open in view will not work on the simulator
