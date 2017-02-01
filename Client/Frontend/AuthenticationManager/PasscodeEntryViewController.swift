@@ -56,9 +56,9 @@ class PasscodeEntryViewController: BasePasscodeViewController {
         self.view.endEditing(true)
     }
 
-    override func dismiss() {
+    override func dismissAnimated() {
         delegate?.userDidCancelValidation?()
-        super.dismiss()
+        super.dismissAnimated()
     }
 }
 

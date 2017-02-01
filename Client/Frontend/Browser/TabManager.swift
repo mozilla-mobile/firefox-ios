@@ -859,7 +859,7 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
         completionHandler: @escaping (URLSession.AuthChallengeDisposition,
         URLCredential?) -> Void) {
             let authenticatingDelegates = delegates.filter {
-                $0.responds(to: #selector(WKNavigationDelegate.webView))
+                $0.responds(to: #selector(webView))
             }
 
             guard let firstAuthenticatingDelegate = authenticatingDelegates.first else {

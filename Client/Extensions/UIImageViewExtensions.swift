@@ -15,7 +15,7 @@ public extension UIImageView {
             return
         }
         let imageURL = URL(string: icon.url)
-        self.sd_setHighlightedImageWithURL(imageURL) { (img, error, type, url) in
+        self.sd_setHighlightedImage(with: imageURL, options: []) { (img, error, type, url) in
             guard let image = img else {
                 return
             }

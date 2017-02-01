@@ -45,7 +45,7 @@ class RemovePasscodeViewController: PagingPasscodeViewController, PasscodeInputV
         authenticationInfo?.recordValidation()
         errorToast?.removeFromSuperview()
         removePasscode()
-        dismiss()
+        dismissAnimated()
     }
 
     fileprivate func removePasscode() {
