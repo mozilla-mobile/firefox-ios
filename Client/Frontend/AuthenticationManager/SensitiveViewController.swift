@@ -57,7 +57,7 @@ class SensitiveViewController: UIViewController {
             cancel: {
                 self.promptingForTouchID = false
                 self.authState = .NotAuthenticating
-                self.navigationController?.popToRootViewControllerAnimated(true)
+                self.navigationController?.popToRootViewController(animated: true)
             },
             fallback: {
                 self.promptingForTouchID = false

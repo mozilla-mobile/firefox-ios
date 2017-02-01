@@ -126,7 +126,7 @@ extension AuroraAppDelegate {
     }
 }
 
-private class FeedbackSnapshotDelegate: NSObject, MFMailComposeViewControllerDelegate {
+fileprivate class FeedbackSnapshotDelegate: NSObject, MFMailComposeViewControllerDelegate {
     @objc func mailComposeController(_ mailComposeViewController: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         mailComposeViewController.dismiss(animated: true, completion: nil)
     }

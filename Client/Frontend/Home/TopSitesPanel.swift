@@ -380,7 +380,7 @@ extension TopSitesPanel: ThumbnailCellDelegate {
     }
 }
 
-private class TopSitesCollectionView: UICollectionView {
+fileprivate class TopSitesCollectionView: UICollectionView {
     fileprivate override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         // Hide the keyboard if this view is touched.
         window?.rootViewController?.view.endEditing(true)
@@ -537,7 +537,7 @@ class TopSitesLayout: UICollectionViewLayout {
     }
 }
 
-private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
+fileprivate class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     var profile: Profile
     var editingThumbnails: Bool = false
     var suggestedSites = [SuggestedSite]()
@@ -604,7 +604,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
                     return
                 }
                 cell.image = img
-                self.setBlurredBackground(img, withURL: url, forCell: cell)
+                self.setBlurredBackground(img, withURL: url!, forCell: cell)
             }
         }
     }

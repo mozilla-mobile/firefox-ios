@@ -25,7 +25,7 @@ protocol TabToolbarProtocol: class  {
     func updateForwardStatus(_ canGoForward: Bool)
     func updateBookmarkStatus(_ isBookmarked: Bool)
     func updateReloadStatus(_ isLoading: Bool)
-    func updatePageStatus(isWebPage: Bool)
+    func updatePageStatus(_ isWebPage: Bool)
 }
 
 protocol TabToolbarDelegate: class {
@@ -260,7 +260,7 @@ class TabToolbar: Toolbar, TabToolbarProtocol {
         helper?.updateReloadStatus(isLoading)
     }
 
-    func updatePageStatus(isWebPage: Bool) {
+    func updatePageStatus(_ isWebPage: Bool) {
         stopReloadButton.isEnabled = isWebPage
         shareButton.isEnabled = isWebPage
     }

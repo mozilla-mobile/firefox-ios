@@ -575,7 +575,7 @@ extension SearchViewController: SuggestionCellDelegate {
 /**
  * Private extension containing string operations specific to this view controller
  */
-private extension String {
+fileprivate extension String {
     func looksLikeAURL() -> Bool {
         // The assumption here is that if the user is typing in a forward slash and there are no spaces
         // involved, it's going to be a URL. If we type a space, any url would be invalid.
@@ -587,20 +587,20 @@ private extension String {
 /**
  * UIScrollView that prevents buttons from interfering with scroll.
  */
-private class ButtonScrollView: UIScrollView {
+fileprivate class ButtonScrollView: UIScrollView {
     fileprivate override func touchesShouldCancel(in view: UIView) -> Bool {
         return true
     }
 }
 
-private protocol SuggestionCellDelegate: class {
+fileprivate protocol SuggestionCellDelegate: class {
     func suggestionCell(_ suggestionCell: SuggestionCell, didSelectSuggestion suggestion: String)
 }
 
 /**
  * Cell that wraps a list of search suggestion buttons.
  */
-private class SuggestionCell: UITableViewCell {
+fileprivate class SuggestionCell: UITableViewCell {
     weak var delegate: SuggestionCellDelegate?
     let container = UIView()
 
@@ -723,7 +723,7 @@ private class SuggestionCell: UITableViewCell {
 /**
  * Rounded search suggestion button that highlights when selected.
  */
-private class SuggestionButton: InsetButton {
+fileprivate class SuggestionButton: InsetButton {
     override init(frame: CGRect) {
         super.init(frame: frame)
 

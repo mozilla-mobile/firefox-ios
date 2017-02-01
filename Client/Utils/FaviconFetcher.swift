@@ -114,8 +114,8 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
                 if let refresh = meta["http-equiv"], refresh == "Refresh",
                     let content = meta["content"],
                     let index = content.range(of: "URL="),
-                    let url = NSURL(string: content.substring(from: index.startIndex.advancedBy(4))) {
-                    reloadUrl = url
+                    let url = NSURL(string: content.substring(from: index.lowerBound.advancedBy(4))) {
+                    reloadUrl = url as URL
                 }
             }
 
@@ -177,7 +177,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
         let deferred = Deferred<Maybe<Favicon>>()
         let url = icon.url
         let manager = SDWebImageManager.shared()
-        let site = Site(url: siteUrl.absoluteString!, title: "")
+        let site = Site(url: siteUrl.absoluteString, title: "")
 
         var fav = Favicon(url: url, type: icon.type)
         if let url = url.asURL {
@@ -221,7 +221,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
             } else {
                 return deferred.fill(Maybe(failure: FaviconError()))
             }
-            SDWebImageManager.sharedManager().downloadImageWithURL(iconURL, options: SDWebImageOptions.ContinueInBackground, progress: nil) { (image, error, cacheType, success, url) in
+            SDWebImageManager.shared().downloadImage(with: iconURL, options: SDWebImageOptions.continueInBackground, progress: nil) { (image, error, cacheType, success, url) in
                 if image != nil {
                     deferred.fill(Maybe(success: image))
                 } else {

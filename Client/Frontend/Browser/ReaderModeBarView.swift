@@ -80,20 +80,20 @@ class ReaderModeBarView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        readStatusButton = createButton(type: .markAsRead, action: #selector(ReaderModeBarView.SELtappedReadStatusButton(_:)))
+        readStatusButton = createButton(.markAsRead, action: #selector(ReaderModeBarView.SELtappedReadStatusButton(_:)))
         readStatusButton.snp.makeConstraints { (make) -> () in
             make.left.equalTo(self)
             make.height.centerY.equalTo(self)
             make.width.equalTo(80)
         }
 
-        settingsButton = createButton(type: .settings, action: #selector(ReaderModeBarView.SELtappedSettingsButton(_:)))
+        settingsButton = createButton(.settings, action: #selector(ReaderModeBarView.SELtappedSettingsButton(_:)))
         settingsButton.snp.makeConstraints { (make) -> () in
             make.height.centerX.centerY.equalTo(self)
             make.width.equalTo(80)
         }
 
-        listStatusButton = createButton(type: .addToReadingList, action: #selector(ReaderModeBarView.SELtappedListStatusButton(_:)))
+        listStatusButton = createButton(.addToReadingList, action: #selector(ReaderModeBarView.SELtappedListStatusButton(_:)))
         listStatusButton.snp.makeConstraints { (make) -> () in
             make.right.equalTo(self)
             make.height.centerY.equalTo(self)
@@ -117,7 +117,7 @@ class ReaderModeBarView: UIView {
         context.strokePath()
     }
 
-    fileprivate func createButton(type: ReaderModeBarButtonType, action: Selector) -> UIButton {
+    fileprivate func createButton(_ type: ReaderModeBarButtonType, action: Selector) -> UIButton {
         let button = UIButton()
         addSubview(button)
         button.setImage(type.image, for: UIControlState())

@@ -11,9 +11,9 @@ import Deferred
 
 private let log = Logger.browserLogger
 
-private func getDate(dayOffset: Int) -> Date {
+private func getDate(_ dayOffset: Int) -> Date {
     let calendar = Calendar(identifier: Calendar.Identifier.gregorian)
-    let nowComponents = (calendar as NSCalendar).components([NSCalendar.Unit.year, NSCalendar.Unit.month, NSCalendar.Unit.day], from: Date())
+    let nowComponents = (calendar as NSCalendar).components([Calendar.Unit.year, Calendar.Unit.month, Calendar.Unit.day], from: Date())
     let today = calendar.date(from: nowComponents)!
     return (calendar as NSCalendar).date(byAdding: NSCalendar.Unit.day, value: dayOffset, to: today, options: [])!
 }
@@ -145,9 +145,9 @@ class HistoryPanelSiteTableViewController: SiteTableViewController {
 
     fileprivate let QueryLimit = 100
     fileprivate let NumSections = 4
-    fileprivate let Today = getDate(dayOffset: 0)
-    fileprivate let Yesterday = getDate(dayOffset: -1)
-    fileprivate let ThisWeek = getDate(dayOffset: -7)
+    fileprivate let Today = getDate(0)
+    fileprivate let Yesterday = getDate(-1)
+    fileprivate let ThisWeek = getDate(-7)
 
     init() {
         super.init(nibName: nil, bundle: nil)

@@ -57,7 +57,7 @@ extension UIView {
     /**
      * rounds the requested corners of a view with the provided radius
      */
-    func addRoundedCorners(cornersToRound: UIRectCorner, cornerRadius: CGSize, color: UIColor) {
+    func addRoundedCorners(_ cornersToRound: UIRectCorner, cornerRadius: CGSize, color: UIColor) {
         let rect = bounds
         let maskPath = UIBezierPath(roundedRect: rect, byRoundingCorners: cornersToRound, cornerRadii: cornerRadius)
 

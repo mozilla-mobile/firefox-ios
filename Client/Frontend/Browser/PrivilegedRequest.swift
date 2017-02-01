@@ -19,7 +19,7 @@ private let REQUEST_KEY_PRIVILEGED = "privileged"
  needed, and when you are sure the URL is from a trustworthy source!
  **/
 class PrivilegedRequest: NSMutableURLRequest {
-    override init(url URL: URL, cachePolicy: NSURLRequest.CachePolicy, timeoutInterval: TimeInterval) {
+    override init(url URL: URL, cachePolicy: URLRequest.CachePolicy, timeoutInterval: TimeInterval) {
         super.init(url: URL, cachePolicy: cachePolicy, timeoutInterval: timeoutInterval)
         setPrivileged()
     }
