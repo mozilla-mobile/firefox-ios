@@ -18,7 +18,7 @@
  *
  * Note that these modes break earlier snapshots of OpenSSL, where
  * libdes compatibility was the only available mode or (later on) the
- * prefered compatibility mode.  However, after much consideration
+ * preferred compatibility mode.  However, after much consideration
  * (and more or less violent discussions with external parties), it
  * was concluded that OpenSSL should be compatible with earlier versions
  * of itself before anything else.  Also, in all honesty, libdes is

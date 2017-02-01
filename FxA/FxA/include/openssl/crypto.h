@@ -103,7 +103,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * The licence and distribution terms for any publically available version or
+ * The licence and distribution terms for any publicly available version or
  * derivative of this code cannot be changed.  i.e. this code cannot simply be
  * copied and put under another distribution licence
  * [including the GNU Public Licence.]
@@ -294,8 +294,8 @@ DECLARE_STACK_OF(void)
 
 typedef struct crypto_ex_data_func_st
 	{
-	long argl;	/* Arbitary long */
-	void *argp;	/* Arbitary void * */
+	long argl;	/* Arbitrary long */
+	void *argp;	/* Arbitrary void * */
 	CRYPTO_EX_new *new_func;
 	CRYPTO_EX_free *free_func;
 	CRYPTO_EX_dup *dup_func;

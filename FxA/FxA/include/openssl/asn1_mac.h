@@ -50,7 +50,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * The licence and distribution terms for any publically available version or
+ * The licence and distribution terms for any publicly available version or
  * derivative of this code cannot be changed.  i.e. this code cannot simply be
  * copied and put under another distribution licence
  * [including the GNU Public Licence.]
@@ -367,7 +367,7 @@ err:\
 		return(NULL)
 
 
-/* BIG UGLY WARNING!  This is so damn ugly I wanna puke.  Unfortunately,
+/* BIG UGLY WARNING!  This is so damn ugly I want to puke.  Unfortunately,
    some macros that use ASN1_const_CTX still insist on writing in the input
    stream.  ARGH!  ARGH!  ARGH!  Let's get rid of this macro package.
    Please?						-- Richard Levitte */

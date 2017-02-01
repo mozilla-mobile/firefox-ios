@@ -109,14 +109,14 @@ typedef struct dso_st DSO;
 
 /* The function prototype used for method functions (or caller-provided
  * callbacks) that transform filenames. They are passed a DSO structure pointer
- * (or NULL if they are to be used independantly of a DSO object) and a
+ * (or NULL if they are to be used independently of a DSO object) and a
  * filename to transform. They should either return NULL (if there is an error
  * condition) or a newly allocated string containing the transformed form that
  * the caller will need to free with OPENSSL_free() when done. */
 typedef char* (*DSO_NAME_CONVERTER_FUNC)(DSO *, const char *);
 /* The function prototype used for method functions (or caller-provided
  * callbacks) that merge two file specifications. They are passed a
- * DSO structure pointer (or NULL if they are to be used independantly of
+ * DSO structure pointer (or NULL if they are to be used independently of
  * a DSO object) and two file specifications to merge. They should
  * either return NULL (if there is an error condition) or a newly allocated
  * string containing the result of merging that the caller will need
@@ -306,7 +306,7 @@ DSO_METHOD *DSO_METHOD_vms(void);
  * returns the number of characters [including trailing zero]
  * written to it. If 'sz' is 0 or negative, 'path' is ignored and
  * required amount of charachers [including trailing zero] to
- * accomodate pathname is returned. If 'addr' is NULL, then
+ * accommodate pathname is returned. If 'addr' is NULL, then
  * pathname of cryptolib itself is returned. Negative or zero
  * return value denotes error.
  */

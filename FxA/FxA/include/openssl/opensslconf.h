@@ -183,7 +183,7 @@ YOU SHOULD NOT HAVE BOTH DES_RISC1 AND DES_RISC2 DEFINED!!!!!
 #endif
 
 /* Unroll the inner loop, this sometimes helps, sometimes hinders.
- * Very mucy CPU dependant */
+ * Very much CPU dependent */
 #ifndef DES_UNROLL
 #define DES_UNROLL
 #endif
