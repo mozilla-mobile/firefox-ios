@@ -15,7 +15,7 @@ class BasePasscodeViewController: UIViewController {
     let errorPadding: CGFloat = 10
 
     init() {
-        self.authenticationInfo = KeychainWrapper.defaultKeychainWrapper.authenticationInfo()
+        self.authenticationInfo = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo()
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -26,7 +26,7 @@ class BasePasscodeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(BasePasscodeViewController.dismiss))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.dismiss))
         automaticallyAdjustsScrollViewInsets = false
     }
 
@@ -43,7 +43,7 @@ extension BasePasscodeViewController {
             let toast = ErrorToast()
             toast.textLabel.text = text
             view.addSubview(toast)
-            toast.snp_makeConstraints { make in
+            toast.snp.makeConstraints { make in
                 make.center.equalTo(self.view)
                 make.left.greaterThanOrEqualTo(self.view).offset(errorPadding)
                 make.right.lessThanOrEqualTo(self.view).offset(-errorPadding)
@@ -87,6 +87,6 @@ extension BasePasscodeViewController {
         inputView.resetCode()
 
         // Store mutations on authentication info object
-        KeychainWrapper.defaultKeychainWrapper.setAuthenticationInfo(authenticationInfo)
+        KeychainWrapper.sharedAppContainerKeychain.setAuthenticationInfo(authenticationInfo)
     }
 }

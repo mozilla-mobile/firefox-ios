@@ -9,7 +9,7 @@ import XCGLogger
 /// Accessors to find what a new tab should do when created without a URL.
 struct NewTabAccessors {
     static let PrefKey = PrefsKeys.KeyNewTab
-    static let Default = NewTabPage.TopSites
+    static let Default = NewTabPage.topSites
 
     static func getNewTabPage(_ prefs: Prefs) -> NewTabPage {
         guard let raw = prefs.stringForKey(PrefKey) else {
@@ -31,12 +31,12 @@ struct NewTabAccessors {
 
 /// Enum to encode what should happen when the user opens a new tab without a URL.
 enum NewTabPage: String {
-    case BlankPage = "Blank"
-    case HomePage = "HomePage"
-    case TopSites = "TopSites"
-    case Bookmarks = "Bookmarks"
-    case History = "History"
-    case ReadingList = "ReadingList"
+    case blankPage = "Blank"
+    case homePage = "HomePage"
+    case topSites = "TopSites"
+    case bookmarks = "Bookmarks"
+    case history = "History"
+    case readingList = "ReadingList"
 
     var settingTitle: String {
         switch self {
@@ -77,5 +77,5 @@ enum NewTabPage: String {
         return homePanel.localhostURL as URL
     }
 
-    static let allValues = [BlankPage, TopSites, Bookmarks, History, ReadingList, HomePage]
+    static let allValues = [blankPage, topSites, bookmarks, history, readingList, homePage]
 }

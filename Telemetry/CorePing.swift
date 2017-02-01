@@ -5,6 +5,7 @@
 import Foundation
 import Shared
 import UIKit
+import SwiftyJSON
 
 private let PrefKeyProfileDate = "PrefKeyProfileDate"
 private let PrefKeyPingCount = "PrefKeyPingCount"
@@ -49,20 +50,20 @@ class CorePing: TelemetryPing {
             profile.prefs.setString(model, forKey: PrefKeyModel)
         }
 
-        let locale = Bundle.mainBundle.preferredLocalizations.first!.stringByReplacingOccurrencesOfString("_", withString: "-")
+        let locale = Bundle.main.preferredLocalizations.first!.replacingOccurrences(of: "_", with: "-")
         let defaultEngine = profile.searchEngines.defaultEngine
 
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
         let date = formatter.string(from: NSDate() as Date)
 
-        let timezoneOffset = NSTimeZone.localTimeZone.secondsFromGMT / 60
+        let timezoneOffset = NSTimeZone.local.secondsFromGMT() / 60
 
         let usageCount = UsageTelemetry.getCount(prefs)
         let usageTime = UsageTelemetry.getTime(prefs)
         UsageTelemetry.reset(prefs)
 
-        var out: [String: AnyObject] = [
+        var out: [String: Any] = [
             "v": PingVersion,
             "clientId": profile.clientID,
             "seq": Int(pingCount),
@@ -72,7 +73,7 @@ class CorePing: TelemetryPing {
             "device": "Apple-" + model,
             "arch": "arm",
             "profileDate": profileDate,
-            "defaultSearch": defaultEngine.engineID ?? JSON.null,
+            "defaultSearch": defaultEngine.engineID as Any,
             "created": date,
             "tz": timezoneOffset,
             "sessions": usageCount,

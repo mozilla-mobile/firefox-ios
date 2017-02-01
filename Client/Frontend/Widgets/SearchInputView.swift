@@ -125,36 +125,36 @@ class SearchInputView: UIView {
     }
 
     fileprivate func setupConstraints() {
-        centerContainer.snp_makeConstraints { make in
+        centerContainer.snp.makeConstraints { make in
             make.center.equalTo(overlay)
         }
 
-        overlay.snp_makeConstraints { make in
+        overlay.snp.makeConstraints { make in
             make.edges.equalTo(self)
         }
 
-        searchIcon.snp_makeConstraints { make in
-            make.right.equalTo(titleLabel.snp_left).offset(-SearchInputViewUX.horizontalSpacing)
+        searchIcon.snp.makeConstraints { make in
+            make.right.equalTo(titleLabel.snp.left).offset(-SearchInputViewUX.horizontalSpacing)
             make.centerY.equalTo(centerContainer)
         }
 
-        titleLabel.snp_makeConstraints { make in
+        titleLabel.snp.makeConstraints { make in
             make.center.equalTo(centerContainer)
         }
 
-        inputField.snp_makeConstraints { make in
+        inputField.snp.makeConstraints { make in
             make.left.equalTo(self).offset(SearchInputViewUX.horizontalSpacing)
             make.centerY.equalTo(self)
-            make.right.equalTo(closeButton.snp_left).offset(-SearchInputViewUX.horizontalSpacing)
+            make.right.equalTo(closeButton.snp.left).offset(-SearchInputViewUX.horizontalSpacing)
         }
 
-        closeButton.snp_makeConstraints { make in
+        closeButton.snp.makeConstraints { make in
             make.right.equalTo(self).offset(-SearchInputViewUX.horizontalSpacing)
             make.centerY.equalTo(self)
             make.size.equalTo(SearchInputViewUX.closeButtonSize)
         }
 
-        bottomBorder.snp_makeConstraints { make in
+        bottomBorder.snp.makeConstraints { make in
             make.left.right.bottom.equalTo(self)
             make.height.equalTo(SearchInputViewUX.borderLineWidth)
         }

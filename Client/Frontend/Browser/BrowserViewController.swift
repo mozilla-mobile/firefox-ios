@@ -252,18 +252,18 @@ class BrowserViewController: UIViewController {
                 addChildViewController(topTabsViewController)
                 topTabsViewController.view.frame = topTabsContainer.frame
                 topTabsContainer.addSubview(topTabsViewController.view)
-                topTabsViewController.view.snp_makeConstraints { make in
+                topTabsViewController.view.snp.makeConstraints { make in
                     make.edges.equalTo(topTabsContainer)
                     make.height.equalTo(TopTabsUX.TopTabsViewHeight)
                 }
                 self.topTabsViewController = topTabsViewController
             }
-            topTabsContainer.snp_updateConstraints { make in
+            topTabsContainer.snp.updateConstraints { make in
                 make.height.equalTo(TopTabsUX.TopTabsViewHeight)
             }
             header.disableBlur = true
         } else {
-            topTabsContainer.snp_updateConstraints { make in
+            topTabsContainer.snp.updateConstraints { make in
                 make.height.equalTo(0)
             }
             topTabsViewController?.view.removeFromSuperview()
@@ -459,31 +459,31 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func setupConstraints() {
-        topTabsContainer.snp_makeConstraints { make in
+        topTabsContainer.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self.header)
             make.top.equalTo(urlBarTopTabsContainer)
         }
         
-        urlBar.snp_makeConstraints { make in
+        urlBar.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalTo(urlBarTopTabsContainer)
             make.height.equalTo(UIConstants.ToolbarHeight)
-            make.top.equalTo(topTabsContainer.snp_bottom)
+            make.top.equalTo(topTabsContainer.snp.bottom)
         }
 
-        header.snp_makeConstraints { make in
-            scrollController.headerTopConstraint = make.top.equalTo(snp_topLayoutGuideBottom).constraint
+        header.snp.makeConstraints { make in
+            scrollController.headerTopConstraint = make.top.equalTo(snp.topLayoutGuideBottom).constraint
             make.left.right.equalTo(self.view)
         }
 
-        headerBackdrop.snp_makeConstraints { make in
+        headerBackdrop.snp.makeConstraints { make in
             make.edges.equalTo(self.header)
         }
 
-        webViewContainerBackdrop.snp_makeConstraints { make in
+        webViewContainerBackdrop.snp.makeConstraints { make in
             make.edges.equalTo(webViewContainer)
         }
 
-        webViewContainerToolbar.snp_makeConstraints { make in
+        webViewContainerToolbar.snp.makeConstraints { make in
             make.left.right.top.equalTo(webViewContainer)
             make.height.equalTo(0)
         }
@@ -492,7 +492,7 @@ class BrowserViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         log.debug("BVC viewDidLayoutSubviews…")
         super.viewDidLayoutSubviews()
-        statusBarOverlay.snp_remakeConstraints { make in
+        statusBarOverlay.snp.remakeConstraints { make in
             make.top.left.right.equalTo(self.view)
             make.height.equalTo(self.topLayoutGuide.length)
         }
@@ -522,7 +522,7 @@ class BrowserViewController: UIViewController {
 
             let urls = cursor.flatMap { $0?.url.asURL }
             if !urls.isEmpty {
-                DispatchQueue.main.asynchronously(DispatchQueue.main) {
+                DispatchQueue.main.async {
                     self.tabManager.addTabsForURLs(urls, zombie: false)
                 }
             }
@@ -624,7 +624,7 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func shouldShowWhatsNewTab() -> Bool {
-        guard let latestMajorAppVersion = profile.prefs.stringForKey(LatestAppVersionProfileKey)?.componentsSeparatedByString(".").first else {
+        guard let latestMajorAppVersion = profile.prefs.stringForKey(LatestAppVersionProfileKey)?.components(separatedBy: ".").first else {
             return DeviceInfo.hasConnectivity()
         }
 
@@ -666,52 +666,52 @@ class BrowserViewController: UIViewController {
     override func updateViewConstraints() {
         super.updateViewConstraints()
 
-        topTouchArea.snp_remakeConstraints { make in
+        topTouchArea.snp.remakeConstraints { make in
             make.top.left.right.equalTo(self.view)
             make.height.equalTo(BrowserViewControllerUX.ShowHeaderTapAreaHeight)
         }
 
-        readerModeBar?.snp_remakeConstraints { make in
-            make.top.equalTo(self.header.snp_bottom).constraint
+        readerModeBar?.snp.remakeConstraints { make in
+            make.top.equalTo(self.header.snp.bottom).constraint
             make.height.equalTo(UIConstants.ToolbarHeight)
             make.leading.trailing.equalTo(self.view)
         }
 
-        webViewContainer.snp_remakeConstraints { make in
+        webViewContainer.snp.remakeConstraints { make in
             make.left.right.equalTo(self.view)
 
-            if let readerModeBarBottom = readerModeBar?.snp_bottom {
+            if let readerModeBarBottom = readerModeBar?.snp.bottom {
                 make.top.equalTo(readerModeBarBottom)
             } else {
-                make.top.equalTo(self.header.snp_bottom)
+                make.top.equalTo(self.header.snp.bottom)
             }
 
             let findInPageHeight = (findInPageBar == nil) ? 0 : UIConstants.ToolbarHeight
             if let toolbar = self.toolbar {
-                make.bottom.equalTo(toolbar.snp_top).offset(-findInPageHeight)
+                make.bottom.equalTo(toolbar.snp.top).offset(-findInPageHeight)
             } else {
                 make.bottom.equalTo(self.view).offset(-findInPageHeight)
             }
         }
 
         // Setup the bottom toolbar
-        toolbar?.snp_remakeConstraints { make in
+        toolbar?.snp.remakeConstraints { make in
             make.edges.equalTo(self.footerBackground!)
             make.height.equalTo(UIConstants.ToolbarHeight)
         }
 
-        footer.snp_remakeConstraints { make in
-            scrollController.footerBottomConstraint = make.bottom.equalTo(self.view.snp_bottom).constraint
-            make.top.equalTo(self.snackBars.snp_top)
+        footer.snp.remakeConstraints { make in
+            scrollController.footerBottomConstraint = make.bottom.equalTo(self.view.snp.bottom).constraint
+            make.top.equalTo(self.snackBars.snp.top)
             make.leading.trailing.equalTo(self.view)
         }
 
-        footerBackdrop.snp_remakeConstraints { make in
+        footerBackdrop.snp.remakeConstraints { make in
             make.edges.equalTo(self.footer)
         }
 
         updateSnackBarConstraints()
-        footerBackground?.snp_remakeConstraints { make in
+        footerBackground?.snp.remakeConstraints { make in
             make.bottom.left.right.equalTo(self.footer)
             make.height.equalTo(UIConstants.ToolbarHeight)
         }
@@ -719,23 +719,23 @@ class BrowserViewController: UIViewController {
 
         // Remake constraints even if we're already showing the home controller.
         // The home controller may change sizes if we tap the URL bar while on about:home.
-        homePanelController?.view.snp_remakeConstraints { make in
-            make.top.equalTo(self.urlBar.snp_bottom)
+        homePanelController?.view.snp.remakeConstraints { make in
+            make.top.equalTo(self.urlBar.snp.bottom)
             make.left.right.equalTo(self.view)
             if self.homePanelIsInline {
-                make.bottom.equalTo(self.toolbar?.snp_top ?? self.view.snp_bottom)
+                make.bottom.equalTo(self.toolbar?.snp.top ?? self.view.snp.bottom)
             } else {
-                make.bottom.equalTo(self.view.snp_bottom)
+                make.bottom.equalTo(self.view.snp.bottom)
             }
         }
 
-        findInPageContainer.snp_remakeConstraints { make in
+        findInPageContainer.snp.remakeConstraints { make in
             make.left.right.equalTo(self.view)
 
             if let keyboardHeight = keyboardState?.intersectionHeightForView(self.view), keyboardHeight > 0 {
                 make.bottom.equalTo(self.view).offset(-keyboardHeight)
             } else if let toolbar = self.toolbar {
-                make.bottom.equalTo(toolbar.snp_top)
+                make.bottom.equalTo(toolbar.snp.top)
             } else {
                 make.bottom.equalTo(self.view)
             }
@@ -803,7 +803,7 @@ class BrowserViewController: UIViewController {
                 UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
 
                 // Refresh the reading view toolbar since the article record may have changed
-                if let readerMode = self.tabManager.selectedTab?.getHelper(name: ReaderMode.name()) as? ReaderMode, readerMode.state == .Active {
+                if let readerMode = self.tabManager.selectedTab?.getHelper(name: ReaderMode.name()) as? ReaderMode, readerMode.state == .active {
                     self.showReaderModeBar(animated: false)
                 }
             })
@@ -835,8 +835,8 @@ class BrowserViewController: UIViewController {
 
         addChildViewController(searchController!)
         view.addSubview(searchController!.view)
-        searchController!.view.snp_makeConstraints { make in
-            make.top.equalTo(self.urlBar.snp_bottom)
+        searchController!.view.snp.makeConstraints { make in
+            make.top.equalTo(self.urlBar.snp.bottom)
             make.left.right.bottom.equalTo(self.view)
             return
         }
@@ -868,22 +868,23 @@ class BrowserViewController: UIViewController {
             resetSpoofedUserAgentIfRequired(webView, newURL: url)
         }
 
-        if let nav = tab.loadRequest(PrivilegedRequest(URL: url)) {
+        if let nav = tab.loadRequest(PrivilegedRequest(url: url) as URLRequest) {
             self.recordNavigationInTab(tab, navigation: nav, visitType: visitType)
         }
     }
 
     func addBookmark(_ tabState: TabState) {
-        guard let url = tabState.url, let absoluteString = url.absoluteString else { return }
+        guard let url = tabState.url else { return }
+        let absoluteString = url.absoluteString
         let shareItem = ShareItem(url: absoluteString, title: tabState.title, favicon: tabState.favicon)
         profile.bookmarks.shareItem(shareItem)
         var userData = [QuickActions.TabURLKey: shareItem.url]
         if let title = shareItem.title {
             userData[QuickActions.TabTitleKey] = title
         }
-        QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.OpenLastBookmark,
+        QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark,
             withUserData: userData,
-            toApplication: UIApplication.sharedApplication)
+            toApplication: UIApplication.shared)
         if let tab = tabManager.getTabForURL(url) {
             tab.isBookmarked = true
         }
@@ -905,7 +906,8 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func removeBookmark(_ tabState: TabState) {
-        guard let url = tabState.url, let absoluteString = url.absoluteString else { return }
+        guard let url = tabState.url else { return }
+        let absoluteString = url.absoluteString
         profile.bookmarks.modelFactory >>== {
             $0.removeByURL(absoluteString)
                 .uponQueue(DispatchQueue.main) { res in
@@ -968,7 +970,7 @@ class BrowserViewController: UIViewController {
             // To prevent spoofing, only change the URL immediately if the new URL is on
             // the same origin as the current URL. Otherwise, do nothing and wait for
             // didCommitNavigation to confirm the page load.
-            if tab.url?.origin == webView.URL?.origin {
+            if tab.url?.origin == webView.url?.origin {
                 tab.url = webView.url
 
                 if tab === tabManager.selectedTab && !tab.restoring {
@@ -1005,10 +1007,10 @@ class BrowserViewController: UIViewController {
         if let url = tab.url {
             if url.isReaderModeURL {
                 showReaderModeBar(animated: false)
-                NotificationCenter.default.addObserver(self, selector: #selector(BrowserViewController.SELDynamicFontChanged(_:)), name: NSNotification.Name(rawValue: NotificationDynamicFontChanged), object: nil)
+                NotificationCenter.default.addObserver(self, selector: #selector(BrowserViewController.SELDynamicFontChanged(_:)), name: NotificationDynamicFontChanged, object: nil)
             } else {
                 hideReaderModeBar(animated: false)
-                NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: NotificationDynamicFontChanged), object: nil)
+                NotificationCenter.default.removeObserver(self, name: NotificationDynamicFontChanged, object: nil)
             }
 
             updateInContentHomePanel(url as URL)
@@ -1073,7 +1075,7 @@ class BrowserViewController: UIViewController {
         }
         let request: URLRequest?
         if let url = url {
-            request = isPrivileged ? PrivilegedRequest(coder: url) : URLRequest(url: url)
+            request = isPrivileged ? PrivilegedRequest(url: url) as URLRequest : URLRequest(url: url)
         } else {
             request = nil
         }
@@ -1125,7 +1127,7 @@ class BrowserViewController: UIViewController {
         }
         activities.append(findInPageActivity)
 
-        if let tab = tab, (tab.getHelper(name: ReaderMode.name()) as? ReaderMode)?.state != .Active {
+        if let tab = tab, (tab.getHelper(name: ReaderMode.name()) as? ReaderMode)?.state != .active {
             let requestDesktopSiteActivity = RequestDesktopSiteActivity(requestMobileSite: tab.desktopSite) { [unowned tab] in
                 tab.toggleDesktopSite()
             }
@@ -1181,7 +1183,7 @@ class BrowserViewController: UIViewController {
                 findInPageBar.delegate = self
                 findInPageContainer.addSubview(findInPageBar)
 
-                findInPageBar.snp_makeConstraints { make in
+                findInPageBar.snp.makeConstraints { make in
                     make.edges.equalTo(findInPageContainer)
                     make.height.equalTo(UIConstants.ToolbarHeight)
                 }
@@ -1439,14 +1441,14 @@ extension BrowserViewController {
     func getVisitTypeForTab(_ tab: Tab, navigation: WKNavigation?) -> VisitType? {
         guard let navigation = navigation else {
             // See https://github.com/WebKit/webkit/blob/master/Source/WebKit2/UIProcess/Cocoa/NavigationState.mm#L390
-            return VisitType.Link
+            return VisitType.link
         }
 
         if let _ = self.ignoredNavigation.remove(navigation) {
             return nil
         }
 
-        return self.typedNavigation.removeValueForKey(navigation) ?? VisitType.Link
+        return self.typedNavigation.removeValue(forKey: navigation) ?? VisitType.link
     }
 }
 
@@ -1492,8 +1494,7 @@ extension BrowserViewController: URLBarDelegate {
     func urlBarDidLongPressReaderMode(_ urlBar: URLBarView) -> Bool {
         guard let tab = tabManager.selectedTab,
                let url = tab.url?.displayURL,
-               let absoluteString = url.absoluteString,
-               let result = profile.readingList?.createRecordWithURL(absoluteString, title: tab.title ?? "", addedBy: UIDevice.currentDevice().name)
+               let result = profile.readingList?.createRecordWithURL(url.absoluteString, title: tab.title ?? "", addedBy: UIDevice.current.name)
             else {
                 UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Could not add page to Reading list", comment: "Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed."))
                 return false
@@ -1584,7 +1585,7 @@ extension BrowserViewController: URLBarDelegate {
     func urlBar(_ urlBar: URLBarView, didSubmitText text: String) {
         if let fixupURL = URIFixup.getURL(text) {
             // The user entered a URL, so use it.
-            finishEditingAndSubmit(fixupURL, visitType: VisitType.Typed)
+            finishEditingAndSubmit(fixupURL, visitType: VisitType.typed)
             return
         }
 
@@ -1596,16 +1597,16 @@ extension BrowserViewController: URLBarDelegate {
         }
 
         let possibleKeyword = trimmedText.substring(to: possibleKeywordQuerySeparatorSpace)
-        let possibleQuery = trimmedText.substring(from: <#T##String.CharacterView corresponding to `possibleKeywordQuerySeparatorSpace`##String.CharacterView#>.index(after: possibleKeywordQuerySeparatorSpace))
+        let possibleQuery = trimmedText.substring(from: trimmedText.index(after: possibleKeywordQuerySeparatorSpace))
 
         profile.bookmarks.getURLForKeywordSearch(possibleKeyword).uponQueue(DispatchQueue.main) { result in
             if var urlString = result.successValue,
-                let escapedQuery = possibleQuery.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.SearchTermsAllowedCharacterSet()),
-                let range = urlString.rangeOfString("%s") {
-                urlString.replaceRange(range, with: escapedQuery)
+                let escapedQuery = possibleQuery.addingPercentEncoding(withAllowedCharacters:NSCharacterSet.urlQueryAllowed),
+                let range = urlString.range(of: "%s") {
+                urlString.replaceSubrange(range, with: escapedQuery)
 
-                if let url = NSURL(string: urlString) {
-                    self.finishEditingAndSubmit(url as URL, visitType: VisitType.Typed)
+                if let url = URL(string: urlString) {
+                    self.finishEditingAndSubmit(url, visitType: VisitType.typed)
                     return
                 }
             }
@@ -1620,7 +1621,7 @@ extension BrowserViewController: URLBarDelegate {
         if let searchURL = engine.searchURLForQuery(text) {
             // We couldn't find a matching search keyword, so do a search query.
             Telemetry.recordEvent(SearchTelemetry.makeEvent(engine: engine, source: .URLBar))
-            finishEditingAndSubmit(searchURL, visitType: VisitType.Typed)
+            finishEditingAndSubmit(searchURL, visitType: VisitType.typed)
         } else {
             // We still don't have a valid URL, so something is broken. Give up.
             log.error("Error handling URL entry: \"\(text)\".")
@@ -1657,7 +1658,7 @@ extension BrowserViewController: TabToolbarDelegate {
 
     func tabToolbarDidLongPressReload(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
 
-        guard let tab = tabManager.selectedTab, tab.webView?.url != nil && (tab.getHelper(name: ReaderMode.name()) as? ReaderMode)?.state != .Active else {
+        guard let tab = tabManager.selectedTab, tab.webView?.url != nil && (tab.getHelper(name: ReaderMode.name()) as? ReaderMode)?.state != .active else {
             return
         }
 
@@ -1744,7 +1745,7 @@ extension BrowserViewController: TabToolbarDelegate {
     func tabToolbarDidPressShare(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         if let tab = tabManager.selectedTab, let url = tab.url?.displayURL {
             let sourceView = self.navigationToolbar.shareButton
-            presentActivityViewController(url, tab: tab, sourceView: sourceView.superview, sourceRect: sourceView.frame, arrowDirection: .Up)
+            presentActivityViewController(url, tab: tab, sourceView: sourceView.superview, sourceRect: sourceView.frame, arrowDirection: .up)
         }
     }
 
@@ -1905,13 +1906,13 @@ extension BrowserViewController: TabDelegate {
     }
 
     fileprivate func updateSnackBarConstraints() {
-        snackBars.snp_remakeConstraints { make in
-            make.bottom.equalTo(findInPageContainer.snp_top)
+        snackBars.snp.remakeConstraints { make in
+            make.bottom.equalTo(findInPageContainer.snp.top)
 
             let bars = self.snackBars.subviews
             if bars.count > 0 {
                 let view = bars[bars.count-1]
-                make.top.equalTo(view.snp_top)
+                make.top.equalTo(view.snp.top)
             } else {
                 make.height.equalTo(0)
             }
@@ -1922,7 +1923,7 @@ extension BrowserViewController: TabDelegate {
             } else {
                 make.centerX.equalTo(self.footer)
                 make.width.equalTo(SnackBarUX.MaxWidth)
-                self.snackBars.layer.borderColor = UIConstants.BorderColor.CGColor
+                self.snackBars.layer.borderColor = UIConstants.BorderColor.cgColor
                 self.snackBars.layer.borderWidth = 1
             }
         }
@@ -1937,14 +1938,14 @@ extension BrowserViewController: TabDelegate {
             if index < bars.count-1 {
                 // Move the bar above this one
                 let nextbar = bars[index+1] as! SnackBar
-                nextbar.snp_updateConstraints { make in
+                nextbar.snp.updateConstraints { make in
                     // If this wasn't the bottom bar, attach to the bar below it
                     if index > 0 {
                         let bar = bars[index-1] as! SnackBar
-                        nextbar.bottom = make.bottom.equalTo(bar.snp_top).constraint
+                        nextbar.bottom = make.bottom.equalTo(bar.snp.top).constraint
                     } else {
                         // Otherwise, we attach it to the bottom of the snackbars
-                        nextbar.bottom = make.bottom.equalTo(self.snackBars.snp_bottom).constraint
+                        nextbar.bottom = make.bottom.equalTo(self.snackBars.snp.bottom).constraint
                     }
                 }
             }
@@ -1956,7 +1957,7 @@ extension BrowserViewController: TabDelegate {
 
     fileprivate func finishAddingBar(_ bar: SnackBar) {
         snackBars.addSubview(bar)
-        bar.snp_remakeConstraints { make in
+        bar.snp.remakeConstraints { make in
             // If there are already bars showing, add this on top of them
             let bars = self.snackBars.subviews
 
@@ -1964,9 +1965,9 @@ extension BrowserViewController: TabDelegate {
             // We're the new top bar in the stack, so make sure we ignore ourself
             if bars.count > 1 {
                 let view = bars[bars.count - 2]
-                bar.bottom = make.bottom.equalTo(view.snp_top).offset(0).constraint
+                bar.bottom = make.bottom.equalTo(view.snp.top).offset(0).constraint
             } else {
-                bar.bottom = make.bottom.equalTo(self.snackBars.snp_bottom).offset(0).constraint
+                bar.bottom = make.bottom.equalTo(self.snackBars.snp.bottom).offset(0).constraint
             }
             make.leading.trailing.equalTo(self.snackBars)
         }
@@ -2049,7 +2050,7 @@ extension BrowserViewController: HomePanelViewControllerDelegate {
 
 extension BrowserViewController: SearchViewControllerDelegate {
     func searchViewController(_ searchViewController: SearchViewController, didSelectURL url: URL) {
-        finishEditingAndSubmit(url, visitType: VisitType.Typed)
+        finishEditingAndSubmit(url, visitType: VisitType.typed)
     }
 
     func presentSearchSettingsController() {
@@ -2092,15 +2093,16 @@ extension BrowserViewController: TabManagerDelegate {
 
             scrollController.tab = selected
             webViewContainer.addSubview(webView)
-            webView.snp_makeConstraints { make in
-                make.top.equalTo(webViewContainerToolbar.snp_bottom)
+            webView.snp.makeConstraints { make in
+                make.top.equalTo(webViewContainerToolbar.snp.bottom)
                 make.left.right.bottom.equalTo(self.webViewContainer)
             }
             webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
             webView.accessibilityIdentifier = "contentView"
             webView.accessibilityElementsHidden = false
 
-            if let url = webView.url, let absoluteString = url.absoluteString {
+            if let url = webView.url {
+                let absoluteString = url.absoluteString
                 // Don't bother fetching bookmark state for about/sessionrestore and about/home.
                 if url.isAboutURL {
                     // Indeed, because we don't show the toolbar at all, don't even blank the star.
@@ -2144,13 +2146,13 @@ extension BrowserViewController: TabManagerDelegate {
 
         if let readerMode = selected?.getHelper(name: ReaderMode.name()) as? ReaderMode {
             urlBar.updateReaderModeState(readerMode.state)
-            if readerMode.state == .Active {
+            if readerMode.state == .active {
                 showReaderModeBar(animated: false)
             } else {
                 hideReaderModeBar(animated: false)
             }
         } else {
-            urlBar.updateReaderModeState(ReaderModeState.Unavailable)
+            urlBar.updateReaderModeState(ReaderModeState.unavailable)
         }
 
         updateInContentHomePanel(selected?.url as URL?)
@@ -2195,10 +2197,10 @@ extension BrowserViewController: TabManagerDelegate {
         }
         
         if let undoToast = toast {
-            let time = DispatchTime(DispatchTime.now()) + Double(Int64(ButtonToastUX.ToastDelay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+            let time = DispatchTime(uptimeNanoseconds: DispatchTime.now().uptimeNanoseconds) + Double(Int64(ButtonToastUX.ToastDelay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
             DispatchQueue.main.asyncAfter(deadline: time) {
                 self.view.addSubview(undoToast)
-                undoToast.snp_makeConstraints { make in
+                undoToast.snp.makeConstraints { make in
                     make.left.right.equalTo(self.view)
                     make.bottom.equalTo(self.webViewContainer)
                 }
@@ -2229,7 +2231,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // (orange color) as soon as the page has loaded.
         if let url = webView.url {
             if !url.isReaderModeURL {
-                urlBar.updateReaderModeState(ReaderModeState.Unavailable)
+                urlBar.updateReaderModeState(ReaderModeState.unavailable)
                 hideReaderModeBar(animated: false)
             }
 
@@ -2288,15 +2290,15 @@ extension BrowserViewController: WKNavigationDelegate {
         // gives us the exact same behaviour as Safari.
 
         if url.scheme == "tel" || url.scheme == "facetime" || url.scheme == "facetime-audio" {
-            if let phoneNumber = url.resourceSpecifier.stringByRemovingPercentEncoding, !phoneNumber.isEmpty {
+            if let phoneNumber = url.path.removingPercentEncoding, !phoneNumber.isEmpty {
                 let formatter = PhoneNumberFormatter()
                 let formattedPhoneNumber = formatter.formatPhoneNumber(phoneNumber)
-                let alert = UIAlertController(title: formattedPhoneNumber, message: nil, preferredStyle: UIAlertControllerStyle.Alert)
-                alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment:"Label for Cancel button"), style: UIAlertActionStyle.Cancel, handler: nil))
-                alert.addAction(UIAlertAction(title: NSLocalizedString("Call", comment:"Alert Call Button"), style: UIAlertActionStyle.Default, handler: { (action: UIAlertAction!) in
-                    UIApplication.sharedApplication().openURL(url)
+                let alert = UIAlertController(title: formattedPhoneNumber, message: nil, preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment:"Label for Cancel button"), style: UIAlertActionStyle.cancel, handler: nil))
+                alert.addAction(UIAlertAction(title: NSLocalizedString("Call", comment:"Alert Call Button"), style: UIAlertActionStyle.default, handler: { (action: UIAlertAction!) in
+                    UIApplication.shared.openURL(url)
                 }))
-                presentViewController(alert, animated: true, completion: nil)
+                present(alert, animated: true, completion: nil)
             }
             decisionHandler(WKNavigationActionPolicy.cancel)
             return
@@ -2381,9 +2383,9 @@ extension BrowserViewController: WKNavigationDelegate {
         let loginsHelper = tab.getHelper(name: LoginsHelper.name()) as? LoginsHelper
         Authenticator.handleAuthRequest(self, challenge: challenge, loginsHelper: loginsHelper).uponQueue(DispatchQueue.main) { res in
             if let credentials = res.successValue {
-                completionHandler(.UseCredential, credentials.credentials)
+                completionHandler(.useCredential, credentials.credentials)
             } else {
-                completionHandler(NSURLSessionAuthChallengeDisposition.RejectProtectionSpace, nil)
+                completionHandler(URLSession.AuthChallengeDisposition.rejectProtectionSpace, nil)
             }
         }
     }
@@ -2449,10 +2451,10 @@ extension BrowserViewController: WKNavigationDelegate {
     fileprivate func addViewForOpenInHelper(_ openInHelper: OpenInHelper) {
         guard let view = openInHelper.openInView else { return }
         webViewContainerToolbar.addSubview(view)
-        webViewContainerToolbar.snp_updateConstraints { make in
+        webViewContainerToolbar.snp.updateConstraints { make in
             make.height.equalTo(OpenInViewUX.ViewHeight)
         }
-        view.snp_makeConstraints { make in
+        view.snp.makeConstraints { make in
             make.edges.equalTo(webViewContainerToolbar)
         }
 
@@ -2463,7 +2465,7 @@ extension BrowserViewController: WKNavigationDelegate {
         guard let _ = self.openInHelper else { return }
         webViewContainerToolbar.subviews.forEach { $0.removeFromSuperview() }
 
-        webViewContainerToolbar.snp_updateConstraints { make in
+        webViewContainerToolbar.snp.updateConstraints { make in
             make.height.equalTo(0)
         }
 
@@ -2515,7 +2517,7 @@ extension BrowserViewController: WKUIDelegate {
 
     fileprivate func canDisplayJSAlertForWebView(_ webView: WKWebView) -> Bool {
         // Only display a JS Alert if we are selected and there isn't anything being shown
-        return (tabManager.selectedTab?.webView == webView ?? false) && (self.presentedViewController == nil)
+        return ((tabManager.selectedTab == nil ? false : tabManager.selectedTab!.webView == webView)) && (self.presentedViewController == nil)
     }
 
     func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping () -> Void) {
@@ -2559,6 +2561,7 @@ extension BrowserViewController: WKUIDelegate {
         // to open an external application and hand it over to UIApplication.openURL(). The result
         // will be that we switch to the external app, for example the app store, while keeping the
         // original web page in the tab instead of replacing it with an error page.
+        let error = error as NSError
         if error.domain == "WebKitErrorDomain" && error.code == 102 {
             return
         }
@@ -2598,7 +2601,7 @@ extension BrowserViewController: WKUIDelegate {
     }
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
-        let helperForURL = OpenIn.helperForResponse(navigationResponse.response)
+        let helperForURL = OpenIn.helperForResponse(response: navigationResponse.response)
         if navigationResponse.canShowMIMEType {
             if let openInHelper = helperForURL {
                 addViewForOpenInHelper(openInHelper)
@@ -2609,7 +2612,7 @@ extension BrowserViewController: WKUIDelegate {
 
         guard var openInHelper = helperForURL else {
             let error = NSError(domain: ErrorPageHelper.MozDomain, code: Int(ErrorPageHelper.MozErrorDownloadsNotEnabled), userInfo: [NSLocalizedDescriptionKey: Strings.UnableToDownloadError])
-            ErrorPageHelper().showPage(error, forUrl: navigationResponse.response.URL!, inWebView: webView)
+            ErrorPageHelper().showPage(error, forUrl: navigationResponse.response.url!, inWebView: webView)
             return decisionHandler(WKNavigationResponsePolicy.allow)
         }
         
@@ -2665,13 +2668,13 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
 extension BrowserViewController: ReaderModeStyleViewControllerDelegate {
     func readerModeStyleViewController(_ readerModeStyleViewController: ReaderModeStyleViewController, didConfigureStyle style: ReaderModeStyle) {
         // Persist the new style to the profile
-        let encodedStyle: [String:AnyObject] = style.encode()
+        let encodedStyle: [String:Any] = style.encode()
         profile.prefs.setObject(encodedStyle, forKey: ReaderModeProfileKeyStyle)
         // Change the reader mode style on all tabs that have reader mode active
         for tabIndex in 0..<tabManager.count {
             if let tab = tabManager[tabIndex] {
                 if let readerMode = tab.getHelper(name: "ReaderMode") as? ReaderMode {
-                    if readerMode.state == ReaderModeState.Active {
+                    if readerMode.state == ReaderModeState.active {
                         readerMode.style = style
                     }
                 }
@@ -2749,7 +2752,7 @@ extension BrowserViewController {
                         try self.readerModeCache.put(currentURL, readabilityResult)
                     } catch _ {
                     }
-                    if let nav = webView.loadRequest(PrivilegedRequest(coder: readerModeURL)) {
+                    if let nav = webView.loadRequest(PrivilegedRequest(url: readerModeURL) as URLRequest) {
                         self.ignoreNavigationInTab(tab, navigation: nav)
                     }
                 }
@@ -2802,7 +2805,7 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
     func readerModeBar(_ readerModeBar: ReaderModeBarView, didSelectButton buttonType: ReaderModeBarButtonType) {
         switch buttonType {
         case .settings:
-            if let readerMode = tabManager.selectedTab?.getHelper(name: "ReaderMode") as? ReaderMode, readerMode.state == ReaderModeState.Active {
+            if let readerMode = tabManager.selectedTab?.getHelper(name: "ReaderMode") as? ReaderMode, readerMode.state == ReaderModeState.active {
                 var readerModeStyle = DefaultReaderModeStyle
                 if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle) {
                     if let style = ReaderModeStyle(dict: dict as [String : AnyObject]) {
@@ -2854,9 +2857,8 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
         case .addToReadingList:
             if let tab = tabManager.selectedTab,
                let rawURL = tab.url, rawURL.isReaderModeURL,
-               let url = rawURL.decodeReaderModeURL,
-               let absoluteString = url.absoluteString {
-                    profile.readingList?.createRecordWithURL(absoluteString, title: tab.title ?? "", addedBy: UIDevice.currentDevice().name) // TODO Check result, can this fail?
+               let url = rawURL.decodeReaderModeURL {
+                    profile.readingList?.createRecordWithURL(url.absoluteString, title: tab.title ?? "", addedBy: UIDevice.current.name) // TODO Check result, can this fail?
                     readerModeBar.added = true
                     readerModeBar.unread = true
             }
@@ -2889,7 +2891,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
                 // On first run (and forced) open up the homepage in the background.
                 let state = self.getCurrentAppState()
                 if let homePageURL = HomePageAccessors.getHomePage(state), let tab = self.tabManager.selectedTab, DeviceInfo.hasConnectivity() {
-                    tab.loadRequest(URLRequest(URL: homePageURL))
+                    tab.loadRequest(URLRequest(url: homePageURL))
                 }
             }
 
@@ -2943,14 +2945,14 @@ extension BrowserViewController: IntroViewControllerDelegate {
 
 extension BrowserViewController: FxAContentViewControllerDelegate {
     func contentViewControllerDidSignIn(_ viewController: FxAContentViewController, data: JSON) -> Void {
-        if data["keyFetchToken"].asString == nil || data["unwrapBKey"].asString == nil {
+        if data["keyFetchToken"].string == nil || data["unwrapBKey"].string == nil {
             // The /settings endpoint sends a partial "login"; ignore it entirely.
             log.debug("Ignoring didSignIn with keyFetchToken or unwrapBKey missing.")
             return
         }
 
         // TODO: Error handling.
-        let account = FirefoxAccount.fromConfigurationAndJSON(profile.accountConfiguration, data: data)!
+        let account = FirefoxAccount.from(profile.accountConfiguration, andJSON: data)!
         profile.setAccount(account)
         if let account = self.profile.getAccount() {
             account.advance()
@@ -3049,13 +3051,13 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                     application.endBackgroundTask(taskId)
                 })
 
-                Alamofire.request(.GET, url)
+                Alamofire.request(url)
                     .validate(statusCode: 200..<300)
-                    .response { responseRequest, responseResponse, responseData, responseError in
+                    .response { response in
                         // Only set the image onto the pasteboard if the pasteboard hasn't changed since
                         // fetching the image; otherwise, in low-bandwidth situations,
                         // we might be overwriting something that the user has subsequently added.
-                        if changeCount == pasteboard.changeCount, let imageData = responseData, responseError == nil {
+                        if changeCount == pasteboard.changeCount, let imageData = response.data, response.error == nil {
                             pasteboard.addImageWithData(imageData, forURL: url)
                         }
 
@@ -3079,10 +3081,10 @@ extension BrowserViewController: ContextMenuHelperDelegate {
     }
 
     fileprivate func getImage(_ url: URL, success: @escaping (UIImage) -> ()) {
-        Alamofire.request(.GET, url)
+        Alamofire.request(url)
             .validate(statusCode: 200..<300)
-            .response { _, _, data, _ in
-                if let data = data,
+            .response { response in
+                if let data = response.data,
                    let image = UIImage.dataIsGIF(data) ? UIImage.imageFromGIFDataThreadSafe(data) : UIImage.imageFromDataThreadSafe(data) {
                     success(image)
                 }
@@ -3130,11 +3132,11 @@ extension BrowserViewController {
                 return
             }
             inputView.addSubview(self.customSearchEngineButton)
-            self.customSearchEngineButton.snp_remakeConstraints { make in
-                make.leading.equalTo(nextButtonView.snp_trailing).offset(20)
-                make.width.equalTo(inputView.snp_height)
-                make.top.equalTo(nextButtonView.snp_top)
-                make.height.equalTo(inputView.snp_height)
+            self.customSearchEngineButton.snp.remakeConstraints { make in
+                make.leading.equalTo(nextButtonView.snp.trailing).offset(20)
+                make.width.equalTo(inputView.snp.height)
+                make.top.equalTo(nextButtonView.snp.top)
+                make.height.equalTo(inputView.snp.height)
             }
     }
 
@@ -3308,7 +3310,7 @@ class BlurWrapper: UIView {
             effectView.removeFromSuperview()
             effectView = newEffect
             insertSubview(effectView, belowSubview: wrappedView)
-            effectView.snp_remakeConstraints { make in
+            effectView.snp.remakeConstraints { make in
                 make.edges.equalTo(self)
             }
             effectView.isHidden = disableBlur
@@ -3348,15 +3350,15 @@ class BlurWrapper: UIView {
         addSubview(effectView)
         addSubview(wrappedView)
 
-        effectView.snp_makeConstraints { make in
+        effectView.snp.makeConstraints { make in
             make.edges.equalTo(self)
         }
 
-        wrappedView.snp_makeConstraints { make in
+        wrappedView.snp.makeConstraints { make in
             make.edges.equalTo(self)
         }
         
-        background.snp_makeConstraints { make in
+        background.snp.makeConstraints { make in
             make.edges.equalTo(self)
         }
     }

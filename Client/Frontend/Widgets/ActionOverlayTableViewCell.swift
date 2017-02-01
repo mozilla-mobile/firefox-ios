@@ -64,17 +64,17 @@ class ActionOverlayTableViewCell: UITableViewCell {
         separatorLineView.backgroundColor = UIColor.gray
         contentView.addSubview(separatorLineView)
 
-        selectedOverlay.snp_remakeConstraints { make in
+        selectedOverlay.snp.remakeConstraints { make in
             make.edges.equalTo(contentView)
         }
 
-        titleLabel.snp_remakeConstraints { make in
+        titleLabel.snp.remakeConstraints { make in
             make.leading.equalTo(contentView).offset(12)
-            make.trailing.equalTo(statusIcon.snp_leading)
+            make.trailing.equalTo(statusIcon.snp.leading)
             make.centerY.equalTo(contentView)
         }
 
-        statusIcon.snp_remakeConstraints { make in
+        statusIcon.snp.remakeConstraints { make in
             make.size.equalTo(ActionOverlayTableViewCellUX.StatusIconSize)
             make.trailing.equalTo(contentView).inset(12)
             make.centerY.equalTo(contentView)

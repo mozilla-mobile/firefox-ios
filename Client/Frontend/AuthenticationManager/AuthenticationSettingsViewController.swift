@@ -84,7 +84,7 @@ class RequirePasscodeSetting: Setting {
 
     override var status: NSAttributedString {
         // Only show the interval if we are enabled and have an interval set.
-        let authenticationInterval = KeychainWrapper.defaultKeychainWrapper.authenticationInfo()
+        let authenticationInterval = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo()
         if let interval = authenticationInterval?.requiredPasscodeInterval, enabled {
             return NSAttributedString.disabledTableRowTitle(interval.settingTitle)
         }
@@ -109,7 +109,7 @@ class RequirePasscodeSetting: Setting {
     }
 
     override func onClick(_: UINavigationController?) {
-        guard let authInfo = KeychainWrapper.defaultKeychainWrapper.authenticationInfo() else {
+        guard let authInfo = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo() else {
             navigateToRequireInterval()
             return
         }
@@ -162,7 +162,7 @@ class TouchIDSetting: Setting {
         self.touchIDSuccess = touchIDSuccess
         self.touchIDFallback = touchIDFallback
         self.navigationController = navigationController
-        self.authInfo = KeychainWrapper.defaultKeychainWrapper.authenticationInfo()
+        self.authInfo = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo()
         super.init(title: title, delegate: delegate, enabled: enabled)
     }
 
@@ -209,7 +209,7 @@ class TouchIDSetting: Setting {
 
     func toggleTouchID(enabled: Bool) {
         authInfo?.useTouchID = enabled
-        KeychainWrapper.defaultKeychainWrapper.setAuthenticationInfo(authInfo)
+        KeychainWrapper.sharedAppContainerKeychain.setAuthenticationInfo(authInfo)
         switchControl?.setOn(enabled, animated: true)
     }
 }
@@ -235,7 +235,7 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
     }
 
     override func generateSettings() -> [SettingSection] {
-        if let _ = KeychainWrapper.defaultKeychainWrapper.authenticationInfo() {
+        if let _ = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo() {
             return passcodeEnabledSettings()
         } else {
             return passcodeDisabledSettings()

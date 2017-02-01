@@ -9,12 +9,12 @@ import SwiftKeychainWrapper
 /// Screen presented to the user when selecting the time interval before requiring a passcode
 class RequirePasscodeIntervalViewController: UITableViewController {
     let intervalOptions: [PasscodeInterval] = [
-        .Immediately,
-        .OneMinute,
-        .FiveMinutes,
-        .TenMinutes,
-        .FifteenMinutes,
-        .OneHour
+        .immediately,
+        .oneMinute,
+        .fiveMinutes,
+        .tenMinutes,
+        .fifteenMinutes,
+        .oneHour
     ]
 
     fileprivate let BasicCheckmarkCell = "BasicCheckmarkCell"
@@ -52,7 +52,7 @@ class RequirePasscodeIntervalViewController: UITableViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.authenticationInfo = KeychainWrapper.defaultKeychainWrapper.authenticationInfo()
+        self.authenticationInfo = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo()
         tableView.reloadData()
     }
 
@@ -71,7 +71,7 @@ class RequirePasscodeIntervalViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         authenticationInfo?.updateRequiredPasscodeInterval(intervalOptions[indexPath.row])
-        KeychainWrapper.defaultKeychainWrapper.setAuthenticationInfo(authenticationInfo)
+        KeychainWrapper.sharedAppContainerKeychain.setAuthenticationInfo(authenticationInfo)
         tableView.reloadData()
     }
 }

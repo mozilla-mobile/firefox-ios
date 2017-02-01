@@ -206,7 +206,7 @@ class ClientPickerTableViewHeaderCell: UITableViewCell {
         nameLabel.text = NSLocalizedString("Available devices:", tableName: "SendTo", comment: "Header for the list of devices table")
         nameLabel.textColor = ClientPickerViewControllerUX.TableHeaderTextColor
 
-        nameLabel.snp_makeConstraints { (make) -> Void in
+        nameLabel.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(ClientPickerViewControllerUX.TableHeaderTextPaddingLeft)
             make.centerY.equalTo(self)
             make.right.equalTo(self)
@@ -258,10 +258,10 @@ class ClientPickerTableViewCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        nameLabel.snp_makeConstraints { (make) -> Void in
+        nameLabel.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(ClientPickerViewControllerUX.DeviceRowTextPaddingLeft)
-            make.centerY.equalTo(self.snp_centerY)
-            make.right.equalTo(self.snp_right).offset(-ClientPickerViewControllerUX.DeviceRowTextPaddingRight)
+            make.centerY.equalTo(self.snp.centerY)
+            make.right.equalTo(self.snp.right).offset(-ClientPickerViewControllerUX.DeviceRowTextPaddingRight)
         }
     }
 

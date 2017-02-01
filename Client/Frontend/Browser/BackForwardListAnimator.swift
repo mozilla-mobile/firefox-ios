@@ -52,14 +52,14 @@ extension BackForwardListAnimator {
             backForward.view.frame = bvc.view.frame
             backForward.view.alpha = 0
             containerView.addSubview(backForward.view)
-            backForward.view.snp_updateConstraints { make in
+            backForward.view.snp.updateConstraints { make in
                 make.edges.equalTo(containerView)
             }
             backForward.view.layoutIfNeeded()
             
             UIView.animate(withDuration: transitionDuration(using: transitionContext), delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.3, options: [], animations: { () -> Void in
                 backForward.view.alpha = 1
-                backForward.tableView.snp_updateConstraints { make in
+                backForward.tableView.snp.updateConstraints { make in
                     make.height.equalTo(backForward.tableHeight)
                 }
                 backForward.view.layoutIfNeeded()
@@ -70,7 +70,7 @@ extension BackForwardListAnimator {
         } else {
             UIView.animate(withDuration: transitionDuration(using: transitionContext), delay: 0, usingSpringWithDamping: 1.2, initialSpringVelocity: 0.0, options: [], animations: { () -> Void in
                 backForward.view.alpha = 0
-                backForward.tableView.snp_updateConstraints { make in
+                backForward.tableView.snp.updateConstraints { make in
                     make.height.equalTo(0)
                 }
                 backForward.view.layoutIfNeeded()

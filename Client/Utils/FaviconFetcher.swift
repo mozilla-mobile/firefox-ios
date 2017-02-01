@@ -32,12 +32,12 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
         return UIImage(named: "defaultFavicon")!
     }()
 
-    class func getForURL(_ url: NSURL, profile: Profile) -> Deferred<Maybe<[Favicon]>> {
+    class func getForURL(_ url: URL, profile: Profile) -> Deferred<Maybe<[Favicon]>> {
         let f = FaviconFetcher()
         return f.loadFavicons(url, profile: profile)
     }
 
-    fileprivate func loadFavicons(_ url: NSURL, profile: Profile, oldIcons: [Favicon] = [Favicon]()) -> Deferred<Maybe<[Favicon]>> {
+    fileprivate func loadFavicons(_ url: URL, profile: Profile, oldIcons: [Favicon] = [Favicon]()) -> Deferred<Maybe<[Favicon]>> {
         if isIgnoredURL(url) {
             return deferMaybe(FaviconFetcherErrorType(description: "Not fetching ignored URL to find favicons."))
         }
@@ -74,25 +74,25 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
         return deferred
     }
 
-    lazy fileprivate var alamofire: Alamofire.Manager = {
-        let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
+    lazy fileprivate var alamofire: SessionManager = {
+        let configuration = URLSessionConfiguration.default
         configuration.timeoutIntervalForRequest = 5
 
-        return Alamofire.Manager.managerWithUserAgent(userAgent, configuration: configuration)
+        return SessionManager.managerWithUserAgent(userAgent, configuration: configuration)
     }()
 
-    fileprivate func fetchDataForURL(_ url: NSURL) -> Deferred<Maybe<NSData>> {
-        let deferred = Deferred<Maybe<NSData>>()
-        alamofire.request(.GET, url).response { (request, response, data, error) in
+    fileprivate func fetchDataForURL(_ url: URL) -> Deferred<Maybe<Data>> {
+        let deferred = Deferred<Maybe<Data>>()
+        alamofire.request(url).response { response in
             // Don't cancel requests just because our Manager is deallocated.
             withExtendedLifetime(self.alamofire) {
-                if error == nil {
-                    if let data = data {
+                if response.error == nil {
+                    if let data = response.data {
                         deferred.fill(Maybe(success: data))
                         return
                     }
                 }
-                let errorDescription = (error as NSError?)?.description ?? "No content."
+                let errorDescription = (response.error as NSError?)?.description ?? "No content."
                 deferred.fill(Maybe(failure: FaviconFetcherErrorType(description: errorDescription)))
             }
         }
@@ -102,19 +102,19 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
 
 
     // Loads and parses an html document and tries to find any known favicon-type tags for the page
-    fileprivate func parseHTMLForFavicons(_ url: NSURL) -> Deferred<Maybe<[Favicon]>> {
+    fileprivate func parseHTMLForFavicons(_ url: URL) -> Deferred<Maybe<[Favicon]>> {
         return fetchDataForURL(url).bind({ result -> Deferred<Maybe<[Favicon]>> in
             var icons = [Favicon]()
             guard let data = result.successValue, result.isSuccess,
                 let root = try? HTMLDocument(data: data as Data) else {
                     return deferMaybe([])
             }
-            var reloadUrl: NSURL? = nil
+            var reloadUrl: URL? = nil
             for meta in root.xpath("//head/meta") {
                 if let refresh = meta["http-equiv"], refresh == "Refresh",
                     let content = meta["content"],
-                    let index = content.rangeOfString("URL="),
-                    let url = NSURL(string: content.substringFromIndex(index.startIndex.advancedBy(4))) {
+                    let index = content.range(of: "URL="),
+                    let url = NSURL(string: content.substring(from: index.startIndex.advancedBy(4))) {
                     reloadUrl = url
                 }
             }
@@ -123,19 +123,19 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
                 return self.parseHTMLForFavicons(url)
             }
 
-            var bestType = IconType.NoneFound
+            var bestType = IconType.noneFound
             for link in root.xpath("//head//link[contains(@rel, 'icon')]") {
                 var iconType: IconType? = nil
                 if let rel = link["rel"] {
                     switch (rel) {
                     case "shortcut icon":
-                        iconType = .Icon
+                        iconType = .icon
                     case "icon":
-                        iconType = .Icon
+                        iconType = .icon
                     case "apple-touch-icon":
-                        iconType = .AppleIcon
+                        iconType = .appleIcon
                     case "apple-touch-icon-precomposed":
-                        iconType = .AppleIconPrecomposed
+                        iconType = .appleIconPrecomposed
                     default:
                         iconType = nil
                     }
@@ -173,7 +173,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
         })
     }
 
-    func getFavicon(_ siteUrl: NSURL, icon: Favicon, profile: Profile) -> Deferred<Maybe<Favicon>> {
+    func getFavicon(_ siteUrl: URL, icon: Favicon, profile: Profile) -> Deferred<Maybe<Favicon>> {
         let deferred = Deferred<Maybe<Favicon>>()
         let url = icon.url
         let manager = SDWebImageManager.shared()
@@ -212,10 +212,10 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
     }
 
     // Returns a single Favicon UIImage for a given URL
-    class func fetchFavImageForURL(forURL url: NSURL, profile: Profile) -> Deferred<Maybe<UIImage>> {
+    class func fetchFavImageForURL(forURL url: URL, profile: Profile) -> Deferred<Maybe<UIImage>> {
         let deferred = Deferred<Maybe<UIImage>>()
         FaviconFetcher.getForURL(url.domainURL, profile: profile).uponQueue(DispatchQueue.main) { result in
-            var iconURL: NSURL?
+            var iconURL: URL?
             if let favicons = result.successValue, favicons.count > 0, let faviconImageURL = favicons.first?.url.asURL {
                 iconURL = faviconImageURL
             } else {

@@ -66,7 +66,7 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
         tableView.cellLayoutMarginsFollowReadableWidth = false
         tableView.accessibilityIdentifier = "Context Menu"
 
-        tableView.snp_makeConstraints { make in
+        tableView.snp.makeConstraints { make in
             make.center.equalTo(self.view)
             make.width.equalTo(290)
             setHeightConstraint(make)
@@ -90,7 +90,7 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
     }
 
     override func updateViewConstraints() {
-        tableView.snp_updateConstraints { make in
+        tableView.snp.updateConstraints { make in
             setHeightConstraint(make)
         }
         super.updateViewConstraints()
@@ -190,19 +190,19 @@ class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
         contentView.addSubview(descriptionLabel)
         contentView.addSubview(titleLabel)
 
-        siteImageView.snp_remakeConstraints { make in
+        siteImageView.snp.remakeConstraints { make in
             make.centerY.equalTo(contentView)
             make.leading.equalTo(contentView).offset(12)
             make.size.equalTo(SimpleHighlightCellUX.SiteImageViewSize)
         }
 
-        titleLabel.snp_remakeConstraints { make in
-            make.leading.equalTo(siteImageView.snp_trailing).offset(12)
+        titleLabel.snp.remakeConstraints { make in
+            make.leading.equalTo(siteImageView.snp.trailing).offset(12)
             make.trailing.equalTo(contentView).inset(12)
             make.top.equalTo(siteImageView).offset(7)
         }
 
-        descriptionLabel.snp_remakeConstraints { make in
+        descriptionLabel.snp.remakeConstraints { make in
             make.leading.equalTo(titleLabel)
             make.bottom.equalTo(siteImageView).inset(7)
         }

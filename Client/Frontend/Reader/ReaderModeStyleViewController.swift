@@ -65,15 +65,15 @@ class ReaderModeStyleViewController: UIViewController {
         view.addSubview(fontTypeRow)
         fontTypeRow.backgroundColor = ReaderModeStyleViewControllerUX.FontTypeRowBackground
 
-        fontTypeRow.snp_makeConstraints { (make) -> () in
+        fontTypeRow.snp.makeConstraints { (make) -> () in
             make.top.equalTo(self.view)
             make.left.right.equalTo(self.view)
             make.height.equalTo(ReaderModeStyleViewControllerUX.RowHeight)
         }
 
         fontTypeButtons = [
-            FontTypeButton(fontType: ReaderModeFontType.SansSerif),
-            FontTypeButton(fontType: ReaderModeFontType.Serif)
+            FontTypeButton(fontType: ReaderModeFontType.sansSerif),
+            FontTypeButton(fontType: ReaderModeFontType.serif)
         ]
 
         setupButtons(fontTypeButtons, inRow: fontTypeRow, action: #selector(ReaderModeStyleViewController.SELchangeFontType(_:)))
@@ -84,8 +84,8 @@ class ReaderModeStyleViewController: UIViewController {
         view.addSubview(fontSizeRow)
         fontSizeRow.backgroundColor = ReaderModeStyleViewControllerUX.FontSizeRowBackground
 
-        fontSizeRow.snp_makeConstraints { (make) -> () in
-            make.top.equalTo(fontTypeRow.snp_bottom)
+        fontSizeRow.snp.makeConstraints { (make) -> () in
+            make.top.equalTo(fontTypeRow.snp.bottom)
             make.left.right.equalTo(self.view)
             make.height.equalTo(ReaderModeStyleViewControllerUX.RowHeight)
         }
@@ -93,7 +93,7 @@ class ReaderModeStyleViewController: UIViewController {
         fontSizeLabel = FontSizeLabel()
         fontSizeRow.addSubview(fontSizeLabel)
 
-        fontSizeLabel.snp_makeConstraints { (make) -> () in
+        fontSizeLabel.snp.makeConstraints { (make) -> () in
             make.center.equalTo(fontSizeRow)
             return
         }
@@ -110,16 +110,16 @@ class ReaderModeStyleViewController: UIViewController {
         let themeRow = UIView()
         view.addSubview(themeRow)
 
-        themeRow.snp_makeConstraints { (make) -> () in
-            make.top.equalTo(fontSizeRow.snp_bottom)
+        themeRow.snp.makeConstraints { (make) -> () in
+            make.top.equalTo(fontSizeRow.snp.bottom)
             make.left.right.equalTo(self.view)
             make.height.equalTo(ReaderModeStyleViewControllerUX.RowHeight)
         }
 
         themeButtons = [
-            ThemeButton(theme: ReaderModeTheme.Light),
-            ThemeButton(theme: ReaderModeTheme.Dark),
-            ThemeButton(theme: ReaderModeTheme.Sepia)
+            ThemeButton(theme: ReaderModeTheme.light),
+            ThemeButton(theme: ReaderModeTheme.dark),
+            ThemeButton(theme: ReaderModeTheme.sepia)
         ]
 
         setupButtons(themeButtons, inRow: themeRow, action: #selector(ReaderModeStyleViewController.SELchangeTheme(_:)))
@@ -130,8 +130,8 @@ class ReaderModeStyleViewController: UIViewController {
         view.addSubview(brightnessRow)
         brightnessRow.backgroundColor = ReaderModeStyleViewControllerUX.BrightnessRowBackground
 
-        brightnessRow.snp_makeConstraints { (make) -> () in
-            make.top.equalTo(themeRow.snp_bottom)
+        brightnessRow.snp.makeConstraints { (make) -> () in
+            make.top.equalTo(themeRow.snp.bottom)
             make.left.right.equalTo(self.view)
             make.height.equalTo(ReaderModeStyleViewControllerUX.RowHeight)
         }
@@ -142,7 +142,7 @@ class ReaderModeStyleViewController: UIViewController {
         slider.tintColor = ReaderModeStyleViewControllerUX.BrightnessSliderTintColor
         slider.addTarget(self, action: #selector(ReaderModeStyleViewController.SELchangeBrightness(_:)), for: UIControlEvents.valueChanged)
 
-        slider.snp_makeConstraints { make in
+        slider.snp.makeConstraints { make in
             make.center.equalTo(brightnessRow.center)
             make.width.equalTo(ReaderModeStyleViewControllerUX.BrightnessSliderWidth)
         }
@@ -150,17 +150,17 @@ class ReaderModeStyleViewController: UIViewController {
         let brightnessMinImageView = UIImageView(image: UIImage(named: "brightnessMin"))
         brightnessRow.addSubview(brightnessMinImageView)
 
-        brightnessMinImageView.snp_makeConstraints { (make) -> () in
+        brightnessMinImageView.snp.makeConstraints { (make) -> () in
             make.centerY.equalTo(slider)
-            make.right.equalTo(slider.snp_left).offset(-ReaderModeStyleViewControllerUX.BrightnessIconOffset)
+            make.right.equalTo(slider.snp.left).offset(-ReaderModeStyleViewControllerUX.BrightnessIconOffset)
         }
 
         let brightnessMaxImageView = UIImageView(image: UIImage(named: "brightnessMax"))
         brightnessRow.addSubview(brightnessMaxImageView)
 
-        brightnessMaxImageView.snp_makeConstraints { (make) -> () in
+        brightnessMaxImageView.snp.makeConstraints { (make) -> () in
             make.centerY.equalTo(slider)
-            make.left.equalTo(slider.snp_right).offset(ReaderModeStyleViewControllerUX.BrightnessIconOffset)
+            make.left.equalTo(slider.snp.right).offset(ReaderModeStyleViewControllerUX.BrightnessIconOffset)
         }
 
         selectFontType(readerModeStyle.fontType)
@@ -174,14 +174,14 @@ class ReaderModeStyleViewController: UIViewController {
         for (idx, button) in buttons.enumerated() {
             row.addSubview(button)
             button.addTarget(self, action: action, for: UIControlEvents.touchUpInside)
-            button.snp_makeConstraints { make in
-                make.top.equalTo(row.snp_top)
+            button.snp.makeConstraints { make in
+                make.top.equalTo(row.snp.top)
                 if idx == 0 {
-                    make.left.equalTo(row.snp_left)
+                    make.left.equalTo(row.snp.left)
                 } else {
-                    make.left.equalTo(buttons[idx - 1].snp_right)
+                    make.left.equalTo(buttons[idx - 1].snp.right)
                 }
-                make.bottom.equalTo(row.snp_bottom)
+                make.bottom.equalTo(row.snp.bottom)
                 make.width.equalTo(self.preferredContentSize.width / CGFloat(buttons.count))
             }
         }
@@ -244,7 +244,7 @@ class ReaderModeStyleViewController: UIViewController {
 // MARK: -
 
 class FontTypeButton: UIButton {
-    var fontType: ReaderModeFontType = .SansSerif
+    var fontType: ReaderModeFontType = .sansSerif
 
     convenience init(fontType: ReaderModeFontType) {
         self.init(frame: CGRect.zero)
@@ -316,7 +316,7 @@ class FontSizeLabel: UILabel {
         fatalError("init(coder:) has not been implemented")
     }
 
-    var fontType: ReaderModeFontType = .SansSerif {
+    var fontType: ReaderModeFontType = .sansSerif {
         didSet {
             switch fontType {
             case .sansSerif:
@@ -357,7 +357,7 @@ class ThemeButton: UIButton {
         }
     }
 
-    var fontType: ReaderModeFontType = .SansSerif {
+    var fontType: ReaderModeFontType = .sansSerif {
         didSet {
             switch fontType {
             case .sansSerif:

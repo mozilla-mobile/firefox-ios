@@ -51,7 +51,7 @@ class MenuViewController: UIViewController {
                 return
             }
 
-            menuView.snp_remakeConstraints { make in
+            menuView.snp.remakeConstraints { make in
                 make.centerX.equalTo(view)
                 make.width.equalTo(fixedWidth)
                 make.bottom.equalTo(view)
@@ -107,7 +107,7 @@ class MenuViewController: UIViewController {
             menuView.toolbar.clipsToBounds = false
             // add a shadow to the tp[ of the toolbar
             menuView.toolbar.layer.shadowOffset = CGSize(width: 0, height: -2)
-            menuView.snp_makeConstraints { make in
+            menuView.snp.makeConstraints { make in
                 make.top.left.right.equalTo(view)
             }
         case .modal:
@@ -125,10 +125,10 @@ class MenuViewController: UIViewController {
     }
 
     fileprivate func setupDefaultModalMenuConstraints() {
-        menuView.snp_remakeConstraints { make in
-            make.left.equalTo(view.snp_left).offset(24)
-            make.right.equalTo(view.snp_right).offset(-24)
-            make.bottom.equalTo(view.snp_bottom)
+        menuView.snp.remakeConstraints { make in
+            make.left.equalTo(view.snp.left).offset(24)
+            make.right.equalTo(view.snp.right).offset(-24)
+            make.bottom.equalTo(view.snp.bottom)
         }
     }
 

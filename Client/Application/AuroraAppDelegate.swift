@@ -17,7 +17,7 @@ class AuroraAppDelegate: AppDelegate {
     fileprivate var naggedAboutAuroraUpdate = false
     fileprivate let feedbackDelegate = FeedbackSnapshotDelegate()
 
-    override func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [AnyHashable: Any]?) -> Bool {
+    override func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         super.application(application, willFinishLaunchingWithOptions: launchOptions)
 
         checkForAuroraUpdate()
@@ -83,8 +83,8 @@ extension AuroraAppDelegate: UIAlertViewDelegate {
         return Bundle.main.object(forInfoDictionaryKey: String(kCFBundleVersionKey)) as? NSString
     }
 
-    fileprivate func fetchLatestAuroraVersion(_ completionHandler: @escaping (NSString?) -> Void) {
-        Alamofire.request(.GET, AuroraPropertyListURL).responsePropertyList(options: PropertyListSerialization.ReadOptions()) { response in
+    fileprivate func fetchLatestAuroraVersion(_ completionHandler: @escaping (String?) -> Void) {
+        Alamofire.request(AuroraPropertyListURL).responsePropertyList(options: PropertyListSerialization.ReadOptions()) { response in
             if let plist = response.result.value as? NSDictionary {
                 if let items = plist["items"] as? NSArray {
                     if let item = items[0] as? NSDictionary {

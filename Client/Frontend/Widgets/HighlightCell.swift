@@ -122,42 +122,42 @@ class HighlightCell: UITableViewCell {
         contentView.addSubview(descriptionLabel)
         contentView.addSubview(statusIcon)
 
-        siteImageView.snp_makeConstraints { make in
+        siteImageView.snp.makeConstraints { make in
             make.top.equalTo(backgroundImage)
             make.leading.equalTo(backgroundImage)
             make.size.equalTo(48)
         }
 
-        backgroundImage.snp_makeConstraints { make in
+        backgroundImage.snp.makeConstraints { make in
             make.top.equalTo(contentView).offset(5)
             make.leading.equalTo(contentView).offset(20)
             make.trailing.equalTo(contentView).inset(20)
             make.height.equalTo(200)
         }
 
-        selectedOverlay.snp_makeConstraints { make in
+        selectedOverlay.snp.makeConstraints { make in
             make.edges.equalTo(contentView)
         }
 
-        titleLabel.snp_remakeConstraints { make in
+        titleLabel.snp.remakeConstraints { make in
             make.leading.equalTo(contentView).offset(20)
-            make.top.equalTo(backgroundImage.snp_bottom).offset(10)
-            make.trailing.equalTo(timeStamp.snp_leading).offset(-5)
+            make.top.equalTo(backgroundImage.snp.bottom).offset(10)
+            make.trailing.equalTo(timeStamp.snp.leading).offset(-5)
         }
 
-        statusIcon.snp_makeConstraints { make in
+        statusIcon.snp.makeConstraints { make in
             make.leading.equalTo(backgroundImage)
-            make.top.equalTo(titleLabel.snp_bottom).offset(8)
+            make.top.equalTo(titleLabel.snp.bottom).offset(8)
             make.bottom.equalTo(contentView).offset(-12)
             make.size.equalTo(12)
         }
 
-        descriptionLabel.snp_makeConstraints { make in
-            make.leading.equalTo(statusIcon.snp_trailing).offset(10)
+        descriptionLabel.snp.makeConstraints { make in
+            make.leading.equalTo(statusIcon.snp.trailing).offset(10)
             make.bottom.equalTo(statusIcon)
         }
 
-        timeStamp.snp_makeConstraints { make in
+        timeStamp.snp.makeConstraints { make in
             make.trailing.equalTo(backgroundImage)
             make.bottom.equalTo(descriptionLabel)
         }
@@ -241,19 +241,19 @@ class HighlightIntroCell: UITableViewCell {
         descriptionLabel.text = Strings.HighlightIntroDescription
 
         let titleInsets = UIEdgeInsets(top: HighlightIntroCellUX.margin, left: HighlightIntroCellUX.margin, bottom: 0, right: 0)
-        titleLabel.snp_makeConstraints { make in
+        titleLabel.snp.makeConstraints { make in
             make.leading.top.equalTo(self.contentView).inset(titleInsets)
         }
 
-        mainImageView.snp_makeConstraints { make in
-            make.leading.equalTo(titleLabel.snp_trailing)
+        mainImageView.snp.makeConstraints { make in
+            make.leading.equalTo(titleLabel.snp.trailing)
             make.top.bottom.equalTo(self.contentView)
             make.trailing.equalTo(self.contentView).offset(-HighlightIntroCellUX.margin/2)
         }
 
-        descriptionLabel.snp_makeConstraints { make in
+        descriptionLabel.snp.makeConstraints { make in
             make.leading.trailing.equalTo(titleLabel)
-            make.top.equalTo(titleLabel.snp_bottom).offset(HighlightIntroCellUX.margin/2)
+            make.top.equalTo(titleLabel.snp.bottom).offset(HighlightIntroCellUX.margin/2)
         }
 
     }

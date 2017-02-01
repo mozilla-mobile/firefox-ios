@@ -107,7 +107,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
         let logoImageView = UIImageView(image: UIImage(named: "emptyBookmarks"))
         overlayView.addSubview(logoImageView)
-        logoImageView.snp_makeConstraints { make in
+        logoImageView.snp.makeConstraints { make in
             make.centerX.equalTo(overlayView)
 
             // Sets proper top constraint for iPhone 6 in portait and for iPad.
@@ -126,9 +126,9 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         welcomeLabel.numberOfLines = 0
         welcomeLabel.adjustsFontSizeToFitWidth = true
 
-        welcomeLabel.snp_makeConstraints { make in
+        welcomeLabel.snp.makeConstraints { make in
             make.centerX.equalTo(overlayView)
-            make.top.equalTo(logoImageView.snp_bottom).offset(BookmarksPanelUX.WelcomeScreenPadding)
+            make.top.equalTo(logoImageView.snp.bottom).offset(BookmarksPanelUX.WelcomeScreenPadding)
             make.width.equalTo(BookmarksPanelUX.WelcomeScreenItemWidth)
         }
         
@@ -140,7 +140,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             if self.emptyStateOverlayView.superview == nil {
                 self.view.addSubview(self.emptyStateOverlayView)
                 self.view.bringSubview(toFront: self.emptyStateOverlayView)
-                self.emptyStateOverlayView.snp_makeConstraints { make -> Void in
+                self.emptyStateOverlayView.snp.makeConstraints { make -> Void in
                     make.edges.equalTo(self.tableView)
                 }
             }
@@ -472,25 +472,25 @@ private class BookmarkFolderTableViewHeader: UITableViewHeaderFooterView {
         contentView.addSubview(chevron)
         contentView.addSubview(titleLabel)
 
-        chevron.snp_makeConstraints { make in
+        chevron.snp.makeConstraints { make in
             make.left.equalTo(contentView).offset(BookmarksPanelUX.BookmarkFolderHeaderViewChevronInset)
             make.centerY.equalTo(contentView)
             make.size.equalTo(BookmarksPanelUX.BookmarkFolderChevronSize)
         }
 
-        titleLabel.snp_makeConstraints { make in
-            make.left.equalTo(chevron.snp_right).offset(BookmarksPanelUX.BookmarkFolderHeaderViewChevronInset)
+        titleLabel.snp.makeConstraints { make in
+            make.left.equalTo(chevron.snp.right).offset(BookmarksPanelUX.BookmarkFolderHeaderViewChevronInset)
             make.right.greaterThanOrEqualTo(contentView).offset(-BookmarksPanelUX.BookmarkFolderHeaderViewChevronInset)
             make.centerY.equalTo(contentView)
         }
 
-        topBorder.snp_makeConstraints { make in
+        topBorder.snp.makeConstraints { make in
             make.left.right.equalTo(self)
             make.top.equalTo(self).offset(-0.5)
             make.height.equalTo(0.5)
         }
 
-        bottomBorder.snp_makeConstraints { make in
+        bottomBorder.snp.makeConstraints { make in
             make.left.right.bottom.equalTo(self)
             make.height.equalTo(0.5)
         }

@@ -29,7 +29,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
 
         let privacyTitle = NSLocalizedString("Privacy", comment: "Privacy section title")
         let accountDebugSettings: [Setting]
-        if AppConstants.BuildChannel != .Aurora {
+        if AppConstants.BuildChannel != .aurora {
             accountDebugSettings = [
                 // Debug settings:
                 RequirePasswordDebugSetting(settings: self),
@@ -147,7 +147,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
                     headerView.titleAlignment = .top
                     headerView.titleLabel.numberOfLines = 0
                     headerView.showBottomBorder = false
-                    headerView.titleLabel.snp_updateConstraints { make in
+                    headerView.titleLabel.snp.updateConstraints { make in
                         make.right.equalTo(headerView).offset(-50)
                     }
 

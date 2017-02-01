@@ -83,19 +83,19 @@ class HistoryPanel: UIViewController, HomePanel {
 
             self.updateNumberOfSyncedDevices(self.currentSyncedDevicesCount)
 
-            self.syncedTabsButton.snp_makeConstraints { make in
+            self.syncedTabsButton.snp.makeConstraints { make in
                 make.leading.trailing.equalTo(self.view)
-                make.top.equalTo(self.recentlyClosedTabsButton.snp_bottom)
+                make.top.equalTo(self.recentlyClosedTabsButton.snp.bottom)
                 make.height.equalTo(HistoryPanelUX.SyncedTabsCellHeight)
-                make.bottom.equalTo(self.tableViewController.view.snp_top)
+                make.bottom.equalTo(self.tableViewController.view.snp.top)
             }
-            self.recentlyClosedTabsButton.snp_makeConstraints { make in
+            self.recentlyClosedTabsButton.snp.makeConstraints { make in
                 make.top.leading.trailing.equalTo(self.view)
                 make.height.equalTo(HistoryPanelUX.SyncedTabsCellHeight)
-                make.bottom.equalTo(self.syncedTabsButton.snp_top)
+                make.bottom.equalTo(self.syncedTabsButton.snp.top)
             }
-            self.tableViewController.view.snp_makeConstraints { make in
-                make.top.equalTo(self.syncedTabsButton.snp_bottom)
+            self.tableViewController.view.snp.makeConstraints { make in
+                make.top.equalTo(self.syncedTabsButton.snp.bottom)
                 make.leading.trailing.bottom.equalTo(self.view)
             }
         }
@@ -293,7 +293,7 @@ class HistoryPanelSiteTableViewController: SiteTableViewController {
         if data.count == 0 {
             if self.emptyStateOverlayView.superview == nil {
                 self.tableView.addSubview(self.emptyStateOverlayView)
-                self.emptyStateOverlayView.snp_makeConstraints { make -> Void in
+                self.emptyStateOverlayView.snp.makeConstraints { make -> Void in
                     make.edges.equalTo(self.tableView)
                     make.size.equalTo(self.view)
                 }
@@ -316,7 +316,7 @@ class HistoryPanelSiteTableViewController: SiteTableViewController {
         welcomeLabel.numberOfLines = 0
         welcomeLabel.adjustsFontSizeToFitWidth = true
 
-        welcomeLabel.snp_makeConstraints { make in
+        welcomeLabel.snp.makeConstraints { make in
             make.centerX.equalTo(overlayView)
             // Sets proper top constraint for iPhone 6 in portait and for iPad.
             make.centerY.equalTo(overlayView).offset(HomePanelUX.EmptyTabContentOffset).priorityMedium()
@@ -587,31 +587,31 @@ class SyncedTabsButton: UIButton {
         addSubview(descriptionLabel)
 
 
-        image.snp_makeConstraints { make in
+        image.snp.makeConstraints { make in
             make.leading.equalTo(self).offset(TwoLineCellUX.BorderViewMargin)
             make.centerY.equalTo(self)
             make.width.equalTo(HistoryPanelUX.SyncedTabsCellImageSize)
         }
 
-        chevron.snp_makeConstraints { make in
+        chevron.snp.makeConstraints { make in
             make.trailing.equalTo(self).offset(-HistoryPanelUX.SyncedTabsCellChevronInset)
             make.centerY.equalTo(self)
             make.size.equalTo(HistoryPanelUX.SyncedTabsCellChevronSize)
         }
 
-        topBorder.snp_makeConstraints { make in
+        topBorder.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self)
             make.top.equalTo(self).offset(-0.5)
             make.height.equalTo(0.5)
         }
 
-        bottomBorder.snp_makeConstraints { make in
+        bottomBorder.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalTo(self)
             make.height.equalTo(0.5)
         }
 
-        descriptionLabel.snp_makeConstraints { make in
-            make.leading.equalTo(image.snp_trailing).offset(TwoLineCellUX.BorderViewMargin)
+        descriptionLabel.snp.makeConstraints { make in
+            make.leading.equalTo(image.snp.trailing).offset(TwoLineCellUX.BorderViewMargin)
             make.centerY.equalTo(self).offset(10)
         }
 
@@ -627,8 +627,8 @@ class SyncedTabsButton: UIButton {
     override func updateConstraints() {
         super.updateConstraints()
 
-        title.snp_remakeConstraints { make in
-            make.leading.equalTo(image.snp_trailing).offset(TwoLineCellUX.BorderViewMargin)
+        title.snp.remakeConstraints { make in
+            make.leading.equalTo(image.snp.trailing).offset(TwoLineCellUX.BorderViewMargin)
             make.centerY.equalTo(self).offset(descriptionLabel.isHidden ? 0 : -10)
         }
     }
@@ -690,36 +690,36 @@ class RecentlyClosedTabsButton: UIButton {
         addSubview(image)
         addSubview(descriptionLabel)
 
-        title.snp_makeConstraints { make in
-            make.leading.equalTo(image.snp_trailing).offset(TwoLineCellUX.BorderViewMargin * 1.25)
+        title.snp.makeConstraints { make in
+            make.leading.equalTo(image.snp.trailing).offset(TwoLineCellUX.BorderViewMargin * 1.25)
             make.centerY.equalTo(self)
         }
 
-        image.snp_makeConstraints { make in
+        image.snp.makeConstraints { make in
             make.leading.equalTo(self).offset(TwoLineCellUX.BorderViewMargin * 1.3)
             make.centerY.equalTo(self)
             make.size.equalTo(24)
         }
 
-        chevron.snp_makeConstraints { make in
+        chevron.snp.makeConstraints { make in
             make.trailing.equalTo(self).offset(-HistoryPanelUX.SyncedTabsCellChevronInset)
             make.centerY.equalTo(self)
             make.size.equalTo(HistoryPanelUX.SyncedTabsCellChevronSize)
         }
 
-        topBorder.snp_makeConstraints { make in
+        topBorder.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self)
             make.top.equalTo(self).offset(-0.5)
             make.height.equalTo(0.5)
         }
 
-        bottomBorder.snp_makeConstraints { make in
+        bottomBorder.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalTo(self)
             make.height.equalTo(0.5)
         }
 
-        descriptionLabel.snp_makeConstraints { make in
-            make.leading.equalTo(image.snp_trailing).offset(TwoLineCellUX.BorderViewMargin)
+        descriptionLabel.snp.makeConstraints { make in
+            make.leading.equalTo(image.snp.trailing).offset(TwoLineCellUX.BorderViewMargin)
             make.centerY.equalTo(self).offset(10)
         }
     }

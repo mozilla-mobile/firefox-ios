@@ -26,11 +26,11 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     var fxaOptions = FxALaunchParams()
 
     fileprivate enum RemoteCommand: String {
-        case CanLinkAccount = "can_link_account"
-        case Loaded = "loaded"
-        case Login = "login"
-        case SessionStatus = "session_status"
-        case SignOut = "sign_out"
+        case canLinkAccount = "can_link_account"
+        case loaded = "loaded"
+        case login = "login"
+        case sessionStatus = "session_status"
+        case signOut = "sign_out"
     }
 
     weak var delegate: FxAContentViewControllerDelegate?
@@ -77,12 +77,12 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     }
 
     // Send a message to the content server.
-    func injectData(_ type: String, content: [String: AnyObject]) {
+    func injectData(_ type: String, content: [String: Any]) {
         let data = [
             "type": type,
             "content": content,
         ] as [String : Any]
-        let json = JSON(data).toString(false)
+        let json = JSON(data).rawString() ?? ""
         let script = "window.postMessage(\(json), '\(self.url)');"
         webView.evaluateJavaScript(script, completionHandler: nil)
     }
@@ -91,22 +91,22 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         //    // We need to confirm a relink - see shouldAllowRelink for more
         //    let ok = shouldAllowRelink(accountData.email);
         let ok = true
-        injectData("message", content: ["status": "can_link_account" as AnyObject, "data": ["ok": ok]])
+        injectData("message", content: ["status": "can_link_account", "data": ["ok": ok]])
     }
 
     // We're not signed in to a Firefox Account at this time, which we signal by returning an error.
     fileprivate func onSessionStatus(_ data: JSON) {
-        injectData("message", content: ["status": "error" as AnyObject])
+        injectData("message", content: ["status": "error"])
     }
 
     // We're not signed in to a Firefox Account at this time. We should never get a sign out message!
     fileprivate func onSignOut(_ data: JSON) {
-        injectData("message", content: ["status": "error" as AnyObject])
+        injectData("message", content: ["status": "error"])
     }
 
     // The user has signed in to a Firefox Account.  We're done!
     fileprivate func onLogin(_ data: JSON) {
-        injectData("message", content: ["status": "login" as AnyObject])
+        injectData("message", content: ["status": "login"])
         self.delegate?.contentViewControllerDidSignIn(self, data: data)
     }
 
@@ -134,7 +134,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     // Handle a message coming from the content server.
     func handleRemoteCommand(_ rawValue: String, data: JSON) {
         if let command = RemoteCommand(rawValue: rawValue) {
-            if !isLoaded && command != .Loaded {
+            if !isLoaded && command != .loaded {
                 // Work around https://github.com/mozilla/fxa-content-server/issues/2137
                 onLoaded()
             }
@@ -169,7 +169,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         if (message.name == "accountsCommandHandler") {
             let body = JSON(message.body)
             let detail = body["detail"]
-            handleRemoteCommand(detail["command"].asString!, data: detail["data"])
+            handleRemoteCommand(detail["command"].stringValue, data: detail["data"])
         }
     }
 
@@ -182,7 +182,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         // Ignore for now.
     }
 
-    override func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: NSError) {
+    override func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         // Ignore for now.
     }
 }

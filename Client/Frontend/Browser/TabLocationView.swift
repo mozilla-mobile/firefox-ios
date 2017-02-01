@@ -77,12 +77,12 @@ class TabLocationView: UIView {
             if newReaderModeState != self.readerModeButton.readerModeState {
                 let wasHidden = readerModeButton.isHidden
                 self.readerModeButton.readerModeState = newReaderModeState
-                readerModeButton.isHidden = (newReaderModeState == ReaderModeState.Unavailable)
+                readerModeButton.isHidden = (newReaderModeState == ReaderModeState.unavailable)
                 if wasHidden != readerModeButton.isHidden {
                     UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
                 }
                 UIView.animate(withDuration: 0.1, animations: { () -> Void in
-                    if newReaderModeState == ReaderModeState.Unavailable {
+                    if newReaderModeState == ReaderModeState.unavailable {
                         self.readerModeButton.alpha = 0.0
                     } else {
                         self.readerModeButton.alpha = 1.0
@@ -147,18 +147,18 @@ class TabLocationView: UIView {
         addSubview(lockImageView)
         addSubview(readerModeButton)
 
-        lockImageView.snp_makeConstraints { make in
+        lockImageView.snp.makeConstraints { make in
             make.leading.centerY.equalTo(self)
             make.width.equalTo(self.lockImageView.intrinsicContentSize.width + CGFloat(TabLocationViewUX.LocationContentInset * 2))
         }
 
-        readerModeButton.snp_makeConstraints { make in
+        readerModeButton.snp.makeConstraints { make in
             make.trailing.centerY.equalTo(self)
             make.width.equalTo(self.readerModeButton.intrinsicContentSize.width + CGFloat(TabLocationViewUX.LocationContentInset * 2))
         }
     }
 
-    override var accessibilityElements: [AnyObject]! {
+    override var accessibilityElements: [Any]? {
         get {
             return [lockImageView, urlTextField, readerModeButton].filter { !$0.isHidden }
         }
@@ -172,19 +172,19 @@ class TabLocationView: UIView {
     }
 
     override func updateConstraints() {
-        urlTextField.snp_remakeConstraints { make in
+        urlTextField.snp.remakeConstraints { make in
             make.top.bottom.equalTo(self)
 
             if lockImageView.isHidden {
                 make.leading.equalTo(self).offset(TabLocationViewUX.LocationContentInset)
             } else {
-                make.leading.equalTo(self.lockImageView.snp_trailing)
+                make.leading.equalTo(self.lockImageView.snp.trailing)
             }
 
             if readerModeButton.isHidden {
                 make.trailing.equalTo(self).offset(-TabLocationViewUX.LocationContentInset)
             } else {
-                make.trailing.equalTo(self.readerModeButton.snp_leading)
+                make.trailing.equalTo(self.readerModeButton.snp.leading)
             }
         }
 
@@ -279,7 +279,7 @@ private class ReaderModeButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     
-    var _readerModeState: ReaderModeState = ReaderModeState.Unavailable
+    var _readerModeState: ReaderModeState = ReaderModeState.unavailable
     
     var readerModeState: ReaderModeState {
         get {

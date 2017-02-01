@@ -204,8 +204,8 @@ class TabCell: UICollectionViewCell {
 
         innerStroke.frame = background.frame
 
-        closeButton.snp_makeConstraints { make in
-            make.size.equalTo(title.snp_height)
+        closeButton.snp.makeConstraints { make in
+            make.size.equalTo(title.snp.height)
             make.trailing.centerY.equalTo(title)
         }
 
@@ -341,7 +341,7 @@ class TabTrayController: UIViewController {
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: NotificationDynamicFontChanged), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NotificationDynamicFontChanged, object: nil)
         self.tabManager.removeDelegate(self)
     }
 
@@ -375,9 +375,9 @@ class TabTrayController: UIViewController {
         makeConstraints()
 
         view.insertSubview(emptyPrivateTabsView, aboveSubview: collectionView)
-        emptyPrivateTabsView.snp_makeConstraints { make in
+        emptyPrivateTabsView.snp.makeConstraints { make in
             make.top.left.right.equalTo(self.collectionView)
-            make.bottom.equalTo(self.toolbar.snp_top)
+            make.bottom.equalTo(self.toolbar.snp.top)
         }
 
         if let tab = tabManager.selectedTab, tab.isPrivate {
@@ -393,7 +393,7 @@ class TabTrayController: UIViewController {
 
         NotificationCenter.default.addObserver(self, selector: #selector(TabTrayController.SELappWillResignActiveNotification), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(TabTrayController.SELappDidBecomeActiveNotification), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(TabTrayController.SELDynamicFontChanged(_:)), name: NSNotification.Name(rawValue: NotificationDynamicFontChanged), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(TabTrayController.SELDynamicFontChanged(_:)), name: NotificationDynamicFontChanged, object: nil)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -439,12 +439,12 @@ class TabTrayController: UIViewController {
     }
 
     fileprivate func makeConstraints() {
-        collectionView.snp_makeConstraints { make in
+        collectionView.snp.makeConstraints { make in
             make.left.bottom.right.equalTo(view)
-            make.top.equalTo(snp_topLayoutGuideBottom)
+            make.top.equalTo(snp.topLayoutGuideBottom)
         }
 
-        toolbar.snp_makeConstraints { make in
+        toolbar.snp.makeConstraints { make in
             make.left.right.bottom.equalTo(view)
             make.height.equalTo(UIConstants.ToolbarHeight)
         }
@@ -755,9 +755,9 @@ extension TabTrayController: TabManagerDelegate {
         }
         if let undoToast = toast {
             view.addSubview(undoToast)
-            undoToast.snp_makeConstraints { make in
+            undoToast.snp.makeConstraints { make in
                 make.left.right.equalTo(view)
-                make.bottom.equalTo(toolbar.snp_top)
+                make.bottom.equalTo(toolbar.snp.top)
             }
             undoToast.showToast()
         }
@@ -1036,22 +1036,22 @@ private class EmptyPrivateTabsView: UIView {
         addSubview(iconImageView)
         addSubview(learnMoreButton)
 
-        titleLabel.snp_makeConstraints { make in
+        titleLabel.snp.makeConstraints { make in
             make.center.equalTo(self)
         }
 
-        iconImageView.snp_makeConstraints { make in
-            make.bottom.equalTo(titleLabel.snp_top).offset(-EmptyPrivateTabsViewUX.TextMargin)
+        iconImageView.snp.makeConstraints { make in
+            make.bottom.equalTo(titleLabel.snp.top).offset(-EmptyPrivateTabsViewUX.TextMargin)
             make.centerX.equalTo(self)
         }
 
-        descriptionLabel.snp_makeConstraints { make in
-            make.top.equalTo(titleLabel.snp_bottom).offset(EmptyPrivateTabsViewUX.TextMargin)
+        descriptionLabel.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(EmptyPrivateTabsViewUX.TextMargin)
             make.centerX.equalTo(self)
         }
 
-        learnMoreButton.snp_makeConstraints { (make) -> Void in
-            make.top.equalTo(descriptionLabel.snp_bottom).offset(EmptyPrivateTabsViewUX.LearnMoreMargin).priorityLow()
+        learnMoreButton.snp.makeConstraints { (make) -> Void in
+            make.top.equalTo(descriptionLabel.snp.bottom).offset(EmptyPrivateTabsViewUX.LearnMoreMargin).priorityLow()
             make.bottom.lessThanOrEqualTo(self).offset(-EmptyPrivateTabsViewUX.MinBottomMargin).priorityHigh()
             make.centerX.equalTo(self)
         }
@@ -1172,19 +1172,19 @@ extension TabTrayController: MenuActionDelegate {
                 }
             case .openTopSites:
                 DispatchQueue.main.async {
-                    self.openNewTab(PrivilegedRequest(coder: HomePanelType.topSites.localhostURL))
+                    self.openNewTab(PrivilegedRequest(url: HomePanelType.topSites.localhostURL) as URLRequest)
                 }
             case .openBookmarks:
                 DispatchQueue.main.async {
-                    self.openNewTab(PrivilegedRequest(coder: HomePanelType.bookmarks.localhostURL))
+                    self.openNewTab(PrivilegedRequest(url: HomePanelType.bookmarks.localhostURL) as URLRequest)
                 }
             case .openHistory:
                 DispatchQueue.main.async {
-                    self.openNewTab(PrivilegedRequest(coder: HomePanelType.history.localhostURL))
+                    self.openNewTab(PrivilegedRequest(url: HomePanelType.history.localhostURL) as URLRequest)
                 }
             case .openReadingList:
                 DispatchQueue.main.async {
-                    self.openNewTab(PrivilegedRequest(coder: HomePanelType.readingList.localhostURL))
+                    self.openNewTab(PrivilegedRequest(url: HomePanelType.readingList.localhostURL) as URLRequest)
                 }
             default: break
             }
@@ -1234,19 +1234,19 @@ class TrayToolbar: UIView {
         
         maskButton.accessibilityIdentifier = "TabTrayController.maskButton"
 
-        buttonToCenter?.snp_makeConstraints { make in
+        buttonToCenter?.snp.makeConstraints { make in
             make.center.equalTo(self)
             make.size.equalTo(toolbarButtonSize)
         }
 
-        addTabButton.snp_makeConstraints { make in
+        addTabButton.snp.makeConstraints { make in
             make.centerY.equalTo(self)
             make.left.equalTo(self).offset(sideOffset)
             make.size.equalTo(toolbarButtonSize)
         }
 
         addSubview(maskButton)
-        maskButton.snp_makeConstraints { make in
+        maskButton.snp.makeConstraints { make in
             make.centerY.equalTo(self)
             make.right.equalTo(self).offset(-sideOffset)
             make.size.equalTo(toolbarButtonSize)

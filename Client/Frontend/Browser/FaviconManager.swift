@@ -44,7 +44,7 @@ class FaviconManager: TabHelper {
         deferreds = favicons.map { favicon in
             return { [weak tab] () -> Deferred<Maybe<Favicon>> in
                 if  let tab = tab,
-                    let url = NSURL(string: favicon.url),
+                    let url = URL(string: favicon.url),
                     let currentURL = tab.url {
                     return self.getFavicon(tab, iconUrl: url, currentURL: currentURL, icon: favicon, profile: profile)
                 } else {
@@ -55,15 +55,15 @@ class FaviconManager: TabHelper {
         return accumulate(deferreds)
     }
     
-    func getFavicon(_ tab: Tab, iconUrl: NSURL, currentURL: NSURL, icon: Favicon, profile: Profile) -> Deferred<Maybe<Favicon>> {
+    func getFavicon(_ tab: Tab, iconUrl: URL, currentURL: URL, icon: Favicon, profile: Profile) -> Deferred<Maybe<Favicon>> {
         let deferred = Deferred<Maybe<Favicon>>()
         let manager = SDWebImageManager.shared()
         let options = tab.isPrivate ?
             [SDWebImageOptions.lowPriority, SDWebImageOptions.cacheMemoryOnly] : [SDWebImageOptions.lowPriority]
         let url = currentURL.absoluteString
-        let site = Site(url: url!, title: "")
+        let site = Site(url: url, title: "")
         var fetch: SDWebImageOperation?
-        fetch = manager?.downloadImage(with: iconUrl as URL!,
+        fetch = manager?.downloadImage(with: iconUrl,
                                      options: SDWebImageOptions(options),
                                      progress: { (receivedSize, expectedSize) in
                                         if receivedSize > FaviconManager.maximumFaviconSize || expectedSize > FaviconManager.maximumFaviconSize {
@@ -72,7 +72,7 @@ class FaviconManager: TabHelper {
                                      },
                                      completed: { (img, err, cacheType, success, url) -> Void in
                                         let fav = Favicon(url: url!.absoluteString,
-                                            date: NSDate() as Date,
+                                            date: Date(),
                                             type: icon.type)
                                         
                                         guard let img = img else {
@@ -84,7 +84,7 @@ class FaviconManager: TabHelper {
                                         
                                         if !tab.isPrivate {
                                             if tab.favicons.isEmpty {
-                                                self.makeFaviconAvailable(tab, atURL: currentURL as URL, favicon: fav, withImage: img)
+                                                self.makeFaviconAvailable(tab, atURL: currentURL, favicon: fav, withImage: img)
                                             }
                                             tab.favicons.append(fav)
                                             self.profile.favicons.addFavicon(fav, forSite: site).upon { _ in
@@ -100,17 +100,16 @@ class FaviconManager: TabHelper {
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
         self.tab?.favicons.removeAll(keepingCapacity: false)
-        if let tab = self.tab,
-        let currentURL = tab.url {
-                var favicons = [Favicon]()
-                if let icons = message.body as? [String: Int] {
-                    for icon in icons {
-                        if let _ = URL(string: icon.0), let iconType = IconType(rawValue: icon.1) {
-                            let favicon = Favicon(url: icon.0, date: Date(), type: iconType)
-                            favicons.append(favicon)
-                        }
+        if let tab = self.tab, let currentURL = tab.url {
+            var favicons = [Favicon]()
+            if let icons = message.body as? [String: Int] {
+                for icon in icons {
+                    if let _ = URL(string: icon.0), let iconType = IconType(rawValue: icon.1) {
+                        let favicon = Favicon(url: icon.0, date: Date(), type: iconType)
+                        favicons.append(favicon)
                     }
                 }
+            }
             loadFavicons(tab, profile: profile, favicons: favicons).uponQueue(DispatchQueue.main) { result in
                 if let result = result.successValue {
                     if result.count == 1 && favicons[0].type == .Guess {

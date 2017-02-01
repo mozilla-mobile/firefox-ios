@@ -24,10 +24,10 @@ struct SimpleToast {
         let toast = self.createView()
         toast.text = text
         window.addSubview(toast)
-        toast.snp_makeConstraints { (make) in
-            make.width.equalTo(window.snp_width)
+        toast.snp.makeConstraints { (make) in
+            make.width.equalTo(window.snp.width)
             make.height.equalTo(SimpleToastUX.ToastHeight)
-            make.bottom.equalTo(window.snp_bottom).offset(-keyboardHeight)
+            make.bottom.equalTo(window.snp.bottom).offset(-keyboardHeight)
         }
         animate(toast)
     }

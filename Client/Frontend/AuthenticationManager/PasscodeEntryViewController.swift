@@ -22,9 +22,9 @@ class PasscodeEntryViewController: BasePasscodeViewController {
         super.viewDidLoad()
         title = AuthenticationStrings.enterPasscodeTitle
         view.addSubview(passcodePane)
-        passcodePane.snp_makeConstraints { make in
+        passcodePane.snp.makeConstraints { make in
             make.bottom.left.right.equalTo(self.view)
-            make.top.equalTo(self.snp_topLayoutGuideBottom)
+            make.top.equalTo(self.snp.topLayoutGuideBottom)
         }
     }
 
@@ -66,7 +66,7 @@ extension PasscodeEntryViewController: PasscodeInputViewDelegate {
     func passcodeInputView(_ inputView: PasscodeInputView, didFinishEnteringCode code: String) {
         if let passcode = authenticationInfo?.passcode, passcode == code {
             authenticationInfo?.recordValidation()
-            KeychainWrapper.defaultKeychainWrapper.setAuthenticationInfo(authenticationInfo)
+            KeychainWrapper.sharedAppContainerKeychain.setAuthenticationInfo(authenticationInfo)
             delegate?.passcodeValidationDidSucceed()
         } else {
             passcodePane.shakePasscode()
@@ -74,7 +74,7 @@ extension PasscodeEntryViewController: PasscodeInputViewDelegate {
             passcodePane.codeInputView.resetCode()
 
             // Store mutations on authentication info object
-            KeychainWrapper.defaultKeychainWrapper.setAuthenticationInfo(authenticationInfo)
+            KeychainWrapper.sharedAppContainerKeychain.setAuthenticationInfo(authenticationInfo)
         }
     }
 }

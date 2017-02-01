@@ -100,7 +100,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         startBrowsingButton.accessibilityIdentifier = "IntroViewController.startBrowsingButton"
 
         view.addSubview(startBrowsingButton)
-        startBrowsingButton.snp_makeConstraints { (make) -> Void in
+        startBrowsingButton.snp.makeConstraints { (make) -> Void in
             make.left.right.bottom.equalTo(self.view)
             make.height.equalTo(IntroViewControllerUX.StartBrowsingButtonHeight)
         }
@@ -125,9 +125,9 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         }
 
         scrollView.addSubview(slideContainer)
-        scrollView.snp_makeConstraints { (make) -> Void in
+        scrollView.snp.makeConstraints { (make) -> Void in
             make.left.right.top.equalTo(self.view)
-            make.bottom.equalTo(startBrowsingButton.snp_top)
+            make.bottom.equalTo(startBrowsingButton.snp.top)
         }
 
         pageControl = UIPageControl()
@@ -138,9 +138,9 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         pageControl.addTarget(self, action: #selector(IntroViewController.changePage), for: UIControlEvents.valueChanged)
 
         view.addSubview(pageControl)
-        pageControl.snp_makeConstraints { (make) -> Void in
+        pageControl.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(self.scrollView)
-            make.centerY.equalTo(self.startBrowsingButton.snp_top).offset(-IntroViewControllerUX.PagerCenterOffsetFromScrollViewBottom)
+            make.centerY.equalTo(self.startBrowsingButton.snp.top).offset(-IntroViewControllerUX.PagerCenterOffsetFromScrollViewBottom)
         }
 
 
@@ -165,7 +165,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         signInButton.layer.cornerRadius = IntroViewControllerUX.SignInButtonCornerRadius
         signInButton.clipsToBounds = true
         signInButton.addTarget(self, action: #selector(IntroViewController.SELlogin), for: UIControlEvents.touchUpInside)
-        signInButton.snp_makeConstraints { (make) -> Void in
+        signInButton.snp.makeConstraints { (make) -> Void in
             make.height.equalTo(IntroViewControllerUX.SignInButtonHeight)
         }
 
@@ -178,9 +178,9 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         for introView in introViews {
             introView.alpha = 0
             self.view.addSubview(introView)
-            introView.snp_makeConstraints { (make) -> Void in
-                make.top.equalTo(self.slideContainer.snp_bottom)
-                make.bottom.equalTo(self.startBrowsingButton.snp_top)
+            introView.snp.makeConstraints { (make) -> Void in
+                make.top.equalTo(self.slideContainer.snp.bottom)
+                make.bottom.equalTo(self.startBrowsingButton.snp.top)
                 make.left.right.equalTo(self.view)
             }
         }
@@ -214,9 +214,9 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        scrollView.snp_remakeConstraints { (make) -> Void in
+        scrollView.snp.remakeConstraints { (make) -> Void in
             make.left.right.top.equalTo(self.view)
-            make.bottom.equalTo(self.startBrowsingButton.snp_top)
+            make.bottom.equalTo(self.startBrowsingButton.snp.top)
         }
 
         for i in 0..<IntroViewControllerUX.NumberOfCards {
@@ -381,7 +381,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
 
     fileprivate func addViewsToIntroView(_ introView: UIView, view: UIView, title: String = "") {
         introView.addSubview(view)
-        view.snp_makeConstraints { (make) -> Void in
+        view.snp.makeConstraints { (make) -> Void in
             make.center.equalTo(introView)
             make.width.equalTo(self.view.frame.width <= 320 ? 240 : 280) // TODO Talk to UX about small screen sizes
         }
@@ -393,9 +393,9 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
             titleLabel.text = title
             titleLabels.append(titleLabel)
             introView.addSubview(titleLabel)
-            titleLabel.snp_makeConstraints { (make) -> Void in
+            titleLabel.snp.makeConstraints { (make) -> Void in
                 make.top.equalTo(introView)
-                make.bottom.equalTo(view.snp_top)
+                make.bottom.equalTo(view.snp.top)
                 make.centerX.equalTo(introView)
                 make.width.equalTo(self.view.frame.width <= 320 ? 240 : 280) // TODO Talk to UX about small screen sizes
             }

@@ -148,18 +148,18 @@ class PasscodePane: UIView {
         centerContainer.addSubview(codeInputView)
         addSubview(centerContainer)
 
-        centerContainer.snp_makeConstraints { make in
+        centerContainer.snp.makeConstraints { make in
             make.centerX.equalTo(self)
             containerCenterConstraint = make.centerY.equalTo(self).constraint
         }
 
-        titleLabel.snp_makeConstraints { make in
+        titleLabel.snp.makeConstraints { make in
             make.centerX.equalTo(centerContainer)
             make.top.equalTo(centerContainer)
-            make.bottom.equalTo(codeInputView.snp_top).offset(-PasscodeUX.TitleVerticalSpacing)
+            make.bottom.equalTo(codeInputView.snp.top).offset(-PasscodeUX.TitleVerticalSpacing)
         }
 
-        codeInputView.snp_makeConstraints { make in
+        codeInputView.snp.makeConstraints { make in
             codeViewCenterConstraint = make.centerX.equalTo(centerContainer).constraint
             make.bottom.equalTo(centerContainer)
             make.size.equalTo(PasscodeUX.PasscodeFieldSize)
@@ -171,11 +171,11 @@ class PasscodePane: UIView {
 
     func shakePasscode() {
         UIView.animate(withDuration: 0.1, animations: {
-                self.codeViewCenterConstraint?.updateOffset(-10)
+                self.codeViewCenterConstraint?.updateOffset(amount: -10)
                 self.layoutIfNeeded()
         }, completion: { complete in
             UIView.animate(withDuration: 0.1, animations: {
-                self.codeViewCenterConstraint?.updateOffset(0)
+                self.codeViewCenterConstraint?.updateOffset(amount: 0)
                 self.layoutIfNeeded()
             }) 
         }) 
@@ -196,14 +196,14 @@ class PasscodePane: UIView {
         }
         
         UIView.animate(withDuration: 0.1, animations: {
-            self.containerCenterConstraint?.updateOffset(-keyboardFrame.height/2)
+            self.containerCenterConstraint?.updateOffset(amount: -keyboardFrame.height/2)
             self.layoutIfNeeded()
         })
     }
     
     func keyboardWillHide(_ sender: Notification) {
         UIView.animate(withDuration: 0.1, animations: {
-            self.containerCenterConstraint?.updateOffset(0)
+            self.containerCenterConstraint?.updateOffset(amount: 0)
             self.layoutIfNeeded()
         })
     }

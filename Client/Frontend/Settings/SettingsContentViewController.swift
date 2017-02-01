@@ -90,7 +90,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
 
         self.webView = makeWebView()
         view.addSubview(webView)
-        self.webView.snp_remakeConstraints { make in
+        self.webView.snp.remakeConstraints { make in
             make.edges.equalTo(self.view)
         }
 
@@ -100,7 +100,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         self.interstitialSpinnerView = ret.1
         self.interstitialErrorView = ret.2
         view.addSubview(interstitialView)
-        self.interstitialView.snp_remakeConstraints { make in
+        self.interstitialView.snp.remakeConstraints { make in
             make.edges.equalTo(self.view)
         }
 
@@ -135,15 +135,15 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         error.isHidden = true
         view.addSubview(error)
 
-        spinner.snp_makeConstraints { make in
+        spinner.snp.makeConstraints { make in
             make.center.equalTo(view)
             return
         }
 
-        error.snp_makeConstraints { make in
+        error.snp.makeConstraints { make in
             make.center.equalTo(view)
-            make.left.equalTo(view.snp_left).offset(20)
-            make.right.equalTo(view.snp_right).offset(-20)
+            make.left.equalTo(view.snp.left).offset(20)
+            make.right.equalTo(view.snp.right).offset(-20)
             make.height.equalTo(44)
             return
         }

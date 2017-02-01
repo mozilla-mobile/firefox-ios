@@ -243,7 +243,7 @@ class StringSetting: Setting, UITextFieldDelegate {
         cell.accessibilityTraits = UIAccessibilityTraitNone
         cell.contentView.addSubview(textField)
 
-        textField.snp_makeConstraints { make in
+        textField.snp.makeConstraints { make in
             make.height.equalTo(44)
             make.trailing.equalTo(cell.contentView).offset(-Padding)
             make.leading.equalTo(cell.contentView).offset(Padding)
@@ -357,14 +357,14 @@ class AccountSetting: Setting, FxAContentViewControllerDelegate {
     override var accessoryType: UITableViewCellAccessoryType { return .none }
 
     func contentViewControllerDidSignIn(_ viewController: FxAContentViewController, data: JSON) -> Void {
-        if data["keyFetchToken"].asString == nil || data["unwrapBKey"].asString == nil {
+        if data["keyFetchToken"].string == nil || data["unwrapBKey"].string == nil {
             // The /settings endpoint sends a partial "login"; ignore it entirely.
             NSLog("Ignoring didSignIn with keyFetchToken or unwrapBKey missing.")
             return
         }
 
         // TODO: Error handling.
-        let account = FirefoxAccount.fromConfigurationAndJSON(profile.accountConfiguration, data: data)!
+        let account = FirefoxAccount.from(profile.accountConfiguration, andJSON: data)!
         profile.setAccount(account)
 
         // Reload the data to reflect the new Account immediately.
@@ -694,12 +694,12 @@ class SettingsTableSectionHeaderFooterView: UITableViewHeaderFooterView {
     }
 
     func setupInitialConstraints() {
-        bottomBorder.snp_makeConstraints { make in
+        bottomBorder.snp.makeConstraints { make in
             make.bottom.left.right.equalTo(self)
             make.height.equalTo(0.5)
         }
 
-        topBorder.snp_makeConstraints { make in
+        topBorder.snp.makeConstraints { make in
             make.top.left.right.equalTo(self)
             make.height.equalTo(0.5)
         }
@@ -718,13 +718,13 @@ class SettingsTableSectionHeaderFooterView: UITableViewHeaderFooterView {
     fileprivate func remakeTitleAlignmentConstraints() {
         switch titleAlignment {
         case .top:
-            titleLabel.snp_remakeConstraints { make in
+            titleLabel.snp.remakeConstraints { make in
                 make.left.right.equalTo(self).inset(SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
                 make.top.equalTo(self).offset(SettingsTableSectionHeaderFooterViewUX.titleVerticalPadding)
                 make.bottom.equalTo(self).offset(-SettingsTableSectionHeaderFooterViewUX.titleVerticalLongPadding)
             }
         case .bottom:
-            titleLabel.snp_remakeConstraints { make in
+            titleLabel.snp.remakeConstraints { make in
                 make.left.right.equalTo(self).inset(SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
                 make.bottom.equalTo(self).offset(-SettingsTableSectionHeaderFooterViewUX.titleVerticalPadding)
                 make.top.equalTo(self).offset(SettingsTableSectionHeaderFooterViewUX.titleVerticalLongPadding)

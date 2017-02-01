@@ -205,47 +205,47 @@ class LoginTableViewCell: UITableViewCell {
     fileprivate func configureLayoutForStyle(_ style: LoginTableViewCellStyle) {
         switch style {
         case .iconAndBothLabels:
-            iconImageView.snp_remakeConstraints { make in
+            iconImageView.snp.remakeConstraints { make in
                 make.centerY.equalTo(contentView)
                 make.left.equalTo(contentView).offset(LoginTableViewCellUX.HorizontalMargin)
                 make.height.width.equalTo(LoginTableViewCellUX.IconImageSize)
             }
 
-            labelContainer.snp_remakeConstraints { make in
+            labelContainer.snp.remakeConstraints { make in
                 make.centerY.equalTo(contentView)
                 make.right.equalTo(contentView).offset(-LoginTableViewCellUX.HorizontalMargin)
-                make.left.equalTo(iconImageView.snp_right).offset(LoginTableViewCellUX.HorizontalMargin)
+                make.left.equalTo(iconImageView.snp.right).offset(LoginTableViewCellUX.HorizontalMargin)
             }
 
-            highlightedLabel.snp_remakeConstraints { make in
+            highlightedLabel.snp.remakeConstraints { make in
                 make.left.top.equalTo(labelContainer)
-                make.bottom.equalTo(descriptionLabel.snp_top)
+                make.bottom.equalTo(descriptionLabel.snp.top)
                 make.width.equalTo(labelContainer)
             }
 
-            descriptionLabel.snp_remakeConstraints { make in
+            descriptionLabel.snp.remakeConstraints { make in
                 make.left.bottom.equalTo(labelContainer)
-                make.top.equalTo(highlightedLabel.snp_bottom)
+                make.top.equalTo(highlightedLabel.snp.bottom)
                 make.width.equalTo(labelContainer)
             }
         case .iconAndDescriptionLabel:
-            iconImageView.snp_remakeConstraints { make in
+            iconImageView.snp.remakeConstraints { make in
                 make.centerY.equalTo(contentView)
                 make.left.equalTo(contentView).offset(LoginTableViewCellUX.HorizontalMargin)
                 make.height.width.equalTo(LoginTableViewCellUX.IconImageSize)
             }
 
-            labelContainer.snp_remakeConstraints { make in
+            labelContainer.snp.remakeConstraints { make in
                 make.centerY.equalTo(contentView)
                 make.right.equalTo(contentView).offset(-LoginTableViewCellUX.HorizontalMargin)
-                make.left.equalTo(iconImageView.snp_right).offset(LoginTableViewCellUX.HorizontalMargin)
+                make.left.equalTo(iconImageView.snp.right).offset(LoginTableViewCellUX.HorizontalMargin)
             }
 
-            highlightedLabel.snp_remakeConstraints { make in
+            highlightedLabel.snp.remakeConstraints { make in
                 make.height.width.equalTo(0)
             }
 
-            descriptionLabel.snp_remakeConstraints { make in
+            descriptionLabel.snp.remakeConstraints { make in
                 make.top.left.bottom.equalTo(labelContainer)
                 make.width.equalTo(labelContainer)
             }
@@ -254,27 +254,27 @@ class LoginTableViewCell: UITableViewCell {
             // we factor in the editingOffset when calculating the constraints.
             let editingOffset = editingDescription ? LoginTableViewCellUX.editingDescriptionIndent : 0
 
-            iconImageView.snp_remakeConstraints { make in
+            iconImageView.snp.remakeConstraints { make in
                 make.centerY.equalTo(contentView)
                 make.left.equalTo(contentView).offset(LoginTableViewCellUX.HorizontalMargin)
                 make.height.width.equalTo(0)
             }
 
-            labelContainer.snp_remakeConstraints { make in
+            labelContainer.snp.remakeConstraints { make in
                 make.centerY.equalTo(contentView)
                 make.right.equalTo(contentView).offset(-LoginTableViewCellUX.HorizontalMargin)
-                make.left.equalTo(iconImageView.snp_right).offset(editingOffset)
+                make.left.equalTo(iconImageView.snp.right).offset(editingOffset)
             }
 
-            highlightedLabel.snp_remakeConstraints { make in
+            highlightedLabel.snp.remakeConstraints { make in
                 make.left.top.equalTo(labelContainer)
-                make.bottom.equalTo(descriptionLabel.snp_top)
+                make.bottom.equalTo(descriptionLabel.snp.top)
                 make.width.equalTo(labelContainer)
             }
 
-            descriptionLabel.snp_remakeConstraints { make in
+            descriptionLabel.snp.remakeConstraints { make in
                 make.left.bottom.equalTo(labelContainer)
-                make.top.equalTo(highlightedLabel.snp_bottom)
+                make.top.equalTo(highlightedLabel.snp.bottom)
                 make.width.equalTo(labelContainer)
             }
         }

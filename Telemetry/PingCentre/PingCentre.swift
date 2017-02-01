@@ -15,7 +15,7 @@ public protocol PingCentreClient {
 // Neat trick to have default parameters for protocol methods while still being able to lean on the compiler
 // for adherence to the protocol.
 extension PingCentreClient {
-    func sendPing(_ data: [String: AnyObject], validate: Bool = true) -> Success {
+    func sendPing(_ data: [String: Any], validate: Bool = true) -> Success {
         return sendPing(data, validate: validate)
     }
 }
@@ -23,16 +23,16 @@ extension PingCentreClient {
 public struct PingCentre {
     public static func clientForTopic(_ topic: PingCentreTopic, clientID: String) -> PingCentreClient {
         switch AppConstants.BuildChannel {
-        case .Developer:
+        case .developer:
             fallthrough
-        case .Nightly:
+        case .nightly:
             fallthrough
-        case .Aurora:
+        case .aurora:
             fallthrough
-        case .Beta:
-            return DefaultPingCentreImpl(topic: topic, endpoint: .Staging, clientID: clientID)
-        case .Release:
-            return DefaultPingCentreImpl(topic: topic, endpoint: .Production, clientID: clientID)
+        case .beta:
+            return DefaultPingCentreImpl(topic: topic, endpoint: .staging, clientID: clientID)
+        case .release:
+            return DefaultPingCentreImpl(topic: topic, endpoint: .production, clientID: clientID)
         }
     }
 }
@@ -69,14 +69,14 @@ class DefaultPingCentreImpl: PingCentreClient {
     fileprivate let topic: PingCentreTopic
     fileprivate let clientID: String
     fileprivate let endpoint: Endpoint
-    fileprivate let manager: Alamofire.Manager
+    fileprivate let manager: SessionManager
 
     fileprivate let validationQueue: DispatchQueue
     fileprivate static let queueLabel = "org.mozilla.pingcentre.validationQueue"
 
     init(topic: PingCentreTopic, endpoint: Endpoint, clientID: String,
          validationQueue: DispatchQueue = dispatch_queue_create(queueLabel, nil),
-         manager: Alamofire.Manager = Alamofire.Manager()) {
+         manager: SessionManager = SessionManager()) {
         self.topic = topic
         self.clientID = clientID
         self.endpoint = endpoint
@@ -84,16 +84,16 @@ class DefaultPingCentreImpl: PingCentreClient {
         self.validationQueue = validationQueue
     }
 
-    func sendPing(_ data: [String: AnyObject], validate: Bool = true) -> Success {
+    func sendPing(_ data: [String: Any], validate: Bool = true) -> Success {
         var payload = data
-        payload["topic"] = topic.name as AnyObject?
-        payload["client_id"] = clientID as AnyObject?
+        payload["topic"] = topic.name
+        payload["client_id"] = clientID
 
         return (validate ? validatePayload(payload, schema: topic.schema) : succeed())
             >>> { return self.sendPayload(payload) }
     }
 
-    fileprivate func sendPayload(_ payload: [String: AnyObject]) -> Success {
+    fileprivate func sendPayload(_ payload: [String: Any]) -> Success {
         let deferred = Deferred<Maybe<()>>()
         let request = NSMutableURLRequest(url: endpoint.url)
         request.httpMethod = "POST"
@@ -119,7 +119,7 @@ class DefaultPingCentreImpl: PingCentreClient {
         return deferred
     }
 
-    fileprivate func validatePayload(_ payload: [String: AnyObject], schema: Schema) -> Success {
+    fileprivate func validatePayload(_ payload: [String: Any], schema: Schema) -> Success {
         return deferDispatchAsync(validationQueue) {
             let errors = schema.validate(payload).errors ?? []
             guard errors.isEmpty else {

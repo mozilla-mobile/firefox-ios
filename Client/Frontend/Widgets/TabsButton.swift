@@ -119,16 +119,16 @@ class TabsButton: UIControl {
 
     override func updateConstraints() {
         super.updateConstraints()
-        labelBackground.snp_remakeConstraints { (make) -> Void in
+        labelBackground.snp.remakeConstraints { (make) -> Void in
             make.edges.equalTo(insideButton)
         }
-        borderView.snp_remakeConstraints { (make) -> Void in
+        borderView.snp.remakeConstraints { (make) -> Void in
             make.edges.equalTo(insideButton)
         }
-        titleLabel.snp_remakeConstraints { (make) -> Void in
+        titleLabel.snp.remakeConstraints { (make) -> Void in
             make.edges.equalTo(insideButton)
         }
-        insideButton.snp_remakeConstraints { (make) -> Void in
+        insideButton.snp.remakeConstraints { (make) -> Void in
             make.edges.equalTo(self).inset(insets)
         }
     }
@@ -179,7 +179,7 @@ class TabsButton: UIControl {
             newTabsButton.titleLabel.text = countToBe
             newTabsButton.accessibilityValue = countToBe
             superview?.addSubview(newTabsButton)
-            newTabsButton.snp_makeConstraints { make in
+            newTabsButton.snp.makeConstraints { make in
                 make.centerY.equalTo(self)
                 make.trailing.equalTo(self)
                 make.size.equalTo(UIConstants.ToolbarHeight)

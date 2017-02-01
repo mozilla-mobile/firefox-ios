@@ -220,16 +220,16 @@ class LoginsHelper: TabHelper {
 
     fileprivate func requestLogins(_ login: LoginData, requestId: String) {
         profile.logins.getLoginsForProtectionSpace(login.protectionSpace).uponQueue(DispatchQueue.main) { res in
-            var jsonObj = [String: AnyObject]()
+            var jsonObj = [String: Any]()
             if let cursor = res.successValue {
                 log.debug("Found \(cursor.count) logins.")
-                jsonObj["requestId"] = requestId as AnyObject?
-                jsonObj["name"] = "RemoteLogins:loginsFound" as AnyObject?
+                jsonObj["requestId"] = requestId
+                jsonObj["name"] = "RemoteLogins:loginsFound"
                 jsonObj["logins"] = cursor.map { $0!.toDict() }
             }
 
             let json = JSON(jsonObj)
-            let src = "window.__firefox__.logins.inject(\(json.toString()))"
+            let src = "window.__firefox__.logins.inject(\(json.rawString()))"
             self.tab?.webView?.evaluateJavaScript(src, completionHandler: { (obj, err) -> Void in
             })
         }

@@ -97,34 +97,34 @@ class FindInPageBar: UIView {
         topBorder.backgroundColor = FindInPageUX.TopBorderColor
         addSubview(topBorder)
 
-        searchText.snp_makeConstraints { make in
+        searchText.snp.makeConstraints { make in
             make.leading.top.bottom.equalTo(self).inset(UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 0))
         }
 
-        matchCountView.snp_makeConstraints { make in
-            make.leading.equalTo(searchText.snp_trailing)
+        matchCountView.snp.makeConstraints { make in
+            make.leading.equalTo(searchText.snp.trailing)
             make.centerY.equalTo(self)
         }
 
-        previousButton.snp_makeConstraints { make in
-            make.leading.equalTo(matchCountView.snp_trailing)
-            make.size.equalTo(self.snp_height)
+        previousButton.snp.makeConstraints { make in
+            make.leading.equalTo(matchCountView.snp.trailing)
+            make.size.equalTo(self.snp.height)
             make.centerY.equalTo(self)
         }
 
-        nextButton.snp_makeConstraints { make in
-            make.leading.equalTo(previousButton.snp_trailing)
-            make.size.equalTo(self.snp_height)
+        nextButton.snp.makeConstraints { make in
+            make.leading.equalTo(previousButton.snp.trailing)
+            make.size.equalTo(self.snp.height)
             make.centerY.equalTo(self)
         }
 
-        closeButton.snp_makeConstraints { make in
-            make.leading.equalTo(nextButton.snp_trailing)
-            make.size.equalTo(self.snp_height)
+        closeButton.snp.makeConstraints { make in
+            make.leading.equalTo(nextButton.snp.trailing)
+            make.size.equalTo(self.snp.height)
             make.trailing.centerY.equalTo(self)
         }
 
-        topBorder.snp_makeConstraints { make in
+        topBorder.snp.makeConstraints { make in
             make.height.equalTo(1)
             make.left.right.top.equalTo(self)
         }

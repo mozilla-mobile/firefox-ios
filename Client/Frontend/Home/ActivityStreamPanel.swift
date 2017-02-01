@@ -214,7 +214,7 @@ extension ActivityStreamPanel {
     }
 
     fileprivate func showSiteWithURLHandler(_ url: URL) {
-        let visitType = VisitType.Bookmark
+        let visitType = VisitType.bookmark
         homePanelDelegate?.homePanel(self, didSelectURL: url, visitType: visitType)
     }
 
@@ -311,13 +311,13 @@ extension ActivityStreamPanel {
 
                 // Merge default topsites with a user's topsites.
                 let mergedSites = mySites.union(defaultSites, f: { (site) -> String in
-                    return NSURL(string: site.url)?.hostSLD ?? ""
+                    return URL(string: site.url)?.hostSLD ?? ""
                 })
 
                 // Favour topsites from defaultSites as they have better favicons.
                 let newSites = mergedSites.map { site -> Site in
-                    let domain = NSURL(string: site.url)?.hostSLD
-                    return defaultSites.find { $0.title.lowercaseString == domain } ?? site
+                    let domain = URL(string: site.url)?.hostSLD
+                    return defaultSites.find { $0.title.lowercased() == domain } ?? site
                 }
 
                 self.topSitesManager.currentTraits = self.view.traitCollection
@@ -333,9 +333,10 @@ extension ActivityStreamPanel {
     }
 
     func hideURLFromTopSites(_ siteURL: URL) {
-        guard let host = siteURL.normalizedHost, let url = siteURL.absoluteString else {
+        guard let host = siteURL.normalizedHost else {
             return
         }
+        let url = siteURL.absoluteString
         // if the default top sites contains the siteurl. also wipe it from default suggested sites.
         if defaultTopSites().filter({$0.url == url}).isEmpty == false {
             deleteTileForSuggestedSite(url)
@@ -402,7 +403,7 @@ extension ActivityStreamPanel {
         let siteBGColor = topSiteItemCell.contentView.backgroundColor
 
         let site = self.topSitesManager.content[indexPath.item]
-        presentContextMenuForSite(site, atIndex: indexPath.item, forSection: .TopSites, siteImage: siteImage, siteBGColor: siteBGColor)
+        presentContextMenuForSite(site, atIndex: indexPath.item, forSection: .topSites, siteImage: siteImage, siteBGColor: siteBGColor)
     }
 
     func presentContextMenuForHighlightCellWithIndexPath(_ indexPath: IndexPath) {
@@ -411,7 +412,7 @@ extension ActivityStreamPanel {
         let siteBGColor = highlightCell.siteImageView.backgroundColor
 
         let site = highlights[indexPath.row]
-        presentContextMenuForSite(site, atIndex: indexPath.row, forSection: .Highlights, siteImage: siteImage, siteBGColor: siteBGColor)
+        presentContextMenuForSite(site, atIndex: indexPath.row, forSection: .highlights, siteImage: siteImage, siteBGColor: siteBGColor)
     }
 
     fileprivate func fetchBookmarkStatusThenPresentContextMenu(_ site: Site, atIndex index: Int, forSection section: Section, siteImage: UIImage?, siteBGColor: UIColor?) {
@@ -466,9 +467,8 @@ extension ActivityStreamPanel {
         let bookmarkAction: ActionOverlayTableViewAction
         if site.bookmarked ?? false {
             bookmarkAction = ActionOverlayTableViewAction(title: Strings.RemoveBookmarkContextMenuTitle, iconString: "action_bookmark_remove", handler: { action in
-                guard let absoluteString = siteURL.absoluteString else { return }
                 self.profile.bookmarks.modelFactory >>== {
-                    $0.removeByURL(absoluteString)
+                    $0.removeByURL(siteURL.absoluteString)
                     site.setBookmarked(false)
                 }
             })
@@ -480,9 +480,9 @@ extension ActivityStreamPanel {
                 if let title = shareItem.title {
                     userData[QuickActions.TabTitleKey] = title
                 }
-                QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.OpenLastBookmark,
+                QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark,
                     withUserData: userData,
-                    toApplication: UIApplication.sharedApplication)
+                    toApplication: UIApplication.shared)
                 site.setBookmarked(true)
             })
         }
@@ -497,7 +497,7 @@ extension ActivityStreamPanel {
             let controller = helper.createActivityViewController { completed, activityType in
                 self.telemetry.reportEvent(.Share, source: pingSource, position: index, shareProvider: activityType)
             }
-            self.presentViewController(controller, animated: true, completion: nil)
+            self.present(controller, animated: true, completion: nil)
         })
 
         let removeTopSiteAction = ActionOverlayTableViewAction(title: Strings.RemoveFromASContextMenuTitle, iconString: "action_close", handler: { action in
@@ -512,7 +512,7 @@ extension ActivityStreamPanel {
 
         var actions = [openInNewTabAction, openInNewPrivateTabAction, bookmarkAction, shareAction]
         switch section {
-            case .highlights: actions.appendContentsOf([dismissHighlightAction, deleteFromHistoryAction])
+            case .highlights: actions.append(contentsOf: [dismissHighlightAction, deleteFromHistoryAction])
             case .topSites: actions.append(removeTopSiteAction)
             case .highlightIntro: break
         }
@@ -553,18 +553,18 @@ struct ActivityStreamTracker {
     let sessionsTracker: PingCentreClient
 
     func reportEvent(_ event: ASPingEvent, source: ASPingSource, position: Int, shareProvider: String? = nil) {
-        var eventPing: [String: AnyObject] = [
-            "event": event.rawValue as AnyObject,
-            "page": "NEW_TAB" as AnyObject,
-            "source": source.rawValue as AnyObject,
-            "action_position": position as AnyObject,
-            "app_version": AppInfo.appVersion as AnyObject,
-            "build": AppInfo.buildNumber as AnyObject,
-            "locale": Locale.currentLocale().localeIdentifier
+        var eventPing: [String: Any] = [
+            "event": event.rawValue,
+            "page": "NEW_TAB",
+            "source": source.rawValue,
+            "action_position": position,
+            "app_version": AppInfo.appVersion,
+            "build": AppInfo.buildNumber,
+            "locale": Locale.current.identifier
         ]
 
         if let provider = shareProvider {
-            eventPing["share_provider"] = provider as AnyObject?
+            eventPing["share_provider"] = provider
         }
 
         eventsTracker.sendPing(eventPing)
@@ -609,18 +609,18 @@ class ASHeaderView: UIView {
 
         addSubview(titleLabel)
 
-        titleLabel.snp_makeConstraints { make in
+        titleLabel.snp.makeConstraints { make in
             make.edges.equalTo(self).offset(UIEdgeInsets(top: ASHeaderViewUX.TitleTopInset, left: ASHeaderViewUX.Insets, bottom: 0, right: -ASHeaderViewUX.Insets) as! ConstraintOffsetTarget).priorityMedium()
         }
 
         let seperatorLine = UIView()
         seperatorLine.backgroundColor = ASHeaderViewUX.SeperatorColor
         addSubview(seperatorLine)
-        seperatorLine.snp_makeConstraints { make in
+        seperatorLine.snp.makeConstraints { make in
             make.height.equalTo(ASHeaderViewUX.SeperatorHeight)
-            make.leading.equalTo(self.snp_leading)
-            make.trailing.equalTo(self.snp_trailing)
-            make.top.equalTo(self.snp_top)
+            make.leading.equalTo(self.snp.leading)
+            make.trailing.equalTo(self.snp.trailing)
+            make.top.equalTo(self.snp.top)
         }
     }
 

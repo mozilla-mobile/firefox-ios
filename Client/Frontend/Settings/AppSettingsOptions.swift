@@ -204,13 +204,13 @@ class SyncNowSetting: WithAccountSetting {
     fileprivate func addIcon(_ image: UIImageView, toCell cell: UITableViewCell) {
         cell.contentView.addSubview(image)
 
-        cell.textLabel?.snp_updateConstraints { make in
-            make.leading.equalTo(image.snp_trailing).offset(5)
+        cell.textLabel?.snp.updateConstraints { make in
+            make.leading.equalTo(image.snp.trailing).offset(5)
             make.trailing.lessThanOrEqualTo(cell.contentView)
             make.centerY.equalTo(cell.contentView)
         }
 
-        image.snp_makeConstraints { make in
+        image.snp.makeConstraints { make in
             make.leading.equalTo(cell.contentView).offset(17)
             make.top.equalTo(cell.textLabel!).offset(2)
         }
@@ -285,11 +285,11 @@ class AccountStatusSetting: WithAccountSetting {
             case .needsVerification:
                 var cs = URLComponents(url: account.configuration.settingsURL, resolvingAgainstBaseURL: false)
                 cs?.queryItems?.append(URLQueryItem(name: "email", value: account.email))
-                viewController.url = cs?.URL
+                viewController.url = try! cs?.asURL()
             case .needsPassword:
                 var cs = URLComponents(url: account.configuration.forceAuthURL, resolvingAgainstBaseURL: false)
                 cs?.queryItems?.append(URLQueryItem(name: "email", value: account.email))
-                viewController.url = cs?.URL
+                viewController.url = try! cs?.asURL()
             case .none, .needsUpgrade:
                 // In future, we'll want to link to /settings and an upgrade page, respectively.
                 return
@@ -305,7 +305,7 @@ class RequirePasswordDebugSetting: WithAccountSetting {
         if !ShowDebugSettings {
             return true
         }
-        if let account = profile.getAccount(), account.actionNeeded != FxAActionNeeded.NeedsPassword {
+        if let account = profile.getAccount(), account.actionNeeded != FxAActionNeeded.needsPassword {
             return false
         }
         return true
@@ -328,7 +328,7 @@ class RequireUpgradeDebugSetting: WithAccountSetting {
         if !ShowDebugSettings {
             return true
         }
-        if let account = profile.getAccount(), account.actionNeeded != FxAActionNeeded.NeedsUpgrade {
+        if let account = profile.getAccount(), account.actionNeeded != FxAActionNeeded.needsUpgrade {
             return false
         }
         return true
@@ -441,7 +441,7 @@ class VersionSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        if AppConstants.BuildChannel != .Aurora {
+        if AppConstants.BuildChannel != .aurora {
             DebugSettingsClickCount += 1
             if DebugSettingsClickCount >= 5 {
                 DebugSettingsClickCount = 0
@@ -604,7 +604,7 @@ class LoginsSetting: Setting {
     }
 
     override func onClick(_: UINavigationController?) {
-        guard let authInfo = KeychainWrapper.defaultKeychainWrapper.authenticationInfo() else {
+        guard let authInfo = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo() else {
             settings?.navigateToLoginsList()
             return
         }

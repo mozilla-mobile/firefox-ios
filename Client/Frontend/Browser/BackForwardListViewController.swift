@@ -78,11 +78,11 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         view.addSubview(shadow)
         view.addSubview(tableView)
         self.snappedToBottom = self.bvc?.toolbar != nil
-        tableView.snp_makeConstraints { make in
+        tableView.snp.makeConstraints { make in
             make.height.equalTo(0)
             make.left.right.equalTo(self.view)
         }
-        shadow.snp_makeConstraints { make in
+        shadow.snp.makeConstraints { make in
             make.left.right.equalTo(self.view)
         }
         remakeVerticalConstraints()
@@ -133,7 +133,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
             return
         }
         if bvc.shouldShowFooterForTraitCollection(newCollection) != snappedToBottom {
-            tableView.snp_updateConstraints { make in
+            tableView.snp.updateConstraints { make in
                 if snappedToBottom {
                     make.bottom.equalTo(self.view).offset(0)
                 } else {
@@ -148,7 +148,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         let correctHeight = {
-            self.tableView.snp_updateConstraints { make in
+            self.tableView.snp.updateConstraints { make in
                 make.height.equalTo(min(CGFloat(BackForwardViewUX.RowHeight * self.listData.count), size.height / 2))
             }
         }
@@ -166,23 +166,23 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
             constraint.deactivate()
         }
         self.verticalConstraints = []
-        tableView.snp_makeConstraints { make in
+        tableView.snp.makeConstraints { make in
             if snappedToBottom {
                 verticalConstraints += [make.bottom.equalTo(self.view).offset(-bvc.footer.frame.height).constraint]
             } else {
                 verticalConstraints += [make.top.equalTo(self.view).offset(bvc.header.frame.height + UIApplication.shared.statusBarFrame.size.height).constraint]
             }
         }
-        shadow.snp_makeConstraints() { make in
+        shadow.snp.makeConstraints() { make in
             if snappedToBottom {
                 verticalConstraints += [
-                    make.bottom.equalTo(tableView.snp_top).constraint,
+                    make.bottom.equalTo(tableView.snp.top).constraint,
                     make.top.equalTo(self.view).constraint
                 ]
                 
             } else {
                 verticalConstraints += [
-                    make.top.equalTo(tableView.snp_bottom).constraint,
+                    make.top.equalTo(tableView.snp.bottom).constraint,
                     make.bottom.equalTo(self.view).constraint
                 ]
             }

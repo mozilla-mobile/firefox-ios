@@ -9,10 +9,10 @@ import Shared
 import XCGLogger
 
 enum ShortcutType: String {
-    case NewTab
-    case NewPrivateTab
-    case OpenLastBookmark
-    @available(*, deprecated: 2.1) case OpenLastTab
+    case newTab
+    case newPrivateTab
+    case openLastBookmark
+    @available(*, deprecated: 2.1) case openLastTab
 
     init?(fullType: String) {
         guard let last = fullType.components(separatedBy: ".").last else { return nil }
@@ -62,13 +62,13 @@ class QuickActions: NSObject {
         var dynamicShortcutItems = application.shortcutItems ?? [UIApplicationShortcutItem]()
         switch(type) {
         case .openLastBookmark:
-            let openLastBookmarkShortcut = UIMutableApplicationShortcutItem(type: ShortcutType.OpenLastBookmark.type,
+            let openLastBookmarkShortcut = UIMutableApplicationShortcutItem(type: ShortcutType.openLastBookmark.type,
                 localizedTitle: lastBookmarkTitle,
                 localizedSubtitle: userData[QuickActions.TabTitleKey] as? String,
                 icon: UIApplicationShortcutIcon(templateImageName: "quick_action_last_bookmark"),
                 userInfo: userData
             )
-            if let index = (dynamicShortcutItems.index { $0.type == ShortcutType.OpenLastBookmark.type }) {
+            if let index = (dynamicShortcutItems.index { $0.type == ShortcutType.openLastBookmark.type }) {
                 dynamicShortcutItems[index] = openLastBookmarkShortcut
             } else {
                 dynamicShortcutItems.append(openLastBookmarkShortcut)
