@@ -68,7 +68,7 @@ class NewTabChoiceViewController: UITableViewController {
 
         cell.accessoryType = (currentChoice == option) ? .checkmark : .none
 
-        let enabled = (option != .HomePage) || hasHomePage
+        let enabled = (option != .homePage) || hasHomePage
 
         cell.textLabel?.textColor = enabled ? UIConstants.TableViewRowTextColor : UIConstants.TableViewDisabledRowTextColor
         cell.isUserInteractionEnabled = enabled

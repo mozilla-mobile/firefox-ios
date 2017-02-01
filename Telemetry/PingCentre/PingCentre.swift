@@ -12,14 +12,6 @@ public protocol PingCentreClient {
     func sendPing(_ data: [String: AnyObject], validate: Bool) -> Success
 }
 
-// Neat trick to have default parameters for protocol methods while still being able to lean on the compiler
-// for adherence to the protocol.
-extension PingCentreClient {
-    func sendPing(_ data: [String: Any], validate: Bool = true) -> Success {
-        return sendPing(data, validate: validate)
-    }
-}
-
 public struct PingCentre {
     public static func clientForTopic(_ topic: PingCentreTopic, clientID: String) -> PingCentreClient {
         switch AppConstants.BuildChannel {
@@ -84,7 +76,7 @@ class DefaultPingCentreImpl: PingCentreClient {
         self.validationQueue = validationQueue
     }
 
-    func sendPing(_ data: [String: Any], validate: Bool = true) -> Success {
+    func sendPing(_ data: [String: Any], validate: Bool) -> Success {
         var payload = data
         payload["topic"] = topic.name
         payload["client_id"] = clientID

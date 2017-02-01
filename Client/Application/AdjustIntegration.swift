@@ -94,12 +94,12 @@ class AdjustIntegration: NSObject {
     /// Return the path to the `AdjustAttribution.json` file. Throws an `NSError` if we could not build the path.
 
     fileprivate func getAttributionPath() throws -> String {
-        guard let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first,
-                let path = url.appendingPathComponent(AdjustAttributionFileName).path else {
+        guard let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
             throw NSError(domain: AdjustIntegrationErrorDomain, code: -1,
                 userInfo: [NSLocalizedDescriptionKey: "Could not build \(AdjustAttributionFileName) path"])
         }
-        return path
+        
+        return url.appendingPathComponent(AdjustAttributionFileName).path
     }
 
     /// Return true if Adjust should be enabled. If the user has disabled the Send Anonymous Usage Data then we immediately

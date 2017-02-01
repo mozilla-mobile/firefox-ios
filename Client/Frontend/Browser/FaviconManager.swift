@@ -112,7 +112,8 @@ class FaviconManager: TabHelper {
             }
             loadFavicons(tab, profile: profile, favicons: favicons).uponQueue(DispatchQueue.main) { result in
                 if let result = result.successValue {
-                    if result.count == 1 && favicons[0].type == .Guess {
+                    let faviconsReadOnly = favicons
+                    if result.count == 1 && faviconsReadOnly[0].type == .guess {
                         // No favicon is indicated in the HTML
                         self.noFaviconAvailable(tab, atURL: currentURL as URL)
                     }

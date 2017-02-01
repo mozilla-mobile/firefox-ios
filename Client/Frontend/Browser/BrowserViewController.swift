@@ -3274,7 +3274,7 @@ extension BrowserViewController: TabTrayDelegate {
         return profile.readingList?.createRecordWithURL(url, title: tab.title ?? url, addedBy: UIDevice.current.name).successValue
     }
 
-    func tabTrayRequestsPresentationOf(viewController: UIViewController) {
+    func tabTrayRequestsPresentationOf(_ viewController: UIViewController) {
         self.present(viewController, animated: false, completion: nil)
     }
 }
