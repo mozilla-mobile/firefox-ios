@@ -663,7 +663,6 @@
 		E6C191F11E38F810000A213B /* libPhoneNumberiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6C191F01E38F7EE000A213B /* libPhoneNumberiOS.framework */; };
 		E6C70E171E2830CC00F8DB57 /* PingCentre.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6C70E151E2830CC00F8DB57 /* PingCentre.swift */; };
 		E6C70E181E2830CC00F8DB57 /* Topics.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6C70E161E2830CC00F8DB57 /* Topics.swift */; };
-		E6C70E801E28313000F8DB57 /* JSONSchema.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E6C70E7D1E28311300F8DB57 /* JSONSchema.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E6C70E821E28314700F8DB57 /* PingCentreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6C70E811E28314700F8DB57 /* PingCentreTests.swift */; };
 		E6C9EB6B1E2FBFC300D5CE80 /* signedInUser.json in Resources */ = {isa = PBXBuildFile; fileRef = E6C9EB6A1E2FBFC300D5CE80 /* signedInUser.json */; };
 		E6CF28E71CB43B7900151AB3 /* SensitiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CF28E61CB43B7900151AB3 /* SensitiveViewController.swift */; };
@@ -1069,20 +1068,6 @@
 			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
 			remoteInfo = Client;
 		};
-		E6C70E7C1E28311300F8DB57 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E6C70E201E28311300F8DB57 /* JSONSchema.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 27CF7EE91A9B9EDA0063FDE4;
-			remoteInfo = JSONSchema;
-		};
-		E6C70E7E1E28311300F8DB57 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E6C70E201E28311300F8DB57 /* JSONSchema.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 27CF7EF41A9B9EDA0063FDE4;
-			remoteInfo = JSONSchemaTests;
-		};
 		E6CB64CB1DA42C2900887098 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D30EBB5A1C75503800105AE9 /* KIF.xcodeproj */;
@@ -1147,7 +1132,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				E6C70E801E28313000F8DB57 /* JSONSchema.framework in Copy Frameworks */,
 				E62CFB3D1C89EFF700C01324 /* FxA.framework in Copy Frameworks */,
 				E601386A1C89EB9800DF9756 /* SQLite.framework in Copy Frameworks */,
 				E60138691C89EB8E00DF9756 /* ReadingList.framework in Copy Frameworks */,
@@ -1809,88 +1793,6 @@
 		E6C191F01E38F7EE000A213B /* libPhoneNumberiOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libPhoneNumberiOS.framework; path = Carthage/Build/iOS/libPhoneNumberiOS.framework; sourceTree = "<group>"; };
 		E6C70E151E2830CC00F8DB57 /* PingCentre.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PingCentre.swift; sourceTree = "<group>"; };
 		E6C70E161E2830CC00F8DB57 /* Topics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Topics.swift; sourceTree = "<group>"; };
-		E6C70E1A1E28311300F8DB57 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
-		E6C70E1C1E28311300F8DB57 /* UniversalFramework_Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = UniversalFramework_Base.xcconfig; sourceTree = "<group>"; };
-		E6C70E1D1E28311300F8DB57 /* UniversalFramework_Framework.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = UniversalFramework_Framework.xcconfig; sourceTree = "<group>"; };
-		E6C70E1E1E28311300F8DB57 /* UniversalFramework_Test.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = UniversalFramework_Test.xcconfig; sourceTree = "<group>"; };
-		E6C70E1F1E28311300F8DB57 /* JSONSchema.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = JSONSchema.podspec; sourceTree = "<group>"; };
-		E6C70E201E28311300F8DB57 /* JSONSchema.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = JSONSchema.xcodeproj; sourceTree = "<group>"; };
-		E6C70E231E28311300F8DB57 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
-		E6C70E241E28311300F8DB57 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
-		E6C70E251E28311300F8DB57 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		E6C70E271E28311300F8DB57 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E6C70E281E28311300F8DB57 /* JSONSchema.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JSONSchema.h; sourceTree = "<group>"; };
-		E6C70E291E28311300F8DB57 /* JSONSchema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONSchema.swift; sourceTree = "<group>"; };
-		E6C70E2A1E28311300F8DB57 /* Validators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Validators.swift; sourceTree = "<group>"; };
-		E6C70E2D1E28311300F8DB57 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
-		E6C70E2E1E28311300F8DB57 /* .travis.yml */ = {isa = PBXFileReference; lastKnownFileType = text; path = .travis.yml; sourceTree = "<group>"; };
-		E6C70E301E28311300F8DB57 /* jsonschema_suite */ = {isa = PBXFileReference; lastKnownFileType = text; path = jsonschema_suite; sourceTree = "<group>"; };
-		E6C70E311E28311300F8DB57 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
-		E6C70E321E28311300F8DB57 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		E6C70E351E28311300F8DB57 /* folderInteger.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = folderInteger.json; sourceTree = "<group>"; };
-		E6C70E361E28311300F8DB57 /* integer.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = integer.json; sourceTree = "<group>"; };
-		E6C70E371E28311300F8DB57 /* subSchemas.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = subSchemas.json; sourceTree = "<group>"; };
-		E6C70E3A1E28311300F8DB57 /* additionalItems.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = additionalItems.json; sourceTree = "<group>"; };
-		E6C70E3B1E28311300F8DB57 /* additionalProperties.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = additionalProperties.json; sourceTree = "<group>"; };
-		E6C70E3C1E28311300F8DB57 /* default.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = default.json; sourceTree = "<group>"; };
-		E6C70E3D1E28311300F8DB57 /* dependencies.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = dependencies.json; sourceTree = "<group>"; };
-		E6C70E3E1E28311300F8DB57 /* disallow.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = disallow.json; sourceTree = "<group>"; };
-		E6C70E3F1E28311300F8DB57 /* divisibleBy.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = divisibleBy.json; sourceTree = "<group>"; };
-		E6C70E401E28311300F8DB57 /* enum.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = enum.json; sourceTree = "<group>"; };
-		E6C70E411E28311300F8DB57 /* extends.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = extends.json; sourceTree = "<group>"; };
-		E6C70E421E28311300F8DB57 /* items.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = items.json; sourceTree = "<group>"; };
-		E6C70E431E28311300F8DB57 /* maximum.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = maximum.json; sourceTree = "<group>"; };
-		E6C70E441E28311300F8DB57 /* maxItems.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = maxItems.json; sourceTree = "<group>"; };
-		E6C70E451E28311300F8DB57 /* maxLength.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = maxLength.json; sourceTree = "<group>"; };
-		E6C70E461E28311300F8DB57 /* minimum.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = minimum.json; sourceTree = "<group>"; };
-		E6C70E471E28311300F8DB57 /* minItems.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = minItems.json; sourceTree = "<group>"; };
-		E6C70E481E28311300F8DB57 /* minLength.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = minLength.json; sourceTree = "<group>"; };
-		E6C70E4A1E28311300F8DB57 /* bignum.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = bignum.json; sourceTree = "<group>"; };
-		E6C70E4B1E28311300F8DB57 /* format.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = format.json; sourceTree = "<group>"; };
-		E6C70E4C1E28311300F8DB57 /* jsregex.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = jsregex.json; sourceTree = "<group>"; };
-		E6C70E4D1E28311300F8DB57 /* zeroTerminatedFloats.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = zeroTerminatedFloats.json; sourceTree = "<group>"; };
-		E6C70E4E1E28311300F8DB57 /* pattern.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = pattern.json; sourceTree = "<group>"; };
-		E6C70E4F1E28311300F8DB57 /* patternProperties.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = patternProperties.json; sourceTree = "<group>"; };
-		E6C70E501E28311300F8DB57 /* properties.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = properties.json; sourceTree = "<group>"; };
-		E6C70E511E28311300F8DB57 /* ref.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ref.json; sourceTree = "<group>"; };
-		E6C70E521E28311300F8DB57 /* refRemote.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = refRemote.json; sourceTree = "<group>"; };
-		E6C70E531E28311300F8DB57 /* required.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = required.json; sourceTree = "<group>"; };
-		E6C70E541E28311300F8DB57 /* type.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = type.json; sourceTree = "<group>"; };
-		E6C70E551E28311300F8DB57 /* uniqueItems.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = uniqueItems.json; sourceTree = "<group>"; };
-		E6C70E571E28311300F8DB57 /* additionalItems.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = additionalItems.json; sourceTree = "<group>"; };
-		E6C70E581E28311300F8DB57 /* additionalProperties.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = additionalProperties.json; sourceTree = "<group>"; };
-		E6C70E591E28311300F8DB57 /* allOf.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = allOf.json; sourceTree = "<group>"; };
-		E6C70E5A1E28311300F8DB57 /* anyOf.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = anyOf.json; sourceTree = "<group>"; };
-		E6C70E5B1E28311300F8DB57 /* default.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = default.json; sourceTree = "<group>"; };
-		E6C70E5C1E28311300F8DB57 /* definitions.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = definitions.json; sourceTree = "<group>"; };
-		E6C70E5D1E28311300F8DB57 /* dependencies.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = dependencies.json; sourceTree = "<group>"; };
-		E6C70E5E1E28311300F8DB57 /* enum.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = enum.json; sourceTree = "<group>"; };
-		E6C70E5F1E28311300F8DB57 /* items.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = items.json; sourceTree = "<group>"; };
-		E6C70E601E28311300F8DB57 /* maximum.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = maximum.json; sourceTree = "<group>"; };
-		E6C70E611E28311300F8DB57 /* maxItems.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = maxItems.json; sourceTree = "<group>"; };
-		E6C70E621E28311300F8DB57 /* maxLength.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = maxLength.json; sourceTree = "<group>"; };
-		E6C70E631E28311300F8DB57 /* maxProperties.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = maxProperties.json; sourceTree = "<group>"; };
-		E6C70E641E28311300F8DB57 /* minimum.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = minimum.json; sourceTree = "<group>"; };
-		E6C70E651E28311300F8DB57 /* minItems.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = minItems.json; sourceTree = "<group>"; };
-		E6C70E661E28311300F8DB57 /* minLength.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = minLength.json; sourceTree = "<group>"; };
-		E6C70E671E28311300F8DB57 /* minProperties.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = minProperties.json; sourceTree = "<group>"; };
-		E6C70E681E28311300F8DB57 /* multipleOf.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = multipleOf.json; sourceTree = "<group>"; };
-		E6C70E691E28311300F8DB57 /* not.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = not.json; sourceTree = "<group>"; };
-		E6C70E6A1E28311300F8DB57 /* oneOf.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = oneOf.json; sourceTree = "<group>"; };
-		E6C70E6C1E28311300F8DB57 /* bignum.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = bignum.json; sourceTree = "<group>"; };
-		E6C70E6D1E28311300F8DB57 /* format.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = format.json; sourceTree = "<group>"; };
-		E6C70E6E1E28311300F8DB57 /* zeroTerminatedFloats.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = zeroTerminatedFloats.json; sourceTree = "<group>"; };
-		E6C70E6F1E28311300F8DB57 /* pattern.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = pattern.json; sourceTree = "<group>"; };
-		E6C70E701E28311300F8DB57 /* patternProperties.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = patternProperties.json; sourceTree = "<group>"; };
-		E6C70E711E28311300F8DB57 /* properties.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = properties.json; sourceTree = "<group>"; };
-		E6C70E721E28311300F8DB57 /* ref.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ref.json; sourceTree = "<group>"; };
-		E6C70E731E28311300F8DB57 /* refRemote.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = refRemote.json; sourceTree = "<group>"; };
-		E6C70E741E28311300F8DB57 /* required.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = required.json; sourceTree = "<group>"; };
-		E6C70E751E28311300F8DB57 /* type.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = type.json; sourceTree = "<group>"; };
-		E6C70E761E28311300F8DB57 /* uniqueItems.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = uniqueItems.json; sourceTree = "<group>"; };
-		E6C70E771E28311300F8DB57 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E6C70E781E28311300F8DB57 /* JSONSchemaCases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONSchemaCases.swift; sourceTree = "<group>"; };
-		E6C70E791E28311300F8DB57 /* JSONSchemaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONSchemaTests.swift; sourceTree = "<group>"; };
 		E6C70E811E28314700F8DB57 /* PingCentreTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PingCentreTests.swift; sourceTree = "<group>"; };
 		E6C9EB6A1E2FBFC300D5CE80 /* signedInUser.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = signedInUser.json; sourceTree = "<group>"; };
 		E6CF28E61CB43B7900151AB3 /* SensitiveViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensitiveViewController.swift; sourceTree = "<group>"; };
@@ -2367,7 +2269,6 @@
 				288A2D7F1AB8B2B20023ABC3 /* Box */,
 				28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */,
 				E65C5B8B1BEA4E7100D28BEF /* FBSnapshotTestCase */,
-				E6C70E191E28311300F8DB57 /* JSONSchema */,
 				D30EBB5A1C75503800105AE9 /* KIF.xcodeproj */,
 				E6B6DC931CD3D35A009CF713 /* PLCrashReporter */,
 				288A2D7E1AB8B2AD0023ABC3 /* Result */,
@@ -3260,201 +3161,6 @@
 			);
 			name = PingCentre;
 			path = Telemetry/PingCentre;
-			sourceTree = "<group>";
-		};
-		E6C70E191E28311300F8DB57 /* JSONSchema */ = {
-			isa = PBXGroup;
-			children = (
-				E6C70E1A1E28311300F8DB57 /* CHANGELOG.md */,
-				E6C70E1B1E28311300F8DB57 /* Configurations */,
-				E6C70E1F1E28311300F8DB57 /* JSONSchema.podspec */,
-				E6C70E201E28311300F8DB57 /* JSONSchema.xcodeproj */,
-				E6C70E231E28311300F8DB57 /* LICENSE */,
-				E6C70E241E28311300F8DB57 /* Package.swift */,
-				E6C70E251E28311300F8DB57 /* README.md */,
-				E6C70E261E28311300F8DB57 /* Sources */,
-				E6C70E2B1E28311300F8DB57 /* Tests */,
-			);
-			name = JSONSchema;
-			path = ThirdParty/JSONSchema;
-			sourceTree = SOURCE_ROOT;
-		};
-		E6C70E1B1E28311300F8DB57 /* Configurations */ = {
-			isa = PBXGroup;
-			children = (
-				E6C70E1C1E28311300F8DB57 /* UniversalFramework_Base.xcconfig */,
-				E6C70E1D1E28311300F8DB57 /* UniversalFramework_Framework.xcconfig */,
-				E6C70E1E1E28311300F8DB57 /* UniversalFramework_Test.xcconfig */,
-			);
-			path = Configurations;
-			sourceTree = "<group>";
-		};
-		E6C70E211E28311300F8DB57 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				E6C70E7D1E28311300F8DB57 /* JSONSchema.framework */,
-				E6C70E7F1E28311300F8DB57 /* JSONSchemaTests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		E6C70E261E28311300F8DB57 /* Sources */ = {
-			isa = PBXGroup;
-			children = (
-				E6C70E271E28311300F8DB57 /* Info.plist */,
-				E6C70E281E28311300F8DB57 /* JSONSchema.h */,
-				E6C70E291E28311300F8DB57 /* JSONSchema.swift */,
-				E6C70E2A1E28311300F8DB57 /* Validators.swift */,
-			);
-			path = Sources;
-			sourceTree = "<group>";
-		};
-		E6C70E2B1E28311300F8DB57 /* Tests */ = {
-			isa = PBXGroup;
-			children = (
-				E6C70E2C1E28311300F8DB57 /* Cases */,
-				E6C70E771E28311300F8DB57 /* Info.plist */,
-				E6C70E781E28311300F8DB57 /* JSONSchemaCases.swift */,
-				E6C70E791E28311300F8DB57 /* JSONSchemaTests.swift */,
-			);
-			path = Tests;
-			sourceTree = "<group>";
-		};
-		E6C70E2C1E28311300F8DB57 /* Cases */ = {
-			isa = PBXGroup;
-			children = (
-				E6C70E2D1E28311300F8DB57 /* .gitignore */,
-				E6C70E2E1E28311300F8DB57 /* .travis.yml */,
-				E6C70E2F1E28311300F8DB57 /* bin */,
-				E6C70E311E28311300F8DB57 /* LICENSE */,
-				E6C70E321E28311300F8DB57 /* README.md */,
-				E6C70E331E28311300F8DB57 /* remotes */,
-				E6C70E381E28311300F8DB57 /* tests */,
-			);
-			path = Cases;
-			sourceTree = "<group>";
-		};
-		E6C70E2F1E28311300F8DB57 /* bin */ = {
-			isa = PBXGroup;
-			children = (
-				E6C70E301E28311300F8DB57 /* jsonschema_suite */,
-			);
-			path = bin;
-			sourceTree = "<group>";
-		};
-		E6C70E331E28311300F8DB57 /* remotes */ = {
-			isa = PBXGroup;
-			children = (
-				E6C70E341E28311300F8DB57 /* folder */,
-				E6C70E361E28311300F8DB57 /* integer.json */,
-				E6C70E371E28311300F8DB57 /* subSchemas.json */,
-			);
-			path = remotes;
-			sourceTree = "<group>";
-		};
-		E6C70E341E28311300F8DB57 /* folder */ = {
-			isa = PBXGroup;
-			children = (
-				E6C70E351E28311300F8DB57 /* folderInteger.json */,
-			);
-			path = folder;
-			sourceTree = "<group>";
-		};
-		E6C70E381E28311300F8DB57 /* tests */ = {
-			isa = PBXGroup;
-			children = (
-				E6C70E391E28311300F8DB57 /* draft3 */,
-				E6C70E561E28311300F8DB57 /* draft4 */,
-			);
-			path = tests;
-			sourceTree = "<group>";
-		};
-		E6C70E391E28311300F8DB57 /* draft3 */ = {
-			isa = PBXGroup;
-			children = (
-				E6C70E3A1E28311300F8DB57 /* additionalItems.json */,
-				E6C70E3B1E28311300F8DB57 /* additionalProperties.json */,
-				E6C70E3C1E28311300F8DB57 /* default.json */,
-				E6C70E3D1E28311300F8DB57 /* dependencies.json */,
-				E6C70E3E1E28311300F8DB57 /* disallow.json */,
-				E6C70E3F1E28311300F8DB57 /* divisibleBy.json */,
-				E6C70E401E28311300F8DB57 /* enum.json */,
-				E6C70E411E28311300F8DB57 /* extends.json */,
-				E6C70E421E28311300F8DB57 /* items.json */,
-				E6C70E431E28311300F8DB57 /* maximum.json */,
-				E6C70E441E28311300F8DB57 /* maxItems.json */,
-				E6C70E451E28311300F8DB57 /* maxLength.json */,
-				E6C70E461E28311300F8DB57 /* minimum.json */,
-				E6C70E471E28311300F8DB57 /* minItems.json */,
-				E6C70E481E28311300F8DB57 /* minLength.json */,
-				E6C70E491E28311300F8DB57 /* optional */,
-				E6C70E4E1E28311300F8DB57 /* pattern.json */,
-				E6C70E4F1E28311300F8DB57 /* patternProperties.json */,
-				E6C70E501E28311300F8DB57 /* properties.json */,
-				E6C70E511E28311300F8DB57 /* ref.json */,
-				E6C70E521E28311300F8DB57 /* refRemote.json */,
-				E6C70E531E28311300F8DB57 /* required.json */,
-				E6C70E541E28311300F8DB57 /* type.json */,
-				E6C70E551E28311300F8DB57 /* uniqueItems.json */,
-			);
-			path = draft3;
-			sourceTree = "<group>";
-		};
-		E6C70E491E28311300F8DB57 /* optional */ = {
-			isa = PBXGroup;
-			children = (
-				E6C70E4A1E28311300F8DB57 /* bignum.json */,
-				E6C70E4B1E28311300F8DB57 /* format.json */,
-				E6C70E4C1E28311300F8DB57 /* jsregex.json */,
-				E6C70E4D1E28311300F8DB57 /* zeroTerminatedFloats.json */,
-			);
-			path = optional;
-			sourceTree = "<group>";
-		};
-		E6C70E561E28311300F8DB57 /* draft4 */ = {
-			isa = PBXGroup;
-			children = (
-				E6C70E571E28311300F8DB57 /* additionalItems.json */,
-				E6C70E581E28311300F8DB57 /* additionalProperties.json */,
-				E6C70E591E28311300F8DB57 /* allOf.json */,
-				E6C70E5A1E28311300F8DB57 /* anyOf.json */,
-				E6C70E5B1E28311300F8DB57 /* default.json */,
-				E6C70E5C1E28311300F8DB57 /* definitions.json */,
-				E6C70E5D1E28311300F8DB57 /* dependencies.json */,
-				E6C70E5E1E28311300F8DB57 /* enum.json */,
-				E6C70E5F1E28311300F8DB57 /* items.json */,
-				E6C70E601E28311300F8DB57 /* maximum.json */,
-				E6C70E611E28311300F8DB57 /* maxItems.json */,
-				E6C70E621E28311300F8DB57 /* maxLength.json */,
-				E6C70E631E28311300F8DB57 /* maxProperties.json */,
-				E6C70E641E28311300F8DB57 /* minimum.json */,
-				E6C70E651E28311300F8DB57 /* minItems.json */,
-				E6C70E661E28311300F8DB57 /* minLength.json */,
-				E6C70E671E28311300F8DB57 /* minProperties.json */,
-				E6C70E681E28311300F8DB57 /* multipleOf.json */,
-				E6C70E691E28311300F8DB57 /* not.json */,
-				E6C70E6A1E28311300F8DB57 /* oneOf.json */,
-				E6C70E6B1E28311300F8DB57 /* optional */,
-				E6C70E6F1E28311300F8DB57 /* pattern.json */,
-				E6C70E701E28311300F8DB57 /* patternProperties.json */,
-				E6C70E711E28311300F8DB57 /* properties.json */,
-				E6C70E721E28311300F8DB57 /* ref.json */,
-				E6C70E731E28311300F8DB57 /* refRemote.json */,
-				E6C70E741E28311300F8DB57 /* required.json */,
-				E6C70E751E28311300F8DB57 /* type.json */,
-				E6C70E761E28311300F8DB57 /* uniqueItems.json */,
-			);
-			path = draft4;
-			sourceTree = "<group>";
-		};
-		E6C70E6B1E28311300F8DB57 /* optional */ = {
-			isa = PBXGroup;
-			children = (
-				E6C70E6C1E28311300F8DB57 /* bignum.json */,
-				E6C70E6D1E28311300F8DB57 /* format.json */,
-				E6C70E6E1E28311300F8DB57 /* zeroTerminatedFloats.json */,
-			);
-			path = optional;
 			sourceTree = "<group>";
 		};
 		E6F9650D1B2F1CF20034B023 /* SharedTests */ = {
@@ -4430,10 +4136,6 @@
 					ProjectRef = 28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */;
 				},
 				{
-					ProductGroup = E6C70E211E28311300F8DB57 /* Products */;
-					ProjectRef = E6C70E201E28311300F8DB57 /* JSONSchema.xcodeproj */;
-				},
-				{
 					ProductGroup = D30EBB5B1C75503800105AE9 /* Products */;
 					ProjectRef = D30EBB5A1C75503800105AE9 /* KIF.xcodeproj */;
 				},
@@ -4571,20 +4273,6 @@
 			fileType = wrapper.framework;
 			path = KIF.framework;
 			remoteRef = D30EBB691C75503800105AE9 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		E6C70E7D1E28311300F8DB57 /* JSONSchema.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = JSONSchema.framework;
-			remoteRef = E6C70E7C1E28311300F8DB57 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		E6C70E7F1E28311300F8DB57 /* JSONSchemaTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = JSONSchemaTests.xctest;
-			remoteRef = E6C70E7E1E28311300F8DB57 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		E6CB64CC1DA42C2900887098 /* KIFFrameworkConsumer.app */ = {
