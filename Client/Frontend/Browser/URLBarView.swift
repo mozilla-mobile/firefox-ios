@@ -916,3 +916,60 @@ extension ToolbarTextField: Themeable {
         highlightColor = theme.highlightColor!
     }
 }
+
+class URLBarMinifiedView: UIView {
+    
+    let touchTarget: UIButton
+    private let blurWrapper: BlurWrapper
+    private let title: UILabel
+    
+    init() {
+        self.touchTarget = UIButton()
+        self.touchTarget.isAccessibilityElement = false
+        
+        self.title = UILabel()
+        self.title.font = UIConstants.DefaultChromeFont
+        self.title.textAlignment = .Center
+        self.title.lineBreakMode = .ByTruncatingMiddle
+        
+        let border = UIView()
+        border.backgroundColor = UIConstants.BorderColor
+        
+        self.blurWrapper = BlurWrapper(view: self.touchTarget)
+        self.blurWrapper.addSubview(border)
+        self.blurWrapper.addSubview(self.title)
+        
+        super.init(frame: .zero)
+        
+        self.addSubview(self.blurWrapper)
+        
+        self.blurWrapper.snp_makeConstraints() { make in
+            make.center.width.height.equalTo(self)
+        }
+        
+        self.title.snp_makeConstraints() { make in
+            make.center.equalTo(self)
+            make.width.equalTo(self).offset(-UIConstants.DefaultPadding)
+        }
+        
+        border.snp_makeConstraints() { make in
+            make.bottom.left.right.equalTo(self)
+            make.height.equalTo(0.5)
+        }
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func updateForTab(tab: Tab) {
+        self.title.text = tab.displayTitle
+        if tab.isPrivate {
+            self.blurWrapper.blurStyle = .Dark
+            self.title.textColor = UIColor.lightTextColor()
+        } else {
+            self.blurWrapper.blurStyle = .ExtraLight
+            self.title.textColor = UIColor.darkTextColor()
+        }
+    }
+}

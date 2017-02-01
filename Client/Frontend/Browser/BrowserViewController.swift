@@ -21,6 +21,7 @@ private let log = Logger.browserLogger
 private let KVOLoading = "loading"
 private let KVOEstimatedProgress = "estimatedProgress"
 private let KVOURL = "URL"
+private let KVOTitle = "title"
 private let KVOCanGoBack = "canGoBack"
 private let KVOCanGoForward = "canGoForward"
 private let KVOContentSize = "contentSize"
@@ -29,7 +30,7 @@ private let ActionSheetTitleMaxLength = 120
 
 private struct BrowserViewControllerUX {
     private static let BackgroundColor = UIConstants.AppBackgroundColor
-    private static let ShowHeaderTapAreaHeight: CGFloat = 32
+    private static let ShowHeaderTapAreaHeight: CGFloat = 24
     private static let BookmarkStarAnimationDuration: Double = 0.5
     private static let BookmarkStarAnimationOffset: CGFloat = 80
 }
@@ -86,7 +87,7 @@ class BrowserViewController: UIViewController {
     var footer: UIView!
     var footerBackdrop: UIView!
     private var footerBackground: BlurWrapper?
-    private var topTouchArea: UIButton!
+    private var topTouchArea: URLBarMinifiedView!
     let urlBarTopTabsContainer = UIView(frame: CGRect.zero)
 
     // Backdrop used for displaying greyed background for private tabs
@@ -368,9 +369,8 @@ class BrowserViewController: UIViewController {
         view.addSubview(statusBarOverlay)
 
         log.debug("BVC setting up top touch area…")
-        topTouchArea = UIButton()
-        topTouchArea.isAccessibilityElement = false
-        topTouchArea.addTarget(self, action: #selector(BrowserViewController.SELtappedTopArea), forControlEvents: UIControlEvents.TouchUpInside)
+        topTouchArea = URLBarMinifiedView()
+        topTouchArea.touchTarget.addTarget(self, action: #selector(BrowserViewController.SELtappedTopArea), forControlEvents: UIControlEvents.TouchUpInside)
         view.addSubview(topTouchArea)
 
         log.debug("BVC setting up URL bar…")
@@ -577,6 +577,7 @@ class BrowserViewController: UIViewController {
         presentIntroViewController()
         log.debug("BVC intro presented.")
         self.webViewContainerToolbar.hidden = false
+        self.topTouchArea.hidden = false
 
         screenshotHelper.viewIsVisible = true
         log.debug("BVC taking pending screenshots….")
@@ -933,7 +934,7 @@ class BrowserViewController: UIViewController {
                 navigationToolbar.updateReloadStatus(loading)
             }
 
-            if (!loading) {
+            if !loading {
                 runScriptsOnWebView(webView)
             }
         case KVOURL:
@@ -949,6 +950,9 @@ class BrowserViewController: UIViewController {
                     updateUIForReaderHomeStateForTab(tab)
                 }
             }
+        case KVOTitle:
+            guard let tab = tabManager[webView] else { break }
+            self.topTouchArea.updateForTab(tab)
         case KVOCanGoBack:
             guard webView == tabManager.selectedTab?.webView,
                 let canGoBack = change?[NSKeyValueChangeNewKey] as? Bool else { break }
@@ -1436,6 +1440,7 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidPressTabs(urlBar: URLBarView) {
         self.webViewContainerToolbar.hidden = true
+        self.topTouchArea.hidden = true
         updateFindInPageVisibility(visible: false)
 
         let tabTrayController = TabTrayController(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
@@ -1789,6 +1794,7 @@ extension BrowserViewController: TabDelegate {
         webView.addObserver(self, forKeyPath: KVOCanGoBack, options: .New, context: nil)
         webView.addObserver(self, forKeyPath: KVOCanGoForward, options: .New, context: nil)
         tab.webView?.addObserver(self, forKeyPath: KVOURL, options: .New, context: nil)
+        tab.webView?.addObserver(self, forKeyPath: KVOTitle, options: .New, context: nil)
 
         webView.scrollView.addObserver(self.scrollController, forKeyPath: KVOContentSize, options: .New, context: nil)
 
