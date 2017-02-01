@@ -125,7 +125,7 @@ class ClearPrivateDataTableViewController: UITableViewController {
 
                     self.profile.prefs.setObject(self.toggles, forKey: TogglesPrefKey)
 
-                    DispatchQueue.main.asynchronously(DispatchQueue.main) {
+                    DispatchQueue.main.async {
                         // Disable the Clear Private Data button after it's clicked.
                         self.clearButtonEnabled = false
                         self.tableView.deselectRow(at: indexPath, animated: true)
@@ -142,15 +142,15 @@ class ClearPrivateDataTableViewController: UITableViewController {
                 if yes.successValue ?? true {
                     // Our local database contains some history items that have been synced.
                     // Warn the user before clearing.
-                    alert = UIAlertController.clearSyncedHistoryAlert(clearPrivateData)
+                    alert = UIAlertController.clearSyncedHistoryAlert(okayCallback: clearPrivateData)
                 } else {
-                    alert = UIAlertController.clearPrivateDataAlert(clearPrivateData)
+                    alert = UIAlertController.clearPrivateDataAlert(okayCallback: clearPrivateData)
                 }
                 self.present(alert, animated: true, completion: nil)
                 return
             }
         } else {
-            let alert = UIAlertController.clearPrivateDataAlert(clearPrivateData)
+            let alert = UIAlertController.clearPrivateDataAlert(okayCallback: clearPrivateData)
             self.present(alert, animated: true, completion: nil)
         }
 

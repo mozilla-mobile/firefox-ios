@@ -107,7 +107,7 @@ class LoginListViewController: SensitiveViewController {
         loadingStateView.isHidden = true
 
         searchView.snp.makeConstraints { make in
-            make.top.equalTo(snp.topLayoutGuideBottom).constraint
+            make.top.equalTo(self.topLayoutGuide.snp.bottom)
             make.left.right.equalTo(self.view)
             make.height.equalTo(LoginListUX.SearchHeight)
         }
@@ -537,7 +537,7 @@ class LoginDataSource: NSObject, UITableViewDataSource {
             }
         }
 
-        return deferDispatchAsync(DispatchQueue.global(DispatchQueue.GlobalQueuePriority.high, 0)) {
+        return deferDispatchAsync(DispatchQueue.global(qos: DispatchQoS.userInteractive.qosClass)) {
             // Precompute the baseDomain, host, and hostname values for sorting later on. At the moment
             // baseDomain() is a costly call because of the ETLD lookup tables.
             logins.forEach { login in

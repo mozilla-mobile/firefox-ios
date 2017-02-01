@@ -183,12 +183,12 @@ private extension NotificationRootViewController {
         self.notificationView.snp.remakeConstraints { make in
             make.height.equalTo(20)
             make.left.right.equalTo(self.view)
-            make.top.equalTo(self.snp.topLayoutGuideBottom)
+            make.top.equalTo(self.topLayoutGuide.snp.bottom)
         }
 
         self.rootViewController.view.snp.remakeConstraints { make in
             make.left.right.equalTo(self.view)
-            make.bottom.equalTo(self.snp.bottomLayoutGuideTop)
+            make.bottom.equalTo(self.bottomLayoutGuide.snp.top)
             make.top.equalTo(self.notificationView.snp.bottom)
         }
     }
@@ -197,13 +197,14 @@ private extension NotificationRootViewController {
         self.notificationView.snp.remakeConstraints { make in
             make.height.equalTo(20)
             make.left.right.equalTo(self.view)
-            make.bottom.equalTo(self.snp.topLayoutGuideTop)
+            make.bottom.equalTo(self.topLayoutGuide.snp.top)
         }
 
         self.rootViewController.view.snp.remakeConstraints { make in
             make.left.right.equalTo(self.view)
-            make.bottom.equalTo(self.snp.bottomLayoutGuideTop)
-            make.top.equalTo(self.snp.topLayoutGuideBottom)
+            
+            make.bottom.equalTo(self.bottomLayoutGuide.snp.top)
+            make.top.equalTo(self.topLayoutGuide.snp.bottom)
         }
     }
 }

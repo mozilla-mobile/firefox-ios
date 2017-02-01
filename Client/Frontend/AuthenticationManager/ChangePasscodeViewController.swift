@@ -46,7 +46,7 @@ class ChangePasscodeViewController: PagingPasscodeViewController, PasscodeInputV
             // Constraint: We need to make sure that the first passcode they've entered matches the one stored in the keychain
             if code != authenticationInfo?.passcode {
                 panes[currentPaneIndex].shakePasscode()
-                failIncorrectPasscode(inputView: inputView)
+                failIncorrectPasscode(inputView)
                 return
             }
             oldPasscode = code
@@ -78,7 +78,7 @@ class ChangePasscodeViewController: PagingPasscodeViewController, PasscodeInputV
                 return
             }
             changePasscodeToCode(code)
-            dismiss()
+            dismissAnimated()
         default:
             break
         }

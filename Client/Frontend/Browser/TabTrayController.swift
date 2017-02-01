@@ -441,7 +441,7 @@ class TabTrayController: UIViewController {
     fileprivate func makeConstraints() {
         collectionView.snp.makeConstraints { make in
             make.left.bottom.right.equalTo(view)
-            make.top.equalTo(snp.topLayoutGuideBottom)
+            make.top.equalTo(self.topLayoutGuide.snp.bottom)
         }
 
         toolbar.snp.makeConstraints { make in
@@ -633,7 +633,7 @@ class TabTrayController: UIViewController {
             if finished {
                 self.navigationController?.popViewController(animated: true)
 
-                if request == nil && NewTabAccessors.getNewTabPage(self.profile.prefs) == .BlankPage {
+                if request == nil && NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage {
                     if let bvc = self.navigationController?.topViewController as? BrowserViewController {
                         bvc.urlBar.tabLocationViewDidTapLocation(bvc.urlBar.locationView)
                     }

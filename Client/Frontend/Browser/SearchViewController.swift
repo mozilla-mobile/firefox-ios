@@ -127,11 +127,11 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
         suggestionCell.delegate = self
 
-        NotificationCenter.default.addObserver(self, selector: #selector(SearchViewController.SELDynamicFontChanged(_:)), name: NSNotification.Name(rawValue: NotificationDynamicFontChanged), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SearchViewController.SELDynamicFontChanged(_:)), name: NotificationDynamicFontChanged, object: nil)
     }
 
     deinit {
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: NotificationDynamicFontChanged), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NotificationDynamicFontChanged, object: nil)
     }
 
     func SELDynamicFontChanged(_ notification: Notification) {
@@ -180,7 +180,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         // If we're not showing search suggestions, the default search engine won't be visible
         // at the top of the table. Show it with the others in the bottom search bar.
         if isPrivate || !searchEngines.shouldShowSearchSuggestions {
-            engines.insert(searchEngines.defaultEngine, atIndex: 0)
+            engines.insert(searchEngines.defaultEngine, at: 0)
         }
 
         return engines!
@@ -388,7 +388,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             return
         }
 
-        Telemetry.recordEvent(SearchTelemetry.makeEvent(engine: engine, source: .QuickSearch))
+        Telemetry.recordEvent(SearchTelemetry.makeEvent(engine, source: .QuickSearch))
         searchDelegate?.searchViewController(self, didSelectURL: url)
     }
 
@@ -564,7 +564,7 @@ extension SearchViewController: SuggestionCellDelegate {
             url = engine.searchURLForQuery(suggestion)
         }
 
-        Telemetry.recordEvent(SearchTelemetry.makeEvent(engine: engine, source: .Suggestion))
+        Telemetry.recordEvent(SearchTelemetry.makeEvent(engine, source: .Suggestion))
 
         if let url = url {
             searchDelegate?.searchViewController(self, didSelectURL: url)
