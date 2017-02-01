@@ -75,14 +75,14 @@ class RemoteTabsPanel: UIViewController, HomePanel {
         self.view.addSubview(tableViewController.view)
         self.view.addSubview(historyBackButton)
 
-        historyBackButton.snp_makeConstraints { make in
+        historyBackButton.snp.makeConstraints { make in
             make.top.left.right.equalTo(self.view)
             make.height.equalTo(50)
-            make.bottom.equalTo(tableViewController.view.snp_top)
+            make.bottom.equalTo(tableViewController.view.snp.top)
         }
 
-        tableViewController.view.snp_makeConstraints { make in
-            make.top.equalTo(historyBackButton.snp_bottom)
+        tableViewController.view.snp.makeConstraints { make in
+            make.top.equalTo(historyBackButton.snp.bottom)
             make.left.right.bottom.equalTo(self.view)
         }
 
@@ -197,7 +197,7 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
         return view
     }
 
-    fileprivate func tabAtIndexPath(_ indexPath: NSIndexPath) -> RemoteTab {
+    fileprivate func tabAtIndexPath(_ indexPath: IndexPath) -> RemoteTab {
         return clientAndTabs[indexPath.section].tabs[indexPath.item]
     }
 
@@ -214,7 +214,7 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
         let tab = tabAtIndexPath(indexPath)
         if let homePanel = self.homePanel {
             // It's not a bookmark, so let's call it Typed (which means History, too).
-            homePanel.homePanelDelegate?.homePanel(homePanel, didSelectURL: tab.URL, visitType: VisitType.Typed)
+            homePanel.homePanelDelegate?.homePanel(homePanel, didSelectURL: tab.URL, visitType: VisitType.typed)
         }
     }
 }
@@ -287,7 +287,7 @@ class RemoteTabsErrorCell: UITableViewCell {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "emptySync")
         containerView.addSubview(imageView)
-        imageView.snp_makeConstraints { (make) -> Void in
+        imageView.snp.makeConstraints { (make) -> Void in
             make.top.equalTo(containerView)
             make.centerX.equalTo(containerView)
         }
@@ -307,29 +307,29 @@ class RemoteTabsErrorCell: UITableViewCell {
         instructionsLabel.numberOfLines = 0
         containerView.addSubview(instructionsLabel)
 
-        titleLabel.snp_makeConstraints { make in
-            make.top.equalTo(imageView.snp_bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalTo(imageView.snp.bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
             make.centerX.equalTo(imageView)
         }
 
-        instructionsLabel.snp_makeConstraints { make in
-            make.top.equalTo(titleLabel.snp_bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems / 2)
+        instructionsLabel.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems / 2)
             make.centerX.equalTo(containerView)
             make.width.equalTo(RemoteTabsPanelUX.EmptyStateInstructionsWidth)
         }
 
-        containerView.snp_makeConstraints { make in
+        containerView.snp.makeConstraints { make in
             // Let the container wrap around the content
-            make.top.equalTo(imageView.snp_top)
+            make.top.equalTo(imageView.snp.top)
             make.left.bottom.right.equalTo(instructionsLabel)
             // And then center it in the overlay view that sits on top of the UITableView
             make.centerX.equalTo(contentView)
 
             // Sets proper top constraint for iPhone 6 in portait and for iPad.
-            make.centerY.equalTo(contentView.snp_centerY).offset(HomePanelUX.EmptyTabContentOffset).priorityMedium()
+            make.centerY.equalTo(contentView.snp.centerY).offset(HomePanelUX.EmptyTabContentOffset).priorityMedium()
 
             // Sets proper top constraint for iPhone 4, 5 in portrait.
-            make.top.greaterThanOrEqualTo(contentView.snp_top).offset(20).priorityHigh()
+            make.top.greaterThanOrEqualTo(contentView.snp.top).offset(20).priorityHigh()
         }
     }
 
@@ -394,24 +394,24 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
         createAnAccountButton.addTarget(self, action: #selector(RemoteTabsNotLoggedInCell.SELcreateAnAccount), for: UIControlEvents.touchUpInside)
         contentView.addSubview(createAnAccountButton)
 
-        imageView.snp_makeConstraints { (make) -> Void in
+        imageView.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(instructionsLabel)
 
             // Sets proper top constraint for iPhone 6 in portait and for iPad.
             make.centerY.equalTo(contentView).offset(HomePanelUX.EmptyTabContentOffset + 30).priorityMedium()
 
             // Sets proper top constraint for iPhone 4, 5 in portrait.
-            make.top.greaterThanOrEqualTo(contentView.snp_top).priorityHigh()
+            make.top.greaterThanOrEqualTo(contentView.snp.top).priorityHigh()
         }
 
-        titleLabel.snp_makeConstraints { make in
-            make.top.equalTo(imageView.snp_bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalTo(imageView.snp.bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
             make.centerX.equalTo(imageView)
         }
 
-        createAnAccountButton.snp_makeConstraints { (make) -> Void in
+        createAnAccountButton.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(signInButton)
-            make.top.equalTo(signInButton.snp_bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
+            make.top.equalTo(signInButton.snp.bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
         }
     }
 
@@ -432,39 +432,39 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
     }
 
     override func updateConstraints() {
-        if UIInterfaceOrientationIsLandscape(UIApplication.sharedApplication.statusBarOrientation) && !(DeviceInfo.deviceModel().rangeOfString("iPad") != nil) {
-            instructionsLabel.snp_remakeConstraints { make in
-                make.top.equalTo(titleLabel.snp_bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
+        if UIInterfaceOrientationIsLandscape(UIApplication.sharedApplication.statusBarOrientation) && !(DeviceInfo.deviceModel().range(of: "iPad") != nil) {
+            instructionsLabel.snp.remakeConstraints { make in
+                make.top.equalTo(titleLabel.snp.bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
                 make.width.equalTo(RemoteTabsPanelUX.EmptyStateInstructionsWidth)
 
                 // Sets proper landscape layout for bigger phones: iPhone 6 and on.
-                make.left.lessThanOrEqualTo(contentView.snp_left).offset(80).priorityMedium()
+                make.left.lessThanOrEqualTo(contentView.snp.left).offset(80).priorityMedium()
 
                 // Sets proper landscape layout for smaller phones: iPhone 4 & 5.
-                make.right.lessThanOrEqualTo(contentView.snp_centerX).offset(-30).priorityHigh()
+                make.right.lessThanOrEqualTo(contentView.snp.centerX).offset(-30).priorityHigh()
             }
 
-            signInButton.snp_remakeConstraints { make in
+            signInButton.snp.remakeConstraints { make in
                 make.height.equalTo(RemoteTabsPanelUX.EmptyStateSignInButtonHeight)
                 make.width.equalTo(RemoteTabsPanelUX.EmptyStateSignInButtonWidth)
                 make.centerY.equalTo(emptyStateImageView).offset(2*RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
 
                 // Sets proper landscape layout for bigger phones: iPhone 6 and on.
-                make.right.greaterThanOrEqualTo(contentView.snp_right).offset(-70).priorityMedium()
+                make.right.greaterThanOrEqualTo(contentView.snp.right).offset(-70).priorityMedium()
 
                 // Sets proper landscape layout for smaller phones: iPhone 4 & 5.
-                make.left.greaterThanOrEqualTo(contentView.snp_centerX).offset(10).priorityHigh()
+                make.left.greaterThanOrEqualTo(contentView.snp.centerX).offset(10).priorityHigh()
             }
         } else {
-            instructionsLabel.snp_remakeConstraints { make in
-                make.top.equalTo(titleLabel.snp_bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
+            instructionsLabel.snp.remakeConstraints { make in
+                make.top.equalTo(titleLabel.snp.bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
                 make.centerX.equalTo(contentView)
                 make.width.equalTo(RemoteTabsPanelUX.EmptyStateInstructionsWidth)
             }
 
-            signInButton.snp_remakeConstraints { make in
+            signInButton.snp.remakeConstraints { make in
                 make.centerX.equalTo(contentView)
-                make.top.equalTo(instructionsLabel.snp_bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
+                make.top.equalTo(instructionsLabel.snp.bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
                 make.height.equalTo(RemoteTabsPanelUX.EmptyStateSignInButtonHeight)
                 make.width.equalTo(RemoteTabsPanelUX.EmptyStateSignInButtonWidth)
             }
@@ -563,12 +563,12 @@ private class RemoteTabsTableViewController: UITableViewController {
 
             // Otherwise, fetch the tabs cloud if it's been more than 1 minute since last sync
             let lastSyncTime = self.profile.prefs.timestampForKey(PrefsKeys.KeyLastRemoteTabSyncTime)
-            if NSDate.now() > (lastSyncTime ?? 0) && NSDate.now() - (lastSyncTime ?? 0) > OneMinuteInMilliseconds && !(self.refreshControl?.refreshing ?? false) {
+            if Date.now() > (lastSyncTime ?? 0) && Date.now() - (lastSyncTime ?? 0) > OneMinuteInMilliseconds && !(self.refreshControl?.isRefreshing ?? false) {
                 self.startRefreshing()
                 self.profile.getClientsAndTabs().uponQueue(DispatchQueue.main) { result in
                     // We set the last sync time to now, regardless of whether the sync was successful, to avoid trying to sync over
                     // and over again in cases whether the client is unable to sync (e.g. when there is no network connectivity).
-                    self.profile.prefs.setTimestamp(NSDate.now(), forKey: PrefsKeys.KeyLastRemoteTabSyncTime)
+                    self.profile.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.KeyLastRemoteTabSyncTime)
                     if let clientAndTabs = result.successValue {
                         self.updateDelegateClientAndTabData(clientAndTabs)
                     }
@@ -577,7 +577,7 @@ private class RemoteTabsTableViewController: UITableViewController {
             } else {
                 // If we failed before and didn't sync, show the failure delegate
                 if let _ = result.failureValue {
-                    self.tableViewDelegate = RemoteTabsPanelErrorDataSource(homePanel: remoteTabsPanel, error: .FailedToSync)
+                    self.tableViewDelegate = RemoteTabsPanelErrorDataSource(homePanel: remoteTabsPanel, error: .failedToSync)
                 }
 
                 self.endRefreshing()

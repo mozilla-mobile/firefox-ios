@@ -50,11 +50,11 @@ class ButtonToast: UIView {
         self.clipsToBounds = true
         self.addSubview(createView(labelText, buttonText: buttonText))
         
-        toast.snp_makeConstraints { make in
+        toast.snp.makeConstraints { make in
             make.left.right.height.equalTo(self)
             animationConstraint = make.top.equalTo(self).offset(SimpleToastUX.ToastHeight).constraint
         }
-        self.snp_makeConstraints { make in
+        self.snp.makeConstraints { make in
             make.height.equalTo(SimpleToastUX.ToastHeight)
         }
     }
@@ -85,13 +85,13 @@ class ButtonToast: UIView {
         
         toast.addSubview(button)
         
-        label.snp_makeConstraints { (make) in
+        label.snp.makeConstraints { (make) in
             make.leading.equalTo(toast).offset(ButtonToastUX.ToastPadding)
             make.centerY.equalTo(toast)
-            make.trailing.equalTo(button.snp_leading)
+            make.trailing.equalTo(button.snp.leading)
         }
         
-        button.snp_makeConstraints { (make) in
+        button.snp.makeConstraints { (make) in
             make.trailing.equalTo(toast).offset(-ButtonToastUX.ToastPadding)
             make.centerY.equalTo(toast)
             make.width.equalTo(button.titleLabel!.intrinsicContentSize.width + 2*ButtonToastUX.ToastButtonPadding)
@@ -108,7 +108,7 @@ class ButtonToast: UIView {
         superview?.removeGestureRecognizer(gestureRecognizer)
         
         UIView.animate(withDuration: SimpleToastUX.ToastAnimationDuration, animations: {
-                self.animationConstraint?.updateOffset(SimpleToastUX.ToastHeight)
+                self.animationConstraint?.updateOffset(amount: SimpleToastUX.ToastHeight)
                 self.layoutIfNeeded()
             },
             completion: { finished in
@@ -123,7 +123,7 @@ class ButtonToast: UIView {
     func showToast() {
         layoutIfNeeded()
         UIView.animate(withDuration: SimpleToastUX.ToastAnimationDuration, animations: {
-                self.animationConstraint?.updateOffset(0)
+                self.animationConstraint?.updateOffset(amount: 0)
                 self.layoutIfNeeded()
             },
             completion: { finished in

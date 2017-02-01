@@ -46,20 +46,20 @@ class RecentlyClosedTabsPanel: UIViewController, HomePanel {
         self.view.addSubview(historyBackButton)
         self.view.addSubview(recentlyClosedHeader)
 
-        historyBackButton.snp_makeConstraints { make in
+        historyBackButton.snp.makeConstraints { make in
             make.top.left.right.equalTo(self.view)
             make.height.equalTo(50)
-            make.bottom.equalTo(recentlyClosedHeader.snp_top)
+            make.bottom.equalTo(recentlyClosedHeader.snp.top)
         }
 
-        recentlyClosedHeader.snp_makeConstraints { make in
-            make.top.equalTo(historyBackButton.snp_bottom)
+        recentlyClosedHeader.snp.makeConstraints { make in
+            make.top.equalTo(historyBackButton.snp.bottom)
             make.height.equalTo(20)
-            make.bottom.equalTo(tableViewController.view.snp_top).offset(-10)
+            make.bottom.equalTo(tableViewController.view.snp.top).offset(-10)
             make.left.right.equalTo(self.view)
         }
 
-        tableViewController.view.snp_makeConstraints { make in
+        tableViewController.view.snp.makeConstraints { make in
             make.left.right.bottom.equalTo(self.view)
         }
 
@@ -98,7 +98,7 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
         let tab = recentlyClosedTabs[indexPath.row]
         let displayURL = tab.url.displayURL ?? tab.url
         twoLineCell.setLines(tab.title, detailText: displayURL.absoluteDisplayString)
-        let site: Favicon? = (tab.faviconURL != nil) ? Favicon(url: tab.faviconURL!, type: .Guess) : nil
+        let site: Favicon? = (tab.faviconURL != nil) ? Favicon(url: tab.faviconURL!, type: .guess) : nil
         cell.imageView?.setIcon(site, forURL: displayURL)
         return cell
     }
@@ -109,7 +109,7 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
             log.warning("No site or no URL when selecting row.")
             return
         }
-        let visitType = VisitType.Typed    // Means History, too.
+        let visitType = VisitType.typed    // Means History, too.
         homePanelDelegate.homePanel(recentlyClosedTabsPanel, didSelectURL: recentlyClosedTabs[indexPath.row].url, visitType: visitType)
     }
 

@@ -11,11 +11,11 @@ class SessionData: NSObject, NSCoding {
     let urls: [URL]
     let lastUsedTime: Timestamp
 
-    var jsonDictionary: [String: AnyObject] {
+    var jsonDictionary: [String: Any] {
         return [
-            "currentPage": String(self.currentPage) as AnyObject,
-            "lastUsedTime": String(self.lastUsedTime) as AnyObject,
-            "urls": urls.map { $0.absoluteString! }
+            "currentPage": String(self.currentPage),
+            "lastUsedTime": String(self.lastUsedTime),
+            "urls": urls.map { $0.absoluteString }
         ]
     }
 

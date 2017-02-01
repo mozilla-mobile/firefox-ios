@@ -31,8 +31,8 @@ class CustomSearchViewController: SettingsTableViewController {
         super.viewDidLoad()
         title = Strings.SettingsAddCustomEngineTitle
         view.addSubview(spinnerView)
-        spinnerView.snp_makeConstraints { make in
-            make.center.equalTo(self.view.snp_center)
+        spinnerView.snp.makeConstraints { make in
+            make.center.equalTo(self.view.snp.center)
         }
     }
 
@@ -178,13 +178,13 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
         cell.textLabel?.text = labelText
         cell.selectionStyle = .none
 
-        textField.snp_makeConstraints { make in
+        textField.snp.makeConstraints { make in
             make.height.equalTo(TextFieldHeight)
             make.trailing.equalTo(cell.contentView).offset(-Padding)
             make.leading.equalTo(cell.contentView).offset(TextFieldOffset)
         }
-        cell.textLabel?.snp_remakeConstraints { make in
-            make.trailing.equalTo(textField.snp_leading).offset(-Padding)
+        cell.textLabel?.snp.remakeConstraints { make in
+            make.trailing.equalTo(textField.snp.leading).offset(-Padding)
             make.leading.equalTo(cell.contentView).offset(Padding)
             make.height.equalTo(TextLabelHeight)
         }

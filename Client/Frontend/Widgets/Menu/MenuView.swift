@@ -144,43 +144,43 @@ class MenuView: UIView {
         switch presentationStyle {
         case .modal:
             addFooter()
-            toolbar.snp_makeConstraints { make in
+            toolbar.snp.makeConstraints { make in
                 make.height.equalTo(toolbarHeight)
                 make.top.left.right.equalTo(self)
             }
-            menuContainerView.snp_makeConstraints { make in
-                make.top.equalTo(toolbar.snp_bottom)
+            menuContainerView.snp.makeConstraints { make in
+                make.top.equalTo(toolbar.snp.bottom)
                 make.left.right.equalTo(self)
-                make.bottom.equalTo(menuFooterView.snp_top)
+                make.bottom.equalTo(menuFooterView.snp.top)
             }
 
-            menuPagingView.snp_makeConstraints { make in
+            menuPagingView.snp.makeConstraints { make in
                 make.top.left.right.equalTo(menuContainerView)
-                make.bottom.equalTo(pageControl.snp_top)
+                make.bottom.equalTo(pageControl.snp.top)
                 make.height.equalTo(0)
             }
 
-            pageControl.snp_makeConstraints { make in
+            pageControl.snp.makeConstraints { make in
                 make.bottom.equalTo(menuContainerView)
                 make.centerX.equalTo(self)
             }
 
         case .popover:
-            menuContainerView.snp_makeConstraints { make in
-                make.bottom.equalTo(toolbar.snp_top)
+            menuContainerView.snp.makeConstraints { make in
+                make.bottom.equalTo(toolbar.snp.top)
                 make.left.right.top.equalTo(self)
             }
 
-            menuPagingView.snp_makeConstraints { make in
+            menuPagingView.snp.makeConstraints { make in
                 make.top.left.right.equalTo(menuContainerView)
-                make.bottom.equalTo(pageControl.snp_top).offset(-itemPadding)
+                make.bottom.equalTo(pageControl.snp.top).offset(-itemPadding)
                 make.height.equalTo(0)
             }
-            pageControl.snp_makeConstraints { make in
+            pageControl.snp.makeConstraints { make in
                 make.bottom.equalTo(menuContainerView)
                 make.centerX.equalTo(self)
             }
-            toolbar.snp_makeConstraints { make in
+            toolbar.snp.makeConstraints { make in
                 make.height.equalTo(toolbarHeight)
                 make.bottom.left.right.equalTo(self)
             }
@@ -195,14 +195,14 @@ class MenuView: UIView {
         self.addSubview(menuFooterView)
         // so it always displays the colour of the background
         menuFooterView.backgroundColor = UIColor.clear
-        menuFooterView.snp_makeConstraints { make in
+        menuFooterView.snp.makeConstraints { make in
             make.height.equalTo(menuFooterHeight)
             make.left.right.equalTo(self)
             make.bottom.equalTo(self)
         }
 
         menuFooterView.addSubview(openMenuImage)
-        openMenuImage.snp_makeConstraints { make in
+        openMenuImage.snp.makeConstraints { make in
             make.center.equalTo(menuFooterView)
         }
     }
@@ -335,11 +335,11 @@ class MenuView: UIView {
             }
         }
         if displayToolbarItems.count == 0 {
-            toolbar.snp_updateConstraints { make in
+            toolbar.snp.updateConstraints { make in
                 make.height.equalTo(0)
             }
         } else {
-            toolbar.snp_updateConstraints { make in
+            toolbar.snp.updateConstraints { make in
                 make.height.equalTo(toolbarHeight)
             }
             toolbar.setItems(displayToolbarItems, animated: false)
@@ -356,7 +356,7 @@ class MenuView: UIView {
         menuPagingLayout.menuRowHeight = CGFloat(menuItemDelegate?.heightForRowsInMenuView(self) ?? 0)
         menuRowHeight = Float(menuPagingLayout.menuRowHeight)
 
-        menuPagingView.snp_updateConstraints { make in
+        menuPagingView.snp.updateConstraints { make in
             let numberOfRows: CGFloat
             if let maxNumberOfItemsForPage = self.menuItemDataSource?.menuView(self, numberOfItemsForPage: 0) {
                 numberOfRows = ceil(CGFloat(maxNumberOfItemsForPage) / numberOfItemsInRow)
@@ -369,7 +369,7 @@ class MenuView: UIView {
     }
 
     fileprivate func layoutFooter() {
-        menuFooterView.snp_updateConstraints { make in
+        menuFooterView.snp.updateConstraints { make in
             make.height.equalTo(menuFooterHeight)
         }
     }

@@ -41,20 +41,20 @@ class SiteTableViewHeader: UITableViewHeaderFooterView {
         addSubview(bottomBorder)
         contentView.addSubview(titleLabel)
 
-        topBorder.snp_makeConstraints { make in
+        topBorder.snp.makeConstraints { make in
             make.left.right.equalTo(self)
             make.top.equalTo(self).offset(-0.5)
             make.height.equalTo(0.5)
         }
 
-        bottomBorder.snp_makeConstraints { make in
+        bottomBorder.snp.makeConstraints { make in
             make.left.right.bottom.equalTo(self)
             make.height.equalTo(0.5)
         }
 
         // A table view will initialize the header with CGSizeZero before applying the actual size. Hence, the label's constraints
         // must not impose a minimum width on the content view.
-        titleLabel.snp_makeConstraints { make in
+        titleLabel.snp.makeConstraints { make in
             make.left.equalTo(contentView).offset(SiteTableViewControllerUX.HeaderTextMargin).priorityHigh()
             make.right.equalTo(contentView).offset(-SiteTableViewControllerUX.HeaderTextMargin).priorityHigh()
             make.left.greaterThanOrEqualTo(contentView) // Fallback for when the left space constraint breaks
@@ -79,14 +79,14 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
             reloadData()
         }
     }
-    var data: Cursor<Site> = Cursor<Site>(status: .Success, msg: "No data set")
+    var data: Cursor<Site> = Cursor<Site>(status: .success, msg: "No data set")
     var tableView = UITableView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         view.addSubview(tableView)
-        tableView.snp_makeConstraints { make in
+        tableView.snp.makeConstraints { make in
             make.edges.equalTo(self.view)
             return
         }

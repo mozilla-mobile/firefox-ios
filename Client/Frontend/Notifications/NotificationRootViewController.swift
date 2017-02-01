@@ -180,30 +180,30 @@ extension NotificationRootViewController {
 // MARK: - Layout Constraints
 private extension NotificationRootViewController {
     func remakeConstraintsForVisibleNotification() {
-        self.notificationView.snp_remakeConstraints { make in
+        self.notificationView.snp.remakeConstraints { make in
             make.height.equalTo(20)
             make.left.right.equalTo(self.view)
-            make.top.equalTo(self.snp_topLayoutGuideBottom)
+            make.top.equalTo(self.snp.topLayoutGuideBottom)
         }
 
-        self.rootViewController.view.snp_remakeConstraints { make in
+        self.rootViewController.view.snp.remakeConstraints { make in
             make.left.right.equalTo(self.view)
-            make.bottom.equalTo(self.snp_bottomLayoutGuideTop)
-            make.top.equalTo(self.notificationView.snp_bottom)
+            make.bottom.equalTo(self.snp.bottomLayoutGuideTop)
+            make.top.equalTo(self.notificationView.snp.bottom)
         }
     }
 
     func remakeConstraintsForHiddenNotification() {
-        self.notificationView.snp_remakeConstraints { make in
+        self.notificationView.snp.remakeConstraints { make in
             make.height.equalTo(20)
             make.left.right.equalTo(self.view)
-            make.bottom.equalTo(self.snp_topLayoutGuideTop)
+            make.bottom.equalTo(self.snp.topLayoutGuideTop)
         }
 
-        self.rootViewController.view.snp_remakeConstraints { make in
+        self.rootViewController.view.snp.remakeConstraints { make in
             make.left.right.equalTo(self.view)
-            make.bottom.equalTo(self.snp_bottomLayoutGuideTop)
-            make.top.equalTo(self.snp_topLayoutGuideBottom)
+            make.bottom.equalTo(self.snp.bottomLayoutGuideTop)
+            make.top.equalTo(self.snp.topLayoutGuideBottom)
         }
     }
 }
@@ -318,13 +318,13 @@ class NotificationStatusView: UIView {
         backgroundColor = UIConstants.AppBackgroundColor
         addSubview(titleLabel)
         addSubview(ellipsisLabel)
-        titleLabel.snp_makeConstraints { make in
+        titleLabel.snp.makeConstraints { make in
             make.center.equalTo(self)
-            make.width.lessThanOrEqualTo(self.snp_width)
+            make.width.lessThanOrEqualTo(self.snp.width)
         }
-        ellipsisLabel.snp_makeConstraints { make in
+        ellipsisLabel.snp.makeConstraints { make in
             make.centerY.equalTo(titleLabel)
-            make.left.equalTo(titleLabel.snp_right)
+            make.left.equalTo(titleLabel.snp.right)
         }
     }
 

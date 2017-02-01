@@ -360,7 +360,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // we've removed the Last Tab option, so we should remove any quick actions that we already have that are last tabs
         // we do this after we've handled any quick actions that have been used to open the app so that we don't b0rk if
         // the user has opened the app for the first time after upgrade with a Last Tab quick action
-        QuickActions.sharedInstance.removeDynamicApplicationShortcutItemOfType(ShortcutType.OpenLastTab, fromApplication: application)
+        QuickActions.sharedInstance.removeDynamicApplicationShortcutItemOfType(ShortcutType.openLastTab, fromApplication: application)
 
         // Check if we have a URL from an external app or extension waiting to launch,
         // then launch it on the main thread.
@@ -459,10 +459,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     fileprivate func updateAuthenticationInfo() {
-        if let authInfo = KeychainWrapper.defaultKeychainWrapper.authenticationInfo() {
+        if let authInfo = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo() {
             if !LAContext().canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil) {
                 authInfo.useTouchID = false
-                KeychainWrapper.defaultKeychainWrapper.setAuthenticationInfo(authInfo)
+                KeychainWrapper.sharedAppContainerKeychain.setAuthenticationInfo(authInfo)
             }
         }
     }
@@ -588,7 +588,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
                 let userData = [QuickActions.TabURLKey: alertURL,
                     QuickActions.TabTitleKey: title]
-                QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.OpenLastBookmark, withUserData: userData, toApplication: UIApplication.sharedApplication)
+                QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark, withUserData: userData, toApplication: UIApplication.shared)
         }
     }
 

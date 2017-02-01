@@ -20,9 +20,10 @@ public extension URL {
      https://tools.ietf.org/html/rfc2368
      */
     func mailToMetadata() -> MailToMetadata? {
-        guard let urlString = absoluteString, scheme == "mailto" else {
+        guard scheme == "mailto" else {
             return nil
         }
+        let urlString = absoluteString
 
         // Extract 'to' value
         let toStart = urlString.characters.index(urlString.startIndex, offsetBy: "mailto:".characters.count)

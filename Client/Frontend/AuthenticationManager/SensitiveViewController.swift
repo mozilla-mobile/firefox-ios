@@ -41,7 +41,7 @@ class SensitiveViewController: UIViewController {
         }
 
         presentedViewController?.dismiss(animated: false, completion: nil)
-        guard let authInfo = KeychainWrapper.defaultKeychainWrapper.authenticationInfo(), authInfo.requiresValidation() else {
+        guard let authInfo = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo(), authInfo.requiresValidation() else {
             removeBackgroundedBlur()
             return
         }
@@ -92,7 +92,7 @@ class SensitiveViewController: UIViewController {
         let blurredSnapshot = snapshot.applyBlur(withRadius: 10, blurType: BOXFILTER, tintColor: UIColor.init(white: 1, alpha: 0.3), saturationDeltaFactor: 1.8, maskImage: nil)
         let blurView = UIImageView(image: blurredSnapshot)
         view.addSubview(blurView)
-        blurView.snp_makeConstraints { $0.edges.equalTo(self.view) }
+        blurView.snp.makeConstraints { $0.edges.equalTo(self.view) }
         view.layoutIfNeeded()
 
         return blurView

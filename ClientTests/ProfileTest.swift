@@ -20,9 +20,9 @@ class ProfileTest: XCTestCase {
 
     func testNewProfileClearsExistingAuthenticationInfo() {
         let authInfo = AuthenticationKeychainInfo(passcode: "1234")
-        KeychainWrapper.defaultKeychainWrapper().setAuthenticationInfo(authInfo)
-        XCTAssertNotNil(KeychainWrapper.defaultKeychainWrapper().authenticationInfo())
+        KeychainWrapper.sharedAppContainerKeychain().setAuthenticationInfo(authInfo)
+        XCTAssertNotNil(KeychainWrapper.sharedAppContainerKeychain().authenticationInfo())
         let _ = BrowserProfile(localName: "my_profile")
-        XCTAssertNil(KeychainWrapper.defaultKeychainWrapper().authenticationInfo())
+        XCTAssertNil(KeychainWrapper.sharedAppContainerKeychain().authenticationInfo())
     }
 }

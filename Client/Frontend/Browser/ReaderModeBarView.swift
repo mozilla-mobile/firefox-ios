@@ -81,20 +81,20 @@ class ReaderModeBarView: UIView {
         super.init(frame: frame)
 
         readStatusButton = createButton(type: .markAsRead, action: #selector(ReaderModeBarView.SELtappedReadStatusButton(_:)))
-        readStatusButton.snp_makeConstraints { (make) -> () in
+        readStatusButton.snp.makeConstraints { (make) -> () in
             make.left.equalTo(self)
             make.height.centerY.equalTo(self)
             make.width.equalTo(80)
         }
 
         settingsButton = createButton(type: .settings, action: #selector(ReaderModeBarView.SELtappedSettingsButton(_:)))
-        settingsButton.snp_makeConstraints { (make) -> () in
+        settingsButton.snp.makeConstraints { (make) -> () in
             make.height.centerX.centerY.equalTo(self)
             make.width.equalTo(80)
         }
 
         listStatusButton = createButton(type: .addToReadingList, action: #selector(ReaderModeBarView.SELtappedListStatusButton(_:)))
-        listStatusButton.snp_makeConstraints { (make) -> () in
+        listStatusButton.snp.makeConstraints { (make) -> () in
             make.right.equalTo(self)
             make.height.centerY.equalTo(self)
             make.width.equalTo(80)

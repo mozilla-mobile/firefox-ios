@@ -98,9 +98,9 @@ let TabSendTitleKey = "TabSendTitle"
 let TabSendCategory = "TabSendCategory"
 
 enum SentTabAction: String {
-    case View = "TabSendViewAction"
-    case Bookmark = "TabSendBookmarkAction"
-    case ReadingList = "TabSendReadingListAction"
+    case view = "TabSendViewAction"
+    case bookmark = "TabSendBookmarkAction"
+    case readingList = "TabSendReadingListAction"
 }
 
 class BrowserProfileSyncDelegate: SyncDelegate {
@@ -596,21 +596,21 @@ open class BrowserProfile: Profile {
 
     func registerForNotifications() {
         let viewAction = UIMutableUserNotificationAction()
-        viewAction.identifier = SentTabAction.View.rawValue
+        viewAction.identifier = SentTabAction.view.rawValue
         viewAction.title = NSLocalizedString("View", comment: "View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440")
         viewAction.activationMode = UIUserNotificationActivationMode.foreground
         viewAction.isDestructive = false
         viewAction.isAuthenticationRequired = false
 
         let bookmarkAction = UIMutableUserNotificationAction()
-        bookmarkAction.identifier = SentTabAction.Bookmark.rawValue
+        bookmarkAction.identifier = SentTabAction.bookmark.rawValue
         bookmarkAction.title = NSLocalizedString("Bookmark", comment: "Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440")
         bookmarkAction.activationMode = UIUserNotificationActivationMode.foreground
         bookmarkAction.isDestructive = false
         bookmarkAction.isAuthenticationRequired = false
 
         let readingListAction = UIMutableUserNotificationAction()
-        readingListAction.identifier = SentTabAction.ReadingList.rawValue
+        readingListAction.identifier = SentTabAction.readingList.rawValue
         readingListAction.title = NSLocalizedString("Add to Reading List", comment: "Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440")
         readingListAction.activationMode = UIUserNotificationActivationMode.foreground
         readingListAction.isDestructive = false

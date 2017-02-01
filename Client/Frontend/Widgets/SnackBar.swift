@@ -181,18 +181,18 @@ class SnackBar: UIView {
     override func updateConstraints() {
         super.updateConstraints()
 
-        backgroundView.snp_remakeConstraints { make in
+        backgroundView.snp.remakeConstraints { make in
             make.bottom.left.right.equalTo(self)
             // Offset it by the width of the top border line so we can see the line from the super view
             make.top.equalTo(self).offset(1)
         }
 
-        contentView.snp_remakeConstraints { make in
-            make.top.left.right.equalTo(self).inset(EdgeInsetsMake(UIConstants.DefaultPadding, left: UIConstants.DefaultPadding, bottom: UIConstants.DefaultPadding, right: UIConstants.DefaultPadding))
+        contentView.snp.remakeConstraints { make in
+            make.top.left.right.equalTo(self).inset(UIEdgeInsetsMake(UIConstants.DefaultPadding, UIConstants.DefaultPadding, UIConstants.DefaultPadding, UIConstants.DefaultPadding))
         }
 
         if let img = imageView.image {
-            imageView.snp_remakeConstraints { make in
+            imageView.snp.remakeConstraints { make in
                 make.left.centerY.equalTo(contentView)
                 // To avoid doubling the padding, the textview doesn't have an inset on its left side.
                 // Instead, it relies on the imageView to tell it where its left side should be.
@@ -200,23 +200,23 @@ class SnackBar: UIView {
                 make.height.equalTo(img.size.height + UIConstants.DefaultPadding)
             }
         } else {
-            imageView.snp_remakeConstraints { make in
+            imageView.snp.remakeConstraints { make in
                 make.width.height.equalTo(0)
                 make.top.left.equalTo(self)
-                make.bottom.lessThanOrEqualTo(contentView.snp_bottom)
+                make.bottom.lessThanOrEqualTo(contentView.snp.bottom)
             }
         }
 
-        textLabel.snp_remakeConstraints { make in
+        textLabel.snp.remakeConstraints { make in
             make.top.equalTo(contentView)
-            make.left.equalTo(self.imageView.snp_right)
+            make.left.equalTo(self.imageView.snp.right)
             make.trailing.equalTo(contentView)
-            make.bottom.lessThanOrEqualTo(contentView.snp_bottom)
+            make.bottom.lessThanOrEqualTo(contentView.snp.bottom)
         }
 
-        buttonsView.snp_remakeConstraints { make in
-            make.top.equalTo(contentView.snp_bottom).offset(UIConstants.DefaultPadding)
-            make.bottom.equalTo(self.snp_bottom)
+        buttonsView.snp.remakeConstraints { make in
+            make.top.equalTo(contentView.snp.bottom).offset(UIConstants.DefaultPadding)
+            make.bottom.equalTo(self.snp.bottom)
             make.left.right.equalTo(self)
             if self.buttonsView.subviews.count > 0 {
                 make.height.equalTo(UIConstants.SnackbarButtonHeight)
@@ -235,7 +235,7 @@ class SnackBar: UIView {
      */
     func show() {
         alpha = 1
-        bottom?.updateOffset(0)
+        bottom?.updateOffset(amount: 0)
     }
 
     /**
@@ -247,7 +247,7 @@ class SnackBar: UIView {
         if h == 0 {
             h = UIConstants.ToolbarHeight
         }
-        bottom?.updateOffset(h)
+        bottom?.updateOffset(amount: h)
     }
 
     fileprivate func addButton(_ snackButton: SnackButton) {

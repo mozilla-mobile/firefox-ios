@@ -66,12 +66,12 @@ class ContextMenuHelper: NSObject, TabHelper, UIGestureRecognizerDelegate {
 
         var linkURL: URL?
         if let urlString = data["link"] as? String {
-            linkURL = URL(string: urlString.stringByAddingPercentEncodingWithAllowedCharacters(CharacterSet.URLAllowedCharacterSet())!)
+            linkURL = URL(string: urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.URLAllowedCharacterSet())!)
         }
 
         var imageURL: URL?
         if let urlString = data["image"] as? String {
-            imageURL = URL(string: urlString.stringByAddingPercentEncodingWithAllowedCharacters(CharacterSet.URLAllowedCharacterSet())!)
+            imageURL = URL(string: urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.URLAllowedCharacterSet())!)
         }
 
         if linkURL != nil || imageURL != nil {

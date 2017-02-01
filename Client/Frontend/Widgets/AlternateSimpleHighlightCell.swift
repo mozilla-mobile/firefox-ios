@@ -107,43 +107,43 @@ class AlternateSimpleHighlightCell: UITableViewCell {
         contentView.addSubview(statusIcon)
         contentView.addSubview(domainLabel)
 
-        siteImageView.snp_makeConstraints { make in
+        siteImageView.snp.makeConstraints { make in
             make.top.equalTo(contentView).offset(AlternateSimpleHighlightCellUX.CellTopBottomOffset)
             make.bottom.lessThanOrEqualTo(contentView).offset(-AlternateSimpleHighlightCellUX.CellTopBottomOffset)
             make.leading.equalTo(contentView).offset(AlternateSimpleHighlightCellUX.CellSideOffset)
             make.size.equalTo(AlternateSimpleHighlightCellUX.SiteImageViewSize)
         }
 
-        selectedOverlay.snp_makeConstraints { make in
+        selectedOverlay.snp.makeConstraints { make in
             make.edges.equalTo(contentView)
         }
 
-        domainLabel.snp_makeConstraints { make in
-            make.leading.equalTo(siteImageView.snp_trailing).offset(AlternateSimpleHighlightCellUX.CellTopBottomOffset)
+        domainLabel.snp.makeConstraints { make in
+            make.leading.equalTo(siteImageView.snp.trailing).offset(AlternateSimpleHighlightCellUX.CellTopBottomOffset)
             make.top.equalTo(siteImageView).offset(-2)
-            make.bottom.equalTo(titleLabel.snp_top).offset(-4)
+            make.bottom.equalTo(titleLabel.snp.top).offset(-4)
         }
 
-        titleLabel.snp_makeConstraints { make in
-            make.leading.equalTo(siteImageView.snp_trailing).offset(AlternateSimpleHighlightCellUX.CellTopBottomOffset)
+        titleLabel.snp.makeConstraints { make in
+            make.leading.equalTo(siteImageView.snp.trailing).offset(AlternateSimpleHighlightCellUX.CellTopBottomOffset)
             make.trailing.equalTo(contentView).inset(AlternateSimpleHighlightCellUX.CellSideOffset)
         }
 
-        descriptionLabel.snp_makeConstraints { make in
-            make.leading.equalTo(statusIcon.snp_trailing).offset(AlternateSimpleHighlightCellUX.TitleLabelOffset)
+        descriptionLabel.snp.makeConstraints { make in
+            make.leading.equalTo(statusIcon.snp.trailing).offset(AlternateSimpleHighlightCellUX.TitleLabelOffset)
             make.bottom.equalTo(statusIcon)
         }
 
-        timeStamp.snp_makeConstraints { make in
+        timeStamp.snp.makeConstraints { make in
             make.trailing.equalTo(contentView).inset(AlternateSimpleHighlightCellUX.CellSideOffset)
             make.bottom.equalTo(descriptionLabel)
         }
 
-        statusIcon.snp_makeConstraints { make in
+        statusIcon.snp.makeConstraints { make in
             make.size.equalTo(SimpleHighlightCellUX.StatusIconSize)
             make.leading.equalTo(titleLabel)
             make.bottom.equalTo(siteImageView).priorityLow()
-            make.top.greaterThanOrEqualTo(titleLabel.snp_bottom).offset(6).priorityHigh()
+            make.top.greaterThanOrEqualTo(titleLabel.snp.bottom).offset(6).priorityHigh()
             make.bottom.lessThanOrEqualTo(contentView).offset(-AlternateSimpleHighlightCellUX.CellTopBottomOffset).priorityHigh()
         }
     }

@@ -76,24 +76,24 @@ class TopSiteItemCell: UICollectionViewCell {
         contentView.addSubview(imageView)
         contentView.addSubview(selectedOverlay)
 
-        titleLabel.snp_makeConstraints { make in
+        titleLabel.snp.makeConstraints { make in
             make.left.equalTo(self).offset(TopSiteCellUX.TitleOffset)
             make.right.equalTo(self).offset(-TopSiteCellUX.TitleOffset)
             make.height.equalTo(TopSiteCellUX.TitleHeight)
             make.bottom.equalTo(self)
         }
 
-        imageView.snp_makeConstraints { make in
+        imageView.snp.makeConstraints { make in
             make.size.equalTo(TopSiteCellUX.IconSize)
             // Add an offset to the image to make it appear centered with the titleLabel
-            make.center.equalTo(self.snp_center).offset(UIEdgeInsets(top: -TopSiteCellUX.TitleHeight/2, left: 0, bottom: 0, right: 0) as! ConstraintOffsetTarget)
+            make.center.equalTo(self.snp.center).offset(UIEdgeInsets(top: -TopSiteCellUX.TitleHeight/2, left: 0, bottom: 0, right: 0))
         }
 
-        selectedOverlay.snp_makeConstraints { make in
+        selectedOverlay.snp.makeConstraints { make in
             make.edges.equalTo(contentView)
         }
 
-        titleWrapper.snp_makeConstraints { make in
+        titleWrapper.snp.makeConstraints { make in
             make.left.right.bottom.equalTo(self)
             make.height.equalTo(TopSiteCellUX.TitleHeight)
         }
@@ -124,8 +124,8 @@ class TopSiteItemCell: UICollectionViewCell {
         let title = self.titleLabel.text
         imageView.sd_setImage(with: url) { [unowned self] (img, err, type, url) -> Void in
             guard let img = img else {
-                self.contentView.backgroundColor = FaviconFetcher.getDefaultColor(url)
-                self.imageView.image = FaviconFetcher.getDefaultFavicon(url)
+                self.contentView.backgroundColor = FaviconFetcher.getDefaultColor(url!)
+                self.imageView.image = FaviconFetcher.getDefaultFavicon(url!)
                 return
             }
             img.getColors(CGSize(width: 25, height: 25)) {colors in
@@ -233,14 +233,14 @@ class ASHorizontalScrollCell: UITableViewCell {
         self.selectionStyle = UITableViewCellSelectionStyle.none
         pageControl.addGestureRecognizer(self.pageControlPress)
 
-        collectionView.snp_makeConstraints { make in
+        collectionView.snp.makeConstraints { make in
             make.edges.equalTo(contentView).offset(UIEdgeInsets(top: 0, left: 0, bottom: ASHorizontalScrollCellUX.PageControlOffset, right: 0) as! ConstraintOffsetTarget)
         }
 
-        pageControl.snp_makeConstraints { make in
+        pageControl.snp.makeConstraints { make in
             make.size.equalTo(ASHorizontalScrollCellUX.PageControlSize)
-            make.top.equalTo(collectionView.snp_bottom)
-            make.centerX.equalTo(self.snp_centerX)
+            make.top.equalTo(collectionView.snp.bottom)
+            make.centerX.equalTo(self.snp.centerX)
         }
     }
 

@@ -61,7 +61,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
             // as we are only allowed 4 in total and we always want to display close tab
             if actions.count < 3 {
                 actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionCopyURL, style: .default) { previewAction, viewController in
-                    guard let url = self.tab?.url, url.absoluteString!.characters.count > 0 else { return }
+                    guard let url = self.tab?.url, url.absoluteString.characters.count > 0 else { return }
                     let pasteBoard = UIPasteboard.general
                     pasteBoard.url = url as URL
                 })
@@ -102,7 +102,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
         let imageView = UIImageView(image: screenshot)
         self.view.addSubview(imageView)
 
-        imageView.snp_makeConstraints { make in
+        imageView.snp.makeConstraints { make in
             make.edges.equalTo(self.view)
         }
 
@@ -117,7 +117,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
         webView.accessibilityLabel = previewAccessibilityLabel
         self.view.addSubview(clonedWebView)
 
-        clonedWebView.snp_makeConstraints { make in
+        clonedWebView.snp.makeConstraints { make in
             make.edges.equalTo(self.view)
         }
 

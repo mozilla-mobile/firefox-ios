@@ -80,7 +80,7 @@ class TopSitesPanel: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(TopSitesPanel.notificationReceived(_:)), name: NotificationFirefoxAccountChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(TopSitesPanel.notificationReceived(_:)), name: NotificationProfileDidFinishSyncing, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(TopSitesPanel.notificationReceived(_:)), name: NotificationPrivateDataClearedHistory, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(TopSitesPanel.notificationReceived(_:)), name: NSNotification.Name(rawValue: NotificationDynamicFontChanged), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(TopSitesPanel.notificationReceived(_:)), name: NotificationDynamicFontChanged, object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -97,7 +97,7 @@ class TopSitesPanel: UIViewController {
         collection.keyboardDismissMode = .onDrag
         collection.accessibilityIdentifier = "Top Sites View"
         view.addSubview(collection)
-        collection.snp_makeConstraints { make in
+        collection.snp.makeConstraints { make in
             make.edges.equalTo(self.view)
         }
         self.collection = collection
@@ -117,7 +117,7 @@ class TopSitesPanel: UIViewController {
         NotificationCenter.default.removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
         NotificationCenter.default.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
         NotificationCenter.default.removeObserver(self, name: NotificationPrivateDataClearedHistory, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: NotificationDynamicFontChanged), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NotificationDynamicFontChanged, object: nil)
     }
 
     func notificationReceived(_ notification: Notification) {
@@ -161,7 +161,7 @@ class TopSitesPanel: UIViewController {
         descriptionLabel.adjustsFontSizeToFitWidth = true
         overlayView.addSubview(descriptionLabel)
 
-        logoImageView.snp_makeConstraints { make in
+        logoImageView.snp.makeConstraints { make in
             make.centerX.equalTo(overlayView)
 
             // Sets proper top constraint for iPhone 6 in portait and for iPad.
@@ -171,14 +171,14 @@ class TopSitesPanel: UIViewController {
             make.top.greaterThanOrEqualTo(overlayView).offset(50)
         }
 
-        titleLabel.snp_makeConstraints { make in
-            make.top.equalTo(logoImageView.snp_bottom).offset(TopSitesPanelUX.EmptyStateTopPaddingInBetweenItems)
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalTo(logoImageView.snp.bottom).offset(TopSitesPanelUX.EmptyStateTopPaddingInBetweenItems)
             make.centerX.equalTo(logoImageView)
         }
 
-        descriptionLabel.snp_makeConstraints { make in
+        descriptionLabel.snp.makeConstraints { make in
             make.centerX.equalTo(overlayView)
-            make.top.equalTo(titleLabel.snp_bottom).offset(TopSitesPanelUX.WelcomeScreenPadding)
+            make.top.equalTo(titleLabel.snp.bottom).offset(TopSitesPanelUX.WelcomeScreenPadding)
             make.width.equalTo(TopSitesPanelUX.WelcomeScreenItemWidth)
         }
 
@@ -189,7 +189,7 @@ class TopSitesPanel: UIViewController {
         if dataSource.count() == 0 {
             if self.emptyStateOverlayView.superview == nil {
                 self.view.addSubview(self.emptyStateOverlayView)
-                self.emptyStateOverlayView.snp_makeConstraints { make -> Void in
+                self.emptyStateOverlayView.snp.makeConstraints { make -> Void in
                     make.edges.equalTo(self.view)
                 }
             }
@@ -237,7 +237,7 @@ class TopSitesPanel: UIViewController {
                 // Finally, requery to pull in the latest sites.
                 self.profile.history.getTopSitesWithLimit(self.maxFrecencyLimit).uponQueue(DispatchQueue.main) { result in
                     self.updateDataSourceWithSites(result)
-                    self.collection?.userInteractionEnabled = true
+                    self.collection?.isUserInteractionEnabled = true
                 }
             }
         }
@@ -281,7 +281,7 @@ class TopSitesPanel: UIViewController {
         }
     }
 
-    fileprivate func deleteOrUpdateSites(_ indexPath: NSIndexPath) -> Success {
+    fileprivate func deleteOrUpdateSites(_ indexPath: IndexPath) -> Success {
         guard let collection = self.collection else { return succeed() }
 
         let result = Success()
@@ -352,7 +352,7 @@ extension TopSitesPanel: UICollectionViewDelegate {
 
         if let site = dataSource[indexPath.item] {
             // We're gonna call Top Sites bookmarks for now.
-            let visitType = VisitType.Bookmark
+            let visitType = VisitType.bookmark
             homePanelDelegate?.homePanel(self, didSelectURL: site.tileURL, visitType: visitType)
         }
     }
@@ -592,13 +592,13 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         FaviconFetcher.getForURL(siteURL, profile: profile).uponQueue(DispatchQueue.main) { result in
             guard let favicons = result.successValue, favicons.count > 0,
                   let url = favicons.first?.url.asURL,
-                  let indexOfSite = (self.sites.indexOf { $0 == site }) else {
+                  let indexOfSite = (self.sites.index { $0 == site }) else {
                 return
             }
 
-            let indexPathToUpdate = NSIndexPath(forItem: indexOfSite, inSection: 0)
-            guard let cell = self.collectionView?.cellForItemAtIndexPath(indexPathToUpdate) as? ThumbnailCell else { return }
-            cell.imageView.sd_setImageWithURL(url) { (img, err, type, url) -> Void in
+            let indexPathToUpdate = IndexPath(item: indexOfSite, section: 0)
+            guard let cell = self.collectionView?.cellForItem(at: indexPathToUpdate) as? ThumbnailCell else { return }
+            cell.imageView.sd_setImage(with: url) { (img, err, type, url) -> Void in
                 guard let img = img else {
                     self.setDefaultThumbnailBackgroundForCell(cell)
                     return
@@ -639,7 +639,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
 
         // We've looked before recently and didn't find a favicon
         switch icon.type {
-        case .noneFound where Date().timeIntervalSinceDate(icon.date) < FaviconFetcher.ExpirationTime:
+        case .noneFound where Date().timeIntervalSince(icon.date) < FaviconFetcher.ExpirationTime:
             self.setDefaultThumbnailBackgroundForCell(cell)
         default:
             cell.imageView.sd_setImage(with: icon.url.asURL, completed: { (img, err, type, url) -> Void in

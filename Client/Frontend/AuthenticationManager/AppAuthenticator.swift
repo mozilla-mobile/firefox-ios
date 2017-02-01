@@ -17,7 +17,7 @@ class AppAuthenticator {
                     // Update our authentication info's last validation timestamp so we don't ask again based
                     // on the set required interval
                     authenticationInfo.recordValidation()
-                    KeychainWrapper.defaultKeychainWrapper.setAuthenticationInfo(authenticationInfo)
+                    KeychainWrapper.sharedAppContainerKeychain.setAuthenticationInfo(authenticationInfo)
                     DispatchQueue.main.async {
                         success?()
                     }

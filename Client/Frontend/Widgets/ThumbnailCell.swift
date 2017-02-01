@@ -94,10 +94,10 @@ class ThumbnailCell: UICollectionViewCell {
             let fractionalW = width - floor(width)
             let additionalW = fractionalW / 2
 
-            imageView.snp_remakeConstraints { make in
+            imageView.snp.remakeConstraints { make in
                 let insets = UIEdgeInsets(top: imagePadding, left: imagePadding, bottom: imagePadding, right: imagePadding)
                 make.top.equalTo(self.imageWrapper).inset(insets.top)
-                make.bottom.equalTo(textWrapper.snp_top).offset(-imagePadding)
+                make.bottom.equalTo(textWrapper.snp.top).offset(-imagePadding)
                 make.left.equalTo(self.imageWrapper).inset(insets.left + additionalW)
                 make.right.equalTo(self.imageWrapper).inset(insets.right + additionalW)
             }
@@ -205,7 +205,7 @@ class ThumbnailCell: UICollectionViewCell {
 
         contentView.addSubview(imageWrapper)
         imageWrapper.addSubview(backgroundImage)
-        backgroundImage.snp_remakeConstraints { make in
+        backgroundImage.snp.remakeConstraints { make in
             make.top.bottom.left.right.equalTo(self.imageWrapper)
         }
         imageWrapper.addSubview(imageView)
@@ -214,16 +214,16 @@ class ThumbnailCell: UICollectionViewCell {
         textWrapper.addSubview(textLabel)
         contentView.addSubview(removeButton)
 
-        textWrapper.snp_makeConstraints { make in
-            make.bottom.equalTo(self.imageWrapper.snp_bottom) // .offset(ThumbnailCellUX.BorderWidth)
+        textWrapper.snp.makeConstraints { make in
+            make.bottom.equalTo(self.imageWrapper.snp.bottom) // .offset(ThumbnailCellUX.BorderWidth)
             make.left.right.equalTo(self.imageWrapper) // .offset(ThumbnailCellUX.BorderWidth)
         }
 
-        selectedOverlay.snp_makeConstraints { make in
+        selectedOverlay.snp.makeConstraints { make in
             make.edges.equalTo(self.imageWrapper)
         }
 
-        textLabel.snp_remakeConstraints { make in
+        textLabel.snp.remakeConstraints { make in
             make.edges.equalTo(self.textWrapper).inset(ThumbnailCellUX.LabelInsets) // TODO swift-2.0 I changes insets to inset - how can that be right?
         }
 
@@ -304,7 +304,7 @@ class ThumbnailCell: UICollectionViewCell {
 
         if cellInsets != self.cellInsets {
             self.cellInsets = cellInsets
-            imageWrapper.snp_remakeConstraints { make in
+            imageWrapper.snp.remakeConstraints { make in
                 make.edges.equalTo(self.contentView).inset(cellInsets)
             }
         }
@@ -315,11 +315,11 @@ class ThumbnailCell: UICollectionViewCell {
         }
 
         if imageInsets != self.imageInsets {
-            imageView.snp_remakeConstraints { make in
+            imageView.snp.remakeConstraints { make in
                 make.top.equalTo(self.imageWrapper).inset(imageInsets.top)
                 make.left.right.equalTo(self.imageWrapper).inset(imageInsets.left)
                 make.right.equalTo(self.imageWrapper).inset(imageInsets.right)
-                make.bottom.equalTo(textWrapper.snp_top).offset(-imageInsets.top)
+                make.bottom.equalTo(textWrapper.snp.top).offset(-imageInsets.top)
             }
         }
     }

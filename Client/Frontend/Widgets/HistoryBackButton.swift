@@ -39,19 +39,19 @@ class HistoryBackButton: UIButton {
 
         backgroundColor = UIColor.white
 
-        chevron.snp_makeConstraints { make in
+        chevron.snp.makeConstraints { make in
             make.leading.equalTo(self).offset(HistoryBackButtonUX.HistoryHistoryBackButtonHeaderChevronInset)
             make.centerY.equalTo(self)
             make.size.equalTo(HistoryBackButtonUX.HistoryHistoryBackButtonHeaderChevronSize)
         }
 
-        title.snp_makeConstraints { make in
-            make.leading.equalTo(chevron.snp_trailing).offset(HistoryBackButtonUX.HistoryHistoryBackButtonHeaderChevronInset)
+        title.snp.makeConstraints { make in
+            make.leading.equalTo(chevron.snp.trailing).offset(HistoryBackButtonUX.HistoryHistoryBackButtonHeaderChevronInset)
             make.trailing.greaterThanOrEqualTo(self).offset(-HistoryBackButtonUX.HistoryHistoryBackButtonHeaderChevronInset)
             make.centerY.equalTo(self)
         }
 
-        topBorder.snp_makeConstraints { make in
+        topBorder.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self)
             make.top.equalTo(self).offset(-0.5)
             make.height.equalTo(0.5)

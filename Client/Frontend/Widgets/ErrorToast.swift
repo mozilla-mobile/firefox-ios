@@ -37,7 +37,7 @@ class ErrorToast: UIView {
         super.init(frame: frame)
         isOpaque = false
         addSubview(textLabel)
-        textLabel.snp_makeConstraints { make in
+        textLabel.snp.makeConstraints { make in
             make.edges.equalTo(self).inset(ErrorToastDefaultUX.margins)
         }
     }

@@ -126,7 +126,7 @@ class URLBarView: UIView {
     lazy var locationView: TabLocationView = {
         let locationView = TabLocationView()
         locationView.translatesAutoresizingMaskIntoConstraints = false
-        locationView.readerModeState = ReaderModeState.Unavailable
+        locationView.readerModeState = ReaderModeState.unavailable
         locationView.delegate = self
         return locationView
     }()
@@ -182,27 +182,25 @@ class URLBarView: UIView {
         return button
     }()
 
-    lazy var shareButton: UIButton = { return UIButton() }()
+    var shareButton: UIButton = UIButton()
 
-    lazy var menuButton: UIButton = { return UIButton() }()
+    var menuButton: UIButton = UIButton()
 
-    lazy var bookmarkButton: UIButton = { return UIButton() }()
+    var bookmarkButton: UIButton = UIButton()
 
-    lazy var forwardButton: UIButton = { return UIButton() }()
+    var forwardButton: UIButton = UIButton()
 
-    lazy var backButton: UIButton = {
+    var backButton: UIButton = {
         let backButton = UIButton()
         backButton.accessibilityIdentifier = "URLBarView.backButton"
         return backButton
     }()
 
-    lazy var stopReloadButton: UIButton = { return UIButton() }()
+    var stopReloadButton: UIButton = UIButton()
 
-    lazy var homePageButton: UIButton = { return UIButton() }()
+    var homePageButton: UIButton = UIButton()
 
-    lazy var actionButtons: [UIButton] = {
-        return [self.shareButton, self.menuButton, self.forwardButton, self.backButton, self.stopReloadButton, self.homePageButton]
-    }()
+    lazy var actionButtons: [UIButton] = [self.shareButton, self.menuButton, self.forwardButton, self.backButton, self.stopReloadButton, self.homePageButton]
 
     fileprivate var rightBarConstraint: Constraint?
     fileprivate let defaultRightOffset: CGFloat = URLBarViewUX.URLBarCurveOffset - URLBarViewUX.URLBarCurveBounceBuffer
@@ -254,67 +252,67 @@ class URLBarView: UIView {
     }
 
     fileprivate func setupConstraints() {
-        scrollToTopButton.snp_makeConstraints { make in
+        scrollToTopButton.snp.makeConstraints { make in
             make.top.equalTo(self)
             make.left.right.equalTo(self.locationContainer)
         }
 
-        progressBar.snp_makeConstraints { make in
-            make.top.equalTo(self.snp_bottom)
+        progressBar.snp.makeConstraints { make in
+            make.top.equalTo(self.snp.bottom)
             make.width.equalTo(self)
         }
 
-        locationView.snp_makeConstraints { make in
+        locationView.snp.makeConstraints { make in
             make.edges.equalTo(self.locationContainer)
         }
 
-        cancelButton.snp_makeConstraints { make in
+        cancelButton.snp.makeConstraints { make in
             make.centerY.equalTo(self.locationContainer)
             make.trailing.equalTo(self)
         }
 
-        tabsButton.snp_makeConstraints { make in
+        tabsButton.snp.makeConstraints { make in
             make.centerY.equalTo(self.locationContainer)
             make.trailing.equalTo(self)
             make.size.equalTo(UIConstants.ToolbarHeight)
         }
 
-        curveShape.snp_makeConstraints { make in
+        curveShape.snp.makeConstraints { make in
             make.top.left.bottom.equalTo(self)
             self.rightBarConstraint = make.right.equalTo(self).constraint
-            self.rightBarConstraint?.updateOffset(defaultRightOffset)
+            self.rightBarConstraint?.update(offset: defaultRightOffset)
         }
 
-        backButton.snp_makeConstraints { make in
+        backButton.snp.makeConstraints { make in
             make.left.centerY.equalTo(self)
             make.size.equalTo(UIConstants.ToolbarHeight)
         }
 
-        forwardButton.snp_makeConstraints { make in
-            make.left.equalTo(self.backButton.snp_right)
+        forwardButton.snp.makeConstraints { make in
+            make.left.equalTo(self.backButton.snp.right)
             make.centerY.equalTo(self)
             make.size.equalTo(backButton)
         }
 
-        stopReloadButton.snp_makeConstraints { make in
-            make.left.equalTo(self.forwardButton.snp_right)
+        stopReloadButton.snp.makeConstraints { make in
+            make.left.equalTo(self.forwardButton.snp.right)
             make.centerY.equalTo(self)
             make.size.equalTo(backButton)
         }
 
-        shareButton.snp_makeConstraints { make in
-            make.right.equalTo(self.menuButton.snp_left)
+        shareButton.snp.makeConstraints { make in
+            make.right.equalTo(self.menuButton.snp.left)
             make.centerY.equalTo(self)
             make.size.equalTo(backButton)
         }
 
-        homePageButton.snp_makeConstraints { make in
+        homePageButton.snp.makeConstraints { make in
             make.center.equalTo(shareButton)
             make.size.equalTo(shareButton)
         }
 
-        menuButton.snp_makeConstraints { make in
-            make.right.equalTo(self.tabsButton.snp_left).offset(URLBarViewUX.URLBarCurveOffsetLeft)
+        menuButton.snp.makeConstraints { make in
+            make.right.equalTo(self.tabsButton.snp.left).offset(URLBarViewUX.URLBarCurveOffsetLeft)
             make.centerY.equalTo(self)
             make.size.equalTo(backButton)
         }
@@ -324,35 +322,35 @@ class URLBarView: UIView {
         super.updateConstraints()
         if inOverlayMode {
             // In overlay mode, we always show the location view full width
-            self.locationContainer.snp_remakeConstraints { make in
+            self.locationContainer.snp.remakeConstraints { make in
                 make.leading.equalTo(self).offset(URLBarViewUX.LocationLeftPadding)
-                make.trailing.equalTo(self.cancelButton.snp_leading)
+                make.trailing.equalTo(self.cancelButton.snp.leading)
                 make.height.equalTo(URLBarViewUX.LocationHeight)
                 make.centerY.equalTo(self)
             }
         } else {
             if (topTabsIsShowing) {
-                tabsButton.snp_remakeConstraints { make in
+                tabsButton.snp.remakeConstraints { make in
                     make.centerY.equalTo(self.locationContainer)
-                    make.leading.equalTo(self.snp_trailing)
+                    make.leading.equalTo(self.snp.trailing)
                     make.size.equalTo(UIConstants.ToolbarHeight)
                 }
             } else {
-                tabsButton.snp_remakeConstraints { make in
+                tabsButton.snp.remakeConstraints { make in
                     make.centerY.equalTo(self.locationContainer)
                     make.trailing.equalTo(self)
                     make.size.equalTo(UIConstants.ToolbarHeight)
                 }
             }
-            self.locationContainer.snp_remakeConstraints { make in
+            self.locationContainer.snp.remakeConstraints { make in
                 if self.toolbarIsShowing {
                     // If we are showing a toolbar, show the text field next to the forward button
-                    make.leading.equalTo(self.stopReloadButton.snp_trailing)
-                    make.trailing.equalTo(self.shareButton.snp_leading)
+                    make.leading.equalTo(self.stopReloadButton.snp.trailing)
+                    make.trailing.equalTo(self.shareButton.snp.leading)
                 } else {
                     // Otherwise, left align the location view
                     make.leading.equalTo(self).offset(URLBarViewUX.LocationLeftPadding)
-                    make.trailing.equalTo(self.tabsButton.snp_leading).offset(-14)
+                    make.trailing.equalTo(self.tabsButton.snp.leading).offset(-14)
                 }
 
                 make.height.equalTo(URLBarViewUX.LocationHeight)
@@ -383,7 +381,7 @@ class URLBarView: UIView {
 
         locationContainer.addSubview(locationTextField)
 
-        locationTextField.snp_makeConstraints { make in
+        locationTextField.snp.makeConstraints { make in
             make.edges.equalTo(self.locationView.urlTextField)
         }
 
@@ -508,20 +506,20 @@ class URLBarView: UIView {
             self.cancelButton.transform = CGAffineTransform.identity
             let tabsButtonTransform = CGAffineTransform(translationX: self.tabsButton.frame.width + URLBarViewUX.URLBarCurveOffset, y: 0)
             self.tabsButton.transform = tabsButtonTransform
-            self.rightBarConstraint?.updateOffset(URLBarViewUX.URLBarCurveOffset + URLBarViewUX.URLBarCurveBounceBuffer + tabsButton.frame.width)
+            self.rightBarConstraint?.update(offset: URLBarViewUX.URLBarCurveOffset + URLBarViewUX.URLBarCurveBounceBuffer + tabsButton.frame.width)
 
             // Make the editable text field span the entire URL bar, covering the lock and reader icons.
-            self.locationTextField?.snp_remakeConstraints { make in
+            self.locationTextField?.snp.remakeConstraints { make in
                 make.leading.equalTo(self.locationContainer).offset(URLBarViewUX.LocationContentOffset)
                 make.top.bottom.trailing.equalTo(self.locationContainer)
             }
         } else {
             self.tabsButton.transform = CGAffineTransform.identity
             self.cancelButton.transform = CGAffineTransform(translationX: self.cancelButton.frame.width, y: 0)
-            self.rightBarConstraint?.updateOffset(defaultRightOffset)
+            self.rightBarConstraint?.update(offset: defaultRightOffset)
 
             // Shrink the editable text field back to the size of the location view before hiding it.
-            self.locationTextField?.snp_remakeConstraints { make in
+            self.locationTextField?.snp.remakeConstraints { make in
                 make.edges.equalTo(self.locationView.urlTextField)
             }
         }
@@ -598,7 +596,7 @@ extension URLBarView: TabToolbarProtocol {
         shareButton.isEnabled = isWebPage
     }
 
-    override var accessibilityElements: [AnyObject]? {
+    var access: [Any]? {
         get {
             if inOverlayMode {
                 guard let locationTextField = locationTextField else { return nil }
@@ -726,8 +724,8 @@ extension URLBarView: AppStateDelegate {
     func appDidUpdateState(_ appState: AppState) {
         if toolbarIsShowing {
             let showShareButton = HomePageAccessors.isButtonInMenu(appState)
-            homePageButton.hidden = showShareButton
-            shareButton.hidden = !showShareButton || inOverlayMode
+            homePageButton.isHidden = showShareButton
+            shareButton.isHidden = !showShareButton || inOverlayMode
             homePageButton.isEnabled = HomePageAccessors.isButtonEnabled(appState)
         } else {
             homePageButton.isHidden = true

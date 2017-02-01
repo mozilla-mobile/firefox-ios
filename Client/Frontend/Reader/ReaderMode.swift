@@ -11,29 +11,29 @@ import SwiftyJSON
 let ReaderModeProfileKeyStyle = "readermode.style"
 
 enum ReaderModeMessageType: String {
-    case StateChange = "ReaderModeStateChange"
-    case PageEvent = "ReaderPageEvent"
+    case stateChange = "ReaderModeStateChange"
+    case pageEvent = "ReaderPageEvent"
 }
 
 enum ReaderPageEvent: String {
-    case PageShow = "PageShow"
+    case pageShow = "PageShow"
 }
 
 enum ReaderModeState: String {
-    case Available = "Available"
-    case Unavailable = "Unavailable"
-    case Active = "Active"
+    case available = "Available"
+    case unavailable = "Unavailable"
+    case active = "Active"
 }
 
 enum ReaderModeTheme: String {
-    case Light = "light"
-    case Dark = "dark"
-    case Sepia = "sepia"
+    case light = "light"
+    case dark = "dark"
+    case sepia = "sepia"
 }
 
 enum ReaderModeFontType: String {
-    case Serif = "serif"
-    case SansSerif = "sans-serif"
+    case serif = "serif"
+    case sansSerif = "sans-serif"
 }
 
 enum ReaderModeFontSize: Int {
@@ -104,12 +104,12 @@ struct ReaderModeStyle {
 
     /// Encode the style to a JSON dictionary that can be passed to ReaderMode.js
     func encode() -> String {
-        return JSON(["theme": theme.rawValue, "fontType": fontType.rawValue, "fontSize": fontSize.rawValue]).toString(false)
+        return JSON(["theme": theme.rawValue, "fontType": fontType.rawValue, "fontSize": fontSize.rawValue]).rawString() ?? ""
     }
 
     /// Encode the style to a dictionary that can be stored in the profile
-    func encode() -> [String:AnyObject] {
-        return ["theme": theme.rawValue as AnyObject, "fontType": fontType.rawValue as AnyObject, "fontSize": fontSize.rawValue as AnyObject]
+    func encode() -> [String:Any] {
+        return ["theme": theme.rawValue, "fontType": fontType.rawValue, "fontSize": fontSize.rawValue]
     }
 
     init(theme: ReaderModeTheme, fontType: ReaderModeFontType, fontSize: ReaderModeFontSize) {
@@ -119,7 +119,7 @@ struct ReaderModeStyle {
     }
 
     /// Initialize the style from a dictionary, taken from the profile. Returns nil if the object cannot be decoded.
-    init?(dict: [String:AnyObject]) {
+    init?(dict: [String:Any]) {
         let themeRawValue = dict["theme"] as? String
         let fontTypeRawValue = dict["fontType"] as? String
         let fontSizeRawValue = dict["fontSize"] as? Int
@@ -140,7 +140,7 @@ struct ReaderModeStyle {
     }
 }
 
-let DefaultReaderModeStyle = ReaderModeStyle(theme: .Light, fontType: .SansSerif, fontSize: ReaderModeFontSize.defaultSize)
+let DefaultReaderModeStyle = ReaderModeStyle(theme: .light, fontType: .sansSerif, fontSize: ReaderModeFontSize.defaultSize)
 
 /// This struct captures the response from the Readability.js code.
 struct ReadabilityResult {
@@ -177,11 +177,11 @@ struct ReadabilityResult {
     /// Initialize from a JSON encoded string
     init?(string: String) {
         let object = JSON(string: string)
-        let domain = object["domain"].asString
-        let url = object["url"].asString
-        let content = object["content"].asString
-        let title = object["title"].asString
-        let credits = object["credits"].asString
+        let domain = object["domain"].string
+        let url = object["url"].string
+        let content = object["content"].string
+        let title = object["title"].string
+        let credits = object["credits"].string
 
         if domain == nil || url == nil || content == nil || title == nil || credits == nil {
             return nil
@@ -195,13 +195,14 @@ struct ReadabilityResult {
     }
 
     /// Encode to a dictionary, which can then for example be json encoded
-    func encode() -> [String:AnyObject] {
-        return ["domain": domain as AnyObject, "url": url as AnyObject, "content": content as AnyObject, "title": title as AnyObject, "credits": credits as AnyObject]
+    func encode() -> [String:Any] {
+        return ["domain": domain, "url": url, "content": content, "title": title, "credits": credits]
     }
 
     /// Encode to a JSON encoded string
     func encode() -> String {
-        return JSON(encode() as [String:AnyObject]).toString(false)
+        let dict: [String: Any] = self.encode()
+        return JSON(object: dict).rawString()!
     }
 }
 
@@ -217,7 +218,7 @@ class ReaderMode: TabHelper {
     var delegate: ReaderModeDelegate?
 
     fileprivate weak var tab: Tab?
-    var state: ReaderModeState = ReaderModeState.Unavailable
+    var state: ReaderModeState = ReaderModeState.unavailable
     fileprivate var originalURL: URL?
 
     class func name() -> String {
@@ -286,7 +287,7 @@ class ReaderMode: TabHelper {
 
     var style: ReaderModeStyle = DefaultReaderModeStyle {
         didSet {
-            if state == ReaderModeState.Active {
+            if state == ReaderModeState.active {
                 tab?.webView?.evaluateJavaScript("\(ReaderModeNamespace).setStyle(\(style.encode()))", completionHandler: {
                     (object, error) -> Void in
                     return

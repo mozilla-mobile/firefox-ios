@@ -65,9 +65,9 @@ class Toolbar: UIView {
     override func updateConstraints() {
         var prev: UIView? = nil
         for view in self.subviews {
-            view.snp_remakeConstraints { make in
+            view.snp.remakeConstraints { make in
                 if let prev = prev {
-                    make.left.equalTo(prev.snp_right)
+                    make.left.equalTo(prev.snp.right)
                 } else {
                     make.left.equalTo(self)
                 }

@@ -106,26 +106,26 @@ class LoginListViewController: SensitiveViewController {
 
         loadingStateView.isHidden = true
 
-        searchView.snp_makeConstraints { make in
-            make.top.equalTo(snp_topLayoutGuideBottom).constraint
+        searchView.snp.makeConstraints { make in
+            make.top.equalTo(snp.topLayoutGuideBottom).constraint
             make.left.right.equalTo(self.view)
             make.height.equalTo(LoginListUX.SearchHeight)
         }
 
-        tableView.snp_makeConstraints { make in
-            make.top.equalTo(searchView.snp_bottom)
+        tableView.snp.makeConstraints { make in
+            make.top.equalTo(searchView.snp.bottom)
             make.left.right.equalTo(self.view)
-            make.bottom.equalTo(self.selectionButton.snp_top)
+            make.bottom.equalTo(self.selectionButton.snp.top)
         }
 
-        selectionButton.snp_makeConstraints { make in
+        selectionButton.snp.makeConstraints { make in
             make.left.right.bottom.equalTo(self.view)
-            make.top.equalTo(self.tableView.snp_bottom)
+            make.top.equalTo(self.tableView.snp.bottom)
             make.bottom.equalTo(self.view)
             selectionButtonHeightConstraint = make.height.equalTo(0).constraint
         }
 
-        loadingStateView.snp_makeConstraints { make in
+        loadingStateView.snp.makeConstraints { make in
             make.edges.equalTo(tableView)
         }
     }
@@ -211,7 +211,7 @@ private extension LoginListViewController {
     @objc func beginEditing() {
         navigationItem.rightBarButtonItem = nil
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(LoginListViewController.cancelSelection))
-        selectionButtonHeightConstraint?.updateOffset(UIConstants.ToolbarHeight)
+        selectionButtonHeightConstraint?.updateOffset(amount: UIConstants.ToolbarHeight)
         self.view.layoutIfNeeded()
         tableView.setEditing(true, animated: true)
     }
@@ -220,7 +220,7 @@ private extension LoginListViewController {
         // Update selection and select all button
         loginSelectionController.deselectAll()
         toggleSelectionTitle()
-        selectionButtonHeightConstraint?.updateOffset(0)
+        selectionButtonHeightConstraint?.updateOffset(amount: 0)
         self.view.layoutIfNeeded()
 
         tableView.setEditing(false, animated: true)
@@ -236,7 +236,7 @@ private extension LoginListViewController {
                     self.loginDataSource.loginAtIndexPath(indexPath)!.guid
                 }
 
-                self.profile.logins.removeLoginsWithGUIDs(guidsToDelete).uponQueue(dispatch_get_main_queue()) { _ in
+                self.profile.logins.removeLoginsWithGUIDs(guidsToDelete).uponQueue(DispatchQueue.main) { _ in
                     self.cancelSelection()
                     self.loadLogins()
                 }
@@ -438,7 +438,7 @@ class LoginDataSource: NSObject, UITableViewDataSource {
         return sections[titleForSectionIndex]
     }
 
-    func loginAtIndexPath(_ indexPath: NSIndexPath) -> Login? {
+    func loginAtIndexPath(_ indexPath: IndexPath) -> Login? {
         let titleForSectionIndex = titles[indexPath.section]
         return sections[titleForSectionIndex]?[indexPath.row]
     }
@@ -591,7 +591,7 @@ private class NoLoginsView: UIView {
 
     fileprivate override func updateConstraints() {
         super.updateConstraints()
-        titleLabel.snp_remakeConstraints { make in
+        titleLabel.snp.remakeConstraints { make in
             make.centerX.equalTo(self)
             make.centerY.equalTo(self).offset(-(searchBarHeight / 2))
         }
@@ -626,7 +626,7 @@ private class LoadingLoginsView: UIView {
 
     fileprivate override func updateConstraints() {
         super.updateConstraints()
-        indicator.snp_remakeConstraints { make in
+        indicator.snp.remakeConstraints { make in
             make.centerX.equalTo(self)
             make.centerY.equalTo(self).offset(-(searchBarHeight / 2))
         }

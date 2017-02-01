@@ -123,30 +123,30 @@ class TopTabsViewController: UIViewController {
         view.addSubview(topTabFader)
         topTabFader.addSubview(collectionView)
         
-        newTab.snp_makeConstraints { make in
+        newTab.snp.makeConstraints { make in
             make.centerY.equalTo(view)
             make.trailing.equalTo(view)
             make.size.equalTo(UIConstants.ToolbarHeight)
         }
-        tabsButton.snp_makeConstraints { make in
+        tabsButton.snp.makeConstraints { make in
             make.centerY.equalTo(view)
-            make.trailing.equalTo(newTab.snp_leading)
+            make.trailing.equalTo(newTab.snp.leading)
             make.size.equalTo(UIConstants.ToolbarHeight)
         }
-        privateModeButton.snp_makeConstraints { make in
+        privateModeButton.snp.makeConstraints { make in
             make.centerY.equalTo(view)
             make.leading.equalTo(view)
             make.size.equalTo(UIConstants.ToolbarHeight)
         }
-        topTabFader.snp_makeConstraints { make in
+        topTabFader.snp.makeConstraints { make in
             make.top.bottom.equalTo(view)
-            make.leading.equalTo(privateModeButton.snp_trailing).offset(-TopTabsUX.FaderPading)
-            make.trailing.equalTo(tabsButton.snp_leading).offset(TopTabsUX.FaderPading)
+            make.leading.equalTo(privateModeButton.snp.trailing).offset(-TopTabsUX.FaderPading)
+            make.trailing.equalTo(tabsButton.snp.leading).offset(TopTabsUX.FaderPading)
         }
-        collectionView.snp_makeConstraints { make in
+        collectionView.snp.makeConstraints { make in
             make.top.bottom.equalTo(view)
-            make.leading.equalTo(privateModeButton.snp_trailing).offset(-TopTabsUX.CollectionViewPadding)
-            make.trailing.equalTo(tabsButton.snp_leading).offset(TopTabsUX.CollectionViewPadding)
+            make.leading.equalTo(privateModeButton.snp.trailing).offset(-TopTabsUX.CollectionViewPadding)
+            make.trailing.equalTo(tabsButton.snp.leading).offset(TopTabsUX.CollectionViewPadding)
         }
         
         view.backgroundColor = UIColor.black
@@ -269,7 +269,7 @@ extension TopTabsViewController: UICollectionViewDataSource {
         tabCell.titleText.text = tab.displayTitle
         
         if tab.displayTitle.isEmpty {
-            if (tab.webView?.url?.baseDomain?.contains("localhost") ?? true) {
+            if ((tab.webView?.url?.baseDomain?.contains("localhost")) ?? true) {
                 tabCell.titleText.text = AppMenuConfiguration.NewTabTitleString
             } else {
                 tabCell.titleText.text = tab.webView?.url?.absoluteDisplayString

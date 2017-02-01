@@ -35,7 +35,7 @@ func setupHelpView(_ view: UIView, introText: String, showMeText: String) {
     let imageView = UIImageView()
     imageView.image = UIImage(named: "emptySync")
     view.addSubview(imageView)
-    imageView.snp_makeConstraints { (make) -> Void in
+    imageView.snp.makeConstraints { (make) -> Void in
         make.top.equalTo(view).offset(InstructionsViewControllerUX.TopPadding)
         make.centerX.equalTo(view)
     }
@@ -48,9 +48,9 @@ func setupHelpView(_ view: UIView, introText: String, showMeText: String) {
     label1.font = InstructionsViewControllerUX.TextFont
     label1.textColor = InstructionsViewControllerUX.TextColor
     label1.textAlignment = NSTextAlignment.center
-    label1.snp_makeConstraints { (make) -> Void in
+    label1.snp.makeConstraints { (make) -> Void in
         make.width.equalTo(250)
-        make.top.equalTo(imageView.snp_bottom).offset(InstructionsViewControllerUX.TopPadding)
+        make.top.equalTo(imageView.snp.bottom).offset(InstructionsViewControllerUX.TopPadding)
         make.centerX.equalTo(view)
     }
 
@@ -62,9 +62,9 @@ func setupHelpView(_ view: UIView, introText: String, showMeText: String) {
     label2.textColor = InstructionsViewControllerUX.TextColor
     label2.textAlignment = NSTextAlignment.center
     label2.attributedText = highlightLink(showMeText as NSString, withColor: InstructionsViewControllerUX.LinkColor)
-    label2.snp_makeConstraints { (make) -> Void in
+    label2.snp.makeConstraints { (make) -> Void in
         make.width.equalTo(250)
-        make.top.equalTo(label1.snp_bottom).offset(InstructionsViewControllerUX.TopPadding)
+        make.top.equalTo(label1.snp.bottom).offset(InstructionsViewControllerUX.TopPadding)
         make.centerX.equalTo(view)
     }
 }

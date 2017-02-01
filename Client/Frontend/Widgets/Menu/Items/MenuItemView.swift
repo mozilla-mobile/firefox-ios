@@ -30,9 +30,9 @@ class MenuItemCollectionViewCell: UICollectionViewCell {
 
         self.contentView.addSubview(menuTitleLabel)
 
-        menuImageView.snp_makeConstraints { make in
+        menuImageView.snp.makeConstraints { make in
             make.centerX.equalTo(self)
-            make.bottom.equalTo(self.snp_centerYWithinMargins)
+            make.bottom.equalTo(self.snp.centerYWithinMargins)
         }
 
         // for iPhone 5S and below, left/right offset should be padding
@@ -43,8 +43,8 @@ class MenuItemCollectionViewCell: UICollectionViewCell {
         } else {
             horizontalOffset = 2 * padding
         }
-        menuTitleLabel.snp_makeConstraints { make in
-            make.top.equalTo(menuImageView.snp_bottom).offset(padding)
+        menuTitleLabel.snp.makeConstraints { make in
+            make.top.equalTo(menuImageView.snp.bottom).offset(padding)
             make.centerX.equalTo(self)
             make.leading.lessThanOrEqualTo(self).offset(horizontalOffset)
             make.trailing.lessThanOrEqualTo(self).offset(-horizontalOffset)

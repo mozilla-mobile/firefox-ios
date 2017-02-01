@@ -43,7 +43,7 @@ class BackForwardTableViewCell: UITableViewCell {
         didSet {
             if(isCurrentTab) {
                 label.font = UIFont(name:"HelveticaNeue-Bold", size: BackForwardViewCellUX.fontSize)
-                bg.snp_updateConstraints { make in
+                bg.snp.updateConstraints { make in
                     make.height.equalTo(BackForwardViewCellUX.faviconWidth+BackForwardViewCellUX.borderBold)
                     make.width.equalTo(BackForwardViewCellUX.faviconWidth+BackForwardViewCellUX.borderBold)
                 }
@@ -80,20 +80,20 @@ class BackForwardTableViewCell: UITableViewCell {
         contentView.addSubview(faviconView)
         contentView.addSubview(label)
         
-        faviconView.snp_makeConstraints { make in
+        faviconView.snp.makeConstraints { make in
             make.height.equalTo(BackForwardViewCellUX.faviconWidth)
             make.width.equalTo(BackForwardViewCellUX.faviconWidth)
             make.centerY.equalTo(self)
-            make.leading.equalTo(self.snp_leading).offset(BackForwardViewCellUX.faviconPadding)
+            make.leading.equalTo(self.snp.leading).offset(BackForwardViewCellUX.faviconPadding)
         }
         
-        label.snp_makeConstraints { make in
+        label.snp.makeConstraints { make in
             make.centerY.equalTo(self)
-            make.leading.equalTo(faviconView.snp_trailing).offset(BackForwardViewCellUX.labelPadding)
-            make.trailing.equalTo(self.snp_trailing).offset(-BackForwardViewCellUX.labelPadding)
+            make.leading.equalTo(faviconView.snp.trailing).offset(BackForwardViewCellUX.labelPadding)
+            make.trailing.equalTo(self.snp.trailing).offset(-BackForwardViewCellUX.labelPadding)
         }
         
-        bg.snp_makeConstraints { make in
+        bg.snp.makeConstraints { make in
             make.height.equalTo(BackForwardViewCellUX.faviconWidth+BackForwardViewCellUX.borderSmall)
             make.width.equalTo(BackForwardViewCellUX.faviconWidth+BackForwardViewCellUX.borderSmall)
             make.centerX.equalTo(faviconView)
@@ -145,7 +145,7 @@ class BackForwardTableViewCell: UITableViewCell {
         isCurrentTab = false
         label.font = UIFont(name:"HelveticaNeue", size: BackForwardViewCellUX.fontSize)
         
-        bg.snp_updateConstraints { make in
+        bg.snp.updateConstraints { make in
             make.height.equalTo(BackForwardViewCellUX.faviconWidth+BackForwardViewCellUX.borderSmall)
             make.width.equalTo(BackForwardViewCellUX.faviconWidth+BackForwardViewCellUX.borderSmall)
         }

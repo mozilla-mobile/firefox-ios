@@ -18,7 +18,7 @@ class LocalRequestHelper: TabHelper {
         if params["type"] == "load",
            let urlString = params["url"],
            let url = URL(string: urlString) {
-            message.webView?.load(PrivilegedRequest(coder: url))
+            message.webView?.load(PrivilegedRequest(url: url) as URLRequest)
         } else if params["type"] == "reload" {
             message.webView?.reload()
         } else {

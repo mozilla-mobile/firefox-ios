@@ -101,36 +101,36 @@ class SimpleHighlightCell: UITableViewCell {
         contentView.addSubview(timeStamp)
         contentView.addSubview(statusIcon)
 
-        siteImageView.snp_remakeConstraints { make in
+        siteImageView.snp.remakeConstraints { make in
             make.top.equalTo(contentView).offset(SimpleHighlightCellUX.CellTopBottomOffset)
             make.bottom.equalTo(contentView).offset(-SimpleHighlightCellUX.CellTopBottomOffset).priorityLow()
             make.leading.equalTo(contentView).offset(SimpleHighlightCellUX.CellSideOffset)
             make.size.equalTo(SimpleHighlightCellUX.SiteImageViewSize)
         }
 
-        selectedOverlay.snp_remakeConstraints { make in
+        selectedOverlay.snp.remakeConstraints { make in
             make.edges.equalTo(contentView)
         }
 
-        titleLabel.snp_remakeConstraints { make in
-            make.leading.equalTo(siteImageView.snp_trailing).offset(SimpleHighlightCellUX.CellTopBottomOffset)
+        titleLabel.snp.remakeConstraints { make in
+            make.leading.equalTo(siteImageView.snp.trailing).offset(SimpleHighlightCellUX.CellTopBottomOffset)
             make.trailing.equalTo(contentView).inset(SimpleHighlightCellUX.CellSideOffset)
             make.top.equalTo(siteImageView)
         }
 
-        descriptionLabel.snp_remakeConstraints { make in
-            make.leading.equalTo(statusIcon.snp_trailing).offset(SimpleHighlightCellUX.TitleLabelOffset)
+        descriptionLabel.snp.remakeConstraints { make in
+            make.leading.equalTo(statusIcon.snp.trailing).offset(SimpleHighlightCellUX.TitleLabelOffset)
             make.bottom.equalTo(statusIcon)
         }
 
-        timeStamp.snp_remakeConstraints { make in
+        timeStamp.snp.remakeConstraints { make in
             make.trailing.equalTo(contentView).inset(SimpleHighlightCellUX.CellSideOffset)
             make.bottom.equalTo(descriptionLabel)
         }
 
-        statusIcon.snp_remakeConstraints { make in
+        statusIcon.snp.remakeConstraints { make in
             make.leading.equalTo(titleLabel)
-            make.top.equalTo(titleLabel.snp_bottom).offset(SimpleHighlightCellUX.CellTopBottomOffset)
+            make.top.equalTo(titleLabel.snp.bottom).offset(SimpleHighlightCellUX.CellTopBottomOffset)
             make.size.equalTo(SimpleHighlightCellUX.StatusIconSize)
             make.bottom.equalTo(contentView).offset(-SimpleHighlightCellUX.AlternateBottomOffset).priorityHigh()
         }
