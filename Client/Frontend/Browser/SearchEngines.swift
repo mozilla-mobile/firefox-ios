@@ -43,7 +43,7 @@ class SearchEngines {
         self.disabledEngineNames = getDisabledEngineNames()
         self.orderedEngines = getOrderedEngines()
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SearchEngines.SELdidResetPrompt(_:)), name: "SearchEnginesPromptReset", object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SearchEngines.SELdidResetPrompt(_:)), name: NSNotification.Name(rawValue: "SearchEnginesPromptReset"), object: nil)
     }
 
     deinit {
@@ -162,7 +162,7 @@ class SearchEngines {
 
     fileprivate func customEngineFilePath() -> String {
         let profilePath = try! self.fileAccessor.getAndEnsureDirectory() as NSString
-        return profilePath.stringByAppendingPathComponent(customSearchEnginesFileName)
+        return profilePath.appendingPathComponent(customSearchEnginesFileName)
     }
 
     fileprivate lazy var customEngines: [OpenSearchEngine] = {

@@ -161,12 +161,12 @@ class ClientPickerViewController: UITableViewController {
                 }
 
                 self.clients = c
-                dispatch_async(dispatch_get_main_queue()) {
+                DispatchQueue.main.asynchronously() {
                     if self.clients.count == 0 {
                         self.navigationItem.rightBarButtonItem = nil
                     } else {
-                        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Send", tableName: "SendTo", comment: "Navigation bar button to Send the current page to a device"), style: UIBarButtonItemStyle.Done, target: self, action: #selector(ClientPickerViewController.send))
-                        self.navigationItem.rightBarButtonItem?.enabled = false
+                        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Send", tableName: "SendTo", comment: "Navigation bar button to Send the current page to a device"), style: UIBarButtonItemStyle.done, target: self, action: #selector(ClientPickerViewController.send))
+                        self.navigationItem.rightBarButtonItem?.isEnabled = false
                     }
                     self.selectedClients.removeAllObjects()
                     self.tableView.reloadData()
@@ -187,7 +187,7 @@ class ClientPickerViewController: UITableViewController {
     func send() {
         var clients = [RemoteClient]()
         for indexPath in selectedClients {
-            clients.append(self.clients[indexPath.row])
+            clients.append(self.clients[(indexPath as AnyObject).row])
         }
         clientPickerDelegate?.clientPickerViewController(self, didPickClients: clients)
     }

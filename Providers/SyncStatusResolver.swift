@@ -62,7 +62,7 @@ public struct SyncStatusResolver {
         guard let results = engineResults.successValue else {
             switch engineResults.failureValue {
             case _ as BookmarksMergeError, _ as BookmarksDatabaseError:
-                return SyncDisplayState.Warning(message: String(format: Strings.FirefoxSyncPartialTitle, Strings.localizedStringForSyncComponent("bookmarks") ?? ""))
+                return SyncDisplayState.warning(message: String(format: Strings.FirefoxSyncPartialTitle, Strings.localizedStringForSyncComponent("bookmarks") ?? ""))
             default:
                 return SyncDisplayState.bad(message: nil)
             }
@@ -78,32 +78,32 @@ public struct SyncStatusResolver {
             case .NotStarted(let reason):
                 switch reason {
                 case .Offline:
-                    return .Bad(message: Strings.FirefoxSyncOfflineTitle)
+                    return .bad(message: Strings.FirefoxSyncOfflineTitle)
                 case .NoAccount:
-                    return .Warning(message: Strings.FirefoxSyncOfflineTitle)
+                    return .warning(message: Strings.FirefoxSyncOfflineTitle)
                 case .Backoff(_):
-                    return .Good
+                    return .good
                 case .EngineRemotelyNotEnabled(_):
-                    return .Good
+                    return .good
                 case .EngineFormatOutdated(_):
-                    return .Good
+                    return .good
                 case .EngineFormatTooNew(_):
-                    return .Good
+                    return .good
                 case .StorageFormatOutdated(_):
-                    return .Good
+                    return .good
                 case .StorageFormatTooNew(_):
-                    return .Good
+                    return .good
                 case .StateMachineNotReady:
-                    return .Good
+                    return .good
                 case .RedLight:
-                    return .Good
+                    return .good
                 case .Unknown:
-                    return .Good
+                    return .good
                 }
             case .Completed:
-                return .Good
+                return .good
             case .Partial:
-                return .Good
+                return .good
             }
         }
 

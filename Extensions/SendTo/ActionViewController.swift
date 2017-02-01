@@ -32,9 +32,9 @@ class ActionViewController: UIViewController, ClientPickerViewControllerDelegate
 
         ExtensionUtils.extractSharedItemFromExtensionContext(self.extensionContext, completionHandler: { (item, error) -> Void in
             guard let item = item, error == nil && item.isShareable else {
-                let alert = UIAlertController(title: Strings.SendToErrorTitle, message: Strings.SendToErrorMessage, preferredStyle: .Alert)
-                alert.addAction(UIAlertAction(title: Strings.SendToErrorOKButton, style: .Default) { _ in self.finish() })
-                self.presentViewController(alert, animated: true, completion: nil)
+                let alert = UIAlertController(title: Strings.SendToErrorTitle, message: Strings.SendToErrorMessage, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: Strings.SendToErrorOKButton, style: .default) { _ in self.finish() })
+                self.present(alert, animated: true, completion: nil)
                 return
             }
 
@@ -43,7 +43,7 @@ class ActionViewController: UIViewController, ClientPickerViewControllerDelegate
             clientPickerViewController.clientPickerDelegate = self
             clientPickerViewController.profile = self.profile
             let navigationController = UINavigationController(rootViewController: clientPickerViewController)
-            self.presentViewController(navigationController, animated: false, completion: nil)
+            self.present(navigationController, animated: false, completion: nil)
         })
     }
 
@@ -56,7 +56,7 @@ class ActionViewController: UIViewController, ClientPickerViewControllerDelegate
         // TODO: hook up Send Tab via Sync.
         // profile?.clients.sendItem(self.sharedItem!, toClients: clients)
         if let item = sharedItem {
-            self.profile.sendItems([item], toClients: clients)
+            self.profile.sendItems(items: [item], toClients: clients)
         }
         finish()
     }
