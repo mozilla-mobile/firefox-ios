@@ -41,7 +41,7 @@ open class NSUserDefaultsPrefs: Prefs {
         // to tell whether there's a value set, and you thus can't distinguish
         // between "not present" and zero.
         // Yeah, NSUserDefaults is meant to be used for storing "defaults", not data.
-        setObject(NSNumber(value: value as Int32), forKey: defaultName)
+        setObject(NSNumber(value: value), forKey: defaultName)
     }
 
     open func setTimestamp(_ value: Timestamp, forKey defaultName: String) {
@@ -49,11 +49,11 @@ open class NSUserDefaultsPrefs: Prefs {
     }
 
     open func setLong(_ value: UInt64, forKey defaultName: String) {
-        setObject(NSNumber(value: value as UInt64), forKey: defaultName)
+        setObject(NSNumber(value: value), forKey: defaultName)
     }
 
     open func setLong(_ value: Int64, forKey defaultName: String) {
-        setObject(NSNumber(value: value as Int64), forKey: defaultName)
+        setObject(NSNumber(value: value), forKey: defaultName)
     }
 
     open func setString(_ value: String, forKey defaultName: String) {

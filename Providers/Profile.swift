@@ -120,7 +120,7 @@ class BrowserProfileSyncDelegate: SyncDelegate {
                 }
 
                 let notification = UILocalNotification()
-                notification.fireDate = NSDate() as Date
+                notification.fireDate = Date()
                 notification.timeZone = NSTimeZone.default
                 notification.alertBody = String(format: NSLocalizedString("New tab: %@: %@", comment:"New tab [title] [url]"), title, URL.absoluteString)
                 notification.userInfo = [TabSendURLKey: URL.absoluteString, TabSendTitleKey: title]
@@ -194,7 +194,7 @@ extension Profile {
         if let id = prefs.stringForKey(PrefKeyClientID) {
             clientID = id
         } else {
-            clientID = NSUUID().uuidString
+            clientID = UUID().uuidString
             prefs.setString(clientID, forKey: PrefKeyClientID)
         }
         return clientID
@@ -508,23 +508,6 @@ public class BrowserProfile: Profile {
     lazy private var loginsKey: String? = {
         let key = "sqlcipher.key.logins.db"
         return key
-//
-//        struct Singleton {
-//            static var token: dispatch_once_t = 0
-//            static var instance: String!
-//        }
-//        dispatch_once(&Singleton.token) {
-//            if self.keychain.hasValueForKey(key) {
-//                let value = self.keychain.stringForKey(key)
-//                Singleton.instance = value
-//            } else {
-//                let Length: UInt = 256
-//                let secret = Bytes.generateRandomBytes(Length).base64EncodedString
-//                self.keychain.setString(secret, forKey: key)
-//                Singleton.instance = secret
-//            }
-//        }
-//        return Singleton.instance
     }()
 
     private static var loginsDBCreated = false
@@ -785,7 +768,7 @@ public class BrowserProfile: Profile {
 
                     let url = "https://mozilla-anonymous-sync-metrics.moo.mx/post/syncstatus".asURL!
                     var request = URLRequest(url: url)
-                    request.httpMethod = "POST"
+                    request.httpMethod = URLRequest.Method.post.rawValue
                     request.httpBody = body
                     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 

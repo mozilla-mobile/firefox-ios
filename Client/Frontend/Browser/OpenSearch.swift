@@ -155,14 +155,12 @@ class OpenSearchParser {
     }
 
     func parse(_ file: String, engineID: String) -> OpenSearchEngine? {
-        let data = try? Data(contentsOf: URL(fileURLWithPath: file))
-
-        if data == nil {
+        guard let data = try? Data(contentsOf: URL(fileURLWithPath: file)) else {
             print("Invalid search file")
             return nil
         }
 
-        guard let indexer = try? XMLDocument(data: data!),
+        guard let indexer = try? XMLDocument(data: data),
             let docIndexer = indexer.root else {
                 print("Invalid XML document")
                 return nil
