@@ -10,8 +10,7 @@ import XCGLogger
 
 private let log = Logger.browserLogger
 
-@objc
-protocol TabToolbarProtocol {
+protocol TabToolbarProtocol: class  {
     weak var tabToolbarDelegate: TabToolbarDelegate? { get set }
     var shareButton: UIButton { get }
     var bookmarkButton: UIButton { get }
@@ -29,7 +28,6 @@ protocol TabToolbarProtocol {
     func updatePageStatus(isWebPage: Bool)
 }
 
-@objc
 protocol TabToolbarDelegate: class {
     func tabToolbarDidPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressForward(_ tabToolbar: TabToolbarProtocol, button: UIButton)
