@@ -474,7 +474,7 @@ class HistoryPanelSiteTableViewController: SiteTableViewController {
                                 let sectionsToAdd = NSMutableIndexSet()
                                 var rowsToAdd = [NSIndexPath]()
 
-                                for (index, category) in self.categories.enumerate() {
+                                for (index, category) in self.categories.enumerated() {
                                     let oldCategory = oldCategories[index]
 
                                     // don't bother if we're not displaying this category
@@ -485,7 +485,7 @@ class HistoryPanelSiteTableViewController: SiteTableViewController {
                                     // 1. add a new section if the section didn't previously exist
                                     if oldCategory.section == nil && category.section != oldCategory.section {
                                         log.debug("adding section \(category.section)")
-                                        sectionsToAdd.addIndex(category.section!)
+                                        sectionsToAdd.add(category.section!)
                                     }
 
                                     // 2. add a new row if there are more rows now than there were before
@@ -501,7 +501,7 @@ class HistoryPanelSiteTableViewController: SiteTableViewController {
                                     if oldCategory.section == indexPath.section {
                                         if category.section == nil {
                                             log.debug("deleting section \(indexPath.section)")
-                                            sectionsToDelete.addIndex(indexPath.section)
+                                            sectionsToDelete.add(indexPath.section)
                                         } else if oldCategory.section == category.section {
                                             if oldCategory.rows > category.rows {
                                                 log.debug("deleting row from \(category.section) at \(indexPath.row)")

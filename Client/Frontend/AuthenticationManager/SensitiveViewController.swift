@@ -51,12 +51,12 @@ class SensitiveViewController: UIViewController {
             touchIDReason: AuthenticationStrings.loginsTouchReason,
             success: {
                 self.promptingForTouchID = false
-                self.authState = .NotAuthenticating
+                self.authState = .notAuthenticating
                 self.removeBackgroundedBlur()
             },
             cancel: {
                 self.promptingForTouchID = false
-                self.authState = .NotAuthenticating
+                self.authState = .notAuthenticating
                 self.navigationController?.popToRootViewController(animated: true)
             },
             fallback: {
