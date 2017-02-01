@@ -25,9 +25,7 @@ We encourage you to participate in this open source project. We love Pull Reques
 
 Want to contribute but don't know where to start? Here is a list of [Good First Bugs.](http://www.joshmatthews.net/bugsahoy/?mobileios=1&simple=1)
 
-This is a work in progress on some early ideas.  Don't get too attached to this code. Tomorrow everything will be different.
-
-Likewise, the design and UX is still in flux. Don't get attached to them. They will change tomorrow!
+The UX is still in flux:
 https://mozilla.invisionapp.com/share/HA254M642#/screens/63057282?maintainScrollPosition=false
 
 *GitHub issues are enabled* on this repository, but we encourage you to file a bug (see above). We'll accept issues to track work items that don't yet have a pull request, and also as an early funnel for bug reports, but Bugzilla is the source of truth for lots of good reasons — issues will be shifted into Bugzilla, and pull requests need a bug number.
