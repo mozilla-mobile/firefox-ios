@@ -106,12 +106,12 @@ class SyncNowSetting: WithAccountSetting {
         }
 
         switch syncStatus {
-        case .Bad(let message):
+        case .bad(let message):
             guard let message = message else { return syncNowTitle }
             return NSAttributedString(string: message, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowErrorTextColor, NSFontAttributeName: DynamicFontHelper.defaultHelper.DefaultStandardFont])
-        case .Warning(let message):
+        case .warning(let message):
             return  NSAttributedString(string: message, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowWarningTextColor, NSFontAttributeName: DynamicFontHelper.defaultHelper.DefaultStandardFont])
-        case .InProgress:
+        case .inProgress:
             return syncingTitle
         default:
             return syncNowTitle
@@ -171,7 +171,7 @@ class SyncNowSetting: WithAccountSetting {
         cell.textLabel?.lineBreakMode = .byWordWrapping
         if let syncStatus = profile.syncManager.syncDisplayState {
             switch syncStatus {
-            case .Bad(let message):
+            case .bad(let message):
                 if let _ = message {
                     // add the red warning symbol
                     // add a link to the MANA page
@@ -182,13 +182,13 @@ class SyncNowSetting: WithAccountSetting {
                     cell.detailTextLabel?.attributedText = status
                     cell.accessoryView = nil
                 }
-            case .Warning(_):
+            case .warning(_):
                 // add the amber warning symbol
                 // add a link to the MANA page
                 cell.detailTextLabel?.attributedText = nil
                 cell.accessoryView = troubleshootButton
                 addIcon(warningIcon, toCell: cell)
-            case .Good:
+            case .good:
                 cell.detailTextLabel?.attributedText = status
                 fallthrough
             default:
@@ -227,13 +227,13 @@ class AccountStatusSetting: WithAccountSetting {
     override var accessoryType: UITableViewCellAccessoryType {
         if let account = profile.getAccount() {
             switch account.actionNeeded {
-            case .NeedsVerification:
+            case .needsVerification:
                 // We link to the resend verification email page.
                 return .disclosureIndicator
-            case .NeedsPassword:
+            case .needsPassword:
                  // We link to the re-enter password page.
                 return .disclosureIndicator
-            case .None, .NeedsUpgrade:
+            case .none, .needsUpgrade:
                 // In future, we'll want to link to /settings and an upgrade page, respectively.
                 return .none
             }
@@ -251,11 +251,11 @@ class AccountStatusSetting: WithAccountSetting {
     override var status: NSAttributedString? {
         if let account = profile.getAccount() {
             switch account.actionNeeded {
-            case .None:
+            case .none:
                 return nil
-            case .NeedsVerification:
+            case .needsVerification:
                 return NSAttributedString(string: NSLocalizedString("Verify your email address.", comment: "Text message in the settings table view"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
-            case .NeedsPassword:
+            case .needsPassword:
                 let string = NSLocalizedString("Enter your password to connect.", comment: "Text message in the settings table view")
                 let range = NSRange(location: 0, length: string.characters.count)
                 let orange = UIColor(red: 255.0 / 255, green: 149.0 / 255, blue: 0.0 / 255, alpha: 1)
@@ -263,7 +263,7 @@ class AccountStatusSetting: WithAccountSetting {
                 let res = NSMutableAttributedString(string: string)
                 res.setAttributes(attrs, range: range)
                 return res
-            case .NeedsUpgrade:
+            case .needsUpgrade:
                 let string = NSLocalizedString("Upgrade Firefox to connect.", comment: "Text message in the settings table view")
                 let range = NSRange(location: 0, length: string.characters.count)
                 let orange = UIColor(red: 255.0 / 255, green: 149.0 / 255, blue: 0.0 / 255, alpha: 1)
@@ -282,15 +282,15 @@ class AccountStatusSetting: WithAccountSetting {
 
         if let account = profile.getAccount() {
             switch account.actionNeeded {
-            case .NeedsVerification:
+            case .needsVerification:
                 var cs = URLComponents(url: account.configuration.settingsURL, resolvingAgainstBaseURL: false)
                 cs?.queryItems?.append(URLQueryItem(name: "email", value: account.email))
                 viewController.url = cs?.URL
-            case .NeedsPassword:
+            case .needsPassword:
                 var cs = URLComponents(url: account.configuration.forceAuthURL, resolvingAgainstBaseURL: false)
                 cs?.queryItems?.append(URLQueryItem(name: "email", value: account.email))
                 viewController.url = cs?.URL
-            case .None, .NeedsUpgrade:
+            case .none, .needsUpgrade:
                 // In future, we'll want to link to /settings and an upgrade page, respectively.
                 return
             }

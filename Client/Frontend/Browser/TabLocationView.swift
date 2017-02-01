@@ -288,13 +288,13 @@ private class ReaderModeButton: UIButton {
         set (newReaderModeState) {
             _readerModeState = newReaderModeState
             switch _readerModeState {
-            case .Available:
+            case .available:
                 self.isEnabled = true
                 self.isSelected = false
-            case .Unavailable:
+            case .unavailable:
                 self.isEnabled = false
                 self.isSelected = false
-            case .Active:
+            case .active:
                 self.isEnabled = true
                 self.isSelected = true
             }

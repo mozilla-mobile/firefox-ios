@@ -1344,47 +1344,47 @@ extension BrowserViewController: MenuActionDelegate {
     func performMenuAction(_ action: MenuAction, withAppState appState: AppState) {
         if let menuAction = AppMenuAction(rawValue: action.action) {
             switch menuAction {
-            case .OpenNewNormalTab:
+            case .openNewNormalTab:
                 self.openURLInNewTab(nil, isPrivate: false, isPrivileged: true)
             // this is a case that is only available in iOS9
-            case .OpenNewPrivateTab:
+            case .openNewPrivateTab:
                 self.openURLInNewTab(nil, isPrivate: true, isPrivileged: true)
-            case .FindInPage:
+            case .findInPage:
                 self.updateFindInPageVisibility(visible: true)
-            case .ToggleBrowsingMode:
+            case .toggleBrowsingMode:
                 guard let tab = tabManager.selectedTab else { break }
                 tab.toggleDesktopSite()
-            case .ToggleBookmarkStatus:
+            case .toggleBookmarkStatus:
                 switch appState.ui {
                 case .tab(let tabState):
                     self.toggleBookmarkForTabState(tabState)
                 default: break
                 }
-            case .ShowImageMode:
+            case .showImageMode:
                 self.setNoImageMode(false)
-            case .HideImageMode:
+            case .hideImageMode:
                 self.setNoImageMode(true)
-            case .ShowNightMode:
+            case .showNightMode:
                 NightModeHelper.setNightMode(self.profile.prefs, tabManager: self.tabManager, enabled: false)
-            case .HideNightMode:
+            case .hideNightMode:
                 NightModeHelper.setNightMode(self.profile.prefs, tabManager: self.tabManager, enabled: true)
-            case .OpenSettings:
+            case .openSettings:
                 self.openSettings()
-            case .OpenTopSites:
+            case .openTopSites:
                 openHomePanel(.topSites, forAppState: appState)
-            case .OpenBookmarks:
+            case .openBookmarks:
                 openHomePanel(.bookmarks, forAppState: appState)
-            case .OpenHistory:
+            case .openHistory:
                 openHomePanel(.history, forAppState: appState)
-            case .OpenReadingList:
+            case .openReadingList:
                 openHomePanel(.readingList, forAppState: appState)
-            case .SetHomePage:
+            case .setHomePage:
                 guard let tab = tabManager.selectedTab else { break }
                 HomePageHelper(prefs: profile.prefs).setHomePage(toTab: tab, withNavigationController: navigationController)
-            case .OpenHomePage:
+            case .openHomePage:
                 guard let tab = tabManager.selectedTab else { break }
                 HomePageHelper(prefs: profile.prefs).openHomePage(inTab: tab, withNavigationController: navigationController)
-            case .SharePage:
+            case .sharePage:
                 guard let url = tabManager.selectedTab?.url else { break }
                 let sourceView = self.navigationToolbar.menuButton
                 let tab = tabManager.selectedTab
@@ -1478,11 +1478,11 @@ extension BrowserViewController: URLBarDelegate {
         if let tab = tabManager.selectedTab {
             if let readerMode = tab.getHelper(name: "ReaderMode") as? ReaderMode {
                 switch readerMode.state {
-                case .Available:
+                case .available:
                     enableReaderMode()
-                case .Active:
+                case .active:
                     disableReaderMode()
-                case .Unavailable:
+                case .unavailable:
                     break
                 }
             }
@@ -1500,10 +1500,10 @@ extension BrowserViewController: URLBarDelegate {
         }
 
         switch result {
-        case .Success:
+        case .success:
             UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Added page to Reading List", comment: "Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action."))
             // TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1158503 provide some form of 'this has been added' visual feedback?
-        case .Failure(let error):
+        case .failure(let error):
             UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Could not add page to Reading List. Maybe it's already there?", comment: "Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures."))
             log.error("readingList.createRecordWithURL(url: \"\(url.absoluteString)\", ...) failed with error: \(error)")
         }
@@ -3315,7 +3315,7 @@ class BlurWrapper: UIView {
             switch blurStyle {
             case .extraLight, .light:
                 background.backgroundColor = TopTabsUX.TopTabsBackgroundNormalColor
-            case .ExtraDark, .dark:
+            case .extraDark, .dark:
                 background.backgroundColor = TopTabsUX.TopTabsBackgroundPrivateColor
             default:
                 assertionFailure("Unsupported blur style")

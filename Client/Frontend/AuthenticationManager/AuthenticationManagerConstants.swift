@@ -9,12 +9,12 @@ import Shared
 extension PasscodeInterval {
     var settingTitle: String {
         switch self {
-        case .Immediately:      return AuthenticationStrings.immediately
-        case .OneMinute:        return AuthenticationStrings.oneMinute
-        case .FiveMinutes:      return AuthenticationStrings.fiveMinutes
-        case .TenMinutes:       return AuthenticationStrings.tenMinutes
-        case .FifteenMinutes:   return AuthenticationStrings.fifteenMinutes
-        case .OneHour:          return AuthenticationStrings.oneHour
+        case .immediately:      return AuthenticationStrings.immediately
+        case .oneMinute:        return AuthenticationStrings.oneMinute
+        case .fiveMinutes:      return AuthenticationStrings.fiveMinutes
+        case .tenMinutes:       return AuthenticationStrings.tenMinutes
+        case .fifteenMinutes:   return AuthenticationStrings.fifteenMinutes
+        case .oneHour:          return AuthenticationStrings.oneHour
         }
     }
 }

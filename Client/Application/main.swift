@@ -10,7 +10,7 @@ if AppConstants.IsRunningTest {
     appDelegate = TestAppDelegate.self
 } else {
     switch AppConstants.BuildChannel {
-    case .Aurora:
+    case .aurora:
         appDelegate = AuroraAppDelegate.self
     default:
         appDelegate = AppDelegate.self

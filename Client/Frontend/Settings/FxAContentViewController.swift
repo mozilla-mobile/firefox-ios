@@ -140,15 +140,15 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
             }
 
             switch (command) {
-            case .Loaded:
+            case .loaded:
                 onLoaded()
-            case .Login:
+            case .login:
                 onLogin(data)
-            case .CanLinkAccount:
+            case .canLinkAccount:
                 onCanLinkAccount(data)
-            case .SessionStatus:
+            case .sessionStatus:
                 onSessionStatus(data)
-            case .SignOut:
+            case .signOut:
                 onSignOut(data)
             }
         }
