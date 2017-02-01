@@ -130,13 +130,13 @@ extension SwipeAnimator {
         }
     }
 
-    func close(_ right: Bool) {
+    func close(right: Bool) {
         let direction = CGFloat(right ? -1 : 1)
         animateAwayWithVelocity(CGPoint(x: -direction * params.minExitVelocity, y: 0), speed: direction * params.minExitVelocity)
     }
 
     @objc func SELcloseWithoutGesture() -> Bool {
-        close(false)
+        close(right: false)
         return true
     }
 }

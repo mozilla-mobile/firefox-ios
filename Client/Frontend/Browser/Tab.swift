@@ -331,7 +331,7 @@ class Tab: NSObject {
         helperManager!.addHelper(helper, name: name)
     }
 
-    func getHelper(_ name: String) -> TabHelper? {
+    func getHelper(name: String) -> TabHelper? {
         return helperManager?.getHelper(name)
     }
 

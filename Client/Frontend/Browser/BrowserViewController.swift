@@ -1032,7 +1032,7 @@ class BrowserViewController: UIViewController {
         urlBar.currentURL = tab.url?.displayURL
 
         let isPage = tab.url?.displayURL?.isWebPage() ?? false
-        navigationToolbar.updatePageStatus(isWebPage: isPage)
+        navigationToolbar.updatePageStatus(isPage)
 
         guard let url = tab.url?.displayURL?.absoluteString else {
             return
@@ -1620,7 +1620,7 @@ extension BrowserViewController: URLBarDelegate {
 
         if let searchURL = engine.searchURLForQuery(text) {
             // We couldn't find a matching search keyword, so do a search query.
-            Telemetry.recordEvent(SearchTelemetry.makeEvent(engine: engine, source: .URLBar))
+            Telemetry.recordEvent(SearchTelemetry.makeEvent(engine, source: .URLBar))
             finishEditingAndSubmit(searchURL, visitType: VisitType.typed)
         } else {
             // We still don't have a valid URL, so something is broken. Give up.
@@ -2601,7 +2601,7 @@ extension BrowserViewController: WKUIDelegate {
     }
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
-        let helperForURL = OpenIn.helperForResponse(response: navigationResponse.response)
+        let helperForURL = OpenIn.helperForResponse(navigationResponse.response)
         if navigationResponse.canShowMIMEType {
             if let openInHelper = helperForURL {
                 addViewForOpenInHelper(openInHelper)
@@ -2752,7 +2752,7 @@ extension BrowserViewController {
                         try self.readerModeCache.put(currentURL, readabilityResult)
                     } catch _ {
                     }
-                    if let nav = webView.loadRequest(PrivilegedRequest(url: readerModeURL) as URLRequest) {
+                    if let nav = webView.load(PrivilegedRequest(url: readerModeURL) as URLRequest) {
                         self.ignoreNavigationInTab(tab, navigation: nav)
                     }
                 }

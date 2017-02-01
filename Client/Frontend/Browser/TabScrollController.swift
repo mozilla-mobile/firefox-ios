@@ -106,7 +106,7 @@ class TabScrollingController: NSObject {
         super.init()
     }
 
-    func showToolbars(_ animated: Bool, completion: ((_ finished: Bool) -> Void)? = nil) {
+    func showToolbars(animated: Bool, completion: ((_ finished: Bool) -> Void)? = nil) {
         if toolbarState == .visible {
             completion?(true)
             return
@@ -123,7 +123,7 @@ class TabScrollingController: NSObject {
             completion: completion)
     }
 
-    func hideToolbars(_ animated: Bool, completion: ((_ finished: Bool) -> Void)? = nil) {
+    func hideToolbars(animated: Bool, completion: ((_ finished: Bool) -> Void)? = nil) {
         if toolbarState == .collapsed {
             completion?(true)
             return
@@ -143,7 +143,7 @@ class TabScrollingController: NSObject {
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "contentSize" {
             if !checkScrollHeightIsLargeEnoughForScrolling() && !toolbarsShowing {
-                showToolbars(true, completion: nil)
+                showToolbars(animated: true, completion: nil)
             }
         }
     }
@@ -298,7 +298,7 @@ extension TabScrollingController: UIScrollViewDelegate {
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         if targetContentOffset.pointee.y + scrollView.frame.size.height >= scrollView.contentSize.height {
             suppressToolbarHiding = true
-            showToolbars(true)
+            showToolbars(animated: true)
         }
     }
 
@@ -309,9 +309,9 @@ extension TabScrollingController: UIScrollViewDelegate {
 
         if (decelerate || (toolbarState == .animating && !decelerate)) && checkScrollHeightIsLargeEnoughForScrolling() {
             if scrollDirection == .up {
-                showToolbars(true)
+                showToolbars(animated: true)
             } else if scrollDirection == .down && !suppressToolbarHiding {
-                hideToolbars(true)
+                hideToolbars(animated: true)
             }
         }
 
@@ -349,7 +349,7 @@ extension TabScrollingController: UIScrollViewDelegate {
     }
 
     func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
-        showToolbars(true)
+        showToolbars(animated: true)
         webViewContainerToolbar?.isHidden = false
         return true
     }
