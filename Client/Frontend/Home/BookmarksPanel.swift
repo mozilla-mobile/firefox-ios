@@ -286,7 +286,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
         switch (bookmark) {
         case let item as BookmarkItem:
-            homePanelDelegate?.homePanel(self, didSelectURLString: item.url, visitType: VisitType.Bookmark)
+            homePanelDelegate?.homePanel(self, didSelectURLString: item.url, visitType: VisitType.bookmark)
             break
 
         case let folder as BookmarkFolder:
@@ -374,7 +374,8 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             self.tableView.endUpdates()
             self.updateEmptyPanelState()
 
-            NotificationCenter.default.postNotificationName(BookmarkStatusChangedNotification, object: bookmark, userInfo:["added": false])
+            NotificationCenter.default.post(name: BookmarkStatusChangedNotification, object: bookmark, userInfo: ["added": false]
+            )
         })
 
         return [delete]

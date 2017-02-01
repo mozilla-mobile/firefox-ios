@@ -24,7 +24,7 @@ class PasscodeEntryViewController: BasePasscodeViewController {
         view.addSubview(passcodePane)
         passcodePane.snp.makeConstraints { make in
             make.bottom.left.right.equalTo(self.view)
-            make.top.equalTo(self.snp.topLayoutGuideBottom)
+            make.top.equalTo(self.topLayoutGuide.snp.bottom)
         }
     }
 
@@ -70,7 +70,7 @@ extension PasscodeEntryViewController: PasscodeInputViewDelegate {
             delegate?.passcodeValidationDidSucceed()
         } else {
             passcodePane.shakePasscode()
-            failIncorrectPasscode(inputView: inputView)
+            failIncorrectPasscode(inputView)
             passcodePane.codeInputView.resetCode()
 
             // Store mutations on authentication info object

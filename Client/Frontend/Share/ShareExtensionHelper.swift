@@ -29,9 +29,7 @@ class ShareExtensionHelper: NSObject {
         let printInfo = UIPrintInfo(dictionary: nil)
 
         let absoluteString = selectedTab?.url?.absoluteString ?? selectedURL.absoluteString
-        if let absoluteString = absoluteString {
-            printInfo.jobName = absoluteString
-        }
+        printInfo.jobName = absoluteString
         printInfo.outputType = .general
         activityItems.append(printInfo)
 
@@ -111,7 +109,7 @@ extension ShareExtensionHelper: UIActivityItemSource {
 
 private extension ShareExtensionHelper {
     static func isPasswordManagerExtensionAvailable() -> Bool {
-        return OnePasswordExtension.sharedExtension().isAppExtensionAvailable()
+        return OnePasswordExtension.shared().isAppExtensionAvailable()
     }
 
     func isPasswordManagerActivityType(_ activityType: String?) -> Bool {
@@ -138,7 +136,7 @@ private extension ShareExtensionHelper {
         }
 
         // Add 1Password to share sheet
-        OnePasswordExtension.sharedExtension().createExtensionItemForWebView(selectedWebView, completion: {(extensionItem, error) -> Void in
+        OnePasswordExtension.shared().createExtensionItemForWebView(selectedWebView, completion: {(extensionItem, error) -> Void in
             if extensionItem == nil {
                 log.error("Failed to create the password manager extension item: \(error).")
                 return
@@ -154,7 +152,7 @@ private extension ShareExtensionHelper {
             return
         }
 
-        OnePasswordExtension.sharedExtension().fillReturnedItems(returnedItems, intoWebView: selectedWebView, completion: { (success, returnedItemsError) -> Void in
+        OnePasswordExtension.shared().fillReturnedItems(returnedItems, intoWebView: selectedWebView, completion: { (success, returnedItemsError) -> Void in
             if !success {
                 log.error("Failed to fill item into webview: \(returnedItemsError).")
             }

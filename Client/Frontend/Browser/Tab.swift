@@ -115,7 +115,7 @@ class Tab: NSObject {
                 URL: displayURL,
                 title: tab.displayTitle,
                 history: history,
-                lastUsed: NSDate.now(),
+                lastUsed: Date.now(),
                 icon: nil)
         } else if let sessionData = tab.sessionData, !sessionData.urls.isEmpty {
             let history = Array(sessionData.urls.filter(RemoteTab.shouldIncludeURL).reversed())
@@ -183,11 +183,7 @@ class Tab: NSObject {
 
             var urls = [String]()
             for url in sessionData.urls {
-                guard let urlString = url.absoluteString else {
-                    assertionFailure("Invalid session URL: \(url)")
-                    continue
-                }
-                urls.append(urlString)
+                urls.append(url.absoluteString)
             }
 
             let currentPage = sessionData.currentPage

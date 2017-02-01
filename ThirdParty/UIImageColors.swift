@@ -29,7 +29,10 @@ class PCCountedColor {
 extension UIColor {
 
     fileprivate var isDarkColor: Bool {
-        let RGB = self.cgColor.components
+        guard let RGB = self.cgColor.components else {
+            return false
+        }
+        
         let r = 0.2126 * RGB[0]
         let g = 0.7152 * RGB[1]
         let b = 0.0722 * RGB[2]
@@ -72,9 +75,9 @@ extension UIColor {
     }
 
     fileprivate func isContrastingColor(_ compareColor: UIColor) -> Bool {
-        let bg = self.cgColor.components
-        let fg = compareColor.cgColor.components
-
+        guard let bg = self.cgColor.components, let fg = compareColor.cgColor.components else {
+            return false
+        }
 
         let bgLumR = 0.2126 * bg[0]
         let bgLumG = 0.7152 * bg[1]

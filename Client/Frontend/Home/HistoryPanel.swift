@@ -13,7 +13,7 @@ private let log = Logger.browserLogger
 
 private func getDate(_ dayOffset: Int) -> Date {
     let calendar = Calendar(identifier: Calendar.Identifier.gregorian)
-    let nowComponents = (calendar as NSCalendar).components([Calendar.Unit.year, Calendar.Unit.month, Calendar.Unit.day], from: Date())
+    let nowComponents = (calendar as NSCalendar).components([.year, .month, .day], from: Date())
     let today = calendar.date(from: nowComponents)!
     return (calendar as NSCalendar).date(byAdding: NSCalendar.Unit.day, value: dayOffset, to: today, options: [])!
 }
@@ -153,7 +153,7 @@ class HistoryPanelSiteTableViewController: SiteTableViewController {
         super.init(nibName: nil, bundle: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(HistoryPanelSiteTableViewController.notificationReceived(_:)), name: NotificationFirefoxAccountChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(HistoryPanelSiteTableViewController.notificationReceived(_:)), name: NotificationPrivateDataClearedHistory, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(HistoryPanelSiteTableViewController.notificationReceived(_:)), name: NSNotification.Name(rawValue: NotificationDynamicFontChanged), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(HistoryPanelSiteTableViewController.notificationReceived(_:)), name: NotificationDynamicFontChanged, object: nil)
     }
 
     override func viewDidLoad() {
@@ -168,7 +168,7 @@ class HistoryPanelSiteTableViewController: SiteTableViewController {
     deinit {
         NotificationCenter.default.removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
         NotificationCenter.default.removeObserver(self, name: NotificationPrivateDataClearedHistory, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: NotificationDynamicFontChanged), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NotificationDynamicFontChanged, object: nil)
     }
 
     func notificationReceived(_ notification: Notification) {
@@ -340,7 +340,7 @@ class HistoryPanelSiteTableViewController: SiteTableViewController {
         return cell
     }
 
-    fileprivate func siteForIndexPath(_ indexPath: NSIndexPath) -> Site? {
+    fileprivate func siteForIndexPath(_ indexPath: IndexPath) -> Site? {
         let offset = self.categories[sectionLookup[indexPath.section]!].offset
         return data[indexPath.row + offset]
     }
@@ -348,7 +348,7 @@ class HistoryPanelSiteTableViewController: SiteTableViewController {
     func tableView(_ tableView: UITableView, didSelectRowAtIndexPath indexPath: IndexPath) {
         if let site = self.siteForIndexPath(indexPath),
            let url = URL(string: site.url) {
-            let visitType = VisitType.Typed    // Means History, too.
+            let visitType = VisitType.typed    // Means History, too.
             if let homePanelDelegate = homePanelDelegate,
                    let historyPanel = historyPanel {
                 homePanelDelegate.homePanel(historyPanel, didSelectURL: url, visitType: visitType)

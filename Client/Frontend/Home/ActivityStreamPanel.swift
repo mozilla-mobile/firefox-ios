@@ -36,7 +36,7 @@ class ActivityStreamPanel: UITableViewController, HomePanel {
 
     fileprivate let topSitesManager = ASHorizontalScrollCellManager()
     fileprivate var isInitialLoad = true //Prevents intro views from flickering while content is loading
-    fileprivate let events = [NotificationFirefoxAccountChanged, NotificationProfileDidFinishSyncing, NotificationPrivateDataClearedHistory, NotificationDynamicFontChanged] as [Any]
+    fileprivate let events = [NotificationFirefoxAccountChanged, NotificationProfileDidFinishSyncing, NotificationPrivateDataClearedHistory, NotificationDynamicFontChanged]
 
     fileprivate var sessionStart: Timestamp?
 
@@ -54,11 +54,11 @@ class ActivityStreamPanel: UITableViewController, HomePanel {
         super.init(style: .grouped)
         view.addGestureRecognizer(longPressRecognizer)
         self.profile.history.setTopSitesCacheSize(Int32(ASPanelUX.topSitesCacheSize))
-        events.forEach { NotificationCenter.defaultCenter.addObserver(self, selector: #selector(TopSitesPanel.notificationReceived(_:)), name: $0, object: nil) }
+        events.forEach { NotificationCenter.default.addObserver(self, selector: #selector(self.notificationReceived(_:)), name: $0, object: nil) }
     }
 
     deinit {
-        events.forEach { NotificationCenter.defaultCenter.removeObserver(self, name: $0, object: nil) }
+        events.forEach { NotificationCenter.default.removeObserver(self, name: $0, object: nil) }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -567,7 +567,7 @@ struct ActivityStreamTracker {
             eventPing["share_provider"] = provider
         }
 
-        eventsTracker.sendPing(eventPing)
+        eventsTracker.sendPing(eventPing, validate: true)
     }
 
     func reportSessionStop(_ duration: UInt64) {
@@ -576,7 +576,7 @@ struct ActivityStreamTracker {
             "app_version": AppInfo.appVersion,
             "build": AppInfo.buildNumber,
             "locale": Locale.currentLocale().localeIdentifier
-        ])
+        ], validate: true)
     }
 }
 
