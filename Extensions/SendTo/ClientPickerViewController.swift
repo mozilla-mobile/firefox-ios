@@ -71,7 +71,8 @@ class ClientPickerViewController: UITableViewController {
         reloadClients()
     }
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+
+    override func numberOfSections(in tableView: UITableView) -> Int {
         if clients.count == 0 {
             return 1
         } else {
@@ -79,7 +80,7 @@ class ClientPickerViewController: UITableViewController {
         }
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if clients.count == 0 {
             return 1
         } else {
@@ -91,7 +92,7 @@ class ClientPickerViewController: UITableViewController {
         }
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell
 
         if clients.count > 0 {
@@ -115,11 +116,11 @@ class ClientPickerViewController: UITableViewController {
         return cell
     }
 
-    override func tableView(tableView: UITableView, shouldHighlightRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
          return indexPath.section != 0
     }
 
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if clients.count > 0 && indexPath.section == 1 {
             tableView.deselectRow(at: indexPath as IndexPath, animated: true)
 
@@ -135,7 +136,8 @@ class ClientPickerViewController: UITableViewController {
         }
     }
 
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if clients.count > 0 {
             if indexPath.section == 0 {
                 return ClientPickerViewControllerUX.TableHeaderRowHeight
@@ -274,7 +276,7 @@ class ClientPickerNoClientsTableViewCell: UITableViewCell {
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupHelpView(view: contentView,
+        setupHelpView(contentView,
             introText: NSLocalizedString("You don't have any other devices connected to this Firefox Account available to sync.", tableName: "SendTo", comment: "Error message shown in the remote tabs panel"),
             showMeText: "") // TODO We used to have a 'show me how to ...' text here. But, we cannot open web pages from the extension. So this is clear for now until we decide otherwise.
         // Move the separator off screen

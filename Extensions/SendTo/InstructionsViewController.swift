@@ -16,13 +16,13 @@ protocol InstructionsViewControllerDelegate: class {
     func instructionsViewControllerDidClose(_ instructionsViewController: InstructionsViewController)
 }
 
-private func highlightLink(s: String, withColor color: UIColor) -> NSAttributedString {
+private func highlightLink(_ s: NSString, withColor color: UIColor) -> NSAttributedString {
     let start = s.range(of: "<")
     if start.location == NSNotFound {
         return NSAttributedString(string: s as String)
     }
 
-    var s: String = s.replacingCharacters(in: start, with: "")
+    var s: NSString = s.replacingCharacters(in: start, with: "") as NSString
     let end = s.range(of: ">")
     s = s.replacingCharacters(in: end, with: "") as NSString
     let a = NSMutableAttributedString(string: s as String)
@@ -61,7 +61,7 @@ func setupHelpView(_ view: UIView, introText: String, showMeText: String) {
     label2.font = InstructionsViewControllerUX.TextFont
     label2.textColor = InstructionsViewControllerUX.TextColor
     label2.textAlignment = NSTextAlignment.center
-    label2.attributedText = highlightLink(s: showMeText, withColor: InstructionsViewControllerUX.LinkColor)
+    label2.attributedText = highlightLink(showMeText as NSString, withColor: InstructionsViewControllerUX.LinkColor)
     label2.snp_makeConstraints { (make) -> Void in
         make.width.equalTo(250)
         make.top.equalTo(label1.snp_bottom).offset(InstructionsViewControllerUX.TopPadding)
@@ -74,7 +74,7 @@ class InstructionsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        edgesForExtendedLayout = UIRectEdge.none
+        edgesForExtendedLayout = []
         view.backgroundColor = UIColor.white
 
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Close", tableName: "SendTo", comment: "Close button in top navigation bar"), style: UIBarButtonItemStyle.done, target: self, action: #selector(InstructionsViewController.close))
