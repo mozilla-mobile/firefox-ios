@@ -250,7 +250,7 @@ class ReaderMode: TabHelper {
 
     fileprivate func handleReaderPageEvent(_ readerPageEvent: ReaderPageEvent) {
         switch readerPageEvent {
-            case .PageShow:
+            case .pageShow:
                 if let tab = tab {
                     delegate?.readerMode(self, didDisplayReaderizedContentForTab: tab)
                 }
@@ -269,12 +269,12 @@ class ReaderMode: TabHelper {
         if let msg = message.body as? Dictionary<String, String> {
             if let messageType = ReaderModeMessageType(rawValue: msg["Type"] ?? "") {
                 switch messageType {
-                    case .PageEvent:
+                    case .pageEvent:
                         if let readerPageEvent = ReaderPageEvent(rawValue: msg["Value"] ?? "Invalid") {
                             handleReaderPageEvent(readerPageEvent)
                         }
                         break
-                    case .StateChange:
+                    case .stateChange:
                         if let readerModeState = ReaderModeState(rawValue: msg["Value"] ?? "Invalid") {
                             handleReaderModeStateChange(readerModeState)
                         }

@@ -61,7 +61,7 @@ class QuickActions: NSObject {
         userData[QuickActions.QuickActionsVersionKey] = QuickActions.QuickActionsVersion
         var dynamicShortcutItems = application.shortcutItems ?? [UIApplicationShortcutItem]()
         switch(type) {
-        case .OpenLastBookmark:
+        case .openLastBookmark:
             let openLastBookmarkShortcut = UIMutableApplicationShortcutItem(type: ShortcutType.OpenLastBookmark.type,
                 localizedTitle: lastBookmarkTitle,
                 localizedSubtitle: userData[QuickActions.TabTitleKey] as? String,
@@ -105,13 +105,13 @@ class QuickActions: NSObject {
 
     fileprivate func handleShortCutItemOfType(_ type: ShortcutType, userData: [String : NSSecureCoding]?, browserViewController: BrowserViewController) {
         switch(type) {
-        case .NewTab:
+        case .newTab:
             handleOpenNewTab(withBrowserViewController: browserViewController, isPrivate: false)
-        case .NewPrivateTab:
+        case .newPrivateTab:
             handleOpenNewTab(withBrowserViewController: browserViewController, isPrivate: true)
         // even though we're removing OpenLastTab, it's possible that someone will use an existing last tab quick action to open the app
         // the first time after upgrading, so we should still handle it
-        case .OpenLastBookmark, .OpenLastTab:
+        case .openLastBookmark, .openLastTab:
             if let urlToOpen = (userData?[QuickActions.TabURLKey] as? String)?.asURL {
                 handleOpenURL(withBrowserViewController: browserViewController, urlToOpen: urlToOpen)
             }

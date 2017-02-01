@@ -306,12 +306,12 @@ class TabManager: NSObject {
         } else {
             let newTabChoice = NewTabAccessors.getNewTabPage(prefs)
             switch newTabChoice {
-            case .HomePage:
+            case .homePage:
                 // We definitely have a homepage if we've got here 
                 // (so we can safely dereference it).
                 let url = HomePageAccessors.getHomePage(prefs)!
                 tab.loadRequest(URLRequest(URL: url))
-            case .BlankPage:
+            case .blankPage:
                 // Do nothing: we're already seeing a blank page.
                 break
             default:

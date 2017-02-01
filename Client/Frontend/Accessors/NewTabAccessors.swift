@@ -40,30 +40,30 @@ enum NewTabPage: String {
 
     var settingTitle: String {
         switch self {
-        case .BlankPage:
+        case .blankPage:
             return Strings.SettingsNewTabBlankPage
-        case .HomePage:
+        case .homePage:
             return Strings.SettingsNewTabHomePage
-        case .TopSites:
+        case .topSites:
             return Strings.SettingsNewTabTopSites
-        case .Bookmarks:
+        case .bookmarks:
             return Strings.SettingsNewTabBookmarks
-        case .History:
+        case .history:
             return Strings.SettingsNewTabHistory
-        case .ReadingList:
+        case .readingList:
             return Strings.SettingsNewTabReadingList
         }
     }
 
     var homePanelType: HomePanelType? {
         switch self {
-        case .TopSites:
+        case .topSites:
             return HomePanelType.topSites
-        case .Bookmarks:
+        case .bookmarks:
             return HomePanelType.bookmarks
-        case .History:
+        case .history:
             return HomePanelType.history
-        case .ReadingList:
+        case .readingList:
             return HomePanelType.readingList
         default:
             return nil

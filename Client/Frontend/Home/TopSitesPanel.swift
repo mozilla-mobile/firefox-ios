@@ -639,7 +639,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
 
         // We've looked before recently and didn't find a favicon
         switch icon.type {
-        case .NoneFound where Date().timeIntervalSinceDate(icon.date) < FaviconFetcher.ExpirationTime:
+        case .noneFound where Date().timeIntervalSinceDate(icon.date) < FaviconFetcher.ExpirationTime:
             self.setDefaultThumbnailBackgroundForCell(cell)
         default:
             cell.imageView.sd_setImage(with: icon.url.asURL, completed: { (img, err, type, url) -> Void in

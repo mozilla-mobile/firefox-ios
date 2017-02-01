@@ -8,7 +8,7 @@ import Shared
 /// Screen presented to the user when selecting the page that is displayed when the user goes to a new tab.
 class NewTabChoiceViewController: UITableViewController {
 
-    let newTabOptions: [NewTabPage] = [.BlankPage, .TopSites, .Bookmarks, .History, .HomePage]
+    let newTabOptions: [NewTabPage] = [.blankPage, .topSites, .bookmarks, .history, .homePage]
 
     let prefs: Prefs
     var currentChoice: NewTabPage!

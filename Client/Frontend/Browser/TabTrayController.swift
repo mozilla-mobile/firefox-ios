@@ -1148,41 +1148,41 @@ extension TabTrayController: MenuActionDelegate {
     func performMenuAction(_ action: MenuAction, withAppState appState: AppState) {
         if let menuAction = AppMenuAction(rawValue: action.action) {
             switch menuAction {
-            case .OpenNewNormalTab:
+            case .openNewNormalTab:
                 DispatchQueue.main.async {
                     if self.privateMode {
                         self.SELdidTogglePrivateMode()
                     }
                     self.openNewTab()
                 }
-            case .OpenNewPrivateTab:
+            case .openNewPrivateTab:
                 DispatchQueue.main.async {
                     if !self.privateMode {
                         self.SELdidTogglePrivateMode()
                     }
                     self.openNewTab()
                 }
-            case .OpenSettings:
+            case .openSettings:
                 DispatchQueue.main.async {
                     self.SELdidClickSettingsItem()
                 }
-            case .CloseAllTabs:
+            case .closeAllTabs:
                 DispatchQueue.main.async {
                     self.closeTabsForCurrentTray()
                 }
-            case .OpenTopSites:
+            case .openTopSites:
                 DispatchQueue.main.async {
                     self.openNewTab(PrivilegedRequest(coder: HomePanelType.topSites.localhostURL))
                 }
-            case .OpenBookmarks:
+            case .openBookmarks:
                 DispatchQueue.main.async {
                     self.openNewTab(PrivilegedRequest(coder: HomePanelType.bookmarks.localhostURL))
                 }
-            case .OpenHistory:
+            case .openHistory:
                 DispatchQueue.main.async {
                     self.openNewTab(PrivilegedRequest(coder: HomePanelType.history.localhostURL))
                 }
-            case .OpenReadingList:
+            case .openReadingList:
                 DispatchQueue.main.async {
                     self.openNewTab(PrivilegedRequest(coder: HomePanelType.readingList.localhostURL))
                 }

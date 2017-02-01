@@ -510,10 +510,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if let action = SentTabAction(rawValue: actionId) {
                 viewURLInNewTab(notification)
                 switch(action) {
-                case .Bookmark:
+                case .bookmark:
                     addBookmark(notification)
                     break
-                case .ReadingList:
+                case .readingList:
                     addToReadingList(notification)
                     break
                 default:
