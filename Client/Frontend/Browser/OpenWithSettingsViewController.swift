@@ -9,10 +9,10 @@ class OpenWithSettingsViewController: UITableViewController {
     typealias MailtoProviderEntry = (name: String, scheme: String, enabled: Bool)
     var mailProviderSource = [MailtoProviderEntry]()
 
-    private let prefs: Prefs
-    private var currentChoice: String = "mailto"
+    fileprivate let prefs: Prefs
+    fileprivate var currentChoice: String = "mailto"
 
-    private let BasicCheckmarkCell = "BasicCheckmarkCell"
+    fileprivate let BasicCheckmarkCell = "BasicCheckmarkCell"
 
     init(prefs: Prefs) {
         self.prefs = prefs
@@ -29,10 +29,10 @@ class OpenWithSettingsViewController: UITableViewController {
 
         tableView.accessibilityIdentifier = "OpenWithPage.Setting.Options"
 
-        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: BasicCheckmarkCell)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: BasicCheckmarkCell)
         tableView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
 
-        let headerFooterFrame = CGRect(origin: CGPointZero, size: CGSize(width: self.view.frame.width, height: UIConstants.TableViewHeaderFooterHeight))
+        let headerFooterFrame = CGRect(origin: CGPoint.zero, size: CGSize(width: self.view.frame.width, height: UIConstants.TableViewHeaderFooterHeight))
         let headerView = SettingsTableSectionHeaderFooterView(frame: headerFooterFrame)
         headerView.titleLabel.text = Strings.SettingsOpenWithPageTitle
         headerView.showTopBorder = false
@@ -45,15 +45,15 @@ class OpenWithSettingsViewController: UITableViewController {
         tableView.tableHeaderView = headerView
         tableView.tableFooterView = footerView
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(OpenWithSettingsViewController.appDidBecomeActive), name: UIApplicationDidBecomeActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(OpenWithSettingsViewController.appDidBecomeActive), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         appDidBecomeActive()
     }
 
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.prefs.setString(currentChoice, forKey: PrefsKeys.KeyMailToOption)
     }
@@ -84,37 +84,37 @@ class OpenWithSettingsViewController: UITableViewController {
     }
 
     func reloadMailProviderSource() {
-        if let path = NSBundle.mainBundle().pathForResource("MailSchemes", ofType: "plist"), let dictRoot = NSArray(contentsOfFile: path) {
+        if let path = Bundle.main.path(forResource: "MailSchemes", ofType: "plist"), let dictRoot = NSArray(contentsOfFile: path) {
             mailProviderSource = dictRoot.map {  dict in (name: dict["name"] as! String, scheme: dict["scheme"] as! String, enabled: canOpenMailScheme(dict["scheme"] as! String)) }
         }
     }
 
-    func canOpenMailScheme(scheme: String) -> Bool {
-        if let url = NSURL(string: scheme) {
-            return UIApplication.sharedApplication().canOpenURL(url)
+    func canOpenMailScheme(_ scheme: String) -> Bool {
+        if let url = URL(string: scheme) {
+            return UIApplication.shared.canOpenURL(url)
         }
         return false
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(BasicCheckmarkCell, forIndexPath: indexPath)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: BasicCheckmarkCell, for: indexPath)
 
         let option = mailProviderSource[indexPath.row]
 
         cell.textLabel?.attributedText = NSAttributedString.tableRowTitle(option.name)
-        cell.accessoryType = (currentChoice == option.scheme && option.enabled) ? .Checkmark : .None
+        cell.accessoryType = (currentChoice == option.scheme && option.enabled) ? .checkmark : .none
 
         cell.textLabel?.textColor = option.enabled ? UIConstants.TableViewRowTextColor : UIConstants.TableViewDisabledRowTextColor
-        cell.userInteractionEnabled = option.enabled
+        cell.isUserInteractionEnabled = option.enabled
 
         return cell
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return mailProviderSource.count
     }
 
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.currentChoice = mailProviderSource[indexPath.row].scheme
         tableView.reloadData()
     }

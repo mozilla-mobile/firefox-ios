@@ -13,7 +13,7 @@ private let log = Logger.browserLogger
 private let browsingActivityType: String = "org.mozilla.ios.firefox.browsing"
 
 class SpotlightHelper: NSObject {
-    private(set) var activity: NSUserActivity? {
+    fileprivate(set) var activity: NSUserActivity? {
         willSet {
             activity?.invalidate()
         }
@@ -22,20 +22,20 @@ class SpotlightHelper: NSObject {
         }
     }
 
-    private var urlForThumbnail: NSURL?
-    private var thumbnailImage: UIImage?
+    fileprivate var urlForThumbnail: URL?
+    fileprivate var thumbnailImage: UIImage?
 
-    private let createNewTab: ((url: NSURL) -> ())?
+    fileprivate let createNewTab: ((_ url: URL) -> ())?
 
-    private weak var tab: Tab?
+    fileprivate weak var tab: Tab?
 
-    init(tab: Tab, openURL: ((url: NSURL) -> ())? = nil) {
+    init(tab: Tab, openURL: ((_ url: URL) -> ())? = nil) {
         createNewTab = openURL
         self.tab = tab
 
-        if let path = NSBundle.mainBundle().pathForResource("SpotlightHelper", ofType: "js") {
-            if let source = try? NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) as String {
-                let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
+        if let path = Bundle.main.path(forResource: "SpotlightHelper", ofType: "js") {
+            if let source = try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String {
+                let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.atDocumentEnd, forMainFrameOnly: true)
                 tab.webView!.configuration.userContentController.addUserScript(userScript)
             }
         }
@@ -47,13 +47,13 @@ class SpotlightHelper: NSObject {
         self.activity = nil
     }
 
-    func update(pageContent: [String: String], forURL url: NSURL) {
+    func update(_ pageContent: [String: String], forURL url: URL) {
         guard url.isWebPage(includeDataURIs: false) else {
             return
         }
 
         var activity: NSUserActivity
-        if let currentActivity = self.activity where currentActivity.webpageURL == url {
+        if let currentActivity = self.activity, currentActivity.webpageURL == url {
             activity = currentActivity
         } else {
             activity = createUserActivity()
@@ -68,7 +68,7 @@ class SpotlightHelper: NSObject {
             attrs.contentDescription = pageContent["description"]
             attrs.contentURL = url
             activity.contentAttributeSet = attrs
-            activity.eligibleForSearch = true
+            activity.isEligibleForSearch = true
 
         }
 
@@ -79,8 +79,8 @@ class SpotlightHelper: NSObject {
         }
     }
 
-    func updateImage(image: UIImage? = nil, forURL url: NSURL) {
-        guard let currentActivity = self.activity where currentActivity.webpageURL == url else {
+    func updateImage(_ image: UIImage? = nil, forURL url: URL) {
+        guard let currentActivity = self.activity, currentActivity.webpageURL == url else {
             // We've got a favicon, but not for this URL.
             // Let's store it until we can get the title and description.
             urlForThumbnail = url
@@ -108,9 +108,9 @@ class SpotlightHelper: NSObject {
 }
 
 extension SpotlightHelper: NSUserActivityDelegate {
-    @objc func userActivityWasContinued(userActivity: NSUserActivity) {
+    @objc func userActivityWasContinued(_ userActivity: NSUserActivity) {
         if let url = userActivity.webpageURL {
-            createNewTab?(url: url)
+            createNewTab?(url)
         }
     }
 }
@@ -124,11 +124,11 @@ extension SpotlightHelper: TabHelper {
         return "spotlightMessageHandler"
     }
 
-    func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
         if let tab = self.tab,
             let url = tab.url,
             let payload = message.body as? [String: String] {
-                update(payload, forURL: url)
+                update(payload, forURL: url as URL)
         }
     }
 }

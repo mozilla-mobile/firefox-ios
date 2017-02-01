@@ -149,7 +149,7 @@ class ClientPickerViewController: UITableViewController {
         }
     }
 
-    private func reloadClients() {
+    fileprivate func reloadClients() {
         guard let profile = self.profile else {
             return
         }

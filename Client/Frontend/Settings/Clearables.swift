@@ -20,7 +20,7 @@ protocol Clearable {
 }
 
 class ClearableError: MaybeErrorType {
-    private let msg: String
+    fileprivate let msg: String
     init(msg: String) {
         self.msg = msg
     }
@@ -41,10 +41,10 @@ class HistoryClearable: Clearable {
 
     func clear() -> Success {
         return profile.history.clearHistory().bind { success in
-            SDImageCache.sharedImageCache().clearDisk()
-            SDImageCache.sharedImageCache().clearMemory()
+            SDImageCache.shared().clearDisk()
+            SDImageCache.shared().clearMemory()
             self.profile.recentlyClosedTabs.clearTabs()
-            NSNotificationCenter.defaultCenter().postNotificationName(NotificationPrivateDataClearedHistory, object: nil)
+            NotificationCenter.default.post(name: NotificationPrivateDataClearedHistory, object: nil)
             log.debug("HistoryClearable succeeded: \(success).")
             return Deferred(value: success)
         }
@@ -52,9 +52,9 @@ class HistoryClearable: Clearable {
 }
 
 struct ClearableErrorType: MaybeErrorType {
-    let err: ErrorType
+    let err: Error
 
-    init(err: ErrorType) {
+    init(err: Error) {
         self.err = err
     }
 
@@ -77,21 +77,21 @@ class CacheClearable: Clearable {
 
     func clear() -> Success {
         let dataTypes = Set([WKWebsiteDataTypeDiskCache, WKWebsiteDataTypeMemoryCache])
-        WKWebsiteDataStore.defaultDataStore().removeDataOfTypes(dataTypes, modifiedSince: NSDate.distantPast(), completionHandler: {})
+        WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: Date.distantPast, completionHandler: {})
 
         log.debug("CacheClearable succeeded.")
         return succeed()
     }
 }
 
-private func deleteLibraryFolderContents(folder: String) throws {
-    let manager = NSFileManager.defaultManager()
-    let library = manager.URLsForDirectory(NSSearchPathDirectory.LibraryDirectory, inDomains: .UserDomainMask)[0]
-    let dir = library.URLByAppendingPathComponent(folder)
-    let contents = try manager.contentsOfDirectoryAtPath(dir!.path!)
+private func deleteLibraryFolderContents(_ folder: String) throws {
+    let manager = FileManager.default
+    let library = manager.urls(for: FileManager.SearchPathDirectory.libraryDirectory, in: .userDomainMask)[0]
+    let dir = library.appendingPathComponent(folder)
+    let contents = try manager.contentsOfDirectory(atPath: dir.path)
     for content in contents {
         do {
-            try manager.removeItemAtURL(dir!.URLByAppendingPathComponent(content)!)
+            try manager.removeItem(at: dir.appendingPathComponent(content))
         } catch where ((error as NSError).userInfo[NSUnderlyingErrorKey] as? NSError)?.code == Int(EPERM) {
             // "Not permitted". We ignore this.
             log.debug("Couldn't delete some library contents.")
@@ -99,11 +99,11 @@ private func deleteLibraryFolderContents(folder: String) throws {
     }
 }
 
-private func deleteLibraryFolder(folder: String) throws {
-    let manager = NSFileManager.defaultManager()
-    let library = manager.URLsForDirectory(NSSearchPathDirectory.LibraryDirectory, inDomains: .UserDomainMask)[0]
-    let dir = library.URLByAppendingPathComponent(folder)
-    try manager.removeItemAtURL(dir!)
+private func deleteLibraryFolder(_ folder: String) throws {
+    let manager = FileManager.default
+    let library = manager.urls(for: FileManager.SearchPathDirectory.libraryDirectory, in: .userDomainMask)[0]
+    let dir = library.appendingPathComponent(folder)
+    try manager.removeItem(at: dir)
 }
 
 // Removes all app cache storage.
@@ -119,7 +119,7 @@ class SiteDataClearable: Clearable {
 
     func clear() -> Success {
         let dataTypes = Set([WKWebsiteDataTypeOfflineWebApplicationCache])
-        WKWebsiteDataStore.defaultDataStore().removeDataOfTypes(dataTypes, modifiedSince: NSDate.distantPast(), completionHandler: {})
+        WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: Date.distantPast, completionHandler: {})
 
         log.debug("SiteDataClearable succeeded.")
         return succeed()
@@ -139,7 +139,7 @@ class CookiesClearable: Clearable {
 
     func clear() -> Success {
         let dataTypes = Set([WKWebsiteDataTypeCookies, WKWebsiteDataTypeLocalStorage, WKWebsiteDataTypeSessionStorage, WKWebsiteDataTypeWebSQLDatabases, WKWebsiteDataTypeIndexedDBDatabases])
-        WKWebsiteDataStore.defaultDataStore().removeDataOfTypes(dataTypes, modifiedSince: NSDate.distantPast(), completionHandler: {})
+        WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: Date.distantPast, completionHandler: {})
 
         log.debug("CookiesClearable succeeded.")
         return succeed()

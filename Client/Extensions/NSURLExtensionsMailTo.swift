@@ -13,34 +13,34 @@ public struct MailToMetadata {
     public let headers: [String: String]
 }
 
-public extension NSURL {
+public extension URL {
 
     /**
      Extracts the metadata associated with a mailto: URL according to RFC 2368
      https://tools.ietf.org/html/rfc2368
      */
     func mailToMetadata() -> MailToMetadata? {
-        guard let urlString = absoluteString where scheme == "mailto" else {
+        guard let urlString = absoluteString, scheme == "mailto" else {
             return nil
         }
 
         // Extract 'to' value
-        let toStart = urlString.startIndex.advancedBy("mailto:".characters.count)
-        let toEnd = urlString.characters.indexOf("?") ?? urlString.endIndex
+        let toStart = urlString.characters.index(urlString.startIndex, offsetBy: "mailto:".characters.count)
+        let toEnd = urlString.characters.index(of: "?") ?? urlString.endIndex
 
-        let to = urlString.substringWithRange(toStart..<toEnd)
+        let to = urlString.substring(with: toStart..<toEnd)
 
         guard toEnd != urlString.endIndex else {
             return MailToMetadata(to: to, headers: [String: String]())
         }
 
         // Extract headers
-        let headersString = urlString.substringWithRange(toEnd.advancedBy(1)..<urlString.endIndex)
+        let headersString = urlString.substring(with: <#T##String.CharacterView corresponding to `toEnd`##String.CharacterView#>.index(toEnd, offsetBy: 1)..<urlString.endIndex)
         var headers = [String: String]()
-        let headerComponents = headersString.componentsSeparatedByString("&")
+        let headerComponents = headersString.components(separatedBy: "&")
 
         headerComponents.forEach { headerPair in
-            let components = headerPair.componentsSeparatedByString("=")
+            let components = headerPair.components(separatedBy: "=")
             guard components.count == 2 else {
                 return
             }

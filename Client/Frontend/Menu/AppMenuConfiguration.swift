@@ -28,11 +28,11 @@ enum AppMenuAction: String {
 
 struct AppMenuConfiguration: MenuConfiguration {
 
-    internal private(set) var menuItems = [MenuItem]()
-    internal private(set) var menuToolbarItems: [MenuToolbarItem]?
-    internal private(set) var numberOfItemsInRow: Int = 0
+    internal fileprivate(set) var menuItems = [MenuItem]()
+    internal fileprivate(set) var menuToolbarItems: [MenuToolbarItem]?
+    internal fileprivate(set) var numberOfItemsInRow: Int = 0
 
-    private(set) var isPrivateMode: Bool = false
+    fileprivate(set) var isPrivateMode: Bool = false
 
     init(appState: AppState) {
         menuItems = menuItemsForAppState(appState)
@@ -41,7 +41,7 @@ struct AppMenuConfiguration: MenuConfiguration {
         isPrivateMode = appState.ui.isPrivate()
     }
 
-    func menuForState(appState: AppState) -> MenuConfiguration {
+    func menuForState(_ appState: AppState) -> MenuConfiguration {
         return AppMenuConfiguration(appState: appState)
     }
 
@@ -63,7 +63,7 @@ struct AppMenuConfiguration: MenuConfiguration {
     }
 
     func menuFont() -> UIFont {
-        return UIFont.systemFontOfSize(11)
+        return UIFont.systemFont(ofSize: 11)
     }
 
     func menuIcon() -> UIImage? {
@@ -75,7 +75,7 @@ struct AppMenuConfiguration: MenuConfiguration {
     }
 
     func shadowColor() -> UIColor {
-        return isPrivateMode ? UIColor.darkGrayColor() : UIColor.lightGrayColor()
+        return isPrivateMode ? UIColor.darkGray : UIColor.lightGray
     }
 
     func selectedItemTintColor() -> UIColor {
@@ -86,9 +86,9 @@ struct AppMenuConfiguration: MenuConfiguration {
         return UIConstants.MenuDisabledItemTintColor
     }
 
-    private func numberOfMenuItemsPerRowForAppState(appState: AppState) -> Int {
+    fileprivate func numberOfMenuItemsPerRowForAppState(_ appState: AppState) -> Int {
         switch appState.ui {
-        case .TabTray:
+        case .tabTray:
             return 4
         default:
             return 3
@@ -96,10 +96,10 @@ struct AppMenuConfiguration: MenuConfiguration {
     }
 
     // the items should be added to the array according to desired display order
-    private func menuItemsForAppState(appState: AppState) -> [MenuItem] {
+    fileprivate func menuItemsForAppState(_ appState: AppState) -> [MenuItem] {
         var menuItems = [MenuItem]()
         switch appState.ui {
-        case .Tab(let tabState):
+        case .tab(let tabState):
             menuItems.append(AppMenuConfiguration.FindInPageMenuItem)
             menuItems.append(tabState.desktopSite ? AppMenuConfiguration.RequestMobileMenuItem : AppMenuConfiguration.RequestDesktopMenuItem)
 
@@ -109,7 +109,7 @@ struct AppMenuConfiguration: MenuConfiguration {
                 menuItems.append(AppMenuConfiguration.OpenHomePageMenuItem)
             } else {
                 var homePageMenuItem = AppMenuConfiguration.SetHomePageMenuItem
-                if let url = tabState.url where !url.isWebPage(includeDataURIs: true) || url.isLocal {
+                if let url = tabState.url, !url.isWebPage(includeDataURIs: true) || url.isLocal {
                     homePageMenuItem.isDisabled = true
                 }
                 menuItems.append(homePageMenuItem)
@@ -117,7 +117,7 @@ struct AppMenuConfiguration: MenuConfiguration {
             menuItems.append(AppMenuConfiguration.NewTabMenuItem)
             menuItems.append(AppMenuConfiguration.NewPrivateTabMenuItem)
             var bookmarkMenuItem = tabState.isBookmarked ? AppMenuConfiguration.RemoveBookmarkMenuItem : AppMenuConfiguration.AddBookmarkMenuItem
-            if let url = tabState.url where !url.isWebPage(includeDataURIs: true) || url.isLocal {
+            if let url = tabState.url, !url.isWebPage(includeDataURIs: true) || url.isLocal {
                 bookmarkMenuItem.isDisabled = true
             }
             menuItems.append(bookmarkMenuItem)
@@ -136,7 +136,7 @@ struct AppMenuConfiguration: MenuConfiguration {
                 }
             }
             menuItems.append(AppMenuConfiguration.SettingsMenuItem)
-        case .HomePanels:
+        case .homePanels:
             menuItems.append(AppMenuConfiguration.NewTabMenuItem)
             menuItems.append(AppMenuConfiguration.NewPrivateTabMenuItem)
             if HomePageAccessors.isButtonInMenu(appState) && HomePageAccessors.hasHomePage(appState) {
@@ -157,7 +157,7 @@ struct AppMenuConfiguration: MenuConfiguration {
                 }
             }
             menuItems.append(AppMenuConfiguration.SettingsMenuItem)
-        case .EmptyTab, .Loading:
+        case .emptyTab, .loading:
             menuItems.append(AppMenuConfiguration.NewTabMenuItem)
             menuItems.append(AppMenuConfiguration.NewPrivateTabMenuItem)
             if HomePageAccessors.isButtonInMenu(appState) && HomePageAccessors.hasHomePage(appState) {
@@ -171,7 +171,7 @@ struct AppMenuConfiguration: MenuConfiguration {
                 }
             }
             menuItems.append(AppMenuConfiguration.SettingsMenuItem)
-        case .TabTray:
+        case .tabTray:
             menuItems.append(AppMenuConfiguration.NewTabMenuItem)
             menuItems.append(AppMenuConfiguration.NewPrivateTabMenuItem)
             menuItems.append(AppMenuConfiguration.CloseAllTabsMenuItem)
@@ -181,10 +181,10 @@ struct AppMenuConfiguration: MenuConfiguration {
     }
 
     // the items should be added to the array according to desired display order
-    private func menuToolbarItemsForAppState(appState: AppState) -> [MenuToolbarItem]? {
+    fileprivate func menuToolbarItemsForAppState(_ appState: AppState) -> [MenuToolbarItem]? {
         let menuToolbarItems: [MenuToolbarItem]?
         switch appState.ui {
-        case .Tab, .TabTray:
+        case .tab, .tabTray:
             menuToolbarItems = [AppMenuConfiguration.TopSitesMenuToolbarItem,
                                 AppMenuConfiguration.BookmarksMenuToolbarItem,
                                 AppMenuConfiguration.HistoryMenuToolbarItem,
@@ -200,101 +200,101 @@ struct AppMenuConfiguration: MenuConfiguration {
 
 extension AppMenuConfiguration {
 
-    private static var NewTabMenuItem: MenuItem {
+    fileprivate static var NewTabMenuItem: MenuItem {
         return AppMenuItem(title: NewTabTitleString, accessibilityIdentifier: "NewTabMenuItem", action: MenuAction(action: AppMenuAction.OpenNewNormalTab.rawValue), icon: "menu-NewTab", privateModeIcon: "menu-NewTab-pbm")
     }
 
-    private static var NewPrivateTabMenuItem: MenuItem {
+    fileprivate static var NewPrivateTabMenuItem: MenuItem {
         return AppMenuItem(title: NewPrivateTabTitleString, accessibilityIdentifier: "NewPrivateTabMenuItem", action:  MenuAction(action: AppMenuAction.OpenNewPrivateTab.rawValue), icon: "menu-NewPrivateTab", privateModeIcon: "menu-NewPrivateTab-pbm")
     }
 
-    private static var AddBookmarkMenuItem: MenuItem {
+    fileprivate static var AddBookmarkMenuItem: MenuItem {
         return AppMenuItem(title: AddBookmarkTitleString, accessibilityIdentifier: "AddBookmarkMenuItem", action:  MenuAction(action: AppMenuAction.ToggleBookmarkStatus.rawValue), icon: "menu-Bookmark", privateModeIcon: "menu-Bookmark-pbm", selectedIcon: "menu-RemoveBookmark", animation: JumpAndSpinAnimator())
     }
 
-    private static var RemoveBookmarkMenuItem: MenuItem {
+    fileprivate static var RemoveBookmarkMenuItem: MenuItem {
         return AppMenuItem(title: RemoveBookmarkTitleString, accessibilityIdentifier: "RemoveBookmarkMenuItem", action:  MenuAction(action: AppMenuAction.ToggleBookmarkStatus.rawValue), icon: "menu-RemoveBookmark", privateModeIcon: "menu-RemoveBookmark")
     }
 
-    private static var FindInPageMenuItem: MenuItem {
+    fileprivate static var FindInPageMenuItem: MenuItem {
         return AppMenuItem(title: FindInPageTitleString, accessibilityIdentifier: "FindInPageMenuItem", action:  MenuAction(action: AppMenuAction.FindInPage.rawValue), icon: "menu-FindInPage", privateModeIcon: "menu-FindInPage-pbm")
     }
 
-    private static var RequestDesktopMenuItem: MenuItem {
+    fileprivate static var RequestDesktopMenuItem: MenuItem {
         return AppMenuItem(title: ViewDesktopSiteTitleString, accessibilityIdentifier: "RequestDesktopMenuItem", action:  MenuAction(action: AppMenuAction.ToggleBrowsingMode.rawValue), icon: "menu-RequestDesktopSite", privateModeIcon: "menu-RequestDesktopSite-pbm")
     }
 
-    private static var RequestMobileMenuItem: MenuItem {
+    fileprivate static var RequestMobileMenuItem: MenuItem {
         return AppMenuItem(title: ViewMobileSiteTitleString, accessibilityIdentifier: "RequestMobileMenuItem", action:  MenuAction(action: AppMenuAction.ToggleBrowsingMode.rawValue), icon: "menu-ViewMobile", privateModeIcon: "menu-ViewMobile-pbm")
     }
 
-    private static var HideImageModeMenuItem: MenuItem {
+    fileprivate static var HideImageModeMenuItem: MenuItem {
         return AppMenuItem(title: Strings.MenuNoImageModeTurnOnLabel, accessibilityIdentifier: "HideImageModeMenuItem", action:  MenuAction(action: AppMenuAction.HideImageMode.rawValue), icon: "menu-NoImageMode", privateModeIcon: "menu-NoImageMode-pbm")
     }
 
-    private static var ShowImageModeMenuItem: MenuItem {
+    fileprivate static var ShowImageModeMenuItem: MenuItem {
         return AppMenuItem(title: Strings.MenuNoImageModeTurnOffLabel, accessibilityIdentifier: "ShowImageModeMenuItem", action:  MenuAction(action: AppMenuAction.ShowImageMode.rawValue), icon: "menu-NoImageMode-Engaged", privateModeIcon: "menu-NoImageMode-Engaged")
    }
  
-    private static var HideNightModeItem: MenuItem {
+    fileprivate static var HideNightModeItem: MenuItem {
         return AppMenuItem(title: Strings.MenuNightModeTurnOnLabel, accessibilityIdentifier: "HideNightModeItem", action:  MenuAction(action: AppMenuAction.HideNightMode.rawValue), icon: "menu-NightMode", privateModeIcon: "menu-NightMode-pbm")
     }
 
-    private static var ShowNightModeItem: MenuItem {
+    fileprivate static var ShowNightModeItem: MenuItem {
         return AppMenuItem(title: Strings.MenuNightModeTurnOffLabel, accessibilityIdentifier: "ShowNightModeItem", action:  MenuAction(action: AppMenuAction.ShowNightMode.rawValue), icon: "menu-NightMode-Engaged", privateModeIcon: "menu-NightMode-Engaged")
     }
 
-    private static var SettingsMenuItem: MenuItem {
+    fileprivate static var SettingsMenuItem: MenuItem {
         return AppMenuItem(title: SettingsTitleString, accessibilityIdentifier: "SettingsMenuItem", action:  MenuAction(action: AppMenuAction.OpenSettings.rawValue), icon: "menu-Settings", privateModeIcon: "menu-Settings-pbm")
     }
 
-    private static var CloseAllTabsMenuItem: MenuItem {
+    fileprivate static var CloseAllTabsMenuItem: MenuItem {
         return AppMenuItem(title: CloseAllTabsTitleString, accessibilityIdentifier: "CloseAllTabsMenuItem", action:  MenuAction(action: AppMenuAction.CloseAllTabs.rawValue), icon: "menu-CloseTabs", privateModeIcon: "menu-CloseTabs-pbm")
     }
 
-    private static var OpenHomePageMenuItem: MenuItem {
+    fileprivate static var OpenHomePageMenuItem: MenuItem {
         return AppMenuItem(title: OpenHomePageTitleString, accessibilityIdentifier: "OpenHomePageMenuItem", action: MenuAction(action: AppMenuAction.OpenHomePage.rawValue), icon: "menu-Home", privateModeIcon: "menu-Home-pbm", selectedIcon: "menu-Home-Engaged")
     }
 
-    private static var SetHomePageMenuItem: MenuItem {
+    fileprivate static var SetHomePageMenuItem: MenuItem {
         return AppMenuItem(title: SetHomePageTitleString, accessibilityIdentifier: "SetHomePageMenuItem", action: MenuAction(action: AppMenuAction.SetHomePage.rawValue), icon: "menu-Home", privateModeIcon: "menu-Home-pbm", selectedIcon: "menu-Home-Engaged")
     }
 
-    private static var SharePageMenuItem: MenuItem {
+    fileprivate static var SharePageMenuItem: MenuItem {
         return AppMenuItem(title: SharePageTitleString, accessibilityIdentifier: "SharePageMenuItem", action: MenuAction(action: AppMenuAction.SharePage.rawValue), icon: "menu-Send", privateModeIcon: "menu-Send-pbm", selectedIcon: "menu-Send-Engaged")
     }
 
-    private static var TopSitesMenuToolbarItem: MenuToolbarItem {
+    fileprivate static var TopSitesMenuToolbarItem: MenuToolbarItem {
         return AppMenuToolbarItem(title: TopSitesTitleString, accessibilityIdentifier: "TopSitesMenuToolbarItem", action:  MenuAction(action: AppMenuAction.OpenTopSites.rawValue), icon: "menu-panel-TopSites")
     }
 
-    private static var BookmarksMenuToolbarItem: MenuToolbarItem {
+    fileprivate static var BookmarksMenuToolbarItem: MenuToolbarItem {
         return AppMenuToolbarItem(title: BookmarksTitleString, accessibilityIdentifier: "BookmarksMenuToolbarItem", action:  MenuAction(action: AppMenuAction.OpenBookmarks.rawValue), icon: "menu-panel-Bookmarks")
     }
 
-    private static var HistoryMenuToolbarItem: MenuToolbarItem {
+    fileprivate static var HistoryMenuToolbarItem: MenuToolbarItem {
         return AppMenuToolbarItem(title: HistoryTitleString, accessibilityIdentifier: "HistoryMenuToolbarItem", action:  MenuAction(action: AppMenuAction.OpenHistory.rawValue), icon: "menu-panel-History")
     }
 
-    private static var ReadingListMenuToolbarItem: MenuToolbarItem {
+    fileprivate static var ReadingListMenuToolbarItem: MenuToolbarItem {
         return  AppMenuToolbarItem(title: ReadingListTitleString, accessibilityIdentifier: "ReadingListMenuToolbarItem", action:  MenuAction(action: AppMenuAction.OpenReadingList.rawValue), icon: "menu-panel-ReadingList")
     }
 
-    static let NewTabTitleString = NSLocalizedString("Menu.NewTabAction.Title", value: "New Tab", tableName: "Menu", comment: "Label for the button, displayed in the menu, used to open a new tab")
-    static let NewPrivateTabTitleString = NSLocalizedString("Menu.NewPrivateTabAction.Title", value: "New Private Tab", tableName: "Menu", comment: "Label for the button, displayed in the menu, used to open a new private tab.")
-    static let AddBookmarkTitleString = NSLocalizedString("Menu.AddBookmarkAction.Title", value: "Add Bookmark", tableName: "Menu", comment: "Label for the button, displayed in the menu, used to create a bookmark for the current website.")
-    static let RemoveBookmarkTitleString = NSLocalizedString("Menu.RemoveBookmarkAction.Title", value: "Remove Bookmark", tableName: "Menu", comment: "Label for the button, displayed in the menu, used to delete an existing bookmark for the current website.")
-    static let FindInPageTitleString = NSLocalizedString("Menu.FindInPageAction.Title", value: "Find In Page", tableName: "Menu", comment: "Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page.")
-    static let ViewDesktopSiteTitleString = NSLocalizedString("Menu.ViewDekstopSiteAction.Title", value: "Request Desktop Site", tableName: "Menu", comment: "Label for the button, displayed in the menu, used to request the desktop version of the current website.")
-    static let ViewMobileSiteTitleString = NSLocalizedString("Menu.ViewMobileSiteAction.Title", value: "Request Mobile Site", tableName: "Menu", comment: "Label for the button, displayed in the menu, used to request the mobile version of the current website.")
-    static let SettingsTitleString = NSLocalizedString("Menu.OpenSettingsAction.Title", value: "Settings", tableName: "Menu", comment: "Label for the button, displayed in the menu, used to open the Settings menu.")
-    static let CloseAllTabsTitleString = NSLocalizedString("Menu.CloseAllTabsAction.Title", value: "Close All Tabs", tableName: "Menu", comment: "Label for the button, displayed in the menu, used to close all tabs currently open.")
-    static let OpenHomePageTitleString = NSLocalizedString("Menu.OpenHomePageAction.Title", value: "Home", tableName: "Menu", comment: "Label for the button, displayed in the menu, used to navigate to the home page.")
-    static let SetHomePageTitleString = NSLocalizedString("Menu.SetHomePageAction.Title", value: "Set Homepage", tableName: "Menu", comment: "Label for the button, displayed in the menu, used to set the homepage if none is currently set.")
-    static let SharePageTitleString = NSLocalizedString("Menu.SendPageAction.Title", value: "Send", tableName: "Menu", comment: "Label for the button, displayed in the menu, used to open the share dialog.")
-    static let TopSitesTitleString = NSLocalizedString("Menu.OpenTopSitesAction.AccessibilityLabel", value: "Top Sites", tableName: "Menu", comment: "Accessibility label for the button, displayed in the menu, used to open the Top Sites home panel.")
-    static let BookmarksTitleString = NSLocalizedString("Menu.OpenBookmarksAction.AccessibilityLabel", value: "Bookmarks", tableName: "Menu", comment: "Accessibility label for the button, displayed in the menu, used to open the Bbookmarks home panel.")
-    static let HistoryTitleString = NSLocalizedString("Menu.OpenHistoryAction.AccessibilityLabel", value: "History", tableName: "Menu", comment: "Accessibility label for the button, displayed in the menu, used to open the History home panel.")
-    static let ReadingListTitleString = NSLocalizedString("Menu.OpenReadingListAction.AccessibilityLabel", value: "Reading List", tableName: "Menu", comment: "Accessibility label for the button, displayed in the menu, used to open the Reading list home panel.")
+    static let NewTabTitleString = NSLocalizedString("Menu.NewTabAction.Title", tableName: "Menu", value: "New Tab", comment: "Label for the button, displayed in the menu, used to open a new tab")
+    static let NewPrivateTabTitleString = NSLocalizedString("Menu.NewPrivateTabAction.Title", tableName: "Menu", value: "New Private Tab", comment: "Label for the button, displayed in the menu, used to open a new private tab.")
+    static let AddBookmarkTitleString = NSLocalizedString("Menu.AddBookmarkAction.Title", tableName: "Menu", value: "Add Bookmark", comment: "Label for the button, displayed in the menu, used to create a bookmark for the current website.")
+    static let RemoveBookmarkTitleString = NSLocalizedString("Menu.RemoveBookmarkAction.Title", tableName: "Menu", value: "Remove Bookmark", comment: "Label for the button, displayed in the menu, used to delete an existing bookmark for the current website.")
+    static let FindInPageTitleString = NSLocalizedString("Menu.FindInPageAction.Title", tableName: "Menu", value: "Find In Page", comment: "Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page.")
+    static let ViewDesktopSiteTitleString = NSLocalizedString("Menu.ViewDekstopSiteAction.Title", tableName: "Menu", value: "Request Desktop Site", comment: "Label for the button, displayed in the menu, used to request the desktop version of the current website.")
+    static let ViewMobileSiteTitleString = NSLocalizedString("Menu.ViewMobileSiteAction.Title", tableName: "Menu", value: "Request Mobile Site", comment: "Label for the button, displayed in the menu, used to request the mobile version of the current website.")
+    static let SettingsTitleString = NSLocalizedString("Menu.OpenSettingsAction.Title", tableName: "Menu", value: "Settings", comment: "Label for the button, displayed in the menu, used to open the Settings menu.")
+    static let CloseAllTabsTitleString = NSLocalizedString("Menu.CloseAllTabsAction.Title", tableName: "Menu", value: "Close All Tabs", comment: "Label for the button, displayed in the menu, used to close all tabs currently open.")
+    static let OpenHomePageTitleString = NSLocalizedString("Menu.OpenHomePageAction.Title", tableName: "Menu", value: "Home", comment: "Label for the button, displayed in the menu, used to navigate to the home page.")
+    static let SetHomePageTitleString = NSLocalizedString("Menu.SetHomePageAction.Title", tableName: "Menu", value: "Set Homepage", comment: "Label for the button, displayed in the menu, used to set the homepage if none is currently set.")
+    static let SharePageTitleString = NSLocalizedString("Menu.SendPageAction.Title", tableName: "Menu", value: "Send", comment: "Label for the button, displayed in the menu, used to open the share dialog.")
+    static let TopSitesTitleString = NSLocalizedString("Menu.OpenTopSitesAction.AccessibilityLabel", tableName: "Menu", value: "Top Sites", comment: "Accessibility label for the button, displayed in the menu, used to open the Top Sites home panel.")
+    static let BookmarksTitleString = NSLocalizedString("Menu.OpenBookmarksAction.AccessibilityLabel", tableName: "Menu", value: "Bookmarks", comment: "Accessibility label for the button, displayed in the menu, used to open the Bbookmarks home panel.")
+    static let HistoryTitleString = NSLocalizedString("Menu.OpenHistoryAction.AccessibilityLabel", tableName: "Menu", value: "History", comment: "Accessibility label for the button, displayed in the menu, used to open the History home panel.")
+    static let ReadingListTitleString = NSLocalizedString("Menu.OpenReadingListAction.AccessibilityLabel", tableName: "Menu", value: "Reading List", comment: "Accessibility label for the button, displayed in the menu, used to open the Reading list home panel.")
     static let MenuButtonAccessibilityLabel = NSLocalizedString("Toolbar.Menu.AccessibilityLabel", value: "Menu", comment: "Accessibility label for the Menu button.")
 }

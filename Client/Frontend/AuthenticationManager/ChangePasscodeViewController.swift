@@ -10,8 +10,8 @@ let NotificationPasscodeDidChange   = "NotificationPasscodeDidChange"
 
 /// Displayed to the user when changing an existing passcode.
 class ChangePasscodeViewController: PagingPasscodeViewController, PasscodeInputViewDelegate {
-    private var newPasscode: String?
-    private var oldPasscode: String?
+    fileprivate var newPasscode: String?
+    fileprivate var oldPasscode: String?
 
     override init() {
         super.init()
@@ -27,20 +27,20 @@ class ChangePasscodeViewController: PagingPasscodeViewController, PasscodeInputV
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         panes.forEach { $0.codeInputView.delegate = self }
 
         // Don't show the keyboard or allow typing if we're locked out. Also display the error.
         if authenticationInfo?.isLocked() ?? false {
             displayLockoutError()
-            panes.first?.codeInputView.userInteractionEnabled = false
+            panes.first?.codeInputView.isUserInteractionEnabled = false
         } else {
             panes.first?.codeInputView.becomeFirstResponder()
         }
     }
 
-    func passcodeInputView(inputView: PasscodeInputView, didFinishEnteringCode code: String) {
+    func passcodeInputView(_ inputView: PasscodeInputView, didFinishEnteringCode code: String) {
         switch currentPaneIndex {
         case 0:
             // Constraint: We need to make sure that the first passcode they've entered matches the one stored in the keychain
@@ -84,10 +84,10 @@ class ChangePasscodeViewController: PagingPasscodeViewController, PasscodeInputV
         }
     }
 
-    private func changePasscodeToCode(code: String) {
+    fileprivate func changePasscodeToCode(_ code: String) {
         authenticationInfo?.updatePasscode(code)
-        KeychainWrapper.defaultKeychainWrapper().setAuthenticationInfo(authenticationInfo)
-        let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.postNotificationName(NotificationPasscodeDidChange, object: nil)
+        KeychainWrapper.defaultKeychainWrapper.setAuthenticationInfo(authenticationInfo)
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.post(name: Notification.Name(rawValue: NotificationPasscodeDidChange), object: nil)
     }
 }

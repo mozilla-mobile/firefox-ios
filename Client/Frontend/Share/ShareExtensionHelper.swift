@@ -9,21 +9,21 @@ import OnePasswordExtension
 private let log = Logger.browserLogger
 
 class ShareExtensionHelper: NSObject {
-    private weak var selectedTab: Tab?
+    fileprivate weak var selectedTab: Tab?
 
-    private let selectedURL: NSURL
-    private var onePasswordExtensionItem: NSExtensionItem!
-    private let activities: [UIActivity]
+    fileprivate let selectedURL: URL
+    fileprivate var onePasswordExtensionItem: NSExtensionItem!
+    fileprivate let activities: [UIActivity]
     // Wechat share extension doesn't like our default data ID which is a modified to support password managers.
-    private let customDataTypeIdentifers = ["com.tencent.xin.sharetimeline"]
+    fileprivate let customDataTypeIdentifers = ["com.tencent.xin.sharetimeline"]
 
-    init(url: NSURL, tab: Tab?, activities: [UIActivity]) {
+    init(url: URL, tab: Tab?, activities: [UIActivity]) {
         self.selectedURL = url
         self.selectedTab = tab
         self.activities = activities
     }
 
-    func createActivityViewController(completionHandler: (completed: Bool, activityType: String?) -> Void) -> UIActivityViewController {
+    func createActivityViewController(_ completionHandler: @escaping (_ completed: Bool, _ activityType: String?) -> Void) -> UIActivityViewController {
         var activityItems = [AnyObject]()
 
         let printInfo = UIPrintInfo(dictionary: nil)
@@ -32,7 +32,7 @@ class ShareExtensionHelper: NSObject {
         if let absoluteString = absoluteString {
             printInfo.jobName = absoluteString
         }
-        printInfo.outputType = .General
+        printInfo.outputType = .general
         activityItems.append(printInfo)
 
         if let tab = selectedTab {
@@ -50,7 +50,7 @@ class ShareExtensionHelper: NSObject {
         // We would also hide View Later, if possible, but the exclusion list doesn't currently support
         // third-party activity types (rdar://19430419).
         activityViewController.excludedActivityTypes = [
-            UIActivityTypeAddToReadingList,
+            UIActivityType.addToReadingList,
         ]
 
         // This needs to be ready by the time the share menu has been displayed and
@@ -62,46 +62,46 @@ class ShareExtensionHelper: NSObject {
 
         activityViewController.completionWithItemsHandler = { activityType, completed, returnedItems, activityError in
             if !completed {
-                completionHandler(completed: completed, activityType: activityType)
+                completionHandler(completed, activityType.map { $0.rawValue })
                 return
             }
 
-            if self.isPasswordManagerActivityType(activityType) {
+            if self.isPasswordManagerActivityType(activityType.map { $0.rawValue }) {
                 if let logins = returnedItems {
-                    self.fillPasswords(logins)
+                    self.fillPasswords(logins as [AnyObject])
                 }
             }
 
-            completionHandler(completed: completed, activityType: activityType)
+            completionHandler(completed, activityType.map { $0.rawValue })
         }
         return activityViewController
     }
 }
 
 extension ShareExtensionHelper: UIActivityItemSource {
-    func activityViewControllerPlaceholderItem(activityViewController: UIActivityViewController) -> AnyObject {
+    func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
         if let displayURL = selectedTab?.url?.displayURL {
             return displayURL
         }
         return selectedURL
     }
 
-    func activityViewController(activityViewController: UIActivityViewController, itemForActivityType activityType: String) -> AnyObject? {
-        if isPasswordManagerActivityType(activityType) {
+    func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivityType) -> Any? {
+        if isPasswordManagerActivityType(activityType.rawValue) {
             return onePasswordExtensionItem
         } else {
             // Return the URL for the selected tab. If we are in reader view then decode
             // it so that we copy the original and not the internal localhost one.
-            if let url = selectedTab?.url?.displayURL where url.isReaderModeURL {
+            if let url = selectedTab?.url?.displayURL, url.isReaderModeURL {
                 return url.decodeReaderModeURL
             }
             return selectedTab?.url?.displayURL ?? selectedURL
         }
     }
 
-    func activityViewController(activityViewController: UIActivityViewController, dataTypeIdentifierForActivityType activityType: String?) -> String {
+    func activityViewController(_ activityViewController: UIActivityViewController, dataTypeIdentifierForActivityType activityType: UIActivityType?) -> String {
         //for these customDataID's load the default public.url because they don't seem to work properly with the 1Password UTI.
-        if let type = activityType where customDataTypeIdentifers.contains(type) {
+        if let type = activityType, customDataTypeIdentifers.contains(type) {
             return "public.url"
         }
         // Because of our UTI declaration, this UTI now satisfies both the 1Password Extension and the usual NSURL for Share extensions.
@@ -114,7 +114,7 @@ private extension ShareExtensionHelper {
         return OnePasswordExtension.sharedExtension().isAppExtensionAvailable()
     }
 
-    func isPasswordManagerActivityType(activityType: String?) -> Bool {
+    func isPasswordManagerActivityType(_ activityType: String?) -> Bool {
         if (!ShareExtensionHelper.isPasswordManagerExtensionAvailable()) {
             return false
         }
@@ -122,7 +122,7 @@ private extension ShareExtensionHelper {
         // com.agilebits.onepassword-ios.extension
         // com.app77.ios.pwsafe2.find-login-action-password-actionExtension
         // If your extension's bundle identifier does not contain "password", simply submit a pull request by adding your bundle identifier.
-        return (activityType?.rangeOfString("password") != nil)
+        return (activityType?.range(of: "password") != nil)
             || (activityType == "com.lastpass.ilastpass.LastPassExt")
             || (activityType == "in.sinew.Walletx.WalletxExt")
 
@@ -133,7 +133,7 @@ private extension ShareExtensionHelper {
             return
         }
 
-        if selectedWebView.URL?.absoluteString == nil {
+        if selectedWebView.url?.absoluteString == nil {
             return
         }
 
@@ -149,7 +149,7 @@ private extension ShareExtensionHelper {
         })
     }
 
-    func fillPasswords(returnedItems: [AnyObject]) {
+    func fillPasswords(_ returnedItems: [AnyObject]) {
         guard let selectedWebView = selectedTab?.webView else {
             return
         }
