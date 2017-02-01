@@ -54,7 +54,7 @@ class SetupPasscodeViewController: PagingPasscodeViewController, PasscodeInputVi
             }
 
             createPasscodeWithCode(code)
-            dismiss()
+            dismissAnimated()
         default:
             break
         }

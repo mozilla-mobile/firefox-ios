@@ -26,11 +26,11 @@ class BasePasscodeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.dismiss))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.dismissAnimated))
         automaticallyAdjustsScrollViewInsets = false
     }
 
-    func dismiss() {
+    func dismissAnimated() {
         self.dismiss(animated: true, completion: nil)
     }
 }
