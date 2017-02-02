@@ -34,9 +34,9 @@ class TestSQLiteLogins: XCTestCase {
         log.debug("Created \(self.login)")
         let expectation = self.expectation(description: "Add login")
 
-        addLogin(login) >>>
-            getLoginsFor(login.protectionSpace, expected: [login]) >>>
-            done(expectation)
+        addLogin(login)
+            >>> getLoginsFor(login.protectionSpace, expected: [login])
+            >>> done(expectation)
 
         waitForExpectations(timeout: 10.0, handler: nil)
     }
@@ -58,10 +58,10 @@ class TestSQLiteLogins: XCTestCase {
     func testRemoveLogin() {
         let expectation = self.expectation(description: "Remove login")
 
-        addLogin(login) >>>
-            removeLogin(login) >>>
-            getLoginsFor(login.protectionSpace, expected: []) >>>
-            done(expectation)
+        addLogin(login)
+            >>> { self.removeLogin(self.login) }
+            >>> getLoginsFor(login.protectionSpace, expected: [])
+            >>> done(expectation)
 
         waitForExpectations(timeout: 10.0, handler: nil)
     }
@@ -107,8 +107,7 @@ class TestSQLiteLogins: XCTestCase {
         let updated = Login.createWithHostname("hostname1", username: "username1", password: "password3", formSubmitURL: formSubmitURL)
         updated.guid = self.login.guid
 
-        addLogin(login) >>>
-            updateLogin(updated) >>>
+        addLogin(login) >>> { self.updateLogin(updated) } >>>
             getLoginsFor(login.protectionSpace, expected: [updated]) >>>
             done(expectation)
 
@@ -258,12 +257,14 @@ class TestSQLiteLogins: XCTestCase {
     }
     */
 
-    func done(_ expectation: XCTestExpectation) -> Success {
-        return removeAllLogins()
-           >>> getLoginsFor(login.protectionSpace, expected: [])
-           >>> {
-                expectation.fulfill()
-                return succeed()
+    func done(_ expectation: XCTestExpectation) -> () -> Success {
+        return {
+            self.removeAllLogins()
+               >>> self.getLoginsFor(self.login.protectionSpace, expected: [])
+               >>> {
+                    expectation.fulfill()
+                    return succeed()
+                }
         }
     }
 
