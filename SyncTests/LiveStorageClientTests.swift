@@ -10,6 +10,7 @@ import Deferred
 @testable import Sync
 
 import XCTest
+import SwiftyJSON
 
 private class KeyFetchError: MaybeErrorType {
     var description: String {
@@ -47,7 +48,7 @@ class LiveStorageClientTests: LiveAccountTest {
         }
 
         let keyBundle: KeyBundle = KeyBundle.fromKB(kB as Data)
-        let encoder = RecordEncoder<KeysPayload>(decode: { KeysPayload($0) }, encode: { $0 })
+        let encoder = RecordEncoder<KeysPayload>(decode: { KeysPayload($0) }, encode: { $0.json })
         let encrypter = Keys(defaultBundle: keyBundle).encrypter("crypto", encoder: encoder)
 
 
