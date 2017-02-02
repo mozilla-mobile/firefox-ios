@@ -67,9 +67,9 @@ class TestBrowserDB: XCTestCase {
         XCTAssertTrue(files.exists("foo.db-wal"))
 
         // Grab a pointer to the -shm so we can compare later.
-        let shmAAttributes = try? FileManager.default.attributesOfItem(atPath: "foo.db-shm")
-        let creationA = shmAAttributes![FileAttributeKey.creationDate] as! Date
-        let inodeA = (shmAAttributes![FileAttributeKey.systemFileNumber] as! NSNumber).uintValue
+        let shmAAttributes = try! files.attributesForFileAt(relativePath: "foo.db-shm")
+        let creationA = shmAAttributes[FileAttributeKey.creationDate] as! Date
+        let inodeA = (shmAAttributes[FileAttributeKey.systemFileNumber] as! NSNumber).uintValue
 
         XCTAssertFalse(files.exists("foo.db.bak.1"))
         XCTAssertFalse(files.exists("foo.db.bak.1-shm"))
@@ -91,9 +91,9 @@ class TestBrowserDB: XCTestCase {
         XCTAssertTrue(files.exists("foo.db-wal"))
 
         // But now it's been reopened, it's not the same -shm!
-        let shmBAttributes = try? FileManager.default.attributesOfItem(atPath: "foo.db-shm")
-        let creationB = shmBAttributes![FileAttributeKey.creationDate] as! Date
-        let inodeB = (shmBAttributes![FileAttributeKey.systemFileNumber] as! NSNumber).uintValue
+        let shmBAttributes = try! files.attributesForFileAt(relativePath: "foo.db-shm")
+        let creationB = shmBAttributes[FileAttributeKey.creationDate] as! Date
+        let inodeB = (shmBAttributes[FileAttributeKey.systemFileNumber] as! NSNumber).uintValue
         XCTAssertTrue(creationA.compare(creationB) != ComparisonResult.orderedDescending)
         XCTAssertNotEqual(inodeA, inodeB)
 
