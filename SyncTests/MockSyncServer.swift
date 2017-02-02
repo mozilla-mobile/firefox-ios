@@ -5,6 +5,7 @@
 import Foundation
 import Shared
 import GCDWebServers
+import SwiftyJSON
 @testable import Sync
 
 import XCTest
@@ -195,7 +196,7 @@ class MockSyncServer {
     }
 
     func storeRecords(records: [EnvelopeJSON], inCollection collection: String, now: Timestamp? = nil) {
-        let now = now ?? NSDate.now()
+        let now = now ?? Date.now()
         let coll = self.collections[collection]
         var out = coll?.records ?? [:]
         records.forEach {
@@ -219,10 +220,10 @@ class MockSyncServer {
             }
 
             // Remove the old one.
-            self.continuations.removeValueForKey(offset)
+            self.continuations.removeValue(forKey: offset)
 
             // Handle the smaller-than-limit or no-provided-limit cases.
-            guard let limit = spec.limit where limit < remainder.count else {
+            guard let limit = spec.limit, limit < remainder.count else {
                 log.debug("Returning all remaining items.")
                 return (remainder, nil)
             }
@@ -230,7 +231,7 @@ class MockSyncServer {
             // Record the next continuation and return the first slice of records.
             let next = "\(self.offsets)"
             self.offsets += 1
-            let (returned, remaining) = splitArray(remainder, at: limit)
+            let (returned, remaining) = splitArray(items: remainder, at: limit)
             self.continuations[next] = remaining
             log.debug("Returning \(limit) items; next continuation is \(next).")
             return (returned, next)
@@ -245,7 +246,7 @@ class MockSyncServer {
         log.debug("Got \(items.count) candidate records.")
 
         if spec.newer ?? 0 > 0 {
-            items = items.filter { $0.modified > spec.newer }
+            items = items.filter { $0.modified > spec.newer! }
         }
 
         if let ids = spec.ids {
@@ -256,20 +257,20 @@ class MockSyncServer {
         if let sort = spec.sort {
             switch sort {
             case SortOption.NewestFirst:
-                items = items.sort { $0.modified > $1.modified }
+                items = items.sorted { $0.modified > $1.modified }
                 log.debug("Sorted items newest first: \(items.map { $0.modified })")
             case SortOption.OldestFirst:
-                items = items.sort { $0.modified < $1.modified }
+                items = items.sorted { $0.modified < $1.modified }
                 log.debug("Sorted items oldest first: \(items.map { $0.modified })")
             case SortOption.Index:
                 log.warning("Index sorting not yet supported.")
             }
         }
 
-        if let limit = spec.limit where items.count > limit {
+        if let limit = spec.limit, items.count > limit {
             let next = "\(self.offsets)"
             self.offsets += 1
-            let (returned, remaining) = splitArray(items, at: limit)
+            let (returned, remaining) = splitArray(items: items, at: limit)
             self.continuations[next] = remaining
             return (returned, next)
         }
