@@ -23,7 +23,7 @@ private func optStringArray(x: AnyObject?) -> [String]? {
     guard let str = x as? String else {
         return nil
     }
-    return str.componentsSeparatedByString(",").map { $0.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) }
+    return str.components(separatedBy: ",").map { $0.trimmingCharacters(in:NSCharacterSet.whitespacesAndNewlines) }
 }
 
 private struct SyncRequestSpec {
@@ -40,10 +40,10 @@ private struct SyncRequestSpec {
         // Input is "/1.5/user/storage/collection", possibly with "/id" at the end.
         // That means we get five or six path components here, the first being empty.
 
-        let parts = request.path!.componentsSeparatedByString("/").filter { !$0.isEmpty }
+        let parts = request.path!.components(separatedBy: "/").filter { !$0.isEmpty }
         let id: String?
-        let ids = optStringArray(request.query["ids"])
-        let newer = optTimestamp(request.query["newer"])
+        let ids = optStringArray(x: request.query["ids"])
+        let newer = optTimestamp(x: request.query["newer"])
         let full: Bool = request.query["full"] != nil
 
         let limit: Int?
@@ -352,28 +352,28 @@ class MockSyncServer {
         }
 
         let matchDelete: GCDWebServerMatchBlock = { method, url, headers, path, query -> GCDWebServerRequest! in
-            guard method == "DELETE" && path.startsWith(basePath) else {
+            guard method == "DELETE" && (path?.startsWith(basePath))! else {
                 return nil
             }
             return GCDWebServerRequest(method: method, url: url, headers: headers, path: path, query: query)
         }
 
-        server.addHandlerWithMatchBlock(matchDelete) { (request) -> GCDWebServerResponse! in
-            guard let spec = SyncDeleteRequestSpec.fromRequest(request) else {
+        server?.addHandler(match: matchDelete) { (request) -> GCDWebServerResponse! in
+            guard let spec = SyncDeleteRequestSpec.fromRequest(request: request!) else {
                 return GCDWebServerDataResponse(statusCode: 400)
             }
 
-            if let collection = spec.collection, id = spec.id {
+            if let collection = spec.collection, let id = spec.id {
                 guard var items = self.collections[collection]?.records else {
                     // Unable to find the requested collection.
-                    return MockSyncServer.withHeaders(GCDWebServerDataResponse(statusCode: 404))
+                    return MockSyncServer.withHeaders(response: GCDWebServerDataResponse(statusCode: 404))
                 }
 
                 guard let item = items[id] else {
                     // Unable to find the requested id.
-                    return MockSyncServer.withHeaders(GCDWebServerDataResponse(statusCode: 404))
+                    return MockSyncServer.withHeaders(response: GCDWebServerDataResponse(statusCode: 404))
                 }
-                items.removeValueForKey(id)
+                items.removeValue(forKey: id)
                 return self.modifiedResponse(item.modified)
             }
 
@@ -413,7 +413,7 @@ class MockSyncServer {
 
             // 2. Grab the matching set of records. Prune based on TTL, exclude with X-I-U-S, etc.
             if let id = spec.id {
-                guard let collection = self.collections[spec.collection], record = collection.records[id] else {
+                guard let collection = self.collections[spec.collection], let record = collection.records[id] else {
                     // Unable to find the requested collection/id.
                     return MockSyncServer.withHeaders(GCDWebServerDataResponse(statusCode: 404))
                 }

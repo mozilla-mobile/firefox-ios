@@ -90,14 +90,14 @@ private func populateHistoryForFrecencyCalculations(_ history: SQLiteHistory, si
 
         for j in 0...20 {
             let visitTime = advanceMicrosecondTimestamp(baseInstantInMicros, by: (1000000 * i) + (1000 * j))
-            addVisitForSite(site, intoHistory: history, from: .Local, atTime: visitTime)
-            addVisitForSite(site, intoHistory: history, from: .Remote, atTime: visitTime)
+            addVisitForSite(site, intoHistory: history, from: .local, atTime: visitTime)
+            addVisitForSite(site, intoHistory: history, from: .remote, atTime: visitTime)
         }
     }
 }
 
 private func addVisitForSite(_ site: Site, intoHistory history: SQLiteHistory, from: VisitOrigin, atTime: MicrosecondTimestamp) {
-    let visit = SiteVisit(site: site, date: atTime, type: VisitType.Link)
+    let visit = SiteVisit(site: site, date: atTime, type: VisitType.link)
     switch from {
     case .local:
         history.addLocalVisit(visit).value
