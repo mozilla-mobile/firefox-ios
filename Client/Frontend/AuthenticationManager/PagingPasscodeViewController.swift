@@ -3,14 +3,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-private let PaneSwipeDuration: NSTimeInterval = 0.3
+private let PaneSwipeDuration: TimeInterval = 0.3
 
 /// Base class for implementing a Passcode configuration screen with multiple 'panes'.
 class PagingPasscodeViewController: BasePasscodeViewController {
-    private lazy var pager: UIScrollView = {
+    fileprivate lazy var pager: UIScrollView = {
         let scrollView = UIScrollView()
-        scrollView.pagingEnabled = true
-        scrollView.userInteractionEnabled = false
+        scrollView.isPagingEnabled = true
+        scrollView.isUserInteractionEnabled = false
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.showsVerticalScrollIndicator = false
         return scrollView
@@ -23,15 +23,15 @@ class PagingPasscodeViewController: BasePasscodeViewController {
         super.viewDidLoad()
         view.addSubview(pager)
         panes.forEach { pager.addSubview($0) }
-        pager.snp_makeConstraints { make in
+        pager.snp.makeConstraints { make in
             make.bottom.left.right.equalTo(self.view)
-            make.top.equalTo(self.snp_topLayoutGuideBottom)
+            make.top.equalTo(self.topLayoutGuide.snp.bottom)
         }
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        panes.enumerate().forEach { index, pane in
+        panes.enumerated().forEach { index, pane in
             pane.frame = CGRect(origin: CGPoint(x: CGFloat(index) * pager.frame.width, y: 0), size: pager.frame.size)
         }
         pager.contentSize = CGSize(width: CGFloat(panes.count) * pager.frame.width, height: pager.frame.height)
@@ -42,7 +42,7 @@ class PagingPasscodeViewController: BasePasscodeViewController {
         panes[currentPaneIndex].codeInputView.becomeFirstResponder()
     }
 
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.view.endEditing(true)
     }
@@ -81,8 +81,8 @@ extension PagingPasscodeViewController {
         scrollToPaneAtIndex(currentPaneIndex)
     }
 
-    func scrollToPaneAtIndex(index: Int) {
-        UIView.animateWithDuration(PaneSwipeDuration, delay: 0, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
+    func scrollToPaneAtIndex(_ index: Int) {
+        UIView.animate(withDuration: PaneSwipeDuration, delay: 0, options: UIViewAnimationOptions(), animations: {
             self.pager.contentOffset = CGPoint(x: CGFloat(self.currentPaneIndex) * self.pager.frame.width, y: 0)
         }, completion: nil)
     }

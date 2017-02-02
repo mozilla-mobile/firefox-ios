@@ -9,73 +9,73 @@ import XCGLogger
 /// Accessors to find what a new tab should do when created without a URL.
 struct NewTabAccessors {
     static let PrefKey = PrefsKeys.KeyNewTab
-    static let Default = NewTabPage.TopSites
+    static let Default = NewTabPage.topSites
 
-    static func getNewTabPage(prefs: Prefs) -> NewTabPage {
+    static func getNewTabPage(_ prefs: Prefs) -> NewTabPage {
         guard let raw = prefs.stringForKey(PrefKey) else {
             return Default
         }
         let option = NewTabPage(rawValue: raw) ?? Default
         // Check if the user has chosen to open a homepage, but no homepage is set,
         // then use the default.
-        if option == .HomePage && HomePageAccessors.getHomePage(prefs) == nil {
+        if option == .homePage && HomePageAccessors.getHomePage(prefs) == nil {
             return Default
         }
         return option
     }
 
-    static func getNewTabPage(state: AppState) -> NewTabPage {
+    static func getNewTabPage(_ state: AppState) -> NewTabPage {
         return getNewTabPage(Accessors.getPrefs(state))
     }
 }
 
 /// Enum to encode what should happen when the user opens a new tab without a URL.
 enum NewTabPage: String {
-    case BlankPage = "Blank"
-    case HomePage = "HomePage"
-    case TopSites = "TopSites"
-    case Bookmarks = "Bookmarks"
-    case History = "History"
-    case ReadingList = "ReadingList"
+    case blankPage = "Blank"
+    case homePage = "HomePage"
+    case topSites = "TopSites"
+    case bookmarks = "Bookmarks"
+    case history = "History"
+    case readingList = "ReadingList"
 
     var settingTitle: String {
         switch self {
-        case .BlankPage:
+        case .blankPage:
             return Strings.SettingsNewTabBlankPage
-        case .HomePage:
+        case .homePage:
             return Strings.SettingsNewTabHomePage
-        case .TopSites:
+        case .topSites:
             return Strings.SettingsNewTabTopSites
-        case .Bookmarks:
+        case .bookmarks:
             return Strings.SettingsNewTabBookmarks
-        case .History:
+        case .history:
             return Strings.SettingsNewTabHistory
-        case .ReadingList:
+        case .readingList:
             return Strings.SettingsNewTabReadingList
         }
     }
 
     var homePanelType: HomePanelType? {
         switch self {
-        case .TopSites:
-            return HomePanelType.TopSites
-        case .Bookmarks:
-            return HomePanelType.Bookmarks
-        case .History:
-            return HomePanelType.History
-        case .ReadingList:
-            return HomePanelType.ReadingList
+        case .topSites:
+            return HomePanelType.topSites
+        case .bookmarks:
+            return HomePanelType.bookmarks
+        case .history:
+            return HomePanelType.history
+        case .readingList:
+            return HomePanelType.readingList
         default:
             return nil
         }
     }
 
-    var url: NSURL? {
+    var url: URL? {
         guard let homePanel = self.homePanelType else {
             return nil
         }
-        return homePanel.localhostURL
+        return homePanel.localhostURL as URL
     }
 
-    static let allValues = [BlankPage, TopSites, Bookmarks, History, ReadingList, HomePage]
+    static let allValues = [blankPage, topSites, bookmarks, history, readingList, homePage]
 }

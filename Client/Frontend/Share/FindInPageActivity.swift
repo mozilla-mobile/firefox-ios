@@ -5,26 +5,26 @@
 import Foundation
 
 class FindInPageActivity: UIActivity {
-    private let callback: () -> ()
+    fileprivate let callback: () -> ()
 
-    init(callback: () -> ()) {
+    init(callback: @escaping () -> ()) {
         self.callback = callback
     }
 
-    override func activityTitle() -> String? {
+    override var activityTitle : String? {
         return NSLocalizedString("Find in Page", tableName: "FindInPage", comment: "Share action title")
     }
 
-    override func activityImage() -> UIImage? {
+    override var activityImage : UIImage? {
         return UIImage(named: "shareFindInPage")
     }
 
-    override func performActivity() {
+    override func perform() {
         callback()
         activityDidFinish(true)
     }
 
-    override func canPerformWithActivityItems(activityItems: [AnyObject]) -> Bool {
+    override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
         return true
     }
 }

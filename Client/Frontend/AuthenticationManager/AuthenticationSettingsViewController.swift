@@ -10,11 +10,11 @@ import LocalAuthentication
 
 private let logger = Logger.browserLogger
 
-private func presentNavAsFormSheet(presented: UINavigationController, presenter: UINavigationController?, settings: AuthenticationSettingsViewController?) {
-    presented.modalPresentationStyle = .FormSheet
-    presenter?.presentViewController(presented, animated: true, completion: {
+private func presentNavAsFormSheet(_ presented: UINavigationController, presenter: UINavigationController?, settings: AuthenticationSettingsViewController?) {
+    presented.modalPresentationStyle = .formSheet
+    presenter?.present(presented, animated: true, completion: {
         if let selectedRow = settings?.tableView.indexPathForSelectedRow {
-            settings?.tableView.deselectRowAtIndexPath(selectedRow, animated: false)
+            settings?.tableView.deselectRow(at: selectedRow, animated: false)
         }
     })
 }
@@ -28,7 +28,7 @@ class TurnPasscodeOnSetting: Setting {
                    delegate: delegate)
     }
 
-    override func onClick(navigationController: UINavigationController?) {
+    override func onClick(_ navigationController: UINavigationController?) {
         presentNavAsFormSheet(UINavigationController(rootViewController: SetupPasscodeViewController()),
                               presenter: navigationController,
                               settings: settings)
@@ -44,7 +44,7 @@ class TurnPasscodeOffSetting: Setting {
                    delegate: delegate)
     }
 
-    override func onClick(navigationController: UINavigationController?) {
+    override func onClick(_ navigationController: UINavigationController?) {
         presentNavAsFormSheet(UINavigationController(rootViewController: RemovePasscodeViewController()),
                               presenter: navigationController,
                               settings: settings)
@@ -66,7 +66,7 @@ class ChangePasscodeSetting: Setting {
                    enabled: enabled)
     }
 
-    override func onClick(navigationController: UINavigationController?) {
+    override func onClick(_ navigationController: UINavigationController?) {
         presentNavAsFormSheet(UINavigationController(rootViewController: ChangePasscodeViewController()),
                               presenter: navigationController,
                               settings: settings)
@@ -76,16 +76,16 @@ class ChangePasscodeSetting: Setting {
 class RequirePasscodeSetting: Setting {
     weak var settings: AuthenticationSettingsViewController?
 
-    private weak var navigationController: UINavigationController?
+    fileprivate weak var navigationController: UINavigationController?
 
-    override var accessoryType: UITableViewCellAccessoryType { return .DisclosureIndicator }
+    override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }
 
-    override var style: UITableViewCellStyle { return .Value1 }
+    override var style: UITableViewCellStyle { return .value1 }
 
     override var status: NSAttributedString {
         // Only show the interval if we are enabled and have an interval set.
-        let authenticationInterval = KeychainWrapper.defaultKeychainWrapper().authenticationInfo()
-        if let interval = authenticationInterval?.requiredPasscodeInterval where enabled {
+        let authenticationInterval = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo()
+        if let interval = authenticationInterval?.requiredPasscodeInterval, enabled {
             return NSAttributedString.disabledTableRowTitle(interval.settingTitle)
         }
         return NSAttributedString(string: "")
@@ -104,12 +104,12 @@ class RequirePasscodeSetting: Setting {
     
     func deselectRow () {
         if let selectedRow = self.settings?.tableView.indexPathForSelectedRow {
-            self.settings?.tableView.deselectRowAtIndexPath(selectedRow, animated: true)
+            self.settings?.tableView.deselectRow(at: selectedRow, animated: true)
         }
     }
 
     override func onClick(_: UINavigationController?) {
-        guard let authInfo = KeychainWrapper.defaultKeychainWrapper().authenticationInfo() else {
+        guard let authInfo = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo() else {
             navigateToRequireInterval()
             return
         }
@@ -130,27 +130,27 @@ class RequirePasscodeSetting: Setting {
         }
     }
 
-    private func navigateToRequireInterval() {
+    fileprivate func navigateToRequireInterval() {
         navigationController?.pushViewController(RequirePasscodeIntervalViewController(), animated: true)
     }
 }
 
 extension RequirePasscodeSetting: PasscodeEntryDelegate {
     @objc func passcodeValidationDidSucceed() {
-        navigationController?.dismissViewControllerAnimated(true) {
+        navigationController?.dismiss(animated: true) {
             self.navigateToRequireInterval()
         }
     }
 }
 
 class TouchIDSetting: Setting {
-    private let authInfo: AuthenticationKeychainInfo?
+    fileprivate let authInfo: AuthenticationKeychainInfo?
 
-    private weak var navigationController: UINavigationController?
-    private weak var switchControl: UISwitch?
+    fileprivate weak var navigationController: UINavigationController?
+    fileprivate weak var switchControl: UISwitch?
 
-    private var touchIDSuccess: (() -> Void)? = nil
-    private var touchIDFallback: (() -> Void)? = nil
+    fileprivate var touchIDSuccess: (() -> Void)? = nil
+    fileprivate var touchIDFallback: (() -> Void)? = nil
 
     init(
         title: NSAttributedString?,
@@ -162,21 +162,21 @@ class TouchIDSetting: Setting {
         self.touchIDSuccess = touchIDSuccess
         self.touchIDFallback = touchIDFallback
         self.navigationController = navigationController
-        self.authInfo = KeychainWrapper.defaultKeychainWrapper().authenticationInfo()
+        self.authInfo = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo()
         super.init(title: title, delegate: delegate, enabled: enabled)
     }
 
-    override func onConfigureCell(cell: UITableViewCell) {
+    override func onConfigureCell(_ cell: UITableViewCell) {
         super.onConfigureCell(cell)
-        cell.selectionStyle = .None
+        cell.selectionStyle = .none
 
         // In order for us to recognize a tap gesture without toggling the switch,
         // the switch is wrapped in a UIView which has a tap gesture recognizer. This way
         // we can disable interaction of the switch and still handle tap events.
         let control = UISwitch()
         control.onTintColor = UIConstants.ControlTintColor
-        control.on = authInfo?.useTouchID ?? false
-        control.userInteractionEnabled = false
+        control.isOn = authInfo?.useTouchID ?? false
+        control.isUserInteractionEnabled = false
         switchControl = control
 
         let accessoryContainer = UIView(frame: control.frame)
@@ -188,7 +188,7 @@ class TouchIDSetting: Setting {
         cell.accessoryView = accessoryContainer
     }
 
-    @objc private func switchTapped() {
+    @objc fileprivate func switchTapped() {
         guard let authInfo = authInfo else {
             logger.error("Authentication info should always be present when modifying Touch ID preference.")
             return
@@ -203,13 +203,13 @@ class TouchIDSetting: Setting {
                 fallback: self.touchIDFallback
             )
         } else {
-            toggleTouchID(enabled: true)
+            toggleTouchID(true)
         }
     }
 
-    func toggleTouchID(enabled enabled: Bool) {
+    func toggleTouchID(_ enabled: Bool) {
         authInfo?.useTouchID = enabled
-        KeychainWrapper.defaultKeychainWrapper().setAuthenticationInfo(authInfo)
+        KeychainWrapper.sharedAppContainerKeychain.setAuthenticationInfo(authInfo)
         switchControl?.setOn(enabled, animated: true)
     }
 }
@@ -219,38 +219,38 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
         super.viewDidLoad()
         updateTitleForTouchIDState()
 
-        let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.addObserver(self, selector: #selector(AuthenticationSettingsViewController.refreshSettings(_:)), name: NotificationPasscodeDidRemove, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(AuthenticationSettingsViewController.refreshSettings(_:)), name: NotificationPasscodeDidCreate, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(AuthenticationSettingsViewController.refreshSettings(_:)), name: UIApplicationDidBecomeActiveNotification, object: nil)
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(AuthenticationSettingsViewController.refreshSettings(_:)), name: NSNotification.Name(rawValue: NotificationPasscodeDidRemove), object: nil)
+        notificationCenter.addObserver(self, selector: #selector(AuthenticationSettingsViewController.refreshSettings(_:)), name: NSNotification.Name(rawValue: NotificationPasscodeDidCreate), object: nil)
+        notificationCenter.addObserver(self, selector: #selector(AuthenticationSettingsViewController.refreshSettings(_:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
 
         tableView.accessibilityIdentifier = "AuthenticationManager.settingsTableView"
     }
 
     deinit {
-        let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.removeObserver(self, name: NotificationPasscodeDidRemove, object: nil)
-        notificationCenter.removeObserver(self, name: NotificationPasscodeDidCreate, object: nil)
-        notificationCenter.removeObserver(self, name: UIApplicationDidBecomeActiveNotification, object: nil)
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.removeObserver(self, name: NSNotification.Name(rawValue: NotificationPasscodeDidRemove), object: nil)
+        notificationCenter.removeObserver(self, name: NSNotification.Name(rawValue: NotificationPasscodeDidCreate), object: nil)
+        notificationCenter.removeObserver(self, name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
     }
 
     override func generateSettings() -> [SettingSection] {
-        if let _ = KeychainWrapper.defaultKeychainWrapper().authenticationInfo() {
+        if let _ = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo() {
             return passcodeEnabledSettings()
         } else {
             return passcodeDisabledSettings()
         }
     }
 
-    private func updateTitleForTouchIDState() {
-        if LAContext().canEvaluatePolicy(.DeviceOwnerAuthenticationWithBiometrics, error: nil) {
+    fileprivate func updateTitleForTouchIDState() {
+        if LAContext().canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil) {
             navigationItem.title = AuthenticationStrings.touchIDPasscodeSetting
         } else {
             navigationItem.title = AuthenticationStrings.passcode
         }
     }
 
-    private func passcodeEnabledSettings() -> [SettingSection] {
+    fileprivate func passcodeEnabledSettings() -> [SettingSection] {
         var settings = [SettingSection]()
 
         let passcodeSectionTitle = NSAttributedString(string: AuthenticationStrings.passcode)
@@ -261,7 +261,7 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
 
         var requirePasscodeSectionChildren: [Setting] = [RequirePasscodeSetting(settings: self)]
         let localAuthContext = LAContext()
-        if localAuthContext.canEvaluatePolicy(.DeviceOwnerAuthenticationWithBiometrics, error: nil) {
+        if localAuthContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil) {
             requirePasscodeSectionChildren.append(
                 TouchIDSetting(
                     title: NSAttributedString.tableRowTitle(
@@ -289,7 +289,7 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
         return settings
     }
 
-    private func passcodeDisabledSettings() -> [SettingSection] {
+    fileprivate func passcodeDisabledSettings() -> [SettingSection] {
         var settings = [SettingSection]()
 
         let passcodeSectionTitle = NSAttributedString(string: AuthenticationStrings.passcode)
@@ -312,7 +312,7 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
 }
 
 extension AuthenticationSettingsViewController {
-    func refreshSettings(notification: NSNotification) {
+    func refreshSettings(_ notification: Notification) {
         updateTitleForTouchIDState()
         settings = generateSettings()
         tableView.reloadData()
@@ -320,7 +320,7 @@ extension AuthenticationSettingsViewController {
 }
 
 extension AuthenticationSettingsViewController: PasscodeEntryDelegate {
-    private func getTouchIDSetting() -> TouchIDSetting? {
+    fileprivate func getTouchIDSetting() -> TouchIDSetting? {
         guard settings.count >= 2 && settings[1].count >= 2 else {
             return nil
         }
@@ -328,7 +328,7 @@ extension AuthenticationSettingsViewController: PasscodeEntryDelegate {
     }
 
     func touchIDAuthenticationSucceeded() {
-        getTouchIDSetting()?.toggleTouchID(enabled: false)
+        getTouchIDSetting()?.toggleTouchID(false)
     }
 
     func fallbackOnTouchIDFailure() {
@@ -336,7 +336,7 @@ extension AuthenticationSettingsViewController: PasscodeEntryDelegate {
     }
 
     @objc func passcodeValidationDidSucceed() {
-        getTouchIDSetting()?.toggleTouchID(enabled: false)
-        navigationController?.dismissViewControllerAnimated(true, completion: nil)
+        getTouchIDSetting()?.toggleTouchID(false)
+        navigationController?.dismiss(animated: true, completion: nil)
     }
 }

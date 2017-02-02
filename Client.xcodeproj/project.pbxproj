@@ -221,6 +221,7 @@
 		3B39EDBA1E16E18900EF029F /* CustomSearchEnginesTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B39EDB91E16E18900EF029F /* CustomSearchEnginesTest.swift */; };
 		3B39EDCB1E16E1AA00EF029F /* CustomSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B39EDCA1E16E1AA00EF029F /* CustomSearchViewController.swift */; };
 		3B43E3D31D95C48D00BBA9DB /* StoragePerfTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B43E3D21D95C48D00BBA9DB /* StoragePerfTests.swift */; };
+		3B4988CE1E42B01800A12FDA /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B4988CD1E42B01800A12FDA /* SwiftyJSON.framework */; };
 		3B4AA24B1D8B8C4C00A2E008 /* ArrayExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B4AA24A1D8B8C4C00A2E008 /* ArrayExtensionTests.swift */; };
 		3B546EC01D95ECAE00BDBE36 /* ActivityStreamTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B546EBF1D95ECAE00BDBE36 /* ActivityStreamTest.swift */; };
 		3B6889C51D66950E002AC85E /* UIImageColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6889C41D66950E002AC85E /* UIImageColors.swift */; };
@@ -548,7 +549,6 @@
 		E6231C051B90A472005ABB0D /* libxml2.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E6231C041B90A472005ABB0D /* libxml2.2.tbd */; };
 		E6231C071B90A712005ABB0D /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E6231C001B90A44F005ABB0D /* libz.tbd */; };
 		E6231C081B90A71E005ABB0D /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E6231C001B90A44F005ABB0D /* libz.tbd */; };
-		E62A56EC1DBE8D32004703EA /* WebMetadataKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E62A56DC1DBE88C3004703EA /* WebMetadataKit.framework */; };
 		E62CFB3D1C89EFF700C01324 /* FxA.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 28CE83D01A1D1D5100576538 /* FxA.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E6327A641BF6438E008D12E0 /* DebugSettingsBundleOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6327A631BF6438E008D12E0 /* DebugSettingsBundleOptions.swift */; };
 		E633E2DA1C21EAF8001FFF6C /* LoginDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E633E2D91C21EAF8001FFF6C /* LoginDetailViewController.swift */; };
@@ -663,7 +663,6 @@
 		E6C191F11E38F810000A213B /* libPhoneNumberiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6C191F01E38F7EE000A213B /* libPhoneNumberiOS.framework */; };
 		E6C70E171E2830CC00F8DB57 /* PingCentre.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6C70E151E2830CC00F8DB57 /* PingCentre.swift */; };
 		E6C70E181E2830CC00F8DB57 /* Topics.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6C70E161E2830CC00F8DB57 /* Topics.swift */; };
-		E6C70E801E28313000F8DB57 /* JSONSchema.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E6C70E7D1E28311300F8DB57 /* JSONSchema.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E6C70E821E28314700F8DB57 /* PingCentreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6C70E811E28314700F8DB57 /* PingCentreTests.swift */; };
 		E6C9EB6B1E2FBFC300D5CE80 /* signedInUser.json in Resources */ = {isa = PBXBuildFile; fileRef = E6C9EB6A1E2FBFC300D5CE80 /* signedInUser.json */; };
 		E6CF28E71CB43B7900151AB3 /* SensitiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CF28E61CB43B7900151AB3 /* SensitiveViewController.swift */; };
@@ -1069,20 +1068,6 @@
 			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
 			remoteInfo = Client;
 		};
-		E6C70E7C1E28311300F8DB57 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E6C70E201E28311300F8DB57 /* JSONSchema.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 27CF7EE91A9B9EDA0063FDE4;
-			remoteInfo = JSONSchema;
-		};
-		E6C70E7E1E28311300F8DB57 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E6C70E201E28311300F8DB57 /* JSONSchema.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 27CF7EF41A9B9EDA0063FDE4;
-			remoteInfo = JSONSchemaTests;
-		};
 		E6CB64CB1DA42C2900887098 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D30EBB5A1C75503800105AE9 /* KIF.xcodeproj */;
@@ -1147,7 +1132,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				E6C70E801E28313000F8DB57 /* JSONSchema.framework in Copy Frameworks */,
 				E62CFB3D1C89EFF700C01324 /* FxA.framework in Copy Frameworks */,
 				E601386A1C89EB9800DF9756 /* SQLite.framework in Copy Frameworks */,
 				E60138691C89EB8E00DF9756 /* ReadingList.framework in Copy Frameworks */,
@@ -1389,6 +1373,7 @@
 		3B43E3D01D95C48D00BBA9DB /* StoragePerfTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StoragePerfTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B43E3D21D95C48D00BBA9DB /* StoragePerfTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoragePerfTests.swift; sourceTree = "<group>"; };
 		3B43E3D41D95C48D00BBA9DB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3B4988CD1E42B01800A12FDA /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
 		3B4AA24A1D8B8C4C00A2E008 /* ArrayExtensionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayExtensionTests.swift; sourceTree = "<group>"; };
 		3B546EBF1D95ECAE00BDBE36 /* ActivityStreamTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityStreamTest.swift; sourceTree = "<group>"; };
 		3B6889C41D66950E002AC85E /* UIImageColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIImageColors.swift; path = ThirdParty/UIImageColors.swift; sourceTree = "<group>"; };
@@ -1682,7 +1667,6 @@
 		E6231C001B90A44F005ABB0D /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		E6231C021B90A466005ABB0D /* libstdc++.6.0.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.6.0.9.tbd"; path = "usr/lib/libstdc++.6.0.9.tbd"; sourceTree = SDKROOT; };
 		E6231C041B90A472005ABB0D /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
-		E62A56DC1DBE88C3004703EA /* WebMetadataKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebMetadataKit.framework; path = Carthage/Build/iOS/WebMetadataKit.framework; sourceTree = "<group>"; };
 		E6327A631BF6438E008D12E0 /* DebugSettingsBundleOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugSettingsBundleOptions.swift; sourceTree = "<group>"; };
 		E633E2D91C21EAF8001FFF6C /* LoginDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginDetailViewController.swift; path = ../Settings/LoginDetailViewController.swift; sourceTree = "<group>"; };
 		E633E3791C2204BE001FFF6C /* LoginManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginManagerTests.swift; sourceTree = "<group>"; };
@@ -1809,88 +1793,6 @@
 		E6C191F01E38F7EE000A213B /* libPhoneNumberiOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libPhoneNumberiOS.framework; path = Carthage/Build/iOS/libPhoneNumberiOS.framework; sourceTree = "<group>"; };
 		E6C70E151E2830CC00F8DB57 /* PingCentre.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PingCentre.swift; sourceTree = "<group>"; };
 		E6C70E161E2830CC00F8DB57 /* Topics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Topics.swift; sourceTree = "<group>"; };
-		E6C70E1A1E28311300F8DB57 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
-		E6C70E1C1E28311300F8DB57 /* UniversalFramework_Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = UniversalFramework_Base.xcconfig; sourceTree = "<group>"; };
-		E6C70E1D1E28311300F8DB57 /* UniversalFramework_Framework.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = UniversalFramework_Framework.xcconfig; sourceTree = "<group>"; };
-		E6C70E1E1E28311300F8DB57 /* UniversalFramework_Test.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = UniversalFramework_Test.xcconfig; sourceTree = "<group>"; };
-		E6C70E1F1E28311300F8DB57 /* JSONSchema.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = JSONSchema.podspec; sourceTree = "<group>"; };
-		E6C70E201E28311300F8DB57 /* JSONSchema.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = JSONSchema.xcodeproj; sourceTree = "<group>"; };
-		E6C70E231E28311300F8DB57 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
-		E6C70E241E28311300F8DB57 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
-		E6C70E251E28311300F8DB57 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		E6C70E271E28311300F8DB57 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E6C70E281E28311300F8DB57 /* JSONSchema.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JSONSchema.h; sourceTree = "<group>"; };
-		E6C70E291E28311300F8DB57 /* JSONSchema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONSchema.swift; sourceTree = "<group>"; };
-		E6C70E2A1E28311300F8DB57 /* Validators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Validators.swift; sourceTree = "<group>"; };
-		E6C70E2D1E28311300F8DB57 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
-		E6C70E2E1E28311300F8DB57 /* .travis.yml */ = {isa = PBXFileReference; lastKnownFileType = text; path = .travis.yml; sourceTree = "<group>"; };
-		E6C70E301E28311300F8DB57 /* jsonschema_suite */ = {isa = PBXFileReference; lastKnownFileType = text; path = jsonschema_suite; sourceTree = "<group>"; };
-		E6C70E311E28311300F8DB57 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
-		E6C70E321E28311300F8DB57 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		E6C70E351E28311300F8DB57 /* folderInteger.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = folderInteger.json; sourceTree = "<group>"; };
-		E6C70E361E28311300F8DB57 /* integer.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = integer.json; sourceTree = "<group>"; };
-		E6C70E371E28311300F8DB57 /* subSchemas.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = subSchemas.json; sourceTree = "<group>"; };
-		E6C70E3A1E28311300F8DB57 /* additionalItems.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = additionalItems.json; sourceTree = "<group>"; };
-		E6C70E3B1E28311300F8DB57 /* additionalProperties.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = additionalProperties.json; sourceTree = "<group>"; };
-		E6C70E3C1E28311300F8DB57 /* default.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = default.json; sourceTree = "<group>"; };
-		E6C70E3D1E28311300F8DB57 /* dependencies.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = dependencies.json; sourceTree = "<group>"; };
-		E6C70E3E1E28311300F8DB57 /* disallow.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = disallow.json; sourceTree = "<group>"; };
-		E6C70E3F1E28311300F8DB57 /* divisibleBy.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = divisibleBy.json; sourceTree = "<group>"; };
-		E6C70E401E28311300F8DB57 /* enum.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = enum.json; sourceTree = "<group>"; };
-		E6C70E411E28311300F8DB57 /* extends.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = extends.json; sourceTree = "<group>"; };
-		E6C70E421E28311300F8DB57 /* items.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = items.json; sourceTree = "<group>"; };
-		E6C70E431E28311300F8DB57 /* maximum.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = maximum.json; sourceTree = "<group>"; };
-		E6C70E441E28311300F8DB57 /* maxItems.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = maxItems.json; sourceTree = "<group>"; };
-		E6C70E451E28311300F8DB57 /* maxLength.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = maxLength.json; sourceTree = "<group>"; };
-		E6C70E461E28311300F8DB57 /* minimum.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = minimum.json; sourceTree = "<group>"; };
-		E6C70E471E28311300F8DB57 /* minItems.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = minItems.json; sourceTree = "<group>"; };
-		E6C70E481E28311300F8DB57 /* minLength.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = minLength.json; sourceTree = "<group>"; };
-		E6C70E4A1E28311300F8DB57 /* bignum.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = bignum.json; sourceTree = "<group>"; };
-		E6C70E4B1E28311300F8DB57 /* format.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = format.json; sourceTree = "<group>"; };
-		E6C70E4C1E28311300F8DB57 /* jsregex.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = jsregex.json; sourceTree = "<group>"; };
-		E6C70E4D1E28311300F8DB57 /* zeroTerminatedFloats.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = zeroTerminatedFloats.json; sourceTree = "<group>"; };
-		E6C70E4E1E28311300F8DB57 /* pattern.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = pattern.json; sourceTree = "<group>"; };
-		E6C70E4F1E28311300F8DB57 /* patternProperties.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = patternProperties.json; sourceTree = "<group>"; };
-		E6C70E501E28311300F8DB57 /* properties.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = properties.json; sourceTree = "<group>"; };
-		E6C70E511E28311300F8DB57 /* ref.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ref.json; sourceTree = "<group>"; };
-		E6C70E521E28311300F8DB57 /* refRemote.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = refRemote.json; sourceTree = "<group>"; };
-		E6C70E531E28311300F8DB57 /* required.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = required.json; sourceTree = "<group>"; };
-		E6C70E541E28311300F8DB57 /* type.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = type.json; sourceTree = "<group>"; };
-		E6C70E551E28311300F8DB57 /* uniqueItems.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = uniqueItems.json; sourceTree = "<group>"; };
-		E6C70E571E28311300F8DB57 /* additionalItems.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = additionalItems.json; sourceTree = "<group>"; };
-		E6C70E581E28311300F8DB57 /* additionalProperties.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = additionalProperties.json; sourceTree = "<group>"; };
-		E6C70E591E28311300F8DB57 /* allOf.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = allOf.json; sourceTree = "<group>"; };
-		E6C70E5A1E28311300F8DB57 /* anyOf.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = anyOf.json; sourceTree = "<group>"; };
-		E6C70E5B1E28311300F8DB57 /* default.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = default.json; sourceTree = "<group>"; };
-		E6C70E5C1E28311300F8DB57 /* definitions.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = definitions.json; sourceTree = "<group>"; };
-		E6C70E5D1E28311300F8DB57 /* dependencies.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = dependencies.json; sourceTree = "<group>"; };
-		E6C70E5E1E28311300F8DB57 /* enum.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = enum.json; sourceTree = "<group>"; };
-		E6C70E5F1E28311300F8DB57 /* items.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = items.json; sourceTree = "<group>"; };
-		E6C70E601E28311300F8DB57 /* maximum.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = maximum.json; sourceTree = "<group>"; };
-		E6C70E611E28311300F8DB57 /* maxItems.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = maxItems.json; sourceTree = "<group>"; };
-		E6C70E621E28311300F8DB57 /* maxLength.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = maxLength.json; sourceTree = "<group>"; };
-		E6C70E631E28311300F8DB57 /* maxProperties.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = maxProperties.json; sourceTree = "<group>"; };
-		E6C70E641E28311300F8DB57 /* minimum.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = minimum.json; sourceTree = "<group>"; };
-		E6C70E651E28311300F8DB57 /* minItems.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = minItems.json; sourceTree = "<group>"; };
-		E6C70E661E28311300F8DB57 /* minLength.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = minLength.json; sourceTree = "<group>"; };
-		E6C70E671E28311300F8DB57 /* minProperties.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = minProperties.json; sourceTree = "<group>"; };
-		E6C70E681E28311300F8DB57 /* multipleOf.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = multipleOf.json; sourceTree = "<group>"; };
-		E6C70E691E28311300F8DB57 /* not.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = not.json; sourceTree = "<group>"; };
-		E6C70E6A1E28311300F8DB57 /* oneOf.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = oneOf.json; sourceTree = "<group>"; };
-		E6C70E6C1E28311300F8DB57 /* bignum.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = bignum.json; sourceTree = "<group>"; };
-		E6C70E6D1E28311300F8DB57 /* format.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = format.json; sourceTree = "<group>"; };
-		E6C70E6E1E28311300F8DB57 /* zeroTerminatedFloats.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = zeroTerminatedFloats.json; sourceTree = "<group>"; };
-		E6C70E6F1E28311300F8DB57 /* pattern.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = pattern.json; sourceTree = "<group>"; };
-		E6C70E701E28311300F8DB57 /* patternProperties.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = patternProperties.json; sourceTree = "<group>"; };
-		E6C70E711E28311300F8DB57 /* properties.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = properties.json; sourceTree = "<group>"; };
-		E6C70E721E28311300F8DB57 /* ref.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ref.json; sourceTree = "<group>"; };
-		E6C70E731E28311300F8DB57 /* refRemote.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = refRemote.json; sourceTree = "<group>"; };
-		E6C70E741E28311300F8DB57 /* required.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = required.json; sourceTree = "<group>"; };
-		E6C70E751E28311300F8DB57 /* type.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = type.json; sourceTree = "<group>"; };
-		E6C70E761E28311300F8DB57 /* uniqueItems.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = uniqueItems.json; sourceTree = "<group>"; };
-		E6C70E771E28311300F8DB57 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E6C70E781E28311300F8DB57 /* JSONSchemaCases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONSchemaCases.swift; sourceTree = "<group>"; };
-		E6C70E791E28311300F8DB57 /* JSONSchemaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONSchemaTests.swift; sourceTree = "<group>"; };
 		E6C70E811E28314700F8DB57 /* PingCentreTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PingCentreTests.swift; sourceTree = "<group>"; };
 		E6C9EB6A1E2FBFC300D5CE80 /* signedInUser.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = signedInUser.json; sourceTree = "<group>"; };
 		E6CF28E61CB43B7900151AB3 /* SensitiveViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensitiveViewController.swift; sourceTree = "<group>"; };
@@ -1966,7 +1868,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E62A56EC1DBE8D32004703EA /* WebMetadataKit.framework in Frameworks */,
 				7B8A47F61D01D3B400C07734 /* PassKit.framework in Frameworks */,
 				E6B6DCA21CD3D370009CF713 /* CrashReporter.framework in Frameworks */,
 				7B604F861C494983006EEEC3 /* Alamofire.framework in Frameworks */,
@@ -1986,6 +1887,7 @@
 				2FCAE2311ABB51F800877008 /* Storage.framework in Frameworks */,
 				2FA436121ABB83B4008031D1 /* Account.framework in Frameworks */,
 				E4D5672F1ADECE2800F1EFE7 /* ReadingList.framework in Frameworks */,
+				3B4988CE1E42B01800A12FDA /* SwiftyJSON.framework in Frameworks */,
 				0B8E0FF41A932BD500161DC3 /* ImageIO.framework in Frameworks */,
 				E4A888161A95679500CDC337 /* FxA.framework in Frameworks */,
 				282731751ABC9BE700AA1954 /* Sync.framework in Frameworks */,
@@ -2367,7 +2269,6 @@
 				288A2D7F1AB8B2B20023ABC3 /* Box */,
 				28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */,
 				E65C5B8B1BEA4E7100D28BEF /* FBSnapshotTestCase */,
-				E6C70E191E28311300F8DB57 /* JSONSchema */,
 				D30EBB5A1C75503800105AE9 /* KIF.xcodeproj */,
 				E6B6DC931CD3D35A009CF713 /* PLCrashReporter */,
 				288A2D7E1AB8B2AD0023ABC3 /* Result */,
@@ -2676,6 +2577,7 @@
 		7B604FC11C496005006EEEC3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3B4988CD1E42B01800A12FDA /* SwiftyJSON.framework */,
 				E6231C041B90A472005ABB0D /* libxml2.2.tbd */,
 				E6231C021B90A466005ABB0D /* libstdc++.6.0.9.tbd */,
 				E6231C001B90A44F005ABB0D /* libz.tbd */,
@@ -2683,7 +2585,6 @@
 				D39FA16B1A83E17800EE869C /* CoreGraphics.framework */,
 				0B8E0FF31A932BD500161DC3 /* ImageIO.framework */,
 				D36998881AD70A0A00650C6C /* IOKit.framework */,
-				E62A56DC1DBE88C3004703EA /* WebMetadataKit.framework */,
 				3BA9A0221D2C208C00BD418C /* Fuzi.framework */,
 				E6C191F01E38F7EE000A213B /* libPhoneNumberiOS.framework */,
 				7B8A47F51D01D3B400C07734 /* PassKit.framework */,
@@ -3260,201 +3161,6 @@
 			);
 			name = PingCentre;
 			path = Telemetry/PingCentre;
-			sourceTree = "<group>";
-		};
-		E6C70E191E28311300F8DB57 /* JSONSchema */ = {
-			isa = PBXGroup;
-			children = (
-				E6C70E1A1E28311300F8DB57 /* CHANGELOG.md */,
-				E6C70E1B1E28311300F8DB57 /* Configurations */,
-				E6C70E1F1E28311300F8DB57 /* JSONSchema.podspec */,
-				E6C70E201E28311300F8DB57 /* JSONSchema.xcodeproj */,
-				E6C70E231E28311300F8DB57 /* LICENSE */,
-				E6C70E241E28311300F8DB57 /* Package.swift */,
-				E6C70E251E28311300F8DB57 /* README.md */,
-				E6C70E261E28311300F8DB57 /* Sources */,
-				E6C70E2B1E28311300F8DB57 /* Tests */,
-			);
-			name = JSONSchema;
-			path = ThirdParty/JSONSchema;
-			sourceTree = SOURCE_ROOT;
-		};
-		E6C70E1B1E28311300F8DB57 /* Configurations */ = {
-			isa = PBXGroup;
-			children = (
-				E6C70E1C1E28311300F8DB57 /* UniversalFramework_Base.xcconfig */,
-				E6C70E1D1E28311300F8DB57 /* UniversalFramework_Framework.xcconfig */,
-				E6C70E1E1E28311300F8DB57 /* UniversalFramework_Test.xcconfig */,
-			);
-			path = Configurations;
-			sourceTree = "<group>";
-		};
-		E6C70E211E28311300F8DB57 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				E6C70E7D1E28311300F8DB57 /* JSONSchema.framework */,
-				E6C70E7F1E28311300F8DB57 /* JSONSchemaTests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		E6C70E261E28311300F8DB57 /* Sources */ = {
-			isa = PBXGroup;
-			children = (
-				E6C70E271E28311300F8DB57 /* Info.plist */,
-				E6C70E281E28311300F8DB57 /* JSONSchema.h */,
-				E6C70E291E28311300F8DB57 /* JSONSchema.swift */,
-				E6C70E2A1E28311300F8DB57 /* Validators.swift */,
-			);
-			path = Sources;
-			sourceTree = "<group>";
-		};
-		E6C70E2B1E28311300F8DB57 /* Tests */ = {
-			isa = PBXGroup;
-			children = (
-				E6C70E2C1E28311300F8DB57 /* Cases */,
-				E6C70E771E28311300F8DB57 /* Info.plist */,
-				E6C70E781E28311300F8DB57 /* JSONSchemaCases.swift */,
-				E6C70E791E28311300F8DB57 /* JSONSchemaTests.swift */,
-			);
-			path = Tests;
-			sourceTree = "<group>";
-		};
-		E6C70E2C1E28311300F8DB57 /* Cases */ = {
-			isa = PBXGroup;
-			children = (
-				E6C70E2D1E28311300F8DB57 /* .gitignore */,
-				E6C70E2E1E28311300F8DB57 /* .travis.yml */,
-				E6C70E2F1E28311300F8DB57 /* bin */,
-				E6C70E311E28311300F8DB57 /* LICENSE */,
-				E6C70E321E28311300F8DB57 /* README.md */,
-				E6C70E331E28311300F8DB57 /* remotes */,
-				E6C70E381E28311300F8DB57 /* tests */,
-			);
-			path = Cases;
-			sourceTree = "<group>";
-		};
-		E6C70E2F1E28311300F8DB57 /* bin */ = {
-			isa = PBXGroup;
-			children = (
-				E6C70E301E28311300F8DB57 /* jsonschema_suite */,
-			);
-			path = bin;
-			sourceTree = "<group>";
-		};
-		E6C70E331E28311300F8DB57 /* remotes */ = {
-			isa = PBXGroup;
-			children = (
-				E6C70E341E28311300F8DB57 /* folder */,
-				E6C70E361E28311300F8DB57 /* integer.json */,
-				E6C70E371E28311300F8DB57 /* subSchemas.json */,
-			);
-			path = remotes;
-			sourceTree = "<group>";
-		};
-		E6C70E341E28311300F8DB57 /* folder */ = {
-			isa = PBXGroup;
-			children = (
-				E6C70E351E28311300F8DB57 /* folderInteger.json */,
-			);
-			path = folder;
-			sourceTree = "<group>";
-		};
-		E6C70E381E28311300F8DB57 /* tests */ = {
-			isa = PBXGroup;
-			children = (
-				E6C70E391E28311300F8DB57 /* draft3 */,
-				E6C70E561E28311300F8DB57 /* draft4 */,
-			);
-			path = tests;
-			sourceTree = "<group>";
-		};
-		E6C70E391E28311300F8DB57 /* draft3 */ = {
-			isa = PBXGroup;
-			children = (
-				E6C70E3A1E28311300F8DB57 /* additionalItems.json */,
-				E6C70E3B1E28311300F8DB57 /* additionalProperties.json */,
-				E6C70E3C1E28311300F8DB57 /* default.json */,
-				E6C70E3D1E28311300F8DB57 /* dependencies.json */,
-				E6C70E3E1E28311300F8DB57 /* disallow.json */,
-				E6C70E3F1E28311300F8DB57 /* divisibleBy.json */,
-				E6C70E401E28311300F8DB57 /* enum.json */,
-				E6C70E411E28311300F8DB57 /* extends.json */,
-				E6C70E421E28311300F8DB57 /* items.json */,
-				E6C70E431E28311300F8DB57 /* maximum.json */,
-				E6C70E441E28311300F8DB57 /* maxItems.json */,
-				E6C70E451E28311300F8DB57 /* maxLength.json */,
-				E6C70E461E28311300F8DB57 /* minimum.json */,
-				E6C70E471E28311300F8DB57 /* minItems.json */,
-				E6C70E481E28311300F8DB57 /* minLength.json */,
-				E6C70E491E28311300F8DB57 /* optional */,
-				E6C70E4E1E28311300F8DB57 /* pattern.json */,
-				E6C70E4F1E28311300F8DB57 /* patternProperties.json */,
-				E6C70E501E28311300F8DB57 /* properties.json */,
-				E6C70E511E28311300F8DB57 /* ref.json */,
-				E6C70E521E28311300F8DB57 /* refRemote.json */,
-				E6C70E531E28311300F8DB57 /* required.json */,
-				E6C70E541E28311300F8DB57 /* type.json */,
-				E6C70E551E28311300F8DB57 /* uniqueItems.json */,
-			);
-			path = draft3;
-			sourceTree = "<group>";
-		};
-		E6C70E491E28311300F8DB57 /* optional */ = {
-			isa = PBXGroup;
-			children = (
-				E6C70E4A1E28311300F8DB57 /* bignum.json */,
-				E6C70E4B1E28311300F8DB57 /* format.json */,
-				E6C70E4C1E28311300F8DB57 /* jsregex.json */,
-				E6C70E4D1E28311300F8DB57 /* zeroTerminatedFloats.json */,
-			);
-			path = optional;
-			sourceTree = "<group>";
-		};
-		E6C70E561E28311300F8DB57 /* draft4 */ = {
-			isa = PBXGroup;
-			children = (
-				E6C70E571E28311300F8DB57 /* additionalItems.json */,
-				E6C70E581E28311300F8DB57 /* additionalProperties.json */,
-				E6C70E591E28311300F8DB57 /* allOf.json */,
-				E6C70E5A1E28311300F8DB57 /* anyOf.json */,
-				E6C70E5B1E28311300F8DB57 /* default.json */,
-				E6C70E5C1E28311300F8DB57 /* definitions.json */,
-				E6C70E5D1E28311300F8DB57 /* dependencies.json */,
-				E6C70E5E1E28311300F8DB57 /* enum.json */,
-				E6C70E5F1E28311300F8DB57 /* items.json */,
-				E6C70E601E28311300F8DB57 /* maximum.json */,
-				E6C70E611E28311300F8DB57 /* maxItems.json */,
-				E6C70E621E28311300F8DB57 /* maxLength.json */,
-				E6C70E631E28311300F8DB57 /* maxProperties.json */,
-				E6C70E641E28311300F8DB57 /* minimum.json */,
-				E6C70E651E28311300F8DB57 /* minItems.json */,
-				E6C70E661E28311300F8DB57 /* minLength.json */,
-				E6C70E671E28311300F8DB57 /* minProperties.json */,
-				E6C70E681E28311300F8DB57 /* multipleOf.json */,
-				E6C70E691E28311300F8DB57 /* not.json */,
-				E6C70E6A1E28311300F8DB57 /* oneOf.json */,
-				E6C70E6B1E28311300F8DB57 /* optional */,
-				E6C70E6F1E28311300F8DB57 /* pattern.json */,
-				E6C70E701E28311300F8DB57 /* patternProperties.json */,
-				E6C70E711E28311300F8DB57 /* properties.json */,
-				E6C70E721E28311300F8DB57 /* ref.json */,
-				E6C70E731E28311300F8DB57 /* refRemote.json */,
-				E6C70E741E28311300F8DB57 /* required.json */,
-				E6C70E751E28311300F8DB57 /* type.json */,
-				E6C70E761E28311300F8DB57 /* uniqueItems.json */,
-			);
-			path = draft4;
-			sourceTree = "<group>";
-		};
-		E6C70E6B1E28311300F8DB57 /* optional */ = {
-			isa = PBXGroup;
-			children = (
-				E6C70E6C1E28311300F8DB57 /* bignum.json */,
-				E6C70E6D1E28311300F8DB57 /* format.json */,
-				E6C70E6E1E28311300F8DB57 /* zeroTerminatedFloats.json */,
-			);
-			path = optional;
 			sourceTree = "<group>";
 		};
 		E6F9650D1B2F1CF20034B023 /* SharedTests */ = {
@@ -4264,7 +3970,7 @@
 					};
 					282731671ABC9BE700AA1954 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -4291,7 +3997,7 @@
 					};
 					2FCAE2231ABB51F800877008 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0800;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -4323,7 +4029,7 @@
 					};
 					D39FA15E1A83E0EC00EE869C = {
 						CreatedOnToolsVersion = 6.1.1;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0800;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -4345,7 +4051,7 @@
 					};
 					E4D567211ADECE2700F1EFE7 = {
 						CreatedOnToolsVersion = 6.3;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -4363,7 +4069,7 @@
 					F84B21BD1A090F8100AAB793 = {
 						CreatedOnToolsVersion = 6.1;
 						DevelopmentTeam = 43AQ936H96;
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 0820;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
@@ -4379,7 +4085,7 @@
 					};
 					F84B21D21A090F8100AAB793 = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0800;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -4428,10 +4134,6 @@
 				{
 					ProductGroup = 28CE83CB1A1D1D5100576538 /* Products */;
 					ProjectRef = 28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */;
-				},
-				{
-					ProductGroup = E6C70E211E28311300F8DB57 /* Products */;
-					ProjectRef = E6C70E201E28311300F8DB57 /* JSONSchema.xcodeproj */;
 				},
 				{
 					ProductGroup = D30EBB5B1C75503800105AE9 /* Products */;
@@ -4571,20 +4273,6 @@
 			fileType = wrapper.framework;
 			path = KIF.framework;
 			remoteRef = D30EBB691C75503800105AE9 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		E6C70E7D1E28311300F8DB57 /* JSONSchema.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = JSONSchema.framework;
-			remoteRef = E6C70E7C1E28311300F8DB57 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		E6C70E7F1E28311300F8DB57 /* JSONSchemaTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = JSONSchemaTests.xctest;
-			remoteRef = E6C70E7E1E28311300F8DB57 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		E6CB64CC1DA42C2900887098 /* KIFFrameworkConsumer.app */ = {
@@ -4857,9 +4545,10 @@
 				"$(SRCROOT)/Carthage/Build/iOS/OnePasswordExtension.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Deferred.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/SwiftKeychainWrapper.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/libPhoneNumber.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/libPhoneNumberiOS.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Fuzi.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/WebMetadataKit.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/JSONSchema.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/SwiftyJSON.framework",
 			);
 			name = "Copy Carthage Dependencies";
 			outputPaths = (
@@ -6503,7 +6192,7 @@
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client-Bridging-Header.h";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Firefox;
 		};
@@ -7132,7 +6821,7 @@
 				PRODUCT_NAME = Client;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = BUDDYBUILD;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client-Bridging-Header.h";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 			};
 			name = FirefoxNightly;
 		};
@@ -7606,7 +7295,7 @@
 				PRODUCT_NAME = Client;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = BUDDYBUILD;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client-Bridging-Header.h";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 			};
 			name = FennecEnterprise;
 		};
@@ -8214,7 +7903,7 @@
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client-Bridging-Header.h";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 			};
 			name = FirefoxBeta;
 		};
@@ -8683,7 +8372,7 @@
 				PRODUCT_NAME = Client;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = BUDDYBUILD;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client-Bridging-Header.h";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Fennec;
 		};

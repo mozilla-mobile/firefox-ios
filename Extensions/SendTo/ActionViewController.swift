@@ -56,7 +56,7 @@ class ActionViewController: UIViewController, ClientPickerViewControllerDelegate
         // TODO: hook up Send Tab via Sync.
         // profile?.clients.sendItem(self.sharedItem!, toClients: clients)
         if let item = sharedItem {
-            self.profile.sendItems(items: [item], toClients: clients)
+            self.profile.sendItems([item], toClients: clients)
         }
         finish()
     }

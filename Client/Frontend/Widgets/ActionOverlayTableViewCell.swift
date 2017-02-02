@@ -22,14 +22,14 @@ class ActionOverlayTableViewCell: UITableViewCell {
         let titleLabel = UILabel()
         titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontMedium
         titleLabel.textColor = ActionOverlayTableViewCellUX.LabelColor
-        titleLabel.textAlignment = .Left
+        titleLabel.textAlignment = .left
         titleLabel.numberOfLines = 1
         return titleLabel
     }()
 
     lazy var statusIcon: UIImageView = {
         let siteImageView = UIImageView()
-        siteImageView.contentMode = UIViewContentMode.ScaleAspectFit
+        siteImageView.contentMode = UIViewContentMode.scaleAspectFit
         siteImageView.clipsToBounds = true
         siteImageView.layer.cornerRadius = ActionOverlayTableViewCellUX.CornerRadius
         return siteImageView
@@ -38,13 +38,13 @@ class ActionOverlayTableViewCell: UITableViewCell {
     lazy var selectedOverlay: UIView = {
         let selectedOverlay = UIView()
         selectedOverlay.backgroundColor = ActionOverlayTableViewCellUX.SelectedOverlayColor
-        selectedOverlay.hidden = true
+        selectedOverlay.isHidden = true
         return selectedOverlay
     }()
 
-    override var selected: Bool {
+    override var isSelected: Bool {
         didSet {
-            self.selectedOverlay.hidden = !selected
+            self.selectedOverlay.isHidden = !isSelected
         }
     }
 
@@ -52,7 +52,7 @@ class ActionOverlayTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         layer.shouldRasterize = true
-        layer.rasterizationScale = UIScreen.mainScreen().scale
+        layer.rasterizationScale = UIScreen.main.scale
 
         isAccessibilityElement = true
 
@@ -60,21 +60,21 @@ class ActionOverlayTableViewCell: UITableViewCell {
         contentView.addSubview(titleLabel)
         contentView.addSubview(statusIcon)
 
-        let separatorLineView = UIView(frame:CGRectMake(0, 0, contentView.frame.width, 0.25))
-        separatorLineView.backgroundColor = UIColor.grayColor()
+        let separatorLineView = UIView(frame:CGRect(x: 0, y: 0, width: contentView.frame.width, height: 0.25))
+        separatorLineView.backgroundColor = UIColor.gray
         contentView.addSubview(separatorLineView)
 
-        selectedOverlay.snp_remakeConstraints { make in
+        selectedOverlay.snp.remakeConstraints { make in
             make.edges.equalTo(contentView)
         }
 
-        titleLabel.snp_remakeConstraints { make in
+        titleLabel.snp.remakeConstraints { make in
             make.leading.equalTo(contentView).offset(12)
-            make.trailing.equalTo(statusIcon.snp_leading)
+            make.trailing.equalTo(statusIcon.snp.leading)
             make.centerY.equalTo(contentView)
         }
 
-        statusIcon.snp_remakeConstraints { make in
+        statusIcon.snp.remakeConstraints { make in
             make.size.equalTo(ActionOverlayTableViewCellUX.StatusIconSize)
             make.trailing.equalTo(contentView).inset(12)
             make.centerY.equalTo(contentView)
@@ -85,11 +85,11 @@ class ActionOverlayTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configureCell(label: String, imageString: String) {
+    func configureCell(_ label: String, imageString: String) {
         titleLabel.text = label
 
         if let uiImage = UIImage(named: imageString) {
-            let image = uiImage.imageWithRenderingMode(.AlwaysTemplate)
+            let image = uiImage.withRenderingMode(.alwaysTemplate)
             statusIcon.image = image
             statusIcon.tintColor = UIConstants.SystemBlueColor
         }

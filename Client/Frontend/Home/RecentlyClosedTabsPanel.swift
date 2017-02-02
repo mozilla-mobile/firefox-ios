@@ -15,27 +15,27 @@ class RecentlyClosedTabsPanel: UIViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate? = nil
     var profile: Profile!
 
-    private lazy var recentlyClosedHeader: UILabel = {
+    fileprivate lazy var recentlyClosedHeader: UILabel = {
         let headerLabel = UILabel()
         headerLabel.text = Strings.RecentlyClosedTabsPanelTitle
         headerLabel.font = DynamicFontHelper.defaultHelper.DeviceFontHistoryPanel
-        headerLabel.textAlignment = .Center
-        headerLabel.backgroundColor = .whiteColor()
+        headerLabel.textAlignment = .center
+        headerLabel.backgroundColor = .white
         return headerLabel
     }()
 
-    private var tableViewController = RecentlyClosedTabsPanelSiteTableViewController()
+    fileprivate var tableViewController = RecentlyClosedTabsPanelSiteTableViewController()
 
-    private lazy var historyBackButton: HistoryBackButton = {
+    fileprivate lazy var historyBackButton: HistoryBackButton = {
         let button = HistoryBackButton()
-        button.addTarget(self, action: #selector(RecentlyClosedTabsPanel.historyBackButtonWasTapped), forControlEvents: .TouchUpInside)
+        button.addTarget(self, action: #selector(RecentlyClosedTabsPanel.historyBackButtonWasTapped), for: .touchUpInside)
         return button
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = .whiteColor()
+        view.backgroundColor = .white
 
         tableViewController.profile = self.profile
         tableViewController.homePanelDelegate = homePanelDelegate
@@ -46,28 +46,28 @@ class RecentlyClosedTabsPanel: UIViewController, HomePanel {
         self.view.addSubview(historyBackButton)
         self.view.addSubview(recentlyClosedHeader)
 
-        historyBackButton.snp_makeConstraints { make in
+        historyBackButton.snp.makeConstraints { make in
             make.top.left.right.equalTo(self.view)
             make.height.equalTo(50)
-            make.bottom.equalTo(recentlyClosedHeader.snp_top)
+            make.bottom.equalTo(recentlyClosedHeader.snp.top)
         }
 
-        recentlyClosedHeader.snp_makeConstraints { make in
-            make.top.equalTo(historyBackButton.snp_bottom)
+        recentlyClosedHeader.snp.makeConstraints { make in
+            make.top.equalTo(historyBackButton.snp.bottom)
             make.height.equalTo(20)
-            make.bottom.equalTo(tableViewController.view.snp_top).offset(-10)
+            make.bottom.equalTo(tableViewController.view.snp.top).offset(-10)
             make.left.right.equalTo(self.view)
         }
 
-        tableViewController.view.snp_makeConstraints { make in
+        tableViewController.view.snp.makeConstraints { make in
             make.left.right.bottom.equalTo(self.view)
         }
 
-        tableViewController.didMoveToParentViewController(self)
+        tableViewController.didMove(toParentViewController: self)
     }
 
-    @objc private func historyBackButtonWasTapped(gestureRecognizer: UITapGestureRecognizer) {
-        self.navigationController?.popViewControllerAnimated(true)
+    @objc fileprivate func historyBackButtonWasTapped(_ gestureRecognizer: UITapGestureRecognizer) {
+        self.navigationController?.popViewController(animated: true)
     }
 }
 
@@ -90,39 +90,39 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         guard let twoLineCell = cell as? TwoLineTableViewCell else {
             return cell
         }
         let tab = recentlyClosedTabs[indexPath.row]
         let displayURL = tab.url.displayURL ?? tab.url
         twoLineCell.setLines(tab.title, detailText: displayURL.absoluteDisplayString)
-        let site: Favicon? = (tab.faviconURL != nil) ? Favicon(url: tab.faviconURL!, type: .Guess) : nil
+        let site: Favicon? = (tab.faviconURL != nil) ? Favicon(url: tab.faviconURL!, type: .guess) : nil
         cell.imageView?.setIcon(site, forURL: displayURL)
         return cell
     }
 
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAtIndexPath indexPath: IndexPath) {
         guard let homePanelDelegate = homePanelDelegate,
               let recentlyClosedTabsPanel = recentlyClosedTabsPanel else {
             log.warning("No site or no URL when selecting row.")
             return
         }
-        let visitType = VisitType.Typed    // Means History, too.
+        let visitType = VisitType.typed    // Means History, too.
         homePanelDelegate.homePanel(recentlyClosedTabsPanel, didSelectURL: recentlyClosedTabs[indexPath.row].url, visitType: visitType)
     }
 
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 0
     }
 
     // Functions that deal with showing header rows.
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSectionsInTableView(_ tableView: UITableView) -> Int {
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return profile.recentlyClosedTabs.tabs.count
     }
 

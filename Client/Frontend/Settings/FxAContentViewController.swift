@@ -7,10 +7,11 @@ import Shared
 import SnapKit
 import UIKit
 import WebKit
+import SwiftyJSON
 
 protocol FxAContentViewControllerDelegate: class {
-    func contentViewControllerDidSignIn(viewController: FxAContentViewController, data: JSON) -> Void
-    func contentViewControllerDidCancel(viewController: FxAContentViewController)
+    func contentViewControllerDidSignIn(_ viewController: FxAContentViewController, data: JSON) -> Void
+    func contentViewControllerDidCancel(_ viewController: FxAContentViewController)
 }
 
 /**
@@ -24,12 +25,12 @@ protocol FxAContentViewControllerDelegate: class {
 class FxAContentViewController: SettingsContentViewController, WKScriptMessageHandler {
     var fxaOptions = FxALaunchParams()
 
-    private enum RemoteCommand: String {
-        case CanLinkAccount = "can_link_account"
-        case Loaded = "loaded"
-        case Login = "login"
-        case SessionStatus = "session_status"
-        case SignOut = "sign_out"
+    fileprivate enum RemoteCommand: String {
+        case canLinkAccount = "can_link_account"
+        case loaded = "loaded"
+        case login = "login"
+        case sessionStatus = "session_status"
+        case signOut = "sign_out"
     }
 
     weak var delegate: FxAContentViewControllerDelegate?
@@ -51,14 +52,14 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         let source = getJS()
         let userScript = WKUserScript(
             source: source,
-            injectionTime: WKUserScriptInjectionTime.AtDocumentEnd,
+            injectionTime: WKUserScriptInjectionTime.atDocumentEnd,
             forMainFrameOnly: true
         )
 
         // Handle messages from the content server (via our user script).
         let contentController = WKUserContentController()
         contentController.addUserScript(userScript)
-        contentController.addScriptMessageHandler(LeakAvoider(delegate:self), name: "accountsCommandHandler")
+        contentController.add(LeakAvoider(delegate:self), name: "accountsCommandHandler")
 
         let config = WKWebViewConfiguration()
         config.userContentController = contentController
@@ -76,17 +77,17 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     }
 
     // Send a message to the content server.
-    func injectData(type: String, content: [String: AnyObject]) {
+    func injectData(_ type: String, content: [String: Any]) {
         let data = [
             "type": type,
             "content": content,
-        ]
-        let json = JSON(data).toString(false)
+        ] as [String : Any]
+        let json = JSON(data).rawString() ?? ""
         let script = "window.postMessage(\(json), '\(self.url)');"
         webView.evaluateJavaScript(script, completionHandler: nil)
     }
 
-    private func onCanLinkAccount(data: JSON) {
+    fileprivate func onCanLinkAccount(_ data: JSON) {
         //    // We need to confirm a relink - see shouldAllowRelink for more
         //    let ok = shouldAllowRelink(accountData.email);
         let ok = true
@@ -94,23 +95,23 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     }
 
     // We're not signed in to a Firefox Account at this time, which we signal by returning an error.
-    private func onSessionStatus(data: JSON) {
+    fileprivate func onSessionStatus(_ data: JSON) {
         injectData("message", content: ["status": "error"])
     }
 
     // We're not signed in to a Firefox Account at this time. We should never get a sign out message!
-    private func onSignOut(data: JSON) {
+    fileprivate func onSignOut(_ data: JSON) {
         injectData("message", content: ["status": "error"])
     }
 
     // The user has signed in to a Firefox Account.  We're done!
-    private func onLogin(data: JSON) {
+    fileprivate func onLogin(_ data: JSON) {
         injectData("message", content: ["status": "login"])
         self.delegate?.contentViewControllerDidSignIn(self, data: data)
     }
 
     // The content server page is ready to be shown.
-    private func onLoaded() {
+    fileprivate func onLoaded() {
         self.timer?.invalidate()
         self.timer = nil
         self.isLoaded = true
@@ -122,7 +123,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     }
     
     // Attempt to fill out a field in content view
-    private func fillField(className: String?, value: String?) {
+    fileprivate func fillField(_ className: String?, value: String?) {
         guard let name = className, let val = value else {
             return
         }
@@ -131,30 +132,30 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     }
 
     // Handle a message coming from the content server.
-    func handleRemoteCommand(rawValue: String, data: JSON) {
+    func handleRemoteCommand(_ rawValue: String, data: JSON) {
         if let command = RemoteCommand(rawValue: rawValue) {
-            if !isLoaded && command != .Loaded {
+            if !isLoaded && command != .loaded {
                 // Work around https://github.com/mozilla/fxa-content-server/issues/2137
                 onLoaded()
             }
 
             switch (command) {
-            case .Loaded:
+            case .loaded:
                 onLoaded()
-            case .Login:
+            case .login:
                 onLogin(data)
-            case .CanLinkAccount:
+            case .canLinkAccount:
                 onCanLinkAccount(data)
-            case .SessionStatus:
+            case .sessionStatus:
                 onSessionStatus(data)
-            case .SignOut:
+            case .signOut:
                 onSignOut(data)
             }
         }
     }
 
     // Dispatch webkit messages originating from our child webview.
-    func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         // Make sure we're communicating with a trusted page. That is, ensure the origin of the
         // message is the same as the origin of the URL we initially loaded in this web view.
         // Note that this exploit wouldn't be possible if we were using WebChannels; see
@@ -168,20 +169,20 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         if (message.name == "accountsCommandHandler") {
             let body = JSON(message.body)
             let detail = body["detail"]
-            handleRemoteCommand(detail["command"].asString!, data: detail["data"])
+            handleRemoteCommand(detail["command"].stringValue, data: detail["data"])
         }
     }
 
-    private func getJS() -> String {
-        let fileRoot = NSBundle.mainBundle().pathForResource("FxASignIn", ofType: "js")
-        return (try! NSString(contentsOfFile: fileRoot!, encoding: NSUTF8StringEncoding)) as String
+    fileprivate func getJS() -> String {
+        let fileRoot = Bundle.main.path(forResource: "FxASignIn", ofType: "js")
+        return (try! NSString(contentsOfFile: fileRoot!, encoding: String.Encoding.utf8.rawValue)) as String
     }
 
-    override func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
+    override func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         // Ignore for now.
     }
 
-    override func webView(webView: WKWebView, didFailNavigation navigation: WKNavigation!, withError error: NSError) {
+    override func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         // Ignore for now.
     }
 }
@@ -199,7 +200,7 @@ class LeakAvoider: NSObject, WKScriptMessageHandler {
         super.init()
     }
 
-    func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        self.delegate?.userContentController(userContentController, didReceiveScriptMessage: message)
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        self.delegate?.userContentController(userContentController, didReceive: message)
     }
 }

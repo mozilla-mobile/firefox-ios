@@ -20,7 +20,7 @@ class LoginViewController: UIViewController {
         loginView.didClickLogin = { [unowned self] in
             self.accountManager.login(loginView.username, password: loginView.password, { err in
                 switch err {
-                case .BadAuth:
+                case .badAuth:
                     println("Invalid username and/or password")
                 default:
                     println("Connection error")

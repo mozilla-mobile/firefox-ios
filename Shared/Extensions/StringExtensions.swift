@@ -5,14 +5,6 @@
 import Foundation
 
 public extension String {
-    public func contains(_ other: String) -> Bool {
-        // rangeOfString returns nil if other is empty, destroying the analogy with (ordered) sets.
-        if other.isEmpty {
-            return true
-        }
-        return self.range(of: other) != nil
-    }
-
     public func startsWith(_ other: String) -> Bool {
         // rangeOfString returns nil if other is empty, destroying the analogy with (ordered) sets.
         if other.isEmpty {
