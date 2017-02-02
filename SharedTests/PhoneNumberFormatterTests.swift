@@ -5,7 +5,7 @@
 @testable import Shared
 import Foundation
 import XCTest
-import libPhoneNumber
+import libPhoneNumberiOS
 
 class PhoneNumberFormatterTests: XCTestCase {
 
@@ -14,13 +14,13 @@ class PhoneNumberFormatterTests: XCTestCase {
     func testUsesCarrierForGuessingCountryCode() {
         let utilMock = PhoneNumberUtilMock(carrierCountryCode: "DE")
         let formatter = PhoneNumberFormatter(util: utilMock)
-        XCTAssertEqual(formatter.guessCurrentCountryCode(Locale(localeIdentifier: "en_US")), "DE")
+        XCTAssertEqual(formatter.guessCurrentCountryCode(Locale(identifier: "en_US")), "DE")
     }
 
     func testFallsBackToSpecifiedLocaleForGuessingCountryCode() {
         let utilMock = PhoneNumberUtilMock(carrierCountryCode: NB_UNKNOWN_REGION)
         let formatter = PhoneNumberFormatter(util: utilMock)
-        XCTAssertEqual(formatter.guessCurrentCountryCode(Locale(localeIdentifier: "en_US")), "US")
+        XCTAssertEqual(formatter.guessCurrentCountryCode(Locale(identifier: "en_US")), "US")
     }
 
     // MARK: - Format Selection
