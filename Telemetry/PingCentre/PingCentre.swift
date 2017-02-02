@@ -87,7 +87,7 @@ class DefaultPingCentreImpl: PingCentreClient {
 
     fileprivate func sendPayload(_ payload: [String: Any]) -> Success {
         let deferred = Deferred<Maybe<()>>()
-        let request = NSMutableURLRequest(url: endpoint.url)
+        var request = URLRequest(url: endpoint.url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
