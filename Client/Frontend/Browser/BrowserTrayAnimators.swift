@@ -139,6 +139,10 @@ private extension BrowserToTrayAnimator {
         tabCollectionViewSnapshot.alpha = 0
         tabTray.view.insertSubview(tabCollectionViewSnapshot, belowSubview: tabTray.toolbar)
 
+        if let toast = bvc.clipboardToast {
+            toast.removeFromSuperview()
+        }
+        
         container.addSubview(cell)
         cell.layoutIfNeeded()
         cell.title.transform = CGAffineTransformMakeTranslation(0, -cell.title.frame.size.height)
@@ -242,7 +246,6 @@ private func calculateCollapsedCellFrameUsingCollectionView(collectionView: UICo
 
 private func calculateExpandedCellFrameFromBVC(bvc: BrowserViewController) -> CGRect {
     var frame = bvc.webViewContainer.frame
-
     // If we're navigating to a home panel and we were expecting to show the toolbar, add more height to end frame since
     // there is no toolbar for home panels
     if !bvc.shouldShowFooterForTraitCollection(bvc.traitCollection) {

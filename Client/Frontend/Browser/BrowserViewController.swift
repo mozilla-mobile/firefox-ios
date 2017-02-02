@@ -43,6 +43,8 @@ class BrowserViewController: UIViewController {
     var readerModeCache: ReaderModeCache
     private var statusBarOverlay: UIView!
     private(set) var toolbar: TabToolbar?
+    var clipboardToast: ButtonToast?
+    var clipboardBarDisplayHandler: ClipboardBarDisplayHandler!
     private var searchController: SearchViewController?
     private var screenshotHelper: ScreenshotHelper!
     private var homePanelIsInline = false
@@ -413,11 +415,14 @@ class BrowserViewController: UIViewController {
         searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
 
         footer = UIView()
-        self.view.addSubview(footer)
-        self.view.addSubview(snackBars)
+        view.addSubview(footer)
+        view.addSubview(snackBars)
         snackBars.backgroundColor = UIColor.clearColor()
-        self.view.addSubview(findInPageContainer)
-
+        view.addSubview(findInPageContainer)
+        
+        clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs)
+        clipboardBarDisplayHandler.delegate = self;
+        
         scrollController.urlBar = urlBar
         scrollController.header = header
         scrollController.footer = footer
@@ -425,7 +430,7 @@ class BrowserViewController: UIViewController {
         scrollController.webViewContainerToolbar = webViewContainerToolbar
 
         log.debug("BVC updating toolbar state…")
-        self.updateToolbarStateForTraitCollection(self.traitCollection)
+        updateToolbarStateForTraitCollection(traitCollection)
 
         log.debug("BVC setting up constraints…")
         setupConstraints()
@@ -531,12 +536,14 @@ class BrowserViewController: UIViewController {
 
         log.debug("Updating tab count.")
         updateTabCountUsingTabManager(tabManager, animated: false)
+        clipboardBarDisplayHandler.checkIfShouldDisplayBar()
         log.debug("BVC done.")
 
         NSNotificationCenter.defaultCenter().addObserver(self,
                                                          selector: #selector(BrowserViewController.openSettings),
                                                          name: NotificationStatusNotificationTapped,
                                                          object: nil)
+        
     }
 
     private func showRestoreTabsAlert() {
@@ -668,6 +675,7 @@ class BrowserViewController: UIViewController {
             }
         }
 
+   
         // Setup the bottom toolbar
         toolbar?.snp_remakeConstraints { make in
             make.edges.equalTo(self.footerBackground!)
@@ -689,6 +697,7 @@ class BrowserViewController: UIViewController {
             make.bottom.left.right.equalTo(self.footer)
             make.height.equalTo(UIConstants.ToolbarHeight)
         }
+        
         urlBar.setNeedsUpdateConstraints()
 
         // Remake constraints even if we're already showing the home controller.
@@ -733,6 +742,7 @@ class BrowserViewController: UIViewController {
             view.addSubview(homePanelController.view)
             homePanelController.didMoveToParentViewController(self)
         }
+        
         guard let homePanelController = self.homePanelController else {
             assertionFailure("homePanelController is still nil after assignment.")
             return
@@ -780,6 +790,8 @@ class BrowserViewController: UIViewController {
                 if let readerMode = self.tabManager.selectedTab?.getHelper(name: ReaderMode.name()) as? ReaderMode where readerMode.state == .Active {
                     self.showReaderModeBar(animated: false)
                 }
+                self.view.setNeedsUpdateConstraints()
+
             })
         }
     }
@@ -1305,6 +1317,37 @@ class BrowserViewController: UIViewController {
     }
 }
 
+extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
+    func shouldDisplayClipboardBar(absoluteString: String) {
+        let title = NSLocalizedString("Go to copied link?", comment: "Clipboard bar title")
+        clipboardToast = ButtonToast(labelText: title, descriptionText: absoluteString,  buttonText: NSLocalizedString("Go", comment: "Clipboard bar button title"), completion: { (buttonPressed) in
+            if !buttonPressed {
+                return
+            }
+            
+            if let url = NSURL(string: absoluteString) {
+                self.openURLInNewTab(url, isPrivileged: false)
+            }
+        })
+
+        if let toast = clipboardToast {
+            let time = dispatch_time(dispatch_time_t(DISPATCH_TIME_NOW), Int64(ButtonToastUX.ToastDelay * Double(NSEC_PER_SEC)))
+            dispatch_after(time, dispatch_get_main_queue()) {
+                self.view.addSubview(toast)
+                toast.snp_makeConstraints { make in
+                    make.leading.trailing.equalTo(self.view)
+                    if self.homePanelController != nil && !self.homePanelIsInline {
+                        make.bottom.equalTo(self.view.snp_bottom)
+                    } else {
+                        make.bottom.equalTo(self.footer.snp_top)
+                    }
+                }
+                toast.showToast(ClipboardBarToastUX.DismissAfter)
+            }
+        }
+    }
+}
+
 extension BrowserViewController: AppStateDelegate {
 
     func appDidUpdateState(appState: AppState) {
@@ -1606,6 +1649,9 @@ extension BrowserViewController: URLBarDelegate {
         if .BlankPage == NewTabAccessors.getNewTabPage(profile.prefs) {
             UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
         } else {
+            if let toast = clipboardToast {
+                toast.removeFromSuperview()
+            }
             showHomePanelController(inline: false)
         }
     }
@@ -2684,7 +2730,6 @@ extension BrowserViewController {
             view.insertSubview(readerModeBar, belowSubview: header)
             self.readerModeBar = readerModeBar
         }
-
         updateReaderModeBar()
 
         self.updateViewConstraints()
