@@ -17,89 +17,89 @@ class SyncStatusResolverTests: XCTestCase {
 
     func testAllCompleted() {
         let results: EngineResults = [
-            ("tabs", .Completed),
-            ("clients", .Completed)
+            ("tabs", .completed),
+            ("clients", .completed)
         ]
         let maybeResults = Maybe(success: results)
 
         let resolver = SyncStatusResolver(engineResults: maybeResults)
-        XCTAssertTrue(resolver.resolveResults() == SyncDisplayState.Good)
+        XCTAssertTrue(resolver.resolveResults() == SyncDisplayState.good)
     }
 
     func testAllCompletedExceptOneDisabledRemotely() {
         let results: EngineResults = [
-            ("tabs", .Completed),
-            ("clients", .NotStarted(.EngineRemotelyNotEnabled(collection: "clients")))
+            ("tabs", .completed),
+            ("clients", .notStarted(.engineRemotelyNotEnabled(collection: "clients")))
         ]
         let maybeResults = Maybe(success: results)
 
         let resolver = SyncStatusResolver(engineResults: maybeResults)
-        XCTAssertTrue(resolver.resolveResults() == SyncDisplayState.Good)
+        XCTAssertTrue(resolver.resolveResults() == SyncDisplayState.good)
     }
 
     func testAllCompletedExceptNotStartedBecauseNoAccount() {
         let results: EngineResults = [
-            ("tabs", .Completed),
-            ("clients", .NotStarted(.NoAccount))
+            ("tabs", .completed),
+            ("clients", .notStarted(.noAccount))
         ]
         let maybeResults = Maybe(success: results)
 
         let resolver = SyncStatusResolver(engineResults: maybeResults)
-        XCTAssertTrue(resolver.resolveResults() == SyncDisplayState.Warning(message: Strings.FirefoxSyncOfflineTitle))
+        XCTAssertTrue(resolver.resolveResults() == SyncDisplayState.warning(message: Strings.FirefoxSyncOfflineTitle))
     }
 
     func testAllCompletedExceptNotStartedBecauseOffline() {
         let results: EngineResults = [
-            ("tabs", .Completed),
-            ("clients", .NotStarted(.Offline))
+            ("tabs", .completed),
+            ("clients", .notStarted(.offline))
         ]
         let maybeResults = Maybe(success: results)
 
         let resolver = SyncStatusResolver(engineResults: maybeResults)
-        XCTAssertTrue(resolver.resolveResults() == SyncDisplayState.Bad(message: Strings.FirefoxSyncOfflineTitle))
+        XCTAssertTrue(resolver.resolveResults() == SyncDisplayState.bad(message: Strings.FirefoxSyncOfflineTitle))
     }
 
     func testOfflineAndNoAccount() {
         let results: EngineResults = [
-            ("tabs", .NotStarted(.NoAccount)),
-            ("clients", .NotStarted(.Offline))
+            ("tabs", .notStarted(.noAccount)),
+            ("clients", .notStarted(.offline))
         ]
 
         let maybeResults = Maybe(success: results)
 
         let resolver = SyncStatusResolver(engineResults: maybeResults)
-        XCTAssertTrue(resolver.resolveResults() == SyncDisplayState.Bad(message: Strings.FirefoxSyncOfflineTitle))
+        XCTAssertTrue(resolver.resolveResults() == SyncDisplayState.bad(message: Strings.FirefoxSyncOfflineTitle))
     }
 
     func testAllPartial() {
         let results: EngineResults = [
-            ("tabs", .Partial),
-            ("clients", .Partial)
+            ("tabs", .partial),
+            ("clients", .partial)
         ]
         let maybeResults = Maybe(success: results)
 
         let resolver = SyncStatusResolver(engineResults: maybeResults)
-        XCTAssertTrue(resolver.resolveResults() == SyncDisplayState.Good)
+        XCTAssertTrue(resolver.resolveResults() == SyncDisplayState.good)
     }
 
     func testBookmarkMergeError() {
         let maybeResults: Maybe<EngineResults> = Maybe(failure: BookmarksMergeError())
         let resolver = SyncStatusResolver(engineResults: maybeResults)
-        let expected = SyncDisplayState.Warning(message: String(format: Strings.FirefoxSyncPartialTitle, Strings.localizedStringForSyncComponent("bookmarks") ?? ""))
+        let expected = SyncDisplayState.warning(message: String(format: Strings.FirefoxSyncPartialTitle, Strings.localizedStringForSyncComponent("bookmarks") ?? ""))
         XCTAssertTrue(resolver.resolveResults() == expected)
     }
 
     func testBookmarksDatabaseError() {
         let maybeResults: Maybe<EngineResults> = Maybe(failure: BookmarksDatabaseError(err: nil))
         let resolver = SyncStatusResolver(engineResults: maybeResults)
-        let expected = SyncDisplayState.Warning(message: String(format: Strings.FirefoxSyncPartialTitle, Strings.localizedStringForSyncComponent("bookmarks") ?? ""))
+        let expected = SyncDisplayState.warning(message: String(format: Strings.FirefoxSyncPartialTitle, Strings.localizedStringForSyncComponent("bookmarks") ?? ""))
         XCTAssertTrue(resolver.resolveResults() == expected)
     }
 
     func testRandomFailure() {
         let maybeResults: Maybe<EngineResults> = Maybe(failure: RandomError())
         let resolver = SyncStatusResolver(engineResults: maybeResults)
-        let expected = SyncDisplayState.Bad(message: nil)
+        let expected = SyncDisplayState.bad(message: nil)
         XCTAssertTrue(resolver.resolveResults() == expected)
     }
 }

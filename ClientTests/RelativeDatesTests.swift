@@ -18,7 +18,7 @@ class RelativeDatesTests: XCTestCase {
         
         date = Date(timeInterval: 0, since: dateOrig)
         date = date.addingTimeInterval(-60)
-        XCTAssertTrue(date.toRelativeTimeString() == ("today at " + DateFormatter.localizedStringFromDate(date, dateStyle: DateFormatter.Style.NoStyle, timeStyle: DateFormatter.Style.ShortStyle)))
+        XCTAssertTrue(date.toRelativeTimeString() == ("today at " + DateFormatter.localizedString(from: date, dateStyle: DateFormatter.Style.none, timeStyle: DateFormatter.Style.short)))
         
         date = Date(timeInterval: 0, since: dateOrig)
         date = date.addingTimeInterval(-60 * 60 * 24)
@@ -38,10 +38,10 @@ class RelativeDatesTests: XCTestCase {
         
         date = Date(timeInterval: 0, since: dateOrig)
         date = date.addingTimeInterval(-60 * 60 * 24 * 7 * 5 * 2)
-        XCTAssertTrue(date.toRelativeTimeString() == DateFormatter.localizedStringFromDate(date, dateStyle: DateFormatter.Style.ShortStyle, timeStyle: DateFormatter.Style.ShortStyle))
+        XCTAssertTrue(date.toRelativeTimeString() == DateFormatter.localizedString(from: date, dateStyle: DateFormatter.Style.short, timeStyle: DateFormatter.Style.short))
         
         date = Date(timeInterval: 0, since: dateOrig)
         date = date.addingTimeInterval(-60 * 60 * 24 * 7 * 5 * 12 * 2)
-        XCTAssertTrue(date.toRelativeTimeString() == DateFormatter.localizedStringFromDate(date, dateStyle: DateFormatter.Style.ShortStyle, timeStyle: DateFormatter.Style.ShortStyle))
+        XCTAssertTrue(date.toRelativeTimeString() == DateFormatter.localizedString(from: date, dateStyle: DateFormatter.Style.short, timeStyle: DateFormatter.Style.short))
     }
 }

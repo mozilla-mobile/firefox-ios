@@ -27,7 +27,7 @@ class TestHistory: ProfileTest {
     fileprivate func checkSites(_ history: BrowserHistory, urls: [String: String], s: Bool = true) {
         // Retrieve the entry.
         if let cursor = history.getSitesByLastVisit(100).value.successValue {
-            XCTAssertEqual(cursor.status, CursorStatus.Success, "Returned success \(cursor.statusMessage).")
+            XCTAssertEqual(cursor.status, CursorStatus.success, "Returned success \(cursor.statusMessage).")
             XCTAssertEqual(cursor.count, urls.count, "Cursor has \(urls.count) entries.")
 
             for index in 0..<cursor.count {
@@ -53,7 +53,7 @@ class TestHistory: ProfileTest {
             history.getSitesByFrecencyWithHistoryLimit(100, whereURLContains: url).upon { result in
                 XCTAssertTrue(result.isSuccess)
                 let cursor = result.successValue!
-                XCTAssertEqual(cursor.status, CursorStatus.Success, "returned success \(cursor.statusMessage)")
+                XCTAssertEqual(cursor.status, CursorStatus.success, "returned success \(cursor.statusMessage)")
                 // XXX - We don't allow querying much info about visits here anymore, so there isn't a lot to do
                 expectation.fulfill()
             }
@@ -129,7 +129,7 @@ class TestHistory: ProfileTest {
     // the results. Just look for crashes.
     func testRandomThreading() {
         withTestProfile { profile -> Void in
-            let queue = DispatchQueue("My Queue", DISPATCH_QUEUE_CONCURRENT)
+            let queue = DispatchQueue(label: "My Queue", qos: DispatchQoS.default, attributes: DispatchQueue.Attributes.concurrent, autoreleaseFrequency: DispatchQueue.AutoreleaseFrequency.inherit, target: nil)
             var counter = 0
 
             let expectation = self.expectation(description: "Wait for history")
@@ -149,7 +149,7 @@ class TestHistory: ProfileTest {
     // Same as testRandomThreading, but uses one history connection for all threads
     func testRandomThreading2() {
         withTestProfile { profile -> Void in
-            let queue = DispatchQueue("My Queue", DISPATCH_QUEUE_CONCURRENT)
+            let queue = DispatchQueue(label: "My Queue", qos: DispatchQoS.default, attributes: DispatchQueue.Attributes.concurrent, autoreleaseFrequency: DispatchQueue.AutoreleaseFrequency.inherit, target: nil)
             var history = profile.history as BrowserHistory
             var counter = 0
 
@@ -199,7 +199,8 @@ class TestHistory: ProfileTest {
             cb()
             return
         } else {
-            runRandom(&history, cmdIn: -1) { _ in
+            runRandom(&history, cmdIn: -1) { [history]_ in
+                var history = history
                 self.runMultiRandom(&history, val: val+1, numCmds: numCmds, cb: cb)
             }
         }
@@ -207,7 +208,8 @@ class TestHistory: ProfileTest {
 
     // Helper for starting a new thread running NumCmds random methods on it. Calls cb when done.
     fileprivate func runRandom(_ history: inout BrowserHistory, queue: DispatchQueue, cb: @escaping () -> Void) {
-        queue.async {
+        queue.async { [history] in
+            var history = history
             // Each thread creates its own history provider
             self.runMultiRandom(&history, val: 0, numCmds: self.NumCmds) { _ in
                 DispatchQueue.main.async(execute: cb)

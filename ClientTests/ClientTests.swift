@@ -15,7 +15,7 @@ class ClientTests: XCTestCase {
 
     func testSyncUA() {
         let ua = UserAgent.syncUserAgent
-        let loc = ua.rangeOfString("^Firefox-iOS-Sync/[0-9\\.]+ \\([-_A-Za-z0-9= \\(\\)]+\\)$", options: NSString.CompareOptions.RegularExpressionSearch)
+        let loc = ua.range(of: "^Firefox-iOS-Sync/[0-9\\.]+ \\([-_A-Za-z0-9= \\(\\)]+\\)$", options: NSString.CompareOptions.regularExpression)
         XCTAssertTrue(loc != nil, "Sync UA is as expected. Was \(ua)")
     }
 
@@ -80,8 +80,8 @@ class ClientTests: XCTestCase {
         let expectation = self.expectation(description: "Validate host for \(host)")
         let request = URLRequest(url: URL(string: "http://\(host):6571/about/license")!)
         var response: HTTPURLResponse?
-        Alamofire.request(request).authenticate(usingCredential: WebServer.sharedInstance.credentials).response { (req, res, data, error) -> Void in
-            response = res
+        Alamofire.request(request).authenticate(usingCredential: WebServer.sharedInstance.credentials).response { (res) -> Void in
+            response = res.response
             expectation.fulfill()
         }
         waitForExpectations(timeout: 100, handler: nil)
