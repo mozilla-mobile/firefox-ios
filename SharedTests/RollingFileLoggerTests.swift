@@ -4,11 +4,12 @@
 
 import Foundation
 import XCTest
+import XCGLogger
 @testable import Shared
 
 class RollingFileLoggerTests: XCTestCase {
     var logger: RollingFileLogger!
-    var logDir: String!
+    var logDir: String = ""
     var sizeLimit: Int = 5000
 
     fileprivate lazy var formatter: DateFormatter = {

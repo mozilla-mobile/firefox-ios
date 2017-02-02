@@ -93,14 +93,19 @@ public func optArrayEqual<T: Equatable>(_ lhs: [T]?, rhs: [T]?) -> Bool {
  *
  * If the input array is empty, returns an empty array.
  */
-public func chunk<T>(_ arr: [T], by: Int) -> [ArraySlice<T>] {
-    let count = arr.count
-    let step = max(1, by)     // Handle out-of-range 'by'.
 
-    let s = stride(from: 0, to: count, by: step)
-    return s.map {
-        arr[$0..<$0.advanced(by: step)]
+public func chunk<T>(_ arr: [T], by: Int) -> [ArraySlice<T>] {
+    var result = [ArraySlice<T>]()
+    var chunk = -1
+    let size = max(1, by)
+    for (index, elem) in arr.enumerated() {
+        if index % size == 0 {
+            result.append(ArraySlice<T>())
+            chunk += 1
+        }
+        result[chunk].append(elem)
     }
+    return result
 }
 
 public extension Sequence {
