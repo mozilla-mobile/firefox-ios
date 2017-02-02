@@ -192,7 +192,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         var cookie: (String, String?, String?)!
         let expectation = self.expectation(description: "Got cookie")
         webView.evaluateJavaScript("JSON.stringify([document.cookie, localStorage.cookie, sessionStorage.cookie])") { result, _ in
-            let cookies = JSON.parse(result as! String).asArray!
+            let cookies = JSON(parseJSON: result as! String).asArray!
             cookie = (cookies[0].asString!, cookies[1].asString, cookies[2].asString)
             expectation.fulfill()
         }

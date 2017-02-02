@@ -242,10 +242,10 @@ class TestSQLiteLogins: XCTestCase {
 
     /*
     func testAddUseOfLogin() {
-        let expectation = self.expectationWithDescription("Add visit")
+        let expectation = self.self.expectation(description: "Add visit")
 
         if var usageData = login as? LoginUsageData {
-            usageData.timeCreated = NSDate.nowMicroseconds()
+            usageData.timeCreated = Date.nowMicroseconds()
         }
 
         addLogin(login) >>>
@@ -253,7 +253,7 @@ class TestSQLiteLogins: XCTestCase {
             getLoginDetailsFor(login, expected: login as! LoginUsageData) >>>
             done(login.protectionSpace, expectation: expectation)
 
-        waitForExpectationsWithTimeout(10.0, handler: nil)
+        waitForExpectations(timeout: 10.0, handler: nil)
     }
     */
 

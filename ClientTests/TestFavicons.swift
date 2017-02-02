@@ -46,7 +46,7 @@ class TestFavicons: ProfileTest {
     // TODO: uncomment.
     /*
     private func checkSites(favicons: Favicons, icons: [String], s: Bool = true) {
-        let expectation = self.expectationWithDescription("Wait for history")
+        let expectation = self.self.expectation(description: "Wait for history")
 
         // Retrieve the entry
         let opts: QueryOptions? = nil
@@ -63,11 +63,11 @@ class TestFavicons: ProfileTest {
             expectation.fulfill()
         })
 
-        self.waitForExpectationsWithTimeout(100, handler: nil)
+        self.waitForExpectations(timeout: 100, handler: nil)
     }
 
     private func clear(favicons: Favicons, s: Bool = true) {
-        let expectation = self.expectationWithDescription("Wait for history")
+        let expectation = self.self.expectation(description: "Wait for history")
 
         let opts: QueryOptions? = nil
         favicons.clear(opts) { (success) -> Void in
@@ -75,7 +75,7 @@ class TestFavicons: ProfileTest {
             expectation.fulfill()
         }
 
-        self.waitForExpectationsWithTimeout(100, handler: nil)
+        self.waitForExpectations(timeout: 100, handler: nil)
     }
 
     // This is a very basic test. Adds an entry. Retrieves it, and then clears the database
