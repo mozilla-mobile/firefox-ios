@@ -9,7 +9,7 @@ import XCGLogger
 
 import XCTest
 
-private let log = XCGLogger.defaultInstance()
+private let log = XCGLogger.default
 
 class TestBrowserDB: XCTestCase {
     let files = MockFiles()
@@ -58,7 +58,7 @@ class TestBrowserDB: XCTestCase {
 
     func testMovesDB() {
         let db = BrowserDB(filename: "foo.db", files: self.files)
-        XCTAssertTrue(db.createOrUpdate(BrowserTable()) == .Success)
+        XCTAssertTrue(db.createOrUpdate(BrowserTable()) == .success)
 
         db.run("CREATE TABLE foo (bar TEXT)").value      // Just so we have writes in the WAL.
 
@@ -67,9 +67,9 @@ class TestBrowserDB: XCTestCase {
         XCTAssertTrue(files.exists("foo.db-wal"))
 
         // Grab a pointer to the -shm so we can compare later.
-        let shmA = try! files.fileWrapper("foo.db-shm")
-        let creationA = shmA.fileAttributes[FileAttributeKey.creationDate] as! NSDate
-        let inodeA = (shmA.fileAttributes[FileAttributeKey.systemFileNumber] as! NSNumber).unsignedLongValue
+        let shmAAttributes = try? FileManager.default.attributesOfItem(atPath: "foo.db-shm")
+        let creationA = shmAAttributes![FileAttributeKey.creationDate] as! Date
+        let inodeA = (shmAAttributes![FileAttributeKey.systemFileNumber] as! NSNumber).uintValue
 
         XCTAssertFalse(files.exists("foo.db.bak.1"))
         XCTAssertFalse(files.exists("foo.db.bak.1-shm"))
@@ -83,7 +83,7 @@ class TestBrowserDB: XCTestCase {
         // It'll still fail, but it moved our old DB.
         // Our current observation is that closing the DB deletes the .shm file and also
         // checkpoints the WAL.
-        XCTAssertFalse(db.createOrUpdate(MockFailingTable()) == .Success)
+        XCTAssertFalse(db.createOrUpdate(MockFailingTable()) == .success)
         db.run("CREATE TABLE foo (bar TEXT)").value      // Just so we have writes in the WAL.
 
         XCTAssertTrue(files.exists("foo.db"))
@@ -91,10 +91,10 @@ class TestBrowserDB: XCTestCase {
         XCTAssertTrue(files.exists("foo.db-wal"))
 
         // But now it's been reopened, it's not the same -shm!
-        let shmB = try! files.fileWrapper("foo.db-shm")
-        let creationB = shmB.fileAttributes[FileAttributeKey.creationDate] as! NSDate
-        let inodeB = (shmB.fileAttributes[FileAttributeKey.systemFileNumber] as! NSNumber).unsignedLongValue
-        XCTAssertTrue(creationA.compare(creationB) != ComparisonResult.OrderedDescending)
+        let shmBAttributes = try? FileManager.default.attributesOfItem(atPath: "foo.db-shm")
+        let creationB = shmBAttributes![FileAttributeKey.creationDate] as! Date
+        let inodeB = (shmBAttributes![FileAttributeKey.systemFileNumber] as! NSNumber).uintValue
+        XCTAssertTrue(creationA.compare(creationB) != ComparisonResult.orderedDescending)
         XCTAssertNotEqual(inodeA, inodeB)
 
         XCTAssertTrue(files.exists("foo.db.bak.1"))

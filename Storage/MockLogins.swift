@@ -6,6 +6,8 @@ import Foundation
 import Shared
 import Deferred
 
+@testable import Storage
+
 open class MockLogins: BrowserLogins, SyncableLogins {
     fileprivate var cache = [Login]()
 
@@ -15,7 +17,7 @@ open class MockLogins: BrowserLogins, SyncableLogins {
     open func getLoginsForProtectionSpace(_ protectionSpace: URLProtectionSpace) -> Deferred<Maybe<Cursor<LoginData>>> {
         let cursor = ArrayCursor(data: cache.filter({ login in
             return login.protectionSpace.host == protectionSpace.host
-        }).sort({ (loginA, loginB) -> Bool in
+        }).sorted(by: { (loginA, loginB) -> Bool in
             return loginA.timeLastUsed > loginB.timeLastUsed
         }).map({ login in
             return login as LoginData
@@ -27,7 +29,7 @@ open class MockLogins: BrowserLogins, SyncableLogins {
         let cursor = ArrayCursor(data: cache.filter({ login in
             return login.protectionSpace.host == protectionSpace.host &&
                    login.username == username
-        }).sort({ (loginA, loginB) -> Bool in
+        }).sorted(by: { (loginA, loginB) -> Bool in
             return loginA.timeLastUsed > loginB.timeLastUsed
         }).map({ login in
             return login as LoginData
@@ -69,7 +71,7 @@ open class MockLogins: BrowserLogins, SyncableLogins {
     open func getUsageDataForLoginByGUID(_ guid: GUID) -> Deferred<Maybe<LoginUsageData>> {
         let res = cache.filter({ login in
             return login.guid == guid
-        }).sort({ (loginA, loginB) -> Bool in
+        }).sorted(by: { (loginA, loginB) -> Bool in
             return loginA.timeLastUsed > loginB.timeLastUsed
         })[0] as LoginUsageData
 

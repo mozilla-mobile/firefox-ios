@@ -45,17 +45,17 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         let siteC = Site(url: "http://siteC/", title: "C")
         let siteD = Site(url: "http://siteD/", title: "D")
 
-        let siteVisitA1 = SiteVisit(site: siteA, date: oneHourAgo, type: .Link)
-        let siteVisitB1 = SiteVisit(site: siteB, date: fifteenMinutesAgo, type: .Link)
+        let siteVisitA1 = SiteVisit(site: siteA, date: oneHourAgo, type: .link)
+        let siteVisitB1 = SiteVisit(site: siteB, date: fifteenMinutesAgo, type: .link)
 
-        let siteVisitC1 = SiteVisit(site: siteC, date: oneHourAgo, type: .Link)
-        let siteVisitC2 = SiteVisit(site: siteC, date: oneHourAgo + 1000, type: .Link)
-        let siteVisitC3 = SiteVisit(site: siteC, date: oneHourAgo + 2000, type: .Link)
+        let siteVisitC1 = SiteVisit(site: siteC, date: oneHourAgo, type: .link)
+        let siteVisitC2 = SiteVisit(site: siteC, date: oneHourAgo + 1000, type: .link)
+        let siteVisitC3 = SiteVisit(site: siteC, date: oneHourAgo + 2000, type: .link)
         
-        let siteVisitD1 = SiteVisit(site: siteD, date: oneHourAgo, type: .Link)
-        let siteVisitD2 = SiteVisit(site: siteD, date: oneHourAgo + 1000, type: .Link)
-        let siteVisitD3 = SiteVisit(site: siteD, date: oneHourAgo + 2000, type: .Link)
-        let siteVisitD4 = SiteVisit(site: siteD, date: oneHourAgo + 3000, type: .Link)
+        let siteVisitD1 = SiteVisit(site: siteD, date: oneHourAgo, type: .link)
+        let siteVisitD2 = SiteVisit(site: siteD, date: oneHourAgo + 1000, type: .link)
+        let siteVisitD3 = SiteVisit(site: siteD, date: oneHourAgo + 2000, type: .link)
+        let siteVisitD4 = SiteVisit(site: siteD, date: oneHourAgo + 3000, type: .link)
 
         history.clearHistory().succeeded()
         history.addLocalVisit(siteVisitA1).succeeded()
@@ -110,15 +110,15 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         bookmarks.applyRecords([bookmarkA, bookmarkB]).succeeded()
 
         let bookmarkSiteA = Site(url: "http://bookmarkA/", title: "A Bookmark")
-        let bookmarkVisitA1 = SiteVisit(site: bookmarkSiteA, date: oneHourAgo, type: .Bookmark)
-        let bookmarkVisitA2 = SiteVisit(site: bookmarkSiteA, date: oneHourAgo + 1000, type: .Bookmark)
-        let bookmarkVisitA3 = SiteVisit(site: bookmarkSiteA, date: oneHourAgo + 2000, type: .Bookmark)
+        let bookmarkVisitA1 = SiteVisit(site: bookmarkSiteA, date: oneHourAgo, type: .bookmark)
+        let bookmarkVisitA2 = SiteVisit(site: bookmarkSiteA, date: oneHourAgo + 1000, type: .bookmark)
+        let bookmarkVisitA3 = SiteVisit(site: bookmarkSiteA, date: oneHourAgo + 2000, type: .bookmark)
         
         let bookmarkSiteB = Site(url: "http://bookmarkB/", title: "B Bookmark")
-        let bookmarkVisitB1 = SiteVisit(site: bookmarkSiteB, date: fourDaysAgo, type: .Bookmark)
-        let bookmarkVisitB2 = SiteVisit(site: bookmarkSiteB, date: fourDaysAgo + 1000, type: .Bookmark)
-        let bookmarkVisitB3 = SiteVisit(site: bookmarkSiteB, date: fourDaysAgo + 2000, type: .Bookmark)
-        let bookmarkVisitB4 = SiteVisit(site: bookmarkSiteB, date: fourDaysAgo + 3000, type: .Bookmark)
+        let bookmarkVisitB1 = SiteVisit(site: bookmarkSiteB, date: fourDaysAgo, type: .bookmark)
+        let bookmarkVisitB2 = SiteVisit(site: bookmarkSiteB, date: fourDaysAgo + 1000, type: .bookmark)
+        let bookmarkVisitB3 = SiteVisit(site: bookmarkSiteB, date: fourDaysAgo + 2000, type: .bookmark)
+        let bookmarkVisitB4 = SiteVisit(site: bookmarkSiteB, date: fourDaysAgo + 3000, type: .bookmark)
 
         history.clearHistory().succeeded()
         history.addLocalVisit(bookmarkVisitA1).succeeded()
@@ -160,17 +160,17 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         let siteC = Site(url: "http://www.search.yahoo.com/", title: "C")
         let siteD = Site(url: "http://siteD/", title: "D")
 
-        let siteVisitA1 = SiteVisit(site: siteA, date: oneHourAgo, type: .Link)
-        let siteVisitB1 = SiteVisit(site: siteB, date: fifteenMinutesAgo, type: .Link)
+        let siteVisitA1 = SiteVisit(site: siteA, date: oneHourAgo, type: .link)
+        let siteVisitB1 = SiteVisit(site: siteB, date: fifteenMinutesAgo, type: .link)
 
-        let siteVisitC1 = SiteVisit(site: siteC, date: oneHourAgo, type: .Link)
-        let siteVisitC2 = SiteVisit(site: siteC, date: oneHourAgo + 1000, type: .Link)
-        let siteVisitC3 = SiteVisit(site: siteC, date: oneHourAgo + 2000, type: .Link)
+        let siteVisitC1 = SiteVisit(site: siteC, date: oneHourAgo, type: .link)
+        let siteVisitC2 = SiteVisit(site: siteC, date: oneHourAgo + 1000, type: .link)
+        let siteVisitC3 = SiteVisit(site: siteC, date: oneHourAgo + 2000, type: .link)
 
-        let siteVisitD1 = SiteVisit(site: siteD, date: oneHourAgo, type: .Link)
-        let siteVisitD2 = SiteVisit(site: siteD, date: oneHourAgo + 1000, type: .Link)
-        let siteVisitD3 = SiteVisit(site: siteD, date: oneHourAgo + 2000, type: .Link)
-        let siteVisitD4 = SiteVisit(site: siteD, date: oneHourAgo + 3000, type: .Link)
+        let siteVisitD1 = SiteVisit(site: siteD, date: oneHourAgo, type: .link)
+        let siteVisitD2 = SiteVisit(site: siteD, date: oneHourAgo + 1000, type: .link)
+        let siteVisitD3 = SiteVisit(site: siteD, date: oneHourAgo + 2000, type: .link)
+        let siteVisitD4 = SiteVisit(site: siteD, date: oneHourAgo + 3000, type: .link)
 
         history.clearHistory().succeeded()
         history.addLocalVisit(siteVisitA1).succeeded()
@@ -209,10 +209,10 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         let siteA = Site(url: "http://www.foo.com/", title: "A")
         let siteC = Site(url: "http://m.foo.com/", title: "C")
 
-        let siteVisitA1 = SiteVisit(site: siteA, date: oneHourAgo, type: .Link)
+        let siteVisitA1 = SiteVisit(site: siteA, date: oneHourAgo, type: .link)
 
-        let siteVisitC1 = SiteVisit(site: siteC, date: twoHoursAgo, type: .Link)
-        let siteVisitC2 = SiteVisit(site: siteC, date: twoHoursAgo + 1000, type: .Link)
+        let siteVisitC1 = SiteVisit(site: siteC, date: twoHoursAgo, type: .link)
+        let siteVisitC2 = SiteVisit(site: siteC, date: twoHoursAgo + 1000, type: .link)
 
         history.clearHistory().succeeded()
         history.addLocalVisit(siteVisitA1).succeeded()
@@ -258,8 +258,8 @@ private func populateForRecommendationCalculations(_ history: SQLiteHistory, boo
 
         for j in 0...20 {
             let visitTime = advanceMicrosecondTimestamp(baseInstantInMicros, by: (1000000 * i) + (1000 * j))
-            addVisitForSite(site, intoHistory: history, from: .Local, atTime: visitTime)
-            addVisitForSite(site, intoHistory: history, from: .Remote, atTime: visitTime)
+            addVisitForSite(site, intoHistory: history, from: .local, atTime: visitTime)
+            addVisitForSite(site, intoHistory: history, from: .remote, atTime: visitTime)
         }
     }
 
@@ -268,10 +268,10 @@ private func populateForRecommendationCalculations(_ history: SQLiteHistory, boo
         let bookmarkSite = Site(url: "http://bookmark-\(i)/", title: "\(i) Bookmark")
         bookmarkSite.guid = "bookmark-\(i)"
         
-        addVisitForSite(bookmarkSite, intoHistory: history, from: .Local, atTime: modifiedTime)
-        addVisitForSite(bookmarkSite, intoHistory: history, from: .Remote, atTime: modifiedTime)
-        addVisitForSite(bookmarkSite, intoHistory: history, from: .Local, atTime: modifiedTime)
-        addVisitForSite(bookmarkSite, intoHistory: history, from: .Remote, atTime: modifiedTime)
+        addVisitForSite(bookmarkSite, intoHistory: history, from: .local, atTime: modifiedTime)
+        addVisitForSite(bookmarkSite, intoHistory: history, from: .remote, atTime: modifiedTime)
+        addVisitForSite(bookmarkSite, intoHistory: history, from: .local, atTime: modifiedTime)
+        addVisitForSite(bookmarkSite, intoHistory: history, from: .remote, atTime: modifiedTime)
         
         return BookmarkMirrorItem.bookmark("http://bookmark-\(i)/", modified: modifiedTime, hasDupe: false,
                                             parentID: BookmarkRoots.MenuFolderGUID,

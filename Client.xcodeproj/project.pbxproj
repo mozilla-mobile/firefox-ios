@@ -304,7 +304,7 @@
 		7B844E3D1BBDDB9D00E733A2 /* ChevronView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B844E3C1BBDDB9D00E733A2 /* ChevronView.swift */; };
 		7B8A47F61D01D3B400C07734 /* PassKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B8A47F51D01D3B400C07734 /* PassKit.framework */; };
 		7B9BF91C1E43472E00CB24F4 /* JSONExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B9BF91B1E43472E00CB24F4 /* JSONExtensions.swift */; };
-		7B9BF92B1E435D0500CB24F4 /* MockLogins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3E7DB91B27AB4C00E2E84D /* MockLogins.swift */; };
+		7B9BF92D1E435DAD00CB24F4 /* MockLogins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3E7DB91B27AB4C00E2E84D /* MockLogins.swift */; };
 		7BA0601B1C0F4DE200DFADB6 /* TabPeekViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BA0601A1C0F4DE200DFADB6 /* TabPeekViewController.swift */; };
 		7BA4A9471C4CED900091D032 /* GCDWebServers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BA4A9451C4CED780091D032 /* GCDWebServers.framework */; };
 		7BA4A94A1C4CEFC70091D032 /* OnePasswordExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BA4A9491C4CEFC70091D032 /* OnePasswordExtension.framework */; };
@@ -957,6 +957,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = EE247AD21C3F04ED00AE3E12;
 			remoteInfo = "SQLite iOS";
+		};
+		7B9BF92E1E435DE400CB24F4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2FCAE2231ABB51F800877008;
+			remoteInfo = StorageTests;
 		};
 		7BEB64421C7345600092C02E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -3911,6 +3918,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				7B9BF92F1E435DE400CB24F4 /* PBXTargetDependency */,
 				F84B21D51A090F8100AAB793 /* PBXTargetDependency */,
 			);
 			name = ClientTests;
@@ -4794,6 +4802,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				28D158AD1AFD90E500F9C065 /* TestSQLiteBookmarks.swift in Sources */,
+				7B9BF92D1E435DAD00CB24F4 /* MockLogins.swift in Sources */,
 				E63F71881DB7FBE200A995C9 /* TestSQLiteMetadata.swift in Sources */,
 				2FCAE2851ABB533A00877008 /* TestSQLiteRemoteClientsAndTabs.swift in Sources */,
 				0B5A93081B1E64F3004F47A2 /* TestDeferredSqlite.swift in Sources */,
@@ -5195,7 +5204,6 @@
 				3BFCBF201E04B1C50070C042 /* UIImageViewExtensionsTests.swift in Sources */,
 				E60D032A1D5118DB002FE3F6 /* SyncStatusResolverTests.swift in Sources */,
 				A83E5B1E1C1DAAAA0026D912 /* UIPasteboardExtensions.swift in Sources */,
-				7B9BF92B1E435D0500CB24F4 /* MockLogins.swift in Sources */,
 				0BF42D4F1A7CD09600889E28 /* TestFavicons.swift in Sources */,
 				7BBFEE741BB405D900A305AA /* TabManagerTests.swift in Sources */,
 				0BA8964C1A250E6500C1010C /* TestBookmarks.swift in Sources */,
@@ -5379,6 +5387,11 @@
 			isa = PBXTargetDependency;
 			name = "SQLite iOS";
 			targetProxy = 7B9A62F81C400303005C83DC /* PBXContainerItemProxy */;
+		};
+		7B9BF92F1E435DE400CB24F4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2FCAE2231ABB51F800877008 /* StorageTests */;
+			targetProxy = 7B9BF92E1E435DE400CB24F4 /* PBXContainerItemProxy */;
 		};
 		7BEB64411C7345600092C02E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

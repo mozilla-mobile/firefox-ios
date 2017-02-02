@@ -48,9 +48,9 @@ extension BrowserDB {
             " is_overridden, server_modified, faviconID)",
             "SELECT guid, type, bmkUri, title, parentid, parentName,",
             "feedUri, siteUri, pos, description, tags, keyword, folderName, queryId,",
-            "0 AS is_overridden, \(NSDate.now()) AS server_modified, faviconID",
+            "0 AS is_overridden, \(Date.now()) AS server_modified, faviconID",
             "FROM \(TableBookmarksLocal)",
-        ].joinWithSeparator(" ")
+        ].joined(separator: " ")
 
         // Copy its mirror structure.
         let structureSQL = "INSERT INTO \(TableBookmarksMirrorStructure) SELECT * FROM \(TableBookmarksLocalStructure)"
