@@ -59,9 +59,8 @@ open class FileAccessor {
         return FileManager.default.fileExists(atPath: path)
     }
 
-    open func fileWrapper(_ relativePath: String) throws -> FileWrapper {
-        let path = URL(fileURLWithPath: rootPath).appendingPathComponent(relativePath).path
-        return try FileWrapper(url: URL(fileURLWithPath: path), options: FileWrapper.ReadingOptions.immediate)
+    open func attributesForFileAt(relativePath: String) throws -> [FileAttributeKey: Any] {
+        return try FileManager.default.attributesOfItem(atPath: URL(fileURLWithPath: rootPath).appendingPathComponent(relativePath).path)
     }
 
     /**
@@ -76,7 +75,7 @@ open class FileAccessor {
         let toDirPath = toDir.path
         try createDir(toDirPath)
 
-        try FileManager.default.moveItem(atPath: fromPath, toPath: toDirPath as String)
+        try FileManager.default.moveItem(atPath: fromPath, toPath: toPath.path)
     }
 
     open func copyMatching(fromRelativeDirectory relativePath: String, toAbsoluteDirectory absolutePath: String, matching: (String) -> Bool) throws {
