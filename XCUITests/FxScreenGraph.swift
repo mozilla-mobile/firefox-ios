@@ -34,7 +34,7 @@ let allSettingsScreens = [
     OpenWithSettings,
 ]
 
-func createScreenGraph(app: XCUIApplication, url: String = "https://www.mozilla.org/en-US/book/") -> ScreenGraph {
+func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozilla.org/en-US/book/") -> ScreenGraph {
     let map = ScreenGraph(app)
 
     map.createScene(FirstRun) { scene in
@@ -67,7 +67,7 @@ func createScreenGraph(app: XCUIApplication, url: String = "https://www.mozilla.
     }
 
     let navigationControllerBackAction = {
-        app.navigationBars.elementBoundByIndex(0).buttons.elementBoundByIndex(0).tap()
+        app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).tap()
     }
 
     map.createScene(SettingsScreen) { scene in

@@ -18,88 +18,88 @@ import EarlGrey
 import Foundation
 
 let greyFailureHandler =
-	NSThread.currentThread().threadDictionary
+	Thread.currentThread().threadDictionary
 		.valueForKey(kGREYFailureHandlerKey) as! GREYFailureHandler
 
-public func grey_allOfMatchers(args: AnyObject...) -> GREYMatcher! {
+public func grey_allOfMatchers(_ args: AnyObject...) -> GREYMatcher! {
 	return GREYAllOf(matchers: args)
 }
 
-public func grey_anyOfMatchers(args: AnyObject...) -> GREYMatcher! {
+public func grey_anyOfMatchers(_ args: AnyObject...) -> GREYMatcher! {
 	return GREYAnyOf(matchers: args)
 }
 
-public func EarlGrey(file: String = #file, line: UInt = #line) -> EarlGreyImpl! {
+public func EarlGrey(_ file: String = #file, line: UInt = #line) -> EarlGreyImpl! {
 	return EarlGreyImpl.invokedFromFile(file, lineNumber: line)
 }
 
-public func GREYAssert(@autoclosure expression: () -> BooleanType, reason: String) {
+public func GREYAssert(_ expression: @autoclosure () -> Bool, reason: String) {
 	GREYAssert(expression, reason, details: "Expected expression to be true")
 }
 
-public func GREYAssertTrue(@autoclosure expression: () -> BooleanType, reason: String) {
+public func GREYAssertTrue(_ expression: @autoclosure () -> Bool, reason: String) {
 	GREYAssert(expression().boolValue,
 	           reason,
 	           details: "Expected the boolean expression to be true")
 }
 
-public func GREYAssertFalse(@autoclosure expression: () -> BooleanType, reason: String) {
+public func GREYAssertFalse(_ expression: @autoclosure () -> Bool, reason: String) {
 	GREYAssert(!expression().boolValue,
 	           reason,
 	           details: "Expected the boolean expression to be false")
 }
 
-public func GREYAssertNotNil(@autoclosure expression: () -> Any?, reason: String) {
+public func GREYAssertNotNil(_ expression: @autoclosure () -> Any?, reason: String) {
 	GREYAssert(expression() != nil, reason, details: "Expected expression to be not nil")
 }
 
-public func GREYAssertNil(@autoclosure expression: () -> Any?, reason: String) {
+public func GREYAssertNil(_ expression: @autoclosure () -> Any?, reason: String) {
 	GREYAssert(expression() == nil, reason, details: "Expected expression to be nil")
 }
 
-public func GREYAssertEqual(@autoclosure left: () -> AnyObject?,
-                                         @autoclosure _ right: () -> AnyObject?, reason: String) {
+public func GREYAssertEqual(_ left: @autoclosure () -> AnyObject?,
+                                         _ right: @autoclosure () -> AnyObject?, reason: String) {
 	GREYAssert(left() === right(), reason, details: "Expected left term to be equal to right term")
 }
 
-public func GREYAssertNotEqual(@autoclosure left: () -> AnyObject?,
-                                            @autoclosure _ right: () -> AnyObject?, reason: String) {
+public func GREYAssertNotEqual(_ left: @autoclosure () -> AnyObject?,
+                                            _ right: @autoclosure () -> AnyObject?, reason: String) {
 	GREYAssert(left() !== right(), reason, details: "Expected left term to not be equal to right" +
 		" term")
 }
 
-public func GREYAssertEqualObjects<T: Equatable>(@autoclosure left: () -> T?,
-                                   @autoclosure _ right: () -> T?, reason: String) {
+public func GREYAssertEqualObjects<T: Equatable>(_ left: @autoclosure () -> T?,
+                                   _ right: @autoclosure () -> T?, reason: String) {
 	GREYAssert(left() == right(), reason, details: "Expected object of the left term to be equal" +
 		" to the object of the right term")
 }
 
-public func GREYAssertNotEqualObjects<T: Equatable>(@autoclosure left: () -> T?,
-                                      @autoclosure _ right: () -> T?, reason: String) {
+public func GREYAssertNotEqualObjects<T: Equatable>(_ left: @autoclosure () -> T?,
+                                      _ right: @autoclosure () -> T?, reason: String) {
 	GREYAssert(left() != right(), reason, details: "Expected object of the left term to not be" +
 		" equal to the object of the right term")
 }
 
-public func GREYFail(reason: String) {
+public func GREYFail(_ reason: String) {
 	greyFailureHandler.handleException(GREYFrameworkException(name: kGREYAssertionFailedException,
 		reason: reason),
 	                                   details: "")
 }
 
-@available(*, deprecated=1.2.0, message="Please use GREYFAIL::withDetails instead.")
-public func GREYFail(reason: String, details: String) {
+@available(*, deprecated: 1.2.0, message: "Please use GREYFAIL::withDetails instead.")
+public func GREYFail(_ reason: String, details: String) {
 	greyFailureHandler.handleException(GREYFrameworkException(name: kGREYAssertionFailedException,
 		reason: reason),
 	                                   details: details)
 }
 
-public func GREYFailWithDetails(reason: String, details: String) {
+public func GREYFailWithDetails(_ reason: String, details: String) {
 	greyFailureHandler.handleException(GREYFrameworkException(name: kGREYAssertionFailedException,
 		reason: reason),
 	                                   details: details)
 }
 
-private func GREYAssert(@autoclosure expression: () -> BooleanType,
+private func GREYAssert(_ expression: @autoclosure () -> Bool,
                                      _ reason: String, details: String) {
 	GREYSetCurrentAsFailable()
 	if !expression().boolValue {
@@ -109,7 +109,7 @@ private func GREYAssert(@autoclosure expression: () -> BooleanType,
 	}
 }
 
-private func GREYSetCurrentAsFailable(file: String = #file, line: UInt = #line) {
+private func GREYSetCurrentAsFailable(_ file: String = #file, line: UInt = #line) {
 	let greyFailureHandlerSelector =
 		#selector(GREYFailureHandler.setInvocationFile(_:andInvocationLine:))
 	if greyFailureHandler.respondsToSelector(greyFailureHandlerSelector) {

@@ -11,9 +11,9 @@ import WebKit
 // https://github.com/mozilla-mobile/firefox-ios/blob/master/Client/Frontend/Home/HomePanels.swift#L23
 // When running on iPhone, this test will fail, because the Collectionview does not have an identifier
 class TopTabsTests: KIFTestCase {
-    private var webRoot: String!
+    fileprivate var webRoot: String!
     let numberOfTabs = 4
-    lazy var collection: UICollectionView = self.tester().waitForViewWithAccessibilityIdentifier("Top Tabs View") as! UICollectionView
+    lazy var collection: UICollectionView = self.tester().waitForView(withAccessibilityIdentifier: "Top Tabs View") as! UICollectionView
     
     override func setUp() {
         super.setUp()
@@ -27,25 +27,25 @@ class TopTabsTests: KIFTestCase {
         BrowserUtils.clearPrivateData(tester: tester())
     }
     
-    private func clearPrivateDataFromHome() {
-        tester().tapViewWithAccessibilityLabel("Show Tabs")
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("Settings")
-        tester().tapViewWithAccessibilityLabel("Clear Private Data")
-        tester().tapViewWithAccessibilityLabel("Clear Private Data", traits: UIAccessibilityTraitButton)
-        tester().tapViewWithAccessibilityLabel("OK")
-        tester().tapViewWithAccessibilityLabel("Settings")
-        tester().tapViewWithAccessibilityLabel("Done")
-        tester().tapViewWithAccessibilityLabel("home")
+    fileprivate func clearPrivateDataFromHome() {
+        tester().tapView(withAccessibilityLabel: "Show Tabs")
+        tester().tapView(withAccessibilityLabel: "Menu")
+        tester().tapView(withAccessibilityLabel: "Settings")
+        tester().tapView(withAccessibilityLabel: "Clear Private Data")
+        tester().tapView(withAccessibilityLabel: "Clear Private Data", traits: UIAccessibilityTraitButton)
+        tester().tapView(withAccessibilityLabel: "OK")
+        tester().tapView(withAccessibilityLabel: "Settings")
+        tester().tapView(withAccessibilityLabel: "Done")
+        tester().tapView(withAccessibilityLabel: "home")
     }
     
-    private func topTabsEnabled() -> Bool {
+    fileprivate func topTabsEnabled() -> Bool {
         let bvc = getBrowserViewController()
         return bvc.shouldShowTopTabsForTraitCollection(bvc.traitCollection)
     }
     
-    private func getBrowserViewController() -> BrowserViewController {
-        return (UIApplication.sharedApplication().delegate as! AppDelegate).browserViewController
+    fileprivate func getBrowserViewController() -> BrowserViewController {
+        return (UIApplication.shared.delegate as! AppDelegate).browserViewController
     }
     
     func testTopTabs() {
@@ -60,115 +60,115 @@ class TopTabsTests: KIFTestCase {
         CloseTab()
     }
     
-    private func AddTab() {
-        tester().waitForTappableViewWithAccessibilityLabel("Show Tabs", value: "1", traits: UIAccessibilityTraitButton)
+    fileprivate func AddTab() {
+        tester().waitForTappableView(withAccessibilityLabel: "Show Tabs", value: "1", traits: UIAccessibilityTraitButton)
 
         for i in 0..<numberOfTabs {
-            tester().tapViewWithAccessibilityIdentifier("url")
+            tester().tapView(withAccessibilityIdentifier: "url")
             let url = "\(webRoot)/numberedPage.html?page=\(i)"
-            tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url)\n")
+            tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "\(url)\n")
             tester().waitForWebViewElementWithAccessibilityLabel("Page \(i)")
-            tester().tapViewWithAccessibilityLabel("New Tab")
+            tester().tapView(withAccessibilityLabel: "New Tab")
         }
         
-        tester().waitForTappableViewWithAccessibilityLabel("Show Tabs", value: String(1+numberOfTabs), traits: UIAccessibilityTraitButton)
+        tester().waitForTappableView(withAccessibilityLabel: "Show Tabs", value: String(1+numberOfTabs), traits: UIAccessibilityTraitButton)
     }
     
-    private func UndoCloseAll() {
-        tester().tapViewWithAccessibilityLabel("Show Tabs")
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("Close All Tabs")
+    fileprivate func UndoCloseAll() {
+        tester().tapView(withAccessibilityLabel: "Show Tabs")
+        tester().tapView(withAccessibilityLabel: "Menu")
+        tester().tapView(withAccessibilityLabel: "Close All Tabs")
         tester().waitForAnimationsToFinish()
-        tester().tapViewWithAccessibilityLabel("Undo")
+        tester().tapView(withAccessibilityLabel: "Undo")
     }
     
-    private func SwitchTabs() {
-        let urlField = tester().waitForViewWithAccessibilityIdentifier("url") as! UITextField
+    fileprivate func SwitchTabs() {
+        let urlField = tester().waitForView(withAccessibilityIdentifier: "url") as! UITextField
         
-        tester().tapViewWithAccessibilityLabel("Page 2")
+        tester().tapView(withAccessibilityLabel: "Page 2")
         tester().waitForAnimationsToFinish()
         XCTAssertEqual(urlField.text, "\(webRoot)/numberedPage.html?page=2")
         
-        tester().tapViewWithAccessibilityLabel("Page 1")
+        tester().tapView(withAccessibilityLabel: "Page 1")
         tester().waitForAnimationsToFinish()
         XCTAssertEqual(urlField.text, "\(webRoot)/numberedPage.html?page=1")
     }
     
-    private func PrivateModeButton() {
-        let tabManager = (UIApplication.sharedApplication().delegate as! AppDelegate).tabManager
+    fileprivate func PrivateModeButton() {
+        let tabManager = (UIApplication.shared.delegate as! AppDelegate).tabManager
         
-        tester().tapViewWithAccessibilityLabel("Private Mode")
-        XCTAssertTrue(tabManager.selectedTab!.isPrivate)
+        tester().tapView(withAccessibilityLabel: "Private Mode")
+        XCTAssertTrue((tabManager?.selectedTab!.isPrivate)!)
         
-        tester().tapViewWithAccessibilityLabel("Private Mode")
-        XCTAssertFalse(tabManager.selectedTab!.isPrivate)
+        tester().tapView(withAccessibilityLabel: "Private Mode")
+        XCTAssertFalse((tabManager?.selectedTab!.isPrivate)!)
         
-        tester().tapViewWithAccessibilityLabel("Private Mode")
-        tester().tapViewWithAccessibilityLabel("Remove page - New Tab")
-        XCTAssertFalse(tabManager.selectedTab!.isPrivate)
+        tester().tapView(withAccessibilityLabel: "Private Mode")
+        tester().tapView(withAccessibilityLabel: "Remove page - New Tab")
+        XCTAssertFalse((tabManager?.selectedTab!.isPrivate)!)
     }
     
-    private func CloseTab() {
-        tester().tapViewWithAccessibilityLabel("Remove page - New Tab")
+    fileprivate func CloseTab() {
+        tester().tapView(withAccessibilityLabel: "Remove page - New Tab")
         for i in 0...(numberOfTabs-1) {
-            tester().tapViewWithAccessibilityLabel("Remove page - Page \(i)")
+            tester().tapView(withAccessibilityLabel: "Remove page - Page \(i)")
         }
     }
     
     func testCloseAll() {
-        tester().waitForTappableViewWithAccessibilityLabel("Show Tabs", value: "1", traits: UIAccessibilityTraitButton)
+        tester().waitForTappableView(withAccessibilityLabel: "Show Tabs", value: "1", traits: UIAccessibilityTraitButton)
         
-        tester().tapViewWithAccessibilityLabel("New Tab")
-        tester().tapViewWithAccessibilityLabel("New Tab")
+        tester().tapView(withAccessibilityLabel: "New Tab")
+        tester().tapView(withAccessibilityLabel: "New Tab")
         
-        tester().tapViewWithAccessibilityLabel("Show Tabs")
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("Close All Tabs")
+        tester().tapView(withAccessibilityLabel: "Show Tabs")
+        tester().tapView(withAccessibilityLabel: "Menu")
+        tester().tapView(withAccessibilityLabel: "Close All Tabs")
         tester().waitForAnimationsToFinish()
         
-        tester().waitForTappableViewWithAccessibilityLabel("Show Tabs", value: "1", traits: UIAccessibilityTraitButton)
-        XCTAssertEqual(collection.visibleCells().count, 1)
+        tester().waitForTappableView(withAccessibilityLabel: "Show Tabs", value: "1", traits: UIAccessibilityTraitButton)
+        XCTAssertEqual(collection.visibleCells.count, 1)
     }
     
     func testAddTabFromContext() {
-        tester().waitForTappableViewWithAccessibilityLabel("Show Tabs", value: "1", traits: UIAccessibilityTraitButton)
-        XCTAssertEqual(collection.visibleCells().count, 1)
+        tester().waitForTappableView(withAccessibilityLabel: "Show Tabs", value: "1", traits: UIAccessibilityTraitButton)
+        XCTAssertEqual(collection.visibleCells.count, 1)
         
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("New Tab")
+        tester().tapView(withAccessibilityLabel: "Menu")
+        tester().tapView(withAccessibilityLabel: "New Tab")
         tester().waitForAnimationsToFinish()
         
-        tester().waitForTappableViewWithAccessibilityLabel("Show Tabs", value: "2", traits: UIAccessibilityTraitButton)
-        XCTAssertEqual(collection.visibleCells().count, 2)
+        tester().waitForTappableView(withAccessibilityLabel: "Show Tabs", value: "2", traits: UIAccessibilityTraitButton)
+        XCTAssertEqual(collection.visibleCells.count, 2)
         
-        tester().tapViewWithAccessibilityLabel("Remove page - New Tab")
+        tester().tapView(withAccessibilityLabel: "Remove page - New Tab")
     }
     
     func testAddAndCloseTabFromTabTray() {
-        tester().waitForTappableViewWithAccessibilityLabel("Show Tabs", value: "1", traits: UIAccessibilityTraitButton)
-        XCTAssertEqual(collection.visibleCells().count, 1)
+        tester().waitForTappableView(withAccessibilityLabel: "Show Tabs", value: "1", traits: UIAccessibilityTraitButton)
+        XCTAssertEqual(collection.visibleCells.count, 1)
         
-        tester().tapViewWithAccessibilityLabel("Show Tabs")
-        tester().tapViewWithAccessibilityLabel("Add Tab")
+        tester().tapView(withAccessibilityLabel: "Show Tabs")
+        tester().tapView(withAccessibilityLabel: "Add Tab")
         tester().waitForAnimationsToFinish()
         
-        tester().waitForTappableViewWithAccessibilityLabel("Show Tabs", value: "2", traits: UIAccessibilityTraitButton)
-        XCTAssertEqual(collection.visibleCells().count, 2)
+        tester().waitForTappableView(withAccessibilityLabel: "Show Tabs", value: "2", traits: UIAccessibilityTraitButton)
+        XCTAssertEqual(collection.visibleCells.count, 2)
         
-        tester().tapViewWithAccessibilityLabel("Show Tabs")
+        tester().tapView(withAccessibilityLabel: "Show Tabs")
         
-        let tabsView = tester().waitForViewWithAccessibilityLabel("Tabs Tray").subviews.first as! UICollectionView
+        let tabsView = tester().waitForView(withAccessibilityLabel: "Tabs Tray").subviews.first as! UICollectionView
         
-        if let cell = tabsView.cellForItemAtIndexPath(NSIndexPath(forItem: 1, inSection: 0)) {
-            tester().swipeViewWithAccessibilityLabel(cell.accessibilityLabel, inDirection: KIFSwipeDirection.Left)
+        if let cell = tabsView.cellForItem(at: IndexPath(item: 1, section: 0)) {
+            tester().swipeView(withAccessibilityLabel: cell.accessibilityLabel, in: KIFSwipeDirection.left)
         }
         
-        if let cell = tabsView.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0)) {
-            let view = tester().waitForTappableViewWithAccessibilityLabel(cell.accessibilityLabel)
-            view.tapAtPoint(CGPoint.zero)
+        if let cell = tabsView.cellForItem(at: IndexPath(item: 0, section: 0)) {
+            let view = tester().waitForTappableView(withAccessibilityLabel: cell.accessibilityLabel)
+            view?.tap(at: CGPoint.zero)
         }
         
-        tester().waitForTappableViewWithAccessibilityLabel("Show Tabs", value: "1", traits: UIAccessibilityTraitButton)
-        XCTAssertEqual(collection.visibleCells().count, 1)
+        tester().waitForTappableView(withAccessibilityLabel: "Show Tabs", value: "1", traits: UIAccessibilityTraitButton)
+        XCTAssertEqual(collection.visibleCells.count, 1)
     }
 }

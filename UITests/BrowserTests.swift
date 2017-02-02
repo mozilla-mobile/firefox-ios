@@ -8,7 +8,7 @@ import Storage
 
 class BrowserTests: KIFTestCase {
 
-    private var webRoot: String!
+    fileprivate var webRoot: String!
 
     override func setUp() {
         super.setUp()
@@ -24,21 +24,21 @@ class BrowserTests: KIFTestCase {
 
     func testDisplaySharesheetWhileJSPromptOccurs() {
         let url = "\(webRoot)/JSPrompt.html"
-        tester().tapViewWithAccessibilityIdentifier("url")
-        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url)\n")
+        tester().tapView(withAccessibilityIdentifier: "url")
+        tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "\(url)\n")
         tester().waitForWebViewElementWithAccessibilityLabel("JS Prompt")
         // Show share sheet and wait for the JS prompt to fire
-        tester().tapViewWithAccessibilityLabel("Share")
-        tester().waitForTimeInterval(5)
+        tester().tapView(withAccessibilityLabel: "Share")
+        tester().wait(forTimeInterval: 5)
         do {
-            try tester().tryFindingTappableViewWithAccessibilityLabel("Cancel")
-            tester().tapViewWithAccessibilityLabel("Cancel")
+            try tester().tryFindingTappableView(withAccessibilityLabel: "Cancel")
+            tester().tapView(withAccessibilityLabel: "Cancel")
         } catch {
-            tester().tapViewWithAccessibilityLabel("dismiss popup")
+            tester().tapView(withAccessibilityLabel: "dismiss popup")
         }
         
         // Check to see if the JS Prompt is dequeued and showing
-        tester().waitForViewWithAccessibilityLabel("OK")
-        tester().tapViewWithAccessibilityLabel("OK")
+        tester().waitForView(withAccessibilityLabel: "OK")
+        tester().tapView(withAccessibilityLabel: "OK")
     }
 }

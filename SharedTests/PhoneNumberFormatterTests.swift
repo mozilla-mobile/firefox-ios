@@ -14,13 +14,13 @@ class PhoneNumberFormatterTests: XCTestCase {
     func testUsesCarrierForGuessingCountryCode() {
         let utilMock = PhoneNumberUtilMock(carrierCountryCode: "DE")
         let formatter = PhoneNumberFormatter(util: utilMock)
-        XCTAssertEqual(formatter.guessCurrentCountryCode(NSLocale(localeIdentifier: "en_US")), "DE")
+        XCTAssertEqual(formatter.guessCurrentCountryCode(Locale(localeIdentifier: "en_US")), "DE")
     }
 
     func testFallsBackToSpecifiedLocaleForGuessingCountryCode() {
         let utilMock = PhoneNumberUtilMock(carrierCountryCode: NB_UNKNOWN_REGION)
         let formatter = PhoneNumberFormatter(util: utilMock)
-        XCTAssertEqual(formatter.guessCurrentCountryCode(NSLocale(localeIdentifier: "en_US")), "US")
+        XCTAssertEqual(formatter.guessCurrentCountryCode(Locale(localeIdentifier: "en_US")), "US")
     }
 
     // MARK: - Format Selection
@@ -86,14 +86,14 @@ private class PhoneNumberUtilMock: NBPhoneNumberUtil {
 
     let formattedPhoneNumber = "(123) 456789"
 
-    private let carrierCountryCode: String?
-    private let failOnParsing: Bool
-    private let failOnValidating: Bool
-    private let failOnFormatting: Bool
+    fileprivate let carrierCountryCode: String?
+    fileprivate let failOnParsing: Bool
+    fileprivate let failOnValidating: Bool
+    fileprivate let failOnFormatting: Bool
 
-    private var didParse = false
-    private var didValidate = false
-    private var didFormat = false
+    fileprivate var didParse = false
+    fileprivate var didValidate = false
+    fileprivate var didFormat = false
 
     init(carrierCountryCode: String? = nil, failOnParsing: Bool = false, failOnValidating: Bool = false, failOnFormatting: Bool = false) {
         self.carrierCountryCode = carrierCountryCode
@@ -102,11 +102,11 @@ private class PhoneNumberUtilMock: NBPhoneNumberUtil {
         self.failOnFormatting = failOnFormatting
     }
 
-    private override func countryCodeByCarrier() -> String! {
+    fileprivate override func countryCodeByCarrier() -> String! {
         return carrierCountryCode ?? NB_UNKNOWN_REGION
     }
 
-    private override func parseAndKeepRawInput(numberToParse: String!, defaultRegion: String!) throws -> NBPhoneNumber {
+    fileprivate override func parseAndKeepRawInput(_ numberToParse: String!, defaultRegion: String!) throws -> NBPhoneNumber {
         didParse = true
         if failOnParsing {
             throw NSError(domain: "foo", code: 1, userInfo: nil)
@@ -114,12 +114,12 @@ private class PhoneNumberUtilMock: NBPhoneNumberUtil {
         return NBPhoneNumber(countryCodeSource: .FROM_NUMBER_WITH_PLUS_SIGN)
     }
 
-    private override func isValidNumber(number: NBPhoneNumber!) -> Bool {
+    fileprivate override func isValidNumber(_ number: NBPhoneNumber!) -> Bool {
         didValidate = true
         return !failOnValidating
     }
 
-    private override func format(phoneNumber: NBPhoneNumber!, numberFormat: NBEPhoneNumberFormat) throws -> String {
+    fileprivate override func format(_ phoneNumber: NBPhoneNumber!, numberFormat: NBEPhoneNumberFormat) throws -> String {
         didFormat = true
         if failOnFormatting {
             throw NSError(domain: "foo", code: 1, userInfo: nil)
@@ -133,7 +133,7 @@ extension NBPhoneNumber {
 
     convenience init(countryCodeSource: NBECountryCodeSource) {
         self.init()
-        self.countryCodeSource = NSNumber(integer: countryCodeSource.rawValue)
+        self.countryCodeSource = NSNumber(value: countryCodeSource.rawValue as Int)
     }
 
 }

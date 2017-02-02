@@ -7,30 +7,30 @@ import Shared
 
 class TestFavicons: ProfileTest {
 
-    private func addSite(favicons: Favicons, url: String, s: Bool = true) {
-        let expectation = self.expectationWithDescription("Wait for history")
+    fileprivate func addSite(_ favicons: Favicons, url: String, s: Bool = true) {
+        let expectation = self.expectation(description: "Wait for history")
         let site = Site(url: url, title: "")
         let icon = Favicon(url: url + "/icon.png", type: IconType.Icon)
         favicons.addFavicon(icon, forSite: site).upon {
             XCTAssertEqual($0.isSuccess, s, "Icon added \(url)")
             expectation.fulfill()
         }
-        self.waitForExpectationsWithTimeout(100, handler: nil)
+        self.waitForExpectations(timeout: 100, handler: nil)
     }
 
     func testFaviconFetcherParse() {
-        let expectation = self.expectationWithDescription("Wait for Favicons to be fetched")
+        let expectation = self.expectation(description: "Wait for Favicons to be fetched")
 
         let profile = MockProfile()
         // I want a site that also has an iOS app so I can get "apple-touch-icon-precomposed" icons as well
-        let url = NSURL(string: "https://instagram.com")
-        FaviconFetcher.getForURL(url!, profile: profile).uponQueue(dispatch_get_main_queue()) { result in
-            guard let favicons = result.successValue where favicons.count > 0, let url = favicons.first?.url.asURL else {
+        let url = URL(string: "https://instagram.com")
+        FaviconFetcher.getForURL(url!, profile: profile).uponQueue(DispatchQueue.main) { result in
+            guard let favicons = result.successValue, favicons.count > 0, let url = favicons.first?.url.asURL else {
                 XCTFail("Favicons were not found.")
                 return expectation.fulfill()
             }
             XCTAssertGreaterThan(favicons.count, 1, "Instagram should have more than one Favicon.")
-            SDWebImageManager.sharedManager().downloadImageWithURL(url, options: SDWebImageOptions.RetryFailed, progress: nil, completed: { (img, err, cache, finished, url) in
+            SDWebImageManager.shared().downloadImage(with: url, options: SDWebImageOptions.retryFailed, progress: nil, completed: { (img, err, cache, finished, url) in
                 guard let image: UIImage = img else {
                     XCTFail("Not a valid URL provided for a favicon.")
                     return expectation.fulfill()
@@ -40,7 +40,7 @@ class TestFavicons: ProfileTest {
             })
 
         }
-        self.waitForExpectationsWithTimeout(3000, handler: nil)
+        self.waitForExpectations(timeout: 3000, handler: nil)
     }
 
     // TODO: uncomment.

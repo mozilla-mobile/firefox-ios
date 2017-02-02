@@ -6,11 +6,35 @@ import Foundation
 @testable import Storage
 
 import XCTest
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func >= <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l >= r
+  default:
+    return !(lhs < rhs)
+  }
+}
+
 
 class TestFaviconsTable: XCTestCase {
     var db: BrowserDB!
 
-    private func addIcon(favicons: FaviconsTable<Favicon>, url: String, s: Bool = true) -> Favicon {
+    fileprivate func addIcon(_ favicons: FaviconsTable<Favicon>, url: String, s: Bool = true) -> Favicon {
         var inserted: Int? = -1
         var icon: Favicon!
         var err: NSError?
@@ -29,7 +53,7 @@ class TestFaviconsTable: XCTestCase {
         return icon
     }
 
-    private func checkIcons(favicons: FaviconsTable<Favicon>, options: QueryOptions?, urls: [String], s: Bool = true) {
+    fileprivate func checkIcons(_ favicons: FaviconsTable<Favicon>, options: QueryOptions?, urls: [String], s: Bool = true) {
         var err: NSError?
         self.db.withConnection(flags: SwiftData.Flags.ReadOnly, err: &err) { (connection, err) -> Bool in
             XCTAssertNil(err)
@@ -50,7 +74,7 @@ class TestFaviconsTable: XCTestCase {
         }
     }
 
-    private func clear(favicons: FaviconsTable<Favicon>, icon: Favicon? = nil, s: Bool = true) {
+    fileprivate func clear(_ favicons: FaviconsTable<Favicon>, icon: Favicon? = nil, s: Bool = true) {
         var deleted = -1
         var err: NSError?
         self.db.withConnection(flags: SwiftData.Flags.ReadWriteCreate, err: &err) { (db, err) -> Int in

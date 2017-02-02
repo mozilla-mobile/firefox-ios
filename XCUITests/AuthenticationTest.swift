@@ -7,7 +7,7 @@ import XCTest
 extension String {
     
     subscript (i: Int) -> Character {
-        return self[self.startIndex.advancedBy(i)]
+        return self[self.characters.index(self.startIndex, offsetBy: i)]
     }
     
     subscript (i: Int) -> String {
@@ -15,8 +15,8 @@ extension String {
     }
     
     subscript (r: Range<Int>) -> String {
-        let start = startIndex.advancedBy(r.startIndex)
-        let end = start.advancedBy(r.endIndex - r.startIndex)
+        let start = characters.index(startIndex, offsetBy: r.lowerBound)
+        let end = <#T##String.CharacterView corresponding to `start`##String.CharacterView#>.index(start, offsetBy: r.upperBound - r.lowerBound)
         return self[Range(start ..< end)]
     }
 }
@@ -39,18 +39,18 @@ class AuthenticationTest: BaseTestCase {
         super.tearDown()
     }
     
-    private func typePasscode(passCode: String) {
+    fileprivate func typePasscode(_ passCode: String) {
         app.keys[passCode[0]].tap()
         app.keys[passCode[1]].tap()
         app.keys[passCode[2]].tap()
         app.keys[passCode[3]].tap()
     }
 
-    private func closeAuthenticationManager() {
+    fileprivate func closeAuthenticationManager() {
         navigator.goto(NewTabScreen)
     }
     
-    private func disablePasscode(passCode: String) {
+    fileprivate func disablePasscode(_ passCode: String) {
         navigator.goto(PasscodeSettings)
         
         app.tables["AuthenticationManager.settingsTableView"].staticTexts["Turn Passcode Off"].tap()
@@ -59,7 +59,7 @@ class AuthenticationTest: BaseTestCase {
         waitforExistence(app.tables["AuthenticationManager.settingsTableView"].staticTexts["Turn Passcode On"])
     }
     
-    private func enablePasscode(passCode: String) {
+    fileprivate func enablePasscode(_ passCode: String) {
         navigator.goto(PasscodeSettings)
 
         app.tables["AuthenticationManager.settingsTableView"].staticTexts["Turn Passcode On"].tap()

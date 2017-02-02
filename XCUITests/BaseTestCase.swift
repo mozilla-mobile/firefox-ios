@@ -18,7 +18,7 @@ class BaseTestCase: XCTestCase {
         super.tearDown()
     }
 
-    func restart(app: XCUIApplication) {
+    func restart(_ app: XCUIApplication) {
         app.terminate()
         app.launchArguments.append(LaunchArguments.Test)
         app.launchArguments.append(LaunchArguments.ClearProfile)
@@ -35,43 +35,43 @@ class BaseTestCase: XCTestCase {
         }
     }
     
-    func waitforExistence(element: XCUIElement) {
+    func waitforExistence(_ element: XCUIElement) {
         let exists = NSPredicate(format: "exists == true")
         
-        expectationForPredicate(exists, evaluatedWithObject: element, handler: nil)
-        waitForExpectationsWithTimeout(20, handler: nil)
+        expectation(for: exists, evaluatedWith: element, handler: nil)
+        waitForExpectations(timeout: 20, handler: nil)
     }
     
-    func waitforNoExistence(element: XCUIElement) {
+    func waitforNoExistence(_ element: XCUIElement) {
         let exists = NSPredicate(format: "exists != true")
         
-        expectationForPredicate(exists, evaluatedWithObject: element, handler: nil)
-        waitForExpectationsWithTimeout(20, handler: nil)
+        expectation(for: exists, evaluatedWith: element, handler: nil)
+        waitForExpectations(timeout: 20, handler: nil)
     }
     
-    func waitForValueContains(element: XCUIElement, value: String) {
+    func waitForValueContains(_ element: XCUIElement, value: String) {
         let predicateText = "value CONTAINS " + "'" + value + "'"
         let valueCheck = NSPredicate(format: predicateText)
         
-        expectationForPredicate(valueCheck, evaluatedWithObject: element, handler: nil)
-        waitForExpectationsWithTimeout(20, handler: nil)
+        expectation(for: valueCheck, evaluatedWith: element, handler: nil)
+        waitForExpectations(timeout: 20, handler: nil)
     }
 
-    func loadWebPage(url: String, waitForLoadToFinish: Bool = true) {
+    func loadWebPage(_ url: String, waitForLoadToFinish: Bool = true) {
         let loaded = NSPredicate(format: "value BEGINSWITH '100'")
 
         let app = XCUIApplication()
 
-        UIPasteboard.generalPasteboard().string = url
-        app.textFields["url"].pressForDuration(2.0)
-        app.sheets.elementBoundByIndex(0).buttons.elementBoundByIndex(0).tap()
+        UIPasteboard.general.string = url
+        app.textFields["url"].press(forDuration: 2.0)
+        app.sheets.element(boundBy: 0).buttons.element(boundBy: 0).tap()
 
         if waitForLoadToFinish {
-            let finishLoadingTimeout: NSTimeInterval = 30
+            let finishLoadingTimeout: TimeInterval = 30
             
-            let progressIndicator = app.progressIndicators.elementBoundByIndex(0)
-            expectationForPredicate(loaded, evaluatedWithObject: progressIndicator, handler: nil)
-            waitForExpectationsWithTimeout(finishLoadingTimeout, handler: nil)
+            let progressIndicator = app.progressIndicators.element(boundBy: 0)
+            expectation(for: loaded, evaluatedWith: progressIndicator, handler: nil)
+            waitForExpectations(timeout: finishLoadingTimeout, handler: nil)
         }
     }
 
@@ -84,13 +84,13 @@ extension BaseTestCase {
 }
 
 extension XCUIElement {
-    func tap(force force: Bool) {
+    func tap(force: Bool) {
         // There appears to be a bug with tapping elements sometimes, despite them being on-screen and tappable, due to hittable being false.
         // See: http://stackoverflow.com/a/33534187/1248491
-        if hittable {
+        if isHittable {
             tap()
         } else if force {
-            coordinateWithNormalizedOffset(CGVector(dx: 0.5, dy: 0.5)).tap()
+            coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
         }
     }
 }

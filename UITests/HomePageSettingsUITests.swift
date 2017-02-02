@@ -6,12 +6,12 @@ import Foundation
 
 class HomePageSettingsUITests: KIFTestCase {
 
-    private var webRoot: String!
+    fileprivate var webRoot: String!
 
     override func setUp() {
         super.setUp()
         webRoot = SimplePageServer.start()
-        UIPasteboard.generalPasteboard().string = " "
+        UIPasteboard.general.string = " "
         BrowserUtils.dismissFirstRunUI(tester())
     }
 
@@ -30,13 +30,13 @@ class HomePageSettingsUITests: KIFTestCase {
 
     func testTyping() {
         HomePageUtils.navigateToHomePageSettings(tester())
-        tester().tapViewWithAccessibilityIdentifier("ClearHomePage")
+        tester().tapView(withAccessibilityIdentifier: "ClearHomePage")
         XCTAssertEqual("", HomePageUtils.homePageSetting(tester()))
 
-        tester().tapViewWithAccessibilityLabel("Enter a webpage")
+        tester().tapView(withAccessibilityLabel: "Enter a webpage")
 
         let webPageString = "http://www.mozilla.com/typing"
-        tester().enterTextIntoCurrentFirstResponder(webPageString)
+        tester().enterText(intoCurrentFirstResponder: webPageString)
         XCTAssertEqual(webPageString, HomePageUtils.homePageSetting(tester()))
 
         // check if it's saved
@@ -45,19 +45,19 @@ class HomePageSettingsUITests: KIFTestCase {
         XCTAssertEqual(webPageString, HomePageUtils.homePageSetting(tester()))
 
         // teardown.
-        tester().tapViewWithAccessibilityIdentifier("ClearHomePage")
+        tester().tapView(withAccessibilityIdentifier: "ClearHomePage")
         HomePageUtils.navigateFromHomePageSettings(tester())
     }
 
     func testTypingBadURL() {
         HomePageUtils.navigateToHomePageSettings(tester())
-        tester().tapViewWithAccessibilityIdentifier("ClearHomePage")
+        tester().tapView(withAccessibilityIdentifier: "ClearHomePage")
         XCTAssertEqual("", HomePageUtils.homePageSetting(tester()))
 
-        tester().tapViewWithAccessibilityLabel("Enter a webpage")
+        tester().tapView(withAccessibilityLabel: "Enter a webpage")
 
         let webPageString = "not a webpage"
-        tester().enterTextIntoCurrentFirstResponder(webPageString)
+        tester().enterText(intoCurrentFirstResponder: webPageString)
         XCTAssertEqual(webPageString, HomePageUtils.homePageSetting(tester()))
 
         // check if it's saved
@@ -66,19 +66,19 @@ class HomePageSettingsUITests: KIFTestCase {
         XCTAssertNotEqual(webPageString, HomePageUtils.homePageSetting(tester()))
 
         // teardown.
-        tester().tapViewWithAccessibilityIdentifier("ClearHomePage")
+        tester().tapView(withAccessibilityIdentifier: "ClearHomePage")
         HomePageUtils.navigateFromHomePageSettings(tester())
     }
 
     func testClipboard() {
         let webPageString = "https://www.mozilla.org/clipboard"
-        UIPasteboard.generalPasteboard().string = webPageString
+        UIPasteboard.general.string = webPageString
         HomePageUtils.navigateToHomePageSettings(tester())
 
-        tester().tapViewWithAccessibilityIdentifier("UseCopiedLink")
+        tester().tapView(withAccessibilityIdentifier: "UseCopiedLink")
         XCTAssertEqual(webPageString, HomePageUtils.homePageSetting(tester()))
 
-        tester().tapViewWithAccessibilityIdentifier("ClearHomePage")
+        tester().tapView(withAccessibilityIdentifier: "ClearHomePage")
         XCTAssertEqual("", HomePageUtils.homePageSetting(tester()))
         HomePageUtils.navigateFromHomePageSettings(tester())
     }
@@ -86,13 +86,13 @@ class HomePageSettingsUITests: KIFTestCase {
 
     func testDisabledClipboard() {
         let webPageString = "not a url"
-        UIPasteboard.generalPasteboard().string = webPageString
+        UIPasteboard.general.string = webPageString
         HomePageUtils.navigateToHomePageSettings(tester())
 
-        tester().tapViewWithAccessibilityIdentifier("UseCopiedLink")
+        tester().tapView(withAccessibilityIdentifier: "UseCopiedLink")
         XCTAssertNotEqual(webPageString, HomePageUtils.homePageSetting(tester()))
 
-        tester().tapViewWithAccessibilityIdentifier("ClearHomePage")
+        tester().tapView(withAccessibilityIdentifier: "ClearHomePage")
         XCTAssertEqual("", HomePageUtils.homePageSetting(tester()))
         HomePageUtils.navigateFromHomePageSettings(tester())
     }

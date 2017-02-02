@@ -6,7 +6,7 @@ import Foundation
 import EarlGrey
 
 class AuthenticationTests: KIFTestCase {
-    private var webRoot: String!
+    fileprivate var webRoot: String!
 
     override func setUp() {
         super.setUp()
@@ -68,12 +68,12 @@ class AuthenticationTests: KIFTestCase {
 
     }
 
-    private func loadAuthPage() {
+    fileprivate func loadAuthPage() {
         EarlGrey().selectElementWithMatcher(grey_accessibilityID("url")).performAction(grey_tap())
         EarlGrey().selectElementWithMatcher(grey_accessibilityID("address")).performAction(grey_typeText("\(webRoot)/auth.html\n"))
     }
 
-    private func logOut() {
+    fileprivate func logOut() {
         EarlGrey().selectElementWithMatcher(grey_accessibilityID("url")).performAction(grey_tap())
         EarlGrey().selectElementWithMatcher(grey_accessibilityID("address")).performAction(grey_typeText("\(webRoot)/auth.html?logout=1\n"))
 		// Wait until the dialog shows up
@@ -95,7 +95,7 @@ class AuthenticationTests: KIFTestCase {
             .performAction(grey_tap())
     }
 
-    private func enterCredentials(usernameValue usernameValue: String, passwordValue: String, username: String, password: String) {
+    fileprivate func enterCredentials(usernameValue: String, passwordValue: String, username: String, password: String) {
 		
 		// Wait until the dialog shows up
 		let dialogAppeared = GREYCondition(name: "Wait the login dialog to appear", block: { _ in

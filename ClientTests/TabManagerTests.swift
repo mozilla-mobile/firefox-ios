@@ -12,92 +12,92 @@ import Deferred
 import XCTest
 
 
-public class TabManagerMockProfile: MockProfile {
+open class TabManagerMockProfile: MockProfile {
     var numberOfTabsStored = 0
-    override func storeTabs(tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
+    override func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
         numberOfTabsStored = tabs.count
         return deferMaybe(tabs.count)
     }
 }
 
-public class MockTabManagerStateDelegate: TabManagerStateDelegate {
+open class MockTabManagerStateDelegate: TabManagerStateDelegate {
     var numberOfTabsStored = 0
-    func tabManagerWillStoreTabs(tabs: [Tab]) {
+    public func tabManagerWillStoreTabs(_ tabs: [Tab]) {
         numberOfTabsStored = tabs.count
     }
 }
 
 struct MethodSpy {
     let functionName: String
-    let method: ((tabs: [Tab?]) -> Void)?
+    let method: ((_ tabs: [Tab?]) -> Void)?
 
     init(functionName: String) {
         self.functionName = functionName
         self.method = nil
     }
 
-    init(functionName: String, method: ((tabs: [Tab?]) -> Void)?) {
+    init(functionName: String, method: ((_ tabs: [Tab?]) -> Void)?) {
         self.functionName = functionName
         self.method = method
     }
 }
 
-public class MockTabManagerDelegate: TabManagerDelegate {
+open class MockTabManagerDelegate: TabManagerDelegate {
 
     //this array represents the order in which delegate methods should be called.
     //each delegate method will pop the first struct from the array. If the method name doesn't match the struct then the order is incorrect
     //Then it evaluates the method closure which will return true/false depending on if the tabs are correct
     var methodCatchers: [MethodSpy] = []
 
-    func expect(methods: [MethodSpy]) {
+    func expect(_ methods: [MethodSpy]) {
         self.methodCatchers = methods
     }
 
-    func verify(message: String) {
+    func verify(_ message: String) {
         XCTAssertTrue(methodCatchers.isEmpty, message)
     }
 
-    func testDelegateMethodWithName(name: String, tabs: [Tab?]) {
+    func testDelegateMethodWithName(_ name: String, tabs: [Tab?]) {
         guard let spy = self.methodCatchers.first else {
             XCTAssert(false, "No method was availible in the queue. For the delegate method \(name) to use")
             return
         }
         XCTAssertEqual(spy.functionName, name)
         if let methodCheck = spy.method {
-            methodCheck(tabs: tabs)
+            methodCheck(tabs)
         }
         methodCatchers.removeFirst()
     }
 
-    func tabManager(tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?) {
+    public func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?) {
         testDelegateMethodWithName(#function, tabs: [selected, previous])
     }
 
-    func tabManager(tabManager: TabManager, didAddTab tab: Tab) {
+    public func tabManager(_ tabManager: TabManager, didAddTab tab: Tab) {
         testDelegateMethodWithName(#function, tabs: [tab])
     }
 
-    func tabManager(tabManager: TabManager, didRemoveTab tab: Tab) {
+    public func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab) {
         testDelegateMethodWithName(#function, tabs: [tab])
     }
 
-    func tabManagerDidRestoreTabs(tabManager: TabManager) {
+    public func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
         testDelegateMethodWithName(#function, tabs: [])
     }
 
-    func tabManager(tabManager: TabManager, willRemoveTab tab: Tab) {
+    public func tabManager(_ tabManager: TabManager, willRemoveTab tab: Tab) {
         testDelegateMethodWithName(#function, tabs: [tab])
     }
 
-    func tabManager(tabManager: TabManager, willAddTab tab: Tab) {
+    public func tabManager(_ tabManager: TabManager, willAddTab tab: Tab) {
         testDelegateMethodWithName(#function, tabs: [tab])
     }
 
-    func tabManagerDidAddTabs(tabManager: TabManager) {
+    public func tabManagerDidAddTabs(_ tabManager: TabManager) {
         testDelegateMethodWithName(#function, tabs: [])
     }
 
-    func tabManagerDidRemoveAllTabs(tabManager: TabManager, toast: ButtonToast?) {
+    public func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
         testDelegateMethodWithName(#function, tabs: [])
     }
 }
@@ -130,8 +130,8 @@ class TabManagerTests: XCTestCase {
         // add some non-private tabs to the tab manager
         for _ in 0..<3 {
             let tab = Tab(configuration: configuration)
-            tab.url = NSURL(string: "http://yahoo.com")!
-            manager.configureTab(tab, request: NSURLRequest(URL: tab.url!), flushToDisk: false, zombie: false)
+            tab.url = URL(string: "http://yahoo.com")!
+            manager.configureTab(tab, request: URLRequest(url: tab.url!), flushToDisk: false, zombie: false)
         }
 
         manager.storeChanges()
@@ -151,8 +151,8 @@ class TabManagerTests: XCTestCase {
         // add some non-private tabs to the tab manager
         for _ in 0..<3 {
             let tab = Tab(configuration: configuration, isPrivate: true)
-            tab.url = NSURL(string: "http://yahoo.com")!
-            manager.configureTab(tab, request: NSURLRequest(URL: tab.url!), flushToDisk: false, zombie: false)
+            tab.url = URL(string: "http://yahoo.com")!
+            manager.configureTab(tab, request: URLRequest(url: tab.url!), flushToDisk: false, zombie: false)
         }
 
         manager.storeChanges()
