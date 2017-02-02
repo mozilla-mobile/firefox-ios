@@ -7,41 +7,41 @@ import XCTest
 
 class RelativeDatesTests: XCTestCase {
     func testRelativeDates() {
-        let dateOrig = NSDate()
-        var date = NSDate(timeInterval: 0, sinceDate: dateOrig)
+        let dateOrig = Date()
+        var date = Date(timeInterval: 0, since: dateOrig)
         
         XCTAssertTrue(date.toRelativeTimeString() == "just now")
         
-        date = NSDate(timeInterval: 0, sinceDate: dateOrig)
-        date = date.dateByAddingTimeInterval(-10)
+        date = Date(timeInterval: 0, since: dateOrig)
+        date = date.addingTimeInterval(-10)
         XCTAssertTrue(date.toRelativeTimeString() == "just now")
         
-        date = NSDate(timeInterval: 0, sinceDate: dateOrig)
-        date = date.dateByAddingTimeInterval(-60)
-        XCTAssertTrue(date.toRelativeTimeString() == ("today at " + NSDateFormatter.localizedStringFromDate(date, dateStyle: NSDateFormatterStyle.NoStyle, timeStyle: NSDateFormatterStyle.ShortStyle)))
+        date = Date(timeInterval: 0, since: dateOrig)
+        date = date.addingTimeInterval(-60)
+        XCTAssertTrue(date.toRelativeTimeString() == ("today at " + DateFormatter.localizedStringFromDate(date, dateStyle: DateFormatter.Style.NoStyle, timeStyle: DateFormatter.Style.ShortStyle)))
         
-        date = NSDate(timeInterval: 0, sinceDate: dateOrig)
-        date = date.dateByAddingTimeInterval(-60 * 60 * 24)
+        date = Date(timeInterval: 0, since: dateOrig)
+        date = date.addingTimeInterval(-60 * 60 * 24)
         XCTAssertTrue(date.toRelativeTimeString() == "yesterday")
         
-        date = NSDate(timeInterval: 0, sinceDate: dateOrig)
-        date = date.dateByAddingTimeInterval(-60 * 60 * 24 * 2)
+        date = Date(timeInterval: 0, since: dateOrig)
+        date = date.addingTimeInterval(-60 * 60 * 24 * 2)
         XCTAssertTrue(date.toRelativeTimeString() == "this week")
         
-        date = NSDate(timeInterval: 0, sinceDate: dateOrig)
-        date = date.dateByAddingTimeInterval(-60 * 60 * 24 * 7)
+        date = Date(timeInterval: 0, since: dateOrig)
+        date = date.addingTimeInterval(-60 * 60 * 24 * 7)
         XCTAssertTrue(date.toRelativeTimeString() == "more than a week ago")
         
-        date = NSDate(timeInterval: 0, sinceDate: dateOrig)
-        date = date.dateByAddingTimeInterval(-60 * 60 * 24 * 7 * 5)
+        date = Date(timeInterval: 0, since: dateOrig)
+        date = date.addingTimeInterval(-60 * 60 * 24 * 7 * 5)
         XCTAssertTrue(date.toRelativeTimeString() == "more than a month ago")
         
-        date = NSDate(timeInterval: 0, sinceDate: dateOrig)
-        date = date.dateByAddingTimeInterval(-60 * 60 * 24 * 7 * 5 * 2)
-        XCTAssertTrue(date.toRelativeTimeString() == NSDateFormatter.localizedStringFromDate(date, dateStyle: NSDateFormatterStyle.ShortStyle, timeStyle: NSDateFormatterStyle.ShortStyle))
+        date = Date(timeInterval: 0, since: dateOrig)
+        date = date.addingTimeInterval(-60 * 60 * 24 * 7 * 5 * 2)
+        XCTAssertTrue(date.toRelativeTimeString() == DateFormatter.localizedStringFromDate(date, dateStyle: DateFormatter.Style.ShortStyle, timeStyle: DateFormatter.Style.ShortStyle))
         
-        date = NSDate(timeInterval: 0, sinceDate: dateOrig)
-        date = date.dateByAddingTimeInterval(-60 * 60 * 24 * 7 * 5 * 12 * 2)
-        XCTAssertTrue(date.toRelativeTimeString() == NSDateFormatter.localizedStringFromDate(date, dateStyle: NSDateFormatterStyle.ShortStyle, timeStyle: NSDateFormatterStyle.ShortStyle))
+        date = Date(timeInterval: 0, since: dateOrig)
+        date = date.addingTimeInterval(-60 * 60 * 24 * 7 * 5 * 12 * 2)
+        XCTAssertTrue(date.toRelativeTimeString() == DateFormatter.localizedStringFromDate(date, dateStyle: DateFormatter.Style.ShortStyle, timeStyle: DateFormatter.Style.ShortStyle))
     }
 }

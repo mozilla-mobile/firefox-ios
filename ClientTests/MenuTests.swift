@@ -18,7 +18,7 @@ class MenuTests: XCTestCase {
         super.tearDown()
     }
 
-    func appState(ui: UIState) -> AppState {
+    func appState(_ ui: UIState) -> AppState {
         let prefs = MockProfilePrefs()
         prefs.setString("http://mozilla.com", forKey: HomePageConstants.HomePageURLPrefKey)
         return AppState(ui: ui, prefs: prefs)
@@ -26,7 +26,7 @@ class MenuTests: XCTestCase {
 
     // bookmarks menu item
     func testMenuConfigurationForNonBookmarkedItemInTab() {
-        let tabState = TabState(isPrivate: false, desktopSite: false, isBookmarked: false, url: NSURL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
+        let tabState = TabState(isPrivate: false, desktopSite: false, isBookmarked: false, url: URL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
         let browserConfiguration = AppMenuConfiguration(appState: appState(.Tab(tabState: tabState)))
         let bookmarkItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.AddBookmarkTitleString }
         XCTAssertNotNil(bookmarkItem)
@@ -35,7 +35,7 @@ class MenuTests: XCTestCase {
     }
 
     func testMenuConfigurationForBookmarkedItemInTab() {
-        let tabState = TabState(isPrivate: false, desktopSite: false, isBookmarked: true, url: NSURL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
+        let tabState = TabState(isPrivate: false, desktopSite: false, isBookmarked: true, url: URL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
         let browserConfiguration = AppMenuConfiguration(appState: appState(.Tab(tabState: tabState)))
         let bookmarkedItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.RemoveBookmarkTitleString }
         XCTAssertNotNil(bookmarkedItem)
@@ -59,7 +59,7 @@ class MenuTests: XCTestCase {
 
     // new private tab item
     func testNewPrivateTabItemPresentInMenuConfigurationInTab() {
-        let tabState = TabState(isPrivate: false, desktopSite: false, isBookmarked: false, url: NSURL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
+        let tabState = TabState(isPrivate: false, desktopSite: false, isBookmarked: false, url: URL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
         let browserConfiguration = AppMenuConfiguration(appState: appState(.Tab(tabState: tabState)))
         let privateTabItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.NewPrivateTabTitleString }
         XCTAssertNotNil(privateTabItem)
@@ -82,7 +82,7 @@ class MenuTests: XCTestCase {
 
     // new tab item
     func testNewTabItemPresentInMenuConfigurationInTab() {
-        let tabState = TabState(isPrivate: false, desktopSite: false, isBookmarked: false, url: NSURL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
+        let tabState = TabState(isPrivate: false, desktopSite: false, isBookmarked: false, url: URL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
         let browserConfiguration = AppMenuConfiguration(appState: appState(.Tab(tabState: tabState)))
         let tabItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.NewTabTitleString }
         XCTAssertNotNil(tabItem)
@@ -105,7 +105,7 @@ class MenuTests: XCTestCase {
 
     // find in page item
     func testFindInPageItemPresentInMenuConfigurationInTab() {
-        let tabState = TabState(isPrivate: false, desktopSite: false, isBookmarked: false, url: NSURL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
+        let tabState = TabState(isPrivate: false, desktopSite: false, isBookmarked: false, url: URL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
         let browserConfiguration = AppMenuConfiguration(appState: appState(.Tab(tabState: tabState)))
         let findInPageItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.FindInPageTitleString }
         XCTAssertNotNil(findInPageItem)
@@ -127,7 +127,7 @@ class MenuTests: XCTestCase {
 
     // view desktop site menu item
     func testMenuConfigurationForViewDesktopSiteItemInTab() {
-        let tabState = TabState(isPrivate: false, desktopSite: false, isBookmarked: false, url: NSURL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
+        let tabState = TabState(isPrivate: false, desktopSite: false, isBookmarked: false, url: URL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
         let browserConfiguration = AppMenuConfiguration(appState: appState(.Tab(tabState: tabState)))
         let viewDesktopSiteItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.ViewDesktopSiteTitleString }
         XCTAssertNotNil(viewDesktopSiteItem)
@@ -136,7 +136,7 @@ class MenuTests: XCTestCase {
     }
 
     func testMenuConfigurationForViewMobileSiteItemInTab() {
-        let tabState = TabState(isPrivate: false, desktopSite: true, isBookmarked: false, url: NSURL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
+        let tabState = TabState(isPrivate: false, desktopSite: true, isBookmarked: false, url: URL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
         let browserConfiguration = AppMenuConfiguration(appState: appState(.Tab(tabState: tabState)))
         let viewMobileSiteItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.ViewMobileSiteTitleString }
         XCTAssertNotNil(viewMobileSiteItem)
@@ -160,7 +160,7 @@ class MenuTests: XCTestCase {
 
     // Homepage and Set homepage items.
     func testHomePageMenuConfiguration() {
-        let tabState = TabState(isPrivate: false, desktopSite: true, isBookmarked: false, url: NSURL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
+        let tabState = TabState(isPrivate: false, desktopSite: true, isBookmarked: false, url: URL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
         let appState = self.appState(.Tab(tabState: tabState))
         appState.prefs.setString("http://mozilla.com", forKey: HomePageConstants.HomePageURLPrefKey)
         let browserConfiguration = AppMenuConfiguration(appState: appState)
@@ -171,7 +171,7 @@ class MenuTests: XCTestCase {
     }
 
     func testSetHomePageMenuConfiguration() {
-        let tabState = TabState(isPrivate: false, desktopSite: true, isBookmarked: false, url: NSURL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
+        let tabState = TabState(isPrivate: false, desktopSite: true, isBookmarked: false, url: URL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
         let appState = self.appState(.Tab(tabState: tabState))
         appState.prefs.removeObjectForKey(HomePageConstants.HomePageURLPrefKey)
 
@@ -183,7 +183,7 @@ class MenuTests: XCTestCase {
     }
 
     func testHomePageNotInMenuConfiguration() {
-        let tabState = TabState(isPrivate: false, desktopSite: true, isBookmarked: false, url: NSURL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
+        let tabState = TabState(isPrivate: false, desktopSite: true, isBookmarked: false, url: URL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
         let appState = self.appState(.Tab(tabState: tabState))
         appState.prefs.setBool(false, forKey: HomePageConstants.HomePageButtonIsInMenuPrefKey)
         
@@ -222,7 +222,7 @@ class MenuTests: XCTestCase {
 
     // Show and Hide Image items
     func testHideImagesMenuConfiguration() {
-        let tabState = TabState(isPrivate: false, desktopSite: true, isBookmarked: false, url: NSURL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
+        let tabState = TabState(isPrivate: false, desktopSite: true, isBookmarked: false, url: URL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
         let appState = self.appState(.Tab(tabState: tabState))
         appState.prefs.setBool(false, forKey: NoImageModePrefsKey.NoImageModeStatus)
 
@@ -234,7 +234,7 @@ class MenuTests: XCTestCase {
     }
 
     func testShowImagesMenuConfiguration() {
-        let tabState = TabState(isPrivate: false, desktopSite: true, isBookmarked: false, url: NSURL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
+        let tabState = TabState(isPrivate: false, desktopSite: true, isBookmarked: false, url: URL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
         let appState = self.appState(.Tab(tabState: tabState))
         appState.prefs.setBool(true, forKey: NoImageModePrefsKey.NoImageModeStatus)
 
@@ -247,7 +247,7 @@ class MenuTests: XCTestCase {
 
     // settings item
     func testSettingsItemPresentInMenuConfigurationInTab() {
-        let tabState = TabState(isPrivate: false, desktopSite: false, isBookmarked: false, url: NSURL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
+        let tabState = TabState(isPrivate: false, desktopSite: false, isBookmarked: false, url: URL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
         let browserConfiguration = AppMenuConfiguration(appState: appState(.Tab(tabState: tabState)))
         let settingsItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.SettingsTitleString }
         XCTAssertNotNil(settingsItem)
@@ -269,7 +269,7 @@ class MenuTests: XCTestCase {
 
     // home panel toolbar items
     func testHomePanelToolbarItemsPresentInMenuConfigurationInTab() {
-        let tabState = TabState(isPrivate: false, desktopSite: false, isBookmarked: false, url: NSURL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
+        let tabState = TabState(isPrivate: false, desktopSite: false, isBookmarked: false, url: URL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
         let browserConfiguration = AppMenuConfiguration(appState: appState(.Tab(tabState: tabState)))
         let topSitesItem = browserConfiguration.menuToolbarItems?.find { $0.title == AppMenuConfiguration.TopSitesTitleString }
         XCTAssertNotNil(topSitesItem)

@@ -82,7 +82,7 @@ class PrefsTests: XCTestCase {
         let prefs = MockProfilePrefs().branch("baz") as! MockProfilePrefs
         let val: Timestamp = NSDate.now()
         prefs.setLong(val, forKey: "foobar")
-        XCTAssertEqual(val, (prefs.things["baz.foobar"] as! NSNumber).unsignedLongLongValue)
+        XCTAssertEqual(val, (prefs.things["baz.foobar"] as! NSNumber).uint64Value)
     }
 
     func testMockProfilePrefsClearAll() {
@@ -95,6 +95,6 @@ class PrefsTests: XCTestCase {
         XCTAssertEqual(123, prefs1.intForKey("foo")!)
 
         prefs1.clearAll()
-        XCTAssertNil(prefs1.intForKey("foo") as! AnyObject?)
+        XCTAssertNil(prefs1.intForKey("foo") as AnyObject?)
     }
 }

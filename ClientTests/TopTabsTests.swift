@@ -17,10 +17,10 @@ class TestTopTabs: XCTestCase {
     var bvc: BrowserViewController! //Needed because of delegates dawg
 
     //Give some time for animations to finish
-    func verifyAfter(block: () -> Void) {
+    func verifyAfter(_ block: @escaping () -> Void) {
         let seconds: Double = 1
-        let dispatchTime: dispatch_time_t = dispatch_time(DISPATCH_TIME_NOW, Int64(seconds * Double(NSEC_PER_SEC)))
-        dispatch_after(dispatchTime, dispatch_get_main_queue(), block)
+        let dispatchTime: DispatchTime = DispatchTime.now() + Double(Int64(seconds * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+        DispatchQueue.main.asyncAfter(deadline: dispatchTime, execute: block)
     }
 
     override func setUp() {
@@ -36,7 +36,7 @@ class TestTopTabs: XCTestCase {
 
     // We do this AFTER we've setup the TabManger with the state we want
     //This is a way of tricking TopTabs from not animating while I setup the correct state
-    private func createTopTabsVC() {
+    fileprivate func createTopTabsVC() {
         tabVC = TopTabsViewController(tabManager: manager)
         tabVC.delegate = bvc
         bvc.topTabsViewController = tabVC
@@ -49,54 +49,54 @@ class TestTopTabs: XCTestCase {
     func testAddingTab() {
         createTopTabsVC()
 
-        let countBefore = tabVC.collectionView.numberOfItemsInSection(0)
+        let countBefore = tabVC.collectionView.numberOfItems(inSection: 0)
         XCTAssertEqual(1, countBefore, "Make sure only one tab is open.")
         tabVC.newTabTapped()
-        let expectation = expectationWithDescription("A single tab is Added")
+        let expectation = self.expectation(description: "A single tab is Added")
 
         verifyAfter { 
-            let countAfter = self.tabVC.collectionView.numberOfItemsInSection(0)
+            let countAfter = self.tabVC.collectionView.numberOfItems(inSection: 0)
             XCTAssertEqual(countBefore + 1, countAfter, "There should be one more tab after the newTab button is tapped")
             expectation.fulfill()
         }
 
-        waitForExpectationsWithTimeout(5, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testRemoveTab() {
         manager.selectTab(manager.addTab())
         createTopTabsVC()
 
-        let countBefore = tabVC.collectionView.numberOfItemsInSection(0)
-        let cell = tabVC.collectionView.cellForItemAtIndexPath(NSIndexPath(forRow: 1, inSection: 0)) as! TopTabCell
+        let countBefore = tabVC.collectionView.numberOfItems(inSection: 0)
+        let cell = tabVC.collectionView.cellForItemAtIndexPath(IndexPath(forRow: 1, inSection: 0)) as! TopTabCell
         XCTAssertNotNil(cell)
         cell.closeTab()
-        let expectation = expectationWithDescription("A single tab is removed")
+        let expectation = self.expectation(description: "A single tab is removed")
 
         verifyAfter {
-            let countAfter = self.tabVC.collectionView.numberOfItemsInSection(0)
+            let countAfter = self.tabVC.collectionView.numberOfItems(inSection: 0)
             XCTAssertEqual(countBefore - 1, countAfter, "There should be one less tab after the newTab button is tapped")
             expectation.fulfill()
         }
-        waitForExpectationsWithTimeout(5, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testRemoveLastNormalTab() {
         createTopTabsVC()
 
-        let countBefore = tabVC.collectionView.numberOfItemsInSection(0)
+        let countBefore = tabVC.collectionView.numberOfItems(inSection: 0)
         XCTAssertEqual(countBefore, 1)
-        let cell = tabVC.collectionView.cellForItemAtIndexPath(NSIndexPath(forRow: 0, inSection: 0)) as! TopTabCell
+        let cell = tabVC.collectionView.cellForItemAtIndexPath(IndexPath(forRow: 0, inSection: 0)) as! TopTabCell
         XCTAssertNotNil(cell)
         cell.closeTab()
-        let expectation = expectationWithDescription("A single tab is removed")
+        let expectation = self.expectation(description: "A single tab is removed")
 
         verifyAfter {
-            let countAfter = self.tabVC.collectionView.numberOfItemsInSection(0)
+            let countAfter = self.tabVC.collectionView.numberOfItems(inSection: 0)
             XCTAssertEqual(countBefore, countAfter, "A new tab should have been added.")
             expectation.fulfill()
         }
-        waitForExpectationsWithTimeout(5, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
 
@@ -108,22 +108,22 @@ class TestTopTabs: XCTestCase {
         createTopTabsVC()
 
         tabVC.togglePrivateModeTapped()
-        let expectation = expectationWithDescription("Private Mode is selected.")
+        let expectation = self.expectation(description: "Private Mode is selected.")
 
         verifyAfter {
             XCTAssertTrue(self.manager.selectedTab!.isPrivate, "We should have created and selected a private tab")
             expectation.fulfill()
         }
-        waitForExpectationsWithTimeout(5, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
 
         tabVC.togglePrivateModeTapped()
-        let normalModeExpectation = expectationWithDescription("Normal mode selected")
+        let normalModeExpectation = self.expectation(description: "Normal mode selected")
         verifyAfter {
             XCTAssertTrue(!self.manager.selectedTab!.isPrivate, "We should have created and selected a private tab")
             XCTAssertEqual(normalSelectedTab, self.manager.selectedTab, "The selectedtab should be equal to the previous normal tab")
             normalModeExpectation.fulfill()
         }
-        waitForExpectationsWithTimeout(5, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
     
 

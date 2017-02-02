@@ -28,7 +28,7 @@ class ActivityStreamTests: XCTestCase {
     func testDeletionOfSingleSuggestedSite() {
         let siteToDelete = panel.defaultTopSites()[0]
 
-        panel.hideURLFromTopSites(NSURL(string: siteToDelete.url)!)
+        panel.hideURLFromTopSites(URL(string: siteToDelete.url)!)
         let newSites = panel.defaultTopSites()
 
         XCTAssertFalse(newSites.contains(siteToDelete, f: { (a, b) -> Bool in
@@ -39,7 +39,7 @@ class ActivityStreamTests: XCTestCase {
     func testDeletionOfAllDefaultSites() {
         let defaultSites = panel.defaultTopSites()
         defaultSites.forEach({
-            panel.hideURLFromTopSites(NSURL(string: $0.url)!)
+            panel.hideURLFromTopSites(URL(string: $0.url)!)
         })
 
         let newSites = panel.defaultTopSites()
@@ -49,21 +49,21 @@ class ActivityStreamTests: XCTestCase {
 
 // MARK: Telemetry Tests
 extension ActivityStreamTests {
-    private func expectedPayloadForEvent(event: String, source: String, position: Int) -> [String: AnyObject] {
+    fileprivate func expectedPayloadForEvent(_ event: String, source: String, position: Int) -> [String: AnyObject] {
         return [
-            "event": event,
-            "page": "NEW_TAB",
-            "source": source,
-            "action_position": position,
-            "app_version": AppInfo.appVersion,
-            "build": AppInfo.buildNumber,
-            "locale": NSLocale.currentLocale().localeIdentifier
+            "event": event as AnyObject,
+            "page": "NEW_TAB" as AnyObject,
+            "source": source as AnyObject,
+            "action_position": position as AnyObject,
+            "app_version": AppInfo.appVersion as AnyObject,
+            "build": AppInfo.buildNumber as AnyObject,
+            "locale": Locale.currentLocale().localeIdentifier
         ]
     }
 
-    private func assertPayload(actual: [String: AnyObject], matches: [String: AnyObject]) {
+    fileprivate func assertPayload(_ actual: [String: AnyObject], matches: [String: AnyObject]) {
         XCTAssertTrue(actual.count == matches.count)
-        actual.enumerate().forEach { index, element in
+        actual.enumerated().forEach { index, element in
             if let actualValue = element.1 as? Int,
                let matchesValue = matches[element.0] as? Int {
                 XCTAssertTrue(actualValue == matchesValue)
@@ -141,7 +141,7 @@ extension ActivityStreamTests {
 class MockPingClient: PingCentreClient {
     var pingsReceived: [[String: AnyObject]] = []
 
-    func sendPing(data: [String: AnyObject], validate: Bool = true) -> Success {
+    func sendPing(_ data: [String: AnyObject], validate: Bool = true) -> Success {
         pingsReceived.append(data)
         return succeed()
     }
