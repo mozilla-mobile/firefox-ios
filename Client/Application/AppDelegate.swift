@@ -660,6 +660,15 @@ extension AppDelegate {
         print("failed to register. \(error.description)")
         FxALoginHelper.sharedInstance?.apnsRegisterDidFail()
     }
+
+    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
+        print("APNS NOTIFICATION \(userInfo)")
+        completionHandler(.NoData)
+    }
+
+    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
+        print("APNS NOTIFICATION \(userInfo)")
+    }
 }
 
 struct FxALaunchParams {
