@@ -28,7 +28,7 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
         let args: Args = [
             item.guid,
             item.name,
-            item.modified,
+            NSNumber(value: item.modified),
             item.type,
             item.formfactor,
             item.os,
@@ -39,7 +39,7 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
     override func getUpdateAndArgs(_ item: inout RemoteClient) -> (String, Args)? {
         let args: Args = [
             item.name,
-            item.modified,
+            NSNumber(value: item.modified),
             item.type,
             item.formfactor,
             item.os,
@@ -61,7 +61,7 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
         return { row -> RemoteClient in
             let guid = row["guid"] as? String
             let name = row["name"] as! String
-            let mod = Timestamp(row["modified"] as! UInt64)
+            let mod = (row["modified"] as! NSNumber).uint64Value
             let type = row["type"] as? String
             let form = row["formfactor"] as? String
             let os = row["os"] as? String
@@ -111,7 +111,7 @@ class RemoteTabsTable<T>: GenericTable<RemoteTab> {
             item.URL.absoluteString,
             item.title,
             RemoteTabsTable.convertHistoryToString(item.history),
-            item.lastUsed,
+            NSNumber(value: item.lastUsed)
         ]
 
         return ("INSERT INTO \(name) (client_guid, url, title, history, last_used) VALUES (?, ?, ?, ?, ?)", args)
@@ -121,7 +121,7 @@ class RemoteTabsTable<T>: GenericTable<RemoteTab> {
         let args: Args = [
             item.title,
             RemoteTabsTable.convertHistoryToString(item.history),
-            item.lastUsed,
+            NSNumber(value: item.lastUsed),
             // Key by (client_guid, url) rather than (transient) id.
             item.clientGUID,
             item.URL.absoluteString,

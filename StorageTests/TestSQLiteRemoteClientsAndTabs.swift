@@ -104,7 +104,10 @@ func removeLocalClient(_ a: ClientAndTabs) -> Bool {
 }
 
 func byGUID(_ a: ClientAndTabs, b: ClientAndTabs) -> Bool {
-    return a.client.guid! < b.client.guid!
+    guard let aGUID = a.client.guid, let bGUID = b.client.guid else {
+        return false
+    }
+    return aGUID < bGUID
 }
 
 func byURL(_ a: RemoteTab, b: RemoteTab) -> Bool {

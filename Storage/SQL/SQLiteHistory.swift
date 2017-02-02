@@ -88,7 +88,7 @@ func getLocalFrecencySQL() -> String {
 
 extension SDRow {
     func getTimestamp(_ column: String) -> Timestamp? {
-        return self[column] as? UInt64
+        return (self[column] as? NSNumber)?.uint64Value
     }
 
     func getBoolean(_ column: String) -> Bool {
