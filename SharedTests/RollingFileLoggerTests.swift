@@ -110,7 +110,7 @@ class RollingFileLoggerTests: XCTestCase {
         let logFileHandle = FileHandle(forWritingAtPath: expectedPath)
         XCTAssertNotNil(logFileHandle, "File should exist")
         let garbageBytes = malloc(size)
-        let blankData = Data(bytes: UnsafePointer<UInt8>(garbageBytes), count: size)
+        let blankData = Data(bytes: garbageBytes!, count: size)
         logFileHandle!.write(blankData)
         logFileHandle!.closeFile()
         return expectedPath
