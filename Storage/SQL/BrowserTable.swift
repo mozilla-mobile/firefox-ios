@@ -107,7 +107,7 @@ private let log = Logger.syncLogger
  * We rely on SQLiteHistory having initialized the favicon table first.
  */
 public class BrowserTable: Table {
-    static let DefaultVersion = 20    // Bug 1253656.
+    static let DefaultVersion = 21    // Bug 1253656.
 
     // TableInfo fields.
     var name: String { return "BROWSER" }
@@ -420,7 +420,7 @@ public class BrowserTable: Table {
     // This smushes together remote and local visits. So it goes.
     private let historyVisitsView =
     "CREATE VIEW \(ViewHistoryVisits) AS " +
-    "SELECT h.url AS url, MAX(v.date) AS visitDate FROM " +
+    "SELECT h.url AS url, MAX(v.date) AS visitDate, h.domain_id AS domain_id FROM " +
     "\(TableHistory) h JOIN \(TableVisits) v ON v.siteID = h.id " +
     "GROUP BY h.id"
 
@@ -835,6 +835,14 @@ public class BrowserTable: Table {
             }
         }
 
+        if from < 21 && to >= 21 {
+            if !self.run(db, queries: [
+                "DROP VIEW IF EXISTS \(ViewHistoryVisits)",
+                self.historyVisitsView]) {
+                return false
+            }
+        }
+
         return true
     }
 
@@ -847,7 +855,7 @@ public class BrowserTable: Table {
         var pairs = Args()
         pairs.reserveCapacity(cursor.count * 2)
         for url in cursor {
-            if let url = url, host = url.asURL?.normalizedHost() {
+            if let url = url, host = url.asURL?.normalizedHost {
                 pairs.append(url)
                 pairs.append(host)
             }

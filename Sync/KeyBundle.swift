@@ -31,12 +31,16 @@ public class KeyBundle: Hashable {
     }
 
     public class var invalid: KeyBundle {
-        return KeyBundle(encKeyB64: "deadbeef", hmacKeyB64: "deadbeef")
+        return KeyBundle(encKeyB64: "deadbeef", hmacKeyB64: "deadbeef")!
     }
 
-    public init(encKeyB64: String, hmacKeyB64: String) {
-        self.encKey = Bytes.decodeBase64(encKeyB64)
-        self.hmacKey = Bytes.decodeBase64(hmacKeyB64)
+    public init?(encKeyB64: String, hmacKeyB64: String) {
+        guard let e = Bytes.decodeBase64(encKeyB64),
+              let h = Bytes.decodeBase64(hmacKeyB64) else {
+            return nil
+        }
+        self.encKey = e
+        self.hmacKey = h
     }
 
     public init(encKey: NSData, hmacKey: NSData) {

@@ -96,10 +96,10 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
             return cell
         }
         let tab = recentlyClosedTabs[indexPath.row]
-        twoLineCell.setLines(tab.title, detailText: tab.url.absoluteString)
+        let displayURL = tab.url.displayURL ?? tab.url
+        twoLineCell.setLines(tab.title, detailText: displayURL.absoluteDisplayString)
         let site: Favicon? = (tab.faviconURL != nil) ? Favicon(url: tab.faviconURL!, type: .Guess) : nil
-        cell.imageView?.setIcon(site, forURL: tab.url)
-
+        cell.imageView?.setIcon(site, forURL: displayURL)
         return cell
     }
 

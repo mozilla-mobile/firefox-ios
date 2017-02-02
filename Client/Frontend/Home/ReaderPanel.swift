@@ -403,7 +403,7 @@ class ReadingListPanel: UITableViewController, HomePanel {
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: false)
-        if let record = records?[indexPath.row], encodedURL = ReaderModeUtils.encodeURL(NSURL(string: record.url)!) {
+        if let record = records?[indexPath.row], let url = NSURL(string: record.url), let encodedURL = url.encodeReaderModeURL(WebServer.sharedInstance.baseReaderModeURL()) {
             // Mark the item as read
             profile.readingList?.updateRecord(record, unread: false)
             // Reading list items are closest in concept to bookmarks.

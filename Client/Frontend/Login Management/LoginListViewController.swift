@@ -542,7 +542,7 @@ class LoginDataSource: NSObject, UITableViewDataSource {
             // baseDomain() is a costly call because of the ETLD lookup tables.
             logins.forEach { login in
                 domainLookup[login.guid] = (
-                    login.hostname.asURL?.baseDomain(),
+                    login.hostname.asURL?.baseDomain,
                     login.hostname.asURL?.host,
                     login.hostname
                 )

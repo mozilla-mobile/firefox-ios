@@ -136,7 +136,7 @@ struct AppMenuConfiguration: MenuConfiguration {
                 }
             }
             menuItems.append(AppMenuConfiguration.SettingsMenuItem)
-        case .HomePanels, .Loading:
+        case .HomePanels:
             menuItems.append(AppMenuConfiguration.NewTabMenuItem)
             menuItems.append(AppMenuConfiguration.NewPrivateTabMenuItem)
             if HomePageAccessors.isButtonInMenu(appState) && HomePageAccessors.hasHomePage(appState) {
@@ -148,6 +148,20 @@ struct AppMenuConfiguration: MenuConfiguration {
                 } else {
                     menuItems.append(AppMenuConfiguration.HideImageModeMenuItem)
                 }
+            }
+            if NightModeAccessors.isNightModeAvailable(appState) {
+                if NightModeAccessors.isNightModeActivated(appState) {
+                    menuItems.append(AppMenuConfiguration.ShowNightModeItem)
+                } else {
+                    menuItems.append(AppMenuConfiguration.HideNightModeItem)
+                }
+            }
+            menuItems.append(AppMenuConfiguration.SettingsMenuItem)
+        case .EmptyTab, .Loading:
+            menuItems.append(AppMenuConfiguration.NewTabMenuItem)
+            menuItems.append(AppMenuConfiguration.NewPrivateTabMenuItem)
+            if HomePageAccessors.isButtonInMenu(appState) && HomePageAccessors.hasHomePage(appState) {
+                menuItems.append(AppMenuConfiguration.OpenHomePageMenuItem)
             }
             if NightModeAccessors.isNightModeAvailable(appState) {
                 if NightModeAccessors.isNightModeActivated(appState) {

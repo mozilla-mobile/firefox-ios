@@ -6,10 +6,13 @@
 import XCTest
 
 class HomePageSettingsTest: BaseTestCase {
-        
+    var navigator: Navigator!
+    var app: XCUIApplication!
+
     override func setUp() {
         super.setUp()
-        dismissFirstRunUI()
+        app = XCUIApplication()
+        navigator = createScreenGraph(app, url: "www.mozilla.com").navigator(self)
     }
     
     override func tearDown() {
@@ -19,21 +22,13 @@ class HomePageSettingsTest: BaseTestCase {
     
     // This test has moved from KIF UITest - accesses google.com instead of local webserver instance
     func testCurrentPage() {
-        
-        let app = XCUIApplication()
-        app.textFields["url"].tap()
-        app.textFields["address"].typeText("www.google.com\r")
-        
+        navigator.goto(BrowserTab)
+
         // Accessing https means that it is routed
-        waitForValueContains(app.textFields["url"], value: "https://www.google")
+        waitForValueContains(app.textFields["url"], value: "https://www.mozilla")
         let currentURL = app.textFields["url"].value as! String
-        app.buttons["TabToolbar.menuButton"].tap()
-        app.pageIndicators["page 1 of 2"].tap()
-        
-        let collectionViewsQuery = app.collectionViews
-        collectionViewsQuery.cells["SettingsMenuItem"].tap()
-        app.tables["AppSettingsTableViewController.tableView"].staticTexts["Homepage"].tap()
-        
+
+        navigator.goto(HomePageSettings)
         let tablesQuery = app.tables
         tablesQuery.staticTexts["Use Current Page"].tap()
         
@@ -45,24 +40,13 @@ class HomePageSettingsTest: BaseTestCase {
     
     // Check whether the toolbar/menu shows homepage icon
     func testShowHomePageIcon() {
-        
-        let app = XCUIApplication()
-        
-        // Go to google website
-        app.textFields["url"].tap()
-        app.textFields["address"].typeText("www.google.com\r")
-        waitForValueContains(app.textFields["url"], value: "https://www.google")
-        
         // Check the Homepage icon is present in menu by default
-        let tabtoolbarMenubuttonButton = app.buttons["TabToolbar.menuButton"]
-        tabtoolbarMenubuttonButton.tap()
+        navigator.goto(BrowserTabMenu)
         let collectionViewsQuery = app.collectionViews
         waitforExistence(collectionViewsQuery.cells["SetHomePageMenuItem"])
         
         // Go to settings, and disable the homepage icon switch
-        app.pageIndicators["page 1 of 2"].tap()
-        collectionViewsQuery.cells["SettingsMenuItem"].tap()
-        app.tables["AppSettingsTableViewController.tableView"].staticTexts["Homepage"].tap()
+        navigator.goto(HomePageSettings)
         
         let value = app.tables.cells.switches["Show Homepage Icon In Menu, Otherwise show in the toolbar"].value
         XCTAssertEqual(value as? String, "1")
@@ -70,18 +54,11 @@ class HomePageSettingsTest: BaseTestCase {
         app.tables.switches["Show Homepage Icon In Menu, Otherwise show in the toolbar"].tap()
         let newValue = app.tables.cells.switches["Show Homepage Icon In Menu, Otherwise show in the toolbar"].value
         XCTAssertEqual(newValue as? String, "0")
-        
-        // Exit and check the icon does not show up in menu, but on toolbar
-        app.navigationBars["Homepage Settings"].buttons["Settings"].tap()
-        app.navigationBars["Settings"].buttons["AppSettingsTableViewController.navigationItem.leftBarButtonItem"].tap()
-        
-        // it is located properly under Nav toolbar
-        waitforExistence(app.otherElements["Navigation Toolbar"].buttons["Homepage"])
-        
+
         // Both pages do not show Homepage icon
-        tabtoolbarMenubuttonButton.tap()
+        navigator.goto(BrowserTabMenu)
         waitforNoExistence(collectionViewsQuery.cells["SetHomePageMenuItem"])
-        app.pageIndicators["page 1 of 2"].tap()
+        navigator.goto(BrowserTabMenu2)
         waitforNoExistence(collectionViewsQuery.cells["SetHomePageMenuItem"])
     }
 }

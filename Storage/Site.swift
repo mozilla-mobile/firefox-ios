@@ -66,7 +66,7 @@ public class Site: Identifiable {
     var guid: String? = nil
 
     public var tileURL: NSURL {
-        return NSURL(string: url)?.domainURL() ?? NSURL(string: "about:blank")!
+        return NSURL(string: url)?.domainURL ?? NSURL(string: "about:blank")!
     }
 
     public let url: String
@@ -74,7 +74,7 @@ public class Site: Identifiable {
      // Sites may have multiple favicons. We'll return the largest.
     public var icon: Favicon?
     public var latestVisit: Visit?
-    public let bookmarked: Bool?
+    public private(set) var bookmarked: Bool?
 
     public convenience init(url: String, title: String) {
         self.init(url: url, title: title, bookmarked: false)
@@ -83,6 +83,10 @@ public class Site: Identifiable {
     public init(url: String, title: String, bookmarked: Bool?) {
         self.url = url
         self.title = title
+        self.bookmarked = bookmarked
+    }
+
+    public func setBookmarked(bookmarked: Bool) {
         self.bookmarked = bookmarked
     }
 

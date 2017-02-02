@@ -19,6 +19,7 @@ enum UIState {
     case HomePanels(homePanelState: HomePanelState)
     case TabTray(tabTrayState: TabTrayState)
     case Loading
+    case EmptyTab
 
     func isPrivate() -> Bool {
         switch self {

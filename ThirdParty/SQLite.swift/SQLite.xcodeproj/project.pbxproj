@@ -219,7 +219,6 @@
 		DC32A7AB1B5AB18C002FFBE2 /* R*TreeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "R*TreeTests.swift"; sourceTree = "<group>"; };
 		DC32A7C61B5C26A6002FFBE2 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		DC32A7C81B5C9814002FFBE2 /* CustomFunctionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomFunctionsTests.swift; sourceTree = "<group>"; };
-		DC40A4C61B7D2B3C005BA12D /* SQLite.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = SQLite.playground; sourceTree = "<group>"; };
 		DC461BB61B2E687900E9DABD /* SQLite-Bridging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SQLite-Bridging.h"; sourceTree = "<group>"; };
 		DC461BB71B2E687900E9DABD /* SQLite-Bridging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SQLite-Bridging.m"; sourceTree = "<group>"; };
 		DC461BBA1B2E68BC00E9DABD /* fts3_tokenizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fts3_tokenizer.h; sourceTree = "<group>"; };
@@ -320,7 +319,6 @@
 			isa = PBXGroup;
 			children = (
 				DC32A7C61B5C26A6002FFBE2 /* README.md */,
-				DC40A4C61B7D2B3C005BA12D /* SQLite.playground */,
 				DC2B29FF1B26FD44001C60EA /* Source */,
 				DC2B2A001B26FD44001C60EA /* Tests */,
 				DC2B2A0C1B26FDEF001C60EA /* Supporting Files */,

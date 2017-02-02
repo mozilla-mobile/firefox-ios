@@ -26,7 +26,7 @@
       buildConfiguration = "FirefoxNightly"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES">
+      shouldUseLaunchSchemeArgsEnv = "NO">
       <PreActions>
          <ExecutionAction
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
@@ -46,6 +46,11 @@
                BlueprintName = "AccountTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "SyncAuthStateTests/testLive()">
+               </Test>
+            </SkippedTests>
          </TestableReference>
          <TestableReference
             skipped = "NO">
@@ -96,6 +101,14 @@
                BlueprintName = "SyncTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "LiveStorageClientTests/testLive()">
+               </Test>
+               <Test
+                  Identifier = "LiveStorageClientTests/testStateMachine()">
+               </Test>
+            </SkippedTests>
          </TestableReference>
          <TestableReference
             skipped = "NO">
@@ -117,6 +130,81 @@
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "D39FA15E1A83E0EC00EE869C"
+               BuildableName = "UITests.xctest"
+               BlueprintName = "UITests"
+               ReferencedContainer = "container:Client.xcodeproj">
+            </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "BookmarkingTests">
+               </Test>
+               <Test
+                  Identifier = "BrowserTests">
+               </Test>
+               <Test
+                  Identifier = "ClearPrivateDataTests">
+               </Test>
+               <Test
+                  Identifier = "DomainAutocompleteTests">
+               </Test>
+               <Test
+                  Identifier = "FindInPageTests">
+               </Test>
+               <Test
+                  Identifier = "HistoryTests">
+               </Test>
+               <Test
+                  Identifier = "HomePageSettingsUITests">
+               </Test>
+               <Test
+                  Identifier = "LoginInputTests">
+               </Test>
+               <Test
+                  Identifier = "LoginManagerTests">
+               </Test>
+               <Test
+                  Identifier = "NavigationTests">
+               </Test>
+               <Test
+                  Identifier = "PrivateBrowsingTests">
+               </Test>
+               <Test
+                  Identifier = "ReaderViewUITests">
+               </Test>
+               <Test
+                  Identifier = "ReadingListTests">
+               </Test>
+               <Test
+                  Identifier = "SearchSettingsUITests">
+               </Test>
+               <Test
+                  Identifier = "SearchTests">
+               </Test>
+               <Test
+                  Identifier = "SecurityTests">
+               </Test>
+               <Test
+                  Identifier = "SessionRestoreTests">
+               </Test>
+               <Test
+                  Identifier = "SettingsTests">
+               </Test>
+               <Test
+                  Identifier = "ToolbarTests">
+               </Test>
+               <Test
+                  Identifier = "TopTabsTests">
+               </Test>
+               <Test
+                  Identifier = "ViewMemoryLeakTests">
+               </Test>
+            </SkippedTests>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
@@ -127,6 +215,23 @@
             ReferencedContainer = "container:Client.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
+      <CommandLineArguments>
+         <CommandLineArgument
+            argument = "FIREFOX_CLEAR_PROFILE"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "FIREFOX_TEST"
+            isEnabled = "YES">
+         </CommandLineArgument>
+      </CommandLineArguments>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "DYLD_INSERT_LIBRARIES"
+            value = "@executable_path/EarlGrey.framework/EarlGrey"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -134,12 +239,12 @@
       buildConfiguration = "FirefoxNightly"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      launchStyle = "0"
+      launchStyle = "1"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
-      allowLocationSimulation = "YES">
+      allowLocationSimulation = "NO">
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
          <BuildableReference
@@ -150,6 +255,13 @@
             ReferencedContainer = "container:Client.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "OS_ACTIVITY_MODE"
+            value = "${DEBUG_ACTIVITY_MODE}"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>

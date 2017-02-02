@@ -119,7 +119,7 @@ class QuickActions: NSObject {
     }
 
     private func handleOpenNewTab(withBrowserViewController bvc: BrowserViewController, isPrivate: Bool) {
-        bvc.openBlankNewTabAndFocus(isPrivate: isPrivate)
+        bvc.openBlankNewTab(isPrivate: isPrivate)
     }
 
     private func handleOpenURL(withBrowserViewController bvc: BrowserViewController, urlToOpen: NSURL) {

@@ -4,10 +4,17 @@
 
 import Foundation
 import Storage
+import SnapKit
+
+private struct ActionOverlayTableViewUX {
+    static let HeaderHeight: CGFloat = 74
+    static let RowHeight: CGFloat = 56
+}
 
 class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    private(set) var actions: [ActionOverlayTableViewAction]
+
     private var site: Site
-    private var actions: [ActionOverlayTableViewAction]
     private var tableView = UITableView()
     private var headerImage: UIImage?
     private var headerImageBackgroundColor: UIColor?
@@ -44,6 +51,7 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
         view.backgroundColor = UIColor.clearColor().colorWithAlphaComponent(0.4)
         view.addGestureRecognizer(tapRecognizer)
         view.addSubview(tableView)
+        view.accessibilityIdentifier = "Action Overlay"
 
         tableView.delegate = self
         tableView.dataSource = self
@@ -51,7 +59,8 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
         tableView.registerClass(ActionOverlayTableViewCell.self, forCellReuseIdentifier: "ActionOverlayTableViewCell")
         tableView.registerClass(ActionOverlayTableViewHeader.self, forHeaderFooterViewReuseIdentifier: "ActionOverlayTableViewHeader")
         tableView.backgroundColor = UIConstants.PanelBackgroundColor
-        tableView.scrollEnabled = false
+        tableView.scrollEnabled = true
+        tableView.bounces = false
         tableView.layer.cornerRadius = 10
         tableView.separatorStyle = .None
         tableView.cellLayoutMarginsFollowReadableWidth = false
@@ -60,8 +69,13 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
         tableView.snp_makeConstraints { make in
             make.center.equalTo(self.view)
             make.width.equalTo(290)
-            make.height.equalTo(74 + actions.count * 56)
+            setHeightConstraint(make)
         }
+    }
+
+    private func setHeightConstraint(make: ConstraintMaker) {
+        make.height.lessThanOrEqualTo(view.bounds.height)
+        make.height.equalTo(ActionOverlayTableViewUX.HeaderHeight + CGFloat(actions.count) * ActionOverlayTableViewUX.RowHeight).priorityLow()
     }
 
     func dismiss(gestureRecognizer: UIGestureRecognizer) {
@@ -73,6 +87,22 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
         // explicitly nil out its references to us to avoid crashes. Bug 1218826.
         tableView.dataSource = nil
         tableView.delegate = nil
+    }
+
+    override func updateViewConstraints() {
+        tableView.snp_updateConstraints { make in
+            setHeightConstraint(make)
+        }
+        super.updateViewConstraints()
+    }
+
+    override func traitCollectionDidChange(previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        if self.traitCollection.verticalSizeClass != previousTraitCollection?.verticalSizeClass
+            || self.traitCollection.horizontalSizeClass != previousTraitCollection?.horizontalSizeClass {
+            updateViewConstraints()
+        }
     }
 
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -96,11 +126,11 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
     }
 
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 56
+        return ActionOverlayTableViewUX.RowHeight
     }
 
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 74
+        return ActionOverlayTableViewUX.HeaderHeight
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -186,6 +216,6 @@ class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
         self.siteImageView.backgroundColor = imageBackgroundColor
         self.siteImageView.image = image?.createScaled(SimpleHighlightCellUX.IconSize) ?? SimpleHighlightCellUX.PlaceholderImage
         self.titleLabel.text = site.title.characters.count <= 1 ? site.url : site.title
-        self.descriptionLabel.text = site.tileURL.baseDomain()
+        self.descriptionLabel.text = site.tileURL.baseDomain
     }
 }

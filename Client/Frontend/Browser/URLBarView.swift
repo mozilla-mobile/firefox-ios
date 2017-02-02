@@ -190,7 +190,11 @@ class URLBarView: UIView {
 
     lazy var forwardButton: UIButton = { return UIButton() }()
 
-    lazy var backButton: UIButton = { return UIButton() }()
+    lazy var backButton: UIButton = {
+        let backButton = UIButton()
+        backButton.accessibilityIdentifier = "URLBarView.backButton"
+        return backButton
+    }()
 
     lazy var stopReloadButton: UIButton = { return UIButton() }()
 
@@ -622,7 +626,7 @@ extension URLBarView: TabLocationViewDelegate {
         var locationText = delegate?.urlBarDisplayTextForURL(locationView.url)
 
         // Make sure to use the result from urlBarDisplayTextForURL as it is responsible for extracting out search terms when on a search page
-        if let text = locationText, let url = NSURL(string: text), let host = url.host {
+        if let text = locationText, let url = NSURL(string: text), let host = url.host where AppConstants.MOZ_PUNYCODE {
             locationText = url.absoluteString?.stringByReplacingOccurrencesOfString(host, withString: host.asciiHostToUTF8())
         }
         enterOverlayMode(locationText, pasted: false)

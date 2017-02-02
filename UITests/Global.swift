@@ -8,6 +8,7 @@ import Storage
 import WebKit
 import SwiftKeychainWrapper
 import Shared
+import EarlGrey
 @testable import Client
 
 let LabelAddressAndSearch = "Address and Search"
@@ -277,6 +278,19 @@ class BrowserUtils {
             //First run dialog did not appear
         }
     }
+	
+	class func dismissFirstRunUI() {
+		var error: NSError?
+		
+		let matcher = grey_allOfMatchers(
+			grey_accessibilityID("IntroViewController.startBrowsingButton"), grey_sufficientlyVisible())
+		
+		EarlGrey().selectElementWithMatcher(matcher).assertWithMatcher(grey_notNil(), error: &error)
+		
+		if (error == nil) {
+			EarlGrey().selectElementWithMatcher(matcher).performAction(grey_tap())
+		}
+	}
 
     /// Injects a URL and title into the browser's history database.
     class func addHistoryEntry(title: String, url: NSURL) {

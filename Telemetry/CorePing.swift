@@ -8,7 +8,6 @@ import UIKit
 
 private let PrefKeyProfileDate = "PrefKeyProfileDate"
 private let PrefKeyPingCount = "PrefKeyPingCount"
-private let PrefKeyClientID = "PrefKeyClientID"
 private let PrefKeyModel = "PrefKeyModel"
 
 // See https://gecko.readthedocs.org/en/latest/toolkit/components/telemetry/telemetry/core-ping.html
@@ -39,14 +38,6 @@ class CorePing: TelemetryPing {
             profileDate = 0
         }
 
-        let clientID: String
-        if let id = profile.prefs.stringForKey(PrefKeyClientID) {
-            clientID = id
-        } else {
-            clientID = NSUUID().UUIDString
-            profile.prefs.setString(clientID, forKey: PrefKeyClientID)
-        }
-
         let model: String
         if let modelString = profile.prefs.stringForKey(PrefKeyModel) {
             model = modelString
@@ -73,7 +64,7 @@ class CorePing: TelemetryPing {
 
         var out: [String: AnyObject] = [
             "v": PingVersion,
-            "clientId": clientID,
+            "clientId": profile.clientID,
             "seq": Int(pingCount),
             "locale": locale,
             "os": "iOS",

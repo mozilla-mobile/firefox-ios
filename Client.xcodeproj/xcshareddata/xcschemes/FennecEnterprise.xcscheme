@@ -85,6 +85,14 @@
                BlueprintName = "SyncTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "LiveStorageClientTests/testLive()">
+               </Test>
+               <Test
+                  Identifier = "LiveStorageClientTests/testStateMachine()">
+               </Test>
+            </SkippedTests>
          </TestableReference>
          <TestableReference
             skipped = "NO">
@@ -123,6 +131,11 @@
                BlueprintName = "AccountTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "SyncAuthStateTests/testLive()">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
       <MacroExpansion>
@@ -170,7 +183,7 @@
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "OS_ACTIVITY_MODE"
-            value = "disable"
+            value = "${DEBUG_ACTIVITY_MODE}"
             isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>

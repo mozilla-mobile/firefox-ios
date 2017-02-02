@@ -214,7 +214,7 @@ public class FaviconFetcher: NSObject, NSXMLParserDelegate {
     // Returns a single Favicon UIImage for a given URL
     class func fetchFavImageForURL(forURL url: NSURL, profile: Profile) -> Deferred<Maybe<UIImage>> {
         let deferred = Deferred<Maybe<UIImage>>()
-        FaviconFetcher.getForURL(url.domainURL(), profile: profile).uponQueue(dispatch_get_main_queue()) { result in
+        FaviconFetcher.getForURL(url.domainURL, profile: profile).uponQueue(dispatch_get_main_queue()) { result in
             var iconURL: NSURL?
             if let favicons = result.successValue where favicons.count > 0, let faviconImageURL = favicons.first?.url.asURL {
                 iconURL = faviconImageURL
@@ -234,7 +234,7 @@ public class FaviconFetcher: NSObject, NSXMLParserDelegate {
 
     // Returns the default favicon for a site based on the first letter of the site's domain
     class func getDefaultFavicon(url: NSURL) -> UIImage {
-        guard let character = url.baseDomain()?.characters.first else {
+        guard let character = url.baseDomain?.characters.first else {
             return defaultFavicon
         }
 
@@ -261,7 +261,7 @@ public class FaviconFetcher: NSObject, NSXMLParserDelegate {
 
     // Returns a color based on the url's hash
     class func getDefaultColor(url: NSURL) -> UIColor {
-        guard let hash = url.baseDomain()?.hashValue else {
+        guard let hash = url.baseDomain?.hashValue else {
             return UIColor.grayColor()
         }
         let index = abs(hash) % (UIConstants.DefaultColorStrings.count - 1)
