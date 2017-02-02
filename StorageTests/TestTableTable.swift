@@ -66,7 +66,7 @@ class TestSchemaTable: XCTestCase {
         var _version: Int = -1
         var version: Int { return _version }
 
-        typealias Type = Int
+        typealias `Type` = Int
 
         // Called if the table is created.
         let createCallback: () -> Bool
@@ -114,7 +114,7 @@ class TestSchemaTable: XCTestCase {
         func insert(_ db: SQLiteDBConnection, item: Type?, err: inout NSError?) -> Int { return -1 }
         func update(_ db: SQLiteDBConnection, item: Type?, err: inout NSError?) -> Int { return -1 }
         func delete(_ db: SQLiteDBConnection, item: Type?, err: inout NSError?) -> Int { return -1 }
-        func query(_ db: SQLiteDBConnection, options: QueryOptions?) -> Cursor<Type> { return Cursor(status: .Failure, msg: "Shouldn't hit this") }
+        func query(_ db: SQLiteDBConnection, options: QueryOptions?) -> Cursor<Type> { return Cursor(status: .failure, msg: "Shouldn't hit this") }
     }
 
     // This function will create a table with appropriate callbacks set. Pass "create" if you expect the table to

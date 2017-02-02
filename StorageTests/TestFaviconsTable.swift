@@ -38,9 +38,9 @@ class TestFaviconsTable: XCTestCase {
         var inserted: Int? = -1
         var icon: Favicon!
         var err: NSError?
-        self.db.withConnection(flags: SwiftData.Flags.ReadWrite, err: &err) { (connection, err) -> Int? in
+        self.db.withConnection(flags: SwiftData.Flags.readWrite, err: &err) { (connection, err) -> Int? in
             XCTAssertNil(err)
-            icon = Favicon(url: url, type: IconType.Icon)
+            icon = Favicon(url: url, type: IconType.icon)
             var error: NSError? = nil
             inserted = favicons.insert(connection, item: icon, err: &error)
             return inserted
@@ -55,17 +55,17 @@ class TestFaviconsTable: XCTestCase {
 
     fileprivate func checkIcons(_ favicons: FaviconsTable<Favicon>, options: QueryOptions?, urls: [String], s: Bool = true) {
         var err: NSError?
-        self.db.withConnection(flags: SwiftData.Flags.ReadOnly, err: &err) { (connection, err) -> Bool in
+        self.db.withConnection(flags: SwiftData.Flags.readOnly, err: &err) { (connection, err) -> Bool in
             XCTAssertNil(err)
             let cursor = favicons.query(connection, options: options)
-            XCTAssertEqual(cursor.status, CursorStatus.Success, "returned success \(cursor.statusMessage)")
+            XCTAssertEqual(cursor.status, CursorStatus.success, "returned success \(cursor.statusMessage)")
             XCTAssertEqual(cursor.count, urls.count, "cursor has right num of entries")
 
             for index in 0..<cursor.count {
                 if let s = cursor[index] {
                     XCTAssertNotNil(s, "cursor has an icon for entry")
-                    let index = urls.indexOf(s.url)
-                    XCTAssert(index > -1, "Found right url")
+                    let index = urls.index(of: s.url)
+                    XCTAssert(index! > -1, "Found right url")
                 } else {
                     XCTAssertFalse(true, "Should not be nil...")
                 }
@@ -77,7 +77,7 @@ class TestFaviconsTable: XCTestCase {
     fileprivate func clear(_ favicons: FaviconsTable<Favicon>, icon: Favicon? = nil, s: Bool = true) {
         var deleted = -1
         var err: NSError?
-        self.db.withConnection(flags: SwiftData.Flags.ReadWriteCreate, err: &err) { (db, err) -> Int in
+        self.db.withConnection(flags: SwiftData.Flags.readWriteCreate, err: &err) { (db, err) -> Int in
             deleted = favicons.delete(db, item: icon, err: &err)
             return deleted
         }
@@ -93,11 +93,11 @@ class TestFaviconsTable: XCTestCase {
     func testFaviconsTable() {
         let files = MockFiles()
         db = BrowserDB(filename: "test.db", files: files)
-        XCTAssertTrue(db.createOrUpdate(BrowserTable()) == .Success)
+        XCTAssertTrue(db.createOrUpdate(BrowserTable()) == .success)
         let f = FaviconsTable<Favicon>()
 
         var err: NSError?
-        self.db.withConnection(flags: SwiftData.Flags.ReadWriteCreate, err: &err) { (db, err) -> Bool in
+        self.db.withConnection(flags: SwiftData.Flags.readWriteCreate, err: &err) { (db, err) -> Bool in
             let result = f.create(db)
             XCTAssertTrue(result)
             return result
@@ -115,7 +115,7 @@ class TestFaviconsTable: XCTestCase {
         options.filter = "url2"
         self.checkIcons(f, options: options, urls: ["url2"])
 
-        _ = Favicon(url: "url1", type: IconType.Icon)
+        _ = Favicon(url: "url1", type: IconType.icon)
         self.clear(f, icon: icon, s: true)
         self.checkIcons(f, options: nil, urls: ["url2"])
         self.clear(f)

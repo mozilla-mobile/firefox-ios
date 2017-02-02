@@ -13,7 +13,7 @@ private func getBrowserDB(_ filename: String, files: FileAccessor) -> BrowserDB?
 
     // BrowserTable exists only to perform create/update etc. operations -- it's not
     // a queryable thing that needs to stick around.
-    if db.createOrUpdate(BrowserTable()) != .Success {
+    if db.createOrUpdate(BrowserTable()) != .success {
         return nil
     }
     return db
@@ -21,7 +21,7 @@ private func getBrowserDB(_ filename: String, files: FileAccessor) -> BrowserDB?
 
 extension SQLiteBookmarks {
     var testFactory: SQLiteBookmarksModelFactory {
-        return SQLiteBookmarksModelFactory(bookmarks: self, direction: .Local)
+        return SQLiteBookmarksModelFactory(bookmarks: self, direction: .local)
     }
 }
 
@@ -81,17 +81,17 @@ class TestSQLiteBookmarks: XCTestCase {
         let mirrorQuery =
         "INSERT INTO \(TableBookmarksMirror) (guid, type, bmkUri, title, parentid, parentName, description, tags, keyword, is_overridden, server_modified, pos) " +
         "VALUES " +
-        "(?, \(BookmarkNodeType.Folder.rawValue), NULL, ?, ?, '', '', '', '', 0, \(Date.now()), NULL), " +
-        "(?, \(BookmarkNodeType.Folder.rawValue), NULL, ?, ?, '', '', '', '', 0, \(Date.now()), NULL), " +
-        "(?, \(BookmarkNodeType.Folder.rawValue), NULL, ?, ?, '', '', '', '', 0, \(Date.now()), NULL), " +
+        "(?, \(BookmarkNodeType.folder.rawValue), NULL, ?, ?, '', '', '', '', 0, \(Date.now()), NULL), " +
+        "(?, \(BookmarkNodeType.folder.rawValue), NULL, ?, ?, '', '', '', '', 0, \(Date.now()), NULL), " +
+        "(?, \(BookmarkNodeType.folder.rawValue), NULL, ?, ?, '', '', '', '', 0, \(Date.now()), NULL), " +
 
-        "(?, \(BookmarkNodeType.Separator.rawValue), NULL, NULL, ?, '', '', '', '', 0, \(Date.now()), 0), " +
+        "(?, \(BookmarkNodeType.separator.rawValue), NULL, NULL, ?, '', '', '', '', 0, \(Date.now()), 0), " +
 
-        "(?, \(BookmarkNodeType.Bookmark.rawValue), ?, ?, ?, '', '', '', '', 0, \(Date.now()), NULL), " +
-        "(?, \(BookmarkNodeType.Bookmark.rawValue), ?, ?, ?, '', '', '', '', 0, \(Date.now()), NULL), " +
-        "(?, \(BookmarkNodeType.Bookmark.rawValue), ?, ?, ?, '', '', '', '', 0, \(Date.now()), NULL), " +
-        "(?, \(BookmarkNodeType.Bookmark.rawValue), ?, ?, ?, '', '', '', '', 0, \(Date.now()), NULL), " +
-        "(?, \(BookmarkNodeType.Bookmark.rawValue), ?, ?, ?, '', '', '', '', 0, \(Date.now()), NULL) "
+        "(?, \(BookmarkNodeType.bookmark.rawValue), ?, ?, ?, '', '', '', '', 0, \(Date.now()), NULL), " +
+        "(?, \(BookmarkNodeType.bookmark.rawValue), ?, ?, ?, '', '', '', '', 0, \(Date.now()), NULL), " +
+        "(?, \(BookmarkNodeType.bookmark.rawValue), ?, ?, ?, '', '', '', '', 0, \(Date.now()), NULL), " +
+        "(?, \(BookmarkNodeType.bookmark.rawValue), ?, ?, ?, '', '', '', '', 0, \(Date.now()), NULL), " +
+        "(?, \(BookmarkNodeType.bookmark.rawValue), ?, ?, ?, '', '', '', '', 0, \(Date.now()), NULL) "
 
         let mirrorArgs: Args = [
             "folderAAAAAA", "AAA", BookmarkRoots.ToolbarFolderGUID,
@@ -140,7 +140,7 @@ class TestSQLiteBookmarks: XCTestCase {
 
     fileprivate func isUnknown(_ folder: BookmarkTreeNode, withGUID: GUID) {
         switch folder {
-        case .Unknown(let guid):
+        case .unknown(let guid):
             XCTAssertEqual(withGUID, guid)
         default:
             XCTFail("Not an unknown with GUID \(withGUID).")
@@ -149,7 +149,7 @@ class TestSQLiteBookmarks: XCTestCase {
 
     fileprivate func isNonFolder(_ folder: BookmarkTreeNode, withGUID: GUID) {
         switch folder {
-        case .NonFolder(let guid):
+        case .nonFolder(let guid):
             XCTAssertEqual(withGUID, guid)
         default:
             XCTFail("Not a non-folder with GUID \(withGUID).")
@@ -158,7 +158,7 @@ class TestSQLiteBookmarks: XCTestCase {
 
     fileprivate func isFolder(_ folder: BookmarkTreeNode, withGUID: GUID) {
         switch folder {
-        case .Folder(let record):
+        case .folder(let record):
             XCTAssertEqual(withGUID, record.guid)
         default:
             XCTFail("Not a folder with GUID \(withGUID).")
@@ -191,7 +191,7 @@ class TestSQLiteBookmarks: XCTestCase {
         XCTAssertTrue(tree.deleted.isEmpty)
         XCTAssertFalse(tree.isEmpty)
         XCTAssertEqual(1, tree.subtrees.count)
-        if case let .Folder(guid, children) = tree.subtrees[0] {
+        if case let .folder(guid, children) = tree.subtrees[0] {
             XCTAssertEqual(guid, "root________")
             XCTAssertEqual(4, children.count)
             children.forEach { child in
@@ -217,9 +217,9 @@ class TestSQLiteBookmarks: XCTestCase {
         self.assertTreeContainsOnlyRoots(bookmarks.treeForLocal().value)
 
         let args: Args = [
-            "unrooted0001", BookmarkNodeType.Bookmark.rawValue, 0, "somefolder01", "Some Folder", "I have no folder", "http://example.org/",
-            "rooted000002", BookmarkNodeType.Bookmark.rawValue, 0, "somefolder02", "Some Other Folder", "I have a folder", "http://example.org/",
-            "somefolder02", BookmarkNodeType.Folder.rawValue, 0, BookmarkRoots.MobileFolderGUID, "Mobile Bookmarks", "Some Other Folder",
+            "unrooted0001", BookmarkNodeType.bookmark.rawValue, 0, "somefolder01", "Some Folder", "I have no folder", "http://example.org/",
+            "rooted000002", BookmarkNodeType.bookmark.rawValue, 0, "somefolder02", "Some Other Folder", "I have a folder", "http://example.org/",
+            "somefolder02", BookmarkNodeType.folder.rawValue, 0, BookmarkRoots.MobileFolderGUID, "Mobile Bookmarks", "Some Other Folder",
         ]
         let now = Date.now()
         let bufferSQL =
@@ -266,7 +266,7 @@ class TestSQLiteBookmarks: XCTestCase {
 
         // There's one root.
         XCTAssertEqual(1, tree.subtrees.count)
-        if case let .Folder(guid, children) = tree.subtrees[0] {
+        if case let .folder(guid, children) = tree.subtrees[0] {
             XCTAssertEqual("root________", guid)
             XCTAssertEqual(4, children.count)
             self.areFolders(children, withGUIDs: BookmarkRoots.RootChildren)
@@ -305,7 +305,7 @@ class TestSQLiteBookmarks: XCTestCase {
         //   menu________
         //     folderBBBBBB
         //       bookmark3001
-        if case let .Folder(guidR, rootChildren) = tree.subtrees[0] {
+        if case let .folder(guidR, rootChildren) = tree.subtrees[0] {
             XCTAssertEqual(guidR, "root________")
             if case let .Folder(guidM, menuChildren) = rootChildren[0] {
                 XCTAssertEqual(guidM, "menu________")
@@ -346,7 +346,7 @@ class TestSQLiteBookmarks: XCTestCase {
         XCTAssertFalse(local.isEmpty)
         XCTAssertEqual(4, local.lookup.count)   // Folder, new bookmark, original two children.
         XCTAssertEqual(1, local.subtrees.count)
-        if case let .Folder(guid, children) = local.subtrees[0] {
+        if case let .folder(guid, children) = local.subtrees[0] {
             XCTAssertEqual("folderBBBBBB", guid)
 
             // We have shadows of the original two children.
@@ -362,15 +362,15 @@ class TestSQLiteBookmarks: XCTestCase {
         // We insert:
         let bufferArgs: Args = [
             // * A folder whose parent isn't present in the structure.
-            "ihavenoparent", BookmarkNodeType.Folder.rawValue, 0, "myparentnoexist", "No Exist", "No Parent",
+            "ihavenoparent", BookmarkNodeType.folder.rawValue, 0, "myparentnoexist", "No Exist", "No Parent",
             // * A folder with no children.
-            "ihavenochildren", BookmarkNodeType.Folder.rawValue, 0, "ihavenoparent", "No Parent", "No Children",
+            "ihavenochildren", BookmarkNodeType.folder.rawValue, 0, "ihavenoparent", "No Parent", "No Children",
             // * A folder that meets both criteria.
-            "xhavenoparent", BookmarkNodeType.Folder.rawValue, 0, "myparentnoexist", "No Exist", "No Parent And No Children",
+            "xhavenoparent", BookmarkNodeType.folder.rawValue, 0, "myparentnoexist", "No Exist", "No Parent And No Children",
             // * A changed bookmark with no parent.
-            "changedbookmark", BookmarkNodeType.Bookmark.rawValue, 0, "folderCCCCCC", "CCC", "I changed", "http://change.org/",
+            "changedbookmark", BookmarkNodeType.bookmark.rawValue, 0, "folderCCCCCC", "CCC", "I changed", "http://change.org/",
             // * A deleted record.
-            "iwasdeleted", BookmarkNodeType.Bookmark.rawValue,
+            "iwasdeleted", BookmarkNodeType.bookmark.rawValue,
         ]
 
         let now = Date.now()
@@ -394,7 +394,7 @@ class TestSQLiteBookmarks: XCTestCase {
         XCTAssertEqual(partialBuffer.deleted, Set<GUID>(["iwasdeleted"]))
         XCTAssertEqual(partialBuffer.orphans, Set<GUID>(["changedbookmark"]))
         XCTAssertEqual(partialBuffer.subtreeGUIDs, Set<GUID>(["ihavenoparent", "xhavenoparent"]))
-        if case let .Folder(_, children) = partialBuffer.lookup["ihavenochildren"]! {
+        if case let .folder(_, children) = partialBuffer.lookup["ihavenochildren"]! {
             XCTAssertTrue(children.isEmpty)
         } else {
             XCTFail("Couldn't look up childless folder.")
@@ -536,7 +536,7 @@ class TestSQLiteBookmarks: XCTestCase {
         XCTAssertEqual(rowA.parentName, "The Mobile")
         XCTAssertEqual(rootGUIDs + [rowA.guid], db.getGUIDs("SELECT guid FROM \(TableBookmarksLocal) ORDER BY id"))
         XCTAssertEqual([rowA.guid], db.getGUIDs("SELECT child FROM \(TableBookmarksLocalStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
-        XCTAssertEqual(SyncStatus.New, db.getSyncStatusForGUID(rowA.guid))
+        XCTAssertEqual(SyncStatus.new, db.getSyncStatusForGUID(rowA.guid))
 
         // Add another. Order should be maintained.
         bookmarks.insertBookmark("https://reddit.com/".asURL!, title: "Reddit", favicon: nil, intoFolder: BookmarkRoots.MobileFolderGUID, withTitle: "Mobile").succeeded()
@@ -546,8 +546,8 @@ class TestSQLiteBookmarks: XCTestCase {
         XCTAssertEqual(rowB.title, "Reddit")
         XCTAssertEqual(rootGUIDs + [rowA.guid, rowB.guid], db.getGUIDs("SELECT guid FROM \(TableBookmarksLocal) ORDER BY id"))
         XCTAssertEqual([rowA.guid, rowB.guid], db.getGUIDs("SELECT child FROM \(TableBookmarksLocalStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
-        XCTAssertEqual(SyncStatus.New, db.getSyncStatusForGUID(rowA.guid))
-        XCTAssertEqual(SyncStatus.New, db.getSyncStatusForGUID(rowB.guid))
+        XCTAssertEqual(SyncStatus.new, db.getSyncStatusForGUID(rowA.guid))
+        XCTAssertEqual(SyncStatus.new, db.getSyncStatusForGUID(rowB.guid))
 
         // The indices should be 0, 1.
         let positions = db.getPositionsForChildrenOfParent(BookmarkRoots.MobileFolderGUID, fromTable: TableBookmarksLocalStructure)
@@ -595,20 +595,20 @@ class TestSQLiteBookmarks: XCTestCase {
         // Parent is changed. The new record is New. The unmodified and deleted records aren't present.
         XCTAssertNil(db.getSyncStatusForGUID(rowA.guid))
         XCTAssertNil(db.getSyncStatusForGUID(rowB.guid))
-        XCTAssertEqual(SyncStatus.New, db.getSyncStatusForGUID(rowC.guid))
-        XCTAssertEqual(SyncStatus.Changed, db.getSyncStatusForGUID(BookmarkRoots.MobileFolderGUID))
+        XCTAssertEqual(SyncStatus.new, db.getSyncStatusForGUID(rowC.guid))
+        XCTAssertEqual(SyncStatus.changed, db.getSyncStatusForGUID(BookmarkRoots.MobileFolderGUID))
 
         // If we delete the old record, we mark it as changed, and it's no longer in the structure.
         bookmarks.testFactory.removeByGUID(rowB.guid).succeeded()
-        XCTAssertEqual(SyncStatus.Changed, db.getSyncStatusForGUID(rowB.guid))
+        XCTAssertEqual(SyncStatus.changed, db.getSyncStatusForGUID(rowB.guid))
         XCTAssertEqual([rowC.guid], db.getGUIDs("SELECT child FROM \(TableBookmarksLocalStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
 
         // Add a duplicate to test multi-deletion (unstar).
         bookmarks.insertBookmark("https://letsencrypt.org/".asURL!, title: "Let's Encrypt", favicon: nil, intoFolder: BookmarkRoots.MobileFolderGUID, withTitle: "Mobile").succeeded()
         let guidD = db.getGUIDs("SELECT child FROM \(TableBookmarksLocalStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx").last!
         XCTAssertNotEqual(rowC.guid, guidD)
-        XCTAssertEqual(SyncStatus.New, db.getSyncStatusForGUID(guidD))
-        XCTAssertEqual(SyncStatus.Changed, db.getSyncStatusForGUID(BookmarkRoots.MobileFolderGUID))
+        XCTAssertEqual(SyncStatus.new, db.getSyncStatusForGUID(guidD))
+        XCTAssertEqual(SyncStatus.changed, db.getSyncStatusForGUID(BookmarkRoots.MobileFolderGUID))
 
         // Delete by URL.
         // If we delete the new records, they just go away -- there's no server version to delete.
