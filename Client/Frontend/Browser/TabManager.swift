@@ -318,7 +318,7 @@ class TabManager: NSObject {
                 // The common case, where the NewTabPage enum defines
                 // one of the about:home pages.
                 if let url = newTabChoice.url {
-                    tab.loadRequest(PrivilegedRequest(URL: url))
+                    tab.loadRequest(PrivilegedRequest(url: url) as URLRequest)
                     tab.url = url
                 }
             }
@@ -669,7 +669,7 @@ extension TabManager {
         var tabToSelect: Tab?
         for (_, savedTab) in savedTabs.enumerated() {
             // Provide an empty request to prevent a new tab from loading the home screen
-            let tab = self.addTab(URLRequest(), configuration: nil, afterTab: nil, flushToDisk: false, zombie: true, isPrivate: savedTab.isPrivate)
+            let tab = self.addTab(nil, configuration: nil, afterTab: nil, flushToDisk: false, zombie: true, isPrivate: savedTab.isPrivate)
 
             if let faviconURL = savedTab.faviconURL {
                 let icon = Favicon(url: faviconURL, date: Date(), type: IconType.noneFound)
@@ -832,15 +832,17 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         for delegate in delegates {
-            delegate.webView?(webView, didCommitNavigation: navigation)
+            delegate.webView?(webView, didCommit: navigation)
         }
     }
 
+
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         for delegate in delegates {
-            delegate.webView?(webView, didFailNavigation: navigation, withError: error)
+            delegate.webView?(webView, didFail: navigation, withError: error)
         }
     }
+
 
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!,
         withError error: Error) {
@@ -851,22 +853,23 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         for delegate in delegates {
-            delegate.webView?(webView, didFinishNavigation: navigation)
+            delegate.webView?(webView, didFinish: navigation)
         }
     }
 
     func webView(_ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge,
         completionHandler: @escaping (URLSession.AuthChallengeDisposition,
         URLCredential?) -> Void) {
-            let authenticatingDelegates = delegates.filter {
-                $0.responds(to: #selector(webView))
+            let authenticatingDelegates = delegates.filter { wv in
+                wv.responds(to: #selector(WKNavigationDelegate.webView(_:didReceive:completionHandler:)))
+                return true
             }
 
             guard let firstAuthenticatingDelegate = authenticatingDelegates.first else {
                 return completionHandler(URLSession.AuthChallengeDisposition.performDefaultHandling, nil)
             }
 
-            firstAuthenticatingDelegate.webView?(webView, didReceiveAuthenticationChallenge: challenge) { (disposition, credential) in
+            firstAuthenticatingDelegate.webView?(webView, didReceive: challenge) { (disposition, credential) in
                 completionHandler(disposition, credential)
             }
     }
@@ -887,7 +890,7 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
         decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
             var res = WKNavigationActionPolicy.allow
             for delegate in delegates {
-                delegate.webView?(webView, decidePolicyForNavigationAction: navigationAction, decisionHandler: { policy in
+                delegate.webView?(webView, decidePolicyFor: navigationAction, decisionHandler: { policy in
                     if policy == .cancel {
                         res = policy
                     }
@@ -901,7 +904,7 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
         decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
             var res = WKNavigationResponsePolicy.allow
             for delegate in delegates {
-                delegate.webView?(webView, decidePolicyForNavigationResponse: navigationResponse, decisionHandler: { policy in
+                delegate.webView?(webView, decidePolicyFor: navigationResponse, decisionHandler: { policy in
                     if policy == .cancel {
                         res = policy
                     }

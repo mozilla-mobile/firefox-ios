@@ -32,7 +32,7 @@ class MenuItemImageView: UIImageView {
         context.draw(image, in: rect)
 
         context.setBlendMode(.multiply)
-        context.setFillColor(overlayColor.cgColor.components!)
+        context.setFillColor(overlayColor.cgColor.components)
         context.fill(self.bounds)
         context.restoreGState()
     }

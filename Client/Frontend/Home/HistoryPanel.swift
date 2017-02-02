@@ -470,9 +470,9 @@ class HistoryPanelSiteTableViewController: SiteTableViewController {
                                 self.computeSectionOffsets()
 
                                 let sectionsToDelete = NSMutableIndexSet()
-                                var rowsToDelete = [NSIndexPath]()
+                                var rowsToDelete = [IndexPath]()
                                 let sectionsToAdd = NSMutableIndexSet()
-                                var rowsToAdd = [NSIndexPath]()
+                                var rowsToAdd = [IndexPath]()
 
                                 for (index, category) in self.categories.enumerated() {
                                     let oldCategory = oldCategories[index]
@@ -491,7 +491,8 @@ class HistoryPanelSiteTableViewController: SiteTableViewController {
                                     // 2. add a new row if there are more rows now than there were before
                                     if oldCategory.rows < category.rows {
                                         log.debug("adding row to \(category.section) at \(category.rows-1)")
-                                        rowsToAdd.append(NSIndexPath(forRow: category.rows-1, inSection: category.section!))
+                                        //IndexPath(row: <#T##Int#>, section: <#T##Int#>)
+                                        rowsToAdd.append(IndexPath(row: category.rows-1, section: category.section!))
                                     }
 
                                     // if we're dealing with the section where the row was deleted:
@@ -509,7 +510,7 @@ class HistoryPanelSiteTableViewController: SiteTableViewController {
                                             } else if category.rows == oldCategory.rows {
                                                 log.debug("in section \(category.section), removing row at \(indexPath.row) and inserting row at \(category.rows-1)")
                                                 rowsToDelete.append(indexPath)
-                                                rowsToAdd.append(NSIndexPath(forRow: category.rows-1, inSection: indexPath.section))
+                                                rowsToAdd.append(IndexPath(row: category.rows-1, section: indexPath.section))
                                             }
                                         }
                                     }
@@ -517,17 +518,17 @@ class HistoryPanelSiteTableViewController: SiteTableViewController {
 
                                 tableView.beginUpdates()
                                 if sectionsToAdd.count > 0 {
-                                    tableView.insertSections(sectionsToAdd, withRowAnimation: UITableViewRowAnimation.Left)
+                                    tableView.insertSections(sectionsToAdd as IndexSet, with: UITableViewRowAnimation.left)
                                 }
                                 if sectionsToDelete.count > 0 {
-                                    tableView.deleteSections(sectionsToDelete, withRowAnimation: UITableViewRowAnimation.Right)
+                                    tableView.deleteSections(sectionsToDelete as IndexSet, with: UITableViewRowAnimation.right)
                                 }
                                 if !rowsToDelete.isEmpty {
-                                    tableView.deleteRowsAtIndexPaths(rowsToDelete, withRowAnimation: UITableViewRowAnimation.Right)
+                                    tableView.deleteRows(at: rowsToDelete, with: UITableViewRowAnimation.right)
                                 }
 
                                 if !rowsToAdd.isEmpty {
-                                    tableView.insertRowsAtIndexPaths(rowsToAdd, withRowAnimation: UITableViewRowAnimation.Right)
+                                    tableView.insertRows(at: rowsToAdd, with: UITableViewRowAnimation.right)
                                 }
 
                                 tableView.endUpdates()

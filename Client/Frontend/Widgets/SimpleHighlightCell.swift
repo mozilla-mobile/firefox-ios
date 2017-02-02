@@ -147,7 +147,7 @@ class SimpleHighlightCell: UITableViewCell {
             }
             // Resize an Image to a specfic size to make sure that it doesnt appear bigger than it needs to (32px) inside a larger frame (48px).
             self.siteImageView.image = img.createScaled(SimpleHighlightCellUX.IconSize)
-            self.siteImageView.image?.getColors(CGSize(width: 25, height: 25)) { colors in
+            self.siteImageView.image?.getColors(scaleDownSize: CGSize(width: 25, height: 25)) { colors in
                 self.siteImageView.backgroundColor = colors.backgroundColor ?? UIColor.lightGray
             }
         }

@@ -374,7 +374,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             self.tableView.endUpdates()
             self.updateEmptyPanelState()
 
-            NotificationCenter.default.post(name: BookmarkStatusChangedNotification, object: bookmark, userInfo: ["added": false]
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: BookmarkStatusChangedNotification), object: bookmark, userInfo: ["added": false]
             )
         })
 
