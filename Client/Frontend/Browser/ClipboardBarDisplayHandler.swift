@@ -6,6 +6,10 @@ public struct UserDefaultClipboardKey {
     public static let KeyLastSavedURL = "KeylastSavedURL"
 }
 
+public struct ClipboardBarToastUX {
+    static let DismissAfter = 10.0
+}
+
 protocol ClipboardBarDisplayHandlerDelegate: class {
     func shouldDisplayClipboardBar(absoluteString: String)
 }
@@ -43,6 +47,7 @@ class ClipboardBarDisplayHandler {
             return false
         }
         sessionStarted = false
+        saveLastDisplayedURL(UIPasteboard.generalPasteboard().copiedURL?.absoluteString)
         return true
     }
     
