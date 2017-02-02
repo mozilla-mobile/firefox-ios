@@ -5,6 +5,7 @@
 @testable import Account
 import FxA
 import Shared
+import SwiftyJSON
 
 import XCTest
 
@@ -63,8 +64,8 @@ class FxAStateTests: XCTestCase {
             if let e = state(fromJSON:d)?.asJSON() {
                 // We can't compare arbitrary Swift Dictionary instances directly, but the following appears to work.
                 XCTAssertEqual(
-                    NSDictionary(dictionary: JSON.unwrap(d) as! [String: AnyObject]),
-                    NSDictionary(dictionary: JSON.unwrap(e) as! [String: AnyObject]))
+                    NSDictionary(dictionary: d.dictionaryObject!),
+                    NSDictionary(dictionary: e.dictionaryObject!))
             } else {
                 XCTFail("Expected to create state.")
             }
@@ -74,7 +75,7 @@ class FxAStateTests: XCTestCase {
         let state2 = FxAStateTests.stateForLabel(.married) as! MarriedState
         // We can't compare arbitrary Swift Dictionary instances directly, but the following appears to work.
         XCTAssertNotEqual(
-            NSDictionary(dictionary: JSON.unwrap(state1.asJSON()) as! [String: AnyObject]),
-            NSDictionary(dictionary: JSON.unwrap(state2.asJSON()) as! [String: AnyObject]))
+            NSDictionary(dictionary: state1.asJSON().dictionaryObject!),
+            NSDictionary(dictionary: state2.asJSON().dictionaryObject!))
     }
 }

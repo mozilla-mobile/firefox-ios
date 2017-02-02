@@ -30,11 +30,11 @@ class FirefoxAccountTests: XCTestCase {
                 deviceRegistration: (d["deviceRegistration"] as! FxADeviceRegistration),
                 stateKeyLabel: Bytes.generateGUID(),
                 state: SeparatedState())
-        let d1 = account1.asDictionary()
+        let d1 = account1.dictionary()
 
         let account2 = FirefoxAccount.fromDictionary(d1)
         XCTAssertNotNil(account2)
-        let d2 = account2!.asDictionary()
+        let d2 = account2!.dictionary()
 
         for (k, v) in d {
             // Skip version, which is an Int.
