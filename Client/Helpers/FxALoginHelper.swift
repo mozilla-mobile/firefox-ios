@@ -32,7 +32,7 @@ class FxALoginHelper {
     }
 
     init(application: UIApplication?, profile: Profile?) {
-        let configuration = StagePushConfiguration()
+        let configuration = DeveloperPushConfiguration()
         let client = PushClient(endpointURL: configuration.endpointURL)
 
         self.application = application
