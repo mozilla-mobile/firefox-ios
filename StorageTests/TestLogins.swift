@@ -9,7 +9,7 @@ import XCGLogger
 
 import XCTest
 
-private let log = XCGLogger.defaultInstance()
+private let log = XCGLogger.default
 
 class TestSQLiteLogins: XCTestCase {
     var db: BrowserDB!
@@ -458,7 +458,7 @@ class TestSyncableLogins: XCTestCase {
         let local1 = self.logins.getExistingLocalRecordByGUID(guidA).value.successValue!
         XCTAssertNotNil(local1)
         XCTAssertEqual(local1!.guid, guidA)
-        XCTAssertEqual(local1!.syncStatus, SyncStatus.New)
+        XCTAssertEqual(local1!.syncStatus, SyncStatus.new)
         XCTAssertEqual(local1!.timesUsed, 1)
 
         XCTAssertTrue(self.logins.addUseOfLoginByGUID(guidA).value.isSuccess)
@@ -467,7 +467,7 @@ class TestSyncableLogins: XCTestCase {
         let local2 = self.logins.getExistingLocalRecordByGUID(guidA).value.successValue!
         XCTAssertNotNil(local2)
         XCTAssertEqual(local2!.guid, guidA)
-        XCTAssertEqual(local2!.syncStatus, SyncStatus.New)
+        XCTAssertEqual(local2!.syncStatus, SyncStatus.new)
         XCTAssertEqual(local2!.timesUsed, 2)
 
         // It's removed immediately, because it was never synced.
@@ -535,7 +535,7 @@ class TestSyncableLogins: XCTestCase {
         XCTAssertEqual(mirrorUsed!.serverModified, Timestamp(2234), "Timestamp is new.")
 
         XCTAssertTrue(localUsed!.localModified >= preUse)         // Local record is modified.
-        XCTAssertEqual(localUsed!.syncStatus, SyncStatus.Synced)  // Uses aren't enough to warrant upload.
+        XCTAssertEqual(localUsed!.syncStatus, SyncStatus.synced)  // Uses aren't enough to warrant upload.
 
         // Uses are local until reconciled.
         XCTAssertEqual(localUsed!.timesUsed, 5)
@@ -561,7 +561,7 @@ class TestSyncableLogins: XCTestCase {
         XCTAssertEqual(localAltered!.password, "yupyup")
         XCTAssertEqual(localAltered!.formSubmitURL!, "http://example.com/form2/")
         XCTAssertTrue(localAltered!.localModified >= preUpdate)
-        XCTAssertEqual(localAltered!.syncStatus, SyncStatus.Changed)              // Changes are enough to warrant upload.
+        XCTAssertEqual(localAltered!.syncStatus, SyncStatus.changed)              // Changes are enough to warrant upload.
         XCTAssertEqual(localAltered!.timesUsed, 6)
         XCTAssertEqual(mirrorAltered!.timesUsed, 4)
     }
@@ -594,19 +594,19 @@ class TestSyncableLogins: XCTestCase {
         XCTAssertEqual(1, a1a2.commutative.count)
 
         switch a1a2.commutative[0] {
-        case let .TimesUsed(increment):
+        case let .timesUsed(increment):
             XCTAssertEqual(increment, 1)
             break
         }
         switch a1a2.nonCommutative[0] {
-        case let .FormSubmitURL(to):
+        case let .formSubmitURL(to):
             XCTAssertNil(to)
             break
         default:
             XCTFail("Unexpected non-commutative login field.")
         }
         switch a1a2.nonCommutative[1] {
-        case let .TimeLastUsed(to):
+        case let .timeLastUsed(to):
             XCTAssertEqual(to, 1235)
             break
         default:
@@ -627,27 +627,27 @@ class TestSyncableLogins: XCTestCase {
         XCTAssertEqual(1, a1a3.commutative.count)
 
         switch a1a3.commutative[0] {
-        case let .TimesUsed(increment):
+        case let .timesUsed(increment):
             XCTAssertEqual(increment, 2)
             break
         }
 
         switch a1a3.nonCommutative[0] {
-        case let .Password(to):
+        case let .password(to):
             XCTAssertEqual("something else", to)
             break
         default:
             XCTFail("Unexpected non-commutative login field.")
         }
         switch a1a3.nonCommutative[1] {
-        case let .TimeLastUsed(to):
+        case let .timeLastUsed(to):
             XCTAssertEqual(to, 1250)
             break
         default:
             XCTFail("Unexpected non-commutative login field.")
         }
         switch a1a3.nonCommutative[2] {
-        case let .TimePasswordChanged(to):
+        case let .timePasswordChanged(to):
             XCTAssertEqual(to, 1250)
             break
         default:
@@ -677,37 +677,37 @@ class TestSyncableLogins: XCTestCase {
         XCTAssertGreaterThanOrEqual(mFCount, max(a2FCount, a3FCount))
 
         switch merged.commutative[0] {
-        case let .TimesUsed(increment):
+        case let .timesUsed(increment):
             XCTAssertEqual(1, increment)
         }
         switch merged.commutative[1] {
-        case let .TimesUsed(increment):
+        case let .timesUsed(increment):
             XCTAssertEqual(2, increment)
         }
 
         switch merged.nonCommutative[0] {
-        case let .Password(to):
+        case let .password(to):
             XCTAssertEqual("something else", to)
             break
         default:
             XCTFail("Unexpected non-commutative login field.")
         }
         switch merged.nonCommutative[1] {
-        case let .FormSubmitURL(to):
+        case let .formSubmitURL(to):
             XCTAssertNil(to)
             break
         default:
             XCTFail("Unexpected non-commutative login field.")
         }
         switch merged.nonCommutative[2] {
-        case let .TimeLastUsed(to):
+        case let .timeLastUsed(to):
             XCTAssertEqual(to, 1250)
             break
         default:
             XCTFail("Unexpected non-commutative login field.")
         }
         switch merged.nonCommutative[3] {
-        case let .TimePasswordChanged(to):
+        case let .timePasswordChanged(to):
             XCTAssertEqual(to, 1250)
             break
         default:

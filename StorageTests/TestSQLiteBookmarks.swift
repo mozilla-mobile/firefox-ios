@@ -195,7 +195,7 @@ class TestSQLiteBookmarks: XCTestCase {
             XCTAssertEqual(guid, "root________")
             XCTAssertEqual(4, children.count)
             children.forEach { child in
-                guard case let .Folder(_, lower) = child, lower.isEmpty else {
+                guard case let .folder(_, lower) = child, lower.isEmpty else {
                     XCTFail("Child \(child) wasn't empty!")
                     return
                 }
@@ -307,19 +307,19 @@ class TestSQLiteBookmarks: XCTestCase {
         //       bookmark3001
         if case let .folder(guidR, rootChildren) = tree.subtrees[0] {
             XCTAssertEqual(guidR, "root________")
-            if case let .Folder(guidM, menuChildren) = rootChildren[0] {
+            if case let .folder(guidM, menuChildren) = rootChildren[0] {
                 XCTAssertEqual(guidM, "menu________")
-                if case let .Folder(guidB, bbbChildren) = menuChildren[0] {
+                if case let .folder(guidB, bbbChildren) = menuChildren[0] {
                     XCTAssertEqual(guidB, "folderBBBBBB")
                     // BBB contains bookmark3001.
-                    if case let .NonFolder(guidBM) = bbbChildren[0] {
+                    if case let .nonFolder(guidBM) = bbbChildren[0] {
                         XCTAssertEqual(guidBM, "bookmark3001")
                     } else {
                         XCTFail("First child of BBB should be bookmark3001.")
                     }
 
                     // BBB contains folderCCCCCC.
-                    if case let .Folder(guidBF, _) = bbbChildren[1] {
+                    if case let .folder(guidBF, _) = bbbChildren[1] {
                         XCTAssertEqual(guidBF, "folderCCCCCC")
                     } else {
                         XCTFail("Second child of BBB should be folderCCCCCC.")

@@ -28,7 +28,7 @@ class TestSwiftData: XCTestCase {
         XCTAssert(SwiftData.ReuseConnections, "Reusing database connections")
         XCTAssert(SwiftData.EnableWAL, "WAL enabled")
 
-        swiftData!.withConnection(SwiftData.Flags.ReadWriteCreate) { db in
+        swiftData!.withConnection(SwiftData.Flags.readWriteCreate) { db in
             let f = FaviconsTable<Favicon>()
             f.create(db)    // Because BrowserTable needs it.
             table.create(db)
@@ -93,7 +93,7 @@ class TestSwiftData: XCTestCase {
 
         // Query the database and hold the cursor.
         var c: Cursor<SDRow>!
-        let error = swiftData!.withConnection(SwiftData.Flags.ReadOnly) { db in
+        let error = swiftData!.withConnection(SwiftData.Flags.readOnly) { db in
             if safeQuery {
                 c = db.executeQuery("SELECT * FROM history", factory: { $0 })
             } else {
@@ -120,7 +120,7 @@ class TestSwiftData: XCTestCase {
     }
 
     fileprivate func addSite(_ table: BrowserTable, url: String, title: String) -> NSError? {
-        return swiftData!.withConnection(SwiftData.Flags.ReadWrite) { connection -> NSError? in
+        return swiftData!.withConnection(SwiftData.Flags.readWrite) { connection -> NSError? in
             let args: Args = [Bytes.generateGUID(), url, title]
             return connection.executeChange("INSERT INTO history (guid, url, title, is_deleted, should_upload) VALUES (?, ?, ?, 0, 0)", withArgs: args)
         }
@@ -136,7 +136,7 @@ class TestSwiftData: XCTestCase {
         }
         let path = testDB
         func verifyData(_ swiftData: SwiftData) -> NSError? {
-            return swiftData.withConnection(SwiftData.Flags.ReadOnly) { db in
+            return swiftData.withConnection(SwiftData.Flags.readOnly) { db in
                 return nil
             }
         }
@@ -168,7 +168,7 @@ class TestSwiftData: XCTestCase {
         XCTAssertNil(t[3], "Subscript three returns nil")
 
         // Test status data with default initializer
-        XCTAssertEqual(t.status, CursorStatus.Success, "Cursor as correct status")
+        XCTAssertEqual(t.status, CursorStatus.success, "Cursor as correct status")
         XCTAssertEqual(t.statusMessage, "Success", "Cursor as correct status message")
         XCTAssertEqual(t.count, 3, "Cursor as correct size")
 
@@ -180,8 +180,8 @@ class TestSwiftData: XCTestCase {
         }
 
         // Test creating a failed cursor
-        let t2 = ArrayCursor<String>(data: data, status: CursorStatus.Failure, statusMessage: "Custom status message")
-        XCTAssertEqual(t2.status, CursorStatus.Failure, "Cursor as correct status")
+        let t2 = ArrayCursor<String>(data: data, status: CursorStatus.failure, statusMessage: "Custom status message")
+        XCTAssertEqual(t2.status, CursorStatus.failure, "Cursor as correct status")
         XCTAssertEqual(t2.statusMessage, "Custom status message", "Cursor as correct status message")
         XCTAssertEqual(t2.count, 0, "Cursor as correct size")
 

@@ -7,6 +7,7 @@ import Shared
 @testable import Storage
 
 import XCTest
+import SwiftyJSON
 
 func byValue(_ a: SyncCommand, b: SyncCommand) -> Bool {
     return a.value < b.value
@@ -66,11 +67,11 @@ class SyncCommandsTests: XCTestCase {
         let syncCommand = SyncCommand.displayURIFromShareItem(shareItem, asClient: "abcdefghijkl")
         XCTAssertNil(syncCommand.commandID)
         XCTAssertNotNil(syncCommand.value)
-        let jsonObj: [String: AnyObject] = [
-            "command": "displayURI" as AnyObject,
+        let jsonObj: [String: Any] = [
+            "command": "displayURI",
             "args": [shareItem.url, "abcdefghijkl", shareItem.title ?? ""]
         ]
-        XCTAssertEqual(JSON.stringify(jsonObj, pretty: false), syncCommand.value)
+        XCTAssertEqual(JSON(object: jsonObj).rawString(), syncCommand.value)
     }
 
     func testInsertWithNoURLOrTitle() {
