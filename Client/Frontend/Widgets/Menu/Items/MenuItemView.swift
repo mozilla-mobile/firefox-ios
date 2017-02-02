@@ -85,17 +85,17 @@ private extension UILabel {
         // chunk into single words
         // this is because trying to get an accurate size on more than 1 line at a time using boundingRectWithSize seems impossible
         for word in words {
-            var maxFontSize = font?.pointSize
-            while maxFontSize! >= minimumFontSize {
-                font = font?.withSize(maxFontSize!)
+            var maxFontSize = font!.pointSize
+            while maxFontSize >= minimumFontSize {
+                font = font?.withSize(maxFontSize)
                 let constraintSize = CGSize(width: .greatestFiniteMagnitude, height: size.height)
                 let labelSize = word.boundingRect(with: constraintSize, options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: [NSFontAttributeName: font], context: nil)
                 if labelSize.width <= size.width {
                     break
                 }
-                maxFontSize -= 0.5
+                maxFontSize -= CGFloat(0.5)
             }
-            newFontSize = min(CGFloat(maxFontSize!), newFontSize)
+            newFontSize = min(CGFloat(maxFontSize), newFontSize)
         }
         self.font = font?.withSize(newFontSize)
     }

@@ -114,7 +114,7 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     func reloadData() {
-        if data.status != .Success {
+        if data.status != .success {
             print("Err: \(data.statusMessage)", terminator: "\n")
         } else {
             self.tableView.reloadData()

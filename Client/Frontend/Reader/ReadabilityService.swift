@@ -52,8 +52,8 @@ class ReadabilityOperation: Operation, WKNavigationDelegate, ReadabilityTabHelpe
             // callback. Or it takes too long, in which case the semaphore times out.
             self.tab.loadRequest(URLRequest(url: self.url))
         })
-
-        if semaphore.wait(timeout: DispatchTime.now() + Double(Int64(Double(ReadabilityTaskDefaultTimeout) * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)) != 0 {
+        let timeout = DispatchTime.now() + Double(Int64(Double(16) * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+        if semaphore.wait(timeout: timeout) == .timedOut {
             result = ReadabilityOperationResult.timeout
         }
 

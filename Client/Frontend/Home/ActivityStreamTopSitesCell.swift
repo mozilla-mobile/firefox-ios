@@ -86,7 +86,8 @@ class TopSiteItemCell: UICollectionViewCell {
         imageView.snp.makeConstraints { make in
             make.size.equalTo(TopSiteCellUX.IconSize)
             // Add an offset to the image to make it appear centered with the titleLabel
-            make.center.equalTo(self.snp.center).offset(UIEdgeInsets(top: -TopSiteCellUX.TitleHeight/2, left: 0, bottom: 0, right: 0))
+            //I dont think you need to specify negative offsets anymore. according to the new snapkit
+            make.center.equalTo(self.snp.center).offset(TopSiteCellUX.TitleHeight/2)
         }
 
         selectedOverlay.snp.makeConstraints { make in
@@ -128,7 +129,7 @@ class TopSiteItemCell: UICollectionViewCell {
                 self.imageView.image = FaviconFetcher.getDefaultFavicon(url!)
                 return
             }
-            img.getColors(CGSize(width: 25, height: 25)) {colors in
+            img.getColors(scaleDownSize: CGSize(width: 25, height: 25)) {colors in
                 //sometimes the cell could be reused by the time we get here.
                 if title == self.titleLabel.text {
                     self.contentView.backgroundColor = colors.backgroundColor ?? UIColor.lightGray
@@ -234,7 +235,8 @@ class ASHorizontalScrollCell: UITableViewCell {
         pageControl.addGestureRecognizer(self.pageControlPress)
 
         collectionView.snp.makeConstraints { make in
-            make.edges.equalTo(contentView).offset(UIEdgeInsets(top: 0, left: 0, bottom: ASHorizontalScrollCellUX.PageControlOffset, right: 0) as! ConstraintOffsetTarget)
+
+            make.edges.equalTo(contentView).inset(UIEdgeInsets(top: 0, left: 0, bottom: ASHorizontalScrollCellUX.PageControlOffset, right: 0))
         }
 
         pageControl.snp.makeConstraints { make in

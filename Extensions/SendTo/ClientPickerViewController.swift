@@ -97,9 +97,9 @@ class ClientPickerViewController: UITableViewController {
 
         if clients.count > 0 {
             if indexPath.section == 0 {
-                cell = tableView.dequeueReusableCell(withIdentifier: ClientPickerTableViewHeaderCell.CellIdentifier, for: indexPath as IndexPath) as! ClientPickerTableViewHeaderCell
+                cell = tableView.dequeueReusableCell(withIdentifier: ClientPickerTableViewHeaderCell.CellIdentifier, for: indexPath) as! ClientPickerTableViewHeaderCell
             } else {
-                let clientCell = tableView.dequeueReusableCell(withIdentifier: ClientPickerTableViewCell.CellIdentifier, for: indexPath as IndexPath) as! ClientPickerTableViewCell
+                let clientCell = tableView.dequeueReusableCell(withIdentifier: ClientPickerTableViewCell.CellIdentifier, for: indexPath) as! ClientPickerTableViewCell
                 clientCell.nameLabel.text = clients[indexPath.row].name
                 clientCell.clientType = clients[indexPath.row].type == "mobile" ? ClientType.Mobile : ClientType.Desktop
                 clientCell.checked = selectedClients.contains(indexPath)
@@ -107,7 +107,7 @@ class ClientPickerViewController: UITableViewController {
             }
         } else {
             if reloading == false {
-                cell = tableView.dequeueReusableCell(withIdentifier: ClientPickerNoClientsTableViewCell.CellIdentifier, for: indexPath as IndexPath) as! ClientPickerNoClientsTableViewCell
+                cell = tableView.dequeueReusableCell(withIdentifier: ClientPickerNoClientsTableViewCell.CellIdentifier, for: indexPath) as! ClientPickerNoClientsTableViewCell
             } else {
                 cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "ClientCell")
             }
@@ -122,7 +122,7 @@ class ClientPickerViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if clients.count > 0 && indexPath.section == 1 {
-            tableView.deselectRow(at: indexPath as IndexPath, animated: true)
+            tableView.deselectRow(at: indexPath, animated: true)
 
             if selectedClients.contains(indexPath) {
                 selectedClients.remove(indexPath)
@@ -130,7 +130,7 @@ class ClientPickerViewController: UITableViewController {
                 selectedClients.add(indexPath)
             }
 
-            tableView.reloadRows(at: [indexPath as IndexPath], with: UITableViewRowAnimation.none)
+            tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
 
             navigationItem.rightBarButtonItem?.isEnabled = (selectedClients.count != 0)
         }

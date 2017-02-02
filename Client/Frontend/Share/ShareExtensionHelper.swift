@@ -99,7 +99,7 @@ extension ShareExtensionHelper: UIActivityItemSource {
 
     func activityViewController(_ activityViewController: UIActivityViewController, dataTypeIdentifierForActivityType activityType: UIActivityType?) -> String {
         //for these customDataID's load the default public.url because they don't seem to work properly with the 1Password UTI.
-        if let type = activityType, customDataTypeIdentifers.contains(type) {
+        if let type = activityType, customDataTypeIdentifers.contains(type.rawValue) {
             return "public.url"
         }
         // Because of our UTI declaration, this UTI now satisfies both the 1Password Extension and the usual NSURL for Share extensions.
@@ -136,7 +136,7 @@ private extension ShareExtensionHelper {
         }
 
         // Add 1Password to share sheet
-        OnePasswordExtension.shared().createExtensionItemForWebView(selectedWebView, completion: {(extensionItem, error) -> Void in
+        OnePasswordExtension.shared().createExtensionItem(forWebView: selectedWebView, completion: {(extensionItem, error) -> Void in
             if extensionItem == nil {
                 log.error("Failed to create the password manager extension item: \(error).")
                 return

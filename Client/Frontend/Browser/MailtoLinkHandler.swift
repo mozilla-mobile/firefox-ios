@@ -26,7 +26,8 @@ open class MailtoLinkHandler {
         var providerDict = [String:MailProvider]()
         if let path = Bundle.main.path(forResource: "MailSchemes", ofType: "plist"), let dictRoot = NSArray(contentsOfFile: path) {
             dictRoot.forEach({ dict in
-                let scheme = dict["scheme"] as! String
+                let schemeDict = dict as! [String: Any]
+                let scheme = schemeDict["scheme"] as! String
                 if scheme == "readdle-spark://" {
                     providerDict[scheme] = ReaddleSparkIntegration()
                 } else if scheme == "mymail-mailto://" {

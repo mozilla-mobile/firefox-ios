@@ -567,15 +567,15 @@ struct ActivityStreamTracker {
             eventPing["share_provider"] = provider
         }
 
-        eventsTracker.sendPing(eventPing, validate: true)
+        eventsTracker.sendPing(eventPing as [String : AnyObject], validate: true)
     }
 
     func reportSessionStop(_ duration: UInt64) {
         sessionsTracker.sendPing([
-            "session_duration": NSNumber(unsignedLongLong: duration),
-            "app_version": AppInfo.appVersion,
-            "build": AppInfo.buildNumber,
-            "locale": Locale.currentLocale().localeIdentifier
+            "session_duration": NSNumber(value: duration),
+            "app_version": AppInfo.appVersion as AnyObject,
+            "build": AppInfo.buildNumber as AnyObject,
+            "locale": Locale.current.identifier as AnyObject
         ], validate: true)
     }
 }
@@ -610,7 +610,7 @@ class ASHeaderView: UIView {
         addSubview(titleLabel)
 
         titleLabel.snp.makeConstraints { make in
-            make.edges.equalTo(self).offset(UIEdgeInsets(top: ASHeaderViewUX.TitleTopInset, left: ASHeaderViewUX.Insets, bottom: 0, right: -ASHeaderViewUX.Insets) as! ConstraintOffsetTarget).priorityMedium()
+            make.edges.equalTo(self).inset(UIEdgeInsets(top: ASHeaderViewUX.TitleTopInset, left: ASHeaderViewUX.Insets, bottom: 0, right: -ASHeaderViewUX.Insets)).priorityMedium()
         }
 
         let seperatorLine = UIView()

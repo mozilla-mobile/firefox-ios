@@ -191,9 +191,9 @@ class Tab: NSObject {
             var jsonDict = [String: AnyObject]()
             jsonDict["history"] = urls as AnyObject?
             jsonDict["currentPage"] = currentPage as AnyObject?
-            let escapedJSON = JSON.stringify(jsonDict, pretty: false).stringByAddingPercentEncodingWithAllowedCharacters(CharacterSet.URLQueryAllowedCharacterSet())!
+            let escapedJSON = JSON(jsonDict).rawString()?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
             let restoreURL = URL(string: "\(WebServer.sharedInstance.base)/about/sessionrestore?history=\(escapedJSON)")
-            lastRequest = PrivilegedRequest(URL: restoreURL!)
+            lastRequest = PrivilegedRequest(url: restoreURL!) as URLRequest
             webView.load(lastRequest!)
         } else if let request = lastRequest {
             webView.load(request)

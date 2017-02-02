@@ -9,7 +9,7 @@ import Deferred
 
 // MARK: Ping Centre Client
 public protocol PingCentreClient {
-    func sendPing(_ data: [String: AnyObject], validate: Bool) -> Success
+    func sendPing(_ data: [String: Any], validate: Bool) -> Success
 }
 
 public struct PingCentre {
@@ -67,7 +67,7 @@ class DefaultPingCentreImpl: PingCentreClient {
     fileprivate static let queueLabel = "org.mozilla.pingcentre.validationQueue"
 
     init(topic: PingCentreTopic, endpoint: Endpoint, clientID: String,
-         validationQueue: DispatchQueue = DispatchQueue(queueLabel, nil),
+         validationQueue: DispatchQueue = DispatchQueue(label: queueLabel),
          manager: SessionManager = SessionManager()) {
         self.topic = topic
         self.clientID = clientID
@@ -97,16 +97,16 @@ class DefaultPingCentreImpl: PingCentreClient {
             deferred.fill(Maybe(failure: PingJSONError(error: e)))
             return deferred
         }
-        
+
         self.manager.request(request as! URLRequestConvertible)
-                    .validate(statusCode: 200..<300)
-                    .response(queue: dispatch_get_global_queue(DispatchQueue.GlobalQueuePriority.default, 0)) { _, _, _, error in
-            if let e = error {
-                NSLog("Failed to send ping to ping centre -- topic: \(self.topic.name), error: \(e)")
-                deferred.fill(Maybe(failure: e))
-                return 
-            }
-            deferred.fill(Maybe(success: ()))
+            .validate(statusCode: 200..<300)
+            .response(queue: DispatchQueue.global()) { (response) in
+                if let e = response.error {
+                    NSLog("Failed to send ping to ping centre -- topic: \(self.topic.name), error: \(e)")
+                    deferred.fill(Maybe(failure: e as! MaybeErrorType))
+                    return
+                }
+                deferred.fill(Maybe(success: ()))
         }
         return deferred
     }

@@ -287,7 +287,7 @@ class TopSitesPanel: UIViewController {
         let result = Success()
 
         collection.performBatchUpdates({
-            collection.deleteItems(at: [indexPath as IndexPath])
+            collection.deleteItems(at: [indexPath])
 
             // If we have more items in our data source, replace the deleted site with a new one.
             let count = collection.numberOfItems(inSection: 0) - 1

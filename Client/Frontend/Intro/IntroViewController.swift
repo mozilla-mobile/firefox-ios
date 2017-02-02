@@ -276,7 +276,8 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
     }
 
     fileprivate var accessibilityScrollStatus: String {
-        return String(format: NSLocalizedString("Introductory slide %@ of %@", tableName: "Intro", comment: "String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3"), NumberFormatter.localizedString(from: pageControl.currentPage+1, number: .decimal), NumberFormatter.localizedString(from: IntroViewControllerUX.NumberOfCards, number: .decimal))
+        let number = NSNumber(value: pageControl.currentPage + 1)
+        return String(format: NSLocalizedString("Introductory slide %@ of %@", tableName: "Intro", comment: "String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3"), NumberFormatter.localizedString(from: number, number: .decimal), NumberFormatter.localizedString(from: NSNumber(value: IntroViewControllerUX.NumberOfCards), number: .decimal))
     }
 
     func changePage() {
