@@ -61,7 +61,7 @@ private extension TrayToBrowserAnimator {
         bvc.urlBar.isTransitioning = true
 
         // Re-calculate the starting transforms for header/footer views in case we switch orientation
-        resetTransformsForViews([bvc.header, bvc.clipboardBar, bvc.headerBackdrop, bvc.readerModeBar, bvc.footer, bvc.footerBackdrop])
+        resetTransformsForViews([bvc.header, bvc.headerBackdrop, bvc.readerModeBar, bvc.footer, bvc.footerBackdrop])
         transformHeaderFooterForBVC(bvc, toFrame: startingFrame, container: container)
 
         UIView.animateWithDuration(self.transitionDuration(transitionContext),
@@ -139,6 +139,10 @@ private extension BrowserToTrayAnimator {
         tabCollectionViewSnapshot.alpha = 0
         tabTray.view.insertSubview(tabCollectionViewSnapshot, belowSubview: tabTray.toolbar)
 
+        if let toast = bvc.clipboardToast {
+            toast.removeFromSuperview()
+        }
+        
         container.addSubview(cell)
         cell.layoutIfNeeded()
         cell.title.transform = CGAffineTransformMakeTranslation(0, -cell.title.frame.size.height)
@@ -198,7 +202,6 @@ private func transformHeaderFooterForBVC(bvc: BrowserViewController, toFrame fin
 
     bvc.footer.transform = footerForTransform
     bvc.footerBackdrop.transform = footerForTransform
-    bvc.clipboardBar.transform = footerTransform(bvc.clipboardBar.frame, toFrame: finalFrame, container: container)
     bvc.header.transform = headerForTransform
     bvc.readerModeBar?.transform = headerForTransform
     bvc.headerBackdrop.transform = headerForTransform
@@ -243,10 +246,6 @@ private func calculateCollapsedCellFrameUsingCollectionView(collectionView: UICo
 
 private func calculateExpandedCellFrameFromBVC(bvc: BrowserViewController) -> CGRect {
     var frame = bvc.webViewContainer.frame
-    if bvc.clipboardBarDisplayHandler.isClipboardBarVisible {
-        frame.size.height -= UIConstants.ClipboardBarHeight
-    }
-    
     // If we're navigating to a home panel and we were expecting to show the toolbar, add more height to end frame since
     // there is no toolbar for home panels
     if !bvc.shouldShowFooterForTraitCollection(bvc.traitCollection) {
