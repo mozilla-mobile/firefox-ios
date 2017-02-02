@@ -50,7 +50,7 @@ class MockingURLProtocol: URLProtocol {
 }
 
 class PingCentreTests: XCTestCase {
-    var manager: Alamofire.Manager!
+    var manager: SessionManager!
     var client: PingCentreClient!
 
     override func setUp() {
@@ -59,8 +59,8 @@ class PingCentreTests: XCTestCase {
         let configuration = URLSessionConfiguration.default
         configuration.protocolClasses!.insert(MockingURLProtocol.self, at: 0)
 
-        self.manager = Manager(configuration: configuration)
-        self.client = DefaultPingCentreImpl(topic: mockTopic, endpoint: .Staging, clientID: "fakeID", manager: self.manager)
+        self.manager = SessionManager(configuration: configuration)
+        self.client = DefaultPingCentreImpl(topic: mockTopic, endpoint: .staging, clientID: "fakeID", manager: self.manager)
     }
 
     override func tearDown() {

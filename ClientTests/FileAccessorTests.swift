@@ -56,7 +56,7 @@ class FileAccessorTests: XCTestCase {
             let path = try files.getAndEnsureDirectory("foo")
             var isDirectory = ObjCBool(false)
             FileManager.default.fileExists(atPath: path, isDirectory: &isDirectory)
-            XCTAssertTrue(isDirectory, "Directory exists")
+            XCTAssertTrue(isDirectory.boolValue, "Directory exists")
         } catch {
             XCTFail("Unable to find directory 'foo' \(error)")
         }

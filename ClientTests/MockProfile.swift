@@ -21,10 +21,10 @@ open class MockSyncManager: SyncManager {
         return deferMaybe(true)
     }
 
-    open func syncClients() -> SyncResult { return deferMaybe(.Completed) }
-    open func syncClientsThenTabs() -> SyncResult { return deferMaybe(.Completed) }
-    open func syncHistory() -> SyncResult { return deferMaybe(.Completed) }
-    open func syncLogins() -> SyncResult { return deferMaybe(.Completed) }
+    open func syncClients() -> SyncResult { return deferMaybe(.completed) }
+    open func syncClientsThenTabs() -> SyncResult { return deferMaybe(.completed) }
+    open func syncHistory() -> SyncResult { return deferMaybe(.completed) }
+    open func syncLogins() -> SyncResult { return deferMaybe(.completed) }
     open func syncEverything() -> Success {
         return succeed()
     }
@@ -176,7 +176,7 @@ open class MockProfile: Profile {
     }
 
     public func hasSyncableAccount() -> Bool {
-        return account?.actionNeeded == FxAActionNeeded.None
+        return account?.actionNeeded == FxAActionNeeded.none
     }
 
     public func getAccount() -> FirefoxAccount? {

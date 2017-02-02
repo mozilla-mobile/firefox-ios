@@ -49,19 +49,19 @@ class ActivityStreamTests: XCTestCase {
 
 // MARK: Telemetry Tests
 extension ActivityStreamTests {
-    fileprivate func expectedPayloadForEvent(_ event: String, source: String, position: Int) -> [String: AnyObject] {
+    fileprivate func expectedPayloadForEvent(_ event: String, source: String, position: Int) -> [String: Any] {
         return [
-            "event": event as AnyObject,
-            "page": "NEW_TAB" as AnyObject,
-            "source": source as AnyObject,
-            "action_position": position as AnyObject,
-            "app_version": AppInfo.appVersion as AnyObject,
-            "build": AppInfo.buildNumber as AnyObject,
-            "locale": Locale.currentLocale().localeIdentifier
+            "event": event,
+            "page": "NEW_TAB",
+            "source": source,
+            "action_position": position,
+            "app_version": AppInfo.appVersion,
+            "build": AppInfo.buildNumber,
+            "locale": Locale.current.identifier
         ]
     }
 
-    fileprivate func assertPayload(_ actual: [String: AnyObject], matches: [String: AnyObject]) {
+    fileprivate func assertPayload(_ actual: [String: Any], matches: [String: Any]) {
         XCTAssertTrue(actual.count == matches.count)
         actual.enumerated().forEach { index, element in
             if let actualValue = element.1 as? Int,
@@ -79,7 +79,7 @@ extension ActivityStreamTests {
     func testHighlightEmitsEventOnTap() {
         let mockSite = Site(url: "http://mozilla.org", title: "Mozilla")
         panel.highlights = [mockSite]
-        panel.selectItemAtIndex(0, inSection: .Highlights)
+        panel.selectItemAtIndex(0, inSection: .highlights)
 
         let pingsSent = (telemetry.eventsTracker as! MockPingClient).pingsReceived
         XCTAssertEqual(pingsSent.count, 1)
@@ -89,7 +89,7 @@ extension ActivityStreamTests {
 
     func testContextMenuOnTopSiteEmitsRemoveEvent() {
         let mockSite = Site(url: "http://mozilla.org", title: "Mozilla")
-        let topSitesContextMenu = panel.contextMenuForSite(mockSite, atIndex: 0, forSection: .TopSites, siteImage: nil, siteBGColor: nil)
+        let topSitesContextMenu = panel.contextMenuForSite(mockSite, atIndex: 0, forSection: .topSites, siteImage: nil, siteBGColor: nil)
 
         let removeAction = topSitesContextMenu?.actions.find { $0.title == Strings.RemoveFromASContextMenuTitle }
         removeAction?.handler?(removeAction!)
@@ -102,7 +102,7 @@ extension ActivityStreamTests {
 
     func testContextMenuOnHighlightsEmitsRemoveDismissEvents() {
         let mockSite = Site(url: "http://mozilla.org", title: "Mozilla")
-        let highlightsContextMenu = panel.contextMenuForSite(mockSite, atIndex: 0, forSection: .Highlights, siteImage: nil, siteBGColor: nil)
+        let highlightsContextMenu = panel.contextMenuForSite(mockSite, atIndex: 0, forSection: .highlights, siteImage: nil, siteBGColor: nil)
 
         let dismiss = highlightsContextMenu?.actions.find { $0.title == Strings.RemoveFromASContextMenuTitle }
         let delete = highlightsContextMenu?.actions.find { $0.title == Strings.DeleteFromHistoryContextMenuTitle }
@@ -139,9 +139,10 @@ extension ActivityStreamTests {
 }
 
 class MockPingClient: PingCentreClient {
-    var pingsReceived: [[String: AnyObject]] = []
 
-    func sendPing(_ data: [String: AnyObject], validate: Bool = true) -> Success {
+    var pingsReceived: [[String: Any]] = []
+
+    public func sendPing(_ data: [String : Any], validate: Bool) -> Success {
         pingsReceived.append(data)
         return succeed()
     }

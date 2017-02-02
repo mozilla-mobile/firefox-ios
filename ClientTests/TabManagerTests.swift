@@ -14,7 +14,7 @@ import XCTest
 
 open class TabManagerMockProfile: MockProfile {
     var numberOfTabsStored = 0
-    override func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
+    override public func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
         numberOfTabsStored = tabs.count
         return deferMaybe(tabs.count)
     }

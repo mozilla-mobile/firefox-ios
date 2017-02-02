@@ -68,7 +68,7 @@ class TestTopTabs: XCTestCase {
         createTopTabsVC()
 
         let countBefore = tabVC.collectionView.numberOfItems(inSection: 0)
-        let cell = tabVC.collectionView.cellForItemAtIndexPath(IndexPath(forRow: 1, inSection: 0)) as! TopTabCell
+        let cell = tabVC.collectionView.cellForItem(at: IndexPath(row: 1, section: 0)) as! TopTabCell
         XCTAssertNotNil(cell)
         cell.closeTab()
         let expectation = self.expectation(description: "A single tab is removed")
@@ -86,7 +86,7 @@ class TestTopTabs: XCTestCase {
 
         let countBefore = tabVC.collectionView.numberOfItems(inSection: 0)
         XCTAssertEqual(countBefore, 1)
-        let cell = tabVC.collectionView.cellForItemAtIndexPath(IndexPath(forRow: 0, inSection: 0)) as! TopTabCell
+        let cell = tabVC.collectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as! TopTabCell
         XCTAssertNotNil(cell)
         cell.closeTab()
         let expectation = self.expectation(description: "A single tab is removed")
