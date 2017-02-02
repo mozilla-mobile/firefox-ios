@@ -678,7 +678,7 @@ class TestSQLiteBookmarks: XCTestCase {
         XCTAssertEqual(second.title, "BBB")
         XCTAssertEqual((second as? BookmarkItem)?.url, "http://getfirefox.com")
 
-        let del: [BookmarkMirrorItem] = [BookmarkMirrorItem.deleted(BookmarkNodeType.Bookmark, guid: "aaaaaaaaaaaa", modified: NSDate.now())]
+        let del: [BookmarkMirrorItem] = [BookmarkMirrorItem.deleted(BookmarkNodeType.Bookmark, guid: "aaaaaaaaaaaa", modified: Date.now())]
         bookmarks.applyRecords(del, withMaxVars: 1)
 
         guard let newToolbar = bookmarks.modelForFolder(BookmarkRoots.ToolbarFolderGUID).value.successValue else {

@@ -85,7 +85,7 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
 
         let alert = XCUIApplication().alerts.elementBoundByIndex(0)
         expectationForPredicate(NSPredicate(format: "exists == 1"), evaluatedWithObject: alert, handler: nil)
-        waitForExpectationsWithTimeout(3, handler: nil)
+        waitForExpectations(timeout: 3, handler: nil)
         alert.buttons.elementBoundByIndex(0).tap()
     }
 
@@ -149,7 +149,7 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
         let predicate = NSPredicate(format: "exists == 1")
         let query = XCUIApplication().alerts.elementBoundByIndex(0)
         expectationForPredicate(predicate, evaluatedWithObject: query, handler: nil)
-        self.waitForExpectationsWithTimeout(3, handler: nil)
+        self.waitForExpectations(timeout: 3, handler: nil)
         snapshot("12WebViewAuthenticationDialog-01", waitForLoadingIndicator: false)
     }
 
