@@ -15,23 +15,23 @@ class ClientTests: XCTestCase {
 
     func testSyncUA() {
         let ua = UserAgent.syncUserAgent
-        let loc = ua.rangeOfString("^Firefox-iOS-Sync/[0-9\\.]+ \\([-_A-Za-z0-9= \\(\\)]+\\)$", options: NSStringCompareOptions.RegularExpressionSearch)
+        let loc = ua.range(of: "^Firefox-iOS-Sync/[0-9\\.]+ \\([-_A-Za-z0-9= \\(\\)]+\\)$", options: NSString.CompareOptions.regularExpression)
         XCTAssertTrue(loc != nil, "Sync UA is as expected. Was \(ua)")
     }
 
     // Simple test to make sure the WKWebView UA matches the expected FxiOS pattern.
     func testUserAgent() {
-        let appVersion = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as! String
+        let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
 
-        let compare: String -> Bool = { ua in
-            let range = ua.rangeOfString("^Mozilla/5\\.0 \\(.+\\) AppleWebKit/[0-9\\.]+ \\(KHTML, like Gecko\\) FxiOS/\(appVersion) Mobile/[A-Za-z0-9]+ Safari/[0-9\\.]+$", options: NSStringCompareOptions.RegularExpressionSearch)
+        let compare: (String) -> Bool = { ua in
+            let range = ua.range(of: "^Mozilla/5\\.0 \\(.+\\) AppleWebKit/[0-9\\.]+ \\(KHTML, like Gecko\\) FxiOS/\(appVersion) Mobile/[A-Za-z0-9]+ Safari/[0-9\\.]+$", options: NSString.CompareOptions.regularExpression)
             return range != nil
         }
 
         XCTAssertTrue(compare(UserAgent.defaultUserAgent()), "User agent computes correctly.")
         XCTAssertTrue(compare(UserAgent.cachedUserAgent(checkiOSVersion: true)!), "User agent is cached correctly.")
 
-        let expectation = expectationWithDescription("Found Firefox user agent")
+        let expectation = self.expectation(description: "Found Firefox user agent")
 
         let webView = WKWebView()
         webView.evaluateJavaScript("navigator.userAgent") { result, error in
@@ -43,12 +43,12 @@ class ClientTests: XCTestCase {
             }
         }
 
-        waitForExpectationsWithTimeout(5, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testDesktopUserAgent() {
-        let compare: String -> Bool = { ua in
-            let range = ua.rangeOfString("^Mozilla/5\\.0 \\(Macintosh; Intel Mac OS X [0-9_]+\\) AppleWebKit/[0-9\\.]+ \\(KHTML, like Gecko\\) Safari/[0-9\\.]+$", options: NSStringCompareOptions.RegularExpressionSearch)
+        let compare: (String) -> Bool = { ua in
+            let range = ua.range(of: "^Mozilla/5\\.0 \\(Macintosh; Intel Mac OS X [0-9_]+\\) AppleWebKit/[0-9\\.]+ \\(KHTML, like Gecko\\) Safari/[0-9\\.]+$", options: NSString.CompareOptions.regularExpression)
             return range != nil
         }
 
@@ -76,15 +76,15 @@ class ClientTests: XCTestCase {
             ].forEach { XCTAssertFalse(hostIsValid($0), "\($0) host should not be valid.") }
     }
 
-    private func hostIsValid(host: String) -> Bool {
-        let expectation = expectationWithDescription("Validate host for \(host)")
-        let request = NSURLRequest(URL: NSURL(string: "http://\(host):6571/about/license")!)
-        var response: NSHTTPURLResponse?
-        Alamofire.request(request).authenticate(usingCredential: WebServer.sharedInstance.credentials).response { (req, res, data, error) -> Void in
-            response = res
+    fileprivate func hostIsValid(_ host: String) -> Bool {
+        let expectation = self.expectation(description: "Validate host for \(host)")
+        let request = URLRequest(url: URL(string: "http://\(host):6571/about/license")!)
+        var response: HTTPURLResponse?
+        Alamofire.request(request).authenticate(usingCredential: WebServer.sharedInstance.credentials).response { (res) -> Void in
+            response = res.response
             expectation.fulfill()
         }
-        waitForExpectationsWithTimeout(100, handler: nil)
+        waitForExpectations(timeout: 100, handler: nil)
         return response?.statusCode == 200
     }
 

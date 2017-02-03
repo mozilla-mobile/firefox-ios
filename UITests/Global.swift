@@ -14,95 +14,95 @@ import EarlGrey
 let LabelAddressAndSearch = "Address and Search"
 
 extension XCTestCase {
-    func tester(file: String = #file, _ line: Int = #line) -> KIFUITestActor {
+    func tester(_ file: String = #file, _ line: Int = #line) -> KIFUITestActor {
         return KIFUITestActor(inFile: file, atLine: line, delegate: self)
     }
 
-    func system(file: String = #file, _ line: Int = #line) -> KIFSystemTestActor {
+    func system(_ file: String = #file, _ line: Int = #line) -> KIFSystemTestActor {
         return KIFSystemTestActor(inFile: file, atLine: line, delegate: self)
     }
 }
 
 extension KIFUITestActor {
     /// Looks for a view with the given accessibility hint.
-    func tryFindingViewWithAccessibilityHint(hint: String) -> Bool {
-        let element = UIApplication.sharedApplication().accessibilityElementMatchingBlock { element in
-            return element.accessibilityHint == hint
+    func tryFindingViewWithAccessibilityHint(_ hint: String) -> Bool {
+        let element = UIApplication.shared.accessibilityElement { element in
+            return element?.accessibilityHint! == hint
         }
 
         return element != nil
     }
 
-    func waitForViewWithAccessibilityHint(hint: String) -> UIView? {
+    func waitForViewWithAccessibilityHint(_ hint: String) -> UIView? {
         var view: UIView? = nil
         autoreleasepool {
-            waitForAccessibilityElement(nil, view: &view, withElementMatchingPredicate: NSPredicate(format: "accessibilityHint = %@", hint), tappable: false)
+            wait(for: nil, view: &view, withElementMatching: NSPredicate(format: "accessibilityHint = %@", hint), tappable: false)
         }
         return view
     }
 
-    func viewExistsWithLabel(label: String) -> Bool {
+    func viewExistsWithLabel(_ label: String) -> Bool {
         do {
-            try self.tryFindingViewWithAccessibilityLabel(label)
+            try self.tryFindingView(withAccessibilityLabel: label)
             return true
         } catch {
             return false
         }
     }
 
-    func viewExistsWithLabelPrefixedBy(prefix: String) -> Bool {
-        let element = UIApplication.sharedApplication().accessibilityElementMatchingBlock { element in
-            return element.accessibilityLabel?.hasPrefix(prefix) ?? false
+    func viewExistsWithLabelPrefixedBy(_ prefix: String) -> Bool {
+        let element = UIApplication.shared.accessibilityElement { element in
+            return element?.accessibilityLabel?.hasPrefix(prefix) ?? false
         }
         return element != nil
     }
 
     /// Waits for and returns a view with the given accessibility value.
-    func waitForViewWithAccessibilityValue(value: String) -> UIView {
+    func waitForViewWithAccessibilityValue(_ value: String) -> UIView {
         var element: UIAccessibilityElement!
 
-        runBlock { _ in
-            element = UIApplication.sharedApplication().accessibilityElementMatchingBlock { element in
-                return element.accessibilityValue == value
+        run { _ in
+            element = UIApplication.shared.accessibilityElement { element in
+                return element?.accessibilityValue! == value
             }
 
-            return (element == nil) ? KIFTestStepResult.Wait : KIFTestStepResult.Success
+            return (element == nil) ? KIFTestStepResult.wait : KIFTestStepResult.success
         }
 
-        return UIAccessibilityElement.viewContainingAccessibilityElement(element)
+        return UIAccessibilityElement.viewContaining(element)
     }
 
     /// Wait for and returns a view with the given accessibility label as an
     /// attributed string. See the comment in ReadingListPanel.swift about
     /// using attributed strings as labels. (It lets us set the pitch)
-    func waitForViewWithAttributedAccessibilityLabel(label: NSAttributedString) -> UIView {
+    func waitForViewWithAttributedAccessibilityLabel(_ label: NSAttributedString) -> UIView {
         var element: UIAccessibilityElement!
 
-        runBlock { _ in
-            element = UIApplication.sharedApplication().accessibilityElementMatchingBlock { element in
-                if let elementLabel = element.valueForKey("accessibilityLabel") as? NSAttributedString {
-                    return elementLabel.isEqualToAttributedString(label)
+        run { _ in
+            element = UIApplication.shared.accessibilityElement { element in
+                if let elementLabel = element?.value(forKey: "accessibilityLabel") as? NSAttributedString {
+                    return elementLabel.isEqual(to: label)
                 }
                 return false
             }
             
-            return (element == nil) ? KIFTestStepResult.Wait : KIFTestStepResult.Success
+            return (element == nil) ? KIFTestStepResult.wait : KIFTestStepResult.success
         }
 
-        return UIAccessibilityElement.viewContainingAccessibilityElement(element)
+        return UIAccessibilityElement.viewContaining(element)
     }
 
     /// There appears to be a KIF bug where waitForViewWithAccessibilityLabel returns the parent
     /// UITableView instead of the UITableViewCell with the given label.
     /// As a workaround, retry until KIF gives us a cell.
     /// Open issue: https://github.com/kif-framework/KIF/issues/336
-    func waitForCellWithAccessibilityLabel(label: String) -> UITableViewCell {
+    func waitForCellWithAccessibilityLabel(_ label: String) -> UITableViewCell {
         var cell: UITableViewCell!
 
-        runBlock { _ in
-            let view = self.waitForViewWithAccessibilityLabel(label)
+        run { _ in
+            let view = self.waitForView(withAccessibilityLabel: label)
             cell = view as? UITableViewCell
-            return (cell == nil) ? KIFTestStepResult.Wait : KIFTestStepResult.Success
+            return (cell == nil) ? KIFTestStepResult.wait : KIFTestStepResult.success
         }
 
         return cell
@@ -114,31 +114,31 @@ extension KIFUITestActor {
      * As a workaround, inject a KIFHelper class that iterates the document and finds
      * elements with the given textContent or title.
      */
-    func waitForWebViewElementWithAccessibilityLabel(text: String) {
-        runBlock { error in
+    func waitForWebViewElementWithAccessibilityLabel(_ text: String) {
+        run { error in
             if (self.hasWebViewElementWithAccessibilityLabel(text)) {
-                return KIFTestStepResult.Success
+                return KIFTestStepResult.success
             }
 
-            return KIFTestStepResult.Wait
+            return KIFTestStepResult.wait
         }
     }
 
     /**
      * Sets the text for a WKWebView input element with the given name.
      */
-    func enterText(text: String, intoWebViewInputWithName inputName: String) {
+    func enterText(_ text: String, intoWebViewInputWithName inputName: String) {
         let webView = getWebViewWithKIFHelper()
-        var stepResult = KIFTestStepResult.Wait
+        var stepResult = KIFTestStepResult.wait
 
-        let escaped = text.stringByReplacingOccurrencesOfString("\"", withString: "\\\"")
+        let escaped = text.replacingOccurrences(of: "\"", with: "\\\"")
         webView.evaluateJavaScript("KIFHelper.enterTextIntoInputWithName(\"\(escaped)\", \"\(inputName)\");") { success, _ in
-            stepResult = (success as! Bool) ? KIFTestStepResult.Success : KIFTestStepResult.Failure
+            stepResult = (success as! Bool) ? KIFTestStepResult.success : KIFTestStepResult.failure
         }
 
-        runBlock { error in
-            if stepResult == KIFTestStepResult.Failure {
-                error.memory = NSError(domain: "KIFHelper", code: 0, userInfo: [NSLocalizedDescriptionKey: "Input element not found in webview: \(escaped)"])
+        run { error in
+            if stepResult == KIFTestStepResult.failure {
+                error?.pointee = NSError(domain: "KIFHelper", code: 0, userInfo: [NSLocalizedDescriptionKey: "Input element not found in webview: \(escaped)"])
             }
             return stepResult
         }
@@ -147,18 +147,18 @@ extension KIFUITestActor {
     /**
      * Clicks a WKWebView element with the given label.
      */
-    func tapWebViewElementWithAccessibilityLabel(text: String) {
+    func tapWebViewElementWithAccessibilityLabel(_ text: String) {
         let webView = getWebViewWithKIFHelper()
-        var stepResult = KIFTestStepResult.Wait
+        var stepResult = KIFTestStepResult.wait
 
-        let escaped = text.stringByReplacingOccurrencesOfString("\"", withString: "\\\"")
+        let escaped = text.replacingOccurrences(of: "\"", with: "\\\"")
         webView.evaluateJavaScript("KIFHelper.tapElementWithAccessibilityLabel(\"\(escaped)\")") { success, _ in
-            stepResult = (success as! Bool) ? KIFTestStepResult.Success : KIFTestStepResult.Failure
+            stepResult = (success as! Bool) ? KIFTestStepResult.success : KIFTestStepResult.failure
         }
 
-        runBlock { error in
-            if stepResult == KIFTestStepResult.Failure {
-                error.memory = NSError(domain: "KIFHelper", code: 0, userInfo: [NSLocalizedDescriptionKey: "Accessibility label not found in webview: \(escaped)"])
+        run { error in
+            if stepResult == KIFTestStepResult.failure {
+                error?.pointee = NSError(domain: "KIFHelper", code: 0, userInfo: [NSLocalizedDescriptionKey: "Accessibility label not found in webview: \(escaped)"])
             }
             return stepResult
         }
@@ -167,49 +167,49 @@ extension KIFUITestActor {
     /**
      * Determines whether an element in the page exists.
      */
-    func hasWebViewElementWithAccessibilityLabel(text: String) -> Bool {
+    func hasWebViewElementWithAccessibilityLabel(_ text: String) -> Bool {
         let webView = getWebViewWithKIFHelper()
-        var stepResult = KIFTestStepResult.Wait
+        var stepResult = KIFTestStepResult.wait
         var found = false
 
-        let escaped = text.stringByReplacingOccurrencesOfString("\"", withString: "\\\"")
+        let escaped = text.replacingOccurrences(of: "\"", with: "\\\"")
         webView.evaluateJavaScript("KIFHelper.hasElementWithAccessibilityLabel(\"\(escaped)\")") { success, _ in
             found = success as? Bool ?? false
-            stepResult = KIFTestStepResult.Success
+            stepResult = KIFTestStepResult.success
         }
 
-        runBlock { _ in return stepResult }
+        run { _ in return stepResult }
 
         return found
     }
 
-    private func getWebViewWithKIFHelper() -> WKWebView {
-        let webView = waitForViewWithAccessibilityLabel("Web content") as! WKWebView
+    fileprivate func getWebViewWithKIFHelper() -> WKWebView {
+        let webView = waitForView(withAccessibilityLabel: "Web content") as! WKWebView
 
         // Wait for the web view to stop loading.
-        runBlock { _ in
-            return webView.loading ? KIFTestStepResult.Wait : KIFTestStepResult.Success
+        run { _ in
+            return webView.isLoading ? KIFTestStepResult.wait : KIFTestStepResult.success
         }
 
-        var stepResult = KIFTestStepResult.Wait
+        var stepResult = KIFTestStepResult.wait
 
         webView.evaluateJavaScript("typeof KIFHelper") { result, _ in
             if result as! String == "undefined" {
-                let bundle = NSBundle(forClass: NavigationTests.self)
-                let path = bundle.pathForResource("KIFHelper", ofType: "js")!
-                let source = try! NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding)
+                let bundle = Bundle(for: NavigationTests.self)
+                let path = bundle.path(forResource: "KIFHelper", ofType: "js")!
+                let source = try! NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue)
                 webView.evaluateJavaScript(source as String, completionHandler: nil)
             }
-            stepResult = KIFTestStepResult.Success
+            stepResult = KIFTestStepResult.success
         }
 
-        runBlock { _ in return stepResult }
+        run { _ in return stepResult }
 
         return webView
     }
 
     public func deleteCharacterFromFirstResponser() {
-        enterTextIntoCurrentFirstResponder("\u{0008}")
+        self.enterText(intoCurrentFirstResponder: "\u{0008}")
     }
 }
 
@@ -224,56 +224,56 @@ class BrowserUtils {
     internal static let AllClearables = Set([Clearable.History, Clearable.Cache, Clearable.OfflineData, Clearable.Cookies])
     
     /// Close all tabs to restore the browser to startup state.
-    class func resetToAboutHome(tester: KIFUITestActor) {
+    class func resetToAboutHome(_ tester: KIFUITestActor) {
         
         do {
-            try tester.tryFindingTappableViewWithAccessibilityLabel("Cancel")
-            tester.tapViewWithAccessibilityLabel("Cancel")
+            try tester.tryFindingTappableView(withAccessibilityLabel: "Cancel")
+            tester.tapView(withAccessibilityLabel: "Cancel")
         } catch _ {
         }
         do {
-            try tester.tryFindingTappableViewWithAccessibilityLabel("Show Tabs")
-            tester.tapViewWithAccessibilityLabel("Show Tabs")
+            try tester.tryFindingTappableView(withAccessibilityLabel: "Show Tabs")
+            tester.tapView(withAccessibilityLabel: "Show Tabs")
         } catch _ {
         
         }
-        let tabsView = tester.waitForViewWithAccessibilityLabel("Tabs Tray").subviews.first as! UICollectionView
+        let tabsView = tester.waitForView(withAccessibilityLabel: "Tabs Tray").subviews.first as! UICollectionView
 
         // Switch to Private Mode if we're not in it already.
         do {
-            try tester.tryFindingTappableViewWithAccessibilityLabel("Private Mode", value: "Off", traits: UIAccessibilityTraitButton)
-            tester.tapViewWithAccessibilityLabel("Private Mode")
+            try tester.tryFindingTappableView(withAccessibilityLabel: "Private Mode", value: "Off", traits: UIAccessibilityTraitButton)
+            tester.tapView(withAccessibilityLabel: "Private Mode")
         } catch _ {}
 
         // Clear all private tabs.
-        while tabsView.numberOfItemsInSection(0) > 0 {
-            let cell = tabsView.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0))!
-            tester.swipeViewWithAccessibilityLabel(cell.accessibilityLabel, inDirection: KIFSwipeDirection.Left)
-            tester.waitForAbsenceOfViewWithAccessibilityLabel(cell.accessibilityLabel)
+        while tabsView.numberOfItems(inSection: 0) > 0 {
+            let cell = tabsView.cellForItem(at: IndexPath(item: 0, section: 0))!
+            tester.swipeView(withAccessibilityLabel: cell.accessibilityLabel, in: KIFSwipeDirection.left)
+            tester.waitForAbsenceOfView(withAccessibilityLabel: cell.accessibilityLabel)
         }
-        tester.tapViewWithAccessibilityLabel("Private Mode")
+        tester.tapView(withAccessibilityLabel: "Private Mode")
 
-        while tabsView.numberOfItemsInSection(0) > 1 {
-            let oldCount = tabsView.numberOfItemsInSection(0)
-            let cell = tabsView.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0))!
-            tester.swipeViewWithAccessibilityLabel(cell.accessibilityLabel, inDirection: KIFSwipeDirection.Left)
+        while tabsView.numberOfItems(inSection: 0) > 1 {
+            let oldCount = tabsView.numberOfItems(inSection: 0)
+            let cell = tabsView.cellForItem(at: IndexPath(item: 0, section: 0))!
+            tester.swipeView(withAccessibilityLabel: cell.accessibilityLabel, in: KIFSwipeDirection.left)
             tester.waitForAnimationsToFinish()
-            XCTAssertEqual(oldCount-1, tabsView.numberOfItemsInSection(0))
+            XCTAssertEqual(oldCount-1, tabsView.numberOfItems(inSection: 0))
         }
 
         // When the last tab is closed, the tabs tray will automatically be closed
         // since a new about:home tab will be selected.
-        if let cell = tabsView.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0)) {
-            tester.swipeViewWithAccessibilityLabel(cell.accessibilityLabel, inDirection: KIFSwipeDirection.Left)
-            tester.waitForTappableViewWithAccessibilityLabel("Show Tabs")
+        if let cell = tabsView.cellForItem(at: IndexPath(item: 0, section: 0)) {
+            tester.swipeView(withAccessibilityLabel: cell.accessibilityLabel, in: KIFSwipeDirection.left)
+            tester.waitForTappableView(withAccessibilityLabel: "Show Tabs")
         }
     }
     
     //If it is a first run, first run window should be gone
-    class func dismissFirstRunUI(tester: KIFUITestActor) {
+    class func dismissFirstRunUI(_ tester: KIFUITestActor) {
         do {
-            try tester.tryFindingTappableViewWithAccessibilityLabel("Start Browsing")
-            tester.tapViewWithAccessibilityLabel("Start Browsing")
+            try tester.tryFindingTappableView(withAccessibilityLabel: "Start Browsing")
+            tester.tapView(withAccessibilityLabel: "Start Browsing")
         } catch {
             //First run dialog did not appear
         }
@@ -293,50 +293,50 @@ class BrowserUtils {
 	}
 
     /// Injects a URL and title into the browser's history database.
-    class func addHistoryEntry(title: String, url: NSURL) {
-        let notificationCenter = NSNotificationCenter.defaultCenter()
-        var info = [NSObject: AnyObject]()
+    class func addHistoryEntry(_ title: String, url: URL) {
+        let notificationCenter = NotificationCenter.default
+        var info = [AnyHashable: Any]()
         info["url"] = url
         info["title"] = title
         info["visitType"] = VisitType.Link.rawValue
-        notificationCenter.postNotificationName("OnLocationChange", object: self, userInfo: info)
+        notificationCenter.post(name: Notification.Name(rawValue: "OnLocationChange"), object: self, userInfo: info)
     }
 
-    private class func clearHistoryItemAtIndex(index: NSIndexPath, tester: KIFUITestActor) {
-        if let row = tester.waitForCellAtIndexPath(index, inTableViewWithAccessibilityIdentifier: "History List") {
-            tester.swipeViewWithAccessibilityLabel(row.accessibilityLabel, value: row.accessibilityValue, inDirection: KIFSwipeDirection.Left)
-            tester.tapViewWithAccessibilityLabel("Remove")
+    fileprivate class func clearHistoryItemAtIndex(_ index: IndexPath, tester: KIFUITestActor) {
+        if let row = tester.waitForCell(at: index, inTableViewWithAccessibilityIdentifier: "History List") {
+            tester.swipeView(withAccessibilityLabel: row.accessibilityLabel, value: row.accessibilityValue, in: KIFSwipeDirection.left)
+            tester.tapView(withAccessibilityLabel: "Remove")
         }
     }
-    class func openClearPrivateDataDialog(swipe: Bool, tester: KIFUITestActor) {
-        tester.tapViewWithAccessibilityLabel("Menu")
+    class func openClearPrivateDataDialog(_ swipe: Bool, tester: KIFUITestActor) {
+        tester.tapView(withAccessibilityLabel: "Menu")
         
         // Need this for simulator only
         if (swipe) {
-            tester.swipeViewWithAccessibilityLabel("Set Homepage", inDirection: KIFSwipeDirection.Left)
+            tester.swipeView(withAccessibilityLabel: "Set Homepage", in: KIFSwipeDirection.left)
         }
-        tester.tapViewWithAccessibilityLabel("Settings")
-        tester.tapViewWithAccessibilityLabel("Clear Private Data")
+        tester.tapView(withAccessibilityLabel: "Settings")
+        tester.tapView(withAccessibilityLabel: "Clear Private Data")
     }
     
-    class func closeClearPrivateDataDialog(tester: KIFUITestActor) {
-        tester.tapViewWithAccessibilityLabel("Settings")
-        tester.tapViewWithAccessibilityLabel("Done")
+    class func closeClearPrivateDataDialog(_ tester: KIFUITestActor) {
+        tester.tapView(withAccessibilityLabel: "Settings")
+        tester.tapView(withAccessibilityLabel: "Done")
     }
     
-    private class func acceptClearPrivateData(tester: KIFUITestActor) {
-        tester.waitForViewWithAccessibilityLabel("OK")
-        tester.tapViewWithAccessibilityLabel("OK")
-        tester.waitForViewWithAccessibilityLabel("Clear Private Data")
+    fileprivate class func acceptClearPrivateData(_ tester: KIFUITestActor) {
+        tester.waitForView(withAccessibilityLabel: "OK")
+        tester.tapView(withAccessibilityLabel: "OK")
+        tester.waitForView(withAccessibilityLabel: "Clear Private Data")
     }
     
-    private class func cancelClearPrivateData(tester: KIFUITestActor) {
-        tester.waitForViewWithAccessibilityLabel("Clear")
-        tester.tapViewWithAccessibilityLabel("Cancel")
-        tester.waitForViewWithAccessibilityLabel("Clear Private Data")
+    fileprivate class func cancelClearPrivateData(_ tester: KIFUITestActor) {
+        tester.waitForView(withAccessibilityLabel: "Clear")
+        tester.tapView(withAccessibilityLabel: "Cancel")
+        tester.waitForView(withAccessibilityLabel: "Clear Private Data")
     }
 
-    class func clearPrivateData(clearables: Set<Clearable>? = AllClearables, swipe: Bool? = false, tester: KIFUITestActor) {
+    class func clearPrivateData(_ clearables: Set<Clearable>? = AllClearables, swipe: Bool? = false, tester: KIFUITestActor) {
         let AllClearables = Set([Clearable.History, Clearable.Cache, Clearable.OfflineData, Clearable.Cookies])
     
         openClearPrivateDataDialog(swipe!, tester: tester)
@@ -345,26 +345,26 @@ class BrowserUtils {
         for clearable in AllClearables {
             // If we don't wait here, setOn:forSwitchWithAccessibilityLabel tries to use the UITableViewCell
             // instead of the UISwitch. KIF bug?
-            tester.waitForViewWithAccessibilityLabel(clearable.rawValue)
+            tester.waitForView(withAccessibilityLabel: clearable.rawValue)
             
             tester.setOn(clearables!.contains(clearable), forSwitchWithAccessibilityLabel: clearable.rawValue)
         }
         
-        tester.tapViewWithAccessibilityLabel("Clear Private Data", traits: UIAccessibilityTraitButton)
+        tester.tapView(withAccessibilityLabel: "Clear Private Data", traits: UIAccessibilityTraitButton)
         acceptClearPrivateData(tester)
         
         closeClearPrivateDataDialog(tester)
     }
     
-    class func clearHistoryItems(tester: KIFUITestActor, numberOfTests: Int = -1) {
+    class func clearHistoryItems(_ tester: KIFUITestActor, numberOfTests: Int = -1) {
         resetToAboutHome(tester)
-        tester.tapViewWithAccessibilityLabel("History")
+        tester.tapView(withAccessibilityLabel: "History")
 
-        let historyTable = tester.waitForViewWithAccessibilityIdentifier("History List") as! UITableView
+        let historyTable = tester.waitForView(withAccessibilityIdentifier: "History List") as! UITableView
         var index = 0
         for _ in 0 ..< historyTable.numberOfSections {
-            for _ in 0 ..< historyTable.numberOfRowsInSection(0) {
-                clearHistoryItemAtIndex(NSIndexPath(forRow: 0, inSection: 0), tester: tester)
+            for _ in 0 ..< historyTable.numberOfRows(inSection: 0) {
+                clearHistoryItemAtIndex(IndexPath(row: 0, section: 0), tester: tester)
                 if numberOfTests > -1 {
                     index += 1
                     if index == numberOfTests {
@@ -373,10 +373,10 @@ class BrowserUtils {
                 }
             }
         }
-        tester.tapViewWithAccessibilityLabel("Top sites")
+        tester.tapView(withAccessibilityLabel: "Top sites")
     }
 
-    class func ensureAutocompletionResult(tester: KIFUITestActor, textField: UITextField, prefix: String, completion: String) {
+    class func ensureAutocompletionResult(_ tester: KIFUITestActor, textField: UITextField, prefix: String, completion: String) {
         // searches are async (and debounced), so we have to wait for the results to appear.
         tester.waitForViewWithAccessibilityValue(prefix + completion)
 
@@ -384,7 +384,7 @@ class BrowserUtils {
         var attribute: AnyObject?
         let textLength = textField.text!.characters.count
 
-        attribute = textField.attributedText!.attribute(NSBackgroundColorAttributeName, atIndex: 0, effectiveRange: &range)
+        attribute = textField.attributedText!.attribute(NSBackgroundColorAttributeName, at: 0, effectiveRange: &range) as AnyObject?
 
         if attribute != nil {
             // If the background attribute exists for the first character, the entire string is highlighted.
@@ -395,7 +395,7 @@ class BrowserUtils {
 
         let prefixLength = range.length
 
-        attribute = textField.attributedText!.attribute(NSBackgroundColorAttributeName, atIndex: textLength - 1, effectiveRange: &range)
+        attribute = textField.attributedText!.attribute(NSBackgroundColorAttributeName, at: textLength - 1, effectiveRange: &range) as AnyObject?
 
         if attribute == nil {
             // If the background attribute exists for the last character, the entire string is not highlighted.
@@ -404,9 +404,9 @@ class BrowserUtils {
             return
         }
 
-        let completionStartIndex = textField.text!.startIndex.advancedBy(prefixLength)
-        let actualPrefix = textField.text!.substringToIndex(completionStartIndex)
-        let actualCompletion = textField.text!.substringFromIndex(completionStartIndex)
+        let completionStartIndex = textField.text!.characters.index(textField.text!.startIndex, offsetBy: prefixLength)
+        let actualPrefix = textField.text!.substring(to: completionStartIndex)
+        let actualCompletion = textField.text!.substring(from: completionStartIndex)
 
         XCTAssertEqual(prefix, actualPrefix, "Expected prefix matches actual prefix")
         XCTAssertEqual(completion, actualCompletion, "Expected completion matches actual completion")
@@ -414,64 +414,64 @@ class BrowserUtils {
 }
 
 class SimplePageServer {
-    class func getPageData(name: String, ext: String = "html") -> String {
-        let pageDataPath = NSBundle(forClass: self).pathForResource(name, ofType: ext)!
-        return (try! NSString(contentsOfFile: pageDataPath, encoding: NSUTF8StringEncoding)) as String
+    class func getPageData(_ name: String, ext: String = "html") -> String {
+        let pageDataPath = Bundle(for: self).path(forResource: name, ofType: ext)!
+        return (try! NSString(contentsOfFile: pageDataPath, encoding: String.Encoding.utf8.rawValue)) as String
     }
 
     class func start() -> String {
         let webServer: GCDWebServer = GCDWebServer()
 
-        webServer.addHandlerForMethod("GET", path: "/image.png", requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
+        webServer.addHandler(forMethod: "GET", path: "/image.png", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
             let img = UIImagePNGRepresentation(UIImage(named: "back")!)
             return GCDWebServerDataResponse(data: img, contentType: "image/png")
         }
 
         for page in ["findPage", "noTitle", "readablePage", "JSPrompt"] {
-            webServer.addHandlerForMethod("GET", path: "/\(page).html", requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
-                return GCDWebServerDataResponse(HTML: self.getPageData(page))
+            webServer.addHandler(forMethod: "GET", path: "/\(page).html", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
+                return GCDWebServerDataResponse(html: self.getPageData(page))
             }
         }
 
         // we may create more than one of these but we need to give them uniquie accessibility ids in the tab manager so we'll pass in a page number
-        webServer.addHandlerForMethod("GET", path: "/scrollablePage.html", requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
+        webServer.addHandler(forMethod: "GET", path: "/scrollablePage.html", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
             var pageData = self.getPageData("scrollablePage")
-            let page = Int((request.query["page"] as! String))!
-            pageData = pageData.stringByReplacingOccurrencesOfString("{page}", withString: page.description)
-            return GCDWebServerDataResponse(HTML: pageData as String)
+            let page = Int((request?.query["page"] as! String))!
+            pageData = pageData.replacingOccurrences(of: "{page}", with: page.description)
+            return GCDWebServerDataResponse(html: pageData as String)
         }
 
-        webServer.addHandlerForMethod("GET", path: "/numberedPage.html", requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
+        webServer.addHandler(forMethod: "GET", path: "/numberedPage.html", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
             var pageData = self.getPageData("numberedPage")
 
-            let page = Int((request.query["page"] as! String))!
-            pageData = pageData.stringByReplacingOccurrencesOfString("{page}", withString: page.description)
+            let page = Int((request?.query["page"] as! String))!
+            pageData = pageData.replacingOccurrences(of: "{page}", with: page.description)
 
-            return GCDWebServerDataResponse(HTML: pageData as String)
+            return GCDWebServerDataResponse(html: pageData as String)
         }
 
-        webServer.addHandlerForMethod("GET", path: "/readerContent.html", requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
-            return GCDWebServerDataResponse(HTML: self.getPageData("readerContent"))
+        webServer.addHandler(forMethod: "GET", path: "/readerContent.html", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
+            return GCDWebServerDataResponse(html: self.getPageData("readerContent"))
         }
 
-        webServer.addHandlerForMethod("GET", path: "/loginForm.html", requestClass: GCDWebServerRequest.self) { _ in
-            return GCDWebServerDataResponse(HTML: self.getPageData("loginForm"))
+        webServer.addHandler(forMethod: "GET", path: "/loginForm.html", request: GCDWebServerRequest.self) { _ in
+            return GCDWebServerDataResponse(html: self.getPageData("loginForm"))
         }
 
-        webServer.addHandlerForMethod("GET", path: "/localhostLoad.html", requestClass: GCDWebServerRequest.self) { _ in
-            return GCDWebServerDataResponse(HTML: self.getPageData("localhostLoad"))
+        webServer.addHandler(forMethod: "GET", path: "/localhostLoad.html", request: GCDWebServerRequest.self) { _ in
+            return GCDWebServerDataResponse(html: self.getPageData("localhostLoad"))
         }
 
-        webServer.addHandlerForMethod("GET", path: "/auth.html", requestClass: GCDWebServerRequest.self) { (request: GCDWebServerRequest!) in
+        webServer.addHandler(forMethod: "GET", path: "/auth.html", request: GCDWebServerRequest.self) { (request: GCDWebServerRequest!) in
             // "user:pass", Base64-encoded.
             let expectedAuth = "Basic dXNlcjpwYXNz"
 
             let response: GCDWebServerDataResponse
             if request.headers["Authorization"] as? String == expectedAuth && request.query["logout"] == nil {
-                response = GCDWebServerDataResponse(HTML: "<html><body>logged in</body></html>")
+                response = GCDWebServerDataResponse(html: "<html><body>logged in</body></html>")
             } else {
                 // Request credentials if the user isn't logged in.
-                response = GCDWebServerDataResponse(HTML: "<html><body>auth fail</body></html>")
+                response = GCDWebServerDataResponse(html: "<html><body>auth fail</body></html>")
                 response.statusCode = 401
                 response.setValue("Basic realm=\"test\"", forAdditionalHeader: "WWW-Authenticate")
             }
@@ -479,7 +479,7 @@ class SimplePageServer {
             return response
         }
 
-        if !webServer.startWithPort(0, bonjourName: nil) {
+        if !webServer.start(withPort: 0, bonjourName: nil) {
             XCTFail("Can't start the GCDWebServer")
         }
 
@@ -491,38 +491,38 @@ class SimplePageServer {
 }
 
 class SearchUtils {
-    static func navigateToSearchSettings(tester: KIFUITestActor) {
+    static func navigateToSearchSettings(_ tester: KIFUITestActor) {
         let engine = SearchUtils.getDefaultEngine().shortName
-        tester.tapViewWithAccessibilityLabel("Menu")
+        tester.tapView(withAccessibilityLabel: "Menu")
         tester.waitForAnimationsToFinish()
-        tester.tapViewWithAccessibilityLabel("Settings")
-        tester.waitForViewWithAccessibilityLabel("Settings")
-        tester.tapViewWithAccessibilityLabel("Search, \(engine)")
-        tester.waitForViewWithAccessibilityIdentifier("Search")
+        tester.tapView(withAccessibilityLabel: "Settings")
+        tester.waitForView(withAccessibilityLabel: "Settings")
+        tester.tapView(withAccessibilityLabel: "Search, \(engine)")
+        tester.waitForView(withAccessibilityIdentifier: "Search")
     }
 
-    static func navigateFromSearchSettings(tester: KIFUITestActor) {
-        tester.tapViewWithAccessibilityLabel("Settings")
-        tester.tapViewWithAccessibilityLabel("Done")
+    static func navigateFromSearchSettings(_ tester: KIFUITestActor) {
+        tester.tapView(withAccessibilityLabel: "Settings")
+        tester.tapView(withAccessibilityLabel: "Done")
     }
 
     // Given that we're at the Search Settings sheet, select the named search engine as the default.
     // Afterwards, we're still at the Search Settings sheet.
-    static func selectDefaultSearchEngineName(tester: KIFUITestActor, engineName: String) {
-        tester.tapViewWithAccessibilityLabel("Default Search Engine", traits: UIAccessibilityTraitButton)
-        tester.waitForViewWithAccessibilityLabel("Default Search Engine")
-        tester.tapViewWithAccessibilityLabel(engineName)
-        tester.waitForViewWithAccessibilityLabel("Search")
+    static func selectDefaultSearchEngineName(_ tester: KIFUITestActor, engineName: String) {
+        tester.tapView(withAccessibilityLabel: "Default Search Engine", traits: UIAccessibilityTraitButton)
+        tester.waitForView(withAccessibilityLabel: "Default Search Engine")
+        tester.tapView(withAccessibilityLabel: engineName)
+        tester.waitForView(withAccessibilityLabel: "Search")
     }
 
     // Given that we're at the Search Settings sheet, return the default search engine's name.
-    static func getDefaultSearchEngineName(tester: KIFUITestActor) -> String {
+    static func getDefaultSearchEngineName(_ tester: KIFUITestActor) -> String {
         let view = tester.waitForCellWithAccessibilityLabel("Default Search Engine")
         return view.accessibilityValue!
     }
 
     static func getDefaultEngine() -> OpenSearchEngine! {
-        guard let userProfile = (UIApplication.sharedApplication().delegate as? AppDelegate)?.profile else {
+        guard let userProfile = (UIApplication.shared.delegate as? AppDelegate)?.profile else {
             XCTFail("Unable to get a reference to the user's profile")
             return nil
         }
@@ -533,9 +533,9 @@ class SearchUtils {
         return mockSearchEngine("YouTube", template: "https://m.youtube.com/#/results?q={searchTerms}&sm=", icon: "youtube")!
     }
 
-    static func mockSearchEngine(name: String, template: String, icon: String) -> OpenSearchEngine? {
-        guard let imagePath = NSBundle(forClass: self).pathForResource(icon, ofType: "ico"),
-              let imageData = NSData(contentsOfFile: imagePath),
+    static func mockSearchEngine(_ name: String, template: String, icon: String) -> OpenSearchEngine? {
+        guard let imagePath = Bundle(for: self).path(forResource: icon, ofType: "ico"),
+              let imageData = Data(contentsOfFile: imagePath),
               let image = UIImage(data: imageData) else {
             XCTFail("Unable to load search engine image named \(icon).ico")
             return nil
@@ -544,8 +544,8 @@ class SearchUtils {
         return OpenSearchEngine(engineID: nil, shortName: name, image: image, searchTemplate: template, suggestTemplate: nil, isCustomEngine: true)
     }
 
-    static func addCustomSearchEngine(engine: OpenSearchEngine) {
-        guard let userProfile = (UIApplication.sharedApplication().delegate as? AppDelegate)?.profile else {
+    static func addCustomSearchEngine(_ engine: OpenSearchEngine) {
+        guard let userProfile = (UIApplication.shared.delegate as? AppDelegate)?.profile else {
             XCTFail("Unable to get a reference to the user's profile")
             return
         }
@@ -553,8 +553,8 @@ class SearchUtils {
         userProfile.searchEngines.addSearchEngine(engine)
     }
 
-    static func removeCustomSearchEngine(engine: OpenSearchEngine) {
-        guard let userProfile = (UIApplication.sharedApplication().delegate as? AppDelegate)?.profile else {
+    static func removeCustomSearchEngine(_ engine: OpenSearchEngine) {
+        guard let userProfile = (UIApplication.shared.delegate as? AppDelegate)?.profile else {
             XCTFail("Unable to get a reference to the user's profile")
             return
         }
@@ -566,54 +566,54 @@ class SearchUtils {
 // From iOS 10, below methods no longer works
 class DynamicFontUtils {
     // Need to leave time for the notification to propagate
-    static func bumpDynamicFontSize(tester: KIFUITestActor) {
-        let value = UIContentSizeCategoryAccessibilityExtraLarge
-        UIApplication.sharedApplication().setValue(value, forKey: "preferredContentSizeCategory")
-        tester.waitForTimeInterval(0.3)
+    static func bumpDynamicFontSize(_ tester: KIFUITestActor) {
+        let value = UIContentSizeCategory.accessibilityExtraLarge
+        UIApplication.shared.setValue(value, forKey: "preferredContentSizeCategory")
+        tester.wait(forTimeInterval: 0.3)
     }
 
-    static func lowerDynamicFontSize(tester: KIFUITestActor) {
-        let value = UIContentSizeCategoryExtraSmall
-        UIApplication.sharedApplication().setValue(value, forKey: "preferredContentSizeCategory")
-        tester.waitForTimeInterval(0.3)
+    static func lowerDynamicFontSize(_ tester: KIFUITestActor) {
+        let value = UIContentSizeCategory.extraSmall
+        UIApplication.shared.setValue(value, forKey: "preferredContentSizeCategory")
+        tester.wait(forTimeInterval: 0.3)
     }
 
-    static func restoreDynamicFontSize(tester: KIFUITestActor) {
-        let value = UIContentSizeCategoryMedium
-        UIApplication.sharedApplication().setValue(value, forKey: "preferredContentSizeCategory")
-        tester.waitForTimeInterval(0.3)
+    static func restoreDynamicFontSize(_ tester: KIFUITestActor) {
+        let value = UIContentSizeCategory.medium
+        UIApplication.shared.setValue(value, forKey: "preferredContentSizeCategory")
+        tester.wait(forTimeInterval: 0.3)
     }
 }
 
 class PasscodeUtils {
     static func resetPasscode() {
-        KeychainWrapper.defaultKeychainWrapper().setAuthenticationInfo(nil)
+        KeychainWrapper.sharedAppContainerKeychain.setAuthenticationInfo(nil)
     }
 
-    static func setPasscode(code: String, interval: PasscodeInterval) {
+    static func setPasscode(_ code: String, interval: PasscodeInterval) {
         let info = AuthenticationKeychainInfo(passcode: code)
         info.updateRequiredPasscodeInterval(interval)
-        KeychainWrapper.defaultKeychainWrapper().setAuthenticationInfo(info)
+        KeychainWrapper.sharedAppContainerKeychain.setAuthenticationInfo(info)
     }
 
-    static func enterPasscode(tester: KIFUITestActor, digits: String) {
-        tester.tapViewWithAccessibilityLabel(String(digits.characters[digits.startIndex]))
-        tester.tapViewWithAccessibilityLabel(String(digits.characters[digits.startIndex.advancedBy(1)]))
-        tester.tapViewWithAccessibilityLabel(String(digits.characters[digits.startIndex.advancedBy(2)]))
-        tester.tapViewWithAccessibilityLabel(String(digits.characters[digits.startIndex.advancedBy(3)]))
+    static func enterPasscode(_ tester: KIFUITestActor, digits: String) {
+        tester.tapView(withAccessibilityLabel: String(digits.characters[digits.startIndex]))
+        tester.tapView(withAccessibilityLabel: String(digits.characters[digits.characters.index(digits.startIndex, offsetBy: 1)]))
+        tester.tapView(withAccessibilityLabel: String(digits.characters[digits.characters.index(digits.startIndex, offsetBy: 2)]))
+        tester.tapView(withAccessibilityLabel: String(digits.characters[digits.characters.index(digits.startIndex, offsetBy: 3)]))
     }
 }
 
 class HomePageUtils {
-    static func navigateToHomePageSettings(tester: KIFUITestActor) {
+    static func navigateToHomePageSettings(_ tester: KIFUITestActor) {
         tester.waitForAnimationsToFinish()
-        tester.tapViewWithAccessibilityLabel("Menu")
-        tester.tapViewWithAccessibilityLabel("Settings")
-        tester.tapViewWithAccessibilityIdentifier("Homepage")
+        tester.tapView(withAccessibilityLabel: "Menu")
+        tester.tapView(withAccessibilityLabel: "Settings")
+        tester.tapView(withAccessibilityIdentifier: "Homepage")
     }
 
-    static func homePageSetting(tester: KIFUITestActor) -> String? {
-        let view = tester.waitForViewWithAccessibilityIdentifier("HomePageSettingTextField")
+    static func homePageSetting(_ tester: KIFUITestActor) -> String? {
+        let view = tester.waitForView(withAccessibilityIdentifier: "HomePageSettingTextField")
         guard let textField = view as? UITextField else {
             XCTFail("View is not a textField: view is \(view)")
             return nil
@@ -621,8 +621,8 @@ class HomePageUtils {
         return textField.text
     }
 
-    static func navigateFromHomePageSettings(tester: KIFUITestActor) {
-        tester.tapViewWithAccessibilityLabel("Settings")
-        tester.tapViewWithAccessibilityLabel("Done")
+    static func navigateFromHomePageSettings(_ tester: KIFUITestActor) {
+        tester.tapView(withAccessibilityLabel: "Settings")
+        tester.tapView(withAccessibilityLabel: "Done")
     }
 }

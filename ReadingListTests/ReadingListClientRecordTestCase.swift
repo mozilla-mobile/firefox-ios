@@ -11,17 +11,17 @@ class ReadingListClientRecordTestCase: XCTestCase {
 
     func testInitWithRow() {
         let now = ReadingListNow()
-        let row: [String:AnyObject] = [
-            "client_id": 1234,
-            "client_last_modified": NSNumber(longLong: now),
-            "id": "5DB5597A-8E60-454D-B1F5-51810C2A5FFE",
-            "last_modified": NSNumber(longLong: now),
-            "url": "http://localhost/article/1",
-            "title": "Article 1",
-            "added_by": "Stefan's iPhone",
-            "unread": true,
-            "archived": false,
-            "favorite": true
+        let row: [String: AnyObject] = [
+            "client_id": 1234 as AnyObject,
+            "client_last_modified": NSNumber(value: now),
+            "id": "5DB5597A-8E60-454D-B1F5-51810C2A5FFE" as AnyObject,
+            "last_modified": NSNumber(value: now),
+            "url": "http://localhost/article/1" as AnyObject,
+            "title": "Article 1" as AnyObject,
+            "added_by": "Stefan's iPhone" as AnyObject,
+            "unread": true as AnyObject,
+            "archived": false as AnyObject,
+            "favorite": true as AnyObject
         ]
 
         let record = ReadingListClientRecord(row: row)
@@ -47,14 +47,14 @@ class ReadingListClientRecordTestCase: XCTestCase {
     func testInitWithRowWithoutServerMeta() {
         let now = ReadingListNow()
         let row: [String:AnyObject] = [
-            "client_id": 1234,
-            "client_last_modified": NSNumber(longLong: now),
-            "url": "http://localhost/article/1",
-            "title": "Article 1",
-            "added_by": "Stefan's iPhone",
-            "unread": true,
-            "archived": false,
-            "favorite": true
+            "client_id": 1234 as AnyObject,
+            "client_last_modified": NSNumber(value: now) as AnyObject,
+            "url": "http://localhost/article/1" as AnyObject,
+            "title": "Article 1" as AnyObject,
+            "added_by": "Stefan's iPhone" as AnyObject,
+            "unread": true as AnyObject,
+            "archived": false as AnyObject,
+            "favorite": true as AnyObject
         ]
 
         let record = ReadingListClientRecord(row: row)
@@ -77,7 +77,7 @@ class ReadingListClientRecordTestCase: XCTestCase {
 
     func testInitWithEmptyRow() {
         let row = NSDictionary()
-        let record = ReadingListClientRecord(row: row)
+        let record = ReadingListClientRecord(row: row as! [String : Any])
         XCTAssert(record == nil)
     }
 
@@ -97,16 +97,16 @@ class ReadingListClientRecordTestCase: XCTestCase {
     func testJSON() {
         let now = ReadingListNow()
         let row: [String:AnyObject] = [
-            "client_id": 1234,
-            "client_last_modified": NSNumber(longLong: now),
-            "id": "5DB5597A-8E60-454D-B1F5-51810C2A5FFE",
-            "last_modified": NSNumber(longLong: now),
-            "url": "http://localhost/article/1",
-            "title": "Article 1",
-            "added_by": "Stefan's iPhone 3GS",
-            "unread": true,
-            "archived": false,
-            "favorite": true
+            "client_id": 1234 as AnyObject,
+            "client_last_modified": NSNumber(value: now),
+            "id": "5DB5597A-8E60-454D-B1F5-51810C2A5FFE" as AnyObject,
+            "last_modified": NSNumber(value: now),
+            "url": "http://localhost/article/1" as AnyObject,
+            "title": "Article 1" as AnyObject,
+            "added_by": "Stefan's iPhone 3GS" as AnyObject,
+            "unread": true as AnyObject,
+            "archived": false as AnyObject,
+            "favorite": true as AnyObject
         ]
 
         let record = ReadingListClientRecord(row: row)
@@ -114,13 +114,13 @@ class ReadingListClientRecordTestCase: XCTestCase {
 
         if let record = record {
             let json: AnyObject = record.json
-            XCTAssertEqual(json.valueForKeyPath("url") as? String, "http://localhost/article/1")
-            XCTAssertEqual(json.valueForKeyPath("title") as? String, "Article 1")
-            XCTAssertEqual(json.valueForKeyPath("added_by") as? String, "Stefan's iPhone 3GS")
+            XCTAssertEqual(json.value(forKeyPath: "url") as? String, "http://localhost/article/1")
+            XCTAssertEqual(json.value(forKeyPath: "title") as? String, "Article 1")
+            XCTAssertEqual(json.value(forKeyPath: "added_by") as? String, "Stefan's iPhone 3GS")
 
-            XCTAssertEqual(json.valueForKeyPath("unread") as? Bool, true)
-            XCTAssertEqual(json.valueForKeyPath("archived") as? Bool, false)
-            XCTAssertEqual(json.valueForKeyPath("favorite") as? Bool, true)
+            XCTAssertEqual(json.value(forKeyPath: "unread") as? Bool, true)
+            XCTAssertEqual(json.value(forKeyPath: "archived") as? Bool, false)
+            XCTAssertEqual(json.value(forKeyPath: "favorite") as? Bool, true)
         }
     }
 }

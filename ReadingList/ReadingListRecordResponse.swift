@@ -5,7 +5,7 @@
 import Foundation
 
 class ReadingListRecordResponse: ReadingListResponse {
-    override init?(response: NSHTTPURLResponse, json: AnyObject?) {
+    override init?(response: HTTPURLResponse, json: [String: Any]) {
         super.init(response: response, json: json)
     }
 
@@ -18,7 +18,7 @@ class ReadingListRecordResponse: ReadingListResponse {
 
     var record: ReadingListServerRecord? {
         get {
-            if let json: AnyObject = self.json {
+            if let json = self.json {
                 return ReadingListServerRecord(json: json)
             } else {
                 return nil

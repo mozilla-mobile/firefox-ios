@@ -6,7 +6,7 @@ import Foundation
 import WebKit
 
 class SettingsTests: KIFTestCase {
-    private var webRoot: String!
+    fileprivate var webRoot: String!
 
     override func setUp() {
         webRoot = SimplePageServer.start()
@@ -18,11 +18,11 @@ class SettingsTests: KIFTestCase {
     }
 
     func testHelpOpensSUMOInTab() {
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("Settings")
-        tester().tapViewWithAccessibilityLabel("Help")
+        tester().tapView(withAccessibilityLabel: "Menu")
+        tester().tapView(withAccessibilityLabel: "Settings")
+        tester().tapView(withAccessibilityLabel: "Help")
         tester().waitForAnimationsToFinish()
-        tester().waitForViewWithAccessibilityLabel("https://support.mozilla.org/en-US/products/ios")
+        tester().waitForView(withAccessibilityLabel: "https://support.mozilla.org/en-US/products/ios")
         BrowserUtils.resetToAboutHome(tester())
     }
 }

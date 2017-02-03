@@ -17,13 +17,13 @@ let SearchSuggestClientErrorInvalidResponse = 1
  * Query callbacks that must run even if they are cancelled should wrap their contents in `withExtendendLifetime`.
  */
 class SearchSuggestClient {
-    private let searchEngine: OpenSearchEngine
-    private weak var request: Request?
-    private let userAgent: String
+    fileprivate let searchEngine: OpenSearchEngine
+    fileprivate weak var request: Request?
+    fileprivate let userAgent: String
 
-    lazy private var alamofire: Alamofire.Manager = {
-        let configuration = NSURLSessionConfiguration.ephemeralSessionConfiguration()
-        return Alamofire.Manager.managerWithUserAgent(self.userAgent, configuration: configuration)
+    lazy fileprivate var alamofire: SessionManager = {
+        let configuration = URLSessionConfiguration.ephemeral
+        return SessionManager.managerWithUserAgent(self.userAgent, configuration: configuration)
     }()
 
     init(searchEngine: OpenSearchEngine, userAgent: String) {
@@ -31,19 +31,19 @@ class SearchSuggestClient {
         self.userAgent = userAgent
     }
 
-    func query(query: String, callback: (response: [String]?, error: NSError?) -> ()) {
+    func query(_ query: String, callback: @escaping (_ response: [String]?, _ error: NSError?) -> ()) {
         let url = searchEngine.suggestURLForQuery(query)
         if url == nil {
             let error = NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidEngine, userInfo: nil)
-            callback(response: nil, error: error)
+            callback(nil, error)
             return
         }
 
-        request = alamofire.request(.GET, url!)
+        request = alamofire.request(url!)
             .validate(statusCode: 200..<300)
             .responseJSON { response in
                 if let error = response.result.error {
-                    callback(response: nil, error: error)
+                    callback(nil, error as NSError?)
                     return
                 }
 
@@ -53,18 +53,18 @@ class SearchSuggestClient {
                 let array = response.result.value as? NSArray
                 if array?.count ?? 0 < 2 {
                     let error = NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidResponse, userInfo: nil)
-                    callback(response: nil, error: error)
+                    callback(nil, error)
                     return
                 }
 
                 let suggestions = array?[1] as? [String]
                 if suggestions == nil {
                     let error = NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidResponse, userInfo: nil)
-                    callback(response: nil, error: error)
+                    callback(nil, error)
                     return
                 }
 
-                callback(response: suggestions!, error: nil)
+                callback(suggestions!, nil)
         }
 
     }

@@ -5,9 +5,10 @@
 import Foundation
 import Shared
 import Storage
+import SwiftyJSON
 
-public class HistoryPayload: CleartextPayloadJSON {
-    public class func fromJSON(json: JSON) -> HistoryPayload? {
+open class HistoryPayload: CleartextPayloadJSON {
+    open class func fromJSON(_ json: JSON) -> HistoryPayload? {
         let p = HistoryPayload(json)
         if p.isValid() {
             return p
@@ -15,41 +16,42 @@ public class HistoryPayload: CleartextPayloadJSON {
         return nil
     }
 
-    override public func isValid() -> Bool {
+    override open func isValid() -> Bool {
         if !super.isValid() {
             return false
         }
 
-        if self["deleted"].asBool ?? false {
+        if self["deleted"].bool ?? false {
             return true
         }
 
-        return self["histUri"].isString &&      // TODO: validate URI.
-               self["title"].isStringOrNull &&
-               self["visits"].isArray
-    }
+        return self["histUri"].string != nil &&      // TODO: validate URI.
+               self["title"].isStringOrNull() &&
+               self["visits"].isArray()
+        }
 
-    public func asPlace() -> Place {
+    open func asPlace() -> Place {
         return Place(guid: self.id, url: self.histURI, title: self.title)
     }
 
     var visits: [Visit] {
-        return optFilter(self["visits"].asArray!.map(Visit.fromJSON))
+        let visits = self["visits"].arrayObject as! [[String: Any]]
+        return optFilter(visits.map(Visit.fromJSON))
     }
 
-    private var histURI: String {
-        return self["histUri"].asString!
+    fileprivate var histURI: String {
+        return self["histUri"].string!
     }
 
-    var historyURI: NSURL {
+    var historyURI: URL {
         return self.histURI.asURL!
     }
 
     var title: String {
-        return self["title"].asString ?? ""
+        return self["title"].string ?? ""
     }
 
-    override public func equalPayloads(obj: CleartextPayloadJSON) -> Bool {
+    override open func equalPayloads(_ obj: CleartextPayloadJSON) -> Bool {
         if let p = obj as? HistoryPayload {
             if !super.equalPayloads(p) {
                 return false

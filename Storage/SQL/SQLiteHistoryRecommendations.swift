@@ -14,18 +14,18 @@ extension SQLiteHistory: HistoryRecommendations {
         let historyLimit = limit - bookmarkLimit
 
         let microsecondsPerMinute: UInt64 = 60_000_000 // 1000 * 1000 * 60
-        let now = NSDate.nowMicroseconds()
-        let thirtyMinutesAgo = NSNumber(unsignedLongLong: now - 30 * microsecondsPerMinute)
-        let threeDaysAgo = NSNumber(unsignedLongLong: now - (60 * microsecondsPerMinute) * 24 * 3)
+        let now = Date.nowMicroseconds()
+        let thirtyMinutesAgo: UInt64 = now - 30 * microsecondsPerMinute
+        let threeDaysAgo: UInt64 = now - (60 * microsecondsPerMinute) * 24 * 3
 
-        let blacklistedHosts: [AnyObject?] = [
-            "google.com",
-            "google.ca",
-            "calendar.google.com",
-            "mail.google.com",
-            "mail.yahoo.com",
-            "search.yahoo.com",
-            "localhost",
+        let blacklistedHosts: Args = [
+            "google.com"   ,
+            "google.ca"   ,
+            "calendar.google.com"   ,
+            "mail.google.com"   ,
+            "mail.yahoo.com"   ,
+            "search.yahoo.com"   ,
+            "localhost"   ,
             "t.co"
         ]
 
@@ -83,16 +83,12 @@ extension SQLiteHistory: HistoryRecommendations {
             "FROM ( \(nonRecentHistory) UNION ALL \(bookmarkHighlights) ) " +
             "LEFT JOIN \(ViewHistoryIDsWithWidestFavicons) ON \(ViewHistoryIDsWithWidestFavicons).id = historyID " +
             "GROUP BY url"
-
-        var args: [AnyObject?] = []
-        args.append(thirtyMinutesAgo)
-        args.appendContentsOf(blacklistedHosts)
-        args.append(threeDaysAgo)
-        args.append(threeDaysAgo)
+        let otherArgs = [threeDaysAgo, threeDaysAgo] as Args
+        let args: Args = [thirtyMinutesAgo] + blacklistedHosts + otherArgs
         return self.db.runQuery(highlightsQuery, args: args, factory: SQLiteHistory.iconHistoryColumnFactory)
     }
 
-    public func removeHighlightForURL(url: String) -> Success {
+    public func removeHighlightForURL(_ url: String) -> Success {
         return self.db.run([("INSERT INTO \(TableActivityStreamBlocklist) (url) VALUES (?)", [url])])
     }
 }

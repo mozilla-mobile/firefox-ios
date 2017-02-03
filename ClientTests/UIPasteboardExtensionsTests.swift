@@ -9,38 +9,38 @@ import XCTest
 
 class UIPasteboardExtensionsTests: XCTestCase {
 
-    private var pasteboard: UIPasteboard!
+    fileprivate var pasteboard: UIPasteboard!
 
     override func setUp() {
         super.setUp()
-        pasteboard = UIPasteboard.pasteboardWithUniqueName()
+        pasteboard = UIPasteboard.withUniqueName()
     }
 
     override func tearDown() {
         super.tearDown()
-        UIPasteboard.removePasteboardWithName(pasteboard.name)
+        UIPasteboard.remove(withName: pasteboard.name)
     }
 
     func testAddPNGImage() {
-        let path = NSBundle(forClass: self.classForCoder).pathForResource("image", ofType: "png")!
-        let data = NSData(contentsOfFile: path)!
-        let url = NSURL(string: "http://foo.bar")!
+        let path = Bundle(for: self.classForCoder).path(forResource: "image", ofType: "png")!
+        let data = try! Data(contentsOf: URL(fileURLWithPath: path))
+        let url = URL(string: "http://foo.bar")!
         pasteboard.addImageWithData(data, forURL: url)
         verifyPasteboard(expectedURL: url, expectedImageTypeKey: kUTTypePNG)
     }
 
     func testAddGIFImage() {
-        let path = NSBundle(forClass: self.classForCoder).pathForResource("image", ofType: "gif")!
-        let data = NSData(contentsOfFile: path)!
-        let url = NSURL(string: "http://foo.bar")!
+        let path = Bundle(for: self.classForCoder).path(forResource: "image", ofType: "gif")!
+        let data = try! Data(contentsOf: URL(fileURLWithPath: path))
+        let url = URL(string: "http://foo.bar")!
         pasteboard.addImageWithData(data, forURL: url)
         verifyPasteboard(expectedURL: url, expectedImageTypeKey: kUTTypeGIF)
     }
 
-    private func verifyPasteboard(expectedURL expectedURL: NSURL, expectedImageTypeKey: CFString) {
+    fileprivate func verifyPasteboard(expectedURL: URL, expectedImageTypeKey: CFString) {
         XCTAssertEqual(pasteboard.items.count, 1)
         XCTAssertEqual(pasteboard.items[0].count, 2)
-        XCTAssertEqual(pasteboard.items[0][kUTTypeURL as String] as? NSURL, expectedURL)
+        XCTAssertEqual(pasteboard.items[0][kUTTypeURL as String] as? URL, expectedURL)
         XCTAssertNotNil(pasteboard.items[0][expectedImageTypeKey as String])
     }
 

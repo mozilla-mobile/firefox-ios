@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Shared
+import SwiftyJSON
 
 public struct RemoteClient: Equatable {
     public let guid: GUID?
@@ -22,18 +23,18 @@ public struct RemoteClient: Equatable {
 
     // Requires a valid ClientPayload (: CleartextPayloadJSON: JSON).
     public init(json: JSON, modified: Timestamp) {
-        self.guid = json["id"].asString!
+        self.guid = json["id"].stringValue
         self.modified = modified
-        self.name = json["name"].asString!
-        self.type = json["type"].asString
+        self.name = json["name"].stringValue
+        self.type = json["type"].stringValue
 
-        self.version = json["version"].asString
-        self.protocols = jsonsToStrings(json["protocols"].asArray)
-        self.os = json["os"].asString
-        self.appPackage = json["appPackage"].asString
-        self.application = json["application"].asString
-        self.formfactor = json["formfactor"].asString
-        self.device = json["device"].asString
+        self.version = json["version"].stringValue
+        self.protocols = jsonsToStrings(json["protocols"].arrayValue)
+        self.os = json["os"].stringValue
+        self.appPackage = json["appPackage"].stringValue
+        self.application = json["application"].stringValue
+        self.formfactor = json["formfactor"].stringValue
+        self.device = json["device"].stringValue
     }
 
     public init(guid: GUID?, name: String, modified: Timestamp, type: String?, formfactor: String?, os: String?) {

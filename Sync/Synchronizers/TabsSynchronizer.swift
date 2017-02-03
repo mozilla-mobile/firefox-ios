@@ -7,11 +7,12 @@ import Shared
 import Storage
 import XCGLogger
 import Deferred
+import SwiftyJSON
 
 private let log = Logger.syncLogger
 let TabsStorageVersion = 1
 
-public class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchronizer {
+open class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchronizer {
     public required init(scratchpad: Scratchpad, delegate: SyncDelegate, basePrefs: Prefs) {
         super.init(scratchpad: scratchpad, delegate: delegate, basePrefs: basePrefs, collection: "tabs")
     }
@@ -30,7 +31,7 @@ public class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchron
         }
     }
 
-    private func createOwnTabsRecord(tabs: [RemoteTab]) -> Record<TabsPayload> {
+    fileprivate func createOwnTabsRecord(_ tabs: [RemoteTab]) -> Record<TabsPayload> {
         let guid = self.scratchpad.clientGUID
 
         let jsonTabs: [JSON] = optFilter(tabs.map { $0.toJSON() })
@@ -40,16 +41,16 @@ public class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchron
             "tabs": jsonTabs
         ])
         if Logger.logPII {
-            log.verbose("Sending tabs JSON \(tabsJSON.toString(true))")
+            log.verbose("Sending tabs JSON \(tabsJSON.rawString())")
         }
         let payload = TabsPayload(tabsJSON)
         return Record(id: guid, payload: payload, ttl: ThreeWeeksInSeconds)
     }
 
-    private func uploadOurTabs(localTabs: RemoteClientsAndTabs, toServer tabsClient: Sync15CollectionClient<TabsPayload>) -> Success {
+    fileprivate func uploadOurTabs(_ localTabs: RemoteClientsAndTabs, toServer tabsClient: Sync15CollectionClient<TabsPayload>) -> Success {
         // check to see if our tabs have changed or we're in a fresh start
         let lastUploadTime: Timestamp? = (self.tabsRecordLastUpload == 0) ? nil : self.tabsRecordLastUpload
-        let expired = lastUploadTime < (NSDate.now() - (OneMinuteInMilliseconds))
+        let expired = lastUploadTime! < (Date.now() - (OneMinuteInMilliseconds))
         if !expired {
             log.debug("Not uploading tabs: already did so at \(lastUploadTime).")
             return succeed()
@@ -80,8 +81,8 @@ public class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchron
         }
     }
 
-    public func synchronizeLocalTabs(localTabs: RemoteClientsAndTabs, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> SyncResult {
-        func onResponseReceived(response: StorageResponse<[Record<TabsPayload>]>) -> Success {
+    open func synchronizeLocalTabs(_ localTabs: RemoteClientsAndTabs, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> SyncResult {
+        func onResponseReceived(_ response: StorageResponse<[Record<TabsPayload>]>) -> Success {
 
             func afterWipe() -> Success {
                 let doInsert: (Record<TabsPayload>) -> Deferred<Maybe<(Int)>> = { record in
@@ -137,24 +138,24 @@ public class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchron
         }
 
         if let reason = self.reasonToNotSync(storageClient) {
-            return deferMaybe(SyncStatus.NotStarted(reason))
+            return deferMaybe(SyncStatus.notStarted(reason))
         }
 
         let keys = self.scratchpad.keys?.value
-        let encoder = RecordEncoder<TabsPayload>(decode: { TabsPayload($0) }, encode: { $0 })
+        let encoder = RecordEncoder<TabsPayload>(decode: { TabsPayload($0) }, encode: { $0.json })
         if let encrypter = keys?.encrypter(self.collection, encoder: encoder) {
             let tabsClient = storageClient.clientForCollection(self.collection, encrypter: encrypter)
 
             if !self.remoteHasChanges(info) {
                 // upload local tabs if they've changed or we're in a fresh start.
-                uploadOurTabs(localTabs, toServer: tabsClient)
-                return deferMaybe(.Completed)
+                let _ = uploadOurTabs(localTabs, toServer: tabsClient)
+                return deferMaybe(.completed)
             }
 
             return tabsClient.getSince(self.lastFetched)
                 >>== onResponseReceived
                 >>> { self.uploadOurTabs(localTabs, toServer: tabsClient) }
-                >>> { deferMaybe(.Completed) }
+                >>> { deferMaybe(.completed) }
         }
 
         log.error("Couldn't make tabs factory.")
@@ -165,7 +166,7 @@ public class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchron
      * This is a dedicated resetting interface that does both tabs and clients at the
      * same time.
      */
-    public static func resetClientsAndTabsWithStorage(storage: ResettableSyncStorage, basePrefs: Prefs) -> Success {
+    open static func resetClientsAndTabsWithStorage(_ storage: ResettableSyncStorage, basePrefs: Prefs) -> Success {
         let clientPrefs = BaseCollectionSynchronizer.prefsForCollection("clients", withBasePrefs: basePrefs)
         let tabsPrefs = BaseCollectionSynchronizer.prefsForCollection("tabs", withBasePrefs: basePrefs)
         clientPrefs.removeObjectForKey("lastFetched")
@@ -178,9 +179,9 @@ extension RemoteTab {
     public func toJSON() -> JSON? {
         let tabHistory = optFilter(history.map { $0.absoluteString })
         if !tabHistory.isEmpty {
-            return JSON([
+            return JSON(object: [
                 "title": title,
-                "icon": icon?.absoluteString ?? NSNull(),
+                "icon": icon?.absoluteString as Any? ?? NSNull(),
                 "urlHistory": tabHistory,
                 "lastUsed": lastUsed.description,
                 ])

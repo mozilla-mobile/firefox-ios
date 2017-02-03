@@ -33,7 +33,7 @@ class L10nBaseSnapshotTests: XCTestCase {
         let element = webView.otherElements[ariaLabel]
         expectationForPredicate(NSPredicate(format: "exists == 1"), evaluatedWithObject: element, handler: nil)
 
-        waitForExpectationsWithTimeout(5.0) { (error) -> Void in
+        waitForExpectations(timeout: 5.0) { (error) -> Void in
             if error != nil {
                 XCTFail("Failed to detect element with ariaLabel=\(ariaLabel) on \(url): \(error)")
             }
@@ -55,7 +55,7 @@ class L10nBaseSnapshotTests: XCTestCase {
             let progressIndicator = app.progressIndicators.elementBoundByIndex(0)
             expectationForPredicate(exists, evaluatedWithObject: progressIndicator, handler: nil)
             expectationForPredicate(loaded, evaluatedWithObject: progressIndicator, handler: nil)
-            waitForExpectationsWithTimeout(LoadingTimeout, handler: nil)
+            waitForExpectations(timeout: LoadingTimeout, handler: nil)
         }
     }
 }

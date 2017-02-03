@@ -6,7 +6,7 @@ import Foundation
 import WebKit
 
 class PrivateBrowsingTests: KIFTestCase {
-    private var webRoot: String!
+    fileprivate var webRoot: String!
 
     override func setUp() {
         super.setUp()
@@ -22,168 +22,168 @@ class PrivateBrowsingTests: KIFTestCase {
     func testPrivateTabDoesntTrackHistory() {
         // First navigate to a normal tab and see that it tracks
         let url1 = "\(webRoot)/numberedPage.html?page=1"
-        tester().tapViewWithAccessibilityIdentifier("url")
-        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url1)\n")
+        tester().tapView(withAccessibilityIdentifier: "url")
+        tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "\(url1)\n")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
-        tester().waitForTimeInterval(3)
+        tester().wait(forTimeInterval: 3)
 
-        tester().tapViewWithAccessibilityIdentifier("url")
-        tester().tapViewWithAccessibilityLabel("History")
+        tester().tapView(withAccessibilityIdentifier: "url")
+        tester().tapView(withAccessibilityLabel: "History")
 
-        var tableView = tester().waitForViewWithAccessibilityIdentifier("History List") as! UITableView
-        XCTAssertEqual(tableView.numberOfRowsInSection(0), 1)
-        tester().tapViewWithAccessibilityLabel("Cancel")
+        var tableView = tester().waitForView(withAccessibilityIdentifier: "History List") as! UITableView
+        XCTAssertEqual(tableView.numberOfRows(inSection: 0), 1)
+        tester().tapView(withAccessibilityLabel: "Cancel")
 
         // Then try doing the same thing for a private tab
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("New Private Tab")
-        tester().tapViewWithAccessibilityIdentifier("url")
+        tester().tapView(withAccessibilityLabel: "Menu")
+        tester().tapView(withAccessibilityLabel: "New Private Tab")
+        tester().tapView(withAccessibilityIdentifier: "url")
 
-        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url1)\n")
+        tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "\(url1)\n")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
 
-        tester().tapViewWithAccessibilityIdentifier("url")
-        tester().tapViewWithAccessibilityLabel("History")
+        tester().tapView(withAccessibilityIdentifier: "url")
+        tester().tapView(withAccessibilityLabel: "History")
 
-        tableView = tester().waitForViewWithAccessibilityIdentifier("History List") as! UITableView
-        XCTAssertEqual(tableView.numberOfRowsInSection(0), 1)
+        tableView = tester().waitForView(withAccessibilityIdentifier: "History List") as! UITableView
+        XCTAssertEqual(tableView.numberOfRows(inSection: 0), 1)
 
         // Exit private mode
-        tester().tapViewWithAccessibilityLabel("Cancel")
-        tester().tapViewWithAccessibilityLabel("Show Tabs")
-        tester().tapViewWithAccessibilityLabel("Private Mode")
-        tester().tapViewWithAccessibilityLabel("Page 1")
+        tester().tapView(withAccessibilityLabel: "Cancel")
+        tester().tapView(withAccessibilityLabel: "Show Tabs")
+        tester().tapView(withAccessibilityLabel: "Private Mode")
+        tester().tapView(withAccessibilityLabel: "Page 1")
     }
 
     func testTabCountShowsOnlyNormalOrPrivateTabCount() {
         let url1 = "\(webRoot)/numberedPage.html?page=1"
-        tester().tapViewWithAccessibilityIdentifier("url")
-        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url1)\n")
+        tester().tapView(withAccessibilityIdentifier: "url")
+        tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "\(url1)\n")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
 
         // Add two tabs and make sure we see the right tab count
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("New Tab")
+        tester().tapView(withAccessibilityLabel: "Menu")
+        tester().tapView(withAccessibilityLabel: "New Tab")
         tester().waitForAnimationsToFinish()
-        var tabButton = tester().waitForViewWithAccessibilityLabel("Show Tabs") as! UIControl
+        var tabButton = tester().waitForView(withAccessibilityLabel: "Show Tabs") as! UIControl
         // Since a new tab is created in setup, the total tab count here is 3
         XCTAssertEqual(tabButton.accessibilityValue, "2", "Tab count shows 2 tabs")
 
         // Add a private tab and make sure we only see the private tab in the count, and not the normal tabs
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("New Private Tab")
+        tester().tapView(withAccessibilityLabel: "Menu")
+        tester().tapView(withAccessibilityLabel: "New Private Tab")
         tester().waitForAnimationsToFinish()
 
-        tabButton = tester().waitForViewWithAccessibilityLabel("Show Tabs") as! UIControl
+        tabButton = tester().waitForView(withAccessibilityLabel: "Show Tabs") as! UIControl
         XCTAssertEqual(tabButton.accessibilityValue, "1", "Private tab count should show 1 tab opened")
 
         // Switch back to normal tabs and make sure the private tab doesnt get added to the count
-        tester().tapViewWithAccessibilityLabel("Show Tabs")
-        tester().tapViewWithAccessibilityLabel("Private Mode")
-        tester().tapViewWithAccessibilityLabel("Page 1")
+        tester().tapView(withAccessibilityLabel: "Show Tabs")
+        tester().tapView(withAccessibilityLabel: "Private Mode")
+        tester().tapView(withAccessibilityLabel: "Page 1")
 
-        tabButton = tester().waitForViewWithAccessibilityLabel("Show Tabs") as! UIControl
+        tabButton = tester().waitForView(withAccessibilityLabel: "Show Tabs") as! UIControl
         XCTAssertEqual(tabButton.accessibilityValue, "2", "Tab count shows 2 tabs")
     }
 
     func testNoPrivateTabsShowsAndHidesEmptyView() {
         // Do we show the empty private tabs panel view?
-        tester().tapViewWithAccessibilityLabel("Show Tabs")
-        tester().tapViewWithAccessibilityLabel("Private Mode")
-        var emptyView = tester().waitForViewWithAccessibilityLabel("Private Browsing")
-        XCTAssertTrue(emptyView.superview!.alpha == 1)
+        tester().tapView(withAccessibilityLabel: "Show Tabs")
+        tester().tapView(withAccessibilityLabel: "Private Mode")
+        var emptyView = tester().waitForView(withAccessibilityLabel: "Private Browsing")
+        XCTAssertTrue(emptyView?.superview!.alpha == 1)
 
         // Do we hide it when we add a tab?
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("New Private Tab")
-        tester().waitForViewWithAccessibilityLabel("Show Tabs")
-        tester().tapViewWithAccessibilityLabel("Show Tabs")
+        tester().tapView(withAccessibilityLabel: "Menu")
+        tester().tapView(withAccessibilityLabel: "New Private Tab")
+        tester().waitForView(withAccessibilityLabel: "Show Tabs")
+        tester().tapView(withAccessibilityLabel: "Show Tabs")
 
         var visible = true
         do {
-            try tester().tryFindingViewWithAccessibilityLabel("Private Browsing")
+            try tester().tryFindingView(withAccessibilityLabel: "Private Browsing")
         } catch {
             // Label is no longer visible when a tab is present
             visible = false
         }
         XCTAssertFalse(visible)
         // Remove the private tab - do we see the empty view now?
-        let tabsView = tester().waitForViewWithAccessibilityLabel("Tabs Tray").subviews.first as! UICollectionView
-        while tabsView.numberOfItemsInSection(0) > 0 {
-            let cell = tabsView.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0))!
-            tester().swipeViewWithAccessibilityLabel(cell.accessibilityLabel, inDirection: KIFSwipeDirection.Left)
-            tester().waitForAbsenceOfViewWithAccessibilityLabel(cell.accessibilityLabel)
+        let tabsView = tester().waitForView(withAccessibilityLabel: "Tabs Tray").subviews.first as! UICollectionView
+        while tabsView.numberOfItems(inSection: 0) > 0 {
+            let cell = tabsView.cellForItem(at: IndexPath(item: 0, section: 0))!
+            tester().swipeView(withAccessibilityLabel: cell.accessibilityLabel, in: KIFSwipeDirection.left)
+            tester().waitForAbsenceOfView(withAccessibilityLabel: cell.accessibilityLabel)
         }
 
-        emptyView = tester().waitForViewWithAccessibilityLabel("Private Browsing")
-        XCTAssertTrue(emptyView.superview!.alpha == 1)
+        emptyView = tester().waitForView(withAccessibilityLabel: "Private Browsing")
+        XCTAssertTrue(emptyView?.superview!.alpha == 1)
 
         // Exit private mode
-        tester().tapViewWithAccessibilityLabel("Private Mode")
+        tester().tapView(withAccessibilityLabel: "Private Mode")
     }
 
     func testClosePrivateTabsClosesPrivateTabs() {
         // First, make sure that selecting the option to ON will close the tabs
-        tester().tapViewWithAccessibilityLabel("Show Tabs")
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("Settings")
-        tester().waitForViewWithAccessibilityLabel("Privacy")
+        tester().tapView(withAccessibilityLabel: "Show Tabs")
+        tester().tapView(withAccessibilityLabel: "Menu")
+        tester().tapView(withAccessibilityLabel: "Settings")
+        tester().waitForView(withAccessibilityLabel: "Privacy")
         
         // In simulator, need to manually scroll to so the menu is visible
-        tester().scrollViewWithAccessibilityLabel("Privacy", byFractionOfSizeHorizontal: 0, vertical: -3)
+        tester().scrollView(withAccessibilityLabel: "Privacy", byFractionOfSizeHorizontal: 0, vertical: -3)
         
-        tester().waitForViewWithAccessibilityLabel("Close Private Tabs, When Leaving Private Browsing")
+        tester().waitForView(withAccessibilityLabel: "Close Private Tabs, When Leaving Private Browsing")
         tester().setOn(true, forSwitchWithAccessibilityLabel: "Close Private Tabs, When Leaving Private Browsing")
-        tester().tapViewWithAccessibilityLabel("Done")
-        tester().tapViewWithAccessibilityLabel("Private Mode")
+        tester().tapView(withAccessibilityLabel: "Done")
+        tester().tapView(withAccessibilityLabel: "Private Mode")
 
         XCTAssertEqual(numberOfTabs(), 0)
 
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("New Private Tab")
-        tester().waitForViewWithAccessibilityLabel("Show Tabs")
-        tester().tapViewWithAccessibilityLabel("Show Tabs")
+        tester().tapView(withAccessibilityLabel: "Menu")
+        tester().tapView(withAccessibilityLabel: "New Private Tab")
+        tester().waitForView(withAccessibilityLabel: "Show Tabs")
+        tester().tapView(withAccessibilityLabel: "Show Tabs")
 
         XCTAssertEqual(numberOfTabs(), 1)
 
-        tester().tapViewWithAccessibilityLabel("Private Mode")
+        tester().tapView(withAccessibilityLabel: "Private Mode")
         tester().waitForAnimationsToFinish()
-        tester().tapViewWithAccessibilityLabel("Private Mode")
+        tester().tapView(withAccessibilityLabel: "Private Mode")
 
         XCTAssertEqual(numberOfTabs(), 0)
 
-        tester().tapViewWithAccessibilityLabel("Private Mode")
+        tester().tapView(withAccessibilityLabel: "Private Mode")
 
         // Second, make sure selecting the option to OFF will not close the tabs
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("Settings")
-        tester().waitForViewWithAccessibilityLabel("Privacy")
-        tester().scrollViewWithAccessibilityLabel("Privacy", byFractionOfSizeHorizontal: 0, vertical: -3)
-        tester().waitForViewWithAccessibilityLabel("Close Private Tabs, When Leaving Private Browsing")
+        tester().tapView(withAccessibilityLabel: "Menu")
+        tester().tapView(withAccessibilityLabel: "Settings")
+        tester().waitForView(withAccessibilityLabel: "Privacy")
+        tester().scrollView(withAccessibilityLabel: "Privacy", byFractionOfSizeHorizontal: 0, vertical: -3)
+        tester().waitForView(withAccessibilityLabel: "Close Private Tabs, When Leaving Private Browsing")
         tester().setOn(false, forSwitchWithAccessibilityLabel: "Close Private Tabs, When Leaving Private Browsing")
-        tester().tapViewWithAccessibilityLabel("Done")
-        tester().tapViewWithAccessibilityLabel("Private Mode")
+        tester().tapView(withAccessibilityLabel: "Done")
+        tester().tapView(withAccessibilityLabel: "Private Mode")
 
         XCTAssertEqual(numberOfTabs(), 0)
 
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("New Private Tab")
-        tester().waitForViewWithAccessibilityLabel("Show Tabs")
-        tester().tapViewWithAccessibilityLabel("Show Tabs")
+        tester().tapView(withAccessibilityLabel: "Menu")
+        tester().tapView(withAccessibilityLabel: "New Private Tab")
+        tester().waitForView(withAccessibilityLabel: "Show Tabs")
+        tester().tapView(withAccessibilityLabel: "Show Tabs")
 
         XCTAssertEqual(numberOfTabs(), 1)
 
-        tester().tapViewWithAccessibilityLabel("Private Mode")
+        tester().tapView(withAccessibilityLabel: "Private Mode")
         tester().waitForAnimationsToFinish()
-        tester().tapViewWithAccessibilityLabel("Private Mode")
+        tester().tapView(withAccessibilityLabel: "Private Mode")
 
         XCTAssertEqual(numberOfTabs(), 1)
 
-        tester().tapViewWithAccessibilityLabel("Private Mode")
+        tester().tapView(withAccessibilityLabel: "Private Mode")
     }
 
-    private func numberOfTabs() -> Int {
-        let tabsView = tester().waitForViewWithAccessibilityLabel("Tabs Tray").subviews.first as! UICollectionView
-        return tabsView.numberOfItemsInSection(0)
+    fileprivate func numberOfTabs() -> Int {
+        let tabsView = tester().waitForView(withAccessibilityLabel: "Tabs Tray").subviews.first as! UICollectionView
+        return tabsView.numberOfItems(inSection: 0)
     }
 }

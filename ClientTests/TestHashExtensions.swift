@@ -12,7 +12,7 @@ class TestHashExtensions: XCTestCase {
     }
 
     func testSha256() {
-        let data1: NSData = "4f980b6f9baa6965f760d0bf2b2ccbee483032e5df01d77bbd9e25f7517a06b9".hexDecodedData
+        let data1: Data = "4f980b6f9baa6965f760d0bf2b2ccbee483032e5df01d77bbd9e25f7517a06b9".hexDecodedData
         XCTAssertEqual("test1test2".sha256, data1)
         XCTAssertEqual("test2test3".sha256, "fc3ea28dc1801e4180cec1022b55bee7795cf3c9fd430fb5237c9d8054218e81".hexDecodedData)
     }

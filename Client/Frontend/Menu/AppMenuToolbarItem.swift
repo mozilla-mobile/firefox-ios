@@ -6,18 +6,18 @@ import Foundation
 
 struct AppMenuToolbarItem: MenuToolbarItem {
 
-    private let iconName: String
+    fileprivate let iconName: String
 
     let title: String
     let accessibilityIdentifier: String
     let action: MenuAction
     let secondaryAction: MenuAction?
 
-    private var icon: UIImage? {
+    fileprivate var icon: UIImage? {
         return UIImage(named: iconName)
     }
 
-    func iconForState(appState: AppState) -> UIImage? {
+    func iconForState(_ appState: AppState) -> UIImage? {
         return icon
     }
 

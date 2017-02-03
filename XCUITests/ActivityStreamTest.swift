@@ -19,37 +19,37 @@ class ActivityStreamTest: BaseTestCase {
     func testDefaultSites() {
         let app = XCUIApplication()
         let topSites = app.tables["Top sites"].cells["TopSitesCell"]
-        let numberOfTopSites = topSites.childrenMatchingType(.Other).matchingIdentifier("TopSite").count
+        let numberOfTopSites = topSites.children(matching: .other).matching(identifier: "TopSite").count
         XCTAssertEqual(numberOfTopSites, 5, "There should be a total of 5 default Top Sites.")
     }
 
     func testTopSitesAdd() {
         let app = XCUIApplication()
         let topSites = app.tables["Top sites"].cells["TopSitesCell"]
-        let numberOfTopSites = topSites.childrenMatchingType(.Other).matchingIdentifier("TopSite").count
+        let numberOfTopSites = topSites.children(matching: .other).matching(identifier: "TopSite").count
 
         loadWebPage("http://example.com")
         app.buttons["TabToolbar.backButton"].tap()
 
-        let sitesAfter = topSites.childrenMatchingType(.Other).matchingIdentifier("TopSite").count
+        let sitesAfter = topSites.children(matching: .other).matching(identifier: "TopSite").count
         XCTAssertTrue(sitesAfter == numberOfTopSites + 1, "A new site should have been added to the topSites")
     }
 
     func testTopSitesRemove() {
         let app = XCUIApplication()
         let topSites = app.tables["Top sites"].cells["TopSitesCell"]
-        let numberOfTopSites = topSites.childrenMatchingType(.Other).matchingIdentifier("TopSite").count
+        let numberOfTopSites = topSites.children(matching: .other).matching(identifier: "TopSite").count
 
         loadWebPage("http://example.com")
         app.buttons["TabToolbar.backButton"].tap()
 
-        let sitesAfter = topSites.childrenMatchingType(.Other).matchingIdentifier("TopSite").count
+        let sitesAfter = topSites.children(matching: .other).matching(identifier: "TopSite").count
         XCTAssertTrue(sitesAfter == numberOfTopSites + 1, "A new site should have been added to the topSites")
 
-        app.tables["Top sites"].otherElements["example"].pressForDuration(1) //example is the name of the domain. (example.com)
+        app.tables["Top sites"].otherElements["example"].press(forDuration: 1) //example is the name of the domain. (example.com)
         app.tables["Context Menu"].cells["Remove"].tap()
         
-        let sitesAfterDelete = topSites.childrenMatchingType(.Other).matchingIdentifier("TopSite").count
+        let sitesAfterDelete = topSites.children(matching: .other).matching(identifier: "TopSite").count
         XCTAssertTrue(sitesAfterDelete == numberOfTopSites, "A site should have been deleted to the topSites")
     }
 
@@ -59,7 +59,7 @@ class ActivityStreamTest: BaseTestCase {
         loadWebPage("http://example.com")
         app.buttons["TabToolbar.backButton"].tap()
 
-        app.tables["Top sites"].otherElements["example"].pressForDuration(1)
+        app.tables["Top sites"].otherElements["example"].press(forDuration: 1)
         app.tables["Context Menu"].cells["Open in New Tab"].tap()
         
         XCTAssert(app.tables["Top sites"].exists)
@@ -78,7 +78,7 @@ class ActivityStreamTest: BaseTestCase {
         loadWebPage("http://example.com")
         app.buttons["TabToolbar.backButton"].tap()
         
-        app.tables["Top sites"].otherElements["example"].pressForDuration(1)
+        app.tables["Top sites"].otherElements["example"].press(forDuration: 1)
         app.tables["Context Menu"].cells["Open in New Private Tab"].tap()
         
         XCTAssert(app.tables["Top sites"].exists)
@@ -111,19 +111,19 @@ class ActivityStreamTest: BaseTestCase {
         // Sleep so the pageControl animation finishes.
         sleep(2)
 
-        app.tables["Top sites"].otherElements["example"].pressForDuration(1)
+        app.tables["Top sites"].otherElements["example"].press(forDuration: 1)
         app.tables["Context Menu"].cells["Remove"].tap()
         XCTAssertFalse(pagecontrolButton.exists, "The Page Control button should disappear after an item is deleted.")
 
     }
     
     func testContextMenuInLandscape() {
-        XCUIDevice.sharedDevice().orientation = .LandscapeLeft
+        XCUIDevice.shared().orientation = .landscapeLeft
         let app = XCUIApplication()
 
         loadWebPage("http://example.com")
         app.buttons["URLBarView.backButton"].tap()
-        app.tables["Top sites"].otherElements["example"].pressForDuration(1)
+        app.tables["Top sites"].otherElements["example"].press(forDuration: 1)
 
         let contextMenuHeight = app.tables["Context Menu"].frame.size.height
         let parentViewHeight = app.otherElements["Action Overlay"].frame.size.height

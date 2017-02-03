@@ -6,42 +6,42 @@ import Foundation
 import FxA
 import Shared
 
-public class HawkHelper {
-    private let NonceLengthInBytes: UInt = 8
+open class HawkHelper {
+    fileprivate let nonceLengthInBytes: UInt = 8
 
     let id: String
-    let key: NSData
+    let key: Data
 
-    public init(id: String, key: NSData) {
+    public init(id: String, key: Data) {
         self.id = id
         self.key = key
     }
 
     // Produce a HAWK value suitable for an "Authorization: value" header, timestamped now.
-    public func getAuthorizationValueFor(request: NSURLRequest) -> String {
-        let timestampInSeconds: Int64 = Int64(NSDate().timeIntervalSince1970)
+    open func getAuthorizationValueFor(_ request: URLRequest) -> String {
+        let timestampInSeconds: Int64 = Int64(Date().timeIntervalSince1970)
         return getAuthorizationValueFor(request, at: timestampInSeconds)
     }
 
     // Produce a HAWK value suitable for an "Authorization: value" header.
-    func getAuthorizationValueFor(request: NSURLRequest, at timestampInSeconds: Int64) -> String {
-        let nonce = NSData.randomOfLength(NonceLengthInBytes)!.base64EncodedString
+    func getAuthorizationValueFor(_ request: URLRequest, at timestampInSeconds: Int64) -> String {
+        let nonce = Data.randomOfLength(nonceLengthInBytes)!.base64EncodedString
         let extra = ""
         return getAuthorizationValueFor(request, at: timestampInSeconds, nonce: nonce, extra: extra)
     }
 
-    func getAuthorizationValueFor(request: NSURLRequest, at timestampInSeconds: Int64, nonce: String, extra: String) -> String {
+    func getAuthorizationValueFor(_ request: URLRequest, at timestampInSeconds: Int64, nonce: String, extra: String) -> String {
         let timestampString = String(timestampInSeconds)
         let hashString = HawkHelper.getPayloadHashFor(request)
         let requestString = HawkHelper.getRequestStringFor(request, timestampString: timestampString, nonce: nonce, hash: hashString, extra: extra)
         let macString = HawkHelper.getSignatureFor(requestString.utf8EncodedData, key: self.key)
 
         let s = NSMutableString(string: "Hawk ")
-        func append(key: String, value: String) -> Void {
-            s.appendString(key)
-            s.appendString("=\"")
-            s.appendString(value)
-            s.appendString("\", ")
+        func append(_ key: String, value: String) -> Void {
+            s.append(key)
+            s.append("=\"")
+            s.append(value)
+            s.append("\", ")
         }
         append("id", value: id)
         append("ts", value: timestampString)
@@ -54,38 +54,38 @@ public class HawkHelper {
         }
         append("mac", value: macString)
         // Drop the trailing "\",".
-        return s.substringToIndex(s.length - 2)
+        return s.substring(to: s.length - 2)
     }
 
-    class func getSignatureFor(input: NSData, key: NSData) -> String {
+    class func getSignatureFor(_ input: Data, key: Data) -> String {
         return input.hmacSha256WithKey(key).base64EncodedString
     }
 
-    class func getRequestStringFor(request: NSURLRequest, timestampString: String, nonce: String, hash: String, extra: String) -> String {
+    class func getRequestStringFor(_ request: URLRequest, timestampString: String, nonce: String, hash: String, extra: String) -> String {
         let s = NSMutableString(string: "hawk.1.header\n")
-        func append(line: String) -> Void {
-            s.appendString(line)
-            s.appendString("\n")
+        func append(_ line: String) -> Void {
+            s.append(line)
+            s.append("\n")
         }
         append(timestampString)
         append(nonce)
-        append(request.HTTPMethod?.uppercaseString ?? "GET")
-        let url = request.URL!
-        s.appendString(url.path!)
+        append((request as NSURLRequest).httpMethod?.uppercased() ?? "GET")
+        let url = request.url!
+        s.append(url.path)
         if let query = url.query {
-            s.appendString("?")
-            s.appendString(query)
+            s.append("?")
+            s.append(query)
         }
         if let fragment = url.fragment {
-            s.appendString("#")
-            s.appendString(fragment)
+            s.append("#")
+            s.append(fragment)
         }
-        s.appendString("\n")
+        s.append("\n")
         append(url.host!)
-        if let port = url.port {
-            append(port.stringValue)
+        if let port = (url as NSURL).port {
+            append(String(describing: port))
         } else {
-            if url.scheme?.lowercaseString == "https" {
+            if url.scheme?.lowercased() == "https" {
                 append("443")
             } else {
                 append("80")
@@ -100,17 +100,17 @@ public class HawkHelper {
         return s as String
     }
 
-    class func getPayloadHashFor(request: NSURLRequest) -> String {
-        if let body = request.HTTPBody {
-            let d = NSMutableData()
-            func append(s: String) {
+    class func getPayloadHashFor(_ request: URLRequest) -> String {
+        if let body = request.httpBody {
+            var d = Data()
+            func append(_ s: String) {
                 let data = s.utf8EncodedData
-                d.appendBytes(data.bytes, length: data.length)
+                d.append(data)
             }
             append("hawk.1.payload\n")
-            append(getBaseContentTypeFor(request.valueForHTTPHeaderField("Content-Type")))
+            append(getBaseContentTypeFor(request.value(forHTTPHeaderField: "Content-Type")))
             append("\n") // Trailing newline is specified by Hawk.
-            d.appendBytes(body.bytes, length: body.length)
+            d.append(body)
             append("\n") // Trailing newline is specified by Hawk.
             return d.sha256.base64EncodedString
         } else {
@@ -118,31 +118,31 @@ public class HawkHelper {
         }
     }
 
-    class func getBaseContentTypeFor(contentType: String?) -> String {
+    class func getBaseContentTypeFor(_ contentType: String?) -> String {
         if let contentType = contentType {
-            if let index = contentType.characters.indexOf(";") {
-                return contentType.substringToIndex(index).stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+            if let index = contentType.characters.index(of: ";") {
+                return contentType.substring(to: index).trimmingCharacters(in: CharacterSet.whitespaces)
             } else {
-                return contentType.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+                return contentType.trimmingCharacters(in: CharacterSet.whitespaces)
             }
         } else {
             return "text/plain"
         }
     }
 
-    class func escapeExtraHeaderAttribute(extra: String) -> String {
-        return extra.stringByReplacingOccurrencesOfString("\\", withString: "\\\\").stringByReplacingOccurrencesOfString("\"", withString: "\\\"")
+    class func escapeExtraHeaderAttribute(_ extra: String) -> String {
+        return extra.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "\"", with: "\\\"")
     }
 
-    class func escapeExtraString(extra: String) -> String {
-        return extra.stringByReplacingOccurrencesOfString("\\", withString: "\\\\").stringByReplacingOccurrencesOfString("\n", withString: "\\n")
+    class func escapeExtraString(_ extra: String) -> String {
+        return extra.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "\n", with: "\\n")
     }
 }
 
-extension NSMutableURLRequest {
-    func addAuthorizationHeader(forHKDFSHA256Key bytes: NSData) {
-        let tokenId = bytes.subdataWithRange(NSMakeRange(0 * KeyLength, KeyLength))
-        let reqHMACKey = bytes.subdataWithRange(NSMakeRange(1 * KeyLength, KeyLength))
+extension URLRequest {
+    mutating func addAuthorizationHeader(forHKDFSHA256Key bytes: Data) {
+        let tokenId = bytes.subdata(in: Range(uncheckedBounds:(lower: 0 * KeyLength, upper: KeyLength)))
+        let reqHMACKey = bytes.subdata(in:Range(uncheckedBounds:(lower: 1 * KeyLength, upper: KeyLength)))
         let hawkHelper = HawkHelper(id: tokenId.hexEncodedString, key: reqHMACKey)
         let hawkValue = hawkHelper.getAuthorizationValueFor(self)
         setValue(hawkValue, forHTTPHeaderField: "Authorization")
