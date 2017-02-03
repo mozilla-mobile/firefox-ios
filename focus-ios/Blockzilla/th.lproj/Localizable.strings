@@ -1,0 +1,189 @@
+/* Button on About screen */
+"About.learnMoreButton" = "เรียนรู้เพิ่มเติม";
+
+/* Label on About screen */
+"About.missionLabel" = "%@ ถูกสร้างขึ้นโดย Mozilla ภารกิจของเราคือส่งเสริมอินเทอร์เน็ตที่เปิดและสมบูรณ์";
+
+/* Label on About screen */
+"About.privateBullet1" = "ค้นหาและท่องเว็บจากในแอป";
+
+/* Label on About screen */
+"About.privateBullet2" = "ปิดกั้นตัวติดตาม (หรืออัปเดตการตั้งค่าเพื่ออนุญาตตัวติดตาม)";
+
+/* Label on About screen */
+"About.privateBullet3" = "ล้างเพื่อลบคุกกี้รวมทั้งประวัติการค้นหาและการท่องเว็บ";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "ใช้เป็นเบราว์เซอร์ส่วนตัว:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "ช่วยเหลือ";
+
+/* Label for row in About screen */
+"About.rowRights" = "สิทธิของคุณ";
+
+/* Label on About screen */
+"About.safariBullet1" = "ปิดกั้นตัวติดตามเพื่อความเป็นส่วนตัวที่เพิ่มขึ้น";
+
+/* Label on About screen */
+"About.safariBullet2" = "ปิดกั้นแบบอักษรเว็บเพื่อลดขนาดหน้า";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "ใช้เป็นส่วนขยาย Safari:";
+
+/* Title for the About screen */
+"About.screenTitle" = "เกี่ยวกับ";
+
+/* Label on About screen */
+"About.topLabel" = "%@ ให้คุณได้ควบคุม";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "ย้อนกลับ";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "เดินหน้า";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "โหลดใหม่";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "การตั้งค่า";
+
+/* Accessibility label for the share button */
+"Browser.shareLabel" = "แบ่งปัน";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "หยุด";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "ลองอีกครั้ง";
+
+/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.callButton" = "โทร";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "ยกเลิก";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "อีเมล";
+
+/* Dialog title used for Maps/App Store links. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.messageTitle" = "คุณกำลังออกจาก Firefox Focus";
+
+/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openAppStoreButton" = "เปิด App Store";
+
+/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openMapsButton" = "เปิดแผนที่";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.buttonLabel" = "ตกลง เข้าใจแล้ว!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelDescription" = "ปิดกั้นตัวติดตามออนไลน์โดยอัตโนมัติขณะที่คุณท่องเว็บ จากนั้นแตะเพื่อล้างหน้าที่เยี่ยมชม, การค้นหา, คุกกี้ และรหัสผ่านจากอุปกรณ์ของคุณ";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "ค้นเว็บเหมือนไม่มีคนเฝ้ามองอยู่";
+
+/* First label for product description on the home screen */
+"Home.descriptionLabel1" = "การท่องเว็บแบบส่วนตัวอัตโนมัติ";
+
+/* Second label for product description on the home screen */
+"Home.descriptionLabel2" = "ท่องเว็บ ล้าง ทำซ้ำ";
+
+/* Label in share alert to cancel the alert */
+"Open.Cancel" = "ยกเลิก";
+
+/* Label in share alert to open the URL in Firefox */
+"Open.Firefox" = "Firefox (การท่องเว็บแบบส่วนตัว)";
+
+/* Label in share alert to open the full system share menu */
+"Open.More" = "เพิ่มเติม";
+
+/* Label in share alert to open the URL in Safari */
+"Open.Safari" = "Safari";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "แตะ Safari จากนั้นเลือก ตัวปิดกั้นเนื้อหา";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "เปิดใช้งาน %@";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ ไม่ได้ถูกเปิดใช้งาน";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "เปิดแอป การตั้งค่า";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "การปิดกั้นตัวติดตามของเนื้อหาอื่น ๆ อาจทำให้บางวิดีโอและหน้าเว็บไม่สมบูรณ์";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "ไม่ ขอบคุณ";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "ฉันเข้าใจ";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "การตั้งค่า";
+
+/* Title for the search engine row */
+"Settings.searchSection" = "เครื่องมือค้นหา";
+
+/* Title for the search engine selection screen */
+"Settings.searchTitle" = "เครื่องมือค้นหา";
+
+/* Label for Safari integration section */
+"Settings.sectionIntegration" = "การผนวกรวม";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for performance toggles */
+"Settings.sectionPerformance" = "ประสิทธิภาพ";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "ความเป็นส่วนตัว";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAds" = "ปิดกั้นตัวติดตามของโฆษณา";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAnalytics" = "ปิดกั้นตัวติดตามของการวิเคราะห์";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "ปิดกั้นแบบอักษรเว็บ";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockOther" = "ปิดกั้นตัวติดตามของเนื้อหาอื่น ๆ";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockSocial" = "ปิดกั้นตัวติดตามทางสังคม";
+
+/* Label subtitle for toggle on main screen */
+"Settings.toggleOtherSubtitle" = "อาจทำให้วิดีโอและหน้าเว็บไม่สมบูรณ์";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageData" = "ส่งข้อมูลการใช้งานแบบไม่ระบุตัวตน";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "เรียนรู้เพิ่มเติม";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "ยกเลิก";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "ล้าง";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "ล้างประวัติการท่องเว็บของคุณแล้ว";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "ค้นหาหรือป้อนที่อยู่";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "ค้นหาสำหรับ %@";
+

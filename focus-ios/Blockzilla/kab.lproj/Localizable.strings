@@ -80,7 +80,7 @@
 "FirstRun.buttonLabel" = "IH, GZIƔ!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Sewḥel s wudem awurman inedfaṛen ticki tettinigeḍ. Senned ɣef tqeffalt Sfeḍ akken ad tekkseḍ isebtar yettwarzan, inadiyen, inagan n tuqqna akked wawalen uffiren.";
+"FirstRun.messageLabelDescription" = "Sqqam s wudem awurman inedfaṛen mara tettinigeḍ. Senned ɣef tqeffalt Sfeḍ akken ad tekkseḍ isebtar yettwarzan, inadiyen, inagan n tuqqna akked wawalen uffiren.";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "Inig am akken ulac win i k-id-ittmuqqulen.";
@@ -104,7 +104,7 @@
 "Open.Safari" = "Safari";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsContentBlockers" = "Senned ɣef Safari, saki nfern Imsewḥal n ugbur";
+"Safari.instructionsContentBlockers" = "Senned ɣef Safari, sakin fren Imsewḥal n ugbur";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsEnable" = "Rmed %@";
@@ -131,7 +131,7 @@
 "Settings.searchSection" = "AMSEDDAY N UNADI";
 
 /* Title for the search engine selection screen */
-"Settings.searchTitle" = "Amsedday n unadi";
+"Settings.searchTitle" = "Amsedday unadi";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "ASLEƔ";
@@ -143,7 +143,7 @@
 "Settings.sectionPerformance" = "TIMELLIT";
 
 /* Section label for privacy toggles */
-"Settings.sectionPrivacy" = "TABADNIT";
+"Settings.sectionPrivacy" = "TABAḌNIT";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "Sewḥel inedfaṛen";

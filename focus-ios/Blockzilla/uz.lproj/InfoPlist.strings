@@ -1,0 +1,12 @@
+/* (No Commment) */
+"NSCameraUsageDescription" = "U rasmga tushirish va internetga yuklashda yordam beradi.";
+
+/* (No Commment) */
+"NSLocationWhenInUseUsageDescription" = "Sahifalarda joylashuvingiz so‘ralishi mumkin.";
+
+/* (No Commment) */
+"NSMicrophoneUsageDescription" = "U videoga olish va internetga yuklash imkonini beradi.";
+
+/* (No Commment) */
+"NSPhotoLibraryUsageDescription" = "U rasmni saqlash va internetga yuklash imkonini beradi.";
+

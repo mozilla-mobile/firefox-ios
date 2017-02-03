@@ -8,13 +8,13 @@
 "About.privateBullet1" = "Пошук і перегляд прямо в програмі";
 
 /* Label on About screen */
-"About.privateBullet2" = "Блокувати стеження (або оновіть наштування, щоб дозволити стеження)";
+"About.privateBullet2" = "Блокуйте стеження (або оновіть налаштування, щоб дозволити стеження)";
 
 /* Label on About screen */
-"About.privateBullet3" = "Очистіть для видалення куків, разом з історією пошуку і перегляду";
+"About.privateBullet3" = "Стирайте для видалення куків, а також історії пошуку й перегляду";
 
 /* Label on About screen */
-"About.privateBulletHeader" = "Використовувати як приватний браузер:";
+"About.privateBulletHeader" = "Використовуйте в якості приватного браузера:";
 
 /* Label for row in About screen */
 "About.rowHelp" = "Допомога";
@@ -23,13 +23,13 @@
 "About.rowRights" = "Ваші права";
 
 /* Label on About screen */
-"About.safariBullet1" = "Блокувати стеження для покращення приватності";
+"About.safariBullet1" = "Блокуйте стеження для покращення приватності";
 
 /* Label on About screen */
-"About.safariBullet2" = "Блокувати веб-шрифти для зменшення розміру сторінки";
+"About.safariBullet2" = "Блокуйте веб-шрифти для зменшення розміру сторінок";
 
 /* Label on About screen */
-"About.safariBulletHeader" = "Використовувати в якості розширення для Safari:";
+"About.safariBulletHeader" = "Використовуйте в якості розширення для Safari:";
 
 /* Title for the About screen */
 "About.screenTitle" = "Про";
@@ -80,7 +80,7 @@
 "FirstRun.buttonLabel" = "ГАРАЗД, ЗРОЗУМІЛО!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Автоматично блокувати стеження онлайн під час перегляду. Потім торкніться, щоб стерти відвідані сторінки, пошукові запити, куки й паролі з вашого пристрою.";
+"FirstRun.messageLabelDescription" = "Автоматично блокуйте стеження онлайн під час перегляду. Потім торкніться, щоб стерти відвідані сторінки, пошукові запити, куки й паролі з вашого пристрою.";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "Переглядайте без думки, що за вами хтось спостерігає.";

@@ -11,7 +11,7 @@
 "About.privateBullet2" = "Blokujte sledovací prvky (nebo aktualizujte nastavení pro povolení sledovacích prvků)";
 
 /* Label on About screen */
-"About.privateBullet3" = "Vymažte pro smazání cookies a historie vyhledávání a prohlížení";
+"About.privateBullet3" = "Pro smazání cookies a historie vyhledávání a prohlížení použijte tlačítko vymazat";
 
 /* Label on About screen */
 "About.privateBulletHeader" = "Používejte ho jako soukromý prohlížeč:";
@@ -83,7 +83,7 @@
 "FirstRun.messageLabelDescription" = "Automaticky blokuje sledovací prvky, zatímco procházíte. Poté stačí klepnout pro vymazání zobrazených stránek, vyhledávání, souborů cookies a hesel z vašeho zařízení.";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelTagline" = "Procházejte, jako když se nikdo nedivá.";
+"FirstRun.messageLabelTagline" = "Procházejte, jako když se nikdo nedívá.";
 
 /* First label for product description on the home screen */
 "Home.descriptionLabel1" = "Automatické anonymní prohlížení.";

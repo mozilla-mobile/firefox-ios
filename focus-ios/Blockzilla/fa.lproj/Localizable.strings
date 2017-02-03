@@ -1,0 +1,189 @@
+/* Button on About screen */
+"About.learnMoreButton" = "اطلاعات بیشتر";
+
+/* Label on About screen */
+"About.missionLabel" = "%@ توسط موزیلا تولید شده است. ماموریت ما پرورش اینترنتی سالم و باز می باشد.";
+
+/* Label on About screen */
+"About.privateBullet1" = "جست و جو و مرور درست در داخل برنامه";
+
+/* Label on About screen */
+"About.privateBullet2" = "مسدود کردن دنبال کننده ها (یا بروز رسانی تنظیمات برای اجازه به دنبال کننده ها )";
+
+/* Label on About screen */
+"About.privateBullet3" = "پاک کردن کوکی ها و همچنین جست و جو و تاریخچه مرورگر";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "استفاده به عنوان مرورگر خصوصی:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "راهنما";
+
+/* Label for row in About screen */
+"About.rowRights" = "حقوق شما";
+
+/* Label on About screen */
+"About.safariBullet1" = "مسدود کردن دنبال کننده ها برای بهبود حریم شخصی";
+
+/* Label on About screen */
+"About.safariBullet2" = "مسدود کردن قلم‌های وب برای کاهش اندازه صفحات";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "استفاده از این به عنوان افزونه Safari:";
+
+/* Title for the About screen */
+"About.screenTitle" = "درباره";
+
+/* Label on About screen */
+"About.topLabel" = "%@ را در کنترل خود بگیرید.";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "بازگشت";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "جلو";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "بارگذاری مجدد";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "تنظیمات";
+
+/* Accessibility label for the share button */
+"Browser.shareLabel" = "به اشتراک گذاشتن";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "توقف";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "تلاش مجدد";
+
+/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.callButton" = "تماس";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "لغو";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "پست‌الکترونیکی";
+
+/* Dialog title used for Maps/App Store links. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.messageTitle" = "شما هم اکنون در حال ترک کردن Firefox Focus هستید.";
+
+/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openAppStoreButton" = "بازکردن فروشگاه برنامه‌ها";
+
+/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openMapsButton" = "باز کردن نقشه";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.buttonLabel" = "باشه، متوجه شدم!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelDescription" = "به صورت خودکار دنبال کنندگان آنلاین را در زمان مرورگر مسدود کن. سپس برای پاک کردن صفحات بازدید شده،‌جست‌و‌جو ها،‌ کوکی ها و رمزهای عبور از روی دستگاه ضربه بزنید.";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "مرورکردن بدون مشاهده کسی.";
+
+/* First label for product description on the home screen */
+"Home.descriptionLabel1" = "مرورکردن خصوصی به صورت خودکار.";
+
+/* Second label for product description on the home screen */
+"Home.descriptionLabel2" = "مرور،‌ پاک کردن، تکرار.";
+
+/* Label in share alert to cancel the alert */
+"Open.Cancel" = "لغو";
+
+/* Label in share alert to open the URL in Firefox */
+"Open.Firefox" = "فایرفاکس ( مرور به صورت خصوصی)";
+
+/* Label in share alert to open the full system share menu */
+"Open.More" = "بیشتر";
+
+/* Label in share alert to open the URL in Safari */
+"Open.Safari" = "سافاری";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "بر روی سافاری ضربه بزنید،‌ سپس محتوا مسدود شما را انتخاب کنید";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "فعالسازی %@";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ فعال نیست.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "بازکردن تنظیمات برنامه";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "مسدود کردن سایر دنبال کنندگان محتوا ممکن است باعث خراب شدن تعدادی فیلم و صفحه وب شود.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "نه، تشکر";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "متوجه هستم";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "تنظیمات";
+
+/* Title for the search engine row */
+"Settings.searchSection" = "موتور جست‌وجو";
+
+/* Title for the search engine selection screen */
+"Settings.searchTitle" = "موتور جستجو";
+
+/* Label for Safari integration section */
+"Settings.sectionIntegration" = "یک پارچگی";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "موزیلا";
+
+/* Section label for performance toggles */
+"Settings.sectionPerformance" = "کارایی";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "حریم شخصی";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAds" = "مسدود کردن دنبال کنندگان تبلیغ";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAnalytics" = "مسدود کردن دنبال کنندگان تجزیه و تحلیل آماری";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "انسداد قلم‌های وب";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockOther" = "انسداد دنبال کنندگان محتوا‌های دیگر";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockSocial" = "انسداد دنبال‌ کنندگان شبکه های اجتماعی";
+
+/* Label subtitle for toggle on main screen */
+"Settings.toggleOtherSubtitle" = "ممکن است باعث خراب شدن تعدادی فیلم و صفحات وب شود";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "سافاری";
+
+/* Label for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageData" = "ارسال ناشناس داده مصرفی";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "اطلاعات بیشتر";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "لغو";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "پاک کردن";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "تاریخچه مرور شما پاک شده است.";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "جست‌وجو یا ورود نشانی";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "جستجو برای %@";
+

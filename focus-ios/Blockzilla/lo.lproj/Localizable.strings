@@ -1,0 +1,189 @@
+/* Button on About screen */
+"About.learnMoreButton" = "ຮຽນຮູ້ເພີ່ມເຕີມ";
+
+/* Label on About screen */
+"About.missionLabel" = "%@ ໄດ້ຖືກສ້າງຂື້ນມາໂດຍ Mozilla. ພາລະກິດຂອງພວກເຮົາແມ່ນເພື່ອສົ່ງເສີມການນຳໃຊ້ອິນເເຕີເນັດແບບເປີດ ແລະ ສົມບູນ.";
+
+/* Label on About screen */
+"About.privateBullet1" = "ຄົ້ນຫາ ແລະ ທ່ອງເວັບຈາກໃນແອັບ";
+
+/* Label on About screen */
+"About.privateBullet2" = "ບັອກຕົວຕິດຕາມ (ຫລື ອັບເດດການຕັ້ງຄ່າເພື່ອອະນຸຍາດຕົວຕິດຕາມ)";
+
+/* Label on About screen */
+"About.privateBullet3" = "ລົບລ້າງຄຸກກີ້ລວມທັງປະຫວັດການຄົ້ນຫາ ແລະ ການທອງເວັບ";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "ໃຊ້ມັນເປັນແບບບຣາວເຊີສ່ວນຕົວ:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "ວິທີໃຊ້";
+
+/* Label for row in About screen */
+"About.rowRights" = "ສິດທິຂອງທ່ານ";
+
+/* Label on About screen */
+"About.safariBullet1" = "ບັອກຕົວຕິດຕາມເພື່ອປັບປຸງຄວາມເປັນສ່ວນຕົວຂື້ນ";
+
+/* Label on About screen */
+"About.safariBullet2" = "ບັອກຕົວອັກສອນຂອງເວັບເພື່ອລຸດຂະຫນາດຂອງຫນ້າລົງ";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "ໃຊ້ມັນເປັນແບບເອັກເທັນຊັນຂອງ Safari:";
+
+/* Title for the About screen */
+"About.screenTitle" = "ກ່ຽວກັບ";
+
+/* Label on About screen */
+"About.topLabel" = "%@ ເຮັດໃຫ້ທ່ານຄວບຄຸມໄດ້:";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "ກັບຄືນ";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "ໄປໜ້າ";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "ໂຫລດຄືນໃຫມ່";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "ການຕັ້ງຄ່າ";
+
+/* Accessibility label for the share button */
+"Browser.shareLabel" = "ແບ່ງປັນ";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "ຢຸດ";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "ລອງໃໝ່ອີກຄັ້ງ";
+
+/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.callButton" = "ໂທ";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "ຍົກເລີກ";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "ອີເມວ";
+
+/* Dialog title used for Maps/App Store links. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.messageTitle" = "ຕອນນີ້ທ່ານກຳລັງອອກຈາກ Firefox Focus.";
+
+/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openAppStoreButton" = "ເປີດໃນ App Store";
+
+/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openMapsButton" = "ເປີດແຜນທີ່";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.buttonLabel" = "ຕົກລົງ, ເຂົ້າໃຈແລ້ວ!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelDescription" = "ມັນຈະບັອກຕົວຕິດຕາມອອນໄລນ໌ແບບອັດຕະໂນມັດໃນຂະນະທີ່ທ່ານກຳລັງທ່ອງເວັບຢູ່. ຫລັງຈາກນັ້ນໃຫ້ແຕະເພື່ອລົບລ້າງຫນ້າເວັບທີ່ທ່ານໄດ້ເຂົ້າໄປເບິງ, ການຄົ້ນຫາ, ຄຸກກີ້ ແລະ ລະຫັດຜ່ານອອກຈາກອຸປະກອນຂອງທ່ານ.";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "ທ່ອງເວັບແບບບໍ່ມີໃຜມາຫລັກເຝົ້າຕິດຕາມ.";
+
+/* First label for product description on the home screen */
+"Home.descriptionLabel1" = "ການທ່ອງເວັບແບບສ່ວນໂຕໂດຍອັດຕະໂນມັດ.";
+
+/* Second label for product description on the home screen */
+"Home.descriptionLabel2" = "ທ່ອງເວັບ. ລົບລ້າງ. ເຮັດຄືນໃຫມ່.";
+
+/* Label in share alert to cancel the alert */
+"Open.Cancel" = "ຍົກເລີກ";
+
+/* Label in share alert to open the URL in Firefox */
+"Open.Firefox" = "Firefox (ການທ່ອງເວັບແບບສ່ວນຕົວ)";
+
+/* Label in share alert to open the full system share menu */
+"Open.More" = "ເພີ່ມເຕີມ";
+
+/* Label in share alert to open the URL in Safari */
+"Open.Safari" = "Safari";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "ແຕະ Safari, ຫລັງຈາກນັ້ນເລືອກຕົວບັອກເນື້ອຫາ";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "ເປີດໃຊ້ງານ %@";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ ຍັງບໍ່ທັນໄດ້ເປີດໃຊ້ງານ.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "ເປີດການຕັ້ງຄ່າ App";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "ການບັອກຕົວຕິດຕາມຂອງເນື້ອຫາຕ່າງໆອາດຈະເຮັດໃຫ້ບາງວິດີໂອ ແລະ ຫນ້າເວັບບໍ່ສົມບູນໄດ້.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "ໄດ້ແລ້ວ, ຂອບໃຈ";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "ຂ້ອຍຮັບຮູ້ເງືອນໄຂແລ້ວ";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "ການຕັ້ງຄ່າ";
+
+/* Title for the search engine row */
+"Settings.searchSection" = "SEARCH ENGINE";
+
+/* Title for the search engine selection screen */
+"Settings.searchTitle" = "ເຄື່ອງມືການຄົ້ນຫາ";
+
+/* Label for Safari integration section */
+"Settings.sectionIntegration" = "INTEGRATION";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for performance toggles */
+"Settings.sectionPerformance" = "PERFORMANCE";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "PRIVACY";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAds" = "ບັອກຕົວຕິດຕາມຂອງການໂຄສະນາ";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAnalytics" = "ບັອກຕົວຕິດຕາມຂອງການວິເຄາະ";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "ບັອກຕົວອັກສອນເວັບ";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockOther" = "ບັອກຕົວຕິດຕາມຂອງເນື້ອຫາຕ່າງໆ";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockSocial" = "ບັອກຕົວຕິດຕາມຂອງສືສັງຄົມອອນໄລນ໌";
+
+/* Label subtitle for toggle on main screen */
+"Settings.toggleOtherSubtitle" = "ອາດຈະເຮັດໃຫ້ບາງວິດີໂອ ແລະ ຫນ້າເວັບບໍ່ສົມບູນ";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageData" = "ສົ່ງຂໍ້ມູນການໃຊ້ງານແບບບໍ່ລະບຸຕົວຕົນ";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "ຮຽນຮູ້ເພີ່ມເຕີມ";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "ຍົກເລີກ";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "ERASE";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "ປະຫວັດການທ່ອງເວັບຂອງທ່ານໄດ້ຖືກລຶບອອກແລ້ວ.";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "ຄົ້ນຫາ ຫລື ປ້ອນທີ່ຢູ່";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "ຄົ້ນຫາສຳລັບ %@";
+

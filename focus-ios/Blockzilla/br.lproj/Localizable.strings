@@ -1,189 +1,189 @@
 /* Button on About screen */
-"About.learnMoreButton" = "Več o tem";
+"About.learnMoreButton" = "Gouzout hiroc'h";
 
 /* Label on About screen */
-"About.missionLabel" = "%@ razvija Mozilla. Naše poslanstvo je spodbujati zdrav in odprt internet.";
+"About.missionLabel" = "Gant Mozilla eo savet %@. Stourm a reomp evit difenn un Internet yac'h ha digor.";
 
 /* Label on About screen */
-"About.privateBullet1" = "Iščite in brskajte naravnost iz aplikacije";
+"About.privateBullet1" = "Klaskit ha merdeit en arload";
 
 /* Label on About screen */
-"About.privateBullet2" = "Zavračajte sledilce (ali spremenite nastavitve zavračanja sledilcev)";
+"About.privateBullet2" = "Stankit an heulierien (pe kemmit an arventennoù evit aotren an heulierien)";
 
 /* Label on About screen */
-"About.privateBullet3" = "Brišite piškotke ter zgodovino strani in iskanja";
+"About.privateBullet3" = "Dilamit ho toupinoù, ho roll istor hag ho roll enklask";
 
 /* Label on About screen */
-"About.privateBulletHeader" = "Uporabljajte ga kot zaseben brskalnik:";
+"About.privateBulletHeader" = "Arverit eñ evel ur merdeer prevez:";
 
 /* Label for row in About screen */
-"About.rowHelp" = "Pomoč";
+"About.rowHelp" = "Skoazell";
 
 /* Label for row in About screen */
-"About.rowRights" = "Vaše pravice";
+"About.rowRights" = "Ho kwirioù";
 
 /* Label on About screen */
-"About.safariBullet1" = "Zavračajte sledilce za več zasebnosti";
+"About.safariBullet1" = "Stankit an heulierien evit difenn ho puhez prevez";
 
 /* Label on About screen */
-"About.safariBullet2" = "Zavračajte spletne pisave za hitrejše nalaganje strani";
+"About.safariBullet2" = "Stankit an nodrezhoù web evit digreskiñ ment ar bajenn";
 
 /* Label on About screen */
-"About.safariBulletHeader" = "Uporabljajte ga kot razširitev za Safari:";
+"About.safariBulletHeader" = "Arverit eñ evel un askouezh Safari:";
 
 /* Title for the About screen */
-"About.screenTitle" = "O aplikaciji";
+"About.screenTitle" = "A-zivout";
 
 /* Label on About screen */
-"About.topLabel" = "%@ daje nadzor v vaše roke.";
+"About.topLabel" = "Chom a rit mestr gant %@.";
 
 /* Accessibility label for the back button */
-"Browser.backLabel" = "Nazaj";
+"Browser.backLabel" = "Distreiñ";
 
 /* Accessibility label for the forward button */
-"Browser.forwardLabel" = "Naprej";
+"Browser.forwardLabel" = "War-lerc'h";
 
 /* Accessibility label for the reload button */
-"Browser.reloadLabel" = "Ponovno naloži";
+"Browser.reloadLabel" = "Adkargañ";
 
 /* Accessibility label for the settings button */
-"Browser.settingsLabel" = "Nastavitve";
+"Browser.settingsLabel" = "Arventennoù";
 
 /* Accessibility label for the share button */
-"Browser.shareLabel" = "Deli";
+"Browser.shareLabel" = "Rannañ";
 
 /* Accessibility label for the stop button */
-"Browser.stopLabel" = "Ustavi";
+"Browser.stopLabel" = "Herzel";
 
 /* Button label to reload the error page */
-"Error.tryAgainButton" = "Poskusi znova";
+"Error.tryAgainButton" = "Klask en-dro";
 
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.callButton" = "Klic";
+"ExternalLink.callButton" = "Gervel";
 
 /* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.cancelButton" = "Prekliči";
+"ExternalLink.cancelButton" = "Nullañ";
 
 /* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.emailButton" = "Pošlji sporočilo";
+"ExternalLink.emailButton" = "Postel";
 
 /* Dialog title used for Maps/App Store links. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.messageTitle" = "Zdaj zapuščate Firefox Focus.";
+"ExternalLink.messageTitle" = "Kuitaat a rit Firefox Focus.";
 
 /* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openAppStoreButton" = "Odpri App Store";
+"ExternalLink.openAppStoreButton" = "Digeriñ an App Store";
 
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openMapsButton" = "Odpri Zemljevide";
+"ExternalLink.openMapsButton" = "Digeriñ an arload kartennoù";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "RAZUMEM!";
+"FirstRun.buttonLabel" = "Mat eo, komprenet em eus!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Samodejno zavračajte spletne sledilce med brskanjem. Nato z enim dotikom izbrišite obiskane strani, iskanja, piškotke in gesla z naprave.";
+"FirstRun.messageLabelDescription" = "Stankañ an heulierien en linenn ent emgefreek pa verdeit. Stokit evit dilemel ar pajennoù gweladennet, an toupinoù, an enklaskoù hag ar gerioù-tremen eus ho trevnad.";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelTagline" = "Brskajte, kot da vas nihče ne gleda.";
+"FirstRun.messageLabelTagline" = "Merdeit 'vel ma vefe den o sellet.";
 
 /* First label for product description on the home screen */
-"Home.descriptionLabel1" = "Samodejno zasebno brskanje.";
+"Home.descriptionLabel1" = "Merdeiñ prevez emgefreek.";
 
 /* Second label for product description on the home screen */
-"Home.descriptionLabel2" = "Brskajte. Izbrišite. Ponovite.";
+"Home.descriptionLabel2" = "Merdeit. Dilamit. Adkrogit.";
 
 /* Label in share alert to cancel the alert */
-"Open.Cancel" = "Prekliči";
+"Open.Cancel" = "Nullañ";
 
 /* Label in share alert to open the URL in Firefox */
-"Open.Firefox" = "Firefox (zasebno brskanje)";
+"Open.Firefox" = "Firefox (Merdeiñ prevez)";
 
 /* Label in share alert to open the full system share menu */
-"Open.More" = "Več";
+"Open.More" = "Muioc'h";
 
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsContentBlockers" = "Tapnite Safari in izberite Content Blockers";
+"Safari.instructionsContentBlockers" = "Stokit war Safari ha diuzit ar stankaerioù endalc'had";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsEnable" = "Omogočite %@";
+"Safari.instructionsEnable" = "Gweredekaat %@";
 
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
-"Safari.instructionsNotEnabled" = "%@ ni omogočen.";
+"Safari.instructionsNotEnabled" = "Diweredekaet eo %@";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsOpen" = "Odprite nastavitve naprave";
+"Safari.instructionsOpen" = "Digeriñ an arload arventennoù";
 
 /* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Zavračanje ostalih vsebinskih sledilcev lahko pokvari nekatere videoposnetke in strani.";
+"Settings.blockOtherMessage" = "Stankañ heulierien endalc'had ouzhpenn a c'hall mirout videoioù ha pajennadoù web da vont en-dro en un doare dereat.";
 
 /* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Ne, hvala";
+"Settings.blockOtherNo" = "Nullañ";
 
 /* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Razumem";
+"Settings.blockOtherYes" = "Komprenet am eus";
 
 /* Title for settings screen */
-"Settings.screenTitle" = "Nastavitve";
+"Settings.screenTitle" = "Arventennoù";
 
 /* Title for the search engine row */
-"Settings.searchSection" = "ISKALNIK";
+"Settings.searchSection" = "LUSKER ENKLASK";
 
 /* Title for the search engine selection screen */
-"Settings.searchTitle" = "Iskalnik";
+"Settings.searchTitle" = "Lusker enklask";
 
 /* Label for Safari integration section */
-"Settings.sectionIntegration" = "INTEGRACIJA";
+"Settings.sectionIntegration" = "ENFRAMMAÑ";
 
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";
 
 /* Section label for performance toggles */
-"Settings.sectionPerformance" = "UČINKOVITOST DELOVANJA";
+"Settings.sectionPerformance" = "DIGONUSTED";
 
 /* Section label for privacy toggles */
-"Settings.sectionPrivacy" = "ZASEBNOST";
+"Settings.sectionPrivacy" = "BUHEZ PREVEZ";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Zavračaj sledilce oglasov";
+"Settings.toggleBlockAds" = "Stankañ an heulierien bruderezh";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Zavračaj sledilce analitike";
+"Settings.toggleBlockAnalytics" = "Stankañ an heulierien stadegim";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "Zavračaj spletne pisave";
+"Settings.toggleBlockFonts" = "Stankañ an nodrezhoù web";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Zavračaj ostale vsebinske sledilce";
+"Settings.toggleBlockOther" = "Stankañ an heulierien endalc'hadoù all";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Zavračaj sledilce družbenih omrežij";
+"Settings.toggleBlockSocial" = "Stankañ an heulierien kevredadel";
 
 /* Label subtitle for toggle on main screen */
-"Settings.toggleOtherSubtitle" = "Lahko pokvari nekatere videoposnetke in strani";
+"Settings.toggleOtherSubtitle" = "Gallout a ra mirout videoioù ga pajennadoù web da vont en-dro en un doare dereat";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
 /* Label for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageData" = "Pošiljaj anonimne podatke o uporabi";
+"Settings.toggleSendAnonymousUsageData" = "Kas roadennoù arver dizanv";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageDataSubtitle" = "Več o tem";
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "Gouzout hiroc'h";
 
 /* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "Prekliči";
+"URL.cancelLabel" = "Nullañ";
 
 /* Erase button in the URL bar */
-"URL.eraseButtonLabel" = "IZBRIŠI";
+"URL.eraseButtonLabel" = "DIVERKAÑ";
 
 /* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "Vaša zgodovina brskanja je bila izbrisana.";
+"URL.eraseMessageLabel" = "Diverket eo bet ho roll istor merdeiñ.";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "Iskanje ali naslov strani";
+"URL.placeholderText" = "Bizskrivit un termen da glask pe ur chomlec'h";
 
 /* Label displayed for search button when typing in the URL bar */
-"URL.searchLabel" = "Išči %@";
+"URL.searchLabel" = "Klask war-lec'h %@";
 

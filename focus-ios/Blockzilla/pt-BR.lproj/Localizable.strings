@@ -1,5 +1,5 @@
 /* Button on About screen */
-"About.learnMoreButton" = "Saiba mais";
+"About.learnMoreButton" = "Saber mais";
 
 /* Label on About screen */
 "About.missionLabel" = "%@ é produzido pela Mozilla. Nossa missão é promover uma Internet saudável e aberta.";
@@ -11,10 +11,10 @@
 "About.privateBullet2" = "Bloquear rastreadores (ou atualizar configurações para permitir rastreadores)";
 
 /* Label on About screen */
-"About.privateBullet3" = "Apagar para excluir cookies, o histórico de pesquisa e navegação";
+"About.privateBullet3" = "Apagar para excluir cookies, bem como o histórico de pesquisa e navegação";
 
 /* Label on About screen */
-"About.privateBulletHeader" = "Usar como um navegador privativo:";
+"About.privateBulletHeader" = "Usá-lo como um navegador privativo:";
 
 /* Label for row in About screen */
 "About.rowHelp" = "Ajuda";
@@ -29,7 +29,7 @@
 "About.safariBullet2" = "Bloquear fontes da Web para reduzir o tamanho da página";
 
 /* Label on About screen */
-"About.safariBulletHeader" = "Usar como uma extensão do Safari:";
+"About.safariBulletHeader" = "Usá-lo como uma extensão do Safari:";
 
 /* Title for the About screen */
 "About.screenTitle" = "Sobre";
@@ -68,7 +68,7 @@
 "ExternalLink.emailButton" = "E-mail";
 
 /* Dialog title used for Maps/App Store links. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.messageTitle" = "Você está deixando o Firefox Focus.";
+"ExternalLink.messageTitle" = "Agora você está deixando o Firefox Focus.";
 
 /* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openAppStoreButton" = "Abrir App Store";
@@ -104,13 +104,13 @@
 "Open.Safari" = "Safari";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsContentBlockers" = "Toque em Safari, e selecione, Bloqueadores de Conteúdo";
+"Safari.instructionsContentBlockers" = "Tocar em Safari e selecionar Bloqueadores de conteúdo";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsEnable" = "Ativar %@";
+"Safari.instructionsEnable" = "Habilitar %@";
 
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
-"Safari.instructionsNotEnabled" = "%@ não está ativado.";
+"Safari.instructionsNotEnabled" = "%@ não está habilitado.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "Abrir configurações do aplicativo";
@@ -152,7 +152,7 @@
 "Settings.toggleBlockAnalytics" = "Bloquear rastreadores analíticos";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "Bloquear fontes da Web";
+"Settings.toggleBlockFonts" = "Bloquear fontes web";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockOther" = "Bloquear outros rastreadores de conteúdo";
@@ -161,16 +161,16 @@
 "Settings.toggleBlockSocial" = "Bloquear rastreadores de mídias sociais";
 
 /* Label subtitle for toggle on main screen */
-"Settings.toggleOtherSubtitle" = "Pode quebrar alguns vídeos e páginas da Web";
+"Settings.toggleOtherSubtitle" = "Pode quebrar alguns vídeos e páginas web";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
 /* Label for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageData" = "Enviar dados de uso anônimos";
+"Settings.toggleSendAnonymousUsageData" = "Enviar dados de uso anonimamente";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageDataSubtitle" = "Saiba mais";
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "Saber mais";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Cancelar";

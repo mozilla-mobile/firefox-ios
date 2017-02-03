@@ -1,0 +1,189 @@
+/* Button on About screen */
+"About.learnMoreButton" = "Barrachd fiosrachaidh";
+
+/* Label on About screen */
+"About.missionLabel" = "Chaidh %@ a chruthachadh le Mozilla. Tha e ’na amas dhuinn eadar-lìon fallainn is fosgailte a bhrosnachadh.";
+
+/* Label on About screen */
+"About.privateBullet1" = "Dèan lorg is brabhsadh san aplacaid fhèin";
+
+/* Label on About screen */
+"About.privateBullet2" = "Bac tracaichean (no ùraich na roghainnean airson tracaichean a cheadachadh)";
+
+/* Label on About screen */
+"About.privateBullet3" = "Dèan suathadh às airson an dà chuid briosgaidean agus eachdraidh nan lorg is a’ bhrabhsaidh a sguabadh às.";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "Cleachd e mar bhrabhsair prìobhaideach:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "Cobhair";
+
+/* Label for row in About screen */
+"About.rowRights" = "Do chòraichean";
+
+/* Label on About screen */
+"About.safariBullet1" = "Bac tracaichean airson barrachd prìobhaideachd";
+
+/* Label on About screen */
+"About.safariBullet2" = "Bac cruthan-clò lìn airson meud dhuilleagan a lùghdachadh";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "Cleachd e mar leudachan Safari:";
+
+/* Title for the About screen */
+"About.screenTitle" = "Mu dhèidhinn";
+
+/* Label on About screen */
+"About.topLabel" = "Bheir %@ smachd dhut.";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "Air ais";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "Air adhart";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "Ath-luchdaich";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "Roghainnean";
+
+/* Accessibility label for the share button */
+"Browser.shareLabel" = "Co-roinn";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "Sguir dheth";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "Feuch ris a-rithist";
+
+/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.callButton" = "Cuir fòn";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "Sguir dheth";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "Post-d";
+
+/* Dialog title used for Maps/App Store links. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.messageTitle" = "Tha thu a’ fàgail Firefox Focus.";
+
+/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openAppStoreButton" = "Fosgail an App Store";
+
+/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openMapsButton" = "Fosgail Maps";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.buttonLabel" = "Tha mi agaibh!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelDescription" = "Bac tracaichean air loidhne gu fèin-obrachail nuair a nì thu brabhsadh. Thoir gnogag an uairsin airson na duilleagan air an do thadhail thu, na luirg a rinn thu, briosgaidean is faclan-faire a sguabadh às an uidheam agad.";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "Dèan brabhsadh mar nach eil duine am bith a’ cumail sùil ort.";
+
+/* First label for product description on the home screen */
+"Home.descriptionLabel1" = "Brabhsadh prìobhaideach fèin-obrachail.";
+
+/* Second label for product description on the home screen */
+"Home.descriptionLabel2" = "Dèan brabhsadh. Dèan suathadh às. Agus a-rithist.";
+
+/* Label in share alert to cancel the alert */
+"Open.Cancel" = "Sguir dheth";
+
+/* Label in share alert to open the URL in Firefox */
+"Open.Firefox" = "Firefox (brabhsadh prìobhaideach)";
+
+/* Label in share alert to open the full system share menu */
+"Open.More" = "Barrachd";
+
+/* Label in share alert to open the URL in Safari */
+"Open.Safari" = "Safari";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "Thoir gnogag air Safari agus tagh “Blocaichean susbaint”";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "Cuir %@ an comas";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "Chan eil %@ an comas.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "Fosgail aplacaid nan roghainnean";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Ma bhacas tu tracaichean susbaint eile, dh’fhaoidte nach obraich cuid a dhuilleagan-lìn is videothan tuilleadh.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "Chan eil, mòran taing";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "Tha mi agaibh";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "Roghainnean";
+
+/* Title for the search engine row */
+"Settings.searchSection" = "EINNSEAN-LUIRG";
+
+/* Title for the search engine selection screen */
+"Settings.searchTitle" = "Einnsean-luirg";
+
+/* Label for Safari integration section */
+"Settings.sectionIntegration" = "AMALACHADH";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for performance toggles */
+"Settings.sectionPerformance" = "DÈANADAS";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "PRÌOBHAIDEACHD";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAds" = "Bac tracaichean sanasachd";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAnalytics" = "Bac tracaichean anailiseach";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Bac cruthan-clò lìn";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockOther" = "Bac tracaichean susbaint eile";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockSocial" = "Bac tracaichean sòisealta";
+
+/* Label subtitle for toggle on main screen */
+"Settings.toggleOtherSubtitle" = "Dh’fhaoidte nach obraich cuid a dhuilleagan-lìn is videothan tuilleadh";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageData" = "Cuir dàta cleachdaidh gun urra";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "Barrachd fiosrachaidh";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "Sguir dheth";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "SUATH ÀS";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "Chaidh an eachdraidh brabhsaidh agad a sguabadh às.";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Dèan lorg no cuir a-steach seòladh";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Lorg %@";
+
