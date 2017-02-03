@@ -6,7 +6,7 @@ import Foundation
 @testable import Client
 
 class SearchSettingsUITests: KIFTestCase {
-    
+    /*
     override func setUp() {
         super.setUp()
         BrowserUtils.dismissFirstRunUI(tester())
@@ -117,5 +117,6 @@ class SearchSettingsUITests: KIFTestCase {
         tester().tapView(withAccessibilityLabel: "Settings")
         tester().waitForView(withAccessibilityLabel: "Settings")
     }
+    */
 }
 
