@@ -267,6 +267,8 @@ private class SQLiteDBStatement {
             } else if obj is Date {
                 let timestamp = (obj as! Date).timeIntervalSince1970
                 status = sqlite3_bind_double(pointer, Int32(index+1), timestamp)
+            } else if obj is UInt64 {
+                status = sqlite3_bind_double(pointer, Int32(index+1), Double(obj as! UInt64))
             } else if obj == nil {
                 status = sqlite3_bind_null(pointer, Int32(index+1))
             }
