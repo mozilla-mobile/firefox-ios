@@ -224,7 +224,7 @@ extension SQLiteHistory: BrowserHistory {
             let insert = "INSERT INTO \(TableHistory) " +
                          "(guid, url, title, local_modified, is_deleted, should_upload, domain_id) " +
                          "SELECT ?, ?, ?, ?, 0, 1, id FROM \(TableDomains) WHERE domain = ?"
-            let insertArgs: Args? = [site.guid, Bytes.generateGUID(), site.url, site.title, time, host]
+            let insertArgs: Args? = [site.guid ?? Bytes.generateGUID(), site.url, site.title, time, host]
             if let error = conn.executeChange(insert, withArgs: insertArgs) {
                 log.warning("Site insertion failed with \(error.localizedDescription)")
                 return 0
