@@ -157,7 +157,7 @@ open class KeyBundle: Hashable {
     open func factory<T: CleartextPayloadJSON>(_ f: @escaping (JSON) -> T) -> (String) -> T? {
         return { (payload: String) -> T? in
             let potential = EncryptedJSON(json: payload, keyBundle: self)
-            if !(potential.isValid()) {
+            if !potential.isValid() {
                 return nil
             }
 
@@ -187,18 +187,10 @@ open class KeyBundle: Hashable {
                     let iv = iv.base64EncodedString
 
                     // The payload is stringified JSON. Yes, I know.
-                    let payload: Any = JSON(object: [
-                        "ciphertext": ciphertext,
-                        "IV": iv,
-                        "hmac": hmac,
-                    ]).rawString() ?? JSON.null
-
-                    return JSON(object: [
-                        "id": record.id,
-                        "sortindex": record.sortindex,
-                        "ttl": record.ttl ?? JSON.null as Any,
-                        "payload": payload,
-                    ])
+                    let payload: Any = JSON(object: ["ciphertext": ciphertext, "IV": iv, "hmac": hmac,]).rawString() as Any
+                    let obj = ["id": record.id, "sortindex": record.sortindex, "ttl": record.ttl as Any, "payload": payload]
+                    print("the object??? \(obj)")
+                    return JSON(object: obj)
                 }
             }
             return nil

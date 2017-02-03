@@ -32,7 +32,7 @@ open class EncryptedJSON {
 
     public init(json: String, keyBundle: KeyBundle) {
         self.keyBundle = keyBundle
-        self.json = JSON.init(parseJSON: json)
+        self.json = JSON(parseJSON: json)
     }
 
     public init(json: JSON, keyBundle: KeyBundle) {
@@ -121,8 +121,8 @@ open class EncryptedJSON {
         if (_hmacBytes != nil) {
             return _hmacBytes!
         }
-
-        _hmacBytes = self["hmac"].stringValue.data(using: String.Encoding.utf16)
+        //NSData(base16EncodedString: self["hmac"].asString!, options: NSDataBase16DecodingOptions.Default)
+        _hmacBytes = NSData(base16EncodedString: self["hmac"].stringValue, options: []) as Data
         return _hmacBytes!
     }
 

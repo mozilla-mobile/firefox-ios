@@ -31,7 +31,7 @@ public extension JSON {
     }
 
     func isNull() -> Bool {
-        return self.type == .null
+        return self.type == .null || self.type == .unknown
     }
 
     func isInt() -> Bool {

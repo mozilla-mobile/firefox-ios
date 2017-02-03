@@ -450,7 +450,8 @@ open class Sync15StorageClient {
     }
 
     func requestPUT(_ url: URL, body: JSON, ifUnmodifiedSince: Timestamp?) -> Request {
-        return self.requestWrite(url, method: URLRequest.Method.put.rawValue, body: body.rawString()!, contentType: "application/json;charset=utf-8", ifUnmodifiedSince: ifUnmodifiedSince)
+        print("the stringgg \(body.rawString())")
+        return self.requestWrite(url, method: URLRequest.Method.put.rawValue, body: body.rawString([.castNilToNSNull: true])!, contentType: "application/json;charset=utf-8", ifUnmodifiedSince: ifUnmodifiedSince)
     }
 
     func requestPOST(_ url: URL, body: JSON, ifUnmodifiedSince: Timestamp?) -> Request {

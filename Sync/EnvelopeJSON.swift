@@ -42,9 +42,9 @@ open class EnvelopeJSON {
     }
 
     open var modified: Timestamp {
-        if let intValue = self.json["modified"].int {
-            return Timestamp(intValue) * 1000
-        }
+//        if let intValue = self.json["modified"].int64 {
+//            return Timestamp(intValue) * 1000
+//        }
 
         if let doubleValue = self.json["modified"].double {
             return Timestamp(1000 * (doubleValue))

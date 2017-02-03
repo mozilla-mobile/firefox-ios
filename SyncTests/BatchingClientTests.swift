@@ -11,7 +11,7 @@ import XCTest
 import SwiftyJSON
 
 // Always return a gigantic encoded payload.
-private func massivify<T>(record: Record<T>) -> JSON? {
+private func massivify<T>(_ record: Record<T>) -> JSON? {
     return JSON([
         "id": record.id,
         "foo": String(repeating: "X", count: Sync15StorageClient.maxRecordSizeBytes + 1)
@@ -21,7 +21,7 @@ private func massivify<T>(record: Record<T>) -> JSON? {
 private func basicSerializer<T>(record: Record<T>) -> String {
     return JSON(object: [
         "id": record.id,
-        "payload": record.payload.json
+        "payload": record.payload.json.dictionaryObject
     ]).rawString()!
 }
 
@@ -48,7 +48,7 @@ private func assertLinesMatchRecords<T>(lines: [String], records: [Record<T>], s
 }
 
 
-private func deferEmptyResponse(batchToken batchToken: BatchToken? = nil, lastModified: Timestamp? = nil) -> Deferred<Maybe<StorageResponse<POSTResult>>> {
+private func deferEmptyResponse(token batchToken: BatchToken? = nil, lastModified: Timestamp? = nil) -> Deferred<Maybe<StorageResponse<POSTResult>>> {
     var headers = [String: Any]()
     if let lastModified = lastModified {
         headers["X-Last-Modified"] = lastModified
@@ -70,15 +70,15 @@ class Sync15BatchClientTests: XCTestCase {
 
     func testAddLargeRecordFails() {
         let uploader: BatchUploadFunction = { _ in deferEmptyResponse(lastModified: 10_000) }
-        let serializeRecord = { massivify($0)?.toString() }
+        let serializeRecord = { massivify($0)?.rawString() }
 
         let batch = Sync15BatchClient(config: miniConfig,
                                       ifUnmodifiedSince: nil,
                                       serializeRecord: serializeRecord,
                                       uploader: uploader,
-                                      onCollectionUploaded: { _ in deferMaybe(NSDate.now())})
+                                      onCollectionUploaded: { _ in deferMaybe(Date() as! MaybeErrorType)})
 
-        let record = createRecordWithID("A")
+        let record = createRecordWithID(id: "A")
         let result = batch.addRecords([record]).value
         XCTAssertTrue(result.isFailure)
         XCTAssertTrue(result.failureValue! is RecordTooLargeError)
@@ -257,13 +257,13 @@ class Sync15BatchClientTests: XCTestCase {
                 XCTAssertEqual(expected, queryParams![0])
                 XCTAssertEqual(ius, 10_000)
                 assertLinesMatchRecords(lines: lines, records: Array(allRecords[0..<2]), serializer: basicSerializer)
-                return deferEmptyResponse(batchToken: "1", lastModified: 10_000)
+                return deferEmptyResponse(token: "1", lastModified: 10_000)
             case 2:
                 let expected = URLQueryItem(name: "batch", value: "1")
                 XCTAssertEqual(expected, queryParams![0])
                 XCTAssertEqual(ius, 10_000_000)
                 assertLinesMatchRecords(lines: lines, records: Array(allRecords[2..<4]), serializer: basicSerializer)
-                return deferEmptyResponse(batchToken: "1", lastModified: 10_000)
+                return deferEmptyResponse(token: "1", lastModified: 10_000)
             case 3:
                 let expectedBatch = URLQueryItem(name: "batch", value: "1")
                 let expectedCommit = URLQueryItem(name: "commit", value: "true")
@@ -334,7 +334,7 @@ class Sync15BatchClientTests: XCTestCase {
                 XCTAssertEqual(expected, queryParams![0])
                 XCTAssertEqual(ius, 10_000)
                 assertLinesMatchRecords(lines: lines, records: Array(allRecords[0..<2]), serializer: basicSerializer)
-                return deferEmptyResponse(batchToken: "1", lastModified: 10_000)
+                return deferEmptyResponse(token: "1", lastModified: 10_000)
             case 2:
                 let expectedBatch = URLQueryItem(name: "batch", value: "1")
                 let expectedCommit = URLQueryItem(name: "commit", value: "true")
@@ -405,7 +405,7 @@ class Sync15BatchClientTests: XCTestCase {
                 XCTAssertEqual(expected, queryParams![0])
                 XCTAssertEqual(ius, 10_000)
                 assertLinesMatchRecords(lines: lines, records: Array(allRecords[0..<2]), serializer: basicSerializer)
-                return deferEmptyResponse(batchToken: "1", lastModified: 10_000)
+                return deferEmptyResponse(token: "1", lastModified: 10_000)
             case 2:
                 let expectedBatch = URLQueryItem(name: "batch", value: "1")
                 XCTAssertEqual(expectedBatch, queryParams![0])
@@ -537,7 +537,7 @@ class Sync15BatchClientTests: XCTestCase {
                 let expected = URLQueryItem(name: "batch", value: "true")
                 XCTAssertEqual(expected, queryParams![0])
                 assertLinesMatchRecords(lines: lines, records: Array(allRecords[0..<2]), serializer: basicSerializer)
-                return deferEmptyResponse(batchToken: "1", lastModified: 20_000)
+                return deferEmptyResponse(token: "1", lastModified: 20_000)
             case 2:
                 let expectedBatch = URLQueryItem(name: "batch", value: "1")
                 XCTAssertEqual(expectedBatch, queryParams![0])
@@ -554,7 +554,7 @@ class Sync15BatchClientTests: XCTestCase {
                 let expected = URLQueryItem(name: "batch", value: "true")
                 XCTAssertEqual(expected, queryParams![0])
                 assertLinesMatchRecords(lines: lines, records: Array(allRecords[6..<8]), serializer: basicSerializer)
-                return deferEmptyResponse(batchToken: "2", lastModified: 30_000)
+                return deferEmptyResponse(token: "2", lastModified: 30_000)
             case 5:
                 let expectedBatch = URLQueryItem(name: "batch", value: "2")
                 XCTAssertEqual(expectedBatch, queryParams![0])

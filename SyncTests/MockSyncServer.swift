@@ -343,7 +343,7 @@ class MockSyncServer {
             }
 
             var body = JSON(object: request.jsonObject)
-            body["modified"] = JSON(stringLiteral:millisecondsToDecimalSeconds(Date.now()))
+            body["modified"] = JSON(stringLiteral: millisecondsToDecimalSeconds(Date.now()))
             let record = EnvelopeJSON(body)
 
             self.storeRecords(records: [record], inCollection: spec.collection)
@@ -449,6 +449,6 @@ class MockSyncServer {
             XCTFail("Can't start the GCDWebServer.")
         }
 
-        baseURL = "http://localhost:\(server?.port)\(basePath)"
+        baseURL = "http://localhost:\(server!.port)\(basePath)"
     }
 }
