@@ -151,7 +151,9 @@ class MockSyncServerTests: XCTestCase {
             let after = decimalSecondsStringToTimestamp(millisecondsToDecimalSeconds(Date.now()))!
 
             // JSON contents: should be the empty object.
-            XCTAssertEqual(response.value.rawString(), "{}")
+            let jsonData = try! response.value.rawData()
+            let jsonString = String(data: jsonData, encoding: String.Encoding.utf8)!
+            XCTAssertEqual(jsonString, "{}")
 
             // X-Weave-Timestamp.
             XCTAssertLessThanOrEqual(before, response.metadata.timestampMilliseconds)
