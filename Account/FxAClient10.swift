@@ -181,7 +181,7 @@ open class FxAClient10 {
         }
 
         let ciphertext = data.subdata(in: Range(uncheckedBounds: (lower: 0 * KeyLength, upper:  2 * KeyLength)))
-        let MAC = data.subdata(in: Range(uncheckedBounds: (lower: 2 * KeyLength, upper: 1 * KeyLength)))
+        let MAC = data.subdata(in: Range(uncheckedBounds: (lower: 1 * KeyLength, upper: 2 * KeyLength)))
 
         let salt: Data = Data()
         let contextInfo: Data = KW("account/keys")
@@ -296,7 +296,7 @@ open class FxAClient10 {
         mutableURLRequest.httpMethod = HTTPMethod.post.rawValue
 
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        mutableURLRequest.httpBody = device.toJSON().string?.utf8EncodedData
+        mutableURLRequest.httpBody = device.toJSON().rawString()?.utf8EncodedData
 
         let salt: Data = Data()
         let contextInfo: Data = FxAClient10.KW("sessionToken")
@@ -318,7 +318,7 @@ open class FxAClient10 {
                         return
                     }
 
-                    if let data = response.result.value as AnyObject? {
+                    if let data = response.result.value {
                         let json = JSON(data)
                         if let remoteError = FxAClient10.remoteError(fromJSON: json, statusCode: response.response!.statusCode) {
                             deferred.fill(Maybe(failure: FxAClientError.remote(remoteError)))
@@ -358,7 +358,7 @@ extension FxAClient10: FxALoginClient {
         let key = (keyFetchToken as NSData).deriveHKDFSHA256Key(withSalt: salt, contextInfo: contextInfo, length: UInt(3 * KeyLength))!
         mutableURLRequest.addAuthorizationHeader(forHKDFSHA256Key: key)
 
-        let keyRequestKey = key.subdata(in: Range(uncheckedBounds:(lower:2 * KeyLength, upper: KeyLength)))
+        let keyRequestKey = key.subdata(in: Range(uncheckedBounds:(lower:KeyLength, upper: 2 * KeyLength)))
 
         return makeRequest(mutableURLRequest) { FxAClient10.keysResponse(fromJSON: keyRequestKey, json: $0) }
     }
