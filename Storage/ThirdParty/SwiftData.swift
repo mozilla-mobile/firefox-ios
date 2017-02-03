@@ -661,7 +661,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
     }
 
     func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T)) -> Cursor<T> {
-        return self.executeQuery(sqlStr, factory: factory)
+        return self.executeQuery(sqlStr, factory: factory, withArgs: nil)
     }
 
     /// Queries the database.
