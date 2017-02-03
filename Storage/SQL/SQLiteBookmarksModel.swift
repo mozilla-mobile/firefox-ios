@@ -290,7 +290,7 @@ extension SQLiteBookmarks {
      */
     func getChildrenWithParent(_ parentGUID: GUID, direction: Direction, excludingGUIDs: [GUID]?=nil, includeIcon: Bool) -> Deferred<Maybe<Cursor<BookmarkNode>>> {
 
-        precondition((excludingGUIDs?.count)! < 100, "Sanity bound for the number of GUIDs we can exclude.")
+        precondition((excludingGUIDs ?? []).count < 100, "Sanity bound for the number of GUIDs we can exclude.")
 
         let valueView = direction.valueView
         let structureView = direction.structureView
