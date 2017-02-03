@@ -63,7 +63,7 @@ extension KIFUITestActor {
 
         run { _ in
             element = UIApplication.shared.accessibilityElement { element in
-                return element?.accessibilityValue! == value
+                return element?.accessibilityValue == value
             }
 
             return (element == nil) ? KIFTestStepResult.wait : KIFTestStepResult.success
@@ -282,13 +282,13 @@ class BrowserUtils {
 	class func dismissFirstRunUI() {
 		var error: NSError?
 		
-		let matcher = grey_allOfMatchers(
-			grey_accessibilityID("IntroViewController.startBrowsingButton"), grey_sufficientlyVisible())
+		let matcher = grey_allOfMatchers([
+			grey_accessibilityID("IntroViewController.startBrowsingButton"), grey_sufficientlyVisible()])
 		
-		EarlGrey().selectElementWithMatcher(matcher).assertWithMatcher(grey_notNil(), error: &error)
+        EarlGrey.select(elementWithMatcher: matcher!).assert(grey_notNil(), error: &error)
 		
 		if (error == nil) {
-			EarlGrey().selectElementWithMatcher(matcher).performAction(grey_tap())
+            EarlGrey.select(elementWithMatcher: matcher!).perform(grey_tap())
 		}
 	}
 
@@ -298,7 +298,7 @@ class BrowserUtils {
         var info = [AnyHashable: Any]()
         info["url"] = url
         info["title"] = title
-        info["visitType"] = VisitType.Link.rawValue
+        info["visitType"] = VisitType.link.rawValue
         notificationCenter.post(name: Notification.Name(rawValue: "OnLocationChange"), object: self, userInfo: info)
     }
 
@@ -462,12 +462,12 @@ class SimplePageServer {
             return GCDWebServerDataResponse(html: self.getPageData("localhostLoad"))
         }
 
-        webServer.addHandler(forMethod: "GET", path: "/auth.html", request: GCDWebServerRequest.self) { (request: GCDWebServerRequest!) in
+        webServer.addHandler(forMethod: "GET", path: "/auth.html", request: GCDWebServerRequest.self) { (request: GCDWebServerRequest?) in
             // "user:pass", Base64-encoded.
             let expectedAuth = "Basic dXNlcjpwYXNz"
 
             let response: GCDWebServerDataResponse
-            if request.headers["Authorization"] as? String == expectedAuth && request.query["logout"] == nil {
+            if request?.headers["Authorization"] as? String == expectedAuth && request?.query["logout"] == nil {
                 response = GCDWebServerDataResponse(html: "<html><body>logged in</body></html>")
             } else {
                 // Request credentials if the user isn't logged in.
@@ -528,7 +528,7 @@ class SearchUtils {
         }
         return userProfile.searchEngines.defaultEngine
     }
-
+/*
     static func youTubeSearchEngine() -> OpenSearchEngine {
         return mockSearchEngine("YouTube", template: "https://m.youtube.com/#/results?q={searchTerms}&sm=", icon: "youtube")!
     }
@@ -543,7 +543,7 @@ class SearchUtils {
 
         return OpenSearchEngine(engineID: nil, shortName: name, image: image, searchTemplate: template, suggestTemplate: nil, isCustomEngine: true)
     }
-
+*/
     static func addCustomSearchEngine(_ engine: OpenSearchEngine) {
         guard let userProfile = (UIApplication.shared.delegate as? AppDelegate)?.profile else {
             XCTFail("Unable to get a reference to the user's profile")
