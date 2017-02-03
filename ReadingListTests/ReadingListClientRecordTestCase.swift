@@ -46,15 +46,15 @@ class ReadingListClientRecordTestCase: XCTestCase {
 
     func testInitWithRowWithoutServerMeta() {
         let now = ReadingListNow()
-        let row: [String:AnyObject] = [
-            "client_id": 1234 as AnyObject,
-            "client_last_modified": NSNumber(value: now) as AnyObject,
-            "url": "http://localhost/article/1" as AnyObject,
-            "title": "Article 1" as AnyObject,
-            "added_by": "Stefan's iPhone" as AnyObject,
-            "unread": true as AnyObject,
-            "archived": false as AnyObject,
-            "favorite": true as AnyObject
+        let row: [String:Any] = [
+            "client_id": Int64(1234),
+            "client_last_modified": now,
+            "url": "http://localhost/article/1",
+            "title": "Article 1",
+            "added_by": "Stefan's iPhone",
+            "unread": true,
+            "archived": false,
+            "favorite": true
         ]
 
         let record = ReadingListClientRecord(row: row)

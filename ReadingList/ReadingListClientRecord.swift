@@ -17,30 +17,28 @@ public struct ReadingListClientRecord: Equatable {
 
     /// Initializer for when a record is loaded from a database row
     public init?(row: [String: Any]) {
-        guard let clientMetadata = ReadingListClientMetadata(row: row),
-            let serverMetadata = ReadingListServerMetadata(row: row) else {
+        guard let clientMetadata = ReadingListClientMetadata(row: row) else {
             return nil
         }
 
         guard let url = row["url"] as? String,
             let title = row["title"] as? String,
             let addedBy = row["added_by"] as? String,
-            let unread = row["unread"] as? Bool,
-            let archived = row["archived"] as? Bool,
-            let favorite = row["favorite"] as? Bool else {
+            let unread = row["unread"] as? Bool else {
             return nil
         }
 
         self.clientMetadata = clientMetadata
-        self.serverMetadata = serverMetadata
+        self.serverMetadata = ReadingListServerMetadata(row: row)
 
         self.url = url
         self.title = title
         self.addedBy = addedBy
 
         self.unread = unread
-        self.archived = archived
-        self.favorite = favorite
+
+        self.archived = row["archived"] as? Bool ?? false
+        self.favorite = row["favorite"] as? Bool ?? false
     }
 
     public var json: AnyObject {
