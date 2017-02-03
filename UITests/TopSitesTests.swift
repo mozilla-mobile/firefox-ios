@@ -23,8 +23,8 @@ class TopSitesTests: KIFTestCase {
             BrowserUtils.addHistoryEntry("", url: URL(string: "https://test\(i).com")!)
         }
         // Switch to the Bookmarks panel and back so we can later reload Top Sites.
-        EarlGrey().selectElementWithMatcher(grey_accessibilityLabel("Bookmarks")).performAction(grey_tap())
-        EarlGrey().selectElementWithMatcher(grey_accessibilityLabel("Top sites")).performAction(grey_tap())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Bookmarks")).perform(grey_tap())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Top sites")).perform(grey_tap())
         
         // Remove the first site and verify that all other sites shift to replace it.
         // Get the first cell.
@@ -36,8 +36,8 @@ class TopSitesTests: KIFTestCase {
 
     func test_RemovingSuggestedSites() {
         // Switch to the Bookmarks panel and back so we can later reload Top Sites.
-        EarlGrey().selectElementWithMatcher(grey_accessibilityLabel("Bookmarks")).performAction(grey_tap())
-        EarlGrey().selectElementWithMatcher(grey_accessibilityLabel("Top sites")).performAction(grey_tap())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Bookmarks")).perform(grey_tap())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Top sites")).perform(grey_tap())
         
         let topSiteCell = tester().waitForView(withAccessibilityIdentifier: "TopSitesCell") as! ASHorizontalScrollCell
 		let collection = topSiteCell.collectionView
@@ -49,8 +49,8 @@ class TopSitesTests: KIFTestCase {
 
     func test_EmptyState() {
         // Switch to the Bookmarks panel and back so we can later reload Top Sites.
-        EarlGrey().selectElementWithMatcher(grey_accessibilityLabel("Bookmarks")).performAction(grey_tap())
-        EarlGrey().selectElementWithMatcher(grey_accessibilityLabel("Top sites")).performAction(grey_tap())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Bookmarks")).perform(grey_tap())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Top sites")).perform(grey_tap())
         
         // Delete all of the suggested tiles (with suggested site, they are marked hidden,
 		// not removed completely)
@@ -71,8 +71,8 @@ class TopSitesTests: KIFTestCase {
         BrowserUtils.addHistoryEntry("", url: URL(string: "https://mozilla.org")!)
 
         // Switch to the Bookmarks panel and back so we can later reload Top Sites.
-        EarlGrey().selectElementWithMatcher(grey_accessibilityLabel("Bookmarks")).performAction(grey_tap())
-        EarlGrey().selectElementWithMatcher(grey_accessibilityLabel("Top sites")).performAction(grey_tap())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Bookmarks")).perform(grey_tap())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Top sites")).perform(grey_tap())
         
 		topSiteCell = tester().waitForView(withAccessibilityIdentifier: "TopSitesCell") as! ASHorizontalScrollCell
 		collection = topSiteCell.collectionView
@@ -86,25 +86,24 @@ class TopSitesTests: KIFTestCase {
     }
 
     fileprivate func deleteSuggestedTopsite(_ accessibilityLabel: String) {
-        EarlGrey().selectElementWithMatcher(grey_accessibilityLabel(accessibilityLabel))
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(accessibilityLabel))
             .inRoot(grey_kindOfClass(NSClassFromString("Client.TopSiteItemCell")))
-            .performAction(grey_longPress())
-        
-        EarlGrey().selectElementWithMatcher(grey_accessibilityLabel("Remove"))
+            .perform(grey_longPress())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Remove"))
             .inRoot(grey_kindOfClass(NSClassFromString("Client.ActionOverlayTableViewCell")))
-            .performAction(grey_tap())
+            .perform(grey_tap())
         
         let disappeared = GREYCondition(name: "Wait for icon to disappear", block: { _ in
 			var errorOrNil: NSError?
-			let matcher = grey_allOfMatchers(grey_accessibilityLabel(accessibilityLabel),
-                grey_kindOfClass(NSClassFromString("UILabel")),
-                grey_notVisible())
             
-            EarlGrey().selectElementWithMatcher(matcher)
-			.assertWithMatcher(grey_notNil(), error: &errorOrNil)
+            let matcher = grey_allOfMatchers([grey_accessibilityLabel(accessibilityLabel)
+            , grey_kindOfClass(NSClassFromString("UILabel"))
+            , grey_notVisible()])
+            
+            EarlGrey.select(elementWithMatcher: matcher!).assert(with: grey_notNil(), error:  &errorOrNil)
 			let success = errorOrNil == nil
 			return success
-        }).waitWithTimeout(5)
+        }).wait(withTimeout: 5)
 		
 		GREYAssertTrue(disappeared, reason: "Failed to disappear")
     }
@@ -117,21 +116,20 @@ class TopSitesTests: KIFTestCase {
 			let firstCell = collection.visibleCells.first!
 			let accessibilityLabel = firstCell.accessibilityLabel
 			
-			EarlGrey().selectElementWithMatcher(grey_accessibilityLabel(accessibilityLabel))
-				.inRoot(grey_kindOfClass(NSClassFromString("Client.TopSiteItemCell")))
-				.performAction(grey_longPress())
-			
-			EarlGrey().selectElementWithMatcher(grey_accessibilityLabel("Remove"))
-				.inRoot(grey_kindOfClass(NSClassFromString("Client.ActionOverlayTableViewCell")))
-				.performAction(grey_tap())
-
-			let disappeared = GREYCondition(name: "Wait for icon to disappear", block: { _ in
+            EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(accessibilityLabel))
+                .inRoot(grey_kindOfClass(NSClassFromString("Client.TopSiteItemCell")))
+                .perform(grey_longPress())
+            EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Remove"))
+                .inRoot(grey_kindOfClass(NSClassFromString("Client.ActionOverlayTableViewCell")))
+                .perform(grey_tap())
+        
+            let disappeared = GREYCondition(name: "Wait for icon to disappear", block: { _ in
 				var errorOrNil: NSError?
-				 EarlGrey().selectElementWithMatcher(grey_accessibilityLabel(accessibilityLabel))
-				.assertWithMatcher(grey_notNil(), error: &errorOrNil)
+                EarlGrey.select(elementWithMatcher:grey_accessibilityLabel(accessibilityLabel))
+				.assert(with: grey_notNil(), error:  &errorOrNil)
 				let success = errorOrNil != nil
 				return success
-			}).waitWithTimeout(5)
+			}).wait(withTimeout: 5)
 			
 			GREYAssertTrue(disappeared, reason: "Failed to disappear")
 		}

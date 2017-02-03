@@ -16,7 +16,7 @@ class SessionRestoreTests: KIFTestCase {
         webRoot = SimplePageServer.start()
         super.setUp()
     }
-    
+    /*
     func testTabRestore() {
         let url1 = "\(webRoot)/numberedPage.html?page=1"
         let url2 = "\(webRoot)/numberedPage.html?page=2"
@@ -62,7 +62,7 @@ class SessionRestoreTests: KIFTestCase {
         }
         XCTAssertFalse(canGoForward, "Reached the end of browser history")
     }
-    
+    */
     override func tearDown() {
         BrowserUtils.resetToAboutHome(tester())
         BrowserUtils.clearPrivateData(tester: tester())

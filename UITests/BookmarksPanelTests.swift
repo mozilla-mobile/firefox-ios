@@ -45,19 +45,19 @@ class BookmarksPanelTests: KIFTestCase {
 
         XCTAssertTrue(bookmarks.applyRecords(recordsA).value.isSuccess)
 
-        EarlGrey().selectElementWithMatcher(grey_accessibilityLabel("Bookmarks")).performAction(grey_tap())
-        EarlGrey().selectElementWithMatcher(grey_accessibilityLabel("Desktop Bookmarks")).performAction(grey_tap())
-        EarlGrey().selectElementWithMatcher(grey_accessibilityLabel("Bookmarks Toolbar")).performAction(grey_tap())
-        EarlGrey().selectElementWithMatcher(grey_accessibilityLabel("AAA"))
-        .assertWithMatcher(grey_sufficientlyVisible())
-        EarlGrey().selectElementWithMatcher(grey_accessibilityLabel("Some Livemark"))
-            .assertWithMatcher(grey_sufficientlyVisible())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Bookmarks")).perform(grey_tap())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Desktop Bookmarks")).perform(grey_tap())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Bookmarks Toolbar")).perform(grey_tap())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("AAA"))
+        .assert(grey_sufficientlyVisible())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Some Livemark"))
+            .assert(grey_sufficientlyVisible())
         
         // When we tap the livemark, we load the siteURI.
-        EarlGrey().selectElementWithMatcher(grey_accessibilityLabel("Some Livemark")).performAction(grey_tap())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Some Livemark")).perform(grey_tap())
         
         // … so we show the truncated URL.
-        EarlGrey().selectElementWithMatcher(grey_accessibilityLabel("example.org/news"))
-            .assertWithMatcher(grey_sufficientlyVisible())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("example.org/news"))
+            .assert(grey_sufficientlyVisible())
     }
 }

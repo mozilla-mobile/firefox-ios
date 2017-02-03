@@ -9,6 +9,7 @@ import UIKit
 import GCDWebServers
 
 class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
+/*
     fileprivate var webRoot: String!
 
     override func setUp() {
@@ -199,6 +200,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         waitForExpectations(timeout: 10, handler: nil)
         return cookie
     }
+    */
 }
 
 /// Server that keeps track of requests.

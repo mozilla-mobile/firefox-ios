@@ -7,7 +7,7 @@ import Storage
 @testable import Client
 
 class LoginManagerTests: KIFTestCase {
-
+/*
     fileprivate var webRoot: String!
 
     override func setUp() {
@@ -697,7 +697,7 @@ class LoginManagerTests: KIFTestCase {
     }
 
     // Cannot be reactivated after being deactivated
-    /*
+
     func testLoginsListPromptsForPasscodeOnReentryFromBackground() {
         PasscodeUtils.setPasscode("1337", interval: .Immediately)
 
@@ -720,10 +720,10 @@ class LoginManagerTests: KIFTestCase {
         tester().tapViewWithAccessibilityLabel("Done")
         tester().tapViewWithAccessibilityLabel("home")
     }
-     */
+
     
     // Cannot be reactivated after being deactivated
-    /*
+
     func testLoginsListPromptsForPasscodeOnReentryFromBackgroundWithDelay() {
         PasscodeUtils.setPasscode("1337", interval: .FiveMinutes)
 
@@ -744,10 +744,10 @@ class LoginManagerTests: KIFTestCase {
         tester().tapViewWithAccessibilityLabel("Done")
         tester().tapViewWithAccessibilityLabel("home")
     }
-     */
+
     
     // Cannot be reactivated after being deactivated
-    /*
+
     func testLoginsDetailsPromptsForPasscodeOnReentryFromBackground() {
         PasscodeUtils.setPasscode("1337", interval: .Immediately)
 
@@ -772,10 +772,10 @@ class LoginManagerTests: KIFTestCase {
         tester().tapViewWithAccessibilityLabel("Back")
         closeLoginManager()
     }
-    */
+    
     
     // Cannot be reactivated after being deactivated
-    /*
+
     func testLoginsDetailsPromptsForPasscodeOnReentryFromBackgroundWithDelay() {
         PasscodeUtils.setPasscode("1337", interval: .FiveMinutes)
 
