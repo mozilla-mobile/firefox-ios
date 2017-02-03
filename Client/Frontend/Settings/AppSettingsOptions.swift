@@ -277,25 +277,30 @@ class AccountStatusSetting: WithAccountSetting {
     }
 
     override func onClick(navigationController: UINavigationController?) {
-        let viewController = FxAContentViewController()
-        viewController.delegate = self
-
         if let account = profile.getAccount() {
             switch account.actionNeeded {
-            case .NeedsVerification:
-                let cs = NSURLComponents(URL: account.configuration.settingsURL, resolvingAgainstBaseURL: false)
-                cs?.queryItems?.append(NSURLQueryItem(name: "email", value: account.email))
-                viewController.url = cs?.URL
+            case .NeedsVerification, .None:
+                if let settingsNavigationController = navigationController as? SettingsNavigationController {
+                    settingsNavigationController.SELdone()
+                    if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
+                        let url = NSURL(string:"https://accounts.firefox.com/")
+                        appDelegate.browserViewController?.openURLInNewTab(url, isPrivileged: true)
+                    }
+                }
+                return
             case .NeedsPassword:
+                let viewController = FxAContentViewController()
+                viewController.delegate = self
                 let cs = NSURLComponents(URL: account.configuration.forceAuthURL, resolvingAgainstBaseURL: false)
                 cs?.queryItems?.append(NSURLQueryItem(name: "email", value: account.email))
                 viewController.url = cs?.URL
-            case .None, .NeedsUpgrade:
+                navigationController?.pushViewController(viewController, animated: true)
+                return
+            case .NeedsUpgrade:
                 // In future, we'll want to link to /settings and an upgrade page, respectively.
                 return
             }
         }
-        navigationController?.pushViewController(viewController, animated: true)
     }
 }
 
