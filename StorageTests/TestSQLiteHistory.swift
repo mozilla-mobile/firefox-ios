@@ -1376,9 +1376,9 @@ class TestSQLiteHistoryFilterSplitting: XCTestCase {
     }
 
     fileprivate func stringArgsEqual(_ one: Args, _ other: Args) -> Bool {
-        return one.elementsEqual(other, by: { (oneElement: AnyObject?, otherElement: AnyObject?) -> Bool in
+        return one.elementsEqual(other, by: { (oneElement: Any?, otherElement: Any?) -> Bool in
             return (oneElement as! String) == (otherElement as! String)
-        } as! (Any?, Any?) -> Bool)
+        })
     }
 }
 
