@@ -39,7 +39,6 @@ class MockSyncServerTests: XCTestCase {
 
         let authorizer: Authorizer = identity
         let queue = DispatchQueue.global(qos: DispatchQoS.background.qosClass)
-        print("URL: \(url)")
         return Sync15StorageClient(serverURI: url, authorizer: authorizer, workQueue: queue, resultQueue: queue, backoff: MockBackoffStorage())
     }
 

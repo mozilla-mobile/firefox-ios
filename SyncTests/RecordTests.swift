@@ -58,7 +58,7 @@ class RecordTests: XCTestCase {
         }
 
         let clearFactory: (String) -> CleartextPayloadJSON? = {
-            (s: String) -> CleartextPayloadJSON? in
+            (s: String) -> CleartextPayloadJSON? in       
             return CleartextPayloadJSON(s)
         }
 
@@ -99,7 +99,7 @@ class RecordTests: XCTestCase {
         let envelope = EnvelopeJSON(inputString)
         if let r = toRecord(envelope) {
             XCTAssertEqual(r.id, expectedGUID)
-            XCTAssertTrue(r.modified == expectedLastModified)
+            XCTAssertTrue(r.modified == expectedLastModified) //1326254123650
             XCTAssertEqual(r.sortindex, expectedSortIndex)
 
             if let ee = encryptClient(r) {
@@ -169,7 +169,7 @@ class RecordTests: XCTestCase {
 
     func testHistoryPayload() {
         let payloadJSON = "{\"id\":\"--DzSJTCw-zb\",\"histUri\":\"https://bugzilla.mozilla.org/show_bug.cgi?id=1154549\",\"title\":\"1154549 – Encapsulate synced profile data within an account-centric object\",\"visits\":[{\"date\":1429061233163240,\"type\":1}]}"
-        let json = JSON(string: payloadJSON)
+        let json = JSON(parseJSON: payloadJSON)
         if let payload = HistoryPayload.fromJSON(json) {
             XCTAssertEqual("--DzSJTCw-zb", payload["id"].stringValue)
             XCTAssertEqual("1154549 – Encapsulate synced profile data within an account-centric object", payload["title"].stringValue)
@@ -187,7 +187,7 @@ class RecordTests: XCTestCase {
 
     func testHistoryPayloadWithNoTitle() {
         let payloadJSON = "{\"id\":\"--DzSJTCw-zb\",\"histUri\":\"https://foo.com/\",\"title\":null,\"visits\":[{\"date\":1429061233163240,\"type\":1}]}"
-        let json = JSON(string: payloadJSON)
+        let json = JSON(parseJSON: payloadJSON)
         if let payload = HistoryPayload.fromJSON(json) {
             XCTAssertEqual("", payload.title)
         } else {
@@ -408,7 +408,8 @@ class RecordTests: XCTestCase {
 
     func testQuery() {
         let str = "{\"title\":\"Downloads\",\"parentName\":\"\",\"bmkUri\":\"place:transition=7&sort=4\",\"id\":\"7gdp9S1okhKf\",\"parentid\":\"rq6WHyfHkoUV\",\"type\":\"query\"}"
-        let query = BookmarkType.payloadFromJSON(JSON(string: str))
+        
+        let query = BookmarkType.payloadFromJSON(JSON(parseJSON: str))
         XCTAssertTrue(query is BookmarkQueryPayload)
         let mirror = query?.toMirrorItem(Date.now())
         let roundtrip = mirror?.asPayload()

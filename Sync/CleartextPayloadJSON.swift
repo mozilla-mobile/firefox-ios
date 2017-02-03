@@ -40,7 +40,7 @@ open class BasePayloadJSON {
 open class CleartextPayloadJSON: BasePayloadJSON {
     // Override me.
     override open func isValid() -> Bool {
-        return super.isValid() && self["id"].isStringOrNull()
+        return super.isValid() && self["id"].isString()
     }
 
     open var id: String {
