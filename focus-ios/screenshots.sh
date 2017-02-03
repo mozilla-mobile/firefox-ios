@@ -1,6 +1,6 @@
 #!/bin/bash
 
-LANGUAGES="ar,az,cs,cy,de,en-US,es-CL,es-ES,fr,hu,id,it,ja,kab,nl,pl,pt-BR,ru,ses,sk,sl,sv-SE,tr,uk,zh-CN,zh-TW"
+LANGUAGES="ar,az,br,cs,cy,de,dsb,en-US,eo,es-CL,es-ES,fa,fr,ga-IE,gd,hi-IN,hsb,hu,id,it,ja,kab,lo,nb-NO,nl,nn-NO,pl,pt-BR,pt-PT,ru,ses,sk,sl,sq,sv-SE,th,tr,uk,uz,zh-CN,zh-TW"
 
 TS=`date +%Y%m%d-%H%M`
 
@@ -10,6 +10,7 @@ for PRODUCT in Focus Klar; do
         DEVICEDIR="${DEVICE// /}"
         mkdir -p "screenshots/$TS/$PRODUCT/$DEVICEDIR"
         fastlane snapshot --project Blockzilla.xcodeproj --scheme "${PRODUCT}SnapshotTests" \
+          --skip_open_summary \
           --erase_simulator --localize_simulator \
           --devices "$DEVICE" \
           --languages "$LANGUAGES" \
