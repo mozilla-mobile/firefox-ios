@@ -341,7 +341,6 @@ class MockSyncServer {
             guard let spec = SyncPutRequestSpec.fromRequest(request: request) else {
                 return MockSyncServer.withHeaders(response: GCDWebServerDataResponse(statusCode: 400))
             }
-
             var body = JSON(object: request.jsonObject)
             body["modified"] = JSON(stringLiteral: millisecondsToDecimalSeconds(Date.now()))
             let record = EnvelopeJSON(body)
