@@ -320,6 +320,11 @@
 		E40FF11C1E43D43F00BA7830 /* uz */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uz; path = uz.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E40FF11D1E43D43F00BA7830 /* uz */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uz; path = uz.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E40FF11E1E43D43F00BA7830 /* uz */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uz; path = uz.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		E40FF1321E464CDF00BA7830 /* fil */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fil; path = fil.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		E40FF1331E464CE000BA7830 /* fil */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fil; path = fil.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		E40FF1341E464CE000BA7830 /* fil */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fil; path = fil.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		E40FF1351E464CE000BA7830 /* fil */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fil; path = fil.lproj/Localizable.strings; sourceTree = "<group>"; };
+		E40FF1361E464CE000BA7830 /* fil */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fil; path = fil.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E44A34671E0A18C100BFD777 /* ScreenshotTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = ScreenshotTests.xctest; path = SnapshotTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E44A34691E0A18C100BFD777 /* SnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotTests.swift; sourceTree = "<group>"; };
 		E44A346B1E0A18C100BFD777 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1143,6 +1148,7 @@
 				E40FF1131E43D40600BA7830 /* sq */,
 				E40FF1181E43D41C00BA7830 /* th */,
 				E40FF11D1E43D43F00BA7830 /* uz */,
+				E40FF1351E464CE000BA7830 /* fil */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -1191,6 +1197,7 @@
 				E40FF1111E43D40600BA7830 /* sq */,
 				E40FF1161E43D41C00BA7830 /* th */,
 				E40FF11B1E43D43F00BA7830 /* uz */,
+				E40FF1331E464CE000BA7830 /* fil */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -1239,6 +1246,7 @@
 				E40FF1101E43D40600BA7830 /* sq */,
 				E40FF1151E43D41C00BA7830 /* th */,
 				E40FF11A1E43D43F00BA7830 /* uz */,
+				E40FF1321E464CDF00BA7830 /* fil */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -1287,6 +1295,7 @@
 				E40FF1121E43D40600BA7830 /* sq */,
 				E40FF1171E43D41C00BA7830 /* th */,
 				E40FF11C1E43D43F00BA7830 /* uz */,
+				E40FF1341E464CE000BA7830 /* fil */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -1335,6 +1344,7 @@
 				E40FF1141E43D40700BA7830 /* sq */,
 				E40FF1191E43D41D00BA7830 /* th */,
 				E40FF11E1E43D43F00BA7830 /* uz */,
+				E40FF1361E464CE000BA7830 /* fil */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
