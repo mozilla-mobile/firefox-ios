@@ -71,14 +71,14 @@ class TabScrollingController: NSObject {
 
     fileprivate var headerTopOffset: CGFloat = 0 {
         didSet {
-            headerTopConstraint?.updateOffset(amount: headerTopOffset)
+            headerTopConstraint?.update(offset: headerTopOffset)
             header?.superview?.setNeedsLayout()
         }
     }
 
     fileprivate var footerBottomOffset: CGFloat = 0 {
         didSet {
-            footerBottomConstraint?.updateOffset(amount: footerBottomOffset)
+            footerBottomConstraint?.update(offset: footerBottomOffset)
             footer?.superview?.setNeedsLayout()
         }
     }

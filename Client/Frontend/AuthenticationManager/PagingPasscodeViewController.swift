@@ -49,13 +49,13 @@ class PagingPasscodeViewController: BasePasscodeViewController {
 }
 
 extension PagingPasscodeViewController {
-    func scrollToNextAndSelect() -> PasscodePane {
+    @discardableResult func scrollToNextAndSelect() -> PasscodePane {
         scrollToNextPane()
         panes[currentPaneIndex].codeInputView.becomeFirstResponder()
         return panes[currentPaneIndex]
     }
 
-    func scrollToPreviousAndSelect() -> PasscodePane {
+    @discardableResult func scrollToPreviousAndSelect() -> PasscodePane {
         scrollToPreviousPane()
         panes[currentPaneIndex].codeInputView.becomeFirstResponder()
         return panes[currentPaneIndex]

@@ -573,12 +573,12 @@ public protocol BrowserLogins {
 
     // Add a new login regardless of whether other logins might match some fields. Callers
     // are responsible for querying first if they care.
-    func addLogin(_ login: LoginData) -> Success
+    @discardableResult func addLogin(_ login: LoginData) -> Success
 
-    func updateLoginByGUID(_ guid: GUID, new: LoginData, significant: Bool) -> Success
+    @discardableResult func updateLoginByGUID(_ guid: GUID, new: LoginData, significant: Bool) -> Success
 
     // Add the use of a login by GUID.
-    func addUseOfLoginByGUID(_ guid: GUID) -> Success
+    @discardableResult func addUseOfLoginByGUID(_ guid: GUID) -> Success
     func removeLoginByGUID(_ guid: GUID) -> Success
     func removeLoginsWithGUIDs(_ guids: [GUID]) -> Success
 

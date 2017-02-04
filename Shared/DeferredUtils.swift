@@ -69,7 +69,7 @@ public func deferMaybe<T>(_ e: MaybeErrorType) -> Deferred<Maybe<T>> {
 
 public typealias Success = Deferred<Maybe<Void>>
 
-public func succeed() -> Success {
+@discardableResult public func succeed() -> Success {
     return deferMaybe(())
 }
 

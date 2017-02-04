@@ -15,7 +15,7 @@ protocol TabLocationViewDelegate {
     func tabLocationViewDidLongPressLocation(_ tabLocationView: TabLocationView)
     func tabLocationViewDidTapReaderMode(_ tabLocationView: TabLocationView)
     /// - returns: whether the long-press was handled by the delegate; i.e. return `false` when the conditions for even starting handling long-press were not satisfied
-    func tabLocationViewDidLongPressReaderMode(_ tabLocationView: TabLocationView) -> Bool
+    @discardableResult func tabLocationViewDidLongPressReaderMode(_ tabLocationView: TabLocationView) -> Bool
     func tabLocationViewLocationAccessibilityActions(_ tabLocationView: TabLocationView) -> [UIAccessibilityCustomAction]?
 }
 

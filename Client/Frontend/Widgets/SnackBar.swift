@@ -235,7 +235,7 @@ class SnackBar: UIView {
      */
     func show() {
         alpha = 1
-        bottom?.updateOffset(amount: 0)
+        bottom?.update(offset: 0)
     }
 
     /**
@@ -247,7 +247,7 @@ class SnackBar: UIView {
         if h == 0 {
             h = UIConstants.ToolbarHeight
         }
-        bottom?.updateOffset(amount: h)
+        bottom?.update(offset: h)
     }
 
     fileprivate func addButton(_ snackButton: SnackButton) {

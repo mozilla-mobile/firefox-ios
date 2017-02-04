@@ -62,7 +62,7 @@ open class DiskImageStore {
     /// Adds an image for the given key.
     /// This put is asynchronous; the image is not recorded in the cache until the write completes.
     /// Does nothing if this key already exists in the store.
-    open func put(_ key: String, image: UIImage) -> Success {
+    @discardableResult open func put(_ key: String, image: UIImage) -> Success {
         if keys.contains(key) {
             return deferMaybe(DiskImageStoreErrorType(description: "Key already in store"))
         }

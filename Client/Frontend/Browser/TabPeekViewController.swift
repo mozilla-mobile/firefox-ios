@@ -10,7 +10,7 @@ import WebKit
 
 protocol TabPeekDelegate: class {
     func tabPeekDidAddBookmark(_ tab: Tab)
-    func tabPeekDidAddToReadingList(_ tab: Tab) -> ReadingListClientRecord?
+    @discardableResult func tabPeekDidAddToReadingList(_ tab: Tab) -> ReadingListClientRecord?
     func tabPeekRequestsPresentationOf(_ viewController: UIViewController)
     func tabPeekDidCloseTab(_ tab: Tab)
 }

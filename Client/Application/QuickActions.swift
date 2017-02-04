@@ -55,7 +55,7 @@ class QuickActions: NSObject {
             QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(type, withUserData: userData, toApplication: application)
     }
 
-    func addDynamicApplicationShortcutItemOfType(_ type: ShortcutType, withUserData userData: [AnyHashable: Any] = [AnyHashable: Any](), toApplication application: UIApplication) -> Bool {
+    @discardableResult func addDynamicApplicationShortcutItemOfType(_ type: ShortcutType, withUserData userData: [AnyHashable: Any] = [AnyHashable: Any](), toApplication application: UIApplication) -> Bool {
         // add the quick actions version so that it is always in the user info
         var userData: [AnyHashable: Any] = userData
         userData[QuickActions.QuickActionsVersionKey] = QuickActions.QuickActionsVersion
@@ -91,7 +91,7 @@ class QuickActions: NSObject {
 
 
     // MARK: Handling Quick Actions
-    func handleShortCutItem(_ shortcutItem: UIApplicationShortcutItem, withBrowserViewController bvc: BrowserViewController ) -> Bool {
+    @discardableResult func handleShortCutItem(_ shortcutItem: UIApplicationShortcutItem, withBrowserViewController bvc: BrowserViewController ) -> Bool {
 
         // Verify that the provided `shortcutItem`'s `type` is one handled by the application.
         guard let shortCutType = ShortcutType(fullType: shortcutItem.type) else { return false }

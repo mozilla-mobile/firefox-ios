@@ -117,7 +117,7 @@ class ReadingListTableViewCell: UITableViewCell {
             make.top.equalTo(self.contentView).offset(ReadingListTableViewCellUX.TitleLabelTopOffset)
             make.leading.equalTo(self.contentView).offset(ReadingListTableViewCellUX.TitleLabelLeftOffset)
             make.trailing.equalTo(self.contentView).offset(ReadingListTableViewCellUX.TitleLabelRightOffset) // TODO Not clear from ux spec
-            make.bottom.lessThanOrEqualTo(hostnameLabel.snp.top).priorityHigh()
+            make.bottom.lessThanOrEqualTo(hostnameLabel.snp.top).priority(1000)
         }
 
         hostnameLabel.textColor = ReadingListTableViewCellUX.ActiveTextColor
@@ -282,13 +282,13 @@ class ReadingListPanel: UITableViewController, HomePanel {
         containerView.addSubview(logoImageView)
         logoImageView.snp.makeConstraints { make in
             make.centerX.equalTo(containerView)
-            make.centerY.lessThanOrEqualTo(overlayView.snp.centerY).priorityHigh()
+            make.centerY.lessThanOrEqualTo(overlayView.snp.centerY).priority(1000)
 
             // Sets proper top constraint for iPhone 6 in portait and iPads.
-            make.centerY.equalTo(overlayView.snp.centerY).offset(HomePanelUX.EmptyTabContentOffset).priorityMedium()
+            make.centerY.equalTo(overlayView.snp.centerY).offset(HomePanelUX.EmptyTabContentOffset).priority(100)
 
             // Sets proper top constraint for iPhone 4, 5 in portrait.
-            make.top.greaterThanOrEqualTo(overlayView.snp.top).offset(50).priorityHigh()
+            make.top.greaterThanOrEqualTo(overlayView.snp.top).offset(50).priority(1000)
         }
 
         let welcomeLabel = UILabel()
@@ -304,7 +304,7 @@ class ReadingListPanel: UITableViewController, HomePanel {
             make.top.equalTo(logoImageView.snp.bottom).offset(ReadingListPanelUX.WelcomeScreenPadding)
 
             // Sets proper center constraint for iPhones in landscape.
-            make.centerY.lessThanOrEqualTo(overlayView.snp.centerY).offset(-40).priorityHigh()
+            make.centerY.lessThanOrEqualTo(overlayView.snp.centerY).offset(-40).priority(1000)
         }
 
         let readerModeLabel = UILabel()

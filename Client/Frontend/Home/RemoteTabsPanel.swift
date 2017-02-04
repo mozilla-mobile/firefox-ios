@@ -326,10 +326,10 @@ class RemoteTabsErrorCell: UITableViewCell {
             make.centerX.equalTo(contentView)
 
             // Sets proper top constraint for iPhone 6 in portait and for iPad.
-            make.centerY.equalTo(contentView.snp.centerY).offset(HomePanelUX.EmptyTabContentOffset).priorityMedium()
+            make.centerY.equalTo(contentView.snp.centerY).offset(HomePanelUX.EmptyTabContentOffset).priority(100)
 
             // Sets proper top constraint for iPhone 4, 5 in portrait.
-            make.top.greaterThanOrEqualTo(contentView.snp.top).offset(20).priorityHigh()
+            make.top.greaterThanOrEqualTo(contentView.snp.top).offset(20).priority(1000)
         }
     }
 
@@ -398,10 +398,10 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
             make.centerX.equalTo(instructionsLabel)
 
             // Sets proper top constraint for iPhone 6 in portait and for iPad.
-            make.centerY.equalTo(contentView).offset(HomePanelUX.EmptyTabContentOffset + 30).priorityMedium()
+            make.centerY.equalTo(contentView).offset(HomePanelUX.EmptyTabContentOffset + 30).priority(100)
 
             // Sets proper top constraint for iPhone 4, 5 in portrait.
-            make.top.greaterThanOrEqualTo(contentView.snp.top).priorityHigh()
+            make.top.greaterThanOrEqualTo(contentView.snp.top).priority(1000)
         }
 
         titleLabel.snp.makeConstraints { make in
@@ -438,10 +438,10 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
                 make.width.equalTo(RemoteTabsPanelUX.EmptyStateInstructionsWidth)
 
                 // Sets proper landscape layout for bigger phones: iPhone 6 and on.
-                make.left.lessThanOrEqualTo(contentView.snp.left).offset(80).priorityMedium()
+                make.left.lessThanOrEqualTo(contentView.snp.left).offset(80).priority(100)
 
                 // Sets proper landscape layout for smaller phones: iPhone 4 & 5.
-                make.right.lessThanOrEqualTo(contentView.snp.centerX).offset(-30).priorityHigh()
+                make.right.lessThanOrEqualTo(contentView.snp.centerX).offset(-30).priority(1000)
             }
 
             signInButton.snp.remakeConstraints { make in
@@ -450,10 +450,10 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
                 make.centerY.equalTo(emptyStateImageView).offset(2*RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
 
                 // Sets proper landscape layout for bigger phones: iPhone 6 and on.
-                make.right.greaterThanOrEqualTo(contentView.snp.right).offset(-70).priorityMedium()
+                make.right.greaterThanOrEqualTo(contentView.snp.right).offset(-70).priority(100)
 
                 // Sets proper landscape layout for smaller phones: iPhone 4 & 5.
-                make.left.greaterThanOrEqualTo(contentView.snp.centerX).offset(10).priorityHigh()
+                make.left.greaterThanOrEqualTo(contentView.snp.centerX).offset(10).priority(1000)
             }
         } else {
             instructionsLabel.snp.remakeConstraints { make in

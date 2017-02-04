@@ -167,7 +167,7 @@ open class FirefoxAccount {
         }
     }
 
-    open func advance() -> Deferred<FxAState> {
+    @discardableResult open func advance() -> Deferred<FxAState> {
         OSSpinLockLock(&advanceLock)
         if let deferred = advanceDeferred {
             // We already have an advance() in progress.  This consumer can chain from it.
@@ -228,13 +228,13 @@ open class FirefoxAccount {
         }
     }
 
-    open func makeSeparated() -> Bool {
+    @discardableResult open func makeSeparated() -> Bool {
         log.info("Making Account State be Separated.")
         self.stateCache.value = SeparatedState()
         return true
     }
 
-    open func makeDoghouse() -> Bool {
+    @discardableResult open func makeDoghouse() -> Bool {
         log.info("Making Account State be Doghouse.")
         self.stateCache.value = DoghouseState()
         return true

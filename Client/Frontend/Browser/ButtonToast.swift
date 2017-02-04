@@ -108,7 +108,7 @@ class ButtonToast: UIView {
         superview?.removeGestureRecognizer(gestureRecognizer)
         
         UIView.animate(withDuration: SimpleToastUX.ToastAnimationDuration, animations: {
-                self.animationConstraint?.updateOffset(amount: SimpleToastUX.ToastHeight)
+                self.animationConstraint?.update(offset: SimpleToastUX.ToastHeight)
                 self.layoutIfNeeded()
             },
             completion: { finished in
@@ -123,7 +123,7 @@ class ButtonToast: UIView {
     func showToast() {
         layoutIfNeeded()
         UIView.animate(withDuration: SimpleToastUX.ToastAnimationDuration, animations: {
-                self.animationConstraint?.updateOffset(amount: 0)
+                self.animationConstraint?.update(offset: 0)
                 self.layoutIfNeeded()
             },
             completion: { finished in

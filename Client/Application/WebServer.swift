@@ -30,7 +30,7 @@ class WebServer {
         credentials = URLCredential(user: sessionToken, password: "", persistence: .forSession)
     }
 
-    func start() throws -> Bool {
+    @discardableResult func start() throws -> Bool {
         if !server.isRunning {
             try server.start(options: [
                 GCDWebServerOption_Port: 6571,

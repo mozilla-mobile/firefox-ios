@@ -41,7 +41,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
     var systemBrightness: CGFloat = UIScreen.main.brightness
 
-    func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    @discardableResult func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Hold references to willFinishLaunching parameters for delayed app launch
         self.application = application
         self.launchOptions = launchOptions
@@ -61,7 +61,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         }
     }
 
-    fileprivate func startApplication(_ application: UIApplication, withLaunchOptions launchOptions: [AnyHashable: Any]?) -> Bool {
+    @discardableResult fileprivate func startApplication(_ application: UIApplication, withLaunchOptions launchOptions: [AnyHashable: Any]?) -> Bool {
         log.debug("Setting UA…")
         // Set the Firefox UA for browsing.
         setUserAgent()

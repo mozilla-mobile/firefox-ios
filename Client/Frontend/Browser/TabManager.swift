@@ -198,7 +198,7 @@ class TabManager: NSObject {
         }
     }
 
-    func addTab(_ request: URLRequest! = nil, configuration: WKWebViewConfiguration! = nil, afterTab: Tab? = nil, isPrivate: Bool) -> Tab {
+    @discardableResult func addTab(_ request: URLRequest! = nil, configuration: WKWebViewConfiguration! = nil, afterTab: Tab? = nil, isPrivate: Bool) -> Tab {
         return self.addTab(request, configuration: configuration, afterTab: afterTab, flushToDisk: true, zombie: false, isPrivate: isPrivate)
     }
 
@@ -208,14 +208,14 @@ class TabManager: NSObject {
         return tab
     }
 
-    func addTabAndSelect(_ request: URLRequest! = nil, configuration: WKWebViewConfiguration! = nil, afterTab: Tab? = nil) -> Tab {
+    @discardableResult func addTabAndSelect(_ request: URLRequest! = nil, configuration: WKWebViewConfiguration! = nil, afterTab: Tab? = nil) -> Tab {
         let tab = addTab(request, configuration: configuration, afterTab: afterTab)
         selectTab(tab)
         return tab
     }
 
     // This method is duplicated to hide the flushToDisk option from consumers.
-    func addTab(_ request: URLRequest! = nil, configuration: WKWebViewConfiguration! = nil, afterTab: Tab? = nil) -> Tab {
+    @discardableResult func addTab(_ request: URLRequest! = nil, configuration: WKWebViewConfiguration! = nil, afterTab: Tab? = nil) -> Tab {
         return self.addTab(request, configuration: configuration, afterTab: afterTab, flushToDisk: true, zombie: false)
     }
 

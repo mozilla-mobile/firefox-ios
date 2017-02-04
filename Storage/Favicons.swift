@@ -18,5 +18,5 @@ public protocol Favicons {
     /**
      * Returns the ID of the added favicon.
      */
-    func addFavicon(_ icon: Favicon, forSite site: Site) -> Deferred<Maybe<Int>>
+    @discardableResult func addFavicon(_ icon: Favicon, forSite site: Site) -> Deferred<Maybe<Int>>
 }

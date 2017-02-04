@@ -111,7 +111,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             make.centerX.equalTo(overlayView)
 
             // Sets proper top constraint for iPhone 6 in portait and for iPad.
-            make.centerY.equalTo(overlayView).offset(HomePanelUX.EmptyTabContentOffset).priorityMedium()
+            make.centerY.equalTo(overlayView).offset(HomePanelUX.EmptyTabContentOffset).priority(100)
 
             // Sets proper top constraint for iPhone 4, 5 in portrait.
             make.top.greaterThanOrEqualTo(overlayView).offset(50)

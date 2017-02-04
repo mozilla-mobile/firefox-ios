@@ -9,7 +9,7 @@ import Deferred
 
 // MARK: Ping Centre Client
 public protocol PingCentreClient {
-    func sendPing(_ data: [String: Any], validate: Bool) -> Success
+    @discardableResult func sendPing(_ data: [String: Any], validate: Bool) -> Success
 }
 
 public struct PingCentre {
@@ -98,7 +98,7 @@ class DefaultPingCentreImpl: PingCentreClient {
             return deferred
         }
 
-        self.manager.request(request as! URLRequestConvertible)
+        self.manager.request(request as URLRequestConvertible)
             .validate(statusCode: 200..<300)
             .response(queue: DispatchQueue.global()) { (response) in
                 if let e = response.error {
