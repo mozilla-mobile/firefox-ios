@@ -437,21 +437,19 @@ open class Sync15StorageClient {
     func requestWrite(_ url: URL, method: String, body: String, contentType: String, ifUnmodifiedSince: Timestamp?) -> Request {
         var req = URLRequest(url: url as URL)
         req.httpMethod = method
-
         req.setValue(contentType, forHTTPHeaderField: "Content-Type")
-        let authorized: URLRequest = self.authorizer(req)
 
         if let ifUnmodifiedSince = ifUnmodifiedSince {
             req.setValue(millisecondsToDecimalSeconds(ifUnmodifiedSince), forHTTPHeaderField: "X-If-Unmodified-Since")
         }
 
         req.httpBody = body.data(using: String.Encoding.utf8)!
+        let authorized: URLRequest = self.authorizer(req)
         return alamofire.request(authorized)
     }
 
     func requestPUT(_ url: URL, body: JSON, ifUnmodifiedSince: Timestamp?) -> Request {
-        print("the stringgg \(body.rawString())")
-        return self.requestWrite(url, method: URLRequest.Method.put.rawValue, body: body.rawString([.castNilToNSNull: true])!, contentType: "application/json;charset=utf-8", ifUnmodifiedSince: ifUnmodifiedSince)
+        return self.requestWrite(url, method: URLRequest.Method.put.rawValue, body: body.rawString()!, contentType: "application/json;charset=utf-8", ifUnmodifiedSince: ifUnmodifiedSince)
     }
 
     func requestPOST(_ url: URL, body: JSON, ifUnmodifiedSince: Timestamp?) -> Request {
