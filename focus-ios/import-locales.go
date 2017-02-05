@@ -8,8 +8,10 @@ import (
 	"strings"
 )
 
-// Turn Foo/Bar.strings into Foo/jp.lproj/Bar.strings
 func localizedDestination(dest string, language string) string {
+	if language == "tl" {
+		language = "fil"
+	}
 	dir, file := filepath.Split(dest)
 	return filepath.Join(dir, fmt.Sprintf("%s.lproj", language), file)
 }
