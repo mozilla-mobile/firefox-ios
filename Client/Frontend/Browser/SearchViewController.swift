@@ -638,7 +638,7 @@ fileprivate class SuggestionCell: UITableViewCell {
                 if container.subviews.isEmpty {
                     let image = UIImage(named: SearchViewControllerUX.SearchImage)
                     button.setImage(image, for: UIControlState())
-                    button.titleEdgeInsets = UIEdgeInsetsMake(0, 8, 0, 0)
+                    button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 0)
                 }
 
                 container.addSubview(button)

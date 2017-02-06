@@ -279,7 +279,7 @@ class RemoteTabsErrorCell: UITableViewCell {
     init(error: RemoteTabsError) {
         super.init(style: .default, reuseIdentifier: RemoteTabsErrorCell.Identifier)
 
-        separatorInset = UIEdgeInsetsMake(0, 1000, 0, 0)
+        separatorInset = UIEdgeInsets(top: 0, left: 1000, bottom: 0, right: 0)
 
         let containerView = UIView()
         contentView.addSubview(containerView)
