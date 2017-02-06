@@ -34,9 +34,9 @@ private struct HistoryPanelUX {
 }
 
 class HistoryPanel: UIViewController, HomePanel {
-    weak var homePanelDelegate: HomePanelDelegate? = nil
+    weak var homePanelDelegate: HomePanelDelegate?
     var profile: Profile!
-    fileprivate var currentSyncedDevicesCount: Int? = nil
+    fileprivate var currentSyncedDevicesCount: Int?
     fileprivate lazy var tableViewController: HistoryPanelSiteTableViewController = {
         return HistoryPanelSiteTableViewController()
     }()

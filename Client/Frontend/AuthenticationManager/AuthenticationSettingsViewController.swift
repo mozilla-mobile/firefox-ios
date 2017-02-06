@@ -149,8 +149,8 @@ class TouchIDSetting: Setting {
     fileprivate weak var navigationController: UINavigationController?
     fileprivate weak var switchControl: UISwitch?
 
-    fileprivate var touchIDSuccess: (() -> Void)? = nil
-    fileprivate var touchIDFallback: (() -> Void)? = nil
+    fileprivate var touchIDSuccess: (() -> Void)?
+    fileprivate var touchIDFallback: (() -> Void)?
 
     init(
         title: NSAttributedString?,

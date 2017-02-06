@@ -91,7 +91,7 @@ public func ==(lhs: Visit, rhs: Visit) -> Bool {
 }
 
 open class SiteVisit: Visit {
-    var id: Int? = nil
+    var id: Int?
     open let site: Site
 
     open override var hashValue: Int {

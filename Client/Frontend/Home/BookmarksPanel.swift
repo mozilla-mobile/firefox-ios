@@ -35,7 +35,7 @@ struct BookmarksPanelUX {
 }
 
 class BookmarksPanel: SiteTableViewController, HomePanel {
-    weak var homePanelDelegate: HomePanelDelegate? = nil
+    weak var homePanelDelegate: HomePanelDelegate?
     var source: BookmarksModel?
     var parentFolders = [BookmarkFolder]()
     var bookmarkFolder: BookmarkFolder?

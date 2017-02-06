@@ -12,7 +12,7 @@ import Deferred
 private let log = Logger.browserLogger
 
 class RecentlyClosedTabsPanel: UIViewController, HomePanel {
-    weak var homePanelDelegate: HomePanelDelegate? = nil
+    weak var homePanelDelegate: HomePanelDelegate?
     var profile: Profile!
 
     fileprivate lazy var recentlyClosedHeader: UILabel = {

@@ -30,7 +30,7 @@ struct ASPanelUX {
 }
 
 class ActivityStreamPanel: UITableViewController, HomePanel {
-    weak var homePanelDelegate: HomePanelDelegate? = nil
+    weak var homePanelDelegate: HomePanelDelegate?
     fileprivate let profile: Profile
     fileprivate let telemetry: ActivityStreamTracker
 

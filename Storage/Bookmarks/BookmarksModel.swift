@@ -12,11 +12,11 @@ private let log = Logger.syncLogger
  * The kinda-immutable base interface for bookmarks and folders.
  */
 open class BookmarkNode {
-    open var id: Int? = nil
+    open var id: Int?
     open let guid: GUID
     open let title: String
     open let isEditable: Bool
-    open var favicon: Favicon? = nil
+    open var favicon: Favicon?
 
     init(guid: GUID, title: String, isEditable: Bool=false) {
         self.guid = guid

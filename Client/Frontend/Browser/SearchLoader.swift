@@ -22,7 +22,7 @@ typealias SearchLoader = _SearchLoader<AnyObject, AnyObject>
 class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController> {
     fileprivate let profile: Profile
     fileprivate let urlBar: URLBarView
-    fileprivate var inProgress: Cancellable? = nil
+    fileprivate var inProgress: Cancellable?
 
     init(profile: Profile, urlBar: URLBarView) {
         self.profile = profile

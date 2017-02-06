@@ -35,7 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
     let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
 
-    var openInFirefoxParams: LaunchParams? = nil
+    var openInFirefoxParams: LaunchParams?
 
     var appStateStore: AppStateStore!
 

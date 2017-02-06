@@ -263,8 +263,8 @@ class SnackBar: UIView {
  * you stay on the current tab though, it will persist until you interact with it.
  */
 class TimerSnackBar: SnackBar {
-    fileprivate var prevURL: URL? = nil
-    fileprivate var timer: Timer? = nil
+    fileprivate var prevURL: URL?
+    fileprivate var timer: Timer?
     fileprivate var timeout: TimeInterval
 
     init(timeout: TimeInterval = 10, attrText: NSAttributedString, img: UIImage?, buttons: [SnackButton]?) {

@@ -179,7 +179,7 @@ class ReadingListTableViewCell: UITableViewCell {
 }
 
 class ReadingListPanel: UITableViewController, HomePanel {
-    weak var homePanelDelegate: HomePanelDelegate? = nil
+    weak var homePanelDelegate: HomePanelDelegate?
     var profile: Profile!
 
     fileprivate lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverview()

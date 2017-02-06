@@ -44,7 +44,7 @@ private let RemoteClientIdentifier = "RemoteClient"
 private let RemoteTabIdentifier = "RemoteTab"
 
 class RemoteTabsPanel: UIViewController, HomePanel {
-    weak var homePanelDelegate: HomePanelDelegate? = nil
+    weak var homePanelDelegate: HomePanelDelegate?
     fileprivate lazy var tableViewController: RemoteTabsTableViewController = RemoteTabsTableViewController()
     fileprivate lazy var historyBackButton: HistoryBackButton = {
         let button = HistoryBackButton()
