@@ -44,7 +44,7 @@ public struct FxADevice {
                 return nil
         }
 
-        let isCurrentDevice = json["isCurrentDevice"].boolValue ?? false
+        let isCurrentDevice = json["isCurrentDevice"].bool ?? false
         return FxADevice(name: name, id: id, type: type, isCurrentDevice: isCurrentDevice)
     }
 }
