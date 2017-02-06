@@ -282,7 +282,7 @@ public struct BookmarkTree {
         orphans.subtract(notTops)
 
         // Recursive. (Not tail recursive, but trees shouldn't be deep enough to blow the stack….)
-        func nodeForGUID(_ guid: GUID) -> BookmarkTreeNode {
+        @discardableResult func nodeForGUID(_ guid: GUID) -> BookmarkTreeNode {
             if let already = nodes[guid] {
                 return already
             }
@@ -305,7 +305,7 @@ public struct BookmarkTree {
 
         // Process every record.
         // Do the not-tops first: shallower recursion.
-        let _ = notTops.forEach({ nodeForGUID($0) })
+        notTops.forEach({ nodeForGUID($0) })
 
         let subtrees = tops.map(nodeForGUID)        // These will all be folders.
 
