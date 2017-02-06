@@ -6,30 +6,6 @@ import Foundation
 @testable import Storage
 
 import XCTest
-// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
-// Consider refactoring the code to use the non-optional operators.
-fileprivate func < <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l < r
-  case (nil, _?):
-    return true
-  default:
-    return false
-  }
-}
-
-// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
-// Consider refactoring the code to use the non-optional operators.
-fileprivate func >= <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l >= r
-  default:
-    return !(lhs < rhs)
-  }
-}
-
 
 class TestFaviconsTable: XCTestCase {
     var db: BrowserDB!
@@ -45,8 +21,14 @@ class TestFaviconsTable: XCTestCase {
             inserted = favicons.insert(connection, item: icon, err: &error)
             return inserted
         }
+
+        guard let insertedCount = inserted else {
+            XCTFail("Inserted return value is nil!")
+            return icon
+        }
+        
         if s {
-            XCTAssert(inserted >= 0, "Insert succeeded")
+            XCTAssert(insertedCount >= 0, "Insert succeeded")
         } else {
             XCTAssert(inserted == nil, "Insert failed")
         }

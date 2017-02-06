@@ -3,30 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
-// Consider refactoring the code to use the non-optional operators.
-fileprivate func < <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l < r
-  case (nil, _?):
-    return true
-  default:
-    return false
-  }
-}
-
-// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
-// Consider refactoring the code to use the non-optional operators.
-fileprivate func > <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l > r
-  default:
-    return rhs < lhs
-  }
-}
-
 
 private struct ETLDEntry: CustomStringConvertible {
     let entry: String
@@ -144,7 +120,7 @@ extension URL {
         var results = [String: String]()
         let keyValues = self.query?.components(separatedBy: "&")
 
-        if keyValues?.count > 0 {
+        if keyValues?.count ?? 0 > 0 {
             for pair in keyValues! {
                 let kv = pair.components(separatedBy: "=")
                 if kv.count > 1 {

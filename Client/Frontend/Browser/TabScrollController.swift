@@ -4,30 +4,6 @@
 
 import UIKit
 import SnapKit
-// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
-// Consider refactoring the code to use the non-optional operators.
-fileprivate func < <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l < r
-  case (nil, _?):
-    return true
-  default:
-    return false
-  }
-}
-
-// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
-// Consider refactoring the code to use the non-optional operators.
-fileprivate func >= <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l >= r
-  default:
-    return !(lhs < rhs)
-  }
-}
-
 
 private let ToolbarBaseAnimationDuration: CGFloat = 0.2
 
@@ -275,11 +251,11 @@ private extension TabScrollingController {
     }
 
     func checkScrollHeightIsLargeEnoughForScrolling() -> Bool {
-        return (UIScreen.main.bounds.size.height + 2 * UIConstants.ToolbarHeight) < scrollView?.contentSize.height
+        return (UIScreen.main.bounds.size.height + 2 * UIConstants.ToolbarHeight) < scrollView?.contentSize.height ?? 0
     }
     
     func showOrHideWebViewContainerToolbar() {
-        if contentOffset.y >= webViewContainerToolbar?.frame.height {
+        if contentOffset.y >= webViewContainerToolbar?.frame.height ?? 0 {
             webViewContainerToolbar?.isHidden = true
         } else {
             webViewContainerToolbar?.isHidden = false

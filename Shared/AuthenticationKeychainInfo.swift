@@ -4,19 +4,6 @@
 
 import Foundation
 import SwiftKeychainWrapper
-// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
-// Consider refactoring the code to use the non-optional operators.
-fileprivate func < <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l < r
-  case (nil, _?):
-    return true
-  default:
-    return false
-  }
-}
-
 
 public let KeychainKeyAuthenticationInfo = "authenticationInfo"
 public let AllowedPasscodeFailedAttempts = 3
@@ -135,10 +122,11 @@ public extension AuthenticationKeychainInfo {
     }
 
     func isLocked() -> Bool {
-        guard self.lockOutInterval != nil else {
+        guard let lockOutInterval = self.lockOutInterval else {
             return false
         }
-        if SystemUtils.systemUptime() < self.lockOutInterval {
+        
+        if SystemUtils.systemUptime() < lockOutInterval {
             // Unlock and require passcode input
             resetLockoutState()
             return false
