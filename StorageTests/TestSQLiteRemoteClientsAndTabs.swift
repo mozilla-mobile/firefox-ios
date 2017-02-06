@@ -128,7 +128,6 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
         clientsAndTabs = SQLiteRemoteClientsAndTabs(db: BrowserDB(filename: "browser.db", files: files))
     }
 
-
     func testInsertGetClear() {
         // Insert some test data.
         for c in clients {
@@ -219,7 +218,6 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
             }
             clientsAndTabs.insertOrUpdateTabsForClientGUID(c.client.guid, tabs: c.tabs)
         }
-
 
         let e = self.expectation(description: "Get after insert.")
         let ct = clients[0]

@@ -795,7 +795,6 @@ class TestBookmarkTreeMerging: FailFastTestCase {
         bookmarks.local.db.run("INSERT INTO \(TableBookmarksLocalStructure) (parent, child, idx) VALUES ('\(BookmarkRoots.MobileFolderGUID)', 'emptyempty02', 0)").succeeded()
         bookmarks.local.db.run("INSERT INTO \(TableBookmarksLocalStructure) (parent, child, idx) VALUES ('\(BookmarkRoots.MobileFolderGUID)', 'emptyemptyL0', 1)").succeeded()
 
-
         let uploader = MockUploader()
         let storer = uploader.getStorer()
         let applier = MergeApplier(buffer: bookmarks, storage: bookmarks, client: storer, greenLight: { true })

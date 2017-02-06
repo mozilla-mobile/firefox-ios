@@ -302,7 +302,6 @@ protocol SQLiteDBConnection {
     func executeChange(_ sqlStr: String) -> NSError?
     func executeChange(_ sqlStr: String, withArgs args: Args?) -> NSError?
 
-
     func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T)) -> Cursor<T>
     func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: Args?) -> Cursor<T>
     func executeQueryUnsafe<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: Args?) -> Cursor<T>
@@ -315,7 +314,6 @@ protocol SQLiteDBConnection {
 
 // Represents a failure to open.
 class FailedSQLiteDBConnection: SQLiteDBConnection {
-
 
     func executeChange(_ sqlStr: String, withArgs args: Args?) -> NSError? {
         return self.fail("Non-open connection; can't execute change.")

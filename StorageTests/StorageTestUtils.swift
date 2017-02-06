@@ -10,7 +10,6 @@ import Shared
 @testable import Storage
 import XCTest
 
-
 // MARK: - The messy way to extend non-protocol generics.
 
 protocol Succeedable {

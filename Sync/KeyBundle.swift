@@ -111,7 +111,6 @@ open class KeyBundle: Hashable {
         return nil
     }
 
-
     fileprivate func crypt(_ input: Data, iv: Data, op: CCOperation) -> (status: CCCryptorStatus, buffer: UnsafeMutableRawPointer, count: Int) {
         let resultSize = input.count + kCCBlockSizeAES128
         var copied: Int = 0

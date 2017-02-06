@@ -47,7 +47,6 @@ private func assertLinesMatchRecords<T>(lines: [String], records: [Record<T>], s
     }
 }
 
-
 private func deferEmptyResponse(token batchToken: BatchToken? = nil, lastModified: Timestamp? = nil) -> Deferred<Maybe<StorageResponse<POSTResult>>> {
     var headers = [String: Any]()
     if let lastModified = lastModified {

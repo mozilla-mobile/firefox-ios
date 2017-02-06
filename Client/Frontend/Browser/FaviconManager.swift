@@ -10,7 +10,6 @@ import WebImage
 import Deferred
 import Sync
 
-
 class FaviconManager: TabHelper {
     static let FaviconDidLoad = "FaviconManagerFaviconDidLoad"
     

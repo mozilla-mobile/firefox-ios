@@ -7,7 +7,6 @@ import Shared
 import WebKit
 import SwiftyJSON
 
-
 let ReaderModeProfileKeyStyle = "readermode.style"
 
 enum ReaderModeMessageType: String {

@@ -106,7 +106,6 @@ class AppSettingsTableViewController: SettingsTableViewController {
             PrivacyPolicySetting()
         ]
 
-
         settings += [
             SettingSection(title: NSAttributedString(string: privacyTitle), children: privacySettings),
             SettingSection(title: NSAttributedString(string: NSLocalizedString("Support", comment: "Support section title")), children: [

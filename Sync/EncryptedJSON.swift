@@ -157,7 +157,6 @@ open class EncryptedJSON {
         return _cleartext!
     }
 
-
     subscript(key: String) -> JSON {
         get {
             return json[key]

@@ -178,7 +178,6 @@ class OpenSearchParser {
             return nil
         }
 
-
         let urlIndexers = docIndexer.children(tag: "Url")
         if urlIndexers.isEmpty {
             print("Url must appear at least once")

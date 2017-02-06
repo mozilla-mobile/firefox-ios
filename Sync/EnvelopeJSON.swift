@@ -66,7 +66,6 @@ open class EnvelopeJSON {
     }
 }
 
-
 extension EnvelopeJSON {
     func asJSON() -> JSON {
         return self.json

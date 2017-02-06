@@ -339,7 +339,6 @@ open class FxAClient10 {
     }
 }
 
-
 extension FxAClient10: FxALoginClient {
 
     func keyPair() -> Deferred<Maybe<KeyPair>> {
@@ -351,7 +350,6 @@ extension FxAClient10: FxALoginClient {
         let URL = self.URL.appendingPathComponent("/account/keys")
         var mutableURLRequest = URLRequest(url: URL)
         mutableURLRequest.httpMethod = HTTPMethod.get.rawValue
-
 
         let salt: Data = Data()
         let contextInfo: Data = FxAClient10.KW("keyFetchToken")

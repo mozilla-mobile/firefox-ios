@@ -347,7 +347,6 @@ class MenuView: UIView {
         toolbar.backgroundColor = toolbarColor
     }
 
-
     fileprivate func layoutMenu() {
         menuContainerView.backgroundColor = menuColor
         let numberOfItemsInRow = CGFloat(menuItemDataSource?.numberOfItemsPerRowInMenuView(self) ?? 0)

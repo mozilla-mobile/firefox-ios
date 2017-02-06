@@ -587,7 +587,6 @@ class SyncedTabsButton: UIButton {
         addSubview(image)
         addSubview(descriptionLabel)
 
-
         image.snp.makeConstraints { make in
             make.leading.equalTo(self).offset(TwoLineCellUX.BorderViewMargin)
             make.centerY.equalTo(self)

@@ -267,7 +267,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             return false
         }
 
-
         if AppConstants.MOZ_FXA_DEEP_LINK_FORM_FILL {
             // Extract optional FxA deep-linking options
             let fxaQuery = url.getQuery()

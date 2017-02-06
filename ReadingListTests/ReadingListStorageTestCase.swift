@@ -8,7 +8,6 @@ import Shared
 
 import XCTest
 
-
 class ReadingListStorageTestCase: XCTestCase {
     var storage: ReadingListStorage!
 

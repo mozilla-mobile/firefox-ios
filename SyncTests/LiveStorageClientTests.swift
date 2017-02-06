@@ -51,7 +51,6 @@ class LiveStorageClientTests: LiveAccountTest {
         let encoder = RecordEncoder<KeysPayload>(decode: { KeysPayload($0) }, encode: { $0.json })
         let encrypter = Keys(defaultBundle: keyBundle).encrypter("crypto", encoder: encoder)
 
-
         let workQueue = DispatchQueue.global(qos: DispatchQoS.default.qosClass)
         let resultQueue = DispatchQueue.main
         let backoff = MockBackoffStorage()

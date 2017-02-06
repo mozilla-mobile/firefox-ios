@@ -55,7 +55,6 @@ private extension TrayToBrowserAnimator {
         // Flush any pending layout/animation code in preperation of the animation call
         container.layoutIfNeeded()
 
-
         let finalFrame = calculateExpandedCellFrameFromBVC(bvc)
         bvc.footer.alpha = shouldDisplayFooterForBVC(bvc) ? 1 : 0
         bvc.urlBar.isTransitioning = true

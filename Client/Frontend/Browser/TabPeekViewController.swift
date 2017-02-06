@@ -75,7 +75,6 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
         return actions
     }()
 
-
     init(tab: Tab, delegate: TabPeekDelegate?) {
         self.tab = tab
         self.delegate = delegate

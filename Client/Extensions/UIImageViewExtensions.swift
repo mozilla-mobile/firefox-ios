@@ -36,7 +36,6 @@ public extension UIImageView {
     }
 }
 
-
 open class ImageOperation: NSObject, SDWebImageOperation {
     open var cacheOperation: Operation?
 

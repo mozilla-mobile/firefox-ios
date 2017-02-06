@@ -16,7 +16,6 @@ private let oneDayInMicroseconds: UInt64 = 24 * oneHourInMicroseconds
 class TestSQLiteHistoryRecommendations: XCTestCase {
     let files = MockFiles()
 
-
     /*
      * Verify that we return a non-recent history highlight if:
      *

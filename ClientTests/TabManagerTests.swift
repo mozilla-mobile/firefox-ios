@@ -11,7 +11,6 @@ import Deferred
 
 import XCTest
 
-
 open class TabManagerMockProfile: MockProfile {
     var numberOfTabsStored = 0
     override public func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
@@ -101,7 +100,6 @@ open class MockTabManagerDelegate: TabManagerDelegate {
         testDelegateMethodWithName(#function, tabs: [])
     }
 }
-
 
 class TabManagerTests: XCTestCase {
 
@@ -193,7 +191,6 @@ class TabManagerTests: XCTestCase {
         delegate.verify("Not all delegate methods were called")
     }
 
-
     func testDidDeleteLastPrivateTab() {
         let profile = TabManagerMockProfile()
         let manager = TabManager(prefs: profile.prefs, imageStore: nil)
@@ -261,7 +258,6 @@ class TabManagerTests: XCTestCase {
 
         delegate.verify("Not all delegate methods were called")
     }
-
 
     func testDeleteFirstTab() {
         let profile = TabManagerMockProfile()

@@ -154,7 +154,6 @@ class ThumbnailCell: UICollectionViewCell {
         return imageView
     }()
 
-
     lazy var imageWrapper: UIView = {
         let imageWrapper = UIView()
         imageWrapper.layer.borderColor = ThumbnailCellUX.BorderColor.cgColor
@@ -231,8 +230,6 @@ class ThumbnailCell: UICollectionViewCell {
         textLabel.setContentCompressionResistancePriority(1000, for: UILayoutConstraintAxis.vertical)
     }
 
-
-
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -259,7 +256,6 @@ class ThumbnailCell: UICollectionViewCell {
     func SELdidRemove() {
         delegate?.didRemoveThumbnail(self)
     }
-
 
     func SELdidLongPress() {
         delegate?.didLongPressThumbnail(self)

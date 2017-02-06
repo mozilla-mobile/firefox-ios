@@ -177,7 +177,6 @@ class LoginListViewController: SensitiveViewController {
         }
     }
 
-
     // Wrap the SQLiteLogins method to allow us to cancel it from our end.
     fileprivate func queryLogins(_ query: String) -> Deferred<Maybe<[Login]>> {
         let deferred = Deferred<Maybe<[Login]>>()

@@ -242,7 +242,6 @@ class NSURLExtensionsTests: XCTestCase {
         badurls.forEach { XCTAssertNil(URL(string:$0)!.originalURLFromErrorURL) }
     }
 
-
     func testisReaderModeURL() {
         let goodurls = [
             "http://localhost:6571/reader-mode/page",

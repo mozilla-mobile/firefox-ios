@@ -8,8 +8,6 @@ import UIKit
 import XCGLogger
 import SwiftyJSON
 
-
-
 // The following are only here because we use master for L10N and otherwise these strings would disappear from the v1.0 release
 private let Bug1204635_S1 = NSLocalizedString("Clear Everything", tableName: "ClearPrivateData", comment: "Title of the Clear private data dialog.")
 private let Bug1204635_S2 = NSLocalizedString("Are you sure you want to clear all of your data? This will also close all open tabs.", tableName: "ClearPrivateData", comment: "Message shown in the dialog prompting users if they want to clear everything")

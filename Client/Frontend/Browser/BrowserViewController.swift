@@ -409,7 +409,6 @@ class BrowserViewController: UIViewController {
             return true
         })
 
-
         log.debug("BVC setting up search loader…")
         searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
 
@@ -1382,13 +1381,11 @@ extension BrowserViewController: MenuActionDelegate {
     }
 }
 
-
 extension BrowserViewController: SettingsDelegate {
     func settingsOpenURLInNewTab(_ url: URL) {
         self.openURLInNewTab(url, isPrivileged: false)
     }
 }
-
 
 extension BrowserViewController: PresentingModalViewControllerDelegate {
     func dismissPresentedModalViewController(_ modalViewController: UIViewController, animated: Bool) {
@@ -3306,7 +3303,6 @@ class BlurWrapper: UIView {
             background.isHidden = !disableBlur
         }
     }
-    
 
     fileprivate var effectView: UIVisualEffectView
     fileprivate var wrappedView: UIView
