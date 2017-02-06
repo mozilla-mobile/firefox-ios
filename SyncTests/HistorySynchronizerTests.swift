@@ -182,7 +182,7 @@ extension MockSyncableHistory: SyncableHistory {
 
 
 class HistorySynchronizerTests: XCTestCase {
-    private func applyRecords(records: [Record<HistoryPayload>], toStorage storage: protocol<SyncableHistory, ResettableSyncStorage>) -> (synchronizer: HistorySynchronizer, prefs: Prefs, scratchpad: Scratchpad) {
+    private func applyRecords(records: [Record<HistoryPayload>], toStorage storage: SyncableHistory & ResettableSyncStorage) -> (synchronizer: HistorySynchronizer, prefs: Prefs, scratchpad: Scratchpad) {
         let delegate = MockSyncDelegate()
 
         // We can use these useless values because we're directly injecting decrypted
