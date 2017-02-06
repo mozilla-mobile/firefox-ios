@@ -9,14 +9,14 @@ import Shared
 
 /// This test should be disabled since session restore does not seem to work
 class SessionRestoreTests: KIFTestCase {
-    private var webRoot: String!
+    fileprivate var webRoot: String!
     
     override func setUp() {
         BrowserUtils.dismissFirstRunUI(tester())
         webRoot = SimplePageServer.start()
         super.setUp()
     }
-    
+    /*
     func testTabRestore() {
         let url1 = "\(webRoot)/numberedPage.html?page=1"
         let url2 = "\(webRoot)/numberedPage.html?page=2"
@@ -25,44 +25,44 @@ class SessionRestoreTests: KIFTestCase {
         // Build a session restore URL from the current homepage URL.
         var jsonDict = [String: AnyObject]()
         jsonDict["history"] = [url1, url2, url3]
-        jsonDict["currentPage"] = -1
-        let escapedJSON = JSON.stringify(jsonDict, pretty: false).stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
-        let webView = tester().waitForViewWithAccessibilityLabel("Web content") as! WKWebView
-        let restoreURL = NSURL(string: "/about/sessionrestore?history=\(escapedJSON)", relativeToURL: webView.URL!)
+        jsonDict["currentPage"] = -1 as AnyObject?
+        let escapedJSON = JSON.stringify(jsonDict, pretty: false).stringByAddingPercentEncodingWithAllowedCharacters(CharacterSet.URLQueryAllowedCharacterSet())!
+        let webView = tester().waitForView(withAccessibilityLabel: "Web content") as! WKWebView
+        let restoreURL = URL(string: "/about/sessionrestore?history=\(escapedJSON)", relativeToURL: webView.URL!)
         
         // Enter the restore URL and verify the back/forward history.
         // After triggering the restore, the session should look like this:
         //   about:home, page1, *page2*, page3
         // where page2 is active.
-        tester().tapViewWithAccessibilityIdentifier("url")
+        tester().tapView(withAccessibilityIdentifier: "url")
         tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(restoreURL!.absoluteString!)\n")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 2")
-        tester().tapViewWithAccessibilityLabel("Back")
+        tester().tapView(withAccessibilityLabel: "Back")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
-        tester().tapViewWithAccessibilityLabel("Back")
-        tester().waitForViewWithAccessibilityLabel("Top sites")
+        tester().tapView(withAccessibilityLabel: "Back")
+        tester().waitForView(withAccessibilityLabel: "Top sites")
         let canGoBack: Bool
         do {
-            try tester().tryFindingTappableViewWithAccessibilityLabel("Back")
+            try tester().tryFindingTappableView(withAccessibilityLabel: "Back")
             canGoBack = true
         } catch _ {
             canGoBack = false
         }
         XCTAssertFalse(canGoBack, "Reached the beginning of browser history")
-        tester().tapViewWithAccessibilityLabel("Forward")
-        tester().tapViewWithAccessibilityLabel("Forward")
-        tester().tapViewWithAccessibilityLabel("Forward")
+        tester().tapView(withAccessibilityLabel: "Forward")
+        tester().tapView(withAccessibilityLabel: "Forward")
+        tester().tapView(withAccessibilityLabel: "Forward")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 3")
         let canGoForward: Bool
         do {
-            try tester().tryFindingTappableViewWithAccessibilityLabel("Forward")
+            try tester().tryFindingTappableView(withAccessibilityLabel: "Forward")
             canGoForward = true
         } catch _ {
             canGoForward = false
         }
         XCTAssertFalse(canGoForward, "Reached the end of browser history")
     }
-    
+    */
     override func tearDown() {
         BrowserUtils.resetToAboutHome(tester())
         BrowserUtils.clearPrivateData(tester: tester())

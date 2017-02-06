@@ -267,6 +267,8 @@ private class SQLiteDBStatement {
             } else if obj is Date {
                 let timestamp = (obj as! Date).timeIntervalSince1970
                 status = sqlite3_bind_double(pointer, Int32(index+1), timestamp)
+            } else if obj is UInt64 {
+                status = sqlite3_bind_double(pointer, Int32(index+1), Double(obj as! UInt64))
             } else if obj == nil {
                 status = sqlite3_bind_null(pointer, Int32(index+1))
             }
@@ -661,7 +663,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
     }
 
     func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T)) -> Cursor<T> {
-        return self.executeQuery(sqlStr, factory: factory)
+        return self.executeQuery(sqlStr, factory: factory, withArgs: nil)
     }
 
     /// Queries the database.
@@ -796,7 +798,8 @@ class SDRow: Sequence {
 
         switch type {
         case SQLITE_NULL, SQLITE_INTEGER:
-            ret = Int(sqlite3_column_int64(statement.pointer, i))
+            //Everyone expects this to be an Int. On Ints larger than 2^31 this will lose information.
+            ret = Int(truncatingBitPattern: sqlite3_column_int64(statement.pointer, i))
         case SQLITE_TEXT:
             if let text = sqlite3_column_text(statement.pointer, i) {
                 return String(cString: text)

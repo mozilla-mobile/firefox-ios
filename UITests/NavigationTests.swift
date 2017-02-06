@@ -6,7 +6,7 @@ import Foundation
 import WebKit
 
 class NavigationTests: KIFTestCase, UITextFieldDelegate {
-    private var webRoot: String!
+    fileprivate var webRoot: String!
 
     override func setUp() {
         super.setUp()
@@ -20,55 +20,55 @@ class NavigationTests: KIFTestCase, UITextFieldDelegate {
      */
     
     func testNavigation() {
-        tester().tapViewWithAccessibilityIdentifier("url")
-        var textView = tester().waitForViewWithAccessibilityLabel("Address and Search") as? UITextField
+        tester().tapView(withAccessibilityIdentifier: "url")
+        var textView = tester().waitForView(withAccessibilityLabel: "Address and Search") as? UITextField
         XCTAssertTrue(textView!.text!.isEmpty, "Text is empty")
         XCTAssertNotNil(textView!.placeholder, "Text view has a placeholder to show when its empty")
 
         let url1 = "\(webRoot)/numberedPage.html?page=1"
-        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url1)\n")
+        tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "\(url1)\n")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
 
-        tester().tapViewWithAccessibilityIdentifier("url")
-        textView = tester().waitForViewWithAccessibilityLabel("Address and Search") as? UITextField
+        tester().tapView(withAccessibilityIdentifier: "url")
+        textView = tester().waitForView(withAccessibilityLabel: "Address and Search") as? UITextField
         XCTAssertEqual(textView!.text, url1, "Text is url")
 
         let url2 = "\(webRoot)/numberedPage.html?page=2"
-        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url2)\n")
+        tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "\(url2)\n")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 2")
 
-        tester().tapViewWithAccessibilityLabel("Back")
+        tester().tapView(withAccessibilityLabel: "Back")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
 
-        tester().tapViewWithAccessibilityLabel("Forward")
+        tester().tapView(withAccessibilityLabel: "Forward")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 2")
     }
 
     func testScrollsToTopWithMultipleTabs() {
         // test scrollsToTop works with 1 tab
-        tester().tapViewWithAccessibilityIdentifier("url")
+        tester().tapView(withAccessibilityIdentifier: "url")
         let url = "\(webRoot)/scrollablePage.html?page=1"
-        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url)\n")
+        tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "\(url)\n")
         tester().waitForWebViewElementWithAccessibilityLabel("Top")
 
 //        var webView = tester().waitForViewWithAccessibilityLabel("Web content") as? WKWebView
-        tester().scrollViewWithAccessibilityIdentifier("contentView", byFractionOfSizeHorizontal: -0.9, vertical: -0.9)
+        tester().scrollView(withAccessibilityIdentifier: "contentView", byFractionOfSizeHorizontal: -0.9, vertical: -0.9)
         tester().waitForWebViewElementWithAccessibilityLabel("Bottom")
 
         tester().tapStatusBar()
         tester().waitForWebViewElementWithAccessibilityLabel("Top")
 
         // now open another tab and test it works too
-        tester().tapViewWithAccessibilityLabel("Show Tabs")
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("New Tab")
-        tester().waitForViewWithAccessibilityLabel("Web content")
+        tester().tapView(withAccessibilityLabel: "Show Tabs")
+        tester().tapView(withAccessibilityLabel: "Menu")
+        tester().tapView(withAccessibilityLabel: "New Tab")
+        tester().waitForView(withAccessibilityLabel: "Web content")
         let url2 = "\(webRoot)/scrollablePage.html?page=2"
-        tester().tapViewWithAccessibilityIdentifier("url")
-        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url2)\n")
+        tester().tapView(withAccessibilityIdentifier: "url")
+        tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "\(url2)\n")
         tester().waitForWebViewElementWithAccessibilityLabel("Top")
 
-        tester().scrollViewWithAccessibilityIdentifier("contentView", byFractionOfSizeHorizontal: -0.9, vertical: -0.9)
+        tester().scrollView(withAccessibilityIdentifier: "contentView", byFractionOfSizeHorizontal: -0.9, vertical: -0.9)
         tester().waitForWebViewElementWithAccessibilityLabel("Bottom")
 
         tester().tapStatusBar()
@@ -76,45 +76,45 @@ class NavigationTests: KIFTestCase, UITextFieldDelegate {
     }
 
     func testTapSignInShowsFxAFromRemoteTabPanel() {
-        tester().tapViewWithAccessibilityLabel("History")
-        tester().tapViewWithAccessibilityLabel("Synced devices")
-        tester().tapViewWithAccessibilityLabel("Sign in")
-        tester().waitForViewWithAccessibilityLabel("Web content")
-        tester().tapViewWithAccessibilityLabel("Cancel")
-        tester().waitForViewWithAccessibilityLabel("Sign in")
+        tester().tapView(withAccessibilityLabel: "History")
+        tester().tapView(withAccessibilityLabel: "Synced devices")
+        tester().tapView(withAccessibilityLabel: "Sign in")
+        tester().waitForView(withAccessibilityLabel: "Web content")
+        tester().tapView(withAccessibilityLabel: "Cancel")
+        tester().waitForView(withAccessibilityLabel: "Sign in")
     }
 
     func testTapSignInShowsFxAFromTour() {
         // Launch the tour from the settings
-        tester().tapViewWithAccessibilityLabel("Menu")
+        tester().tapView(withAccessibilityLabel: "Menu")
         tester().waitForAnimationsToFinish()
-        tester().tapViewWithAccessibilityLabel("Settings")
+        tester().tapView(withAccessibilityLabel: "Settings")
         tester().waitForAnimationsToFinish()
-        tester().tapViewWithAccessibilityLabel("Show Tour")
+        tester().tapView(withAccessibilityLabel: "Show Tour")
         tester().waitForAnimationsToFinish()
 
         // Swipe to the end of the tour
-        tester().swipeViewWithAccessibilityLabel("Intro Tour Carousel", inDirection: KIFSwipeDirection.Left)
-        tester().swipeViewWithAccessibilityLabel("Intro Tour Carousel", inDirection: KIFSwipeDirection.Left)
+        tester().swipeView(withAccessibilityLabel: "Intro Tour Carousel", in: KIFSwipeDirection.left)
+        tester().swipeView(withAccessibilityLabel: "Intro Tour Carousel", in: KIFSwipeDirection.left)
 
-        tester().tapViewWithAccessibilityLabel("Sign in to Firefox")
-        tester().waitForViewWithAccessibilityLabel("Web content")
-        tester().tapViewWithAccessibilityLabel("Cancel")
+        tester().tapView(withAccessibilityLabel: "Sign in to Firefox")
+        tester().waitForView(withAccessibilityLabel: "Web content")
+        tester().tapView(withAccessibilityLabel: "Cancel")
         tester().waitForAnimationsToFinish()
     }
 
     func testTapSigninShowsFxAFromSettings() {
         // Navigation to the settings to select the signin option
-        tester().tapViewWithAccessibilityLabel("Menu")
+        tester().tapView(withAccessibilityLabel: "Menu")
         tester().waitForAnimationsToFinish()
-        tester().tapViewWithAccessibilityLabel("Settings")
+        tester().tapView(withAccessibilityLabel: "Settings")
         tester().waitForAnimationsToFinish()
-        tester().tapViewWithAccessibilityLabel("Sign In to Firefox")
-        tester().waitForViewWithAccessibilityLabel("Web content")
+        tester().tapView(withAccessibilityLabel: "Sign In to Firefox")
+        tester().waitForView(withAccessibilityLabel: "Web content")
 
         // Go back to the home screen
-        tester().tapViewWithAccessibilityLabel("Settings")
-        tester().tapViewWithAccessibilityLabel("Done")
+        tester().tapView(withAccessibilityLabel: "Settings")
+        tester().tapView(withAccessibilityLabel: "Done")
     }
 
     func testToggleBetweenMobileAndDesktopSite() {
@@ -195,84 +195,84 @@ class NavigationTests: KIFTestCase, UITextFieldDelegate {
         ensureDesktopSite()
 
         // Navigate back and ensure that we are on the mobile site again
-        tester().tapViewWithAccessibilityLabel("Back")
+        tester().tapView(withAccessibilityLabel: "Back")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
         ensureMobileSite()
 
         // Navigate forward and ensure that we are on the desktop site again
-        tester().tapViewWithAccessibilityLabel("Forward")
+        tester().tapView(withAccessibilityLabel: "Forward")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 2")
         ensureDesktopSite()
     }
 
-    private func loadURL(url: String, webViewElementAccessibilityLabel: String? = nil) {
-        tester().tapViewWithAccessibilityIdentifier("url")
-        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder(url + "\n")
+    fileprivate func loadURL(_ url: String, webViewElementAccessibilityLabel: String? = nil) {
+        tester().tapView(withAccessibilityIdentifier: "url")
+        tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: url + "\n")
         if let label = webViewElementAccessibilityLabel {
             tester().waitForWebViewElementWithAccessibilityLabel(label)
         } else {
-            tester().waitForTimeInterval(5)
+            tester().wait(forTimeInterval: 5)
         }
     }
 
-    private func reload(webViewElementAccessibilityLabel: String) {
-        tester().tapViewWithAccessibilityLabel("Reload")
+    fileprivate func reload(_ webViewElementAccessibilityLabel: String) {
+        tester().tapView(withAccessibilityLabel: "Reload")
         tester().waitForWebViewElementWithAccessibilityLabel(webViewElementAccessibilityLabel)
     }
 
-    private func ensureMobileSite() {
-        tester().longPressViewWithAccessibilityLabel("Reload", duration: 1)
-        tester().waitForViewWithAccessibilityLabel("Request Desktop Site")
-        tester().tapViewWithAccessibilityLabel("Cancel")
-        tester().waitForAbsenceOfViewWithAccessibilityLabel("Request Desktop Site")
+    fileprivate func ensureMobileSite() {
+        tester().longPressView(withAccessibilityLabel: "Reload", duration: 1)
+        tester().waitForView(withAccessibilityLabel: "Request Desktop Site")
+        tester().tapView(withAccessibilityLabel: "Cancel")
+        tester().waitForAbsenceOfView(withAccessibilityLabel: "Request Desktop Site")
     }
     
-    private func ensureDesktopSite() {
-        tester().longPressViewWithAccessibilityLabel("Reload", duration: 1)
-        tester().waitForViewWithAccessibilityLabel("Request Mobile Site")
-        tester().tapViewWithAccessibilityLabel("Cancel")
-        tester().waitForAbsenceOfViewWithAccessibilityLabel("Request Mobile Site")
+    fileprivate func ensureDesktopSite() {
+        tester().longPressView(withAccessibilityLabel: "Reload", duration: 1)
+        tester().waitForView(withAccessibilityLabel: "Request Mobile Site")
+        tester().tapView(withAccessibilityLabel: "Cancel")
+        tester().waitForAbsenceOfView(withAccessibilityLabel: "Request Mobile Site")
     }
 
-    private func requestMobileSite(webViewElementAccessibilityLabel: String) {
-        tester().longPressViewWithAccessibilityLabel("Reload", duration: 1)
-        tester().waitForViewWithAccessibilityLabel("Request Mobile Site")
-        tester().tapViewWithAccessibilityLabel("Request Mobile Site")
+    fileprivate func requestMobileSite(_ webViewElementAccessibilityLabel: String) {
+        tester().longPressView(withAccessibilityLabel: "Reload", duration: 1)
+        tester().waitForView(withAccessibilityLabel: "Request Mobile Site")
+        tester().tapView(withAccessibilityLabel: "Request Mobile Site")
         tester().waitForWebViewElementWithAccessibilityLabel(webViewElementAccessibilityLabel)
     }
 
-    private func requestDesktopSite(webViewElementAccessibilityLabel: String) {
-        tester().longPressViewWithAccessibilityLabel("Reload", duration: 1)
-        tester().waitForViewWithAccessibilityLabel("Request Desktop Site")
-        tester().tapViewWithAccessibilityLabel("Request Desktop Site")
+    fileprivate func requestDesktopSite(_ webViewElementAccessibilityLabel: String) {
+        tester().longPressView(withAccessibilityLabel: "Reload", duration: 1)
+        tester().waitForView(withAccessibilityLabel: "Request Desktop Site")
+        tester().tapView(withAccessibilityLabel: "Request Desktop Site")
         tester().waitForWebViewElementWithAccessibilityLabel(webViewElementAccessibilityLabel)
     }
 
-    private func requestDesktopSiteFromMenu(webViewElementAccessibilityLabel: String) {
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().waitForViewWithAccessibilityLabel("Request Desktop Site")
-        tester().tapViewWithAccessibilityLabel("Request Desktop Site")
+    fileprivate func requestDesktopSiteFromMenu(_ webViewElementAccessibilityLabel: String) {
+        tester().tapView(withAccessibilityLabel: "Menu")
+        tester().waitForView(withAccessibilityLabel: "Request Desktop Site")
+        tester().tapView(withAccessibilityLabel: "Request Desktop Site")
         tester().waitForWebViewElementWithAccessibilityLabel(webViewElementAccessibilityLabel)
     }
 
-    private func requestMobileSiteFromMenu(webViewElementAccessibilityLabel: String) {
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().waitForViewWithAccessibilityLabel("Request Mobile Site")
-        tester().tapViewWithAccessibilityLabel("Request Mobile Site")
+    fileprivate func requestMobileSiteFromMenu(_ webViewElementAccessibilityLabel: String) {
+        tester().tapView(withAccessibilityLabel: "Menu")
+        tester().waitForView(withAccessibilityLabel: "Request Mobile Site")
+        tester().tapView(withAccessibilityLabel: "Request Mobile Site")
         tester().waitForWebViewElementWithAccessibilityLabel(webViewElementAccessibilityLabel)
     }
 
 
-    private func ensureMobileSiteFromMenu() {
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().waitForViewWithAccessibilityLabel("Request Desktop Site")
-        tester().tapViewWithAccessibilityLabel("Close Menu")
+    fileprivate func ensureMobileSiteFromMenu() {
+        tester().tapView(withAccessibilityLabel: "Menu")
+        tester().waitForView(withAccessibilityLabel: "Request Desktop Site")
+        tester().tapView(withAccessibilityLabel: "Close Menu")
     }
 
-    private func ensureDesktopSiteFromMenu() {
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().waitForViewWithAccessibilityLabel("Request Mobile Site")
-        tester().tapViewWithAccessibilityLabel("Close Menu")
+    fileprivate func ensureDesktopSiteFromMenu() {
+        tester().tapView(withAccessibilityLabel: "Menu")
+        tester().waitForView(withAccessibilityLabel: "Request Mobile Site")
+        tester().tapView(withAccessibilityLabel: "Close Menu")
     }
 
     override func tearDown() {

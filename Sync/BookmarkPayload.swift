@@ -165,7 +165,7 @@ open class SeparatorPayload: BookmarkBasePayload {
         if !super.isValid() {
             return false
         }
-        if self["pos"].isInt() {
+        if !self["pos"].isInt() {
             log.warning("Separator \(self.id) missing pos.")
             return false
         }
@@ -463,7 +463,7 @@ open class BookmarkBasePayload: CleartextPayloadJSON, MirrorItemable {
         return fields.every { field in
             let val = self[field]
             // Yup, 404 is not found, so this means "string or nothing".
-            let valid = val.type == .string || val.type == .null || val.error?.code == 404
+            let valid = val.isString() || val.isNull() || val.isError()
             if !valid {
                 log.debug("Field \(field) is invalid: \(val).")
             }

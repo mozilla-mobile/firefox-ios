@@ -176,7 +176,7 @@ struct ReadabilityResult {
 
     /// Initialize from a JSON encoded string
     init?(string: String) {
-        let object = JSON(string: string)
+        let object = JSON(parseJSON: string)
         let domain = object["domain"].string
         let url = object["url"].string
         let content = object["content"].string

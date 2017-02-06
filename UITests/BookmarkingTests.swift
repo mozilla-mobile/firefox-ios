@@ -6,7 +6,7 @@ import Foundation
 import WebKit
 
 class BookmarkingTests: KIFTestCase, UITextFieldDelegate {
-    private var webRoot: String!
+    fileprivate var webRoot: String!
 
     override func setUp() {
         super.setUp()
@@ -14,35 +14,35 @@ class BookmarkingTests: KIFTestCase, UITextFieldDelegate {
         BrowserUtils.dismissFirstRunUI(tester())
     }
     
-    private func bookmark() {
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("Add Bookmark")
+    fileprivate func bookmark() {
+        tester().tapView(withAccessibilityLabel: "Menu")
+        tester().tapView(withAccessibilityLabel: "Add Bookmark")
     }
 
-    private func unbookmark() {
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("Remove Bookmark")
+    fileprivate func unbookmark() {
+        tester().tapView(withAccessibilityLabel: "Menu")
+        tester().tapView(withAccessibilityLabel: "Remove Bookmark")
     }
 
-    private func checkBookmarked() {
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().waitForViewWithAccessibilityLabel("Remove Bookmark")
+    fileprivate func checkBookmarked() {
+        tester().tapView(withAccessibilityLabel: "Menu")
+        tester().waitForView(withAccessibilityLabel: "Remove Bookmark")
         do {
-            try tester().tryFindingTappableViewWithAccessibilityLabel("Close Menu")
-            tester().tapViewWithAccessibilityLabel("Close Menu")
+            try tester().tryFindingTappableView(withAccessibilityLabel: "Close Menu")
+            tester().tapView(withAccessibilityLabel: "Close Menu")
         } catch {
-            tester().tapViewWithAccessibilityLabel("dismiss popup")
+            tester().tapView(withAccessibilityLabel: "dismiss popup")
         }
     }
 
-    private func checkUnbookmarked() {
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().waitForViewWithAccessibilityLabel("Add Bookmark")
+    fileprivate func checkUnbookmarked() {
+        tester().tapView(withAccessibilityLabel: "Menu")
+        tester().waitForView(withAccessibilityLabel: "Add Bookmark")
         do {
-            try tester().tryFindingTappableViewWithAccessibilityLabel("Close Menu")
-            tester().tapViewWithAccessibilityLabel("Close Menu")
+            try tester().tryFindingTappableView(withAccessibilityLabel: "Close Menu")
+            tester().tapView(withAccessibilityLabel: "Close Menu")
         } catch {
-            tester().tapViewWithAccessibilityLabel("dismiss popup")
+            tester().tapView(withAccessibilityLabel: "dismiss popup")
         }
     }
 
@@ -51,9 +51,9 @@ class BookmarkingTests: KIFTestCase, UITextFieldDelegate {
      */
     func testBookmarkingUI() {
         // Load a page
-        tester().tapViewWithAccessibilityIdentifier("url")
+        tester().tapView(withAccessibilityIdentifier: "url")
         let url1 = "www.google.com"
-        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url1)\n")
+        tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "\(url1)\n")
         //tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
 
         // Bookmark it using the bookmark button
@@ -61,29 +61,29 @@ class BookmarkingTests: KIFTestCase, UITextFieldDelegate {
         checkBookmarked()
 
         // Load a different page in a new tab
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("New Tab")
+        tester().tapView(withAccessibilityLabel: "Menu")
+        tester().tapView(withAccessibilityLabel: "New Tab")
 
-        tester().tapViewWithAccessibilityIdentifier("url")
+        tester().tapView(withAccessibilityIdentifier: "url")
         let url2 = "www.mozilla.org"
-        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url2)\n")
+        tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "\(url2)\n")
        // tester().waitForWebViewElementWithAccessibilityLabel("Page 2")
 
         // Check that the bookmark button is no longer selected
         checkUnbookmarked()
 
         // Now switch back to the original tab
-        tester().tapViewWithAccessibilityLabel("Show Tabs")
-        tester().tapViewWithAccessibilityLabel("Google")
+        tester().tapView(withAccessibilityLabel: "Show Tabs")
+        tester().tapView(withAccessibilityLabel: "Google")
         checkBookmarked()
 
         // Check that it appears in the bookmarks home panel
-        tester().tapViewWithAccessibilityIdentifier("url")
-        tester().tapViewWithAccessibilityLabel("Bookmarks")
-        tester().waitForViewWithAccessibilityLabel("Google")
+        tester().tapView(withAccessibilityIdentifier: "url")
+        tester().tapView(withAccessibilityLabel: "Bookmarks")
+        tester().waitForView(withAccessibilityLabel: "Google")
 
         // Tap to open it
-        tester().tapViewWithAccessibilityLabel("Google")
+        tester().tapView(withAccessibilityLabel: "Google")
         //tester().waitForWebViewElementWithAccessibilityLabel("Google")
 
         // Unbookmark it using the bookmark button
@@ -91,9 +91,9 @@ class BookmarkingTests: KIFTestCase, UITextFieldDelegate {
         checkUnbookmarked()
 
         // Check that it no longer appears in the bookmarks home panel
-        tester().tapViewWithAccessibilityIdentifier("url")
-        tester().tapViewWithAccessibilityLabel("Bookmarks")
-        tester().waitForAbsenceOfViewWithAccessibilityLabel("google")
+        tester().tapView(withAccessibilityIdentifier: "url")
+        tester().tapView(withAccessibilityLabel: "Bookmarks")
+        tester().waitForAbsenceOfView(withAccessibilityLabel: "google")
     }
 
     // Disabled since font changing hack is no longer working for ios 10

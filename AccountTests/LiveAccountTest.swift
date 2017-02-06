@@ -7,6 +7,7 @@ import Foundation
 import FxA
 import Shared
 import Deferred
+import SwiftyJSON
 
 import XCTest
 
@@ -19,11 +20,11 @@ open class LiveAccountTest: XCTestCase {
     lazy var signedInUser: JSON? = {
         if let path = Bundle(for: type(of: self)).path(forResource: "signedInUser.json", ofType: nil) {
             if let contents = try? String(contentsOfFile: path, encoding: String.Encoding.utf8) {
-                let json = JSON.parse(contents)
-                if json.isError {
+                let json = JSON(parseJSON: contents)
+                if json.isError() {
                     return nil
                 }
-                if let email = json["email"].asString {
+                if let email = json["email"].string {
                     return json
                 } else {
                     // This is the standard case: signedInUser.json is {}.
@@ -45,9 +46,9 @@ open class LiveAccountTest: XCTestCase {
         self.expectation(description: "withExistingAccount").fulfill()
         if let json = self.signedInUser {
             if mustBeVerified {
-                XCTAssertTrue(json["verified"].asBool ?? false)
+                XCTAssertTrue(json["verified"].bool ?? false)
             }
-            let email = json["email"].asString!
+            let email = json["email"].stringValue
             let emailUTF8 = email.utf8EncodedData
             let password = email.utf8EncodedData
             let stretchedPW = FxAClient10.quickStretchPW(emailUTF8, password: password)

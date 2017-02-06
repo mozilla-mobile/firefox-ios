@@ -19,29 +19,29 @@ private let mockTopic = PingCentreTopic(name: "ios-mock", schema: Schema([
     ]
 ]))
 
-private var receivedNetworkRequests = [NSURLRequest]()
+private var receivedNetworkRequests = [URLRequest]()
 
 // Used to mock the network so we don't need to rely on the interweb for our unit tests.
-class MockingURLProtocol: NSURLProtocol {
-    override class func canInitWithRequest(request: NSURLRequest) -> Bool {
-        return request.URL?.scheme == "https" && request.HTTPMethod == "POST"
+class MockingURLProtocol: URLProtocol {
+    override class func canInit(with request: URLRequest) -> Bool {
+        return request.url?.scheme == "https" && request.httpMethod == "POST"
     }
 
-    override class func canonicalRequestForRequest(request: NSURLRequest) -> NSURLRequest {
+    override class func canonicalRequest(for request: URLRequest) -> URLRequest {
         return request
     }
 
     override func startLoading() {
         receivedNetworkRequests.append(request)
 
-        let response = NSHTTPURLResponse(URL: request.URL!,
+        let response = HTTPURLResponse(url: request.url!,
                                          statusCode: 200,
-                                         HTTPVersion: "HTTP/1.1",
+                                         httpVersion: "HTTP/1.1",
                                          headerFields: [:])
 
-        self.client?.URLProtocol(self, didReceiveResponse: response!, cacheStoragePolicy: .NotAllowed)
-        self.client?.URLProtocol(self, didLoadData: "".dataUsingEncoding(NSUTF8StringEncoding)!)
-        self.client?.URLProtocolDidFinishLoading(self)
+        self.client?.urlProtocol(self, didReceive: response!, cacheStoragePolicy: .notAllowed)
+        self.client?.urlProtocol(self, didLoad: "".data(using: String.Encoding.utf8)!)
+        self.client?.urlProtocolDidFinishLoading(self)
     }
 
     override func stopLoading() {
@@ -50,17 +50,17 @@ class MockingURLProtocol: NSURLProtocol {
 }
 
 class PingCentreTests: XCTestCase {
-    var manager: Alamofire.Manager!
+    var manager: SessionManager!
     var client: PingCentreClient!
 
     override func setUp() {
         super.setUp()
         
-        let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
-        configuration.protocolClasses!.insert(MockingURLProtocol.self, atIndex: 0)
+        let configuration = URLSessionConfiguration.default
+        configuration.protocolClasses!.insert(MockingURLProtocol.self, at: 0)
 
-        self.manager = Manager(configuration: configuration)
-        self.client = DefaultPingCentreImpl(topic: mockTopic, endpoint: .Staging, clientID: "fakeID", manager: self.manager)
+        self.manager = SessionManager(configuration: configuration)
+        self.client = DefaultPingCentreImpl(topic: mockTopic, endpoint: .staging, clientID: "fakeID", manager: self.manager)
     }
 
     override func tearDown() {

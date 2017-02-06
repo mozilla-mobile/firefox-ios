@@ -17,102 +17,137 @@
 import EarlGrey
 import Foundation
 
-let greyFailureHandler =
-	NSThread.currentThread().threadDictionary
-		.valueForKey(kGREYFailureHandlerKey) as! GREYFailureHandler
-
-public func grey_allOfMatchers(args: AnyObject...) -> GREYMatcher! {
-	return GREYAllOf(matchers: args)
+public func GREYAssert(_ expression: @autoclosure () -> Bool, reason: String) {
+    GREYAssert(expression, reason, details: "Expected expression to be true")
 }
 
-public func grey_anyOfMatchers(args: AnyObject...) -> GREYMatcher! {
-	return GREYAnyOf(matchers: args)
+public func GREYAssertTrue(_ expression: @autoclosure () -> Bool, reason: String) {
+    GREYAssert(expression(), reason, details: "Expected the boolean expression to be true")
 }
 
-public func EarlGrey(file: String = #file, line: UInt = #line) -> EarlGreyImpl! {
-	return EarlGreyImpl.invokedFromFile(file, lineNumber: line)
+public func GREYAssertFalse(_ expression: @autoclosure () -> Bool, reason: String) {
+    GREYAssert(!expression(), reason, details: "Expected the boolean expression to be false")
 }
 
-public func GREYAssert(@autoclosure expression: () -> BooleanType, reason: String) {
-	GREYAssert(expression, reason, details: "Expected expression to be true")
+public func GREYAssertNotNil(_ expression: @autoclosure ()-> Any?, reason: String) {
+    GREYAssert(expression() != nil, reason, details: "Expected expression to be not nil")
 }
 
-public func GREYAssertTrue(@autoclosure expression: () -> BooleanType, reason: String) {
-	GREYAssert(expression().boolValue,
-	           reason,
-	           details: "Expected the boolean expression to be true")
+public func GREYAssertNil(_ expression: @autoclosure () -> Any?, reason: String) {
+    GREYAssert(expression() == nil, reason, details: "Expected expression to be nil")
 }
 
-public func GREYAssertFalse(@autoclosure expression: () -> BooleanType, reason: String) {
-	GREYAssert(!expression().boolValue,
-	           reason,
-	           details: "Expected the boolean expression to be false")
+public func GREYAssertEqual(_ left: @autoclosure () -> AnyObject?,
+                            _ right: @autoclosure () -> AnyObject?, reason: String) {
+    GREYAssert(left() === right(), reason, details: "Expected left term to be equal to right term")
 }
 
-public func GREYAssertNotNil(@autoclosure expression: () -> Any?, reason: String) {
-	GREYAssert(expression() != nil, reason, details: "Expected expression to be not nil")
+public func GREYAssertNotEqual(_ left: @autoclosure () -> AnyObject?,
+                               _ right: @autoclosure () -> AnyObject?, reason: String) {
+    GREYAssert(left() !== right(), reason, details: "Expected left term to not equal the right term")
 }
 
-public func GREYAssertNil(@autoclosure expression: () -> Any?, reason: String) {
-	GREYAssert(expression() == nil, reason, details: "Expected expression to be nil")
+public func GREYAssertEqualObjects<T: Equatable>( _ left: @autoclosure () -> T?,
+                                   _ right: @autoclosure () -> T?, reason: String) {
+    GREYAssert(left() == right(), reason, details: "Expected object of the left term to be equal" +
+        " to the object of the right term")
 }
 
-public func GREYAssertEqual(@autoclosure left: () -> AnyObject?,
-                                         @autoclosure _ right: () -> AnyObject?, reason: String) {
-	GREYAssert(left() === right(), reason, details: "Expected left term to be equal to right term")
+public func GREYAssertNotEqualObjects<T: Equatable>( _ left: @autoclosure () -> T?,
+                                      _ right: @autoclosure () -> T?, reason: String) {
+    GREYAssert(left() != right(), reason, details: "Expected object of the left term to not" +
+        " equal the object of the right term")
 }
 
-public func GREYAssertNotEqual(@autoclosure left: () -> AnyObject?,
-                                            @autoclosure _ right: () -> AnyObject?, reason: String) {
-	GREYAssert(left() !== right(), reason, details: "Expected left term to not be equal to right" +
-		" term")
+public func GREYFail(_ reason: String) {
+    EarlGrey.handle(exception: GREYFrameworkException(name: kGREYAssertionFailedException,
+                                                      reason: reason),
+                    details: "")
 }
 
-public func GREYAssertEqualObjects<T: Equatable>(@autoclosure left: () -> T?,
-                                   @autoclosure _ right: () -> T?, reason: String) {
-	GREYAssert(left() == right(), reason, details: "Expected object of the left term to be equal" +
-		" to the object of the right term")
+public func GREYFailWithDetails(_ reason: String, details: String) {
+    EarlGrey.handle(exception: GREYFrameworkException(name: kGREYAssertionFailedException,
+                                                      reason: reason),
+                    details: details)
 }
 
-public func GREYAssertNotEqualObjects<T: Equatable>(@autoclosure left: () -> T?,
-                                      @autoclosure _ right: () -> T?, reason: String) {
-	GREYAssert(left() != right(), reason, details: "Expected object of the left term to not be" +
-		" equal to the object of the right term")
+private func GREYAssert(_ expression: @autoclosure () -> Bool,
+                        _ reason: String, details: String) {
+    GREYSetCurrentAsFailable()
+    if !expression() {
+        EarlGrey.handle(exception: GREYFrameworkException(name: kGREYAssertionFailedException,
+                                                          reason: reason),
+                        details: details)
+    }
 }
 
-public func GREYFail(reason: String) {
-	greyFailureHandler.handleException(GREYFrameworkException(name: kGREYAssertionFailedException,
-		reason: reason),
-	                                   details: "")
+private func GREYSetCurrentAsFailable() {
+    let greyFailureHandlerSelector =
+        #selector(GREYFailureHandler.setInvocationFile(_:andInvocationLine:))
+    let greyFailureHandler =
+        Thread.current.threadDictionary.value(forKey: kGREYFailureHandlerKey) as! GREYFailureHandler
+    if greyFailureHandler.responds(to: greyFailureHandlerSelector) {
+        greyFailureHandler.setInvocationFile!(#file, andInvocationLine:#line)
+    }
 }
 
-@available(*, deprecated=1.2.0, message="Please use GREYFAIL::withDetails instead.")
-public func GREYFail(reason: String, details: String) {
-	greyFailureHandler.handleException(GREYFrameworkException(name: kGREYAssertionFailedException,
-		reason: reason),
-	                                   details: details)
+open class EarlGrey: NSObject {
+    open class func select(elementWithMatcher matcher: GREYMatcher,
+                           file: StaticString = #file,
+                           line: UInt = #line) -> GREYElementInteraction {
+        return EarlGreyImpl.invoked(fromFile: file.description, lineNumber: line)
+            .selectElement(with: matcher)
+    }
+    
+    open class func setFailureHandler(handler: GREYFailureHandler,
+                                      file: StaticString = #file,
+                                      line: UInt = #line) {
+        return EarlGreyImpl.invoked(fromFile: file.description, lineNumber: line)
+            .setFailureHandler(handler)
+    }
+    
+    open class func handle(exception: GREYFrameworkException,
+                           details: String,
+                           file: StaticString = #file,
+                           line: UInt = #line) {
+        return EarlGreyImpl.invoked(fromFile: file.description, lineNumber: line)
+            .handle(exception, details: details)
+    }
+    
+    @discardableResult open class func rotateDeviceTo(orientation: UIDeviceOrientation,
+                                                      errorOrNil: UnsafeMutablePointer<NSError?>!,
+                                                      file: StaticString = #file,
+                                                      line: UInt = #line)
+        -> Bool {
+            return EarlGreyImpl.invoked(fromFile: file.description, lineNumber: line)
+                .rotateDevice(to: orientation,
+                              errorOrNil: errorOrNil)
+    }
 }
 
-public func GREYFailWithDetails(reason: String, details: String) {
-	greyFailureHandler.handleException(GREYFrameworkException(name: kGREYAssertionFailedException,
-		reason: reason),
-	                                   details: details)
+extension GREYInteraction {
+    @discardableResult public func assert(_ matcher: @autoclosure () -> GREYMatcher) -> Self {
+        return self.assert(with:matcher())
+    }
+    
+    @discardableResult public func assert(_ matcher: @autoclosure () -> GREYMatcher,
+                                          error: UnsafeMutablePointer<NSError?>!) -> Self {
+        return self.assert(with: matcher(), error: error)
+    }
+    
+    @discardableResult public func using(searchAction: GREYAction,
+                                         onElementWithMatcher matcher: GREYMatcher) -> Self {
+        return self.usingSearch(searchAction, onElementWith: matcher)
+    }
 }
 
-private func GREYAssert(@autoclosure expression: () -> BooleanType,
-                                     _ reason: String, details: String) {
-	GREYSetCurrentAsFailable()
-	if !expression().boolValue {
-		greyFailureHandler.handleException(GREYFrameworkException(name: kGREYAssertionFailedException,
-			reason: reason),
-		                                   details: details)
-	}
-}
-
-private func GREYSetCurrentAsFailable(file: String = #file, line: UInt = #line) {
-	let greyFailureHandlerSelector =
-		#selector(GREYFailureHandler.setInvocationFile(_:andInvocationLine:))
-	if greyFailureHandler.respondsToSelector(greyFailureHandlerSelector) {
-		greyFailureHandler.setInvocationFile!(file, andInvocationLine: line)
-	}
+extension GREYCondition {
+    open func waitWithTimeout(seconds: CFTimeInterval) -> Bool {
+        return self.wait(withTimeout: seconds)
+    }
+    
+    open func waitWithTimeout(seconds: CFTimeInterval, pollInterval: CFTimeInterval)
+        -> Bool {
+            return self.wait(withTimeout: seconds, pollInterval: pollInterval)
+    }
 }

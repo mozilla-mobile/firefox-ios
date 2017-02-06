@@ -112,8 +112,8 @@ public struct MetaGlobal: Equatable {
         let json: JSON = JSON([
             "syncID": self.syncID,
             "storageVersion": self.storageVersion,
-            "engines": enginesPayload(),
-            "declined": JSON(self.declined)
+            "engines": enginesPayload().dictionaryObject,
+            "declined": self.declined
         ])
         return CleartextPayloadJSON(json)
     }

@@ -85,7 +85,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
             for tab in tabs {
                 // We trust that each tab's clientGUID matches the supplied client!
                 // Really tabs shouldn't have a GUID at all. Future cleanup!
-                if self.tabs.insert(connection, item: tab, err: &err)! > 0 {
+                if self.tabs.insert(connection, item: tab, err: &err) ?? 0 > 0 {
                     inserted += 1
                 } else {
                     if let err = err {

@@ -35,12 +35,12 @@ class CryptoTests: XCTestCase {
     func testHMAC() {
         let keyBundle = KeyBundle(encKey: encKey, hmacKey: hmacKey)
         // HMAC is computed against the Base64 ciphertext.
-        let ciphertextRaw: NSData = dataFromBase64(ciphertextB64)
+        let ciphertextRaw: Data = dataFromBase64(b64: ciphertextB64)
         XCTAssertNotNil(ciphertextRaw)
         XCTAssertEqual(hmacB16, keyBundle.hmacString(ciphertextRaw))
     }
 
-    func dataFromBase64(b64: String) -> NSData {
+    func dataFromBase64(b64: String) -> Data {
         return Bytes.dataFromBase64(b64)!
     }
 
@@ -51,8 +51,8 @@ class CryptoTests: XCTestCase {
         let iv = Bytes.decodeBase64(ivB64)!
         let s = keyBundle.decrypt(ciphertext, iv: iv)
         let cleartext = NSString(data: Bytes.decodeBase64(cleartextB64)!,
-                                 encoding: NSUTF8StringEncoding)
-        XCTAssertTrue(cleartext!.isEqualToString(s!))
+                                 encoding: String.Encoding.utf8.rawValue)
+        XCTAssertTrue(cleartext!.isEqual(to: s!))
     }
 
     func testBadBase64() {

@@ -17,7 +17,7 @@ class TestBookmarks: ProfileTest {
                 profile.bookmarks.shareItem(bookmark)
             }
 
-            let expectation = self.expectationWithDescription("asynchronous request")
+            let expectation = self.expectation(description: "asynchronous request")
             profile.bookmarks.modelFactory >>== {
                 $0.modelForFolder(BookmarkRoots.MobileFolderGUID).upon { result in
                     guard let model = result.successValue else {
@@ -34,7 +34,7 @@ class TestBookmarks: ProfileTest {
                 }
             }
 
-            self.waitForExpectationsWithTimeout(10.0, handler:nil)
+            self.waitForExpectations(timeout: 10.0, handler:nil)
             // This'll do.
             try! profile.files.remove("mock.db")
         }

@@ -40,7 +40,7 @@ open class BasePayloadJSON {
 open class CleartextPayloadJSON: BasePayloadJSON {
     // Override me.
     override open func isValid() -> Bool {
-        return super.isValid() && self["id"].isStringOrNull()
+        return super.isValid() && self["id"].isString()
     }
 
     open var id: String {
@@ -60,47 +60,5 @@ open class CleartextPayloadJSON: BasePayloadJSON {
     // Doesn't check id. Should it?
     open func equalPayloads (_ obj: CleartextPayloadJSON) -> Bool {
         return self.deleted == obj.deleted
-    }
-}
-
-public extension JSON {
-    func isStringOrNull() -> Bool {
-        return isNull() || isString()
-    }
-
-    func isError() -> Bool {
-        return self.error != nil
-    }
-
-    func isString() -> Bool {
-        return self.type == .string
-    }
-
-    func isBool() -> Bool {
-        return self.type == .bool
-    }
-
-    func isArray() -> Bool {
-        return self.type == .array
-    }
-
-    func isDictionary() -> Bool {
-        return self.type == .dictionary
-    }
-
-    func isNull() -> Bool {
-        return self.type == .null
-    }
-
-    func isInt() -> Bool {
-        return self.type == .number && self.int != nil
-    }
-
-    func isNumber() -> Bool {
-        return self.type == .number && self.number != nil
-    }
-
-    func isDouble() -> Bool {
-        return self.type == .number && self.double != nil
     }
 }
