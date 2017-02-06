@@ -35,7 +35,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     fileprivate var shouldApplyCompletion = false
     fileprivate var enteredText = ""
     fileprivate var previousSuggestion = ""
-    fileprivate var notifyTextChanged: (() -> ())?
+    fileprivate var notifyTextChanged: (() -> Void)?
 
     dynamic var highlightColor = AutocompleteTextFieldUX.HighlightColor {
         didSet {

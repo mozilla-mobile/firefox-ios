@@ -19,9 +19,9 @@ import Foundation
 import GameplayKit
 import XCTest
 
-typealias Edge = (XCTestCase, String, UInt) -> ()
-typealias SceneBuilder = (ScreenGraphNode) -> ()
-typealias NodeVisitor = (String) -> ()
+typealias Edge = (XCTestCase, String, UInt) -> Void
+typealias SceneBuilder = (ScreenGraphNode) -> Void
+typealias NodeVisitor = (String) -> Void
 
 /**
  * ScreenGraph
@@ -50,7 +50,7 @@ extension ScreenGraph {
      * Method for creating a ScreenGraphNode in the graph. The node should be accompanied by a closure 
      * used to document the exits out of this node to other nodes.
      */
-    func createScene(_ name: String, file: String = #file, line: UInt = #line, builder: @escaping (ScreenGraphNode) -> ()) {
+    func createScene(_ name: String, file: String = #file, line: UInt = #line, builder: @escaping (ScreenGraphNode) -> Void) {
         let scene = ScreenGraphNode(map: self, name: name, builder: builder)
         scene.file = file
         scene.line = line
@@ -101,7 +101,7 @@ extension ScreenGraph {
     }
 }
 
-typealias Gesture = () -> ()
+typealias Gesture = () -> Void
 
 /**
  * The ScreenGraph is made up of nodes. It is not possible to init these directly, only by creating 
@@ -186,7 +186,7 @@ extension ScreenGraphNode {
      * @param withElement – optional, but if provided will attempt to verify it is there before performing the action.
      * @param to – the destination node.
      */
-    func gesture(withElement element: XCUIElement? = nil, to nodeName: String, file declFile: String = #file, line declLine: UInt = #line, g: @escaping () -> ()) {
+    func gesture(withElement element: XCUIElement? = nil, to nodeName: String, file declFile: String = #file, line declLine: UInt = #line, g: @escaping () -> Void) {
         addEdge(nodeName) { xcTest, file, line in
             if let el = element {
                 self.waitForElement(el, withTest: xcTest) { _ in

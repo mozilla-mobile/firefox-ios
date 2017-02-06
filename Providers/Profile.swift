@@ -874,7 +874,7 @@ open class BrowserProfile: Profile {
             }
         }
 
-        func doInBackgroundAfter(_ millis: Int64, _ block: @escaping (Void) -> ()) {
+        func doInBackgroundAfter(_ millis: Int64, _ block: @escaping (Void) -> Void) {
             let queue = DispatchQueue.global(qos: DispatchQoS.background.qosClass)
             //Pretty ambiguous here. I'm thinking .now was DispatchTime.now() and not Date.now()
             queue.asyncAfter(deadline: DispatchTime.now() + DispatchTimeInterval.milliseconds(Int(millis)), execute: block)

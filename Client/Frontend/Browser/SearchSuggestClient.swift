@@ -31,7 +31,7 @@ class SearchSuggestClient {
         self.userAgent = userAgent
     }
 
-    func query(_ query: String, callback: @escaping (_ response: [String]?, _ error: NSError?) -> ()) {
+    func query(_ query: String, callback: @escaping (_ response: [String]?, _ error: NSError?) -> Void) {
         let url = searchEngine.suggestURLForQuery(query)
         if url == nil {
             let error = NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidEngine, userInfo: nil)

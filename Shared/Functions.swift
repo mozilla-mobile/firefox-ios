@@ -54,13 +54,13 @@ public func •<T, U, V>(f: @escaping (T) -> U, g: @escaping (U) -> V) -> (T) ->
         return g(f(t))
     }
 }
-public func •<T, V>(f: @escaping (T) -> (), g: @escaping () -> V) -> (T) -> V {
+public func •<T, V>(f: @escaping (T) -> Void, g: @escaping () -> V) -> (T) -> V {
     return { t in
         f(t)
         return g()
     }
 }
-public func •<V>(f: @escaping () -> (), g: @escaping () -> V) -> () -> V {
+public func •<V>(f: @escaping () -> Void, g: @escaping () -> V) -> () -> V {
     return {
         f()
         return g()
@@ -203,9 +203,9 @@ public func jsonsToStrings(_ arr: [JSON]?) -> [String]? {
 
 // Encapsulate a callback in a way that we can use it with NSTimer.
 private class Callback {
-    private let handler:()->()
+    private let handler:() -> Void
 
-    init(handler:@escaping ()->()) {
+    init(handler:@escaping () -> Void) {
         self.handler = handler
     }
 
@@ -219,7 +219,7 @@ private class Callback {
  * Taken from http://stackoverflow.com/questions/27116684/how-can-i-debounce-a-method-call
  * Allows creating a block that will fire after a delay. Resets the timer if called again before the delay expires.
  **/
-public func debounce(_ delay: TimeInterval, action:@escaping ()->()) -> ()->() {
+public func debounce(_ delay: TimeInterval, action:@escaping () -> Void) -> () -> Void {
     let callback = Callback(handler: action)
     var timer: Timer?
 

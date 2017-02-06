@@ -6,9 +6,9 @@ import Foundation
 
 class RequestDesktopSiteActivity: UIActivity {
     fileprivate let requestMobileSite: Bool
-    fileprivate let callback: () -> ()
+    fileprivate let callback: () -> Void
 
-    init(requestMobileSite: Bool, callback: @escaping () -> ()) {
+    init(requestMobileSite: Bool, callback: @escaping () -> Void) {
         self.requestMobileSite = requestMobileSite
         self.callback = callback
     }

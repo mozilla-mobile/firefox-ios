@@ -67,7 +67,7 @@ class BrowserViewController: UIViewController {
 
     // popover rotation handling
     fileprivate var displayedPopoverController: UIViewController?
-    fileprivate var updateDisplayedPopoverProperties: (() -> ())?
+    fileprivate var updateDisplayedPopoverProperties: (() -> Void)?
 
     fileprivate var openInHelper: OpenInHelper?
 
@@ -3052,7 +3052,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
         self.present(actionSheetController, animated: true, completion: nil)
     }
 
-    fileprivate func getImage(_ url: URL, success: @escaping (UIImage) -> ()) {
+    fileprivate func getImage(_ url: URL, success: @escaping (UIImage) -> Void) {
         Alamofire.request(url)
             .validate(statusCode: 200..<300)
             .response { response in

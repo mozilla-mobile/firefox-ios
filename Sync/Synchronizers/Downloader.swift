@@ -27,7 +27,7 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
         return ret
     }
 
-    var _advance: (() -> ())?
+    var _advance: (() -> Void)?
     func advance() {
         guard let f = self._advance else {
             return

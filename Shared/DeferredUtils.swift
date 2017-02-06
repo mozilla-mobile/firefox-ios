@@ -25,7 +25,7 @@ infix operator >>> : MonadicDoPrecedence
 }
 
 // A termination case.
-@discardableResult public func >>== <T>(x: Deferred<Maybe<T>>, f: @escaping (T) -> ()) {
+@discardableResult public func >>== <T>(x: Deferred<Maybe<T>>, f: @escaping (T) -> Void) {
     return x.upon { result in
         if let v = result.successValue {
             f(v)
@@ -44,7 +44,7 @@ infix operator >>> : MonadicDoPrecedence
 }
 
 // Another termination case.
-@discardableResult public func >>> <T>(x: Deferred<Maybe<T>>, f: @escaping () -> ()) {
+@discardableResult public func >>> <T>(x: Deferred<Maybe<T>>, f: @escaping () -> Void) {
     return x.upon { res in
         if res.isSuccess {
             f()
@@ -96,8 +96,8 @@ public func accumulate<T>(_ thunks: [() -> Deferred<Maybe<T>>]) -> Deferred<Mayb
     var results: [T] = []
     results.reserveCapacity(thunks.count)
 
-    var onValue: ((T) -> ())!
-    var onResult: ((Maybe<T>) -> ())!
+    var onValue: ((T) -> Void)!
+    var onResult: ((Maybe<T>) -> Void)!
 
     onValue = { t in
         results.append(t)

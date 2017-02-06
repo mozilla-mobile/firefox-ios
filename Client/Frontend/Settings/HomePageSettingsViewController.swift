@@ -18,7 +18,7 @@ class HomePageSettingsViewController: SettingsTableViewController {
     override func generateSettings() -> [SettingSection] {
         let prefs = profile.prefs
         let helper = HomePageHelper(prefs: prefs)
-        func setHomePage(_ url: URL?) -> ((UINavigationController?) -> ()) {
+        func setHomePage(_ url: URL?) -> ((UINavigationController?) -> Void) {
             weak var tableView: UITableView? = self.tableView
             return { nav in
                 helper.currentURL = url
