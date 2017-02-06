@@ -142,9 +142,9 @@ class AlternateSimpleHighlightCell: UITableViewCell {
         statusIcon.snp.makeConstraints { make in
             make.size.equalTo(SimpleHighlightCellUX.StatusIconSize)
             make.leading.equalTo(titleLabel)
-            make.bottom.equalTo(siteImageView).priorityLow()
-            make.top.greaterThanOrEqualTo(titleLabel.snp.bottom).offset(6).priorityHigh()
-            make.bottom.lessThanOrEqualTo(contentView).offset(-AlternateSimpleHighlightCellUX.CellTopBottomOffset).priorityHigh()
+            make.bottom.equalTo(siteImageView).priority(10)
+            make.top.greaterThanOrEqualTo(titleLabel.snp.bottom).offset(6).priority(1000)
+            make.bottom.lessThanOrEqualTo(contentView).offset(-AlternateSimpleHighlightCellUX.CellTopBottomOffset).priority(1000)
         }
     }
 

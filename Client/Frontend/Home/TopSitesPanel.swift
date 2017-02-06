@@ -165,7 +165,7 @@ class TopSitesPanel: UIViewController {
             make.centerX.equalTo(overlayView)
 
             // Sets proper top constraint for iPhone 6 in portait and for iPad.
-            make.centerY.equalTo(overlayView).offset(HomePanelUX.EmptyTabContentOffset).priorityMedium()
+            make.centerY.equalTo(overlayView).offset(HomePanelUX.EmptyTabContentOffset).priority(100)
 
             // Sets proper top constraint for iPhone 4, 5 in portrait.
             make.top.greaterThanOrEqualTo(overlayView).offset(50)
@@ -211,7 +211,7 @@ class TopSitesPanel: UIViewController {
         collection?.indexPathsForVisibleItems.forEach(updateRemoveButtonStateForIndexPath)
     }
 
-    fileprivate func deleteTileForSuggestedSite(_ site: SuggestedSite) -> Success {
+    @discardableResult fileprivate func deleteTileForSuggestedSite(_ site: SuggestedSite) -> Success {
         var deletedSuggestedSites = profile.prefs.arrayForKey("topSites.deletedSuggestedSites") as! [String]
         deletedSuggestedSites.append(site.url)
         profile.prefs.setObject(deletedSuggestedSites, forKey: "topSites.deletedSuggestedSites")
@@ -273,7 +273,7 @@ class TopSitesPanel: UIViewController {
         }
     }
 
-    fileprivate func reloadTopSitesWithLimit(_ limit: Int) -> Success {
+    @discardableResult fileprivate func reloadTopSitesWithLimit(_ limit: Int) -> Success {
         return self.profile.history.getTopSitesWithLimit(limit).bindQueue(DispatchQueue.main) { result in
             self.updateDataSourceWithSites(result)
             self.collection?.reloadData()
@@ -411,7 +411,7 @@ class TopSitesLayout: UICollectionViewLayout {
                 return 5
             }
             // Split screen iPad width
-            else if size.widthLargerOrEqualThanHalfIPad() ?? false {
+            else if size.widthLargerOrEqualThanHalfIPad() {
                 return 4
             }
             // iPhone portrait

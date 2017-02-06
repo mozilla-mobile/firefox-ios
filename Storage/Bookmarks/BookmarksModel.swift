@@ -152,7 +152,7 @@ public protocol BookmarksModelFactory {
 
     func isBookmarked(_ url: String) -> Deferred<Maybe<Bool>>
     func removeByGUID(_ guid: GUID) -> Success
-    func removeByURL(_ url: String) -> Success
+    @discardableResult func removeByURL(_ url: String) -> Success
 }
 
 /*

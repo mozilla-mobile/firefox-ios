@@ -103,7 +103,7 @@ class SimpleHighlightCell: UITableViewCell {
 
         siteImageView.snp.remakeConstraints { make in
             make.top.equalTo(contentView).offset(SimpleHighlightCellUX.CellTopBottomOffset)
-            make.bottom.equalTo(contentView).offset(-SimpleHighlightCellUX.CellTopBottomOffset).priorityLow()
+            make.bottom.equalTo(contentView).offset(-SimpleHighlightCellUX.CellTopBottomOffset).priority(10)
             make.leading.equalTo(contentView).offset(SimpleHighlightCellUX.CellSideOffset)
             make.size.equalTo(SimpleHighlightCellUX.SiteImageViewSize)
         }
@@ -132,7 +132,7 @@ class SimpleHighlightCell: UITableViewCell {
             make.leading.equalTo(titleLabel)
             make.top.equalTo(titleLabel.snp.bottom).offset(SimpleHighlightCellUX.CellTopBottomOffset)
             make.size.equalTo(SimpleHighlightCellUX.StatusIconSize)
-            make.bottom.equalTo(contentView).offset(-SimpleHighlightCellUX.AlternateBottomOffset).priorityHigh()
+            make.bottom.equalTo(contentView).offset(-SimpleHighlightCellUX.AlternateBottomOffset).priority(1000)
         }
     }
 

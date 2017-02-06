@@ -93,27 +93,27 @@ class TopTabCell: UICollectionViewCell {
         // The tab needs to be slightly bigger in order for the background view not to appear underneath
         // https://bugzilla.mozilla.org/show_bug.cgi?id=1320135
         let bezierOffset: CGFloat = 3
-        bezierView.snp_makeConstraints { make in
+        bezierView.snp.makeConstraints { make in
             make.centerY.centerX.equalTo(self)
             make.height.equalTo(self)
             make.width.equalTo(frame.width + TopTabsUX.TopTabsBackgroundPadding + bezierOffset)
         }
-        favicon.snp_makeConstraints { make in
+        favicon.snp.makeConstraints { make in
             make.centerY.equalTo(self)
             make.size.equalTo(TabTrayControllerUX.FaviconSize)
             make.leading.equalTo(self).offset(TopTabsUX.TabTitlePadding)
         }
-        titleText.snp_makeConstraints { make in
+        titleText.snp.makeConstraints { make in
             make.centerY.equalTo(self)
             make.height.equalTo(self)
             make.width.equalTo(TopTabsUX.TabTitleWidth)
-            make.leading.equalTo(favicon.snp_trailing).offset(TopTabsUX.TabTitlePadding)
+            make.leading.equalTo(favicon.snp.trailing).offset(TopTabsUX.TabTitlePadding)
         }
-        closeButton.snp_makeConstraints { make in
+        closeButton.snp.makeConstraints { make in
             make.centerY.equalTo(self)
             make.height.equalTo(self)
-            make.width.equalTo(self.snp_height)
-            make.leading.equalTo(titleText.snp_trailing).offset(-5)
+            make.width.equalTo(self.snp.height)
+            make.leading.equalTo(titleText.snp.trailing).offset(-5)
         }
         
         self.clipsToBounds = false
@@ -236,21 +236,21 @@ class TopTabsBackgroundDecorationView: UICollectionReusableView {
         self.addSubview(leftCurve)
         self.addSubview(centerBackground)
         
-        rightCurve.snp_makeConstraints { make in
+        rightCurve.snp.makeConstraints { make in
             make.right.equalTo(self)
             make.top.equalTo(self)
             make.bottom.equalTo(self)
             make.width.equalTo(SingleCurveView.CurveWidth)
         }
-        leftCurve.snp_makeConstraints { make in
+        leftCurve.snp.makeConstraints { make in
             make.left.equalTo(self)
             make.top.equalTo(self)
             make.bottom.equalTo(self)
             make.width.equalTo(SingleCurveView.CurveWidth)
         }
-        centerBackground.snp_makeConstraints { make in
-            make.left.equalTo(leftCurve.snp_right)
-            make.right.equalTo(rightCurve.snp_left)
+        centerBackground.snp.makeConstraints { make in
+            make.left.equalTo(leftCurve.snp.right)
+            make.right.equalTo(rightCurve.snp.left)
             make.top.equalTo(self)
             make.bottom.equalTo(self)
         }

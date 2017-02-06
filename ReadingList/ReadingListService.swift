@@ -20,7 +20,7 @@ open class ReadingListService {
         return storage.getAvailableRecords()
     }
 
-    open func deleteRecord(_ record: ReadingListClientRecord) -> Maybe<Void> {
+    @discardableResult open func deleteRecord(_ record: ReadingListClientRecord) -> Maybe<Void> {
         return storage.deleteRecord(record)
     }
 
@@ -28,7 +28,7 @@ open class ReadingListService {
         return storage.deleteAllRecords()
     }
 
-    open func createRecordWithURL(_ url: String, title: String, addedBy: String) -> Maybe<ReadingListClientRecord> {
+    @discardableResult open func createRecordWithURL(_ url: String, title: String, addedBy: String) -> Maybe<ReadingListClientRecord> {
         return storage.createRecordWithURL(url, title: title, addedBy: addedBy)
     }
 
@@ -36,7 +36,7 @@ open class ReadingListService {
         return storage.getRecordWithURL(url)
     }
 
-    open func updateRecord(_ record: ReadingListClientRecord, unread: Bool) -> Maybe<ReadingListClientRecord?> {
+    @discardableResult open func updateRecord(_ record: ReadingListClientRecord, unread: Bool) -> Maybe<ReadingListClientRecord?> {
         return storage.updateRecord(record, unread: unread)
     }
 }

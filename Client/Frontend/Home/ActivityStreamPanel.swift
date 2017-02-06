@@ -610,7 +610,7 @@ class ASHeaderView: UIView {
         addSubview(titleLabel)
 
         titleLabel.snp.makeConstraints { make in
-            make.edges.equalTo(self).inset(UIEdgeInsets(top: ASHeaderViewUX.TitleTopInset, left: ASHeaderViewUX.Insets, bottom: 0, right: -ASHeaderViewUX.Insets)).priorityMedium()
+            make.edges.equalTo(self).inset(UIEdgeInsets(top: ASHeaderViewUX.TitleTopInset, left: ASHeaderViewUX.Insets, bottom: 0, right: -ASHeaderViewUX.Insets)).priority(100)
         }
 
         let seperatorLine = UIView()

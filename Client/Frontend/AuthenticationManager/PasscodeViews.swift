@@ -171,11 +171,11 @@ class PasscodePane: UIView {
 
     func shakePasscode() {
         UIView.animate(withDuration: 0.1, animations: {
-                self.codeViewCenterConstraint?.updateOffset(amount: -10)
+                self.codeViewCenterConstraint?.update(offset: -10)
                 self.layoutIfNeeded()
         }, completion: { complete in
             UIView.animate(withDuration: 0.1, animations: {
-                self.codeViewCenterConstraint?.updateOffset(amount: 0)
+                self.codeViewCenterConstraint?.update(offset: 0)
                 self.layoutIfNeeded()
             }) 
         }) 
@@ -196,14 +196,14 @@ class PasscodePane: UIView {
         }
         
         UIView.animate(withDuration: 0.1, animations: {
-            self.containerCenterConstraint?.updateOffset(amount: -keyboardFrame.height/2)
+            self.containerCenterConstraint?.update(offset: -keyboardFrame.height/2)
             self.layoutIfNeeded()
         })
     }
     
     func keyboardWillHide(_ sender: Notification) {
         UIView.animate(withDuration: 0.1, animations: {
-            self.containerCenterConstraint?.updateOffset(amount: 0)
+            self.containerCenterConstraint?.update(offset: 0)
             self.layoutIfNeeded()
         })
     }

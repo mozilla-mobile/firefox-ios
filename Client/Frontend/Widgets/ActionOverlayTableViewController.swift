@@ -75,7 +75,7 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
 
     fileprivate func setHeightConstraint(_ make: ConstraintMaker) {
         make.height.lessThanOrEqualTo(view.bounds.height)
-        make.height.equalTo(ActionOverlayTableViewUX.HeaderHeight + CGFloat(actions.count) * ActionOverlayTableViewUX.RowHeight).priorityLow()
+        make.height.equalTo(ActionOverlayTableViewUX.HeaderHeight + CGFloat(actions.count) * ActionOverlayTableViewUX.RowHeight).priority(10)
     }
 
     func dismiss(_ gestureRecognizer: UIGestureRecognizer) {

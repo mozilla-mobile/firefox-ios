@@ -211,7 +211,7 @@ private extension LoginListViewController {
     @objc func beginEditing() {
         navigationItem.rightBarButtonItem = nil
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(LoginListViewController.cancelSelection))
-        selectionButtonHeightConstraint?.updateOffset(amount: UIConstants.ToolbarHeight)
+        selectionButtonHeightConstraint?.update(offset: UIConstants.ToolbarHeight)
         self.view.layoutIfNeeded()
         tableView.setEditing(true, animated: true)
     }
@@ -220,7 +220,7 @@ private extension LoginListViewController {
         // Update selection and select all button
         loginSelectionController.deselectAll()
         toggleSelectionTitle()
-        selectionButtonHeightConstraint?.updateOffset(amount: 0)
+        selectionButtonHeightConstraint?.update(offset: 0)
         self.view.layoutIfNeeded()
 
         tableView.setEditing(false, animated: true)

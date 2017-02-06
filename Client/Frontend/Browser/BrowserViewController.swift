@@ -282,7 +282,7 @@ class BrowserViewController: UIViewController {
             updateURLBarDisplayURL(tab)
             navigationToolbar.updateBackStatus(webView.canGoBack)
             navigationToolbar.updateForwardStatus(webView.canGoForward)
-            navigationToolbar.updateReloadStatus(tab.loading ?? false)
+            navigationToolbar.updateReloadStatus(tab.loading)
         }
     }
 
@@ -672,7 +672,7 @@ class BrowserViewController: UIViewController {
         }
 
         readerModeBar?.snp.remakeConstraints { make in
-            make.top.equalTo(self.header.snp.bottom).constraint
+            make.top.equalTo(self.header.snp.bottom)
             make.height.equalTo(UIConstants.ToolbarHeight)
             make.leading.trailing.equalTo(self.view)
         }
@@ -2877,7 +2877,7 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
 }
 
 extension BrowserViewController: IntroViewControllerDelegate {
-    func presentIntroViewController(_ force: Bool = false) -> Bool {
+    @discardableResult func presentIntroViewController(_ force: Bool = false) -> Bool {
         if force || profile.prefs.intForKey(IntroViewControllerSeenProfileKey) == nil {
             let introViewController = IntroViewController()
             introViewController.delegate = self
@@ -3123,7 +3123,7 @@ extension BrowserViewController {
             return
         }
 
-        guard let input = webContentView.perform(Selector("inputAccessoryView")),
+        guard let input = webContentView.perform(#selector(getter: UIResponder.inputAccessoryView)),
             let inputView = input.takeUnretainedValue() as? UIInputView,
             let nextButton = inputView.value(forKey: "_nextItem") as? UIBarButtonItem,
             let nextButtonView = nextButton.value(forKey: "view") as? UIView else {

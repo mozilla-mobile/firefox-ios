@@ -33,7 +33,7 @@ public protocol SyncManager {
     func syncClientsThenTabs() -> SyncResult
     func syncHistory() -> SyncResult
     func syncLogins() -> SyncResult
-    func syncEverything() -> Success
+    @discardableResult func syncEverything() -> Success
 
     // The simplest possible approach.
     func beginTimedSyncs()
@@ -42,8 +42,8 @@ public protocol SyncManager {
     func applicationDidBecomeActive()
 
     func onNewProfile()
-    func onRemovedAccount(_ account: FirefoxAccount?) -> Success
-    func onAddedAccount() -> Success
+    @discardableResult func onRemovedAccount(_ account: FirefoxAccount?) -> Success
+    @discardableResult func onAddedAccount() -> Success
 }
 
 typealias EngineIdentifier = String
@@ -179,7 +179,7 @@ protocol Profile: class {
     func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>>
     func getCachedClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>>
 
-    func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>>
+    @discardableResult func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>>
 
     func sendItems(_ items: [ShareItem], toClients clients: [RemoteClient])
 
@@ -1203,7 +1203,7 @@ open class BrowserProfile: Profile {
             }
         }
 
-        func syncEverything() -> Success {
+        @discardableResult func syncEverything() -> Success {
             return self.syncSeveral([
                 ("clients", self.syncClientsWithDelegate),
                 ("tabs", self.syncTabsWithDelegate),
@@ -1247,7 +1247,7 @@ open class BrowserProfile: Profile {
             }
         }
 
-        func syncLogins() -> SyncResult {
+        @discardableResult func syncLogins() -> SyncResult {
             return self.sync("logins", function: syncLoginsWithDelegate)
         }
 
