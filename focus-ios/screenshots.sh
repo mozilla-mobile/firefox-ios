@@ -1,6 +1,11 @@
 #!/bin/bash
 
-LANGUAGES="ar,az,br,cs,cy,de,dsb,en-US,eo,es-CL,es-ES,fa,fr,ga-IE,gd,hi-IN,hsb,hu,id,it,ja,kab,lo,nb-NO,nl,nn-NO,pl,pt-BR,pt-PT,ru,ses,sk,sl,sq,sv-SE,th,tl,tr,uk,uz,zh-CN,zh-TW"
+# Note that fil is tl in the l10n repo
+LANGUAGES="ar,az,br,cs,cy,de,dsb,en-US,eo,es-CL,es-ES,fa,fil,fr,ga-IE,gd,hi-IN,hsb,hu,id,it,ja,kab,lo,nb-NO,nl,nn-NO,pl,pt-BR,pt-PT,ru,ses,sk,sl,sq,sv-SE,th,tr,uk,uz,zh-CN,zh-TW"
+
+if [ $# -eq 1 ]; then
+  LANGUAGES=$1
+fi
 
 TS=`date +%Y%m%d-%H%M`
 
