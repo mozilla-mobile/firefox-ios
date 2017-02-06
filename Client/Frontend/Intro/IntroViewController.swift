@@ -143,7 +143,6 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
             make.centerY.equalTo(self.startBrowsingButton.snp.top).offset(-IntroViewControllerUX.PagerCenterOffsetFromScrollViewBottom)
         }
 
-
         func addCard(_ text: String, title: String) {
             let introView = UIView()
             self.introViews.append(introView)
@@ -154,7 +153,6 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         addCard(IntroViewControllerUX.CardTextCustomize, title: IntroViewControllerUX.CardTitleCustomize)
         addCard(IntroViewControllerUX.CardTextShare, title: IntroViewControllerUX.CardTitleShare)
         addCard(IntroViewControllerUX.CardTextChoose, title: IntroViewControllerUX.CardTitleChoose)
-
 
         // Sync card, with sign in to sync button.
 
@@ -188,7 +186,6 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         // Make whole screen scrollable by bringing the scrollview to the top
         view.bringSubview(toFront: scrollView)
         view.bringSubview(toFront: pageControl)
-
 
         // Activate the first card
         setActiveIntroView(introViews[0], forPage: 0)

@@ -30,5 +30,4 @@ class RoundedToolbar: UIToolbar {
         addRoundedCorners(cornersToRound, cornerRadius: cornerRadius, color: layerBackgroundColor ?? UIColor.white)
     }
 
-
 }

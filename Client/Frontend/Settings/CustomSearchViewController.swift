@@ -51,7 +51,6 @@ class CustomSearchViewController: SettingsTableViewController {
         }
     }
 
-
     func createEngine(forQuery query: String, andName name: String) -> Deferred<Maybe<OpenSearchEngine>> {
         let deferred = Deferred<Maybe<OpenSearchEngine>>()
         guard let template = getSearchTemplate(withString: query),

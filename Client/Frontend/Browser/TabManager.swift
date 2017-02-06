@@ -351,7 +351,6 @@ class TabManager: NSObject {
             tabIndex = (tab.isPrivate ? privateTabs.index(of: oldTab) : normalTabs.index(of: oldTab)) ?? -1
         }
 
-
         let prevCount = count
         if let removalIndex = tabs.index(where: { $0 === tab }) {
             tabs.remove(at: removalIndex)
@@ -836,13 +835,11 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
         }
     }
 
-
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         for delegate in delegates {
             delegate.webView?(webView, didFail: navigation, withError: error)
         }
     }
-
 
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!,
         withError error: Error) {

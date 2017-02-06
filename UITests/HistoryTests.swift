@@ -42,12 +42,10 @@ class HistoryTests: KIFTestCase {
         tester().tapView(withAccessibilityIdentifier: "url")
         tester().tapView(withAccessibilityLabel: "History")
 
-
         let firstHistoryRow = tester().waitForCell(at: IndexPath(row: 0, section: 0), inTableViewWithAccessibilityIdentifier: "History List")
         XCTAssertNotNil(firstHistoryRow?.imageView?.image)
         XCTAssertEqual(firstHistoryRow?.textLabel!.text!, "Page 2")
         XCTAssertEqual(firstHistoryRow?.detailTextLabel!.text!, "\(webRoot)/numberedPage.html?page=2")
-
 
         let secondHistoryRow = tester().waitForCell(at: IndexPath(row: 1, section: 0), inTableViewWithAccessibilityIdentifier: "History List")
         XCTAssertNotNil(secondHistoryRow?.imageView?.image)

@@ -89,7 +89,6 @@ class QuickActions: NSObject {
         application.shortcutItems = dynamicShortcutItems
     }
 
-
     // MARK: Handling Quick Actions
     @discardableResult func handleShortCutItem(_ shortcutItem: UIApplicationShortcutItem, withBrowserViewController bvc: BrowserViewController ) -> Bool {
 

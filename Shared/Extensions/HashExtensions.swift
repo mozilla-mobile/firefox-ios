@@ -4,7 +4,6 @@
 
 import Foundation
 
-
 extension Data {
     public var sha1: Data {
         let len = Int(CC_SHA1_DIGEST_LENGTH)

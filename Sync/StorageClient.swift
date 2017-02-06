@@ -12,7 +12,6 @@ import SwiftyJSON
 
 private let log = Logger.syncLogger
 
-
 // Not an error that indicates a server problem, but merely an
 // error that encloses a StorageResponse.
 open class StorageResponseError<T>: MaybeErrorType {

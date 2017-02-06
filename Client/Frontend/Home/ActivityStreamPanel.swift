@@ -370,7 +370,6 @@ extension ActivityStreamPanel {
         return suggested.filter({deleted.index(of: $0.url) == .none})
     }
 
-
     @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         guard longPressGestureRecognizer.state == UIGestureRecognizerState.began else { return }
         let touchPoint = longPressGestureRecognizer.location(in: self.view)

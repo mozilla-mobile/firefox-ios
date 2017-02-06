@@ -6,7 +6,6 @@ import Foundation
 import Shared
 import XCTest
 
-
 class ArrayExtensionTests: XCTestCase {
     override func setUp() {
         super.setUp()

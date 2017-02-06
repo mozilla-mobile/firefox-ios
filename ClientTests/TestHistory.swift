@@ -23,7 +23,6 @@ class TestHistory: ProfileTest {
         }
     }
 
-
     fileprivate func checkSites(_ history: BrowserHistory, urls: [String: String], s: Bool = true) {
         // Retrieve the entry.
         if let cursor = history.getSitesByLastVisit(100).value.successValue {
@@ -165,7 +164,6 @@ class TestHistory: ProfileTest {
             self.waitForExpectations(timeout: 10, handler: nil)
         }
     }
-
 
     // Runs a random command on a database. Calls cb when finished.
     fileprivate func runRandom(_ history: inout BrowserHistory, cmdIn: Int, cb: @escaping () -> Void) {

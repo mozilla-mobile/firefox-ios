@@ -89,7 +89,6 @@ class TopTabsViewController: UIViewController {
     fileprivate var inserts: [IndexPath] = []
     fileprivate var pendingUpdates: [TopTabChangeSet] = []
 
-
     init(tabManager: TabManager) {
         self.tabManager = tabManager
         super.init(nibName: nil, bundle: nil)

@@ -63,7 +63,6 @@ class SearchTests: XCTestCase {
                                       isCustomEngine: false)
         let client = SearchSuggestClient(searchEngine: engine, userAgent: "Fx-testSuggestClient")
 
-
         let query1 = self.expectation(description: "foo query")
         client.query("foo", callback: { response, error in
             withExtendedLifetime(client) {

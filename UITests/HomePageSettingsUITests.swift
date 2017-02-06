@@ -83,7 +83,6 @@ class HomePageSettingsUITests: KIFTestCase {
         HomePageUtils.navigateFromHomePageSettings(tester())
     }
 
-
     func testDisabledClipboard() {
         let webPageString = "not a url"
         UIPasteboard.general.string = webPageString
@@ -96,6 +95,5 @@ class HomePageSettingsUITests: KIFTestCase {
         XCTAssertEqual("", HomePageUtils.homePageSetting(tester()))
         HomePageUtils.navigateFromHomePageSettings(tester())
     }
-
 
 }

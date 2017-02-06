@@ -10,7 +10,6 @@ import WebKit
 import Deferred
 import SwiftyJSON
 
-
 private let log = Logger.browserLogger
 
 class LoginsHelper: TabHelper {

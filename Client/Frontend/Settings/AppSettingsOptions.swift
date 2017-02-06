@@ -321,7 +321,6 @@ class RequirePasswordDebugSetting: WithAccountSetting {
     }
 }
 
-
 // For great debugging!
 class RequireUpgradeDebugSetting: WithAccountSetting {
     override var hidden: Bool {
@@ -365,7 +364,6 @@ class ForgetSyncAuthStateDebugSetting: WithAccountSetting {
         settings.tableView.reloadData()
     }
 }
-
 
 class DeleteExportedDataSetting: HiddenSetting {
     override var title: NSAttributedString? {

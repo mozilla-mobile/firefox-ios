@@ -19,7 +19,6 @@ func byClient(_ a: RemoteClient, b: RemoteClient) -> Bool {
 
 class SyncCommandsTests: XCTestCase {
 
-
     var clients: [RemoteClient] = [RemoteClient]()
     var clientsAndTabs: SQLiteRemoteClientsAndTabs!
 

@@ -1158,7 +1158,6 @@ class TestSQLiteHistory: XCTestCase {
             }
             >>> done
 
-
         waitForExpectations(timeout: 10.0) { error in
             return
         }

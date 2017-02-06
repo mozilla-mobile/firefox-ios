@@ -71,7 +71,6 @@ class ClientPickerViewController: UITableViewController {
         reloadClients()
     }
 
-
     override func numberOfSections(in tableView: UITableView) -> Int {
         if clients.count == 0 {
             return 1
@@ -135,7 +134,6 @@ class ClientPickerViewController: UITableViewController {
             navigationItem.rightBarButtonItem?.isEnabled = (selectedClients.count != 0)
         }
     }
-
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if clients.count > 0 {

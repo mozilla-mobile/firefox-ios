@@ -33,7 +33,6 @@ class MenuPresentationAnimator: NSObject, UIViewControllerAnimatedTransitioning 
         }
     }
 
-
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return presenting ? 0.4 : 0.2
     }

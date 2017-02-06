@@ -108,7 +108,6 @@ open class TabToolbarHelper: NSObject {
         toolbar.shareButton.accessibilityLabel = NSLocalizedString("Share", comment: "Accessibility Label for the tab toolbar Share button")
         toolbar.shareButton.addTarget(self, action: #selector(TabToolbarHelper.SELdidClickShare), for: UIControlEvents.touchUpInside)
 
-
         toolbar.homePageButton.setImage(UIImage.templateImageNamed("menu-Home"), for: .normal)
         toolbar.homePageButton.setImage(UIImage(named: "menu-Home-Engaged"), for: .highlighted)
         toolbar.homePageButton.accessibilityLabel = NSLocalizedString("Toolbar.OpenHomePage.AccessibilityLabel", value: "Homepage", comment: "Accessibility Label for the tab toolbar Homepage button")

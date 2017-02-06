@@ -11,7 +11,6 @@ import GCDWebServers
 
 @testable import Client
 
-
 class UIImageViewExtensionsTests: XCTestCase {
 
     override func setUp() {

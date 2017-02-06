@@ -180,7 +180,6 @@ extension MockSyncableHistory: SyncableHistory {
     }
 }
 
-
 class HistorySynchronizerTests: XCTestCase {
     private func applyRecords(records: [Record<HistoryPayload>], toStorage storage: SyncableHistory & ResettableSyncStorage) -> (synchronizer: HistorySynchronizer, prefs: Prefs, scratchpad: Scratchpad) {
         let delegate = MockSyncDelegate()

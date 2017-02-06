@@ -213,7 +213,6 @@ class TabCell: UICollectionViewCell {
         titleText.frame.origin = CGPoint(x: titleText.frame.origin.x, y: max(0, top))
     }
 
-
     override func prepareForReuse() {
         // Reset any close animations.
         backgroundHolder.transform = CGAffineTransform.identity

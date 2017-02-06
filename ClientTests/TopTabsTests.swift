@@ -45,7 +45,6 @@ class TestTopTabs: XCTestCase {
         tabVC.collectionView.layoutIfNeeded()
     }
 
-
     func testAddingTab() {
         createTopTabsVC()
 
@@ -99,7 +98,6 @@ class TestTopTabs: XCTestCase {
         waitForExpectations(timeout: 5, handler: nil)
     }
 
-
     // We should keep the tab state while toggling private mode
     func testCorrectTabSelectedWhileTogglingPrivateMode() {
         (0..<10).forEach {_ in manager.addTab() }
@@ -125,6 +123,5 @@ class TestTopTabs: XCTestCase {
         }
         waitForExpectations(timeout: 5, handler: nil)
     }
-    
 
 }

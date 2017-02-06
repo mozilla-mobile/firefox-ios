@@ -5,7 +5,6 @@
 import Foundation
 import WebKit
 
-
 class CustomSearchHelper: TabHelper {
     fileprivate weak var tab: Tab?
 

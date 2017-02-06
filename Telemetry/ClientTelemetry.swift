@@ -47,7 +47,6 @@ private class SearchTelemetryEvent: TelemetryEvent {
     }
 }
 
-
 class UsageTelemetry {
     fileprivate init() {}
 

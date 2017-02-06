@@ -79,7 +79,6 @@ class MenuTests: XCTestCase {
         XCTAssertNotNil(privateTabItem)
     }
 
-
     // new tab item
     func testNewTabItemPresentInMenuConfigurationInTab() {
         let tabState = TabState(isPrivate: false, desktopSite: false, isBookmarked: false, url: URL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
@@ -101,7 +100,6 @@ class MenuTests: XCTestCase {
         let tabItem = tabTrayConfiguration.menuItems.find { $0.title == AppMenuConfiguration.NewTabTitleString }
         XCTAssertNotNil(tabItem)
     }
-
 
     // find in page item
     func testFindInPageItemPresentInMenuConfigurationInTab() {

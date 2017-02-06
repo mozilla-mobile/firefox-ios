@@ -242,7 +242,6 @@ open class BrowserProfile: Profile {
         notificationCenter.addObserver(self, selector: #selector(onProfileDidFinishSyncing(notification:)), name: NotificationProfileDidFinishSyncing, object: nil)
         notificationCenter.addObserver(self, selector: #selector(onPrivateDataClearedHistory(notification:)), name: NotificationPrivateDataClearedHistory, object: nil)
 
-
         // If the profile dir doesn't exist yet, this is first run (for this profile).
         if !files.exists("") {
             log.info("New profile. Removing old account metadata.")
@@ -256,7 +255,6 @@ open class BrowserProfile: Profile {
         // This is the same as self.history.setTopSitesNeedsInvalidation, but without the
         // side-effect of instantiating SQLiteHistory (and thus BrowserDB) on the main thread.
         prefs.setBool(false, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
-
 
         if isChinaEdition {
             // On first run, set the Home button to be in the toolbar.

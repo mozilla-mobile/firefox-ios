@@ -262,7 +262,6 @@ class NavigationTests: KIFTestCase, UITextFieldDelegate {
         tester().waitForWebViewElementWithAccessibilityLabel(webViewElementAccessibilityLabel)
     }
 
-
     fileprivate func ensureMobileSiteFromMenu() {
         tester().tapView(withAccessibilityLabel: "Menu")
         tester().waitForView(withAccessibilityLabel: "Request Desktop Site")

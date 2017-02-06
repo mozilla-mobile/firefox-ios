@@ -8,7 +8,6 @@ import CoreSpotlight
 import MobileCoreServices
 import WebKit
 
-
 private let log = Logger.browserLogger
 private let browsingActivityType: String = "org.mozilla.ios.firefox.browsing"
 
