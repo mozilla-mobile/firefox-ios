@@ -15,6 +15,7 @@ for PRODUCT in Focus Klar; do
         DEVICEDIR="${DEVICE// /}"
         mkdir -p "screenshots/$TS/$PRODUCT/$DEVICEDIR"
         fastlane snapshot --project Blockzilla.xcodeproj --scheme "${PRODUCT}SnapshotTests" \
+          --derived_data_path screenshots-derived-data \
           --skip_open_summary \
           --erase_simulator --localize_simulator \
           --devices "$DEVICE" \
