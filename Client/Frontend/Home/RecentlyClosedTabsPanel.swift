@@ -67,7 +67,7 @@ class RecentlyClosedTabsPanel: UIViewController, HomePanel {
     }
 
     @objc fileprivate func historyBackButtonWasTapped(_ gestureRecognizer: UITapGestureRecognizer) {
-        self.navigationController?.popViewController(animated: true)
+        let _ = self.navigationController?.popViewController(animated: true)
     }
 }
 
