@@ -89,7 +89,7 @@
 "Home.descriptionLabel1" = "Brabhsadh prìobhaideach fèin-obrachail.";
 
 /* Second label for product description on the home screen */
-"Home.descriptionLabel2" = "Dèan brabhsadh. Dèan suathadh às. Agus a-rithist.";
+"Home.descriptionLabel2" = "Dèan brabhsadh. Dèan suathadh às. Agus a‑rithist.";
 
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Sguir dheth";
@@ -119,10 +119,10 @@
 "Settings.blockOtherMessage" = "Ma bhacas tu tracaichean susbaint eile, dh’fhaoidte nach obraich cuid a dhuilleagan-lìn is videothan tuilleadh.";
 
 /* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Chan eil, mòran taing";
+"Settings.blockOtherNo" = "Na bac iad, mòran taing";
 
 /* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Tha mi agaibh";
+"Settings.blockOtherYes" = "Bac iad co-dhiù";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Roghainnean";
@@ -182,7 +182,7 @@
 "URL.eraseMessageLabel" = "Chaidh an eachdraidh brabhsaidh agad a sguabadh às.";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "Dèan lorg no cuir a-steach seòladh";
+"URL.placeholderText" = "Cuir lorg no seòladh an-seo";
 
 /* Label displayed for search button when typing in the URL bar */
 "URL.searchLabel" = "Lorg %@";

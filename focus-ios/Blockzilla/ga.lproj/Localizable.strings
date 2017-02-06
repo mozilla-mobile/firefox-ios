@@ -119,10 +119,10 @@
 "Settings.blockOtherMessage" = "Má chuireann tú cosc ar lorgairí ábhair eile, seans go mbrisfidh sé físeáin agus leathanaigh Ghréasáin áirithe.";
 
 /* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Níl";
+"Settings.blockOtherNo" = "Cealaigh";
 
 /* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Tuigim";
+"Settings.blockOtherYes" = "Tuigim, cuir coisc mar sin féin";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Socruithe";

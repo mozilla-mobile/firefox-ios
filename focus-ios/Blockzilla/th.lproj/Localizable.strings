@@ -2,7 +2,7 @@
 "About.learnMoreButton" = "เรียนรู้เพิ่มเติม";
 
 /* Label on About screen */
-"About.missionLabel" = "%@ ถูกสร้างขึ้นโดย Mozilla ภารกิจของเราคือส่งเสริมอินเทอร์เน็ตที่เปิดและสมบูรณ์";
+"About.missionLabel" = "%@ ถูกสร้างขึ้นโดย Mozilla ภารกิจของเราคือส่งเสริมอินเทอร์เน็ตที่สมบูรณ์และเปิดกว้าง";
 
 /* Label on About screen */
 "About.privateBullet1" = "ค้นหาและท่องเว็บจากในแอป";
@@ -83,7 +83,7 @@
 "FirstRun.messageLabelDescription" = "ปิดกั้นตัวติดตามออนไลน์โดยอัตโนมัติขณะที่คุณท่องเว็บ จากนั้นแตะเพื่อล้างหน้าที่เยี่ยมชม, การค้นหา, คุกกี้ และรหัสผ่านจากอุปกรณ์ของคุณ";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelTagline" = "ค้นเว็บเหมือนไม่มีคนเฝ้ามองอยู่";
+"FirstRun.messageLabelTagline" = "ท่องเว็บเหมือนไม่มีใครเฝ้ามองอยู่";
 
 /* First label for product description on the home screen */
 "Home.descriptionLabel1" = "การท่องเว็บแบบส่วนตัวอัตโนมัติ";
@@ -161,7 +161,7 @@
 "Settings.toggleBlockSocial" = "ปิดกั้นตัวติดตามทางสังคม";
 
 /* Label subtitle for toggle on main screen */
-"Settings.toggleOtherSubtitle" = "อาจทำให้วิดีโอและหน้าเว็บไม่สมบูรณ์";
+"Settings.toggleOtherSubtitle" = "อาจทำให้บางวิดีโอและหน้าเว็บไม่สมบูรณ์";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";

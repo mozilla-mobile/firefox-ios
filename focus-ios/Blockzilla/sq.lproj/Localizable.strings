@@ -29,7 +29,7 @@
 "About.safariBullet2" = "Bllokoni shkronja Web që të zvogëlohet madhësia e faqes";
 
 /* Label on About screen */
-"About.safariBulletHeader" = "Përdoreni si nja zgjerim të Safari-t:";
+"About.safariBulletHeader" = "Përdoreni si një zgjerim të Safari-t:";
 
 /* Title for the About screen */
 "About.screenTitle" = "Rreth";
@@ -80,7 +80,7 @@
 "FirstRun.buttonLabel" = "OK, E MORA VESH!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Bllokojini vetvetiu gjurmuesi në internet, teksa shfletoni. Mandej prekeni, që të fshihen nga pajisja juaj faqe të vizituara, kërkime, cookies dhe fjalëkalime.";
+"FirstRun.messageLabelDescription" = "Bllokojini vetvetiu gjurmuesit në internet, teksa shfletoni. Mandej prekeni, që të fshihen nga pajisja juaj faqe të vizituara, kërkime, cookies dhe fjalëkalime.";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "Shfletoni sikur të mos ju vëzhgonte njeri.";

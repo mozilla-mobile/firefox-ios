@@ -14,7 +14,7 @@
 "About.privateBullet3" = "Dilamit ho toupinoù, ho roll istor hag ho roll enklask";
 
 /* Label on About screen */
-"About.privateBulletHeader" = "Arverit eñ evel ur merdeer prevez:";
+"About.privateBulletHeader" = "Arverit anezhañ evel ur merdeer prevez:";
 
 /* Label for row in About screen */
 "About.rowHelp" = "Skoazell";
@@ -29,7 +29,7 @@
 "About.safariBullet2" = "Stankit an nodrezhoù web evit digreskiñ ment ar bajenn";
 
 /* Label on About screen */
-"About.safariBulletHeader" = "Arverit eñ evel un askouezh Safari:";
+"About.safariBulletHeader" = "Arverit anezhañ evel un askouezh Safari:";
 
 /* Title for the About screen */
 "About.screenTitle" = "A-zivout";
@@ -80,7 +80,7 @@
 "FirstRun.buttonLabel" = "Mat eo, komprenet em eus!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Stankañ an heulierien en linenn ent emgefreek pa verdeit. Stokit evit dilemel ar pajennoù gweladennet, an toupinoù, an enklaskoù hag ar gerioù-tremen eus ho trevnad.";
+"FirstRun.messageLabelDescription" = "Stankit an heulierien en linenn ent emgefreek pa verdeit. Stokit evit dilemel ar pajennoù gweladennet, an toupinoù, an enklaskoù hag ar gerioù-tremen eus ho trevnad.";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "Merdeit 'vel ma vefe den o sellet.";
@@ -89,7 +89,7 @@
 "Home.descriptionLabel1" = "Merdeiñ prevez emgefreek.";
 
 /* Second label for product description on the home screen */
-"Home.descriptionLabel2" = "Merdeit. Dilamit. Adkrogit.";
+"Home.descriptionLabel2" = "Merdeit. Diverkit. Adkrogit.";
 
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Nullañ";
@@ -149,7 +149,7 @@
 "Settings.toggleBlockAds" = "Stankañ an heulierien bruderezh";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Stankañ an heulierien stadegim";
+"Settings.toggleBlockAnalytics" = "Stankañ an heulierien stadegoù";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Stankañ an nodrezhoù web";
@@ -182,8 +182,8 @@
 "URL.eraseMessageLabel" = "Diverket eo bet ho roll istor merdeiñ.";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "Bizskrivit un termen da glask pe ur chomlec'h";
+"URL.placeholderText" = "Klask pe chomlec'h";
 
 /* Label displayed for search button when typing in the URL bar */
-"URL.searchLabel" = "Klask war-lec'h %@";
+"URL.searchLabel" = "Klask %@";
 
