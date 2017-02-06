@@ -237,7 +237,7 @@ open class BrowserDB {
 
                 // Notify the world that we moved the database. This allows us to
                 // reset sync and start over in the case of corruption.
-                notify = Notification(name: NotificationDatabaseWasRecreated , object: self.filename)
+                notify = Notification(name: NotificationDatabaseWasRecreated, object: self.filename)
             } catch _ {
                 success = false
             }
