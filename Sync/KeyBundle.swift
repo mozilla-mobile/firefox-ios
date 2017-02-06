@@ -187,7 +187,7 @@ open class KeyBundle: Hashable {
                     let iv = iv.base64EncodedString
 
                     // The payload is stringified JSON. Yes, I know.
-                    let payload: Any = JSON(object: ["ciphertext": ciphertext, "IV": iv, "hmac": hmac,]).rawString()! as Any
+                    let payload: Any = JSON(object: ["ciphertext": ciphertext, "IV": iv, "hmac": hmac]).rawString()! as Any
                     let obj = ["id": record.id, "sortindex": record.sortindex, "ttl": record.ttl as Any, "payload": payload]
                     return JSON(object: obj)
                 }

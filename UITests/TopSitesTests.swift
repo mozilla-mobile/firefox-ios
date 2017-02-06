@@ -96,9 +96,9 @@ class TopSitesTests: KIFTestCase {
         let disappeared = GREYCondition(name: "Wait for icon to disappear", block: { _ in
 			var errorOrNil: NSError?
             
-            let matcher = grey_allOfMatchers([grey_accessibilityLabel(accessibilityLabel)
-            , grey_kindOfClass(NSClassFromString("UILabel"))
-            , grey_notVisible()])
+            let matcher = grey_allOfMatchers([grey_accessibilityLabel(accessibilityLabel),
+                                              grey_kindOfClass(NSClassFromString("UILabel")),
+                                              grey_notVisible()])
             
             EarlGrey.select(elementWithMatcher: matcher!).assert(with: grey_notNil(), error:  &errorOrNil)
 			let success = errorOrNil == nil

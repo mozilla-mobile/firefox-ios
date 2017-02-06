@@ -434,7 +434,7 @@ class TabTrayController: UIViewController {
         }, completion: nil)
     }
 
-    override var preferredStatusBarStyle : UIStatusBarStyle {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
         return UIStatusBarStyle.lightContent
     }
 

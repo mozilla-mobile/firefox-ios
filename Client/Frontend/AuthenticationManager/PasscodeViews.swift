@@ -54,7 +54,7 @@ class PasscodeInputView: UIView, UIKeyInput {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override var canBecomeFirstResponder : Bool {
+    override var canBecomeFirstResponder: Bool {
         return true
     }
 
@@ -63,7 +63,7 @@ class PasscodeInputView: UIView, UIKeyInput {
         setNeedsDisplay()
     }
 
-    @objc var hasText : Bool {
+    @objc var hasText: Bool {
         return inputtedCode.characters.count > 0
     }
 

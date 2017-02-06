@@ -125,7 +125,7 @@ import UIKit
         }
     }
 
-    override open var intrinsicContentSize : CGSize {
+    override open var intrinsicContentSize: CGSize {
         return sizeThatFits(CGSize.zero)
     }
 

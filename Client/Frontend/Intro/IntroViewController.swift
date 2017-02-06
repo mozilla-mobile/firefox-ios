@@ -229,15 +229,15 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         scrollView.contentSize = CGSize(width: slideContainer.frame.width, height: slideContainer.frame.height)
     }
 
-    override var prefersStatusBarHidden : Bool {
+    override var prefersStatusBarHidden: Bool {
         return true
     }
 
-    override var shouldAutorotate : Bool {
+    override var shouldAutorotate: Bool {
         return false
     }
 
-    override var supportedInterfaceOrientations : UIInterfaceOrientationMask {
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         // This actually does the right thing on iPad where the modally
         // presented version happily rotates with the iPad orientation.
         return UIInterfaceOrientationMask.portrait
