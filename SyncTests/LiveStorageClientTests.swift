@@ -58,9 +58,8 @@ class LiveStorageClientTests: LiveAccountTest {
         let storageClient = Sync15StorageClient(serverURI: cryptoURI!, authorizer: authorizer, workQueue: workQueue, resultQueue: resultQueue, backoff: backoff)
         let keysFetcher = storageClient.clientForCollection("crypto", encrypter: encrypter)
 
-        return keysFetcher.get("keys").map({
+        return keysFetcher.get("keys").map({ res in
             // Unwrap the response.
-            res in
             if let r = res.successValue {
                 return Maybe(success: r.value)
             }
@@ -76,8 +75,7 @@ class LiveStorageClientTests: LiveAccountTest {
     func getTokenAndDefaultKeys() -> Deferred<Maybe<(TokenServerToken, KeyBundle)>> {
         let authState = self.syncAuthState(Date.now())
 
-        let keysPayload: Deferred<Maybe<Record<KeysPayload>>> = authState.bind {
-            tokenResult in
+        let keysPayload: Deferred<Maybe<Record<KeysPayload>>> = authState.bind { tokenResult in
             if let (token, forKey) = tokenResult.successValue {
                 return self.getKeys(kB: forKey, token: token)
             }
@@ -86,8 +84,7 @@ class LiveStorageClientTests: LiveAccountTest {
         }
 
         let result = Deferred<Maybe<(TokenServerToken, KeyBundle)>>()
-        keysPayload.upon {
-            res in
+        keysPayload.upon { res in
             if let rec = res.successValue {
                 XCTAssert(rec.id == "keys", "GUID is correct.")
                 XCTAssert(rec.modified > 1000, "modified is sane.")
@@ -109,8 +106,7 @@ class LiveStorageClientTests: LiveAccountTest {
     func testLive() {
         let expctn = expectation(description: "Waiting on value.")
         let deferred = getTokenAndDefaultKeys()
-        deferred.upon {
-            res in
+        deferred.upon { res in
             if let (_, _) = res.successValue {
                 print("Yay", terminator: "\n")
             } else {
