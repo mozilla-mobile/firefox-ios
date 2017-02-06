@@ -98,7 +98,7 @@ class AuthenticationTests: KIFTestCase {
     fileprivate func enterCredentials(usernameValue: String, passwordValue: String, username: String, password: String) {
 		
 		// Wait until the dialog shows up
-		let dialogAppeared = GREYCondition.init(name: "Wait the login dialog to appear", block: { () -> Bool in
+		let dialogAppeared = GREYCondition(name: "Wait the login dialog to appear", block: { () -> Bool in
 			var errorOrNil: NSError?
 			let matcher = grey_allOfMatchers([grey_accessibilityValue(usernameValue),
 				grey_sufficientlyVisible()])

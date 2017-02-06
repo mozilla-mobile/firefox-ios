@@ -67,7 +67,7 @@ class AdjustIntegration: NSObject {
         guard !adjustAppToken.isEmpty && !adjustEnvironment.isEmpty else {
             return nil
         }
-        guard let environment = AdjustEnvironment.init(rawValue: adjustEnvironment) else {
+        guard let environment = AdjustEnvironment(rawValue: adjustEnvironment) else {
             Logger.browserLogger.error("Adjust - Invalid environment provided: \(adjustEnvironment)")
             return nil
         }

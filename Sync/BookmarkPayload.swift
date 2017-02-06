@@ -71,7 +71,7 @@ public enum BookmarkType: String {
             return nil
         }
 
-        guard let type = BookmarkType.init(rawValue: typeString) else {
+        guard let type = BookmarkType(rawValue: typeString) else {
             return nil
         }
 
@@ -96,7 +96,7 @@ public enum BookmarkType: String {
             return false
         }
 
-        return BookmarkType.init(rawValue: type) != nil
+        return BookmarkType(rawValue: type) != nil
     }
 }
 
