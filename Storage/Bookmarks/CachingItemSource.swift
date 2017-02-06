@@ -57,8 +57,8 @@ private class CachedSource {
         self.seen.insert(guid)
     }
 
-    func markSeen<T: Collection>(_ guids: T) where T.Iterator.Element == GUID {
-        self.seen.formUnion(guids as! Set<GUID>)
+    func markSeen<T: Sequence>(_ guids: T) where T.Iterator.Element == GUID {
+        self.seen.formUnion(guids)
     }
 
     func takingGUIDs<T: Collection>(_ guids: T) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> where T.Iterator.Element == GUID {
