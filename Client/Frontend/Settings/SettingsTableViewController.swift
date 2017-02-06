@@ -297,11 +297,11 @@ class StringSetting: Setting, UITextFieldDelegate {
 /// isEnabled is called on each tableview.reloadData. If it returns
 /// false then the 'button' appears disabled.
 class ButtonSetting: Setting {
-    let onButtonClick: (UINavigationController?) -> ()
+    let onButtonClick: (UINavigationController?) -> Void
     let destructive: Bool
     let isEnabled: (() -> Bool)?
 
-    init(title: NSAttributedString?, destructive: Bool = false, accessibilityIdentifier: String, isEnabled: (() -> Bool)? = nil, onClick: @escaping (UINavigationController?) -> ()) {
+    init(title: NSAttributedString?, destructive: Bool = false, accessibilityIdentifier: String, isEnabled: (() -> Bool)? = nil, onClick: @escaping (UINavigationController?) -> Void) {
         self.onButtonClick = onClick
         self.destructive = destructive
         self.isEnabled = isEnabled

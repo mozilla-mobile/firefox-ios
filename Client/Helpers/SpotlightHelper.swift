@@ -24,11 +24,11 @@ class SpotlightHelper: NSObject {
     fileprivate var urlForThumbnail: URL?
     fileprivate var thumbnailImage: UIImage?
 
-    fileprivate let createNewTab: ((_ url: URL) -> ())?
+    fileprivate let createNewTab: ((_ url: URL) -> Void)?
 
     fileprivate weak var tab: Tab?
 
-    init(tab: Tab, openURL: ((_ url: URL) -> ())? = nil) {
+    init(tab: Tab, openURL: ((_ url: URL) -> Void)? = nil) {
         createNewTab = openURL
         self.tab = tab
 

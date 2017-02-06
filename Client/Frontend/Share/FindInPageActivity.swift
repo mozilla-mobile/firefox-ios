@@ -5,9 +5,9 @@
 import Foundation
 
 class FindInPageActivity: UIActivity {
-    fileprivate let callback: () -> ()
+    fileprivate let callback: () -> Void
 
-    init(callback: @escaping () -> ()) {
+    init(callback: @escaping () -> Void) {
         self.callback = callback
     }
 

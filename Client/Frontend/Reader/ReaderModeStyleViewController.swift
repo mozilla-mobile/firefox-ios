@@ -65,7 +65,7 @@ class ReaderModeStyleViewController: UIViewController {
         view.addSubview(fontTypeRow)
         fontTypeRow.backgroundColor = ReaderModeStyleViewControllerUX.FontTypeRowBackground
 
-        fontTypeRow.snp.makeConstraints { (make) -> () in
+        fontTypeRow.snp.makeConstraints { (make) -> Void in
             make.top.equalTo(self.view)
             make.left.right.equalTo(self.view)
             make.height.equalTo(ReaderModeStyleViewControllerUX.RowHeight)
@@ -84,7 +84,7 @@ class ReaderModeStyleViewController: UIViewController {
         view.addSubview(fontSizeRow)
         fontSizeRow.backgroundColor = ReaderModeStyleViewControllerUX.FontSizeRowBackground
 
-        fontSizeRow.snp.makeConstraints { (make) -> () in
+        fontSizeRow.snp.makeConstraints { (make) -> Void in
             make.top.equalTo(fontTypeRow.snp.bottom)
             make.left.right.equalTo(self.view)
             make.height.equalTo(ReaderModeStyleViewControllerUX.RowHeight)
@@ -93,7 +93,7 @@ class ReaderModeStyleViewController: UIViewController {
         fontSizeLabel = FontSizeLabel()
         fontSizeRow.addSubview(fontSizeLabel)
 
-        fontSizeLabel.snp.makeConstraints { (make) -> () in
+        fontSizeLabel.snp.makeConstraints { (make) -> Void in
             make.center.equalTo(fontSizeRow)
             return
         }
@@ -110,7 +110,7 @@ class ReaderModeStyleViewController: UIViewController {
         let themeRow = UIView()
         view.addSubview(themeRow)
 
-        themeRow.snp.makeConstraints { (make) -> () in
+        themeRow.snp.makeConstraints { (make) -> Void in
             make.top.equalTo(fontSizeRow.snp.bottom)
             make.left.right.equalTo(self.view)
             make.height.equalTo(ReaderModeStyleViewControllerUX.RowHeight)
@@ -130,7 +130,7 @@ class ReaderModeStyleViewController: UIViewController {
         view.addSubview(brightnessRow)
         brightnessRow.backgroundColor = ReaderModeStyleViewControllerUX.BrightnessRowBackground
 
-        brightnessRow.snp.makeConstraints { (make) -> () in
+        brightnessRow.snp.makeConstraints { (make) -> Void in
             make.top.equalTo(themeRow.snp.bottom)
             make.left.right.equalTo(self.view)
             make.height.equalTo(ReaderModeStyleViewControllerUX.RowHeight)
@@ -150,7 +150,7 @@ class ReaderModeStyleViewController: UIViewController {
         let brightnessMinImageView = UIImageView(image: UIImage(named: "brightnessMin"))
         brightnessRow.addSubview(brightnessMinImageView)
 
-        brightnessMinImageView.snp.makeConstraints { (make) -> () in
+        brightnessMinImageView.snp.makeConstraints { (make) -> Void in
             make.centerY.equalTo(slider)
             make.right.equalTo(slider.snp.left).offset(-ReaderModeStyleViewControllerUX.BrightnessIconOffset)
         }
@@ -158,7 +158,7 @@ class ReaderModeStyleViewController: UIViewController {
         let brightnessMaxImageView = UIImageView(image: UIImage(named: "brightnessMax"))
         brightnessRow.addSubview(brightnessMaxImageView)
 
-        brightnessMaxImageView.snp.makeConstraints { (make) -> () in
+        brightnessMaxImageView.snp.makeConstraints { (make) -> Void in
             make.centerY.equalTo(slider)
             make.left.equalTo(slider.snp.right).offset(ReaderModeStyleViewControllerUX.BrightnessIconOffset)
         }

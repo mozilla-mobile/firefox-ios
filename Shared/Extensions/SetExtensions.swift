@@ -30,7 +30,7 @@ public extension SetIterator {
 }
 
 public extension Set {
-    func withSubsetsOfSize(_ n: Int, f: (Set<Iterator.Element>) -> ()) {
+    func withSubsetsOfSize(_ n: Int, f: (Set<Iterator.Element>) -> Void) {
         precondition(n > 0)
 
         if self.isEmpty {

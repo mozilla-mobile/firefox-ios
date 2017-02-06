@@ -101,7 +101,7 @@ class ReadingListTableViewCell: UITableViewCell {
 
         contentView.addSubview(readStatusImageView)
         readStatusImageView.contentMode = UIViewContentMode.scaleAspectFit
-        readStatusImageView.snp.makeConstraints { (make) -> () in
+        readStatusImageView.snp.makeConstraints { (make) -> Void in
             make.width.equalTo(ReadingListTableViewCellUX.ReadIndicatorWidth)
             make.height.equalTo(ReadingListTableViewCellUX.ReadIndicatorHeight)
             make.centerY.equalTo(self.contentView)
@@ -113,7 +113,7 @@ class ReadingListTableViewCell: UITableViewCell {
 
         titleLabel.textColor = ReadingListTableViewCellUX.ActiveTextColor
         titleLabel.numberOfLines = 2
-        titleLabel.snp.makeConstraints { (make) -> () in
+        titleLabel.snp.makeConstraints { (make) -> Void in
             make.top.equalTo(self.contentView).offset(ReadingListTableViewCellUX.TitleLabelTopOffset)
             make.leading.equalTo(self.contentView).offset(ReadingListTableViewCellUX.TitleLabelLeftOffset)
             make.trailing.equalTo(self.contentView).offset(ReadingListTableViewCellUX.TitleLabelRightOffset) // TODO Not clear from ux spec
@@ -122,7 +122,7 @@ class ReadingListTableViewCell: UITableViewCell {
 
         hostnameLabel.textColor = ReadingListTableViewCellUX.ActiveTextColor
         hostnameLabel.numberOfLines = 1
-        hostnameLabel.snp.makeConstraints { (make) -> () in
+        hostnameLabel.snp.makeConstraints { (make) -> Void in
             make.bottom.equalTo(self.contentView).offset(-ReadingListTableViewCellUX.HostnameLabelBottomOffset)
             make.leading.trailing.equalTo(self.titleLabel)
         }

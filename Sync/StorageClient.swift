@@ -338,7 +338,7 @@ open class Sync15StorageClient {
         }
     }
 
-    func errorWrap<T, U>(_ deferred: Deferred<Maybe<T>>, handler: @escaping (DataResponse<U>) -> ()) -> (DataResponse<U>) -> () {
+    func errorWrap<T, U>(_ deferred: Deferred<Maybe<T>>, handler: @escaping (DataResponse<U>) -> Void) -> (DataResponse<U>) -> Void {
         return { response in
             log.verbose("Response is \(response.response).")
 

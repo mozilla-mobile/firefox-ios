@@ -148,7 +148,7 @@ class TestError: MaybeErrorType {
 private let serialQueue = DispatchQueue(label: "com.mozilla.test.serial", attributes: [])
 private let concurrentQueue = DispatchQueue(label: "com.mozilla.test.concurrent", attributes: DispatchQueue.Attributes.concurrent)
 
-func delay(_ delay: Double, closure:@escaping ()->()) {
+func delay(_ delay: Double, closure:@escaping () -> Void) {
     concurrentQueue.asyncAfter(
         deadline: DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: closure)
 }
