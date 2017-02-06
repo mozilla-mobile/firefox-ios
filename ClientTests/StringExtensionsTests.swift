@@ -6,15 +6,6 @@ import Foundation
 import XCTest
 
 class StringExtensionsTests: XCTestCase {
-    func testContains() {
-        XCTAssertTrue("abcde".contains("abcde"))
-        XCTAssertTrue("abcde".contains(""))
-        XCTAssertTrue("abcde".contains("a"))
-        XCTAssertTrue("abcde".contains("e"))
-        XCTAssertFalse("abcde".contains("f"))
-        XCTAssertFalse("abcde".contains("fa"))
-        XCTAssertFalse("abcde".contains("ef"))
-    }
 
     func testStartsWith() {
         XCTAssertTrue("abcde".startsWith("abcde"))
