@@ -22,6 +22,17 @@ disabled_rules: # rule identifiers to exclude from running
   - operator_whitespace
   - file_length
   - mark
+  - unused_closure_parameter
+  - empty_parentheses_with_trailing_closure
+  - redundant_string_enum_value
+  - large_tuple
+  - vertical_parameter_alignment
+  - class_delegate_protocol
+  - syntactic_sugar
+  - implicit_getter
+  - weak_delegate
+  - shorthand_operator
+  - trailing_comma
 opt_in_rules: # some rules are only opt-in
   - closing_brace
   - opening_brace
