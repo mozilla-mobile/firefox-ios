@@ -199,16 +199,15 @@ class GenericTable<T>: BaseTable {
     }
 
     func delete(_ db: SQLiteDBConnection, item: DataType?, err: inout NSError?) -> Int {
-        if var item: DataType? = item {
-            if let (query, args) = getDeleteAndArgs(&item) {
-                if let error = db.executeChange(query, withArgs: args) {
-                    print(error.description)
-                    err = error
-                    return 0
-                }
-
-                return db.numberOfRowsModified
+        var singleItem = item
+        if let (query, args) = getDeleteAndArgs(&singleItem) {
+            if let error = db.executeChange(query, withArgs: args) {
+                print(error.description)
+                err = error
+                return 0
             }
+
+            return db.numberOfRowsModified
         }
         return 0
     }
