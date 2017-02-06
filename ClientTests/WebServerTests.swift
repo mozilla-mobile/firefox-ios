@@ -39,7 +39,7 @@ class WebServerTests: XCTestCase {
     func testWebServerIsServingRequests() {
         let response: NSString?
         do {
-            response = try NSString(contentsOf: URL(string: "\(webServerBase)/hello")!, encoding: String.Encoding.utf8.rawValue)
+            response = try NSString(contentsOf: URL(string: "\(webServerBase!)/hello")!, encoding: String.Encoding.utf8.rawValue)
         } catch _ {
             response = nil
         }
