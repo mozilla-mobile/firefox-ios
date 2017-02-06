@@ -65,7 +65,7 @@ class Authenticator {
             // This is a side effect of https://bugzilla.mozilla.org/show_bug.cgi?id=1238103.
             if logins.count > 1 {
                 credentials = (logins.find { login in
-                    (login.protectionSpace.`protocol` == challenge.protectionSpace.`protocol`) && !(login.hasMalformedHostname ?? false)
+                    (login.protectionSpace.`protocol` == challenge.protectionSpace.`protocol`) && !login.hasMalformedHostname
                 })?.credentials
 
                 let malformedGUIDs: [GUID] = logins.flatMap { login in
