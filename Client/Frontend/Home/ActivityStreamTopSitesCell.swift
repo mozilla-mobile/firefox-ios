@@ -86,8 +86,8 @@ class TopSiteItemCell: UICollectionViewCell {
         imageView.snp.makeConstraints { make in
             make.size.equalTo(TopSiteCellUX.IconSize)
             // Add an offset to the image to make it appear centered with the titleLabel
-            //I dont think you need to specify negative offsets anymore. according to the new snapkit
-            make.center.equalTo(self.snp.center).offset(TopSiteCellUX.TitleHeight/2)
+            make.centerX.equalTo(self)
+            make.centerY.equalTo(self).offset(-TopSiteCellUX.TitleHeight/2)
         }
 
         selectedOverlay.snp.makeConstraints { make in
