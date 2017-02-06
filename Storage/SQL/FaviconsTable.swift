@@ -3,29 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
-// Consider refactoring the code to use the non-optional operators.
-fileprivate func < <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l < r
-  case (nil, _?):
-    return true
-  default:
-    return false
-  }
-}
-
-// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
-// Consider refactoring the code to use the non-optional operators.
-fileprivate func >= <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l >= r
-  default:
-    return !(lhs < rhs)
-  }
-}
 
 // This is our default favicons store.
 class FaviconsTable<T>: GenericTable<Favicon> {
@@ -97,7 +74,10 @@ class FaviconsTable<T>: GenericTable<Favicon> {
 
     func insertOrUpdate(_ db: SQLiteDBConnection, obj: Favicon) -> Int? {
         var err: NSError? = nil
-        let id = self.insert(db, item: obj, err: &err)
+        guard let id = self.insert(db, item: obj, err: &err) else {
+            return nil
+        }
+
         if id >= 0 {
             obj.id = id
             return id

@@ -7,29 +7,6 @@ import XCGLogger
 import Deferred
 import Shared
 import Deferred
-// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
-// Consider refactoring the code to use the non-optional operators.
-fileprivate func < <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l < r
-  case (nil, _?):
-    return true
-  default:
-    return false
-  }
-}
-
-// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
-// Consider refactoring the code to use the non-optional operators.
-fileprivate func > <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l > r
-  default:
-    return rhs < lhs
-  }
-}
 
 public let NotificationDatabaseWasRecreated = Notification.Name("NotificationDatabaseWasRecreated")
 
@@ -111,7 +88,11 @@ open class BrowserDB {
         }
 
         var err: NSError? = nil
-        return schemaTable.insert(conn, item: table, err: &err) > -1 ? .created : .failed
+        guard let result = schemaTable.insert(conn, item: table, err: &err) else {
+            return .failed
+        }
+        
+        return result > -1 ? .created : .failed
     }
 
     // Updates a table and writes its table into the table-table database.
@@ -143,8 +124,11 @@ open class BrowserDB {
         // Yes, we UPDATE OR INSERT… because we might be transferring ownership of a database table
         // to a different Table. It'll trigger exists, and thus take the update path, but we won't
         // necessarily have an existing schema entry -- i.e., we'll be updating from 0.
-        if schemaTable.update(conn, item: table, err: &err) > 0 ||
-           schemaTable.insert(conn, item: table, err: &err) > 0 {
+        guard let insertResult = schemaTable.insert(conn, item: table, err: &err) else {
+            return .failed
+        }
+
+        if schemaTable.update(conn, item: table, err: &err) > 0 || insertResult > 0 {
             return .updated
         }
         return .failed
