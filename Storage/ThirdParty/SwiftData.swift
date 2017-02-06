@@ -61,8 +61,8 @@ open class SwiftData {
 
     /// Shared connection to this database.
     fileprivate var sharedConnection: ConcreteSQLiteDBConnection?
-    fileprivate var key: String? = nil
-    fileprivate var prevKey: String? = nil
+    fileprivate var key: String?
+    fileprivate var prevKey: String?
 
     /// A simple state flag to track whether we should accept new connection requests.
     /// If a connection request is made while the database is closed, a
@@ -221,7 +221,7 @@ open class SwiftData {
  * finalizing the SQL statement once it goes out of scope.
  */
 private class SQLiteDBStatement {
-    var pointer: OpaquePointer? = nil
+    var pointer: OpaquePointer?
     fileprivate let connection: ConcreteSQLiteDBConnection
 
     init(connection: ConcreteSQLiteDBConnection, query: String, args: [Any?]?) throws {
@@ -351,7 +351,7 @@ class FailedSQLiteDBConnection: SQLiteDBConnection {
 
 open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
 
-    fileprivate var sqliteDB: OpaquePointer? = nil
+    fileprivate var sqliteDB: OpaquePointer?
     fileprivate let filename: String
     fileprivate let debug_enabled = false
     fileprivate let queue: DispatchQueue

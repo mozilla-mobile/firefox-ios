@@ -40,7 +40,7 @@ class LoginTableViewCell: UITableViewCell {
 
     fileprivate let labelContainer = UIView()
 
-    weak var delegate: LoginTableViewCellDelegate? = nil
+    weak var delegate: LoginTableViewCellDelegate?
 
     lazy var descriptionLabel: UITextField = {
         let label = UITextField()

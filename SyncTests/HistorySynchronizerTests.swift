@@ -21,8 +21,8 @@ class MockSyncDelegate: SyncDelegate {
 class DBPlace: Place {
     var isDeleted = false
     var shouldUpload = false
-    var serverModified: Timestamp? = nil
-    var localModified: Timestamp? = nil
+    var serverModified: Timestamp?
+    var localModified: Timestamp?
 }
 
 class MockSyncableHistory {

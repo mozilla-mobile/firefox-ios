@@ -43,7 +43,7 @@ open class FirefoxAccount {
     // prevent data races against the shared deferred, advance() locks accesses to `advanceDeferred` using
     // `advanceLock`.
     fileprivate var advanceLock = OSSpinLock()
-    fileprivate var advanceDeferred: Deferred<FxAState>? = nil
+    fileprivate var advanceDeferred: Deferred<FxAState>?
 
     open var actionNeeded: FxAActionNeeded {
         return stateCache.value!.actionNeeded

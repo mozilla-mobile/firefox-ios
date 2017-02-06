@@ -53,14 +53,14 @@ class Tab: NSObject {
         return TabState(isPrivate: _isPrivate, desktopSite: desktopSite, isBookmarked: isBookmarked, url: url, title: displayTitle, favicon: displayFavicon)
     }
 
-    var webView: WKWebView? = nil
-    var tabDelegate: TabDelegate? = nil
+    var webView: WKWebView?
+    var tabDelegate: TabDelegate?
     weak var appStateDelegate: AppStateDelegate?
     var bars = [SnackBar]()
     var favicons = [Favicon]()
     var lastExecutedTime: Timestamp?
     var sessionData: SessionData?
-    fileprivate var lastRequest: URLRequest? = nil
+    fileprivate var lastRequest: URLRequest?
     var restoring: Bool = false
     var pendingScreenshot = false
     var url: URL?
@@ -89,10 +89,10 @@ class Tab: NSObject {
     var screenshotUUID: UUID?
     
     // If this tab has been opened from another, its parent will point to the tab from which it was opened
-    var parent: Tab? = nil
+    var parent: Tab?
 
-    fileprivate var helperManager: HelperManager? = nil
-    fileprivate var configuration: WKWebViewConfiguration? = nil
+    fileprivate var helperManager: HelperManager?
+    fileprivate var configuration: WKWebViewConfiguration?
 
     /// Any time a tab tries to make requests to display a Javascript Alert and we are not the active
     /// tab instance, queue it for later until we become foregrounded.

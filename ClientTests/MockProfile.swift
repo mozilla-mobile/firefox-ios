@@ -14,7 +14,7 @@ import Deferred
 
 open class MockSyncManager: SyncManager {
     open var isSyncing = false
-    open var lastSyncFinishTime: Timestamp? = nil
+    open var lastSyncFinishTime: Timestamp?
     open var syncDisplayState: SyncDisplayState?
 
     open func hasSyncedHistory() -> Deferred<Maybe<Bool>> {
@@ -169,7 +169,7 @@ open class MockProfile: Profile {
     }()
 
     public let accountConfiguration: FirefoxAccountConfiguration = ProductionFirefoxAccountConfiguration()
-    var account: FirefoxAccount? = nil
+    var account: FirefoxAccount?
 
     public func hasAccount() -> Bool {
         return account != nil

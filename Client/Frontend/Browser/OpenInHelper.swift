@@ -41,7 +41,7 @@ struct OpenIn {
 }
 
 class ShareFileHelper: NSObject, OpenInHelper {
-    var openInView: UIView? = nil
+    var openInView: UIView?
 
     fileprivate var url: URL
     var pathExtension: String?
@@ -74,7 +74,7 @@ class ShareFileHelper: NSObject, OpenInHelper {
 }
 
 class OpenPassBookHelper: NSObject, OpenInHelper {
-    var openInView: UIView? = nil
+    var openInView: UIView?
 
     fileprivate var url: URL
 
@@ -115,7 +115,7 @@ class OpenPassBookHelper: NSObject, OpenInHelper {
 
 class OpenPdfInHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDelegate {
     fileprivate var url: URL
-    fileprivate var docController: UIDocumentInteractionController? = nil
+    fileprivate var docController: UIDocumentInteractionController?
     fileprivate var openInURL: URL?
 
     lazy var openInView: UIView? = getOpenInView(self)()

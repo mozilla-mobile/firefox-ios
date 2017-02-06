@@ -188,7 +188,7 @@ class MergedTreeNode {
         return !self.structureState.isUnknown
     }
 
-    var mergedChildren: [MergedTreeNode]? = nil
+    var mergedChildren: [MergedTreeNode]?
 
     // One-sided constructors.
     static func forRemote(_ remote: BookmarkTreeNode, mirror: BookmarkTreeNode?=nil) -> MergedTreeNode {

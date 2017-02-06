@@ -139,16 +139,16 @@ open class Login: CustomStringConvertible, LoginData, LoginUsageData, Equatable 
 
     open var username: String? { return credentials.user }
     open var password: String { return credentials.password! }
-    open var usernameField: String? = nil
-    open var passwordField: String? = nil
+    open var usernameField: String?
+    open var passwordField: String?
 
-    fileprivate var _httpRealm: String? = nil
+    fileprivate var _httpRealm: String?
     open var httpRealm: String? {
         get { return self._httpRealm ?? protectionSpace.realm }
         set { self._httpRealm = newValue }
     }
 
-    fileprivate var _formSubmitURL: String? = nil
+    fileprivate var _formSubmitURL: String?
     open var formSubmitURL: String? {
         get {
             return self._formSubmitURL

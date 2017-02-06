@@ -140,7 +140,7 @@ class ScreenGraphNode {
      */
     var dismissOnUse: Bool = false
 
-    var existsWhen: XCUIElement? = nil
+    var existsWhen: XCUIElement?
 
     fileprivate var line: UInt!
 

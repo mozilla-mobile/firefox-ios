@@ -50,7 +50,7 @@ class LoginDetailViewController: SensitiveViewController {
     fileprivate let SeparatorIdentifier = "SeparatorIdentifier"
 
     // Used to temporarily store a reference to the cell the user is showing the menu controller for
-    fileprivate var menuControllerCell: LoginTableViewCell? = nil
+    fileprivate var menuControllerCell: LoginTableViewCell?
 
     fileprivate weak var usernameField: UITextField?
     fileprivate weak var passwordField: UITextField?

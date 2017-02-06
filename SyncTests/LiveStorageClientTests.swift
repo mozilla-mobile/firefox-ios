@@ -19,7 +19,7 @@ private class KeyFetchError: MaybeErrorType {
 }
 
 private class MockBackoffStorage: BackoffStorage {
-    var serverBackoffUntilLocalTimestamp: Timestamp? = nil
+    var serverBackoffUntilLocalTimestamp: Timestamp?
 
     func clearServerBackoff() {
         self.serverBackoffUntilLocalTimestamp = nil

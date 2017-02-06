@@ -637,7 +637,7 @@ open class BrowserProfile: Profile {
         let FifteenMinutes = TimeInterval(60 * 15)
         let OneMinute = TimeInterval(60)
 
-        fileprivate var syncTimer: Timer? = nil
+        fileprivate var syncTimer: Timer?
 
         fileprivate var backgrounded: Bool = true
         func applicationDidEnterBackground() {

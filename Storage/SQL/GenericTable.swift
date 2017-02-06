@@ -61,7 +61,7 @@ public enum QuerySort {
 
 open class QueryOptions {
     // A filter string to apploy to the query
-    open var filter: Any? = nil
+    open var filter: Any?
 
     // Allows for customizing how the filter is applied (i.e. only urls or urls and titles?)
     open var filterType: FilterType = .none

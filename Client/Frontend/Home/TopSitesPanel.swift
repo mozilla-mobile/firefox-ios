@@ -31,7 +31,7 @@ struct TopSitesPanelUX {
 class TopSitesPanel: UIViewController {
     weak var homePanelDelegate: HomePanelDelegate?
     fileprivate lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverlayView()
-    fileprivate var collection: TopSitesCollectionView? = nil
+    fileprivate var collection: TopSitesCollectionView?
     fileprivate lazy var dataSource: TopSitesDataSource = {
         return TopSitesDataSource(profile: self.profile)
     }()
