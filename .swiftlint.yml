@@ -39,6 +39,7 @@ opt_in_rules: # some rules are only opt-in
   - return_arrow_whitespace
   - trailing_semicolon
   - statement_position
+  - explicit_init
   # Find all the available rules by running:
   # swiftlint rules
 included: # paths to include during linting. `--path` is ignored if present.

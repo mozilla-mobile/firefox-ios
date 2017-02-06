@@ -270,7 +270,7 @@ class MetaGlobalTests: XCTestCase {
         let afterFirstSync = Date.now()
 
         // Store a fresh crypto/keys, with the same default key, one identical collection key, and one changed collection key.
-        let freshCryptoKeys = Keys.init(defaultBundle: cryptoKeys.defaultBundle)
+        let freshCryptoKeys = Keys(defaultBundle: cryptoKeys.defaultBundle)
         freshCryptoKeys.collectionKeys.updateValue(cryptoKeys.forCollection("bookmarks"), forKey: "bookmarks")
         freshCryptoKeys.collectionKeys.updateValue(KeyBundle.random(), forKey: "clients")
         storeCryptoKeys(keys: freshCryptoKeys)

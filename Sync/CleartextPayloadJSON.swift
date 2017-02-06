@@ -9,7 +9,7 @@ import SwiftyJSON
 open class BasePayloadJSON {
     var json: JSON
     required public init(_ jsonString: String) {
-        self.json = JSON.init(parseJSON: jsonString)
+        self.json = JSON(parseJSON: jsonString)
     }
 
     public init(_ json: JSON) {
