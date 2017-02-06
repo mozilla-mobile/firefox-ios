@@ -622,7 +622,7 @@ open class BrowserProfile: Profile {
 
         sentTabsCategory.setActions([bookmarkAction, viewAction], for: UIUserNotificationActionContext.minimal)
 
-        UIUserNotificationSettings(types: UIUserNotificationType.alert, categories: [sentTabsCategory])
+        let _ = UIUserNotificationSettings(types: UIUserNotificationType.alert, categories: [sentTabsCategory])
         app?.registerForRemoteNotifications()
     }
 
