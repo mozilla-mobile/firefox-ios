@@ -22,13 +22,8 @@ class TestFaviconsTable: XCTestCase {
             return inserted
         }
 
-        guard let insertedCount = inserted else {
-            XCTFail("Inserted return value is nil!")
-            return icon
-        }
-        
         if s {
-            XCTAssert(insertedCount >= 0, "Insert succeeded")
+            XCTAssert(inserted! >= 0, "Insert succeeded")
         } else {
             XCTAssert(inserted == nil, "Insert failed")
         }
