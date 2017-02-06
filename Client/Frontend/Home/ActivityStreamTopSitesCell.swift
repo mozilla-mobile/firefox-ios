@@ -404,8 +404,8 @@ class HorizontalFlowLayout: UICollectionViewLayout {
     Defines the number of items to show in topsites for different size classes.
 */
 struct ASTopSiteSourceUX {
-    static let verticalItemsForTraitSizes = [UIUserInterfaceSizeClass.compact : 1, UIUserInterfaceSizeClass.regular : 2, UIUserInterfaceSizeClass.unspecified: 0]
-    static let horizontalItemsForTraitSizes = [UIUserInterfaceSizeClass.compact : 3, UIUserInterfaceSizeClass.regular : 5, UIUserInterfaceSizeClass.unspecified: 0]
+    static let verticalItemsForTraitSizes = [UIUserInterfaceSizeClass.compact: 1, UIUserInterfaceSizeClass.regular: 2, UIUserInterfaceSizeClass.unspecified: 0]
+    static let horizontalItemsForTraitSizes = [UIUserInterfaceSizeClass.compact: 3, UIUserInterfaceSizeClass.regular: 5, UIUserInterfaceSizeClass.unspecified: 0]
     static let maxNumberOfPages = 2
     static let CellIdentifier = "TopSiteItemCell"
 }

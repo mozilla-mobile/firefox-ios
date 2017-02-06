@@ -27,7 +27,7 @@ class FaviconFetcherErrorType: MaybeErrorType {
 open class FaviconFetcher: NSObject, XMLParserDelegate {
     open static var userAgent: String = ""
     static let ExpirationTime = TimeInterval(60*60*24*7) // Only check for icons once a week
-    fileprivate static var characterToFaviconCache = [String : UIImage]()
+    fileprivate static var characterToFaviconCache = [String: UIImage]()
     static var defaultFavicon: UIImage = {
         return UIImage(named: "defaultFavicon")!
     }()

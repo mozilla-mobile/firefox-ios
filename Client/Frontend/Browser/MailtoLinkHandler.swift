@@ -23,7 +23,7 @@ open class MailtoLinkHandler {
     }
 
     func fetchMailSchemeProviders() -> [String:MailProvider] {
-        var providerDict = [String:MailProvider]()
+        var providerDict = [String: MailProvider]()
         if let path = Bundle.main.path(forResource: "MailSchemes", ofType: "plist"), let dictRoot = NSArray(contentsOfFile: path) {
             dictRoot.forEach({ dict in
                 let schemeDict = dict as! [String: Any]

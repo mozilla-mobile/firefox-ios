@@ -259,7 +259,7 @@ class AccountStatusSetting: WithAccountSetting {
                 let string = NSLocalizedString("Enter your password to connect.", comment: "Text message in the settings table view")
                 let range = NSRange(location: 0, length: string.characters.count)
                 let orange = UIColor(red: 255.0 / 255, green: 149.0 / 255, blue: 0.0 / 255, alpha: 1)
-                let attrs = [NSForegroundColorAttributeName : orange]
+                let attrs = [NSForegroundColorAttributeName: orange]
                 let res = NSMutableAttributedString(string: string)
                 res.setAttributes(attrs, range: range)
                 return res
@@ -267,7 +267,7 @@ class AccountStatusSetting: WithAccountSetting {
                 let string = NSLocalizedString("Upgrade Firefox to connect.", comment: "Text message in the settings table view")
                 let range = NSRange(location: 0, length: string.characters.count)
                 let orange = UIColor(red: 255.0 / 255, green: 149.0 / 255, blue: 0.0 / 255, alpha: 1)
-                let attrs = [NSForegroundColorAttributeName : orange]
+                let attrs = [NSForegroundColorAttributeName: orange]
                 let res = NSMutableAttributedString(string: string)
                 res.setAttributes(attrs, range: range)
                 return res
