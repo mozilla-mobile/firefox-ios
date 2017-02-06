@@ -90,13 +90,14 @@ public extension String {
     public func stringSplitWithNewline() -> String {
         let mid = self.characters.count/2
 
-        let arr = self.characters.indices.flatMap { (index) -> Int? in
-            if let i = Int("\(index)"), self.characters[index] == " " {
-                return i
+        let arr: [Int] = self.characters.indices.flatMap {
+            if self.characters[$0] == " " {
+                return self.distance(from: startIndex, to: $0)
             }
+
             return nil
         }
-        guard let closest = arr.enumerated().min(by: { abs($0.1 - mid) < abs($1.1 - mid)}) else {
+        guard let closest = arr.enumerated().min(by: { abs($0.1 - mid) < abs($1.1 - mid) }) else {
             return self
         }
         var newString = self

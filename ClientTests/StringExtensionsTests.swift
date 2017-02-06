@@ -55,6 +55,7 @@ class StringExtensionsTests: XCTestCase {
         XCTAssertEqual("foo", "foo".stringSplitWithNewline())
         XCTAssertEqual("aaa\n bbb", "aaa bbb".stringSplitWithNewline())
         XCTAssertEqual("Mark as\n Read", "Mark as Read".stringSplitWithNewline())
+        XCTAssertEqual("aa\n bbbbbb", "aa bbbbbb".stringSplitWithNewline())
     }
 
 }
