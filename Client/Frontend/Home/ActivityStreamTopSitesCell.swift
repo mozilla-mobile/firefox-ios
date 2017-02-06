@@ -310,7 +310,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
         return itemsPerPage == 0 ? 0 : Int(ceil(Double(cellCount) / Double(itemsPerPage)))
     }
 
-    override var collectionViewContentSize : CGSize {
+    override var collectionViewContentSize: CGSize {
         let contentSize = boundsSize
         let horizontalItemsCount = maxHorizontalItemsCount()
         let verticalItemsCount = maxVerticalItemsCount()

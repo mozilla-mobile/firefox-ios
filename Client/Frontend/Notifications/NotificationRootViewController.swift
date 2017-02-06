@@ -84,7 +84,7 @@ extension NotificationRootViewController {
         }, completion: nil)
     }
 
-    override var prefersStatusBarHidden : Bool {
+    override var prefersStatusBarHidden: Bool {
         // Always hide status bar when in landscape iPhone
         if traitCollection.horizontalSizeClass == .compact && traitCollection.verticalSizeClass == .compact {
             return true
@@ -92,11 +92,11 @@ extension NotificationRootViewController {
         return statusBarHidden
     }
 
-    override var preferredStatusBarUpdateAnimation : UIStatusBarAnimation {
+    override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
         return .slide
     }
 
-    override var preferredStatusBarStyle : UIStatusBarStyle {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
 }

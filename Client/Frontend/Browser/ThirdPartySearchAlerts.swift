@@ -10,7 +10,7 @@ class ThirdPartySearchAlerts: UIAlertController {
     /**
     Allows the keyboard to pop back up after an alertview.
     **/
-    override var canBecomeFirstResponder : Bool {
+    override var canBecomeFirstResponder: Bool {
         return false
     }
 

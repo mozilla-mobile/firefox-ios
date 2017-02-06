@@ -33,7 +33,7 @@ extension CGColor {
             var blue = CGFloat()
             var alpha = CGFloat()
             UIColor(cgColor: self).getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-            return [red,green,blue,alpha]
+            return [red, green, blue, alpha]
         }
     }
 }
@@ -209,7 +209,7 @@ extension UIImage {
         var sortedColors = NSMutableArray(capacity: leftEdgeColors.count)
         while let kolor = enumerator.nextObject() as? UIColor {
             let colorCount = leftEdgeColors.count(for: kolor)
-            if randomColorsThreshold < colorCount  {
+            if randomColorsThreshold < colorCount {
                 sortedColors.add(PCCountedColor(color: kolor, count: colorCount))
             }
         }

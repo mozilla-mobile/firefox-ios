@@ -10,7 +10,7 @@ import XCGLogger
 
 private let log = Logger.browserLogger
 
-protocol TabToolbarProtocol: class  {
+protocol TabToolbarProtocol: class {
     weak var tabToolbarDelegate: TabToolbarDelegate? { get set }
     var shareButton: UIButton { get }
     var bookmarkButton: UIButton { get }

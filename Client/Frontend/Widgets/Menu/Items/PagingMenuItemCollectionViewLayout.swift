@@ -14,7 +14,7 @@ class PagingMenuItemCollectionViewLayout: UICollectionViewLayout {
     var contentSize = CGSize.zero
     var layoutCellAttributes = [IndexPath: UICollectionViewLayoutAttributes]()
 
-    override var collectionViewContentSize : CGSize {
+    override var collectionViewContentSize: CGSize {
         return contentSize
     }
 

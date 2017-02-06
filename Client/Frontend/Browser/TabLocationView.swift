@@ -314,7 +314,7 @@ private class DisplayTextField: UITextField {
         }
     }
 
-    fileprivate override var canBecomeFirstResponder : Bool {
+    fileprivate override var canBecomeFirstResponder: Bool {
         return false
     }
 }

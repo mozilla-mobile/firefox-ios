@@ -11,11 +11,11 @@ class FindInPageActivity: UIActivity {
         self.callback = callback
     }
 
-    override var activityTitle : String? {
+    override var activityTitle: String? {
         return NSLocalizedString("Find in Page", tableName: "FindInPage", comment: "Share action title")
     }
 
-    override var activityImage : UIImage? {
+    override var activityImage: UIImage? {
         return UIImage(named: "shareFindInPage")
     }
 

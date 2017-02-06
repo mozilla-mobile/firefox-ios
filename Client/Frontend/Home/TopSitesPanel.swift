@@ -70,7 +70,7 @@ class TopSitesPanel: UIViewController {
         }
     }
 
-    override var supportedInterfaceOrientations : UIInterfaceOrientationMask {
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return UIInterfaceOrientationMask.allButUpsideDown
     }
 
@@ -478,7 +478,7 @@ class TopSitesLayout: UICollectionViewLayout {
         return min(count - 1, max(0, Int((y - topSectionHeight) / UIConstants.DefaultRowHeight + CGFloat(thumbnailCount))))
     }
 
-    override var collectionViewContentSize : CGSize {
+    override var collectionViewContentSize: CGSize {
         if count <= thumbnailCount {
             return CGSize(width: width, height: topSectionHeight)
         }

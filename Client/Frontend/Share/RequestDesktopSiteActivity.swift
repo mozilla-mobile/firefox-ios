@@ -13,13 +13,13 @@ class RequestDesktopSiteActivity: UIActivity {
         self.callback = callback
     }
 
-    override var activityTitle : String? {
+    override var activityTitle: String? {
         return requestMobileSite ?
             NSLocalizedString("Request Mobile Site", comment: "Share action title") :
             NSLocalizedString("Request Desktop Site", comment: "Share action title")
     }
 
-    override var activityImage : UIImage? {
+    override var activityImage: UIImage? {
         return requestMobileSite ?
             UIImage(named: "shareRequestMobileSite") :
             UIImage(named: "shareRequestDesktopSite")

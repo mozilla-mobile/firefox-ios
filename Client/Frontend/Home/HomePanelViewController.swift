@@ -201,7 +201,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         panel.view.accessibilityLabel = accessibilityLabel
     }
 
-    override var preferredStatusBarStyle : UIStatusBarStyle {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
         return UIStatusBarStyle.lightContent
     }
 
