@@ -354,7 +354,7 @@ class AccountSetting: Setting, FxAContentViewControllerDelegate {
 
     override var accessoryType: UITableViewCellAccessoryType { return .none }
 
-    func contentViewControllerDidSignIn(_ viewController: FxAContentViewController, data: JSON) -> Void {
+    func contentViewControllerDidSignIn(_ viewController: FxAContentViewController, data: JSON) {
         if data["keyFetchToken"].string == nil || data["unwrapBKey"].string == nil {
             // The /settings endpoint sends a partial "login"; ignore it entirely.
             NSLog("Ignoring didSignIn with keyFetchToken or unwrapBKey missing.")

@@ -75,7 +75,7 @@ class HistoryPanel: UIViewController, HomePanel {
         }
     }
 
-    func setUpHistoryPanelViews() -> Void {
+    func setUpHistoryPanelViews() {
         return updateSyncedDevicesCount().uponQueue(DispatchQueue.main) { result in
             self.view.addSubview(self.recentlyClosedTabsButton)
             self.view.addSubview(self.tableViewController.view)

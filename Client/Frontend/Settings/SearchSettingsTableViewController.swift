@@ -7,7 +7,7 @@ import WebImage
 import Shared
 
 protocol SearchEnginePickerDelegate: class {
-    func searchEnginePicker(_ searchEnginePicker: SearchEnginePicker?, didSelectSearchEngine engine: OpenSearchEngine?) -> Void
+    func searchEnginePicker(_ searchEnginePicker: SearchEnginePicker?, didSelectSearchEngine engine: OpenSearchEngine?)
 }
 
 class SearchSettingsTableViewController: UITableViewController {

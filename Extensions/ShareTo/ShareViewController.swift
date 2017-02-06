@@ -22,8 +22,8 @@ let ShareDestinations = [
 ]
 
 protocol ShareControllerDelegate {
-    func shareControllerDidCancel(_ shareController: ShareDialogController) -> Void
-    func shareController(_ shareController: ShareDialogController, didShareItem item: ShareItem, toDestinations destinations: NSSet) -> Void
+    func shareControllerDidCancel(_ shareController: ShareDialogController)
+    func shareController(_ shareController: ShareDialogController, didShareItem item: ShareItem, toDestinations destinations: NSSet)
 }
 
 private struct ShareDialogControllerUX {

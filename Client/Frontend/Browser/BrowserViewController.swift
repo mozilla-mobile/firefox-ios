@@ -2916,7 +2916,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
 }
 
 extension BrowserViewController: FxAContentViewControllerDelegate {
-    func contentViewControllerDidSignIn(_ viewController: FxAContentViewController, data: JSON) -> Void {
+    func contentViewControllerDidSignIn(_ viewController: FxAContentViewController, data: JSON) {
         if data["keyFetchToken"].string == nil || data["unwrapBKey"].string == nil {
             // The /settings endpoint sends a partial "login"; ignore it entirely.
             log.debug("Ignoring didSignIn with keyFetchToken or unwrapBKey missing.")
