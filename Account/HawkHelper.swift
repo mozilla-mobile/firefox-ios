@@ -37,7 +37,7 @@ open class HawkHelper {
         let macString = HawkHelper.getSignatureFor(requestString.utf8EncodedData, key: self.key)
 
         let s = NSMutableString(string: "Hawk ")
-        func append(_ key: String, value: String) -> Void {
+        func append(_ key: String, value: String) {
             s.append(key)
             s.append("=\"")
             s.append(value)
@@ -63,7 +63,7 @@ open class HawkHelper {
 
     class func getRequestStringFor(_ request: URLRequest, timestampString: String, nonce: String, hash: String, extra: String) -> String {
         let s = NSMutableString(string: "hawk.1.header\n")
-        func append(_ line: String) -> Void {
+        func append(_ line: String) {
             s.append(line)
             s.append("\n")
         }

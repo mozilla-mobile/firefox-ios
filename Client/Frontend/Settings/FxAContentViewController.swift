@@ -10,7 +10,7 @@ import WebKit
 import SwiftyJSON
 
 protocol FxAContentViewControllerDelegate: class {
-    func contentViewControllerDidSignIn(_ viewController: FxAContentViewController, data: JSON) -> Void
+    func contentViewControllerDidSignIn(_ viewController: FxAContentViewController, data: JSON)
     func contentViewControllerDidCancel(_ viewController: FxAContentViewController)
 }
 

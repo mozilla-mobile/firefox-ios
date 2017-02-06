@@ -84,7 +84,7 @@ class AdjustIntegration: NSObject {
     /// written is a JSON file with a single dictionary in it. We add one extra item to it that contains the current
     /// timestamp in seconds since the UNIX epoch.
 
-    fileprivate func saveAttribution(_ attribution: ADJAttribution) throws -> Void {
+    fileprivate func saveAttribution(_ attribution: ADJAttribution) throws {
         let dictionary = NSMutableDictionary(dictionary: attribution.dictionary())
         dictionary["_timestamp"] = NSNumber(value: Int64(Date().timeIntervalSince1970) as Int64)
         let data = try JSONSerialization.data(withJSONObject: dictionary, options: [JSONSerialization.WritingOptions.prettyPrinted])
@@ -126,7 +126,7 @@ extension AdjustIntegration: AdjustDelegate {
     /// Adjust SDK. We always let it send the initial attribution ping. Session tracking is only enabled if
     /// the Send Anonymous Usage Data setting is turned on.
 
-    func triggerApplicationDidFinishLaunchingWithOptions(_ launchOptions: [AnyHashable: Any]?) -> Void {
+    func triggerApplicationDidFinishLaunchingWithOptions(_ launchOptions: [AnyHashable: Any]?) {
         do {
             if let config = getConfig() {
                 // Always initialize Adjust - otherwise we cannot enable/disable it later. Their SDK must be

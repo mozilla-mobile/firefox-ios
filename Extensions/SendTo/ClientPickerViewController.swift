@@ -8,8 +8,8 @@ import Storage
 import SnapKit
 
 protocol ClientPickerViewControllerDelegate {
-    func clientPickerViewControllerDidCancel(_ clientPickerViewController: ClientPickerViewController) -> Void
-    func clientPickerViewController(_ clientPickerViewController: ClientPickerViewController, didPickClients clients: [RemoteClient]) -> Void
+    func clientPickerViewControllerDidCancel(_ clientPickerViewController: ClientPickerViewController)
+    func clientPickerViewController(_ clientPickerViewController: ClientPickerViewController, didPickClients clients: [RemoteClient])
 }
 
 struct ClientPickerViewControllerUX {
