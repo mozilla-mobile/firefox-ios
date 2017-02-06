@@ -55,7 +55,7 @@ class DiskImageStoreTests: XCTestCase {
     }
 
     private func makeImageWithColor(color: UIColor) -> UIImage {
-        let rect = CGRectMake(0, 0, 1, 1)
+        let rect = CGRect(x: 0, y: 0, width: 1, height: 1)
         UIGraphicsBeginImageContext(rect.size)
         let context = UIGraphicsGetCurrentContext()
         CGContextSetFillColorWithColor(context, color.CGColor)

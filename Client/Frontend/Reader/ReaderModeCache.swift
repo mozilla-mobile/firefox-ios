@@ -131,7 +131,7 @@ class DiskReaderModeCache: ReaderModeCache {
     fileprivate func hashedPathForURL(_ url: URL) -> String? {
         guard let hash = hashForURL(url) else { return nil }
 
-        return NSString.path(withComponents: [hash.substring(with: NSMakeRange(0, 2)), hash.substring(with: NSMakeRange(2, 2)), hash.substring(from: 4)]) as String
+        return NSString.path(withComponents: [hash.substring(with: NSRange(location: 0, length: 2)), hash.substring(with: NSRange(location: 2, length: 2)), hash.substring(from: 4)]) as String
     }
 
     fileprivate func hashForURL(_ url: URL) -> NSString? {

@@ -60,7 +60,7 @@ struct ThumbnailCellUX {
         }
     }
 
-    static let LabelInsets = UIEdgeInsetsMake(10, 3, 10, 3)
+    static let LabelInsets = UIEdgeInsets(top: 10, left: 3, bottom: 10, right: 3)
     static let PlaceholderImage = UIImage(named: "defaultTopSiteIcon")
     static let CornerRadius: CGFloat = 3
 

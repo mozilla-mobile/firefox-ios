@@ -167,7 +167,7 @@ class URLBarView: UIView {
         cancelButton.setTitle(cancelTitle, for: UIControlState())
         cancelButton.titleLabel?.font = UIConstants.DefaultChromeFont
         cancelButton.addTarget(self, action: #selector(URLBarView.SELdidClickCancel), for: UIControlEvents.touchUpInside)
-        cancelButton.titleEdgeInsets = UIEdgeInsetsMake(10, 12, 10, 12)
+        cancelButton.titleEdgeInsets = UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12)
         cancelButton.setContentHuggingPriority(1000, for: UILayoutConstraintAxis.horizontal)
         cancelButton.setContentCompressionResistancePriority(1000, for: UILayoutConstraintAxis.horizontal)
         cancelButton.alpha = 0

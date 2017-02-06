@@ -44,7 +44,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
                 let attributedString = NSMutableAttributedString(string: text)
                 let selectedStart = offset(from: beginningOfDocument, to: selectedTextRange.start)
                 let selectedLength = offset(from: selectedTextRange.start, to: selectedTextRange.end)
-                attributedString.addAttribute(NSBackgroundColorAttributeName, value: highlightColor, range: NSMakeRange(selectedStart, selectedLength))
+                attributedString.addAttribute(NSBackgroundColorAttributeName, value: highlightColor, range: NSRange(location: selectedStart, length: selectedLength))
                 attributedText = attributedString
             }
         }
