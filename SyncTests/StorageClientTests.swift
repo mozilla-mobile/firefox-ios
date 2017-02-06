@@ -70,7 +70,7 @@ class StorageClientTests: XCTestCase {
         let v: JSON = JSON(parseJSON: "{\"a:\": 2}")
         let m = ResponseMetadata(status: 200, headers: [
             "X-Weave-Timestamp": "1274380461.12",
-            "X-Last-Modified":   "2174380461.12",
+            "X-Last-Modified": "2174380461.12",
             "X-Weave-Next-Offset": "abdef",
             ])
 

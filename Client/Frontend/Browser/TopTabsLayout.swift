@@ -31,7 +31,7 @@ class TopTabsViewLayout: UICollectionViewFlowLayout {
     var themeColor: UIColor = TopTabsUX.TopTabsBackgroundNormalColorInactive
     var decorationAttributeArr: [Int : UICollectionViewLayoutAttributes?] = [:]
     
-    override var collectionViewContentSize : CGSize {
+    override var collectionViewContentSize: CGSize {
         return CGSize(width: CGFloat(collectionView!.numberOfItems(inSection: 0)) * (TopTabsUX.TabWidth+1)+TopTabsUX.TopTabsBackgroundShadowWidth*2,
                       height: collectionView!.bounds.height)
     }
