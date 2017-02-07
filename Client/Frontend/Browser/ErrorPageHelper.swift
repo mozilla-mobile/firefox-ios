@@ -154,8 +154,8 @@ class ErrorPageHelper {
 
             var asset = Bundle.main.path(forResource: "NetError", ofType: "html")
             var variables = [
-                "error_code": "\(errCode ?? -1)",
-                "error_title": errDescription ?? "",
+                "error_code": "\(errCode)",
+                "error_title": errDescription,
                 "short_description": errDomain,
             ]
 
