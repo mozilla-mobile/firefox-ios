@@ -180,14 +180,14 @@ open class FxAClient10 {
             return nil
         }
 
-        let ciphertext = data.subdata(in: Range(uncheckedBounds: (lower: 0 * KeyLength, upper:  2 * KeyLength)))
-        let MAC = data.subdata(in: Range(uncheckedBounds: (lower: 1 * KeyLength, upper: 2 * KeyLength)))
+        let ciphertext = data.subdata(in: 0..<(2 * KeyLength))
+        let MAC = data.subdata(in: (2 * KeyLength)..<(3 * KeyLength))
 
         let salt: Data = Data()
         let contextInfo: Data = KW("account/keys")
         let bytes = (keyRequestKey as NSData).deriveHKDFSHA256Key(withSalt: salt, contextInfo: contextInfo, length: UInt(3 * KeyLength))
-        let respHMACKey = bytes?.subdata(in: Range(uncheckedBounds: (lower: 0 * KeyLength, upper: 1 * KeyLength)))
-        let respXORKey = bytes?.subdata(in: Range(uncheckedBounds: (lower: 1 * KeyLength, upper: 2 * KeyLength)))
+        let respHMACKey = bytes?.subdata(in: 0..<KeyLength)
+        let respXORKey = bytes?.subdata(in: KeyLength..<(3 * KeyLength))
 
         guard let hmacKey = respHMACKey,
             ciphertext.hmacSha256WithKey(hmacKey) == MAC else {
@@ -200,8 +200,8 @@ open class FxAClient10 {
             return nil
         }
 
-        let kA = xoredBytes.subdata(in: Range(uncheckedBounds: (lower: 0 * KeyLength, upper: 1 * KeyLength)))
-        let wrapkB = xoredBytes.subdata(in: Range(uncheckedBounds: (lower: 1 * KeyLength, upper: 1 * KeyLength)))
+        let kA = xoredBytes.subdata(in: 0..<KeyLength)
+        let wrapkB = xoredBytes.subdata(in: KeyLength..<(2 * KeyLength))
         return FxAKeysResponse(kA: kA, wrapkB: wrapkB)
     }
 
@@ -356,7 +356,8 @@ extension FxAClient10: FxALoginClient {
         let key = (keyFetchToken as NSData).deriveHKDFSHA256Key(withSalt: salt, contextInfo: contextInfo, length: UInt(3 * KeyLength))!
         mutableURLRequest.addAuthorizationHeader(forHKDFSHA256Key: key)
 
-        let keyRequestKey = key.subdata(in: Range(uncheckedBounds:(lower:KeyLength, upper: 2 * KeyLength)))
+        let rangeStart = 2 * KeyLength
+        let keyRequestKey = key.subdata(in: rangeStart..<(rangeStart + KeyLength))
 
         return makeRequest(mutableURLRequest) { FxAClient10.keysResponse(fromJSON: keyRequestKey, json: $0) }
     }

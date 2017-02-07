@@ -141,8 +141,8 @@ open class HawkHelper {
 
 extension URLRequest {
     mutating func addAuthorizationHeader(forHKDFSHA256Key bytes: Data) {
-        let tokenId = bytes.subdata(in: Range(uncheckedBounds:(lower: 0 * KeyLength, upper: KeyLength)))
-        let reqHMACKey = bytes.subdata(in:Range(uncheckedBounds:(lower: 1 * KeyLength, upper: KeyLength)))
+        let tokenId = bytes.subdata(in: 0..<KeyLength)
+        let reqHMACKey = bytes.subdata(in: KeyLength..<(2 * KeyLength))
         let hawkHelper = HawkHelper(id: tokenId.hexEncodedString, key: reqHMACKey)
         let hawkValue = hawkHelper.getAuthorizationValueFor(self)
         setValue(hawkValue, forHTTPHeaderField: "Authorization")
