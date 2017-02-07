@@ -630,7 +630,7 @@ class TabTrayController: UIViewController {
         }, completion: { finished in
             self.toolbar.isUserInteractionEnabled = true
             if finished {
-                self.navigationController?.popViewController(animated: true)
+                let _ = self.navigationController?.popViewController(animated: true)
 
                 if request == nil && NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage {
                     if let bvc = self.navigationController?.topViewController as? BrowserViewController {
@@ -674,7 +674,7 @@ extension TabTrayController: TabSelectionDelegate {
     func didSelectTabAtIndex(_ index: Int) {
         let tab = tabsToDisplay[index]
         tabManager.selectTab(tab)
-        self.navigationController?.popViewController(animated: true)
+        let _ = self.navigationController?.popViewController(animated: true)
     }
 }
 
@@ -709,7 +709,7 @@ extension TabTrayController: TabManagerDelegate {
                 tabManager.selectTab(tab)
                 // don't pop the tab tray view controller if it is not in the foreground
                 if self.presentedViewController == nil {
-                    self.navigationController?.popViewController(animated: true)
+                    let _ = self.navigationController?.popViewController(animated: true)
                 }
             }
         })
@@ -1106,7 +1106,7 @@ extension TabTrayController: UIViewControllerPreviewingDelegate {
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
         guard let tpvc = viewControllerToCommit as? TabPeekViewController else { return }
         tabManager.selectTab(tpvc.tab)
-        self.navigationController?.popViewController(animated: true)
+        let _ = self.navigationController?.popViewController(animated: true)
 
         delegate?.tabTrayDidDismiss(self)
 

@@ -57,7 +57,7 @@ class SensitiveViewController: UIViewController {
             cancel: {
                 self.promptingForTouchID = false
                 self.authState = .notAuthenticating
-                self.navigationController?.popToRootViewController(animated: true)
+                let _ = self.navigationController?.popToRootViewController(animated: true)
             },
             fallback: {
                 self.promptingForTouchID = false
@@ -68,7 +68,7 @@ class SensitiveViewController: UIViewController {
     }
 
     func hideLogins() {
-        self.navigationController?.popToRootViewController(animated: true)
+        let _ = self.navigationController?.popToRootViewController(animated: true)
     }
 
     func blurContents() {
@@ -108,7 +108,7 @@ extension SensitiveViewController: PasscodeEntryDelegate {
     }
 
     func userDidCancelValidation() {
-        self.navigationController?.popToRootViewController(animated: false)
+        let _ = self.navigationController?.popToRootViewController(animated: false)
         self.authState = .notAuthenticating
     }
 }

@@ -278,15 +278,15 @@ class Tab: NSObject {
     }
 
     func goBack() {
-        webView?.goBack()
+        let _ = webView?.goBack()
     }
 
     func goForward() {
-        webView?.goForward()
+        let _ = webView?.goForward()
     }
 
     func goToBackForwardListItem(_ item: WKBackForwardListItem) {
-        webView?.go(to: item)
+        let _ = webView?.go(to: item)
     }
 
     @discardableResult func loadRequest(_ request: URLRequest) -> WKNavigation? {
