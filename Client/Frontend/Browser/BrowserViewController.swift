@@ -898,7 +898,7 @@ class BrowserViewController: UIViewController {
         if let bookmark = notification.object as? BookmarkItem {
             if bookmark.url == urlBar.currentURL?.absoluteString {
                 if let userInfo = notification.userInfo as? Dictionary<String, Bool> {
-                    if let added = userInfo["added"] {
+                    if userInfo["added"] != nil {
                         if let tab = self.tabManager.getTabForURL(urlBar.currentURL!) {
                             tab.isBookmarked = false
                         }
