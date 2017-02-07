@@ -12,7 +12,6 @@ enum ShortcutType: String {
     case newTab
     case newPrivateTab
     case openLastBookmark
-    @available(*, deprecated: 2.1) case openLastTab
 
     init?(fullType: String) {
         guard let last = fullType.components(separatedBy: ".").last else { return nil }
@@ -110,7 +109,7 @@ class QuickActions: NSObject {
             handleOpenNewTab(withBrowserViewController: browserViewController, isPrivate: true)
         // even though we're removing OpenLastTab, it's possible that someone will use an existing last tab quick action to open the app
         // the first time after upgrading, so we should still handle it
-        case .openLastBookmark, .openLastTab:
+        case .openLastBookmark:
             if let urlToOpen = (userData?[QuickActions.TabURLKey] as? String)?.asURL {
                 handleOpenURL(withBrowserViewController: browserViewController, urlToOpen: urlToOpen)
             }
