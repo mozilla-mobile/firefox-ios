@@ -581,7 +581,7 @@ class SettingsTableViewController: UITableViewController {
         guard let text = text else { return 0 }
 
         let size = CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)
-        let attrs = [NSFontAttributeName: label.font]
+        let attrs = [NSFontAttributeName: label.font as Any]
         let boundingRect = NSString(string: text).boundingRect(with: size,
             options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: attrs, context: nil)
         return boundingRect.height

@@ -151,7 +151,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     fileprivate func onModelFetched(_ result: Maybe<BookmarksModel>) {
         guard let model = result.successValue else {
-            self.onModelFailure(result.failureValue)
+            self.onModelFailure(result.failureValue as Any)
             return
         }
         self.onNewModel(model)
