@@ -18,7 +18,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
         navigationItem.leftBarButtonItem = UIBarButtonItem(
             title: NSLocalizedString("Done", comment: "Done button on left side of the Settings view controller title bar"),
             style: UIBarButtonItemStyle.done,
-            target: navigationController, action: Selector("SELdone"))
+            target: navigationController, action: #selector((navigationController as! SettingsNavigationController).SELdone))
         navigationItem.leftBarButtonItem?.accessibilityIdentifier = "AppSettingsTableViewController.navigationItem.leftBarButtonItem"
 
         tableView.accessibilityIdentifier = "AppSettingsTableViewController.tableView"
