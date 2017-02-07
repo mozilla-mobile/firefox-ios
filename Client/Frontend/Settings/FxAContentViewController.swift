@@ -82,8 +82,8 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
             "type": type,
             "content": content,
         ] as [String : Any]
-        let json = JSON(data).rawString() ?? ""
-        let script = "window.postMessage(\(json), '\(self.url)');"
+        let json = JSON(data).rawString(.utf8, options: []) ?? ""
+        let script = "window.postMessage(\(json), '\(self.url.absoluteString)');"
         webView.evaluateJavaScript(script, completionHandler: nil)
     }
 
