@@ -360,11 +360,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             quickActions.launchedShortcutItem = nil
         }
 
-        // we've removed the Last Tab option, so we should remove any quick actions that we already have that are last tabs
-        // we do this after we've handled any quick actions that have been used to open the app so that we don't b0rk if
-        // the user has opened the app for the first time after upgrade with a Last Tab quick action
-        QuickActions.sharedInstance.removeDynamicApplicationShortcutItemOfType(ShortcutType.openLastTab, fromApplication: application)
-
         // Check if we have a URL from an external app or extension waiting to launch,
         // then launch it on the main thread.
         if let params = openInFirefoxParams {
