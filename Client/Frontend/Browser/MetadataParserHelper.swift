@@ -31,7 +31,7 @@ class MetadataParserHelper: TabHelper {
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        guard let dict = message.body as? [String: AnyObject] else {
+        guard message.body is [String: AnyObject] else {
             return
         }
         
