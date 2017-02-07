@@ -1,0 +1,31 @@
+/* Message shown in the dialog prompting users if they want to clear everything */
+"Are you sure you want to clear all of your data? This will also close all open tabs." = "Chceće woprawdźe wšě swoje daty zhašeć? To tež wšě wočinjene rajtarki začini.";
+
+/* Settings item for clearing browsing history */
+"Browsing History" = "Přehladowanska historija";
+
+/* Settings item for clearing the cache */
+"Cache" = "Pufrowak";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "Přetorhnyć";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "Zhašeć";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "Wšitko zhašeć";
+
+/* Button in settings that clears private data for the selected items.
+   Navigation title in settings. */
+"Clear Private Data" = "Priwatne daty zhašeć";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Placki";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "Daty websydła offline";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "Składowane přizjewjenja";
+

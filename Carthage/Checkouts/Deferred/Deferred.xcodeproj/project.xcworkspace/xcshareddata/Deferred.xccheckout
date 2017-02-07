@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>1AB37996-BED0-42C1-B4C6-F134F6C18775</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Deferred</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>84E260F88D2CB3384881FB5CA3D4F2ADC480059A</key>
+		<string>https://github.com/bignerdranch/Deferred</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Deferred.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>84E260F88D2CB3384881FB5CA3D4F2ADC480059A</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/bignerdranch/Deferred</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>84E260F88D2CB3384881FB5CA3D4F2ADC480059A</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>84E260F88D2CB3384881FB5CA3D4F2ADC480059A</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Deferred</string>
+		</dict>
+	</array>
+</dict>
+</plist>

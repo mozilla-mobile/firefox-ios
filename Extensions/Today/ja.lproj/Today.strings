@@ -1,0 +1,9 @@
+/* Go to link on clipboard */
+"TodayWidget.GoToCopiedLinkLabel" = "コピーしたリンクを開く";
+
+/* New Private Tab button label */
+"TodayWidget.NewPrivateTabButtonLabel" = "新規プライベートタブ";
+
+/* New Tab button label */
+"TodayWidget.NewTabButtonLabel" = "新規タブ";
+

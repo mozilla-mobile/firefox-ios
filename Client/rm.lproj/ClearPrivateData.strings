@@ -1,0 +1,31 @@
+/* Message shown in the dialog prompting users if they want to clear everything */
+"Are you sure you want to clear all of your data? This will also close all open tabs." = "Vuls ti propi stizzar tut tias datas? Quai serra era tut ils tabs averts.";
+
+/* Settings item for clearing browsing history */
+"Browsing History" = "Cronologia";
+
+/* Settings item for clearing the cache */
+"Cache" = "Cache";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "Interrumper";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "Stizzar";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "Stizzar tut";
+
+/* Button in settings that clears private data for the selected items.
+   Navigation title in settings. */
+"Clear Private Data" = "Stizzar las datas privatas";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Cookies";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "Datas da websites offline";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "Infurmaziuns d'annunzia memorisadas";
+

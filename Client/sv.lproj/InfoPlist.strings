@@ -1,0 +1,12 @@
+"NSCameraUsageDescription" = "Detta gör det möjligt att ta och ladda upp bilder.";
+
+"NSLocationWhenInUseUsageDescription" = "Webbsidor du besöker kan be om din plats.";
+
+"NSMicrophoneUsageDescription" = "Detta gör det möjligt att ta och ladda upp videor.";
+
+"NSPhotoLibraryUsageDescription" = "Detta gör det möjligt att spara och ladda upp bilder.";
+
+"ShortcutItemTitleNewPrivateTab" = "Ny privat flik";
+
+"ShortcutItemTitleNewTab" = "Ny flik";
+

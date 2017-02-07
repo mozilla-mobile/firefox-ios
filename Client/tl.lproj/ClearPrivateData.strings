@@ -1,0 +1,31 @@
+/* Message shown in the dialog prompting users if they want to clear everything */
+"Are you sure you want to clear all of your data? This will also close all open tabs." = "Sigurado ka ba sa pagbura ng lahat ng data? Isasara nito lahat ng bukas na tab.";
+
+/* Settings item for clearing browsing history */
+"Browsing History" = "Browsing History";
+
+/* Settings item for clearing the cache */
+"Cache" = "Cache";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "Ikansela";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "I-clear";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "I-clear lahat";
+
+/* Button in settings that clears private data for the selected items.
+   Navigation title in settings. */
+"Clear Private Data" = "I-clear ang Private Data.";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Cookies";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "Offline Website Data";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "Offline Website Data";
+

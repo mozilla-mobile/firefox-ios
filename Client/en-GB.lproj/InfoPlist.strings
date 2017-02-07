@@ -1,0 +1,12 @@
+"NSCameraUsageDescription" = "This lets you take and upload photos.";
+
+"NSLocationWhenInUseUsageDescription" = "Web sites you visit may request your location.";
+
+"NSMicrophoneUsageDescription" = "This lets you take and upload videos.";
+
+"NSPhotoLibraryUsageDescription" = "This lets you save and upload photos.";
+
+"ShortcutItemTitleNewPrivateTab" = "New Private Tab";
+
+"ShortcutItemTitleNewTab" = "New Tab";
+

@@ -1,0 +1,12 @@
+"NSCameraUsageDescription" = "Это позволит вам снимать и загружать фотографии.";
+
+"NSLocationWhenInUseUsageDescription" = "Посещаемые вам веб-сайты могут запросить ваше местоположение.";
+
+"NSMicrophoneUsageDescription" = "Это позволит вам снимать и загружать видео.";
+
+"NSPhotoLibraryUsageDescription" = "Это позволит вам сохранять и загружать фотографии.";
+
+"ShortcutItemTitleNewPrivateTab" = "Новая приватная вкладка";
+
+"ShortcutItemTitleNewTab" = "Новая вкладка";
+

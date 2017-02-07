@@ -1,0 +1,147 @@
+<div id="readability-page-1" class="page">
+    <div class="post-body entry-content" id="post-body-932306423056216142" itemprop="description articleBody">
+        <p style="display: inline;" class="readability-styled">
+            I've written a couple of posts in the past few months but they were all for </p><a href="http://blog.ioactive.com/search/label/Andrew%20Zonenberg">the blog at work</a>
+        <p style="display: inline;" class="readability-styled"> so I figured I'm long overdue for one on Silicon Exposed.</p>
+        <p>
+
+            <h2>
+                So what's a GreenPak?</h2>
+        </p>
+        <p style="display: inline;" class="readability-styled"> Silego Technology is a fabless semiconductor company located in the SF Bay area, which makes (among other things) a line of programmable logic devices known as GreenPak. Their </p><a href="http://www.silego.com/products/greenpak5.html">5th generation parts</a>
+        <p style="display: inline;" class="readability-styled"> were just announced, but I started this project before that happened so I'm still targeting the </p><a href="http://www.silego.com/products/greenpak4.html">4th generation</a>
+        <p style="display: inline;" class="readability-styled">.</p>
+        <p>
+            GreenPak devices are kind of like itty bitty <a href="http://www.cypress.com/products/32-bit-arm-cortex-m-psoc">PSoCs</a> - they have a mixed signal fabric with an ADC, DACs, comparators, voltage references, plus a digital LUT/FF fabric and some typical digital MCU peripherals like counters and oscillators (but no CPU).</p>
+        <p>
+            It's actually an interesting architecture - FPGAs (including some devices marketed as CPLDs) are a 2D array of LUTs connected via wires to adjacent cells, and true (product term) CPLDs are a star topology of AND-OR arrays connected by a crossbar. GreenPak, on the other hand, is a star topology of LUTs, flipflops, and analog/digital hard IP connected to a crossbar.</p>
+        <p>
+            Without further ado, here's a block diagram showing all the cool stuff you get in the SLG46620V:</p>
+        <p>
+
+
+            They're also tiny (the SLG46620V is a 20-pin 0.4mm pitch STQFN measuring 2x3 mm, and the lower gate count SLG46140V is a mere 1.6x2 mm) and probably the cheapest programmable logic device on the market - $0.50 in low volume and less than $0.40 in larger quantities.</p>
+        <p>
+            The Vdd range of GreenPak4 is huge, more like what you'd expect from an MCU than an FPGA! It can run on anything from 1.8 to 5V, although performance is only specified at 1.8, 3.3, and 5V nominal voltages. There's also a dual-rail version that trades one of the GPIO pins for a second power supply pin, allowing you to interface to logic at two different voltage levels.</p>
+        <p>
+            To support low-cost/space-constrained applications, they even have the configuration memory on die. It's one-time programmable and needs external Vpp to program (presumably Silego didn't want to waste die area on charge pumps that would only be used once) but has a SRAM programming mode for prototyping.</p>
+        <p>
+            The best part is that the development software (GreenPak Designer) is free of charge and provided for all major operating systems including Linux! Unfortunately, the only supported design entry method is schematic entry and there's no way to write your design in a HDL.</p>
+        <p>
+            While schematics may be fine for quick tinkering on really simple designs, they quickly get unwieldy. The nightmare of a circuit shown below is just a bunch of counters hooked up to LEDs that blink at various rates.</p>
+        <p>
+
+
+            As if this wasn't enough of a problem, the largest GreenPak4 device (the SLG46620V) is split into two halves with limited routing between them, and the GUI doesn't help the user manage this complexity at all - you have to draw your schematic in two halves and add "cross connections" between them.</p>
+        <p>
+            The icing on the cake is that schematics are a pain to diff and collaborate on. Although GreenPak schematics are XML based, which is a touch better than binary, who wants to read a giant XML diff and try to figure out what's going on in the circuit?</p>
+        <p>
+            This isn't going to be a post on the quirks of Silego's software, though - that would be boring. As it turns out, there's one more exciting feature of these chips that I didn't mention earlier: the configuration bitstream is 100% documented in the device datasheet! This is unheard of in the programmable logic world. As Nick of Arachnid Labs <a href="http://www.arachnidlabs.com/blog/2015/03/30/greenpak/">says</a>, the chip is "just dying for someone to write a VHDL or Verilog compiler for it". As you can probably guess by from the title of this post, I've been busy doing exactly that.</p>
+        <p>
+
+            <h2>
+                Great! How does it work?</h2>
+        </p>
+        <p style="display: inline;" class="readability-styled"> Rather than wasting time writing a synthesizer, I decided to write a GreenPak technology library for Clifford Wolf's excellent open source synthesis tool, </p><a href="http://www.clifford.at/yosys/">Yosys</a>
+        <p style="display: inline;" class="readability-styled">, and then make a place-and-route tool to turn that into a final netlist. The post-PAR netlist can then be loaded into GreenPak Designer in order to program the device.</p>
+        <p>
+            The first step of the process is to run the "synth_greenpak4" Yosys flow on the Verilog source. This runs a generic RTL synthesis pass, then some coarse-grained extraction passes to infer shift register and counter cells from behavioral logic, and finally maps the remaining logic to LUT/FF cells and outputs a JSON-formatted netlist.</p>
+        <p>
+            Once the design has been synthesized, my tool (named, surprisingly, gp4par) is then launched on the netlist. It begins by parsing the JSON and constructing a directed graph of cell objects in memory. A second graph, containing all of the primitives in the device and the legal connections between them, is then created based on the device specified on the command line. (As of now only the SLG46620V is supported; the SLG46621V can be added fairly easily but the SLG46140V has a slightly different microarchitecture which will require a bit more work to support.)</p>
+        <p>
+            After the graphs are generated, each node in the netlist graph is assigned a numeric label identifying the type of cell and each node in the device graph is assigned a list of legal labels: for example, an I/O buffer site is legal for an input buffer, output buffer, or bidirectional buffer.</p>
+        <p>
+
+
+            The labeled nodes now need to be placed. The initial placement uses a simple greedy algorithm to create a valid (although not necessarily optimal or even routable) placement:</p><br/>
+        <ol>
+            <li>Loop over the cells in the netlist. If any cell has a LOC constraint, which locks the cell to a specific physical site, attempt to assign the node to the specified site. If the specified node is the wrong type, doesn't exist, or is already used by another constrained node, the constraint is invalid so fail with an error.</li>
+            <li>Loop over all of the unconstrained cells in the netlist and assign them to the first unused site with the right label. If none are available, the design is too big for the device so fail with an error.</li>
+        </ol>
+        <p style="display: inline;" class="readability-styled">
+            Once the design is placed, the placement optimizer then loops over the design and attempts to improve it. A simulated annealing algorithm is used, where changes to the design are accepted unconditionally if they make the placement better, and with a random, gradually decreasing probability if they make it worse. The optimizer terminates when the design receives a perfect score (indicating an optimal placement) or if it stops making progress for several iterations. Each iteration does the following:</p><br/>
+        <ol>
+            <li>Compute a score for the current design based on the number of unroutable nets, the amount of routing congestion (number of nets crossing between halves of the device), and static timing analysis (not yet implemented, always zero).</li>
+            <li>Make a list of nodes that contributed to this score in some way (having some attached nets unroutable, crossing to the other half of the device, or failing timing).</li>
+            <li>Remove nodes from the list that are LOC'd to a specific location since we're not allowed to move them.</li>
+            <li>Remove nodes from the list that have only one legal placement in the device (for example, oscillator hard IP) since there's nowhere else for them to go.</li>
+            <li>Pick a node from the remainder of the list at random. Call this our pivot.</li>
+            <li>Find a list of candidate placements for the pivot: </li>
+            <ol>
+                <li>Consider all routable placements in the other half of the device.</li>
+                <li>If none were found, consider all routable placements anywhere in the device.</li>
+                <li>If none were found, consider all placements anywhere in the device even if they're not routable.</li>
+            </ol>
+            <li>Pick one of the candidates at random and move the pivot to that location. If another cell in the netlist is already there, put it in the vacant site left by the pivot.</li>
+            <li>Re-compute the score for the design. If it's better, accept this change and start the next iteration.</li>
+            <li>If the score is worse, accept it with a random probability which decreases as the iteration number goes up. If the change is not accepted, restore the previous placement.</li>
+        </ol>
+        <p style="display: inline;" class="readability-styled">
+            After optimization, the design is checked for routability. If any edges in the netlist graph don't correspond to edges in the device graph, the user probably asked for something impossible (for example, trying to hook a flipflop's output to a comparator's reference voltage input) so fail with an error.</p>
+        <p>
+            The design is then routed. This is quite simple due to the crossbar structure of the device. For each edge in the netlist:</p><br/>
+        <ol>
+            <li>If dedicated (non-fabric) routing is used for this path, configure the destination's input mux appropriately and stop.</li>
+            <li>If the source and destination are in the same half of the device, configure the destination's input mux appropriately and stop.</li>
+            <li>A cross-connection must be used. Check if we already used one to bring the source signal to the other half of the device. If found, configure the destination to route from that cross-connection and stop.</li>
+            <li>Check if we have any cross-connections left going in this direction. If they're all used, the design is unroutable due to congestion so fail with an error.</li>
+            <li>Pick the next unused cross-connection and configure it to route from the source. Configure the destination to route from the cross-connection and stop.</li>
+        </ol>
+        <p style="display: inline;" class="readability-styled">
+            Once routing is finished, run a series of post-PAR design rule checks. These currently include the following:</p><br/>
+        <ul>
+            <li>If any node has no loads, generate a warning</li>
+            <li>If an I/O buffer is connected to analog hard IP, fail with an error if it's not configured in analog mode.</li>
+            <li>Some signals (such as comparator inputs and oscillator power-down controls) are generated by a shared mux and fed to many loads. If different loads require conflicting settings for the shared mux, fail with an error.</li>
+        </ul>
+        <p style="display: inline;" class="readability-styled">
+            If DRC passes with no errors, configure all of the individual cells in the netlist based on the HDL parameters. Fail with an error if an invalid configuration was requested.</p>
+        <p>
+            Finally, generate the bitstream from all of the per-cell configuration and write it to a file.</p>
+        <p>
+
+            <h2>
+                Great, let's get started!</h2>
+            If you don't already have one, you'll need to buy a <a href="http://www.silego.com/buy/index.php?main_page=product_info&amp;products_id=388">GreenPak4 development kit</a>. The kit includes samples of the SLG46620V (among other devices) and a programmer/emulation board. While you're waiting for it to arrive, install <a href="http://www.silego.com/softdoc/software.html">GreenPak Designer</a>.</p>
+        <p>
+            Download and install Yosys. Although Clifford is pretty good at merging my pull requests, only <a href="https://github.com/azonenberg/yosys/">my fork on Github</a> is guaranteed to have the most up-to-date support for GreenPak devices so don't be surprised if you can't use a bleeding-edge feature with mainline Yosys.</p>
+        <p>
+            Download and install gp4par. You can get it from <a href="https://github.com/azonenberg/openfpga/">the Github repository</a>.</p>
+        <p>
+            Write your HDL, compile with Yosys, P&amp;R with gp4par, and import the bitstream into GreenPak Designer to program the target device. The most current gp4par manual is included in LaTeX source form in the source tree and is automatically built as part of the compile process. If you're just browsing, there's a <a href="http://thanatos.virtual.antikernel.net/unlisted/gp4-hdl.pdf">relatively recent PDF version</a> on my web server.</p>
+        <p>
+            If you'd like to see the Verilog that produced the nightmare of a schematic I showed above, <a href="https://github.com/azonenberg/openfpga/blob/master/tests/greenpak4/Blinky/Blinky.v">here it is</a>.</p>
+        <p>
+            Be advised that this project is still very much a work in progress and there are still a number of SLG46620V features I don't support (see the manual for exact details).</p>
+        <p>
+
+            <h2>
+                I love it / it segfaulted / there's a problem in the manual!</h2>
+            Hop in our IRC channel (##openfpga on Freenode) and let me know. Feedback is great, pull requests are even better,</p>
+        <p>
+
+            <h2>
+                You're competing with Silego's IDE. Have they found out and sued you yet?</h2>
+            Nope. They're fully aware of what I'm doing and are rolling out the red carpet for me. They love the idea of a HDL flow as an alternative to schematic entry and are pretty amazed at how fast it's coming together.</p>
+        <p>
+            After I reported a few bugs in their datasheets they decided to skip the middleman and give me direct access to the engineer who writes their documentation so that I can get faster responses. The last time I found a problem (two different parts of the datasheet contradicted each other) an updated datasheet was in my inbox and on their website by the next day. I only wish Xilinx gave me that kind of treatment!</p>
+        <p>
+            They've even <a href="https://twitter.com/SilegoTech/status/717018987771469824">offered me free hardware</a> to help me add support for their latest product family, although I plan to get GreenPak4 support to a more stable state before taking them up on the offer.</p>
+        <p>
+
+            <h2>
+                So what's next?</h2>
+        </p>
+        <p style="display: inline;" class="readability-styled"> Better testing, for starters. I have to verify functionality by hand with a DMM and oscilloscope, which is time consuming.</p>
+        <p>
+            My contact at Silego says they're going to be giving me documentation on the SRAM emulation interface soon, so I'm going to make a hardware-in-loop test platform that connects to my desktop and the Silego ZIF socket, and lets me load new bitstreams via a scriptable interface. It'll have FPGA-based digital I/O as well as an ADC and DAC on every device pin, plus an adjustable voltage regulator for power, so I can feed in arbitrary mixed-signal test waveforms and write PC-based unit tests to verify correct behavior.</p>
+        <p>
+            Other than that, I want to finish support for the SLG46620V in the next month or two. The SLG46621V will be an easy addition since only one pin and the relevant configuration bits have changed from the 46620 (I suspect they're the same die, just bonded out differently).</p>
+        <p>
+            Once that's done I'll have to do some more extensive work to add the SLG46140V since the architecture is a bit different (a lot of the combinatorial logic is merged into multi-function blocks). Luckily, the 46140 has a lot in common architecturally with the GreenPak5 family, so once that's done GreenPak5 will probably be a lot easier to add support for.</p>
+        <p>
+            My thanks go out to Clifford Wolf, whitequark, the IRC users in ##openfpga, and everyone at Silego I've worked with to help make this possible. I hope that one day this project will become mature enough that Silego will ship it as an officially supported extension to GreenPak Designer, making history by becoming the first modern programmable logic vendor to ship a fully open source synthesis and P&amp;R suite.
+
+        </p>
+    </div>
+</div>

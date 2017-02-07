@@ -1,0 +1,12 @@
+"NSCameraUsageDescription" = "Dette lader dig tage og uploade fotos.";
+
+"NSLocationWhenInUseUsageDescription" = "Websteder du besøger kan bede om din position.";
+
+"NSMicrophoneUsageDescription" = "Dette lader dig tage og uploade videoer.";
+
+"NSPhotoLibraryUsageDescription" = "Dette lader dig gemme og uploade fotos.";
+
+"ShortcutItemTitleNewPrivateTab" = "Nyt privat faneblad";
+
+"ShortcutItemTitleNewTab" = "Nyt faneblad";
+
