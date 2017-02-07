@@ -89,7 +89,7 @@ private extension UILabel {
             while maxFontSize >= minimumFontSize {
                 font = font?.withSize(maxFontSize)
                 let constraintSize = CGSize(width: .greatestFiniteMagnitude, height: size.height)
-                let labelSize = word.boundingRect(with: constraintSize, options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: [NSFontAttributeName: font], context: nil)
+                let labelSize = word.boundingRect(with: constraintSize, options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: [NSFontAttributeName: font as Any], context: nil)
                 if labelSize.width <= size.width {
                     break
                 }
