@@ -232,7 +232,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         // Now roll logs.
         log.debug("Triggering log roll.")
-        DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.background).async {
+        DispatchQueue.global(qos: DispatchQoS.background.qosClass).async {
             Logger.syncLogger.deleteOldLogsDownToSizeLimit()
             Logger.browserLogger.deleteOldLogsDownToSizeLimit()
         }
@@ -446,7 +446,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             return
         }
 
-        DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.background).async {
+        DispatchQueue.global(qos: DispatchQoS.background.qosClass).async {
             // The core ping resets data counts when the ping is built, meaning we'll lose
             // the data if the ping doesn't go through. To minimize loss, we only send the
             // core ping if we have an active connection. Until we implement a fault-handling
@@ -634,7 +634,7 @@ extension AppDelegate: TabManagerStateDelegate {
 
         // Don't insert into the DB immediately. We tend to contend with more important
         // work like querying for top sites.
-        let queue = DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.background)
+        let queue = DispatchQueue.global(qos: DispatchQoS.background.qosClass)
         queue.asyncAfter(deadline: DispatchTime.now() + Double(Int64(ProfileRemoteTabsSyncDelay * Double(NSEC_PER_MSEC))) / Double(NSEC_PER_SEC)) {
             self.profile?.storeTabs(storedTabs)
         }
