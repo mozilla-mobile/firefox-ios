@@ -157,7 +157,7 @@
 
     function configureReader() {
         // Configure the reader with the initial style that was injected in the page.
-        var style = JSON(parseJSON: document.body.getAttribute("data-readerStyle"));
+        var style = JSON.parse(document.body.getAttribute("data-readerStyle"));
         setStyle(style);
 
         // The order here is important. Because updateImageMargins depends on contentElement.offsetWidth which
