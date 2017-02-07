@@ -388,7 +388,7 @@ private protocol BookmarkFolderTableViewHeaderDelegate {
 
 extension BookmarksPanel: BookmarkFolderTableViewHeaderDelegate {
     fileprivate func didSelectHeader() {
-        self.navigationController?.popViewController(animated: true)
+        let _ = self.navigationController?.popViewController(animated: true)
     }
 }
 

@@ -301,7 +301,7 @@ extension SearchSettingsTableViewController {
     }
 
     func cancel() {
-        navigationController?.popViewController(animated: true)
+        let _ = navigationController?.popViewController(animated: true)
     }
 
     func dismissAnimated() {
@@ -323,6 +323,6 @@ extension SearchSettingsTableViewController: SearchEnginePickerDelegate {
             model.defaultEngine = engine
             self.tableView.reloadData()
         }
-        navigationController?.popViewController(animated: true)
+        let _ = navigationController?.popViewController(animated: true)
     }
 }

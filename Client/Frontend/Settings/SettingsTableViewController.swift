@@ -370,12 +370,12 @@ class AccountSetting: Setting, FxAContentViewControllerDelegate {
         // And start advancing the Account state in the background as well.
         settings.SELrefresh()
 
-        settings.navigationController?.popToRootViewController(animated: true)
+        let _ = settings.navigationController?.popToRootViewController(animated: true)
     }
 
     func contentViewControllerDidCancel(_ viewController: FxAContentViewController) {
         NSLog("didCancel")
-        settings.navigationController?.popToRootViewController(animated: true)
+        let _ = settings.navigationController?.popToRootViewController(animated: true)
     }
 }
 

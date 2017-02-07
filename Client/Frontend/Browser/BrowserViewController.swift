@@ -1055,7 +1055,7 @@ class BrowserViewController: UIViewController {
         }
 
         switchToPrivacyMode(isPrivate: isPrivate)
-        tabManager.addTabAndSelect(request, isPrivate: isPrivate)
+        let _ = tabManager.addTabAndSelect(request, isPrivate: isPrivate)
         if url == nil && NewTabAccessors.getNewTabPage(profile.prefs) == .blankPage {
             urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
         }
@@ -1072,7 +1072,7 @@ class BrowserViewController: UIViewController {
         }
         currentViewController.dismiss(animated: true, completion: nil)
         if currentViewController != self {
-            self.navigationController?.popViewController(animated: true)
+            let _ = self.navigationController?.popViewController(animated: true)
         } else if urlBar.inOverlayMode {
             urlBar.SELdidClickCancel()
         }
@@ -2876,7 +2876,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
     func introViewControllerDidFinish(_ introViewController: IntroViewController) {
         introViewController.dismiss(animated: true) { finished in
             if self.navigationController?.viewControllers.count ?? 0 > 1 {
-                self.navigationController?.popToRootViewController(animated: true)
+                let _ = self.navigationController?.popToRootViewController(animated: true)
             }
         }
     }
