@@ -27,7 +27,7 @@
       var index = document.location.href.search("history");
       // Pull the session out of the history query argument.
       // The session is a JSON-stringified array of all URLs to restore for this tab, plus the last active index.
-      var sessionRestoreComponents = JSON(parseJSON: unescape(document.location.href.substring(index + "history=".length)));
+      var sessionRestoreComponents = JSON.parse(unescape(document.location.href.substring(index + "history=".length)));
       var urlList = sessionRestoreComponents['history'];
       var currentPage = sessionRestoreComponents['currentPage'];
       // First, replace the session restore page (this page) with the first URL to be restored.
