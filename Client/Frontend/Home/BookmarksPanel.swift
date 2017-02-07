@@ -326,7 +326,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             return .none
         }
 
-        if source.current.itemIsEditableAtIndex(indexPath.row) ?? false {
+        if source.current.itemIsEditableAtIndex(indexPath.row) {
             return .delete
         }
 
