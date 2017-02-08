@@ -196,7 +196,7 @@ class TopTabFader: UIView {
         super.layoutSubviews()
 
         let widthA = NSNumber(value: Float(CGFloat(15.0) / frame.width))
-        let widthB = NSNumber(value: Float(CGFloat(1-15) / frame.width))
+        let widthB = NSNumber(value: Float(1 - CGFloat(15) / frame.width))
 
         hMaskLayer.locations = [0.00, widthA, widthB, 1.0]
         hMaskLayer.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
