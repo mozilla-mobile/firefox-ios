@@ -217,14 +217,13 @@ open class BrowserProfile: Profile {
         let key = "sqlcipher.key.logins.db"
         let keychain = KeychainWrapper.sharedAppContainerKeychain
         if keychain.hasValue(forKey: key) {
-            let value = keychain.string(forKey: key)
-            return value
-        } else {
-            let Length: UInt = 256
-            let secret = Bytes.generateRandomBytes(Length).base64EncodedString
-            keychain.set(secret, forKey: key)
-            return secret
+            return keychain.string(forKey: key)
         }
+
+        let Length: UInt = 256
+        let secret = Bytes.generateRandomBytes(Length).base64EncodedString
+        keychain.set(secret, forKey: key)
+        return secret
     }
 
     /**
