@@ -134,12 +134,14 @@ open class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
 
         return self.applyIncomingRecords(records, apply: applyRecord)
             >>> effect({
-                self.statsSession.recordDownloadStats(stats)
+                self.statsSession.recordDownload(stats: stats)
             })
     }
 
-    fileprivate func uploadModifiedPlaces(_ places: [(Place, [Visit])], lastTimestamp: Timestamp, fromStorage storage: SyncableHistory, withServer storageClient: Sync15CollectionClient<HistoryPayload>, stats: inout SyncUploadStats) -> DeferredTimestamp {
+    fileprivate func uploadModifiedPlaces(_ places: [(Place, [Visit])], lastTimestamp: Timestamp, fromStorage storage: SyncableHistory, withServer storageClient: Sync15CollectionClient<HistoryPayload>) -> DeferredTimestamp {
         log.info("Preparing upload…")
+
+        var stats = SyncUploadStats()
 
         // Build sequences of 1000 history items, sequence by sequence
         // These will be uploaded in smaller batches by the upload batcher, but we chunk here
@@ -158,22 +160,23 @@ open class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
 
         let start = deferMaybe(lastTimestamp)
         return walk(toUpload, start: start, f: perChunk)
+                >>== effect({ _ in self.statsSession.recordUpload(stats: stats) })
     }
 
-    fileprivate func uploadDeletedPlaces(_ guids: [GUID], lastTimestamp: Timestamp, fromStorage storage: SyncableHistory, withServer storageClient: Sync15CollectionClient<HistoryPayload>, stats: inout SyncUploadStats) -> DeferredTimestamp {
+    fileprivate func uploadDeletedPlaces(_ guids: [GUID], lastTimestamp: Timestamp, fromStorage storage: SyncableHistory, withServer storageClient: Sync15CollectionClient<HistoryPayload>) -> DeferredTimestamp {
         let records = guids.map(makeDeletedHistoryRecord)
+        var stats = SyncUploadStats()
         stats.sent += records.count
         
         // Deletions are smaller, so upload 100 at a time.
         return self.uploadRecords(records, lastTimestamp: lastTimestamp, storageClient: storageClient) { result, lastModified in
             stats.sentFailed += result.failed.count
-            return storage.markAsDeleted(result.success) >>> always(lastModified ?? lastTimestamp)
-        }
+            return storage.markAsDeleted(result.success)
+                >>> always(lastModified ?? lastTimestamp)
+        } >>== effect({ _ in self.statsSession.recordUpload(stats: stats) })
     }
 
     fileprivate func uploadOutgoingFromStorage(_ storage: SyncableHistory, lastTimestamp: Timestamp, withServer storageClient: Sync15CollectionClient<HistoryPayload>) -> Success {
-        var stats = SyncUploadStats()
-
         var workWasDone = false
         let uploadDeleted: (Timestamp) -> DeferredTimestamp = { timestamp in
             storage.getDeletedHistoryToUpload()
@@ -182,7 +185,7 @@ open class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
                     workWasDone = true
                 }
                 log.info("Uploading \(guids.count) deleted places.")
-                return self.uploadDeletedPlaces(guids, lastTimestamp: timestamp, fromStorage: storage, withServer: storageClient, stats: &stats)
+                return self.uploadDeletedPlaces(guids, lastTimestamp: timestamp, fromStorage: storage, withServer: storageClient)
             }
         }
 
@@ -193,7 +196,7 @@ open class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
                         workWasDone = true
                     }
                     log.info("Uploading \(places.count) modified places.")
-                    return self.uploadModifiedPlaces(places, lastTimestamp: timestamp, fromStorage: storage, withServer: storageClient, stats: &stats)
+                    return self.uploadModifiedPlaces(places, lastTimestamp: timestamp, fromStorage: storage, withServer: storageClient)
             }
         }
 
@@ -208,7 +211,6 @@ open class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
           >>== uploadModified
            >>> effect({ log.debug("Done syncing. Work was done? \(workWasDone)") })
            >>> { workWasDone ? storage.doneUpdatingMetadataAfterUpload() : succeed() }    // A closure so we eval workWasDone after it's set!
-           >>> effect({ self.statsSession.recordUploadStats(stats) })
            >>> effect({ log.debug("Done.") })
     }
 

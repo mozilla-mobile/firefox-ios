@@ -686,10 +686,10 @@ open class BrowserProfile: Profile {
 
             syncDisplayState = SyncStatusResolver(engineResults: result.engineResults).resolveResults()
             if AppConstants.MOZ_ADHOC_SYNC_REPORTING {
-                reportAdHocEndSyncingStatus(syncDisplayState, engineResults: result.engineResults)
+                reportAdHocEndSyncingStatus(displayState: syncDisplayState, engineResults: result.engineResults)
             }
 
-            reportSyncPingForResult(result)
+            reportSyncPingForResult(opResult: result)
             notifySyncing(notification: NotificationProfileDidFinishSyncing)
             syncReducer = nil
         }
@@ -967,7 +967,7 @@ open class BrowserProfile: Profile {
             guard self.profile.hasSyncableAccount() else { return succeed() }
 
             self.beginTimedSyncs()
-            return self.syncEverything(why: .DidLogin)
+            return self.syncEverything(why: .didLogin)
         }
 
         func locallyResetCollections(_ collections: [String]) -> Success {
@@ -1156,7 +1156,7 @@ open class BrowserProfile: Profile {
                         return deferMaybe(statuses)
                     }
 
-                    return self.syncWith(remaining, statsSession: statsSession) >>== { deferMaybe(statuses + $0) }
+                    return self.syncWith(synchronizers: remaining, statsSession: statsSession) >>== { deferMaybe(statuses + $0) }
                 }
 
                 reducer.terminal.upon { results in
@@ -1211,7 +1211,7 @@ open class BrowserProfile: Profile {
             
             return readyDeferred >>== self.takeActionsOnEngineStateChanges >>== { ready in
                 // Once we are ready and have a server timestamp to begin our session, start recording
-                statsSession.start(ready.infoMetadata.timestampMilliseconds)
+                statsSession.start(time: ready.infoMetadata.timestampMilliseconds)
                 return function(delegate, self.prefsForSync, ready)
             }
         }
@@ -1224,19 +1224,18 @@ open class BrowserProfile: Profile {
                 ("tabs", self.syncTabsWithDelegate),
                 ("logins", self.syncLoginsWithDelegate),
                 ("bookmarks", self.mirrorBookmarksWithDelegate),
-                ("history", self.syncHistoryWithDelegate)
-            ]) >>> succeed
+                ("history", self.syncHistoryWithDelegate)) >>> succeed
         }
 
         func syncEverythingSoon() {
             self.doInBackgroundAfter(SyncConstants.SyncOnForegroundAfterMillis) {
                 log.debug("Running delayed startup sync.")
-                self.syncEverything(why: .Startup)
+                self.syncEverything(why: .startup)
             }
         }
 
         @objc func syncOnTimer() {
-            self.syncEverything(why: .Scheduled)
+            self.syncEverything(why: .scheduled)
         }
 
         func hasSyncedHistory() -> Deferred<Maybe<Bool>> {
@@ -1257,8 +1256,7 @@ open class BrowserProfile: Profile {
                 why: .user,
                 synchronizers:
                 ("clients", self.syncClientsWithDelegate),
-                ("tabs", self.syncTabsWithDelegate)
-            ]) >>== { statuses in
+                ("tabs", self.syncTabsWithDelegate)) >>== { statuses in
                 let status = statuses.find { "tabs" == $0.0 }
                 return deferMaybe(status!.1)
             }

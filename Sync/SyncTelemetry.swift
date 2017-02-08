@@ -7,11 +7,11 @@ import Shared
 import Account
 
 public enum SyncReason: String {
-    case Startup = "startup"
-    case Scheduled = "scheduled"
-    case Backgrounded = "backgrounded"
-    case User = "user"
-    case DidLogin = "didLogin"
+    case startup = "startup"
+    case scheduled = "scheduled"
+    case backgrounded = "backgrounded"
+    case user = "user"
+    case didLogin = "didLogin"
 }
 
 public protocol Stats {
@@ -54,8 +54,8 @@ public class StatsSession {
     private var took: UInt64 = 0
     private var startTime: Timestamp?
 
-    public func start(startTime: Timestamp = Date.now()) {
-        self.startTime = startTime
+    public func start(time: Timestamp = Date.now()) {
+        self.startTime = time
     }
 
     public func end() -> Self {
@@ -84,7 +84,7 @@ public class SyncEngineStatsSession: StatsSession {
         self.downloadStats = SyncDownloadStats()
     }
 
-    public func recordDownloadStats(stats: SyncDownloadStats) {
+    public func recordDownload(stats: SyncDownloadStats) {
         self.downloadStats.applied += stats.applied
         self.downloadStats.succeeded += stats.succeeded
         self.downloadStats.failed += stats.failed
@@ -92,7 +92,7 @@ public class SyncEngineStatsSession: StatsSession {
         self.downloadStats.reconciled += stats.reconciled
     }
 
-    public func recordUploadStats(stats: SyncUploadStats) {
+    public func recordUpload(stats: SyncUploadStats) {
         self.uploadStats.sent += stats.sent
         self.uploadStats.sentFailed += stats.sentFailed
     }
@@ -108,6 +108,6 @@ public class SyncOperationStatsSession: StatsSession {
 
     public init(why: SyncReason) {
         self.why = why
-        self.didLogin = why == .DidLogin
+        self.didLogin = (why == .didLogin)
     }
 }
