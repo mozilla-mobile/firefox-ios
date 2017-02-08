@@ -153,6 +153,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         adjustIntegration = AdjustIntegration(profile: profile)
 
+        LeanplumIntegration.sharedInstance.setup(profile: profile)
+
         // We need to check if the app is a clean install to use for
         // preventing the What's New URL from appearing.
         if getProfile(application).prefs.intForKey(IntroViewControllerSeenProfileKey) == nil {
