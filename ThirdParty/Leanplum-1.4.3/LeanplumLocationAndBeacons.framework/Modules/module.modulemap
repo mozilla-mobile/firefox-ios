@@ -1,0 +1,6 @@
+framework module LeanplumLocationAndBeacons {
+  umbrella header "Leanplum-iOS-LocationAndBeacons-umbrella.h"
+
+  export *
+  module * { export * }
+}

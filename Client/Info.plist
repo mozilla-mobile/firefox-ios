@@ -6,6 +6,12 @@
 	<string>$(ADJUST_APP_TOKEN)</string>
 	<key>AdjustEnvironment</key>
 	<string>$(ADJUST_ENVIRONMENT)</string>
+	<key>LeanplumEnvironment</key>
+	<string>$(LEANPLUM_ENVIRONMENT)</string>
+	<key>LeanplumAppId</key>
+	<string>$(LEANPLUM_APP_ID)</string>
+	<key>LeanplumKey</key>
+	<string>$(LEANPLUM_KEY)</string>
 	<key>AppIdentifierPrefix</key>
 	<string>$(APP_IDENTIFIER_PREFIX)</string>
 	<key>CFBundleDevelopmentRegion</key>
