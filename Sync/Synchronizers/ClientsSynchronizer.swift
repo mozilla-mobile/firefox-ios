@@ -324,7 +324,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
             >>== { succeeded in
                 downloadStats.succeeded += succeeded
                 downloadStats.failed += (toInsert.count - succeeded)
-                self.statsSession.recordDownloadStats(downloadStats)
+                self.statsSession.recordDownloadStats(stats: downloadStats)
                 return succeed()
             }
             >>== { self.processCommandsFromRecord(ours, withServer: storageClient) }

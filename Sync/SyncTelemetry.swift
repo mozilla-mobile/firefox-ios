@@ -54,7 +54,7 @@ public class StatsSession {
     private var took: UInt64 = 0
     private var startTime: Timestamp?
 
-    public func start(startTime: Timestamp = NSDate.now()) {
+    public func start(startTime: Timestamp = Date.now()) {
         self.startTime = startTime
     }
 
@@ -64,7 +64,7 @@ public class StatsSession {
             return self
         }
 
-        took = NSDate.now() - startTime
+        took = Date.now() - startTime
         return self
     }
 }
