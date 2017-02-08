@@ -56,7 +56,7 @@
 "Browser.stopLabel" = "Sguir dheth";
 
 /* Button label to reload the error page */
-"Error.tryAgainButton" = "Feuch ris a-rithist";
+"Error.tryAgainButton" = "Feuch ris a‑rithist";
 
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.callButton" = "Cuir fòn";
@@ -182,7 +182,7 @@
 "URL.eraseMessageLabel" = "Chaidh an eachdraidh brabhsaidh agad a sguabadh às.";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "Cuir lorg no seòladh an-seo";
+"URL.placeholderText" = "Lorg no seòladh an‑seo";
 
 /* Label displayed for search button when typing in the URL bar */
 "URL.searchLabel" = "Lorg %@";

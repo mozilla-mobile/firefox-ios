@@ -1,0 +1,189 @@
+/* Button on About screen */
+"About.learnMoreButton" = "מידע נוסף";
+
+/* Label on About screen */
+"About.missionLabel" = "%@ פותח על־ידי Mozilla. המשימה שלנו היא לטפח רשת אינטרנט פתוחה ובריאה.";
+
+/* Label on About screen */
+"About.privateBullet1" = "חיפוש וגלישה ישירות מהיישום";
+
+/* Label on About screen */
+"About.privateBullet2" = "חסימת רכיבי מעקב (או עדכון הגדרות לצורך אפשור רכיבי מעקב)";
+
+/* Label on About screen */
+"About.privateBullet3" = "מחיקת עוגיות כמו גם חיפוש והיסטורית גלישה";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "שימוש לגלישה פרטית:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "עזרה";
+
+/* Label for row in About screen */
+"About.rowRights" = "הזכויות שלך";
+
+/* Label on About screen */
+"About.safariBullet1" = "חסימת רכיבי מעקב, לפרטיות מוגברת";
+
+/* Label on About screen */
+"About.safariBullet2" = "חסימת גופני רשת כדי לצמצם את משקל הדף";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "שימוש כהרחבה עבור Safari:";
+
+/* Title for the About screen */
+"About.screenTitle" = "אודות";
+
+/* Label on About screen */
+"About.topLabel" = "%@ שם אותך בשליטה.";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "אחורה";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "קדימה";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "טעינה מחדש";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "הגדרות";
+
+/* Accessibility label for the share button */
+"Browser.shareLabel" = "שיתוף";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "עצירה";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "לנסות שוב";
+
+/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.callButton" = "התקשרות";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "ביטול";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "דוא״ל";
+
+/* Dialog title used for Maps/App Store links. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.messageTitle" = "אתם עוזבים כעת את Firefox Focus.";
+
+/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openAppStoreButton" = "פתיחת App Store";
+
+/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openMapsButton" = "פתיחת מפות";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.buttonLabel" = "קיבלתי!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelDescription" = "חסימת מעקב מקוון אוטומטית במהלך הגלישה שלך, ואז מחיקת רשימת האתרים שביקרת בהם, חיפושים, עוגיות וססמאות מההתקן שלך.";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "גלישה כאילו אף־אחד אינו צופה בך.";
+
+/* First label for product description on the home screen */
+"Home.descriptionLabel1" = "גלישה פרטית אוטומטית.";
+
+/* Second label for product description on the home screen */
+"Home.descriptionLabel2" = "גלישה, מחיקה, חזרה להתחלה.";
+
+/* Label in share alert to cancel the alert */
+"Open.Cancel" = "ביטול";
+
+/* Label in share alert to open the URL in Firefox */
+"Open.Firefox" = "Firefox (גלישה פרטית)";
+
+/* Label in share alert to open the full system share menu */
+"Open.More" = "עוד";
+
+/* Label in share alert to open the URL in Safari */
+"Open.Safari" = "Safari";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "יש להיכנס ל־Safari ולבחור בחוסמי תוכן";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "הפעלת %@";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ לא מופעל.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "פתיחת הגדרות היישום";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "חסימת רכיבי מעקב אחרים עלולה לשבש את פעילותם של דפי אינטרנט ומספר סרטונים.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "לא, תודה";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "הבנתי";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "הגדרות";
+
+/* Title for the search engine row */
+"Settings.searchSection" = "מנוע חיפוש";
+
+/* Title for the search engine selection screen */
+"Settings.searchTitle" = "מנוע חיפוש";
+
+/* Label for Safari integration section */
+"Settings.sectionIntegration" = "הטמעה";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for performance toggles */
+"Settings.sectionPerformance" = "ביצועים";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "פרטיות";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAds" = "חסימת מעקב פרסומות";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAnalytics" = "חסימת מעקב של כלי ניתוח";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "חסימת גופני רשת";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockOther" = "חסימת מעקב תוכן אחר";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockSocial" = "חסימת רכיבי מעקב חברתיים";
+
+/* Label subtitle for toggle on main screen */
+"Settings.toggleOtherSubtitle" = "עלולה לשבש את פעילותם של דפי אינטרנט ומספר סרטונים";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageData" = "שליחת נתוני שימוש אנונימיים";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "מידע נוסף";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "ביטול";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "מחיקה";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "היסטורית הגלישה שלך נמחקה.";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "חיפוש או הכנסת כתובת";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "חיפוש עבור %@";
+

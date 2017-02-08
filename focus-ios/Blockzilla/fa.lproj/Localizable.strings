@@ -2,13 +2,13 @@
 "About.learnMoreButton" = "اطلاعات بیشتر";
 
 /* Label on About screen */
-"About.missionLabel" = "%@ توسط موزیلا تولید شده است. ماموریت ما پرورش اینترنتی سالم و باز می باشد.";
+"About.missionLabel" = "%@ توسط موزیلا تولید شده است. ماموریت ما پرورش اینترنتی سالم و باز می‌باشد.";
 
 /* Label on About screen */
-"About.privateBullet1" = "جست و جو و مرور درست در داخل برنامه";
+"About.privateBullet1" = "جستجو و مرور دقیقا در داخل برنامه";
 
 /* Label on About screen */
-"About.privateBullet2" = "مسدود کردن دنبال کننده ها (یا بروز رسانی تنظیمات برای اجازه به دنبال کننده ها )";
+"About.privateBullet2" = "مسدود کردن دنبال کننده‌ها (یا به‌روزرسانی تنظیمات برای اجازه دادن به دنبال کننده‌ها)";
 
 /* Label on About screen */
 "About.privateBullet3" = "پاک کردن کوکی ها و همچنین جست و جو و تاریخچه مرورگر";

@@ -8,7 +8,7 @@
 "About.privateBullet1" = "Søk og surf rett i appen";
 
 /* Label on About screen */
-"About.privateBullet2" = "Blokker sporfølgjarar(eller oppdater innstillingane for å tillata sporfølgjarar)";
+"About.privateBullet2" = "Blokker sporfølgjarar (eller oppdater innstillingane for å tillata sporfølgjarar)";
 
 /* Label on About screen */
 "About.privateBullet3" = "Slett for å fjerna informasjonskapslar samt søk- og nettlesarhistorikk";
@@ -110,7 +110,7 @@
 "Safari.instructionsEnable" = "Slå på %@";
 
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
-"Safari.instructionsNotEnabled" = "%@ er ikkje påslått.";
+"Safari.instructionsNotEnabled" = "%@ er ikkje slått på.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "Opna innstillingar-appen";
@@ -146,10 +146,10 @@
 "Settings.sectionPrivacy" = "PERSONVERN";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Blokker reklamesporfølgjarar";
+"Settings.toggleBlockAds" = "Blokker sporfølgjarar for reklame";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Blokker analysesporfølgjarar";
+"Settings.toggleBlockAnalytics" = "Blokker sporfølgjarar for analyser";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Blokker nettskrifter";
@@ -182,7 +182,7 @@
 "URL.eraseMessageLabel" = "Nettlesarhistorikken din er sletta.";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "Søk eller skriv inn adresse";
+"URL.placeholderText" = "Søk eller skriv inn ei adresse";
 
 /* Label displayed for search button when typing in the URL bar */
 "URL.searchLabel" = "Søk etter %@";
