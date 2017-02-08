@@ -213,6 +213,20 @@ open class BrowserProfile: Profile {
     let db: BrowserDB
     let loginsDB: BrowserDB
 
+    private static var loginsKey: String? {
+        let key = "sqlcipher.key.logins.db"
+        let keychain = KeychainWrapper.sharedAppContainerKeychain
+        if keychain.hasValue(forKey: key) {
+            let value = keychain.string(forKey: key)
+            return value
+        } else {
+            let Length: UInt = 256
+            let secret = Bytes.generateRandomBytes(Length).base64EncodedString
+            keychain.set(secret, forKey: key)
+            return secret
+        }
+    }
+
     /**
      * N.B., BrowserProfile is used from our extensions, often via a pattern like
      *
@@ -230,10 +244,6 @@ open class BrowserProfile: Profile {
 
         self.keychain = KeychainWrapper.sharedAppContainerKeychain
 
-        // Setup our database handles
-        self.loginsDB = BrowserDB(filename: "logins.db", secretKey: "sqlcipher.key.logins.db", files: files)
-        self.db = BrowserDB(filename: "browser.db", files: files)
-
         if clear {
             do {
                 try FileManager.default.removeItem(atPath: self.files.rootPath as String)
@@ -241,6 +251,10 @@ open class BrowserProfile: Profile {
                 log.info("Cannot clear profile: \(error)")
             }
         }
+
+        // Setup our database handles
+        self.loginsDB = BrowserDB(filename: "logins.db", secretKey: BrowserProfile.loginsKey, files: files)
+        self.db = BrowserDB(filename: "browser.db", files: files)
 
         let notificationCenter = NotificationCenter.default
 
@@ -360,9 +374,6 @@ open class BrowserProfile: Profile {
         NotificationCenter.default.removeObserver(self, name: NotificationOnPageMetadataFetched, object: nil)
         NotificationCenter.default.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
         NotificationCenter.default.removeObserver(self, name: NotificationPrivateDataClearedHistory, object: nil)
-
-        // Shutdown any handles we have open to our databases
-        shutdown()
     }
 
     func localName() -> String {
