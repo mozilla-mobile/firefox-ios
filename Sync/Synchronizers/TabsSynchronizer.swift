@@ -50,8 +50,8 @@ open class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchroniz
     fileprivate func uploadOurTabs(_ localTabs: RemoteClientsAndTabs, toServer tabsClient: Sync15CollectionClient<TabsPayload>) -> Success {
         // check to see if our tabs have changed or we're in a fresh start
         let lastUploadTime: Timestamp? = (self.tabsRecordLastUpload == 0) ? nil : self.tabsRecordLastUpload
-        let expired = lastUploadTime! < (Date.now() - (OneMinuteInMilliseconds))
-        if !expired {
+        if let lastUploadTime = lastUploadTime,
+            lastUploadTime >= (Date.now() - (OneMinuteInMilliseconds)) {
             log.debug("Not uploading tabs: already did so at \(lastUploadTime).")
             return succeed()
         }

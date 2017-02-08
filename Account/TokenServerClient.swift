@@ -158,7 +158,7 @@ open class TokenServerClient {
 
                         if let data = response.result.value as AnyObject? { // Declaring the type quiets a Swift warning about inferring AnyObject.
                             let json = JSON(data)
-                            let remoteTimestampHeader = response.response?.allHeaderFields["x-timestamp"] as? String
+                            let remoteTimestampHeader = response.response?.allHeaderFields["X-Timestamp"] as? String
 
                             if let remoteError = TokenServerClient.remoteError(fromJSON: json, statusCode: response.response!.statusCode,
                                 remoteTimestampHeader: remoteTimestampHeader) {

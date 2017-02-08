@@ -54,7 +54,7 @@ open class FxADeviceRegistration: NSObject, NSCoding {
 
     public convenience required init(coder: NSCoder) {
         let id = coder.decodeObject(forKey: "id") as! String
-        let version = coder.decodeObject(forKey: "version") as! Int
+        let version: Int = coder.decodeInteger(forKey: "version")
         let lastRegistered = (coder.decodeObject(forKey: "lastRegistered") as! NSNumber).uint64Value
         self.init(id: id, version: version, lastRegistered: lastRegistered)
     }
