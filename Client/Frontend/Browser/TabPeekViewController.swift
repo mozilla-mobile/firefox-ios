@@ -42,7 +42,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
             if !self.isInReadingList {
                 actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionAddToReadingList, style: .default) { previewAction, viewController in
                     guard let tab = self.tab else { return }
-                    self.delegate?.tabPeekDidAddToReadingList(tab)
+                    let _ = self.delegate?.tabPeekDidAddToReadingList(tab)
                 })
             }
             if !self.isBookmarked {
@@ -161,7 +161,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
 
         let result = browserProfile.readingList?.getRecordWithURL(displayURL).successValue!
 
-        self.isInReadingList = ((result?.url.characters.count)! > 0) ?? false
+        self.isInReadingList = (result?.url.characters.count ?? 0) > 0
         self.ignoreURL = isIgnoredURL(displayURL)
     }
 

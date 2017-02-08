@@ -57,7 +57,7 @@ class ChangePasscodeSetting: Setting {
     init(settings: SettingsTableViewController, delegate: SettingsDelegate? = nil, enabled: Bool) {
         self.settings = settings as? AuthenticationSettingsViewController
 
-        let attributedTitle: NSAttributedString = (enabled ?? false) ?
+        let attributedTitle: NSAttributedString = enabled ?
             NSAttributedString.tableRowTitle(AuthenticationStrings.changePasscode) :
             NSAttributedString.disabledTableRowTitle(AuthenticationStrings.changePasscode)
 

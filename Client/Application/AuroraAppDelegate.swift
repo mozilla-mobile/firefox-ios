@@ -71,8 +71,12 @@ extension AuroraAppDelegate: UIAlertViewDelegate {
                     if localVersion.compare(remoteVersion as String, options: NSString.CompareOptions.numeric) == ComparisonResult.orderedAscending {
                         self.naggedAboutAuroraUpdate = true
 
-                        let alert = UIAlertView(title: AppUpdateTitle, message: AppUpdateMessage, delegate: self, cancelButtonTitle: AppUpdateCancel, otherButtonTitles: AppUpdateOK)
-                        alert.show()
+                        let alert = UIAlertController(title: AppUpdateTitle, message: AppUpdateMessage, preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: AppUpdateOK, style: UIAlertActionStyle.default) { _ in
+                            UIApplication.shared.openURL(URL(string: AuroraDownloadPageURL)!)
+                        })
+                        alert.addAction(UIAlertAction(title: AppUpdateCancel, style: UIAlertActionStyle.cancel))
+                        self.window?.rootViewController?.present(alert, animated: true)
                     }
                 }
             }
@@ -98,12 +102,6 @@ extension AuroraAppDelegate: UIAlertViewDelegate {
                 }
             }
             completionHandler(nil)
-        }
-    }
-
-    func alertView(_ alertView: UIAlertView, clickedButtonAt buttonIndex: Int) {
-        if buttonIndex == 1 {
-            UIApplication.shared.openURL(URL(string: AuroraDownloadPageURL)!)
         }
     }
 }

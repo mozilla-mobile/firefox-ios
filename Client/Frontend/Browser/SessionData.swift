@@ -39,7 +39,7 @@ class SessionData: NSObject, NSCoding {
     required init?(coder: NSCoder) {
         self.currentPage = coder.decodeObject(forKey: "currentPage") as? Int ?? 0
         self.urls = coder.decodeObject(forKey: "urls") as? [URL] ?? []
-        self.lastUsedTime = UInt64(coder.decodeInt64(forKey: "lastUsedTime")) ?? Date.now()
+        self.lastUsedTime = UInt64(coder.decodeInt64(forKey: "lastUsedTime")) 
     }
 
     func encode(with coder: NSCoder) {

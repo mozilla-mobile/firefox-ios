@@ -438,7 +438,7 @@ class TabManager: NSObject {
     }
     
     func undoCloseTabs() {
-        guard let tempTabs = self.tempTabs, tempTabs.count ?? 0 > 0 else {
+        guard let tempTabs = self.tempTabs, tempTabs.count > 0 else {
             return
         }
         let tabsCopy = normalTabs
@@ -447,7 +447,7 @@ class TabManager: NSObject {
         for tab in tempTabs {
             tab.showContent(true)
         }
-        if !tempTabs[0].isPrivate ?? true {
+        if !tempTabs[0].isPrivate {
             removeTabs(tabsCopy)
         }
         selectTab(tempTabs.first)

@@ -232,7 +232,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         // Now roll logs.
         log.debug("Triggering log roll.")
-        DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.background).async {
+        DispatchQueue.global(qos: DispatchQoS.background.qosClass).async {
             Logger.syncLogger.deleteOldLogsDownToSizeLimit()
             Logger.browserLogger.deleteOldLogsDownToSizeLimit()
         }
@@ -360,11 +360,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             quickActions.launchedShortcutItem = nil
         }
 
-        // we've removed the Last Tab option, so we should remove any quick actions that we already have that are last tabs
-        // we do this after we've handled any quick actions that have been used to open the app so that we don't b0rk if
-        // the user has opened the app for the first time after upgrade with a Last Tab quick action
-        QuickActions.sharedInstance.removeDynamicApplicationShortcutItemOfType(ShortcutType.openLastTab, fromApplication: application)
-
         // Check if we have a URL from an external app or extension waiting to launch,
         // then launch it on the main thread.
         if let params = openInFirefoxParams {
@@ -446,7 +441,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             return
         }
 
-        DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.background).async {
+        DispatchQueue.global(qos: DispatchQoS.background.qosClass).async {
             // The core ping resets data counts when the ping is built, meaning we'll lose
             // the data if the ping doesn't go through. To minimize loss, we only send the
             // core ping if we have an active connection. Until we implement a fault-handling
@@ -634,7 +629,7 @@ extension AppDelegate: TabManagerStateDelegate {
 
         // Don't insert into the DB immediately. We tend to contend with more important
         // work like querying for top sites.
-        let queue = DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.background)
+        let queue = DispatchQueue.global(qos: DispatchQoS.background.qosClass)
         queue.asyncAfter(deadline: DispatchTime.now() + Double(Int64(ProfileRemoteTabsSyncDelay * Double(NSEC_PER_MSEC))) / Double(NSEC_PER_SEC)) {
             self.profile?.storeTabs(storedTabs)
         }
