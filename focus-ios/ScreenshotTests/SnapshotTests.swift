@@ -74,6 +74,22 @@ class SnapshotTests: XCTestCase {
         snapshot("13SafariIntegrationInstructions")
     }
 
+    func test06OpenMaps() {
+        let app = XCUIApplication()
+        app.buttons["URLBar.activateButton"].tap()
+        app.textFields["URLBar.urlText"].typeText("maps.apple.com\n")
+        waitForValueContains(element: app.textFields["URLBar.urlText"], value: "http://maps.apple.com")
+        snapshot("06OpenMaps")
+    }
+
+    func test07OpenAppStore() {
+        let app = XCUIApplication()
+        app.buttons["URLBar.activateButton"].tap()
+        app.textFields["URLBar.urlText"].typeText("itunes.apple.com\n")
+        waitForValueContains(element: app.textFields["URLBar.urlText"], value: "http://itunes.apple.com")
+        snapshot("07OpenAppStore")
+    }
+
     func waitForValueContains(element:XCUIElement, value:String, file: String = #file, line: UInt = #line) {
         let predicateText = "value CONTAINS " + "'" + value + "'"
         let valueCheck = NSPredicate(format: predicateText)
