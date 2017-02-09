@@ -124,11 +124,9 @@ open class BrowserDB {
         // Yes, we UPDATE OR INSERT… because we might be transferring ownership of a database table
         // to a different Table. It'll trigger exists, and thus take the update path, but we won't
         // necessarily have an existing schema entry -- i.e., we'll be updating from 0.
-        guard let insertResult = schemaTable.insert(conn, item: table, err: &err) else {
-            return .failed
-        }
-
-        if schemaTable.update(conn, item: table, err: &err) > 0 || insertResult > 0 {
+        let insertResult = schemaTable.insert(conn, item: table, err: &err) ?? 0
+        let updateResult = schemaTable.update(conn, item: table, err: &err)
+        if  updateResult > 0 || insertResult > 0 {
             return .updated
         }
         return .failed
