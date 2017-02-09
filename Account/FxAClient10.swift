@@ -123,7 +123,7 @@ open class FxAClient10 {
         if kB.count != 32 {
             return nil
         }
-        return kB.sha256.subdata(in: Range(uncheckedBounds:(lower: 0, upper: 16))).hexEncodedString
+        return kB.sha256.subdata(in:  0..<16).hexEncodedString
     }
 
     open class func quickStretchPW(_ email: Data, password: Data) -> Data {
