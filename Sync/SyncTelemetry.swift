@@ -59,6 +59,10 @@ public class StatsSession {
         self.startTime = time
     }
 
+    public func hasStarted() -> Bool {
+        return startTime != nil
+    }
+
     public func end() -> Self {
         guard let startTime = startTime else {
             assertionFailure("SyncOperationStats called end without first calling start!")

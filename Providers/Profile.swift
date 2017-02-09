@@ -50,7 +50,7 @@ typealias EngineIdentifier = String
 typealias SyncFunction = (SyncDelegate, Prefs, Ready) -> SyncResult
 typealias EngineStatus = (EngineIdentifier, SyncStatus)
 typealias EngineResults = [EngineStatus]
-typealias SyncOperationResult = (engineResults: Maybe<EngineResults>, stats: SyncOperationStatsSession)
+typealias SyncOperationResult = (engineResults: Maybe<EngineResults>, stats: SyncOperationStatsSession?)
 
 class ProfileFileAccessor: FileAccessor {
     convenience init(profile: Profile) {
@@ -701,6 +701,10 @@ open class BrowserProfile: Profile {
         }
 
         fileprivate func reportSyncPingForResult(opResult: SyncOperationResult) {
+            if let opStats = opResult.stats {
+                print("operation: \(opStats)")
+            }
+            
             if let engineResults = opResult.engineResults.successValue {
                 engineResults.forEach { collection, status in
                     switch status {
@@ -1168,7 +1172,11 @@ open class BrowserProfile: Profile {
                 }
 
                 reducer.terminal.upon { results in
-                    self.endSyncing(SyncOperationResult(engineResults: results, stats: statsSession.end()))
+                    let result = SyncOperationResult(
+                        engineResults: results,
+                        stats: statsSession.hasStarted() ? statsSession.end() : nil
+                    )
+                    self.endSyncing(result)
                 }
 
                 // The actual work of synchronizing doesn't start until we append
