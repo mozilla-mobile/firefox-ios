@@ -9,7 +9,7 @@ import Shared
  * Factory methods for converting rows from SQLite into model objects
  */
 extension SQLiteHistory {
-    class func basicHistoryColumnFactory(row: SDRow) -> Site {
+    class func basicHistoryColumnFactory(_ row: SDRow) -> Site {
         let id = row["historyID"] as! Int
         let url = row["url"] as! String
         let title = row["title"] as! String
@@ -30,24 +30,24 @@ extension SQLiteHistory {
 
         let latest = max(local, remote, either)
         if latest > 0 {
-            site.latestVisit = Visit(date: latest, type: VisitType.Unknown)
+            site.latestVisit = Visit(date: latest, type: VisitType.unknown)
         }
 
         return site
     }
 
-    class func iconColumnFactory(row: SDRow) -> Favicon? {
+    class func iconColumnFactory(_ row: SDRow) -> Favicon? {
         if let iconType = row["iconType"] as? Int,
             let iconURL = row["iconURL"] as? String,
             let iconDate = row["iconDate"] as? Double,
             let _ = row["iconID"] as? Int {
-                let date = NSDate(timeIntervalSince1970: iconDate)
+                let date = Date(timeIntervalSince1970: iconDate)
                 return Favicon(url: iconURL, date: date, type: IconType(rawValue: iconType)!)
         }
         return nil
     }
 
-    class func iconHistoryColumnFactory(row: SDRow) -> Site {
+    class func iconHistoryColumnFactory(_ row: SDRow) -> Site {
         let site = basicHistoryColumnFactory(row)
         site.icon = iconColumnFactory(row)
         return site

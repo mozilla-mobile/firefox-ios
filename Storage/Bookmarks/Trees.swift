@@ -10,18 +10,18 @@ private let log = Logger.syncLogger
 // MARK: - Defining a tree structure for syncability.
 
 public enum BookmarkTreeNode: Equatable {
-    indirect case Folder(guid: GUID, children: [BookmarkTreeNode])
-    case NonFolder(guid: GUID)
-    case Unknown(guid: GUID)
+    indirect case folder(guid: GUID, children: [BookmarkTreeNode])
+    case nonFolder(guid: GUID)
+    case unknown(guid: GUID)
 
     // Because shared associated values between enum cases aren't possible.
     public var recordGUID: GUID {
         switch self {
-        case let .Folder(guid, _):
+        case let .folder(guid, _):
             return guid
-        case let .NonFolder(guid):
+        case let .nonFolder(guid):
             return guid
-        case let .Unknown(guid):
+        case let .unknown(guid):
             return guid
         }
     }
@@ -31,44 +31,44 @@ public enum BookmarkTreeNode: Equatable {
     }
 
     public var isUnknown: Bool {
-        if case .Unknown = self {
+        if case .unknown = self {
             return true
         }
         return false
     }
 
     public var children: [BookmarkTreeNode]? {
-        if case let .Folder(_, children) = self {
+        if case let .folder(_, children) = self {
             return children
         }
         return nil
     }
 
-    public func hasChildList(nodes: [BookmarkTreeNode]) -> Bool {
-        if case let .Folder(_, ours) = self {
-            return ours.elementsEqual(nodes, isEquivalent: { $0.recordGUID == $1.recordGUID })
+    public func hasChildList(_ nodes: [BookmarkTreeNode]) -> Bool {
+        if case let .folder(_, ours) = self {
+            return ours.elementsEqual(nodes, by: { $0.recordGUID == $1.recordGUID })
         }
         return false
     }
 
-    public func hasSameChildListAs(other: BookmarkTreeNode) -> Bool {
-        if case let .Folder(_, ours) = self {
-            if case let .Folder(_, theirs) = other {
-                return ours.elementsEqual(theirs, isEquivalent: { $0.recordGUID == $1.recordGUID })
+    public func hasSameChildListAs(_ other: BookmarkTreeNode) -> Bool {
+        if case let .folder(_, ours) = self {
+            if case let .folder(_, theirs) = other {
+                return ours.elementsEqual(theirs, by: { $0.recordGUID == $1.recordGUID })
             }
         }
         return false
     }
 
     // Returns false for unknowns.
-    public func isSameTypeAs(other: BookmarkTreeNode) -> Bool {
+    public func isSameTypeAs(_ other: BookmarkTreeNode) -> Bool {
         switch self {
-        case .Folder:
-            if case .Folder = other {
+        case .folder:
+            if case .folder = other {
                 return true
             }
-        case .NonFolder:
-            if case .NonFolder = other {
+        case .nonFolder:
+            if case .nonFolder = other {
                 return true
             }
         default:
@@ -80,18 +80,18 @@ public enum BookmarkTreeNode: Equatable {
 
 public func == (lhs: BookmarkTreeNode, rhs: BookmarkTreeNode) -> Bool {
     switch lhs {
-    case let .Folder(guid, children):
-        if case let .Folder(rguid, rchildren) = rhs {
+    case let .folder(guid, children):
+        if case let .folder(rguid, rchildren) = rhs {
             return guid == rguid && children == rchildren
         }
         return false
-    case let .NonFolder(guid):
-        if case let .NonFolder(rguid) = rhs {
+    case let .nonFolder(guid):
+        if case let .nonFolder(rguid) = rhs {
             return guid == rguid
         }
         return false
-    case let .Unknown(guid):
-        if case let .Unknown(rguid) = rhs {
+    case let .unknown(guid):
+        if case let .unknown(rguid) = rhs {
             return guid == rguid
         }
         return false
@@ -144,27 +144,27 @@ public struct BookmarkTree {
         return mappingsToTreeForStructureRows([], withNonFoldersAndEmptyFolders: [], withDeletedRecords: Set(), modifiedRecords: Set(), alwaysIncludeRoots: true)
     }
 
-    public func includesOrDeletesNode(node: BookmarkTreeNode) -> Bool {
+    public func includesOrDeletesNode(_ node: BookmarkTreeNode) -> Bool {
         return self.includesOrDeletesGUID(node.recordGUID)
     }
 
-    public func includesNode(node: BookmarkTreeNode) -> Bool {
+    public func includesNode(_ node: BookmarkTreeNode) -> Bool {
         return self.includesGUID(node.recordGUID)
     }
 
-    public func includesOrDeletesGUID(guid: GUID) -> Bool {
+    public func includesOrDeletesGUID(_ guid: GUID) -> Bool {
         return self.includesGUID(guid) || self.deleted.contains(guid)
     }
 
-    public func includesGUID(guid: GUID) -> Bool {
+    public func includesGUID(_ guid: GUID) -> Bool {
         return self.lookup[guid] != nil
     }
 
-    public func find(guid: GUID) -> BookmarkTreeNode? {
+    public func find(_ guid: GUID) -> BookmarkTreeNode? {
         return self.lookup[guid]
     }
 
-    public func find(node: BookmarkTreeNode) -> BookmarkTreeNode? {
+    public func find(_ node: BookmarkTreeNode) -> BookmarkTreeNode? {
         return self.find(node.recordGUID)
     }
 
@@ -177,7 +177,7 @@ public struct BookmarkTree {
      * In a fully rooted tree there can be no orphans; if our partial tree
      * includes orphans, they must be known by the comparison tree.
      */
-    public func isFullyRootedIn(tree: BookmarkTree) -> Bool {
+    public func isFullyRootedIn(_ tree: BookmarkTree) -> Bool {
         // We don't compare against tree.deleted, because you can't *undelete*.
         return self.orphans.every(tree.includesGUID) &&
                self.subtrees.every { subtree in
@@ -192,7 +192,7 @@ public struct BookmarkTree {
 
     // Recursively process an input set of structure pairs to yield complete subtrees,
     // assembling those subtrees to make a minimal set of trees.
-    static func mappingsToTreeForStructureRows(mappings: [StructureRow], withNonFoldersAndEmptyFolders nonFoldersAndEmptyFolders: [BookmarkTreeNode], withDeletedRecords deleted: Set<GUID>, modifiedRecords modified: Set<GUID>, alwaysIncludeRoots: Bool) -> BookmarkTree {
+    static func mappingsToTreeForStructureRows(_ mappings: [StructureRow], withNonFoldersAndEmptyFolders nonFoldersAndEmptyFolders: [BookmarkTreeNode], withDeletedRecords deleted: Set<GUID>, modifiedRecords modified: Set<GUID>, alwaysIncludeRoots: Bool) -> BookmarkTree {
         // Accumulate.
         var nodes: [GUID: BookmarkTreeNode] = [:]
         var parents: [GUID: GUID] = [:]
@@ -216,7 +216,7 @@ public struct BookmarkTree {
             nodes[guid] = node
 
             switch node {
-            case .Folder:
+            case .folder:
                 // If we end up here, it's because this folder is empty, and it won't
                 // appear in structure. Assert to make sure that's true!
                 assert(pseudoTree[guid] == nil)
@@ -240,15 +240,15 @@ public struct BookmarkTree {
 
             if let type = row.type {
                 switch type {
-                case .Folder:
+                case .folder:
                     // The child is itself a folder.
                     remainingFolders.insert(row.child)
                 default:
-                    nodes[row.child] = BookmarkTreeNode.NonFolder(guid: row.child)
+                    nodes[row.child] = BookmarkTreeNode.nonFolder(guid: row.child)
                 }
             } else {
                 // This will be the case if we've shadowed a folder; we indirectly reference the original rows.
-                nodes[row.child] = BookmarkTreeNode.Unknown(guid: row.child)
+                nodes[row.child] = BookmarkTreeNode.unknown(guid: row.child)
             }
         }
 
@@ -256,12 +256,11 @@ public struct BookmarkTree {
         // This gives us our shared basis from which to merge.
         // Doing it here means we don't need to protect the mirror database table.
         if alwaysIncludeRoots {
-            func setVirtual(guid: GUID) {
+            func setVirtual(_ guid: GUID) {
                 if !remainingFolders.contains(guid) && nodes[guid] == nil {
                     virtual.insert(guid)
                 }
             }
-
 
             // Note that we don't check whether the input already contained the roots; we
             // never change them, so it's safe to do this unconditionally.
@@ -272,34 +271,34 @@ public struct BookmarkTree {
 
             pseudoTree[BookmarkRoots.RootGUID] = BookmarkRoots.RootChildren
             tops.insert(BookmarkRoots.RootGUID)
-            notTops.unionInPlace(BookmarkRoots.RootChildren)
-            remainingFolders.unionInPlace(BookmarkRoots.All)
+            notTops.formUnion(Set(BookmarkRoots.RootChildren))
+            remainingFolders.formUnion(BookmarkRoots.All)
             BookmarkRoots.RootChildren.forEach {
                 parents[$0] = BookmarkRoots.RootGUID
             }
         }
 
-        tops.subtractInPlace(notTops)
-        orphans.subtractInPlace(notTops)
+        tops.subtract(notTops)
+        orphans.subtract(notTops)
 
         // Recursive. (Not tail recursive, but trees shouldn't be deep enough to blow the stack….)
-        func nodeForGUID(guid: GUID) -> BookmarkTreeNode {
+        @discardableResult func nodeForGUID(_ guid: GUID) -> BookmarkTreeNode {
             if let already = nodes[guid] {
                 return already
             }
 
             if !remainingFolders.contains(guid) {
-                let node = BookmarkTreeNode.Unknown(guid: guid)
+                let node = BookmarkTreeNode.unknown(guid: guid)
                 nodes[guid] = node
                 return node
             }
 
             // Removing these eagerly prevents infinite recursion in the case of a cycle.
             let childGUIDs = pseudoTree[guid] ?? []
-            pseudoTree.removeValueForKey(guid)
+            pseudoTree.removeValue(forKey: guid)
             remainingFolders.remove(guid)
 
-            let node = BookmarkTreeNode.Folder(guid: guid, children: childGUIDs.map(nodeForGUID))
+            let node = BookmarkTreeNode.folder(guid: guid, children: childGUIDs.map(nodeForGUID))
             nodes[guid] = node
             return node
         }

@@ -10,14 +10,13 @@ public struct ReadingListClientMetadata: Equatable {
     /// A client timestamp
     public var lastModified: ReadingListTimestamp
 
-    public init?(row: AnyObject) {
-        let id = row.valueForKeyPath("client_id") as? NSNumber
-        let lastModified = row.valueForKeyPath("client_last_modified") as? NSNumber
-        if id == nil || lastModified == nil {
+    public init?(row: [String: Any]) {
+        guard let id = row["client_id"] as? Int64,
+            let lastModified = row["client_last_modified"] as? Int64 else {
             return nil
         }
-        self.id = id!.longLongValue
-        self.lastModified = lastModified!.longLongValue
+        self.id = id
+        self.lastModified = lastModified
     }
 }
 

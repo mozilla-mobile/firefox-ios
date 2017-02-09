@@ -7,7 +7,7 @@ import UIKit
 /// A transparent view with a rectangular border with rounded corners, stroked
 /// with a semi-transparent white border.
 class InnerStrokedView: UIView {
-    var color = UIColor.whiteColor().colorWithAlphaComponent(0.2) {
+    var color = UIColor.white.withAlphaComponent(0.2) {
         didSet {
             setNeedsDisplay()
         }
@@ -27,14 +27,14 @@ class InnerStrokedView: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.clearColor()
+        backgroundColor = UIColor.clear
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         let halfWidth = strokeWidth / 2 as CGFloat
 
         let path = UIBezierPath(roundedRect: CGRect(x: halfWidth,

@@ -11,7 +11,7 @@ import WebKit
 /// non-deterministic and there are no guarantees the references will be set to nil. In practice,
 /// though, the references are consistently cleared, which should be good enough for testing.
 class ViewMemoryLeakTests: KIFTestCase, UITextFieldDelegate {
-    private var webRoot: String!
+    fileprivate var webRoot: String!
 
     override func setUp() {
         webRoot = SimplePageServer.start()
@@ -19,8 +19,8 @@ class ViewMemoryLeakTests: KIFTestCase, UITextFieldDelegate {
 
     override func tearDown() {
         do {
-            try tester().tryFindingTappableViewWithAccessibilityLabel("home")
-            tester().tapViewWithAccessibilityLabel("home")
+            try tester().tryFindingTappableView(withAccessibilityLabel: "home")
+            tester().tapView(withAccessibilityLabel: "home")
         } catch _ {
         }
         BrowserUtils.resetToAboutHome(tester())

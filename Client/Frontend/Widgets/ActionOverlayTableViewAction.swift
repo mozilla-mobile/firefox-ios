@@ -5,7 +5,7 @@
 import Foundation
 
 public struct ActionOverlayTableViewAction {
-    public private(set) var title: String
-    public private(set) var iconString: String
-    public private(set) var handler: (ActionOverlayTableViewAction -> Void)?
+    public fileprivate(set) var title: String
+    public fileprivate(set) var iconString: String
+    public fileprivate(set) var handler: ((ActionOverlayTableViewAction) -> Void)?
 }

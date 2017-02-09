@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-public func titleForSpecialGUID(guid: GUID) -> String? {
+public func titleForSpecialGUID(_ guid: GUID) -> String? {
     switch guid {
     case BookmarkRoots.RootGUID:
         return "<Root>"
@@ -23,8 +23,8 @@ public func titleForSpecialGUID(guid: GUID) -> String? {
 }
 
 extension SQLiteBookmarks: ShareToDestination {
-    public func addToMobileBookmarks(url: NSURL, title: String, favicon: Favicon?) -> Success {
-        return isBookmarked(String(url), direction: Direction.Local)
+    public func addToMobileBookmarks(_ url: URL, title: String, favicon: Favicon?) -> Success {
+        return isBookmarked(String(describing: url), direction: Direction.local)
             >>== { yes in
                 guard !yes else { return succeed() }
                 return self.insertBookmark(url, title: title, favicon: favicon,
@@ -33,11 +33,11 @@ extension SQLiteBookmarks: ShareToDestination {
         }
     }
 
-    public func shareItem(item: ShareItem) {
+    public func shareItem(_ item: ShareItem) {
         // We parse here in anticipation of getting real URLs at some point.
         if let url = item.url.asURL {
             let title = item.title ?? url.absoluteString
-            self.addToMobileBookmarks(url, title: title!, favicon: item.favicon)
+            let _ = self.addToMobileBookmarks(url, title: title, favicon: item.favicon)
         }
     }
 }

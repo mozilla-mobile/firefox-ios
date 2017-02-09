@@ -46,7 +46,7 @@ class MarketingSnapshotTests: XCTestCase {
         expectationForPredicate(exists, evaluatedWithObject: progressIndicator, handler: nil)
         expectationForPredicate(loaded, evaluatedWithObject: progressIndicator, handler: nil)
         app.typeText("\n")
-        waitForExpectationsWithTimeout(LoadingTimeout, handler: nil)
+        waitForExpectations(timeout: LoadingTimeout, handler: nil)
     }
 
     func testTakeMarketingScreenshots() {

@@ -5,10 +5,10 @@
 import Foundation
 
 protocol ReadingListChangeAccumulator {
-    func addDeletedClientRecord(deletedRecord: ReadingListClientRecord)
-    func addDeletedServerRecord(deletedRecord: ReadingListServerRecord)
-    func addChangedRecord(changedRecord: ReadingListClientRecord)
-    func addUploadedRecord(uploadedRecord: ReadingListClientRecord, down: ReadingListServerRecord)
-    func addDownloadedRecord(downloadedRecord: ReadingListServerRecord)
+    func addDeletedClientRecord(_ deletedRecord: ReadingListClientRecord)
+    func addDeletedServerRecord(_ deletedRecord: ReadingListServerRecord)
+    func addChangedRecord(_ changedRecord: ReadingListClientRecord)
+    func addUploadedRecord(_ uploadedRecord: ReadingListClientRecord, down: ReadingListServerRecord)
+    func addDownloadedRecord(_ downloadedRecord: ReadingListServerRecord)
     func applyAccumulatedChanges()
 }

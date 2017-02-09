@@ -9,30 +9,22 @@ import Deferred
 
 // MARK: Ping Centre Client
 public protocol PingCentreClient {
-    func sendPing(data: [String: AnyObject], validate: Bool) -> Success
-}
-
-// Neat trick to have default parameters for protocol methods while still being able to lean on the compiler
-// for adherence to the protocol.
-extension PingCentreClient {
-    func sendPing(data: [String: AnyObject], validate: Bool = true) -> Success {
-        return sendPing(data, validate: validate)
-    }
+    @discardableResult func sendPing(_ data: [String: Any], validate: Bool) -> Success
 }
 
 public struct PingCentre {
-    public static func clientForTopic(topic: PingCentreTopic, clientID: String) -> PingCentreClient {
+    public static func clientForTopic(_ topic: PingCentreTopic, clientID: String) -> PingCentreClient {
         switch AppConstants.BuildChannel {
-        case .Developer:
+        case .developer:
             fallthrough
-        case .Nightly:
+        case .nightly:
             fallthrough
-        case .Aurora:
+        case .aurora:
             fallthrough
-        case .Beta:
-            return DefaultPingCentreImpl(topic: topic, endpoint: .Staging, clientID: clientID)
-        case .Release:
-            return DefaultPingCentreImpl(topic: topic, endpoint: .Production, clientID: clientID)
+        case .beta:
+            return DefaultPingCentreImpl(topic: topic, endpoint: .staging, clientID: clientID)
+        case .release:
+            return DefaultPingCentreImpl(topic: topic, endpoint: .production, clientID: clientID)
         }
     }
 }
@@ -45,38 +37,38 @@ public struct PingValidationError: MaybeErrorType {
 }
 
 public struct PingJSONError: MaybeErrorType {
-    public let error: ErrorType
+    public let error: Error
     public var description: String {
         return "Failed to serialize JSON ping into NSData format -- \(error)"
     }
 }
 
 enum Endpoint {
-    case Staging
-    case Production
+    case staging
+    case production
 
-    var url: NSURL {
+    var url: URL {
         switch self {
-        case .Staging:
-            return NSURL(string: "https://onyx_tiles.stage.mozaws.net/v3/links/ping-centre")!
-        case .Production:
-            return NSURL(string: "https://tiles.services.mozilla.com/v3/links/ping-centre")!
+        case .staging:
+            return URL(string: "https://onyx_tiles.stage.mozaws.net/v3/links/ping-centre")!
+        case .production:
+            return URL(string: "https://tiles.services.mozilla.com/v3/links/ping-centre")!
         }
     }
 }
 
 class DefaultPingCentreImpl: PingCentreClient {
-    private let topic: PingCentreTopic
-    private let clientID: String
-    private let endpoint: Endpoint
-    private let manager: Alamofire.Manager
+    fileprivate let topic: PingCentreTopic
+    fileprivate let clientID: String
+    fileprivate let endpoint: Endpoint
+    fileprivate let manager: SessionManager
 
-    private let validationQueue: dispatch_queue_t
-    private static let queueLabel = "org.mozilla.pingcentre.validationQueue"
+    fileprivate let validationQueue: DispatchQueue
+    fileprivate static let queueLabel = "org.mozilla.pingcentre.validationQueue"
 
     init(topic: PingCentreTopic, endpoint: Endpoint, clientID: String,
-         validationQueue: dispatch_queue_t = dispatch_queue_create(queueLabel, nil),
-         manager: Alamofire.Manager = Alamofire.Manager()) {
+         validationQueue: DispatchQueue = DispatchQueue(label: queueLabel),
+         manager: SessionManager = SessionManager()) {
         self.topic = topic
         self.clientID = clientID
         self.endpoint = endpoint
@@ -84,7 +76,7 @@ class DefaultPingCentreImpl: PingCentreClient {
         self.validationQueue = validationQueue
     }
 
-    func sendPing(data: [String: AnyObject], validate: Bool = true) -> Success {
+    public func sendPing(_ data: [String: Any], validate: Bool) -> Success {
         var payload = data
         payload["topic"] = topic.name
         payload["client_id"] = clientID
@@ -93,33 +85,33 @@ class DefaultPingCentreImpl: PingCentreClient {
             >>> { return self.sendPayload(payload) }
     }
 
-    private func sendPayload(payload: [String: AnyObject]) -> Success {
+    fileprivate func sendPayload(_ payload: [String: Any]) -> Success {
         let deferred = Deferred<Maybe<()>>()
-        let request = NSMutableURLRequest(URL: endpoint.url)
-        request.HTTPMethod = "POST"
+        var request = URLRequest(url: endpoint.url)
+        request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         do {
-            request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(payload, options: [])
+            request.httpBody = try JSONSerialization.data(withJSONObject: payload, options: [])
         } catch let e {
             deferred.fill(Maybe(failure: PingJSONError(error: e)))
             return deferred
         }
-        
-        self.manager.request(request)
-                    .validate(statusCode: 200..<300)
-                    .response(queue: dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { _, _, _, error in
-            if let e = error {
-                NSLog("Failed to send ping to ping centre -- topic: \(self.topic.name), error: \(e)")
-                deferred.fill(Maybe(failure: e))
-                return 
-            }
-            deferred.fill(Maybe(success: ()))
+
+        self.manager.request(request as URLRequestConvertible)
+            .validate(statusCode: 200..<300)
+            .response(queue: DispatchQueue.global()) { (response) in
+                if let e = response.error {
+                    NSLog("Failed to send ping to ping centre -- topic: \(self.topic.name), error: \(e)")
+                    deferred.fill(Maybe(failure: e as! MaybeErrorType))
+                    return
+                }
+                deferred.fill(Maybe(success: ()))
         }
         return deferred
     }
 
-    private func validatePayload(payload: [String: AnyObject], schema: Schema) -> Success {
+    fileprivate func validatePayload(_ payload: [String: Any], schema: Schema) -> Success {
         return deferDispatchAsync(validationQueue) {
             let errors = schema.validate(payload).errors ?? []
             guard errors.isEmpty else {

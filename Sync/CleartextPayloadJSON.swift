@@ -4,19 +4,31 @@
 
 import Foundation
 import Shared
+import SwiftyJSON
 
-public class BasePayloadJSON: JSON {
+open class BasePayloadJSON {
+    var json: JSON
     required public init(_ jsonString: String) {
-        super.init(JSON.parse(jsonString))
+        self.json = JSON(parseJSON: jsonString)
     }
 
-    override public init(_ json: JSON) {
-        super.init(json)
+    public init(_ json: JSON) {
+        self.json = json
     }
 
     // Override me.
-    private func isValid() -> Bool {
-        return !isError
+    fileprivate func isValid() -> Bool {
+        return self.json.error == nil
+    }
+
+    subscript(key: String) -> JSON {
+        get {
+            return json[key]
+        }
+
+        set {
+            json[key] = newValue
+        }
     }
 }
 
@@ -25,20 +37,20 @@ public class BasePayloadJSON: JSON {
  * "In addition to these custom collection object structures, the
  *  Encrypted DataObject adds fields like id and deleted."
  */
-public class CleartextPayloadJSON: BasePayloadJSON {
+open class CleartextPayloadJSON: BasePayloadJSON {
     // Override me.
-    override public func isValid() -> Bool {
-        return super.isValid() && self["id"].isString
+    override open func isValid() -> Bool {
+        return super.isValid() && self["id"].isString()
     }
 
-    public var id: String {
-        return self["id"].asString!
+    open var id: String {
+        return self["id"].string!
     }
 
-    public var deleted: Bool {
+    open var deleted: Bool {
         let d = self["deleted"]
-        if d.isBool {
-            return d.asBool!
+        if let bool = d.bool {
+            return bool
         } else {
             return false
         }
@@ -46,13 +58,7 @@ public class CleartextPayloadJSON: BasePayloadJSON {
 
     // Override me.
     // Doesn't check id. Should it?
-    public func equalPayloads (obj: CleartextPayloadJSON) -> Bool {
+    open func equalPayloads (_ obj: CleartextPayloadJSON) -> Bool {
         return self.deleted == obj.deleted
-    }
-}
-
-extension JSON {
-    public var isStringOrNull: Bool {
-        return self.isString || self.isNull
     }
 }

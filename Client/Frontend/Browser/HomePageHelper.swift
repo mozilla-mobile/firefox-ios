@@ -18,13 +18,13 @@ class HomePageHelper {
 
     let prefs: Prefs
 
-    var currentURL: NSURL? {
+    var currentURL: URL? {
         get {
             return HomePageAccessors.getHomePage(prefs)
         }
         set {
-            if let url = newValue where url.isWebPage(includeDataURIs: false) && !url.isLocal {
-                prefs.setString(url.absoluteString!, forKey: HomePageConstants.HomePageURLPrefKey)
+            if let url = newValue, url.isWebPage(includeDataURIs: false) && !url.isLocal {
+                prefs.setString(url.absoluteString, forKey: HomePageConstants.HomePageURLPrefKey)
             } else {
                 prefs.removeObjectForKey(HomePageConstants.HomePageURLPrefKey)
             }
@@ -41,13 +41,13 @@ class HomePageHelper {
         self.prefs = prefs
     }
 
-    func openHomePage(tab: Tab) {
+    func openHomePage(_ tab: Tab) {
         guard let url = currentURL else {
             // this should probably never happen.
             log.error("User requested a homepage that wasn't a valid URL")
             return
         }
-        tab.loadRequest(NSURLRequest(URL: url))
+        tab.loadRequest(URLRequest(url: url))
     }
 
     func openHomePage(inTab tab: Tab, withNavigationController navigationController: UINavigationController?) {
@@ -62,11 +62,11 @@ class HomePageHelper {
         let alertController = UIAlertController(
             title: Strings.SetHomePageDialogTitle,
             message: Strings.SetHomePageDialogMessage,
-            preferredStyle: UIAlertControllerStyle.Alert)
-        alertController.addAction(UIAlertAction(title: Strings.SetHomePageDialogNo, style: .Cancel, handler: nil))
-        alertController.addAction(UIAlertAction(title: Strings.SetHomePageDialogYes, style: .Default) { _ in
-            self.currentURL = tab.url
+            preferredStyle: UIAlertControllerStyle.alert)
+        alertController.addAction(UIAlertAction(title: Strings.SetHomePageDialogNo, style: .cancel, handler: nil))
+        alertController.addAction(UIAlertAction(title: Strings.SetHomePageDialogYes, style: .default) { _ in
+            self.currentURL = tab.url as URL?
             })
-        navigationController?.presentViewController(alertController, animated: true, completion: nil)
+        navigationController?.present(alertController, animated: true, completion: nil)
     }
 }

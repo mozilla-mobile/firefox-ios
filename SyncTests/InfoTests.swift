@@ -7,16 +7,17 @@ import Shared
 @testable import Sync
 
 import XCTest
+import SwiftyJSON
 
 class InfoTests: XCTestCase {
     func testSame() {
-        let empty = JSON.parse("{}")
+        let empty = JSON(parseJSON: "{}")
 
-        let oneA = JSON.parse("{\"foo\": 1234.0, \"bar\": 456.12}")
-        let oneB = JSON.parse("{\"bar\": 456.12, \"foo\": 1234.0}")
+        let oneA = JSON(parseJSON: "{\"foo\": 1234.0, \"bar\": 456.12}")
+        let oneB = JSON(parseJSON: "{\"bar\": 456.12, \"foo\": 1234.0}")
         
-        let twoA = JSON.parse("{\"bar\": 456.12}")
-        let twoB = JSON.parse("{\"foo\": 1234.0}")
+        let twoA = JSON(parseJSON: "{\"bar\": 456.12}")
+        let twoB = JSON(parseJSON: "{\"foo\": 1234.0}")
 
         let iEmpty = InfoCollections.fromJSON(empty)!
         let iOneA = InfoCollections.fromJSON(oneA)!

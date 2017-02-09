@@ -6,13 +6,13 @@ import Foundation
 import WebKit
 
 class ReaderViewUITests: KIFTestCase, UITextFieldDelegate {
-    private var webRoot: String!
+    fileprivate var webRoot: String!
 
     override func setUp() {
         super.setUp()
         // We undo the localhost/127.0.0.1 switch in order to get 'localhost' in accessibility labels.
         webRoot = SimplePageServer.start()
-            .stringByReplacingOccurrencesOfString("127.0.0.1", withString: "localhost", options: NSStringCompareOptions(), range: nil)
+            .replacingOccurrences(of: "127.0.0.1", with: "localhost", options: NSString.CompareOptions(), range: nil)
         BrowserUtils.dismissFirstRunUI(tester())
     }
     
@@ -34,80 +34,80 @@ class ReaderViewUITests: KIFTestCase, UITextFieldDelegate {
     }
 
     func loadReaderContent() {
-        tester().tapViewWithAccessibilityIdentifier("url")
+        tester().tapView(withAccessibilityIdentifier: "url")
         let url = "\(webRoot)/readerContent.html"
-        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url)\n")
-        tester().tapViewWithAccessibilityLabel("Reader View")
+        tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "\(url)\n")
+        tester().tapView(withAccessibilityLabel: "Reader View")
     }
 
     func addToReadingList() {
-        tester().tapViewWithAccessibilityLabel("Add to Reading List")
-        tester().tapViewWithAccessibilityIdentifier("url")
-        tester().tapViewWithAccessibilityLabel("Reading list")
-        tester().waitForViewWithAccessibilityLabel("Reader View Test, unread, localhost")
+        tester().tapView(withAccessibilityLabel: "Add to Reading List")
+        tester().tapView(withAccessibilityIdentifier: "url")
+        tester().tapView(withAccessibilityLabel: "Reading list")
+        tester().waitForView(withAccessibilityLabel: "Reader View Test, unread, localhost")
 
         // TODO: Check for rows in this table
 
-        tester().tapViewWithAccessibilityLabel("Cancel")
+        tester().tapView(withAccessibilityLabel: "Cancel")
     }
 
     func markAsReadFromReaderView() {
-        tester().tapViewWithAccessibilityLabel("Mark as Read")
-        tester().tapViewWithAccessibilityIdentifier("url")
-        tester().tapViewWithAccessibilityLabel("Reading list")
-        tester().waitForViewWithAccessibilityLabel("Reader View Test")
-        tester().swipeViewWithAccessibilityLabel("Reader View Test", inDirection: KIFSwipeDirection.Left)
-        tester().waitForViewWithAccessibilityLabel("Mark as Unread")
-        tester().tapViewWithAccessibilityLabel("Cancel")
+        tester().tapView(withAccessibilityLabel: "Mark as Read")
+        tester().tapView(withAccessibilityIdentifier: "url")
+        tester().tapView(withAccessibilityLabel: "Reading list")
+        tester().waitForView(withAccessibilityLabel: "Reader View Test")
+        tester().swipeView(withAccessibilityLabel: "Reader View Test", in: KIFSwipeDirection.left)
+        tester().waitForView(withAccessibilityLabel: "Mark as Unread")
+        tester().tapView(withAccessibilityLabel: "Cancel")
     }
 
     func markAsUnreadFromReaderView() {
-        tester().tapViewWithAccessibilityLabel("Mark as Unread")
-        tester().tapViewWithAccessibilityIdentifier("url")
-        tester().tapViewWithAccessibilityLabel("Reading list")
-        tester().swipeViewWithAccessibilityLabel("Reader View Test", inDirection: KIFSwipeDirection.Left)
-        tester().waitForViewWithAccessibilityLabel("Mark as Read")
-        tester().tapViewWithAccessibilityLabel("Cancel")
+        tester().tapView(withAccessibilityLabel: "Mark as Unread")
+        tester().tapView(withAccessibilityIdentifier: "url")
+        tester().tapView(withAccessibilityLabel: "Reading list")
+        tester().swipeView(withAccessibilityLabel: "Reader View Test", in: KIFSwipeDirection.left)
+        tester().waitForView(withAccessibilityLabel: "Mark as Read")
+        tester().tapView(withAccessibilityLabel: "Cancel")
     }
 
     func markAsReadFromReadingList() {
-        tester().tapViewWithAccessibilityIdentifier("url")
-        tester().tapViewWithAccessibilityLabel("Reading list")
-        tester().swipeViewWithAccessibilityLabel("Reader View Test", inDirection: KIFSwipeDirection.Left)
-        tester().tapViewWithAccessibilityLabel("Mark as Read")
-        tester().tapViewWithAccessibilityLabel("Cancel")
-        tester().waitForViewWithAccessibilityLabel("Mark as Unread")
+        tester().tapView(withAccessibilityIdentifier: "url")
+        tester().tapView(withAccessibilityLabel: "Reading list")
+        tester().swipeView(withAccessibilityLabel: "Reader View Test", in: KIFSwipeDirection.left)
+        tester().tapView(withAccessibilityLabel: "Mark as Read")
+        tester().tapView(withAccessibilityLabel: "Cancel")
+        tester().waitForView(withAccessibilityLabel: "Mark as Unread")
     }
 
     func markAsUnreadFromReadingList() {
-        tester().tapViewWithAccessibilityIdentifier("url")
-        tester().tapViewWithAccessibilityLabel("Reading list")
-        tester().swipeViewWithAccessibilityLabel("Reader View Test", inDirection: KIFSwipeDirection.Left)
-        tester().tapViewWithAccessibilityLabel("Mark as Unread")
-        tester().tapViewWithAccessibilityLabel("Cancel")
-        tester().waitForViewWithAccessibilityLabel("Mark as Read")
+        tester().tapView(withAccessibilityIdentifier: "url")
+        tester().tapView(withAccessibilityLabel: "Reading list")
+        tester().swipeView(withAccessibilityLabel: "Reader View Test", in: KIFSwipeDirection.left)
+        tester().tapView(withAccessibilityLabel: "Mark as Unread")
+        tester().tapView(withAccessibilityLabel: "Cancel")
+        tester().waitForView(withAccessibilityLabel: "Mark as Read")
     }
  
     func removeFromReadingList() {
-        tester().tapViewWithAccessibilityIdentifier("url")
-        tester().tapViewWithAccessibilityLabel("Reading list")
-        tester().swipeViewWithAccessibilityLabel("Reader View Test read", inDirection: KIFSwipeDirection.Left)
-        tester().tapViewWithAccessibilityLabel("Remove")
-        tester().waitForAbsenceOfViewWithAccessibilityLabel("Reader View Test")
-        tester().tapViewWithAccessibilityLabel("Cancel")
-        tester().waitForViewWithAccessibilityLabel("Add to Reading List")
+        tester().tapView(withAccessibilityIdentifier: "url")
+        tester().tapView(withAccessibilityLabel: "Reading list")
+        tester().swipeView(withAccessibilityLabel: "Reader View Test read", in: KIFSwipeDirection.left)
+        tester().tapView(withAccessibilityLabel: "Remove")
+        tester().waitForAbsenceOfView(withAccessibilityLabel: "Reader View Test")
+        tester().tapView(withAccessibilityLabel: "Cancel")
+        tester().waitForView(withAccessibilityLabel: "Add to Reading List")
     }
 
     func removeFromReadingListInView() {
-        tester().tapViewWithAccessibilityLabel("Remove from Reading List")
-        tester().waitForViewWithAccessibilityLabel("Add to Reading List")
-        tester().tapViewWithAccessibilityIdentifier("url")
-        tester().tapViewWithAccessibilityLabel("Reading list")
+        tester().tapView(withAccessibilityLabel: "Remove from Reading List")
+        tester().waitForView(withAccessibilityLabel: "Add to Reading List")
+        tester().tapView(withAccessibilityIdentifier: "url")
+        tester().tapView(withAccessibilityLabel: "Reading list")
         
         // TODO: Check for rows in this table
         
-        tester().tapViewWithAccessibilityLabel("Cancel")
-        tester().waitForViewWithAccessibilityLabel("Add to Reading List")
+        tester().tapView(withAccessibilityLabel: "Cancel")
+        tester().waitForView(withAccessibilityLabel: "Add to Reading List")
     }
 
     // TODO: Add a reader view display settings test

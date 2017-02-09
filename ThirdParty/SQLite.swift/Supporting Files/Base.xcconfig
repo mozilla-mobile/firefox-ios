@@ -1,5 +1,0 @@
-INFOPLIST_FILE = Supporting Files/$(PRODUCT_NAME)/Info.plist
-
-PRODUCT_BUNDLE_IDENTIFIER = com.stephencelis.$(PRODUCT_NAME:c99extidentifier)
-
-APPLICATION_EXTENSION_API_ONLY = YES

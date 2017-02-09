@@ -7,24 +7,23 @@ import Foundation
 class ReadingListBatchRecordResponse: ReadingListResponse {
     var responses: [ReadingListRecordResponse] = [ReadingListRecordResponse]()
 
-    override init?(response: NSHTTPURLResponse, json: AnyObject?) {
+    override init?(response: HTTPURLResponse, json: [String: Any]) {
         super.init(response: response, json: json)
-        if let responses = json?.valueForKeyPath("responses") as? [AnyObject] {
-            for response in responses {
-                guard let body = response.valueForKeyPath("body") as? [String:AnyObject],
-                    let statusCode = response.valueForKeyPath("status") as? Int,
-                    let path = response.valueForKeyPath("path") as? String,
-                    let url = NSURL(string: path, relativeToURL: self.response.URL),
-                    let headers = response.valueForKeyPath("headers") as? [String:String],
-                    let r = NSHTTPURLResponse(URL: url, statusCode: statusCode, HTTPVersion: "1.1", headerFields: headers),
-                    let recordResponse = ReadingListRecordResponse(response: r, json: body) else {
-                        return nil
-                }
-                
-                self.responses.append(recordResponse)
-            }
-        } else {
+        guard let responses = json["responses"] as? [[String: Any]] else {
             return nil
+        }
+
+        for resp in responses {
+            guard let body = resp["body"] as? [String: Any],
+                let statusCode = resp["status"] as? Int,
+                let path = resp["path"] as? String,
+                let url = URL(string: path, relativeTo: self.response.url),
+                let headers = resp["headers"] as? [String: String],
+                let r = HTTPURLResponse(url: url, statusCode: statusCode, httpVersion: "1.1", headerFields: headers),
+                let recordResponse = ReadingListRecordResponse(response: r, json: body) else {
+                    return nil
+            }
+            self.responses.append(recordResponse)
         }
     }
 

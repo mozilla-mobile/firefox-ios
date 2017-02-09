@@ -13,8 +13,8 @@ private class CachedSource {
     // to look up a value at all. This allows us to distinguish between a cache miss and a
     // cache hit that didn't find an item in the backing store.
     // We expect, given our prefetching, that cache misses will be rare.
-    private var cache: [GUID: BookmarkMirrorItem] = [:]
-    private var seen: Set<GUID> = Set()
+    fileprivate var cache: [GUID: BookmarkMirrorItem] = [:]
+    fileprivate var seen: Set<GUID> = Set()
 
     subscript(guid: GUID) -> BookmarkMirrorItem? {
         get {
@@ -26,7 +26,7 @@ private class CachedSource {
         }
     }
 
-    func lookup(guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>>? {
+    func lookup(_ guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>>? {
         guard self.seen.contains(guid) else {
             log.warning("Cache miss for \(guid).")
             return nil
@@ -46,22 +46,22 @@ private class CachedSource {
     }
 
     // fill and seen are separate: we won't find every item in the DB.
-    func fill(items: [GUID: BookmarkMirrorItem]) -> Success {
+    func fill(_ items: [GUID: BookmarkMirrorItem]) -> Success {
         for (x, y) in items {
             self.cache[x] = y
         }
         return succeed()
     }
 
-    func markSeen(guid: GUID) {
+    func markSeen(_ guid: GUID) {
         self.seen.insert(guid)
     }
 
-    func markSeen<T: CollectionType where T.Generator.Element == GUID>(guids: T) {
-        self.seen.unionInPlace(guids)
+    func markSeen<T: Sequence>(_ guids: T) where T.Iterator.Element == GUID {
+        self.seen.formUnion(guids)
     }
 
-    func takingGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
+    func takingGUIDs<T: Collection>(_ guids: T) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> where T.Iterator.Element == GUID {
         var out: [GUID: BookmarkMirrorItem] = [:]
         guids.forEach {
             if let v = self.cache[$0] {
@@ -76,16 +76,16 @@ private class CachedSource {
 // These are separate protocols so that the method names don't collide when implemented
 // by the same class, but that means extracting more base implementation is more trouble than
 // it's worth.
-public class CachingLocalItemSource: LocalItemSource {
-    private let cache: CachedSource
-    private let source: LocalItemSource
+open class CachingLocalItemSource: LocalItemSource {
+    fileprivate let cache: CachedSource
+    fileprivate let source: LocalItemSource
 
     public init(source: LocalItemSource) {
         self.cache = CachedSource()
         self.source = source
     }
 
-    public func getLocalItemWithGUID(guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>> {
+    open func getLocalItemWithGUID(_ guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>> {
         if let found = self.cache.lookup(guid) {
             return found
         }
@@ -96,11 +96,11 @@ public class CachingLocalItemSource: LocalItemSource {
         }
     }
 
-    public func getLocalItemsWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
+    open func getLocalItemsWithGUIDs<T: Collection>(_ guids: T) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> where T.Iterator.Element == GUID {
         return self.prefetchLocalItemsWithGUIDs(guids) >>> { self.cache.takingGUIDs(guids) }
     }
 
-    public func prefetchLocalItemsWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Success {
+    open func prefetchLocalItemsWithGUIDs<T: Collection>(_ guids: T) -> Success where T.Iterator.Element == GUID {
         log.debug("Prefetching \(guids.count) local items: \(guids.prefix(10))….")
         if guids.isEmpty {
             return succeed()
@@ -113,16 +113,16 @@ public class CachingLocalItemSource: LocalItemSource {
     }
 }
 
-public class CachingMirrorItemSource: MirrorItemSource {
-    private let cache: CachedSource
-    private let source: MirrorItemSource
+open class CachingMirrorItemSource: MirrorItemSource {
+    fileprivate let cache: CachedSource
+    fileprivate let source: MirrorItemSource
 
     public init(source: MirrorItemSource) {
         self.cache = CachedSource()
         self.source = source
     }
 
-    public func getMirrorItemWithGUID(guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>> {
+    open func getMirrorItemWithGUID(_ guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>> {
         if let found = self.cache.lookup(guid) {
             return found
         }
@@ -133,11 +133,11 @@ public class CachingMirrorItemSource: MirrorItemSource {
         }
     }
 
-    public func getMirrorItemsWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
+    open func getMirrorItemsWithGUIDs<T: Collection>(_ guids: T) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> where T.Iterator.Element == GUID {
         return self.prefetchMirrorItemsWithGUIDs(guids) >>> { self.cache.takingGUIDs(guids) }
     }
 
-    public func prefetchMirrorItemsWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Success {
+    open func prefetchMirrorItemsWithGUIDs<T: Collection>(_ guids: T) -> Success where T.Iterator.Element == GUID {
         log.debug("Prefetching \(guids.count) mirror items: \(guids.prefix(10))….")
         if guids.isEmpty {
             return succeed()
@@ -150,16 +150,16 @@ public class CachingMirrorItemSource: MirrorItemSource {
     }
 }
 
-public class CachingBufferItemSource: BufferItemSource {
-    private let cache: CachedSource
-    private let source: BufferItemSource
+open class CachingBufferItemSource: BufferItemSource {
+    fileprivate let cache: CachedSource
+    fileprivate let source: BufferItemSource
 
     public init(source: BufferItemSource) {
         self.cache = CachedSource()
         self.source = source
     }
 
-    public func getBufferItemWithGUID(guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>> {
+    open func getBufferItemWithGUID(_ guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>> {
         if let found = self.cache.lookup(guid) {
             return found
         }
@@ -170,11 +170,11 @@ public class CachingBufferItemSource: BufferItemSource {
         }
     }
 
-    public func getBufferItemsWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> {
+    open func getBufferItemsWithGUIDs<T: Collection>(_ guids: T) -> Deferred<Maybe<[GUID: BookmarkMirrorItem]>> where T.Iterator.Element == GUID {
         return self.prefetchBufferItemsWithGUIDs(guids) >>> { self.cache.takingGUIDs(guids) }
     }
 
-    public func prefetchBufferItemsWithGUIDs<T: CollectionType where T.Generator.Element == GUID>(guids: T) -> Success {
+    open func prefetchBufferItemsWithGUIDs<T: Collection>(_ guids: T) -> Success where T.Iterator.Element == GUID {
         log.debug("Prefetching \(guids.count) buffer items: \(guids.prefix(10))….")
         if guids.isEmpty {
             return succeed()

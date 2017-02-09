@@ -13,25 +13,25 @@ private let log = Logger.syncLogger
 // Because generic protocols in Swift are a pain in the ass.
 public protocol BookmarkStorer: class {
     // TODO: this should probably return a timestamp.
-    func applyUpstreamCompletionOp(op: UpstreamCompletionOp, itemSources: ItemSources, trackingTimesInto local: LocalOverrideCompletionOp) -> Deferred<Maybe<POSTResult>>
+    func applyUpstreamCompletionOp(_ op: UpstreamCompletionOp, itemSources: ItemSources, trackingTimesInto local: LocalOverrideCompletionOp) -> Deferred<Maybe<POSTResult>>
 }
 
-public class UpstreamCompletionOp: PerhapsNoOp {
+open class UpstreamCompletionOp: PerhapsNoOp {
     // Upload these records from the buffer, but with these child lists.
-    public var amendChildrenFromBuffer: [GUID: [GUID]] = [:]
+    open var amendChildrenFromBuffer: [GUID: [GUID]] = [:]
 
     // Upload these records from the mirror, but with these child lists.
-    public var amendChildrenFromMirror: [GUID: [GUID]] = [:]
+    open var amendChildrenFromMirror: [GUID: [GUID]] = [:]
 
     // Upload these records from local, but with these child lists.
-    public var amendChildrenFromLocal: [GUID: [GUID]] = [:]
+    open var amendChildrenFromLocal: [GUID: [GUID]] = [:]
 
     // Upload these records as-is.
-    public var records: [Record<BookmarkBasePayload>] = []
+    open var records: [Record<BookmarkBasePayload>] = []
 
-    public let ifUnmodifiedSince: Timestamp?
+    open let ifUnmodifiedSince: Timestamp?
 
-    public var isNoOp: Bool {
+    open var isNoOp: Bool {
         return records.isEmpty
     }
 
@@ -40,19 +40,19 @@ public class UpstreamCompletionOp: PerhapsNoOp {
     }
 }
 
-public class BookmarksMergeResult: PerhapsNoOp {
+open class BookmarksMergeResult: PerhapsNoOp {
     let uploadCompletion: UpstreamCompletionOp
     let overrideCompletion: LocalOverrideCompletionOp
     let bufferCompletion: BufferCompletionOp
     let itemSources: ItemSources
 
-    public var isNoOp: Bool {
+    open var isNoOp: Bool {
         return self.uploadCompletion.isNoOp &&
                self.overrideCompletion.isNoOp &&
                self.bufferCompletion.isNoOp
     }
 
-    func applyToClient(client: BookmarkStorer, storage: SyncableBookmarks, buffer: BookmarkBufferStorage) -> Success {
+    func applyToClient(_ client: BookmarkStorer, storage: SyncableBookmarks, buffer: BookmarkBufferStorage) -> Success {
         return client.applyUpstreamCompletionOp(self.uploadCompletion, itemSources: self.itemSources, trackingTimesInto: self.overrideCompletion)
          >>> { storage.applyLocalOverrideCompletionOp(self.overrideCompletion, itemSources: self.itemSources) }
          >>> { buffer.applyBufferCompletionOp(self.bufferCompletion, itemSources: self.itemSources) }
@@ -65,59 +65,59 @@ public class BookmarksMergeResult: PerhapsNoOp {
         self.itemSources = itemSources
     }
 
-    static func NoOp(itemSources: ItemSources) -> BookmarksMergeResult {
+    static func NoOp(_ itemSources: ItemSources) -> BookmarksMergeResult {
         return BookmarksMergeResult(uploadCompletion: UpstreamCompletionOp(), overrideCompletion: LocalOverrideCompletionOp(), bufferCompletion: BufferCompletionOp(), itemSources: itemSources)
     }
 }
 
 // MARK: - Errors.
 
-public class BookmarksMergeError: MaybeErrorType {
-    private let error: ErrorType?
+open class BookmarksMergeError: MaybeErrorType {
+    fileprivate let error: Error?
 
-    init(error: ErrorType?=nil) {
+    init(error: Error?=nil) {
         self.error = error
     }
 
-    public var description: String {
+    open var description: String {
         return "Merge error: \(self.error)"
     }
 }
 
-public class BookmarksMergeConsistencyError: BookmarksMergeError {
-    override public var description: String {
+open class BookmarksMergeConsistencyError: BookmarksMergeError {
+    override open var description: String {
         return "Merge consistency error"
     }
 }
 
-public class BookmarksMergeErrorTreeIsUnrooted: BookmarksMergeConsistencyError {
-    public let roots: Set<GUID>
+open class BookmarksMergeErrorTreeIsUnrooted: BookmarksMergeConsistencyError {
+    open let roots: Set<GUID>
 
     public init(roots: Set<GUID>) {
         self.roots = roots
     }
 
-    override public var description: String {
+    override open var description: String {
         return "Tree is unrooted: roots are \(self.roots)"
     }
 }
 
 enum MergeState<T> {
-    case Unknown              // Default state.
-    case Unchanged            // Nothing changed: no work needed.
-    case Remote               // Take the associated remote value.
-    case Local                // Take the associated local value.
-    case New(value: T)        // Take this synthesized value.
+    case unknown              // Default state.
+    case unchanged            // Nothing changed: no work needed.
+    case remote               // Take the associated remote value.
+    case local                // Take the associated local value.
+    case new(value: T)        // Take this synthesized value.
 
     var isUnchanged: Bool {
-        if case .Unchanged = self {
+        if case .unchanged = self {
             return true
         }
         return false
     }
 
     var isUnknown: Bool {
-        if case .Unknown = self {
+        if case .unknown = self {
             return true
         }
         return false
@@ -125,15 +125,15 @@ enum MergeState<T> {
 
     var label: String {
         switch self {
-        case .Unknown:
+        case .unknown:
             return "Unknown"
-        case .Unchanged:
+        case .unchanged:
             return "Unchanged"
-        case .Remote:
+        case .remote:
             return "Remote"
-        case .Local:
+        case .local:
             return "Local"
-        case .New:
+        case .new:
             return "New"
         }
     }
@@ -141,15 +141,15 @@ enum MergeState<T> {
 
 func ==<T: Equatable>(lhs: MergeState<T>, rhs: MergeState<T>) -> Bool {
     switch (lhs, rhs) {
-    case (.Unknown, .Unknown):
+    case (.unknown, .unknown):
         return true
-    case (.Unchanged, .Unchanged):
+    case (.unchanged, .unchanged):
         return true
-    case (.Remote, .Remote):
+    case (.remote, .remote):
         return true
-    case (.Local, .Local):
+    case (.local, .local):
         return true
-    case let (.New(lh), .New(rh)):
+    case let (.new(lh), .new(rh)):
         return lh == rh
     default:
         return false
@@ -181,33 +181,33 @@ class MergedTreeNode {
     var hasMirror: Bool { return self.mirror != nil }
     var hasRemote: Bool { return self.remote != nil }
 
-    var valueState: MergeState<BookmarkMirrorItem> = MergeState.Unknown
-    var structureState: MergeState<BookmarkTreeNode> = MergeState.Unknown
+    var valueState: MergeState<BookmarkMirrorItem> = MergeState.unknown
+    var structureState: MergeState<BookmarkTreeNode> = MergeState.unknown
 
     var hasDecidedChildren: Bool {
         return !self.structureState.isUnknown
     }
 
-    var mergedChildren: [MergedTreeNode]? = nil
+    var mergedChildren: [MergedTreeNode]?
 
     // One-sided constructors.
-    static func forRemote(remote: BookmarkTreeNode, mirror: BookmarkTreeNode?=nil) -> MergedTreeNode {
-        let n = MergedTreeNode(guid: remote.recordGUID, mirror: mirror, structureState: MergeState.Remote)
+    static func forRemote(_ remote: BookmarkTreeNode, mirror: BookmarkTreeNode?=nil) -> MergedTreeNode {
+        let n = MergedTreeNode(guid: remote.recordGUID, mirror: mirror, structureState: MergeState.remote)
         n.remote = remote
-        n.valueState = MergeState.Remote
+        n.valueState = MergeState.remote
         return n
     }
 
-    static func forLocal(local: BookmarkTreeNode, mirror: BookmarkTreeNode?=nil) -> MergedTreeNode {
-        let n = MergedTreeNode(guid: local.recordGUID, mirror: mirror, structureState: MergeState.Local)
+    static func forLocal(_ local: BookmarkTreeNode, mirror: BookmarkTreeNode?=nil) -> MergedTreeNode {
+        let n = MergedTreeNode(guid: local.recordGUID, mirror: mirror, structureState: MergeState.local)
         n.local = local
-        n.valueState = MergeState.Local
+        n.valueState = MergeState.local
         return n
     }
 
-    static func forUnchanged(mirror: BookmarkTreeNode) -> MergedTreeNode {
-        let n = MergedTreeNode(guid: mirror.recordGUID, mirror: mirror, structureState: MergeState.Unchanged)
-        n.valueState = MergeState.Unchanged
+    static func forUnchanged(_ mirror: BookmarkTreeNode) -> MergedTreeNode {
+        let n = MergedTreeNode(guid: mirror.recordGUID, mirror: mirror, structureState: MergeState.unchanged)
+        n.valueState = MergeState.unchanged
         return n
     }
 
@@ -224,35 +224,35 @@ class MergedTreeNode {
 
     // N.B., you cannot recurse down `decidedStructure`: you'll depart from the
     // merged tree. You need to use `mergedChildren` instead.
-    private var decidedStructure: BookmarkTreeNode? {
+    fileprivate var decidedStructure: BookmarkTreeNode? {
         switch self.structureState {
-        case .Unknown:
+        case .unknown:
             return nil
-        case .Unchanged:
+        case .unchanged:
             return self.mirror
-        case .Remote:
+        case .remote:
             return self.remote
-        case .Local:
+        case .local:
             return self.local
-        case let .New(node):
+        case let .new(node):
             return node
         }
     }
 
     func asUnmergedTreeNode() -> BookmarkTreeNode {
-        return self.decidedStructure ?? BookmarkTreeNode.Unknown(guid: self.guid)
+        return self.decidedStructure ?? BookmarkTreeNode.unknown(guid: self.guid)
     }
 
     // Recursive. Starts returning Unknown when nodes haven't been processed.
     func asMergedTreeNode() -> BookmarkTreeNode {
         guard let decided = self.decidedStructure,
               let merged = self.mergedChildren else {
-            return BookmarkTreeNode.Unknown(guid: self.guid)
+            return BookmarkTreeNode.unknown(guid: self.guid)
         }
 
-        if case .Folder = decided {
+        if case .folder = decided {
             let children = merged.map { $0.asMergedTreeNode() }
-            return BookmarkTreeNode.Folder(guid: self.guid, children: children)
+            return BookmarkTreeNode.folder(guid: self.guid, children: children)
         }
 
         return decided
@@ -262,7 +262,7 @@ class MergedTreeNode {
         return self.mergedChildren != nil
     }
 
-    func dump(indent: Int) {
+    func dump(_ indent: Int) {
         precondition(indent < 200)
         let r: Character = "R"
         let l: Character = "L"
@@ -283,15 +283,15 @@ class MergedTreeNode {
     }
 }
 
-private func box<T>(x: T?, _ c: Character) -> Character {
+private func box<T>(_ x: T?, _ c: Character) -> Character {
     if x == nil {
         return "□"
     }
     return c
 }
 
-private func indenting(by: Int) -> String {
-    return String(count: by, repeatedValue: " " as Character)
+private func indenting(_ by: Int) -> String {
+    return String(repeating: " ", count: by)
 }
 
 class MergedTree {
@@ -304,11 +304,11 @@ class MergedTree {
 
     var allGUIDs: Set<GUID> {
         var out = Set<GUID>([self.root.guid])
-        func acc(node: MergedTreeNode) {
+        func acc(_ node: MergedTreeNode) {
             guard let children = node.mergedChildren else {
                 return
             }
-            out.unionInPlace(children.map { $0.guid })
+            out.formUnion(Set(children.map { $0.guid }))
             children.forEach(acc)
         }
         acc(self.root)
@@ -316,16 +316,16 @@ class MergedTree {
     }
 
     init(mirrorRoot: BookmarkTreeNode) {
-        self.root = MergedTreeNode(guid: mirrorRoot.recordGUID, mirror: mirrorRoot, structureState: MergeState.Unchanged)
-        self.root.valueState = MergeState.Unchanged
+        self.root = MergedTreeNode(guid: mirrorRoot.recordGUID, mirror: mirrorRoot, structureState: MergeState.unchanged)
+        self.root.valueState = MergeState.unchanged
     }
 
     func dump() {
-        print("Deleted locally: \(self.deleteLocally.joinWithSeparator(", "))")
-        print("Deleted remotely: \(self.deleteRemotely.joinWithSeparator(", "))")
-        print("Deleted from mirror: \(self.deleteFromMirror.joinWithSeparator(", "))")
-        print("Accepted local deletions: \(self.acceptLocalDeletion.joinWithSeparator(", "))")
-        print("Accepted remote deletions: \(self.acceptRemoteDeletion.joinWithSeparator(", "))")
+        print("Deleted locally: \(self.deleteLocally.joined(separator: ", "))")
+        print("Deleted remotely: \(self.deleteRemotely.joined(separator: ", "))")
+        print("Deleted from mirror: \(self.deleteFromMirror.joined(separator: ", "))")
+        print("Accepted local deletions: \(self.acceptLocalDeletion.joined(separator: ", "))")
+        print("Accepted remote deletions: \(self.acceptRemoteDeletion.joined(separator: ", "))")
         print("Root: ")
         self.root.dump(0)
     }

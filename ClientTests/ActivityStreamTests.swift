@@ -28,7 +28,7 @@ class ActivityStreamTests: XCTestCase {
     func testDeletionOfSingleSuggestedSite() {
         let siteToDelete = panel.defaultTopSites()[0]
 
-        panel.hideURLFromTopSites(NSURL(string: siteToDelete.url)!)
+        panel.hideURLFromTopSites(URL(string: siteToDelete.url)!)
         let newSites = panel.defaultTopSites()
 
         XCTAssertFalse(newSites.contains(siteToDelete, f: { (a, b) -> Bool in
@@ -39,7 +39,7 @@ class ActivityStreamTests: XCTestCase {
     func testDeletionOfAllDefaultSites() {
         let defaultSites = panel.defaultTopSites()
         defaultSites.forEach({
-            panel.hideURLFromTopSites(NSURL(string: $0.url)!)
+            panel.hideURLFromTopSites(URL(string: $0.url)!)
         })
 
         let newSites = panel.defaultTopSites()
@@ -49,7 +49,7 @@ class ActivityStreamTests: XCTestCase {
 
 // MARK: Telemetry Tests
 extension ActivityStreamTests {
-    private func expectedPayloadForEvent(event: String, source: String, position: Int) -> [String: AnyObject] {
+    fileprivate func expectedPayloadForEvent(_ event: String, source: String, position: Int) -> [String: Any] {
         return [
             "event": event,
             "page": "NEW_TAB",
@@ -57,13 +57,13 @@ extension ActivityStreamTests {
             "action_position": position,
             "app_version": AppInfo.appVersion,
             "build": AppInfo.buildNumber,
-            "locale": NSLocale.currentLocale().localeIdentifier
+            "locale": Locale.current.identifier
         ]
     }
 
-    private func assertPayload(actual: [String: AnyObject], matches: [String: AnyObject]) {
+    fileprivate func assertPayload(_ actual: [String: Any], matches: [String: Any]) {
         XCTAssertTrue(actual.count == matches.count)
-        actual.enumerate().forEach { index, element in
+        actual.enumerated().forEach { index, element in
             if let actualValue = element.1 as? Int,
                let matchesValue = matches[element.0] as? Int {
                 XCTAssertTrue(actualValue == matchesValue)
@@ -79,7 +79,7 @@ extension ActivityStreamTests {
     func testHighlightEmitsEventOnTap() {
         let mockSite = Site(url: "http://mozilla.org", title: "Mozilla")
         panel.highlights = [mockSite]
-        panel.selectItemAtIndex(0, inSection: .Highlights)
+        panel.selectItemAtIndex(0, inSection: .highlights)
 
         let pingsSent = (telemetry.eventsTracker as! MockPingClient).pingsReceived
         XCTAssertEqual(pingsSent.count, 1)
@@ -89,7 +89,7 @@ extension ActivityStreamTests {
 
     func testContextMenuOnTopSiteEmitsRemoveEvent() {
         let mockSite = Site(url: "http://mozilla.org", title: "Mozilla")
-        let topSitesContextMenu = panel.contextMenuForSite(mockSite, atIndex: 0, forSection: .TopSites, siteImage: nil, siteBGColor: nil)
+        let topSitesContextMenu = panel.contextMenuForSite(mockSite, atIndex: 0, forSection: .topSites, siteImage: nil, siteBGColor: nil)
 
         let removeAction = topSitesContextMenu?.actions.find { $0.title == Strings.RemoveFromASContextMenuTitle }
         removeAction?.handler?(removeAction!)
@@ -102,7 +102,7 @@ extension ActivityStreamTests {
 
     func testContextMenuOnHighlightsEmitsRemoveDismissEvents() {
         let mockSite = Site(url: "http://mozilla.org", title: "Mozilla")
-        let highlightsContextMenu = panel.contextMenuForSite(mockSite, atIndex: 0, forSection: .Highlights, siteImage: nil, siteBGColor: nil)
+        let highlightsContextMenu = panel.contextMenuForSite(mockSite, atIndex: 0, forSection: .highlights, siteImage: nil, siteBGColor: nil)
 
         let dismiss = highlightsContextMenu?.actions.find { $0.title == Strings.RemoveFromASContextMenuTitle }
         let delete = highlightsContextMenu?.actions.find { $0.title == Strings.DeleteFromHistoryContextMenuTitle }
@@ -139,9 +139,10 @@ extension ActivityStreamTests {
 }
 
 class MockPingClient: PingCentreClient {
-    var pingsReceived: [[String: AnyObject]] = []
 
-    func sendPing(data: [String: AnyObject], validate: Bool = true) -> Success {
+    var pingsReceived: [[String: Any]] = []
+
+    public func sendPing(_ data: [String : Any], validate: Bool) -> Success {
         pingsReceived.append(data)
         return succeed()
     }
