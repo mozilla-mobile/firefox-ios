@@ -68,7 +68,7 @@ class ProfileFileAccessor: FileAccessor {
             rootPath = (NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)[0])
         }
 
-        super.init(rootPath: URL(string: rootPath)!.appendingPathComponent(profileDirName).absoluteString)
+        super.init(rootPath: URL(fileURLWithPath: rootPath).appendingPathComponent(profileDirName).path)
     }
 }
 
@@ -240,7 +240,6 @@ open class BrowserProfile: Profile {
         self.name = localName
         self.files = ProfileFileAccessor(localName: localName)
         self.app = app
-
         self.keychain = KeychainWrapper.sharedAppContainerKeychain
 
         if clear {
@@ -250,6 +249,10 @@ open class BrowserProfile: Profile {
                 log.info("Cannot clear profile: \(error)")
             }
         }
+
+        // If the profile dir doesn't exist yet, this is first run (for this profile). The check is made here
+        // since the DB handles will create new DBs under the new profile folder.
+        let isNewProfile = files.exists("")
 
         // Setup our database handles
         self.loginsDB = BrowserDB(filename: "logins.db", secretKey: BrowserProfile.loginsKey, files: files)
@@ -262,8 +265,7 @@ open class BrowserProfile: Profile {
         notificationCenter.addObserver(self, selector: #selector(onProfileDidFinishSyncing(notification:)), name: NotificationProfileDidFinishSyncing, object: nil)
         notificationCenter.addObserver(self, selector: #selector(onPrivateDataClearedHistory(notification:)), name: NotificationPrivateDataClearedHistory, object: nil)
 
-        // If the profile dir doesn't exist yet, this is first run (for this profile).
-        if !files.exists("") {
+        if isNewProfile {
             log.info("New profile. Removing old account metadata.")
             self.removeAccountMetadata()
             self.syncManager.onNewProfile()
