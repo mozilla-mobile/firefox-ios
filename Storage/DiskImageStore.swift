@@ -68,10 +68,10 @@ open class DiskImageStore {
         }
 
         return deferDispatchAsync(queue) { () -> Success in
-            let imagePath = URL(fileURLWithPath: self.filesDir).appendingPathComponent(key).absoluteString
+            let imageURL = URL(fileURLWithPath: self.filesDir).appendingPathComponent(key)
             if let data = UIImageJPEGRepresentation(image, self.quality) {
                 do {
-                    try data.write(to: URL(fileURLWithPath: imagePath), options: .noFileProtection)
+                    try data.write(to: imageURL, options: .noFileProtection)
                     self.keys.insert(key)
                     return succeed()
                 } catch {
@@ -88,11 +88,11 @@ open class DiskImageStore {
         let keysToDelete = self.keys.subtracting(keys)
 
         for key in keysToDelete {
-            let path = URL(fileURLWithPath: filesDir).appendingPathComponent(key).absoluteString
+            let url = URL(fileURLWithPath: filesDir).appendingPathComponent(key)
             do {
-                try FileManager.default.removeItem(atPath: path)
+                try FileManager.default.removeItem(at: url)
             } catch {
-                log.warning("Failed to remove DiskImageStore item at \(path): \(error)")
+                log.warning("Failed to remove DiskImageStore item at \(url.absoluteString): \(error)")
             }
         }
 
