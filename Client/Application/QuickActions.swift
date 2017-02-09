@@ -9,9 +9,9 @@ import Shared
 import XCGLogger
 
 enum ShortcutType: String {
-    case newTab
-    case newPrivateTab
-    case openLastBookmark
+    case newTab = "NewTab"
+    case newPrivateTab = "NewPrivateTab"
+    case openLastBookmark = "OpenLastBookmark"
 
     init?(fullType: String) {
         guard let last = fullType.components(separatedBy: ".").last else { return nil }
