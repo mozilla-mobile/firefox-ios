@@ -71,11 +71,11 @@ open class AuthenticationKeychainInfo: NSObject, NSCoding {
     }
 
     public required init?(coder aDecoder: NSCoder) {
-        self.lastPasscodeValidationInterval = (aDecoder.decodeObject(forKey: "lastPasscodeValidationInterval") as? NSNumber)?.doubleValue
-        self.lockOutInterval = (aDecoder.decodeObject(forKey: "lockOutInterval") as? NSNumber)?.doubleValue
+        self.lastPasscodeValidationInterval = aDecoder.decodeAsDouble(forKey: "lastPasscodeValidationInterval")
+        self.lockOutInterval = aDecoder.decodeAsDouble(forKey: "lockOutInterval")
         self.passcode = aDecoder.decodeObject(forKey: "passcode") as? String
-        self.failedAttempts = aDecoder.decodeInteger(forKey: "failedAttempts")
-        self.useTouchID = aDecoder.decodeBool(forKey: "useTouchID")
+        self.failedAttempts = aDecoder.decodeAsInt(forKey: "failedAttempts")
+        self.useTouchID = aDecoder.decodeAsBool(forKey: "useTouchID")
         if var interval = aDecoder.decodeObject(forKey: "requiredPasscodeInterval") as? NSNumber {
             // We have updated the immediate lockout value to 2 from 0 due to timing issues with systemUptime()
             interval = interval == 0 ? 2 : interval
