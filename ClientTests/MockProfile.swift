@@ -25,10 +25,10 @@ open class MockSyncManager: SyncManager {
         return deferMaybe(SyncStatus.completed(SyncEngineStatsSession(collection: collection)))
     }
     
-    open func syncClients() -> SyncResult { return completedWithStats("clients") }
-    open func syncClientsThenTabs() -> SyncResult { return completedWithStats("clientsandtabs") }
-    open func syncHistory() -> SyncResult { return completedWithStats("history") }
-    open func syncLogins() -> SyncResult { return completedWithStats("logins") }
+    open func syncClients() -> SyncResult { return completedWithStats("mock_clients") }
+    open func syncClientsThenTabs() -> SyncResult { return completedWithStats("mock_clientsandtabs") }
+    open func syncHistory() -> SyncResult { return completedWithStats("mock_history") }
+    open func syncLogins() -> SyncResult { return completedWithStats("mock_logins") }
     open func syncEverything(why: SyncReason) -> Success {
         return succeed()
     }

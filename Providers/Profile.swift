@@ -679,27 +679,28 @@ open class BrowserProfile: Profile {
         }
 
         fileprivate func endSyncing(_ result: SyncOperationResult) {
-            // loop through status's and fill sync state
+            // loop through statuses and fill sync state
             syncLock.lock()
             defer { syncLock.unlock() }
             log.info("Ending all queued syncs.")
 
             syncDisplayState = SyncStatusResolver(engineResults: result.engineResults).resolveResults()
-            if AppConstants.MOZ_ADHOC_SYNC_REPORTING {
-                reportAdHocEndSyncingStatus(displayState: syncDisplayState, engineResults: result.engineResults)
-            }
 
-            reportSyncPingForResult(opResult: result)
+            if canSendUsageData() {
+                if AppConstants.MOZ_ADHOC_SYNC_REPORTING {
+                    reportAdHocEndSyncingStatus(displayState: syncDisplayState, engineResults: result.engineResults)
+                }
+
+                reportSyncPingForResult(opResult: result)
+            } else {
+                log.debug("Profile isn't sending usage data. Not sending sync status event.")
+            }
+            
             notifySyncing(notification: NotificationProfileDidFinishSyncing)
             syncReducer = nil
         }
 
         fileprivate func reportSyncPingForResult(opResult: SyncOperationResult) {
-            guard profile.prefs.boolForKey("settings.sendUsageData") ?? true else {
-                log.debug("Profile isn't sending usage data. Not sending sync status event.")
-                return
-            }
-
             if let engineResults = opResult.engineResults.successValue {
                 engineResults.forEach { collection, status in
                     switch status {
@@ -715,11 +716,6 @@ open class BrowserProfile: Profile {
         fileprivate func reportAdHocEndSyncingStatus(displayState: SyncDisplayState?, engineResults: Maybe<EngineResults>?) {
             // We don't send this ad hoc telemetry on the release channel.
             guard AppConstants.BuildChannel != AppBuildChannel.release else {
-                return
-            }
-
-            guard profile.prefs.boolForKey("settings.sendUsageData") ?? true else {
-                log.debug("Profile isn't sending usage data. Not sending sync status event.")
                 return
             }
 
@@ -775,6 +771,10 @@ open class BrowserProfile: Profile {
                 }
             }
 
+        }
+
+        fileprivate func canSendUsageData() -> Bool {
+            return profile.prefs.boolForKey("settings.sendUsageData") ?? true
         }
 
         private func notifySyncing(notification: Notification.Name) {
@@ -1145,9 +1145,17 @@ open class BrowserProfile: Profile {
             syncLock.lock()
             defer { syncLock.unlock() }
 
-            if !isSyncing {
+            guard let account = self.profile.account else {
+                log.info("No account to sync with.")
+                let statuses = synchronizers.map {
+                    ($0.0, SyncStatus.notStarted(.noAccount))
+                }
+                return deferMaybe(statuses)
+            }
+
+            if (!isSyncing) {
                 // A sync isn't already going on, so start another one.
-                let statsSession = SyncOperationStatsSession(why: why)
+                let statsSession = SyncOperationStatsSession(why: why, uid: account.uid, deviceID: account.deviceRegistration?.id)
                 let reducer = AsyncReducer<EngineResults, EngineTasks>(initialValue: [], queue: syncQueue) { (statuses, synchronizers)  in
                     let done = Set(statuses.map { $0.0 })
                     let remaining = synchronizers.filter { !done.contains($0.0) }
@@ -1156,7 +1164,7 @@ open class BrowserProfile: Profile {
                         return deferMaybe(statuses)
                     }
 
-                    return self.syncWith(synchronizers: remaining, statsSession: statsSession) >>== { deferMaybe(statuses + $0) }
+                    return self.syncWith(synchronizers: remaining, account: account, statsSession: statsSession) >>== { deferMaybe(statuses + $0) }
                 }
 
                 reducer.terminal.upon { results in
@@ -1181,19 +1189,8 @@ open class BrowserProfile: Profile {
         }
 
         // This SHOULD NOT be called directly: use syncSeveral instead.
-        fileprivate func syncWith(synchronizers: [(EngineIdentifier, SyncFunction)],
+        fileprivate func syncWith(synchronizers: [(EngineIdentifier, SyncFunction)], account: FirefoxAccount,
                               statsSession: SyncOperationStatsSession) -> Deferred<Maybe<[(EngineIdentifier, SyncStatus)]>> {
-            guard let account = self.profile.account else {
-                log.info("No account to sync with.")
-                let statuses = synchronizers.map {
-                    ($0.0, SyncStatus.notStarted(.noAccount))
-                }
-                return deferMaybe(statuses)
-            }
-
-            statsSession.uid = account.uid
-            statsSession.deviceID = account.deviceRegistration?.id
-
             log.info("Syncing \(synchronizers.map { $0.0 })")
             let authState = account.syncAuthState
             let delegate = self.profile.getSyncDelegate()

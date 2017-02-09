@@ -220,7 +220,7 @@ open class BaseSyncState: SyncState {
     var scratchpad: Scratchpad
 
     // TODO: 304 for i/c.
-    open func getInfoCollectionResponse() -> Deferred<Maybe<StorageResponse<InfoCollections>>> {
+    open func getInfoCollectionsResponse() -> Deferred<Maybe<StorageResponse<InfoCollections>>> {
         return self.client.getInfoCollections()
     }
 
@@ -520,7 +520,7 @@ open class InitialWithLiveToken: BaseSyncState {
     }
 
     override open func advance() -> Deferred<Maybe<SyncState>> {
-        return chain(getInfoCollectionResponse(), f: self.advanceWithInfo)
+        return chain(getInfoCollectionsResponse(), f: self.advanceWithInfo)
     }
 }
 
