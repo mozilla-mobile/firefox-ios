@@ -84,7 +84,8 @@ class Authenticator {
                 let login = logins[0]
                 credentials = login.credentials
                 let new = Login(credential: login.credentials, protectionSpace: challenge.protectionSpace)
-                loginsProvider.updateLoginByGUID(login.guid, new: new, significant: true)
+                return loginsProvider.updateLoginByGUID(login.guid, new: new, significant: true)
+                    >>> { deferMaybe(credentials) }
             }
 
             // Found a single entry that matches the scheme and host - good to go.
