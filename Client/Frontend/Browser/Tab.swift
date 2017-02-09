@@ -501,7 +501,7 @@ private class TabWebView: WKWebView, MenuHelperInterface {
         return action == MenuHelper.SelectorFindInPage
     }
 
-    @objc func menuHelperFindInPage(_ sender: Notification) {
+    @objc func menuHelperFindInPage() {
         evaluateJavaScript("getSelection().toString()") { result, _ in
             let selection = result as? String ?? ""
             self.delegate?.tabWebView(self, didSelectFindInPageForSelection: selection)

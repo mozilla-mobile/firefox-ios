@@ -5,19 +5,19 @@
 import Foundation
 
 @objc public protocol MenuHelperInterface {
-    @objc optional func menuHelperCopy(_ sender: Notification)
-    @objc optional func menuHelperOpenAndFill(_ sender: Notification)
-    @objc optional func menuHelperReveal(_ sender: Notification)
-    @objc optional func menuHelperSecure(_ sender: Notification)
-    @objc optional func menuHelperFindInPage(_ sender: Notification)
+    @objc optional func menuHelperCopy()
+    @objc optional func menuHelperOpenAndFill()
+    @objc optional func menuHelperReveal()
+    @objc optional func menuHelperSecure()
+    @objc optional func menuHelperFindInPage()
 }
 
 open class MenuHelper: NSObject {
-    open static let SelectorCopy: Selector = #selector(MenuHelperInterface.menuHelperCopy(_:))
-    open static let SelectorHide: Selector = #selector(MenuHelperInterface.menuHelperSecure(_:))
-    open static let SelectorOpenAndFill: Selector = #selector(MenuHelperInterface.menuHelperOpenAndFill(_:))
-    open static let SelectorReveal: Selector = #selector(MenuHelperInterface.menuHelperReveal(_:))
-    open static let SelectorFindInPage: Selector = #selector(MenuHelperInterface.menuHelperFindInPage(_:))
+    open static let SelectorCopy: Selector = #selector(MenuHelperInterface.menuHelperCopy)
+    open static let SelectorHide: Selector = #selector(MenuHelperInterface.menuHelperSecure)
+    open static let SelectorOpenAndFill: Selector = #selector(MenuHelperInterface.menuHelperOpenAndFill)
+    open static let SelectorReveal: Selector = #selector(MenuHelperInterface.menuHelperReveal)
+    open static let SelectorFindInPage: Selector = #selector(MenuHelperInterface.menuHelperFindInPage)
 
     open class var defaultHelper: MenuHelper {
         struct Singleton {
