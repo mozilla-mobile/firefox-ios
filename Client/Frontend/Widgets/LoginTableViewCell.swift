@@ -310,20 +310,20 @@ class LoginTableViewCell: UITableViewCell {
 // MARK: - Menu Selectors
 extension LoginTableViewCell: MenuHelperInterface {
 
-    func menuHelperReveal(_ sender: Notification) {
+    func menuHelperReveal() {
         displayDescriptionAsPassword = false
     }
 
-    func menuHelperSecure(_ sender: Notification) {
+    func menuHelperSecure() {
         displayDescriptionAsPassword = true
     }
 
-    func menuHelperCopy(_ sender: Notification) {
+    func menuHelperCopy() {
         // Copy description text to clipboard
         UIPasteboard.general.string = descriptionLabel.text
     }
 
-    func menuHelperOpenAndFill(_ sender: Notification) {
+    func menuHelperOpenAndFill() {
         delegate?.didSelectOpenAndFillForCell(self)
     }
 }
