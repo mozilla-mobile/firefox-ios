@@ -1910,7 +1910,7 @@ extension BrowserViewController: TabDelegate {
             if index < bars.count-1 {
                 // Move the bar above this one
                 let nextbar = bars[index+1] as! SnackBar
-                nextbar.snp.updateConstraints { make in
+                nextbar.snp.remakeConstraints { make in
                     // If this wasn't the bottom bar, attach to the bar below it
                     if index > 0 {
                         let bar = bars[index-1] as! SnackBar
