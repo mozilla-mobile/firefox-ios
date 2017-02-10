@@ -53,7 +53,7 @@ class MenuViewController: UIViewController {
 
             menuView.snp.remakeConstraints { make in
                 make.centerX.equalTo(view)
-                make.width.equalTo(fixedWidth)
+                make.width.equalTo(fixedWidth).priority(50)
                 make.bottom.equalTo(view)
             }
         }
@@ -126,8 +126,8 @@ class MenuViewController: UIViewController {
 
     fileprivate func setupDefaultModalMenuConstraints() {
         menuView.snp.remakeConstraints { make in
-            make.left.equalTo(view.snp.left).offset(24)
-            make.right.equalTo(view.snp.right).offset(-24)
+            make.left.equalTo(view.snp.left).offset(24).priority(25)
+            make.right.equalTo(view.snp.right).offset(-24).priority(25)
             make.bottom.equalTo(view.snp.bottom)
         }
     }
