@@ -251,7 +251,7 @@ class ErrorPageHelper {
         }
 
         components.queryItems = queryItems
-     //   webView.load(PrivilegedRequest(coder: components.url as! NSCoder) as URLRequest)
+        webView.load(PrivilegedRequest(url: components.url!) as URLRequest)
     }
 }
 
