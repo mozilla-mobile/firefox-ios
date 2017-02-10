@@ -22,7 +22,7 @@ class ProfileTest: XCTestCase {
         let authInfo = AuthenticationKeychainInfo(passcode: "1234")
         KeychainWrapper.sharedAppContainerKeychain.setAuthenticationInfo(authInfo)
         XCTAssertNotNil(KeychainWrapper.sharedAppContainerKeychain.authenticationInfo())
-        let _ = BrowserProfile(localName: "my_profile")
+        let _ = BrowserProfile(localName: "my_profile", app: nil, clear: true)
         XCTAssertNil(KeychainWrapper.sharedAppContainerKeychain.authenticationInfo())
     }
 }

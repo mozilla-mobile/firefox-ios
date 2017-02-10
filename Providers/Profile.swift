@@ -252,7 +252,7 @@ open class BrowserProfile: Profile {
 
         // If the profile dir doesn't exist yet, this is first run (for this profile). The check is made here
         // since the DB handles will create new DBs under the new profile folder.
-        let isNewProfile = files.exists("")
+        let isNewProfile = !files.exists("")
 
         // Setup our database handles
         self.loginsDB = BrowserDB(filename: "logins.db", secretKey: BrowserProfile.loginsKey, files: files)
