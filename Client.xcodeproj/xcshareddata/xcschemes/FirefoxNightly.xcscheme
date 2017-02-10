@@ -141,9 +141,6 @@
             </BuildableReference>
             <SkippedTests>
                <Test
-                  Identifier = "AuthenticationTests">
-               </Test>
-               <Test
                   Identifier = "BookmarkingTests">
                </Test>
                <Test
@@ -175,9 +172,6 @@
                </Test>
                <Test
                   Identifier = "SearchTests">
-               </Test>
-               <Test
-                  Identifier = "SecurityTests/testWindowExploit()">
                </Test>
                <Test
                   Identifier = "SettingsTests">
