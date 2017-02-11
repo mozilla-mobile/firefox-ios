@@ -72,3 +72,15 @@ extension NSData {
     }
 
 }
+
+extension String {
+    public var asciiEncodedData: NSData {
+        return self.dataUsingEncoding(NSASCIIStringEncoding, allowLossyConversion: false)!
+    }
+}
+
+extension NSData {
+    public var zeroTerminated: NSData {
+        return NSData(bytes: self.bytes, length: length + 1)
+    }
+}
