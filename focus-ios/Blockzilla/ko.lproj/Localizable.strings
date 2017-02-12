@@ -1,0 +1,189 @@
+/* Button on About screen */
+"About.learnMoreButton" = "상세정보";
+
+/* Label on About screen */
+"About.missionLabel" = "%@는 Mozilla가 만듭니다. 우리의 사명은 건전하고 개방적인 인터넷을 육성하는 것입니다.";
+
+/* Label on About screen */
+"About.privateBullet1" = "앱에서 검색 및 브라우징하기";
+
+/* Label on About screen */
+"About.privateBullet2" = "추적 차단 (또는 설정 변경으로 추적 허용)";
+
+/* Label on About screen */
+"About.privateBullet3" = "검색 기록이나 페이지 표시 내용 및 쿠키 삭제";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "사생활 보호 브라우저로 사용:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "도움말";
+
+/* Label for row in About screen */
+"About.rowRights" = "권리 보기";
+
+/* Label on About screen */
+"About.safariBullet1" = "추적 차단 및 개인 정보 보호";
+
+/* Label on About screen */
+"About.safariBullet2" = "데이터 전송량 절감을 위해 웹 폰트 차단";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "Safari 확장 기능 사용:";
+
+/* Title for the About screen */
+"About.screenTitle" = "정보";
+
+/* Label on About screen */
+"About.topLabel" = "%@로 데이터 제어가 가능합니다.";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "뒤로";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "앞으로";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "새로고침";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "설정";
+
+/* Accessibility label for the share button */
+"Browser.shareLabel" = "공유";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "중지";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "재시도";
+
+/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.callButton" = "통화";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "취소";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "메일";
+
+/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.messageTitleWithPlaceholder" = "%@를 종료합니다.";
+
+/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openAppStoreButton" = "App Store 열기";
+
+/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openMapsButton" = "지도";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.buttonLabel" = "OK! 알겠습니다!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelDescription" = "검색 중 온라인 추적을 자동으로 차단합니다. 클릭만으로 방문한 페이지, 검색 기록, 쿠키, 암호를 단말기에서 삭제할 수 있습니다.";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "누구도 감시하지 않는 자유로운 웹 여행";
+
+/* First label for product description on the home screen */
+"Home.descriptionLabel1" = "자동 사생활 보호모드 제공";
+
+/* Second label for product description on the home screen */
+"Home.descriptionLabel2" = "브라우징. 삭재. 반복";
+
+/* Label in share alert to cancel the alert */
+"Open.Cancel" = "취소";
+
+/* Label in share alert to open the URL in Firefox */
+"Open.Firefox" = "Firefox (사생활 보호모드)";
+
+/* Label in share alert to open the full system share menu */
+"Open.More" = "기타";
+
+/* Label in share alert to open the URL in Safari */
+"Open.Safari" = "Safari";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "Safari에서 컨텐츠 차단 선택";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "%@ 사용";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ 사용 안함";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "앱 설정 열기";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "다른 콘텐츠 추적기를 차단하면, 동영상이나 웹 페이지가 제대로 표시되지 않을 수 있습니다.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "아니오, 감사합니다";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "차단";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "설정";
+
+/* Title for the search engine row */
+"Settings.searchSection" = "검색엔진";
+
+/* Title for the search engine selection screen */
+"Settings.searchTitle" = "검색엔진";
+
+/* Label for Safari integration section */
+"Settings.sectionIntegration" = "통합";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for performance toggles */
+"Settings.sectionPerformance" = "성능";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "개인 정보";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAds" = "광고 추적기 차단";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAnalytics" = "분석용 추적기 차단";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "웹 폰트 차단";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockOther" = "기타 추적기 차단";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockSocial" = "소셜 추적기 차단";
+
+/* Label subtitle for toggle on main screen */
+"Settings.toggleOtherSubtitle" = "동영상이나 웹 페이지가 제대로 표시되지 않을 수 있음";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageData" = "사용 데이터 익명 전송";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "상세정보";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "취소";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "삭제";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "페이지 표시 내역이 삭제되었습니다.";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "검색어 또는 주소 입력";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "%@ 검색하기";
+

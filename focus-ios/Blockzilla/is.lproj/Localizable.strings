@@ -1,0 +1,189 @@
+/* Button on About screen */
+"About.learnMoreButton" = "Fræðast meira";
+
+/* Label on About screen */
+"About.missionLabel" = "%@ er framleitt af Mozilla. Markmið okkar er að stuðla að heilbrigðu og opnu Alneti.";
+
+/* Label on About screen */
+"About.privateBullet1" = "Leita og vafra beint í forritinu";
+
+/* Label on About screen */
+"About.privateBullet2" = "Loka á rekjara (eða uppfæra stillingar til að leyfa rekjara)";
+
+/* Label on About screen */
+"About.privateBullet3" = "Eyða til að þurrka út smákökur, leitar- og vafra feril";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "Nota sem einkavafra:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "Hjálp";
+
+/* Label for row in About screen */
+"About.rowRights" = "Rétturinn þinn";
+
+/* Label on About screen */
+"About.safariBullet1" = "Loka á rekjara fyrir aukna gagnaleynd";
+
+/* Label on About screen */
+"About.safariBullet2" = "Loka á vef leturgerðir til að minnka stærð síðunnar";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "Nota sem Safari viðauki:";
+
+/* Title for the About screen */
+"About.screenTitle" = "Um";
+
+/* Label on About screen */
+"About.topLabel" = "%@ gefur þér stjórn.";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "Til baka";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "Áfram";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "Endurhlaða";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "Stillingar";
+
+/* Accessibility label for the share button */
+"Browser.shareLabel" = "Deila";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "Stöðva";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "Reyna aftur";
+
+/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.callButton" = "Hringja";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "Hætta við";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "Tölvupóstur";
+
+/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.messageTitleWithPlaceholder" = "Þú ert að yfirgefa %@.";
+
+/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openAppStoreButton" = "Opna smáforrits verslun";
+
+/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openMapsButton" = "Opna kort";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.buttonLabel" = "OK, SAMÞYKKT!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelDescription" = "Loka sjálfvirkt á tengda rekjara á meðan þú vafrar. Snertu síðan til að eyða heimsóttum síðum, uppflettingum, smákökum og lykilorðum úr tæki þínu.";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "Vafra eins og enginn sér til.";
+
+/* First label for product description on the home screen */
+"Home.descriptionLabel1" = "Sjálfvirkt einkavafur.";
+
+/* Second label for product description on the home screen */
+"Home.descriptionLabel2" = "Vafra. Eyða. Endurtaka.";
+
+/* Label in share alert to cancel the alert */
+"Open.Cancel" = "Hætta við";
+
+/* Label in share alert to open the URL in Firefox */
+"Open.Firefox" = "Firefox (Einkavafur)";
+
+/* Label in share alert to open the full system share menu */
+"Open.More" = "Meira";
+
+/* Label in share alert to open the URL in Safari */
+"Open.Safari" = "Safari";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "Snertu Safari, veldu síðan lokun á efni";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "Virkja %@";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ er óvirkt.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "Opna smáforrits stillingu";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Að loka á aðra efnisrekjara gæti haft áhrif á sum myndbönd og vefsíður.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "Nei takk";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "Ég skil";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "Stillingar";
+
+/* Title for the search engine row */
+"Settings.searchSection" = "LEITARVÉL";
+
+/* Title for the search engine selection screen */
+"Settings.searchTitle" = "Leitarvél";
+
+/* Label for Safari integration section */
+"Settings.sectionIntegration" = "SAMÞÆTTING";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for performance toggles */
+"Settings.sectionPerformance" = "AFKÖST";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "FRIÐHELGI";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAds" = "Loka á auglýsinga rekjara";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAnalytics" = "Loka á greiningar rekjara";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Loka á vef leturgerðir";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockOther" = "Loka á aðra efnisrekjara";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockSocial" = "Loka á félagsrekjara";
+
+/* Label subtitle for toggle on main screen */
+"Settings.toggleOtherSubtitle" = "Gæti haft áhrif á sum myndbönd og vefsíður";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageData" = "Senda óauðkenndar upplýsingar um gagnanotkun";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "Fræðast meira";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "Hætta við";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "EYÐA";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "Vafra ferill þinn er eyddur.";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Leitaðu eða sláðu inn vistfang";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Leita að %@";
+

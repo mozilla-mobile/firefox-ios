@@ -340,6 +340,16 @@
 		E47F9AE91DB9329D00A93285 /* Adjust-Focus.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Adjust-Focus.plist"; sourceTree = "<group>"; };
 		E47F9AEB1DB9333200A93285 /* Adjust-Klar.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Adjust-Klar.plist"; sourceTree = "<group>"; };
 		E47F9AED1DB9338600A93285 /* AdjustIntegration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdjustIntegration.swift; sourceTree = "<group>"; };
+		E4870BEA1E50ECE200F5F491 /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = is; path = is.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		E4870BEB1E50ECE200F5F491 /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = is; path = is.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		E4870BEC1E50ECE300F5F491 /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = is; path = is.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		E4870BED1E50ECE300F5F491 /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = is; path = is.lproj/Localizable.strings; sourceTree = "<group>"; };
+		E4870BEE1E50ECE300F5F491 /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = is; path = is.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		E4870BEF1E50ECF400F5F491 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		E4870BF01E50ECF400F5F491 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		E4870BF11E50ECF400F5F491 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		E4870BF21E50ECF500F5F491 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
+		E4870BF31E50ECF500F5F491 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E4BC845C1E288D2700833B45 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E4BC845D1E288D2800833B45 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E4BC84691E288D4100833B45 /* az */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = az; path = az.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -1155,6 +1165,8 @@
 				E40FF11D1E43D43F00BA7830 /* uz */,
 				E40FF1351E464CE000BA7830 /* fil */,
 				E436961C1E4AC70F0023D5F0 /* he */,
+				E4870BED1E50ECE300F5F491 /* is */,
+				E4870BF21E50ECF500F5F491 /* ko */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -1205,6 +1217,8 @@
 				E40FF11B1E43D43F00BA7830 /* uz */,
 				E40FF1331E464CE000BA7830 /* fil */,
 				E436961B1E4AC70E0023D5F0 /* he */,
+				E4870BEB1E50ECE200F5F491 /* is */,
+				E4870BF01E50ECF400F5F491 /* ko */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -1255,6 +1269,8 @@
 				E40FF11A1E43D43F00BA7830 /* uz */,
 				E40FF1321E464CDF00BA7830 /* fil */,
 				E436961A1E4AC70E0023D5F0 /* he */,
+				E4870BEA1E50ECE200F5F491 /* is */,
+				E4870BEF1E50ECF400F5F491 /* ko */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -1305,6 +1321,8 @@
 				E40FF11C1E43D43F00BA7830 /* uz */,
 				E40FF1341E464CE000BA7830 /* fil */,
 				E436961D1E4AC70F0023D5F0 /* he */,
+				E4870BEC1E50ECE300F5F491 /* is */,
+				E4870BF11E50ECF400F5F491 /* ko */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -1355,6 +1373,8 @@
 				E40FF11E1E43D43F00BA7830 /* uz */,
 				E40FF1361E464CE000BA7830 /* fil */,
 				E436961E1E4AC70F0023D5F0 /* he */,
+				E4870BEE1E50ECE300F5F491 /* is */,
+				E4870BF31E50ECF500F5F491 /* ko */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";

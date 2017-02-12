@@ -1,0 +1,12 @@
+/* (No Commment) */
+"NSCameraUsageDescription" = "사진을 촬영하여 업로드 할 수 있습니다.";
+
+/* (No Commment) */
+"NSLocationWhenInUseUsageDescription" = "현재 웹 사이트가 여러분의 위치 정보를 요구하고 있습니다.";
+
+/* (No Commment) */
+"NSMicrophoneUsageDescription" = "동영상을 촬영하여 업로드 할 수 있습니다.";
+
+/* (No Commment) */
+"NSPhotoLibraryUsageDescription" = "사진을 촬영하여 업로드 할 수 있습니다.";
+
