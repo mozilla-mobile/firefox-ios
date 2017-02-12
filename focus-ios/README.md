@@ -1,8 +1,4 @@
-> A lot of info in this README has not been updated for the current version of Firefox Focus, 2.0. We will do that soon.
-
-![Focus by Firefox](https://raw.githubusercontent.com/mozilla/focus/master/README.png)
-
-Focus by Firefox is a free content blocker for Safari users on iOS 9 that gives users greater control of their mobile Web experience. Focus by Firefox puts users in control of their privacy by allowing them to block categories of trackers such as those used for ads, analytics and social media. Focus by Firefox may also increase performance and reduce mobile data usage by blocking Web fonts.
+> SOme info in this README has not been updated for the current version of Firefox Focus (and Firefox Klar) 3.0. We will do that soon. The code in this repository however is fully up to date and represents the code of the Firefox Focus and Klar applications that are found on the iOS App Store.
 
 Download on the [App Store](https://itunes.apple.com/app/id1055677337).
 
