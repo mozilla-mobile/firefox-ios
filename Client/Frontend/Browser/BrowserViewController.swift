@@ -3046,6 +3046,10 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             popoverPresentationController.permittedArrowDirections = .any
         }
 
+        if actionSheetController.popoverPresentationController != nil {
+            displayedPopoverController = actionSheetController
+        }
+
         actionSheetController.title = dialogTitle?.ellipsize(maxLength: ActionSheetTitleMaxLength)
         let cancelAction = UIAlertAction(title: UIConstants.CancelString, style: UIAlertActionStyle.cancel, handler: nil)
         actionSheetController.addAction(cancelAction)
