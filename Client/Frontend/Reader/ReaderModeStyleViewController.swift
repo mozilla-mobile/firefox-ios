@@ -143,7 +143,7 @@ class ReaderModeStyleViewController: UIViewController {
         slider.addTarget(self, action: #selector(ReaderModeStyleViewController.SELchangeBrightness(_:)), for: UIControlEvents.valueChanged)
 
         slider.snp.makeConstraints { make in
-            make.center.equalTo(brightnessRow.center)
+            make.center.equalTo(brightnessRow)
             make.width.equalTo(ReaderModeStyleViewControllerUX.BrightnessSliderWidth)
         }
 
