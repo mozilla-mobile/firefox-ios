@@ -13,50 +13,16 @@ func identity<T>(x: T) -> T {
     return x
 }
 
-private class MockBackoffStorage: BackoffStorage {
-    var serverBackoffUntilLocalTimestamp: Timestamp?
-
-    func clearServerBackoff() {
-        serverBackoffUntilLocalTimestamp = nil
-    }
-
-    func isInBackoff(_ now: Timestamp) -> Timestamp? {
-        return nil
-    }
-}
-
-// Non-encrypting 'encrypter'.
-internal func getEncrypter() -> RecordEncrypter<CleartextPayloadJSON> {
-    let serializer: (Record<CleartextPayloadJSON>) -> JSON? = { $0.payload.json }
-    let factory: (String) -> CleartextPayloadJSON = { CleartextPayloadJSON($0) }
-    return RecordEncrypter(serializer: serializer, factory: factory)
-}
-
 class DownloadTests: XCTestCase {
-    func getClient(server: MockSyncServer) -> Sync15StorageClient? {
-        guard let url = server.baseURL.asURL else {
-            XCTFail("Couldn't get URL.")
-            return nil
-        }
-
-        let authorizer: Authorizer = identity
-        let queue = DispatchQueue.global(qos: DispatchQoS.background.qosClass)
-        print("URL: \(url)")
-        return Sync15StorageClient(serverURI: url, authorizer: authorizer, workQueue: queue, resultQueue: queue, backoff: MockBackoffStorage())
-    }
-
-    func getServer() -> MockSyncServer {
-        let server = MockSyncServer(username: "1234567")
+    func loadEmptyBookmarksIntoServer(server: MockSyncServer) {
         server.storeRecords(records: [], inCollection: "bookmarks")
-        server.start()
-        return server
     }
 
     func testBasicDownload() {
-        let server = getServer()
+        let server = getServer(preStart: loadEmptyBookmarksIntoServer)
         server.storeRecords(records: [], inCollection: "bookmarks")
 
-        let storageClient = getClient(server: server)!
+        let storageClient = getClient(server: server)
         let bookmarksClient = storageClient.clientForCollection("bookmarks", encrypter: getEncrypter())
 
         let expectation = self.expectation(description: "Waiting for result.")
@@ -77,10 +43,11 @@ class DownloadTests: XCTestCase {
         let ts2: Timestamp = 1326254125650
         let rec2 = MockSyncServer.makeValidEnvelope(guid: guid2, modified: ts2)
 
-        let server = getServer()
+        let server = getServer(preStart: loadEmptyBookmarksIntoServer)
+
         server.storeRecords(records: [rec1], inCollection: "clients", now: ts1)
 
-        let storageClient = getClient(server: server)!
+        let storageClient = getClient(server: server)
         let bookmarksClient = storageClient.clientForCollection("clients", encrypter: getEncrypter())
         let prefs = MockProfilePrefs()
 
@@ -101,7 +68,7 @@ class DownloadTests: XCTestCase {
         XCTAssertEqual(batcher.go(ic1, limit: 1).value.successValue, DownloadEndState.noNewData)
 
         // More records. Start again.
-        batcher.reset().value
+        let _ = batcher.reset().value
 
         let ic2 = InfoCollections(collections: ["clients": ts2])
         server.storeRecords(records: [rec2], inCollection: "clients", now: ts2)

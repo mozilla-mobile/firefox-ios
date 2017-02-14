@@ -90,49 +90,35 @@ open class LoginsSynchronizer: IndependentRecordSynchronizer, Synchronizer {
     }
 
     func applyIncomingToStorage(_ storage: SyncableLogins, records: [Record<LoginPayload>], fetched: Timestamp) -> Success {
-        var stats = SyncDownloadStats()
-
         return self.applyIncomingToStorage(records, fetched: fetched) { rec in
-            let recordApplyResult: (Maybe<()>) -> Success = { result in
-                result.isSuccess ? (stats.succeeded += 1) : (stats.failed += 1)
-                return Deferred(value: result)
-            }
-
             let guid = rec.id
             let payload = rec.payload
 
             guard payload.isValid() else {
                 log.warning("Login record \(guid) is invalid. Skipping.")
-                stats.failed += 1
                 return succeed()
             }
 
             // We apply deletions immediately. That might not be exactly what we want -- perhaps you changed
             // a password locally after deleting it remotely -- but it's expedient.
             if payload.deleted {
-                return storage.deleteByGUID(guid, deletedAt: rec.modified).bind(recordApplyResult)
+                return storage.deleteByGUID(guid, deletedAt: rec.modified)
             }
 
-            stats.applied += 1
-            return storage.applyChangedLogin(self.getLogin(rec)).bind(recordApplyResult)
-                >>> effect({ self.statsSession.recordDownload(stats: stats) })
+            return storage.applyChangedLogin(self.getLogin(rec))
         }
     }
 
     fileprivate func uploadChangedRecords<T>(_ deleted: Set<GUID>, modified: Set<GUID>, records: [Record<T>], lastTimestamp: Timestamp, storage: SyncableLogins, withServer storageClient: Sync15CollectionClient<T>) -> Success {
-
-        var stats = SyncUploadStats()
         let onUpload: (POSTResult, Timestamp?) -> DeferredTimestamp = { result, lastModified in
-            stats.sentFailed += result.failed.count
             let uploaded = Set(result.success)
             return storage.markAsDeleted(uploaded.intersection(deleted)) >>> { storage.markAsSynchronized(uploaded.intersection(modified), modified: lastModified ?? lastTimestamp) }
         }
-        stats.sent += records.count
+        
         return uploadRecords(records,
                              lastTimestamp: lastTimestamp,
                              storageClient: storageClient,
-                             onUpload: onUpload)
-            >>> effect({ self.statsSession.recordUpload(stats: stats) })
+                             onUpload: onUpload) >>> succeed
     }
 
     // Find any records for which a local overlay exists. If we want to be really precise,

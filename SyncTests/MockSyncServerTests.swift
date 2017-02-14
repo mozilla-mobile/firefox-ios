@@ -9,18 +9,6 @@ import UIKit
 
 import XCTest
 
-private class MockBackoffStorage: BackoffStorage {
-    var serverBackoffUntilLocalTimestamp: Timestamp?
-
-    func clearServerBackoff() {
-        serverBackoffUntilLocalTimestamp = nil
-    }
-
-    func isInBackoff(_ now: Timestamp) -> Timestamp? {
-        return nil
-    }
-}
-
 class MockSyncServerTests: XCTestCase {
     var server: MockSyncServer!
     var client: Sync15StorageClient!

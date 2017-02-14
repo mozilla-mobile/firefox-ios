@@ -46,6 +46,35 @@ func makeHistoryRecord(_ place: Place, visits: [Visit]) -> Record<HistoryPayload
     return Record<HistoryPayload>(id: id, payload: payload, modified: modified, sortindex: sortindex, ttl: ttl)
 }
 
+extension SyncableHistory {
+    func applyRecord(_ rec: Record<HistoryPayload>) -> Success {
+        let guid = rec.id
+        let payload = rec.payload
+        let modified = rec.modified
+
+        // We apply deletions immediately. Yes, this will throw away local visits
+        // that haven't yet been synced. That's how Sync works, alas.
+        if payload.deleted {
+            return deleteByGUID(guid, deletedAt: modified)
+        }
+
+        // It's safe to apply other remote records, too -- even if we re-download, we know
+        // from our local cached server timestamp on each record that we've already seen it.
+        // We have to reconcile on-the-fly: we're about to overwrite the server record, which
+        // is our shared parent.
+        let place = rec.payload.asPlace()
+
+        if isIgnoredURL(place.url) {
+            log.debug("Ignoring incoming record \(guid) because its URL is one we wish to ignore.")
+            return succeed()
+        }
+
+        let placeThenVisits = insertOrUpdatePlace(place, modified: modified)
+                          >>> { self.storeRemoteVisits(payload.visits, forGUID: guid) }
+        return placeThenVisits
+    }
+}
+
 open class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
     public required init(scratchpad: Scratchpad, delegate: SyncDelegate, basePrefs: Prefs) {
         super.init(scratchpad: scratchpad, delegate: delegate, basePrefs: basePrefs, collection: "history")
@@ -81,67 +110,12 @@ open class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
     // 3. bulkInsert all failed updates in one go.
     // 4. Store all remote visits for all places in one go, constructing a single sequence of visits.
     func applyIncomingToStorage(_ storage: SyncableHistory, records: [Record<HistoryPayload>]) -> Success {
-        var stats = SyncDownloadStats()
-
-        // Skip over at most this many failing records before aborting the sync.
-        let maskSomeFailures = self.mask(3)
-
-        // TODO: it'd be nice to put this in an extension on SyncableHistory. Waiting for Swift 2.0...
-        func applyRecord(_ rec: Record<HistoryPayload>) -> Success {
-            let guid = rec.id
-            let payload = rec.payload
-            let modified = rec.modified
-
-            // We apply deletions immediately. Yes, this will throw away local visits
-            // that haven't yet been synced. That's how Sync works, alas.
-            if payload.deleted {
-                stats.applied += 1
-                return storage.deleteByGUID(guid, deletedAt: modified).bind({ result in
-                    if result.isSuccess {
-                        stats.succeeded += 1
-                    } else {
-                        stats.failed += 1
-                    }
-                    return Deferred(value: result)
-                }).bind(maskSomeFailures)
-            }
-
-            // It's safe to apply other remote records, too -- even if we re-download, we know
-            // from our local cached server timestamp on each record that we've already seen it.
-            // We have to reconcile on-the-fly: we're about to overwrite the server record, which
-            // is our shared parent.
-            let place = rec.payload.asPlace()
-
-            if isIgnoredURL(place.url) {
-                log.debug("Ignoring incoming record \(guid) because its URL is one we wish to ignore.")
-                return succeed()
-            }
-
-            let placeThenVisits = storage.insertOrUpdatePlace(place, modified: modified)
-                              >>> { storage.storeRemoteVisits(payload.visits, forGUID: guid) }
-            return placeThenVisits.map({ result in
-                stats.applied += 1
-                if result.isFailure {
-                    let reason = result.failureValue?.description ?? "unknown reason"
-                    log.error("Record application failed: \(reason)")
-                    stats.failed += 1
-                } else {
-                    stats.succeeded += 1
-                }
-                return result
-            }).bind(maskSomeFailures)
-        }
-
-        return self.applyIncomingRecords(records, apply: applyRecord)
-            >>> effect({
-                self.statsSession.recordDownload(stats: stats)
-            })
+        let maskSomeFailures = mask(3)
+        return self.applyIncomingRecords(records, apply: storage.applyRecord).bind(maskSomeFailures)
     }
 
     fileprivate func uploadModifiedPlaces(_ places: [(Place, [Visit])], lastTimestamp: Timestamp, fromStorage storage: SyncableHistory, withServer storageClient: Sync15CollectionClient<HistoryPayload>) -> DeferredTimestamp {
         log.info("Preparing upload…")
-
-        var stats = SyncUploadStats()
 
         // Build sequences of 1000 history items, sequence by sequence
         // These will be uploaded in smaller batches by the upload batcher, but we chunk here
@@ -150,9 +124,7 @@ open class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
         let perChunk: (ArraySlice<(Place, [Visit])>, Timestamp) -> DeferredTimestamp = { (records, timestamp) in
             let recs = records.map(makeHistoryRecord)
             log.info("Uploading \(recs.count) history items…")
-            stats.sent += recs.count
             return self.uploadRecords(recs, lastTimestamp: timestamp, storageClient: storageClient) { result, lastModified in
-                stats.sentFailed += result.failed.count
                 // We don't do anything with failed.
                 return storage.markAsSynchronized(result.success, modified: lastModified ?? timestamp)
             }
@@ -160,20 +132,16 @@ open class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
 
         let start = deferMaybe(lastTimestamp)
         return walk(toUpload, start: start, f: perChunk)
-                >>== effect({ _ in self.statsSession.recordUpload(stats: stats) })
     }
 
     fileprivate func uploadDeletedPlaces(_ guids: [GUID], lastTimestamp: Timestamp, fromStorage storage: SyncableHistory, withServer storageClient: Sync15CollectionClient<HistoryPayload>) -> DeferredTimestamp {
         let records = guids.map(makeDeletedHistoryRecord)
-        var stats = SyncUploadStats()
-        stats.sent += records.count
         
         // Deletions are smaller, so upload 100 at a time.
         return self.uploadRecords(records, lastTimestamp: lastTimestamp, storageClient: storageClient) { result, lastModified in
-            stats.sentFailed += result.failed.count
             return storage.markAsDeleted(result.success)
                 >>> always(lastModified ?? lastTimestamp)
-        } >>== effect({ _ in self.statsSession.recordUpload(stats: stats) })
+        }
     }
 
     fileprivate func uploadOutgoingFromStorage(_ storage: SyncableHistory, lastTimestamp: Timestamp, withServer storageClient: Sync15CollectionClient<HistoryPayload>) -> Success {
