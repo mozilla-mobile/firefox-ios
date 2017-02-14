@@ -444,6 +444,17 @@ class Tab: NSObject {
     func setNightMode(_ enabled: Bool) {
         webView?.evaluateJavaScript("window.__firefox__.NightMode.setEnabled(\(enabled))", completionHandler: nil)
     }
+
+    func injectUserScriptWith(fileName: String, type: String = "js", injectionTime: WKUserScriptInjectionTime = .atDocumentEnd, mainFrameOnly: Bool = true) {
+        guard let webView = self.webView else {
+            return
+        }
+        if let path = Bundle.main.path(forResource: fileName, ofType: type),
+            let source = try? String(contentsOfFile: path) {
+            let userScript = WKUserScript(source: source, injectionTime: injectionTime, forMainFrameOnly: mainFrameOnly)
+            webView.configuration.userContentController.addUserScript(userScript)
+        }
+    }
 }
 
 extension Tab: TabWebViewDelegate {

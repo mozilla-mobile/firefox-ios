@@ -345,7 +345,7 @@ open class BrowserProfile: Profile {
             return
         }
 
-        guard let metadataDict = notification.userInfo?["metadata"] as? [String: AnyObject],
+        guard let metadataDict = notification.userInfo?["metadata"] as? [String: Any],
               let pageURL = (metadataDict["url"] as? String)?.asURL,
               let pageMetadata = PageMetadata.fromDictionary(metadataDict) else {
             log.debug("Metadata notification doesn't contain any metadata!")

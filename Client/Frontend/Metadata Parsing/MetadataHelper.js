@@ -11,7 +11,13 @@ if (!window.__firefox__) {
 var MetadataWrapper = function () {
 
     function extractMetadata() {
+        if (window.__firefox__.pageMetadata) {
+            webkit.messageHandlers.metadataMessageHandler.postMessage(window.__firefox__.pageMetadata);
+            return;
+        }
+
         var metadata = metadataparser.getMetadata(window.document, window.location.href, metadataparser.metadataRules);
+        window.__firefox__.pageMetadata = metadata;
         webkit.messageHandlers.metadataMessageHandler.postMessage(metadata);
     }
 
