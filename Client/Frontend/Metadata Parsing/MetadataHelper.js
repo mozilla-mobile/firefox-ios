@@ -29,7 +29,7 @@ var MetadataWrapper = function () {
         if (iconURL) {
             getDataUri(iconURL, function(dataURI) {
                 if (dataURI) {
-                    metadata["icon_data_url"] = dataURI;
+                    metadata["icon_data_uri"] = dataURI;
                 }
                 if (imageLoaded) {
                     metadataCallback(metadata);
@@ -45,7 +45,7 @@ var MetadataWrapper = function () {
         if (imageURL) {
             getDataUri(imageURL, function(dataURI) {
                 if (dataURI) {
-                    metadata["image_data_url"] = dataURI;
+                    metadata["image_data_uri"] = dataURI;
                 }
                 if (iconLoaded) {
                     metadataCallback(metadata);
