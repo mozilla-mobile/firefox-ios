@@ -734,13 +734,12 @@ extension TabManager {
                 }
             )
         }
+        isRestoring = false
 
         if count == 0 {
             let tab = addTab()
             selectTab(tab)
         }
-
-        isRestoring = false
     }
     
     func restoreTabs(_ savedTabs: [Tab]) {
