@@ -27,58 +27,22 @@ var MetadataWrapper = function () {
         }
 
         var metadata = metadataparser.getMetadata(window.document, window.location.href, metadataparser.metadataRules);
-
-        var iconURL = metadata["icon_url"];
         var imageURL = metadata["image_url"];
-        var iconLoaded = false, imageLoaded = false
-        if (iconURL) {
-            if (isDataURI(iconURL)) {
-                metadata["icon_data_uri"] = iconURL;
-                if (imageLoaded) {
-                    metadataCallback(metadata);
-                } else {
-                    iconLoaded = true
-                }
-            } else {
-                getDataUri(iconURL, function(dataURI) {
-                    if (dataURI) {
-                        metadata["icon_data_uri"] = dataURI;
-                    }
-                    if (imageLoaded) {
-                        metadataCallback(metadata);
-                    } else {
-                        iconLoaded = true
-                    }
-                });
-            }
-        } 
-        else { 
-            iconLoaded = true; 
-        }
 
         if (imageURL) {
             if (isDataURI(imageURL)) {
                 metadata["image_data_uri"] = imageURL;
-                if (imageLoaded) {
-                    metadataCallback(metadata);
-                } else {
-                    imageLoaded = true
-                }
+                metadataCallback(metadata);
             } else {
                 getDataUri(imageURL, function(dataURI) {
                     if (dataURI) {
                         metadata["image_data_uri"] = dataURI;
                     }
-                    if (iconLoaded) {
-                        metadataCallback(metadata);
-                    } else {
-                        imageLoaded = true
-                    }
+                    metadataCallback(metadata);
                 });
             }
         } 
-        else if (iconLoaded) { 
-            imageLoaded = true; 
+        else { 
             metadataCallback(metadata);
         }
 

@@ -7,8 +7,6 @@ import UIKit
 import WebImage
 
 enum MetadataKeys: String {
-    case iconURL = "icon_url"
-    case iconDataURI = "icon_data_uri"
     case imageURL = "image_url"
     case imageDataURI = "image_data_uri"
     case pageURL = "url"
@@ -25,23 +23,20 @@ public struct PageMetadata {
     public let id: Int?
     public let siteURL: String
     public let mediaURL: String?
-    public let iconURL: String?
     public let title: String?
     public let description: String?
     public let type: String?
     public let providerName: String?
 
-    public init(id: Int?, siteURL: String, mediaURL: String?, iconURL: String?, title: String?, description: String?, type: String?, providerName: String?, iconDataURI: String?, mediaDataURI: String?) {
+    public init(id: Int?, siteURL: String, mediaURL: String?, title: String?, description: String?, type: String?, providerName: String?, mediaDataURI: String?) {
         self.id = id
         self.siteURL = siteURL
         self.mediaURL = mediaURL
-        self.iconURL = iconURL
         self.title = title
         self.description = description
         self.type = type
         self.providerName = providerName
 
-        self.cacheImage(fromDataURI: iconDataURI, forURL: iconURL)
         self.cacheImage(fromDataURI: mediaDataURI, forURL: mediaURL)
     }
 
@@ -50,10 +45,9 @@ public struct PageMetadata {
             return nil
         }
 
-        return PageMetadata(id: nil, siteURL: siteURL, mediaURL: dict[MetadataKeys.imageURL.rawValue] as? String, iconURL: dict[MetadataKeys.iconURL.rawValue] as? String,
+        return PageMetadata(id: nil, siteURL: siteURL, mediaURL: dict[MetadataKeys.imageURL.rawValue] as? String,
                             title: dict[MetadataKeys.title.rawValue] as? String, description: dict[MetadataKeys.description.rawValue] as? String,
-                            type: dict[MetadataKeys.type.rawValue] as? String, providerName: dict[MetadataKeys.provider.rawValue] as? String,
-                            iconDataURI: dict[MetadataKeys.iconDataURI.rawValue] as? String, mediaDataURI: dict[MetadataKeys.imageDataURI.rawValue] as? String)
+                            type: dict[MetadataKeys.type.rawValue] as? String, providerName: dict[MetadataKeys.provider.rawValue] as? String, mediaDataURI: dict[MetadataKeys.imageDataURI.rawValue] as? String)
     }
 
     fileprivate func cacheImage(fromDataURI dataURI: String?, forURL urlString: String?) {
