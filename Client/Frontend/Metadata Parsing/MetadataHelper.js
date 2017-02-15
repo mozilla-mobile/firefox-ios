@@ -9,6 +9,11 @@ if (!window.__firefox__) {
 }
 
 var MetadataWrapper = function () {
+    var dataURIRegex = /^\s*data:([a-z]+\/[a-z]+(;[a-z\-]+\=[a-z\-]+)?)?(;base64)?,[a-z0-9\!\$\&\'\,\(\)\*\+\,\;\=\-\.\_\~\:\@\/\?\%\s]*\s*$/i;
+    
+    function isDataURI(s) {
+        return !!s.match(dataURIRegex);
+    }
 
     function extractMetadata() {
         if (window.__firefox__.pageMetadata) {
@@ -27,32 +32,50 @@ var MetadataWrapper = function () {
         var imageURL = metadata["image_url"];
         var iconLoaded = false, imageLoaded = false
         if (iconURL) {
-            getDataUri(iconURL, function(dataURI) {
-                if (dataURI) {
-                    metadata["icon_data_uri"] = dataURI;
-                }
+            if (isDataURI(iconURL)) {
+                metadata["icon_data_uri"] = iconURL;
                 if (imageLoaded) {
                     metadataCallback(metadata);
                 } else {
                     iconLoaded = true
                 }
-            });
+            } else {
+                getDataUri(iconURL, function(dataURI) {
+                    if (dataURI) {
+                        metadata["icon_data_uri"] = dataURI;
+                    }
+                    if (imageLoaded) {
+                        metadataCallback(metadata);
+                    } else {
+                        iconLoaded = true
+                    }
+                });
+            }
         } 
         else { 
             iconLoaded = true; 
         }
 
         if (imageURL) {
-            getDataUri(imageURL, function(dataURI) {
-                if (dataURI) {
-                    metadata["image_data_uri"] = dataURI;
-                }
-                if (iconLoaded) {
+            if (isDataURI(imageURL)) {
+                metadata["image_data_uri"] = imageURL;
+                if (imageLoaded) {
                     metadataCallback(metadata);
                 } else {
                     imageLoaded = true
                 }
-            });
+            } else {
+                getDataUri(imageURL, function(dataURI) {
+                    if (dataURI) {
+                        metadata["image_data_uri"] = dataURI;
+                    }
+                    if (iconLoaded) {
+                        metadataCallback(metadata);
+                    } else {
+                        imageLoaded = true
+                    }
+                });
+            }
         } 
         else if (iconLoaded) { 
             imageLoaded = true; 
@@ -60,10 +83,6 @@ var MetadataWrapper = function () {
         }
 
     }
-
-    return {
-        extractMetadata: extractMetadata
-    };
 
     function getDataUri(url, callback) {
         var image = new Image();
