@@ -41,21 +41,8 @@ public struct PageMetadata {
         self.type = type
         self.providerName = providerName
 
-        if let dataURI = iconDataURI,
-            let dataURL = URL(string: dataURI),
-            let data = try? Data(contentsOf: dataURL),
-            let iconImage = UIImage(data: data) {
-
-            self.cacheImage(image: iconImage, forURL: iconURL!)
-        }
-
-        if let dataURI = mediaDataURI,
-            let dataURL = URL(string: dataURI),
-            let data = try? Data(contentsOf: dataURL),
-            let mediaImage = UIImage(data: data) {
-            
-            self.cacheImage(image: mediaImage, forURL: mediaURL!)
-        }
+        self.cacheImage(fromDataURI: iconDataURI, forURL: iconURL)
+        self.cacheImage(fromDataURI: mediaDataURI, forURL: mediaURL)
     }
 
     public static func fromDictionary(_ dict: [String: Any]) -> PageMetadata? {
@@ -69,8 +56,34 @@ public struct PageMetadata {
                             iconDataURI: dict[MetadataKeys.iconDataURI.rawValue] as? String, mediaDataURI: dict[MetadataKeys.imageDataURI.rawValue] as? String)
     }
 
-    fileprivate func cacheImage(image: UIImage, forURL url: String) {
+    fileprivate func cacheImage(fromDataURI dataURI: String?, forURL urlString: String?) {
+        if let urlString = urlString,
+            let url = URL(string: urlString) {
+            if let dataURI = dataURI,
+                let dataURL = URL(string: dataURI),
+                let data = try? Data(contentsOf: dataURL),
+                let image = UIImage(data: data) {
+
+                self.cache(image: image, forURL: url)
+            } else {
+                // download image direct from URL
+                self.downloadAndCache(fromURL: url)
+            }
+        }
+    }
+
+    fileprivate func downloadAndCache(fromURL webUrl: URL) {
         let imageManager = SDWebImageManager.shared()
-        imageManager?.saveImage(toCache: image, for: URL(string: url)!)
+        let _ = imageManager?.downloadImage(with: webUrl, options: SDWebImageOptions.continueInBackground, progress: nil) { (image, error, cacheType, success, url) in
+            guard let image = image else {
+                return
+            }
+            self.cache(image: image, forURL: webUrl)
+        }
+    }
+
+    fileprivate func cache(image: UIImage, forURL url: URL) {
+        let imageManager = SDWebImageManager.shared()
+        imageManager?.saveImage(toCache: image, for: url)
     }
 }
