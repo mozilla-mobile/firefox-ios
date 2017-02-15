@@ -1910,7 +1910,7 @@ extension BrowserViewController: TabDelegate {
             if index < bars.count-1 {
                 // Move the bar above this one
                 let nextbar = bars[index+1] as! SnackBar
-                nextbar.snp.remakeConstraints { make in
+                nextbar.snp.makeConstraints { make in
                     // If this wasn't the bottom bar, attach to the bar below it
                     if index > 0 {
                         let bar = bars[index-1] as! SnackBar
@@ -1929,7 +1929,7 @@ extension BrowserViewController: TabDelegate {
 
     fileprivate func finishAddingBar(_ bar: SnackBar) {
         snackBars.addSubview(bar)
-        bar.snp.remakeConstraints { make in
+        bar.snp.makeConstraints { make in
             // If there are already bars showing, add this on top of them
             let bars = self.snackBars.subviews
 
