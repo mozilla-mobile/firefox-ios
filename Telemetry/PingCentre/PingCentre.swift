@@ -16,13 +16,13 @@ public struct PingCentre {
     public static func clientForTopic(_ topic: PingCentreTopic, clientID: String) -> PingCentreClient {
         switch AppConstants.BuildChannel {
         case .developer:
-            fallthrough
+            return DefaultPingCentreImpl(topic: topic, endpoint: .staging, clientID: clientID)
         case .nightly:
             fallthrough
         case .aurora:
             fallthrough
         case .beta:
-            return DefaultPingCentreImpl(topic: topic, endpoint: .staging, clientID: clientID)
+            fallthrough
         case .release:
             return DefaultPingCentreImpl(topic: topic, endpoint: .production, clientID: clientID)
         }
