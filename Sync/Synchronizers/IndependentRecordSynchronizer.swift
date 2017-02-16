@@ -41,7 +41,6 @@ open class IndependentRecordSynchronizer: TimestampedSingleCollectionSynchronize
         return { record in
             var stats = SyncDownloadStats()
             stats.applied = 1
-
             return apply(record).bind({ result in
                 if result.isSuccess {
                     stats.succeeded = 1

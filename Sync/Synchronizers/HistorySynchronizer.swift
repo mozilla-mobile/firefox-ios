@@ -108,7 +108,7 @@ open class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
             }
 
             let placeThenVisits = storage.insertOrUpdatePlace(place, modified: modified)
-                >>> { storage.storeRemoteVisits(payload.visits, forGUID: guid) }
+                              >>> { storage.storeRemoteVisits(payload.visits, forGUID: guid) }
             return placeThenVisits.map({ result in
                 if result.isFailure {
                     let reason = result.failureValue?.description ?? "unknown reason"
@@ -142,16 +142,18 @@ open class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
     }
 
     fileprivate func uploadDeletedPlaces(_ guids: [GUID], lastTimestamp: Timestamp, fromStorage storage: SyncableHistory, withServer storageClient: Sync15CollectionClient<HistoryPayload>) -> DeferredTimestamp {
+
         let records = guids.map(makeDeletedHistoryRecord)
 
         // Deletions are smaller, so upload 100 at a time.
         return self.uploadRecords(records, lastTimestamp: lastTimestamp, storageClient: storageClient) { result, lastModified in
-            return storage.markAsDeleted(result.success) >>> always(lastModified ?? lastTimestamp)
+            storage.markAsDeleted(result.success) >>> always(lastModified ?? lastTimestamp)
         }
     }
 
     fileprivate func uploadOutgoingFromStorage(_ storage: SyncableHistory, lastTimestamp: Timestamp, withServer storageClient: Sync15CollectionClient<HistoryPayload>) -> Success {
         var workWasDone = false
+
         let uploadDeleted: (Timestamp) -> DeferredTimestamp = { timestamp in
             storage.getDeletedHistoryToUpload()
             >>== { guids in
