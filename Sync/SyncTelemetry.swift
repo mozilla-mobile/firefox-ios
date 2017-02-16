@@ -77,7 +77,7 @@ public class StatsSession {
 // Stats about a single engine's sync
 public class SyncEngineStatsSession: StatsSession {
     public let collection: String
-    public var failureReason: AnyObject?
+    public var failureReason: Any?
     public var validationStats: ValidationStats?
 
     private(set) var uploadStats: SyncUploadStats

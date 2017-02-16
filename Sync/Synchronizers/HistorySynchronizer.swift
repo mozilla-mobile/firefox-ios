@@ -46,35 +46,6 @@ func makeHistoryRecord(_ place: Place, visits: [Visit]) -> Record<HistoryPayload
     return Record<HistoryPayload>(id: id, payload: payload, modified: modified, sortindex: sortindex, ttl: ttl)
 }
 
-extension SyncableHistory {
-    func applyRecord(_ rec: Record<HistoryPayload>) -> Success {
-        let guid = rec.id
-        let payload = rec.payload
-        let modified = rec.modified
-
-        // We apply deletions immediately. Yes, this will throw away local visits
-        // that haven't yet been synced. That's how Sync works, alas.
-        if payload.deleted {
-            return deleteByGUID(guid, deletedAt: modified)
-        }
-
-        // It's safe to apply other remote records, too -- even if we re-download, we know
-        // from our local cached server timestamp on each record that we've already seen it.
-        // We have to reconcile on-the-fly: we're about to overwrite the server record, which
-        // is our shared parent.
-        let place = rec.payload.asPlace()
-
-        if isIgnoredURL(place.url) {
-            log.debug("Ignoring incoming record \(guid) because its URL is one we wish to ignore.")
-            return succeed()
-        }
-
-        let placeThenVisits = insertOrUpdatePlace(place, modified: modified)
-                          >>> { self.storeRemoteVisits(payload.visits, forGUID: guid) }
-        return placeThenVisits
-    }
-}
-
 open class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
     public required init(scratchpad: Scratchpad, delegate: SyncDelegate, basePrefs: Prefs) {
         super.init(scratchpad: scratchpad, delegate: delegate, basePrefs: basePrefs, collection: "history")
@@ -110,8 +81,44 @@ open class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
     // 3. bulkInsert all failed updates in one go.
     // 4. Store all remote visits for all places in one go, constructing a single sequence of visits.
     func applyIncomingToStorage(_ storage: SyncableHistory, records: [Record<HistoryPayload>]) -> Success {
-        let maskSomeFailures = mask(3)
-        return self.applyIncomingRecords(records, apply: storage.applyRecord).bind(maskSomeFailures)
+        // Skip over at most this many failing records before aborting the sync.
+        let maskSomeFailures = self.mask(3)
+
+        // TODO: it'd be nice to put this in an extension on SyncableHistory. Waiting for Swift 2.0...
+        func applyRecord(_ rec: Record<HistoryPayload>) -> Success {
+            let guid = rec.id
+            let payload = rec.payload
+            let modified = rec.modified
+
+            // We apply deletions immediately. Yes, this will throw away local visits
+            // that haven't yet been synced. That's how Sync works, alas.
+            if payload.deleted {
+                return storage.deleteByGUID(guid, deletedAt: modified).bind(maskSomeFailures)
+            }
+
+            // It's safe to apply other remote records, too -- even if we re-download, we know
+            // from our local cached server timestamp on each record that we've already seen it.
+            // We have to reconcile on-the-fly: we're about to overwrite the server record, which
+            // is our shared parent.
+            let place = rec.payload.asPlace()
+
+            if isIgnoredURL(place.url) {
+                log.debug("Ignoring incoming record \(guid) because its URL is one we wish to ignore.")
+                return succeed()
+            }
+
+            let placeThenVisits = storage.insertOrUpdatePlace(place, modified: modified)
+                >>> { storage.storeRemoteVisits(payload.visits, forGUID: guid) }
+            return placeThenVisits.map({ result in
+                if result.isFailure {
+                    let reason = result.failureValue?.description ?? "unknown reason"
+                    log.error("Record application failed: \(reason)")
+                }
+                return result
+            }).bind(maskSomeFailures)
+        }
+
+        return self.applyIncomingRecords(records, apply: applyRecord)
     }
 
     fileprivate func uploadModifiedPlaces(_ places: [(Place, [Visit])], lastTimestamp: Timestamp, fromStorage storage: SyncableHistory, withServer storageClient: Sync15CollectionClient<HistoryPayload>) -> DeferredTimestamp {
@@ -136,11 +143,10 @@ open class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
 
     fileprivate func uploadDeletedPlaces(_ guids: [GUID], lastTimestamp: Timestamp, fromStorage storage: SyncableHistory, withServer storageClient: Sync15CollectionClient<HistoryPayload>) -> DeferredTimestamp {
         let records = guids.map(makeDeletedHistoryRecord)
-        
+
         // Deletions are smaller, so upload 100 at a time.
         return self.uploadRecords(records, lastTimestamp: lastTimestamp, storageClient: storageClient) { result, lastModified in
-            return storage.markAsDeleted(result.success)
-                >>> always(lastModified ?? lastTimestamp)
+            return storage.markAsDeleted(result.success) >>> always(lastModified ?? lastTimestamp)
         }
     }
 

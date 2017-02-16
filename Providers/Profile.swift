@@ -701,20 +701,7 @@ open class BrowserProfile: Profile {
         }
 
         fileprivate func reportSyncPingForResult(opResult: SyncOperationResult) {
-            if let opStats = opResult.stats {
-                print("operation: \(opStats)")
-            }
-            
-            if let engineResults = opResult.engineResults.successValue {
-                engineResults.forEach { collection, status in
-                    switch status {
-                    case .completed(let stats):
-                        print("collection: \(collection), stats: \(stats)")
-                    default:
-                        break
-                    }
-                }
-            }
+            // TODO: Send sync report to telemetry client for storage/sending
         }
 
         fileprivate func reportAdHocEndSyncingStatus(displayState: SyncDisplayState?, engineResults: Maybe<EngineResults>?) {

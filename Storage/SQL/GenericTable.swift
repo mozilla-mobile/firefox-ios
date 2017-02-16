@@ -6,7 +6,7 @@ import Foundation
 import XCGLogger
 import Shared
 
-fileprivate let log = Logger.syncLogger
+private let log = Logger.syncLogger
 
 // A protocol for information about a particular table. This is used as a type to be stored by TableTable.
 protocol TableInfo {
