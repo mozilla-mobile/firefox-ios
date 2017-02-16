@@ -7,6 +7,7 @@ import Foundation
 public enum FirefoxAccountConfigurationLabel: String {
     case latestDev = "LatestDev"
     case stableDev = "StableDev"
+    case stage = "Stage"
     case production = "Production"
     case chinaEdition = "ChinaEdition"
 
@@ -14,6 +15,7 @@ public enum FirefoxAccountConfigurationLabel: String {
         switch self {
         case .latestDev: return LatestDevFirefoxAccountConfiguration()
         case .stableDev: return StableDevFirefoxAccountConfiguration()
+        case .stage: return StageFirefoxAccountConfiguration()
         case .production: return ProductionFirefoxAccountConfiguration()
         case .chinaEdition: return ChinaEditionFirefoxAccountConfiguration()
         }
@@ -86,15 +88,15 @@ public struct StageFirefoxAccountConfiguration: FirefoxAccountConfiguration {
     public init() {
     }
 
-    public let label = FirefoxAccountConfigurationLabel.production
+    public let label = FirefoxAccountConfigurationLabel.stage
 
-    public let authEndpointURL = URL(string: "https://api.accounts.firefox.com/v1")!
-    public let oauthEndpointURL = URL(string: "https://oauth.accounts.firefox.com/v1")!
-    public let profileEndpointURL = URL(string: "https://profile.accounts.firefox.com/v1")!
+    public let authEndpointURL = URL(string: "https://api-accounts.stage.mozaws.net/v1")!
+    public let oauthEndpointURL = URL(string: "https://oauth.stage.mozaws.net/v1")!
+    public let profileEndpointURL = URL(string: "https://profile.stage.mozaws.net/v1")!
 
-    public let signInURL = URL(string: "https://accounts.firefox.com/signin?service=sync&context=fx_ios_v1")!
-    public let settingsURL = URL(string: "https://accounts.firefox.com/settings?context=fx_ios_v1")!
-    public let forceAuthURL = URL(string: "https://accounts.firefox.com/force_auth?service=sync&context=fx_ios_v1")!
+    public let signInURL = URL(string: "https://accounts.stage.mozaws.net/signin?service=sync&context=fx_ios_v1")!
+    public let settingsURL = URL(string: "https://accounts.stage.mozaws.net/settings?context=fx_ios_v1")!
+    public let forceAuthURL = URL(string: "https://accounts.stage.mozaws.net/force_auth?service=sync&context=fx_ios_v1")!
 
     public let sync15Configuration: Sync15Configuration = StageSync15Configuration()
 }
