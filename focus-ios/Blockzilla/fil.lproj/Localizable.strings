@@ -1,5 +1,5 @@
 /* Button on About screen */
-"About.learnMoreButton" = "Matuto ng higit pa";
+"About.learnMoreButton" = "Alamin";
 
 /* Label on About screen */
 "About.missionLabel" = "%@ ay ginawa ng Mozilla. Ang aming misyon ay upang pagyamanin ang isang malusog, bukas na Internet.";
@@ -20,7 +20,7 @@
 "About.rowHelp" = "Tulong";
 
 /* Label for row in About screen */
-"About.rowRights" = "Ang iyong mga karapatan";
+"About.rowRights" = "Ang Iyong mga Karapatan";
 
 /* Label on About screen */
 "About.safariBullet1" = "Harangin ang mga tracker para mapabuti ang privacy";
@@ -53,16 +53,16 @@
 "Browser.shareLabel" = "Ibahagi";
 
 /* Accessibility label for the stop button */
-"Browser.stopLabel" = "Itigil";
+"Browser.stopLabel" = "Huminto";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "Subukang muli";
 
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.callButton" = "Tawagan";
+"ExternalLink.callButton" = "Tumawag";
 
 /* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.cancelButton" = "Kanselahin";
+"ExternalLink.cancelButton" = "I-cancel";
 
 /* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.emailButton" = "Email";
@@ -92,7 +92,7 @@
 "Home.descriptionLabel2" = "Magtingin. Burahin. Ulitin.";
 
 /* Label in share alert to cancel the alert */
-"Open.Cancel" = "Kanselahin";
+"Open.Cancel" = "I-cancel";
 
 /* Label in share alert to open the URL in Firefox */
 "Open.Firefox" = "Firefox (pribadong pagba-browse)";
@@ -173,7 +173,7 @@
 "Settings.toggleSendAnonymousUsageDataSubtitle" = "Matuto ng higit pa";
 
 /* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "Kanselahin";
+"URL.cancelLabel" = "I-cancel";
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "BURAHIN";

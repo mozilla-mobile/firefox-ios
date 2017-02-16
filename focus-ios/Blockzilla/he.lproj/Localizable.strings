@@ -2,7 +2,7 @@
 "About.learnMoreButton" = "מידע נוסף";
 
 /* Label on About screen */
-"About.missionLabel" = "%@ פותח על־ידי Mozilla. המשימה שלנו היא לטפח רשת אינטרנט פתוחה ובריאה.";
+"About.missionLabel" = "‏%@ פותח על־ידי Mozilla. המשימה שלנו היא לטפח רשת אינטרנט פתוחה ובריאה.";
 
 /* Label on About screen */
 "About.privateBullet1" = "חיפוש וגלישה ישירות מהיישום";
@@ -35,7 +35,7 @@
 "About.screenTitle" = "אודות";
 
 /* Label on About screen */
-"About.topLabel" = "%@ שם אותך בשליטה.";
+"About.topLabel" = "‏%@ שם אותך בשליטה.";
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "אחורה";
@@ -104,16 +104,16 @@
 "Open.Safari" = "Safari";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsContentBlockers" = "יש להיכנס ל־Safari ולבחור בחוסמי תוכן";
+"Safari.instructionsContentBlockers" = "היכנסו ל־Safari ובחרו בחוסמי תוכן";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsEnable" = "הפעלת %@";
+"Safari.instructionsEnable" = "הפעילו את %@";
 
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
-"Safari.instructionsNotEnabled" = "%@ לא מופעל.";
+"Safari.instructionsNotEnabled" = "‏%@ לא מופעל.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsOpen" = "פתיחת הגדרות היישום";
+"Safari.instructionsOpen" = "פתחו את היישום הגדרות";
 
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "חסימת רכיבי מעקב אחרים עלולה לשבש את פעילותם של דפי אינטרנט ומספר סרטונים.";
