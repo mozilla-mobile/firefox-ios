@@ -1202,8 +1202,7 @@ open class BrowserProfile: Profile {
             }
             
             return readyDeferred >>== self.takeActionsOnEngineStateChanges >>== { ready in
-                // Once we are ready and have a server timestamp to begin our session, start recording
-                statsSession.start(time: ready.infoMetadata.timestampMilliseconds)
+                statsSession.start()
                 return function(delegate, self.prefsForSync, ready)
             }
         }
