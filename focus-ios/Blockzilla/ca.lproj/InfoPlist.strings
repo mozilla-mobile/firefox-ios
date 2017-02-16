@@ -1,0 +1,12 @@
+/* (No Commment) */
+"NSCameraUsageDescription" = "Això permet fer fotos i pujar-les.";
+
+/* (No Commment) */
+"NSLocationWhenInUseUsageDescription" = "Els llocs web que visiteu poden sol·licitar la vostra ubicació.";
+
+/* (No Commment) */
+"NSMicrophoneUsageDescription" = "Això permet fer vídeos i pujar-los.";
+
+/* (No Commment) */
+"NSPhotoLibraryUsageDescription" = "Això permet desar fotos i pujar-les.";
+

@@ -1,0 +1,189 @@
+/* Button on About screen */
+"About.learnMoreButton" = "Més informació";
+
+/* Label on About screen */
+"About.missionLabel" = "El %@ està creat per Mozilla. La nostra missió és fomentar l'Internet obert i saludable.";
+
+/* Label on About screen */
+"About.privateBullet1" = "Cerqueu i navegueu directament des de l'aplicació";
+
+/* Label on About screen */
+"About.privateBullet2" = "Bloqueja els elements de seguiment (o canvieu els paràmetres per permetre'ls)";
+
+/* Label on About screen */
+"About.privateBullet3" = "Esborra les galetes i l'historial de cerques i de navegació";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "Utilitzeu-lo com a navegador privat:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "Ajuda";
+
+/* Label for row in About screen */
+"About.rowRights" = "Els vostres drets";
+
+/* Label on About screen */
+"About.safariBullet1" = "Bloqueja els elements de seguiment per millorar la privadesa";
+
+/* Label on About screen */
+"About.safariBullet2" = "Bloqueja els tipus de lletra web per reduir la mida de la pàgina";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "Utilitzeu-lo com a extensió del Safari:";
+
+/* Title for the About screen */
+"About.screenTitle" = "Quant a";
+
+/* Label on About screen */
+"About.topLabel" = "El %@ us dóna el control.";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "Enrere";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "Endavant";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "Torna a carregar";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "Paràmetres";
+
+/* Accessibility label for the share button */
+"Browser.shareLabel" = "Comparteix";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "Atura";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "Torna-ho a provar";
+
+/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.callButton" = "Truca";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "Cancel·la";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "Correu electrònic";
+
+/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.messageTitleWithPlaceholder" = "Esteu sortint del %@.";
+
+/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openAppStoreButton" = "Obre l'App Store";
+
+/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openMapsButton" = "Obre els Mapes";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.buttonLabel" = "ENTESOS!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelDescription" = "Bloqueja automàticament els elements que us fan el seguiment mentre navegueu. Esborreu amb un sol toc les pàgines visitades, cerques, galetes i contrasenyes del vostre dispositiu.";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "Navegueu sense sentir-vos observats.";
+
+/* First label for product description on the home screen */
+"Home.descriptionLabel1" = "Navegació privada automàtica.";
+
+/* Second label for product description on the home screen */
+"Home.descriptionLabel2" = "Navegueu. Esborreu. Torneu-hi.";
+
+/* Label in share alert to cancel the alert */
+"Open.Cancel" = "Cancel·la";
+
+/* Label in share alert to open the URL in Firefox */
+"Open.Firefox" = "Firefox (navegació privada)";
+
+/* Label in share alert to open the full system share menu */
+"Open.More" = "Més";
+
+/* Label in share alert to open the URL in Safari */
+"Open.Safari" = "Safari";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "Toqueu «Safari» i trieu «Bloquejadors de contingut»";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "Activeu el %@";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "El %@ no està activat.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "Obriu l'aplicació «Configuració»";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Si bloquegeu altres elements de seguiment de contingut, és possible que alguns vídeos i pàgines web no funcionin bé.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "No, gràcies";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "Entesos";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "Paràmetres";
+
+/* Title for the search engine row */
+"Settings.searchSection" = "MOTOR DE CERCA";
+
+/* Title for the search engine selection screen */
+"Settings.searchTitle" = "Motor de cerca";
+
+/* Label for Safari integration section */
+"Settings.sectionIntegration" = "INTEGRACIÓ";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for performance toggles */
+"Settings.sectionPerformance" = "RENDIMENT";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "PRIVADESA";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAds" = "Bloqueja seguiment de publicitat";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAnalytics" = "Bloqueja seguiment d'anàlisi";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Bloqueja tipus de lletra web";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockOther" = "Bloqueja altres seguiments de contingut";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockSocial" = "Bloqueja seguiment social";
+
+/* Label subtitle for toggle on main screen */
+"Settings.toggleOtherSubtitle" = "Pot causar problemes amb alguns vídeos i pàgines web";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageData" = "Envia dades d'ús anònimes";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "Més informació";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "Cancel·la";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "ESBORRA";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "S'ha esborrat el vostre historial de navegació.";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Escriviu una cerca o adreça";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Cerca %@";
+
