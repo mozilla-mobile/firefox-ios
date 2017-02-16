@@ -224,7 +224,7 @@ open class TimestampedSingleCollectionSynchronizer: BaseCollectionSynchronizer, 
     }
 
     open func remoteHasChanges(_ info: InfoCollections) -> Bool {
-        return info.modified(self.collection)! > self.lastFetched
+        return info.modified(self.collection) ?? 0 > self.lastFetched
     }
 }
 
