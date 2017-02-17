@@ -2162,6 +2162,18 @@ extension BrowserViewController: TabManagerDelegate {
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
         updateTabCountUsingTabManager(tabManager)
     }
+
+    func show(buttonToast: ButtonToast, afterWaiting delay: Double = 0) {
+        let time = DispatchTime.now() + Double(delay * Double(NSEC_PER_MSEC)) / Double(NSEC_PER_SEC)
+        DispatchQueue.main.asyncAfter(deadline: time) {
+            self.view.addSubview(buttonToast)
+            buttonToast.snp.makeConstraints { make in
+                make.left.right.equalTo(self.view)
+                make.bottom.equalTo(self.webViewContainer)
+            }
+            buttonToast.showToast()
+        }
+    }
     
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
         guard !tabTrayController.privateMode else {
@@ -2178,6 +2190,7 @@ extension BrowserViewController: TabManagerDelegate {
                 }
                 undoToast.showToast()
             }
+            show(buttonToast: undoToast, afterWaiting: ButtonToastUX.ToastDelay)
         }
     }
 
@@ -2954,21 +2967,34 @@ extension BrowserViewController: ContextMenuHelperDelegate {
         if let url = elements.link, let currentTab = tabManager.selectedTab {
             dialogTitle = url.absoluteString
             let isPrivate = currentTab.isPrivate
+
+            let addTab = { (rURL: URL, isPrivate: Bool) in
+                self.scrollController.showToolbars(animated: !self.scrollController.toolbarsShowing, completion: { _ in
+                    let tab = self.tabManager.addTab(URLRequest(url: rURL as URL), afterTab: currentTab, isPrivate: isPrivate)
+                    guard self.topTabsViewController == nil else {
+                        return
+                    }
+                    // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
+                    let toast = ButtonToast(labelText: Strings.ContextMenuButtonToastNewTabOpenedLabelText, buttonText: Strings.ContextMenuButtonToastNewTabOpenedButtonText, completion: { buttonPressed in
+                        if (buttonPressed) {
+                            self.tabManager.selectTab(tab)
+                        }
+                    })
+                    self.show(buttonToast: toast)
+                })
+            }
+
             if !isPrivate {
                 let newTabTitle = NSLocalizedString("Open in New Tab", comment: "Context menu item for opening a link in a new tab")
                 let openNewTabAction =  UIAlertAction(title: newTabTitle, style: UIAlertActionStyle.default) { (action: UIAlertAction) in
-                    self.scrollController.showToolbars(animated: !self.scrollController.toolbarsShowing, completion: { _ in
-                        self.tabManager.addTab(URLRequest(url: url as URL), afterTab: currentTab)
-                    })
+                    addTab(url, false)
                 }
                 actionSheetController.addAction(openNewTabAction)
             }
 
             let openNewPrivateTabTitle = NSLocalizedString("Open in New Private Tab", tableName: "PrivateBrowsing", comment: "Context menu option for opening a link in a new private tab")
             let openNewPrivateTabAction =  UIAlertAction(title: openNewPrivateTabTitle, style: UIAlertActionStyle.default) { (action: UIAlertAction) in
-                self.scrollController.showToolbars(animated: !self.scrollController.toolbarsShowing, completion: { _ in
-                    self.tabManager.addTab(URLRequest(url: url as URL), afterTab: currentTab, isPrivate: true)
-                })
+                addTab(url, true)
             }
             actionSheetController.addAction(openNewPrivateTabAction)
 
