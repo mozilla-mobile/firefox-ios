@@ -74,7 +74,7 @@
 "ExternalLink.openAppStoreButton" = "App Store 열기";
 
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openMapsButton" = "지도";
+"ExternalLink.openMapsButton" = "지도 열기";
 
 /* Label on button to dismiss first run UI */
 "FirstRun.buttonLabel" = "OK! 알겠습니다!";
@@ -89,7 +89,7 @@
 "Home.descriptionLabel1" = "자동 사생활 보호모드 제공";
 
 /* Second label for product description on the home screen */
-"Home.descriptionLabel2" = "브라우징. 삭재. 반복";
+"Home.descriptionLabel2" = "브라우징. 삭제. 반복.";
 
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "취소";
@@ -104,7 +104,7 @@
 "Open.Safari" = "Safari";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsContentBlockers" = "Safari에서 컨텐츠 차단 선택";
+"Safari.instructionsContentBlockers" = "Safari에서 콘텐츠 차단";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsEnable" = "%@ 사용";
@@ -116,10 +116,10 @@
 "Safari.instructionsOpen" = "앱 설정 열기";
 
 /* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "다른 콘텐츠 추적기를 차단하면, 동영상이나 웹 페이지가 제대로 표시되지 않을 수 있습니다.";
+"Settings.blockOtherMessage" = "기타 콘텐츠 추적기를 차단하면, 동영상이나 웹 페이지가 제대로 표시되지 않을 수 있습니다.";
 
 /* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "아니오, 감사합니다";
+"Settings.blockOtherNo" = "아니오";
 
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes" = "차단";
@@ -155,7 +155,7 @@
 "Settings.toggleBlockFonts" = "웹 폰트 차단";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "기타 추적기 차단";
+"Settings.toggleBlockOther" = "기타 콘텐츠 추적기 차단";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockSocial" = "소셜 추적기 차단";

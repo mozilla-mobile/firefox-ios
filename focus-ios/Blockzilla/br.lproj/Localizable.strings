@@ -80,7 +80,7 @@
 "FirstRun.buttonLabel" = "Mat eo, komprenet em eus!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Stankit an heulierien en linenn ent emgefreek pa verdeit. Stokit evit dilemel ar pajennoù gweladennet, an toupinoù, an enklaskoù hag ar gerioù-tremen eus ho trevnad.";
+"FirstRun.messageLabelDescription" = "Stankit an heulierien enlinenn ent emgefreek pa verdeit. Stokit evit dilemel ar pajennoù gweladennet, an toupinoù, an enklaskoù hag ar gerioù-tremen eus ho trevnad.";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "Merdeit 'vel ma vefe den o sellet.";
@@ -116,7 +116,7 @@
 "Safari.instructionsOpen" = "Digeriñ an arload arventennoù";
 
 /* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Stankañ heulierien endalc'had ouzhpenn a c'hall mirout videoioù ha pajennadoù web da vont en-dro en un doare dereat.";
+"Settings.blockOtherMessage" = "Stankañ heulierien endalc'hadoù all a c'hall mirout videoioù ha pajennadoù web da vont en-dro en un doare dereat.";
 
 /* Button label for declining Content blocker alert */
 "Settings.blockOtherNo" = "Nullañ";
@@ -161,7 +161,7 @@
 "Settings.toggleBlockSocial" = "Stankañ an heulierien kevredadel";
 
 /* Label subtitle for toggle on main screen */
-"Settings.toggleOtherSubtitle" = "Gallout a ra mirout videoioù ga pajennadoù web da vont en-dro en un doare dereat";
+"Settings.toggleOtherSubtitle" = "Gallout a ra mirout videoioù ha pajennadoù web da vont en-dro en un doare dereat";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
