@@ -1,0 +1,189 @@
+/* Button on About screen */
+"About.learnMoreButton" = "আরও জানুন";
+
+/* Label on About screen */
+"About.missionLabel" = "%@ Mozilla দ্বারা প্রস্তুতকৃত। আমাদের মিশন হচ্ছে, ইন্টারনেটকে উন্মুক্ত রাখা এবং সেটির গুণগত মান বজায় রাখতে উৎসাহ দেওয়া।";
+
+/* Label on About screen */
+"About.privateBullet1" = "অ্যাপের মধ্যেই অনুসন্ধান এবং ব্রাউজ করুন";
+
+/* Label on About screen */
+"About.privateBullet2" = "ট্রাকারদেরকে অবরুদ্ধ করুন(অথবা ট্রাকারদের অনুমতি দিতে সেটিংস আপডেট করুন)";
+
+/* Label on About screen */
+"About.privateBullet3" = "সেইসাথে অনুসন্ধান এবং ব্রাউজিং-র পূর্ববর্তী তথ্যক কুকির সাথে সরাতে মুছুন";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "একটি ব্যক্তিগত ব্রাউজার হিসাবে এটিকে ব্যবহার করুন:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "সাহায্য";
+
+/* Label for row in About screen */
+"About.rowRights" = "আপনার অধিকার";
+
+/* Label on About screen */
+"About.safariBullet1" = "গোপনীয়তাকে আরো উন্নত করতে ট্রাকারদেরকে অবরুদ্ধ করুন";
+
+/* Label on About screen */
+"About.safariBullet2" = "পাতা আকার হ্রাস করতে ওয়েব ফন্টকে অবরুদ্ধ করুন";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "Safari-র এক্সটেনশন হিসাবে এটিকে ব্যবহার করুন:";
+
+/* Title for the About screen */
+"About.screenTitle" = "সম্পর্কে";
+
+/* Label on About screen */
+"About.topLabel" = "%@ আপানকে নিয়ন্ত্রণে রাখে।";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "পূর্ববর্তী";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "পরবর্তী";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "পুনরায় লোড করুন";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "সেটিংস";
+
+/* Accessibility label for the share button */
+"Browser.shareLabel" = "শেয়ার করুন";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "থামুন";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "আবার চেষ্টা করুন";
+
+/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.callButton" = "কল";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "বাতিল";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "ইমেইল";
+
+/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.messageTitleWithPlaceholder" = "এখন আপনি %@ থেকে বেরিয়ে যাচ্ছেন।";
+
+/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openAppStoreButton" = "অ্যাপ ষ্টোর খুলুন";
+
+/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openMapsButton" = "মানচিত্র খুলুন";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.buttonLabel" = "ঠিক আছে, বুঝেছি!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelDescription" = "আপনার ব্রাউজ করার সময় স্বয়ংক্রিয়ভাবে অনলাইন ট্রাকারদেরকে অবরুদ্ধ করা হয়। তারপর আপনার ডিভাইস থেকে দেখা পৃষ্ঠাগুলি, অনুসন্ধান, কুকি এবং পাসওয়ার্ড মুছতে ট্যাপ করুন।";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "কেউ দেখছেন না-র মত ব্রাউজ করুন।";
+
+/* First label for product description on the home screen */
+"Home.descriptionLabel1" = "স্বয়ংক্রিয় ব্যক্তিগত ব্রাউজিং।";
+
+/* Second label for product description on the home screen */
+"Home.descriptionLabel2" = "ব্রাউজ করুন। মুছে দিন। পুনরাবৃত্তি করুন।";
+
+/* Label in share alert to cancel the alert */
+"Open.Cancel" = "বাতিল";
+
+/* Label in share alert to open the URL in Firefox */
+"Open.Firefox" = "Firefox (ব্যক্তিগত ব্রাউজিং)";
+
+/* Label in share alert to open the full system share menu */
+"Open.More" = "আরো";
+
+/* Label in share alert to open the URL in Safari */
+"Open.Safari" = "Safari";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "Safari তে ট্যাপ করুন, তারপর কন্টেন্ট ব্লকার নির্বাচন করুন";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "%@ কে সক্রিয় করুন";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ কে সক্রিয় করা হয়নি।";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "সেটিংস অ্যাপ খুলুন";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "অন্যান্য কন্টেন্ট ট্রাকারদেরকে অবরুদ্ধ করা হলে কিছু ভিডিও এবং ওয়েব পেজে সমস্যা হতে পারে।";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "না, ধন্যবাদ";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "আমি বুঝেছি";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "সেটিংস";
+
+/* Title for the search engine row */
+"Settings.searchSection" = "অনুসন্ধানের ইঞ্জিন";
+
+/* Title for the search engine selection screen */
+"Settings.searchTitle" = "অনুসন্ধানের ইঞ্জিন";
+
+/* Label for Safari integration section */
+"Settings.sectionIntegration" = "একত্রিকরণ";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for performance toggles */
+"Settings.sectionPerformance" = "কার্যক্ষমতা";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "গোপনীয়তা";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAds" = "বিজ্ঞাপনের ট্রাকারদের অবরুদ্ধ করুন";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAnalytics" = "বিশ্লেষণধর্মী ট্রাকারদের অবরুদ্ধ করুন";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "ওয়েব ফন্ট অবরুদ্ধ করুন";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockOther" = "অন্যান্য কন্টেন্ট ট্রাকারদেরকে অবরুদ্ধ করুন";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockSocial" = "সামাজিক ট্রাকারদের অবরুদ্ধ করুন";
+
+/* Label subtitle for toggle on main screen */
+"Settings.toggleOtherSubtitle" = "কিছু ভিডিও এবং ওয়েব পেজে সমস্যা দেখা যেতে পারে";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageData" = "বেনামী ব্যবহারের তথ্য পাঠান";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "আরও জানুন";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "বাতিল";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "মুছুন";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "আপনার ব্রাউজিং-র পূর্ববর্তী তথ্য মুছে ফেলা হয়েছে।";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "অনুসন্ধান করুন বা ঠিকানা লিখুন";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "%@ -র অনুসন্ধান করুন";
+
