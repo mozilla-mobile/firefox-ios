@@ -58,15 +58,19 @@ class BaseTestCase: XCTestCase {
     }
 
     func loadWebPage(_ url: String, waitForLoadToFinish: Bool = true) {
+        let loaded = NSPredicate(format: "value BEGINSWITH '100'")
+
         let app = XCUIApplication()
+
         UIPasteboard.general.string = url
         app.textFields["url"].press(forDuration: 2.0)
         app.sheets.element(boundBy: 0).buttons.element(boundBy: 0).tap()
 
         if waitForLoadToFinish {
             let finishLoadingTimeout: TimeInterval = 30
+            
             let progressIndicator = app.progressIndicators.element(boundBy: 0)
-            expectation(for: NSPredicate(format: "exists = false"), evaluatedWith: progressIndicator, handler: nil)
+            expectation(for: loaded, evaluatedWith: progressIndicator, handler: nil)
             waitForExpectations(timeout: finishLoadingTimeout, handler: nil)
         }
     }
