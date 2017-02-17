@@ -380,8 +380,6 @@
 		E4BC84741E288D6F00833B45 /* cy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cy; path = cy.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E4BC847E1E288DAA00833B45 /* es-CL */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-CL"; path = "es-CL.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		E4BC847F1E288DAB00833B45 /* es-CL */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-CL"; path = "es-CL.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		E4BC84831E288DB900833B45 /* es-ES */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-ES"; path = "es-ES.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
-		E4BC84841E288DB900833B45 /* es-ES */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-ES"; path = "es-ES.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		E4BC84881E288DC800833B45 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E4BC84891E288DC900833B45 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E4BC848D1E288DD600833B45 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -435,9 +433,6 @@
 		E4BC850D1E2A869200833B45 /* es-CL */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-CL"; path = "es-CL.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		E4BC850E1E2A869300833B45 /* es-CL */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-CL"; path = "es-CL.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		E4BC850F1E2A869400833B45 /* es-CL */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-CL"; path = "es-CL.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
-		E4BC85101E2A869F00833B45 /* es-ES */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-ES"; path = "es-ES.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
-		E4BC85111E2A86A000833B45 /* es-ES */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-ES"; path = "es-ES.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
-		E4BC85121E2A86A100833B45 /* es-ES */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-ES"; path = "es-ES.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		E4BC85131E2A86AE00833B45 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E4BC85141E2A86AE00833B45 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E4BC85151E2A86AF00833B45 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -1149,7 +1144,6 @@
 				E4BC846F1E288D5E00833B45 /* cs */,
 				E4BC84741E288D6F00833B45 /* cy */,
 				E4BC847F1E288DAB00833B45 /* es-CL */,
-				E4BC84841E288DB900833B45 /* es-ES */,
 				E4BC84891E288DC900833B45 /* fr */,
 				E4BC848E1E288DD700833B45 /* hu */,
 				E4BC84931E288DE400833B45 /* id */,
@@ -1205,7 +1199,6 @@
 				E4BC846E1E288D5D00833B45 /* cs */,
 				E4BC84731E288D6F00833B45 /* cy */,
 				E4BC847E1E288DAA00833B45 /* es-CL */,
-				E4BC84831E288DB900833B45 /* es-ES */,
 				E4BC84881E288DC800833B45 /* fr */,
 				E4BC848D1E288DD600833B45 /* hu */,
 				E4BC84921E288DE300833B45 /* id */,
@@ -1261,7 +1254,6 @@
 				E4BC85071E2A867600833B45 /* de */,
 				E4BC850A1E2A868400833B45 /* en */,
 				E4BC850D1E2A869200833B45 /* es-CL */,
-				E4BC85101E2A869F00833B45 /* es-ES */,
 				E4BC85131E2A86AE00833B45 /* fr */,
 				E4BC85161E2A86BA00833B45 /* hu */,
 				E4BC85191E2A86C900833B45 /* id */,
@@ -1317,7 +1309,6 @@
 				E4BC85081E2A867600833B45 /* de */,
 				E4BC850B1E2A868400833B45 /* en */,
 				E4BC850E1E2A869300833B45 /* es-CL */,
-				E4BC85111E2A86A000833B45 /* es-ES */,
 				E4BC85141E2A86AE00833B45 /* fr */,
 				E4BC85171E2A86BB00833B45 /* hu */,
 				E4BC851A1E2A86C900833B45 /* id */,
@@ -1373,7 +1364,6 @@
 				E4BC85091E2A867700833B45 /* de */,
 				E4BC850C1E2A868500833B45 /* en */,
 				E4BC850F1E2A869400833B45 /* es-CL */,
-				E4BC85121E2A86A100833B45 /* es-ES */,
 				E4BC85151E2A86AF00833B45 /* fr */,
 				E4BC85181E2A86BB00833B45 /* hu */,
 				E4BC851B1E2A86CA00833B45 /* id */,
