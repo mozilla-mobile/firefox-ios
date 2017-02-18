@@ -57,7 +57,8 @@ extension ActivityStreamTests {
             "action_position": position,
             "app_version": AppInfo.appVersion,
             "build": AppInfo.buildNumber,
-            "locale": Locale.current.identifier
+            "locale": Locale.current.identifier,
+            "release_channel": AppConstants.BuildChannel.rawValue
         ]
     }
 
