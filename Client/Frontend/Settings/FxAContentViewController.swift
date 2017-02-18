@@ -139,7 +139,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
                 onLoaded()
             }
 
-            switch (command) {
+            switch command {
             case .loaded:
                 onLoaded()
             case .login:
@@ -166,7 +166,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
             return
         }
 
-        if (message.name == "accountsCommandHandler") {
+        if message.name == "accountsCommandHandler" {
             let body = JSON(message.body)
             let detail = body["detail"]
             handleRemoteCommand(detail["command"].stringValue, data: detail["data"])

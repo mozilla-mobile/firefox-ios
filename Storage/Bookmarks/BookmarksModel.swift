@@ -224,7 +224,7 @@ open class MemoryBookmarkFolder: BookmarkFolder, Sequence {
      * but also contains the new items.
      */
     func append(_ items: [BookmarkNode]) -> MemoryBookmarkFolder {
-        if (items.isEmpty) {
+        if items.isEmpty {
             return self
         }
         return MemoryBookmarkFolder(guid: self.guid, title: self.title, children: self.children + items)
@@ -245,7 +245,7 @@ open class MemoryBookmarksSink: ShareToDestination {
         }
 
         // Don't create duplicates.
-        if (!queue.contains(where: exists)) {
+        if !queue.contains(where: exists) {
             queue.append(BookmarkItem(guid: Bytes.generateGUID(), title: title, url: item.url))
         }
     }
@@ -325,7 +325,7 @@ open class MockMemoryBookmarksStore: BookmarksModelFactory, ShareToDestination {
 
     open func modelForFolder(_ guid: GUID, title: String) -> Deferred<Maybe<BookmarksModel>> {
         var m: BookmarkFolder
-        switch (guid) {
+        switch guid {
         case BookmarkRoots.MobileFolderGUID:
             // Transparently merges in any queued items.
             m = self.mobile.append(self.sink.queue)

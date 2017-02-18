@@ -176,7 +176,7 @@ class SearchSettingsTableViewController: UITableViewController {
 
     // Don't show delete button on the left.
     override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
-        if (indexPath.section == SectionDefault || indexPath.item + 1 == model.orderedEngines.count) {
+        if indexPath.section == SectionDefault || indexPath.item + 1 == model.orderedEngines.count {
             return UITableViewCellEditingStyle.none
         }
 
@@ -247,9 +247,9 @@ class SearchSettingsTableViewController: UITableViewController {
             return sourceIndexPath
         }
 
-        if (sourceIndexPath.section != proposedDestinationIndexPath.section) {
+        if sourceIndexPath.section != proposedDestinationIndexPath.section {
             var row = 0
-            if (sourceIndexPath.section < proposedDestinationIndexPath.section) {
+            if sourceIndexPath.section < proposedDestinationIndexPath.section {
                 row = tableView.numberOfRows(inSection: sourceIndexPath.section) - 1
             }
             return IndexPath(row: row, section: sourceIndexPath.section)
@@ -258,7 +258,7 @@ class SearchSettingsTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if (editingStyle == .delete) {
+        if editingStyle == .delete {
             let index = indexPath.item + 1
             let engine = model.orderedEngines[index]
             model.deleteCustomEngine(engine)

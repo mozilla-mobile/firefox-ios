@@ -43,7 +43,7 @@ public enum LocalCommand: CustomStringConvertible, Hashable {
     case disableEngine(engine: String)
 
     public func toJSON() -> JSON {
-        switch (self) {
+        switch self {
         case let .resetAllEngines(except):
             return JSON(["type": "ResetAllEngines", "except": Array(except).sorted()])
 
@@ -463,7 +463,7 @@ open class Scratchpad {
 
     open class func restoreFromPrefs(_ prefs: Prefs, syncKeyBundle: KeyBundle) -> Scratchpad? {
         if let ver = prefs.intForKey(PrefVersion) {
-            switch (ver) {
+            switch ver {
             case 1:
                 return unpickleV1FromPrefs(prefs, syncKeyBundle: syncKeyBundle)
             default:

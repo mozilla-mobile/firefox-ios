@@ -311,7 +311,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         let page = Int(scrollView.contentOffset.x / scrollView.frame.size.width)
         pageControl.currentPage = page
 
-        if(percentage < 0.5) {
+        if percentage < 0.5 {
             startColor = IntroViewControllerUX.Card1Color
             endColor = IntroViewControllerUX.Card2Color
             percentage = percentage * 2

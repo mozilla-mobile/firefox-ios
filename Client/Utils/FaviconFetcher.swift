@@ -126,7 +126,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
             for link in root.xpath("//head//link[contains(@rel, 'icon')]") {
                 var iconType: IconType? = nil
                 if let rel = link["rel"] {
-                    switch (rel) {
+                    switch rel {
                     case "shortcut icon":
                         iconType = .icon
                     case "icon":
@@ -144,14 +144,14 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
                     continue //Skip the rest of the loop. But don't stop the loop
                 }
 
-                if (href.endsWith(".ico")) {
+                if href.endsWith(".ico") {
                     iconType = .guess
                 }
 
                 if let type = iconType, !bestType.isPreferredTo(type), let iconUrl = NSURL(string: href, relativeTo: url as URL), let absoluteString = iconUrl.absoluteString {
                     let icon = Favicon(url: absoluteString, date: NSDate() as Date, type: type)
                     // If we already have a list of Favicons going already, then add it…
-                    if (type == bestType) {
+                    if type == bestType {
                         icons.append(icon)
                     } else {
                         // otherwise, this is the first in a new best yet type.

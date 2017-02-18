@@ -685,7 +685,7 @@ fileprivate class TopSitesDataSource: NSObject, UICollectionViewDataSource {
 
     fileprivate func setHistorySites(_ historySites: [Site]) {
         // Sites are invalidated and we have a new data set, so do a replace.
-        if (sitesInvalidated) {
+        if sitesInvalidated {
             self.sites = []
         }
 

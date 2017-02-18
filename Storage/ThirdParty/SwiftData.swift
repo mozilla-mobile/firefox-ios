@@ -241,10 +241,10 @@ private class SQLiteDBStatement {
     /// Binds arguments to the statement.
     fileprivate func bind(_ objects: [Any?]) -> NSError? {
         let count = Int(sqlite3_bind_parameter_count(pointer))
-        if (count < objects.count) {
+        if count < objects.count {
             return connection.createErr("During: Bind", status: 202)
         }
-        if (count > objects.count) {
+        if count > objects.count {
             return connection.createErr("During: Bind", status: 201)
         }
 
@@ -572,14 +572,14 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
     fileprivate func createErr(_ description: String, status: Int) -> NSError {
         var msg = SDError.errorMessageFromCode(status)
 
-        if (debug_enabled) {
+        if debug_enabled {
             log.debug("SwiftData Error -> \(description)")
             log.debug("                -> Code: \(status) - \(msg)")
         }
 
         if let errMsg = String(validatingUTF8: sqlite3_errmsg(sqliteDB)) {
             msg += " " + errMsg
-            if (debug_enabled) {
+            if debug_enabled {
                 log.debug("                -> Details: \(errMsg)")
             }
         }
@@ -837,7 +837,7 @@ class SDRow: Sequence {
         let nextIndex = 0
         return AnyIterator() {
             // This crashes the compiler. Yay!
-            if (nextIndex < self.columnNames.count) {
+            if nextIndex < self.columnNames.count {
                 return nil // self.getValue(nextIndex)
             }
             return nil
@@ -1032,7 +1032,7 @@ private class LiveSQLiteCursor<T>: Cursor<T> {
     fileprivate var position: Int = -1 {
         didSet {
             // If we're already there, shortcut out.
-            if (oldValue == position) {
+            if oldValue == position {
                 return
             }
 
@@ -1040,7 +1040,7 @@ private class LiveSQLiteCursor<T>: Cursor<T> {
 
             // If we're currently somewhere in the list after this position
             // we'll have to jump back to the start.
-            if (position < oldValue) {
+            if position < oldValue {
                 sqlite3_reset(self.statement.pointer)
                 stepStart = -1
             }

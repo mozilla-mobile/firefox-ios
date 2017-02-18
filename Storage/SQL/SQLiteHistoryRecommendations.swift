@@ -30,7 +30,7 @@ extension SQLiteHistory: HistoryRecommendations {
         ]
 
         var blacklistSubquery = ""
-        if (blacklistedHosts.count > 0) {
+        if blacklistedHosts.count > 0 {
             blacklistSubquery = "SELECT " + "\(TableDomains).id" +
                 " FROM " + "\(TableDomains)" +
                 " WHERE " + "\(TableDomains).domain" + " IN " + BrowserDB.varlist(blacklistedHosts.count)

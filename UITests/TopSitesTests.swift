@@ -58,7 +58,7 @@ class TopSitesTests: KIFTestCase {
         
         while collection.visibleCells.count > 0 {
             let firstCell = collection.visibleCells.first!
-            if (firstCell.isVisibleInViewHierarchy() == false) {
+            if firstCell.isVisibleInViewHierarchy() == false {
                 break
             } else {
                 deleteSuggestedTopsite(firstCell.accessibilityLabel!)

@@ -288,7 +288,7 @@ private class TwoLineCellHelper {
         }).filter({
             $0 != nil
         }).reduce(NSMutableAttributedString(string: ""), {
-            if ($0.length > 0) {
+            if $0.length > 0 {
                 $0.append(NSAttributedString(string: ", "))
             }
             $0.append($1!)

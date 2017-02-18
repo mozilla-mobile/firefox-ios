@@ -185,7 +185,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let source = source, let bookmark = source.current[indexPath.row] else { return super.tableView(tableView, cellForRowAt: indexPath) }
-        switch (bookmark) {
+        switch bookmark {
         case let item as BookmarkItem:
             let cell = super.tableView(tableView, cellForRowAt: indexPath)
             if item.title.isEmpty {
@@ -284,7 +284,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
         let bookmark = source.current[indexPath.row]
 
-        switch (bookmark) {
+        switch bookmark {
         case let item as BookmarkItem:
             homePanelDelegate?.homePanel(self, didSelectURLString: item.url, visitType: VisitType.bookmark)
             break

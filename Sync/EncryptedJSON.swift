@@ -109,7 +109,7 @@ open class EncryptedJSON {
      * Make sure you call isValid first. This API force-unwraps for simplicity.
      */
     var ciphertext: Data {
-        if (_ciphertextBytes != nil) {
+        if _ciphertextBytes != nil {
             return _ciphertextBytes!
         }
 
@@ -118,7 +118,7 @@ open class EncryptedJSON {
     }
 
     var hmac: Data {
-        if (_hmacBytes != nil) {
+        if _hmacBytes != nil {
             return _hmacBytes!
         }
         //NSData(base16EncodedString: self["hmac"].asString!, options: NSDataBase16DecodingOptions.Default)
@@ -127,7 +127,7 @@ open class EncryptedJSON {
     }
 
     var iv: Data {
-        if (_ivBytes != nil) {
+        if _ivBytes != nil {
             return _ivBytes!
         }
 
@@ -137,17 +137,17 @@ open class EncryptedJSON {
 
     // Returns nil on error.
     open var cleartext: JSON? {
-        if (_cleartext != nil) {
+        if _cleartext != nil {
             return _cleartext
         }
 
-        if (!isValid()) {
+        if !isValid() {
             log.error("Failed to validate.")
             return nil
         }
 
         let decrypted: String? = keyBundle.decrypt(self.ciphertext, iv: self.iv)
-        if (decrypted == nil) {
+        if decrypted == nil {
             log.error("Failed to decrypt.")
             valid = false
             return nil

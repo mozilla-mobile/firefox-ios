@@ -29,7 +29,7 @@ extension String {
         delta = delta / damp
         delta += delta / numPoints
         var k = 0
-        while (delta > ((base - tMin) * tMax) / 2) {
+        while delta > ((base - tMin) * tMax) / 2 {
             delta /= (base - tMin)
             k += base
         }

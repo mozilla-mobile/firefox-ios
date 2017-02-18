@@ -59,7 +59,7 @@ class QuickActions: NSObject {
         var userData: [AnyHashable: Any] = userData
         userData[QuickActions.QuickActionsVersionKey] = QuickActions.QuickActionsVersion
         var dynamicShortcutItems = application.shortcutItems ?? [UIApplicationShortcutItem]()
-        switch(type) {
+        switch type {
         case .openLastBookmark:
             let openLastBookmarkShortcut = UIMutableApplicationShortcutItem(type: ShortcutType.openLastBookmark.type,
                 localizedTitle: lastBookmarkTitle,
@@ -102,7 +102,7 @@ class QuickActions: NSObject {
     }
 
     fileprivate func handleShortCutItemOfType(_ type: ShortcutType, userData: [String : NSSecureCoding]?, browserViewController: BrowserViewController) {
-        switch(type) {
+        switch type {
         case .newTab:
             handleOpenNewTab(withBrowserViewController: browserViewController, isPrivate: false)
         case .newPrivateTab:

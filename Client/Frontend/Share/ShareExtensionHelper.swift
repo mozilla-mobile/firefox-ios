@@ -54,7 +54,7 @@ class ShareExtensionHelper: NSObject {
         // This needs to be ready by the time the share menu has been displayed and
         // activityViewController(activityViewController:, activityType:) is called,
         // which is after the user taps the button. So a million cycles away.
-        if (ShareExtensionHelper.isPasswordManagerExtensionAvailable()) {
+        if ShareExtensionHelper.isPasswordManagerExtensionAvailable() {
             findLoginExtensionItem()
         }
 
@@ -114,7 +114,7 @@ private extension ShareExtensionHelper {
     }
 
     func isPasswordManagerActivityType(_ activityType: String?) -> Bool {
-        if (!ShareExtensionHelper.isPasswordManagerExtensionAvailable()) {
+        if !ShareExtensionHelper.isPasswordManagerExtensionAvailable() {
             return false
         }
         // A 'password' substring covers the most cases, such as pwsafe and 1Password.

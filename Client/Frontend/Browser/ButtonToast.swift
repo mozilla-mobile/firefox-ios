@@ -113,7 +113,7 @@ class ButtonToast: UIView {
             },
             completion: { finished in
                 self.removeFromSuperview()
-                if(!buttonPressed) {
+                if !buttonPressed {
                     self.completionHandler?(false)
                 }
             }

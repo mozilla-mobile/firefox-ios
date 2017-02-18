@@ -30,7 +30,7 @@ class BaseTestCase: XCTestCase {
     func dismissFirstRunUI() {
         let firstRunUI = XCUIApplication().buttons["Start Browsing"]
         
-        if (firstRunUI.exists) {
+        if firstRunUI.exists {
             firstRunUI.tap()
         }
     }
