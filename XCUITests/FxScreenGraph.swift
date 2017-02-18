@@ -40,7 +40,7 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
     map.createScene(FirstRun) { scene in
         scene.gesture(to: NewTabScreen) {
             let firstRunUI = app.buttons["Start Browsing"]
-            if (firstRunUI.exists) {
+            if firstRunUI.exists {
                 firstRunUI.tap()
             }
         }

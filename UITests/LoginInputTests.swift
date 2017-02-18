@@ -33,7 +33,7 @@ class LoginInputTests: KIFTestCase {
         var success = false
         var failedReason = "Failed to display dialog"
         
-        if (appears == false) {
+        if appears == false {
             failedReason = "Dialog still displayed"
         }
         
@@ -43,7 +43,7 @@ class LoginInputTests: KIFTestCase {
                                               grey_sufficientlyVisible()])
             EarlGrey.select(elementWithMatcher: matcher!)
                 .assert(grey_notNil(), error: &errorOrNil)
-            if (appears == true) {
+            if appears == true {
                 success = errorOrNil == nil
             } else {
                 success = errorOrNil != nil

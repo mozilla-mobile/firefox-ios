@@ -831,7 +831,7 @@ extension SQLiteLogins: SyncableLogins {
 
         return self.db.runQuery(sql, args: args, factory: SQLiteLogins.LocalLoginFactory)
           >>== { cursor in
-            switch (cursor.count) {
+            switch cursor.count {
             case 0:
                 return deferMaybe(nil)
             case 1:

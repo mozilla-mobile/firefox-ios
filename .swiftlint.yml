@@ -16,7 +16,6 @@ disabled_rules: # rule identifiers to exclude from running
   - type_body_length
   - function_parameter_count
   - force_try
-  - control_statement
   - trailing_whitespace
   - leading_whitespace
   - operator_whitespace

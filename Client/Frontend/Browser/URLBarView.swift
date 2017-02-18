@@ -329,7 +329,7 @@ class URLBarView: UIView {
                 make.centerY.equalTo(self)
             }
         } else {
-            if (topTabsIsShowing) {
+            if topTabsIsShowing {
                 tabsButton.snp.remakeConstraints { make in
                     make.centerY.equalTo(self.locationContainer)
                     make.leading.equalTo(self.snp.trailing)

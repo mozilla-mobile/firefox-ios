@@ -41,7 +41,7 @@ class BackForwardTableViewCell: UITableViewCell {
     
     var isCurrentTab = false {
         didSet {
-            if(isCurrentTab) {
+            if isCurrentTab {
                 label.font = UIFont(name:"HelveticaNeue-Bold", size: BackForwardViewCellUX.fontSize)
                 bg.snp.updateConstraints { make in
                     make.height.equalTo(BackForwardViewCellUX.faviconWidth+BackForwardViewCellUX.borderBold)
@@ -131,7 +131,7 @@ class BackForwardTableViewCell: UITableViewCell {
     }
     
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-        if (highlighted) {
+        if highlighted {
             self.backgroundColor = UIColor(colorLiteralRed: 0, green: 0, blue: 0, alpha: 0.1)
         } else {
             self.backgroundColor = UIColor.clear

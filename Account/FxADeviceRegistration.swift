@@ -96,7 +96,7 @@ open class FxADeviceRegistrator {
             // Recover from the error -- if we can.
             if let error = result.failureValue as? FxAClientError,
                case .remote(let remoteError) = error {
-                switch (remoteError.code) {
+                switch remoteError.code {
                 case FxAccountRemoteError.DeviceSessionConflict:
                     return recoverFromDeviceSessionConflict(account, client: client, sessionToken: sessionToken)
                 case FxAccountRemoteError.InvalidAuthenticationToken:

@@ -64,7 +64,7 @@ class ChevronView: UIView {
 
         let path: UIBezierPath
 
-        switch (direction) {
+        switch direction {
         case .left:
             path = drawLeftChevronAt(CGPoint(x: rect.size.width - (strokeLength + Padding), y: strokeLength + Padding), strokeLength:strokeLength)
         case .up:

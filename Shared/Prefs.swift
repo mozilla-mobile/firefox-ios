@@ -154,7 +154,7 @@ open class MockProfilePrefs: Prefs {
 
     open func arrayForKey(_ defaultName: String) -> [Any]? {
         let r: Any? = things.object(forKey: defaultName) as Any?
-        if (r == nil) {
+        if r == nil {
             return nil
         }
         if let arr = r as? [Any] {

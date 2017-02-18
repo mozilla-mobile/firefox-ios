@@ -116,7 +116,7 @@ extension KIFUITestActor {
      */
     func waitForWebViewElementWithAccessibilityLabel(_ text: String) {
         run { error in
-            if (self.hasWebViewElementWithAccessibilityLabel(text)) {
+            if self.hasWebViewElementWithAccessibilityLabel(text) {
                 return KIFTestStepResult.success
             }
 
@@ -287,7 +287,7 @@ class BrowserUtils {
 		
         EarlGrey.select(elementWithMatcher: matcher!).assert(grey_notNil(), error: &error)
 		
-		if (error == nil) {
+		if error == nil {
             EarlGrey.select(elementWithMatcher: matcher!).perform(grey_tap())
 		}
 	}
@@ -312,7 +312,7 @@ class BrowserUtils {
         tester.tapView(withAccessibilityLabel: "Menu")
         
         // Need this for simulator only
-        if (swipe) {
+        if swipe {
             tester.swipeView(withAccessibilityLabel: "Set Homepage", in: KIFSwipeDirection.left)
         }
         tester.tapView(withAccessibilityLabel: "Settings")

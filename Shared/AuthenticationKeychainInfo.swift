@@ -113,7 +113,7 @@ public extension AuthenticationKeychainInfo {
     }
 
     func recordFailedAttempt() {
-        if (self.failedAttempts >= AllowedPasscodeFailedAttempts) {
+        if self.failedAttempts >= AllowedPasscodeFailedAttempts {
             //This is a failed attempt after a lockout period. Reset the lockout state
             //This prevents failedAttemps from being higher than 3
             self.resetLockoutState()

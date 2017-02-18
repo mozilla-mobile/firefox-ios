@@ -113,7 +113,7 @@ class AuthenticationTests: KIFTestCase {
         let usernameField = EarlGrey.select(elementWithMatcher: grey_accessibilityValue(usernameValue))
         let passwordField = EarlGrey.select(elementWithMatcher: grey_accessibilityValue(passwordValue))
         
-        if (usernameValue != "Username") {
+        if usernameValue != "Username" {
             usernameField.perform(grey_doubleTap())
             EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Select All"))
                 .inRoot(grey_kindOfClass(NSClassFromString("UICalloutBarButton")))

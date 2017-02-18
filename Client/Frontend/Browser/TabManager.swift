@@ -161,7 +161,7 @@ class TabManager: NSObject {
         assert(Thread.isMainThread)
 
         for tab in tabs {
-            if (tab.webView?.url == url) {
+            if tab.webView?.url == url {
                 return tab
             }
         }
@@ -424,7 +424,7 @@ class TabManager: NSObject {
         var toast: ButtonToast?
         if let numberOfTabs = tempTabs?.count, numberOfTabs > 0 {
             toast = ButtonToast(labelText: String.localizedStringWithFormat(Strings.TabsDeleteAllUndoTitle, numberOfTabs), buttonText: Strings.TabsDeleteAllUndoAction, completion: { buttonPressed in
-                if (buttonPressed) {
+                if buttonPressed {
                     self.undoCloseTabs()
                     for delegate in self.delegates {
                         delegate.get()?.tabManagerDidAddTabs(self)
@@ -595,8 +595,6 @@ class SavedTab: NSObject, NSCoding {
 }
 
 extension TabManager {
-
-
 
     static fileprivate func tabsStateArchivePath() -> String {
         let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]

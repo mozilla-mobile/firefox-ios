@@ -66,7 +66,7 @@ class FaviconsTable<T>: GenericTable<Favicon> {
         opts.filter = obj.url
 
         let cursor = query(db, options: opts)
-        if (cursor.count != 1) {
+        if cursor.count != 1 {
             return nil
         }
         return cursor[0]?.id

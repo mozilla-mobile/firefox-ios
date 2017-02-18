@@ -161,7 +161,7 @@ open class KeyBundle: Hashable {
             }
 
             let cleartext = potential.cleartext
-            if (cleartext == nil) {
+            if cleartext == nil {
                 return nil
             }
             return f(cleartext!)

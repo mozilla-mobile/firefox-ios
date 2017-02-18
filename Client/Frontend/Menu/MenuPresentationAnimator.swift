@@ -123,7 +123,7 @@ extension MenuPresentationAnimator {
 
         UIView.animate(withDuration: transitionDuration(using: transitionContext), delay: 0.0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.5, options: [], animations: {
 
-            if (self.presenting) {
+            if self.presenting {
                 menuViewSnapshot.alpha = 1
                 menuViewSnapshot.frame = (menuView?.frame)!
                 menuView?.backgroundColor = menuView?.backgroundColor?.withAlphaComponent(0.4)

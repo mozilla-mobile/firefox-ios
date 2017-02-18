@@ -935,7 +935,7 @@ class BrowserViewController: UIViewController {
                 navigationToolbar.updateReloadStatus(loading)
             }
 
-            if (!loading) {
+            if !loading {
                 runScriptsOnWebView(webView)
             }
         case KVOURL:
@@ -1193,24 +1193,24 @@ class BrowserViewController: UIViewController {
     }
 
     func reloadTab() {
-        if(homePanelController == nil) {
+        if homePanelController == nil {
             tabManager.selectedTab?.reload()
         }
     }
 
     func goBack() {
-        if(tabManager.selectedTab?.canGoBack == true && homePanelController == nil) {
+        if tabManager.selectedTab?.canGoBack == true && homePanelController == nil {
             tabManager.selectedTab?.goBack()
         }
     }
     func goForward() {
-        if(tabManager.selectedTab?.canGoForward == true && homePanelController == nil) {
+        if tabManager.selectedTab?.canGoForward == true && homePanelController == nil {
             tabManager.selectedTab?.goForward()
         }
     }
 
     func findOnPage() {
-        if(homePanelController == nil) {
+        if homePanelController == nil {
             tab( (tabManager.selectedTab)!, didSelectFindInPageForSelection: "")
         }
     }
@@ -1228,7 +1228,7 @@ class BrowserViewController: UIViewController {
     }
 
     func closeTab() {
-        if(tabManager.tabs.count > 1) {
+        if tabManager.tabs.count > 1 {
             tabManager.removeTab(tabManager.selectedTab!)
         } else {
             //need to close the last tab and show the favorites screen thing
@@ -1236,20 +1236,20 @@ class BrowserViewController: UIViewController {
     }
 
     func nextTab() {
-        if(tabManager.selectedIndex < (tabManager.tabs.count - 1) ) {
+        if tabManager.selectedIndex < (tabManager.tabs.count - 1) {
             tabManager.selectTab(tabManager.tabs[tabManager.selectedIndex+1])
         } else {
-            if(tabManager.tabs.count > 1) {
+            if tabManager.tabs.count > 1 {
                 tabManager.selectTab(tabManager.tabs[0])
             }
         }
     }
 
     func previousTab() {
-        if(tabManager.selectedIndex > 0) {
+        if tabManager.selectedIndex > 0 {
             tabManager.selectTab(tabManager.tabs[tabManager.selectedIndex-1])
         } else {
-            if(tabManager.tabs.count > 1) {
+            if tabManager.tabs.count > 1 {
                 tabManager.selectTab(tabManager.tabs[tabManager.count-1])
             }
         }
@@ -2976,7 +2976,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                     }
                     // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
                     let toast = ButtonToast(labelText: Strings.ContextMenuButtonToastNewTabOpenedLabelText, buttonText: Strings.ContextMenuButtonToastNewTabOpenedButtonText, completion: { buttonPressed in
-                        if (buttonPressed) {
+                        if buttonPressed {
                             self.tabManager.selectTab(tab)
                         }
                     })
@@ -3291,7 +3291,7 @@ extension BrowserViewController: Themeable {
 
         topTabsViewController?.applyTheme(themeName)
 
-        switch(themeName) {
+        switch themeName {
         case Theme.NormalMode:
             header.blurStyle = .extraLight
             footerBackground?.blurStyle = .extraLight

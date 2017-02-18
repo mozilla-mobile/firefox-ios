@@ -107,7 +107,7 @@ extension SwipeAnimator {
     @objc func SELdidPan(_ recognizer: UIPanGestureRecognizer!) {
         let translation = recognizer.translation(in: container)
 
-        switch (recognizer.state) {
+        switch recognizer.state {
         case .began:
             prevOffset = containerCenter
         case .changed:
@@ -120,7 +120,7 @@ extension SwipeAnimator {
             let velocity = recognizer.velocity(in: container)
             // Bounce back if the velocity is too low or if we have not reached the threshold yet
             let speed = max(abs(velocity.x), params.minExitVelocity)
-            if (speed < params.minExitVelocity || abs(prevOffset.x) < params.deleteThreshold) {
+            if speed < params.minExitVelocity || abs(prevOffset.x) < params.deleteThreshold {
                 animateBackToCenter()
             } else {
                 animateAwayWithVelocity(velocity, speed: speed)

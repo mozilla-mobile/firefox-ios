@@ -507,7 +507,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         if let actionId = identifier {
             if let action = SentTabAction(rawValue: actionId) {
                 viewURLInNewTab(notification)
-                switch(action) {
+                switch action {
                 case .bookmark:
                     addBookmark(notification)
                     break

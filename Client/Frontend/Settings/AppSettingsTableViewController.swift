@@ -123,7 +123,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 EnableBookmarkMergingSetting(settings: self)
             ])]
             
-            if (profile.hasAccount()) {
+            if profile.hasAccount() {
                 settings += [
                     SettingSection(title: nil, children: [
                         DisconnectSetting(settings: self),

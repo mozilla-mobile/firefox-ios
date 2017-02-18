@@ -108,7 +108,7 @@ extension AuroraAppDelegate: UIAlertViewDelegate {
 
 extension AuroraAppDelegate {
     func sendFeedbackMailWithImage(_ image: UIImage) {
-        if (MFMailComposeViewController.canSendMail()) {
+        if MFMailComposeViewController.canSendMail() {
             if let buildNumber = Bundle.main.object(forInfoDictionaryKey: String(kCFBundleVersionKey)) as? NSString {
                 let mailComposeViewController = MFMailComposeViewController()
                 mailComposeViewController.mailComposeDelegate = self.feedbackDelegate

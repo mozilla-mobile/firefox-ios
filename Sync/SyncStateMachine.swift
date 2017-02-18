@@ -765,7 +765,7 @@ open class NeedsFreshCryptoKeys: BaseSyncStateWithInfo {
         return self.client.getCryptoKeys(self.scratchpad.syncKeyBundle, ifUnmodifiedSince: nil).bind { result in
             if let resp = result.successValue {
                 let collectionKeys = Keys(payload: resp.value.payload)
-                if (!collectionKeys.valid) {
+                if !collectionKeys.valid {
                     log.error("Unexpectedly invalid crypto/keys during a successful fetch.")
                     return Deferred(value: Maybe(failure: InvalidKeysError(collectionKeys)))
                 }

@@ -160,7 +160,7 @@ class LoginListViewController: SensitiveViewController {
     fileprivate func toggleDeleteBarButton() {
         // Show delete bar button item if we have selected any items
         if loginSelectionController.selectedCount > 0 {
-            if (navigationItem.rightBarButtonItem == nil) {
+            if navigationItem.rightBarButtonItem == nil {
                 navigationItem.rightBarButtonItem = UIBarButtonItem(title: deleteLoginTitle, style: .plain, target: self, action: #selector(LoginListViewController.tappedDelete))
                 navigationItem.rightBarButtonItem?.tintColor = UIColor.red
             }

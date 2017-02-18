@@ -498,7 +498,7 @@ open class BookmarkBasePayload: CleartextPayloadJSON, MirrorItemable {
         }
 
         if !(self["parentName"].isString() || self.id == "places") {
-            if (self["parentid"].string! == "places") {
+            if self["parentid"].string! == "places" {
                 log.debug("Accepting root with missing parent name.")
             } else {
                 // Bug 1318414.
