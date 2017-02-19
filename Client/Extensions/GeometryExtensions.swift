@@ -15,6 +15,15 @@ extension CGRect {
     }
 }
 
+extension UIEdgeInsets {
+    init(equalInset inset: CGFloat) {
+        top = inset
+        left = inset
+        right = inset
+        bottom = inset
+    }
+}
+
 /**
 Generates the affine transform for transforming the first CGRect into the second one
 

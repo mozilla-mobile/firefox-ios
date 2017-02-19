@@ -596,8 +596,6 @@ class SavedTab: NSObject, NSCoding {
 
 extension TabManager {
 
-
-
     static fileprivate func tabsStateArchivePath() -> String {
         let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
         return URL(fileURLWithPath: documentsPath).appendingPathComponent("tabsState.archive").path

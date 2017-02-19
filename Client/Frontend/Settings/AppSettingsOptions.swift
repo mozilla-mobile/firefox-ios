@@ -126,7 +126,7 @@ class SyncNowSetting: WithAccountSetting {
         let formattedLabel = timestampFormatter.string(from: Date.fromTimestamp(timestamp))
         let attributedString = NSMutableAttributedString(string: formattedLabel)
         let attributes = [NSForegroundColorAttributeName: UIColor.gray, NSFontAttributeName: UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)]
-        let range = NSMakeRange(0, attributedString.length)
+        let range = NSRange(location: 0, length: attributedString.length)
         attributedString.setAttributes(attributes, range: range)
         return attributedString
     }

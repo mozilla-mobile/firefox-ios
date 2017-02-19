@@ -126,7 +126,7 @@ class TabCell: UICollectionViewCell {
         self.closeButton = UIButton()
         self.closeButton.setImage(UIImage(named: "stop"), for: UIControlState())
         self.closeButton.tintColor = UIColor.lightGray
-        self.closeButton.imageEdgeInsets = UIEdgeInsetsMake(TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset)
+        self.closeButton.imageEdgeInsets = UIEdgeInsets(equalInset: TabTrayControllerUX.CloseButtonEdgeInset)
 
         self.innerStroke = InnerStrokedView(frame: self.backgroundHolder.frame)
         self.innerStroke.layer.backgroundColor = UIColor.clear.cgColor
@@ -963,7 +963,7 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsetsMake(TabTrayControllerUX.Margin, TabTrayControllerUX.Margin, TabTrayControllerUX.Margin, TabTrayControllerUX.Margin)
+        return UIEdgeInsets(equalInset: TabTrayControllerUX.Margin)
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {

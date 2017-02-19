@@ -15,7 +15,7 @@ class TopTabsLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout {
     }
     
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsetsMake(0, TopTabsUX.TopTabsBackgroundShadowWidth, 0, TopTabsUX.TopTabsBackgroundShadowWidth)
+        return UIEdgeInsets(top: 0, left: TopTabsUX.TopTabsBackgroundShadowWidth, bottom: 0, right: TopTabsUX.TopTabsBackgroundShadowWidth)
     }
     
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {

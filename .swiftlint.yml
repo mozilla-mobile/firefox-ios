@@ -1,8 +1,6 @@
 disabled_rules: # rule identifiers to exclude from running
-  - legacy_constructor
   - variable_name
   - legacy_cggeometry_functions
-  - legacy_constant
   - todo
   - trailing_newline
   - empty_count

@@ -363,7 +363,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         paragraphStyle.alignment = .center
 
         let string = NSMutableAttributedString(string: text)
-        string.addAttribute(NSParagraphStyleAttributeName, value: paragraphStyle, range: NSMakeRange(0, string.length))
+        string.addAttribute(NSParagraphStyleAttributeName, value: paragraphStyle, range: NSRange(location: 0, length: string.length))
         return string
     }
 

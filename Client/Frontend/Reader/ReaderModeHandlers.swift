@@ -59,13 +59,13 @@ struct ReaderModeHandlers {
                             do {
                                 let readerViewLoading = try NSMutableString(contentsOfFile: readerViewLoadingPath, encoding: String.Encoding.utf8.rawValue)
                                 readerViewLoading.replaceOccurrences(of: "%ORIGINAL-URL%", with: url.absoluteString,
-                                    options: NSString.CompareOptions.literal, range: NSMakeRange(0, readerViewLoading.length))
+                                    options: NSString.CompareOptions.literal, range: NSRange(location: 0, length: readerViewLoading.length))
                                 readerViewLoading.replaceOccurrences(of: "%LOADING-TEXT%", with: NSLocalizedString("Loading content…", comment: "Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app."),
-                                    options: NSString.CompareOptions.literal, range: NSMakeRange(0, readerViewLoading.length))
+                                    options: NSString.CompareOptions.literal, range: NSRange(location: 0, length: readerViewLoading.length))
                                 readerViewLoading.replaceOccurrences(of: "%LOADING-FAILED-TEXT%", with: NSLocalizedString("The page could not be displayed in Reader View.", comment: "Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app."),
-                                    options: NSString.CompareOptions.literal, range: NSMakeRange(0, readerViewLoading.length))
+                                    options: NSString.CompareOptions.literal, range: NSRange(location: 0, length: readerViewLoading.length))
                                 readerViewLoading.replaceOccurrences(of: "%LOAD-ORIGINAL-TEXT%", with: NSLocalizedString("Load original page", comment: "Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app."),
-                                    options: NSString.CompareOptions.literal, range: NSMakeRange(0, readerViewLoading.length))
+                                    options: NSString.CompareOptions.literal, range: NSRange(location: 0, length: readerViewLoading.length))
                                 return GCDWebServerDataResponse(html: readerViewLoading as String)
                             } catch _ {
                             }

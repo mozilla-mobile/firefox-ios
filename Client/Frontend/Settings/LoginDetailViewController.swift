@@ -129,7 +129,7 @@ class LoginDetailViewController: SensitiveViewController {
         let itemsToHideSeperators: [InfoItem] = [.passwordItem, .lastModifiedSeparator]
         itemsToHideSeperators.forEach { item in
             let cell = tableView.cellForRow(at: IndexPath(row: item.rawValue, section: 0))
-            cell?.separatorInset = UIEdgeInsetsMake(0, cell?.bounds.width ?? 0, 0, 0)
+            cell?.separatorInset = UIEdgeInsets(top: 0, left: cell?.bounds.width ?? 0, bottom: 0, right: 0)
         }
 
         // Rows to display full width seperator
