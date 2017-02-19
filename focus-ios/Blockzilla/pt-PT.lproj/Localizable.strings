@@ -80,7 +80,7 @@
 "FirstRun.buttonLabel" = "OK, ENTENDI!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Bloqueia trackers online automaticamente enquanto navega. Depois toque para apagar as páginas visitadas, pesquisas, cookies e palavras-passe do seu dispositivo.";
+"FirstRun.messageLabelDescription" = "Bloqueie trackers online automaticamente enquanto navega. Depois toque para apagar as páginas visitadas, pesquisas, cookies e palavras-passe do seu dispositivo.";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "Navegue como se ninguém estivesse a ver.";

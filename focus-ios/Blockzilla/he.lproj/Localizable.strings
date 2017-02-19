@@ -104,10 +104,10 @@
 "Open.Safari" = "Safari";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsContentBlockers" = "היכנסו ל־Safari ובחרו בחוסמי תוכן";
+"Safari.instructionsContentBlockers" = "יש להיכנס ל־Safari ולבחור בחוסמי תוכן";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsEnable" = "הפעילו את %@";
+"Safari.instructionsEnable" = "הפעלת %@";
 
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
 "Safari.instructionsNotEnabled" = "‏%@ לא מופעל.";
@@ -179,11 +179,11 @@
 "URL.eraseButtonLabel" = "מחיקה";
 
 /* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "היסטורית הגלישה שלך נמחקה.";
+"URL.eraseMessageLabel" = "היסטוריית הגלישה שלך נמחקה.";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "חיפוש או הכנסת כתובת";
 
 /* Label displayed for search button when typing in the URL bar */
-"URL.searchLabel" = "חיפוש עבור %@";
+"URL.searchLabel" = "חיפוש אחר %@";
 

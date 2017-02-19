@@ -5,7 +5,7 @@
 "About.missionLabel" = "%@ жасаған Mozilla. Мақсатымыз - интернет денсаулығын және ашықтығын сақтау.";
 
 /* Label on About screen */
-"About.privateBullet1" = "Тура қолданба ішінен іздеу және шолу";
+"About.privateBullet1" = "Қолданба ішінен тікелей іздеу және шолу";
 
 /* Label on About screen */
 "About.privateBullet2" = "Трекерлерді блоктаңыз (немесе, оларды рұқсат ету үшін, баптауларды жаңартыңыз)";
@@ -80,7 +80,7 @@
 "FirstRun.buttonLabel" = "Мен түсіндім!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Интернетті шолу кезінде онлайн трекерлерді автоматты түрдеу блоктаңыз. Одан кейін құрылғыңыздан қаралған парақтар, іздеулер, cookies және парольдерді өшіру үшін батырманы басыңыз.";
+"FirstRun.messageLabelDescription" = "Интернетті шолу кезінде онлайн трекерлерді автоматты түрде блоктаңыз. Одан кейін құрылғыңыздан қаралған парақтар, іздеулер, cookies және парольдерді өшіру үшін батырманы басыңыз.";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "Бақылаудан қорықпай-ақ интернетті шолыңыз.";
@@ -110,7 +110,7 @@
 "Safari.instructionsEnable" = "%@ рұқсат ету";
 
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
-"Safari.instructionsNotEnabled" = "%@ рұқсат етілмеген";
+"Safari.instructionsNotEnabled" = "%@ іске қосылмаған.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "Баптауларды ашу";
@@ -179,7 +179,7 @@
 "URL.eraseButtonLabel" = "ӨШІРУ";
 
 /* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "Сіз шолу тарихыңыз өшірілді.";
+"URL.eraseMessageLabel" = "Сіздің шолу тарихыңыз өшірілді.";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Іздеу үшін сұранымды немесе адресті енгізіңіз";

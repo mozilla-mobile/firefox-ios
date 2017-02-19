@@ -146,7 +146,7 @@
 "Settings.sectionPrivacy" = "FRIÐHELGI";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Loka á auglýsingar rekjara";
+"Settings.toggleBlockAds" = "Loka á auglýsinga rekjara";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockAnalytics" = "Loka á greiningar rekjara";
