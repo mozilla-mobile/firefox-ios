@@ -109,8 +109,7 @@ open class LoginsSynchronizer: IndependentRecordSynchronizer, Synchronizer {
         }
     }
 
-    fileprivate func uploadChangedRecords<T>(_ deleted: Set<GUID>, modified: Set<GUID>, records: [Record<T>], lastTimestamp: Timestamp,
-                                      storage: SyncableLogins, withServer storageClient: Sync15CollectionClient<T>) -> Success {
+    fileprivate func uploadChangedRecords<T>(_ deleted: Set<GUID>, modified: Set<GUID>, records: [Record<T>], lastTimestamp: Timestamp, storage: SyncableLogins, withServer storageClient: Sync15CollectionClient<T>) -> Success {
 
         let onUpload: (POSTResult, Timestamp?) -> DeferredTimestamp = { result, lastModified in
             let uploaded = Set(result.success)

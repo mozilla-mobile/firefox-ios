@@ -70,8 +70,12 @@ open class FirefoxAccountSyncAuthState: SyncAuthState {
     //
     // It's tricky to get Swift to recurse into a closure that captures from the environment without
     // segfaulting the compiler, so we pass everything around, like barbarians.
-    fileprivate func generateAssertionAndFetchTokenAt(_ audience: String, client: TokenServerClient, clientState: String?, married: MarriedState,
-            now: Timestamp, retryCount: Int) -> Deferred<Maybe<TokenServerToken>> {
+    fileprivate func generateAssertionAndFetchTokenAt(_ audience: String,
+                                                      client: TokenServerClient,
+                                                      clientState: String?,
+                                                      married: MarriedState,
+                                                      now: Timestamp,
+                                                      retryCount: Int) -> Deferred<Maybe<TokenServerToken>> {
         let assertion = married.generateAssertionForAudience(audience, now: now)
         return client.token(assertion, clientState: clientState).bind { result in
             if retryCount > 0 {

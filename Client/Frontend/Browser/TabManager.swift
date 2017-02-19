@@ -841,8 +841,7 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
         }
     }
 
-    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!,
-        withError error: Error) {
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
             for delegate in delegates {
                 delegate.webView?(webView, didFailProvisionalNavigation: navigation, withError: error)
             }
@@ -854,9 +853,7 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
         }
     }
 
-    func webView(_ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge,
-        completionHandler: @escaping (URLSession.AuthChallengeDisposition,
-        URLCredential?) -> Void) {
+    func webView(_ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
             let authenticatingDelegates = delegates.filter { wv in
                 return wv.responds(to: #selector(WKNavigationDelegate.webView(_:didReceive:completionHandler:)))
             }
@@ -882,8 +879,7 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
         }
     }
 
-    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction,
-        decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
             var res = WKNavigationActionPolicy.allow
             for delegate in delegates {
                 delegate.webView?(webView, decidePolicyFor: navigationAction, decisionHandler: { policy in
@@ -896,8 +892,9 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
             decisionHandler(res)
     }
 
-    func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse,
-        decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
+    func webView(_ webView: WKWebView,
+                 decidePolicyFor navigationResponse: WKNavigationResponse,
+                 decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
             var res = WKNavigationResponsePolicy.allow
             for delegate in delegates {
                 delegate.webView?(webView, decidePolicyFor: navigationResponse, decisionHandler: { policy in

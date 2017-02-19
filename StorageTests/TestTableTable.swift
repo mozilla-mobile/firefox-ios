@@ -76,10 +76,7 @@ class TestSchemaTable: XCTestCase {
 
         let dropCallback: (() -> Void)?
 
-        init(version: Int,
-                createCallback: @escaping () -> Bool,
-                updateCallback: @escaping (_ from: Int) -> Bool,
-                dropCallback: (() -> Void)? = nil) {
+        init(version: Int, createCallback: @escaping () -> Bool, updateCallback: @escaping (_ from: Int) -> Bool, dropCallback: (() -> Void)? = nil) {
             self._version = version
             self.createCallback = createCallback
             self.updateCallback = updateCallback
