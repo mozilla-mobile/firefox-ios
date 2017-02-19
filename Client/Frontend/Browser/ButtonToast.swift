@@ -7,7 +7,6 @@ import Shared
 import SnapKit
 
 struct ButtonToastUX {
-    static let ToastDismissAfter = 4.0
     static let ToastPadding = 15.0
     static let ToastButtonPadding: CGFloat = 10.0
     static let ToastDelay = 0.9
@@ -43,13 +42,13 @@ class ButtonToast: UIView {
         return gestureRecognizer
     }()
     
-    init(labelText: String, buttonText: String, completion:@escaping (_ buttonPressed: Bool) -> Void) {
+    init(labelText: String, descriptionText: String? = nil, buttonText: String, completion:@escaping (_ buttonPressed: Bool) -> Void) {
         super.init(frame: CGRect.zero)
         completionHandler = completion
         
         self.clipsToBounds = true
-        self.addSubview(createView(labelText, buttonText: buttonText))
-        
+        self.addSubview(createView(labelText, descriptionText: descriptionText, buttonText: buttonText))
+
         toast.snp.makeConstraints { make in
             make.left.right.height.equalTo(self)
             animationConstraint = make.top.equalTo(self).offset(SimpleToastUX.ToastHeight).constraint
@@ -63,7 +62,7 @@ class ButtonToast: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    fileprivate func createView(_ labelText: String, buttonText: String) -> UIView {
+    fileprivate func createView(_ labelText: String, descriptionText: String?, buttonText: String) -> UIView {
         let label = UILabel()
         label.textColor = UIColor.white
         label.font = SimpleToastUX.ToastFont
@@ -85,10 +84,36 @@ class ButtonToast: UIView {
         
         toast.addSubview(button)
         
-        label.snp.makeConstraints { (make) in
-            make.leading.equalTo(toast).offset(ButtonToastUX.ToastPadding)
-            make.centerY.equalTo(toast)
-            make.trailing.equalTo(button.snp.leading)
+        var descriptionLabel : UILabel?
+        
+        if let text = descriptionText {
+            let textLabel = UILabel()
+            textLabel.textColor = UIColor.white
+            label.font = UIFont.systemFont(ofSize: DynamicFontHelper.defaultHelper.DefaultMediumFontSize, weight: UIFontWeightRegular)
+            textLabel.font = UIFont.systemFont(ofSize: DynamicFontHelper.defaultHelper.DefaultMediumFontSize, weight: UIFontWeightRegular)
+            textLabel.text = text
+            textLabel.lineBreakMode = .byTruncatingTail
+            toast.addSubview(textLabel)
+            descriptionLabel = textLabel
+        }
+        
+        if let description = descriptionLabel {
+            label.snp.makeConstraints { (make) in
+                make.leading.equalTo(toast).offset(ButtonToastUX.ToastPadding)
+                make.top.equalTo(toast).offset(ButtonToastUX.ToastButtonPadding)
+                make.trailing.equalTo(button.snp.leading)
+            }
+            description.snp.makeConstraints { (make) in
+                make.leading.equalTo(toast).offset(ButtonToastUX.ToastPadding)
+                make.bottom.equalTo(toast).offset(-ButtonToastUX.ToastButtonPadding)
+                make.trailing.equalTo(button.snp.leading)
+            }
+        } else {
+            label.snp.makeConstraints { (make) in
+                make.leading.equalTo(toast).offset(ButtonToastUX.ToastPadding)
+                make.centerY.equalTo(toast)
+                make.trailing.equalTo(button.snp.leading)
+            }
         }
         
         button.snp.makeConstraints { (make) in
@@ -120,14 +145,14 @@ class ButtonToast: UIView {
         )
     }
     
-    func showToast() {
+    func showToast(duration: Double = SimpleToastUX.ToastDismissAfter) {
         layoutIfNeeded()
         UIView.animate(withDuration: SimpleToastUX.ToastAnimationDuration, animations: {
                 self.animationConstraint?.update(offset: 0)
                 self.layoutIfNeeded()
             },
             completion: { finished in
-                let dispatchTime = DispatchTime.now() + Double(Int64(SimpleToastUX.ToastDismissAfter * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+                let dispatchTime = DispatchTime.now() + Double(Int64(duration * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
                 DispatchQueue.main.asyncAfter(deadline: dispatchTime, execute: {
                     self.dismiss(false)
                 })
