@@ -80,7 +80,7 @@
 "FirstRun.buttonLabel" = "RAZUMEM!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Samodejno zavračajte spletne sledilce med brskanjem. Nato z enim dotikom izbrišite obiskane strani, iskanja, piškotke in gesla z naprave.";
+"FirstRun.messageLabelDescription" = "Samodejno zavračajte spletne sledilce med brskanjem. Nato z enim dotikom izbrišite obiskane strani, iskanja, piškotke in gesla.";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "Brskajte, kot da vas nihče ne gleda.";

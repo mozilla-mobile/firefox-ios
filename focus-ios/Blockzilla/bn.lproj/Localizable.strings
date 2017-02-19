@@ -26,7 +26,7 @@
 "About.safariBullet1" = "গোপনীয়তাকে আরো উন্নত করতে ট্রাকারদেরকে অবরুদ্ধ করুন";
 
 /* Label on About screen */
-"About.safariBullet2" = "পাতা আকার হ্রাস করতে ওয়েব ফন্টকে অবরুদ্ধ করুন";
+"About.safariBullet2" = "পাতার আকার হ্রাস করতে ওয়েব ফন্টকে অবরুদ্ধ করুন";
 
 /* Label on About screen */
 "About.safariBulletHeader" = "Safari-র এক্সটেনশন হিসাবে এটিকে ব্যবহার করুন:";
@@ -35,7 +35,7 @@
 "About.screenTitle" = "সম্পর্কে";
 
 /* Label on About screen */
-"About.topLabel" = "%@ আপানকে নিয়ন্ত্রণে রাখে।";
+"About.topLabel" = "%@ আপনাকে নিয়ন্ত্রণে রাখে।";
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "পূর্ববর্তী";
@@ -80,10 +80,10 @@
 "FirstRun.buttonLabel" = "ঠিক আছে, বুঝেছি!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "আপনার ব্রাউজ করার সময় স্বয়ংক্রিয়ভাবে অনলাইন ট্রাকারদেরকে অবরুদ্ধ করা হয়। তারপর আপনার ডিভাইস থেকে দেখা পৃষ্ঠাগুলি, অনুসন্ধান, কুকি এবং পাসওয়ার্ড মুছতে ট্যাপ করুন।";
+"FirstRun.messageLabelDescription" = "আপনার ব্রাউজিং-র সময় স্বয়ংক্রিয়ভাবে অনলাইন ট্রাকারদেরকে অবরুদ্ধ করা হয়। তারপর আপনার ডিভাইস থেকে দেখা পৃষ্ঠাগুলি, অনুসন্ধান, কুকি এবং পাসওয়ার্ড মুছতে ট্যাপ করুন।";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelTagline" = "কেউ দেখছেন না-র মত ব্রাউজ করুন।";
+"FirstRun.messageLabelTagline" = "কেউ দেখছেন না - এমন ভেবে ব্রাউজ করুন।";
 
 /* First label for product description on the home screen */
 "Home.descriptionLabel1" = "স্বয়ংক্রিয় ব্যক্তিগত ব্রাউজিং।";
@@ -146,7 +146,7 @@
 "Settings.sectionPrivacy" = "গোপনীয়তা";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "বিজ্ঞাপনের ট্রাকারদের অবরুদ্ধ করুন";
+"Settings.toggleBlockAds" = "বিজ্ঞাপন সম্বন্ধিত ট্রাকারদেরকে অবরুদ্ধ করুন";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockAnalytics" = "বিশ্লেষণধর্মী ট্রাকারদের অবরুদ্ধ করুন";

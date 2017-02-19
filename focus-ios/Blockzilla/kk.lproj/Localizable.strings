@@ -128,10 +128,10 @@
 "Settings.screenTitle" = "Баптаулар";
 
 /* Title for the search engine row */
-"Settings.searchSection" = "ІЗДЕУ ТЕТІГІ";
+"Settings.searchSection" = "ІЗДЕУ ЖҮЙЕСІ";
 
 /* Title for the search engine selection screen */
-"Settings.searchTitle" = "Іздеу тетігі";
+"Settings.searchTitle" = "Іздеу жүйесі";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "ИНТЕГРАЦИЯ";
@@ -182,7 +182,7 @@
 "URL.eraseMessageLabel" = "Сіздің шолу тарихыңыз өшірілді.";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "Іздеу үшін сұранымды немесе адресті енгізіңіз";
+"URL.placeholderText" = "Іздеу немесе адрес";
 
 /* Label displayed for search button when typing in the URL bar */
 "URL.searchLabel" = "%@ дегенді іздеу";
