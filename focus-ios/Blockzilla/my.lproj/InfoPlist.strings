@@ -1,0 +1,12 @@
+/* (No Commment) */
+"NSCameraUsageDescription" = "ဓါတ်ပုံရိုက်ခြင်းနှင့် တင်ပို့ခြင်းတို့ကို ဆောင်ရွက်နိုင်စေသည်။";
+
+/* (No Commment) */
+"NSLocationWhenInUseUsageDescription" = "သင်ကြည့်ရှုနေသော ဝဘ်ဆိုက်များသည် သင့်တည်နေရာကို တောင်းဆိုကောင်း တောင်းဆိုပါလိမ့်မည်။";
+
+/* (No Commment) */
+"NSMicrophoneUsageDescription" = "ဗီဒီယိုရိုက်ခြင်းနှင့် တင်ပို့ခြင်းတို့ကို ဆောင်ရွက်နိုင်စေသည်။";
+
+/* (No Commment) */
+"NSPhotoLibraryUsageDescription" = "ဓါတ်ပုံသိမ်းခြင်းနှင့် တင်ပို့ခြင်းတို့ကို ဆောင်ရွက်နိုင်စေသည်။";
+

@@ -1,0 +1,189 @@
+/* Button on About screen */
+"About.learnMoreButton" = "ပိုမိုလေ့လာရန်";
+
+/* Label on About screen */
+"About.missionLabel" = "%@ ကို Mozilla က ထုတ်လုပ်ပါသည်။ ကျွန်ုပ်တို့၏ ရည်မှန်းချက်မှာ ကောင်းမွန်ပွင့်လင်းသော အင်တာနက်ဖြစ်လာစေရန် ဖြစ်သည်။";
+
+/* Label on About screen */
+"About.privateBullet1" = "အက်ပ်ထဲမှာ အင်တာနက်ကို ရှာဖွေကြည့်ရှုအသုံးပြုပါ";
+
+/* Label on About screen */
+"About.privateBullet2" = "နောက်ယောင်ခံကိရိယာများကို ပိတ်ပါ (သို့မဟုတ် နောက်ယောင်ခံကိရိယာများကို ဆောင်ရွက်ခွင့်ပေးရန် အပြင်အဆင်များကို ပြောင်းလဲပါ)";
+
+/* Label on About screen */
+"About.privateBullet3" = "ကွတ်ကီးများကိုသာမက ရှာဖွေမှု၊ ကြည့်ရှုမှုမှတ်တမ်းကိုပါ ဖျက်ရန် ရှင်းလင်းပါ";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "သီးသန့်ဘရောင်ဇာအနေနှင့် အသုံးပြုပါ။";
+
+/* Label for row in About screen */
+"About.rowHelp" = "အကူအညီ";
+
+/* Label for row in About screen */
+"About.rowRights" = "သင့်လုပ်ပိုင်ခွင့်များ";
+
+/* Label on About screen */
+"About.safariBullet1" = "ကိုယ်ရေးလုံခြုံမှု ပိုမိုကောင်းမွန်စေရန် နောက်ယောင်ခံကိရိယာများကို ပိတ်ပါ";
+
+/* Label on About screen */
+"About.safariBullet2" = "စာမျက်နှာ ဖိုင်အရွယ်အစားကို လျှော့ချရန် ဝဘ်ဖောင့်အသုံးပြုခြင်းကို ပိတ်ပါ";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "Safari extension အနေနှင့် အသုံးပြုပါ။";
+
+/* Title for the About screen */
+"About.screenTitle" = "အကြောင်း";
+
+/* Label on About screen */
+"About.topLabel" = "%@ က သင့်ကို ထိန်းချုပ်နိုင်စွမ်း ရှိစေသည်။";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "နောက်သို့";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "ရှေ့သို့";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "ပြန်ဖွင့်ပါ";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "အပြင်အဆင်များ";
+
+/* Accessibility label for the share button */
+"Browser.shareLabel" = "မျှဝေရန်";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "ရပ်ပါ";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "ထပ်ကြိုးစားကြည့်ပါ";
+
+/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.callButton" = "ခေါ်ဆိုပါ";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "မဆောင်ရွက်တော့ပါ";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "အီးမေးလ်";
+
+/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.messageTitleWithPlaceholder" = "သင်သည် %@ ကနေ ထွက်ခွာတော့မည်။";
+
+/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openAppStoreButton" = "App Store ကို ဖွင့်ပါ";
+
+/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openMapsButton" = "Maps ကို ဖွင့်ပါ";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.buttonLabel" = "ကောင်းပြီ၊ သိပါပြီ။";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelDescription" = "သင်ကြည့်ရှုနေစဉ်အတွင်း အွန်လိုင်းနောက်ယောက်ခံ ကိရိယာများကို အလိုအလျောက် ပိတ်ပင်ပါသည်။ လည်ပတ်ကြည့်ရှုခဲ့သော ဝဘ်စာမျက်နှာများ၊ ရှာဖွေမှုများ၊ ကွတ်ကီးများနှင့် စကားဝှက်များကို တို့ထိပြီး ဖယ်ရှားရှင်းလင်းနိုင်သည်။";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "မည်သူမျှ စောင့်ကြည့်ခြင်းမရှိသကဲ့သို့ အင်တာနက်ကို အသုံးပြုပါ";
+
+/* First label for product description on the home screen */
+"Home.descriptionLabel1" = "အလိုအလျောက် သီးသန့် ရှာဖွေကြည့်ရှုခြင်း။";
+
+/* Second label for product description on the home screen */
+"Home.descriptionLabel2" = "ရှာဖွေကြည့်ရှု၊ ဖယ်ရှားရှင်းလင်း၊ ၎င်းအတိုင်း ပြန်ဆောင်ရွက်။";
+
+/* Label in share alert to cancel the alert */
+"Open.Cancel" = "မလုပ်ဆောင်တော့ပါ";
+
+/* Label in share alert to open the URL in Firefox */
+"Open.Firefox" = "Firefox (သီးသန့် ရှာဖွေကြည့်ရှုခြင်း)";
+
+/* Label in share alert to open the full system share menu */
+"Open.More" = "ပို၍";
+
+/* Label in share alert to open the URL in Safari */
+"Open.Safari" = "Safari";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "Safari ကို တို့ထိပါ၊ ပြီးလျှင် Content Blockers ကို ရွေးပါ";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "%@ ကို ဖွင့်ပါ";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ ကို ဖွင့်မထားပါ။";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "အပြင်အဆင်များအက်ပ်ကို ဖွင့်ပါ";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "အခြား အကြောင်းအရာနောက်ယောင်ခံကိရိယာများကို ပိတ်ခြင်းသည် အချို့သော ဗီဒီယိုများနှင့် ဝဘ်စာမျက်နှာများကို ကောင်းမွန်စွာ လုပ်ဆောင်နိုင်စေမည် မဟုတ်ပါ။";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "ရပါတယ်၊ ကျေးဇူးတင်ပါတယ်။";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "ကျွန်ုပ် နားလည်သဘောပေါက်ပါသည်";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "အပြင်အဆင်များ";
+
+/* Title for the search engine row */
+"Settings.searchSection" = "SEARCH ENGINE";
+
+/* Title for the search engine selection screen */
+"Settings.searchTitle" = "ရှာဖွေရေး ယန္တရား";
+
+/* Label for Safari integration section */
+"Settings.sectionIntegration" = "INTEGRATION";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for performance toggles */
+"Settings.sectionPerformance" = "PERFORMANCE";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "PRIVACY";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAds" = "ကြော်ငြာနောက်ယောက်ခံ ကိရိယာများကို ပိတ်ပင်ပါ";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAnalytics" = "သရုပ်ခွဲလေ့လာသည့် နောက်ယောင်ခံကိရိယာများကို ပိတ်ပင်ပါ";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "ဝဘ်ဖောင့်များကို ပိတ်ပင်ပါ";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockOther" = "အခြားသော အကြောင်းအရာနောက်ယောက်ခံကိရိယာများကို ပိတ်ပင်ပါ";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockSocial" = "လူမှုမီဒီယာ နောက်ယောင်ခံကိရိယာများကို ပိတ်ပင်ပါ";
+
+/* Label subtitle for toggle on main screen */
+"Settings.toggleOtherSubtitle" = "အချို့သော ဗီဒီယိုများနှင့် ဝဘ်စာမျက်နှာများကို ထိခိုက်စေသည်";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageData" = "အမျိုးအမည်မဲ့အသုံးပြုမှုအချက်အလက်များကို ပေးပို့ရန်";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "ပိုမိုလေ့လာရန်";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "မလုပ်ဆောင်တော့ပါ";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "ERASE";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "ကြည့်ရှုမှုမှတ်တမ်းကို ဖယ်ရှားရှင်းလင်းပြီးပြီ။";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "ရှာဖွေ သို့မဟုတ် လိပ်စာရိုက်ပါ";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "%@ ကို ရှာဖွေရန်";
+
