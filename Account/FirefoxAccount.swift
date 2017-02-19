@@ -80,15 +80,21 @@ open class FirefoxAccount {
     }
 
     open class func from(_ configuration: FirefoxAccountConfiguration,
-            andLoginResponse response: FxALoginResponse, unwrapkB: Data) -> FirefoxAccount {
+                         andLoginResponse response: FxALoginResponse,
+                         unwrapkB: Data) -> FirefoxAccount {
         return FirefoxAccount.from(configuration: configuration,
             andParametersWithEmail: response.remoteEmail, uid: response.uid, deviceRegistration: nil, verified: response.verified,
             sessionToken: response.sessionToken as Data, keyFetchToken: response.keyFetchToken as Data, unwrapkB: unwrapkB)
     }
 
     fileprivate class func from(configuration: FirefoxAccountConfiguration,
-            andParametersWithEmail email: String, uid: String, deviceRegistration: FxADeviceRegistration?, verified: Bool,
-            sessionToken: Data, keyFetchToken: Data, unwrapkB: Data) -> FirefoxAccount {
+                                andParametersWithEmail email: String,
+                                uid: String,
+                                deviceRegistration: FxADeviceRegistration?,
+                                verified: Bool,
+                                sessionToken: Data,
+                                keyFetchToken: Data,
+                                unwrapkB: Data) -> FirefoxAccount {
         var state: FxAState! = nil
         if !verified {
             let now = Date.now()

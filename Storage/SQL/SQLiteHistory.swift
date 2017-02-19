@@ -434,8 +434,8 @@ extension SQLiteHistory: BrowserHistory {
     }
 
     fileprivate func getFilteredSitesByVisitDateWithLimit(_ limit: Int,
-                                                      whereURLContains filter: String? = nil,
-                                                      includeIcon: Bool = true) -> Deferred<Maybe<Cursor<Site>>> {
+                                                          whereURLContains filter: String? = nil,
+                                                          includeIcon: Bool = true) -> Deferred<Maybe<Cursor<Site>>> {
         let args: Args?
         let whereClause: String
         if let filter = filter?.trimmingCharacters(in: CharacterSet.whitespaces), !filter.isEmpty {
@@ -494,11 +494,11 @@ extension SQLiteHistory: BrowserHistory {
     }
 
     fileprivate func getFilteredSitesByFrecencyWithHistoryLimit(_ limit: Int,
-                                                            bookmarksLimit: Int,
-                                                            whereURLContains filter: String? = nil,
-                                                            groupClause: String = "GROUP BY historyID ",
-                                                            whereData: String? = nil,
-                                                            includeIcon: Bool = true) -> Deferred<Maybe<Cursor<Site>>> {
+                                                                bookmarksLimit: Int,
+                                                                whereURLContains filter: String? = nil,
+                                                                groupClause: String = "GROUP BY historyID ",
+                                                                whereData: String? = nil,
+                                                                includeIcon: Bool = true) -> Deferred<Maybe<Cursor<Site>>> {
         let factory: (SDRow) -> Site
         if includeIcon {
             factory = SQLiteHistory.iconHistoryColumnFactory
@@ -519,11 +519,11 @@ extension SQLiteHistory: BrowserHistory {
     }
 
     fileprivate func filteredSitesByFrecencyQueryWithHistoryLimit(_ historyLimit: Int,
-                                                              bookmarksLimit: Int,
-                                                              whereURLContains filter: String? = nil,
-                                                              groupClause: String = "GROUP BY historyID ",
-                                                              whereData: String? = nil,
-                                                              includeIcon: Bool = true) -> (String, Args?) {
+                                                                  bookmarksLimit: Int,
+                                                                  whereURLContains filter: String? = nil,
+                                                                  groupClause: String = "GROUP BY historyID ",
+                                                                  whereData: String? = nil,
+                                                                  includeIcon: Bool = true) -> (String, Args?) {
         let includeBookmarks = bookmarksLimit > 0
         let localFrecencySQL = getLocalFrecencySQL()
         let remoteFrecencySQL = getRemoteFrecencySQL()
