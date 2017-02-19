@@ -26,7 +26,7 @@
 "About.safariBullet1" = "Verfolger blockieren, um Datenschutz zu verbessern";
 
 /* Label on About screen */
-"About.safariBullet2" = "Web-Schriftarten blockieren, um Seitengröße zu verringern";
+"About.safariBullet2" = "Web-Schriftarten blockieren, um zum Anzeigen der Seite benötigten Datenverkehr zu reduzieren";
 
 /* Label on About screen */
 "About.safariBulletHeader" = "Als Safari-Erweiterung nutzen:";
