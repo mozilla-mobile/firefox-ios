@@ -1,0 +1,189 @@
+/* Button on About screen */
+"About.learnMoreButton" = "Argibide gehiago";
+
+/* Label on About screen */
+"About.missionLabel" = "Mozillak egina da %@. Internet osasuntsu eta irekia sustatzea da gure misioa.";
+
+/* Label on About screen */
+"About.privateBullet1" = "Bilatu eta nabigatu aplikaziotik zuzenean";
+
+/* Label on About screen */
+"About.privateBullet2" = "Blokeatu jarraipena (edo eguneratu ezarpenak jarraipena onartzeko)";
+
+/* Label on About screen */
+"About.privateBullet3" = "Ezabatu cookieak eta bilaketa- eta nabigatze-historia";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "Erabili nabigatzaile pribatu gisa:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "Laguntza";
+
+/* Label for row in About screen */
+"About.rowRights" = "Zure eskubideak";
+
+/* Label on About screen */
+"About.safariBullet1" = "Blokeatu jarraipena pribatutasuna hobetzeko";
+
+/* Label on About screen */
+"About.safariBullet2" = "Blokeatu webeko letra-tipoak orrien pisua gutxiagotzeko";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "Erabili Safariren hedapen gisa:";
+
+/* Title for the About screen */
+"About.screenTitle" = "Honi buruz";
+
+/* Label on About screen */
+"About.topLabel" = "%@(e)k agintea ematen dizu.";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "Atzera";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "Aurrera";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "Berritu";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "Ezarpenak";
+
+/* Accessibility label for the share button */
+"Browser.shareLabel" = "Partekatu";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "Gelditu";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "Saiatu berriro";
+
+/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.callButton" = "Deitu";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "Utzi";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "Bidali mezu elektronikoa";
+
+/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.messageTitleWithPlaceholder" = "%@(e)tik irtetear zaude.";
+
+/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openAppStoreButton" = "Ireki App Store-a";
+
+/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openMapsButton" = "Ireki mapak";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.buttonLabel" = "ADOS, ULERTUTA!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelDescription" = "Automatikoki blokeatu jarraipena nabigatu ahala. Ondoren sakatu zure gailutik ezabatzeko bisitatutako orriak, bilaketak, cookieak eta pasahitzak.";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "Nabigatu inor begira ez balego bezala.";
+
+/* First label for product description on the home screen */
+"Home.descriptionLabel1" = "Nabigatze pribatu automatikoa.";
+
+/* Second label for product description on the home screen */
+"Home.descriptionLabel2" = "Nabigatu. Ezabatu. Errepikatu.";
+
+/* Label in share alert to cancel the alert */
+"Open.Cancel" = "Utzi";
+
+/* Label in share alert to open the URL in Firefox */
+"Open.Firefox" = "Firefox (nabigatze pribatua)";
+
+/* Label in share alert to open the full system share menu */
+"Open.More" = "Gehiago";
+
+/* Label in share alert to open the URL in Safari */
+"Open.Safari" = "Safari";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "Sakatu Safari-n eta ondoren hautatu edukien blokeatzaileak";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "Gaitu %@";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ gaitu gabe dago.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "Ireki ezarpenen aplikazioa";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Bestelako jarraipen-elementuak blokeatzean zenbait bideo eta web orri apur litezke.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "Ez, eskerrik asko";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "Ulertzen dut";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "Ezarpenak";
+
+/* Title for the search engine row */
+"Settings.searchSection" = "BILAKETA-MOTORRA";
+
+/* Title for the search engine selection screen */
+"Settings.searchTitle" = "Bilaketa-motorra";
+
+/* Label for Safari integration section */
+"Settings.sectionIntegration" = "INTEGRAZIOA";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for performance toggles */
+"Settings.sectionPerformance" = "ERRENDIMENDUA";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "PRIBATUTASUNA";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAds" = "Blokeatu publizitatearen jarraipena";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAnalytics" = "Blokeatu analitiken jarraipena";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Blokeatu webeko letra-tipoak";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockOther" = "Blokeatu bestelako edukien jarraipena";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockSocial" = "Blokeatu sare sozialetako jarraipena";
+
+/* Label subtitle for toggle on main screen */
+"Settings.toggleOtherSubtitle" = "Zenbait bideo eta web orri apur litzake";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageData" = "Bidali erabilpen-datu anonimoak";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "Argibide gehiago";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "Utzi";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "EZABATU";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "Zure nabigatze-historia ezabatu egin da.";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Idatzi bilaketa edo helbidea";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Bilatu %@";
+
