@@ -40,6 +40,8 @@ opt_in_rules: # some rules are only opt-in
   - trailing_semicolon
   - statement_position
   - explicit_init
+  - shorthand_operator
+  - file_header
   # Find all the available rules by running:
   # swiftlint rules
 included: # paths to include during linting. `--path` is ignored if present.
@@ -52,6 +54,10 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   - FxA
   - FxAClient
   - build
+  - UITests/EarlGrey.swift
+  - Storage/ThirdParty/SwiftData.swift
+  - fastlane/
+  - Client/Assets/Search/get_supported_locales.swift
 
 # configurable rules can be customized from this configuration file
 # binary rules can set their severity level
@@ -64,6 +70,9 @@ statement_position: error
 colon: error
 comma: error
 
+
+file_header:
+  required_string: "/* This Source Code Form is subject to the terms of the Mozilla Public\n * License, v. 2.0. If a copy of the MPL was not distributed with this\n * file, You can obtain one at http://mozilla.org/MPL/2.0/. */"
 line_length: 1000
 
 reporter: "json" # reporter type (xcode, json, csv, checkstyle)
