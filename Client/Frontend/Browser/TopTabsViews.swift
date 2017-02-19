@@ -68,7 +68,8 @@ class TopTabCell: UICollectionViewCell {
         let closeButton = UIButton()
         closeButton.setImage(UIImage(named: "topTabs-closeTabs"), for: UIControlState())
         closeButton.tintColor = UIColor.lightGray
-        closeButton.imageEdgeInsets = UIEdgeInsetsMake(TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset)
+
+        closeButton.imageEdgeInsets = UIEdgeInsets(equalInset: TabTrayControllerUX.CloseButtonEdgeInset)
         return closeButton
     }()
     

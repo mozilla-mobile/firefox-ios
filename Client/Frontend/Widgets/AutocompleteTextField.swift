@@ -81,7 +81,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         if let text = text {
             if !text.isEmpty {
                 let attributedString = NSMutableAttributedString(string: text)
-                attributedString.addAttribute(NSBackgroundColorAttributeName, value: highlightColor, range: NSMakeRange(0, (text).characters.count))
+                attributedString.addAttribute(NSBackgroundColorAttributeName, value: highlightColor, range: NSRange(location: 0, length: (text).characters.count))
                 attributedText = attributedString
 
                 enteredText = ""
@@ -167,7 +167,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
             if suggestion.startsWith(normalizeString(enteredText)) && normalizeString(enteredText).characters.count < suggestion.characters.count {
                 let endingString = suggestion.substring(from: suggestion.characters.index(suggestion.startIndex, offsetBy: normalizeString(enteredText).characters.count))
                 let completedAndMarkedString = NSMutableAttributedString(string: enteredText + endingString)
-                completedAndMarkedString.addAttribute(NSBackgroundColorAttributeName, value: highlightColor, range: NSMakeRange(enteredText.characters.count, endingString.characters.count))
+                completedAndMarkedString.addAttribute(NSBackgroundColorAttributeName, value: highlightColor, range: NSRange(location: enteredText.characters.count, length: endingString.characters.count))
                 attributedText = completedAndMarkedString
                 completionActive = true
                 previousSuggestion = suggestion

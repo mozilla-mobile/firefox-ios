@@ -85,8 +85,8 @@ class LoginsHelper: TabHelper {
                 range: nil,
                 locale: nil)!
             string.replaceSubrange(range, with: replace)
-            let nsRange = NSMakeRange(string.characters.distance(from: string.startIndex, to: range.lowerBound),
-                replace.characters.count)
+            let nsRange = NSRange(location: string.characters.distance(from: string.startIndex, to: range.lowerBound),
+                                  length: replace.characters.count)
             ranges.append(nsRange)
         }
 

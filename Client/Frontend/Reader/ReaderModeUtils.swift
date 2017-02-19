@@ -25,25 +25,25 @@ struct ReaderModeUtils {
                     do {
                         let tmpl = try NSMutableString(contentsOfFile: tmplPath, encoding: String.Encoding.utf8.rawValue)
                         tmpl.replaceOccurrences(of: "%READER-CSS%", with: css as String,
-                            options: NSString.CompareOptions(), range: NSMakeRange(0, tmpl.length))
+                            options: NSString.CompareOptions(), range: NSRange(location: 0, length: tmpl.length))
 
                         tmpl.replaceOccurrences(of: "%READER-STYLE%", with: initialStyle.encode(),
-                            options: NSString.CompareOptions(), range: NSMakeRange(0, tmpl.length))
+                            options: NSString.CompareOptions(), range: NSRange(location: 0, length: tmpl.length))
 
                         tmpl.replaceOccurrences(of: "%READER-DOMAIN%", with: simplifyDomain(readabilityResult.domain),
-                            options: NSString.CompareOptions(), range: NSMakeRange(0, tmpl.length))
+                            options: NSString.CompareOptions(), range: NSRange(location: 0, length: tmpl.length))
 
                         tmpl.replaceOccurrences(of: "%READER-URL%", with: readabilityResult.url,
-                            options: NSString.CompareOptions(), range: NSMakeRange(0, tmpl.length))
+                            options: NSString.CompareOptions(), range: NSRange(location: 0, length: tmpl.length))
 
                         tmpl.replaceOccurrences(of: "%READER-TITLE%", with: readabilityResult.title,
-                            options: NSString.CompareOptions(), range: NSMakeRange(0, tmpl.length))
+                            options: NSString.CompareOptions(), range: NSRange(location: 0, length: tmpl.length))
 
                         tmpl.replaceOccurrences(of: "%READER-CREDITS%", with: readabilityResult.credits,
-                            options: NSString.CompareOptions(), range: NSMakeRange(0, tmpl.length))
+                            options: NSString.CompareOptions(), range: NSRange(location: 0, length: tmpl.length))
 
                         tmpl.replaceOccurrences(of: "%READER-CONTENT%", with: readabilityResult.content,
-                            options: NSString.CompareOptions(), range: NSMakeRange(0, tmpl.length))
+                            options: NSString.CompareOptions(), range: NSRange(location: 0, length: tmpl.length))
 
                         return tmpl as String
                     } catch _ {

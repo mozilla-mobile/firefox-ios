@@ -40,7 +40,7 @@ class TwoLineTableViewCell: UITableViewCell {
 
         indentationWidth = 0
         layoutMargins = UIEdgeInsets.zero
-        separatorInset = UIEdgeInsetsMake(0, TwoLineCellUX.ImageSize + 2 * TwoLineCellUX.BorderViewMargin, 0, 0)
+        separatorInset = UIEdgeInsets(top: 0, left: TwoLineCellUX.ImageSize + 2 * TwoLineCellUX.BorderViewMargin, bottom: 0, right: 0)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -54,7 +54,7 @@ class TwoLineTableViewCell: UITableViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        separatorInset = UIEdgeInsetsMake(0, TwoLineCellUX.ImageSize + 2 * TwoLineCellUX.BorderViewMargin, 0, 0)
+        separatorInset = UIEdgeInsets(top: 0, left: TwoLineCellUX.ImageSize + 2 * TwoLineCellUX.BorderViewMargin, bottom: 0, right: 0)
         twoLineHelper.setupDynamicFonts()
     }
 
@@ -82,7 +82,7 @@ class HistoryTableViewCell: TwoLineTableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: UITableViewCellStyle.subtitle, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(borderView)
-        separatorInset = UIEdgeInsetsMake(0, TwoLineCellUX.BorderFrameSize + 2 * TwoLineCellUX.BorderViewMargin, 0, 0)
+        separatorInset = UIEdgeInsets(top: 0, left: TwoLineCellUX.BorderFrameSize + 2 * TwoLineCellUX.BorderViewMargin, bottom: 0, right: 0)
 
         borderView.frame = CGRect(x: TwoLineCellUX.BorderViewMargin, y: TwoLineCellUX.BorderViewMargin, width: TwoLineCellUX.BorderFrameSize, height: TwoLineCellUX.BorderFrameSize)
         borderView.layer.borderWidth = 0.5
@@ -102,7 +102,7 @@ class HistoryTableViewCell: TwoLineTableViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        separatorInset = UIEdgeInsetsMake(0, TwoLineCellUX.BorderFrameSize + 2 * TwoLineCellUX.BorderViewMargin, 0, 0)
+        separatorInset = UIEdgeInsets(top: 0, left: TwoLineCellUX.BorderFrameSize + 2 * TwoLineCellUX.BorderViewMargin, bottom: 0, right: 0)
     }
 
     required init?(coder aDecoder: NSCoder) {

@@ -219,7 +219,7 @@ class TabLocationView: UIView {
         if let httplessURL = url?.absoluteDisplayString, let baseDomain = url?.baseDomain {
             // Highlight the base domain of the current URL.
             let attributedString = NSMutableAttributedString(string: httplessURL)
-            let nsRange = NSMakeRange(0, httplessURL.characters.count)
+            let nsRange = NSRange(location: 0, length: httplessURL.characters.count)
             attributedString.addAttribute(NSForegroundColorAttributeName, value: baseURLFontColor, range: nsRange)
             attributedString.colorSubstring(baseDomain, withColor: hostFontColor)
             attributedString.addAttribute(UIAccessibilitySpeechAttributePitch, value: NSNumber(value: TabLocationViewUX.BaseURLPitch), range: nsRange)

@@ -188,7 +188,7 @@ class SnackBar: UIView {
         }
 
         contentView.snp.remakeConstraints { make in
-            make.top.left.right.equalTo(self).inset(UIEdgeInsetsMake(UIConstants.DefaultPadding, UIConstants.DefaultPadding, UIConstants.DefaultPadding, UIConstants.DefaultPadding))
+            make.top.left.right.equalTo(self).inset(UIEdgeInsets(equalInset: UIConstants.DefaultPadding))
         }
 
         if let img = imageView.image {
