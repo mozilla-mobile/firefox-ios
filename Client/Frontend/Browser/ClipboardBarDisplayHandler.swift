@@ -40,9 +40,7 @@ class ClipboardBarDisplayHandler {
     }
     
     private func shouldDisplayBar() -> Bool {
-        let allowClipboard = (prefs.boolForKey(PrefsKeys.KeyGoToCopiedLink) ?? true)
-        
-        if !sessionStarted || !allowClipboard || UIPasteboard.general.copiedURL == nil || wasClipboardURLAlreadyDisplayed() {
+        if !sessionStarted || UIPasteboard.general.copiedURL == nil || wasClipboardURLAlreadyDisplayed() {
             return false
         }
         sessionStarted = false
