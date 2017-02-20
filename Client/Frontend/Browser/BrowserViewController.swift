@@ -1327,19 +1327,7 @@ extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
         })
         
         if let toast = clipboardToast {
-            let dispatchTime = DispatchTime.now() + Double(Int64(ButtonToastUX.ToastDelay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
-            DispatchQueue.main.asyncAfter(deadline: dispatchTime, execute: {
-                self.view.addSubview(toast)
-                toast.snp.makeConstraints { make in
-                    make.leading.trailing.equalTo(self.view)
-                    if self.homePanelController != nil && !self.homePanelIsInline {
-                        make.bottom.equalTo(self.view.snp.bottom)
-                    } else {
-                        make.bottom.equalTo(self.footer.snp.top)
-                    }
-                }
-                toast.showToast(duration: ClipboardBarToastUX.DismissAfter)
-            })
+            show(buttonToast: toast, afterWaiting: ClipboardBarToastUX.ToastDelay)
         }
     }
 }

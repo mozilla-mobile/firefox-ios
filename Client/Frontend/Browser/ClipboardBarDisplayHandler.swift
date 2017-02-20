@@ -3,7 +3,7 @@ import Foundation
 import Shared
 
 public struct ClipboardBarToastUX {
-    static let DismissAfter = 4.0
+    static let ToastDelay = 4.0
 }
 
 protocol ClipboardBarDisplayHandlerDelegate: class {
