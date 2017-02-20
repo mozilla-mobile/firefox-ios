@@ -1316,8 +1316,7 @@ class BrowserViewController: UIViewController {
 
 extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
     func shouldDisplayClipboardBar(absoluteString: String) {
-        let title = NSLocalizedString("Go to copied link?", comment: "Clipboard bar title")
-        clipboardToast = ButtonToast(labelText: title, descriptionText: absoluteString,  buttonText: NSLocalizedString("Go", comment: "Clipboard bar button title"), completion: { (buttonPressed) in
+        clipboardToast = ButtonToast(labelText: Strings.GoToCopiedLink, descriptionText: absoluteString,  buttonText: Strings.GoButtonTittle, completion: { (buttonPressed) in
             if !buttonPressed {
                 return
             }
