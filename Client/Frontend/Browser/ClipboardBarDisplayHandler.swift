@@ -7,7 +7,7 @@ public struct UserDefaultClipboardKey {
 }
 
 public struct ClipboardBarToastUX {
-    static let DismissAfter = 10.0
+    static let DismissAfter = 4.0
 }
 
 protocol ClipboardBarDisplayHandlerDelegate: class {
