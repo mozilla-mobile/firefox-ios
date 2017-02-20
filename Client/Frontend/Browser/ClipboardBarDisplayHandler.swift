@@ -2,10 +2,6 @@
 import Foundation
 import Shared
 
-public struct UserDefaultClipboardKey {
-    public static let KeyLastSavedURL = "KeylastSavedURL"
-}
-
 public struct ClipboardBarToastUX {
     static let DismissAfter = 4.0
 }
@@ -18,12 +14,7 @@ class ClipboardBarDisplayHandler {
     weak var delegate: ClipboardBarDisplayHandlerDelegate?
     private var sessionStarted = true
     private var prefs: Prefs
-    private var lastDisplayedURL: String? {
-        if let value = UserDefaults.standard.object(forKey: UserDefaultClipboardKey.KeyLastSavedURL) as? String {
-            return value
-        }
-        return nil
-    }
+    private var lastDisplayedURL: String?
     
     init(prefs: Prefs) {
         self.prefs = prefs
@@ -44,17 +35,8 @@ class ClipboardBarDisplayHandler {
             return false
         }
         sessionStarted = false
-        saveLastDisplayedURL(url: UIPasteboard.general.copiedURL?.absoluteString)
+        lastDisplayedURL = UIPasteboard.general.copiedURL?.absoluteString
         return true
-    }
-    
-    private func saveLastDisplayedURL(url: String?) {
-        if let urlString = url {
-            UserDefaults.standard.set(urlString, forKey: UserDefaultClipboardKey.KeyLastSavedURL)
-        } else {
-            UserDefaults.standard.removeObject(forKey: UserDefaultClipboardKey.KeyLastSavedURL)
-        }
-        UserDefaults.standard.synchronize()
     }
     
     //If we already displayed this URL on the previous session
