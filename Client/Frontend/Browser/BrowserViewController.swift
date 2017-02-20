@@ -40,7 +40,6 @@ class BrowserViewController: UIViewController {
     var webViewContainer: UIView!
     var menuViewController: MenuViewController?
     var urlBar: URLBarView!
-    var clipboardToast: ButtonToast?
     var clipboardBarDisplayHandler: ClipboardBarDisplayHandler!
     var readerModeBar: ReaderModeBarView?
     var readerModeCache: ReaderModeCache
@@ -420,9 +419,8 @@ class BrowserViewController: UIViewController {
         snackBars.backgroundColor = UIColor.clear
         self.view.addSubview(findInPageContainer)
 
-        clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs)
+        clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs, settingsDelegate: self)
         clipboardBarDisplayHandler.delegate = self;
-        
         
         scrollController.urlBar = urlBar
         scrollController.header = header
@@ -1315,20 +1313,8 @@ class BrowserViewController: UIViewController {
 }
 
 extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
-    func shouldDisplayClipboardBar(absoluteString: String) {
-        clipboardToast = ButtonToast(labelText: Strings.GoToCopiedLink, descriptionText: absoluteString,  buttonText: Strings.GoButtonTittle, completion: { (buttonPressed) in
-            if !buttonPressed {
-                return
-            }
-            
-            if let url = URL(string: absoluteString) {
-                self.openURLInNewTab(url, isPrivileged: false)
-            }
-        })
-        
-        if let toast = clipboardToast {
-            show(buttonToast: toast, afterWaiting: ClipboardBarToastUX.ToastDelay)
-        }
+    func shouldDisplayClipboardBar(_ clipboardBar: ButtonToast) {
+        show(buttonToast: clipboardBar, duration: ClipboardBarToastUX.ToastDelay)
     }
 }
 
@@ -1631,7 +1617,7 @@ extension BrowserViewController: URLBarDelegate {
         if .blankPage == NewTabAccessors.getNewTabPage(profile.prefs) {
             UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
         } else {
-            if let toast = clipboardToast {
+            if let toast = clipboardBarDisplayHandler.clipboardToast {
                 toast.removeFromSuperview()
             }
             showHomePanelController(inline: false)
@@ -2192,7 +2178,7 @@ extension BrowserViewController: TabManagerDelegate {
         updateTabCountUsingTabManager(tabManager)
     }
 
-    func show(buttonToast: ButtonToast, afterWaiting delay: Double = 0) {
+    func show(buttonToast: ButtonToast, afterWaiting delay: Double = 0, duration: Double = SimpleToastUX.ToastDismissAfter) {
         let time = DispatchTime.now() + Double(delay * Double(NSEC_PER_MSEC)) / Double(NSEC_PER_SEC)
         DispatchQueue.main.asyncAfter(deadline: time) {
             self.view.addSubview(buttonToast)
@@ -2200,7 +2186,7 @@ extension BrowserViewController: TabManagerDelegate {
                 make.left.right.equalTo(self.view)
                 make.bottom.equalTo(self.webViewContainer)
             }
-            buttonToast.showToast()
+            buttonToast.showToast(duration: duration)
         }
     }
     
