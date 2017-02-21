@@ -1,20 +1,20 @@
 /* Button on About screen */
-"About.learnMoreButton" = "اطلاعات بیشتر";
+"About.learnMoreButton" = "بیشتر بدانید";
 
 /* Label on About screen */
-"About.missionLabel" = "%@ توسط موزیلا تولید شده است. ماموریت ما پرورش اینترنتی سالم و باز می‌باشد.";
+"About.missionLabel" = "برنامهٔ %@ توسط موزیلا تولید شده است. ماموریت ما پرورشِ اینترنتی سالم و باز می‌باشد.";
 
 /* Label on About screen */
-"About.privateBullet1" = "جستجو و مرور دقیقا در داخل برنامه";
+"About.privateBullet1" = "جست‌وجو و مرور تنها با استفاده از این برنامه";
 
 /* Label on About screen */
-"About.privateBullet2" = "مسدود کردن دنبال کننده‌ها (یا به‌روزرسانی تنظیمات برای اجازه دادن به دنبال کننده‌ها)";
+"About.privateBullet2" = "ردیاب‌ها را مسدود کنید (یا اینکه تنظیمات خود را برای اجازه دادن به ردیاب‌ها تغییر دهید)";
 
 /* Label on About screen */
-"About.privateBullet3" = "پاک کردن کوکی ها و همچنین جست و جو و تاریخچه مرورگر";
+"About.privateBullet3" = "پاک کنید تا اطلاعاتی مانند کوکی‌ها و همچنین جست‌وجوها و تاریخچه مرور حذف شوند";
 
 /* Label on About screen */
-"About.privateBulletHeader" = "استفاده به عنوان مرورگر خصوصی:";
+"About.privateBulletHeader" = "از آن به عنوان یک مرورگر ناشناس استفاده کنید:";
 
 /* Label for row in About screen */
 "About.rowHelp" = "راهنما";
@@ -23,19 +23,19 @@
 "About.rowRights" = "حقوق شما";
 
 /* Label on About screen */
-"About.safariBullet1" = "مسدود کردن دنبال کننده ها برای بهبود حریم شخصی";
+"About.safariBullet1" = "ردیاب‌ها را برای بهبود حریم‌خصوصی خود مسدود کنید";
 
 /* Label on About screen */
-"About.safariBullet2" = "مسدود کردن قلم‌های وب برای کاهش اندازه صفحات";
+"About.safariBullet2" = "قلم‌های وب را برای کاهش حجم صفحه‌ها مسدود کنید";
 
 /* Label on About screen */
-"About.safariBulletHeader" = "استفاده از این به عنوان افزونه Safari:";
+"About.safariBulletHeader" = "از آن به عنوان یک افزونه برای Safari استفاده کنید:";
 
 /* Title for the About screen */
 "About.screenTitle" = "درباره";
 
 /* Label on About screen */
-"About.topLabel" = "%@ را در کنترل خود بگیرید.";
+"About.topLabel" = "برنامهٔ %@ شما را در کنترل قرار می‌دهد.";
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "بازگشت";
@@ -44,19 +44,19 @@
 "Browser.forwardLabel" = "جلو";
 
 /* Accessibility label for the reload button */
-"Browser.reloadLabel" = "بارگذاری مجدد";
+"Browser.reloadLabel" = "بارگیری دوباره";
 
 /* Accessibility label for the settings button */
 "Browser.settingsLabel" = "تنظیمات";
 
 /* Accessibility label for the share button */
-"Browser.shareLabel" = "به اشتراک گذاشتن";
+"Browser.shareLabel" = "اشتراک‌گذاری";
 
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "توقف";
 
 /* Button label to reload the error page */
-"Error.tryAgainButton" = "تلاش مجدد";
+"Error.tryAgainButton" = "تلاش دوباره";
 
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.callButton" = "تماس";
@@ -71,7 +71,7 @@
 "ExternalLink.messageTitleWithPlaceholder" = "شما در حال ترک %@ هستید.";
 
 /* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openAppStoreButton" = "بازکردن فروشگاه برنامه‌ها";
+"ExternalLink.openAppStoreButton" = "باز کردن فروشگاه برنامه‌ها";
 
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "باز کردن نقشه";
@@ -80,46 +80,46 @@
 "FirstRun.buttonLabel" = "باشه، متوجه شدم!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "به صورت خودکار دنبال کنندگان آنلاین را در زمان مرورگر مسدود کن. سپس برای پاک کردن صفحات بازدید شده،‌جست‌و‌جو ها،‌ کوکی ها و رمزهای عبور از روی دستگاه ضربه بزنید.";
+"FirstRun.messageLabelDescription" = "به طور خودکار ردیاب‌های آنلاین را هنگام مرورِ خود مسدود کنید. سپس تنها با یک ضربه صفحه‌های بازدید کرده، جست‌وجوها، کوکی‌ها و گذرواژه‌های خود را از روی دستگاه حذف کنید.";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelTagline" = "مرورکردن بدون مشاهده کسی.";
+"FirstRun.messageLabelTagline" = "طوری مرور کنید، انگار که کسی شما را تحت نظر ندارد.";
 
 /* First label for product description on the home screen */
-"Home.descriptionLabel1" = "مرورکردن خصوصی به صورت خودکار.";
+"Home.descriptionLabel1" = "مرورِ خودکارِ ناشناس.";
 
 /* Second label for product description on the home screen */
-"Home.descriptionLabel2" = "مرور،‌ پاک کردن، تکرار.";
+"Home.descriptionLabel2" = "مرور کنید. پاک کنید. تکرار کنید.";
 
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "لغو";
 
 /* Label in share alert to open the URL in Firefox */
-"Open.Firefox" = "فایرفاکس ( مرور به صورت خصوصی)";
+"Open.Firefox" = "فایرفاکس (مرور ناشناس)";
 
 /* Label in share alert to open the full system share menu */
 "Open.More" = "بیشتر";
 
 /* Label in share alert to open the URL in Safari */
-"Open.Safari" = "سافاری";
+"Open.Safari" = "Safari";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsContentBlockers" = "بر روی سافاری ضربه بزنید،‌ سپس محتوا مسدود شما را انتخاب کنید";
+"Safari.instructionsContentBlockers" = "بر روی Safari بزنید و سپس Content Blockers را انتخاب کنید";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsEnable" = "فعالسازی %@";
+"Safari.instructionsEnable" = "فعال‌سازی %@";
 
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
-"Safari.instructionsNotEnabled" = "%@ فعال نیست.";
+"Safari.instructionsNotEnabled" = "گزینه %@ فعال نیست.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsOpen" = "بازکردن تنظیمات برنامه";
+"Safari.instructionsOpen" = "باز کردن برنامهٔ تنظیمات";
 
 /* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "مسدود کردن سایر دنبال کنندگان محتوا ممکن است باعث خراب شدن تعدادی فیلم و صفحه وب شود.";
+"Settings.blockOtherMessage" = "مسدود کردن سایر ردیاب‌های محتوا ممکن است باعث خراب شدن تعدادی از فیلم‌ها و صفحات وب شود.";
 
 /* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "نه، تشکر";
+"Settings.blockOtherNo" = "خیر، ممنون";
 
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes" = "متوجه هستم";
@@ -134,7 +134,7 @@
 "Settings.searchTitle" = "موتور جستجو";
 
 /* Label for Safari integration section */
-"Settings.sectionIntegration" = "یک پارچگی";
+"Settings.sectionIntegration" = "یکپارچگی";
 
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "موزیلا";
@@ -143,31 +143,31 @@
 "Settings.sectionPerformance" = "کارایی";
 
 /* Section label for privacy toggles */
-"Settings.sectionPrivacy" = "حریم شخصی";
+"Settings.sectionPrivacy" = "حریم‌خصوصی";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "مسدود کردن دنبال کنندگان تبلیغ";
+"Settings.toggleBlockAds" = "مسدود کردن ردیاب‌های تبلیغاتی";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "مسدود کردن دنبال کنندگان تجزیه و تحلیل آماری";
+"Settings.toggleBlockAnalytics" = "مسدود کردن ردیاب‌های پایشگر ترافیک";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "انسداد قلم‌های وب";
+"Settings.toggleBlockFonts" = "مسدود کردن قلم‌ها وب";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "انسداد دنبال کنندگان محتوا‌های دیگر";
+"Settings.toggleBlockOther" = "مسدود کردن سایر ردیاب‌های محتوا";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "انسداد دنبال‌ کنندگان شبکه های اجتماعی";
+"Settings.toggleBlockSocial" = "مسدود کردن ردیاب‌های شبکه‌های اجتماعی";
 
 /* Label subtitle for toggle on main screen */
-"Settings.toggleOtherSubtitle" = "ممکن است باعث خراب شدن تعدادی فیلم و صفحات وب شود";
+"Settings.toggleOtherSubtitle" = "ممکن است باعث خرابی برخی فیلم‌ها و صفحات وب شود";
 
 /* Safari toggle label on settings screen */
-"Settings.toggleSafari" = "سافاری";
+"Settings.toggleSafari" = "Safari";
 
 /* Label for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageData" = "ارسال ناشناس داده مصرفی";
+"Settings.toggleSendAnonymousUsageData" = "ارسالِ ناشناسِ اطلاعات مربوط به نحوه استفاده";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.toggleSendAnonymousUsageDataSubtitle" = "اطلاعات بیشتر";

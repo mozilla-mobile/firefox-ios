@@ -1,12 +1,12 @@
 /* (No Commment) */
-"NSCameraUsageDescription" = "این اجازه را به شما می‌دهد تا تصاویر خود را ثبت و بارگذاری کنید.";
+"NSCameraUsageDescription" = "به شما اجازه گرفتن و بارگذاری تصاویر را می‌دهد.";
 
 /* (No Commment) */
-"NSLocationWhenInUseUsageDescription" = "وب سایت‌هایی که شما بازدید میکنید ممکن است مکان شما را درخواست کنند.";
+"NSLocationWhenInUseUsageDescription" = "وب‌سایت‌هایی که بازدید می‌کنید ممکن است مکان شما را درخواست کنند.";
 
 /* (No Commment) */
-"NSMicrophoneUsageDescription" = "این به شما اجازه گرفتن و آپلود فیلم را می‌دهد.";
+"NSMicrophoneUsageDescription" = "به شما اجازه گرفتن و بارگذاری ویدئوها را می‌دهد.";
 
 /* (No Commment) */
-"NSPhotoLibraryUsageDescription" = "این اجازه را به شما می‌دهد تا تصاویر خود را ثبت و بارگذاری کنید.";
+"NSPhotoLibraryUsageDescription" = "به شما اجازه گرفتن و بارگذاری تصاویر را می‌دهد.";
 
