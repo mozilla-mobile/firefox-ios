@@ -419,7 +419,7 @@ class BrowserViewController: UIViewController {
         snackBars.backgroundColor = UIColor.clear
         self.view.addSubview(findInPageContainer)
 
-        clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs, settingsDelegate: self)
+        clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs)
         clipboardBarDisplayHandler.delegate = self;
         
         scrollController.urlBar = urlBar
@@ -1313,8 +1313,8 @@ class BrowserViewController: UIViewController {
 }
 
 extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
-    func shouldDisplayClipboardBar(_ clipboardBar: ButtonToast) {
-        show(buttonToast: clipboardBar, duration: ClipboardBarToastUX.ToastDelay)
+    func shouldDisplay(clipboardBar bar: ButtonToast) {
+        show(buttonToast: bar, duration: ClipboardBarToastUX.ToastDelay)
     }
 }
 
