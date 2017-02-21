@@ -5,34 +5,61 @@
 import UIKit
 import Storage
 import WebImage
+import Shared
 
 public extension UIImageView {
 
-    public func setIcon(_ icon: Favicon?, forURL url: URL?) {
-        self.backgroundColor = UIColor.clear
-        setDefaultIcon(url)
-        guard let icon = icon else {
-            return
-        }
-        let imageURL = URL(string: icon.url)
-        self.sd_setHighlightedImage(with: imageURL, options: []) { (img, error, type, url) in
-            guard let image = img else {
-                return
+    public func setIcon(_ icon: Favicon?, forURL url: URL?, completed completionBlock: ((UIColor, URL?) -> Void)? = nil ) {
+        if let siteURL = url?.baseDomain, let defaultIcon = FaviconFetcher.defaultIcons[siteURL] {
+            self.image = UIImage(contentsOfFile: defaultIcon.url)
+            self.backgroundColor = defaultIcon.color
+            completionBlock?(defaultIcon.color, url)
+        } else {
+            let imageURL = URL(string: icon?.url ?? "")
+            let defaults = defaultFavicon(url)
+            self.sd_setImage(with: imageURL, placeholderImage: defaults.image, options: []) {(img, err, _, _) in
+                guard let image = img, let dUrl = url, err == nil else {
+                    self.backgroundColor = defaults.color
+                    completionBlock?(defaults.color, url)
+                    return
+                }
+                self.color(forImage: image, andURL: dUrl, completed: completionBlock)
             }
-            self.image = image
-            self.backgroundColor = UIColor.white
         }
     }
 
-    fileprivate func setDefaultIcon(_ url: URL?) {
-        if let url = url {
-            self.image = FaviconFetcher.getDefaultFavicon(url)
-            self.backgroundColor = FaviconFetcher.getDefaultColor(url)
-        } else {
-            self.image = FaviconFetcher.defaultFavicon
-            self.backgroundColor = UIColor.white
+   /*
+    * Fetch a background color for a specfic favicon UIImage. It uses the URL to store the UIColor in memory for subsequent requests.
+    */
+    private func color(forImage image: UIImage, andURL url: URL, completed completionBlock: ((UIColor, URL?) -> Void)? = nil) {
+        guard let domain = url.baseDomain else {
+            self.backgroundColor = .gray
+            completionBlock?(UIColor.gray, url)
+            return
         }
-        self.highlightedImage = self.image
+
+        if let color = FaviconFetcher.colors[domain] {
+            self.backgroundColor = color
+            completionBlock?(color, url)
+        } else {
+            image.getColors(scaleDownSize: CGSize(width: 25, height: 25)) {colors in
+                self.backgroundColor = colors.backgroundColor
+                completionBlock?(colors.backgroundColor, url)
+                FaviconFetcher.colors[domain] = colors.backgroundColor
+            }
+        }
+    }
+
+    public func setFavicon(forSite site: Site, onCompletion completionBlock: ((UIColor, URL?) -> Void)? = nil ) {
+        self.setIcon(site.icon, forURL: site.tileURL, completed: completionBlock)
+    }
+
+    private func defaultFavicon(_ url: URL?) -> (image: UIImage, color: UIColor) {
+        if let url = url {
+            return (FaviconFetcher.getDefaultFavicon(url), FaviconFetcher.getDefaultColor(url))
+        } else {
+            return (FaviconFetcher.defaultFavicon, .white)
+        }
     }
 }
 
