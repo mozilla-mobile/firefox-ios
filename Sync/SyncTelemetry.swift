@@ -54,11 +54,13 @@ public struct ValidationStats: Stats {
 }
 
 public class StatsSession {
-    private var took: UInt64 = 0
+    private var took: Int64 = 0
+    private var when: UInt64?
     private var startUptime: UInt64?
 
-    public func start(uptime: UInt64 = DispatchTime.now().uptimeNanoseconds) {
-        self.startUptime = uptime
+    public func start(when: UInt64 = Date.now()) {
+        self.when = when
+        self.startUptime = DispatchTime.now().uptimeNanoseconds
     }
 
     public func hasStarted() -> Bool {
@@ -71,15 +73,8 @@ public class StatsSession {
             return self
         }
 
-        // Check for potential clock issues to prevent an overflow if our end time is before our start time.
-        let (diff, overflowed) = UInt64.subtractWithOverflow(DispatchTime.now().uptimeNanoseconds, startUptime)
-        if overflowed {
-            log.error("Start uptime is less than end uptime! Setting took to 0.")
-            took = 0
-        } else {
-            // Round to milleseconds
-            took = diff / 1000000
-        }
+        // Casting to Int64 should be safe since we're using uptime since boot in both cases.
+        took = Int64(DispatchTime.now().uptimeNanoseconds) - Int64(startUptime)
         return self
     }
 }
