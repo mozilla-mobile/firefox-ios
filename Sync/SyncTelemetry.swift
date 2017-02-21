@@ -46,7 +46,7 @@ public struct SyncDownloadStats: Stats {
     }
 }
 
-// TODO(sleroux): Implement various bookmark validation issues we can run into
+// TODO(sleroux): Implement various bookmark validation issues we can run into.
 public struct ValidationStats: Stats {
     public func hasData() -> Bool {
         return false
@@ -84,7 +84,7 @@ public class StatsSession {
     }
 }
 
-// Stats about a single engine's sync
+// Stats about a single engine's sync.
 public class SyncEngineStatsSession: StatsSession {
     public let collection: String
     public var failureReason: Any?
@@ -113,7 +113,7 @@ public class SyncEngineStatsSession: StatsSession {
     }
 }
 
-// Stats and metadata for a sync operation
+// Stats and metadata for a sync operation.
 public class SyncOperationStatsSession: StatsSession {
     public let why: SyncReason
     public var uid: String?
