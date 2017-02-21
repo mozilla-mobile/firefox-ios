@@ -10,6 +10,7 @@ import MessageUI
 import WebImage
 import SwiftKeychainWrapper
 import LocalAuthentication
+import Button
 
 private let log = Logger.browserLogger
 
@@ -217,7 +218,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         log.debug("Setting up Adjust")
         self.adjustIntegration?.triggerApplicationDidFinishLaunchingWithOptions(launchOptions)
-        
+
+        log.debug("Setting up Button")
+        Button.sharedButton().configureWithApplicationId("app-7a2a9acbcc95e820", userId: nil) { (error, url) in
+            if error != nil {
+                log.error("Button failed to initialize: \(error)")
+            }
+        }
+
         log.debug("Making window key and visible…")
         self.window!.makeKeyAndVisible()
 

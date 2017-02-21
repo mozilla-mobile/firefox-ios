@@ -695,6 +695,8 @@
 		F8708D2C1A0970B40051AB07 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F8708D221A0970990051AB07 /* MainInterface.storyboard */; };
 		F8708D2E1A0970B70051AB07 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F8708D251A0970990051AB07 /* Images.xcassets */; };
 		F8708D321A0970B70051AB07 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8708D291A0970990051AB07 /* ShareViewController.swift */; };
+		F8A8C0A51E4241B00044E27B /* Button.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F8A8C0A31E4241B00044E27B /* Button.bundle */; };
+		F8A8C0A61E4241B00044E27B /* Button.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F8A8C0A41E4241B00044E27B /* Button.framework */; };
 		FA6B2AC21D41F02D00429414 /* Punycode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6B2AC11D41F02D00429414 /* Punycode.swift */; };
 		FA6B2AC31D41F02D00429414 /* Punycode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6B2AC11D41F02D00429414 /* Punycode.swift */; };
 		FA6B2AC41D41F02D00429414 /* Punycode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6B2AC11D41F02D00429414 /* Punycode.swift */; };
@@ -1825,6 +1827,8 @@
 		F8708D251A0970990051AB07 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		F8708D261A0970990051AB07 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F8708D291A0970990051AB07 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
+		F8A8C0A31E4241B00044E27B /* Button.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Button.bundle; sourceTree = "<group>"; };
+		F8A8C0A41E4241B00044E27B /* Button.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Button.framework; sourceTree = "<group>"; };
 		FA6B2AC11D41F02D00429414 /* Punycode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Punycode.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1884,6 +1888,7 @@
 				2FCAE2311ABB51F800877008 /* Storage.framework in Frameworks */,
 				2FA436121ABB83B4008031D1 /* Account.framework in Frameworks */,
 				E4D5672F1ADECE2800F1EFE7 /* ReadingList.framework in Frameworks */,
+				F8A8C0A61E4241B00044E27B /* Button.framework in Frameworks */,
 				0B8E0FF41A932BD500161DC3 /* ImageIO.framework in Frameworks */,
 				E4A888161A95679500CDC337 /* FxA.framework in Frameworks */,
 				282731751ABC9BE700AA1954 /* Sync.framework in Frameworks */,
@@ -2299,6 +2304,7 @@
 		28CE83EF1A1D246900576538 /* Third-Party Source */ = {
 			isa = PBXGroup;
 			children = (
+				F8A8C0A21E4241B00044E27B /* Button */,
 				E66C5B451BDA81050051AA93 /* Apple */,
 				288A2D7F1AB8B2B20023ABC3 /* Box */,
 				E65C5B8B1BEA4E7100D28BEF /* FBSnapshotTestCase */,
@@ -3494,6 +3500,15 @@
 			path = ShareTo;
 			sourceTree = "<group>";
 		};
+		F8A8C0A21E4241B00044E27B /* Button */ = {
+			isa = PBXGroup;
+			children = (
+				F8A8C0A31E4241B00044E27B /* Button.bundle */,
+				F8A8C0A41E4241B00044E27B /* Button.framework */,
+			);
+			path = Button;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -4096,6 +4111,9 @@
 							com.apple.Keychain = {
 								enabled = 1;
 							};
+							com.apple.SafariKeychain = {
+								enabled = 1;
+							};
 						};
 					};
 					F84B21D21A090F8100AAB793 = {
@@ -4497,6 +4515,7 @@
 				74821FFE1DB6D3AC00EEEA72 /* MailSchemes.plist in Resources */,
 				E6FF6AC61D8708F70070C294 /* MetadataParser.js in Resources */,
 				D308EE561CBF0BF5006843F2 /* CertError.css in Resources */,
+				F8A8C0A51E4241B00044E27B /* Button.bundle in Resources */,
 				E4B7B7641A793CF20022C5E0 /* CharisSILR.ttf in Resources */,
 				2F834D161A80629A006A0B7B /* FxASignIn.js in Resources */,
 				D3BA7E0C1B0E902A00153782 /* ContextMenu.js in Resources */,
@@ -6207,6 +6226,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 					"$(PROJECT_DIR)/ThirdParty/PLCrashReporter",
+					"$(PROJECT_DIR)/Button",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -6825,6 +6845,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 					"$(PROJECT_DIR)/ThirdParty/PLCrashReporter",
+					"$(PROJECT_DIR)/Button",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -7276,6 +7297,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 					"$(PROJECT_DIR)/ThirdParty/PLCrashReporter",
+					"$(PROJECT_DIR)/Button",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -7883,6 +7905,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 					"$(PROJECT_DIR)/ThirdParty/PLCrashReporter",
+					"$(PROJECT_DIR)/Button",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -8340,6 +8363,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 					"$(PROJECT_DIR)/ThirdParty/PLCrashReporter",
+					"$(PROJECT_DIR)/Button",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",

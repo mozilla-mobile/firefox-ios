@@ -1,0 +1,6 @@
+framework module Button {
+	umbrella header "Button.h"
+
+	export *
+	module * { export * }
+}
