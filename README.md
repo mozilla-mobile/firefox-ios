@@ -6,7 +6,7 @@ Download on the [App Store](https://itunes.apple.com/app/firefox-web-browser/id9
 This branch
 -----------
 
-This branch is for mainline development that will ship in v7.0.
+This branch is for mainline development that will ship in *v8.0*.
 
 This branch works with Xcode 8.2.1, and supports iOS 9.x and 10.
 
@@ -14,7 +14,7 @@ This branch is written in Swift 3.0.
 
 Please make sure you aim your pull requests in the right direction.
 
-For bug fixes and features for the upcoming v6.0 release, please see the *v6.x* branch.
+For bug fixes and features for the upcoming v7.0 release, please see the *v7.x* branch.
 
 Getting involved
 ----------------
@@ -26,8 +26,6 @@ We encourage you to participate in this open source project. We love Pull Reques
 * Bugs:           [File a new bug](https://bugzilla.mozilla.org/enter_bug.cgi?bug_file_loc=http%3A%2F%2F&bug_ignored=0&op_sys=iOS%20&product=Firefox%20for%20iOS&rep_platform=All) • [Existing bugs](https://bugzilla.mozilla.org/describecomponents.cgi?product=Firefox%20for%20iOS) 
 
 Want to contribute but don't know where to start? Here is a list of [Good First Bugs.](http://www.joshmatthews.net/bugsahoy/?mobileios=1&simple=1)
-
-This is a work in progress on some early ideas.  Don't get too attached to this code. Tomorrow everything will be different.
 
 Likewise, the design and UX is still in flux. Don't get attached to them. They will change tomorrow!
 https://mozilla.invisionapp.com/share/HA254M642#/screens/63057282?maintainScrollPosition=false
