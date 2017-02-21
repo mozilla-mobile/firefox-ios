@@ -6,6 +6,8 @@ import Foundation
 import Shared
 import Account
 
+fileprivate let log = Logger.syncLogger
+
 public enum SyncReason: String {
     case startup = "startup"
     case scheduled = "scheduled"
@@ -53,23 +55,31 @@ public struct ValidationStats: Stats {
 
 public class StatsSession {
     private var took: UInt64 = 0
-    private var startTime: Timestamp?
+    private var startUptime: UInt64?
 
-    public func start(time: Timestamp = Date.now()) {
-        self.startTime = time
+    public func start(uptime: UInt64 = DispatchTime.now().uptimeNanoseconds) {
+        self.startUptime = uptime
     }
 
     public func hasStarted() -> Bool {
-        return startTime != nil
+        return startUptime != nil
     }
 
     public func end() -> Self {
-        guard let startTime = startTime else {
+        guard let startUptime = startUptime else {
             assertionFailure("SyncOperationStats called end without first calling start!")
             return self
         }
 
-        took = Date.now() - startTime
+        // Check for potential clock issues to prevent an overflow if our end time is before our start time.
+        let (diff, overflowed) = UInt64.subtractWithOverflow(DispatchTime.now().uptimeNanoseconds, startUptime)
+        if overflowed {
+            log.error("Start uptime is less than end uptime! Setting took to 0.")
+            took = 0
+        } else {
+            // Round to milleseconds
+            took = diff / 1000000
+        }
         return self
     }
 }
