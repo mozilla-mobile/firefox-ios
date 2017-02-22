@@ -420,7 +420,7 @@ class BrowserViewController: UIViewController {
         self.view.addSubview(findInPageContainer)
 
         clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs)
-        clipboardBarDisplayHandler.delegate = self;
+        clipboardBarDisplayHandler.delegate = self
         
         scrollController.urlBar = urlBar
         scrollController.header = header
@@ -1317,7 +1317,6 @@ extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
         show(buttonToast: bar, duration: ClipboardBarToastUX.ToastDelay)
     }
 }
-
 
 extension BrowserViewController: AppStateDelegate {
 

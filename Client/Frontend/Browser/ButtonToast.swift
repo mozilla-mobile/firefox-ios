@@ -81,10 +81,8 @@ class ButtonToast: UIView {
         
         let recognizer = UITapGestureRecognizer(target: self, action:#selector(ButtonToast.buttonPressed(_:)))
         button.addGestureRecognizer(recognizer)
-        
         toast.addSubview(button)
-        
-        var descriptionLabel : UILabel?
+        var descriptionLabel: UILabel?
         
         if let text = descriptionText {
             let textLabel = UILabel()

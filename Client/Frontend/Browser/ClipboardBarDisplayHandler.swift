@@ -1,3 +1,6 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
 import Shared
@@ -17,7 +20,6 @@ class ClipboardBarDisplayHandler {
     private var prefs: Prefs
     private var lastDisplayedURL: String?
     var clipboardToast: ButtonToast?
-    
     
     init(prefs: Prefs) {
         self.prefs = prefs
@@ -58,7 +60,7 @@ class ClipboardBarDisplayHandler {
     func checkIfShouldDisplayBar() {
         guard let absoluteString = UIPasteboard.general.copiedURL?.absoluteString, shouldDisplayBar() else { return }
         
-        clipboardToast = ButtonToast(labelText: Strings.GoToCopiedLink, descriptionText: absoluteString,  buttonText: Strings.GoButtonTittle, completion: { buttonPressed in
+        clipboardToast = ButtonToast(labelText: Strings.GoToCopiedLink, descriptionText: absoluteString, buttonText: Strings.GoButtonTittle, completion: { buttonPressed in
 
             guard let url = URL(string: absoluteString), buttonPressed else { return }
             self.delegate?.settingsOpenURLInNewTab(url)
