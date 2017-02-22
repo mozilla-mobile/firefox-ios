@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>AdjustAppToken</key>
-	<string>$(ADJUST_APP_TOKEN)</string>
+	<string></string>
 	<key>AdjustEnvironment</key>
-	<string>$(ADJUST_ENVIRONMENT)</string>
+	<string></string>
 	<key>AppIdentifierPrefix</key>
 	<string>$(APP_IDENTIFIER_PREFIX)</string>
 	<key>CFBundleDevelopmentRegion</key>
