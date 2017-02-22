@@ -143,7 +143,11 @@ class TopSiteItemCell: UICollectionViewCell {
     }
 
     func configureWithTopSiteItem(_ site: Site) {
-        titleLabel.text = site.tileURL.hostSLD
+        if let provider = site.provider {
+            titleLabel.text = provider.lowercased()
+        } else {
+            titleLabel.text = site.tileURL.hostSLD
+        }
         accessibilityLabel = titleLabel.text
         if let suggestedSite = site as? SuggestedSite {
             let img = UIImage(named: suggestedSite.faviconImagePath!)

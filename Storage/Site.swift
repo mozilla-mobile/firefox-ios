@@ -71,6 +71,7 @@ open class Site: Identifiable {
 
     open let url: String
     open let title: String
+    open var provider: String?
      // Sites may have multiple favicons. We'll return the largest.
     open var icon: Favicon?
     open var latestVisit: Visit?
