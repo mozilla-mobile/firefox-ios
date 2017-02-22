@@ -4030,67 +4030,67 @@
 				TargetAttributes = {
 					2827315D1ABC9BE600AA1954 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 					};
 					282731671ABC9BE700AA1954 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
 					288A2D851AB8B3260023ABC3 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 					};
 					2FA435FA1ABB83B4008031D1 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 					};
 					2FA436041ABB83B4008031D1 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
 					2FCAE2191ABB51F800877008 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 					};
 					2FCAE2231ABB51F800877008 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
 					390527491C874D35007E0BB7 = {
 						CreatedOnToolsVersion = 7.2.1;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 						ProvisioningStyle = Manual;
 					};
 					3B43E3CF1D95C48D00BBA9DB = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 						ProvisioningStyle = Automatic;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
 					3BFE4B061D342FB800DDF53F = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
 					7BEB64401C7345600092C02E = {
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
 					7BEB644F1C7345990092C02E = {
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
 					D39FA15E1A83E0EC00EE869C = {
@@ -4101,7 +4101,7 @@
 					};
 					E4BA8A2A1B4B0A1600BC2E95 = {
 						CreatedOnToolsVersion = 6.4;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
@@ -4112,29 +4112,29 @@
 					};
 					E4D567171ADECE2700F1EFE7 = {
 						CreatedOnToolsVersion = 6.3;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 					};
 					E4D567211ADECE2700F1EFE7 = {
 						CreatedOnToolsVersion = 6.3;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
 					E65C5BC31BEA4F6500D28BEF = {
 						CreatedOnToolsVersion = 7.1;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0800;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
 					E6F9650B1B2F1CF20034B023 = {
 						CreatedOnToolsVersion = 6.3.2;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 					};
 					F84B21BD1A090F8100AAB793 = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
@@ -4151,13 +4151,13 @@
 					};
 					F84B21D21A090F8100AAB793 = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
 					F84B22481A0920C600AAB793 = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
@@ -4171,7 +4171,7 @@
 					};
 					F84B225B1A09210A00AAB793 = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
@@ -5742,11 +5742,12 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Entitlements/Enterprise/Fennec.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DISPLAY_NAME = "Fennec ($USER)";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Extensions/Today/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Fennec.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.FennecEnterprise.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = Today;
 				SWIFT_VERSION = 3.0;
 			};
@@ -5759,11 +5760,12 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Entitlements/Enterprise/Firefox.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DISPLAY_NAME = Firefox;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Extensions/Today/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Firefox.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Firefox.enterprise.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = Today;
 				SWIFT_VERSION = 3.0;
 			};
@@ -5776,11 +5778,12 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Entitlements/Enterprise/FirefoxBeta.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DISPLAY_NAME = "Firefox β";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Extensions/Today/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.FirefoxBeta.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.FirefoxBeta.enterprise.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = Today;
 				SWIFT_VERSION = 3.0;
 			};
@@ -5793,6 +5796,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Entitlements/Enterprise/FirefoxNightly.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DISPLAY_NAME = "Firefox α";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Extensions/Today/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -6245,7 +6249,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_ACTIVITY_MODE = "";
 				"DEBUG_ACTIVITY_MODE[sdk=iphonesimulator*]" = disable;
-				DEVELOPMENT_TEAM = 43AQ936H96;
+				DEVELOPMENT_TEAM = 9G8J6YA743;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6294,6 +6298,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Entitlements/Enterprise/Firefox.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DISPLAY_NAME = Firefox;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -6315,7 +6320,7 @@
 					"-ObjC",
 					"-lxml2",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Firefox;
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Firefox.enterprise;
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client-Bridging-Header.h";
@@ -6354,6 +6359,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Entitlements/Enterprise/Firefox.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DISPLAY_NAME = Firefox;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -6362,7 +6368,7 @@
 				);
 				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Firefox.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Firefox.enterprise.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
@@ -6378,6 +6384,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Entitlements/Enterprise/Firefox.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DISPLAY_NAME = "Send Tab";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -6386,7 +6393,7 @@
 				);
 				INFOPLIST_FILE = Extensions/SendTo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Firefox.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Firefox.enterprise.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
@@ -6615,6 +6622,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Entitlements/Enterprise/Fennec.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DISPLAY_NAME = "View Later ($USER)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -6623,7 +6631,7 @@
 				);
 				INFOPLIST_FILE = Extensions/ViewLater/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Fennec.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.FennecEnterprise.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
@@ -6638,6 +6646,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Entitlements/Enterprise/Firefox.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DISPLAY_NAME = "View Later";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -6646,7 +6655,7 @@
 				);
 				INFOPLIST_FILE = Extensions/ViewLater/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Firefox.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Firefox.enterprise.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
@@ -6904,6 +6913,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Entitlements/Enterprise/FirefoxNightly.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DISPLAY_NAME = "Firefox α";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -6961,6 +6971,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Entitlements/Enterprise/FirefoxNightly.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DISPLAY_NAME = "Send Tab (α)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -6983,6 +6994,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Entitlements/Enterprise/FirefoxNightly.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DISPLAY_NAME = "Firefox α";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -7007,6 +7019,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Entitlements/Enterprise/FirefoxNightly.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DISPLAY_NAME = "View Later (α)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -7357,7 +7370,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_ACTIVITY_MODE = "";
 				"DEBUG_ACTIVITY_MODE[sdk=iphonesimulator*]" = disable;
-				DEVELOPMENT_TEAM = 43AQ936H96;
+				DEVELOPMENT_TEAM = 9G8J6YA743;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -7407,6 +7420,7 @@
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Entitlements/Enterprise/FirefoxBeta.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				DISPLAY_NAME = "Firefox β ";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -7428,10 +7442,9 @@
 					"-ObjC",
 					"-lxml2",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.FirefoxBeta;
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.FirefoxBeta.enterprise;
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
-				PROVISIONING_PROFILE = "89529973-650c-4b50-8fa4-5331ccb30c68";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
@@ -7463,6 +7476,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Entitlements/Enterprise/FirefoxBeta.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DISPLAY_NAME = "Send Tab (β)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -7471,7 +7485,7 @@
 				);
 				INFOPLIST_FILE = Extensions/SendTo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.FirefoxBeta.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.FirefoxBeta.enterprise.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
@@ -7485,6 +7499,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Entitlements/Enterprise/FirefoxBeta.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DISPLAY_NAME = "Firefox β";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -7493,7 +7508,7 @@
 				);
 				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.FirefoxBeta.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.FirefoxBeta.enterprise.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
@@ -7509,6 +7524,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Entitlements/Enterprise/FirefoxBeta.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DISPLAY_NAME = "View Later (β)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -7517,7 +7533,7 @@
 				);
 				INFOPLIST_FILE = Extensions/ViewLater/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.FirefoxBeta.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.FirefoxBeta.enterprise.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
@@ -7805,7 +7821,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_ACTIVITY_MODE = "";
 				"DEBUG_ACTIVITY_MODE[sdk=iphonesimulator*]" = disable;
-				DEVELOPMENT_TEAM = 43AQ936H96;
+				DEVELOPMENT_TEAM = 9G8J6YA743;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -7858,6 +7874,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_Developer;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Entitlements/Enterprise/Fennec.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DISPLAY_NAME = "Fennec ($USER)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -7898,7 +7915,7 @@
 					"-framework",
 					CoreMedia,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Fennec;
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.FennecEnterprise;
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = BUDDYBUILD;
@@ -7932,6 +7949,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Entitlements/Enterprise/Fennec.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DISPLAY_NAME = "Fennec ($USER)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -7940,7 +7958,7 @@
 				);
 				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Fennec.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.FennecEnterprise.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
@@ -7956,6 +7974,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Entitlements/Enterprise/Fennec.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DISPLAY_NAME = "Send Tab ($USER)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -7964,7 +7983,7 @@
 				);
 				INFOPLIST_FILE = Extensions/SendTo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Fennec.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.FennecEnterprise.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;

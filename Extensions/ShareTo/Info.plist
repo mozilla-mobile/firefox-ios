@@ -44,5 +44,7 @@
 		<string>FiraSans-UltraLight.ttf</string>
 		<string>FiraSans-Medium.ttf</string>
 	</array>
+	<key>LSApplicationCategoryType</key>
+	<string>Extensions/SendTo/Info.plist</string>
 </dict>
 </plist>
