@@ -246,6 +246,11 @@ class Tab: NSObject {
             }
         }
 
+        // Don't expose localhost urls.
+        if let url = self.url, url.isLocal {
+            return ""
+        }
+
         guard let lastTitle = lastTitle, !lastTitle.isEmpty else {
             return self.url?.displayURL?.absoluteString ??  ""
         }
