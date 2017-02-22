@@ -11,7 +11,7 @@ echo password | sudo -S pip install --upgrade pip
 echo password | sudo -S pip install virtualenv
 
 # Add badge to app icon
-badge --no_badge --shield_no_resize --shield "7.0-Build%2024-blue"
+badge --no_badge --shield_no_resize --shield "7.0-Build%$BUDDYBUILD_BUILD_NUMBER-blue"
 
 # Localize the app
 ./scripts/import-locales.sh
