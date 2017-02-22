@@ -26,7 +26,7 @@ fi
 # to make rerunning easy and it also allows us to ensure that the repo
 # doesn't get treated as a submodule by Git
 echo "Creating firefox-ios-l10n Git repo"
-svn export --force https://github.com/mozilla-l10n/firefoxios-l10n/trunk firefox-ios-l10n || exit 1
+svn export --non-interactive --trust-server-cert --force https://github.com/mozilla-l10n/firefoxios-l10n/trunk firefox-ios-l10n || exit 1
 
 # Store current relative path to the script
 script_path=$(dirname "$0")
