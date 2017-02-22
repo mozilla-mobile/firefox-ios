@@ -94,6 +94,8 @@ class TopTabsViewController: UIViewController {
     init(tabManager: TabManager) {
         self.tabManager = tabManager
         super.init(nibName: nil, bundle: nil)
+        collectionView.dataSource = self
+        collectionView.delegate = tabLayoutDelegate
         NotificationCenter.default.addObserver(self, selector: #selector(TopTabsViewController.reloadFavicons(_:)), name: faviconNotification, object: nil)
     }
     
@@ -108,13 +110,12 @@ class TopTabsViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        collectionView.dataSource = self
-        collectionView.delegate = tabLayoutDelegate
-        scrollToCurrentTab()
+        self.reloadData()
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
         tabManager.addDelegate(self)
         self.tabStore = self.tabsToDisplay
 
