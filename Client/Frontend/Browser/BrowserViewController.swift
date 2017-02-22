@@ -40,6 +40,7 @@ class BrowserViewController: UIViewController {
     var webViewContainer: UIView!
     var menuViewController: MenuViewController?
     var urlBar: URLBarView!
+    var clipboardBarDisplayHandler: ClipboardBarDisplayHandler!
     var readerModeBar: ReaderModeBarView?
     var readerModeCache: ReaderModeCache
     fileprivate var statusBarOverlay: UIView!
@@ -418,6 +419,9 @@ class BrowserViewController: UIViewController {
         snackBars.backgroundColor = UIColor.clear
         self.view.addSubview(findInPageContainer)
 
+        clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs)
+        clipboardBarDisplayHandler.delegate = self
+        
         scrollController.urlBar = urlBar
         scrollController.header = header
         scrollController.footer = footer
@@ -531,6 +535,7 @@ class BrowserViewController: UIViewController {
 
         log.debug("Updating tab count.")
         updateTabCountUsingTabManager(tabManager, animated: false)
+        clipboardBarDisplayHandler.checkIfShouldDisplayBar()
         log.debug("BVC done.")
 
         NotificationCenter.default.addObserver(self,
@@ -1307,6 +1312,12 @@ class BrowserViewController: UIViewController {
     }
 }
 
+extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
+    func shouldDisplay(clipboardBar bar: ButtonToast) {
+        show(buttonToast: bar, duration: ClipboardBarToastUX.ToastDelay)
+    }
+}
+
 extension BrowserViewController: AppStateDelegate {
 
     func appDidUpdateState(_ appState: AppState) {
@@ -1605,6 +1616,9 @@ extension BrowserViewController: URLBarDelegate {
         if .blankPage == NewTabAccessors.getNewTabPage(profile.prefs) {
             UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
         } else {
+            if let toast = clipboardBarDisplayHandler.clipboardToast {
+                toast.removeFromSuperview()
+            }
             showHomePanelController(inline: false)
         }
     }
@@ -2163,7 +2177,7 @@ extension BrowserViewController: TabManagerDelegate {
         updateTabCountUsingTabManager(tabManager)
     }
 
-    func show(buttonToast: ButtonToast, afterWaiting delay: Double = 0) {
+    func show(buttonToast: ButtonToast, afterWaiting delay: Double = 0, duration: Double = SimpleToastUX.ToastDismissAfter) {
         let time = DispatchTime.now() + Double(delay * Double(NSEC_PER_MSEC)) / Double(NSEC_PER_SEC)
         DispatchQueue.main.asyncAfter(deadline: time) {
             self.view.addSubview(buttonToast)
@@ -2171,7 +2185,7 @@ extension BrowserViewController: TabManagerDelegate {
                 make.left.right.equalTo(self.view)
                 make.bottom.equalTo(self.webViewContainer)
             }
-            buttonToast.showToast()
+            buttonToast.showToast(duration: duration)
         }
     }
     

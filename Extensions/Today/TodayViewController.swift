@@ -112,19 +112,6 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         return stackView
     }()
 
-    fileprivate var copiedURL: URL? {
-        if let string = UIPasteboard.general.string,
-            let url = URL(string: string), url.isWebPage() {
-            return url
-        } else {
-            return nil
-        }
-    }
-
-    fileprivate var hasCopiedURL: Bool {
-        return copiedURL != nil
-    }
-
     fileprivate var scheme: String {
         guard let string = Bundle.main.object(forInfoDictionaryKey: "MozInternalURLScheme") as? String else {
             // Something went wrong/weird, but we should fallback to the public one.
@@ -179,7 +166,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     }
 
     func updateCopiedLink() {
-        if let url = self.copiedURL {
+        if let url = UIPasteboard.general.copiedURL {
             self.openCopiedLinkButton.isHidden = false
             self.openCopiedLinkButton.subtitleLabel.isHidden = SystemUtils.isDeviceLocked()
             self.openCopiedLinkButton.subtitleLabel.text = url.absoluteString

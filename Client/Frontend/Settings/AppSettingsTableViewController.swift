@@ -47,13 +47,13 @@ class AppSettingsTableViewController: SettingsTableViewController {
             HomePageSetting(settings: self),
             OpenWithSetting(settings: self),
             BoolSetting(prefs: prefs, prefKey: "blockPopups", defaultValue: true,
-                titleText: NSLocalizedString("Block Pop-up Windows", comment: "Block pop-up windows setting")),
+                        titleText: NSLocalizedString("Block Pop-up Windows", comment: "Block pop-up windows setting")),
             BoolSetting(prefs: prefs, prefKey: "saveLogins", defaultValue: true,
-                titleText: NSLocalizedString("Save Logins", comment: "Setting to enable the built-in password manager")),
+                        titleText: NSLocalizedString("Save Logins", comment: "Setting to enable the built-in password manager")),
             BoolSetting(prefs: prefs, prefKey: AllowThirdPartyKeyboardsKey, defaultValue: false,
-                titleText: NSLocalizedString("Allow Third-Party Keyboards", comment: "Setting to enable third-party keyboards"), statusText: NSLocalizedString("Firefox needs to reopen for this change to take effect.", comment: "Setting value prop to enable third-party keyboards")),
-        ]
-
+                        titleText: NSLocalizedString("Allow Third-Party Keyboards", comment: "Setting to enable third-party keyboards"), statusText: NSLocalizedString("Firefox needs to reopen for this change to take effect.", comment: "Setting value prop to enable third-party keyboards")),
+            ]        
+        
         let accountChinaSyncSetting: [Setting]
         if !profile.isChinaEdition {
             accountChinaSyncSetting = []
