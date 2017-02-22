@@ -463,7 +463,11 @@ extension TopTabsViewController: TabManagerDelegate {
     func performTabUpdates() {
         let fromTabs = !self.pendingUpdatesToTabs.isEmpty ? self.pendingUpdatesToTabs : self.oldTabs
         self.oldTabs = fromTabs ?? self.tabStore
-        self.updateTabsFrom(self.oldTabs, to: self.tabsToDisplay)
+        if self.pendingReloadData && !isUpdating {
+            self.reloadData()
+        } else {
+            self.updateTabsFrom(self.oldTabs, to: self.tabsToDisplay)
+        }
     }
 
     // This helps make sure animations don't happen before the view is loaded.
@@ -507,7 +511,7 @@ extension TopTabsViewController: TabManagerDelegate {
             return
         }
         // If we deleted the last private tab. We'll be switching back to normal browsing. Pause updates till then
-        if tab.isPrivate && self.tabsToDisplay.isEmpty {
+        if self.tabsToDisplay.isEmpty {
             self.pendingReloadData = true
             return
         }
