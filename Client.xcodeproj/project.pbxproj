@@ -5778,6 +5778,8 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Entitlements/Enterprise/FirefoxBeta.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				DEVELOPMENT_TEAM = 9G8J6YA743;
 				DISPLAY_NAME = "Firefox β";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Extensions/Today/Info.plist;
@@ -5785,6 +5787,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.FirefoxBeta.enterprise.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = Today;
+				PROVISIONING_PROFILE = "80cea5bd-a0d5-4c37-b9a8-4ea5033d880f";
+				PROVISIONING_PROFILE_SPECIFIER = "Firefox Beta Enterprise Today";
 				SWIFT_VERSION = 3.0;
 			};
 			name = FirefoxBeta;
@@ -7420,6 +7424,7 @@
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Entitlements/Enterprise/FirefoxBeta.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				DEVELOPMENT_TEAM = 9G8J6YA743;
 				DISPLAY_NAME = "Firefox β ";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -7445,6 +7450,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.FirefoxBeta.enterprise;
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
+				PROVISIONING_PROFILE = "5bf24d04-98ae-4f29-a0e8-7df2e1f10b1e";
+				PROVISIONING_PROFILE_SPECIFIER = "Firefox Beta Enterprise";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
@@ -7476,6 +7483,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Entitlements/Enterprise/FirefoxBeta.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				DEVELOPMENT_TEAM = 9G8J6YA743;
 				DISPLAY_NAME = "Send Tab (β)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -7487,6 +7496,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.FirefoxBeta.enterprise.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "3ed4844e-0559-4c99-b825-5063ebf45f95";
+				PROVISIONING_PROFILE_SPECIFIER = "Firefox Beta Enterprise SendTo";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
 			};
@@ -7499,6 +7510,8 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Entitlements/Enterprise/FirefoxBeta.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				DEVELOPMENT_TEAM = 9G8J6YA743;
 				DISPLAY_NAME = "Firefox β";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -7510,6 +7523,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.FirefoxBeta.enterprise.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "b54e5ca3-24b4-4cd2-8007-65d0d27a8858";
+				PROVISIONING_PROFILE_SPECIFIER = "Firefox Beta Enterprise ShareTo";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -7524,6 +7539,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Entitlements/Enterprise/FirefoxBeta.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				DEVELOPMENT_TEAM = 9G8J6YA743;
 				DISPLAY_NAME = "View Later (β)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -7535,6 +7552,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.FirefoxBeta.enterprise.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "8c3859ae-6e6b-46c1-a04c-d705938a26ef";
+				PROVISIONING_PROFILE_SPECIFIER = "Firefox Beta Enterprise ViewLater";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
 			};
