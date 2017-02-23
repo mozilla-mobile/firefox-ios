@@ -2042,6 +2042,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
     func presentSearchSettingsController() {
         let settingsNavigationController = SearchSettingsTableViewController()
         settingsNavigationController.model = self.profile.searchEngines
+        settingsNavigationController.profile = self.profile
 
         let navController = UINavigationController(rootViewController: settingsNavigationController)
 
