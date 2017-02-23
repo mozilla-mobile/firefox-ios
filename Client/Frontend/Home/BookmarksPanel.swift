@@ -24,14 +24,18 @@ let emptyBookmarksText = NSLocalizedString("Bookmarks you save will show up here
 // MARK: - UX constants.
 
 struct BookmarksPanelUX {
-    fileprivate static let BookmarkFolderHeaderViewChevronInset: CGFloat = 10
-    fileprivate static let BookmarkFolderChevronSize: CGFloat = 20
-    fileprivate static let BookmarkFolderChevronLineWidth: CGFloat = 4.0
-    fileprivate static let BookmarkFolderTextColor = UIColor(red: 92/255, green: 92/255, blue: 92/255, alpha: 1.0)
-    fileprivate static let WelcomeScreenPadding: CGFloat = 15
-    fileprivate static let WelcomeScreenItemTextColor = UIColor.gray
-    fileprivate static let WelcomeScreenItemWidth = 170
-    fileprivate static let SeparatorRowHeight: CGFloat = 0.5
+    static let BookmarkFolderHeaderViewChevronInset: CGFloat = 10
+    static let BookmarkFolderChevronSize: CGFloat = 20
+    static let BookmarkFolderChevronLineWidth: CGFloat = 2.0
+    static let BookmarkFolderTextColor = UIColor(red: 92/255, green: 92/255, blue: 92/255, alpha: 1.0)
+    static let BookmarkFolderBGColor = UIColor(rgb: 0xf7f8f7).withAlphaComponent(0.3)
+    static let WelcomeScreenPadding: CGFloat = 15
+    static let WelcomeScreenItemTextColor = UIColor.gray
+    static let WelcomeScreenItemWidth = 170
+    static let SeparatorRowHeight: CGFloat = 0.5
+    static let IconSize: CGFloat = 23
+    static let IconBorderColor = UIColor(white: 0, alpha: 0.1)
+    static let IconBorderWidth: CGFloat = 0.5
 }
 
 class BookmarksPanel: SiteTableViewController, HomePanel {
@@ -196,7 +200,11 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             if let url = bookmark.favicon?.url.asURL, url.scheme == "asset" {
                 cell.imageView?.image = UIImage(named: url.host!)
             } else {
+                cell.imageView?.layer.borderColor = BookmarksPanelUX.IconBorderColor.cgColor
+                cell.imageView?.layer.borderWidth = BookmarksPanelUX.IconBorderWidth
                 cell.imageView?.setIcon(bookmark.favicon, forURL: URL(string: item.url))
+                cell.imageView?.image = cell.imageView?.image?.createScaled(CGSize(width: BookmarksPanelUX.IconSize, height: BookmarksPanelUX.IconSize))
+                cell.imageView?.contentMode = .center
             }
             return cell
         case is BookmarkSeparator:
@@ -393,33 +401,20 @@ extension BookmarksPanel: BookmarkFolderTableViewHeaderDelegate {
 }
 
 class BookmarkFolderTableViewCell: TwoLineTableViewCell {
-    fileprivate let ImageMargin: CGFloat = 12
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.backgroundColor = SiteTableViewControllerUX.HeaderBackgroundColor
+        self.backgroundColor = BookmarksPanelUX.BookmarkFolderBGColor
         textLabel?.backgroundColor = UIColor.clear
         textLabel?.tintColor = BookmarksPanelUX.BookmarkFolderTextColor
 
         imageView?.image = UIImage(named: "bookmarkFolder")
-
-        let chevron = ChevronView(direction: .right)
-        chevron.tintColor = BookmarksPanelUX.BookmarkFolderTextColor
-        chevron.frame = CGRect(x: 0, y: 0, width: BookmarksPanelUX.BookmarkFolderChevronSize, height: BookmarksPanelUX.BookmarkFolderChevronSize)
-        chevron.lineWidth = BookmarksPanelUX.BookmarkFolderChevronLineWidth
-        accessoryView = chevron
-
+        accessoryType = UITableViewCellAccessoryType.disclosureIndicator
         separatorInset = UIEdgeInsets.zero
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
-
-        // Do this here as TwoLineTableViewCell changes the imageView frame
-        // in its own layoutSubviews, and we have to make sure it is right.
-        if let imageSize = imageView?.image?.size {
-            imageView?.frame = CGRect(x: ImageMargin, y: (frame.height - imageSize.width) / 2, width: imageSize.width, height: imageSize.height)
-        }
     }
 
     required init?(coder aDecoder: NSCoder) {

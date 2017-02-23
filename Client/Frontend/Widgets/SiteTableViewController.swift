@@ -6,13 +6,13 @@ import UIKit
 import Storage
 
 struct SiteTableViewControllerUX {
-    static let HeaderHeight = CGFloat(25)
-    static let RowHeight = CGFloat(58)
+    static let HeaderHeight = CGFloat(32)
+    static let RowHeight = CGFloat(44)
     static let HeaderBorderColor = UIColor(rgb: 0xCFD5D9).withAlphaComponent(0.8)
     static let HeaderTextColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.black : UIColor(rgb: 0x232323)
-    static let HeaderBackgroundColor = UIColor(rgb: 0xECF0F3).withAlphaComponent(0.3)
+    static let HeaderBackgroundColor = UIColor(rgb: 0xf7f8f7)
     static let HeaderFont = UIFont.systemFont(ofSize: 12, weight: UIFontWeightMedium)
-    static let HeaderTextMargin = CGFloat(10)
+    static let HeaderTextMargin = CGFloat(16)
 }
 
 class SiteTableViewHeader: UITableViewHeaderFooterView {
@@ -29,11 +29,11 @@ class SiteTableViewHeader: UITableViewHeaderFooterView {
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
 
-        topBorder.backgroundColor = UIColor.white
+        topBorder.backgroundColor = SiteTableViewControllerUX.HeaderBorderColor
         bottomBorder.backgroundColor = SiteTableViewControllerUX.HeaderBorderColor
-        contentView.backgroundColor = UIColor.white
+        contentView.backgroundColor = SiteTableViewControllerUX.HeaderBackgroundColor
 
-        titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
+        titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontMediumBold
         titleLabel.textColor = SiteTableViewControllerUX.HeaderTextColor
         titleLabel.textAlignment = .left
 
@@ -93,7 +93,7 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
 
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(HistoryTableViewCell.self, forCellReuseIdentifier: CellIdentifier)
+        tableView.register(SiteTableViewCell.self, forCellReuseIdentifier: CellIdentifier)
         tableView.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: HeaderIdentifier)
         tableView.layoutMargins = UIEdgeInsets.zero
         tableView.keyboardDismissMode = UIScrollViewKeyboardDismissMode.onDrag

@@ -45,6 +45,10 @@ private struct SearchViewControllerUX {
     static let PromptNoFont = UIFont.systemFont(ofSize: 15, weight: UIFontWeightRegular)
     static let PromptInsets = UIEdgeInsets(top: 15, left: 12, bottom: 15, right: 12)
     static let PromptButtonColor = UIColor(rgb: 0x007aff)
+
+    static let IconSize: CGFloat = 23
+    static let IconBorderColor = UIColor(white: 0, alpha: 0.1)
+    static let IconBorderWidth: CGFloat = 0.5
 }
 
 protocol SearchViewControllerDelegate: class {
@@ -533,7 +537,12 @@ extension SearchViewController {
                     let isBookmark = site.bookmarked ?? false
                     cell.setLines(site.title, detailText: site.url)
                     cell.setRightBadge(isBookmark ? self.bookmarkedBadge : nil)
-                    cell.imageView?.setIcon(site.icon, forURL: site.tileURL)
+                    cell.imageView!.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
+                    cell.imageView!.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
+                    cell.imageView?.setIcon(site.icon, forURL: site.tileURL, completed: { (color, url) in
+                        cell.imageView?.image = cell.imageView?.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
+                        cell.imageView?.contentMode = .center
+                    })
                 }
             }
             return cell

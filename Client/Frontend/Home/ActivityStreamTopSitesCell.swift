@@ -141,10 +141,10 @@ class TopSiteItemCell: UICollectionViewCell {
             contentView.backgroundColor = suggestedSite.backgroundColor.isBlackOrWhite ? UIColor.white : suggestedSite.backgroundColor
             imageView.backgroundColor = contentView.backgroundColor
         } else {
-            imageView.setFavicon(forSite: site, onCompletion: { (color, url) in
+            imageView.setFavicon(forSite: site, onCompletion: { [weak self] (color, url) in
                 if let url = url, url == site.tileURL {
-                    self.contentView.backgroundColor = color
-                    self.imageView.backgroundColor = color
+                    self?.contentView.backgroundColor = color
+                    self?.imageView.backgroundColor = color
                 }
             })
         }
