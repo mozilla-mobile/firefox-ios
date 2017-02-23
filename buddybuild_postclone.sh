@@ -11,7 +11,7 @@ brew upgrade swiftlint
 
 # Install tooling for Badging.
 brew update && brew install imagemagick
-#echo password | sudo -S gem install badge
+echo password | sudo -S gem install badge
 
 # Add badge to app icon.
 badge --no_badge --shield_no_resize --shield "7.0-Build%20$BUDDYBUILD_BUILD_NUMBER-blue"
