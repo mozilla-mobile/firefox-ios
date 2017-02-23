@@ -11,10 +11,10 @@
 "About.privateBullet2" = "ট্রাকারদেরকে অবরুদ্ধ করুন(অথবা ট্রাকারদের অনুমতি দিতে সেটিংস আপডেট করুন)";
 
 /* Label on About screen */
-"About.privateBullet3" = "সেইসাথে অনুসন্ধান এবং ব্রাউজিং-র পূর্ববর্তী তথ্যক কুকির সাথে সরাতে মুছুন";
+"About.privateBullet3" = "সেইসাথে অনুসন্ধান এবং ব্রাউজিংয়ের পূর্ববর্তী তথ্য কুকির সাথে সরাতে মুছুন";
 
 /* Label on About screen */
-"About.privateBulletHeader" = "একটি ব্যক্তিগত ব্রাউজার হিসাবে এটিকে ব্যবহার করুন:";
+"About.privateBulletHeader" = "ব্যক্তিগত ব্রাউজার হিসাবে এটিকে ব্যবহার করুন:";
 
 /* Label for row in About screen */
 "About.rowHelp" = "সাহায্য";
@@ -35,7 +35,7 @@
 "About.screenTitle" = "সম্পর্কে";
 
 /* Label on About screen */
-"About.topLabel" = "%@ আপনাকে নিয়ন্ত্রণে রাখে।";
+"About.topLabel" = "%@ আপনাকে নিয়ন্ত্রণ দেয়।";
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "পূর্ববর্তী";
@@ -80,10 +80,10 @@
 "FirstRun.buttonLabel" = "ঠিক আছে, বুঝেছি!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "আপনার ব্রাউজিং-র সময় স্বয়ংক্রিয়ভাবে অনলাইন ট্রাকারদেরকে অবরুদ্ধ করা হয়। তারপর আপনার ডিভাইস থেকে দেখা পৃষ্ঠাগুলি, অনুসন্ধান, কুকি এবং পাসওয়ার্ড মুছতে ট্যাপ করুন।";
+"FirstRun.messageLabelDescription" = "আপনার ব্রাউজিংয়ের সময় স্বয়ংক্রিয়ভাবে অনলাইন ট্রাকারদেরকে অবরুদ্ধ করা হয়। তারপর আপনার ডিভাইস থেকে দেখা পৃষ্ঠাগুলি, অনুসন্ধান, কুকি এবং পাসওয়ার্ড মুছতে ট্যাপ করুন।";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelTagline" = "কেউ দেখছেন না - এমন ভেবে ব্রাউজ করুন।";
+"FirstRun.messageLabelTagline" = "ব্রাউজ করুন এমন ভাবে, যেনো কেউ দেখছে না।";
 
 /* First label for product description on the home screen */
 "Home.descriptionLabel1" = "স্বয়ংক্রিয় ব্যক্তিগত ব্রাউজিং।";
@@ -107,10 +107,10 @@
 "Safari.instructionsContentBlockers" = "Safari তে ট্যাপ করুন, তারপর কন্টেন্ট ব্লকার নির্বাচন করুন";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsEnable" = "%@ কে সক্রিয় করুন";
+"Safari.instructionsEnable" = "%@ সক্রিয় করুন";
 
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
-"Safari.instructionsNotEnabled" = "%@ কে সক্রিয় করা হয়নি।";
+"Safari.instructionsNotEnabled" = "%@ সক্রিয় করা হয়নি।";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "সেটিংস অ্যাপ খুলুন";
@@ -146,7 +146,7 @@
 "Settings.sectionPrivacy" = "গোপনীয়তা";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "বিজ্ঞাপন সম্বন্ধিত ট্রাকারদেরকে অবরুদ্ধ করুন";
+"Settings.toggleBlockAds" = "বিজ্ঞাপনদাতা ট্রাকারদেরকে অবরুদ্ধ করুন";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockAnalytics" = "বিশ্লেষণধর্মী ট্রাকারদের অবরুদ্ধ করুন";
@@ -158,7 +158,7 @@
 "Settings.toggleBlockOther" = "অন্যান্য কন্টেন্ট ট্রাকারদেরকে অবরুদ্ধ করুন";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "সামাজিক ট্রাকারদের অবরুদ্ধ করুন";
+"Settings.toggleBlockSocial" = "সোসাল-নেটওয়ার্ক ট্রাকারদের অবরুদ্ধ করুন";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "কিছু ভিডিও এবং ওয়েব পেজে সমস্যা দেখা যেতে পারে";
@@ -179,11 +179,11 @@
 "URL.eraseButtonLabel" = "মুছুন";
 
 /* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "আপনার ব্রাউজিং-র পূর্ববর্তী তথ্য মুছে ফেলা হয়েছে।";
+"URL.eraseMessageLabel" = "আপনার ব্রাউজিংয়ের পূর্ববর্তী তথ্য মুছে ফেলা হয়েছে।";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "অনুসন্ধান করুন বা ঠিকানা লিখুন";
 
 /* Label displayed for search button when typing in the URL bar */
-"URL.searchLabel" = "%@ -র অনুসন্ধান করুন";
+"URL.searchLabel" = "%@ এর জন্যে অনুসন্ধান করুন";
 

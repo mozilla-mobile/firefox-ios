@@ -2,19 +2,19 @@
 "About.learnMoreButton" = "Més informació";
 
 /* Label on About screen */
-"About.missionLabel" = "El %@ està creat per Mozilla. La nostra missió és fomentar l'Internet obert i saludable.";
+"About.missionLabel" = "El %@ està creat per Mozilla. La nostra missió és fomentar un Internet obert i saludable.";
 
 /* Label on About screen */
-"About.privateBullet1" = "Cerqueu i navegueu directament des de l'aplicació";
+"About.privateBullet1" = "Cercar i navegar directament des de l'aplicació";
 
 /* Label on About screen */
-"About.privateBullet2" = "Bloqueja els elements de seguiment (o canvieu els paràmetres per permetre'ls)";
+"About.privateBullet2" = "Bloquejar els elements de seguiment (o canviar els paràmetres per permetre'ls)";
 
 /* Label on About screen */
-"About.privateBullet3" = "Esborra les galetes i l'historial de cerques i de navegació";
+"About.privateBullet3" = "Esborrar les galetes i l'historial de cerques i de navegació";
 
 /* Label on About screen */
-"About.privateBulletHeader" = "Utilitzeu-lo com a navegador privat:";
+"About.privateBulletHeader" = "Com a navegador privat, us permet:";
 
 /* Label for row in About screen */
 "About.rowHelp" = "Ajuda";
@@ -23,13 +23,13 @@
 "About.rowRights" = "Els vostres drets";
 
 /* Label on About screen */
-"About.safariBullet1" = "Bloqueja els elements de seguiment per millorar la privadesa";
+"About.safariBullet1" = "Bloquejar els elements de seguiment per millorar la privadesa";
 
 /* Label on About screen */
-"About.safariBullet2" = "Bloqueja els tipus de lletra web per reduir la mida de la pàgina";
+"About.safariBullet2" = "Bloquejar els tipus de lletra web per reduir la mida de la pàgina";
 
 /* Label on About screen */
-"About.safariBulletHeader" = "Utilitzeu-lo com a extensió del Safari:";
+"About.safariBulletHeader" = "Com a extensió del Safari, us permet:";
 
 /* Title for the About screen */
 "About.screenTitle" = "Quant a";
@@ -77,10 +77,10 @@
 "ExternalLink.openMapsButton" = "Obre els Mapes";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "ENTESOS!";
+"FirstRun.buttonLabel" = "ENTESOS";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Bloqueja automàticament els elements que us fan el seguiment mentre navegueu. Esborreu amb un sol toc les pàgines visitades, cerques, galetes i contrasenyes del vostre dispositiu.";
+"FirstRun.messageLabelDescription" = "Bloquegeu automàticament els elements que us fan el seguiment mentre navegueu. Esborreu amb un sol toc les pàgines visitades, cerques, galetes i contrasenyes del dispositiu.";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "Navegueu sense sentir-vos observats.";
@@ -116,7 +116,7 @@
 "Safari.instructionsOpen" = "Obriu l'aplicació «Configuració»";
 
 /* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Si bloquegeu altres elements de seguiment de contingut, és possible que alguns vídeos i pàgines web no funcionin bé.";
+"Settings.blockOtherMessage" = "Si bloquegeu altres elements de seguiment de contingut, és possible que alguns vídeos i pàgines web no funcionin correctament.";
 
 /* Button label for declining Content blocker alert */
 "Settings.blockOtherNo" = "No, gràcies";
@@ -146,19 +146,19 @@
 "Settings.sectionPrivacy" = "PRIVADESA";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Bloqueja seguiment de publicitat";
+"Settings.toggleBlockAds" = "Bloqueja els elements de seguiment de publicitat";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Bloqueja seguiment d'anàlisi";
+"Settings.toggleBlockAnalytics" = "Bloqueja els elements de seguiment d'anàlisi";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Bloqueja tipus de lletra web";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Bloqueja altres seguiments de contingut";
+"Settings.toggleBlockOther" = "Bloqueja altres elements de seguiment de contingut";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Bloqueja seguiment social";
+"Settings.toggleBlockSocial" = "Bloqueja els elements de seguiment social";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Pot causar problemes amb alguns vídeos i pàgines web";
@@ -179,7 +179,7 @@
 "URL.eraseButtonLabel" = "ESBORRA";
 
 /* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "S'ha esborrat el vostre historial de navegació.";
+"URL.eraseMessageLabel" = "S'ha esborrat l'historial de navegació.";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Escriviu una cerca o adreça";
