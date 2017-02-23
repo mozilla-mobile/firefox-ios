@@ -45,11 +45,11 @@ class RequestHandler {
 
         switch host {
         case "maps.apple.com":
-            let alert = RequestHandler.makeAlert(title: String(format: UIConstants.strings.externalLinkTitle, AppInfo.productName), action: UIConstants.strings.externalLinkOpenMaps, forURL: url)
+            let alert = RequestHandler.makeAlert(title: String(format: UIConstants.strings.externalLinkTitle, AppInfo.productName.replacingOccurrences(of: " ", with: " ")), action: UIConstants.strings.externalLinkOpenMaps, forURL: url)
             alertCallback(alert)
             return false
         case "itunes.apple.com":
-            let alert = RequestHandler.makeAlert(title: String(format: UIConstants.strings.externalLinkTitle, AppInfo.productName), action: UIConstants.strings.externalLinkOpenAppStore, forURL: url)
+            let alert = RequestHandler.makeAlert(title: String(format: UIConstants.strings.externalLinkTitle, AppInfo.productName.replacingOccurrences(of: " ", with: " ")), action: UIConstants.strings.externalLinkOpenAppStore, forURL: url)
             alertCallback(alert)
             return false
         default:
