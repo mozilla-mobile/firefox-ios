@@ -23,6 +23,9 @@ extension SQLiteHistory {
         site.guid = guid
         site.id = id
 
+        if let provider = row["provider_name"] as? String {
+            site.provider = provider
+        }
         // Find the most recent visit, regardless of which column it might be in.
         let local = row.getTimestamp("localVisitDate") ?? 0
         let remote = row.getTimestamp("remoteVisitDate") ?? 0
