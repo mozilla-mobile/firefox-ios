@@ -76,44 +76,55 @@ extension MenuPresentationAnimator {
 
         let container = transitionContext.containerView
 
-        let menuView = menuController.view
-        menuView?.frame = container.bounds
-        let bottomView = baseController.view
+        // If we don't have any views abort the animation since there isn't anything to animate.
+        guard let menuView = menuController.view, let bottomView = baseController.view else {
+            transitionContext.completeTransition(true)
+            return
+        }
+        menuView.frame = container.bounds
 
         // Insert tab tray below the browser and force a layout so the collection view can get it's frame right
         if presenting {
-            container.insertSubview(menuView!, belowSubview: bottomView!)
-            menuView?.layoutSubviews()
+            container.insertSubview(menuView, belowSubview: bottomView)
+            menuView.layoutSubviews()
         }
 
         let vanishingPoint: CGPoint
         if let sourceView = sourceView {
-            vanishingPoint = (menuView?.convert(sourceView.center, from: sourceView.superview))!
+            vanishingPoint = menuView.convert(sourceView.center, from: sourceView.superview)
         } else {
-            vanishingPoint = CGPoint(x: (menuView?.center.x)!, y: (menuView?.frame.size.height)!)
+            vanishingPoint = CGPoint(x: menuView.center.x, y: menuView.frame.size.height)
         }
-        let minimisedFrame = CGRect(origin: vanishingPoint, size: CGSize.zero)
 
+        let minimisedFrame = CGRect(origin: vanishingPoint, size: CGSize.zero)
         let menuViewSnapshot: UIView
         if presenting {
-            menuViewSnapshot = (menuView?.snapshotView(afterScreenUpdates: true)!)!
+            guard let snapshot = menuView.snapshotView(afterScreenUpdates: true) else {
+                transitionContext.completeTransition(true)
+                return
+            }
+            menuViewSnapshot = snapshot
             menuViewSnapshot.frame = minimisedFrame
             menuViewSnapshot.alpha = 0
-            menuView?.backgroundColor = menuView?.backgroundColor?.withAlphaComponent(0.0)
-            menuView?.addSubview(menuViewSnapshot)
+            menuView.backgroundColor = menuView.backgroundColor?.withAlphaComponent(0.0)
+            menuView.addSubview(menuViewSnapshot)
         } else {
-            menuViewSnapshot = (menuView?.snapshotView(afterScreenUpdates: false)!)!
-            menuViewSnapshot.frame = (menuView?.frame)!
-            container.insertSubview(menuViewSnapshot, aboveSubview: menuView!)
-            menuView?.isHidden = true
+            guard let snapshot = menuView.snapshotView(afterScreenUpdates: false) else {
+                transitionContext.completeTransition(true)
+                return
+            }
+            menuViewSnapshot = snapshot
+            menuViewSnapshot.frame = menuView.frame
+            container.insertSubview(menuViewSnapshot, aboveSubview: menuView)
+            menuView.isHidden = true
         }
 
-        let offstageValue = (bottomView?.bounds.size.width)! / 2
+        let offstageValue = bottomView.bounds.size.width / 2
         let offstageLeft = CGAffineTransform(translationX: -offstageValue, y: 0)
         let offstageRight = CGAffineTransform(translationX: offstageValue, y: 0)
 
         if presenting {
-            menuView?.alpha = 0
+            menuView.alpha = 0
             menuController.menuView.isHidden = true
         } else {
             // move the buttons to their offstage positions
@@ -125,9 +136,9 @@ extension MenuPresentationAnimator {
 
             if self.presenting {
                 menuViewSnapshot.alpha = 1
-                menuViewSnapshot.frame = (menuView?.frame)!
-                menuView?.backgroundColor = menuView?.backgroundColor?.withAlphaComponent(0.4)
-                menuView?.alpha = 1
+                menuViewSnapshot.frame = menuView.frame
+                menuView.backgroundColor = menuView.backgroundColor?.withAlphaComponent(0.4)
+                menuView.alpha = 1
                 // animate back and forward buttons off to the left
                 viewsToAnimateLeft?.forEach { $0.transform = offstageLeft }
                 // animate reload and share buttons off to the right
@@ -139,7 +150,7 @@ extension MenuPresentationAnimator {
                 viewsToAnimateRight?.forEach { $0.transform = CGAffineTransform.identity }
                 menuViewSnapshot.frame = minimisedFrame
                 menuViewSnapshot.alpha = 0
-                menuView?.alpha = 0
+                menuView.alpha = 0
             }
 
             }, completion: { finished in
