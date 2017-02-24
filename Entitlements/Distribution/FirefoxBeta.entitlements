@@ -4,11 +4,11 @@
 <dict>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.$(MOZ_BUNDLE_ID)</string>
+		<string>group.org.mozilla.ios.FirefoxBeta</string>
 	</array>
 	<key>keychain-access-groups</key>
 	<array>
-		<string>$(AppIdentifierPrefix)$(MOZ_BUNDLE_ID)</string>
+		<string>$(AppIdentifierPrefix)org.mozilla.ios.FirefoxBeta</string>
 	</array>
 </dict>
 </plist>
