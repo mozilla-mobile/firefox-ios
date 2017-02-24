@@ -31,7 +31,7 @@ static NSMutableSet * cachedPrimes;
 
 + (CHNumber *)generatePrimeOfLength:(int)numBits safe:(BOOL)safe add:(CHNumber *)add remainder:(CHNumber *)rem {
 	CHNumber * result = [CHNumber number];
-	BN_generate_prime([result bigNumber], numBits, safe, [add bigNumber], [rem bigNumber], NULL, NULL);
+	BN_generate_prime_ex([result bigNumber], numBits, safe, [add bigNumber], [rem bigNumber], NULL);
 	return result;
 }
 

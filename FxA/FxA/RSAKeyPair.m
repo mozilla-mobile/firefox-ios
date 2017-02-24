@@ -29,11 +29,9 @@
 {
     if ((self = [super init]) != nil) {
         _rsa = RSA_new();
-        _rsa->n = BN_dup([n bigNumValue]);
-        _rsa->d = BN_dup([d bigNumValue]);
         BIGNUM* exp = BN_new();
-        BN_set_word(exp, RSA_F4);
-        _rsa->e = exp; // TODO: Is this the right thing to do?
+        BN_set_word(exp, RSA_F4); // TODO is this 'e'?
+        RSA_set0_key(_rsa, BN_dup([n bigNumValue]), exp, BN_dup([d bigNumValue]));
         // Maybe there is some secret communication between a Java KeyPair where the Private Key can discover e from the associated Public Key?
 //        _rsa->p = BN_dup([p bigNumValue]);
 //        _rsa->q = BN_dup([q bigNumValue]);
@@ -49,16 +47,20 @@
 
 - (NSDictionary*) JSONRepresentation
 {
+    BIGNUM *n, *d;
+    RSA_get0_key(_rsa, &n, NULL, &d);
     return @{
         @"algorithm": @"RS",
-        @"n": [[CHNumber numberWithOpenSSLNumber: _rsa->n] stringValue],
-        @"d": [[CHNumber numberWithOpenSSLNumber: _rsa->d] stringValue]
+        @"n": [[CHNumber numberWithOpenSSLNumber: n] stringValue],
+        @"d": [[CHNumber numberWithOpenSSLNumber: d] stringValue]
     };
 }
 
 - (NSString*) algorithm
 {
-    int sizeInBytes = (BN_num_bits(_rsa->n) + 7)/8;
+    BIGNUM *n;
+    RSA_get0_key(_rsa, &n, NULL, NULL);
+    int sizeInBytes = (BN_num_bits(n) + 7)/8;
     return [NSString stringWithFormat: @"RS%d", sizeInBytes];
 }
 
@@ -119,8 +121,7 @@
 {
     if ((self = [super init]) != nil) {
         _rsa = RSA_new();
-        _rsa->n = BN_dup([n bigNumValue]);
-        _rsa->e = BN_dup([e bigNumValue]);
+        RSA_set0_key(_rsa, BN_dup([n bigNumValue]), BN_dup([e bigNumValue]), NULL);
     }
     return self;
 }
@@ -133,16 +134,20 @@
 
 - (NSDictionary*) JSONRepresentation
 {
+    BIGNUM *n, *e;
+    RSA_get0_key(_rsa, &n, &e, NULL);
     return @{
         @"algorithm": @"RS",
-        @"n": [[CHNumber numberWithOpenSSLNumber: _rsa->n] stringValue],
-        @"e": [[CHNumber numberWithOpenSSLNumber: _rsa->e] stringValue]
+        @"n": [[CHNumber numberWithOpenSSLNumber: n] stringValue],
+        @"e": [[CHNumber numberWithOpenSSLNumber: e] stringValue]
     };
 }
 
 - (NSString*) algorithm
 {
-    int sizeInBytes = (BN_num_bits(_rsa->n) + 7)/8;
+    BIGNUM *n;
+    RSA_get0_key(_rsa, &n, NULL, NULL);
+    int sizeInBytes = (BN_num_bits(n) + 7)/8;
     return [NSString stringWithFormat: @"RS%d", sizeInBytes];
 }
 
@@ -194,11 +199,13 @@
         RSA_free(rsa);
         return nil;
     }
+    BIGNUM *n, *e, *d;
+    RSA_get0_key(rsa, &n, &e, &d);
 
-    RSAPublicKey *publicKey = [[RSAPublicKey alloc] initWithModulus: [CHNumber numberWithOpenSSLNumber: rsa->n]
-        publicExponent: [CHNumber numberWithOpenSSLNumber: rsa->e]];
-    RSAPrivateKey *privateKey = [[RSAPrivateKey alloc] initWithModulus: [CHNumber numberWithOpenSSLNumber: rsa->n]
-        privateExponent: [CHNumber numberWithOpenSSLNumber: rsa->d]];
+    RSAPublicKey *publicKey = [[RSAPublicKey alloc] initWithModulus: [CHNumber numberWithOpenSSLNumber: n]
+        publicExponent: [CHNumber numberWithOpenSSLNumber: e]];
+    RSAPrivateKey *privateKey = [[RSAPrivateKey alloc] initWithModulus: [CHNumber numberWithOpenSSLNumber: n]
+        privateExponent: [CHNumber numberWithOpenSSLNumber: d]];
 
     RSA_free(rsa);
 

@@ -274,7 +274,7 @@
 }
 
 - (BOOL)isPrime {
-	return BN_is_prime([self bigNumber], BN_prime_checks, NULL, context, NULL);
+	return BN_is_prime_ex([self bigNumber], BN_prime_checks, context, NULL);
 }
 
 - (BOOL)isOdd {

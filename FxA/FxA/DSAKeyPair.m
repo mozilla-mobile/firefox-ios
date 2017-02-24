@@ -43,10 +43,8 @@
 {
     if ((self = [super init]) != nil) {
         _dsa = DSA_new();
-        _dsa->priv_key = BN_dup([x bigNumValue]);
-        _dsa->p = BN_dup([parameters.p bigNumValue]);
-        _dsa->q = BN_dup([parameters.q bigNumValue]);
-        _dsa->g = BN_dup([parameters.g bigNumValue]);
+        DSA_set0_key(_dsa, NULL, BN_dup([x bigNumValue]));
+        DSA_set0_pqg(_dsa, BN_dup([parameters.p bigNumValue]), BN_dup([parameters.q bigNumValue]), BN_dup([parameters.g bigNumValue]));
     }
     return self;
 }
@@ -61,18 +59,24 @@
 
 - (NSDictionary*) JSONRepresentation
 {
+    const BIGNUM *g, *q, *p, *priv_key;
+    DSA_get0_pqg(_dsa, &p, &q, &g);
+    DSA_get0_key(_dsa, NULL, &priv_key);
+
     return @{
-        @"algorithm": @"DS",
-        @"x": [[CHNumber numberWithOpenSSLNumber: _dsa->priv_key] hexStringValue],
-        @"p": [[CHNumber numberWithOpenSSLNumber: _dsa->p] hexStringValue],
-        @"q": [[CHNumber numberWithOpenSSLNumber: _dsa->q] hexStringValue],
-        @"g": [[CHNumber numberWithOpenSSLNumber: _dsa->g] hexStringValue]
-    };
+         @"algorithm": @"DS",
+         @"x": [[CHNumber numberWithOpenSSLNumber: priv_key] hexStringValue],
+         @"p": [[CHNumber numberWithOpenSSLNumber: p] hexStringValue],
+         @"q": [[CHNumber numberWithOpenSSLNumber: q] hexStringValue],
+         @"g": [[CHNumber numberWithOpenSSLNumber: g] hexStringValue],
+     };
 }
 
 - (NSString*) algorithm
 {
-    int sizeInBytes = (BN_num_bits(_dsa->p) + 7)/8;
+    const BIGNUM *p;
+    DSA_get0_pqg(_dsa, &p, NULL, NULL);
+    int sizeInBytes = (BN_num_bits(p) + 7)/8;
     return [NSString stringWithFormat: @"DS%d", sizeInBytes];
 }
 
@@ -156,10 +160,8 @@
 {
     if ((self = [super init]) != nil) {
         _dsa = DSA_new();
-        _dsa->pub_key = BN_dup([y bigNumValue]);
-        _dsa->p = BN_dup([parameters.p bigNumValue]);
-        _dsa->q = BN_dup([parameters.q bigNumValue]);
-        _dsa->g = BN_dup([parameters.g bigNumValue]);
+        DSA_set0_key(_dsa, BN_dup([y bigNumValue]), NULL);
+        DSA_set0_pqg(_dsa, BN_dup([parameters.p bigNumValue]), BN_dup([parameters.q bigNumValue]), BN_dup([parameters.g bigNumValue]));
     }
     return self;
 }
@@ -174,18 +176,24 @@
 
 - (NSDictionary*) JSONRepresentation
 {
+    const BIGNUM *g, *q, *p, *pub_key;
+    DSA_get0_pqg(_dsa, &p, &q, &g);
+    DSA_get0_key(_dsa, &pub_key, NULL);
+
     return @{
         @"algorithm": @"DS",
-        @"y": [[CHNumber numberWithOpenSSLNumber: _dsa->pub_key] hexStringValue],
-        @"g": [[CHNumber numberWithOpenSSLNumber: _dsa->g] hexStringValue],
-        @"p": [[CHNumber numberWithOpenSSLNumber: _dsa->p] hexStringValue],
-        @"q": [[CHNumber numberWithOpenSSLNumber: _dsa->q] hexStringValue]
+        @"y": [[CHNumber numberWithOpenSSLNumber: pub_key] hexStringValue],
+        @"g": [[CHNumber numberWithOpenSSLNumber: g] hexStringValue],
+        @"p": [[CHNumber numberWithOpenSSLNumber: p] hexStringValue],
+        @"q": [[CHNumber numberWithOpenSSLNumber: q] hexStringValue]
     };
 }
 
 - (NSString*) algorithm
 {
-    int sizeInBytes = (BN_num_bits(_dsa->p) + 7)/8;
+    const BIGNUM *p;
+    DSA_get0_pqg(_dsa, &p, NULL, NULL);
+    int sizeInBytes = (BN_num_bits(p) + 7)/8;
     return [NSString stringWithFormat: @"DS%d", sizeInBytes];
 }
 
@@ -265,13 +273,17 @@
         return nil;
     }
 
-    DSAParameters *parameters = [DSAParameters new];
-    parameters.p = [CHNumber numberWithOpenSSLNumber: dsa->p];
-    parameters.q = [CHNumber numberWithOpenSSLNumber: dsa->q];
-    parameters.g = [CHNumber numberWithOpenSSLNumber: dsa->g];
+    const BIGNUM *g, *q, *p, *pub_key, *priv_key;
+    DSA_get0_pqg(dsa, &p, &q, &g);
+    DSA_get0_key(dsa, &pub_key, &priv_key);
 
-    CHNumber *x = [CHNumber numberWithOpenSSLNumber: dsa->priv_key];
-    CHNumber *y = [CHNumber numberWithOpenSSLNumber: dsa->pub_key];
+    DSAParameters *parameters = [DSAParameters new];
+    parameters.p = [CHNumber numberWithOpenSSLNumber: p];
+    parameters.q = [CHNumber numberWithOpenSSLNumber: q];
+    parameters.g = [CHNumber numberWithOpenSSLNumber: g];
+
+    CHNumber *x = [CHNumber numberWithOpenSSLNumber: priv_key];
+    CHNumber *y = [CHNumber numberWithOpenSSLNumber: pub_key];
 
     DSAPrivateKey *privateKey = [[DSAPrivateKey alloc] initWithPrivateKey: x parameters: parameters];
     DSAPublicKey *publicKey = [[DSAPublicKey alloc] initWithPublicKey: y parameters: parameters];
