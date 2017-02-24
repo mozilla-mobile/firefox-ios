@@ -9,7 +9,7 @@ class ActivityStreamTest: BaseTestCase {
     override func setUp() {
         
         super.setUp()
-        dismissFirstRunUI()
+        dismissFirstRunUI()  //should be deprecated
     }
 
     override func tearDown() {
