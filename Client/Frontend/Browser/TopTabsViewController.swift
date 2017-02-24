@@ -17,7 +17,7 @@ struct TopTabsUX {
     static let TopTabsBackgroundShadowWidth: CGFloat = 35
     static let TabWidth: CGFloat = 180
     static let CollectionViewPadding: CGFloat = 15
-    static let FaderPading: CGFloat = 5
+    static let FaderPading: CGFloat = 10
     static let BackgroundSeparatorLinePadding: CGFloat = 5
     static let TabTitleWidth: CGFloat = 110
     static let TabTitlePadding: CGFloat = 10
