@@ -107,9 +107,9 @@ class TopTabsViewController: UIViewController {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         self.reloadData()
     }
 
@@ -427,7 +427,7 @@ extension TopTabsViewController {
     fileprivate func reloadData() {
         assertIsMainThread("reloadData must only be called from main thread")
 
-        if self.isUpdating {
+        if self.isUpdating || self.collectionView.frame == CGRect.zero {
             self.pendingReloadData = true
             return
         }
@@ -435,15 +435,16 @@ extension TopTabsViewController {
         isUpdating = true
         self.tabStore = self.tabsToDisplay
         self.newTab.isUserInteractionEnabled = false
+        self.flushPendingChanges()
         UIView.animate(withDuration: 0.2, animations: {
             self.collectionView.reloadData()
             self.collectionView.collectionViewLayout.invalidateLayout()
             self.collectionView.layoutIfNeeded()
             self.scrollToCurrentTab(true, centerCell: true)
         }, completion: { (_) in
-            self.flushPendingChanges()
             self.isUpdating = false
             self.pendingReloadData = false
+            self.performTabUpdates()
             self.newTab.isUserInteractionEnabled = true
         }) 
     }
@@ -526,7 +527,6 @@ extension TopTabsViewController: TabManagerDelegate {
 
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
         self.reloadData()
-        self.scrollToCurrentTab(false, centerCell: false)
     }
 
     func tabManagerDidAddTabs(_ tabManager: TabManager) {
