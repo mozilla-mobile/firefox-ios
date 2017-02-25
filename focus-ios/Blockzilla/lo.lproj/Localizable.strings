@@ -11,7 +11,7 @@
 "About.privateBullet2" = "ບັອກຕົວຕິດຕາມ (ຫລື ອັບເດດການຕັ້ງຄ່າເພື່ອອະນຸຍາດຕົວຕິດຕາມ)";
 
 /* Label on About screen */
-"About.privateBullet3" = "ລົບລ້າງຄຸກກີ້ລວມທັງປະຫວັດການຄົ້ນຫາ ແລະ ການທອງເວັບ";
+"About.privateBullet3" = "ລົບລ້າງຄຸກກີ້ລວມທັງປະຫວັດການຄົ້ນຫາ ແລະ ການທ່ອງເວັບ";
 
 /* Label on About screen */
 "About.privateBulletHeader" = "ໃຊ້ມັນເປັນແບບບຣາວເຊີສ່ວນຕົວ:";
@@ -35,7 +35,7 @@
 "About.screenTitle" = "ກ່ຽວກັບ";
 
 /* Label on About screen */
-"About.topLabel" = "%@ ເຮັດໃຫ້ທ່ານຄວບຄຸມໄດ້:";
+"About.topLabel" = "%@ ເຮັດໃຫ້ທ່ານສາມາດຄວບຄຸມໄດ້ດັ່ງລຸ່ມນີ້:";
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "ກັບຄືນ";
@@ -68,7 +68,7 @@
 "ExternalLink.emailButton" = "ອີເມວ";
 
 /* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.messageTitleWithPlaceholder" = "ຕອນນີ້ທ່ານກຳລັງອອກໄປຈາກ %@.";
+"ExternalLink.messageTitleWithPlaceholder" = "ຕອນນີ້ທ່ານກຳລັງຈະອອກໄປຈາກ %@.";
 
 /* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openAppStoreButton" = "ເປີດໃນ App Store";
@@ -77,7 +77,7 @@
 "ExternalLink.openMapsButton" = "ເປີດແຜນທີ່";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "ຕົກລົງ, ເຂົ້າໃຈແລ້ວ!";
+"FirstRun.buttonLabel" = "ຕົກລົງ, ຮັບຮູ້ແລ້ວ!";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "ມັນຈະບັອກຕົວຕິດຕາມອອນໄລນ໌ແບບອັດຕະໂນມັດໃນຂະນະທີ່ທ່ານກຳລັງທ່ອງເວັບຢູ່. ຫລັງຈາກນັ້ນໃຫ້ແຕະເພື່ອລົບລ້າງຫນ້າເວັບທີ່ທ່ານໄດ້ເຂົ້າໄປເບິງ, ການຄົ້ນຫາ, ຄຸກກີ້ ແລະ ລະຫັດຜ່ານອອກຈາກອຸປະກອນຂອງທ່ານ.";
@@ -89,7 +89,7 @@
 "Home.descriptionLabel1" = "ການທ່ອງເວັບແບບສ່ວນໂຕໂດຍອັດຕະໂນມັດ.";
 
 /* Second label for product description on the home screen */
-"Home.descriptionLabel2" = "ທ່ອງເວັບ. ລົບລ້າງ. ເຮັດຄືນໃຫມ່.";
+"Home.descriptionLabel2" = "ທ່ອງເວັບ ແລະ ລຶບຂໍ້ມູນການທ່ອງເວັບຕ່າງໆອອກ.";
 
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "ຍົກເລີກ";
@@ -176,13 +176,13 @@
 "URL.cancelLabel" = "ຍົກເລີກ";
 
 /* Erase button in the URL bar */
-"URL.eraseButtonLabel" = "ERASE";
+"URL.eraseButtonLabel" = "ລຶບອອກ";
 
 /* Message shown after pressing the Erase button */
 "URL.eraseMessageLabel" = "ປະຫວັດການທ່ອງເວັບຂອງທ່ານໄດ້ຖືກລຶບອອກແລ້ວ.";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "ຄົ້ນຫາ ຫລື ປ້ອນທີ່ຢູ່";
+"URL.placeholderText" = "ຄົ້ນຫາ ຫລື ປ້ອນທີ່ຢູ່ໃສ່ນີ້";
 
 /* Label displayed for search button when typing in the URL bar */
 "URL.searchLabel" = "ຄົ້ນຫາສຳລັບ %@";

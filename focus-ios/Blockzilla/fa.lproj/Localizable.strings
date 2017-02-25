@@ -110,7 +110,7 @@
 "Safari.instructionsEnable" = "فعال‌سازی %@";
 
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
-"Safari.instructionsNotEnabled" = "گزینه %@ فعال نیست.";
+"Safari.instructionsNotEnabled" = "برنامه %@ فعال نیست.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "باز کردن برنامهٔ تنظیمات";
@@ -152,7 +152,7 @@
 "Settings.toggleBlockAnalytics" = "مسدود کردن ردیاب‌های پایشگر ترافیک";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "مسدود کردن قلم‌ها وب";
+"Settings.toggleBlockFonts" = "مسدود کردن قلم‌های وب";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockOther" = "مسدود کردن سایر ردیاب‌های محتوا";
