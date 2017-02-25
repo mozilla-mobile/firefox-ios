@@ -56,8 +56,8 @@ class UIImageViewExtensionsTests: XCTestCase {
     func testAsyncSetIconFail() {
         let favImageView = UIImageView()
 
-        let gFavURL = URL(string: "https://www.google.com/noicon.ico")
-        let gURL = URL(string: "http://google.com")
+        let gFavURL = URL(string: "https://www.nofavicon.com/noicon.ico")
+        let gURL = URL(string: "http://nofavicon.com")
         let correctImage = FaviconFetcher.getDefaultFavicon(gURL!)
 
         favImageView.setIcon(Favicon(url: gFavURL!.absoluteString, type: .guess), forURL: gURL)
@@ -67,6 +67,28 @@ class UIImageViewExtensionsTests: XCTestCase {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(time) / Double(NSEC_PER_SEC)) {
             let b = UIImagePNGRepresentation(correctImage) // we need to convert to png in order to compare
             let a = UIImagePNGRepresentation(favImageView.image!)
+            XCTAssertEqual(b, a, "The correct default favicon should be applied to the UIImageView")
+            expect.fulfill()
+        }
+        waitForExpectations(timeout: 5, handler: nil)
+    }
+
+    func testDefaultIcons() {
+        let favImageView = UIImageView()
+
+        let gFavURL = URL(string: "https://www.google.com/fav") //This will be fetched from tippy top sites
+        let gURL = URL(string: "http://www.google.com")!
+        let defaultItem = FaviconFetcher.defaultIcons[gURL.baseDomain!]!
+        let correctImage = UIImage(contentsOfFile: defaultItem.url)!
+
+        favImageView.setIcon(Favicon(url: gFavURL!.absoluteString, type: .guess), forURL: gURL)
+
+        let expect = expectation(description: "UIImageView async load")
+        let time = Int64(2 * Double(NSEC_PER_SEC))
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(time) / Double(NSEC_PER_SEC)) {
+            let b = UIImagePNGRepresentation(correctImage) // we need to convert to png in order to compare
+            let a = UIImagePNGRepresentation(favImageView.image!)
+            XCTAssertEqual(favImageView.backgroundColor, defaultItem.color)
             XCTAssertEqual(b, a, "The correct default favicon should be applied to the UIImageView")
             expect.fulfill()
         }
