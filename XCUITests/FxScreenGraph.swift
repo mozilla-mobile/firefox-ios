@@ -22,6 +22,7 @@ let LoginsSettings = "LoginsSettings"
 let OpenWithSettings = "OpenWithSettings"
 let NewTabScreen = "NewTabScreen"
 let NewTabMenu = "NewTabMenu"
+let URLBarOpen = "URLBarOpen"
 
 let allSettingsScreens = [
     SettingsScreen,
@@ -47,16 +48,17 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
     }
 
     map.createScene(NewTabScreen) { scene in
-        // This is used for opening BrowserTab with default mozilla URL
-        // For custom URL, should use Navigator.openNewURL
-        scene.gesture(to: BrowserTab) {
-            app.textFields["url"].tap()
-            app.textFields["address"].typeText(url + "\r")
-        }
-
+        scene.tap(app.textFields["url"], to: URLBarOpen)
         scene.tap(app.buttons["TabToolbar.menuButton"], to: NewTabMenu)
-        scene.gesture(to: TabTray) {
-            app.buttons["URLBarView.tabsButton"].tap()
+        scene.tap(app.buttons["URLBarView.tabsButton"], to: TabTray)
+    }
+
+    map.createScene(URLBarOpen) { scene in
+        // This is used for opening BrowserTab with default mozilla URL
+        // For custom URL, should use Navigator.openNewURL or Navigator.openURL.
+        scene.typeText(url + "\r", into: app.textFields["address"], to: BrowserTab)
+        scene.backAction = {
+            app.buttons["Cancel"].tap()
         }
     }
 
@@ -156,6 +158,7 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
     }
 
     map.createScene(BrowserTab) { scene in
+        scene.tap(app.textFields["url"], to: URLBarOpen)
         scene.tap(app.buttons["TabToolbar.menuButton"], to: BrowserTabMenu)
         scene.gesture(to: TabTray) {
             app.buttons["URLBarView.tabsButton"].tap()
@@ -187,15 +190,18 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
     return map
 }
 
-// For visiting BrowserTab with specific URL.
-// Invoking this method in BrowserTab will create another tab,
-// as that is the shortest path to itself
 extension Navigator {
-    func openNewURL(urlString: String) {
-        self.goto(NewTabScreen)
+    // Open a URL. Will use/re-use the first BrowserTab or NewTabScreen it comes to.
+    func openURL(urlString: String) {
+        self.goto(URLBarOpen)
         let app = XCUIApplication()
-        app.textFields["url"].tap()
         app.textFields["address"].typeText(urlString + "\r")
         self.nowAt(BrowserTab)
+    }
+
+    // Opens a URL in a new tab.
+    func openNewURL(urlString: String) {
+        self.goto(NewTabScreen)
+        self.openURL(urlString: urlString)
     }
 }
