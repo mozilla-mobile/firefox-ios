@@ -64,6 +64,7 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
 
     map.createScene(NewTabMenu) { scene in
         scene.gesture(to: SettingsScreen) {
+            // XXX The element is fails the existence test, so we tap it through the gesture() escape hatch.
             app.collectionViews.cells["SettingsMenuItem"].tap()
         }
         scene.tap(app.buttons["Close Menu"], to: NewTabScreen)
@@ -140,19 +141,12 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
     }
 
     map.createScene(TabTray) { scene in
-        scene.gesture(to: TabTrayMenu) {
-            app.buttons["TabTrayController.menuButton"].tap()
-        }
-        scene.gesture(to: NewTabScreen) {
-            app.buttons["TabTrayController.addTabButton"].tap()
-        }
+        scene.tap(app.buttons["TabTrayController.menuButton"], to: TabTrayMenu)
+        scene.tap(app.buttons["TabTrayController.addTabButton"], to: NewTabScreen)
     }
 
     map.createScene(TabTrayMenu) { scene in
-        scene.gesture(to: SettingsScreen) {
-            let collectionViewsQuery = app.collectionViews
-            collectionViewsQuery.cells["SettingsMenuItem"].tap()
-        }
+        scene.tap(app.collectionViews.cells["SettingsMenuItem"], to: SettingsScreen)
         scene.tap(app.buttons["Close Menu"], to: TabTray)
         scene.dismissOnUse = true
     }
@@ -160,13 +154,14 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
     map.createScene(BrowserTab) { scene in
         scene.tap(app.textFields["url"], to: URLBarOpen)
         scene.tap(app.buttons["TabToolbar.menuButton"], to: BrowserTabMenu)
-        scene.gesture(to: TabTray) {
-            app.buttons["URLBarView.tabsButton"].tap()
-        }
+        scene.tap(app.buttons["URLBarView.tabsButton"], to: TabTray)
     }
 
     map.createScene(BrowserTabMenu) { scene in
         scene.tap(app.buttons["Close Menu"], to: BrowserTab)
+        // XXX Testing for the element causes an error, so we use the more
+        // generic `gesture` method which does not test for the existence
+        // before swiping.
         scene.gesture(to: BrowserTabMenu2) {
             app.otherElements["MenuViewController.menuView"].swipeLeft()
         }
@@ -174,13 +169,13 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
     }
 
     map.createScene(BrowserTabMenu2) { scene in
-        scene.gesture(to: SettingsScreen) {
-            let collectionViewsQuery = app.collectionViews
-            collectionViewsQuery.cells["SettingsMenuItem"].tap()
-        }
+        // XXX Testing for the element causes an error, so we use the more
+        // generic `gesture` method which does not test for the existence
+        // before swiping.
         scene.gesture(to: BrowserTabMenu) {
             app.otherElements["MenuViewController.menuView"].swipeRight()
         }
+        scene.tap(app.collectionViews.cells["SettingsMenuItem"], to: SettingsScreen)
         scene.tap(app.buttons["Close Menu"], to: BrowserTab)
         scene.dismissOnUse = true
     }
