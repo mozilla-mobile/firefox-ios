@@ -27,6 +27,9 @@ class HomePageSettingsTest: BaseTestCase {
         waitForValueContains(app.textFields["url"], value: "https://www.mozilla")
         let currentURL = app.textFields["url"].value as! String
 
+        // Go via the menu, becuase if we go via the TabTray, then we 
+        // won't have a current tab.
+        navigator.goto(BrowserTabMenu)
         navigator.goto(HomePageSettings)
         let tablesQuery = app.tables
         tablesQuery.staticTexts["Use Current Page"].tap()
