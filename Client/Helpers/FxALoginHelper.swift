@@ -6,6 +6,7 @@ import Account
 import Deferred
 import Foundation
 import Shared
+import SwiftyJSON
 
 private let applicationDidRequestUserNotificationPermissionPrefKey = "applicationDidRequestUserNotificationPermissionPrefKey"
 
@@ -26,7 +27,7 @@ class FxALoginHelper {
 
     static private(set) var sharedInstance: FxALoginHelper?
 
-    class func createSharedInstance(application: UIApplication?, profile: Profile?) -> FxALoginHelper {
+    class func createSharedInstance(_ application: UIApplication?, profile: Profile?) -> FxALoginHelper {
         sharedInstance = FxALoginHelper(application: application, profile: profile)
         return sharedInstance!
     }
@@ -40,8 +41,8 @@ class FxALoginHelper {
         self.profile = profile
     }
 
-    func userDidLogin(data: JSON) -> Success {
-        if data["keyFetchToken"].asString == nil || data["unwrapBKey"].asString == nil {
+    func userDidLogin(_ data: JSON) -> Success {
+        if data["keyFetchToken"].rawString() == nil || data["unwrapBKey"].rawString() == nil {
             // The /settings endpoint sends a partial "login"; ignore it entirely.
             NSLog("Ignoring didSignIn with keyFetchToken or unwrapBKey missing.")
             self.loginDidFail()
@@ -50,7 +51,7 @@ class FxALoginHelper {
 
         // TODO: Error handling.
         guard let profile = profile,
-            let account = FirefoxAccount.fromConfigurationAndJSON(profile.accountConfiguration, data: data) else {
+            let account = FirefoxAccount.from(profile.accountConfiguration, andJSON: data) else {
             self.loginDidFail()
             return deferred
         }
@@ -78,7 +79,7 @@ class FxALoginHelper {
         // Now: we have an account that does not have push notifications set up.
         // however, we need to deal with cases of asking for permissions too frequently.
         let asked = profile?.prefs.boolForKey(applicationDidRequestUserNotificationPermissionPrefKey) ?? true
-        let permitted = application!.currentUserNotificationSettings()!.types != .None
+        let permitted = application!.currentUserNotificationSettings!.types != .none
 
         // If we've never asked(*), then we should probably ask.
         // If we've asked already, then we should not ask again.
@@ -101,40 +102,42 @@ class FxALoginHelper {
 
     private func requestUserNotifications() {
         let viewAction = UIMutableUserNotificationAction()
-        viewAction.identifier = SentTabAction.View.rawValue
+        viewAction.identifier = SentTabAction.view.rawValue
         viewAction.title = NSLocalizedString("View", comment: "View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440")
-        viewAction.activationMode = UIUserNotificationActivationMode.Foreground
-        viewAction.destructive = false
-        viewAction.authenticationRequired = false
+        viewAction.activationMode = UIUserNotificationActivationMode.foreground
+        viewAction.isDestructive = false
+        viewAction.isAuthenticationRequired = false
 
         let bookmarkAction = UIMutableUserNotificationAction()
-        bookmarkAction.identifier = SentTabAction.Bookmark.rawValue
+        bookmarkAction.identifier = SentTabAction.bookmark.rawValue
         bookmarkAction.title = NSLocalizedString("Bookmark", comment: "Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440")
-        bookmarkAction.activationMode = UIUserNotificationActivationMode.Foreground
-        bookmarkAction.destructive = false
-        bookmarkAction.authenticationRequired = false
+        bookmarkAction.activationMode = UIUserNotificationActivationMode.foreground
+        bookmarkAction.isDestructive = false
+        bookmarkAction.isAuthenticationRequired = false
 
         let readingListAction = UIMutableUserNotificationAction()
-        readingListAction.identifier = SentTabAction.ReadingList.rawValue
+        readingListAction.identifier = SentTabAction.readingList.rawValue
         readingListAction.title = NSLocalizedString("Add to Reading List", comment: "Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440")
-        readingListAction.activationMode = UIUserNotificationActivationMode.Foreground
-        readingListAction.destructive = false
-        readingListAction.authenticationRequired = false
+        readingListAction.activationMode = UIUserNotificationActivationMode.foreground
+        readingListAction.isDestructive = false
+        readingListAction.isAuthenticationRequired = false
 
         let sentTabsCategory = UIMutableUserNotificationCategory()
         sentTabsCategory.identifier = TabSendCategory
-        sentTabsCategory.setActions([readingListAction, bookmarkAction, viewAction], forContext: UIUserNotificationActionContext.Default)
+        sentTabsCategory.setActions([readingListAction, bookmarkAction, viewAction], for: UIUserNotificationActionContext.default)
 
-        sentTabsCategory.setActions([bookmarkAction, viewAction], forContext: UIUserNotificationActionContext.Minimal)
+        sentTabsCategory.setActions([bookmarkAction, viewAction], for: UIUserNotificationActionContext.minimal)
 
-        application?.registerUserNotificationSettings(UIUserNotificationSettings(forTypes: UIUserNotificationType.Alert, categories: [sentTabsCategory]))
+        let settings = UIUserNotificationSettings(types: UIUserNotificationType.alert, categories: [sentTabsCategory])
+
+        application?.registerUserNotificationSettings(settings)
     }
 
-    func userDidRegister(notificationSettings notificationSettings: UIUserNotificationSettings) {
+    func userDidRegister(notificationSettings: UIUserNotificationSettings) {
         // Record that we have asked the user, and they have given an answer.
         profile?.prefs.setBool(true, forKey: applicationDidRequestUserNotificationPermissionPrefKey)
 
-        guard notificationSettings.types != .None else {
+        guard notificationSettings.types != .none else {
             return readyForSyncing()
         }
 
@@ -145,7 +148,7 @@ class FxALoginHelper {
         }
     }
 
-    func apnsRegisterDidSucceed(apnsToken apnsToken: String) {
+    func apnsRegisterDidSucceed(apnsToken: String) {
         pushClient.register(apnsToken).upon { res in
             if let pushRegistration = res.successValue {
                 return self.pushRegistrationDidSucceed(apnsToken: apnsToken, pushRegistration: pushRegistration)
@@ -158,7 +161,7 @@ class FxALoginHelper {
         readyForSyncing()
     }
 
-    func pushRegistrationDidSucceed(apnsToken apnsToken: String, pushRegistration: PushRegistration) {
+    func pushRegistrationDidSucceed(apnsToken: String, pushRegistration: PushRegistration) {
         account.pushRegistration = pushRegistration
         readyForSyncing()
     }
@@ -175,7 +178,7 @@ class FxALoginHelper {
                 account.advance()
             }
         }
-        finishNormally()
+        let _ = finishNormally()
     }
 
     func finishNormally() -> Success {
@@ -186,6 +189,6 @@ class FxALoginHelper {
 
     func loginDidFail() {
         FxALoginHelper.sharedInstance = nil
-        deferred.fill(Maybe(failure: FxADeviceRegistratorError.InvalidSession))
+        deferred.fill(Maybe(failure: FxADeviceRegistratorError.invalidSession))
     }
 }
