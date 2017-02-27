@@ -752,14 +752,6 @@ extension TabTrayController: TabManagerDelegate {
         guard privateMode else {
             return
         }
-        if let undoToast = toast {
-            view.addSubview(undoToast)
-            undoToast.snp.makeConstraints { make in
-                make.left.right.equalTo(view)
-                make.bottom.equalTo(toolbar.snp.top)
-            }
-            undoToast.showToast()
-        }
     }
 }
 
