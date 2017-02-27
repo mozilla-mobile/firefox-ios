@@ -6,18 +6,18 @@ import XCTest
 
 class L10nPermissionStringsSnapshotTests: L10nBaseSnapshotTests {
     func testNSLocationWhenInUseUsageDescription() {
-        loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/geolocation.html", waitForOtherElementWithAriaLabel: "body")
+        loadWebPage(url: "http://people.mozilla.org/~sarentz/fxios/testpages/geolocation.html", waitForOtherElementWithAriaLabel: "body")
         snapshot("15LocationDialog-01")
-        loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/index.html", waitForOtherElementWithAriaLabel: "body")
+        loadWebPage(url: "http://people.mozilla.org/~sarentz/fxios/testpages/index.html", waitForOtherElementWithAriaLabel: "body")
     }
 
     func testNSPhotoLibraryUsageDescription() {
-        addUIInterruptionMonitorWithDescription("Permission Alert") { (alert) -> Bool in
-            alert.buttons.elementBoundByIndex(0).tap()
+        addUIInterruptionMonitor(withDescription: "Permission Alert") { (alert) -> Bool in
+            alert.buttons.element(boundBy: 0).tap()
             return true
         }
-        loadWebPage("http://people.mozilla.org/~sarentz/fxios/testpages/mediaAccess.html", waitForOtherElementWithAriaLabel: "body")
-        XCUIApplication().webViews.elementBoundByIndex(0).buttons["submitCameraUpload"].tap()
-        XCUIApplication().tables.staticTexts.elementBoundByIndex(0).tap() // Photo Library is the first cell
+        loadWebPage(url: "http://people.mozilla.org/~sarentz/fxios/testpages/mediaAccess.html", waitForOtherElementWithAriaLabel: "body")
+        XCUIApplication().webViews.element(boundBy: 0).buttons["submitCameraUpload"].tap()
+        XCUIApplication().tables.staticTexts.element(boundBy: 0).tap() // Photo Library is the first cell
     }
 }
