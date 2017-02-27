@@ -97,23 +97,17 @@ extension MenuPresentationAnimator {
         }
 
         let minimisedFrame = CGRect(origin: vanishingPoint, size: CGSize.zero)
-        let menuViewSnapshot: UIView
+        guard let menuViewSnapshot = menuView.snapshotView(afterScreenUpdates: presenting) else {
+            transitionContext.completeTransition(true)
+            return
+        }
+
         if presenting {
-            guard let snapshot = menuView.snapshotView(afterScreenUpdates: true) else {
-                transitionContext.completeTransition(true)
-                return
-            }
-            menuViewSnapshot = snapshot
             menuViewSnapshot.frame = minimisedFrame
             menuViewSnapshot.alpha = 0
             menuView.backgroundColor = menuView.backgroundColor?.withAlphaComponent(0.0)
             menuView.addSubview(menuViewSnapshot)
         } else {
-            guard let snapshot = menuView.snapshotView(afterScreenUpdates: false) else {
-                transitionContext.completeTransition(true)
-                return
-            }
-            menuViewSnapshot = snapshot
             menuViewSnapshot.frame = menuView.frame
             container.insertSubview(menuViewSnapshot, aboveSubview: menuView)
             menuView.isHidden = true
