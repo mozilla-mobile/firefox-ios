@@ -113,8 +113,8 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         injectData("message", content: ["status": "login"])
 
         let app = UIApplication.shared
-        let helper = FxALoginHelper.createSharedInstance(application: app, profile: profile)
-        helper.userDidLogin(data).uponQueue(dispatch_get_main_queue()) { res in
+        let helper = FxALoginHelper.createSharedInstance(app, profile: profile)
+        helper.userDidLogin(data).uponQueue(DispatchQueue.main) { res in
             if res.isSuccess {
                 self.delegate?.contentViewControllerDidSignIn(self, data: data)
             } else {
