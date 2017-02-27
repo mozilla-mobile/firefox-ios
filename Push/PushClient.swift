@@ -6,6 +6,7 @@ import Foundation
 import Alamofire
 import Deferred
 import Shared
+import SwiftyJSON
 
 //public struct PushRemoteError {
 //    static let MissingNecessaryCryptoKeys: Int32 = 101
@@ -33,21 +34,21 @@ public struct PushRemoteError {
     let error: String
     let message: String?
 
-    public static func fromJSON(json: JSON) -> PushRemoteError? {
-        guard let code = json["code"].asInt,
-              let errno = json["errno"].asInt,
-              let error = json["error"].asString else {
+    public static func from(json: JSON) -> PushRemoteError? {
+        guard let code = json["code"].int,
+              let errno = json["errno"].int,
+              let error = json["error"].string else {
             return nil
         }
 
-        let message = json["message"].asString
+        let message = json["message"].string
         return PushRemoteError(code: code, errno: errno, error: error, message: message)
     }
 }
 
 public enum PushClientError: MaybeErrorType {
     case Remote(PushRemoteError)
-    case Local(NSError)
+    case Local(Error)
 
     public var description: String {
         switch self {
@@ -56,7 +57,7 @@ public enum PushClientError: MaybeErrorType {
             let messageString = error.message ?? ""
             return "<FxAClientError.Remote \(error.code)/\(error.errno): \(errorString) (\(messageString))>"
         case let .Local(error):
-            return "<FxAClientError.Local Error Domain=\(error.domain) Code=\(error.code) \"\(error.localizedDescription)\">"
+            return "<FxAClientError.Local Error \"\(error.localizedDescription)\">"
         }
     }
 }
@@ -64,11 +65,10 @@ public enum PushClientError: MaybeErrorType {
 public class PushClient {
     let endpointURL: NSURL
 
-    lazy private var alamofire: Alamofire.Manager = {
-        // TODO: User Agent?
+    lazy fileprivate var alamofire: SessionManager = {
         let ua = UserAgent.fxaUserAgent
-        let configuration = NSURLSessionConfiguration.ephemeralSessionConfiguration()
-        return Alamofire.Manager.managerWithUserAgent(ua, configuration: configuration)
+        let configuration = URLSessionConfiguration.ephemeral
+        return SessionManager.managerWithUserAgent(ua, configuration: configuration)
     }()
 
     public init(endpointURL: NSURL) {
@@ -78,19 +78,19 @@ public class PushClient {
 }
 
 public extension PushClient {
-    public func register(apnsToken: String) -> Deferred<Maybe<PushRegistration>> {
+    public func register(_ apnsToken: String) -> Deferred<Maybe<PushRegistration>> {
         //  POST /v1/{type}/{app_id}/registration
-        let registerURL = endpointURL.URLByAppendingPathComponent("registration")!
+        let registerURL = endpointURL.appendingPathComponent("registration")!
 
-        let mutableURLRequest = NSMutableURLRequest(URL: registerURL)
-        mutableURLRequest.HTTPMethod = Method.POST.rawValue
+        var mutableURLRequest = URLRequest(url: registerURL)
+        mutableURLRequest.httpMethod = HTTPMethod.post.rawValue
 
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         let parameters = ["token": apnsToken]
-        mutableURLRequest.HTTPBody = JSON(parameters).toString().utf8EncodedData
+        mutableURLRequest.httpBody = JSON(parameters).rawString()?.utf8EncodedData
 
-        return sendRequest(mutableURLRequest) >>== { json in
-            guard let response = PushRegistration.fromJSON(json) else {
+        return send(request: mutableURLRequest) >>== { json in
+            guard let response = PushRegistration.from(json: json) else {
                 return deferMaybe(PushClientError.Local(PushClientUnknownError))
             }
 
@@ -100,18 +100,18 @@ public extension PushClient {
 
     public func updateUAID(apnsToken: String, creds: PushRegistration) -> Deferred<Maybe<PushRegistration>> {
         //  PUT /v1/{type}/{app_id}/registration/{uaid}
-        let registerURL = endpointURL.URLByAppendingPathComponent("registration/\(creds.uaid)")!
-        let mutableURLRequest = NSMutableURLRequest(URL: registerURL)
+        let registerURL = endpointURL.appendingPathComponent("registration/\(creds.uaid)")!
+        var mutableURLRequest = URLRequest(url: registerURL)
 
-        mutableURLRequest.HTTPMethod = Method.PUT.rawValue
+        mutableURLRequest.httpMethod = HTTPMethod.put.rawValue
         mutableURLRequest.addValue("Bearer \(creds.secret)", forHTTPHeaderField: "Authorization")
 
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         let parameters = ["token": apnsToken]
-        mutableURLRequest.HTTPBody = JSON(parameters).toString().utf8EncodedData
+        mutableURLRequest.httpBody = JSON(parameters).rawString()?.utf8EncodedData
 
-        return sendRequest(mutableURLRequest) >>== { json in
-            guard let response = PushRegistration.fromJSON(json) else {
+        return send(request: mutableURLRequest) >>== { json in
+            guard let response = PushRegistration.from(json: json) else {
                 return deferMaybe(PushClientError.Local(PushClientUnknownError))
             }
             return deferMaybe(response)
@@ -120,20 +120,20 @@ public extension PushClient {
 
     public func unregister(creds: PushRegistration) -> Success {
         //  DELETE /v1/{type}/{app_id}/registration/{uaid}
-        let unregisterURL = endpointURL.URLByAppendingPathComponent("registration/\(creds.uaid)")
+        let unregisterURL = endpointURL.appendingPathComponent("registration/\(creds.uaid)")
 
-        let mutableURLRequest = NSMutableURLRequest(URL: unregisterURL!)
-        mutableURLRequest.HTTPMethod = Method.DELETE.rawValue
+        var mutableURLRequest = URLRequest(url: unregisterURL!)
+        mutableURLRequest.httpMethod = HTTPMethod.delete.rawValue
         mutableURLRequest.addValue("Bearer \(creds.secret)", forHTTPHeaderField: "Authorization")
 
-        return sendRequest(mutableURLRequest) >>> succeed
+        return send(request: mutableURLRequest) >>> succeed
     }
 }
 
 /// Utilities
 extension PushClient {
-    private func sendRequest(request: NSURLRequest) -> Deferred<Maybe<JSON>> {
-        log.info("\(request.HTTPMethod!) \(request.URLString)")
+    fileprivate func send(request: URLRequest) -> Deferred<Maybe<JSON>> {
+        log.info("\(request.httpMethod!) \(request.url?.absoluteString)")
         let deferred = Deferred<Maybe<JSON>>()
         alamofire.request(request)
             .validate(contentType: ["application/json"])
@@ -151,7 +151,7 @@ extension PushClient {
 
                     let json = JSON(data: data)
                     
-                    if let remoteError = PushRemoteError.fromJSON(json) {
+                    if let remoteError = PushRemoteError.from(json: json) {
                         return deferred.fill(Maybe(failure: PushClientError.Remote(remoteError)))
                     }
 
