@@ -10,3 +10,6 @@ elif [ "$BUDDYBUILD_SCHEME" == Firefox ]; then
   /usr/libexec/PlistBuddy -c "Set AdjustAppToken String $ADJUST_KEY_PRODUCTION" "Client/Info.plist"
   /usr/libexec/PlistBuddy -c "Set AdjustEnvironment String production" "Client/Info.plist"
 fi
+
+# Set the build number to match the Buddybuild number
+agvtool new-version -all $BUDDYBUILD_BUILD_NUMBER
