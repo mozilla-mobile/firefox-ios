@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import SwiftyJSON
 
 public class PushRegistration: NSObject, NSCoding {
     let endpoint: NSURL
@@ -19,32 +20,32 @@ public class PushRegistration: NSObject, NSCoding {
     }
 
     @objc public convenience required init?(coder aDecoder: NSCoder) {
-        guard let uaid = aDecoder.decodeObjectForKey("uaid") as? String,
-            let secret = aDecoder.decodeObjectForKey("secret") as? String,
-            let urlString = aDecoder.decodeObjectForKey("endpoint") as? String,
+        guard let uaid = aDecoder.decodeObject(forKey: "uaid") as? String,
+            let secret = aDecoder.decodeObject(forKey: "secret") as? String,
+            let urlString = aDecoder.decodeObject(forKey: "endpoint") as? String,
             let endpoint = NSURL(string: urlString),
-            let channelID = aDecoder.decodeObjectForKey("channelID") as? String else {
+            let channelID = aDecoder.decodeObject(forKey: "channelID") as? String else {
                 fatalError("Cannot decode registration")
         }
         self.init(uaid: uaid, secret: secret, endpoint: endpoint, channelID: channelID)
     }
 
-    @objc public func encodeWithCoder(aCoder: NSCoder) {
-        aCoder.encodeObject(uaid, forKey: "uaid")
-        aCoder.encodeObject(secret, forKey: "secret")
-        aCoder.encodeObject(endpoint.absoluteString, forKey: "endpoint")
-        aCoder.encodeObject(channelID, forKey: "channelID")
+    @objc public func encode(with aCoder: NSCoder) {
+        aCoder.encode(uaid, forKey: "uaid")
+        aCoder.encode(secret, forKey: "secret")
+        aCoder.encode(endpoint.absoluteString, forKey: "endpoint")
+        aCoder.encode(channelID, forKey: "channelID")
     }
 
     // TODO ???
     //     protected final @NonNull Map<String, PushSubscription> subscriptions;
 
-    public static func fromJSON(json: JSON) -> PushRegistration? {
-        guard let endpointString = json["endpoint"].asString,
+    public static func from(json: JSON) -> PushRegistration? {
+        guard let endpointString = json["endpoint"].rawString(),
               let endpoint = NSURL(string: endpointString),
-              let secret = json["secret"].asString,
-              let uaid = json["uaid"].asString,
-              let channelID = json["channelID"].asString else {
+              let secret = json["secret"].rawString(),
+              let uaid = json["uaid"].rawString(),
+              let channelID = json["channelID"].rawString() else {
             return nil
         }
 
