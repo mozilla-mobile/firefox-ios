@@ -12,4 +12,4 @@ elif [ "$BUDDYBUILD_SCHEME" == Firefox ]; then
 fi
 
 # Set the build number to match the Buddybuild number
-avgtool new-version -all $BUDDYBUILD_BUILD_NUMBER
+agvtool new-version -all $BUDDYBUILD_BUILD_NUMBER
