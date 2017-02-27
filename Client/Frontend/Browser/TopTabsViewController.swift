@@ -18,7 +18,7 @@ struct TopTabsUX {
     static let TabWidth: CGFloat = 180
     static let CollectionViewPadding: CGFloat = 15
     static let FaderPading: CGFloat = 10
-    static let BackgroundSeparatorLinePadding: CGFloat = 5
+    static let SeparatorWidth: CGFloat = 1
     static let TabTitleWidth: CGFloat = 110
     static let TabTitlePadding: CGFloat = 10
 }
@@ -191,11 +191,12 @@ class TopTabsViewController: UIViewController {
         if isUpdating || pendingReloadData {
             return
         }
+        let isPrivate = self.isPrivate
         delegate?.topTabsDidTogglePrivateMode()
         self.pendingReloadData = true // Stops animations from happening
         let oldSelectedTab = self.oldSelectedTab
         self.oldSelectedTab = tabManager.selectedTab
-        self.privateModeButton.setSelected(isPrivate, animated: true)
+        self.privateModeButton.setSelected(!isPrivate, animated: true)
 
         //if private tabs is empty and we are transitioning to it add a tab
         if tabManager.privateTabs.isEmpty  && !isPrivate {
