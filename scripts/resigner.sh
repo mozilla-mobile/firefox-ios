@@ -13,7 +13,7 @@ TEAM_ID=$4
 CERT_NAME=$5
 
 UNZIPPED="temp_${IPA%.ipa}"
-DEVELOPER_DIR=`xcode-select -p`
+DEVELOPER_DIR=$(xcode-select -p)
 
 # 1. 'Unzip' the .ipa file to get access to it's contents.
 function unzip_ipa {
@@ -31,19 +31,19 @@ function export_entitlements {
 
 # 3. Update the entitlements to use the new team/bundle identifiers.
 function update_extension_entitlements {
-  /usr/libexec/PlistBuddy -c "Set application-identifier $TEAM_ID.$BUNDLE_ID.$2" $1
-  /usr/libexec/PlistBuddy -c "Set com.apple.developer.team-identifier $TEAM_ID" $1
-  /usr/libexec/PlistBuddy -c "Set com.apple.security.application-groups:0 group.$BUNDLE_ID" $1
-  /usr/libexec/PlistBuddy -c "Set keychain-access-groups:0 $TEAM_ID.$BUNDLE_ID" $1
-  /usr/libexec/PlistBuddy -c "Add beta-reports-active bool true" $1
+  /usr/libexec/PlistBuddy -c "Set application-identifier $TEAM_ID.$BUNDLE_ID.$2" "$1"
+  /usr/libexec/PlistBuddy -c "Set com.apple.developer.team-identifier $TEAM_ID" "$1"
+  /usr/libexec/PlistBuddy -c "Set com.apple.security.application-groups:0 group.$BUNDLE_ID" "$1"
+  /usr/libexec/PlistBuddy -c "Set keychain-access-groups:0 $TEAM_ID.$BUNDLE_ID" "$1"
+  /usr/libexec/PlistBuddy -c "Add beta-reports-active bool true" "$1"
 }
 
 function update_client_entitlements {
-  /usr/libexec/PlistBuddy -c "Set application-identifier $TEAM_ID.$BUNDLE_ID" $1
-  /usr/libexec/PlistBuddy -c "Set com.apple.developer.team-identifier $TEAM_ID" $1
-  /usr/libexec/PlistBuddy -c "Set com.apple.security.application-groups:0 group.$BUNDLE_ID" $1
-  /usr/libexec/PlistBuddy -c "Set keychain-access-groups:0 $TEAM_ID.$BUNDLE_ID" $1
-  /usr/libexec/PlistBuddy -c "Add beta-reports-active bool true" $1
+  /usr/libexec/PlistBuddy -c "Set application-identifier $TEAM_ID.$BUNDLE_ID" "$1"
+  /usr/libexec/PlistBuddy -c "Set com.apple.developer.team-identifier $TEAM_ID" "$1"
+  /usr/libexec/PlistBuddy -c "Set com.apple.security.application-groups:0 group.$BUNDLE_ID" "$1"
+  /usr/libexec/PlistBuddy -c "Set keychain-access-groups:0 $TEAM_ID.$BUNDLE_ID" "$1"
+  /usr/libexec/PlistBuddy -c "Add beta-reports-active bool true" "$1"
 }
 
 # 4. Replace the bundle identifier in each Info.plist.
@@ -98,7 +98,7 @@ function resign {
 }
 
 function resign_frameworks {
-  find "$UNZIPPED/Payload/Client.app/Frameworks" -name *.framework -d 1 | while read line; do
+  find "$UNZIPPED/Payload/Client.app/Frameworks" -name '*.framework' -d 1 | while read -r line; do
     codesign -f -s "$CERT_NAME" \
       "$line"
   done
@@ -107,15 +107,15 @@ function resign_frameworks {
 # 7. Copy over the libswift*.dylib libraries into the SwiftSupport library.
 function copy_swift_support {
   mkdir -p "$UNZIPPED/SwiftSupport"
-  for supportlib in `ls -1 "$UNZIPPED/Payload/Client.app/Frameworks" | egrep "libswift"`; do
-    echo "-- Copying over $supportlib"
-    cp "$DEVELOPER_DIR/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/$supportlib" "$UNZIPPED/SwiftSupport"
+  find "$UNZIPPED/Payload/Client.app/Frameworks" -name 'libswift*.dylib' -exec basename {} \; | while read -r line; do
+    echo "-- Copying over $line"
+    cp "$DEVELOPER_DIR/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/$line" "$UNZIPPED/SwiftSupport"
   done
 }
 
 # 8. Put it all back together into a new .ipa
 function rezip_ipa {
-  cd "$UNZIPPED"
+  cd "$UNZIPPED" || exit
   zip -qr "../$IPA" .
   cd ..
 }
