@@ -158,6 +158,12 @@ class TestBookmarkTreeMerging: FailFastTestCase {
         return getBrowserDBForFile(filename: file, files: self.files)
     }
 
+    private func mockStatsSessionForBookmarks() -> SyncEngineStatsSession {
+        let session = SyncEngineStatsSession(collection: "bookmarks")
+        session.start()
+        return session
+    }
+
     func getSyncableBookmarks(name: String) -> MergedSQLiteBookmarks? {
         guard let db = self.getBrowserDB(name: name) else {
             XCTFail("Couldn't get prepared DB.")
@@ -308,7 +314,7 @@ class TestBookmarkTreeMerging: FailFastTestCase {
 
         let uploader = MockUploader()
         let storer = uploader.getStorer()
-        let applier = MergeApplier(buffer: bookmarks, storage: bookmarks, client: storer, greenLight: { true })
+        let applier = MergeApplier(buffer: bookmarks, storage: bookmarks, client: storer, statsSession: mockStatsSessionForBookmarks(), greenLight: { true })
         applier.go().succeeded()
 
         // Now the local contents are replicated into the mirror, and both the buffer and local are empty.
@@ -721,7 +727,7 @@ class TestBookmarkTreeMerging: FailFastTestCase {
 
         let uploader = MockUploader()
         let storer = uploader.getStorer()
-        let applier = MergeApplier(buffer: bookmarks, storage: bookmarks, client: storer, greenLight: { true })
+        let applier = MergeApplier(buffer: bookmarks, storage: bookmarks, client: storer, statsSession: mockStatsSessionForBookmarks(), greenLight: { true })
         applier.applyResult(result).succeeded()
 
         guard let mirror = bookmarks.treeForMirror().value.successValue else {
@@ -797,7 +803,7 @@ class TestBookmarkTreeMerging: FailFastTestCase {
 
         let uploader = MockUploader()
         let storer = uploader.getStorer()
-        let applier = MergeApplier(buffer: bookmarks, storage: bookmarks, client: storer, greenLight: { true })
+        let applier = MergeApplier(buffer: bookmarks, storage: bookmarks, client: storer, statsSession: mockStatsSessionForBookmarks(), greenLight: { true })
         applier.go().succeeded()
 
         guard let mirror = bookmarks.treeForMirror().value.successValue else {
@@ -864,7 +870,7 @@ class TestBookmarkTreeMerging: FailFastTestCase {
 
         let uploader = MockUploader()
         let storer = uploader.getStorer()
-        let applier = MergeApplier(buffer: bookmarks, storage: bookmarks, client: storer, greenLight: { true })
+        let applier = MergeApplier(buffer: bookmarks, storage: bookmarks, client: storer, statsSession: mockStatsSessionForBookmarks(), greenLight: { true })
         applier.go().succeeded()
 
         // After merge, the buffer and local are empty.
@@ -923,7 +929,7 @@ class TestBookmarkTreeMerging: FailFastTestCase {
 
         let uploader = MockUploader()
         let storer = uploader.getStorer()
-        let applier = MergeApplier(buffer: bookmarks, storage: bookmarks, client: storer, greenLight: { true })
+        let applier = MergeApplier(buffer: bookmarks, storage: bookmarks, client: storer, statsSession: mockStatsSessionForBookmarks(), greenLight: { true })
         applier.go().succeeded()
 
         guard let _ = bookmarks.treeForMirror().value.successValue else {
@@ -956,7 +962,7 @@ class TestBookmarkTreeMerging: FailFastTestCase {
 
         let uu = MockUploader()
         let ss = uu.getStorer()
-        let changeApplier = MergeApplier(buffer: bookmarks, storage: bookmarks, client: ss, greenLight: { true })
+        let changeApplier = MergeApplier(buffer: bookmarks, storage: bookmarks, client: ss, statsSession: mockStatsSessionForBookmarks(), greenLight: { true })
         changeApplier.go().succeeded()
 
         // The title changed.

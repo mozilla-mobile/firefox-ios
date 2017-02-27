@@ -177,12 +177,14 @@ open class LoginsSynchronizer: IndependentRecordSynchronizer, Synchronizer {
                 NotificationCenter.default.post(name: NotificationDataRemoteLoginChangesWereApplied, object: nil)
             }
         }
+
+        statsSession.start()
         return passwordsClient.getSince(since)
             >>== applyIncomingToStorage
             // TODO: If we fetch sorted by date, we can bump the lastFetched timestamp
             // to the last successfully applied record timestamp, no matter where we fail.
             // There's no need to do the upload before bumping -- the storage of local changes is stable.
             >>> { self.uploadOutgoingFromStorage(logins, lastTimestamp: 0, withServer: passwordsClient) }
-            >>> { return deferMaybe(.completed) }
+            >>> { return deferMaybe(self.completedWithStats) }
     }
 }

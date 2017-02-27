@@ -199,4 +199,21 @@ public struct AppConstants {
             return true
         #endif
     }()
+
+    /// Toggles reporting our ad-hoc bookmark sync ping
+    public static let MOZ_ADHOC_SYNC_REPORTING: Bool = {
+        #if MOZ_CHANNEL_RELEASE
+            return false
+        #elseif MOZ_CHANNEL_BETA
+            return false
+        #elseif MOZ_CHANNEL_NIGHTLY
+            return true
+        #elseif MOZ_CHANNEL_FENNEC
+            return true
+        #elseif MOZ_CHANNEL_AURORA
+            return true
+        #else
+            return true
+        #endif
+    }()
 }

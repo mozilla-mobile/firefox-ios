@@ -57,11 +57,13 @@ public class BookmarksMirrorer {
     private let downloader: BatchingDownloader<BookmarkBasePayload>
     private let storage: BookmarkBufferStorage
     private let batchSize: Int
+    private let statsSession: SyncEngineStatsSession
 
-    public init(storage: BookmarkBufferStorage, client: Sync15CollectionClient<BookmarkBasePayload>, basePrefs: Prefs, collection: String, batchSize: Int=100) {
+    public init(storage: BookmarkBufferStorage, client: Sync15CollectionClient<BookmarkBasePayload>, basePrefs: Prefs, collection: String, statsSession: SyncEngineStatsSession, batchSize: Int=100) {
         self.storage = storage
         self.downloader = BatchingDownloader(collectionClient: client, basePrefs: basePrefs, collection: collection)
         self.batchSize = batchSize
+        self.statsSession = statsSession
     }
 
     // TODO
@@ -129,7 +131,7 @@ public class BookmarksMirrorer {
                 return self.applyRecordsFromBatcher()
                    >>> effect(self.downloader.advance)
                    >>> self.storage.doneApplyingRecordsAfterDownload
-                   >>> always(SyncStatus.completed)
+                   >>> always(SyncStatus.completed(self.statsSession.end()))
             case .incomplete:
                 log.debug("Running another batch.")
                 // This recursion is fine because Deferred always pushes callbacks onto a queue.
@@ -142,7 +144,7 @@ public class BookmarksMirrorer {
             case .noNewData:
                 log.info("No new data. No need to continue batching.")
                 self.downloader.advance()
-                return deferMaybe(SyncStatus.completed)
+                return deferMaybe(SyncStatus.completed(self.statsSession.end()))
             }
         }
     }

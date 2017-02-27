@@ -17,20 +17,6 @@ func massivify(record: Record<CleartextPayloadJSON>) -> JSON? {
     ])
 }
 
-private class MockBackoffStorage: BackoffStorage {
-    var serverBackoffUntilLocalTimestamp: Timestamp? { get { return 0 } set(value) {} }
-
-    func clearServerBackoff() {
-    }
-
-    func isInBackoff(_ now: Timestamp) -> Timestamp? {
-        return nil
-    }
-
-    init() {
-    }
-}
-
 class StorageClientTests: XCTestCase {
     func testPartialJSON() {
         let body = "0"

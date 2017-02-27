@@ -18,21 +18,6 @@ private class KeyFetchError: MaybeErrorType {
     }
 }
 
-private class MockBackoffStorage: BackoffStorage {
-    var serverBackoffUntilLocalTimestamp: Timestamp?
-
-    func clearServerBackoff() {
-        self.serverBackoffUntilLocalTimestamp = nil
-    }
-
-    func isInBackoff(_ now: Timestamp) -> Timestamp? {
-        if let ts = self.serverBackoffUntilLocalTimestamp, now < ts {
-            return ts
-        }
-        return nil
-    }
-}
-
 class LiveStorageClientTests: LiveAccountTest {
     func getKeys(kB: Data, token: TokenServerToken) -> Deferred<Maybe<Record<KeysPayload>>> {
         let endpoint = token.api_endpoint

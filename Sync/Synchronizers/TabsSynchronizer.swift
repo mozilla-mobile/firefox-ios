@@ -68,6 +68,9 @@ open class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchroniz
             let tabsRecord = self.createOwnTabsRecord(tabs)
             log.debug("Uploading our tabs: \(tabs.count).")
 
+            var uploadStats = SyncUploadStats()
+            uploadStats.sent += 1
+
             // We explicitly don't send If-Unmodified-Since, because we always
             // want our upload to succeed -- we own the record.
             return tabsClient.put(tabsRecord, ifUnmodifiedSince: nil) >>== { resp in
@@ -75,9 +78,11 @@ open class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchroniz
                     // Protocol says this should always be present for success responses.
                     log.debug("Tabs record upload succeeded. New timestamp: \(ts).")
                     self.tabsRecordLastUpload = ts
+                } else {
+                    uploadStats.sentFailed += 1
                 }
                 return succeed()
-            }
+            } >>== effect({ self.statsSession.recordUpload(stats: uploadStats) })
         }
     }
 
@@ -85,14 +90,23 @@ open class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchroniz
         func onResponseReceived(_ response: StorageResponse<[Record<TabsPayload>]>) -> Success {
 
             func afterWipe() -> Success {
+                var downloadStats = SyncDownloadStats()
+
                 let doInsert: (Record<TabsPayload>) -> Deferred<Maybe<(Int)>> = { record in
                     let remotes = record.payload.isValid() ? record.payload.remoteTabs : []
                     let ins = localTabs.insertOrUpdateTabsForClientGUID(record.id, tabs: remotes)
+
+                    // Since tabs are all sent within a single record, we don't count number of tabs applied
+                    // but number of records. In this case it's just one.
+                    downloadStats.applied += 1
                     ins.upon() { res in
                         if let inserted = res.successValue {
                             if inserted != remotes.count {
                                 log.warning("Only inserted \(inserted) tabs, not \(remotes.count). Malformed or missing client?")
                             }
+                            downloadStats.applied += 1
+                        } else {
+                            downloadStats.failed += 1
                         }
                     }
                     return ins
@@ -124,7 +138,7 @@ open class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchroniz
                             self.lastFetched = responseTimestamp!
                             return succeed()
                         }
-                }
+                } >>== effect({ self.statsSession.downloadStats })
             }
 
             // If this is a fresh start, do a wipe.
@@ -146,16 +160,18 @@ open class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchroniz
         if let encrypter = keys?.encrypter(self.collection, encoder: encoder) {
             let tabsClient = storageClient.clientForCollection(self.collection, encrypter: encrypter)
 
+            statsSession.start()
+
             if !self.remoteHasChanges(info) {
                 // upload local tabs if they've changed or we're in a fresh start.
                 let _ = uploadOurTabs(localTabs, toServer: tabsClient)
-                return deferMaybe(.completed)
+                return deferMaybe(completedWithStats)
             }
 
             return tabsClient.getSince(self.lastFetched)
                 >>== onResponseReceived
                 >>> { self.uploadOurTabs(localTabs, toServer: tabsClient) }
-                >>> { deferMaybe(.completed) }
+                >>> { deferMaybe(self.completedWithStats) }
         }
 
         log.error("Couldn't make tabs factory.")

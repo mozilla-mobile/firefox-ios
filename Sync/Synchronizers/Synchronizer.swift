@@ -76,7 +76,7 @@ public protocol Synchronizer {
  * for batch scheduling, success-case backoff and so on.
  */
 public enum SyncStatus {
-    case completed                 // TODO: we pick up a bunch of info along the way. Pass it along.
+    case completed(SyncEngineStatsSession)
     case notStarted(SyncNotStartedReason)
     case partial
 
@@ -142,6 +142,8 @@ open class BaseCollectionSynchronizer {
     let delegate: SyncDelegate
     let prefs: Prefs
 
+    var statsSession: SyncEngineStatsSession
+
     static func prefsForCollection(_ collection: String, withBasePrefs basePrefs: Prefs) -> Prefs {
         let branchName = "synchronizer." + collection + "."
         return basePrefs.branch(branchName)
@@ -152,6 +154,7 @@ open class BaseCollectionSynchronizer {
         self.delegate = delegate
         self.collection = collection
         self.prefs = BaseCollectionSynchronizer.prefsForCollection(collection, withBasePrefs: basePrefs)
+        self.statsSession = SyncEngineStatsSession(collection: collection)
 
         log.info("Synchronizer configured with prefs '\(self.prefs.getBranchPrefix()).'")
     }
@@ -159,6 +162,11 @@ open class BaseCollectionSynchronizer {
     var storageVersion: Int {
         assert(false, "Override me!")
         return 0
+    }
+
+    // Short-hand for returning .Complete status + recorded stats
+    var completedWithStats: SyncStatus {
+        return .completed(statsSession.end())
     }
 
     open func reasonToNotSync(_ client: Sync15StorageClient) -> SyncNotStartedReason? {

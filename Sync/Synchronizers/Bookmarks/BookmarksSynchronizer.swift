@@ -102,7 +102,7 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
         }
 
         let start = Date.nowMicroseconds()
-        let mirrorer = BookmarksMirrorer(storage: buffer, client: bookmarksClient, basePrefs: self.prefs, collection: "bookmarks")
+        let mirrorer = BookmarksMirrorer(storage: buffer, client: bookmarksClient, basePrefs: self.prefs, collection: "bookmarks", statsSession: self.statsSession)
         let storer = TrivialBookmarkStorer(uploader: { records, lastTimestamp, onUpload in
             let timestamp = lastTimestamp ?? self.lastFetched
             return self.uploadRecords(records, lastTimestamp: timestamp, storageClient: bookmarksClient, onUpload: onUpload)
@@ -114,8 +114,9 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
         })
 
         let doMirror = mirrorer.go(info: info, greenLight: greenLight)
-
         let run: SyncResult
+
+        statsSession.start()
         if !AppConstants.shouldMergeBookmarks {
             if case .release = AppConstants.BuildChannel {
                 // On release, just mirror; don't validate.
@@ -133,7 +134,7 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
             run = doMirror >>== { result in
                 // Only bother trying to sync if the mirror operation wasn't interrupted or partial.
                 if case .completed = result {
-                    let applier = MergeApplier(buffer: buffer, storage: storage, client: storer, greenLight: greenLight)
+                    let applier = MergeApplier(buffer: buffer, storage: storage, client: storer, statsSession: self.statsSession, greenLight: greenLight)
                     return applier.go()
                 }
                 return deferMaybe(result)
@@ -156,13 +157,15 @@ class MergeApplier {
     let storage: SyncableBookmarks
     let client: BookmarkStorer
     let merger: BookmarksStorageMerger
+    let statsSession: SyncEngineStatsSession
 
-    init(buffer: BookmarkBufferStorage & BufferItemSource, storage: SyncableBookmarks & LocalItemSource & MirrorItemSource, client: BookmarkStorer, greenLight: @escaping () -> Bool) {
+    init(buffer: BookmarkBufferStorage & BufferItemSource, storage: SyncableBookmarks & LocalItemSource & MirrorItemSource, client: BookmarkStorer, statsSession: SyncEngineStatsSession, greenLight: @escaping () -> Bool) {
         self.greenLight = greenLight
         self.buffer = buffer
         self.storage = storage
         self.merger = ThreeWayBookmarksStorageMerger(buffer: buffer, storage: storage)
         self.client = client
+        self.statsSession = statsSession
     }
 
     // Exposed for use from tests.
@@ -173,12 +176,12 @@ class MergeApplier {
     func go() -> SyncResult {
         guard self.greenLight() else {
             log.info("Green light turned red; not merging bookmarks.")
-            return deferMaybe(SyncStatus.completed)
+            return deferMaybe(SyncStatus.completed(statsSession.end()))
         }
 
         return self.merger.merge()
           >>== self.applyResult
-           >>> always(SyncStatus.completed)
+           >>> always(SyncStatus.completed(statsSession.end()))
     }
 }
 

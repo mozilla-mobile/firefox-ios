@@ -37,6 +37,22 @@ class Uploader {
 }
 
 open class IndependentRecordSynchronizer: TimestampedSingleCollectionSynchronizer {
+    private func reportApplyStatsWrap<T>(apply: @escaping (T) -> Success) -> (T) -> Success {
+        return { record in
+            return apply(record).bind({ result in
+                var stats = SyncDownloadStats()
+                stats.applied = 1
+                if result.isSuccess {
+                    stats.succeeded = 1
+                } else {
+                    stats.failed = 1
+                }
+                self.statsSession.recordDownload(stats: stats)
+                return Deferred(value: result)
+            })
+        }
+    }
+
     /**
      * Just like the usual applyIncomingToStorage, but doesn't fast-forward the timestamp.
      */
@@ -46,7 +62,7 @@ open class IndependentRecordSynchronizer: TimestampedSingleCollectionSynchronize
             return succeed()
         }
 
-        return walk(records, f: apply)
+        return walk(records, f: reportApplyStatsWrap(apply: apply))
     }
 
     func applyIncomingToStorage<T>(_ records: [T], fetched: Timestamp, apply: @escaping (T) -> Success) -> Success {
@@ -61,7 +77,7 @@ open class IndependentRecordSynchronizer: TimestampedSingleCollectionSynchronize
             return done()
         }
 
-        return walk(records, f: apply) >>> done
+        return walk(records, f: reportApplyStatsWrap(apply: apply)) >>> done
     }
 }
 
@@ -89,7 +105,13 @@ extension TimestampedSingleCollectionSynchronizer {
             return deferMaybe(lastTimestamp)
         }
 
-        let batch = storageClient.newBatch(ifUnmodifiedSince: (lastTimestamp == 0) ? nil : lastTimestamp, onCollectionUploaded: onUpload)
+        func reportUploadStatsWrap(result: POSTResult, timestamp: Timestamp?) -> DeferredTimestamp {
+            let stats = SyncUploadStats(sent: result.success.count, sentFailed: result.failed.count)
+            self.statsSession.recordUpload(stats: stats)
+            return onUpload(result, timestamp)
+        }
+
+        let batch = storageClient.newBatch(ifUnmodifiedSince: (lastTimestamp == 0) ? nil : lastTimestamp, onCollectionUploaded: reportUploadStatsWrap)
         return batch.addRecords(records)
             >>> batch.endBatch
             >>> {
