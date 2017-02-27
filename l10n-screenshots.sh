@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 if [ -d l10n-screenshots ]; then
   echo "The l10n-screenshots directory already exists. You decide."
@@ -12,14 +12,12 @@ fi
 
 mkdir l10n-screenshots
 
-SNAPSHOT=snapshot
-
 for d in firefox-ios-l10n/?? firefox-ios-l10n/??? firefox-ios-l10n/??-??; do
     lang=$(basename $d)
     if [ "$lang" != "ar" ]; then
-        echo "`date` Snapshotting $lang"
+        echo "$(date) Snapshotting $lang"
         mkdir "l10n-screenshots/$lang"
-        $SNAPSHOT --project Client.xcodeproj --scheme L10nSnapshotTests \
+        fastlane snapshot --project Client.xcodeproj --scheme L10nSnapshotTests \
             --skip_open_summary \
             --derived_data_path l10n-screenshots-dd \
             --erase_simulator --number_of_retries 3 \
