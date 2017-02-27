@@ -11,9 +11,9 @@ public enum PushConfigurationLabel: String {
 
     public func toConfiguration() -> PushConfiguration {
         switch self {
-        case Stage: return StagePushConfiguration()
-        case Production: return ProductionPushConfiguration()
-        case Developer: return DeveloperPushConfiguration()
+        case .Stage: return StagePushConfiguration()
+        case .Production: return ProductionPushConfiguration()
+        case .Developer: return DeveloperPushConfiguration()
         }
     }
 }
