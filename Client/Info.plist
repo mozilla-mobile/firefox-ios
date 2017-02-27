@@ -3,15 +3,15 @@
 <plist version="1.0">
 <dict>
 	<key>AdjustAppToken</key>
-	<string>$(ADJUST_APP_TOKEN)</string>
+	<string></string>
 	<key>AdjustEnvironment</key>
-	<string>$(ADJUST_ENVIRONMENT)</string>
+	<string></string>
 	<key>AppIdentifierPrefix</key>
 	<string>$(APP_IDENTIFIER_PREFIX)</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>$(MOZ_BUNDLE_DISPLAY_NAME)</string>
+	<string>$(DISPLAY_NAME)</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -60,14 +60,14 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Websites you visit may request your location.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This lets you save and upload photos.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>This lets you take and upload photos.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Websites you visit may request your location.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This lets you take and upload videos.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This lets you save and upload photos.</string>
 	<key>NSUserActivityTypes</key>
 	<array>
 		<string>org.mozilla.ios.firefox.browsing</string>
