@@ -23,15 +23,14 @@ class L10nBaseSnapshotTests: XCTestCase {
 
     func loadWebPage(url: String, waitForOtherElementWithAriaLabel ariaLabel: String) {
         let app = XCUIApplication()
-        UIPasteboard.generalPasteboard().string = url
-        app.textFields["url"].pressForDuration(2.0)
-        app.sheets.elementBoundByIndex(0).buttons.elementBoundByIndex(0).tap()
-
+        UIPasteboard.general.string = url
+        app.textFields["url"].press(forDuration: 2.0)
+        app.sheets.element(boundBy: 0).buttons.element(boundBy: 0).tap()
         sleep(3) // TODO Otherwise we detect the body in the currently loaded document, before the new page has loaded
 
-        let webView = app.webViews.elementBoundByIndex(0)
+        let webView = app.webViews.element(boundBy: 0)
         let element = webView.otherElements[ariaLabel]
-        expectationForPredicate(NSPredicate(format: "exists == 1"), evaluatedWithObject: element, handler: nil)
+        expectation(for: NSPredicate(format: "exists == 1"), evaluatedWith: element, handler: nil)
 
         waitForExpectations(timeout: 5.0) { (error) -> Void in
             if error != nil {
@@ -41,20 +40,20 @@ class L10nBaseSnapshotTests: XCTestCase {
     }
 
     func loadWebPage(url: String, waitForLoadToFinish: Bool = true) {
-        let LoadingTimeout: NSTimeInterval = 60
+        let LoadingTimeout: TimeInterval = 60
         let exists = NSPredicate(format: "exists = true")
         let loaded = NSPredicate(format: "value BEGINSWITH '100'")
 
         let app = XCUIApplication()
 
-        UIPasteboard.generalPasteboard().string = url
-        app.textFields["url"].pressForDuration(2.0)
-        app.sheets.elementBoundByIndex(0).buttons.elementBoundByIndex(0).tap()
+        UIPasteboard.general.string = url
+        app.textFields["url"].press(forDuration: 2.0)
+        app.sheets.element(boundBy: 0).buttons.element(boundBy: 0).tap()
 
         if waitForLoadToFinish {
-            let progressIndicator = app.progressIndicators.elementBoundByIndex(0)
-            expectationForPredicate(exists, evaluatedWithObject: progressIndicator, handler: nil)
-            expectationForPredicate(loaded, evaluatedWithObject: progressIndicator, handler: nil)
+            let progressIndicator = app.progressIndicators.element(boundBy: 0)
+            expectation(for: exists, evaluatedWith: progressIndicator, handler: nil)
+            expectation(for: loaded, evaluatedWith: progressIndicator, handler: nil)
             waitForExpectations(timeout: LoadingTimeout, handler: nil)
         }
     }
