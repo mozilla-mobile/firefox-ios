@@ -178,7 +178,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         }
 
         let fxaLoginHelper = FxALoginHelper.createSharedInstance(application, profile: profile)
-        fxaLoginHelper.applicationDidLoadProfile()
+        let _ = fxaLoginHelper.applicationDidLoadProfile()
 
         log.debug("Done with setting up the application.")
         return true
@@ -651,7 +651,7 @@ extension AppDelegate {
 }
 
 extension AppDelegate {
-    func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
+    func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         let apnsToken = deviceToken.hexEncodedString
         FxALoginHelper.sharedInstance?.apnsRegisterDidSucceed(apnsToken: apnsToken)
     }
@@ -663,7 +663,7 @@ extension AppDelegate {
 
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
         print("APNS NOTIFICATION \(userInfo)")
-        completionHandler(.NoData)
+        completionHandler(.noData)
     }
 
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
