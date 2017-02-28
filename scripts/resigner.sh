@@ -50,6 +50,9 @@ function update_client_entitlements {
 function replace_bundle_identifiers {
   /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $BUNDLE_ID" \
     "$UNZIPPED/Payload/Client.app/Info.plist"
+  /usr/libexec/PlistBuddy -c "Set AppIdentifierPrefix $TEAM_ID" \
+    "$UNZIPPED/Payload/Client.app/Info.plist"
+
   /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $BUNDLE_ID.Today" \
     "$UNZIPPED/Payload/Client.app/Plugins/Today.appex/Info.plist"
   /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $BUNDLE_ID.SendTo" \
