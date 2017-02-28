@@ -98,7 +98,7 @@ public extension PushClient {
         }
     }
 
-    public func updateUAID(apnsToken: String, creds: PushRegistration) -> Deferred<Maybe<PushRegistration>> {
+    public func updateUAID(_ apnsToken: String, withRegistration creds: PushRegistration) -> Deferred<Maybe<PushRegistration>> {
         //  PUT /v1/{type}/{app_id}/registration/{uaid}
         let registerURL = endpointURL.appendingPathComponent("registration/\(creds.uaid)")!
         var mutableURLRequest = URLRequest(url: registerURL)
@@ -118,7 +118,7 @@ public extension PushClient {
         }
     }
 
-    public func unregister(creds: PushRegistration) -> Success {
+    public func unregister(_ creds: PushRegistration) -> Success {
         //  DELETE /v1/{type}/{app_id}/registration/{uaid}
         let unregisterURL = endpointURL.appendingPathComponent("registration/\(creds.uaid)")
 
