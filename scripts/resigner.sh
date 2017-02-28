@@ -41,8 +41,17 @@ function update_extension_entitlements {
 function update_client_entitlements {
   /usr/libexec/PlistBuddy -c "Set application-identifier $TEAM_ID.$BUNDLE_ID" "$1"
   /usr/libexec/PlistBuddy -c "Set com.apple.developer.team-identifier $TEAM_ID" "$1"
+
+  # Delete other groups and only be left with one
+  /usr/libexec/PlistBuddy -c "Delete com.apple.security.application-groups:1" "$1"
+  /usr/libexec/PlistBuddy -c "Delete com.apple.security.application-groups:1" "$1"
+
+  /usr/libexec/PlistBuddy -c "Delete keychain-access-groups:1" "$1"
+  /usr/libexec/PlistBuddy -c "Delete keychain-access-groups:1" "$1"
+
   /usr/libexec/PlistBuddy -c "Set com.apple.security.application-groups:0 group.$BUNDLE_ID" "$1"
   /usr/libexec/PlistBuddy -c "Set keychain-access-groups:0 $TEAM_ID.$BUNDLE_ID" "$1"
+
   /usr/libexec/PlistBuddy -c "Add beta-reports-active bool true" "$1"
 }
 
