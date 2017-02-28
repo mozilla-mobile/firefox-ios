@@ -370,7 +370,10 @@ class AccountSetting: Setting, FxAContentViewControllerDelegate {
         // And start advancing the Account state in the background as well.
         settings.SELrefresh()
 
-        let _ = settings.navigationController?.popToRootViewController(animated: true)
+        // Dismiss the FxA content view if the account is verified.
+        if let verified = data["verified"].bool, verified {
+            let _ = settings.navigationController?.popToRootViewController(animated: true)
+        }
     }
 
     func contentViewControllerDidCancel(_ viewController: FxAContentViewController) {
