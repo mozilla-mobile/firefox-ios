@@ -736,9 +736,12 @@ extension TabManager {
         }
         isRestoring = false
 
-        if count == 0 {
+        // Always make sure there is a single normal tab.
+        if normalTabs.isEmpty {
             let tab = addTab()
-            selectTab(tab)
+            if selectedTab == nil {
+                selectTab(tab)
+            }
         }
     }
     
