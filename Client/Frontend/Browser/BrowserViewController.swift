@@ -2943,7 +2943,11 @@ extension BrowserViewController: FxAContentViewControllerDelegate {
         if let account = self.profile.getAccount() {
             account.advance()
         }
-        self.dismiss(animated: true, completion: nil)
+
+        // Dismiss the FxA content view if the account is verified.
+        if let verified = data["verified"].bool, verified {
+            self.dismiss(animated: true, completion: nil)
+        }
     }
 
     func contentViewControllerDidCancel(_ viewController: FxAContentViewController) {
