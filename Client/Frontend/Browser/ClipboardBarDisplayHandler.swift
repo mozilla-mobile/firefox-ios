@@ -36,7 +36,10 @@ class ClipboardBarDisplayHandler {
     }
     
     private func shouldDisplayBar() -> Bool {
-        if !sessionStarted || UIPasteboard.general.copiedURL == nil || wasClipboardURLAlreadyDisplayed() {
+        if !sessionStarted ||
+            UIPasteboard.general.copiedURL == nil ||
+            wasClipboardURLAlreadyDisplayed() ||
+            self.prefs.intForKey(IntroViewControllerSeenProfileKey) == nil {
             return false
         }
         sessionStarted = false
