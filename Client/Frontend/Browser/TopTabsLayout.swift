@@ -82,7 +82,7 @@ class TopTabsViewLayout: UICollectionViewFlowLayout {
         decorationAttributes.themeColor = self.themeColor
 
         // Create attributes for the Tab Separator.
-        for i in attributes  {
+        for i in attributes {
             let sep = UICollectionViewLayoutAttributes(forDecorationViewOfKind: TopTabsSeparatorUX.Identifier, with: i.indexPath)
             sep.frame = CGRect(x: i.frame.origin.x - TopTabsUX.SeparatorWidth, y: i.frame.size.height / 4, width: TopTabsUX.SeparatorWidth, height: i.frame.size.height / 2)
             sep.zIndex = -1
