@@ -246,8 +246,9 @@ class Tab: NSObject {
             }
         }
 
-        // Don't expose localhost urls.
-        if let url = self.url, url.isLocal {
+        // When picking a display title. Tabs with sessionData are pending a restore so show their old title.
+        // To prevent flickering of the display title. If a tab is restoring make sure to use its lastTitle.
+        if let url = self.url, url.isAboutHomeURL, sessionData == nil, !restoring {
             return ""
         }
 
