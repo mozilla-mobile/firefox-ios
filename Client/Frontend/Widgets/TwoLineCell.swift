@@ -5,14 +5,15 @@
 import UIKit
 
 struct TwoLineCellUX {
-    static let ImageSize: CGFloat = 25
-    static let BorderViewMargin: CGFloat = 13
+    static let ImageSize: CGFloat = 29
+    static let ImageCornerRadius: CGFloat = 8
+    static let BorderViewMargin: CGFloat = 16
     static let BadgeSize: CGFloat = 16
     static let BadgeMargin: CGFloat = 16
     static let BorderFrameSize: CGFloat = 32
     static let TextColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.black : UIColor(rgb: 0x333333)
     static let DetailTextColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.darkGray : UIColor.gray
-    static let DetailTextTopMargin: CGFloat = 5
+    static let DetailTextTopMargin: CGFloat = 0
 }
 
 class TwoLineTableViewCell: UITableViewCell {
@@ -40,6 +41,7 @@ class TwoLineTableViewCell: UITableViewCell {
 
         indentationWidth = 0
         layoutMargins = UIEdgeInsets.zero
+
         separatorInset = UIEdgeInsets(top: 0, left: TwoLineCellUX.ImageSize + 2 * TwoLineCellUX.BorderViewMargin, bottom: 0, right: 0)
     }
 
@@ -54,6 +56,9 @@ class TwoLineTableViewCell: UITableViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
+        self.textLabel!.alpha = 1
+        self.imageView!.alpha = 1
+        self.selectionStyle = .default
         separatorInset = UIEdgeInsets(top: 0, left: TwoLineCellUX.ImageSize + 2 * TwoLineCellUX.BorderViewMargin, bottom: 0, right: 0)
         twoLineHelper.setupDynamicFonts()
     }
@@ -76,79 +81,21 @@ class TwoLineTableViewCell: UITableViewCell {
     }
 }
 
-class HistoryTableViewCell: TwoLineTableViewCell {
+class SiteTableViewCell: TwoLineTableViewCell {
     let borderView = UIView()
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: UITableViewCellStyle.subtitle, reuseIdentifier: reuseIdentifier)
-        contentView.addSubview(borderView)
-        separatorInset = UIEdgeInsets(top: 0, left: TwoLineCellUX.BorderFrameSize + 2 * TwoLineCellUX.BorderViewMargin, bottom: 0, right: 0)
-
-        borderView.frame = CGRect(x: TwoLineCellUX.BorderViewMargin, y: TwoLineCellUX.BorderViewMargin, width: TwoLineCellUX.BorderFrameSize, height: TwoLineCellUX.BorderFrameSize)
-        borderView.layer.borderWidth = 0.5
-        borderView.layer.borderColor = UIColor.gray.cgColor
-
-        twoLineHelper.hasBorderView = true
-
         twoLineHelper.setUpViews(self, textLabel: textLabel!, detailTextLabel: detailTextLabel!, imageView: imageView!)
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
         twoLineHelper.layoutSubviews()
-
-        imageView!.center = borderView.center
-    }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        separatorInset = UIEdgeInsets(top: 0, left: TwoLineCellUX.BorderFrameSize + 2 * TwoLineCellUX.BorderViewMargin, bottom: 0, right: 0)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-}
-
-class TwoLineCollectionViewCell: UICollectionViewCell {
-    fileprivate let twoLineHelper = TwoLineCellHelper()
-    let textLabel = UILabel()
-    let detailTextLabel = UILabel()
-    let imageView = UIImageView()
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-
-        twoLineHelper.setUpViews(self, textLabel: textLabel, detailTextLabel: detailTextLabel, imageView: imageView)
-
-        contentView.addSubview(textLabel)
-        contentView.addSubview(detailTextLabel)
-        contentView.addSubview(imageView)
-
-        contentView.backgroundColor = UIColor.clear
-        layoutMargins = UIEdgeInsets.zero
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        twoLineHelper.layoutSubviews()
-    }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        twoLineHelper.setupDynamicFonts()
-    }
-
-    func setLines(_ text: String?, detailText: String?) {
-        twoLineHelper.setLines(text, detailText: detailText)
-    }
-
-    func mergeAccessibilityLabels(_ views: [AnyObject?]? = nil) {
-        twoLineHelper.mergeAccessibilityLabels(views)
     }
 }
 
@@ -209,7 +156,6 @@ private class TwoLineCellHelper {
     var textLabel: UILabel!
     var detailTextLabel: UILabel!
     var imageView: UIImageView!
-    var hasBorderView: Bool = false
     var hasRightBadge: Bool = false
 
     // TODO: Not ideal. We should figure out a better way to get this initialized.
@@ -230,6 +176,8 @@ private class TwoLineCellHelper {
         setupDynamicFonts()
 
         imageView.contentMode = .scaleAspectFill
+        imageView.layer.cornerRadius = 6 //hmm
+        imageView.layer.masksToBounds = true
     }
 
     func setupDynamicFonts() {
@@ -242,7 +190,7 @@ private class TwoLineCellHelper {
             return
         }
         let height = container.frame.height
-        let textLeft = hasBorderView ? TwoLineCellUX.BorderFrameSize + 2 * TwoLineCellUX.BorderViewMargin : TwoLineCellUX.ImageSize + 2 * TwoLineCellUX.BorderViewMargin
+        let textLeft = TwoLineCellUX.ImageSize + 2 * TwoLineCellUX.BorderViewMargin
         let textLabelHeight = textLabel.intrinsicContentSize.height
         let detailTextLabelHeight = detailTextLabel.intrinsicContentSize.height
         var contentHeight = textLabelHeight

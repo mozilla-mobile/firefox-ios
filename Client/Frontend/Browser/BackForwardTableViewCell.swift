@@ -9,17 +9,22 @@ class BackForwardTableViewCell: UITableViewCell {
     
     struct BackForwardViewCellUX {
         static let bgColor = UIColor(colorLiteralRed: 0.7, green: 0.7, blue: 0.7, alpha: 1)
-        static let faviconWidth = 20
+        static let faviconWidth = 29
         static let faviconPadding: CGFloat = 20
         static let labelPadding = 20
         static let borderSmall = 2
         static let borderBold = 5
+        static let IconSize = 23
         static let fontSize: CGFloat = 12.0
     }
     
     lazy var faviconView: UIImageView = {
         let faviconView = UIImageView(image: FaviconFetcher.defaultFavicon)
         faviconView.backgroundColor = UIColor.white
+        faviconView.layer.cornerRadius = 6
+        faviconView.layer.borderWidth = 0.5
+        faviconView.layer.borderColor = UIColor(white: 0, alpha: 0.1).cgColor
+        faviconView.layer.masksToBounds = true
         return faviconView
     }()
     
@@ -29,13 +34,7 @@ class BackForwardTableViewCell: UITableViewCell {
         label.font = label.font.withSize(BackForwardViewCellUX.fontSize)
         return label
     }()
-    
-    lazy var bg: UIView = {
-        let bg = UIView(frame: CGRect.zero)
-        bg.backgroundColor = BackForwardViewCellUX.bgColor
-        return bg
-    }()
-    
+
     var connectingForwards = true
     var connectingBackwards = true
     
@@ -43,10 +42,6 @@ class BackForwardTableViewCell: UITableViewCell {
         didSet {
             if isCurrentTab {
                 label.font = UIFont(name:"HelveticaNeue-Bold", size: BackForwardViewCellUX.fontSize)
-                bg.snp.updateConstraints { make in
-                    make.height.equalTo(BackForwardViewCellUX.faviconWidth+BackForwardViewCellUX.borderBold)
-                    make.width.equalTo(BackForwardViewCellUX.faviconWidth+BackForwardViewCellUX.borderBold)
-                }
             }
         }
     }
@@ -54,7 +49,10 @@ class BackForwardTableViewCell: UITableViewCell {
     var site: Site? {
         didSet {
             if let s = site {
-                faviconView.setFavicon(forSite: s)
+                faviconView.setFavicon(forSite: s, onCompletion: { [weak self] (color, url) in
+                    self?.faviconView.image = self?.faviconView.image?.createScaled(CGSize(width: BackForwardViewCellUX.IconSize, height: BackForwardViewCellUX.IconSize))
+                    self?.faviconView.contentMode = .center
+                })
                 var title = s.title
                 if title.isEmpty {
                     title = s.url
@@ -76,7 +74,6 @@ class BackForwardTableViewCell: UITableViewCell {
         backgroundColor = UIColor.clear
         selectionStyle = .none
         
-        contentView.addSubview(bg)
         contentView.addSubview(faviconView)
         contentView.addSubview(label)
         
@@ -92,13 +89,7 @@ class BackForwardTableViewCell: UITableViewCell {
             make.leading.equalTo(faviconView.snp.trailing).offset(BackForwardViewCellUX.labelPadding)
             make.trailing.equalTo(self.snp.trailing).offset(-BackForwardViewCellUX.labelPadding)
         }
-        
-        bg.snp.makeConstraints { make in
-            make.height.equalTo(BackForwardViewCellUX.faviconWidth+BackForwardViewCellUX.borderSmall)
-            make.width.equalTo(BackForwardViewCellUX.faviconWidth+BackForwardViewCellUX.borderSmall)
-            make.centerX.equalTo(faviconView)
-            make.centerY.equalTo(faviconView)
-        }
+
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -144,10 +135,5 @@ class BackForwardTableViewCell: UITableViewCell {
         connectingBackwards = true
         isCurrentTab = false
         label.font = UIFont(name:"HelveticaNeue", size: BackForwardViewCellUX.fontSize)
-        
-        bg.snp.updateConstraints { make in
-            make.height.equalTo(BackForwardViewCellUX.faviconWidth+BackForwardViewCellUX.borderSmall)
-            make.width.equalTo(BackForwardViewCellUX.faviconWidth+BackForwardViewCellUX.borderSmall)
-        }
     }
 }

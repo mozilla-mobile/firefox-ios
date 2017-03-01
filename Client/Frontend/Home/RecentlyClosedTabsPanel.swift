@@ -11,6 +11,12 @@ import Deferred
 
 private let log = Logger.browserLogger
 
+struct RecentlyClosedPanelUX {
+    static let IconSize = CGSize(width: 23, height: 23)
+    static let IconBorderColor = UIColor(white: 0, alpha: 0.1)
+    static let IconBorderWidth: CGFloat = 0.5
+}
+
 class RecentlyClosedTabsPanel: UIViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate?
     var profile: Profile!
@@ -99,7 +105,12 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
         let displayURL = tab.url.displayURL ?? tab.url
         twoLineCell.setLines(tab.title, detailText: displayURL.absoluteDisplayString)
         let site: Favicon? = (tab.faviconURL != nil) ? Favicon(url: tab.faviconURL!, type: .guess) : nil
-        cell.imageView?.setIcon(site, forURL: displayURL)
+        cell.imageView!.layer.borderColor = RecentlyClosedPanelUX.IconBorderColor.cgColor
+        cell.imageView!.layer.borderWidth = RecentlyClosedPanelUX.IconBorderWidth
+        cell.imageView?.setIcon(site, forURL: displayURL, completed: { (color, url) in
+            cell.imageView?.image = cell.imageView?.image?.createScaled(RecentlyClosedPanelUX.IconSize)
+            cell.imageView?.contentMode = .center
+        })
         return cell
     }
 
