@@ -18,7 +18,7 @@ struct TopTabsUX {
     static let TabWidth: CGFloat = 180
     static let CollectionViewPadding: CGFloat = 15
     static let FaderPading: CGFloat = 10
-    static let BackgroundSeparatorLinePadding: CGFloat = 5
+    static let SeparatorWidth: CGFloat = 1
     static let TabTitleWidth: CGFloat = 110
     static let TabTitlePadding: CGFloat = 10
 }
@@ -107,9 +107,9 @@ class TopTabsViewController: UIViewController {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         self.reloadData()
     }
 
@@ -191,11 +191,12 @@ class TopTabsViewController: UIViewController {
         if isUpdating || pendingReloadData {
             return
         }
+        let isPrivate = self.isPrivate
         delegate?.topTabsDidTogglePrivateMode()
         self.pendingReloadData = true // Stops animations from happening
         let oldSelectedTab = self.oldSelectedTab
         self.oldSelectedTab = tabManager.selectedTab
-        self.privateModeButton.setSelected(isPrivate, animated: true)
+        self.privateModeButton.setSelected(!isPrivate, animated: true)
 
         //if private tabs is empty and we are transitioning to it add a tab
         if tabManager.privateTabs.isEmpty  && !isPrivate {
@@ -427,7 +428,7 @@ extension TopTabsViewController {
     fileprivate func reloadData() {
         assertIsMainThread("reloadData must only be called from main thread")
 
-        if self.isUpdating {
+        if self.isUpdating || self.collectionView.frame == CGRect.zero {
             self.pendingReloadData = true
             return
         }
@@ -435,15 +436,16 @@ extension TopTabsViewController {
         isUpdating = true
         self.tabStore = self.tabsToDisplay
         self.newTab.isUserInteractionEnabled = false
+        self.flushPendingChanges()
         UIView.animate(withDuration: 0.2, animations: {
             self.collectionView.reloadData()
             self.collectionView.collectionViewLayout.invalidateLayout()
             self.collectionView.layoutIfNeeded()
             self.scrollToCurrentTab(true, centerCell: true)
         }, completion: { (_) in
-            self.flushPendingChanges()
             self.isUpdating = false
             self.pendingReloadData = false
+            self.performTabUpdates()
             self.newTab.isUserInteractionEnabled = true
         }) 
     }
@@ -526,7 +528,6 @@ extension TopTabsViewController: TabManagerDelegate {
 
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
         self.reloadData()
-        self.scrollToCurrentTab(false, centerCell: false)
     }
 
     func tabManagerDidAddTabs(_ tabManager: TabManager) {
