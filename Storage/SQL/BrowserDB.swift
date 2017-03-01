@@ -279,11 +279,7 @@ open class BrowserDB {
     }
 
     func withWritableConnection<T>(_ err: inout NSError?, callback: @escaping (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> T) -> T {
-        return withConnection(flags: SwiftData.Flags.readWrite, err: &err, callback: callback)
-    }
-
-    func withReadableConnection<T>(_ err: inout NSError?, callback: @escaping (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> Cursor<T>) -> Cursor<T> {
-        return withConnection(flags: SwiftData.Flags.readOnly, err: &err, callback: callback)
+        return withConnection(flags: SwiftData.Flags.readWriteCreate, err: &err, callback: callback)
     }
 
     func transaction(_ err: inout NSError?, callback: @escaping (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> Bool) -> NSError? {
