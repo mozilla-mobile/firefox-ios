@@ -122,6 +122,7 @@
 		2FF8264B19D3CAFF003ED08E /* NSData+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF825E819D3CAFF003ED08E /* NSData+Utils.m */; };
 		2FF8264C19D3CAFF003ED08E /* NSString+Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FF825E919D3CAFF003ED08E /* NSString+Utils.h */; };
 		2FF8264D19D3CAFF003ED08E /* NSString+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF825EA19D3CAFF003ED08E /* NSString+Utils.m */; };
+		396120AA1E5B3D5800D6241A /* ECEUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 396120A91E5B3D5800D6241A /* ECEUtils.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -254,6 +255,8 @@
 		2FF825E819D3CAFF003ED08E /* NSData+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Utils.m"; sourceTree = "<group>"; };
 		2FF825E919D3CAFF003ED08E /* NSString+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Utils.h"; sourceTree = "<group>"; };
 		2FF825EA19D3CAFF003ED08E /* NSString+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Utils.m"; sourceTree = "<group>"; };
+		396120A91E5B3D5800D6241A /* ECEUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ECEUtils.m; sourceTree = "<group>"; };
+		396120AB1E5B3DC600D6241A /* ECEUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ECEUtils.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -312,6 +315,8 @@
 				2FF8258C19D3CAFF003ED08E /* CHNumber.m */,
 				2FF8258D19D3CAFF003ED08E /* CHUtils.h */,
 				2FF8258E19D3CAFF003ED08E /* CHUtils.m */,
+				396120AB1E5B3DC600D6241A /* ECEUtils.h */,
+				396120A91E5B3D5800D6241A /* ECEUtils.m */,
 				2FF825DF19D3CAFF003ED08E /* NSData+Base16.h */,
 				2FF825E019D3CAFF003ED08E /* NSData+Base16.m */,
 				2FF825E119D3CAFF003ED08E /* NSData+Base32.h */,
@@ -686,6 +691,7 @@
 				2FF8264B19D3CAFF003ED08E /* NSData+Utils.m in Sources */,
 				2FF825EF19D3CAFF003ED08E /* CHMutableNumber.m in Sources */,
 				2FF8264919D3CAFF003ED08E /* NSData+SHA.m in Sources */,
+				396120AA1E5B3D5800D6241A /* ECEUtils.m in Sources */,
 				2FF824E519D3C6D8003ED08E /* PublicKey.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

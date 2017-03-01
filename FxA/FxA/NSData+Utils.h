@@ -20,4 +20,10 @@
 - (NSString*) base64URLEncodedStringWithOptions: (NSDataBase64EncodingOptions) options;
 - (instancetype) initWithBase64URLEncodedString:(NSString *)base64String options:(NSDataBase64DecodingOptions)options;
 
+- (UInt8) readUInt8BE: (int) location;
+
+- (UInt32) readUInt32BE: (int) location;
+
+- (UInt64) readUInt48BE: (int) location;
+
 @end

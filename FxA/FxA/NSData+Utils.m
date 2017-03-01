@@ -109,4 +109,23 @@
     return [self initWithBase64EncodedString: encodedString options: options];
 }
 
+- (UInt8) readUInt8BE: (int) location {
+    unsigned char* bytes = (unsigned char*) self.bytes;
+    return bytes[location];
+}
+
+- (UInt32) readUInt32BE: (int) location {
+    unsigned char* dataBytes = (unsigned char*) self.bytes;
+    unsigned char* bytes = &dataBytes[location];
+    return bytes[3] | (bytes[2] << 8) | (bytes[1] << 16) | (bytes[0] << 24);
+}
+
+- (UInt64) readUInt48BE: (int) location {
+    unsigned char* dataBytes = (unsigned char*) self.bytes;
+    unsigned char* bytes = &dataBytes[location];
+    return bytes[5] | (bytes[4] << 8) | (bytes[3] << 16) |
+    ((uint64_t) bytes[2] << 24) | ((uint64_t) bytes[1] << 32) |
+    ((uint64_t) bytes[0] << 40);
+}
+
 @end
