@@ -98,6 +98,9 @@ class BrowserViewController: UIViewController {
 
     fileprivate var keyboardState: KeyboardState?
 
+    var didRemoveAllTabs: Bool = false
+    var undoToast: ButtonToast?
+
     let WhiteListedUrls = ["\\/\\/itunes\\.apple\\.com\\/"]
 
     // Tracking navigation items to record history types.
@@ -596,6 +599,18 @@ class BrowserViewController: UIViewController {
             if let whatsNewURL = SupportUtils.URLForTopic("new-ios") {
                 self.openURLInNewTab(whatsNewURL, isPrivileged: false)
                 profile.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
+            }
+        }
+
+        if didRemoveAllTabs && !tabTrayController.privateMode {
+            didRemoveAllTabs = false
+            if let toast = undoToast, let toolbar = self.toolbar {
+                view.addSubview(toast)
+                toast.snp.makeConstraints { make in
+                    make.left.right.equalTo(view)
+                    make.bottom.equalTo(toolbar.snp.top)
+                }
+                toast.showToast()
             }
         }
 
@@ -2179,7 +2194,7 @@ extension BrowserViewController: TabManagerDelegate {
     }
 
     func show(buttonToast: ButtonToast, afterWaiting delay: Double = 0, duration: Double = SimpleToastUX.ToastDismissAfter) {
-        let time = DispatchTime.now() + Double(delay * Double(NSEC_PER_MSEC)) / Double(NSEC_PER_SEC)
+        let time = DispatchTime(uptimeNanoseconds: DispatchTime.now().uptimeNanoseconds) + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
         DispatchQueue.main.asyncAfter(deadline: time) {
             self.view.addSubview(buttonToast)
             buttonToast.snp.makeConstraints { make in
@@ -2194,19 +2209,9 @@ extension BrowserViewController: TabManagerDelegate {
         guard !tabTrayController.privateMode else {
             return
         }
-        
-        if let undoToast = toast {
-            let time = DispatchTime(uptimeNanoseconds: DispatchTime.now().uptimeNanoseconds) + Double(Int64(ButtonToastUX.ToastDelay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
-            DispatchQueue.main.asyncAfter(deadline: time) {
-                self.view.addSubview(undoToast)
-                undoToast.snp.makeConstraints { make in
-                    make.left.right.equalTo(self.view)
-                    make.bottom.equalTo(self.webViewContainer)
-                }
-                undoToast.showToast()
-            }
-            show(buttonToast: undoToast, afterWaiting: ButtonToastUX.ToastDelay)
-        }
+
+        self.didRemoveAllTabs = true
+        self.undoToast = toast
     }
 
     fileprivate func updateTabCountUsingTabManager(_ tabManager: TabManager, animated: Bool = true) {
