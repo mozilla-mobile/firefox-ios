@@ -737,6 +737,9 @@ class BrowserViewController: UIViewController {
             addChildViewController(homePanelController)
             view.addSubview(homePanelController.view)
             homePanelController.didMove(toParentViewController: self)
+            if let toast = clipboardBarDisplayHandler.clipboardToast {
+                view.bringSubview(toFront: toast)
+            }
         }
         guard let homePanelController = self.homePanelController else {
             assertionFailure("homePanelController is still nil after assignment.")
