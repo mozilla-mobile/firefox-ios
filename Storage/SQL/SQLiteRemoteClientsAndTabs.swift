@@ -146,7 +146,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     open func getClients() -> Deferred<Maybe<[RemoteClient]>> {
         var err: NSError?
 
-        let clientCursor = db.withWritableConnection(&err) { connection, _ in
+        let clientCursor = db.withConnection(&err) { connection, _ in
             return self.clients.query(connection, options: nil)
         }
 
@@ -192,7 +192,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         var err: NSError?
 
         // Now find the clients.
-        let clientCursor = db.withWritableConnection(&err) { connection, _ in
+        let clientCursor = db.withConnection(&err) { connection, _ in
             return self.clients.query(connection, options: nil)
         }
 
@@ -206,7 +206,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
 
         log.debug("Found \(clients.count) clients in the DB.")
 
-        let tabCursor = db.withWritableConnection(&err) { connection, _ in
+        let tabCursor = db.withConnection(&err) { connection, _ in
             return self.tabs.query(connection, options: nil)
         }
 
@@ -311,7 +311,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         var err: NSError?
 
         // Now find the clients.
-        let commandCursor = db.withWritableConnection(&err) { connection, _ in
+        let commandCursor = db.withConnection(&err) { connection, _ in
             return self.commands.query(connection, options: nil)
         }
 
