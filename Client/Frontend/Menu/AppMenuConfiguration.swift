@@ -163,6 +163,13 @@ struct AppMenuConfiguration: MenuConfiguration {
             if HomePageAccessors.isButtonInMenu(appState) && HomePageAccessors.hasHomePage(appState) {
                 menuItems.append(AppMenuConfiguration.OpenHomePageMenuItem)
             }
+            if NoImageModeHelper.isNoImageModeAvailable(appState) {
+                if NoImageModeHelper.isNoImageModeActivated(appState) {
+                    menuItems.append(AppMenuConfiguration.ShowImageModeMenuItem)
+                } else {
+                    menuItems.append(AppMenuConfiguration.HideImageModeMenuItem)
+                }
+            }
             if NightModeAccessors.isNightModeAvailable(appState) {
                 if NightModeAccessors.isNightModeActivated(appState) {
                     menuItems.append(AppMenuConfiguration.ShowNightModeItem)
