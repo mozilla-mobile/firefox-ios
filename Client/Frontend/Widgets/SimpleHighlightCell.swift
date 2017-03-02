@@ -17,7 +17,6 @@ struct SimpleHighlightCellUX {
     static let IconSize = CGSize(width: 32, height: 32)
     static let StatusIconSize = 12
     static let DescriptionLabelColor = UIColor(colorString: "919191")
-    static let TimestampColor = UIColor(colorString: "D4D4D4")
     static let SelectedOverlayColor = UIColor(white: 0.0, alpha: 0.25)
     static let PlaceholderImage = UIImage(named: "defaultTopSiteIcon")
     static let CornerRadius: CGFloat = 3
@@ -43,14 +42,6 @@ class SimpleHighlightCell: UITableViewCell {
         descriptionLabel.textAlignment = .left
         descriptionLabel.numberOfLines = 1
         return descriptionLabel
-    }()
-
-    fileprivate lazy var timeStamp: UILabel = {
-        let timeStamp = UILabel()
-        timeStamp.font = DynamicFontHelper.defaultHelper.DeviceFontSmallActivityStream
-        timeStamp.textColor = SimpleHighlightCellUX.TimestampColor
-        timeStamp.textAlignment = .right
-        return timeStamp
     }()
 
     lazy var siteImageView: UIImageView = {
@@ -98,7 +89,6 @@ class SimpleHighlightCell: UITableViewCell {
         contentView.addSubview(descriptionLabel)
         contentView.addSubview(selectedOverlay)
         contentView.addSubview(titleLabel)
-        contentView.addSubview(timeStamp)
         contentView.addSubview(statusIcon)
 
         siteImageView.snp.remakeConstraints { make in
@@ -121,11 +111,6 @@ class SimpleHighlightCell: UITableViewCell {
         descriptionLabel.snp.remakeConstraints { make in
             make.leading.equalTo(statusIcon.snp.trailing).offset(SimpleHighlightCellUX.TitleLabelOffset)
             make.bottom.equalTo(statusIcon)
-        }
-
-        timeStamp.snp.remakeConstraints { make in
-            make.trailing.equalTo(contentView).inset(SimpleHighlightCellUX.CellSideOffset)
-            make.bottom.equalTo(descriptionLabel)
         }
 
         statusIcon.snp.remakeConstraints { make in
@@ -156,7 +141,6 @@ class SimpleHighlightCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         self.siteImageView.image = nil
-        self.timeStamp.text = nil
     }
 
     func configureWithSite(_ site: Site) {
@@ -171,9 +155,6 @@ class SimpleHighlightCell: UITableViewCell {
 
         self.titleLabel.text = site.title.characters.count <= 1 ? site.url : site.title
         configureCellStatus(site)
-        if let date = site.latestVisit?.date {
-            self.timeStamp.text = Date.fromMicrosecondTimestamp(date).toRelativeTimeString()
-        }
     }
 
     func configureCellStatus(_ site: Site) {
