@@ -2,7 +2,7 @@
 "About.learnMoreButton" = "ပိုမိုလေ့လာရန်";
 
 /* Label on About screen */
-"About.missionLabel" = "%@ ကို Mozilla က ထုတ်လုပ်ပါသည်။ ကျွန်ုပ်တို့၏ ရည်မှန်းချက်မှာ ကောင်းမွန်ပွင့်လင်းသော အင်တာနက်ဖြစ်လာစေရန် ဖြစ်သည်။";
+"About.missionLabel" = "%@ ကို Mozilla က ထုတ်လုပ်ပါသည်။ ရည်မှန်းချက်မှာ ကောင်းမွန်ပွင့်လင်းသော အင်တာနက်ဖြစ်လာစေရန် ဖြစ်သည်။";
 
 /* Label on About screen */
 "About.privateBullet1" = "အက်ပ်ထဲမှာ အင်တာနက်ကို ရှာဖွေကြည့်ရှုအသုံးပြုပါ";
@@ -80,7 +80,7 @@
 "FirstRun.buttonLabel" = "ကောင်းပြီ၊ သိပါပြီ။";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "သင်ကြည့်ရှုနေစဉ်အတွင်း အွန်လိုင်းနောက်ယောက်ခံ ကိရိယာများကို အလိုအလျောက် ပိတ်ပင်ပါသည်။ လည်ပတ်ကြည့်ရှုခဲ့သော ဝဘ်စာမျက်နှာများ၊ ရှာဖွေမှုများ၊ ကွတ်ကီးများနှင့် စကားဝှက်များကို တို့ထိပြီး ဖယ်ရှားရှင်းလင်းနိုင်သည်။";
+"FirstRun.messageLabelDescription" = "သင်ကြည့်ရှုနေစဉ်အတွင်း အွန်လိုင်းနောက်ယောက်ခံ ကိရိယာများကို အလိုအလျောက် ပိတ်ပင်ပါသည်။ လည်ပတ် ကြည့်ရှုခဲ့သော ဝဘ်စာမျက်နှာများ၊ ရှာဖွေမှုများ၊ ကွတ်ကီးများနှင့် စကားဝှက်များကို တို့ထိပြီး ဖယ်ရှားရှင်းလင်းနိုင်သည်။";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "မည်သူမျှ စောင့်ကြည့်ခြင်းမရှိသကဲ့သို့ အင်တာနက်ကို အသုံးပြုပါ";
@@ -119,10 +119,10 @@
 "Settings.blockOtherMessage" = "အခြား အကြောင်းအရာနောက်ယောင်ခံကိရိယာများကို ပိတ်ခြင်းသည် အချို့သော ဗီဒီယိုများနှင့် ဝဘ်စာမျက်နှာများကို ကောင်းမွန်စွာ လုပ်ဆောင်နိုင်စေမည် မဟုတ်ပါ။";
 
 /* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "ရပါတယ်၊ ကျေးဇူးတင်ပါတယ်။";
+"Settings.blockOtherNo" = "မလိုပါ၊ ကျေးဇူးတင်ပါသည်။";
 
 /* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "ကျွန်ုပ် နားလည်သဘောပေါက်ပါသည်";
+"Settings.blockOtherYes" = "နားလည်သဘောပေါက်ပါသည်";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "အပြင်အဆင်များ";

@@ -26,7 +26,7 @@
 "About.safariBullet1" = "blokować śledzące elementy dla większej prywatności";
 
 /* Label on About screen */
-"About.safariBullet2" = "blokować czcionki siecowe i pobierać mniej danych";
+"About.safariBullet2" = "blokować czcionki sieciowe i pobierać mniej danych";
 
 /* Label on About screen */
 "About.safariBulletHeader" = "Jako rozszerzenie blokad zawartości Safari pozwala:";
@@ -83,7 +83,7 @@
 "FirstRun.messageLabelDescription" = "Automatycznie blokuj śledzące elementy podczas przeglądania stron. Wystarczy stuknąć, aby usunąć z urządzenia odwiedzone strony, wyszukiwania i hasła.";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelTagline" = "Przeglądaj jak gdyby nikt nie patrzył";
+"FirstRun.messageLabelTagline" = "Przeglądaj, jak gdyby nikt nie patrzył";
 
 /* First label for product description on the home screen */
 "Home.descriptionLabel1" = "Automatyczne przeglądanie prywatne.";
@@ -104,7 +104,7 @@
 "Open.Safari" = "Safari";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsContentBlockers" = "Stuknij Safari a następnie Blokady zawartości";
+"Safari.instructionsContentBlockers" = "Stuknij Safari, a następnie Blokady zawartości";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsEnable" = "Włącz %@";
@@ -152,7 +152,7 @@
 "Settings.toggleBlockAnalytics" = "Blokowanie śledzących statystyk";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "Blokowanie czcionek siecowych";
+"Settings.toggleBlockFonts" = "Blokowanie czcionek sieciowych";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockOther" = "Blokowanie pozostałych śledzących";

@@ -146,16 +146,16 @@
 "Settings.sectionPrivacy" = "PRIVAATHEID";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Blokkeer advertensie speurders";
+"Settings.toggleBlockAds" = "Blokkeer advertensie­speurders";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Blokkeer analise speurders";
+"Settings.toggleBlockAnalytics" = "Blokkeer analise­speurders";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Blokkeer webfonte";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Blokkeer ander inhoud speurders";
+"Settings.toggleBlockOther" = "Blokkeer ander inhoud­speurders";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockSocial" = "Blokkeer sosiale speurders";
