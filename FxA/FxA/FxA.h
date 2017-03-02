@@ -16,10 +16,8 @@ FOUNDATION_EXPORT const unsigned char FxAVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <FxA/PublicHeader.h>
 
-#include <FxA/DSAKeyPair.h>
 #include <FxA/RSAKeyPair.h>
 #include <FxA/JSONWebTokenUtils.h>
-#include <FxA/MockMyIDTokenFactory.h>
 #include <FxA/NSData+Base16.h>
 #include <FxA/NSData+Base32.h>
 #include <FxA/NSData+SHA.h>
@@ -30,4 +28,3 @@ FOUNDATION_EXPORT const unsigned char FxAVersionString[];
 // Some are commented out because they rely on openssl/bn.h, which we can't find
 // when we try the import. *shrug*
 #include "ASNUtils.h"
-#include "CHUtils.h"

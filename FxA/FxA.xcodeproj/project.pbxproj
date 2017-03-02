@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		28F9520119D0F9FA00DCE892 /* FxA.h in Headers */ = {isa = PBXBuildFile; fileRef = 28F9520019D0F9FA00DCE892 /* FxA.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		28F9520B19D0F9FB00DCE892 /* FxATests.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F9520A19D0F9FB00DCE892 /* FxATests.m */; };
-		2FA17F7E19D3D2D100F3D844 /* MockMyIDTokenFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FA17F7C19D3D2D100F3D844 /* MockMyIDTokenFactory.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2FA17F7F19D3D2D100F3D844 /* MockMyIDTokenFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA17F7D19D3D2D100F3D844 /* MockMyIDTokenFactory.m */; };
 		2FA17FD219D3D32300F3D844 /* aes.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FA17F8219D3D32300F3D844 /* aes.h */; };
 		2FA17FD319D3D32300F3D844 /* asn1.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FA17F8319D3D32300F3D844 /* asn1.h */; };
 		2FA17FD419D3D32300F3D844 /* asn1_mac.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FA17F8419D3D32300F3D844 /* asn1_mac.h */; };
@@ -90,8 +88,6 @@
 		2FA1801E19D3D32300F3D844 /* JSONWebTokenUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA17FCE19D3D32300F3D844 /* JSONWebTokenUtils.m */; };
 		2FA1801F19D3D32300F3D844 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FA17FD019D3D32300F3D844 /* libcrypto.a */; };
 		2FA1802019D3D32300F3D844 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FA17FD119D3D32300F3D844 /* libssl.a */; };
-		2FF824DE19D3C6D8003ED08E /* DSAKeyPair.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FF824D219D3C6D8003ED08E /* DSAKeyPair.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2FF824DF19D3C6D8003ED08E /* DSAKeyPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF824D319D3C6D8003ED08E /* DSAKeyPair.m */; };
 		2FF824E019D3C6D8003ED08E /* KeyPair.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FF824D419D3C6D8003ED08E /* KeyPair.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2FF824E119D3C6D8003ED08E /* KeyPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF824D519D3C6D8003ED08E /* KeyPair.m */; };
 		2FF824E219D3C6D8003ED08E /* PrivateKey.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FF824D619D3C6D8003ED08E /* PrivateKey.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -108,8 +104,6 @@
 		2FF825F019D3CAFF003ED08E /* CHNumber_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FF8258A19D3CAFF003ED08E /* CHNumber_Private.h */; };
 		2FF825F119D3CAFF003ED08E /* CHNumber.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FF8258B19D3CAFF003ED08E /* CHNumber.h */; };
 		2FF825F219D3CAFF003ED08E /* CHNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF8258C19D3CAFF003ED08E /* CHNumber.m */; };
-		2FF825F319D3CAFF003ED08E /* CHUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FF8258D19D3CAFF003ED08E /* CHUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2FF825F419D3CAFF003ED08E /* CHUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF8258E19D3CAFF003ED08E /* CHUtils.m */; };
 		2FF8264219D3CAFF003ED08E /* NSData+Base16.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FF825DF19D3CAFF003ED08E /* NSData+Base16.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2FF8264319D3CAFF003ED08E /* NSData+Base16.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF825E019D3CAFF003ED08E /* NSData+Base16.m */; };
 		2FF8264419D3CAFF003ED08E /* NSData+Base32.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FF825E119D3CAFF003ED08E /* NSData+Base32.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -141,8 +135,6 @@
 		28F9520619D0F9FB00DCE892 /* FxATests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FxATests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		28F9520919D0F9FB00DCE892 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		28F9520A19D0F9FB00DCE892 /* FxATests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FxATests.m; sourceTree = "<group>"; };
-		2FA17F7C19D3D2D100F3D844 /* MockMyIDTokenFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MockMyIDTokenFactory.h; sourceTree = "<group>"; };
-		2FA17F7D19D3D2D100F3D844 /* MockMyIDTokenFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MockMyIDTokenFactory.m; sourceTree = "<group>"; };
 		2FA17F8219D3D32300F3D844 /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
 		2FA17F8319D3D32300F3D844 /* asn1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = asn1.h; sourceTree = "<group>"; };
 		2FA17F8419D3D32300F3D844 /* asn1_mac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = asn1_mac.h; sourceTree = "<group>"; };
@@ -222,8 +214,6 @@
 		2FA17FCE19D3D32300F3D844 /* JSONWebTokenUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONWebTokenUtils.m; sourceTree = "<group>"; };
 		2FA17FD019D3D32300F3D844 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcrypto.a; sourceTree = "<group>"; };
 		2FA17FD119D3D32300F3D844 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libssl.a; sourceTree = "<group>"; };
-		2FF824D219D3C6D8003ED08E /* DSAKeyPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSAKeyPair.h; sourceTree = "<group>"; };
-		2FF824D319D3C6D8003ED08E /* DSAKeyPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSAKeyPair.m; sourceTree = "<group>"; };
 		2FF824D419D3C6D8003ED08E /* KeyPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyPair.h; sourceTree = "<group>"; };
 		2FF824D519D3C6D8003ED08E /* KeyPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyPair.m; sourceTree = "<group>"; };
 		2FF824D619D3C6D8003ED08E /* PrivateKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrivateKey.h; sourceTree = "<group>"; };
@@ -240,8 +230,6 @@
 		2FF8258A19D3CAFF003ED08E /* CHNumber_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHNumber_Private.h; sourceTree = "<group>"; };
 		2FF8258B19D3CAFF003ED08E /* CHNumber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHNumber.h; sourceTree = "<group>"; };
 		2FF8258C19D3CAFF003ED08E /* CHNumber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHNumber.m; sourceTree = "<group>"; };
-		2FF8258D19D3CAFF003ED08E /* CHUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHUtils.h; sourceTree = "<group>"; };
-		2FF8258E19D3CAFF003ED08E /* CHUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHUtils.m; sourceTree = "<group>"; };
 		2FF825DF19D3CAFF003ED08E /* NSData+Base16.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base16.h"; sourceTree = "<group>"; };
 		2FF825E019D3CAFF003ED08E /* NSData+Base16.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base16.m"; sourceTree = "<group>"; };
 		2FF825E119D3CAFF003ED08E /* NSData+Base32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base32.h"; sourceTree = "<group>"; };
@@ -300,8 +288,6 @@
 				28F9520019D0F9FA00DCE892 /* FxA.h */,
 				2FA17FCD19D3D32300F3D844 /* JSONWebTokenUtils.h */,
 				2FA17FCE19D3D32300F3D844 /* JSONWebTokenUtils.m */,
-				2FA17F7C19D3D2D100F3D844 /* MockMyIDTokenFactory.h */,
-				2FA17F7D19D3D2D100F3D844 /* MockMyIDTokenFactory.m */,
 				2FF8258519D3CAFF003ED08E /* ASNUtils.h */,
 				2FF8258619D3CAFF003ED08E /* ASNUtils.m */,
 				2FF8258719D3CAFF003ED08E /* CHMath.h */,
@@ -310,8 +296,6 @@
 				2FF8258A19D3CAFF003ED08E /* CHNumber_Private.h */,
 				2FF8258B19D3CAFF003ED08E /* CHNumber.h */,
 				2FF8258C19D3CAFF003ED08E /* CHNumber.m */,
-				2FF8258D19D3CAFF003ED08E /* CHUtils.h */,
-				2FF8258E19D3CAFF003ED08E /* CHUtils.m */,
 				2FF825DF19D3CAFF003ED08E /* NSData+Base16.h */,
 				2FF825E019D3CAFF003ED08E /* NSData+Base16.m */,
 				2FF825E119D3CAFF003ED08E /* NSData+Base32.h */,
@@ -324,8 +308,6 @@
 				2FF825E819D3CAFF003ED08E /* NSData+Utils.m */,
 				2FF825E919D3CAFF003ED08E /* NSString+Utils.h */,
 				2FF825EA19D3CAFF003ED08E /* NSString+Utils.m */,
-				2FF824D219D3C6D8003ED08E /* DSAKeyPair.h */,
-				2FF824D319D3C6D8003ED08E /* DSAKeyPair.m */,
 				2FF824D419D3C6D8003ED08E /* KeyPair.h */,
 				2FF824D519D3C6D8003ED08E /* KeyPair.m */,
 				2FF824D619D3C6D8003ED08E /* PrivateKey.h */,
@@ -474,12 +456,10 @@
 			files = (
 				2FF824E219D3C6D8003ED08E /* PrivateKey.h in Headers */,
 				2FF824E419D3C6D8003ED08E /* PublicKey.h in Headers */,
-				2FF824DE19D3C6D8003ED08E /* DSAKeyPair.h in Headers */,
 				2FF824E619D3C6D8003ED08E /* RSAKeyPair.h in Headers */,
 				2FF8264419D3CAFF003ED08E /* NSData+Base32.h in Headers */,
 				2FA1801B19D3D32300F3D844 /* x509_vfy.h in Headers */,
 				2FA1801419D3D32300F3D844 /* tls1.h in Headers */,
-				2FA17F7E19D3D2D100F3D844 /* MockMyIDTokenFactory.h in Headers */,
 				28F9520119D0F9FA00DCE892 /* FxA.h in Headers */,
 				2FA1801D19D3D32300F3D844 /* JSONWebTokenUtils.h in Headers */,
 				2FA1801A19D3D32300F3D844 /* x509.h in Headers */,
@@ -513,7 +493,6 @@
 				2FA17FE019D3D32300F3D844 /* conf_api.h in Headers */,
 				2FA1801519D3D32300F3D844 /* ts.h in Headers */,
 				2FF824E019D3C6D8003ED08E /* KeyPair.h in Headers */,
-				2FF825F319D3CAFF003ED08E /* CHUtils.h in Headers */,
 				2FA17FD419D3D32300F3D844 /* asn1_mac.h in Headers */,
 				2FA17FFE19D3D32300F3D844 /* ossl_typ.h in Headers */,
 				2FA17FDB19D3D32300F3D844 /* cast.h in Headers */,
@@ -670,7 +649,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2FF824DF19D3C6D8003ED08E /* DSAKeyPair.m in Sources */,
 				2FF825F219D3CAFF003ED08E /* CHNumber.m in Sources */,
 				2FF824E119D3C6D8003ED08E /* KeyPair.m in Sources */,
 				2FF8264519D3CAFF003ED08E /* NSData+Base32.m in Sources */,
@@ -678,9 +656,7 @@
 				2FF8264319D3CAFF003ED08E /* NSData+Base16.m in Sources */,
 				2FA1801E19D3D32300F3D844 /* JSONWebTokenUtils.m in Sources */,
 				2FF824E719D3C6D8003ED08E /* RSAKeyPair.m in Sources */,
-				2FA17F7F19D3D2D100F3D844 /* MockMyIDTokenFactory.m in Sources */,
 				2FF8264D19D3CAFF003ED08E /* NSString+Utils.m in Sources */,
-				2FF825F419D3CAFF003ED08E /* CHUtils.m in Sources */,
 				2FF825EC19D3CAFF003ED08E /* ASNUtils.m in Sources */,
 				2FF8264719D3CAFF003ED08E /* NSData+KeyDerivation.m in Sources */,
 				2FF8264B19D3CAFF003ED08E /* NSData+Utils.m in Sources */,
