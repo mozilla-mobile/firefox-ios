@@ -23,6 +23,9 @@ let OpenWithSettings = "OpenWithSettings"
 let NewTabScreen = "NewTabScreen"
 let NewTabMenu = "NewTabMenu"
 let URLBarOpen = "URLBarOpen"
+let NewPrivateTabScreen = "NewPrivateTabScreen"
+let PrivateTabTray = "PrivateTabTray"
+let PrivateBrowserTab = "PrivateBrowserTab"
 
 let allSettingsScreens = [
     SettingsScreen,
@@ -51,6 +54,12 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
         scene.tap(app.textFields["url"], to: URLBarOpen)
         scene.tap(app.buttons["TabToolbar.menuButton"], to: NewTabMenu)
         scene.tap(app.buttons["URLBarView.tabsButton"], to: TabTray)
+    }
+
+    map.createScene(NewPrivateTabScreen) { scene in
+        scene.tap(app.textFields["url"], to: URLBarOpen)
+        scene.tap(app.buttons["TabToolbar.menuButton"], to: NewTabMenu)
+        scene.tap(app.buttons["URLBarView.tabsButton"], to: PrivateTabTray)
     }
 
     map.createScene(URLBarOpen) { scene in
@@ -140,13 +149,24 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
         scene.backAction = navigationControllerBackAction
     }
 
+    map.createScene(PrivateTabTray) { scene in
+        scene.tap(app.buttons["TabTrayController.menuButton"], to: TabTrayMenu)
+        scene.tap(app.buttons["TabTrayController.addTabButton"], to: NewPrivateTabScreen)
+        scene.tap(app.buttons["TabTrayController.maskButton"], to: TabTray)
+    }
+
     map.createScene(TabTray) { scene in
         scene.tap(app.buttons["TabTrayController.menuButton"], to: TabTrayMenu)
         scene.tap(app.buttons["TabTrayController.addTabButton"], to: NewTabScreen)
+        scene.tap(app.buttons["TabTrayController.maskButton"], to: PrivateTabTray)
     }
 
     map.createScene(TabTrayMenu) { scene in
-        scene.tap(app.collectionViews.cells["SettingsMenuItem"], to: SettingsScreen)
+        scene.gesture(to: SettingsScreen) {
+            // XXX The element is fails the existence test, so we tap it through the gesture() escape hatch.
+            app.collectionViews.cells["SettingsMenuItem"].tap()
+        }
+
         scene.tap(app.buttons["Close Menu"], to: TabTray)
         scene.dismissOnUse = true
     }
@@ -155,6 +175,12 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
         scene.tap(app.textFields["url"], to: URLBarOpen)
         scene.tap(app.buttons["TabToolbar.menuButton"], to: BrowserTabMenu)
         scene.tap(app.buttons["URLBarView.tabsButton"], to: TabTray)
+    }
+
+    map.createScene(PrivateBrowserTab) { scene in
+        scene.tap(app.textFields["url"], to: URLBarOpen)
+        scene.tap(app.buttons["TabToolbar.menuButton"], to: BrowserTabMenu)
+        scene.tap(app.buttons["URLBarView.tabsButton"], to: PrivateTabTray)
     }
 
     map.createScene(BrowserTabMenu) { scene in
