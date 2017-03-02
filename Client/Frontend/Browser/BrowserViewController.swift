@@ -2491,7 +2491,7 @@ extension BrowserViewController: WKNavigationDelegate {
 }
 
 /// List of schemes that are allowed to open a popup window
-private let SchemesAllowedToOpenPopups = ["http", "https", "javascript", "data"]
+private let SchemesAllowedToOpenPopups = ["http", "https", "javascript", "data", "about"]
 
 extension BrowserViewController: WKUIDelegate {
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
