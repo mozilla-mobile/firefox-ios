@@ -15,7 +15,6 @@ struct AlternateSimpleHighlightCellUX {
     static let SiteImageViewSize: CGSize = CGSize(width: 99, height: 76)
     static let StatusIconSize = 12
     static let DescriptionLabelColor = UIColor(colorString: "919191")
-    static let TimestampColor = UIColor(colorString: "D4D4D4")
     static let SelectedOverlayColor = UIColor(white: 0.0, alpha: 0.25)
     static let CornerRadius: CGFloat = 3
     static let BorderColor = UIColor(white: 0, alpha: 0.1)
@@ -48,14 +47,6 @@ class AlternateSimpleHighlightCell: UITableViewCell {
         descriptionLabel.textAlignment = .left
         descriptionLabel.numberOfLines = 1
         return descriptionLabel
-    }()
-
-    fileprivate lazy var timeStamp: UILabel = {
-        let timeStamp = UILabel()
-        timeStamp.font = DynamicFontHelper.defaultHelper.DeviceFontSmallActivityStream
-        timeStamp.textColor = AlternateSimpleHighlightCellUX.TimestampColor
-        timeStamp.textAlignment = .right
-        return timeStamp
     }()
 
     lazy var siteImageView: UIImageView = {
@@ -103,7 +94,6 @@ class AlternateSimpleHighlightCell: UITableViewCell {
         contentView.addSubview(descriptionLabel)
         contentView.addSubview(selectedOverlay)
         contentView.addSubview(titleLabel)
-        contentView.addSubview(timeStamp)
         contentView.addSubview(statusIcon)
         contentView.addSubview(domainLabel)
 
@@ -132,11 +122,6 @@ class AlternateSimpleHighlightCell: UITableViewCell {
         descriptionLabel.snp.makeConstraints { make in
             make.leading.equalTo(statusIcon.snp.trailing).offset(AlternateSimpleHighlightCellUX.TitleLabelOffset)
             make.bottom.equalTo(statusIcon)
-        }
-
-        timeStamp.snp.makeConstraints { make in
-            make.trailing.equalTo(contentView).inset(AlternateSimpleHighlightCellUX.CellSideOffset)
-            make.bottom.equalTo(descriptionLabel)
         }
 
         statusIcon.snp.makeConstraints { make in
@@ -168,7 +153,6 @@ class AlternateSimpleHighlightCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         self.siteImageView.image = nil
-        self.timeStamp.text = nil
     }
 
     func configureWithSite(_ site: Site) {
@@ -188,10 +172,6 @@ class AlternateSimpleHighlightCell: UITableViewCell {
         } else {
             self.descriptionLabel.text = "Visited"
             self.statusIcon.image = UIImage(named: "context_viewed")
-        }
-
-        if let date = site.latestVisit?.date {
-            self.timeStamp.text = Date.fromMicrosecondTimestamp(date).toRelativeTimeString()
         }
     }
 }
