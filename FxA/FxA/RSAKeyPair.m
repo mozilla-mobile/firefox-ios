@@ -29,11 +29,24 @@
 {
     if ((self = [super init]) != nil) {
         _rsa = RSA_new();
-        _rsa->n = BN_dup([n bigNumValue]);
-        _rsa->d = BN_dup([d bigNumValue]);
-        BIGNUM* exp = BN_new();
-        BN_set_word(exp, RSA_F4);
-        _rsa->e = exp; // TODO: Is this the right thing to do?
+        BIGNUM* _e = BN_new();
+        BIGNUM* _n = BN_dup([n bigNumValue]);
+        BIGNUM* _d = BN_dup([d bigNumValue]);
+
+        if (_n == NULL || _e == NULL || _d == NULL) {
+            BN_free(_e);
+            return nil;
+        }
+
+        if (BN_set_word(_e, RSA_F4) != 1) {
+            BN_free(_e);
+            return nil;
+        }
+
+        if (RSA_set0_key(_rsa, _n, _e, _d) != 1) {
+            BN_free(_e);
+            return nil;
+        }
         // Maybe there is some secret communication between a Java KeyPair where the Private Key can discover e from the associated Public Key?
 //        _rsa->p = BN_dup([p bigNumValue]);
 //        _rsa->q = BN_dup([q bigNumValue]);
@@ -49,16 +62,26 @@
 
 - (NSDictionary*) JSONRepresentation
 {
+    BIGNUM *n, *d;
+    RSA_get0_key(_rsa, &n, NULL, &d);
+    if (n == NULL || d == NULL) {
+        return nil;
+    }
     return @{
         @"algorithm": @"RS",
-        @"n": [[CHNumber numberWithOpenSSLNumber: _rsa->n] stringValue],
-        @"d": [[CHNumber numberWithOpenSSLNumber: _rsa->d] stringValue]
+        @"n": [[CHNumber numberWithOpenSSLNumber: n] stringValue],
+        @"d": [[CHNumber numberWithOpenSSLNumber: d] stringValue]
     };
 }
 
 - (NSString*) algorithm
 {
-    int sizeInBytes = (BN_num_bits(_rsa->n) + 7)/8;
+    BIGNUM *n;
+    RSA_get0_key(_rsa, &n, NULL, NULL);
+    if (n == NULL) {
+        return nil;
+    }
+    int sizeInBytes = (BN_num_bits(n) + 7)/8;
     return [NSString stringWithFormat: @"RS%d", sizeInBytes];
 }
 
@@ -118,9 +141,16 @@
 - (id) initWithModulus: (CHNumber*) n publicExponent: (CHNumber*) e;
 {
     if ((self = [super init]) != nil) {
+        BIGNUM *_n = BN_dup([n bigNumValue]);
+        BIGNUM *_e = BN_dup([e bigNumValue]);
+
+        if (_n == NULL || _e == NULL) {
+            return nil;
+        }
         _rsa = RSA_new();
-        _rsa->n = BN_dup([n bigNumValue]);
-        _rsa->e = BN_dup([e bigNumValue]);
+        if (RSA_set0_key(_rsa, _n, _e, NULL) != 1) {
+            return nil;
+        }
     }
     return self;
 }
@@ -133,16 +163,26 @@
 
 - (NSDictionary*) JSONRepresentation
 {
+    BIGNUM *n, *e;
+    RSA_get0_key(_rsa, &n, &e, NULL);
+    if (n == NULL || e == NULL) {
+        return nil;
+    }
     return @{
         @"algorithm": @"RS",
-        @"n": [[CHNumber numberWithOpenSSLNumber: _rsa->n] stringValue],
-        @"e": [[CHNumber numberWithOpenSSLNumber: _rsa->e] stringValue]
+        @"n": [[CHNumber numberWithOpenSSLNumber: n] stringValue],
+        @"e": [[CHNumber numberWithOpenSSLNumber: e] stringValue]
     };
 }
 
 - (NSString*) algorithm
 {
-    int sizeInBytes = (BN_num_bits(_rsa->n) + 7)/8;
+    BIGNUM *n;
+    RSA_get0_key(_rsa, &n, NULL, NULL);
+    if (n == NULL) {
+        return nil;
+    }
+    int sizeInBytes = (BN_num_bits(n) + 7)/8;
     return [NSString stringWithFormat: @"RS%d", sizeInBytes];
 }
 
@@ -194,11 +234,18 @@
         RSA_free(rsa);
         return nil;
     }
+    BIGNUM *n, *e, *d;
+    RSA_get0_key(rsa, &n, &e, &d);
 
-    RSAPublicKey *publicKey = [[RSAPublicKey alloc] initWithModulus: [CHNumber numberWithOpenSSLNumber: rsa->n]
-        publicExponent: [CHNumber numberWithOpenSSLNumber: rsa->e]];
-    RSAPrivateKey *privateKey = [[RSAPrivateKey alloc] initWithModulus: [CHNumber numberWithOpenSSLNumber: rsa->n]
-        privateExponent: [CHNumber numberWithOpenSSLNumber: rsa->d]];
+    if (n == NULL || e == NULL || d == NULL) {
+        RSA_free(rsa);
+        return nil;
+    }
+
+    RSAPublicKey *publicKey = [[RSAPublicKey alloc] initWithModulus: [CHNumber numberWithOpenSSLNumber: n]
+        publicExponent: [CHNumber numberWithOpenSSLNumber: e]];
+    RSAPrivateKey *privateKey = [[RSAPrivateKey alloc] initWithModulus: [CHNumber numberWithOpenSSLNumber: n]
+        privateExponent: [CHNumber numberWithOpenSSLNumber: d]];
 
     RSA_free(rsa);
 
