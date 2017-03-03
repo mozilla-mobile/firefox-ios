@@ -7,79 +7,58 @@ import Deferred
 import Foundation
 import Shared
 import SwiftyJSON
+import XCGLogger
 
 private let applicationDidRequestUserNotificationPermissionPrefKey = "applicationDidRequestUserNotificationPermissionPrefKey"
+
+private let log = Logger.browserLogger
+
+protocol FxAPushLoginDelegate : class {
+    func accountLoginDidFail()
+
+    func accountLoginDidSucceed(withPushRegistration: Bool)
+}
 
 /// This class manages the from successful login for FxAccounts to 
 /// asking the user for notification permissions, registering for 
 /// remote push notifications (APNS), registering for WebPush notifcations
 /// then creating an account and storing it in the profile.
 class FxALoginHelper {
-    private let deferred = Success()
+    static var sharedInstance: FxALoginHelper = {
+        return FxALoginHelper()
+    }()
 
-    private let pushClient: PushClient
+    weak var delegate: FxAPushLoginDelegate?
 
-    private weak var application: UIApplication?
-    private weak var profile: Profile?
+    fileprivate weak var profile: Profile?
 
-    private var account: FirefoxAccount!
-    private var pushRegistration: PushRegistration!
+    fileprivate var account: FirefoxAccount!
 
-    static private(set) var sharedInstance: FxALoginHelper?
-
-    class func createSharedInstance(_ application: UIApplication?, profile: Profile?) -> FxALoginHelper {
-        sharedInstance = FxALoginHelper(application: application, profile: profile)
-        return sharedInstance!
-    }
-
-    init(application: UIApplication?, profile: Profile?) {
-        let configuration = DeveloperPushConfiguration()
-        let client = PushClient(endpointURL: configuration.endpointURL)
-
-        self.application = application
-        self.pushClient = client
+    // This should be called when the application has started.
+    // This configures the helper for logging into Firefox Accounts, and
+    // if already logged in, checking if anything needs to be done in response
+    // to changing of user settings and push notifications.
+    func application(_ application: UIApplication, didLoadProfile profile: Profile) {
         self.profile = profile
-    }
 
-    func userDidLogin(_ data: JSON) -> Success {
-        if data["keyFetchToken"].rawString() == nil || data["unwrapBKey"].rawString() == nil {
-            // The /settings endpoint sends a partial "login"; ignore it entirely.
-            NSLog("Ignoring didSignIn with keyFetchToken or unwrapBKey missing.")
-            self.loginDidFail()
-            return deferred
-        }
-
-        // TODO: Error handling.
-        guard let profile = profile,
-            let account = FirefoxAccount.from(profile.accountConfiguration, andJSON: data) else {
-            self.loginDidFail()
-            return deferred
-        }
-
-        self.account = account
-        requestUserNotifications()
-        return deferred
-    }
-
-    func applicationDidLoadProfile() -> Success {
-        guard AppConstants.MOZ_FXA_PUSH else {
-            return finishNormally()
-        }
-
-        guard let account = profile?.getAccount() else {
+        guard let account = profile.getAccount() else {
             // There's no account, no further action.
-            return finishNormally()
+            return loginDidFail()
+        }
+
+        guard AppConstants.MOZ_FXA_PUSH else {
+            return loginDidSucceed()
         }
 
         if let _ = account.pushRegistration {
             // We have an account, and it's already registered for push notifications.
-            return finishNormally()
+            return loginDidSucceed()
         }
 
         // Now: we have an account that does not have push notifications set up.
         // however, we need to deal with cases of asking for permissions too frequently.
-        let asked = profile?.prefs.boolForKey(applicationDidRequestUserNotificationPermissionPrefKey) ?? true
-        let permitted = application!.currentUserNotificationSettings!.types != .none
+        let asked = profile.prefs.boolForKey(applicationDidRequestUserNotificationPermissionPrefKey) ?? true
+        let permitted = application.currentUserNotificationSettings!.types != .none
 
         // If we've never asked(*), then we should probably ask.
         // If we've asked already, then we should not ask again.
@@ -88,7 +67,7 @@ class FxALoginHelper {
         // If the user denied permission, or flipped permissions in the Settings app, then 
         // we'll bug them once, but this is probably unavoidable.
         if asked && !permitted {
-            return finishNormally()
+            return loginDidSucceed()
         }
 
         // By the time we reach here, we haven't registered for APNS
@@ -96,11 +75,32 @@ class FxALoginHelper {
         // the notification in the Settings app.
 
         self.account = account
-        requestUserNotifications()
-        return deferred
+        requestUserNotifications(application)
     }
 
-    private func requestUserNotifications() {
+    // This is called when the user logs into a new FxA account.
+    // It manages the asking for user permission for notification and registration 
+    // for APNS and WebPush notifications.
+    func application(_ application: UIApplication, didReceiveAccountJSON data: JSON) {
+        if data["keyFetchToken"].rawString() == nil || data["unwrapBKey"].rawString() == nil {
+            // The /settings endpoint sends a partial "login"; ignore it entirely.
+            log.error("Ignoring didSignIn with keyFetchToken or unwrapBKey missing.")
+            return self.loginDidFail()
+        }
+
+        assert(profile != nil, "Profile should still exist and be loaded into this FxAPushLoginStateMachine")
+
+        guard let profile = profile,
+            let account = FirefoxAccount.from(profile.accountConfiguration, andJSON: data) else {
+                return self.loginDidFail()
+        }
+
+        self.account = account
+        requestUserNotifications(application)
+    }
+
+
+    fileprivate func requestUserNotifications(_ application: UIApplication) {
         let viewAction = UIMutableUserNotificationAction()
         viewAction.identifier = SentTabAction.view.rawValue
         viewAction.title = Strings.SentTabViewActionTitle
@@ -130,10 +130,13 @@ class FxALoginHelper {
 
         let settings = UIUserNotificationSettings(types: .alert, categories: [sentTabsCategory])
 
-        application?.registerUserNotificationSettings(settings)
+        application.registerUserNotificationSettings(settings)
     }
 
-    func userDidRegister(notificationSettings: UIUserNotificationSettings) {
+    // This is necessarily called from the AppDelegate.
+    // Once we have permission from the user to display notifications, we should 
+    // try and register for APNS. If not, then start syncing.
+    func application(_ application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
         // Record that we have asked the user, and they have given an answer.
         profile?.prefs.setBool(true, forKey: applicationDidRequestUserNotificationPermissionPrefKey)
 
@@ -142,18 +145,20 @@ class FxALoginHelper {
         }
 
         if AppConstants.MOZ_FXA_PUSH {
-            application?.registerForRemoteNotifications()
+            application.registerForRemoteNotifications()
         } else {
             readyForSyncing()
         }
     }
 
     func apnsRegisterDidSucceed(apnsToken: String) {
-        pushClient.register(apnsToken).upon { res in
-            if let pushRegistration = res.successValue {
-                return self.pushRegistrationDidSucceed(apnsToken: apnsToken, pushRegistration: pushRegistration)
+        let configuration = DeveloperPushConfiguration()
+        let client = PushClient(endpointURL: configuration.endpointURL)
+        client.register(apnsToken).upon { res in
+            guard let pushRegistration = res.successValue else {
+                return self.apnsRegisterDidFail()
             }
-            self.apnsRegisterDidFail()
+            return self.pushRegistrationDidSucceed(apnsToken: apnsToken, pushRegistration: pushRegistration)
         }
     }
 
@@ -161,16 +166,16 @@ class FxALoginHelper {
         readyForSyncing()
     }
 
-    func pushRegistrationDidSucceed(apnsToken: String, pushRegistration: PushRegistration) {
+    fileprivate func pushRegistrationDidSucceed(apnsToken: String, pushRegistration: PushRegistration) {
         account.pushRegistration = pushRegistration
         readyForSyncing()
     }
 
-    func pushRegistrationDidFail() {
+    fileprivate func pushRegistrationDidFail() {
         readyForSyncing()
     }
 
-    func readyForSyncing() {
+    fileprivate func readyForSyncing() {
         if let profile = self.profile, let account = account {
             profile.setAccount(account)
             // account.advance is idempotent.
@@ -178,17 +183,14 @@ class FxALoginHelper {
                 account.advance()
             }
         }
-        let _ = finishNormally()
+        loginDidSucceed()
     }
 
-    func finishNormally() -> Success {
-        FxALoginHelper.sharedInstance = nil
-        deferred.fill(Maybe(success: ()))
-        return deferred
+    fileprivate func loginDidSucceed() {
+        delegate?.accountLoginDidSucceed(withPushRegistration: account?.pushRegistration != nil)
     }
 
-    func loginDidFail() {
-        FxALoginHelper.sharedInstance = nil
-        deferred.fill(Maybe(failure: FxADeviceRegistratorError.invalidSession))
+    fileprivate func loginDidFail() {
+        delegate?.accountLoginDidFail()
     }
 }
