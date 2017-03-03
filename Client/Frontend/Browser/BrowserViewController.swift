@@ -98,7 +98,7 @@ class BrowserViewController: UIViewController {
     fileprivate var keyboardState: KeyboardState?
 
     var didRemoveAllTabs: Bool = false
-    var undoToast: ButtonToast?
+    var pendingToast: ButtonToast? // A toast that might be waiting for BVC to appear before displaying
 
     let WhiteListedUrls = ["\\/\\/itunes\\.apple\\.com\\/"]
 
@@ -597,18 +597,10 @@ class BrowserViewController: UIViewController {
             }
         }
 
-        if didRemoveAllTabs && !tabTrayController.privateMode {
-            didRemoveAllTabs = false
-            if let toast = undoToast, let toolbar = self.toolbar {
-                view.addSubview(toast)
-                toast.snp.makeConstraints { make in
-                    make.left.right.equalTo(view)
-                    make.bottom.equalTo(toolbar.snp.top)
-                }
-                toast.showToast()
-            }
+        if let toast = self.pendingToast {
+            self.pendingToast = nil
+            show(buttonToast: toast, afterWaiting: ButtonToastUX.ToastDelay)
         }
-
         showQueuedAlertIfAvailable()
     }
 
@@ -2180,6 +2172,12 @@ extension BrowserViewController: TabManagerDelegate {
     }
 
     func show(buttonToast: ButtonToast, afterWaiting delay: Double = 0, duration: Double = SimpleToastUX.ToastDismissAfter) {
+        // If BVC isnt visible hold on to this toast until viewDidAppear
+        if self.view.window == nil {
+            self.pendingToast = buttonToast
+            return
+        }
+
         let time = DispatchTime(uptimeNanoseconds: DispatchTime.now().uptimeNanoseconds) + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
         DispatchQueue.main.asyncAfter(deadline: time) {
             self.view.addSubview(buttonToast)
@@ -2192,12 +2190,10 @@ extension BrowserViewController: TabManagerDelegate {
     }
     
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
-        guard !tabTrayController.privateMode else {
+        guard let toast = toast, !tabTrayController.privateMode else {
             return
         }
-
-        self.didRemoveAllTabs = true
-        self.undoToast = toast
+        show(buttonToast: toast, afterWaiting: ButtonToastUX.ToastDelay)
     }
 
     fileprivate func updateTabCountUsingTabManager(_ tabManager: TabManager, animated: Bool = true) {
