@@ -3076,6 +3076,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             popoverPresentationController.sourceView = view
             popoverPresentationController.sourceRect = CGRect(origin: touchPoint, size: touchSize)
             popoverPresentationController.permittedArrowDirections = .any
+            popoverPresentationController.delegate = self
         }
 
         if actionSheetController.popoverPresentationController != nil {
