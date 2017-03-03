@@ -10,7 +10,7 @@ import WebKit
 import SwiftyJSON
 
 protocol FxAContentViewControllerDelegate: class {
-    func contentViewControllerDidSignIn(_ viewController: FxAContentViewController, data: JSON)
+    func contentViewControllerDidSignIn(_ viewController: FxAContentViewController)
     func contentViewControllerDidCancel(_ viewController: FxAContentViewController)
 }
 
@@ -113,14 +113,9 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         injectData("message", content: ["status": "login"])
 
         let app = UIApplication.shared
-        let helper = FxALoginHelper.createSharedInstance(app, profile: profile)
-        helper.userDidLogin(data).uponQueue(DispatchQueue.main) { res in
-            if res.isSuccess {
-                self.delegate?.contentViewControllerDidSignIn(self, data: data)
-            } else {
-                self.delegate?.contentViewControllerDidCancel(self)
-            }
-        }
+        let helper = FxALoginHelper.sharedInstance
+        helper.delegate = self
+        helper.application(app, didReceiveAccountJSON: data)
     }
 
     // The content server page is ready to be shown.
@@ -197,6 +192,20 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
 
     override func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         // Ignore for now.
+    }
+}
+
+extension FxAContentViewController: FxAPushLoginDelegate {
+    func accountLoginDidSucceed(withPushRegistration: Bool) {
+        DispatchQueue.main.async {
+            self.delegate?.contentViewControllerDidSignIn(self)
+        }
+    }
+
+    func accountLoginDidFail() {
+        DispatchQueue.main.async {
+            self.delegate?.contentViewControllerDidCancel(self)
+        }
     }
 }
 

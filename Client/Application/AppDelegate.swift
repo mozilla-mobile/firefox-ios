@@ -177,8 +177,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             sendCorePing()
         }
 
-        let fxaLoginHelper = FxALoginHelper.createSharedInstance(application, profile: profile)
-        let _ = fxaLoginHelper.applicationDidLoadProfile()
+        let fxaLoginHelper = FxALoginHelper.sharedInstance
+        fxaLoginHelper.application(application, didLoadProfile: profile)
 
         log.debug("Done with setting up the application.")
         return true
@@ -646,19 +646,19 @@ extension AppDelegate: MFMailComposeViewControllerDelegate {
 
 extension AppDelegate {
     func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
-        FxALoginHelper.sharedInstance?.userDidRegister(notificationSettings: notificationSettings)
+        FxALoginHelper.sharedInstance.application(application, didRegisterUserNotificationSettings: notificationSettings)
     }
 }
 
 extension AppDelegate {
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         let apnsToken = deviceToken.hexEncodedString
-        FxALoginHelper.sharedInstance?.apnsRegisterDidSucceed(apnsToken: apnsToken)
+        FxALoginHelper.sharedInstance.apnsRegisterDidSucceed(apnsToken: apnsToken)
     }
 
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
         print("failed to register. \(error.description)")
-        FxALoginHelper.sharedInstance?.apnsRegisterDidFail()
+        FxALoginHelper.sharedInstance.apnsRegisterDidFail()
     }
 
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {

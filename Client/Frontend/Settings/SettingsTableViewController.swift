@@ -356,7 +356,7 @@ class AccountSetting: Setting, FxAContentViewControllerDelegate {
 
     override var accessoryType: UITableViewCellAccessoryType { return .none }
 
-    func contentViewControllerDidSignIn(_ viewController: FxAContentViewController, data: JSON) {
+    func contentViewControllerDidSignIn(_ viewController: FxAContentViewController) {
         // Reload the data to reflect the new Account immediately.
         settings.tableView.reloadData()
         // And start advancing the Account state in the background as well.
