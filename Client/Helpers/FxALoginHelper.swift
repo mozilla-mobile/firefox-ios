@@ -103,22 +103,22 @@ class FxALoginHelper {
     private func requestUserNotifications() {
         let viewAction = UIMutableUserNotificationAction()
         viewAction.identifier = SentTabAction.view.rawValue
-        viewAction.title = NSLocalizedString("View", comment: "View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440")
         viewAction.activationMode = UIUserNotificationActivationMode.foreground
+        viewAction.title = Strings.SentTabViewActionTitle
         viewAction.isDestructive = false
         viewAction.isAuthenticationRequired = false
 
         let bookmarkAction = UIMutableUserNotificationAction()
         bookmarkAction.identifier = SentTabAction.bookmark.rawValue
-        bookmarkAction.title = NSLocalizedString("Bookmark", comment: "Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440")
         bookmarkAction.activationMode = UIUserNotificationActivationMode.foreground
+        bookmarkAction.title = Strings.SentTabBookmarkActionTitle
         bookmarkAction.isDestructive = false
         bookmarkAction.isAuthenticationRequired = false
 
         let readingListAction = UIMutableUserNotificationAction()
         readingListAction.identifier = SentTabAction.readingList.rawValue
-        readingListAction.title = NSLocalizedString("Add to Reading List", comment: "Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440")
         readingListAction.activationMode = UIUserNotificationActivationMode.foreground
+        readingListAction.title = Strings.SentTabAddToReadingListActionTitle
         readingListAction.isDestructive = false
         readingListAction.isAuthenticationRequired = false
 
