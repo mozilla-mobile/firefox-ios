@@ -216,7 +216,7 @@ public struct AppConstants {
             return true
         #endif
     }()
-    
+
     /// Toggles the ability to add a custom search engine
     public static let MOZ_CUSTOM_SEARCH_ENGINE: Bool = {
         #if MOZ_CHANNEL_RELEASE
