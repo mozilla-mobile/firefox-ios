@@ -72,7 +72,9 @@ open class AuthenticationKeychainInfo: NSObject, NSCoding {
 
     public required init?(coder aDecoder: NSCoder) {
         self.lastPasscodeValidationInterval = aDecoder.decodeAsDouble(forKey: "lastPasscodeValidationInterval")
-        self.lockOutInterval = aDecoder.decodeAsDouble(forKey: "lockOutInterval")
+        if let lockOutInterval = aDecoder.decodeObject(forKey: "lockOutInterval") as? NSNumber {
+            self.lockOutInterval = lockOutInterval.doubleValue
+        }
         self.passcode = aDecoder.decodeObject(forKey: "passcode") as? String
         self.failedAttempts = aDecoder.decodeAsInt(forKey: "failedAttempts")
         self.useTouchID = aDecoder.decodeAsBool(forKey: "useTouchID")
