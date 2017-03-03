@@ -1,0 +1,24 @@
+<html>
+    <head>
+        <title>Cookie Test</title>
+        <script type="text/javascript">
+            window.onload = function () {
+                if (document.cookie != null && document.cookie != "") {
+                    document.getElementById("cookie").innerHTML = "Cookie!";
+                } else {
+                    document.getElementById("cookie").innerHTML = "No Cookie";
+                }
+            }
+
+            function createCookie() {
+                document.cookie = "username=fakeuser@email.com";
+                var decodedCookie = decodeURIComponent(document.cookie);
+                document.getElementById("cookie").innerHTML = "Cookie!";
+            }
+        </script>
+    </head>
+    <body>
+        <h1 id="cookie">No Cookie</h1>
+        <button id="create" onclick="createCookie();">Create Cookie</button>
+    </body>
+</html>
