@@ -103,32 +103,32 @@ class FxALoginHelper {
     private func requestUserNotifications() {
         let viewAction = UIMutableUserNotificationAction()
         viewAction.identifier = SentTabAction.view.rawValue
-        viewAction.activationMode = UIUserNotificationActivationMode.foreground
         viewAction.title = Strings.SentTabViewActionTitle
+        viewAction.activationMode = .foreground
         viewAction.isDestructive = false
         viewAction.isAuthenticationRequired = false
 
         let bookmarkAction = UIMutableUserNotificationAction()
         bookmarkAction.identifier = SentTabAction.bookmark.rawValue
-        bookmarkAction.activationMode = UIUserNotificationActivationMode.foreground
         bookmarkAction.title = Strings.SentTabBookmarkActionTitle
+        bookmarkAction.activationMode = .foreground
         bookmarkAction.isDestructive = false
         bookmarkAction.isAuthenticationRequired = false
 
         let readingListAction = UIMutableUserNotificationAction()
         readingListAction.identifier = SentTabAction.readingList.rawValue
-        readingListAction.activationMode = UIUserNotificationActivationMode.foreground
         readingListAction.title = Strings.SentTabAddToReadingListActionTitle
+        readingListAction.activationMode = .foreground
         readingListAction.isDestructive = false
         readingListAction.isAuthenticationRequired = false
 
         let sentTabsCategory = UIMutableUserNotificationCategory()
         sentTabsCategory.identifier = TabSendCategory
-        sentTabsCategory.setActions([readingListAction, bookmarkAction, viewAction], for: UIUserNotificationActionContext.default)
+        sentTabsCategory.setActions([readingListAction, bookmarkAction, viewAction], for: .default)
 
-        sentTabsCategory.setActions([bookmarkAction, viewAction], for: UIUserNotificationActionContext.minimal)
+        sentTabsCategory.setActions([bookmarkAction, viewAction], for: .minimal)
 
-        let settings = UIUserNotificationSettings(types: UIUserNotificationType.alert, categories: [sentTabsCategory])
+        let settings = UIUserNotificationSettings(types: .alert, categories: [sentTabsCategory])
 
         application?.registerUserNotificationSettings(settings)
     }
