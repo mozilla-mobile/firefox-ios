@@ -12,8 +12,19 @@ import Deferred
 private let log = Logger.browserLogger
 
 class CustomSearchError: MaybeErrorType {
+    
+    enum Reason {
+        case DuplicateEngine, FormInput
+    }
+    
+    var reason: Reason!
+    
     internal var description: String {
         return "Search Engine Not Added"
+    }
+    
+    init(_ reason: Reason) {
+        self.reason = reason
     }
 }
 
@@ -41,7 +52,12 @@ class CustomSearchViewController: SettingsTableViewController {
         createEngine(forQuery: searchQuery, andName: title).uponQueue(DispatchQueue.main) { result in
             self.spinnerView.stopAnimating()
             guard let engine = result.successValue else {
-                let alert = ThirdPartySearchAlerts.incorrectCustomEngineForm()
+                let alert: UIAlertController
+                let error = result.failureValue as? CustomSearchError
+                
+                alert = (error?.reason == .DuplicateEngine) ?
+                    ThirdPartySearchAlerts.duplicateCustomEngine() : ThirdPartySearchAlerts.incorrectCustomEngineForm()
+                
                 self.present(alert, animated: true, completion: nil)
                 return
             }
@@ -55,19 +71,32 @@ class CustomSearchViewController: SettingsTableViewController {
         let deferred = Deferred<Maybe<OpenSearchEngine>>()
         guard let template = getSearchTemplate(withString: query),
             let url = URL(string: template.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlFragmentAllowed)!), url.isWebPage() else {
-                deferred.fill(Maybe(failure: CustomSearchError()))
+                deferred.fill(Maybe(failure: CustomSearchError(.FormInput)))
                 return deferred
         }
+        
+        // ensure we haven't already stored this template
+        guard engineExists(name: name, template: template) == false else {
+            deferred.fill(Maybe(failure: CustomSearchError(.DuplicateEngine)))
+            return deferred
+        }
+        
         FaviconFetcher.fetchFavImageForURL(forURL: url, profile: profile).uponQueue(DispatchQueue.main) { result in
             let image = result.successValue ?? FaviconFetcher.getDefaultFavicon(url)
             let engine = OpenSearchEngine(engineID: nil, shortName: name, image: image, searchTemplate: template, suggestTemplate: nil, isCustomEngine: true)
 
             //Make sure a valid scheme is used
             let url = engine.searchURLForQuery("test")
-            let maybe = (url == nil) ? Maybe(failure: CustomSearchError()) : Maybe(success: engine)
+            let maybe = (url == nil) ? Maybe(failure: CustomSearchError(.FormInput)) : Maybe(success: engine)
             deferred.fill(maybe)
         }
         return deferred
+    }
+    
+    private func engineExists(name: String, template: String) -> Bool {
+        return profile.searchEngines.orderedEngines.contains { (engine) -> Bool in
+            return engine.shortName == name || engine.searchTemplate == template
+        }
     }
 
     func getSearchTemplate(withString query: String) -> String? {
