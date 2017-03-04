@@ -58,6 +58,7 @@ class CustomSearchViewController: SettingsTableViewController {
                 alert = (error?.reason == .DuplicateEngine) ?
                     ThirdPartySearchAlerts.duplicateCustomEngine() : ThirdPartySearchAlerts.incorrectCustomEngineForm()
                 
+                self.navigationItem.rightBarButtonItem?.isEnabled = true
                 self.present(alert, animated: true, completion: nil)
                 return
             }
@@ -152,6 +153,7 @@ class CustomSearchViewController: SettingsTableViewController {
 
     func addCustomSearchEngine(_ nav: UINavigationController?) {
         self.view.endEditing(true)
+        navigationItem.rightBarButtonItem?.isEnabled = false
         if let url = self.urlString {
             self.addSearchEngine(url, title: self.engineTitle)
         }
