@@ -16,7 +16,14 @@ private let log = Logger.browserLogger
 protocol FxAPushLoginDelegate : class {
     func accountLoginDidFail()
 
-    func accountLoginDidSucceed(withPushRegistration: Bool)
+    func accountLoginDidSucceed(withFlags flags: FxALoginFlags)
+}
+
+/// Small struct to keep together the immediately actionable flags that the UI is likely to immediately
+/// following a successful login. This is not supposed to be a long lived object.
+struct FxALoginFlags {
+    let pushEnabled: Bool
+    let verified: Bool
 }
 
 /// This class manages the from successful login for FxAccounts to 
@@ -33,6 +40,8 @@ class FxALoginHelper {
     fileprivate weak var profile: Profile?
 
     fileprivate var account: FirefoxAccount!
+
+    fileprivate var accountVerified: Bool!
 
     // This should be called when the application has started.
     // This configures the helper for logging into Firefox Accounts, and
@@ -94,7 +103,7 @@ class FxALoginHelper {
             let account = FirefoxAccount.from(profile.accountConfiguration, andJSON: data) else {
                 return self.loginDidFail()
         }
-
+        accountVerified = data["verified"].bool ?? false
         self.account = account
         requestUserNotifications(application)
     }
@@ -187,7 +196,8 @@ class FxALoginHelper {
     }
 
     fileprivate func loginDidSucceed() {
-        delegate?.accountLoginDidSucceed(withPushRegistration: account?.pushRegistration != nil)
+        let flags = FxALoginFlags(pushEnabled: account?.pushRegistration != nil, verified: accountVerified)
+        delegate?.accountLoginDidSucceed(withFlags: flags)
     }
 
     fileprivate func loginDidFail() {
