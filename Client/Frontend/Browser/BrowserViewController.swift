@@ -1240,30 +1240,35 @@ class BrowserViewController: UIViewController {
     }
 
     func closeTab() {
-        if tabManager.tabs.count > 1 {
-            tabManager.removeTab(tabManager.selectedTab!)
-        } else {
-            //need to close the last tab and show the favorites screen thing
+        guard let currentTab = tabManager.selectedTab else {
+            return
         }
+        tabManager.removeTab(currentTab)
     }
 
     func nextTab() {
-        if tabManager.selectedIndex < (tabManager.tabs.count - 1) {
-            tabManager.selectTab(tabManager.tabs[tabManager.selectedIndex+1])
-        } else {
-            if tabManager.tabs.count > 1 {
-                tabManager.selectTab(tabManager.tabs[0])
-            }
+        guard let currentTab = tabManager.selectedTab else {
+            return
+        }
+
+        let tabs = currentTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
+        if let index = tabs.index(of: currentTab), index + 1 < tabs.count {
+            tabManager.selectTab(tabs[index + 1])
+        } else if let firstTab = tabs.first {
+            tabManager.selectTab(firstTab)
         }
     }
 
     func previousTab() {
-        if tabManager.selectedIndex > 0 {
-            tabManager.selectTab(tabManager.tabs[tabManager.selectedIndex-1])
-        } else {
-            if tabManager.tabs.count > 1 {
-                tabManager.selectTab(tabManager.tabs[tabManager.count-1])
-            }
+        guard let currentTab = tabManager.selectedTab else {
+            return
+        }
+
+        let tabs = currentTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
+        if let index = tabs.index(of: currentTab), index - 1 < tabs.count && index != 0 {
+            tabManager.selectTab(tabs[index - 1])
+        } else if let lastTab = tabs.last {
+            tabManager.selectTab(lastTab)
         }
     }
 
