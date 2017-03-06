@@ -7,12 +7,14 @@
 		<string>group.org.mozilla.ios.FirefoxBeta.enterprise</string>
 		<string>group.org.mozilla.ios.FirefoxNightly.enterprise</string>
 		<string>group.org.mozilla.ios.FennecEnterprise</string>
+		<string>group.org.mozilla.ios.Firefox.enterprise</string>
 	</array>
 	<key>keychain-access-groups</key>
 	<array>
 		<string>$(AppIdentifierPrefix)org.mozilla.ios.FirefoxBeta.enterprise</string>
 		<string>$(AppIdentifierPrefix)org.mozilla.ios.FirefoxNightly.enterprise</string>
 		<string>$(AppIdentifierPrefix)org.mozilla.ios.FennecEnterprise</string>
+		<string>$(AppIdentifierPrefix)org.mozilla.ios.Firefox.enterprise</string>
 	</array>
 </dict>
 </plist>
