@@ -323,6 +323,8 @@ class ButtonSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
+        // Force editing to end for any focused text fields so they can finish up validation first.
+        navigationController?.view.endEditing(true)
         if isEnabled?() ?? true {
             onButtonClick(navigationController)
         }
