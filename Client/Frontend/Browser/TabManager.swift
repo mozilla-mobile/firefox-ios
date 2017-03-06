@@ -339,6 +339,19 @@ class TabManager: NSObject {
     fileprivate func removeTab(_ tab: Tab, flushToDisk: Bool, notify: Bool) {
         assert(Thread.isMainThread)
 
+        if tab.isPrivate {
+            // Wipe clean data associated with this tab when it is removed.
+            let dataTypes = Set([WKWebsiteDataTypeCookies,
+                                 WKWebsiteDataTypeLocalStorage,
+                                 WKWebsiteDataTypeSessionStorage,
+                                 WKWebsiteDataTypeWebSQLDatabases,
+                                 WKWebsiteDataTypeIndexedDBDatabases])
+
+            tab.webView?.configuration.websiteDataStore.removeData(ofTypes: dataTypes,
+                                                                   modifiedSince: Date.distantPast,
+                                                                   completionHandler: {})
+        }
+
         let oldSelectedTab = selectedTab
 
         if notify {
