@@ -20,7 +20,7 @@ class TestSchemaTable: XCTestCase {
         // Now make sure the item is in the table-table
         var err: NSError? = nil
         let table = SchemaTable()
-        var cursor = db.withReadableConnection(&err) { (connection, err) -> Cursor<TableInfo> in
+        var cursor = db.withConnection(&err) { (connection, err) -> Cursor<TableInfo> in
             return table.query(connection, options: QueryOptions(filter: testTable.name))
         }
 
@@ -32,7 +32,7 @@ class TestSchemaTable: XCTestCase {
         // Now test updating the table
         testTable = getUpgradeTable()
         db.createOrUpdate(testTable)
-        cursor = db.withReadableConnection(&err) { (connection, err) -> Cursor<TableInfo> in
+        cursor = db.withConnection(&err) { (connection, err) -> Cursor<TableInfo> in
             return table.query(connection, options: QueryOptions(filter: testTable.name))
         }
         verifyTable(cursor, table: testTable)

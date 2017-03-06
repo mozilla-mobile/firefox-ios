@@ -278,12 +278,14 @@ open class BrowserDB {
         return res
     }
 
-    func withWritableConnection<T>(_ err: inout NSError?, callback: @escaping (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> T) -> T {
-        return withConnection(flags: SwiftData.Flags.readWrite, err: &err, callback: callback)
-    }
-
-    func withReadableConnection<T>(_ err: inout NSError?, callback: @escaping (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> Cursor<T>) -> Cursor<T> {
-        return withConnection(flags: SwiftData.Flags.readOnly, err: &err, callback: callback)
+    func withConnection<T>(_ err: inout NSError?, callback: @escaping (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> T) -> T {
+        /*
+         * Opening a WAL-using database with a hot journal cannot complete in read-only mode.
+         * The supported mechanism for a read-only query against a WAL-using SQLite database is to use PRAGMA query_only,
+         * but this isn't all that useful for us, because we have a mixed read/write workload.
+         */
+        
+        return withConnection(flags: SwiftData.Flags.readWriteCreate, err: &err, callback: callback)
     }
 
     func transaction(_ err: inout NSError?, callback: @escaping (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> Bool) -> NSError? {

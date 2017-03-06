@@ -81,7 +81,7 @@ class SyncCommandsTests: XCTestCase {
             XCTAssertEqual(3, $0.successValue!)
 
             var error2: NSError? = nil
-            let commandCursor = self.db.withReadableConnection(&error2) { (connection, err) -> Cursor<Int> in
+            let commandCursor = self.db.withConnection(&error2) { (connection, err) -> Cursor<Int> in
                 let select = "SELECT COUNT(*) FROM \(TableSyncCommands)"
                 return connection.executeQuery(select, factory: IntFactory, withArgs: nil)
             }
@@ -103,7 +103,7 @@ class SyncCommandsTests: XCTestCase {
             XCTAssertEqual(3, $0.successValue!)
 
             var error: NSError? = nil
-            let commandCursor = self.db.withReadableConnection(&error) { (connection, err) -> Cursor<Int> in
+            let commandCursor = self.db.withConnection(&error) { (connection, err) -> Cursor<Int> in
                 let select = "SELECT COUNT(*) FROM \(TableSyncCommands)"
                 return connection.executeQuery(select, factory: IntFactory, withArgs: nil)
             }
@@ -125,7 +125,7 @@ class SyncCommandsTests: XCTestCase {
             XCTAssertEqual(12, $0.successValue!)
 
             var error: NSError? = nil
-            let commandCursor = self.db.withReadableConnection(&error) { (connection, err) -> Cursor<Int> in
+            let commandCursor = self.db.withConnection(&error) { (connection, err) -> Cursor<Int> in
                 let select = "SELECT COUNT(*) FROM \(TableSyncCommands)"
                 return connection.executeQuery(select, factory: IntFactory, withArgs: nil)
             }
@@ -177,7 +177,7 @@ class SyncCommandsTests: XCTestCase {
             a.fulfill()
 
             var error: NSError? = nil
-            let commandCursor = self.db.withReadableConnection(&error) { (connection, err) -> Cursor<Int> in
+            let commandCursor = self.db.withConnection(&error) { (connection, err) -> Cursor<Int> in
                 let select = "SELECT COUNT(*) FROM \(TableSyncCommands) WHERE client_guid = '\(client.guid!)'"
                 return connection.executeQuery(select, factory: IntFactory, withArgs: nil)
             }
@@ -187,7 +187,7 @@ class SyncCommandsTests: XCTestCase {
             b.fulfill()
 
             client = self.clients[1]
-            let commandCursor2 = self.db.withReadableConnection(&error) { (connection, err) -> Cursor<Int> in
+            let commandCursor2 = self.db.withConnection(&error) { (connection, err) -> Cursor<Int> in
                 let select = "SELECT COUNT(*) FROM \(TableSyncCommands) WHERE client_guid = '\(client.guid!)'"
                 return connection.executeQuery(select, factory: IntFactory, withArgs: nil)
             }

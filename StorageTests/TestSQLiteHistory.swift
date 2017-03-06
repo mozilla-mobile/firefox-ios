@@ -967,7 +967,7 @@ class TestSQLiteHistory: XCTestCase {
         var err: NSError? = nil
 
         // Insert something with an invalid domain ID. We have to manually do this since domains are usually hidden.
-        db.withWritableConnection(&err, callback: { (connection, err) -> Int in
+        db.withConnection(&err, callback: { (connection, err) -> Int in
             let insert = "INSERT INTO \(TableHistory) (guid, url, title, local_modified, is_deleted, should_upload, domain_id) " +
                          "?, ?, ?, ?, ?, ?, ?"
             let args: Args = [Bytes.generateGUID(), site.url, site.title, Date.now(), 0, 0, -1]
@@ -979,7 +979,7 @@ class TestSQLiteHistory: XCTestCase {
         history.addLocalVisit(SiteVisit(site: site, date: Date.nowMicroseconds(), type: VisitType.link))
 
         // DomainID isn't normally exposed, so we manually query to get it
-        let results = db.withReadableConnection(&err, callback: { (connection, err) -> Cursor<Int> in
+        let results = db.withConnection(&err, callback: { (connection, err) -> Cursor<Int> in
             let sql = "SELECT domain_id FROM \(TableHistory) WHERE url = ?"
             let args: Args = [site.url]
             return connection.executeQuery(sql, factory: IntFactory, withArgs: args)
