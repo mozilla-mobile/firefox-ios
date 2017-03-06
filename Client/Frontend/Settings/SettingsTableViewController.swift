@@ -356,14 +356,14 @@ class AccountSetting: Setting, FxAContentViewControllerDelegate {
 
     override var accessoryType: UITableViewCellAccessoryType { return .none }
 
-    func contentViewControllerDidSignIn(_ viewController: FxAContentViewController) {
+    func contentViewControllerDidSignIn(_ viewController: FxAContentViewController, withFlags flags: FxALoginFlags) {
         // Reload the data to reflect the new Account immediately.
         settings.tableView.reloadData()
         // And start advancing the Account state in the background as well.
         settings.SELrefresh()
 
         // Dismiss the FxA content view if the account is verified.
-        if let verified = data["verified"].bool, verified {
+        if flags.verified {
             let _ = settings.navigationController?.popToRootViewController(animated: true)
         }
     }

@@ -10,7 +10,7 @@ import WebKit
 import SwiftyJSON
 
 protocol FxAContentViewControllerDelegate: class {
-    func contentViewControllerDidSignIn(_ viewController: FxAContentViewController)
+    func contentViewControllerDidSignIn(_ viewController: FxAContentViewController, withFlags: FxALoginFlags)
     func contentViewControllerDidCancel(_ viewController: FxAContentViewController)
 }
 
@@ -196,9 +196,9 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
 }
 
 extension FxAContentViewController: FxAPushLoginDelegate {
-    func accountLoginDidSucceed(withPushRegistration: Bool) {
+    func accountLoginDidSucceed(withFlags flags: FxALoginFlags) {
         DispatchQueue.main.async {
-            self.delegate?.contentViewControllerDidSignIn(self)
+            self.delegate?.contentViewControllerDidSignIn(self, withFlags: flags)
         }
     }
 
