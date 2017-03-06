@@ -161,7 +161,11 @@ class FxALoginHelper {
     }
 
     func apnsRegisterDidSucceed(apnsToken: String) {
-        let configuration = DeveloperPushConfiguration()
+        guard let configuration = self.profile?.accountConfiguration.pushConfiguration else {
+            log.error("Push server endpoint could not be found")
+            return pushRegistrationDidFail()
+        }
+
         let client = PushClient(endpointURL: configuration.endpointURL)
         client.register(apnsToken).upon { res in
             guard let pushRegistration = res.successValue else {
