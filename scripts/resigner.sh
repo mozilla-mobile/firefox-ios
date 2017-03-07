@@ -30,19 +30,24 @@ function export_entitlements {
 }
 
 # 3. Update the entitlements to use the new team/bundle identifiers.
+function update_app_security_groups {
+  # Clear out the app groups and security groups and set them to only the given identifier.
+  /usr/libexec/PlistBuddy -c "Delete com.apple.security.application-groups" "$1"
+  /usr/libexec/PlistBuddy -c "Delete keychain-access-groups" "$1"
+
+  /usr/libexec/PlistBuddy -c "Add com.apple.security.application-groups array" "$1"
+  /usr/libexec/PlistBuddy -c "Add com.apple.security.application-groups: string group.$BUNDLE_ID" "$1"
+
+  /usr/libexec/PlistBuddy -c "Add keychain-access-groups array" "$1"
+  /usr/libexec/PlistBuddy -c "Add keychain-access-groups: string $TEAM_ID.$BUNDLE_ID" "$1"
+}
+
 function update_extension_entitlements {
   /usr/libexec/PlistBuddy -c "Set application-identifier $TEAM_ID.$BUNDLE_ID.$2" "$1"
   /usr/libexec/PlistBuddy -c "Set com.apple.developer.team-identifier $TEAM_ID" "$1"
 
-  # Delete other groups and only be left with one
-  /usr/libexec/PlistBuddy -c "Delete com.apple.security.application-groups:1" "$1"
-  /usr/libexec/PlistBuddy -c "Delete com.apple.security.application-groups:1" "$1"
+  update_app_security_groups "$1"
 
-  /usr/libexec/PlistBuddy -c "Delete keychain-access-groups:1" "$1"
-  /usr/libexec/PlistBuddy -c "Delete keychain-access-groups:1" "$1"
-
-  /usr/libexec/PlistBuddy -c "Set com.apple.security.application-groups:0 group.$BUNDLE_ID" "$1"
-  /usr/libexec/PlistBuddy -c "Set keychain-access-groups:0 $TEAM_ID.$BUNDLE_ID" "$1"
   /usr/libexec/PlistBuddy -c "Add beta-reports-active bool true" "$1"
 }
 
