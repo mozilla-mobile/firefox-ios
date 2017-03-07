@@ -111,7 +111,9 @@ class TopTabsViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.reloadData()
+        if self.tabsToDisplay != self.tabStore {
+            self.reloadData()
+        }
     }
 
     override func viewDidLoad() {
