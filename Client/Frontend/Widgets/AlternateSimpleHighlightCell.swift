@@ -14,6 +14,7 @@ struct AlternateSimpleHighlightCellUX {
     static let CellTopBottomOffset = 12
     static let SiteImageViewSize: CGSize = CGSize(width: 99, height: 76)
     static let StatusIconSize = 12
+    static let FaviconSize = CGSize(width: 32, height: 32)
     static let DescriptionLabelColor = UIColor(colorString: "919191")
     static let SelectedOverlayColor = UIColor(white: 0.0, alpha: 0.25)
     static let CornerRadius: CGFloat = 3
@@ -137,32 +138,19 @@ class AlternateSimpleHighlightCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func setImageWithURL(_ url: URL) {
-        siteImageView.sd_setImage(with: url) { (img, err, type, url) -> Void in
-            guard let img = img else {
-                return
-            }
-            // Resize an Image to a specfic size to make sure that it doesnt appear bigger than it needs to (32px) inside a larger frame (48px).
-            self.siteImageView.image = img.createScaled(CGSize(width: 32, height: 32))
-            self.siteImageView.image?.getColors(scaleDownSize: CGSize(width: 25, height: 25)) { colors in
-                self.siteImageView.backgroundColor = colors.backgroundColor ?? UIColor.lightGray
-            }
-        }
-    }
-
     override func prepareForReuse() {
         super.prepareForReuse()
         self.siteImageView.image = nil
+        contentView.backgroundColor = UIColor.clear
+        siteImageView.backgroundColor = UIColor.clear
     }
 
     func configureWithSite(_ site: Site) {
-        if let icon = site.icon, let url = URL(string:icon.url) {
-            self.setImageWithURL(url)
-        } else {
-            let url = site.url.asURL!
-            self.siteImageView.image = FaviconFetcher.getDefaultFavicon(url)
-            self.siteImageView.backgroundColor = FaviconFetcher.getDefaultColor(url)
-        }
+        self.siteImageView.setFavicon(forSite: site, onCompletion: { [weak self] (color, url)  in
+            self?.siteImageView.image = self?.siteImageView.image?.createScaled(AlternateSimpleHighlightCellUX.FaviconSize)
+        })
+        self.siteImageView.contentMode = .center
+
         self.domainLabel.text = site.tileURL.hostSLD
         self.titleLabel.text = site.title.characters.count <= 1 ? site.url : site.title
 
