@@ -124,6 +124,7 @@ private extension ShareExtensionHelper {
         return (activityType?.range(of: "password") != nil)
             || (activityType == "com.lastpass.ilastpass.LastPassExt")
             || (activityType == "in.sinew.Walletx.WalletxExt")
+            || (activityType == "com.8bit.bitwarden.find-login-action-extension")
 
     }
 
