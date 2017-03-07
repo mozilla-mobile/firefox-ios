@@ -269,7 +269,7 @@ extension TopTabsViewController: Themeable {
 extension TopTabsViewController: TopTabCellDelegate {
     func tabCellDidClose(_ cell: TopTabCell) {
         // Trying to remove tabs while animating can lead to crashes as indexes change. If updates are happening don't allow tabs to be removed.
-        guard let index = collectionView.indexPath(for: cell)?.item, !isUpdating else {
+        guard let index = collectionView.indexPath(for: cell)?.item else {
             return
         }
         let tab = tabStore[index]
@@ -422,8 +422,7 @@ extension TopTabsViewController {
 
             // There can be pending animations. Run update again to clear them.
             let tabs = self.oldTabs ?? self.tabStore
-            let toTabs = self.tabsToDisplay.count >= self.tabStore.count ? self.tabsToDisplay : self.tabStore
-            self.updateTabsFrom(tabs, to: toTabs, on: {
+            self.updateTabsFrom(tabs, to: self.tabsToDisplay, on: {
                 if !update.inserts.isEmpty || !update.reloads.isEmpty {
                     self.scrollToCurrentTab()
                 }
@@ -474,6 +473,10 @@ extension TopTabsViewController: TabManagerDelegate {
     }
 
     func performTabUpdates() {
+        guard !isUpdating else {
+            return
+        }
+
         let fromTabs = !self.pendingUpdatesToTabs.isEmpty ? self.pendingUpdatesToTabs : self.oldTabs
         self.oldTabs = fromTabs ?? self.tabStore
         if self.pendingReloadData && !isUpdating {
