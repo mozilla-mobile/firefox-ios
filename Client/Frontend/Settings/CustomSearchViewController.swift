@@ -49,7 +49,11 @@ class CustomSearchViewController: SettingsTableViewController {
 
     fileprivate func addSearchEngine(_ searchQuery: String, title: String) {
         spinnerView.startAnimating()
-        createEngine(forQuery: searchQuery, andName: title).uponQueue(DispatchQueue.main) { result in
+        
+        let trimmedQuery = searchQuery.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmedTitle = title.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        createEngine(forQuery: trimmedQuery, andName: trimmedTitle).uponQueue(DispatchQueue.main) { result in
             self.spinnerView.stopAnimating()
             guard let engine = result.successValue else {
                 let alert: UIAlertController
