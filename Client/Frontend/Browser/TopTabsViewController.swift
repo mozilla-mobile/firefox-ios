@@ -21,6 +21,7 @@ struct TopTabsUX {
     static let SeparatorWidth: CGFloat = 1
     static let TabTitleWidth: CGFloat = 110
     static let TabTitlePadding: CGFloat = 10
+    static let AnimationSpeed: TimeInterval = 0.1
 }
 
 protocol TopTabsDelegate: class {
@@ -235,7 +236,13 @@ class TopTabsViewController: UIViewController {
             } else {
                 // Padding is added to ensure the tab is completely visible (none of the tab is under the fader)
                 let padFrame = frame.insetBy(dx: -(TopTabsUX.TopTabsBackgroundShadowWidth+TopTabsUX.FaderPading), dy: 0)
-                collectionView.scrollRectToVisible(padFrame, animated: animated)
+                if animated {
+                    UIView.animate(withDuration: TopTabsUX.AnimationSpeed, animations: { 
+                        self.collectionView.scrollRectToVisible(padFrame, animated: true)
+                    })
+                } else {
+                    collectionView.scrollRectToVisible(padFrame, animated: false)
+                }
             }
         }
     }
@@ -401,7 +408,9 @@ extension TopTabsViewController {
         self.pendingUpdatesToTabs = newTabs // This var helps other mutations that might happen while updating.
 
         // The actual update
-        self.collectionView.performBatchUpdates(updateBlock) { (_) in
+        UIView.animate(withDuration: TopTabsUX.AnimationSpeed, animations: {
+            self.collectionView.performBatchUpdates(updateBlock)
+        }) { (_) in
             self.isUpdating = false
             self.pendingUpdatesToTabs = []
             // Sometimes there might be a pending reload. Lets do that.
@@ -437,7 +446,7 @@ extension TopTabsViewController {
         self.tabStore = self.tabsToDisplay
         self.newTab.isUserInteractionEnabled = false
         self.flushPendingChanges()
-        UIView.animate(withDuration: 0.2, animations: {
+        UIView.animate(withDuration: TopTabsUX.AnimationSpeed, animations: {
             self.collectionView.reloadData()
             self.collectionView.collectionViewLayout.invalidateLayout()
             self.collectionView.layoutIfNeeded()
