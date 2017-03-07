@@ -158,7 +158,7 @@ struct ASHorizontalScrollCellUX {
     static let BackgroundColor = UIColor.white
     static let PageControlRadius: CGFloat = 3
     static let PageControlSize = CGSize(width: 30, height: 15)
-    static let PageControlOffset: CGFloat = -20
+    static let PageControlOffset: CGFloat = 20
 }
 
 /*
