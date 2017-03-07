@@ -50,34 +50,15 @@ function update_client_entitlements {
   /usr/libexec/PlistBuddy -c "Set application-identifier $TEAM_ID.$BUNDLE_ID" "$1"
   /usr/libexec/PlistBuddy -c "Set com.apple.developer.team-identifier $TEAM_ID" "$1"
 
-  # Delete other groups and only be left with one
-  /usr/libexec/PlistBuddy -c "Delete com.apple.security.application-groups:1" "$1"
-  /usr/libexec/PlistBuddy -c "Delete com.apple.security.application-groups:1" "$1"
-
-  /usr/libexec/PlistBuddy -c "Delete keychain-access-groups:1" "$1"
-  /usr/libexec/PlistBuddy -c "Delete keychain-access-groups:1" "$1"
-
-  /usr/libexec/PlistBuddy -c "Set com.apple.security.application-groups:0 group.$BUNDLE_ID" "$1"
-  /usr/libexec/PlistBuddy -c "Set keychain-access-groups:0 $TEAM_ID.$BUNDLE_ID" "$1"
+  update_app_security_groups "$1"
 
   /usr/libexec/PlistBuddy -c "Add beta-reports-active bool true" "$1"
 }
 
 # 4. Replace the bundle identifier in each Info.plist.
 function replace_bundle_identifiers {
-  /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $BUNDLE_ID" \
-    "$UNZIPPED/Payload/Client.app/Info.plist"
-  /usr/libexec/PlistBuddy -c "Set AppIdentifierPrefix $TEAM_ID" \
-    "$UNZIPPED/Payload/Client.app/Info.plist"
-
-  /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $BUNDLE_ID.Today" \
-    "$UNZIPPED/Payload/Client.app/Plugins/Today.appex/Info.plist"
-  /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $BUNDLE_ID.SendTo" \
-    "$UNZIPPED/Payload/Client.app/Plugins/SendTo.appex/Info.plist"
-  /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $BUNDLE_ID.ShareTo" \
-    "$UNZIPPED/Payload/Client.app/Plugins/ShareTo.appex/Info.plist"
-  /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $BUNDLE_ID.ViewLater" \
-    "$UNZIPPED/Payload/Client.app/Plugins/ViewLater.appex/Info.plist"
+  /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $1" "$2"
+  /usr/libexec/PlistBuddy -c "Set AppIdentifierPrefix $TEAM_ID" "$2"
 }
 
 # 5. Copy over the new provisioning profiles into each target.
@@ -166,7 +147,11 @@ update_extension_entitlements ShareToEntitlements.plist ShareTo
 update_extension_entitlements ViewLaterEntitlements.plist ViewLater
 
 echo "> Update bundle identifiers in Info.plist files for all targets"
-replace_bundle_identifiers
+replace_bundle_identifiers "$BUNDLE_ID" "$UNZIPPED/Payload/Client.app/Info.plist"
+replace_bundle_identifiers "$BUNDLE_ID.Today" "$UNZIPPED/Payload/Client.app/Plugins/Today.appex/Info.plist"
+replace_bundle_identifiers "$BUNDLE_ID.SendTo" "$UNZIPPED/Payload/Client.app/Plugins/SendTo.appex/Info.plist"
+replace_bundle_identifiers "$BUNDLE_ID.ShareTo" "$UNZIPPED/Payload/Client.app/Plugins/ShareTo.appex/Info.plist"
+replace_bundle_identifiers "$BUNDLE_ID.ViewLater" "$UNZIPPED/Payload/Client.app/Plugins/ViewLater.appex/Info.plist"
 
 echo "> Copying over the new profiles into targets"
 copy_profiles
