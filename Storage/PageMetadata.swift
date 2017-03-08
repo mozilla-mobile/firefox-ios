@@ -28,7 +28,7 @@ public struct PageMetadata {
     public let type: String?
     public let providerName: String?
 
-    public init(id: Int?, siteURL: String, mediaURL: String?, title: String?, description: String?, type: String?, providerName: String?, mediaDataURI: String?) {
+    public init(id: Int?, siteURL: String, mediaURL: String?, title: String?, description: String?, type: String?, providerName: String?, mediaDataURI: String?, cacheImages: Bool = true) {
         self.id = id
         self.siteURL = siteURL
         self.mediaURL = mediaURL
@@ -37,7 +37,9 @@ public struct PageMetadata {
         self.type = type
         self.providerName = providerName
 
-        self.cacheImage(fromDataURI: mediaDataURI, forURL: mediaURL)
+        if cacheImages {
+            self.cacheImage(fromDataURI: mediaDataURI, forURL: mediaURL)
+        }
     }
 
     public static func fromDictionary(_ dict: [String: Any]) -> PageMetadata? {

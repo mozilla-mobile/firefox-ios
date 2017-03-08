@@ -6,6 +6,7 @@ import Foundation
 import Shared
 @testable import Storage
 import Deferred
+import WebImage
 
 import XCTest
 
@@ -222,6 +223,59 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         let highlights = history.getHighlights().value.successValue!
         XCTAssertEqual(highlights.count, 1)
         XCTAssertEqual(highlights[0]!.title, "A")
+    }
+
+    func testMetadataReturnedInHighlights() {
+        let db = BrowserDB(filename: "browser.db", files: files)
+        let prefs = MockProfilePrefs()
+        let history = SQLiteHistory(db: db, prefs: prefs)
+
+        let startTime = Date.nowMicroseconds()
+        let oneHourAgo = startTime - oneHourInMicroseconds
+
+        let siteA = Site(url: "http://siteA.com", title: "Site A")
+        let siteB = Site(url: "http://siteB.com/", title: "Site B")
+        let siteC = Site(url: "http://siteC.com/", title: "Site C")
+
+        let siteVisitA1 = SiteVisit(site: siteA, date: oneHourAgo, type: .link)
+        let siteVisitB1 = SiteVisit(site: siteB, date: oneHourAgo + 1000, type: .link)
+
+        let siteVisitC1 = SiteVisit(site: siteC, date: oneHourAgo, type: .link)
+        let siteVisitC2 = SiteVisit(site: siteC, date: oneHourAgo + 1000, type: .link)
+        let siteVisitC3 = SiteVisit(site: siteC, date: oneHourAgo + 2000, type: .link)
+
+        history.clearHistory().succeeded()
+        history.addLocalVisit(siteVisitA1).succeeded()
+
+        history.addLocalVisit(siteVisitB1).succeeded()
+
+        history.addLocalVisit(siteVisitC1).succeeded()
+        history.addLocalVisit(siteVisitC2).succeeded()
+        history.addLocalVisit(siteVisitC3).succeeded()
+
+        // add metadata for 2 of the sites
+        let metadata = SQLiteMetadata(db: db)
+        let pageA = PageMetadata(id: nil, siteURL: siteA.url, mediaURL: "http://image.com",
+                                title: siteA.title, description: "Test Description", type: nil, providerName: nil, mediaDataURI: nil, cacheImages: false)
+        metadata.storeMetadata(pageA, forPageURL: siteA.url.asURL!, expireAt: Date.now() + 3000).succeeded()
+        let pageB = PageMetadata(id: nil, siteURL: siteB.url, mediaURL: "http://image.com",
+                                 title: siteB.title, description: "Test Description", type: nil, providerName: nil, mediaDataURI: nil, cacheImages: false)
+        metadata.storeMetadata(pageB, forPageURL: siteB.url.asURL!, expireAt: Date.now() + 3000).succeeded()
+        let pageC = PageMetadata(id: nil, siteURL: siteC.url, mediaURL: "http://image.com",
+                                 title: siteC.title, description: "Test Description", type: nil, providerName: nil, mediaDataURI: nil, cacheImages: false)
+        metadata.storeMetadata(pageC, forPageURL: siteC.url.asURL!, expireAt: Date.now() + 3000).succeeded()
+
+        let highlights = history.getHighlights().value.successValue!
+        XCTAssertEqual(highlights.count, 3)
+
+        for highlight in highlights {
+            XCTAssertNotNil(highlight?.metadata)
+            XCTAssertNotNil(highlight?.metadata?.mediaURL)
+        }
+
+        db.run("DELETE FROM \(TablePageMetadata)").succeeded()
+        SDWebImageManager.shared().imageCache.clearDisk()
+        SDWebImageManager.shared().imageCache.clearMemory()
     }
 }
 
