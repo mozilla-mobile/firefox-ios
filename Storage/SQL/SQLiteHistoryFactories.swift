@@ -23,9 +23,6 @@ extension SQLiteHistory {
         site.guid = guid
         site.id = id
 
-        if let provider = row["provider_name"] as? String {
-            site.provider = provider
-        }
         // Find the most recent visit, regardless of which column it might be in.
         let local = row.getTimestamp("localVisitDate") ?? 0
         let remote = row.getTimestamp("remoteVisitDate") ?? 0
@@ -50,9 +47,29 @@ extension SQLiteHistory {
         return nil
     }
 
+    class func pageMetadataColumnFactory(_ row: SDRow) -> PageMetadata? {
+        guard let siteURL = row["url"] as? String else {
+            return nil
+        }
+
+        return PageMetadata(id: row["metadata_id"] as? Int, siteURL: siteURL, mediaURL: row["media_url"] as? String, title: row["metadata_title"] as? String, description: row["description"] as? String, type: row["type"] as? String, providerName: row["provider_name"] as? String, mediaDataURI: nil)
+    }
+
     class func iconHistoryColumnFactory(_ row: SDRow) -> Site {
         let site = basicHistoryColumnFactory(row)
         site.icon = iconColumnFactory(row)
+        return site
+    }
+
+    class func iconHistoryMetadataColumnFactory(_ row: SDRow) -> Site {
+        let site = iconHistoryColumnFactory(row)
+        site.metadata = pageMetadataColumnFactory(row)
+        return site
+    }
+
+    class func basicHistoryMetadataColumnFactory(_ row: SDRow) -> Site {
+        let site = basicHistoryColumnFactory(row)
+        site.metadata = pageMetadataColumnFactory(row)
         return site
     }
 }

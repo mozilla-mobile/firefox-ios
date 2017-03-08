@@ -55,11 +55,12 @@ public struct PageMetadata {
             let url = URL(string: urlString) {
             if let dataURI = dataURI,
                 let dataURL = URL(string: dataURI),
+                !SDWebImageManager.shared().cachedImageExists(for: dataURL),
                 let data = try? Data(contentsOf: dataURL),
                 let image = UIImage(data: data) {
 
                 self.cache(image: image, forURL: url)
-            } else {
+            } else if !SDWebImageManager.shared().cachedImageExists(for: url) {
                 // download image direct from URL
                 self.downloadAndCache(fromURL: url)
             }
