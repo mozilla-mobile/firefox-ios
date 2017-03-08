@@ -276,7 +276,7 @@ extension SQLiteHistory: BrowserHistory {
     }
 
     public func getTopSitesWithLimit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
-        return self.db.runQuery(topSitesQuery, args: [limit], factory: SQLiteHistory.iconHistoryColumnFactory)
+        return self.db.runQuery(topSitesQuery, args: [limit], factory: SQLiteHistory.iconHistoryMetadataColumnFactory)
     }
 
     public func setTopSitesNeedsInvalidation() {
