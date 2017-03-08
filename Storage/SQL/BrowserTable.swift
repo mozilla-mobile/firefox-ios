@@ -52,6 +52,7 @@ let IndexBookmarksLocalStructureParentIdx = "idx_bookmarksLocalStructure_parent_
 let IndexBookmarksBufferStructureParentIdx = "idx_bookmarksBufferStructure_parent_idx"   // Added in v12.
 let IndexBookmarksMirrorStructureChild = "idx_bookmarksMirrorStructure_child"            // Added in v14.
 let IndexPageMetadataCacheKey = "idx_page_metadata_cache_key_uniqueindex" // Added in v19
+let IndexPageMetadataSiteURL = "idx_page_metadata_site_url_uniqueindex" // Added in v19
 
 private let AllTables: [String] = [
     TableDomains,
@@ -95,7 +96,8 @@ private let AllIndices: [String] = [
     IndexBookmarksLocalStructureParentIdx,
     IndexBookmarksMirrorStructureParentIdx,
     IndexBookmarksMirrorStructureChild,
-    IndexPageMetadataCacheKey
+    IndexPageMetadataCacheKey,
+    IndexPageMetadataSiteURL
 ]
 
 private let AllTablesIndicesAndViews: [String] = AllViews + AllIndices + AllTables
@@ -262,8 +264,11 @@ open class BrowserTable: Table {
             "expired_at LONG" +
         ") "
 
-    let indexPageMetadataCreate =
-        "CREATE UNIQUE INDEX IF NOT EXISTS \(IndexPageMetadataCacheKey) ON page_metadata (cache_key)"
+    let indexPageMetadataCacheKeyCreate =
+    "CREATE UNIQUE INDEX IF NOT EXISTS \(IndexPageMetadataCacheKey) ON page_metadata (cache_key)"
+
+    let indexPageMetadataSiteURLCreate =
+    "CREATE UNIQUE INDEX IF NOT EXISTS \(IndexPageMetadataSiteURL) ON page_metadata (site_url)"
 
     let iconColumns = ", faviconID INTEGER REFERENCES \(TableFavicons)(id) ON DELETE SET NULL"
     let mirrorColumns = ", is_overridden TINYINT NOT NULL DEFAULT 0"
@@ -577,7 +582,8 @@ open class BrowserTable: Table {
             historyIDsWithIcon,
             iconForURL,
             pageMetadataCreate,
-            indexPageMetadataCreate,
+            indexPageMetadataCacheKeyCreate,
+            indexPageMetadataSiteURLCreate,
             self.queueTableCreate,
             self.topSitesTableCreate,
             self.localBookmarksView,
@@ -822,7 +828,8 @@ open class BrowserTable: Table {
 
                 // Adds tables/indicies for metadata content
                 pageMetadataCreate,
-                indexPageMetadataCreate]) {
+                indexPageMetadataCacheKeyCreate,
+                indexPageMetadataSiteURLCreate]) {
                 return false
             }
         }

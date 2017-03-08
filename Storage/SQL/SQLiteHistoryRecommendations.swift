@@ -41,10 +41,10 @@ extension SQLiteHistory: HistoryRecommendations {
             "   FROM \(ViewHistoryVisits)" +
             "   GROUP BY \(ViewHistoryVisits).domain_id) AS domains ON domains.domain_id = \(TableHistory).domain_id AND visitDate = domains.visit_date"
 
-        let siteProjection = "historyID, url, title, guid, visitCount, visitDate, is_bookmarked"
+        let subQuerySiteProjection = "historyID, url, siteTitle, guid, visitCount, visitDate, is_bookmarked"
         let nonRecentHistory =
-            "SELECT \(siteProjection) FROM (" +
-            "   SELECT \(TableHistory).id as historyID, url, title, guid, visitDate, \(TableHistory).domain_id," +
+            "SELECT \(subQuerySiteProjection) FROM (" +
+            "   SELECT \(TableHistory).id as historyID, url, title AS siteTitle, guid, visitDate, \(TableHistory).domain_id," +
             "       (SELECT COUNT(1) FROM \(TableVisits) WHERE s = \(TableVisits).siteID) AS visitCount," +
             "       (SELECT COUNT(1) FROM \(ViewBookmarksLocalOnMirror) WHERE \(ViewBookmarksLocalOnMirror).bmkUri == url) AS is_bookmarked" +
             "   FROM (" +
@@ -64,8 +64,8 @@ extension SQLiteHistory: HistoryRecommendations {
             ")"
 
         let bookmarkHighlights =
-            "SELECT \(siteProjection) FROM (" +
-            "   SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, \(TableHistory).title AS title, guid, \(TableHistory).domain_id, NULL AS visitDate, (SELECT count(1) FROM visits WHERE \(TableVisits).siteID = \(TableHistory).id) as visitCount, 1 AS is_bookmarked" +
+            "SELECT \(subQuerySiteProjection) FROM (" +
+            "   SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, \(TableHistory).title AS siteTitle, guid, \(TableHistory).domain_id, NULL AS visitDate, (SELECT count(1) FROM visits WHERE \(TableVisits).siteID = \(TableHistory).id) as visitCount, 1 AS is_bookmarked" +
             "   FROM (" +
             "       SELECT bmkUri" +
             "       FROM \(ViewBookmarksLocalOnMirror)" +
@@ -78,14 +78,16 @@ extension SQLiteHistory: HistoryRecommendations {
             "   LIMIT \(bookmarkLimit)" +
             ")"
 
+        let siteProjection = subQuerySiteProjection.replacingOccurrences(of: "siteTitle", with: "siteTitle AS title")
         let highlightsQuery =
-            "SELECT \(siteProjection), iconID, iconURL, iconType, iconDate, iconWidth " +
+            "SELECT \(siteProjection), iconID, iconURL, iconType, iconDate, iconWidth, \(TablePageMetadata).title AS metadata_title, media_url, type, description, provider_name " +
             "FROM ( \(nonRecentHistory) UNION ALL \(bookmarkHighlights) ) " +
             "LEFT JOIN \(ViewHistoryIDsWithWidestFavicons) ON \(ViewHistoryIDsWithWidestFavicons).id = historyID " +
+            "LEFT OUTER JOIN \(TablePageMetadata) ON \(TablePageMetadata).site_url = url " +
             "GROUP BY url"
         let otherArgs = [threeDaysAgo, threeDaysAgo] as Args
         let args: Args = [thirtyMinutesAgo] + blacklistedHosts + otherArgs
-        return self.db.runQuery(highlightsQuery, args: args, factory: SQLiteHistory.iconHistoryColumnFactory)
+        return self.db.runQuery(highlightsQuery, args: args, factory: SQLiteHistory.iconHistoryMetadataColumnFactory)
     }
 
     public func removeHighlightForURL(_ url: String) -> Success {
