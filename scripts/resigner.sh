@@ -15,6 +15,8 @@ CERT_NAME=$5
 UNZIPPED="temp_${IPA%.ipa}"
 DEVELOPER_DIR=$(xcode-select -p)
 
+EXTENSIONS=(Today ViewLater SendTo ShareTo)
+
 # 1. 'Unzip' the .ipa file to get access to it's contents.
 function unzip_ipa {
   unzip -q "$IPA" -d "$UNZIPPED"
@@ -23,26 +25,31 @@ function unzip_ipa {
 # 2. Export the entitlements for each target into a .plist for later.
 function export_entitlements {
   codesign -d --entitlements :- "$UNZIPPED/Payload/Client.app" > ClientEntitlements.plist
-  codesign -d --entitlements :- "$UNZIPPED/Payload/Client.app/PlugIns/Today.appex" > TodayEntitlements.plist 
-  codesign -d --entitlements :- "$UNZIPPED/Payload/Client.app/PlugIns/SendTo.appex" > SendToEntitlements.plist
-  codesign -d --entitlements :- "$UNZIPPED/Payload/Client.app/PlugIns/ShareTo.appex" > ShareToEntitlements.plist
-  codesign -d --entitlements :- "$UNZIPPED/Payload/Client.app/PlugIns/ViewLater.appex" > ViewLaterEntitlements.plist
+
+  for EXTEN in "${EXTENSIONS[@]}"; do
+    codesign -d --entitlements :- "$UNZIPPED/Payload/Client.app/PlugIns/$EXTEN.appex" > "${EXTEN}Entitlements.plist"
+  done
 }
 
 # 3. Update the entitlements to use the new team/bundle identifiers.
+function update_app_security_groups {
+  # Clear out the app groups and security groups and set them to only the given identifier.
+  /usr/libexec/PlistBuddy -c "Delete com.apple.security.application-groups" "$1"
+  /usr/libexec/PlistBuddy -c "Delete keychain-access-groups" "$1"
+
+  /usr/libexec/PlistBuddy -c "Add com.apple.security.application-groups array" "$1"
+  /usr/libexec/PlistBuddy -c "Add com.apple.security.application-groups: string group.$BUNDLE_ID" "$1"
+
+  /usr/libexec/PlistBuddy -c "Add keychain-access-groups array" "$1"
+  /usr/libexec/PlistBuddy -c "Add keychain-access-groups: string $TEAM_ID.$BUNDLE_ID" "$1"
+}
+
 function update_extension_entitlements {
   /usr/libexec/PlistBuddy -c "Set application-identifier $TEAM_ID.$BUNDLE_ID.$2" "$1"
   /usr/libexec/PlistBuddy -c "Set com.apple.developer.team-identifier $TEAM_ID" "$1"
 
-  # Delete other groups and only be left with one
-  /usr/libexec/PlistBuddy -c "Delete com.apple.security.application-groups:1" "$1"
-  /usr/libexec/PlistBuddy -c "Delete com.apple.security.application-groups:1" "$1"
+  update_app_security_groups "$1"
 
-  /usr/libexec/PlistBuddy -c "Delete keychain-access-groups:1" "$1"
-  /usr/libexec/PlistBuddy -c "Delete keychain-access-groups:1" "$1"
-
-  /usr/libexec/PlistBuddy -c "Set com.apple.security.application-groups:0 group.$BUNDLE_ID" "$1"
-  /usr/libexec/PlistBuddy -c "Set keychain-access-groups:0 $TEAM_ID.$BUNDLE_ID" "$1"
   /usr/libexec/PlistBuddy -c "Add beta-reports-active bool true" "$1"
 }
 
@@ -50,67 +57,35 @@ function update_client_entitlements {
   /usr/libexec/PlistBuddy -c "Set application-identifier $TEAM_ID.$BUNDLE_ID" "$1"
   /usr/libexec/PlistBuddy -c "Set com.apple.developer.team-identifier $TEAM_ID" "$1"
 
-  # Delete other groups and only be left with one
-  /usr/libexec/PlistBuddy -c "Delete com.apple.security.application-groups:1" "$1"
-  /usr/libexec/PlistBuddy -c "Delete com.apple.security.application-groups:1" "$1"
-
-  /usr/libexec/PlistBuddy -c "Delete keychain-access-groups:1" "$1"
-  /usr/libexec/PlistBuddy -c "Delete keychain-access-groups:1" "$1"
-
-  /usr/libexec/PlistBuddy -c "Set com.apple.security.application-groups:0 group.$BUNDLE_ID" "$1"
-  /usr/libexec/PlistBuddy -c "Set keychain-access-groups:0 $TEAM_ID.$BUNDLE_ID" "$1"
+  update_app_security_groups "$1"
 
   /usr/libexec/PlistBuddy -c "Add beta-reports-active bool true" "$1"
 }
 
 # 4. Replace the bundle identifier in each Info.plist.
 function replace_bundle_identifiers {
-  /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $BUNDLE_ID" \
-    "$UNZIPPED/Payload/Client.app/Info.plist"
-  /usr/libexec/PlistBuddy -c "Set AppIdentifierPrefix $TEAM_ID" \
-    "$UNZIPPED/Payload/Client.app/Info.plist"
-
-  /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $BUNDLE_ID.Today" \
-    "$UNZIPPED/Payload/Client.app/Plugins/Today.appex/Info.plist"
-  /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $BUNDLE_ID.SendTo" \
-    "$UNZIPPED/Payload/Client.app/Plugins/SendTo.appex/Info.plist"
-  /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $BUNDLE_ID.ShareTo" \
-    "$UNZIPPED/Payload/Client.app/Plugins/ShareTo.appex/Info.plist"
-  /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $BUNDLE_ID.ViewLater" \
-    "$UNZIPPED/Payload/Client.app/Plugins/ViewLater.appex/Info.plist"
+  /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $1" "$2"
+  /usr/libexec/PlistBuddy -c "Set AppIdentifierPrefix $TEAM_ID" "$2"
 }
 
 # 5. Copy over the new provisioning profiles into each target.
 function copy_profiles {
   cp "$PROFILES_DIR/Firefox_Beta_Distribution.mobileprovision" \
     "$UNZIPPED/Payload/Client.app/embedded.mobileprovision"
-  cp "$PROFILES_DIR/Firefox_Beta_Today_Distribution.mobileprovision" \
-    "$UNZIPPED/Payload/Client.app/Plugins/Today.appex/embedded.mobileprovision"
-  cp "$PROFILES_DIR/Firefox_Beta_SendTo_Distribution.mobileprovision" \
-    "$UNZIPPED/Payload/Client.app/Plugins/SendTo.appex/embedded.mobileprovision"
-  cp "$PROFILES_DIR/Firefox_Beta_ShareTo_Distribution.mobileprovision" \
-    "$UNZIPPED/Payload/Client.app/Plugins/ShareTo.appex/embedded.mobileprovision"
-  cp "$PROFILES_DIR/Firefox_Beta_ViewLater_Distribution.mobileprovision" \
-    "$UNZIPPED/Payload/Client.app/Plugins/ViewLater.appex/embedded.mobileprovision"
+
+  for EXTEN in "${EXTENSIONS[@]}"; do
+    cp "$PROFILES_DIR/Firefox_Beta_${EXTEN}_Distribution.mobileprovision" \
+      "$UNZIPPED/Payload/Client.app/Plugins/${EXTEN}.appex/embedded.mobileprovision"
+  done
 }
 
 # 6. Resign each target from deepest in the folder hierarchy to most shallow.
 function resign {
-  codesign -f -s "$CERT_NAME" \
-    --entitlements TodayEntitlements.plist \
-    "$UNZIPPED/Payload/Client.app/PlugIns/Today.appex"
-
-  codesign -f -s "$CERT_NAME" \
-    --entitlements SendToEntitlements.plist \
-    "$UNZIPPED/Payload/Client.app/PlugIns/SendTo.appex"
-
-  codesign -f -s "$CERT_NAME" \
-    --entitlements ShareToEntitlements.plist \
-    "$UNZIPPED/Payload/Client.app/PlugIns/ShareTo.appex"
-
-  codesign -f -s "$CERT_NAME" \
-    --entitlements ViewLaterEntitlements.plist \
-    "$UNZIPPED/Payload/Client.app/PlugIns/ViewLater.appex"
+  for EXTEN in "${EXTENSIONS[@]}"; do
+    codesign -f -s "$CERT_NAME" \
+      --entitlements "${EXTEN}Entitlements.plist" \
+      "$UNZIPPED/Payload/Client.app/PlugIns/$EXTEN.appex"
+  done
 
   codesign -f -s "$CERT_NAME" \
     --entitlements ClientEntitlements.plist \
@@ -142,10 +117,9 @@ function rezip_ipa {
 
 # 9. Tidy up the temp files we created
 function tidy_up {
-  rm TodayEntitlements.plist
-  rm SendToEntitlements.plist
-  rm ShareToEntitlements.plist
-  rm ViewLaterEntitlements.plist
+  for EXTEN in "${EXTENSIONS[@]}"; do
+    rm "${EXTEN}Entitlements.plist"
+  done
   rm ClientEntitlements.plist
   rm -r "$UNZIPPED"
 }
@@ -160,13 +134,17 @@ export_entitlements
 
 echo "> Updating entitlements to use new team/bundle identifiers"
 update_client_entitlements ClientEntitlements.plist
-update_extension_entitlements TodayEntitlements.plist Today
-update_extension_entitlements SendToEntitlements.plist SendTo
-update_extension_entitlements ShareToEntitlements.plist ShareTo
-update_extension_entitlements ViewLaterEntitlements.plist ViewLater
+
+for EXTEN in "${EXTENSIONS[@]}"; do
+  update_extension_entitlements "${EXTEN}Entitlements.plist" "$EXTEN" 
+done
 
 echo "> Update bundle identifiers in Info.plist files for all targets"
-replace_bundle_identifiers
+replace_bundle_identifiers "$BUNDLE_ID" "$UNZIPPED/Payload/Client.app/Info.plist"
+
+for EXTEN in "${EXTENSIONS[@]}"; do
+  replace_bundle_identifiers "$BUNDLE_ID.$EXTEN" "$UNZIPPED/Payload/Client.app/Plugins/$EXTEN.appex/Info.plist"
+done
 
 echo "> Copying over the new profiles into targets"
 copy_profiles
