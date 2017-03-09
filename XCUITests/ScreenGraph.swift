@@ -29,7 +29,6 @@ typealias NodeVisitor = (String) -> Void
  * The ScreenGraph will be used as a map to navigate the test agent around the app.
  */
 open class ScreenGraph {
-    let app: XCUIApplication
     var initialSceneName: String?
 
     var namedScenes: [String: ScreenGraphNode] = [:]
@@ -39,8 +38,7 @@ open class ScreenGraph {
 
     let gkGraph: GKGraph
 
-    init(_ app: XCUIApplication) {
-        self.app = app
+    init() {
         self.gkGraph = GKGraph()
     }
 }
