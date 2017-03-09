@@ -4,6 +4,7 @@
 
 import Foundation
 import WebKit
+import EarlGrey
 
 class PrivateBrowsingTests: KIFTestCase {
     fileprivate var webRoot: String!
@@ -17,6 +18,11 @@ class PrivateBrowsingTests: KIFTestCase {
     override func tearDown() {
         BrowserUtils.resetToAboutHome(tester())
         BrowserUtils.clearPrivateData(tester: tester())
+    }
+
+    func enterUrl(url: String) {
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_typeText("\(url)\n"))
     }
 
     func testPrivateTabDoesntTrackHistory() {
@@ -53,6 +59,33 @@ class PrivateBrowsingTests: KIFTestCase {
         tester().tapView(withAccessibilityLabel: "Show Tabs")
         tester().tapView(withAccessibilityLabel: "Private Mode")
         tester().tapView(withAccessibilityLabel: "Page 1")
+    }
+
+    func testClosingPrivateTabClearsCookies() {
+        let url = "\(webRoot!)/cookie.html"
+
+        tester().tapView(withAccessibilityLabel: "Menu")
+        tester().tapView(withAccessibilityLabel: "New Private Tab")
+
+        enterUrl(url: url)
+        tester().tapWebViewElementWithAccessibilityLabel("Create Cookie")
+
+        tester().tapView(withAccessibilityLabel: "Show Tabs")
+        
+        let tabsView = tester().waitForView(withAccessibilityLabel: "Tabs Tray").subviews.first as! UICollectionView
+
+        // Clear all private tabs.
+        while tabsView.numberOfItems(inSection: 0) > 0 {
+            let cell = tabsView.cellForItem(at: IndexPath(item: 0, section: 0))!
+            tester().swipeView(withAccessibilityLabel: cell.accessibilityLabel, in: KIFSwipeDirection.left)
+            tester().waitForAbsenceOfView(withAccessibilityLabel: cell.accessibilityLabel)
+        }
+
+        tester().tapView(withAccessibilityLabel: "Add Tab")
+        enterUrl(url: url)
+
+        tester().wait(forTimeInterval: 2)
+        tester().waitForWebViewElementWithAccessibilityLabel("No Cookie")
     }
 
     func testTabCountShowsOnlyNormalOrPrivateTabCount() {
