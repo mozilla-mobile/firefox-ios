@@ -146,10 +146,16 @@ class AlternateSimpleHighlightCell: UITableViewCell {
     }
 
     func configureWithSite(_ site: Site) {
-        self.siteImageView.setFavicon(forSite: site, onCompletion: { [weak self] (color, url)  in
-            self?.siteImageView.image = self?.siteImageView.image?.createScaled(AlternateSimpleHighlightCellUX.FaviconSize)
-        })
-        self.siteImageView.contentMode = .center
+        if let mediaURLStr = site.metadata?.mediaURL,
+            let mediaURL = URL(string: mediaURLStr) {
+            self.siteImageView.sd_setImage(with: mediaURL)
+            self.siteImageView.contentMode = .scaleAspectFill
+        } else {
+            self.siteImageView.setFavicon(forSite: site, onCompletion: { [weak self] (color, url)  in
+                self?.siteImageView.image = self?.siteImageView.image?.createScaled(AlternateSimpleHighlightCellUX.FaviconSize)
+            })
+            self.siteImageView.contentMode = .center
+        }
 
         self.domainLabel.text = site.tileURL.hostSLD
         self.titleLabel.text = site.title.characters.count <= 1 ? site.url : site.title

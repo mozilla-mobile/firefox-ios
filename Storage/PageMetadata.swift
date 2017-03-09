@@ -28,7 +28,7 @@ public struct PageMetadata {
     public let type: String?
     public let providerName: String?
 
-    public init(id: Int?, siteURL: String, mediaURL: String?, title: String?, description: String?, type: String?, providerName: String?, mediaDataURI: String?) {
+    public init(id: Int?, siteURL: String, mediaURL: String?, title: String?, description: String?, type: String?, providerName: String?, mediaDataURI: String?, cacheImages: Bool = true) {
         self.id = id
         self.siteURL = siteURL
         self.mediaURL = mediaURL
@@ -37,7 +37,9 @@ public struct PageMetadata {
         self.type = type
         self.providerName = providerName
 
-        self.cacheImage(fromDataURI: mediaDataURI, forURL: mediaURL)
+        if cacheImages {
+            self.cacheImage(fromDataURI: mediaDataURI, forURL: mediaURL)
+        }
     }
 
     public static func fromDictionary(_ dict: [String: Any]) -> PageMetadata? {
@@ -55,11 +57,12 @@ public struct PageMetadata {
             let url = URL(string: urlString) {
             if let dataURI = dataURI,
                 let dataURL = URL(string: dataURI),
+                !SDWebImageManager.shared().cachedImageExists(for: dataURL),
                 let data = try? Data(contentsOf: dataURL),
                 let image = UIImage(data: data) {
 
                 self.cache(image: image, forURL: url)
-            } else {
+            } else if !SDWebImageManager.shared().cachedImageExists(for: url) {
                 // download image direct from URL
                 self.downloadAndCache(fromURL: url)
             }

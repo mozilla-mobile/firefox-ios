@@ -127,7 +127,7 @@ class TopSiteItemCell: UICollectionViewCell {
     }
 
     func configureWithTopSiteItem(_ site: Site) {
-        if let provider = site.provider {
+        if let provider = site.metadata?.providerName {
             titleLabel.text = provider.lowercased()
         } else {
             titleLabel.text = site.tileURL.hostSLD
