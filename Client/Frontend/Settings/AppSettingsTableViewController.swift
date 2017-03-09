@@ -117,6 +117,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
             SettingSection(title: NSAttributedString(string: NSLocalizedString("About", comment: "About settings section title")), children: [
                 VersionSetting(settings: self),
                 LicenseAndAcknowledgementsSetting(),
+                ThirdPartySetting(),
                 YourRightsSetting(),
                 ExportBrowserDataSetting(settings: self),
                 DeleteExportedDataSetting(settings: self),

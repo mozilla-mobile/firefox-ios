@@ -465,6 +465,22 @@ class LicenseAndAcknowledgementsSetting: Setting {
     }
 }
 
+// Opens the third party attribution page in a new tab
+class ThirdPartySetting: Setting {
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: NSLocalizedString("Third Party", comment: "third party libraries attribution"), attributes:
+            [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
+    }
+    
+    override var url: URL? {
+        return URL(string: WebServer.sharedInstance.URLForResource("thirdyparty", module: "about"))
+    }
+    
+    override func onClick(_ navigationController: UINavigationController?) {
+        setUpAndPushSettingsContentViewController(navigationController)
+    }
+}
+
 // Opens about:rights page in the content view controller
 class YourRightsSetting: Setting {
     override var title: NSAttributedString? {
