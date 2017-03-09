@@ -6,16 +6,17 @@ import Foundation
 import Shared
 import WebKit
 import UIKit
+import EarlGrey
 import GCDWebServers
 
 class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
-/*
+
     fileprivate var webRoot: String!
 
     override func setUp() {
         super.setUp()
         webRoot = SimplePageServer.start()
-        BrowserUtils.dismissFirstRunUI(tester())
+        BrowserUtils.dismissFirstRunUI()
     }
 
     override func tearDown() {
@@ -26,14 +27,17 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
     func visitSites(noOfSites: Int) -> [(title: String, domain: String, dispDomain: String, url: String)] {
         var urls: [(title: String, domain: String, dispDomain: String, url: String)] = []
         for pageNo in 1...noOfSites {
-            tester().tapView(withAccessibilityIdentifier: "url")
-            let url = "\(webRoot)/numberedPage.html?page=\(pageNo)"
-            tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "\(url)\n")
+            let url = "\(webRoot!)/numberedPage.html?page=\(pageNo)"
+            EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
+            EarlGrey.select(elementWithMatcher: grey_accessibilityID("address"))
+                .perform(grey_typeText("\(url)\n"))
+
             tester().waitForWebViewElementWithAccessibilityLabel("Page \(pageNo)")
             let dom = URL(string: url)!.normalizedHost!
-            let index = dom.startIndex.advancedBy(7)
-            let dispDom = dom.substringToIndex(index)   // On IPhone, it only displays first 8 chars
-            let tuple: (title: String, domain: String, dispDomain: String, url: String) = ("Page \(pageNo)", dom, dispDom, url)
+            let index = dom.index(dom.startIndex, offsetBy: 7)
+            let dispDom = dom.substring(to: index)  // On IPhone, it only displays first 8 chars
+            let tuple: (title: String, domain: String, dispDomain: String, url: String)
+            = ("Page \(pageNo)", dom, dispDom, url)
             urls.append(tuple)
         }
         BrowserUtils.resetToAboutHome(tester())
@@ -41,23 +45,36 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
     }
 
     func anyDomainsExistOnTopSites(_ domains: Set<String>, fulldomains: Set<String>) {
+        if checkDomains(domains: domains) == true {
+            return
+        } else {
+            if checkDomains(domains: fulldomains) == true {
+                return
+            }
+        }
+       XCTFail("Couldn't find any domains in top sites.")
+    }
+    
+    private func checkDomains(domains: Set<String>) -> Bool {
+        var errorOrNil: NSError?
+    
         for domain in domains {
-            if self.tester().viewExistsWithLabel(domain) {
-                return
+            let withoutDot = domain.replacingOccurrences(of: ".", with: " ")
+            let matcher = grey_allOfMatchers([grey_accessibilityLabel(withoutDot),
+                                              grey_accessibilityID("TopSite"),
+                                              grey_sufficientlyVisible()])
+            EarlGrey.select(elementWithMatcher: matcher!).assert(grey_notNil(), error: &errorOrNil)
+            
+            if errorOrNil == nil {
+                return true
             }
         }
-        for domain in fulldomains {
-            if self.tester().viewExistsWithLabel(domain) {
-                return
-            }
-        }
-        XCTFail("Couldn't find any domains in top sites.")
+        return false
     }
 
-    func testRemembersToggles(_ swipe: Bool) {
-        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.History], swipe:swipe, tester: tester())
-
-        BrowserUtils.openClearPrivateDataDialog(swipe, tester: tester())
+    func testRemembersToggles() {
+        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.History], swipe:false, tester: tester())
+        BrowserUtils.openClearPrivateDataDialog(false, tester: tester())
 
         // Ensure the toggles match our settings.
         [
@@ -66,9 +83,9 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
             (BrowserUtils.Clearable.OfflineData, "0"),
             (BrowserUtils.Clearable.History, "1")
         ].forEach { clearable, switchValue in
-            XCTAssertNotNil(tester().waitForView(withAccessibilityLabel: clearable.rawValue, value: switchValue, traits: UIAccessibilityTraitNone))
+            XCTAssertNotNil(tester()
+            .waitForView(withAccessibilityLabel: clearable.rawValue, value: switchValue, traits: UIAccessibilityTraitNone))
         }
-
 
         BrowserUtils.closeClearPrivateDataDialog(tester())
     }
@@ -77,15 +94,24 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         let urls = visitSites(noOfSites: 2)
         let dispDomains = Set<String>(urls.map { $0.dispDomain })
         let fullDomains = Set<String>(urls.map { $0.domain })
-
-        tester().tapView(withAccessibilityLabel: "Top sites")
-
+        var errorOrNil: NSError?
+        
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Top sites")).perform(grey_tap())
+        
         // Only one will be found -- we collapse by domain.
         anyDomainsExistOnTopSites(dispDomains, fulldomains: fullDomains)
 
         BrowserUtils.clearPrivateData([BrowserUtils.Clearable.History], swipe: false, tester: tester())
-        XCTAssertFalse(tester().viewExistsWithLabel(urls[0].title), "Expected to have removed top site panel \(urls[0])")
-        XCTAssertFalse(tester().viewExistsWithLabel(urls[1].title), "We shouldn't find the other URL, either.")
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(urls[0].title))
+            .assert(grey_notNil(), error: &errorOrNil)
+        XCTAssertEqual(GREYInteractionErrorCode(rawValue: errorOrNil!.code),
+        GREYInteractionErrorCode.elementNotFoundErrorCode,
+        "Expected to have removed top site panel \(urls[0])")
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(urls[1].title))
+            .assert(grey_notNil(), error: &errorOrNil)
+        XCTAssertEqual(GREYInteractionErrorCode(rawValue: errorOrNil!.code),
+        GREYInteractionErrorCode.elementNotFoundErrorCode,
+        "We shouldn't find the other URL, either.")
     }
 
     func testDisabledHistoryDoesNotClearTopSitesPanel() {
@@ -100,39 +126,54 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
 
     func testClearsHistoryPanel() {
         let urls = visitSites(noOfSites: 2)
-
-        tester().tapView(withAccessibilityLabel: "History")
-        let url1 = "\(urls[0].title), \(urls[0].url)"
-        let url2 = "\(urls[1].title), \(urls[1].url)"
-        XCTAssertTrue(tester().viewExistsWithLabel(url1), "Expected to have history row \(url1)")
-        XCTAssertTrue(tester().viewExistsWithLabel(url2), "Expected to have history row \(url2)")
+        var errorOrNil: NSError?
+        
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("History")).perform(grey_tap())
+        let url1 = urls[0].url
+        let url2 = urls[1].url
+        
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(url1)).assert(grey_notNil())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(url2)).assert(grey_notNil())
 
         BrowserUtils.clearPrivateData([BrowserUtils.Clearable.History], swipe: false, tester: tester())
-        tester().tapView(withAccessibilityLabel: "Bookmarks")
-        tester().tapView(withAccessibilityLabel: "History")
-        XCTAssertFalse(tester().viewExistsWithLabel(url1), "Expected to have removed history row \(url1)")
-        XCTAssertFalse(tester().viewExistsWithLabel(url2), "Expected to have removed history row \(url2)")
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Bookmarks")).perform(grey_tap())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("History")).perform(grey_tap())
+        
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(url1))
+            .assert(grey_notNil(), error: &errorOrNil)
+        XCTAssertEqual(GREYInteractionErrorCode(rawValue: errorOrNil!.code),
+        GREYInteractionErrorCode.elementNotFoundErrorCode,
+                       "Expected to have removed history row \(url1)")
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(url2))
+            .assert(grey_notNil(), error: &errorOrNil)
+        XCTAssertEqual(GREYInteractionErrorCode(rawValue: errorOrNil!.code),
+        GREYInteractionErrorCode.elementNotFoundErrorCode,
+                       "Expected to have removed history row \(url2)")
     }
 
     func testDisabledHistoryDoesNotClearHistoryPanel() {
         let urls = visitSites(noOfSites: 2)
+        var errorOrNil: NSError?
 
-        tester().tapView(withAccessibilityLabel: "History")
-        let url1 = "\(urls[0].title), \(urls[0].url)"
-        let url2 = "\(urls[1].title), \(urls[1].url)"
-        XCTAssertTrue(tester().viewExistsWithLabel(url1), "Expected to have history row \(url1)")
-        XCTAssertTrue(tester().viewExistsWithLabel(url2), "Expected to have history row \(url2)")
-
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("History")).perform(grey_tap())
+        let url1 = urls[0].url
+        let url2 = urls[1].url
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(url1)).assert(grey_notNil())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(url2)).assert(grey_notNil())
         BrowserUtils.clearPrivateData(BrowserUtils.AllClearables.subtracting([BrowserUtils.Clearable.History]), swipe: false, tester: tester())
-
-        XCTAssertTrue(tester().viewExistsWithLabel(url1), "Expected to not have removed history row \(url1)")
-        XCTAssertTrue(tester().viewExistsWithLabel(url2), "Expected to not have removed history row \(url2)")
+        
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(url1))
+            .assert(grey_notNil(), error: &errorOrNil)
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(url2))
+            .assert(grey_notNil(), error: &errorOrNil)
     }
 
     func testClearsCookies() {
-        tester().tapView(withAccessibilityIdentifier: "url")
-        let url = "\(webRoot)/numberedPage.html?page=1"
-        tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "\(url)\n")
+        let url = "\(webRoot!)/numberedPage.html?page=1"
+        
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address"))
+            .perform(grey_typeText("\(url)\n"))
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
 
         let webView = tester().waitForView(withAccessibilityLabel: "Web content") as! WKWebView
@@ -155,16 +196,17 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         BrowserUtils.clearPrivateData([BrowserUtils.Clearable.Cookies], swipe: true, tester: tester())
         cookies = getCookies(webView)
         XCTAssertEqual(cookies.cookie, "")
-        XCTAssertNil(cookies.localStorage)
-        XCTAssertNil(cookies.sessionStorage)
+        XCTAssertEqual(cookies.localStorage, "null")
+        XCTAssertEqual(cookies.sessionStorage, "null")
     }
 
     func testClearsCache() {
         let cachedServer = CachedPageServer()
         let cacheRoot = cachedServer.start()
         let url = "\(cacheRoot)/cachedPage.html"
-        tester().tapView(withAccessibilityIdentifier: "url")
-        tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "\(url)\n")
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address"))
+            .perform(grey_typeText("\(url)\n"))
         tester().waitForWebViewElementWithAccessibilityLabel("Cache test")
 
         let webView = tester().waitForView(withAccessibilityLabel: "Web content") as! WKWebView
@@ -191,16 +233,22 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
 
     fileprivate func getCookies(_ webView: WKWebView) -> (cookie: String, localStorage: String?, sessionStorage: String?) {
         var cookie: (String, String?, String?)!
+        var value: String!
         let expectation = self.expectation(description: "Got cookie")
+        
         webView.evaluateJavaScript("JSON.stringify([document.cookie, localStorage.cookie, sessionStorage.cookie])") { result, _ in
-            let cookies = JSON(parseJSON: result as! String).asArray!
-            cookie = (cookies[0].asString!, cookies[1].asString, cookies[2].asString)
+            value = result as! String
             expectation.fulfill()
         }
+        
         waitForExpectations(timeout: 10, handler: nil)
+        value = value.replacingOccurrences(of: "[", with: "")
+        value = value.replacingOccurrences(of: "]", with: "")
+        value = value.replacingOccurrences(of: "\"", with: "")
+        let items = value.components(separatedBy: ",")
+        cookie = (items[0], items[1], items[2])
         return cookie
     }
-    */
 }
 
 /// Server that keeps track of requests.
@@ -218,7 +266,8 @@ private class CachedPageServer {
 
         // We use 127.0.0.1 explicitly here, rather than localhost, in order to avoid our
         // history exclusion code (Bug 1188626).
-        let webRoot = "http://127.0.0.1:\(webServer?.port)"
+        let port = (webServer?.port)!
+        let webRoot = "http://127.0.0.1:\(port)"
         return webRoot
     }
 }
