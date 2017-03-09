@@ -414,7 +414,18 @@ class TabManager: NSObject {
     /// - Parameter notify: if set to true, the delegate is called when a tab is
     ///   removed.
     func removeAllPrivateTabsAndNotify(_ notify: Bool) {
-        privateTabs.forEach({ removeTab($0, flushToDisk: true, notify: notify) })
+        // if there is a selected tab, it needs to be closed last
+        // this is important for TopTabs as otherwise the selection of the new tab
+        // causes problems as it may no longer be present.
+        // without this we get a nasty crash
+        guard let selectedTab = selectedTab,
+            let _ = privateTabs.index(of: selectedTab) else {
+            return privateTabs.forEach({ removeTab($0, flushToDisk: true, notify: notify) })
+        }
+
+        let nonSelectedTabsForRemoval = privateTabs.filter { $0 != selectedTab }
+        nonSelectedTabsForRemoval.forEach({ removeTab($0, flushToDisk: true, notify: notify) })
+        removeTab(selectedTab, flushToDisk: true, notify: notify)
     }
     
     func removeTabsWithUndoToast(_ tabs: [Tab]) {
