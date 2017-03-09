@@ -15,6 +15,21 @@ struct AboutHomeHandler {
     }
 }
 
+struct ThirdPartyHandler {
+    static func register(_ webServer: WebServer) {
+        webServer.registerHandlerForMethod("GET", module: "about", resource: "thirdyparty") { (request: GCDWebServerRequest?) -> GCDWebServerResponse! in
+            let path = Bundle.main.path(forResource: "thirdyparty", ofType: "html")
+            do {
+                let html = try NSString(contentsOfFile: path!, encoding: String.Encoding.utf8.rawValue) as String
+                return GCDWebServerDataResponse(html: html)
+            } catch {
+                print("Unable to register webserver \(error)")
+            }
+            return GCDWebServerResponse(statusCode: 200)
+        }
+    }
+}
+
 struct AboutLicenseHandler {
     static func register(_ webServer: WebServer) {
         webServer.registerHandlerForMethod("GET", module: "about", resource: "license") { (request: GCDWebServerRequest?) -> GCDWebServerResponse! in
