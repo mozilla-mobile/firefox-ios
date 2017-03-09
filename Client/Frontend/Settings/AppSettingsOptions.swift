@@ -468,7 +468,7 @@ class LicenseAndAcknowledgementsSetting: Setting {
 // Opens the third party attribution page in a new tab
 class ThirdPartySetting: Setting {
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Third Party", comment: "third party libraries attribution"), attributes:
+        return NSAttributedString(string: NSLocalizedString("Third-Party Contents", comment: "third-party libraries attribution"), attributes:
             [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
     }
     
