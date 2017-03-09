@@ -11,6 +11,7 @@ PROFILES_DIR=$2
 BUNDLE_ID=$3
 TEAM_ID=$4
 CERT_NAME=$5
+IS_BETA=$6
 
 UNZIPPED="temp_${IPA%.ipa}"
 DEVELOPER_DIR=$(xcode-select -p)
@@ -69,12 +70,22 @@ function replace_bundle_identifiers {
 }
 
 # 5. Copy over the new provisioning profiles into each target.
-function copy_profiles {
+function copy_beta_profiles {
   cp "$PROFILES_DIR/Firefox_Beta_Distribution.mobileprovision" \
     "$UNZIPPED/Payload/Client.app/embedded.mobileprovision"
 
   for EXTEN in "${EXTENSIONS[@]}"; do
     cp "$PROFILES_DIR/Firefox_Beta_${EXTEN}_Distribution.mobileprovision" \
+      "$UNZIPPED/Payload/Client.app/Plugins/${EXTEN}.appex/embedded.mobileprovision"
+  done
+}
+
+function copy_production_profiles {
+  cp "$PROFILES_DIR/Firefox_Distribution.mobileprovision" \
+    "$UNZIPPED/Payload/Client.app/embedded.mobileprovision"
+
+  for EXTEN in "${EXTENSIONS[@]}"; do
+    cp "$PROFILES_DIR/Firefox_${EXTEN}_Distribution.mobileprovision" \
       "$UNZIPPED/Payload/Client.app/Plugins/${EXTEN}.appex/embedded.mobileprovision"
   done
 }
@@ -147,7 +158,11 @@ for EXTEN in "${EXTENSIONS[@]}"; do
 done
 
 echo "> Copying over the new profiles into targets"
-copy_profiles
+if [ "$IS_BETA" = "true" ]; then
+  copy_beta_profiles
+else 
+  copy_production_profiles
+fi
 
 echo "> Resigning each target and linked framework (deepest -> shallow-est in folder hierarchy)"
 resign_frameworks
