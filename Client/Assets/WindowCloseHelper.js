@@ -11,9 +11,16 @@
             value: {}
         });
     }
+ 
     if (!window.__firefox__.messages) {
-        window.__firefox__.messages = {};
+        Object.defineProperty(window.__firefox__, 'messages', {
+            enumerable: false,
+            configurable: false,
+            writable: false,
+            value: {}
+        });
     }
+ 
     window.__firefox__.messages.close = "FIREFOX_MESSAGE_CLOSE";
  
     var _close = window.close;
