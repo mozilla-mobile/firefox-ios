@@ -164,7 +164,7 @@ struct ASHorizontalScrollCellUX {
 /*
  The View that describes the topSite cell that appears in the tableView.
  */
-class ASHorizontalScrollCell: UITableViewCell {
+class ASHorizontalScrollCell: UICollectionViewCell {
 
     lazy var collectionView: UICollectionView = {
         let layout  = HorizontalFlowLayout()
@@ -173,7 +173,7 @@ class ASHorizontalScrollCell: UITableViewCell {
         collectionView.register(TopSiteItemCell.self, forCellWithReuseIdentifier: ASHorizontalScrollCellUX.TopSiteCellIdentifier)
         collectionView.backgroundColor = UIColor.clear
         collectionView.showsHorizontalScrollIndicator = false
-	 collectionView.isPagingEnabled = true
+        collectionView.isPagingEnabled = true
         return collectionView
     }()
 
@@ -198,7 +198,7 @@ class ASHorizontalScrollCell: UITableViewCell {
 
     lazy fileprivate var pageControlPress: UITapGestureRecognizer = {
         let press = UITapGestureRecognizer(target: self, action: #selector(ASHorizontalScrollCell.handlePageTap(_:)))
-        press.delegate = self
+   //     press.delegate = self
         return press
     }()
 
@@ -215,20 +215,18 @@ class ASHorizontalScrollCell: UITableViewCell {
         }
     }
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         isAccessibilityElement = false
         accessibilityIdentifier = "TopSitesCell"
         backgroundColor = UIColor.clear
         contentView.addSubview(collectionView)
         contentView.addSubview(pageControl)
-        self.selectionStyle = UITableViewCellSelectionStyle.none
         pageControl.addGestureRecognizer(self.pageControlPress)
 
         collectionView.snp.makeConstraints { make in
 
-            make.edges.equalTo(contentView).inset(UIEdgeInsets(top: 0, left: 0, bottom: ASHorizontalScrollCellUX.PageControlOffset, right: 0))
+            make.edges.equalTo(contentView)
         }
 
         pageControl.snp.makeConstraints { make in
@@ -237,6 +235,7 @@ class ASHorizontalScrollCell: UITableViewCell {
             make.centerX.equalTo(self.snp.centerX)
         }
     }
+
 
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -296,7 +295,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
 
     override func prepare() {
         super.prepare()
-        boundsSize = self.collectionView?.bounds.size ?? CGSize.zero
+        boundsSize = self.collectionView?.frame.size ?? CGSize.zero
     }
 
     func numberOfPages() -> Int {
@@ -321,7 +320,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
             verticalInsets = minimumInsets
             horizontalInsets = minimumInsets
             itemSize.width = (contentSize.width - (CGFloat(horizontalItemsCount + 1) * horizontalInsets)) / CGFloat(horizontalItemsCount)
-            itemSize.height = itemSize.width + 20
+            itemSize.height = itemSize.width + TopSiteCellUX.TitleHeight
         }
 
         insets = UIEdgeInsets(top: verticalInsets, left: horizontalInsets, bottom: verticalInsets, right: horizontalInsets)
@@ -400,7 +399,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
 */
 struct ASTopSiteSourceUX {
     static let verticalItemsForTraitSizes = [UIUserInterfaceSizeClass.compact: 1, UIUserInterfaceSizeClass.regular: 2, UIUserInterfaceSizeClass.unspecified: 0]
-    static let horizontalItemsForTraitSizes = [UIUserInterfaceSizeClass.compact: 4, UIUserInterfaceSizeClass.regular: 6, UIUserInterfaceSizeClass.unspecified: 0]
+    static let horizontalItemsForTraitSizes = [UIUserInterfaceSizeClass.compact: 4, UIUserInterfaceSizeClass.regular: 8, UIUserInterfaceSizeClass.unspecified: 0]
     static let maxNumberOfPages = 2
     static let CellIdentifier = "TopSiteItemCell"
 }
