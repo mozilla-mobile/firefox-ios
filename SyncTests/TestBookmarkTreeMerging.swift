@@ -131,17 +131,6 @@ private func getBrowserDBForFile(filename: String, files: FileAccessor) -> Brows
     return db
 }
 
-class FailFastTestCase: XCTestCase {
-    // This is how to make an assertion failure stop the current test function
-    // but continue with other test functions in the same test case.
-    // See http://stackoverflow.com/a/27016786/22003
-    override func invokeTest() {
-        self.continueAfterFailure = false
-        defer { self.continueAfterFailure = true }
-        super.invokeTest()
-    }
-}
-
 class TestBookmarkTreeMerging: FailFastTestCase {
     let files = MockFiles()
 
