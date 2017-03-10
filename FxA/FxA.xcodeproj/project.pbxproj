@@ -116,6 +116,13 @@
 		2FF8264B19D3CAFF003ED08E /* NSData+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF825E819D3CAFF003ED08E /* NSData+Utils.m */; };
 		2FF8264C19D3CAFF003ED08E /* NSString+Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FF825E919D3CAFF003ED08E /* NSString+Utils.h */; };
 		2FF8264D19D3CAFF003ED08E /* NSString+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF825EA19D3CAFF003ED08E /* NSString+Utils.m */; };
+		395C8E271E71826200A68E8C /* ece.h in Headers */ = {isa = PBXBuildFile; fileRef = 395C8E261E71826200A68E8C /* ece.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		395C8E2E1E71827200A68E8C /* aesgcm-header.c in Sources */ = {isa = PBXBuildFile; fileRef = 395C8E281E71827200A68E8C /* aesgcm-header.c */; };
+		395C8E2F1E71827200A68E8C /* base64url.c in Sources */ = {isa = PBXBuildFile; fileRef = 395C8E291E71827200A68E8C /* base64url.c */; };
+		395C8E301E71827200A68E8C /* buffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 395C8E2A1E71827200A68E8C /* buffer.c */; };
+		395C8E311E71827200A68E8C /* decrypt.c in Sources */ = {isa = PBXBuildFile; fileRef = 395C8E2B1E71827200A68E8C /* decrypt.c */; };
+		395C8E321E71827200A68E8C /* keys.c in Sources */ = {isa = PBXBuildFile; fileRef = 395C8E2C1E71827200A68E8C /* keys.c */; };
+		395C8E331E71827200A68E8C /* keys.h in Headers */ = {isa = PBXBuildFile; fileRef = 395C8E2D1E71827200A68E8C /* keys.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -242,6 +249,13 @@
 		2FF825E819D3CAFF003ED08E /* NSData+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Utils.m"; sourceTree = "<group>"; };
 		2FF825E919D3CAFF003ED08E /* NSString+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Utils.h"; sourceTree = "<group>"; };
 		2FF825EA19D3CAFF003ED08E /* NSString+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Utils.m"; sourceTree = "<group>"; };
+		395C8E261E71826200A68E8C /* ece.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ece.h; path = include/ece.h; sourceTree = "<group>"; };
+		395C8E281E71827200A68E8C /* aesgcm-header.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "aesgcm-header.c"; path = "src/aesgcm-header.c"; sourceTree = "<group>"; };
+		395C8E291E71827200A68E8C /* base64url.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = base64url.c; path = src/base64url.c; sourceTree = "<group>"; };
+		395C8E2A1E71827200A68E8C /* buffer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = buffer.c; path = src/buffer.c; sourceTree = "<group>"; };
+		395C8E2B1E71827200A68E8C /* decrypt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = decrypt.c; path = src/decrypt.c; sourceTree = "<group>"; };
+		395C8E2C1E71827200A68E8C /* keys.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = keys.c; path = src/keys.c; sourceTree = "<group>"; };
+		395C8E2D1E71827200A68E8C /* keys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = keys.h; path = src/keys.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -267,6 +281,7 @@
 		28F951F119D0F9FA00DCE892 = {
 			isa = PBXGroup;
 			children = (
+				395C8E251E7181FD00A68E8C /* ecec */,
 				28F951FD19D0F9FA00DCE892 /* FxA */,
 				28F9520719D0F9FB00DCE892 /* FxATests */,
 				28F951FC19D0F9FA00DCE892 /* Products */,
@@ -447,6 +462,21 @@
 			path = lib;
 			sourceTree = "<group>";
 		};
+		395C8E251E7181FD00A68E8C /* ecec */ = {
+			isa = PBXGroup;
+			children = (
+				395C8E281E71827200A68E8C /* aesgcm-header.c */,
+				395C8E291E71827200A68E8C /* base64url.c */,
+				395C8E2A1E71827200A68E8C /* buffer.c */,
+				395C8E2B1E71827200A68E8C /* decrypt.c */,
+				395C8E261E71826200A68E8C /* ece.h */,
+				395C8E2C1E71827200A68E8C /* keys.c */,
+				395C8E2D1E71827200A68E8C /* keys.h */,
+			);
+			name = ecec;
+			path = ../ThirdParty/ecec;
+			sourceTree = SOURCE_ROOT;
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -460,6 +490,7 @@
 				2FF8264419D3CAFF003ED08E /* NSData+Base32.h in Headers */,
 				2FA1801B19D3D32300F3D844 /* x509_vfy.h in Headers */,
 				2FA1801419D3D32300F3D844 /* tls1.h in Headers */,
+				395C8E271E71826200A68E8C /* ece.h in Headers */,
 				28F9520119D0F9FA00DCE892 /* FxA.h in Headers */,
 				2FA1801D19D3D32300F3D844 /* JSONWebTokenUtils.h in Headers */,
 				2FA1801A19D3D32300F3D844 /* x509.h in Headers */,
@@ -489,6 +520,7 @@
 				2FA1801319D3D32300F3D844 /* symhacks.h in Headers */,
 				2FA1800B19D3D32300F3D844 /* sha.h in Headers */,
 				2FA17FE719D3D32300F3D844 /* dtls1.h in Headers */,
+				395C8E331E71827200A68E8C /* keys.h in Headers */,
 				2FA17FD819D3D32300F3D844 /* bn.h in Headers */,
 				2FA17FE019D3D32300F3D844 /* conf_api.h in Headers */,
 				2FA1801519D3D32300F3D844 /* ts.h in Headers */,
@@ -649,10 +681,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				395C8E2E1E71827200A68E8C /* aesgcm-header.c in Sources */,
 				2FF825F219D3CAFF003ED08E /* CHNumber.m in Sources */,
 				2FF824E119D3C6D8003ED08E /* KeyPair.m in Sources */,
+				395C8E321E71827200A68E8C /* keys.c in Sources */,
 				2FF8264519D3CAFF003ED08E /* NSData+Base32.m in Sources */,
+				395C8E301E71827200A68E8C /* buffer.c in Sources */,
+				395C8E2F1E71827200A68E8C /* base64url.c in Sources */,
 				2FF824E319D3C6D8003ED08E /* PrivateKey.m in Sources */,
+				395C8E311E71827200A68E8C /* decrypt.c in Sources */,
 				2FF8264319D3CAFF003ED08E /* NSData+Base16.m in Sources */,
 				2FA1801E19D3D32300F3D844 /* JSONWebTokenUtils.m in Sources */,
 				2FF824E719D3C6D8003ED08E /* RSAKeyPair.m in Sources */,

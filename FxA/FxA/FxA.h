@@ -28,3 +28,4 @@ FOUNDATION_EXPORT const unsigned char FxAVersionString[];
 // Some are commented out because they rely on openssl/bn.h, which we can't find
 // when we try the import. *shrug*
 #include "ASNUtils.h"
+#include <FxA/ece.h>
