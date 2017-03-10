@@ -77,7 +77,6 @@
 		28532BEA1C472008000072D9 /* DeferredTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28786E541AB0F5FA009EA9EF /* DeferredTests.swift */; };
 		28532BEB1C472015000072D9 /* UtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A6CE891AC082E200C1A2D4 /* UtilsTests.swift */; };
 		28532CC11C473977000072D9 /* MockFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2791ABB533A00877008 /* MockFiles.swift */; };
-		28532CE61C48098D000072D9 /* ThreeWayTreeMerger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28532CE51C48098D000072D9 /* ThreeWayTreeMerger.swift */; };
 		28532D321C483E3D000072D9 /* CompletionOps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28532D311C483E3D000072D9 /* CompletionOps.swift */; };
 		2853C5411AD84C6800C4F31D /* TabsPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2853C5401AD84C6800C4F31D /* TabsPayload.swift */; };
 		2855611F1AEFFA1C00D5ED5B /* HistorySynchronizerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2855611E1AEFFA1C00D5ED5B /* HistorySynchronizerTests.swift */; };
@@ -4621,7 +4620,6 @@
 				2894C1691AE89DDC00F1F92F /* ClientsSynchronizer.swift in Sources */,
 				288E67C21B9E730900AE2C6A /* BookmarksDownloader.swift in Sources */,
 				28E91E751B443AD5009DF274 /* SyncConstants.swift in Sources */,
-				28532CE61C48098D000072D9 /* ThreeWayTreeMerger.swift in Sources */,
 				28C28BFD1C51A3B900D5460E /* Merging.swift in Sources */,
 				2F3724E91ABF3C19007607FA /* Synchronizer.swift in Sources */,
 				28AA941D1B97DCA800703DC6 /* BookmarkPayload.swift in Sources */,
@@ -6183,7 +6181,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
 				SWIFT_INCLUDE_PATHS = "$(PROJECT_DIR)/Storage/modules";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -7284,7 +7282,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
 				SWIFT_INCLUDE_PATHS = "$(PROJECT_DIR)/Storage/modules";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";

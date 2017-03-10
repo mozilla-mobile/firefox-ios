@@ -130,14 +130,16 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
                 })
             }
         } else {
-            run = doMirror >>== { result in
-                // Only bother trying to sync if the mirror operation wasn't interrupted or partial.
-                if case .completed = result {
-                    let applier = MergeApplier(buffer: buffer, storage: storage, client: storer, greenLight: greenLight)
-                    return applier.go()
-                }
-                return deferMaybe(result)
-            }
+            run = doMirror
+// Commented out due to Xcode 8.3 Swift Optimization issues: https://bugzilla.mozilla.org/show_bug.cgi?id=1342514
+//            run = doMirror >>== { result in
+//                // Only bother trying to sync if the mirror operation wasn't interrupted or partial.
+//                if case .completed = result {
+//                    let applier = MergeApplier(buffer: buffer, storage: storage, client: storer, greenLight: greenLight)
+//                    return applier.go()
+//                }
+//                return deferMaybe(result)
+//            }
         }
 
         run.upon { result in
@@ -150,37 +152,39 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
     }
 }
 
-class MergeApplier {
-    let greenLight: () -> Bool
-    let buffer: BookmarkBufferStorage
-    let storage: SyncableBookmarks
-    let client: BookmarkStorer
-    let merger: BookmarksStorageMerger
 
-    init(buffer: BookmarkBufferStorage & BufferItemSource, storage: SyncableBookmarks & LocalItemSource & MirrorItemSource, client: BookmarkStorer, greenLight: @escaping () -> Bool) {
-        self.greenLight = greenLight
-        self.buffer = buffer
-        self.storage = storage
-        self.merger = ThreeWayBookmarksStorageMerger(buffer: buffer, storage: storage)
-        self.client = client
-    }
-
-    // Exposed for use from tests.
-    func applyResult(_ result: BookmarksMergeResult) -> Success {
-        return result.applyToClient(self.client, storage: self.storage, buffer: self.buffer)
-    }
-
-    func go() -> SyncResult {
-        guard self.greenLight() else {
-            log.info("Green light turned red; not merging bookmarks.")
-            return deferMaybe(SyncStatus.completed)
-        }
-
-        return self.merger.merge()
-          >>== self.applyResult
-           >>> always(SyncStatus.completed)
-    }
-}
+// Commented out due to Xcode 8.3 Swift Optimization issues: https://bugzilla.mozilla.org/show_bug.cgi?id=1342514
+//class MergeApplier {
+//    let greenLight: () -> Bool
+//    let buffer: BookmarkBufferStorage
+//    let storage: SyncableBookmarks
+//    let client: BookmarkStorer
+//    let merger: BookmarksStorageMerger
+//
+//    init(buffer: BookmarkBufferStorage & BufferItemSource, storage: SyncableBookmarks & LocalItemSource & MirrorItemSource, client: BookmarkStorer, greenLight: @escaping () -> Bool) {
+//        self.greenLight = greenLight
+//        self.buffer = buffer
+//        self.storage = storage
+//        self.merger = ThreeWayBookmarksStorageMerger(buffer: buffer, storage: storage)
+//        self.client = client
+//    }
+//
+//    // Exposed for use from tests.
+//    func applyResult(_ result: BookmarksMergeResult) -> Success {
+//        return result.applyToClient(self.client, storage: self.storage, buffer: self.buffer)
+//    }
+//
+//    func go() -> SyncResult {
+//        guard self.greenLight() else {
+//            log.info("Green light turned red; not merging bookmarks.")
+//            return deferMaybe(SyncStatus.completed)
+//        }
+//
+//        return self.merger.merge()
+//          >>== self.applyResult
+//           >>> always(SyncStatus.completed)
+//    }
+//}
 
 /**
  * The merger takes as input an existing storage state (mirror and local override),
@@ -256,114 +260,115 @@ class NoOpBookmarksMerger: BookmarksStorageMerger {
     }
 }
 
-class ThreeWayBookmarksStorageMerger: BookmarksStorageMerger {
-    let buffer: BookmarkBufferStorage & BufferItemSource
-    let storage: SyncableBookmarks & LocalItemSource & MirrorItemSource
-
-    required init(buffer: BookmarkBufferStorage & BufferItemSource, storage: SyncableBookmarks & LocalItemSource & MirrorItemSource) {
-        self.buffer = buffer
-        self.storage = storage
-    }
-
-    // MARK: - BookmarksStorageMerger.
-
-    // Trivial one-way sync.
-    fileprivate func applyLocalDirectlyToMirror() -> Deferred<Maybe<BookmarksMergeResult>> {
-        // Theoretically, we do the following:
-        // * Construct a virtual bookmark tree overlaying local on the mirror.
-        // * Walk the tree to produce Sync records.
-        // * Upload those records.
-        // * Flatten that tree into the mirror, clearing local.
-        //
-        // This is simpler than a full three-way merge: it's tree delta then flatten.
-        //
-        // But we are confident that our local changes, when overlaid on the mirror, are
-        // consistent. So we can take a little bit of a shortcut: process records
-        // directly, rather than building a tree.
-        //
-        // So do the following:
-        // * Take everything in `local` and turn it into a Sync record. This means pulling
-        //   folder hierarchies out of localStructure, values out of local, and turning
-        //   them into records. Do so in hierarchical order if we can, and set sortindex
-        //   attributes to put folders first.
-        // * Upload those records in as few batches as possible. Ensure that each batch
-        //   is consistent, if at all possible, though we're hoping for server support for
-        //   atomic writes.
-        // * Take everything in local that was successfully uploaded and move it into the
-        //   mirror, using the timestamps we tracked from the upload.
-        //
-        // Optionally, set 'again' to true in our response, and do this work only for a
-        // particular subtree (e.g., a single root, or a single branch of changes). This
-        // allows us to make incremental progress.
-
-        // TODO
-        log.debug("No special-case local-only merging yet. Falling back to three-way merge.")
-        return self.threeWayMerge()
-    }
-
-    fileprivate func applyIncomingDirectlyToMirror() -> Deferred<Maybe<BookmarksMergeResult>> {
-        // If the incoming buffer is consistent -- and the result of the mirrorer
-        // gives us a hint about that! -- then we can move the buffer records into
-        // the mirror directly.
-        //
-        // Note that this is also true for entire subtrees: if none of the children
-        // of, say, 'menu________' are modified locally, then we can apply it without
-        // merging.
-        //
-        // TODO
-        log.debug("No special-case remote-only merging yet. Falling back to three-way merge.")
-        return self.threeWayMerge()
-    }
-
-    // This is exposed for testing.
-    func getMerger() -> Deferred<Maybe<ThreeWayTreeMerger>> {
-        return self.storage.treesForEdges() >>== { (local, remote) in
-            // At this point *might* have two empty trees. This should only be the case if
-            // there are value-only changes (e.g., a renamed bookmark).
-            // We don't fail in that case, but we could optimize here.
-
-            // Find the mirror tree so we can compare.
-            return self.storage.treeForMirror() >>== { mirror in
-                // At this point we know that there have been changes both locally and remotely.
-                // (Or, in the general case, changes either locally or remotely.)
-
-                let itemSources = ItemSources(local: CachingLocalItemSource(source: self.storage), mirror: CachingMirrorItemSource(source: self.storage), buffer: CachingBufferItemSource(source: self.buffer))
-                return deferMaybe(ThreeWayTreeMerger(local: local, mirror: mirror, remote: remote, itemSources: itemSources))
-            }
-        }
-    }
-
-    func getMergedTree() -> Deferred<Maybe<MergedTree>> {
-        return self.getMerger() >>== { $0.produceMergedTree() }
-    }
-
-    func threeWayMerge() -> Deferred<Maybe<BookmarksMergeResult>> {
-        return self.getMerger() >>== { $0.produceMergedTree() >>== $0.produceMergeResultFromMergedTree }
-    }
-
-    func merge() -> Deferred<Maybe<BookmarksMergeResult>> {
-        return self.buffer.isEmpty() >>== { noIncoming in
-
-            // TODO: the presence of empty desktop roots in local storage
-            // isn't something we really need to worry about. Can we skip it here?
-
-            return self.storage.isUnchanged() >>== { noOutgoing in
-                switch (noIncoming, noOutgoing) {
-                case (true, true):
-                    // Nothing to do!
-                    log.debug("No incoming and no outgoing records: no-op.")
-                    return deferMaybe(BookmarksMergeResult.NoOp(ItemSources(local: self.storage, mirror: self.storage, buffer: self.buffer)))
-                case (true, false):
-                    // No incoming records to apply. Unilaterally apply local changes.
-                    return self.applyLocalDirectlyToMirror()
-                case (false, true):
-                    // No outgoing changes. Unilaterally apply remote changes if they're consistent.
-                    return self.buffer.validate() >>> self.applyIncomingDirectlyToMirror
-                default:
-                    // Changes on both sides. Merge.
-                    return self.buffer.validate() >>> self.threeWayMerge
-                }
-            }
-        }
-    }
-}
+// Commented out due to Xcode 8.3 Swift Optimization issues: https://bugzilla.mozilla.org/show_bug.cgi?id=1342514
+//class ThreeWayBookmarksStorageMerger: BookmarksStorageMerger {
+//    let buffer: BookmarkBufferStorage & BufferItemSource
+//    let storage: SyncableBookmarks & LocalItemSource & MirrorItemSource
+//
+//    required init(buffer: BookmarkBufferStorage & BufferItemSource, storage: SyncableBookmarks & LocalItemSource & MirrorItemSource) {
+//        self.buffer = buffer
+//        self.storage = storage
+//    }
+//
+//    // MARK: - BookmarksStorageMerger.
+//
+//    // Trivial one-way sync.
+//    fileprivate func applyLocalDirectlyToMirror() -> Deferred<Maybe<BookmarksMergeResult>> {
+//        // Theoretically, we do the following:
+//        // * Construct a virtual bookmark tree overlaying local on the mirror.
+//        // * Walk the tree to produce Sync records.
+//        // * Upload those records.
+//        // * Flatten that tree into the mirror, clearing local.
+//        //
+//        // This is simpler than a full three-way merge: it's tree delta then flatten.
+//        //
+//        // But we are confident that our local changes, when overlaid on the mirror, are
+//        // consistent. So we can take a little bit of a shortcut: process records
+//        // directly, rather than building a tree.
+//        //
+//        // So do the following:
+//        // * Take everything in `local` and turn it into a Sync record. This means pulling
+//        //   folder hierarchies out of localStructure, values out of local, and turning
+//        //   them into records. Do so in hierarchical order if we can, and set sortindex
+//        //   attributes to put folders first.
+//        // * Upload those records in as few batches as possible. Ensure that each batch
+//        //   is consistent, if at all possible, though we're hoping for server support for
+//        //   atomic writes.
+//        // * Take everything in local that was successfully uploaded and move it into the
+//        //   mirror, using the timestamps we tracked from the upload.
+//        //
+//        // Optionally, set 'again' to true in our response, and do this work only for a
+//        // particular subtree (e.g., a single root, or a single branch of changes). This
+//        // allows us to make incremental progress.
+//
+//        // TODO
+//        log.debug("No special-case local-only merging yet. Falling back to three-way merge.")
+//        return self.threeWayMerge()
+//    }
+//
+//    fileprivate func applyIncomingDirectlyToMirror() -> Deferred<Maybe<BookmarksMergeResult>> {
+//        // If the incoming buffer is consistent -- and the result of the mirrorer
+//        // gives us a hint about that! -- then we can move the buffer records into
+//        // the mirror directly.
+//        //
+//        // Note that this is also true for entire subtrees: if none of the children
+//        // of, say, 'menu________' are modified locally, then we can apply it without
+//        // merging.
+//        //
+//        // TODO
+//        log.debug("No special-case remote-only merging yet. Falling back to three-way merge.")
+//        return self.threeWayMerge()
+//    }
+//
+//    // This is exposed for testing.
+//    func getMerger() -> Deferred<Maybe<ThreeWayTreeMerger>> {
+//        return self.storage.treesForEdges() >>== { (local, remote) in
+//            // At this point *might* have two empty trees. This should only be the case if
+//            // there are value-only changes (e.g., a renamed bookmark).
+//            // We don't fail in that case, but we could optimize here.
+//
+//            // Find the mirror tree so we can compare.
+//            return self.storage.treeForMirror() >>== { mirror in
+//                // At this point we know that there have been changes both locally and remotely.
+//                // (Or, in the general case, changes either locally or remotely.)
+//
+//                let itemSources = ItemSources(local: CachingLocalItemSource(source: self.storage), mirror: CachingMirrorItemSource(source: self.storage), buffer: CachingBufferItemSource(source: self.buffer))
+//                return deferMaybe(ThreeWayTreeMerger(local: local, mirror: mirror, remote: remote, itemSources: itemSources))
+//            }
+//        }
+//    }
+//
+//    func getMergedTree() -> Deferred<Maybe<MergedTree>> {
+//        return self.getMerger() >>== { $0.produceMergedTree() }
+//    }
+//
+//    func threeWayMerge() -> Deferred<Maybe<BookmarksMergeResult>> {
+//        return self.getMerger() >>== { $0.produceMergedTree() >>== $0.produceMergeResultFromMergedTree }
+//    }
+//
+//    func merge() -> Deferred<Maybe<BookmarksMergeResult>> {
+//        return self.buffer.isEmpty() >>== { noIncoming in
+//
+//            // TODO: the presence of empty desktop roots in local storage
+//            // isn't something we really need to worry about. Can we skip it here?
+//
+//            return self.storage.isUnchanged() >>== { noOutgoing in
+//                switch (noIncoming, noOutgoing) {
+//                case (true, true):
+//                    // Nothing to do!
+//                    log.debug("No incoming and no outgoing records: no-op.")
+//                    return deferMaybe(BookmarksMergeResult.NoOp(ItemSources(local: self.storage, mirror: self.storage, buffer: self.buffer)))
+//                case (true, false):
+//                    // No incoming records to apply. Unilaterally apply local changes.
+//                    return self.applyLocalDirectlyToMirror()
+//                case (false, true):
+//                    // No outgoing changes. Unilaterally apply remote changes if they're consistent.
+//                    return self.buffer.validate() >>> self.applyIncomingDirectlyToMirror
+//                default:
+//                    // Changes on both sides. Merge.
+//                    return self.buffer.validate() >>> self.threeWayMerge
+//                }
+//            }
+//        }
+//    }
+//}
