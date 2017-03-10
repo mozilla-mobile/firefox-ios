@@ -20,7 +20,7 @@ class HomePanels {
     let enabledPanels = [
         HomePanelDescriptor(
             makeViewController: { profile in
-                if UIDevice.current.userInterfaceIdiom != .pad && AppConstants.MOZ_AS_PANEL {
+                if AppConstants.MOZ_AS_PANEL {
                     return ActivityStreamPanel(profile: profile)
                 } else {
                     return TopSitesPanel(profile: profile)
