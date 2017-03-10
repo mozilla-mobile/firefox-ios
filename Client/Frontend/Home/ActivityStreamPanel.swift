@@ -24,8 +24,9 @@ struct ASPanelUX {
     // These ratios repersent how much space the topsites require.
     // They are calculated from the iphone 5 which requires 220px of vertical height on a 320px width screen.
     // 320/220 = 1.4545.
-    static let TopSiteDoubleRowRatio: CGFloat = 1.4545
-    static let TopSiteSingleRowRatio: CGFloat = 4.7333
+    static let TopSiteDoubleRowRatio: CGFloat = 1.27
+    static let TopSiteDoubleRowLargeRatio: CGFloat = 1.7 //used to show 4 columned topsites on larger width devices
+    static let TopSiteSingleRowRatio: CGFloat = 4.4
     static let PageControlOffsetSize: CGFloat = 20
 }
 
@@ -143,7 +144,11 @@ extension ActivityStreamPanel {
             case .highlights: return UITableViewAutomaticDimension
             case .topSites:
                 if traits.horizontalSizeClass == .compact && traits.verticalSizeClass == .regular {
-                    return CGFloat(Int(width / ASPanelUX.TopSiteDoubleRowRatio)) + ASPanelUX.PageControlOffsetSize
+                    if width > 320 {
+                        return CGFloat(Int(width / ASPanelUX.TopSiteDoubleRowLargeRatio)) + ASPanelUX.PageControlOffsetSize
+                    } else {
+                        return CGFloat(Int(width / ASPanelUX.TopSiteDoubleRowRatio)) + ASPanelUX.PageControlOffsetSize
+                    }
                 } else {
                     return CGFloat(Int(width / ASPanelUX.TopSiteSingleRowRatio)) + ASPanelUX.PageControlOffsetSize
                 }
