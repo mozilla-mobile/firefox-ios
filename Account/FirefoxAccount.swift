@@ -134,7 +134,6 @@ open class FirefoxAccount {
         dict["pushRegistration"] = pushRegistration
         dict["configurationLabel"] = configuration.label.rawValue
         dict["stateKeyLabel"] = stateCache.label
-        dict["pushRegistration"] = pushRegistration
         return dict
     }
 

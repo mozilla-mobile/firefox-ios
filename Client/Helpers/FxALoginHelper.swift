@@ -28,8 +28,8 @@ struct FxALoginFlags {
 
 /// This class manages the from successful login for FxAccounts to 
 /// asking the user for notification permissions, registering for 
-/// remote push notifications (APNS), registering for WebPush notifcations
-/// then creating an account and storing it in the profile.
+/// remote push notifications (APNS), then creating an account and 
+/// storing it in the profile.
 class FxALoginHelper {
     static var sharedInstance: FxALoginHelper = {
         return FxALoginHelper()

@@ -2941,8 +2941,10 @@ extension BrowserViewController: IntroViewControllerDelegate {
 }
 
 extension BrowserViewController: FxAContentViewControllerDelegate {
-    func contentViewControllerDidSignIn(_ viewController: FxAContentViewController, withFlags: FxALoginFlags) {
-        self.dismiss(animated: true, completion: nil)
+    func contentViewControllerDidSignIn(_ viewController: FxAContentViewController, withFlags flags: FxALoginFlags) {
+        if flags.verified {
+            self.dismiss(animated: true, completion: nil)
+        }
     }
 
     func contentViewControllerDidCancel(_ viewController: FxAContentViewController) {

@@ -662,12 +662,12 @@ extension AppDelegate {
     }
 
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
-        print("APNS NOTIFICATION \(userInfo)")
+        log.info("APNS NOTIFICATION \(userInfo)")
         completionHandler(.noData)
     }
 
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
-        print("APNS NOTIFICATION \(userInfo)")
+        log.info("APNS NOTIFICATION \(userInfo)")
     }
 }
 

@@ -266,10 +266,11 @@ extension Strings {
     public static let ContextMenuButtonToastNewPrivateTabOpenedButtonText = NSLocalizedString("ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText", value: "Switch", comment: "The button text in the Button Toast for switching to a fresh New Private Tab.")
 }
 
+// Receiving tabs sent from other devices.
 extension Strings {
-    public static let SentTabViewActionTitle = NSLocalizedString("View", comment: "View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440")
-    public static let SentTabBookmarkActionTitle = NSLocalizedString("Bookmark", comment: "Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440")
-    public static let SentTabAddToReadingListActionTitle = NSLocalizedString("Add to Reading List", comment: "Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440")
+    public static let SentTabViewActionTitle = NSLocalizedString("SentTab.ViewPage", value: "View",  comment: "Button title displayed in a notification when a sent tab has been received. Tapping on the button will open the URL.")
+    public static let SentTabBookmarkActionTitle = NSLocalizedString("SentTab.BookmarkPage", value: "Bookmark", comment: "Button title displayed in a notification when a sent tab has been received. Tapping on the button will add the URL as a bookmark.")
+    public static let SentTabAddToReadingListActionTitle = NSLocalizedString("SentTab.AddToReadingList", value: "Add to Reading List", comment: "Button title displayed in a notification when a sent tab has been received. Tapping on the button will add the page to the reading list.")
 }
 
 // Reader Mode.
