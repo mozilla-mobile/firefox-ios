@@ -28,6 +28,8 @@ struct ASPanelUX {
     static let TopSiteDoubleRowLargeRatio: CGFloat = 1.7 //used to show 4 columned topsites on larger width devices
     static let TopSiteSingleRowRatio: CGFloat = 4.4
     static let PageControlOffsetSize: CGFloat = 20
+    static let SectionInsetsForIpad: CGFloat = 100
+    static let CompactWidth: CGFloat = 320
 }
 
 class ActivityStreamPanel: UICollectionViewController, HomePanel {
@@ -73,7 +75,7 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
         super.viewDidLoad()
 
 
-    //    Section.allValues.forEach { tableView.register(Section($0.rawValue).cellType, forCellReuseIdentifier: Section($0.rawValue).cellIdentifier) }
+        Section.allValues.forEach { self.collectionView?.register(Section($0.rawValue).cellType, forCellWithReuseIdentifier: Section($0.rawValue).cellIdentifier)}
 
         collectionView?.backgroundColor = ASPanelUX.backgroundColor
 //        tableView.keyboardDismissMode = .onDrag
@@ -103,12 +105,18 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
         sessionStart = nil
     }
 
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        coordinator.animate(alongsideTransition: {context in
+            self.collectionViewLayout.invalidateLayout()
+            self.collectionView?.reloadData()
+        }, completion: nil)
+    }
+
+
+
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         self.topSitesManager.currentTraits = self.traitCollection
-        DispatchQueue.main.async {
-            self.collectionView?.reloadData()
-        }
     }
 }
 
@@ -144,7 +152,8 @@ extension ActivityStreamPanel {
             case .highlights: return UITableViewAutomaticDimension
             case .topSites:
                 if traits.horizontalSizeClass == .compact && traits.verticalSizeClass == .regular {
-                    if width > 320 {
+                    // On more compact width devices (iPhone SE) we force a 3 column layout
+                    if width > ASPanelUX.CompactWidth {
                         return CGFloat(Int(width / ASPanelUX.TopSiteDoubleRowLargeRatio)) + ASPanelUX.PageControlOffsetSize
                     } else {
                         return CGFloat(Int(width / ASPanelUX.TopSiteDoubleRowRatio)) + ASPanelUX.PageControlOffsetSize
@@ -179,11 +188,11 @@ extension ActivityStreamPanel {
             }
         }
 
-        var cellType: UITableViewCell.Type {
+        var cellType: UICollectionViewCell.Type {
             switch self {
             case .topSites: return ASHorizontalScrollCell.self
-            case .highlights: return AlternateSimpleHighlightCell.self
-            case .highlightIntro: return HighlightIntroCell.self
+            case .highlights: return ASHorizontalScrollCell.self
+            case .highlightIntro: return ASHorizontalScrollCell.self
             }
         }
 
@@ -210,14 +219,22 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        //Look at how cell height was done before. And modify it to return a CGrect instead of a width. 
-        //return Section(indexPath.section).cellHeight(self.traitCollection, width: self.view.frame.width)
-        return CGSize.zero
+        // This only returns height for topsites. Modify to support all the cells.
+        let height = Section(indexPath.section).cellHeight(self.traitCollection, width: self.view.frame.width)
+        let inset = UIDevice.current.userInterfaceIdiom == .pad ? (ASPanelUX.SectionInsetsForIpad * 2) : 0
+        return CGSize(width: self.view.frame.width - inset, height: height)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize.zero
     }
+
+   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        //insets should match every section
+        let inset = UIDevice.current.userInterfaceIdiom == .pad ? ASPanelUX.SectionInsetsForIpad : 0
+        return UIEdgeInsets(top: 0, left: inset, bottom: 0, right: inset)
+    }
+
 
 //    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
 //        // Depending on if highlights are present. Hide certain section headers.
@@ -260,6 +277,7 @@ extension ActivityStreamPanel {
 
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1  //only topsites works right now
         return Section.count
     }
 
@@ -275,8 +293,11 @@ extension ActivityStreamPanel {
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
-        return cell
+        let identifier = Section(indexPath.section).cellIdentifier
+
+
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath)
+        return configureTopSitesCell(cell, forIndexPath: indexPath)
 
         /* All wrong.
         let identifier = Section(indexPath.section).cellIdentifier
@@ -293,7 +314,7 @@ extension ActivityStreamPanel {
     }
 
     //should all be collectionview
-    func configureTopSitesCell(_ cell: UITableViewCell, forIndexPath indexPath: IndexPath) -> UITableViewCell {
+    func configureTopSitesCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         let topSiteCell = cell as! ASHorizontalScrollCell
         topSiteCell.delegate = self.topSitesManager
         return cell
