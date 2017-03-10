@@ -225,4 +225,28 @@ extension Navigator {
         self.goto(NewTabScreen)
         self.openURL(urlString: urlString)
     }
+
+    // Closes all Tabs from the option in TabTrayMenu
+    func closeAllTabs() {
+        self.goto(TabTrayMenu)
+        let app = XCUIApplication()
+        app.collectionViews.cells["CloseAllTabsMenuItem"].tap()
+        self.nowAt(NewTabScreen)
+    }
+
+    // Add a new Tab from the New Tab option in Browser Tab Menu
+    func createNewTab() {
+        self.goto(NewTabMenu)
+        let app = XCUIApplication()
+        app.collectionViews.cells["NewTabMenuItem"].tap()
+        self.nowAt(NewTabScreen)
+    }
+
+    // Add Tab(s) from the Tab Tray
+    func createSeveralTabsFromTabTray(numberTabs: Int) {
+        for _ in 1...numberTabs {
+            self.goto(NewTabScreen)
+            self.goto(TabTray)
+        }
+    }
 }

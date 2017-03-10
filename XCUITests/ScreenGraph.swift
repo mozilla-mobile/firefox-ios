@@ -212,7 +212,6 @@ extension ScreenGraphNode {
      */
     func tap(_ element: XCUIElement, to nodeName: String, file: String = #file, line: UInt = #line) {
         self.gesture(withElement: element, to: nodeName, file: file, line: line) {
-            // TODO check if this element is enabled
             element.tap()
         }
     }
