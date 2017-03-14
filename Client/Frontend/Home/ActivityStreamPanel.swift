@@ -360,7 +360,7 @@ extension ActivityStreamPanel {
         profile.recommendations.removeHighlightForURL(site.url).uponQueue(DispatchQueue.main) { result in
             guard result.isSuccess else { return }
             self.invalidateHighlights().uponQueue(DispatchQueue.main) { _ in
-                self.reloadAll()
+                self.tableView.reloadSections([1], with: .none)
             }
         }
     }
