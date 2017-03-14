@@ -263,7 +263,7 @@ class SearchEngines {
             assert(FileManager.default.fileExists(atPath: fullPath), "\(fullPath) exists")
 
             let engine = parser.parse(fullPath, engineID: engineName)
-            if let engine = parser.parse(fullPath, engineID: engineName){
+            if let engine = parser.parse(fullPath, engineID: engineName) {
                 print (")Engine at \(fullPath) successfully parsed")
                 engines.append(engine)
             }
