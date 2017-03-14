@@ -364,20 +364,21 @@ extension TopTabsViewController {
             return nil
         }
 
-        // Create based on what is visibile but filter out tabs we are about to insert.
-        let reloads: [IndexPath] = reloadTabs.flatMap { tab in
-            guard let tab = tab, newTabs.index(of: tab) != nil else {
-                return nil
-            }
-            return IndexPath(row: newTabs.index(of: tab)!, section: 0)
-        }.filter { return inserts.index(of: $0) == nil }
-
         let deletes: [IndexPath] = oldTabs.enumerated().flatMap { index, tab in
             if newTabs.index(of: tab) == nil {
                 return IndexPath(row: index, section: 0)
             }
             return nil
         }
+
+        // Create based on what is visibile but filter out tabs we are about to insert/delete.
+        let reloads: [IndexPath] = reloadTabs.flatMap { tab in
+            guard let tab = tab, newTabs.index(of: tab) != nil else {
+                return nil
+            }
+            return IndexPath(row: newTabs.index(of: tab)!, section: 0)
+            }.filter { return inserts.index(of: $0) == nil && deletes.index(of: $0) == nil }
+
         return TopTabChangeSet(reloadArr: reloads, insertArr: inserts, deleteArr: deletes)
     }
 
