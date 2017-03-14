@@ -263,9 +263,10 @@ class SearchEngines {
             assert(FileManager.default.fileExists(atPath: fullPath), "\(fullPath) exists")
 
             let engine = parser.parse(fullPath, engineID: engineName)
-            assert(engine != nil, "Engine at \(fullPath) successfully parsed")
-
-            engines.append(engine!)
+            if let engine = parser.parse(fullPath, engineID: engineName){
+                print (")Engine at \(fullPath) successfully parsed")
+                engines.append(engine)
+            }
         }
 
         let defaultEngineFile = (searchDirectory as NSString).appendingPathComponent("default.txt")
