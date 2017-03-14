@@ -18,15 +18,15 @@ private var TODOPageLoadErrorString = NSLocalizedString("Could not load page.", 
 class SettingsContentViewController: UIViewController, WKNavigationDelegate {
     let interstitialBackgroundColor: UIColor
     var settingsTitle: NSAttributedString?
-    var url: NSURL!
-    var timer: NSTimer?
+    var url: URL!
+    var timer: Timer?
 
     var isLoaded: Bool = false {
         didSet {
             if isLoaded {
-                UIView.transitionFromView(interstitialView, toView: webView,
+                UIView.transition(from: interstitialView, to: webView,
                     duration: 0.5,
-                    options: UIViewAnimationOptions.TransitionCrossDissolve,
+                    options: UIViewAnimationOptions.transitionCrossDissolve,
                     completion: { finished in
                         self.interstitialView.removeFromSuperview()
                         self.interstitialSpinnerView.stopAnimating()
@@ -35,13 +35,13 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         }
     }
 
-    private var isError: Bool = false {
+    fileprivate var isError: Bool = false {
         didSet {
             if isError {
-                interstitialErrorView.hidden = false
-                UIView.transitionFromView(interstitialSpinnerView, toView: interstitialErrorView,
+                interstitialErrorView.isHidden = false
+                UIView.transition(from: interstitialSpinnerView, to: interstitialErrorView,
                     duration: 0.5,
-                    options: UIViewAnimationOptions.TransitionCrossDissolve,
+                    options: UIViewAnimationOptions.transitionCrossDissolve,
                     completion: { finished in
                         self.interstitialSpinnerView.removeFromSuperview()
                         self.interstitialSpinnerView.stopAnimating()
@@ -51,27 +51,27 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
     }
 
     // The view shown while the content is loading in the background web view.
-    private var interstitialView: UIView!
-    private var interstitialSpinnerView: UIActivityIndicatorView!
-    private var interstitialErrorView: UILabel!
+    fileprivate var interstitialView: UIView!
+    fileprivate var interstitialSpinnerView: UIActivityIndicatorView!
+    fileprivate var interstitialErrorView: UILabel!
 
     // The web view that displays content.
     var webView: WKWebView!
 
-    private func startLoading(timeout: Double = DefaultTimeoutTimeInterval) {
+    fileprivate func startLoading(_ timeout: Double = DefaultTimeoutTimeInterval) {
         if self.isLoaded {
             return
         }
         if timeout > 0 {
-            self.timer = NSTimer.scheduledTimerWithTimeInterval(timeout, target: self, selector: #selector(SettingsContentViewController.SELdidTimeOut), userInfo: nil, repeats: false)
+            self.timer = Timer.scheduledTimer(timeInterval: timeout, target: self, selector: #selector(SettingsContentViewController.SELdidTimeOut), userInfo: nil, repeats: false)
         } else {
             self.timer = nil
         }
-        self.webView.loadRequest(NSURLRequest(URL: url))
+        self.webView.load(URLRequest(url: url))
         self.interstitialSpinnerView.startAnimating()
     }
 
-    init(backgroundColor: UIColor = UIColor.whiteColor(), title: NSAttributedString? = nil) {
+    init(backgroundColor: UIColor = UIColor.white, title: NSAttributedString? = nil) {
         interstitialBackgroundColor = backgroundColor
         settingsTitle = title
         super.init(nibName: nil, bundle: nil)
@@ -90,7 +90,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
 
         self.webView = makeWebView()
         view.addSubview(webView)
-        self.webView.snp_remakeConstraints { make in
+        self.webView.snp.remakeConstraints { make in
             make.edges.equalTo(self.view)
         }
 
@@ -100,7 +100,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         self.interstitialSpinnerView = ret.1
         self.interstitialErrorView = ret.2
         view.addSubview(interstitialView)
-        self.interstitialView.snp_remakeConstraints { make in
+        self.interstitialView.snp.remakeConstraints { make in
             make.edges.equalTo(self.view)
         }
 
@@ -117,33 +117,33 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         return webView
     }
 
-    private func makeInterstitialViews() -> (UIView, UIActivityIndicatorView, UILabel) {
+    fileprivate func makeInterstitialViews() -> (UIView, UIActivityIndicatorView, UILabel) {
         let view = UIView()
 
         // Keeping the background constant prevents a pop of mismatched color.
         view.backgroundColor = interstitialBackgroundColor
 
-        let spinner = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
+        let spinner = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
         view.addSubview(spinner)
 
         let error = UILabel()
         if let _ = settingsTitle {
             error.text = TODOPageLoadErrorString
-            error.textColor = UIColor.redColor() // Firefox Orange!
-            error.textAlignment = NSTextAlignment.Center
+            error.textColor = UIColor.red // Firefox Orange!
+            error.textAlignment = NSTextAlignment.center
         }
-        error.hidden = true
+        error.isHidden = true
         view.addSubview(error)
 
-        spinner.snp_makeConstraints { make in
+        spinner.snp.makeConstraints { make in
             make.center.equalTo(view)
             return
         }
 
-        error.snp_makeConstraints { make in
+        error.snp.makeConstraints { make in
             make.center.equalTo(view)
-            make.left.equalTo(view.snp_left).offset(20)
-            make.right.equalTo(view.snp_right).offset(-20)
+            make.left.equalTo(view.snp.left).offset(20)
+            make.right.equalTo(view.snp.right).offset(-20)
             make.height.equalTo(44)
             return
         }
@@ -156,15 +156,24 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         self.isError = true
     }
 
-    func webView(webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: NSError) {
+    func webView(_ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+        // If this is a request to our local web server, use our private credentials.
+        if challenge.protectionSpace.host == "localhost" && challenge.protectionSpace.port == Int(WebServer.sharedInstance.server.port) {
+            completionHandler(.useCredential, WebServer.sharedInstance.credentials)
+            return
+        }
+        completionHandler(URLSession.AuthChallengeDisposition.performDefaultHandling, nil)
+    }
+
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
         SELdidTimeOut()
     }
 
-    func webView(webView: WKWebView, didFailNavigation navigation: WKNavigation!, withError error: NSError) {
+    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         SELdidTimeOut()
     }
 
-    func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         self.timer?.invalidate()
         self.timer = nil
         self.isLoaded = true

@@ -15,13 +15,13 @@ public final class MutableBox<T>: MutableBoxType, CustomStringConvertible {
 	public var value: T
 
 	/// Constructs a new MutableBox by transforming `value` by `f`.
-	public func map<U>(f: T -> U) -> MutableBox<U> {
+	public func map<U>(_ f: (T) -> U) -> MutableBox<U> {
 		return MutableBox<U>(f(value))
 	}
 
 	// MARK: Printable
 
 	public var description: String {
-		return String(value)
+		return String(describing: value)
 	}
 }

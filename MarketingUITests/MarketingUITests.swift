@@ -1,6 +1,6 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
-* License, v. 2.0. If a copy of the MPL was not distributed with this
-* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import XCTest
 
@@ -46,7 +46,7 @@ class MarketingSnapshotTests: XCTestCase {
         expectationForPredicate(exists, evaluatedWithObject: progressIndicator, handler: nil)
         expectationForPredicate(loaded, evaluatedWithObject: progressIndicator, handler: nil)
         app.typeText("\n")
-        waitForExpectationsWithTimeout(LoadingTimeout, handler: nil)
+        waitForExpectations(timeout: LoadingTimeout, handler: nil)
     }
 
     func testTakeMarketingScreenshots() {

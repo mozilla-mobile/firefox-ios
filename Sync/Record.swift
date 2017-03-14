@@ -8,7 +8,7 @@ import XCGLogger
 
 private let log = Logger.syncLogger
 
-let ONE_YEAR_IN_SECONDS = 365 * 24 * 60 * 60;
+let ONE_YEAR_IN_SECONDS = 365 * 24 * 60 * 60
 
 /**
  * Immutable representation for Sync records.
@@ -19,13 +19,13 @@ let ONE_YEAR_IN_SECONDS = 365 * 24 * 60 * 60;
  *
  * Deletedness is a property of the payload.
  */
-public class Record<T: CleartextPayloadJSON> {
-    public let id: String
-    public let payload: T
+open class Record<T: CleartextPayloadJSON> {
+    open let id: String
+    open let payload: T
 
-    public let modified: Timestamp
-    public let sortindex: Int
-    public let ttl: Int?              // Seconds. Can be null, which means 'don't expire'.
+    open let modified: Timestamp
+    open let sortindex: Int
+    open let ttl: Int?              // Seconds. Can be null, which means 'don't expire'.
 
     // This is a hook for decryption.
     // Right now it only parses the string. In subclasses, it'll parse the
@@ -39,24 +39,24 @@ public class Record<T: CleartextPayloadJSON> {
     //   should also specify a record for decryption.
     //
     // @seealso EncryptedRecord.
-    public class func payloadFromPayloadString(envelope: EnvelopeJSON, payload: String) -> T? {
+    open class func payloadFromPayloadString(_ envelope: EnvelopeJSON, payload: String) -> T? {
         return T(payload)
     }
 
     // TODO: consider using error tuples.
-    public class func fromEnvelope(envelope: EnvelopeJSON, payloadFactory: (String) -> T?) -> Record<T>? {
+    open class func fromEnvelope(_ envelope: EnvelopeJSON, payloadFactory: (String) -> T?) -> Record<T>? {
         if !(envelope.isValid()) {
             log.error("Invalid envelope.")
             return nil
         }
-
+        print("the payload is \(envelope.payload)")
         guard let payload = payloadFactory(envelope.payload) else {
             log.error("Unable to parse payload.")
             return nil
         }
 
         if !payload.isValid() {
-            log.warning("Invalid payload \(payload.toString(true)).")
+            log.warning("Invalid payload \(payload.json.rawString()).")
         }
 
         return Record<T>(envelope: envelope, payload: payload)
@@ -74,23 +74,23 @@ public class Record<T: CleartextPayloadJSON> {
     init(id: GUID, payload: T, modified: Timestamp = Timestamp(time(nil)), sortindex: Int = 0, ttl: Int? = nil) {
         self.id = id
 
-        self.payload = payload;
+        self.payload = payload
 
         self.modified = modified
         self.sortindex = sortindex
         self.ttl = ttl
     }
 
-    func equalIdentifiers(rec: Record) -> Bool {
+    func equalIdentifiers(_ rec: Record) -> Bool {
         return rec.id == self.id
     }
 
     // Override me.
-    func equalPayloads(rec: Record) -> Bool {
+    func equalPayloads(_ rec: Record) -> Bool {
         return equalIdentifiers(rec) && rec.payload.deleted == self.payload.deleted
     }
 
-    func equals(rec: Record) -> Bool {
+    func equals(_ rec: Record) -> Bool {
         return rec.sortindex == self.sortindex &&
                rec.modified == self.modified &&
                equalPayloads(rec)

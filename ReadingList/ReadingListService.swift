@@ -7,36 +7,36 @@ import Shared
 
 /// This is the public API that the application and extension talk to. It exposes the bare minimum
 /// functions that need to be public and hides details like storage and syncing.
-public class ReadingListService {
+open class ReadingListService {
     var databasePath: String
     var storage: ReadingListStorage
 
     public init?(profileStoragePath: String) {
-        databasePath = (profileStoragePath as NSString).stringByAppendingPathComponent("ReadingList.db")
+        databasePath = (profileStoragePath as NSString).appendingPathComponent("ReadingList.db")
         storage = ReadingListSQLStorage(path: "\(profileStoragePath)/ReadingList.db")
     }
 
-    public func getAvailableRecords() -> Maybe<[ReadingListClientRecord]> {
+    open func getAvailableRecords() -> Maybe<[ReadingListClientRecord]> {
         return storage.getAvailableRecords()
     }
 
-    public func deleteRecord(record: ReadingListClientRecord) -> Maybe<Void> {
+    @discardableResult open func deleteRecord(_ record: ReadingListClientRecord) -> Maybe<Void> {
         return storage.deleteRecord(record)
     }
 
-    public func deleteAllRecords() -> Maybe<Void>{
+    open func deleteAllRecords() -> Maybe<Void> {
         return storage.deleteAllRecords()
     }
 
-    public func createRecordWithURL(url: String, title: String, addedBy: String) -> Maybe<ReadingListClientRecord> {
+    @discardableResult open func createRecordWithURL(_ url: String, title: String, addedBy: String) -> Maybe<ReadingListClientRecord> {
         return storage.createRecordWithURL(url, title: title, addedBy: addedBy)
     }
 
-    public func getRecordWithURL(url: String) -> Maybe<ReadingListClientRecord?> {
+    open func getRecordWithURL(_ url: String) -> Maybe<ReadingListClientRecord?> {
         return storage.getRecordWithURL(url)
     }
 
-    public func updateRecord(record: ReadingListClientRecord, unread: Bool) -> Maybe<ReadingListClientRecord?> {
+    @discardableResult open func updateRecord(_ record: ReadingListClientRecord, unread: Bool) -> Maybe<ReadingListClientRecord?> {
         return storage.updateRecord(record, unread: unread)
     }
 }

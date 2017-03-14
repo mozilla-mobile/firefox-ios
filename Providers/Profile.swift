@@ -12,16 +12,19 @@ import Sync
 import XCGLogger
 import SwiftKeychainWrapper
 import Deferred
+import SwiftyJSON
 
 private let log = Logger.syncLogger
 
-public let NotificationProfileDidStartSyncing = "NotificationProfileDidStartSyncing"
-public let NotificationProfileDidFinishSyncing = "NotificationProfileDidFinishSyncing"
-public let ProfileRemoteTabsSyncDelay: NSTimeInterval = 0.1
+public let NotificationProfileDidStartSyncing = Notification.Name("NotificationProfileDidStartSyncing")
+public let NotificationProfileDidFinishSyncing = Notification.Name("NotificationProfileDidFinishSyncing")
+
+public let ProfileRemoteTabsSyncDelay: TimeInterval = 0.1
 
 public protocol SyncManager {
     var isSyncing: Bool { get }
     var lastSyncFinishTime: Timestamp? { get set }
+    var syncDisplayState: SyncDisplayState? { get }
 
     func hasSyncedHistory() -> Deferred<Maybe<Bool>>
     func hasSyncedLogins() -> Deferred<Maybe<Bool>>
@@ -30,7 +33,7 @@ public protocol SyncManager {
     func syncClientsThenTabs() -> SyncResult
     func syncHistory() -> SyncResult
     func syncLogins() -> SyncResult
-    func syncEverything() -> Success
+    @discardableResult func syncEverything(why: SyncReason) -> Success
 
     // The simplest possible approach.
     func beginTimedSyncs()
@@ -39,13 +42,15 @@ public protocol SyncManager {
     func applicationDidBecomeActive()
 
     func onNewProfile()
-    func onRemovedAccount(account: FirefoxAccount?) -> Success
-    func onAddedAccount() -> Success
+    @discardableResult func onRemovedAccount(_ account: FirefoxAccount?) -> Success
+    @discardableResult func onAddedAccount() -> Success
 }
 
 typealias EngineIdentifier = String
 typealias SyncFunction = (SyncDelegate, Prefs, Ready) -> SyncResult
-private typealias EngineStatus = (EngineIdentifier, SyncStatus)
+typealias EngineStatus = (EngineIdentifier, SyncStatus)
+typealias EngineResults = [EngineStatus]
+typealias SyncOperationResult = (engineResults: Maybe<EngineResults>, stats: SyncOperationStatsSession?)
 
 class ProfileFileAccessor: FileAccessor {
     convenience init(profile: Profile) {
@@ -56,15 +61,15 @@ class ProfileFileAccessor: FileAccessor {
         let profileDirName = "profile.\(localName)"
 
         // Bug 1147262: First option is for device, second is for simulator.
-        var rootPath: NSString
-        if let sharedContainerIdentifier = AppInfo.sharedContainerIdentifier(), url = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(sharedContainerIdentifier), path = url.path {
-            rootPath = path as NSString
+        var rootPath: String
+        if let sharedContainerIdentifier = AppInfo.sharedContainerIdentifier(), let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: sharedContainerIdentifier) {
+            rootPath = url.path
         } else {
             log.error("Unable to find the shared container. Defaulting profile location to ~/Documents instead.")
-            rootPath = (NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)[0]) as NSString
+            rootPath = (NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)[0])
         }
 
-        super.init(rootPath: rootPath.stringByAppendingPathComponent(profileDirName))
+        super.init(rootPath: URL(fileURLWithPath: rootPath).appendingPathComponent(profileDirName).path)
     }
 }
 
@@ -75,9 +80,9 @@ class CommandStoringSyncDelegate: SyncDelegate {
         profile = BrowserProfile(localName: "profile", app: nil)
     }
 
-    func displaySentTabForURL(URL: NSURL, title: String) {
+    public func displaySentTabForURL(_ URL: URL, title: String) {
         let item = ShareItem(url: URL.absoluteString, title: title, favicon: nil)
-        self.profile.queue.addToQueue(item)
+        let _ = self.profile.queue.addToQueue(item)
     }
 }
 
@@ -94,9 +99,9 @@ let TabSendTitleKey = "TabSendTitle"
 let TabSendCategory = "TabSendCategory"
 
 enum SentTabAction: String {
-    case View = "TabSendViewAction"
-    case Bookmark = "TabSendBookmarkAction"
-    case ReadingList = "TabSendReadingListAction"
+    case view = "TabSendViewAction"
+    case bookmark = "TabSendBookmarkAction"
+    case readingList = "TabSendReadingListAction"
 }
 
 class BrowserProfileSyncDelegate: SyncDelegate {
@@ -106,19 +111,18 @@ class BrowserProfileSyncDelegate: SyncDelegate {
         self.app = app
     }
 
-    // SyncDelegate
-    func displaySentTabForURL(URL: NSURL, title: String) {
+    open func displaySentTabForURL(_ URL: URL, title: String) {
         // check to see what the current notification settings are and only try and send a notification if
         // the user has agreed to them
-        if let currentSettings = app.currentUserNotificationSettings() {
-            if currentSettings.types.rawValue & UIUserNotificationType.Alert.rawValue != 0 {
+        if let currentSettings = app.currentUserNotificationSettings {
+            if currentSettings.types.rawValue & UIUserNotificationType.alert.rawValue != 0 {
                 if Logger.logPII {
                     log.info("Displaying notification for URL \(URL.absoluteString)")
                 }
 
                 let notification = UILocalNotification()
-                notification.fireDate = NSDate()
-                notification.timeZone = NSTimeZone.defaultTimeZone()
+                notification.fireDate = Date()
+                notification.timeZone = NSTimeZone.default
                 notification.alertBody = String(format: NSLocalizedString("New tab: %@: %@", comment:"New tab [title] [url]"), title, URL.absoluteString)
                 notification.userInfo = [TabSendURLKey: URL.absoluteString, TabSendTitleKey: title]
                 notification.alertAction = nil
@@ -134,19 +138,25 @@ class BrowserProfileSyncDelegate: SyncDelegate {
  * A Profile manages access to the user's data.
  */
 protocol Profile: class {
-    var bookmarks: protocol<BookmarksModelFactorySource, ShareToDestination, SyncableBookmarks, LocalItemSource, MirrorItemSource> { get }
+    var bookmarks: BookmarksModelFactorySource & KeywordSearchSource & ShareToDestination & SyncableBookmarks & LocalItemSource & MirrorItemSource { get }
     // var favicons: Favicons { get }
     var prefs: Prefs { get }
     var queue: TabQueue { get }
     var searchEngines: SearchEngines { get }
     var files: FileAccessor { get }
-    var history: protocol<BrowserHistory, SyncableHistory, ResettableSyncStorage> { get }
+    var history: BrowserHistory & SyncableHistory & ResettableSyncStorage { get }
+    var metadata: Metadata { get }
+    var recommendations: HistoryRecommendations { get }
     var favicons: Favicons { get }
     var readingList: ReadingListService? { get }
-    var logins: protocol<BrowserLogins, SyncableLogins, ResettableSyncStorage> { get }
+    var logins: BrowserLogins & SyncableLogins & ResettableSyncStorage { get }
     var certStore: CertStore { get }
+    var recentlyClosedTabs: ClosedTabsStore { get }
 
+    var isShutdown: Bool { get }
+    
     func shutdown()
+    func reopen()
 
     // I got really weird EXC_BAD_ACCESS errors on a non-null reference when I made this a getter.
     // Similar to <http://stackoverflow.com/questions/26029317/exc-bad-access-when-indirectly-accessing-inherited-member-in-swift>.
@@ -163,24 +173,59 @@ protocol Profile: class {
 
     func getAccount() -> FirefoxAccount?
     func removeAccount()
-    func setAccount(account: FirefoxAccount)
+    func setAccount(_ account: FirefoxAccount)
+    func flushAccount()
 
     func getClients() -> Deferred<Maybe<[RemoteClient]>>
     func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>>
     func getCachedClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>>
 
-    func storeTabs(tabs: [RemoteTab]) -> Deferred<Maybe<Int>>
+    @discardableResult func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>>
 
-    func sendItems(items: [ShareItem], toClients clients: [RemoteClient])
+    func sendItems(_ items: [ShareItem], toClients clients: [RemoteClient])
 
     var syncManager: SyncManager { get }
+    var isChinaEdition: Bool { get }
 }
 
-public class BrowserProfile: Profile {
-    private let name: String
+fileprivate let PrefKeyClientID = "PrefKeyClientID"
+extension Profile {
+    var clientID: String {
+        let clientID: String
+        if let id = prefs.stringForKey(PrefKeyClientID) {
+            clientID = id
+        } else {
+            clientID = UUID().uuidString
+            prefs.setString(clientID, forKey: PrefKeyClientID)
+        }
+        return clientID
+    }
+}
+
+open class BrowserProfile: Profile {
+    fileprivate let name: String
+    fileprivate let keychain: KeychainWrapper
+    var isShutdown = false
+
     internal let files: FileAccessor
 
-    weak private var app: UIApplication?
+    weak fileprivate var app: UIApplication?
+
+    let db: BrowserDB
+    let loginsDB: BrowserDB
+
+    private static var loginsKey: String? {
+        let key = "sqlcipher.key.logins.db"
+        let keychain = KeychainWrapper.sharedAppContainerKeychain
+        if keychain.hasValue(forKey: key) {
+            return keychain.string(forKey: key)
+        }
+
+        let Length: UInt = 256
+        let secret = Bytes.generateRandomBytes(Length).base64EncodedString
+        keychain.set(secret, forKey: key)
+        return secret
+    }
 
     /**
      * N.B., BrowserProfile is used from our extensions, often via a pattern like
@@ -192,33 +237,36 @@ public class BrowserProfile: Profile {
      * see Bug 1218833. Be sure to only perform synchronous actions here.
      */
     init(localName: String, app: UIApplication?, clear: Bool = false) {
-        log.debug("Initing profile \(localName) on thread \(NSThread.currentThread()).")
+        log.debug("Initing profile \(localName) on thread \(Thread.current).")
         self.name = localName
         self.files = ProfileFileAccessor(localName: localName)
         self.app = app
-        
+        self.keychain = KeychainWrapper.sharedAppContainerKeychain
+
         if clear {
             do {
-                try NSFileManager.defaultManager().removeItemAtPath(self.files.rootPath as String)
+                try FileManager.default.removeItem(atPath: self.files.rootPath as String)
             } catch {
                 log.info("Cannot clear profile: \(error)")
             }
         }
 
-        let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.addObserver(self, selector: #selector(BrowserProfile.onLocationChange(_:)), name: NotificationOnLocationChange, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(BrowserProfile.onProfileDidFinishSyncing(_:)), name: NotificationProfileDidFinishSyncing, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(BrowserProfile.onPrivateDataClearedHistory(_:)), name: NotificationPrivateDataClearedHistory, object: nil)
+        // If the profile dir doesn't exist yet, this is first run (for this profile). The check is made here
+        // since the DB handles will create new DBs under the new profile folder.
+        let isNewProfile = !files.exists("")
 
+        // Setup our database handles
+        self.loginsDB = BrowserDB(filename: "logins.db", secretKey: BrowserProfile.loginsKey, files: files)
+        self.db = BrowserDB(filename: "browser.db", files: files)
 
-        if let baseBundleIdentifier = AppInfo.baseBundleIdentifier() {
-            KeychainWrapper.serviceName = baseBundleIdentifier
-        } else {
-            log.error("Unable to get the base bundle identifier. Keychain data will not be shared.")
-        }
+        let notificationCenter = NotificationCenter.default
 
-        // If the profile dir doesn't exist yet, this is first run (for this profile).
-        if !files.exists("") {
+        notificationCenter.addObserver(self, selector: #selector(onLocationChange(notification:)), name: NotificationOnLocationChange, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(onPageMetadataFetched(notification:)), name: NotificationOnPageMetadataFetched, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(onProfileDidFinishSyncing(notification:)), name: NotificationProfileDidFinishSyncing, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(onPrivateDataClearedHistory(notification:)), name: NotificationPrivateDataClearedHistory, object: nil)
+
+        if isNewProfile {
             log.info("New profile. Removing old account metadata.")
             self.removeAccountMetadata()
             self.syncManager.onNewProfile()
@@ -230,6 +278,23 @@ public class BrowserProfile: Profile {
         // This is the same as self.history.setTopSitesNeedsInvalidation, but without the
         // side-effect of instantiating SQLiteHistory (and thus BrowserDB) on the main thread.
         prefs.setBool(false, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
+
+        if isChinaEdition {
+            // On first run, set the Home button to be in the toolbar.
+            if prefs.boolForKey(PrefsKeys.KeyHomePageButtonIsInMenu) == nil {
+                prefs.setBool(false, forKey: PrefsKeys.KeyHomePageButtonIsInMenu)
+            }
+            // Set the default homepage.
+            prefs.setString(PrefsDefaults.ChineseHomePageURL, forKey: PrefsKeys.KeyDefaultHomePageURL)
+
+            if prefs.stringForKey(PrefsKeys.KeyNewTab) == nil {
+                prefs.setString(PrefsDefaults.ChineseNewTabDefault, forKey: PrefsKeys.KeyNewTab)
+            }
+        } else {
+            // Remove the default homepage. This does not change the user's preference,
+            // just the behaviour when there is no homepage.
+            prefs.removeObjectForKey(PrefsKeys.KeyDefaultHomePageURL)
+        }
     }
 
     // Extensions don't have a UIApplication.
@@ -237,29 +302,33 @@ public class BrowserProfile: Profile {
         self.init(localName: localName, app: nil)
     }
 
+    func reopen() {
+        log.debug("Reopening profile.")
+        isShutdown = false
+        
+        db.reopenIfClosed()
+        loginsDB.reopenIfClosed()
+    }
+
     func shutdown() {
         log.debug("Shutting down profile.")
+        isShutdown = true
 
-        if self.dbCreated {
-            db.forceClose()
-        }
-
-        if self.loginsDBCreated {
-            loginsDB.forceClose()
-        }
+        db.forceClose()
+        loginsDB.forceClose()
     }
 
     @objc
     func onLocationChange(notification: NSNotification) {
         if let v = notification.userInfo!["visitType"] as? Int,
            let visitType = VisitType(rawValue: v),
-           let url = notification.userInfo!["url"] as? NSURL where !isIgnoredURL(url),
+           let url = notification.userInfo!["url"] as? URL, !isIgnoredURL(url),
            let title = notification.userInfo!["title"] as? NSString {
             // Only record local vists if the change notification originated from a non-private tab
             if !(notification.userInfo!["isPrivate"] as? Bool ?? false) {
                 // We don't record a visit if no type was specified -- that means "ignore me".
                 let site = Site(url: url.absoluteString, title: title as String)
-                let visit = SiteVisit(site: site, date: NSDate.nowMicroseconds(), type: visitType)
+                let visit = SiteVisit(site: site, date: Date.nowMicroseconds(), type: visitType)
                 history.addLocalVisit(visit)
             }
 
@@ -267,6 +336,25 @@ public class BrowserProfile: Profile {
         } else {
             log.debug("Ignoring navigation.")
         }
+    }
+
+    @objc
+    func onPageMetadataFetched(notification: NSNotification) {
+        let isPrivate = notification.userInfo?["isPrivate"] as? Bool ?? true
+        guard !isPrivate else {
+            log.debug("Private mode - Ignoring page metadata.")
+            return
+        }
+
+        guard let metadataDict = notification.userInfo?["metadata"] as? [String: Any],
+              let pageURL = (metadataDict["url"] as? String)?.asURL,
+              let pageMetadata = PageMetadata.fromDictionary(metadataDict) else {
+            log.debug("Metadata notification doesn't contain any metadata!")
+            return
+        }
+
+        let defaultMetadataTTL: UInt64 = 3 * 24 * 60 * 60 * 1000 // 3 days for the metadata to live
+        self.metadata.storeMetadata(pageMetadata, forPageURL: pageURL, expireAt: defaultMetadataTTL + Date.now())
     }
 
     // These selectors run on which ever thread sent the notifications (not the main thread)
@@ -284,9 +372,10 @@ public class BrowserProfile: Profile {
     deinit {
         log.debug("Deiniting profile \(self.localName).")
         self.syncManager.endTimedSyncs()
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationOnLocationChange, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationPrivateDataClearedHistory, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NotificationOnLocationChange, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NotificationOnPageMetadataFetched, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NotificationPrivateDataClearedHistory, object: nil)
     }
 
     func localName() -> String {
@@ -299,19 +388,6 @@ public class BrowserProfile: Profile {
         }
     }()
 
-    private var dbCreated = false
-    var db: BrowserDB {
-        struct Singleton {
-            static var token: dispatch_once_t = 0
-            static var instance: BrowserDB!
-        }
-        dispatch_once(&Singleton.token) {
-            Singleton.instance = BrowserDB(filename: "browser.db", files: self.files)
-            self.dbCreated = true
-        }
-        return Singleton.instance
-    }
-
     /**
      * Favicons, history, and bookmarks are all stored in one intermeshed
      * collection of tables.
@@ -319,19 +395,27 @@ public class BrowserProfile: Profile {
      * Any other class that needs to access any one of these should ensure
      * that this is initialized first.
      */
-    private lazy var places: protocol<BrowserHistory, Favicons, SyncableHistory, ResettableSyncStorage> = {
-        return SQLiteHistory(db: self.db, prefs: self.prefs)!
+    fileprivate lazy var places: BrowserHistory & Favicons & SyncableHistory & ResettableSyncStorage & HistoryRecommendations  = {
+        return SQLiteHistory(db: self.db, prefs: self.prefs)
     }()
 
     var favicons: Favicons {
         return self.places
     }
 
-    var history: protocol<BrowserHistory, SyncableHistory, ResettableSyncStorage> {
+    var history: BrowserHistory & SyncableHistory & ResettableSyncStorage {
         return self.places
     }
 
-    lazy var bookmarks: protocol<BookmarksModelFactorySource, ShareToDestination, SyncableBookmarks, LocalItemSource, MirrorItemSource> = {
+    lazy var metadata: Metadata = {
+        return SQLiteMetadata(db: self.db)
+    }()
+
+    var recommendations: HistoryRecommendations {
+        return self.places
+    }
+
+    lazy var bookmarks: BookmarksModelFactorySource & KeywordSearchSource & ShareToDestination & SyncableBookmarks & LocalItemSource & MirrorItemSource = {
         // Make sure the rest of our tables are initialized before we try to read them!
         // This expression is for side-effects only.
         withExtendedLifetime(self.places) {
@@ -339,13 +423,13 @@ public class BrowserProfile: Profile {
         }
     }()
 
-    lazy var mirrorBookmarks: protocol<BookmarkBufferStorage, BufferItemSource> = {
+    lazy var mirrorBookmarks: BookmarkBufferStorage & BufferItemSource = {
         // Yeah, this is lazy. Sorry.
         return self.bookmarks as! MergedSQLiteBookmarks
     }()
 
     lazy var searchEngines: SearchEngines = {
-        return SearchEngines(prefs: self.prefs)
+        return SearchEngines(prefs: self.prefs, files: self.files)
     }()
 
     func makePrefs() -> Prefs {
@@ -360,7 +444,7 @@ public class BrowserProfile: Profile {
         return ReadingListService(profileStoragePath: self.files.rootPath as String)
     }()
 
-    lazy var remoteClientsAndTabs: protocol<RemoteClientsAndTabs, ResettableSyncStorage, AccountRemovalDelegate> = {
+    lazy var remoteClientsAndTabs: RemoteClientsAndTabs & ResettableSyncStorage & AccountRemovalDelegate = {
         return SQLiteRemoteClientsAndTabs(db: self.db)
     }()
 
@@ -372,7 +456,11 @@ public class BrowserProfile: Profile {
         return CertStore()
     }()
 
-    private func getSyncDelegate() -> SyncDelegate {
+    lazy var recentlyClosedTabs: ClosedTabsStore = {
+        return ClosedTabsStore(prefs: self.prefs)
+    }()
+
+    fileprivate func getSyncDelegate() -> SyncDelegate {
         if let app = self.app {
             return BrowserProfileSyncDelegate(app: app)
         }
@@ -393,67 +481,35 @@ public class BrowserProfile: Profile {
         return self.remoteClientsAndTabs.getClientsAndTabs()
     }
 
-    func storeTabs(tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
+    func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
         return self.remoteClientsAndTabs.insertOrUpdateTabs(tabs)
     }
 
-    public func sendItems(items: [ShareItem], toClients clients: [RemoteClient]) {
+    public func sendItems(_ items: [ShareItem], toClients clients: [RemoteClient]) {
+        let id = DeviceInfo.clientIdentifier(self.prefs)
         let commands = items.map { item in
-            SyncCommand.fromShareItem(item, withAction: "displayURI")
+            SyncCommand.displayURIFromShareItem(item, asClient: id)
         }
         self.remoteClientsAndTabs.insertCommands(commands, forClients: clients) >>> { self.syncManager.syncClients() }
     }
 
-    lazy var logins: protocol<BrowserLogins, SyncableLogins, ResettableSyncStorage> = {
+    lazy var logins: BrowserLogins & SyncableLogins & ResettableSyncStorage = {
         return SQLiteLogins(db: self.loginsDB)
     }()
 
-    // This is currently only used within the dispatch_once block in loginsDB, so we don't
-    // have to worry about races giving us two keys. But if this were ever to be used
-    // elsewhere, it'd be unsafe, so we wrap this in a dispatch_once, too.
-    private var loginsKey: String? {
-        let key = "sqlcipher.key.logins.db"
-        struct Singleton {
-            static var token: dispatch_once_t = 0
-            static var instance: String!
-        }
-        dispatch_once(&Singleton.token) {
-            if KeychainWrapper.hasValueForKey(key) {
-                let value = KeychainWrapper.stringForKey(key)
-                Singleton.instance = value
-            } else {
-                let Length: UInt = 256
-                let secret = Bytes.generateRandomBytes(Length).base64EncodedString
-                KeychainWrapper.setString(secret, forKey: key)
-                Singleton.instance = secret
-            }
-        }
-        return Singleton.instance
-    }
-
-    private var loginsDBCreated = false
-    private lazy var loginsDB: BrowserDB = {
-        struct Singleton {
-            static var token: dispatch_once_t = 0
-            static var instance: BrowserDB!
-        }
-        dispatch_once(&Singleton.token) {
-            Singleton.instance = BrowserDB(filename: "logins.db", secretKey: self.loginsKey, files: self.files)
-            self.loginsDBCreated = true
-        }
-        return Singleton.instance
+    lazy var isChinaEdition: Bool = {
+        return Locale.current.identifier == "zh_CN"
     }()
 
     var accountConfiguration: FirefoxAccountConfiguration {
-        let locale = NSLocale.currentLocale()
-        if self.prefs.boolForKey("useChinaSyncService") ?? (locale.localeIdentifier == "zh_CN") {
+        if prefs.boolForKey("useChinaSyncService") ?? isChinaEdition {
             return ChinaEditionFirefoxAccountConfiguration()
         }
         return ProductionFirefoxAccountConfiguration()
     }
 
-    private lazy var account: FirefoxAccount? = {
-        if let dictionary = KeychainWrapper.objectForKey(self.name + ".account") as? [String: AnyObject] {
+    fileprivate lazy var account: FirefoxAccount? = {
+        if let dictionary = self.keychain.object(forKey: self.name + ".account") as? [String: AnyObject] {
             return FirefoxAccount.fromDictionary(dictionary)
         }
         return nil
@@ -464,7 +520,7 @@ public class BrowserProfile: Profile {
     }
 
     func hasSyncableAccount() -> Bool {
-        return account?.actionNeeded == FxAActionNeeded.None
+        return account?.actionNeeded == FxAActionNeeded.none
     }
 
     func getAccount() -> FirefoxAccount? {
@@ -473,11 +529,11 @@ public class BrowserProfile: Profile {
 
     func removeAccountMetadata() {
         self.prefs.removeObjectForKey(PrefsKeys.KeyLastRemoteTabSyncTime)
-        KeychainWrapper.removeObjectForKey(self.name + ".account")
+        self.keychain.removeObject(forKey: self.name + ".account")
     }
 
     func removeExistingAuthenticationInfo() {
-        KeychainWrapper.setAuthenticationInfo(nil)
+        self.keychain.setAuthenticationInfo(nil)
     }
 
     func removeAccount() {
@@ -486,7 +542,7 @@ public class BrowserProfile: Profile {
         self.account = nil
 
         // Tell any observers that our account has changed.
-        NSNotificationCenter.defaultCenter().postNotificationName(NotificationFirefoxAccountChanged, object: nil)
+        NotificationCenter.default.post(name: NotificationFirefoxAccountChanged, object: nil)
 
         // Trigger cleanup. Pass in the account in case we want to try to remove
         // client-specific data from the server.
@@ -496,48 +552,57 @@ public class BrowserProfile: Profile {
         app?.unregisterForRemoteNotifications()
     }
 
-    func setAccount(account: FirefoxAccount) {
-        KeychainWrapper.setObject(account.asDictionary(), forKey: name + ".account")
+    func setAccount(_ account: FirefoxAccount) {
         self.account = account
+
+        flushAccount()
 
         // register for notifications for the account
         registerForNotifications()
         
         // tell any observers that our account has changed
-        NSNotificationCenter.defaultCenter().postNotificationName(NotificationFirefoxAccountChanged, object: nil)
+        let userInfo = [NotificationUserInfoKeyHasSyncableAccount: hasSyncableAccount()]
+        NotificationCenter.default.post(name: NotificationFirefoxAccountChanged, object: nil, userInfo: userInfo)
 
         self.syncManager.onAddedAccount()
     }
 
+    func flushAccount() {
+        if let account = account {
+            // Will this cause issues with people migrating?
+            self.keychain.set(account.dictionary() as NSCoding, forKey: name + ".account")
+        }
+    }
+
     func registerForNotifications() {
         let viewAction = UIMutableUserNotificationAction()
-        viewAction.identifier = SentTabAction.View.rawValue
+        viewAction.identifier = SentTabAction.view.rawValue
         viewAction.title = NSLocalizedString("View", comment: "View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440")
-        viewAction.activationMode = UIUserNotificationActivationMode.Foreground
-        viewAction.destructive = false
-        viewAction.authenticationRequired = false
+        viewAction.activationMode = UIUserNotificationActivationMode.foreground
+        viewAction.isDestructive = false
+        viewAction.isAuthenticationRequired = false
 
         let bookmarkAction = UIMutableUserNotificationAction()
-        bookmarkAction.identifier = SentTabAction.Bookmark.rawValue
+        bookmarkAction.identifier = SentTabAction.bookmark.rawValue
         bookmarkAction.title = NSLocalizedString("Bookmark", comment: "Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440")
-        bookmarkAction.activationMode = UIUserNotificationActivationMode.Foreground
-        bookmarkAction.destructive = false
-        bookmarkAction.authenticationRequired = false
+        bookmarkAction.activationMode = UIUserNotificationActivationMode.foreground
+        bookmarkAction.isDestructive = false
+        bookmarkAction.isAuthenticationRequired = false
 
         let readingListAction = UIMutableUserNotificationAction()
-        readingListAction.identifier = SentTabAction.ReadingList.rawValue
+        readingListAction.identifier = SentTabAction.readingList.rawValue
         readingListAction.title = NSLocalizedString("Add to Reading List", comment: "Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440")
-        readingListAction.activationMode = UIUserNotificationActivationMode.Foreground
-        readingListAction.destructive = false
-        readingListAction.authenticationRequired = false
+        readingListAction.activationMode = UIUserNotificationActivationMode.foreground
+        readingListAction.isDestructive = false
+        readingListAction.isAuthenticationRequired = false
 
         let sentTabsCategory = UIMutableUserNotificationCategory()
         sentTabsCategory.identifier = TabSendCategory
-        sentTabsCategory.setActions([readingListAction, bookmarkAction, viewAction], forContext: UIUserNotificationActionContext.Default)
+        sentTabsCategory.setActions([readingListAction, bookmarkAction, viewAction], for: UIUserNotificationActionContext.default)
 
-        sentTabsCategory.setActions([bookmarkAction, viewAction], forContext: UIUserNotificationActionContext.Minimal)
+        sentTabsCategory.setActions([bookmarkAction, viewAction], for: UIUserNotificationActionContext.minimal)
 
-        app?.registerUserNotificationSettings(UIUserNotificationSettings(forTypes: UIUserNotificationType.Alert, categories: [sentTabsCategory]))
+        let _ = UIUserNotificationSettings(types: UIUserNotificationType.alert, categories: [sentTabsCategory])
         app?.registerForRemoteNotifications()
     }
 
@@ -548,15 +613,15 @@ public class BrowserProfile: Profile {
         // But it's possible that we'll finish a side-effect sync after we've ditched the profile
         // as a whole, so we hold on to our Prefs, potentially for a little while longer. This is
         // safe as a strong reference, because there's no cycle.
-        unowned private let profile: BrowserProfile
-        private let prefs: Prefs
+        unowned fileprivate let profile: BrowserProfile
+        fileprivate let prefs: Prefs
 
-        let FifteenMinutes = NSTimeInterval(60 * 15)
-        let OneMinute = NSTimeInterval(60)
+        let FifteenMinutes = TimeInterval(60 * 15)
+        let OneMinute = TimeInterval(60)
 
-        private var syncTimer: NSTimer? = nil
+        fileprivate var syncTimer: Timer?
 
-        private var backgrounded: Bool = true
+        fileprivate var backgrounded: Bool = true
         func applicationDidEnterBackground() {
             self.backgrounded = true
             self.endTimedSyncs()
@@ -565,15 +630,20 @@ public class BrowserProfile: Profile {
         func applicationDidBecomeActive() {
             self.backgrounded = false
 
-            guard self.profile.hasAccount() else {
+            guard self.profile.hasSyncableAccount() else {
                 return
             }
 
             self.beginTimedSyncs()
 
             // Sync now if it's been more than our threshold.
-            let now = NSDate.now()
+            let now = Date.now()
             let then = self.lastSyncFinishTime ?? 0
+            guard now >= then else {
+                log.debug("Time was modified since last sync.")
+                self.syncEverythingSoon()
+                return
+            }
             let since = now - then
             log.debug("\(since)msec since last sync.")
             if since > SyncConstants.SyncOnForegroundMinimumDelayMillis {
@@ -585,37 +655,121 @@ public class BrowserProfile: Profile {
          * Locking is managed by syncSeveral. Make sure you take and release these
          * whenever you do anything Sync-ey.
          */
-        private let syncLock = NSRecursiveLock()
+        fileprivate let syncLock = NSRecursiveLock()
 
         var isSyncing: Bool {
             syncLock.lock()
             defer { syncLock.unlock() }
-            return !(syncReducer?.isFilled ?? true)
+            return syncDisplayState != nil && syncDisplayState! == .inProgress
         }
+
+        var syncDisplayState: SyncDisplayState?
 
         // The dispatch queue for coordinating syncing and resetting the database.
-        private let syncQueue = dispatch_queue_create("com.mozilla.firefox.sync", DISPATCH_QUEUE_SERIAL)
+        fileprivate let syncQueue = DispatchQueue(label: "com.mozilla.firefox.sync")
 
-        private typealias EngineResults = [(EngineIdentifier, SyncStatus)]
-        private typealias EngineTasks = [(EngineIdentifier, SyncFunction)]
+        fileprivate typealias EngineResults = [(EngineIdentifier, SyncStatus)]
+        fileprivate typealias EngineTasks = [(EngineIdentifier, SyncFunction)]
 
         // Used as a task queue for syncing.
-        private var syncReducer: AsyncReducer<EngineResults, EngineTasks>?
+        fileprivate var syncReducer: AsyncReducer<EngineResults, EngineTasks>?
 
-        private func beginSyncing() {
-            notifySyncing(NotificationProfileDidStartSyncing)
+        fileprivate func beginSyncing() {
+            notifySyncing(notification: NotificationProfileDidStartSyncing)
         }
 
-        private func endSyncing() {
+        fileprivate func endSyncing(_ result: SyncOperationResult) {
+            // loop through statuses and fill sync state
             syncLock.lock()
             defer { syncLock.unlock() }
             log.info("Ending all queued syncs.")
-            notifySyncing(NotificationProfileDidFinishSyncing)
+
+            syncDisplayState = SyncStatusResolver(engineResults: result.engineResults).resolveResults()
+
+            if canSendUsageData() {
+                if AppConstants.MOZ_ADHOC_SYNC_REPORTING {
+                    reportAdHocEndSyncingStatus(displayState: syncDisplayState, engineResults: result.engineResults)
+                }
+
+                reportSyncPingForResult(opResult: result)
+            } else {
+                log.debug("Profile isn't sending usage data. Not sending sync status event.")
+            }
+            
+            notifySyncing(notification: NotificationProfileDidFinishSyncing)
             syncReducer = nil
         }
 
-        private func notifySyncing(notification: String) {
-            NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: notification, object: nil))
+        fileprivate func reportSyncPingForResult(opResult: SyncOperationResult) {
+            // TODO: Send sync report to telemetry client for storage/sending
+        }
+
+        fileprivate func reportAdHocEndSyncingStatus(displayState: SyncDisplayState?, engineResults: Maybe<EngineResults>?) {
+            // We don't send this ad hoc telemetry on the release channel.
+            guard AppConstants.BuildChannel != AppBuildChannel.release else {
+                return
+            }
+
+            guard let displayState = displayState else {
+                log.debug("Sync display state not set!. Not sending sync status event.")
+                return
+            }
+
+            self.doInBackgroundAfter(300) {
+                self.profile.remoteClientsAndTabs.getClientGUIDs() >>== { clients in
+                    // We would love to include the version and OS etc. of each remote client,
+                    // but we don't store that information. For now, just do a count.
+                    let clientCount = clients.count
+
+                    let id = DeviceInfo.clientIdentifier(self.prefs)
+
+                    var engineResultsDict: [String: String]? = nil
+                    if let results = engineResults?.successValue {
+                        engineResultsDict = [:]
+                        results.forEach { (engineIdentifier, syncStatus) in
+                            engineResultsDict![engineIdentifier] = syncStatus.description
+                        }
+                    }
+
+                    let engineResultsFailure = engineResults?.failureValue
+
+                    let ping = makeAdHocSyncStatusPing(
+                        Bundle.main,
+                        clientID: id,
+                        statusObject: displayState.asObject(),
+                        engineResults: engineResultsDict,
+                        resultsFailure: engineResultsFailure,
+                        clientCount: clientCount
+                    )
+
+                    let payload = ping.stringValue
+
+                    log.debug("Payload is: \(payload)")
+                    guard let body = payload.data(using: String.Encoding.utf8) else {
+                        log.debug("Invalid JSON!")
+                        return
+                    }
+
+                    let url = "https://mozilla-anonymous-sync-metrics.moo.mx/post/syncstatus".asURL!
+                    var request = URLRequest(url: url)
+                    request.httpMethod = URLRequest.Method.post.rawValue
+                    request.httpBody = body
+                    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+                    SessionManager.default.request(request).responseData(completionHandler: { response in
+                        log.debug("Sync Status upload response: \(response.response?.statusCode ?? -1).")
+                    })
+                }
+            }
+
+        }
+
+        fileprivate func canSendUsageData() -> Bool {
+            return profile.prefs.boolForKey("settings.sendUsageData") ?? true
+        }
+
+        private func notifySyncing(notification: Notification.Name) {
+            NotificationCenter.default.post(name: notification, object: syncDisplayState?.asObject())
         }
 
         init(profile: BrowserProfile) {
@@ -624,16 +778,17 @@ public class BrowserProfile: Profile {
 
             super.init()
 
-            let center = NSNotificationCenter.defaultCenter()
-            center.addObserver(self, selector: #selector(BrowserSyncManager.onDatabaseWasRecreated(_:)), name: NotificationDatabaseWasRecreated, object: nil)
-            center.addObserver(self, selector: #selector(BrowserSyncManager.onLoginDidChange(_:)), name: NotificationDataLoginDidChange, object: nil)
-            center.addObserver(self, selector: #selector(BrowserSyncManager.onFinishSyncing(_:)), name: NotificationProfileDidFinishSyncing, object: nil)
-            center.addObserver(self, selector: #selector(BrowserSyncManager.onBookmarkBufferValidated(_:)), name: NotificationBookmarkBufferValidated, object: nil)
+            let center = NotificationCenter.default
+            center.addObserver(self, selector: #selector(onDatabaseWasRecreated(notification:)), name: NotificationDatabaseWasRecreated, object: nil)
+            center.addObserver(self, selector: #selector(onLoginDidChange(_:)), name: NotificationDataLoginDidChange, object: nil)
+            center.addObserver(self, selector: #selector(onStartSyncing(_:)), name: NotificationProfileDidStartSyncing, object: nil)
+            center.addObserver(self, selector: #selector(onFinishSyncing(_:)), name: NotificationProfileDidFinishSyncing, object: nil)
+            center.addObserver(self, selector: #selector(onBookmarkBufferValidated(notification:)), name: NotificationBookmarkBufferValidated, object: nil)
         }
 
         func onBookmarkBufferValidated(notification: NSNotification) {
             // We don't send this ad hoc telemetry on the release channel.
-            guard AppConstants.BuildChannel != AppBuildChannel.Release else {
+            guard AppConstants.BuildChannel != AppBuildChannel.release else {
                 return
             }
 
@@ -653,30 +808,30 @@ public class BrowserProfile: Profile {
             // Capture the buffer count ASAP, not in the delayed op, because the merge could wipe it!
             let bufferRows = (self.profile.bookmarks as? MergedSQLiteBookmarks)?.synchronousBufferCount()
 
-            self.doInBackgroundAfter(millis: 300) {
+            self.doInBackgroundAfter(300) {
                 self.profile.remoteClientsAndTabs.getClientGUIDs() >>== { clients in
                     // We would love to include the version and OS etc. of each remote client,
                     // but we don't store that information. For now, just do a count.
                     let clientCount = clients.count
 
                     let id = DeviceInfo.clientIdentifier(self.prefs)
-                    let ping = makeAdHocBookmarkMergePing(NSBundle.mainBundle(), clientID: id, attempt: attempt, bufferRows: bufferRows, valid: validations, clientCount: clientCount)
-                    let payload = ping.toString()
+                    let ping = makeAdHocBookmarkMergePing(Bundle.main, clientID: id, attempt: attempt, bufferRows: bufferRows, valid: validations, clientCount: clientCount)
+                    let payload = ping.stringValue
 
                     log.debug("Payload is: \(payload)")
-                    guard let body = payload.dataUsingEncoding(NSUTF8StringEncoding) else {
+                    guard let body = payload.data(using: String.Encoding.utf8) else {
                         log.debug("Invalid JSON!")
                         return
                     }
 
                     let url = "https://mozilla-anonymous-sync-metrics.moo.mx/post/bookmarkvalidation".asURL!
-                    let request = NSMutableURLRequest(URL: url)
-                    request.HTTPMethod = "POST"
-                    request.HTTPBody = body
+                    var request = URLRequest(url: url)
+                    request.httpMethod = "POST"
+                    request.httpBody = body
                     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
-                    Alamofire.Manager.sharedInstance.request(request).response { (request, response, data, error) in
-                        log.debug("Bookmark validation upload response: \(response?.statusCode ?? -1).")
+                    SessionManager.default.request(request).responseData { response in
+                        log.debug("Bookmark validation upload response: \(response.response?.statusCode ?? -1).")
                     }
                 }
             }
@@ -684,9 +839,10 @@ public class BrowserProfile: Profile {
 
         deinit {
             // Remove 'em all.
-            let center = NSNotificationCenter.defaultCenter()
+            let center = NotificationCenter.default
             center.removeObserver(self, name: NotificationDatabaseWasRecreated, object: nil)
             center.removeObserver(self, name: NotificationDataLoginDidChange, object: nil)
+            center.removeObserver(self, name: NotificationProfileDidStartSyncing, object: nil)
             center.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
             center.removeObserver(self, name: NotificationBookmarkBufferValidated, object: nil)
         }
@@ -708,11 +864,10 @@ public class BrowserProfile: Profile {
             }
         }
 
-        func doInBackgroundAfter(millis millis: Int64, _ block: dispatch_block_t) {
-            let delay = millis * Int64(NSEC_PER_MSEC)
-            let when = dispatch_time(DISPATCH_TIME_NOW, delay)
-            let queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
-            dispatch_after(when, queue, block)
+        func doInBackgroundAfter(_ millis: Int64, _ block: @escaping (Void) -> Void) {
+            let queue = DispatchQueue.global(qos: DispatchQoS.background.qosClass)
+            //Pretty ambiguous here. I'm thinking .now was DispatchTime.now() and not Date.now()
+            queue.asyncAfter(deadline: DispatchTime.now() + DispatchTimeInterval.milliseconds(Int(millis)), execute: block)
         }
 
         @objc
@@ -726,41 +881,39 @@ public class BrowserProfile: Profile {
             // happen in the middle of a sync.
 
             let resetDatabase = {
-                return self.handleRecreationOfDatabaseNamed(name) >>== {
+                return self.handleRecreationOfDatabaseNamed(name: name) >>== {
                     log.debug("Reset of \(name) done")
                 }
             }
 
-            self.doInBackgroundAfter(millis: 300) {
+            self.doInBackgroundAfter(300) {
                 self.syncLock.lock()
                 defer { self.syncLock.unlock() }
                 // If we're syncing already, then wait for sync to end, 
                 // then reset the database on the same serial queue.
-                if let reducer = self.syncReducer where !reducer.isFilled {
+                if let reducer = self.syncReducer, !reducer.isFilled {
                     reducer.terminal.upon { _ in
-                        dispatch_async(self.syncQueue, resetDatabase)
+                        self.syncQueue.async(execute: resetDatabase)
                     }
                 } else {
                     // Otherwise, reset the database on the sync queue now
                     // Sync can't start while this is still going on.
-                    dispatch_async(self.syncQueue, resetDatabase)
+                    self.syncQueue.async(execute: resetDatabase)
                 }
             }
         }
 
         // Simple in-memory rate limiting.
         var lastTriggeredLoginSync: Timestamp = 0
-        @objc func onLoginDidChange(notification: NSNotification) {
+        @objc func onLoginDidChange(_ notification: NSNotification) {
             log.debug("Login did change.")
-            if (NSDate.now() - lastTriggeredLoginSync) > OneMinuteInMilliseconds {
-                lastTriggeredLoginSync = NSDate.now()
+            if (Date.now() - lastTriggeredLoginSync) > OneMinuteInMilliseconds {
+                lastTriggeredLoginSync = Date.now()
 
                 // Give it a few seconds.
-                let when: dispatch_time_t = dispatch_time(DISPATCH_TIME_NOW, SyncConstants.SyncDelayTriggered)
-
                 // Trigger on the main queue. The bulk of the sync work runs in the background.
                 let greenLight = self.greenLight()
-                dispatch_after(when, dispatch_get_main_queue()) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(SyncConstants.SyncDelayTriggered)) {
                     if greenLight() {
                         self.syncLogins()
                     }
@@ -782,8 +935,18 @@ public class BrowserProfile: Profile {
             }
         }
 
-        @objc func onFinishSyncing(notification: NSNotification) {
-            self.lastSyncFinishTime = NSDate.now()
+        @objc func onStartSyncing(_ notification: NSNotification) {
+            syncLock.lock()
+            defer { syncLock.unlock() }
+            syncDisplayState = .inProgress
+        }
+
+        @objc func onFinishSyncing(_ notification: NSNotification) {
+            syncLock.lock()
+            defer { syncLock.unlock() }
+            if let syncState = syncDisplayState, syncState == .good {
+                self.lastSyncFinishTime = Date.now()
+            }
         }
 
         var prefsForSync: Prefs {
@@ -791,15 +954,18 @@ public class BrowserProfile: Profile {
         }
 
         func onAddedAccount() -> Success {
-            self.beginTimedSyncs();
-            return self.syncEverything()
+            // Only sync if we're green lit. This makes sure that we don't sync unverified accounts.
+            guard self.profile.hasSyncableAccount() else { return succeed() }
+
+            self.beginTimedSyncs()
+            return self.syncEverything(why: .didLogin)
         }
 
-        func locallyResetCollections(collections: [String]) -> Success {
+        func locallyResetCollections(_ collections: [String]) -> Success {
             return walk(collections, f: self.locallyResetCollection)
         }
 
-        func locallyResetCollection(collection: String) -> Success {
+        func locallyResetCollection(_ collection: String) -> Success {
             switch collection {
             case "bookmarks":
                 return BufferingBookmarksSynchronizer.resetSynchronizerWithStorage(self.profile.bookmarks, basePrefs: self.prefsForSync, collection: "bookmarks")
@@ -835,7 +1001,7 @@ public class BrowserProfile: Profile {
             SyncStateMachine.clearStateFromPrefs(self.prefsForSync)
         }
 
-        func onRemovedAccount(account: FirefoxAccount?) -> Success {
+        func onRemovedAccount(_ account: FirefoxAccount?) -> Success {
             let profile = self.profile
 
             // Run these in order, because they might write to the same DB!
@@ -862,8 +1028,8 @@ public class BrowserProfile: Profile {
             return accumulate(remove) >>> clearPrefs
         }
 
-        private func repeatingTimerAtInterval(interval: NSTimeInterval, selector: Selector) -> NSTimer {
-            return NSTimer.scheduledTimerWithTimeInterval(interval, target: self, selector: selector, userInfo: nil, repeats: true)
+        fileprivate func repeatingTimerAtInterval(_ interval: TimeInterval, selector: Selector) -> Timer {
+            return Timer.scheduledTimer(timeInterval: interval, target: self, selector: selector, userInfo: nil, repeats: true)
         }
 
         func beginTimedSyncs() {
@@ -890,40 +1056,40 @@ public class BrowserProfile: Profile {
             }
         }
 
-        private func syncClientsWithDelegate(delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> SyncResult {
+        fileprivate func syncClientsWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> SyncResult {
             log.debug("Syncing clients to storage.")
             let clientSynchronizer = ready.synchronizer(ClientsSynchronizer.self, delegate: delegate, prefs: prefs)
             return clientSynchronizer.synchronizeLocalClients(self.profile.remoteClientsAndTabs, withServer: ready.client, info: ready.info)
         }
 
-        private func syncTabsWithDelegate(delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> SyncResult {
+        fileprivate func syncTabsWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> SyncResult {
             let storage = self.profile.remoteClientsAndTabs
             let tabSynchronizer = ready.synchronizer(TabsSynchronizer.self, delegate: delegate, prefs: prefs)
             return tabSynchronizer.synchronizeLocalTabs(storage, withServer: ready.client, info: ready.info)
         }
 
-        private func syncHistoryWithDelegate(delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> SyncResult {
+        fileprivate func syncHistoryWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> SyncResult {
             log.debug("Syncing history to storage.")
             let historySynchronizer = ready.synchronizer(HistorySynchronizer.self, delegate: delegate, prefs: prefs)
             return historySynchronizer.synchronizeLocalHistory(self.profile.history, withServer: ready.client, info: ready.info, greenLight: self.greenLight())
         }
 
-        private func syncLoginsWithDelegate(delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> SyncResult {
+        fileprivate func syncLoginsWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> SyncResult {
             log.debug("Syncing logins to storage.")
             let loginsSynchronizer = ready.synchronizer(LoginsSynchronizer.self, delegate: delegate, prefs: prefs)
             return loginsSynchronizer.synchronizeLocalLogins(self.profile.logins, withServer: ready.client, info: ready.info)
         }
 
-        private func mirrorBookmarksWithDelegate(delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> SyncResult {
+        fileprivate func mirrorBookmarksWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> SyncResult {
             log.debug("Synchronizing server bookmarks to storage.")
             let bookmarksMirrorer = ready.synchronizer(BufferingBookmarksSynchronizer.self, delegate: delegate, prefs: prefs)
             return bookmarksMirrorer.synchronizeBookmarksToStorage(self.profile.bookmarks, usingBuffer: self.profile.mirrorBookmarks, withServer: ready.client, info: ready.info, greenLight: self.greenLight())
         }
 
-        func takeActionsOnEngineStateChanges<T: EngineStateChanges>(changes: T) -> Deferred<Maybe<T>> {
+        func takeActionsOnEngineStateChanges<T: EngineStateChanges>(_ changes: T) -> Deferred<Maybe<T>> {
             var needReset = Set<String>(changes.collectionsThatNeedLocalReset())
-            needReset.unionInPlace(changes.enginesDisabled())
-            needReset.unionInPlace(changes.enginesEnabled())
+            needReset.formUnion(changes.enginesDisabled())
+            needReset.formUnion(changes.enginesEnabled())
             if needReset.isEmpty {
                 log.debug("No collections need reset. Moving on.")
                 return deferMaybe(changes)
@@ -946,18 +1112,18 @@ public class BrowserProfile: Profile {
         /**
          * Runs the single provided synchronization function and returns its status.
          */
-        private func sync(label: EngineIdentifier, function: SyncFunction) -> SyncResult {
-            return syncSeveral([(label, function)]) >>== { statuses in
+        fileprivate func sync(_ label: EngineIdentifier, function: @escaping SyncFunction) -> SyncResult {
+            return syncSeveral(why: .user, synchronizers: [(label, function)]) >>== { statuses in
                 let status = statuses.find { label == $0.0 }?.1
-                return deferMaybe(status ?? .NotStarted(.Unknown))
+                return deferMaybe(status ?? .notStarted(.unknown))
             }
         }
 
         /**
          * Convenience method for syncSeveral([(EngineIdentifier, SyncFunction)])
          */
-        private func syncSeveral(synchronizers: (EngineIdentifier, SyncFunction)...) -> Deferred<Maybe<[(EngineIdentifier, SyncStatus)]>> {
-            return syncSeveral(synchronizers)
+        private func syncSeveral(why: SyncReason, synchronizers: (EngineIdentifier, SyncFunction)...) -> Deferred<Maybe<[(EngineIdentifier, SyncStatus)]>> {
+            return syncSeveral(why: why, synchronizers: synchronizers)
         }
 
         /**
@@ -966,12 +1132,21 @@ public class BrowserProfile: Profile {
          * The statuses returned will be a superset of the ones that are requested here.
          * While a sync is ongoing, each engine from successive calls to this method will only be called once.
          */
-        private func syncSeveral(synchronizers: [(EngineIdentifier, SyncFunction)]) -> Deferred<Maybe<[(EngineIdentifier, SyncStatus)]>> {
+        fileprivate func syncSeveral(why: SyncReason, synchronizers: [(EngineIdentifier, SyncFunction)]) -> Deferred<Maybe<[(EngineIdentifier, SyncStatus)]>> {
             syncLock.lock()
             defer { syncLock.unlock() }
 
+            guard let account = self.profile.account else {
+                log.info("No account to sync with.")
+                let statuses = synchronizers.map {
+                    ($0.0, SyncStatus.notStarted(.noAccount))
+                }
+                return deferMaybe(statuses)
+            }
+
             if (!isSyncing) {
                 // A sync isn't already going on, so start another one.
+                let statsSession = SyncOperationStatsSession(why: why, uid: account.uid, deviceID: account.deviceRegistration?.id)
                 let reducer = AsyncReducer<EngineResults, EngineTasks>(initialValue: [], queue: syncQueue) { (statuses, synchronizers)  in
                     let done = Set(statuses.map { $0.0 })
                     let remaining = synchronizers.filter { !done.contains($0.0) }
@@ -980,11 +1155,18 @@ public class BrowserProfile: Profile {
                         return deferMaybe(statuses)
                     }
 
-                    return self.syncWith(remaining) >>== { deferMaybe(statuses + $0) }
+                    return self.syncWith(synchronizers: remaining, account: account, statsSession: statsSession) >>== { deferMaybe(statuses + $0) }
                 }
-                reducer.terminal >>> self.endSyncing
 
-                // The actual work of synchronizing doesn't start until we append 
+                reducer.terminal.upon { results in
+                    let result = SyncOperationResult(
+                        engineResults: results,
+                        stats: statsSession.hasStarted() ? statsSession.end() : nil
+                    )
+                    self.endSyncing(result)
+                }
+
+                // The actual work of synchronizing doesn't start until we append
                 // the synchronizers to the reducer below.
                 self.syncReducer = reducer
                 self.beginSyncing()
@@ -995,26 +1177,19 @@ public class BrowserProfile: Profile {
             } catch let error {
                 log.error("Synchronizers appended after sync was finished. This is a bug. \(error)")
                 let statuses = synchronizers.map {
-                    ($0.0, SyncStatus.NotStarted(.Unknown))
+                    ($0.0, SyncStatus.notStarted(.unknown))
                 }
                 return deferMaybe(statuses)
             }
         }
 
         // This SHOULD NOT be called directly: use syncSeveral instead.
-        private func syncWith(synchronizers: [(EngineIdentifier, SyncFunction)]) -> Deferred<Maybe<[(EngineIdentifier, SyncStatus)]>> {
-            guard let account = self.profile.account else {
-                log.info("No account to sync with.")
-                let statuses = synchronizers.map {
-                    ($0.0, SyncStatus.NotStarted(.NoAccount))
-                }
-                return deferMaybe(statuses)
-            }
-
+        fileprivate func syncWith(synchronizers: [(EngineIdentifier, SyncFunction)], account: FirefoxAccount,
+                              statsSession: SyncOperationStatsSession) -> Deferred<Maybe<[(EngineIdentifier, SyncStatus)]>> {
             log.info("Syncing \(synchronizers.map { $0.0 })")
             let authState = account.syncAuthState
             let delegate = self.profile.getSyncDelegate()
-            let readyDeferred = SyncStateMachine(prefs: self.prefsForSync).toReady(authState)
+            let readyDeferred = SyncStateMachine(prefs: self.prefsForSync).toReady(authState!)
 
             let function: (SyncDelegate, Prefs, Ready) -> Deferred<Maybe<[EngineStatus]>> = { delegate, syncPrefs, ready in
                 let thunks = synchronizers.map { (i, f) in
@@ -1027,29 +1202,31 @@ public class BrowserProfile: Profile {
             }
             
             return readyDeferred >>== self.takeActionsOnEngineStateChanges >>== { ready in
-                function(delegate, self.prefsForSync, ready)
+                statsSession.start()
+                return function(delegate, self.prefsForSync, ready)
             }
         }
 
-        func syncEverything() -> Success {
+        @discardableResult func syncEverything(why: SyncReason) -> Success {
             return self.syncSeveral(
+                why: why,
+                synchronizers:
                 ("clients", self.syncClientsWithDelegate),
                 ("tabs", self.syncTabsWithDelegate),
                 ("logins", self.syncLoginsWithDelegate),
                 ("bookmarks", self.mirrorBookmarksWithDelegate),
-                ("history", self.syncHistoryWithDelegate)
-            ) >>> succeed
+                ("history", self.syncHistoryWithDelegate)) >>> succeed
         }
 
         func syncEverythingSoon() {
-            self.doInBackgroundAfter(millis: SyncConstants.SyncOnForegroundAfterMillis) {
+            self.doInBackgroundAfter(SyncConstants.SyncOnForegroundAfterMillis) {
                 log.debug("Running delayed startup sync.")
-                self.syncEverything()
+                self.syncEverything(why: .startup)
             }
         }
 
         @objc func syncOnTimer() {
-            self.syncEverything()
+            self.syncEverything(why: .scheduled)
         }
 
         func hasSyncedHistory() -> Deferred<Maybe<Bool>> {
@@ -1067,15 +1244,16 @@ public class BrowserProfile: Profile {
 
         func syncClientsThenTabs() -> SyncResult {
             return self.syncSeveral(
+                why: .user,
+                synchronizers:
                 ("clients", self.syncClientsWithDelegate),
-                ("tabs", self.syncTabsWithDelegate)
-            ) >>== { statuses in
+                ("tabs", self.syncTabsWithDelegate)) >>== { statuses in
                 let status = statuses.find { "tabs" == $0.0 }
                 return deferMaybe(status!.1)
             }
         }
 
-        func syncLogins() -> SyncResult {
+        @discardableResult func syncLogins() -> SyncResult {
             return self.sync("logins", function: syncLoginsWithDelegate)
         }
 
@@ -1093,13 +1271,13 @@ public class BrowserProfile: Profile {
          * should continue.
          */
         func greenLight() -> () -> Bool {
-            let start = NSDate.now()
+            let start = Date.now()
 
-            // Give it one minute to run before we stop.
-            let stopBy = start + OneMinuteInMilliseconds
+            // Give it two minutes to run before we stop.
+            let stopBy = start + (2 * OneMinuteInMilliseconds)
             log.debug("Checking green light. Backgrounded: \(self.backgrounded).")
             return {
-                NSDate.now() < stopBy &&
+                Date.now() < stopBy &&
                 self.profile.hasSyncableAccount()
             }
         }

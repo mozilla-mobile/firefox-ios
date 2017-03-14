@@ -1,0 +1,52 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="referrer" content="never">
+</head>
+<body>
+<script>
+  /**
+   * This file is responsible for restoring session history.
+   * It uses the DOM history API to push pages onto the back/forward stack. Since that API
+   * is bound by same origin restrictions, we're only able to push pages with the current origin
+   * (which is a page hosted on localhost). As a workaround, push all to-be-restored URLs as
+   * error pages so that they will redirect to the correct URLs when loaded.
+   */
+  (function () {
+      function getRestoreURL(url) {
+          // If the url already points to an error page just return the url as is
+          if (url.indexOf(document.location.origin + '/errors/error.html') === 0) {
+               return url;
+           }
+          // Otherwise, push an error page to trigger a redirect when loaded.
+          return '/errors/error.html?url=' + escape(url);
+      }
+      var index = document.location.href.search("history");
+      // Pull the session out of the history query argument.
+      // The session is a JSON-stringified array of all URLs to restore for this tab, plus the last active index.
+      var sessionRestoreComponents = JSON.parse(unescape(document.location.href.substring(index + "history=".length)));
+      var urlList = sessionRestoreComponents['history'];
+      var currentPage = sessionRestoreComponents['currentPage'];
+      // First, replace the session restore page (this page) with the first URL to be restored.
+      history.replaceState({}, "", getRestoreURL(urlList[0]));
+      // Then push the remaining pages to be restored.
+      for (var i = 1; i < urlList.length; i++) {
+          history.pushState({}, '', getRestoreURL(urlList[i]));
+      }
+      // We'll end up at the last page pushed, so set the selected index to the current index in the session history.
+      history.go(currentPage);
+
+      // Finally, reload the page to trigger the error redirection, which will load the actual URL.
+      // For some reason (maybe a WebKit bug?), document.location still points to SessionRestore.html at this point,
+      // so wait until the next tick when the location points to the correct index and URL.
+      setTimeout(function () {
+          webkit.messageHandlers.localRequestHelper.postMessage({ type: "reload" });
+          webkit.messageHandlers.sessionRestoreHelper.postMessage({ name: "didRestoreSession" });
+      }, 0);
+  }) ();
+</script>
+</body>
+</html>

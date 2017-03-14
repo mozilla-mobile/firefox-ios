@@ -5,12 +5,18 @@
 import Foundation
 import UIKit
 
-protocol MenuToolbarItemDelegate {
-    func menuView(menuView: MenuView, didSelectItemAtIndex index: Int)
+protocol MenuToolbarItemDelegate: class {
+    func menuView(_ menuView: MenuView, didSelectItemAtIndex index: Int)
+
+    func menuView(_ menuView: MenuView, didLongPressItemAtIndex index: Int)
 }
 
-protocol MenuItemDelegate {
-    func menuView(menuView: MenuView, didSelectItemAtIndexPath indexPath: NSIndexPath)
+protocol MenuItemDelegate: class {
+    func menuView(_ menuView: MenuView, didSelectItemAtIndexPath indexPath: IndexPath)
 
-    func heightForRowsInMenuView(menuView: MenuView) -> CGFloat
+    func menuView(_ menuView: MenuView, didLongPressItemAtIndexPath indexPath: IndexPath)
+
+    func menuView(_ menuView: MenuView, shouldSelectItemAtIndexPath indexPath: IndexPath) -> Bool
+
+    func heightForRowsInMenuView(_ menuView: MenuView) -> CGFloat
 }

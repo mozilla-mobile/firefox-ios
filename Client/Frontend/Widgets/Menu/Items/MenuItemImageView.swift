@@ -2,12 +2,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-
 import UIKit
 
 class MenuItemImageView: UIImageView {
 
-    var overlayColor: UIColor = UIColor.clearColor() {
+    var overlayColor: UIColor = UIColor.clear {
         didSet {
             setNeedsDisplay()
         }
@@ -25,16 +24,16 @@ class MenuItemImageView: UIImageView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func drawRect(rect: CGRect) {
-        let context = UIGraphicsGetCurrentContext()
-        CGContextSaveGState(context)
+    override func draw(_ rect: CGRect) {
+        guard let image = image?.cgImage, let context = UIGraphicsGetCurrentContext() else { return }
+        context.saveGState()
 
-        CGContextDrawImage(context, rect, image?.CGImage)
+        context.draw(image, in: rect)
 
-        CGContextSetBlendMode(context, .Multiply)
-        CGContextSetFillColor(context, CGColorGetComponents(overlayColor.CGColor))
-        CGContextFillRect(context, self.bounds)
-        CGContextRestoreGState(context)
+        context.setBlendMode(.multiply)
+        context.setFillColor(overlayColor.cgColor.components)
+        context.fill(self.bounds)
+        context.restoreGState()
     }
 
 }

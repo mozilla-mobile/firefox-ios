@@ -5,23 +5,24 @@
 import Foundation
 import Shared
 import XCGLogger
+import SwiftyJSON
 
 private let log = Logger.syncLogger
 
-public class LoginPayload: CleartextPayloadJSON {
-    private static let OptionalStringFields = [
+open class LoginPayload: CleartextPayloadJSON {
+    fileprivate static let OptionalStringFields = [
         "formSubmitURL",
         "httpRealm",
     ]
 
-    private static let OptionalNumericFields = [
+    fileprivate static let OptionalNumericFields = [
         "timeLastUsed",
         "timeCreated",
         "timePasswordChanged",
         "timesUsed",
     ]
 
-    private static let RequiredStringFields = [
+    fileprivate static let RequiredStringFields = [
         "hostname",
         "username",
         "password",
@@ -29,7 +30,7 @@ public class LoginPayload: CleartextPayloadJSON {
         "passwordField",
     ]
 
-    public class func fromJSON(json: JSON) -> LoginPayload? {
+    open class func fromJSON(_ json: JSON) -> LoginPayload? {
         let p = LoginPayload(json)
         if p.isValid() {
             return p
@@ -37,23 +38,23 @@ public class LoginPayload: CleartextPayloadJSON {
         return nil
     }
 
-    override public func isValid() -> Bool {
+    override open func isValid() -> Bool {
         if !super.isValid() {
             return false
         }
 
-        if self["deleted"].asBool ?? false {
+        if self["deleted"].bool ?? false {
             return true
         }
 
-        if !LoginPayload.RequiredStringFields.every({ self[$0].isString }) {
+        if !LoginPayload.RequiredStringFields.every({ self[$0].isString() }) {
             return false
         }
 
         if !LoginPayload.OptionalStringFields.every({ field in
             let val = self[field]
             // Yup, 404 is not found, so this means "string or nothing".
-            let valid = val.isString || val.isNull || val.asError?.code == 404
+            let valid = val.isString() || val.isNull() || val.error?.code == 404
             if !valid {
                 log.debug("Field \(field) is invalid: \(val)")
             }
@@ -66,7 +67,7 @@ public class LoginPayload: CleartextPayloadJSON {
             let val = self[field]
             // Yup, 404 is not found, so this means "number or nothing".
             // We only check for number because we're including timestamps as NSNumbers.
-            let valid = val.isNumber || val.isNull || val.asError?.code == 404
+            let valid = val.isNumber() || val.isNull() || val.error?.code == 404
             if !valid {
                 log.debug("Field \(field) is invalid: \(val)")
             }
@@ -78,62 +79,62 @@ public class LoginPayload: CleartextPayloadJSON {
         return true
     }
 
-    public var hostname: String {
-        return self["hostname"].asString!
+    open var hostname: String {
+        return self["hostname"].string!
     }
 
-    public var username: String {
-        return self["username"].asString!
+    open var username: String {
+        return self["username"].string!
     }
 
-    public var password: String {
-        return self["password"].asString!
+    open var password: String {
+        return self["password"].string!
     }
 
-    public var usernameField: String {
-        return self["usernameField"].asString!
+    open var usernameField: String {
+        return self["usernameField"].string!
     }
 
-    public var passwordField: String {
-        return self["passwordField"].asString!
+    open var passwordField: String {
+        return self["passwordField"].string!
     }
 
-    public var formSubmitURL: String? {
-        return self["formSubmitURL"].asString
+    open var formSubmitURL: String? {
+        return self["formSubmitURL"].string
     }
 
-    public var httpRealm: String? {
-        return self["httpRealm"].asString
+    open var httpRealm: String? {
+        return self["httpRealm"].string
     }
 
-    private func timestamp(field: String) -> Timestamp? {
+    fileprivate func timestamp(_ field: String) -> Timestamp? {
         let json = self[field]
-        if let i = json.asInt64 where i > 0 {
+        if let i = json.int64, i > 0 {
             return Timestamp(i)
         }
         return nil
     }
 
-    public var timesUsed: Int? {
-        return self["timesUsed"].asInt
+    open var timesUsed: Int? {
+        return self["timesUsed"].int
     }
 
-    public var timeCreated: Timestamp? {
+    open var timeCreated: Timestamp? {
         return self.timestamp("timeCreated")
     }
 
-    public var timeLastUsed: Timestamp? {
+    open var timeLastUsed: Timestamp? {
         return self.timestamp("timeLastUsed")
     }
 
-    public var timePasswordChanged: Timestamp? {
+    open var timePasswordChanged: Timestamp? {
         return self.timestamp("timePasswordChanged")
     }
 
-    override public func equalPayloads(obj: CleartextPayloadJSON) -> Bool {
+    override open func equalPayloads(_ obj: CleartextPayloadJSON) -> Bool {
         if let p = obj as? LoginPayload {
             if !super.equalPayloads(p) {
-                return false;
+                return false
             }
 
             if p.deleted || self.deleted {
@@ -144,7 +145,7 @@ public class LoginPayload: CleartextPayloadJSON {
             // But we just checked, so we're good to roll on.
 
             return LoginPayload.RequiredStringFields.every({ field in
-                p[field].asString == self[field].asString
+                p[field].string == self[field].string
             })
 
             // TODO: optional fields.

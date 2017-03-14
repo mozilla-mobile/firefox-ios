@@ -6,6 +6,7 @@ import Foundation
 import Shared
 import XCGLogger
 import Deferred
+import SwiftyJSON
 
 private let CurrentSyncAuthStateCacheVersion = 1
 
@@ -13,25 +14,25 @@ private let log = Logger.syncLogger
 
 public struct SyncAuthStateCache {
     let token: TokenServerToken
-    let forKey: NSData
+    let forKey: Data
     let expiresAt: Timestamp
 }
 
 public protocol SyncAuthState {
     func invalidate()
-    func token(now: Timestamp, canBeExpired: Bool) -> Deferred<Maybe<(token: TokenServerToken, forKey: NSData)>>
+    func token(_ now: Timestamp, canBeExpired: Bool) -> Deferred<Maybe<(token: TokenServerToken, forKey: Data)>>
 }
 
-public func syncAuthStateCachefromJSON(json: JSON) -> SyncAuthStateCache? {
-    if let version = json["version"].asInt {
+public func syncAuthStateCachefromJSON(_ json: JSON) -> SyncAuthStateCache? {
+    if let version = json["version"].int {
         if version != CurrentSyncAuthStateCacheVersion {
             log.warning("Sync Auth State Cache is wrong version; dropping.")
             return nil
         }
         if let
             token = TokenServerToken.fromJSON(json["token"]),
-            forKey = json["forKey"].asString?.hexDecodedData,
-            expiresAt = json["expiresAt"].asInt64 {
+            let forKey = json["forKey"].string?.hexDecodedData,
+            let expiresAt = json["expiresAt"].int64 {
             return SyncAuthStateCache(token: token, forKey: forKey, expiresAt: Timestamp(expiresAt))
         }
     }
@@ -44,14 +45,14 @@ extension SyncAuthStateCache: JSONLiteralConvertible {
             "version": CurrentSyncAuthStateCacheVersion,
             "token": token.asJSON(),
             "forKey": forKey.hexEncodedString,
-            "expiresAt": NSNumber(unsignedLongLong: expiresAt),
-        ])
+            "expiresAt": NSNumber(value: expiresAt),
+        ] as NSDictionary)
     }
 }
 
-public class FirefoxAccountSyncAuthState: SyncAuthState {
-    private let account: FirefoxAccount
-    private let cache: KeychainCache<SyncAuthStateCache>
+open class FirefoxAccountSyncAuthState: SyncAuthState {
+    fileprivate let account: FirefoxAccount
+    fileprivate let cache: KeychainCache<SyncAuthStateCache>
 
     init(account: FirefoxAccount, cache: KeychainCache<SyncAuthStateCache>) {
         self.account = account
@@ -59,7 +60,7 @@ public class FirefoxAccountSyncAuthState: SyncAuthState {
     }
 
     // If a token gives you a 401, invalidate it and request a new one.
-    public func invalidate() {
+    open func invalidate() {
         log.info("Invalidating cached token server token.")
         self.cache.value = nil
     }
@@ -69,14 +70,18 @@ public class FirefoxAccountSyncAuthState: SyncAuthState {
     //
     // It's tricky to get Swift to recurse into a closure that captures from the environment without
     // segfaulting the compiler, so we pass everything around, like barbarians.
-    private func generateAssertionAndFetchTokenAt(audience: String, client: TokenServerClient, clientState: String?, married: MarriedState,
-            now: Timestamp, retryCount: Int) -> Deferred<Maybe<TokenServerToken>> {
+    fileprivate func generateAssertionAndFetchTokenAt(_ audience: String,
+                                                      client: TokenServerClient,
+                                                      clientState: String?,
+                                                      married: MarriedState,
+                                                      now: Timestamp,
+                                                      retryCount: Int) -> Deferred<Maybe<TokenServerToken>> {
         let assertion = married.generateAssertionForAudience(audience, now: now)
         return client.token(assertion, clientState: clientState).bind { result in
             if retryCount > 0 {
                 if let tokenServerError = result.failureValue as? TokenServerError {
                     switch tokenServerError {
-                    case let .Remote(code, status, remoteTimestamp) where code == 401 && status == "invalid-timestamp":
+                    case let .remote(code, status, remoteTimestamp) where code == 401 && status == "invalid-timestamp":
                         if let remoteTimestamp = remoteTimestamp {
                             let skew = Int64(remoteTimestamp) - Int64(now) // Without casts, runtime crash due to overflow.
                             log.info("Token server responded with 401/invalid-timestamp: retrying with remote timestamp \(remoteTimestamp), which is local timestamp + skew = \(now) + \(skew).")
@@ -92,7 +97,7 @@ public class FirefoxAccountSyncAuthState: SyncAuthState {
         }
     }
 
-    public func token(now: Timestamp, canBeExpired: Bool) -> Deferred<Maybe<(token: TokenServerToken, forKey: NSData)>> {
+    open func token(_ now: Timestamp, canBeExpired: Bool) -> Deferred<Maybe<(token: TokenServerToken, forKey: Data)>> {
         if let value = cache.value {
             // Give ourselves some room to do work.
             let isExpired = value.expiresAt < now + 5 * OneMinuteInMilliseconds
@@ -116,7 +121,7 @@ public class FirefoxAccountSyncAuthState: SyncAuthState {
             if let married = result.successValue {
                 log.info("Account is in Married state; generating assertion.")
                 let tokenServerEndpointURL = self.account.configuration.sync15Configuration.tokenServerEndpointURL
-                let audience = TokenServerClient.getAudienceForURL(tokenServerEndpointURL)
+                let audience = TokenServerClient.getAudience(forURL: tokenServerEndpointURL)
                 let client = TokenServerClient(URL: tokenServerEndpointURL)
                 let clientState = FxAClient10.computeClientState(married.kB)
                 log.debug("Fetching token server token.")

@@ -27,7 +27,7 @@ class FxAClient10Tests: LiveAccountTest {
         // Make sure we don't hide error details.
         let error = NSError(domain: "test", code: 123, userInfo: nil)
 
-        let localError = FxAClientError.Local(error)
+        let localError = FxAClientError.local(error)
         XCTAssertEqual(
             localError.description,
             "<FxAClientError.Local Error Domain=test Code=123 \"The operation couldn’t be completed. (test error 123.)\">")
@@ -35,7 +35,7 @@ class FxAClient10Tests: LiveAccountTest {
             "\(localError)",
             "<FxAClientError.Local Error Domain=test Code=123 \"The operation couldn’t be completed. (test error 123.)\">")
 
-        let remoteError = FxAClientError.Remote(RemoteError(code: 401, errno: 104,
+        let remoteError = FxAClientError.remote(RemoteError(code: 401, errno: 104,
             error: "error", message: "message", info: "info"))
         XCTAssertEqual(
             remoteError.description,
@@ -47,7 +47,7 @@ class FxAClient10Tests: LiveAccountTest {
 
     func testLoginSuccess() {
         withVerifiedAccount { emailUTF8, quickStretchedPW in
-            let e = self.expectationWithDescription("")
+            let e = self.expectation(description: "")
 
             let client = FxAClient10()
             let result = client.login(emailUTF8, quickStretchedPW: quickStretchedPW, getKeys: true)
@@ -63,14 +63,14 @@ class FxAClient10Tests: LiveAccountTest {
                 e.fulfill()
             }
         }
-        self.waitForExpectationsWithTimeout(10, handler: nil)
+        self.waitForExpectations(timeout: 10, handler: nil)
     }
 
     func testLoginFailure() {
         withVerifiedAccount { emailUTF8, _ in
-            let e = self.expectationWithDescription("")
+            let e = self.expectation(description: "")
 
-            let badPassword = FxAClient10.quickStretchPW(emailUTF8, password: "BAD PASSWORD".utf8EncodedData!)
+            let badPassword = FxAClient10.quickStretchPW(emailUTF8, password: "BAD PASSWORD".utf8EncodedData)
 
             let client = FxAClient10()
             let result = client.login(emailUTF8, quickStretchedPW: badPassword, getKeys: true)
@@ -80,10 +80,10 @@ class FxAClient10Tests: LiveAccountTest {
                 } else {
                     if let error = result.failureValue as? FxAClientError {
                         switch error {
-                        case let .Remote(remoteError):
+                        case let .remote(remoteError):
                             XCTAssertEqual(remoteError.code, Int32(400)) // Bad auth.
                             XCTAssertEqual(remoteError.errno, Int32(103)) // Incorrect password.
-                        case let .Local(error):
+                        case let .local(error):
                             XCTAssertEqual(error.description, "")
                         }
                     } else {
@@ -93,48 +93,48 @@ class FxAClient10Tests: LiveAccountTest {
                 e.fulfill()
             }
         }
-        self.waitForExpectationsWithTimeout(10, handler: nil)
+        self.waitForExpectations(timeout: 10, handler: nil)
     }
 
     func testKeysSuccess() {
         withVerifiedAccount { emailUTF8, quickStretchedPW in
-            let e = self.expectationWithDescription("")
+            let e = self.expectation(description: "")
 
             let client = FxAClient10()
             let login: Deferred<Maybe<FxALoginResponse>> = client.login(emailUTF8, quickStretchedPW: quickStretchedPW, getKeys: true)
             let keys: Deferred<Maybe<FxAKeysResponse>> = login.bind { (result: Maybe<FxALoginResponse>) in
                 switch result {
-                case let .Failure(error):
-                    return Deferred(value: .Failure(error))
-                case let .Success(loginResponse):
+                case let .failure(error):
+                    return Deferred(value: .failure(error))
+                case let .success(loginResponse):
                     return client.keys(loginResponse.value.keyFetchToken)
                 }
             }
             keys.upon { result in
                 if let response = result.successValue {
-                    XCTAssertEqual(32, response.kA.length)
-                    XCTAssertEqual(32, response.wrapkB.length)
+                    XCTAssertEqual(32, response.kA.count)
+                    XCTAssertEqual(32, response.wrapkB.count)
                 } else {
                     XCTAssertEqual(result.failureValue!.description, "")
                 }
                 e.fulfill()
             }
         }
-        self.waitForExpectationsWithTimeout(10, handler: nil)
+        self.waitForExpectations(timeout: 10, handler: nil)
     }
 
     func testSignSuccess() {
         withVerifiedAccount { emailUTF8, quickStretchedPW in
-            let e = self.expectationWithDescription("")
+            let e = self.expectation(description: "")
 
             let client = FxAClient10()
             let login: Deferred<Maybe<FxALoginResponse>> = client.login(emailUTF8, quickStretchedPW: quickStretchedPW, getKeys: true)
             let sign: Deferred<Maybe<FxASignResponse>> = login.bind { (result: Maybe<FxALoginResponse>) in
                 switch result {
-                case let .Failure(error):
-                    return Deferred(value: .Failure(error))
-                case let .Success(loginResponse):
-                    let keyPair = RSAKeyPair.generateKeyPairWithModulusSize(1024)
+                case let .failure(error):
+                    return Deferred(value: .failure(error))
+                case let .success(loginResponse):
+                    let keyPair = RSAKeyPair.generate(withModulusSize: 1024)!
                     return client.sign(loginResponse.value.sessionToken, publicKey: keyPair.publicKey)
                 }
             }
@@ -142,13 +142,13 @@ class FxAClient10Tests: LiveAccountTest {
                 if let response = result.successValue {
                     XCTAssertNotNil(response.certificate)
                     // A simple test that we got a reasonable certificate back.
-                    XCTAssertEqual(3, response.certificate.componentsSeparatedByString(".").count)
+                    XCTAssertEqual(3, response.certificate.components(separatedBy: ".").count)
                 } else {
                     XCTAssertEqual(result.failureValue!.description, "")
                 }
                 e.fulfill()
             }
         }
-        self.waitForExpectationsWithTimeout(10, handler: nil)
+        self.waitForExpectations(timeout: 10, handler: nil)
     }
 }

@@ -10,12 +10,12 @@ import XCGLogger
 private let log = Logger.browserLogger
 
 struct TabsButtonUX {
-    static let TitleColor: UIColor = UIColor.blackColor()
-    static let TitleBackgroundColor: UIColor = UIColor.whiteColor()
+    static let TitleColor: UIColor = UIColor.black
+    static let TitleBackgroundColor: UIColor = UIColor.white
     static let CornerRadius: CGFloat = 2
     static let TitleFont: UIFont = UIConstants.DefaultChromeSmallFontBold
     static let BorderStrokeWidth: CGFloat = 1
-    static let BorderColor: UIColor = UIColor.clearColor()
+    static let BorderColor: UIColor = UIColor.clear
     static let TitleInsets = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
 
     static let Themes: [String: Theme] = {
@@ -49,11 +49,11 @@ struct TabsButtonUX {
 }
 
 class TabsButton: UIControl {
-    private var theme: Theme = TabsButtonUX.Themes[Theme.NormalMode]!
+    fileprivate var theme: Theme = TabsButtonUX.Themes[Theme.NormalMode]!
     
-    override var highlighted: Bool {
+    override var isHighlighted: Bool {
         didSet {
-            if highlighted {
+            if isHighlighted {
                 borderColor = theme.highlightBorderColor!
                 titleBackgroundColor = theme.highlightButtonColor
                 textColor = theme.highlightTextColor
@@ -64,39 +64,48 @@ class TabsButton: UIControl {
             }
         }
     }
+    
+    override var transform: CGAffineTransform {
+        didSet {
+            clonedTabsButton?.transform = transform
+        }
+    }
 
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = TabsButtonUX.TitleFont
         label.layer.cornerRadius = TabsButtonUX.CornerRadius
-        label.textAlignment = NSTextAlignment.Center
-        label.userInteractionEnabled = false
+        label.textAlignment = NSTextAlignment.center
+        label.isUserInteractionEnabled = false
         return label
     }()
 
     lazy var insideButton: UIView = {
         let view = UIView()
         view.clipsToBounds = false
-        view.userInteractionEnabled = false
+        view.isUserInteractionEnabled = false
         return view
     }()
 
-    private lazy var labelBackground: UIView = {
+    fileprivate lazy var labelBackground: UIView = {
         let background = UIView()
         background.layer.cornerRadius = TabsButtonUX.CornerRadius
-        background.userInteractionEnabled = false
+        background.isUserInteractionEnabled = false
         return background
     }()
 
-    private lazy var borderView: InnerStrokedView = {
+    fileprivate lazy var borderView: InnerStrokedView = {
         let border = InnerStrokedView()
         border.strokeWidth = TabsButtonUX.BorderStrokeWidth
         border.cornerRadius = TabsButtonUX.CornerRadius
-        border.userInteractionEnabled = false
+        border.isUserInteractionEnabled = false
         return border
     }()
 
-    private var buttonInsets: UIEdgeInsets = TabsButtonUX.TitleInsets
+    fileprivate var buttonInsets: UIEdgeInsets = TabsButtonUX.TitleInsets
+    
+    // Used to temporarily store the cloned button so we can respond to layout changes during animation
+    fileprivate weak var clonedTabsButton: TabsButton?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -110,16 +119,16 @@ class TabsButton: UIControl {
 
     override func updateConstraints() {
         super.updateConstraints()
-        labelBackground.snp_remakeConstraints { (make) -> Void in
+        labelBackground.snp.remakeConstraints { (make) -> Void in
             make.edges.equalTo(insideButton)
         }
-        borderView.snp_remakeConstraints { (make) -> Void in
+        borderView.snp.remakeConstraints { (make) -> Void in
             make.edges.equalTo(insideButton)
         }
-        titleLabel.snp_remakeConstraints { (make) -> Void in
+        titleLabel.snp.remakeConstraints { (make) -> Void in
             make.edges.equalTo(insideButton)
         }
-        insideButton.snp_remakeConstraints { (make) -> Void in
+        insideButton.snp.remakeConstraints { (make) -> Void in
             make.edges.equalTo(self).inset(insets)
         }
     }
@@ -134,6 +143,8 @@ class TabsButton: UIControl {
         button.accessibilityLabel = accessibilityLabel
         button.titleLabel.text = titleLabel.text
 
+        button.theme = theme
+
         // Copy all of the styable properties over to the new TabsButton
         button.titleLabel.font = titleLabel.font
         button.titleLabel.textColor = titleLabel.textColor
@@ -145,12 +156,85 @@ class TabsButton: UIControl {
         button.borderView.strokeWidth = borderView.strokeWidth
         button.borderView.color = borderView.color
         button.borderView.cornerRadius = borderView.cornerRadius
+
         return button
+    }
+    
+    func updateTabCount(_ count: Int, animated: Bool = true) {
+        let currentCount = self.titleLabel.text
+        let infinity = "\u{221E}"
+        let countToBe = (count < 100) ? count.description : infinity
+        // only animate a tab count change if the tab count has actually changed
+        if currentCount != count.description || (clonedTabsButton?.titleLabel.text ?? count.description) != count.description {
+            if let _ = self.clonedTabsButton {
+                self.clonedTabsButton?.layer.removeAllAnimations()
+                self.clonedTabsButton?.removeFromSuperview()
+                insideButton.layer.removeAllAnimations()
+            }
+            
+            // make a 'clone' of the tabs button
+            let newTabsButton = clone() as! TabsButton
+            self.clonedTabsButton = newTabsButton
+            newTabsButton.addTarget(self, action: #selector(TabsButton.cloneDidClickTabs), for: UIControlEvents.touchUpInside)
+            newTabsButton.titleLabel.text = countToBe
+            newTabsButton.accessibilityValue = countToBe
+            superview?.addSubview(newTabsButton)
+            newTabsButton.snp.makeConstraints { make in
+                make.centerY.equalTo(self)
+                make.trailing.equalTo(self)
+                make.size.equalTo(UIConstants.ToolbarHeight)
+            }
+            
+            newTabsButton.frame = self.frame
+            newTabsButton.insets = insets
+            
+            // Instead of changing the anchorPoint of the CALayer, lets alter the rotation matrix math to be
+            // a rotation around a non-origin point
+            let frame = self.insideButton.frame
+            let halfTitleHeight = frame.height / 2
+            
+            var newFlipTransform = CATransform3DIdentity
+            newFlipTransform = CATransform3DTranslate(newFlipTransform, 0, halfTitleHeight, 0)
+            newFlipTransform.m34 = -1.0 / 200.0 // add some perspective
+            newFlipTransform = CATransform3DRotate(newFlipTransform, CGFloat(-M_PI_2), 1.0, 0.0, 0.0)
+            newTabsButton.insideButton.layer.transform = newFlipTransform
+            
+            var oldFlipTransform = CATransform3DIdentity
+            oldFlipTransform = CATransform3DTranslate(oldFlipTransform, 0, halfTitleHeight, 0)
+            oldFlipTransform.m34 = -1.0 / 200.0 // add some perspective
+            oldFlipTransform = CATransform3DRotate(oldFlipTransform, CGFloat(M_PI_2), 1.0, 0.0, 0.0)
+            
+            let animate = {
+                newTabsButton.insideButton.layer.transform = CATransform3DIdentity
+                self.insideButton.layer.transform = oldFlipTransform
+                self.insideButton.layer.opacity = 0
+            }
+            
+            let completion: (Bool) -> Void = { _ in
+                // Remove the clone and setup the actual tab button
+                newTabsButton.removeFromSuperview()
+                
+                self.insideButton.layer.opacity = 1
+                self.insideButton.layer.transform = CATransform3DIdentity
+                self.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility label for the tabs button in the (top) tab toolbar")
+                self.titleLabel.text = countToBe
+                self.accessibilityValue = countToBe
+            }
+            
+            if animated {
+                UIView.animate(withDuration: 1.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.0, options: UIViewAnimationOptions(), animations: animate, completion: completion)
+            } else {
+                completion(true)
+            }
+        }
+    }
+    func cloneDidClickTabs() {
+        sendActions(for: UIControlEvents.touchUpInside)
     }
 }
 
 extension TabsButton: Themeable {
-    func applyTheme(themeName: String) {
+    func applyTheme(_ themeName: String) {
 
         guard let theme = TabsButtonUX.Themes[themeName] else {
             log.error("Unable to apply unknown theme \(themeName)")
@@ -195,7 +279,7 @@ extension TabsButton {
         set { labelBackground.backgroundColor = newValue }
     }
 
-    dynamic var insets : UIEdgeInsets {
+    dynamic var insets: UIEdgeInsets {
         get { return buttonInsets }
         set {
             buttonInsets = newValue

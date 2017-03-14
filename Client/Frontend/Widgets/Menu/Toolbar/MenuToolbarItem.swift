@@ -6,6 +6,8 @@ import Foundation
 
 protocol MenuToolbarItem {
     var title: String { get }
+    var accessibilityIdentifier: String { get }
     var action: MenuAction { get }
-    func iconForState(appState: AppState) -> UIImage?
+    var secondaryAction: MenuAction? { get }
+    func iconForState(_ appState: AppState) -> UIImage?
 }

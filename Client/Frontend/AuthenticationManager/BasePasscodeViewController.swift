@@ -15,7 +15,7 @@ class BasePasscodeViewController: UIViewController {
     let errorPadding: CGFloat = 10
 
     init() {
-        self.authenticationInfo = KeychainWrapper.authenticationInfo()
+        self.authenticationInfo = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo()
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -26,24 +26,24 @@ class BasePasscodeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: #selector(BasePasscodeViewController.dismiss))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.dismissAnimated))
         automaticallyAdjustsScrollViewInsets = false
     }
 
-    func dismiss() {
-        self.dismissViewControllerAnimated(true, completion: nil)
+    func dismissAnimated() {
+        self.dismiss(animated: true, completion: nil)
     }
 }
 
 // MARK: - Error Helpers
 extension BasePasscodeViewController {
-    private func displayError(text: String) {
+    fileprivate func displayError(_ text: String) {
         errorToast?.removeFromSuperview()
         errorToast = {
             let toast = ErrorToast()
             toast.textLabel.text = text
             view.addSubview(toast)
-            toast.snp_makeConstraints { make in
+            toast.snp.makeConstraints { make in
                 make.center.equalTo(self.view)
                 make.left.greaterThanOrEqualTo(self.view).offset(errorPadding)
                 make.right.lessThanOrEqualTo(self.view).offset(-errorPadding)
@@ -72,13 +72,13 @@ extension BasePasscodeViewController {
         displayError(useNewPasscodeError)
     }
 
-    func failIncorrectPasscode(inputView inputView: PasscodeInputView) {
+    func failIncorrectPasscode(_ inputView: PasscodeInputView) {
         authenticationInfo?.recordFailedAttempt()
         let numberOfAttempts = authenticationInfo?.failedAttempts ?? 0
         if numberOfAttempts == AllowedPasscodeFailedAttempts {
             authenticationInfo?.lockOutUser()
             displayError(AuthenticationStrings.maximumAttemptsReachedNoTime)
-            inputView.userInteractionEnabled = false
+            inputView.isUserInteractionEnabled = false
             resignFirstResponder()
         } else {
             displayError(String(format: AuthenticationStrings.incorrectAttemptsRemaining, (AllowedPasscodeFailedAttempts - numberOfAttempts)))
@@ -87,6 +87,6 @@ extension BasePasscodeViewController {
         inputView.resetCode()
 
         // Store mutations on authentication info object
-        KeychainWrapper.setAuthenticationInfo(authenticationInfo)
+        KeychainWrapper.sharedAppContainerKeychain.setAuthenticationInfo(authenticationInfo)
     }
 }

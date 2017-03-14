@@ -13,22 +13,22 @@ class DeferredTests: XCTestCase {
         let d = Deferred<Int>()
         XCTAssertNil(d.peek(), "Value not yet filled.")
 
-        let expectation = expectationWithDescription("Waiting on value.")
+        let expectation = self.expectation(description: "Waiting on value.")
         d.upon({ x in
             expectation.fulfill()
         })
 
         d.fill(5)
-        waitForExpectationsWithTimeout(10) { (error) in
+        waitForExpectations(timeout: 10) { (error) in
             XCTAssertNil(error, "\(error)")
         }
 
-        XCTAssertEqual(5, d.peek()!, "Value is filled.");
+        XCTAssertEqual(5, d.peek()!, "Value is filled.")
     }
 
     func testMultipleUponBlocks() {
-        let e1 = self.expectationWithDescription("First.")
-        let e2 = self.expectationWithDescription("Second.")
+        let e1 = self.expectation(description: "First.")
+        let e2 = self.expectation(description: "Second.")
         let d = Deferred<Int>()
         d.upon { x in
             XCTAssertEqual(x, 5)
@@ -39,18 +39,18 @@ class DeferredTests: XCTestCase {
             e2.fulfill()
         }
         d.fill(5)
-        waitForExpectationsWithTimeout(10, handler: nil)
+        waitForExpectations(timeout: 10, handler: nil)
     }
 
     func testOperators() {
-        let e1 = self.expectationWithDescription("First.")
-        let e2 = self.expectationWithDescription("Second.")
+        let e1 = self.expectation(description: "First.")
+        let e2 = self.expectation(description: "Second.")
 
         let f1: () -> Deferred<Maybe<Int>> = {
             return deferMaybe(5)
         }
 
-        let f2: (x: Int) -> Deferred<Maybe<String>> = {
+        let f2: (_ x: Int) -> Deferred<Maybe<String>> = {
             if $0 == 5 {
                 e1.fulfill()
             }
@@ -66,6 +66,6 @@ class DeferredTests: XCTestCase {
             e2.fulfill()
         }
 
-        waitForExpectationsWithTimeout(10, handler: nil)
+        waitForExpectations(timeout: 10, handler: nil)
     }
 }

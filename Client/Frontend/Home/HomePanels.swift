@@ -4,12 +4,13 @@
 
 import Foundation
 import UIKit
+import Shared
 
 /**
  * Data for identifying and constructing a HomePanel.
  */
 struct HomePanelDescriptor {
-    let makeViewController: (profile: Profile) -> UIViewController
+    let makeViewController: (_ profile: Profile) -> UIViewController
     let imageName: String
     let accessibilityLabel: String
     let accessibilityIdentifier: String
@@ -19,7 +20,11 @@ class HomePanels {
     let enabledPanels = [
         HomePanelDescriptor(
             makeViewController: { profile in
-                TopSitesPanel(profile: profile)
+                if UIDevice.current.userInterfaceIdiom != .pad && AppConstants.MOZ_AS_PANEL {
+                    return ActivityStreamPanel(profile: profile)
+                } else {
+                    return TopSitesPanel(profile: profile)
+                }
             },
             imageName: "TopSites",
             accessibilityLabel: NSLocalizedString("Top sites", comment: "Panel accessibility label"),
@@ -33,7 +38,7 @@ class HomePanels {
                 controller.setNavigationBarHidden(true, animated: false)
                 // this re-enables the native swipe to pop gesture on UINavigationController for embedded, navigation bar-less UINavigationControllers
                 // don't ask me why it works though, I've tried to find an answer but can't.
-                // found here, along with many other places: 
+                // found here, along with many other places:
                 // http://luugiathuy.com/2013/11/ios7-interactivepopgesturerecognizer-for-uinavigationcontroller-with-hidden-navigation-bar/
                 controller.interactivePopGestureRecognizer?.delegate = nil
                 return controller
@@ -44,23 +49,16 @@ class HomePanels {
 
         HomePanelDescriptor(
             makeViewController: { profile in
-                let controller = HistoryPanel()
-                controller.profile = profile
+                let history = HistoryPanel()
+                history.profile = profile
+                let controller = UINavigationController(rootViewController: history)
+                controller.setNavigationBarHidden(true, animated: false)
+                controller.interactivePopGestureRecognizer?.delegate = nil
                 return controller
             },
             imageName: "History",
             accessibilityLabel: NSLocalizedString("History", comment: "Panel accessibility label"),
             accessibilityIdentifier: "HomePanels.History"),
-
-        HomePanelDescriptor(
-            makeViewController: { profile in
-                let controller = RemoteTabsPanel()
-                controller.profile = profile
-                return controller
-            },
-            imageName: "SyncedTabs",
-            accessibilityLabel: NSLocalizedString("Synced tabs", comment: "Panel accessibility label"),
-            accessibilityIdentifier: "HomePanels.SyncedTabs"),
 
         HomePanelDescriptor(
             makeViewController: { profile in
@@ -71,5 +69,5 @@ class HomePanels {
             imageName: "ReadingList",
             accessibilityLabel: NSLocalizedString("Reading list", comment: "Panel accessibility label"),
             accessibilityIdentifier: "HomePanels.ReadingList"),
-    ]
+        ]
 }

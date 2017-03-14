@@ -645,21 +645,31 @@ window.addEventListener("submit", function(event) {
 });
 
 if (!window.__firefox__) {
-  window.__firefox__ = { }
+  Object.defineProperty(window, '__firefox__', {
+    enumerable: false,
+    configurable: false,
+    writable: false,
+    value: {}
+  });
 }
 
 function LoginInjector() {
   this.inject = function(msg) {
     try {
-      LoginManagerContent.receiveMessage(msg)
+      LoginManagerContent.receiveMessage(msg);
     } catch(ex) {
       // Eat errors to avoid leaking them to the page
       // alert(ex);
     }
-  }
+  };
 }
 
-window.__firefox__.logins = new LoginInjector()
+Object.defineProperty(window.__firefox__, 'logins', {
+  enumerable: false,
+  configurable: false,
+  writable: false,
+  value: Object.freeze(new LoginInjector())
+});
 
 function map(array, callback) {
 

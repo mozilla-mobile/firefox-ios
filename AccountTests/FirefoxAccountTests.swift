@@ -15,24 +15,26 @@ class FirefoxAccountTests: XCTestCase {
     }
 
     func testSerialization() {
-        let d: [String: AnyObject] = [
+        let d: [String: Any] = [
             "version": 1,
-            "configurationLabel": FirefoxAccountConfigurationLabel.Production.rawValue,
+            "configurationLabel": FirefoxAccountConfigurationLabel.production.rawValue,
             "email": "testtest@test.com",
             "uid": "uid",
+            "deviceRegistration": FxADeviceRegistration(id: "bogus-device", version: 0, lastRegistered: Date.now())
         ]
 
         let account1 = FirefoxAccount(
-                configuration: FirefoxAccountConfigurationLabel.Production.toConfiguration(),
+                configuration: FirefoxAccountConfigurationLabel.production.toConfiguration(),
                 email: d["email"] as! String,
                 uid: d["uid"] as! String,
+                deviceRegistration: (d["deviceRegistration"] as! FxADeviceRegistration),
                 stateKeyLabel: Bytes.generateGUID(),
                 state: SeparatedState())
-        let d1 = account1.asDictionary()
+        let d1 = account1.dictionary()
 
         let account2 = FirefoxAccount.fromDictionary(d1)
         XCTAssertNotNil(account2)
-        let d2 = account2!.asDictionary()
+        let d2 = account2!.dictionary()
 
         for (k, v) in d {
             // Skip version, which is an Int.

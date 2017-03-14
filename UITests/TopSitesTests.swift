@@ -4,147 +4,139 @@
 
 import Foundation
 import WebKit
+import EarlGrey
 @testable import Storage
 @testable import Client
 
 class TopSitesTests: KIFTestCase {
-    private var webRoot: String!
-    private var profile: Profile!
-
+    fileprivate var profile: Profile!
+    
     override func setUp() {
-        profile = (UIApplication.sharedApplication().delegate as! AppDelegate).profile!
-        profile.prefs.setObject([], forKey: "topSites.deletedSuggestedSites")
-        webRoot = SimplePageServer.start()
+        profile = (UIApplication.shared.delegate as! AppDelegate).profile!
+        BrowserUtils.dismissFirstRunUI()
     }
-
-    private func extractTextSizeFromThumbnail(thumbnail: ThumbnailCell) -> CGFloat? {
-        return thumbnail.textLabel.font.pointSize
-    }
-
-    private func accessibilityLabelsForAllTopSites(collection: UICollectionView) -> [String] {
-        return collection.visibleCells().reduce([], combine: { arr, cell in
-            if let label = cell.accessibilityLabel {
-                return arr + [label]
-            }
-            return arr
-        })
-    }
-
-    // Quick way to clear out all our history items
-    private func clearPrivateDataFromHome() {
-        tester().tapViewWithAccessibilityLabel("Show Tabs")
-        tester().tapViewWithAccessibilityLabel("Menu")
-        tester().tapViewWithAccessibilityLabel("Settings")
-        tester().tapViewWithAccessibilityLabel("Clear Private Data")
-        tester().tapViewWithAccessibilityLabel("Clear Private Data", traits: UIAccessibilityTraitButton)
-        tester().tapViewWithAccessibilityLabel("OK")
-        tester().tapViewWithAccessibilityLabel("Settings")
-        tester().tapViewWithAccessibilityLabel("Done")
-        tester().tapViewWithAccessibilityLabel("home")
-    }
-
-    func testChangingDyamicFontOnTopSites() {
-        DynamicFontUtils.restoreDynamicFontSize(tester())
-
-        let collection = tester().waitForViewWithAccessibilityIdentifier("Top Sites View") as! UICollectionView
-        let thumbnail = collection.visibleCells().first as! ThumbnailCell
-
-        let size = extractTextSizeFromThumbnail(thumbnail)
-
-        DynamicFontUtils.bumpDynamicFontSize(tester())
-        let bigSize = extractTextSizeFromThumbnail(thumbnail)
-
-        DynamicFontUtils.lowerDynamicFontSize(tester())
-        let smallSize = extractTextSizeFromThumbnail(thumbnail)
-
-        XCTAssertGreaterThan(bigSize!, size!)
-        XCTAssertGreaterThanOrEqual(size!, smallSize!)
-    }
-
-    func testRemovingSite() {
-        // Switch to the Bookmarks panel so we can later reload Top Sites.
-        tester().tapViewWithAccessibilityLabel("Bookmarks")
-
-        // Load a set of dummy domains.
-        for i in 1...10 {
-            BrowserUtils.addHistoryEntry("", url: NSURL(string: "https://test\(i).com")!)
+    
+    func test_RemovingSite() {
+        // Populate history (Each page has 6 sites listed)
+        for i in 1...6 {
+            BrowserUtils.addHistoryEntry("", url: URL(string: "https://test\(i).com")!)
         }
-
-        // Switch back to the Top Sites panel.
-        tester().tapViewWithAccessibilityLabel("Top sites")
-
+        // Switch to the Bookmarks panel and back so we can later reload Top Sites.
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Bookmarks")).perform(grey_tap())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Top sites")).perform(grey_tap())
+        
         // Remove the first site and verify that all other sites shift to replace it.
-        let collection = tester().waitForViewWithAccessibilityIdentifier("Top Sites View") as! UICollectionView
-
-        // Get the first cell (test10.com).
-        let cell = collection.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0))!
-
-        let cellToDeleteLabel = cell.accessibilityLabel
-        tester().longPressViewWithAccessibilityLabel(cellToDeleteLabel, duration: 1)
-        tester().waitForViewWithAccessibilityLabel("Remove page - \(cellToDeleteLabel!)")
-        cell.tapAtPoint(CGPointZero)
-
-        // Close editing mode.
-        tester().tapViewWithAccessibilityLabel("Done")
-        tester().waitForAbsenceOfViewWithAccessibilityLabel("Remove page")
-
-        let postDeletedLabels = accessibilityLabelsForAllTopSites(collection)
-        XCTAssertFalse(postDeletedLabels.contains(cellToDeleteLabel!))
+        // Get the first cell.
+        deleteHistoryTopsite()
+        
+        // clear rest of the history
+        deleteHistoryTopsite(5)
     }
-
-    func testRemovingSuggestedSites() {
-        // Switch to the Bookmarks panel so we can later reload Top Sites.
-        tester().tapViewWithAccessibilityLabel("Bookmarks")
-        tester().tapViewWithAccessibilityLabel("Top sites")
-
-        var collection = tester().waitForViewWithAccessibilityIdentifier("Top Sites View") as! UICollectionView
-        let firstCell = collection.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0))!
-        let cellToDeleteLabel = firstCell.accessibilityLabel
-        tester().longPressViewWithAccessibilityLabel(cellToDeleteLabel, duration: 1)
-        tester().tapViewWithAccessibilityLabel("Remove page - \(cellToDeleteLabel!)")
-        tester().waitForAnimationsToFinish()
-
-        // Close editing mode
-        tester().tapViewWithAccessibilityLabel("Done")
-
-        // Verify that the tile we removed is removed
-
-        collection = tester().waitForViewWithAccessibilityIdentifier("Top Sites View") as! UICollectionView
-        XCTAssertFalse(accessibilityLabelsForAllTopSites(collection).contains(cellToDeleteLabel!))
+    
+    func test_RemovingSuggestedSites() {
+        // Switch to the Bookmarks panel and back so we can later reload Top Sites.
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Bookmarks")).perform(grey_tap())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Top sites")).perform(grey_tap())
+        
+        let topSiteCell = tester().waitForView(withAccessibilityIdentifier: "TopSitesCell") as! ASHorizontalScrollCell
+        let collection = topSiteCell.collectionView
+        let firstCell = collection.visibleCells.first!
+        
+        // Delete the site, and verify that the tile we removed is removed
+        deleteSuggestedTopsite(firstCell.accessibilityLabel!)
     }
-
-    func testEmptyState() {
-        // Delete all of the suggested tiles
-        var collection = tester().waitForViewWithAccessibilityIdentifier("Top Sites View") as! UICollectionView
-        while collection.visibleCells().count > 0 {
-            let firstCell = collection.visibleCells().first!
-            firstCell.longPressAtPoint(CGPointZero, duration: 3)
-            tester().tapViewWithAccessibilityLabel("Remove page - \(firstCell.accessibilityLabel!)")
-            tester().waitForAnimationsToFinish()
+    
+    func test_EmptyState() {
+        // Switch to the Bookmarks panel and back so we can later reload Top Sites.
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Bookmarks")).perform(grey_tap())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Top sites")).perform(grey_tap())
+        
+        // Delete all of the suggested tiles (with suggested site, they are marked hidden,
+        // not removed completely)
+        var topSiteCell = tester().waitForView(withAccessibilityIdentifier: "TopSitesCell") as! ASHorizontalScrollCell
+        var collection = topSiteCell.collectionView
+        
+        while collection.visibleCells.count > 0 {
+            let firstCell = collection.visibleCells.first!
+            if firstCell.isVisibleInViewHierarchy() == false {
+                break
+            } else {
+                deleteSuggestedTopsite(firstCell.accessibilityLabel!)
+            }
         }
-
-        // Close editing mode
-        tester().tapViewWithAccessibilityLabel("Done")
-
-        // Check for empty state
-        XCTAssertTrue(tester().viewExistsWithLabel("Welcome to Top Sites"))
-
+        
         // Add a new history item
-
         // Verify that empty state no longer appears
-        BrowserUtils.addHistoryEntry("", url: NSURL(string: "https://mozilla.org")!)
-
-        tester().tapViewWithAccessibilityLabel("Bookmarks")
-        tester().tapViewWithAccessibilityLabel("Top sites")
-
-        collection = tester().waitForViewWithAccessibilityIdentifier("Top Sites View") as! UICollectionView
-        XCTAssertEqual(collection.visibleCells().count, 1)
-        XCTAssertFalse(tester().viewExistsWithLabel("Welcome to Top Sites"))
+        BrowserUtils.addHistoryEntry("", url: URL(string: "https://mozilla.org")!)
+        
+        // Switch to the Bookmarks panel and back so we can later reload Top Sites.
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Bookmarks")).perform(grey_tap())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Top sites")).perform(grey_tap())
+        
+        topSiteCell = tester().waitForView(withAccessibilityIdentifier: "TopSitesCell") as! ASHorizontalScrollCell
+        collection = topSiteCell.collectionView
+        // 1 topsite from history is populated: no default topsites are re-populated
+        XCTAssertEqual(collection.visibleCells.count, 1)
+        
+        // Delete the history item cell for cleanup
+        let firstCell = collection.visibleCells.first!
+        deleteSuggestedTopsite(firstCell.accessibilityLabel!)
+        
     }
-
+    
+    fileprivate func deleteSuggestedTopsite(_ accessibilityLabel: String) {
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(accessibilityLabel))
+            .inRoot(grey_kindOfClass(NSClassFromString("Client.TopSiteItemCell")))
+            .perform(grey_longPress())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Remove"))
+            .inRoot(grey_kindOfClass(NSClassFromString("Client.ActionOverlayTableViewCell")))
+            .perform(grey_tap())
+        
+        let disappeared = GREYCondition(name: "Wait for icon to disappear", block: { _ in
+            var errorOrNil: NSError?
+            
+            let matcher = grey_allOfMatchers([grey_accessibilityLabel(accessibilityLabel),
+                                              grey_kindOfClass(NSClassFromString("UILabel")),
+                                              grey_notVisible()])
+            
+            EarlGrey.select(elementWithMatcher: matcher!).assert(with: grey_notNil(), error:  &errorOrNil)
+            let success = errorOrNil == nil
+            return success
+        }).wait(withTimeout: 5)
+        
+        GREYAssertTrue(disappeared, reason: "Failed to disappear")
+    }
+    
+    fileprivate func deleteHistoryTopsite(_ siteCount: Int = 1) {
+        
+        let topSiteCell = tester().waitForView(withAccessibilityIdentifier: "TopSitesCell") as! ASHorizontalScrollCell
+        let collection = topSiteCell.collectionView
+        for _ in 1...siteCount {
+            let firstCell = collection.visibleCells.first!
+            let accessibilityLabel = firstCell.accessibilityLabel
+            
+            EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(accessibilityLabel))
+                .inRoot(grey_kindOfClass(NSClassFromString("Client.TopSiteItemCell")))
+                .perform(grey_longPress())
+            EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Remove"))
+                .inRoot(grey_kindOfClass(NSClassFromString("Client.ActionOverlayTableViewCell")))
+                .perform(grey_tap())
+            
+            let disappeared = GREYCondition(name: "Wait for icon to disappear", block: { _ in
+                var errorOrNil: NSError?
+                EarlGrey.select(elementWithMatcher:grey_accessibilityLabel(accessibilityLabel))
+                    .assert(with: grey_notNil(), error:  &errorOrNil)
+                let success = errorOrNil != nil
+                return success
+            }).wait(withTimeout: 5)
+            
+            GREYAssertTrue(disappeared, reason: "Failed to disappear")
+        }
+    }
+    
     override func tearDown() {
-        DynamicFontUtils.restoreDynamicFontSize(tester())
+        profile.prefs.setObject([], forKey: "topSites.deletedSuggestedSites")
         BrowserUtils.resetToAboutHome(tester())
-        clearPrivateDataFromHome()
     }
+    
 }

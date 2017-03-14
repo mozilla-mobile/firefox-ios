@@ -6,8 +6,11 @@ import Foundation
 
 protocol MenuItem {
     var title: String { get }
+    var accessibilityIdentifier: String { get }
     var action: MenuAction { get }
+    var secondaryAction: MenuAction? { get }
     var animation: Animatable? { get }
-    func iconForState(appState: AppState) -> UIImage?
-    func selectedIconForState(appState: AppState) -> UIImage?
+    var isDisabled: Bool { set get }
+    func iconForState(_ appState: AppState) -> UIImage?
+    func selectedIconForState(_ appState: AppState) -> UIImage?
 }

@@ -6,13 +6,25 @@
 @testable import Storage
 import Foundation
 import WebKit
+import EarlGrey
 
 class BookmarksPanelTests: KIFTestCase {
+    
+    override func setUp() {
+        super.setUp()
+		BrowserUtils.dismissFirstRunUI()
+	}
+	
+    override func tearDown() {
+        super.tearDown()
+		BrowserUtils.resetToAboutHome(tester())
+    }
+    
     func testBookmarkPanelBufferOnly() {
         // Insert some data into the buffer. There will be nothing in the mirror, but we can still
         // show Desktop Bookmarks.
 
-        let application = UIApplication.sharedApplication()
+        let application = UIApplication.shared
 
         guard let delegate = application.delegate as? TestAppDelegate else {
             XCTFail("Couldn't get app delegate.")
@@ -26,23 +38,28 @@ class BookmarksPanelTests: KIFTestCase {
             return
         }
 
-        let record1 = BookmarkMirrorItem.bookmark("aaaaaaaaaaaa", modified: NSDate.now(), hasDupe: false, parentID: BookmarkRoots.ToolbarFolderGUID, parentName: "Bookmarks Toolbar", title: "AAA", description: "AAA desc", URI: "http://getfirefox.com", tags: "[]", keyword: nil)
-        let record2 = BookmarkMirrorItem.livemark("bbbbbbbbbbbb", modified: NSDate.now(), hasDupe: false, parentID: BookmarkRoots.ToolbarFolderGUID, parentName: "Bookmarks Toolbar", title: "Some Livemark", description: nil, feedURI: "http://example.org/feed", siteURI: "http://example.org/news")
-        let toolbar = BookmarkMirrorItem.folder("toolbar", modified: NSDate.now(), hasDupe: false, parentID: "places", parentName: "", title: "Bookmarks Toolbar", description: "Add bookmarks to this folder to see them displayed on the Bookmarks Toolbar", children: ["aaaaaaaaaaaa", "bbbbbbbbbbbb"])
+        let record1 = BookmarkMirrorItem.bookmark("aaaaaaaaaaaa", modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.ToolbarFolderGUID, parentName: "Bookmarks Toolbar", title: "AAA", description: "AAA desc", URI: "http://getfirefox.com", tags: "[]", keyword: nil)
+        let record2 = BookmarkMirrorItem.livemark("bbbbbbbbbbbb", modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.ToolbarFolderGUID, parentName: "Bookmarks Toolbar", title: "Some Livemark", description: nil, feedURI: "http://example.org/feed", siteURI: "http://example.org/news")
+        let toolbar = BookmarkMirrorItem.folder("toolbar", modified: Date.now(), hasDupe: false, parentID: "places", parentName: "", title: "Bookmarks Toolbar", description: "Add bookmarks to this folder to see them displayed on the Bookmarks Toolbar", children: ["aaaaaaaaaaaa", "bbbbbbbbbbbb"])
         let recordsA: [BookmarkMirrorItem] = [record1, toolbar, record2]
 
         XCTAssertTrue(bookmarks.applyRecords(recordsA).value.isSuccess)
 
-        tester().tapViewWithAccessibilityLabel("Bookmarks")
-        tester().tapViewWithAccessibilityLabel("Desktop Bookmarks")
-        tester().tapViewWithAccessibilityLabel("Bookmarks Toolbar")
-        tester().waitForViewWithAccessibilityLabel("AAA")
-        tester().waitForViewWithAccessibilityLabel("Some Livemark")
-
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Bookmarks")).perform(grey_tap())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Desktop Bookmarks")).perform(grey_tap())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Bookmarks Toolbar")).perform(grey_tap())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("AAA"))
+        .assert(grey_sufficientlyVisible())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Some Livemark"))
+            .assert(grey_sufficientlyVisible())
+        
         // When we tap the livemark, we load the siteURI.
-        tester().tapViewWithAccessibilityLabel("Some Livemark")
-
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Some Livemark")).perform(grey_tap())
+        
         // … so we show the truncated URL.
-        tester().waitForViewWithAccessibilityLabel("example.org/news")
+        // Strangely, earlgrey cannot find the label in buddybuild, but passes locally. 
+        // Using KIF for this check for now.
+        tester().waitForView(withAccessibilityLabel: "example.org/news")
+        
     }
 }

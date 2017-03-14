@@ -5,20 +5,23 @@
 import Foundation
 import Shared
 import UIKit
+import SwiftyJSON
 
 private let PrefKeyProfileDate = "PrefKeyProfileDate"
 private let PrefKeyPingCount = "PrefKeyPingCount"
-private let PrefKeyClientID = "PrefKeyClientID"
 private let PrefKeyModel = "PrefKeyModel"
 
 // See https://gecko.readthedocs.org/en/latest/toolkit/components/telemetry/telemetry/core-ping.html
-private let PingVersion = 3
+private let PingVersion = 7
 
 class CorePing: TelemetryPing {
     let payload: JSON
+    let prefs: Prefs
 
     init(profile: Profile) {
-        let version = NSProcessInfo.processInfo().operatingSystemVersion
+        self.prefs = profile.prefs
+
+        let version = ProcessInfo.processInfo.operatingSystemVersion
         let versionString = "\(version.majorVersion).\(version.minorVersion).\(version.patchVersion)"
 
         let pingCount = profile.prefs.intForKey(PrefKeyPingCount) ?? 0
@@ -27,21 +30,13 @@ class CorePing: TelemetryPing {
         let profileDate: Int
         if let date = profile.prefs.intForKey(PrefKeyProfileDate) {
             profileDate = Int(date)
-        } else if let attributes = try? NSFileManager.defaultManager().attributesOfItemAtPath(profile.files.rootPath as String),
-                  let date = attributes[NSFileCreationDate] as? NSDate {
+        } else if let attributes = try? FileManager.default.attributesOfItem(atPath: profile.files.rootPath as String),
+                  let date = attributes[FileAttributeKey.creationDate] as? NSDate {
             let seconds = date.timeIntervalSince1970
             profileDate = Int(UInt64(seconds) * OneSecondInMilliseconds / OneDayInMilliseconds)
             profile.prefs.setInt(Int32(profileDate), forKey: PrefKeyProfileDate)
         } else {
             profileDate = 0
-        }
-
-        let clientID: String
-        if let id = profile.prefs.stringForKey(PrefKeyClientID) {
-            clientID = id
-        } else {
-            clientID = NSUUID().UUIDString
-            profile.prefs.setString(clientID, forKey: PrefKeyClientID)
         }
 
         let model: String
@@ -50,16 +45,27 @@ class CorePing: TelemetryPing {
         } else {
             var sysinfo = utsname()
             uname(&sysinfo)
-            let rawModel = NSString(bytes: &sysinfo.machine, length: Int(_SYS_NAMELEN), encoding: NSASCIIStringEncoding)!
-            model = rawModel.stringByTrimmingCharactersInSet(NSCharacterSet.controlCharacterSet())
+            let rawModel = NSString(bytes: &sysinfo.machine, length: Int(_SYS_NAMELEN), encoding: String.Encoding.ascii.rawValue)!
+            model = rawModel.trimmingCharacters(in: NSCharacterSet.controlCharacters)
             profile.prefs.setString(model, forKey: PrefKeyModel)
         }
 
-        let locale = NSBundle.mainBundle().preferredLocalizations.first!.stringByReplacingOccurrencesOfString("_", withString: "-")
+        let locale = Bundle.main.preferredLocalizations.first!.replacingOccurrences(of: "_", with: "-")
+        let defaultEngine = profile.searchEngines.defaultEngine
 
-        let out: [String: AnyObject] = [
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        let date = formatter.string(from: NSDate() as Date)
+
+        let timezoneOffset = NSTimeZone.local.secondsFromGMT() / 60
+
+        let usageCount = UsageTelemetry.getCount(prefs)
+        let usageTime = UsageTelemetry.getTime(prefs)
+        UsageTelemetry.reset(prefs)
+
+        var out: [String: Any] = [
             "v": PingVersion,
-            "clientId": clientID,
+            "clientId": profile.clientID,
             "seq": Int(pingCount),
             "locale": locale,
             "os": "iOS",
@@ -67,8 +73,25 @@ class CorePing: TelemetryPing {
             "device": "Apple-" + model,
             "arch": "arm",
             "profileDate": profileDate,
-            "defaultSearch": profile.searchEngines.defaultEngine.shortName,
+            "defaultSearch": defaultEngine.engineID as Any,
+            "created": date,
+            "tz": timezoneOffset,
+            "sessions": usageCount,
+            "durations": usageTime,
         ]
+
+        if let searches = SearchTelemetry.getData(profile.prefs) {
+            out["searches"] = searches
+            SearchTelemetry.resetCount(profile.prefs)
+        }
+
+        if let newTabChoice = self.prefs.stringForKey(NewTabAccessors.PrefKey) {
+            out["defaultNewTabExperience"] = newTabChoice as AnyObject?
+        }
+
+        if let chosenEmailClient = self.prefs.stringForKey(PrefsKeys.KeyMailToOption) {
+            out["defaultMailClient"] = chosenEmailClient as AnyObject?
+        }
 
         payload = JSON(out)
     }

@@ -1,4 +1,4 @@
-Firefox for iOS [![codebeat badge](https://codebeat.co/badges/67e58b6d-bc89-4f22-ba8f-7668a9c15c5a)](https://codebeat.co/projects/github-com-mozilla-firefox-ios)
+Firefox for iOS [![codebeat badge](https://codebeat.co/badges/67e58b6d-bc89-4f22-ba8f-7668a9c15c5a)](https://codebeat.co/projects/github-com-mozilla-firefox-ios) [![BuddyBuild](https://dashboard.buddybuild.com/api/statusImage?appID=57bf25c0f096bc01001e21e0&branch=master&build=latest)](https://dashboard.buddybuild.com/apps/57bf25c0f096bc01001e21e0/build/latest)
 ===============
 
 Download on the [App Store](https://itunes.apple.com/app/firefox-web-browser/id989804926).
@@ -6,13 +6,15 @@ Download on the [App Store](https://itunes.apple.com/app/firefox-web-browser/id9
 This branch
 -----------
 
-This branch is for mainline development that will eventually ship as v5.0.
+This branch is for mainline development that will ship in *v8.0*.
 
-See the __v4.x__ branch if you're doing stabilization work for v4.0. If you are interested in fixing a bug on the __v4.x__ stabilization branch, take a look at the list of open bugs that are marked as [tracking 4.0](https://wiki.mozilla.org/Mobile/Triage/iOS#iOS_Tracking_4.0.2B).
+This branch works with Xcode 8.2.1, and supports iOS 9.x and 10.
 
-This branch works with Xcode 7.2.1, and supports iOS 8.2 and 9.x. Although you can only run and debug from Xcode on a 9.2.1 device.
+This branch is written in Swift 3.0.
 
 Please make sure you aim your pull requests in the right direction.
+
+For bug fixes and features for the upcoming v7.0 release, please see the *v7.x* branch.
 
 Getting involved
 ----------------
@@ -21,9 +23,9 @@ We encourage you to participate in this open source project. We love Pull Reques
 
 * IRC:            [#mobile](https://wiki.mozilla.org/IRC) for general discussion and [#mobistatus](https://wiki.mozilla.org/IRC) for team status updates.
 * Mailing list:   [mobile-firefox-dev@mozilla.org](https://mail.mozilla.org/listinfo/mobile-firefox-dev).
-* Bugs:           [File a new bug](https://bugzilla.mozilla.org/enter_bug.cgi?bug_file_loc=http%3A%2F%2F&bug_ignored=0&op_sys=iOS%20&product=Firefox%20for%20iOS&rep_platform=All) • [Existing bugs](https://bugzilla.mozilla.org/describecomponents.cgi?product=Firefox%20for%20iOS)
+* Bugs:           [File a new bug](https://bugzilla.mozilla.org/enter_bug.cgi?bug_file_loc=http%3A%2F%2F&bug_ignored=0&op_sys=iOS%20&product=Firefox%20for%20iOS&rep_platform=All) • [Existing bugs](https://bugzilla.mozilla.org/describecomponents.cgi?product=Firefox%20for%20iOS) 
 
-This is a work in progress on some early ideas.  Don't get too attached to this code. Tomorrow everything will be different.
+Want to contribute but don't know where to start? Here is a list of [Good First Bugs.](http://www.joshmatthews.net/bugsahoy/?mobileios=1&simple=1)
 
 Likewise, the design and UX is still in flux. Don't get attached to them. They will change tomorrow!
 https://mozilla.invisionapp.com/share/HA254M642#/screens/63057282?maintainScrollPosition=false
@@ -33,7 +35,7 @@ https://mozilla.invisionapp.com/share/HA254M642#/screens/63057282?maintainScroll
 Building the code
 -----------------
 
-> __As of March 28, 2016, this project requires Xcode 7.3.__
+> __As of Sept. 16, 2016, this project requires Xcode 8.__
 
 1. Install the latest [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple.
 1. Install Carthage
@@ -46,7 +48,7 @@ Building the code
 1. Clone the repository:
 
   ```shell
-  git clone https://github.com/mozilla/firefox-ios
+  git clone https://github.com/mozilla-mobile/firefox-ios
   ```
 
 1. Pull in the project dependencies:

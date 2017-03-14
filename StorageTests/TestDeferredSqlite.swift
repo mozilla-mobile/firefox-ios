@@ -11,8 +11,8 @@ import XCTest
 class TestDeferredSqlite: XCTestCase {
     func testCancelling() {
         let files = MockFiles()
-        let db = SwiftData(filename: (try! (files.getAndEnsureDirectory() as NSString)).stringByAppendingPathComponent("test.db"))
-        let expectation = self.expectationWithDescription("Wait")
+        let db = SwiftData(filename: (try! (files.getAndEnsureDirectory() as NSString)).appendingPathComponent("test.db"))
+        let expectation = self.expectation(description: "Wait")
 
         let deferred = DeferredDBOperation(db: db, block: { (connection, err) -> Int? in
             XCTFail("This should be cancelled before hitting this")
@@ -27,6 +27,6 @@ class TestDeferredSqlite: XCTestCase {
         deferred.cancel()
         deferred.start()
 
-        waitForExpectationsWithTimeout(10, handler: nil)
+        waitForExpectations(timeout: 10, handler: nil)
     }
 }

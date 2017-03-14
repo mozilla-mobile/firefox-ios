@@ -5,6 +5,7 @@
 import Foundation
 import Shared
 import GCDWebServers
+import SwiftyJSON
 @testable import Sync
 
 import XCTest
@@ -22,7 +23,7 @@ private func optStringArray(x: AnyObject?) -> [String]? {
     guard let str = x as? String else {
         return nil
     }
-    return str.componentsSeparatedByString(",").map { $0.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) }
+    return str.components(separatedBy: ",").map { $0.trimmingCharacters(in:NSCharacterSet.whitespacesAndNewlines) }
 }
 
 private struct SyncRequestSpec {
@@ -39,23 +40,24 @@ private struct SyncRequestSpec {
         // Input is "/1.5/user/storage/collection", possibly with "/id" at the end.
         // That means we get five or six path components here, the first being empty.
 
-        let parts = request.path!.componentsSeparatedByString("/").filter { !$0.isEmpty }
+        let parts = request.path!.components(separatedBy: "/").filter { !$0.isEmpty }
         let id: String?
-        let ids = optStringArray(request.query["ids"])
-        let newer = optTimestamp(request.query["newer"])
-        let full: Bool = request.query["full"] != nil
+        let query = request.query as! [String: AnyObject]
+        let ids = optStringArray(x: query["ids"])
+        let newer = optTimestamp(x: query["newer"])
+        let full: Bool = query["full"] != nil
 
         let limit: Int?
-        if let lim = request.query["limit"] as? String {
+        if let lim = query["limit"] as? String {
             limit = Int(lim)
         } else {
             limit = nil
         }
 
-        let offset = request.query["offset"] as? String
+        let offset = query["offset"] as? String
 
         let sort: SortOption?
-        switch request.query["sort"] as? String ?? "" {
+        switch query["sort"] as? String ?? "" {
         case "oldest":
             sort = SortOption.OldestFirst
         case "newest":
@@ -97,12 +99,12 @@ struct SyncDeleteRequestSpec {
     static func fromRequest(request: GCDWebServerRequest) -> SyncDeleteRequestSpec? {
         // Input is "/1.5/user{/storage{/collection{/id}}}".
         // That means we get four, five, or six path components here, the first being empty.
-        return SyncDeleteRequestSpec.fromPath(request.path!, withQuery: request.query)
+        return SyncDeleteRequestSpec.fromPath(path: request.path!, withQuery: request.query as! [NSString : AnyObject])
     }
 
-    static func fromPath(path: String, withQuery query: [NSObject: AnyObject]) -> SyncDeleteRequestSpec? {
-        let parts = path.componentsSeparatedByString("/").filter { !$0.isEmpty }
-        let queryIDs: [GUID]? = (query["ids"] as? String)?.componentsSeparatedByString(",")
+    static func fromPath(path: String, withQuery query: [NSString: AnyObject]) -> SyncDeleteRequestSpec? {
+        let parts = path.components(separatedBy: "/").filter { !$0.isEmpty }
+        let queryIDs: [GUID]? = (query["ids"] as? String)?.components(separatedBy: ",")
 
         guard [2, 4, 5].contains(parts.count) else {
             return nil
@@ -133,7 +135,7 @@ private struct SyncPutRequestSpec {
         // Input is "/1.5/user/storage/collection/id}}}".
         // That means we get six path components here, the first being empty.
 
-        let parts = request.path!.componentsSeparatedByString("/").filter { !$0.isEmpty }
+        let parts = request.path!.components(separatedBy: "/").filter { !$0.isEmpty }
 
         guard parts.count == 5 else {
             return nil
@@ -161,24 +163,24 @@ class MockSyncServer {
     }
 
     class func makeValidEnvelope(guid: GUID, modified: Timestamp) -> EnvelopeJSON {
-        let clientBody: [String: AnyObject] = [
+        let clientBody: [String: Any] = [
             "id": guid,
             "name": "Foobar",
             "commands": [],
             "type": "mobile",
         ]
-        let clientBodyString = JSON(clientBody).toString(false)
-        let clientRecord: [String : AnyObject] = [
+        let clientBodyString = JSON(object: clientBody).rawString()!
+        let clientRecord: [String : Any] = [
             "id": guid,
             "collection": "clients",
             "payload": clientBodyString,
             "modified": Double(modified) / 1000,
         ]
-        return EnvelopeJSON(JSON(clientRecord).toString(false))
+        return EnvelopeJSON(JSON(object: clientRecord).rawString()!)
     }
 
     class func withHeaders(response: GCDWebServerResponse, lastModified: Timestamp? = nil, records: Int? = nil, timestamp: Timestamp? = nil) -> GCDWebServerResponse {
-        let timestamp = timestamp ?? NSDate.now()
+        let timestamp = timestamp ?? Date.now()
         let xWeaveTimestamp = millisecondsToDecimalSeconds(timestamp)
         response.setValue("\(xWeaveTimestamp)", forAdditionalHeader: "X-Weave-Timestamp")
 
@@ -191,11 +193,11 @@ class MockSyncServer {
             response.setValue("\(records)", forAdditionalHeader: "X-Weave-Records")
         }
 
-        return response;
+        return response
     }
 
     func storeRecords(records: [EnvelopeJSON], inCollection collection: String, now: Timestamp? = nil) {
-        let now = now ?? NSDate.now()
+        let now = now ?? Date.now()
         let coll = self.collections[collection]
         var out = coll?.records ?? [:]
         records.forEach {
@@ -219,10 +221,10 @@ class MockSyncServer {
             }
 
             // Remove the old one.
-            self.continuations.removeValueForKey(offset)
+            self.continuations.removeValue(forKey: offset)
 
             // Handle the smaller-than-limit or no-provided-limit cases.
-            guard let limit = spec.limit where limit < remainder.count else {
+            guard let limit = spec.limit, limit < remainder.count else {
                 log.debug("Returning all remaining items.")
                 return (remainder, nil)
             }
@@ -230,7 +232,7 @@ class MockSyncServer {
             // Record the next continuation and return the first slice of records.
             let next = "\(self.offsets)"
             self.offsets += 1
-            let (returned, remaining) = splitArray(remainder, at: limit)
+            let (returned, remaining) = splitArray(items: remainder, at: limit)
             self.continuations[next] = remaining
             log.debug("Returning \(limit) items; next continuation is \(next).")
             return (returned, next)
@@ -245,7 +247,7 @@ class MockSyncServer {
         log.debug("Got \(items.count) candidate records.")
 
         if spec.newer ?? 0 > 0 {
-            items = items.filter { $0.modified > spec.newer }
+            items = items.filter { $0.modified > spec.newer! }
         }
 
         if let ids = spec.ids {
@@ -256,20 +258,20 @@ class MockSyncServer {
         if let sort = spec.sort {
             switch sort {
             case SortOption.NewestFirst:
-                items = items.sort { $0.modified > $1.modified }
+                items = items.sorted { $0.modified > $1.modified }
                 log.debug("Sorted items newest first: \(items.map { $0.modified })")
             case SortOption.OldestFirst:
-                items = items.sort { $0.modified < $1.modified }
+                items = items.sorted { $0.modified < $1.modified }
                 log.debug("Sorted items oldest first: \(items.map { $0.modified })")
             case SortOption.Index:
                 log.warning("Index sorting not yet supported.")
             }
         }
 
-        if let limit = spec.limit where items.count > limit {
+        if let limit = spec.limit, items.count > limit {
             let next = "\(self.offsets)"
             self.offsets += 1
-            let (returned, remaining) = splitArray(items, at: limit)
+            let (returned, remaining) = splitArray(items: items, at: limit)
             self.continuations[next] = remaining
             return (returned, next)
         }
@@ -278,17 +280,17 @@ class MockSyncServer {
     }
 
     private func recordResponse(record: EnvelopeJSON) -> GCDWebServerResponse {
-        let body = JSON(record.asJSON()).toString()
+        let body = record.asJSON().rawString()!
         let bodyData = body.utf8EncodedData
         let response = GCDWebServerDataResponse(data: bodyData, contentType: "application/json")
-        return MockSyncServer.withHeaders(response, lastModified: record.modified)
+        return MockSyncServer.withHeaders(response: response!, lastModified: record.modified)
     }
 
     private func modifiedResponse(timestamp: Timestamp) -> GCDWebServerResponse {
-        let body = JSON(["modified": NSNumber(unsignedLongLong: timestamp)]).toString()
-        let bodyData = body.utf8EncodedData
-        let response = GCDWebServerDataResponse(data: bodyData, contentType: "application/json")
-        return MockSyncServer.withHeaders(response)
+        let body = JSON(object: ["modified": timestamp]).rawString()
+        let bodyData = body?.utf8EncodedData
+        let response = GCDWebServerDataResponse(data: bodyData, contentType: "application/json")!
+        return MockSyncServer.withHeaders(response: response)
     }
 
     func modifiedTimeForCollection(collection: String) -> Timestamp? {
@@ -306,146 +308,146 @@ class MockSyncServer {
         let storagePath = "\(basePath)/storage/"
 
         let infoCollectionsPath = "\(basePath)/info/collections"
-        server.addHandlerForMethod("GET", path: infoCollectionsPath, requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
-            var ic = [String: NSNumber]()
+        server?.addHandler(forMethod: "GET", path: infoCollectionsPath, request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
+            var ic = [String: Any]()
             var lastModified: Timestamp = 0
             for collection in self.collections.keys {
-                if let timestamp = self.modifiedTimeForCollection(collection) {
-                    ic[collection] = NSNumber(double: Double(timestamp) / 1000)
+                if let timestamp = self.modifiedTimeForCollection(collection: collection) {
+                    ic[collection] = Double(timestamp) / 1000
                     lastModified = max(lastModified, timestamp)
                 }
 
             }
-            let body = JSON(ic).toString()
-            let bodyData = body.utf8EncodedData
+            let body = JSON(object: ic).rawString()
+            let bodyData = body?.utf8EncodedData
 
-            let response = GCDWebServerDataResponse(data: bodyData, contentType: "application/json")
-            return MockSyncServer.withHeaders(response, lastModified: lastModified, records: ic.count)
+            let response = GCDWebServerDataResponse(data: bodyData, contentType: "application/json")!
+            return MockSyncServer.withHeaders(response: response, lastModified: lastModified, records: ic.count)
         }
 
         let matchPut: GCDWebServerMatchBlock = { method, url, headers, path, query -> GCDWebServerRequest! in
-            guard method == "PUT" && path.startsWith(basePath) else {
+            guard method == "PUT",
+                path?.startsWith(basePath) ?? false else {
                 return nil
             }
             return GCDWebServerDataRequest(method: method, url: url, headers: headers, path: path, query: query)
         }
 
-        server.addHandlerWithMatchBlock(matchPut) { (request) -> GCDWebServerResponse! in
+        server?.addHandler(match: matchPut) { (request) -> GCDWebServerResponse! in
             guard let request = request as? GCDWebServerDataRequest else {
-                return MockSyncServer.withHeaders(GCDWebServerDataResponse(statusCode: 400))
+                return MockSyncServer.withHeaders(response: GCDWebServerDataResponse(statusCode: 400))
             }
 
-            guard let spec = SyncPutRequestSpec.fromRequest(request) else {
-                return MockSyncServer.withHeaders(GCDWebServerDataResponse(statusCode: 400))
+            guard let spec = SyncPutRequestSpec.fromRequest(request: request) else {
+                return MockSyncServer.withHeaders(response: GCDWebServerDataResponse(statusCode: 400))
             }
+            var body = JSON(object: request.jsonObject)
+            body["modified"] = JSON(stringLiteral: millisecondsToDecimalSeconds(Date.now()))
+            let record = EnvelopeJSON(body)
 
-            var body = JSON(request.jsonObject).asDictionary!
-            body["modified"] = JSON(millisecondsToDecimalSeconds(NSDate.now()))
-            let record = EnvelopeJSON(JSON(body))
-
-            self.storeRecords([record], inCollection: spec.collection)
-            let timestamp = self.modifiedTimeForCollection(spec.collection)!
+            self.storeRecords(records: [record], inCollection: spec.collection)
+            let timestamp = self.modifiedTimeForCollection(collection: spec.collection)!
 
             let response = GCDWebServerDataResponse(data: millisecondsToDecimalSeconds(timestamp).utf8EncodedData, contentType: "application/json")
-            return MockSyncServer.withHeaders(response)
+            return MockSyncServer.withHeaders(response: response!)
         }
 
         let matchDelete: GCDWebServerMatchBlock = { method, url, headers, path, query -> GCDWebServerRequest! in
-            guard method == "DELETE" && path.startsWith(basePath) else {
+            guard method == "DELETE" && (path?.startsWith(basePath))! else {
                 return nil
             }
             return GCDWebServerRequest(method: method, url: url, headers: headers, path: path, query: query)
         }
 
-        server.addHandlerWithMatchBlock(matchDelete) { (request) -> GCDWebServerResponse! in
-            guard let spec = SyncDeleteRequestSpec.fromRequest(request) else {
+        server?.addHandler(match: matchDelete) { (request) -> GCDWebServerResponse! in
+            guard let spec = SyncDeleteRequestSpec.fromRequest(request: request!) else {
                 return GCDWebServerDataResponse(statusCode: 400)
             }
 
-            if let collection = spec.collection, id = spec.id {
+            if let collection = spec.collection, let id = spec.id {
                 guard var items = self.collections[collection]?.records else {
                     // Unable to find the requested collection.
-                    return MockSyncServer.withHeaders(GCDWebServerDataResponse(statusCode: 404))
+                    return MockSyncServer.withHeaders(response: GCDWebServerDataResponse(statusCode: 404))
                 }
 
                 guard let item = items[id] else {
                     // Unable to find the requested id.
-                    return MockSyncServer.withHeaders(GCDWebServerDataResponse(statusCode: 404))
+                    return MockSyncServer.withHeaders(response: GCDWebServerDataResponse(statusCode: 404))
                 }
-                items.removeValueForKey(id)
-                return self.modifiedResponse(item.modified)
+                items.removeValue(forKey: id)
+                return self.modifiedResponse(timestamp: item.modified)
             }
 
             if let collection = spec.collection {
                 if spec.wholeCollection {
-                    self.collections.removeValueForKey(collection)
+                    self.collections.removeValue(forKey: collection)
                 } else {
                     if let ids = spec.ids,
                        var map = self.collections[collection]?.records {
                             for id in ids {
-                                map.removeValueForKey(id)
+                                map.removeValue(forKey: id)
                             }
-                            self.collections[collection] = (modified: NSDate.now(), records: map)
+                            self.collections[collection] = (Date.now(), records: map)
                     }
                 }
-                return self.modifiedResponse(NSDate.now())
+                return self.modifiedResponse(timestamp: Date.now())
             }
 
             self.collections = [:]
-            return MockSyncServer.withHeaders(GCDWebServerDataResponse(data: "{}".utf8EncodedData, contentType: "application/json"))
+            return MockSyncServer.withHeaders(response: GCDWebServerDataResponse(data: "{}".utf8EncodedData, contentType: "application/json"))
         }
 
         let match: GCDWebServerMatchBlock = { method, url, headers, path, query -> GCDWebServerRequest! in
-            guard method == "GET" && path.startsWith(storagePath) else {
+            guard method == "GET", path?.startsWith(storagePath) ?? false else {
                 return nil
             }
             return GCDWebServerRequest(method: method, url: url, headers: headers, path: path, query: query)
         }
 
-        server.addHandlerWithMatchBlock(match) { (request) -> GCDWebServerResponse! in
+        server?.addHandler(match: match) { (request) -> GCDWebServerResponse! in
             // 1. Decide what the URL is asking for. It might be a collection fetch or
             //    an individual record, and it might have query parameters.
 
-            guard let spec = SyncRequestSpec.fromRequest(request) else {
-                return MockSyncServer.withHeaders(GCDWebServerDataResponse(statusCode: 400))
+            guard let spec = SyncRequestSpec.fromRequest(request: request!) else {
+                return MockSyncServer.withHeaders(response: GCDWebServerDataResponse(statusCode: 400))
             }
 
             // 2. Grab the matching set of records. Prune based on TTL, exclude with X-I-U-S, etc.
             if let id = spec.id {
-                guard let collection = self.collections[spec.collection], record = collection.records[id] else {
+                guard let collection = self.collections[spec.collection], let record = collection.records[id] else {
                     // Unable to find the requested collection/id.
-                    return MockSyncServer.withHeaders(GCDWebServerDataResponse(statusCode: 404))
+                    return MockSyncServer.withHeaders(response: GCDWebServerDataResponse(statusCode: 404))
                 }
 
-                return self.recordResponse(record)
+                return self.recordResponse(record: record)
             }
 
-            guard let (items, offset) = self.recordsMatchingSpec(spec) else {
+            guard let (items, offset) = self.recordsMatchingSpec(spec: spec) else {
                 // Unable to find the provided offset.
-                return MockSyncServer.withHeaders(GCDWebServerDataResponse(statusCode: 400))
+                return MockSyncServer.withHeaders(response: GCDWebServerDataResponse(statusCode: 400))
             }
 
             // TODO: TTL
             // TODO: X-I-U-S
 
-            let body = JSON(items.map { $0.asJSON() }).toString()
-            let bodyData = body.utf8EncodedData
+            let body = JSON(object: items.map { $0.asJSON() }).rawString()
+            let bodyData = body?.utf8EncodedData
             let response = GCDWebServerDataResponse(data: bodyData, contentType: "application/json")
 
             // 3. Compute the correct set of headers: timestamps, X-Weave-Records, etc.
             if let offset = offset {
-                response.setValue(offset, forAdditionalHeader: "X-Weave-Next-Offset")
+                response?.setValue(offset, forAdditionalHeader: "X-Weave-Next-Offset")
             }
 
-            let timestamp = self.modifiedTimeForCollection(spec.collection)!
+            let timestamp = self.modifiedTimeForCollection(collection: spec.collection)!
             log.debug("Returning GET response with X-Last-Modified for \(items.count) records: \(timestamp).")
-            return MockSyncServer.withHeaders(response, lastModified: timestamp, records: items.count)
+            return MockSyncServer.withHeaders(response: response!, lastModified: timestamp, records: items.count)
         }
 
-        if server.startWithPort(0, bonjourName: nil) == false {
+        if server?.start(withPort: 0, bonjourName: nil) == false {
             XCTFail("Can't start the GCDWebServer.")
         }
 
-        baseURL = "http://localhost:\(server.port)\(basePath)"
+        baseURL = "http://localhost:\(server!.port)\(basePath)"
     }
 }

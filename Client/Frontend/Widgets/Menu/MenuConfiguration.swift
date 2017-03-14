@@ -6,7 +6,7 @@ import Foundation
 
 protocol MenuConfiguration {
 
-    func menuForState(appState: AppState) -> MenuConfiguration
+    func menuForState(_ appState: AppState) -> MenuConfiguration
 
     var menuItems: [MenuItem] { get }
     var menuToolbarItems: [MenuToolbarItem]? { get }
@@ -22,10 +22,11 @@ protocol MenuConfiguration {
     func minMenuRowHeight() -> CGFloat
     func shadowColor() -> UIColor
     func selectedItemTintColor() -> UIColor
+    func disabledItemTintColor() -> UIColor
 }
 
 protocol MenuActionDelegate: class {
-    func performMenuAction(action: MenuAction, withAppState appState: AppState)
+    func performMenuAction(_ action: MenuAction, withAppState appState: AppState)
 }
 
 struct MenuAction {

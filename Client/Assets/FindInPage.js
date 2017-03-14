@@ -243,7 +243,12 @@ function updateSearch(text) {
 
 
 if (!window.__firefox__) {
-  window.__firefox__ = {};
+  Object.defineProperty(window, '__firefox__', {
+    enumerable: false,
+    configurable: false,
+    writable: false,
+    value: {}
+  });
 }
 
 window.__firefox__.find = function (text) {

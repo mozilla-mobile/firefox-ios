@@ -6,41 +6,47 @@ import Foundation
 
 struct AppMenuItem: MenuItem {
     let title: String
+    let accessibilityIdentifier: String
     let action: MenuAction
+    let secondaryAction: MenuAction?
     let animation: Animatable?
-    private let iconName: String
-    private let privateModeIconName: String
-    private let selectedIconName: String?
+    var isDisabled: Bool
+    fileprivate let iconName: String
+    fileprivate let privateModeIconName: String
+    fileprivate let selectedIconName: String?
 
-    private var icon: UIImage? {
+    fileprivate var icon: UIImage? {
         return UIImage(named: iconName)
     }
 
-    private var privateModeIcon: UIImage? {
+    fileprivate var privateModeIcon: UIImage? {
         return UIImage(named: privateModeIconName)
     }
 
-    private var selectedIcon: UIImage? {
+    fileprivate var selectedIcon: UIImage? {
         guard let selectedIconName = selectedIconName else {
             return nil
         }
         return UIImage(named: selectedIconName)
     }
 
-    func iconForState(appState: AppState) -> UIImage?  {
-        return appState.isPrivate() ? privateModeIcon : icon
+    func iconForState(_ appState: AppState) -> UIImage? {
+        return appState.ui.isPrivate() ? privateModeIcon : icon
     }
 
-    func selectedIconForState(appState: AppState) -> UIImage? {
+    func selectedIconForState(_ appState: AppState) -> UIImage? {
         return selectedIcon
     }
 
-    init(title: String, action: MenuAction, icon: String, privateModeIcon: String, selectedIcon: String? = nil, animation: Animatable? = nil) {
+    init(title: String, accessibilityIdentifier: String, action: MenuAction, secondaryAction: MenuAction? = nil, icon: String, privateModeIcon: String, selectedIcon: String? = nil, animation: Animatable? = nil, isDisabled: Bool = false) {
         self.title = title
+        self.accessibilityIdentifier = accessibilityIdentifier
         self.action = action
         self.iconName = icon
         self.privateModeIconName = privateModeIcon
         self.selectedIconName = selectedIcon
         self.animation = animation
+        self.secondaryAction = secondaryAction
+        self.isDisabled = isDisabled
     }
 }

@@ -6,21 +6,16 @@ import Shared
 
 private var appDelegate: AppDelegate.Type
 
-if AppConstants.IsRunningTest || AppConstants.IsRunningFastlaneSnapshot {
+if AppConstants.IsRunningTest {
     appDelegate = TestAppDelegate.self
 } else {
     switch AppConstants.BuildChannel {
-    case .Aurora:
+    case .aurora:
         appDelegate = AuroraAppDelegate.self
-    case .Developer:
-        appDelegate = AppDelegate.self
-    case .Fennec:
-        appDelegate = AppDelegate.self
-    case .Release:
-        appDelegate = AppDelegate.self
-    case .Beta:
+    default:
         appDelegate = AppDelegate.self
     }
 }
 
-UIApplicationMain(Process.argc, Process.unsafeArgv, NSStringFromClass(UIApplication.self), NSStringFromClass(appDelegate))
+private let pointer = UnsafeMutableRawPointer(CommandLine.unsafeArgv).bindMemory(to: UnsafeMutablePointer<Int8>.self, capacity: Int(CommandLine.argc))
+UIApplicationMain(CommandLine.argc, pointer, NSStringFromClass(UIApplication.self), NSStringFromClass(appDelegate))

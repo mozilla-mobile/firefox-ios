@@ -10,13 +10,11 @@ import Deferred
 
 private let log = Logger.syncLogger
 
-public typealias ByteCount = Int
-
 class Uploader {
     /**
      * Upload just about anything that can be turned into something we can upload.
      */
-    func sequentialPosts<T>(items: [T], by: Int, lastTimestamp: Timestamp, storageOp: ([T], Timestamp) -> DeferredTimestamp) -> DeferredTimestamp {
+    func sequentialPosts<T>(_ items: [T], by: Int, lastTimestamp: Timestamp, storageOp: @escaping ([T], Timestamp) -> DeferredTimestamp) -> DeferredTimestamp {
 
         // This needs to be a real Array, not an ArraySlice,
         // for the types to line up.
@@ -38,20 +36,36 @@ class Uploader {
     }
 }
 
-public class IndependentRecordSynchronizer: TimestampedSingleCollectionSynchronizer {
+open class IndependentRecordSynchronizer: TimestampedSingleCollectionSynchronizer {
+    private func reportApplyStatsWrap<T>(apply: @escaping (T) -> Success) -> (T) -> Success {
+        return { record in
+            return apply(record).bind({ result in
+                var stats = SyncDownloadStats()
+                stats.applied = 1
+                if result.isSuccess {
+                    stats.succeeded = 1
+                } else {
+                    stats.failed = 1
+                }
+                self.statsSession.recordDownload(stats: stats)
+                return Deferred(value: result)
+            })
+        }
+    }
+
     /**
      * Just like the usual applyIncomingToStorage, but doesn't fast-forward the timestamp.
      */
-    func applyIncomingRecords<T>(records: [T], apply: T -> Success) -> Success {
+    func applyIncomingRecords<T>(_ records: [T], apply: @escaping (T) -> Success) -> Success {
         if records.isEmpty {
             log.debug("No records; done applying.")
             return succeed()
         }
 
-        return walk(records, f: apply)
+        return walk(records, f: reportApplyStatsWrap(apply: apply))
     }
 
-    func applyIncomingToStorage<T>(records: [T], fetched: Timestamp, apply: T -> Success) -> Success {
+    func applyIncomingToStorage<T>(_ records: [T], fetched: Timestamp, apply: @escaping (T) -> Success) -> Success {
         func done() -> Success {
             log.debug("Bumping fetch timestamp to \(fetched).")
             self.lastFetched = fetched
@@ -63,7 +77,7 @@ public class IndependentRecordSynchronizer: TimestampedSingleCollectionSynchroni
             return done()
         }
 
-        return walk(records, f: apply) >>> done
+        return walk(records, f: reportApplyStatsWrap(apply: apply)) >>> done
     }
 }
 
@@ -85,119 +99,25 @@ extension TimestampedSingleCollectionSynchronizer {
      * In order to implement the latter, we'd need to chain the date from getSince in place of the
      * 0 in the call to uploadOutgoingFromStorage in each synchronizer.
      */
-    func uploadRecords<T>(records: [Record<T>], by: Int, lastTimestamp: Timestamp, storageClient: Sync15CollectionClient<T>, onUpload: POSTResult -> DeferredTimestamp) -> DeferredTimestamp {
+    func uploadRecords<T>(_ records: [Record<T>], lastTimestamp: Timestamp, storageClient: Sync15CollectionClient<T>, onUpload: @escaping (POSTResult, Timestamp?) -> DeferredTimestamp) -> DeferredTimestamp {
         if records.isEmpty {
             log.debug("No modified records to upload.")
             return deferMaybe(lastTimestamp)
         }
 
-        let storageOp: ([Record<T>], Timestamp) -> DeferredTimestamp = { records, timestamp in
-            // TODO: use I-U-S.
-
-            // Each time we do the storage operation, we might receive a backoff notification.
-            // For a success response, this will be on the subsequent request, which means we don't
-            // have to worry about handling successes and failures mixed with backoffs here.
-            return storageClient.post(records, ifUnmodifiedSince: nil)
-                >>== { onUpload($0.value) }
+        func reportUploadStatsWrap(result: POSTResult, timestamp: Timestamp?) -> DeferredTimestamp {
+            let stats = SyncUploadStats(sent: result.success.count, sentFailed: result.failed.count)
+            self.statsSession.recordUpload(stats: stats)
+            return onUpload(result, timestamp)
         }
 
-        log.debug("Uploading \(records.count) modified records.")
-
-        // Chain the last upload timestamp right into our lastFetched timestamp.
-        // This is what Sync clients tend to do, but we can probably do better.
-        // Upload 50 records at a time.
-        return Uploader().sequentialPosts(records, by: by, lastTimestamp: lastTimestamp, storageOp: storageOp)
-            >>== effect(self.setTimestamp)
-    }
-
-    func uploadRecordsInChunks<T>(records: [Record<T>], lastTimestamp: Timestamp, storageClient: Sync15CollectionClient<T>, onUpload: POSTResult -> DeferredTimestamp) -> DeferredTimestamp {
-
-        // Obvious sanity.
-        precondition(Sync15StorageClient.maxRecordSizeBytes <= Sync15StorageClient.maxPayloadSizeBytes)
-
-        if records.isEmpty {
-            log.debug("No modified records to upload.")
-            return deferMaybe(lastTimestamp)
-        }
-
-        var failedGUID: GUID? = nil
-        var largest: ByteCount = 0
-
-        // Schwartzian transform -- decorate, sort, undecorate.
-        func decorate(record: Record<T>) -> (String, ByteCount)? {
-            guard failedGUID == nil else {
-                // If we hit an over-sized record, or fail to serialize, we stop processing
-                // everything: we don't want to upload only some of the user's bookmarks.
-                return nil
+        let batch = storageClient.newBatch(ifUnmodifiedSince: (lastTimestamp == 0) ? nil : lastTimestamp, onCollectionUploaded: reportUploadStatsWrap)
+        return batch.addRecords(records)
+            >>> batch.endBatch
+            >>> {
+                let timestamp = batch.ifUnmodifiedSince ?? lastTimestamp
+                self.setTimestamp(timestamp)
+                return deferMaybe(timestamp)
             }
-
-            guard let string = storageClient.serializeRecord(record) else {
-                failedGUID = record.id
-                return nil
-            }
-
-            let size = string.utf8.count
-            if size > largest {
-                largest = size
-                if size > Sync15StorageClient.maxRecordSizeBytes {
-                    // If we hit this case, we cannot ever successfully sync until the user
-                    // takes action. Let's hope they do.
-                    failedGUID = record.id
-                    return nil
-                }
-            }
-
-            return (string, size)
-        }
-
-        // Put small records first.
-        let sorted = records.flatMap(decorate).sort { $0.1 < $1.1 }
-
-        if let failed = failedGUID {
-            return deferMaybe(RecordTooLargeError(size: largest, guid: failed))
-        }
-
-        // Cut this up into chunks of a maximum size.
-        var batches: [[String]] = []
-        var batch: [String] = []
-        var bytes = 0
-        var count = 0
-        sorted.forEach { (string, size) in
-            let expectedBytes = bytes + size + 1   // Include newlines.
-            if expectedBytes > Sync15StorageClient.maxPayloadSizeBytes ||
-               count >= Sync15StorageClient.maxPayloadItemCount {
-                batches.append(batch)
-                batch = []
-                bytes = 0
-                count = 0
-            }
-            batch.append(string)
-            bytes += size + 1
-            count += 1
-        }
-
-        // Catch the last one.
-        if !batch.isEmpty {
-            batches.append(batch)
-        }
-
-        log.debug("Uploading \(records.count) modified records in \(batches.count) batches.")
-
-        let perChunk: ([String], Timestamp) -> DeferredTimestamp = { (lines, timestamp) in
-            log.debug("Uploading \(lines.count) records.")
-            // TODO: use I-U-S.
-
-            // Each time we do the storage operation, we might receive a backoff notification.
-            // For a success response, this will be on the subsequent request, which means we don't
-            // have to worry about handling successes and failures mixed with backoffs here.
-            return storageClient.post(lines, ifUnmodifiedSince: nil)
-                >>== { onUpload($0.value) }
-        }
-
-        let start = deferMaybe(lastTimestamp)
-        return walk(batches, start: start, f: perChunk)
-            // Chain the last upload timestamp right into our lastFetched timestamp.
-            // This is what Sync clients tend to do, but we can probably do better.
-            >>== effect(self.setTimestamp)
     }
 }

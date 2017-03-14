@@ -10,7 +10,7 @@ let NotificationPasscodeDidCreate   = "NotificationPasscodeDidCreate"
 
 /// Displayed to the user when setting up a passcode.
 class SetupPasscodeViewController: PagingPasscodeViewController, PasscodeInputViewDelegate {
-    private var confirmCode: String?
+    fileprivate var confirmCode: String?
 
     override init() {
         super.init()
@@ -25,19 +25,20 @@ class SetupPasscodeViewController: PagingPasscodeViewController, PasscodeInputVi
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         panes.forEach { $0.codeInputView.delegate = self }
 
         // Don't show the keyboard or allow typing if we're locked out. Also display the error.
         if authenticationInfo?.isLocked() ?? false {
-            panes.first?.codeInputView.userInteractionEnabled = false
+            displayLockoutError()
+            panes.first?.codeInputView.isUserInteractionEnabled = false
         } else {
             panes.first?.codeInputView.becomeFirstResponder()
         }
     }
 
-    func passcodeInputView(inputView: PasscodeInputView, didFinishEnteringCode code: String) {
+    func passcodeInputView(_ inputView: PasscodeInputView, didFinishEnteringCode code: String) {
         switch currentPaneIndex {
         case 0:
             confirmCode = code
@@ -53,15 +54,15 @@ class SetupPasscodeViewController: PagingPasscodeViewController, PasscodeInputVi
             }
 
             createPasscodeWithCode(code)
-            dismiss()
+            dismissAnimated()
         default:
             break
         }
     }
 
-    private func createPasscodeWithCode(code: String) {
-        KeychainWrapper.setAuthenticationInfo(AuthenticationKeychainInfo(passcode: code))
-        let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.postNotificationName(NotificationPasscodeDidCreate, object: nil)
+    fileprivate func createPasscodeWithCode(_ code: String) {
+        KeychainWrapper.sharedAppContainerKeychain.setAuthenticationInfo(AuthenticationKeychainInfo(passcode: code))
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.post(name: Notification.Name(rawValue: NotificationPasscodeDidCreate), object: nil)
     }
 }

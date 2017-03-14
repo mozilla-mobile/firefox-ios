@@ -8,7 +8,7 @@ import UIKit
 
 extension UIPasteboard {
 
-    func addImageWithData(data: NSData, forURL url: NSURL) {
+    func addImageWithData(_ data: Data, forURL url: URL) {
         let isGIF = UIImage.dataIsGIF(data)
 
         // Setting pasteboard.items allows us to set multiple representations for the same item.
@@ -18,8 +18,16 @@ extension UIPasteboard {
         ]]
     }
 
-    private func imageTypeKey(isGIF: Bool) -> String {
+    fileprivate func imageTypeKey(_ isGIF: Bool) -> String {
         return (isGIF ? kUTTypeGIF : kUTTypePNG) as String
     }
-
+    
+    var copiedURL: URL? {
+        if let string = UIPasteboard.general.string,
+            let url = URL(string: string), url.isWebPage() {
+            return url
+        } else {
+            return nil
+        }
+    }
 }

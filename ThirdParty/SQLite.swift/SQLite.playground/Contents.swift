@@ -2,7 +2,7 @@ import SQLite
 
 let db = try! Connection()
 
-db.trace(print)
+db.trace { print($0) }
 
 let users = Table("users")
 
@@ -19,7 +19,7 @@ try! db.run(users.create { t in
 let rowid = try! db.run(users.insert(email <- "alice@mac.com"))
 let alice = users.filter(id == rowid)
 
-for user in db.prepare(users) {
+for user in try! db.prepare(users) {
     print("id: \(user[id]), email: \(user[email])")
 }
 
@@ -35,9 +35,9 @@ try! db.run(emails.insert(
     body <- "This is a hello world message."
 ))
 
-let row = db.pluck(emails.match("hello"))
+let row = try! db.pluck(emails.match("hello"))
 
-let query = db.prepare(emails.match("hello"))
+let query = try! db.prepare(emails.match("hello"))
 for row in query {
     print(row[subject])
 }

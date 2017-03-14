@@ -9,7 +9,8 @@
 
 #import "ThirdParty/UIImageViewAligned/UIImageViewAligned/UIImageViewAligned.h"
 #import "ThirdParty/Apple/UIImage+ImageEffects.h"
-#import "ThirdParty/SWTableViewCell/PodFiles/SWTableViewCell.h"
-#import "ThirdParty/RaptureXML/RXMLElement.h"
+
+#import <CrashReporter/CrashReporter.h>
+#import <BuddyBuildSDK/BuddyBuildSDK.h>
 
 #endif

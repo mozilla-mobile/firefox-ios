@@ -8,12 +8,12 @@ import Foundation
  * Status results for a Cursor
  */
 public enum CursorStatus {
-    case Success
-    case Failure
-    case Closed
+    case success
+    case failure
+    case closed
 }
 
-public protocol TypedCursor: SequenceType {
+public protocol TypedCursor: Sequence {
     associatedtype T
     var count: Int { get }
     var status: CursorStatus { get }
@@ -25,31 +25,31 @@ public protocol TypedCursor: SequenceType {
 /**
  * Provides a generic method of returning some data and status information about a request.
  */
-public class Cursor<T>: TypedCursor {
-    public var count: Int {
+open class Cursor<T>: TypedCursor {
+    open var count: Int {
         get { return 0 }
     }
 
     // Extra status information
-    public var status: CursorStatus
+    open var status: CursorStatus
     public var statusMessage: String
 
     init(err: NSError) {
-        self.status = .Failure
+        self.status = .failure
         self.statusMessage = err.description
     }
 
-    public init(status: CursorStatus = CursorStatus.Success, msg: String = "") {
-        self.status = status
+    public init(status: CursorStatus = .success, msg: String = "") {
         self.statusMessage = msg
+        self.status = status
     }
 
     // Collection iteration and access functions
-    public subscript(index: Int) -> T? {
+    open subscript(index: Int) -> T? {
         get { return nil }
     }
 
-    public func asArray() -> [T] {
+    open func asArray() -> [T] {
         var acc = [T]()
         acc.reserveCapacity(self.count)
         for row in self {
@@ -62,10 +62,10 @@ public class Cursor<T>: TypedCursor {
         return acc
     }
 
-    public func generate() -> AnyGenerator<T?> {
+    open func makeIterator() -> AnyIterator<T?> {
         var nextIndex = 0
-        return AnyGenerator() {
-            if (nextIndex >= self.count || self.status != CursorStatus.Success) {
+        return AnyIterator() {
+            if nextIndex >= self.count || self.status != CursorStatus.success {
                 return nil
             }
 
@@ -74,13 +74,13 @@ public class Cursor<T>: TypedCursor {
         }
     }
 
-    public func close() {
-        status = .Closed
+    open func close() {
+        status = .closed
         statusMessage = "Closed"
     }
 
     deinit {
-        if status != CursorStatus.Closed {
+        if status != CursorStatus.closed {
             close()
         }
     }
@@ -89,35 +89,35 @@ public class Cursor<T>: TypedCursor {
 /*
  * A cursor implementation that wraps an array.
  */
-public class ArrayCursor<T> : Cursor<T> {
-    private var data : [T]
+open class ArrayCursor<T> : Cursor<T> {
+    fileprivate var data: [T]
 
-    public override var count : Int {
-        if (status != .Success) {
+    open override var count: Int {
+        if status != .success {
             return 0
         }
         return data.count
     }
 
     public init(data: [T], status: CursorStatus, statusMessage: String) {
-        self.data = data;
+        self.data = data
         super.init(status: status, msg: statusMessage)
     }
 
     public convenience init(data: [T]) {
-        self.init(data: data, status: CursorStatus.Success, statusMessage: "Success")
+        self.init(data: data, status: CursorStatus.success, statusMessage: "Success")
     }
 
-    public override subscript(index: Int) -> T? {
+    open override subscript(index: Int) -> T? {
         get {
-            if (index >= data.count || index < 0 || status != .Success) {
+            if index >= data.count || index < 0 || status != .success {
                 return nil
             }
             return data[index]
         }
     }
 
-    override public func close() {
+    override open func close() {
         data = [T]()
         super.close()
     }

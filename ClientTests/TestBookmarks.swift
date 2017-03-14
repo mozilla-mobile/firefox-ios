@@ -17,7 +17,7 @@ class TestBookmarks: ProfileTest {
                 profile.bookmarks.shareItem(bookmark)
             }
 
-            let expectation = self.expectationWithDescription("asynchronous request")
+            let expectation = self.expectation(description: "asynchronous request")
             profile.bookmarks.modelFactory >>== {
                 $0.modelForFolder(BookmarkRoots.MobileFolderGUID).upon { result in
                     guard let model = result.successValue else {
@@ -29,12 +29,12 @@ class TestBookmarks: ProfileTest {
                     XCTAssertEqual(model.current.count, 11, "We create \(model.current.count) stub bookmarks in the Mobile Bookmarks folder.")
                     let bookmark = model.current[0]
                     XCTAssertTrue(bookmark is BookmarkItem)
-                    XCTAssertEqual((bookmark as! BookmarkItem).url, "http://www.example.com/0", "Example URL found.")
+                    XCTAssertTrue((bookmark as! BookmarkItem).url.hasPrefix("http://www.example.com/"), "Example URL found.")
                     expectation.fulfill()
                 }
             }
 
-            self.waitForExpectationsWithTimeout(10.0, handler:nil)
+            self.waitForExpectations(timeout: 10.0, handler:nil)
             // This'll do.
             try! profile.files.remove("mock.db")
         }

@@ -7,17 +7,17 @@ import Shared
 @testable import Storage
 
 import XCTest
+import SwiftyJSON
 
-func byValue(a: SyncCommand, b: SyncCommand) -> Bool {
+func byValue(_ a: SyncCommand, b: SyncCommand) -> Bool {
     return a.value < b.value
 }
 
-func byClient(a: RemoteClient, b: RemoteClient) -> Bool{
+func byClient(_ a: RemoteClient, b: RemoteClient) -> Bool {
     return a.guid! < b.guid!
 }
 
 class SyncCommandsTests: XCTestCase {
-
 
     var clients: [RemoteClient] = [RemoteClient]()
     var clientsAndTabs: SQLiteRemoteClientsAndTabs!
@@ -37,7 +37,7 @@ class SyncCommandsTests: XCTestCase {
         db = BrowserDB(filename: "browser.db", files: files)
         // create clients
 
-        let now = NSDate.now()
+        let now = Date.now()
         let client1GUID = Bytes.generateGUID()
         let client2GUID = Bytes.generateGUID()
         let client3GUID = Bytes.generateGUID()
@@ -61,28 +61,27 @@ class SyncCommandsTests: XCTestCase {
         clientsAndTabs.clear()
     }
 
-    func testCreateSyncCommandFromShareItem(){
-        let action = "testcommand"
+    func testCreateSyncCommandFromShareItem() {
         let shareItem = shareItems[0]
-        let syncCommand = SyncCommand.fromShareItem(shareItem, withAction: action)
+        let syncCommand = SyncCommand.displayURIFromShareItem(shareItem, asClient: "abcdefghijkl")
         XCTAssertNil(syncCommand.commandID)
         XCTAssertNotNil(syncCommand.value)
-        let jsonObj:[String: AnyObject] = [
-            "command": action,
-            "args": [shareItem.url, "", shareItem.title ?? ""]
+        let jsonObj: [String: Any] = [
+            "command": "displayURI",
+            "args": [shareItem.url, "abcdefghijkl", shareItem.title ?? ""]
         ]
-        XCTAssertEqual(JSON.stringify(jsonObj, pretty: false), syncCommand.value)
+        XCTAssertEqual(JSON(object: jsonObj).rawString(), syncCommand.value)
     }
 
     func testInsertWithNoURLOrTitle() {
         // Test insert command to table for
-        let e = self.expectationWithDescription("Insert.")
+        let e = self.expectation(description: "Insert.")
         clientsAndTabs.insertCommand(self.wipeCommand, forClients: clients).upon {
             XCTAssertTrue($0.isSuccess)
             XCTAssertEqual(3, $0.successValue!)
 
             var error2: NSError? = nil
-            let commandCursor = self.db.withReadableConnection(&error2) { (connection, err) -> Cursor<Int> in
+            let commandCursor = self.db.withConnection(&error2) { (connection, err) -> Cursor<Int> in
                 let select = "SELECT COUNT(*) FROM \(TableSyncCommands)"
                 return connection.executeQuery(select, factory: IntFactory, withArgs: nil)
             }
@@ -91,21 +90,20 @@ class SyncCommandsTests: XCTestCase {
             XCTAssertEqual(3, commandCursor[0]!)
             e.fulfill()
         }
-        self.waitForExpectationsWithTimeout(5, handler: nil)
+        self.waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testInsertWithURLOnly() {
-        let action = "testcommand"
         let shareItem = shareItems[3]
-        let syncCommand = SyncCommand.fromShareItem(shareItem, withAction: action)
+        let syncCommand = SyncCommand.displayURIFromShareItem(shareItem, asClient: "abcdefghijkl")
 
-        let e = self.expectationWithDescription("Insert.")
+        let e = self.expectation(description: "Insert.")
         clientsAndTabs.insertCommand(syncCommand, forClients: clients).upon {
             XCTAssertTrue($0.isSuccess)
             XCTAssertEqual(3, $0.successValue!)
 
             var error: NSError? = nil
-            let commandCursor = self.db.withReadableConnection(&error) { (connection, err) -> Cursor<Int> in
+            let commandCursor = self.db.withConnection(&error) { (connection, err) -> Cursor<Int> in
                 let select = "SELECT COUNT(*) FROM \(TableSyncCommands)"
                 return connection.executeQuery(select, factory: IntFactory, withArgs: nil)
             }
@@ -114,21 +112,20 @@ class SyncCommandsTests: XCTestCase {
             XCTAssertEqual(3, commandCursor[0]!)
             e.fulfill()
         }
-        self.waitForExpectationsWithTimeout(5, handler: nil)
+        self.waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testInsertWithMultipleCommands() {
-        let action = "testcommand"
-        let e = self.expectationWithDescription("Insert.")
+        let e = self.expectation(description: "Insert.")
         let syncCommands = shareItems.map { item in
-            return SyncCommand.fromShareItem(item, withAction: action)
+            return SyncCommand.displayURIFromShareItem(item, asClient: "abcdefghijkl")
         }
         clientsAndTabs.insertCommands(syncCommands, forClients: clients).upon {
             XCTAssertTrue($0.isSuccess)
             XCTAssertEqual(12, $0.successValue!)
 
             var error: NSError? = nil
-            let commandCursor = self.db.withReadableConnection(&error) { (connection, err) -> Cursor<Int> in
+            let commandCursor = self.db.withConnection(&error) { (connection, err) -> Cursor<Int> in
                 let select = "SELECT COUNT(*) FROM \(TableSyncCommands)"
                 return connection.executeQuery(select, factory: IntFactory, withArgs: nil)
             }
@@ -137,42 +134,40 @@ class SyncCommandsTests: XCTestCase {
             XCTAssertEqual(12, commandCursor[0]!)
             e.fulfill()
         }
-        self.waitForExpectationsWithTimeout(5, handler: nil)
+        self.waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testGetForAllClients() {
-        let action = "testcommand"
         let syncCommands = shareItems.map { item in
-            return SyncCommand.fromShareItem(item, withAction: action)
-        }.sort(byValue)
+            return SyncCommand.displayURIFromShareItem(item, asClient: "abcdefghijkl")
+        }.sorted(by: byValue)
         clientsAndTabs.insertCommands(syncCommands, forClients: clients)
 
-        let b = self.expectationWithDescription("Get for invalid client.")
+        let b = self.expectation(description: "Get for invalid client.")
         clientsAndTabs.getCommands().upon({ result in
             XCTAssertTrue(result.isSuccess)
             if let clientCommands = result.successValue {
                 XCTAssertEqual(clientCommands.count, self.clients.count)
                 for client in clientCommands.keys {
-                    XCTAssertEqual(syncCommands, clientCommands[client]!.sort(byValue))
+                    XCTAssertEqual(syncCommands, clientCommands[client]!.sorted(by: byValue))
                 }
             } else {
                 XCTFail("Expected no commands!")
             }
             b.fulfill()
         })
-        self.waitForExpectationsWithTimeout(5, handler: nil)
+        self.waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testDeleteForValidClient() {
-        let action = "testcommand"
         let syncCommands = shareItems.map { item in
-            return SyncCommand.fromShareItem(item, withAction: action)
-        }.sort(byValue)
+            return SyncCommand.displayURIFromShareItem(item, asClient: "abcdefghijkl")
+        }.sorted(by: byValue)
 
         var client = self.clients[0]
-        let a = self.expectationWithDescription("delete for client.")
-        let b = self.expectationWithDescription("Get for deleted client.")
-        let c = self.expectationWithDescription("Get for not deleted client.")
+        let a = self.expectation(description: "delete for client.")
+        let b = self.expectation(description: "Get for deleted client.")
+        let c = self.expectation(description: "Get for not deleted client.")
         clientsAndTabs.insertCommands(syncCommands, forClients: clients).upon {
             XCTAssertTrue($0.isSuccess)
             XCTAssertEqual(12, $0.successValue!)
@@ -182,7 +177,7 @@ class SyncCommandsTests: XCTestCase {
             a.fulfill()
 
             var error: NSError? = nil
-            let commandCursor = self.db.withReadableConnection(&error) { (connection, err) -> Cursor<Int> in
+            let commandCursor = self.db.withConnection(&error) { (connection, err) -> Cursor<Int> in
                 let select = "SELECT COUNT(*) FROM \(TableSyncCommands) WHERE client_guid = '\(client.guid!)'"
                 return connection.executeQuery(select, factory: IntFactory, withArgs: nil)
             }
@@ -192,7 +187,7 @@ class SyncCommandsTests: XCTestCase {
             b.fulfill()
 
             client = self.clients[1]
-            let commandCursor2 = self.db.withReadableConnection(&error) { (connection, err) -> Cursor<Int> in
+            let commandCursor2 = self.db.withConnection(&error) { (connection, err) -> Cursor<Int> in
                 let select = "SELECT COUNT(*) FROM \(TableSyncCommands) WHERE client_guid = '\(client.guid!)'"
                 return connection.executeQuery(select, factory: IntFactory, withArgs: nil)
             }
@@ -202,17 +197,16 @@ class SyncCommandsTests: XCTestCase {
             c.fulfill()
         }
 
-        self.waitForExpectationsWithTimeout(5, handler: nil)
+        self.waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testDeleteForAllClients() {
-        let action = "testcommand"
         let syncCommands = shareItems.map { item in
-            return SyncCommand.fromShareItem(item, withAction: action)
+            return SyncCommand.displayURIFromShareItem(item, asClient: "abcdefghijkl")
         }
 
-        let a = self.expectationWithDescription("Wipe for all clients.")
-        let b = self.expectationWithDescription("Get for clients.")
+        let a = self.expectation(description: "Wipe for all clients.")
+        let b = self.expectation(description: "Get for clients.")
         clientsAndTabs.insertCommands(syncCommands, forClients: clients).upon {
             XCTAssertTrue($0.isSuccess)
             XCTAssertEqual(12, $0.successValue!)
@@ -232,6 +226,6 @@ class SyncCommandsTests: XCTestCase {
             })
         }
         
-        self.waitForExpectationsWithTimeout(5, handler: nil)
+        self.waitForExpectations(timeout: 5, handler: nil)
     }
 }

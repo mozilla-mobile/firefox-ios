@@ -9,7 +9,7 @@ import Account
 
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
 class AppSettingsTableViewController: SettingsTableViewController {
-    private let SectionHeaderIdentifier = "SectionHeaderIdentifier"
+    fileprivate let SectionHeaderIdentifier = "SectionHeaderIdentifier"
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -17,8 +17,8 @@ class AppSettingsTableViewController: SettingsTableViewController {
         navigationItem.title = NSLocalizedString("Settings", comment: "Settings")
         navigationItem.leftBarButtonItem = UIBarButtonItem(
             title: NSLocalizedString("Done", comment: "Done button on left side of the Settings view controller title bar"),
-            style: UIBarButtonItemStyle.Done,
-            target: navigationController, action: Selector("SELdone"))
+            style: UIBarButtonItemStyle.done,
+            target: navigationController, action: #selector((navigationController as! SettingsNavigationController).SELdone))
         navigationItem.leftBarButtonItem?.accessibilityIdentifier = "AppSettingsTableViewController.navigationItem.leftBarButtonItem"
 
         tableView.accessibilityIdentifier = "AppSettingsTableViewController.tableView"
@@ -29,7 +29,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
 
         let privacyTitle = NSLocalizedString("Privacy", comment: "Privacy section title")
         let accountDebugSettings: [Setting]
-        if AppConstants.BuildChannel != .Aurora {
+        if AppConstants.BuildChannel != .aurora {
             accountDebugSettings = [
                 // Debug settings:
                 RequirePasswordDebugSetting(settings: self),
@@ -41,19 +41,21 @@ class AppSettingsTableViewController: SettingsTableViewController {
         }
 
         let prefs = profile.prefs
-        var generalSettings = [
+        var generalSettings: [Setting] = [
             SearchSetting(settings: self),
+            NewTabPageSetting(settings: self),
+            HomePageSetting(settings: self),
+            OpenWithSetting(settings: self),
             BoolSetting(prefs: prefs, prefKey: "blockPopups", defaultValue: true,
-                titleText: NSLocalizedString("Block Pop-up Windows", comment: "Block pop-up windows setting")),
+                        titleText: NSLocalizedString("Block Pop-up Windows", comment: "Block pop-up windows setting")),
             BoolSetting(prefs: prefs, prefKey: "saveLogins", defaultValue: true,
-                titleText: NSLocalizedString("Save Logins", comment: "Setting to enable the built-in password manager")),
+                        titleText: NSLocalizedString("Save Logins", comment: "Setting to enable the built-in password manager")),
             BoolSetting(prefs: prefs, prefKey: AllowThirdPartyKeyboardsKey, defaultValue: false,
-                titleText: NSLocalizedString("Allow Third-Party Keyboards", comment: "Setting to enable third-party keyboards"), statusText: NSLocalizedString("Firefox needs to reopen for this change to take effect.", comment: "Setting value prop to enable third-party keyboards")),
-        ]
-
+                        titleText: NSLocalizedString("Allow Third-Party Keyboards", comment: "Setting to enable third-party keyboards"), statusText: NSLocalizedString("Firefox needs to reopen for this change to take effect.", comment: "Setting value prop to enable third-party keyboards")),
+            ]        
+        
         let accountChinaSyncSetting: [Setting]
-        let locale = NSLocale.currentLocale()
-        if locale.localeIdentifier != "zh_CN" {
+        if !profile.isChinaEdition {
             accountChinaSyncSetting = []
         } else {
             accountChinaSyncSetting = [
@@ -64,7 +66,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
         // There is nothing to show in the Customize section if we don't include the compact tab layout
         // setting on iPad. When more options are added that work on both device types, this logic can
         // be changed.
-        if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
+        if UIDevice.current.userInterfaceIdiom == .phone {
             generalSettings +=  [
                 BoolSetting(prefs: prefs, prefKey: "CompactTabLayout", defaultValue: true,
                     titleText: NSLocalizedString("Use Compact Tabs", comment: "Setting to enable compact tabs in the tab overview"))
@@ -87,33 +89,22 @@ class AppSettingsTableViewController: SettingsTableViewController {
         settings += [ SettingSection(title: NSAttributedString(string: NSLocalizedString("General", comment: "General settings section title")), children: generalSettings)]
 
         var privacySettings = [Setting]()
-        if AppConstants.MOZ_LOGIN_MANAGER {
-            privacySettings.append(LoginsSetting(settings: self, delegate: settingsDelegate))
-        }
-
-        if AppConstants.MOZ_AUTHENTICATION_MANAGER {
-            privacySettings.append(TouchIDPasscodeSetting(settings: self))
-        }
+        privacySettings.append(LoginsSetting(settings: self, delegate: settingsDelegate))
+        privacySettings.append(TouchIDPasscodeSetting(settings: self))
 
         privacySettings.append(ClearPrivateDataSetting(settings: self))
 
-        if #available(iOS 9, *) {
-            privacySettings += [
-                BoolSetting(prefs: prefs,
-                    prefKey: "settings.closePrivateTabs",
-                    defaultValue: false,
-                    titleText: NSLocalizedString("Close Private Tabs", tableName: "PrivateBrowsing", comment: "Setting for closing private tabs"),
-                    statusText: NSLocalizedString("When Leaving Private Browsing", tableName: "PrivateBrowsing", comment: "Will be displayed in Settings under 'Close Private Tabs'"))
-            ]
-        }
-
         privacySettings += [
-            BoolSetting(prefs: prefs, prefKey: "crashreports.send.always", defaultValue: false,
-                titleText: NSLocalizedString("Send Crash Reports", comment: "Setting to enable the sending of crash reports"),
-                settingDidChange: { configureActiveCrashReporter($0) }),
-            PrivacyPolicySetting()
+            BoolSetting(prefs: prefs,
+                prefKey: "settings.closePrivateTabs",
+                defaultValue: false,
+                titleText: NSLocalizedString("Close Private Tabs", tableName: "PrivateBrowsing", comment: "Setting for closing private tabs"),
+                statusText: NSLocalizedString("When Leaving Private Browsing", tableName: "PrivateBrowsing", comment: "Will be displayed in Settings under 'Close Private Tabs'"))
         ]
 
+        privacySettings += [
+            PrivacyPolicySetting()
+        ]
 
         settings += [
             SettingSection(title: NSAttributedString(string: privacyTitle), children: privacySettings),
@@ -129,9 +120,10 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 YourRightsSetting(),
                 ExportBrowserDataSetting(settings: self),
                 DeleteExportedDataSetting(settings: self),
+                EnableBookmarkMergingSetting(settings: self)
             ])]
             
-            if (profile.hasAccount()) {
+            if profile.hasAccount() {
                 settings += [
                     SettingSection(title: nil, children: [
                         DisconnectSetting(settings: self),
@@ -142,19 +134,19 @@ class AppSettingsTableViewController: SettingsTableViewController {
         return settings
     }
 
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if !profile.hasAccount() {
-            let headerView = tableView.dequeueReusableHeaderFooterViewWithIdentifier(SectionHeaderIdentifier) as! SettingsTableSectionHeaderFooterView
+            let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as! SettingsTableSectionHeaderFooterView
             let sectionSetting = settings[section]
             headerView.titleLabel.text = sectionSetting.title?.string
 
             switch section {
                 // Hide the bottom border for the Sign In to Firefox value prop
                 case 1:
-                    headerView.titleAlignment = .Top
+                    headerView.titleAlignment = .top
                     headerView.titleLabel.numberOfLines = 0
                     headerView.showBottomBorder = false
-                    headerView.titleLabel.snp_updateConstraints { make in
+                    headerView.titleLabel.snp.updateConstraints { make in
                         make.right.equalTo(headerView).offset(-50)
                     }
 
@@ -168,5 +160,21 @@ class AppSettingsTableViewController: SettingsTableViewController {
         }
         
         return super.tableView(tableView, viewForHeaderInSection: section)
+    }
+}
+
+extension AppSettingsTableViewController {
+    func navigateToLoginsList() {
+        let viewController = LoginListViewController(profile: profile)
+        viewController.settingsDelegate = settingsDelegate
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+}
+
+extension AppSettingsTableViewController: PasscodeEntryDelegate {
+    @objc func passcodeValidationDidSucceed() {
+        navigationController?.dismiss(animated: true) {
+            self.navigateToLoginsList()
+        }
     }
 }

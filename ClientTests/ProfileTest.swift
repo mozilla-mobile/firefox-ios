@@ -14,15 +14,15 @@ import XCTest
  * A base test type for tests that need a profile.
  */
 class ProfileTest: XCTestCase {
-    func withTestProfile(callback: (profile: Profile) -> Void) {
-        callback(profile: MockProfile())
+    func withTestProfile(_ callback: (_ profile: Profile) -> Void) {
+        callback(MockProfile())
     }
 
     func testNewProfileClearsExistingAuthenticationInfo() {
         let authInfo = AuthenticationKeychainInfo(passcode: "1234")
-        KeychainWrapper.setAuthenticationInfo(authInfo)
-        XCTAssertNotNil(KeychainWrapper.authenticationInfo())
-        let _ = BrowserProfile(localName: "my_profile")
-        XCTAssertNil(KeychainWrapper.authenticationInfo())
+        KeychainWrapper.sharedAppContainerKeychain.setAuthenticationInfo(authInfo)
+        XCTAssertNotNil(KeychainWrapper.sharedAppContainerKeychain.authenticationInfo())
+        let _ = BrowserProfile(localName: "my_profile", app: nil, clear: true)
+        XCTAssertNil(KeychainWrapper.sharedAppContainerKeychain.authenticationInfo())
     }
 }
