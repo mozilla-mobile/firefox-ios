@@ -204,7 +204,9 @@ private extension LoginListViewController {
         // Fill in an in-flight query and re-query
         activeLoginQuery?.fillIfUnfilled(Maybe(success: []))
         activeLoginQuery = queryLogins(query ?? "")
-        activeLoginQuery! >>== self.loginDataSource.setLogins
+        activeLoginQuery! >>== { logins in
+            self.loginDataSource.setLogins(logins, forQuery: query ?? "") // Empty string is a prefix for any query. It helps filtering in-memory.
+        }
     }
 
     @objc func beginEditing() {
@@ -347,7 +349,20 @@ extension LoginListViewController: KeyboardHelperDelegate {
 extension LoginListViewController: SearchInputViewDelegate {
 
     @objc func searchInputView(_ searchView: SearchInputView, didChangeTextTo text: String) {
-        loadLogins(text)
+
+        if let currentQuery = loginDataSource.currentQuery, text.hasPrefix(currentQuery) {
+            activeLoginQuery?.fillIfUnfilled(Maybe(success: []))
+
+            let filteredLogins = loginDataSource.getLogins().filter {
+                (($0.username?.range(of: text)) != nil)
+                    || ($0.password.range(of: text) != nil)
+                    || ($0.hostname.range(of: text) != nil)
+            }
+
+            loginDataSource.setLogins(filteredLogins, forQuery: text)
+        } else {
+            loadLogins(text)
+        }
     }
 
     @objc func searchInputViewBeganEditing(_ searchView: SearchInputView) {
@@ -356,13 +371,15 @@ extension LoginListViewController: SearchInputViewDelegate {
 
         // Hide the edit button while we're searching
         navigationItem.rightBarButtonItem = nil
-        loadLogins()
     }
 
     @objc func searchInputViewFinishedEditing(_ searchView: SearchInputView) {
         // Show the edit after we're done with the search
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(LoginListViewController.beginEditing))
-        loadLogins()
+
+        if loginDataSource.currentQuery != "" { // Empty string is a prefix for any query. It helps filtering in-memory.
+            loadLogins()
+        }
     }
 }
 
@@ -421,6 +438,8 @@ class LoginDataSource: NSObject, UITableViewDataSource {
 
     weak var dataObserver: LoginDataSourceObserver?
 
+    private(set) var currentQuery: String?
+
     fileprivate let emptyStateView = NoLoginsView()
 
     fileprivate var sections = [Character: [Login]]() {
@@ -478,7 +497,7 @@ class LoginDataSource: NSObject, UITableViewDataSource {
         return String(titles[section])
     }
 
-    func setLogins(_ logins: [Login]) {
+    func setLogins(_ logins: [Login], forQuery currentQuery: String) {
         // NB: Make sure we call the callback on the main thread so it can be synced up with a reloadData to
         //     prevent race conditions between data/UI indexing.
         return computeSectionsFromLogins(logins).uponQueue(DispatchQueue.main) { result in
@@ -492,7 +511,12 @@ class LoginDataSource: NSObject, UITableViewDataSource {
             self.count = logins.count
             self.titles = titles
             self.sections = sections
+            self.currentQuery = currentQuery
         }
+    }
+
+    func getLogins() -> [Login] {
+        return sections.flatMap { $0.value }
     }
 
     fileprivate func computeSectionsFromLogins(_ logins: [Login]) -> Deferred<Maybe<([Character], [Character: [Login]])>> {
