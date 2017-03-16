@@ -87,13 +87,35 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
     map.createScene(SettingsScreen) { scene in
         let table = app.tables["AppSettingsTableViewController.tableView"]
 
-        scene.tap(table.cells["Search"], to: SearchSettings)
+        /*scene.tap(table.cells["Search"], to: SearchSettings)
         scene.tap(table.cells["NewTab"], to: NewTabSettings)
         scene.tap(table.cells["Homepage"], to: HomePageSettings)
         scene.tap(table.cells["TouchIDPasscode"], to: PasscodeSettings)
         scene.tap(table.cells["Logins"], to: LoginsSettings)
         scene.tap(table.cells["ClearPrivateData"], to: ClearPrivateDataSettings)
-        scene.tap(table.cells["OpenWith.Setting"], to: OpenWithSettings)
+        scene.tap(table.cells["OpenWith.Setting"], to: OpenWithSettings)*/
+
+        scene.gesture(to: SearchSettings) {
+            table.cells["Search"].tap()
+        }
+        scene.gesture(to: NewTabSettings) {
+            table.cells["NewTab"].tap()
+        }
+        scene.gesture(to: HomePageSettings) {
+            table.cells["Homepage"].tap()
+        }
+        scene.gesture(to: PasscodeSettings) {
+            table.cells["TouchIDPasscode"].tap()
+        }
+        scene.gesture(to: LoginsSettings) {
+            table.cells["Logins"].tap()
+        }
+        scene.gesture(to: ClearPrivateDataSettings) {
+            table.cells["ClearPrivateData"].tap()
+        }
+        scene.gesture(to: OpenWithSettings) {
+            table.cells["OpenWith.Setting"].tap()
+        }
 
         scene.backAction = navigationControllerBackAction
     }
