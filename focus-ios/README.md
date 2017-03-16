@@ -1,4 +1,4 @@
-> SOme info in this README has not been updated for the current version of Firefox Focus (and Firefox Klar) 3.0. We will do that soon. The code in this repository however is fully up to date and represents the code of the Firefox Focus and Klar applications that are found on the iOS App Store.
+> Some info in this README has not been updated for the current version of Firefox Focus (and Firefox Klar) 3.0. We will do that soon. The code in this repository however is fully up to date and represents the code of the Firefox Focus and Klar applications that are found on the iOS App Store.
 
 Download on the [App Store](https://itunes.apple.com/app/id1055677337).
 
