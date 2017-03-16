@@ -68,6 +68,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
             frame: CGRect(x: 0, y: 0, width: 1, height: 1),
             configuration: config
         )
+        webView.allowsLinkPreview = false
         webView.navigationDelegate = self
         webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
 
