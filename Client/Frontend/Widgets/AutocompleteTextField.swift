@@ -77,6 +77,50 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         })
     }
 
+    override var keyCommands: [UIKeyCommand]? {
+        return [
+            UIKeyCommand(input: UIKeyInputLeftArrow, modifierFlags: .init(rawValue: 0), action: #selector(self.handleKeyCommand(sender:))),
+            UIKeyCommand(input: UIKeyInputRightArrow, modifierFlags: .init(rawValue: 0), action: #selector(self.handleKeyCommand(sender:)))
+        ]
+    }
+    
+    func handleKeyCommand(sender: UIKeyCommand) {
+        switch sender.input {
+        case UIKeyInputLeftArrow:
+            if completionActive {
+                applyCompletion()
+                
+                // Set the current position to the beginning of the text.
+                selectedTextRange = textRange(from: beginningOfDocument, to: beginningOfDocument)
+            } else if selectedTextRange != nil {
+                if selectedTextRange?.start == beginningOfDocument {
+                    return
+                }
+                
+                let cursorPosition = position(from: (selectedTextRange?.start)!, offset: -1)!
+                selectedTextRange = textRange(from: cursorPosition, to: cursorPosition)
+            }
+            return
+        case UIKeyInputRightArrow:
+            if completionActive {
+                applyCompletion()
+                
+                // Set the current position to the end of the text.
+                selectedTextRange = textRange(from: endOfDocument, to: endOfDocument)
+            } else if selectedTextRange != nil {
+                if selectedTextRange?.end == endOfDocument {
+                    return
+                }
+                
+                let cursorPosition = position(from: (selectedTextRange?.end)!, offset: 1)!
+                selectedTextRange = textRange(from: cursorPosition, to: cursorPosition)
+            }
+            return
+        default:
+            return
+        }
+    }
+    
     func highlightAll() {
         if let text = text {
             if !text.isEmpty {
