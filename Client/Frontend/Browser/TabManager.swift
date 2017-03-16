@@ -695,7 +695,7 @@ extension TabManager {
             let tab = self.addTab(nil, configuration: nil, afterTab: nil, flushToDisk: false, zombie: true, isPrivate: savedTab.isPrivate)
 
             // Since this is a restored tab, reset the URL to be loaded as that will be handled by the SessionRestoreHandler
-            tab.url = nil;
+            tab.url = nil
             
             if let faviconURL = savedTab.faviconURL {
                 let icon = Favicon(url: faviconURL, date: Date(), type: IconType.noneFound)
