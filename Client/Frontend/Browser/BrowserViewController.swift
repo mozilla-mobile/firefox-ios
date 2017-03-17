@@ -140,15 +140,15 @@ class BrowserViewController: UIViewController {
             self.displayedPopoverController = nil
         }
 
-        coordinator.animate(alongsideTransition: {context in
+        coordinator.animate(alongsideTransition: { context in
             self.scrollController.updateMinimumZoom()
             self.topTabsViewController?.scrollToCurrentTab(false, centerCell: false)
             if let popover = self.displayedPopoverController {
                 self.updateDisplayedPopoverProperties?()
                 self.present(popover, animated: true, completion: nil)
             }
-            }, completion: { _ in
-                self.scrollController.setMinimumZoom()
+        }, completion: { _ in
+            self.scrollController.setMinimumZoom()
         })
     }
 
@@ -1137,20 +1137,11 @@ class BrowserViewController: UIViewController {
             }
         })
 
-        let setupPopover = { [unowned self] in
-            if let popoverPresentationController = controller.popoverPresentationController {
-                popoverPresentationController.sourceView = sourceView
-                popoverPresentationController.sourceRect = sourceRect
-                popoverPresentationController.permittedArrowDirections = arrowDirection
-                popoverPresentationController.delegate = self
-            }
-        }
-
-        setupPopover()
-
-        if controller.popoverPresentationController != nil {
-            displayedPopoverController = controller
-            updateDisplayedPopoverProperties = setupPopover
+        if let popoverPresentationController = controller.popoverPresentationController {
+            popoverPresentationController.sourceView = sourceView
+            popoverPresentationController.sourceRect = sourceRect
+            popoverPresentationController.permittedArrowDirections = arrowDirection
+            popoverPresentationController.delegate = self
         }
 
         self.present(controller, animated: true, completion: nil)
