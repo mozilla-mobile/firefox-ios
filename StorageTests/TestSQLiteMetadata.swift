@@ -17,6 +17,7 @@ class TestSQLiteMetadata: XCTestCase {
     override func setUp() {
         super.setUp()
         self.db = BrowserDB(filename: "foo.db", files: self.files)
+        self.db.attachDB(named: "metadata.db", as: AttachedDatabaseMetadata)
         XCTAssertTrue(db.createOrUpdate(BrowserTable()) == .success)
         
         self.metadata = SQLiteMetadata(db: db)
@@ -95,12 +96,12 @@ class TestSQLiteMetadata: XCTestCase {
 }
 
 private func metadataFromDB(_ db: BrowserDB) -> Deferred<Maybe<Cursor<PageMetadata>>> {
-    let sql = "SELECT * FROM \(TablePageMetadata)"
+    let sql = "SELECT * FROM \(AttachedTablePageMetadata)"
     return db.runQuery(sql, args: nil, factory: pageMetadataFactory)
 }
 
 private func removeAllMetadata(_ db: BrowserDB) -> Success {
-    return db.run("DELETE FROM \(TablePageMetadata)")
+    return db.run("DELETE FROM \(AttachedTablePageMetadata)")
 }
 
 private func pageMetadataFactory(_ row: SDRow) -> PageMetadata {
