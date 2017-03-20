@@ -44,7 +44,6 @@ class TopSiteItemCell: UICollectionViewCell {
 
     lazy private var faviconBG: UIView = {
         let view = UIView()
-        view.layer.masksToBounds = true
         view.layer.cornerRadius = TopSiteCellUX.CellCornerRadius
         view.layer.masksToBounds = true
         view.layer.borderWidth = TopSiteCellUX.BorderWidth
@@ -225,17 +224,15 @@ class ASHorizontalScrollCell: UICollectionViewCell {
         pageControl.addGestureRecognizer(self.pageControlPress)
 
         collectionView.snp.makeConstraints { make in
-
             make.edges.equalTo(contentView)
         }
 
         pageControl.snp.makeConstraints { make in
             make.size.equalTo(ASHorizontalScrollCellUX.PageControlSize)
-            make.top.equalTo(collectionView.snp.bottom)
+            make.top.equalTo(collectionView.snp.bottom).inset(ASHorizontalScrollCellUX.PageControlOffset)
             make.centerX.equalTo(self.snp.centerX)
         }
     }
-
 
     override func layoutSubviews() {
         super.layoutSubviews()
