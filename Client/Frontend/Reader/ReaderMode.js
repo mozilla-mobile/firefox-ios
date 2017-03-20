@@ -4,7 +4,7 @@
 
 (function() {
     "use strict";
- 
+
     if (!window.__firefox__) {
         Object.defineProperty(window, '__firefox__', {
             enumerable: false,
@@ -16,7 +16,7 @@
 
     var readabilityResult = null;
     var currentStyle = null;
- 
+
     var readerModeURL = /^http:\/\/localhost:\d+\/reader-mode\/page/;
 
     var BLOCK_IMAGES_SELECTOR = ".content p > img:only-child, " +
@@ -87,7 +87,7 @@
             document.body.classList.remove(currentStyle.theme);
         }
         document.body.classList.add(style.theme);
-        
+
         // Configure the font size (1-5)
         if (currentStyle != null) {
             document.body.classList.remove("font-size" + currentStyle.fontSize);
@@ -99,44 +99,44 @@
             document.body.classList.remove(currentStyle.fontType);
         }
         document.body.classList.add(style.fontType);
-        
+
         // Remember the style
         currentStyle = style;
     }
 
     function updateImageMargins() {
         var contentElement = document.getElementById('reader-content');
-        
+
         var windowWidth = window.innerWidth;
         var contentWidth = contentElement.offsetWidth;
         var maxWidthStyle = windowWidth + "px !important";
-        
+
         var setImageMargins = function(img) {
             if (!img._originalWidth) {
                 img._originalWidth = img.offsetWidth;
             }
-            
+
             var imgWidth = img._originalWidth;
-            
+
             // If the image is taking more than half of the screen, just make
             // it fill edge-to-edge.
             if (imgWidth < contentWidth && imgWidth > windowWidth * 0.55) {
                 imgWidth = windowWidth;
             }
-            
+
             var sideMargin = Math.max((contentWidth - windowWidth) / 2, (contentWidth - imgWidth) / 2);
-            
+
             var imageStyle = sideMargin + "px !important";
             var widthStyle = imgWidth + "px !important";
-            
+
             var cssText = "max-width: " + maxWidthStyle + ";" +
                 "width: " + widthStyle + ";" +
                 "margin-left: " + imageStyle + ";" +
                 "margin-right: " + imageStyle + ";";
-            
+
             img.style.cssText = cssText;
         }
-        
+
         var imgs = document.querySelectorAll(BLOCK_IMAGES_SELECTOR);
         for (var i = imgs.length; --i >= 0;) {
             var img = imgs[i];
@@ -167,20 +167,43 @@
 
         // The order here is important. Because updateImageMargins depends on contentElement.offsetWidth which
         // will not be set until contentElement is visible. If this leads to annoying content reflowing then we
-        // need to look at an alternative way to do 
+        // need to look at an alternative way to do
         showContent();
         updateImageMargins();
     }
 
-    window.__firefox__.reader = {
-        // If this is http or https content, and not an index page, then try to run Readability. If anything
-        // fails, the app will never be notified and we don't show the button. That is ok for now since there
-        // is no error feedback possible anyway.
-        DEBUG: false,
-        checkReadability: checkReadability,
-        readerize: readerize,
-        setStyle: setStyle
-    };
+    Object.defineProperty(window.__firefox__, 'reader', {
+        enumerable: false,
+        configurable: false,
+        writable: false,
+        value: {
+          // If this is http or https content, and not an index page, then try to run Readability. If anything
+          // fails, the app will never be notified and we don't show the button. That is ok for now since there
+          // is no error feedback possible anyway.
+          DEBUG: false
+        }
+    });
+
+    Object.defineProperty(window.__firefox__.reader, 'checkReadability', {
+        enumerable: false,
+        configurable: false,
+        writable: false,
+        value: checkReadability
+    });
+
+    Object.defineProperty(window.__firefox__.reader, 'readerize', {
+        enumerable: false,
+        configurable: false,
+        writable: false,
+        value: readerize
+    });
+
+    Object.defineProperty(window.__firefox__.reader, 'setStyle', {
+        enumerable: false,
+        configurable: false,
+        writable: false,
+        value: setStyle
+    });
 
     window.addEventListener('load', function(event) {
         // If this is an about:reader page that we are loading, apply the initial style to the page.
