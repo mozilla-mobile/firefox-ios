@@ -1,7 +1,7 @@
 ast
 az
 bg
-bn-BD
+bn
 br
 ca
 cs
@@ -9,6 +9,7 @@ cy
 da
 de
 dsb
+el
 en-GB
 en-US
 eo
@@ -17,7 +18,6 @@ es-CL
 es-MX
 eu
 fr
-fy-NL
 ga-IE
 gd
 hsb
@@ -33,6 +33,7 @@ ko
 lo
 lt
 lv
+my
 nb-NO
 ne-NP
 nl
@@ -46,6 +47,7 @@ ru
 ses
 sk
 sl
+sq
 sv-SE
 te
 th
