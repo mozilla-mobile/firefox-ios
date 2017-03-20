@@ -50,7 +50,7 @@ public struct AppConstants {
         #if MOZ_CHANNEL_RELEASE
             return false
         #elseif MOZ_CHANNEL_BETA
-            return true
+            return false
         #elseif MOZ_CHANNEL_NIGHTLY
             return true
         #elseif MOZ_CHANNEL_FENNEC
@@ -99,7 +99,7 @@ public struct AppConstants {
     ///  Enables/disables the top tabs for iPad
     public static let MOZ_TOP_TABS: Bool = {
         #if MOZ_CHANNEL_RELEASE
-            return false
+            return true
         #elseif MOZ_CHANNEL_BETA
             return true
         #elseif MOZ_CHANNEL_NIGHTLY
@@ -203,7 +203,7 @@ public struct AppConstants {
     /// Toggles the ability to add a custom search engine
     public static let MOZ_CUSTOM_SEARCH_ENGINE: Bool = {
         #if MOZ_CHANNEL_RELEASE
-            return false
+            return true
         #elseif MOZ_CHANNEL_BETA
             return true
         #elseif MOZ_CHANNEL_NIGHTLY
