@@ -10,7 +10,7 @@ import WebKit
 import SwiftyJSON
 
 protocol FxAContentViewControllerDelegate: class {
-    func contentViewControllerDidSignIn(_ viewController: FxAContentViewController, data: JSON)
+    func contentViewControllerDidSignIn(_ viewController: FxAContentViewController, withFlags: FxALoginFlags)
     func contentViewControllerDidCancel(_ viewController: FxAContentViewController)
 }
 
@@ -35,7 +35,10 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
 
     weak var delegate: FxAContentViewControllerDelegate?
 
-    init() {
+    let profile: Profile
+
+    init(profile: Profile) {
+        self.profile = profile
         super.init(backgroundColor: UIColor(red: 242 / 255.0, green: 242 / 255.0, blue: 242 / 255.0, alpha: 1.0), title: NSAttributedString(string: "Firefox Accounts"))
     }
 
@@ -108,7 +111,11 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     // The user has signed in to a Firefox Account.  We're done!
     fileprivate func onLogin(_ data: JSON) {
         injectData("message", content: ["status": "login"])
-        self.delegate?.contentViewControllerDidSignIn(self, data: data)
+
+        let app = UIApplication.shared
+        let helper = FxALoginHelper.sharedInstance
+        helper.delegate = self
+        helper.application(app, didReceiveAccountJSON: data)
     }
 
     // The content server page is ready to be shown.
@@ -185,6 +192,20 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
 
     override func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         // Ignore for now.
+    }
+}
+
+extension FxAContentViewController: FxAPushLoginDelegate {
+    func accountLoginDidSucceed(withFlags flags: FxALoginFlags) {
+        DispatchQueue.main.async {
+            self.delegate?.contentViewControllerDidSignIn(self, withFlags: flags)
+        }
+    }
+
+    func accountLoginDidFail() {
+        DispatchQueue.main.async {
+            self.delegate?.contentViewControllerDidCancel(self)
+        }
     }
 }
 

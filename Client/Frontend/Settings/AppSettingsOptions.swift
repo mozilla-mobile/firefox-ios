@@ -38,7 +38,7 @@ class ConnectSetting: WithoutAccountSetting {
     override var accessibilityIdentifier: String? { return "SignInToFirefox" }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = FxAContentViewController()
+        let viewController = FxAContentViewController(profile: profile)
         viewController.delegate = self
         viewController.url = settings.profile.accountConfiguration.signInURL
         navigationController?.pushViewController(viewController, animated: true)
@@ -277,7 +277,7 @@ class AccountStatusSetting: WithAccountSetting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = FxAContentViewController()
+        let viewController = FxAContentViewController(profile: profile)
         viewController.delegate = self
 
         if let account = profile.getAccount() {
