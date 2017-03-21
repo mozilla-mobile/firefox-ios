@@ -11,18 +11,14 @@ public typealias GUID = String
  */
 open class Bytes {
     open class func generateRandomBytes(_ len: UInt) -> Data {
-        let len = Int(len)
-        var data = Data(count: len)
-        data.withUnsafeMutableBytes { (p: UnsafeMutablePointer<UInt8>) in
-            assert(SecRandomCopyBytes(kSecRandomDefault, len, p) == 0, "Random byte generation failed.")
-        }
-        return data
+        let bytes = [UInt32](repeating: 0, count: Int(len)).map { _ in arc4random() }
+        return Data(bytes: bytes, count: Int(len))
     }
 
     open class func generateGUID() -> GUID {
         // Turns the standard NSData encoding into the URL-safe variant that Sync expects.
         return generateRandomBytes(9)
-            .base64EncodedString(options: NSData.Base64EncodingOptions())
+            .base64EncodedString
             .replacingOccurrences(of: "/", with: "_", options: NSString.CompareOptions(), range: nil)
             .replacingOccurrences(of: "+", with: "-", options: NSString.CompareOptions(), range: nil)
     }
