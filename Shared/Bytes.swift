@@ -10,9 +10,9 @@ public typealias GUID = String
  * Utilities for futzing with bytes and such.
  */
 open class Bytes {
-    open class func generateRandomBytes(_ len: Int) -> Data {
-        let bytes = [UInt32](repeating: 0, count: len).map { _ in arc4random() }
-        return Data(bytes: bytes, count: len)
+    open class func generateRandomBytes(_ len: UInt) -> Data {
+        let bytes = [UInt32](repeating: 0, count: Int(len)).map { _ in arc4random() }
+        return Data(bytes: bytes, count: Int(len))
     }
 
     open class func generateGUID() -> GUID {
