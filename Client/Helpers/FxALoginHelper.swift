@@ -108,7 +108,6 @@ class FxALoginHelper {
         requestUserNotifications(application)
     }
 
-
     fileprivate func requestUserNotifications(_ application: UIApplication) {
         let viewAction = UIMutableUserNotificationAction()
         viewAction.identifier = SentTabAction.view.rawValue
