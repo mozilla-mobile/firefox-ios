@@ -277,25 +277,30 @@ class AccountStatusSetting: WithAccountSetting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = FxAContentViewController()
-        viewController.delegate = self
-
         if let account = profile.getAccount() {
             switch account.actionNeeded {
-            case .needsVerification:
-                var cs = URLComponents(url: account.configuration.settingsURL, resolvingAgainstBaseURL: false)
-                cs?.queryItems?.append(URLQueryItem(name: "email", value: account.email))
-                viewController.url = try! cs?.asURL()
+            case .needsVerification, .none:
+                if let settingsNavigationController = navigationController as? SettingsNavigationController {
+                    settingsNavigationController.SELdone()
+                    if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                        let url = NSURL(string:"https://accounts.firefox.com/")
+                        appDelegate.browserViewController?.openURLInNewTab(url as URL?, isPrivileged: true)
+                    }
+                }
+                return
             case .needsPassword:
-                var cs = URLComponents(url: account.configuration.forceAuthURL, resolvingAgainstBaseURL: false)
-                cs?.queryItems?.append(URLQueryItem(name: "email", value: account.email))
-                viewController.url = try! cs?.asURL()
-            case .none, .needsUpgrade:
+                let viewController = FxAContentViewController()
+                viewController.delegate = self
+                let cs = NSURLComponents(url: account.configuration.forceAuthURL, resolvingAgainstBaseURL: false)
+                cs?.queryItems?.append(NSURLQueryItem(name: "email", value: account.email) as URLQueryItem)
+                viewController.url = cs?.url
+                navigationController?.pushViewController(viewController, animated: true)
+                return
+            case .needsUpgrade:
                 // In future, we'll want to link to /settings and an upgrade page, respectively.
                 return
             }
         }
-        navigationController?.pushViewController(viewController, animated: true)
     }
 }
 
