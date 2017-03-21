@@ -4,8 +4,11 @@
 
 import Foundation
 import GCDWebServers
+import Shared
 
 class WebServer {
+    private let log = Logger.browserLogger
+
     static let WebServerSharedInstance = WebServer()
 
     class var sharedInstance: WebServer {
@@ -66,8 +69,11 @@ class WebServer {
     /// Convenience method to register all resources in the main bundle of a specific type. Will be mounted at $base/$module/$resource
     func registerMainBundleResourcesOfType(_ type: String, module: String) {
         for path: String in Bundle.paths(forResourcesOfType: type, inDirectory: Bundle.main.bundlePath) {
-            let resource = NSURL(string: path)!.lastPathComponent
-            server.addGETHandler(forPath: "/\(module)/\(resource)", filePath: path as String, isAttachment: false, cacheAge: UInt.max, allowRangeRequests: true)
+            if let resource = NSURL(string: path)?.lastPathComponent {
+                server.addGETHandler(forPath: "/\(module)/\(resource)", filePath: path as String, isAttachment: false, cacheAge: UInt.max, allowRangeRequests: true)
+            } else {
+                log.warning("Unable to locate resource at path: '\(path)'")
+            }
         }
     }
 
