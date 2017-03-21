@@ -92,12 +92,15 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
                 
                 // Set the current position to the beginning of the text.
                 selectedTextRange = textRange(from: beginningOfDocument, to: beginningOfDocument)
-            } else if selectedTextRange != nil {
-                if selectedTextRange?.start == beginningOfDocument {
+            } else if let range = selectedTextRange {
+                if range.start == beginningOfDocument {
                     return
                 }
                 
-                let cursorPosition = position(from: (selectedTextRange?.start)!, offset: -1)!
+                guard let cursorPosition = position(from: range.start, offset: -1) else {
+                    return
+                }
+                
                 selectedTextRange = textRange(from: cursorPosition, to: cursorPosition)
             }
             return
@@ -107,12 +110,15 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
                 
                 // Set the current position to the end of the text.
                 selectedTextRange = textRange(from: endOfDocument, to: endOfDocument)
-            } else if selectedTextRange != nil {
-                if selectedTextRange?.end == endOfDocument {
+            } else if let range = selectedTextRange {
+                if range.end == endOfDocument {
                     return
                 }
                 
-                let cursorPosition = position(from: (selectedTextRange?.end)!, offset: 1)!
+                guard let cursorPosition = position(from: range.end, offset: 1) else {
+                    return
+                }
+
                 selectedTextRange = textRange(from: cursorPosition, to: cursorPosition)
             }
             return
