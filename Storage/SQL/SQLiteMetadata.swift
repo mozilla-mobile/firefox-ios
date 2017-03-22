@@ -34,13 +34,13 @@ extension SQLiteMetadata: Metadata {
         }
 
         // Replace any matching cache_key entries if they exist
-        let selectUniqueCacheKey = "COALESCE((SELECT cache_key FROM \(TablePageMetadata) WHERE cache_key = ?), ?)"
+        let selectUniqueCacheKey = "COALESCE((SELECT cache_key FROM \(AttachedTablePageMetadata) WHERE cache_key = ?), ?)"
         let args: Args = [cacheKey, cacheKey, metadata.siteURL, metadata.mediaURL, metadata.title,
                           metadata.type, metadata.description, metadata.providerName,
                           expireAt]
 
         let insert =
-        "INSERT OR REPLACE INTO \(TablePageMetadata)" +
+        "INSERT OR REPLACE INTO \(AttachedTablePageMetadata)" +
         "(cache_key, site_url, media_url, title, type, description, provider_name, expired_at) " +
         "VALUES ( \(selectUniqueCacheKey), ?, ?, ?, ?, ?, ?, ?)"
 

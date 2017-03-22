@@ -89,7 +89,9 @@ open class MockProfile: Profile {
     fileprivate var dbCreated = false
     lazy var db: BrowserDB = {
         self.dbCreated = true
-        return BrowserDB(filename: "mock.db", files: self.files)
+        let db = BrowserDB(filename: "mock.db", files: self.files)
+        db.attachDB(named: "metadata.db", as: AttachedDatabaseMetadata)
+        return db
     }()
 
     /**

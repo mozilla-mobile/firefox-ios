@@ -58,6 +58,7 @@ class TestBrowserDB: XCTestCase {
 
     func testMovesDB() {
         let db = BrowserDB(filename: "foo.db", files: self.files)
+        db.attachDB(named: "metadata.db", as: AttachedDatabaseMetadata)
         XCTAssertTrue(db.createOrUpdate(BrowserTable()) == .success)
 
         db.run("CREATE TABLE foo (bar TEXT)").value      // Just so we have writes in the WAL.
