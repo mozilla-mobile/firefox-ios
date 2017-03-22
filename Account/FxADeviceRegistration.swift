@@ -75,15 +75,22 @@ open class FxADeviceRegistrator {
                 return deferMaybe(FxADeviceRegistrationResult.alreadyRegistered)
         }
 
+        let pushParams: FxADevicePushParams?
+        if AppConstants.MOZ_FXA_PUSH, let pushRegistration = account.pushRegistration {
+            pushParams = FxADevicePushParams(callback: pushRegistration.endpoint.absoluteString!, publicKey: "", authKey: "")
+        } else {
+            pushParams = nil
+        }
+
         let client = client ?? FxAClient10(endpoint: account.configuration.authEndpointURL)
         let name = DeviceInfo.defaultClientName()
         let device: FxADevice
         let registrationResult: FxADeviceRegistrationResult
         if let registration = account.deviceRegistration {
-            device = FxADevice.forUpdate(name, id: registration.id)
+            device = FxADevice.forUpdate(name, id: registration.id, push: pushParams)
             registrationResult = FxADeviceRegistrationResult.updated
         } else {
-            device = FxADevice.forRegister(name, type: "mobile")
+            device = FxADevice.forRegister(name, type: "mobile", push: pushParams)
             registrationResult = FxADeviceRegistrationResult.registered
         }
 

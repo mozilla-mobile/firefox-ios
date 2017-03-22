@@ -38,28 +38,86 @@ let allSettingsScreens = [
     OpenWithSettings,
 ]
 
-func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozilla.org/en-US/book/") -> ScreenGraph {
-    let map = ScreenGraph(app)
+let Intro_Organize = "Intro.Organize"
+let Intro_Customize = "Intro.Customize"
+let Intro_Share = "Intro.Share"
+let Intro_Choose = "Intro.Choose"
+let Intro_Sync = "Intro.Sync"
 
+let allIntroPages = [
+    Intro_Organize,
+    Intro_Customize,
+    Intro_Share,
+    Intro_Choose,
+    Intro_Sync,
+]
+
+let HomePanelsScreen = "HomePanels"
+let HomePanel_TopSites = "HomePanel.TopSites.0"
+let HomePanel_Bookmarks = "HomePanel.Bookmarks.1"
+let HomePanel_History = "HomePanel.History.2"
+let HomePanel_ReadingList = "HomePanel.ReadingList.3"
+
+let allHomePanels = [
+    HomePanel_Bookmarks,
+    HomePanel_TopSites,
+    HomePanel_History,
+    HomePanel_ReadingList,
+]
+
+let ContextMenu_ReloadButton = "ContextMenu_ReloadButton"
+
+func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozilla.org/en-US/book/") -> ScreenGraph {
+    let map = ScreenGraph()
+
+    let startBrowsingButton = app.buttons["IntroViewController.startBrowsingButton"]
     map.createScene(FirstRun) { scene in
         scene.gesture(to: NewTabScreen) {
-            let firstRunUI = app.buttons["Start Browsing"]
-            if firstRunUI.exists {
-                firstRunUI.tap()
+            if startBrowsingButton.exists {
+                startBrowsingButton.tap()
             }
         }
+
+        scene.noop(to: allIntroPages[0])
+    }
+
+    // Add the intro screens.
+    var i = 0
+    let introLast = allIntroPages.count - 1
+    let introPager = app.scrollViews["IntroViewController.scrollView"]
+    for intro in allIntroPages {
+        let prev = i == 0 ? nil : allIntroPages[i - 1]
+        let next = i == introLast ? nil : allIntroPages[i + 1]
+
+        map.createScene(intro) { scene in
+            if let prev = prev {
+                scene.swipeRight(introPager, to: prev)
+            }
+
+            if let next = next {
+                scene.swipeLeft(introPager, to: next)
+            }
+
+            scene.tap(startBrowsingButton, to: NewTabScreen)
+        }
+
+        i += 1
     }
 
     map.createScene(NewTabScreen) { scene in
         scene.tap(app.textFields["url"], to: URLBarOpen)
         scene.tap(app.buttons["TabToolbar.menuButton"], to: NewTabMenu)
         scene.tap(app.buttons["URLBarView.tabsButton"], to: TabTray)
+
+        scene.noop(to: HomePanelsScreen)
     }
 
     map.createScene(NewPrivateTabScreen) { scene in
         scene.tap(app.textFields["url"], to: URLBarOpen)
         scene.tap(app.buttons["TabToolbar.menuButton"], to: NewTabMenu)
         scene.tap(app.buttons["URLBarView.tabsButton"], to: PrivateTabTray)
+
+        scene.noop(to: HomePanelsScreen)
     }
 
     map.createScene(URLBarOpen) { scene in
@@ -71,12 +129,32 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
         }
     }
 
+    let noopAction = {}
+    map.createScene(HomePanelsScreen) { scene in
+        scene.tap(app.buttons["HomePanels.TopSites"], to: HomePanel_TopSites)
+        scene.tap(app.buttons["HomePanels.Bookmarks"], to: HomePanel_Bookmarks)
+        scene.tap(app.buttons["HomePanels.History"], to: HomePanel_History)
+        scene.tap(app.buttons["HomePanels.ReadingList"], to: HomePanel_ReadingList)
+    }
+
+    allHomePanels.forEach { name in
+        // Tab panel means that all the home panels are available all the time, so we can 
+        // fake this out by a noop back to the HomePanelsScreen which can get to every other panel.
+        map.createScene(name) { scene in
+            scene.backAction = noopAction
+        }
+    }
+
+    let closeMenuAction = {
+        app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.25)).tap()
+    }
+
     map.createScene(NewTabMenu) { scene in
         scene.gesture(to: SettingsScreen) {
             // XXX The element is fails the existence test, so we tap it through the gesture() escape hatch.
             app.collectionViews.cells["SettingsMenuItem"].tap()
         }
-        scene.tap(app.buttons["Close Menu"], to: NewTabScreen)
+        scene.backAction = closeMenuAction
         scene.dismissOnUse = true
     }
 
@@ -167,7 +245,7 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
             app.collectionViews.cells["SettingsMenuItem"].tap()
         }
 
-        scene.tap(app.buttons["Close Menu"], to: TabTray)
+        scene.backAction = closeMenuAction
         scene.dismissOnUse = true
     }
 
@@ -184,7 +262,7 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
     }
 
     map.createScene(BrowserTabMenu) { scene in
-        scene.tap(app.buttons["Close Menu"], to: BrowserTab)
+        scene.backAction = closeMenuAction
         // XXX Testing for the element causes an error, so we use the more
         // generic `gesture` method which does not test for the existence
         // before swiping.
@@ -202,8 +280,13 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
             app.otherElements["MenuViewController.menuView"].swipeRight()
         }
         scene.tap(app.collectionViews.cells["SettingsMenuItem"], to: SettingsScreen)
-        scene.tap(app.buttons["Close Menu"], to: BrowserTab)
+        scene.backAction = closeMenuAction
         scene.dismissOnUse = true
+    }
+
+    let cancelContextMenuAction = {
+        let buttons = app.sheets.element(boundBy: 0).buttons
+        buttons.element(boundBy: buttons.count-1).tap()
     }
 
     map.initialSceneName = FirstRun

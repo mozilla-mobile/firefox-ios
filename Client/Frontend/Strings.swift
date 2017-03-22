@@ -266,6 +266,13 @@ extension Strings {
     public static let ContextMenuButtonToastNewPrivateTabOpenedButtonText = NSLocalizedString("ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText", value: "Switch", comment: "The button text in the Button Toast for switching to a fresh New Private Tab.")
 }
 
+// Receiving tabs sent from other devices.
+extension Strings {
+    public static let SentTabViewActionTitle = NSLocalizedString("SentTab.ViewPage", value: "View", comment: "Button title displayed in a notification when a sent tab has been received. Tapping on the button will open the URL.")
+    public static let SentTabBookmarkActionTitle = NSLocalizedString("SentTab.BookmarkPage", value: "Bookmark", comment: "Button title displayed in a notification when a sent tab has been received. Tapping on the button will add the URL as a bookmark.")
+    public static let SentTabAddToReadingListActionTitle = NSLocalizedString("SentTab.AddToReadingList", value: "Add to Reading List", comment: "Button title displayed in a notification when a sent tab has been received. Tapping on the button will add the page to the reading list.")
+}
+
 // Reader Mode.
 extension Strings {
     public static let ReaderModeAvailableVoiceOverAnnouncement = NSLocalizedString("ReaderMode.Available.VoiceOverAnnouncement", value: "Reader Mode available", comment: "Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available.")

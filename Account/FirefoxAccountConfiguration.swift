@@ -48,6 +48,8 @@ public protocol FirefoxAccountConfiguration {
     var forceAuthURL: URL { get }
 
     var sync15Configuration: Sync15Configuration { get }
+
+    var pushConfiguration: PushConfiguration { get }
 }
 
 public struct LatestDevFirefoxAccountConfiguration: FirefoxAccountConfiguration {
@@ -65,6 +67,8 @@ public struct LatestDevFirefoxAccountConfiguration: FirefoxAccountConfiguration 
     public let forceAuthURL = URL(string: "https://latest.dev.lcip.org/force_auth?service=sync&context=fx_ios_v1")!
 
     public let sync15Configuration: Sync15Configuration = StageSync15Configuration()
+
+    public let pushConfiguration: PushConfiguration = DeveloperPushConfiguration()
 }
 
 public struct StableDevFirefoxAccountConfiguration: FirefoxAccountConfiguration {
@@ -82,6 +86,8 @@ public struct StableDevFirefoxAccountConfiguration: FirefoxAccountConfiguration 
     public let forceAuthURL = URL(string: "https://stable.dev.lcip.org/force_auth?service=sync&context=fx_ios_v1")!
 
     public let sync15Configuration: Sync15Configuration = StageSync15Configuration()
+
+    public let pushConfiguration: PushConfiguration = DeveloperPushConfiguration()
 }
 
 public struct StageFirefoxAccountConfiguration: FirefoxAccountConfiguration {
@@ -99,6 +105,8 @@ public struct StageFirefoxAccountConfiguration: FirefoxAccountConfiguration {
     public let forceAuthURL = URL(string: "https://accounts.stage.mozaws.net/force_auth?service=sync&context=fx_ios_v1")!
 
     public let sync15Configuration: Sync15Configuration = StageSync15Configuration()
+
+    public let pushConfiguration: PushConfiguration = StagePushConfiguration()
 }
 
 public struct ProductionFirefoxAccountConfiguration: FirefoxAccountConfiguration {
@@ -116,6 +124,8 @@ public struct ProductionFirefoxAccountConfiguration: FirefoxAccountConfiguration
     public let forceAuthURL = URL(string: "https://accounts.firefox.com/force_auth?service=sync&context=fx_ios_v1")!
 
     public let sync15Configuration: Sync15Configuration = ProductionSync15Configuration()
+
+    public let pushConfiguration: PushConfiguration = ProductionPushConfiguration()
 }
 
 public struct ChinaEditionFirefoxAccountConfiguration: FirefoxAccountConfiguration {
@@ -133,6 +143,8 @@ public struct ChinaEditionFirefoxAccountConfiguration: FirefoxAccountConfigurati
     public let forceAuthURL = URL(string: "https://accounts.firefox.com.cn/force_auth?service=sync&context=fx_ios_v1")!
 
     public let sync15Configuration: Sync15Configuration = ChinaEditionSync15Configuration()
+
+    public let pushConfiguration: PushConfiguration = ProductionPushConfiguration()
 }
 
 public struct ChinaEditionSync15Configuration: Sync15Configuration {

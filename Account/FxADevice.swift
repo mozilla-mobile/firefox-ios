@@ -6,25 +6,33 @@ import Foundation
 import Shared
 import SwiftyJSON
 
+public struct FxADevicePushParams {
+    let callback: String
+    let publicKey: String
+    let authKey: String
+}
+
 public struct FxADevice {
     let name: String
     let id: String?
     let type: String?
+    let pushParams: FxADevicePushParams?
     let isCurrentDevice: Bool
 
-    fileprivate init(name: String, id: String?, type: String?, isCurrentDevice: Bool = false) {
+    fileprivate init(name: String, id: String?, type: String?, isCurrentDevice: Bool = false, push: FxADevicePushParams?) {
         self.name = name
         self.id = id
         self.type = type
         self.isCurrentDevice = isCurrentDevice
+        self.pushParams = push
     }
 
-    static func forRegister(_ name: String, type: String) -> FxADevice {
-        return FxADevice(name: name, id: nil, type: type)
+    static func forRegister(_ name: String, type: String, push: FxADevicePushParams?) -> FxADevice {
+        return FxADevice(name: name, id: nil, type: type, push: push)
     }
 
-    static func forUpdate(_ name: String, id: String) -> FxADevice {
-        return FxADevice(name: name, id: id, type: nil)
+    static func forUpdate(_ name: String, id: String, push: FxADevicePushParams?) -> FxADevice {
+        return FxADevice(name: name, id: id, type: nil, push: push)
     }
 
     func toJSON() -> JSON {
@@ -32,7 +40,11 @@ public struct FxADevice {
         parameters["name"] = name
         parameters["id"] = id
         parameters["type"] = type
-
+        if let push = self.pushParams {
+            parameters["pushCallback"] = push.callback
+            parameters["pushPublicKey"] = push.publicKey
+            parameters["pushAuthKey"] = push.authKey
+        }
         return JSON(parameters as NSDictionary)
     }
 
@@ -45,6 +57,16 @@ public struct FxADevice {
         }
 
         let isCurrentDevice = json["isCurrentDevice"].bool ?? false
-        return FxADevice(name: name, id: id, type: type, isCurrentDevice: isCurrentDevice)
+
+        let push: FxADevicePushParams?
+        if let pushCallback = json["pushCallback"].rawString(),
+            let publicKey = json["pushPublicKey"].rawString(), publicKey != "",
+            let authKey   = json["pushAuthKey"].rawString(), authKey != "" {
+            push = FxADevicePushParams(callback: pushCallback, publicKey: publicKey, authKey: authKey)
+        } else {
+            push = nil
+        }
+
+        return FxADevice(name: name, id: id, type: type, isCurrentDevice: isCurrentDevice, push: push)
     }
 }

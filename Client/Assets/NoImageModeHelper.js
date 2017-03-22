@@ -2,41 +2,47 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
- (function() {
-  "use strict";
+(function() {
+"use strict";
 
-  if (!window.__firefox__) {
-    Object.defineProperty(window, '__firefox__', {
-      enumerable: false,
-      configurable: false,
-      writable: false,
-      value: {}
-    });
+if (!window.__firefox__) {
+  Object.defineProperty(window, '__firefox__', {
+    enumerable: false,
+    configurable: false,
+    writable: false,
+    value: {}
+  });
+}
+
+Object.defineProperty(window.__firefox__, 'NoImageMode', {
+  enumerable: false,
+  configurable: false,
+  writable: false,
+  value: { enabled: false }
+});
+
+var className = "__firefox__NoImageMode";
+var observer = null;
+
+function initializeStyleSheet () {
+  var noImageCSS = "*{background-image:none !important;}img,iframe{visibility:hidden !important;}";
+  var newCss = document.getElementById(className);
+  if (!newCss) {
+    var cssStyle = document.createElement("style");
+    cssStyle.type = "text/css";
+    cssStyle.id = className;
+    cssStyle.appendChild(document.createTextNode(noImageCSS));
+    document.documentElement.appendChild(cssStyle);
+  } else {
+    newCss.innerHTML = noImageCSS;
   }
+}
 
-  window.__firefox__.NoImageMode = {
-    enabled: false,
-    setEnabled: null
-  };
-
-  var className = "__firefox__NoImageMode";
-  var observer = null;
-
-  function initializeStyleSheet () {
-    var noImageCSS = "*{background-image:none !important;}img,iframe{visibility:hidden !important;}";
-    var newCss = document.getElementById(className);
-    if (!newCss) {
-      var cssStyle = document.createElement("style");
-      cssStyle.type = "text/css";
-      cssStyle.id = className;
-      cssStyle.appendChild(document.createTextNode(noImageCSS));
-      document.documentElement.appendChild(cssStyle);
-    } else {
-      newCss.innerHTML = noImageCSS;
-    }
-  }
-
-  window.__firefox__.NoImageMode.setEnabled = function (enabled) {
+Object.defineProperty(window.__firefox__.NoImageMode, 'setEnabled', {
+  enumerable: false,
+  configurable: false,
+  writable: false,
+  value: function(enabled) {
     if (enabled === window.__firefox__.NoImageMode.enabled) {
       return;
     }
@@ -70,8 +76,10 @@
       observer = null;
     }
   }
+});
 
-  window.addEventListener("DOMContentLoaded", function (event) {
-    window.__firefox__.NoImageMode.setEnabled(window.__firefox__.NoImageMode.enabled);
-  });
+window.addEventListener("DOMContentLoaded", function (event) {
+  window.__firefox__.NoImageMode.setEnabled(window.__firefox__.NoImageMode.enabled);
+});
+
 })();

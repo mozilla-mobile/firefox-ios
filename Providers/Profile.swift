@@ -556,9 +556,6 @@ open class BrowserProfile: Profile {
         self.account = account
 
         flushAccount()
-
-        // register for notifications for the account
-        registerForNotifications()
         
         // tell any observers that our account has changed
         let userInfo = [NotificationUserInfoKeyHasSyncableAccount: hasSyncableAccount()]
@@ -572,38 +569,6 @@ open class BrowserProfile: Profile {
             // Will this cause issues with people migrating?
             self.keychain.set(account.dictionary() as NSCoding, forKey: name + ".account")
         }
-    }
-
-    func registerForNotifications() {
-        let viewAction = UIMutableUserNotificationAction()
-        viewAction.identifier = SentTabAction.view.rawValue
-        viewAction.title = NSLocalizedString("View", comment: "View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440")
-        viewAction.activationMode = UIUserNotificationActivationMode.foreground
-        viewAction.isDestructive = false
-        viewAction.isAuthenticationRequired = false
-
-        let bookmarkAction = UIMutableUserNotificationAction()
-        bookmarkAction.identifier = SentTabAction.bookmark.rawValue
-        bookmarkAction.title = NSLocalizedString("Bookmark", comment: "Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440")
-        bookmarkAction.activationMode = UIUserNotificationActivationMode.foreground
-        bookmarkAction.isDestructive = false
-        bookmarkAction.isAuthenticationRequired = false
-
-        let readingListAction = UIMutableUserNotificationAction()
-        readingListAction.identifier = SentTabAction.readingList.rawValue
-        readingListAction.title = NSLocalizedString("Add to Reading List", comment: "Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440")
-        readingListAction.activationMode = UIUserNotificationActivationMode.foreground
-        readingListAction.isDestructive = false
-        readingListAction.isAuthenticationRequired = false
-
-        let sentTabsCategory = UIMutableUserNotificationCategory()
-        sentTabsCategory.identifier = TabSendCategory
-        sentTabsCategory.setActions([readingListAction, bookmarkAction, viewAction], for: UIUserNotificationActionContext.default)
-
-        sentTabsCategory.setActions([bookmarkAction, viewAction], for: UIUserNotificationActionContext.minimal)
-
-        let _ = UIUserNotificationSettings(types: UIUserNotificationType.alert, categories: [sentTabsCategory])
-        app?.registerForRemoteNotifications()
     }
 
     // Extends NSObject so we can use timers.

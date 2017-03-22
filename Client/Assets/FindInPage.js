@@ -241,7 +241,6 @@ function updateSearch(text) {
   updateActiveHighlight();
 }
 
-
 if (!window.__firefox__) {
   Object.defineProperty(window, '__firefox__', {
     enumerable: false,
@@ -251,23 +250,43 @@ if (!window.__firefox__) {
   });
 }
 
-window.__firefox__.find = function (text) {
-  updateSearch(text);
-};
+Object.defineProperty(window.__firefox__, 'find', {
+  enumerable: false,
+  configurable: false,
+  writable: false,
+  value: function(text) {
+    updateSearch(text);
+  }
+});
 
-window.__firefox__.findNext = function (text) {
-  activeIndex++;
-  updateSearch(text);
-};
+Object.defineProperty(window.__firefox__, 'findNext', {
+  enumerable: false,
+  configurable: false,
+  writable: false,
+  value: function(text) {
+    activeIndex++;
+    updateSearch(text);
+  }
+});
 
-window.__firefox__.findPrevious = function (text) {
-  activeIndex--;
-  updateSearch(text);
-};
+Object.defineProperty(window.__firefox__, 'findPrevious', {
+  enumerable: false,
+  configurable: false,
+  writable: false,
+  value: function(text) {
+    activeIndex--;
+    updateSearch(text);
+  }
+});
 
-window.__firefox__.findDone = function () {
-  clearHighlights();
-  lastSearch = null;
-};
+Object.defineProperty(window.__firefox__, 'findDone', {
+  enumerable: false,
+  configurable: false,
+  writable: false,
+  value: function() {
+    clearHighlights();
+    lastSearch = null;
+  }
+});
 
-}) ();
+})();
