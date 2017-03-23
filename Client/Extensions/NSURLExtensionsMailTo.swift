@@ -36,7 +36,7 @@ public extension URL {
         }
 
         // Extract headers
-        let headersString = ""//urlString.substring(with: <#T##String.CharacterView corresponding to `toEnd`##String.CharacterView#>.index(toEnd, offsetBy: 1)..<urlString.endIndex)
+        let headersString = urlString.substring(with: urlString.index(toEnd, offsetBy: 1)..<urlString.endIndex)
         var headers = [String: String]()
         let headerComponents = headersString.components(separatedBy: "&")
 

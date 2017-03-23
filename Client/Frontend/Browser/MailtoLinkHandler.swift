@@ -38,6 +38,8 @@ open class MailtoLinkHandler {
                     providerDict[scheme] = AirmailIntegration()
                 } else if scheme == "ms-outlook://" {
                     providerDict[scheme] = MSOutlookIntegration()
+                } else if scheme == "ymail://" {
+                    providerDict[scheme] = YMailIntegration()
                 }
             })
         }
