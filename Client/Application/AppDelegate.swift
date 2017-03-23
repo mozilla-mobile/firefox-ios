@@ -474,6 +474,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         ErrorPageHelper.register(server, certStore: profile.certStore)
         AboutHomeHandler.register(server)
         AboutLicenseHandler.register(server)
+        ThirdPartyHandler.register(server)
         SessionRestoreHandler.register(server)
 
         // Bug 1223009 was an issue whereby CGDWebserver crashed when moving to a background task
