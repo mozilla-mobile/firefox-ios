@@ -41,11 +41,11 @@ public class PushRegistration: NSObject, NSCoding {
     //     protected final @NonNull Map<String, PushSubscription> subscriptions;
 
     public static func from(json: JSON) -> PushRegistration? {
-        guard let endpointString = json["endpoint"].rawString(),
+        guard let endpointString = json["endpoint"].stringValue(),
               let endpoint = NSURL(string: endpointString),
-              let secret = json["secret"].rawString(),
-              let uaid = json["uaid"].rawString(),
-              let channelID = json["channelID"].rawString() else {
+              let secret = json["secret"].stringValue(),
+              let uaid = json["uaid"].stringValue(),
+              let channelID = json["channelID"].stringValue() else {
             return nil
         }
 

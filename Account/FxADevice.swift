@@ -59,9 +59,9 @@ public struct FxADevice {
         let isCurrentDevice = json["isCurrentDevice"].bool ?? false
 
         let push: FxADevicePushParams?
-        if let pushCallback = json["pushCallback"].rawString(),
-            let publicKey = json["pushPublicKey"].rawString(), publicKey != "",
-            let authKey   = json["pushAuthKey"].rawString(), authKey != "" {
+        if let pushCallback = json["pushCallback"].stringValue(),
+            let publicKey = json["pushPublicKey"].stringValue(), publicKey != "",
+            let authKey   = json["pushAuthKey"].stringValue(), authKey != "" {
             push = FxADevicePushParams(callback: pushCallback, publicKey: publicKey, authKey: authKey)
         } else {
             push = nil

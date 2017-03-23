@@ -260,7 +260,7 @@ open class FxAClient10 {
         mutableURLRequest.httpMethod = HTTPMethod.post.rawValue
 
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        mutableURLRequest.httpBody = JSON(parameters).rawString()?.utf8EncodedData
+        mutableURLRequest.httpBody = JSON(parameters).stringValue()?.utf8EncodedData
 
         return makeRequest(mutableURLRequest, responseHandler: FxAClient10.loginResponse)
     }
@@ -296,7 +296,7 @@ open class FxAClient10 {
         mutableURLRequest.httpMethod = HTTPMethod.post.rawValue
 
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        mutableURLRequest.httpBody = device.toJSON().rawString()?.utf8EncodedData
+        mutableURLRequest.httpBody = device.toJSON().stringValue()?.utf8EncodedData
 
         let salt: Data = Data()
         let contextInfo: Data = FxAClient10.KW("sessionToken")
@@ -373,7 +373,7 @@ extension FxAClient10: FxALoginClient {
         mutableURLRequest.httpMethod = HTTPMethod.post.rawValue
 
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        mutableURLRequest.httpBody = JSON(parameters as NSDictionary).rawString()?.utf8EncodedData
+        mutableURLRequest.httpBody = JSON(parameters as NSDictionary).stringValue()?.utf8EncodedData
 
         let salt: Data = Data()
         let contextInfo: Data = FxAClient10.KW("sessionToken")

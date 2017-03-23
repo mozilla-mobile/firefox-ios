@@ -34,7 +34,7 @@ open class Telemetry {
     }
 
     open class func sendPing(_ ping: TelemetryPing) {
-        let payload = ping.payload.rawString()
+        let payload = ping.payload.stringValue()
 
         let docID = UUID().uuidString
         let docType = "core"
