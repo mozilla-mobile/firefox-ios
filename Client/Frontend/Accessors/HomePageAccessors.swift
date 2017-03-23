@@ -26,8 +26,12 @@ class HomePageAccessors {
 
     static func isButtonEnabled(_ state: AppState) -> Bool {
         switch state.ui {
-        case .tab:
-            return true
+        case .tab(let tabState):
+            if hasHomePage(state) {
+                return true
+            } else {
+                return tabState.url?.isExternalWebPage ?? false
+            }
         case .homePanels, .loading:
             return hasHomePage(state)
         default:

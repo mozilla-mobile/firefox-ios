@@ -289,6 +289,10 @@ extension URL {
         return host.lowercased() == "localhost" || host == "127.0.0.1"
     }
 
+    public var isExternalWebPage: Bool {
+        return isWebPage(includeDataURIs: true) && !isLocal
+    }
+
     public var isIPv6: Bool {
         return host?.contains(":") ?? false
     }

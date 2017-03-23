@@ -15,7 +15,7 @@ class HomePageUITest: BaseTestCase {
         super.tearDown()
     }
 
-    func testSetInternalURLAsHomepage() {
+    func testSetInternalURLAsHomepageFromMenu() {
         let app = XCUIApplication()
 
         loadWebPage("http://en.m.wikipedia.org/wiki/Main_Page")
@@ -24,5 +24,19 @@ class HomePageUITest: BaseTestCase {
         app.cells["Set Homepage"].tap()
 
         XCTAssertTrue(app.alerts.count == 0)
+    }
+
+    func testSetInternalURLAsHomepageFromToolbar() {
+        XCUIDevice.shared().orientation = .landscapeLeft
+        let app = XCUIApplication()
+        
+        loadWebPage("http://en.m.wikipedia.org/wiki/Main_Page")
+        app.buttons["Reader View"].tap()
+        app.buttons["TabToolbar.menuButton"].tap()
+        app.cells["Set Homepage"].tap()
+        
+        XCTAssertTrue(app.alerts.count == 0)
+        
+        XCUIDevice.shared().orientation = .portrait
     }
 }
