@@ -48,9 +48,9 @@ class RecordTests: XCTestCase {
         let emptyPayload = "{\"id\": \"abcdefghijkl\", \"collection\": \"clients\", \"payload\": \"{}\"}"
 
         let clientBody: [String: Any] = ["id": "abcdefghijkl", "name": "Foobar", "commands": [], "type": "mobile"]
-        let clientBodyString = JSON(object: clientBody).rawString()!
+        let clientBodyString = JSON(object: clientBody).stringValue()!
         let clientRecord: [String : Any] = ["id": "abcdefghijkl", "collection": "clients", "payload": clientBodyString]
-        let clientPayload = JSON(object: clientRecord).rawString()!
+        let clientPayload = JSON(object: clientRecord).stringValue()!
 
         let cleartextClientsFactory: (String) -> ClientPayload? = {
             (s: String) -> ClientPayload? in

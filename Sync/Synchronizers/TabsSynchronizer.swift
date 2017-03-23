@@ -41,7 +41,7 @@ open class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchroniz
             "tabs": jsonTabs
         ])
         if Logger.logPII {
-            log.verbose("Sending tabs JSON \(tabsJSON.rawString())")
+            log.verbose("Sending tabs JSON \(tabsJSON.stringValue())")
         }
         let payload = TabsPayload(tabsJSON)
         return Record(id: guid, payload: payload, ttl: ThreeWeeksInSeconds)

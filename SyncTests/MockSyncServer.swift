@@ -169,14 +169,14 @@ class MockSyncServer {
             "commands": [],
             "type": "mobile",
         ]
-        let clientBodyString = JSON(object: clientBody).rawString()!
+        let clientBodyString = JSON(object: clientBody).stringValue()!
         let clientRecord: [String : Any] = [
             "id": guid,
             "collection": "clients",
             "payload": clientBodyString,
             "modified": Double(modified) / 1000,
         ]
-        return EnvelopeJSON(JSON(object: clientRecord).rawString()!)
+        return EnvelopeJSON(JSON(object: clientRecord).stringValue()!)
     }
 
     class func withHeaders(response: GCDWebServerResponse, lastModified: Timestamp? = nil, records: Int? = nil, timestamp: Timestamp? = nil) -> GCDWebServerResponse {
@@ -280,14 +280,14 @@ class MockSyncServer {
     }
 
     private func recordResponse(record: EnvelopeJSON) -> GCDWebServerResponse {
-        let body = record.asJSON().rawString()!
+        let body = record.asJSON().stringValue()!
         let bodyData = body.utf8EncodedData
         let response = GCDWebServerDataResponse(data: bodyData, contentType: "application/json")
         return MockSyncServer.withHeaders(response: response!, lastModified: record.modified)
     }
 
     private func modifiedResponse(timestamp: Timestamp) -> GCDWebServerResponse {
-        let body = JSON(object: ["modified": timestamp]).rawString()
+        let body = JSON(object: ["modified": timestamp]).stringValue()
         let bodyData = body?.utf8EncodedData
         let response = GCDWebServerDataResponse(data: bodyData, contentType: "application/json")!
         return MockSyncServer.withHeaders(response: response)
@@ -318,7 +318,7 @@ class MockSyncServer {
                 }
 
             }
-            let body = JSON(object: ic).rawString()
+            let body = JSON(object: ic).stringValue()
             let bodyData = body?.utf8EncodedData
 
             let response = GCDWebServerDataResponse(data: bodyData, contentType: "application/json")!
@@ -430,7 +430,7 @@ class MockSyncServer {
             // TODO: TTL
             // TODO: X-I-U-S
 
-            let body = JSON(object: items.map { $0.asJSON() }).rawString()
+            let body = JSON(object: items.map { $0.asJSON() }).stringValue()
             let bodyData = body?.utf8EncodedData
             let response = GCDWebServerDataResponse(data: bodyData, contentType: "application/json")
 
