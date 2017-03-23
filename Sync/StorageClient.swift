@@ -645,7 +645,7 @@ open class Sync15CollectionClient<T: CleartextPayloadJSON> {
 
     // Exposed so we can batch by size.
     open func serializeRecord(_ record: Record<T>) -> String? {
-        return self.encrypter.serializer(record)?.rawString()
+        return self.encrypter.serializer(record)?.rawString(.utf8, options: [])
     }
 
     open func post(_ lines: [String], ifUnmodifiedSince: Timestamp?, queryParams: [URLQueryItem]? = nil) -> Deferred<Maybe<StorageResponse<POSTResult>>> {
