@@ -14,7 +14,9 @@ open class Bytes {
         let len = Int(len)
         var data = Data(count: len)
         data.withUnsafeMutableBytes { (p: UnsafeMutablePointer<UInt8>) in
-            assert(SecRandomCopyBytes(kSecRandomDefault, len, p) == 0, "Random byte generation failed.")
+            if (SecRandomCopyBytes(kSecRandomDefault, len, p) != errSecSuccess) {
+                fatalError("Random byte generation failed.")
+            }
         }
         return data
     }
