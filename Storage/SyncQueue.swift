@@ -42,7 +42,7 @@ public struct SyncCommand: Equatable {
             "command": "displayURI",
             "args": [shareItem.url, sender, shareItem.title ?? ""]
         ]
-        return SyncCommand(value: JSON(object: jsonObj).rawString()!)
+        return SyncCommand(value: JSON(object: jsonObj).stringValue()!)
     }
 
     public func withClientGUID(_ clientGUID: String?) -> SyncCommand {

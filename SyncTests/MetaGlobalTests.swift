@@ -57,7 +57,7 @@ class MetaGlobalTests: XCTestCase {
         let envelope = EnvelopeJSON(JSON(object: [
             "id": "global",
             "collection": "meta",
-            "payload": metaGlobal.asPayload().json.rawString()!,
+            "payload": metaGlobal.asPayload().json.stringValue()!,
             "modified": Double(Date.now())/1000]))
         server.storeRecords(records: [envelope], inCollection: "meta")
     }

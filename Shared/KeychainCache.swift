@@ -54,7 +54,7 @@ open class KeychainCache<T: JSONLiteralConvertible> {
         log.info("Storing \(self.branch) in Keychain with label \(self.branch).\(self.label).")
         // TODO: PII logging.
         if let value = value,
-            let jsonString = value.asJSON().rawString() {
+            let jsonString = value.asJSON().stringValue() {
             KeychainWrapper.sharedAppContainerKeychain.set(jsonString, forKey: "\(branch).\(label)")
         } else {
             KeychainWrapper.sharedAppContainerKeychain.removeObject(forKey: "\(branch).\(label)")

@@ -489,7 +489,7 @@ open class Scratchpad {
         prefs.setInt(1, forKey: PrefVersion)
         if let global = global {
             prefs.setLong(global.timestamp, forKey: PrefGlobalTS)
-            prefs.setString(global.value.asPayload().json.rawString()!, forKey: PrefGlobal)
+            prefs.setString(global.value.asPayload().json.stringValue()!, forKey: PrefGlobal)
         } else {
             prefs.removeObjectForKey(PrefGlobal)
             prefs.removeObjectForKey(PrefGlobalTS)
@@ -498,7 +498,7 @@ open class Scratchpad {
         // We store the meat of your keys in the Keychain, using a random identifier that we persist in prefs.
         prefs.setString(self.keyLabel, forKey: PrefKeyLabel)
         if let keys = self.keys,
-            let payload = keys.value.asPayload().json.rawString() {
+            let payload = keys.value.asPayload().json.stringValue() {
             let label = "keys." + self.keyLabel
             log.debug("Storing keys in Keychain with label \(label).")
             prefs.setString(self.keyLabel, forKey: PrefKeyLabel)
@@ -514,11 +514,11 @@ open class Scratchpad {
         prefs.setString(clientName, forKey: PrefClientName)
         prefs.setString(clientGUID, forKey: PrefClientGUID)
 
-        let localCommands: [String] = Array(self.localCommands).map({$0.toJSON().rawString()!})
+        let localCommands: [String] = Array(self.localCommands).map({$0.toJSON().stringValue()!})
         prefs.setObject(localCommands, forKey: PrefLocalCommands)
 
         if let engineConfiguration = self.engineConfiguration {
-            prefs.setString(engineConfiguration.toJSON().rawString()!, forKey: PrefEngineConfiguration)
+            prefs.setString(engineConfiguration.toJSON().stringValue()!, forKey: PrefEngineConfiguration)
         } else {
             prefs.removeObjectForKey(PrefEngineConfiguration)
         }

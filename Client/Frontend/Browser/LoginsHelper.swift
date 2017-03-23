@@ -228,7 +228,7 @@ class LoginsHelper: TabHelper {
             }
 
             let json = JSON(jsonObj)
-            let src = "window.__firefox__.logins.inject(\(json.rawString()!))"
+            let src = "window.__firefox__.logins.inject(\(json.stringValue()!))"
             self.tab?.webView?.evaluateJavaScript(src, completionHandler: { (obj, err) -> Void in
             })
         }

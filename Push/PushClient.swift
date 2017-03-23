@@ -87,7 +87,7 @@ public extension PushClient {
 
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         let parameters = ["token": apnsToken]
-        mutableURLRequest.httpBody = JSON(parameters).rawString()?.utf8EncodedData
+        mutableURLRequest.httpBody = JSON(parameters).stringValue()?.utf8EncodedData
 
         return send(request: mutableURLRequest) >>== { json in
             guard let response = PushRegistration.from(json: json) else {
@@ -108,7 +108,7 @@ public extension PushClient {
 
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         let parameters = ["token": apnsToken]
-        mutableURLRequest.httpBody = JSON(parameters).rawString()?.utf8EncodedData
+        mutableURLRequest.httpBody = JSON(parameters).stringValue()?.utf8EncodedData
 
         return send(request: mutableURLRequest) >>== { json in
             guard let response = PushRegistration.from(json: json) else {

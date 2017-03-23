@@ -28,7 +28,7 @@ class SessionRestoreTests: KIFTestCase {
         jsonDict["history"] = [url1, url2, url3]
         jsonDict["currentPage"] = -1 as Any?
         let json = JSON(jsonDict)
-        let escapedJSON = json.rawString()?.addingPercentEncoding(withAllowedCharacters: CharacterSet.URLAllowedCharacterSet())
+        let escapedJSON = json.stringValue()?.addingPercentEncoding(withAllowedCharacters: CharacterSet.URLAllowedCharacterSet())
         let webView = tester().waitForView(withAccessibilityLabel: "Web content") as! WKWebView
         let restoreURL = URL(string: "/about/sessionrestore?history=\(escapedJSON!)", relativeTo: webView.url!)
         
