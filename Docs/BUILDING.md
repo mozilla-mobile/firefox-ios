@@ -1,7 +1,7 @@
 Building Firefox for iOS
 ========================
 
-Prerequisites, as of *September 16, 2016*:
+Prerequisites, as of *February 14, 2017*:
 
 * Mac OS X 10.11.5
 * Xcode 8.2.1 with the iOS 10 SDK (Betas not supported)
@@ -12,7 +12,7 @@ When running on a device:
 * A device that supports iOS 9.3 GM or later
 * One of the following:
  * A developer account and Admin access to the *Certificates, Identifiers & Profiles* section of the *iOS DevCenter*
- * A free developer account, new with Xcode 7
+ * A free developer account (create an Apple ID for free and add as an account in Xcode)
 
 Get the Code
 -----------
@@ -54,7 +54,7 @@ Run on the Simulator
 Run on a Device with Xcode 8 and a Free Developer Account
 ---------------
 
-> Only follow these instructions if you are using the new free personal developer accounts that Apple enabled with Xcode 7.
+> Only follow these instructions if you are using the free personal developer accounts. Simply add your Apple ID as an account in Xcode.
 
 Since the bundle identifier we use for Firefox is tied to our developer account, you'll need to generate your own identifier and update the existing configuration.
 
