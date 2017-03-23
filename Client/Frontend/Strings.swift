@@ -180,6 +180,20 @@ extension Strings {
     public static let SettingsOpenWithPageTitle = NSLocalizedString("Settings.OpenWith.PageTitle", value: "Open mail links in", comment: "Title for Open With Settings")
 }
 
+// mailto: prompts
+extension Strings {
+    public static let MailToSelectionDialogTitle =
+        NSLocalizedString("MailTo.Dialog.Title", value: "Which application would you like to use for email?", comment: "Title shown on dialog when user selects a custom email application for mailto: links")
+    public static let MailToSelectionDialogConfirmButton =
+        NSLocalizedString("MailTo.Dialog.Button.Select", value: "Select", comment: "Dialog option button that confirms a user's mail application choice")
+    public static let MailToConfirmDialogTitle =
+        NSLocalizedString("MailTo.ConfirmDialog.Title", value: "Would you like to set \"%@\" to handle mail links in Firefox?", comment: "Title for confirmation dialog when user selects a mail application")
+    public static let MailToConfirmDialogNotNow =
+        NSLocalizedString("MailTo.ConfirmDialog.Button.NotNow", value: "Not Now", comment: "Button to not handle mail links with selected mail provider from mail confirm dialog")
+    public static let MailToConfirmDialogOK =
+        NSLocalizedString("MailTo.ConfirmDialog.Button.OK", value: "OK", comment: "Button to confirm mail application choice")
+}
+
 // Third Party Search Engines
 extension Strings {
     public static let ThirdPartySearchEngineAdded = NSLocalizedString("Search.ThirdPartyEngines.AddSuccess", value: "Added Search engine!", comment: "The success message that appears after a user sucessfully adds a new search engine")
