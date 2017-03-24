@@ -12,7 +12,6 @@ class TestSchemaTable: XCTestCase {
     func testTable() {
         let files = MockFiles()
         let db = BrowserDB(filename: "browser.db", files: files)
-        db.attachDB(named: "metadata.db", as: AttachedDatabaseMetadata)
 
         // Test creating a table
         var testTable = getCreateTable()

@@ -70,7 +70,6 @@ class TestFaviconsTable: XCTestCase {
     func testFaviconsTable() {
         let files = MockFiles()
         db = BrowserDB(filename: "test.db", files: files)
-        db.attachDB(named: "metadata.db", as: AttachedDatabaseMetadata)
         XCTAssertTrue(db.createOrUpdate(BrowserTable()) == .success)
         let f = FaviconsTable<Favicon>()
 
