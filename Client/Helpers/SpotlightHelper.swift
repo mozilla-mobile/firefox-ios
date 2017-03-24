@@ -131,3 +131,9 @@ extension SpotlightHelper: TabHelper {
         }
     }
 }
+
+extension SpotlightHelper {
+    class func clearSearchIndex(completionHandler: ((Error?) -> Void)? = nil) {
+        CSSearchableIndex.default().deleteAllSearchableItems(completionHandler: completionHandler)
+    }
+}
