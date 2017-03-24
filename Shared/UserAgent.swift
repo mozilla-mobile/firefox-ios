@@ -10,33 +10,38 @@ open class UserAgent {
 
     open static var syncUserAgent: String {
         let appName = DeviceInfo.appName()
-        return "Firefox-iOS-Sync/\(AppInfo.appVersion) (\(appName))"
+        return "Firefox-iOS-Sync/\(AppInfo.appVersion)b\(AppInfo.buildNumber) (\(appName))"
     }
 
     open static var tokenServerClientUserAgent: String {
         let appName = DeviceInfo.appName()
-        return "Firefox-iOS-Token/\(AppInfo.appVersion) (\(appName))"
+        return "Firefox-iOS-Token/\(AppInfo.appVersion)b\(AppInfo.buildNumber) (\(appName))"
     }
 
     open static var fxaUserAgent: String {
         let appName = DeviceInfo.appName()
-        return "Firefox-iOS-FxA/\(AppInfo.appVersion) (\(appName))"
+        return "Firefox-iOS-FxA/\(AppInfo.appVersion)b\(AppInfo.buildNumber) (\(appName))"
     }
 
     /**
      * Use this if you know that a value must have been computed before your
      * code runs, or you don't mind failure.
      */
-    open static func cachedUserAgent(checkiOSVersion: Bool = true, checkFirefoxVersion: Bool = true) -> String? {
+    open static func cachedUserAgent(checkiOSVersion: Bool = true,
+                                     checkFirefoxVersion: Bool = true,
+                                     checkFirefoxBuildNumber: Bool = true) -> String? {
         let currentiOSVersion = UIDevice.current.systemVersion
         let lastiOSVersion = defaults.string(forKey: "LastDeviceSystemVersionNumber")
 
+        let currentFirefoxBuildNumber = AppInfo.buildNumber
         let currentFirefoxVersion = AppInfo.appVersion
         let lastFirefoxVersion = defaults.string(forKey: "LastFirefoxVersionNumber")
-
+        let lastFirefoxBuildNumber = defaults.string(forKey: "LastFirefoxBuildNumber")
+        
         if let firefoxUA = defaults.string(forKey: "UserAgent") {
             if (!checkiOSVersion || (lastiOSVersion == currentiOSVersion))
-                && (!checkFirefoxVersion || (lastFirefoxVersion == currentFirefoxVersion)) {
+                && (!checkFirefoxVersion || (lastFirefoxVersion == currentFirefoxVersion)
+                && (!checkFirefoxBuildNumber || (lastFirefoxBuildNumber == currentFirefoxBuildNumber))) {
                 return firefoxUA
             }
         }
@@ -58,9 +63,12 @@ open class UserAgent {
         let webView = UIWebView()
 
         let appVersion = AppInfo.appVersion
+        let buildNumber = AppInfo.buildNumber
         let currentiOSVersion = UIDevice.current.systemVersion
         defaults.set(currentiOSVersion, forKey: "LastDeviceSystemVersionNumber")
         defaults.set(appVersion, forKey: "LastFirefoxVersionNumber")
+        defaults.set(buildNumber, forKey: "LastFirefoxBuildNumber")
+
         let userAgent = webView.stringByEvaluatingJavaScript(from: "navigator.userAgent")!
 
         // Extract the WebKit version and use it as the Safari version.
@@ -84,7 +92,7 @@ open class UserAgent {
         }
 
         let mutableUA = NSMutableString(string: userAgent)
-        mutableUA.insert("FxiOS/\(appVersion) ", at: mobileRange.location)
+        mutableUA.insert("FxiOS/\(appVersion)b\(AppInfo.buildNumber) ", at: mobileRange.location)
 
         let firefoxUA = "\(mutableUA) Safari/\(webKitVersion)"
 
