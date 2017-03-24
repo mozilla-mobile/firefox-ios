@@ -742,7 +742,7 @@
 			outputFiles = (
 				"$(DERIVED_FILE_DIR)/$(INPUT_FILE_NAME)",
 			);
-			script = "\"$SRCROOT\"/Build-Phases/localizeInfoPlists.sh > /tmp/output$EXECUTABLE_NAME";
+			script = "\"$SRCROOT\"/Build-Phases/localizeInfoPlists.sh";
 		};
 /* End PBXBuildRule section */
 
