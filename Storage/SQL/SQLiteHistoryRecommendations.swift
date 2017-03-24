@@ -80,10 +80,10 @@ extension SQLiteHistory: HistoryRecommendations {
 
         let siteProjection = subQuerySiteProjection.replacingOccurrences(of: "siteTitle", with: "siteTitle AS title")
         let highlightsQuery =
-            "SELECT \(siteProjection), iconID, iconURL, iconType, iconDate, iconWidth, \(AttachedTablePageMetadata).title AS metadata_title, media_url, type, description, provider_name " +
+            "SELECT \(siteProjection), iconID, iconURL, iconType, iconDate, iconWidth, \(TablePageMetadata).title AS metadata_title, media_url, type, description, provider_name " +
             "FROM ( \(nonRecentHistory) UNION ALL \(bookmarkHighlights) ) " +
             "LEFT JOIN \(ViewHistoryIDsWithWidestFavicons) ON \(ViewHistoryIDsWithWidestFavicons).id = historyID " +
-            "LEFT OUTER JOIN \(AttachedTablePageMetadata) ON \(AttachedTablePageMetadata).site_url = url " +
+            "LEFT OUTER JOIN \(TablePageMetadata) ON \(TablePageMetadata).site_url = url " +
             "GROUP BY url"
         let otherArgs = [threeDaysAgo, threeDaysAgo] as Args
         let args: Args = [thirtyMinutesAgo] + blacklistedHosts + otherArgs

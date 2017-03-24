@@ -36,7 +36,6 @@ class TestSQLiteHistoryFrecencyPerf: XCTestCase {
     func testFrecencyPerf() {
         let files = MockFiles()
         let db = BrowserDB(filename: "browser.db", files: files)
-        db.attachDB(named: "metadata.db", as: AttachedDatabaseMetadata)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
@@ -58,7 +57,6 @@ class TestSQLiteHistoryTopSitesCachePref: XCTestCase {
     func testCachePerf() {
         let files = MockFiles()
         let db = BrowserDB(filename: "browser.db", files: files)
-        db.attachDB(named: "metadata.db", as: AttachedDatabaseMetadata)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 

@@ -122,7 +122,6 @@ class MockUploader {
 // Thieved mercilessly from TestSQLiteBookmarks.
 private func getBrowserDBForFile(filename: String, files: FileAccessor) -> BrowserDB? {
     let db = BrowserDB(filename: filename, files: files)
-    db.attachDB(named: "metadata.db", as: AttachedDatabaseMetadata)
 
     // BrowserTable exists only to perform create/update etc. operations -- it's not
     // a queryable thing that needs to stick around.

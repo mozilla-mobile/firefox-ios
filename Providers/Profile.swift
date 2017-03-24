@@ -258,7 +258,6 @@ open class BrowserProfile: Profile {
         // Setup our database handles
         self.loginsDB = BrowserDB(filename: "logins.db", secretKey: BrowserProfile.loginsKey, files: files)
         self.db = BrowserDB(filename: "browser.db", files: files)
-        self.db.attachDB(named: "metadata.db", as: AttachedDatabaseMetadata)
 
         let notificationCenter = NotificationCenter.default
 
