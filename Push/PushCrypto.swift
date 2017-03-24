@@ -52,7 +52,6 @@ extension PushCrypto {
         return Data(bytes: plaintext, count: plaintextLen)
     }
 
-
     func aes128gcm(plaintext: String, encryptWith rawRecvPubKey: String, authenticateWith authSecret: String, rs: Int, padLen: Int) throws -> String {
         guard let rawRecvPubKey = rawRecvPubKey.base64urlSafeDecodedData,
             let authSecret = authSecret.base64urlSafeDecodedData else {
@@ -162,7 +161,7 @@ extension PushCrypto {
         }
 
         let privKey = Data(bytes: rawRecvPrivKey, count: privateKeyLength).base64urlSafeEncodedString
-        let pubKey =  Data(bytes: rawRecvPubKey,  count: publicKeyLength).base64urlSafeEncodedString
+        let pubKey =  Data(bytes: rawRecvPubKey, count: publicKeyLength).base64urlSafeEncodedString
         let authKey = Data(bytes: authSecret, count: authSecretLength).base64urlSafeEncodedString
 
         return PushKeys(p256dhPrivateKey: privKey, p256dhPublicKey: pubKey, auth: authKey)
@@ -212,6 +211,6 @@ extension Data {
         return self.base64EncodedString
             .replacingOccurrences(of: "+", with: "-", options: .literal)
             .replacingOccurrences(of: "/", with: "_", options: .literal)
-            .replacingOccurrences(of: "=", with: "",  options: [.anchored, .backwards])
+            .replacingOccurrences(of: "=", with: "", options: [.anchored, .backwards])
     }
 }

@@ -5,7 +5,6 @@
 @testable import Client
 import XCTest
 
-
 class PushCryptoTests: XCTestCase {
 
     let push = PushCrypto.sharedInstance
