@@ -15,10 +15,13 @@ class TestAppDelegate: AppDelegate {
             return profile
         }
 
-        let profile = BrowserProfile(localName: "testProfile", app: application)
+        var profile = BrowserProfile(localName: "testProfile", app: application)
         if ProcessInfo.processInfo.arguments.contains(LaunchArguments.ClearProfile) {
             // Use a clean profile for each test session.
+            log.debug("Deleting all files in profile directory")
             _ = try? profile.files.removeFilesInDirectory()
+            
+            profile = BrowserProfile(localName: "testProfile", app: application)
             profile.prefs.clearAll()
 
             // Don't show the What's New page.
