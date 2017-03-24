@@ -61,10 +61,8 @@ Since the bundle identifier we use for Firefox is tied to our developer account,
 1. Open Client/Configuration/Fennec.xcconfig
 2. Change MOZ_BUNDLE_ID to your own bundle identifier. Just think of something unique: e.g., com.your_github_id.Fennec
 3. Open the project editor in Xcode.
-4. For the 'Client' target, in the 'Capabilities' section, turn off the 'Push Notifications' and 'Wallet' capabilities. Make sure the change appears in the file 'Client.xcodeproj/project.pbxproj'. This step is necessary before the next step because, Xcode 8 seems to be not listing the 'Push Notifications' and 'Wallet' capabilities the moment the personal development account is selected in the next step. Hence, it wouldn't be possible to disable the capability after making that change.
-5. Navigate to each of the application targets (Client/SendTo/ShareTo/ViewLater) and for each one:
-  1. select your personal development account
-  2. remove the code signing entitlements (Do this by disabling all the capabilities from the "Capabilities" section)
+4. For each target (Client/SendTo/ShareTo/Today/ViewLater), in the 'Capabilities' section, turn off all the capabilities. This step is necessary because it's not possible to disable certain capabilities (like 'Push Notifications' and 'Wallet') after Step 5.
+5. For each target, in the 'General' section, under 'Signing', select your personal development account.
 
 If you submit a patch, be sure to exclude these files because they are only relevant for your personal build.
 
