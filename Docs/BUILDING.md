@@ -61,7 +61,7 @@ Since the bundle identifier we use for Firefox is tied to our developer account,
 1. Open Client/Configuration/Fennec.xcconfig
 2. Change MOZ_BUNDLE_ID to your own bundle identifier. Just think of something unique: e.g., com.your_github_id.Fennec
 3. Open the project editor in Xcode.
-4. For each target (Client/SendTo/ShareTo/Today/ViewLater), in the 'Capabilities' section, turn off all the capabilities. This step is necessary because it's not possible to disable certain capabilities (like 'Push Notifications' and 'Wallet') after Step 5.
+4. For the 'Client' target, in the 'Capabilities' section, turn off the capabilities 'Push Notifications' and 'Wallet'.
 5. For each target, in the 'General' section, under 'Signing', select your personal development account.
 
 If you submit a patch, be sure to exclude these files because they are only relevant for your personal build.
