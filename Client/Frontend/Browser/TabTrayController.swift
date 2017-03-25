@@ -585,6 +585,10 @@ class TabTrayController: UIViewController {
         } else {
             emptyPrivateTabsView.isHidden = false
             toView = emptyPrivateTabsView
+
+            if let bool = profile.prefs.boolForKey("settings.closePrivateTabs"), bool {
+                tabManager.showFocusPromoToast()
+            }
         }
         toView.alpha = 0
         toView.transform = scaleDownTransform
@@ -650,6 +654,7 @@ class TabTrayController: UIViewController {
 
     fileprivate func closeTabsForCurrentTray() {
         tabManager.removeTabsWithUndoToast(tabsToDisplay)
+
         self.collectionView.reloadData()
     }
 }
