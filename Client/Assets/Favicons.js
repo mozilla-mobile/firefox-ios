@@ -16,7 +16,7 @@ Object.defineProperty(window.__firefox__, 'favicons', {
   enumerable: false,
   configurable: false,
   writable: false,
-  value: function() {
+  value: (() => {
     // These integers should be kept in sync with the IconType raw-values
     var ICON = 0;
     var APPLE = 1;
@@ -53,8 +53,6 @@ Object.defineProperty(window.__firefox__, 'favicons', {
       webkit.messageHandlers.faviconsMessageHandler.postMessage(favicons);
     }
   
-    return {
-      getFavicons: getFavicons
-    };
-  }
+    return Object.freeze({ getFavicons });
+  })(),
 });
