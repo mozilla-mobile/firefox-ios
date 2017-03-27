@@ -59,7 +59,9 @@ class AuthenticationTest: BaseTestCase {
         waitforExistence(app.tables["AuthenticationManager.settingsTableView"].staticTexts["Turn Passcode On"])
     }
     
-    fileprivate func enablePasscode(_ passCode: String) {
+    fileprivate func enablePasscode(_ passCode: String, interval: String = "Immediately") {
+        let authenticationmanagerSettingstableviewTable = app.tables["AuthenticationManager.settingsTableView"]
+        
         navigator.goto(PasscodeSettings)
 
         app.tables["AuthenticationManager.settingsTableView"].staticTexts["Turn Passcode On"].tap()
@@ -68,6 +70,12 @@ class AuthenticationTest: BaseTestCase {
         waitforExistence(app.staticTexts["Re-enter passcode"])
         typePasscode(passCode)
         waitforExistence(app.tables["AuthenticationManager.settingsTableView"].staticTexts["Turn Passcode Off"])
+        navigator.goto(PasscodeIntervalSettings)
+        typePasscode(passCode)
+        app.staticTexts[interval].tap()
+        navigator.goto(PasscodeSettings)
+        waitforExistence(authenticationmanagerSettingstableviewTable.staticTexts[interval])
+        
      }
 
     // Sets the passcode and interval (set to immediately)
@@ -90,6 +98,42 @@ class AuthenticationTest: BaseTestCase {
         waitforExistence(app.tables["AuthenticationManager.settingsTableView"].staticTexts["Turn Passcode Off"])
 
         disablePasscode("2337")
+    }
+    
+    func testPromptPassCodeUponReentry() {
+        let springboard = XCUIApplication(privateWithPath: nil, bundleID: "com.apple.springboard")!
+      
+        enablePasscode("1337")
+        navigator.goto(LoginsSettings)
+        waitforExistence(app.staticTexts["Enter Passcode"])
+        typePasscode("1337")
+        waitforExistence(app.tables["Login List"])
+        
+        //send app to background, and re-enter
+        XCUIDevice.shared().press(.home)
+        springboard.scrollViews.otherElements.icons["Nightly"].tap()
+        
+        navigator.nowAt("SettingsScreen")
+        navigator.goto(LoginsSettings)
+        waitforExistence(app.staticTexts["Enter Passcode"])
+    }
+    
+    func testPromptPassCodeUponReentryWithDelay() {
+        let springboard = XCUIApplication(privateWithPath: nil, bundleID: "com.apple.springboard")!
+        
+        enablePasscode("1337", interval: "After 5 minutes")
+        navigator.goto(LoginsSettings)
+        waitforExistence(app.staticTexts["Enter Passcode"])
+        typePasscode("1337")
+        waitforExistence(app.tables["Login List"])
+        
+        //send app to background, and re-enter
+        XCUIDevice.shared().press(.home)
+        springboard.scrollViews.otherElements.icons["Nightly"].tap()
+        
+        navigator.nowAt("SettingsScreen")
+        navigator.goto(LoginsSettings)
+        waitforExistence(app.tables["Login List"])
     }
     
     func testChangePasscodeShowsErrorStates() {
@@ -174,13 +218,7 @@ class AuthenticationTest: BaseTestCase {
     }
 
     func testEnteringLoginsUsingPasscodeWithFiveMinutesInterval() {
-        enablePasscode("1337")
-
-        navigator.goto(PasscodeIntervalSettings)
-        waitforExistence(app.staticTexts["Enter Passcode"])
-        typePasscode("1337")
-        waitforExistence(app.staticTexts["After 5 minutes"])
-        app.staticTexts["After 5 minutes"].tap()
+        enablePasscode("1337", interval: "After 5 minutes")
 
         // now we've changed the timeout, we should prompt next time for passcode.
         navigator.goto(LoginsSettings)

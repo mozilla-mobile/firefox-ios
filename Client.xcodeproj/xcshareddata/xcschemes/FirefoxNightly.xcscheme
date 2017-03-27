@@ -48,7 +48,7 @@
             </BuildableReference>
             <SkippedTests>
                <Test
-                    Identifier = "LivePushClientTests">
+                  Identifier = "LivePushClientTests">
                </Test>
                <Test
                   Identifier = "SyncAuthStateTests/testLive()">
@@ -154,9 +154,6 @@
                </Test>
                <Test
                   Identifier = "HomePageSettingsUITests">
-               </Test>
-               <Test
-                  Identifier = "LoginManagerTests">
                </Test>
                <Test
                   Identifier = "NavigationTests">
