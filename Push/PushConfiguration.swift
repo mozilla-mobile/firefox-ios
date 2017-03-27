@@ -38,7 +38,7 @@ public struct DeveloperPushConfiguration: PushConfiguration {
 public struct StagePushConfiguration: PushConfiguration {
     public init() {}
     public let label = PushConfigurationLabel.Stage
-    public let endpointURL = NSURL(string: "https://updates-autopush.dev.mozaws.net/v1/apns/stage")!
+    public let endpointURL = NSURL(string: "https://updates-autopush.stage.mozaws.net/v1/apns/stage")!
 }
 
 public struct ProductionPushConfiguration: PushConfiguration {
