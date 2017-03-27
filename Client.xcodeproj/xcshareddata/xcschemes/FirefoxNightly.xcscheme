@@ -153,9 +153,6 @@
                   Identifier = "HomePageSettingsUITests">
                </Test>
                <Test
-                  Identifier = "LoginManagerTests">
-               </Test>
-               <Test
                   Identifier = "NavigationTests">
                </Test>
                <Test

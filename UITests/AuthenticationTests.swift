@@ -41,7 +41,7 @@ class AuthenticationTests: KIFTestCase {
 
         // Save the credentials.
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Save Login"))
-            .inRoot(grey_kindOfClass(NSClassFromString("Client.SnackButton")))
+            .inRoot(grey_kindOfClass(NSClassFromString("Client.SnackButton")!))
             .perform(grey_tap())
         
         logOut()
@@ -49,14 +49,14 @@ class AuthenticationTests: KIFTestCase {
 
         // Make sure the credentials were saved and auto-filled.
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Log in"))
-            .inRoot(grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")))
+            .inRoot(grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")!))
             .perform(grey_tap())
         tester().waitForWebViewElementWithAccessibilityLabel("logged in")
 
         // Add a private tab.
         EarlGrey.select(elementWithMatcher:grey_accessibilityLabel("Menu")).perform(grey_tap())
         EarlGrey.select(elementWithMatcher:grey_accessibilityLabel("New Private Tab"))
-            .inRoot(grey_kindOfClass(NSClassFromString("Client.MenuItemCollectionViewCell")))
+            .inRoot(grey_kindOfClass(NSClassFromString("Client.MenuItemCollectionViewCell")!))
             .perform(grey_tap())
         loadAuthPage()
 
@@ -79,10 +79,10 @@ class AuthenticationTests: KIFTestCase {
 		// Wait until the dialog shows up
 		let dialogAppeared = GREYCondition(name: "Wait the login dialog to appear", block: { _ in
 			var errorOrNil: NSError?
-			let matcher = grey_allOfMatchers([grey_accessibilityLabel("Cancel"),
+			let matcher = grey_allOf([grey_accessibilityLabel("Cancel"),
 			                                 grey_sufficientlyVisible()])
-            EarlGrey.select(elementWithMatcher: matcher!)
-				.inRoot(grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")))
+            EarlGrey.select(elementWithMatcher: matcher)
+				.inRoot(grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")!))
 				.assert(grey_notNil(), error: &errorOrNil)
 			let success = errorOrNil == nil
 			return success
@@ -91,7 +91,7 @@ class AuthenticationTests: KIFTestCase {
 		GREYAssertTrue(dialogAppeared, reason: "Failed to display login dialog")
 
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Cancel"))
-            .inRoot(grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")))
+            .inRoot(grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")!))
             .perform(grey_tap())
     }
 
@@ -100,9 +100,9 @@ class AuthenticationTests: KIFTestCase {
 		// Wait until the dialog shows up
 		let dialogAppeared = GREYCondition(name: "Wait the login dialog to appear", block: { () -> Bool in
 			var errorOrNil: NSError?
-			let matcher = grey_allOfMatchers([grey_accessibilityValue(usernameValue),
+			let matcher = grey_allOf([grey_accessibilityValue(usernameValue),
 				grey_sufficientlyVisible()])
-            EarlGrey.select(elementWithMatcher: matcher!).assert(grey_notNil(), error: &errorOrNil)
+            EarlGrey.select(elementWithMatcher: matcher).assert(grey_notNil(), error: &errorOrNil)
 			let success = errorOrNil == nil
 			return success
         })
@@ -116,7 +116,7 @@ class AuthenticationTests: KIFTestCase {
         if usernameValue != "Username" {
             usernameField.perform(grey_doubleTap())
             EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Select All"))
-                .inRoot(grey_kindOfClass(NSClassFromString("UICalloutBarButton")))
+                .inRoot(grey_kindOfClass(NSClassFromString("UICalloutBarButton")!))
                 .perform(grey_tap())
         }
         
@@ -124,7 +124,7 @@ class AuthenticationTests: KIFTestCase {
         passwordField.perform(grey_typeText(password))
         
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Log in"))
-            .inRoot(grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")))
+            .inRoot(grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")!))
             .perform(grey_tap())
 	}
 }
