@@ -31,47 +31,32 @@ Encryption and usage without ECDH are planned for future releases. In the meanti
 
 ```c
 #include <ece.h>
-#include <openssl/ec.h>
-#include <openssl/ecdh.h>
-#include <openssl/rand.h>
 
-// Generate a public-private ECDH key pair for the push subscription.
-EC_KEY* subKey = EC_KEY_new_by_curve_name(NID_X9_62_prime256v1);
-assert(subKey);
-assert(EC_KEY_generate_key(subKey) > 0);
+int
+main() {
+  // The subscription private key. This key should never be sent to the app
+  // server. It should be persisted with the endpoint and auth secret, and used
+  // to decrypt all messages sent to the subscription.
+  uint8_t rawRecvPrivKey[ECE_WEBPUSH_PRIVATE_KEY_LENGTH];
 
-// Export the generated private key. The private key should never be sent to
-// the app server. It should be persisted with the endpoint and auth secret,
-// and used to decrypt all messages sent to the subscription.
-size_t subPrivKeyLen = EC_KEY_priv2oct(subKey, NULL, 0);
-assert(subPrivKeyLen);
-ece_buf_t rawSubPrivKey;
-assert(ece_buf_alloc(&rawSubPrivKey, subPrivKeyLen));
-assert(EC_KEY_priv2oct(subKey, rawSubPrivKey.bytes, rawSubPrivKey.length) ==
-       rawSubPrivKey.length);
+  // The subscription public key. This key should be sent to the app server,
+  // and used to encrypt messages. The Push DOM API exposes the public key via
+  // `pushSubscription.getKey("p256dh")`.
+  uint8_t rawRecvPubKey[ECE_WEBPUSH_PUBLIC_KEY_LENGTH];
 
-// Export the subscription public key in uncompressed form. The public key
-// should be sent to the app server, and used to encrypt messages.
-ece_buf_t rawSubPubKey;
-const EC_GROUP* subGrp = EC_KEY_get0_group(subKey);
-const EC_POINT* subPubKeyPt = EC_KEY_get0_public_key(subKey);
-size_t subPubKeyLen = EC_POINT_point2oct(subGrp, subPubKeyPt,
-                                         POINT_CONVERSION_UNCOMPRESSED, NULL,
-                                         0);
-assert(subPubKeyLen);
-assert(ece_buf_alloc(&rawSubPubKey, subPubKeyLen));
-assert(EC_POINT_point2oct(subGrp, subPubKeyPt, POINT_CONVERSION_UNCOMPRESSED,
-                          rawSubPubKey.bytes,
-                          rawSubPubKey.length) == rawSubPubKey.length);
+  // The shared auth secret. This secret should be persisted with the
+  // subscription information, and sent to the app server. The DOM API exposes
+  // the auth secret via `pushSubscription.getKey("auth")`.
+  uint8_t authSecret[ECE_WEBPUSH_AUTH_SECRET_LENGTH];
 
-// Release the key once we're finished with it.
-EC_KEY_free(subKey);
-
-// Generate the authentication secret. The auth secret should be persisted
-// with the subscription information, and sent to the app server.
-ece_buf_t authSecret;
-assert(ece_buf_alloc(&authSecret, 16));
-assert(RAND_bytes(authSecret.bytes, authSecret.length) > 0);
+  int err = ece_webpush_generate_keys(
+    rawRecvPrivKey, ECE_WEBPUSH_PRIVATE_KEY_LENGTH, rawRecvPubKey,
+    ECE_WEBPUSH_PUBLIC_KEY_LENGTH, authSecret, ECE_WEBPUSH_AUTH_SECRET_LENGTH);
+  if (err) {
+    return 1;
+  }
+  return 0;
+}
 ```
 
 ### `aes128gcm`
@@ -79,24 +64,30 @@ assert(RAND_bytes(authSecret.bytes, authSecret.length) > 0);
 This is the scheme from the latest version of the encrypted content-coding draft. It's not currently supported by any encryption library or browser, but will eventually replace `aesgcm`. This scheme removes the `Crypto-Key` and `Encryption` headers. Instead, the salt, record size, and sender public key are included in the payload as a binary header block.
 
 ```c
-ece_buf_t payload;
-// Set `bytes` and `length` to the contents of the encrypted payload.
-// ecec does not take ownership of the contents; it's safe for the caller to
-// free the contents after decryption.
-payload.bytes = NULL;
-payload.length = 0;
+// Assume `rawSubPrivKey` and `authSecret` contain the subscription private key
+// and auth secret.
+uint8_t rawSubPrivKey[ECE_WEBPUSH_PRIVATE_KEY_LENGTH] = {0};
+uint8_t authSecret[ECE_WEBPUSH_AUTH_SECRET_LENGTH] = {0};
 
-// The plaintext is reset before decryption, and freed on error. If decryption
-// succeeds, we take ownership of the contents. The contents are allocated with
-// `malloc`, so it's safe to transfer ownership to functions that call
-// `free(plaintext.bytes)`.
-ece_buf_t plaintext;
+// Assume `payload` points to the contents of the encrypted payload, and
+// `payloadLen` specifies the length.
+uint8_t* payload = NULL;
+size_t payloadLen = 0;
+
+size_t plaintextLen = ece_aes128gcm_plaintext_max_length(payload, payloadLen);
+assert(plaintextLen > 0);
+uint8_t* plaintext = calloc(plaintextLen, sizeof(uint8_t));
+assert(plaintext);
 
 int err =
-  ece_aes128gcm_decrypt(&rawSubPrivKey, &authSecret, &payload, &plaintext);
+  ece_webpush_aes128gcm_decrypt(rawSubPrivKey, ECE_WEBPUSH_PRIVATE_KEY_LENGTH,
+                                authSecret, ECE_WEBPUSH_AUTH_SECRET_LENGTH,
+                                payload, payloadLen, plaintext, &plaintextLen);
+assert(err == ECE_OK);
 
-assert(!err);
-ece_buf_free(&plaintext);
+// `plaintext[0..plaintextLen]` contains the decrypted message.
+
+free(plaintext);
 ```
 
 ### `aesgcm`
@@ -111,21 +102,29 @@ If the `Crypto-Key` header contains multiple keys, the sender must also include 
 **ecec** will extract the relevant parameters from the `Crypto-Key` and `Encryption` headers before decrypting the message. You don't need to parse the headers yourself.
 
 ```c
+uint8_t rawSubPrivKey[ECE_WEBPUSH_PRIVATE_KEY_LENGTH] = {0};
+uint8_t authSecret[ECE_WEBPUSH_AUTH_SECRET_LENGTH] = {0};
+
 const char* cryptoKeyHeader = "dh=...";
 const char* encryptionHeader = "salt=...; rs=...";
 
-// The same ownership rules apply as for `ece_aes128gcm_decrypt`.
-ece_buf_t ciphertext;
-ciphertext.bytes = NULL;
-ciphertext.length = 0;
+uint8_t* ciphertext = NULL;
+size_t ciphertextLen = 0;
 
-ece_buf_t plaintext;
+size_t plaintextLen = ece_aesgcm_plaintext_max_length(ciphertextLen);
+assert(plaintextLen > 0);
+uint8_t* plaintext = calloc(plaintextLen, sizeof(uint8_t));
+assert(plaintext);
 
-int err = ece_aesgcm_decrypt(&rawSubPrivKey, &authSecret, cryptoKeyHeader,
-                             encryptionHeader, &ciphertext, &plaintext);
+int err = ece_webpush_aesgcm_decrypt(
+  rawSubPrivKey, ECE_WEBPUSH_PRIVATE_KEY_LENGTH, authSecret,
+  ECE_WEBPUSH_AUTH_SECRET_LENGTH, cryptoKeyHeader, encryptionHeader, ciphertext,
+  ciphertextLen, plaintext, &plaintextLen);
+assert(err == ECE_OK);
 
-assert(!err);
-ece_buf_free(&plaintext);
+// `plaintext[0..plaintextLen]` contains the decrypted message.
+
+free(plaintext);
 ```
 
 ## Building
