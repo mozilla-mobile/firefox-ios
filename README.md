@@ -39,25 +39,19 @@ Building the code
 
 1. Install the latest [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple.
 1. Install Carthage
-
-  ```shell
-  brew update
-  brew install carthage
-  ```
-
+    ```shell
+    brew update
+    brew install carthage
+    ```
 1. Clone the repository:
-
-  ```shell
-  git clone https://github.com/mozilla-mobile/firefox-ios
-  ```
-
+    ```shell
+    git clone https://github.com/mozilla-mobile/firefox-ios
+    ```
 1. Pull in the project dependencies:
-
-  ```shell
-  cd firefox-ios
-  sh ./bootstrap.sh
-  ```
-
+    ```shell
+    cd firefox-ios
+    sh ./bootstrap.sh
+    ```
 1. Open `Client.xcodeproj` in Xcode.
 1. Build the `Fennec` scheme in Xcode.
 
