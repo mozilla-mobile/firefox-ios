@@ -11,8 +11,14 @@ public typealias GUID = String
  */
 open class Bytes {
     open class func generateRandomBytes(_ len: UInt) -> Data {
-        let bytes = [UInt32](repeating: 0, count: Int(len)).map { _ in arc4random() }
-        return Data(bytes: bytes, count: Int(len))
+        let len = Int(len)
+        var data = Data(count: len)
+        data.withUnsafeMutableBytes { (p: UnsafeMutablePointer<UInt8>) in
+            if (SecRandomCopyBytes(kSecRandomDefault, len, p) != errSecSuccess) {
+                fatalError("Random byte generation failed.")
+            }
+        }
+        return data
     }
 
     open class func generateGUID() -> GUID {
