@@ -3,13 +3,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import FxA
 import Shared
 import SwiftyJSON
 
 public class PushRegistration: NSObject, NSCoding {
     let uaid: String
     let secret: String
-    var subscriptions: [String: PushSubscription]
+    // We don't need to have more than one subscription until WebPush is exposed to content Javascript
+    // however, if/when we do, it'll make migrating easier if we have been serializing it like this all along.
+    fileprivate var subscriptions: [String: PushSubscription]
 
     var defaultSubscription: PushSubscription {
         return subscriptions[defaultSubscriptionID]!
@@ -20,6 +23,10 @@ public class PushRegistration: NSObject, NSCoding {
         self.secret = secret
 
         self.subscriptions = subscriptions
+    }
+
+    public convenience init(uaid: String, secret: String, subscription: PushSubscription) {
+        self.init(uaid: uaid, secret: secret, subscriptions: [defaultSubscriptionID: subscription])
     }
 
     @objc public convenience required init?(coder aDecoder: NSCoder) {
@@ -45,16 +52,17 @@ public class PushRegistration: NSObject, NSCoding {
               let channelID = json["channelID"].stringValue() else {
             return nil
         }
-
-        let defaultSubscription = PushSubscription(channelID: channelID, endpoint: endpoint)
-
+        guard let defaultSubscription = try? PushSubscription(channelID: channelID, endpoint: endpoint) else {
+            return nil
+        }
         return PushRegistration(uaid: uaid, secret: secret, subscriptions: [defaultSubscriptionID: defaultSubscription])
     }
 }
 
 fileprivate let defaultSubscriptionID = "defaultSubscription"
+/// Small NSCodable class for persisting a channel subscription. 
+/// We use NSCoder because we expect it to be stored in the profile.
 public class PushSubscription: NSObject, NSCoding {
-
     let channelID: String
     let endpoint: URL
 
@@ -70,8 +78,17 @@ public class PushSubscription: NSObject, NSCoding {
         self.authKey = authKey
     }
 
-    convenience init(channelID: String, endpoint: URL) {
-        self.init(channelID: channelID, endpoint: endpoint, p256dhPrivateKey: "", p256dhPublicKey: "", authKey: "")
+    convenience init(channelID: String, endpoint: URL, keys: PushKeys) {
+        self.init(channelID: channelID,
+                  endpoint: endpoint,
+                  p256dhPrivateKey: keys.p256dhPrivateKey,
+                  p256dhPublicKey: keys.p256dhPublicKey,
+                  authKey: keys.auth)
+    }
+
+    convenience init(channelID: String, endpoint: URL) throws {
+        let keys = try PushCrypto.sharedInstance.generateKeys()
+        self.init(channelID: channelID, endpoint: endpoint, keys: keys)
     }
 
     @objc public convenience required init?(coder aDecoder: NSCoder) {
@@ -84,7 +101,11 @@ public class PushSubscription: NSObject, NSCoding {
             return nil
         }
 
-        self.init(channelID: channelID, endpoint: endpoint, p256dhPrivateKey: p256dhPrivateKey, p256dhPublicKey: p256dhPublicKey, authKey: authKey)
+        self.init(channelID: channelID,
+                  endpoint: endpoint,
+                  p256dhPrivateKey: p256dhPrivateKey,
+                  p256dhPublicKey: p256dhPublicKey,
+                  authKey: authKey)
     }
 
     @objc public func encode(with aCoder: NSCoder) {
