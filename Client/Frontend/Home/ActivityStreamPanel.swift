@@ -134,9 +134,9 @@ extension ActivityStreamPanel {
 
         var headerHeight: CGSize {
             switch self {
-            case .highlights: return CGSize(width: 50, height: 20)
+            case .highlights: return CGSize(width: 50, height: 40)
             case .topSites: return CGSize(width: 0, height: 0)
-            case .highlightIntro: return CGSize(width: 50, height: 20)
+            case .highlightIntro: return CGSize(width: 50, height: 2)
             }
         }
 
@@ -147,9 +147,9 @@ extension ActivityStreamPanel {
                 if traits.horizontalSizeClass == .compact && traits.verticalSizeClass == .regular {
                     // On more compact width devices (iPhone SE) we force a 3 column layout
                     if width > ASPanelUX.CompactWidth {
-                        return CGFloat(Int(width / ASPanelUX.TopSiteDoubleRowLargeRatio)) + ASPanelUX.PageControlOffsetSize
+                        return CGFloat(Int(width / ASPanelUX.TopSiteDoubleRowLargeRatio))
                     } else {
-                        return CGFloat(Int(width / ASPanelUX.TopSiteDoubleRowRatio)) + ASPanelUX.PageControlOffsetSize
+                        return CGFloat(Int(width / ASPanelUX.TopSiteDoubleRowRatio))
                     }
                 } else {
                     if UIDevice.current.orientation == .landscapeLeft || UIDevice.current.orientation == .landscapeRight {
@@ -159,6 +159,37 @@ extension ActivityStreamPanel {
                     }
                 }
             case .highlightIntro: return UITableViewAutomaticDimension
+            }
+        }
+
+        func sectionInsets() -> CGFloat {
+            switch self {
+            case .highlights:
+                return UIDevice.current.userInterfaceIdiom == .pad ? (ASPanelUX.SectionInsetsForIpad * 2) : (ASPanelUX.SectionInsetsForIphone * 2)
+            case .topSites:
+                return UIDevice.current.userInterfaceIdiom == .pad ? (ASPanelUX.SectionInsetsForIpad * 2) : 0
+            case .highlightIntro:
+                return 0
+            }
+        }
+
+        func cellSize(for traits: UITraitCollection, frameWidth: CGFloat) -> CGSize {
+            let height = cellHeight(traits, width: frameWidth)
+            let inset = sectionInsets()
+
+            switch self {
+            case .highlights:
+                if UIDevice.current.orientation == .landscapeLeft || UIDevice.current.orientation == .landscapeRight {
+                    return CGSize(width: (frameWidth - inset) / 4 - 10, height: height)
+                } else if UIDevice.current.userInterfaceIdiom == .pad {
+                    return CGSize(width: (frameWidth - inset) / 3 - 10, height: height)
+                } else {
+                    return CGSize(width: (frameWidth - inset) / 2 - 10, height: height)
+                }
+            case .topSites:
+                return CGSize(width: frameWidth - inset, height: height)
+            case .highlightIntro:
+                return CGSize(width: frameWidth - inset, height: height)
             }
         }
 
@@ -186,11 +217,10 @@ extension ActivityStreamPanel {
         }
 
         var cellType: UICollectionViewCell.Type {
-
             switch self {
             case .topSites: return ASHorizontalScrollCell.self
-            default: return AlternateSimpleHighlightCell.self
-                //            case .highlightIntro: return HighlightIntroCell.self
+            case .highlights: return AlternateSimpleHighlightCell.self
+            case .highlightIntro: return AlternateSimpleHighlightCell.self //TODO
             }
         }
 
@@ -227,26 +257,19 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let height = Section(indexPath.section).cellHeight(self.traitCollection, width: self.view.frame.width)
-        let inset = UIDevice.current.userInterfaceIdiom == .pad ? (ASPanelUX.SectionInsetsForIpad * 2) : (ASPanelUX.SectionInsetsForIphone * 2)
-        let topSitesInsets = UIDevice.current.userInterfaceIdiom == .pad ? (ASPanelUX.SectionInsetsForIpad * 2) : 0
+        let cellSize = Section(indexPath.section).cellSize(for: self.traitCollection, frameWidth: self.view.frame.width)
 
         switch Section(indexPath.section) {
         case .highlights:
-            if !highlights.isEmpty {
-                if UIDevice.current.orientation == .landscapeLeft || UIDevice.current.orientation == .landscapeRight {
-                    return CGSize(width: (self.view.frame.width - inset) / 4 - 10, height: height)
-                } else if UIDevice.current.userInterfaceIdiom == .pad {
-                    return CGSize(width: (self.view.frame.width - inset) / 3 - 10, height: height)
-                } else {
-                    return CGSize(width: (self.view.frame.width - inset) / 2 - 10, height: height)
-                }
+            if highlights.isEmpty {
+                return CGSize.zero
             }
-            return CGSize(width: 0, height: 0)
-
-        // topsites insets
-        default:
-            return CGSize(width: self.view.frame.width - topSitesInsets, height: height)
+            return cellSize
+        case .topSites:
+            return CGSize(width: cellSize.width, height: cellSize.height + ASPanelUX.PageControlOffsetSize)
+        case .highlightIntro:
+            //if we should show the highlight intro return cellSize
+            return CGSize.zero
         }
     }
 
@@ -292,10 +315,10 @@ extension ActivityStreamPanel {
         switch Section(section) {
         case .topSites:
             return topSitesManager.content.isEmpty ? 0 : 1
-        default:
+        case .highlights:
             return self.highlights.count
-            //        case .highlightIntro:
-            //            return self.highlights.isEmpty && !self.isInitialLoad ? 1 : 0
+        case .highlightIntro:
+            return self.highlights.isEmpty && !self.isInitialLoad ? 1 : 0
         }
     }
 
@@ -306,8 +329,10 @@ extension ActivityStreamPanel {
         switch Section(indexPath.section) {
         case .topSites:
             return configureTopSitesCell(cell, forIndexPath: indexPath)
-        default:
+        case .highlights:
             return configureHistoryItemCell(cell, forIndexPath: indexPath)
+        case .highlightIntro:
+            return cell //TODO. Configure this
         }
     }
 
@@ -675,6 +700,7 @@ class ASHeaderView: UICollectionReusableView {
         
         let seperatorLine = UIView()
         seperatorLine.backgroundColor = ASHeaderViewUX.SeperatorColor
+        self.backgroundColor = UIColor.red
         addSubview(seperatorLine)
         seperatorLine.snp.makeConstraints { make in
             make.height.equalTo(ASHeaderViewUX.SeperatorHeight)
