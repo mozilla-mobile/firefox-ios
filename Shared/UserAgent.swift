@@ -8,19 +8,21 @@ import UIKit
 open class UserAgent {
     private static var defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier())!
 
+    private static func clientUserAgent(prefix: String) -> String {
+        return "\(prefix)/\(AppInfo.appVersion)b\(AppInfo.buildNumber) " +
+               "(\(DeviceInfo.deviceModel()); iPhone OS \(UIDevice.current.systemVersion)) (\(DeviceInfo.appName()))"
+    }
+
     open static var syncUserAgent: String {
-        let appName = DeviceInfo.appName()
-        return "Firefox-iOS-Sync/\(AppInfo.appVersion)b\(AppInfo.buildNumber) (\(appName))"
+        return clientUserAgent(prefix: "Firefox-iOS-Sync")
     }
 
     open static var tokenServerClientUserAgent: String {
-        let appName = DeviceInfo.appName()
-        return "Firefox-iOS-Token/\(AppInfo.appVersion)b\(AppInfo.buildNumber) (\(appName))"
+        return clientUserAgent(prefix: "Firefox-iOS-Token")
     }
 
     open static var fxaUserAgent: String {
-        let appName = DeviceInfo.appName()
-        return "Firefox-iOS-FxA/\(AppInfo.appVersion)b\(AppInfo.buildNumber) (\(appName))"
+        return clientUserAgent(prefix: "Firefox-iOS-FxA")
     }
 
     /**

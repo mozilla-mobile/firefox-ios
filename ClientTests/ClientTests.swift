@@ -15,7 +15,10 @@ class ClientTests: XCTestCase {
 
     func testSyncUA() {
         let ua = UserAgent.syncUserAgent
-        let loc = ua.range(of: "^Firefox-iOS-Sync/[0-9]\\.[0-9]b*[0-9] \\([-_A-Za-z0-9= \\(\\)]+\\)$", options: NSString.CompareOptions.regularExpression)
+        let device = DeviceInfo.deviceModel()
+        let systemVersion = UIDevice.current.systemVersion
+        let expectedRegex = "^Firefox-iOS-Sync/[0-9]\\.[0-9]b*[0-9] \\(\(device); iPhone OS \(systemVersion)\\) \\([-_A-Za-z0-9= \\(\\)]+\\)$"
+        let loc = ua.range(of: expectedRegex, options: NSString.CompareOptions.regularExpression)
         XCTAssertTrue(loc != nil, "Sync UA is as expected. Was \(ua)")
     }
 
