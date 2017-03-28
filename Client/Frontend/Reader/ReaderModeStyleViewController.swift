@@ -4,6 +4,7 @@
 
 import Foundation
 import UIKit
+import Shared
 
 private struct ReaderModeStyleViewControllerUX {
     static let RowHeight = 50
@@ -100,6 +101,7 @@ class ReaderModeStyleViewController: UIViewController {
 
         fontSizeButtons = [
             FontSizeButton(fontSizeAction: FontSizeAction.smaller),
+            FontSizeButton(fontSizeAction: FontSizeAction.reset),
             FontSizeButton(fontSizeAction: FontSizeAction.bigger)
         ]
 
@@ -209,6 +211,8 @@ class ReaderModeStyleViewController: UIViewController {
             readerModeStyle.fontSize = readerModeStyle.fontSize.smaller()
         case .bigger:
             readerModeStyle.fontSize = readerModeStyle.fontSize.bigger()
+        case .reset:
+            readerModeStyle.fontSize = ReaderModeFontSize.defaultSize
         }
         updateFontSizeButtons()
         delegate?.readerModeStyleViewController(self, didConfigureStyle: readerModeStyle)
@@ -222,6 +226,8 @@ class ReaderModeStyleViewController: UIViewController {
                 break
             case .smaller:
                 button.isEnabled = !readerModeStyle.fontSize.isSmallest()
+                break
+            case .reset:
                 break
             }
         }
@@ -270,6 +276,7 @@ class FontTypeButton: UIButton {
 
 enum FontSizeAction {
     case smaller
+    case reset
     case bigger
 }
 
@@ -294,6 +301,8 @@ class FontSizeButton: UIButton {
             let largerFontAccessibilityLabel = NSLocalizedString("Increase text size", comment: "Accessibility label for button increasing font size in display settings of reader mode")
             setTitle(largerFontLabel, for: UIControlState())
             accessibilityLabel = largerFontAccessibilityLabel
+        case .reset:
+            accessibilityLabel = Strings.ReaderModeResetFontSizeAccessibilityLabel
         }
 
         // TODO Does this need to change with the selected font type? Not sure if makes sense for just +/-
