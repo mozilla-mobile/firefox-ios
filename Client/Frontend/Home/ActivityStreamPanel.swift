@@ -384,7 +384,10 @@ extension ActivityStreamPanel {
 
         switch Section(indexPath.section) {
         case .highlights:
-            presentContextMenuForHighlightCellWithIndexPath(indexPath)
+            let locationInHeader = longPressGestureRecognizer.location(in: tableView.cellForRow(at: indexPath))
+            if locationInHeader.y > 0.0 {
+                presentContextMenuForHighlightCellWithIndexPath(indexPath)
+            }
         case .topSites:
             let topSiteCell = self.tableView.cellForRow(at: indexPath) as! ASHorizontalScrollCell
             let pointInTopSite = longPressGestureRecognizer.location(in: topSiteCell.collectionView)
