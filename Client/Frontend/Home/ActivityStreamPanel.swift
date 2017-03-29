@@ -20,14 +20,6 @@ struct ASPanelUX {
     static let rowSpacing: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 30 : 20
     static let highlightCellHeight: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 250 : 195
 
-    // These ratios repersent how much space the topsites require.
-    // They are calculated from the iphone 5 which requires 220px of vertical height on a 320px width screen.
-    // 320/220 = 1.4545.
-    static let TopSiteDoubleRowRatio: CGFloat = 1.27
-    static let TopSiteDoubleRowLargeRatio: CGFloat = 1.7 //used to show 4 columned topsites on larger width devices
-    static let TopSiteSingleRowRatio: CGFloat = 4.4
-    static let TopSiteIpadSingleRowHorizontalRatio: CGFloat = 4
-    static let TopSiteIpadSingleRowVerticalRatio: CGFloat = 3.2
     static let PageControlOffsetSize: CGFloat = 40
     static let SectionInsetsForIpad: CGFloat = 100
     static let SectionInsetsForIphone: CGFloat = 14
@@ -50,6 +42,13 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
         return UILongPressGestureRecognizer(target: self, action: #selector(ActivityStreamPanel.longPress(_:)))
     }()
 
+    // Not used for displaying. Only used for calculating layout.
+    lazy var topSiteCell: ASHorizontalScrollCell = {
+        let customCell = ASHorizontalScrollCell(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 0))
+        customCell.delegate = self.topSitesManager
+        return customCell
+    }()
+
     var highlights: [Site] = []
 
     init(profile: Profile, telemetry: ActivityStreamTracker? = nil) {
@@ -57,10 +56,8 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
         self.telemetry = telemetry ?? ActivityStreamTracker(eventsTracker: PingCentre.clientForTopic(.ActivityStreamEvents, clientID: profile.clientID), sessionsTracker: PingCentre.clientForTopic(.ActivityStreamSessions, clientID: profile.clientID))
 
         super.init(collectionViewLayout: flowLayout)
-//        flowLayout.estimatedItemSize = CGSize(width: self.view.frame.width, height: 300)
         self.collectionView?.delegate = self
         self.collectionView?.dataSource = self
-
 
         collectionView?.addGestureRecognizer(longPressRecognizer)
         self.profile.history.setTopSitesCacheSize(Int32(ASPanelUX.topSitesCacheSize))
@@ -145,31 +142,17 @@ extension ActivityStreamPanel {
         func cellHeight(_ traits: UITraitCollection, width: CGFloat) -> CGFloat {
             switch self {
             case .highlights: return ASPanelUX.highlightCellHeight
-            case .topSites:
-                if traits.horizontalSizeClass == .compact && traits.verticalSizeClass == .regular {
-                    // On more compact width devices (iPhone SE) we force a 3 column layout
-                    if width > ASPanelUX.CompactWidth {
-                        return CGFloat(Int(width / ASPanelUX.TopSiteDoubleRowLargeRatio))
-                    } else {
-                        return CGFloat(Int(width / ASPanelUX.TopSiteDoubleRowRatio))
-                    }
-                } else {
-                    if UIDevice.current.orientation == .landscapeLeft || UIDevice.current.orientation == .landscapeRight {
-                        return CGFloat(Int(width / ASPanelUX.TopSiteIpadSingleRowHorizontalRatio))
-                    } else {
-                        return CGFloat(Int(width / ASPanelUX.TopSiteIpadSingleRowVerticalRatio))
-                    }
-                }
-            case .highlightIntro: return UITableViewAutomaticDimension
+            case .topSites: return 0 //calculated dynamically
+            case .highlightIntro: return 200
             }
         }
 
         func sectionInsets() -> CGFloat {
             switch self {
             case .highlights:
-                return UIDevice.current.userInterfaceIdiom == .pad ? (ASPanelUX.SectionInsetsForIpad * 2) : (ASPanelUX.SectionInsetsForIphone * 2)
+                return UIDevice.current.userInterfaceIdiom == .pad ? ASPanelUX.SectionInsetsForIpad + ASHorizontalScrollCellUX.MinimumInsets : ASPanelUX.SectionInsetsForIphone
             case .topSites:
-                return UIDevice.current.userInterfaceIdiom == .pad ? (ASPanelUX.SectionInsetsForIpad * 2) : 0
+                return UIDevice.current.userInterfaceIdiom == .pad ? ASPanelUX.SectionInsetsForIpad : 0
             case .highlightIntro:
                 return 0
             }
@@ -177,7 +160,7 @@ extension ActivityStreamPanel {
 
         func cellSize(for traits: UITraitCollection, frameWidth: CGFloat) -> CGSize {
             let height = cellHeight(traits, width: frameWidth)
-            let inset = sectionInsets()
+            let inset = sectionInsets() * 2
 
             switch self {
             case .highlights:
@@ -221,8 +204,8 @@ extension ActivityStreamPanel {
         var cellType: UICollectionViewCell.Type {
             switch self {
             case .topSites: return ASHorizontalScrollCell.self
-            case .highlights: return AlternateSimpleHighlightCell.self
-            case .highlightIntro: return AlternateSimpleHighlightCell.self //TODO
+            case .highlights: return ActivityStreamHighlightCell.self
+            case .highlightIntro: return HighlightIntroCell.self
             }
         }
 
@@ -268,20 +251,24 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
             }
             return cellSize
         case .topSites:
-            //if there is more than one page of space. then add the pagecontrol offset.
-            let customCell = ASHorizontalScrollCell(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 0))
-            customCell.delegate = topSitesManager
-            let layout = customCell.collectionView.collectionViewLayout as! HorizontalFlowLayout
-            let size = layout.calculateContentSize(with: self.view.frame.size.width, height: 0)
-            return CGSize(width: cellSize.width, height: size.height)
+            // Create a temporary cell so we can calculate the height.
+            let layout = topSiteCell.collectionView.collectionViewLayout as! HorizontalFlowLayout
+            let estimatedLayout = layout.calculateLayout(for: CGSize(width: self.view.frame.size.width, height: 0))
+            return CGSize(width: cellSize.width, height: estimatedLayout.size.height)
         case .highlightIntro:
-            //if we should show the highlight intro return cellSize
-            return CGSize.zero
+            return cellSize
         }
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return highlights.isEmpty ? CGSize(width: 0, height: 0) : Section(section).headerHeight
+        switch Section(section) {
+        case .highlights:
+            return highlights.isEmpty ? CGSize.zero : Section(section).headerHeight
+        case .highlightIntro:
+            return !highlights.isEmpty ? CGSize.zero : Section(section).headerHeight
+        case .topSites:
+            return Section(section).headerHeight
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
@@ -293,16 +280,8 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-
-        let inset = UIDevice.current.userInterfaceIdiom == .pad ? ASPanelUX.SectionInsetsForIpad + ASHorizontalScrollCellUX.MinimumInsets : ASPanelUX.SectionInsetsForIphone
-        let topSitesInsets = UIDevice.current.userInterfaceIdiom == .pad ? ASPanelUX.SectionInsetsForIpad : 0
-
-        if section == Section.highlights.rawValue {
-            return UIEdgeInsets(top: 0, left: inset, bottom: 0, right: inset)
-        }
-
-        // topsites insets
-        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        let insets = Section(section).sectionInsets()
+        return UIEdgeInsets(top: 0, left: insets, bottom: 0, right: insets)
     }
 
     fileprivate func showSiteWithURLHandler(_ url: URL) {
@@ -315,7 +294,7 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
 extension ActivityStreamPanel {
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 2
+        return 3
     }
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -339,7 +318,7 @@ extension ActivityStreamPanel {
         case .highlights:
             return configureHistoryItemCell(cell, forIndexPath: indexPath)
         case .highlightIntro:
-            return cell //TODO. Configure this
+            return configureHighlightIntroCell(cell, forIndexPath: indexPath)
         }
     }
 
@@ -352,14 +331,14 @@ extension ActivityStreamPanel {
 
     func configureHistoryItemCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         let site = highlights[indexPath.row]
-        let simpleHighlightCell = cell as! AlternateSimpleHighlightCell
+        let simpleHighlightCell = cell as! ActivityStreamHighlightCell
         simpleHighlightCell.configureWithSite(site)
         return simpleHighlightCell
     }
 
-    func configureHighlightIntroCell(_ cell: UITableViewCell, forIndexPath indexPath: IndexPath) -> UITableViewCell {
+    func configureHighlightIntroCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         let introCell = cell as! HighlightIntroCell
-        //The cell is configured on creation. No need to configure
+        //The cell is configured on creation. No need to configure. But leave this here in case we need it.
         return introCell
     }
 }
@@ -494,7 +473,7 @@ extension ActivityStreamPanel {
     }
 
     func presentContextMenuForHighlightCellWithIndexPath(_ indexPath: IndexPath) {
-        guard let highlightCell = self.collectionView?.cellForItem(at: indexPath) as? AlternateSimpleHighlightCell else { return }
+        guard let highlightCell = self.collectionView?.cellForItem(at: indexPath) as? ActivityStreamHighlightCell else { return }
         let siteImage = highlightCell.siteImageView.image
         let siteBGColor = highlightCell.siteImageView.backgroundColor
 

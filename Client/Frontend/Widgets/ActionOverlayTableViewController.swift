@@ -7,8 +7,15 @@ import Storage
 import SnapKit
 
 private struct ActionOverlayTableViewUX {
+
     static let HeaderHeight: CGFloat = 74
     static let RowHeight: CGFloat = 56
+    static let LabelColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.black : UIColor(rgb: 0x353535)
+    static let DescriptionLabelColor = UIColor(colorString: "919191")
+    static let PlaceholderImage = UIImage(named: "defaultTopSiteIcon")
+    static let CornerRadius: CGFloat = 3
+    static let SiteImageViewSize = 48
+    static let IconSize = CGSize(width: 32, height: 32)
 }
 
 class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
@@ -151,7 +158,7 @@ class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
     lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontMediumBold
-        titleLabel.textColor = SimpleHighlightCellUX.LabelColor
+        titleLabel.textColor = ActionOverlayTableViewUX.LabelColor
         titleLabel.textAlignment = .left
         titleLabel.numberOfLines = 3
         return titleLabel
@@ -160,7 +167,7 @@ class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
     lazy var descriptionLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontDescriptionActivityStream
-        titleLabel.textColor = SimpleHighlightCellUX.DescriptionLabelColor
+        titleLabel.textColor = ActionOverlayTableViewUX.DescriptionLabelColor
         titleLabel.textAlignment = .left
         titleLabel.numberOfLines = 1
         return titleLabel
@@ -169,7 +176,7 @@ class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
     lazy var siteImageView: UIImageView = {
         let siteImageView = UIImageView()
         siteImageView.contentMode = UIViewContentMode.center
-        siteImageView.layer.cornerRadius = SimpleHighlightCellUX.CornerRadius
+        siteImageView.layer.cornerRadius = ActionOverlayTableViewUX.CornerRadius
         return siteImageView
     }()
 
@@ -193,7 +200,7 @@ class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
         siteImageView.snp.remakeConstraints { make in
             make.centerY.equalTo(contentView)
             make.leading.equalTo(contentView).offset(12)
-            make.size.equalTo(SimpleHighlightCellUX.SiteImageViewSize)
+            make.size.equalTo(ActionOverlayTableViewUX.SiteImageViewSize)
         }
 
         titleLabel.snp.remakeConstraints { make in
@@ -214,7 +221,7 @@ class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
 
     func configureWithSite(_ site: Site, image: UIImage?, imageBackgroundColor: UIColor?) {
         self.siteImageView.backgroundColor = imageBackgroundColor
-        self.siteImageView.image = image?.createScaled(SimpleHighlightCellUX.IconSize) ?? SimpleHighlightCellUX.PlaceholderImage
+        self.siteImageView.image = image?.createScaled(ActionOverlayTableViewUX.IconSize) ?? ActionOverlayTableViewUX.PlaceholderImage
         self.titleLabel.text = site.title.characters.count <= 1 ? site.url : site.title
         self.descriptionLabel.text = site.tileURL.baseDomain
     }
