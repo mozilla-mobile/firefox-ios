@@ -48,11 +48,7 @@ public protocol SyncManager {
     @discardableResult func onAddedAccount() -> Success
 }
 
-typealias EngineIdentifier = String
 typealias SyncFunction = (SyncDelegate, Prefs, Ready) -> SyncResult
-typealias EngineStatus = (EngineIdentifier, SyncStatus)
-typealias EngineResults = [EngineStatus]
-typealias SyncOperationResult = (engineResults: Maybe<EngineResults>, stats: SyncOperationStatsSession?)
 
 class ProfileFileAccessor: FileAccessor {
     convenience init(profile: Profile) {
@@ -663,17 +659,14 @@ open class BrowserProfile: Profile {
                     reportAdHocEndSyncingStatus(displayState: syncDisplayState, engineResults: result.engineResults)
                 }
 
-                reportSyncPingForResult(opResult: result)
+                let syncPing = SyncPing(account: profile.account, syncOperationResult: result)
+                Telemetry.send(ping: syncPing , docType: .sync)
             } else {
                 log.debug("Profile isn't sending usage data. Not sending sync status event.")
             }
             
             notifySyncing(notification: NotificationProfileDidFinishSyncing)
             syncReducer = nil
-        }
-
-        fileprivate func reportSyncPingForResult(opResult: SyncOperationResult) {
-            // TODO: Send sync report to telemetry client for storage/sending
         }
 
         fileprivate func reportAdHocEndSyncingStatus(displayState: SyncDisplayState?, engineResults: Maybe<EngineResults>?) {

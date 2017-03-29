@@ -453,7 +453,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             }
 
             let ping = CorePing(profile: profile)
-            Telemetry.sendPing(ping)
+            Telemetry.send(ping: ping, docType: .core)
         }
     }
 

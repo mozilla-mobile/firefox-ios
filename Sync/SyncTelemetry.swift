@@ -30,12 +30,25 @@ public protocol Stats {
     func hasData() -> Bool
 }
 
+private protocol DictionaryRepresentable {
+    func asDictionary() -> [String: Any]
+}
+
 public struct SyncUploadStats: Stats {
     var sent: Int = 0
     var sentFailed: Int = 0
 
     public func hasData() -> Bool {
         return sent > 0 || sentFailed > 0
+    }
+}
+
+extension SyncUploadStats: DictionaryRepresentable {
+    func asDictionary() -> [String: Any] {
+        return [
+            "sent": sent,
+            "sentFailed": sentFailed
+        ]
     }
 }
 
@@ -48,10 +61,22 @@ public struct SyncDownloadStats: Stats {
 
     public func hasData() -> Bool {
         return applied > 0 ||
-            succeeded > 0 ||
-            failed > 0 ||
-            newFailed > 0 ||
-            reconciled > 0
+               succeeded > 0 ||
+               failed > 0 ||
+               newFailed > 0 ||
+               reconciled > 0
+    }
+}
+
+extension SyncDownloadStats: DictionaryRepresentable {
+    func asDictionary() -> [String: Any] {
+        return [
+            "applied": applied,
+            "succeeded": succeeded,
+            "failed": failed,
+            "newFailed": newFailed,
+            "reconciled": reconciled
+        ]
     }
 }
 
@@ -63,13 +88,15 @@ public struct ValidationStats: Stats {
 }
 
 public class StatsSession {
-    private var took: Int64 = 0
-    private var when: UInt64?
-    private var startUptime: UInt64?
+    var took: Int64 = 0
+    var when: Int64?
 
-    public func start(when: UInt64 = Date.now()) {
-        self.when = when
-        self.startUptime = DispatchTime.now().uptimeNanoseconds
+    private var startUptime: Int64?
+
+    public func start(when: Int64 = Int64(Date.now())) {
+        // Convert to milliseconds as stated in the ping format
+        self.when = when / 1000
+        self.startUptime = Int64(DispatchTime.now().uptimeNanoseconds)
     }
 
     public func hasStarted() -> Bool {
@@ -83,14 +110,14 @@ public class StatsSession {
         }
 
         // Casting to Int64 should be safe since we're using uptime since boot in both cases.
-        took = Int64(DispatchTime.now().uptimeNanoseconds) - Int64(startUptime)
+        // Convert to milliseconds as stated in the sync ping format
+        took = (Int64(DispatchTime.now().uptimeNanoseconds) - Int64(startUptime)) / 1000000
         return self
     }
 }
 
 // Stats about a single engine's sync.
 public class SyncEngineStatsSession: StatsSession {
-    public let collection: String
     public var failureReason: Any?
     public var validationStats: ValidationStats?
 
@@ -98,7 +125,6 @@ public class SyncEngineStatsSession: StatsSession {
     private(set) var downloadStats: SyncDownloadStats
 
     public init(collection: String) {
-        self.collection = collection
         self.uploadStats = SyncUploadStats()
         self.downloadStats = SyncDownloadStats()
     }
@@ -114,6 +140,24 @@ public class SyncEngineStatsSession: StatsSession {
     public func recordUpload(stats: SyncUploadStats) {
         self.uploadStats.sent += stats.sent
         self.uploadStats.sentFailed += stats.sentFailed
+    }
+}
+
+extension SyncEngineStatsSession: DictionaryRepresentable {
+    func asDictionary() -> [String : Any] {
+        var dict: [String: Any] = [
+            "took": took,
+        ]
+
+        if downloadStats.hasData() {
+            dict["incoming"] = downloadStats.asDictionary()
+        }
+
+        if uploadStats.hasData() {
+            dict["outgoing"] = uploadStats.asDictionary()
+        }
+
+        return dict
     }
 }
 
@@ -148,19 +192,50 @@ extension SyncOperationStatsSession: DictionaryRepresentable {
 public struct SyncPing: TelemetryPing {
     public var payload: JSON
 
-    public init(opStats: SyncOperationStatsSession, engineStats: [SyncEngineStatsSession]) {
+    public init(account: FirefoxAccount?, syncOperationResult: SyncOperationResult) {
         var ping: [String: Any] = [
             "version": 1,
-            "discarded": 0,
             "why": SyncPingReason.schedule.rawValue,
-            "uid": "testUID",
-            "deviceID": "testDeviceID"
+            "uid": account?.uid ?? String(repeating: "0", count: 32)
         ]
 
-        var syncOp = opStats.asDictionary()
-        syncOp["engines"] = engineStats.map { $0.asDictionary() }
-        ping["syncs"] = [syncOp]
-        
+        if let deviceID = account?.deviceRegistration?.id {
+            ping["deviceID"] = deviceID
+        }
+
+        if let syncStats = syncOperationResult.stats {
+            var singleSync = syncStats.asDictionary()
+            if let engineResults = syncOperationResult.engineResults.successValue {
+                singleSync["engines"] = SyncPing.enginePingDataFrom(engineResults: engineResults)
+            }
+
+            ping["syncs"] = [singleSync]
+        }
+
         payload = JSON(ping)
+    }
+
+    private static func enginePingDataFrom(engineResults: EngineResults) -> [[String: Any]] {
+        return engineResults.map { result in
+            var engine: [String: Any] = [
+                "name": result.0
+            ]
+
+            // For complete/partial results, extract out the collect stats
+            // and add it to engine information. For syncs that were not able to
+            // start, return why and a reason.
+            switch result.1 {
+            case .completed(let stats):
+                engine.merge(with: stats.asDictionary())
+            case .partial(let stats):
+                engine.merge(with: stats.asDictionary())
+            case .notStarted(let reason):
+                engine.merge(with: [
+                    "status": reason.telemetryId
+                ])
+            }
+
+            return engine
+        }
     }
 }
