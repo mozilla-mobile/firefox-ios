@@ -12,16 +12,16 @@ struct AlternateSimpleHighlightCellUX {
     static let CellSideOffset = 20
     static let TitleLabelOffset = 2
     static let CellTopBottomOffset = 12
-    static let SiteImageViewSize: CGSize = CGSize(width: 99, height: 76)
+    static let SiteImageViewSize: CGSize = UIDevice.current.userInterfaceIdiom == .pad ? CGSize(width: 99, height: 120) : CGSize(width: 99, height: 90)
     static let StatusIconSize = 12
-    static let FaviconSize = CGSize(width: 32, height: 32)
+    static let FaviconSize = CGSize(width: 45, height: 45)
     static let DescriptionLabelColor = UIColor(colorString: "919191")
     static let SelectedOverlayColor = UIColor(white: 0.0, alpha: 0.25)
     static let CornerRadius: CGFloat = 3
     static let BorderColor = UIColor(white: 0, alpha: 0.1)
 }
 
-class AlternateSimpleHighlightCell: UITableViewCell {
+class AlternateSimpleHighlightCell: UICollectionViewCell {
 
     fileprivate lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
@@ -47,6 +47,7 @@ class AlternateSimpleHighlightCell: UITableViewCell {
         descriptionLabel.textColor = AlternateSimpleHighlightCellUX.DescriptionLabelColor
         descriptionLabel.textAlignment = .left
         descriptionLabel.numberOfLines = 1
+        descriptionLabel.setContentCompressionResistancePriority(1000, for: UILayoutConstraintAxis.vertical)
         return descriptionLabel
     }()
 
@@ -83,8 +84,8 @@ class AlternateSimpleHighlightCell: UITableViewCell {
         }
     }
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
 
         layer.shouldRasterize = true
         layer.rasterizationScale = UIScreen.main.scale
@@ -99,10 +100,10 @@ class AlternateSimpleHighlightCell: UITableViewCell {
         contentView.addSubview(domainLabel)
 
         siteImageView.snp.makeConstraints { make in
-            make.top.equalTo(contentView).offset(AlternateSimpleHighlightCellUX.CellTopBottomOffset)
-            make.bottom.lessThanOrEqualTo(contentView).offset(-AlternateSimpleHighlightCellUX.CellTopBottomOffset)
-            make.leading.equalTo(contentView).offset(AlternateSimpleHighlightCellUX.CellSideOffset)
-            make.size.equalTo(AlternateSimpleHighlightCellUX.SiteImageViewSize)
+            make.top.equalTo(contentView)
+            make.leading.trailing.equalTo(contentView)
+            make.centerX.equalTo(contentView)
+            make.height.equalTo(AlternateSimpleHighlightCellUX.SiteImageViewSize)
         }
 
         selectedOverlay.snp.makeConstraints { make in
@@ -110,27 +111,26 @@ class AlternateSimpleHighlightCell: UITableViewCell {
         }
 
         domainLabel.snp.makeConstraints { make in
-            make.leading.equalTo(siteImageView.snp.trailing).offset(AlternateSimpleHighlightCellUX.CellTopBottomOffset)
-            make.top.equalTo(siteImageView).offset(-2)
-            make.bottom.equalTo(titleLabel.snp.top).offset(-4)
+            make.leading.equalTo(siteImageView)
+            make.trailing.equalTo(contentView)
+            make.top.equalTo(siteImageView.snp.bottom).offset(5)
         }
 
         titleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(siteImageView.snp.trailing).offset(AlternateSimpleHighlightCellUX.CellTopBottomOffset)
-            make.trailing.equalTo(contentView).inset(AlternateSimpleHighlightCellUX.CellSideOffset)
+            make.leading.equalTo(siteImageView)
+            make.trailing.equalTo(contentView)
+            make.top.equalTo(domainLabel.snp.bottom).offset(5)
         }
 
         descriptionLabel.snp.makeConstraints { make in
             make.leading.equalTo(statusIcon.snp.trailing).offset(AlternateSimpleHighlightCellUX.TitleLabelOffset)
-            make.bottom.equalTo(statusIcon)
+            make.bottom.equalTo(contentView)
         }
 
         statusIcon.snp.makeConstraints { make in
             make.size.equalTo(SimpleHighlightCellUX.StatusIconSize)
-            make.leading.equalTo(titleLabel)
-            make.bottom.equalTo(siteImageView).priority(10)
-            make.top.greaterThanOrEqualTo(titleLabel.snp.bottom).offset(6).priority(1000)
-            make.bottom.lessThanOrEqualTo(contentView).offset(-AlternateSimpleHighlightCellUX.CellTopBottomOffset).priority(1000)
+            make.leading.equalTo(siteImageView)
+            make.bottom.equalTo(contentView)
         }
     }
 
@@ -167,20 +167,5 @@ class AlternateSimpleHighlightCell: UITableViewCell {
             self.descriptionLabel.text = "Visited"
             self.statusIcon.image = UIImage(named: "context_viewed")
         }
-    }
-}
-
-// Save background color on UITableViewCell "select" because it disappears in the default behavior
-extension AlternateSimpleHighlightCell {
-    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-        let color = self.siteImageView.backgroundColor
-        super.setHighlighted(highlighted, animated: animated)
-        self.siteImageView.backgroundColor = color
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        let color = self.siteImageView.backgroundColor
-        super.setSelected(selected, animated: animated)
-        self.siteImageView.backgroundColor = color
     }
 }
