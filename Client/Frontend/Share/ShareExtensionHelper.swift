@@ -84,7 +84,10 @@ extension ShareExtensionHelper: UIActivityItemSource {
         return selectedURL
     }
 
-    func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivityType) -> Any? {
+    // IMPORTANT: This method needs Swift compiler optimization DISABLED to prevent a nasty
+    // crash from happening in release builds. It seems as though the check for `nil` may
+    // get removed by the optimizer which leads to a crash when that happens.
+    @_semantics("optimize.sil.never") func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivityType) -> Any? {
         // activityType actually is nil sometimes (in the simulator at least)
         if activityType != nil && isPasswordManagerActivityType(activityType.rawValue) {
             return onePasswordExtensionItem
