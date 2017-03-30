@@ -55,6 +55,9 @@ class FxALoginHelper {
             return loginDidFail()
         }
 
+        // accountVerified is needed by delegates.
+        accountVerified = account.actionNeeded != .needsVerification
+
         guard AppConstants.MOZ_FXA_PUSH else {
             return loginDidSucceed()
         }
