@@ -450,6 +450,8 @@ extension TopTabsViewController {
         self.flushPendingChanges()
         UIView.animate(withDuration: TopTabsUX.AnimationSpeed, animations: {
             self.collectionView.reloadData()
+            // Workaround - reloadData() is not triggering collectionView(_:cellForItemAt:)
+            self.collectionView.reloadItems(at: self.collectionView.indexPathsForVisibleItems)
             self.collectionView.collectionViewLayout.invalidateLayout()
             self.collectionView.layoutIfNeeded()
             self.scrollToCurrentTab(true, centerCell: true)
