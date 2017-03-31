@@ -253,7 +253,7 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
         case .topSites:
             // Create a temporary cell so we can calculate the height.
             let layout = topSiteCell.collectionView.collectionViewLayout as! HorizontalFlowLayout
-            let estimatedLayout = layout.calculateLayout(for: CGSize(width: self.view.frame.size.width, height: 0))
+            let estimatedLayout = layout.calculateLayout(for: CGSize(width: cellSize.width, height: 0))
             return CGSize(width: cellSize.width, height: estimatedLayout.size.height)
         case .highlightIntro:
             return cellSize

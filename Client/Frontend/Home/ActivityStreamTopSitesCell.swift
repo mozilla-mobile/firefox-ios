@@ -280,7 +280,8 @@ class HorizontalFlowLayout: UICollectionViewLayout {
         return 0
     }
     var boundsSize = CGSize.zero
-    fileprivate var insets = UIEdgeInsets(equalInset: ASHorizontalScrollCellUX.MinimumInsets)
+    private var insets = UIEdgeInsets(equalInset: ASHorizontalScrollCellUX.MinimumInsets)
+    private var sectionInsets: CGFloat = 0
 
     override func prepare() {
         super.prepare()
@@ -301,12 +302,16 @@ class HorizontalFlowLayout: UICollectionViewLayout {
         }
 
         let horizontalItemsCount = maxHorizontalItemsCount(width: width)
-        let verticalItemsCount = maxVerticalItemsCount(height: height)
+        var verticalItemsCount = maxVerticalItemsCount(height: height)
+        if cellCount <= horizontalItemsCount {
+            // If we have only a few items don't provide space for multiple rows.
+            verticalItemsCount = 1
+        }
 
         // Take the number of cells and subtract its space in the view from the height. The left over space is the white space.
         // The left over space is then devided evenly into (n + 1) parts to figure out how much space should be inbetween a cell
-        var verticalInsets = (height - (CGFloat(verticalItemsCount) * itemSize.height)) / CGFloat(verticalItemsCount + 1)
-        var horizontalInsets = (width - (CGFloat(horizontalItemsCount) * itemSize.width)) / CGFloat(horizontalItemsCount + 1)
+        var verticalInsets = floor((height - (CGFloat(verticalItemsCount) * itemSize.height)) / CGFloat(verticalItemsCount + 1))
+        var horizontalInsets = floor((width - (CGFloat(horizontalItemsCount) * itemSize.width)) / CGFloat(horizontalItemsCount + 1))
 
         // We want a minimum inset to make things not look crowded. We also don't want uneven spacing.
         // If we dont have this. Set a minimum inset and recalculate the size of a cell
@@ -314,13 +319,14 @@ class HorizontalFlowLayout: UICollectionViewLayout {
         if horizontalInsets < ASHorizontalScrollCellUX.MinimumInsets || horizontalInsets != verticalInsets {
             verticalInsets = ASHorizontalScrollCellUX.MinimumInsets
             horizontalInsets = ASHorizontalScrollCellUX.MinimumInsets
-            estimatedItemSize.width = (width - (CGFloat(horizontalItemsCount + 1) * horizontalInsets)) / CGFloat(horizontalItemsCount)
+            estimatedItemSize.width = floor((width - (CGFloat(horizontalItemsCount + 1) * horizontalInsets)) / CGFloat(horizontalItemsCount))
             estimatedItemSize.height = estimatedItemSize.width + TopSiteCellUX.TitleHeight
         }
 
         //calculate our estimates.
-        let estimatedHeight = (estimatedItemSize.height * CGFloat(verticalItemsCount)) + (verticalInsets * (CGFloat(verticalItemsCount) + 1))
+        let estimatedHeight = floor(estimatedItemSize.height * CGFloat(verticalItemsCount)) + (verticalInsets * (CGFloat(verticalItemsCount) + 1))
         let estimatedSize = CGSize(width: CGFloat(numberOfPages(with: boundsSize)) * width, height: estimatedHeight)
+
         let estimatedInsets = UIEdgeInsets(top: verticalInsets, left: horizontalInsets, bottom: verticalInsets, right: horizontalInsets)
         return (size: estimatedSize, cellSize: estimatedItemSize, cellInsets: estimatedInsets)
     }
@@ -329,7 +335,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
         let estimatedLayout = calculateLayout(for: boundsSize)
         insets = estimatedLayout.cellInsets
         itemSize = estimatedLayout.cellSize
-        boundsSize.height = estimatedLayout.size.height
+        boundsSize = estimatedLayout.size
         return estimatedLayout.size
     }
 
@@ -386,9 +392,13 @@ class HorizontalFlowLayout: UICollectionViewLayout {
         let itemPage = Int(floor(Double(row)/Double(itemsPerPage)))
 
         let attr = UICollectionViewLayoutAttributes(forCellWith: indexPath)
-
         var frame = CGRect.zero
         frame.origin.x = CGFloat(itemPage) * bounds.size.width + CGFloat(columnPosition) * (itemSize.width + insets.left) + insets.left
+        // If there is only 1 page. and only 1 row. Make sure to center.
+        if cellCount < horizontalItemsCount {
+            sectionInsets = floor((bounds.width - (CGFloat(cellCount) * (itemSize.width + insets.left))) / 2)
+            frame.origin.x += sectionInsets
+        }
         frame.origin.y = CGFloat(rowPosition) * (itemSize.height + insets.top) + insets.top
         frame.size = itemSize
         attr.frame = frame
