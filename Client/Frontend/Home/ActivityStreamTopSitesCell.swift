@@ -16,7 +16,7 @@ struct TopSiteCellUX {
     static let CellCornerRadius: CGFloat = 4
     static let TitleOffset: CGFloat = 5
     static let OverlayColor = UIColor(white: 0.0, alpha: 0.25)
-    static let IconSize = CGSize(width: 40, height: 40)
+    static let IconSize = CGSize(width: 50, height: 50)
     static let BorderColor = UIColor(white: 0, alpha: 0.1)
     static let BorderWidth: CGFloat = 0.5
 }
