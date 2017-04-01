@@ -50,7 +50,7 @@ class TokenServerClientTests: LiveAccountTest {
     }
 
     func testTokenSuccess() {
-        let audience = TokenServerClient.getAudience(forURL: ProductionSync15Configuration().tokenServerEndpointURL)
+        let audience = TokenServerClient.getAudience(forURL: ProductionSync15Configuration(prefs: nil).tokenServerEndpointURL)
 
         withCertificate { expectation, emailUTF8, keyPair, certificate in
             let assertion = JSONWebTokenUtils.createAssertionWithPrivateKeyToSign(with: keyPair.privateKey,

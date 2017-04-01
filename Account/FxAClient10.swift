@@ -107,7 +107,7 @@ open class FxAClient10 {
     let URL: URL
 
     public init(endpoint: URL? = nil) {
-        self.URL = endpoint ?? ProductionFirefoxAccountConfiguration().authEndpointURL as URL
+        self.URL = endpoint ?? ProductionFirefoxAccountConfiguration(prefs: nil).authEndpointURL as URL
     }
 
     open class func KW(_ kw: String) -> Data {

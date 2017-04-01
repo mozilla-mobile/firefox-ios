@@ -125,7 +125,7 @@ open class LiveAccountTest: XCTestCase {
     func getTestAccount() -> Deferred<Maybe<FirefoxAccount>> {
         // TODO: Use signedInUser.json here.  It's hard to include the same resource file in two Xcode targets.
         return self.account("998797987.sync@restmail.net", password: "998797987.sync@restmail.net",
-            configuration: ProductionFirefoxAccountConfiguration())
+                            configuration: ProductionFirefoxAccountConfiguration(prefs: nil))
     }
 
     open func getAuthState(_ now: Timestamp) -> Deferred<Maybe<SyncAuthState>> {

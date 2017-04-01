@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Shared
 
 public enum FirefoxAccountConfigurationLabel: String {
     case latestDev = "LatestDev"
@@ -10,14 +11,16 @@ public enum FirefoxAccountConfigurationLabel: String {
     case stage = "Stage"
     case production = "Production"
     case chinaEdition = "ChinaEdition"
+    case custom = "Custom"
 
     public func toConfiguration() -> FirefoxAccountConfiguration {
         switch self {
-        case .latestDev: return LatestDevFirefoxAccountConfiguration()
-        case .stableDev: return StableDevFirefoxAccountConfiguration()
-        case .stage: return StageFirefoxAccountConfiguration()
-        case .production: return ProductionFirefoxAccountConfiguration()
-        case .chinaEdition: return ChinaEditionFirefoxAccountConfiguration()
+        case .latestDev: return LatestDevFirefoxAccountConfiguration(prefs: nil)
+        case .stableDev: return StableDevFirefoxAccountConfiguration(prefs: nil)
+        case .stage: return StageFirefoxAccountConfiguration(prefs: nil)
+        case .production: return ProductionFirefoxAccountConfiguration(prefs: nil)
+        case .chinaEdition: return ChinaEditionFirefoxAccountConfiguration(prefs: nil)
+        case .custom: return CustomFirefoxAccountConfiguration(prefs: nil)
         }
     }
 }
@@ -27,8 +30,8 @@ public enum FirefoxAccountConfigurationLabel: String {
  * and context=fx_ios_v1 opts us in to the Desktop Sync postMessage interface.
  */
 public protocol FirefoxAccountConfiguration {
-    init()
-
+    init(prefs: Prefs?)
+    
     var label: FirefoxAccountConfigurationLabel { get }
 
     /// A Firefox Account exists on a particular server.  The auth endpoint should speak the protocol documented at
@@ -53,9 +56,9 @@ public protocol FirefoxAccountConfiguration {
 }
 
 public struct LatestDevFirefoxAccountConfiguration: FirefoxAccountConfiguration {
-    public init() {
+    public init(prefs: Prefs?) {
     }
-
+    
     public let label = FirefoxAccountConfigurationLabel.latestDev
 
     public let authEndpointURL = URL(string: "https://latest.dev.lcip.org/auth/v1")!
@@ -66,13 +69,13 @@ public struct LatestDevFirefoxAccountConfiguration: FirefoxAccountConfiguration 
     public let settingsURL = URL(string: "https://latest.dev.lcip.org/settings?context=fx_ios_v1")!
     public let forceAuthURL = URL(string: "https://latest.dev.lcip.org/force_auth?service=sync&context=fx_ios_v1")!
 
-    public let sync15Configuration: Sync15Configuration = StageSync15Configuration()
+    public let sync15Configuration: Sync15Configuration = StageSync15Configuration(prefs: nil)
 
     public let pushConfiguration: PushConfiguration = DeveloperPushConfiguration()
 }
 
 public struct StableDevFirefoxAccountConfiguration: FirefoxAccountConfiguration {
-    public init() {
+    public init(prefs: Prefs?) {
     }
 
     public let label = FirefoxAccountConfigurationLabel.stableDev
@@ -85,13 +88,13 @@ public struct StableDevFirefoxAccountConfiguration: FirefoxAccountConfiguration 
     public let settingsURL = URL(string: "https://stable.dev.lcip.org/settings?context=fx_ios_v1")!
     public let forceAuthURL = URL(string: "https://stable.dev.lcip.org/force_auth?service=sync&context=fx_ios_v1")!
 
-    public let sync15Configuration: Sync15Configuration = StageSync15Configuration()
+    public let sync15Configuration: Sync15Configuration = StageSync15Configuration(prefs: nil)
 
     public let pushConfiguration: PushConfiguration = DeveloperPushConfiguration()
 }
 
 public struct StageFirefoxAccountConfiguration: FirefoxAccountConfiguration {
-    public init() {
+    public init(prefs: Prefs?) {
     }
 
     public let label = FirefoxAccountConfigurationLabel.stage
@@ -104,15 +107,15 @@ public struct StageFirefoxAccountConfiguration: FirefoxAccountConfiguration {
     public let settingsURL = URL(string: "https://accounts.stage.mozaws.net/settings?context=fx_ios_v1")!
     public let forceAuthURL = URL(string: "https://accounts.stage.mozaws.net/force_auth?service=sync&context=fx_ios_v1")!
 
-    public let sync15Configuration: Sync15Configuration = StageSync15Configuration()
+    public let sync15Configuration: Sync15Configuration = StageSync15Configuration(prefs: nil)
 
     public let pushConfiguration: PushConfiguration = StagePushConfiguration()
 }
 
 public struct ProductionFirefoxAccountConfiguration: FirefoxAccountConfiguration {
-    public init() {
+    public init(prefs: Prefs?) {
     }
-
+    
     public let label = FirefoxAccountConfigurationLabel.production
 
     public let authEndpointURL = URL(string: "https://api.accounts.firefox.com/v1")!
@@ -123,14 +126,77 @@ public struct ProductionFirefoxAccountConfiguration: FirefoxAccountConfiguration
     public let settingsURL = URL(string: "https://accounts.firefox.com/settings?context=fx_ios_v1")!
     public let forceAuthURL = URL(string: "https://accounts.firefox.com/force_auth?service=sync&context=fx_ios_v1")!
 
-    public let sync15Configuration: Sync15Configuration = ProductionSync15Configuration()
+    public let sync15Configuration: Sync15Configuration = ProductionSync15Configuration(prefs: nil)
 
     public let pushConfiguration: PushConfiguration = ProductionPushConfiguration()
 }
 
-public struct ChinaEditionFirefoxAccountConfiguration: FirefoxAccountConfiguration {
-    public init() {
+public struct CustomFirefoxAccountConfiguration: FirefoxAccountConfiguration {
+    
+    public init(prefs: Prefs?) {
+        self.prefs = prefs
     }
+    
+    public var prefs: Prefs?
+    
+    public let label = FirefoxAccountConfigurationLabel.custom
+    
+    public var authEndpointURL: URL {
+        get {
+            let authServerUrl = self.prefs?.stringForKey(PrefsKeys.KeyCustomSyncAuth)!
+            return URL(string: authServerUrl! + "/v1")!
+        }
+    }
+
+    public var oauthEndpointURL: URL {
+        get {
+            let oauthServerUrl = self.prefs?.stringForKey(PrefsKeys.KeyCustomSyncOauth)!
+            return URL(string: oauthServerUrl! + "/v1")!
+        }
+    }
+    
+    public var profileEndpointURL: URL {
+        get {
+            let profileServerUrl = self.prefs?.stringForKey(PrefsKeys.KeyCustomSyncProfile)!
+            return URL(string: profileServerUrl! + "/v1")!
+        }
+    }
+    
+    public var signInURL: URL {
+        get {
+            let webServerUrl = self.prefs?.stringForKey(PrefsKeys.KeyCustomSyncWeb)!
+            return URL(string: webServerUrl! + "/signin?service=sync&context=fx_ios_v1")!
+        }
+    }
+    
+    public var forceAuthURL: URL {
+        get {
+            let webServerUrl = self.prefs?.stringForKey(PrefsKeys.KeyCustomSyncWeb)!
+            return URL(string: webServerUrl! + "/force_auth?service=sync&context=fx_ios_v1")!
+        }
+    }
+    
+    public var settingsURL: URL {
+        get {
+            let webServerUrl = self.prefs?.stringForKey(PrefsKeys.KeyCustomSyncWeb)!
+            return URL(string: webServerUrl! + "/settings?context=fx_ios_v1")!
+        }
+    }
+    
+    public var sync15Configuration: Sync15Configuration {
+        get {
+            return CustomSync15Configuration(prefs: self.prefs)
+        }
+    }
+    
+    public let pushConfiguration: PushConfiguration = ProductionPushConfiguration()
+}
+
+public struct ChinaEditionFirefoxAccountConfiguration: FirefoxAccountConfiguration {
+    public init(prefs: Prefs?) {
+    }
+
+    public var prefs: Prefs?
 
     public let label = FirefoxAccountConfigurationLabel.chinaEdition
 
@@ -142,33 +208,53 @@ public struct ChinaEditionFirefoxAccountConfiguration: FirefoxAccountConfigurati
     public let settingsURL = URL(string: "https://accounts.firefox.com.cn/settings?context=fx_ios_v1")!
     public let forceAuthURL = URL(string: "https://accounts.firefox.com.cn/force_auth?service=sync&context=fx_ios_v1")!
 
-    public let sync15Configuration: Sync15Configuration = ChinaEditionSync15Configuration()
+    public let sync15Configuration: Sync15Configuration = ChinaEditionSync15Configuration(prefs: nil)
 
     public let pushConfiguration: PushConfiguration = ProductionPushConfiguration()
 }
 
-public struct ChinaEditionSync15Configuration: Sync15Configuration {
-    public init() {
-    }
-
-    public let tokenServerEndpointURL = URL(string: "https://sync.firefox.com.cn/token/1.0/sync/1.5")!
-}
-
 public protocol Sync15Configuration {
-    init()
+    init(prefs: Prefs?)
+    
+    var prefs: Prefs? { get }
     var tokenServerEndpointURL: URL { get }
 }
 
+public struct ChinaEditionSync15Configuration: Sync15Configuration {
+    public init(prefs: Prefs?) {
+    }
+    
+    public var prefs: Prefs?
+    public let tokenServerEndpointURL = URL(string: "https://sync.firefox.com.cn/token/1.0/sync/1.5")!
+}
+
 public struct ProductionSync15Configuration: Sync15Configuration {
-    public init() {
+    public init(prefs: Prefs?) {
     }
 
+    public var prefs: Prefs?
     public let tokenServerEndpointURL = URL(string: "https://token.services.mozilla.com/1.0/sync/1.5")!
 }
 
 public struct StageSync15Configuration: Sync15Configuration {
-    public init() {
+    public init(prefs: Prefs?) {
     }
 
+    public var prefs: Prefs?
     public let tokenServerEndpointURL = URL(string: "https://token.stage.mozaws.net/1.0/sync/1.5")!
+}
+
+public struct CustomSync15Configuration: Sync15Configuration {
+    public init(prefs: Prefs?) {
+        self.prefs = prefs!
+    }
+    
+    public var prefs: Prefs?
+    
+    public var tokenServerEndpointURL: URL {
+        get {
+            let webServerUrl = self.prefs?.stringForKey(PrefsKeys.KeyCustomSyncToken)!
+            return URL(string: webServerUrl! + "/1.0/sync/1.5")!
+        }
+    }
 }

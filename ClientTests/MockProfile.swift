@@ -163,7 +163,7 @@ open class MockProfile: Profile {
         return MockLogins(files: self.files)
     }()
 
-    public let accountConfiguration: FirefoxAccountConfiguration = ProductionFirefoxAccountConfiguration()
+    public let accountConfiguration: FirefoxAccountConfiguration = ProductionFirefoxAccountConfiguration(prefs: nil)
     var account: FirefoxAccount?
 
     public func hasAccount() -> Bool {

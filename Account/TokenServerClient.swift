@@ -83,7 +83,7 @@ open class TokenServerClient {
     let URL: URL
 
     public init(URL: URL? = nil) {
-        self.URL = URL ?? ProductionSync15Configuration().tokenServerEndpointURL
+        self.URL = URL ?? ProductionSync15Configuration(prefs: nil).tokenServerEndpointURL
     }
 
     open class func getAudience(forURL URL: URL) -> String {

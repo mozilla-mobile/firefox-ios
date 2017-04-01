@@ -174,6 +174,20 @@ extension Strings {
     public static let SettingsNewTabDescription = NSLocalizedString("Settings.NewTab.Description", value: "When you open a New Tab:", comment: "A description in settings of what the new tab choice means")
 }
 
+// Custom account settings
+extension Strings {
+    public static let SettingsAdvanceAccountSectionName = NSLocalizedString("Settings.AdvanceAccount.SectionName", value: "Advance Settings", comment: "Label used as an item in Settings. When touched it will open a dialog to setup advance Firefox account settings.")
+    public static let SettingsAdvanceAccountTitle = NSLocalizedString("Settings.AdvanceAccount.SectionName", value: "Advance Settings", comment: "Title displayed in header of the setting panel.")
+    public static let SettingsAdvanceAccountUrlPlaceholder = NSLocalizedString("Settings.AdvanceAccount.UrlPlaceholder", value: "Custom Service Account URL", comment: "Title displayed in header of the setting panel.")
+    
+    public static let SettingsAdvanceAccountUrlUpdatedAlertMessage = NSLocalizedString("Settings.AdvanceAccount.UpdatedAlertMessage", value: "Sync service updated. Please log out and sign-in to complete changing service process.", comment: "Messaged displayed when sync service has been successfully set.")
+    public static let SettingsAdvanceAccountUrlUpdatedAlertOk = NSLocalizedString("Settings.AdvanceAccount.UpdatedAlertOk", value: "OK", comment: "Ok button on custom sync service updated alert")
+    
+    public static let SettingsAdvanceAccountUrlErrorAlertTitle = NSLocalizedString("Settings.AdvanceAccount.ErrorAlertTitle", value: "Error", comment: "Error alert message title.")
+    public static let SettingsAdvanceAccountUrlErrorAlertMessage = NSLocalizedString("Settings.AdvanceAccount.ErrorAlertMessage", value: "There was an error while attempting to parse the url. Please make sure that it is a valid Firefox Account base url.", comment: "Messaged displayed when sync service has an error setting a custom sync url.")
+    public static let SettingsAdvanceAccountUrlErrorAlertOk = NSLocalizedString("Settings.AdvanceAccount.ErrorAlertOk", value: "OK", comment: "Ok button on custom sync service error alert.")
+}
+
 // Open With Settings
 extension Strings {
     public static let SettingsOpenWithSectionName = NSLocalizedString("Settings.OpenWith.SectionName", value: "Open With", comment: "Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behaviour.")

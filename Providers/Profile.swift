@@ -504,15 +504,22 @@ open class BrowserProfile: Profile {
     }()
 
     var accountConfiguration: FirefoxAccountConfiguration {
+        let useCustomSyncService = prefs.boolForKey("useCustomSyncService")
+        if useCustomSyncService == true  {
+            return CustomFirefoxAccountConfiguration(prefs: self.prefs)
+        }
+        
         if prefs.boolForKey("useChinaSyncService") ?? isChinaEdition {
-            return ChinaEditionFirefoxAccountConfiguration()
+            return ChinaEditionFirefoxAccountConfiguration(prefs: nil)
         }
+        
         if prefs.boolForKey("useStageSyncService") ?? false {
-            return StageFirefoxAccountConfiguration()
+            return StageFirefoxAccountConfiguration(prefs: nil)
         }
-        return ProductionFirefoxAccountConfiguration()
+        
+        return ProductionFirefoxAccountConfiguration(prefs: nil)
     }
-
+    
     fileprivate lazy var account: FirefoxAccount? = {
         if let dictionary = self.keychain.object(forKey: self.name + ".account") as? [String: AnyObject] {
             return FirefoxAccount.fromDictionary(dictionary)

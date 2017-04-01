@@ -743,7 +743,7 @@ class StageSyncServiceDebugSetting: WithoutAccountSetting {
 
     override var status: NSAttributedString? {
         let isOn = prefs.boolForKey(prefKey) ?? false
-        let configurationURL = isOn ? StageFirefoxAccountConfiguration().authEndpointURL : ProductionFirefoxAccountConfiguration().authEndpointURL
+        let configurationURL = isOn ? StageFirefoxAccountConfiguration(prefs: nil).authEndpointURL : ProductionFirefoxAccountConfiguration(prefs: nil).authEndpointURL
         return NSAttributedString(string: configurationURL.absoluteString, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewHeaderTextColor])
     }
 
@@ -820,6 +820,29 @@ class OpenWithSetting: Setting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         let viewController = OpenWithSettingsViewController(prefs: profile.prefs)
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+}
+
+class AdvanceAccountSetting: HiddenSetting {
+    let profile: Profile
+    
+    override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }
+    
+    override var accessibilityIdentifier: String? { return "AdvanceAccount.Setting" }
+    
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: Strings.SettingsAdvanceAccountTitle, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
+    }
+    
+    override init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
+        super.init(settings: settings)
+    }
+    
+    override func onClick(_ navigationController: UINavigationController?) {
+        let viewController = AdvanceAccountSettingViewController()        
+        viewController.profile = profile
         navigationController?.pushViewController(viewController, animated: true)
     }
 }

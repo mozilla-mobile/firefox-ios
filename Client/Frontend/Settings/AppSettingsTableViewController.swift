@@ -52,7 +52,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
             BoolSetting(prefs: prefs, prefKey: "saveLogins", defaultValue: true,
                         titleText: NSLocalizedString("Save Logins", comment: "Setting to enable the built-in password manager")),
             BoolSetting(prefs: prefs, prefKey: AllowThirdPartyKeyboardsKey, defaultValue: false,
-                        titleText: NSLocalizedString("Allow Third-Party Keyboards", comment: "Setting to enable third-party keyboards"), statusText: NSLocalizedString("Firefox needs to reopen for this change to take effect.", comment: "Setting value prop to enable third-party keyboards")),
+                        titleText: NSLocalizedString("Allow Third-Party Keyboards", comment: "Setting to enable third-party keyboards"), statusText: NSLocalizedString("Firefox needs to reopen for this change to take effect.", comment: "Setting value prop to enable third-party keyboards"))
             ]        
         
         let accountChinaSyncSetting: [Setting]
@@ -80,7 +80,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 ConnectSetting(settings: self),
                 // With a Firefox Account:
                 AccountStatusSetting(settings: self),
-                SyncNowSetting(settings: self)
+                SyncNowSetting(settings: self),
             ] + accountChinaSyncSetting + accountDebugSettings)]
 
         if !profile.hasAccount() {
@@ -121,7 +121,8 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 YourRightsSetting(),
                 ExportBrowserDataSetting(settings: self),
                 DeleteExportedDataSetting(settings: self),
-                EnableBookmarkMergingSetting(settings: self)
+                EnableBookmarkMergingSetting(settings: self),
+                AdvanceAccountSetting(settings: self)
             ])]
             
             if profile.hasAccount() {
