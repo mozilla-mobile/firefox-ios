@@ -21,7 +21,7 @@ struct ASPanelUX {
     static let highlightCellHeight: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 250 : 195
 
     static let PageControlOffsetSize: CGFloat = 40
-    static let SectionInsetsForIpad: CGFloat = 100
+    static let SectionInsetsForIpad: CGFloat = 101
     static let SectionInsetsForIphone: CGFloat = 14
     static let CompactWidth: CGFloat = 320
 }
@@ -164,13 +164,15 @@ extension ActivityStreamPanel {
 
             switch self {
             case .highlights:
+                var numItems: CGFloat = 0
                 if UIDevice.current.orientation == .landscapeLeft || UIDevice.current.orientation == .landscapeRight {
-                    return CGSize(width: (frameWidth - inset) / 4 - 10, height: height)
+                    numItems = 4
                 } else if UIDevice.current.userInterfaceIdiom == .pad {
-                    return CGSize(width: (frameWidth - inset) / 3 - 10, height: height)
+                    numItems = 3
                 } else {
-                    return CGSize(width: (frameWidth - inset) / 2 - 10, height: height)
+                    numItems = 2
                 }
+                return CGSize(width: floor(((frameWidth - inset) - (ASHorizontalScrollCellUX.MinimumInsets * (numItems - 1))) / numItems), height: height)
             case .topSites:
                 return CGSize(width: frameWidth - inset, height: height)
             case .highlightIntro:

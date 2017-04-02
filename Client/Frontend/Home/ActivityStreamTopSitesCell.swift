@@ -160,7 +160,7 @@ struct ASHorizontalScrollCellUX {
     static let PageControlRadius: CGFloat = 3
     static let PageControlSize = CGSize(width: 30, height: 15)
     static let PageControlOffset: CGFloat = 12
-    static let MinimumInsets: CGFloat = 15
+    static let MinimumInsets: CGFloat = 14
 }
 
 /*
@@ -354,7 +354,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
     func maxHorizontalItemsCount(width: CGFloat) -> Int {
         let horizontalItemsCount =  Int(floor(width / (ASHorizontalScrollCellUX.TopSiteItemSize.width + insets.left)))
         if let delegate = self.collectionView?.delegate as? ASHorizontalLayoutDelegate {
-            return delegate.numberOfHorizontalItems() > horizontalItemsCount ? horizontalItemsCount : delegate.numberOfHorizontalItems()
+            return delegate.numberOfHorizontalItems()
         } else {
             return horizontalItemsCount
         }
@@ -415,7 +415,6 @@ class HorizontalFlowLayout: UICollectionViewLayout {
 */
 struct ASTopSiteSourceUX {
     static let verticalItemsForTraitSizes = [UIUserInterfaceSizeClass.compact: 1, UIUserInterfaceSizeClass.regular: 2, UIUserInterfaceSizeClass.unspecified: 0]
-    static let horizontalItemsForTraitSizes = [UIUserInterfaceSizeClass.compact: 4, UIUserInterfaceSizeClass.regular: 8, UIUserInterfaceSizeClass.unspecified: 0]
     static let maxNumberOfPages = 2
     static let CellIdentifier = "TopSiteItemCell"
 }
@@ -449,14 +448,14 @@ class ASHorizontalScrollCellManager: NSObject, UICollectionViewDelegate, UIColle
     }
 
     func numberOfHorizontalItems() -> Int {
-        guard let traits = currentTraits else {
-            return 0
+        // The number of items to show per row.
+        if UIDevice.current.orientation == .landscapeLeft || UIDevice.current.orientation == .landscapeRight {
+            return 8
+        } else if UIDevice.current.userInterfaceIdiom == .pad {
+            return 6
+        } else {
+            return 4
         }
-        // An iPhone 5 in both landscape/portrait is considered compactWidth which means we need to let the layout determine how many items to show based on actual width.
-        if traits.horizontalSizeClass == .compact && traits.verticalSizeClass == .compact {
-            return ASTopSiteSourceUX.horizontalItemsForTraitSizes[.regular]!
-        }
-        return ASTopSiteSourceUX.horizontalItemsForTraitSizes[traits.horizontalSizeClass]!
     }
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
