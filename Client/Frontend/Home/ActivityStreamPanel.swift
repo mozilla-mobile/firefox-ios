@@ -524,10 +524,12 @@ extension ActivityStreamPanel {
 
         let openInNewTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewTabContextMenuTitle, iconString: "action_new_tab") { action in
             self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
+            self.telemetry.reportEvent(.NewTab, source: pingSource, position: index)
         }
 
         let openInNewPrivateTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "action_new_private_tab") { action in
             self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
+            self.telemetry.reportEvent(.NewPrivateTab, source: pingSource, position: index)
         }
 
         let bookmarkAction: ActionOverlayTableViewAction
@@ -552,6 +554,7 @@ extension ActivityStreamPanel {
                 site.setBookmarked(true)
             })
         }
+        self.telemetry.reportEvent(.Bookmark, source: pingSource, position: index)
 
         let deleteFromHistoryAction = ActionOverlayTableViewAction(title: Strings.DeleteFromHistoryContextMenuTitle, iconString: "action_delete", handler: { action in
             self.telemetry.reportEvent(.Delete, source: pingSource, position: index)
@@ -606,6 +609,10 @@ enum ASPingEvent: String {
     case Delete = "DELETE"
     case Dismiss = "DISMISS"
     case Share = "SHARE"
+    case NewTab = "NEWTAB"
+    case NewPrivateTab = "NEWPRIVATETAB"
+    case Bookmark = "BOOKMARK"
+    case Remove = "REMOVE"
 }
 
 enum ASPingSource: String {
