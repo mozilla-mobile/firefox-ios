@@ -74,7 +74,7 @@ class LiveStorageClientTests: LiveAccountTest {
                 XCTAssert(rec.id == "keys", "GUID is correct.")
                 XCTAssert(rec.modified > 1000, "modified is sane.")
                 let payload: KeysPayload = rec.payload as KeysPayload
-                print("Body: \(payload.json.rawString())", terminator: "\n")
+                print("Body: \(payload.json.stringValue())", terminator: "\n")
                 XCTAssert(rec.id == "keys", "GUID inside is correct.")
                 if let keys = payload.defaultKeys {
                     // Extracting the token like this is not great, but...

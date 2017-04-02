@@ -44,6 +44,7 @@ class HistoryClearable: Clearable {
             SDImageCache.shared().clearDisk()
             SDImageCache.shared().clearMemory()
             self.profile.recentlyClosedTabs.clearTabs()
+            SpotlightHelper.clearSearchIndex()
             NotificationCenter.default.post(name: NotificationPrivateDataClearedHistory, object: nil)
             log.debug("HistoryClearable succeeded: \(success).")
             return Deferred(value: success)

@@ -6,27 +6,27 @@ import UIKit
 import Shared
 import Storage
 
-struct AlternateSimpleHighlightCellUX {
+struct ActivityStreamHighlightCellUX {
     static let LabelColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.black : UIColor(rgb: 0x353535)
     static let BorderWidth: CGFloat = 0.5
     static let CellSideOffset = 20
     static let TitleLabelOffset = 2
     static let CellTopBottomOffset = 12
-    static let SiteImageViewSize: CGSize = CGSize(width: 99, height: 76)
+    static let SiteImageViewSize: CGSize = UIDevice.current.userInterfaceIdiom == .pad ? CGSize(width: 99, height: 120) : CGSize(width: 99, height: 90)
     static let StatusIconSize = 12
-    static let FaviconSize = CGSize(width: 32, height: 32)
+    static let FaviconSize = CGSize(width: 45, height: 45)
     static let DescriptionLabelColor = UIColor(colorString: "919191")
     static let SelectedOverlayColor = UIColor(white: 0.0, alpha: 0.25)
     static let CornerRadius: CGFloat = 3
     static let BorderColor = UIColor(white: 0, alpha: 0.1)
 }
 
-class AlternateSimpleHighlightCell: UITableViewCell {
+class ActivityStreamHighlightCell: UICollectionViewCell {
 
     fileprivate lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontMediumBoldActivityStream
-        titleLabel.textColor = AlternateSimpleHighlightCellUX.LabelColor
+        titleLabel.textColor = ActivityStreamHighlightCellUX.LabelColor
         titleLabel.textAlignment = .left
         titleLabel.numberOfLines = 3
         return titleLabel
@@ -35,7 +35,7 @@ class AlternateSimpleHighlightCell: UITableViewCell {
     fileprivate lazy var descriptionLabel: UILabel = {
         let descriptionLabel = UILabel()
         descriptionLabel.font = DynamicFontHelper.defaultHelper.DeviceFontDescriptionActivityStream
-        descriptionLabel.textColor = AlternateSimpleHighlightCellUX.DescriptionLabelColor
+        descriptionLabel.textColor = ActivityStreamHighlightCellUX.DescriptionLabelColor
         descriptionLabel.textAlignment = .left
         descriptionLabel.numberOfLines = 1
         return descriptionLabel
@@ -44,9 +44,10 @@ class AlternateSimpleHighlightCell: UITableViewCell {
     fileprivate lazy var domainLabel: UILabel = {
         let descriptionLabel = UILabel()
         descriptionLabel.font = DynamicFontHelper.defaultHelper.DeviceFontDescriptionActivityStream
-        descriptionLabel.textColor = AlternateSimpleHighlightCellUX.DescriptionLabelColor
+        descriptionLabel.textColor = ActivityStreamHighlightCellUX.DescriptionLabelColor
         descriptionLabel.textAlignment = .left
         descriptionLabel.numberOfLines = 1
+        descriptionLabel.setContentCompressionResistancePriority(1000, for: UILayoutConstraintAxis.vertical)
         return descriptionLabel
     }()
 
@@ -55,9 +56,9 @@ class AlternateSimpleHighlightCell: UITableViewCell {
         siteImageView.contentMode = UIViewContentMode.scaleAspectFit
         siteImageView.clipsToBounds = true
         siteImageView.contentMode = UIViewContentMode.center
-        siteImageView.layer.cornerRadius = AlternateSimpleHighlightCellUX.CornerRadius
-        siteImageView.layer.borderColor = AlternateSimpleHighlightCellUX.BorderColor.cgColor
-        siteImageView.layer.borderWidth = AlternateSimpleHighlightCellUX.BorderWidth
+        siteImageView.layer.cornerRadius = ActivityStreamHighlightCellUX.CornerRadius
+        siteImageView.layer.borderColor = ActivityStreamHighlightCellUX.BorderColor.cgColor
+        siteImageView.layer.borderWidth = ActivityStreamHighlightCellUX.BorderWidth
         siteImageView.layer.masksToBounds = true
         return siteImageView
     }()
@@ -66,13 +67,13 @@ class AlternateSimpleHighlightCell: UITableViewCell {
         let statusIcon = UIImageView()
         statusIcon.contentMode = UIViewContentMode.scaleAspectFit
         statusIcon.clipsToBounds = true
-        statusIcon.layer.cornerRadius = AlternateSimpleHighlightCellUX.CornerRadius
+        statusIcon.layer.cornerRadius = ActivityStreamHighlightCellUX.CornerRadius
         return statusIcon
     }()
 
     fileprivate lazy var selectedOverlay: UIView = {
         let selectedOverlay = UIView()
-        selectedOverlay.backgroundColor = AlternateSimpleHighlightCellUX.SelectedOverlayColor
+        selectedOverlay.backgroundColor = ActivityStreamHighlightCellUX.SelectedOverlayColor
         selectedOverlay.isHidden = true
         return selectedOverlay
     }()
@@ -83,8 +84,8 @@ class AlternateSimpleHighlightCell: UITableViewCell {
         }
     }
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
 
         layer.shouldRasterize = true
         layer.rasterizationScale = UIScreen.main.scale
@@ -99,10 +100,10 @@ class AlternateSimpleHighlightCell: UITableViewCell {
         contentView.addSubview(domainLabel)
 
         siteImageView.snp.makeConstraints { make in
-            make.top.equalTo(contentView).offset(AlternateSimpleHighlightCellUX.CellTopBottomOffset)
-            make.bottom.lessThanOrEqualTo(contentView).offset(-AlternateSimpleHighlightCellUX.CellTopBottomOffset)
-            make.leading.equalTo(contentView).offset(AlternateSimpleHighlightCellUX.CellSideOffset)
-            make.size.equalTo(AlternateSimpleHighlightCellUX.SiteImageViewSize)
+            make.top.equalTo(contentView)
+            make.leading.trailing.equalTo(contentView)
+            make.centerX.equalTo(contentView)
+            make.height.equalTo(ActivityStreamHighlightCellUX.SiteImageViewSize)
         }
 
         selectedOverlay.snp.makeConstraints { make in
@@ -110,27 +111,26 @@ class AlternateSimpleHighlightCell: UITableViewCell {
         }
 
         domainLabel.snp.makeConstraints { make in
-            make.leading.equalTo(siteImageView.snp.trailing).offset(AlternateSimpleHighlightCellUX.CellTopBottomOffset)
-            make.top.equalTo(siteImageView).offset(-2)
-            make.bottom.equalTo(titleLabel.snp.top).offset(-4)
+            make.leading.equalTo(siteImageView)
+            make.trailing.equalTo(contentView)
+            make.top.equalTo(siteImageView.snp.bottom).offset(5)
         }
 
         titleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(siteImageView.snp.trailing).offset(AlternateSimpleHighlightCellUX.CellTopBottomOffset)
-            make.trailing.equalTo(contentView).inset(AlternateSimpleHighlightCellUX.CellSideOffset)
+            make.leading.equalTo(siteImageView)
+            make.trailing.equalTo(contentView)
+            make.top.equalTo(domainLabel.snp.bottom).offset(5)
         }
 
         descriptionLabel.snp.makeConstraints { make in
-            make.leading.equalTo(statusIcon.snp.trailing).offset(AlternateSimpleHighlightCellUX.TitleLabelOffset)
-            make.bottom.equalTo(statusIcon)
+            make.leading.equalTo(statusIcon.snp.trailing).offset(ActivityStreamHighlightCellUX.TitleLabelOffset)
+            make.bottom.equalTo(contentView)
         }
 
         statusIcon.snp.makeConstraints { make in
-            make.size.equalTo(SimpleHighlightCellUX.StatusIconSize)
-            make.leading.equalTo(titleLabel)
-            make.bottom.equalTo(siteImageView).priority(10)
-            make.top.greaterThanOrEqualTo(titleLabel.snp.bottom).offset(6).priority(1000)
-            make.bottom.lessThanOrEqualTo(contentView).offset(-AlternateSimpleHighlightCellUX.CellTopBottomOffset).priority(1000)
+            make.size.equalTo(ActivityStreamHighlightCellUX.StatusIconSize)
+            make.leading.equalTo(siteImageView)
+            make.bottom.equalTo(contentView)
         }
     }
 
@@ -152,7 +152,7 @@ class AlternateSimpleHighlightCell: UITableViewCell {
             self.siteImageView.contentMode = .scaleAspectFill
         } else {
             self.siteImageView.setFavicon(forSite: site, onCompletion: { [weak self] (color, url)  in
-                self?.siteImageView.image = self?.siteImageView.image?.createScaled(AlternateSimpleHighlightCellUX.FaviconSize)
+                self?.siteImageView.image = self?.siteImageView.image?.createScaled(ActivityStreamHighlightCellUX.FaviconSize)
             })
             self.siteImageView.contentMode = .center
         }
@@ -170,17 +170,68 @@ class AlternateSimpleHighlightCell: UITableViewCell {
     }
 }
 
-// Save background color on UITableViewCell "select" because it disappears in the default behavior
-extension AlternateSimpleHighlightCell {
-    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-        let color = self.siteImageView.backgroundColor
-        super.setHighlighted(highlighted, animated: animated)
-        self.siteImageView.backgroundColor = color
+struct HighlightIntroCellUX {
+    static let foxImageName = "fox_finder"
+    static let margin: CGFloat = 20
+    static let foxImageWidth: CGFloat = 168
+}
+
+class HighlightIntroCell: UICollectionViewCell {
+
+    lazy var titleLabel: UILabel = {
+        let textLabel = UILabel()
+        textLabel.font = DynamicFontHelper.defaultHelper.DeviceFontMediumBold
+        textLabel.textColor = UIColor.black
+        textLabel.numberOfLines = 1
+        textLabel.adjustsFontSizeToFitWidth = true
+        textLabel.minimumScaleFactor = 0.8
+        return textLabel
+    }()
+
+    lazy var mainImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: HighlightIntroCellUX.foxImageName)
+        return imageView
+    }()
+
+    lazy var descriptionLabel: UILabel = {
+        let label = UILabel()
+        label.font = DynamicFontHelper.defaultHelper.DeviceFontDescriptionActivityStream
+        label.textColor = UIColor.darkGray
+        label.numberOfLines = 0
+        return label
+    }()
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(mainImageView)
+        contentView.addSubview(descriptionLabel)
+
+        titleLabel.text = Strings.HighlightIntroTitle
+        descriptionLabel.text = Strings.HighlightIntroDescription
+
+        let titleInsets = UIEdgeInsets(top: HighlightIntroCellUX.margin, left: HighlightIntroCellUX.margin, bottom: 0, right: 0)
+        titleLabel.snp.makeConstraints { make in
+            make.leading.top.equalTo(self.contentView).inset(titleInsets)
+            make.trailing.equalTo(mainImageView.snp.leading)
+        }
+
+        mainImageView.snp.makeConstraints { make in
+            make.top.equalTo(self.contentView)
+            make.width.equalTo(HighlightIntroCellUX.foxImageWidth)
+            make.trailing.equalTo(self.contentView).offset(-HighlightIntroCellUX.margin/2)
+        }
+
+        descriptionLabel.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(titleLabel)
+            make.top.equalTo(titleLabel.snp.bottom).offset(HighlightIntroCellUX.margin/2)
+        }
     }
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        let color = self.siteImageView.backgroundColor
-        super.setSelected(selected, animated: animated)
-        self.siteImageView.backgroundColor = color
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
+    
 }

@@ -13,11 +13,11 @@ find_package(OpenSSL 1.1.0 REQUIRED)
 enable_testing()
 
 set(ECE_SOURCES
-  src/aesgcm-header.c
   src/base64url.c
-  src/buffer.c
+  src/encrypt.c
   src/decrypt.c
-  src/keys.c)
+  src/keys.c
+  src/params.c)
 add_library(ece ${ECE_SOURCES})
 set_target_properties(ece PROPERTIES
   OUTPUT_NAME ece
@@ -49,7 +49,8 @@ set_target_properties(ece-test PROPERTIES EXCLUDE_FROM_ALL 1)
 target_include_directories(ece-test PRIVATE test)
 target_link_libraries(ece-test PRIVATE ece)
 add_test(NAME ece-test COMMAND ece-test)
-add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} "--output-on-failure")
+add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND}
+  -C ${CMAKE_BUILD_TYPE} --output-on-failure)
 add_dependencies(check ece-test)
 
 if(MSVC)

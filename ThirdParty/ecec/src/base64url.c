@@ -26,32 +26,23 @@ static const uint8_t ece_base64url_decode_table[] = {
 
 static inline bool
 ece_base64url_decode_lookup(char c, uint8_t* b) {
-  uint8_t index = (uint8_t) c;
-  *b = ece_base64url_decode_table[index & 0x7f];
+  *b = ece_base64url_decode_table[c & 0x7f];
   return (*b != 255) && !(*b & ~0x7f);
 }
 
-int
+size_t
 ece_base64url_decode(const char* base64, size_t base64Len,
                      ece_base64url_decode_policy_t paddingPolicy,
-                     ece_buf_t* result) {
-  int err = ECE_OK;
-
-  ece_buf_reset(result);
-
+                     uint8_t* decoded, size_t decodedLen) {
   // Don't decode empty strings.
   if (!base64Len) {
-    goto end;
+    return 0;
   }
 
   // Check for overflow.
-  if (base64Len > UINT32_MAX / 3) {
-    err = ECE_ERROR_OUT_OF_MEMORY;
-    goto error;
+  if (base64Len > SIZE_MAX / 3) {
+    return 0;
   }
-
-  // The decoded length may be 1-2 bytes over, depending on the final quantum.
-  size_t binaryLen = (base64Len * 3) / 4;
 
   // Determine whether to check for and ignore trailing padding.
   bool maybePadded = false;
@@ -59,8 +50,7 @@ ece_base64url_decode(const char* base64, size_t base64Len,
   case ECE_BASE64URL_REQUIRE_PADDING:
     if (base64Len % 4) {
       // Padded input length must be a multiple of 4.
-      err = ECE_ERROR_INVALID_BASE64URL;
-      goto error;
+      return 0;
     }
     maybePadded = true;
     break;
@@ -82,15 +72,19 @@ ece_base64url_decode(const char* base64, size_t base64Len,
     if (base64[base64Len - 2] == '=') {
       base64Len -= 2;
     } else {
-      base64Len -= 1;
+      base64Len--;
     }
   }
 
-  if (!ece_buf_alloc(result, binaryLen)) {
-    err = ECE_ERROR_OUT_OF_MEMORY;
-    goto error;
+  size_t maxDecodedLen = (base64Len * 3) / 4;
+  if (!decodedLen) {
+    return maxDecodedLen;
   }
-  uint8_t* binary = result->bytes;
+
+  uint8_t* binary = decoded;
+  if (!binary || decodedLen < maxDecodedLen) {
+    return 0;
+  }
 
   for (; base64Len >= 4; base64Len -= 4) {
     uint8_t w, x, y, z;
@@ -98,12 +92,11 @@ ece_base64url_decode(const char* base64, size_t base64Len,
         !ece_base64url_decode_lookup(*base64++, &x) ||
         !ece_base64url_decode_lookup(*base64++, &y) ||
         !ece_base64url_decode_lookup(*base64++, &z)) {
-      err = ECE_ERROR_INVALID_BASE64URL;
-      goto error;
+      return 0;
     }
-    *binary++ = w << 2 | x >> 4;
-    *binary++ = x << 4 | y >> 2;
-    *binary++ = y << 6 | z;
+    *binary++ = (w << 2 | x >> 4) & 0xff;
+    *binary++ = (x << 4 | y >> 2) & 0xff;
+    *binary++ = (y << 6 | z) & 0xff;
   }
 
   if (base64Len == 3) {
@@ -111,31 +104,20 @@ ece_base64url_decode(const char* base64, size_t base64Len,
     if (!ece_base64url_decode_lookup(*base64++, &w) ||
         !ece_base64url_decode_lookup(*base64++, &x) ||
         !ece_base64url_decode_lookup(*base64++, &y)) {
-      err = ECE_ERROR_INVALID_BASE64URL;
-      goto error;
+      return 0;
     }
-    *binary++ = w << 2 | x >> 4;
-    *binary++ = x << 4 | y >> 2;
+    *binary++ = (w << 2 | x >> 4) & 0xff;
+    *binary++ = (x << 4 | y >> 2) & 0xff;
   } else if (base64Len == 2) {
     uint8_t w, x;
     if (!ece_base64url_decode_lookup(*base64++, &w) ||
         !ece_base64url_decode_lookup(*base64++, &x)) {
-      err = ECE_ERROR_INVALID_BASE64URL;
-      goto error;
+      return 0;
     }
-    *binary++ = w << 2 | x >> 4;
+    *binary++ = (w << 2 | x >> 4) & 0xff;
   } else if (base64Len) {
-    err = ECE_ERROR_INVALID_BASE64URL;
-    goto error;
+    return 0;
   }
 
-  // Set the length to the actual number of decoded bytes.
-  result->length = binary - result->bytes;
-  goto end;
-
-error:
-  ece_buf_free(result);
-
-end:
-  return err;
+  return (size_t)(binary - decoded);
 }

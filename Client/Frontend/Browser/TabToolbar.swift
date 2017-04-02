@@ -302,9 +302,6 @@ extension TabToolbar: Themeable {
 
 extension TabToolbar: AppStateDelegate {
     func appDidUpdateState(_ state: AppState) {
-        let isPrivate = Accessors.isPrivate(state)
-        applyTheme(isPrivate ? Theme.PrivateMode : Theme.NormalMode)
-
         let showHomepage = !HomePageAccessors.isButtonInMenu(state)
         homePageButton.removeFromSuperview()
         shareButton.removeFromSuperview()

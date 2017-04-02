@@ -43,7 +43,6 @@ public extension UIImageView {
             completionBlock?(color, url)
         } else {
             image.getColors(scaleDownSize: CGSize(width: 25, height: 25)) {colors in
-                self.backgroundColor = colors.backgroundColor
                 completionBlock?(colors.backgroundColor, url)
                 FaviconFetcher.colors[domain] = colors.backgroundColor
             }

@@ -38,5 +38,11 @@
 		<key>scheme</key>
 		<string>readdle-spark://</string>
 	</dict>
+	<dict>
+		<key>name</key>
+		<string>YMail!</string>
+		<key>scheme</key>
+		<string>ymail://</string>
+	</dict>
 </array>
 </plist>

@@ -10,7 +10,9 @@ main() {
   test_aesgcm_invalid_crypto_params();
   test_aesgcm_valid_ciphertexts();
 
-  test_aes128gcm_valid_payloads();
+  test_webpush_aes128gcm_encrypt();
+  test_webpush_aes128gcm_decrypt_valid_payloads();
+  test_aes128gcm_decrypt_invalid_payloads();
 
   test_base64url_decode();
 
@@ -34,7 +36,7 @@ ece_log(const char* funcName, int line, const char* expr, const char* format,
   if (size < 0) {
     goto error;
   }
-  message = (char*) malloc(size + 1);
+  message = malloc((size_t) size + 1);
   if (!message || vsprintf(message, format, args) != size) {
     goto error;
   }

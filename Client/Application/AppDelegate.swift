@@ -645,28 +645,28 @@ extension AppDelegate: MFMailComposeViewControllerDelegate {
 }
 
 extension AppDelegate {
-    func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
+    func application(_ application: UIApplication, didRegister notificationSettings: UIUserNotificationSettings) {
         FxALoginHelper.sharedInstance.application(application, didRegisterUserNotificationSettings: notificationSettings)
     }
 }
 
 extension AppDelegate {
-    func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         let apnsToken = deviceToken.hexEncodedString
         FxALoginHelper.sharedInstance.apnsRegisterDidSucceed(apnsToken: apnsToken)
     }
 
-    func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
-        print("failed to register. \(error.description)")
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        print("failed to register. \(error)")
         FxALoginHelper.sharedInstance.apnsRegisterDidFail()
     }
 
-    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         log.info("APNS NOTIFICATION \(userInfo)")
         completionHandler(.noData)
     }
 
-    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
         log.info("APNS NOTIFICATION \(userInfo)")
     }
 }

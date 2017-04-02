@@ -98,7 +98,7 @@ static invalid_param_test_t invalid_param_tests[] = {
   {
     .desc = "Crypto-Key missing param value",
     .cryptoKey = "dh=",
-    .encryption = "dh=Esao8aTBfIk",
+    .encryption = "salt=Esao8aTBfIk",
     .err = ECE_ERROR_INVALID_CRYPTO_KEY_HEADER,
   },
   {
@@ -295,33 +295,18 @@ test_aesgcm_valid_crypto_params() {
   for (size_t i = 0; i < length; i++) {
     valid_param_test_t t = valid_param_tests[i];
 
+    uint8_t salt[8];
     uint32_t rs;
-    ece_buf_t salt;
-    ece_buf_t rawSenderPubKey;
-
-    int err = ece_header_extract_aesgcm_crypto_params(
-      t.cryptoKey, t.encryption, &rs, &salt, &rawSenderPubKey);
+    uint8_t rawSenderPubKey[8];
+    int err = ece_webpush_aesgcm_headers_extract_params(
+      t.cryptoKey, t.encryption, salt, 8, rawSenderPubKey, 8, &rs);
 
     ece_assert(!err, "Got %d extracting params for `%s`", err, t.desc);
+    ece_assert(!memcmp(salt, t.salt, 8), "Wrong salt for `%s`", t.desc);
     ece_assert(rs == t.rs, "Got rs = %" PRIu32 " for `%s`; want %" PRIu32, rs,
                t.desc, t.rs);
-
-    size_t saltLen = strlen(t.salt);
-    ece_assert(salt.length == saltLen, "Got salt length %zu for `%s`; want %zu",
-               salt.length, t.desc, saltLen);
-    ece_assert(!memcmp(salt.bytes, t.salt, saltLen), "Wrong salt for `%s`",
-               t.desc);
-
-    size_t rawSenderPubKeyLen = strlen(t.rawSenderPubKey);
-    ece_assert(rawSenderPubKey.length == rawSenderPubKeyLen,
-               "Got public key length %zu for `%s`; want %zu",
-               rawSenderPubKey.length, t.desc, rawSenderPubKeyLen);
-    ece_assert(
-      !memcmp(rawSenderPubKey.bytes, t.rawSenderPubKey, rawSenderPubKeyLen),
-      "Wrong public key for `%s`", t.desc);
-
-    ece_buf_free(&salt);
-    ece_buf_free(&rawSenderPubKey);
+    ece_assert(!memcmp(rawSenderPubKey, t.rawSenderPubKey, 8),
+               "Wrong public key for `%s`", t.desc);
   }
 }
 
@@ -331,19 +316,14 @@ test_aesgcm_invalid_crypto_params() {
   for (size_t i = 0; i < length; i++) {
     invalid_param_test_t t = invalid_param_tests[i];
 
+    uint8_t salt[8];
     uint32_t rs;
-    ece_buf_t salt;
-    ece_buf_t rawSenderPubKey;
+    uint8_t rawSenderPubKey[8];
+    int err = ece_webpush_aesgcm_headers_extract_params(
+      t.cryptoKey, t.encryption, salt, 8, rawSenderPubKey, 8, &rs);
 
-    int err = ece_header_extract_aesgcm_crypto_params(
-      t.cryptoKey, t.encryption, &rs, &salt, &rawSenderPubKey);
     ece_assert(err == t.err, "Got %d extracting params for `%s`; want %d", err,
                t.desc, t.err);
-    ece_assert(rs == 0, "Got rs = %" PRIu32 " for `%s`; want 0", rs, t.desc);
-    ece_assert(!salt.bytes, "Got salt %p for `%s`; want NULL", salt.bytes,
-               t.desc);
-    ece_assert(!rawSenderPubKey.bytes, "Got key %p for `%s`; want NULL",
-               rawSenderPubKey.bytes, t.desc);
   }
 }
 
@@ -354,37 +334,50 @@ test_aesgcm_valid_ciphertexts() {
   for (size_t i = 0; i < length; i++) {
     valid_ciphertext_test_t t = valid_ciphertext_tests[i];
 
-    ece_buf_t rawRecvPrivKey;
-    int err =
+    uint8_t rawRecvPrivKey[32];
+    size_t decodedLen =
       ece_base64url_decode(t.recvPrivKey, strlen(t.recvPrivKey),
-                           ECE_BASE64URL_REJECT_PADDING, &rawRecvPrivKey);
-    ece_assert(!err, "Got %d decoding private key for `%s`", err, t.desc);
+                           ECE_BASE64URL_REJECT_PADDING, rawRecvPrivKey, 32);
+    ece_assert(decodedLen, "Want decoded receiver private key for `%s`",
+               t.desc);
 
-    ece_buf_t authSecret;
-    err = ece_base64url_decode(t.authSecret, strlen(t.authSecret),
-                               ECE_BASE64URL_REJECT_PADDING, &authSecret);
-    ece_assert(!err, "Got %d decoding auth secret for `%s`", err, t.desc);
+    uint8_t authSecret[16];
+    decodedLen =
+      ece_base64url_decode(t.authSecret, strlen(t.authSecret),
+                           ECE_BASE64URL_REJECT_PADDING, authSecret, 16);
+    ece_assert(decodedLen, "Want decoded auth secret length for `%s`", t.desc);
 
-    ece_buf_t ciphertext;
-    err = ece_base64url_decode(t.ciphertext, strlen(t.ciphertext),
-                               ECE_BASE64URL_REJECT_PADDING, &ciphertext);
-    ece_assert(!err, "Got %d decoding ciphertext for `%s`", err, t.desc);
+    size_t ciphertextBase64Len = strlen(t.ciphertext);
+    decodedLen = ece_base64url_decode(t.ciphertext, ciphertextBase64Len,
+                                      ECE_BASE64URL_REJECT_PADDING, NULL, 0);
+    ece_assert(decodedLen, "Want decoded ciphertext length for `%s`", t.desc);
+    uint8_t* ciphertext = calloc(decodedLen, sizeof(uint8_t));
+    ece_assert(ciphertext, "Want ciphertext buffer length %zu for `%s`",
+               decodedLen, t.desc);
+    decodedLen = ece_base64url_decode(t.ciphertext, ciphertextBase64Len,
+                                      ECE_BASE64URL_REJECT_PADDING, ciphertext,
+                                      decodedLen);
+    ece_assert(decodedLen, "Want decoded ciphertext for `%s`", t.desc);
 
-    ece_buf_t plaintext;
-    err = ece_aesgcm_decrypt(&rawRecvPrivKey, &authSecret, t.cryptoKey,
-                             t.encryption, &ciphertext, &plaintext);
+    size_t plaintextLen = ece_aesgcm_plaintext_max_length(decodedLen);
+    ece_assert(plaintextLen, "Want maximum plaintext length for `%s`", t.desc);
+    uint8_t* plaintext = calloc(plaintextLen, sizeof(uint8_t));
+    ece_assert(plaintext, "Want plaintext buffer length %zu for `%s`",
+               plaintextLen, t.desc);
+
+    int err = ece_webpush_aesgcm_decrypt(rawRecvPrivKey, 32, authSecret, 16,
+                                         t.cryptoKey, t.encryption, ciphertext,
+                                         decodedLen, plaintext, &plaintextLen);
     ece_assert(!err, "Got %d decrypting ciphertext for `%s`", err, t.desc);
 
-    size_t expectedLen = strlen(t.plaintext);
-    ece_assert(plaintext.length == expectedLen,
-               "Got plaintext length %zu for `%s`; want %zu", plaintext.length,
-               t.desc, expectedLen);
-    ece_assert(!memcmp(plaintext.bytes, t.plaintext, plaintext.length),
+    size_t expectedPlaintextLen = strlen(t.plaintext);
+    ece_assert(plaintextLen == expectedPlaintextLen,
+               "Got plaintext length %zu for `%s`; want %zu", plaintextLen,
+               t.desc, expectedPlaintextLen);
+    ece_assert(!memcmp(plaintext, t.plaintext, plaintextLen),
                "Wrong plaintext for `%s`", t.desc);
 
-    ece_buf_free(&rawRecvPrivKey);
-    ece_buf_free(&authSecret);
-    ece_buf_free(&ciphertext);
-    ece_buf_free(&plaintext);
+    free(ciphertext);
+    free(plaintext);
   }
 }

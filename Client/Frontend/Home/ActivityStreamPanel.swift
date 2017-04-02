@@ -17,22 +17,20 @@ struct ASPanelUX {
     static let backgroundColor = UIColor(white: 1.0, alpha: 0.5)
     static let topSitesCacheSize = 12
     static let historySize = 10
-    static let rowHeight: CGFloat = 65
-    static let sectionHeight: CGFloat = 15
-    static let footerHeight: CGFloat = 0
+    static let rowSpacing: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 30 : 20
+    static let highlightCellHeight: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 250 : 195
 
-    // These ratios repersent how much space the topsites require.
-    // They are calculated from the iphone 5 which requires 220px of vertical height on a 320px width screen.
-    // 320/220 = 1.4545.
-    static let TopSiteDoubleRowRatio: CGFloat = 1.4545
-    static let TopSiteSingleRowRatio: CGFloat = 4.7333
-    static let PageControlOffsetSize: CGFloat = 20
+    static let PageControlOffsetSize: CGFloat = 40
+    static let SectionInsetsForIpad: CGFloat = 100
+    static let SectionInsetsForIphone: CGFloat = 14
+    static let CompactWidth: CGFloat = 320
 }
 
-class ActivityStreamPanel: UITableViewController, HomePanel {
+class ActivityStreamPanel: UICollectionViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate?
     fileprivate let profile: Profile
     fileprivate let telemetry: ActivityStreamTracker
+    fileprivate let flowLayout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
 
     fileprivate let topSitesManager = ASHorizontalScrollCellManager()
     fileprivate var isInitialLoad = true //Prevents intro views from flickering while content is loading
@@ -44,15 +42,24 @@ class ActivityStreamPanel: UITableViewController, HomePanel {
         return UILongPressGestureRecognizer(target: self, action: #selector(ActivityStreamPanel.longPress(_:)))
     }()
 
+    // Not used for displaying. Only used for calculating layout.
+    lazy var topSiteCell: ASHorizontalScrollCell = {
+        let customCell = ASHorizontalScrollCell(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 0))
+        customCell.delegate = self.topSitesManager
+        return customCell
+    }()
+
     var highlights: [Site] = []
 
     init(profile: Profile, telemetry: ActivityStreamTracker? = nil) {
         self.profile = profile
-        self.telemetry = telemetry ?? ActivityStreamTracker(eventsTracker: PingCentre.clientForTopic(.ActivityStreamEvents, clientID: profile.clientID),
-                                                            sessionsTracker: PingCentre.clientForTopic(.ActivityStreamSessions, clientID: profile.clientID))
+        self.telemetry = telemetry ?? ActivityStreamTracker(eventsTracker: PingCentre.clientForTopic(.ActivityStreamEvents, clientID: profile.clientID), sessionsTracker: PingCentre.clientForTopic(.ActivityStreamSessions, clientID: profile.clientID))
 
-        super.init(style: .grouped)
-        view.addGestureRecognizer(longPressRecognizer)
+        super.init(collectionViewLayout: flowLayout)
+        self.collectionView?.delegate = self
+        self.collectionView?.dataSource = self
+
+        collectionView?.addGestureRecognizer(longPressRecognizer)
         self.profile.history.setTopSitesCacheSize(Int32(ASPanelUX.topSitesCacheSize))
         events.forEach { NotificationCenter.default.addObserver(self, selector: #selector(self.notificationReceived(_:)), name: $0, object: nil) }
     }
@@ -68,19 +75,11 @@ class ActivityStreamPanel: UITableViewController, HomePanel {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        Section.allValues.forEach { tableView.register(Section($0.rawValue).cellType, forCellReuseIdentifier: Section($0.rawValue).cellIdentifier) }
+        Section.allValues.forEach { self.collectionView?.register(Section($0.rawValue).cellType, forCellWithReuseIdentifier: Section($0.rawValue).cellIdentifier) }
+        self.collectionView?.register(ASHeaderView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "Header")
 
-        tableView.backgroundColor = ASPanelUX.backgroundColor
-        tableView.keyboardDismissMode = .onDrag
-        tableView.separatorStyle = .none
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.separatorInset = UIEdgeInsets.zero
-        tableView.estimatedRowHeight = ASPanelUX.rowHeight
-        tableView.estimatedSectionHeaderHeight = ASPanelUX.sectionHeight
-        tableView.sectionFooterHeight = ASPanelUX.footerHeight
-        tableView.sectionHeaderHeight = UITableViewAutomaticDimension
+        collectionView?.backgroundColor = ASPanelUX.backgroundColor
+        collectionView?.keyboardDismissMode = .onDrag
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -89,7 +88,7 @@ class ActivityStreamPanel: UITableViewController, HomePanel {
 
         all([invalidateTopSites(), invalidateHighlights()]).uponQueue(DispatchQueue.main) { _ in
             self.isInitialLoad = false
-            self.reloadAll()
+            self.collectionView?.reloadData()
         }
     }
 
@@ -99,12 +98,17 @@ class ActivityStreamPanel: UITableViewController, HomePanel {
         sessionStart = nil
     }
 
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        coordinator.animate(alongsideTransition: {context in
+            self.collectionViewLayout.invalidateLayout()
+            self.collectionView?.reloadData()
+        }, completion: nil)
+    }
+
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         self.topSitesManager.currentTraits = self.traitCollection
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-        }
     }
 }
 
@@ -127,24 +131,50 @@ extension ActivityStreamPanel {
             }
         }
 
-        var headerHeight: CGFloat {
+        var headerHeight: CGSize {
             switch self {
-            case .highlights: return 40
-            case .topSites: return 0
-            case .highlightIntro: return 2
+            case .highlights: return CGSize(width: 50, height: 40)
+            case .topSites: return CGSize(width: 0, height: 0)
+            case .highlightIntro: return CGSize(width: 50, height: 2)
             }
         }
 
         func cellHeight(_ traits: UITraitCollection, width: CGFloat) -> CGFloat {
             switch self {
-            case .highlights: return UITableViewAutomaticDimension
+            case .highlights: return ASPanelUX.highlightCellHeight
+            case .topSites: return 0 //calculated dynamically
+            case .highlightIntro: return 200
+            }
+        }
+
+        func sectionInsets() -> CGFloat {
+            switch self {
+            case .highlights:
+                return UIDevice.current.userInterfaceIdiom == .pad ? ASPanelUX.SectionInsetsForIpad + ASHorizontalScrollCellUX.MinimumInsets : ASPanelUX.SectionInsetsForIphone
             case .topSites:
-                if traits.horizontalSizeClass == .compact && traits.verticalSizeClass == .regular {
-                    return CGFloat(Int(width / ASPanelUX.TopSiteDoubleRowRatio)) + ASPanelUX.PageControlOffsetSize
+                return UIDevice.current.userInterfaceIdiom == .pad ? ASPanelUX.SectionInsetsForIpad : 0
+            case .highlightIntro:
+                return 0
+            }
+        }
+
+        func cellSize(for traits: UITraitCollection, frameWidth: CGFloat) -> CGSize {
+            let height = cellHeight(traits, width: frameWidth)
+            let inset = sectionInsets() * 2
+
+            switch self {
+            case .highlights:
+                if UIDevice.current.orientation == .landscapeLeft || UIDevice.current.orientation == .landscapeRight {
+                    return CGSize(width: (frameWidth - inset) / 4 - 10, height: height)
+                } else if UIDevice.current.userInterfaceIdiom == .pad {
+                    return CGSize(width: (frameWidth - inset) / 3 - 10, height: height)
                 } else {
-                    return CGFloat(Int(width / ASPanelUX.TopSiteSingleRowRatio)) + ASPanelUX.PageControlOffsetSize
+                    return CGSize(width: (frameWidth - inset) / 2 - 10, height: height)
                 }
-            case .highlightIntro: return UITableViewAutomaticDimension
+            case .topSites:
+                return CGSize(width: frameWidth - inset, height: height)
+            case .highlightIntro:
+                return CGSize(width: frameWidth - inset, height: height)
             }
         }
 
@@ -171,10 +201,10 @@ extension ActivityStreamPanel {
             }
         }
 
-        var cellType: UITableViewCell.Type {
+        var cellType: UICollectionViewCell.Type {
             switch self {
             case .topSites: return ASHorizontalScrollCell.self
-            case .highlights: return AlternateSimpleHighlightCell.self
+            case .highlights: return ActivityStreamHighlightCell.self
             case .highlightIntro: return HighlightIntroCell.self
             }
         }
@@ -187,69 +217,100 @@ extension ActivityStreamPanel {
             self.init(rawValue: section)!
         }
     }
-
 }
 
 // MARK: -  Tableview Delegate
-extension ActivityStreamPanel {
+extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
 
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        // Depending on if highlights are present. Hide certain section headers.
-        switch Section(section) {
-            case .highlights:
-                return highlights.isEmpty ? 0 : Section(section).headerHeight
-            case .highlightIntro:
-                return !highlights.isEmpty ? 0 : Section(section).headerHeight
-            case .topSites:
-                return Section(section).headerHeight
+    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "Header", for: indexPath) as! ASHeaderView
+        let title = Section(indexPath.section).title
+        switch Section(indexPath.section) {
+        case .highlights:
+            view.title = title
+            return view
+        case .topSites:
+            return UICollectionReusableView()
+        case .highlightIntro:
+            view.title = title
+            return view
         }
     }
 
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return Section(section).headerView
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        selectItemAtIndex(indexPath.item, inSection: Section(indexPath.section))
     }
 
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return Section(indexPath.section).cellHeight(self.traitCollection, width: self.view.frame.width)
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let cellSize = Section(indexPath.section).cellSize(for: self.traitCollection, frameWidth: self.view.frame.width)
+
+        switch Section(indexPath.section) {
+        case .highlights:
+            if highlights.isEmpty {
+                return CGSize.zero
+            }
+            return cellSize
+        case .topSites:
+            // Create a temporary cell so we can calculate the height.
+            let layout = topSiteCell.collectionView.collectionViewLayout as! HorizontalFlowLayout
+            let estimatedLayout = layout.calculateLayout(for: CGSize(width: cellSize.width, height: 0))
+            return CGSize(width: cellSize.width, height: estimatedLayout.size.height)
+        case .highlightIntro:
+            return cellSize
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        switch Section(section) {
+        case .highlights:
+            return highlights.isEmpty ? CGSize.zero : Section(section).headerHeight
+        case .highlightIntro:
+            return !highlights.isEmpty ? CGSize.zero : Section(section).headerHeight
+        case .topSites:
+            return Section(section).headerHeight
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return ASPanelUX.rowSpacing
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        let insets = Section(section).sectionInsets()
+        return UIEdgeInsets(top: 0, left: insets, bottom: 0, right: insets)
     }
 
     fileprivate func showSiteWithURLHandler(_ url: URL) {
         let visitType = VisitType.bookmark
         homePanelDelegate?.homePanel(self, didSelectURL: url, visitType: visitType)
     }
-
-    override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        self.longPressRecognizer.isEnabled = false
-        return indexPath
-    }
-
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
-        selectItemAtIndex(indexPath.item, inSection: Section(indexPath.section))
-    }
 }
 
 // MARK: - Tableview Data Source
 extension ActivityStreamPanel {
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return Section.count
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 3
     }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch Section(section) {
-            case .topSites:
-                return topSitesManager.content.isEmpty ? 0 : 1
-            case .highlights:
-                return self.highlights.count
-            case .highlightIntro:
-                return self.highlights.isEmpty && !self.isInitialLoad ? 1 : 0
+        case .topSites:
+            return topSitesManager.content.isEmpty ? 0 : 1
+        case .highlights:
+            return self.highlights.count
+        case .highlightIntro:
+            return self.highlights.isEmpty && !self.isInitialLoad ? 1 : 0
         }
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let identifier = Section(indexPath.section).cellIdentifier
-        let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath)
 
         switch Section(indexPath.section) {
         case .topSites:
@@ -261,22 +322,23 @@ extension ActivityStreamPanel {
         }
     }
 
-    func configureTopSitesCell(_ cell: UITableViewCell, forIndexPath indexPath: IndexPath) -> UITableViewCell {
+    //should all be collectionview
+    func configureTopSitesCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         let topSiteCell = cell as! ASHorizontalScrollCell
         topSiteCell.delegate = self.topSitesManager
         return cell
     }
 
-    func configureHistoryItemCell(_ cell: UITableViewCell, forIndexPath indexPath: IndexPath) -> UITableViewCell {
+    func configureHistoryItemCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         let site = highlights[indexPath.row]
-        let simpleHighlightCell = cell as! AlternateSimpleHighlightCell
+        let simpleHighlightCell = cell as! ActivityStreamHighlightCell
         simpleHighlightCell.configureWithSite(site)
         return simpleHighlightCell
     }
 
-    func configureHighlightIntroCell(_ cell: UITableViewCell, forIndexPath indexPath: IndexPath) -> UITableViewCell {
+    func configureHighlightIntroCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         let introCell = cell as! HighlightIntroCell
-        //The cell is configured on creation. No need to configure
+        //The cell is configured on creation. No need to configure. But leave this here in case we need it.
         return introCell
     }
 }
@@ -288,15 +350,11 @@ extension ActivityStreamPanel {
         switch notification.name {
         case NotificationProfileDidFinishSyncing, NotificationFirefoxAccountChanged, NotificationPrivateDataClearedHistory, NotificationDynamicFontChanged:
             self.invalidateTopSites().uponQueue(DispatchQueue.main) { _ in
-                self.reloadAll()
+                self.collectionView?.reloadData()
             }
         default:
             log.warning("Received unexpected notification \(notification.name)")
         }
-    }
-
-    fileprivate func reloadAll() {
-        self.tableView.reloadData()
     }
 
     fileprivate func invalidateHighlights() -> Success {
@@ -333,7 +391,7 @@ extension ActivityStreamPanel {
                     self.telemetry.reportEvent(.Click, source: .TopSites, position: indexPath.item)
                     self.showSiteWithURLHandler(url as URL)
                 }
-                
+
                 return succeed()
             }
         }
@@ -351,7 +409,7 @@ extension ActivityStreamPanel {
         profile.history.removeHostFromTopSites(host).uponQueue(DispatchQueue.main) { result in
             guard result.isSuccess else { return }
             self.invalidateTopSites().uponQueue(DispatchQueue.main) { _ in
-                self.reloadAll()
+                self.collectionView?.reloadData()
             }
         }
     }
@@ -360,7 +418,7 @@ extension ActivityStreamPanel {
         profile.recommendations.removeHighlightForURL(site.url).uponQueue(DispatchQueue.main) { result in
             guard result.isSuccess else { return }
             self.invalidateHighlights().uponQueue(DispatchQueue.main) { _ in
-                self.reloadAll()
+                self.collectionView?.reloadData()
             }
         }
     }
@@ -379,14 +437,15 @@ extension ActivityStreamPanel {
 
     @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         guard longPressGestureRecognizer.state == UIGestureRecognizerState.began else { return }
-        let touchPoint = longPressGestureRecognizer.location(in: self.view)
-        guard let indexPath = tableView.indexPathForRow(at: touchPoint) else { return }
+
+        let point = longPressGestureRecognizer.location(in: self.collectionView)
+        guard let indexPath = self.collectionView?.indexPathForItem(at: point) else { return }
 
         switch Section(indexPath.section) {
         case .highlights:
             presentContextMenuForHighlightCellWithIndexPath(indexPath)
         case .topSites:
-            let topSiteCell = self.tableView.cellForRow(at: indexPath) as! ASHorizontalScrollCell
+            let topSiteCell = self.collectionView?.cellForItem(at: indexPath) as! ASHorizontalScrollCell
             let pointInTopSite = longPressGestureRecognizer.location(in: topSiteCell.collectionView)
             guard let topSiteIndexPath = topSiteCell.collectionView.indexPathForItem(at: pointInTopSite) else { return }
             presentContextMenuForTopSiteCellWithIndexPath(topSiteIndexPath)
@@ -403,7 +462,8 @@ extension ActivityStreamPanel {
 
     func presentContextMenuForTopSiteCellWithIndexPath(_ indexPath: IndexPath) {
         let topsiteIndex = IndexPath(row: 0, section: Section.topSites.rawValue)
-        guard let topSiteCell = self.tableView.cellForRow(at: topsiteIndex) as? ASHorizontalScrollCell else { return }
+
+        guard let topSiteCell = collectionView?.cellForItem(at: topsiteIndex) as? ASHorizontalScrollCell else { return }
         guard let topSiteItemCell = topSiteCell.collectionView.cellForItem(at: indexPath) as? TopSiteItemCell else { return }
         let siteImage = topSiteItemCell.imageView.image
         let siteBGColor = topSiteItemCell.contentView.backgroundColor
@@ -413,7 +473,7 @@ extension ActivityStreamPanel {
     }
 
     func presentContextMenuForHighlightCellWithIndexPath(_ indexPath: IndexPath) {
-        guard let highlightCell = tableView.cellForRow(at: indexPath) as? AlternateSimpleHighlightCell else { return }
+        guard let highlightCell = self.collectionView?.cellForItem(at: indexPath) as? ActivityStreamHighlightCell else { return }
         let siteImage = highlightCell.siteImageView.image
         let siteBGColor = highlightCell.siteImageView.backgroundColor
 
@@ -465,7 +525,7 @@ extension ActivityStreamPanel {
         let openInNewTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewTabContextMenuTitle, iconString: "action_new_tab") { action in
             self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
         }
-        
+
         let openInNewPrivateTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "action_new_private_tab") { action in
             self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
         }
@@ -487,8 +547,8 @@ extension ActivityStreamPanel {
                     userData[QuickActions.TabTitleKey] = title
                 }
                 QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark,
-                    withUserData: userData,
-                    toApplication: UIApplication.shared)
+                                                                                    withUserData: userData,
+                                                                                    toApplication: UIApplication.shared)
                 site.setBookmarked(true)
             })
         }
@@ -510,7 +570,7 @@ extension ActivityStreamPanel {
             self.telemetry.reportEvent(.Dismiss, source: pingSource, position: index)
             self.hideURLFromTopSites(site.tileURL)
         })
-        
+
         let dismissHighlightAction = ActionOverlayTableViewAction(title: Strings.RemoveFromASContextMenuTitle, iconString: "action_close", handler: { action in
             self.telemetry.reportEvent(.Dismiss, source: pingSource, position: index)
             self.hideFromHighlights(site)
@@ -518,9 +578,9 @@ extension ActivityStreamPanel {
 
         var actions = [openInNewTabAction, openInNewPrivateTabAction, bookmarkAction, shareAction]
         switch section {
-            case .highlights: actions.append(contentsOf: [dismissHighlightAction, deleteFromHistoryAction])
-            case .topSites: actions.append(removeTopSiteAction)
-            case .highlightIntro: break
+        case .highlights: actions.append(contentsOf: [dismissHighlightAction, deleteFromHistoryAction])
+        case .topSites: actions.append(removeTopSiteAction)
+        case .highlightIntro: break
         }
 
         return ActionOverlayTableViewController(site: site, actions: actions, siteImage: siteImage, siteBGColor: siteBGColor)
@@ -584,20 +644,20 @@ struct ActivityStreamTracker {
             "build": AppInfo.buildNumber,
             "locale": Locale.current.identifier,
             "release_channel": AppConstants.BuildChannel.rawValue
-        ], validate: true)
+            ], validate: true)
     }
 }
 
 // MARK: - Section Header View
 struct ASHeaderViewUX {
     static let SeperatorColor =  UIColor(rgb: 0xedecea)
-    static let TextFont = DynamicFontHelper.defaultHelper.DefaultSmallFontBold
+    static let TextFont = DynamicFontHelper.defaultHelper.DefaultMediumBoldFont
     static let SeperatorHeight = 1
-    static let Insets: CGFloat = 20
+    static let Insets: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? ASPanelUX.SectionInsetsForIpad : ASPanelUX.SectionInsetsForIphone
     static let TitleTopInset: CGFloat = 5
 }
 
-class ASHeaderView: UIView {
+class ASHeaderView: UICollectionReusableView {
     lazy fileprivate var titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.text = self.title
@@ -616,16 +676,17 @@ class ASHeaderView: UIView {
         super.init(frame: frame)
 
         addSubview(titleLabel)
-
+        let leftInset = UIDevice.current.userInterfaceIdiom == .pad ? ASHorizontalScrollCellUX.MinimumInsets : 0
         titleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(self).inset(ASHeaderViewUX.Insets)
+            make.leading.equalTo(self).inset(ASHeaderViewUX.Insets + leftInset)
             make.trailing.equalTo(self).inset(-ASHeaderViewUX.Insets)
             make.top.equalTo(self).inset(ASHeaderViewUX.TitleTopInset)
             make.bottom.equalTo(self)
         }
-
+        
         let seperatorLine = UIView()
         seperatorLine.backgroundColor = ASHeaderViewUX.SeperatorColor
+        self.backgroundColor = UIColor.clear
         addSubview(seperatorLine)
         seperatorLine.snp.makeConstraints { make in
             make.height.equalTo(ASHeaderViewUX.SeperatorHeight)
@@ -634,9 +695,8 @@ class ASHeaderView: UIView {
             make.top.equalTo(self.snp.top)
         }
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
 }

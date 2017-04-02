@@ -172,7 +172,7 @@ open class KeyBundle: Hashable {
     open func serializer<T: CleartextPayloadJSON>(_ f: @escaping (T) -> JSON) -> (Record<T>) -> JSON? {
         return { (record: Record<T>) -> JSON? in
             let json = f(record.payload)
-            let data = (json.rawString() ?? "").utf8EncodedData
+            let data = (json.rawString([writtingOptionsKeys.castNilToNSNull: true]) ?? "").utf8EncodedData
 
             // We pass a null IV, which means "generate me a new one".
             // We then include the generated IV in the resulting record.
@@ -186,7 +186,7 @@ open class KeyBundle: Hashable {
                     let iv = iv.base64EncodedString
 
                     // The payload is stringified JSON. Yes, I know.
-                    let payload: Any = JSON(object: ["ciphertext": ciphertext, "IV": iv, "hmac": hmac]).rawString()! as Any
+                    let payload: Any = JSON(object: ["ciphertext": ciphertext, "IV": iv, "hmac": hmac]).stringValue()! as Any
                     let obj = ["id": record.id, "sortindex": record.sortindex, "ttl": record.ttl as Any, "payload": payload]
                     return JSON(object: obj)
                 }

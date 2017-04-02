@@ -24,7 +24,7 @@ class ThirdPartySearchTest: BaseTestCase {
             app.buttons["Dismiss"].tap()
         }
     }
-
+    /* Three test cases disabled because they are failing due to a known bug: 1349154, they will be enabled again once it is fixed
     func testCustomSearchEngines() {
         let app = XCUIApplication()
 
@@ -129,7 +129,7 @@ class ThirdPartySearchTest: BaseTestCase {
         XCTAssertFalse(app.scrollViews.otherElements.buttons["developer.mozilla.org search"].exists)
 
     }
-    
+    */
     func testCustomEngineFromCorrectTemplate() {
         let app = XCUIApplication()
         

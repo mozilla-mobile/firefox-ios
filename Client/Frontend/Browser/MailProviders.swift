@@ -38,7 +38,6 @@ private func constructEmailURLString(_ beginningURLString: String, metadata: Mai
     })
     let stringParams = queryParams.joined(separator: "&")
     let finalURLString = beginningURLString + (stringParams.isEmpty ? toParam : [toParam, stringParams].joined(separator: "&"))
-
     return finalURLString
 }
 
@@ -103,6 +102,20 @@ class MSOutlookIntegration: MailProvider {
         "to",
         "cc",
         "bcc",
+        "subject",
+        "body"
+    ]
+
+    func newEmailURLFromMetadata(_ metadata: MailToMetadata) -> URL? {
+        return constructEmailURLString(beginningScheme, metadata: metadata, supportedHeaders: supportedHeaders).asURL
+    }
+}
+
+class YMailIntegration: MailProvider {
+    var beginningScheme = "ymail://mail/any/compose?"
+    var supportedHeaders = [
+        "to",
+        "cc",
         "subject",
         "body"
     ]

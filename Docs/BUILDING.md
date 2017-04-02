@@ -1,10 +1,10 @@
 Building Firefox for iOS
 ========================
 
-Prerequisites, as of *September 16, 2016*:
+Prerequisites, as of *February 14, 2017*:
 
 * Mac OS X 10.11.5
-* Xcode 8 with the iOS 10 SDK (Betas not supported)
+* Xcode 8.2.1 with the iOS 10 SDK (Betas not supported)
 * Carthage 0.15 or newer
 
 When running on a device:
@@ -12,7 +12,7 @@ When running on a device:
 * A device that supports iOS 9.3 GM or later
 * One of the following:
  * A developer account and Admin access to the *Certificates, Identifiers & Profiles* section of the *iOS DevCenter*
- * A free developer account, new with Xcode 8
+ * A free developer account (create an Apple ID for free and add as an account in Xcode)
 
 Get the Code
 -----------
@@ -54,17 +54,15 @@ Run on the Simulator
 Run on a Device with Xcode 8 and a Free Developer Account
 ---------------
 
-> Only follow these instructions if you are using the new free personal developer accounts that Apple enabled with Xcode 8.
+> Only follow these instructions if you are using the free personal developer accounts. Simply add your Apple ID as an account in Xcode.
 
 Since the bundle identifier we use for Firefox is tied to our developer account, you'll need to generate your own identifier and update the existing configuration.
 
 1. Open Client/Configuration/Fennec.xcconfig
 2. Change MOZ_BUNDLE_ID to your own bundle identifier. Just think of something unique: e.g., com.your_github_id.Fennec
 3. Open the project editor in Xcode.
-4. For the 'Client' target, in the 'Capabilities' section, turn off the 'Wallet' capability. Cancel the prompts that appear. Make sure the change appears in the file 'Client.xcodeproj/project.pbxproj'. This step is necessary before the next step because, Xcode 8 seems to be not listing the 'Wallet' capability the moment the personal development account is selected in the next step. Hence, it wouldn't be possible to disable the capability after making that change.
-5. Navigate to each of the application targets (Client/SendTo/ShareTo/ViewLater) and for each one:
-  1. select your personal development account
-  2. remove the code signing entitlements (Do this by disabling all the capabilities from the "Capabilities" section)
+4. For the 'Client' target, in the 'Capabilities' section, turn off the capabilities 'Push Notifications' and 'Wallet'.
+5. For each target, in the 'General' section, under 'Signing', select your personal development account.
 
 If you submit a patch, be sure to exclude these files because they are only relevant for your personal build.
 

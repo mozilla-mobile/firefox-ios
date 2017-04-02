@@ -22,11 +22,22 @@
 #define ECE_HEADER_STATE_END_VALUE 9
 #define ECE_HEADER_STATE_INVALID_HEADER 10
 
+// Extracts an unsigned 32-bit integer in network byte order.
+static inline uint32_t
+ece_read_uint32_be(const uint8_t* bytes) {
+  uint32_t value = bytes[3];
+  value |= (uint32_t) bytes[2] << 8;
+  value |= (uint32_t) bytes[1] << 16;
+  value |= (uint32_t) bytes[0] << 24;
+  return value;
+}
+
 // A linked list that holds name-value pairs for a parameter in a header
 // value. For example, if the parameter is `a=b; c=d; e=f`, the parser will
 // allocate three `ece_header_pairs_t` structures, one for each ;-delimited
 // pair. "=" separates the name and value.
 typedef struct ece_header_pairs_s {
+  struct ece_header_pairs_s* next;
   // The name and value are pointers into the backing header value; the parser
   // doesn't allocate new strings. Freeing the backing string will invalidate
   // all `name` and `value` references. Also, because these are not true C
@@ -34,26 +45,24 @@ typedef struct ece_header_pairs_s {
   // `strncmp`. Functions that assume a NUL-terminated string will read until
   // the end of the backing string.
   const char* name;
-  size_t nameLen;
   const char* value;
+  size_t nameLen;
   size_t valueLen;
-  struct ece_header_pairs_s* next;
 } ece_header_pairs_t;
 
 // Initializes a name-value pair node at the head of the pair list. `head` may
 // be `NULL`.
 static ece_header_pairs_t*
 ece_header_pairs_alloc(ece_header_pairs_t* head) {
-  ece_header_pairs_t* pairs =
-    (ece_header_pairs_t*) malloc(sizeof(ece_header_pairs_t));
+  ece_header_pairs_t* pairs = malloc(sizeof(ece_header_pairs_t));
   if (!pairs) {
     return NULL;
   }
-  pairs->name = NULL;
-  pairs->nameLen = 0;
-  pairs->value = NULL;
-  pairs->valueLen = 0;
   pairs->next = head;
+  pairs->name = NULL;
+  pairs->value = NULL;
+  pairs->nameLen = 0;
+  pairs->valueLen = 0;
   return pairs;
 }
 
@@ -72,7 +81,10 @@ ece_header_pairs_has_value(ece_header_pairs_t* pair, const char* value) {
 // Copies a pair node's value into a C string.
 static char*
 ece_header_pairs_value_to_str(ece_header_pairs_t* pair) {
-  char* value = (char*) malloc(pair->valueLen + 1);
+  char* value = malloc(pair->valueLen + 1);
+  if (!value) {
+    return NULL;
+  }
   strncpy(value, pair->value, pair->valueLen);
   value[pair->valueLen] = '\0';
   return value;
@@ -94,21 +106,20 @@ ece_header_pairs_free(ece_header_pairs_t* pairs) {
 // allocate two `ece_header_params_t` structures: one to hold the parameter
 // `a=b; c=d`, and the other to hold `e=f; g=h`.
 typedef struct ece_header_params_s {
-  ece_header_pairs_t* pairs;
   struct ece_header_params_s* next;
+  ece_header_pairs_t* pairs;
 } ece_header_params_t;
 
 // Initializes a parameter node at the head of the parameter list. `head` may be
 // `NULL`.
 static ece_header_params_t*
 ece_header_params_alloc(ece_header_params_t* head) {
-  ece_header_params_t* params =
-    (ece_header_params_t*) malloc(sizeof(ece_header_params_t));
+  ece_header_params_t* params = malloc(sizeof(ece_header_params_t));
   if (!params) {
     return NULL;
   }
-  params->pairs = NULL;
   params->next = head;
+  params->pairs = NULL;
   return params;
 }
 
@@ -327,76 +338,125 @@ error:
 }
 
 int
-ece_header_extract_aesgcm_crypto_params(const char* cryptoKeyHeader,
-                                        const char* encryptionHeader,
-                                        uint32_t* rs, ece_buf_t* salt,
-                                        ece_buf_t* rawSenderPubKey) {
-  int err = ECE_OK;
+ece_aes128gcm_payload_extract_params(const uint8_t* payload, size_t payloadLen,
+                                     const uint8_t** salt, size_t* saltLen,
+                                     const uint8_t** keyId, size_t* keyIdLen,
+                                     uint32_t* rs, const uint8_t** ciphertext,
+                                     size_t* ciphertextLen) {
+  if (payloadLen < ECE_AES128GCM_HEADER_LENGTH) {
+    return ECE_ERROR_SHORT_HEADER;
+  }
 
-  ece_buf_reset(salt);
-  ece_buf_reset(rawSenderPubKey);
+  *salt = payload;
+  *saltLen = ECE_SALT_LENGTH;
+
+  *keyIdLen = payload[ECE_SALT_LENGTH + 4];
+  if (payloadLen < ECE_AES128GCM_HEADER_LENGTH + *keyIdLen) {
+    return ECE_ERROR_SHORT_HEADER;
+  }
+  *keyId = &payload[ECE_AES128GCM_HEADER_LENGTH];
+
+  *rs = ece_read_uint32_be(&payload[ECE_SALT_LENGTH]);
+  if (*rs < ECE_AES128GCM_MIN_RS) {
+    return ECE_ERROR_INVALID_RS;
+  }
+
+  size_t payloadStart = ECE_AES128GCM_HEADER_LENGTH + *keyIdLen;
+  *ciphertext = &payload[payloadStart];
+  *ciphertextLen = payloadLen - payloadStart;
+
+  return ECE_OK;
+}
+
+int
+ece_webpush_aesgcm_headers_extract_params(const char* cryptoKeyHeader,
+                                          const char* encryptionHeader,
+                                          uint8_t* salt, size_t saltLen,
+                                          uint8_t* rawSenderPubKey,
+                                          size_t rawSenderPubKeyLen,
+                                          uint32_t* rs) {
+  int err = ECE_OK;
 
   ece_header_params_t* encryptionParams = NULL;
   ece_header_params_t* cryptoKeyParams = NULL;
   char* keyId = NULL;
-
-  // The record size defaults to 4096 if unspecified.
-  *rs = 4096;
+  uint32_t rsValue = 0;
+  size_t decodedSaltLen = 0;
+  size_t decodedKeyLen = 0;
 
   // First, extract the key ID, salt, and record size from the first key in the
   // `Encryption` header.
   encryptionParams = ece_header_extract_params(encryptionHeader);
   if (!encryptionParams) {
     err = ECE_ERROR_INVALID_ENCRYPTION_HEADER;
-    goto error;
+    goto end;
   }
   for (ece_header_pairs_t* pair = encryptionParams->pairs; pair;
        pair = pair->next) {
     if (ece_header_pairs_has_name(pair, "keyid")) {
+      // The key ID is optional, and is used to identify the public key in the
+      // `Crypto-Key` header if multiple encryption keys are specified.
+      if (keyId) {
+        err = ECE_ERROR_INVALID_ENCRYPTION_HEADER;
+        goto end;
+      }
       keyId = ece_header_pairs_value_to_str(pair);
       if (!keyId) {
-        // The key ID is optional, and is used to identify the public key in the
-        // `Crypto-Key` header if multiple encryption keys are specified.
         err = ECE_ERROR_OUT_OF_MEMORY;
-        goto error;
+        goto end;
       }
       continue;
     }
     if (ece_header_pairs_has_name(pair, "rs")) {
       // The record size is optional.
+      if (rsValue) {
+        err = ECE_ERROR_INVALID_ENCRYPTION_HEADER;
+        goto end;
+      }
       char* value = ece_header_pairs_value_to_str(pair);
       if (!value) {
-        err = ECE_ERROR_INVALID_RS;
-        goto error;
+        err = ECE_ERROR_OUT_OF_MEMORY;
+        goto end;
       }
-      int result = sscanf(value, "%" SCNu32, rs);
+      int result = sscanf(value, "%" SCNu32, &rsValue);
       free(value);
-      if (result <= 0 || !*rs) {
+      if (result <= 0 || !rsValue) {
         err = ECE_ERROR_INVALID_RS;
-        goto error;
+        goto end;
       }
       continue;
     }
     if (ece_header_pairs_has_name(pair, "salt")) {
       // The salt is required, and must be Base64url-encoded without padding.
-      if (ece_base64url_decode(pair->value, pair->valueLen,
-                               ECE_BASE64URL_REJECT_PADDING, salt)) {
+      if (decodedSaltLen) {
+        err = ECE_ERROR_INVALID_ENCRYPTION_HEADER;
+        goto end;
+      }
+      decodedSaltLen =
+        ece_base64url_decode(pair->value, pair->valueLen,
+                             ECE_BASE64URL_REJECT_PADDING, salt, saltLen);
+      if (!decodedSaltLen) {
         err = ECE_ERROR_INVALID_SALT;
-        goto error;
+        goto end;
       }
       continue;
     }
   }
-  if (!salt) {
+  if (decodedSaltLen != saltLen) {
     err = ECE_ERROR_INVALID_SALT;
-    goto error;
+    goto end;
   }
+  if (!rsValue) {
+    // The record size defaults to 4096 if unspecified.
+    rsValue = 4096;
+  }
+  *rs = rsValue;
 
   // Next, find the ephemeral public key in the `Crypto-Key` header.
   cryptoKeyParams = ece_header_extract_params(cryptoKeyHeader);
   if (!cryptoKeyParams) {
     err = ECE_ERROR_INVALID_CRYPTO_KEY_HEADER;
-    goto error;
+    goto end;
   }
   ece_header_params_t* cryptoKeyParam = cryptoKeyParams;
   if (keyId) {
@@ -423,7 +483,7 @@ ece_header_extract_aesgcm_crypto_params(const char* cryptoKeyHeader,
     if (!cryptoKeyParam) {
       // We don't have a matching key ID with a `dh` name-value pair.
       err = ECE_ERROR_INVALID_DH;
-      goto error;
+      goto end;
     }
   }
   for (ece_header_pairs_t* pair = cryptoKeyParam->pairs; pair;
@@ -432,23 +492,15 @@ ece_header_extract_aesgcm_crypto_params(const char* cryptoKeyHeader,
       continue;
     }
     // The sender's public key must be Base64url-encoded without padding.
-    if (ece_base64url_decode(pair->value, pair->valueLen,
-                             ECE_BASE64URL_REJECT_PADDING, rawSenderPubKey)) {
-      err = ECE_ERROR_INVALID_DH;
-      goto error;
-    }
+    decodedKeyLen = ece_base64url_decode(pair->value, pair->valueLen,
+                                         ECE_BASE64URL_REJECT_PADDING,
+                                         rawSenderPubKey, rawSenderPubKeyLen);
     break;
   }
-  if (!rawSenderPubKey) {
+  if (!decodedKeyLen) {
     err = ECE_ERROR_INVALID_DH;
-    goto error;
+    goto end;
   }
-  goto end;
-
-error:
-  *rs = 0;
-  ece_buf_free(salt);
-  ece_buf_free(rawSenderPubKey);
 
 end:
   ece_header_params_free(encryptionParams);
