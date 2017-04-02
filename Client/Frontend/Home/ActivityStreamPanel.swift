@@ -238,6 +238,7 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
     }
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        self.longPressRecognizer.isEnabled = false
         selectItemAtIndex(indexPath.item, inSection: Section(indexPath.section))
     }
 
@@ -461,27 +462,16 @@ extension ActivityStreamPanel {
     }
 
     func presentContextMenuForTopSiteCellWithIndexPath(_ indexPath: IndexPath) {
-        let topsiteIndex = IndexPath(row: 0, section: Section.topSites.rawValue)
-
-        guard let topSiteCell = collectionView?.cellForItem(at: topsiteIndex) as? ASHorizontalScrollCell else { return }
-        guard let topSiteItemCell = topSiteCell.collectionView.cellForItem(at: indexPath) as? TopSiteItemCell else { return }
-        let siteImage = topSiteItemCell.imageView.image
-        let siteBGColor = topSiteItemCell.contentView.backgroundColor
-
         let site = self.topSitesManager.content[indexPath.item]
-        presentContextMenuForSite(site, atIndex: indexPath.item, forSection: .topSites, siteImage: siteImage, siteBGColor: siteBGColor)
+        presentContextMenuForSite(site, atIndex: indexPath.item, forSection: .topSites)
     }
 
     func presentContextMenuForHighlightCellWithIndexPath(_ indexPath: IndexPath) {
-        guard let highlightCell = self.collectionView?.cellForItem(at: indexPath) as? ActivityStreamHighlightCell else { return }
-        let siteImage = highlightCell.siteImageView.image
-        let siteBGColor = highlightCell.siteImageView.backgroundColor
-
         let site = highlights[indexPath.row]
-        presentContextMenuForSite(site, atIndex: indexPath.row, forSection: .highlights, siteImage: siteImage, siteBGColor: siteBGColor)
+        presentContextMenuForSite(site, atIndex: indexPath.row, forSection: .highlights)
     }
 
-    fileprivate func fetchBookmarkStatusThenPresentContextMenu(_ site: Site, atIndex index: Int, forSection section: Section, siteImage: UIImage?, siteBGColor: UIColor?) {
+    fileprivate func fetchBookmarkStatusThenPresentContextMenu(_ site: Site, atIndex index: Int, forSection section: Section) {
         profile.bookmarks.modelFactory >>== {
             $0.isBookmarked(site.url).uponQueue(DispatchQueue.main) { result in
                 guard let isBookmarked = result.successValue else {
@@ -489,24 +479,24 @@ extension ActivityStreamPanel {
                     return
                 }
                 site.setBookmarked(isBookmarked)
-                self.presentContextMenuForSite(site, atIndex: index, forSection: section, siteImage: siteImage, siteBGColor: siteBGColor)
+                self.presentContextMenuForSite(site, atIndex: index, forSection: section)
             }
         }
     }
 
-    func presentContextMenuForSite(_ site: Site, atIndex index: Int, forSection section: Section, siteImage: UIImage?, siteBGColor: UIColor?) {
+    func presentContextMenuForSite(_ site: Site, atIndex index: Int, forSection section: Section) {
         guard let _ = site.bookmarked else {
-            fetchBookmarkStatusThenPresentContextMenu(site, atIndex: index, forSection: section, siteImage: siteImage, siteBGColor: siteBGColor)
+            fetchBookmarkStatusThenPresentContextMenu(site, atIndex: index, forSection: section)
             return
         }
-        guard let contextMenu = contextMenuForSite(site, atIndex: index, forSection: section, siteImage: siteImage, siteBGColor: siteBGColor) else {
+        guard let contextMenu = contextMenuForSite(site, atIndex: index, forSection: section) else {
             return
         }
 
         self.presentContextMenu(contextMenu)
     }
 
-    func contextMenuForSite(_ site: Site, atIndex index: Int, forSection section: Section, siteImage: UIImage?, siteBGColor: UIColor?) -> ActionOverlayTableViewController? {
+    func contextMenuForSite(_ site: Site, atIndex index: Int, forSection section: Section) -> ActionOverlayTableViewController? {
 
         guard let siteURL = URL(string: site.url) else {
             return nil
@@ -583,14 +573,13 @@ extension ActivityStreamPanel {
         case .highlightIntro: break
         }
 
-        return ActionOverlayTableViewController(site: site, actions: actions, siteImage: siteImage, siteBGColor: siteBGColor)
+        return ActionOverlayTableViewController(site: site, actions: actions)
     }
 
     func selectItemAtIndex(_ index: Int, inSection section: Section) {
         switch section {
         case .highlights:
             telemetry.reportEvent(.Click, source: .Highlights, position: index)
-
             let site = self.highlights[index]
             showSiteWithURLHandler(URL(string:site.url)!)
         case .topSites, .highlightIntro:
@@ -644,7 +633,7 @@ struct ActivityStreamTracker {
             "build": AppInfo.buildNumber,
             "locale": Locale.current.identifier,
             "release_channel": AppConstants.BuildChannel.rawValue
-            ], validate: true)
+            ] as [String: Any], validate: true)
     }
 }
 
