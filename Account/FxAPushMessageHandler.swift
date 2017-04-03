@@ -11,15 +11,16 @@ import XCGLogger
 
 private let log = Logger.syncLogger
 class FxAPushMessageHandler {
-
     let profile: Profile
 
     init(with profile: Profile) {
         self.profile = profile
     }
+}
 
-    func handle(message: JSON?) {
-
+extension FxAPushMessageHandler {
+    /// The main entry point to the handler.
+    func handle(message: JSON?) -> Success {
         guard let json = message else {
             return handleVerification()
         }
@@ -29,65 +30,87 @@ class FxAPushMessageHandler {
 
         // https://github.com/mozilla/fxa-auth-server/blob/master/docs/pushpayloads.schema.json#L26
 
-        let command = json["command"].stringValue
+        let rawValue = json["command"].stringValue
+        guard let command = PushMessageType(rawValue: rawValue) else {
+            log.warning("Command \(rawValue) received but not recognized")
+            return deferMaybe(PushMessageError.messageIncomplete)
+        }
+
+        let result: Success
         switch command {
-            case "fxaccounts:device_connected":
-                handleDeviceConnected(json["data"])
-            case "fxaccounts:device_disconnected":
-                handleDeviceDisconnected(json["data"])
-            case "fxaccounts:profile_updated":
-                handleProfileUpdated()
-            case "fxaccounts:password_changed":
-                handlePasswordChanged()
-            case "fxaccounts:password_reset":
-                handlePasswordReset()
-            case "sync:collection_changed":
-                handleCollectionChanged(json["data"])
-            default:
-                log.warning("Command \(command) received but not recognized")
-                break
+            case .deviceConnected:
+                result = handleDeviceConnected(json["data"])
+            case .deviceDisconnected:
+                result = handleDeviceDisconnected(json["data"])
+            case .profileUpdated:
+                result = handleProfileUpdated()
+            case .passwordChanged:
+                result = handlePasswordChanged()
+            case .passwordReset:
+                result = handlePasswordReset()
+            case .collectionChanged:
+                result = handleCollectionChanged(json["data"])
         }
+        return result
     }
+}
 
-    func handleVerification() {
-
+extension FxAPushMessageHandler {
+    func handleVerification() -> Success {
         guard let account = profile.getAccount(), account.actionNeeded == .needsVerification else {
-            return log.info("Account verified by server either doesn't exist or doesn't need verifying")
+            log.info("Account verified by server either doesn't exist or doesn't need verifying")
+            return deferMaybe(PushMessageError.noActionNeeded)
         }
 
-        account.advance()
+        // Now we're verified, we can start syncing.
+        return account.advance().bind { _ in
+            return succeed()
+        }
     }
+}
 
-    func handleDeviceConnected(_ data: JSON?) {
+/// An extension to handle each of the messages.
+extension FxAPushMessageHandler {
+    func handleDeviceConnected(_ data: JSON?) -> Success {
         guard let deviceName = data?["deviceName"].string else {
-            return log.warning("device_connected received but incomplete: \(data)")
+            return messageIncomplete(.deviceConnected)
         }
-        log.debug("device_connected \(deviceName), unimplemented")
+        return unimplemented(.deviceConnected, with: deviceName)
     }
+}
 
-    func handleDeviceDisconnected(_ data: JSON?) {
+extension FxAPushMessageHandler {
+    func handleDeviceDisconnected(_ data: JSON?) -> Success {
         guard let deviceID = data?["id"].string else {
-            return log.warning("device_disconnected received but incomplete: \(data)")
+            return messageIncomplete(.deviceDisconnected)
         }
-        log.debug("device_disconnected \(deviceID), unimplemented")
+        return unimplemented(.deviceDisconnected, with: deviceID)
     }
+}
 
-    func handleProfileUpdated() {
-        log.debug("profile_updated received but unimplemented")
+extension FxAPushMessageHandler {
+    func handleProfileUpdated() -> Success {
+        return unimplemented(.profileUpdated)
     }
+}
 
-    func handlePasswordChanged() {
-        log.debug("password_changed received but unimplemented")
-        profile.getAccount()?.makeSeparated()
+extension FxAPushMessageHandler {
+    func handlePasswordChanged() -> Success {
+        return unimplemented(.passwordChanged)
     }
+}
 
-    func handlePasswordReset() {
-        log.debug("password_reset received but unimplemented")
+extension FxAPushMessageHandler {
+    func handlePasswordReset() -> Success {
+        return unimplemented(.passwordReset)
     }
+}
 
-    func handleCollectionChanged(_ data: JSON?) {
+extension FxAPushMessageHandler {
+    func handleCollectionChanged(_ data: JSON?) -> Success {
         guard let collections = data?["collections"].arrayObject as? [String] else {
-            return log.warning("collections_changed received but incomplete: \(data)")
+            log.warning("collections_changed received but incomplete: \(data)")
+            return deferMaybe(PushMessageError.messageIncomplete)
         }
         let sm = profile.syncManager
         let deferreds = collections.flatMap { (id: String) -> SyncResult? in
@@ -115,44 +138,52 @@ class FxAPushMessageHandler {
             }
         }
 
-        let _ = all(deferreds)
+        if deferreds.isEmpty {
+            return deferMaybe(PushMessageError.noActionNeeded)
+        }
+
+        return all(deferreds).bind { _ in
+            return succeed()
+        }
     }
-/*
-         {
-            "version": x,
-            "command": "fxaccounts:device_connected",
-            "data": {
-                "deviceName": "string",
-            },
-         },
-         {
-            "version": x,
-            "command": "fxaccounts:device_disconnected",
-            "data": {
-                "id": "string"
-                "deviceName": "string",
-            },
-         },
-         {
-            "version": x,
-            "command": "fxaccounts:profile_updated",
-         },
-         {
-            "version": x,
-            "command": "fxaccounts:password_changed",
-         },
-         {
-            "version": x,
-            "command": "fxaccounts:password_reset",
-         },
-         
-         {
-            "version": x,
-            "command": "sync:collection_changed",
-            "data": {
-                "collections": ["addons", "bookmarks", "history", "forms", "prefs",
-                                "tabs", "passwords", "clients"],
-            },
-         },
-*/
+}
+
+/// Some utility methods
+fileprivate extension FxAPushMessageHandler {
+    func unimplemented(_ messageType: PushMessageType, with param: String? = nil) -> Success {
+        if let param = param {
+            log.warning("\(messageType) message received with parameter = \(param), but unimplemented")
+        } else {
+            log.warning("\(messageType) message received, but unimplemented")
+        }
+        return deferMaybe(PushMessageError.unimplemented(messageType))
+    }
+
+    func messageIncomplete(_ messageType: PushMessageType) -> Success {
+        log.info("\(messageType) message received, but incomplete")
+        return deferMaybe(PushMessageError.messageIncomplete)
+    }
+}
+
+enum PushMessageType: String {
+    case deviceConnected = "fxaccounts:device_connected"
+    case deviceDisconnected = "fxaccounts:device_disconnected"
+    case profileUpdated = "fxaccounts:profile_updated"
+    case passwordChanged = "fxaccounts:password_changed"
+    case passwordReset = "fxaccounts:password_reset"
+    case collectionChanged = "sync:collection_changed"
+}
+
+enum PushMessageError: MaybeErrorType {
+    case messageIncomplete
+    case unimplemented(PushMessageType)
+    case noActionNeeded
+
+    public var description: String {
+        switch self {
+        case .messageIncomplete: return "messageIncomplete"
+        case .noActionNeeded: return "noActionNeeded"
+        case .unimplemented(let what): return "unimplemented=\(what)"
+        }
+    }
 }
