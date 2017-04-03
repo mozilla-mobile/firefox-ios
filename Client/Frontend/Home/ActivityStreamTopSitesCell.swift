@@ -335,7 +335,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
         let estimatedLayout = calculateLayout(for: boundsSize)
         insets = estimatedLayout.cellInsets
         itemSize = estimatedLayout.cellSize
-        boundsSize = estimatedLayout.size
+        boundsSize.height = estimatedLayout.size.height
         return estimatedLayout.size
     }
 
