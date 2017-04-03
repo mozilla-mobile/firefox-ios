@@ -196,7 +196,7 @@ class FxALoginHelper {
         if let profile = self.profile, let account = account {
             profile.setAccount(account)
             // account.advance is idempotent.
-            if let account = profile.getAccount() {
+            if  let account = profile.getAccount(), accountVerified! {
                 account.advance()
             }
         }
