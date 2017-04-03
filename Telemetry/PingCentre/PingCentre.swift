@@ -14,6 +14,10 @@ public protocol PingCentreClient {
 
 public struct PingCentre {
     public static func clientForTopic(_ topic: PingCentreTopic, clientID: String) -> PingCentreClient {
+        guard !AppConstants.IsRunningTest else {
+            return DefaultPingCentreImpl(topic: topic, endpoint: .staging, clientID: clientID)
+        }
+
         switch AppConstants.BuildChannel {
         case .developer:
             return DefaultPingCentreImpl(topic: topic, endpoint: .staging, clientID: clientID)
