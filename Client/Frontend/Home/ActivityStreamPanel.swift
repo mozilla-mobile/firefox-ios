@@ -539,6 +539,8 @@ extension ActivityStreamPanel {
                     $0.removeByURL(siteURL.absoluteString)
                     site.setBookmarked(false)
                 }
+                self.telemetry.reportEvent(.RemoveBookmark, source: pingSource, position: index)
+
             })
         } else {
             bookmarkAction = ActionOverlayTableViewAction(title: Strings.BookmarkContextMenuTitle, iconString: "action_bookmark", handler: { action in
@@ -553,8 +555,8 @@ extension ActivityStreamPanel {
                                                                                     toApplication: UIApplication.shared)
                 site.setBookmarked(true)
             })
+            self.telemetry.reportEvent(.AddBookmark, source: pingSource, position: index)
         }
-        self.telemetry.reportEvent(.Bookmark, source: pingSource, position: index)
 
         let deleteFromHistoryAction = ActionOverlayTableViewAction(title: Strings.DeleteFromHistoryContextMenuTitle, iconString: "action_delete", handler: { action in
             self.telemetry.reportEvent(.Delete, source: pingSource, position: index)
@@ -570,7 +572,7 @@ extension ActivityStreamPanel {
         })
 
         let removeTopSiteAction = ActionOverlayTableViewAction(title: Strings.RemoveFromASContextMenuTitle, iconString: "action_close", handler: { action in
-            self.telemetry.reportEvent(.Dismiss, source: pingSource, position: index)
+            self.telemetry.reportEvent(.Remove, source: pingSource, position: index)
             self.hideURLFromTopSites(site.tileURL)
         })
 
@@ -611,7 +613,8 @@ enum ASPingEvent: String {
     case Share = "SHARE"
     case NewTab = "NEWTAB"
     case NewPrivateTab = "NEWPRIVATETAB"
-    case Bookmark = "BOOKMARK"
+    case AddBookmark = "ADDBOOKMARK"
+    case RemoveBookmark = "REMOVEBOOKMARK"
     case Remove = "REMOVE"
 }
 
