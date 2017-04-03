@@ -107,7 +107,7 @@ struct ReaderModeStyle {
     }
 
     /// Encode the style to a dictionary that can be stored in the profile
-    func encode() -> [String:Any] {
+    func encodeAsDictionary() -> [String:Any] {
         return ["theme": theme.rawValue, "fontType": fontType.rawValue, "fontSize": fontSize.rawValue]
     }
 
