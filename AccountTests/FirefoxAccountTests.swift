@@ -15,13 +15,19 @@ class FirefoxAccountTests: XCTestCase {
     }
 
     func testSerialization() {
+        let ogPushSub = PushSubscription(channelID: "channel-id",
+                                       endpoint: URL(string: "https://mozilla.com")!,
+                                       p256dhPrivateKey: "private-key",
+                                       p256dhPublicKey: "public-key",
+                                       authKey: "auth-key")
+
         let d: [String: Any] = [
             "version": 1,
             "configurationLabel": FirefoxAccountConfigurationLabel.production.rawValue,
             "email": "testtest@test.com",
             "uid": "uid",
             "deviceRegistration": FxADeviceRegistration(id: "bogus-device", version: 0, lastRegistered: Date.now()),
-            "pushRegistration": PushRegistration(uaid: "bogus-device-uaid", secret: "secret", endpoint: NSURL(string: "https://mozilla.com")!, channelID: "channelID"),
+            "pushRegistration": PushRegistration(uaid: "bogus-device-uaid", secret: "secret", subscription: ogPushSub),
         ]
 
         let account1 = FirefoxAccount(
@@ -46,6 +52,12 @@ class FirefoxAccountTests: XCTestCase {
                 XCTAssertEqual(s, d1[k] as? String, "Value for '\(k)' does not agree for manually created account.")
                 XCTAssertEqual(s, d2[k] as? String, "Value for '\(k)' does not agree for deserialized account.")
             }
+        }
+
+        if let pubSub = account2?.pushRegistration?.defaultSubscription {
+            XCTAssertEqual(pubSub, ogPushSub)
+        } else {
+            XCTFail("PushSubscription did not get decoded")
         }
     }
 }

@@ -111,10 +111,7 @@ public extension PushClient {
         mutableURLRequest.httpBody = JSON(parameters).stringValue()?.utf8EncodedData
 
         return send(request: mutableURLRequest) >>== { json in
-            guard let response = PushRegistration.from(json: json) else {
-                return deferMaybe(PushClientError.Local(PushClientUnknownError))
-            }
-            return deferMaybe(response)
+            return deferMaybe(creds)
         }
     }
 
