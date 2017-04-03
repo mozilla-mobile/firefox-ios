@@ -659,6 +659,7 @@
 		E677F0451D9423FB00ECF1FB /* SQLiteMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E677F0441D9423FB00ECF1FB /* SQLiteMetadata.swift */; };
 		E677F0541D94247300ECF1FB /* Metadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E677F0531D94247300ECF1FB /* Metadata.swift */; };
 		E67D57031D527449003917B1 /* BatchingClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67D57021D527449003917B1 /* BatchingClient.swift */; };
+		E683F0A61E92E0820035D990 /* MockableHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E683F0A51E92E0820035D990 /* MockableHistory.swift */; };
 		E689C6F81E0C6E72008BAADB /* FxASignIn.js in Resources */ = {isa = PBXBuildFile; fileRef = E689C6F71E0C6E72008BAADB /* FxASignIn.js */; };
 		E689C6FA1E0C6E98008BAADB /* FxAContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E689C6F91E0C6E98008BAADB /* FxAContentViewController.swift */; };
 		E689C6FE1E0C6FE0008BAADB /* ClientTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = E689C6FB1E0C6FD0008BAADB /* ClientTelemetry.swift */; };
@@ -1815,6 +1816,7 @@
 		E677F0441D9423FB00ECF1FB /* SQLiteMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteMetadata.swift; sourceTree = "<group>"; };
 		E677F0531D94247300ECF1FB /* Metadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Metadata.swift; sourceTree = "<group>"; };
 		E67D57021D527449003917B1 /* BatchingClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatchingClient.swift; sourceTree = "<group>"; };
+		E683F0A51E92E0820035D990 /* MockableHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockableHistory.swift; sourceTree = "<group>"; };
 		E689C6F71E0C6E72008BAADB /* FxASignIn.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = FxASignIn.js; sourceTree = "<group>"; };
 		E689C6F91E0C6E98008BAADB /* FxAContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAContentViewController.swift; sourceTree = "<group>"; };
 		E689C6FB1E0C6FD0008BAADB /* ClientTelemetry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClientTelemetry.swift; path = Telemetry/ClientTelemetry.swift; sourceTree = "<group>"; };
@@ -3367,6 +3369,7 @@
 				D3D488581ABB54CD00A93597 /* FileAccessorTests.swift */,
 				7BC7B4BD1C904BF90046E9D2 /* MenuTests.swift */,
 				281B2BE91ADF4D90002917DC /* MockProfile.swift */,
+				E683F0A51E92E0820035D990 /* MockableHistory.swift */,
 				E6C70E811E28314700F8DB57 /* PingCentreTests.swift */,
 				2FDB10921A9FBEC5006CF312 /* PrefsTests.swift */,
 				0BA896491A250E6500C1010C /* ProfileTest.swift */,
@@ -5325,6 +5328,7 @@
 				554867231DC3935A00183DAA /* HomePageTests.swift in Sources */,
 				3BFCBF201E04B1C50070C042 /* UIImageViewExtensionsTests.swift in Sources */,
 				E60D032A1D5118DB002FE3F6 /* SyncStatusResolverTests.swift in Sources */,
+				E683F0A61E92E0820035D990 /* MockableHistory.swift in Sources */,
 				A83E5B1E1C1DAAAA0026D912 /* UIPasteboardExtensions.swift in Sources */,
 				0BF42D4F1A7CD09600889E28 /* TestFavicons.swift in Sources */,
 				7BBFEE741BB405D900A305AA /* TabManagerTests.swift in Sources */,
