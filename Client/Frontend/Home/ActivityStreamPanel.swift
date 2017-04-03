@@ -554,8 +554,8 @@ extension ActivityStreamPanel {
                                                                                     withUserData: userData,
                                                                                     toApplication: UIApplication.shared)
                 site.setBookmarked(true)
+                self.telemetry.reportEvent(.AddBookmark, source: pingSource, position: index)
             })
-            self.telemetry.reportEvent(.AddBookmark, source: pingSource, position: index)
         }
 
         let deleteFromHistoryAction = ActionOverlayTableViewAction(title: Strings.DeleteFromHistoryContextMenuTitle, iconString: "action_delete", handler: { action in
@@ -611,10 +611,10 @@ enum ASPingEvent: String {
     case Delete = "DELETE"
     case Dismiss = "DISMISS"
     case Share = "SHARE"
-    case NewTab = "NEWTAB"
-    case NewPrivateTab = "NEWPRIVATETAB"
-    case AddBookmark = "ADDBOOKMARK"
-    case RemoveBookmark = "REMOVEBOOKMARK"
+    case NewTab = "NEW_TAB"
+    case NewPrivateTab = "NEW_PRIVATE_TAB"
+    case AddBookmark = "ADD_BOOKMARK"
+    case RemoveBookmark = "REMOVE_BOOKMARK"
     case Remove = "REMOVE"
 }
 
