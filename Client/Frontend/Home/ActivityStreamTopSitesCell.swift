@@ -16,7 +16,7 @@ struct TopSiteCellUX {
     static let CellCornerRadius: CGFloat = 4
     static let TitleOffset: CGFloat = 5
     static let OverlayColor = UIColor(white: 0.0, alpha: 0.25)
-    static let IconSize = CGSize(width: 50, height: 50)
+    static let IconSizePercent: CGFloat = 0.8
     static let BorderColor = UIColor(white: 0, alpha: 0.1)
     static let BorderWidth: CGFloat = 0.5
 }
@@ -90,7 +90,7 @@ class TopSiteItemCell: UICollectionViewCell {
         }
 
         imageView.snp.makeConstraints { make in
-            make.size.equalTo(TopSiteCellUX.IconSize)
+            make.size.equalTo(floor(frame.width * TopSiteCellUX.IconSizePercent))
             make.centerX.equalTo(self)
             make.centerY.equalTo(self).inset(-TopSiteCellUX.TitleHeight/2)
         }
