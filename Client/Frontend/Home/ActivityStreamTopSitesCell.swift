@@ -319,7 +319,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
         // We want a minimum inset to make things not look crowded. We also don't want uneven spacing.
         // If we dont have this. Set a minimum inset and recalculate the size of a cell
         var estimatedItemSize = itemSize
-        if horizontalInsets < ASHorizontalScrollCellUX.MinimumInsets || horizontalInsets != verticalInsets {
+        if horizontalInsets != ASHorizontalScrollCellUX.MinimumInsets {
             verticalInsets = ASHorizontalScrollCellUX.MinimumInsets
             horizontalInsets = ASHorizontalScrollCellUX.MinimumInsets
             estimatedItemSize.width = floor((width - (CGFloat(horizontalItemsCount + 1) * horizontalInsets)) / CGFloat(horizontalItemsCount))
