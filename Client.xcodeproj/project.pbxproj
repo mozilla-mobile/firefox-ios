@@ -145,6 +145,7 @@
 		2CA16FDE1E5F089100332277 /* SearchTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA16FDD1E5F089100332277 /* SearchTest.swift */; };
 		2CB56E3F1E926BFB00AF7586 /* ToolbarTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB56E3E1E926BFB00AF7586 /* ToolbarTest.swift */; };
 		2CC1B3F01E9B861400814EEC /* DomainAutocompleteTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC1B3EF1E9B861400814EEC /* DomainAutocompleteTest.swift */; };
+               2CEA6F791E93E3A600D4100E /* SearchSettingsUITest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEA6F781E93E3A600D4100E /* SearchSettingsUITest.swift */; };
 		2F13E79B1AC0C02700D75081 /* StringExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F13E79A1AC0C02700D75081 /* StringExtensionsTests.swift */; };
 		2F14E13A1ABB890800FF98DB /* Account-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F14E1391ABB890800FF98DB /* Account-Bridging-Header.h */; };
 		2F1A3DE11ABE3C90002F1E15 /* FxALoginStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1A3DE01ABE3C90002F1E15 /* FxALoginStateMachine.swift */; };
@@ -161,7 +162,6 @@
 		2F44FCC51A9E85E900FD20CC /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F44FCC41A9E85E900FD20CC /* SettingsTableViewController.swift */; };
 		2F44FCC71A9E8CF500FD20CC /* SearchSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F44FCC61A9E8CF500FD20CC /* SearchSettingsTableViewController.swift */; };
 		2F44FCCB1A9E972E00FD20CC /* SearchEnginePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F44FCCA1A9E972E00FD20CC /* SearchEnginePicker.swift */; };
-		2F642CED1AA8FFAF004F8BE8 /* SearchSettingsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F642CEC1AA8FFAF004F8BE8 /* SearchSettingsUITests.swift */; };
 		2F67C5261BB0CB4E00E7B73A /* MetaGlobalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F67C5251BB0CB4E00E7B73A /* MetaGlobalTests.swift */; };
 		2F697F7E1A9FD22D009E03AE /* SearchEnginesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F697F7D1A9FD22D009E03AE /* SearchEnginesTests.swift */; };
 		2F8C76571BC32F3C00D5E4E0 /* MockSyncServerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8C76561BC32F3C00D5E4E0 /* MockSyncServerTests.swift */; };
@@ -1324,6 +1324,7 @@
 		2CA16FDD1E5F089100332277 /* SearchTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTest.swift; sourceTree = "<group>"; };
 		2CB56E3E1E926BFB00AF7586 /* ToolbarTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolbarTest.swift; sourceTree = "<group>"; };
 		2CC1B3EF1E9B861400814EEC /* DomainAutocompleteTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DomainAutocompleteTest.swift; sourceTree = "<group>"; };
+               2CEA6F781E93E3A600D4100E /* SearchSettingsUITest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchSettingsUITest.swift; sourceTree = "<group>"; };
 		2F13E79A1AC0C02700D75081 /* StringExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensionsTests.swift; sourceTree = "<group>"; };
 		2F14E1391ABB890800FF98DB /* Account-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Account-Bridging-Header.h"; sourceTree = "<group>"; };
 		2F1A3DE01ABE3C90002F1E15 /* FxALoginStateMachine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = FxALoginStateMachine.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -1338,7 +1339,6 @@
 		2F44FCC41A9E85E900FD20CC /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		2F44FCC61A9E8CF500FD20CC /* SearchSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchSettingsTableViewController.swift; sourceTree = "<group>"; };
 		2F44FCCA1A9E972E00FD20CC /* SearchEnginePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchEnginePicker.swift; sourceTree = "<group>"; };
-		2F642CEC1AA8FFAF004F8BE8 /* SearchSettingsUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchSettingsUITests.swift; sourceTree = "<group>"; };
 		2F67C5251BB0CB4E00E7B73A /* MetaGlobalTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MetaGlobalTests.swift; path = SyncTests/MetaGlobalTests.swift; sourceTree = "<group>"; };
 		2F697F7D1A9FD22D009E03AE /* SearchEnginesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchEnginesTests.swift; sourceTree = "<group>"; };
 		2F8C76561BC32F3C00D5E4E0 /* MockSyncServerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockSyncServerTests.swift; path = SyncTests/MockSyncServerTests.swift; sourceTree = "<group>"; };
@@ -2636,6 +2636,7 @@
 				2C31A8461E8D447F00DAC646 /* HomePageSettingsUITest.swift */,
 				2CB56E3E1E926BFB00AF7586 /* ToolbarTest.swift */,
 				2CC1B3EF1E9B861400814EEC /* DomainAutocompleteTest.swift */,
+                               2CEA6F781E93E3A600D4100E /* SearchSettingsUITest.swift */,
 			);
 			path = XCUITests;
 			sourceTree = "<group>";
@@ -2873,7 +2874,6 @@
 				D39FA1821A83E87900EE869C /* NavigationTests.swift */,
 				4F97573A1AFA6F37006ECC24 /* ReaderViewUITests.swift */,
 				0B5A93211B1EB4C8004F47A2 /* ReadingListTest.swift */,
-				2F642CEC1AA8FFAF004F8BE8 /* SearchSettingsUITests.swift */,
 				D3CFD3631CC5605B0064AB4A /* SecurityTests.swift */,
 				D3C3EB641B6FF44000388E9A /* SessionRestoreTests.swift */,
 				744B0FFD1B4F172E00100422 /* ToolbarTests.swift */,
@@ -4977,6 +4977,7 @@
 				2CC1B3F01E9B861400814EEC /* DomainAutocompleteTest.swift in Sources */,
 				0B729D371E047D6A008E6859 /* HomePageSettingsTest.swift in Sources */,
 				2C31A8471E8D447F00DAC646 /* HomePageSettingsUITest.swift in Sources */,
+                               2CEA6F791E93E3A600D4100E /* SearchSettingsUITest.swift in Sources */,
 				55A747171DC46FC400CE1B57 /* HomePageUITest.swift in Sources */,
 				2C8C07771E7800EA00DC1237 /* FindInPageTest.swift in Sources */,
 				2CB56E3F1E926BFB00AF7586 /* ToolbarTest.swift in Sources */,
@@ -5027,7 +5028,6 @@
 				7B24DC9C1B67B3590005766B /* ClearPrivateDataTests.swift in Sources */,
 				E633E37A1C2204BE001FFF6C /* LoginManagerTests.swift in Sources */,
 				744B0FFE1B4F172E00100422 /* ToolbarTests.swift in Sources */,
-				2F642CED1AA8FFAF004F8BE8 /* SearchSettingsUITests.swift in Sources */,
 				0BEF44631E31165700187C32 /* EarlGrey.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
