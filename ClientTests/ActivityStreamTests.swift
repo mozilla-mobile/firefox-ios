@@ -18,7 +18,7 @@ class ActivityStreamTests: XCTestCase {
     override func setUp() {
         super.setUp()
         self.profile = MockProfile()
-        self.telemetry = ActivityStreamTracker(eventsTracker: MockPingClient(), sessionsTracker: MockPingClient())
+        self.telemetry = ActivityStreamTracker(profile: profile, eventsTracker: MockPingClient(), sessionsTracker: MockPingClient())
         self.panel = ActivityStreamPanel(profile: profile, telemetry: self.telemetry)
     }
 

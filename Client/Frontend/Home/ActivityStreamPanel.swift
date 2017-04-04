@@ -53,7 +53,7 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
 
     init(profile: Profile, telemetry: ActivityStreamTracker? = nil) {
         self.profile = profile
-        self.telemetry = telemetry ?? ActivityStreamTracker(eventsTracker: PingCentre.clientForTopic(.ActivityStreamEvents, clientID: profile.clientID), sessionsTracker: PingCentre.clientForTopic(.ActivityStreamSessions, clientID: profile.clientID))
+        self.telemetry = telemetry ?? ActivityStreamTracker(profile: profile, eventsTracker: PingCentre.clientForTopic(.ActivityStreamEvents, clientID: profile.clientID), sessionsTracker: PingCentre.clientForTopic(.ActivityStreamSessions, clientID: profile.clientID))
 
         super.init(collectionViewLayout: flowLayout)
         self.collectionView?.delegate = self
@@ -86,7 +86,13 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
         super.viewWillAppear(animated)
         sessionStart = Date.now()
 
+        let queryStart = Date.now()
         all([invalidateTopSites(), invalidateHighlights()]).uponQueue(DispatchQueue.main) { _ in
+            let queryDuration = Date.now() - queryStart
+            self.telemetry.reportPerf(event: .OnFirstDataLoad,
+                                      queryDuration: queryDuration,
+                                      highlightsCount: self.self.highlights.count,
+                                      topSitesCount: self.topSitesManager.content.count)
             self.isInitialLoad = false
             self.collectionView?.reloadData()
         }
@@ -616,6 +622,7 @@ enum ASPingEvent: String {
     case Delete = "DELETE"
     case Dismiss = "DISMISS"
     case Share = "SHARE"
+    case OnFirstDataLoad = "ON_FIRST_DATA_LOAD"
 }
 
 enum ASPingBadStateEvent: String {
@@ -630,6 +637,7 @@ enum ASPingSource: String {
 }
 
 struct ActivityStreamTracker {
+    let profile: Profile
     let eventsTracker: PingCentreClient
     let sessionsTracker: PingCentreClient
 
@@ -640,6 +648,34 @@ struct ActivityStreamTracker {
             "locale": Locale.current.identifier,
             "release_channel": AppConstants.BuildChannel.rawValue
         ]
+    }
+
+    private func collectStorageStats() -> Deferred<Maybe<[String: Int]>> {
+        // Dispatch some deferreds to gather up some information about the
+        // various souces of data that power Activity Stream
+        return accumulate([
+            profile.history.numberOfHistoryEntries,
+            profile.bookmarks.numberOfBookmarks
+        ]) >>== { results in
+            return deferMaybe([
+                "total_history_size": results[0],
+                "total_bookmarks_size": results[1],
+            ])
+        }
+    }
+
+    func reportPerf(event: ASPingEvent, queryDuration: UInt64, highlightsCount: Int, topSitesCount: Int) {
+        return collectStorageStats() >>== { storageStats in
+            var eventPing: [String: Any] = [
+                "event": event.rawValue,
+                "page": "NEW_TAB",
+                "highlights_count": highlightsCount,
+                "top_sites_count": topSitesCount
+            ]
+            eventPing.merge(with: self.baseASPing)
+            eventPing.merge(with: storageStats)
+            self.eventsTracker.sendPing(eventPing, validate: true)
+        }
     }
 
     func reportBadState(badState: ASPingBadStateEvent, source: ASPingSource) {
