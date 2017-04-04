@@ -32,7 +32,9 @@ class TopSitesTests: KIFTestCase {
         // clear rest of the history
         deleteHistoryTopsite(5)
     }
-    
+
+    // Test disabled till bug 1352959 https://bugzilla.mozilla.org/show_bug.cgi?id=1352959 is fixed
+    /*
     func test_RemovingSuggestedSites() {
         // Switch to the Bookmarks panel and back so we can later reload Top Sites.
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Bookmarks")).perform(grey_tap())
@@ -45,7 +47,7 @@ class TopSitesTests: KIFTestCase {
         // Delete the site, and verify that the tile we removed is removed
         deleteSuggestedTopsite(firstCell.accessibilityLabel!)
     }
-    
+    */
     func test_EmptyState() {
         // Switch to the Bookmarks panel and back so we can later reload Top Sites.
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Bookmarks")).perform(grey_tap())

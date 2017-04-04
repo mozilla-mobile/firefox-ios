@@ -16,6 +16,8 @@ class ActivityStreamTest: BaseTestCase {
         super.tearDown()
     }
 
+    // Tests disabled till bug 1352959 https://bugzilla.mozilla.org/show_bug.cgi?id=1352959 is fixed
+    /*
     func testDefaultSites() {
         let app = XCUIApplication()
         let topSites = app.tables["Top sites"].cells["TopSitesCell"]
@@ -130,4 +132,5 @@ class ActivityStreamTest: BaseTestCase {
 
         XCTAssertLessThanOrEqual(contextMenuHeight, parentViewHeight)
     }
+*/
 }
