@@ -285,6 +285,9 @@ class HorizontalFlowLayout: UICollectionViewLayout {
 
     override func prepare() {
         super.prepare()
+        if boundsSize != self.collectionView?.frame.size {
+            self.collectionView?.setContentOffset(CGPoint.zero, animated: false)
+        }
         boundsSize = self.collectionView?.frame.size ?? CGSize.zero
     }
 
