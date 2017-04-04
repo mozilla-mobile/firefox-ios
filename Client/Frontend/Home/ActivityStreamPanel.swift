@@ -631,17 +631,22 @@ struct ActivityStreamTracker {
     let eventsTracker: PingCentreClient
     let sessionsTracker: PingCentreClient
 
-    func reportBadState(badState: ASPingBadStateEvent, source: ASPingSource) {
-        var eventPing: [String: Any] = [
-            "event": badState.rawValue,
-            "page": "NEW_TAB",
-            "source": source.rawValue,
+    private var baseASPing: [String: Any] {
+        return [
             "app_version": AppInfo.appVersion,
             "build": AppInfo.buildNumber,
             "locale": Locale.current.identifier,
             "release_channel": AppConstants.BuildChannel.rawValue
         ]
+    }
 
+    func reportBadState(badState: ASPingBadStateEvent, source: ASPingSource) {
+        var eventPing: [String: Any] = [
+            "event": badState.rawValue,
+            "page": "NEW_TAB",
+            "source": source.rawValue,
+        ]
+        eventPing.merge(with: baseASPing)
         eventsTracker.sendPing(eventPing as [String : AnyObject], validate: true)
     }
 
@@ -651,16 +656,13 @@ struct ActivityStreamTracker {
             "page": "NEW_TAB",
             "source": source.rawValue,
             "action_position": position,
-            "app_version": AppInfo.appVersion,
-            "build": AppInfo.buildNumber,
-            "locale": Locale.current.identifier,
-            "release_channel": AppConstants.BuildChannel.rawValue
         ]
 
         if let provider = shareProvider {
             eventPing["share_provider"] = provider
         }
 
+        eventPing.merge(with: baseASPing)
         eventsTracker.sendPing(eventPing as [String : AnyObject], validate: true)
     }
 
