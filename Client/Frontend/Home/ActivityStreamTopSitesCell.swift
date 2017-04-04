@@ -153,8 +153,25 @@ class TopSiteItemCell: UICollectionViewCell {
 
 }
 
+// An empty cell to show when a row is incomplete
+class EmptyTopsiteDecorationCell: UICollectionReusableView {
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.layer.cornerRadius = TopSiteCellUX.CellCornerRadius
+        self.layer.borderWidth = TopSiteCellUX.BorderWidth
+        self.layer.borderColor = TopSiteCellUX.BorderColor.cgColor
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
 struct ASHorizontalScrollCellUX {
     static let TopSiteCellIdentifier = "TopSiteItemCell"
+    static let TopSiteEmptyCellIdentifier = "TopSiteItemEmptyCell"
+
     static let TopSiteItemSize = CGSize(width: 75, height: 75)
     static let BackgroundColor = UIColor.white
     static let PageControlRadius: CGFloat = 3
@@ -272,7 +289,6 @@ class ASHorizontalScrollCell: UICollectionViewCell {
  */
 
 class HorizontalFlowLayout: UICollectionViewLayout {
-    var itemSize = CGSize.zero
     fileprivate var cellCount: Int {
         if let collectionView = collectionView, let dataSource = collectionView.dataSource {
             return dataSource.collectionView(collectionView, numberOfItemsInSection: 0)
@@ -282,6 +298,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
     var boundsSize = CGSize.zero
     private var insets = UIEdgeInsets(equalInset: ASHorizontalScrollCellUX.MinimumInsets)
     private var sectionInsets: CGFloat = 0
+    var itemSize = CGSize.zero
 
     override func prepare() {
         super.prepare()
@@ -289,6 +306,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
             self.collectionView?.setContentOffset(CGPoint.zero, animated: false)
         }
         boundsSize = self.collectionView?.frame.size ?? CGSize.zero
+        register(EmptyTopsiteDecorationCell.self, forDecorationViewOfKind: ASHorizontalScrollCellUX.TopSiteEmptyCellIdentifier)
     }
 
     func numberOfPages(with bounds: CGSize) -> Int {
@@ -360,14 +378,33 @@ class HorizontalFlowLayout: UICollectionViewLayout {
         }
     }
 
+    override func layoutAttributesForDecorationView(ofKind elementKind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+        let decorationAttr =  UICollectionViewLayoutAttributes(forDecorationViewOfKind: elementKind, with: indexPath)
+        let cellAttr = self.computeLayoutAttributesForCellAtIndexPath(indexPath)
+        decorationAttr.frame = cellAttr.frame
+        decorationAttr.frame.size.height -= TopSiteCellUX.TitleHeight
+        decorationAttr.zIndex = -1
+        return decorationAttr
+    }
+
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-        super.layoutAttributesForElements(in: rect)
         var allAttributes = [UICollectionViewLayoutAttributes]()
         for i in 0 ..< cellCount {
             let indexPath = IndexPath(row: i, section: 0)
             let attr = self.computeLayoutAttributesForCellAtIndexPath(indexPath)
             allAttributes.append(attr)
         }
+
+        //create decoration attributes
+        let horizontalItemsCount = maxHorizontalItemsCount(width: boundsSize.width)
+        var numberOfCells = cellCount
+        while numberOfCells % horizontalItemsCount != 0 {
+            //we need some empty cells dawg.
+            let attr = self.layoutAttributesForDecorationView(ofKind: ASHorizontalScrollCellUX.TopSiteEmptyCellIdentifier, at: IndexPath(item: numberOfCells, section: 0))
+            allAttributes.append(attr!)
+            numberOfCells += 1
+        }
+
         return allAttributes
     }
 
@@ -378,7 +415,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
     override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
         // Sometimes when the topsiteCell isnt on the screen the newbounds that it tries to layout in is very tiny
         // Resulting in incorrect layouts. So only layout when the width is greater than 320.
-        return newBounds.width <= 320
+        return newBounds.width >= 320
     }
 
     func computeLayoutAttributesForCellAtIndexPath(_ indexPath: IndexPath) -> UICollectionViewLayoutAttributes {
@@ -397,11 +434,6 @@ class HorizontalFlowLayout: UICollectionViewLayout {
         let attr = UICollectionViewLayoutAttributes(forCellWith: indexPath)
         var frame = CGRect.zero
         frame.origin.x = CGFloat(itemPage) * bounds.size.width + CGFloat(columnPosition) * (itemSize.width + insets.left) + insets.left
-        // If there is only 1 page. and only 1 row. Make sure to center.
-        if cellCount < horizontalItemsCount {
-            sectionInsets = floor((bounds.width - (CGFloat(cellCount) * (itemSize.width + insets.left))) / 2)
-            frame.origin.x += sectionInsets
-        }
         frame.origin.y = CGFloat(rowPosition) * (itemSize.height + insets.top) + insets.top
         frame.size = itemSize
         attr.frame = frame
