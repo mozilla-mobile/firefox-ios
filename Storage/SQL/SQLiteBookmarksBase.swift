@@ -18,7 +18,7 @@ class NoSuchSearchKeywordError: MaybeErrorType {
     }
 }
 
-open class SQLiteBookmarks: BookmarksModelFactorySource, KeywordSearchSource {
+open class SQLiteBookmarks: BookmarksModelFactorySource, KeywordSearchSource, CountableBookmarks {
     let db: BrowserDB
     let favicons: FaviconsTable<Favicon>
 
@@ -61,5 +61,13 @@ open class SQLiteBookmarks: BookmarksModelFactorySource, KeywordSearchSource {
 
                 return deferMaybe(NoSuchSearchKeywordError(keyword: keyword))
         }
+    }
+
+    // Doesn't factor in bookmark structure. Used for telemetry purposes on 
+    // bookmarks the user can actually see.
+    open func numberOfBookmarks() -> Deferred<Maybe<Int>> {
+        let sql = "SELECT COUNT(*) FROM \(ViewBookmarksLocalOnMirror)"
+        return self.db.runQuery(sql, args: nil, factory: { $0[0] as! Int })
+            >>== { deferMaybe($0[0]!) }
     }
 }

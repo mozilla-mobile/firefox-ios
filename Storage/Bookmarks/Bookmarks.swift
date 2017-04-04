@@ -14,6 +14,10 @@ public protocol SearchableBookmarks: class {
     func bookmarksByURL(_ url: URL) -> Deferred<Maybe<Cursor<BookmarkItem>>>
 }
 
+public protocol CountableBookmarks: class {
+    func numberOfBookmarks() -> Deferred<Maybe<Int>>
+}
+
 public protocol SyncableBookmarks: class, ResettableSyncStorage, AccountRemovalDelegate {
     // TODO
     func isUnchanged() -> Deferred<Maybe<Bool>>
