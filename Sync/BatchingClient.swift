@@ -98,14 +98,13 @@ open class Sync15BatchClient<T: CleartextPayloadJSON> {
             return succeed()
         }
 
-        do {
-            // Eagerly serializer the record prior to processing them so we can catch any issues
-            // with record sizes before we start uploading to the server.
-            let serialized = try records.map { try serialize($0) }
-            return addRecords(serialized.makeIterator())
-        } catch let e {
-            return deferMaybe(e as! MaybeErrorType)
+        // Eagerly serializer the record prior to processing them so we can catch any issues
+        // with record sizes before we start uploading to the server.
+        let serializeThunks = records.map { record in
+            return { self.serialize(record) }
         }
+
+        return accumulate(serializeThunks) >>== { self.addRecords($0.makeIterator()) }
     }
 
     fileprivate func addRecords(_ generator: IndexingIterator<[UploadRecord]>) -> Success {
@@ -117,50 +116,52 @@ open class Sync15BatchClient<T: CleartextPayloadJSON> {
     }
 
     fileprivate func accumulateOrUpload(_ record: UploadRecord) -> Success {
-        do {
+        return accumulateRecord(record).bind { result in
             // Try to add the record to our buffer
-            try accumulateRecord(record)
-        } catch AccumulateRecordError.full(let uploadOp) {
-            // When we're full, run the upload and try to add the record
-            // after uploading since we've made room for it.
-            return uploadOp >>> { self.accumulateOrUpload(record) }
-        } catch let e {
-            // Should never happen.
-            return deferMaybe(e as! MaybeErrorType)
+            guard let e = result.failureValue as? AccumulateRecordError else {
+                return succeed()
+            }
+
+            switch e {
+            case .full(let uploadOp):
+                return uploadOp >>> { self.accumulateOrUpload(record) }
+            default:
+                return deferMaybe(e)
+            }
         }
-        return succeed()
     }
 
-    fileprivate func accumulateRecord(_ record: UploadRecord) throws {
+    fileprivate func accumulateRecord(_ record: UploadRecord) -> Success {
         guard let token = self.batchToken else {
             guard addToPost(record) else {
-                throw AccumulateRecordError.full(uploadOp: self.start())
+                return deferMaybe(AccumulateRecordError.full(uploadOp: self.start()))
             }
-            return
+            return succeed()
         }
 
         guard fitsInBatch(record) else {
-            throw AccumulateRecordError.full(uploadOp: self.commitBatch(token))
+            return deferMaybe(AccumulateRecordError.full(uploadOp: self.commitBatch(token)))
         }
 
         guard addToPost(record) else {
-            throw AccumulateRecordError.full(uploadOp: self.postInBatch(token))
+            return deferMaybe(AccumulateRecordError.full(uploadOp: self.postInBatch(token)))
         }
 
         addToBatch(record)
+        return succeed()
     }
 
-    fileprivate func serialize(_ record: Record<T>) throws -> UploadRecord {
+    fileprivate func serialize(_ record: Record<T>) -> Deferred<Maybe<UploadRecord>> {
         guard let line = self.serializeRecord(record) else {
-            throw SerializeRecordFailure(record: record)
+            return deferMaybe(SerializeRecordFailure(record: record))
         }
 
         let lineSize = line.utf8.count
         guard lineSize < Sync15StorageClient.maxRecordSizeBytes else {
-            throw RecordTooLargeError(size: lineSize, guid: record.id)
+            return deferMaybe(RecordTooLargeError(size: lineSize, guid: record.id))
         }
 
-        return (record.id, line, lineSize)
+        return deferMaybe((record.id, line, lineSize))
     }
 
     fileprivate func addToPost(_ record: UploadRecord) -> Bool {
