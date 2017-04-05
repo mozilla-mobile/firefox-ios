@@ -265,6 +265,19 @@ open class BrowserDB {
         return success ? .success : .failure
     }
 
+    open func attachDB(named name: String, as alias: String) {
+        let file = URL(fileURLWithPath: (try! files.getAndEnsureDirectory())).appendingPathComponent(name).path
+        let command = "ATTACH DATABASE '\(file)' AS \(alias)"
+        let _ = db.withConnection(SwiftData.Flags.readWriteCreate, synchronous: true) { connection in
+            let err = connection.executeChange(command, withArgs: [])
+            if err != nil {
+                log.error("Error attaching DB. \(err?.localizedDescription)")
+                log.error("SQL was \(command)")
+            }
+            return err
+        }
+    }
+
     typealias IntCallback = (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> Int
 
     func withConnection<T>(flags: SwiftData.Flags, err: inout NSError?, callback: @escaping (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> T) -> T {

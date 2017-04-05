@@ -85,6 +85,7 @@ open class MockProfile: Profile {
     init() {
         files = MockFiles()
         db = BrowserDB(filename: "mock.db", files: files)
+        db.attachDB(named: "metadata.db", as: AttachedDatabaseMetadata)
         places = SQLiteHistory(db: self.db, prefs: MockProfilePrefs())
         recommendations = places
         history = places
