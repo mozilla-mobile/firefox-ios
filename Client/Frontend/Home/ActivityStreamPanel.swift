@@ -85,17 +85,7 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         sessionStart = Date.now()
-
-        let queryStart = Date.now()
-        all([invalidateTopSites(), invalidateHighlights()]).uponQueue(DispatchQueue.main) { _ in
-            let queryDuration = Date.now() - queryStart
-            self.telemetry.reportPerf(event: .OnFirstDataLoad,
-                                      queryDuration: queryDuration,
-                                      highlightsCount: self.self.highlights.count,
-                                      topSitesCount: self.topSitesManager.content.count)
-            self.isInitialLoad = false
-            self.collectionView?.reloadData()
-        }
+        let _ = invalidateAll()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -375,6 +365,20 @@ extension ActivityStreamPanel {
             if site.icon == nil {
                 self.telemetry.reportBadState(badState: .MissingFavicon, source: source)
             }
+        }
+    }
+
+    func invalidateAll() -> Success {
+        let queryStart = Date.now()
+        return all([invalidateTopSites(), invalidateHighlights()]).bindQueue(DispatchQueue.main) { _ in
+            let queryDuration = Date.now() - queryStart
+            self.telemetry.reportPerf(event: .OnFirstDataLoad,
+                                      queryDuration: queryDuration,
+                                      highlightsCount: self.self.highlights.count,
+                                      topSitesCount: self.topSitesManager.content.count)
+            self.isInitialLoad = false
+            self.collectionView?.reloadData()
+            return succeed()
         }
     }
 

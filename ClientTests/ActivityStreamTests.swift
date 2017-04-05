@@ -12,18 +12,21 @@ import Deferred
 class ActivityStreamTests: XCTestCase {
     var profile: MockProfile!
     var panel: ActivityStreamPanel!
-    var mockPingClient: MockPingClient!
+    var mockEventClient: MockPingClient!
     var telemetry: ActivityStreamTracker!
 
     override func setUp() {
         super.setUp()
         self.profile = MockProfile()
-        self.telemetry = ActivityStreamTracker(profile: profile, eventsTracker: MockPingClient(), sessionsTracker: MockPingClient())
+        self.mockEventClient = MockPingClient()
+        self.telemetry = ActivityStreamTracker(profile: profile,
+                                               eventsTracker: mockEventClient,
+                                               sessionsTracker: MockPingClient())
         self.panel = ActivityStreamPanel(profile: profile, telemetry: self.telemetry)
     }
 
     override func tearDown() {
-        mockPingClient = nil
+        mockEventClient = nil
     }
 
     func testDeletionOfSingleSuggestedSite() {
@@ -212,14 +215,28 @@ extension ActivityStreamTests {
         assertPayload(pingsSent[1],
                       matches: expectedBadStatePayload(state: "MISSING_FAVICON", source: "TOP_SITES"))
     }
+
+    func testPerfQueryEvent() {
+        let expect = XCTestExpectation(description: "Sent query ping data")
+        mockEventClient.expectation = expect
+        let _ = panel.invalidateAll()
+        wait(for: [expect], timeout: 3)
+
+        let pingsSent = (telemetry.eventsTracker as! MockPingClient).pingsReceived
+        XCTAssertEqual(pingsSent.count, 1)
+
+        let eventPing = pingsSent[0]
+        XCTAssertEqual(eventPing["event"] as! String, "ON_FIRST_DATA_LOAD")
+    }
 }
 
 class MockPingClient: PingCentreClient {
-
     var pingsReceived: [[String: Any]] = []
+    var expectation: XCTestExpectation?
 
     public func sendPing(_ data: [String : Any], validate: Bool) -> Success {
         pingsReceived.append(data)
+        expectation?.fulfill()
         return succeed()
     }
 }
