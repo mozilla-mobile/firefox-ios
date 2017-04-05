@@ -26,7 +26,7 @@ open class SearchEnginesJSON {
                 } else {
                     engineNames = regions[region]!["visibleDefaultEngines"].array
                 }
-                break;
+                break
             }
         }
         if engineNames == nil {
@@ -54,7 +54,7 @@ open class SearchEnginesJSON {
                 } else {
                     searchDefault = regions[region]!["searchDefault"].string
                 }
-                break;
+                break
             }
         }
         if searchDefault == nil {
