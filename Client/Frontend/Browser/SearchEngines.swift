@@ -190,7 +190,7 @@ class SearchEngines {
             possibilities.append(components[0] + "-" + components[2])
             possibilities.append(components[0])
         }
-        return possibilities;
+        return possibilities
     }
 
     /// Return all possible paths for a language identifier in the order of most specific to least specific.
@@ -262,7 +262,7 @@ class SearchEngines {
             let fullPath = (pluginBasePath as NSString).appendingPathComponent("\(engineName).xml")
             // If a search engine doesn't exist, just ignore it. We might have entries in
             // list.json where the files don't exist yet.
-            if (!FileManager.default.fileExists(atPath: fullPath)) {
+            if !FileManager.default.fileExists(atPath: fullPath) {
                 continue
             }
 
@@ -272,7 +272,7 @@ class SearchEngines {
             engines.append(engine!)
         }
 
-        let defaultEngineName = searchDefault;
+        let defaultEngineName = searchDefault
 
         return engines.sorted { e, _ in e.shortName == defaultEngineName }
     }
