@@ -358,14 +358,30 @@ extension ActivityStreamPanel {
         }
     }
 
-    fileprivate func invalidateHighlights() -> Success {
+    fileprivate func reportMissingData(sites: [Site], source: ASPingSource) {
+        sites.forEach { site in
+            if site.metadata?.mediaURL == nil {
+                self.telemetry.reportBadState(badState: .MissingMetadataImage, source: source)
+            }
+
+            if site.icon == nil {
+                self.telemetry.reportBadState(badState: .MissingFavicon, source: source)
+            }
+        }
+    }
+
+    func invalidateHighlights() -> Success {
         return self.profile.recommendations.getHighlights().bindQueue(DispatchQueue.main) { result in
-            self.highlights = result.successValue?.asArray() ?? self.highlights
+            if let newHighlights = result.successValue?.asArray() {
+                // Scan through the fetched highlights and report on anything that might be missing.
+                self.reportMissingData(sites: newHighlights, source: .Highlights)
+                self.highlights = newHighlights
+            }
             return succeed()
         }
     }
 
-    fileprivate func invalidateTopSites() -> Success {
+    func invalidateTopSites() -> Success {
         let frecencyLimit = ASPanelUX.topSitesCacheSize
 
         // Update our top sites cache if it's been invalidated
@@ -384,6 +400,9 @@ extension ActivityStreamPanel {
                     let domain = URL(string: site.url)?.hostSLD
                     return defaultSites.find { $0.title.lowercased() == domain } ?? site
                 }
+
+                // Don't report bad states for default sites we provide
+                self.reportMissingData(sites: mySites, source: .TopSites)
 
                 self.topSitesManager.currentTraits = self.view.traitCollection
                 self.topSitesManager.content = newSites.count > ASPanelUX.topSitesCacheSize ? Array(newSites[0..<ASPanelUX.topSitesCacheSize]) : newSites
@@ -597,6 +616,11 @@ enum ASPingEvent: String {
     case Share = "SHARE"
 }
 
+enum ASPingBadStateEvent: String {
+    case MissingMetadataImage = "MISSING_METADATA_IMAGE"
+    case MissingFavicon = "MISSING_FAVICON"
+}
+
 enum ASPingSource: String {
     case Highlights = "HIGHLIGHTS"
     case TopSites = "TOP_SITES"
@@ -607,22 +631,38 @@ struct ActivityStreamTracker {
     let eventsTracker: PingCentreClient
     let sessionsTracker: PingCentreClient
 
+    private var baseASPing: [String: Any] {
+        return [
+            "app_version": AppInfo.appVersion,
+            "build": AppInfo.buildNumber,
+            "locale": Locale.current.identifier,
+            "release_channel": AppConstants.BuildChannel.rawValue
+        ]
+    }
+
+    func reportBadState(badState: ASPingBadStateEvent, source: ASPingSource) {
+        var eventPing: [String: Any] = [
+            "event": badState.rawValue,
+            "page": "NEW_TAB",
+            "source": source.rawValue,
+        ]
+        eventPing.merge(with: baseASPing)
+        eventsTracker.sendPing(eventPing as [String : AnyObject], validate: true)
+    }
+
     func reportEvent(_ event: ASPingEvent, source: ASPingSource, position: Int, shareProvider: String? = nil) {
         var eventPing: [String: Any] = [
             "event": event.rawValue,
             "page": "NEW_TAB",
             "source": source.rawValue,
             "action_position": position,
-            "app_version": AppInfo.appVersion,
-            "build": AppInfo.buildNumber,
-            "locale": Locale.current.identifier,
-            "release_channel": AppConstants.BuildChannel.rawValue
         ]
 
         if let provider = shareProvider {
             eventPing["share_provider"] = provider
         }
 
+        eventPing.merge(with: baseASPing)
         eventsTracker.sendPing(eventPing as [String : AnyObject], validate: true)
     }
 
