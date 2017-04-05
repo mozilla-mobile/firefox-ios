@@ -1,6 +1,0 @@
-amazondotcom
-bing
-google
-leit-is
-wikipedia-is
-yahoo

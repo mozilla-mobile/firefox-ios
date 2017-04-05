@@ -1,0 +1,22 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>Yahoo</ShortName>
+<InputEncoding>UTF-8</InputEncoding>
+<Image width="16" height="16">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAMAAADVRocKAAAAt1BMVEUAAABTALVUALVUALZUALVVAL9TALX///9hFrv+/v77+v19QMdXBrfezvGba9SVYtH49vzw6vnIree+n+P08Pro3vXaye/Ot+rKsejFqua1kt+yjd6of9qfcdaOV855OcV1M8NuKMBpIb7l2PPi1PKrg9uidteKUs2GTcuESspaC7jz7frUwO3Bo+SviNyhdNaZaNOYZ9KSXdBnHb1eEbldD7n18frs4/a6muG6meG5mOGnftmletijsdsyAAAABnRSTlMA8si8ZBgxEvPEAAACZElEQVRo3u2aaW/CMAyGC2NuoeUobMC473FtY4Pd+/+/a2SOlIy1SDR5pSHVH6pUcfI0sRM7VZy95LIZAkgmm3OEXF4QTC4u9wBU/0zYzw9BJedkCSpZJ0NQyTgElhSQAlJACjABLDo933/q1PrH288/Zr3bXnnqnwzwVu6PFOmYBNesdb08fYrKLsvmGKArleZJbLDmtuEuXsW7Yp1mIiMPC9y6Fa9SY43KNpkXfXLzwjBOYZBnjVlCNw3G3L4Rp1Dn+kmQEEC+MuExN/CTL7Q76YSRn7gLubZGSQHKS76iKj+4buUZAKgk3WQUb+GN2V5UlI4eW1MnM0BffuciZmyFgSGA3pSdo6zTIlOA98I9dSLXcPhsDKAHZee/M/dIpgC1npsRFi5aiWhzl+VWtzCLbwVADe7tdXlo4RsyB+j7dvtgB6lsLQGorXxe3wM7ZAvwHOqrNpioKbMDUBtzWbzM5EvPZl5UV+tqW+HymmwC+i7LO1GVS/mBTYDq1l9I1BvZBYykq45lpnXlWQbQvftLumQbsAz1/seBbYByVRl/bAPUDsqZEgLArsq5HgRAN66r4iQCMJRhbLUjggCoqrkoBFDSQhsE8IgGbLR9GjlFT6J8noCuFtcggE8tnYMApgwoiTIGAF1oKug8iDIE0NaOxRgAegQt7cwJAdS0nBQCkBFnym+4eHDPb7AR8DkBOAIOyRBAU2bAogwBNLTfKxDAmgF3ogwB1LXDJQRQZEBVlCGAiXbmBwEKL5U8p74QwMgTT28knv//73sKSAEp4JwA6EsD8GsP8Isb6Ksn+Msz8Os/38MM7gJG7lmzAAAAAElFTkSuQmCC</Image>
+<Url type="application/x-suggestions+json" method="GET"
+     template="https://mx.search.yahoo.com/sugg/ff">
+  <Param name="output" value="fxjson" />
+  <Param name="appid" value="ffm" />
+  <Param name="command" value="{searchTerms}" />
+  <Param name="nresults" value="4" />
+</Url>
+<Url type="text/html" method="GET" template="https://mx.search.yahoo.com/search">
+  <Param name="p" value="{searchTerms}" />
+  <Param name="ei" value="UTF-8" />
+  <Param name="fr" value="mozilla_mobile_search" />
+</Url>
+<SearchForm>https://mx.search.yahoo.com/</SearchForm>
+</SearchPlugin>

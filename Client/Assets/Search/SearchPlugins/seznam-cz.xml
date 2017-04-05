@@ -1,0 +1,17 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>Seznam</ShortName>
+<InputEncoding>UTF-8</InputEncoding>
+<Image width="16" height="16">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAMAAADVRocKAAAAw1BMVEUAAADMAADMAADMAADMAADMAADMAADMAAD////++vrNBQX//v7dVFTWLy/43d3zw8Pto6PsoKDhaWnTIyP99vb87+/1y8vxt7fSHR3RGBjOCwv77Oz31NTrm5vmg4PbS0vaQkLZPDzQExPqkpLnh4fibGzfX1/eWlrXNjbVKyv98/P65+f54OD32Njyu7vwsbHle3vkd3fUKCjPEBDOCQn54+P1zs7tpqbjcnLgZWXaRkb0yMjvrKzojY3XNDTniYnlfX1mR6ZxAAAAB3RSTlMA8si8ZBhlc+JuAAAAAmtJREFUaN7t2uly2jAQwHFDSHdlG3yAwZhw3+E+wpWjff+nKm3GNsM6oc1KHzLj/wPopxHWWHiknctlM6CgTDan/en+DpR1d38GyPhSBU37AUrLaVlQWlbLgNIyGiguBVIgBVLgewNj2xsBSRYwXpYNxEkVSHxAf3PtJ3zP0uUCQdutlwVetJQH5F1nZuB1Ii8F6BxfapicxQd0syLw49pcYDDFT+vyAN/CG1ksoFXDW5U5QLOEN7MZwNs/jC9GXwe2BbzZpMV4TBt4q4dDwNjJgYefNXPcIgAwgBN+lFdpNDtwjgcMk1elOwwnzgVGSCr1yOAMAKYEMAFkAnSNmnIBcOhTLxfQ99eCsS9yANqKvAmEk5cJQPsBSc/HjTwA9FWJEmIx6HCBOL8ukCbmbpUJxBWdJAIN6+DzgLhqr4bJxiBgAXFBv4CJea8+D4gzK0YiIeo+D4jzf80SidJSZwJx+V7iUu3WDIAYjRkVHpssgBpkhwuTB1Dj5+RKaHMBeip+xsuetlyAdipcCq58AHQb4+YSAFolBh6VAEURC0oAsDCsBkoAJwIWoASYk2OTXGBskP86UoHNQ/QLrFUA/i7ax3mQD+h9L3x32h2QDmyit6ixGAHIBtpOKdzA9TGAZCDfC8/2ojIMAKQC21a3EI1+JEvPBIr9SrQyi8EGSBygOqxHU7caLR1IDKBqdsMdNd0f2luI4gP6qG+/z1zs7NWpCiQGsB50/36j88rOylyTRWEBnWZj7mGt/PLqtsisuUDRXNbtntscB/B/fa9PyymQAimQAvJSfmlA/bWHHCgtp/rqifrLM8qv//wGWy8ZH4yviOAAAAAASUVORK5CYII=</Image>
+<Url type="application/x-suggestions+json" method="GET" template="https://suggest.seznam.cz/fulltext_ff">
+  <Param name="phrase" value="{searchTerms}"/>
+</Url>
+<Url type="text/html" method="GET" template="https://search.seznam.cz/">
+  <Param name="q" value="{searchTerms}"/>
+  <Param name="sourceid" value="SearchBox"/>
+</Url>
+<SearchForm>http://search.seznam.cz/</SearchForm>
+</SearchPlugin>
