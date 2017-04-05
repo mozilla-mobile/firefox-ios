@@ -20,7 +20,7 @@ private struct ActionOverlayTableViewUX {
     static let IconSize = CGSize(width: 32, height: 32)
 }
 
-class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate {
     fileprivate(set) var actions: [ActionOverlayTableViewAction]
 
     private var site: Site
@@ -31,6 +31,7 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
         tapRecognizer.addTarget(self, action: #selector(ActionOverlayTableViewController.dismiss(_:)))
         tapRecognizer.numberOfTapsRequired = 1
         tapRecognizer.cancelsTouchesInView = false
+        tapRecognizer.delegate = self
         return tapRecognizer
     }()
 
@@ -84,7 +85,7 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
         make.height.equalTo(ActionOverlayTableViewUX.HeaderHeight + CGFloat(actions.count) * ActionOverlayTableViewUX.RowHeight).priority(10)
     }
 
-    func dismiss(_ gestureRecognizer: UIGestureRecognizer) {
+    func dismiss(_ gestureRecognizer: UIGestureRecognizer?) {
         self.dismiss(animated: true, completion: nil)
     }
 
@@ -111,6 +112,13 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
         }
     }
 
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        if tableView.frame.contains(touch.location(in: self.view)) {
+            return false
+        }
+        return true
+    }
+
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -120,6 +128,10 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        defer {
+            self.dismiss(nil)
+        }
+
         let action = actions[indexPath.row]
         guard let handler = actions[indexPath.row].handler else {
             return
