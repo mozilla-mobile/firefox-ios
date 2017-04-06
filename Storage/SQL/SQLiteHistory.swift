@@ -596,6 +596,7 @@ extension SQLiteHistory: BrowserHistory {
             "max(remoteVisitDate) AS remoteVisitDate,",
             "sum(localVisitCount) AS localVisitCount,",
             "sum(remoteVisitCount) AS remoteVisitCount,",
+            "max(frecency),",
             "sum(frecency) AS frecencies,",
             "0 AS is_bookmarked",
             "FROM (", frecenciedSQL, ") ",
