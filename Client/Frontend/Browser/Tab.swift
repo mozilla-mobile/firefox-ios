@@ -151,6 +151,9 @@ class Tab: NSObject {
             configuration!.userContentController = WKUserContentController()
             configuration!.preferences = WKPreferences()
             configuration!.preferences.javaScriptCanOpenWindowsAutomatically = false
+            configuration!.allowsInlineMediaPlayback = true
+            configuration!.allowsPictureInPictureMediaPlayback = true
+            configuration!.allowsAirPlayForMediaPlayback = true
             let webView = TabWebView(frame: CGRect.zero, configuration: configuration!)
             webView.delegate = self
             configuration = nil
