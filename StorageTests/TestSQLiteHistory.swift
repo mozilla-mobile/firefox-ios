@@ -1234,6 +1234,56 @@ class TestSQLiteHistory: XCTestCase {
         }
     }
 
+    func testTopSitesFrecencyOrder() {
+        let db = BrowserDB(filename: "browser.db", files: files)
+        let prefs = MockProfilePrefs()
+        let history = SQLiteHistory(db: db, prefs: prefs)
+
+        history.setTopSitesCacheSize(20)
+        history.clearTopSitesCache().value
+        history.clearHistory().value
+
+
+        // Lets create some history. This will create 100 sites that will have 21 local and 21 remote visits
+        populateHistoryForFrecencyCalculations(history, siteCount: 100)
+
+        // Create a new site thats for an existing domain but a different URL.
+        let site = Site(url: "http://s\(5)ite\(5).com/foo-different-url", title: "A \(5) different url")
+        site.guid = "abc\(5)defhi"
+        history.insertOrUpdatePlace(site.asPlace(), modified: baseInstantInMillis - 20000).value
+        // Don't give it any remote visits. But give it 100 local visits. This should be the new Topsite!
+        for i in 0...100 {
+            addVisitForSite(site, intoHistory: history, from: .local, atTime: advanceTimestamp(baseInstantInMicros, by: 1000000 * i))
+        }
+
+        let expectation = self.expectation(description: "First.")
+        func done() -> Success {
+            expectation.fulfill()
+            return succeed()
+        }
+
+        func loadCache() -> Success {
+            return history.updateTopSitesCacheIfInvalidated() >>> succeed
+        }
+
+        func checkTopSitesReturnsResults() -> Success {
+            return history.getTopSitesWithLimit(20) >>== { topSites in
+                XCTAssertEqual(topSites.count, 20)
+                XCTAssertEqual(topSites[0]!.guid, "abc\(5)defhi")
+                return succeed()
+            }
+        }
+
+        loadCache()
+            >>> checkTopSitesReturnsResults
+            >>> done
+
+        waitForExpectations(timeout: 10.0) { error in
+            return
+        }
+    }
+
+
     func testTopSitesCache() {
         let db = BrowserDB(filename: "browser.db", files: files)
         db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
@@ -1301,7 +1351,8 @@ class TestSQLiteHistory: XCTestCase {
 
             return history.getTopSitesWithLimit(20) >>== { topSites in
                 XCTAssertEqual(topSites.count, 20)
-                XCTAssertEqual(topSites[0]!.guid, "abc\(0)def")
+                XCTAssertEqual(topSites[0]!.guid, "abc\(5)def")
+                XCTAssertEqual(topSites[1]!.guid, "abc\(0)def")
                 return succeed()
             }
         }
