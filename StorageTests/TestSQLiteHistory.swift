@@ -1248,7 +1248,7 @@ class TestSQLiteHistory: XCTestCase {
         populateHistoryForFrecencyCalculations(history, siteCount: 100)
 
         // Add extra visits to the 5th site to bubble it to the top of the top sites cache
-        let site = Site(url: "http://s\(5)ite\(5)/foo", title: "A \(5)")
+        let site = Site(url: "http://s\(5)ite\(5).com/foo", title: "A \(5)")
         site.guid = "abc\(5)def"
         for i in 0...20 {
             addVisitForSite(site, intoHistory: history, from: .local, atTime: advanceTimestamp(baseInstantInMicros, by: 1000000 * i))
@@ -1283,7 +1283,7 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         func addVisitsToZerothSite() -> Success {
-            let site = Site(url: "http://s\(0)ite\(0)/foo", title: "A \(0)")
+            let site = Site(url: "http://s\(0)ite\(0).com/foo", title: "A \(0)")
             site.guid = "abc\(0)def"
             for i in 0...20 {
                 addVisitForSite(site, intoHistory: history, from: .local, atTime: advanceTimestamp(baseInstantInMicros, by: 1000000 * i))
@@ -1401,7 +1401,7 @@ enum VisitOrigin {
 
 private func populateHistoryForFrecencyCalculations(_ history: SQLiteHistory, siteCount count: Int) {
     for i in 0...count {
-        let site = Site(url: "http://s\(i)ite\(i)/foo", title: "A \(i)")
+        let site = Site(url: "http://s\(i)ite\(i).com/foo", title: "A \(i)")
         site.guid = "abc\(i)def"
 
         let baseMillis: UInt64 = baseInstantInMillis - 20000
