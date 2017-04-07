@@ -8,6 +8,7 @@ import Deferred
 import Storage
 import WebImage
 import XCGLogger
+import Telemetry
 
 private let log = Logger.browserLogger
 private let DefaultSuggestedSitesKey = "topSites.deletedSuggestedSites"

@@ -43,13 +43,23 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E69DB07C1E97DEA9008A67E6"
+               BuildableName = "TelemetryTests.xctest"
+               BlueprintName = "TelemetryTests"
+               ReferencedContainer = "container:Client.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "390527491C874D35007E0BB7"
-            BuildableName = "Today.appex"
-            BlueprintName = "Today"
+            BlueprintIdentifier = "F84B21BD1A090F8100AAB793"
+            BuildableName = "Client.app"
+            BlueprintName = "Client"
             ReferencedContainer = "container:Client.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

@@ -7,6 +7,7 @@ import Foundation
 import GCDWebServers
 import XCGLogger
 import SwiftyJSON
+import Shared
 
 private let log = Logger.browserLogger
 private let ServerURL = "https://incoming.telemetry.mozilla.org".asURL!

@@ -10,6 +10,7 @@ import MessageUI
 import WebImage
 import SwiftKeychainWrapper
 import LocalAuthentication
+import Telemetry
 
 private let log = Logger.browserLogger
 

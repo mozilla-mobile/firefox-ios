@@ -13,6 +13,7 @@ import XCGLogger
 import SwiftKeychainWrapper
 import Deferred
 import SwiftyJSON
+import Telemetry
 
 private let log = Logger.syncLogger
 

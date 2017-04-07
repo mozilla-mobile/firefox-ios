@@ -427,7 +427,6 @@
 		D3972BF41C22412B00035B87 /* TitleActivityItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3972BF21C22412B00035B87 /* TitleActivityItemProvider.swift */; };
 		D39949F51C22461A00E2A03C /* RequestDesktopSiteActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39949F41C22461A00E2A03C /* RequestDesktopSiteActivity.swift */; };
 		D3994A4A1C22813200E2A03C /* FindInPageActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3994A491C22813200E2A03C /* FindInPageActivity.swift */; };
-		D39ABDFE1CC6F35F003A319E /* CorePing.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35F55871CC5A3E400DC0D22 /* CorePing.swift */; };
 		D39FA16C1A83E17800EE869C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D39FA16B1A83E17800EE869C /* CoreGraphics.framework */; };
 		D39FA1811A83E84900EE869C /* Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39FA1801A83E84900EE869C /* Global.swift */; };
 		D39FA1831A83E87900EE869C /* NavigationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39FA1821A83E87900EE869C /* NavigationTests.swift */; };
@@ -643,8 +642,6 @@
 		E65075BF1E37F7AB006961AC /* UserAgent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075901E37F7AB006961AC /* UserAgent.swift */; };
 		E65075C01E37F7AB006961AC /* WeakList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075911E37F7AB006961AC /* WeakList.swift */; };
 		E65075C21E37F956006961AC /* ExtensionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075C11E37F956006961AC /* ExtensionUtils.swift */; };
-		E65075C81E37FB8E006961AC /* BookmarkTelemetryPing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28BFA7241C8E5C3F0017C2BD /* BookmarkTelemetryPing.swift */; };
-		E65075C91E37FBEF006961AC /* Telemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35F55891CC5A4E000DC0D22 /* Telemetry.swift */; };
 		E653422D1C5944F90039DD9E /* BrowserPrompts.swift in Sources */ = {isa = PBXBuildFile; fileRef = E653422C1C5944F90039DD9E /* BrowserPrompts.swift */; };
 		E65607611C08B4E200534B02 /* SearchInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65607601C08B4E200534B02 /* SearchInputView.swift */; };
 		E65C5BD31BEA4F8A00D28BEF /* FBSnapshotTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = E65C5B951BEA4E7100D28BEF /* FBSnapshotTestCase.m */; };
@@ -668,7 +665,6 @@
 		E683F0C21E93D4E90035D990 /* DictionaryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E683F0C11E93D4E90035D990 /* DictionaryExtensions.swift */; };
 		E689C6F81E0C6E72008BAADB /* FxASignIn.js in Resources */ = {isa = PBXBuildFile; fileRef = E689C6F71E0C6E72008BAADB /* FxASignIn.js */; };
 		E689C6FA1E0C6E98008BAADB /* FxAContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E689C6F91E0C6E98008BAADB /* FxAContentViewController.swift */; };
-		E689C6FE1E0C6FE0008BAADB /* ClientTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = E689C6FB1E0C6FD0008BAADB /* ClientTelemetry.swift */; };
 		E689C7301E0C7617008BAADB /* NSAttributedStringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E689C72F1E0C7617008BAADB /* NSAttributedStringExtensions.swift */; };
 		E68AEDB01B18F81A00133D99 /* SwipeAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */; };
 		E68E39BE1C46F42000B85F42 /* AppSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68E39BD1C46F42000B85F42 /* AppSettingsTableViewController.swift */; };
@@ -683,6 +679,21 @@
 		E696FE511C47F86E00EC007C /* AuthenticatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E696FE501C47F86E00EC007C /* AuthenticatorTests.swift */; };
 		E698FFDA1B4AADF40001F623 /* TabScrollController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E698FFD91B4AADF40001F623 /* TabScrollController.swift */; };
 		E69922171B94E3EF007C480D /* Licenses.html in Resources */ = {isa = PBXBuildFile; fileRef = E69922121B94E3EF007C480D /* Licenses.html */; };
+		E69DB07E1E97DEAA008A67E6 /* Telemetry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E69DB0751E97DEA9008A67E6 /* Telemetry.framework */; };
+		E69DB0851E97DEAA008A67E6 /* TelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69DB0841E97DEAA008A67E6 /* TelemetryTests.swift */; };
+		E69DB0871E97DEAA008A67E6 /* Telemetry.h in Headers */ = {isa = PBXBuildFile; fileRef = E69DB0771E97DEA9008A67E6 /* Telemetry.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E69DB08A1E97DEAA008A67E6 /* Telemetry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E69DB0751E97DEA9008A67E6 /* Telemetry.framework */; };
+		E69DB08B1E97DEAA008A67E6 /* Telemetry.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E69DB0751E97DEA9008A67E6 /* Telemetry.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E69DB0A81E97DF22008A67E6 /* Telemetry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E69DB0751E97DEA9008A67E6 /* Telemetry.framework */; };
+		E69DB0A91E97DF73008A67E6 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
+		E69DB0AA1E97DFD4008A67E6 /* FxA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28CE83D01A1D1D5100576538 /* FxA.framework */; };
+		E69DB0B61E97E2AC008A67E6 /* PingCentre.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69DB0B41E97E2AC008A67E6 /* PingCentre.swift */; };
+		E69DB0B71E97E2AC008A67E6 /* Telemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69DB0B51E97E2AC008A67E6 /* Telemetry.swift */; };
+		E69DB0BD1E97E301008A67E6 /* ActivityStreamTopics.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69DB0BA1E97E301008A67E6 /* ActivityStreamTopics.swift */; };
+		E69DB0BE1E97E301008A67E6 /* ClientTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69DB0BB1E97E301008A67E6 /* ClientTelemetry.swift */; };
+		E69DB0BF1E97E301008A67E6 /* CorePing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69DB0BC1E97E301008A67E6 /* CorePing.swift */; };
+		E69DB0C31E97E320008A67E6 /* BookmarkTelemetryPing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69DB0C01E97E320008A67E6 /* BookmarkTelemetryPing.swift */; };
+		E69DB0C41E97E320008A67E6 /* SyncTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69DB0C11E97E320008A67E6 /* SyncTelemetry.swift */; };
 		E69E06BA1C76173D00D0F926 /* RequirePasscodeIntervalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E06B91C76173D00D0F926 /* RequirePasscodeIntervalViewController.swift */; };
 		E69E06C91C76198000D0F926 /* AuthenticationManagerConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E06C81C76198000D0F926 /* AuthenticationManagerConstants.swift */; };
 		E6A92ADB1C52A8DA00743291 /* LoginInputTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A92ADA1C52A8DA00743291 /* LoginInputTests.swift */; };
@@ -692,12 +703,9 @@
 		E6BA20211E52170E00697F9C /* SyncTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BA20111E52165800697F9C /* SyncTelemetryTests.swift */; };
 		E6BE53CD1D9177B10074909A /* TestSQLiteHistoryRecommendations.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BE53CC1D9177B10074909A /* TestSQLiteHistoryRecommendations.swift */; };
 		E6C191F11E38F810000A213B /* libPhoneNumberiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6C191F01E38F7EE000A213B /* libPhoneNumberiOS.framework */; };
-		E6C70E171E2830CC00F8DB57 /* PingCentre.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6C70E151E2830CC00F8DB57 /* PingCentre.swift */; };
-		E6C70E181E2830CC00F8DB57 /* Topics.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6C70E161E2830CC00F8DB57 /* Topics.swift */; };
 		E6C70E821E28314700F8DB57 /* PingCentreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6C70E811E28314700F8DB57 /* PingCentreTests.swift */; };
 		E6C9EB6B1E2FBFC300D5CE80 /* signedInUser.json in Resources */ = {isa = PBXBuildFile; fileRef = E6C9EB6A1E2FBFC300D5CE80 /* signedInUser.json */; };
 		E6CF28E71CB43B7900151AB3 /* SensitiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CF28E61CB43B7900151AB3 /* SensitiveViewController.swift */; };
-		E6D60FE31E0B08A000674605 /* SyncTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D60FE21E0B08A000674605 /* SyncTelemetry.swift */; };
 		E6D7C32B1CF4E86C00E746BA /* TestBookmarkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7C31C1CF4E68D00E746BA /* TestBookmarkModel.swift */; };
 		E6D8D5E71B569D70009E5A58 /* BrowserTrayAnimators.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D8D5E61B569D70009E5A58 /* BrowserTrayAnimators.swift */; };
 		E6EAC5961B29CB3A00E1DE1E /* scrollablePage.html in Resources */ = {isa = PBXBuildFile; fileRef = E6EAC5951B29CB3A00E1DE1E /* scrollablePage.html */; };
@@ -1113,6 +1121,34 @@
 			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
 			remoteInfo = Client;
 		};
+		E69DB07F1E97DEAA008A67E6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E69DB0741E97DEA9008A67E6;
+			remoteInfo = Telemetry;
+		};
+		E69DB0811E97DEAA008A67E6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
+			remoteInfo = Client;
+		};
+		E69DB0881E97DEAA008A67E6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E69DB0741E97DEA9008A67E6;
+			remoteInfo = Telemetry;
+		};
+		E69DB0A61E97DEF6008A67E6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E69DB0741E97DEA9008A67E6;
+			remoteInfo = Telemetry;
+		};
 		E6CB64CB1DA42C2900887098 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D30EBB5A1C75503800105AE9 /* KIF.xcodeproj */;
@@ -1179,6 +1215,7 @@
 			files = (
 				E62CFB3D1C89EFF700C01324 /* FxA.framework in Copy Frameworks */,
 				E601386A1C89EB9800DF9756 /* SQLite.framework in Copy Frameworks */,
+				E69DB08B1E97DEAA008A67E6 /* Telemetry.framework in Copy Frameworks */,
 				E60138691C89EB8E00DF9756 /* ReadingList.framework in Copy Frameworks */,
 				E60138681C89EB8800DF9756 /* Sync.framework in Copy Frameworks */,
 				E60138671C89EB8300DF9756 /* Account.framework in Copy Frameworks */,
@@ -1303,7 +1340,6 @@
 		28A6CE891AC082E200C1A2D4 /* UtilsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UtilsTests.swift; sourceTree = "<group>"; };
 		28AA941C1B97DCA800703DC6 /* BookmarkPayload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarkPayload.swift; sourceTree = "<group>"; };
 		28B62ACD1BC745E7004A585A /* Syncable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Syncable.swift; sourceTree = "<group>"; };
-		28BFA7241C8E5C3F0017C2BD /* BookmarkTelemetryPing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BookmarkTelemetryPing.swift; path = Telemetry/BookmarkTelemetryPing.swift; sourceTree = "<group>"; };
 		28C077971A3B064000834FE5 /* CryptoTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CryptoTests.swift; path = SyncTests/CryptoTests.swift; sourceTree = "<group>"; };
 		28C0779D1A3B066000834FE5 /* RecordTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RecordTests.swift; path = SyncTests/RecordTests.swift; sourceTree = "<group>"; };
 		28C28BFC1C51A3B900D5460E /* Merging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Merging.swift; sourceTree = "<group>"; };
@@ -1588,8 +1624,6 @@
 		D34DC84D1A16C40C00D49B7B /* Profile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Profile.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		D34E33021BA793C2006135F0 /* loginForm.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = loginForm.html; sourceTree = "<group>"; };
 		D35210E01CB2F16600FC5DCB /* Strings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Strings.swift; path = ../Client/Frontend/Strings.swift; sourceTree = "<group>"; };
-		D35F55871CC5A3E400DC0D22 /* CorePing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CorePing.swift; path = Telemetry/CorePing.swift; sourceTree = "<group>"; };
-		D35F55891CC5A4E000DC0D22 /* Telemetry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Telemetry.swift; path = Telemetry/Telemetry.swift; sourceTree = "<group>"; };
 		D36998881AD70A0A00650C6C /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/IOKit.framework; sourceTree = DEVELOPER_DIR; };
 		D37524861C6E8B5A00A5F6C2 /* topdomains.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = topdomains.txt; sourceTree = "<group>"; };
 		D375A91F1AE71675001B30D5 /* ViewMemoryLeakTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewMemoryLeakTests.swift; sourceTree = "<group>"; };
@@ -1840,7 +1874,6 @@
 		E683F0C11E93D4E90035D990 /* DictionaryExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DictionaryExtensions.swift; sourceTree = "<group>"; };
 		E689C6F71E0C6E72008BAADB /* FxASignIn.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = FxASignIn.js; sourceTree = "<group>"; };
 		E689C6F91E0C6E98008BAADB /* FxAContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAContentViewController.swift; sourceTree = "<group>"; };
-		E689C6FB1E0C6FD0008BAADB /* ClientTelemetry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClientTelemetry.swift; path = Telemetry/ClientTelemetry.swift; sourceTree = "<group>"; };
 		E689C72F1E0C7617008BAADB /* NSAttributedStringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NSAttributedStringExtensions.swift; path = Extensions/NSAttributedStringExtensions.swift; sourceTree = "<group>"; };
 		E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeAnimator.swift; sourceTree = "<group>"; };
 		E68E39BD1C46F42000B85F42 /* AppSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettingsTableViewController.swift; sourceTree = "<group>"; };
@@ -1855,6 +1888,19 @@
 		E696FE501C47F86E00EC007C /* AuthenticatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticatorTests.swift; sourceTree = "<group>"; };
 		E698FFD91B4AADF40001F623 /* TabScrollController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabScrollController.swift; sourceTree = "<group>"; };
 		E69922121B94E3EF007C480D /* Licenses.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = Licenses.html; sourceTree = "<group>"; };
+		E69DB0751E97DEA9008A67E6 /* Telemetry.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Telemetry.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E69DB0771E97DEA9008A67E6 /* Telemetry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Telemetry.h; sourceTree = "<group>"; };
+		E69DB0781E97DEA9008A67E6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E69DB07D1E97DEA9008A67E6 /* TelemetryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TelemetryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E69DB0841E97DEAA008A67E6 /* TelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryTests.swift; sourceTree = "<group>"; };
+		E69DB0861E97DEAA008A67E6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E69DB0B41E97E2AC008A67E6 /* PingCentre.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PingCentre.swift; sourceTree = "<group>"; };
+		E69DB0B51E97E2AC008A67E6 /* Telemetry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Telemetry.swift; sourceTree = "<group>"; };
+		E69DB0BA1E97E301008A67E6 /* ActivityStreamTopics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityStreamTopics.swift; sourceTree = "<group>"; };
+		E69DB0BB1E97E301008A67E6 /* ClientTelemetry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientTelemetry.swift; sourceTree = "<group>"; };
+		E69DB0BC1E97E301008A67E6 /* CorePing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CorePing.swift; sourceTree = "<group>"; };
+		E69DB0C01E97E320008A67E6 /* BookmarkTelemetryPing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarkTelemetryPing.swift; sourceTree = "<group>"; };
+		E69DB0C11E97E320008A67E6 /* SyncTelemetry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncTelemetry.swift; sourceTree = "<group>"; };
 		E69E06B91C76173D00D0F926 /* RequirePasscodeIntervalViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequirePasscodeIntervalViewController.swift; sourceTree = "<group>"; };
 		E69E06C81C76198000D0F926 /* AuthenticationManagerConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationManagerConstants.swift; sourceTree = "<group>"; };
 		E6A92ADA1C52A8DA00743291 /* LoginInputTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginInputTests.swift; sourceTree = "<group>"; };
@@ -1866,12 +1912,9 @@
 		E6C191D41E38F7B7000A213B /* Cartfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
 		E6C191D51E38F7B7000A213B /* Cartfile.resolved */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile.resolved; sourceTree = "<group>"; };
 		E6C191F01E38F7EE000A213B /* libPhoneNumberiOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libPhoneNumberiOS.framework; path = Carthage/Build/iOS/libPhoneNumberiOS.framework; sourceTree = "<group>"; };
-		E6C70E151E2830CC00F8DB57 /* PingCentre.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PingCentre.swift; sourceTree = "<group>"; };
-		E6C70E161E2830CC00F8DB57 /* Topics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Topics.swift; sourceTree = "<group>"; };
 		E6C70E811E28314700F8DB57 /* PingCentreTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PingCentreTests.swift; sourceTree = "<group>"; };
 		E6C9EB6A1E2FBFC300D5CE80 /* signedInUser.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = signedInUser.json; sourceTree = "<group>"; };
 		E6CF28E61CB43B7900151AB3 /* SensitiveViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensitiveViewController.swift; sourceTree = "<group>"; };
-		E6D60FE21E0B08A000674605 /* SyncTelemetry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncTelemetry.swift; sourceTree = "<group>"; };
 		E6D7C31C1CF4E68D00E746BA /* TestBookmarkModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestBookmarkModel.swift; path = SyncTests/TestBookmarkModel.swift; sourceTree = "<group>"; };
 		E6D8D5E61B569D70009E5A58 /* BrowserTrayAnimators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserTrayAnimators.swift; sourceTree = "<group>"; };
 		E6DCC1ED1DCBB6AA00CEC4B7 /* FennecEnterprise.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = FennecEnterprise.xcconfig; path = Configuration/FennecEnterprise.xcconfig; sourceTree = "<group>"; };
@@ -1913,6 +1956,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E69DB0A81E97DF22008A67E6 /* Telemetry.framework in Frameworks */,
 				7B604F901C494B0F006EEEC3 /* Alamofire.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1945,6 +1989,7 @@
 			files = (
 				7B8A47F61D01D3B400C07734 /* PassKit.framework in Frameworks */,
 				E6B6DCA21CD3D370009CF713 /* CrashReporter.framework in Frameworks */,
+				E69DB08A1E97DEAA008A67E6 /* Telemetry.framework in Frameworks */,
 				7B604F861C494983006EEEC3 /* Alamofire.framework in Frameworks */,
 				7B604F9B1C4950F2006EEEC3 /* WebImage.framework in Frameworks */,
 				3BA9A0231D2C208C00BD418C /* Fuzi.framework in Frameworks */,
@@ -2093,6 +2138,23 @@
 			buildActionMask = 2147483647;
 			files = (
 				7B6FF7911C74A2C00007E196 /* WebImage.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E69DB0711E97DEA9008A67E6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E69DB0AA1E97DFD4008A67E6 /* FxA.framework in Frameworks */,
+				E69DB0A91E97DF73008A67E6 /* Shared.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E69DB07A1E97DEA9008A67E6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E69DB07E1E97DEAA008A67E6 /* Telemetry.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2265,18 +2327,6 @@
 			name = Synchronizers;
 			sourceTree = "<group>";
 		};
-		28BFA7101C8E5C1A0017C2BD /* Telemetry */ = {
-			isa = PBXGroup;
-			children = (
-				E6C70E141E2830CC00F8DB57 /* PingCentre */,
-				E689C6FB1E0C6FD0008BAADB /* ClientTelemetry.swift */,
-				D35F55871CC5A3E400DC0D22 /* CorePing.swift */,
-				D35F55891CC5A4E000DC0D22 /* Telemetry.swift */,
-				28BFA7241C8E5C3F0017C2BD /* BookmarkTelemetryPing.swift */,
-			);
-			name = Telemetry;
-			sourceTree = "<group>";
-		};
 		28C077911A3B05C200834FE5 /* SyncTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -2322,12 +2372,12 @@
 				282731601ABC9BE600AA1954 /* Supporting Files */,
 				28926B3D1AC0F1A6009C0B1D /* Meta */,
 				28926B3C1AC0F176009C0B1D /* Records */,
+				E69DB0B31E97E0E4008A67E6 /* Telemetry */,
 				E67D57021D527449003917B1 /* BatchingClient.swift */,
 				28CE83BC1A1D1D3200576538 /* KeyBundle.swift */,
 				2F3724E31ABF3C19007607FA /* StorageClient.swift */,
 				28E91E741B443AD5009DF274 /* SyncConstants.swift */,
 				2885023E1AC117A500E7F670 /* SyncStateMachine.swift */,
-				E6D60FE21E0B08A000674605 /* SyncTelemetry.swift */,
 				288501DD1AC0F61D00E7F670 /* RequestExtensions.swift */,
 			);
 			path = Sync;
@@ -3262,6 +3312,53 @@
 			path = About;
 			sourceTree = "<group>";
 		};
+		E69DB0761E97DEA9008A67E6 /* Telemetry */ = {
+			isa = PBXGroup;
+			children = (
+				E69DB0B81E97E2B5008A67E6 /* Supporting Files */,
+				E69DB0B41E97E2AC008A67E6 /* PingCentre.swift */,
+				E69DB0B51E97E2AC008A67E6 /* Telemetry.swift */,
+			);
+			path = Telemetry;
+			sourceTree = "<group>";
+		};
+		E69DB0831E97DEAA008A67E6 /* TelemetryTests */ = {
+			isa = PBXGroup;
+			children = (
+				E69DB0841E97DEAA008A67E6 /* TelemetryTests.swift */,
+				E69DB0861E97DEAA008A67E6 /* Info.plist */,
+			);
+			path = TelemetryTests;
+			sourceTree = "<group>";
+		};
+		E69DB0B31E97E0E4008A67E6 /* Telemetry */ = {
+			isa = PBXGroup;
+			children = (
+				E69DB0C01E97E320008A67E6 /* BookmarkTelemetryPing.swift */,
+				E69DB0C11E97E320008A67E6 /* SyncTelemetry.swift */,
+			);
+			name = Telemetry;
+			sourceTree = "<group>";
+		};
+		E69DB0B81E97E2B5008A67E6 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				E69DB0771E97DEA9008A67E6 /* Telemetry.h */,
+				E69DB0781E97DEA9008A67E6 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E69DB0B91E97E301008A67E6 /* Telemetry */ = {
+			isa = PBXGroup;
+			children = (
+				E69DB0BA1E97E301008A67E6 /* ActivityStreamTopics.swift */,
+				E69DB0BB1E97E301008A67E6 /* ClientTelemetry.swift */,
+				E69DB0BC1E97E301008A67E6 /* CorePing.swift */,
+			);
+			path = Telemetry;
+			sourceTree = "<group>";
+		};
 		E6B6DC931CD3D35A009CF713 /* PLCrashReporter */ = {
 			isa = PBXGroup;
 			children = (
@@ -3269,16 +3366,6 @@
 			);
 			name = PLCrashReporter;
 			path = ThirdParty/PLCrashReporter;
-			sourceTree = "<group>";
-		};
-		E6C70E141E2830CC00F8DB57 /* PingCentre */ = {
-			isa = PBXGroup;
-			children = (
-				E6C70E151E2830CC00F8DB57 /* PingCentre.swift */,
-				E6C70E161E2830CC00F8DB57 /* Topics.swift */,
-			);
-			name = PingCentre;
-			path = Telemetry/PingCentre;
 			sourceTree = "<group>";
 		};
 		E6F6D6921E9E6AC20012072B /* TestUtils */ = {
@@ -3343,8 +3430,9 @@
 				2FCAE22A1ABB51F800877008 /* StorageTests */,
 				28CE83B91A1D1D3200576538 /* Sync */,
 				28C077911A3B05C200834FE5 /* SyncTests */,
-				28BFA7101C8E5C1A0017C2BD /* Telemetry */,
 				E6F6D6921E9E6AC20012072B /* TestUtils */,
+				E69DB0761E97DEA9008A67E6 /* Telemetry */,
+				E69DB0831E97DEAA008A67E6 /* TelemetryTests */,
 				28CE83EF1A1D246900576538 /* Third-Party Source */,
 				D39FA1601A83E0EC00EE869C /* UITests */,
 				3BFE4B081D342FB900DDF53F /* XCUITests */,
@@ -3376,6 +3464,8 @@
 				3905274A1C874D35007E0BB7 /* Today.appex */,
 				3BFE4B071D342FB800DDF53F /* XCUITests.xctest */,
 				3B43E3D01D95C48D00BBA9DB /* StoragePerfTests.xctest */,
+				E69DB0751E97DEA9008A67E6 /* Telemetry.framework */,
+				E69DB07D1E97DEA9008A67E6 /* TelemetryTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3392,6 +3482,7 @@
 				28EADE5C1AFC3A6D007FB2FB /* Extensions */,
 				F84B21F11A0910F600AAB793 /* Frontend */,
 				39A359BD1BFCCE7B006B9E87 /* Helpers */,
+				E69DB0B91E97E301008A67E6 /* Telemetry */,
 				E65075551E37F714006961AC /* Utils */,
 				74821FFD1DB6D3AC00EEEA72 /* MailSchemes.plist */,
 			);
@@ -3656,6 +3747,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E69DB0721E97DEA9008A67E6 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E69DB0871E97DEAA008A67E6 /* Telemetry.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
@@ -3671,6 +3770,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				E69DB0A71E97DEF6008A67E6 /* PBXTargetDependency */,
 				E4EE05B01BA3A0A10021B3A7 /* PBXTargetDependency */,
 				2F77F6B91ABCAF0700484F3A /* PBXTargetDependency */,
 				2F77F69D1ABCAEFE00484F3A /* PBXTargetDependency */,
@@ -3981,6 +4081,43 @@
 			productReference = E65C5BC41BEA4F6500D28BEF /* NativeRefTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		E69DB0741E97DEA9008A67E6 /* Telemetry */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E69DB08C1E97DEAA008A67E6 /* Build configuration list for PBXNativeTarget "Telemetry" */;
+			buildPhases = (
+				E69DB0701E97DEA9008A67E6 /* Sources */,
+				E69DB0711E97DEA9008A67E6 /* Frameworks */,
+				E69DB0721E97DEA9008A67E6 /* Headers */,
+				E69DB0731E97DEA9008A67E6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Telemetry;
+			productName = Telemetry;
+			productReference = E69DB0751E97DEA9008A67E6 /* Telemetry.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		E69DB07C1E97DEA9008A67E6 /* TelemetryTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E69DB0921E97DEAA008A67E6 /* Build configuration list for PBXNativeTarget "TelemetryTests" */;
+			buildPhases = (
+				E69DB0791E97DEA9008A67E6 /* Sources */,
+				E69DB07A1E97DEA9008A67E6 /* Frameworks */,
+				E69DB07B1E97DEA9008A67E6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E69DB0801E97DEAA008A67E6 /* PBXTargetDependency */,
+				E69DB0821E97DEAA008A67E6 /* PBXTargetDependency */,
+			);
+			name = TelemetryTests;
+			productName = TelemetryTests;
+			productReference = E69DB07D1E97DEA9008A67E6 /* TelemetryTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		E6F9650B1B2F1CF20034B023 /* SharedTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E6F965381B2F1CF20034B023 /* Build configuration list for PBXNativeTarget "SharedTests" */;
@@ -4025,6 +4162,7 @@
 				E4D5672E1ADECE2800F1EFE7 /* PBXTargetDependency */,
 				E4BA8A341B4B0A1700BC2E95 /* PBXTargetDependency */,
 				390527551C874D35007E0BB7 /* PBXTargetDependency */,
+				E69DB0891E97DEAA008A67E6 /* PBXTargetDependency */,
 			);
 			name = Client;
 			productName = Client;
@@ -4096,64 +4234,64 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftMigration = 0700;
-				LastSwiftUpdateCheck = 0820;
+				LastSwiftUpdateCheck = 0830;
 				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = Mozilla;
 				TargetAttributes = {
 					2827315D1ABC9BE600AA1954 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 9G8J6YA743;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0820;
 					};
 					282731671ABC9BE700AA1954 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 9G8J6YA743;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0820;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
 					288A2D851AB8B3260023ABC3 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 9G8J6YA743;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0820;
 					};
 					2FA435FA1ABB83B4008031D1 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 9G8J6YA743;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0820;
 					};
 					2FA436041ABB83B4008031D1 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 9G8J6YA743;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0820;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
 					2FCAE2191ABB51F800877008 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 9G8J6YA743;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0820;
 					};
 					2FCAE2231ABB51F800877008 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 9G8J6YA743;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0820;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
 					390527491C874D35007E0BB7 = {
 						CreatedOnToolsVersion = 7.2.1;
-						DevelopmentTeam = 9G8J6YA743;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0820;
 						ProvisioningStyle = Automatic;
 					};
 					3B43E3CF1D95C48D00BBA9DB = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = 9G8J6YA743;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0820;
 						ProvisioningStyle = Automatic;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
 					3BFE4B061D342FB800DDF53F = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = 9G8J6YA743;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0820;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -4167,13 +4305,13 @@
 					};
 					D39FA15E1A83E0EC00EE869C = {
 						CreatedOnToolsVersion = 6.1.1;
-						DevelopmentTeam = 9G8J6YA743;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0820;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
 					E4BA8A2A1B4B0A1600BC2E95 = {
 						CreatedOnToolsVersion = 6.4;
-						DevelopmentTeam = 9G8J6YA743;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0820;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -4184,12 +4322,12 @@
 					};
 					E4D567171ADECE2700F1EFE7 = {
 						CreatedOnToolsVersion = 6.3;
-						DevelopmentTeam = 9G8J6YA743;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0820;
 					};
 					E4D567211ADECE2700F1EFE7 = {
 						CreatedOnToolsVersion = 6.3;
-						DevelopmentTeam = 9G8J6YA743;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0820;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -4199,14 +4337,25 @@
 						LastSwiftMigration = 0800;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
+					E69DB0741E97DEA9008A67E6 = {
+						CreatedOnToolsVersion = 8.3;
+						DevelopmentTeam = 43AQ936H96;
+						ProvisioningStyle = Automatic;
+					};
+					E69DB07C1E97DEA9008A67E6 = {
+						CreatedOnToolsVersion = 8.3;
+						DevelopmentTeam = 43AQ936H96;
+						ProvisioningStyle = Automatic;
+						TestTargetID = F84B21BD1A090F8100AAB793;
+					};
 					E6F9650B1B2F1CF20034B023 = {
 						CreatedOnToolsVersion = 6.3.2;
-						DevelopmentTeam = 9G8J6YA743;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0820;
 					};
 					F84B21BD1A090F8100AAB793 = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = 9G8J6YA743;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0820;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -4226,13 +4375,13 @@
 					};
 					F84B21D21A090F8100AAB793 = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = 9G8J6YA743;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0820;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
 					F84B22481A0920C600AAB793 = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = 9G8J6YA743;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0820;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -4246,7 +4395,7 @@
 					};
 					F84B225B1A09210A00AAB793 = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = 9G8J6YA743;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0820;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -4301,6 +4450,7 @@
 				2FA435FA1ABB83B4008031D1 /* Account */,
 				2827315D1ABC9BE600AA1954 /* Sync */,
 				E4D567171ADECE2700F1EFE7 /* ReadingList */,
+				E69DB0741E97DEA9008A67E6 /* Telemetry */,
 				F84B21D21A090F8100AAB793 /* ClientTests */,
 				D39FA15E1A83E0EC00EE869C /* UITests */,
 				E65C5BC31BEA4F6500D28BEF /* NativeRefTests */,
@@ -4313,6 +4463,7 @@
 				7BEB644F1C7345990092C02E /* MarketingUITests */,
 				3BFE4B061D342FB800DDF53F /* XCUITests */,
 				3B43E3CF1D95C48D00BBA9DB /* StoragePerfTests */,
+				E69DB07C1E97DEA9008A67E6 /* TelemetryTests */,
 			);
 		};
 /* End PBXProject section */
@@ -4573,6 +4724,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E69DB0731E97DEA9008A67E6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E69DB07B1E97DEA9008A67E6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E6F9650A1B2F1CF20034B023 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -4745,7 +4910,6 @@
 				2827319D1ABC9C2F00AA1954 /* SyncMeta.swift in Sources */,
 				2894C1661AE89DD200F1F92F /* TabsSynchronizer.swift in Sources */,
 				282731991ABC9C2F00AA1954 /* ClientPayload.swift in Sources */,
-				E6D60FE31E0B08A000674605 /* SyncTelemetry.swift in Sources */,
 				E67D57031D527449003917B1 /* BatchingClient.swift in Sources */,
 				2894C1431AE89D8900F1F92F /* HistorySynchronizer.swift in Sources */,
 				28E23C121AC5A5EE00F5AC85 /* State.swift in Sources */,
@@ -4760,6 +4924,7 @@
 				288E67C21B9E730900AE2C6A /* BookmarksDownloader.swift in Sources */,
 				28E91E751B443AD5009DF274 /* SyncConstants.swift in Sources */,
 				28532CE61C48098D000072D9 /* ThreeWayTreeMerger.swift in Sources */,
+				E69DB0C41E97E320008A67E6 /* SyncTelemetry.swift in Sources */,
 				28C28BFD1C51A3B900D5460E /* Merging.swift in Sources */,
 				2F3724E91ABF3C19007607FA /* Synchronizer.swift in Sources */,
 				28AA941D1B97DCA800703DC6 /* BookmarkPayload.swift in Sources */,
@@ -4768,6 +4933,7 @@
 				2827319A1ABC9C2F00AA1954 /* KeyBundle.swift in Sources */,
 				2F3724E51ABF3C19007607FA /* Info.swift in Sources */,
 				2827319C1ABC9C2F00AA1954 /* Record.swift in Sources */,
+				E69DB0C31E97E320008A67E6 /* BookmarkTelemetryPing.swift in Sources */,
 				2827319B1ABC9C2F00AA1954 /* KeysPayload.swift in Sources */,
 				288501DE1AC0F61D00E7F670 /* RequestExtensions.swift in Sources */,
 			);
@@ -4819,14 +4985,12 @@
 				E65075921E37F7AB006961AC /* Accessibility.swift in Sources */,
 				E65075B51E37F7AB006961AC /* LaunchArguments.swift in Sources */,
 				288A2DAB1AB8B3700023ABC3 /* BoxType.swift in Sources */,
-				E65075C81E37FB8E006961AC /* BookmarkTelemetryPing.swift in Sources */,
 				E65075BB1E37F7AB006961AC /* RollingFileLogger.swift in Sources */,
 				E650759D1E37F7AB006961AC /* DeviceInfo.swift in Sources */,
 				E65075971E37F7AB006961AC /* AuthenticationKeychainInfo.swift in Sources */,
 				E65075A51E37F7AB006961AC /* NSFileManagerExtensions.swift in Sources */,
 				E65075A11E37F7AB006961AC /* HashExtensions.swift in Sources */,
 				3964B09A1EA8F06F00F2EEF4 /* FeatureSwitch.swift in Sources */,
-				E65075C91E37FBEF006961AC /* Telemetry.swift in Sources */,
 				E65075981E37F7AB006961AC /* Bytes.swift in Sources */,
 				E65075B11E37F7AB006961AC /* FSUtils.m in Sources */,
 				D3A14C221CB3145E00253BC6 /* Strings.swift in Sources */,
@@ -5142,6 +5306,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E69DB0701E97DEA9008A67E6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E69DB0B71E97E2AC008A67E6 /* Telemetry.swift in Sources */,
+				E69DB0B61E97E2AC008A67E6 /* PingCentre.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E69DB0791E97DEA9008A67E6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E69DB0851E97DEAA008A67E6 /* TelemetryTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E6F965081B2F1CF20034B023 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -5168,7 +5349,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E68E39BE1C46F42000B85F42 /* AppSettingsTableViewController.swift in Sources */,
-				D39ABDFE1CC6F35F003A319E /* CorePing.swift in Sources */,
 				E640E86A1C73A47C00C5F072 /* PasscodeViews.swift in Sources */,
 				E692E3371C46E86A009D1240 /* AppSettingsOptions.swift in Sources */,
 				D38F02D11C05127100175932 /* Authenticator.swift in Sources */,
@@ -5182,7 +5362,6 @@
 				31ADB5DA1E58CEC300E87909 /* ClipboardBarDisplayHandler.swift in Sources */,
 				745DAB3F1CDAB09E00D44181 /* HistoryBackButton.swift in Sources */,
 				D3B6923F1B9F9A58004B87A4 /* FindInPageHelper.swift in Sources */,
-				E689C6FE1E0C6FE0008BAADB /* ClientTelemetry.swift in Sources */,
 				D3C3696E1CC6B78800348A61 /* LocalRequestHelper.swift in Sources */,
 				E4B423DD1ABA0318007E66C8 /* ReaderModeHandlers.swift in Sources */,
 				7B0B1B9D1C1B6A3F00DF4AB5 /* InstructionsViewController.swift in Sources */,
@@ -5304,6 +5483,7 @@
 				D3968F251A38FE8500CEFD3B /* TabManager.swift in Sources */,
 				C4E398601D22C409004E89BA /* TopTabsLayout.swift in Sources */,
 				2816F0001B33E05400522243 /* UIConstants.swift in Sources */,
+				E69DB0BF1E97E301008A67E6 /* CorePing.swift in Sources */,
 				E650755F1E37F756006961AC /* Try.m in Sources */,
 				3B6889C51D66950E002AC85E /* UIImageColors.swift in Sources */,
 				392ED7E41D0AEF56009D9B62 /* NewTabAccessors.swift in Sources */,
@@ -5333,21 +5513,21 @@
 				7BC68CCF1CC152B70043562A /* MenuToolbarItem.swift in Sources */,
 				E65D89181C8647420006EA35 /* AppAuthenticator.swift in Sources */,
 				28FDFF0C1C1F725800840F86 /* SeparatorTableCell.swift in Sources */,
+				E69DB0BE1E97E301008A67E6 /* ClientTelemetry.swift in Sources */,
 				C400467C1CF4E43E00B08303 /* BackForwardListViewController.swift in Sources */,
 				D3972BF31C22412B00035B87 /* ShareExtensionHelper.swift in Sources */,
 				F35B8D2D1D6383E9008E3D61 /* SessionRestoreHelper.swift in Sources */,
 				744ED5611DBFEB8D00A2B5BE /* MailtoLinkHandler.swift in Sources */,
-				E6C70E171E2830CC00F8DB57 /* PingCentre.swift in Sources */,
 				59A68E0B4ABBF55E14819668 /* BookmarksPanel.swift in Sources */,
 				7B0B1B791C1B69C900DF4AB5 /* ClientPickerViewController.swift in Sources */,
 				7B844E3D1BBDDB9D00E733A2 /* ChevronView.swift in Sources */,
 				E4C358551AF144BA00299F7E /* FSReadingList.m in Sources */,
 				3BE7275D1CCFE8B60099189F /* CustomSearchHandler.swift in Sources */,
-				E6C70E181E2830CC00F8DB57 /* Topics.swift in Sources */,
 				E692E3291C46E62D009D1240 /* AuthenticationSettingsViewController.swift in Sources */,
 				E663D5781BB341C4001EF30E /* ToggleButton.swift in Sources */,
 				E6327A641BF6438E008D12E0 /* DebugSettingsBundleOptions.swift in Sources */,
 				D3E8EF101B97BE69001900FB /* ClearPrivateDataTableViewController.swift in Sources */,
+				E69DB0BD1E97E301008A67E6 /* ActivityStreamTopics.swift in Sources */,
 				7BC68CCC1CC152B70043562A /* MenuDelegate.swift in Sources */,
 				59A68FD5260B8D520F890F4A /* ReaderPanel.swift in Sources */,
 				7BC68CC91CC152B70043562A /* PagingMenuItemCollectionViewLayout.swift in Sources */,
@@ -5620,6 +5800,26 @@
 			isa = PBXTargetDependency;
 			target = F84B21BD1A090F8100AAB793 /* Client */;
 			targetProxy = E65C5BC91BEA4F6500D28BEF /* PBXContainerItemProxy */;
+		};
+		E69DB0801E97DEAA008A67E6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E69DB0741E97DEA9008A67E6 /* Telemetry */;
+			targetProxy = E69DB07F1E97DEAA008A67E6 /* PBXContainerItemProxy */;
+		};
+		E69DB0821E97DEAA008A67E6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F84B21BD1A090F8100AAB793 /* Client */;
+			targetProxy = E69DB0811E97DEAA008A67E6 /* PBXContainerItemProxy */;
+		};
+		E69DB0891E97DEAA008A67E6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E69DB0741E97DEA9008A67E6 /* Telemetry */;
+			targetProxy = E69DB0881E97DEAA008A67E6 /* PBXContainerItemProxy */;
+		};
+		E69DB0A71E97DEF6008A67E6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E69DB0741E97DEA9008A67E6 /* Telemetry */;
+			targetProxy = E69DB0A61E97DEF6008A67E6 /* PBXContainerItemProxy */;
 		};
 		E6F965141B2F1CF20034B023 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -6389,6 +6589,7 @@
 		E448FC9E1AEE7A6000869B6C /* Firefox */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_BITCODE = NO;
@@ -6408,6 +6609,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**",
 				);
 				INFOPLIST_FILE = Client/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lxml2",
@@ -6994,6 +7196,7 @@
 		E682F5211C89E71000ECB6B2 /* FirefoxNightly */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_BITCODE = NO;
@@ -7014,6 +7217,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**",
 				);
 				INFOPLIST_FILE = Client/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lxml2",
@@ -7387,6 +7591,572 @@
 			};
 			name = FirefoxNightly;
 		};
+		E69DB08D1E97DEAA008A67E6 /* Fennec */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				APPLICATION_EXTENSION_API_ONLY = NO;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Telemetry/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Telemetry;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Fennec;
+		};
+		E69DB08E1E97DEAA008A67E6 /* FennecEnterprise */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Telemetry/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Telemetry;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = FennecEnterprise;
+		};
+		E69DB08F1E97DEAA008A67E6 /* Firefox */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Telemetry/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Telemetry;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Firefox;
+		};
+		E69DB0901E97DEAA008A67E6 /* FirefoxBeta */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Telemetry/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Telemetry;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = FirefoxBeta;
+		};
+		E69DB0911E97DEAA008A67E6 /* FirefoxNightly */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Telemetry/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Telemetry;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = FirefoxNightly;
+		};
+		E69DB0931E97DEAA008A67E6 /* Fennec */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = TelemetryTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.TelemetryTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
+			};
+			name = Fennec;
+		};
+		E69DB0941E97DEAA008A67E6 /* FennecEnterprise */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = TelemetryTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.TelemetryTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = FennecEnterprise;
+		};
+		E69DB0951E97DEAA008A67E6 /* Firefox */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = TelemetryTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.TelemetryTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Firefox;
+		};
+		E69DB0961E97DEAA008A67E6 /* FirefoxBeta */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = TelemetryTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.TelemetryTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = FirefoxBeta;
+		};
+		E69DB0971E97DEAA008A67E6 /* FirefoxNightly */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = TelemetryTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.TelemetryTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = FirefoxNightly;
+		};
 		E6DCC2051DCBB6F100CEC4B7 /* FennecEnterprise */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E6DCC1ED1DCBB6AA00CEC4B7 /* FennecEnterprise.xcconfig */;
@@ -7394,6 +8164,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				APPLICATION_EXTENSION_API_ONLY = NO;
+				APP_IDENTIFIER_PREFIX = 9G8J6YA743;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -7465,6 +8236,7 @@
 		E6DCC2061DCBB6F100CEC4B7 /* FennecEnterprise */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_Developer;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_BITCODE = NO;
@@ -7485,6 +8257,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**",
 				);
 				INFOPLIST_FILE = Client/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lxml2",
@@ -8090,6 +8863,7 @@
 		E6FCC42A1C40562400DF6113 /* FirefoxBeta */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_Beta;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_BITCODE = NO;
@@ -8109,6 +8883,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**",
 				);
 				INFOPLIST_FILE = Client/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lxml2",
@@ -8536,6 +9311,7 @@
 		F84B21DE1A090F8100AAB793 /* Fennec */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_Developer;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_BITCODE = NO;
@@ -8556,6 +9332,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**",
 				);
 				INFOPLIST_FILE = Client/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lxml2",
@@ -8852,6 +9629,30 @@
 				E65C5BCE1BEA4F6500D28BEF /* Firefox */,
 				E6FCC4301C40562400DF6113 /* FirefoxBeta */,
 				E682F52C1C89E71000ECB6B2 /* FirefoxNightly */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Fennec;
+		};
+		E69DB08C1E97DEAA008A67E6 /* Build configuration list for PBXNativeTarget "Telemetry" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E69DB08D1E97DEAA008A67E6 /* Fennec */,
+				E69DB08E1E97DEAA008A67E6 /* FennecEnterprise */,
+				E69DB08F1E97DEAA008A67E6 /* Firefox */,
+				E69DB0901E97DEAA008A67E6 /* FirefoxBeta */,
+				E69DB0911E97DEAA008A67E6 /* FirefoxNightly */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Fennec;
+		};
+		E69DB0921E97DEAA008A67E6 /* Build configuration list for PBXNativeTarget "TelemetryTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E69DB0931E97DEAA008A67E6 /* Fennec */,
+				E69DB0941E97DEAA008A67E6 /* FennecEnterprise */,
+				E69DB0951E97DEAA008A67E6 /* Firefox */,
+				E69DB0961E97DEAA008A67E6 /* FirefoxBeta */,
+				E69DB0971E97DEAA008A67E6 /* FirefoxNightly */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
