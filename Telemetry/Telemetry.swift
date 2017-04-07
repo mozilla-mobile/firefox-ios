@@ -113,7 +113,7 @@ open class Telemetry {
                 "buildId": AppInfo.buildNumber,
                 "name": AppInfo.displayName,
                 "version": AppInfo.appVersion,
-                "displayVersion":  displayVersion,
+                "displayVersion": displayVersion,
                 "platformVersion": osVersion,
                 "channel": AppConstants.BuildChannel.rawValue
             ]
