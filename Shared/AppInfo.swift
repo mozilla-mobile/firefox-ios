@@ -33,4 +33,23 @@ open class AppInfo {
     open static func appGroupSuffix() -> String {
         return Bundle.main.object(forInfoDictionaryKey: "MozGroupSuffix") as! String
     }
+
+    /// Return the base bundle identifier.
+    ///
+    /// This function is smart enough to find out if it is being called from an extension or the main application. In
+    /// case of the former, it will chop off the extension identifier from the bundle since that is a suffix not part
+    /// of the *base* bundle identifier.
+    open static func baseBundleIdentifier() -> String? {
+        let bundle = Bundle.main
+        if let packageType = bundle.object(forInfoDictionaryKey: "CFBundlePackageType") as? NSString {
+            if let baseBundleIdentifier = bundle.bundleIdentifier {
+                if packageType == "XPC!" {
+                    let components = baseBundleIdentifier.components(separatedBy: ".")
+                    return components[0..<components.count-1].joined(separator: ".")
+                }
+                return baseBundleIdentifier
+            }
+        }
+        return nil
+    }
 }

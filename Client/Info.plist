@@ -7,7 +7,7 @@
 	<key>AdjustEnvironment</key>
 	<string>$(ADJUST_ENVIRONMENT)</string>
 	<key>MozGroupSuffix</key>
-	<string>$(MOZ_APP_GROUP_SUFFIX)</string>
+	<string>$(MOZ_GROUP_SUFFIX)</string>
 	<key>MozDevelopmentTeam</key>
 	<string>$(DEVELOPMENT_TEAM)</string>
 	<key>CFBundleDevelopmentRegion</key>

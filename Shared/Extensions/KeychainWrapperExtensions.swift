@@ -5,13 +5,11 @@
 import Foundation
 import SwiftKeychainWrapper
 
-let appGroupSuffix = AppInfo.appGroupSuffix()
-let accessGroupPrefix = Bundle.main.object(forInfoDictionaryKey: "MozDevelopmentTeam") as! String
-let accessGroupIdentifier = AppInfo.keychainAccessGroupWithPrefix(accessGroupPrefix)
-private var sharedAppKeychainWrapper = KeychainWrapper(serviceName: appGroupSuffix, accessGroup: accessGroupIdentifier)
-
 public extension KeychainWrapper {
     static var sharedAppContainerKeychain: KeychainWrapper {
-        return sharedAppKeychainWrapper
+        let baseBundleIdentifier = AppInfo.baseBundleIdentifier()!
+        let accessGroupPrefix = Bundle.main.object(forInfoDictionaryKey: "MozDevelopmentTeam") as! String
+        let accessGroupIdentifier = AppInfo.keychainAccessGroupWithPrefix(accessGroupPrefix)
+        return KeychainWrapper(serviceName: baseBundleIdentifier, accessGroup: accessGroupIdentifier)
     }
 }

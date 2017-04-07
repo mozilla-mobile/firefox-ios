@@ -10,7 +10,7 @@
 	</array>
 	<key>keychain-access-groups</key>
 	<array>
-		<string>$(DEVELOPMENT_TEAM)org.mozilla.ios.Firefox</string>
+		<string>$(AppIdentifierPrefix)org.mozilla.ios.Firefox</string>
 	</array>
 </dict>
 </plist>

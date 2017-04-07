@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>MozGroupSuffix</key>
-	<string>$(MOZ_APP_GROUP_SUFFIX)</string>
+	<string>$(MOZ_GROUP_SUFFIX)</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
