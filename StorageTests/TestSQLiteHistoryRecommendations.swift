@@ -27,7 +27,7 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
      */
     func testHistoryHighlights() {
         let db = BrowserDB(filename: "browser.db", files: files)
-        db.attachDB(named: "metadata.db", as: AttachedDatabaseMetadata)
+        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
@@ -88,7 +88,7 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
      */
     func testBookmarkHighlights() {
         let db = BrowserDB(filename: "browser.db", files: files)
-        db.attachDB(named: "metadata.db", as: AttachedDatabaseMetadata)
+        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
         let bookmarks = SQLiteBookmarkBufferStorage(db: db)
@@ -144,7 +144,7 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
      */
     func testBlacklistHighlights() {
         let db = BrowserDB(filename: "browser.db", files: files)
-        db.attachDB(named: "metadata.db", as: AttachedDatabaseMetadata)
+        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
@@ -198,7 +198,7 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
      */
     func testMostRecentUniqueDomainReturnedInHighlights() {
         let db = BrowserDB(filename: "browser.db", files: files)
-        db.attachDB(named: "metadata.db", as: AttachedDatabaseMetadata)
+        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
@@ -231,7 +231,7 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
 
     func testMetadataReturnedInHighlights() {
         let db = BrowserDB(filename: "browser.db", files: files)
-        db.attachDB(named: "metadata.db", as: AttachedDatabaseMetadata)
+        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
@@ -288,7 +288,7 @@ class TestSQLiteHistoryRecommendationsPerf: XCTestCase {
     func testRecommendationPref() {
         let files = MockFiles()
         let db = BrowserDB(filename: "browser.db", files: files)
-        db.attachDB(named: "metadata.db", as: AttachedDatabaseMetadata)
+        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
         let bookmarks = SQLiteBookmarkBufferStorage(db: db)

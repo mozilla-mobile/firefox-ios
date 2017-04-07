@@ -35,7 +35,7 @@ class SyncCommandsTests: XCTestCase {
         } catch _ {
         }
         db = BrowserDB(filename: "browser.db", files: files)
-        db.attachDB(named: "metadata.db", as: AttachedDatabaseMetadata)
+        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
         // create clients
 
         let now = Date.now()
