@@ -649,8 +649,7 @@ extension AppDelegate {
 
 extension AppDelegate {
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        let apnsToken = deviceToken.hexEncodedString
-        FxALoginHelper.sharedInstance.apnsRegisterDidSucceed(apnsToken: apnsToken)
+        FxALoginHelper.sharedInstance.apnsRegisterDidSucceed(deviceToken)
     }
 
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
@@ -660,11 +659,25 @@ extension AppDelegate {
 
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         log.info("APNS NOTIFICATION \(userInfo)")
-        completionHandler(.noData)
+
+        guard let profile = self.profile else {
+            return completionHandler(.noData)
+        }
+
+        let handler = FxAPushMessageHandler(with: profile)
+        handler.handle(userInfo: userInfo).upon { res in
+            completionHandler(res.isSuccess ? .newData : .noData)
+        }
     }
 
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
         log.info("APNS NOTIFICATION \(userInfo)")
+        guard let profile = self.profile else {
+            return
+        }
+
+        let handler = FxAPushMessageHandler(with: profile)
+        handler.handle(userInfo: userInfo)
     }
 }
 

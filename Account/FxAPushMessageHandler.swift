@@ -19,9 +19,38 @@ class FxAPushMessageHandler {
 }
 
 extension FxAPushMessageHandler {
+    @discardableResult func handle(userInfo: [AnyHashable: Any]) -> Success {
+        guard let subscription = profile.getAccount()?.pushRegistration?.defaultSubscription else {
+            return deferMaybe(PushMessageError.notDecrypted)
+        }
+
+        guard let encoding = userInfo["con"] as? String, // content-encoding
+            let payload = userInfo["body"] as? String else {
+                return deferMaybe(PushMessageError.messageIncomplete)
+        }
+        // ver == endpointURL path, chid == channel id, aps == alert text and content_available.
+
+        let plaintext: String?
+        if let cryptoKeyHeader = userInfo["cryptokey"] as? String,  // crypto-key
+            let encryptionHeader = userInfo["enc"] as? String, // encryption
+            encoding == "aesgcm" {
+            plaintext = subscription.aesgcm(payload: payload, encryptionHeader: encryptionHeader, cryptoHeader: cryptoKeyHeader)
+        } else if encoding == "aes128gcm" {
+            plaintext = subscription.aes128gcm(payload: payload)
+        } else {
+            plaintext = nil
+        }
+
+        guard let _ = plaintext else {
+            return deferMaybe(PushMessageError.notDecrypted)
+        }
+
+        return handle(message: JSON(parseJSON: plaintext!))
+    }
+
     /// The main entry point to the handler.
-    func handle(message: JSON?) -> Success {
-        guard let json = message else {
+    func handle(message json: JSON) -> Success {
+        if !json.isDictionary() {
             return handleVerification()
         }
 
@@ -175,12 +204,14 @@ enum PushMessageType: String {
 }
 
 enum PushMessageError: MaybeErrorType {
+    case notDecrypted
     case messageIncomplete
     case unimplemented(PushMessageType)
     case noActionNeeded
 
     public var description: String {
         switch self {
+        case .notDecrypted: return "notDecrypted"
         case .messageIncomplete: return "messageIncomplete"
         case .noActionNeeded: return "noActionNeeded"
         case .unimplemented(let what): return "unimplemented=\(what)"

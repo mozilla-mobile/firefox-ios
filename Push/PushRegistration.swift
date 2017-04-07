@@ -14,7 +14,7 @@ public class PushRegistration: NSObject, NSCoding {
     // however, if/when we do, it'll make migrating easier if we have been serializing it like this all along.
     fileprivate var subscriptions: [String: PushSubscription]
 
-    var defaultSubscription: PushSubscription {
+    public var defaultSubscription: PushSubscription {
         return subscriptions[defaultSubscriptionID]!
     }
 
@@ -70,7 +70,7 @@ public class PushSubscription: NSObject, NSCoding {
     let p256dhPrivateKey: String
     let authKey: String
 
-    init(channelID: String, endpoint: URL, p256dhPrivateKey: String, p256dhPublicKey: String, authKey: String) {
+    public init(channelID: String, endpoint: URL, p256dhPrivateKey: String, p256dhPublicKey: String, authKey: String) {
         self.channelID =  channelID
         self.endpoint = endpoint
         self.p256dhPrivateKey = p256dhPrivateKey
@@ -114,5 +114,15 @@ public class PushSubscription: NSObject, NSCoding {
         aCoder.encode(p256dhPrivateKey, forKey: "p256dhPrivateKey")
         aCoder.encode(p256dhPublicKey, forKey: "p256dhPublicKey")
         aCoder.encode(authKey, forKey: "authKey")
+    }
+}
+
+public extension PushSubscription {
+    public func aesgcm(payload: String, encryptionHeader: String, cryptoHeader: String) -> String? {
+        return try? PushCrypto.sharedInstance.aesgcm(ciphertext: payload, decryptWith: p256dhPrivateKey, authenticateWith: authKey, encryptionHeader: encryptionHeader, cryptoKeyHeader: cryptoHeader)
+    }
+
+    public func aes128gcm(payload: String) -> String? {
+        return try? PushCrypto.sharedInstance.aes128gcm(payload: payload, decryptWith: p256dhPrivateKey, authenticateWith: authKey)
     }
 }

@@ -164,8 +164,17 @@ class FxALoginHelper {
         }
     }
 
-    func apnsRegisterDidSucceed(apnsToken: String) {
-        guard let configuration = self.profile?.accountConfiguration.pushConfiguration else {
+    func getPushConfiguration() -> PushConfiguration? {
+        if AppConstants.BuildChannel == .developer {
+            return DeveloperPushConfiguration()
+        }
+        return nil
+    }
+
+    func apnsRegisterDidSucceed(_ deviceToken: Data) {
+        let apnsToken = deviceToken.hexEncodedString
+
+        guard let configuration = getPushConfiguration() ?? self.profile?.accountConfiguration.pushConfiguration else {
             log.error("Push server endpoint could not be found")
             return pushRegistrationDidFail()
         }
