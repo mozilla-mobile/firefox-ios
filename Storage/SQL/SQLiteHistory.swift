@@ -586,7 +586,10 @@ extension SQLiteHistory: BrowserHistory {
         ") ORDER BY frecency DESC" +
         " LIMIT 1000"                                 // Don't even look at a huge set. This avoids work.
 
-        // Next: merge by domain and sum frecency, ordering by that sum and reducing to a (typically much lower) limit.
+        // Next: merge by domain and select the url with the max frecency of a domain, ordering by that sum frecency and reducing to a (typically much lower) limit.
+        // NOTE: When using GROUP BY we need to be explicit about which url to use when merging. By using "max(frecency)" the result row
+        //       for that domain will contain the url with the max frecency https://sqlite.org/lang_select.html#resultset
+        //       This is the behavior we want in order to ensure that the most popular url for a domain is used as the Topsite.
         // TODO: make is_bookmarked here accurate by joining against ViewAllBookmarks.
         // TODO: ensure that the same URL doesn't appear twice in the list, either from duplicate
         //       bookmarks or from being in both bookmarks and history.

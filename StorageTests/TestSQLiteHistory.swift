@@ -1243,7 +1243,6 @@ class TestSQLiteHistory: XCTestCase {
         history.clearTopSitesCache().value
         history.clearHistory().value
 
-
         // Lets create some history. This will create 100 sites that will have 21 local and 21 remote visits
         populateHistoryForFrecencyCalculations(history, siteCount: 100)
 
@@ -1282,7 +1281,6 @@ class TestSQLiteHistory: XCTestCase {
             return
         }
     }
-
 
     func testTopSitesCache() {
         let db = BrowserDB(filename: "browser.db", files: files)
