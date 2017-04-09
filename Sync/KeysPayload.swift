@@ -8,10 +8,7 @@ import SwiftyJSON
 
 open class KeysPayload: CleartextPayloadJSON {
     override open func isValid() -> Bool {
-        // We should also call super.isValid(), but that'll fail:
-        // Global is external, but doesn't have external or weak linkage!
-        // Swift compiler bug #18422804.
-        return !json.isError() &&
+        return super.isValid() &&
                self["default"].isArray()
     }
     
