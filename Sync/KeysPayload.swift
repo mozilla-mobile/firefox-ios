@@ -12,7 +12,7 @@ open class KeysPayload: CleartextPayloadJSON {
         // Global is external, but doesn't have external or weak linkage!
         // Swift compiler bug #18422804.
         return !json.isError() &&
-               self["default"].type == Type.array
+               self["default"].isArray()
     }
     
     fileprivate func keyBundleFromPair(_ input: JSON) -> KeyBundle? {
