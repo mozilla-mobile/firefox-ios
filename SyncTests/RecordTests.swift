@@ -47,9 +47,14 @@ class RecordTests: XCTestCase {
         let invalidPayload = "{\"id\": \"abcdefghijkl\", \"collection\": \"clients\", \"payload\": \"invalid\"}"
         let emptyPayload = "{\"id\": \"abcdefghijkl\", \"collection\": \"clients\", \"payload\": \"{}\"}"
 
+        let invalidIDPayload: [String: Any] = ["id": 0]
+        let invalidIDPayloadString = JSON(object: invalidIDPayload).stringValue()!
+        let invalidIDRecord: [String: Any] = ["id": "abcdefghijkl", "collection": "clients", "payload": invalidIDPayloadString]
+        let invalidIDRecordString = JSON(object: invalidIDRecord).stringValue()!
+
         let clientBody: [String: Any] = ["id": "abcdefghijkl", "name": "Foobar", "commands": [], "type": "mobile"]
         let clientBodyString = JSON(object: clientBody).stringValue()!
-        let clientRecord: [String : Any] = ["id": "abcdefghijkl", "collection": "clients", "payload": clientBodyString]
+        let clientRecord: [String: Any] = ["id": "abcdefghijkl", "collection": "clients", "payload": clientBodyString]
         let clientPayload = JSON(object: clientRecord).stringValue()!
 
         let cleartextClientsFactory: (String) -> ClientPayload? = {
@@ -72,6 +77,19 @@ class RecordTests: XCTestCase {
 
         // Missing ID.
         XCTAssertFalse(Record<CleartextPayloadJSON>.fromEnvelope(EnvelopeJSON(emptyPayload), payloadFactory: clearFactory)!.payload.isValid())
+
+
+        // Non-string ID.
+
+        let invalidEnvelope = EnvelopeJSON(invalidIDRecordString)
+
+        // The envelope is valid...
+        XCTAssertTrue(invalidEnvelope.isValid())
+
+        // ... but the payload is not.
+        let rec = Record<CleartextPayloadJSON>.fromEnvelope(invalidEnvelope, payloadFactory: cleartextClientsFactory)
+        XCTAssertNotNil(rec)
+        XCTAssertFalse(rec!.payload.isValid())
 
         // Only valid ClientPayloads are valid.
         XCTAssertFalse(Record<ClientPayload>.fromEnvelope(EnvelopeJSON(invalidPayload), payloadFactory: cleartextClientsFactory)!.payload.isValid())
@@ -185,7 +203,23 @@ class RecordTests: XCTestCase {
         }
     }
 
+    func testHistoryPayloadWithNoURL() {
+        let payloadJSON = "{\"id\":\"--DzSJTCw-zb\",\"histUri\":null,\"visits\":[{\"date\":1429061233163240,\"type\":1}]}"
+        let json = JSON(parseJSON: payloadJSON)
+        XCTAssertNil(HistoryPayload.fromJSON(json))
+    }
+
     func testHistoryPayloadWithNoTitle() {
+        let payloadJSON = "{\"id\":\"--DzSJTCw-zb\",\"histUri\":\"https://foo.com/\",\"visits\":[{\"date\":1429061233163240,\"type\":1}]}"
+        let json = JSON(parseJSON: payloadJSON)
+        if let payload = HistoryPayload.fromJSON(json) {
+            XCTAssertEqual("", payload.title)
+        } else {
+            XCTFail("Should have parsed.")
+        }
+    }
+
+    func testHistoryPayloadWithNullTitle() {
         let payloadJSON = "{\"id\":\"--DzSJTCw-zb\",\"histUri\":\"https://foo.com/\",\"title\":null,\"visits\":[{\"date\":1429061233163240,\"type\":1}]}"
         let json = JSON(parseJSON: payloadJSON)
         if let payload = HistoryPayload.fromJSON(json) {
