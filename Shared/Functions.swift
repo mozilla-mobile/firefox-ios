@@ -192,13 +192,7 @@ public func findOneValue<K, V>(_ map: [K: V], f: (V) -> Bool) -> V? {
  * It's usually convenient for this to accept an optional.
  */
 public func jsonsToStrings(_ arr: [JSON]?) -> [String]? {
-    if let arr = arr {
-        return optFilter(arr.map { j in
-            return j.stringValue
-
-            })
-    }
-    return nil
+    return arr?.flatMap { $0.stringValue }
 }
 
 // Encapsulate a callback in a way that we can use it with NSTimer.
