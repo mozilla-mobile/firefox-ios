@@ -7,7 +7,8 @@ import SwiftyJSON
 
 public extension JSON {
     func isStringOrNull() -> Bool {
-        return isNull() || isString()
+        return self.isString() ||
+               self.isNull()
     }
 
     func isError() -> Bool {
@@ -15,7 +16,10 @@ public extension JSON {
     }
 
     func isString() -> Bool {
-        return self.type == .string
+        // SwiftyJSON doesn't link values to types; it's possible for `self.type == .string` but
+        // `self.string` to return `nil`. Validate both.
+        return self.type == .string &&
+               self.string != nil
     }
 
     func isBool() -> Bool {
@@ -31,7 +35,7 @@ public extension JSON {
     }
 
     func isNull() -> Bool {
-        return self.type == .null || self.type == .unknown
+        return self.type == .null
     }
 
     func isInt() -> Bool {
