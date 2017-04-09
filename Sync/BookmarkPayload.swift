@@ -353,7 +353,7 @@ open class BookmarkPayload: BookmarkBasePayload {
 
     lazy var tagsString: String = {
         if self["tags"].type == Type.array {
-            return self["tags"].stringValue
+            return self["tags"].stringValue() ?? "[]"
         }
         return "[]"
     }()
