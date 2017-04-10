@@ -274,6 +274,8 @@ class RecordTests: XCTestCase {
         let payloadJSON = "{\"id\":\"--DzSJTCw-zb\",\"histUri\":\"https://foo.com/\",\"visits\":[{\"date\":1429061233163240,\"type\":1}]}"
         let json = JSON(parseJSON: payloadJSON)
         if let payload = HistoryPayload.fromJSON(json) {
+            // Missing fields are null-valued in SwiftyJSON.
+            XCTAssertTrue(payload["title"].isNull())
             XCTAssertEqual("", payload.title)
         } else {
             XCTFail("Should have parsed.")
