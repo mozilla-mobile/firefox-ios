@@ -27,6 +27,34 @@ class RecordTests: XCTestCase {
         XCTAssertTrue(json["ttl"].isNull())
     }
 
+    func testParsedNulls() {
+        // Make this a thorough test: use a real-ish blob of JSON.
+        let fullRecord = "{\"id\":\"global\"," +
+            "\"payload\":" +
+            "\"{\\\"syncID\\\":\\\"zPSQTm7WBVWB\\\"," +
+            "\\\"declined\\\":[\\\"bookmarks\\\"]," +
+            "\\\"storageVersion\\\":5," +
+            "\\\"engines\\\":{" +
+            "\\\"clients\\\":{\\\"version\\\":1,\\\"syncID\\\": null}," +
+            "\\\"tabs\\\":{\\\"version\\\":1,\\\"syncID\\\":\\\"W4H5lOMChkYA\\\"}}}\"," +
+            "\"username\":\"5817483\"," +
+        "\"modified\":1.32046073744E9}"
+
+        let record = EnvelopeJSON(fullRecord)
+        let bodyJSON = JSON(parseJSON: record.payload)
+        let clients = bodyJSON["engines"]["clients"]
+
+        // Make sure we're really getting a value out.
+        XCTAssertEqual(clients["version"].int, 1)
+
+        // An explicit null in the input has .type == null, so our .isNull works.
+        XCTAssertTrue(clients["syncID"].isNull())
+
+        // Oh, and it's a valid meta/global.
+        let global = MetaGlobal.fromJSON(bodyJSON)
+        XCTAssertTrue(global != nil)
+    }
+
     func testEnvelopeJSON() {
         let e = EnvelopeJSON(JSON(parseJSON: "{}"))
         XCTAssertFalse(e.isValid())
