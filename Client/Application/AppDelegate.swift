@@ -374,9 +374,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
-        // Workaround for crashing in the background when <select> popovers are visible (rdar://24571325).
-        let jsBlurSelect = "if (document.activeElement && document.activeElement.tagName === 'SELECT') { document.activeElement.blur(); }"
-        tabManager.selectedTab?.webView?.evaluateJavaScript(jsBlurSelect, completionHandler: nil)
         syncOnDidEnterBackground(application: application)
 
         let elapsed = Int(Date().timeIntervalSince1970) - foregroundStartTime
