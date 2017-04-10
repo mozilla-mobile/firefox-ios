@@ -18,7 +18,7 @@ class RecordTests: XCTestCase {
     }
 
     func testEnvelopeNullTTL() {
-        let p = CleartextPayloadJSON(JSON([]))
+        let p = CleartextPayloadJSON(JSON(object: ["id": "guid"]))
         let r = Record<CleartextPayloadJSON>(id: "guid", payload: p, modified: Date.now(), sortindex: 15, ttl: nil)
         let k = KeyBundle.random()
         let s = k.serializer({ $0.json })
