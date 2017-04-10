@@ -284,7 +284,8 @@ open class BrowserDB {
             
             // Need to re-attach any previously-attached DBs
             for attachedDB in attachedDBs {
-                if let _ = attachedDB.attach(to: self) {
+                if let err = attachedDB.attach(to: self) {
+                    log.error("Error re-attaching DB. \(err.localizedDescription)")
                     success = false
                 }
             }
@@ -295,6 +296,7 @@ open class BrowserDB {
                 for table in tables {
                     doCreate(table, connection)
                     if !success {
+                        log.error("Unable to re-create table '\(table.name)'.")
                         return false
                     }
                 }
