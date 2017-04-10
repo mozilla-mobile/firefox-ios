@@ -185,13 +185,17 @@ open class KeyBundle: Hashable {
                     let hmac = self.hmacString(encodedCiphertextBytes)
                     let iv = iv.base64EncodedString
 
+                    // Xcode 8.2 is unable to infer the Any type when using ?? with a primitive
+                    // and NS*value in the dictionary below so this is pulled out.
+                    let ttl: Any = record.ttl ?? NSNull()
+
                     // The payload is stringified JSON. Yes, I know.
                     let payload: Any = JSON(object: ["ciphertext": ciphertext, "IV": iv, "hmac": hmac]).stringValue()! as Any
                     let obj = ["id": record.id,
                                "sortindex": record.sortindex,
                                // This is how SwiftyJSON wants us to express a null that we want to
                                // serialize. Yes, this is gross.
-                               "ttl": record.ttl ?? NSNull(),
+                               "ttl": ttl,
                                "payload": payload]
                     return JSON(object: obj)
                 }
