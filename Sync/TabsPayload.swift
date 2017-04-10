@@ -72,8 +72,8 @@ open class TabsPayload: CleartextPayloadJSON {
             return true
         }
 
-        return self["clientName"].type == Type.string &&
-               self["tabs"].type == Type.array
+        return self["clientName"].isString() &&
+               self["tabs"].isArray()
     }
 
     // Eventually it'd be nice to unify RemoteTab and Tab. We want to kill the GUID in RemoteTab,

@@ -18,7 +18,8 @@ open class BasePayloadJSON {
 
     // Override me.
     fileprivate func isValid() -> Bool {
-        return self.json.error == nil
+        return self.json.type != .unknown &&
+               self.json.error == nil
     }
 
     subscript(key: String) -> JSON {

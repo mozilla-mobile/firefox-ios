@@ -187,7 +187,12 @@ open class KeyBundle: Hashable {
 
                     // The payload is stringified JSON. Yes, I know.
                     let payload: Any = JSON(object: ["ciphertext": ciphertext, "IV": iv, "hmac": hmac]).stringValue()! as Any
-                    let obj = ["id": record.id, "sortindex": record.sortindex, "ttl": record.ttl as Any, "payload": payload]
+                    let obj = ["id": record.id,
+                               "sortindex": record.sortindex,
+                               // This is how SwiftyJSON wants us to express a null that we want to
+                               // serialize. Yes, this is gross.
+                               "ttl": record.ttl ?? NSNull(),
+                               "payload": payload]
                     return JSON(object: obj)
                 }
             }
