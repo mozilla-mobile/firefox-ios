@@ -34,6 +34,12 @@ public extension JSON {
         return self.type == .dictionary
     }
 
+    // Bear in mind that for this function to work you need to set the value to NSNull:
+    // ```
+    // var myObj = JSON(…)
+    // myObj["foo"] = someOptional ?? NSNull()
+    // ```
+    // This is… easy to get wrong.
     func isNull() -> Bool {
         return self.type == .null
     }
