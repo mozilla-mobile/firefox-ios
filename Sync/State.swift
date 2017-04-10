@@ -67,7 +67,7 @@ public enum LocalCommand: CustomStringConvertible, Hashable {
         }
         switch type {
         case "ResetAllEngines":
-            if let except = json["except"].array, except.every({$0.type == Type.string}) {
+            if let except = json["except"].array, except.every({$0.isString()}) {
                 return .resetAllEngines(except: Set(except.map({$0.stringValue})))
             }
             return nil
