@@ -29,6 +29,7 @@ class RecordTests: XCTestCase {
 
     func testParsedNulls() {
         // Make this a thorough test: use a real-ish blob of JSON.
+        // Look to see whether fields with explicit null values match isNull().
         let fullRecord = "{\"id\":\"global\"," +
             "\"payload\":" +
             "\"{\\\"syncID\\\":\\\"zPSQTm7WBVWB\\\"," +
@@ -36,12 +37,15 @@ class RecordTests: XCTestCase {
             "\\\"storageVersion\\\":5," +
             "\\\"engines\\\":{" +
             "\\\"clients\\\":{\\\"version\\\":1,\\\"syncID\\\": null}," +
-            "\\\"tabs\\\":{\\\"version\\\":1,\\\"syncID\\\":\\\"W4H5lOMChkYA\\\"}}}\"," +
+            "\\\"tabs\\\":null}}\"," +
             "\"username\":\"5817483\"," +
         "\"modified\":1.32046073744E9}"
 
         let record = EnvelopeJSON(fullRecord)
         let bodyJSON = JSON(parseJSON: record.payload)
+
+        XCTAssertTrue(bodyJSON["engines"]["tabs"].isNull())
+
         let clients = bodyJSON["engines"]["clients"]
 
         // Make sure we're really getting a value out.
@@ -71,15 +75,35 @@ class RecordTests: XCTestCase {
     }
 
     func testRecord() {
+        // This is malformed JSON (no closing brace).
         let malformedPayload = "{\"id\": \"abcdefghijkl\", \"collection\": \"clients\", \"payload\": \"in"
+
+        // Invalid: the payload isn't stringified JSON.
         let invalidPayload = "{\"id\": \"abcdefghijkl\", \"collection\": \"clients\", \"payload\": \"invalid\"}"
+
+        // Invalid: the payload is missing a GUID.
         let emptyPayload = "{\"id\": \"abcdefghijkl\", \"collection\": \"clients\", \"payload\": \"{}\"}"
 
-        let invalidIDPayload: [String: Any] = ["id": 0]
-        let invalidIDPayloadString = JSON(object: invalidIDPayload).stringValue()!
-        let invalidIDRecord: [String: Any] = ["id": "abcdefghijkl", "collection": "clients", "payload": invalidIDPayloadString]
-        let invalidIDRecordString = JSON(object: invalidIDRecord).stringValue()!
+        // This one is invalid because the payload "id" isn't a string.
+        // (It'll also fail implicitly because the guid doesn't match the envelope.)
+        let badPayloadGUIDPayload: [String: Any] = ["id": 0]
+        let badPayloadGUIDPayloadString = JSON(object: badPayloadGUIDPayload).stringValue()!
+        let badPayloadGUIDRecord: [String: Any] = ["id": "abcdefghijkl",
+                                                   "collection": "clients",
+                                                   "payload": badPayloadGUIDPayloadString]
+        let badPayloadGUIDRecordString = JSON(object: badPayloadGUIDRecord).stringValue()!
 
+        // This one is invalid because the payload doesn't contain an "id" at all, but it's non-empty.
+        // See also `emptyPayload` above.
+        // (It'll also fail implicitly because the guid doesn't match the envelope.)
+        let noPayloadGUIDPayload: [String: Any] = ["some": "thing"]
+        let noPayloadGUIDPayloadString = JSON(object: noPayloadGUIDPayload).stringValue()!
+        let noPayloadGUIDRecord: [String: Any] = ["id": "abcdefghijkl",
+                                                  "collection": "clients",
+                                                  "payload": noPayloadGUIDPayloadString]
+        let noPayloadGUIDRecordString = JSON(object: noPayloadGUIDRecord).stringValue()!
+
+        // And this is a valid record.
         let clientBody: [String: Any] = ["id": "abcdefghijkl", "name": "Foobar", "commands": [], "type": "mobile"]
         let clientBodyString = JSON(object: clientBody).stringValue()!
         let clientRecord: [String: Any] = ["id": "abcdefghijkl", "collection": "clients", "payload": clientBodyString]
@@ -106,18 +130,27 @@ class RecordTests: XCTestCase {
         // Missing ID.
         XCTAssertFalse(Record<CleartextPayloadJSON>.fromEnvelope(EnvelopeJSON(emptyPayload), payloadFactory: clearFactory)!.payload.isValid())
 
-
-        // Non-string ID.
-
-        let invalidEnvelope = EnvelopeJSON(invalidIDRecordString)
+        // No ID in non-empty payload.
+        let noPayloadGUIDEnvelope = EnvelopeJSON(noPayloadGUIDRecordString)
 
         // The envelope is valid...
-        XCTAssertTrue(invalidEnvelope.isValid())
+        XCTAssertTrue(noPayloadGUIDEnvelope.isValid())
 
         // ... but the payload is not.
-        let rec = Record<CleartextPayloadJSON>.fromEnvelope(invalidEnvelope, payloadFactory: cleartextClientsFactory)
-        XCTAssertNotNil(rec)
-        XCTAssertFalse(rec!.payload.isValid())
+        let noID = Record<CleartextPayloadJSON>.fromEnvelope(noPayloadGUIDEnvelope, payloadFactory: cleartextClientsFactory)
+        XCTAssertNotNil(noID)
+        XCTAssertFalse(noID!.payload.isValid())
+
+        // Non-string ID in payload.
+        let badPayloadGUIDEnvelope = EnvelopeJSON(badPayloadGUIDRecordString)
+
+        // The envelope is valid...
+        XCTAssertTrue(badPayloadGUIDEnvelope.isValid())
+
+        // ... but the payload is not.
+        let badID = Record<CleartextPayloadJSON>.fromEnvelope(badPayloadGUIDEnvelope, payloadFactory: cleartextClientsFactory)
+        XCTAssertNotNil(badID)
+        XCTAssertFalse(badID!.payload.isValid())
 
         // Only valid ClientPayloads are valid.
         XCTAssertFalse(Record<ClientPayload>.fromEnvelope(EnvelopeJSON(invalidPayload), payloadFactory: cleartextClientsFactory)!.payload.isValid())
