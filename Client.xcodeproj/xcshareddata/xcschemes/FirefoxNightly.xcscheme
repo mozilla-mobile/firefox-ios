@@ -147,9 +147,6 @@
                   Identifier = "BookmarkingTests">
                </Test>
                <Test
-                  Identifier = "DomainAutocompleteTests">
-               </Test>
-               <Test
                   Identifier = "FindInPageTests">
                </Test>
                <Test
