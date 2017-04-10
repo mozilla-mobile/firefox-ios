@@ -30,6 +30,31 @@ public enum DatabaseOpResult {
     case closed
 }
 
+class AttachedDB {
+    public let filename: String
+    public let schemaName: String
+    
+    init(filename: String, schemaName: String) {
+        self.filename = filename
+        self.schemaName = schemaName
+    }
+    
+    func attach(to browserDB: BrowserDB) -> NSError? {
+        let file = URL(fileURLWithPath: (try! browserDB.files.getAndEnsureDirectory())).appendingPathComponent(filename).path
+        let command = "ATTACH DATABASE '\(file)' AS '\(schemaName)'"
+        return browserDB.db.withConnection(SwiftData.Flags.readWriteCreate, synchronous: true) { connection in
+            return connection.executeChange(command, withArgs: [])
+        }
+    }
+    
+    func detach(from browserDB: BrowserDB) -> NSError? {
+        let command = "DETACH DATABASE '\(schemaName)'"
+        return browserDB.db.withConnection(SwiftData.Flags.readWriteCreate, synchronous: true) { connection in
+            return connection.executeChange(command, withArgs: [])
+        }
+    }
+}
+
 // Version 1 - Basic history table.
 // Version 2 - Added a visits table, refactored the history table to be a GenericTable.
 // Version 3 - Added a favicons table.
@@ -45,7 +70,8 @@ open class BrowserDB {
     fileprivate let filename: String
     fileprivate let secretKey: String?
     fileprivate let schemaTable: SchemaTable
-
+    
+    fileprivate var attachedDBs: [AttachedDB]
     fileprivate var initialized = [String]()
 
     // SQLITE_MAX_VARIABLE_NUMBER = 999 by default. This controls how many ?s can
@@ -58,6 +84,7 @@ open class BrowserDB {
         self.filename = filename
         self.schemaTable = SchemaTable()
         self.secretKey = secretKey
+        self.attachedDBs = []
 
         let file = URL(fileURLWithPath: (try! files.getAndEnsureDirectory())).appendingPathComponent(filename).path
         self.db = SwiftData(filename: file, key: secretKey, prevKey: nil)
@@ -199,60 +226,77 @@ open class BrowserDB {
 
         // If we failed, move the file and try again. This will probably break things that are already
         // attached and expecting a working DB, but at least we should be able to restart.
-        var notify: Notification? = nil
         if !success {
-            log.debug("Couldn't create or update \(tables.map { $0.name }).")
-            log.debug("Attempting to move \(self.filename) to another location.")
-
             // Make sure that we don't still have open the files that we want to move!
             // Note that we use sqlite3_close_v2, which might actually _not_ close the
             // database file yet. For this reason we move the -shm and -wal files, too.
             db.forceClose()
 
-            // Note that a backup file might already exist! We append a counter to avoid this.
-            var bakCounter = 0
-            var bak: String
-            repeat {
-                bakCounter += 1
-                bak = "\(self.filename).bak.\(bakCounter)"
-            } while self.files.exists(bak)
+            // Attempt to make a backup as long as the DB file still exists
+            if self.files.exists(self.filename) {
+                log.debug("Couldn't create or update \(tables.map { $0.name }).")
+                log.debug("Attempting to move \(self.filename) to another location.")
 
-            do {
-                try self.files.move(self.filename, toRelativePath: bak)
+                // Note that a backup file might already exist! We append a counter to avoid this.
+                var bakCounter = 0
+                var bak: String
+                repeat {
+                    bakCounter += 1
+                    bak = "\(self.filename).bak.\(bakCounter)"
+                } while self.files.exists(bak)
 
-                let shm = self.filename + "-shm"
-                let wal = self.filename + "-wal"
-                log.debug("Moving \(shm) and \(wal)…")
-                if self.files.exists(shm) {
-                    log.debug("\(shm) exists.")
-                    try self.files.move(shm, toRelativePath: bak + "-shm")
+                do {
+                    try self.files.move(self.filename, toRelativePath: bak)
+
+                    let shm = self.filename + "-shm"
+                    let wal = self.filename + "-wal"
+                    log.debug("Moving \(shm) and \(wal)…")
+                    if self.files.exists(shm) {
+                        log.debug("\(shm) exists.")
+                        try self.files.move(shm, toRelativePath: bak + "-shm")
+                    }
+                    if self.files.exists(wal) {
+                        log.debug("\(wal) exists.")
+                        try self.files.move(wal, toRelativePath: bak + "-wal")
+                    }
+                    
+                    log.debug("Finished moving \(self.filename) successfully.")
+                } catch _ {
+                    log.error("Unable to move \(self.filename) to another location.")
                 }
-                if self.files.exists(wal) {
-                    log.debug("\(wal) exists.")
-                    try self.files.move(wal, toRelativePath: bak + "-wal")
-                }
-                success = true
-
-                // Notify the world that we moved the database. This allows us to
-                // reset sync and start over in the case of corruption.
-                notify = Notification(name: NotificationDatabaseWasRecreated, object: self.filename)
-            } catch _ {
-                success = false
+            } else {
+                // No backup was attempted since the DB file did not exist
+                log.error("The DB \(self.filename) has been deleted while previously in use.")
             }
-            assert(success)
 
             // Do this after the relevant tables have been created.
             defer {
-                if let notify = notify {
-                    NotificationCenter.default.post(notify)
-                }
+                // Notify the world that we moved the database. This allows us to
+                // reset sync and start over in the case of corruption.
+                let notify = Notification(name: NotificationDatabaseWasRecreated, object: self.filename)
+                NotificationCenter.default.post(notify)
             }
 
             self.reopenIfClosed()
+            
+            // Attempt to re-create the DB
+            success = true
+            
+            // Need to re-attach any previously-attached DBs
+            for attachedDB in attachedDBs {
+                if let err = attachedDB.attach(to: self) {
+                    log.error("Error re-attaching DB. \(err.localizedDescription)")
+                    success = false
+                }
+            }
+            
+            // Re-create all previously-created tables
             if let _ = db.transaction({ connection -> Bool in
+                doCreate(self.schemaTable, connection)
                 for table in tables {
                     doCreate(table, connection)
                     if !success {
+                        log.error("Unable to re-create table '\(table.name)'.")
                         return false
                     }
                 }
@@ -263,6 +307,15 @@ open class BrowserDB {
         }
 
         return success ? .success : .failure
+    }
+
+    open func attachDB(filename: String, as schemaName: String) {
+        let attachedDB = AttachedDB(filename: filename, schemaName: schemaName)
+        if let err = attachedDB.attach(to: self) {
+            log.error("Error attaching DB. \(err.localizedDescription)")
+        } else {
+            self.attachedDBs.append(attachedDB)
+        }
     }
 
     typealias IntCallback = (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> Int

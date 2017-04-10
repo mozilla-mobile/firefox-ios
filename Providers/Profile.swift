@@ -259,6 +259,7 @@ open class BrowserProfile: Profile {
         // Setup our database handles
         self.loginsDB = BrowserDB(filename: "logins.db", secretKey: BrowserProfile.loginsKey, files: files)
         self.db = BrowserDB(filename: "browser.db", files: files)
+        self.db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
 
         let notificationCenter = NotificationCenter.default
 
@@ -1110,7 +1111,7 @@ open class BrowserProfile: Profile {
                 return deferMaybe(statuses)
             }
 
-            if (!isSyncing) {
+            if !isSyncing {
                 // A sync isn't already going on, so start another one.
                 let statsSession = SyncOperationStatsSession(why: why, uid: account.uid, deviceID: account.deviceRegistration?.id)
                 let reducer = AsyncReducer<EngineResults, EngineTasks>(initialValue: [], queue: syncQueue) { (statuses, synchronizers)  in
@@ -1150,8 +1151,7 @@ open class BrowserProfile: Profile {
         }
 
         // This SHOULD NOT be called directly: use syncSeveral instead.
-        fileprivate func syncWith(synchronizers: [(EngineIdentifier, SyncFunction)], account: FirefoxAccount,
-                              statsSession: SyncOperationStatsSession) -> Deferred<Maybe<[(EngineIdentifier, SyncStatus)]>> {
+        fileprivate func syncWith(synchronizers: [(EngineIdentifier, SyncFunction)], account: FirefoxAccount, statsSession: SyncOperationStatsSession) -> Deferred<Maybe<[(EngineIdentifier, SyncStatus)]>> {
             log.info("Syncing \(synchronizers.map { $0.0 })")
             let authState = account.syncAuthState
             let delegate = self.profile.getSyncDelegate()

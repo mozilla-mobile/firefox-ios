@@ -30,6 +30,8 @@ let TableQueuedTabs = "queue"
 
 let TableActivityStreamBlocklist = "activity_stream_blocklist"
 let TablePageMetadata = "page_metadata"
+public let AttachedDatabaseMetadata = "metadataDB" // Added in v22
+let AttachedTablePageMetadata = AttachedDatabaseMetadata + "." + TablePageMetadata // Added in v22
 
 let ViewBookmarksBufferOnMirror = "view_bookmarksBuffer_on_mirror"
 let ViewBookmarksBufferStructureOnMirror = "view_bookmarksBufferStructure_on_mirror"
@@ -52,7 +54,9 @@ let IndexBookmarksLocalStructureParentIdx = "idx_bookmarksLocalStructure_parent_
 let IndexBookmarksBufferStructureParentIdx = "idx_bookmarksBufferStructure_parent_idx"   // Added in v12.
 let IndexBookmarksMirrorStructureChild = "idx_bookmarksMirrorStructure_child"            // Added in v14.
 let IndexPageMetadataCacheKey = "idx_page_metadata_cache_key_uniqueindex" // Added in v19
-let IndexPageMetadataSiteURL = "idx_page_metadata_site_url_uniqueindex" // Added in v19
+let IndexPageMetadataSiteURL = "idx_page_metadata_site_url_uniqueindex" // Added in v21
+let AttachedIndexPageMetadataCacheKey = AttachedDatabaseMetadata + "." + IndexPageMetadataCacheKey // Added in v22
+let AttachedIndexPageMetadataSiteURL = AttachedDatabaseMetadata + "." + IndexPageMetadataSiteURL // Added in v22
 
 private let AllTables: [String] = [
     TableDomains,
@@ -72,7 +76,7 @@ private let AllTables: [String] = [
     TableQueuedTabs,
 
     TableActivityStreamBlocklist,
-    TablePageMetadata,
+    AttachedTablePageMetadata,
 ]
 
 private let AllViews: [String] = [
@@ -109,7 +113,7 @@ private let log = Logger.syncLogger
  * We rely on SQLiteHistory having initialized the favicon table first.
  */
 open class BrowserTable: Table {
-    static let DefaultVersion = 21    // Bug 1253656.
+    static let DefaultVersion = 22    // Bug 1253656.
 
     // TableInfo fields.
     var name: String { return "BROWSER" }
@@ -262,13 +266,33 @@ open class BrowserTable: Table {
             "provider_name TEXT, " +
             "created_at DATETIME DEFAULT CURRENT_TIMESTAMP, " +
             "expired_at LONG" +
-        ") "
+    ") "
+
+    let attachedPageMetadataCreate =
+        "CREATE TABLE IF NOT EXISTS \(AttachedTablePageMetadata) (" +
+            "id INTEGER PRIMARY KEY, " +
+            "cache_key LONGVARCHAR UNIQUE, " +
+            "site_url TEXT, " +
+            "media_url LONGVARCHAR, " +
+            "title TEXT, " +
+            "type VARCHAR(32), " +
+            "description TEXT, " +
+            "provider_name TEXT, " +
+            "created_at DATETIME DEFAULT CURRENT_TIMESTAMP, " +
+            "expired_at LONG" +
+    ") "
 
     let indexPageMetadataCacheKeyCreate =
     "CREATE UNIQUE INDEX IF NOT EXISTS \(IndexPageMetadataCacheKey) ON page_metadata (cache_key)"
 
     let indexPageMetadataSiteURLCreate =
     "CREATE UNIQUE INDEX IF NOT EXISTS \(IndexPageMetadataSiteURL) ON page_metadata (site_url)"
+
+    let attachedIndexPageMetadataCacheKeyCreate =
+    "CREATE UNIQUE INDEX IF NOT EXISTS \(AttachedIndexPageMetadataCacheKey) ON \(TablePageMetadata) (cache_key)"
+
+    let attachedIndexPageMetadataSiteURLCreate =
+    "CREATE UNIQUE INDEX IF NOT EXISTS \(AttachedIndexPageMetadataSiteURL) ON \(TablePageMetadata) (site_url)"
 
     let iconColumns = ", faviconID INTEGER REFERENCES \(TableFavicons)(id) ON DELETE SET NULL"
     let mirrorColumns = ", is_overridden TINYINT NOT NULL DEFAULT 0"
@@ -581,9 +605,9 @@ open class BrowserTable: Table {
             widestFavicons,
             historyIDsWithIcon,
             iconForURL,
-            pageMetadataCreate,
-            indexPageMetadataCacheKeyCreate,
-            indexPageMetadataSiteURLCreate,
+            attachedPageMetadataCreate,
+            attachedIndexPageMetadataSiteURLCreate,
+            attachedIndexPageMetadataCacheKeyCreate,
             self.queueTableCreate,
             self.topSitesTableCreate,
             self.localBookmarksView,
@@ -828,8 +852,7 @@ open class BrowserTable: Table {
 
                 // Adds tables/indicies for metadata content
                 pageMetadataCreate,
-                indexPageMetadataCacheKeyCreate,
-                indexPageMetadataSiteURLCreate]) {
+                indexPageMetadataCacheKeyCreate]) {
                 return false
             }
         }
@@ -845,7 +868,18 @@ open class BrowserTable: Table {
         if from < 21 && to >= 21 {
             if !self.run(db, queries: [
                 "DROP VIEW IF EXISTS \(ViewHistoryVisits)",
-                self.historyVisitsView]) {
+                self.historyVisitsView,
+                indexPageMetadataSiteURLCreate]) {
+                return false
+            }
+        }
+
+        if from < 22 && to >= 22 {
+            if !self.run(db, queries: [
+                "DROP TABLE IF EXISTS \(TablePageMetadata)",
+                attachedPageMetadataCreate,
+                attachedIndexPageMetadataCacheKeyCreate,
+                attachedIndexPageMetadataSiteURLCreate]) {
                 return false
             }
         }

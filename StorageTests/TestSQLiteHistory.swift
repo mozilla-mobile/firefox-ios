@@ -838,6 +838,7 @@ class TestSQLiteHistory: XCTestCase {
     // Test that our visit partitioning for frecency is correct.
     func testHistoryLocalAndRemoteVisits() {
         let db = BrowserDB(filename: "browser.db", files: files)
+        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
@@ -917,6 +918,7 @@ class TestSQLiteHistory: XCTestCase {
 
         for (version, table) in sources {
             let db = BrowserDB(filename: "browser-v\(version).db", files: files)
+            db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
             XCTAssertTrue(
                 db.runWithConnection { (conn, err) in
                     XCTAssertTrue(table.create(conn), "Creating browser table version \(version)")
@@ -931,6 +933,7 @@ class TestSQLiteHistory: XCTestCase {
 
     func testUpgradesWithData() {
         let db = BrowserDB(filename: "browser-v6-data.db", files: files)
+        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
 
         XCTAssertTrue(db.createOrUpdate(BrowserTableV6()) == .success, "Creating browser table version 6")
 
@@ -960,6 +963,7 @@ class TestSQLiteHistory: XCTestCase {
 
     func testDomainUpgrade() {
         let db = BrowserDB(filename: "browser.db", files: files)
+        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
@@ -989,6 +993,7 @@ class TestSQLiteHistory: XCTestCase {
 
     func testDomains() {
         let db = BrowserDB(filename: "browser.db", files: files)
+        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
@@ -1026,6 +1031,7 @@ class TestSQLiteHistory: XCTestCase {
 
     func testHistoryIsSynced() {
         let db = BrowserDB(filename: "historysynced.db", files: files)
+        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
@@ -1043,6 +1049,7 @@ class TestSQLiteHistory: XCTestCase {
     // and then clears the database.
     func testHistoryTable() {
         let db = BrowserDB(filename: "browser.db", files: files)
+        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
         let bookmarks = SQLiteBookmarks(db: db)
@@ -1165,6 +1172,7 @@ class TestSQLiteHistory: XCTestCase {
 
     func testFaviconTable() {
         let db = BrowserDB(filename: "browser.db", files: files)
+        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
         let bookmarks = SQLiteBookmarks(db: db)
@@ -1228,6 +1236,7 @@ class TestSQLiteHistory: XCTestCase {
 
     func testTopSitesCache() {
         let db = BrowserDB(filename: "browser.db", files: files)
+        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
@@ -1315,6 +1324,7 @@ class TestSQLiteHistoryTransactionUpdate: XCTestCase {
     func testUpdateInTransaction() {
         let files = MockFiles()
         let db = BrowserDB(filename: "browser.db", files: files)
+        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
@@ -1334,6 +1344,7 @@ class TestSQLiteHistoryFilterSplitting: XCTestCase {
     let history: SQLiteHistory = {
         let files = MockFiles()
         let db = BrowserDB(filename: "browser.db", files: files)
+        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
         let prefs = MockProfilePrefs()
         return SQLiteHistory(db: db, prefs: prefs)
     }()
