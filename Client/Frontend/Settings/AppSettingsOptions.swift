@@ -594,7 +594,7 @@ class LoginsSetting: Setting {
         super.init(title: NSAttributedString(string: loginsTitle, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]),
                    delegate: delegate)
     }
-    
+
     func deselectRow () {
         if let selectedRow = self.settings?.tableView.indexPathForSelectedRow {
             self.settings?.tableView.deselectRow(at: selectedRow, animated: true)
@@ -718,6 +718,48 @@ class ChinaSyncServiceSetting: WithoutAccountSetting {
 
     @objc func switchValueChanged(_ toggle: UISwitch) {
         prefs.setObject(toggle.isOn, forKey: prefKey)
+    }
+}
+
+class StageSyncServiceDebugSetting: WithoutAccountSetting {
+    override var accessoryType: UITableViewCellAccessoryType { return .none }
+    var prefs: Prefs { return settings.profile.prefs }
+
+    var prefKey: String = "useStageSyncService"
+
+    override var hidden: Bool {
+        if !ShowDebugSettings {
+            return true
+        }
+        if let _ = profile.getAccount() {
+            return true
+        }
+        return false
+    }
+
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: NSLocalizedString("Debug: use stage servers", comment: "Debug option"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
+    }
+
+    override var status: NSAttributedString? {
+        let isOn = prefs.boolForKey(prefKey) ?? false
+        let configurationURL = isOn ? StageFirefoxAccountConfiguration().authEndpointURL : ProductionFirefoxAccountConfiguration().authEndpointURL
+        return NSAttributedString(string: configurationURL.absoluteString, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewHeaderTextColor])
+    }
+
+    override func onConfigureCell(_ cell: UITableViewCell) {
+        super.onConfigureCell(cell)
+        let control = UISwitch()
+        control.onTintColor = UIConstants.ControlTintColor
+        control.addTarget(self, action: #selector(StageSyncServiceDebugSetting.switchValueChanged(_:)), for: UIControlEvents.valueChanged)
+        control.isOn = prefs.boolForKey(prefKey) ?? false
+        cell.accessoryView = control
+        cell.selectionStyle = .none
+    }
+
+    @objc func switchValueChanged(_ toggle: UISwitch) {
+        prefs.setObject(toggle.isOn, forKey: prefKey)
+        settings.tableView.reloadData()
     }
 }
 

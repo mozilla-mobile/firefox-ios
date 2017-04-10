@@ -505,6 +505,9 @@ open class BrowserProfile: Profile {
         if prefs.boolForKey("useChinaSyncService") ?? isChinaEdition {
             return ChinaEditionFirefoxAccountConfiguration()
         }
+        if prefs.boolForKey("useStageSyncService") ?? false {
+            return StageFirefoxAccountConfiguration()
+        }
         return ProductionFirefoxAccountConfiguration()
     }
 
