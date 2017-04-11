@@ -117,7 +117,7 @@ extension MockSyncableHistory: SyncableHistory {
                 if let existingLocal = self.places[place.guid] {
                     if existingLocal.shouldUpload {
                         log.debug("Record \(existingLocal.guid) modified locally and remotely.")
-                        log.debug("Local modified: \(existingLocal.localModified); remote: \(modified).")
+                        log.debug("Local modified: \(existingLocal.localModified ??? "nil"); remote: \(modified).")
 
                         // Should always be a value if marked as changed.
                         if existingLocal.localModified! > modified {
