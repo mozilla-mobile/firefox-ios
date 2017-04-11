@@ -46,8 +46,7 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
     func testUserInfoRemovedFromURL() {
         let hostWithUsername = webRoot.replacingOccurrences(of: "127.0.0.1", with: "username:password@127.0.0.1", options: NSString.CompareOptions(), range: nil)
         let urlWithUserInfo = "\(hostWithUsername)/numberedPage.html?page=1"
-        let url = "\(webRoot)/numberedPage.html?page=1"
-
+        let url = "\(webRoot!)/numberedPage.html?page=1"
         _ = tester().waitForView(withAccessibilityIdentifier: "url") as! UITextField
         tester().tapView(withAccessibilityIdentifier: "url")
         tester().enterText(intoCurrentFirstResponder: urlWithUserInfo+"\n")
