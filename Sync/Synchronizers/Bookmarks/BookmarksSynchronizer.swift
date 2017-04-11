@@ -64,7 +64,7 @@ class TrivialBookmarkStorer: BookmarkStorer {
                 failed[guid] = message
             }
 
-            log.debug("Uploaded records got timestamp \(lastModified).")
+            log.debug("Uploaded records got timestamp \(lastModified ??? "nil").")
             let modified = lastModified ?? 0
             local.setModifiedTime(modified, guids: result.success)
             return deferMaybe(modified)
