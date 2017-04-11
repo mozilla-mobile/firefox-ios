@@ -15,7 +15,9 @@ public protocol SearchableBookmarks: class {
 }
 
 public protocol CountableBookmarks: class {
-    func numberOfBookmarks() -> Deferred<Maybe<Int>>
+    // Counts all of the bookmark items matching the given types across all of the
+    // non-structure bookmarks tables (local, mirror, buffer)
+    func countAllItems(matchingTypes: [BookmarkNodeType]) -> Deferred<Maybe<Int>>
 }
 
 public protocol SyncableBookmarks: class, ResettableSyncStorage, AccountRemovalDelegate {

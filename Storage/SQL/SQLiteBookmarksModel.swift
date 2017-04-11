@@ -855,7 +855,7 @@ open class MergedSQLiteBookmarks: BookmarksModelFactorySource, KeywordSearchSour
         return self.local.getURLForKeywordSearch(keyword)
     }
 
-    open func numberOfBookmarks() -> Deferred<Maybe<Int>> {
-        return self.local.numberOfBookmarks()
+    open func countAllItems(matchingTypes: [BookmarkNodeType]) -> Deferred<Maybe<Int>> {
+        return local.countAllItems(matchingTypes: matchingTypes)
     }
 }

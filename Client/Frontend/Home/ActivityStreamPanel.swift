@@ -657,9 +657,17 @@ struct ActivityStreamTracker {
     private func collectStorageStats() -> Deferred<Maybe<[String: Int]>> {
         // Dispatch some deferreds to gather up some information about the
         // various souces of data that power Activity Stream
+        let bookmarkSourceTypes: [BookmarkNodeType] = [
+            .bookmark,
+            .livemark,
+            .separator,
+            .dynamicContainer,
+            .query
+        ]
+
         return accumulate([
             profile.history.numberOfHistoryEntries,
-            profile.bookmarks.numberOfBookmarks
+            { self.profile.bookmarks.countAllItems(matchingTypes: bookmarkSourceTypes) }
         ]) >>== { results in
             return deferMaybe([
                 "total_history_size": results[0],

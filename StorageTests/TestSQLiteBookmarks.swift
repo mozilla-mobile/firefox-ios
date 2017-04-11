@@ -741,31 +741,31 @@ class TestSQLiteBookmarks: XCTestCase {
 
         let bookmarks = SQLiteBookmarks(db: db)
         var expectedCount = BookmarkRoots.Real.count
-        var count = bookmarks.numberOfBookmarks().value.successValue!
-        XCTAssertEqual(count, BookmarkRoots.Real.count)
+        var count = bookmarks.countAllItems(matchingTypes: [.bookmark]).value.successValue!
+        XCTAssertEqual(count, 0)
 
         // Check that adding a local bookmark increases the count
         bookmarks.insertBookmark("http://getfirefox.com".asURL!, title: "AAA", favicon: nil, intoFolder: BookmarkRoots.MobileFolderGUID, withTitle: "Mobile Bookmarks").succeeded()
         expectedCount += 1
-        count = bookmarks.numberOfBookmarks().value.successValue!
-        XCTAssertEqual(count, expectedCount)
+        count = bookmarks.countAllItems(matchingTypes: [.bookmark]).value.successValue!
+        XCTAssertEqual(count, 1)
 
         // Check that bookmarks in the mirror also count
         db.moveLocalToMirrorForTesting()
-        count = bookmarks.numberOfBookmarks().value.successValue!
-        XCTAssertEqual(count, expectedCount)
+        count = bookmarks.countAllItems(matchingTypes: [.bookmark]).value.successValue!
+        XCTAssertEqual(count, 1)
 
         // Check that bookmarks in local and mirror are both counted
         bookmarks.insertBookmark("http://deleteme.com".asURL!, title: "BBB", favicon: nil, intoFolder: BookmarkRoots.MobileFolderGUID, withTitle: "Mobile Bookmarks").succeeded()
         expectedCount += 1
-        count = bookmarks.numberOfBookmarks().value.successValue!
-        XCTAssertEqual(count, expectedCount)
+        count = bookmarks.countAllItems(matchingTypes: [.bookmark]).value.successValue!
+        XCTAssertEqual(count, 2)
 
         // Check that a deleted bookmark doesn't count
         let bookmarkToRemove = bookmarks.bookmarksByURL("http://deleteme.com".asURL!).value.successValue![0]!
         bookmarks.removeGUIDs([bookmarkToRemove.guid]).succeeded()
         expectedCount -= 1
-        count = bookmarks.numberOfBookmarks().value.successValue!
-        XCTAssertEqual(count, expectedCount)
+        count = bookmarks.countAllItems(matchingTypes: [.bookmark]).value.successValue!
+        XCTAssertEqual(count, 1)
     }
 }

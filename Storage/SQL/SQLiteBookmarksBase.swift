@@ -65,8 +65,13 @@ open class SQLiteBookmarks: BookmarksModelFactorySource, KeywordSearchSource, Co
 
     // Doesn't factor in bookmark structure. Used for telemetry purposes on 
     // bookmarks the user can actually see.
-    open func numberOfBookmarks() -> Deferred<Maybe<Int>> {
-        let sql = "SELECT COUNT(*) FROM \(ViewBookmarksLocalOnMirror)"
+    open func countAllItems(matchingTypes: [BookmarkNodeType]) -> Deferred<Maybe<Int>> {
+        let whereSQL = matchingTypes.map { "type IS \($0.rawValue)" }.joined(separator: " OR ")
+        let sql = "SELECT (" +
+            "(SELECT COUNT(*) FROM \(TableBookmarksBuffer) WHERE \(whereSQL)) + " +
+            "(SELECT COUNT(*) FROM \(TableBookmarksMirror) WHERE is_overridden = 0 AND \(whereSQL)) + " +
+            "(SELECT COUNT(*) FROM \(TableBookmarksLocal) WHERE \(whereSQL)))" +
+            "AS count"
         return self.db.runQuery(sql, args: nil, factory: { $0[0] as! Int })
             >>== { deferMaybe($0[0]!) }
     }
