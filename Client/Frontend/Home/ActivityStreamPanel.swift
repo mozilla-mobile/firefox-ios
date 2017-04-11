@@ -665,10 +665,13 @@ struct ActivityStreamTracker {
             .query
         ]
 
-        return accumulate([
-            profile.history.numberOfHistoryEntries,
-            { self.profile.bookmarks.countAllItems(matchingTypes: bookmarkSourceTypes) }
-        ]) >>== { results in
+        let collectOps = [
+            profile.history.numberOfHistoryEntries, {
+                self.profile.bookmarks.countAllItems(matchingTypes: bookmarkSourceTypes)
+            }
+        ]
+
+        return accumulate(collectOps) >>== { results in
             return deferMaybe([
                 "total_history_size": results[0],
                 "total_bookmarks_size": results[1],
