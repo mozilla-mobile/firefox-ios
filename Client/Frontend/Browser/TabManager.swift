@@ -69,6 +69,7 @@ class TabManager: NSObject {
         let configuration = WKWebViewConfiguration()
         configuration.processPool = WKProcessPool()
         configuration.preferences.javaScriptCanOpenWindowsAutomatically = !(self.prefs.boolForKey("blockPopups") ?? true)
+        configuration.setPlaybackPref(property: "requiresUserActionForMediaPlayback", value: !(self.prefs.boolForKey("allowAutoplay") ?? true))
         return configuration
     }()
 
@@ -77,6 +78,7 @@ class TabManager: NSObject {
         let configuration = WKWebViewConfiguration()
         configuration.processPool = WKProcessPool()
         configuration.preferences.javaScriptCanOpenWindowsAutomatically = !(self.prefs.boolForKey("blockPopups") ?? true)
+        configuration.setPlaybackPref(property: "requiresUserActionForMediaPlayback", value: !(self.prefs.boolForKey("allowAutoplay") ?? true))
         configuration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
         return configuration
     }()
@@ -324,7 +326,7 @@ class TabManager: NSObject {
             }
         }
         if flushToDisk {
-        	storeChanges()
+            storeChanges()
         }
     }
 
@@ -525,13 +527,18 @@ class TabManager: NSObject {
     func prefsDidChange() {
         DispatchQueue.main.async {
             let allowPopups = !(self.prefs.boolForKey("blockPopups") ?? true)
+            let allowAutoplay = !(self.prefs.boolForKey("allowAutoplay") ?? true)
             // Each tab may have its own configuration, so we should tell each of them in turn.
             for tab in self.tabs {
                 tab.webView?.configuration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
+                tab.webView?.configuration.setPlaybackPref(property: "requiresUserActionForMediaPlayback", value: allowAutoplay)
             }
             // The default tab configurations also need to change.
             self.configuration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
+            self.configuration.setPlaybackPref(property: "requiresUserActionForMediaPlayback", value: allowAutoplay)
+
             self.privateConfiguration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
+            self.privateConfiguration.setPlaybackPref(property: "requiresUserActionForMediaPlayback", value: allowAutoplay)
         }
     }
 

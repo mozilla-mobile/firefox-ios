@@ -53,6 +53,8 @@ class AppSettingsTableViewController: SettingsTableViewController {
                         titleText: NSLocalizedString("Save Logins", comment: "Setting to enable the built-in password manager")),
             BoolSetting(prefs: prefs, prefKey: AllowThirdPartyKeyboardsKey, defaultValue: false,
                         titleText: NSLocalizedString("Allow Third-Party Keyboards", comment: "Setting to enable third-party keyboards"), statusText: NSLocalizedString("Firefox needs to reopen for this change to take effect.", comment: "Setting value prop to enable third-party keyboards")),
+            BoolSetting(prefs: prefs, prefKey: "allowAutoplay", defaultValue: true,
+                        titleText: NSLocalizedString("Allow Autoplay", comment: "Setting to enable media autoplay"), statusText: NSLocalizedString("Control if websites can autoplay videos and other media content.", comment: "Setting value prop to enable media autoplay")),
             ]        
         
         let accountChinaSyncSetting: [Setting]
