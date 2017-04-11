@@ -54,7 +54,12 @@ open class Telemetry {
         var request = URLRequest(url: url)
 
         log.debug("Ping URL: \(url)")
-        log.debug("Ping payload: \(payload)")
+        if let payload = payload {
+            log.debug("Ping payload: \(payload)")
+        } else {
+            log.warning("Warning: Payload being sent for \(url) is empty!")
+        }
+        
 
         guard let body = payload?.data(using: String.Encoding.utf8) else {
             log.error("Invalid data!")
