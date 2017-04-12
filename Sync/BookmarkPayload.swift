@@ -110,9 +110,12 @@ open class LivemarkPayload: BookmarkBasePayload {
     }
 
     override open func isValid() -> Bool {
+        log.debug("Calling LivemarkPayload.isValid()...")
         if !super.isValid() {
+            log.debug("LivemarkPayload.isValid() -> false")
             return false
         }
+        log.debug("LivemarkPayload.isValid() -> " + (self.hasRequiredStringFields(["feedUri", "siteUri"]) ? "true" : "false"))
         return self.hasRequiredStringFields(["feedUri", "siteUri"])
     }
 
@@ -162,13 +165,17 @@ open class LivemarkPayload: BookmarkBasePayload {
 
 open class SeparatorPayload: BookmarkBasePayload {
     override open func isValid() -> Bool {
+        log.debug("Calling SeparatorPayload.isValid()...")
         if !super.isValid() {
+            log.debug("SeparatorPayload.isValid() -> false")
             return false
         }
         if !self["pos"].isInt() {
             log.warning("Separator \(self.id) missing pos.")
+            log.debug("SeparatorPayload.isValid() -> false")
             return false
         }
+        log.debug("SeparatorPayload.isValid() -> true")
         return true
     }
 
@@ -215,25 +222,31 @@ open class FolderPayload: BookmarkBasePayload {
     }
 
     override open func isValid() -> Bool {
+        log.debug("Calling FolderPayload.isValid()...")
         if !super.isValid() {
+            log.debug("FolderPayload.isValid() -> false")
             return false
         }
 
         if !self.hasRequiredStringFields(["title"]) {
             log.warning("Folder \(self.id) missing title.")
+            log.debug("FolderPayload.isValid() -> false")
             return false
         }
 
         if !self.hasOptionalStringFields(["description"]) {
             log.warning("Folder \(self.id) missing string description.")
+            log.debug("FolderPayload.isValid() -> false")
             return false
 
         }
         if !self.childrenAreValid {
             log.warning("Folder \(self.id) has invalid children.")
+            log.debug("FolderPayload.isValid() -> false")
             return false
         }
 
+        log.debug("FolderPayload.isValid() -> true")
         return true
     }
 
@@ -296,12 +309,15 @@ open class BookmarkPayload: BookmarkBasePayload {
     fileprivate static let optionalBookmarkBooleanFields = ["loadInSidebar"]
 
     override open func isValid() -> Bool {
+        log.debug("Calling BookmarkPayload.isValid()...")
         if !super.isValid() {
+            log.debug("BookmarkPayload.isValid() -> false")
             return false
         }
 
         if !self.hasRequiredStringFields(BookmarkPayload.requiredBookmarkStringFields) {
             log.warning("Bookmark \(self.id) missing required string field.")
+            log.debug("BookmarkPayload.isValid() -> false")
             return false
         }
 
@@ -311,9 +327,11 @@ open class BookmarkPayload: BookmarkBasePayload {
         }
 
         if !self.hasOptionalStringFields(BookmarkPayload.optionalBookmarkStringFields) {
+            log.debug("BookmarkPayload.isValid() -> false")
             return false
         }
 
+        log.debug("BookmarkPayload.isValid() -> " + (self.hasOptionalBooleanFields(BookmarkPayload.optionalBookmarkBooleanFields) ? "true" : "false"))
         return self.hasOptionalBooleanFields(BookmarkPayload.optionalBookmarkBooleanFields)
     }
 
@@ -381,15 +399,19 @@ open class BookmarkPayload: BookmarkBasePayload {
 
 open class BookmarkQueryPayload: BookmarkPayload {
     override open func isValid() -> Bool {
+        log.debug("Calling BookmarkQueryPayload.isValid()...")
         if !super.isValid() {
+            log.debug("BookmarkQueryPayload.isValid() -> false")
             return false
         }
 
         if !self.hasOptionalStringFields(["queryId", "folderName"]) {
             log.warning("Query \(self.id) missing queryId or folderName.")
+            log.debug("BookmarkQueryPayload.isValid() -> false")
             return false
         }
 
+        log.debug("BookmarkQueryPayload.isValid() -> true")
         return true
     }
 

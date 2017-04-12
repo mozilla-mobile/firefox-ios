@@ -7,6 +7,8 @@ import Shared
 import Storage
 import SwiftyJSON
 
+private let log = Logger.syncLogger
+
 open class HistoryPayload: CleartextPayloadJSON {
     open class func fromJSON(_ json: JSON) -> HistoryPayload? {
         let p = HistoryPayload(json)
@@ -17,17 +19,23 @@ open class HistoryPayload: CleartextPayloadJSON {
     }
 
     override open func isValid() -> Bool {
+        log.debug("Calling HistoryPayload.isValid()...")
         if !super.isValid() {
+            log.debug("HistoryPayload.isValid() -> false")
             return false
         }
 
         if self["deleted"].bool ?? false {
+            log.debug("HistoryPayload.isValid() -> true")
             return true
         }
 
-        return self["histUri"].string != nil &&      // TODO: validate URI.
-               self["title"].isStringOrNull() &&
-               self["visits"].isArray()
+        log.debug("ID is: " + self.id)
+        let result = self["histUri"].string != nil &&      // TODO: validate URI.
+                     self["title"].isStringOrNull() &&
+                     self["visits"].isArray()
+        log.debug("HistoryPayload.isValid() -> " + (result ? "true" : "false"))
+        return result
     }
 
     open func asPlace() -> Place {

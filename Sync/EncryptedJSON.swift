@@ -153,6 +153,7 @@ open class EncryptedJSON {
             return nil
         }
 
+        log.debug("**** DECRYPTED JSON **** " + decrypted!)
         _cleartext = JSON(parseJSON: decrypted!)
         return _cleartext!
     }

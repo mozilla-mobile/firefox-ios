@@ -33,8 +33,9 @@ public extension Logger {
     :returns: Directory path where log files are stored
     */
     static func logFileDirectoryPath() -> String? {
-        if let cacheDir = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first {
-            let logDir = "\(cacheDir)/Logs"
+        let searchPath: FileManager.SearchPathDirectory = AppConstants.BuildChannel == AppBuildChannel.beta && UserDefaults.standard.bool(forKey: "SettingsBundleStoreLogsInDocuments") ? .documentDirectory : .cachesDirectory
+        if let storeDir = NSSearchPathForDirectoriesInDomains(searchPath, .userDomainMask, true).first {
+            let logDir = "\(storeDir)/Logs"
             if !FileManager.default.fileExists(atPath: logDir) {
                 do {
                     try FileManager.default.createDirectory(atPath: logDir, withIntermediateDirectories: false, attributes: nil)
