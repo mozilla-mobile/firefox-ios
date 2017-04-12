@@ -42,12 +42,12 @@ class TestSQLiteHistoryFrecencyPerf: XCTestCase {
 
         let count = 500
 
-        history.clearHistory().value
+        history.clearHistory().succeeded()
         populateHistoryForFrecencyCalculations(history, siteCount: count)
 
         self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true) {
             for _ in 0...5 {
-                history.getSitesByFrecencyWithHistoryLimit(10, includeIcon: false).value
+                history.getSitesByFrecencyWithHistoryLimit(10, includeIcon: false).succeeded()
             }
             self.stopMeasuring()
         }
@@ -64,12 +64,12 @@ class TestSQLiteHistoryTopSitesCachePref: XCTestCase {
 
         let count = 500
 
-        history.clearHistory().value
+        history.clearHistory().succeeded()
         populateHistoryForFrecencyCalculations(history, siteCount: count)
 
         history.setTopSitesNeedsInvalidation()
         self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true) {
-            history.updateTopSitesCacheIfInvalidated().value
+            history.updateTopSitesCacheIfInvalidated().succeeded()
             self.stopMeasuring()
         }
     }
@@ -88,7 +88,7 @@ private func populateHistoryForFrecencyCalculations(_ history: SQLiteHistory, si
         site.guid = "abc\(i)def"
 
         let baseMillis: UInt64 = baseInstantInMillis - 20000
-        history.insertOrUpdatePlace(site.asPlace(), modified: baseMillis).value
+        history.insertOrUpdatePlace(site.asPlace(), modified: baseMillis).succeeded()
 
         for j in 0...20 {
             let visitTime = advanceMicrosecondTimestamp(baseInstantInMicros, by: (1000000 * i) + (1000 * j))
@@ -102,8 +102,8 @@ private func addVisitForSite(_ site: Site, intoHistory history: SQLiteHistory, f
     let visit = SiteVisit(site: site, date: atTime, type: VisitType.link)
     switch from {
     case .local:
-        history.addLocalVisit(visit).value
+        history.addLocalVisit(visit).succeeded()
     case .remote:
-        history.storeRemoteVisits([visit], forGUID: site.guid!).value
+        history.storeRemoteVisits([visit], forGUID: site.guid!).succeeded()
     }
 }
