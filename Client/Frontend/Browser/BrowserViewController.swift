@@ -933,7 +933,7 @@ class BrowserViewController: UIViewController {
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         let webView = object as! WKWebView
-        guard let path = keyPath else { assertionFailure("Unhandled KVO key: \(keyPath)"); return }
+        guard let path = keyPath else { assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")"); return }
         switch path {
         case KVOEstimatedProgress:
             guard webView == tabManager.selectedTab?.webView,
@@ -974,7 +974,7 @@ class BrowserViewController: UIViewController {
 
             navigationToolbar.updateForwardStatus(canGoForward)
         default:
-            assertionFailure("Unhandled KVO key: \(keyPath)")
+            assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")")
         }
     }
 
@@ -1027,7 +1027,7 @@ class BrowserViewController: UIViewController {
         profile.bookmarks.modelFactory >>== {
             $0.isBookmarked(url).uponQueue(DispatchQueue.main) { [weak tab] result in
                 guard let bookmarked = result.successValue else {
-                    log.error("Error getting bookmark status: \(result.failureValue).")
+                    log.error("Error getting bookmark status: \(result.failureValue ??? "nil").")
                     return
                 }
                 tab?.isBookmarked = bookmarked
@@ -2101,7 +2101,7 @@ extension BrowserViewController: TabManagerDelegate {
                         $0.isBookmarked(absoluteString)
                             .uponQueue(DispatchQueue.main) {
                             guard let isBookmarked = $0.successValue else {
-                                log.error("Error getting bookmark status: \($0.failureValue).")
+                                log.error("Error getting bookmark status: \($0.failureValue ??? "nil").")
                                 return
                             }
 
@@ -2277,7 +2277,6 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         if !navigationAction.isAllowed && navigationAction.navigationType != .backForward {
-            print("\(navigationAction.isAllowed) \(navigationAction.navigationType == .backForward) \(navigationAction.request.url)")
             log.warning("Denying unprivileged request: \(navigationAction.request)")
             decisionHandler(WKNavigationActionPolicy.cancel)
             return

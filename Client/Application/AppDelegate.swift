@@ -266,7 +266,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         }
 
         guard let scheme = components.scheme, urlSchemes.contains(scheme) else {
-            log.warning("Cannot handle \(components.scheme) URL scheme")
+            log.warning("Cannot handle \(components.scheme ?? "nil") URL scheme")
             return false
         }
 
