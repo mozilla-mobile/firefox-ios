@@ -971,7 +971,7 @@ class TestSQLiteHistory: XCTestCase {
         var err: NSError? = nil
 
         // Insert something with an invalid domain ID. We have to manually do this since domains are usually hidden.
-        db.withConnection(&err, callback: { (connection, err) -> Int in
+        let _ = db.withConnection(&err, callback: { (connection, err) -> Int in
             let insert = "INSERT INTO \(TableHistory) (guid, url, title, local_modified, is_deleted, should_upload, domain_id) " +
                          "?, ?, ?, ?, ?, ?, ?"
             let args: Args = [Bytes.generateGUID(), site.url, site.title, Date.now(), 0, 0, -1]
@@ -980,7 +980,7 @@ class TestSQLiteHistory: XCTestCase {
         })
 
         // Now insert it again. This should update the domain
-        history.addLocalVisit(SiteVisit(site: site, date: Date.nowMicroseconds(), type: VisitType.link))
+        history.addLocalVisit(SiteVisit(site: site, date: Date.nowMicroseconds(), type: VisitType.link)).succeeded()
 
         // DomainID isn't normally exposed, so we manually query to get it
         let results = db.withConnection(&err, callback: { (connection, err) -> Cursor<Int> in
@@ -1241,8 +1241,8 @@ class TestSQLiteHistory: XCTestCase {
         let history = SQLiteHistory(db: db, prefs: prefs)
 
         history.setTopSitesCacheSize(20)
-        history.clearTopSitesCache().value
-        history.clearHistory().value
+        history.clearTopSitesCache().succeeded()
+        history.clearHistory().succeeded()
 
         // Make sure that we get back the top sites
         populateHistoryForFrecencyCalculations(history, siteCount: 100)
@@ -1297,7 +1297,7 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         func checkSitesInvalidate() -> Success {
-            history.updateTopSitesCacheIfInvalidated().value
+            history.updateTopSitesCacheIfInvalidated().succeeded()
 
             return history.getTopSitesWithLimit(20) >>== { topSites in
                 XCTAssertEqual(topSites.count, 20)
@@ -1328,11 +1328,11 @@ class TestSQLiteHistoryTransactionUpdate: XCTestCase {
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
-        history.clearHistory().value
+        history.clearHistory().succeeded()
         let site = Site(url: "http://site/foo", title: "AA")
         site.guid = "abcdefghiabc"
 
-        history.insertOrUpdatePlace(site.asPlace(), modified: 1234567890).value
+        history.insertOrUpdatePlace(site.asPlace(), modified: 1234567890).succeeded()
 
         let ts: MicrosecondTimestamp = baseInstantInMicros
         let local = SiteVisit(site: site, date: ts, type: VisitType.link)
@@ -1405,7 +1405,7 @@ private func populateHistoryForFrecencyCalculations(_ history: SQLiteHistory, si
         site.guid = "abc\(i)def"
 
         let baseMillis: UInt64 = baseInstantInMillis - 20000
-        history.insertOrUpdatePlace(site.asPlace(), modified: baseMillis).value
+        history.insertOrUpdatePlace(site.asPlace(), modified: baseMillis).succeeded()
 
         for j in 0...20 {
             let visitTime = advanceMicrosecondTimestamp(baseInstantInMicros, by: (1000000 * i) + (1000 * j))
@@ -1419,8 +1419,8 @@ func addVisitForSite(_ site: Site, intoHistory history: SQLiteHistory, from: Vis
     let visit = SiteVisit(site: site, date: atTime, type: VisitType.link)
     switch from {
     case .local:
-            history.addLocalVisit(visit).value
+            history.addLocalVisit(visit).succeeded()
     case .remote:
-        history.storeRemoteVisits([visit], forGUID: site.guid!).value
+        history.storeRemoteVisits([visit], forGUID: site.guid!).succeeded()
     }
 }

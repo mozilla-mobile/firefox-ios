@@ -295,11 +295,11 @@ class TestSQLiteHistoryRecommendationsPerf: XCTestCase {
 
         let count = 500
 
-        history.clearHistory().value
+        history.clearHistory().succeeded()
         populateForRecommendationCalculations(history, bookmarks: bookmarks, historyCount: count, bookmarkCount: count)
         self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true) {
             for _ in 0...5 {
-                history.getHighlights().value
+                history.getHighlights().succeeded()
             }
             self.stopMeasuring()
         }
@@ -313,7 +313,7 @@ private func populateForRecommendationCalculations(_ history: SQLiteHistory, boo
         let site = Site(url: "http://s\(i)ite\(i)/foo", title: "A \(i)")
         site.guid = "abc\(i)def"
 
-        history.insertOrUpdatePlace(site.asPlace(), modified: baseMillis).value
+        history.insertOrUpdatePlace(site.asPlace(), modified: baseMillis).succeeded()
 
         for j in 0...20 {
             let visitTime = advanceMicrosecondTimestamp(baseInstantInMicros, by: (1000000 * i) + (1000 * j))

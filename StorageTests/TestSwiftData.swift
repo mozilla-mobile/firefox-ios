@@ -28,10 +28,10 @@ class TestSwiftData: XCTestCase {
         XCTAssert(SwiftData.ReuseConnections, "Reusing database connections")
         XCTAssert(SwiftData.EnableWAL, "WAL enabled")
 
-        swiftData!.withConnection(SwiftData.Flags.readWriteCreate) { db in
+        let _ = swiftData!.withConnection(SwiftData.Flags.readWriteCreate) { db in
             let f = FaviconsTable<Favicon>()
-            f.create(db)    // Because BrowserTable needs it.
-            table.create(db)
+            let _ = f.create(db)    // Because BrowserTable needs it.
+            let _ = table.create(db)
             return nil
         }
 
@@ -105,7 +105,7 @@ class TestSwiftData: XCTestCase {
 
         // If we have a live cursor, this will step to the first result.
         // Stepping through a prepared statement without resetting it will lock the connection.
-        c[0]
+        let _ = c[0]
 
         // Close the cursor after a delay if there's a close timeout set.
         if let closeTimeout = closeTimeout {
@@ -194,7 +194,7 @@ class TestSwiftData: XCTestCase {
         // Test that generator doesn't work with failed cursors
         var ran = false
         for s in t2 {
-            print("Got \(s)", terminator: "\n")
+            print("Got \(s ?? "nil")", terminator: "\n")
             ran = true
         }
         XCTAssertFalse(ran, "for...in didn't run for failed cursor")

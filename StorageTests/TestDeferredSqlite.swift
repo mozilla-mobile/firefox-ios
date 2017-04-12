@@ -25,7 +25,7 @@ class TestDeferredSqlite: XCTestCase {
         })
 
         deferred.cancel()
-        deferred.start()
+        let _ = deferred.start()
 
         waitForExpectations(timeout: 10, handler: nil)
     }

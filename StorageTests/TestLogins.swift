@@ -73,16 +73,16 @@ class TestSQLiteLogins: XCTestCase {
         let loginD = Login.createWithHostname("candle.com", username: "username4", password: "password4", formSubmitURL: formSubmitURL)
 
         func addLogins() -> Success {
-            addLogin(loginA).value
-            addLogin(loginB).value
-            addLogin(loginC).value
-            addLogin(loginD).value
+            addLogin(loginA).succeeded()
+            addLogin(loginB).succeeded()
+            addLogin(loginC).succeeded()
+            addLogin(loginD).succeeded()
             return succeed()
         }
 
-        addLogins().value
+        addLogins().succeeded()
         let guids = [loginA.guid, loginB.guid]
-        logins.removeLoginsWithGUIDs(guids).value
+        logins.removeLoginsWithGUIDs(guids).succeeded()
         let result = logins.getAllLogins().value.successValue!
         XCTAssertEqual(result.count, 2)
     }
@@ -95,9 +95,9 @@ class TestSQLiteLogins: XCTestCase {
             if i <= 1000 {
                 guids += [login.guid]
             }
-            addLogin(login).value
+            addLogin(login).succeeded()
         }
-        logins.removeLoginsWithGUIDs(guids).value
+        logins.removeLoginsWithGUIDs(guids).succeeded()
         let result = logins.getAllLogins().value.successValue!
         XCTAssertEqual(result.count, 999)
     }
@@ -147,7 +147,7 @@ class TestSQLiteLogins: XCTestCase {
         let updated = Login.createWithHostname("hostname1", username: "username1", password: "", formSubmitURL: formSubmitURL)
         updated.guid = self.login.guid
 
-        addLogin(login).value
+        addLogin(login).succeeded()
         var result = logins.updateLoginByGUID(login.guid, new: updated, significant: true).value
         XCTAssertNil(result.successValue)
         XCTAssertNotNil(result.failureValue)
@@ -185,10 +185,10 @@ class TestSQLiteLogins: XCTestCase {
         let loginD = Login.createWithHostname("candle.com", username: "username4", password: "password4", formSubmitURL: formSubmitURL)
 
         func addLogins() -> Success {
-            addLogin(loginA).value
-            addLogin(loginB).value
-            addLogin(loginC).value
-            addLogin(loginD).value
+            addLogin(loginA).succeeded()
+            addLogin(loginB).succeeded()
+            addLogin(loginC).succeeded()
+            addLogin(loginD).succeeded()
             return succeed()
         }
 
@@ -348,7 +348,7 @@ class TestSQLiteLoginsPerf: XCTestCase {
         // Measure time to find one entry amongst the 1000 of them
         self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true) {
             for _ in 0...5 {
-                self.logins.searchLoginsWithQuery("username500").value
+                self.logins.searchLoginsWithQuery("username500").succeeded()
             }
             self.stopMeasuring()
         }
@@ -362,7 +362,7 @@ class TestSQLiteLoginsPerf: XCTestCase {
         // Measure time to find all matching results
         self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true) {
             for _ in 0...5 {
-                self.logins.searchLoginsWithQuery("username").value
+                self.logins.searchLoginsWithQuery("username").succeeded()
             }
             self.stopMeasuring()
         }
@@ -376,7 +376,7 @@ class TestSQLiteLoginsPerf: XCTestCase {
         // Measure time to find all matching results
         self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true) {
             for _ in 0...5 {
-                self.logins.getAllLogins().value
+                self.logins.getAllLogins().succeeded()
             }
             self.stopMeasuring()
         }
@@ -387,7 +387,7 @@ class TestSQLiteLoginsPerf: XCTestCase {
     func populateTestLogins() {
         for i in 0..<1000 {
             let login = Login.createWithHostname("website\(i).com", username: "username\(i)", password: "password\(i)")
-            addLogin(login).value
+            addLogin(login).succeeded()
         }
     }
 
@@ -733,9 +733,9 @@ class TestSyncableLogins: XCTestCase {
         let serverLoginA = ServerLogin(guid: loginA.guid, hostname: "alpha.com", username: "username1", password: "password1", modified: Date.now())
 
         XCTAssertFalse(logins.hasSyncedLogins().value.successValue ?? true)
-        logins.addLogin(loginA).value
+        let _ = logins.addLogin(loginA).value
         XCTAssertFalse(logins.hasSyncedLogins().value.successValue ?? false)
-        logins.applyChangedLogin(serverLoginA).value
+        let _ = logins.applyChangedLogin(serverLoginA).value
         XCTAssertTrue(logins.hasSyncedLogins().value.successValue ?? false)
     }
 }

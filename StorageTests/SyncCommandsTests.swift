@@ -47,7 +47,7 @@ class SyncCommandsTests: XCTestCase {
         self.clients.append(RemoteClient(guid: client2GUID, name: "Test client 2", modified: (now - OneHourInMilliseconds), type: "desktop", formfactor: "laptop", os: "Darwin"))
         self.clients.append(RemoteClient(guid: client3GUID, name: "Test local client", modified: (now - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS"))
         clientsAndTabs = SQLiteRemoteClientsAndTabs(db: db)
-        clientsAndTabs.insertOrUpdateClients(clients)
+        clientsAndTabs.insertOrUpdateClients(clients).succeeded()
 
         shareItems.append(ShareItem(url: "http://mozilla.com", title: "Mozilla", favicon: nil))
         shareItems.append(ShareItem(url: "http://slashdot.org", title: "Slashdot", favicon: nil))
@@ -58,8 +58,8 @@ class SyncCommandsTests: XCTestCase {
     }
 
     override func tearDown() {
-        clientsAndTabs.deleteCommands()
-        clientsAndTabs.clear()
+        clientsAndTabs.deleteCommands().succeeded()
+        clientsAndTabs.clear().succeeded()
     }
 
     func testCreateSyncCommandFromShareItem() {
@@ -142,7 +142,7 @@ class SyncCommandsTests: XCTestCase {
         let syncCommands = shareItems.map { item in
             return SyncCommand.displayURIFromShareItem(item, asClient: "abcdefghijkl")
         }.sorted(by: byValue)
-        clientsAndTabs.insertCommands(syncCommands, forClients: clients)
+        clientsAndTabs.insertCommands(syncCommands, forClients: clients).succeeded()
 
         let b = self.expectation(description: "Get for invalid client.")
         clientsAndTabs.getCommands().upon({ result in
