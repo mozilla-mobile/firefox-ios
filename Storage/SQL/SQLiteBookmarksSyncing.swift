@@ -158,7 +158,7 @@ extension SQLiteBookmarks {
             faviconID = nil
         }
 
-        log.debug("Inserting bookmark with GUID \(newGUID) and specified icon \(faviconID).")
+        log.debug("Inserting bookmark with GUID \(newGUID) and specified icon \(faviconID ??? "nil").")
 
         // If the caller didn't provide an icon (and they usually don't!),
         // do a reverse lookup in history. We use a view to make this simple.

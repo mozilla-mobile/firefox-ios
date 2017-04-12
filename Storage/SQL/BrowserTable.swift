@@ -133,7 +133,7 @@ open class BrowserTable: Table {
     func run(_ db: SQLiteDBConnection, sql: String, args: Args? = nil) -> Bool {
         let err = db.executeChange(sql, withArgs: args)
         if err != nil {
-            log.error("Error running SQL in BrowserTable. \(err?.localizedDescription)")
+            log.error("Error running SQL in BrowserTable: \(err?.localizedDescription ?? "nil")")
             log.error("SQL was \(sql)")
         }
         return err == nil
