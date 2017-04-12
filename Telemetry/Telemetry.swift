@@ -60,7 +60,6 @@ open class Telemetry {
             log.warning("Warning: Payload being sent for \(url) is empty!")
         }
         
-
         guard let body = payload?.data(using: String.Encoding.utf8) else {
             log.error("Invalid data!")
             assertionFailure()
