@@ -486,9 +486,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         self.data = data
         tableView.reloadData()
     }
-}
 
-extension SearchViewController {
     func tableView(_ tableView: UITableView, didSelectRowAtIndexPath indexPath: IndexPath) {
         let section = SearchListSection(rawValue: indexPath.section)!
         if section == SearchListSection.bookmarksAndHistory {
@@ -519,9 +517,7 @@ extension SearchViewController {
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 0
     }
-}
 
-extension SearchViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch SearchListSection(rawValue: indexPath.section)! {
         case .searchSuggestions:
