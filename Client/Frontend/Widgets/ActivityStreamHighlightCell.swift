@@ -212,7 +212,7 @@ class HighlightIntroCell: UICollectionViewCell {
         titleLabel.text = Strings.HighlightIntroTitle
         descriptionLabel.text = Strings.HighlightIntroDescription
 
-        let titleInsets = UIEdgeInsets(top: HighlightIntroCellUX.margin, left: HighlightIntroCellUX.margin, bottom: 0, right: 0)
+        let titleInsets = UIEdgeInsets(top: HighlightIntroCellUX.margin, left: 0, bottom: 0, right: 0)
         titleLabel.snp.makeConstraints { make in
             make.leading.top.equalTo(self.contentView).inset(titleInsets)
             make.trailing.equalTo(mainImageView.snp.leading)

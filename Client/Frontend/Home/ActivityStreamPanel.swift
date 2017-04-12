@@ -154,7 +154,7 @@ extension ActivityStreamPanel {
             case .topSites:
                 return UIDevice.current.userInterfaceIdiom == .pad ? ASPanelUX.SectionInsetsForIpad : 0
             case .highlightIntro:
-                return 0
+                return UIDevice.current.userInterfaceIdiom == .pad ? ASPanelUX.SectionInsetsForIpad : 0
             }
         }
 
@@ -176,7 +176,7 @@ extension ActivityStreamPanel {
             case .topSites:
                 return CGSize(width: frameWidth - inset, height: height)
             case .highlightIntro:
-                return CGSize(width: frameWidth - inset, height: height)
+                return CGSize(width: frameWidth - inset - (ASHorizontalScrollCellUX.MinimumInsets * 2), height: height)
             }
         }
 
