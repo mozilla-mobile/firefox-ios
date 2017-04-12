@@ -142,7 +142,7 @@ class AuralProgressBar {
                     // TODO: consider some attack-sustain-release to make the tones sound little less "sharp" and robotic
                     var val = 0.0
                     if frame < pitchFrames {
-                        val = volume * sin(pitch*Double(frame)*2*M_PI/format.sampleRate)
+                        val = volume * sin(pitch*Double(frame)*2*Double.pi/format.sampleRate)
                     }
                     channelData?[i] = Float(val)
                     i += buffer.stride
