@@ -233,8 +233,6 @@
 		3BB50E111D6274CD004B33DF /* ActivityStreamTopSitesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB50E101D6274CD004B33DF /* ActivityStreamTopSitesCell.swift */; };
 		3BB50E201D627539004B33DF /* ActivityStreamPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB50E1F1D627539004B33DF /* ActivityStreamPanel.swift */; };
 		3BB54B311E68EB2B0021DAC4 /* AuthenticationKeychainInfoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB54B301E68EB2B0021DAC4 /* AuthenticationKeychainInfoTests.swift */; };
-		3BC659491E5BA4AE006D560F /* TopSites in Resources */ = {isa = PBXBuildFile; fileRef = 3BC659481E5BA4AE006D560F /* TopSites */; };
-		3BC659591E5BA505006D560F /* top_sites.json in Resources */ = {isa = PBXBuildFile; fileRef = 3BC659581E5BA505006D560F /* top_sites.json */; };
 		3BCE6D3C1CEB9E4D0080928C /* ThirdPartySearchAlerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BCE6D3B1CEB9E4D0080928C /* ThirdPartySearchAlerts.swift */; };
 		3BE7274E1CCFE8A30099189F /* CustomSearchHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 3BE7274D1CCFE8A30099189F /* CustomSearchHelper.js */; };
 		3BE7275D1CCFE8B60099189F /* CustomSearchHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BE7275C1CCFE8B60099189F /* CustomSearchHandler.swift */; };
@@ -1398,8 +1396,6 @@
 		3BB50E101D6274CD004B33DF /* ActivityStreamTopSitesCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityStreamTopSitesCell.swift; sourceTree = "<group>"; };
 		3BB50E1F1D627539004B33DF /* ActivityStreamPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityStreamPanel.swift; sourceTree = "<group>"; };
 		3BB54B301E68EB2B0021DAC4 /* AuthenticationKeychainInfoTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationKeychainInfoTests.swift; sourceTree = "<group>"; };
-		3BC659481E5BA4AE006D560F /* TopSites */ = {isa = PBXFileReference; lastKnownFileType = folder; path = TopSites; sourceTree = "<group>"; };
-		3BC659581E5BA505006D560F /* top_sites.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = top_sites.json; sourceTree = "<group>"; };
 		3BCE6D3B1CEB9E4D0080928C /* ThirdPartySearchAlerts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThirdPartySearchAlerts.swift; sourceTree = "<group>"; };
 		3BE7274D1CCFE8A30099189F /* CustomSearchHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = CustomSearchHelper.js; sourceTree = "<group>"; };
 		3BE7275C1CCFE8B60099189F /* CustomSearchHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomSearchHandler.swift; sourceTree = "<group>"; };
@@ -5684,6 +5680,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.FirefoxBeta.enterprise.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = Today;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = FirefoxBeta;
@@ -7322,6 +7319,7 @@
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = FirefoxBeta;
@@ -7361,6 +7359,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.FirefoxBeta.enterprise.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = FirefoxBeta;
@@ -7381,6 +7380,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.FirefoxBeta.enterprise.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -7403,6 +7403,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.FirefoxBeta.enterprise.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = FirefoxBeta;
@@ -7457,6 +7458,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = FirefoxBeta;
@@ -7479,7 +7481,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = FirefoxBeta;
@@ -7527,6 +7529,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = FirefoxBeta;
@@ -7574,6 +7577,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Sync/Sync-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = FirefoxBeta;
@@ -7622,6 +7626,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = FirefoxBeta;
