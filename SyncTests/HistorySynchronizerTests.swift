@@ -211,7 +211,7 @@ class HistorySynchronizerTests: XCTestCase {
         let noRecords = [Record<HistoryPayload>]()
 
         // Apply no records.
-        self.applyRecords(records: noRecords, toStorage: empty)
+        let _ = self.applyRecords(records: noRecords, toStorage: empty)
 
         // Hey look! Nothing changed.
         XCTAssertTrue(empty.places.isEmpty)
