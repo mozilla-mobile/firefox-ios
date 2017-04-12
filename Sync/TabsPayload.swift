@@ -8,7 +8,7 @@ import Storage
 import XCGLogger
 import SwiftyJSON
 
-private let log = Logger.browserLogger
+private let log = Logger.syncLogger
 
 open class TabsPayload: CleartextPayloadJSON {
     open class Tab {
@@ -64,14 +64,18 @@ open class TabsPayload: CleartextPayloadJSON {
     }
 
     override open func isValid() -> Bool {
+        log.debug("Calling TabsPayload.isValid()...")
         if !super.isValid() {
+            log.debug("TabsPayload.isValid() -> false")
             return false
         }
 
         if self["deleted"].bool ?? false {
+            log.debug("TabsPayload.isValid() -> true")
             return true
         }
 
+        log.debug("TabsPayload.isValid() -> " + (self["clientName"].isString() && self["tabs"].isArray() ? "true" : "false"))
         return self["clientName"].isString() &&
                self["tabs"].isArray()
     }
