@@ -70,7 +70,7 @@ public class PushSubscription: NSObject, NSCoding {
     let p256dhPrivateKey: String
     let authKey: String
 
-    public init(channelID: String, endpoint: URL, p256dhPrivateKey: String, p256dhPublicKey: String, authKey: String) {
+    init(channelID: String, endpoint: URL, p256dhPrivateKey: String, p256dhPublicKey: String, authKey: String) {
         self.channelID =  channelID
         self.endpoint = endpoint
         self.p256dhPrivateKey = p256dhPrivateKey

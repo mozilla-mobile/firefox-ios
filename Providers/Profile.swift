@@ -1198,12 +1198,12 @@ open class BrowserProfile: Profile {
 
         /**
          * Allows selective sync of different collections, for use by external APIs.
-         * Some help is given to callers who use different namespaces (specifically: `passowrds` is mapped to `logins`)
+         * Some help is given to callers who use different namespaces (specifically: `passwords` is mapped to `logins`)
          * and to preserve some ordering rules.
          */
         public func syncNamedCollections(why: SyncReason, names: [String]) -> Success {
             // Massage the list of names into engine identifiers.
-            let engineIndentifiers = names.map { name -> [EngineIdentifier] in
+            let engineIdentifiers = names.map { name -> [EngineIdentifier] in
                 switch name {
                 case "passwords":
                     return ["logins"]
@@ -1214,10 +1214,10 @@ open class BrowserProfile: Profile {
                 }
             }.flatMap { $0 }
 
-            // By this time, `engineIndentifiers` may have duplicates in. We won't try and dedupe here
+            // By this time, `engineIdentifiers` may have duplicates in. We won't try and dedupe here
             // because `syncSeveral` will do that for us.
 
-            let synchronizers: [(EngineIdentifier, SyncFunction)] = engineIndentifiers.flatMap {
+            let synchronizers: [(EngineIdentifier, SyncFunction)] = engineIdentifiers.flatMap {
                 switch $0 {
                 case "clients": return ("clients", self.syncClientsWithDelegate)
                 case "tabs": return ("tabs", self.syncTabsWithDelegate)

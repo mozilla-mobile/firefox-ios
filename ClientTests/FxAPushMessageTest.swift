@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Account
+@testable import Account
 @testable import Client
 import Foundation
 import FxA
@@ -10,25 +10,14 @@ import SwiftyJSON
 import XCTest
 
 class FxAPushMessageTest: XCTestCase {
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-
-
     func testMessage_subscriptionDecryption() {
         var userInfo: [AnyHashable: Any] = [
-            "chid":       "034f52789f7b44ecaf119cc59231cdc1",
-            "enc":        "keyid=p256dh;salt=mYBHM3B_oXlEjV0HfgHZ1A",
-            "body":       "_tZf65gKC23STnTNuhtSSbrg1LScGiLjO4GOIuHlCGIFFEzcwsB-J-s3pe3qu2d24A-sKwVyolmShlMBEvEX_34f6FgXMs3k35g4u5STKgJMQxZ8VFDjtQqQfxfSIEt35pdKaPwXKH2zbs0xHC3qEJ0YMc60Eq8uAuQF7FQZ7ts",
-            "cryptokey":  "keyid=p256dh;dh=BNLZ2IWMNGioofzMBnSijySib0Pa-lwgBfLYIhqvvmKxprKgEh6JCDB2DBUmj9BuJCk6xJvBbPd-4x_8tb-qIPM;p256ecdsa=BP-OR33RzQSlrzD7_d1kYE9i9WjSIQAKTuhHxYNiPEF0i-wxeNIIwxthwU7zBTbumyxFUeydrmxcVKXugjBImRU",
-            "con":        "aesgcm",
-            "ver":        "gAAAAABY5hUl_Pi1bVI4ptqKzPWq_aulqXEO1eOx_ncUuwoz8zItWWLA4Ix1ZbDLTOkurqK1vE3N3y1ZXsp_MZ69QJYRuWg5V_3T_XUNVBxj8dnDcNAE-ep9_M5xeKiNdngdww-cqqMOxf-tI5ZoR2nQFqWSs51XGwMMIdsGNmUPqnR4w2Rzt6FYz-AsGCrHXJ3bmYbwpq4P",
+            "chid": "034f52789f7b44ecaf119cc59231cdc1",
+            "enc": "keyid=p256dh;salt=mYBHM3B_oXlEjV0HfgHZ1A",
+            "body": "_tZf65gKC23STnTNuhtSSbrg1LScGiLjO4GOIuHlCGIFFEzcwsB-J-s3pe3qu2d24A-sKwVyolmShlMBEvEX_34f6FgXMs3k35g4u5STKgJMQxZ8VFDjtQqQfxfSIEt35pdKaPwXKH2zbs0xHC3qEJ0YMc60Eq8uAuQF7FQZ7ts",
+            "cryptokey": "keyid=p256dh;dh=BNLZ2IWMNGioofzMBnSijySib0Pa-lwgBfLYIhqvvmKxprKgEh6JCDB2DBUmj9BuJCk6xJvBbPd-4x_8tb-qIPM;p256ecdsa=BP-OR33RzQSlrzD7_d1kYE9i9WjSIQAKTuhHxYNiPEF0i-wxeNIIwxthwU7zBTbumyxFUeydrmxcVKXugjBImRU",
+            "con": "aesgcm",
+            "ver": "gAAAAABY5hUl_Pi1bVI4ptqKzPWq_aulqXEO1eOx_ncUuwoz8zItWWLA4Ix1ZbDLTOkurqK1vE3N3y1ZXsp_MZ69QJYRuWg5V_3T_XUNVBxj8dnDcNAE-ep9_M5xeKiNdngdww-cqqMOxf-tI5ZoR2nQFqWSs51XGwMMIdsGNmUPqnR4w2Rzt6FYz-AsGCrHXJ3bmYbwpq4P",
             ]
 
         let subscription = PushSubscription(channelID: "channel",
@@ -36,8 +25,6 @@ class FxAPushMessageTest: XCTestCase {
                                             p256dhPrivateKey: "UDnicgor_Il7cLNTqSt--SrEblNBbgPA2yXAQ_b31xI",
                                             p256dhPublicKey: "BB4XdAhpVVU45NYSXHpRiubMYoaeb0A-y5aSGE437YKGHQihlvlZMv5D0ebK6WmFqzpIr217Kv9oCbZVDp1KGK4",
                                             authKey: "0gH7RiYYMhfHDQ1L1X4RMw")
-
-
 
         let body = userInfo["body"] as! String
         let enc = userInfo["enc"] as! String
@@ -53,7 +40,6 @@ class FxAPushMessageTest: XCTestCase {
     }
 
     func testMessageHandler() {
-
         let subscription = PushSubscription(channelID: "channel",
                                             endpoint: URL(string: "https://example.ru")!,
                                             p256dhPrivateKey: "GwkCJrRPc0GNp4XHuPdLiUdGXYa6RzLtJBaF8N0Mvss",
@@ -86,7 +72,11 @@ class FxAPushMessageTest: XCTestCase {
 
         let handler = FxAPushMessageHandler(with: profile)
 
-        handler.handle(userInfo: userInfo)
+        let expectation = XCTestExpectation()
+        handler.handle(userInfo: userInfo).upon { _ in
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: 10)
     }
 
 }

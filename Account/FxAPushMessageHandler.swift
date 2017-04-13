@@ -10,6 +10,12 @@ import Sync
 import XCGLogger
 
 private let log = Logger.syncLogger
+
+/// This class provides handles push messages from FxA.
+/// For reference, the [message schema][0] and [Android implementation][1] are both useful resources.
+/// [0]: https://github.com/mozilla/fxa-auth-server/blob/master/docs/pushpayloads.schema.json#L26
+/// [1]: https://dxr.mozilla.org/mozilla-central/source/mobile/android/services/src/main/java/org/mozilla/gecko/fxa/FxAccountPushHandler.java
+/// The main entry points are `handle` methods, to accept the raw APNS `userInfo` and then to process the resulting JSON.
 class FxAPushMessageHandler {
     let profile: Profile
 
@@ -19,6 +25,9 @@ class FxAPushMessageHandler {
 }
 
 extension FxAPushMessageHandler {
+    /// Accepts the raw Push message from Autopush. 
+    /// This method then decrypts it according to the content-encoding (aes128gcm or aesgcm)
+    /// and then effects changes on the logged in account.
     @discardableResult func handle(userInfo: [AnyHashable: Any]) -> Success {
         guard let subscription = profile.getAccount()?.pushRegistration?.defaultSubscription else {
             return deferMaybe(PushMessageError.notDecrypted)
@@ -48,16 +57,11 @@ extension FxAPushMessageHandler {
         return handle(message: JSON(parseJSON: plaintext!))
     }
 
-    /// The main entry point to the handler.
+    /// The main entry point to the handler for decrypted messages.
     func handle(message json: JSON) -> Success {
         if !json.isDictionary() {
             return handleVerification()
         }
-
-        // https://dxr.mozilla.org/mozilla-central/source/mobile/android/services/src/main/java/org/mozilla/gecko/fxa/FxAccountPushHandler.java#19
-
-
-        // https://github.com/mozilla/fxa-auth-server/blob/master/docs/pushpayloads.schema.json#L26
 
         let rawValue = json["command"].stringValue
         guard let command = PushMessageType(rawValue: rawValue) else {
@@ -88,13 +92,11 @@ extension FxAPushMessageHandler {
     func handleVerification() -> Success {
         guard let account = profile.getAccount(), account.actionNeeded == .needsVerification else {
             log.info("Account verified by server either doesn't exist or doesn't need verifying")
-            return deferMaybe(PushMessageError.noActionNeeded)
-        }
-
-        // Now we're verified, we can start syncing.
-        return account.advance().bind { _ in
             return succeed()
         }
+
+        // If we're verified, we can start syncing.
+        return account.advance().bind { _ in return succeed() }
     }
 }
 
@@ -138,7 +140,7 @@ extension FxAPushMessageHandler {
 extension FxAPushMessageHandler {
     func handleCollectionChanged(_ data: JSON?) -> Success {
         guard let collections = data?["collections"].arrayObject as? [String] else {
-            log.warning("collections_changed received but incomplete: \(data)")
+            log.warning("collections_changed received but incomplete: \(data ?? "nil")")
             return deferMaybe(PushMessageError.messageIncomplete)
         }
         // Possible values: "addons", "bookmarks", "history", "forms", "prefs", "tabs", "passwords", "clients"
@@ -178,13 +180,11 @@ enum PushMessageError: MaybeErrorType {
     case notDecrypted
     case messageIncomplete
     case unimplemented(PushMessageType)
-    case noActionNeeded
 
     public var description: String {
         switch self {
         case .notDecrypted: return "notDecrypted"
         case .messageIncomplete: return "messageIncomplete"
-        case .noActionNeeded: return "noActionNeeded"
         case .unimplemented(let what): return "unimplemented=\(what)"
         }
     }
