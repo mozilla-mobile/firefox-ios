@@ -7,7 +7,7 @@ import Shared
 import SwiftyJSON
 
 open class BasePayloadJSON {
-    var json: JSON
+    let json: JSON
     required public init(_ jsonString: String) {
         self.json = JSON(parseJSON: jsonString)
     }
@@ -25,10 +25,6 @@ open class BasePayloadJSON {
     subscript(key: String) -> JSON {
         get {
             return json[key]
-        }
-
-        set {
-            json[key] = newValue
         }
     }
 }
