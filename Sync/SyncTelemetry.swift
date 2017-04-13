@@ -15,6 +15,7 @@ public enum SyncReason: String {
     case user = "user"
     case syncNow = "syncNow"
     case didLogin = "didLogin"
+    case push = "push"
 }
 
 public protocol Stats {

@@ -141,39 +141,10 @@ extension FxAPushMessageHandler {
             log.warning("collections_changed received but incomplete: \(data)")
             return deferMaybe(PushMessageError.messageIncomplete)
         }
-        let sm = profile.syncManager
-        let deferreds = collections.flatMap { (id: String) -> SyncResult? in
-            switch id {
-            case "addons":
-                return nil
-            case "forms":
-                return nil
-            case "prefs":
-                return nil
-            case "bookmarks":
-                return nil
-            case "history":
-                return sm.syncHistory()
-            case "tabs":
-                return sm.syncClientsThenTabs()
-            case "passwords":
-                return sm.syncLogins()
-            case "clients":
-                // if we get "tabs", "clients" then we'll do "tabs" first, 
-                // then "client", but not "tabs" a second time.
-                return sm.syncClients()
-            default:
-                return nil
-            }
-        }
+        // Possible values: "addons", "bookmarks", "history", "forms", "prefs", "tabs", "passwords", "clients"
 
-        if deferreds.isEmpty {
-            return deferMaybe(PushMessageError.noActionNeeded)
-        }
-
-        return all(deferreds).bind { _ in
-            return succeed()
-        }
+        // syncManager will only do a subset; others will be ignored.
+        return profile.syncManager.syncNamedCollections(why: .push, names: collections)
     }
 }
 
