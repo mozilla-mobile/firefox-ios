@@ -49,14 +49,15 @@ open class Record<T: CleartextPayloadJSON> {
             log.error("Invalid envelope.")
             return nil
         }
-        print("the payload is \(envelope.payload)")
+
         guard let payload = payloadFactory(envelope.payload) else {
             log.error("Unable to parse payload.")
             return nil
         }
 
         if !payload.isValid() {
-            log.warning("Invalid payload \(payload.json.stringValue()).")
+            log.error("Invalid payload \(envelope.payload).")
+            return nil
         }
 
         return Record<T>(envelope: envelope, payload: payload)

@@ -125,10 +125,10 @@ class RecordTests: XCTestCase {
         XCTAssertNil(Record<CleartextPayloadJSON>.fromEnvelope(EnvelopeJSON(malformedPayload), payloadFactory: clearFactory))
 
         // Only payloads that parse as JSON objects are valid.
-        XCTAssertFalse(Record<CleartextPayloadJSON>.fromEnvelope(EnvelopeJSON(invalidPayload), payloadFactory: clearFactory)!.payload.isValid())
+        XCTAssertNil(Record<CleartextPayloadJSON>.fromEnvelope(EnvelopeJSON(invalidPayload), payloadFactory: clearFactory))
 
         // Missing ID.
-        XCTAssertFalse(Record<CleartextPayloadJSON>.fromEnvelope(EnvelopeJSON(emptyPayload), payloadFactory: clearFactory)!.payload.isValid())
+        XCTAssertNil(Record<CleartextPayloadJSON>.fromEnvelope(EnvelopeJSON(emptyPayload), payloadFactory: clearFactory))
 
         // No ID in non-empty payload.
         let noPayloadGUIDEnvelope = EnvelopeJSON(noPayloadGUIDRecordString)
@@ -138,8 +138,7 @@ class RecordTests: XCTestCase {
 
         // ... but the payload is not.
         let noID = Record<CleartextPayloadJSON>.fromEnvelope(noPayloadGUIDEnvelope, payloadFactory: cleartextClientsFactory)
-        XCTAssertNotNil(noID)
-        XCTAssertFalse(noID!.payload.isValid())
+        XCTAssertNil(noID)
 
         // Non-string ID in payload.
         let badPayloadGUIDEnvelope = EnvelopeJSON(badPayloadGUIDRecordString)
@@ -149,11 +148,10 @@ class RecordTests: XCTestCase {
 
         // ... but the payload is not.
         let badID = Record<CleartextPayloadJSON>.fromEnvelope(badPayloadGUIDEnvelope, payloadFactory: cleartextClientsFactory)
-        XCTAssertNotNil(badID)
-        XCTAssertFalse(badID!.payload.isValid())
+        XCTAssertNil(badID)
 
         // Only valid ClientPayloads are valid.
-        XCTAssertFalse(Record<ClientPayload>.fromEnvelope(EnvelopeJSON(invalidPayload), payloadFactory: cleartextClientsFactory)!.payload.isValid())
+        XCTAssertNil(Record<ClientPayload>.fromEnvelope(EnvelopeJSON(invalidPayload), payloadFactory: cleartextClientsFactory))
         XCTAssertTrue(Record<ClientPayload>.fromEnvelope(EnvelopeJSON(clientPayload), payloadFactory: cleartextClientsFactory)!.payload.isValid())
     }
 
