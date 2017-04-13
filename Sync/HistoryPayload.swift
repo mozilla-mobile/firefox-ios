@@ -39,7 +39,20 @@ open class HistoryPayload: CleartextPayloadJSON {
     }
 
     open func asPlace() -> Place {
-        return Place(guid: self.id, url: self.histURI, title: self.title)
+        log.debug("Calling HistoryPayload.asPlace()...")
+
+        if !self.isValid() {
+            fatalError("HistoryPayload is invalid!")
+        }
+
+        let id: GUID = self.id
+        log.debug("HistoryPayload.id == " + id)
+        let histURI: String = self.histURI
+        log.debug("HistoryPayload.histURI == " + histURI)
+        let title: String = self.title
+        log.debug("HistoryPayload.title == " + title)
+
+        return Place(guid: id, url: histURI, title: title)
     }
 
     var visits: [Visit] {
