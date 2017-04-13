@@ -10,26 +10,6 @@ import Shared
 @testable import Storage
 import XCTest
 
-// MARK: - The messy way to extend non-protocol generics.
-
-protocol Succeedable {
-    var isSuccess: Bool { get }
-    var isFailure: Bool { get }
-}
-
-extension Maybe: Succeedable {
-}
-
-extension Deferred where T: Succeedable {
-    func succeeded() {
-        XCTAssertTrue(self.value.isSuccess)
-    }
-
-    func failed() {
-        XCTAssertTrue(self.value.isFailure)
-    }
-}
-
 extension BrowserDB {
     func assertQueryReturns(_ query: String, int: Int) {
         XCTAssertEqual(int, self.runQuery(query, args: nil, factory: IntFactory).value.successValue![0])

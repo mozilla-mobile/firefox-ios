@@ -22,7 +22,7 @@ class LivePushClientTests: XCTestCase {
         XCTAssert(maybeReg.isSuccess, "Registered OK - deviceID = \(deviceID)")
 
         guard let registration = maybeReg.successValue else {
-            return XCTFail("Registration failed – \(maybeReg.failureValue)")
+            return XCTFail("Registration failed – \(maybeReg.failureValue ??? "nil")")
         }
 
         let maybeVoid = client.unregister(registration).value

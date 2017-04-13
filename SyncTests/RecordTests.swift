@@ -529,29 +529,30 @@ class RecordTests: XCTestCase {
         XCTAssertTrue(bookmark is BookmarkPayload)
 
         let query = JSON(parseJSON: "{\"id\":\"ShCZLGEFQMam\",\"type\":\"query\",\"title\":\"Downloads\",\"parentName\":\"\",\"bmkUri\":\"place:transition=7&sort=4\",\"tags\":[],\"keyword\":null,\"description\":null,\"loadInSidebar\":false,\"parentid\":\"T6XK5oJMU8ih\"}")
-        let q = BookmarkType.payloadFromJSON(query)
-        XCTAssertTrue(q is BookmarkQueryPayload)
-        XCTAssertTrue(q is MirrorItemable)
-        guard let item = (q as? MirrorItemable)?.toMirrorItem(Date.now()) else {
-            XCTFail("Not mirrorable!")
-            return
+
+        guard let q = BookmarkType.payloadFromJSON(query) else {
+            XCTFail("Failed to generate payload from json: \(query)")
+            return 
         }
 
+        XCTAssertTrue(q is BookmarkQueryPayload)
+
+        let item = q.toMirrorItem(Date.now())
         XCTAssertEqual(6, item.type.rawValue)
         XCTAssertEqual("ShCZLGEFQMam", item.guid)
 
         let places = JSON(parseJSON: "{\"id\":\"places\",\"type\":\"folder\",\"title\":\"\",\"description\":null,\"children\":[\"menu________\",\"toolbar_____\",\"tags________\",\"unfiled_____\",\"jKnyPDrBQSDg\",\"T6XK5oJMU8ih\"],\"parentid\":\"2hYxKgBwvkEH\"}")
-        let p = BookmarkType.payloadFromJSON(places)
-        XCTAssertTrue(p is FolderPayload)
-        XCTAssertTrue(p is MirrorItemable)
-
-        // Items keep their GUID until they're written into the mirror table.
-        XCTAssertEqual("places", p!.id)
-
-        guard let pMirror = (p as? MirrorItemable)?.toMirrorItem(Date.now()) else {
-            XCTFail("Not mirrorable!")
+        guard let p = BookmarkType.payloadFromJSON(places) else {
+            XCTFail("Failed to generate payload from json: \(places)")
             return
         }
+
+        XCTAssertTrue(p is FolderPayload)
+
+        // Items keep their GUID until they're written into the mirror table.
+        XCTAssertEqual("places", p.id)
+
+        let pMirror = p.toMirrorItem(Date.now())
 
         XCTAssertEqual(2, pMirror.type.rawValue)
 

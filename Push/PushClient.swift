@@ -130,7 +130,7 @@ public extension PushClient {
 /// Utilities
 extension PushClient {
     fileprivate func send(request: URLRequest) -> Deferred<Maybe<JSON>> {
-        log.info("\(request.httpMethod!) \(request.url?.absoluteString)")
+        log.info("\(request.httpMethod!) \(request.url?.absoluteString ?? "nil")")
         let deferred = Deferred<Maybe<JSON>>()
         alamofire.request(request)
             .validate(contentType: ["application/json"])

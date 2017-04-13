@@ -821,7 +821,8 @@ open class BrowserProfile: Profile {
             let loginsCollections = ["passwords"]
             let browserCollections = ["bookmarks", "history", "tabs"]
 
-            switch name ?? "<all>" {
+            let dbName = name ?? "<all>"
+            switch dbName {
             case "<all>":
                 return self.locallyResetCollections(loginsCollections + browserCollections)
             case "logins.db":
@@ -829,7 +830,7 @@ open class BrowserProfile: Profile {
             case "browser.db":
                 return self.locallyResetCollections(browserCollections)
             default:
-                log.debug("Unknown database \(name).")
+                log.debug("Unknown database \(dbName).")
                 return succeed()
             }
         }
@@ -844,7 +845,7 @@ open class BrowserProfile: Profile {
         func onDatabaseWasRecreated(notification: NSNotification) {
             log.debug("Database was recreated.")
             let name = notification.object as? String
-            log.debug("Database was \(name).")
+            log.debug("Database was \(name ?? "nil").")
 
             // We run this in the background after a few hundred milliseconds;
             // it doesn't really matter when it runs, so long as it doesn't
@@ -852,7 +853,7 @@ open class BrowserProfile: Profile {
 
             let resetDatabase = {
                 return self.handleRecreationOfDatabaseNamed(name: name) >>== {
-                    log.debug("Reset of \(name) done")
+                    log.debug("Reset of \(name ?? "nil") done")
                 }
             }
 

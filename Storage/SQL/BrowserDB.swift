@@ -90,7 +90,7 @@ open class BrowserDB {
         self.db = SwiftData(filename: file, key: secretKey, prevKey: nil)
 
         if AppConstants.BuildChannel == .developer && secretKey != nil {
-            log.debug("Creating db: \(file) with secret = \(secretKey)")
+            log.debug("Creating db: \(file) with secret = \(secretKey!)")
         }
 
         // Create or update will also delete and create the database if our key was incorrect.

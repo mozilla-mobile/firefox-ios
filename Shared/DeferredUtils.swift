@@ -25,7 +25,7 @@ infix operator >>> : MonadicDoPrecedence
 }
 
 // A termination case.
-@discardableResult public func >>== <T>(x: Deferred<Maybe<T>>, f: @escaping (T) -> Void) {
+public func >>== <T>(x: Deferred<Maybe<T>>, f: @escaping (T) -> Void) {
     return x.upon { result in
         if let v = result.successValue {
             f(v)
@@ -44,7 +44,7 @@ infix operator >>> : MonadicDoPrecedence
 }
 
 // Another termination case.
-@discardableResult public func >>> <T>(x: Deferred<Maybe<T>>, f: @escaping () -> Void) {
+public func >>> <T>(x: Deferred<Maybe<T>>, f: @escaping () -> Void) {
     return x.upon { res in
         if res.isSuccess {
             f()

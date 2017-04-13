@@ -146,7 +146,7 @@ class GenericTable<T>: BaseTable {
         let args =  Args()
         let err = db.executeChange(sqlStr, withArgs: args)
         if err != nil {
-            log.error("Error dropping \(self.name): \(err)")
+            log.error("Error dropping \(self.name): \(err.debugDescription)")
         }
         return err == nil
     }
@@ -219,6 +219,6 @@ class GenericTable<T>: BaseTable {
                 return c
             }
         }
-        return Cursor(status: CursorStatus.failure, msg: "Invalid query: \(options?.filter)")
+        return Cursor(status: CursorStatus.failure, msg: "Invalid query: \(options?.filter ?? "nil")")
     }
 }

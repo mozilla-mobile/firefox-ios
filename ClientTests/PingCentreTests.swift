@@ -82,22 +82,3 @@ class PingCentreTests: XCTestCase {
         XCTAssertTrue(receivedNetworkRequests.count == 1)
     }
 }
-
-// Borrowed from StorageTestUtils...
-private protocol Succeedable {
-    var isSuccess: Bool { get }
-    var isFailure: Bool { get }
-}
-
-extension Maybe: Succeedable {
-}
-
-private extension Deferred where T: Succeedable {
-    func succeeded() {
-        XCTAssertTrue(self.value.isSuccess)
-    }
-
-    func failed() {
-        XCTAssertTrue(self.value.isFailure)
-    }
-}

@@ -496,7 +496,7 @@ extension ActivityStreamPanel {
         profile.bookmarks.modelFactory >>== {
             $0.isBookmarked(site.url).uponQueue(DispatchQueue.main) { result in
                 guard let isBookmarked = result.successValue else {
-                    log.error("Error getting bookmark status: \(result.failureValue).")
+                    log.error("Error getting bookmark status: \(result.failureValue ??? "nil").")
                     return
                 }
                 site.setBookmarked(isBookmarked)

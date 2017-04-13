@@ -205,7 +205,7 @@ extension SQLiteHistory: BrowserHistory {
             }
             let error = conn.executeChange(update, withArgs: updateArgs)
             if error != nil {
-                log.warning("Update failed with \(error?.localizedDescription)")
+                log.warning("Update failed with error: \(error?.localizedDescription ?? "nil")")
                 return 0
             }
             return conn.numberOfRowsModified

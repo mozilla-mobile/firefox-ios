@@ -107,7 +107,7 @@ class DefaultPingCentreImpl: PingCentreClient {
             .response(queue: DispatchQueue.global()) { (response) in
                 if let e = response.error {
                     NSLog("Failed to send ping to ping centre -- topic: \(self.topic.name), error: \(e)")
-                    deferred.fill(Maybe(failure: e as! MaybeErrorType))
+                    deferred.fill(Maybe(failure: e as MaybeErrorType))
                     return
                 }
                 deferred.fill(Maybe(success: ()))

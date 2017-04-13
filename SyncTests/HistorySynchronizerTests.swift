@@ -117,7 +117,7 @@ extension MockSyncableHistory: SyncableHistory {
                 if let existingLocal = self.places[place.guid] {
                     if existingLocal.shouldUpload {
                         log.debug("Record \(existingLocal.guid) modified locally and remotely.")
-                        log.debug("Local modified: \(existingLocal.localModified); remote: \(modified).")
+                        log.debug("Local modified: \(existingLocal.localModified ??? "nil"); remote: \(modified).")
 
                         // Should always be a value if marked as changed.
                         if existingLocal.localModified! > modified {
@@ -211,7 +211,7 @@ class HistorySynchronizerTests: XCTestCase {
         let noRecords = [Record<HistoryPayload>]()
 
         // Apply no records.
-        self.applyRecords(records: noRecords, toStorage: empty)
+        let _ = self.applyRecords(records: noRecords, toStorage: empty)
 
         // Hey look! Nothing changed.
         XCTAssertTrue(empty.places.isEmpty)
