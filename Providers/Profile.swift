@@ -34,6 +34,7 @@ public protocol SyncManager {
     func syncHistory() -> SyncResult
     func syncLogins() -> SyncResult
     @discardableResult func syncEverything(why: SyncReason) -> Success
+    func syncNamedCollections(why: SyncReason, names: [String]) -> Success
 
     // The simplest possible approach.
     func beginTimedSyncs()
@@ -1193,6 +1194,40 @@ open class BrowserProfile: Profile {
                 log.debug("Running delayed startup sync.")
                 self.syncEverything(why: .startup)
             }
+        }
+
+        /**
+         * Allows selective sync of different collections, for use by external APIs.
+         * Some help is given to callers who use different namespaces (specifically: `passowrds` is mapped to `logins`)
+         * and to preserve some ordering rules.
+         */
+        public func syncNamedCollections(why: SyncReason, names: [String]) -> Success {
+            // Massage the list of names into engine identifiers.
+            let engineIndentifiers = names.map { name -> [EngineIdentifier] in
+                switch name {
+                case "passwords":
+                    return ["logins"]
+                case "tabs":
+                    return ["clients", "tabs"]
+                default:
+                    return [name]
+                }
+            }.flatMap { $0 }
+
+            // By this time, `engineIndentifiers` may have duplicates in. We won't try and dedupe here
+            // because `syncSeveral` will do that for us.
+
+            let synchronizers: [(EngineIdentifier, SyncFunction)] = engineIndentifiers.flatMap {
+                switch $0 {
+                case "clients": return ("clients", self.syncClientsWithDelegate)
+                case "tabs": return ("tabs", self.syncTabsWithDelegate)
+                case "logins": return ("logins", self.syncLoginsWithDelegate)
+                case "bookmarks": return ("bookmarks", self.mirrorBookmarksWithDelegate)
+                case "history": return ("history", self.syncHistoryWithDelegate)
+                default: return nil
+                }
+            }
+            return self.syncSeveral(why: why, synchronizers: synchronizers) >>> succeed
         }
 
         @objc func syncOnTimer() {
