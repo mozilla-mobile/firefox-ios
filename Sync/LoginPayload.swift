@@ -39,19 +39,15 @@ open class LoginPayload: CleartextPayloadJSON {
     }
 
     override open func isValid() -> Bool {
-        log.debug("Calling LoginPayload.isValid()...")
         if !super.isValid() {
-            log.debug("LoginPayload.isValid() -> false")
             return false
         }
 
         if self["deleted"].bool ?? false {
-            log.debug("LoginPayload.isValid() -> true")
             return true
         }
 
         if !LoginPayload.RequiredStringFields.every({ self[$0].isString() }) {
-            log.debug("LoginPayload.isValid() -> false")
             return false
         }
 
@@ -64,7 +60,6 @@ open class LoginPayload: CleartextPayloadJSON {
             }
             return valid
         }) {
-            log.debug("LoginPayload.isValid() -> false")
             return false
         }
 
@@ -78,11 +73,9 @@ open class LoginPayload: CleartextPayloadJSON {
             }
             return valid
         }) {
-            log.debug("LoginPayload.isValid() -> false")
             return false
         }
 
-        log.debug("LoginPayload.isValid() -> true")
         return true
     }
 

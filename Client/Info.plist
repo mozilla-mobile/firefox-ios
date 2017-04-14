@@ -148,7 +148,5 @@
 			<string></string>
 		</dict>
 	</array>
-    <key>UIFileSharingEnabled</key>
-    <string>$(MOZ_FILE_SHARING_ENABLED)</string>
 </dict>
 </plist>

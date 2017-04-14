@@ -6,12 +6,8 @@ import Foundation
 import Shared
 import SwiftyJSON
 
-private let log = Logger.syncLogger
-
 open class KeysPayload: CleartextPayloadJSON {
     override open func isValid() -> Bool {
-        log.debug("Calling KeysPayload.isValid()...")
-        log.debug("KeysPayload.isValid() -> " + (super.isValid() && self["default"].isArray() ? "true" : "false"))
         return super.isValid() &&
                self["default"].isArray()
     }
