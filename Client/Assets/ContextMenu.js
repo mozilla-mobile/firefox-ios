@@ -105,6 +105,12 @@ addEventListener("touchstart", function (event) {
     if (!data.link && element.localName === "a") {
       data.link = element.href;
 
+      // Don't show the context menu if this is a script link
+      if (element.getAttribute("href") === "#") {
+        data = {};
+        break;
+      }
+
       // The web view still shows the tap highlight after clicking an element,
       // so add a delay before showing the long press highlight to avoid
       // the highlight flashing twice.
