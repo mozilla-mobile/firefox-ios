@@ -1236,6 +1236,7 @@ class TestSQLiteHistory: XCTestCase {
 
     func testTopSitesFrecencyOrder() {
         let db = BrowserDB(filename: "browser.db", files: files)
+        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
