@@ -19,7 +19,8 @@ class SearchProviderTest: BaseTestCase {
 	
     func testSearchProvider() {
 		let app = XCUIApplication()
-		let searchEngines = ["Google", "Yahoo", "DuckDuckGo", "Wikipedia", "Twitter", "Amazon.com"]
+        // Removing Twitter since it seems to be blocked from BB devices
+		let searchEngines = ["Google", "Yahoo", "DuckDuckGo", "Wikipedia", "Amazon.com"]
 		
 		for searchEngine in searchEngines {
 			changeSearchProvider(provider: searchEngine)
@@ -66,9 +67,7 @@ class SearchProviderTest: BaseTestCase {
 				waitforExistence(element: app.otherElements["mozilla at DuckDuckGo"])
 			case "Wikipedia":
 				waitForValueContains(element: urlbarUrltextTextField, value: "https://en.m.wikipedia.org/wiki/Mozilla")
-			case "Twitter":
-				waitForValueContains(element: urlbarUrltextTextField, value: "https://mobile.twitter.com/search/?q=mozilla")
-			case "Amazon.com":
+            case "Amazon.com":
 				waitForValueContains(element: urlbarUrltextTextField, value: "https://www.amazon")
 				waitForValueContains(element: app.textFields["Search"], value: searchWord)
 			default:

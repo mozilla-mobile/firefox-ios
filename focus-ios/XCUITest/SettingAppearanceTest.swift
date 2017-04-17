@@ -29,7 +29,7 @@ class SettingAppearanceTest: BaseTestCase {
         
         // Check Help page, wait until the webpage is shown
         tablesQuery.staticTexts["Help"].tap()
-        waitforExistence(element: app.staticTexts["What is Firefox Focus?"])
+        waitforExistence(element: app.staticTexts["What is Firefox Focus for iOS?"])
         let firefoxFocusAboutcontentviewNavigationBar = app.navigationBars["Firefox_Focus.AboutContentView"]
         firefoxFocusAboutcontentviewNavigationBar.buttons["About"].tap()
         
@@ -77,5 +77,38 @@ class SettingAppearanceTest: BaseTestCase {
         otherContentSwitch.tap()
         sheetsQuery.buttons["No, Thanks"].tap()
         XCTAssertEqual(otherContentSwitch.value as! String, "0")
+    }
+    
+    func testOpenInSafari() {
+        let app = XCUIApplication()
+        let safariapp = XCUIApplication(privateWithPath: nil, bundleID: "com.apple.mobilesafari")!
+        // Enter 'mozilla' on the search field
+        app.buttons["Search or enter address"].tap()
+        let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
+        
+        // Check the text autocompletes to mozilla.org/, and also look for 'Search for mozilla' button below
+        let label = app.textFields["Search or enter address"]
+        searchOrEnterAddressTextField.typeText("mozilla\n")
+        
+        // Check the correct site is reached
+        waitForValueContains(element: label, value: "https://www.mozilla.org")
+        
+        app.buttons["Share"].tap()
+        XCTAssertTrue(app.buttons["Firefox (Private Browsing)"].exists)
+        XCTAssertTrue(app.buttons["Safari"].exists)
+        XCTAssertTrue(app.buttons["More"].exists)
+        XCTAssertTrue(app.buttons["Cancel"].exists)
+        app.buttons["Safari"].tap()
+        
+        // Now in Safari
+        let safariLabel = safariapp.otherElements["Address"]
+        waitForValueContains(element: safariLabel, value: "Mozilla Corporation")
+        XCTAssertTrue(safariapp.buttons["Return to Firefox Focus"].exists)
+        safariapp.statusBars.buttons["Return to Firefox Focus"].tap()
+        
+        // Now back to Focus
+        waitForValueContains(element: label, value: "https://www.mozilla.org")
+        app.buttons["ERASE"].tap()
+        waitforExistence(element: app.staticTexts["Your browsing history has been erased."])
     }
 }
