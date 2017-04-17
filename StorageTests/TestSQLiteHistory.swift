@@ -1234,6 +1234,55 @@ class TestSQLiteHistory: XCTestCase {
         }
     }
 
+    func testTopSitesFrecencyOrder() {
+        let db = BrowserDB(filename: "browser.db", files: files)
+        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
+        let prefs = MockProfilePrefs()
+        let history = SQLiteHistory(db: db, prefs: prefs)
+
+        history.setTopSitesCacheSize(20)
+        history.clearTopSitesCache().value
+        history.clearHistory().value
+
+        // Lets create some history. This will create 100 sites that will have 21 local and 21 remote visits
+        populateHistoryForFrecencyCalculations(history, siteCount: 100)
+
+        // Create a new site thats for an existing domain but a different URL.
+        let site = Site(url: "http://s\(5)ite\(5).com/foo-different-url", title: "A \(5) different url")
+        site.guid = "abc\(5)defhi"
+        history.insertOrUpdatePlace(site.asPlace(), modified: baseInstantInMillis - 20000).value
+        // Don't give it any remote visits. But give it 100 local visits. This should be the new Topsite!
+        for i in 0...100 {
+            addVisitForSite(site, intoHistory: history, from: .local, atTime: advanceTimestamp(baseInstantInMicros, by: 1000000 * i))
+        }
+
+        let expectation = self.expectation(description: "First.")
+        func done() -> Success {
+            expectation.fulfill()
+            return succeed()
+        }
+
+        func loadCache() -> Success {
+            return history.updateTopSitesCacheIfInvalidated() >>> succeed
+        }
+
+        func checkTopSitesReturnsResults() -> Success {
+            return history.getTopSitesWithLimit(20) >>== { topSites in
+                XCTAssertEqual(topSites.count, 20)
+                XCTAssertEqual(topSites[0]!.guid, "abc\(5)defhi")
+                return succeed()
+            }
+        }
+
+        loadCache()
+            >>> checkTopSitesReturnsResults
+            >>> done
+
+        waitForExpectations(timeout: 10.0) { error in
+            return
+        }
+    }
+
     func testTopSitesCache() {
         let db = BrowserDB(filename: "browser.db", files: files)
         db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
@@ -1248,7 +1297,7 @@ class TestSQLiteHistory: XCTestCase {
         populateHistoryForFrecencyCalculations(history, siteCount: 100)
 
         // Add extra visits to the 5th site to bubble it to the top of the top sites cache
-        let site = Site(url: "http://s\(5)ite\(5)/foo", title: "A \(5)")
+        let site = Site(url: "http://s\(5)ite\(5).com/foo", title: "A \(5)")
         site.guid = "abc\(5)def"
         for i in 0...20 {
             addVisitForSite(site, intoHistory: history, from: .local, atTime: advanceTimestamp(baseInstantInMicros, by: 1000000 * i))
@@ -1283,7 +1332,7 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         func addVisitsToZerothSite() -> Success {
-            let site = Site(url: "http://s\(0)ite\(0)/foo", title: "A \(0)")
+            let site = Site(url: "http://s\(0)ite\(0).com/foo", title: "A \(0)")
             site.guid = "abc\(0)def"
             for i in 0...20 {
                 addVisitForSite(site, intoHistory: history, from: .local, atTime: advanceTimestamp(baseInstantInMicros, by: 1000000 * i))
@@ -1301,7 +1350,8 @@ class TestSQLiteHistory: XCTestCase {
 
             return history.getTopSitesWithLimit(20) >>== { topSites in
                 XCTAssertEqual(topSites.count, 20)
-                XCTAssertEqual(topSites[0]!.guid, "abc\(0)def")
+                XCTAssertEqual(topSites[0]!.guid, "abc\(5)def")
+                XCTAssertEqual(topSites[1]!.guid, "abc\(0)def")
                 return succeed()
             }
         }
@@ -1401,7 +1451,7 @@ enum VisitOrigin {
 
 private func populateHistoryForFrecencyCalculations(_ history: SQLiteHistory, siteCount count: Int) {
     for i in 0...count {
-        let site = Site(url: "http://s\(i)ite\(i)/foo", title: "A \(i)")
+        let site = Site(url: "http://s\(i)ite\(i).com/foo", title: "A \(i)")
         site.guid = "abc\(i)def"
 
         let baseMillis: UInt64 = baseInstantInMillis - 20000
@@ -1410,7 +1460,7 @@ private func populateHistoryForFrecencyCalculations(_ history: SQLiteHistory, si
         for j in 0...20 {
             let visitTime = advanceMicrosecondTimestamp(baseInstantInMicros, by: (1000000 * i) + (1000 * j))
             addVisitForSite(site, intoHistory: history, from: .local, atTime: visitTime)
-            addVisitForSite(site, intoHistory: history, from: .remote, atTime: visitTime)
+            addVisitForSite(site, intoHistory: history, from: .remote, atTime: visitTime - 100)
         }
     }
 }
