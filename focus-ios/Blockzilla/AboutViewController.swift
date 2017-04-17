@@ -85,9 +85,10 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch (indexPath as NSIndexPath).row {
         case 1:
-            let url = URL(string: "https://support.mozilla.org/\(AppInfo.config.supportPath)")!
-            let contentViewController = AboutContentViewController(url: url)
-            navigationController?.pushViewController(contentViewController, animated: true)
+            if let url = SupportUtils.URLForTopic(AppInfo.config.supportTopic) {
+                let contentViewController = AboutContentViewController(url: url)
+                navigationController?.pushViewController(contentViewController, animated: true)
+            }
         case 2:
             let url = LocalWebServer.sharedInstance.URLForPath("/\(AppInfo.config.rightsFile)")!
             let contentViewController = AboutContentViewController(url: url)

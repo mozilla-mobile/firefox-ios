@@ -10,7 +10,7 @@ protocol AppConfig {
     var firefoxAppStoreURL: URL { get }
     var productName: String { get }
     var rightsFile: String { get }
-    var supportPath: String { get }
+    var supportTopic: SupportTopic { get }
     var wordmark: UIImage { get }
 }
 
@@ -19,7 +19,7 @@ struct FocusAppConfig: AppConfig {
     let firefoxAppStoreURL = URL(string: "https://app.adjust.com/gs1ao4")!
     let productName = "Focus"
     let rightsFile = "rights-focus.html"
-    let supportPath = "en-US/kb/focus"
+    let supportTopic = SupportTopic.focusHelp
     let wordmark = #imageLiteral(resourceName: "img_focus_wordmark")
 }
 
@@ -28,6 +28,6 @@ struct KlarAppConfig: AppConfig {
     let firefoxAppStoreURL = URL(string: "https://app.adjust.com/c04cts")!
     let productName = "Klar"
     let rightsFile = "rights-klar.html"
-    let supportPath = "products/klar"
+    let supportTopic = SupportTopic.klarHelp
     let wordmark = #imageLiteral(resourceName: "img_klar_wordmark")
 }

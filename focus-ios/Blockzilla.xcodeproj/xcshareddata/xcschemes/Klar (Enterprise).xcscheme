@@ -38,6 +38,16 @@
                ReferencedContainer = "container:Blockzilla.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E4F7F3EF1E9C5D9200BAAB05"
+               BuildableName = "BlockzillaTests.xctest"
+               BlueprintName = "BlockzillaTests"
+               ReferencedContainer = "container:Blockzilla.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
@@ -60,8 +70,7 @@
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
-      allowLocationSimulation = "YES"
-      language = "de">
+      allowLocationSimulation = "YES">
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
          <BuildableReference
