@@ -335,4 +335,49 @@ class TabManagerTests: XCTestCase {
         delegate.verify("Not all delegate methods were called")
     }
 
+    func testPreservingTabs() {
+        let profile = TabManagerMockProfile()
+        let manager = TabManager(prefs: profile.prefs, imageStore: nil)
+
+        // Create a tab. SessionData is required otherwise preserveTab discards the tab
+        let sessionData = SessionData(currentPage: 0, urls: [URL(string: "http://mozilla.org")!], lastUsedTime: Date.now())
+        for _ in 0...4 {
+            let tab = manager.addTab()
+            tab.sessionData = sessionData
+        }
+        for _ in 0...4 {
+            let tab = manager.addTab(isPrivate: true)
+            tab.sessionData = sessionData
+        }
+        manager.selectTab(manager.tabs.first)
+        manager.preserveTabs() // not required because selectTab will preservetabs but still.
+
+        // Create a new Tabmanager and check the restored tabs
+        let newManager = TabManager(prefs: profile.prefs, imageStore: nil)
+        newManager.restoreTabs()
+
+        XCTAssertEqual(newManager.count, manager.count, "All tabs should be restored.")
+
+        newManager.tabs.enumerated().forEach { (offset, tab) in
+            XCTAssertEqual(tab.isPrivate, manager[offset]?.isPrivate)
+            // The selected tab has a session restore url and no sessionData to compare.
+            if tab != newManager.selectedTab {
+                XCTAssertEqual((tab.sessionData?.urls)!, (manager[offset]?.sessionData?.urls)!)
+            }
+        }
+        XCTAssertEqual(newManager.selectedTab, newManager.tabs.first, "The first tab should be selected")
+    }
+
+    func testFailedRestore() {
+        // Lets use a bad tab tate
+        let filePath =  Bundle(for: type(of: self)).path(forResource: "badTabsState", ofType: "archive")!
+        let file = try! Data(contentsOf: URL(fileURLWithPath: filePath))
+        try! file.write(to: URL(fileURLWithPath: TabManager.tabsStateArchivePath()))
+
+        // lets create a Tabmanager and try a restore
+        let profile = TabManagerMockProfile()
+        let manager = TabManager(prefs: profile.prefs, imageStore: nil)
+        manager.restoreTabs()
+    }
+
 }

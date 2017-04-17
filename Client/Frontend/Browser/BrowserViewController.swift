@@ -530,7 +530,7 @@ class BrowserViewController: UIViewController {
         if PLCrashReporter.shared().hasPendingCrashReport() {
             PLCrashReporter.shared().purgePendingCrashReport()
             showRestoreTabsAlert()
-        } else {
+        } else if !AppConstants.IsRunningTest {
             log.debug("Restoring tabs.")
             tabManager.restoreTabs()
             log.debug("Done restoring tabs.")

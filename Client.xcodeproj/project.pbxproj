@@ -234,6 +234,7 @@
 		39F99FE61E3A6F1700F353B4 /* PushRegistration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39F99FDB1E3A6DE300F353B4 /* PushRegistration.swift */; };
 		39F99FEE1E3A71F800F353B4 /* FxALoginHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39F99FED1E3A71F800F353B4 /* FxALoginHelper.swift */; };
 		3B0943811D6CC4FC004F24E1 /* FilledPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0943801D6CC4FC004F24E1 /* FilledPageControl.swift */; };
+		3B1ACF071E9D512100467603 /* badTabsState.archive in Resources */ = {isa = PBXBuildFile; fileRef = 3B1ACF061E9D512100467603 /* badTabsState.archive */; };
 		3B39EDBA1E16E18900EF029F /* CustomSearchEnginesTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B39EDB91E16E18900EF029F /* CustomSearchEnginesTest.swift */; };
 		3B39EDCB1E16E1AA00EF029F /* CustomSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B39EDCA1E16E1AA00EF029F /* CustomSearchViewController.swift */; };
 		3B4262E51E538EC400CA681C /* MetadataHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 3B4262E21E538EC400CA681C /* MetadataHelper.js */; };
@@ -1422,6 +1423,7 @@
 		39F99FDB1E3A6DE300F353B4 /* PushRegistration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushRegistration.swift; sourceTree = "<group>"; };
 		39F99FED1E3A71F800F353B4 /* FxALoginHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FxALoginHelper.swift; path = Helpers/FxALoginHelper.swift; sourceTree = "<group>"; };
 		3B0943801D6CC4FC004F24E1 /* FilledPageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FilledPageControl.swift; path = ThirdParty/FilledPageControl.swift; sourceTree = "<group>"; };
+		3B1ACF061E9D512100467603 /* badTabsState.archive */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = badTabsState.archive; sourceTree = "<group>"; };
 		3B39EDB91E16E18900EF029F /* CustomSearchEnginesTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomSearchEnginesTest.swift; sourceTree = "<group>"; };
 		3B39EDCA1E16E1AA00EF029F /* CustomSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomSearchViewController.swift; sourceTree = "<group>"; };
 		3B4262E21E538EC400CA681C /* MetadataHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = MetadataHelper.js; path = "Metadata Parsing/MetadataHelper.js"; sourceTree = "<group>"; };
@@ -3420,6 +3422,7 @@
 		F84B21D71A090F8100AAB793 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				3B1ACF061E9D512100467603 /* badTabsState.archive */,
 				A83E5B181C1DA8BF0026D912 /* image.gif */,
 				F84B21D81A090F8100AAB793 /* Info.plist */,
 				A83E5B191C1DA8BF0026D912 /* image.png */,
@@ -4629,6 +4632,7 @@
 			files = (
 				D38A1BF11A9FA2CA00F6A386 /* SiteTableViewControllerHeader.xib in Resources */,
 				A83E5B1A1C1DA8BF0026D912 /* image.gif in Resources */,
+				3B1ACF071E9D512100467603 /* badTabsState.archive in Resources */,
 				A83E5B1B1C1DA8BF0026D912 /* image.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
