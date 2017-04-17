@@ -10,6 +10,8 @@ import SwiftyJSON
 
 private let log = Logger.syncLogger
 
+// Hello this is demo
+
 // The version of the account schema we persist.
 let AccountSchemaVersion = 1
 
@@ -262,3 +264,6 @@ open class FirefoxAccount {
         return false
     }
 }
+
+
+// Hello Too
