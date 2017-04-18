@@ -172,11 +172,29 @@ open class KeyBundle: Hashable {
     open func serializer<T: CleartextPayloadJSON>(_ f: @escaping (T) -> JSON) -> (Record<T>) -> JSON? {
         return { (record: Record<T>) -> JSON? in
             let json = f(record.payload)
-            let data = (json.rawString([writtingOptionsKeys.castNilToNSNull: true]) ?? "").utf8EncodedData
+            if json.isNull() {
+                // This should never happen, but if it does, we don't want to leak this
+                // record to the server!
+                return nil
+            }
+
+            let bytes: Data
+            do {
+                // Get the most basic kind of encoding: no pretty printing.
+                // This can throw; if so, we return nil.
+                // `rawData` simply calls JSONSerialization.dataWithJSONObject:options:error, which
+                // guarantees UTF-8 encoded output.
+                bytes = try json.rawData(options: [])
+            } catch {
+                return nil
+            }
+
+            // Given a valid non-null JSON object, we don't ever expect a round-trip to fail.
+            assert(!JSON(bytes).isNull())
 
             // We pass a null IV, which means "generate me a new one".
             // We then include the generated IV in the resulting record.
-            if let (ciphertext, iv) = self.encrypt(data, iv: nil) {
+            if let (ciphertext, iv) = self.encrypt(bytes, iv: nil) {
                 // So we have the encrypted payload. Now let's build the envelope around it.
                 let ciphertext = ciphertext.base64EncodedString
 
