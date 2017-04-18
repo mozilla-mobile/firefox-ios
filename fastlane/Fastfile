@@ -17,7 +17,6 @@ clone_folder = "../../build-tools"
 sh("rsync -a #{clone_folder}/scripts ../")
 sh("rsync -a #{clone_folder}/fastlane/Appfile Appfile")
 sh("rsync -a #{clone_folder}/fastlane/Snapfile Snapfile")
-sh("rsync -a #{clone_folder}/fastlane/SnapshotHelper.swift SnapshotHelper.swift")
 sh("rsync -a #{clone_folder}/fastlane/scripts .")
 sh("rsync -a #{clone_folder}/fastlane/frames .")
 sh("rsync -a #{clone_folder}/fastlane/templates .")

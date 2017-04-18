@@ -17,6 +17,7 @@ DerivedData
 *.xcuserstate
 *.xcscmblueprint
 
+/screenshots
 /fastlane/scripts/upload.sh
 /fastlane/README.md
 /firefox-ios-l10n
