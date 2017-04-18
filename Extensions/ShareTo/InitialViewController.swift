@@ -12,10 +12,6 @@ private let LastUsedShareDestinationsKey = "LastUsedShareDestinations"
 class InitialViewController: UIViewController, ShareControllerDelegate {
     var shareDialogController: ShareDialogController!
 
-    lazy var profile: Profile = {
-        return BrowserProfile(localName: "profile", app: nil)
-    }()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor(white: 0.0, alpha: 0.66) // TODO: Is the correct color documented somewhere?
@@ -54,7 +50,6 @@ class InitialViewController: UIViewController, ShareControllerDelegate {
     }
 
     func finish() {
-        self.profile.shutdown()
         self.extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
     }
 
@@ -66,13 +61,17 @@ class InitialViewController: UIViewController, ShareControllerDelegate {
         }, completion: { (Bool) -> Void in
             self.dismissShareDialog()
             
+            let profile = BrowserProfile(localName: "profile", app: nil)
+
             if destinations.contains(ShareDestinationReadingList) {
-                self.shareToReadingList(item)
+                profile.readingList?.createRecordWithURL(item.url, title: item.title ?? "", addedBy: UIDevice.current.name)
             }
             
             if destinations.contains(ShareDestinationBookmarks) {
-                self.shareToBookmarks(item)
+                profile.bookmarks.shareItem(item)
             }
+
+            profile.shutdown()
 
             self.extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
         })
@@ -133,15 +132,5 @@ class InitialViewController: UIViewController, ShareControllerDelegate {
         shareDialogController.willMove(toParentViewController: nil)
         shareDialogController.view.removeFromSuperview()
         shareDialogController.removeFromParentViewController()
-    }
-    
-    //
-    
-    func shareToReadingList(_ item: ShareItem) {
-        profile.readingList?.createRecordWithURL(item.url, title: item.title ?? "", addedBy: UIDevice.current.name)
-    }
-    
-    func shareToBookmarks(_ item: ShareItem) {
-        profile.bookmarks.shareItem(item)
     }
 }
