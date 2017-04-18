@@ -9,7 +9,7 @@ import Deferred
 
 extension SQLiteHistory: HistoryRecommendations {
     public func getHighlights() -> Deferred<Maybe<Cursor<Site>>> {
-        let limit = 20
+        let limit = 8
         let bookmarkLimit = 1
         let historyLimit = limit - bookmarkLimit
 
