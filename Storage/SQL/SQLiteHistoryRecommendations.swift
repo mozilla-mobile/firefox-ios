@@ -7,8 +7,39 @@ import Shared
 import XCGLogger
 import Deferred
 
+fileprivate let log = Logger.syncLogger
+
 extension SQLiteHistory: HistoryRecommendations {
     public func getHighlights() -> Deferred<Maybe<Cursor<Site>>> {
+        let sql = "SELECT * FROM \(AttachedTableHighlights)"
+        return self.db.runQuery(sql, args: nil, factory: SQLiteHistory.iconHistoryMetadataColumnFactory)
+    }
+
+    public func invalidateHighlights() -> Success {
+        return clearHighlights() >>> populateHighlights
+    }
+
+    public func removeHighlightForURL(_ url: String) -> Success {
+        return self.db.run([("INSERT INTO \(TableActivityStreamBlocklist) (url) VALUES (?)", [url])])
+    }
+
+    private func clearHighlights() -> Success {
+        return self.db.run("DELETE FROM \(AttachedTableHighlights)", withArgs: nil)
+    }
+
+    private func populateHighlights() -> Success {
+        let (query, args) = computeHighlightsQuery()
+        let sql =
+            "INSERT INTO \(AttachedTableHighlights) " +
+            "SELECT historyID, url, title, guid, visitCount, visitDate, " +
+            "is_bookmarked, iconID, iconURL, iconType, iconDate, iconWidth, " +
+            "metadata_title, media_url, type, description, provider_name " +
+            "FROM (\(query))"
+
+        return self.db.run(sql, withArgs: args)
+    }
+
+    private func computeHighlightsQuery() -> (String, Args) {
         let limit = 8
         let bookmarkLimit = 1
         let historyLimit = limit - bookmarkLimit
@@ -87,10 +118,6 @@ extension SQLiteHistory: HistoryRecommendations {
             "GROUP BY url"
         let otherArgs = [threeDaysAgo, threeDaysAgo] as Args
         let args: Args = [thirtyMinutesAgo] + blacklistedHosts + otherArgs
-        return self.db.runQuery(highlightsQuery, args: args, factory: SQLiteHistory.iconHistoryMetadataColumnFactory)
-    }
-
-    public func removeHighlightForURL(_ url: String) -> Success {
-        return self.db.run([("INSERT INTO \(TableActivityStreamBlocklist) (url) VALUES (?)", [url])])
+        return (highlightsQuery, args)
     }
 }

@@ -293,7 +293,7 @@ class TestSQLiteHistoryRecommendationsPerf: XCTestCase {
         let history = SQLiteHistory(db: db, prefs: prefs)
         let bookmarks = SQLiteBookmarkBufferStorage(db: db)
 
-        let count = 500
+        let count = 5000
 
         history.clearHistory().succeeded()
         populateForRecommendationCalculations(history, bookmarks: bookmarks, historyCount: count, bookmarkCount: count)
