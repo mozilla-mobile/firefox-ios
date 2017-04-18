@@ -32,7 +32,9 @@ open class MockSyncManager: SyncManager {
     open func syncEverything(why: SyncReason) -> Success {
         return succeed()
     }
-
+    open func syncNamedCollections(why: SyncReason, names: [String]) -> Success {
+        return succeed()
+    }
     open func beginTimedSyncs() {}
     open func endTimedSyncs() {}
     open func applicationDidBecomeActive() {
