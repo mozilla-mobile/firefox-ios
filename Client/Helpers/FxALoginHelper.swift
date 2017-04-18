@@ -151,7 +151,9 @@ class FxALoginHelper {
         // Record that we have asked the user, and they have given an answer.
         profile?.prefs.setBool(true, forKey: applicationDidRequestUserNotificationPermissionPrefKey)
 
-        guard notificationSettings.types != .none else {
+        let types = notificationSettings.types
+
+        guard types != .none && types.rawValue != 0 else {
             return readyForSyncing()
         }
 
@@ -171,7 +173,7 @@ class FxALoginHelper {
         let client = PushClient(endpointURL: configuration.endpointURL)
         client.register(apnsToken).upon { res in
             guard let pushRegistration = res.successValue else {
-                return self.apnsRegisterDidFail()
+                return self.pushRegistrationDidFail()
             }
             return self.pushRegistrationDidSucceed(apnsToken: apnsToken, pushRegistration: pushRegistration)
         }
