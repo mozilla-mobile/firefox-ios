@@ -7,13 +7,19 @@ import Deferred
 import Shared
 
 public let NotificationASPanelDataInvalidated = Notification.Name("NotificationASPanelDataInvalidated")
+public let ActivityStreamTopSiteCacheSize: Int32 = 16
+
 private let log = Logger.browserLogger
 
-struct PanelDataObservers {
+class PanelDataObservers {
     let activityStream: ActivityStreamDataObserver
+
+    init(profile: Profile) {
+        self.activityStream = ActivityStreamDataObserver(profile: profile)
+    }
 }
 
-protocol ActivityStreamDataDelegate: class {
+@objc protocol ActivityStreamDataDelegate: class {
     func didInvalidateDataSources()
 }
 
@@ -21,10 +27,12 @@ class ActivityStreamDataObserver {
     let profile: Profile
     weak var delegate: ActivityStreamDataDelegate?
 
-    fileprivate let events = [NotificationFirefoxAccountChanged, NotificationProfileDidFinishSyncing, NotificationPrivateDataClearedHistory, NotificationDynamicFontChanged]
+    fileprivate let events = [NotificationFirefoxAccountChanged, NotificationProfileDidFinishSyncing, NotificationPrivateDataClearedHistory]
 
     init(profile: Profile) {
         self.profile = profile
+        self.profile.history.setTopSitesCacheSize(ActivityStreamTopSiteCacheSize)
+
         events.forEach { NotificationCenter.default.addObserver(self, selector: #selector(self.notificationReceived(_:)), name: $0, object: nil) }
     }
 
@@ -47,7 +55,7 @@ class ActivityStreamDataObserver {
     
     @objc func notificationReceived(_ notification: Notification) {
         switch notification.name {
-        case NotificationProfileDidFinishSyncing, NotificationFirefoxAccountChanged, NotificationPrivateDataClearedHistory, NotificationDynamicFontChanged:
+        case NotificationProfileDidFinishSyncing, NotificationFirefoxAccountChanged, NotificationPrivateDataClearedHistory:
             invalidate()
         default:
             log.warning("Received unexpected notification \(notification.name)")
