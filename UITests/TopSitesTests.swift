@@ -88,20 +88,20 @@ class TopSitesTests: KIFTestCase {
     
     fileprivate func deleteSuggestedTopsite(_ accessibilityLabel: String) {
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(accessibilityLabel))
-            .inRoot(grey_kindOfClass(NSClassFromString("Client.TopSiteItemCell")))
+            .inRoot(grey_kindOfClass(NSClassFromString("Client.TopSiteItemCell")!))
             .perform(grey_longPress())
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Remove"))
-            .inRoot(grey_kindOfClass(NSClassFromString("Client.ActionOverlayTableViewCell")))
+            .inRoot(grey_kindOfClass(NSClassFromString("Client.ActionOverlayTableViewCell")!))
             .perform(grey_tap())
         
         let disappeared = GREYCondition(name: "Wait for icon to disappear", block: { _ in
             var errorOrNil: NSError?
             
-            let matcher = grey_allOfMatchers([grey_accessibilityLabel(accessibilityLabel),
-                                              grey_kindOfClass(NSClassFromString("UILabel")),
+            let matcher = grey_allOf([grey_accessibilityLabel(accessibilityLabel),
+                                              grey_kindOfClass(NSClassFromString("UILabel")!),
                                               grey_notVisible()])
             
-            EarlGrey.select(elementWithMatcher: matcher!).assert(with: grey_notNil(), error:  &errorOrNil)
+            EarlGrey.select(elementWithMatcher: matcher).assert(with: grey_notNil(), error:  &errorOrNil)
             let success = errorOrNil == nil
             return success
         }).wait(withTimeout: 5)
@@ -117,16 +117,16 @@ class TopSitesTests: KIFTestCase {
             let firstCell = collection.visibleCells.first!
             let accessibilityLabel = firstCell.accessibilityLabel
             
-            EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(accessibilityLabel))
-                .inRoot(grey_kindOfClass(NSClassFromString("Client.TopSiteItemCell")))
+            EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(accessibilityLabel!))
+                .inRoot(grey_kindOfClass(NSClassFromString("Client.TopSiteItemCell")!))
                 .perform(grey_longPress())
             EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Remove"))
-                .inRoot(grey_kindOfClass(NSClassFromString("Client.ActionOverlayTableViewCell")))
+                .inRoot(grey_kindOfClass(NSClassFromString("Client.ActionOverlayTableViewCell")!))
                 .perform(grey_tap())
             
             let disappeared = GREYCondition(name: "Wait for icon to disappear", block: { _ in
                 var errorOrNil: NSError?
-                EarlGrey.select(elementWithMatcher:grey_accessibilityLabel(accessibilityLabel))
+                EarlGrey.select(elementWithMatcher:grey_accessibilityLabel(accessibilityLabel!))
                     .assert(with: grey_notNil(), error:  &errorOrNil)
                 let success = errorOrNil != nil
                 return success
@@ -139,6 +139,7 @@ class TopSitesTests: KIFTestCase {
     override func tearDown() {
         profile.prefs.setObject([], forKey: "topSites.deletedSuggestedSites")
         BrowserUtils.resetToAboutHome(tester())
+        super.tearDown()
     }
     
 }
