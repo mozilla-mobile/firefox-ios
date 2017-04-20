@@ -8,6 +8,10 @@ import Storage
 import XCGLogger
 import SwiftyJSON
 
+// Int64.max / 1000.
+private let MaxSecondsToConvertInt64: Int64 = 9223372036854775
+private let MaxSecondsToConvertDouble: Double = Double(9223372036854775)
+
 private let log = Logger.browserLogger
 
 open class TabsPayload: CleartextPayloadJSON {
@@ -25,7 +29,7 @@ open class TabsPayload: CleartextPayloadJSON {
         }
 
         func toRemoteTabForClient(_ guid: GUID) -> RemoteTab? {
-            let urls = optFilter(urlHistory.map({ $0.asURL }))
+            let urls = urlHistory.flatMap({ $0.asURL })
             if urls.isEmpty {
                 log.debug("Bug 1201875 - Discarding tab as history has no conforming URLs.")
                 return nil
@@ -40,14 +44,38 @@ open class TabsPayload: CleartextPayloadJSON {
 
         class func fromJSON(_ json: JSON) -> Tab? {
             func getLastUsed(_ json: JSON) -> Timestamp? {
+                let lastUsed = json["lastUsed"]
+                if lastUsed.isBool() {
+                    return nil
+                }
                 // This might be a string or a number.
-                if let num = json["lastUsed"].int64 {
+                if let num = lastUsed.int64 {
+                    if num < 0 {
+                        // Timestamps are unsigned.
+                        return nil
+                    }
+                    if num > MaxSecondsToConvertInt64 {
+                        // This will overflow when multiplied.
+                        return nil
+                    }
                     return Timestamp(num * 1000)
                 }
 
-                if let num = json["lastUsed"].string {
+                if let num = lastUsed.double {
+                    if num < 0 {
+                        // Timestamps are unsigned.
+                        return nil
+                    }
+                    if num > MaxSecondsToConvertDouble {
+                        // This will overflow when multiplied.
+                        return nil
+                    }
+                    return Timestamp(num * 1000)
+                }
+
+                if let num = lastUsed.string {
                     // Try parsing.
-                    return decimalSecondsStringToTimestamp(num)
+                    return someKindOfTimestampStringToTimestamp(num)
                 }
 
                 return nil
@@ -83,7 +111,7 @@ open class TabsPayload: CleartextPayloadJSON {
     var remoteTabs: [RemoteTab] {
         if let clientGUID = self["id"].string {
             let payloadTabs = self["tabs"].arrayValue
-            let remoteTabs = optFilter(payloadTabs.map({ Tab.remoteTabFromJSON($0, clientGUID: clientGUID) }))
+            let remoteTabs = payloadTabs.flatMap({ Tab.remoteTabFromJSON($0, clientGUID: clientGUID) })
             if payloadTabs.count != remoteTabs.count {
                 log.debug("Bug 1201875 - Missing remote tabs from sync")
             }
@@ -94,7 +122,7 @@ open class TabsPayload: CleartextPayloadJSON {
     }
 
     var tabs: [Tab] {
-        return optFilter(self["tabs"].arrayValue.map(Tab.fromJSON))
+        return self["tabs"].arrayValue.flatMap(Tab.fromJSON)
     }
 
     var clientName: String {
