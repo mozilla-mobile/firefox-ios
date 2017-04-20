@@ -45,6 +45,9 @@ open class TabsPayload: CleartextPayloadJSON {
         class func fromJSON(_ json: JSON) -> Tab? {
             func getLastUsed(_ json: JSON) -> Timestamp? {
                 let lastUsed = json["lastUsed"]
+                if lastUsed.isBool() {
+                    return nil
+                }
                 // This might be a string or a number.
                 if let num = lastUsed.int64 {
                     if num < 0 {
