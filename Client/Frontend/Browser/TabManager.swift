@@ -637,6 +637,7 @@ extension TabManager {
     static func tabsToRestore() -> [SavedTab]? {
         if let tabData = tabArchiveData() {
             let unarchiver = NSKeyedUnarchiver(forReadingWith: tabData)
+            unarchiver.decodingFailurePolicy = .setErrorAndReturn
             return unarchiver.decodeObject(forKey: "tabs") as? [SavedTab]
         } else {
             return nil
