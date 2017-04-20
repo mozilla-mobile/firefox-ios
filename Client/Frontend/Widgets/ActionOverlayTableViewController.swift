@@ -128,14 +128,13 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        defer {
-            self.dismiss(nil)
-        }
 
         let action = actions[indexPath.row]
         guard let handler = actions[indexPath.row].handler else {
+            self.dismiss(nil)
             return
         }
+        self.dismiss(nil)
         return handler(action)
     }
 
