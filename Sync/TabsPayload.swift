@@ -119,7 +119,7 @@ open class TabsPayload: CleartextPayloadJSON {
     }
 
     var tabs: [Tab] {
-        return self["tabs"].arrayValue.flatMap(Tab.fromJSON))
+        return self["tabs"].arrayValue.flatMap(Tab.fromJSON)
     }
 
     var clientName: String {
