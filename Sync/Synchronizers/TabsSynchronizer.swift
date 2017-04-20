@@ -34,7 +34,7 @@ open class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchroniz
     fileprivate func createOwnTabsRecord(_ tabs: [RemoteTab]) -> Record<TabsPayload> {
         let guid = self.scratchpad.clientGUID
 
-        let jsonTabs: [JSON] = optFilter(tabs.map { $0.toJSON() })
+        let jsonTabs: [JSON] = tabs.flatMap { $0.toJSON() }
         let tabsJSON = JSON([
             "id": guid,
             "clientName": self.scratchpad.clientName,
