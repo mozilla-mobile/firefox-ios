@@ -6,6 +6,8 @@ import Foundation
 
 /// Steadily growing set of feature switches controlling access to features by populations of Release users.
 open class FeatureSwitches {
+    open static let activityStream =
+        FeatureSwitch(named: "activity_stream", AppConstants.MOZ_AS_PANEL, allowPercentage: 10)
 }
 
 /// Small class to allow a percentage of users to access a given feature.
