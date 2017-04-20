@@ -10,7 +10,7 @@ import SwiftyJSON
 
 // Int64.max / 1000.
 private let MaxSecondsToConvertInt64: Int64 = 9223372036854775
-private let MaxSecondsToConvertDouble: Double = Double(9223372036854775)
+private let MaxSecondsToConvertDouble: Double = Double(9223372036854775 as Int64)
 
 private let log = Logger.browserLogger
 
