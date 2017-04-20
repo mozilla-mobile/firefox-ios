@@ -90,6 +90,11 @@ let MaxTimestampAsDouble: Double = Double(UInt64.max)
 public func someKindOfTimestampStringToTimestamp(_ input: String) -> Timestamp? {
     var double = 0.0
     if Scanner(string: input).scanDouble(&double) {
+        // This should never happen. Hah!
+        if double.isNaN || double.isInfinite {
+            return nil
+        }
+
         // `double` will be either huge or negatively huge on overflow, and 0 on underflow.
         // We clamp to reasonable ranges.
         if double < 0 {
@@ -120,6 +125,11 @@ public func someKindOfTimestampStringToTimestamp(_ input: String) -> Timestamp? 
 public func decimalSecondsStringToTimestamp(_ input: String) -> Timestamp? {
     var double = 0.0
     if Scanner(string: input).scanDouble(&double) {
+        // This should never happen. Hah!
+        if double.isNaN || double.isInfinite {
+            return nil
+        }
+
         // `double` will be either huge or negatively huge on overflow, and 0 on underflow.
         // We clamp to reasonable ranges.
         if double < 0 {
