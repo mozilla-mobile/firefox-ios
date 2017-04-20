@@ -76,7 +76,6 @@ class TabsPayloadTests: XCTestCase {
             "{\"id\": \"abc\", \"deleted\": false, \"clientName\": \"Foo\", \"tabs\": [{\"title\": \"Some Title\", \"urlHistory\": [\"http://www.example.com\"], \"icon\": null, \"lastUsed\": 9223372036854775807}]}",
             "{\"id\": \"abc\", \"deleted\": false, \"clientName\": \"Foo\", \"tabs\": [{\"title\": \"Some Title\", \"urlHistory\": [\"http://www.example.com\"], \"icon\": null, \"lastUsed\": 123456789012345678901234567890}]}",
             "{\"id\": \"abc\", \"deleted\": false, \"clientName\": \"Foo\", \"tabs\": [{\"title\": \"Some Title\", \"urlHistory\": [\"http://www.example.com\"], \"icon\": null, \"lastUsed\": -1}]}",
-            "{\"id\": \"abc\", \"deleted\": false, \"clientName\": \"Foo\", \"tabs\": [{\"title\": \"Some Title\", \"urlHistory\": [\"http://www.example.com\"], \"icon\": null, \"lastUsed\": \"9223372036854775807\"}]}",
             "{\"id\": \"abc\", \"deleted\": false, \"clientName\": \"Foo\", \"tabs\": [{\"title\": \"Some Title\", \"urlHistory\": [\"http://www.example.com\"], \"icon\": null, \"lastUsed\": \"123456789012345678901234567890\"}]}",
             "{\"id\": \"abc\", \"deleted\": false, \"clientName\": \"Foo\", \"tabs\": [{\"title\": \"Some Title\", \"urlHistory\": [\"http://www.example.com\"], \"icon\": null, \"lastUsed\": \"-1\"}]}"
         ]
