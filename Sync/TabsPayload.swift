@@ -8,7 +8,10 @@ import Storage
 import XCGLogger
 import SwiftyJSON
 
-private let MaxSecondsToConvert: Int64 = 9223372036854775;
+// Int64.max / 1000.
+private let MaxSecondsToConvertInt64: Int64 = 9223372036854775;
+private let MaxSecondsToConvertDouble: Double = Double(9223372036854775);
+
 private let log = Logger.browserLogger
 
 open class TabsPayload: CleartextPayloadJSON {
@@ -41,14 +44,35 @@ open class TabsPayload: CleartextPayloadJSON {
 
         class func fromJSON(_ json: JSON) -> Tab? {
             func getLastUsed(_ json: JSON) -> Timestamp? {
+                let lastUsed = json["lastUsed"]
                 // This might be a string or a number.
-                if let num = json["lastUsed"].int64 {
+                if let num = lastUsed.int64 {
+                    if num < 0 {
+                        // Timestamps are unsigned.
+                        return nil
+                    }
+                    if num > MaxSecondsToConvertInt64 {
+                        // This will overflow when multiplied.
+                        return nil
+                    }
                     return Timestamp(num * 1000)
                 }
 
-                if let num = json["lastUsed"].string {
+                if let num = lastUsed.double {
+                    if num < 0 {
+                        // Timestamps are unsigned.
+                        return nil
+                    }
+                    if num > MaxSecondsToConvertDouble {
+                        // This will overflow when multiplied.
+                        return nil
+                    }
+                    return Timestamp(num * 1000)
+                }
+
+                if let num = lastUsed.string {
                     // Try parsing.
-                    return decimalSecondsStringToTimestamp(num)
+                    return someKindOfTimestampStringToTimestamp(num)
                 }
 
                 return nil
