@@ -376,9 +376,12 @@ extension ActivityStreamPanel: ActivityStreamDataDelegate {
     }
 
     func getHighlights() -> Success {
-        return self.profile.recommendations.getHighlights() >>== { cursor in
+        return self.profile.recommendations.getHighlights().bindQueue(.main) { result in
             // Scan through the fetched highlights and report on anything that might be missing.
-            let highlights = cursor.asArray()
+            guard let highlights = result.successValue?.asArray() else {
+                return succeed()
+            }
+            
             self.reportMissingData(sites: highlights, source: .Highlights)
             self.highlights = highlights
             return succeed()
@@ -386,8 +389,11 @@ extension ActivityStreamPanel: ActivityStreamDataDelegate {
     }
 
     func getTopSites() -> Success {
-        return self.profile.history.getTopSitesWithLimit(16) >>== { topSites in
-            let mySites = topSites.asArray()
+        return self.profile.history.getTopSitesWithLimit(16).bindQueue(.main) { result in
+            guard let mySites = result.successValue?.asArray() else {
+                return succeed()
+            }
+            
             let defaultSites = self.defaultTopSites()
 
             // Merge default topsites with a user's topsites.
