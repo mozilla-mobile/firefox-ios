@@ -305,7 +305,6 @@ open class BrowserTable: Table {
             "description TEXT," +
             "provider_name TEXT" +
     ") "
-    
 
     let indexPageMetadataCacheKeyCreate =
     "CREATE UNIQUE INDEX IF NOT EXISTS \(IndexPageMetadataCacheKey) ON page_metadata (cache_key)"
