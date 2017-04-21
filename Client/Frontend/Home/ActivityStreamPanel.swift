@@ -352,8 +352,10 @@ extension ActivityStreamPanel {
     func notificationReceived(_ notification: Notification) {
         switch notification.name {
         case NotificationProfileDidFinishSyncing, NotificationFirefoxAccountChanged, NotificationPrivateDataClearedHistory, NotificationDynamicFontChanged:
-            self.invalidateTopSites().uponQueue(DispatchQueue.main) { _ in
-                self.collectionView?.reloadData()
+            DispatchQueue.main.async {
+                all([self.invalidateTopSites(), self.invalidateHighlights()]).uponQueue(DispatchQueue.main) { _ in
+                    self.collectionView?.reloadData()
+                }
             }
         default:
             log.warning("Received unexpected notification \(notification.name)")
@@ -385,10 +387,12 @@ extension ActivityStreamPanel {
 
     func invalidateTopSites() -> Success {
         let frecencyLimit = ASPanelUX.topSitesCacheSize
-
         // Update our top sites cache if it's been invalidated
         return self.profile.history.updateTopSitesCacheIfInvalidated() >>== { _ in
-            return self.profile.history.getTopSitesWithLimit(frecencyLimit) >>== { topSites in
+            return self.profile.history.getTopSitesWithLimit(frecencyLimit).bindQueue(DispatchQueue.main) { result in
+                guard let topSites = result.successValue else {
+                    return succeed()
+                }
                 let mySites = topSites.asArray()
                 let defaultSites = self.defaultTopSites()
 
