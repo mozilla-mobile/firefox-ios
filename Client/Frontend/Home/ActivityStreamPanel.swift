@@ -354,7 +354,7 @@ extension ActivityStreamPanel {
 }
 
 // MARK: - Data Management
-extension ActivityStreamPanel: ActivityStreamDataDelegate {
+extension ActivityStreamPanel: DataObserverDelegate {
     fileprivate func reportMissingData(sites: [Site], source: ASPingSource) {
         sites.forEach { site in
             if site.metadata?.mediaURL == nil {

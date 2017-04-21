@@ -11,21 +11,28 @@ public let ActivityStreamTopSiteCacheSize: Int32 = 16
 
 private let log = Logger.browserLogger
 
-class PanelDataObservers {
-    let activityStream: ActivityStreamDataObserver
+protocol DataObserver {
+    var profile: Profile { get }
+    weak var delegate: DataObserverDelegate? { get set }
+    
+    func invalidate()
+}
+
+@objc protocol DataObserverDelegate: class {
+    func didInvalidateDataSources()
+}
+
+open class PanelDataObservers {
+    var activityStream: DataObserver
 
     init(profile: Profile) {
         self.activityStream = ActivityStreamDataObserver(profile: profile)
     }
 }
 
-@objc protocol ActivityStreamDataDelegate: class {
-    func didInvalidateDataSources()
-}
-
-class ActivityStreamDataObserver {
+class ActivityStreamDataObserver: DataObserver {
     let profile: Profile
-    weak var delegate: ActivityStreamDataDelegate?
+    weak var delegate: DataObserverDelegate?
 
     fileprivate let events = [NotificationFirefoxAccountChanged, NotificationProfileDidFinishSyncing, NotificationPrivateDataClearedHistory]
 

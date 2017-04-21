@@ -72,6 +72,7 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         history.addLocalVisit(siteVisitD3).succeeded()
         history.addLocalVisit(siteVisitD4).succeeded()
 
+        history.invalidateHighlights().succeeded()
         let highlights = history.getHighlights().value.successValue!
         XCTAssertEqual(highlights.count, 2)
         XCTAssertEqual(highlights[0]!.title, "A")
@@ -132,6 +133,7 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         history.addLocalVisit(bookmarkVisitB3).succeeded()
         history.addLocalVisit(bookmarkVisitB4).succeeded()
 
+        history.invalidateHighlights().succeeded()
         let highlights = history.getHighlights().value.successValue!
         XCTAssertEqual(highlights.count, 1)
         XCTAssertEqual(highlights[0]!.title, "A Bookmark")
@@ -189,6 +191,7 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         history.addLocalVisit(siteVisitD3).succeeded()
         history.addLocalVisit(siteVisitD4).succeeded()
 
+        history.invalidateHighlights().succeeded()
         let highlights = history.getHighlights().value.successValue!
         XCTAssertEqual(highlights.count, 0)
     }
@@ -224,6 +227,7 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         history.addLocalVisit(siteVisitC1).succeeded()
         history.addLocalVisit(siteVisitC2).succeeded()
 
+        history.invalidateHighlights().succeeded()
         let highlights = history.getHighlights().value.successValue!
         XCTAssertEqual(highlights.count, 1)
         XCTAssertEqual(highlights[0]!.title, "A")
@@ -270,6 +274,7 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
                                  title: siteC.title, description: "Test Description", type: nil, providerName: nil, mediaDataURI: nil, cacheImages: false)
         metadata.storeMetadata(pageC, forPageURL: siteC.url.asURL!, expireAt: Date.now() + 3000).succeeded()
 
+        history.invalidateHighlights().succeeded()
         let highlights = history.getHighlights().value.successValue!
         XCTAssertEqual(highlights.count, 3)
 

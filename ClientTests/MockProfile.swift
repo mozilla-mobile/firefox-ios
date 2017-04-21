@@ -73,12 +73,35 @@ open class MockTabQueue: TabQueue {
     }
 }
 
+open class MockPanelDataObservers: PanelDataObservers {
+    override init(profile: Profile) {
+        super.init(profile: profile)
+        self.activityStream = MockActivityStreamDataObserver(profile: profile)
+    }
+}
+
+open class MockActivityStreamDataObserver: DataObserver {
+    public var profile: Profile
+    public weak var delegate: DataObserverDelegate?
+
+    init(profile: Profile) {
+        self.profile = profile
+    }
+    
+    public func invalidate() {
+        // no-op
+    }
+}
+
 open class MockProfile: Profile {
     // Read/Writeable properties for mocking
     public var recommendations: HistoryRecommendations
     public var places: BrowserHistory & Favicons & SyncableHistory & ResettableSyncStorage & HistoryRecommendations
     public var files: FileAccessor
     public var history: BrowserHistory & SyncableHistory & ResettableSyncStorage
+    public lazy var panelDataObservers: PanelDataObservers = {
+        return MockPanelDataObservers(profile: self)
+    }()
 
     var db: BrowserDB
 
