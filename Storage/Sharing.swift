@@ -26,5 +26,5 @@ public struct ShareItem {
 }
 
 public protocol ShareToDestination {
-    func shareItem(_ item: ShareItem)
+    func shareItem(_ item: ShareItem) -> Success
 }
