@@ -329,6 +329,8 @@ extension ActivityStreamPanel {
     func configureTopSitesCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         let topSiteCell = cell as! ASHorizontalScrollCell
         topSiteCell.delegate = self.topSitesManager
+        topSiteCell.collectionView.setNeedsLayout()
+        topSiteCell.collectionView.reloadData()
         return cell
     }
 

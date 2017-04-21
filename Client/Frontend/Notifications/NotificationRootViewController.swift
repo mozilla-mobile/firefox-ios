@@ -258,11 +258,15 @@ private extension NotificationRootViewController {
             }
         }
         guard let syncMessage = syncMessageForNotification(notification.object as AnyObject?) else {
-            notificationView.titleLabel.text = nil
-            notificationView.titleLabel.attributedText = nil
+            DispatchQueue.main.async {
+                self.notificationView.titleLabel.text = nil
+                self.notificationView.titleLabel.attributedText = nil
+            }
             return
         }
-        notificationView.titleLabel.attributedText = syncMessage
+        DispatchQueue.main.async {
+            self.notificationView.titleLabel.attributedText = syncMessage
+        }
     }
 
     @objc func fxaAccountDidChange(_ notification: Notification) {
