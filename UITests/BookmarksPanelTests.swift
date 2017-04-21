@@ -12,12 +12,12 @@ class BookmarksPanelTests: KIFTestCase {
     
     override func setUp() {
         super.setUp()
-		BrowserUtils.dismissFirstRunUI()
+        BrowserUtils.dismissFirstRunUI()
 	}
 	
     override func tearDown() {
         super.tearDown()
-		BrowserUtils.resetToAboutHome(tester())
+		BrowserUtils.resetToAboutHome(tester()) 
     }
     
     func testBookmarkPanelBufferOnly() {
@@ -39,7 +39,7 @@ class BookmarksPanelTests: KIFTestCase {
         }
 
         let record1 = BookmarkMirrorItem.bookmark("aaaaaaaaaaaa", modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.ToolbarFolderGUID, parentName: "Bookmarks Toolbar", title: "AAA", description: "AAA desc", URI: "http://getfirefox.com", tags: "[]", keyword: nil)
-        let record2 = BookmarkMirrorItem.livemark("bbbbbbbbbbbb", modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.ToolbarFolderGUID, parentName: "Bookmarks Toolbar", title: "Some Livemark", description: nil, feedURI: "http://example.org/feed", siteURI: "http://example.org/news")
+        let record2 = BookmarkMirrorItem.livemark("bbbbbbbbbbbb", modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.ToolbarFolderGUID, parentName: "Bookmarks Toolbar", title: "Some Livemark", description: nil, feedURI: "https://people-mozilla.org/~npark", siteURI: "https://people-mozilla.org/~npark")
         let toolbar = BookmarkMirrorItem.folder("toolbar", modified: Date.now(), hasDupe: false, parentID: "places", parentName: "", title: "Bookmarks Toolbar", description: "Add bookmarks to this folder to see them displayed on the Bookmarks Toolbar", children: ["aaaaaaaaaaaa", "bbbbbbbbbbbb"])
         let recordsA: [BookmarkMirrorItem] = [record1, toolbar, record2]
 
@@ -59,7 +59,7 @@ class BookmarksPanelTests: KIFTestCase {
         // … so we show the truncated URL.
         // Strangely, earlgrey cannot find the label in buddybuild, but passes locally. 
         // Using KIF for this check for now.
-        tester().waitForView(withAccessibilityLabel: "example.org/news")
+        tester().waitForView(withAccessibilityLabel: "https://people-mozilla.org/~npark")
         
     }
 }
