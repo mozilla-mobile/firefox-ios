@@ -496,6 +496,10 @@
 		E4BCAAB91B0537E300855D82 /* InstructionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BCAAB81B0537E300855D82 /* InstructionsViewController.swift */; };
 		E4BCAAD91B05380B00855D82 /* ClientPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BCAAD81B05380B00855D82 /* ClientPickerViewController.swift */; };
 		E4C358551AF144BA00299F7E /* FSReadingList.m in Sources */ = {isa = PBXBuildFile; fileRef = E4C358541AF144BA00299F7E /* FSReadingList.m */; };
+		E4C68D451EAA7AD2000DBA1C /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E6639F171BF11E17002D0853 /* Settings.bundle */; };
+		E4C68D541EAA84D1000DBA1C /* DebugSettingsBundleOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6327A631BF6438E008D12E0 /* DebugSettingsBundleOptions.swift */; };
+		E4C68D551EAA84D8000DBA1C /* DebugSettingsBundleOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6327A631BF6438E008D12E0 /* DebugSettingsBundleOptions.swift */; };
+		E4C68D561EAA84D8000DBA1C /* DebugSettingsBundleOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6327A631BF6438E008D12E0 /* DebugSettingsBundleOptions.swift */; };
 		E4CD9E911A6897FB00318571 /* ReaderMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CD9E901A6897FB00318571 /* ReaderMode.swift */; };
 		E4CD9E9A1A68980A00318571 /* ReaderMode.js in Resources */ = {isa = PBXBuildFile; fileRef = E4CD9E991A68980A00318571 /* ReaderMode.js */; };
 		E4CD9F1D1A6D9C2800318571 /* WebServerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CD9F1C1A6D9C2800318571 /* WebServerTests.swift */; };
@@ -2230,7 +2234,6 @@
 				50027345B49B967409DDA348 /* StateTests.swift */,
 				E6EDE81D1D524475007A0732 /* BatchingClientTests.swift */,
 				2F3724C51ABF3C01007607FA /* StorageClientTests.swift */,
-				E6BA20111E52165800697F9C /* SyncTelemetryTests.swift */,
 				E42736061EA858CF009C428E /* TabsPayloadTests.swift */,
 			);
 			name = SyncTests;
@@ -2562,15 +2565,6 @@
 				3B546EBF1D95ECAE00BDBE36 /* ActivityStreamTest.swift */,
 				3BFE4B0B1D342FB900DDF53F /* Info.plist */,
 				55A747161DC46FC400CE1B57 /* HomePageUITest.swift */,
-				2C2A5EF31E68469500F02659 /* PrivateBrowsingTest.swift */,
-				2CA16FDD1E5F089100332277 /* SearchTest.swift */,
-				2C97EC701E72C80E0092EC18 /* TopTabsTest.swift */,
-				2C8C07761E7800EA00DC1237 /* FindInPageTest.swift */,
-				2C31A8461E8D447F00DAC646 /* HomePageSettingsUITest.swift */,
-				2CB56E3E1E926BFB00AF7586 /* ToolbarTest.swift */,
-				2CC1B3EF1E9B861400814EEC /* DomainAutocompleteTest.swift */,
-				2CEA6F781E93E3A600D4100E /* SearchSettingsUITest.swift */,
-				0B9D40781E8D5AC80059E664 /* XCUITests-Bridging-Header.h */,
 			);
 			path = XCUITests;
 			sourceTree = "<group>";
@@ -4489,6 +4483,7 @@
 				E49BFF591B1F48C3009368CC /* Readability.js in Resources */,
 				E4CD9E9A1A68980A00318571 /* ReaderMode.js in Resources */,
 				E4424B201AC6EBE100F44C38 /* ReaderSettings.xcassets in Resources */,
+				E4C68D451EAA7AD2000DBA1C /* Settings.bundle in Resources */,
 				D30684F11C84F12A002D8D82 /* SearchPlugins in Resources */,
 				3B4262E51E538EC400CA681C /* MetadataHelper.js in Resources */,
 				E47536FC1C85415F0022CC69 /* PrintHelper.js in Resources */,
@@ -4656,9 +4651,6 @@
 				2F3724C61ABF3C01007607FA /* LiveStorageClientTests.swift in Sources */,
 				E6EDE82C1D5244AF007A0732 /* BatchingClientTests.swift in Sources */,
 				E42736071EA858CF009C428E /* TabsPayloadTests.swift in Sources */,
-				E6F6D6A51E9E6B2B0012072B /* DeferredTestUtils.swift in Sources */,
-				28D980231C47149000277055 /* TestBookmarkTreeMerging.swift in Sources */,
-				E67035EE1E538B500037AB83 /* Mocking.swift in Sources */,
 				289A4C141C4EB90600A460E3 /* StorageTestUtils.swift in Sources */,
 				E67672611E734C8600E0B5B0 /* FailFastTestCase.swift in Sources */,
 				28532CC11C473977000072D9 /* MockFiles.swift in Sources */,
@@ -4941,6 +4933,7 @@
 				E60D03281D511555002FE3F6 /* SyncStatusResolver.swift in Sources */,
 				E444F7E21B4B1C6800FEB19B /* SearchEngines.swift in Sources */,
 				E444F7DF1B4B1C1200FEB19B /* Profile.swift in Sources */,
+				E4C68D541EAA84D1000DBA1C /* DebugSettingsBundleOptions.swift in Sources */,
 				E444F7E31B4B1C8000FEB19B /* OpenSearch.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5256,6 +5249,7 @@
 				F8708D321A0970B70051AB07 /* ShareViewController.swift in Sources */,
 				28CDA55C1A43C37C005C318C /* NSUserDefaultsPrefs.swift in Sources */,
 				E60D03271D511554002FE3F6 /* SyncStatusResolver.swift in Sources */,
+				E4C68D561EAA84D8000DBA1C /* DebugSettingsBundleOptions.swift in Sources */,
 				E41A7D4B1A1BE04500245963 /* InitialViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5267,6 +5261,7 @@
 				D38B2D8B1A8D98D10040E6B5 /* SearchEngines.swift in Sources */,
 				D3C744D01A687D6C004CE85D /* URIFixup.swift in Sources */,
 				E60D03261D511554002FE3F6 /* SyncStatusResolver.swift in Sources */,
+				E4C68D551EAA84D8000DBA1C /* DebugSettingsBundleOptions.swift in Sources */,
 				D38B2D8D1A8D98DA0040E6B5 /* OpenSearch.swift in Sources */,
 				E4BCAAB91B0537E300855D82 /* InstructionsViewController.swift in Sources */,
 				E42CCDE81A23A73D00B794D3 /* Profile.swift in Sources */,

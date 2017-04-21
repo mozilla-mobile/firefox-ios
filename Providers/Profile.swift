@@ -906,7 +906,7 @@ open class BrowserProfile: Profile {
                 let greenLight = self.greenLight()
                 DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(SyncConstants.SyncDelayTriggered)) {
                     if greenLight() {
-                        self.syncLogins()
+                        let _ = self.syncLogins()
                     }
                 }
             }
@@ -1183,13 +1183,27 @@ open class BrowserProfile: Profile {
         }
 
         @discardableResult func syncEverything() -> Success {
-            return self.syncSeveral([
-                ("clients", self.syncClientsWithDelegate),
-                ("tabs", self.syncTabsWithDelegate),
-                ("logins", self.syncLoginsWithDelegate),
-                ("bookmarks", self.mirrorBookmarksWithDelegate),
-                ("history", self.syncHistoryWithDelegate)
-            ]) >>> succeed
+            var synchronizers = [
+                ("clients", self.syncClientsWithDelegate)
+            ]
+            
+            if DebugSettingsBundleOptions.syncTabs {
+                synchronizers.append(("tabs", self.syncTabsWithDelegate))
+            }
+            
+            if DebugSettingsBundleOptions.syncLogins {
+                synchronizers.append(("logins", self.syncLoginsWithDelegate))
+            }
+            
+            if DebugSettingsBundleOptions.syncBookmarks {
+                synchronizers.append(("bookmarks", self.mirrorBookmarksWithDelegate))
+            }
+            
+            if DebugSettingsBundleOptions.syncHistory {
+                synchronizers.append(("history", self.syncHistoryWithDelegate))
+            }
+                
+            return self.syncSeveral(synchronizers) >>> succeed
         }
 
         func syncEverythingSoon() {
@@ -1217,6 +1231,10 @@ open class BrowserProfile: Profile {
         }
 
         func syncClientsThenTabs() -> SyncResult {
+            if !DebugSettingsBundleOptions.syncTabs {
+                return deferMaybe(SyncStatus.notStarted(.engineLocallyNotEnabled(collection: "tabs")))
+            }
+            
             return self.syncSeveral([
                 ("clients", self.syncClientsWithDelegate),
                 ("tabs", self.syncTabsWithDelegate)
@@ -1226,16 +1244,25 @@ open class BrowserProfile: Profile {
             }
         }
 
-        @discardableResult func syncLogins() -> SyncResult {
+        func syncLogins() -> SyncResult {
+            if !DebugSettingsBundleOptions.syncLogins {
+                return deferMaybe(SyncStatus.notStarted(.engineLocallyNotEnabled(collection: "logins")))
+            }
             return self.sync("logins", function: syncLoginsWithDelegate)
         }
 
         func syncHistory() -> SyncResult {
+            if !DebugSettingsBundleOptions.syncHistory {
+                return deferMaybe(SyncStatus.notStarted(.engineLocallyNotEnabled(collection: "history")))
+            }
             // TODO: recognize .NotStarted.
             return self.sync("history", function: syncHistoryWithDelegate)
         }
 
         func mirrorBookmarks() -> SyncResult {
+            if !DebugSettingsBundleOptions.syncBookmarks {
+                return deferMaybe(SyncStatus.notStarted(.engineLocallyNotEnabled(collection: "bookmarks")))
+            }
             return self.sync("bookmarks", function: mirrorBookmarksWithDelegate)
         }
 
