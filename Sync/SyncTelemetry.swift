@@ -167,7 +167,7 @@ public class SyncOperationStatsSession: StatsSession {
     public var uid: String?
     public var deviceID: String?
 
-    private let didLogin: Bool
+    fileprivate let didLogin: Bool
 
     public init(why: SyncReason, uid: String, deviceID: String?) {
         self.why = why
@@ -192,10 +192,10 @@ extension SyncOperationStatsSession: DictionaryRepresentable {
 public struct SyncPing: TelemetryPing {
     public var payload: JSON
 
-    public init(account: FirefoxAccount?, syncOperationResult: SyncOperationResult) {
+    public init(account: FirefoxAccount?, why: SyncPingReason, syncOperationResult: SyncOperationResult) {
         var ping: [String: Any] = [
             "version": 1,
-            "why": SyncPingReason.schedule.rawValue,
+            "why": why.rawValue,
             "uid": account?.uid ?? String(repeating: "0", count: 32)
         ]
 

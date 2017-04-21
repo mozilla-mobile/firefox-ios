@@ -659,7 +659,7 @@ open class BrowserProfile: Profile {
                     reportAdHocEndSyncingStatus(displayState: syncDisplayState, engineResults: result.engineResults)
                 }
 
-                let syncPing = SyncPing(account: profile.account, syncOperationResult: result)
+                let syncPing = SyncPing(account: profile.account, why: .schedule, syncOperationResult: result)
                 Telemetry.send(ping: syncPing, docType: .sync)
             } else {
                 log.debug("Profile isn't sending usage data. Not sending sync status event.")
