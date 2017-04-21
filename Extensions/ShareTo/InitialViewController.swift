@@ -66,14 +66,14 @@ class InitialViewController: UIViewController, ShareControllerDelegate {
             if destinations.contains(ShareDestinationReadingList) {
                 profile.readingList?.createRecordWithURL(item.url, title: item.title ?? "", addedBy: UIDevice.current.name)
             }
-            
+
             if destinations.contains(ShareDestinationBookmarks) {
-                profile.bookmarks.shareItem(item)
+                let _ = profile.bookmarks.shareItem(item).value // Blocks until database has settled
             }
 
             profile.shutdown()
 
-            self.extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
+            self.finish()
         })
     }
     
