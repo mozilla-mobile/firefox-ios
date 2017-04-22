@@ -162,7 +162,9 @@ open class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
                     workWasDone = true
                 }
                 log.info("Uploading \(guids.count) deleted places.")
-                return self.uploadDeletedPlaces(guids, lastTimestamp: timestamp, fromStorage: storage, withServer: storageClient)
+                let r = self.uploadDeletedPlaces(guids, lastTimestamp: timestamp, fromStorage: storage, withServer: storageClient)
+                log.info("MOOMOO Done Uploading deleted places")
+                return r
             }
         }
 
@@ -173,7 +175,9 @@ open class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
                         workWasDone = true
                     }
                     log.info("Uploading \(places.count) modified places.")
-                    return self.uploadModifiedPlaces(places, lastTimestamp: timestamp, fromStorage: storage, withServer: storageClient)
+                    let r = self.uploadModifiedPlaces(places, lastTimestamp: timestamp, fromStorage: storage, withServer: storageClient)
+                    log.info("MOOMOO Done Uploading modified places")
+                    return r
             }
         }
 
