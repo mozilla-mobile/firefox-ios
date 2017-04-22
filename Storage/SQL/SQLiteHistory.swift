@@ -969,6 +969,8 @@ extension SQLiteHistory: SyncableHistory {
     }
 
     public func getModifiedHistoryToUpload() -> Deferred<Maybe<[(Place, [Visit])]>> {
+        log.info("MOOMOO SQLiteHistory.getModifiedHistoryToUpload")
+
         // What we want to do: find all items flagged for update, selecting some number of their
         // visits alongside.
         //
@@ -1032,16 +1034,26 @@ extension SQLiteHistory: SyncableHistory {
 
                 // Consume every row, with the side effect of populating the places
                 // and visit accumulators.
+                var n = 0
                 var ids = Set<Int>()
                 for row in c {
                     // Collect every ID first, so that we're guaranteed to have
                     // fully populated the visit lists, and we don't have to
                     // worry about only collecting each place once.
                     ids.insert(row!)
+
+                    n += 1
+                    if n == 50 {
+                        log.debug("MOOMOO Processed \(n) records")
+                    }
                 }
+
+                log.debug("MOOMOO Processed \(n) records in total")
 
                 // Now we're done with the cursor. Close it.
                 c.close()
+
+                log.debug("MOOMOO Closed cursor")
 
                 // Now collect the return value.
                 return deferMaybe(ids.map { return (places[$0]!, visits[$0]!) })
