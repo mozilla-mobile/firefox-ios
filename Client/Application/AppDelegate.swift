@@ -84,6 +84,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         log.debug("Creating Browser log file…")
         Logger.browserLogger.newLogWithDate(logDate)
 
+
+        // DEBUG List all files in the app container
+        if true {
+            log.debug("Listing all files in the container:")
+            if let sharedContainerIdentifier = AppInfo.sharedContainerIdentifier(), let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: sharedContainerIdentifier) {
+                if let enumerator = FileManager.default.enumerator(at: containerURL, includingPropertiesForKeys: [.fileSizeKey]) {
+                    for case let url as URL in enumerator {
+                        let fileSize = url.getResourceLongLongForKey(URLResourceKey.fileSizeKey.rawValue) ?? 0
+                        log.debug("\(url.path) \(fileSize)")
+                    }
+                }
+            }
+        }
+
         log.debug("Getting profile…")
         let profile = getProfile(application)
         appStateStore = AppStateStore(prefs: profile.prefs)
