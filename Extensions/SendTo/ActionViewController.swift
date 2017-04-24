@@ -13,16 +13,14 @@ import SnapKit
 
 @objc(ActionViewController)
 class ActionViewController: UIViewController, ClientPickerViewControllerDelegate, InstructionsViewControllerDelegate {
-    private lazy var profile: Profile = { return BrowserProfile(localName: "profile", app: nil) }()
     private var sharedItem: ShareItem?
 
     override func viewDidLoad() {
         view.backgroundColor = UIColor.white
 
         super.viewDidLoad()
-        profile.reopen()
 
-        guard profile.hasAccount() else {
+        if !hasAccount() {
             let instructionsViewController = InstructionsViewController()
             instructionsViewController.delegate = self
             let navigationController = UINavigationController(rootViewController: instructionsViewController)
@@ -48,15 +46,14 @@ class ActionViewController: UIViewController, ClientPickerViewControllerDelegate
     }
 
     func finish() {
-        self.profile.shutdown()
         self.extensionContext!.completeRequest(returningItems: nil, completionHandler: nil)
     }
 
     func clientPickerViewController(_ clientPickerViewController: ClientPickerViewController, didPickClients clients: [RemoteClient]) {
-        // TODO: hook up Send Tab via Sync.
-        // profile?.clients.sendItem(self.sharedItem!, toClients: clients)
         if let item = sharedItem {
-            self.profile.sendItems([item], toClients: clients)
+            let profile = BrowserProfile(localName: "profile", app: nil)
+            profile.sendItems([item], toClients: clients)
+            profile.shutdown()
         }
         finish()
     }
@@ -67,5 +64,13 @@ class ActionViewController: UIViewController, ClientPickerViewControllerDelegate
 
     func instructionsViewControllerDidClose(_ instructionsViewController: InstructionsViewController) {
         finish()
+    }
+
+    private func hasAccount() -> Bool {
+        let profile = BrowserProfile(localName: "profile", app: nil)
+        defer {
+            profile.shutdown()
+        }
+        return profile.hasAccount()
     }
 }
