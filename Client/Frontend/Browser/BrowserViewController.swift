@@ -2273,7 +2273,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // gives us the exact same behaviour as Safari.
 
         if url.scheme == "tel" || url.scheme == "facetime" || url.scheme == "facetime-audio" {
-            if let phoneNumber = url.path.removingPercentEncoding, !phoneNumber.isEmpty {
+            if let components = NSURLComponents(url: url, resolvingAgainstBaseURL: false), let phoneNumber = components.path, !phoneNumber.isEmpty {
                 let formatter = PhoneNumberFormatter()
                 let formattedPhoneNumber = formatter.formatPhoneNumber(phoneNumber)
                 let alert = UIAlertController(title: formattedPhoneNumber, message: nil, preferredStyle: UIAlertControllerStyle.alert)
