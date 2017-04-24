@@ -69,6 +69,11 @@ function replace_bundle_identifiers {
   /usr/libexec/PlistBuddy -c "Set AppIdentifierPrefix $TEAM_ID" "$2"
 }
 
+function replace_shortcut_items {
+ /usr/libexec/PlistBuddy -c "Set :UIApplicationShortcutItems:0:UIApplicationShortcutItemType ${1}.NewTab" $2
+ /usr/libexec/PlistBuddy -c "Set :UIApplicationShortcutItems:1:UIApplicationShortcutItemType ${1}.NewPrivateTab" $2
+}
+
 # 5. Copy over the new provisioning profiles into each target.
 function copy_beta_profiles {
   cp "$PROFILES_DIR/Firefox_Beta_Distribution.mobileprovision" \
@@ -152,6 +157,9 @@ done
 
 echo "> Update bundle identifiers in Info.plist files for all targets"
 replace_bundle_identifiers "$BUNDLE_ID" "$UNZIPPED/Payload/Client.app/Info.plist"
+
+echo "> Update UIApplicationShortcutItems in Info.plist"
+replace_shortcut_items "$BUNDLE_ID" "$UNZIPPED/Payload/Client.app/Info.plist"
 
 for EXTEN in "${EXTENSIONS[@]}"; do
   replace_bundle_identifiers "$BUNDLE_ID.$EXTEN" "$UNZIPPED/Payload/Client.app/Plugins/$EXTEN.appex/Info.plist"
