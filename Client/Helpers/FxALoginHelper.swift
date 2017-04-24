@@ -14,6 +14,9 @@ private let applicationDidRequestUserNotificationPermissionPrefKey = "applicatio
 
 private let log = Logger.browserLogger
 
+private let verificationPollingInterval = DispatchTimeInterval.seconds(3)
+private let verificationMaxRetries = 100 // Poll every 3 seconds for 5 minutes.
+
 protocol FxAPushLoginDelegate : class {
     func accountLoginDidFail()
 
@@ -200,19 +203,48 @@ class FxALoginHelper {
     }
 
     fileprivate func readyForSyncing() {
-        if let profile = self.profile, let account = account {
-            profile.setAccount(account)
-            // account.advance is idempotent.
-            if  let account = profile.getAccount() {
-                account.advance().upon { _ in
-                    let scratchpadPrefs = profile.prefs.branch("sync.scratchpad")
-                    if let deviceRegistration = account.deviceRegistration {
-                        scratchpadPrefs.setString(deviceRegistration.toJSON().stringValue()!, forKey: PrefDeviceRegistration)
-                    }
-                }
+        guard let profile = self.profile, let account = self.account else {
+            return loginDidSucceed()
+        }
+
+        profile.setAccount(account)
+
+        awaitVerification()
+        loginDidSucceed()
+    }
+
+    fileprivate func awaitVerification(_ attemptsLeft: Int = verificationMaxRetries) {
+        guard let account = account,
+            let profile = profile else {
+            return
+        }
+
+        if attemptsLeft == 0 {
+            return
+        }
+
+        // The only way we can tell if the account has been verified is to 
+        // start a sync. If it works, then yay,
+        account.advance().upon { state in
+            guard state.actionNeeded == .needsVerification else {
+                // Verification has occurred remotely, and we can proceed.
+                // The state machine will have told any listening UIs that 
+                // we're done.
+                FxALoginHelper.performVerifiedSync(profile, account: account)
+                return
+            }
+
+            if account.pushRegistration != nil {
+                // Verification hasn't occurred yet, but we've registered for push 
+                // so we can wait for a push notification in FxAPushMessageHandler.
+                return
+            }
+
+            let queue = DispatchQueue.global(qos: DispatchQoS.background.qosClass)
+            queue.asyncAfter(deadline: DispatchTime.now() + verificationPollingInterval) {
+                self.awaitVerification(attemptsLeft - 1)
             }
         }
-        loginDidSucceed()
     }
 
     fileprivate func loginDidSucceed() {
@@ -222,5 +254,20 @@ class FxALoginHelper {
 
     fileprivate func loginDidFail() {
         delegate?.accountLoginDidFail()
+    }
+
+    // Class method so as to be callable from the FxAPushMessageHandler, whenever it is dealing with 
+    // verification.
+    class func performVerifiedSync(_ profile: Profile, account: FirefoxAccount) -> Success {
+        // First we need to associate the fxaDeviceId with sync;
+        // We can do this anything after the first time we account.advance()
+        // but before the first time we sync.
+        let scratchpadPrefs = profile.prefs.branch("sync.scratchpad")
+        if let deviceRegistration = account.deviceRegistration {
+            scratchpadPrefs.setString(deviceRegistration.toJSON().stringValue()!, forKey: PrefDeviceRegistration)
+        }
+
+        // Once we do that we can do an explicit sync.
+        return profile.syncManager.syncEverything(why: .didLogin) >>> succeed
     }
 }
