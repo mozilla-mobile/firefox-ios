@@ -12,20 +12,49 @@ class LivePushClientTests: XCTestCase {
     var endpointURL: NSURL {
         return DeveloperPushConfiguration().endpointURL
     }
-    
-    func testClientRegistration() {
+
+    func generateDeviceID() -> String {
         let num = arc4random_uniform(1 << 31)
-        let deviceID = "test-id-deadbeef-\(num)"
+        return "test-id-deadbeef-\(num)"
+    }
+
+    func testClientRegistration() {
+        let deviceID = generateDeviceID()
         let client = PushClient(endpointURL: endpointURL)
 
-        let maybeReg = client.register(deviceID).value
-        XCTAssert(maybeReg.isSuccess, "Registered OK - deviceID = \(deviceID)")
+        let registrationExpectation = XCTestExpectation()
+        let unregistrationExpectation = XCTestExpectation()
 
-        guard let registration = maybeReg.successValue else {
-            return XCTFail("Registration failed – \(maybeReg.failureValue ??? "nil")")
+        client.register(deviceID) >>== { registration in
+            registrationExpectation.fulfill()
+            client.unregister(registration) >>== { res in
+                unregistrationExpectation.fulfill()
+            }
         }
 
-        let maybeVoid = client.unregister(registration).value
-        XCTAssert(maybeVoid.isSuccess, "Unregistered OK - deviceID = \(deviceID), registration.uaid = \(registration.uaid)")
+        wait(for: [registrationExpectation, unregistrationExpectation], timeout: 2 * 60)
+    }
+
+    func testClientUpdate() {
+        let client = PushClient(endpointURL: endpointURL)
+
+        let registrationExpectation = XCTestExpectation()
+        let updateExpectation = XCTestExpectation()
+        let unregistrationExpectation = XCTestExpectation()
+
+        client.register(generateDeviceID()) >>== { ogRegistration in
+            registrationExpectation.fulfill()
+
+            client.updateUAID(self.generateDeviceID(), withRegistration: ogRegistration) >>== { registration in
+                updateExpectation.fulfill()
+                XCTAssertEqual(ogRegistration, registration)
+
+                client.unregister(registration) >>== { res in
+                    unregistrationExpectation.fulfill()
+                }
+            }
+        }
+
+        wait(for: [registrationExpectation, updateExpectation, unregistrationExpectation], timeout: 2 * 60)
     }
 }

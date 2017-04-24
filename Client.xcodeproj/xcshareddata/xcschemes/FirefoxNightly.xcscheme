@@ -48,9 +48,6 @@
             </BuildableReference>
             <SkippedTests>
                <Test
-                  Identifier = "LivePushClientTests">
-               </Test>
-               <Test
                   Identifier = "SyncAuthStateTests/testLive()">
                </Test>
             </SkippedTests>
