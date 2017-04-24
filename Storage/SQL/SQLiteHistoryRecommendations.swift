@@ -11,7 +11,31 @@ fileprivate let log = Logger.syncLogger
 
 extension SQLiteHistory: HistoryRecommendations {
     public func getHighlights() -> Deferred<Maybe<Cursor<Site>>> {
-        let sql = "SELECT * FROM \(AttachedTableHighlights)"
+        let highlightsProjection = [
+            "historyID",
+            "url",
+            "\(AttachedTableHighlights).title AS title",
+            "guid",
+            "visitCount",
+            "visitDate",
+            "is_bookmarked"
+        ]
+        let faviconsProjection = ["iconID", "iconURL", "iconType", "iconDate", "iconWidth"]
+        let metadataProjections = [
+            "\(AttachedTablePageMetadata).title AS metadata_title",
+            "media_url",
+            "type",
+            "description",
+            "provider_name"
+        ]
+
+        let allProjection = highlightsProjection + faviconsProjection + metadataProjections
+        let sql =
+        "SELECT \(allProjection.joined(separator: ",")) " +
+        "FROM \(AttachedTableHighlights) " +
+        "LEFT JOIN \(ViewHistoryIDsWithWidestFavicons) ON \(ViewHistoryIDsWithWidestFavicons).id = historyID " +
+        "LEFT OUTER JOIN \(AttachedTablePageMetadata) ON \(AttachedTablePageMetadata).site_url = url "
+
         return self.db.runQuery(sql, args: nil, factory: SQLiteHistory.iconHistoryMetadataColumnFactory)
     }
 
@@ -31,9 +55,7 @@ extension SQLiteHistory: HistoryRecommendations {
         let (query, args) = computeHighlightsQuery()
         let sql =
             "INSERT INTO \(AttachedTableHighlights) " +
-            "SELECT historyID, url, title, guid, visitCount, visitDate, " +
-            "is_bookmarked, iconID, iconURL, iconType, iconDate, iconWidth, " +
-            "metadata_title, media_url, type, description, provider_name " +
+            "SELECT historyID, url, title, guid, visitCount, visitDate, is_bookmarked " +
             "FROM (\(query))"
 
         return self.db.run(sql, withArgs: args)
@@ -111,10 +133,8 @@ extension SQLiteHistory: HistoryRecommendations {
 
         let siteProjection = subQuerySiteProjection.replacingOccurrences(of: "siteTitle", with: "siteTitle AS title")
         let highlightsQuery =
-            "SELECT \(siteProjection), iconID, iconURL, iconType, iconDate, iconWidth, \(AttachedTablePageMetadata).title AS metadata_title, media_url, type, description, provider_name " +
+            "SELECT \(siteProjection) " +
             "FROM ( \(nonRecentHistory) UNION ALL \(bookmarkHighlights) ) " +
-            "LEFT JOIN \(ViewHistoryIDsWithWidestFavicons) ON \(ViewHistoryIDsWithWidestFavicons).id = historyID " +
-            "LEFT OUTER JOIN \(AttachedTablePageMetadata) ON \(AttachedTablePageMetadata).site_url = url " +
             "GROUP BY url"
         let otherArgs = [threeDaysAgo, threeDaysAgo] as Args
         let args: Args = [thirtyMinutesAgo] + blacklistedHosts + otherArgs

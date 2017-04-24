@@ -293,17 +293,7 @@ open class BrowserTable: Table {
             "guid TEXT," +
             "visitCount INTEGER," +
             "visitDate DATETIME," +
-            "is_bookmarked INTEGER," +
-            "iconID INTEGER," +
-            "iconURL TEXT," +
-            "iconType INTEGER," +
-            "iconDate DATETIME," +
-            "iconWidth INTEGER," +
-            "metadata_title TEXT," +
-            "media_url TEXT," +
-            "type INTEGER," +
-            "description TEXT," +
-            "provider_name TEXT" +
+            "is_bookmarked INTEGER" +
     ") "
 
     let indexPageMetadataCacheKeyCreate =
