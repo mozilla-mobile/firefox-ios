@@ -23,7 +23,7 @@
       </BuildActionEntries>
    </BuildAction>
    <TestAction
-      buildConfiguration = "KlarDebug"
+      buildConfiguration = "KlarRelease"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
@@ -35,16 +35,6 @@
                BlueprintIdentifier = "0BA39A821DD2B8E4005F970A"
                BuildableName = "XCUITest.xctest"
                BlueprintName = "XCUITest"
-               ReferencedContainer = "container:Blockzilla.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E4F7F3EF1E9C5D9200BAAB05"
-               BuildableName = "BlockzillaTests.xctest"
-               BlueprintName = "BlockzillaTests"
                ReferencedContainer = "container:Blockzilla.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -62,7 +52,7 @@
       </AdditionalOptions>
    </TestAction>
    <LaunchAction
-      buildConfiguration = "KlarDebug"
+      buildConfiguration = "KlarRelease"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
@@ -102,7 +92,7 @@
       </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
-      buildConfiguration = "KlarDebug">
+      buildConfiguration = "KlarRelease">
    </AnalyzeAction>
    <ArchiveAction
       buildConfiguration = "KlarRelease"

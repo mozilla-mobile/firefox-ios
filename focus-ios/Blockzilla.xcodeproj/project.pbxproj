@@ -94,7 +94,6 @@
 		D3E54FD51DEFB25B003E1AFF /* SearchPlugins in Resources */ = {isa = PBXBuildFile; fileRef = D3E54FD41DEFB25B003E1AFF /* SearchPlugins */; };
 		D3E54FDE1DF0E0D7003E1AFF /* UIImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E54FDD1DF0E0D6003E1AFF /* UIImageExtensions.swift */; };
 		D3E54FE01DF0E221003E1AFF /* SearchSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E54FDF1DF0E221003E1AFF /* SearchSettingsViewController.swift */; };
-		E40A08711E99265E00E096EC /* SupportUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40AFB131DC939FF00DA5651 /* SupportUtils.swift */; };
 		E40AFB101DC9014700DA5651 /* UserAgent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40AFB0F1DC9014700DA5651 /* UserAgent.swift */; };
 		E40AFB141DC939FF00DA5651 /* SupportUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40AFB131DC939FF00DA5651 /* SupportUtils.swift */; };
 		E40AFC741DDDE96D00DA5651 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E40AFC761DDDE96D00DA5651 /* InfoPlist.strings */; };
@@ -116,8 +115,6 @@
 		E4BF2DF51BACE92400DA9D68 /* ContentBlocker.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E4BF2DEC1BACE92400DA9D68 /* ContentBlocker.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E4BF2E111BAD8AC500DA9D68 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF2E101BAD8AC500DA9D68 /* Settings.swift */; };
 		E4BF2E121BAD8AC500DA9D68 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF2E101BAD8AC500DA9D68 /* Settings.swift */; };
-		E4F7F3F31E9C5D9200BAAB05 /* BlockzillaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F7F3F21E9C5D9200BAAB05 /* BlockzillaTests.swift */; };
-		E4F7F3FE1E9C5EAF00BAAB05 /* SupportUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40AFB131DC939FF00DA5651 /* SupportUtils.swift */; };
 		F805722F1DBEE504004339C1 /* WebCacheUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F805722E1DBEE504004339C1 /* WebCacheUtils.swift */; };
 		F84AFE751DE77FE6005C4DD1 /* LaunchScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = F84AFE721DE77FE6005C4DD1 /* LaunchScreen.png */; };
 		F84AFE761DE77FE6005C4DD1 /* LaunchScreen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F84AFE731DE77FE6005C4DD1 /* LaunchScreen@2x.png */; };
@@ -145,13 +142,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = E4BF2DEB1BACE92400DA9D68;
 			remoteInfo = ContentBlocker;
-		};
-		E4F7F3F51E9C5D9200BAAB05 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E4BF2DCB1BACE8CA00DA9D68 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = E4BF2DD21BACE8CA00DA9D68;
-			remoteInfo = Blockzilla;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -512,9 +502,6 @@
 		E4D0AB881E300EFE00DFBEDA /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E4D0AB891E300EFF00DFBEDA /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E4D0AB8A1E300F0000DFBEDA /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		E4F7F3F01E9C5D9200BAAB05 /* BlockzillaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlockzillaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E4F7F3F21E9C5D9200BAAB05 /* BlockzillaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockzillaTests.swift; sourceTree = "<group>"; };
-		E4F7F3F41E9C5D9200BAAB05 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F4C4943B406FCA9B74B4E186 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		F805722E1DBEE504004339C1 /* WebCacheUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebCacheUtils.swift; sourceTree = "<group>"; };
 		F84AFE721DE77FE6005C4DD1 /* LaunchScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LaunchScreen.png; sourceTree = "<group>"; };
@@ -559,13 +546,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		E4BF2DE91BACE92400DA9D68 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E4F7F3ED1E9C5D9200BAAB05 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -697,7 +677,6 @@
 				D3E2C9001D9F17C600DEBE3D /* Blocklists */,
 				E4BF2DD51BACE8CA00DA9D68 /* Blockzilla */,
 				E4BF2DED1BACE92400DA9D68 /* ContentBlocker */,
-				E4F7F3F11E9C5D9200BAAB05 /* BlockzillaTests */,
 				D77FE464056F274978E025ED /* Frameworks */,
 				E4BF2DD41BACE8CA00DA9D68 /* Products */,
 				D33A1A391BC476D40003D929 /* Shared */,
@@ -714,7 +693,6 @@
 				E4BF2DEC1BACE92400DA9D68 /* ContentBlocker.appex */,
 				0BA39A831DD2B8E4005F970A /* XCUITest.xctest */,
 				E44A34671E0A18C100BFD777 /* SnapshotTests.xctest */,
-				E4F7F3F01E9C5D9200BAAB05 /* BlockzillaTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -797,15 +775,6 @@
 			path = ContentBlocker;
 			sourceTree = "<group>";
 		};
-		E4F7F3F11E9C5D9200BAAB05 /* BlockzillaTests */ = {
-			isa = PBXGroup;
-			children = (
-				E4F7F3F21E9C5D9200BAAB05 /* BlockzillaTests.swift */,
-				E4F7F3F41E9C5D9200BAAB05 /* Info.plist */,
-			);
-			path = BlockzillaTests;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -883,31 +852,13 @@
 			productReference = E4BF2DEC1BACE92400DA9D68 /* ContentBlocker.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
-		E4F7F3EF1E9C5D9200BAAB05 /* BlockzillaTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = E4F7F3FD1E9C5D9200BAAB05 /* Build configuration list for PBXNativeTarget "BlockzillaTests" */;
-			buildPhases = (
-				E4F7F3EC1E9C5D9200BAAB05 /* Sources */,
-				E4F7F3ED1E9C5D9200BAAB05 /* Frameworks */,
-				E4F7F3EE1E9C5D9200BAAB05 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				E4F7F3F61E9C5D9200BAAB05 /* PBXTargetDependency */,
-			);
-			name = BlockzillaTests;
-			productName = BlockzillaTests;
-			productReference = E4F7F3F01E9C5D9200BAAB05 /* BlockzillaTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		E4BF2DCB1BACE8CA00DA9D68 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0830;
+				LastSwiftUpdateCheck = 0820;
 				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = Mozilla;
 				TargetAttributes = {
@@ -943,11 +894,6 @@
 							};
 						};
 					};
-					E4F7F3EF1E9C5D9200BAAB05 = {
-						CreatedOnToolsVersion = 8.3.1;
-						ProvisioningStyle = Manual;
-						TestTargetID = E4BF2DD21BACE8CA00DA9D68;
-					};
 				};
 			};
 			buildConfigurationList = E4BF2DCE1BACE8CA00DA9D68 /* Build configuration list for PBXProject "Blockzilla" */;
@@ -968,7 +914,6 @@
 				E4BF2DEB1BACE92400DA9D68 /* ContentBlocker */,
 				0BA39A821DD2B8E4005F970A /* XCUITest */,
 				E44A34661E0A18C100BFD777 /* SnapshotTests */,
-				E4F7F3EF1E9C5D9200BAAB05 /* BlockzillaTests */,
 			);
 		};
 /* End PBXProject section */
@@ -1031,13 +976,6 @@
 				D32817221BD0689800185845 /* disconnect-advertising.json in Resources */,
 				D32817241BD0689800185845 /* disconnect-content.json in Resources */,
 				D3B323521BD1A7EE00B0EEE4 /* web-fonts.json in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E4F7F3EE1E9C5D9200BAAB05 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1169,16 +1107,6 @@
 				D3A6605B1DAF0904002BA72A /* AppInfo.swift in Sources */,
 				E4BF2DF11BACE92400DA9D68 /* ActionRequestHandler.swift in Sources */,
 				D3A6605A1DAF08FA002BA72A /* Utils.swift in Sources */,
-				E40A08711E99265E00E096EC /* SupportUtils.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E4F7F3EC1E9C5D9200BAAB05 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E4F7F3F31E9C5D9200BAAB05 /* BlockzillaTests.swift in Sources */,
-				E4F7F3FE1E9C5EAF00BAAB05 /* SupportUtils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1199,11 +1127,6 @@
 			isa = PBXTargetDependency;
 			target = E4BF2DEB1BACE92400DA9D68 /* ContentBlocker */;
 			targetProxy = E4BF2DF31BACE92400DA9D68 /* PBXContainerItemProxy */;
-		};
-		E4F7F3F61E9C5D9200BAAB05 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = E4BF2DD21BACE8CA00DA9D68 /* Blockzilla */;
-			targetProxy = E4F7F3F51E9C5D9200BAAB05 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -2635,325 +2558,6 @@
 			};
 			name = KlarRelease;
 		};
-		E4F7F3F71E9C5D9200BAAB05 /* KlarDebug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = "";
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_TESTABILITY = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = BlockzillaTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.BlockzillaTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SDKROOT = iphoneos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Firefox Focus.app/Firefox Focus";
-			};
-			name = KlarDebug;
-		};
-		E4F7F3F81E9C5D9200BAAB05 /* FocusDebug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = "";
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = BlockzillaTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.BlockzillaTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Firefox Focus.app/Firefox Focus";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = FocusDebug;
-		};
-		E4F7F3F91E9C5D9200BAAB05 /* KlarRelease */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = "";
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = BlockzillaTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.BlockzillaTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Firefox Focus.app/Firefox Focus";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = KlarRelease;
-		};
-		E4F7F3FA1E9C5D9200BAAB05 /* FocusRelease */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = "";
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = BlockzillaTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.BlockzillaTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Firefox Focus.app/Firefox Focus";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = FocusRelease;
-		};
-		E4F7F3FB1E9C5D9200BAAB05 /* FocusEnterprise */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = "";
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = BlockzillaTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.BlockzillaTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Firefox Focus.app/Firefox Focus";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = FocusEnterprise;
-		};
-		E4F7F3FC1E9C5D9200BAAB05 /* KlarEnterprise */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = "";
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = BlockzillaTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.BlockzillaTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Firefox Focus.app/Firefox Focus";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = KlarEnterprise;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -3021,18 +2625,6 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = FocusRelease;
-		};
-		E4F7F3FD1E9C5D9200BAAB05 /* Build configuration list for PBXNativeTarget "BlockzillaTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				E4F7F3F71E9C5D9200BAAB05 /* KlarDebug */,
-				E4F7F3F81E9C5D9200BAAB05 /* FocusDebug */,
-				E4F7F3F91E9C5D9200BAAB05 /* KlarRelease */,
-				E4F7F3FA1E9C5D9200BAAB05 /* FocusRelease */,
-				E4F7F3FB1E9C5D9200BAAB05 /* FocusEnterprise */,
-				E4F7F3FC1E9C5D9200BAAB05 /* KlarEnterprise */,
-			);
-			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};

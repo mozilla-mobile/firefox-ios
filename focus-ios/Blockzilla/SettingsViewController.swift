@@ -247,10 +247,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             searchSettingsViewController.delegate = self
             navigationController?.pushViewController(searchSettingsViewController, animated: true)
         case 5:
-            if let url = SupportUtils.URLForTopic(.usageData) {
-                let contentViewController = AboutContentViewController(url: url)
-                navigationController?.pushViewController(contentViewController, animated: true)
-            }
+            guard let url = SupportUtils.URLForTopic(topic: "usage-data") else { break }
+            let contentViewController = AboutContentViewController(url: url)
+            navigationController?.pushViewController(contentViewController, animated: true)
         default: break
         }
     }
