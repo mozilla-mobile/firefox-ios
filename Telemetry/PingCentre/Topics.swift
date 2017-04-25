@@ -26,6 +26,10 @@ extension PingCentreTopic {
                 "source": ["type": "string"],
                 "action_position": ["type": "number"],
                 "share_provider": ["type": "string"],
+                "total_bookmarks_size": ["type": "number"],
+                "total_history_size": ["type": "number"],
+                "highlights_count": ["type": "number"],
+                "top_sites_count": ["type": "number"],
 
                 // Application metadata
                 "app_version": ["type": "string"],

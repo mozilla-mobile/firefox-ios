@@ -1368,6 +1368,21 @@ class TestSQLiteHistory: XCTestCase {
             return
         }
     }
+
+    func testHistoryCounting() {
+        let db = BrowserDB(filename: "browser.db", files: files)
+        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
+
+        let prefs = MockProfilePrefs()
+        let history = SQLiteHistory(db: db, prefs: prefs)
+
+        XCTAssertEqual(history.numberOfHistoryEntries().value.successValue!, 0)
+
+        let site = Site(url: "http://getfirefox.com", title: "Get Firefox")
+        history.addLocalVisit(SiteVisit(site: site, date: Date.nowMicroseconds())).succeeded()
+
+        XCTAssertEqual(history.numberOfHistoryEntries().value.successValue!, 1)
+    }
 }
 
 class TestSQLiteHistoryTransactionUpdate: XCTestCase {

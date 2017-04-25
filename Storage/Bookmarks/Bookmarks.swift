@@ -14,6 +14,12 @@ public protocol SearchableBookmarks: class {
     func bookmarksByURL(_ url: URL) -> Deferred<Maybe<Cursor<BookmarkItem>>>
 }
 
+public protocol CountableBookmarks: class {
+    // Counts all of the bookmark items matching the given types across all of the
+    // non-structure bookmarks tables (local, mirror, buffer)
+    func countAllItems(matchingTypes: [BookmarkNodeType]) -> Deferred<Maybe<Int>>
+}
+
 public protocol SyncableBookmarks: class, ResettableSyncStorage, AccountRemovalDelegate {
     // TODO
     func isUnchanged() -> Deferred<Maybe<Bool>>

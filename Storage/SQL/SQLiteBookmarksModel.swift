@@ -828,7 +828,7 @@ open class UnsyncedBookmarksFallbackModelFactory: BookmarksModelFactory {
     }
 }
 
-open class MergedSQLiteBookmarks: BookmarksModelFactorySource, KeywordSearchSource {
+open class MergedSQLiteBookmarks: BookmarksModelFactorySource, KeywordSearchSource, CountableBookmarks {
     let local: SQLiteBookmarks
     let buffer: SQLiteBookmarkBufferStorage
 
@@ -853,5 +853,9 @@ open class MergedSQLiteBookmarks: BookmarksModelFactorySource, KeywordSearchSour
 
     open func getURLForKeywordSearch(_ keyword: String) -> Deferred<Maybe<String>> {
         return self.local.getURLForKeywordSearch(keyword)
+    }
+
+    open func countAllItems(matchingTypes: [BookmarkNodeType]) -> Deferred<Maybe<Int>> {
+        return local.countAllItems(matchingTypes: matchingTypes)
     }
 }

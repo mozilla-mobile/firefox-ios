@@ -666,6 +666,12 @@ extension SQLiteHistory: BrowserHistory {
         let allSQL = "SELECT * FROM (SELECT * FROM (\(historySQL)) UNION SELECT * FROM (\(bookmarksSQL))) ORDER BY is_bookmarked DESC, frecencies DESC"
         return (allSQL, args)
     }
+
+    public func numberOfHistoryEntries() -> Deferred<Maybe<Int>> {
+        let sql = "SELECT COUNT(*) FROM \(TableHistory)"
+        return self.db.runQuery(sql, args: nil, factory: { $0[0] as! Int })
+            >>== { deferMaybe($0[0]!) }
+    }
 }
 
 extension SQLiteHistory: Favicons {
