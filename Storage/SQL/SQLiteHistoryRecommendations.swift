@@ -47,7 +47,7 @@ extension SQLiteHistory: HistoryRecommendations {
         return self.db.run([("INSERT INTO \(TableActivityStreamBlocklist) (url) VALUES (?)", [url])])
     }
 
-    private func clearHighlights() -> Success {
+    public func clearHighlights() -> Success {
         return self.db.run("DELETE FROM \(AttachedTableHighlights)", withArgs: nil)
     }
 
