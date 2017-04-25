@@ -734,6 +734,39 @@
 		FA6B2AC41D41F02D00429414 /* Punycode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6B2AC11D41F02D00429414 /* Punycode.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXBuildRule section */
+		1616B2B11E7F2E750064F701 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			fileType = text.plist.strings;
+			isEditable = 1;
+			outputFiles = (
+				"$(DERIVED_FILE_DIR)/$(INPUT_FILE_NAME)",
+			);
+			script = "\"$SRCROOT\"/Build-Phases/localizeInfoPlists.sh";
+		};
+		1616B2B21E7F2E8A0064F701 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			fileType = text.plist.strings;
+			isEditable = 1;
+			outputFiles = (
+				"$(DERIVED_FILE_DIR)/$(INPUT_FILE_NAME)",
+			);
+			script = "\"$SRCROOT\"/Build-Phases/localizeInfoPlists.sh";
+		};
+		1616B2B31E7F2E940064F701 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			fileType = text.plist.strings;
+			isEditable = 1;
+			outputFiles = (
+				"$(DERIVED_FILE_DIR)/$(INPUT_FILE_NAME)",
+			);
+			script = "\"$SRCROOT\"/Build-Phases/localizeInfoPlists.sh";
+		};
+/* End PBXBuildRule section */
+
 /* Begin PBXContainerItemProxy section */
 		0B742CCB1B32491400EE9264 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -3917,6 +3950,7 @@
 				E4BA8A291B4B0A1600BC2E95 /* Resources */,
 			);
 			buildRules = (
+				1616B2B11E7F2E750064F701 /* PBXBuildRule */,
 			);
 			dependencies = (
 			);
@@ -4060,6 +4094,7 @@
 				F84B22471A0920C600AAB793 /* Resources */,
 			);
 			buildRules = (
+				1616B2B21E7F2E8A0064F701 /* PBXBuildRule */,
 			);
 			dependencies = (
 				2F9A72381ABB868100F9F05D /* PBXTargetDependency */,
@@ -4079,6 +4114,7 @@
 				F84B225A1A09210A00AAB793 /* Resources */,
 			);
 			buildRules = (
+				1616B2B31E7F2E940064F701 /* PBXBuildRule */,
 			);
 			dependencies = (
 				2F9A72361ABB867B00F9F05D /* PBXTargetDependency */,
@@ -4134,7 +4170,6 @@
 					};
 					2FCAE2231ABB51F800877008 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -4146,14 +4181,12 @@
 					};
 					3B43E3CF1D95C48D00BBA9DB = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 						ProvisioningStyle = Automatic;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
 					3BFE4B061D342FB800DDF53F = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -4167,7 +4200,6 @@
 					};
 					D39FA15E1A83E0EC00EE869C = {
 						CreatedOnToolsVersion = 6.1.1;
-						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -4189,7 +4221,6 @@
 					};
 					E4D567211ADECE2700F1EFE7 = {
 						CreatedOnToolsVersion = 6.3;
-						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -4226,7 +4257,6 @@
 					};
 					F84B21D21A090F8100AAB793 = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
