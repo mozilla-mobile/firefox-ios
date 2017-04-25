@@ -91,20 +91,19 @@ public class StatsSession {
     var took: Int64 = 0
     var when: Timestamp?
 
-    private var startUptime: UInt64?
+    private var startUptimeNanos: UInt64?
 
     public func start(when: UInt64 = Date.now()) {
-        // Convert to milliseconds as stated in the ping format
-        self.when = when / 1000
-        self.startUptime = DispatchTime.now().uptimeNanoseconds
+        self.when = when
+        self.startUptimeNanos = DispatchTime.now().uptimeNanoseconds
     }
 
     public func hasStarted() -> Bool {
-        return startUptime != nil
+        return startUptimeNanos != nil
     }
 
     public func end() -> Self {
-        guard let startUptime = startUptime else {
+        guard let startUptime = startUptimeNanos else {
             assertionFailure("SyncOperationStats called end without first calling start!")
             return self
         }
