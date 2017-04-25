@@ -8,6 +8,7 @@ import XCTest
 import Shared
 import Storage
 import Deferred
+import Telemetry
 
 class ActivityStreamTests: XCTestCase {
     var profile: MockProfile!

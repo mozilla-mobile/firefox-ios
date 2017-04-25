@@ -105,7 +105,7 @@ open class Telemetry {
 
         return [
             "type": type.rawValue,
-            "id": NSUUID().uuidString,
+            "id": UUID().uuidString,
             "creationDate": date,
             "version": Telemetry.telemetryVersion,
             "application": [

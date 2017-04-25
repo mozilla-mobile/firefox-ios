@@ -89,14 +89,14 @@ public struct ValidationStats: Stats {
 
 public class StatsSession {
     var took: Int64 = 0
-    var when: Int64?
+    var when: Timestamp?
 
-    private var startUptime: Int64?
+    private var startUptime: UInt64?
 
-    public func start(when: Int64 = Int64(Date.now())) {
+    public func start(when: UInt64 = Date.now()) {
         // Convert to milliseconds as stated in the ping format
         self.when = when / 1000
-        self.startUptime = Int64(DispatchTime.now().uptimeNanoseconds)
+        self.startUptime = DispatchTime.now().uptimeNanoseconds
     }
 
     public func hasStarted() -> Bool {
@@ -217,14 +217,15 @@ public struct SyncPing: TelemetryPing {
 
     private static func enginePingDataFrom(engineResults: EngineResults) -> [[String: Any]] {
         return engineResults.map { result in
+            let (name, status) = result
             var engine: [String: Any] = [
-                "name": result.0
+                "name": name
             ]
 
             // For complete/partial results, extract out the collect stats
             // and add it to engine information. For syncs that were not able to
             // start, return why and a reason.
-            switch result.1 {
+            switch status {
             case .completed(let stats):
                 engine.merge(with: stats.asDictionary())
             case .partial(let stats):
