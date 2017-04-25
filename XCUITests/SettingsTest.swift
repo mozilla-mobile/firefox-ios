@@ -25,11 +25,14 @@ class SettingsTest: BaseTestCase {
         appsettingstableviewcontrollerTableviewTable.staticTexts["Use Compact Tabs"].swipeUp()
         appsettingstableviewcontrollerTableviewTable.staticTexts["Passcode"].swipeUp()
         appsettingstableviewcontrollerTableviewTable.staticTexts["Show Tour"].swipeUp()
+        sleep(2)
         let helpMenu = appsettingstableviewcontrollerTableviewTable.cells["Help"]
+        XCTAssertTrue(helpMenu.isEnabled)
         helpMenu.tap()
+        
         waitForValueContains(app.textFields["url"], value: "support.mozilla.org")
-        waitforExistence(app.webViews.links["mozilla support"])
-        XCTAssertTrue(app.webViews.links["mozilla support"].exists)
+        waitforExistence(app.webViews.staticTexts["Firefox for iOS"])
+        XCTAssertTrue(app.webViews.staticTexts["Firefox for iOS"].exists)
 
         let numTabs = app.buttons["Show Tabs"].value
         XCTAssertEqual("2", numTabs as? String, "Sume should be open in a different tab")
