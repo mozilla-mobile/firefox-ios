@@ -5,6 +5,10 @@
 import Foundation
 
 open class AppInfo {
+    open static var displayName: String {
+        return Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as! String
+    }
+
     open static var appVersion: String {
         return Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
     }

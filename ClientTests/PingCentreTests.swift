@@ -8,6 +8,7 @@ import JSONSchema
 import Alamofire
 import Deferred
 import Shared
+@testable import Telemetry
 
 private let mockTopic = PingCentreTopic(name: "ios-mock", schema: Schema([
     "type": "object",

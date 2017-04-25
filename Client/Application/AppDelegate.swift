@@ -10,6 +10,7 @@ import MessageUI
 import WebImage
 import SwiftKeychainWrapper
 import LocalAuthentication
+import Telemetry
 
 private let log = Logger.browserLogger
 
@@ -452,7 +453,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             }
 
             let ping = CorePing(profile: profile)
-            Telemetry.sendPing(ping)
+            Telemetry.send(ping: ping, docType: .core)
         }
     }
 

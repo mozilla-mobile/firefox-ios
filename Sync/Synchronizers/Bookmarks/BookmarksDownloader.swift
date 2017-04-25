@@ -140,7 +140,7 @@ public class BookmarksMirrorer {
                    >>> { self.go(info: info, greenLight: greenLight) }
             case .interrupted:
                 log.info("Interrupted. Aborting batching this time.")
-                return deferMaybe(SyncStatus.partial)
+                return deferMaybe(SyncStatus.partial(self.statsSession))
             case .noNewData:
                 log.info("No new data. No need to continue batching.")
                 self.downloader.advance()

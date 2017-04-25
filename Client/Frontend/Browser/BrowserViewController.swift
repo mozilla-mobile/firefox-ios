@@ -16,6 +16,7 @@ import ReadingList
 import MobileCoreServices
 import WebImage
 import SwiftyJSON
+import Telemetry
 
 private let log = Logger.browserLogger
 

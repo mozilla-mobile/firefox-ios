@@ -199,7 +199,7 @@ open class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
 
         if !greenLight() {
             log.info("Green light turned red. Stopping history download.")
-            return deferMaybe(.partial)
+            return deferMaybe(.partial(self.statsSession))
         }
 
         func applyBatched() -> Success {
@@ -226,7 +226,7 @@ open class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
                    >>> { self.go(info, greenLight: greenLight, downloader: downloader, history: history) }
             case .interrupted:
                 log.info("Interrupted. Aborting batching this time.")
-                return deferMaybe(.partial)
+                return deferMaybe(.partial(self.statsSession))
             case .noNewData:
                 log.info("No new data. No need to continue batching.")
                 downloader.advance()

@@ -12,6 +12,18 @@ public protocol PingCentreClient {
     @discardableResult func sendPing(_ data: [String: Any], validate: Bool) -> Success
 }
 
+/*
+ * A Ping Centre Topic has a name and an associated JSON schema describing the ping data.
+ */
+public struct PingCentreTopic {
+    public let name: String
+    public let schema: Schema
+    public init(name: String, schema: Schema) {
+        self.name = name
+        self.schema = schema
+    }
+}
+
 public struct PingCentre {
     public static func clientForTopic(_ topic: PingCentreTopic, clientID: String) -> PingCentreClient {
         guard !AppConstants.IsRunningTest else {
