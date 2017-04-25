@@ -986,7 +986,8 @@ extension SQLiteHistory: SyncableHistory {
         // We then need to flatten the cursor. We do that by collecting
         // places as a side-effect of the factory, producing visits as a result, and merging in memory.
 
-        let args: Args = [20] // Maximum number of visits to retrieve.
+        let limit = 1000
+        let args: Args = [20, limit] // Maximum number of visits to retrieve, limit to retrieve
 
         // Exclude 'unknown' visits, because they're not syncable.
         let filter = "history.should_upload = 1 AND v1.type IS NOT 0"
@@ -1003,7 +1004,8 @@ extension SQLiteHistory: SyncableHistory {
         "ON v1.siteID = v2.siteID AND v1.date < v2.date " +
         "GROUP BY v1.date " +
         "HAVING COUNT(*) < ? " +
-        "ORDER BY v1.siteID, v1.date DESC"
+        "ORDER BY v1.siteID, v1.date DESC " +
+        "LIMIT ?"
 
         var places = [Int: Place]()
         var visits = [Int: [Visit]]()
