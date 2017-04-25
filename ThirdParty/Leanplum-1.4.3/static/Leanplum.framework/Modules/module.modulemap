@@ -1,0 +1,6 @@
+framework module Leanplum {
+  umbrella header "Leanplum.h"
+  export *
+  module *
+  { export * }
+}
