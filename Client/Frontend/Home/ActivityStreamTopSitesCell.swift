@@ -221,10 +221,6 @@ class ASHorizontalScrollCell: UICollectionViewCell {
             delegate?.pageChangedHandler = { [weak self] progress in
                 self?.currentPageChanged(progress)
             }
-            DispatchQueue.main.async {
-                self.setNeedsLayout()
-                self.collectionView.reloadData()
-            }
         }
     }
 
