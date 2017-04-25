@@ -42,7 +42,6 @@
 		D3426AF61DB84E7A0016DA5A /* SearchEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3426AF51DB84E7A0016DA5A /* SearchEngine.swift */; };
 		D3426B031DBAE3800016DA5A /* URLBarContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3426B021DBAE3800016DA5A /* URLBarContainer.swift */; };
 		D343DCC21C44356500D7EEE8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D343DCC41C44356500D7EEE8 /* Localizable.strings */; };
-		D34E70331DA8736300BABDCC /* AutocompleteTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34E70321DA8736300BABDCC /* AutocompleteTextField.swift */; };
 		D34E70351DA874AA00BABDCC /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34E70341DA874AA00BABDCC /* StringExtensions.swift */; };
 		D3561B2B1DB5925100A5EEAF /* GradientBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3561B2A1DB5925100A5EEAF /* GradientBackgroundView.swift */; };
 		D35A0E021E26C94F00297884 /* ClosedRangeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35A0E011E26C94F00297884 /* ClosedRangeExtensions.swift */; };
@@ -59,6 +58,7 @@
 		D392887F1BC5E47E0016A9A0 /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D392887E1BC5E47E0016A9A0 /* UIConstants.swift */; };
 		D3A6605A1DAF08FA002BA72A /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E251F81DAF064B005918DC /* Utils.swift */; };
 		D3A6605B1DAF0904002BA72A /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E251FA1DAF0668005918DC /* AppInfo.swift */; };
+		D3AAC2911EAE9146005B7E8C /* AutocompleteTextField.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3AAC28C1EAE8F5A005B7E8C /* AutocompleteTextField.framework */; };
 		D3B3232D1BD16A0F00B0EEE4 /* gpl.html in Resources */ = {isa = PBXBuildFile; fileRef = D3B3232B1BD16A0F00B0EEE4 /* gpl.html */; };
 		D3B3232E1BD16A0F00B0EEE4 /* licenses.html in Resources */ = {isa = PBXBuildFile; fileRef = D3B3232C1BD16A0F00B0EEE4 /* licenses.html */; };
 		D3B323521BD1A7EE00B0EEE4 /* web-fonts.json in Resources */ = {isa = PBXBuildFile; fileRef = D3B323511BD1A7EE00B0EEE4 /* web-fonts.json */; };
@@ -199,7 +199,6 @@
 		D3426AF51DB84E7A0016DA5A /* SearchEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchEngine.swift; sourceTree = "<group>"; };
 		D3426B021DBAE3800016DA5A /* URLBarContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLBarContainer.swift; sourceTree = "<group>"; };
 		D343DCC31C44356500D7EEE8 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
-		D34E70321DA8736300BABDCC /* AutocompleteTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutocompleteTextField.swift; sourceTree = "<group>"; };
 		D34E70341DA874AA00BABDCC /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		D3561B2A1DB5925100A5EEAF /* GradientBackgroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientBackgroundView.swift; sourceTree = "<group>"; };
 		D35A0E011E26C94F00297884 /* ClosedRangeExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClosedRangeExtensions.swift; sourceTree = "<group>"; };
@@ -214,6 +213,7 @@
 		D38EDB951DCA8A9400E28196 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D392881C1BC5CF180016A9A0 /* UIColorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
 		D392887E1BC5E47E0016A9A0 /* UIConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIConstants.swift; sourceTree = "<group>"; };
+		D3AAC28C1EAE8F5A005B7E8C /* AutocompleteTextField.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AutocompleteTextField.framework; path = Carthage/Build/iOS/AutocompleteTextField.framework; sourceTree = "<group>"; };
 		D3B3232B1BD16A0F00B0EEE4 /* gpl.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = gpl.html; sourceTree = "<group>"; };
 		D3B3232C1BD16A0F00B0EEE4 /* licenses.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = licenses.html; sourceTree = "<group>"; };
 		D3B323511BD1A7EE00B0EEE4 /* web-fonts.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "web-fonts.json"; path = "Lists/web-fonts.json"; sourceTree = SOURCE_ROOT; };
@@ -528,6 +528,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3AAC2911EAE9146005B7E8C /* AutocompleteTextField.framework in Frameworks */,
 				E47F9AE71DB929D800A93285 /* AdSupport.framework in Frameworks */,
 				E47F9AE81DB929D800A93285 /* iAd.framework in Frameworks */,
 				D3E54FCD1DEFA92F003E1AFF /* Fuzi.framework in Frameworks */,
@@ -635,6 +636,7 @@
 		D77FE464056F274978E025ED /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D3AAC28C1EAE8F5A005B7E8C /* AutocompleteTextField.framework */,
 				E47F9AE11DB927FD00A93285 /* AdjustSdk.framework */,
 				E47F9AE51DB929D800A93285 /* AdSupport.framework */,
 				29B90C056305836CB297FF79 /* AssetsLibrary.framework */,
@@ -715,7 +717,6 @@
 				D30179C21BCC6F65009AD388 /* AboutViewController.swift */,
 				E47F9AED1DB9338600A93285 /* AdjustIntegration.swift */,
 				E4BF2DD61BACE8CA00DA9D68 /* AppDelegate.swift */,
-				D34E70321DA8736300BABDCC /* AutocompleteTextField.swift */,
 				D30179061BC6CB19009AD388 /* BlockerEnabledDetector.swift */,
 				D3E2C9891DA47D5300DEBE3D /* Browser.swift */,
 				D3E2C96E1DA3093D00DEBE3D /* BrowserToolbar.swift */,
@@ -992,6 +993,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/GCDWebServers.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/AdjustSdk.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Fuzi.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/AutocompleteTextField.framework",
 			);
 			name = "Run Script (Carthage)";
 			outputPaths = (
@@ -1076,7 +1078,6 @@
 				D3E54FD11DEFB063003E1AFF /* SearchEngineManager.swift in Sources */,
 				D392881D1BC5CF180016A9A0 /* UIColorExtensions.swift in Sources */,
 				D3E3CA7D1DA827AD0079C94B /* HomeView.swift in Sources */,
-				D34E70331DA8736300BABDCC /* AutocompleteTextField.swift in Sources */,
 				D3E251EB1DAD714C005918DC /* SafariInstructionsViewController.swift in Sources */,
 				D35A0E021E26C94F00297884 /* ClosedRangeExtensions.swift in Sources */,
 				D3E2C8FA1D9F170200DEBE3D /* LocalContentBlocker.swift in Sources */,

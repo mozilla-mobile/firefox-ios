@@ -3,14 +3,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import AutocompleteTextField
 
-class DomainCompletion: AutocompleteTextFieldSource {
+class DomainCompletion: AutocompleteTextFieldCompletionSource {
     private lazy var topDomains: [String] = {
         let filePath = Bundle.main.path(forResource: "topdomains", ofType: "txt")
         return try! String(contentsOfFile: filePath!).components(separatedBy: "\n")
     }()
 
-    func completion(forText text: String) -> String? {
+    func autocompleteTextFieldCompletionSource(_ autocompleteTextField: AutocompleteTextField, forText text: String) -> String? {
         guard !text.isEmpty else { return nil }
 
         for domain in self.topDomains {

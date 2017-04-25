@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import AutocompleteTextField
 import SnapKit
 
 protocol URLBarDelegate: class {
@@ -77,6 +78,7 @@ class URLBar: UIView {
         urlText.font = UIConstants.fonts.urlText
         urlText.tintColor = UIConstants.colors.urlTextFont
         urlText.textColor = UIConstants.colors.urlTextFont
+        urlText.highlightColor = UIConstants.colors.urlTextHighlight
         urlText.keyboardType = .webSearch
         urlText.autocapitalizationType = .none
         urlText.autocorrectionType = .no
@@ -84,7 +86,7 @@ class URLBar: UIView {
         urlText.rightViewMode = .whileEditing
         urlText.setContentHuggingPriority(1000, for: .vertical)
         urlText.autocompleteDelegate = self
-        urlText.source = domainCompletion
+        urlText.completionSource = domainCompletion
         urlText.accessibilityIdentifier = "URLBar.urlText"
         textAndLockContainer.addSubview(urlText)
 

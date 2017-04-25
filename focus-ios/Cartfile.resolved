@@ -1,4 +1,5 @@
-github "cezheng/Fuzi" "1.0.1"
-github "swisspol/GCDWebServer" "3.3.3"
 github "SnapKit/SnapKit" "3.1.1"
 github "adjust/ios_sdk" "v4.10.2"
+github "cezheng/Fuzi" "1.0.1"
+github "swisspol/GCDWebServer" "3.3.3"
+github "mozilla-mobile/AutocompleteTextField" "ddff214d4e7df7a13e828f4af1b6d480dbec31cd"
