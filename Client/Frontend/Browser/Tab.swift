@@ -151,6 +151,7 @@ class Tab: NSObject {
             configuration!.userContentController = WKUserContentController()
             configuration!.preferences = WKPreferences()
             configuration!.preferences.javaScriptCanOpenWindowsAutomatically = false
+            configuration!.allowsInlineMediaPlayback = true
             let webView = TabWebView(frame: CGRect.zero, configuration: configuration!)
             webView.delegate = self
             configuration = nil
@@ -201,7 +202,7 @@ class Tab: NSObject {
         } else if let request = lastRequest {
             webView.load(request)
         } else {
-            log.error("creating webview with no lastRequest and no session data: \(self.url)")
+            log.error("creating webview with no lastRequest and no session data: \(self.url?.description ?? "nil")")
         }
     }
 
@@ -424,7 +425,7 @@ class Tab: NSObject {
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         guard let webView = object as? WKWebView, webView == self.webView,
             let path = keyPath, path == "URL" else {
-            return assertionFailure("Unhandled KVO key: \(keyPath)")
+            return assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")")
         }
 
         updateAppState()

@@ -13,6 +13,7 @@ import XCGLogger
 import SwiftKeychainWrapper
 import Deferred
 import SwiftyJSON
+import Telemetry
 
 private let log = Logger.syncLogger
 
@@ -34,6 +35,7 @@ public protocol SyncManager {
     func syncHistory() -> SyncResult
     func syncLogins() -> SyncResult
     @discardableResult func syncEverything(why: SyncReason) -> Success
+    func syncNamedCollections(why: SyncReason, names: [String]) -> Success
 
     // The simplest possible approach.
     func beginTimedSyncs()
@@ -46,11 +48,7 @@ public protocol SyncManager {
     @discardableResult func onAddedAccount() -> Success
 }
 
-typealias EngineIdentifier = String
 typealias SyncFunction = (SyncDelegate, Prefs, Ready) -> SyncResult
-typealias EngineStatus = (EngineIdentifier, SyncStatus)
-typealias EngineResults = [EngineStatus]
-typealias SyncOperationResult = (engineResults: Maybe<EngineResults>, stats: SyncOperationStatsSession?)
 
 class ProfileFileAccessor: FileAccessor {
     convenience init(profile: Profile) {
@@ -62,7 +60,8 @@ class ProfileFileAccessor: FileAccessor {
 
         // Bug 1147262: First option is for device, second is for simulator.
         var rootPath: String
-        if let sharedContainerIdentifier = AppInfo.sharedContainerIdentifier(), let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: sharedContainerIdentifier) {
+        let sharedContainerIdentifier = AppInfo.sharedContainerIdentifier()
+        if let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: sharedContainerIdentifier) {
             rootPath = url.path
         } else {
             log.error("Unable to find the shared container. Defaulting profile location to ~/Documents instead.")
@@ -152,6 +151,7 @@ protocol Profile: class {
     var logins: BrowserLogins & SyncableLogins & ResettableSyncStorage { get }
     var certStore: CertStore { get }
     var recentlyClosedTabs: ClosedTabsStore { get }
+    var panelDataObservers: PanelDataObservers { get }
 
     var isShutdown: Bool { get }
     
@@ -258,6 +258,7 @@ open class BrowserProfile: Profile {
         // Setup our database handles
         self.loginsDB = BrowserDB(filename: "logins.db", secretKey: BrowserProfile.loginsKey, files: files)
         self.db = BrowserDB(filename: "browser.db", files: files)
+        self.db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
 
         let notificationCenter = NotificationCenter.default
 
@@ -407,6 +408,10 @@ open class BrowserProfile: Profile {
         return self.places
     }
 
+    lazy var panelDataObservers: PanelDataObservers = {
+        return PanelDataObservers(profile: self)
+    }()
+
     lazy var metadata: Metadata = {
         return SQLiteMetadata(db: self.db)
     }()
@@ -504,6 +509,9 @@ open class BrowserProfile: Profile {
     var accountConfiguration: FirefoxAccountConfiguration {
         if prefs.boolForKey("useChinaSyncService") ?? isChinaEdition {
             return ChinaEditionFirefoxAccountConfiguration()
+        }
+        if prefs.boolForKey("useStageSyncService") ?? false {
+            return StageFirefoxAccountConfiguration()
         }
         return ProductionFirefoxAccountConfiguration()
     }
@@ -656,17 +664,14 @@ open class BrowserProfile: Profile {
                     reportAdHocEndSyncingStatus(displayState: syncDisplayState, engineResults: result.engineResults)
                 }
 
-                reportSyncPingForResult(opResult: result)
+                let syncPing = SyncPing(account: profile.account, why: .schedule, syncOperationResult: result)
+                Telemetry.send(ping: syncPing, docType: .sync)
             } else {
                 log.debug("Profile isn't sending usage data. Not sending sync status event.")
             }
             
             notifySyncing(notification: NotificationProfileDidFinishSyncing)
             syncReducer = nil
-        }
-
-        fileprivate func reportSyncPingForResult(opResult: SyncOperationResult) {
-            // TODO: Send sync report to telemetry client for storage/sending
         }
 
         fileprivate func reportAdHocEndSyncingStatus(displayState: SyncDisplayState?, engineResults: Maybe<EngineResults>?) {
@@ -816,7 +821,8 @@ open class BrowserProfile: Profile {
             let loginsCollections = ["passwords"]
             let browserCollections = ["bookmarks", "history", "tabs"]
 
-            switch name ?? "<all>" {
+            let dbName = name ?? "<all>"
+            switch dbName {
             case "<all>":
                 return self.locallyResetCollections(loginsCollections + browserCollections)
             case "logins.db":
@@ -824,7 +830,7 @@ open class BrowserProfile: Profile {
             case "browser.db":
                 return self.locallyResetCollections(browserCollections)
             default:
-                log.debug("Unknown database \(name).")
+                log.debug("Unknown database \(dbName).")
                 return succeed()
             }
         }
@@ -839,7 +845,7 @@ open class BrowserProfile: Profile {
         func onDatabaseWasRecreated(notification: NSNotification) {
             log.debug("Database was recreated.")
             let name = notification.object as? String
-            log.debug("Database was \(name).")
+            log.debug("Database was \(name ?? "nil").")
 
             // We run this in the background after a few hundred milliseconds;
             // it doesn't really matter when it runs, so long as it doesn't
@@ -847,7 +853,7 @@ open class BrowserProfile: Profile {
 
             let resetDatabase = {
                 return self.handleRecreationOfDatabaseNamed(name: name) >>== {
-                    log.debug("Reset of \(name) done")
+                    log.debug("Reset of \(name ?? "nil") done")
                 }
             }
 
@@ -1109,7 +1115,7 @@ open class BrowserProfile: Profile {
                 return deferMaybe(statuses)
             }
 
-            if (!isSyncing) {
+            if !isSyncing {
                 // A sync isn't already going on, so start another one.
                 let statsSession = SyncOperationStatsSession(why: why, uid: account.uid, deviceID: account.deviceRegistration?.id)
                 let reducer = AsyncReducer<EngineResults, EngineTasks>(initialValue: [], queue: syncQueue) { (statuses, synchronizers)  in
@@ -1149,8 +1155,9 @@ open class BrowserProfile: Profile {
         }
 
         // This SHOULD NOT be called directly: use syncSeveral instead.
-        fileprivate func syncWith(synchronizers: [(EngineIdentifier, SyncFunction)], account: FirefoxAccount,
-                              statsSession: SyncOperationStatsSession) -> Deferred<Maybe<[(EngineIdentifier, SyncStatus)]>> {
+        fileprivate func syncWith(synchronizers: [(EngineIdentifier, SyncFunction)],
+                                  account: FirefoxAccount,
+                                  statsSession: SyncOperationStatsSession) -> Deferred<Maybe<[(EngineIdentifier, SyncStatus)]>> {
             log.info("Syncing \(synchronizers.map { $0.0 })")
             let authState = account.syncAuthState
             let delegate = self.profile.getSyncDelegate()
@@ -1188,6 +1195,40 @@ open class BrowserProfile: Profile {
                 log.debug("Running delayed startup sync.")
                 self.syncEverything(why: .startup)
             }
+        }
+
+        /**
+         * Allows selective sync of different collections, for use by external APIs.
+         * Some help is given to callers who use different namespaces (specifically: `passwords` is mapped to `logins`)
+         * and to preserve some ordering rules.
+         */
+        public func syncNamedCollections(why: SyncReason, names: [String]) -> Success {
+            // Massage the list of names into engine identifiers.
+            let engineIdentifiers = names.map { name -> [EngineIdentifier] in
+                switch name {
+                case "passwords":
+                    return ["logins"]
+                case "tabs":
+                    return ["clients", "tabs"]
+                default:
+                    return [name]
+                }
+            }.flatMap { $0 }
+
+            // By this time, `engineIdentifiers` may have duplicates in. We won't try and dedupe here
+            // because `syncSeveral` will do that for us.
+
+            let synchronizers: [(EngineIdentifier, SyncFunction)] = engineIdentifiers.flatMap {
+                switch $0 {
+                case "clients": return ("clients", self.syncClientsWithDelegate)
+                case "tabs": return ("tabs", self.syncTabsWithDelegate)
+                case "logins": return ("logins", self.syncLoginsWithDelegate)
+                case "bookmarks": return ("bookmarks", self.mirrorBookmarksWithDelegate)
+                case "history": return ("history", self.syncHistoryWithDelegate)
+                default: return nil
+                }
+            }
+            return self.syncSeveral(why: why, synchronizers: synchronizers) >>> succeed
         }
 
         @objc func syncOnTimer() {

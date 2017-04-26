@@ -25,9 +25,9 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
     func waitForReadingList() {
         let readingList = GREYCondition(name: "wait until Reading List Add btn appears", block: { _ in
             var errorOrNil: NSError?
-            let matcher = grey_allOfMatchers([grey_accessibilityLabel("Add to Reading List"),
+            let matcher = grey_allOf([grey_accessibilityLabel("Add to Reading List"),
                                               grey_sufficientlyVisible()])
-            EarlGrey.select(elementWithMatcher: matcher!)
+            EarlGrey.select(elementWithMatcher: matcher)
                 .assert(grey_notNil(), error: &errorOrNil)
             let success = errorOrNil == nil
             return success
@@ -39,9 +39,9 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
     func waitForEmptyReadingList() {
         let readable = GREYCondition(name: "Check readable list is empty", block: { _ in
             var errorOrNil: NSError?
-            let matcher = grey_allOfMatchers([grey_accessibilityLabel("Readable page"),
+            let matcher = grey_allOf([grey_accessibilityLabel("Readable page"),
                                               grey_sufficientlyVisible()])
-            EarlGrey.select(elementWithMatcher: matcher!)
+            EarlGrey.select(elementWithMatcher: matcher)
                 .assert(grey_notNil(), error: &errorOrNil)
             
             let success = errorOrNil != nil
@@ -95,7 +95,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
         waitForEmptyReadingList()
         
         EarlGrey.select(elementWithMatcher:
-            grey_allOfMatchers([grey_accessibilityLabel("Cancel"),
+            grey_allOf([grey_accessibilityLabel("Cancel"),
                                 grey_accessibilityTrait(UIAccessibilityTraitButton),
                                 grey_sufficientlyVisible()]))
             .perform(grey_tap())
@@ -121,7 +121,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Reading list"))
             .perform(grey_tap())
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("MarkAsRead"))
-            .inRoot(grey_kindOfClass(NSClassFromString("UITableViewCellContentView")))
+            .inRoot(grey_kindOfClass(NSClassFromString("UITableViewCellContentView")!))
             .assert(grey_notNil())
         // Select to Read
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("localhost"))
@@ -138,7 +138,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Readable page"))
             .assert(grey_notNil())
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("MarkAsUnread"))
-            .inRoot(grey_kindOfClass(NSClassFromString("UITableViewCellContentView")))
+            .inRoot(grey_kindOfClass(NSClassFromString("UITableViewCellContentView")!))
             .assert(grey_notNil())
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("localhost"))
             .assert(grey_notNil())
@@ -147,7 +147,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Readable page"))
             .perform(grey_swipeSlowInDirection(GREYDirection.left))
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Remove"))
-            .inRoot(grey_kindOfClass(NSClassFromString("_UITableViewCellActionButton")))
+            .inRoot(grey_kindOfClass(NSClassFromString("_UITableViewCellActionButton")!))
             .perform(grey_tap())
         
         // check the entry no longer exist

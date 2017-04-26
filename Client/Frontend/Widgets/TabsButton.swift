@@ -196,13 +196,13 @@ class TabsButton: UIControl {
             var newFlipTransform = CATransform3DIdentity
             newFlipTransform = CATransform3DTranslate(newFlipTransform, 0, halfTitleHeight, 0)
             newFlipTransform.m34 = -1.0 / 200.0 // add some perspective
-            newFlipTransform = CATransform3DRotate(newFlipTransform, CGFloat(-M_PI_2), 1.0, 0.0, 0.0)
+            newFlipTransform = CATransform3DRotate(newFlipTransform, CGFloat(-(Double.pi / 2)), 1.0, 0.0, 0.0)
             newTabsButton.insideButton.layer.transform = newFlipTransform
             
             var oldFlipTransform = CATransform3DIdentity
             oldFlipTransform = CATransform3DTranslate(oldFlipTransform, 0, halfTitleHeight, 0)
             oldFlipTransform.m34 = -1.0 / 200.0 // add some perspective
-            oldFlipTransform = CATransform3DRotate(oldFlipTransform, CGFloat(M_PI_2), 1.0, 0.0, 0.0)
+            oldFlipTransform = CATransform3DRotate(oldFlipTransform, CGFloat(-(Double.pi / 2)), 1.0, 0.0, 0.0)
             
             let animate = {
                 newTabsButton.insideButton.layer.transform = CATransform3DIdentity

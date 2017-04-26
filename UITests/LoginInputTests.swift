@@ -39,9 +39,9 @@ class LoginInputTests: KIFTestCase {
         
         let saveLoginDialog = GREYCondition(name: "Check login dialog appears", block: { _ in
             var errorOrNil: NSError?
-            let matcher = grey_allOfMatchers([grey_accessibilityLabel(text),
+            let matcher = grey_allOf([grey_accessibilityLabel(text),
                                               grey_sufficientlyVisible()])
-            EarlGrey.select(elementWithMatcher: matcher!)
+            EarlGrey.select(elementWithMatcher: matcher)
                 .assert(grey_notNil(), error: &errorOrNil)
             if appears == true {
                 success = errorOrNil == nil

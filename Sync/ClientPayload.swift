@@ -16,8 +16,8 @@ open class ClientPayload: CleartextPayloadJSON {
             return true
         }
 
-        return self["name"].type == Type.string &&
-               self["type"].type == Type.string
+        return self["name"].isString() &&
+               self["type"].isString()
     }
 
     var commands: [JSON] {

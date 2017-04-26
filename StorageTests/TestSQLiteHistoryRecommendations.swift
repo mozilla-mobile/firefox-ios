@@ -17,6 +17,32 @@ private let oneDayInMicroseconds: UInt64 = 24 * oneHourInMicroseconds
 class TestSQLiteHistoryRecommendations: XCTestCase {
     let files = MockFiles()
 
+    var db: BrowserDB!
+    var prefs: MockProfilePrefs!
+    var history: SQLiteHistory!
+    var bookmarks: SQLiteBookmarkBufferStorage!
+
+    override func setUp() {
+        super.setUp()
+
+        db = BrowserDB(filename: "browser.db", files: files)
+        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
+        prefs = MockProfilePrefs()
+        history = SQLiteHistory(db: db, prefs: prefs)
+        bookmarks = SQLiteBookmarkBufferStorage(db: db)
+    }
+
+    override func tearDown() {
+        // Clear out anything we might have changed on disk
+        history.clearHistory().succeeded()
+        history.clearHighlights().succeeded()
+        db.run("DELETE FROM \(AttachedTablePageMetadata)").succeeded()
+        SDWebImageManager.shared().imageCache.clearDisk()
+        SDWebImageManager.shared().imageCache.clearMemory()
+
+        super.tearDown()
+    }
+
     /*
      * Verify that we return a non-recent history highlight if:
      *
@@ -26,10 +52,6 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
      *
      */
     func testHistoryHighlights() {
-        let db = BrowserDB(filename: "browser.db", files: files)
-        let prefs = MockProfilePrefs()
-        let history = SQLiteHistory(db: db, prefs: prefs)
-
         let startTime = Date.nowMicroseconds()
         let oneHourAgo = startTime - oneHourInMicroseconds
         let fifteenMinutesAgo = startTime - 15 * microsecondsPerMinute
@@ -48,7 +70,7 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         let siteVisitA1 = SiteVisit(site: siteA, date: oneHourAgo, type: .link)
         let siteVisitB1 = SiteVisit(site: siteB, date: fifteenMinutesAgo, type: .link)
 
-        let siteVisitC1 = SiteVisit(site: siteC, date: oneHourAgo, type: .link)
+        let siteVisitC1 = SiteVisit(site: siteC, date: oneHourAgo + 1, type: .link)
         let siteVisitC2 = SiteVisit(site: siteC, date: oneHourAgo + 1000, type: .link)
         let siteVisitC3 = SiteVisit(site: siteC, date: oneHourAgo + 2000, type: .link)
         
@@ -71,6 +93,7 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         history.addLocalVisit(siteVisitD3).succeeded()
         history.addLocalVisit(siteVisitD4).succeeded()
 
+        history.invalidateHighlights().succeeded()
         let highlights = history.getHighlights().value.successValue!
         XCTAssertEqual(highlights.count, 2)
         XCTAssertEqual(highlights[0]!.title, "A")
@@ -86,11 +109,6 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
      *
      */
     func testBookmarkHighlights() {
-        let db = BrowserDB(filename: "browser.db", files: files)
-        let prefs = MockProfilePrefs()
-        let history = SQLiteHistory(db: db, prefs: prefs)
-        let bookmarks = SQLiteBookmarkBufferStorage(db: db)
-
         let startTime = Date.nowMicroseconds()
         let oneHourAgo = startTime - oneHourInMicroseconds
         let fourDaysAgo = startTime - 4 * oneDayInMicroseconds
@@ -130,6 +148,7 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         history.addLocalVisit(bookmarkVisitB3).succeeded()
         history.addLocalVisit(bookmarkVisitB4).succeeded()
 
+        history.invalidateHighlights().succeeded()
         let highlights = history.getHighlights().value.successValue!
         XCTAssertEqual(highlights.count, 1)
         XCTAssertEqual(highlights[0]!.title, "A Bookmark")
@@ -141,10 +160,6 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
      *
      */
     func testBlacklistHighlights() {
-        let db = BrowserDB(filename: "browser.db", files: files)
-        let prefs = MockProfilePrefs()
-        let history = SQLiteHistory(db: db, prefs: prefs)
-
         let startTime = Date.nowMicroseconds()
         let oneHourAgo = startTime - oneHourInMicroseconds
         let fifteenMinutesAgo = startTime - 15 * microsecondsPerMinute
@@ -186,6 +201,7 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         history.addLocalVisit(siteVisitD3).succeeded()
         history.addLocalVisit(siteVisitD4).succeeded()
 
+        history.invalidateHighlights().succeeded()
         let highlights = history.getHighlights().value.successValue!
         XCTAssertEqual(highlights.count, 0)
     }
@@ -194,10 +210,6 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
      * Verify that we return the most recent highlight per domain
      */
     func testMostRecentUniqueDomainReturnedInHighlights() {
-        let db = BrowserDB(filename: "browser.db", files: files)
-        let prefs = MockProfilePrefs()
-        let history = SQLiteHistory(db: db, prefs: prefs)
-
         let startTime = Date.nowMicroseconds()
         let oneHourAgo = startTime - oneHourInMicroseconds
         let twoHoursAgo = startTime - 2 * oneHourInMicroseconds
@@ -220,16 +232,13 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         history.addLocalVisit(siteVisitC1).succeeded()
         history.addLocalVisit(siteVisitC2).succeeded()
 
+        history.invalidateHighlights().succeeded()
         let highlights = history.getHighlights().value.successValue!
         XCTAssertEqual(highlights.count, 1)
         XCTAssertEqual(highlights[0]!.title, "A")
     }
 
     func testMetadataReturnedInHighlights() {
-        let db = BrowserDB(filename: "browser.db", files: files)
-        let prefs = MockProfilePrefs()
-        let history = SQLiteHistory(db: db, prefs: prefs)
-
         let startTime = Date.nowMicroseconds()
         let oneHourAgo = startTime - oneHourInMicroseconds
 
@@ -265,6 +274,7 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
                                  title: siteC.title, description: "Test Description", type: nil, providerName: nil, mediaDataURI: nil, cacheImages: false)
         metadata.storeMetadata(pageC, forPageURL: siteC.url.asURL!, expireAt: Date.now() + 3000).succeeded()
 
+        history.invalidateHighlights().succeeded()
         let highlights = history.getHighlights().value.successValue!
         XCTAssertEqual(highlights.count, 3)
 
@@ -272,10 +282,47 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
             XCTAssertNotNil(highlight?.metadata)
             XCTAssertNotNil(highlight?.metadata?.mediaURL)
         }
+    }
 
-        db.run("DELETE FROM \(TablePageMetadata)").succeeded()
-        SDWebImageManager.shared().imageCache.clearDisk()
-        SDWebImageManager.shared().imageCache.clearMemory()
+    func testRemoveHighlightForURL() {
+        let startTime = Date.nowMicroseconds()
+        let oneHourAgo = startTime - oneHourInMicroseconds
+
+        let siteA = Site(url: "http://siteA/", title: "A")
+        let siteVisitA1 = SiteVisit(site: siteA, date: oneHourAgo, type: .link)
+
+        history.clearHistory().succeeded()
+        history.addLocalVisit(siteVisitA1).succeeded()
+
+        history.invalidateHighlights().succeeded()
+        var highlights = history.getHighlights().value.successValue!
+        XCTAssertEqual(highlights.count, 1)
+        XCTAssertEqual(highlights[0]!.title, "A")
+
+        history.removeHighlightForURL(siteA.url).succeeded()
+        history.invalidateHighlights().succeeded()
+        highlights = history.getHighlights().value.successValue!
+        XCTAssertEqual(highlights.count, 0)
+    }
+
+    func testClearHighlightsCache() {
+        let startTime = Date.nowMicroseconds()
+        let oneHourAgo = startTime - oneHourInMicroseconds
+
+        let siteA = Site(url: "http://siteA/", title: "A")
+        let siteVisitA1 = SiteVisit(site: siteA, date: oneHourAgo, type: .link)
+
+        history.clearHistory().succeeded()
+        history.addLocalVisit(siteVisitA1).succeeded()
+
+        history.invalidateHighlights().succeeded()
+        var highlights = history.getHighlights().value.successValue!
+        XCTAssertEqual(highlights.count, 1)
+        XCTAssertEqual(highlights[0]!.title, "A")
+
+        history.clearHighlights().succeeded()
+        highlights = history.getHighlights().value.successValue!
+        XCTAssertEqual(highlights.count, 0)
     }
 }
 
@@ -283,17 +330,18 @@ class TestSQLiteHistoryRecommendationsPerf: XCTestCase {
     func testRecommendationPref() {
         let files = MockFiles()
         let db = BrowserDB(filename: "browser.db", files: files)
+        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
         let bookmarks = SQLiteBookmarkBufferStorage(db: db)
 
         let count = 500
 
-        history.clearHistory().value
+        history.clearHistory().succeeded()
         populateForRecommendationCalculations(history, bookmarks: bookmarks, historyCount: count, bookmarkCount: count)
         self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true) {
             for _ in 0...5 {
-                history.getHighlights().value
+                history.invalidateHighlights().succeeded()
             }
             self.stopMeasuring()
         }
@@ -307,7 +355,7 @@ private func populateForRecommendationCalculations(_ history: SQLiteHistory, boo
         let site = Site(url: "http://s\(i)ite\(i)/foo", title: "A \(i)")
         site.guid = "abc\(i)def"
 
-        history.insertOrUpdatePlace(site.asPlace(), modified: baseMillis).value
+        history.insertOrUpdatePlace(site.asPlace(), modified: baseMillis).succeeded()
 
         for j in 0...20 {
             let visitTime = advanceMicrosecondTimestamp(baseInstantInMicros, by: (1000000 * i) + (1000 * j))

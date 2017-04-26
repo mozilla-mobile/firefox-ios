@@ -14,22 +14,24 @@ private struct ActionOverlayTableViewUX {
     static let DescriptionLabelColor = UIColor(colorString: "919191")
     static let PlaceholderImage = UIImage(named: "defaultTopSiteIcon")
     static let CornerRadius: CGFloat = 3
+    static let BorderWidth: CGFloat = 0.5
+    static let BorderColor = UIColor(white: 0, alpha: 0.1)
     static let SiteImageViewSize = 48
     static let IconSize = CGSize(width: 32, height: 32)
 }
 
-class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate {
     fileprivate(set) var actions: [ActionOverlayTableViewAction]
 
-    fileprivate var site: Site
-    fileprivate var tableView = UITableView()
-    fileprivate var headerImage: UIImage?
-    fileprivate var headerImageBackgroundColor: UIColor?
+    private var site: Site
+    private var tableView = UITableView()
+
     lazy var tapRecognizer: UITapGestureRecognizer = {
         let tapRecognizer = UITapGestureRecognizer()
         tapRecognizer.addTarget(self, action: #selector(ActionOverlayTableViewController.dismiss(_:)))
         tapRecognizer.numberOfTapsRequired = 1
         tapRecognizer.cancelsTouchesInView = false
+        tapRecognizer.delegate = self
         return tapRecognizer
     }()
 
@@ -40,11 +42,9 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
         return visualEffectView
     }()
 
-    init(site: Site, actions: [ActionOverlayTableViewAction], siteImage: UIImage?, siteBGColor: UIColor?) {
+    init(site: Site, actions: [ActionOverlayTableViewAction]) {
         self.site = site
         self.actions = actions
-        self.headerImage = siteImage
-        self.headerImageBackgroundColor = siteBGColor
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -85,7 +85,7 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
         make.height.equalTo(ActionOverlayTableViewUX.HeaderHeight + CGFloat(actions.count) * ActionOverlayTableViewUX.RowHeight).priority(10)
     }
 
-    func dismiss(_ gestureRecognizer: UIGestureRecognizer) {
+    func dismiss(_ gestureRecognizer: UIGestureRecognizer?) {
         self.dismiss(animated: true, completion: nil)
     }
 
@@ -112,6 +112,13 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
         }
     }
 
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        if tableView.frame.contains(touch.location(in: self.view)) {
+            return false
+        }
+        return true
+    }
+
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -121,10 +128,13 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
         let action = actions[indexPath.row]
         guard let handler = actions[indexPath.row].handler else {
+            self.dismiss(nil)
             return
         }
+        self.dismiss(nil)
         return handler(action)
     }
 
@@ -149,7 +159,7 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "ActionOverlayTableViewHeader") as! ActionOverlayTableViewHeader
-        header.configureWithSite(site, image: headerImage, imageBackgroundColor: headerImageBackgroundColor)
+        header.configureWithSite(site)
         return header
     }
 }
@@ -177,6 +187,8 @@ class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
         let siteImageView = UIImageView()
         siteImageView.contentMode = UIViewContentMode.center
         siteImageView.layer.cornerRadius = ActionOverlayTableViewUX.CornerRadius
+        siteImageView.layer.borderColor = ActionOverlayTableViewUX.BorderColor.cgColor
+        siteImageView.layer.borderWidth = ActionOverlayTableViewUX.BorderWidth
         return siteImageView
     }()
 
@@ -219,9 +231,16 @@ class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configureWithSite(_ site: Site, image: UIImage?, imageBackgroundColor: UIColor?) {
-        self.siteImageView.backgroundColor = imageBackgroundColor
-        self.siteImageView.image = image?.createScaled(ActionOverlayTableViewUX.IconSize) ?? ActionOverlayTableViewUX.PlaceholderImage
+    override func prepareForReuse() {
+        self.siteImageView.image = nil
+        self.siteImageView.backgroundColor = UIColor.clear
+    }
+
+    func configureWithSite(_ site: Site) {
+        self.siteImageView.setFavicon(forSite: site) { (color, url) in
+            self.siteImageView.backgroundColor = color
+            self.siteImageView.image = self.siteImageView.image?.createScaled(ActionOverlayTableViewUX.IconSize)
+        }
         self.titleLabel.text = site.title.characters.count <= 1 ? site.url : site.title
         self.descriptionLabel.text = site.tileURL.baseDomain
     }

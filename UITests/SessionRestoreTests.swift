@@ -49,9 +49,9 @@ class SessionRestoreTests: KIFTestCase {
             .perform(grey_tap())
         let wentBack = GREYCondition(name: "Check browser went back", block: { _ in
             var errorOrNil: NSError?
-            let matcher = grey_allOfMatchers([grey_accessibilityLabel("Top sites"),
+            let matcher = grey_allOf([grey_accessibilityLabel("Top sites"),
                                               grey_sufficientlyVisible()])
-            EarlGrey.select(elementWithMatcher: matcher!).assert(grey_notNil(), error: &errorOrNil)
+            EarlGrey.select(elementWithMatcher: matcher).assert(grey_notNil(), error: &errorOrNil)
             let success = errorOrNil == nil
             return success
         }).wait(withTimeout: 5)

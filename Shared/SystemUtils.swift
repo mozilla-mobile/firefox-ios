@@ -49,9 +49,7 @@ extension SystemUtils {
     }
 
     private static var lockedDeviceURL: URL? {
-        guard let groupIdentifier = AppInfo.sharedContainerIdentifier() else {
-            return nil
-        }
+        let groupIdentifier = AppInfo.sharedContainerIdentifier()
         let directoryURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: groupIdentifier)
         return directoryURL?.appendingPathComponent("security.dummy")
     }

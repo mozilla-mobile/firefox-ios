@@ -7,10 +7,16 @@ import Foundation
 import GCDWebServers
 import XCGLogger
 import SwiftyJSON
+import Shared
 
 private let log = Logger.browserLogger
 private let ServerURL = "https://incoming.telemetry.mozilla.org".asURL!
 private let AppName = "Fennec"
+
+public enum TelemetryDocType: String {
+    case core = "core"
+    case sync = "sync"
+}
 
 public protocol TelemetryEvent {
     func record(_ prefs: Prefs)
@@ -18,6 +24,7 @@ public protocol TelemetryEvent {
 
 open class Telemetry {
     private static var prefs: Prefs?
+    private static var telemetryVersion: Int = 4
 
     open class func initWithPrefs(_ prefs: Prefs) {
         assert(self.prefs == nil, "Prefs already initialized")
@@ -33,11 +40,8 @@ open class Telemetry {
         event.record(prefs)
     }
 
-    open class func sendPing(_ ping: TelemetryPing) {
-        let payload = ping.payload.stringValue()
-
+    open class func send(ping: TelemetryPing, docType: TelemetryDocType) {
         let docID = UUID().uuidString
-        let docType = "core"
         let appVersion = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! String
         let buildID = Bundle.main.object(forInfoDictionaryKey: kCFBundleVersionKey as String) as! String
 
@@ -49,14 +53,24 @@ open class Telemetry {
         default: channel = "default"
         }
 
-        let path = "/submit/telemetry/\(docID)/\(docType)/\(AppName)/\(appVersion)/\(channel)/\(buildID)"
+        let path = "/submit/telemetry/\(docID)/\(docType.rawValue)/\(AppName)/\(appVersion)/\(channel)/\(buildID)"
         let url = ServerURL.appendingPathComponent(path)
         var request = URLRequest(url: url)
 
         log.debug("Ping URL: \(url)")
-        log.debug("Ping payload: \(payload)")
+        log.debug("Ping payload: \(ping.payload.stringValue() ?? "")")
 
-        guard let body = payload?.data(using: String.Encoding.utf8) else {
+        // Don't add the common ping format for the mobile core ping.
+        let pingString: String?
+        if docType != .core {
+            var json = JSON(commonPingFormat(forType: docType))
+            json["payload"] = ping.payload
+            pingString = json.stringValue()
+        } else {
+            pingString = ping.payload.stringValue()
+        }
+
+        guard let body = pingString?.data(using: String.Encoding.utf8) else {
             log.error("Invalid data!")
             assertionFailure()
             return
@@ -75,6 +89,35 @@ open class Telemetry {
         SessionManager.default.request(request).response { response in
             log.debug("Ping response: \(response.response?.statusCode ?? -1).")
         }
+    }
+
+    private static func commonPingFormat(forType type: TelemetryDocType) -> [String: Any] {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        let date = formatter.string(from: NSDate() as Date)
+        let displayVersion =  [
+            AppInfo.appVersion,
+            "b",
+            AppInfo.buildNumber
+        ].joined()
+        let version = ProcessInfo.processInfo.operatingSystemVersion
+        let osVersion = "\(version.majorVersion).\(version.minorVersion).\(version.patchVersion)"
+
+        return [
+            "type": type.rawValue,
+            "id": UUID().uuidString,
+            "creationDate": date,
+            "version": Telemetry.telemetryVersion,
+            "application": [
+                "architecture": "arm",
+                "buildId": AppInfo.buildNumber,
+                "name": AppInfo.displayName,
+                "version": AppInfo.appVersion,
+                "displayVersion": displayVersion,
+                "platformVersion": osVersion,
+                "channel": AppConstants.BuildChannel.rawValue
+            ]
+        ]
     }
 }
 

@@ -32,14 +32,14 @@ class BrowserTests: KIFTestCase {
         
         // Show share sheet and wait for the JS prompt to fire
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Share")).perform(grey_tap())
-        let matcher = grey_allOfMatchers([grey_accessibilityLabel("Cancel"),
+        let matcher = grey_allOf([grey_accessibilityLabel("Cancel"),
                                           grey_accessibilityTrait(UIAccessibilityTraitButton),
                                           grey_sufficientlyVisible()])
-        EarlGrey.select(elementWithMatcher: matcher!).perform(grey_tap())
+        EarlGrey.select(elementWithMatcher: matcher).perform(grey_tap())
         
         // Check to see if the JS Prompt is dequeued and showing
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("OK"))
-            .inRoot(grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")))
+            .inRoot(grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")!))
             .assert(grey_enabled())
             .perform((grey_tap()))
     }

@@ -340,7 +340,7 @@ open class Sync15StorageClient {
 
     func errorWrap<T, U>(_ deferred: Deferred<Maybe<T>>, handler: @escaping (DataResponse<U>) -> Void) -> (DataResponse<U>) -> Void {
         return { response in
-            log.verbose("Response is \(response.response).")
+            log.verbose("Response is \(response.response ??? "nil").")
 
             /**
              * Returns true if handled.
@@ -386,7 +386,7 @@ open class Sync15StorageClient {
 
             // Check for an error from the request processor.
             if response.result.isFailure {
-                log.error("Response: \(response.response?.statusCode ?? 0). Got error \(response.result.error).")
+                log.error("Response: \(response.response?.statusCode ?? 0). Got error \(response.result.error ??? "nil").")
 
                 // If we got one, we don't want to hit the response nil case above and
                 // return a RecordParseError, because a RequestError is more fitting.
@@ -754,7 +754,7 @@ open class Sync15CollectionClient<T: CleartextPayloadJSON> {
             params.append(URLQueryItem(name: "sort", value: sort.rawValue))
         }
 
-        log.debug("Issuing GET with newer = \(since), offset = \(offset), sort = \(sort).")
+        log.debug("Issuing GET with newer = \(since), offset = \(offset ??? "nil"), sort = \(sort ??? "nil").")
         let req = client.requestGET(self.collectionURI.withQueryParams(params))
 
         let _ = req.responsePartialParsedJSON(queue: collectionQueue, completionHandler: self.client.errorWrap(deferred) { (response: DataResponse<JSON>) in

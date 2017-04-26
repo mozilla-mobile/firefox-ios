@@ -28,7 +28,7 @@ private class LoginsTable: Table {
     func run(_ db: SQLiteDBConnection, sql: String, args: Args? = nil) -> Bool {
         let err = db.executeChange(sql, withArgs: args)
         if err != nil {
-            log.error("Error running SQL in LoginsTable. \(err?.localizedDescription)")
+            log.error("Error running SQL in LoginsTable: \(err?.localizedDescription ?? "nil")")
             log.error("SQL was \(sql)")
         }
         return err == nil
@@ -305,7 +305,7 @@ open class SQLiteLogins: BrowserLogins {
         }
 
         if Logger.logPII {
-            log.debug("Looking for login: \(username), \(args[0])")
+            log.debug("Looking for login with username: \(username ?? "nil"), first arg: \(args[0] ?? "nil")")
         }
 
         let sql =

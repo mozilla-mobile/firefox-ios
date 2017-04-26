@@ -6,6 +6,7 @@ import Foundation
 import Shared
 import UIKit
 import SwiftyJSON
+import Telemetry
 
 private let PrefKeyProfileDate = "PrefKeyProfileDate"
 private let PrefKeyPingCount = "PrefKeyPingCount"

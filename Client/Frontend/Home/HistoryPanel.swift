@@ -469,13 +469,13 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
                                     // 1. add a new section if the section didn't previously exist
                                     if oldCategory.section == nil && category.section != oldCategory.section {
-                                        log.debug("adding section \(category.section)")
+                                        log.debug("adding section \(category.section ?? 0)")
                                         sectionsToAdd.add(category.section!)
                                     }
 
                                     // 2. add a new row if there are more rows now than there were before
                                     if oldCategory.rows < category.rows {
-                                        log.debug("adding row to \(category.section) at \(category.rows-1)")
+                                        log.debug("adding row to \(category.section ?? 0)) at \(category.rows-1)")
                                         rowsToAdd.append(IndexPath(row: category.rows-1, section: category.section!))
                                     }
 
@@ -489,10 +489,10 @@ class HistoryPanel: SiteTableViewController, HomePanel {
                                             sectionsToDelete.add(indexPath.section)
                                         } else if oldCategory.section == category.section {
                                             if oldCategory.rows > category.rows {
-                                                log.debug("deleting row from \(category.section) at \(indexPath.row)")
+                                                log.debug("deleting row from \(category.section ?? 0) at \(indexPath.row)")
                                                 rowsToDelete.append(indexPath)
                                             } else if category.rows == oldCategory.rows {
-                                                log.debug("in section \(category.section), removing row at \(indexPath.row) and inserting row at \(category.rows-1)")
+                                                log.debug("in section \(category.section ?? 0), removing row at \(indexPath.row) and inserting row at \(category.rows-1)")
                                                 rowsToDelete.append(indexPath)
                                                 rowsToAdd.append(IndexPath(row: category.rows-1, section: indexPath.section))
                                             }

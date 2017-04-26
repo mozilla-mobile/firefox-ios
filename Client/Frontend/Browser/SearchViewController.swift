@@ -5,6 +5,7 @@
 import UIKit
 import Shared
 import Storage
+import Telemetry
 
 private let PromptMessage = NSLocalizedString("Turn on search suggestions?", tableName: "Search", comment: "Prompt shown before enabling provider search queries")
 private let PromptYes = NSLocalizedString("Yes", tableName: "Search", comment: "For search suggestions prompt. This string should be short so it fits nicely on the prompt row.")
@@ -486,9 +487,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         self.data = data
         tableView.reloadData()
     }
-}
 
-extension SearchViewController {
     func tableView(_ tableView: UITableView, didSelectRowAtIndexPath indexPath: IndexPath) {
         let section = SearchListSection(rawValue: indexPath.section)!
         if section == SearchListSection.bookmarksAndHistory {
@@ -519,9 +518,7 @@ extension SearchViewController {
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 0
     }
-}
 
-extension SearchViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch SearchListSection(rawValue: indexPath.section)! {
         case .searchSuggestions:

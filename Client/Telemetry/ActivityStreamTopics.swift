@@ -3,17 +3,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import JSONSchema
-
-/*
- * A Ping Centre Topic has a name and an associated JSON schema describing the ping data.
- */
-public struct PingCentreTopic {
-    public let name: String
-    public let schema: Schema
-}
+import Telemetry
 
 // MARK: Activity Stream
-
 extension PingCentreTopic {
 
     static var ActivityStreamEvents: PingCentreTopic {

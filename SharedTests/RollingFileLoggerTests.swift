@@ -55,7 +55,7 @@ class RollingFileLoggerTests: XCTestCase {
         XCTAssertGreaterThan(directorySize, Int64(sizeLimit), "Log folder should be larger than size limit")
 
         let exceedsSmaller = try! manager.allocatedSizeOfDirectoryAtURL(dirURL, forFilesPrefixedWith: prefix, isLargerThanBytes: directorySize - 1)
-        let doesNotExceedLarger = try! manager.allocatedSizeOfDirectoryAtURL(dirURL, forFilesPrefixedWith: prefix, isLargerThanBytes: sizeLimit + 2)
+        let doesNotExceedLarger = try! manager.allocatedSizeOfDirectoryAtURL(dirURL, forFilesPrefixedWith: prefix, isLargerThanBytes: Int64(sizeLimit + 2))
         XCTAssertTrue(exceedsSmaller)
         XCTAssertTrue(doesNotExceedLarger)
 

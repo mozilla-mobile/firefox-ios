@@ -117,7 +117,7 @@ extension MockSyncableHistory: SyncableHistory {
                 if let existingLocal = self.places[place.guid] {
                     if existingLocal.shouldUpload {
                         log.debug("Record \(existingLocal.guid) modified locally and remotely.")
-                        log.debug("Local modified: \(existingLocal.localModified); remote: \(modified).")
+                        log.debug("Local modified: \(existingLocal.localModified ??? "nil"); remote: \(modified).")
 
                         // Should always be a value if marked as changed.
                         if existingLocal.localModified! > modified {
@@ -204,6 +204,35 @@ class HistorySynchronizerTests: XCTestCase {
         return (synchronizer, prefs, scratchpad)
     }
 
+    func testRecordSerialization() {
+        let id = "abcdefghi"
+        let modified: Timestamp = 0    // Ignored in upload serialization.
+        let sortindex = 1
+        let ttl = 12345
+        let json: JSON = JSON([
+            "id": id,
+            "visits": [],
+            "histUri": "http://www.slideshare.net/swadpasc/bpm-edu-netseminarscepwithreactionrulemlprova",
+            "title": "Semantic Complex Event Processing with \(Character(UnicodeScalar(11)))Reaction RuleML 1.0 and Prova",
+            ])
+        let payload = HistoryPayload(json)
+        let record = Record<HistoryPayload>(id: id, payload: payload, modified: modified, sortindex: sortindex, ttl: ttl)
+        let k = KeyBundle.random()
+        let s = k.serializer({ (x: HistoryPayload) -> JSON in x.json })
+        let converter = { (x: JSON) -> HistoryPayload in HistoryPayload(x) }
+        let f = k.factory(converter)
+        let serialized = s(record)!
+        let envelope = EnvelopeJSON(serialized)
+
+        // With a badly serialized payload, we get null JSON!
+        let p = f(envelope.payload)
+        XCTAssertFalse(p!.json.isNull())
+
+        // When we round-trip, the payload should be valid, and we'll get a record here.
+        let roundtripped = Record<HistoryPayload>.fromEnvelope(envelope, payloadFactory: f)
+        XCTAssertNotNil(roundtripped)
+    }
+
     func testApplyRecords() {
         let earliest = Date.now()
 
@@ -211,7 +240,7 @@ class HistorySynchronizerTests: XCTestCase {
         let noRecords = [Record<HistoryPayload>]()
 
         // Apply no records.
-        self.applyRecords(records: noRecords, toStorage: empty)
+        let _ = self.applyRecords(records: noRecords, toStorage: empty)
 
         // Hey look! Nothing changed.
         XCTAssertTrue(empty.places.isEmpty)

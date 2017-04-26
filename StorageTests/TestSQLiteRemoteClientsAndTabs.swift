@@ -136,7 +136,7 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
                 XCTAssertTrue($0.isSuccess)
                 e.fulfill()
             }
-            clientsAndTabs.insertOrUpdateTabsForClientGUID(c.client.guid, tabs: c.tabs)
+            clientsAndTabs.insertOrUpdateTabsForClientGUID(c.client.guid, tabs: c.tabs).succeeded()
         }
 
         let f = self.expectation(description: "Get after insert.")
@@ -163,7 +163,7 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
         ].sorted(by: byGUID)
 
         func doUpdate(_ guid: String?, tabs: [RemoteTab]) {
-            let g0 = self.expectation(description: "Update client \(guid).")
+            let g0 = self.expectation(description: "Update client: \(guid ?? "nil").")
             clientsAndTabs.insertOrUpdateTabsForClientGUID(guid, tabs: tabs).upon {
                 if let rowID = $0.successValue {
                     XCTAssertTrue(rowID > -1)
@@ -216,7 +216,7 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
                 XCTAssertTrue($0.isSuccess)
                 e.fulfill()
             }
-            clientsAndTabs.insertOrUpdateTabsForClientGUID(c.client.guid, tabs: c.tabs)
+            clientsAndTabs.insertOrUpdateTabsForClientGUID(c.client.guid, tabs: c.tabs).succeeded()
         }
 
         let e = self.expectation(description: "Get after insert.")

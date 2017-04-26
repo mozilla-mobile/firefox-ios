@@ -142,6 +142,9 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         let dismissKeyboardGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(HomePanelViewController.SELhandleDismissKeyboardGestureRecognizer(_:)))
         dismissKeyboardGestureRecognizer.cancelsTouchesInView = false
         buttonContainerView.addGestureRecognizer(dismissKeyboardGestureRecognizer)
+
+        // Invalidate our activity stream data sources whenever we open up the home panels
+        self.profile.panelDataObservers.activityStream.invalidate()
     }
 
     fileprivate func updateAppState() {

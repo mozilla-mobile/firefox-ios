@@ -48,9 +48,6 @@
             </BuildableReference>
             <SkippedTests>
                <Test
-                    Identifier = "LivePushClientTests">
-               </Test>
-               <Test
                   Identifier = "SyncAuthStateTests/testLive()">
                </Test>
             </SkippedTests>
@@ -147,16 +144,10 @@
                   Identifier = "BookmarkingTests">
                </Test>
                <Test
-                  Identifier = "DomainAutocompleteTests">
-               </Test>
-               <Test
                   Identifier = "FindInPageTests">
                </Test>
                <Test
                   Identifier = "HomePageSettingsUITests">
-               </Test>
-               <Test
-                  Identifier = "LoginManagerTests">
                </Test>
                <Test
                   Identifier = "NavigationTests">
@@ -177,7 +168,7 @@
                   Identifier = "SettingsTests">
                </Test>
                <Test
-                  Identifier = "ToolbarTests">
+                  Identifier = "TopSitesTests">
                </Test>
                <Test
                   Identifier = "TopTabsTests">
@@ -186,6 +177,16 @@
                   Identifier = "ViewMemoryLeakTests">
                </Test>
             </SkippedTests>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E69DB07C1E97DEA9008A67E6"
+               BuildableName = "TelemetryTests.xctest"
+               BlueprintName = "TelemetryTests"
+               ReferencedContainer = "container:Client.xcodeproj">
+            </BuildableReference>
          </TestableReference>
       </Testables>
       <MacroExpansion>

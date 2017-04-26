@@ -643,7 +643,7 @@ private func processFailure(_ failure: MaybeErrorType?) -> MaybeErrorType {
         return failure
     }
 
-    log.error("Unexpected failure. \(failure?.description)")
+    log.error("Unexpected failure. \(failure?.description ?? "nil")")
     return failure ?? UnknownError()
 }
 

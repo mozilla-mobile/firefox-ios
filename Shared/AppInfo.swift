@@ -5,6 +5,10 @@
 import Foundation
 
 open class AppInfo {
+    open static var displayName: String {
+        return Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as! String
+    }
+
     open static var appVersion: String {
         return Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
     }
@@ -19,19 +23,19 @@ open class AppInfo {
 
     /// Return the shared container identifier (also known as the app group) to be used with for example background
     /// http requests. It is the base bundle identifier with a "group." prefix.
-    open static func sharedContainerIdentifier() -> String? {
-        if let baseBundleIdentifier = AppInfo.baseBundleIdentifier() {
-            return "group." + baseBundleIdentifier
-        }
-        return nil
+    open static func sharedContainerIdentifier() -> String {
+        return "group." + appGroupSuffix()
     }
 
     /// Return the keychain access group.
-    open static func keychainAccessGroupWithPrefix(_ prefix: String) -> String? {
-        if let baseBundleIdentifier = AppInfo.baseBundleIdentifier() {
-            return prefix + "." + baseBundleIdentifier
-        }
-        return nil
+    open static func keychainAccessGroupWithPrefix(_ prefix: String) -> String {
+        return prefix + "." + appGroupSuffix()
+    }
+
+    /// Returns the base string used to append group. and the team identifier to
+    /// that is used for the app's entitlements.
+    open static func appGroupSuffix() -> String {
+        return Bundle.main.object(forInfoDictionaryKey: "MozGroupSuffix") as! String
     }
 
     /// Return the base bundle identifier.

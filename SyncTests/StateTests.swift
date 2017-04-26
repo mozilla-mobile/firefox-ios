@@ -32,7 +32,7 @@ func compareScratchpads(tuple: (lhs: Scratchpad, rhs: Scratchpad)) {
 
 func roundtrip(s: Scratchpad) -> (Scratchpad, rhs: Scratchpad) {
     let prefs = MockProfilePrefs()
-    s.pickle(prefs)
+    let _ = s.pickle(prefs)
     return (s, rhs: Scratchpad.restoreFromPrefs(prefs, syncKeyBundle: s.syncKeyBundle)!)
 }
 
@@ -50,7 +50,7 @@ class StateTests: XCTestCase {
         let syncKeyBundle = KeyBundle.fromKB(Bytes.generateRandomBytes(32))
         let keys = Fetched(value: Keys(defaultBundle: syncKeyBundle), timestamp: 1001)
         let b = Scratchpad(b: syncKeyBundle, persistingTo: MockProfilePrefs()).evolve()
-        b.setKeys(keys)
+        let _ = b.setKeys(keys)
         b.localCommands = Set([
             .enableEngine(engine: "tabs"),
             .disableEngine(engine: "passwords"),

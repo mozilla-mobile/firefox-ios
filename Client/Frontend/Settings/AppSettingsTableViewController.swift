@@ -35,6 +35,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 RequirePasswordDebugSetting(settings: self),
                 RequireUpgradeDebugSetting(settings: self),
                 ForgetSyncAuthStateDebugSetting(settings: self),
+                StageSyncServiceDebugSetting(settings: self),
             ]
         } else {
             accountDebugSettings = []

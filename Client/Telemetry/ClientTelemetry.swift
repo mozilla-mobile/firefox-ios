@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import Telemetry
 
 private let PrefKeySearches = "Telemetry.Searches"
 private let PrefKeyUsageTime = "Telemetry.UsageTime"
