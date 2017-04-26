@@ -468,9 +468,6 @@ class TabManager: NSObject {
             return
         }
 
-        // Checks if Leanplum variables changed and updates accordingly
-        LeanplumIntegration.sharedInstance.forceContentUpdate()
-
         guard let templateDict = LeanplumIntegration.sharedInstance.getTemplateDictionary(), let labelText = templateDict["Template Text"], let buttonText = templateDict["Button Text"], let colorText = templateDict["Hex Color String"], let deepLink = templateDict["Deep Link"] else {
             return
         }
