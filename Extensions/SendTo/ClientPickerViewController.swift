@@ -45,6 +45,12 @@ class ClientPickerViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        if profile == nil {
+            // If we are in an app extension, we want to open the profile right here.
+            profile = BrowserProfile(localName: "profile", app: nil)
+        }
+
         title = NSLocalizedString("Send Tab", tableName: "SendTo", comment: "Title of the dialog that allows you to send a tab to a different device")
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(ClientPickerViewController.refresh), for: UIControlEvents.valueChanged)
@@ -148,17 +154,22 @@ class ClientPickerViewController: UITableViewController {
     }
 
     fileprivate func reloadClients() {
-        guard let profile = self.profile else {
-            return
+        let profile = self.profile ?? BrowserProfile(localName: "profile", app: nil)
+        if profile.isShutdown {
+            profile.reopen()
         }
 
         reloading = true
         profile.getClients().upon({ result in
             withExtendedLifetime(profile) {
                 self.reloading = false
+                profile.shutdown()
+
                 guard let c = result.successValue else {
                     return
                 }
+
+                // If we are inside an app extension, we opened the profile right here, so we also want to close it.
 
                 self.clients = c
                 DispatchQueue.main.async {

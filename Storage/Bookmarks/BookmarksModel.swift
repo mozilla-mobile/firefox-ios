@@ -234,7 +234,7 @@ open class MemoryBookmarkFolder: BookmarkFolder, Sequence {
 open class MemoryBookmarksSink: ShareToDestination {
     var queue: [BookmarkNode] = []
     public init() { }
-    open func shareItem(_ item: ShareItem) {
+    open func shareItem(_ item: ShareItem) -> Success {
         let title = item.title == nil ? "Untitled" : item.title!
         func exists(_ e: BookmarkNode) -> Bool {
             if let bookmark = e as? BookmarkItem {
@@ -248,6 +248,7 @@ open class MemoryBookmarksSink: ShareToDestination {
         if !queue.contains(where: exists) {
             queue.append(BookmarkItem(guid: Bytes.generateGUID(), title: title, url: item.url))
         }
+        return succeed()
     }
 }
 
@@ -355,8 +356,8 @@ open class MockMemoryBookmarksStore: BookmarksModelFactory, ShareToDestination {
         return BookmarksModel(modelFactory: self, root: f)
     }
 
-    open func shareItem(_ item: ShareItem) {
-        self.sink.shareItem(item)
+    open func shareItem(_ item: ShareItem) -> Success {
+        return self.sink.shareItem(item)
     }
 
     open func isBookmarked(_ url: String) -> Deferred<Maybe<Bool>> {

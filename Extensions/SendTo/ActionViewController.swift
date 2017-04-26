@@ -39,7 +39,6 @@ class ActionViewController: UIViewController, ClientPickerViewControllerDelegate
             self.sharedItem = item
             let clientPickerViewController = ClientPickerViewController()
             clientPickerViewController.clientPickerDelegate = self
-            clientPickerViewController.profile = self.profile
             let navigationController = UINavigationController(rootViewController: clientPickerViewController)
             self.present(navigationController, animated: false, completion: nil)
         })
@@ -49,13 +48,20 @@ class ActionViewController: UIViewController, ClientPickerViewControllerDelegate
         self.extensionContext!.completeRequest(returningItems: nil, completionHandler: nil)
     }
 
+    var profile: Profile?
+
     func clientPickerViewController(_ clientPickerViewController: ClientPickerViewController, didPickClients clients: [RemoteClient]) {
-        if let item = sharedItem {
-            let profile = BrowserProfile(localName: "profile", app: nil)
-            profile.sendItems([item], toClients: clients)
-            profile.shutdown()
+        guard let item = sharedItem else {
+            finish()
+            return
         }
-        finish()
+
+        self.profile = BrowserProfile(localName: "profile", app: nil)
+        self.profile?.sendItems([item], toClients: clients).uponQueue(DispatchQueue.main) { result in
+                self.profile?.shutdown()
+                self.profile = nil
+                self.finish()
+        }
     }
     
     func clientPickerViewControllerDidCancel(_ clientPickerViewController: ClientPickerViewController) {
