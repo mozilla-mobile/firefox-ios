@@ -988,10 +988,9 @@ extension SQLiteHistory: SyncableHistory {
 
         let limit = 1000
         let args: Args = [limit, 20] // Limited number of history items to retrieve, Maximum number of visits to retrieve
-        let historyLimit = "SELECT * FROM history LIMIT ?"
-
-        // Exclude 'unknown' visits, because they're not syncable.
-        let filter = "history.should_upload = 1 AND v1.type IS NOT 0"
+        let historyLimit =
+        "SELECT * FROM history " +
+        "WHERE history.should_upload = 1 LIMIT ?"
 
         let sql =
         "SELECT " +
@@ -999,7 +998,7 @@ extension SQLiteHistory: SyncableHistory {
         "v1.siteID AS siteID, v1.date AS visitDate, v1.type AS visitType " +
         "FROM " +
         "visits AS v1 " +
-        "JOIN (\(historyLimit)) as history ON history.id = v1.siteID AND \(filter) " +
+        "JOIN (\(historyLimit)) as history ON history.id = v1.siteID AND v1.type <> 0 " +
         "LEFT OUTER JOIN " +
         "visits AS v2 " +
         "ON v1.siteID = v2.siteID AND v1.date < v2.date " +
