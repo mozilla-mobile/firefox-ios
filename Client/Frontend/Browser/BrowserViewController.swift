@@ -17,6 +17,7 @@ import MobileCoreServices
 import WebImage
 import SwiftyJSON
 import Telemetry
+import Sentry
 
 private let log = Logger.browserLogger
 
@@ -1108,6 +1109,8 @@ class BrowserViewController: UIViewController {
 
     fileprivate func presentActivityViewController(_ url: URL, tab: Tab? = nil, sourceView: UIView?, sourceRect: CGRect, arrowDirection: UIPopoverArrowDirection) {
         var activities = [UIActivity]()
+
+        SentryClient.shared?.crash()
 
         let findInPageActivity = FindInPageActivity() { [unowned self] in
             self.updateFindInPageVisibility(visible: true)
