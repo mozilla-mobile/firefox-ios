@@ -60,7 +60,7 @@ class LeanplumIntegration {
     private var profile: Profile?
 
     func setup(profile: Profile) {
-        guard ((SupportedLocales.init(rawValue: Locale.current.identifier)) != nil) else {
+        guard (SupportedLocales.init(rawValue: Locale.current.identifier)) != nil else {
             return
         }
 
