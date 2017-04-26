@@ -222,7 +222,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // Override point for customization after application launch.
         var shouldPerformAdditionalDelegateHandling = true
 
-        SentryClient.shared = SentryClient(dsnString: "https://8afa1cdeb71e4e4b84d38694e921683a:65fdb514f87749b9b854b0e53bb2ba1b@sentry.io/161858")
+        SentryClient.shared = SentryClient(dsnString: "https://8ce89051ab414ea8a41e5b8211103bec:670a141f1ca04b24b75e85c3474475e8@sentry.prod.mozaws.net/201")
         if let profile = self.profile {
             SentryClient.shared?.addExtra("hasAccount", value: profile.hasAccount())
         }
