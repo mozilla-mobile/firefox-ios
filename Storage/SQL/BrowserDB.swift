@@ -282,14 +282,6 @@ open class BrowserDB {
             // Attempt to re-create the DB
             success = true
             
-            // Need to re-attach any previously-attached DBs
-            for attachedDB in attachedDBs {
-                if let err = attachedDB.attach(to: self) {
-                    log.error("Error re-attaching DB. \(err.localizedDescription)")
-                    success = false
-                }
-            }
-            
             // Re-create all previously-created tables
             if let _ = db.transaction({ connection -> Bool in
                 doCreate(self.schemaTable, connection)
@@ -461,7 +453,20 @@ extension BrowserDB {
     }
 
     public func reopenIfClosed() {
+        let wasClosed = db.closed
+
         db.reopenIfClosed()
+        
+        // Need to re-attach any previously-attached DBs if the DB was closed
+        if wasClosed {
+            for attachedDB in attachedDBs {
+                log.debug("Re-attaching DB \(attachedDB.filename) as \(attachedDB.schemaName).")
+
+                if let err = attachedDB.attach(to: self) {
+                    log.error("Error re-attaching DB. \(err.localizedDescription)")
+                }
+            }
+        }
     }
 }
 
