@@ -377,7 +377,7 @@ class DeleteExportedDataSetting: HiddenSetting {
         do {
             let files = try fileManager.contentsOfDirectory(atPath: documentsPath)
             for file in files {
-                if file.startsWith("browser.") || file.startsWith("logins.") {
+                if file.startsWith("browser.") || file.startsWith("logins.") || file.startsWith("metadata.") {
                     try fileManager.removeItemInDirectory(documentsPath, named: file)
                 }
             }
@@ -399,7 +399,7 @@ class ExportBrowserDataSetting: HiddenSetting {
             let log = Logger.syncLogger
             try self.settings.profile.files.copyMatching(fromRelativeDirectory: "", toAbsoluteDirectory: documentsPath) { file in
                 log.debug("Matcher: \(file)")
-                return file.startsWith("browser.") || file.startsWith("logins.")
+                return file.startsWith("browser.") || file.startsWith("logins.") || file.startsWith("metadata.")
             }
         } catch {
             print("Couldn't export browser data: \(error).")

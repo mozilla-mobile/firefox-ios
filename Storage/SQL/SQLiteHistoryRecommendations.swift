@@ -16,77 +16,57 @@ extension SQLiteHistory: HistoryRecommendations {
         let microsecondsPerMinute: UInt64 = 60_000_000 // 1000 * 1000 * 60
         let now = Date.nowMicroseconds()
         let thirtyMinutesAgo: UInt64 = now - 30 * microsecondsPerMinute
-        let threeDaysAgo: UInt64 = now - (60 * microsecondsPerMinute) * 24 * 3
 
         let blacklistedHosts: Args = [
-            "google.com"   ,
-            "google.ca"   ,
-            "calendar.google.com"   ,
-            "mail.google.com"   ,
-            "mail.yahoo.com"   ,
-            "search.yahoo.com"   ,
-            "localhost"   ,
+            "google.com",
+            "google.ca",
+            "calendar.google.com",
+            "mail.google.com",
+            "mail.yahoo.com",
+            "search.yahoo.com",
+            "localhost",
             "t.co"
         ]
 
-        var blacklistSubquery = ""
-        if blacklistedHosts.count > 0 {
-            blacklistSubquery = "SELECT " + "\(TableDomains).id" +
-                " FROM " + "\(TableDomains)" +
-                " WHERE " + "\(TableDomains).domain" + " IN " + BrowserDB.varlist(blacklistedHosts.count)
-        }
+        let blacklistSubquery = "SELECT \(TableDomains).id FROM \(TableDomains) " +
+                "WHERE " + "\(TableDomains).domain" + " IN " + BrowserDB.varlist(blacklistedHosts.count)
 
-        let removeMultipleDomainsSubquery =
-            "   INNER JOIN (SELECT \(ViewHistoryVisits).domain_id AS domain_id, MAX(\(ViewHistoryVisits).visitDate) AS visit_date" +
-            "   FROM \(ViewHistoryVisits)" +
-            "   GROUP BY \(ViewHistoryVisits).domain_id) AS domains ON domains.domain_id = \(TableHistory).domain_id AND visitDate = domains.visit_date"
+        /*
+         Lets get some history that we will then rank based on the metadata availible to us
+         When grouping by domain. Choose the url with the largest title and largest url.
+         We also want to filter out sites that appear in the top sites or are part of the blacklist.
+         From these 100 we will show less than a dozen.
+         */
 
-        let subQuerySiteProjection = "historyID, url, siteTitle, guid, visitCount, visitDate, is_bookmarked"
-        let nonRecentHistory =
-            "SELECT \(subQuerySiteProjection) FROM (" +
-            "   SELECT \(TableHistory).id as historyID, url, title AS siteTitle, guid, visitDate, \(TableHistory).domain_id," +
+        let newquery =
+            "SELECT historyID, url, title, guid, visitCount, visitDate, is_bookmarked " +
+            "FROM (" +
+            "   SELECT url, siteID as historyID, title, guid, visitDate," +
             "       (SELECT COUNT(1) FROM \(TableVisits) WHERE s = \(TableVisits).siteID) AS visitCount," +
             "       (SELECT COUNT(1) FROM \(ViewBookmarksLocalOnMirror) WHERE \(ViewBookmarksLocalOnMirror).bmkUri == url) AS is_bookmarked" +
-            "   FROM (" +
-            "       SELECT siteID AS s, max(date) AS visitDate" +
-            "       FROM \(TableVisits)" +
-            "       WHERE date < ?" +
-            "       GROUP BY siteID" +
-            "       ORDER BY visitDate DESC" +
-            "   )" +
-            "   LEFT JOIN \(TableHistory) ON \(TableHistory).id = s" +
-                removeMultipleDomainsSubquery +
-            "   WHERE visitCount <= 3 AND title NOT NULL AND title != '' AND is_bookmarked == 0 AND url NOT IN" +
-            "       (SELECT \(TableActivityStreamBlocklist).url FROM \(TableActivityStreamBlocklist))" +
-            "        AND \(TableHistory).domain_id NOT IN ("
-                    + blacklistSubquery + ")" +
-            "   LIMIT \(historyLimit)" +
-            ")"
+            "   FROM (SELECT  *, siteID AS s, min(date) AS visitDate, max(title), max(url) FROM visits  LEFT JOIN history ON history.id = s group by domain_id)" +
+            "   WHERE visitCount <= 3 AND visitDate < ? AND title NOT NULL AND title != ''" +
+            "       AND is_bookmarked == 0 AND domain_id NOT IN (SELECT cached_top_sites.domain_id FROM cached_top_sites) " +
+            "       AND domain_id NOT IN (\(blacklistSubquery))" +
+            "   ORDER BY visitDate DESC " +
+            "   ) " +
+            "LIMIT 100"
 
-        let bookmarkHighlights =
-            "SELECT \(subQuerySiteProjection) FROM (" +
-            "   SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, \(TableHistory).title AS siteTitle, guid, \(TableHistory).domain_id, NULL AS visitDate, (SELECT count(1) FROM visits WHERE \(TableVisits).siteID = \(TableHistory).id) as visitCount, 1 AS is_bookmarked" +
-            "   FROM (" +
-            "       SELECT bmkUri" +
-            "       FROM \(ViewBookmarksLocalOnMirror)" +
-            "       WHERE \(ViewBookmarksLocalOnMirror).server_modified > ? OR \(ViewBookmarksLocalOnMirror).local_modified > ?" +
-            "   )" +
-            "   LEFT JOIN \(TableHistory) ON \(TableHistory).url = bmkUri" +
-                removeMultipleDomainsSubquery +
-            "   WHERE visitCount >= 3 AND \(TableHistory).title NOT NULL and \(TableHistory).title != '' AND url NOT IN" +
-            "       (SELECT \(TableActivityStreamBlocklist).url FROM \(TableActivityStreamBlocklist))" +
-            "   LIMIT \(bookmarkLimit)" +
-            ")"
-
-        let siteProjection = subQuerySiteProjection.replacingOccurrences(of: "siteTitle", with: "siteTitle AS title")
+        /*
+         The main query. We perform a join with the metadata and favicon table
+         We do some loose ranking based on the metadata availible for each site. If a site has a media_url rank it higher.
+         */
         let highlightsQuery =
-            "SELECT \(siteProjection), iconID, iconURL, iconType, iconDate, iconWidth, \(AttachedTablePageMetadata).title AS metadata_title, media_url, type, description, provider_name " +
-            "FROM ( \(nonRecentHistory) UNION ALL \(bookmarkHighlights) ) " +
+            "SELECT *, \(AttachedTablePageMetadata).title AS metadata_title " +
+            "FROM ( \(newquery) ) " +
             "LEFT JOIN \(ViewHistoryIDsWithWidestFavicons) ON \(ViewHistoryIDsWithWidestFavicons).id = historyID " +
             "LEFT OUTER JOIN \(AttachedTablePageMetadata) ON \(AttachedTablePageMetadata).site_url = url " +
-            "GROUP BY url"
-        let otherArgs = [threeDaysAgo, threeDaysAgo] as Args
-        let args: Args = [thirtyMinutesAgo] + blacklistedHosts + otherArgs
+            "GROUP BY url " +
+            "ORDER BY COALESCE(iconURL, media_url) NOT NULL DESC " +
+            "LIMIT \(historyLimit)"
+
+        let args: Args = [now] + blacklistedHosts
+        print(highlightsQuery)
         return self.db.runQuery(highlightsQuery, args: args, factory: SQLiteHistory.iconHistoryMetadataColumnFactory)
     }
 
