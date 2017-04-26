@@ -30,8 +30,10 @@ let TableQueuedTabs = "queue"
 
 let TableActivityStreamBlocklist = "activity_stream_blocklist"
 let TablePageMetadata = "page_metadata"
+let TableHighlights = "highlights"
 public let AttachedDatabaseMetadata = "metadataDB" // Added in v22
 let AttachedTablePageMetadata = AttachedDatabaseMetadata + "." + TablePageMetadata // Added in v22
+let AttachedTableHighlights = AttachedDatabaseMetadata + "." + TableHighlights // Added in v23
 
 let ViewBookmarksBufferOnMirror = "view_bookmarksBuffer_on_mirror"
 let ViewBookmarksBufferStructureOnMirror = "view_bookmarksBufferStructure_on_mirror"
@@ -77,6 +79,7 @@ private let AllTables: [String] = [
 
     TableActivityStreamBlocklist,
     AttachedTablePageMetadata,
+    AttachedTableHighlights,
 ]
 
 private let AllViews: [String] = [
@@ -113,7 +116,7 @@ private let log = Logger.syncLogger
  * We rely on SQLiteHistory having initialized the favicon table first.
  */
 open class BrowserTable: Table {
-    static let DefaultVersion = 22    // Bug 1253656.
+    static let DefaultVersion = 23    // Bug 1326564.
 
     // TableInfo fields.
     var name: String { return "BROWSER" }
@@ -280,6 +283,17 @@ open class BrowserTable: Table {
             "provider_name TEXT, " +
             "created_at DATETIME DEFAULT CURRENT_TIMESTAMP, " +
             "expired_at LONG" +
+    ") "
+
+    let attachedHighlightsCreate =
+        "CREATE TABLE IF NOT EXISTS \(AttachedTableHighlights) (" +
+            "historyID INTEGER PRIMARY KEY," +
+            "url TEXT," +
+            "title TEXT," +
+            "guid TEXT," +
+            "visitCount INTEGER," +
+            "visitDate DATETIME," +
+            "is_bookmarked INTEGER" +
     ") "
 
     let indexPageMetadataCacheKeyCreate =
@@ -606,6 +620,7 @@ open class BrowserTable: Table {
             historyIDsWithIcon,
             iconForURL,
             attachedPageMetadataCreate,
+            attachedHighlightsCreate,
             attachedIndexPageMetadataSiteURLCreate,
             attachedIndexPageMetadataCacheKeyCreate,
             self.queueTableCreate,
@@ -880,6 +895,13 @@ open class BrowserTable: Table {
                 attachedPageMetadataCreate,
                 attachedIndexPageMetadataCacheKeyCreate,
                 attachedIndexPageMetadataSiteURLCreate]) {
+                return false
+            }
+        }
+
+        if from < 23 && to >= 23 {
+            if !self.run(db, queries: [
+                attachedHighlightsCreate]) {
                 return false
             }
         }

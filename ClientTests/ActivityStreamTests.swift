@@ -170,7 +170,7 @@ extension ActivityStreamTests {
         // simply call .value on this to block since the app will dead lock when
         // trying to call back onto a blocked main thread.
         let expect = XCTestExpectation(description: "Sent bad highlight pings")
-        panel.invalidateHighlights() >>> {
+        panel.getHighlights() >>> {
             expect.fulfill()
         }
 
@@ -201,7 +201,7 @@ extension ActivityStreamTests {
         // simply call .value on this to block since the app will dead lock when
         // trying to call back onto a blocked main thread.
         let expect = XCTestExpectation(description: "Sent bad top site pings")
-        panel.invalidateTopSites() >>> {
+        panel.getTopSites() >>> {
             expect.fulfill()
         }
 
@@ -226,6 +226,11 @@ class MockPingClient: PingCentreClient {
 }
 
 fileprivate class MockRecommender: HistoryRecommendations {
+    func invalidateHighlights() -> Success {
+        // no-op since we don't need to purge a cache for our mock recommender
+        return succeed()
+    }
+
     var highlights: [Site]
 
     init(highlights: [Site]) {
