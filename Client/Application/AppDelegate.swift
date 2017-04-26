@@ -223,6 +223,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         var shouldPerformAdditionalDelegateHandling = true
 
         SentryClient.shared = SentryClient(dsnString: "https://8afa1cdeb71e4e4b84d38694e921683a:65fdb514f87749b9b854b0e53bb2ba1b@sentry.io/161858")
+        if let profile = self.profile {
+            SentryClient.shared?.addExtra("hasAccount", value: profile.hasAccount())
+        }
         SentryClient.shared?.startCrashHandler()
 
         log.debug("Did finish launching.")
