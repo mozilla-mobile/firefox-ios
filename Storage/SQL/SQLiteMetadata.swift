@@ -18,7 +18,7 @@ open class SQLiteMetadata {
 extension SQLiteMetadata: Metadata {
     // A cache key is a conveninent, readable identifier for a site in the metadata database which helps
     // with deduping entries for the same page.
-    fileprivate typealias CacheKey = String
+    typealias CacheKey = String
 
     /// Persists the given PageMetadata object to browser.db in the page_metadata table.
     ///
@@ -29,7 +29,7 @@ extension SQLiteMetadata: Metadata {
     /// - returns: Deferred on success
     public func storeMetadata(_ metadata: PageMetadata, forPageURL pageURL: URL,
                               expireAt: UInt64) -> Success {
-        guard let cacheKey = cacheKeyForURL(pageURL as URL) else {
+        guard let cacheKey = SQLiteMetadata.cacheKeyForURL(pageURL as URL) else {
             return succeed()
         }
 
@@ -55,7 +55,7 @@ extension SQLiteMetadata: Metadata {
         return self.db.run(sql)
     }
 
-    fileprivate func cacheKeyForURL(_ url: URL) -> CacheKey? {
+    static func cacheKeyForURL(_ url: URL) -> CacheKey? {
         var key = url.normalizedHost ?? ""
         key = key + url.path + (url.query ?? "")
         return key
