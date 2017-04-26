@@ -987,7 +987,8 @@ extension SQLiteHistory: SyncableHistory {
         // places as a side-effect of the factory, producing visits as a result, and merging in memory.
 
         let limit = 1000
-        let args: Args = [20, limit] // Maximum number of visits to retrieve, limit to retrieve
+        let args: Args = [limit, 20] // Limited number of history items to retrieve, Maximum number of visits to retrieve
+        let historyLimit = "SELECT * FROM history LIMIT ?"
 
         // Exclude 'unknown' visits, because they're not syncable.
         let filter = "history.should_upload = 1 AND v1.type IS NOT 0"
@@ -998,14 +999,13 @@ extension SQLiteHistory: SyncableHistory {
         "v1.siteID AS siteID, v1.date AS visitDate, v1.type AS visitType " +
         "FROM " +
         "visits AS v1 " +
-        "JOIN history ON history.id = v1.siteID AND \(filter) " +
+        "JOIN (\(historyLimit)) as history ON history.id = v1.siteID AND \(filter) " +
         "LEFT OUTER JOIN " +
         "visits AS v2 " +
         "ON v1.siteID = v2.siteID AND v1.date < v2.date " +
         "GROUP BY v1.date " +
         "HAVING COUNT(*) < ? " +
-        "ORDER BY v1.siteID, v1.date DESC " +
-        "LIMIT ?"
+        "ORDER BY v1.siteID, v1.date DESC"
 
         var places = [Int: Place]()
         var visits = [Int: [Visit]]()
