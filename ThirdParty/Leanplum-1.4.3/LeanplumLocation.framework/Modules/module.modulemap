@@ -1,0 +1,6 @@
+framework module LeanplumLocation {
+  umbrella header "Leanplum-iOS-Location-umbrella.h"
+
+  export *
+  module * { export * }
+}

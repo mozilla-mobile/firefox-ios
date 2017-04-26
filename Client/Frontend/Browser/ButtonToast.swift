@@ -172,3 +172,68 @@ class ButtonToast: UIView {
         dismiss(false)
     }
 }
+
+struct LeanplumPromoButtonToastUX {
+    static let ToastHeight = 96
+    static let ToastButtonInset: CGFloat = 16
+    static let ToastButtonHeight = 33
+    static let ToastButtonTopOffset = 14
+    static let ToastButtonBottomInset = 17
+    static let ToastLabelTopOffset = 16
+}
+
+class LeanplumPromoButtonToast: ButtonToast {
+    let colorText: String
+
+    init(labelText: String, descriptionText: String? = nil, buttonText: String, colorText: String, completion:@escaping (_ buttonPressed: Bool) -> Void) {
+        self.colorText = colorText
+        super.init(labelText: labelText, descriptionText: descriptionText, buttonText: buttonText, completion: completion)
+
+        self.snp.remakeConstraints { make in
+            make.height.equalTo(LeanplumPromoButtonToastUX.ToastHeight)
+        }
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func createView(_ labelText: String, descriptionText: String?, buttonText: String) -> UIView {
+        let label = UILabel()
+        label.textColor = UIColor.white
+        label.font = SimpleToastUX.ToastFont
+        label.text = labelText
+        label.lineBreakMode = .byWordWrapping
+        label.numberOfLines = 0
+        toast.addSubview(label)
+
+        let button = HighlightableButton()
+        button.layer.cornerRadius = ButtonToastUX.ToastButtonBorderRadius
+        button.layer.borderWidth = ButtonToastUX.ToastButtonBorderWidth
+        button.layer.borderColor = UIColor.white.cgColor
+        button.setTitle(buttonText, for: UIControlState())
+        button.setTitleColor(self.toast.backgroundColor, for: .highlighted)
+        button.titleLabel?.font = SimpleToastUX.ToastFont
+        button.contentEdgeInsets = UIEdgeInsets(top: 0, left: LeanplumPromoButtonToastUX.ToastButtonInset, bottom: 0, right: LeanplumPromoButtonToastUX.ToastButtonInset)
+
+        let recognizer = UITapGestureRecognizer(target: self, action:#selector(ButtonToast.buttonPressed(_:)))
+        button.addGestureRecognizer(recognizer)
+        toast.addSubview(button)
+
+        toast.backgroundColor = UIColor(colorStringWithAlpha: colorText)
+
+        label.snp.makeConstraints { (make) in
+            make.centerX.equalTo(toast)
+            make.top.equalTo(toast).offset(LeanplumPromoButtonToastUX.ToastLabelTopOffset)
+        }
+
+        button.snp.makeConstraints { (make) in
+            make.centerX.equalTo(toast)
+            make.top.equalTo(label.snp.bottom).offset(LeanplumPromoButtonToastUX.ToastButtonTopOffset)
+            make.height.equalTo(LeanplumPromoButtonToastUX.ToastButtonHeight)
+            make.bottom.equalTo(toast).inset(LeanplumPromoButtonToastUX.ToastButtonBottomInset)
+        }
+
+        return toast
+    }
+}

@@ -9,7 +9,7 @@ struct SimpleToastUX {
     static let ToastHeight = CGFloat(50)
     static let ToastAnimationDuration = 0.5
     static let ToastDefaultColor = UIColor(red: 76.0 / 255, green: 158.0 / 255, blue: 255.0 / 255, alpha: 1)
-    static let ToastFont = UIFont.systemFont(ofSize: 15)
+    static let ToastFont = UIFont.systemFont(ofSize: 14)
     static let ToastDismissAfter = 2.0
 }
 
