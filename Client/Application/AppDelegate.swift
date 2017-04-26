@@ -11,6 +11,7 @@ import WebImage
 import SwiftKeychainWrapper
 import LocalAuthentication
 import Telemetry
+import Sentry
 
 private let log = Logger.browserLogger
 
@@ -220,6 +221,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         var shouldPerformAdditionalDelegateHandling = true
+
+        SentryClient.shared = SentryClient(dsnString: "https://8afa1cdeb71e4e4b84d38694e921683a:65fdb514f87749b9b854b0e53bb2ba1b@sentry.io/161858")
+        SentryClient.shared?.startCrashHandler()
 
         log.debug("Did finish launching.")
 
