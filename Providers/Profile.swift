@@ -181,7 +181,7 @@ protocol Profile: class {
 
     @discardableResult func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>>
 
-    func sendItems(_ items: [ShareItem], toClients clients: [RemoteClient])
+    func sendItems(_ items: [ShareItem], toClients clients: [RemoteClient]) -> Deferred<Maybe<SyncStatus>>
 
     var syncManager: SyncManager { get }
     var isChinaEdition: Bool { get }
@@ -485,12 +485,12 @@ open class BrowserProfile: Profile {
         return self.remoteClientsAndTabs.insertOrUpdateTabs(tabs)
     }
 
-    public func sendItems(_ items: [ShareItem], toClients clients: [RemoteClient]) {
+    public func sendItems(_ items: [ShareItem], toClients clients: [RemoteClient]) -> Deferred<Maybe<SyncStatus>> {
         let id = DeviceInfo.clientIdentifier(self.prefs)
         let commands = items.map { item in
             SyncCommand.displayURIFromShareItem(item, asClient: id)
         }
-        self.remoteClientsAndTabs.insertCommands(commands, forClients: clients) >>> { self.syncManager.syncClients() }
+        return self.remoteClientsAndTabs.insertCommands(commands, forClients: clients) >>> { self.syncManager.syncClients() }
     }
 
     lazy var logins: BrowserLogins & SyncableLogins & ResettableSyncStorage = {

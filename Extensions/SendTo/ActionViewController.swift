@@ -49,10 +49,17 @@ class ActionViewController: UIViewController, ClientPickerViewControllerDelegate
     }
 
     func clientPickerViewController(_ clientPickerViewController: ClientPickerViewController, didPickClients clients: [RemoteClient]) {
-        // TODO
-        finish()
+        guard let item = sharedItem else {
+            return finish()
+        }
+
+        let profile = BrowserProfile(localName: "profile", app: nil) // TODO Will this be owned?
+        profile.sendItems([item], toClients: clients).uponQueue(DispatchQueue.main) { result in
+            profile.shutdown()
+            self.finish()
+        }
     }
-    
+
     func clientPickerViewControllerDidCancel(_ clientPickerViewController: ClientPickerViewController) {
         finish()
     }
