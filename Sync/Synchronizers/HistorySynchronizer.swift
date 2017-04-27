@@ -8,6 +8,7 @@ import Storage
 import XCGLogger
 import Deferred
 import SwiftyJSON
+import Sentry
 
 private let log = Logger.syncLogger
 private let HistoryTTLInSeconds = 5184000                   // 60 days.
@@ -175,8 +176,10 @@ open class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
                         workWasDone = true
                     }
                     log.info("Uploading \(places.count) modified places.")
+                    SentryClient.shared?.captureMessage("MOOMOO Uploading \(places.count) modified places residentSize=\(getMegabytesUsed())", level: .Debug)
                     let r = self.uploadModifiedPlaces(places, lastTimestamp: timestamp, fromStorage: storage, withServer: storageClient)
                     log.info("MOOMOO Done Uploading modified places")
+                    SentryClient.shared?.captureMessage("MOOMOO Done Uploading modified places residentSize=\(getMegabytesUsed())", level: .Debug)
                     return r
             }
         }

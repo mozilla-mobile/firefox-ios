@@ -6,6 +6,7 @@ import Foundation
 import Shared
 import XCGLogger
 import Deferred
+import Sentry
 
 private let log = Logger.syncLogger
 
@@ -992,7 +993,8 @@ extension SQLiteHistory: SyncableHistory {
     }
 
     public func getModifiedHistoryToUpload() -> Deferred<Maybe<[(Place, [Visit])]>> {
-        log.info("MOOMOO SQLiteHistory.getModifiedHistoryToUpload residentSize=\(getMegabytesUsed())")
+        SentryClient.shared?.captureMessage("MOOMOO SQLiteHistory.getModifiedHistoryToUpload residentSize=\(getMegabytesUsed())", level: .Debug)
+        log.debug("MOOMOO SQLiteHistory.getModifiedHistoryToUpload residentSize=\(getMegabytesUsed())")
 
         // What we want to do: find all items flagged for update, selecting some number of their
         // visits alongside.
@@ -1056,6 +1058,7 @@ extension SQLiteHistory: SyncableHistory {
         return db.runQuery(sql, args: args, factory: factory)
             >>== { c in
 
+                SentryClient.shared?.captureMessage("MOOMOO Ran query c.count=\(c.count) residentSize=\(getMegabytesUsed())", level: .Debug)
                 log.debug("MOOMOO Ran query c.count=\(c.count) residentSize=\(getMegabytesUsed())")
 
                 // Consume every row, with the side effect of populating the places
@@ -1070,19 +1073,23 @@ extension SQLiteHistory: SyncableHistory {
 
                     n += 1
                     if n == 50 {
+                        SentryClient.shared?.captureMessage("MOOMOO Processed \(n) records residentSize=\(getMegabytesUsed())", level: .Debug)
                         log.debug("MOOMOO Processed \(n) records residentSize=\(getMegabytesUsed())")
                     }
                 }
 
+                SentryClient.shared?.captureMessage("MOOMOO Processed \(n) records in total residentSize=\(getMegabytesUsed())", level: .Debug)
                 log.debug("MOOMOO Processed \(n) records in total residentSize=\(getMegabytesUsed())")
 
                 // Now we're done with the cursor. Close it.
                 c.close()
 
+                SentryClient.shared?.captureMessage("MOOMOO Closed cursor residentSize=\(getMegabytesUsed())", level: .Debug)
                 log.debug("MOOMOO Closed cursor residentSize=\(getMegabytesUsed())")
 
                 // Now collect the return value.
                 let r = deferMaybe(ids.map { return (places[$0]!, visits[$0]!) })
+                SentryClient.shared?.captureMessage("MOOMOO Returning result residentSize=\(getMegabytesUsed())", level: .Debug)
                 log.debug("MOOMOO Returning result residentSize=\(getMegabytesUsed())")
                 return r
         }
