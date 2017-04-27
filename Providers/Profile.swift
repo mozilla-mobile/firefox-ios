@@ -75,8 +75,8 @@ class ProfileFileAccessor: FileAccessor {
 class CommandStoringSyncDelegate: SyncDelegate {
     let profile: Profile
 
-    init() {
-        profile = BrowserProfile(localName: "profile", app: nil)
+    init(profile: Profile) {
+        self.profile = profile
     }
 
     public func displaySentTabForURL(_ URL: URL, title: String) {
@@ -181,7 +181,7 @@ protocol Profile: class {
 
     @discardableResult func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>>
 
-    func sendItems(_ items: [ShareItem], toClients clients: [RemoteClient])
+    func sendItems(_ items: [ShareItem], toClients clients: [RemoteClient]) -> Deferred<Maybe<SyncStatus>>
 
     var syncManager: SyncManager { get }
     var isChinaEdition: Bool { get }
@@ -463,7 +463,7 @@ open class BrowserProfile: Profile {
         if let app = self.app {
             return BrowserProfileSyncDelegate(app: app)
         }
-        return CommandStoringSyncDelegate()
+        return CommandStoringSyncDelegate(profile: self)
     }
 
     public func getClients() -> Deferred<Maybe<[RemoteClient]>> {
@@ -484,12 +484,12 @@ open class BrowserProfile: Profile {
         return self.remoteClientsAndTabs.insertOrUpdateTabs(tabs)
     }
 
-    public func sendItems(_ items: [ShareItem], toClients clients: [RemoteClient]) {
+    public func sendItems(_ items: [ShareItem], toClients clients: [RemoteClient]) -> Deferred<Maybe<SyncStatus>> {
         let id = DeviceInfo.clientIdentifier(self.prefs)
         let commands = items.map { item in
             SyncCommand.displayURIFromShareItem(item, asClient: id)
         }
-        self.remoteClientsAndTabs.insertCommands(commands, forClients: clients) >>> { self.syncManager.syncClients() }
+        return self.remoteClientsAndTabs.insertCommands(commands, forClients: clients) >>> { self.syncManager.syncClients() }
     }
 
     lazy var logins: BrowserLogins & SyncableLogins & ResettableSyncStorage = {
@@ -689,74 +689,12 @@ open class BrowserProfile: Profile {
                 syncDisplayState = .good
             }
 
-            reportEndSyncingStatus(syncDisplayState, engineResults: result)
             notifySyncing(notification: NotificationProfileDidFinishSyncing)
             syncReducer = nil
         }
 
-        fileprivate func reportEndSyncingStatus(_ displayState: SyncDisplayState?, engineResults: Maybe<EngineResults>?) {
-            // We don't send this ad hoc telemetry on the release channel.
-            guard AppConstants.BuildChannel != AppBuildChannel.release else {
-                return
-            }
-
-            guard profile.prefs.boolForKey("settings.sendUsageData") ?? true else {
-                log.debug("Profile isn't sending usage data. Not sending sync status event.")
-                return
-            }
-
-            guard let displayState = displayState else {
-                log.debug("Sync display state not set!. Not sending sync status event.")
-                return
-            }
-
-            self.doInBackgroundAfter(300) {
-                self.profile.remoteClientsAndTabs.getClientGUIDs() >>== { clients in
-                    // We would love to include the version and OS etc. of each remote client,
-                    // but we don't store that information. For now, just do a count.
-                    let clientCount = clients.count
-
-                    let id = DeviceInfo.clientIdentifier(self.prefs)
-
-                    var engineResultsDict: [String: String]? = nil
-                    if let results = engineResults?.successValue {
-                        engineResultsDict = [:]
-                        results.forEach { (engineIdentifier, syncStatus) in
-                            engineResultsDict![engineIdentifier] = syncStatus.description
-                        }
-                    }
-
-                    let engineResultsFailure = engineResults?.failureValue
-
-                    let ping = makeAdHocSyncStatusPing(
-                        Bundle.main,
-                        clientID: id,
-                        statusObject: displayState.asObject(),
-                        engineResults: engineResultsDict,
-                        resultsFailure: engineResultsFailure,
-                        clientCount: clientCount
-                    )
-
-                    let payload = ping.stringValue
-
-                    log.debug("Payload is: \(payload)")
-                    guard let body = payload.data(using: String.Encoding.utf8) else {
-                        log.debug("Invalid JSON!")
-                        return
-                    }
-
-                    let url = "https://mozilla-anonymous-sync-metrics.moo.mx/post/syncstatus".asURL!
-                    var request = URLRequest(url: url)
-                    request.httpMethod = URLRequest.Method.post.rawValue
-                    request.httpBody = body
-                    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-                    SessionManager.default.request(request).responseData(completionHandler: { response in
-                        log.debug("Sync Status upload response: \(response.response?.statusCode ?? -1).")
-                    })
-                }
-            }
-
+        fileprivate func canSendUsageData() -> Bool {
+            return profile.prefs.boolForKey("settings.sendUsageData") ?? true
         }
 
         private func notifySyncing(notification: Notification.Name) {
