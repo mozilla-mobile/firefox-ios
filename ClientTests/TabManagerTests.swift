@@ -99,6 +99,11 @@ open class MockTabManagerDelegate: TabManagerDelegate {
     public func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
         testDelegateMethodWithName(#function, tabs: [])
     }
+
+    public func tabManagerDidCreateDeepLink(_ tabManager: TabManager, deepLink: String) {
+        testDelegateMethodWithName(#function, tabs:[])
+    }
+
 }
 
 class TabManagerTests: XCTestCase {

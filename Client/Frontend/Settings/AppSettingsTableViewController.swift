@@ -11,6 +11,41 @@ import Account
 class AppSettingsTableViewController: SettingsTableViewController {
     fileprivate let SectionHeaderIdentifier = "SectionHeaderIdentifier"
 
+    var deepLink: String? = nil
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        guard let deepLink = deepLink else {
+            return
+        }
+
+        switch deepLink {
+        case "search-settings":
+            let viewController = SearchSettingsTableViewController()
+            viewController.model = profile.searchEngines
+            viewController.profile = profile
+            navigationController?.pushViewController(viewController, animated: false)
+        case "mailto-settings":
+            let viewController = OpenWithSettingsViewController(prefs: profile.prefs)
+            navigationController?.pushViewController(viewController, animated: false)
+        case "homepage-settings":
+            let viewController = HomePageSettingsViewController()
+            viewController.profile = profile
+            viewController.tabManager = tabManager
+            navigationController?.pushViewController(viewController, animated: false)
+        case "private-data-settings":
+            let viewController = ClearPrivateDataTableViewController()
+            viewController.profile = profile
+            viewController.tabManager = tabManager
+            navigationController?.pushViewController(viewController, animated: false)
+        default:
+            break
+        }
+
+        self.deepLink = nil
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
