@@ -33,7 +33,7 @@ enum LeanplumEventName: String {
     case savedLoginAndPassword = "Saved Login and Password"
 }
 
-enum SupportedLocales: String {
+private enum SupportedLocales: String {
     case US = "en_US"
     case DE = "de"
     case UK = "en_GB"
