@@ -1633,6 +1633,8 @@ extension BrowserViewController: TabToolbarDelegate {
 
     func tabToolbarDidLongPressReload(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
 
+        NSException(name: .genericException, reason: "This is a test", userInfo: nil).raise()
+
         guard let tab = tabManager.selectedTab, tab.webView?.url != nil && (tab.getHelper(name: ReaderMode.name()) as? ReaderMode)?.state != .active else {
             return
         }

@@ -10,6 +10,7 @@ import MessageUI
 import WebImage
 import SwiftKeychainWrapper
 import LocalAuthentication
+import Sentry
 
 private let log = Logger.browserLogger
 
@@ -232,6 +233,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         var shouldPerformAdditionalDelegateHandling = true
 
         log.debug("Did finish launching.")
+
+        log.debug("Setting up Sentry")
+        SentryClient.shared = SentryClient(dsnString: "https://8ce89051ab414ea8a41e5b8211103bec:670a141f1ca04b24b75e85c3474475e8@sentry.prod.mozaws.net/201")
+        if let profile = self.profile {
+            SentryClient.shared?.addExtra("hasAccount", value: profile.hasAccount())
+        }
+        SentryClient.shared?.startCrashHandler()
 
         log.debug("Setting up Adjust")
         self.adjustIntegration?.triggerApplicationDidFinishLaunchingWithOptions(launchOptions)
