@@ -75,8 +75,8 @@ class ProfileFileAccessor: FileAccessor {
 class CommandStoringSyncDelegate: SyncDelegate {
     let profile: Profile
 
-    init() {
-        profile = BrowserProfile(localName: "profile", app: nil)
+    init(profile: Profile) {
+        self.profile = profile
     }
 
     public func displaySentTabForURL(_ URL: URL, title: String) {
@@ -464,7 +464,7 @@ open class BrowserProfile: Profile {
         if let app = self.app {
             return BrowserProfileSyncDelegate(app: app)
         }
-        return CommandStoringSyncDelegate()
+        return CommandStoringSyncDelegate(profile: self)
     }
 
     public func getClients() -> Deferred<Maybe<[RemoteClient]>> {
