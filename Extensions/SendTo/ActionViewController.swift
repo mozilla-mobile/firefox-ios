@@ -54,7 +54,7 @@ class ActionViewController: UIViewController, ClientPickerViewControllerDelegate
             return finish()
         }
 
-        let profile = BrowserProfile(localName: "profile", app: nil) // TODO Will this be owned?
+        let profile = BrowserProfile(localName: "profile", app: nil)
         profile.sendItems([item], toClients: clients).uponQueue(DispatchQueue.main) { result in
             profile.shutdown()
             self.finish()
