@@ -209,6 +209,7 @@ open class MockProfile: Profile {
         return deferMaybe(0)
     }
 
-    public func sendItems(_ items: [ShareItem], toClients clients: [RemoteClient]) {
+    public func sendItems(_ items: [ShareItem], toClients clients: [RemoteClient]) -> Deferred<Maybe<SyncStatus>> {
+        return deferMaybe(SyncStatus.notStarted(.offline))
     }
 }
