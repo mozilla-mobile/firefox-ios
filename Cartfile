@@ -1,4 +1,8 @@
 github "Alamofire/Alamofire"                ~> 4.0
+
+github "kstenerud/KSCrash" "1.15.8"
+github "getsentry/sentry-swift"  "2.1.4"
+
 github "sleroux/Deferred"                   "Swift3.0"
 github "SnapKit/SnapKit"                    "3.1.2"
 
@@ -17,3 +21,5 @@ github "cezheng/Fuzi"                       "1.0.1"
 github "SwiftyJSON/SwiftyJSON"              "3.1.4"
 github "farhanpatel/JSONSchema.swift" "master"
 github "google/EarlGrey"                    "1.7.0"
+
+
