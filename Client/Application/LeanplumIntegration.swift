@@ -33,6 +33,19 @@ enum LeanplumEventName: String {
     case savedLoginAndPassword = "Saved Login and Password"
 }
 
+enum SupportedLocales: String {
+    case US = "en_US"
+    case DE = "de"
+    case UK = "en_GB"
+    case CA_EN = "en_CA"
+    case CA_FR = "fr_CA"
+    case AU = "en_AU"
+    case TW = "zh_TW"
+    case HK = "en_HK"
+    case SG_EN = "en_SG"
+    case SG_CH = "zh_SG"
+}
+
 private struct LeanplumSettings {
     var environment: LeanplumEnvironment
     var appId: String
@@ -47,6 +60,10 @@ class LeanplumIntegration {
     private var profile: Profile?
 
     func setup(profile: Profile) {
+        guard (SupportedLocales(rawValue: Locale.current.identifier)) != nil else {
+            return
+        }
+
         if self.profile != nil {
             Logger.browserLogger.error("LeanplumIntegration - Already initialized")
             return
