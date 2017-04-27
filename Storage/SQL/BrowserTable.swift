@@ -116,7 +116,7 @@ private let log = Logger.syncLogger
  * We rely on SQLiteHistory having initialized the favicon table first.
  */
 open class BrowserTable: Table {
-    static let DefaultVersion = 23    // Bug 1326564.
+    static let DefaultVersion = 24    // Bug 1358154.
 
     // TableInfo fields.
     var name: String { return "BROWSER" }
@@ -288,6 +288,7 @@ open class BrowserTable: Table {
     let attachedHighlightsCreate =
         "CREATE TABLE IF NOT EXISTS \(AttachedTableHighlights) (" +
             "historyID INTEGER PRIMARY KEY," +
+            "cache_key LONGVARCHAR," +
             "url TEXT," +
             "title TEXT," +
             "guid TEXT," +
@@ -902,6 +903,16 @@ open class BrowserTable: Table {
         if from < 23 && to >= 23 {
             if !self.run(db, queries: [
                 attachedHighlightsCreate]) {
+                return false
+            }
+        }
+
+        if from < 24 && to >= 24 {
+            if !self.run(db, queries: [
+                // We can safely drop the highlights cache table since it gets cleared on every invalidate anyways.
+                "DROP TABLE IF EXISTS \(AttachedTableHighlights)",
+                attachedHighlightsCreate
+            ]) {
                 return false
             }
         }

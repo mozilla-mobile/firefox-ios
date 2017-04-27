@@ -13,6 +13,7 @@ extension SQLiteHistory: HistoryRecommendations {
     public func getHighlights() -> Deferred<Maybe<Cursor<Site>>> {
         let highlightsProjection = [
             "historyID",
+            "\(AttachedTableHighlights).cache_key AS cache_key",
             "url",
             "\(AttachedTableHighlights).title AS title",
             "guid",
@@ -34,7 +35,8 @@ extension SQLiteHistory: HistoryRecommendations {
         "SELECT \(allProjection.joined(separator: ",")) " +
         "FROM \(AttachedTableHighlights) " +
         "LEFT JOIN \(ViewHistoryIDsWithWidestFavicons) ON \(ViewHistoryIDsWithWidestFavicons).id = historyID " +
-        "LEFT OUTER JOIN \(AttachedTablePageMetadata) ON \(AttachedTablePageMetadata).site_url = url "
+        "LEFT OUTER JOIN \(AttachedTablePageMetadata) ON " +
+        "\(AttachedTablePageMetadata).cache_key = \(AttachedTableHighlights).cache_key"
 
         return self.db.runQuery(sql, args: nil, factory: SQLiteHistory.iconHistoryMetadataColumnFactory)
     }
@@ -53,12 +55,46 @@ extension SQLiteHistory: HistoryRecommendations {
 
     private func populateHighlights() -> Success {
         let (query, args) = computeHighlightsQuery()
-        let sql =
-            "INSERT INTO \(AttachedTableHighlights) " +
-            "SELECT historyID, url, title, guid, visitCount, visitDate, is_bookmarked " +
-            "FROM (\(query))"
 
-        return self.db.run(sql, withArgs: args)
+        // Convert the fetched row into arguments for a bulk insert along with the
+        // generated cache_key value.
+        func argsFrom(row: SDRow) -> Args? {
+            let urlString = row["url"] as! String
+            let cacheKey = SQLiteMetadata.cacheKeyForURL(urlString.asURL!)!
+            return [
+                row["historyID"],
+                cacheKey,
+                urlString,
+                row["title"],
+                row["guid"],
+                row["visitCount"],
+                row["visitDate"],
+                row["is_bookmarked"]
+            ]
+        }
+        
+        // Run the highlights computation query and take the results to bulk insert into the cached highlights table
+        return self.db.runQuery(query, args: args, factory: argsFrom)
+            >>== { highlightRows in
+                let values: [Args] = highlightRows.asArray().flatMap { $0 }
+                let highlightsProjection = [
+                    "historyID",
+                    "cache_key",
+                    "url",
+                    "title",
+                    "guid",
+                    "visitCount",
+                    "visitDate",
+                    "is_bookmarked"
+                ]
+
+                return self.db.bulkInsert(
+                    AttachedTableHighlights,
+                    op: .InsertOrReplace,
+                    columns: highlightsProjection,
+                    values: values
+            )
+        }
     }
 
     private func computeHighlightsQuery() -> (String, Args) {
