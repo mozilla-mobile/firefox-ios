@@ -3,7 +3,6 @@ disabled_rules: # rule identifiers to exclude from running
   - legacy_cggeometry_functions
   - todo
   - trailing_newline
-  - force_cast
   - type_name
   - function_body_length
   - missing_docs
@@ -11,7 +10,6 @@ disabled_rules: # rule identifiers to exclude from running
   - cyclomatic_complexity
   - type_body_length
   - function_parameter_count
-  - force_try
   - trailing_whitespace
   - leading_whitespace
   - operator_whitespace
@@ -27,6 +25,7 @@ disabled_rules: # rule identifiers to exclude from running
   - weak_delegate
   - shorthand_operator
   - trailing_comma
+  - unused_optional_binding
 opt_in_rules: # some rules are only opt-in
   - closing_brace
   - opening_brace
@@ -50,7 +49,15 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   - build
   - UITests/EarlGrey.swift
   - Storage/ThirdParty/SwiftData.swift
+  - UITests/
+  - XCUITests/
+  - SyncTests/
+  - StorageTests/
+  - ReadingListTests/
+  - ClientTests/
+  - AccountTests/
   - fastlane/
+  - SharedTests/
   - Client/Assets/Search/get_supported_locales.swift
 
 # configurable rules can be customized from this configuration file
@@ -63,6 +70,8 @@ return_arrow_whitespace: error
 statement_position: error
 colon: error
 comma: error
+force_try: warning
+force_cast: warning
 
 
 file_header:
