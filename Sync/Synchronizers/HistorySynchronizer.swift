@@ -14,6 +14,29 @@ private let log = Logger.syncLogger
 private let HistoryTTLInSeconds = 5184000                   // 60 days.
 let HistoryStorageVersion = 1
 
+func mach_task_self() -> task_t {
+    return mach_task_self_
+}
+
+func getMegabytesUsed() -> Float? {
+    var info = mach_task_basic_info()
+    var count = mach_msg_type_number_t(MemoryLayout.size(ofValue: info) / MemoryLayout<integer_t>.size)
+    let kerr = withUnsafeMutablePointer(to: &info) { infoPtr in
+        return infoPtr.withMemoryRebound(to: integer_t.self, capacity: Int(count)) { (machPtr: UnsafeMutablePointer<integer_t>) in
+            return task_info(
+                mach_task_self(),
+                task_flavor_t(MACH_TASK_BASIC_INFO),
+                machPtr,
+                &count
+            )
+        }
+    }
+    guard kerr == KERN_SUCCESS else {
+        return nil
+    }
+    return Float(info.resident_size) / (1024 * 1024)
+}
+
 func makeDeletedHistoryRecord(_ guid: GUID) -> Record<HistoryPayload> {
     // Local modified time is ignored in upload serialization.
     let modified: Timestamp = 0
