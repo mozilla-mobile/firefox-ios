@@ -56,7 +56,7 @@ class ThirdPartySearchTest: BaseTestCase {
         loadWebPage("https://developer.mozilla.org/en-US/search", waitForLoadToFinish: true)
 
         app.webViews.searchFields.element(boundBy: 0).tap()
-        app.buttons["AddSearch"].tap()
+        app.buttons["AddSearch"].tap(force: true)
         app.alerts["Add Search Provider?"].buttons["OK"].tap()
         XCTAssertFalse(app.buttons["AddSearch"].isEnabled)
         dismissKeyboardAssistant(forApp: app)
