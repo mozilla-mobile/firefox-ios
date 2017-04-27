@@ -85,6 +85,8 @@ public struct SyncStatusResolver {
                     return .good
                 case .engineRemotelyNotEnabled(_):
                     return .good
+                case .engineLocallyNotEnabled(_):
+                    return .good
                 case .engineFormatOutdated(_):
                     return .good
                 case .engineFormatTooNew(_):

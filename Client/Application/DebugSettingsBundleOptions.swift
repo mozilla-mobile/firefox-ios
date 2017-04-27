@@ -32,4 +32,29 @@ struct DebugSettingsBundleOptions {
     static var attachLogsToDebugEmail: Bool {
         return UserDefaults.standard.bool(forKey: "SettingsBundleEmailLogsOnLaunch")
     }
+    
+    static var syncTabs: Bool {
+        UserDefaults.standard.register(defaults: ["SettingsBundleSyncTabs": true])
+        return UserDefaults.standard.bool(forKey: "SettingsBundleSyncTabs")
+    }
+
+    static var syncHistory: Bool {
+        UserDefaults.standard.register(defaults: ["SettingsBundleSyncHistory": true])
+        return UserDefaults.standard.bool(forKey: "SettingsBundleSyncHistory")
+    }
+
+    static var syncBookmarks: Bool {
+        UserDefaults.standard.register(defaults: ["SettingsBundleSyncBookmarks": true])
+        return UserDefaults.standard.bool(forKey: "SettingsBundleSyncBookmarks")
+    }
+
+    static var syncLogins: Bool {
+        UserDefaults.standard.register(defaults: ["SettingsBundleSyncLogins": true])
+        return UserDefaults.standard.bool(forKey: "SettingsBundleSyncLogins")
+    }
+    
+    static var storeLogsInDocuments: Bool {
+        UserDefaults.standard.register(defaults: ["SettingsBundleStoreLogsInDocuments": true])
+        return UserDefaults.standard.bool(forKey: "SettingsBundleStoreLogsInDocuments")
+    }
 }

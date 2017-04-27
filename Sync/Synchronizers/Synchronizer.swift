@@ -100,6 +100,7 @@ public enum SyncNotStartedReason {
     case offline
     case backoff(remainingSeconds: Int)
     case engineRemotelyNotEnabled(collection: String)
+    case engineLocallyNotEnabled(collection: String)
     case engineFormatOutdated(needs: Int)
     case engineFormatTooNew(expected: Int)   // This'll disappear eventually; we'll wipe the server and upload m/g.
     case storageFormatOutdated(needs: Int)
@@ -114,6 +115,8 @@ public enum SyncNotStartedReason {
             return "no account"
         case let .backoff(remaining):
             return "in backoff: \(remaining) seconds remaining"
+        case let .engineLocallyNotEnabled(engine):
+            return "engine \(engine) locally disabled"
         default:
             return "undescribed reason"
         }

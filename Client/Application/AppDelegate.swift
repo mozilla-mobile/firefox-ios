@@ -10,6 +10,7 @@ import MessageUI
 import WebImage
 import SwiftKeychainWrapper
 import LocalAuthentication
+import Sentry
 
 private let log = Logger.browserLogger
 
@@ -50,7 +51,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window!.backgroundColor = UIConstants.AppBackgroundColor
-
+        
         // Short circuit the app if we want to email logs from the debug menu
         if DebugSettingsBundleOptions.launchIntoEmailComposer {
             self.window?.rootViewController = UIViewController()
@@ -83,6 +84,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         log.debug("Creating Browser log file…")
         Logger.browserLogger.newLogWithDate(logDate)
+
+
+        // DEBUG List all files in the app container
+        if true {
+            log.debug("Listing all files in the container:")
+            if let sharedContainerIdentifier = AppInfo.sharedContainerIdentifier(), let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: sharedContainerIdentifier) {
+                if let enumerator = FileManager.default.enumerator(at: containerURL, includingPropertiesForKeys: [.fileSizeKey]) {
+                    for case let url as URL in enumerator {
+                        let fileSize = url.getResourceLongLongForKey(URLResourceKey.fileSizeKey.rawValue) ?? 0
+                        log.debug("\(url.path) \(fileSize)")
+                    }
+                }
+            }
+        }
 
         log.debug("Getting profile…")
         let profile = getProfile(application)
@@ -131,12 +146,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         self.window!.rootViewController = rootViewController
 
-        do {
-            log.debug("Configuring Crash Reporting...")
-            try PLCrashReporter.shared().enableAndReturnError()
-        } catch let error as NSError {
-            log.error("Failed to enable PLCrashReporter - \(error.description)")
-        }
+//        do {
+//            log.debug("Configuring Crash Reporting...")
+//            try PLCrashReporter.shared().enableAndReturnError()
+//        } catch let error as NSError {
+//            log.error("Failed to enable PLCrashReporter - \(error.description)")
+//        }
 
         log.debug("Adding observers…")
         NotificationCenter.default.addObserver(forName: NSNotification.Name.FSReadingListAddReadingListItem, object: nil, queue: nil) { (notification) -> Void in
@@ -219,13 +234,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         log.debug("Did finish launching.")
 
+        log.debug("Setting up Sentry")
+        SentryClient.shared = SentryClient(dsnString: "https://100d2c22a7b74395a46c2793239a2df6:84192abb5a7d4c8f8777e490750ef9b8@sentry.prod.mozaws.net/202")
+        SentryClient.shared?.addTag("build", value: AppInfo.buildNumber)
+        SentryClient.shared?.addTag("bundleIdentifier", value: Bundle.main.bundleIdentifier ?? "unknown")
+
+        if let profile = self.profile {
+            SentryClient.shared?.addExtra("hasAccount", value: profile.hasAccount())
+        }
+        SentryClient.shared?.startCrashHandler()
+
         log.debug("Setting up Adjust")
         self.adjustIntegration?.triggerApplicationDidFinishLaunchingWithOptions(launchOptions)
 
-        #if BUDDYBUILD
-            log.debug("Setting up BuddyBuild SDK")
-            BuddyBuildSDK.setup()
-        #endif
+//        #if BUDDYBUILD
+//            log.debug("Setting up BuddyBuild SDK")
+//            BuddyBuildSDK.setup()
+//        #endif
         
         log.debug("Making window key and visible…")
         self.window!.makeKeyAndVisible()

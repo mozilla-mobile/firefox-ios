@@ -1,4 +1,8 @@
 github "Alamofire/Alamofire" "4.3.0"
+
+github "kstenerud/KSCrash" "1.15.8"
+github "getsentry/sentry-swift"  "2.1.5"
+
 github "sleroux/Deferred" "35b8927c1b94ce074e10793c57e1f80d0e2227fa"
 github "cezheng/Fuzi" "1.0.1"
 github "swisspol/GCDWebServer" "3.3.2"
@@ -14,3 +18,4 @@ github "mozilla/readability" "ccc8e9bf4c5400814d9b7a3ea83c21540da4c76f"
 github "SwiftyJSON/SwiftyJSON" "3.1.4"
 github "farhanpatel/JSONSchema.swift" "1c052b83baa8c497e12cde6a8afca0f54574612f"
 github "google/EarlGrey"                    "1.7.0"
+
