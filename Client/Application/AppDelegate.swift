@@ -235,7 +235,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         log.debug("Did finish launching.")
 
         log.debug("Setting up Sentry")
-        SentryClient.shared = SentryClient(dsnString: "https://8ce89051ab414ea8a41e5b8211103bec:670a141f1ca04b24b75e85c3474475e8@sentry.prod.mozaws.net/201")
+        SentryClient.shared = SentryClient(dsnString: "https://100d2c22a7b74395a46c2793239a2df6:84192abb5a7d4c8f8777e490750ef9b8@sentry.prod.mozaws.net/202")
+        SentryClient.shared?.addTag("build", value: AppInfo.buildNumber)
+        SentryClient.shared?.addTag("bundleIdentifier", value: Bundle.main.bundleIdentifier ?? "unknown")
+
         if let profile = self.profile {
             SentryClient.shared?.addExtra("hasAccount", value: profile.hasAccount())
         }
