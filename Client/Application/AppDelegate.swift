@@ -145,12 +145,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         self.window!.rootViewController = rootViewController
 
-        do {
-            log.debug("Configuring Crash Reporting...")
-            try PLCrashReporter.shared().enableAndReturnError()
-        } catch let error as NSError {
-            log.error("Failed to enable PLCrashReporter - \(error.description)")
-        }
+//        do {
+//            log.debug("Configuring Crash Reporting...")
+//            try PLCrashReporter.shared().enableAndReturnError()
+//        } catch let error as NSError {
+//            log.error("Failed to enable PLCrashReporter - \(error.description)")
+//        }
 
         log.debug("Adding observers…")
         NotificationCenter.default.addObserver(forName: NSNotification.Name.FSReadingListAddReadingListItem, object: nil, queue: nil) { (notification) -> Void in
@@ -236,10 +236,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         log.debug("Setting up Adjust")
         self.adjustIntegration?.triggerApplicationDidFinishLaunchingWithOptions(launchOptions)
 
-        #if BUDDYBUILD
-            log.debug("Setting up BuddyBuild SDK")
-            BuddyBuildSDK.setup()
-        #endif
+//        #if BUDDYBUILD
+//            log.debug("Setting up BuddyBuild SDK")
+//            BuddyBuildSDK.setup()
+//        #endif
         
         log.debug("Making window key and visible…")
         self.window!.makeKeyAndVisible()

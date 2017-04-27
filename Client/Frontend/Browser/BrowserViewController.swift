@@ -523,14 +523,14 @@ class BrowserViewController: UIViewController {
             self.view.alpha = (profile.prefs.intForKey(IntroViewControllerSeenProfileKey) != nil) ? 1.0 : 0.0
         }
 
-        if PLCrashReporter.shared().hasPendingCrashReport() {
-            PLCrashReporter.shared().purgePendingCrashReport()
-            showRestoreTabsAlert()
-        } else {
-            log.debug("Restoring tabs.")
-            tabManager.restoreTabs()
-            log.debug("Done restoring tabs.")
-        }
+//        if PLCrashReporter.shared().hasPendingCrashReport() {
+//            PLCrashReporter.shared().purgePendingCrashReport()
+//            showRestoreTabsAlert()
+//        } else {
+//            log.debug("Restoring tabs.")
+//            tabManager.restoreTabs()
+//            log.debug("Done restoring tabs.")
+//        }
 
         log.debug("Updating tab count.")
         updateTabCountUsingTabManager(tabManager, animated: false)
