@@ -211,6 +211,9 @@ class SearchEngines {
     // identifier from preferredLanguages and takes into account that on iOS 8, zh-Hans-CN is returned as
     // zh-Hans. In that case it returns the longer form zh-Hans-CN. Same for traditional Chinese.
     //
+    // There is also an exception for English because preferredLanguages can return en. In this case,
+    // we just assume en-US.
+    //
     // These exceptions can go away when we drop iOS 8 or when we start using a better mechanism for search
     // engine selection that is not based on language identifier.
     class func languageIdentifierForSearchEngines() -> String {
@@ -220,6 +223,8 @@ class SearchEngines {
                 return "zh-Hans-CN"
             case "zh-Hant":
                 return "zh-Hant-TW"
+            case "en":
+                return "en-US"
             default:
                 return languageIdentifier
         }
