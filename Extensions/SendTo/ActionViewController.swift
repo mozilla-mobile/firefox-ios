@@ -39,6 +39,7 @@ class ActionViewController: UIViewController, ClientPickerViewControllerDelegate
             self.sharedItem = item
             let clientPickerViewController = ClientPickerViewController()
             clientPickerViewController.clientPickerDelegate = self
+            clientPickerViewController.profile = nil // This means the picker will open and close the default profile
             let navigationController = UINavigationController(rootViewController: clientPickerViewController)
             self.present(navigationController, animated: false, completion: nil)
         })
