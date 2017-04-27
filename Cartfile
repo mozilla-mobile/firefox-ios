@@ -1,7 +1,7 @@
 github "Alamofire/Alamofire"                ~> 4.0
 
 github "kstenerud/KSCrash" "1.15.8"
-github "getsentry/sentry-swift"  "2.1.4"
+github "getsentry/sentry-swift"  "2.1.5"
 
 github "sleroux/Deferred"                   "Swift3.0"
 github "SnapKit/SnapKit"                    "3.1.2"
