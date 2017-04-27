@@ -519,6 +519,7 @@ class MetaGlobalTests: XCTestCase {
         declined.append("unknownEngine1")
         let secondMetaGlobal = MetaGlobal(syncID: newMetaGlobal.syncID, storageVersion: 5, engines: engines, declined: declined)
         storeMetaGlobal(metaGlobal: secondMetaGlobal)
+        syncPrefs.removeObjectForKey("scratchpad.localCommands")
 
         // Now, run through the state machine again.
         let thirdExpectation = self.expectation(description: "Waiting on value.")
