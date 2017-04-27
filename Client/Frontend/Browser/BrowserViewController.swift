@@ -527,9 +527,9 @@ class BrowserViewController: UIViewController {
 //            PLCrashReporter.shared().purgePendingCrashReport()
 //            showRestoreTabsAlert()
 //        } else {
-//            log.debug("Restoring tabs.")
-//            tabManager.restoreTabs()
-//            log.debug("Done restoring tabs.")
+           log.debug("Restoring tabs.")
+           tabManager.restoreTabs()
+           log.debug("Done restoring tabs.")
 //        }
 
         log.debug("Updating tab count.")
