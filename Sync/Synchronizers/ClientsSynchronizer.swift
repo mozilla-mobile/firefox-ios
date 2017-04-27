@@ -83,6 +83,32 @@ open class DisplayURICommand: Command {
     }
 }
 
+open class RepairResponseCommand: Command {
+    let repairResponse: RepairResponse
+
+    public init(command: String, args: [JSON]) {
+        self.repairResponse = RepairResponse.fromJSON(args: args[0])
+    }
+
+    open class func fromName(_ command: String, args: [JSON]) -> Command? {
+        return RepairResponseCommand(command: command, args: args)
+    }
+
+    open func run(_ synchronizer: ClientsSynchronizer) -> Success {
+        let repairer = BookmarksRepairRequestor(scratchpad: synchronizer.scratchpad, basePrefs: synchronizer.basePrefs, remoteClients: synchronizer.localClients!)
+        return repairer.continueRepairs(response: self.repairResponse) >>> succeed
+    }
+
+    open static func commandFromSyncCommand(_ syncCommand: SyncCommand) -> Command? {
+        let json = JSON(parseJSON: syncCommand.value)
+        if let name = json["command"].string,
+            let args = json["args"].array {
+            return RepairResponseCommand.fromName(name, args: args)
+        }
+        return nil
+    }
+}
+
 let Commands: [String: (String, [JSON]) -> Command?] = [
     "wipeAll": WipeCommand.fromName,
     "wipeEngine": WipeCommand.fromName,
@@ -90,12 +116,15 @@ let Commands: [String: (String, [JSON]) -> Command?] = [
     // resetAll
     // logout
     "displayURI": DisplayURICommand.fromName,
+    "repairResponse": RepairResponseCommand.fromName
 ]
 
 open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchronizer {
     public required init(scratchpad: Scratchpad, delegate: SyncDelegate, basePrefs: Prefs) {
         super.init(scratchpad: scratchpad, delegate: delegate, basePrefs: basePrefs, collection: "clients")
     }
+
+    var localClients: RemoteClientsAndTabs? = nil
 
     override var storageVersion: Int {
         return ClientsStorageVersion
@@ -344,6 +373,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
 
     open func synchronizeLocalClients(_ localClients: RemoteClientsAndTabs, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> SyncResult {
         log.debug("Synchronizing clients.")
+        self.localClients = localClients // Store for later when we process a repairResponse command
 
         if let reason = self.reasonToNotSync(storageClient) {
             switch reason {

@@ -12,7 +12,7 @@ public struct RemoteClient: Equatable {
     public let name: String
     public let type: String?
 
-    let version: String?
+    public let version: String?
     let protocols: [String]?
 
     let os: String?

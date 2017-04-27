@@ -89,7 +89,8 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
         return BookmarksStorageVersion
     }
 
-    open func synchronizeBookmarksToStorage(_ storage: SyncableBookmarks & LocalItemSource & MirrorItemSource, usingBuffer buffer: BookmarkBufferStorage & BufferItemSource, withServer storageClient: Sync15StorageClient, info: InfoCollections, greenLight: @escaping () -> Bool) -> SyncResult {
+    open func synchronizeBookmarksToStorage(_ storage: SyncableBookmarks & LocalItemSource & MirrorItemSource, usingBuffer buffer: BookmarkBufferStorage & BufferItemSource, withServer storageClient: Sync15StorageClient, info: InfoCollections, greenLight: @escaping () -> Bool,
+        remoteClientsAndTabs: RemoteClientsAndTabs) -> SyncResult {
         if let reason = self.reasonToNotSync(storageClient) {
             return deferMaybe(.notStarted(reason))
         }
@@ -134,8 +135,19 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
             run = doMirror >>== { result in
                 // Only bother trying to sync if the mirror operation wasn't interrupted or partial.
                 if case .completed = result {
-                    let applier = MergeApplier(buffer: buffer, storage: storage, client: storer, statsSession: self.statsSession, greenLight: greenLight)
-                    return applier.go()
+                    return buffer.repairValidation() >>== { validationInfo in
+                        let problemCount = validationInfo.flatMap { $0.ids }.count
+                        if problemCount == 0 {
+                            let applier = MergeApplier(buffer: buffer, storage: storage, client: storer, statsSession: self.statsSession, greenLight: greenLight)
+                            return applier.go()
+                        } else {
+                            log.warning("Buffer inconsistent, starting repair procedure")
+                            let repairer = BookmarksRepairRequestor(scratchpad: self.scratchpad, basePrefs: self.basePrefs, remoteClients: remoteClientsAndTabs)
+                            return repairer.startRepairs(validationInfo: validationInfo) >>> {
+                                deferMaybe(BookmarksDatabaseError(description: "Buffer inconsistent, repair started."))
+                            }
+                        }
+                    }
                 }
                 return deferMaybe(result)
             }
