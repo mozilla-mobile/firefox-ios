@@ -520,7 +520,10 @@ class SendAnonymousUsageDataSetting: BoolSetting {
             prefs: prefs, prefKey: "settings.sendUsageData", defaultValue: true,
             attributedTitleText: NSAttributedString(string: NSLocalizedString("Send Anonymous Usage Data", tableName: "SendAnonymousUsageData", comment: "See http://bit.ly/1SmEXU1")),
             attributedStatusText: NSAttributedString(string: NSLocalizedString("More Info…", tableName: "SendAnonymousUsageData", comment: "See http://bit.ly/1SmEXU1"), attributes: [NSForegroundColorAttributeName: UIConstants.HighlightBlue]),
-            settingDidChange: { AdjustIntegration.setEnabled($0) }
+            settingDidChange: {
+                AdjustIntegration.setEnabled($0)
+                LeanplumIntegration.sharedInstance.setEnabled($0)
+            }
         )
     }
 
