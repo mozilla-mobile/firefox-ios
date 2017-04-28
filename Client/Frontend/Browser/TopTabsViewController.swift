@@ -463,6 +463,9 @@ extension TopTabsViewController {
 }
 
 extension TopTabsViewController: TabManagerDelegate {
+    func tabManagerDidCreateDeepLink(_ tabManager: TabManager, deepLink: String) {
+    }
+
 
     // Because we don't know when we are about to transition to private mode
     // check to make sure that the tab we are trying to add is being added to the right tab group

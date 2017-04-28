@@ -693,6 +693,9 @@ extension TabTrayController: PresentingModalViewControllerDelegate {
 }
 
 extension TabTrayController: TabManagerDelegate {
+    func tabManagerDidCreateDeepLink(_ tabManager: TabManager, deepLink: String) {
+    }
+
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?) {
     }
 

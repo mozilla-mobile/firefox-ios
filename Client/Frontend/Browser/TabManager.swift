@@ -16,6 +16,7 @@ protocol TabManagerDelegate: class {
     func tabManager(_ tabManager: TabManager, willRemoveTab tab: Tab)
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab)
 
+    func tabManagerDidCreateDeepLink(_ tabManager: TabManager, deepLink: String)
     func tabManagerDidRestoreTabs(_ tabManager: TabManager)
     func tabManagerDidAddTabs(_ tabManager: TabManager)
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?)
@@ -473,12 +474,19 @@ class TabManager: NSObject {
         }
 
         let toast = LeanplumPromoButtonToast(labelText: labelText, buttonText: buttonText, colorText: colorText, completion: { buttonPressed in
-            guard let url = URL(string: deepLink) else {
+            if !buttonPressed {
                 return
             }
 
-            if UIApplication.shared.canOpenURL(url) && buttonPressed {
-                UIApplication.shared.openURL(url)
+            if let url = URL(string: deepLink) {
+                if UIApplication.shared.canOpenURL(url) && buttonPressed {
+                    UIApplication.shared.openURL(url)
+                    return
+                }
+            }
+
+            for delegate in self.delegates {
+                delegate.get()?.tabManagerDidCreateDeepLink(self, deepLink: deepLink)
             }
         })
 

@@ -1301,13 +1301,17 @@ class BrowserViewController: UIViewController {
         return .tab(tabState: tab.tabState)
     }
 
-    @objc fileprivate func openSettings() {
+    @objc fileprivate func openSettings(deepLink: String? = nil) {
         assert(Thread.isMainThread, "Opening settings requires being invoked on the main thread")
 
         let settingsTableViewController = AppSettingsTableViewController()
         settingsTableViewController.profile = profile
         settingsTableViewController.tabManager = tabManager
         settingsTableViewController.settingsDelegate = self
+
+        if let deepLink = deepLink {
+            settingsTableViewController.deepLink = deepLink
+        }
 
         let controller = SettingsNavigationController(rootViewController: settingsTableViewController)
         controller.popoverDelegate = self
@@ -2185,6 +2189,20 @@ extension BrowserViewController: TabManagerDelegate {
 
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
         updateTabCountUsingTabManager(tabManager)
+    }
+
+    func tabManagerDidCreateDeepLink(_ tabManager: TabManager, deepLink: String) {
+        switch deepLink {
+            case "new-tab":
+                openBlankNewTab()
+            case "new-private-tab":
+                openBlankNewTab(isPrivate: true)
+            case "bookmark-panel":
+                self.openURLInNewTab(HomePanelType.bookmarks.localhostURL as URL, isPrivate: false, isPrivileged: true)
+            case "sync-settings", "search-settings", "mailto-settings", "homepage-settings", "private-data-settings": openSettings(deepLink: deepLink)
+        default:
+            break
+        }
     }
 
     func show(buttonToast: ButtonToast, afterWaiting delay: Double = 0, duration: Double = SimpleToastUX.ToastDismissAfter) {
