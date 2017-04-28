@@ -159,6 +159,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         adjustIntegration = AdjustIntegration(profile: profile)
 
         LeanplumIntegration.sharedInstance.setup(profile: profile)
+        LeanplumIntegration.sharedInstance.start()
 
         // We need to check if the app is a clean install to use for
         // preventing the What's New URL from appearing.
