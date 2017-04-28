@@ -52,7 +52,7 @@ class TrivialBookmarkStorer: BookmarkStorer {
             try accumulateFromAmendMap(op.amendChildrenFromMirror, fetch: { itemSources.mirror.getMirrorItemsWithGUIDs($0.keys).value })
             try accumulateFromAmendMap(op.amendChildrenFromLocal, fetch: { itemSources.local.getLocalItemsWithGUIDs($0.keys).value })
         } catch {
-            return deferMaybe(error as! MaybeErrorType)
+            return deferMaybe(error as MaybeErrorType)
         }
 
         var success: [GUID] = []
@@ -64,7 +64,7 @@ class TrivialBookmarkStorer: BookmarkStorer {
                 failed[guid] = message
             }
 
-            log.debug("Uploaded records got timestamp \(lastModified).")
+            log.debug("Uploaded records got timestamp \(lastModified ??? "nil").")
             let modified = lastModified ?? 0
             local.setModifiedTime(modified, guids: result.success)
             return deferMaybe(modified)

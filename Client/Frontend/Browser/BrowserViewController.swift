@@ -16,6 +16,7 @@ import ReadingList
 import MobileCoreServices
 import WebImage
 import SwiftyJSON
+import Telemetry
 
 private let log = Logger.browserLogger
 
@@ -933,7 +934,7 @@ class BrowserViewController: UIViewController {
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         let webView = object as! WKWebView
-        guard let path = keyPath else { assertionFailure("Unhandled KVO key: \(keyPath)"); return }
+        guard let path = keyPath else { assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")"); return }
         switch path {
         case KVOEstimatedProgress:
             guard webView == tabManager.selectedTab?.webView,
@@ -974,7 +975,7 @@ class BrowserViewController: UIViewController {
 
             navigationToolbar.updateForwardStatus(canGoForward)
         default:
-            assertionFailure("Unhandled KVO key: \(keyPath)")
+            assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")")
         }
     }
 
@@ -1027,7 +1028,7 @@ class BrowserViewController: UIViewController {
         profile.bookmarks.modelFactory >>== {
             $0.isBookmarked(url).uponQueue(DispatchQueue.main) { [weak tab] result in
                 guard let bookmarked = result.successValue else {
-                    log.error("Error getting bookmark status: \(result.failureValue).")
+                    log.error("Error getting bookmark status: \(result.failureValue ??? "nil").")
                     return
                 }
                 tab?.isBookmarked = bookmarked
@@ -1336,6 +1337,8 @@ extension BrowserViewController: MenuActionDelegate {
             switch menuAction {
             case .openNewNormalTab:
                 self.openURLInNewTab(nil, isPrivate: false, isPrivileged: true)
+                LeanplumIntegration.sharedInstance.track(eventName: .openedNewTab)
+
             // this is a case that is only available in iOS9
             case .openNewPrivateTab:
                 self.openURLInNewTab(nil, isPrivate: true, isPrivileged: true)
@@ -1624,6 +1627,8 @@ extension BrowserViewController: URLBarDelegate {
             }
             showHomePanelController(inline: false)
         }
+
+        LeanplumIntegration.sharedInstance.track(eventName: .interactWithURLBar)
     }
 
     func urlBarDidLeaveOverlayMode(_ urlBar: URLBarView) {
@@ -1715,6 +1720,7 @@ extension BrowserViewController: TabToolbarDelegate {
             self.removeBookmark(tabState)
         } else {
             self.addBookmark(tabState)
+            LeanplumIntegration.sharedInstance.track(eventName: .savedBookmark)
         }
     }
 
@@ -2101,7 +2107,7 @@ extension BrowserViewController: TabManagerDelegate {
                         $0.isBookmarked(absoluteString)
                             .uponQueue(DispatchQueue.main) {
                             guard let isBookmarked = $0.successValue else {
-                                log.error("Error getting bookmark status: \($0.failureValue).")
+                                log.error("Error getting bookmark status: \($0.failureValue ??? "nil").")
                                 return
                             }
 
@@ -2277,7 +2283,6 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         if !navigationAction.isAllowed && navigationAction.navigationType != .backForward {
-            print("\(navigationAction.isAllowed) \(navigationAction.navigationType == .backForward) \(navigationAction.request.url)")
             log.warning("Denying unprivileged request: \(navigationAction.request)")
             decisionHandler(WKNavigationActionPolicy.cancel)
             return
@@ -2287,7 +2292,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // gives us the exact same behaviour as Safari.
 
         if url.scheme == "tel" || url.scheme == "facetime" || url.scheme == "facetime-audio" {
-            if let phoneNumber = url.path.removingPercentEncoding, !phoneNumber.isEmpty {
+            if let components = NSURLComponents(url: url, resolvingAgainstBaseURL: false), let phoneNumber = components.path, !phoneNumber.isEmpty {
                 let formatter = PhoneNumberFormatter()
                 let formattedPhoneNumber = formatter.formatPhoneNumber(phoneNumber)
                 let alert = UIAlertController(title: formattedPhoneNumber, message: nil, preferredStyle: UIAlertControllerStyle.alert)
@@ -2296,6 +2301,8 @@ extension BrowserViewController: WKNavigationDelegate {
                     UIApplication.shared.openURL(url)
                 }))
                 present(alert, animated: true, completion: nil)
+
+                LeanplumIntegration.sharedInstance.track(eventName: .openedTelephoneLink)
             }
             decisionHandler(WKNavigationActionPolicy.cancel)
             return
@@ -2318,6 +2325,8 @@ extension BrowserViewController: WKNavigationDelegate {
             } else {
                 UIApplication.shared.openURL(url)
             }
+
+            LeanplumIntegration.sharedInstance.track(eventName: .openedMailtoLink)
             decisionHandler(WKNavigationActionPolicy.cancel)
             return
         }
@@ -2325,7 +2334,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // This is the normal case, opening a http or https url, which we handle by loading them in this WKWebView. We
         // always allow this. Additionally, data URIs are also handled just like normal web pages.
 
-        if url.scheme == "http" || url.scheme == "https" || url.scheme == "data" {
+        if url.scheme == "http" || url.scheme == "https" || url.scheme == "data" || url.scheme == "blob" {
             if navigationAction.navigationType == .linkActivated {
                 resetSpoofedUserAgentIfRequired(webView, newURL: url)
             } else if navigationAction.navigationType == .backForward {
@@ -3033,7 +3042,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                     }
                     accessDenied.addAction(settingsAction)
                     self.present(accessDenied, animated: true, completion: nil)
-
+                    LeanplumIntegration.sharedInstance.track(eventName: .downloadedImage)
                 }
             }
             actionSheetController.addAction(saveImageAction)
@@ -3449,6 +3458,7 @@ extension BrowserViewController: TopTabsDelegate {
         if selectedTab.isPrivate {
             if profile.prefs.boolForKey("settings.closePrivateTabs") ?? false {
                 tabManager.removeAllPrivateTabsAndNotify(false)
+                tabManager.showFocusPromoToast()
             }
         }
     }

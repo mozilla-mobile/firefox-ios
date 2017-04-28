@@ -838,6 +838,7 @@ class TestSQLiteHistory: XCTestCase {
     // Test that our visit partitioning for frecency is correct.
     func testHistoryLocalAndRemoteVisits() {
         let db = BrowserDB(filename: "browser.db", files: files)
+        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
@@ -917,6 +918,7 @@ class TestSQLiteHistory: XCTestCase {
 
         for (version, table) in sources {
             let db = BrowserDB(filename: "browser-v\(version).db", files: files)
+            db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
             XCTAssertTrue(
                 db.runWithConnection { (conn, err) in
                     XCTAssertTrue(table.create(conn), "Creating browser table version \(version)")
@@ -931,6 +933,7 @@ class TestSQLiteHistory: XCTestCase {
 
     func testUpgradesWithData() {
         let db = BrowserDB(filename: "browser-v6-data.db", files: files)
+        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
 
         XCTAssertTrue(db.createOrUpdate(BrowserTableV6()) == .success, "Creating browser table version 6")
 
@@ -960,6 +963,7 @@ class TestSQLiteHistory: XCTestCase {
 
     func testDomainUpgrade() {
         let db = BrowserDB(filename: "browser.db", files: files)
+        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
@@ -967,7 +971,7 @@ class TestSQLiteHistory: XCTestCase {
         var err: NSError? = nil
 
         // Insert something with an invalid domain ID. We have to manually do this since domains are usually hidden.
-        db.withConnection(&err, callback: { (connection, err) -> Int in
+        let _ = db.withConnection(&err, callback: { (connection, err) -> Int in
             let insert = "INSERT INTO \(TableHistory) (guid, url, title, local_modified, is_deleted, should_upload, domain_id) " +
                          "?, ?, ?, ?, ?, ?, ?"
             let args: Args = [Bytes.generateGUID(), site.url, site.title, Date.now(), 0, 0, -1]
@@ -976,7 +980,7 @@ class TestSQLiteHistory: XCTestCase {
         })
 
         // Now insert it again. This should update the domain
-        history.addLocalVisit(SiteVisit(site: site, date: Date.nowMicroseconds(), type: VisitType.link))
+        history.addLocalVisit(SiteVisit(site: site, date: Date.nowMicroseconds(), type: VisitType.link)).succeeded()
 
         // DomainID isn't normally exposed, so we manually query to get it
         let results = db.withConnection(&err, callback: { (connection, err) -> Cursor<Int> in
@@ -989,6 +993,7 @@ class TestSQLiteHistory: XCTestCase {
 
     func testDomains() {
         let db = BrowserDB(filename: "browser.db", files: files)
+        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
@@ -1026,6 +1031,7 @@ class TestSQLiteHistory: XCTestCase {
 
     func testHistoryIsSynced() {
         let db = BrowserDB(filename: "historysynced.db", files: files)
+        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
@@ -1043,6 +1049,7 @@ class TestSQLiteHistory: XCTestCase {
     // and then clears the database.
     func testHistoryTable() {
         let db = BrowserDB(filename: "browser.db", files: files)
+        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
         let bookmarks = SQLiteBookmarks(db: db)
@@ -1165,6 +1172,7 @@ class TestSQLiteHistory: XCTestCase {
 
     func testFaviconTable() {
         let db = BrowserDB(filename: "browser.db", files: files)
+        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
         let bookmarks = SQLiteBookmarks(db: db)
@@ -1226,8 +1234,9 @@ class TestSQLiteHistory: XCTestCase {
         }
     }
 
-    func testTopSitesCache() {
+    func testTopSitesFrecencyOrder() {
         let db = BrowserDB(filename: "browser.db", files: files)
+        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
@@ -1235,11 +1244,60 @@ class TestSQLiteHistory: XCTestCase {
         history.clearTopSitesCache().value
         history.clearHistory().value
 
+        // Lets create some history. This will create 100 sites that will have 21 local and 21 remote visits
+        populateHistoryForFrecencyCalculations(history, siteCount: 100)
+
+        // Create a new site thats for an existing domain but a different URL.
+        let site = Site(url: "http://s\(5)ite\(5).com/foo-different-url", title: "A \(5) different url")
+        site.guid = "abc\(5)defhi"
+        history.insertOrUpdatePlace(site.asPlace(), modified: baseInstantInMillis - 20000).value
+        // Don't give it any remote visits. But give it 100 local visits. This should be the new Topsite!
+        for i in 0...100 {
+            addVisitForSite(site, intoHistory: history, from: .local, atTime: advanceTimestamp(baseInstantInMicros, by: 1000000 * i))
+        }
+
+        let expectation = self.expectation(description: "First.")
+        func done() -> Success {
+            expectation.fulfill()
+            return succeed()
+        }
+
+        func loadCache() -> Success {
+            return history.updateTopSitesCacheIfInvalidated() >>> succeed
+        }
+
+        func checkTopSitesReturnsResults() -> Success {
+            return history.getTopSitesWithLimit(20) >>== { topSites in
+                XCTAssertEqual(topSites.count, 20)
+                XCTAssertEqual(topSites[0]!.guid, "abc\(5)defhi")
+                return succeed()
+            }
+        }
+
+        loadCache()
+            >>> checkTopSitesReturnsResults
+            >>> done
+
+        waitForExpectations(timeout: 10.0) { error in
+            return
+        }
+    }
+
+    func testTopSitesCache() {
+        let db = BrowserDB(filename: "browser.db", files: files)
+        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
+        let prefs = MockProfilePrefs()
+        let history = SQLiteHistory(db: db, prefs: prefs)
+
+        history.setTopSitesCacheSize(20)
+        history.clearTopSitesCache().succeeded()
+        history.clearHistory().succeeded()
+
         // Make sure that we get back the top sites
         populateHistoryForFrecencyCalculations(history, siteCount: 100)
 
         // Add extra visits to the 5th site to bubble it to the top of the top sites cache
-        let site = Site(url: "http://s\(5)ite\(5)/foo", title: "A \(5)")
+        let site = Site(url: "http://s\(5)ite\(5).com/foo", title: "A \(5)")
         site.guid = "abc\(5)def"
         for i in 0...20 {
             addVisitForSite(site, intoHistory: history, from: .local, atTime: advanceTimestamp(baseInstantInMicros, by: 1000000 * i))
@@ -1274,7 +1332,7 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         func addVisitsToZerothSite() -> Success {
-            let site = Site(url: "http://s\(0)ite\(0)/foo", title: "A \(0)")
+            let site = Site(url: "http://s\(0)ite\(0).com/foo", title: "A \(0)")
             site.guid = "abc\(0)def"
             for i in 0...20 {
                 addVisitForSite(site, intoHistory: history, from: .local, atTime: advanceTimestamp(baseInstantInMicros, by: 1000000 * i))
@@ -1288,11 +1346,12 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         func checkSitesInvalidate() -> Success {
-            history.updateTopSitesCacheIfInvalidated().value
+            history.updateTopSitesCacheIfInvalidated().succeeded()
 
             return history.getTopSitesWithLimit(20) >>== { topSites in
                 XCTAssertEqual(topSites.count, 20)
-                XCTAssertEqual(topSites[0]!.guid, "abc\(0)def")
+                XCTAssertEqual(topSites[0]!.guid, "abc\(5)def")
+                XCTAssertEqual(topSites[1]!.guid, "abc\(0)def")
                 return succeed()
             }
         }
@@ -1315,14 +1374,15 @@ class TestSQLiteHistoryTransactionUpdate: XCTestCase {
     func testUpdateInTransaction() {
         let files = MockFiles()
         let db = BrowserDB(filename: "browser.db", files: files)
+        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
-        history.clearHistory().value
+        history.clearHistory().succeeded()
         let site = Site(url: "http://site/foo", title: "AA")
         site.guid = "abcdefghiabc"
 
-        history.insertOrUpdatePlace(site.asPlace(), modified: 1234567890).value
+        history.insertOrUpdatePlace(site.asPlace(), modified: 1234567890).succeeded()
 
         let ts: MicrosecondTimestamp = baseInstantInMicros
         let local = SiteVisit(site: site, date: ts, type: VisitType.link)
@@ -1334,6 +1394,7 @@ class TestSQLiteHistoryFilterSplitting: XCTestCase {
     let history: SQLiteHistory = {
         let files = MockFiles()
         let db = BrowserDB(filename: "browser.db", files: files)
+        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
         let prefs = MockProfilePrefs()
         return SQLiteHistory(db: db, prefs: prefs)
     }()
@@ -1390,16 +1451,16 @@ enum VisitOrigin {
 
 private func populateHistoryForFrecencyCalculations(_ history: SQLiteHistory, siteCount count: Int) {
     for i in 0...count {
-        let site = Site(url: "http://s\(i)ite\(i)/foo", title: "A \(i)")
+        let site = Site(url: "http://s\(i)ite\(i).com/foo", title: "A \(i)")
         site.guid = "abc\(i)def"
 
         let baseMillis: UInt64 = baseInstantInMillis - 20000
-        history.insertOrUpdatePlace(site.asPlace(), modified: baseMillis).value
+        history.insertOrUpdatePlace(site.asPlace(), modified: baseMillis).succeeded()
 
         for j in 0...20 {
             let visitTime = advanceMicrosecondTimestamp(baseInstantInMicros, by: (1000000 * i) + (1000 * j))
             addVisitForSite(site, intoHistory: history, from: .local, atTime: visitTime)
-            addVisitForSite(site, intoHistory: history, from: .remote, atTime: visitTime)
+            addVisitForSite(site, intoHistory: history, from: .remote, atTime: visitTime - 100)
         }
     }
 }
@@ -1408,8 +1469,8 @@ func addVisitForSite(_ site: Site, intoHistory history: SQLiteHistory, from: Vis
     let visit = SiteVisit(site: site, date: atTime, type: VisitType.link)
     switch from {
     case .local:
-            history.addLocalVisit(visit).value
+            history.addLocalVisit(visit).succeeded()
     case .remote:
-        history.storeRemoteVisits([visit], forGUID: site.guid!).value
+        history.storeRemoteVisits([visit], forGUID: site.guid!).succeeded()
     }
 }

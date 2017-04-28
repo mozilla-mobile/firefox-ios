@@ -32,6 +32,8 @@ struct ClientPickerViewControllerUX {
 
 class ClientPickerViewController: UITableViewController {
     var profile: Profile?
+    var profileNeedsShutdown = true
+
     var clientPickerDelegate: ClientPickerViewControllerDelegate?
 
     var reloading = true
@@ -148,13 +150,36 @@ class ClientPickerViewController: UITableViewController {
     }
 
     fileprivate func reloadClients() {
+        // If we were not given a profile, open the default profile. This happens in case we are called from an app
+        // extension. That also means that we need to shut down the profile, otherwise the app extension will be
+        // terminated when it goes into the background.
+
+        if self.profile == nil {
+            self.profile = BrowserProfile(localName: "profile")
+            self.profileNeedsShutdown = true
+        }
+
         guard let profile = self.profile else {
             return
+        }
+
+        // Re-open the profile it was shutdown. This happens when we run from an app extension, where we must
+        // make sure that the profile is only open for brief moments of time.
+
+        if profile.isShutdown {
+            profile.reopen()
         }
 
         reloading = true
         profile.getClients().upon({ result in
             withExtendedLifetime(profile) {
+                // If we are running from an app extension then make sure we shut down the profile as soon as we are
+                // done with it.
+
+                if self.profileNeedsShutdown {
+                    profile.shutdown()
+                }
+
                 self.reloading = false
                 guard let c = result.successValue else {
                     return

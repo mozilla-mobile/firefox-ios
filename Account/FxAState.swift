@@ -90,7 +90,7 @@ func stateV1(fromJSON json: JSON) -> FxAState? {
                     sessionToken = json["sessionToken"].string?.hexDecodedData,
                     let kA = json["kA"].string?.hexDecodedData,
                     let kB = json["kB"].string?.hexDecodedData,
-                    let keyPairJSON = json["keyPair"].dictionaryObject as? [String: AnyObject],
+                    let keyPairJSON = json["keyPair"].dictionaryObject,
                     let keyPair = RSAKeyPair(jsonRepresentation: keyPairJSON),
                     let keyPairExpiresAt = json["keyPairExpiresAt"].int64 {
                         return CohabitingAfterKeyPairState(sessionToken: sessionToken, kA: kA, kB: kB,
@@ -102,7 +102,7 @@ func stateV1(fromJSON json: JSON) -> FxAState? {
                     sessionToken = json["sessionToken"].string?.hexDecodedData,
                     let kA = json["kA"].string?.hexDecodedData,
                     let kB = json["kB"].string?.hexDecodedData,
-                    let keyPairJSON = json["keyPair"].dictionaryObject as? [String: AnyObject],
+                    let keyPairJSON = json["keyPair"].dictionaryObject,
                     let keyPair = RSAKeyPair(jsonRepresentation: keyPairJSON),
                     let keyPairExpiresAt = json["keyPairExpiresAt"].int64,
                     let certificate = json["certificate"].string,

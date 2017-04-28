@@ -352,8 +352,8 @@ open class BookmarkPayload: BookmarkBasePayload {
     }()
 
     lazy var tagsString: String = {
-        if self["tags"].type == Type.array {
-            return self["tags"].stringValue
+        if self["tags"].isArray() {
+            return self["tags"].stringValue() ?? "[]"
         }
         return "[]"
     }()
@@ -452,11 +452,11 @@ open class BookmarkBasePayload: CleartextPayloadJSON, MirrorItemable {
         guard let arr = self[name].array else {
             return false
         }
-        return arr.every { $0.type == .string }
+        return arr.every { $0.isString() }
     }
 
     func hasRequiredStringFields(_ fields: [String]) -> Bool {
-        return fields.every { self[$0].type == .string }
+        return fields.every { self[$0].isString() }
     }
 
     func hasOptionalStringFields(_ fields: [String]) -> Bool {

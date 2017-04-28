@@ -80,6 +80,9 @@ class ToolbarTests: BaseTestCase {
 
         XCTAssertFalse(app.buttons["URLBarView.backButton"].isEnabled)
         XCTAssertFalse(app.buttons["Forward"].isEnabled)
+
+        // Go back to portrait mode
+        XCUIDevice.shared().orientation = .portrait
     }
 
     func testClearURLTextUsingBackspace() {

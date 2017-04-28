@@ -113,7 +113,7 @@ class MetaGlobalTests: XCTestCase {
         }
 
         waitForExpectations(timeout: 2000) { (error) in
-            XCTAssertNil(error, "\(error)")
+            XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
     }
 
@@ -133,7 +133,7 @@ class MetaGlobalTests: XCTestCase {
         }
 
         waitForExpectations(timeout: 2000) { (error) in
-            XCTAssertNil(error, "\(error)")
+            XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
     }
 
@@ -151,7 +151,7 @@ class MetaGlobalTests: XCTestCase {
         }
 
         waitForExpectations(timeout: 2000) { (error) in
-            XCTAssertNil(error, "\(error)")
+            XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
     }
 
@@ -170,7 +170,7 @@ class MetaGlobalTests: XCTestCase {
         }
 
         waitForExpectations(timeout: 2000) { (error) in
-            XCTAssertNil(error, "\(error)")
+            XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
     }
 
@@ -203,7 +203,7 @@ class MetaGlobalTests: XCTestCase {
         }
 
         waitForExpectations(timeout: 2000) { (error) in
-            XCTAssertNil(error, "\(error)")
+            XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
 
         let afterFirstSync = Date.now()
@@ -229,7 +229,7 @@ class MetaGlobalTests: XCTestCase {
         }
 
         waitForExpectations(timeout: 2000) { (error) in
-            XCTAssertNil(error, "\(error)")
+            XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
     }
 
@@ -264,7 +264,7 @@ class MetaGlobalTests: XCTestCase {
         }
 
         waitForExpectations(timeout: 2000) { (error) in
-            XCTAssertNil(error, "\(error)")
+            XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
 
         let afterFirstSync = Date.now()
@@ -297,7 +297,7 @@ class MetaGlobalTests: XCTestCase {
         }
 
         waitForExpectations(timeout: 2000) { (error) in
-            XCTAssertNil(error, "\(error)")
+            XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
 
         let afterSecondSync = Date.now()
@@ -330,7 +330,7 @@ class MetaGlobalTests: XCTestCase {
         }
 
         waitForExpectations(timeout: 2000) { (error) in
-            XCTAssertNil(error, "\(error)")
+            XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
 
         let afterThirdSync = Date.now()
@@ -361,7 +361,7 @@ class MetaGlobalTests: XCTestCase {
         }
 
         waitForExpectations(timeout: 2000) { (error) in
-            XCTAssertNil(error, "\(error)")
+            XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
     }
 
@@ -400,7 +400,7 @@ class MetaGlobalTests: XCTestCase {
         }
 
         waitForExpectations(timeout: 2000) { (error) in
-            XCTAssertNil(error, "\(error)")
+            XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
 
         // Wipe meta/global.
@@ -435,7 +435,7 @@ class MetaGlobalTests: XCTestCase {
         }
 
         waitForExpectations(timeout: 2000) { (error) in
-            XCTAssertNil(error, "\(error)")
+            XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
     }
 
@@ -469,7 +469,7 @@ class MetaGlobalTests: XCTestCase {
         }
 
         waitForExpectations(timeout: 2000) { (error) in
-            XCTAssertNil(error, "\(error)")
+            XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
 
         let afterFirstSync = Date.now()
@@ -507,7 +507,7 @@ class MetaGlobalTests: XCTestCase {
         }
 
         waitForExpectations(timeout: 2000) { (error) in
-            XCTAssertNil(error, "\(error)")
+            XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
 
         // Now store a meta/global with a changed engine syncID, a new engine, and a new declined entry.
@@ -551,7 +551,7 @@ class MetaGlobalTests: XCTestCase {
         }
 
         waitForExpectations(timeout: 2000) { (error) in
-            XCTAssertNil(error, "\(error)")
+            XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
     }
 }

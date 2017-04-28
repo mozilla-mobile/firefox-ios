@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
+import Shared
 import WebKit
 import Storage
 import SnapKit
@@ -90,7 +91,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         scrollTableViewToIndex(currentRow)
         setupDismissTap()
     }
-
+    
     func loadSitesFromProfile() {
         let sql = profile.favicons as! SQLiteHistory
         let urls = self.listData.flatMap {$0.url.isLocal ? $0.url.getQuery()["url"]?.unescape() : $0.url.absoluteString}
@@ -109,13 +110,17 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         }
     }
 
-    func loadSites(_ bfList: WKBackForwardList) {
+    func homeAndNormalPagesOnly(_ bfList: WKBackForwardList) {
         let items = bfList.forwardList.reversed() + [bfList.currentItem].flatMap({$0}) + bfList.backList.reversed()
-        self.currentItem = bfList.currentItem
-
+        
         //error url's are OK as they are used to populate history on session restore.
-        listData = items.filter({return !($0.url.isLocal && ($0.url.originalURLFromErrorURL?.isLocal ?? true))})
-
+        listData = items.filter({return !($0.url.isLocal && ($0.url.originalURLFromErrorURL?.isLocal ?? true)) || $0.url.isAboutHomeURL})
+    }
+    
+    func loadSites(_ bfList: WKBackForwardList) {
+        self.currentItem = bfList.currentItem
+        
+        homeAndNormalPagesOnly(bfList)
     }
     
     func scrollTableViewToIndex(_ index: Int) {
@@ -217,23 +222,30 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-       let cell = self.tableView.dequeueReusableCell(withIdentifier: BackForwardListCellIdentifier, for: indexPath) as! BackForwardTableViewCell
+        let cell = self.tableView.dequeueReusableCell(withIdentifier: BackForwardListCellIdentifier, for: indexPath) as! BackForwardTableViewCell
         let item = listData[indexPath.item]
         let urlString = item.url.isLocal ? item.url.getQuery()["url"]?.unescape() : item.url.absoluteString
-        guard let url = urlString else {
-            return cell // This should never happen.
-        }
-
-        if let site = sites[url] {
-            cell.site = site
-        } else {
-            cell.site = Site(url: url, title: item.title ?? "")
-        }
         
         cell.isCurrentTab = listData[indexPath.item] == self.currentItem
         cell.connectingBackwards = indexPath.item != listData.count-1
         cell.connectingForwards = indexPath.item != 0
         cell.isPrivate = isPrivate
+        
+        guard let url = urlString else {
+            cell.site = Site(url: item.url.absoluteString, title: Strings.FirefoxHomePage)
+            return cell
+        }
+        
+        if item.url.isAboutHomeURL {
+            cell.site = Site(url: item.url.absoluteString, title: Strings.FirefoxHomePage)
+            return cell
+        }
+        
+        if let site = sites[url] {
+            cell.site = site
+        } else {
+            cell.site = Site(url: url, title: item.title ?? "")
+        }
         
         cell.setNeedsDisplay()
         

@@ -245,24 +245,24 @@ private extension NotificationRootViewController {
     }
 
     @objc func didFinishSyncing(_ notification: Notification) {
-        defer {
-            if let syncMessage = notificationView.titleLabel.attributedText {
-                DispatchQueue.main.async {
-                    self.showStatusNotification(!self.showingNotification, duration: .short, withEllipsis: false)
-                }
-            } else if showingNotification {
-                showNotificationForSync = false
-                DispatchQueue.main.async {
+        DispatchQueue.main.async {
+            defer {
+                if let syncMessage = self.notificationView.titleLabel.attributedText {
+                        self.showStatusNotification(!self.showingNotification, duration: .short, withEllipsis: false)
+
+                } else if self.showingNotification {
+                    self.showNotificationForSync = false
                     self.hideStatusNotification()
+
                 }
             }
+            guard let syncMessage = self.syncMessageForNotification(notification.object as AnyObject?) else {
+                self.notificationView.titleLabel.text = nil
+                self.notificationView.titleLabel.attributedText = nil
+                return
+            }
+            self.notificationView.titleLabel.attributedText = syncMessage
         }
-        guard let syncMessage = syncMessageForNotification(notification.object as AnyObject?) else {
-            notificationView.titleLabel.text = nil
-            notificationView.titleLabel.attributedText = nil
-            return
-        }
-        notificationView.titleLabel.attributedText = syncMessage
     }
 
     @objc func fxaAccountDidChange(_ notification: Notification) {

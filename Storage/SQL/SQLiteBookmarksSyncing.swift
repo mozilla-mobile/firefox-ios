@@ -158,7 +158,7 @@ extension SQLiteBookmarks {
             faviconID = nil
         }
 
-        log.debug("Inserting bookmark with GUID \(newGUID) and specified icon \(faviconID).")
+        log.debug("Inserting bookmark with GUID \(newGUID) and specified icon \(faviconID ??? "nil").")
 
         // If the caller didn't provide an icon (and they usually don't!),
         // do a reverse lookup in history. We use a view to make this simple.
@@ -635,8 +635,8 @@ extension MergedSQLiteBookmarks: LocalItemSource {
 }
 
 extension MergedSQLiteBookmarks: ShareToDestination {
-    public func shareItem(_ item: ShareItem) {
-        self.local.shareItem(item)
+    public func shareItem(_ item: ShareItem) -> Success {
+        return self.local.shareItem(item)
     }
 }
 

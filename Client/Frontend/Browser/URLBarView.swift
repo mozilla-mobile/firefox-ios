@@ -754,7 +754,7 @@ private let H_M4 = 0.961
 /* Code for drawing the urlbar curve */
 private class CurveView: UIView {
     fileprivate lazy var leftCurvePath: UIBezierPath = {
-        var leftArc = UIBezierPath(arcCenter: CGPoint(x: 5, y: 5), radius: CGFloat(5), startAngle: CGFloat(-M_PI), endAngle: CGFloat(-M_PI_2), clockwise: true)
+        var leftArc = UIBezierPath(arcCenter: CGPoint(x: 5, y: 5), radius: CGFloat(5), startAngle: CGFloat(-Double.pi), endAngle: CGFloat(-(Double.pi / 2)), clockwise: true)
         leftArc.addLine(to: CGPoint(x: 0, y: 0))
         leftArc.addLine(to: CGPoint(x: 0, y: 5))
         leftArc.close()

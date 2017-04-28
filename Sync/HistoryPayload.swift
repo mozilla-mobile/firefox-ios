@@ -28,7 +28,7 @@ open class HistoryPayload: CleartextPayloadJSON {
         return self["histUri"].string != nil &&      // TODO: validate URI.
                self["title"].isStringOrNull() &&
                self["visits"].isArray()
-        }
+    }
 
     open func asPlace() -> Place {
         return Place(guid: self.id, url: self.histURI, title: self.title)

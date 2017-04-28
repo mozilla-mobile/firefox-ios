@@ -257,7 +257,8 @@ open class FirefoxAccount {
             self.stateCache.value = married.withoutKeyPair()
             return true
         }
-        log.info("Cannot make Account State be CohabitingWithoutKeyPair from state with label \(self.stateCache.value?.label).")
+
+        log.info("Cannot make Account State be CohabitingWithoutKeyPair from state with label \(self.stateCache.value?.label ??? "nil").")
         return false
     }
 }

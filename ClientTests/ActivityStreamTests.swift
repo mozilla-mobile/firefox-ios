@@ -7,9 +7,11 @@ import XCTest
 @testable import Client
 import Shared
 import Storage
+import Deferred
+import Telemetry
 
 class ActivityStreamTests: XCTestCase {
-    var profile: Profile!
+    var profile: MockProfile!
     var panel: ActivityStreamPanel!
     var mockPingClient: MockPingClient!
     var telemetry: ActivityStreamTracker!
@@ -55,6 +57,18 @@ extension ActivityStreamTests {
             "page": "NEW_TAB",
             "source": source,
             "action_position": position,
+            "app_version": AppInfo.appVersion,
+            "build": AppInfo.buildNumber,
+            "locale": Locale.current.identifier,
+            "release_channel": AppConstants.BuildChannel.rawValue
+        ]
+    }
+
+    fileprivate func expectedBadStatePayload(state: String, source: String) -> [String: Any] {
+        return [
+            "event": state,
+            "page": "NEW_TAB",
+            "source": source,
             "app_version": AppInfo.appVersion,
             "build": AppInfo.buildNumber,
             "locale": Locale.current.identifier,
@@ -137,6 +151,68 @@ extension ActivityStreamTests {
         let eventPing = pingsSent[0]
         XCTAssertNotNil(eventPing["session_duration"])
     }
+
+    func testBadStateEventsForHighlights() {
+        let goodSite = Site(url: "http://mozilla.org", title: "Mozilla")
+        goodSite.icon = Favicon(url: "http://image", date: Date(), type: .local)
+        goodSite.metadata = PageMetadata(id: nil,
+                                         siteURL: "http://mozilla.org",
+                                         mediaURL: "http://image",
+                                         title: "Mozilla",
+                                         description: "Web",
+                                         type: nil,
+                                         providerName: nil,
+                                         mediaDataURI: nil)
+        let badSite = Site(url: "http://mozilla.org", title: "Mozilla")
+        profile.recommendations = MockRecommender(highlights: [goodSite, badSite])
+
+        // Since invalidateHighlights calls back into the main thread, we can't 
+        // simply call .value on this to block since the app will dead lock when
+        // trying to call back onto a blocked main thread.
+        let expect = XCTestExpectation(description: "Sent bad highlight pings")
+        panel.getHighlights() >>> {
+            expect.fulfill()
+        }
+
+        wait(for: [expect], timeout: 3)
+        let pingsSent = (self.telemetry.eventsTracker as! MockPingClient).pingsReceived
+        XCTAssertEqual(pingsSent.count, 2)
+        assertPayload(pingsSent[0],
+                      matches: expectedBadStatePayload(state: "MISSING_METADATA_IMAGE", source: "HIGHLIGHTS"))
+        assertPayload(pingsSent[1],
+                      matches: expectedBadStatePayload(state: "MISSING_FAVICON", source: "HIGHLIGHTS"))
+    }
+
+    func testBadStateEventsForTopSites() {
+        let goodSite = Site(url: "http://mozilla.org", title: "Mozilla")
+        goodSite.icon = Favicon(url: "http://image", date: Date(), type: .local)
+        goodSite.metadata = PageMetadata(id: nil,
+                                         siteURL: "http://mozilla.org",
+                                         mediaURL: "http://image",
+                                         title: "Mozilla",
+                                         description: "Web",
+                                         type: nil,
+                                         providerName: nil,
+                                         mediaDataURI: nil)
+        let badSite = Site(url: "http://mozilla.org", title: "Mozilla")
+        profile.history = MockTopSitesHistory(sites: [goodSite, badSite])
+
+        // Since invalidateHighlights calls back into the main thread, we can't 
+        // simply call .value on this to block since the app will dead lock when
+        // trying to call back onto a blocked main thread.
+        let expect = XCTestExpectation(description: "Sent bad top site pings")
+        panel.getTopSites() >>> {
+            expect.fulfill()
+        }
+
+        wait(for: [expect], timeout: 3)
+        let pingsSent = (self.telemetry.eventsTracker as! MockPingClient).pingsReceived
+        XCTAssertEqual(pingsSent.count, 2)
+        assertPayload(pingsSent[0],
+                      matches: expectedBadStatePayload(state: "MISSING_METADATA_IMAGE", source: "TOP_SITES"))
+        assertPayload(pingsSent[1],
+                      matches: expectedBadStatePayload(state: "MISSING_FAVICON", source: "TOP_SITES"))
+    }
 }
 
 class MockPingClient: PingCentreClient {
@@ -146,5 +222,47 @@ class MockPingClient: PingCentreClient {
     public func sendPing(_ data: [String : Any], validate: Bool) -> Success {
         pingsReceived.append(data)
         return succeed()
+    }
+}
+
+fileprivate class MockRecommender: HistoryRecommendations {
+    func invalidateHighlights() -> Success {
+        // no-op since we don't need to purge a cache for our mock recommender
+        return succeed()
+    }
+
+    var highlights: [Site]
+
+    init(highlights: [Site]) {
+        self.highlights = highlights
+    }
+
+    func getHighlights() -> Deferred<Maybe<Cursor<Site>>> {
+        return deferMaybe(ArrayCursor(data: highlights))
+    }
+    
+    func removeHighlightForURL(_ url: String) -> Success {
+        guard let foundSite = highlights.filter({ $0.url == url }).first else {
+            return succeed()
+        }
+        let foundIndex = highlights.index(of: foundSite)!
+        highlights.remove(at: foundIndex)
+        return succeed()
+    }
+}
+
+fileprivate class MockTopSitesHistory: MockableHistory {
+    let mockTopSites: [Site]
+
+    init(sites: [Site]) {
+        mockTopSites = sites
+    }
+
+    override func getTopSitesWithLimit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
+        return deferMaybe(ArrayCursor(data: mockTopSites))
+    }
+
+    override func updateTopSitesCacheIfInvalidated() -> Deferred<Maybe<Bool>> {
+        return deferMaybe(true)
     }
 }

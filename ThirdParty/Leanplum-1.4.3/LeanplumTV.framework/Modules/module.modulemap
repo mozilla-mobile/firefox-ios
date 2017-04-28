@@ -1,0 +1,6 @@
+framework module Leanplum {
+  umbrella header "Leanplum-SDK-tvOS-umbrella.h"
+
+  export *
+  module * { export * }
+}

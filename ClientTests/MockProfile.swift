@@ -32,7 +32,9 @@ open class MockSyncManager: SyncManager {
     open func syncEverything(why: SyncReason) -> Success {
         return succeed()
     }
-
+    open func syncNamedCollections(why: SyncReason, names: [String]) -> Success {
+        return succeed()
+    }
     open func beginTimedSyncs() {}
     open func endTimedSyncs() {}
     open func applicationDidBecomeActive() {
@@ -71,8 +73,48 @@ open class MockTabQueue: TabQueue {
     }
 }
 
+open class MockPanelDataObservers: PanelDataObservers {
+    override init(profile: Profile) {
+        super.init(profile: profile)
+        self.activityStream = MockActivityStreamDataObserver(profile: profile)
+    }
+}
+
+open class MockActivityStreamDataObserver: DataObserver {
+    public var profile: Profile
+    public weak var delegate: DataObserverDelegate?
+
+    init(profile: Profile) {
+        self.profile = profile
+    }
+    
+    public func invalidate() {
+        // no-op
+    }
+}
+
 open class MockProfile: Profile {
+    // Read/Writeable properties for mocking
+    public var recommendations: HistoryRecommendations
+    public var places: BrowserHistory & Favicons & SyncableHistory & ResettableSyncStorage & HistoryRecommendations
+    public var files: FileAccessor
+    public var history: BrowserHistory & SyncableHistory & ResettableSyncStorage
+    public lazy var panelDataObservers: PanelDataObservers = {
+        return MockPanelDataObservers(profile: self)
+    }()
+
+    var db: BrowserDB
+
     fileprivate let name: String = "mockaccount"
+
+    init() {
+        files = MockFiles()
+        db = BrowserDB(filename: "mock.db", files: files)
+        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
+        places = SQLiteHistory(db: self.db, prefs: MockProfilePrefs())
+        recommendations = places
+        history = places
+    }
 
     public func localName() -> String {
         return name
@@ -86,20 +128,6 @@ open class MockProfile: Profile {
 
     public var isShutdown: Bool = false
 
-    fileprivate var dbCreated = false
-    lazy var db: BrowserDB = {
-        self.dbCreated = true
-        return BrowserDB(filename: "mock.db", files: self.files)
-    }()
-
-    /**
-     * Favicons, history, and bookmarks are all stored in one intermeshed
-     * collection of tables.
-     */
-    fileprivate lazy var places: BrowserHistory & Favicons & SyncableHistory & ResettableSyncStorage & HistoryRecommendations = {
-        return SQLiteHistory(db: self.db, prefs: MockProfilePrefs())
-    }()
-
     public var favicons: Favicons {
         return self.places
     }
@@ -107,14 +135,6 @@ open class MockProfile: Profile {
     lazy public var queue: TabQueue = {
         return MockTabQueue()
     }()
-
-    public var history: BrowserHistory & SyncableHistory & ResettableSyncStorage {
-        return self.places
-    }
-
-    public var recommendations: HistoryRecommendations {
-        return self.places
-    }
 
     lazy public var metadata: Metadata = {
         return SQLiteMetadata(db: self.db)
@@ -146,10 +166,6 @@ open class MockProfile: Profile {
 
     lazy public var prefs: Prefs = {
         return MockProfilePrefs()
-    }()
-
-    lazy public var files: FileAccessor = {
-        return ProfileFileAccessor(profile: self)
     }()
 
     lazy public var readingList: ReadingListService? = {
@@ -216,6 +232,7 @@ open class MockProfile: Profile {
         return deferMaybe(0)
     }
 
-    public func sendItems(_ items: [ShareItem], toClients clients: [RemoteClient]) {
+    public func sendItems(_ items: [ShareItem], toClients clients: [RemoteClient]) -> Deferred<Maybe<SyncStatus>> {
+        return deferMaybe(SyncStatus.notStarted(.offline))
     }
 }

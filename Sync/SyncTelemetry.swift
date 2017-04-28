@@ -5,6 +5,8 @@
 import Foundation
 import Shared
 import Account
+import SwiftyJSON
+import Telemetry
 
 fileprivate let log = Logger.syncLogger
 
@@ -15,10 +17,21 @@ public enum SyncReason: String {
     case user = "user"
     case syncNow = "syncNow"
     case didLogin = "didLogin"
+    case push = "push"
+}
+
+public enum SyncPingReason: String {
+    case shutdown = "shutdown"
+    case schedule = "schedule"
+    case idChanged = "idchanged"
 }
 
 public protocol Stats {
     func hasData() -> Bool
+}
+
+private protocol DictionaryRepresentable {
+    func asDictionary() -> [String: Any]
 }
 
 public struct SyncUploadStats: Stats {
@@ -27,6 +40,15 @@ public struct SyncUploadStats: Stats {
 
     public func hasData() -> Bool {
         return sent > 0 || sentFailed > 0
+    }
+}
+
+extension SyncUploadStats: DictionaryRepresentable {
+    func asDictionary() -> [String: Any] {
+        return [
+            "sent": sent,
+            "sentFailed": sentFailed
+        ]
     }
 }
 
@@ -46,6 +68,18 @@ public struct SyncDownloadStats: Stats {
     }
 }
 
+extension SyncDownloadStats: DictionaryRepresentable {
+    func asDictionary() -> [String: Any] {
+        return [
+            "applied": applied,
+            "succeeded": succeeded,
+            "failed": failed,
+            "newFailed": newFailed,
+            "reconciled": reconciled
+        ]
+    }
+}
+
 // TODO(sleroux): Implement various bookmark validation issues we can run into.
 public struct ValidationStats: Stats {
     public func hasData() -> Bool {
@@ -54,34 +88,35 @@ public struct ValidationStats: Stats {
 }
 
 public class StatsSession {
-    private var took: Int64 = 0
-    private var when: UInt64?
-    private var startUptime: UInt64?
+    var took: Int64 = 0
+    var when: Timestamp?
+
+    private var startUptimeNanos: UInt64?
 
     public func start(when: UInt64 = Date.now()) {
         self.when = when
-        self.startUptime = DispatchTime.now().uptimeNanoseconds
+        self.startUptimeNanos = DispatchTime.now().uptimeNanoseconds
     }
 
     public func hasStarted() -> Bool {
-        return startUptime != nil
+        return startUptimeNanos != nil
     }
 
     public func end() -> Self {
-        guard let startUptime = startUptime else {
+        guard let startUptime = startUptimeNanos else {
             assertionFailure("SyncOperationStats called end without first calling start!")
             return self
         }
 
         // Casting to Int64 should be safe since we're using uptime since boot in both cases.
-        took = Int64(DispatchTime.now().uptimeNanoseconds) - Int64(startUptime)
+        // Convert to milliseconds as stated in the sync ping format
+        took = (Int64(DispatchTime.now().uptimeNanoseconds) - Int64(startUptime)) / 1000000
         return self
     }
 }
 
 // Stats about a single engine's sync.
 public class SyncEngineStatsSession: StatsSession {
-    public let collection: String
     public var failureReason: Any?
     public var validationStats: ValidationStats?
 
@@ -89,7 +124,6 @@ public class SyncEngineStatsSession: StatsSession {
     private(set) var downloadStats: SyncDownloadStats
 
     public init(collection: String) {
-        self.collection = collection
         self.uploadStats = SyncUploadStats()
         self.downloadStats = SyncDownloadStats()
     }
@@ -108,18 +142,100 @@ public class SyncEngineStatsSession: StatsSession {
     }
 }
 
+extension SyncEngineStatsSession: DictionaryRepresentable {
+    func asDictionary() -> [String : Any] {
+        var dict: [String: Any] = [
+            "took": took,
+        ]
+
+        if downloadStats.hasData() {
+            dict["incoming"] = downloadStats.asDictionary()
+        }
+
+        if uploadStats.hasData() {
+            dict["outgoing"] = uploadStats.asDictionary()
+        }
+
+        return dict
+    }
+}
+
 // Stats and metadata for a sync operation.
 public class SyncOperationStatsSession: StatsSession {
     public let why: SyncReason
     public var uid: String?
     public var deviceID: String?
 
-    private let didLogin: Bool
+    fileprivate let didLogin: Bool
 
     public init(why: SyncReason, uid: String, deviceID: String?) {
         self.why = why
         self.uid = uid
         self.deviceID = deviceID
         self.didLogin = (why == .didLogin)
+    }
+}
+
+extension SyncOperationStatsSession: DictionaryRepresentable {
+    func asDictionary() -> [String : Any] {
+        let whenValue = when ?? 0
+        return [
+            "when": whenValue,
+            "took": took,
+            "didLogin": didLogin,
+            "why": why.rawValue
+        ]
+    }
+}
+
+public struct SyncPing: TelemetryPing {
+    public var payload: JSON
+
+    public init(account: FirefoxAccount?, why: SyncPingReason, syncOperationResult: SyncOperationResult) {
+        var ping: [String: Any] = [
+            "version": 1,
+            "why": why.rawValue,
+            "uid": account?.uid ?? String(repeating: "0", count: 32)
+        ]
+
+        if let deviceID = account?.deviceRegistration?.id {
+            ping["deviceID"] = deviceID
+        }
+
+        if let syncStats = syncOperationResult.stats {
+            var singleSync = syncStats.asDictionary()
+            if let engineResults = syncOperationResult.engineResults.successValue {
+                singleSync["engines"] = SyncPing.enginePingDataFrom(engineResults: engineResults)
+            }
+
+            ping["syncs"] = [singleSync]
+        }
+
+        payload = JSON(ping)
+    }
+
+    private static func enginePingDataFrom(engineResults: EngineResults) -> [[String: Any]] {
+        return engineResults.map { result in
+            let (name, status) = result
+            var engine: [String: Any] = [
+                "name": name
+            ]
+
+            // For complete/partial results, extract out the collect stats
+            // and add it to engine information. For syncs that were not able to
+            // start, return why and a reason.
+            switch status {
+            case .completed(let stats):
+                engine.merge(with: stats.asDictionary())
+            case .partial(let stats):
+                engine.merge(with: stats.asDictionary())
+            case .notStarted(let reason):
+                engine.merge(with: [
+                    "status": reason.telemetryId
+                ])
+            }
+
+            return engine
+        }
     }
 }

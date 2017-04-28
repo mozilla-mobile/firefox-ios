@@ -84,7 +84,7 @@ extension SwipeAnimator {
 
     fileprivate func transformForTranslation(_ translation: CGFloat) -> CGAffineTransform {
         let swipeWidth = container.frame.size.width
-        let totalRotationInRadians = CGFloat(params.totalRotationInDegrees / 180.0 * M_PI)
+        let totalRotationInRadians = CGFloat(params.totalRotationInDegrees / 180.0 * Double.pi)
 
         // Determine rotation / scaling amounts by the distance to the edge
         let rotation = (translation / swipeWidth) * totalRotationInRadians

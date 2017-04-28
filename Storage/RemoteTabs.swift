@@ -11,7 +11,7 @@ public struct ClientAndTabs: Equatable, CustomStringConvertible {
     public let tabs: [RemoteTab]
 
     public var description: String {
-        return "<Client \(client.guid), \(tabs.count) tabs.>"
+        return "<Client guid: \(client.guid ?? "nil"), \(tabs.count) tabs.>"
     }
 
     // See notes in RemoteTabsPanel.swift.
@@ -98,6 +98,6 @@ public func ==(lhs: RemoteTab, rhs: RemoteTab) -> Bool {
 
 extension RemoteTab: CustomStringConvertible {
     public var description: String {
-        return "<RemoteTab clientGUID: \(clientGUID), URL: \(URL), title: \(title), lastUsed: \(lastUsed)>"
+        return "<RemoteTab clientGUID: \(clientGUID ?? "nil"), URL: \(URL), title: \(title), lastUsed: \(lastUsed)>"
     }
 }

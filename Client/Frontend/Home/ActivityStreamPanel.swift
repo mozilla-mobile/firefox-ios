@@ -8,6 +8,7 @@ import Deferred
 import Storage
 import WebImage
 import XCGLogger
+import Telemetry
 
 private let log = Logger.browserLogger
 private let DefaultSuggestedSitesKey = "topSites.deletedSuggestedSites"
@@ -15,13 +16,12 @@ private let DefaultSuggestedSitesKey = "topSites.deletedSuggestedSites"
 // MARK: -  Lifecycle
 struct ASPanelUX {
     static let backgroundColor = UIColor(white: 1.0, alpha: 0.5)
-    static let topSitesCacheSize = 12
     static let historySize = 10
     static let rowSpacing: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 30 : 20
     static let highlightCellHeight: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 250 : 195
 
     static let PageControlOffsetSize: CGFloat = 40
-    static let SectionInsetsForIpad: CGFloat = 100
+    static let SectionInsetsForIpad: CGFloat = 101
     static let SectionInsetsForIphone: CGFloat = 14
     static let CompactWidth: CGFloat = 320
 }
@@ -34,8 +34,6 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
 
     fileprivate let topSitesManager = ASHorizontalScrollCellManager()
     fileprivate var isInitialLoad = true //Prevents intro views from flickering while content is loading
-    fileprivate let events = [NotificationFirefoxAccountChanged, NotificationProfileDidFinishSyncing, NotificationPrivateDataClearedHistory, NotificationDynamicFontChanged]
-
     fileprivate var sessionStart: Timestamp?
 
     lazy var longPressRecognizer: UILongPressGestureRecognizer = {
@@ -60,12 +58,16 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
         self.collectionView?.dataSource = self
 
         collectionView?.addGestureRecognizer(longPressRecognizer)
-        self.profile.history.setTopSitesCacheSize(Int32(ASPanelUX.topSitesCacheSize))
-        events.forEach { NotificationCenter.default.addObserver(self, selector: #selector(self.notificationReceived(_:)), name: $0, object: nil) }
+
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(didChangeFontSize(notification:)),
+                                               name: NotificationDynamicFontChanged,
+                                               object: nil)
+        
     }
 
     deinit {
-        events.forEach { NotificationCenter.default.removeObserver(self, name: $0, object: nil) }
+        NotificationCenter.default.removeObserver(self, name: NotificationDynamicFontChanged, object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -80,16 +82,14 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
 
         collectionView?.backgroundColor = ASPanelUX.backgroundColor
         collectionView?.keyboardDismissMode = .onDrag
+        
+        self.profile.panelDataObservers.activityStream.delegate = self
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         sessionStart = Date.now()
-
-        all([invalidateTopSites(), invalidateHighlights()]).uponQueue(DispatchQueue.main) { _ in
-            self.isInitialLoad = false
-            self.collectionView?.reloadData()
-        }
+        reloadAll()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -109,6 +109,11 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         self.topSitesManager.currentTraits = self.traitCollection
+    }
+
+    func didChangeFontSize(notification: Notification) {
+        // Don't need to invalidate the data for a font change. Just reload the UI.
+        reloadAll()
     }
 }
 
@@ -154,7 +159,7 @@ extension ActivityStreamPanel {
             case .topSites:
                 return UIDevice.current.userInterfaceIdiom == .pad ? ASPanelUX.SectionInsetsForIpad : 0
             case .highlightIntro:
-                return 0
+                return UIDevice.current.userInterfaceIdiom == .pad ? ASPanelUX.SectionInsetsForIpad : 0
             }
         }
 
@@ -164,17 +169,19 @@ extension ActivityStreamPanel {
 
             switch self {
             case .highlights:
+                var numItems: CGFloat = 0
                 if UIDevice.current.orientation == .landscapeLeft || UIDevice.current.orientation == .landscapeRight {
-                    return CGSize(width: (frameWidth - inset) / 4 - 10, height: height)
+                    numItems = 4
                 } else if UIDevice.current.userInterfaceIdiom == .pad {
-                    return CGSize(width: (frameWidth - inset) / 3 - 10, height: height)
+                    numItems = 3
                 } else {
-                    return CGSize(width: (frameWidth - inset) / 2 - 10, height: height)
+                    numItems = 2
                 }
+                return CGSize(width: floor(((frameWidth - inset) - (ASHorizontalScrollCellUX.MinimumInsets * (numItems - 1))) / numItems), height: height)
             case .topSites:
                 return CGSize(width: frameWidth - inset, height: height)
             case .highlightIntro:
-                return CGSize(width: frameWidth - inset, height: height)
+                return CGSize(width: frameWidth - inset - (ASHorizontalScrollCellUX.MinimumInsets * 2), height: height)
             }
         }
 
@@ -327,6 +334,8 @@ extension ActivityStreamPanel {
     func configureTopSitesCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         let topSiteCell = cell as! ASHorizontalScrollCell
         topSiteCell.delegate = self.topSitesManager
+        topSiteCell.collectionView.setNeedsLayout()
+        topSiteCell.collectionView.reloadData()
         return cell
     }
 
@@ -345,57 +354,84 @@ extension ActivityStreamPanel {
 }
 
 // MARK: - Data Management
-extension ActivityStreamPanel {
-
-    func notificationReceived(_ notification: Notification) {
-        switch notification.name {
-        case NotificationProfileDidFinishSyncing, NotificationFirefoxAccountChanged, NotificationPrivateDataClearedHistory, NotificationDynamicFontChanged:
-            self.invalidateTopSites().uponQueue(DispatchQueue.main) { _ in
-                self.collectionView?.reloadData()
+extension ActivityStreamPanel: DataObserverDelegate {
+    fileprivate func reportMissingData(sites: [Site], source: ASPingSource) {
+        sites.forEach { site in
+            if site.metadata?.mediaURL == nil {
+                self.telemetry.reportBadState(badState: .MissingMetadataImage, source: source)
             }
-        default:
-            log.warning("Received unexpected notification \(notification.name)")
+
+            if site.icon == nil {
+                self.telemetry.reportBadState(badState: .MissingFavicon, source: source)
+            }
         }
     }
 
-    fileprivate func invalidateHighlights() -> Success {
-        return self.profile.recommendations.getHighlights().bindQueue(DispatchQueue.main) { result in
-            self.highlights = result.successValue?.asArray() ?? self.highlights
+    // Reloads both highlights and top sites data from their respective caches. Does not invalidate the cache.
+    // See ActivityStreamDataObserver for invalidation logic.
+    func reloadAll() {
+        accumulate([self.getHighlights, self.getTopSites]).uponQueue(DispatchQueue.main) { _ in
+            self.isInitialLoad = false
+            self.collectionView?.reloadData()
+        }
+    }
+
+    func getHighlights() -> Success {
+        return self.profile.recommendations.getHighlights().bindQueue(.main) { result in
+            // Scan through the fetched highlights and report on anything that might be missing.
+            guard let highlights = result.successValue?.asArray() else {
+                return succeed()
+            }
+            
+            self.reportMissingData(sites: highlights, source: .Highlights)
+            self.highlights = highlights
             return succeed()
         }
     }
 
-    fileprivate func invalidateTopSites() -> Success {
-        let frecencyLimit = ASPanelUX.topSitesCacheSize
-
-        // Update our top sites cache if it's been invalidated
-        return self.profile.history.updateTopSitesCacheIfInvalidated() >>== { _ in
-            return self.profile.history.getTopSitesWithLimit(frecencyLimit) >>== { topSites in
-                let mySites = topSites.asArray()
-                let defaultSites = self.defaultTopSites()
-
-                // Merge default topsites with a user's topsites.
-                let mergedSites = mySites.union(defaultSites, f: { (site) -> String in
-                    return URL(string: site.url)?.hostSLD ?? ""
-                })
-
-                // Favour topsites from defaultSites as they have better favicons.
-                let newSites = mergedSites.map { site -> Site in
-                    let domain = URL(string: site.url)?.hostSLD
-                    return defaultSites.find { $0.title.lowercased() == domain } ?? site
-                }
-
-                self.topSitesManager.currentTraits = self.view.traitCollection
-                self.topSitesManager.content = newSites.count > ASPanelUX.topSitesCacheSize ? Array(newSites[0..<ASPanelUX.topSitesCacheSize]) : newSites
-                self.topSitesManager.urlPressedHandler = { [unowned self] url, indexPath in
-                    self.longPressRecognizer.isEnabled = false
-                    self.telemetry.reportEvent(.Click, source: .TopSites, position: indexPath.item)
-                    self.showSiteWithURLHandler(url as URL)
-                }
-
+    func getTopSites() -> Success {
+        return self.profile.history.getTopSitesWithLimit(16).bindQueue(.main) { result in
+            guard let mySites = result.successValue?.asArray() else {
                 return succeed()
             }
+            
+            let defaultSites = self.defaultTopSites()
+
+            // Merge default topsites with a user's topsites.
+            let mergedSites = mySites.union(defaultSites, f: { (site) -> String in
+                return URL(string: site.url)?.hostSLD ?? ""
+            })
+
+            // Favour topsites from defaultSites as they have better favicons.
+            let newSites = mergedSites.map { site -> Site in
+                let domain = URL(string: site.url)?.hostSLD
+                return defaultSites.find { $0.title.lowercased() == domain } ?? site
+            }
+
+            // Don't report bad states for default sites we provide
+            self.reportMissingData(sites: mySites, source: .TopSites)
+
+            self.topSitesManager.currentTraits = self.view.traitCollection
+
+            if newSites.count > Int(ActivityStreamTopSiteCacheSize) {
+                self.topSitesManager.content = Array(newSites[0..<Int(ActivityStreamTopSiteCacheSize)])
+            } else {
+                self.topSitesManager.content = newSites
+            }
+
+            self.topSitesManager.urlPressedHandler = { [unowned self] url, indexPath in
+                self.longPressRecognizer.isEnabled = false
+                self.telemetry.reportEvent(.Click, source: .TopSites, position: indexPath.item)
+                self.showSiteWithURLHandler(url as URL)
+            }
+
+            return succeed()
         }
+    }
+
+    // Invoked by the ActivityStreamDataObserver when highlights/top sites invalidation is complete.
+    func didInvalidateDataSources() {
+        reloadAll()
     }
 
     func hideURLFromTopSites(_ siteURL: URL) {
@@ -409,18 +445,14 @@ extension ActivityStreamPanel {
         }
         profile.history.removeHostFromTopSites(host).uponQueue(DispatchQueue.main) { result in
             guard result.isSuccess else { return }
-            self.invalidateTopSites().uponQueue(DispatchQueue.main) { _ in
-                self.collectionView?.reloadData()
-            }
+            self.profile.panelDataObservers.activityStream.invalidate()
         }
     }
 
     func hideFromHighlights(_ site: Site) {
         profile.recommendations.removeHighlightForURL(site.url).uponQueue(DispatchQueue.main) { result in
             guard result.isSuccess else { return }
-            self.invalidateHighlights().uponQueue(DispatchQueue.main) { _ in
-                self.collectionView?.reloadData()
-            }
+            self.profile.panelDataObservers.activityStream.invalidate()
         }
     }
 
@@ -475,7 +507,7 @@ extension ActivityStreamPanel {
         profile.bookmarks.modelFactory >>== {
             $0.isBookmarked(site.url).uponQueue(DispatchQueue.main) { result in
                 guard let isBookmarked = result.successValue else {
-                    log.error("Error getting bookmark status: \(result.failureValue).")
+                    log.error("Error getting bookmark status: \(result.failureValue ??? "nil").")
                     return
                 }
                 site.setBookmarked(isBookmarked)
@@ -597,6 +629,11 @@ enum ASPingEvent: String {
     case Share = "SHARE"
 }
 
+enum ASPingBadStateEvent: String {
+    case MissingMetadataImage = "MISSING_METADATA_IMAGE"
+    case MissingFavicon = "MISSING_FAVICON"
+}
+
 enum ASPingSource: String {
     case Highlights = "HIGHLIGHTS"
     case TopSites = "TOP_SITES"
@@ -607,22 +644,38 @@ struct ActivityStreamTracker {
     let eventsTracker: PingCentreClient
     let sessionsTracker: PingCentreClient
 
+    private var baseASPing: [String: Any] {
+        return [
+            "app_version": AppInfo.appVersion,
+            "build": AppInfo.buildNumber,
+            "locale": Locale.current.identifier,
+            "release_channel": AppConstants.BuildChannel.rawValue
+        ]
+    }
+
+    func reportBadState(badState: ASPingBadStateEvent, source: ASPingSource) {
+        var eventPing: [String: Any] = [
+            "event": badState.rawValue,
+            "page": "NEW_TAB",
+            "source": source.rawValue,
+        ]
+        eventPing.merge(with: baseASPing)
+        eventsTracker.sendPing(eventPing as [String : AnyObject], validate: true)
+    }
+
     func reportEvent(_ event: ASPingEvent, source: ASPingSource, position: Int, shareProvider: String? = nil) {
         var eventPing: [String: Any] = [
             "event": event.rawValue,
             "page": "NEW_TAB",
             "source": source.rawValue,
             "action_position": position,
-            "app_version": AppInfo.appVersion,
-            "build": AppInfo.buildNumber,
-            "locale": Locale.current.identifier,
-            "release_channel": AppConstants.BuildChannel.rawValue
         ]
 
         if let provider = shareProvider {
             eventPing["share_provider"] = provider
         }
 
+        eventPing.merge(with: baseASPing)
         eventsTracker.sendPing(eventPing as [String : AnyObject], validate: true)
     }
 

@@ -65,7 +65,7 @@ class AsyncReducerTests: XCTestCase {
 
         delay(0.1) {
             do {
-                try reducer.append(6, 7, 8)
+                let _ = try reducer.append(6, 7, 8)
                 XCTFail("Can't append to a reducer that's already finished")
             } catch let error {
                 XCTAssert(true, "Properly received error on finished reducer \(error)")
@@ -86,7 +86,7 @@ class AsyncReducerTests: XCTestCase {
 
             // Pretend that some new work arrived while we were handling this.
             if let nextUp = addDuring.popLast() {
-                try! reducer.append(nextUp)
+                let _ = try! reducer.append(nextUp)
             }
 
             return deferMaybe(out)
@@ -94,7 +94,7 @@ class AsyncReducerTests: XCTestCase {
 
         // Start with 'foo'.
         reducer = AsyncReducer(initialValue: deferMaybe([:]), combine: combine)
-        try! reducer.append("foo")
+        let _ = try! reducer.append("foo")
 
         // Wait for the result. We should have handled all three by the time this returns.
         let result = reducer.terminal.value
@@ -134,7 +134,7 @@ extension AsyncReducerTests {
 
     func append(_ reducer: AsyncReducer<Int, Int>, items: Int...) {
         do {
-            try reducer.append(items)
+            let _ = try reducer.append(items)
         } catch let error {
             XCTFail("Append failed with \(error)")
         }

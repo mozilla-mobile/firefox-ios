@@ -396,7 +396,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
     fileprivate func pragma<T: Equatable>(_ pragma: String, expected: T?, factory: @escaping (SDRow) -> T, message: String) throws {
         let cursorResult = self.pragma(pragma, factory: factory)
         if cursorResult != expected {
-            log.error("\(message): \(cursorResult), \(expected)")
+            log.error("\(message): \(cursorResult.debugDescription), \(expected.debugDescription)")
             throw NSError(domain: "mozilla", code: 0, userInfo: [NSLocalizedDescriptionKey: "PRAGMA didn't return expected output: \(message)."])
         }
     }
@@ -463,7 +463,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
             try pragma("page_size=\(desiredPageSize)", expected: nil,
                        factory: IntFactory, message: "Page size set")
 
-            log.info("Vacuuming to alter database page size from \(currentPageSize) to \(desiredPageSize).")
+            log.info("Vacuuming to alter database page size from \(currentPageSize ?? 0) to \(desiredPageSize).")
             if let err = self.vacuum() {
                 log.error("Vacuuming failed: \(err).")
             } else {

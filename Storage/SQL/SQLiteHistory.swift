@@ -126,7 +126,7 @@ open class SQLiteHistory {
     }
 }
 
-private let topSitesQuery = "SELECT \(TableCachedTopSites).*, \(TablePageMetadata).provider_name FROM \(TableCachedTopSites) LEFT OUTER JOIN \(TablePageMetadata) ON \(TableCachedTopSites).url = \(TablePageMetadata).site_url ORDER BY frecencies DESC LIMIT (?)"
+private let topSitesQuery = "SELECT \(TableCachedTopSites).*, \(AttachedTablePageMetadata).provider_name FROM \(TableCachedTopSites) LEFT OUTER JOIN \(AttachedTablePageMetadata) ON \(TableCachedTopSites).url = \(AttachedTablePageMetadata).site_url ORDER BY frecencies DESC LIMIT (?)"
 
 extension SQLiteHistory: BrowserHistory {
     public func removeSiteFromTopSites(_ site: Site) -> Success {
@@ -205,7 +205,7 @@ extension SQLiteHistory: BrowserHistory {
             }
             let error = conn.executeChange(update, withArgs: updateArgs)
             if error != nil {
-                log.warning("Update failed with \(error?.localizedDescription)")
+                log.warning("Update failed with error: \(error?.localizedDescription ?? "nil")")
                 return 0
             }
             return conn.numberOfRowsModified
@@ -586,7 +586,10 @@ extension SQLiteHistory: BrowserHistory {
         ") ORDER BY frecency DESC" +
         " LIMIT 1000"                                 // Don't even look at a huge set. This avoids work.
 
-        // Next: merge by domain and sum frecency, ordering by that sum and reducing to a (typically much lower) limit.
+        // Next: merge by domain and select the URL with the max frecency of a domain, ordering by that sum frecency and reducing to a (typically much lower) limit.
+        // NOTE: When using GROUP BY we need to be explicit about which URL to use when grouping. By using "max(frecency)" the result row
+        //       for that domain will contain the projected URL corresponding to the history item with the max frecency, https://sqlite.org/lang_select.html#resultset
+        //       This is the behavior we want in order to ensure that the most popular URL for a domain is used for the top sites tile.
         // TODO: make is_bookmarked here accurate by joining against ViewAllBookmarks.
         // TODO: ensure that the same URL doesn't appear twice in the list, either from duplicate
         //       bookmarks or from being in both bookmarks and history.
@@ -596,6 +599,7 @@ extension SQLiteHistory: BrowserHistory {
             "max(remoteVisitDate) AS remoteVisitDate,",
             "sum(localVisitCount) AS localVisitCount,",
             "sum(remoteVisitCount) AS remoteVisitCount,",
+            "max(frecency),",
             "sum(frecency) AS frecencies,",
             "0 AS is_bookmarked",
             "FROM (", frecenciedSQL, ") ",
@@ -982,10 +986,11 @@ extension SQLiteHistory: SyncableHistory {
         // We then need to flatten the cursor. We do that by collecting
         // places as a side-effect of the factory, producing visits as a result, and merging in memory.
 
-        let args: Args = [20] // Maximum number of visits to retrieve.
-
-        // Exclude 'unknown' visits, because they're not syncable.
-        let filter = "history.should_upload = 1 AND v1.type IS NOT 0"
+        let limit = 1000
+        let args: Args = [limit, 20] // Limited number of history items to retrieve, Maximum number of visits to retrieve
+        let historyLimit =
+        "SELECT * FROM history " +
+        "WHERE history.should_upload = 1 LIMIT ?"
 
         let sql =
         "SELECT " +
@@ -993,7 +998,7 @@ extension SQLiteHistory: SyncableHistory {
         "v1.siteID AS siteID, v1.date AS visitDate, v1.type AS visitType " +
         "FROM " +
         "visits AS v1 " +
-        "JOIN history ON history.id = v1.siteID AND \(filter) " +
+        "JOIN (\(historyLimit)) as history ON history.id = v1.siteID AND v1.type <> 0 " +
         "LEFT OUTER JOIN " +
         "visits AS v2 " +
         "ON v1.siteID = v2.siteID AND v1.date < v2.date " +

@@ -20,7 +20,7 @@ class DeferredTests: XCTestCase {
 
         d.fill(5)
         waitForExpectations(timeout: 10) { (error) in
-            XCTAssertNil(error, "\(error)")
+            XCTAssertNil(error, "\(error.debugDescription)")
         }
 
         XCTAssertEqual(5, d.peek()!, "Value is filled.")

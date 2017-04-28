@@ -20,7 +20,7 @@ class HomePanels {
     let enabledPanels = [
         HomePanelDescriptor(
             makeViewController: { profile in
-                if AppConstants.MOZ_AS_PANEL {
+                if FeatureSwitches.activityStream.isMember(profile.prefs) {
                     return ActivityStreamPanel(profile: profile)
                 } else {
                     return TopSitesPanel(profile: profile)

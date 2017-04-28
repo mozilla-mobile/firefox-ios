@@ -77,8 +77,8 @@ class SyncStatusResolverTests: XCTestCase {
 
     func testAllPartial() {
         let results: EngineResults = [
-            ("tabs", .partial),
-            ("clients", .partial)
+            ("tabs", .partial(SyncEngineStatsSession(collection: "tabs"))),
+            ("clients", .partial(SyncEngineStatsSession(collection: "clients")))
         ]
         let maybeResults = Maybe(success: results)
 

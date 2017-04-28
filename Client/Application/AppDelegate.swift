@@ -10,6 +10,7 @@ import MessageUI
 import WebImage
 import SwiftKeychainWrapper
 import LocalAuthentication
+import Telemetry
 
 private let log = Logger.browserLogger
 
@@ -157,10 +158,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         
         adjustIntegration = AdjustIntegration(profile: profile)
 
+        LeanplumIntegration.sharedInstance.setup(profile: profile)
+
         // We need to check if the app is a clean install to use for
         // preventing the What's New URL from appearing.
         if getProfile(application).prefs.intForKey(IntroViewControllerSeenProfileKey) == nil {
             getProfile(application).prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
+            LeanplumIntegration.sharedInstance.track(eventName: .firstRun)
+        } else if getProfile(application).prefs.boolForKey("SecondRun") == nil {
+            getProfile(application).prefs.setBool(true, forKey: "SecondRun")
+            LeanplumIntegration.sharedInstance.track(eventName: .secondRun)
         }
 
         log.debug("Updating authentication keychain state to reflect system state")
@@ -179,6 +186,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         let fxaLoginHelper = FxALoginHelper.sharedInstance
         fxaLoginHelper.application(application, didLoadProfile: profile)
+
+        // Run an invalidate when we come back into the app.
+        profile.panelDataObservers.activityStream.invalidate()
 
         log.debug("Done with setting up the application.")
         return true
@@ -266,7 +276,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         }
 
         guard let scheme = components.scheme, urlSchemes.contains(scheme) else {
-            log.warning("Cannot handle \(components.scheme) URL scheme")
+            log.warning("Cannot handle \(components.scheme ?? "nil") URL scheme")
             return false
         }
 
@@ -374,9 +384,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
-        // Workaround for crashing in the background when <select> popovers are visible (rdar://24571325).
-        let jsBlurSelect = "if (document.activeElement && document.activeElement.tagName === 'SELECT') { document.activeElement.blur(); }"
-        tabManager.selectedTab?.webView?.evaluateJavaScript(jsBlurSelect, completionHandler: nil)
         syncOnDidEnterBackground(application: application)
 
         let elapsed = Int(Date().timeIntervalSince1970) - foregroundStartTime
@@ -455,7 +462,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             }
 
             let ping = CorePing(profile: profile)
-            Telemetry.sendPing(ping)
+            Telemetry.send(ping: ping, docType: .core)
         }
     }
 
@@ -652,8 +659,7 @@ extension AppDelegate {
 
 extension AppDelegate {
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        let apnsToken = deviceToken.hexEncodedString
-        FxALoginHelper.sharedInstance.apnsRegisterDidSucceed(apnsToken: apnsToken)
+        FxALoginHelper.sharedInstance.apnsRegisterDidSucceed(deviceToken)
     }
 
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
@@ -663,11 +669,25 @@ extension AppDelegate {
 
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         log.info("APNS NOTIFICATION \(userInfo)")
-        completionHandler(.noData)
+
+        guard let profile = self.profile else {
+            return completionHandler(.noData)
+        }
+
+        let handler = FxAPushMessageHandler(with: profile)
+        handler.handle(userInfo: userInfo).upon { res in
+            completionHandler(res.isSuccess ? .newData : .noData)
+        }
     }
 
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
         log.info("APNS NOTIFICATION \(userInfo)")
+        guard let profile = self.profile else {
+            return
+        }
+
+        let handler = FxAPushMessageHandler(with: profile)
+        handler.handle(userInfo: userInfo)
     }
 }
 

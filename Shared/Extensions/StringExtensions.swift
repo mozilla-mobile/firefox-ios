@@ -37,9 +37,10 @@ public extension String {
     }
 
     func unescape() -> String {
-        let raw: NSString = self as NSString
-        let str = CFURLCreateStringByReplacingPercentEscapes(kCFAllocatorDefault, raw, "[]." as CFString!)
-        return str as! String
+        return CFURLCreateStringByReplacingPercentEscapes(
+            kCFAllocatorDefault,
+            self as CFString,
+            "[]." as CFString) as String
     }
 
     /**

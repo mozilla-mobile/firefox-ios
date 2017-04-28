@@ -441,7 +441,7 @@ class ThreeWayTreeMerger {
                         if localParentGUID != result.guid {
                             log.debug("Local child \(guid) is in folder \(localParentGUID), but remotely is in \(result.guid).")
                             if mirrorParentGUID != localParentGUID {
-                                log.debug("… and locally it has changed since our last sync, moving from \(mirrorParentGUID) to \(localParentGUID).")
+                                log.debug("… and locally it has changed since our last sync, moving from \(mirrorParentGUID ?? "nil") to \(localParentGUID).")
 
                                 // Find out which parent is most recent.
                                 if let localRecords = self.itemSources.local.getLocalItemsWithGUIDs([localParentGUID, guid]).value.successValue,
@@ -459,7 +459,7 @@ class ThreeWayTreeMerger {
                                     log.debug("Taking remote, because it's later. Merging now.")
                                 }
                             } else {
-                                log.debug("\(guid) didn't move from \(mirrorParentGUID) since our last sync. Taking remote parent.")
+                                log.debug("\(guid) didn't move from \(mirrorParentGUID ?? "nil") since our last sync. Taking remote parent.")
                             }
                         } else {
                             log.debug("\(guid) is locally in \(localParentGUID) and remotely in \(result.guid). Easy.")
@@ -605,7 +605,7 @@ class ThreeWayTreeMerger {
                     return MergeState.remote
                 }
 
-                log.debug("Comparing local (\(local.localModified)) to remote (\(remote.serverModified)) clock for two-way value merge of \(guid).")
+                log.debug("Comparing local (\(local.localModified ??? "nil")) to remote (\(remote.serverModified)) clock for two-way value merge of \(guid).")
                 if local.localModified! > remote.serverModified {
                     return MergeState.local
                 }

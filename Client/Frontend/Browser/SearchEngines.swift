@@ -5,6 +5,9 @@
 import Foundation
 import Shared
 import Storage
+import XCGLogger
+
+private let log = Logger.browserLogger
 
 private let OrderedEngineNames = "search.orderedEngineNames"
 private let DisabledEngineNames = "search.disabledEngineNames"
@@ -256,10 +259,11 @@ class SearchEngines {
                 continue
             }
 
-            let engine = parser.parse(fullPath, engineID: engineName)
-            assert(engine != nil, "Engine at \(fullPath) successfully parsed")
-
-            engines.append(engine!)
+            guard let engine = parser.parse(fullPath, engineID: engineName) else {
+                log.error("Failed to parse search engine ID \(engineName) at \(fullPath)")
+                continue
+            }
+            engines.append(engine)
         }
 
         let defaultEngineName = searchDefault

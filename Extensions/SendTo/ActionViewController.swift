@@ -13,16 +13,14 @@ import SnapKit
 
 @objc(ActionViewController)
 class ActionViewController: UIViewController, ClientPickerViewControllerDelegate, InstructionsViewControllerDelegate {
-    private lazy var profile: Profile = { return BrowserProfile(localName: "profile", app: nil) }()
     private var sharedItem: ShareItem?
 
     override func viewDidLoad() {
         view.backgroundColor = UIColor.white
 
         super.viewDidLoad()
-        profile.reopen()
 
-        guard profile.hasAccount() else {
+        if !hasAccount() {
             let instructionsViewController = InstructionsViewController()
             instructionsViewController.delegate = self
             let navigationController = UINavigationController(rootViewController: instructionsViewController)
@@ -41,31 +39,41 @@ class ActionViewController: UIViewController, ClientPickerViewControllerDelegate
             self.sharedItem = item
             let clientPickerViewController = ClientPickerViewController()
             clientPickerViewController.clientPickerDelegate = self
-            clientPickerViewController.profile = self.profile
+            clientPickerViewController.profile = nil // This means the picker will open and close the default profile
             let navigationController = UINavigationController(rootViewController: clientPickerViewController)
             self.present(navigationController, animated: false, completion: nil)
         })
     }
 
     func finish() {
-        self.profile.shutdown()
         self.extensionContext!.completeRequest(returningItems: nil, completionHandler: nil)
     }
 
     func clientPickerViewController(_ clientPickerViewController: ClientPickerViewController, didPickClients clients: [RemoteClient]) {
-        // TODO: hook up Send Tab via Sync.
-        // profile?.clients.sendItem(self.sharedItem!, toClients: clients)
-        if let item = sharedItem {
-            self.profile.sendItems([item], toClients: clients)
+        guard let item = sharedItem else {
+            return finish()
         }
-        finish()
+
+        let profile = BrowserProfile(localName: "profile", app: nil)
+        profile.sendItems([item], toClients: clients).uponQueue(DispatchQueue.main) { result in
+            profile.shutdown()
+            self.finish()
+        }
     }
-    
+
     func clientPickerViewControllerDidCancel(_ clientPickerViewController: ClientPickerViewController) {
         finish()
     }
 
     func instructionsViewControllerDidClose(_ instructionsViewController: InstructionsViewController) {
         finish()
+    }
+
+    private func hasAccount() -> Bool {
+        let profile = BrowserProfile(localName: "profile", app: nil)
+        defer {
+            profile.shutdown()
+        }
+        return profile.hasAccount()
     }
 }

@@ -78,7 +78,7 @@ public protocol Synchronizer {
 public enum SyncStatus {
     case completed(SyncEngineStatsSession)
     case notStarted(SyncNotStartedReason)
-    case partial
+    case partial(SyncEngineStatsSession)
 
     public var description: String {
         switch self {
@@ -94,6 +94,10 @@ public enum SyncStatus {
 
 public typealias DeferredTimestamp = Deferred<Maybe<Timestamp>>
 public typealias SyncResult = Deferred<Maybe<SyncStatus>>
+public typealias EngineIdentifier = String
+public typealias EngineStatus = (EngineIdentifier, SyncStatus)
+public typealias EngineResults = [EngineStatus]
+public typealias SyncOperationResult = (engineResults: Maybe<EngineResults>, stats: SyncOperationStatsSession?)
 
 public enum SyncNotStartedReason {
     case noAccount
@@ -107,6 +111,33 @@ public enum SyncNotStartedReason {
     case stateMachineNotReady                // Because we're not done implementing.
     case redLight
     case unknown                             // Likely a programming error.
+
+    var telemetryId: String {
+        switch self {
+        case .noAccount:
+            return "sync.not_started.reason.no_account"
+        case .offline:
+            return "sync.not_started.reason.offline"
+        case .backoff(_):
+            return "sync.not_started.reason.backoff"
+        case .engineRemotelyNotEnabled(_):
+            return "sync.not_started.reason.remotely_not_enabled"
+        case .engineFormatOutdated(_):
+            return "sync.not_started.reason.format_outdated"
+        case .engineFormatTooNew(_):   // This'll disappear eventually; we'll wipe the server and upload m/g.
+            return "sync.not_started.reason.format_too_new"
+        case .storageFormatOutdated(_):
+            return "sync.not_started.reason.storage_format_outdated"
+        case .storageFormatTooNew(_):  // This'll disappear eventually; we'll wipe the server and upload m/g.
+            return "sync.not_started.reason.storage_format_too_new"
+        case .stateMachineNotReady:                // Because we're not done implementing.
+            return "sync.not_started.reason.state_machine_not_ready"
+        case .redLight:
+            return "sync.not_started.reason.red_light"
+        case .unknown:                             // Likely a programming error
+            return "sync.not_started.reason.unknown"
+        }
+    }
 
     var description: String {
         switch self {
