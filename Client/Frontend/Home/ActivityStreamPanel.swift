@@ -546,10 +546,12 @@ extension ActivityStreamPanel: DataObserverDelegate {
 
         let openInNewTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewTabContextMenuTitle, iconString: "action_new_tab") { action in
             self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
+            self.telemetry.reportEvent(.NewTab, source: pingSource, position: index)
         }
 
         let openInNewPrivateTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "action_new_private_tab") { action in
             self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
+            self.telemetry.reportEvent(.NewPrivateTab, source: pingSource, position: index)
         }
 
         let bookmarkAction: ActionOverlayTableViewAction
@@ -559,6 +561,8 @@ extension ActivityStreamPanel: DataObserverDelegate {
                     $0.removeByURL(siteURL.absoluteString)
                     site.setBookmarked(false)
                 }
+                self.telemetry.reportEvent(.RemoveBookmark, source: pingSource, position: index)
+
             })
         } else {
             bookmarkAction = ActionOverlayTableViewAction(title: Strings.BookmarkContextMenuTitle, iconString: "action_bookmark", handler: { action in
@@ -572,6 +576,7 @@ extension ActivityStreamPanel: DataObserverDelegate {
                                                                                     withUserData: userData,
                                                                                     toApplication: UIApplication.shared)
                 site.setBookmarked(true)
+                self.telemetry.reportEvent(.AddBookmark, source: pingSource, position: index)
             })
         }
 
@@ -589,7 +594,7 @@ extension ActivityStreamPanel: DataObserverDelegate {
         })
 
         let removeTopSiteAction = ActionOverlayTableViewAction(title: Strings.RemoveFromASContextMenuTitle, iconString: "action_close", handler: { action in
-            self.telemetry.reportEvent(.Dismiss, source: pingSource, position: index)
+            self.telemetry.reportEvent(.Remove, source: pingSource, position: index)
             self.hideURLFromTopSites(site.tileURL)
         })
 
@@ -627,6 +632,11 @@ enum ASPingEvent: String {
     case Delete = "DELETE"
     case Dismiss = "DISMISS"
     case Share = "SHARE"
+    case NewTab = "NEW_TAB"
+    case NewPrivateTab = "NEW_PRIVATE_TAB"
+    case AddBookmark = "ADD_BOOKMARK"
+    case RemoveBookmark = "REMOVE_BOOKMARK"
+    case Remove = "REMOVE"
 }
 
 enum ASPingBadStateEvent: String {
