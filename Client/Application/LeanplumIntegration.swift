@@ -31,6 +31,10 @@ enum LeanplumEventName: String {
     case closedPrivateTabsWhenLeavingPrivateBrowsing = "Closed Private Tabs When Leaving Private Browsing"
     case closedPrivateTabs = "Closed Private Tabs"
     case savedLoginAndPassword = "Saved Login and Password"
+    case userTappedFocusPromoButton = "User Tapped Focus Promo Button"
+    case focusPromoImpression = "Focus Promo Impression"
+    case focusPromoTimeout = "Focus Promo Timed Out"
+    case focusPromoTapDismiss = "Focus Promo was Dismissed By Tap"
 }
 
 private enum SupportedLocales: String {

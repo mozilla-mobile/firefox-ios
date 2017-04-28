@@ -180,6 +180,7 @@ struct LeanplumPromoButtonToastUX {
     static let ToastButtonTopOffset = 14
     static let ToastButtonBottomInset = 17
     static let ToastLabelTopOffset = 16
+    static let ToastAnimationDuration = 0.8
 }
 
 class LeanplumPromoButtonToast: ButtonToast {
@@ -235,5 +236,45 @@ class LeanplumPromoButtonToast: ButtonToast {
         }
 
         return toast
+    }
+
+    fileprivate override func dismiss(_ buttonPressed: Bool) {
+        guard dismissed == false else {
+            return
+        }
+        dismissed = true
+        superview?.removeGestureRecognizer(gestureRecognizer)
+
+        UIView.animate(withDuration: LeanplumPromoButtonToastUX.ToastAnimationDuration, animations: {
+            self.animationConstraint?.update(offset: LeanplumPromoButtonToastUX.ToastHeight)
+            self.layoutIfNeeded()
+        },
+           completion: { finished in
+            self.removeFromSuperview()
+            if !buttonPressed {
+                self.completionHandler?(false)
+            }
+        })
+    }
+
+    override func showToast(duration: Double = SimpleToastUX.ToastDismissAfter) {
+        layoutIfNeeded()
+        UIView.animate(withDuration: SimpleToastUX.ToastAnimationDuration, animations: {
+            self.animationConstraint?.update(offset: 0)
+            self.layoutIfNeeded()
+        }, completion: { finished in
+            let dispatchTime = DispatchTime.now() + Double(Int64(duration * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+            DispatchQueue.main.asyncAfter(deadline: dispatchTime, execute: {
+                if !self.dismissed {
+                    LeanplumIntegration.sharedInstance.track(eventName: .focusPromoTimeout)
+                }
+                self.dismiss(false)
+            })
+        })
+    }
+
+    override func handleTap(_ gestureRecognizer: UIGestureRecognizer) {
+        super.handleTap(gestureRecognizer)
+        LeanplumIntegration.sharedInstance.track(eventName: .focusPromoTapDismiss)
     }
 }
