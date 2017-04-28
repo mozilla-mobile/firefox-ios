@@ -6,11 +6,11 @@
 	<string>production</string>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.org.mozilla.ios.Firefox</string>
+		<string>group.$(MOZ_BUNDLE_ID)</string>
 	</array>
 	<key>keychain-access-groups</key>
 	<array>
-		<string>$(DEVELOPMENT_TEAM)group.org.mozilla.ios.Firefox</string>
+		<string>$(AppIdentifierPrefix)$(MOZ_BUNDLE_ID)</string>
 	</array>
 </dict>
 </plist>
