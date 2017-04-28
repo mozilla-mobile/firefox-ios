@@ -982,8 +982,11 @@ extension SQLiteHistory: SyncableHistory {
         // We then need to flatten the cursor. We do that by collecting
         // places as a side-effect of the factory, producing visits as a result, and merging in memory.
 
-        let limit = 1000
-        let args: Args = [limit, 20] // Limited number of history items to retrieve, Maximum number of visits to retrieve
+        let args: Args = [
+            50, // Limited number of history items to retrieve
+            20  // Maximum number of visits to retrieve per history item
+        ]
+
         let historyLimit =
         "SELECT * FROM history " +
         "WHERE history.should_upload = 1 LIMIT ?"
