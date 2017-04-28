@@ -193,20 +193,6 @@ class SearchEngines {
         return possibilities
     }
 
-    /// Return all possible paths for a language identifier in the order of most specific to least specific.
-    /// For example, zh-Hans-CN with a default of en will return [zh-Hans-CN, zh-CN, zh, en]. The fallback
-    /// identifier must be a known one that is guaranteed to exist in the SearchPlugins directory.
-    class func directoriesForLanguageIdentifier(_ languageIdentifier: String, basePath: NSString, fallbackIdentifier: String) -> [String] {
-        var directories = possibilitiesForLanguageIdentifier(languageIdentifier)
-        if !directories.contains(fallbackIdentifier) {
-            directories.append(fallbackIdentifier)
-        }
-        
-        return directories.map { (path) -> String in
-            return basePath.appendingPathComponent(path)
-        }
-    }
-
     // Return the language identifier to be used for the search engine selection. This returns the first
     // identifier from preferredLanguages and takes into account that on iOS 8, zh-Hans-CN is returned as
     // zh-Hans. In that case it returns the longer form zh-Hans-CN. Same for traditional Chinese.
@@ -231,8 +217,7 @@ class SearchEngines {
     }
 
     // Return the region identifier to be used for the search engine selection.
-    class func regionIdentifierForSearchEngines() -> String {
-        let languageIdentifier = languageIdentifierForSearchEngines()
+    class func regionIdentifierForSearchEngines(_ languageIdentifier: String) -> String {
         let components = languageIdentifier.components(separatedBy: "-")
         if components.count == 2 {
             return components[1]
@@ -246,14 +231,14 @@ class SearchEngines {
     /// but the others in no particular order.
     class func getUnorderedBundledEngines() -> [OpenSearchEngine] {
         let pluginBasePath: NSString = (Bundle.main.resourcePath! as NSString).appendingPathComponent("SearchPlugins") as NSString
-        let languageIdentifier = languageIdentifierForSearchEngines()
 
         let index = (pluginBasePath as NSString).appendingPathComponent("list.json")
         let listFile = try! String(contentsOfFile: index, encoding: String.Encoding.utf8)
         let engineJSON = SearchEnginesJSON(listFile)
   
+        let languageIdentifier = languageIdentifierForSearchEngines()
         let possibilities = possibilitiesForLanguageIdentifier(languageIdentifier)
-        let region = regionIdentifierForSearchEngines()
+        let region = regionIdentifierForSearchEngines(languageIdentifier)
         let engineNames = engineJSON.visibleDefaultEngines(possibilities: possibilities, region: region)
         let searchDefault = engineJSON.searchDefault(possibilities: possibilities, region: region)
         
