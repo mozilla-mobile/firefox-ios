@@ -37,6 +37,8 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         history.clearHistory().succeeded()
         history.clearHighlights().succeeded()
         db.run("DELETE FROM \(AttachedTablePageMetadata)").succeeded()
+        db.run("DELETE FROM \(TableActivityStreamBlocklist)").succeeded()
+
         SDWebImageManager.shared().imageCache.clearDisk()
         SDWebImageManager.shared().imageCache.clearMemory()
 
@@ -100,59 +102,6 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         XCTAssertEqual(highlights[1]!.title, "C")
     }
 
-    /*
-     * Verify that we return a bookmark highlight if:
-     * 
-     * 1. Bookmark was last modified less than 3 days ago
-     * 2. Bookmark has been visited at least 3 times
-     * 3. Bookmark has a non-empty title
-     *
-     */
-    func testBookmarkHighlights() {
-        let startTime = Date.nowMicroseconds()
-        let oneHourAgo = startTime - oneHourInMicroseconds
-        let fourDaysAgo = startTime - 4 * oneDayInMicroseconds
-
-        let bookmarkA = BookmarkMirrorItem.bookmark("A", modified: oneHourAgo, hasDupe: false,
-                                                    parentID: BookmarkRoots.MenuFolderGUID,
-                                                    parentName: "Menu Bookmarks",
-                                                    title: "A Bookmark", description: nil,
-                                                    URI: "http://bookmarkA/", tags: "", keyword: nil)
-
-        let bookmarkB = BookmarkMirrorItem.bookmark("B", modified: fourDaysAgo, hasDupe: false,
-                                                    parentID: BookmarkRoots.MenuFolderGUID,
-                                                    parentName: "Menu Bookmarks",
-                                                    title: "B Bookmark", description: nil,
-                                                    URI: "http://bookmarkB/", tags: "", keyword: nil)
-
-        bookmarks.applyRecords([bookmarkA, bookmarkB]).succeeded()
-
-        let bookmarkSiteA = Site(url: "http://bookmarkA/", title: "A Bookmark")
-        let bookmarkVisitA1 = SiteVisit(site: bookmarkSiteA, date: oneHourAgo, type: .bookmark)
-        let bookmarkVisitA2 = SiteVisit(site: bookmarkSiteA, date: oneHourAgo + 1000, type: .bookmark)
-        let bookmarkVisitA3 = SiteVisit(site: bookmarkSiteA, date: oneHourAgo + 2000, type: .bookmark)
-        
-        let bookmarkSiteB = Site(url: "http://bookmarkB/", title: "B Bookmark")
-        let bookmarkVisitB1 = SiteVisit(site: bookmarkSiteB, date: fourDaysAgo, type: .bookmark)
-        let bookmarkVisitB2 = SiteVisit(site: bookmarkSiteB, date: fourDaysAgo + 1000, type: .bookmark)
-        let bookmarkVisitB3 = SiteVisit(site: bookmarkSiteB, date: fourDaysAgo + 2000, type: .bookmark)
-        let bookmarkVisitB4 = SiteVisit(site: bookmarkSiteB, date: fourDaysAgo + 3000, type: .bookmark)
-
-        history.clearHistory().succeeded()
-        history.addLocalVisit(bookmarkVisitA1).succeeded()
-        history.addLocalVisit(bookmarkVisitA2).succeeded()
-        history.addLocalVisit(bookmarkVisitA3).succeeded()
-
-        history.addLocalVisit(bookmarkVisitB1).succeeded()
-        history.addLocalVisit(bookmarkVisitB2).succeeded()
-        history.addLocalVisit(bookmarkVisitB3).succeeded()
-        history.addLocalVisit(bookmarkVisitB4).succeeded()
-
-        history.invalidateHighlights().succeeded()
-        let highlights = history.getHighlights().value.successValue!
-        XCTAssertEqual(highlights.count, 1)
-        XCTAssertEqual(highlights[0]!.title, "A Bookmark")
-    }
 
     /*
      * Verify that we do not return a highlight if
