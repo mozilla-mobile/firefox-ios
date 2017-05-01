@@ -112,7 +112,7 @@ extension ActivityStreamTests {
         let pingsSent = (telemetry.eventsTracker as! MockPingClient).pingsReceived
         XCTAssertEqual(pingsSent.count, 1)
         let removePing = pingsSent[0]
-        assertPayload(removePing, matches: expectedPayloadForEvent("DISMISS", source: "TOP_SITES", position: 0))
+        assertPayload(removePing, matches: expectedPayloadForEvent("REMOVE", source: "TOP_SITES", position: 0))
     }
 
     func testContextMenuOnHighlightsEmitsRemoveDismissEvents() {
