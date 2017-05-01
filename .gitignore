@@ -39,7 +39,6 @@ DerivedData
 /provisioning-profiles
 /assets
 #build tools
-/scripts
 /fastlane/Appfile
 /fastlane/Snapfile
 /fastlane/SnapshotHelper.swift
