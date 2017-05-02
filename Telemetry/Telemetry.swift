@@ -45,14 +45,7 @@ open class Telemetry {
         let appVersion = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! String
         let buildID = Bundle.main.object(forInfoDictionaryKey: kCFBundleVersionKey as String) as! String
 
-        let channel: String
-        switch AppConstants.BuildChannel {
-        case .nightly: channel = "nightly"
-        case .beta: channel = "beta"
-        case .release: channel = "release"
-        default: channel = "default"
-        }
-
+        let channel = AppConstants.BuildChannel.rawValue
         let path = "/submit/telemetry/\(docID)/\(docType.rawValue)/\(AppName)/\(appVersion)/\(channel)/\(buildID)"
         let url = ServerURL.appendingPathComponent(path)
         var request = URLRequest(url: url)
