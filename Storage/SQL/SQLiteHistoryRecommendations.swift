@@ -99,32 +99,23 @@ extension SQLiteHistory: HistoryRecommendations {
 
     private func computeHighlightsQuery() -> (String, Args) {
         let limit = 8
-        let bookmarkLimit = 1
-        let historyLimit = limit - bookmarkLimit
 
         let microsecondsPerMinute: UInt64 = 60_000_000 // 1000 * 1000 * 60
         let now = Date.nowMicroseconds()
         let thirtyMinutesAgo: UInt64 = now - 30 * microsecondsPerMinute
-        let threeDaysAgo: UInt64 = now - (60 * microsecondsPerMinute) * 24 * 3
 
         let blacklistedHosts: Args = [
-            "google.com"   ,
-            "google.ca"   ,
-            "calendar.google.com"   ,
-            "mail.google.com"   ,
-            "mail.yahoo.com"   ,
-            "search.yahoo.com"   ,
-            "localhost"   ,
+            "google.com",
+            "google.ca",
+            "calendar.google.com",
+            "mail.google.com",
+            "mail.yahoo.com",
+            "search.yahoo.com",
+            "localhost",
             "t.co"
         ]
 
-        var blacklistSubquery = ""
-        if blacklistedHosts.count > 0 {
-            blacklistSubquery = "SELECT " + "\(TableDomains).id" +
-                " FROM " + "\(TableDomains)" +
-                " WHERE " + "\(TableDomains).domain" + " IN " + BrowserDB.varlist(blacklistedHosts.count)
-        }
-
+        let blacklistSubquery = "SELECT \(TableDomains).id FROM \(TableDomains) WHERE \(TableDomains).domain IN " + BrowserDB.varlist(blacklistedHosts.count)
         let removeMultipleDomainsSubquery =
             "   INNER JOIN (SELECT \(ViewHistoryVisits).domain_id AS domain_id, MAX(\(ViewHistoryVisits).visitDate) AS visit_date" +
             "   FROM \(ViewHistoryVisits)" +
@@ -149,31 +140,15 @@ extension SQLiteHistory: HistoryRecommendations {
             "       (SELECT \(TableActivityStreamBlocklist).url FROM \(TableActivityStreamBlocklist))" +
             "        AND \(TableHistory).domain_id NOT IN ("
                     + blacklistSubquery + ")" +
-            "   LIMIT \(historyLimit)" +
-            ")"
-
-        let bookmarkHighlights =
-            "SELECT \(subQuerySiteProjection) FROM (" +
-            "   SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, \(TableHistory).title AS siteTitle, guid, \(TableHistory).domain_id, NULL AS visitDate, (SELECT count(1) FROM visits WHERE \(TableVisits).siteID = \(TableHistory).id) as visitCount, 1 AS is_bookmarked" +
-            "   FROM (" +
-            "       SELECT bmkUri" +
-            "       FROM \(ViewBookmarksLocalOnMirror)" +
-            "       WHERE \(ViewBookmarksLocalOnMirror).server_modified > ? OR \(ViewBookmarksLocalOnMirror).local_modified > ?" +
-            "   )" +
-            "   LEFT JOIN \(TableHistory) ON \(TableHistory).url = bmkUri" +
-                removeMultipleDomainsSubquery +
-            "   WHERE visitCount >= 3 AND \(TableHistory).title NOT NULL and \(TableHistory).title != '' AND url NOT IN" +
-            "       (SELECT \(TableActivityStreamBlocklist).url FROM \(TableActivityStreamBlocklist))" +
-            "   LIMIT \(bookmarkLimit)" +
+            "   LIMIT \(limit)" +
             ")"
 
         let siteProjection = subQuerySiteProjection.replacingOccurrences(of: "siteTitle", with: "siteTitle AS title")
         let highlightsQuery =
             "SELECT \(siteProjection) " +
-            "FROM ( \(nonRecentHistory) UNION ALL \(bookmarkHighlights) ) " +
+            "FROM ( \(nonRecentHistory) ) " +
             "GROUP BY url"
-        let otherArgs = [threeDaysAgo, threeDaysAgo] as Args
-        let args: Args = [thirtyMinutesAgo] + blacklistedHosts + otherArgs
+        let args: Args = [thirtyMinutesAgo] + blacklistedHosts
         return (highlightsQuery, args)
     }
 }
