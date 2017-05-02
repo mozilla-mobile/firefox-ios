@@ -15,7 +15,7 @@ protocol DataObserver {
     var profile: Profile { get }
     weak var delegate: DataObserverDelegate? { get set }
     
-    func invalidate()
+    func invalidate(highlights: Bool)
 }
 
 @objc protocol DataObserverDelegate: class {
@@ -33,13 +33,14 @@ open class PanelDataObservers {
 class ActivityStreamDataObserver: DataObserver {
     let profile: Profile
     weak var delegate: DataObserverDelegate?
+    private var invalidationTime = OneMinuteInMilliseconds * 15
+    private var lastInvalidation = Date.now()
 
     fileprivate let events = [NotificationFirefoxAccountChanged, NotificationProfileDidFinishSyncing, NotificationPrivateDataClearedHistory]
 
     init(profile: Profile) {
         self.profile = profile
         self.profile.history.setTopSitesCacheSize(ActivityStreamTopSiteCacheSize)
-
         events.forEach { NotificationCenter.default.addObserver(self, selector: #selector(self.notificationReceived(_:)), name: $0, object: nil) }
     }
 
@@ -47,7 +48,7 @@ class ActivityStreamDataObserver: DataObserver {
         events.forEach { NotificationCenter.default.removeObserver(self, name: $0, object: nil) }
     }
     
-    func invalidate() {
+    func invalidate(highlights: Bool) {
         let notify = {
             self.delegate?.didInvalidateDataSources()
         }
@@ -57,13 +58,16 @@ class ActivityStreamDataObserver: DataObserver {
             return self.profile.history.updateTopSitesCacheIfInvalidated() >>> succeed
         }
 
-        accumulate([self.profile.recommendations.invalidateHighlights, invalidateTopSites]) >>> effect(notify)
+        let shouldInvalidate = highlights ? true : (Date.now() - lastInvalidation > invalidationTime)
+        lastInvalidation = shouldInvalidate ? Date.now() : lastInvalidation
+        let query = shouldInvalidate ? [self.profile.recommendations.invalidateHighlights, invalidateTopSites] : [invalidateTopSites]
+        accumulate(query) >>> effect(notify)
     }
     
     @objc func notificationReceived(_ notification: Notification) {
         switch notification.name {
         case NotificationProfileDidFinishSyncing, NotificationFirefoxAccountChanged, NotificationPrivateDataClearedHistory:
-            invalidate()
+            invalidate(highlights: true)
         default:
             log.warning("Received unexpected notification \(notification.name)")
         }
