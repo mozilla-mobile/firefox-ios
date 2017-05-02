@@ -11,7 +11,7 @@ import SwiftyJSON
 private let log = Logger.syncLogger
 
 // The version of the account schema we persist.
-let AccountSchemaVersion = 1
+let AccountSchemaVersion = 2
 
 /// A FirefoxAccount mediates access to identity attached services.
 ///
