@@ -385,7 +385,7 @@ extension SQLiteHistory: BrowserHistory {
     }
 
     fileprivate func topSiteClauses() -> (String, String) {
-        let whereData = "(\(TableDomains).showOnTopSites IS 1) AND (\(TableDomains).domain NOT LIKE 'r.%') "
+        let whereData = "(\(TableDomains).showOnTopSites IS 1) AND (\(TableDomains).domain NOT LIKE 'r.%') AND (\(TableDomains).domain NOT LIKE 'google.%') "
         let groupBy = "GROUP BY domain_id "
         return (whereData, groupBy)
     }
