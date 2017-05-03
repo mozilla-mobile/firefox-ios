@@ -137,6 +137,7 @@ class TestHistory: ProfileTest {
                 self.runRandom(&history, queue: queue, cb: { () -> Void in
                     counter += 1
                     if counter == self.NumThreads {
+                        self.clear(history)
                         expectation.fulfill()
                     }
                 })
@@ -157,6 +158,7 @@ class TestHistory: ProfileTest {
                 self.runRandom(&history, queue: queue, cb: { () -> Void in
                     counter += 1
                     if counter == self.NumThreads {
+                        self.clear(history)
                         expectation.fulfill()
                     }
                 })
