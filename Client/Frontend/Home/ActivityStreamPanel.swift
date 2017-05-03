@@ -445,14 +445,14 @@ extension ActivityStreamPanel: DataObserverDelegate {
         }
         profile.history.removeHostFromTopSites(host).uponQueue(DispatchQueue.main) { result in
             guard result.isSuccess else { return }
-            self.profile.panelDataObservers.activityStream.invalidate()
+            self.profile.panelDataObservers.activityStream.invalidate(highlights: false)
         }
     }
 
     func hideFromHighlights(_ site: Site) {
         profile.recommendations.removeHighlightForURL(site.url).uponQueue(DispatchQueue.main) { result in
             guard result.isSuccess else { return }
-            self.profile.panelDataObservers.activityStream.invalidate()
+            self.profile.panelDataObservers.activityStream.invalidate(highlights: true)
         }
     }
 

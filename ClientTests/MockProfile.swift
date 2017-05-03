@@ -87,9 +87,9 @@ open class MockActivityStreamDataObserver: DataObserver {
     init(profile: Profile) {
         self.profile = profile
     }
-    
-    public func invalidate() {
-        // no-op
+
+    public func invalidate(highlights: Bool) {
+
     }
 }
 

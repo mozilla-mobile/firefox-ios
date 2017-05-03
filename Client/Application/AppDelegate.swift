@@ -182,7 +182,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         fxaLoginHelper.application(application, didLoadProfile: profile)
 
         // Run an invalidate when we come back into the app.
-        profile.panelDataObservers.activityStream.invalidate()
+        profile.panelDataObservers.activityStream.invalidate(highlights: true)
 
         log.debug("Done with setting up the application.")
         return true
