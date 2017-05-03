@@ -283,12 +283,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         if AppConstants.MOZ_FXA_DEEP_LINK_FORM_FILL {
             // Extract optional FxA deep-linking options
-            let fxaQuery = url.getQuery()
+            let query = url.getQuery()
+            let host = url.host
             
-            // FxA form filling requires a `signin` query param
-            if fxaQuery["signin"] != nil {
+            // FxA form filling requires a `signin` query param and host = fxa-signin
+            // Ex. firefox://fxa-signin?signin=<token>&someQuery=<data>...
+            if query["signin"] != nil && host == "fxa-signin" {
                 let fxaParams: FxALaunchParams
-                fxaParams = FxALaunchParams(query: fxaQuery)
+                fxaParams = FxALaunchParams(query: query)
                 launchFxAFromURL(fxaParams)
                 return true
             }
