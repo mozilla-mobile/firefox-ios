@@ -472,14 +472,12 @@ class TabManager: NSObject {
             return
         }
 
-        LeanplumIntegration.sharedInstance.track(eventName: .focusPromoImpression, withParameters: ["button name": buttonText as AnyObject])
         let toast = LeanplumPromoButtonToast(labelText: labelText, buttonText: buttonText, colorText: colorText, completion: { buttonPressed in
             guard let url = URL(string: deepLink) else {
                 return
             }
 
             if UIApplication.shared.canOpenURL(url) && buttonPressed {
-                LeanplumIntegration.sharedInstance.track(eventName: .userTappedFocusPromoButton)
                 UIApplication.shared.openURL(url)
             }
         })
