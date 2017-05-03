@@ -158,16 +158,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         
         adjustIntegration = AdjustIntegration(profile: profile)
 
-        LeanplumIntegration.sharedInstance.setup(profile: profile)
-
         // We need to check if the app is a clean install to use for
         // preventing the What's New URL from appearing.
-        if profile.prefs.intForKey(IntroViewControllerSeenProfileKey) == nil {
-            profile.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
-            LeanplumIntegration.sharedInstance.track(eventName: .firstRun)
-        } else if profile.prefs.boolForKey("SecondRun") == nil {
-            profile.prefs.setBool(true, forKey: "SecondRun")
-            LeanplumIntegration.sharedInstance.track(eventName: .secondRun)
+        if getProfile(application).prefs.intForKey(IntroViewControllerSeenProfileKey) == nil {
+            getProfile(application).prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
         }
 
         log.debug("Updating authentication keychain state to reflect system state")
