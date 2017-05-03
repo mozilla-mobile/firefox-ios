@@ -2029,12 +2029,12 @@ extension BrowserViewController: HomePanelViewControllerDelegate {
     }
 
     func homePanelViewControllerDidRequestToCreateAccount(_ homePanelViewController: HomePanelViewController) {
-        let fxaOptions = FxALaunchParams(view: "signup", email: nil, access_code: nil)
+        let fxaOptions = FxALaunchParams(query: nil)
         presentSignInViewController(fxaOptions) // TODO UX Right now the flow for sign in and create account is the same
     }
 
     func homePanelViewControllerDidRequestToSignIn(_ homePanelViewController: HomePanelViewController) {
-        let fxaOptions = FxALaunchParams(view: "signin", email: nil, access_code: nil)
+        let fxaOptions = FxALaunchParams(query: nil)
         presentSignInViewController(fxaOptions) // TODO UX Right now the flow for sign in and create account is the same
     }
     
@@ -2926,8 +2926,23 @@ extension BrowserViewController: IntroViewControllerDelegate {
         } else {
             let signInVC = FxAContentViewController(profile: profile)
             signInVC.delegate = self
-            signInVC.url = profile.accountConfiguration.signInURL
-            signInVC.fxaOptions = fxaOptions
+            
+            // Append any passed query strings to the signin url. Note that you can't
+            // override the service and context params.
+            if fxaOptions.query != nil {
+                var url = "";
+                for param in fxaOptions.query! {
+                    if (param.key == "service" || param.key == "context") {
+                        continue;
+                    }
+                    url = url + "&" + param.key + "=" + param.value
+                }
+                let newUrl = URL(string: "\(profile.accountConfiguration.signInURL)\(url)")
+                signInVC.url = newUrl
+            } else {
+                signInVC.url = profile.accountConfiguration.signInURL
+            }
+            
             signInVC.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.cancel, target: self, action: #selector(BrowserViewController.dismissSignInViewController))
             vcToPresent = signInVC
         }
@@ -2943,7 +2958,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
 
     func introViewControllerDidRequestToLogin(_ introViewController: IntroViewController) {
         introViewController.dismiss(animated: true, completion: { () -> Void in
-            let fxaOptions = FxALaunchParams(view: "signup", email: nil, access_code: nil)
+            let fxaOptions = FxALaunchParams(query: nil)
             self.presentSignInViewController(fxaOptions)
         })
     }

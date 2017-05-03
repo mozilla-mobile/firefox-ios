@@ -23,8 +23,6 @@ protocol FxAContentViewControllerDelegate: class {
  * fxa-content-server git repository.
  */
 class FxAContentViewController: SettingsContentViewController, WKScriptMessageHandler {
-    var fxaOptions = FxALaunchParams()
-
     fileprivate enum RemoteCommand: String {
         case canLinkAccount = "can_link_account"
         case loaded = "loaded"
@@ -123,20 +121,6 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         self.timer?.invalidate()
         self.timer = nil
         self.isLoaded = true
-
-        if AppConstants.MOZ_FXA_DEEP_LINK_FORM_FILL {
-            fillField("email", value: self.fxaOptions.email)
-            fillField("access_code", value: self.fxaOptions.access_code)
-        }
-    }
-    
-    // Attempt to fill out a field in content view
-    fileprivate func fillField(_ className: String?, value: String?) {
-        guard let name = className, let val = value else {
-            return
-        }
-        let script = "$('.\(name)').val('\(val)');"
-        webView.evaluateJavaScript(script, completionHandler: nil)
     }
 
     // Handle a message coming from the content server.
