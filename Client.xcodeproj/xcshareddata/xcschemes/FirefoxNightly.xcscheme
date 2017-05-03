@@ -168,9 +168,6 @@
                   Identifier = "SettingsTests">
                </Test>
                <Test
-                  Identifier = "TopSitesTests">
-               </Test>
-               <Test
                   Identifier = "TopTabsTests">
                </Test>
                <Test
