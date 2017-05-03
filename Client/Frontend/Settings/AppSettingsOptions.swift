@@ -485,6 +485,8 @@ class YourRightsSetting: Setting {
 class ShowIntroductionSetting: Setting {
     let profile: Profile
 
+    override var accessibilityIdentifier: String? { return "ShowTour" }
+
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
         super.init(title: NSAttributedString(string: NSLocalizedString("Show Tour", comment: "Show the on-boarding screen again from the settings"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]))

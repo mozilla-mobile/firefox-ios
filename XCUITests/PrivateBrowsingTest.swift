@@ -118,6 +118,7 @@ class PrivateBrowsingTest: BaseTestCase {
         closePrivateTabsSwitch.tap()
 
         // Go back to regular browsing and check that the private tab has been closed and that the initial Private Browsing message appears when going back to Private Browsing
+        navigator.goto(PrivateTabTray)
         navigator.goto(TabTray)
         navigator.goto(PrivateTabTray)
 
