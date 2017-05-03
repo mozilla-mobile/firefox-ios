@@ -38,10 +38,12 @@ private enum SupportedLocales: String {
     case DE = "de"
     case UK = "en_GB"
     case CA_EN = "en_CA"
+    case CA_FR = "fr_CA"
     case AU = "en_AU"
     case TW = "zh_TW"
     case HK = "en_HK"
     case SG_EN = "en_SG"
+    case SG_CH = "zh_SG"
 }
 
 private struct LeanplumSettings {
@@ -56,35 +58,18 @@ class LeanplumIntegration {
     // Setup
 
     private var profile: Profile?
-    private var enabled: Bool = false
-    
-    func shouldSendToLP() -> Bool {
-        return enabled && Leanplum.hasStarted()
-    }
 
     func setup(profile: Profile) {
-        self.profile = profile
-    }
-    
-    func start() {
-        if let userUsageSetting = self.profile?.prefs.boolForKey("settings.sendUsageData") {
-            self.enabled = userUsageSetting
-        }
-        else {
-            self.enabled = false
-        }
-        guard self.enabled else {
-            return
-        }
-        
-        guard SupportedLocales(rawValue: Locale.current.identifier) != nil else {
+        guard (SupportedLocales(rawValue: Locale.current.identifier)) != nil else {
             return
         }
 
-        if Leanplum.hasStarted() {
+        if self.profile != nil {
             Logger.browserLogger.error("LeanplumIntegration - Already initialized")
             return
         }
+
+        self.profile = profile
 
         guard let settings = getSettings() else {
             Logger.browserLogger.error("LeanplumIntegration - Could not load settings from Info.plist")
@@ -116,7 +101,7 @@ class LeanplumIntegration {
             userAttributesDict["Klar Installed"] = "true"
         }
 
-        if let mailtoScheme = self.profile?.prefs.stringForKey(PrefsKeys.KeyMailToOption), mailtoScheme != "mailto:" {
+        if let mailtoScheme = profile.prefs.stringForKey(PrefsKeys.KeyMailToOption), mailtoScheme != "mailto:" {
             userAttributesDict["Alternate Mail Client Installed"] = mailtoScheme
         }
 
@@ -128,13 +113,13 @@ class LeanplumIntegration {
     // Events
 
     func track(eventName: LeanplumEventName) {
-        if shouldSendToLP() {
+        if profile != nil {
             Leanplum.track(eventName.rawValue)
         }
     }
 
     func track(eventName: LeanplumEventName, withParameters parameters: [String: AnyObject]) {
-        if shouldSendToLP() {
+        if profile != nil {
             Leanplum.track(eventName.rawValue, withParameters: parameters)
         }
     }
@@ -142,7 +127,7 @@ class LeanplumIntegration {
     // States
 
     func advanceTo(state: String) {
-        if shouldSendToLP() {
+        if profile != nil {
             Leanplum.advance(to: state)
         }
     }
@@ -150,20 +135,20 @@ class LeanplumIntegration {
     // Data Modeling
 
     func setupTemplateDictionary() {
-        if shouldSendToLP() {
+        if profile != nil {
             LPVar.define("Template Dictionary", with: ["Template Text": "", "Button Text": "", "Deep Link": "", "Hex Color String": ""])
         }
     }
 
     func getTemplateDictionary() -> [String:String]? {
-        if shouldSendToLP() {
+        if profile != nil {
             return Leanplum.object(forKeyPathComponents: ["Template Dictionary"]) as? [String : String]
         }
         return nil
     }
 
     func getBoolVariableFromServer(key: String) -> Bool? {
-        if shouldSendToLP() {
+        if profile != nil {
             return Leanplum.object(forKeyPathComponents: [key]) as? Bool
         }
         return nil
@@ -171,11 +156,8 @@ class LeanplumIntegration {
 
     // Utils
     
-    func setEnabled(_ enabled: Bool) {
-        self.enabled = enabled
-        if self.enabled {
-            self.start()
-        }
+    func forceContentUpdate() {
+        Leanplum.forceContentUpdate()
     }
 
     func shouldShowFocusUI() -> Bool {
