@@ -10,14 +10,6 @@
 	<string>$(MOZ_GROUP_SUFFIX)</string>
 	<key>MozDevelopmentTeam</key>
 	<string>$(DEVELOPMENT_TEAM)</string>
-	<key>LeanplumEnvironment</key>
-	<string>$(LEANPLUM_ENVIRONMENT)</string>
-	<key>LeanplumAppId</key>
-	<string>$(LEANPLUM_APP_ID)</string>
-	<key>LeanplumKey</key>
-	<string>$(LEANPLUM_KEY)</string>
-	<key>AppIdentifierPrefix</key>
-	<string>$(APP_IDENTIFIER_PREFIX)</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -54,8 +46,6 @@
 	<false/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
-		<string>firefox-focus</string>
-		<string>firefox-klar</string>
 		<string>ymail</string>
 		<string>ms-outlook</string>
 		<string>airmail</string>
