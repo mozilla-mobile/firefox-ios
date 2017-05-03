@@ -6,7 +6,6 @@ import Foundation
 import Deferred
 import Shared
 
-public let NotificationASPanelDataInvalidated = Notification.Name("NotificationASPanelDataInvalidated")
 public let ActivityStreamTopSiteCacheSize: Int32 = 16
 
 private let log = Logger.browserLogger
@@ -20,6 +19,7 @@ protocol DataObserver {
 
 @objc protocol DataObserverDelegate: class {
     func didInvalidateDataSources()
+    func willInvalidateDataSources()
 }
 
 open class PanelDataObservers {
@@ -39,15 +39,16 @@ class ActivityStreamDataObserver: DataObserver {
     init(profile: Profile) {
         self.profile = profile
         self.profile.history.setTopSitesCacheSize(ActivityStreamTopSiteCacheSize)
-
         events.forEach { NotificationCenter.default.addObserver(self, selector: #selector(self.notificationReceived(_:)), name: $0, object: nil) }
     }
 
     deinit {
         events.forEach { NotificationCenter.default.removeObserver(self, name: $0, object: nil) }
     }
-    
+
     func invalidate() {
+        self.delegate?.willInvalidateDataSources()
+
         let notify = {
             self.delegate?.didInvalidateDataSources()
         }

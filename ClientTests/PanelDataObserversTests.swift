@@ -8,10 +8,15 @@ import XCTest
 @testable import Client
 
 private class MockDataObserverDelegate: DataObserverDelegate {
-    var delegateCalledCount = 0
+    var didInvalidateCount = 0
+    var willInvalidateCount = 0
 
     func didInvalidateDataSources() {
-        delegateCalledCount += 1
+        didInvalidateCount += 1
+    }
+
+    func willInvalidateDataSources() {
+        willInvalidateCount += 1
     }
 }
 
@@ -29,6 +34,6 @@ class PanelDataObserversTests: XCTestCase {
         NotificationCenter.default.post(name: NotificationPrivateDataClearedHistory,
                                         object: nil)
 
-        waitForCondition(timeout: 5) { delegate.delegateCalledCount == 3 }
+        waitForCondition(timeout: 5) { delegate.didInvalidateCount == 3 &&  delegate.willInvalidateCount == 3 }
     }
 }
