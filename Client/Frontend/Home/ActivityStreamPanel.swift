@@ -551,7 +551,6 @@ extension ActivityStreamPanel: DataObserverDelegate {
 
         let openInNewPrivateTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "action_new_private_tab") { action in
             self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
-            self.telemetry.reportEvent(.NewPrivateTab, source: pingSource, position: index)
         }
 
         let bookmarkAction: ActionOverlayTableViewAction
@@ -633,7 +632,6 @@ enum ASPingEvent: String {
     case Dismiss = "DISMISS"
     case Share = "SHARE"
     case NewTab = "NEW_TAB"
-    case NewPrivateTab = "NEW_PRIVATE_TAB"
     case AddBookmark = "ADD_BOOKMARK"
     case RemoveBookmark = "REMOVE_BOOKMARK"
     case Remove = "REMOVE"
