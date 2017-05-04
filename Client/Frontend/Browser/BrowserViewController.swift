@@ -528,8 +528,8 @@ class BrowserViewController: UIViewController {
             self.view.alpha = (profile.prefs.intForKey(IntroViewControllerSeenProfileKey) != nil) ? 1.0 : 0.0
         }
 
-        if PLCrashReporter.shared().hasPendingCrashReport() {
-            PLCrashReporter.shared().purgePendingCrashReport()
+        if hasPendingCrashReport() {
+            purgePendingCrashReport()
             showRestoreTabsAlert()
         } else {
             log.debug("Restoring tabs.")
@@ -546,6 +546,14 @@ class BrowserViewController: UIViewController {
                                                          selector: #selector(BrowserViewController.openSettings),
                                                          name: NSNotification.Name(rawValue: NotificationStatusNotificationTapped),
                                                          object: nil)
+    }
+
+    fileprivate func hasPendingCrashReport() -> Bool {
+        return false
+    }
+
+    fileprivate func purgePendingCrashReport() {
+        // no-op
     }
 
     fileprivate func showRestoreTabsAlert() {

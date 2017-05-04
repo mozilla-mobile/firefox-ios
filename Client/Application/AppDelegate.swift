@@ -132,13 +132,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         self.window!.rootViewController = rootViewController
 
-        do {
-            log.debug("Configuring Crash Reporting...")
-            try PLCrashReporter.shared().enableAndReturnError()
-        } catch let error as NSError {
-            log.error("Failed to enable PLCrashReporter - \(error.description)")
-        }
-
         log.debug("Adding observers…")
         NotificationCenter.default.addObserver(forName: NSNotification.Name.FSReadingListAddReadingListItem, object: nil, queue: nil) { (notification) -> Void in
             if let userInfo = notification.userInfo, let url = userInfo["URL"] as? URL {
