@@ -55,7 +55,7 @@ class ResetTests: XCTestCase {
 
         // Add a client.
         let tabs = profile.peekTabs
-        XCTAssertTrue(tabs.insertOrUpdateClient(RemoteClient(guid: "abcdefghijkl", name: "Remote", modified: Date.now(), type: "mobile", formfactor: "tablet", os: "Windows")).value.isSuccess)
+        XCTAssertTrue(tabs.insertOrUpdateClient(RemoteClient(guid: "abcdefghijkl", name: "Remote", modified: Date.now(), type: "mobile", formfactor: "tablet", os: "Windows", version: "55.0.1")).value.isSuccess)
 
         // Verify that it's there.
         assertClientsHaveGUIDsFromStorage(tabs, expected: ["abcdefghijkl"])
