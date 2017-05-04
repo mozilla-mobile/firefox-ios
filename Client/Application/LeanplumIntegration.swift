@@ -106,6 +106,7 @@ class LeanplumIntegration {
         }
         Leanplum.syncResourcesAsync(true)
         setupTemplateDictionary()
+        setupIntroPrototypeDict()
 
         var userAttributesDict = [AnyHashable: Any]()
         userAttributesDict["Focus Installed"] = "false"
@@ -154,9 +155,18 @@ class LeanplumIntegration {
     // Data Modeling
 
     func setupTemplateDictionary() {
+        LPVar.define("Template Dictionary", with: ["Template Text": "", "Button Text": "", "Deep Link": "", "Hex Color String": ""])
+    }
+
+    func setupIntroPrototypeDict() {
+        LPVar.define("Prototype Dictionary", with: ["Card Text": "", "Card Title": "", "Card Image": "", "Card Color": ""])
+    }
+
+    func getIntroPrototypeDict() -> [String:String]? {
         if shouldSendToLP() {
-            LPVar.define("Template Dictionary", with: ["Template Text": "", "Button Text": "", "Deep Link": "", "Hex Color String": ""])
+            return Leanplum.object(forKeyPathComponents: ["Prototype Dictionary"]) as? [String : String]
         }
+        return nil
     }
 
     func getTemplateDictionary() -> [String:String]? {
