@@ -67,14 +67,6 @@
                BlueprintName = "StorageTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
-            <SkippedTests>
-               <Test
-                  Identifier = "TestSQLiteHistoryRecommendationsPerf">
-               </Test>
-               <Test
-                  Identifier = "TestSQLiteLoginsPerf">
-               </Test>
-            </SkippedTests>
          </TestableReference>
          <TestableReference
             skipped = "NO">
@@ -86,6 +78,12 @@
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
             <SkippedTests>
+               <Test
+                  Identifier = "LiveAccountTest">
+               </Test>
+               <Test
+                  Identifier = "LiveStorageClientTests">
+               </Test>
                <Test
                   Identifier = "LiveStorageClientTests/testLive()">
                </Test>
@@ -105,7 +103,7 @@
             </BuildableReference>
          </TestableReference>
          <TestableReference
-            skipped = "YES">
+            skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "3B43E3CF1D95C48D00BBA9DB"
@@ -113,14 +111,6 @@
                BlueprintName = "StoragePerfTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
-            <SkippedTests>
-               <Test
-                  Identifier = "TestSQLiteHistoryFrecencyPerf">
-               </Test>
-               <Test
-                  Identifier = "TestSQLiteHistoryTopSitesCachePref">
-               </Test>
-            </SkippedTests>
          </TestableReference>
          <TestableReference
             skipped = "NO">
@@ -133,7 +123,7 @@
             </BuildableReference>
             <SkippedTests>
                <Test
-                  Identifier = "LivePushClientTests">
+                  Identifier = "SyncAuthStateTests">
                </Test>
                <Test
                   Identifier = "SyncAuthStateTests/testLive()">
