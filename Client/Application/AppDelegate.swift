@@ -89,6 +89,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         let profile = getProfile(application)
         appStateStore = AppStateStore(prefs: profile.prefs)
 
+        log.debug("Initializing Sentry…")
+        SentryIntegration.shared.setup(profile: profile)
+
         log.debug("Initializing telemetry…")
         Telemetry.initWithPrefs(profile.prefs)
 
