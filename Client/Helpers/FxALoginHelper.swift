@@ -165,10 +165,7 @@ class FxALoginHelper {
     }
 
     func getPushConfiguration() -> PushConfiguration? {
-        if AppConstants.BuildChannel == .developer {
-            return DeveloperPushConfiguration()
-        }
-        return nil
+        return ProductionPushConfiguration()
     }
 
     func apnsRegisterDidSucceed(_ deviceToken: Data) {

@@ -1283,6 +1283,65 @@ class TestSQLiteHistory: XCTestCase {
         }
     }
 
+    func testTopSitesFiltersGoogle() {
+        let db = BrowserDB(filename: "browser.db", files: files)
+        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
+        let prefs = MockProfilePrefs()
+        let history = SQLiteHistory(db: db, prefs: prefs)
+
+        history.setTopSitesCacheSize(20)
+        history.clearTopSitesCache().value
+        history.clearHistory().value
+        // Lets create some history. This will create 100 sites that will have 21 local and 21 remote visits
+        populateHistoryForFrecencyCalculations(history, siteCount: 100)
+
+        func createTopSite(url: String, guid: String) {
+            let site = Site(url: url, title: "Hi")
+            site.guid = guid
+            history.insertOrUpdatePlace(site.asPlace(), modified: baseInstantInMillis - 20000).value
+            // Don't give it any remote visits. But give it 100 local visits. This should be the new Topsite!
+            for i in 0...100 {
+                addVisitForSite(site, intoHistory: history, from: .local, atTime: advanceTimestamp(baseInstantInMicros, by: 1000000 * i))
+            }
+        }
+
+        createTopSite(url: "http://google.com", guid: "abcgoogle") // should not be a topsite
+        createTopSite(url: "http://www.google.com", guid: "abcgoogle1") // should not be a topsite
+        createTopSite(url: "http://google.co.za", guid: "abcgoogleza") // should not be a topsite
+        createTopSite(url: "http://docs.google.com", guid: "docsgoogle") // should be a topsite
+
+        let expectation = self.expectation(description: "First.")
+        func done() -> Success {
+            expectation.fulfill()
+            return succeed()
+        }
+
+        func loadCache() -> Success {
+            return history.updateTopSitesCacheIfInvalidated() >>> succeed
+        }
+
+        func checkTopSitesReturnsResults() -> Success {
+            return history.getTopSitesWithLimit(20) >>== { topSites in
+                XCTAssertEqual(topSites[0]?.guid, "docsgoogle") // google docs should be the first topsite
+                // make sure all other google guids are not in the topsites array
+                topSites.forEach {
+                    let guid: String = $0!.guid! // type checking is hard
+                    XCTAssertNil(["abcgoogle", "abcgoogle1", "abcgoogleza"].index(of: guid))
+                }
+                XCTAssertEqual(topSites.count, 20)
+                return succeed()
+            }
+        }
+
+        loadCache()
+            >>> checkTopSitesReturnsResults
+            >>> done
+
+        waitForExpectations(timeout: 10.0) { error in
+            return
+        }
+    }
+
     func testTopSitesCache() {
         let db = BrowserDB(filename: "browser.db", files: files)
         db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)

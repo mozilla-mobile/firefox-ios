@@ -386,7 +386,7 @@ class TestSQLiteLoginsPerf: XCTestCase {
 
     func populateTestLogins() {
         for i in 0..<1000 {
-            let login = Login.createWithHostname("website\(i).com", username: "username\(i)", password: "password\(i)")
+            let login = Login.createWithHostname("website\(i).com", username: "username\(i)", password: "password\(i)", formSubmitURL: "test")
             addLogin(login).succeeded()
         }
     }

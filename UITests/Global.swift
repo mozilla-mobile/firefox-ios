@@ -195,7 +195,7 @@ extension KIFUITestActor {
 
         webView.evaluateJavaScript("typeof KIFHelper") { result, _ in
             if result as! String == "undefined" {
-                let bundle = Bundle(for: NavigationTests.self)
+                let bundle = Bundle(for: BrowserTests.self)
                 let path = bundle.path(forResource: "KIFHelper", ofType: "js")!
                 let source = try! NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue)
                 webView.evaluateJavaScript(source as String, completionHandler: nil)
