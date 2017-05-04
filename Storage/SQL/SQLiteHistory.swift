@@ -981,7 +981,9 @@ extension SQLiteHistory: SyncableHistory {
     private func getModifiedHistory(limit: Int) -> Deferred<Maybe<[Int: Place]>> {
         let sql =
         "SELECT id, guid, url, title FROM \(TableHistory) " +
-        "WHERE should_upload = 1 LIMIT ?"
+        "WHERE should_upload = 1 " +
+        "ORDER BY id " +
+        "LIMIT ?"
 
         var places = [Int: Place]()
         let placeFactory: (SDRow) -> Void = { row in
@@ -1007,23 +1009,26 @@ extension SQLiteHistory: SyncableHistory {
         // We then need to flatten the cursor. We do that by collecting
         // places as a side-effect of the factory, producing visits as a result, and merging in memory.
 
+
+        // Turn our lazy collection of integers into a comma-seperated string for the IN clause.
         let historyIDs = Array(places.keys)
-        let idsVarlist = BrowserDB.varlist(historyIDs.count)
+        let inClause = "siteID IN ( \(historyIDs.map(String.init).joined(separator: ",")) )"
+
         let sql =
         "SELECT v1.siteID AS siteID, v1.date AS visitDate, v1.type AS visitType " +
         "FROM (" +
-        "   SELECT * FROM \(TableVisits) WHERE siteID IN \(idsVarlist) AND type <> 0" +
+        "   SELECT * FROM \(TableVisits) WHERE \(inClause) AND type <> 0" +
         ") AS v1 " +
         "LEFT OUTER JOIN \(TableVisits) AS v2 ON v1.siteID = v2.siteID AND v1.date < v2.date " +
         "GROUP BY v1.date " +
         "HAVING COUNT(*) < ?" +
         "ORDER BY v1.siteID, v1.date DESC"
 
-        // Seed our acculumator with empty lists since we already know which IDs we will be fetching.
+        // Seed our accumulator with empty lists since we already know which IDs we will be fetching.
         var visits = [Int: [Visit]]()
         historyIDs.forEach { visits[$0] = [] }
 
-        // Add each visit to it's history item's list.
+        // Add each visit to its history item's list.
         let visitsAccumulator: (SDRow) -> Void = { row in
             let date = row.getTimestamp("visitDate")!
             let type = VisitType(rawValue: row["visitType"] as! Int)!
@@ -1032,10 +1037,15 @@ extension SQLiteHistory: SyncableHistory {
             visits[id]?.append(visit)
         }
 
-        let args: Args = historyIDs + [visitLimit]
+        let args: Args = [visitLimit]
         return db.runQuery(sql, args: args, factory: visitsAccumulator) >>> {
             // Join up the places map we received as input with our visits map.
-            let placesAndVisits = places.map { id, place in (place, visits[id]!) }
+            let placesAndVisits: [(Place, [Visit])] = places.flatMap { id, place in
+                guard let visitsList = visits[id], !visitsList.isEmpty else {
+                    return nil
+                }
+                return (place, visitsList)
+            }
             return deferMaybe(placesAndVisits)
         }
     }
