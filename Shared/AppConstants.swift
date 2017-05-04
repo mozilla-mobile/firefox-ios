@@ -27,6 +27,18 @@ public struct AppConstants {
         #endif
     }()
 
+    public static let scheme: String = {
+        guard let identifier = Bundle.main.bundleIdentifier else {
+            return "unknown"
+        }
+
+        let scheme = identifier.replacingOccurrences(of: "org.mozilla.ios.", with: "")
+        if scheme == "FirefoxNightly.enterprise" {
+            return "FirefoxNightly"
+        }
+        return scheme
+    }()
+
     /// Whether we just mirror (false) or actively merge and upload (true).
     public static var shouldMergeBookmarks = false
 

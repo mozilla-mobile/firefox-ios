@@ -5,15 +5,19 @@
 import Foundation
 
 public enum PushConfigurationLabel: String {
-    case Developer = "Developer"
-    case Stage = "Stage"
-    case Production = "Production"
+    case fennec = "Fennec"
+    case fennecEnterprise = "FennecEnterprise"
+    case firefoxBeta = "FirefoxBeta"
+    case firefoxNightlyEnterprise = "FirefoxNightly"
+    case firefox = "Firefox"
 
     public func toConfiguration() -> PushConfiguration {
         switch self {
-        case .Stage: return StagePushConfiguration()
-        case .Production: return ProductionPushConfiguration()
-        case .Developer: return DeveloperPushConfiguration()
+        case .fennec: return FennecPushConfiguration()
+        case .fennecEnterprise: return FennecEnterprisePushConfiguration()
+        case .firefoxBeta: return FirefoxBetaPushConfiguration()
+        case .firefoxNightlyEnterprise: return FirefoxNightlyEnterprisePushConfiguration()
+        case .firefox: return FirefoxPushConfiguration()
         }
     }
 }
@@ -29,20 +33,32 @@ public protocol PushConfiguration {
     var endpointURL: NSURL { get }
 }
 
-public struct DeveloperPushConfiguration: PushConfiguration {
+public struct FennecPushConfiguration: PushConfiguration {
     public init() {}
-    public let label = PushConfigurationLabel.Developer
-    public let endpointURL = NSURL(string: "https://updates-autopush.dev.mozaws.net/v1/apns/dev")!
+    public let label = PushConfigurationLabel.fennec
+    public let endpointURL = NSURL(string: "https://updates.push.services.mozilla.com/v1/apns/fennec")!
 }
 
-public struct StagePushConfiguration: PushConfiguration {
+public struct FennecEnterprisePushConfiguration: PushConfiguration {
     public init() {}
-    public let label = PushConfigurationLabel.Stage
-    public let endpointURL = NSURL(string: "https://updates-autopush.stage.mozaws.net/v1/apns/stage")!
+    public let label = PushConfigurationLabel.fennecEnterprise
+    public let endpointURL = NSURL(string: "https://updates.push.services.mozilla.com/v1/apns/fennecenterprise")!
 }
 
-public struct ProductionPushConfiguration: PushConfiguration {
+public struct FirefoxBetaPushConfiguration: PushConfiguration {
     public init() {}
-    public let label = PushConfigurationLabel.Production
+    public let label = PushConfigurationLabel.firefoxBeta
+    public let endpointURL = NSURL(string: "https://updates.push.services.mozilla.com/v1/apns/firefoxbeta")!
+}
+
+public struct FirefoxNightlyEnterprisePushConfiguration: PushConfiguration {
+    public init() {}
+    public let label = PushConfigurationLabel.firefoxNightlyEnterprise
+    public let endpointURL = NSURL(string: "https://updates.push.services.mozilla.com/v1/apns/firefoxnightlyenterprise")!
+}
+
+public struct FirefoxPushConfiguration: PushConfiguration {
+    public init() {}
+    public let label = PushConfigurationLabel.firefox
     public let endpointURL = NSURL(string: "https://updates.push.services.mozilla.com/v1/apns/firefox")!
 }
