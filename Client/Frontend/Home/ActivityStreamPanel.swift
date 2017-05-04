@@ -33,7 +33,8 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
     fileprivate let flowLayout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
 
     fileprivate let topSitesManager = ASHorizontalScrollCellManager()
-    fileprivate var isInitialLoad = true //Prevents intro views from flickering while content is loading
+    fileprivate var pendingCacheUpdate = false
+    fileprivate var showHighlightIntro = false
     fileprivate var sessionStart: Timestamp?
 
     lazy var longPressRecognizer: UILongPressGestureRecognizer = {
@@ -312,7 +313,7 @@ extension ActivityStreamPanel {
         case .highlights:
             return self.highlights.count
         case .highlightIntro:
-            return self.highlights.isEmpty && !self.isInitialLoad ? 1 : 0
+            return self.highlights.isEmpty && showHighlightIntro ? 1 : 0
         }
     }
 
@@ -370,19 +371,19 @@ extension ActivityStreamPanel: DataObserverDelegate {
     // Reloads both highlights and top sites data from their respective caches. Does not invalidate the cache.
     // See ActivityStreamDataObserver for invalidation logic.
     func reloadAll() {
-        accumulate([self.getHighlights, self.getTopSites]).uponQueue(DispatchQueue.main) { _ in
-            self.isInitialLoad = false
+        accumulate([self.getHighlights, self.getTopSites]).uponQueue(.main) { _ in
+            // If there is no pending cache update and highlights are empty. Show the onboarding screen
+            self.showHighlightIntro = self.highlights.isEmpty && !self.pendingCacheUpdate
             self.collectionView?.reloadData()
         }
     }
 
     func getHighlights() -> Success {
         return self.profile.recommendations.getHighlights().bindQueue(.main) { result in
-            // Scan through the fetched highlights and report on anything that might be missing.
             guard let highlights = result.successValue?.asArray() else {
                 return succeed()
             }
-            
+            // Scan through the fetched highlights and report on anything that might be missing.
             self.reportMissingData(sites: highlights, source: .Highlights)
             self.highlights = highlights
             return succeed()
@@ -391,7 +392,7 @@ extension ActivityStreamPanel: DataObserverDelegate {
 
     func getTopSites() -> Success {
         return self.profile.history.getTopSitesWithLimit(16).bindQueue(.main) { result in
-            guard let mySites = result.successValue?.asArray() else {
+            guard let mySites = result.successValue?.asArray(), !self.pendingCacheUpdate else {
                 return succeed()
             }
             
@@ -429,8 +430,13 @@ extension ActivityStreamPanel: DataObserverDelegate {
         }
     }
 
+    func willInvalidateDataSources() {
+        self.pendingCacheUpdate = true
+    }
+
     // Invoked by the ActivityStreamDataObserver when highlights/top sites invalidation is complete.
     func didInvalidateDataSources() {
+        self.pendingCacheUpdate = false
         reloadAll()
     }
 
@@ -443,14 +449,14 @@ extension ActivityStreamPanel: DataObserverDelegate {
         if defaultTopSites().filter({$0.url == url}).isEmpty == false {
             deleteTileForSuggestedSite(url)
         }
-        profile.history.removeHostFromTopSites(host).uponQueue(DispatchQueue.main) { result in
+        profile.history.removeHostFromTopSites(host).uponQueue(.main) { result in
             guard result.isSuccess else { return }
             self.profile.panelDataObservers.activityStream.invalidate(highlights: false)
         }
     }
 
     func hideFromHighlights(_ site: Site) {
-        profile.recommendations.removeHighlightForURL(site.url).uponQueue(DispatchQueue.main) { result in
+        profile.recommendations.removeHighlightForURL(site.url).uponQueue(.main) { result in
             guard result.isSuccess else { return }
             self.profile.panelDataObservers.activityStream.invalidate(highlights: true)
         }
@@ -505,7 +511,7 @@ extension ActivityStreamPanel: DataObserverDelegate {
 
     fileprivate func fetchBookmarkStatusThenPresentContextMenu(_ site: Site, atIndex index: Int, forSection section: Section) {
         profile.bookmarks.modelFactory >>== {
-            $0.isBookmarked(site.url).uponQueue(DispatchQueue.main) { result in
+            $0.isBookmarked(site.url).uponQueue(.main) { result in
                 guard let isBookmarked = result.successValue else {
                     log.error("Error getting bookmark status: \(result.failureValue ??? "nil").")
                     return
