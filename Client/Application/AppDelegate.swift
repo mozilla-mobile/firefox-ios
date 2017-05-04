@@ -11,6 +11,7 @@ import WebImage
 import SwiftKeychainWrapper
 import LocalAuthentication
 import Telemetry
+import Sentry
 
 private let log = Logger.browserLogger
 
@@ -224,15 +225,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // Override point for customization after application launch.
         var shouldPerformAdditionalDelegateHandling = true
 
+        SentryClient.shared = SentryClient(dsnString: "https://8ce89051ab414ea8a41e5b8211103bec:670a141f1ca04b24b75e85c3474475e8@sentry.prod.mozaws.net/201")
+        if let profile = self.profile {
+            SentryClient.shared?.addExtra("hasAccount", value: profile.hasAccount())
+        }
+        SentryClient.shared?.startCrashHandler()
+
         log.debug("Did finish launching.")
 
         log.debug("Setting up Adjust")
         self.adjustIntegration?.triggerApplicationDidFinishLaunchingWithOptions(launchOptions)
 
-        #if BUDDYBUILD
-            log.debug("Setting up BuddyBuild SDK")
-            BuddyBuildSDK.setup()
-        #endif
+//        #if BUDDYBUILD
+//            log.debug("Setting up BuddyBuild SDK")
+//            BuddyBuildSDK.setup()
+//        #endif
         
         log.debug("Making window key and visible…")
         self.window!.makeKeyAndVisible()
