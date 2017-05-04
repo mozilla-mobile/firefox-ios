@@ -969,9 +969,32 @@ extension SQLiteHistory: SyncableHistory {
     }
 
     public func getModifiedHistoryToUpload() -> Deferred<Maybe<[(Place, [Visit])]>> {
-        // What we want to do: find all items flagged for update, selecting some number of their
-        // visits alongside.
-        //
+        // What we want to do: find all history items that are flagged for upload, then find a number of recent visits for each item.
+        // This was originally all in a single SQL query but was seperated into two to save some memory when returning back the cursor.
+        return getModifiedHistory(limit: 1000) >>== { self.attachVisitsTo(places: $0, visitLimit: 20) }
+    }
+
+    private func getModifiedHistory(limit: Int) -> Deferred<Maybe<[Int: Place]>> {
+        let sql =
+        "SELECT id, guid, url, title FROM \(TableHistory) " +
+        "WHERE should_upload = 1 " +
+        "ORDER BY id " +
+        "LIMIT ?"
+
+        var places = [Int: Place]()
+        let placeFactory: (SDRow) -> Void = { row in
+            let id = row["id"] as! Int
+            let guid = row["guid"] as! String
+            let url = row["url"] as! String
+            let title = row["title"] as! String
+            places[id] = Place(guid: guid, url: url, title: title)
+        }
+
+        let args: Args = [limit]
+        return db.runQuery(sql, args: args, factory: placeFactory) >>> { deferMaybe(places) }
+    }
+
+    private func attachVisitsTo(places: [Int: Place], visitLimit: Int) -> Deferred<Maybe<[(Place, [Visit])]>> {
         // A difficulty here: we don't want to fetch *all* visits, only some number of the most recent.
         // (It's not enough to only get new ones, because the server record should contain more.)
         //
@@ -982,73 +1005,44 @@ extension SQLiteHistory: SyncableHistory {
         // We then need to flatten the cursor. We do that by collecting
         // places as a side-effect of the factory, producing visits as a result, and merging in memory.
 
-        let args: Args = [
-            50, // Limited number of history items to retrieve
-            20  // Maximum number of visits to retrieve per history item
-        ]
 
-        let historyLimit =
-        "SELECT * FROM history " +
-        "WHERE history.should_upload = 1 LIMIT ?"
+        // Turn our lazy collection of integers into a comma-seperated string for the IN clause.
+        let historyIDs = Array(places.keys)
+        let inClause = "siteID IN ( \(historyIDs.map(String.init).joined(separator: ",")) )"
 
         let sql =
-        "SELECT " +
-        "history.id AS siteID, history.guid AS guid, history.url AS url, history.title AS title, " +
-        "v1.siteID AS siteID, v1.date AS visitDate, v1.type AS visitType " +
-        "FROM " +
-        "visits AS v1 " +
-        "JOIN (\(historyLimit)) as history ON history.id = v1.siteID AND v1.type <> 0 " +
-        "LEFT OUTER JOIN " +
-        "visits AS v2 " +
-        "ON v1.siteID = v2.siteID AND v1.date < v2.date " +
+        "SELECT v1.siteID AS siteID, v1.date AS visitDate, v1.type AS visitType " +
+        "FROM (" +
+        "   SELECT * FROM \(TableVisits) WHERE \(inClause) AND type <> 0" +
+        ") AS v1 " +
+        "LEFT OUTER JOIN \(TableVisits) AS v2 ON v1.siteID = v2.siteID AND v1.date < v2.date " +
         "GROUP BY v1.date " +
-        "HAVING COUNT(*) < ? " +
+        "HAVING COUNT(*) < ?" +
         "ORDER BY v1.siteID, v1.date DESC"
 
-        var places = [Int: Place]()
+        // Seed our accumulator with empty lists since we already know which IDs we will be fetching.
         var visits = [Int: [Visit]]()
+        historyIDs.forEach { visits[$0] = [] }
 
-        // Add a place to the accumulator, prepare to accumulate visits, return the ID.
-        let ensurePlace: (SDRow) -> Int = { row in
-            let id = row["siteID"] as! Int
-            if places[id] == nil {
-                let guid = row["guid"] as! String
-                let url = row["url"] as! String
-                let title = row["title"] as! String
-                places[id] = Place(guid: guid, url: url, title: title)
-                visits[id] = Array()
-            }
-            return id
-        }
-
-        // Store the place and the visit.
-        let factory: (SDRow) -> Int = { row in
+        // Add each visit to its history item's list.
+        let visitsAccumulator: (SDRow) -> Void = { row in
             let date = row.getTimestamp("visitDate")!
             let type = VisitType(rawValue: row["visitType"] as! Int)!
             let visit = Visit(date: date, type: type)
-            let id = ensurePlace(row)
+            let id = row["siteID"] as! Int
             visits[id]?.append(visit)
-            return id
         }
 
-        return db.runQuery(sql, args: args, factory: factory)
-            >>== { c in
-
-                // Consume every row, with the side effect of populating the places
-                // and visit accumulators.
-                var ids = Set<Int>()
-                for row in c {
-                    // Collect every ID first, so that we're guaranteed to have
-                    // fully populated the visit lists, and we don't have to
-                    // worry about only collecting each place once.
-                    ids.insert(row!)
+        let args: Args = [visitLimit]
+        return db.runQuery(sql, args: args, factory: visitsAccumulator) >>> {
+            // Join up the places map we received as input with our visits map.
+            let placesAndVisits: [(Place, [Visit])] = places.flatMap { id, place in
+                guard let visitsList = visits[id], !visitsList.isEmpty else {
+                    return nil
                 }
-
-                // Now we're done with the cursor. Close it.
-                c.close()
-
-                // Now collect the return value.
-                return deferMaybe(ids.map { return (places[$0]!, visits[$0]!) })
+                return (place, visitsList)
+            }
+            return deferMaybe(placesAndVisits)
         }
     }
 
