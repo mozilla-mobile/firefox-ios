@@ -1,0 +1,3 @@
+ignore:
+ - "./ThirdParty/sqlcipher/.*"
+ - "./ThirdParty/SQLite.swift/**/*"
