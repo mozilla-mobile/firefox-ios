@@ -75,7 +75,7 @@ class TestAppDelegate: AppDelegate {
 
         // Clear the documents directory
         var rootPath: String = ""
-        let sharedContainerIdentifier = AppInfo.sharedContainerIdentifier()
+        let sharedContainerIdentifier = AppInfo.sharedContainerIdentifier
         if let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: sharedContainerIdentifier) {
             rootPath = url.path
         } else {

@@ -60,7 +60,7 @@ class ProfileFileAccessor: FileAccessor {
 
         // Bug 1147262: First option is for device, second is for simulator.
         var rootPath: String
-        let sharedContainerIdentifier = AppInfo.sharedContainerIdentifier()
+        let sharedContainerIdentifier = AppInfo.sharedContainerIdentifier
         if let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: sharedContainerIdentifier) {
             rootPath = url.path
         } else {

@@ -6,11 +6,11 @@
 	<string>development</string>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.org.mozilla.ios.Firefox</string>
+		<string>group.org.mozilla.ios.Fennec</string>
 	</array>
 	<key>keychain-access-groups</key>
 	<array>
-		<string>$(AppIdentifierPrefix)org.mozilla.ios.Firefox</string>
+		<string>$(AppIdentifierPrefix)org.mozilla.ios.Fennec</string>
 	</array>
 </dict>
 </plist>

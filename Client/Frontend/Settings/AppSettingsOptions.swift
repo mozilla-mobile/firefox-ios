@@ -439,13 +439,11 @@ class VersionSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        if AppConstants.BuildChannel != .aurora {
-            DebugSettingsClickCount += 1
-            if DebugSettingsClickCount >= 5 {
-                DebugSettingsClickCount = 0
-                ShowDebugSettings = !ShowDebugSettings
-                settings.tableView.reloadData()
-            }
+        DebugSettingsClickCount += 1
+        if DebugSettingsClickCount >= 5 {
+            DebugSettingsClickCount = 0
+            ShowDebugSettings = !ShowDebugSettings
+            settings.tableView.reloadData()
         }
     }
 }

@@ -23,35 +23,11 @@
       </BuildActionEntries>
    </BuildAction>
    <TestAction
-      buildConfiguration = "FirefoxNightly"
+      buildConfiguration = "Fennc_Enterprise"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "NO">
-      <PreActions>
-         <ExecutionAction
-            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
-            <ActionContent
-               title = "Run Script"
-               scriptText = "/usr/local/bin/carthage checkout">
-            </ActionContent>
-         </ExecutionAction>
-      </PreActions>
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "2FA436041ABB83B4008031D1"
-               BuildableName = "AccountTests.xctest"
-               BlueprintName = "AccountTests"
-               ReferencedContainer = "container:Client.xcodeproj">
-            </BuildableReference>
-            <SkippedTests>
-               <Test
-                  Identifier = "SyncAuthStateTests/testLive()">
-               </Test>
-            </SkippedTests>
-         </TestableReference>
          <TestableReference
             skipped = "NO">
             <BuildableReference
@@ -66,19 +42,19 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E6F9650B1B2F1CF20034B023"
-               BuildableName = "SharedTests.xctest"
-               BlueprintName = "SharedTests"
+               BlueprintIdentifier = "E4D567211ADECE2700F1EFE7"
+               BuildableName = "ReadingListTests.xctest"
+               BlueprintName = "ReadingListTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
-            skipped = "YES">
+            skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3B43E3CF1D95C48D00BBA9DB"
-               BuildableName = "StoragePerfTests.xctest"
-               BlueprintName = "StoragePerfTests"
+               BlueprintIdentifier = "E6F9650B1B2F1CF20034B023"
+               BuildableName = "SharedTests.xctest"
+               BlueprintName = "SharedTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -103,6 +79,12 @@
             </BuildableReference>
             <SkippedTests>
                <Test
+                  Identifier = "LiveAccountTest">
+               </Test>
+               <Test
+                  Identifier = "LiveStorageClientTests">
+               </Test>
+               <Test
                   Identifier = "LiveStorageClientTests/testLive()">
                </Test>
                <Test
@@ -114,9 +96,19 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E4D567211ADECE2700F1EFE7"
-               BuildableName = "ReadingListTests.xctest"
-               BlueprintName = "ReadingListTests"
+               BlueprintIdentifier = "28F9520519D0F9FB00DCE892"
+               BuildableName = "FxATests.xctest"
+               BlueprintName = "FxATests"
+               ReferencedContainer = "container:FxA/FxA.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "3B43E3CF1D95C48D00BBA9DB"
+               BuildableName = "StoragePerfTests.xctest"
+               BlueprintName = "StoragePerfTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -124,54 +116,17 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3BFE4B061D342FB800DDF53F"
-               BuildableName = "XCUITests.xctest"
-               BlueprintName = "XCUITests"
-               ReferencedContainer = "container:Client.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D39FA15E1A83E0EC00EE869C"
-               BuildableName = "UITests.xctest"
-               BlueprintName = "UITests"
+               BlueprintIdentifier = "2FA436041ABB83B4008031D1"
+               BuildableName = "AccountTests.xctest"
+               BlueprintName = "AccountTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
             <SkippedTests>
                <Test
-                  Identifier = "BookmarkingTests">
+                  Identifier = "SyncAuthStateTests">
                </Test>
                <Test
-                  Identifier = "FindInPageTests">
-               </Test>
-               <Test
-                  Identifier = "HomePageSettingsUITests">
-               </Test>
-               <Test
-                  Identifier = "NavigationTests">
-               </Test>
-               <Test
-                  Identifier = "PrivateBrowsingTests">
-               </Test>
-               <Test
-                  Identifier = "ReaderViewUITests">
-               </Test>
-               <Test
-                  Identifier = "SearchSettingsUITests">
-               </Test>
-               <Test
-                  Identifier = "SearchTests">
-               </Test>
-               <Test
-                  Identifier = "SettingsTests">
-               </Test>
-               <Test
-                  Identifier = "TopTabsTests">
-               </Test>
-               <Test
-                  Identifier = "ViewMemoryLeakTests">
+                  Identifier = "SyncAuthStateTests/testLive()">
                </Test>
             </SkippedTests>
          </TestableReference>
@@ -197,34 +152,27 @@
       </MacroExpansion>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "FIREFOX_CLEAR_PROFILE"
+            argument = "-AppleLanguages (English)"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "FIREFOX_TEST"
+            argument = "-AppleLocale es_US"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
-      <EnvironmentVariables>
-         <EnvironmentVariable
-            key = "DYLD_INSERT_LIBRARIES"
-            value = "@executable_path/EarlGrey.framework/EarlGrey"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-      </EnvironmentVariables>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
    <LaunchAction
-      buildConfiguration = "FirefoxNightly"
+      buildConfiguration = "Fennc_Enterprise"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      launchStyle = "1"
+      launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
-      allowLocationSimulation = "NO">
+      allowLocationSimulation = "YES">
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
          <BuildableReference
@@ -246,7 +194,7 @@
       </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
-      buildConfiguration = "FirefoxNightly"
+      buildConfiguration = "Fennc_Enterprise"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
@@ -263,19 +211,10 @@
       </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
-      buildConfiguration = "FirefoxNightly">
+      buildConfiguration = "Fennc_Enterprise">
    </AnalyzeAction>
    <ArchiveAction
-      buildConfiguration = "FirefoxNightly"
+      buildConfiguration = "Fennc_Enterprise"
       revealArchiveInOrganizer = "YES">
-      <PreActions>
-         <ExecutionAction
-            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
-            <ActionContent
-               title = "Run Script"
-               scriptText = "/usr/local/bin/carthage checkout">
-            </ActionContent>
-         </ExecutionAction>
-      </PreActions>
    </ArchiveAction>
 </Scheme>

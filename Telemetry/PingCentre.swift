@@ -33,10 +33,6 @@ public struct PingCentre {
         switch AppConstants.BuildChannel {
         case .developer:
             return DefaultPingCentreImpl(topic: topic, endpoint: .staging, clientID: clientID)
-        case .nightly:
-            fallthrough
-        case .aurora:
-            fallthrough
         case .beta:
             fallthrough
         case .release:

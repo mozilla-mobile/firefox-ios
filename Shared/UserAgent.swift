@@ -6,7 +6,7 @@ import AVFoundation
 import UIKit
 
 open class UserAgent {
-    private static var defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier())!
+    private static var defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
 
     private static func clientUserAgent(prefix: String) -> String {
         return "\(prefix)/\(AppInfo.appVersion)b\(AppInfo.buildNumber) " +

@@ -138,7 +138,7 @@
 		28F657EA1ABFCA7A00A608BD /* LiveAccountTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA4363B1ABB8448008031D1 /* LiveAccountTest.swift */; };
 		28FDFF0C1C1F725800840F86 /* SeparatorTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28FDFF0B1C1F725800840F86 /* SeparatorTableCell.swift */; };
 		2C2A5EF41E68469500F02659 /* PrivateBrowsingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2A5EF31E68469500F02659 /* PrivateBrowsingTest.swift */; };
-               2C31A7A91E8BFB2200DAC646 /* ReaderViewUITest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C31A7A81E8BFB2200DAC646 /* ReaderViewUITest.swift */; };
+		2C31A7A91E8BFB2200DAC646 /* ReaderViewUITest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C31A7A81E8BFB2200DAC646 /* ReaderViewUITest.swift */; };
 		2C31A8471E8D447F00DAC646 /* HomePageSettingsUITest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C31A8461E8D447F00DAC646 /* HomePageSettingsUITest.swift */; };
 		2C3406C81E719F00000FD889 /* SettingsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3406C71E719F00000FD889 /* SettingsTest.swift */; };
 		2C8C07771E7800EA00DC1237 /* FindInPageTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8C07761E7800EA00DC1237 /* FindInPageTest.swift */; };
@@ -440,7 +440,6 @@
 		D3BA7E0E1B0E934F00153782 /* ContextMenuHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BA7E0D1B0E934F00153782 /* ContextMenuHelper.swift */; };
 		D3BE7B261B054D4400641031 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BE7B251B054D4400641031 /* main.swift */; };
 		D3BE7B461B054F8600641031 /* TestAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BE7B451B054F8600641031 /* TestAppDelegate.swift */; };
-		D3BE7B481B05596800641031 /* AuroraAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BE7B471B05596800641031 /* AuroraAppDelegate.swift */; };
 		D3BF8CBB1B7425570007AFE6 /* DiskImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BF8CBA1B7425570007AFE6 /* DiskImageStore.swift */; };
 		D3C3696E1CC6B78800348A61 /* LocalRequestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C3696D1CC6B78800348A61 /* LocalRequestHelper.swift */; };
 		D3C3EB651B6FF44000388E9A /* SessionRestoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C3EB641B6FF44000388E9A /* SessionRestoreTests.swift */; };
@@ -1372,7 +1371,7 @@
 		28F596A01ACA13CA0071DDCC /* InfoTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InfoTests.swift; path = SyncTests/InfoTests.swift; sourceTree = "<group>"; };
 		28FDFF0B1C1F725800840F86 /* SeparatorTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeparatorTableCell.swift; sourceTree = "<group>"; };
 		2C2A5EF31E68469500F02659 /* PrivateBrowsingTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivateBrowsingTest.swift; sourceTree = "<group>"; };
-               2C31A7A81E8BFB2200DAC646 /* ReaderViewUITest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReaderViewUITest.swift; sourceTree = "<group>"; };
+		2C31A7A81E8BFB2200DAC646 /* ReaderViewUITest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReaderViewUITest.swift; sourceTree = "<group>"; };
 		2C31A8461E8D447F00DAC646 /* HomePageSettingsUITest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomePageSettingsUITest.swift; sourceTree = "<group>"; };
 		2C3406C71E719F00000FD889 /* SettingsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTest.swift; sourceTree = "<group>"; };
 		2C8C07761E7800EA00DC1237 /* FindInPageTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindInPageTest.swift; sourceTree = "<group>"; };
@@ -1661,7 +1660,6 @@
 		D3BA7E0D1B0E934F00153782 /* ContextMenuHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContextMenuHelper.swift; sourceTree = "<group>"; };
 		D3BE7B251B054D4400641031 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		D3BE7B451B054F8600641031 /* TestAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestAppDelegate.swift; sourceTree = "<group>"; };
-		D3BE7B471B05596800641031 /* AuroraAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuroraAppDelegate.swift; sourceTree = "<group>"; };
 		D3BF8CBA1B7425570007AFE6 /* DiskImageStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiskImageStore.swift; sourceTree = "<group>"; };
 		D3BF8CBC1B7472FA0007AFE6 /* DiskImageStoreTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiskImageStoreTests.swift; sourceTree = "<group>"; };
 		D3C3696D1CC6B78800348A61 /* LocalRequestHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalRequestHelper.swift; sourceTree = "<group>"; };
@@ -1768,7 +1766,6 @@
 		E4ECD0871B70FD4F00B90D22 /* WindowCloseHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowCloseHelper.swift; sourceTree = "<group>"; };
 		E4F21AA51A13C4A300B0FAAA /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		E60961861B62B8A700DD640F /* Fennec.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Fennec.xcconfig; path = Configuration/Fennec.xcconfig; sourceTree = "<group>"; };
-		E60961881B62B8BE00DD640F /* FirefoxNightly.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = FirefoxNightly.xcconfig; path = Configuration/FirefoxNightly.xcconfig; sourceTree = "<group>"; };
 		E60961891B62B8C800DD640F /* Firefox.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Firefox.xcconfig; path = Configuration/Firefox.xcconfig; sourceTree = "<group>"; };
 		E60D03171D511398002FE3F6 /* SyncStatusResolver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncStatusResolver.swift; sourceTree = "<group>"; };
 		E60D03291D5118DB002FE3F6 /* SyncStatusResolverTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncStatusResolverTests.swift; sourceTree = "<group>"; };
@@ -1779,9 +1776,7 @@
 		E6231C001B90A44F005ABB0D /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		E6231C021B90A466005ABB0D /* libstdc++.6.0.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.6.0.9.tbd"; path = "usr/lib/libstdc++.6.0.9.tbd"; sourceTree = SDKROOT; };
 		E6231C041B90A472005ABB0D /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
-		E62AC15D1E956AF100843532 /* Enterprise.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Enterprise.entitlements; sourceTree = "<group>"; };
-		E62AC15E1E956AF100843532 /* Release.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Release.entitlements; sourceTree = "<group>"; };
-		E62AC15F1E956AFC00843532 /* Debug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Debug.entitlements; sourceTree = "<group>"; };
+		E62AC15F1E956AFC00843532 /* Fennec.enterprise.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Fennec.enterprise.entitlements; sourceTree = "<group>"; };
 		E6327A631BF6438E008D12E0 /* DebugSettingsBundleOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugSettingsBundleOptions.swift; sourceTree = "<group>"; };
 		E633E2D91C21EAF8001FFF6C /* LoginDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginDetailViewController.swift; path = ../Settings/LoginDetailViewController.swift; sourceTree = "<group>"; };
 		E633E3791C2204BE001FFF6C /* LoginManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginManagerTests.swift; sourceTree = "<group>"; };
@@ -1850,6 +1845,7 @@
 		E65075C11E37F956006961AC /* ExtensionUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionUtils.swift; sourceTree = "<group>"; };
 		E653422C1C5944F90039DD9E /* BrowserPrompts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserPrompts.swift; sourceTree = "<group>"; };
 		E65607601C08B4E200534B02 /* SearchInputView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchInputView.swift; sourceTree = "<group>"; };
+		E659A60A1EB7C1D300D7A6AD /* BuddyBuildSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BuddyBuildSDK.framework; sourceTree = "<group>"; };
 		E65C5B931BEA4E7100D28BEF /* FBSnapshotTestCase-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FBSnapshotTestCase-Info.plist"; sourceTree = "<group>"; };
 		E65C5B941BEA4E7100D28BEF /* FBSnapshotTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FBSnapshotTestCase.h; sourceTree = "<group>"; };
 		E65C5B951BEA4E7100D28BEF /* FBSnapshotTestCase.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FBSnapshotTestCase.m; sourceTree = "<group>"; };
@@ -1924,11 +1920,14 @@
 		E6CF28E61CB43B7900151AB3 /* SensitiveViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensitiveViewController.swift; sourceTree = "<group>"; };
 		E6D7C31C1CF4E68D00E746BA /* TestBookmarkModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestBookmarkModel.swift; path = SyncTests/TestBookmarkModel.swift; sourceTree = "<group>"; };
 		E6D8D5E61B569D70009E5A58 /* BrowserTrayAnimators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserTrayAnimators.swift; sourceTree = "<group>"; };
-		E6DCC1ED1DCBB6AA00CEC4B7 /* FennecEnterprise.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = FennecEnterprise.xcconfig; path = Configuration/FennecEnterprise.xcconfig; sourceTree = "<group>"; };
+		E6DCC1ED1DCBB6AA00CEC4B7 /* Fennec.enterprise.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Fennec.enterprise.xcconfig; path = Configuration/Fennec.enterprise.xcconfig; sourceTree = "<group>"; };
 		E6EAC5951B29CB3A00E1DE1E /* scrollablePage.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = scrollablePage.html; sourceTree = "<group>"; };
 		E6EDE81D1D524475007A0732 /* BatchingClientTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BatchingClientTests.swift; path = SyncTests/BatchingClientTests.swift; sourceTree = "<group>"; };
 		E6F368281D7F594F008CDD67 /* SQLiteHistoryRecommendations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteHistoryRecommendations.swift; sourceTree = "<group>"; };
 		E6F6D6A11E9E6AF90012072B /* DeferredTestUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeferredTestUtils.swift; sourceTree = "<group>"; };
+		E6F738741EB7A8D300B50143 /* Fennec.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Fennec.entitlements; sourceTree = "<group>"; };
+		E6F738751EB7A97100B50143 /* FirefoxBeta.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FirefoxBeta.entitlements; sourceTree = "<group>"; };
+		E6F738761EB7A97500B50143 /* Firefox.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Firefox.entitlements; sourceTree = "<group>"; };
 		E6F9650C1B2F1CF20034B023 /* SharedTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SharedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E6F9650F1B2F1CF20034B023 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E6F9653B1B2F1D5D0034B023 /* NSURLExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSURLExtensionsTests.swift; sourceTree = "<group>"; };
@@ -2404,6 +2403,7 @@
 			isa = PBXGroup;
 			children = (
 				E66C5B451BDA81050051AA93 /* Apple */,
+				E659A6091EB7C1D300D7A6AD /* BuddyBuild */,
 				288A2D7F1AB8B2B20023ABC3 /* Box */,
 				28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */,
 				E65C5B8B1BEA4E7100D28BEF /* FBSnapshotTestCase */,
@@ -2714,7 +2714,7 @@
 				2C97EC701E72C80E0092EC18 /* TopTabsTest.swift */,
                                2CF449A41E7BFE2C00FD7595 /* NavigationTest.swift */,
 				2C8C07761E7800EA00DC1237 /* FindInPageTest.swift */,
-                               2C31A7A81E8BFB2200DAC646 /* ReaderViewUITest.swift */,
+				2C31A7A81E8BFB2200DAC646 /* ReaderViewUITest.swift */,
 				2C31A8461E8D447F00DAC646 /* HomePageSettingsUITest.swift */,
 				2CB56E3E1E926BFB00AF7586 /* ToolbarTest.swift */,
 				2CC1B3EF1E9B861400814EEC /* DomainAutocompleteTest.swift */,
@@ -3169,8 +3169,7 @@
 			isa = PBXGroup;
 			children = (
 				E60961861B62B8A700DD640F /* Fennec.xcconfig */,
-				E6DCC1ED1DCBB6AA00CEC4B7 /* FennecEnterprise.xcconfig */,
-				E60961881B62B8BE00DD640F /* FirefoxNightly.xcconfig */,
+				E6DCC1ED1DCBB6AA00CEC4B7 /* Fennec.enterprise.xcconfig */,
 				E6FCC43C1C40565200DF6113 /* FirefoxBeta.xcconfig */,
 				E60961891B62B8C800DD640F /* Firefox.xcconfig */,
 			);
@@ -3232,9 +3231,17 @@
 			children = (
 				F84B21E51A0910F600AAB793 /* AppDelegate.swift */,
 				D3BE7B451B054F8600641031 /* TestAppDelegate.swift */,
-				D3BE7B471B05596800641031 /* AuroraAppDelegate.swift */,
 			);
 			name = Delegates;
+			sourceTree = "<group>";
+		};
+		E659A6091EB7C1D300D7A6AD /* BuddyBuild */ = {
+			isa = PBXGroup;
+			children = (
+				E659A60A1EB7C1D300D7A6AD /* BuddyBuildSDK.framework */,
+			);
+			name = BuddyBuild;
+			path = ThirdParty/BuddyBuild;
 			sourceTree = "<group>";
 		};
 		E65C5B8B1BEA4E7100D28BEF /* FBSnapshotTestCase */ = {
@@ -3280,9 +3287,10 @@
 		E689C6FF1E0C716F008BAADB /* Entitlements */ = {
 			isa = PBXGroup;
 			children = (
-				E62AC15D1E956AF100843532 /* Enterprise.entitlements */,
-				E62AC15E1E956AF100843532 /* Release.entitlements */,
-				E62AC15F1E956AFC00843532 /* Debug.entitlements */,
+				E6F738761EB7A97500B50143 /* Firefox.entitlements */,
+				E6F738751EB7A97100B50143 /* FirefoxBeta.entitlements */,
+				E6F738741EB7A8D300B50143 /* Fennec.entitlements */,
+				E62AC15F1E956AFC00843532 /* Fennec.enterprise.entitlements */,
 			);
 			path = Entitlements;
 			sourceTree = "<group>";
@@ -4247,7 +4255,7 @@
 					};
 					282731671ABC9BE700AA1954 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 9G8J6YA743;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0820;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -4293,7 +4301,7 @@
 					};
 					3BFE4B061D342FB800DDF53F = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = 9G8J6YA743;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0820;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -4352,7 +4360,7 @@
 					};
 					E6F9650B1B2F1CF20034B023 = {
 						CreatedOnToolsVersion = 6.3.2;
-						DevelopmentTeam = 9G8J6YA743;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0820;
 					};
 					F84B21BD1A090F8100AAB793 = {
@@ -5192,7 +5200,7 @@
 				2C31A8471E8D447F00DAC646 /* HomePageSettingsUITest.swift in Sources */,
 				2CEA6F791E93E3A600D4100E /* SearchSettingsUITest.swift in Sources */,
 				55A747171DC46FC400CE1B57 /* HomePageUITest.swift in Sources */,
-                               2C31A7A91E8BFB2200DAC646 /* ReaderViewUITest.swift in Sources */,
+				2C31A7A91E8BFB2200DAC646 /* ReaderViewUITest.swift in Sources */,
 				2C8C07771E7800EA00DC1237 /* FindInPageTest.swift in Sources */,
 				2CB56E3F1E926BFB00AF7586 /* ToolbarTest.swift in Sources */,
 				2C3406C81E719F00000FD889 /* SettingsTest.swift in Sources */,
@@ -5384,7 +5392,6 @@
 				D3BE7B461B054F8600641031 /* TestAppDelegate.swift in Sources */,
 				3BB50E111D6274CD004B33DF /* ActivityStreamTopSitesCell.swift in Sources */,
 				0B62EFD21AD63CD100ACB9CD /* Clearables.swift in Sources */,
-				D3BE7B481B05596800641031 /* AuroraAppDelegate.swift in Sources */,
 				7482205C1DBAB56300EEEA72 /* MailProviders.swift in Sources */,
 				C40046FA1CF8E0B200B08303 /* BackForwardListAnimator.swift in Sources */,
 				DD31E0FB1B382B520077078A /* TabPrintPageRenderer.swift in Sources */,
@@ -6091,22 +6098,6 @@
 			};
 			name = FirefoxBeta;
 		};
-		39409A441C90E68300DAE683 /* FirefoxNightly */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				ENABLE_BITCODE = NO;
-				INFOPLIST_FILE = Extensions/Today/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = Today;
-				SWIFT_VERSION = 3.0;
-			};
-			name = FirefoxNightly;
-		};
 		3B43E3D71D95C48E00BBA9DB /* Fennec */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -6261,55 +6252,6 @@
 			};
 			name = FirefoxBeta;
 		};
-		3B43E3DB1D95C48E00BBA9DB /* FirefoxNightly */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_SUSPICIOUS_MOVES = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = StoragePerfTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = com.mozilla.StoragePerfTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = FirefoxNightly;
-		};
 		3BFE4B0E1D342FB900DDF53F /* Fennec */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -6450,51 +6392,6 @@
 			};
 			name = FirefoxBeta;
 		};
-		3BFE4B121D342FB900DDF53F /* FirefoxNightly */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = XCUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = com.mozilla.XCUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/XCUITests/XCUITests-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
-				TEST_TARGET_NAME = Client;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = FirefoxNightly;
-		};
 		D39FA1681A83E0EC00EE869C /* Fennec */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -6547,7 +6444,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/Entitlements/Release.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/Entitlements/Firefox.entitlements";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_ACTIVITY_MODE = "";
@@ -6606,6 +6503,7 @@
 					"$(inherited)",
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/ThirdParty/BuddyBuild",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -7031,18 +6929,6 @@
 			};
 			name = FirefoxBeta;
 		};
-		E60138501C89EAE600DF9756 /* FirefoxNightly */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = L10nSnapshotTests;
-				SWIFT_VERSION = 3.0;
-				TEST_TARGET_NAME = Client;
-				USES_XCTRUNNER = YES;
-			};
-			name = FirefoxNightly;
-		};
 		E60138511C89EAE600DF9756 /* Fennec */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -7069,15 +6955,6 @@
 				PRODUCT_NAME = MarketingUITests;
 			};
 			name = FirefoxBeta;
-		};
-		E60138551C89EAE600DF9756 /* FirefoxNightly */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = MarketingUITests;
-			};
-			name = FirefoxNightly;
 		};
 		E65C5BCC1BEA4F6500D28BEF /* Fennec */ = {
 			isa = XCBuildConfiguration;
@@ -7126,481 +7003,12 @@
 			};
 			name = Firefox;
 		};
-		E682F5201C89E71000ECB6B2 /* FirefoxNightly */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = E60961881B62B8BE00DD640F /* FirefoxNightly.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				APPLICATION_EXTENSION_API_ONLY = NO;
-				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/Entitlements/Enterprise.entitlements";
-				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_ACTIVITY_MODE = "";
-				"DEBUG_ACTIVITY_MODE[sdk=iphonesimulator*]" = disable;
-				DEVELOPMENT_TEAM = 9G8J6YA743;
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_TESTABILITY = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
-				);
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"$(SRCROOT)",
-					"$(SDKROOT)/usr/include/libxml2",
-					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**",
-				);
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
-				MOZ_INTERNAL_URL_SCHEME = "firefox-nightly";
-				MTL_ENABLE_DEBUG_INFO = YES;
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-lxml2",
-				);
-				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_NIGHTLY";
-				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
-				SDKROOT = iphoneos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
-				SWIFT_INCLUDE_PATHS = "$(PROJECT_DIR)/Storage/modules";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-			};
-			name = FirefoxNightly;
-		};
-		E682F5211C89E71000ECB6B2 /* FirefoxNightly */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/ThirdParty/BuddyBuild",
-				);
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"$(SRCROOT)",
-					"$(SDKROOT)/usr/include/libxml2",
-					"$(BUILD_DIR)/Debug$(EFFECTIVE_PLATFORM_NAME)/include/**",
-					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**",
-				);
-				INFOPLIST_FILE = Client/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-lxml2",
-					"-framework",
-					BuddyBuildSDK,
-					"-framework",
-					AssetsLibrary,
-					"-framework",
-					CoreText,
-					"-framework",
-					CoreTelephony,
-					"-framework",
-					SystemConfiguration,
-					"-framework",
-					QuartzCore,
-					"-framework",
-					CoreVideo,
-					"-framework",
-					AVFoundation,
-					"-framework",
-					CoreMedia,
-				);
-				PRODUCT_MODULE_NAME = Client;
-				PRODUCT_NAME = Client;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = BUDDYBUILD;
-				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
-			};
-			name = FirefoxNightly;
-		};
-		E682F5221C89E71000ECB6B2 /* FirefoxNightly */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
-				);
-				INFOPLIST_FILE = Extensions/SendTo/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
-			};
-			name = FirefoxNightly;
-		};
-		E682F5231C89E71000ECB6B2 /* FirefoxNightly */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
-				);
-				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = FirefoxNightly;
-		};
-		E682F5241C89E71000ECB6B2 /* FirefoxNightly */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
-				);
-				INFOPLIST_FILE = Extensions/ViewLater/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
-			};
-			name = FirefoxNightly;
-		};
-		E682F5251C89E71000ECB6B2 /* FirefoxNightly */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Shared/Supporting Files/Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
-			};
-			name = FirefoxNightly;
-		};
-		E682F5261C89E71000ECB6B2 /* FirefoxNightly */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = Storage/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_CFLAGS = "-DSQLITE_HAS_CODEC";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_VERSION = 3.0;
-			};
-			name = FirefoxNightly;
-		};
-		E682F5271C89E71000ECB6B2 /* FirefoxNightly */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
-				);
-				HEADER_SEARCH_PATHS = (
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"$(SRCROOT)",
-					"$(SDKROOT)/usr/include/libxml2",
-					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**",
-				);
-				INFOPLIST_FILE = Account/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
-			};
-			name = FirefoxNightly;
-		};
-		E682F5281C89E71000ECB6B2 /* FirefoxNightly */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
-				);
-				INFOPLIST_FILE = Sync/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Sync/Sync-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
-			};
-			name = FirefoxNightly;
-		};
-		E682F5291C89E71000ECB6B2 /* FirefoxNightly */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
-				);
-				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = ReadingList/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_VERSION = 3.0;
-			};
-			name = FirefoxNightly;
-		};
-		E682F52A1C89E71000ECB6B2 /* FirefoxNightly */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
-				);
-				INFOPLIST_FILE = ClientTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = ClientTests;
-				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
-			};
-			name = FirefoxNightly;
-		};
-		E682F52B1C89E71000ECB6B2 /* FirefoxNightly */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				INFOPLIST_FILE = UITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.allizom.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = UITests;
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/UITests/UITests-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
-			};
-			name = FirefoxNightly;
-		};
-		E682F52C1C89E71000ECB6B2 /* FirefoxNightly */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_NO_COMMON_BLOCKS = YES;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					$SRCROOT/,
-					$SDKROOT/usr/include/libxml2,
-					"$SRCROOT/ThirdParty/**",
-				);
-				INFOPLIST_FILE = NativeRefTests/Other/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Fennec.NativeRefTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/$TARGETNAME/Other/NativeRefTests-Bridging-Header.h";
-				SWIFT_VERSION = 2.3;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
-			};
-			name = FirefoxNightly;
-		};
-		E682F52D1C89E71000ECB6B2 /* FirefoxNightly */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				INFOPLIST_FILE = StorageTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
-			};
-			name = FirefoxNightly;
-		};
-		E682F52E1C89E71000ECB6B2 /* FirefoxNightly */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
-				);
-				INFOPLIST_FILE = AccountTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
-			};
-			name = FirefoxNightly;
-		};
-		E682F52F1C89E71000ECB6B2 /* FirefoxNightly */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
-				);
-				INFOPLIST_FILE = SyncTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/SyncTests/SyncTests-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
-			};
-			name = FirefoxNightly;
-		};
-		E682F5301C89E71000ECB6B2 /* FirefoxNightly */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				INFOPLIST_FILE = ReadingListTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
-			};
-			name = FirefoxNightly;
-		};
-		E682F5311C89E71000ECB6B2 /* FirefoxNightly */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = SharedTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
-			};
-			name = FirefoxNightly;
-		};
 		E69DB08D1E97DEAA008A67E6 /* Fennec */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				APPLICATION_EXTENSION_API_ONLY = NO;
+				APP_IDENTIFIER_PREFIX = 9G8J6YA743;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -7665,7 +7073,7 @@
 			};
 			name = Fennec;
 		};
-		E69DB08E1E97DEAA008A67E6 /* FennecEnterprise */ = {
+		E69DB08E1E97DEAA008A67E6 /* Fennc_Enterprise */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -7723,7 +7131,7 @@
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
-			name = FennecEnterprise;
+			name = Fennc_Enterprise;
 		};
 		E69DB08F1E97DEAA008A67E6 /* Firefox */ = {
 			isa = XCBuildConfiguration;
@@ -7845,66 +7253,6 @@
 			};
 			name = FirefoxBeta;
 		};
-		E69DB0911E97DEAA008A67E6 /* FirefoxNightly */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_BITCODE = NO;
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = Telemetry/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Telemetry;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 3.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = FirefoxNightly;
-		};
 		E69DB0931E97DEAA008A67E6 /* Fennec */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -7963,7 +7311,7 @@
 			};
 			name = Fennec;
 		};
-		E69DB0941E97DEAA008A67E6 /* FennecEnterprise */ = {
+		E69DB0941E97DEAA008A67E6 /* Fennc_Enterprise */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
@@ -8012,7 +7360,7 @@
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 				VALIDATE_PRODUCT = YES;
 			};
-			name = FennecEnterprise;
+			name = Fennc_Enterprise;
 		};
 		E69DB0951E97DEAA008A67E6 /* Firefox */ = {
 			isa = XCBuildConfiguration;
@@ -8116,65 +7464,13 @@
 			};
 			name = FirefoxBeta;
 		};
-		E69DB0971E97DEAA008A67E6 /* FirefoxNightly */ = {
+		E6DCC2051DCBB6F100CEC4B7 /* Fennc_Enterprise */ = {
 			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = TelemetryTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.TelemetryTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = FirefoxNightly;
-		};
-		E6DCC2051DCBB6F100CEC4B7 /* FennecEnterprise */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = E6DCC1ED1DCBB6AA00CEC4B7 /* FennecEnterprise.xcconfig */;
+			baseConfigurationReference = E6DCC1ED1DCBB6AA00CEC4B7 /* Fennec.enterprise.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				APPLICATION_EXTENSION_API_ONLY = NO;
-				APP_IDENTIFIER_PREFIX = 9G8J6YA743;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -8191,7 +7487,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/Entitlements/Enterprise.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/Entitlements/Fennec.enterprise.entitlements";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_ACTIVITY_MODE = "";
@@ -8241,9 +7537,9 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
-			name = FennecEnterprise;
+			name = Fennc_Enterprise;
 		};
-		E6DCC2061DCBB6F100CEC4B7 /* FennecEnterprise */ = {
+		E6DCC2061DCBB6F100CEC4B7 /* Fennc_Enterprise */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
@@ -8294,9 +7590,9 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
-			name = FennecEnterprise;
+			name = Fennc_Enterprise;
 		};
-		E6DCC2071DCBB6F100CEC4B7 /* FennecEnterprise */ = {
+		E6DCC2071DCBB6F100CEC4B7 /* Fennc_Enterprise */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
@@ -8316,9 +7612,9 @@
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
 			};
-			name = FennecEnterprise;
+			name = Fennc_Enterprise;
 		};
-		E6DCC2081DCBB6F100CEC4B7 /* FennecEnterprise */ = {
+		E6DCC2081DCBB6F100CEC4B7 /* Fennc_Enterprise */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
@@ -8338,9 +7634,9 @@
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
-			name = FennecEnterprise;
+			name = Fennc_Enterprise;
 		};
-		E6DCC2091DCBB6F100CEC4B7 /* FennecEnterprise */ = {
+		E6DCC2091DCBB6F100CEC4B7 /* Fennc_Enterprise */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
@@ -8354,9 +7650,9 @@
 				PRODUCT_NAME = Today;
 				SWIFT_VERSION = 3.0;
 			};
-			name = FennecEnterprise;
+			name = Fennc_Enterprise;
 		};
-		E6DCC20A1DCBB6F100CEC4B7 /* FennecEnterprise */ = {
+		E6DCC20A1DCBB6F100CEC4B7 /* Fennc_Enterprise */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
@@ -8376,9 +7672,9 @@
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
 			};
-			name = FennecEnterprise;
+			name = Fennc_Enterprise;
 		};
-		E6DCC20B1DCBB6F100CEC4B7 /* FennecEnterprise */ = {
+		E6DCC20B1DCBB6F100CEC4B7 /* Fennc_Enterprise */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
@@ -8396,9 +7692,9 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
-			name = FennecEnterprise;
+			name = Fennc_Enterprise;
 		};
-		E6DCC20C1DCBB6F100CEC4B7 /* FennecEnterprise */ = {
+		E6DCC20C1DCBB6F100CEC4B7 /* Fennc_Enterprise */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
@@ -8417,9 +7713,9 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
-			name = FennecEnterprise;
+			name = Fennc_Enterprise;
 		};
-		E6DCC20D1DCBB6F100CEC4B7 /* FennecEnterprise */ = {
+		E6DCC20D1DCBB6F100CEC4B7 /* Fennc_Enterprise */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
@@ -8448,9 +7744,9 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
-			name = FennecEnterprise;
+			name = Fennc_Enterprise;
 		};
-		E6DCC20E1DCBB6F100CEC4B7 /* FennecEnterprise */ = {
+		E6DCC20E1DCBB6F100CEC4B7 /* Fennc_Enterprise */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
@@ -8474,9 +7770,9 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Sync/Sync-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
-			name = FennecEnterprise;
+			name = Fennc_Enterprise;
 		};
-		E6DCC20F1DCBB6F100CEC4B7 /* FennecEnterprise */ = {
+		E6DCC20F1DCBB6F100CEC4B7 /* Fennc_Enterprise */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
@@ -8501,9 +7797,9 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 3.0;
 			};
-			name = FennecEnterprise;
+			name = Fennc_Enterprise;
 		};
-		E6DCC2101DCBB6F100CEC4B7 /* FennecEnterprise */ = {
+		E6DCC2101DCBB6F100CEC4B7 /* Fennc_Enterprise */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -8519,9 +7815,9 @@
 				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
-			name = FennecEnterprise;
+			name = Fennc_Enterprise;
 		};
-		E6DCC2111DCBB6F100CEC4B7 /* FennecEnterprise */ = {
+		E6DCC2111DCBB6F100CEC4B7 /* Fennc_Enterprise */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -8534,9 +7830,9 @@
 				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
-			name = FennecEnterprise;
+			name = Fennc_Enterprise;
 		};
-		E6DCC2121DCBB6F100CEC4B7 /* FennecEnterprise */ = {
+		E6DCC2121DCBB6F100CEC4B7 /* Fennc_Enterprise */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -8557,9 +7853,9 @@
 				SWIFT_VERSION = 2.3;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
-			name = FennecEnterprise;
+			name = Fennc_Enterprise;
 		};
-		E6DCC2131DCBB6F100CEC4B7 /* FennecEnterprise */ = {
+		E6DCC2131DCBB6F100CEC4B7 /* Fennc_Enterprise */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				INFOPLIST_FILE = StorageTests/Info.plist;
@@ -8570,9 +7866,9 @@
 				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
-			name = FennecEnterprise;
+			name = Fennc_Enterprise;
 		};
-		E6DCC2141DCBB6F100CEC4B7 /* FennecEnterprise */ = {
+		E6DCC2141DCBB6F100CEC4B7 /* Fennc_Enterprise */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
@@ -8588,9 +7884,9 @@
 				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
-			name = FennecEnterprise;
+			name = Fennc_Enterprise;
 		};
-		E6DCC2151DCBB6F100CEC4B7 /* FennecEnterprise */ = {
+		E6DCC2151DCBB6F100CEC4B7 /* Fennc_Enterprise */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
@@ -8606,9 +7902,9 @@
 				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
-			name = FennecEnterprise;
+			name = Fennc_Enterprise;
 		};
-		E6DCC2161DCBB6F100CEC4B7 /* FennecEnterprise */ = {
+		E6DCC2161DCBB6F100CEC4B7 /* Fennc_Enterprise */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -8620,9 +7916,9 @@
 				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
-			name = FennecEnterprise;
+			name = Fennc_Enterprise;
 		};
-		E6DCC2171DCBB6F100CEC4B7 /* FennecEnterprise */ = {
+		E6DCC2171DCBB6F100CEC4B7 /* Fennc_Enterprise */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -8635,9 +7931,9 @@
 				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
-			name = FennecEnterprise;
+			name = Fennc_Enterprise;
 		};
-		E6DCC2181DCBB6F100CEC4B7 /* FennecEnterprise */ = {
+		E6DCC2181DCBB6F100CEC4B7 /* Fennc_Enterprise */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
@@ -8647,18 +7943,18 @@
 				TEST_TARGET_NAME = Client;
 				USES_XCTRUNNER = YES;
 			};
-			name = FennecEnterprise;
+			name = Fennc_Enterprise;
 		};
-		E6DCC2191DCBB6F100CEC4B7 /* FennecEnterprise */ = {
+		E6DCC2191DCBB6F100CEC4B7 /* Fennc_Enterprise */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = MarketingUITests;
 			};
-			name = FennecEnterprise;
+			name = Fennc_Enterprise;
 		};
-		E6DCC21A1DCBB6F100CEC4B7 /* FennecEnterprise */ = {
+		E6DCC21A1DCBB6F100CEC4B7 /* Fennc_Enterprise */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -8708,9 +8004,9 @@
 				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = Client;
 			};
-			name = FennecEnterprise;
+			name = Fennc_Enterprise;
 		};
-		E6DCC21B1DCBB6F100CEC4B7 /* FennecEnterprise */ = {
+		E6DCC21B1DCBB6F100CEC4B7 /* Fennc_Enterprise */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -8764,7 +8060,7 @@
 				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
-			name = FennecEnterprise;
+			name = Fennc_Enterprise;
 		};
 		E6F965151B2F1CF20034B023 /* Fennec */ = {
 			isa = XCBuildConfiguration;
@@ -8820,7 +8116,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/Entitlements/Release.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/Entitlements/FirefoxBeta.entitlements";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_ACTIVITY_MODE = "";
@@ -8879,6 +8175,7 @@
 					"$(inherited)",
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/ThirdParty/BuddyBuild",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -9262,7 +8559,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/Entitlements/Debug.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/Entitlements/Fennec.entitlements";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_ACTIVITY_MODE = "";
@@ -9436,10 +8733,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				282731771ABC9BE800AA1954 /* Fennec */,
-				E6DCC20E1DCBB6F100CEC4B7 /* FennecEnterprise */,
+				E6DCC20E1DCBB6F100CEC4B7 /* Fennc_Enterprise */,
 				E448FCA81AEE7A6000869B6C /* Firefox */,
 				E6FCC4361C40562400DF6113 /* FirefoxBeta */,
-				E682F5281C89E71000ECB6B2 /* FirefoxNightly */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
@@ -9448,10 +8744,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2827317A1ABC9BE800AA1954 /* Fennec */,
-				E6DCC2151DCBB6F100CEC4B7 /* FennecEnterprise */,
+				E6DCC2151DCBB6F100CEC4B7 /* Fennc_Enterprise */,
 				E448FCA91AEE7A6000869B6C /* Firefox */,
 				E6FCC4371C40562400DF6113 /* FirefoxBeta */,
-				E682F52F1C89E71000ECB6B2 /* FirefoxNightly */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
@@ -9460,10 +8755,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				288A2DA01AB8B3260023ABC3 /* Fennec */,
-				E6DCC20B1DCBB6F100CEC4B7 /* FennecEnterprise */,
+				E6DCC20B1DCBB6F100CEC4B7 /* Fennc_Enterprise */,
 				E448FCA31AEE7A6000869B6C /* Firefox */,
 				E6FCC4311C40562400DF6113 /* FirefoxBeta */,
-				E682F5251C89E71000ECB6B2 /* FirefoxNightly */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
@@ -9472,10 +8766,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2FA436151ABB83B4008031D1 /* Fennec */,
-				E6DCC20D1DCBB6F100CEC4B7 /* FennecEnterprise */,
+				E6DCC20D1DCBB6F100CEC4B7 /* Fennc_Enterprise */,
 				E448FCA61AEE7A6000869B6C /* Firefox */,
 				E6FCC4341C40562400DF6113 /* FirefoxBeta */,
-				E682F5271C89E71000ECB6B2 /* FirefoxNightly */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
@@ -9484,10 +8777,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2FA436191ABB83B4008031D1 /* Fennec */,
-				E6DCC2141DCBB6F100CEC4B7 /* FennecEnterprise */,
+				E6DCC2141DCBB6F100CEC4B7 /* Fennc_Enterprise */,
 				E448FCA71AEE7A6000869B6C /* Firefox */,
 				E6FCC4351C40562400DF6113 /* FirefoxBeta */,
-				E682F52E1C89E71000ECB6B2 /* FirefoxNightly */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
@@ -9496,10 +8788,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2FCAE2341ABB51F900877008 /* Fennec */,
-				E6DCC20C1DCBB6F100CEC4B7 /* FennecEnterprise */,
+				E6DCC20C1DCBB6F100CEC4B7 /* Fennc_Enterprise */,
 				E448FCA41AEE7A6000869B6C /* Firefox */,
 				E6FCC4321C40562400DF6113 /* FirefoxBeta */,
-				E682F5261C89E71000ECB6B2 /* FirefoxNightly */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
@@ -9508,10 +8799,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2FCAE2381ABB51F900877008 /* Fennec */,
-				E6DCC2131DCBB6F100CEC4B7 /* FennecEnterprise */,
+				E6DCC2131DCBB6F100CEC4B7 /* Fennc_Enterprise */,
 				E448FCA51AEE7A6000869B6C /* Firefox */,
 				E6FCC4331C40562400DF6113 /* FirefoxBeta */,
-				E682F52D1C89E71000ECB6B2 /* FirefoxNightly */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
@@ -9520,10 +8810,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				39409A401C90E68300DAE683 /* Fennec */,
-				E6DCC2091DCBB6F100CEC4B7 /* FennecEnterprise */,
+				E6DCC2091DCBB6F100CEC4B7 /* Fennc_Enterprise */,
 				39409A411C90E68300DAE683 /* Firefox */,
 				39409A421C90E68300DAE683 /* FirefoxBeta */,
-				39409A441C90E68300DAE683 /* FirefoxNightly */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
@@ -9532,10 +8821,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3B43E3D71D95C48E00BBA9DB /* Fennec */,
-				E6DCC21B1DCBB6F100CEC4B7 /* FennecEnterprise */,
+				E6DCC21B1DCBB6F100CEC4B7 /* Fennc_Enterprise */,
 				3B43E3D81D95C48E00BBA9DB /* Firefox */,
 				3B43E3D91D95C48E00BBA9DB /* FirefoxBeta */,
-				3B43E3DB1D95C48E00BBA9DB /* FirefoxNightly */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
@@ -9544,10 +8832,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3BFE4B0E1D342FB900DDF53F /* Fennec */,
-				E6DCC21A1DCBB6F100CEC4B7 /* FennecEnterprise */,
+				E6DCC21A1DCBB6F100CEC4B7 /* Fennc_Enterprise */,
 				3BFE4B0F1D342FB900DDF53F /* Firefox */,
 				3BFE4B101D342FB900DDF53F /* FirefoxBeta */,
-				3BFE4B121D342FB900DDF53F /* FirefoxNightly */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
@@ -9556,11 +8843,10 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D39FA1681A83E0EC00EE869C /* Fennec */,
-				E6DCC2111DCBB6F100CEC4B7 /* FennecEnterprise */,
+				E6DCC2111DCBB6F100CEC4B7 /* Fennc_Enterprise */,
 				D39FA1691A83E0EC00EE869C /* Release */,
 				E448FCA21AEE7A6000869B6C /* Firefox */,
 				E6FCC42F1C40562400DF6113 /* FirefoxBeta */,
-				E682F52B1C89E71000ECB6B2 /* FirefoxNightly */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
@@ -9569,10 +8855,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E4BA8A361B4B0A1700BC2E95 /* Fennec */,
-				E6DCC20A1DCBB6F100CEC4B7 /* FennecEnterprise */,
+				E6DCC20A1DCBB6F100CEC4B7 /* Fennc_Enterprise */,
 				E4BA8A381B4B0A1700BC2E95 /* Firefox */,
 				E6FCC42E1C40562400DF6113 /* FirefoxBeta */,
-				E682F5241C89E71000ECB6B2 /* FirefoxNightly */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
@@ -9581,10 +8866,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E4D567311ADECE2900F1EFE7 /* Fennec */,
-				E6DCC20F1DCBB6F100CEC4B7 /* FennecEnterprise */,
+				E6DCC20F1DCBB6F100CEC4B7 /* Fennc_Enterprise */,
 				E448FCAA1AEE7A6000869B6C /* Firefox */,
 				E6FCC4381C40562400DF6113 /* FirefoxBeta */,
-				E682F5291C89E71000ECB6B2 /* FirefoxNightly */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
@@ -9593,10 +8877,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E4D567341ADECE2900F1EFE7 /* Fennec */,
-				E6DCC2161DCBB6F100CEC4B7 /* FennecEnterprise */,
+				E6DCC2161DCBB6F100CEC4B7 /* Fennc_Enterprise */,
 				E448FCAB1AEE7A6000869B6C /* Firefox */,
 				E6FCC4391C40562400DF6113 /* FirefoxBeta */,
-				E682F5301C89E71000ECB6B2 /* FirefoxNightly */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
@@ -9605,10 +8888,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E601384C1C89EAE600DF9756 /* Fennec */,
-				E6DCC2181DCBB6F100CEC4B7 /* FennecEnterprise */,
+				E6DCC2181DCBB6F100CEC4B7 /* Fennc_Enterprise */,
 				E601384D1C89EAE600DF9756 /* Firefox */,
 				E601384E1C89EAE600DF9756 /* FirefoxBeta */,
-				E60138501C89EAE600DF9756 /* FirefoxNightly */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
@@ -9617,10 +8899,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E60138511C89EAE600DF9756 /* Fennec */,
-				E6DCC2191DCBB6F100CEC4B7 /* FennecEnterprise */,
+				E6DCC2191DCBB6F100CEC4B7 /* Fennc_Enterprise */,
 				E60138521C89EAE600DF9756 /* Firefox */,
 				E60138531C89EAE600DF9756 /* FirefoxBeta */,
-				E60138551C89EAE600DF9756 /* FirefoxNightly */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
@@ -9629,10 +8910,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E65C5BCC1BEA4F6500D28BEF /* Fennec */,
-				E6DCC2121DCBB6F100CEC4B7 /* FennecEnterprise */,
+				E6DCC2121DCBB6F100CEC4B7 /* Fennc_Enterprise */,
 				E65C5BCE1BEA4F6500D28BEF /* Firefox */,
 				E6FCC4301C40562400DF6113 /* FirefoxBeta */,
-				E682F52C1C89E71000ECB6B2 /* FirefoxNightly */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
@@ -9641,10 +8921,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E69DB08D1E97DEAA008A67E6 /* Fennec */,
-				E69DB08E1E97DEAA008A67E6 /* FennecEnterprise */,
+				E69DB08E1E97DEAA008A67E6 /* Fennc_Enterprise */,
 				E69DB08F1E97DEAA008A67E6 /* Firefox */,
 				E69DB0901E97DEAA008A67E6 /* FirefoxBeta */,
-				E69DB0911E97DEAA008A67E6 /* FirefoxNightly */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
@@ -9653,10 +8932,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E69DB0931E97DEAA008A67E6 /* Fennec */,
-				E69DB0941E97DEAA008A67E6 /* FennecEnterprise */,
+				E69DB0941E97DEAA008A67E6 /* Fennc_Enterprise */,
 				E69DB0951E97DEAA008A67E6 /* Firefox */,
 				E69DB0961E97DEAA008A67E6 /* FirefoxBeta */,
-				E69DB0971E97DEAA008A67E6 /* FirefoxNightly */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
@@ -9665,10 +8943,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E6F965151B2F1CF20034B023 /* Fennec */,
-				E6DCC2171DCBB6F100CEC4B7 /* FennecEnterprise */,
+				E6DCC2171DCBB6F100CEC4B7 /* Fennc_Enterprise */,
 				E6F965171B2F1CF20034B023 /* Firefox */,
 				E6FCC43A1C40562400DF6113 /* FirefoxBeta */,
-				E682F5311C89E71000ECB6B2 /* FirefoxNightly */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
@@ -9677,10 +8954,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F84B21DB1A090F8100AAB793 /* Fennec */,
-				E6DCC2051DCBB6F100CEC4B7 /* FennecEnterprise */,
+				E6DCC2051DCBB6F100CEC4B7 /* Fennc_Enterprise */,
 				E448FC9D1AEE7A6000869B6C /* Firefox */,
 				E6FCC4291C40562400DF6113 /* FirefoxBeta */,
-				E682F5201C89E71000ECB6B2 /* FirefoxNightly */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
@@ -9689,10 +8965,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F84B21DE1A090F8100AAB793 /* Fennec */,
-				E6DCC2061DCBB6F100CEC4B7 /* FennecEnterprise */,
+				E6DCC2061DCBB6F100CEC4B7 /* Fennc_Enterprise */,
 				E448FC9E1AEE7A6000869B6C /* Firefox */,
 				E6FCC42A1C40562400DF6113 /* FirefoxBeta */,
-				E682F5211C89E71000ECB6B2 /* FirefoxNightly */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
@@ -9701,10 +8976,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F84B21E11A090F8100AAB793 /* Fennec */,
-				E6DCC2101DCBB6F100CEC4B7 /* FennecEnterprise */,
+				E6DCC2101DCBB6F100CEC4B7 /* Fennc_Enterprise */,
 				E448FC9F1AEE7A6000869B6C /* Firefox */,
 				E6FCC42B1C40562400DF6113 /* FirefoxBeta */,
-				E682F52A1C89E71000ECB6B2 /* FirefoxNightly */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
@@ -9713,10 +8987,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F84B22561A0920C600AAB793 /* Fennec */,
-				E6DCC2081DCBB6F100CEC4B7 /* FennecEnterprise */,
+				E6DCC2081DCBB6F100CEC4B7 /* Fennc_Enterprise */,
 				E448FCA01AEE7A6000869B6C /* Firefox */,
 				E6FCC42D1C40562400DF6113 /* FirefoxBeta */,
-				E682F5231C89E71000ECB6B2 /* FirefoxNightly */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
@@ -9725,10 +8998,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F84B22681A09210A00AAB793 /* Fennec */,
-				E6DCC2071DCBB6F100CEC4B7 /* FennecEnterprise */,
+				E6DCC2071DCBB6F100CEC4B7 /* Fennc_Enterprise */,
 				E448FCA11AEE7A6000869B6C /* Firefox */,
 				E6FCC42C1C40562400DF6113 /* FirefoxBeta */,
-				E682F5221C89E71000ECB6B2 /* FirefoxNightly */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;

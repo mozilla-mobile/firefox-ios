@@ -15,4 +15,4 @@ echo "Setting Sentry DSN to $SENTRY_DSN"
 /usr/libexec/PlistBuddy -c "Set SentryDSN $SENTRY_DSN" "Client/Info.plist"
 
 # Set the build number to match the Buddybuild number
-agvtool new-version -all $BUDDYBUILD_BUILD_NUMBER
+agvtool new-version -all "$BUDDYBUILD_BUILD_NUMBER"

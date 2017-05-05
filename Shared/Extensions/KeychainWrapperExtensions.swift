@@ -7,7 +7,7 @@ import SwiftKeychainWrapper
 
 public extension KeychainWrapper {
     static var sharedAppContainerKeychain: KeychainWrapper {
-        let baseBundleIdentifier = AppInfo.baseBundleIdentifier()!
+        let baseBundleIdentifier = AppInfo.baseBundleIdentifier
         let accessGroupPrefix = Bundle.main.object(forInfoDictionaryKey: "MozDevelopmentTeam") as! String
         let accessGroupIdentifier = AppInfo.keychainAccessGroupWithPrefix(accessGroupPrefix)
         return KeychainWrapper(serviceName: baseBundleIdentifier, accessGroup: accessGroupIdentifier)
