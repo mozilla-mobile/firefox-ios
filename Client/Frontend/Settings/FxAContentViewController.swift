@@ -23,6 +23,8 @@ protocol FxAContentViewControllerDelegate: class {
  * fxa-content-server git repository.
  */
 class FxAContentViewController: SettingsContentViewController, WKScriptMessageHandler {
+    var fxaOptions = FxALaunchParams()
+    
     fileprivate enum RemoteCommand: String {
         case canLinkAccount = "can_link_account"
         case loaded = "loaded"
@@ -45,6 +47,12 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     }
 
     override func viewDidLoad() {
+        if AppConstants.MOZ_FXA_DEEP_LINK_FORM_FILL {
+            self.url = FxAURLWithOptions(fxaOptions, profile: profile)
+        } else {
+            self.url = profile.accountConfiguration.signInURL
+        }
+        
         super.viewDidLoad()
     }
 
@@ -120,7 +128,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     fileprivate func onLoaded() {
         self.timer?.invalidate()
         self.timer = nil
-        self.isLoaded = true
+        self.isLoaded = true        
     }
 
     // Handle a message coming from the content server.
@@ -163,6 +171,24 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
             let detail = body["detail"]
             handleRemoteCommand(detail["command"].stringValue, data: detail["data"])
         }
+    }
+    
+    // Configure the FxA signin url based on any passed options.
+    func FxAURLWithOptions(_ fxaOptions: FxALaunchParams, profile: Profile) -> URL {
+        // Append any passed query strings to the signin url. Note that you can't
+        // override the service and context params.
+        guard fxaOptions.query != nil else {
+            return profile.accountConfiguration.signInURL
+        }
+        
+        var queryParams: String = ""
+        for param in fxaOptions.query! {
+            if (param.key == "service" || param.key == "context") {
+                continue
+            }
+            queryParams = queryParams + "&" + param.key + "=" + param.value
+        }
+        return URL(string: "\(profile.accountConfiguration.signInURL)\(queryParams)")!
     }
 
     fileprivate func getJS() -> String {
