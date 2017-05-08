@@ -7,7 +7,7 @@ import Foundation
 /// Steadily growing set of feature switches controlling access to features by populations of Release users.
 open class FeatureSwitches {
     open static let activityStream =
-        FeatureSwitch(named: "activity_stream", AppConstants.MOZ_AS_PANEL, allowPercentage: 10)
+        FeatureSwitch(named: "activity_stream", AppConstants.MOZ_AS_PANEL, allowPercentage: 50)
 }
 
 /// Small class to allow a percentage of users to access a given feature.
@@ -18,12 +18,13 @@ open class FeatureSwitch {
     let buildChannel: AppBuildChannel
     let nonChannelValue: Bool
     let percentage: Int
-
+    fileprivate let switchKey: String
     init(named featureID: String, _ value: Bool = true, allowPercentage percentage: Int, buildChannel: AppBuildChannel = .release) {
         self.featureID = featureID
         self.percentage = percentage
         self.buildChannel = buildChannel
         self.nonChannelValue = value
+        self.switchKey = "feature_switches.\(self.featureID)"
     }
 
     /// Is this user a member of the bucket that is allowed to use this feature.
@@ -36,8 +37,14 @@ open class FeatureSwitch {
             return nonChannelValue
         }
 
+        // Check if this feature has been enabled by the user
+        let key = "\(self.switchKey).enabled"
+        if let isEnabled = prefs.boolForKey(key) {
+            return isEnabled
+        }
+
         // Use a branch of the prefs.
-        let uuidKey = "feature_switches/\(self.featureID)_uuid"
+        let uuidKey = "\(self.switchKey).uuid"
 
         let uuidString: String
         if let string = prefs.stringForKey(uuidKey) {
@@ -49,5 +56,10 @@ open class FeatureSwitch {
 
         let hash = abs(uuidString.hashValue)
         return hash % 100 < self.percentage
+    }
+
+    open func setMembership(_ isEnabled: Bool, for prefs: Prefs) {
+        let key = "\(self.switchKey).enabled"
+        prefs.setBool(isEnabled, forKey: key)
     }
 }

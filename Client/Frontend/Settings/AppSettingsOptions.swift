@@ -407,6 +407,45 @@ class ExportBrowserDataSetting: HiddenSetting {
     }
 }
 
+/*
+ FeatureSwitchSetting is a boolean switch for features that are enabled via a FeatureSwitch.
+ These are usually features behind a partial release and not features released to the entire population.
+ */
+class FeatureSwitchSetting: BoolSetting {
+    let featureSwitch: FeatureSwitch
+    let prefs: Prefs
+
+    init(prefs: Prefs, featureSwitch: FeatureSwitch, with title: NSAttributedString) {
+        self.featureSwitch = featureSwitch
+        self.prefs = prefs
+        super.init(prefs: prefs, defaultValue: featureSwitch.isMember(prefs), attributedTitleText: title)
+    }
+
+    override var hidden: Bool {
+        return !ShowDebugSettings
+    }
+
+    override func displayBool(_ control: UISwitch) {
+        control.isOn = featureSwitch.isMember(prefs)
+    }
+
+    override func writeBool(_ control: UISwitch) {
+        self.featureSwitch.setMembership(control.isOn, for: self.prefs)
+    }
+
+}
+
+class EnableActivtyStreamSetting: FeatureSwitchSetting {
+    let profile: Profile
+
+    init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
+        let title = NSAttributedString(string: "Enable the New Tab Experience", attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
+        super.init(prefs: settings.profile.prefs, featureSwitch: FeatureSwitches.activityStream, with: title)
+    }
+
+}
+
 class EnableBookmarkMergingSetting: HiddenSetting {
     override var title: NSAttributedString? {
         // Not localized for now.
