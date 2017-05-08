@@ -17,14 +17,58 @@ class RecordTests: XCTestCase {
         XCTAssertEqual(12, s.lengthOfBytes(using: String.Encoding.utf8))
     }
 
+    func testSwiftyJSONSerializingControlChars() {
+        let input = "{\"foo\":\"help \\u000b this\"}"
+        let json = JSON(parseJSON: input)
+        XCTAssertNil(json.error)
+        XCTAssertNil(json.null)
+        XCTAssertEqual(input, json.stringValue())
+
+        let pairs: [String: Any] = ["foo": "help \(Character(UnicodeScalar(11))) this"]
+        let built = JSON(object: pairs)
+        XCTAssertEqual(input, built.stringValue())
+    }
+
     func testEnvelopeNullTTL() {
-        let p = CleartextPayloadJSON(JSON([]))
+        let p = CleartextPayloadJSON(JSON(object: ["id": "guid"]))
         let r = Record<CleartextPayloadJSON>(id: "guid", payload: p, modified: Date.now(), sortindex: 15, ttl: nil)
         let k = KeyBundle.random()
         let s = k.serializer({ $0.json })
         let json = s(r)!
         XCTAssertEqual(json["id"].stringValue, "guid")
         XCTAssertTrue(json["ttl"].isNull())
+    }
+
+    func testParsedNulls() {
+        // Make this a thorough test: use a real-ish blob of JSON.
+        // Look to see whether fields with explicit null values match isNull().
+        let fullRecord = "{\"id\":\"global\"," +
+            "\"payload\":" +
+            "\"{\\\"syncID\\\":\\\"zPSQTm7WBVWB\\\"," +
+            "\\\"declined\\\":[\\\"bookmarks\\\"]," +
+            "\\\"storageVersion\\\":5," +
+            "\\\"engines\\\":{" +
+            "\\\"clients\\\":{\\\"version\\\":1,\\\"syncID\\\": null}," +
+            "\\\"tabs\\\":null}}\"," +
+            "\"username\":\"5817483\"," +
+        "\"modified\":1.32046073744E9}"
+
+        let record = EnvelopeJSON(fullRecord)
+        let bodyJSON = JSON(parseJSON: record.payload)
+
+        XCTAssertTrue(bodyJSON["engines"]["tabs"].isNull())
+
+        let clients = bodyJSON["engines"]["clients"]
+
+        // Make sure we're really getting a value out.
+        XCTAssertEqual(clients["version"].int, 1)
+
+        // An explicit null in the input has .type == null, so our .isNull works.
+        XCTAssertTrue(clients["syncID"].isNull())
+
+        // Oh, and it's a valid meta/global.
+        let global = MetaGlobal.fromJSON(bodyJSON)
+        XCTAssertTrue(global != nil)
     }
 
     func testEnvelopeJSON() {
@@ -43,13 +87,38 @@ class RecordTests: XCTestCase {
     }
 
     func testRecord() {
+        // This is malformed JSON (no closing brace).
         let malformedPayload = "{\"id\": \"abcdefghijkl\", \"collection\": \"clients\", \"payload\": \"in"
+
+        // Invalid: the payload isn't stringified JSON.
         let invalidPayload = "{\"id\": \"abcdefghijkl\", \"collection\": \"clients\", \"payload\": \"invalid\"}"
+
+        // Invalid: the payload is missing a GUID.
         let emptyPayload = "{\"id\": \"abcdefghijkl\", \"collection\": \"clients\", \"payload\": \"{}\"}"
 
+        // This one is invalid because the payload "id" isn't a string.
+        // (It'll also fail implicitly because the guid doesn't match the envelope.)
+        let badPayloadGUIDPayload: [String: Any] = ["id": 0]
+        let badPayloadGUIDPayloadString = JSON(object: badPayloadGUIDPayload).stringValue()!
+        let badPayloadGUIDRecord: [String: Any] = ["id": "abcdefghijkl",
+                                                   "collection": "clients",
+                                                   "payload": badPayloadGUIDPayloadString]
+        let badPayloadGUIDRecordString = JSON(object: badPayloadGUIDRecord).stringValue()!
+
+        // This one is invalid because the payload doesn't contain an "id" at all, but it's non-empty.
+        // See also `emptyPayload` above.
+        // (It'll also fail implicitly because the guid doesn't match the envelope.)
+        let noPayloadGUIDPayload: [String: Any] = ["some": "thing"]
+        let noPayloadGUIDPayloadString = JSON(object: noPayloadGUIDPayload).stringValue()!
+        let noPayloadGUIDRecord: [String: Any] = ["id": "abcdefghijkl",
+                                                  "collection": "clients",
+                                                  "payload": noPayloadGUIDPayloadString]
+        let noPayloadGUIDRecordString = JSON(object: noPayloadGUIDRecord).stringValue()!
+
+        // And this is a valid record.
         let clientBody: [String: Any] = ["id": "abcdefghijkl", "name": "Foobar", "commands": [], "type": "mobile"]
         let clientBodyString = JSON(object: clientBody).stringValue()!
-        let clientRecord: [String : Any] = ["id": "abcdefghijkl", "collection": "clients", "payload": clientBodyString]
+        let clientRecord: [String: Any] = ["id": "abcdefghijkl", "collection": "clients", "payload": clientBodyString]
         let clientPayload = JSON(object: clientRecord).stringValue()!
 
         let cleartextClientsFactory: (String) -> ClientPayload? = {
@@ -68,13 +137,33 @@ class RecordTests: XCTestCase {
         XCTAssertNil(Record<CleartextPayloadJSON>.fromEnvelope(EnvelopeJSON(malformedPayload), payloadFactory: clearFactory))
 
         // Only payloads that parse as JSON objects are valid.
-        XCTAssertFalse(Record<CleartextPayloadJSON>.fromEnvelope(EnvelopeJSON(invalidPayload), payloadFactory: clearFactory)!.payload.isValid())
+        XCTAssertNil(Record<CleartextPayloadJSON>.fromEnvelope(EnvelopeJSON(invalidPayload), payloadFactory: clearFactory))
 
         // Missing ID.
-        XCTAssertFalse(Record<CleartextPayloadJSON>.fromEnvelope(EnvelopeJSON(emptyPayload), payloadFactory: clearFactory)!.payload.isValid())
+        XCTAssertNil(Record<CleartextPayloadJSON>.fromEnvelope(EnvelopeJSON(emptyPayload), payloadFactory: clearFactory))
+
+        // No ID in non-empty payload.
+        let noPayloadGUIDEnvelope = EnvelopeJSON(noPayloadGUIDRecordString)
+
+        // The envelope is valid...
+        XCTAssertTrue(noPayloadGUIDEnvelope.isValid())
+
+        // ... but the payload is not.
+        let noID = Record<CleartextPayloadJSON>.fromEnvelope(noPayloadGUIDEnvelope, payloadFactory: cleartextClientsFactory)
+        XCTAssertNil(noID)
+
+        // Non-string ID in payload.
+        let badPayloadGUIDEnvelope = EnvelopeJSON(badPayloadGUIDRecordString)
+
+        // The envelope is valid...
+        XCTAssertTrue(badPayloadGUIDEnvelope.isValid())
+
+        // ... but the payload is not.
+        let badID = Record<CleartextPayloadJSON>.fromEnvelope(badPayloadGUIDEnvelope, payloadFactory: cleartextClientsFactory)
+        XCTAssertNil(badID)
 
         // Only valid ClientPayloads are valid.
-        XCTAssertFalse(Record<ClientPayload>.fromEnvelope(EnvelopeJSON(invalidPayload), payloadFactory: cleartextClientsFactory)!.payload.isValid())
+        XCTAssertNil(Record<ClientPayload>.fromEnvelope(EnvelopeJSON(invalidPayload), payloadFactory: cleartextClientsFactory))
         XCTAssertTrue(Record<ClientPayload>.fromEnvelope(EnvelopeJSON(clientPayload), payloadFactory: cleartextClientsFactory)!.payload.isValid())
     }
 
@@ -185,7 +274,25 @@ class RecordTests: XCTestCase {
         }
     }
 
+    func testHistoryPayloadWithNoURL() {
+        let payloadJSON = "{\"id\":\"--DzSJTCw-zb\",\"histUri\":null,\"visits\":[{\"date\":1429061233163240,\"type\":1}]}"
+        let json = JSON(parseJSON: payloadJSON)
+        XCTAssertNil(HistoryPayload.fromJSON(json))
+    }
+
     func testHistoryPayloadWithNoTitle() {
+        let payloadJSON = "{\"id\":\"--DzSJTCw-zb\",\"histUri\":\"https://foo.com/\",\"visits\":[{\"date\":1429061233163240,\"type\":1}]}"
+        let json = JSON(parseJSON: payloadJSON)
+        if let payload = HistoryPayload.fromJSON(json) {
+            // Missing fields are null-valued in SwiftyJSON.
+            XCTAssertTrue(payload["title"].isNull())
+            XCTAssertEqual("", payload.title)
+        } else {
+            XCTFail("Should have parsed.")
+        }
+    }
+
+    func testHistoryPayloadWithNullTitle() {
         let payloadJSON = "{\"id\":\"--DzSJTCw-zb\",\"histUri\":\"https://foo.com/\",\"title\":null,\"visits\":[{\"date\":1429061233163240,\"type\":1}]}"
         let json = JSON(parseJSON: payloadJSON)
         if let payload = HistoryPayload.fromJSON(json) {
@@ -432,29 +539,30 @@ class RecordTests: XCTestCase {
         XCTAssertTrue(bookmark is BookmarkPayload)
 
         let query = JSON(parseJSON: "{\"id\":\"ShCZLGEFQMam\",\"type\":\"query\",\"title\":\"Downloads\",\"parentName\":\"\",\"bmkUri\":\"place:transition=7&sort=4\",\"tags\":[],\"keyword\":null,\"description\":null,\"loadInSidebar\":false,\"parentid\":\"T6XK5oJMU8ih\"}")
-        let q = BookmarkType.payloadFromJSON(query)
-        XCTAssertTrue(q is BookmarkQueryPayload)
-        XCTAssertTrue(q is MirrorItemable)
-        guard let item = (q as? MirrorItemable)?.toMirrorItem(Date.now()) else {
-            XCTFail("Not mirrorable!")
-            return
+
+        guard let q = BookmarkType.payloadFromJSON(query) else {
+            XCTFail("Failed to generate payload from json: \(query)")
+            return 
         }
 
+        XCTAssertTrue(q is BookmarkQueryPayload)
+
+        let item = q.toMirrorItem(Date.now())
         XCTAssertEqual(6, item.type.rawValue)
         XCTAssertEqual("ShCZLGEFQMam", item.guid)
 
         let places = JSON(parseJSON: "{\"id\":\"places\",\"type\":\"folder\",\"title\":\"\",\"description\":null,\"children\":[\"menu________\",\"toolbar_____\",\"tags________\",\"unfiled_____\",\"jKnyPDrBQSDg\",\"T6XK5oJMU8ih\"],\"parentid\":\"2hYxKgBwvkEH\"}")
-        let p = BookmarkType.payloadFromJSON(places)
-        XCTAssertTrue(p is FolderPayload)
-        XCTAssertTrue(p is MirrorItemable)
-
-        // Items keep their GUID until they're written into the mirror table.
-        XCTAssertEqual("places", p!.id)
-
-        guard let pMirror = (p as? MirrorItemable)?.toMirrorItem(Date.now()) else {
-            XCTFail("Not mirrorable!")
+        guard let p = BookmarkType.payloadFromJSON(places) else {
+            XCTFail("Failed to generate payload from json: \(places)")
             return
         }
+
+        XCTAssertTrue(p is FolderPayload)
+
+        // Items keep their GUID until they're written into the mirror table.
+        XCTAssertEqual("places", p.id)
+
+        let pMirror = p.toMirrorItem(Date.now())
 
         XCTAssertEqual(2, pMirror.type.rawValue)
 

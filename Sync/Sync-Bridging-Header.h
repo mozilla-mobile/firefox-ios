@@ -2,5 +2,7 @@
 #define Client_Sync_Bridging_Header_h
 
 #import <Foundation/Foundation.h>
+#import "Shared-Bridging-Header.h"
+#import "Storage-Bridging-Header.h"
 
 #endif

@@ -151,7 +151,9 @@ class FxALoginHelper {
         // Record that we have asked the user, and they have given an answer.
         profile?.prefs.setBool(true, forKey: applicationDidRequestUserNotificationPermissionPrefKey)
 
-        guard notificationSettings.types != .none else {
+        let types = notificationSettings.types
+
+        guard types != .none && types.rawValue != 0 else {
             return readyForSyncing()
         }
 
@@ -162,8 +164,14 @@ class FxALoginHelper {
         }
     }
 
-    func apnsRegisterDidSucceed(apnsToken: String) {
-        guard let configuration = self.profile?.accountConfiguration.pushConfiguration else {
+    func getPushConfiguration() -> PushConfiguration? {
+        return ProductionPushConfiguration()
+    }
+
+    func apnsRegisterDidSucceed(_ deviceToken: Data) {
+        let apnsToken = deviceToken.hexEncodedString
+
+        guard let configuration = getPushConfiguration() ?? self.profile?.accountConfiguration.pushConfiguration else {
             log.error("Push server endpoint could not be found")
             return pushRegistrationDidFail()
         }
@@ -171,7 +179,7 @@ class FxALoginHelper {
         let client = PushClient(endpointURL: configuration.endpointURL)
         client.register(apnsToken).upon { res in
             guard let pushRegistration = res.successValue else {
-                return self.apnsRegisterDidFail()
+                return self.pushRegistrationDidFail()
             }
             return self.pushRegistrationDidSucceed(apnsToken: apnsToken, pushRegistration: pushRegistration)
         }
@@ -194,7 +202,7 @@ class FxALoginHelper {
         if let profile = self.profile, let account = account {
             profile.setAccount(account)
             // account.advance is idempotent.
-            if let account = profile.getAccount() {
+            if  let account = profile.getAccount(), accountVerified! {
                 account.advance()
             }
         }

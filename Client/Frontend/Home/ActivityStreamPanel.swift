@@ -8,6 +8,7 @@ import Deferred
 import Storage
 import WebImage
 import XCGLogger
+import Telemetry
 
 private let log = Logger.browserLogger
 private let DefaultSuggestedSitesKey = "topSites.deletedSuggestedSites"
@@ -15,13 +16,12 @@ private let DefaultSuggestedSitesKey = "topSites.deletedSuggestedSites"
 // MARK: -  Lifecycle
 struct ASPanelUX {
     static let backgroundColor = UIColor(white: 1.0, alpha: 0.5)
-    static let topSitesCacheSize = 12
     static let historySize = 10
     static let rowSpacing: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 30 : 20
     static let highlightCellHeight: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 250 : 195
 
     static let PageControlOffsetSize: CGFloat = 40
-    static let SectionInsetsForIpad: CGFloat = 100
+    static let SectionInsetsForIpad: CGFloat = 101
     static let SectionInsetsForIphone: CGFloat = 14
     static let CompactWidth: CGFloat = 320
 }
@@ -33,9 +33,8 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
     fileprivate let flowLayout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
 
     fileprivate let topSitesManager = ASHorizontalScrollCellManager()
-    fileprivate var isInitialLoad = true //Prevents intro views from flickering while content is loading
-    fileprivate let events = [NotificationFirefoxAccountChanged, NotificationProfileDidFinishSyncing, NotificationPrivateDataClearedHistory, NotificationDynamicFontChanged]
-
+    fileprivate var pendingCacheUpdate = false
+    fileprivate var showHighlightIntro = false
     fileprivate var sessionStart: Timestamp?
 
     lazy var longPressRecognizer: UILongPressGestureRecognizer = {
@@ -60,12 +59,16 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
         self.collectionView?.dataSource = self
 
         collectionView?.addGestureRecognizer(longPressRecognizer)
-        self.profile.history.setTopSitesCacheSize(Int32(ASPanelUX.topSitesCacheSize))
-        events.forEach { NotificationCenter.default.addObserver(self, selector: #selector(self.notificationReceived(_:)), name: $0, object: nil) }
+
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(didChangeFontSize(notification:)),
+                                               name: NotificationDynamicFontChanged,
+                                               object: nil)
+        
     }
 
     deinit {
-        events.forEach { NotificationCenter.default.removeObserver(self, name: $0, object: nil) }
+        NotificationCenter.default.removeObserver(self, name: NotificationDynamicFontChanged, object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -80,16 +83,14 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
 
         collectionView?.backgroundColor = ASPanelUX.backgroundColor
         collectionView?.keyboardDismissMode = .onDrag
+        
+        self.profile.panelDataObservers.activityStream.delegate = self
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         sessionStart = Date.now()
-
-        all([invalidateTopSites(), invalidateHighlights()]).uponQueue(DispatchQueue.main) { _ in
-            self.isInitialLoad = false
-            self.collectionView?.reloadData()
-        }
+        reloadAll()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -109,6 +110,11 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         self.topSitesManager.currentTraits = self.traitCollection
+    }
+
+    func didChangeFontSize(notification: Notification) {
+        // Don't need to invalidate the data for a font change. Just reload the UI.
+        reloadAll()
     }
 }
 
@@ -154,7 +160,7 @@ extension ActivityStreamPanel {
             case .topSites:
                 return UIDevice.current.userInterfaceIdiom == .pad ? ASPanelUX.SectionInsetsForIpad : 0
             case .highlightIntro:
-                return 0
+                return UIDevice.current.userInterfaceIdiom == .pad ? ASPanelUX.SectionInsetsForIpad : 0
             }
         }
 
@@ -164,17 +170,19 @@ extension ActivityStreamPanel {
 
             switch self {
             case .highlights:
+                var numItems: CGFloat = 0
                 if UIDevice.current.orientation == .landscapeLeft || UIDevice.current.orientation == .landscapeRight {
-                    return CGSize(width: (frameWidth - inset) / 4 - 10, height: height)
+                    numItems = 4
                 } else if UIDevice.current.userInterfaceIdiom == .pad {
-                    return CGSize(width: (frameWidth - inset) / 3 - 10, height: height)
+                    numItems = 3
                 } else {
-                    return CGSize(width: (frameWidth - inset) / 2 - 10, height: height)
+                    numItems = 2
                 }
+                return CGSize(width: floor(((frameWidth - inset) - (ASHorizontalScrollCellUX.MinimumInsets * (numItems - 1))) / numItems), height: height)
             case .topSites:
                 return CGSize(width: frameWidth - inset, height: height)
             case .highlightIntro:
-                return CGSize(width: frameWidth - inset, height: height)
+                return CGSize(width: frameWidth - inset - (ASHorizontalScrollCellUX.MinimumInsets * 2), height: height)
             }
         }
 
@@ -238,6 +246,7 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
     }
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        self.longPressRecognizer.isEnabled = false
         selectItemAtIndex(indexPath.item, inSection: Section(indexPath.section))
     }
 
@@ -304,7 +313,7 @@ extension ActivityStreamPanel {
         case .highlights:
             return self.highlights.count
         case .highlightIntro:
-            return self.highlights.isEmpty && !self.isInitialLoad ? 1 : 0
+            return self.highlights.isEmpty && showHighlightIntro ? 1 : 0
         }
     }
 
@@ -326,6 +335,8 @@ extension ActivityStreamPanel {
     func configureTopSitesCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         let topSiteCell = cell as! ASHorizontalScrollCell
         topSiteCell.delegate = self.topSitesManager
+        topSiteCell.setNeedsLayout()
+        topSiteCell.collectionView.reloadData()
         return cell
     }
 
@@ -344,57 +355,89 @@ extension ActivityStreamPanel {
 }
 
 // MARK: - Data Management
-extension ActivityStreamPanel {
-
-    func notificationReceived(_ notification: Notification) {
-        switch notification.name {
-        case NotificationProfileDidFinishSyncing, NotificationFirefoxAccountChanged, NotificationPrivateDataClearedHistory, NotificationDynamicFontChanged:
-            self.invalidateTopSites().uponQueue(DispatchQueue.main) { _ in
-                self.collectionView?.reloadData()
+extension ActivityStreamPanel: DataObserverDelegate {
+    fileprivate func reportMissingData(sites: [Site], source: ASPingSource) {
+        sites.forEach { site in
+            if site.metadata?.mediaURL == nil {
+                self.telemetry.reportBadState(badState: .MissingMetadataImage, source: source)
             }
-        default:
-            log.warning("Received unexpected notification \(notification.name)")
+
+            if site.icon == nil {
+                self.telemetry.reportBadState(badState: .MissingFavicon, source: source)
+            }
         }
     }
 
-    fileprivate func invalidateHighlights() -> Success {
-        return self.profile.recommendations.getHighlights().bindQueue(DispatchQueue.main) { result in
-            self.highlights = result.successValue?.asArray() ?? self.highlights
+    // Reloads both highlights and top sites data from their respective caches. Does not invalidate the cache.
+    // See ActivityStreamDataObserver for invalidation logic.
+    func reloadAll() {
+        accumulate([self.getHighlights, self.getTopSites]).uponQueue(.main) { _ in
+            // If there is no pending cache update and highlights are empty. Show the onboarding screen
+            self.showHighlightIntro = self.highlights.isEmpty && !self.pendingCacheUpdate
+            self.collectionView?.reloadData()
+        }
+    }
+
+    func getHighlights() -> Success {
+        return self.profile.recommendations.getHighlights().bindQueue(.main) { result in
+            guard let highlights = result.successValue?.asArray() else {
+                return succeed()
+            }
+            // Scan through the fetched highlights and report on anything that might be missing.
+            self.reportMissingData(sites: highlights, source: .Highlights)
+            self.highlights = highlights
             return succeed()
         }
     }
 
-    fileprivate func invalidateTopSites() -> Success {
-        let frecencyLimit = ASPanelUX.topSitesCacheSize
-
-        // Update our top sites cache if it's been invalidated
-        return self.profile.history.updateTopSitesCacheIfInvalidated() >>== { _ in
-            return self.profile.history.getTopSitesWithLimit(frecencyLimit) >>== { topSites in
-                let mySites = topSites.asArray()
-                let defaultSites = self.defaultTopSites()
-
-                // Merge default topsites with a user's topsites.
-                let mergedSites = mySites.union(defaultSites, f: { (site) -> String in
-                    return URL(string: site.url)?.hostSLD ?? ""
-                })
-
-                // Favour topsites from defaultSites as they have better favicons.
-                let newSites = mergedSites.map { site -> Site in
-                    let domain = URL(string: site.url)?.hostSLD
-                    return defaultSites.find { $0.title.lowercased() == domain } ?? site
-                }
-
-                self.topSitesManager.currentTraits = self.view.traitCollection
-                self.topSitesManager.content = newSites.count > ASPanelUX.topSitesCacheSize ? Array(newSites[0..<ASPanelUX.topSitesCacheSize]) : newSites
-                self.topSitesManager.urlPressedHandler = { [unowned self] url, indexPath in
-                    self.longPressRecognizer.isEnabled = false
-                    self.telemetry.reportEvent(.Click, source: .TopSites, position: indexPath.item)
-                    self.showSiteWithURLHandler(url as URL)
-                }
-
+    func getTopSites() -> Success {
+        return self.profile.history.getTopSitesWithLimit(16).bindQueue(.main) { result in
+            guard let mySites = result.successValue?.asArray(), !self.pendingCacheUpdate else {
                 return succeed()
             }
+            
+            let defaultSites = self.defaultTopSites()
+
+            // Merge default topsites with a user's topsites.
+            let mergedSites = mySites.union(defaultSites, f: { (site) -> String in
+                return URL(string: site.url)?.hostSLD ?? ""
+            })
+
+            // Favour topsites from defaultSites as they have better favicons.
+            let newSites = mergedSites.map { site -> Site in
+                let domain = URL(string: site.url)?.hostSLD
+                return defaultSites.find { $0.title.lowercased() == domain } ?? site
+            }
+
+            // Don't report bad states for default sites we provide
+            self.reportMissingData(sites: mySites, source: .TopSites)
+
+            self.topSitesManager.currentTraits = self.view.traitCollection
+
+            if newSites.count > Int(ActivityStreamTopSiteCacheSize) {
+                self.topSitesManager.content = Array(newSites[0..<Int(ActivityStreamTopSiteCacheSize)])
+            } else {
+                self.topSitesManager.content = newSites
+            }
+
+            self.topSitesManager.urlPressedHandler = { [unowned self] url, indexPath in
+                self.longPressRecognizer.isEnabled = false
+                self.telemetry.reportEvent(.Click, source: .TopSites, position: indexPath.item)
+                self.showSiteWithURLHandler(url as URL)
+            }
+
+            return succeed()
         }
+    }
+
+    func willInvalidateDataSources() {
+        self.pendingCacheUpdate = true
+    }
+
+    // Invoked by the ActivityStreamDataObserver when highlights/top sites invalidation is complete.
+    func didInvalidateDataSources() {
+        self.pendingCacheUpdate = false
+        reloadAll()
     }
 
     func hideURLFromTopSites(_ siteURL: URL) {
@@ -406,20 +449,16 @@ extension ActivityStreamPanel {
         if defaultTopSites().filter({$0.url == url}).isEmpty == false {
             deleteTileForSuggestedSite(url)
         }
-        profile.history.removeHostFromTopSites(host).uponQueue(DispatchQueue.main) { result in
+        profile.history.removeHostFromTopSites(host).uponQueue(.main) { result in
             guard result.isSuccess else { return }
-            self.invalidateTopSites().uponQueue(DispatchQueue.main) { _ in
-                self.collectionView?.reloadData()
-            }
+            self.profile.panelDataObservers.activityStream.invalidate(highlights: false)
         }
     }
 
     func hideFromHighlights(_ site: Site) {
-        profile.recommendations.removeHighlightForURL(site.url).uponQueue(DispatchQueue.main) { result in
+        profile.recommendations.removeHighlightForURL(site.url).uponQueue(.main) { result in
             guard result.isSuccess else { return }
-            self.invalidateHighlights().uponQueue(DispatchQueue.main) { _ in
-                self.collectionView?.reloadData()
-            }
+            self.profile.panelDataObservers.activityStream.invalidate(highlights: true)
         }
     }
 
@@ -461,52 +500,41 @@ extension ActivityStreamPanel {
     }
 
     func presentContextMenuForTopSiteCellWithIndexPath(_ indexPath: IndexPath) {
-        let topsiteIndex = IndexPath(row: 0, section: Section.topSites.rawValue)
-
-        guard let topSiteCell = collectionView?.cellForItem(at: topsiteIndex) as? ASHorizontalScrollCell else { return }
-        guard let topSiteItemCell = topSiteCell.collectionView.cellForItem(at: indexPath) as? TopSiteItemCell else { return }
-        let siteImage = topSiteItemCell.imageView.image
-        let siteBGColor = topSiteItemCell.contentView.backgroundColor
-
         let site = self.topSitesManager.content[indexPath.item]
-        presentContextMenuForSite(site, atIndex: indexPath.item, forSection: .topSites, siteImage: siteImage, siteBGColor: siteBGColor)
+        presentContextMenuForSite(site, atIndex: indexPath.item, forSection: .topSites)
     }
 
     func presentContextMenuForHighlightCellWithIndexPath(_ indexPath: IndexPath) {
-        guard let highlightCell = self.collectionView?.cellForItem(at: indexPath) as? ActivityStreamHighlightCell else { return }
-        let siteImage = highlightCell.siteImageView.image
-        let siteBGColor = highlightCell.siteImageView.backgroundColor
-
         let site = highlights[indexPath.row]
-        presentContextMenuForSite(site, atIndex: indexPath.row, forSection: .highlights, siteImage: siteImage, siteBGColor: siteBGColor)
+        presentContextMenuForSite(site, atIndex: indexPath.row, forSection: .highlights)
     }
 
-    fileprivate func fetchBookmarkStatusThenPresentContextMenu(_ site: Site, atIndex index: Int, forSection section: Section, siteImage: UIImage?, siteBGColor: UIColor?) {
+    fileprivate func fetchBookmarkStatusThenPresentContextMenu(_ site: Site, atIndex index: Int, forSection section: Section) {
         profile.bookmarks.modelFactory >>== {
-            $0.isBookmarked(site.url).uponQueue(DispatchQueue.main) { result in
+            $0.isBookmarked(site.url).uponQueue(.main) { result in
                 guard let isBookmarked = result.successValue else {
-                    log.error("Error getting bookmark status: \(result.failureValue).")
+                    log.error("Error getting bookmark status: \(result.failureValue ??? "nil").")
                     return
                 }
                 site.setBookmarked(isBookmarked)
-                self.presentContextMenuForSite(site, atIndex: index, forSection: section, siteImage: siteImage, siteBGColor: siteBGColor)
+                self.presentContextMenuForSite(site, atIndex: index, forSection: section)
             }
         }
     }
 
-    func presentContextMenuForSite(_ site: Site, atIndex index: Int, forSection section: Section, siteImage: UIImage?, siteBGColor: UIColor?) {
+    func presentContextMenuForSite(_ site: Site, atIndex index: Int, forSection section: Section) {
         guard let _ = site.bookmarked else {
-            fetchBookmarkStatusThenPresentContextMenu(site, atIndex: index, forSection: section, siteImage: siteImage, siteBGColor: siteBGColor)
+            fetchBookmarkStatusThenPresentContextMenu(site, atIndex: index, forSection: section)
             return
         }
-        guard let contextMenu = contextMenuForSite(site, atIndex: index, forSection: section, siteImage: siteImage, siteBGColor: siteBGColor) else {
+        guard let contextMenu = contextMenuForSite(site, atIndex: index, forSection: section) else {
             return
         }
 
         self.presentContextMenu(contextMenu)
     }
 
-    func contextMenuForSite(_ site: Site, atIndex index: Int, forSection section: Section, siteImage: UIImage?, siteBGColor: UIColor?) -> ActionOverlayTableViewController? {
+    func contextMenuForSite(_ site: Site, atIndex index: Int, forSection section: Section) -> ActionOverlayTableViewController? {
 
         guard let siteURL = URL(string: site.url) else {
             return nil
@@ -524,6 +552,7 @@ extension ActivityStreamPanel {
 
         let openInNewTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewTabContextMenuTitle, iconString: "action_new_tab") { action in
             self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
+            self.telemetry.reportEvent(.NewTab, source: pingSource, position: index)
         }
 
         let openInNewPrivateTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "action_new_private_tab") { action in
@@ -537,6 +566,8 @@ extension ActivityStreamPanel {
                     $0.removeByURL(siteURL.absoluteString)
                     site.setBookmarked(false)
                 }
+                self.telemetry.reportEvent(.RemoveBookmark, source: pingSource, position: index)
+
             })
         } else {
             bookmarkAction = ActionOverlayTableViewAction(title: Strings.BookmarkContextMenuTitle, iconString: "action_bookmark", handler: { action in
@@ -550,6 +581,7 @@ extension ActivityStreamPanel {
                                                                                     withUserData: userData,
                                                                                     toApplication: UIApplication.shared)
                 site.setBookmarked(true)
+                self.telemetry.reportEvent(.AddBookmark, source: pingSource, position: index)
             })
         }
 
@@ -567,7 +599,7 @@ extension ActivityStreamPanel {
         })
 
         let removeTopSiteAction = ActionOverlayTableViewAction(title: Strings.RemoveFromASContextMenuTitle, iconString: "action_close", handler: { action in
-            self.telemetry.reportEvent(.Dismiss, source: pingSource, position: index)
+            self.telemetry.reportEvent(.Remove, source: pingSource, position: index)
             self.hideURLFromTopSites(site.tileURL)
         })
 
@@ -583,14 +615,13 @@ extension ActivityStreamPanel {
         case .highlightIntro: break
         }
 
-        return ActionOverlayTableViewController(site: site, actions: actions, siteImage: siteImage, siteBGColor: siteBGColor)
+        return ActionOverlayTableViewController(site: site, actions: actions)
     }
 
     func selectItemAtIndex(_ index: Int, inSection section: Section) {
         switch section {
         case .highlights:
             telemetry.reportEvent(.Click, source: .Highlights, position: index)
-
             let site = self.highlights[index]
             showSiteWithURLHandler(URL(string:site.url)!)
         case .topSites, .highlightIntro:
@@ -606,6 +637,15 @@ enum ASPingEvent: String {
     case Delete = "DELETE"
     case Dismiss = "DISMISS"
     case Share = "SHARE"
+    case NewTab = "NEW_TAB"
+    case AddBookmark = "ADD_BOOKMARK"
+    case RemoveBookmark = "REMOVE_BOOKMARK"
+    case Remove = "REMOVE"
+}
+
+enum ASPingBadStateEvent: String {
+    case MissingMetadataImage = "MISSING_METADATA_IMAGE"
+    case MissingFavicon = "MISSING_FAVICON"
 }
 
 enum ASPingSource: String {
@@ -618,22 +658,38 @@ struct ActivityStreamTracker {
     let eventsTracker: PingCentreClient
     let sessionsTracker: PingCentreClient
 
+    private var baseASPing: [String: Any] {
+        return [
+            "app_version": AppInfo.appVersion,
+            "build": AppInfo.buildNumber,
+            "locale": Locale.current.identifier,
+            "release_channel": AppConstants.BuildChannel.rawValue
+        ]
+    }
+
+    func reportBadState(badState: ASPingBadStateEvent, source: ASPingSource) {
+        var eventPing: [String: Any] = [
+            "event": badState.rawValue,
+            "page": "NEW_TAB",
+            "source": source.rawValue,
+        ]
+        eventPing.merge(with: baseASPing)
+        eventsTracker.sendPing(eventPing as [String : AnyObject], validate: true)
+    }
+
     func reportEvent(_ event: ASPingEvent, source: ASPingSource, position: Int, shareProvider: String? = nil) {
         var eventPing: [String: Any] = [
             "event": event.rawValue,
             "page": "NEW_TAB",
             "source": source.rawValue,
             "action_position": position,
-            "app_version": AppInfo.appVersion,
-            "build": AppInfo.buildNumber,
-            "locale": Locale.current.identifier,
-            "release_channel": AppConstants.BuildChannel.rawValue
         ]
 
         if let provider = shareProvider {
             eventPing["share_provider"] = provider
         }
 
+        eventPing.merge(with: baseASPing)
         eventsTracker.sendPing(eventPing as [String : AnyObject], validate: true)
     }
 
@@ -644,7 +700,7 @@ struct ActivityStreamTracker {
             "build": AppInfo.buildNumber,
             "locale": Locale.current.identifier,
             "release_channel": AppConstants.BuildChannel.rawValue
-            ], validate: true)
+            ] as [String: Any], validate: true)
     }
 }
 

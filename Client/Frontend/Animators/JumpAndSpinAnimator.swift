@@ -20,7 +20,7 @@ class JumpAndSpinAnimator: Animatable {
         UIView.animate(withDuration: AnimationDuration, delay: 0.0, usingSpringWithDamping: 0.6, initialSpringVelocity: 2.0, options: [], animations: { () -> Void in
             viewToAnimate.transform = offToolbar
             let rotation = CABasicAnimation(keyPath: "transform.rotation")
-            rotation.toValue = CGFloat(M_PI * 2.0)
+            rotation.toValue = CGFloat(2.0 * Double.pi)
             rotation.isCumulative = true
             rotation.duration = self.AnimationDuration + 0.075
             rotation.repeatCount = 1.0

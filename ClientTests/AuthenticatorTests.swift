@@ -73,11 +73,11 @@ class AuthenticatorTests: XCTestCase {
         super.setUp()
         self.db = BrowserDB(filename: "testsqlitelogins.db", files: MockFiles())
         self.logins = SQLiteLogins(db: self.db)
-        self.logins.removeAll().value
+        self.logins.removeAll().succeeded()
     }
 
     override func tearDown() {
-        self.logins.removeAll().value
+        self.logins.removeAll().succeeded()
     }
 
     fileprivate func mockChallengeForURL(_ url: URL, username: String, password: String) -> URLAuthenticationChallenge {
@@ -117,7 +117,7 @@ class AuthenticatorTests: XCTestCase {
 
     func testChallengeMatchesLoginEntry() {
         let login = Login.createWithHostname("https://securesite.com", username: "username", password: "password", formSubmitURL: "https://submit.me")
-        logins.addLogin(login).value
+        logins.addLogin(login).succeeded()
         let challenge = mockChallengeForURL(URL(string: "https://securesite.com")!, username: "username", password: "password")
         let result = Authenticator.findMatchingCredentialsForChallenge(challenge, fromLoginsProvider: logins).value.successValue!
         XCTAssertNotNil(result)
@@ -128,7 +128,7 @@ class AuthenticatorTests: XCTestCase {
     func testChallengeMatchesSingleMalformedLoginEntry() {
         // Since Login has been updated to not store schemeless URL, write directly to simulate a malformed URL
         let malformedLogin = MockMalformableLogin.createWithHostname("malformed.com", username: "username", password: "password", formSubmitURL: "https://submit.me")
-        logins.addLogin(malformedLogin).value
+        logins.addLogin(malformedLogin).succeeded()
 
         // Pre-condition: Check that the hostname is malformed
         let oldHostname = rawQueryForAllLogins().value.successValue![0]
@@ -148,10 +148,10 @@ class AuthenticatorTests: XCTestCase {
     func testChallengeMatchesDuplicateLoginEntries() {
         // Since Login has been updated to not store schemeless URL, write directly to simulate a malformed URL
         let malformedLogin = MockMalformableLogin.createWithHostname("malformed.com", username: "malformed_username", password: "malformed_password", formSubmitURL: "https://submit.me")
-        logins.addLogin(malformedLogin).value
+        logins.addLogin(malformedLogin).succeeded()
 
         let login = Login.createWithHostname("https://malformed.com", username: "good_username", password: "good_password", formSubmitURL: "https://submit.me")
-        logins.addLogin(login).value
+        logins.addLogin(login).succeeded()
 
         // Pre-condition: Verify that both logins were stored
         let hostnames = rawQueryForAllLogins().value.successValue!

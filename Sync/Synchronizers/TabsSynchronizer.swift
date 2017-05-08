@@ -34,14 +34,13 @@ open class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchroniz
     fileprivate func createOwnTabsRecord(_ tabs: [RemoteTab]) -> Record<TabsPayload> {
         let guid = self.scratchpad.clientGUID
 
-        let jsonTabs: [JSON] = optFilter(tabs.map { $0.toJSON() })
         let tabsJSON = JSON([
             "id": guid,
             "clientName": self.scratchpad.clientName,
-            "tabs": jsonTabs
+            "tabs": tabs.flatMap { $0.toDictionary() }
         ])
         if Logger.logPII {
-            log.verbose("Sending tabs JSON \(tabsJSON.stringValue())")
+            log.verbose("Sending tabs JSON \(tabsJSON.stringValue() ?? "nil")")
         }
         let payload = TabsPayload(tabsJSON)
         return Record(id: guid, payload: payload, ttl: ThreeWeeksInSeconds)
@@ -192,16 +191,16 @@ open class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchroniz
 }
 
 extension RemoteTab {
-    public func toJSON() -> JSON? {
-        let tabHistory = optFilter(history.map { $0.absoluteString })
-        if !tabHistory.isEmpty {
-            return JSON(object: [
-                "title": title,
-                "icon": icon?.absoluteString as Any? ?? NSNull(),
-                "urlHistory": tabHistory,
-                "lastUsed": lastUsed.description,
-                ])
+    public func toDictionary() -> Dictionary<String, Any>? {
+        let tabHistory = history.flatMap { $0.absoluteString }
+        if tabHistory.isEmpty {
+            return nil
         }
-        return nil
+        return [
+            "title": title,
+            "icon": icon?.absoluteString as Any? ?? NSNull(),
+            "urlHistory": tabHistory,
+            "lastUsed": millisecondsToDecimalSeconds(lastUsed)
+        ]
     }
 }

@@ -16,6 +16,7 @@ import ReadingList
 import MobileCoreServices
 import WebImage
 import SwiftyJSON
+import Telemetry
 
 private let log = Logger.browserLogger
 
@@ -527,8 +528,8 @@ class BrowserViewController: UIViewController {
             self.view.alpha = (profile.prefs.intForKey(IntroViewControllerSeenProfileKey) != nil) ? 1.0 : 0.0
         }
 
-        if PLCrashReporter.shared().hasPendingCrashReport() {
-            PLCrashReporter.shared().purgePendingCrashReport()
+        if hasPendingCrashReport() {
+            purgePendingCrashReport()
             showRestoreTabsAlert()
         } else {
             log.debug("Restoring tabs.")
@@ -545,6 +546,14 @@ class BrowserViewController: UIViewController {
                                                          selector: #selector(BrowserViewController.openSettings),
                                                          name: NSNotification.Name(rawValue: NotificationStatusNotificationTapped),
                                                          object: nil)
+    }
+
+    fileprivate func hasPendingCrashReport() -> Bool {
+        return false
+    }
+
+    fileprivate func purgePendingCrashReport() {
+        // no-op
     }
 
     fileprivate func showRestoreTabsAlert() {
@@ -933,7 +942,7 @@ class BrowserViewController: UIViewController {
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         let webView = object as! WKWebView
-        guard let path = keyPath else { assertionFailure("Unhandled KVO key: \(keyPath)"); return }
+        guard let path = keyPath else { assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")"); return }
         switch path {
         case KVOEstimatedProgress:
             guard webView == tabManager.selectedTab?.webView,
@@ -974,7 +983,7 @@ class BrowserViewController: UIViewController {
 
             navigationToolbar.updateForwardStatus(canGoForward)
         default:
-            assertionFailure("Unhandled KVO key: \(keyPath)")
+            assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")")
         }
     }
 
@@ -1027,7 +1036,7 @@ class BrowserViewController: UIViewController {
         profile.bookmarks.modelFactory >>== {
             $0.isBookmarked(url).uponQueue(DispatchQueue.main) { [weak tab] result in
                 guard let bookmarked = result.successValue else {
-                    log.error("Error getting bookmark status: \(result.failureValue).")
+                    log.error("Error getting bookmark status: \(result.failureValue ??? "nil").")
                     return
                 }
                 tab?.isBookmarked = bookmarked
@@ -2101,7 +2110,7 @@ extension BrowserViewController: TabManagerDelegate {
                         $0.isBookmarked(absoluteString)
                             .uponQueue(DispatchQueue.main) {
                             guard let isBookmarked = $0.successValue else {
-                                log.error("Error getting bookmark status: \($0.failureValue).")
+                                log.error("Error getting bookmark status: \($0.failureValue ??? "nil").")
                                 return
                             }
 
@@ -2277,7 +2286,6 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         if !navigationAction.isAllowed && navigationAction.navigationType != .backForward {
-            print("\(navigationAction.isAllowed) \(navigationAction.navigationType == .backForward) \(navigationAction.request.url)")
             log.warning("Denying unprivileged request: \(navigationAction.request)")
             decisionHandler(WKNavigationActionPolicy.cancel)
             return
@@ -2287,7 +2295,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // gives us the exact same behaviour as Safari.
 
         if url.scheme == "tel" || url.scheme == "facetime" || url.scheme == "facetime-audio" {
-            if let phoneNumber = url.path.removingPercentEncoding, !phoneNumber.isEmpty {
+            if let components = NSURLComponents(url: url, resolvingAgainstBaseURL: false), let phoneNumber = components.path, !phoneNumber.isEmpty {
                 let formatter = PhoneNumberFormatter()
                 let formattedPhoneNumber = formatter.formatPhoneNumber(phoneNumber)
                 let alert = UIAlertController(title: formattedPhoneNumber, message: nil, preferredStyle: UIAlertControllerStyle.alert)
@@ -2325,7 +2333,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // This is the normal case, opening a http or https url, which we handle by loading them in this WKWebView. We
         // always allow this. Additionally, data URIs are also handled just like normal web pages.
 
-        if url.scheme == "http" || url.scheme == "https" || url.scheme == "data" {
+        if url.scheme == "http" || url.scheme == "https" || url.scheme == "data" || url.scheme == "blob" {
             if navigationAction.navigationType == .linkActivated {
                 resetSpoofedUserAgentIfRequired(webView, newURL: url)
             } else if navigationAction.navigationType == .backForward {
@@ -2665,7 +2673,7 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
 extension BrowserViewController: ReaderModeStyleViewControllerDelegate {
     func readerModeStyleViewController(_ readerModeStyleViewController: ReaderModeStyleViewController, didConfigureStyle style: ReaderModeStyle) {
         // Persist the new style to the profile
-        let encodedStyle: [String:Any] = style.encode()
+        let encodedStyle: [String:Any] = style.encodeAsDictionary()
         profile.prefs.setObject(encodedStyle, forKey: ReaderModeProfileKeyStyle)
         // Change the reader mode style on all tabs that have reader mode active
         for tabIndex in 0..<tabManager.count {

@@ -678,7 +678,7 @@ extension TabManager {
         _ = Try(withTry: { () -> Void in
             self.preserveTabsInternal()
             }) { (exception) -> Void in
-            print("Failed to preserve tabs: \(exception)")
+            print("Failed to preserve tabs: \(exception ??? "nil")")
         }
     }
 
@@ -757,7 +757,7 @@ extension TabManager {
                     self.restoreTabsInternal()
                 },
                 catch: { exception in
-                    print("Failed to restore tabs: \(exception)")
+                    print("Failed to restore tabs: \(exception ??? "nil")")
                 }
             )
         }

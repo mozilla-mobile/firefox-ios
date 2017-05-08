@@ -5,10 +5,10 @@
 import XCTest
 
 let url1 = "www.mozilla.org"
-let url2 = "www.yahoo.com"
+let url2 = "people.mozilla.org"
 
 let url1Label = "Internet for people, not profit — Mozilla"
-let url2Label = "Yahoo"
+let url2Label = "People of Mozilla"
 
 class PrivateBrowsingTest: BaseTestCase {
 
@@ -44,7 +44,7 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.goto(PrivateTabTray)
         navigator.openURL(urlString: url2)
         navigator.nowAt(PrivateBrowserTab)
-        waitForValueContains(app.textFields["url"], value: "yahoo")
+        waitForValueContains(app.textFields["url"], value: "people")
         navigator.goto(BrowserTabMenu)
         waitforExistence(app.toolbars.buttons["HistoryMenuToolbarItem"])
         app.toolbars.buttons["HistoryMenuToolbarItem"].tap()
@@ -72,7 +72,7 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.goto(NewPrivateTabScreen)
         navigator.openURL(urlString: url2)
         navigator.nowAt(PrivateBrowserTab)
-        waitForValueContains(app.textFields["url"], value: "yahoo")
+        waitForValueContains(app.textFields["url"], value: "people")
 
         navigator.goto(PrivateTabTray)
 
@@ -118,6 +118,7 @@ class PrivateBrowsingTest: BaseTestCase {
         closePrivateTabsSwitch.tap()
 
         // Go back to regular browsing and check that the private tab has been closed and that the initial Private Browsing message appears when going back to Private Browsing
+        navigator.goto(PrivateTabTray)
         navigator.goto(TabTray)
         navigator.goto(PrivateTabTray)
 

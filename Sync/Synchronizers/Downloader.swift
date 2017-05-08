@@ -53,7 +53,7 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
 
         let lm = prefs.timestampForKey("lastModified")
         let bt = prefs.timestampForKey("baseTimestamp")
-        log.debug("Resetting downloader prefs \(prefs.getBranchPrefix()). Previous values: \(lm), \(bt).")
+        log.debug("Resetting downloader prefs \(prefs.getBranchPrefix()). Previous values: \(lm ??? "nil"), \(bt ??? "nil").")
 
         prefs.removeObjectForKey("nextOffset")
         prefs.removeObjectForKey("offsetNewer")
@@ -154,7 +154,7 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
 
     func downloadNextBatchWithLimit(_ limit: Int, infoModified: Timestamp) -> Deferred<Maybe<DownloadEndState>> {
         let (offset, since) = self.fetchParameters()
-        log.debug("Fetching newer=\(since), offset=\(offset).")
+        log.debug("Fetching newer=\(since), offset=\(offset ?? "nil").")
 
         let fetch = self.client.getSince(since, sort: SortOption.OldestFirst, limit: limit, offset: offset)
 
@@ -201,7 +201,7 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
                     // value, we'll simply redownload some records.
                     // All bets are off if we hit this case and are filtering somehow… don't do that.
                     let lm = response.metadata.lastModifiedMilliseconds
-                    log.debug("Advancing lastModified to \(lm) ?? \(infoModified).")
+                    log.debug("Advancing lastModified to \(String(describing: lm)) ?? \(infoModified).")
                     self.lastModified = lm ?? infoModified
                 }
             }

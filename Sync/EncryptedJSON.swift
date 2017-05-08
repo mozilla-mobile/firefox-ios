@@ -62,9 +62,9 @@ open class EncryptedJSON {
 
         defer { validated = true }
 
-        guard self["ciphertext"].type == .string &&
-              self["hmac"].type == .string &&
-              self["IV"].type == .string else {
+        guard self["ciphertext"].isString() &&
+              self["hmac"].isString() &&
+              self["IV"].isString() else {
             valid = false
             return false
         }

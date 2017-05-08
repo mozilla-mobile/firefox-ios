@@ -18,7 +18,7 @@ open class SQLiteMetadata {
 extension SQLiteMetadata: Metadata {
     // A cache key is a conveninent, readable identifier for a site in the metadata database which helps
     // with deduping entries for the same page.
-    fileprivate typealias CacheKey = String
+    typealias CacheKey = String
 
     /// Persists the given PageMetadata object to browser.db in the page_metadata table.
     ///
@@ -29,18 +29,18 @@ extension SQLiteMetadata: Metadata {
     /// - returns: Deferred on success
     public func storeMetadata(_ metadata: PageMetadata, forPageURL pageURL: URL,
                               expireAt: UInt64) -> Success {
-        guard let cacheKey = cacheKeyForURL(pageURL as URL) else {
+        guard let cacheKey = SQLiteMetadata.cacheKeyForURL(pageURL as URL) else {
             return succeed()
         }
 
         // Replace any matching cache_key entries if they exist
-        let selectUniqueCacheKey = "COALESCE((SELECT cache_key FROM \(TablePageMetadata) WHERE cache_key = ?), ?)"
+        let selectUniqueCacheKey = "COALESCE((SELECT cache_key FROM \(AttachedTablePageMetadata) WHERE cache_key = ?), ?)"
         let args: Args = [cacheKey, cacheKey, metadata.siteURL, metadata.mediaURL, metadata.title,
                           metadata.type, metadata.description, metadata.providerName,
                           expireAt]
 
         let insert =
-        "INSERT OR REPLACE INTO \(TablePageMetadata)" +
+        "INSERT OR REPLACE INTO \(AttachedTablePageMetadata)" +
         "(cache_key, site_url, media_url, title, type, description, provider_name, expired_at) " +
         "VALUES ( \(selectUniqueCacheKey), ?, ?, ?, ?, ?, ?, ?)"
 
@@ -55,7 +55,7 @@ extension SQLiteMetadata: Metadata {
         return self.db.run(sql)
     }
 
-    fileprivate func cacheKeyForURL(_ url: URL) -> CacheKey? {
+    static func cacheKeyForURL(_ url: URL) -> CacheKey? {
         var key = url.normalizedHost ?? ""
         key = key + url.path + (url.query ?? "")
         return key

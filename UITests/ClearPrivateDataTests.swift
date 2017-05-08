@@ -60,10 +60,10 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
     
         for domain in domains {
             let withoutDot = domain.replacingOccurrences(of: ".", with: " ")
-            let matcher = grey_allOfMatchers([grey_accessibilityLabel(withoutDot),
-                                              grey_accessibilityID("TopSite"),
+            let matcher = grey_allOf([grey_accessibilityLabel(withoutDot),
+                                              grey_kindOfClass(NSClassFromString("Client.TopSiteItemCell")!),
                                               grey_sufficientlyVisible()])
-            EarlGrey.select(elementWithMatcher: matcher!).assert(grey_notNil(), error: &errorOrNil)
+            EarlGrey.select(elementWithMatcher: matcher).assert(grey_notNil(), error: &errorOrNil)
             
             if errorOrNil == nil {
                 return true

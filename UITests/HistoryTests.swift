@@ -59,7 +59,7 @@ class HistoryTests: KIFTestCase {
             .assert(grey_layout([topConstraint!], grey_accessibilityLabel("Page 1")))
         
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Cancel"))
-            .inRoot(grey_kindOfClass(NSClassFromString("Client.InsetButton")))
+            .inRoot(grey_kindOfClass(NSClassFromString("Client.InsetButton")!))
             .perform(grey_tap())
     }
     
@@ -74,27 +74,27 @@ class HistoryTests: KIFTestCase {
             .perform(grey_swipeSlowInDirection(GREYDirection.left))
         
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Remove"))
-            .inRoot(grey_kindOfClass(NSClassFromString("_UITableViewCellActionButton")))
+            .inRoot(grey_kindOfClass(NSClassFromString("_UITableViewCellActionButton")!))
             .perform(grey_tap())
         
         // The second history entry still exists
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(urls[1]))
-            .inRoot(grey_kindOfClass(NSClassFromString("UITableViewCellContentView")))
+            .inRoot(grey_kindOfClass(NSClassFromString("UITableViewCellContentView")!))
             .assert(grey_notNil())
         
         // check page 1 does not exist
         let historyRemoved = GREYCondition(name: "Check entry is removed", block: { _ in
             var errorOrNil: NSError?
-            let matcher = grey_allOfMatchers([grey_accessibilityLabel(urls[0]),
+            let matcher = grey_allOf([grey_accessibilityLabel(urls[0]),
                                               grey_sufficientlyVisible()])
-            EarlGrey.select(elementWithMatcher: matcher!).assert(grey_notNil(), error: &errorOrNil)
+            EarlGrey.select(elementWithMatcher: matcher).assert(grey_notNil(), error: &errorOrNil)
             let success = errorOrNil != nil
             return success
         }).wait(withTimeout: 5)
         GREYAssertTrue(historyRemoved, reason: "Failed to remove history")
         
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Cancel"))
-            .inRoot(grey_kindOfClass(NSClassFromString("Client.InsetButton")))
+            .inRoot(grey_kindOfClass(NSClassFromString("Client.InsetButton")!))
             .perform(grey_tap())
     }
     
@@ -112,7 +112,7 @@ class HistoryTests: KIFTestCase {
         EarlGrey.select(elementWithMatcher:grey_accessibilityLabel(urlToDelete))
             .perform(grey_swipeSlowInDirection(GREYDirection.left))
         EarlGrey.select(elementWithMatcher:grey_accessibilityLabel("Remove"))
-            .inRoot(grey_kindOfClass(NSClassFromString("_UITableViewCellActionButton")))
+            .inRoot(grey_kindOfClass(NSClassFromString("_UITableViewCellActionButton")!))
             .perform(grey_tap())
         
         // The history list still exists
@@ -124,9 +124,9 @@ class HistoryTests: KIFTestCase {
         // check page 1 does not exist
         let historyRemoved = GREYCondition(name: "Check entry is removed", block: { _ in
             var errorOrNil: NSError?
-            let matcher = grey_allOfMatchers([grey_accessibilityLabel(urlToDelete),
+            let matcher = grey_allOf([grey_accessibilityLabel(urlToDelete),
                                               grey_sufficientlyVisible()])
-            EarlGrey.select(elementWithMatcher:matcher!).assert(grey_notNil(), error: &errorOrNil)
+            EarlGrey.select(elementWithMatcher:matcher).assert(grey_notNil(), error: &errorOrNil)
             let success = errorOrNil != nil
             return success
         }).wait(withTimeout: 5)

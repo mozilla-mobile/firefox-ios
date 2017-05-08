@@ -45,6 +45,7 @@ public protocol BrowserHistory {
 public protocol HistoryRecommendations {
     func getHighlights() -> Deferred<Maybe<Cursor<Site>>>
     func removeHighlightForURL(_ url: String) -> Success
+    func invalidateHighlights() -> Success
 }
 
 /**

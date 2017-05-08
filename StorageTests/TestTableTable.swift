@@ -12,10 +12,11 @@ class TestSchemaTable: XCTestCase {
     func testTable() {
         let files = MockFiles()
         let db = BrowserDB(filename: "browser.db", files: files)
+        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
 
         // Test creating a table
         var testTable = getCreateTable()
-        db.createOrUpdate(testTable)
+        XCTAssertTrue(db.createOrUpdate(testTable) == .success)
 
         // Now make sure the item is in the table-table
         var err: NSError? = nil
@@ -31,7 +32,7 @@ class TestSchemaTable: XCTestCase {
 
         // Now test updating the table
         testTable = getUpgradeTable()
-        db.createOrUpdate(testTable)
+        XCTAssertTrue(db.createOrUpdate(testTable) == .success)
         cursor = db.withConnection(&err) { (connection, err) -> Cursor<TableInfo> in
             return table.query(connection, options: QueryOptions(filter: testTable.name))
         }
@@ -42,7 +43,7 @@ class TestSchemaTable: XCTestCase {
 
         // Now try updating it again to the same version. This shouldn't call create or upgrade
         testTable = getNoOpTable()
-        db.createOrUpdate(testTable)
+        XCTAssertTrue(db.createOrUpdate(testTable) == .success)
 
         do {
             // Cleanup
@@ -99,7 +100,7 @@ class TestSchemaTable: XCTestCase {
 
         func create(_ db: SQLiteDBConnection) -> Bool {
             // BrowserDB uses a different query to determine if a table exists, so we need to ensure it actually happens
-            db.executeChange("CREATE TABLE IF NOT EXISTS \(name) (ID INTEGER PRIMARY KEY AUTOINCREMENT)")
+            let _ = db.executeChange("CREATE TABLE IF NOT EXISTS \(name) (ID INTEGER PRIMARY KEY AUTOINCREMENT)")
             return createCallback()
         }
 

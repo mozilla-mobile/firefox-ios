@@ -50,6 +50,12 @@ class BackForwardTableViewCell: UITableViewCell {
         didSet {
             if let s = site {
                 faviconView.setFavicon(forSite: s, onCompletion: { [weak self] (color, url) in
+                    if s.tileURL.isLocal {
+                        self?.faviconView.image = UIImage(named: "faviconFox" )
+                        self?.faviconView.backgroundColor = UIColor.white
+                        return
+                    }
+                    
                     self?.faviconView.image = self?.faviconView.image?.createScaled(CGSize(width: BackForwardViewCellUX.IconSize, height: BackForwardViewCellUX.IconSize))
                     self?.faviconView.contentMode = .center
                 })

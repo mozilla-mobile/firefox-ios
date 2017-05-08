@@ -7,9 +7,7 @@ import UIKit
 public enum AppBuildChannel: String {
     case release = "release"
     case beta = "beta"
-    case nightly = "nightly"
     case developer = "developer"
-    case aurora = "aurora"
 }
 
 public struct AppConstants {
@@ -24,12 +22,8 @@ public struct AppConstants {
             return AppBuildChannel.release
         #elseif MOZ_CHANNEL_BETA
             return AppBuildChannel.beta
-        #elseif MOZ_CHANNEL_NIGHTLY
-            return AppBuildChannel.nightly
         #elseif MOZ_CHANNEL_FENNEC
             return AppBuildChannel.developer
-        #elseif MOZ_CHANNEL_AURORA
-            return AppBuildChannel.aurora
         #endif
     }()
 
@@ -51,11 +45,7 @@ public struct AppConstants {
             return false
         #elseif MOZ_CHANNEL_BETA
             return true
-        #elseif MOZ_CHANNEL_NIGHTLY
-            return true
         #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #elseif MOZ_CHANNEL_AURORA
             return true
         #else
             return true
@@ -68,11 +58,7 @@ public struct AppConstants {
             return false
         #elseif MOZ_CHANNEL_BETA
             return false
-        #elseif MOZ_CHANNEL_NIGHTLY
-            return true
         #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #elseif MOZ_CHANNEL_AURORA
             return true
         #else
             return true
@@ -85,11 +71,7 @@ public struct AppConstants {
             return false
         #elseif MOZ_CHANNEL_BETA
             return false
-        #elseif MOZ_CHANNEL_NIGHTLY
-            return true
         #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #elseif MOZ_CHANNEL_AURORA
             return true
         #else
             return true
@@ -102,11 +84,7 @@ public struct AppConstants {
             return false
         #elseif MOZ_CHANNEL_BETA
             return false
-        #elseif MOZ_CHANNEL_NIGHTLY
-            return true
         #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #elseif MOZ_CHANNEL_AURORA
             return true
         #else
             return true
@@ -119,11 +97,7 @@ public struct AppConstants {
             return false
         #elseif MOZ_CHANNEL_BETA
             return false
-        #elseif MOZ_CHANNEL_NIGHTLY
-            return true
         #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #elseif MOZ_CHANNEL_AURORA
             return true
         #else
             return true
@@ -137,11 +111,7 @@ public struct AppConstants {
             return false
         #elseif MOZ_CHANNEL_BETA
             return false
-        #elseif MOZ_CHANNEL_NIGHTLY
-            return true
         #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #elseif MOZ_CHANNEL_AURORA
             return true
         #else
             return true
@@ -154,11 +124,7 @@ public struct AppConstants {
             return false
         #elseif MOZ_CHANNEL_BETA
             return false
-        #elseif MOZ_CHANNEL_NIGHTLY
-            return true
         #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #elseif MOZ_CHANNEL_AURORA
             return true
         #else
             return true
@@ -172,11 +138,7 @@ public struct AppConstants {
             return false
         #elseif MOZ_CHANNEL_BETA
             return false
-        #elseif MOZ_CHANNEL_NIGHTLY
-            return true
         #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #elseif MOZ_CHANNEL_AURORA
             return true
         #else
             return true
@@ -189,11 +151,7 @@ public struct AppConstants {
             return false
         #elseif MOZ_CHANNEL_BETA
             return false
-        #elseif MOZ_CHANNEL_NIGHTLY
-            return true
         #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #elseif MOZ_CHANNEL_AURORA
             return true
         #else
             return true
@@ -206,11 +164,7 @@ public struct AppConstants {
             return false
         #elseif MOZ_CHANNEL_BETA
             return false
-        #elseif MOZ_CHANNEL_NIGHTLY
-            return true
         #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #elseif MOZ_CHANNEL_AURORA
             return true
         #else
             return true
@@ -223,11 +177,7 @@ public struct AppConstants {
             return false
         #elseif MOZ_CHANNEL_BETA
             return true
-        #elseif MOZ_CHANNEL_NIGHTLY
-            return true
         #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #elseif MOZ_CHANNEL_AURORA
             return true
         #else
             return true
@@ -239,12 +189,8 @@ public struct AppConstants {
         #if MOZ_CHANNEL_RELEASE
             return false
         #elseif MOZ_CHANNEL_BETA
-            return false
-        #elseif MOZ_CHANNEL_NIGHTLY
-            return false
-        #elseif MOZ_CHANNEL_FENNEC
             return true
-        #elseif MOZ_CHANNEL_AURORA
+        #elseif MOZ_CHANNEL_FENNEC
             return true
         #else
             return true

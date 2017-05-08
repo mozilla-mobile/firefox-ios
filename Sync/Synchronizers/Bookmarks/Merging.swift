@@ -80,7 +80,7 @@ open class BookmarksMergeError: MaybeErrorType {
     }
 
     open var description: String {
-        return "Merge error: \(self.error)"
+        return "Merge error: \(self.error ??? "nil")"
     }
 }
 

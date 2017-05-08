@@ -58,9 +58,10 @@ class TestBrowserDB: XCTestCase {
 
     func testMovesDB() {
         let db = BrowserDB(filename: "foo.db", files: self.files)
+        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
         XCTAssertTrue(db.createOrUpdate(BrowserTable()) == .success)
 
-        db.run("CREATE TABLE foo (bar TEXT)").value      // Just so we have writes in the WAL.
+        db.run("CREATE TABLE foo (bar TEXT)").succeeded() // Just so we have writes in the WAL.
 
         XCTAssertTrue(files.exists("foo.db"))
         XCTAssertTrue(files.exists("foo.db-shm"))
@@ -84,7 +85,7 @@ class TestBrowserDB: XCTestCase {
         // Our current observation is that closing the DB deletes the .shm file and also
         // checkpoints the WAL.
         XCTAssertFalse(db.createOrUpdate(MockFailingTable()) == .success)
-        db.run("CREATE TABLE foo (bar TEXT)").value      // Just so we have writes in the WAL.
+        db.run("CREATE TABLE foo (bar TEXT)").succeeded() // Just so we have writes in the WAL.
 
         XCTAssertTrue(files.exists("foo.db"))
         XCTAssertTrue(files.exists("foo.db-shm"))

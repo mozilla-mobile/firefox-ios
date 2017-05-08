@@ -67,7 +67,7 @@ class SearchTests: XCTestCase {
         client.query("foo", callback: { response, error in
             withExtendedLifetime(client) {
                 if error != nil {
-                    XCTFail("Error: \(error?.description)")
+                    XCTFail("Error: \(error?.description ?? "nil")")
                 }
 
                 XCTAssertEqual(response![0], "foo")
@@ -83,7 +83,7 @@ class SearchTests: XCTestCase {
         client.query("foo bar", callback: { response, error in
             withExtendedLifetime(client) {
                 if error != nil {
-                    XCTFail("Error: \(error?.description)")
+                    XCTFail("Error: \(error?.description ?? "nil")")
                 }
 
                 XCTAssertEqual(response![0], "foo bar soap")

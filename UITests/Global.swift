@@ -195,7 +195,7 @@ extension KIFUITestActor {
 
         webView.evaluateJavaScript("typeof KIFHelper") { result, _ in
             if result as! String == "undefined" {
-                let bundle = Bundle(for: NavigationTests.self)
+                let bundle = Bundle(for: BrowserTests.self)
                 let path = bundle.path(forResource: "KIFHelper", ofType: "js")!
                 let source = try! NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue)
                 webView.evaluateJavaScript(source as String, completionHandler: nil)
@@ -282,13 +282,13 @@ class BrowserUtils {
 	class func dismissFirstRunUI() {
 		var error: NSError?
 		
-		let matcher = grey_allOfMatchers([
+		let matcher = grey_allOf([
 			grey_accessibilityID("IntroViewController.startBrowsingButton"), grey_sufficientlyVisible()])
 		
-        EarlGrey.select(elementWithMatcher: matcher!).assert(grey_notNil(), error: &error)
+        EarlGrey.select(elementWithMatcher: matcher).assert(grey_notNil(), error: &error)
 		
 		if error == nil {
-            EarlGrey.select(elementWithMatcher: matcher!).perform(grey_tap())
+            EarlGrey.select(elementWithMatcher: matcher).perform(grey_tap())
 		}
 	}
 
@@ -615,7 +615,7 @@ class HomePageUtils {
     static func homePageSetting(_ tester: KIFUITestActor) -> String? {
         let view = tester.waitForView(withAccessibilityIdentifier: "HomePageSettingTextField")
         guard let textField = view as? UITextField else {
-            XCTFail("View is not a textField: view is \(view)")
+            XCTFail("View is not a textField: view is \(String(describing: view))")
             return nil
         }
         return textField.text

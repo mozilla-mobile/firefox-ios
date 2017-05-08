@@ -180,10 +180,10 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
             clientArgs = nil
         }
 
-        log.debug("Looking for tabs for client with guid: \(guid)")
+        log.debug("Looking for tabs for client with guid: \(guid ?? "nil")")
         return db.runQuery(tabsSQL, args: clientArgs, factory: tabs.factory!) >>== {
             let tabs = $0.asArray()
-            log.debug("Found \(tabs.count) tabs for client with guid: \(guid)")
+            log.debug("Found \(tabs.count) tabs for client with guid: \(guid ?? "nil")")
             return deferMaybe(tabs)
         }
     }
@@ -229,7 +229,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
                     acc[guid]!.append(tab)
                 }
             } else {
-                log.error("Couldn't cast tab \(tab) to RemoteTab.")
+                log.error("Couldn't cast tab (\(tab ??? "nil")) to RemoteTab.")
             }
         }
 

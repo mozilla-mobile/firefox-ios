@@ -170,7 +170,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         // https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/WebChannel.jsm
         let origin = message.frameInfo.securityOrigin
         guard origin.`protocol` == url.scheme && origin.host == url.host && origin.port == (url.port ?? 0) else {
-            print("Ignoring message - \(origin) does not match expected origin \(url.origin)")
+            print("Ignoring message - \(origin) does not match expected origin: \(url.origin ?? "nil")")
             return
         }
 

@@ -10,6 +10,7 @@ import MessageUI
 import WebImage
 import SwiftKeychainWrapper
 import LocalAuthentication
+import Telemetry
 
 private let log = Logger.browserLogger
 
@@ -88,6 +89,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         let profile = getProfile(application)
         appStateStore = AppStateStore(prefs: profile.prefs)
 
+        log.debug("Initializing Sentry…")
+        SentryIntegration.shared.setup(profile: profile)
+
         log.debug("Initializing telemetry…")
         Telemetry.initWithPrefs(profile.prefs)
 
@@ -131,13 +135,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         self.window!.rootViewController = rootViewController
 
-        do {
-            log.debug("Configuring Crash Reporting...")
-            try PLCrashReporter.shared().enableAndReturnError()
-        } catch let error as NSError {
-            log.error("Failed to enable PLCrashReporter - \(error.description)")
-        }
-
         log.debug("Adding observers…")
         NotificationCenter.default.addObserver(forName: NSNotification.Name.FSReadingListAddReadingListItem, object: nil, queue: nil) { (notification) -> Void in
             if let userInfo = notification.userInfo, let url = userInfo["URL"] as? URL {
@@ -179,6 +176,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         let fxaLoginHelper = FxALoginHelper.sharedInstance
         fxaLoginHelper.application(application, didLoadProfile: profile)
+
+        // Run an invalidate when we come back into the app.
+        profile.panelDataObservers.activityStream.invalidate(highlights: true)
 
         log.debug("Done with setting up the application.")
         return true
@@ -266,7 +266,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         }
 
         guard let scheme = components.scheme, urlSchemes.contains(scheme) else {
-            log.warning("Cannot handle \(components.scheme) URL scheme")
+            log.warning("Cannot handle \(components.scheme ?? "nil") URL scheme")
             return false
         }
 
@@ -374,9 +374,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
-        // Workaround for crashing in the background when <select> popovers are visible (rdar://24571325).
-        let jsBlurSelect = "if (document.activeElement && document.activeElement.tagName === 'SELECT') { document.activeElement.blur(); }"
-        tabManager.selectedTab?.webView?.evaluateJavaScript(jsBlurSelect, completionHandler: nil)
         syncOnDidEnterBackground(application: application)
 
         let elapsed = Int(Date().timeIntervalSince1970) - foregroundStartTime
@@ -455,7 +452,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             }
 
             let ping = CorePing(profile: profile)
-            Telemetry.sendPing(ping)
+            Telemetry.send(ping: ping, docType: .core)
         }
     }
 
@@ -493,7 +490,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // Set the UA for WKWebView (via defaults), the favicon fetcher, and the image loader.
         // This only needs to be done once per runtime. Note that we use defaults here that are
         // readable from extensions, so they can just use the cached identifier.
-        let defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier())!
+        let defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
         defaults.register(defaults: ["UserAgent": firefoxUA])
 
         SDWebImageDownloader.shared().setValue(firefoxUA, forHTTPHeaderField: "User-Agent")
@@ -652,8 +649,7 @@ extension AppDelegate {
 
 extension AppDelegate {
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        let apnsToken = deviceToken.hexEncodedString
-        FxALoginHelper.sharedInstance.apnsRegisterDidSucceed(apnsToken: apnsToken)
+        FxALoginHelper.sharedInstance.apnsRegisterDidSucceed(deviceToken)
     }
 
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
@@ -663,11 +659,25 @@ extension AppDelegate {
 
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         log.info("APNS NOTIFICATION \(userInfo)")
-        completionHandler(.noData)
+
+        guard let profile = self.profile else {
+            return completionHandler(.noData)
+        }
+
+        let handler = FxAPushMessageHandler(with: profile)
+        handler.handle(userInfo: userInfo).upon { res in
+            completionHandler(res.isSuccess ? .newData : .noData)
+        }
     }
 
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
         log.info("APNS NOTIFICATION \(userInfo)")
+        guard let profile = self.profile else {
+            return
+        }
+
+        let handler = FxAPushMessageHandler(with: profile)
+        handler.handle(userInfo: userInfo)
     }
 }
 
