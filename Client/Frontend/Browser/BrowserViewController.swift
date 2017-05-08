@@ -17,6 +17,7 @@ import MobileCoreServices
 import WebImage
 import SwiftyJSON
 import Telemetry
+import KSCrash
 
 private let log = Logger.browserLogger
 
@@ -529,7 +530,6 @@ class BrowserViewController: UIViewController {
         }
 
         if hasPendingCrashReport() {
-            purgePendingCrashReport()
             showRestoreTabsAlert()
         } else {
             log.debug("Restoring tabs.")
@@ -549,15 +549,11 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func hasPendingCrashReport() -> Bool {
-        return false
-    }
-
-    fileprivate func purgePendingCrashReport() {
-        // no-op
+        return KSCrash.sharedInstance().crashedLastLaunch
     }
 
     fileprivate func showRestoreTabsAlert() {
-        guard shouldRestoreTabs() else {
+        if !canRestoreTabs() {
             self.tabManager.addTabAndSelect()
             return
         }
@@ -576,17 +572,9 @@ class BrowserViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
 
-    fileprivate func shouldRestoreTabs() -> Bool {
+    fileprivate func canRestoreTabs() -> Bool {
         guard let tabsToRestore = TabManager.tabsToRestore() else { return false }
-        let onlyNoHistoryTabs = !tabsToRestore.every {
-            if $0.sessionData?.urls.count ?? 0 > 1 {
-                if let url = $0.sessionData?.urls.first {
-                    return !url.isAboutHomeURL
-                }
-            }
-            return false
-        }
-        return !onlyNoHistoryTabs && !DebugSettingsBundleOptions.skipSessionRestore
+        return tabsToRestore.count > 0
     }
 
     override func viewDidAppear(_ animated: Bool) {
