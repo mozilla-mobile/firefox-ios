@@ -11,6 +11,14 @@ fileprivate let log = Logger.syncLogger
 
 extension SQLiteHistory: HistoryRecommendations {
     public func getHighlights() -> Deferred<Maybe<Cursor<Site>>> {
+        let scoresProjection = [
+            "CASE WHEN \(AttachedTableHighlights).visitCount IS NULL THEN 0 ELSE \(AttachedTableHighlights).visitCount END AS visit_count_score",
+            "CASE WHEN \(AttachedTableHighlights).is_bookmarked IS NULL THEN 0 ELSE \(AttachedTableHighlights).is_bookmarked END AS is_bookmarked_score",
+            "CASE WHEN \(AttachedTablePageMetadata).title IS NULL THEN 0 ELSE 1 END AS title_score",
+            "CASE WHEN \(AttachedTablePageMetadata).description IS NULL THEN 0 ELSE 1 END AS description_score",
+            "CASE WHEN \(AttachedTablePageMetadata).media_url IS NULL THEN 0 ELSE 1 END AS media_url_score",
+            "CASE WHEN \(ViewHistoryIDsWithWidestFavicons).iconID IS NULL THEN 0 ELSE 5 END AS icon_score"
+        ]
         let highlightsProjection = [
             "historyID",
             "\(AttachedTableHighlights).cache_key AS cache_key",
@@ -30,13 +38,14 @@ extension SQLiteHistory: HistoryRecommendations {
             "provider_name"
         ]
 
-        let allProjection = highlightsProjection + faviconsProjection + metadataProjections
+        let allProjection = scoresProjection + highlightsProjection + faviconsProjection + metadataProjections
         let sql =
         "SELECT \(allProjection.joined(separator: ",")) " +
         "FROM \(AttachedTableHighlights) " +
         "LEFT JOIN \(ViewHistoryIDsWithWidestFavicons) ON \(ViewHistoryIDsWithWidestFavicons).id = historyID " +
         "LEFT OUTER JOIN \(AttachedTablePageMetadata) ON " +
-        "\(AttachedTablePageMetadata).cache_key = \(AttachedTableHighlights).cache_key"
+        "\(AttachedTablePageMetadata).cache_key = \(AttachedTableHighlights).cache_key " +
+        "ORDER BY visit_count_score + is_bookmarked_score + title_score + description_score + media_url_score + icon_score DESC"
 
         return self.db.runQuery(sql, args: nil, factory: SQLiteHistory.iconHistoryMetadataColumnFactory)
     }
