@@ -188,7 +188,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         
         var queryParams: String = ""
         for param in fxaOptions.query! {
-            if (param.key == "service" || param.key == "context") {
+            if param.key == "service" || param.key == "context" {
                 continue
             }
             queryParams = "\(queryParams)&\(param.key)=\(param.value)"
