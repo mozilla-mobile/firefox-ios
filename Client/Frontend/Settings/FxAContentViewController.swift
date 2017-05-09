@@ -37,8 +37,13 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
 
     let profile: Profile
 
-    init(profile: Profile) {
+    init(profile: Profile, fxaOptions: FxALaunchParams? = nil) {
         self.profile = profile
+        
+        if fxaOptions != nil {
+            self.fxaOptions = fxaOptions!
+        }
+        
         super.init(backgroundColor: UIColor(red: 242 / 255.0, green: 242 / 255.0, blue: 242 / 255.0, alpha: 1.0), title: NSAttributedString(string: "Firefox Accounts"))
     }
 
@@ -174,7 +179,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     }
     
     // Configure the FxA signin url based on any passed options.
-    func FxAURLWithOptions(_ fxaOptions: FxALaunchParams, profile: Profile) -> URL {
+    public func FxAURLWithOptions(_ fxaOptions: FxALaunchParams, profile: Profile) -> URL {
         // Append any passed query strings to the signin url. Note that you can't
         // override the service and context params.
         guard fxaOptions.query != nil else {
@@ -186,9 +191,10 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
             if (param.key == "service" || param.key == "context") {
                 continue
             }
-            queryParams = queryParams + "&" + param.key + "=" + param.value
+            queryParams = "\(queryParams)&\(param.key)=\(param.value)"
         }
-        return URL(string: "\(profile.accountConfiguration.signInURL)\(queryParams)")!
+        let newUrl = URL(string: "\(profile.accountConfiguration.signInURL)\(queryParams)")!
+        return newUrl
     }
 
     fileprivate func getJS() -> String {

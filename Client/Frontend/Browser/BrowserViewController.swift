@@ -2922,13 +2922,8 @@ extension BrowserViewController: IntroViewControllerDelegate {
             settingsTableViewController.tabManager = tabManager
             vcToPresent = settingsTableViewController
         } else {
-            let signInVC = FxAContentViewController(profile: profile)
-            signInVC.delegate = self
-            
-            if fxaOptions != nil {
-                signInVC.fxaOptions = fxaOptions!
-            }
-            
+            let signInVC = FxAContentViewController(profile: profile, fxaOptions: fxaOptions)
+            signInVC.delegate = self            
             signInVC.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.cancel, target: self, action: #selector(BrowserViewController.dismissSignInViewController))
             vcToPresent = signInVC
         }
