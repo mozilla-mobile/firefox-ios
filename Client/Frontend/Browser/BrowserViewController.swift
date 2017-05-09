@@ -1333,6 +1333,8 @@ extension BrowserViewController: MenuActionDelegate {
             switch menuAction {
             case .openNewNormalTab:
                 self.openURLInNewTab(nil, isPrivate: false, isPrivileged: true)
+                LeanplumIntegration.sharedInstance.track(eventName: .openedNewTab)
+
             // this is a case that is only available in iOS9
             case .openNewPrivateTab:
                 self.openURLInNewTab(nil, isPrivate: true, isPrivileged: true)
@@ -1621,6 +1623,8 @@ extension BrowserViewController: URLBarDelegate {
             }
             showHomePanelController(inline: false)
         }
+
+        LeanplumIntegration.sharedInstance.track(eventName: .interactWithURLBar)
     }
 
     func urlBarDidLeaveOverlayMode(_ urlBar: URLBarView) {
@@ -1712,6 +1716,7 @@ extension BrowserViewController: TabToolbarDelegate {
             self.removeBookmark(tabState)
         } else {
             self.addBookmark(tabState)
+            LeanplumIntegration.sharedInstance.track(eventName: .savedBookmark)
         }
     }
 
@@ -2314,6 +2319,8 @@ extension BrowserViewController: WKNavigationDelegate {
             } else {
                 UIApplication.shared.openURL(url)
             }
+
+            LeanplumIntegration.sharedInstance.track(eventName: .openedMailtoLink)
             decisionHandler(WKNavigationActionPolicy.cancel)
             return
         }
@@ -3029,7 +3036,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                     }
                     accessDenied.addAction(settingsAction)
                     self.present(accessDenied, animated: true, completion: nil)
-
+                    LeanplumIntegration.sharedInstance.track(eventName: .saveImage)
                 }
             }
             actionSheetController.addAction(saveImageAction)
