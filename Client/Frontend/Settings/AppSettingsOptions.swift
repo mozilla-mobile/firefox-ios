@@ -418,6 +418,16 @@ class EnableBookmarkMergingSetting: HiddenSetting {
     }
 }
 
+class ForceCrashSetting: HiddenSetting {
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: "Debug: Force Crash", attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        fatalError("Crashing on user request")
+    }
+}
+
 // Show the current version of Firefox
 class VersionSetting: Setting {
     unowned let settings: SettingsTableViewController
