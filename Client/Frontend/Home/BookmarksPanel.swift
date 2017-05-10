@@ -287,6 +287,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         switch bookmark {
         case let item as BookmarkItem:
             homePanelDelegate?.homePanel(self, didSelectURLString: item.url, visitType: VisitType.bookmark)
+            LeanplumIntegration.sharedInstance.track(eventName: .openedBookmark)
             break
 
         case let folder as BookmarkFolder:

@@ -418,16 +418,6 @@ class EnableBookmarkMergingSetting: HiddenSetting {
     }
 }
 
-class ForceCrashSetting: HiddenSetting {
-    override var title: NSAttributedString? {
-        return NSAttributedString(string: "Debug: Force Crash", attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        fatalError("Crashing on user request")
-    }
-}
-
 // Show the current version of Firefox
 class VersionSetting: Setting {
     unowned let settings: SettingsTableViewController
@@ -530,7 +520,10 @@ class SendAnonymousUsageDataSetting: BoolSetting {
             prefs: prefs, prefKey: "settings.sendUsageData", defaultValue: true,
             attributedTitleText: NSAttributedString(string: NSLocalizedString("Send Anonymous Usage Data", tableName: "SendAnonymousUsageData", comment: "See http://bit.ly/1SmEXU1")),
             attributedStatusText: NSAttributedString(string: NSLocalizedString("More Info…", tableName: "SendAnonymousUsageData", comment: "See http://bit.ly/1SmEXU1"), attributes: [NSForegroundColorAttributeName: UIConstants.HighlightBlue]),
-            settingDidChange: { AdjustIntegration.setEnabled($0) }
+            settingDidChange: {
+                AdjustIntegration.setEnabled($0)
+                LeanplumIntegration.sharedInstance.setEnabled($0)
+            }
         )
     }
 
@@ -614,6 +607,7 @@ class LoginsSetting: Setting {
     override func onClick(_: UINavigationController?) {
         guard let authInfo = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo() else {
             settings?.navigateToLoginsList()
+            LeanplumIntegration.sharedInstance.track(eventName: .openedLogins)
             return
         }
 
@@ -622,6 +616,7 @@ class LoginsSetting: Setting {
             touchIDReason: AuthenticationStrings.loginsTouchReason,
             success: {
                 self.settings?.navigateToLoginsList()
+                LeanplumIntegration.sharedInstance.track(eventName: .openedLogins)
             },
             cancel: {
                 self.deselectRow()
@@ -632,6 +627,7 @@ class LoginsSetting: Setting {
             })
         } else {
             settings?.navigateToLoginsList()
+            LeanplumIntegration.sharedInstance.track(eventName: .openedLogins)
         }
     }
 }
