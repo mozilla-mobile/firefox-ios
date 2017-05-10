@@ -696,7 +696,7 @@ extension AppDelegate {
 }
 
 struct FxALaunchParams {
-    var query: [String: String]?
+    var query: [String: String]
 }
 
 struct LaunchParams {

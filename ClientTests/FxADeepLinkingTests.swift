@@ -15,33 +15,28 @@ class FxADeepLinkingTests: XCTestCase {
     override func setUp() {
         super.setUp()
         self.profile = MockProfile()
+        self.vc = FxAContentViewController(profile: self.profile)
     }
     
     func testLaunchWithNilOptions() {
-        self.vc = FxAContentViewController(profile: self.profile)
-        self.vc.viewDidLoad()
-        XCTAssertEqual(self.vc.url, self.vc.profile.accountConfiguration.signInURL)
-        
-        self.vc = FxAContentViewController(profile: self.profile, fxaOptions: nil)
-        self.vc.viewDidLoad()
-        XCTAssertEqual(self.vc.url, self.vc.profile.accountConfiguration.signInURL)
+        let testUrl = self.vc.FxAURLWithOptions(nil)
+        // Should use default urls for nil options
+        XCTAssertEqual(testUrl, self.vc.profile.accountConfiguration.signInURL)
     }
     
     func testLaunchWithOptions() {
         let url = URL(string: "firefox://fxa-signin?signin=test&another=one")
         let query = url!.getQuery()
         let fxaOptions = FxALaunchParams(query: query)
-        self.vc = FxAContentViewController(profile: self.profile, fxaOptions: fxaOptions)
-        self.vc.viewDidLoad()
-        XCTAssertEqual(self.vc.url, expectUrl!)
+        let testUrl = self.vc.FxAURLWithOptions(fxaOptions)
+        XCTAssertEqual(testUrl, expectUrl!)
     }
     
     func testDoesntOverrideServiceContext() {
         let url = URL(string: "firefox://fxa-signin?service=asdf&context=123&signin=test&another=one")
         let query = url!.getQuery()
         let fxaOptions = FxALaunchParams(query: query)
-        self.vc = FxAContentViewController(profile: self.profile, fxaOptions: fxaOptions)
-        self.vc.viewDidLoad()
-        XCTAssertEqual(self.vc.url, expectUrl!)
+        let testUrl = self.vc.FxAURLWithOptions(fxaOptions)
+        XCTAssertEqual(testUrl, expectUrl!)
     }
 }
