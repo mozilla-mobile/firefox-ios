@@ -36,4 +36,8 @@ class SentryIntegration {
     var crashedLastLaunch: Bool {
         return KSCrash.sharedInstance().crashedLastLaunch
     }
+
+    func crash() {
+        SentryClient.shared?.crash()
+    }
 }
