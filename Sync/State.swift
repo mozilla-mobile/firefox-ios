@@ -138,6 +138,11 @@ private let PrefClientName = "clientName"
 private let PrefClientGUID = "clientGUID"
 private let PrefEngineConfiguration = "engineConfiguration"
 
+/*
+ * Keys for values that originate from prefs set when the account is first established.
+ */
+public let PrefDeviceRegistration = "deviceRegistration"
+
 class PrefsBackoffStorage: BackoffStorage {
     let prefs: Prefs
     fileprivate let key = "timestamp"
@@ -198,6 +203,7 @@ open class Scratchpad {
         var engineConfiguration: EngineConfiguration?
         var clientGUID: String
         var clientName: String
+        var fxaDeviceId: String
         var prefs: Prefs
 
         init(p: Scratchpad) {
@@ -212,6 +218,7 @@ open class Scratchpad {
             self.engineConfiguration = p.engineConfiguration
             self.clientGUID = p.clientGUID
             self.clientName = p.clientName
+            self.fxaDeviceId = p.fxaDeviceId
         }
 
         open func clearLocalCommands() -> Builder {
@@ -288,6 +295,7 @@ open class Scratchpad {
                     engines: self.engineConfiguration,
                     clientGUID: self.clientGUID,
                     clientName: self.clientName,
+                    fxaDeviceId: self.fxaDeviceId,
                     persistingTo: self.prefs
             )
         }
@@ -340,6 +348,7 @@ open class Scratchpad {
     // What's our client name?
     let clientName: String
     let clientGUID: String
+    let fxaDeviceId: String
 
     // Where do we persist when told?
     let prefs: Prefs
@@ -352,6 +361,7 @@ open class Scratchpad {
          engines: EngineConfiguration?,
          clientGUID: String,
          clientName: String,
+         fxaDeviceId: String,
          persistingTo prefs: Prefs
         ) {
         self.syncKeyBundle = b
@@ -364,6 +374,7 @@ open class Scratchpad {
         self.localCommands = localCommands
         self.clientGUID = clientGUID
         self.clientName = clientName
+        self.fxaDeviceId = fxaDeviceId
     }
 
     // This should never be used in the end; we'll unpickle instead.
@@ -379,6 +390,14 @@ open class Scratchpad {
         self.localCommands = Set()
         self.clientGUID = Bytes.generateGUID()
         self.clientName = DeviceInfo.defaultClientName()
+
+        self.fxaDeviceId = {
+            guard let string = prefs.stringForKey(PrefDeviceRegistration) else {
+                return nil
+            }
+            let json = JSON(parseJSON: string)
+            return json["id"].string
+        }() ?? "unknown_fxaDeviceId"
     }
 
     func freshStartWithGlobal(_ global: Fetched<MetaGlobal>) -> Scratchpad {

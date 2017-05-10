@@ -7,6 +7,7 @@ import Deferred
 import Foundation
 import Shared
 import SwiftyJSON
+import Sync
 import XCGLogger
 
 private let applicationDidRequestUserNotificationPermissionPrefKey = "applicationDidRequestUserNotificationPermissionPrefKey"
@@ -202,8 +203,13 @@ class FxALoginHelper {
         if let profile = self.profile, let account = account {
             profile.setAccount(account)
             // account.advance is idempotent.
-            if  let account = profile.getAccount(), accountVerified! {
-                account.advance()
+            if  let account = profile.getAccount() {
+                account.advance().upon { _ in
+                    let scratchpadPrefs = profile.prefs.branch("sync.scratchpad")
+                    if let deviceRegistration = account.deviceRegistration {
+                        scratchpadPrefs.setString(deviceRegistration.toJSON().stringValue()!, forKey: PrefDeviceRegistration)
+                    }
+                }
             }
         }
         loginDidSucceed()

@@ -5,6 +5,7 @@
 import Foundation
 import Deferred
 import Shared
+import SwiftyJSON
 
 private let log = Logger.syncLogger
 
@@ -63,6 +64,14 @@ open class FxADeviceRegistration: NSObject, NSCoding {
         aCoder.encode(id, forKey: "id")
         aCoder.encode(version, forKey: "version")
         aCoder.encode(NSNumber(value: lastRegistered), forKey: "lastRegistered")
+    }
+
+    open func toJSON() -> JSON {
+        return JSON(object: [
+            "id": id,
+            "version": version,
+            "lastRegistered": lastRegistered,
+        ])
     }
 }
 

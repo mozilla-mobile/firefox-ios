@@ -123,6 +123,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
         
         let json = JSON(object: [
             "id": guid,
+            "fxaDeviceId": self.scratchpad.fxaDeviceId,
             "version": AppInfo.appVersion,
             "protocols": ["1.5"],
             "name": self.scratchpad.clientName,
