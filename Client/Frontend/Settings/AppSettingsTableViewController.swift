@@ -120,7 +120,8 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 YourRightsSetting(),
                 ExportBrowserDataSetting(settings: self),
                 DeleteExportedDataSetting(settings: self),
-                EnableBookmarkMergingSetting(settings: self)
+                EnableBookmarkMergingSetting(settings: self),
+                ForceCrashSetting(settings: self),
             ])]
             
             if profile.hasAccount() {
