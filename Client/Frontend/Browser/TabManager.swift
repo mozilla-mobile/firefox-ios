@@ -450,6 +450,7 @@ class TabManager: NSObject {
             toast = ButtonToast(labelText: String.localizedStringWithFormat(Strings.TabsDeleteAllUndoTitle, numberOfTabs), buttonText: Strings.TabsDeleteAllUndoAction, completion: { buttonPressed in
                 if buttonPressed {
                     self.undoCloseTabs()
+                    self.storeChanges()
                     for delegate in self.delegates {
                         delegate.get()?.tabManagerDidAddTabs(self)
                     }
