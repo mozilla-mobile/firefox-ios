@@ -31,10 +31,19 @@ extension SQLiteHistory: HistoryRecommendations {
         ]
 
         let allProjection = highlightsProjection + faviconsProjection + metadataProjections
+
+        let highlightsHistoryIDs =
+        "SELECT historyID FROM \(AttachedTableHighlights)"
+
+        // Search the history/favicon view with our limited set of highlight IDs
+        // to avoid doing a full table scan on history
+        let faviconSearch =
+        "SELECT * FROM \(ViewHistoryIDsWithWidestFavicons) WHERE id IN (\(highlightsHistoryIDs))"
+
         let sql =
         "SELECT \(allProjection.joined(separator: ",")) " +
         "FROM \(AttachedTableHighlights) " +
-        "LEFT JOIN \(ViewHistoryIDsWithWidestFavicons) ON \(ViewHistoryIDsWithWidestFavicons).id = historyID " +
+        "LEFT JOIN (\(faviconSearch)) AS f1 ON f1.id = historyID " +
         "LEFT OUTER JOIN \(AttachedTablePageMetadata) ON " +
         "\(AttachedTablePageMetadata).cache_key = \(AttachedTableHighlights).cache_key"
 
