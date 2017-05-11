@@ -10,6 +10,7 @@ import Deferred
 // MARK: Ping Centre Client
 public protocol PingCentreClient {
     @discardableResult func sendPing(_ data: [String: Any], validate: Bool) -> Success
+    @discardableResult func sendBatch(_ data: [[String: Any]], validate: Bool) -> Success
 }
 
 /*
@@ -89,27 +90,56 @@ class DefaultPingCentreImpl: PingCentreClient {
     }
 
     public func sendPing(_ data: [String: Any], validate: Bool) -> Success {
-        var payload = data
-        payload["topic"] = topic.name
-        payload["client_id"] = clientID
-
-        return (validate ? validatePayload(payload, schema: topic.schema) : succeed())
-            >>> { return self.sendPayload(payload) }
+        return (validate ? validatePayload(data, schema: topic.schema) : succeed())
+            >>> {
+                do {
+                    let request = try self.singleRequestFor(payload: data)
+                    return self.send(request: request)
+                } catch let e {
+                    return deferMaybe(PingJSONError(error: e))
+                }
+            }
     }
 
-    fileprivate func sendPayload(_ payload: [String: Any]) -> Success {
-        let deferred = Deferred<Maybe<()>>()
+    public func sendBatch(_ data: [[String: Any]], validate: Bool) -> Success {
+        // Walk through all the pings if we need to validate
+        return (validate ? walk(data) { self.validatePayload($0, schema: self.topic.schema) } : succeed())
+            >>> {
+                do {
+                    let request = try self.batchRequestFor(payloads: data)
+                    return self.send(request: request)
+                } catch let e {
+                    return deferMaybe(PingJSONError(error: e))
+                }
+            }
+    }
+
+    fileprivate func singleRequestFor(payload: [String: Any]) throws -> URLRequest {
         var request = URLRequest(url: endpoint.url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        var root = payload
+        root["topic"] = topic.name
+        root["client_id"] = clientID
+        request.httpBody = try JSONSerialization.data(withJSONObject: payload, options: [])
+        return request
+    }
 
-        do {
-            request.httpBody = try JSONSerialization.data(withJSONObject: payload, options: [])
-        } catch let e {
-            deferred.fill(Maybe(failure: PingJSONError(error: e)))
-            return deferred
-        }
+    fileprivate func batchRequestFor(payloads: [[String: Any]]) throws -> URLRequest {
+        var request = URLRequest(url: endpoint.url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let root: [String: Any] = [
+            "topic": self.topic.name,
+            "batch-mode": true,
+            "payloads": payloads
+        ]
+        request.httpBody = try JSONSerialization.data(withJSONObject: root, options: [])
+        return request
+    }
 
+    fileprivate func send(request: URLRequest) -> Success {
+        let deferred = Deferred<Maybe<()>>()
         self.manager.request(request as URLRequestConvertible)
             .validate(statusCode: 200..<300)
             .response(queue: DispatchQueue.global()) { (response) in
