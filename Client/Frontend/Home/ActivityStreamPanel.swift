@@ -357,15 +357,22 @@ extension ActivityStreamPanel {
 // MARK: - Data Management
 extension ActivityStreamPanel: DataObserverDelegate {
     fileprivate func reportMissingData(sites: [Site], source: ASPingSource) {
-        sites.forEach { site in
+        let missingImagePings: [[String: Any]] = sites.flatMap { site in
             if site.metadata?.mediaURL == nil {
-                self.telemetry.reportBadState(badState: .MissingMetadataImage, source: source)
+                return self.telemetry.pingFor(badState: .MissingMetadataImage, source: source)
             }
-
-            if site.icon == nil {
-                self.telemetry.reportBadState(badState: .MissingFavicon, source: source)
-            }
+            return nil
         }
+
+        let missingFaviconPings: [[String: Any]] = sites.flatMap { site in
+            if site.icon == nil {
+                return self.telemetry.pingFor(badState: .MissingFavicon, source: source)
+            }
+            return nil
+        }
+
+        let badPings = missingImagePings + missingFaviconPings
+        self.telemetry.eventsTracker.sendBatch(badPings, validate: true)
     }
 
     // Reloads both highlights and top sites data from their respective caches. Does not invalidate the cache.
@@ -667,14 +674,14 @@ struct ActivityStreamTracker {
         ]
     }
 
-    func reportBadState(badState: ASPingBadStateEvent, source: ASPingSource) {
+    func pingFor(badState: ASPingBadStateEvent, source: ASPingSource) -> [String: Any] {
         var eventPing: [String: Any] = [
             "event": badState.rawValue,
             "page": "NEW_TAB",
             "source": source.rawValue,
         ]
         eventPing.merge(with: baseASPing)
-        eventsTracker.sendPing(eventPing as [String : AnyObject], validate: true)
+        return eventPing
     }
 
     func reportEvent(_ event: ASPingEvent, source: ASPingSource, position: Int, shareProvider: String? = nil) {
