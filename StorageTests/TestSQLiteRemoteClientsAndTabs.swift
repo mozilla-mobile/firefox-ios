@@ -27,10 +27,10 @@ open class MockRemoteClientsAndTabs: RemoteClientsAndTabs {
         let u22 = URL(string: "http://different.com/test2")!
         let tab22 = RemoteTab(clientGUID: client2GUID, URL: u22, title: "Different Test 2", history: [], lastUsed: now + OneHourInMilliseconds, icon: nil)
 
-        let client1 = RemoteClient(guid: client1GUID, name: "Test client 1", modified: (now - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS")
-        let client2 = RemoteClient(guid: client2GUID, name: "Test client 2", modified: (now - OneHourInMilliseconds), type: "desktop", formfactor: "laptop", os: "Darwin")
+        let client1 = RemoteClient(guid: client1GUID, name: "Test client 1", modified: (now - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS", version: "55.0.1")
+        let client2 = RemoteClient(guid: client2GUID, name: "Test client 2", modified: (now - OneHourInMilliseconds), type: "desktop", formfactor: "laptop", os: "Darwin", version: "55.0.1")
 
-        let localClient = RemoteClient(guid: nil, name: "Test local client", modified: (now - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS")
+        let localClient = RemoteClient(guid: nil, name: "Test local client", modified: (now - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS", version: "55.0.1")
         let localUrl1 = URL(string: "http://test.com/testlocal1")!
         let localTab1 = RemoteTab(clientGUID: nil, URL: localUrl1, title: "Local test 1", history: [], lastUsed: (now - OneMinuteInMilliseconds), icon: nil)
         let localUrl2 = URL(string: "http://test.com/testlocal2")!
