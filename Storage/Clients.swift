@@ -12,7 +12,7 @@ public struct RemoteClient: Equatable {
     public let name: String
     public let type: String?
 
-    let version: String?
+    public let version: String?
     let protocols: [String]?
 
     let os: String?
@@ -23,32 +23,32 @@ public struct RemoteClient: Equatable {
 
     // Requires a valid ClientPayload (: CleartextPayloadJSON: JSON).
     public init(json: JSON, modified: Timestamp) {
-        self.guid = json["id"].stringValue
+        self.guid = json["id"].string
         self.modified = modified
         self.name = json["name"].stringValue
-        self.type = json["type"].stringValue
+        self.type = json["type"].string
 
-        self.version = json["version"].stringValue
-        self.protocols = jsonsToStrings(json["protocols"].arrayValue)
-        self.os = json["os"].stringValue
-        self.appPackage = json["appPackage"].stringValue
-        self.application = json["application"].stringValue
-        self.formfactor = json["formfactor"].stringValue
-        self.device = json["device"].stringValue
+        self.version = json["version"].string
+        self.protocols = jsonsToStrings(json["protocols"].array)
+        self.os = json["os"].string
+        self.appPackage = json["appPackage"].string
+        self.application = json["application"].string
+        self.formfactor = json["formfactor"].string
+        self.device = json["device"].string
     }
 
-    public init(guid: GUID?, name: String, modified: Timestamp, type: String?, formfactor: String?, os: String?) {
+    public init(guid: GUID?, name: String, modified: Timestamp, type: String?, formfactor: String?, os: String?, version: String?) {
         self.guid = guid
         self.name = name
         self.modified = modified
         self.type = type
         self.formfactor = formfactor
         self.os = os
+        self.version = version
 
         self.device = nil
         self.appPackage = nil
         self.application = nil
-        self.version = nil
         self.protocols = nil
     }
 }
@@ -60,11 +60,12 @@ public func ==(lhs: RemoteClient, rhs: RemoteClient) -> Bool {
         lhs.modified == rhs.modified &&
         lhs.type == rhs.type &&
         lhs.formfactor == rhs.formfactor &&
-        lhs.os == rhs.os
+        lhs.os == rhs.os &&
+        lhs.version == rhs.version
 }
 
 extension RemoteClient: CustomStringConvertible {
     public var description: String {
-        return "<RemoteClient GUID: \(guid ?? "nil"), name: \(name), modified: \(modified), type: \(type ?? "nil"), formfactor: \(formfactor ?? "nil"), OS: \(os ?? "nil")>"
+        return "<RemoteClient GUID: \(guid ?? "nil"), name: \(name), modified: \(modified), type: \(type ?? "nil"), formfactor: \(formfactor ?? "nil"), OS: \(os ?? "nil"), version: \(version ?? "nil")>"
     }
 }
