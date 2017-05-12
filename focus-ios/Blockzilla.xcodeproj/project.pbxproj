@@ -23,6 +23,8 @@
 		5AFDBB0CF3A9FBA175D2B693 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 427B752EF11959F9C38B12D6 /* AVFoundation.framework */; };
 		6616A36F1BD17EFA00C7E493 /* style.css in Resources */ = {isa = PBXBuildFile; fileRef = 6616A36E1BD17EFA00C7E493 /* style.css */; };
 		A57245250F88CCA4993E55B2 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4C4943B406FCA9B74B4E186 /* CoreText.framework */; };
+		D00A44111EB8F80A00DB0218 /* Telemetry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D00A44101EB8F80A00DB0218 /* Telemetry.framework */; };
+		D0967A811EC50002009D937F /* TelemetryIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0967A801EC50002009D937F /* TelemetryIntegration.swift */; };
 		D30179071BC6CB19009AD388 /* BlockerEnabledDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30179061BC6CB19009AD388 /* BlockerEnabledDetector.swift */; };
 		D30179C31BCC6F65009AD388 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30179C21BCC6F65009AD388 /* AboutViewController.swift */; };
 		D30179C81BCD78E2009AD388 /* SCSiriWaveformView.m in Sources */ = {isa = PBXBuildFile; fileRef = D30179C71BCD78E2009AD388 /* SCSiriWaveformView.m */; };
@@ -178,6 +180,10 @@
 		AAB8E622E994545108473554 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		BC16C41C8D4A74C79A493D42 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		C652A61E213D254A86DF5736 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		D00A440E1EB8F40A00DB0218 /* Cartfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
+		D00A440F1EB8F40A00DB0218 /* Cartfile.resolved */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile.resolved; sourceTree = "<group>"; };
+		D00A44101EB8F80A00DB0218 /* Telemetry.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Telemetry.framework; path = Carthage/Build/iOS/Telemetry.framework; sourceTree = "<group>"; };
+		D0967A801EC50002009D937F /* TelemetryIntegration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TelemetryIntegration.swift; sourceTree = "<group>"; };
 		D30179061BC6CB19009AD388 /* BlockerEnabledDetector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockerEnabledDetector.swift; sourceTree = "<group>"; };
 		D30179C21BCC6F65009AD388 /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		D30179C51BCD78E1009AD388 /* Blockzilla-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Blockzilla-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
@@ -538,6 +544,7 @@
 				4285B8E0671F40DA543A2E58 /* AssetsLibrary.framework in Frameworks */,
 				A57245250F88CCA4993E55B2 /* CoreText.framework in Frameworks */,
 				2B36326E97D2E67E9C684B4B /* CoreTelephony.framework in Frameworks */,
+				D00A44111EB8F80A00DB0218 /* Telemetry.framework in Frameworks */,
 				2825C3665AB14081B262F767 /* SystemConfiguration.framework in Frameworks */,
 				34056D10515852F370C83A01 /* QuartzCore.framework in Frameworks */,
 				5AFDBB0CF3A9FBA175D2B693 /* AVFoundation.framework in Frameworks */,
@@ -652,6 +659,7 @@
 				AAB8E622E994545108473554 /* QuartzCore.framework */,
 				D38D693C1C471A98003EF211 /* SnapKit.framework */,
 				1D051AC1857A0EEEBB833D15 /* SystemConfiguration.framework */,
+				D00A44101EB8F80A00DB0218 /* Telemetry.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -672,6 +680,8 @@
 		E4BF2DCA1BACE8CA00DA9D68 = {
 			isa = PBXGroup;
 			children = (
+				D00A440E1EB8F40A00DB0218 /* Cartfile */,
+				D00A440F1EB8F40A00DB0218 /* Cartfile.resolved */,
 				D3E3CA801DA83FAF0079C94B /* Focus.entitlements */,
 				D3E3CA811DA83FAF0079C94B /* FocusEnterprise.entitlements */,
 				D3C70C711DDFCA4800CEE458 /* Klar.entitlements */,
@@ -745,6 +755,7 @@
 				D33A1AB01BC48FAC0003D929 /* SettingsViewController.swift */,
 				D34E70341DA874AA00BABDCC /* StringExtensions.swift */,
 				E40AFB131DC939FF00DA5651 /* SupportUtils.swift */,
+				D0967A801EC50002009D937F /* TelemetryIntegration.swift */,
 				D30DF93D1DC1634F0064736C /* Toast.swift */,
 				D392881C1BC5CF180016A9A0 /* UIColorExtensions.swift */,
 				D392887E1BC5E47E0016A9A0 /* UIConstants.swift */,
@@ -994,6 +1005,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/AdjustSdk.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Fuzi.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/AutocompleteTextField.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Telemetry.framework",
 			);
 			name = "Run Script (Carthage)";
 			outputPaths = (
@@ -1047,6 +1059,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0967A811EC50002009D937F /* TelemetryIntegration.swift in Sources */,
 				D3E2C8EA1D9F0E6200DEBE3D /* BrowserViewController.swift in Sources */,
 				D3426B031DBAE3800016DA5A /* URLBarContainer.swift in Sources */,
 				D3BFCB3F1BD14F5900AD22D1 /* LocalWebServer.swift in Sources */,

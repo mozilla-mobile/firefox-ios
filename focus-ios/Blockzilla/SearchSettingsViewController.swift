@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Telemetry
 
 protocol SearchSettingsViewControllerDelegate: class {
     func searchSettingsViewController(_ searchSettingsViewController: SearchSettingsViewController, didSelectEngine engine: SearchEngine)
@@ -54,6 +55,8 @@ class SearchSettingsViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         let engine = searchEngineManager.engines[indexPath.item]
         searchEngineManager.activeEngine = engine
+        Telemetry.default.configuration.defaultSearchEngineProvider = engine.name
+        
         _ = navigationController?.popViewController(animated: true)
         delegate?.searchSettingsViewController(self, didSelectEngine: engine)
     }

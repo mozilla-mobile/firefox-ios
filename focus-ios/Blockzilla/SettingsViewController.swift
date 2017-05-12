@@ -5,6 +5,7 @@
 import Foundation
 import SnapKit
 import UIKit
+import Telemetry
 
 class SettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     fileprivate let tableView = UITableView()
@@ -274,6 +275,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         let toggle = toggles.filter { $0.toggle == sender }.first!
 
         func updateSetting() {
+            let telemetryEvent = TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: "setting", value: toggle.setting.rawValue)
+            telemetryEvent.addExtra(key: "to", value: sender.isOn)
+            Telemetry.default.recordEvent(telemetryEvent)
+            
             switch toggle.setting {
             case .safari:
                 AdjustIntegration.track(eventName: sender.isOn ? .enableSafariIntegration : .disableSafariIntegration)

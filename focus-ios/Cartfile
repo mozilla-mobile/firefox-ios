@@ -3,3 +3,4 @@ github "SnapKit/SnapKit" ~> 3.0.1
 github "adjust/ios_sdk" ~> 4.10.2
 github "cezheng/Fuzi" ~> 1.0.1
 github "mozilla-mobile/AutocompleteTextField" "master"
+github "mozilla-mobile/telemetry-ios" "master"
