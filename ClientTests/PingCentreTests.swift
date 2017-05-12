@@ -95,5 +95,10 @@ class PingCentreTests: XCTestCase {
 
         // Double check that we actually sent the successful ping and not the invalid one
         XCTAssertTrue(receivedNetworkRequests.count == 1)
+
+        client.sendBatch([], validate: true).succeeded()
+        
+        // Double check that we didn't send the empty payloads request
+        XCTAssertTrue(receivedNetworkRequests.count == 1)
     }
 }
