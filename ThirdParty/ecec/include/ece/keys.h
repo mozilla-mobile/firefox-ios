@@ -4,13 +4,10 @@
 extern "C" {
 #endif
 
-#include "ece.h"
-
 #include <openssl/ec.h>
 
 #define ECE_AES_KEY_LENGTH 16
 #define ECE_NONCE_LENGTH 12
-#define ECE_TAG_LENGTH 16
 
 #define ECE_WEBPUSH_IKM_LENGTH 32
 
