@@ -191,15 +191,15 @@ extension SyncOperationStatsSession: DictionaryRepresentable {
 public struct SyncPing: TelemetryPing {
     public var payload: JSON
 
-    public init(account: FirefoxAccount?, why: SyncPingReason, syncOperationResult: SyncOperationResult) {
+    public init(account: FirefoxAccount, token: TokenServerToken, why: SyncPingReason, syncOperationResult: SyncOperationResult) {
         var ping: [String: Any] = [
             "version": 1,
             "why": why.rawValue,
-            "uid": account?.uid ?? String(repeating: "0", count: 32)
+            "uid": token.hashedFxAUID,
         ]
-
-        if let deviceID = account?.deviceRegistration?.id {
-            ping["deviceID"] = deviceID
+            
+        if let deviceID = account.deviceRegistration?.id {
+            ping["deviceID"] = (deviceID + token.hashedFxAUID).sha256.hexEncodedString
         }
 
         if let syncStats = syncOperationResult.stats {

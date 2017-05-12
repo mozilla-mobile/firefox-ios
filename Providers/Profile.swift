@@ -659,9 +659,8 @@ open class BrowserProfile: Profile {
 
             syncDisplayState = SyncStatusResolver(engineResults: result.engineResults).resolveResults()
 
-            if canSendUsageData() {
-                let syncPing = SyncPing(account: profile.account, why: .schedule, syncOperationResult: result)
-                Telemetry.send(ping: syncPing, docType: .sync)
+            if let account = profile.account, canSendUsageData() {
+                sendSyncPing(account: account, result: result)
             } else {
                 log.debug("Profile isn't sending usage data. Not sending sync status event.")
             }
@@ -672,6 +671,16 @@ open class BrowserProfile: Profile {
 
         fileprivate func canSendUsageData() -> Bool {
             return profile.prefs.boolForKey("settings.sendUsageData") ?? true
+        }
+
+        private func sendSyncPing(account: FirefoxAccount, result: SyncOperationResult) {
+            account.syncAuthState.token(Date.now(), canBeExpired: false) >>== { tokenResult in
+                let syncPing = SyncPing(account: account,
+                                        token: tokenResult.token,
+                                        why: .schedule,
+                                        syncOperationResult: result)
+                Telemetry.send(ping: syncPing, docType: .sync)
+            }
         }
 
         private func notifySyncing(notification: Notification.Name) {
