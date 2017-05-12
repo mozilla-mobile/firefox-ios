@@ -674,13 +674,8 @@ open class BrowserProfile: Profile {
         }
 
         private func sendSyncPing(account: FirefoxAccount, result: SyncOperationResult) {
-            account.syncAuthState.token(Date.now(), canBeExpired: false) >>== { tokenResult in
-                let syncPing = SyncPing(account: account,
-                                        token: tokenResult.token,
-                                        why: .schedule,
-                                        syncOperationResult: result)
-                Telemetry.send(ping: syncPing, docType: .sync)
-            }
+            SyncPing.from(result: result, account: account, prefs: self.prefs, why: .schedule)
+                >>== { Telemetry.send(ping: $0, docType: .sync) }
         }
 
         private func notifySyncing(notification: Notification.Name) {
