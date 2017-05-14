@@ -20,8 +20,8 @@ for d in firefox-ios-l10n/?? firefox-ios-l10n/??? firefox-ios-l10n/??-??; do
         fastlane snapshot --project Client.xcodeproj --scheme L10nSnapshotTests \
             --skip_open_summary \
             --derived_data_path l10n-screenshots-dd \
-            --erase_simulator --number_of_retries 3 \
-            --devices "iPhone SE" --languages "$lang" \
-            --output_directory "l10n-screenshots/$lang" # > "l10n-screenshots/$lang/snapshot.log" 2>&1
+            --erase_simulator --localize_simulator \
+            --devices "iPhone 5s" --languages "$lang" \
+            --output_directory "l10n-screenshots/$lang" > "l10n-screenshots/$lang/snapshot.log" 2>&1
     fi
 done
