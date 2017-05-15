@@ -139,6 +139,7 @@ public enum SyncStateLabel: String {
     case InitialWithLiveTokenAndInfo = "initialWithLiveTokenAndInfo"
     case ResolveMetaGlobalVersion = "resolveMetaGlobalVersion"
     case ResolveMetaGlobalContent = "resolveMetaGlobalContent"
+    case NeedsFreshMetaGlobal = "needsFreshMetaGlobal"
     case NewMetaGlobal = "newMetaGlobal"
     case HasMetaGlobal = "hasMetaGlobal"
     case NeedsFreshCryptoKeys = "needsFreshCryptoKeys"
@@ -160,6 +161,7 @@ public enum SyncStateLabel: String {
         InitialWithExpiredTokenAndInfo,
         InitialWithLiveToken,
         InitialWithLiveTokenAndInfo,
+        NeedsFreshMetaGlobal,
         ResolveMetaGlobalVersion,
         ResolveMetaGlobalContent,
         NewMetaGlobal,
@@ -682,6 +684,24 @@ open class InitialWithLiveTokenAndInfo: BaseSyncStateWithInfo {
             log.debug("No cached meta/global found. Fetching fresh meta/global.")
         }
 
+        return deferMaybe(NeedsFreshMetaGlobal.fromState(self))
+    }
+}
+
+/*
+ * We've reached NeedsFreshMetaGlobal somehow, but we haven't yet done anything about it
+ * (e.g. fetch a new one with GET /storage/meta/global ).
+ *
+ * If we don't want to hit the network (e.g. from an extension), we should stop if we get to this state.
+ */
+open class NeedsFreshMetaGlobal: BaseSyncStateWithInfo {
+    open override var label: SyncStateLabel { return SyncStateLabel.NeedsFreshMetaGlobal }
+
+    class func fromState(_ state: BaseSyncStateWithInfo) -> NeedsFreshMetaGlobal {
+        return NeedsFreshMetaGlobal(client: state.client, scratchpad: state.scratchpad, token: state.token, info: state.info)
+    }
+
+    override open func advance() -> Deferred<Maybe<SyncState>> {
         // Fetch.
         return self.client.getMetaGlobal().bind { result in
             if let resp = result.successValue {
