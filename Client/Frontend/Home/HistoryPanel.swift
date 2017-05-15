@@ -323,6 +323,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
             cell.imageView!.alpha = 0.5
             cell.selectionStyle = .none
         }
+        cell.accessibilityIdentifier = "HistoryPanel.recentlyClosedCell"
         return cell
     }
 
@@ -332,6 +333,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         cell.detailTextLabel!.text = self.syncDetailText
         cell.imageView!.image = UIImage(named: "synced_devices")
         cell.imageView?.backgroundColor = UIColor.white
+        cell.accessibilityIdentifier = "HistoryPanel.syncedDevicesCell"
         return cell
     }
 
