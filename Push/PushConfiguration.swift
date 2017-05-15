@@ -36,7 +36,8 @@ public protocol PushConfiguration {
 public struct FennecPushConfiguration: PushConfiguration {
     public init() {}
     public let label = PushConfigurationLabel.fennec
-    public let endpointURL = NSURL(string: "https://updates.push.services.mozilla.com/v1/apns/fennec")!
+//    public let endpointURL = NSURL(string: "https://updates.push.services.mozilla.com/v1/apns/fennec")!
+    public let endpointURL = NSURL(string: "https://updates-autopush.dev.mozaws.net/v1/apns/dev")!
 }
 
 public struct FennecEnterprisePushConfiguration: PushConfiguration {
