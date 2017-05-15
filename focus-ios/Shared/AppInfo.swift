@@ -47,5 +47,7 @@ class AppInfo {
         return Bundle.main.preferredLocalizations.first!
     }
 
-    static let config: AppConfig = AppInfo.productName.contains("Focus") ? FocusAppConfig() : KlarAppConfig()
+    static let isKlar: Bool = AppInfo.productName.contains("Klar")
+    
+    static let config: AppConfig = AppInfo.isKlar ? KlarAppConfig() : FocusAppConfig()
 }

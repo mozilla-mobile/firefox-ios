@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Set up Telemetry
         let telemetryConfig = Telemetry.default.configuration
-        telemetryConfig.appName = AppInfo.productName.contains("Focus") ? "Focus" : "Klar"
+        telemetryConfig.appName = AppInfo.isKlar ? "Klar" : "Focus"
         telemetryConfig.userDefaultsSuiteName = AppInfo.sharedContainerIdentifier
 
         // Since Focus always clears the caches directory and Telemetry files are
