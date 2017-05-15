@@ -10,14 +10,4 @@ class L10nPermissionStringsSnapshotTests: L10nBaseSnapshotTests {
         snapshot("15LocationDialog-01")
         loadWebPage(url: "http://people.mozilla.org/~sarentz/fxios/testpages/index.html", waitForOtherElementWithAriaLabel: "body")
     }
-
-    func testNSPhotoLibraryUsageDescription() {
-        addUIInterruptionMonitor(withDescription: "Permission Alert") { (alert) -> Bool in
-            alert.buttons.element(boundBy: 0).tap()
-            return true
-        }
-        loadWebPage(url: "http://people.mozilla.org/~sarentz/fxios/testpages/mediaAccess.html", waitForOtherElementWithAriaLabel: "body")
-        XCUIApplication().webViews.element(boundBy: 0).buttons["submitCameraUpload"].tap()
-        XCUIApplication().tables.staticTexts.element(boundBy: 0).tap() // Photo Library is the first cell
-    }
 }
