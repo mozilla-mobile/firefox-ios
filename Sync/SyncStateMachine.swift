@@ -73,10 +73,20 @@ open class SyncStateMachine {
     var stateLabelsSeen = [SyncStateLabel: Bool]()
     var stateLabelSequence = [SyncStateLabel]()
 
+    let stateLabelsIncluded: Set<SyncStateLabel>
+
     let scratchpadPrefs: Prefs
 
-    public init(prefs: Prefs) {
+    public convenience init(prefs: Prefs, optimistic: Bool = false) {
+        let included = optimistic ?
+            SyncStateLabel.optimisticValues :
+            SyncStateLabel.allValues
+        self.init(prefs: prefs, includedStates: included)
+    }
+
+    public init(prefs: Prefs, includedStates labels: [SyncStateLabel]) {
         self.scratchpadPrefs = prefs.branch("scratchpad")
+        self.stateLabelsIncluded = Set(labels)
     }
 
     open class func clearStateFromPrefs(_ prefs: Prefs) {
@@ -100,6 +110,10 @@ open class SyncStateMachine {
         // Cycles are not necessarily a problem, but seeing the same (recoverable) error condition is a problem.
         if state is RecoverableSyncState && labelAlreadySeen {
             return deferMaybe(StateMachineCycleError())
+        }
+
+        guard stateLabelsIncluded.contains(state.label) else {
+            return deferMaybe(ExcludedStateError(state.label))
         }
 
         return state.advance() >>== self.advanceFromState
@@ -180,6 +194,14 @@ public enum SyncStateLabel: String {
         SyncIDChanged,
         RemoteUpgradeRequired,
         ClientUpgradeRequired,
+    ]
+
+    static let optimisticValues: [SyncStateLabel] = [
+        InitialWithLiveToken,
+        InitialWithLiveTokenAndInfo,
+        HasMetaGlobal,
+        HasFreshCryptoKeys,
+        Ready,
     ]
 }
 
@@ -326,6 +348,18 @@ open class InvalidKeysError: SyncError {
 
     open var description: String {
         return "Downloaded crypto/keys, but couldn't parse them."
+    }
+}
+
+open class ExcludedStateError: SyncError {
+    let state: SyncStateLabel
+
+    public init(_ state: SyncStateLabel) {
+        self.state = state
+    }
+
+    open var description: String {
+        return "Sync state machine could not reach Ready with only included states"
     }
 }
 
