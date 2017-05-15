@@ -67,7 +67,7 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
         snapshot("06PanelsEmptyState-01")
         app.buttons["HomePanels.History"].tap()
         snapshot("06PanelsEmptyState-02")
-        app.buttons["HistoryPanel.syncedTabsButton"].tap()
+        app.cells["HistoryPanel.syncedDevicesCell"].tap()
         snapshot("06PanelsEmptyState-03")
         app.buttons["HomePanels.ReadingList"].tap()
         snapshot("06PanelsEmptyState-04")
