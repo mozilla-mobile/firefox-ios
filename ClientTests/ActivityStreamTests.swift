@@ -223,6 +223,11 @@ class MockPingClient: PingCentreClient {
         pingsReceived.append(data)
         return succeed()
     }
+    
+    public func sendBatch(_ data: [[String : Any]], validate: Bool) -> Success {
+        pingsReceived += data
+        return succeed()
+    }
 }
 
 fileprivate class MockRecommender: HistoryRecommendations {
