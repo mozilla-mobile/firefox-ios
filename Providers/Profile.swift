@@ -359,7 +359,9 @@ open class BrowserProfile: Profile {
     // These selectors run on which ever thread sent the notifications (not the main thread)
     @objc
     func onProfileDidFinishSyncing(notification: NSNotification) {
-        history.setTopSitesNeedsInvalidation()
+        if self.app != nil { // Do not run this when we were started from an app extension
+            history.setTopSitesNeedsInvalidation()
+        }
     }
 
     @objc
