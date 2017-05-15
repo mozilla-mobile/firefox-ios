@@ -49,9 +49,10 @@ open class LiveAccountTest: XCTestCase {
                 XCTAssertTrue(json["verified"].bool ?? false)
             }
             let email = json["email"].stringValue
+            let password = json["password"].stringValue
             let emailUTF8 = email.utf8EncodedData
-            let password = email.utf8EncodedData
-            let stretchedPW = FxAClient10.quickStretchPW(emailUTF8, password: password)
+            let passwordUT8 = password.utf8EncodedData
+            let stretchedPW = FxAClient10.quickStretchPW(emailUTF8, password: passwordUT8)
             completion(emailUTF8, stretchedPW)
         } else {
             // This is the standard case: signedInUser.json is {}.

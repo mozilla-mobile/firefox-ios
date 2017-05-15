@@ -29,7 +29,7 @@ class MockSyncAuthState: SyncAuthState {
     }
 
     func token(_ now: Timestamp, canBeExpired: Bool) -> Deferred<Maybe<(token: TokenServerToken, forKey: Data)>> {
-        let token = TokenServerToken(id: "id", key: "key", api_endpoint: serverRoot, uid: UInt64(0),
+        let token = TokenServerToken(id: "id", key: "key", api_endpoint: serverRoot, uid: UInt64(0), hashedFxAUID: "",
             durationInSeconds: UInt64(5 * 60), remoteTimestamp: Timestamp(now - 1))
         return deferMaybe((token, self.kB))
     }
