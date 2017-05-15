@@ -531,7 +531,7 @@ class BrowserViewController: UIViewController {
 
         if hasPendingCrashReport() {
             showRestoreTabsAlert()
-        } else {
+        } else if !AppConstants.IsRunningTest {
             log.debug("Restoring tabs.")
             tabManager.restoreTabs()
             log.debug("Done restoring tabs.")
