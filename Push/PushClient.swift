@@ -28,6 +28,15 @@ private let PushClientUnknownError = NSError(domain: PushClientErrorDomain, code
                                              userInfo: [NSLocalizedDescriptionKey: "Invalid server response"])
 private let log = Logger.browserLogger
 
+/// Bug 1364403 – This is to be put into the push registration
+private let apsEnvironment: [String: Any] = [
+    "mutable-content": 1,
+    "alert": [
+        "title": " ",
+        "body": " "
+    ],
+]
+
 public struct PushRemoteError {
     let code: Int
     let errno: Int
@@ -64,6 +73,7 @@ public enum PushClientError: MaybeErrorType {
 
 public class PushClient {
     let endpointURL: NSURL
+    let isDebugging = true
 
     lazy fileprivate var alamofire: SessionManager = {
         let ua = UserAgent.fxaUserAgent
@@ -74,7 +84,6 @@ public class PushClient {
     public init(endpointURL: NSURL) {
         self.endpointURL = endpointURL
     }
-
 }
 
 public extension PushClient {
@@ -86,8 +95,21 @@ public extension PushClient {
         mutableURLRequest.httpMethod = HTTPMethod.post.rawValue
 
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        let parameters = ["token": apnsToken]
+        let parameters: [String: Any]
+        if isDebugging {
+            parameters = [
+                "token": apnsToken,
+                "aps": apsEnvironment,
+            ]
+        } else {
+            parameters = ["token": apnsToken]
+        }
+
         mutableURLRequest.httpBody = JSON(parameters).stringValue()?.utf8EncodedData
+
+        if isDebugging {
+            log.info("curl -X POST \(registerURL.absoluteString) --data '\(JSON(parameters).stringValue()!)'")
+        }
 
         return send(request: mutableURLRequest) >>== { json in
             guard let response = PushRegistration.from(json: json) else {
