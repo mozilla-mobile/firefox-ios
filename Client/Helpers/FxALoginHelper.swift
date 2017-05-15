@@ -8,6 +8,7 @@ import Foundation
 import Shared
 import SwiftyJSON
 import Sync
+import UserNotifications
 import XCGLogger
 
 private let applicationDidRequestUserNotificationPermissionPrefKey = "applicationDidRequestUserNotificationPermissionPrefKey"
@@ -116,6 +117,19 @@ class FxALoginHelper {
     }
 
     fileprivate func requestUserNotifications(_ application: UIApplication) {
+        if #available(iOS 10, *) {
+            let center = UNUserNotificationCenter.current()
+            return center.requestAuthorization(options: [.alert]) { (granted, error) in
+                guard error == nil else {
+                    return self.application(application, canDisplayUserNotifications: false)
+                }
+                self.application(application, canDisplayUserNotifications: granted)
+            }
+        }
+
+        // This is for iOS 9 and below.
+        // We'll still be using local notifications, i.e. the old behavior,
+        // so we need to keep doing it like this.
         let viewAction = UIMutableUserNotificationAction()
         viewAction.identifier = SentTabAction.view.rawValue
         viewAction.title = Strings.SentTabViewActionTitle
@@ -152,12 +166,20 @@ class FxALoginHelper {
     // Once we have permission from the user to display notifications, we should 
     // try and register for APNS. If not, then start syncing.
     func application(_ application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
+        let types = notificationSettings.types
+        let allowed = types != .none && types.rawValue != 0
+        self.application(application, canDisplayUserNotifications: allowed)
+    }
+
+    func application(_ application: UIApplication, canDisplayUserNotifications allowed: Bool) {
+        guard allowed else {
+            return readyForSyncing()
+        }
+
         // Record that we have asked the user, and they have given an answer.
         profile?.prefs.setBool(true, forKey: applicationDidRequestUserNotificationPermissionPrefKey)
 
-        let types = notificationSettings.types
-
-        guard types != .none && types.rawValue != 0 else {
+        guard #available(iOS 10, *) else {
             return readyForSyncing()
         }
 
