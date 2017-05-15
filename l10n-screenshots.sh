@@ -12,8 +12,12 @@ fi
 
 mkdir l10n-screenshots
 
-for d in firefox-ios-l10n/?? firefox-ios-l10n/??? firefox-ios-l10n/??-??; do
-    lang=$(basename $d)
+LOCALES=$*
+if [ $# -eq 0 ]; then
+  LOCALES="af ar ast az bg bn br bs ca cs cy da de dsb el en-GB en-US eo es es-CL es-MX eu fa fr ga-IE gd gl he hi-IN hsb hu hy-AM id is it ja kab kk km kn ko lo lt lv ml ms my nb-NO ne-NP nl nn-NO or pa-IN pl pt-BR pt-PT rm ro ru ses si sk sl sq sv-SE te th tl tn tr uk ur uz zh-CN zh-TW"
+fi
+
+for lang in $LOCALES; do
     echo "$(date) Snapshotting $lang"
     mkdir "l10n-screenshots/$lang"
     fastlane snapshot --project Client.xcodeproj --scheme L10nSnapshotTests \
