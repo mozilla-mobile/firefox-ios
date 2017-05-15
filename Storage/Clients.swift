@@ -11,11 +11,11 @@ public struct RemoteClient: Equatable {
 
     public let name: String
     public let type: String?
-
+    public let os: String?
     public let version: String?
+    
     let protocols: [String]?
 
-    let os: String?
     let appPackage: String?
     let application: String?
     let formfactor: String?

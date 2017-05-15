@@ -5,6 +5,7 @@
 import Foundation
 import Shared
 import Account
+import Storage
 import SwiftyJSON
 import Telemetry
 import Deferred
@@ -202,15 +203,23 @@ public enum SyncPingError: MaybeErrorType {
 public struct SyncPing: TelemetryPing {
     public private(set) var payload: JSON
 
-    public static func from(result: SyncOperationResult, account: FirefoxAccount, prefs: Prefs, why: SyncPingReason) -> Deferred<Maybe<SyncPing>> {
-        // Grab our token so we can use the hashed_fxa_uid and clientGUID from our scratchpad for 
+    public static func from(result: SyncOperationResult,
+                            account: FirefoxAccount,
+                            remoteClientsAndTabs: RemoteClientsAndTabs,
+                            prefs: Prefs,
+                            why: SyncPingReason) -> Deferred<Maybe<SyncPing>> {
+
+
+
+
+        // Grab our token so we can use the hashed_fxa_uid and clientGUID from our scratchpad for
         // our ping's identifiers
         return account.syncAuthState.token(Date.now(), canBeExpired: false) >>== { (token, kB) in
             let scratchpadPrefs = prefs.branch("sync.scratchpad")
             guard let scratchpad = Scratchpad.restoreFromPrefs(scratchpadPrefs, syncKeyBundle: KeyBundle.fromKB(kB)) else {
                 return deferMaybe(SyncPingError.failedToRestoreScratchpad)
             }
-            
+
             var ping: [String: Any] = [
                 "version": 1,
                 "why": why.rawValue,
@@ -229,6 +238,25 @@ public struct SyncPing: TelemetryPing {
 
             return deferMaybe(SyncPing(payload: JSON(ping)))
         }
+    }
+
+    private static func connectedDevices(fromStorage storage: RemoteClientsAndTabs,
+                                         token: TokenServerToken) -> Deferred<Maybe<[[String: Any]]>> {
+        func dictionaryFrom(client: RemoteClient) -> [String: Any]? {
+            guard let os = client.os,
+                  let version = client.version,
+                  let guid = client.guid else {
+                return nil
+            }
+
+            return [
+                "id": (guid + token.hashedFxAUID).sha256.hexEncodedString,
+                "os": os,
+                "version": version
+            ]
+        }
+        
+        return storage.getClients() >>== { deferMaybe($0.flatMap(dictionaryFrom)) }
     }
 
     private static func enginePingDataFrom(engineResults: EngineResults) -> [[String: Any]] {
