@@ -7,6 +7,7 @@ import Shared
 import Account
 import SwiftyJSON
 import Telemetry
+import Deferred
 
 fileprivate let log = Logger.syncLogger
 
@@ -188,30 +189,46 @@ extension SyncOperationStatsSession: DictionaryRepresentable {
     }
 }
 
-public struct SyncPing: TelemetryPing {
-    public var payload: JSON
+public enum SyncPingError: MaybeErrorType {
+    case failedToRestoreScratchpad
 
-    public init(account: FirefoxAccount?, why: SyncPingReason, syncOperationResult: SyncOperationResult) {
-        var ping: [String: Any] = [
-            "version": 1,
-            "why": why.rawValue,
-            "uid": account?.uid ?? String(repeating: "0", count: 32)
-        ]
-
-        if let deviceID = account?.deviceRegistration?.id {
-            ping["deviceID"] = deviceID
+    public var description: String {
+        switch self {
+        case .failedToRestoreScratchpad: return "Failed to restore Scratchpad from prefs"
         }
+    }
+}
 
-        if let syncStats = syncOperationResult.stats {
-            var singleSync = syncStats.asDictionary()
-            if let engineResults = syncOperationResult.engineResults.successValue {
-                singleSync["engines"] = SyncPing.enginePingDataFrom(engineResults: engineResults)
+public struct SyncPing: TelemetryPing {
+    public private(set) var payload: JSON
+
+    public static func from(result: SyncOperationResult, account: FirefoxAccount, prefs: Prefs, why: SyncPingReason) -> Deferred<Maybe<SyncPing>> {
+        // Grab our token so we can use the hashed_fxa_uid and clientGUID from our scratchpad for 
+        // our ping's identifiers
+        return account.syncAuthState.token(Date.now(), canBeExpired: false) >>== { (token, kB) in
+            let scratchpadPrefs = prefs.branch("sync.scratchpad")
+            guard let scratchpad = Scratchpad.restoreFromPrefs(scratchpadPrefs, syncKeyBundle: KeyBundle.fromKB(kB)) else {
+                return deferMaybe(SyncPingError.failedToRestoreScratchpad)
+            }
+            
+            var ping: [String: Any] = [
+                "version": 1,
+                "why": why.rawValue,
+                "uid": token.hashedFxAUID,
+                "deviceID": (scratchpad.clientGUID + token.hashedFxAUID).sha256.hexEncodedString
+            ]
+
+            if let syncStats = result.stats {
+                var singleSync = syncStats.asDictionary()
+                if let engineResults = result.engineResults.successValue {
+                    singleSync["engines"] = SyncPing.enginePingDataFrom(engineResults: engineResults)
+                }
+
+                ping["syncs"] = [singleSync]
             }
 
-            ping["syncs"] = [singleSync]
+            return deferMaybe(SyncPing(payload: JSON(ping)))
         }
-
-        payload = JSON(ping)
     }
 
     private static func enginePingDataFrom(engineResults: EngineResults) -> [[String: Any]] {
