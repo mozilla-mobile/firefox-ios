@@ -583,6 +583,10 @@ extension MergedSQLiteBookmarks: BookmarkBufferStorage {
         return self.buffer.validate()
     }
 
+    public func repairValidation() -> Deferred<Maybe<[(type: String, ids: [String])]>> {
+        return self.buffer.repairValidation()
+    }
+
     public func getBufferedDeletions() -> Deferred<Maybe<[(GUID, Timestamp)]>> {
         return self.buffer.getBufferedDeletions()
     }
@@ -762,6 +766,25 @@ public enum BufferInconsistency {
         }
     }
 
+    var idsFactory: (SDRow) -> [String] {
+        switch self {
+        case .missingValues:
+            return self.getConcernedIDs(colNames: ["pointee", "pointer"])
+        case .missingStructure:
+            return self.getConcernedIDs(colNames: ["missing", "parent"])
+        case .overlappingStructure:
+            return self.getConcernedIDs(colNames: ["child"])
+        case .parentIDDisagreement:
+            return self.getConcernedIDs(colNames: ["guid", "parentid", "parent", "child"])
+        }
+    }
+
+    private func getConcernedIDs(colNames: [String]) -> ((SDRow) -> [String]) {
+        return { (row: SDRow) in
+             colNames.map({ row[$0] as! String})
+        }
+    }
+
     public static let all: [BufferInconsistency] = [.missingValues, .missingStructure, .overlappingStructure, .parentIDDisagreement]
 }
 
@@ -789,6 +812,19 @@ extension SQLiteBookmarkBufferStorage {
         }
 
         return deferred
+    }
+
+    // XXX I'd rather have this renamed to validate() and the old validate() to isValid().
+    public func repairValidation() -> Deferred<Maybe<[(type: String, ids: [String])]>> {
+        func idsFor(inconsistency inc: BufferInconsistency) -> () -> Deferred<Maybe<(type: String, ids: [String])>> {
+            return {
+                self.db.runQuery(inc.query, args: nil, factory: inc.idsFactory)
+                    >>== { deferMaybe((type: inc.trackingEvent, ids: $0.asArray().reduce([], +))) }
+            }
+        }
+
+        let ops = BufferInconsistency.all.map { idsFor(inconsistency: $0) }
+        return accumulate(ops)
     }
 
     public func getBufferedDeletions() -> Deferred<Maybe<[(GUID, Timestamp)]>> {
