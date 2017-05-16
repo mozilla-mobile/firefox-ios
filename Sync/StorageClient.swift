@@ -14,8 +14,12 @@ private let log = Logger.syncLogger
 
 // Not an error that indicates a server problem, but merely an
 // error that encloses a StorageResponse.
-open class StorageResponseError<T>: MaybeErrorType {
+open class StorageResponseError<T>: MaybeErrorType, SyncPingFailureFormattable {
     open let response: StorageResponse<T>
+
+    open var failureReasonName: SyncPingFailureReasonName {
+        return .httpError
+    }
 
     public init(_ response: StorageResponse<T>) {
         self.response = response
@@ -26,7 +30,11 @@ open class StorageResponseError<T>: MaybeErrorType {
     }
 }
 
-open class RequestError: MaybeErrorType {
+open class RequestError: MaybeErrorType, SyncPingFailureFormattable {
+    open var failureReasonName: SyncPingFailureReasonName {
+        return .httpError
+    }
+
     open var description: String {
         return "Request error."
     }
@@ -65,21 +73,33 @@ open class NotFound<T>: StorageResponseError<T> {
     }
 }
 
-open class RecordParseError: MaybeErrorType {
+open class RecordParseError: MaybeErrorType, SyncPingFailureFormattable {
     open var description: String {
         return "Failed to parse record."
     }
-}
 
-open class MalformedMetaGlobalError: MaybeErrorType {
-    open var description: String {
-        return "Supplied meta/global for upload did not serialize to valid JSON."
+    open var failureReasonName: SyncPingFailureReasonName {
+        return .otherError
     }
 }
 
-open class RecordTooLargeError: MaybeErrorType {
+open class MalformedMetaGlobalError: MaybeErrorType, SyncPingFailureFormattable {
+    open var description: String {
+        return "Supplied meta/global for upload did not serialize to valid JSON."
+    }
+
+    open var failureReasonName: SyncPingFailureReasonName {
+        return .otherError
+    }
+}
+
+open class RecordTooLargeError: MaybeErrorType, SyncPingFailureFormattable {
     open let guid: GUID
     open let size: ByteCount
+
+    open var failureReasonName: SyncPingFailureReasonName {
+        return .otherError
+    }
 
     public init(size: ByteCount, guid: GUID) {
         self.size = size
@@ -97,8 +117,12 @@ open class RecordTooLargeError: MaybeErrorType {
  * If you want to bypass this, remove the backoff from the BackoffStorage that
  * the storage client is using.
  */
-open class ServerInBackoffError: MaybeErrorType {
+open class ServerInBackoffError: MaybeErrorType, SyncPingFailureFormattable {
     fileprivate let until: Timestamp
+
+    open var failureReasonName: SyncPingFailureReasonName {
+        return .otherError
+    }
 
     open var description: String {
         let formatter = DateFormatter()

@@ -300,7 +300,13 @@ open class BaseSyncStateWithInfo: BaseSyncState {
 /*
  * Error types.
  */
-public protocol SyncError: MaybeErrorType {}
+public protocol SyncError: MaybeErrorType, SyncPingFailureFormattable {}
+
+extension SyncError {
+    public var failureReasonName: SyncPingFailureReasonName {
+        return .unexpectedError
+    }
+}
 
 open class UnknownError: SyncError {
     open var description: String {
