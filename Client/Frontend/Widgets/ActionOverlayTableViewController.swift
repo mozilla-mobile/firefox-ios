@@ -165,12 +165,15 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
 }
 
 class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
+    static let Padding: CGFloat = 12
+    static let VerticalPadding: CGFloat = 2
+
     lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontMediumBold
         titleLabel.textColor = ActionOverlayTableViewUX.LabelColor
         titleLabel.textAlignment = .left
-        titleLabel.numberOfLines = 3
+        titleLabel.numberOfLines = 1
         return titleLabel
     }()
 
@@ -197,34 +200,30 @@ class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
 
         layer.shouldRasterize = true
         layer.rasterizationScale = UIScreen.main.scale
-
         isAccessibilityElement = true
 
-        descriptionLabel.numberOfLines = 1
-        titleLabel.numberOfLines = 1
-
         contentView.backgroundColor = UIConstants.PanelBackgroundColor
-
         contentView.addSubview(siteImageView)
-        contentView.addSubview(descriptionLabel)
-        contentView.addSubview(titleLabel)
 
         siteImageView.snp.remakeConstraints { make in
             make.centerY.equalTo(contentView)
-            make.leading.equalTo(contentView).offset(12)
+            make.leading.equalTo(contentView).offset(ActionOverlayTableViewHeader.Padding)
             make.size.equalTo(ActionOverlayTableViewUX.SiteImageViewSize)
         }
 
-        titleLabel.snp.remakeConstraints { make in
-            make.leading.equalTo(siteImageView.snp.trailing).offset(12)
-            make.trailing.equalTo(contentView).inset(12)
-            make.top.equalTo(siteImageView).offset(7)
+        let stackView = UIStackView(arrangedSubviews: [titleLabel, descriptionLabel])
+        stackView.spacing = ActionOverlayTableViewHeader.VerticalPadding
+        stackView.alignment = .leading
+        stackView.axis = .vertical
+
+        contentView.addSubview(stackView)
+
+        stackView.snp.makeConstraints { make in
+            make.leading.equalTo(siteImageView.snp.trailing).offset(ActionOverlayTableViewHeader.Padding)
+            make.trailing.equalTo(contentView).inset(ActionOverlayTableViewHeader.Padding)
+            make.centerY.equalTo(siteImageView.snp.centerY)
         }
 
-        descriptionLabel.snp.remakeConstraints { make in
-            make.leading.equalTo(titleLabel)
-            make.bottom.equalTo(siteImageView).inset(7)
-        }
     }
     
     required init?(coder aDecoder: NSCoder) {
