@@ -73,20 +73,20 @@ open class SyncStateMachine {
     var stateLabelsSeen = [SyncStateLabel: Bool]()
     var stateLabelSequence = [SyncStateLabel]()
 
-    let stateLabelsIncluded: Set<SyncStateLabel>
+    let stateLabelsAllowed: Set<SyncStateLabel>
 
     let scratchpadPrefs: Prefs
 
-    public convenience init(prefs: Prefs, optimistic: Bool = false) {
-        let included = optimistic ?
-            SyncStateLabel.optimisticValues :
-            SyncStateLabel.allValues
-        self.init(prefs: prefs, includedStates: included)
-    }
+    /// Use this set of states to constrain the state machine to making a minimal 
+    /// number of HTTP requests. This is suitable for extension uses.
+    public static let OptimisticStates = Set(SyncStateLabel.optimisticValues)
 
-    public init(prefs: Prefs, includedStates labels: [SyncStateLabel]) {
+    /// The default set of states that the state machine is allowed to use.
+    public static let AllStates = Set(SyncStateLabel.allValues)
+
+    public init(prefs: Prefs, allowingStates labels: Set<SyncStateLabel> = SyncStateMachine.AllStates) {
         self.scratchpadPrefs = prefs.branch("scratchpad")
-        self.stateLabelsIncluded = Set(labels)
+        self.stateLabelsAllowed = labels
     }
 
     open class func clearStateFromPrefs(_ prefs: Prefs) {
@@ -112,8 +112,8 @@ open class SyncStateMachine {
             return deferMaybe(StateMachineCycleError())
         }
 
-        guard stateLabelsIncluded.contains(state.label) else {
-            return deferMaybe(ExcludedStateError(state.label))
+        guard stateLabelsAllowed.contains(state.label) else {
+            return deferMaybe(DisallowedStateError(state.label, allowedStates: stateLabelsAllowed))
         }
 
         return state.advance() >>== self.advanceFromState
@@ -196,6 +196,8 @@ public enum SyncStateLabel: String {
         ClientUpgradeRequired,
     ]
 
+    // This is the list of states that gets us to ready with the minimal 
+    // number of HTTP requests.
     static let optimisticValues: [SyncStateLabel] = [
         InitialWithLiveToken,
         InitialWithLiveTokenAndInfo,
@@ -351,15 +353,17 @@ open class InvalidKeysError: SyncError {
     }
 }
 
-open class ExcludedStateError: SyncError {
+open class DisallowedStateError: SyncError {
     let state: SyncStateLabel
+    let allowedStates: Set<SyncStateLabel>
 
-    public init(_ state: SyncStateLabel) {
+    public init(_ state: SyncStateLabel, allowedStates: Set<SyncStateLabel>) {
         self.state = state
+        self.allowedStates = allowedStates
     }
 
     open var description: String {
-        return "Sync state machine could not reach Ready with only included states"
+        return "Sync state machine reached \(String(describing: state)) state, which is disallowed. Legal states are: \(String(describing: allowedStates))"
     }
 }
 
@@ -712,6 +716,8 @@ open class InitialWithLiveTokenAndInfo: BaseSyncStateWithInfo {
                 // Drop our cached value and fall through; we'll try to fetch, fail, and
                 // go through the usual failure flow.
                 log.warning("Local meta/global fetched at \(global.timestamp) found, but no meta collection on server. Dropping cached meta/global.")
+                // If we bail because we've been overly optimistic, then we nil out the current (broken)
+                // meta/global. Next time around, we end up in the "No cached meta/global found" branch.
                 self.scratchpad = self.scratchpad.evolve().setGlobal(nil).setKeys(nil).build().checkpoint()
             }
         } else {

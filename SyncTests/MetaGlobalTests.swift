@@ -240,13 +240,13 @@ class MetaGlobalTests: XCTestCase {
         storeMetaGlobal(metaGlobal: metaGlobal)
         storeCryptoKeys(keys: cryptoKeys)
 
-        stateMachine = SyncStateMachine(prefs: syncPrefs, optimistic: true)
+        stateMachine = SyncStateMachine(prefs: syncPrefs, allowingStates: SyncStateMachine.OptimisticStates)
 
         let expectation = self.expectation(description: "Waiting on value.")
         stateMachine.toReady(authState).upon { result in
             XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "needsFreshMetaGlobal"])
             XCTAssertNotNil(result.failureValue)
-            if let failure = result.failureValue as? ExcludedStateError {
+            if let failure = result.failureValue as? DisallowedStateError {
                 XCTAssertEqual(failure.state, SyncStateLabel.NeedsFreshMetaGlobal)
             } else {
                 XCTFail("SyncStatus failed, but with a different error")
@@ -260,7 +260,7 @@ class MetaGlobalTests: XCTestCase {
     }
 
     func testHappyOptimisticStateMachine() {
-        // When encountering a valid meta/global and crypto/keys, advance smoothly.
+        // We should be able to quickly progress through a constrained (a.k.a. optimistic) state machine
         let metaGlobal = MetaGlobal(syncID: "id", storageVersion: 5, engines: [String: EngineMeta](), declined: [])
         let cryptoKeys = Keys.random()
         storeMetaGlobal(metaGlobal: metaGlobal)
@@ -277,29 +277,15 @@ class MetaGlobalTests: XCTestCase {
             XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
 
-        let afterFirstSync = Date.now()
-
         // Now, run through the state machine again.  Nothing's changed remotely, so we should advance quickly.
         // We should be able to use this 'optimistic' path in an extension.
-        stateMachine = SyncStateMachine(prefs: syncPrefs, optimistic: true)
+        stateMachine = SyncStateMachine(prefs: syncPrefs, allowingStates: SyncStateMachine.OptimisticStates)
 
         let secondExpectation = self.expectation(description: "Waiting on value.")
 
         stateMachine.toReady(authState).upon { result in
             XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "hasMetaGlobal", "hasFreshCryptoKeys", "ready"])
             XCTAssertNotNil(result.successValue)
-            guard let ready = result.successValue else {
-                return
-            }
-            // And we should have not downloaded a fresh meta/global or crypto/keys.
-            XCTAssertLessThan(ready.scratchpad.global?.timestamp ?? Timestamp.max, afterFirstSync)
-            XCTAssertLessThan(ready.scratchpad.keys?.timestamp ?? Timestamp.max, afterFirstSync)
-
-            // We should not have marked any local engines for reset.
-            XCTAssertEqual(ready.collectionsThatNeedLocalReset(), [])
-
-            XCTAssertTrue(result.isSuccess)
-            XCTAssertNil(result.failureValue)
             secondExpectation.fulfill()
         }
 
