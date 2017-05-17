@@ -281,7 +281,7 @@ class BrowserUtils {
 	
 	class func dismissFirstRunUI() {
 		var error: NSError?
-		
+        
 		let matcher = grey_allOf([
 			grey_accessibilityID("IntroViewController.startBrowsingButton"), grey_sufficientlyVisible()])
 		
