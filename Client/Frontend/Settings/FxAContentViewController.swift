@@ -40,7 +40,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     init(profile: Profile) {
         self.profile = profile
         super.init(backgroundColor: UIColor(red: 242 / 255.0, green: 242 / 255.0, blue: 242 / 255.0, alpha: 1.0), title: NSAttributedString(string: "Firefox Accounts"))
-        NotificationCenter.default.addObserver(self, selector: #selector(FxAContentViewController.SELdidVerify(_:)), name: NotificationFirefoxAccountVerified, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(FxAContentViewController.userDidVerify(_:)), name: NotificationFirefoxAccountVerified, object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -123,7 +123,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         helper.application(app, didReceiveAccountJSON: data)
     }
 
-    @objc fileprivate func SELdidVerify(_ notification: Notification) {
+    @objc fileprivate func userDidVerify(_ notification: Notification) {
         guard let account = profile.getAccount() else {
             return
         }
