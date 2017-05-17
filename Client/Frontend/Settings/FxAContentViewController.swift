@@ -180,7 +180,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
             return profileUrl
         }
         
-        // Only append `sigin`, `entrypoint` and `utm_*` parameters. Note that you can't
+        // Only append `signin`, `entrypoint` and `utm_*` parameters. Note that you can't
         // override the service and context params.
         var params = launchParams.query
         params.removeValue(forKey: "service")
