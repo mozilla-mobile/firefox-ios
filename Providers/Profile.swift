@@ -674,8 +674,11 @@ open class BrowserProfile: Profile {
         }
 
         private func sendSyncPing(account: FirefoxAccount, result: SyncOperationResult) {
-            SyncPing.from(result: result, account: account, prefs: self.prefs, why: .schedule)
-                >>== { Telemetry.send(ping: $0, docType: .sync) }
+            SyncPing.from(result: result,
+                          account: account,
+                          remoteClientsAndTabs: self.profile.remoteClientsAndTabs,
+                          prefs: self.prefs,
+                          why: .schedule) >>== { Telemetry.send(ping: $0, docType: .sync) }
         }
 
         private func notifySyncing(notification: Notification.Name) {
