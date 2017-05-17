@@ -38,6 +38,24 @@ class FeatureSwitchTests: XCTestCase {
 
         XCTAssertEqual(changed, 1, "Users should get and keep the feature if the feature is becoming successful")
     }
+
+    func testUserEnabled() {
+        let prefs = MockProfilePrefs()
+        let featureSwitch = FeatureSwitch(named: "test-user-enabled", allowPercentage: 0, buildChannel: buildChannel)
+        XCTAssertFalse(featureSwitch.isMember(prefs), "The feature should be disabled")
+        featureSwitch.setMembership(true, for: prefs) // enable the feature
+        XCTAssertTrue(featureSwitch.isMember(prefs), "The feature should be enabled")
+        featureSwitch.setMembership(false, for: prefs) // disable the feature
+        XCTAssertFalse(featureSwitch.isMember(prefs), "The feature should be disabled again")
+    }
+
+    func testForceDisabled() {
+        let prefs = MockProfilePrefs()
+        let featureSwitch = FeatureSwitch(named: "test-user-disabled", allowPercentage: 100, buildChannel: buildChannel)
+        XCTAssertTrue(featureSwitch.isMember(prefs), "The feature should be enabled")
+        featureSwitch.setMembership(false, for: prefs) // disable the feature
+        XCTAssertFalse(featureSwitch.isMember(prefs), "The feature should be disabled again")
+    }
 }
 
 extension FeatureSwitchTests {
