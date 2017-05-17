@@ -59,7 +59,7 @@ extension FxAPushMessageHandler {
 
     /// The main entry point to the handler for decrypted messages.
     func handle(message json: JSON) -> Success {
-        if !json.isDictionary() {
+        if !json.isDictionary() || json.isEmpty {
             return handleVerification()
         }
 
@@ -95,8 +95,10 @@ extension FxAPushMessageHandler {
             return succeed()
         }
 
-        // If we're verified, we can start syncing.
-        return account.advance().bind { _ in return succeed() }
+        // Progress through the FxAStateMachine, then explicitly sync.
+        return account.advance().bind { _ in
+            FxALoginHelper.performVerifiedSync(self.profile, account: account)
+        }
     }
 }
 
