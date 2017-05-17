@@ -180,12 +180,14 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
             return profileUrl
         }
         
-        // Append any passed query strings to the signin url. Note that you can't
+        // Only append `sigin`, `entrypoint` and `utm_*` parameters. Note that you can't
         // override the service and context params.
         var params = launchParams.query
         params.removeValue(forKey: "service")
         params.removeValue(forKey: "context")
-        let queryURL = params.map({return "\($0.key)=\($0.value)"}).joined(separator: "&")
+        let queryURL = params.filter { $0.key == "signin" || $0.key == "entrypoint" || $0.key.range(of: "utm_") != nil }.map({
+            return "\($0.key)=\($0.value)"
+        }).joined(separator: "&")
         
         return  URL(string: "\(profileUrl)&\(queryURL)") ?? profileUrl
     }

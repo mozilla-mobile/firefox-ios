@@ -10,7 +10,7 @@ import Shared
 class FxADeepLinkingTests: XCTestCase {
     var profile: MockProfile!
     var vc: FxAContentViewController!
-    var expectUrl = URL(string: "https://accounts.firefox.com/signin?service=sync&context=fx_ios_v1&signin=test&another=one")
+    var expectUrl = URL(string: "https://accounts.firefox.com/signin?service=sync&context=fx_ios_v1&signin=test&utm_source=somesource&entrypoint=one")
     
     override func setUp() {
         super.setUp()
@@ -25,7 +25,7 @@ class FxADeepLinkingTests: XCTestCase {
     }
     
     func testLaunchWithOptions() {
-        let url = URL(string: "firefox://fxa-signin?signin=test&another=one")
+        let url = URL(string: "firefox://fxa-signin?signin=test&utm_source=somesource&entrypoint=one&ignore=this")
         let query = url!.getQuery()
         let fxaOptions = FxALaunchParams(query: query)
         let testUrl = self.vc.FxAURLWithOptions(fxaOptions)
@@ -33,7 +33,7 @@ class FxADeepLinkingTests: XCTestCase {
     }
     
     func testDoesntOverrideServiceContext() {
-        let url = URL(string: "firefox://fxa-signin?service=asdf&context=123&signin=test&another=one")
+        let url = URL(string: "firefox://fxa-signin?service=asdf&context=123&signin=test&entrypoint=one&utm_source=somesource&ignore=this")
         let query = url!.getQuery()
         let fxaOptions = FxALaunchParams(query: query)
         let testUrl = self.vc.FxAURLWithOptions(fxaOptions)
