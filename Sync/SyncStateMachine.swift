@@ -77,8 +77,10 @@ open class SyncStateMachine {
 
     let scratchpadPrefs: Prefs
 
-    /// Use this set of states to constrain the state machine to making a minimal 
-    /// number of HTTP requests. This is suitable for extension uses.
+    /// Use this set of states to constrain the state machine to attempt the barest 
+    /// minimum to get to Ready. This is suitable for extension uses. If it is not possible,
+    /// then no destructive or expensive actions are taken (e.g. total HTTP requests, 
+    /// duration, records processed, database writes, fsyncs, blanking any local collections)
     public static let OptimisticStates = Set(SyncStateLabel.optimisticValues)
 
     /// The default set of states that the state machine is allowed to use.
@@ -196,8 +198,9 @@ public enum SyncStateLabel: String {
         ClientUpgradeRequired,
     ]
 
-    // This is the list of states that gets us to ready with the minimal 
-    // number of HTTP requests.
+    // This is the list of states needed to get to Ready, or failing.
+    // This is useful in circumstances where it is important to conserve time and/or battery, and failure 
+    // to timely sync is acceptable.
     static let optimisticValues: [SyncStateLabel] = [
         InitialWithLiveToken,
         InitialWithLiveTokenAndInfo,

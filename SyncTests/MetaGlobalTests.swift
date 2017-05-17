@@ -234,7 +234,8 @@ class MetaGlobalTests: XCTestCase {
     }
 
     func testFailingOptimisticStateMachine() {
-        // When encountering a valid meta/global and crypto/keys, advance smoothly.
+        // We test only the optimistic state machine, knowing it will need to go through 
+        // needsFreshMetaGlobal, and fail.
         let metaGlobal = MetaGlobal(syncID: "id", storageVersion: 5, engines: [String: EngineMeta](), declined: [])
         let cryptoKeys = Keys.random()
         storeMetaGlobal(metaGlobal: metaGlobal)
