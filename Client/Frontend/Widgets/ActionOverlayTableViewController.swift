@@ -7,7 +7,8 @@ import Storage
 import SnapKit
 
 private struct ActionOverlayTableViewUX {
-
+    static let MaxWidth: CGFloat = 375
+    static let Padding: CGFloat = 14
     static let HeaderHeight: CGFloat = 74
     static let RowHeight: CGFloat = 56
     static let LabelColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.black : UIColor(rgb: 0x353535)
@@ -35,13 +36,6 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
         return tapRecognizer
     }()
 
-    lazy var visualEffectView: UIVisualEffectView = {
-        let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
-        visualEffectView.frame = self.view.bounds
-        visualEffectView.alpha = 0.90
-        return visualEffectView
-    }()
-
     init(site: Site, actions: [ActionOverlayTableViewAction]) {
         self.site = site
         self.actions = actions
@@ -52,10 +46,14 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = UIColor.clear.withAlphaComponent(0.4)
+        applyBackgroundBlur()
         view.addGestureRecognizer(tapRecognizer)
         view.addSubview(tableView)
         view.accessibilityIdentifier = "Action Overlay"
@@ -73,12 +71,29 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
         tableView.cellLayoutMarginsFollowReadableWidth = false
         tableView.accessibilityIdentifier = "Context Menu"
 
+        let width = min(self.view.frame.size.width, ActionOverlayTableViewUX.MaxWidth) - (ActionOverlayTableViewUX.Padding * 2)
+
         tableView.snp.makeConstraints { make in
             make.center.equalTo(self.view)
-            make.width.equalTo(290)
+            make.width.equalTo(width)
             setHeightConstraint(make)
         }
     }
+
+    private func applyBackgroundBlur() {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        if let screenshot = appDelegate.window?.screenshot() {
+            let blurredImage = screenshot.applyBlur(withRadius: 5,
+                                                    blurType: BOXFILTER,
+                                                    tintColor: UIColor.black.withAlphaComponent(0.2),
+                                                    saturationDeltaFactor: 1.8,
+                                                    maskImage: nil)
+            let imageView = UIImageView(image: blurredImage)
+            view.addSubview(imageView)
+        }
+    }
+
+
 
     fileprivate func setHeightConstraint(_ make: ConstraintMaker) {
         make.height.lessThanOrEqualTo(view.bounds.height)
@@ -173,7 +188,7 @@ class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
         titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontMediumBold
         titleLabel.textColor = ActionOverlayTableViewUX.LabelColor
         titleLabel.textAlignment = .left
-        titleLabel.numberOfLines = 1
+        titleLabel.numberOfLines = 2
         return titleLabel
     }()
 

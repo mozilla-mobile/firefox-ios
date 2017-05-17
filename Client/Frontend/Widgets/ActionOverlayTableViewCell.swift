@@ -60,21 +60,26 @@ class ActionOverlayTableViewCell: UITableViewCell {
         contentView.addSubview(titleLabel)
         contentView.addSubview(statusIcon)
 
-        let separatorLineView = UIView(frame:CGRect(x: 0, y: 0, width: contentView.frame.width, height: 0.25))
-        separatorLineView.backgroundColor = UIColor.gray
+        let separatorLineView = UIView()
+        separatorLineView.backgroundColor = UIColor.lightGray
         contentView.addSubview(separatorLineView)
 
-        selectedOverlay.snp.remakeConstraints { make in
+        separatorLineView.snp.makeConstraints { make in
+            make.leading.top.trailing.equalTo(self)
+            make.height.equalTo(0.25)
+        }
+
+        selectedOverlay.snp.makeConstraints { make in
             make.edges.equalTo(contentView)
         }
 
-        titleLabel.snp.remakeConstraints { make in
+        titleLabel.snp.makeConstraints { make in
             make.leading.equalTo(contentView).offset(12)
             make.trailing.equalTo(statusIcon.snp.leading)
             make.centerY.equalTo(contentView)
         }
 
-        statusIcon.snp.remakeConstraints { make in
+        statusIcon.snp.makeConstraints { make in
             make.size.equalTo(ActionOverlayTableViewCellUX.StatusIconSize)
             make.trailing.equalTo(contentView).inset(12)
             make.centerY.equalTo(contentView)
