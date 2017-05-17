@@ -81,10 +81,28 @@ extension SyncDownloadStats: DictionaryRepresentable {
     }
 }
 
-// TODO(sleroux): Implement various bookmark validation issues we can run into.
-public struct ValidationStats: Stats {
+public struct ValidationStats: Stats, DictionaryRepresentable {
+    let problems: [ValidationProblem]
+    let took: Int64
+
     public func hasData() -> Bool {
-        return false
+        return !problems.isEmpty
+    }
+
+    func asDictionary() -> [String: Any] {
+        return [
+            "problems": problems.map { $0.asDictionary() },
+            "took" : took
+        ]
+    }
+}
+
+public struct ValidationProblem: DictionaryRepresentable {
+    let name: String
+    let count: Int
+
+    func asDictionary() -> [String: Any] {
+        return ["name": name, "count": count]
     }
 }
 
@@ -155,6 +173,10 @@ extension SyncEngineStatsSession: DictionaryRepresentable {
 
         if uploadStats.hasData() {
             dict["outgoing"] = uploadStats.asDictionary()
+        }
+
+        if let validation = self.validationStats, validation.hasData() {
+            dict["validation"] = validation.asDictionary()
         }
 
         return dict

@@ -136,6 +136,8 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
                 if case .completed = result {
                     return buffer.validate().bind { result in
                         if let invalidError = result.failureValue as? BufferInvalidError {
+                            self.statsSession.validationStats = self.validationStatsFrom(error: invalidError)
+
                             log.warning("Buffer inconsistent, starting repair procedure")
                             let repairer = BookmarksRepairRequestor(scratchpad: self.scratchpad, basePrefs: self.basePrefs, remoteClients: remoteClientsAndTabs)
                             return repairer.startRepairs(validationInfo: invalidError.inconsistencies) >>> {
@@ -158,6 +160,11 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
         }
 
         return run
+    }
+
+    private func validationStatsFrom(error: BufferInvalidError) -> ValidationStats {
+        let problems = error.inconsistencies.map { ValidationProblem(name: $0.trackingEvent, count: $1.count) }
+        return ValidationStats(problems: problems, took: error.validationDuration)
     }
 }
 
