@@ -129,7 +129,7 @@ class BookmarksRepairRequestor {
      *
      * - returns: true if a repair was started and false otherwise.
      */
-    func startRepairs(validationInfo: [(type: String, ids: [String])], flowID: String = Bytes.generateGUID()) -> Deferred<Maybe<Bool>> {
+    func startRepairs(validationInfo: [BufferInconsistency: [GUID]], flowID: String = Bytes.generateGUID()) -> Deferred<Maybe<Bool>> {
         guard self.currentState == .notRepairing else {
             log.info("Can't start a repair - repair with ID \(self.flowID) is already in progress")
             return deferMaybe(false)
@@ -450,8 +450,8 @@ class BookmarksRepairRequestor {
         return false
     }
 
-    private func getProblemIDs(_ validations: [(type: String, ids: [String])]) -> [String] {
-        return Array(Set<String>(validations.flatMap { $0.ids.map { BookmarkRoots.translateOutgoingRootGUID($0) } }))
+    private func getProblemIDs(_ validations: [BufferInconsistency: [GUID]]) -> [GUID] {
+        return validations.reduce([]) { acc, pair in acc + pair.value }
     }
 
     private func anyClientsRepairing(flowID: String? = nil) -> Deferred<Maybe<Bool>> {

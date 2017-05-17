@@ -134,18 +134,17 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
             run = doMirror >>== { result in
                 // Only bother trying to sync if the mirror operation wasn't interrupted or partial.
                 if case .completed = result {
-                    return buffer.repairValidation() >>== { validationInfo in
-                        let problemCount = validationInfo.flatMap { $0.ids }.count
-                        if problemCount == 0 {
-                            let applier = MergeApplier(buffer: buffer, storage: storage, client: storer, statsSession: self.statsSession, greenLight: greenLight)
-                            return applier.go()
-                        } else {
+                    return buffer.validate().bind { result in
+                        if let invalidError = result.failureValue as? BufferInvalidError {
                             log.warning("Buffer inconsistent, starting repair procedure")
                             let repairer = BookmarksRepairRequestor(scratchpad: self.scratchpad, basePrefs: self.basePrefs, remoteClients: remoteClientsAndTabs)
-                            return repairer.startRepairs(validationInfo: validationInfo) >>> {
-                                deferMaybe(BookmarksDatabaseError(description: "Buffer inconsistent, repair started."))
+                            return repairer.startRepairs(validationInfo: invalidError.inconsistencies) >>> {
+                                deferMaybe(invalidError)
                             }
                         }
+                        
+                        let applier = MergeApplier(buffer: buffer, storage: storage, client: storer, statsSession: self.statsSession, greenLight: greenLight)
+                        return applier.go()
                     }
                 }
                 return deferMaybe(result)
