@@ -118,17 +118,19 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
 
         statsSession.start()
         if !AppConstants.shouldMergeBookmarks {
-            if case .release = AppConstants.BuildChannel {
-                // On release, just mirror; don't validate.
-                run = doMirror
-            } else {
-                run = doMirror >>== effect({ result in
-                    // Just validate to report statistics.
-                    if case .completed = result {
-                        log.debug("Validating completed buffer download.")
-                        let _ = buffer.validate()
+            run = doMirror >>== { result in
+                // Just validate to report statistics.
+                if case .completed = result {
+                    log.debug("Validating completed buffer download.")
+                    return buffer.validate().bind { validationResult in
+                        if let invalidError = validationResult.failureValue as? BufferInvalidError {
+                            self.statsSession.validationStats = self.validationStatsFrom(error: invalidError)
+                        }
+                        return deferMaybe(result)
                     }
-                })
+                }
+
+                return deferMaybe(result)
             }
         } else {
             run = doMirror >>== { result in
