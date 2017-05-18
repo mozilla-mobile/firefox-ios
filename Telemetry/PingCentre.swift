@@ -126,7 +126,7 @@ class DefaultPingCentreImpl: PingCentreClient {
         var root = payload
         root["topic"] = topic.name
         root["client_id"] = clientID
-        request.httpBody = try JSONSerialization.data(withJSONObject: payload, options: [])
+        request.httpBody = try JSONSerialization.data(withJSONObject: root, options: [])
         return request
     }
 
