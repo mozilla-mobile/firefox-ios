@@ -583,10 +583,6 @@ extension MergedSQLiteBookmarks: BookmarkBufferStorage {
         return self.buffer.validate()
     }
 
-    public func repairValidation() -> Deferred<Maybe<[(type: String, ids: [String])]>> {
-        return self.buffer.repairValidation()
-    }
-
     public func getBufferedDeletions() -> Deferred<Maybe<[(GUID, Timestamp)]>> {
         return self.buffer.getBufferedDeletions()
     }
@@ -788,43 +784,38 @@ public enum BufferInconsistency {
     public static let all: [BufferInconsistency] = [.missingValues, .missingStructure, .overlappingStructure, .parentIDDisagreement]
 }
 
-open class BookmarksDatabaseError: DatabaseError {}
+public struct BufferInvalidError: MaybeErrorType {
+    public let description = "Bookmarks buffer contains invalid data"
+    public let inconsistencies: [BufferInconsistency: [GUID]]
+    public let validationDuration: Int64
+
+    public init(inconsistencies: [BufferInconsistency: [GUID]], validationDuration: Int64) {
+        self.inconsistencies = inconsistencies
+        self.validationDuration = validationDuration
+    }
+}
 
 extension SQLiteBookmarkBufferStorage {
     public func validate() -> Success {
-        let notificationCenter = NotificationCenter.default
-
-        var validations: [String: Bool] = [:]
-        let deferred = BufferInconsistency.all.map { inc in
-            self.db.queryReturnsNoResults(inc.query) >>== { yes in
-                validations[inc.trackingEvent] = !yes
-                guard yes else {
-                    let message = inc.description
-                    log.warning(message)
-                    return deferMaybe(BookmarksDatabaseError(description: message))
-                }
-                return succeed()
-            }
-        }.allSucceed()
-
-        deferred.upon { _ in
-            notificationCenter.post(name: NotificationBookmarkBufferValidated, object: Box(validations))
-        }
-
-        return deferred
-    }
-
-    // XXX I'd rather have this renamed to validate() and the old validate() to isValid().
-    public func repairValidation() -> Deferred<Maybe<[(type: String, ids: [String])]>> {
-        func idsFor(inconsistency inc: BufferInconsistency) -> () -> Deferred<Maybe<(type: String, ids: [String])>> {
+        func idsFor(inconsistency inc: BufferInconsistency) -> () -> Deferred<Maybe<(type: BufferInconsistency, ids: [String])>> {
             return {
                 self.db.runQuery(inc.query, args: nil, factory: inc.idsFactory)
-                    >>== { deferMaybe((type: inc.trackingEvent, ids: $0.asArray().reduce([], +))) }
+                    >>== { deferMaybe((type: inc, ids: $0.asArray().reduce([], +))) }
             }
         }
 
+        let start = Date.now()
         let ops = BufferInconsistency.all.map { idsFor(inconsistency: $0) }
-        return accumulate(ops)
+        return accumulate(ops) >>== { results in
+            var inconsistencies = [BufferInconsistency: [GUID]]()
+            results.forEach { type, ids in
+                guard !ids.isEmpty else { return }
+                inconsistencies[type] = ids
+            }
+
+            return inconsistencies.isEmpty ? succeed() :
+                deferMaybe(BufferInvalidError(inconsistencies: inconsistencies, validationDuration: Int64(Date.now() - start)))
+        }
     }
 
     public func getBufferedDeletions() -> Deferred<Maybe<[(GUID, Timestamp)]>> {
