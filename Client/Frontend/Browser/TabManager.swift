@@ -454,6 +454,8 @@ class TabManager: NSObject {
                     for delegate in self.delegates {
                         delegate.get()?.tabManagerDidAddTabs(self)
                     }
+                } else {
+                    self.showFocusPromoToast()
                 }
                 self.eraseUndoCache()
             })
@@ -461,7 +463,36 @@ class TabManager: NSObject {
 
         delegates.forEach { $0.get()?.tabManagerDidRemoveAllTabs(self, toast: toast) }
     }
-    
+
+    func showFocusPromoToast() {
+        if !LeanplumIntegration.sharedInstance.shouldShowFocusUI() {
+            return
+        }
+
+        guard let templateDict = LeanplumIntegration.sharedInstance.getTemplateDictionary(),
+              let labelText = templateDict["Template Text"],
+              let buttonText = templateDict["Button Text"],
+              let colorText = templateDict["Hex Color String"],
+              let deepLink = templateDict["Deep Link"] else {
+            return
+        }
+
+        let toast = LeanplumPromoButtonToast(labelText: labelText, buttonText: buttonText, colorText: colorText, completion: { buttonPressed in
+            guard let url = URL(string: deepLink) else {
+                return
+            }
+
+            if UIApplication.shared.canOpenURL(url) && buttonPressed {
+                LeanplumIntegration.sharedInstance.track(eventName: .userTappedFocusPromoButton)
+                UIApplication.shared.openURL(url)
+            }
+
+            LeanplumIntegration.sharedInstance.track(eventName: .focusPromoImpression, withParameters: ["button name": buttonText as AnyObject])
+        })
+
+        delegates.forEach { $0.get()?.tabManagerDidRemoveAllTabs(self, toast: toast) }
+    }
+
     func undoCloseTabs() {
         guard let tempTabs = self.tempTabs, tempTabs.count > 0 else {
             return
