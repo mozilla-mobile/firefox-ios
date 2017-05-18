@@ -18,10 +18,16 @@ if [ "$BUDDYBUILD_SCHEME" = FirefoxBeta ]; then
   # Add badge to app icon.
   CF_BUNDLE_SHORT_VERSION_STRING=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" Client/Info.plist)
   badge --no_badge --shield_no_resize --shield "$CF_BUNDLE_SHORT_VERSION_STRING-Build%20$BUDDYBUILD_BUILD_NUMBER-blue"
+fi
 
+# Only localize the v8.x branch
+if [ "$BUDDYBUILD_BRANCH" == "v8.x" ]; then
   setup_virtualenv
-  ./scripts/import-locales.sh
-elif [ "$BUDDYBUILD_SCHEME" = Firefox ]; then
-  setup_virtualenv
-  ./scripts/import-locales.sh --release
+  if [ "$BUDDYBUILD_SCHEME" = Firefox ]; then
+    # On release we only include finished locales
+    ./scripts/import-locales.sh --release
+  else
+    # On all other builds we include all available locales
+    ./scripts/import-locales.sh
+  fi
 fi
