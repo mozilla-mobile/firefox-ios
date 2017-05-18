@@ -73,10 +73,22 @@ open class SyncStateMachine {
     var stateLabelsSeen = [SyncStateLabel: Bool]()
     var stateLabelSequence = [SyncStateLabel]()
 
+    let stateLabelsAllowed: Set<SyncStateLabel>
+
     let scratchpadPrefs: Prefs
 
-    public init(prefs: Prefs) {
+    /// Use this set of states to constrain the state machine to attempt the barest 
+    /// minimum to get to Ready. This is suitable for extension uses. If it is not possible,
+    /// then no destructive or expensive actions are taken (e.g. total HTTP requests, 
+    /// duration, records processed, database writes, fsyncs, blanking any local collections)
+    public static let OptimisticStates = Set(SyncStateLabel.optimisticValues)
+
+    /// The default set of states that the state machine is allowed to use.
+    public static let AllStates = Set(SyncStateLabel.allValues)
+
+    public init(prefs: Prefs, allowingStates labels: Set<SyncStateLabel> = SyncStateMachine.AllStates) {
         self.scratchpadPrefs = prefs.branch("scratchpad")
+        self.stateLabelsAllowed = labels
     }
 
     open class func clearStateFromPrefs(_ prefs: Prefs) {
@@ -100,6 +112,10 @@ open class SyncStateMachine {
         // Cycles are not necessarily a problem, but seeing the same (recoverable) error condition is a problem.
         if state is RecoverableSyncState && labelAlreadySeen {
             return deferMaybe(StateMachineCycleError())
+        }
+
+        guard stateLabelsAllowed.contains(state.label) else {
+            return deferMaybe(DisallowedStateError(state.label, allowedStates: stateLabelsAllowed))
         }
 
         return state.advance() >>== self.advanceFromState
@@ -139,6 +155,7 @@ public enum SyncStateLabel: String {
     case InitialWithLiveTokenAndInfo = "initialWithLiveTokenAndInfo"
     case ResolveMetaGlobalVersion = "resolveMetaGlobalVersion"
     case ResolveMetaGlobalContent = "resolveMetaGlobalContent"
+    case NeedsFreshMetaGlobal = "needsFreshMetaGlobal"
     case NewMetaGlobal = "newMetaGlobal"
     case HasMetaGlobal = "hasMetaGlobal"
     case NeedsFreshCryptoKeys = "needsFreshCryptoKeys"
@@ -160,6 +177,7 @@ public enum SyncStateLabel: String {
         InitialWithExpiredTokenAndInfo,
         InitialWithLiveToken,
         InitialWithLiveTokenAndInfo,
+        NeedsFreshMetaGlobal,
         ResolveMetaGlobalVersion,
         ResolveMetaGlobalContent,
         NewMetaGlobal,
@@ -178,6 +196,17 @@ public enum SyncStateLabel: String {
         SyncIDChanged,
         RemoteUpgradeRequired,
         ClientUpgradeRequired,
+    ]
+
+    // This is the list of states needed to get to Ready, or failing.
+    // This is useful in circumstances where it is important to conserve time and/or battery, and failure 
+    // to timely sync is acceptable.
+    static let optimisticValues: [SyncStateLabel] = [
+        InitialWithLiveToken,
+        InitialWithLiveTokenAndInfo,
+        HasMetaGlobal,
+        HasFreshCryptoKeys,
+        Ready,
     ]
 }
 
@@ -324,6 +353,20 @@ open class InvalidKeysError: SyncError {
 
     open var description: String {
         return "Downloaded crypto/keys, but couldn't parse them."
+    }
+}
+
+open class DisallowedStateError: SyncError {
+    let state: SyncStateLabel
+    let allowedStates: Set<SyncStateLabel>
+
+    public init(_ state: SyncStateLabel, allowedStates: Set<SyncStateLabel>) {
+        self.state = state
+        self.allowedStates = allowedStates
+    }
+
+    open var description: String {
+        return "Sync state machine reached \(String(describing: state)) state, which is disallowed. Legal states are: \(String(describing: allowedStates))"
     }
 }
 
@@ -676,12 +719,32 @@ open class InitialWithLiveTokenAndInfo: BaseSyncStateWithInfo {
                 // Drop our cached value and fall through; we'll try to fetch, fail, and
                 // go through the usual failure flow.
                 log.warning("Local meta/global fetched at \(global.timestamp) found, but no meta collection on server. Dropping cached meta/global.")
+                // If we bail because we've been overly optimistic, then we nil out the current (broken)
+                // meta/global. Next time around, we end up in the "No cached meta/global found" branch.
                 self.scratchpad = self.scratchpad.evolve().setGlobal(nil).setKeys(nil).build().checkpoint()
             }
         } else {
             log.debug("No cached meta/global found. Fetching fresh meta/global.")
         }
 
+        return deferMaybe(NeedsFreshMetaGlobal.fromState(self))
+    }
+}
+
+/*
+ * We've reached NeedsFreshMetaGlobal somehow, but we haven't yet done anything about it
+ * (e.g. fetch a new one with GET /storage/meta/global ).
+ *
+ * If we don't want to hit the network (e.g. from an extension), we should stop if we get to this state.
+ */
+open class NeedsFreshMetaGlobal: BaseSyncStateWithInfo {
+    open override var label: SyncStateLabel { return SyncStateLabel.NeedsFreshMetaGlobal }
+
+    class func fromState(_ state: BaseSyncStateWithInfo) -> NeedsFreshMetaGlobal {
+        return NeedsFreshMetaGlobal(client: state.client, scratchpad: state.scratchpad, token: state.token, info: state.info)
+    }
+
+    override open func advance() -> Deferred<Maybe<SyncState>> {
         // Fetch.
         return self.client.getMetaGlobal().bind { result in
             if let resp = result.successValue {
