@@ -4,7 +4,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-# USAGE: ./resigner.sh IPA_PATH PROFILES_DIR BUNDLE_ID TEAM_ID CERT_NAME
+# USAGE: ./resigner.sh IPA_PATH PROFILES_DIR BUNDLE_ID TEAM_ID CERT_NAME IS_BETA
 
 IPA=$1
 PROFILES_DIR=$2
@@ -48,6 +48,7 @@ function update_app_security_groups {
 function update_extension_entitlements {
   /usr/libexec/PlistBuddy -c "Set application-identifier $TEAM_ID.$BUNDLE_ID.$2" "$1"
   /usr/libexec/PlistBuddy -c "Set com.apple.developer.team-identifier $TEAM_ID" "$1"
+  /usr/libexec/PlistBuddy -c "Delete aps-environment" "$1"
 
   update_app_security_groups "$1"
 
@@ -66,7 +67,6 @@ function update_client_entitlements {
 # 4. Replace the bundle identifier in each Info.plist.
 function replace_bundle_identifiers {
   /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $1" "$2"
-  /usr/libexec/PlistBuddy -c "Set AppIdentifierPrefix $TEAM_ID" "$2"
 }
 
 function replace_shortcut_items {
