@@ -517,6 +517,10 @@ class BrowserViewController: UIViewController {
         }
     }
 
+    // Because crashedLastLaunch is sticky, it does not get reset, we need to remember its
+    // value so that we do not keep asking the user to restore their tabs.
+    var displayedRestoreTabsAlert = false
+
     override func viewWillAppear(_ animated: Bool) {
         log.debug("BVC viewWillAppear.")
         super.viewWillAppear(animated)
@@ -529,7 +533,8 @@ class BrowserViewController: UIViewController {
             self.view.alpha = (profile.prefs.intForKey(IntroViewControllerSeenProfileKey) != nil) ? 1.0 : 0.0
         }
 
-        if hasPendingCrashReport() {
+        if !displayedRestoreTabsAlert && hasPendingCrashReport() {
+            displayedRestoreTabsAlert = true
             showRestoreTabsAlert()
         } else {
             log.debug("Restoring tabs.")
