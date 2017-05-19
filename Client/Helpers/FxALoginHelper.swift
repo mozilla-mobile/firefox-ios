@@ -280,7 +280,7 @@ class FxALoginHelper {
 
     // Class method so as to be callable from the FxAPushMessageHandler, whenever it is dealing with 
     // verification.
-    class func performVerifiedSync(_ profile: Profile, account: FirefoxAccount) -> Success {
+    @discardableResult class func performVerifiedSync(_ profile: Profile, account: FirefoxAccount) -> Success {
         // First we need to associate the fxaDeviceId with sync;
         // We can do this anything after the first time we account.advance()
         // but before the first time we sync.
