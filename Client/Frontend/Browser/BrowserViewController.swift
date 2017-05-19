@@ -1315,6 +1315,59 @@ class BrowserViewController: UIViewController {
         controller.modalPresentationStyle = UIModalPresentationStyle.formSheet
         self.present(controller, animated: true, completion: nil)
     }
+    
+    fileprivate func navigateInTab(tab: Tab, to navigation: WKNavigation? = nil) {
+        tabManager.expireSnackbars()
+
+        guard let webView = tab.webView else {
+            log.warning("Cannot navigate in tab without a webView")
+            return
+        }
+
+        if let url = webView.url, !url.isErrorPageURL && !url.isAboutHomeURL {
+            tab.lastExecutedTime = Date.now()
+            
+            if navigation == nil {
+                log.warning("Implicitly unwrapped optional navigation was nil.")
+            }
+            
+            postLocationChangeNotificationForTab(tab, navigation: navigation)
+            
+            // Fire the readability check. This is here and not in the pageShow event handler in ReaderMode.js anymore
+            // because that event wil not always fire due to unreliable page caching. This will either let us know that
+            // the currently loaded page can be turned into reading mode or if the page already is in reading mode. We
+            // ignore the result because we are being called back asynchronous when the readermode status changes.
+            webView.evaluateJavaScript("\(ReaderModeNamespace).checkReadability()", completionHandler: nil)
+
+            // Re-run additional scripts in webView to extract updated favicons and metadata.
+            runScriptsOnWebView(webView)
+        }
+        
+        if tab === tabManager.selectedTab {
+            UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
+            // must be followed by LayoutChanged, as ScreenChanged will make VoiceOver
+            // cursor land on the correct initial element, but if not followed by LayoutChanged,
+            // VoiceOver will sometimes be stuck on the element, not allowing user to move
+            // forward/backward. Strange, but LayoutChanged fixes that.
+            UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
+        } else {
+            // To Screenshot a tab that is hidden we must add the webView,
+            // then wait enough time for the webview to render.
+            if let webView =  tab.webView {
+                view.insertSubview(webView, at: 0)
+                let time = DispatchTime.now() + Double(Int64(500 * NSEC_PER_MSEC)) / Double(NSEC_PER_SEC)
+                DispatchQueue.main.asyncAfter(deadline: time) {
+                    self.screenshotHelper.takeScreenshot(tab)
+                    if webView.superview == self.view {
+                        webView.removeFromSuperview()
+                    }
+                }
+            }
+        }
+        
+        // Remember whether or not a desktop site was requested
+        tab.desktopSite = webView.customUserAgent?.isEmpty == false
+    }
 }
 
 extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
@@ -1865,6 +1918,10 @@ extension BrowserViewController: TabDelegate {
 
         tab.addHelper(LocalRequestHelper(), name: LocalRequestHelper.name())
 
+        let historyStateHelper = HistoryStateHelper(tab: tab)
+        historyStateHelper.delegate = self
+        tab.addHelper(historyStateHelper, name: HistoryStateHelper.name())
+        
         if AppConstants.MOZ_CONTENT_METADATA_PARSING {
             let metadataHelper = MetadataParserHelper(tab: tab, profile: profile)
             tab.addHelper(metadataHelper, name: MetadataParserHelper.name())
@@ -2402,48 +2459,7 @@ extension BrowserViewController: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         let tab: Tab! = tabManager[webView]
-        tabManager.expireSnackbars()
-
-        if let url = webView.url, !url.isErrorPageURL && !url.isAboutHomeURL {
-            tab.lastExecutedTime = Date.now()
-
-            if navigation == nil {
-                log.warning("Implicitly unwrapped optional navigation was nil.")
-            }
-
-            postLocationChangeNotificationForTab(tab, navigation: navigation)
-
-            // Fire the readability check. This is here and not in the pageShow event handler in ReaderMode.js anymore
-            // because that event wil not always fire due to unreliable page caching. This will either let us know that
-            // the currently loaded page can be turned into reading mode or if the page already is in reading mode. We
-            // ignore the result because we are being called back asynchronous when the readermode status changes.
-            webView.evaluateJavaScript("\(ReaderModeNamespace).checkReadability()", completionHandler: nil)
-        }
-
-        if tab === tabManager.selectedTab {
-            UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
-            // must be followed by LayoutChanged, as ScreenChanged will make VoiceOver
-            // cursor land on the correct initial element, but if not followed by LayoutChanged,
-            // VoiceOver will sometimes be stuck on the element, not allowing user to move
-            // forward/backward. Strange, but LayoutChanged fixes that.
-            UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
-        } else {
-            // To Screenshot a tab that is hidden we must add the webView,
-            // then wait enough time for the webview to render.
-            if let webView =  tab.webView {
-                view.insertSubview(webView, at: 0)
-                let time = DispatchTime.now() + Double(Int64(500 * NSEC_PER_MSEC)) / Double(NSEC_PER_SEC)
-                DispatchQueue.main.asyncAfter(deadline: time) {
-                    self.screenshotHelper.takeScreenshot(tab)
-                    if webView.superview == self.view {
-                        webView.removeFromSuperview()
-                    }
-                }
-            }
-        }
-
-        // Remember whether or not a desktop site was requested
-        tab.desktopSite = webView.customUserAgent?.isEmpty == false
+        navigateInTab(tab: tab, to: navigation)
     }
 
     fileprivate func addViewForOpenInHelper(_ openInHelper: OpenInHelper) {
@@ -3095,6 +3111,12 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                     success(image)
                 }
             }
+    }
+}
+
+extension BrowserViewController: HistoryStateHelperDelegate {
+    func historyStateHelper(_ historyStateHelper: HistoryStateHelper, didPushOrReplaceStateInTab tab: Tab) {
+        navigateInTab(tab: tab)
     }
 }
 
