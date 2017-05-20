@@ -93,7 +93,7 @@ public struct ValidationStats: Stats, DictionaryRepresentable {
     func asDictionary() -> [String: Any] {
         return [
             "problems": problems.map { $0.asDictionary() },
-            "took" : took
+            "took": took
         ]
     }
 }

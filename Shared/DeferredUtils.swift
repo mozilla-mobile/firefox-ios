@@ -127,7 +127,7 @@ public func accumulate<T>(_ thunks: [() -> Deferred<Maybe<T>>]) -> Deferred<Mayb
  */
 public func effect<T, U>(_ f: @escaping (T) -> U) -> (T) -> Deferred<Maybe<T>> {
     return { t in
-        let _ = f(t)
+        _ = f(t)
         return deferMaybe(t)
     }
 }

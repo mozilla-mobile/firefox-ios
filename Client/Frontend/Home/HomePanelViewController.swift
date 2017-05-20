@@ -231,12 +231,10 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     }
 
     func SELtappedButton(_ sender: UIButton!) {
-        for (index, button) in buttons.enumerated() {
-            if button == sender {
-                selectedPanel = HomePanelType(rawValue: index)
-                delegate?.homePanelViewController(self, didSelectPanel: index)
-                break
-            }
+        for (index, button) in buttons.enumerated() where button == sender {
+            selectedPanel = HomePanelType(rawValue: index)
+            delegate?.homePanelViewController(self, didSelectPanel: index)
+            break
         }
     }
 

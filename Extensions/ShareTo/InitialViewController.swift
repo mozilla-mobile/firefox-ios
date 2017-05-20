@@ -68,7 +68,7 @@ class InitialViewController: UIViewController, ShareControllerDelegate {
             }
 
             if destinations.contains(ShareDestinationBookmarks) {
-                let _ = profile.bookmarks.shareItem(item).value // Blocks until database has settled
+                _ = profile.bookmarks.shareItem(item).value // Blocks until database has settled
             }
 
             profile.shutdown()

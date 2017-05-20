@@ -174,7 +174,7 @@ extension SQLiteHistory: BrowserHistory {
             return deferMaybe(IgnoredSiteError())
         }
 
-        let _ = db.withConnection(&error) { (conn, _) -> Int in
+        _ = db.withConnection(&error) { (conn, _) -> Int in
             let now = Date.now()
 
             let i = self.updateSite(site, atTime: now, withConnection: conn)
@@ -242,7 +242,7 @@ extension SQLiteHistory: BrowserHistory {
     // TODO: thread siteID into this to avoid the need to do the lookup.
     func addLocalVisitForExistingSite(_ visit: SiteVisit) -> Success {
         var error: NSError? = nil
-        let _ = db.withConnection(&error) { (conn, _) -> Int in
+        _ = db.withConnection(&error) { (conn, _) -> Int in
             // INSERT OR IGNORE because we *might* have a clock error that causes a timestamp
             // collision with an existing visit, and it would really suck to error out for that reason.
             let insert = "INSERT OR IGNORE INTO \(TableVisits) (siteID, date, type, is_local) VALUES (" +
@@ -704,7 +704,7 @@ extension SQLiteHistory: Favicons {
     public func clearAllFavicons() -> Success {
         var err: NSError? = nil
 
-        let _ = db.withConnection(&err) { (conn, err: inout NSError?) -> Int in
+        _ = db.withConnection(&err) { (conn, err: inout NSError?) -> Int in
             err = conn.executeChange("DELETE FROM \(TableFaviconSites)")
             if err == nil {
                 err = conn.executeChange("DELETE FROM \(TableFavicons)")
@@ -754,8 +754,8 @@ extension SQLiteHistory: Favicons {
                 // multiple bookmarks with a particular URI, and a mirror bookmark can be
                 // locally changed, so either or both of these statements can update multiple rows.
                 if let id = id {
-                    let _ = conn.executeChange("UPDATE \(TableBookmarksLocal) SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
-                    let _ = conn.executeChange("UPDATE \(TableBookmarksMirror) SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
+                    _ = conn.executeChange("UPDATE \(TableBookmarksLocal) SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
+                    _ = conn.executeChange("UPDATE \(TableBookmarksMirror) SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
                 }
 
                 return id ?? 0
@@ -1008,7 +1008,6 @@ extension SQLiteHistory: SyncableHistory {
         // We can do this in a single query, rather than the N+1 that desktop takes.
         // We then need to flatten the cursor. We do that by collecting
         // places as a side-effect of the factory, producing visits as a result, and merging in memory.
-
 
         // Turn our lazy collection of integers into a comma-seperated string for the IN clause.
         let historyIDs = Array(places.keys)

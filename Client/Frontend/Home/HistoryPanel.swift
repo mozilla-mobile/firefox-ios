@@ -353,10 +353,8 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
     func numberOfSectionsInTableView(_ tableView: UITableView) -> Int {
         var count = 1
-        for category in self.categories {
-            if category.rows > 0 {
-                count += 1
-            }
+        for category in self.categories where category.rows > 0 {
+            count += 1
         }
         return count
     }
