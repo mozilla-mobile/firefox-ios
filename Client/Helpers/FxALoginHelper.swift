@@ -119,7 +119,7 @@ class FxALoginHelper {
     fileprivate func requestUserNotifications(_ application: UIApplication) {
         if #available(iOS 10, *) {
             let center = UNUserNotificationCenter.current()
-            return center.requestAuthorization(options: [.alert]) { (granted, error) in
+            return center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
                 guard error == nil else {
                     return self.application(application, canDisplayUserNotifications: false)
                 }
