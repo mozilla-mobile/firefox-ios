@@ -613,7 +613,7 @@ extension ActivityStreamPanel: DataObserverDelegate {
 
         let removeTopSiteAction = ActionOverlayTableViewAction(title: Strings.RemoveFromASContextMenuTitle, iconString: "action_close", handler: { action in
             self.telemetry.reportEvent(.Remove, source: pingSource, position: index)
-            self.hideURLFromTopSites(site.tileURL) // TODO: This is call position!
+            self.hideURLFromTopSites(site.tileURL)
         })
 
         let dismissHighlightAction = ActionOverlayTableViewAction(title: Strings.RemoveFromASContextMenuTitle, iconString: "action_close", handler: { action in
