@@ -124,7 +124,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
         super.init(scratchpad: scratchpad, delegate: delegate, basePrefs: basePrefs, collection: "clients")
     }
 
-    var localClients: RemoteClientsAndTabs? = nil
+    var localClients: RemoteClientsAndTabs?
 
     override var storageVersion: Int {
         return ClientsStorageVersion
@@ -363,8 +363,8 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
                     >>> { self.uploadClientCommands(toLocalClients: localClients, withServer: storageClient) }
                     >>> {
                         log.debug("Running \(commands.count) commands.")
-                        for (command) in commands {
-                            let _ = command.run(self)
+                        for command in commands {
+                            _ = command.run(self)
                         }
                         self.lastFetched = responseTimestamp!
                         return succeed()

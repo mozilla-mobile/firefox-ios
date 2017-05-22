@@ -1069,7 +1069,7 @@ class BrowserViewController: UIViewController {
         }
 
         switchToPrivacyMode(isPrivate: isPrivate)
-        let _ = tabManager.addTabAndSelect(request, isPrivate: isPrivate)
+        _ = tabManager.addTabAndSelect(request, isPrivate: isPrivate)
         if url == nil && NewTabAccessors.getNewTabPage(profile.prefs) == .blankPage {
             urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
         }
@@ -1086,7 +1086,7 @@ class BrowserViewController: UIViewController {
         }
         currentViewController.dismiss(animated: true, completion: nil)
         if currentViewController != self {
-            let _ = self.navigationController?.popViewController(animated: true)
+            _ = self.navigationController?.popViewController(animated: true)
         } else if urlBar.inOverlayMode {
             urlBar.SELdidClickCancel()
         }
@@ -1945,10 +1945,8 @@ extension BrowserViewController: TabDelegate {
 
     fileprivate func findSnackbar(_ barToFind: SnackBar) -> Int? {
         let bars = snackBars.subviews
-        for (index, bar) in bars.enumerated() {
-            if bar === barToFind {
-                return index
-            }
+        for (index, bar) in bars.enumerated() where bar === barToFind {
+            return index
         }
         return nil
     }
@@ -2918,7 +2916,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
     func introViewControllerDidFinish(_ introViewController: IntroViewController) {
         introViewController.dismiss(animated: true) { finished in
             if self.navigationController?.viewControllers.count ?? 0 > 1 {
-                let _ = self.navigationController?.popToRootViewController(animated: true)
+                _ = self.navigationController?.popToRootViewController(animated: true)
             }
         }
     }

@@ -28,8 +28,7 @@ class MockSyncCollectionClient<T: CleartextPayloadJSON>: Sync15CollectionClient<
          collection: String,
          encrypter: RecordEncrypter<T>,
          client: Sync15StorageClient = getClient(server: getServer(preStart: { _ in })),
-         serverURI: URL = URL(string: "http://localhost/collections")!)
-    {
+         serverURI: URL = URL(string: "http://localhost/collections")!) {
         self.uploader = uploader
         self.infoConfig = infoConfig
         super.init(client: client, serverURI: serverURI, collection: collection, encrypter: encrypter)

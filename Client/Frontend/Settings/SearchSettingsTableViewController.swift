@@ -193,10 +193,8 @@ class SearchSettingsTableViewController: UITableViewController {
     // Hide a thin vertical line that iOS renders between the accessoryView and the reordering control.
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if cell.isEditing {
-            for v in cell.subviews {
-                if v.frame.width == 1.0 {
-                    v.backgroundColor = UIColor.clear
-                }
+            for v in cell.subviews where v.frame.width == 1.0 {
+                v.backgroundColor = UIColor.clear
             }
         }
     }
@@ -301,7 +299,7 @@ extension SearchSettingsTableViewController {
     }
 
     func cancel() {
-        let _ = navigationController?.popViewController(animated: true)
+        _ = navigationController?.popViewController(animated: true)
     }
 
     func dismissAnimated() {
@@ -323,6 +321,6 @@ extension SearchSettingsTableViewController: SearchEnginePickerDelegate {
             model.defaultEngine = engine
             self.tableView.reloadData()
         }
-        let _ = navigationController?.popViewController(animated: true)
+        _ = navigationController?.popViewController(animated: true)
     }
 }

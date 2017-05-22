@@ -164,7 +164,7 @@ open class FxADeviceRegistrator {
 
     fileprivate static func recoverFromTokenError(_ account: FirefoxAccount, client: FxAClient10) -> Deferred<Maybe<FxADeviceRegistration>> {
         return client.status(forUID: account.uid) >>== { status in
-            let _ = account.makeDoghouse()
+            _ = account.makeDoghouse()
             if !status.exists {
                 // TODO: Should be in an "I have an iOS account, but the FxA is gone." state.
                 // This will do for now...

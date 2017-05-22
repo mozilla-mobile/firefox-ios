@@ -348,14 +348,14 @@ open class BrowserDB {
 extension BrowserDB {
     func vacuum() {
         log.debug("Vacuuming a BrowserDB.")
-        let _ = db.withConnection(SwiftData.Flags.readWriteCreate, synchronous: true) { connection in
+        _ = db.withConnection(SwiftData.Flags.readWriteCreate, synchronous: true) { connection in
             return connection.vacuum()
         }
     }
 
     func checkpoint() {
         log.debug("Checkpointing a BrowserDB.")
-        let _ = db.transaction(synchronous: true) { connection in
+        _ = db.transaction(synchronous: true) { connection in
             connection.checkpoint()
             return true
         }

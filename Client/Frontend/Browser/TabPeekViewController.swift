@@ -42,7 +42,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
             if !self.isInReadingList {
                 actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionAddToReadingList, style: .default) { previewAction, viewController in
                     guard let tab = self.tab else { return }
-                    let _ = self.delegate?.tabPeekDidAddToReadingList(tab)
+                    _ = self.delegate?.tabPeekDidAddToReadingList(tab)
                 })
             }
             if !self.isBookmarked {

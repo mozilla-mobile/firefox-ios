@@ -84,7 +84,7 @@ class PushCryptoTests: XCTestCase {
 
         for test in tests {
             do {
-                let _ = try push.aes128gcm(payload: test.payload,
+                _ = try push.aes128gcm(payload: test.payload,
                                            decryptWith: test.recvPrivKey,
                                            authenticateWith: test.authSecret)
 
@@ -201,7 +201,7 @@ class PushCryptoTests: XCTestCase {
 
         for test in tests {
             do {
-                let _ = try push.aesgcm(ciphertext: test.ciphertext,
+                _ = try push.aesgcm(ciphertext: test.ciphertext,
                                  decryptWith: test.recvPrivKey,
                                  authenticateWith: test.authSecret,
                                  encryptionHeader: test.encryption,
