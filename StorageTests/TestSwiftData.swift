@@ -18,6 +18,7 @@ class TestSwiftData: XCTestCase {
         let files = MockFiles()
         do {
             try files.remove("testSwiftData.db")
+            try files.remove("testSwiftData_metadata.db")
         } catch _ {
         }
         testDB = (try! (files.getAndEnsureDirectory() as NSString)).appendingPathComponent("testSwiftData.db")
@@ -28,6 +29,12 @@ class TestSwiftData: XCTestCase {
         XCTAssert(SwiftData.ReuseConnections, "Reusing database connections")
         XCTAssert(SwiftData.EnableWAL, "WAL enabled")
 
+        let _ = swiftData!.withConnection(SwiftData.Flags.readWriteCreate, synchronous: true) { db in
+            let testMetadataDB = try! (files.getAndEnsureDirectory() as NSString).appendingPathComponent("testSwiftData_metadata.db")
+            let command = "ATTACH DATABASE '\(testMetadataDB)' AS 'metadataDB'"
+            return db.executeChange(command, withArgs: [])
+        }
+        
         let _ = swiftData!.withConnection(SwiftData.Flags.readWriteCreate) { db in
             let f = FaviconsTable<Favicon>()
             let _ = f.create(db)    // Because BrowserTable needs it.
