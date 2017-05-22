@@ -448,18 +448,24 @@ extension ActivityStreamPanel: DataObserverDelegate {
     }
 
     func hideURLFromTopSites(_ siteURL: URL) {
-        guard let host = siteURL.normalizedHost else {
-            return
+        func deleteURLFromTopPanel(_ action: UIAlertAction) {
+            guard let host = siteURL.normalizedHost else {
+                return
+            }
+
+            let url = siteURL.absoluteString
+            // if the default top sites contains the siteurl. also wipe it from default suggested sites.
+            if self.defaultTopSites().filter({$0.url == url}).isEmpty == false {
+                self.deleteTileForSuggestedSite(url)
+            }
+            self.profile.history.removeHostFromTopSites(host).uponQueue(.main) { result in
+                guard result.isSuccess else { return }
+                self.profile.panelDataObservers.activityStream.invalidate(highlights: false)
+            }
         }
-        let url = siteURL.absoluteString
-        // if the default top sites contains the siteurl. also wipe it from default suggested sites.
-        if defaultTopSites().filter({$0.url == url}).isEmpty == false {
-            deleteTileForSuggestedSite(url)
-        }
-        profile.history.removeHostFromTopSites(host).uponQueue(.main) { result in
-            guard result.isSuccess else { return }
-            self.profile.panelDataObservers.activityStream.invalidate(highlights: false)
-        }
+        
+        let alert = UIAlertController.deleteTopSitesAlert(okayCallback: deleteURLFromTopPanel)
+        present(alert, animated: true, completion: nil)
     }
 
     func hideFromHighlights(_ site: Site) {
@@ -607,7 +613,7 @@ extension ActivityStreamPanel: DataObserverDelegate {
 
         let removeTopSiteAction = ActionOverlayTableViewAction(title: Strings.RemoveFromASContextMenuTitle, iconString: "action_close", handler: { action in
             self.telemetry.reportEvent(.Remove, source: pingSource, position: index)
-            self.hideURLFromTopSites(site.tileURL)
+            self.hideURLFromTopSites(site.tileURL) // TODO: This is call position!
         })
 
         let dismissHighlightAction = ActionOverlayTableViewAction(title: Strings.RemoveFromASContextMenuTitle, iconString: "action_close", handler: { action in
