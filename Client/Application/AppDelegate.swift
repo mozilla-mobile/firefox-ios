@@ -678,7 +678,7 @@ extension AppDelegate {
 
         let handler = FxAPushMessageHandler(with: profile)
         handler.handle(userInfo: userInfo).upon { res in
-            completionHandler(res.isSuccess ? .newData : .noData)
+            completionHandler(res.isSuccess ? .newData : .failed)
         }
     }
 
