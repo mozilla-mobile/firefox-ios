@@ -101,11 +101,9 @@
 		E40AFC741DDDE96D00DA5651 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E40AFC761DDDE96D00DA5651 /* InfoPlist.strings */; };
 		E44A346A1E0A18C100BFD777 /* SnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44A34691E0A18C100BFD777 /* SnapshotTests.swift */; };
 		E44A34761E0A198000BFD777 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44A34751E0A198000BFD777 /* SnapshotHelper.swift */; };
-		E47F9AE21DB927FD00A93285 /* AdjustSdk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E47F9AE11DB927FD00A93285 /* AdjustSdk.framework */; };
-		E47F9AE71DB929D800A93285 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E47F9AE51DB929D800A93285 /* AdSupport.framework */; };
-		E47F9AE81DB929D800A93285 /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E47F9AE61DB929D800A93285 /* iAd.framework */; };
+		E47F9AE71DB929D800A93285 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E47F9AE51DB929D800A93285 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		E47F9AE81DB929D800A93285 /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E47F9AE61DB929D800A93285 /* iAd.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		E47F9AEA1DB9329D00A93285 /* Adjust-Focus.plist in Resources */ = {isa = PBXBuildFile; fileRef = E47F9AE91DB9329D00A93285 /* Adjust-Focus.plist */; };
-		E47F9AEC1DB9333200A93285 /* Adjust-Klar.plist in Resources */ = {isa = PBXBuildFile; fileRef = E47F9AEB1DB9333200A93285 /* Adjust-Klar.plist */; };
 		E47F9AEE1DB9338600A93285 /* AdjustIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = E47F9AED1DB9338600A93285 /* AdjustIntegration.swift */; };
 		E4BC84F11E2A862400833B45 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E4BC84F31E2A862400833B45 /* InfoPlist.strings */; };
 		E4BC84F61E2A862600833B45 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E4BC84F81E2A862600833B45 /* InfoPlist.strings */; };
@@ -357,11 +355,9 @@
 		E47DBB771E5535A50027DE08 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E47DBB781E5535A50027DE08 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E47DBB791E5535A50027DE08 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		E47F9AE11DB927FD00A93285 /* AdjustSdk.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdjustSdk.framework; path = Carthage/Build/iOS/AdjustSdk.framework; sourceTree = "<group>"; };
 		E47F9AE51DB929D800A93285 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		E47F9AE61DB929D800A93285 /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
 		E47F9AE91DB9329D00A93285 /* Adjust-Focus.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Adjust-Focus.plist"; sourceTree = "<group>"; };
-		E47F9AEB1DB9333200A93285 /* Adjust-Klar.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Adjust-Klar.plist"; sourceTree = "<group>"; };
 		E47F9AED1DB9338600A93285 /* AdjustIntegration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdjustIntegration.swift; sourceTree = "<group>"; };
 		E4870BEA1E50ECE200F5F491 /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = is; path = is.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E4870BEB1E50ECE200F5F491 /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = is; path = is.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -538,7 +534,6 @@
 				E47F9AE71DB929D800A93285 /* AdSupport.framework in Frameworks */,
 				E47F9AE81DB929D800A93285 /* iAd.framework in Frameworks */,
 				D3E54FCD1DEFA92F003E1AFF /* Fuzi.framework in Frameworks */,
-				E47F9AE21DB927FD00A93285 /* AdjustSdk.framework in Frameworks */,
 				D38D693D1C471A98003EF211 /* GCDWebServers.framework in Frameworks */,
 				D38D693E1C471A98003EF211 /* SnapKit.framework in Frameworks */,
 				4285B8E0671F40DA543A2E58 /* AssetsLibrary.framework in Frameworks */,
@@ -644,7 +639,6 @@
 			isa = PBXGroup;
 			children = (
 				D3AAC28C1EAE8F5A005B7E8C /* AutocompleteTextField.framework */,
-				E47F9AE11DB927FD00A93285 /* AdjustSdk.framework */,
 				E47F9AE51DB929D800A93285 /* AdSupport.framework */,
 				29B90C056305836CB297FF79 /* AssetsLibrary.framework */,
 				427B752EF11959F9C38B12D6 /* AVFoundation.framework */,
@@ -716,7 +710,6 @@
 				D30179C51BCD78E1009AD388 /* Blockzilla-Bridging-Header.h */,
 				D3DA778B1DC2C60E009C114E /* errorPage.html */,
 				E47F9AE91DB9329D00A93285 /* Adjust-Focus.plist */,
-				E47F9AEB1DB9333200A93285 /* Adjust-Klar.plist */,
 				E4BF2DE21BACE8CA00DA9D68 /* Info.plist */,
 				D3C047BC1DCBD8ED00402FFB /* SearchEngines.plist */,
 				F84AFE721DE77FE6005C4DD1 /* LaunchScreen.png */,
@@ -836,6 +829,7 @@
 				E4BF2DD11BACE8CA00DA9D68 /* Resources */,
 				E4BF2DF91BACE92400DA9D68 /* Embed App Extensions */,
 				D38D693F1C471AC7003EF211 /* Run Script (Carthage) */,
+				D02817331ECF37D900240CAA /* Run Script (Copy Adjust SDK - Focus Only) */,
 			);
 			buildRules = (
 			);
@@ -969,7 +963,6 @@
 				D3E2C8FC1D9F17AC00DEBE3D /* disconnect-analytics.json in Resources */,
 				D3E2C8FD1D9F17AC00DEBE3D /* disconnect-content.json in Resources */,
 				D3BFCB5B1BD15CD000AD22D1 /* rights-klar.html in Resources */,
-				E47F9AEC1DB9333200A93285 /* Adjust-Klar.plist in Resources */,
 				D3426AEF1DB846BB0016DA5A /* topdomains.txt in Resources */,
 				F84AFE771DE77FE6005C4DD1 /* LaunchScreen@3x.png in Resources */,
 				D3E54FD51DEFB25B003E1AFF /* SearchPlugins in Resources */,
@@ -994,6 +987,20 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		D02817331ECF37D900240CAA /* Run Script (Copy Adjust SDK - Focus Only) */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script (Copy Adjust SDK - Focus Only)";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "echo $OTHER_SWIFT_FLAGS | grep -e \"-DFOCUS\" && /usr/local/bin/carthage copy-frameworks $(SRCROOT)/Carthage/Build/iOS/AdjustSdk.framework || echo \"1\"";
+		};
 		D38D693F1C471AC7003EF211 /* Run Script (Carthage) */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1002,7 +1009,6 @@
 			inputPaths = (
 				"$(SRCROOT)/Carthage/Build/iOS/SnapKit.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/GCDWebServers.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/AdjustSdk.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Fuzi.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/AutocompleteTextField.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Telemetry.framework",
@@ -1740,6 +1746,7 @@
 					"-framework",
 					BuddyBuildSDK,
 				);
+				OTHER_SWIFT_FLAGS = "-DFOCUS";
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus.enterprise;
 				PRODUCT_NAME = "Firefox Focus";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = BUDDYBUILD;
@@ -1829,6 +1836,7 @@
 					"-framework",
 					BuddyBuildSDK,
 				);
+				OTHER_SWIFT_FLAGS = "-DKLAR";
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar.enterprise;
 				PRODUCT_NAME = "Firefox Klar";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = BUDDYBUILD;
@@ -1973,6 +1981,7 @@
 					"-framework",
 					BuddyBuildSDK,
 				);
+				OTHER_SWIFT_FLAGS = "-DFOCUS";
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus;
 				PRODUCT_NAME = "Firefox Focus";
 				PROVISIONING_PROFILE = "12379ceb-99e8-48c2-b270-64131bd2fb24";
@@ -2060,6 +2069,7 @@
 				HEADER_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2";
 				INFOPLIST_FILE = Blockzilla/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "-DFOCUS";
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus;
 				PRODUCT_NAME = "Firefox Focus";
 				PROVISIONING_PROFILE = "a0e006fd-308f-466b-8037-c39e3e78188e";
@@ -2503,6 +2513,7 @@
 					"-framework",
 					BuddyBuildSDK,
 				);
+				OTHER_SWIFT_FLAGS = "-DKLAR";
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar;
 				PRODUCT_NAME = "Firefox Klar";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG BUDDYBUILD";
@@ -2529,6 +2540,7 @@
 				HEADER_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2";
 				INFOPLIST_FILE = Blockzilla/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "-DKLAR";
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar;
 				PRODUCT_NAME = "Firefox Klar";
 				PROVISIONING_PROFILE = "2eae84bd-8fb1-4984-b330-8c4a90e69457";

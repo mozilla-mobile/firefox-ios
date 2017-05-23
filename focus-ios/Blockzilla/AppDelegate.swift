@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         #if BUDDYBUILD
             BuddyBuildSDK.setup()
         #endif
-
+        
         // Set up Telemetry
         let telemetryConfig = Telemetry.default.configuration
         telemetryConfig.appName = AppInfo.isKlar ? "Klar" : "Focus"
@@ -50,12 +50,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Telemetry.default.add(pingBuilderType: CorePingBuilder.self)
         Telemetry.default.add(pingBuilderType: FocusEventPingBuilder.self)
         
-        // Always initialize Adjust, otherwise the SDK is in a bad state. We disable it
-        // immediately so that no data is collected or sent.
-        AdjustIntegration.applicationDidFinishLaunching()
-        if !Settings.getToggle(.sendAnonymousUsageData) {
-            AdjustIntegration.enabled = false
-        }
+        // Only include Adjust SDK in Focus and NOT in Klar builds.
+        #if FOCUS
+            // Always initialize Adjust, otherwise the SDK is in a bad state. We disable it
+            // immediately so that no data is collected or sent.
+            AdjustIntegration.applicationDidFinishLaunching()
+            if !Settings.getToggle(.sendAnonymousUsageData) {
+                AdjustIntegration.enabled = false
+            }
+        #endif
 
         // Disable localStorage.
         // We clear the Caches directory after each Erase, but WebKit apparently maintains
