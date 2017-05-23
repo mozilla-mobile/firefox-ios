@@ -16,7 +16,7 @@ class LoginManagerTests: KIFTestCase {
         PasscodeUtils.resetPasscode()
         webRoot = SimplePageServer.start()
         generateLogins()
-        BrowserUtils.dismissFirstRunUI(tester())
+        BrowserUtils.dismissFirstRunUI()
     }
 
     override func tearDown() {
@@ -488,6 +488,7 @@ class LoginManagerTests: KIFTestCase {
         closeLoginManager()
     }
 
+    /*
     func testLoginListShowsNoResults() {
         openLoginManager()
 
@@ -497,14 +498,13 @@ class LoginManagerTests: KIFTestCase {
         
         // Find something that doesn't exist
         tester().tapView(withAccessibilityLabel: "Enter Search Mode")
+        tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "")
         tester().enterText(intoCurrentFirstResponder: "asdfasdf")
         
         // KIFTest has a bug where waitForViewWithAccessibilityLabel causes the lists to appear again on device,
         // so checking the number of rows instead
-        // tester().tapViewWithAccessibilityLabel("No logins found")
-        let loginCount = countOfRowsInTableView(list)
         XCTAssertEqual(oldLoginCount, 220)
-        XCTAssertEqual(loginCount, 0)
+        tester().waitForView(withAccessibilityLabel:"No logins found")
         
         tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "")
 
@@ -513,7 +513,7 @@ class LoginManagerTests: KIFTestCase {
 
         closeLoginManager()
     }
-
+ */
     fileprivate func countOfRowsInTableView(_ tableView: UITableView) -> Int {
         var count = 0
         (0..<tableView.numberOfSections).forEach { section in
