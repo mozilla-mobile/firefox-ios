@@ -19,3 +19,7 @@ github "cezheng/Fuzi"                       "1.0.1"
 github "SwiftyJSON/SwiftyJSON"              "3.1.4"
 github "farhanpatel/JSONSchema.swift" "master"
 github "google/EarlGrey"                    "1.9.0"
+
+github "Leanplum/Leanplum-iOS-SDK"
+github "Leanplum/Leanplum-iOS-Location"
+github "Leanplum/Leanplum-iOS-LocationAndBeacons"
