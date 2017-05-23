@@ -20,19 +20,16 @@ class OpenUtils {
         }
 
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.menu, value: "firefox")
-        AdjustIntegration.track(eventName: .openFirefox)
         app.openURL(firefoxURL)
     }
 
     private static func openFirefoxInstall() {
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.openAppStore, object: TelemetryEventObject.menu, value: "firefox")
-        AdjustIntegration.track(eventName: .openFirefoxInstall)
         UIApplication.shared.openURL(AppInfo.config.firefoxAppStoreURL)
     }
 
     private static func openInSafari(url: URL) {
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.menu, value: "default")
-        AdjustIntegration.track(eventName: .openSafari)
         app.openURL(url)
     }
 
@@ -55,7 +52,6 @@ class OpenUtils {
 
         alert.addAction(UIAlertAction(title: UIConstants.strings.openMore, style: .default) { _ in
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.share, object: TelemetryEventObject.menu)
-            AdjustIntegration.track(eventName: .openSystemShare)
 
             let controller = UIActivityViewController(activityItems: [url], applicationActivities: nil)
             controller.popoverPresentationController?.sourceView = anchor

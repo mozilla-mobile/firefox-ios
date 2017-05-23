@@ -278,23 +278,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             let telemetryEvent = TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: "setting", value: toggle.setting.rawValue)
             telemetryEvent.addExtra(key: "to", value: sender.isOn)
             Telemetry.default.recordEvent(telemetryEvent)
-            
-            switch toggle.setting {
-            case .safari:
-                AdjustIntegration.track(eventName: sender.isOn ? .enableSafariIntegration : .disableSafariIntegration)
-            case .blockAds:
-                AdjustIntegration.track(eventName: sender.isOn ? .enableBlockAds : .disableBlockAds)
-            case .blockAnalytics:
-                AdjustIntegration.track(eventName: sender.isOn ? .enableBlockAnalytics : .disableBlockAnalytics)
-            case .blockSocial:
-                AdjustIntegration.track(eventName: sender.isOn ? .enableBlockSocial : .disableBlockSocial)
-            case .blockOther:
-                AdjustIntegration.track(eventName: sender.isOn ? .enableBlockOther : .disableBlockOther)
-            case .blockFonts:
-                AdjustIntegration.track(eventName: sender.isOn ? .enableBlockFonts : .disableBlockFonts)
-            default:
-                break
-            }
 
             Settings.set(sender.isOn, forToggle: toggle.setting)
             Utils.reloadSafariContentBlocker()
@@ -304,7 +287,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         // First check if the user changed the anonymous usage data setting and follow that choice right
         // here. Otherwise it will be delayed until the application restarts.
         if toggle.setting == .sendAnonymousUsageData {
-            AdjustIntegration.enabled = sender.isOn
+            Telemetry.default.configuration.isCollectionEnabled = sender.isOn
+            Telemetry.default.configuration.isUploadEnabled = sender.isOn
         }
 
         switch toggle.setting {

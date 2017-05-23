@@ -4,46 +4,5 @@
 <dict>
 	<key>AppToken</key>
 	<string>XXX</string>
-	<key>Events</key>
-	<dict>
-		<key>Browse</key>
-		<string>hjuag8</string>
-		<key>Search</key>
-		<string>jf1b59</string>
-		<key>Clear</key>
-		<string>hy183e</string>
-		<key>OpenInFirefox</key>
-		<string>t7m1ru</string>
-		<key>OpenInSafari</key>
-		<string>ns4a3y</string>
-		<key>EnableBlockAds</key>
-		<string>1pmsby</string>
-		<key>DisableBlockAds</key>
-		<string>34xb7g</string>
-		<key>EnableBlockAnalytics</key>
-		<string>oimjge</string>
-		<key>DisableBlockAnalytics</key>
-		<string>pppabq</string>
-		<key>EnableBlockFonts</key>
-		<string>1zb5ah</string>
-		<key>DisableBlockFonts</key>
-		<string>nfi1np</string>
-		<key>EnableBlockOther</key>
-		<string>fr308r</string>
-		<key>DisableBlockOther</key>
-		<string>vp5tjk</string>
-		<key>EnableBlockSocial</key>
-		<string>9l4fiy</string>
-		<key>DisableBlockSocial</key>
-		<string>ha6nkv</string>
-		<key>EnableSafariIntegration</key>
-		<string>ec8kb7</string>
-		<key>DisableSafariIntegration</key>
-		<string>i0zoki</string>
-		<key>OpenSystemShare</key>
-		<string>n4k5jo</string>
-		<key>OpenFirefoxInstall</key>
-		<string>5qb7ma</string>
-	</dict>
 </dict>
 </plist>

@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-import AdjustSdk
 import Telemetry
 
 @UIApplicationMain
@@ -44,7 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             telemetryConfig.isUploadEnabled = false
         #else
             telemetryConfig.updateChannel = "release"
-            telemetryConfig.isCollectionEnabled = true
+            telemetryConfig.isCollectionEnabled = Settings.getToggle(.sendAnonymousUsageData)
             telemetryConfig.isUploadEnabled = Settings.getToggle(.sendAnonymousUsageData)
         #endif
         
