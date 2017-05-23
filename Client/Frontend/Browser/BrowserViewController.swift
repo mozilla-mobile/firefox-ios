@@ -24,6 +24,7 @@ private let log = Logger.browserLogger
 private let KVOLoading = "loading"
 private let KVOEstimatedProgress = "estimatedProgress"
 private let KVOURL = "URL"
+private let KVOTitle = "title"
 private let KVOCanGoBack = "canGoBack"
 private let KVOCanGoForward = "canGoForward"
 private let KVOContentSize = "contentSize"
@@ -965,6 +966,15 @@ class BrowserViewController: UIViewController {
                     updateUIForReaderHomeStateForTab(tab)
                 }
             }
+        case KVOTitle:
+            guard let tab = tabManager[webView] else { break }
+            
+            // Ensure that the tab title *actually* changed to prevent repeated calls
+            // to navigateInTab(tab:).
+            guard let title = tab.title else { break }
+            if !title.isEmpty && title != tab.lastTitle {
+                navigateInTab(tab: tab)
+            }
         case KVOCanGoBack:
             guard webView == tabManager.selectedTab?.webView,
                 let canGoBack = change?[NSKeyValueChangeKey.newKey] as? Bool else { break }
@@ -1860,6 +1870,7 @@ extension BrowserViewController: TabDelegate {
         webView.addObserver(self, forKeyPath: KVOCanGoBack, options: .new, context: nil)
         webView.addObserver(self, forKeyPath: KVOCanGoForward, options: .new, context: nil)
         tab.webView?.addObserver(self, forKeyPath: KVOURL, options: .new, context: nil)
+        tab.webView?.addObserver(self, forKeyPath: KVOTitle, options: .new, context: nil)
 
         webView.scrollView.addObserver(self.scrollController, forKeyPath: KVOContentSize, options: .new, context: nil)
 
@@ -1937,6 +1948,7 @@ extension BrowserViewController: TabDelegate {
         webView.removeObserver(self, forKeyPath: KVOCanGoForward)
         webView.scrollView.removeObserver(self.scrollController, forKeyPath: KVOContentSize)
         webView.removeObserver(self, forKeyPath: KVOURL)
+        webView.removeObserver(self, forKeyPath: KVOTitle)
 
         webView.uiDelegate = nil
         webView.scrollView.delegate = nil
