@@ -259,7 +259,7 @@ class URLBarView: UIView {
 
         progressBar.snp.makeConstraints { make in
             make.top.equalTo(self.snp.bottom)
-            make.width.equalTo(self)
+            make.left.right.equalTo(self)
         }
 
         locationView.snp.makeConstraints { make in
