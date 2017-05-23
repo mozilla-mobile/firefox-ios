@@ -594,7 +594,10 @@ extension ActivityStreamPanel: DataObserverDelegate {
 
         let deleteFromHistoryAction = ActionOverlayTableViewAction(title: Strings.DeleteFromHistoryContextMenuTitle, iconString: "action_delete", handler: { action in
             self.telemetry.reportEvent(.Delete, source: pingSource, position: index)
-            self.profile.history.removeHistoryForURL(site.url)
+            self.profile.history.removeHistoryForURL(site.url).uponQueue(.main) { result in
+                guard result.isSuccess else { return }
+                self.profile.panelDataObservers.activityStream.invalidate(highlights: true)
+            }
         })
 
         let shareAction = ActionOverlayTableViewAction(title: Strings.ShareContextMenuTitle, iconString: "action_share", handler: { action in
