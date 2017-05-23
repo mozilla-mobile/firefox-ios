@@ -130,14 +130,16 @@ extension SQLiteHistory: HistoryRecommendations {
             "   FROM \(ViewHistoryVisits)" +
             "   GROUP BY \(ViewHistoryVisits).domain_id) AS domains ON domains.domain_id = \(TableHistory).domain_id AND visitDate = domains.visit_date"
 
-        let subQuerySiteProjection = "historyID, url, siteTitle, guid, visitCount, visitDate, is_bookmarked"
+        let subQuerySiteProjection = "historyID, url, siteTitle, guid, visitCount, visitDate, is_bookmarked, visitCount * icon_url_score * media_url_score AS score"
         let nonRecentHistory =
             "SELECT \(subQuerySiteProjection) FROM (" +
-            "   SELECT \(TableHistory).id as historyID, url, title AS siteTitle, guid, visitDate, \(TableHistory).domain_id," +
+            "   SELECT \(TableHistory).id as historyID, url, \(TableHistory).title AS siteTitle, guid, visitDate, \(TableHistory).domain_id," +
             "       (SELECT COUNT(1) FROM \(TableVisits) WHERE s = \(TableVisits).siteID) AS visitCount," +
-            "       (SELECT COUNT(1) FROM \(ViewBookmarksLocalOnMirror) WHERE \(ViewBookmarksLocalOnMirror).bmkUri == url) AS is_bookmarked" +
+            "       (SELECT COUNT(1) FROM \(ViewBookmarksLocalOnMirror) WHERE \(ViewBookmarksLocalOnMirror).bmkUri == url) AS is_bookmarked," +
+            "     CASE WHEN iconURL IS NULL THEN 1 ELSE 2 END AS icon_url_score," +
+            "     CASE WHEN media_url IS NULL THEN 1 ELSE 4 END AS media_url_score" +
             "   FROM (" +
-            "       SELECT siteID AS s, max(date) AS visitDate" +
+            "       SELECT siteID AS s, MAX(date) AS visitDate" +
             "       FROM \(TableVisits)" +
             "       WHERE date < ?" +
             "       GROUP BY siteID" +
@@ -145,18 +147,25 @@ extension SQLiteHistory: HistoryRecommendations {
             "   )" +
             "   LEFT JOIN \(TableHistory) ON \(TableHistory).id = s" +
                 removeMultipleDomainsSubquery +
-            "   WHERE visitCount <= 3 AND title NOT NULL AND title != '' AND is_bookmarked == 0 AND url NOT IN" +
-            "       (SELECT \(TableActivityStreamBlocklist).url FROM \(TableActivityStreamBlocklist))" +
+            "   LEFT OUTER JOIN \(ViewHistoryIDsWithWidestFavicons) ON" +
+            "       \(ViewHistoryIDsWithWidestFavicons).id = \(TableHistory).id" +
+            "   LEFT OUTER JOIN \(AttachedTablePageMetadata) ON" +
+            "       \(AttachedTablePageMetadata).site_url = \(TableHistory).url" +
+            "   WHERE visitCount <= 3 AND \(TableHistory).title NOT NULL AND \(TableHistory).title != '' AND is_bookmarked == 0 AND url NOT IN" +
+            "       (SELECT url FROM \(TableActivityStreamBlocklist))" +
             "        AND \(TableHistory).domain_id NOT IN ("
                     + blacklistSubquery + ")" +
-            "   LIMIT \(limit)" +
             ")"
 
-        let siteProjection = subQuerySiteProjection.replacingOccurrences(of: "siteTitle", with: "siteTitle AS title")
+        let siteProjection = subQuerySiteProjection
+            .replacingOccurrences(of: "siteTitle", with: "siteTitle AS title")
+            .replacingOccurrences(of: "visitCount * icon_url_score * media_url_score AS score", with: "score")
         let highlightsQuery =
             "SELECT \(siteProjection) " +
             "FROM ( \(nonRecentHistory) ) " +
-            "GROUP BY url"
+            "GROUP BY url " +
+            "ORDER BY score DESC " +
+            "LIMIT \(limit)"
         let args: Args = [thirtyMinutesAgo] + blacklistedHosts
         return (highlightsQuery, args)
     }
