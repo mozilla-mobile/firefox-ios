@@ -60,6 +60,6 @@ public extension JSON {
     // existing code required the string to not be pretty printed, this helper
     // can be used as a shorthand for non-pretty printed strings.
     func stringValue() -> String? {
-        return self.rawString(.utf8, options: [])
+        return self.rawString([writtingOptionsKeys.castNilToNSNull: true])
     }
 }
