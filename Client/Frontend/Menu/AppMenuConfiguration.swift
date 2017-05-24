@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import AVFoundation
 import Shared
 
 enum AppMenuAction: String {
@@ -34,6 +35,8 @@ struct AppMenuConfiguration: MenuConfiguration {
     internal fileprivate(set) var numberOfItemsInRow: Int = 0
 
     fileprivate(set) var isPrivateMode: Bool = false
+
+    private let hasVideoCaptureDevice: Bool = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo) != nil
 
     init(appState: AppState) {
         menuItems = menuItemsForAppState(appState)
@@ -136,7 +139,9 @@ struct AppMenuConfiguration: MenuConfiguration {
                     menuItems.append(AppMenuConfiguration.HideNightModeItem)
                 }
             }
-            menuItems.append(AppMenuConfiguration.QRCodeMenuItem)
+            if hasVideoCaptureDevice {
+                menuItems.append(AppMenuConfiguration.QRCodeMenuItem)
+            }
             menuItems.append(AppMenuConfiguration.SettingsMenuItem)
         case .homePanels:
             menuItems.append(AppMenuConfiguration.NewTabMenuItem)
@@ -158,7 +163,9 @@ struct AppMenuConfiguration: MenuConfiguration {
                     menuItems.append(AppMenuConfiguration.HideNightModeItem)
                 }
             }
-            menuItems.append(AppMenuConfiguration.QRCodeMenuItem)
+            if hasVideoCaptureDevice {
+                menuItems.append(AppMenuConfiguration.QRCodeMenuItem)
+            }
             menuItems.append(AppMenuConfiguration.SettingsMenuItem)
         case .emptyTab, .loading:
             menuItems.append(AppMenuConfiguration.NewTabMenuItem)
@@ -180,7 +187,9 @@ struct AppMenuConfiguration: MenuConfiguration {
                     menuItems.append(AppMenuConfiguration.HideNightModeItem)
                 }
             }
-            menuItems.append(AppMenuConfiguration.QRCodeMenuItem)
+            if hasVideoCaptureDevice {
+                menuItems.append(AppMenuConfiguration.QRCodeMenuItem)
+            }
             menuItems.append(AppMenuConfiguration.SettingsMenuItem)
         case .tabTray:
             menuItems.append(AppMenuConfiguration.NewTabMenuItem)
