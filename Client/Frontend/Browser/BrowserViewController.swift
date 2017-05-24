@@ -2116,13 +2116,11 @@ extension BrowserViewController: HomePanelViewControllerDelegate {
     }
 
     func homePanelViewControllerDidRequestToCreateAccount(_ homePanelViewController: HomePanelViewController) {
-        let fxaOptions = FxALaunchParams(view: "signup", email: nil, access_code: nil)
-        presentSignInViewController(fxaOptions) // TODO UX Right now the flow for sign in and create account is the same
+        presentSignInViewController() // TODO UX Right now the flow for sign in and create account is the same
     }
 
     func homePanelViewControllerDidRequestToSignIn(_ homePanelViewController: HomePanelViewController) {
-        let fxaOptions = FxALaunchParams(view: "signin", email: nil, access_code: nil)
-        presentSignInViewController(fxaOptions) // TODO UX Right now the flow for sign in and create account is the same
+        presentSignInViewController() // TODO UX Right now the flow for sign in and create account is the same
     }
     
     func homePanelViewControllerDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
@@ -2959,7 +2957,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
         }
     }
 
-    func presentSignInViewController(_ fxaOptions: FxALaunchParams) {
+    func presentSignInViewController(_ fxaOptions: FxALaunchParams? = nil) {
         // Show the settings page if we have already signed in. If we haven't then show the signin page
         let vcToPresent: UIViewController
         if profile.hasAccount() {
@@ -2968,10 +2966,8 @@ extension BrowserViewController: IntroViewControllerDelegate {
             settingsTableViewController.tabManager = tabManager
             vcToPresent = settingsTableViewController
         } else {
-            let signInVC = FxAContentViewController(profile: profile)
-            signInVC.delegate = self
-            signInVC.url = profile.accountConfiguration.signInURL
-            signInVC.fxaOptions = fxaOptions
+            let signInVC = FxAContentViewController(profile: profile, fxaOptions: fxaOptions)
+            signInVC.delegate = self            
             signInVC.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.cancel, target: self, action: #selector(BrowserViewController.dismissSignInViewController))
             vcToPresent = signInVC
         }
@@ -2987,8 +2983,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
 
     func introViewControllerDidRequestToLogin(_ introViewController: IntroViewController) {
         introViewController.dismiss(animated: true, completion: { () -> Void in
-            let fxaOptions = FxALaunchParams(view: "signup", email: nil, access_code: nil)
-            self.presentSignInViewController(fxaOptions)
+            self.presentSignInViewController()
         })
     }
 }
