@@ -272,11 +272,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         if AppConstants.MOZ_FXA_DEEP_LINK_FORM_FILL {
             // Extract optional FxA deep-linking options
-            let fxaQuery = url.getQuery()
-            let fxaParams: FxALaunchParams
-            fxaParams = FxALaunchParams(view: fxaQuery["fxa"], email: fxaQuery["email"], access_code: fxaQuery["access_code"])
+            let query = url.getQuery()
+            let host = url.host
             
-            if fxaParams.view != nil {
+            // FxA form filling requires a `signin` query param and host = fxa-signin
+            // Ex. firefox://fxa-signin?signin=<token>&someQuery=<data>...
+            if query["signin"] != nil && host == "fxa-signin" {
+                let fxaParams: FxALaunchParams
+                fxaParams = FxALaunchParams(query: query)
                 launchFxAFromURL(fxaParams)
                 return true
             }
@@ -315,7 +318,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     }
     
     func launchFxAFromURL(_ params: FxALaunchParams) {
-        guard params.view != nil else {
+        guard params.query != nil else {
             return
         }
         self.browserViewController.presentSignInViewController(params)
@@ -682,9 +685,7 @@ extension AppDelegate {
 }
 
 struct FxALaunchParams {
-    var view: String?
-    var email: String?
-    var access_code: String?
+    var query: [String: String]
 }
 
 struct LaunchParams {
