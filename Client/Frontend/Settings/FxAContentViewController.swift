@@ -41,7 +41,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         super.init(backgroundColor: UIColor(red: 242 / 255.0, green: 242 / 255.0, blue: 242 / 255.0, alpha: 1.0), title: NSAttributedString(string: "Firefox Accounts"))
         
         if AppConstants.MOZ_FXA_DEEP_LINK_FORM_FILL {
-            self.url = self.FxAURLWithOptions(fxaOptions)
+            self.url = self.createFxAURLWith(fxaOptions, profile: profile)
         } else {
             self.url = profile.accountConfiguration.signInURL
         }
@@ -194,8 +194,8 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     }
     
     // Configure the FxA signin url based on any passed options.
-    public func FxAURLWithOptions(_ fxaOptions: FxALaunchParams?) -> URL {
-        let profileUrl = self.profile.accountConfiguration.signInURL
+    public func createFxAURLWith(_ fxaOptions: FxALaunchParams?, profile: Profile) -> URL {
+        let profileUrl = profile.accountConfiguration.signInURL
         
         guard let launchParams = fxaOptions else {
             return profileUrl
