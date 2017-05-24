@@ -8,8 +8,12 @@ import Shared
 import XCGLogger
 import Deferred
 
-open class SerializeRecordFailure<T: CleartextPayloadJSON>: MaybeErrorType {
+open class SerializeRecordFailure<T: CleartextPayloadJSON>: MaybeErrorType, SyncPingFailureFormattable {
     open let record: Record<T>
+
+    open var failureReasonName: SyncPingFailureReasonName {
+        return .otherError
+    }
 
     open var description: String {
         return "Failed to serialize record: \(record)"
