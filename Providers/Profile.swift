@@ -60,7 +60,7 @@ class ProfileFileAccessor: FileAccessor {
 
         // Bug 1147262: First option is for device, second is for simulator.
         var rootPath: String
-        let sharedContainerIdentifier = AppInfo.sharedContainerIdentifier()
+        let sharedContainerIdentifier = AppInfo.sharedContainerIdentifier
         if let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: sharedContainerIdentifier) {
             rootPath = url.path
         } else {
@@ -81,7 +81,7 @@ class CommandStoringSyncDelegate: SyncDelegate {
 
     public func displaySentTabForURL(_ URL: URL, title: String) {
         let item = ShareItem(url: URL.absoluteString, title: title, favicon: nil)
-        let _ = self.profile.queue.addToQueue(item)
+        _ = self.profile.queue.addToQueue(item)
     }
 }
 
@@ -659,9 +659,8 @@ open class BrowserProfile: Profile {
 
             syncDisplayState = SyncStatusResolver(engineResults: result.engineResults).resolveResults()
 
-            if canSendUsageData() {
-                let syncPing = SyncPing(account: profile.account, why: .schedule, syncOperationResult: result)
-                Telemetry.send(ping: syncPing, docType: .sync)
+            if let account = profile.account, canSendUsageData() {
+                sendSyncPing(account: account, result: result)
             } else {
                 log.debug("Profile isn't sending usage data. Not sending sync status event.")
             }
@@ -672,6 +671,14 @@ open class BrowserProfile: Profile {
 
         fileprivate func canSendUsageData() -> Bool {
             return profile.prefs.boolForKey("settings.sendUsageData") ?? true
+        }
+
+        private func sendSyncPing(account: FirefoxAccount, result: SyncOperationResult) {
+            SyncPing.from(result: result,
+                          account: account,
+                          remoteClientsAndTabs: self.profile.remoteClientsAndTabs,
+                          prefs: self.prefs,
+                          why: .schedule) >>== { Telemetry.send(ping: $0, docType: .sync) }
         }
 
         private func notifySyncing(notification: Notification.Name) {
@@ -990,7 +997,7 @@ open class BrowserProfile: Profile {
         fileprivate func mirrorBookmarksWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> SyncResult {
             log.debug("Synchronizing server bookmarks to storage.")
             let bookmarksMirrorer = ready.synchronizer(BufferingBookmarksSynchronizer.self, delegate: delegate, prefs: prefs)
-            return bookmarksMirrorer.synchronizeBookmarksToStorage(self.profile.bookmarks, usingBuffer: self.profile.mirrorBookmarks, withServer: ready.client, info: ready.info, greenLight: self.greenLight())
+            return bookmarksMirrorer.synchronizeBookmarksToStorage(self.profile.bookmarks, usingBuffer: self.profile.mirrorBookmarks, withServer: ready.client, info: ready.info, greenLight: self.greenLight(), remoteClientsAndTabs: self.profile.remoteClientsAndTabs)
         }
 
         func takeActionsOnEngineStateChanges<T: EngineStateChanges>(_ changes: T) -> Deferred<Maybe<T>> {

@@ -172,6 +172,7 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
         scene.tap(table.cells["Logins"], to: LoginsSettings)
         scene.tap(table.cells["ClearPrivateData"], to: ClearPrivateDataSettings)
         scene.tap(table.cells["OpenWith.Setting"], to: OpenWithSettings)
+        scene.tap(table.cells["ShowTour"], to: Intro_Organize)
 
         scene.backAction = navigationControllerBackAction
     }
@@ -332,4 +333,39 @@ extension Navigator {
             self.goto(TabTray)
         }
     }
+
+    func browserPerformAction(_ view: BrowserPerformAction) {
+        let page1Options = [.requestDesktop, .requestMobile, .findInPageOption, .requestSetHomePage, .addBookmarkOption, .removeBookmarkOption, .openNewTabOption, BrowserPerformAction.openNewPrivateTabOption]
+        let page2Options = [.requestNightMode, .requestDayMode, .requestHideImages, .requestShowImages, BrowserPerformAction.openSettingsOption]
+
+        let app = XCUIApplication()
+
+        if page1Options.contains(view) {
+            self.goto(BrowserTabMenu)
+            app.collectionViews.cells[view.rawValue].tap()
+        } else if page2Options.contains(view) {
+            self.goto(BrowserTabMenu2)
+            app.collectionViews.cells[view.rawValue].tap()
+        }
+    }
+}
+enum BrowserPerformAction: String {
+    // BrowserTabMenu Page 1
+    case requestDesktop = "RequestDesktopMenuItem"
+    case requestMobile = "RequestMobileMenuItem"
+    case findInPageOption = "FindInPageMenuItem"
+    case requestSetHomePage = "SetHomePageMenuItem"
+    case addBookmarkOption  = "AddBookmarkMenuItem"
+    case removeBookmarkOption = "RemoveBookmarkMenuItem"
+    // These two cases below added for completeness and to check a particular use case, like that the button works and takes to the correct place, but do NOT use them in a complex test case, use the other way (navigator.goto(....)) to open a new tab/new private tab
+    case openNewTabOption = "NewTabMenuItem"
+    case openNewPrivateTabOption = "NewPrivateTabMenuItem"
+
+    // BrowserTabMenu Page 2
+    case requestNightMode = "HideNightModeItem"
+    case requestDayMode = "ShowNightModeItem"
+    case requestHideImages = "HideImageModeMenuItem"
+    case requestShowImages = "ShowImageModeMenuItem"
+    // Same comment as above, this case added for completeness
+    case openSettingsOption = "SettingsMenuItem"
 }

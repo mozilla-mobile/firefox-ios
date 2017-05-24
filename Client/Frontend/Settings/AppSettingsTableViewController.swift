@@ -28,18 +28,13 @@ class AppSettingsTableViewController: SettingsTableViewController {
         var settings = [SettingSection]()
 
         let privacyTitle = NSLocalizedString("Privacy", comment: "Privacy section title")
-        let accountDebugSettings: [Setting]
-        if AppConstants.BuildChannel != .aurora {
-            accountDebugSettings = [
-                // Debug settings:
-                RequirePasswordDebugSetting(settings: self),
-                RequireUpgradeDebugSetting(settings: self),
-                ForgetSyncAuthStateDebugSetting(settings: self),
-                StageSyncServiceDebugSetting(settings: self),
-            ]
-        } else {
-            accountDebugSettings = []
-        }
+        let accountDebugSettings = [
+            // Debug settings:
+            RequirePasswordDebugSetting(settings: self),
+            RequireUpgradeDebugSetting(settings: self),
+            ForgetSyncAuthStateDebugSetting(settings: self),
+            StageSyncServiceDebugSetting(settings: self),
+        ]
 
         let prefs = profile.prefs
         var generalSettings: [Setting] = [
@@ -121,7 +116,9 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 YourRightsSetting(),
                 ExportBrowserDataSetting(settings: self),
                 DeleteExportedDataSetting(settings: self),
-                EnableBookmarkMergingSetting(settings: self)
+                EnableBookmarkMergingSetting(settings: self),
+                ForceCrashSetting(settings: self),
+                EnableActivtyStreamSetting(settings: self)
             ])]
             
             if profile.hasAccount() {

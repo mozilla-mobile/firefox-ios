@@ -17,6 +17,7 @@ import MobileCoreServices
 import WebImage
 import SwiftyJSON
 import Telemetry
+import KSCrash
 
 private let log = Logger.browserLogger
 
@@ -516,6 +517,10 @@ class BrowserViewController: UIViewController {
         }
     }
 
+    // Because crashedLastLaunch is sticky, it does not get reset, we need to remember its
+    // value so that we do not keep asking the user to restore their tabs.
+    var displayedRestoreTabsAlert = false
+
     override func viewWillAppear(_ animated: Bool) {
         log.debug("BVC viewWillAppear.")
         super.viewWillAppear(animated)
@@ -528,8 +533,8 @@ class BrowserViewController: UIViewController {
             self.view.alpha = (profile.prefs.intForKey(IntroViewControllerSeenProfileKey) != nil) ? 1.0 : 0.0
         }
 
-        if PLCrashReporter.shared().hasPendingCrashReport() {
-            PLCrashReporter.shared().purgePendingCrashReport()
+        if !displayedRestoreTabsAlert && hasPendingCrashReport() {
+            displayedRestoreTabsAlert = true
             showRestoreTabsAlert()
         } else {
             log.debug("Restoring tabs.")
@@ -548,8 +553,12 @@ class BrowserViewController: UIViewController {
                                                          object: nil)
     }
 
+    fileprivate func hasPendingCrashReport() -> Bool {
+        return KSCrash.sharedInstance().crashedLastLaunch
+    }
+
     fileprivate func showRestoreTabsAlert() {
-        guard shouldRestoreTabs() else {
+        if !canRestoreTabs() {
             self.tabManager.addTabAndSelect()
             return
         }
@@ -568,17 +577,9 @@ class BrowserViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
 
-    fileprivate func shouldRestoreTabs() -> Bool {
+    fileprivate func canRestoreTabs() -> Bool {
         guard let tabsToRestore = TabManager.tabsToRestore() else { return false }
-        let onlyNoHistoryTabs = !tabsToRestore.every {
-            if $0.sessionData?.urls.count ?? 0 > 1 {
-                if let url = $0.sessionData?.urls.first {
-                    return !url.isAboutHomeURL
-                }
-            }
-            return false
-        }
-        return !onlyNoHistoryTabs && !DebugSettingsBundleOptions.skipSessionRestore
+        return tabsToRestore.count > 0
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -1068,7 +1069,7 @@ class BrowserViewController: UIViewController {
         }
 
         switchToPrivacyMode(isPrivate: isPrivate)
-        let _ = tabManager.addTabAndSelect(request, isPrivate: isPrivate)
+        _ = tabManager.addTabAndSelect(request, isPrivate: isPrivate)
         if url == nil && NewTabAccessors.getNewTabPage(profile.prefs) == .blankPage {
             urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
         }
@@ -1085,7 +1086,7 @@ class BrowserViewController: UIViewController {
         }
         currentViewController.dismiss(animated: true, completion: nil)
         if currentViewController != self {
-            let _ = self.navigationController?.popViewController(animated: true)
+            _ = self.navigationController?.popViewController(animated: true)
         } else if urlBar.inOverlayMode {
             urlBar.SELdidClickCancel()
         }
@@ -1314,6 +1315,59 @@ class BrowserViewController: UIViewController {
         controller.modalPresentationStyle = UIModalPresentationStyle.formSheet
         self.present(controller, animated: true, completion: nil)
     }
+    
+    fileprivate func navigateInTab(tab: Tab, to navigation: WKNavigation? = nil) {
+        tabManager.expireSnackbars()
+
+        guard let webView = tab.webView else {
+            log.warning("Cannot navigate in tab without a webView")
+            return
+        }
+
+        if let url = webView.url, !url.isErrorPageURL && !url.isAboutHomeURL {
+            tab.lastExecutedTime = Date.now()
+            
+            if navigation == nil {
+                log.warning("Implicitly unwrapped optional navigation was nil.")
+            }
+            
+            postLocationChangeNotificationForTab(tab, navigation: navigation)
+            
+            // Fire the readability check. This is here and not in the pageShow event handler in ReaderMode.js anymore
+            // because that event wil not always fire due to unreliable page caching. This will either let us know that
+            // the currently loaded page can be turned into reading mode or if the page already is in reading mode. We
+            // ignore the result because we are being called back asynchronous when the readermode status changes.
+            webView.evaluateJavaScript("\(ReaderModeNamespace).checkReadability()", completionHandler: nil)
+
+            // Re-run additional scripts in webView to extract updated favicons and metadata.
+            runScriptsOnWebView(webView)
+        }
+        
+        if tab === tabManager.selectedTab {
+            UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
+            // must be followed by LayoutChanged, as ScreenChanged will make VoiceOver
+            // cursor land on the correct initial element, but if not followed by LayoutChanged,
+            // VoiceOver will sometimes be stuck on the element, not allowing user to move
+            // forward/backward. Strange, but LayoutChanged fixes that.
+            UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
+        } else {
+            // To Screenshot a tab that is hidden we must add the webView,
+            // then wait enough time for the webview to render.
+            if let webView =  tab.webView {
+                view.insertSubview(webView, at: 0)
+                let time = DispatchTime.now() + Double(Int64(500 * NSEC_PER_MSEC)) / Double(NSEC_PER_SEC)
+                DispatchQueue.main.asyncAfter(deadline: time) {
+                    self.screenshotHelper.takeScreenshot(tab)
+                    if webView.superview == self.view {
+                        webView.removeFromSuperview()
+                    }
+                }
+            }
+        }
+        
+        // Remember whether or not a desktop site was requested
+        tab.desktopSite = webView.customUserAgent?.isEmpty == false
+    }
 }
 
 extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
@@ -1337,8 +1391,6 @@ extension BrowserViewController: MenuActionDelegate {
             switch menuAction {
             case .openNewNormalTab:
                 self.openURLInNewTab(nil, isPrivate: false, isPrivileged: true)
-                LeanplumIntegration.sharedInstance.track(eventName: .openedNewTab)
-
             // this is a case that is only available in iOS9
             case .openNewPrivateTab:
                 self.openURLInNewTab(nil, isPrivate: true, isPrivileged: true)
@@ -1627,8 +1679,6 @@ extension BrowserViewController: URLBarDelegate {
             }
             showHomePanelController(inline: false)
         }
-
-        LeanplumIntegration.sharedInstance.track(eventName: .interactWithURLBar)
     }
 
     func urlBarDidLeaveOverlayMode(_ urlBar: URLBarView) {
@@ -1720,7 +1770,6 @@ extension BrowserViewController: TabToolbarDelegate {
             self.removeBookmark(tabState)
         } else {
             self.addBookmark(tabState)
-            LeanplumIntegration.sharedInstance.track(eventName: .savedBookmark)
         }
     }
 
@@ -1869,6 +1918,10 @@ extension BrowserViewController: TabDelegate {
 
         tab.addHelper(LocalRequestHelper(), name: LocalRequestHelper.name())
 
+        let historyStateHelper = HistoryStateHelper(tab: tab)
+        historyStateHelper.delegate = self
+        tab.addHelper(historyStateHelper, name: HistoryStateHelper.name())
+        
         if AppConstants.MOZ_CONTENT_METADATA_PARSING {
             let metadataHelper = MetadataParserHelper(tab: tab, profile: profile)
             tab.addHelper(metadataHelper, name: MetadataParserHelper.name())
@@ -1892,10 +1945,8 @@ extension BrowserViewController: TabDelegate {
 
     fileprivate func findSnackbar(_ barToFind: SnackBar) -> Int? {
         let bars = snackBars.subviews
-        for (index, bar) in bars.enumerated() {
-            if bar === barToFind {
-                return index
-            }
+        for (index, bar) in bars.enumerated() where bar === barToFind {
+            return index
         }
         return nil
     }
@@ -2299,8 +2350,6 @@ extension BrowserViewController: WKNavigationDelegate {
                     UIApplication.shared.openURL(url)
                 }))
                 present(alert, animated: true, completion: nil)
-
-                LeanplumIntegration.sharedInstance.track(eventName: .openedTelephoneLink)
             }
             decisionHandler(WKNavigationActionPolicy.cancel)
             return
@@ -2323,8 +2372,6 @@ extension BrowserViewController: WKNavigationDelegate {
             } else {
                 UIApplication.shared.openURL(url)
             }
-
-            LeanplumIntegration.sharedInstance.track(eventName: .openedMailtoLink)
             decisionHandler(WKNavigationActionPolicy.cancel)
             return
         }
@@ -2408,48 +2455,7 @@ extension BrowserViewController: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         let tab: Tab! = tabManager[webView]
-        tabManager.expireSnackbars()
-
-        if let url = webView.url, !url.isErrorPageURL && !url.isAboutHomeURL {
-            tab.lastExecutedTime = Date.now()
-
-            if navigation == nil {
-                log.warning("Implicitly unwrapped optional navigation was nil.")
-            }
-
-            postLocationChangeNotificationForTab(tab, navigation: navigation)
-
-            // Fire the readability check. This is here and not in the pageShow event handler in ReaderMode.js anymore
-            // because that event wil not always fire due to unreliable page caching. This will either let us know that
-            // the currently loaded page can be turned into reading mode or if the page already is in reading mode. We
-            // ignore the result because we are being called back asynchronous when the readermode status changes.
-            webView.evaluateJavaScript("\(ReaderModeNamespace).checkReadability()", completionHandler: nil)
-        }
-
-        if tab === tabManager.selectedTab {
-            UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
-            // must be followed by LayoutChanged, as ScreenChanged will make VoiceOver
-            // cursor land on the correct initial element, but if not followed by LayoutChanged,
-            // VoiceOver will sometimes be stuck on the element, not allowing user to move
-            // forward/backward. Strange, but LayoutChanged fixes that.
-            UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
-        } else {
-            // To Screenshot a tab that is hidden we must add the webView,
-            // then wait enough time for the webview to render.
-            if let webView =  tab.webView {
-                view.insertSubview(webView, at: 0)
-                let time = DispatchTime.now() + Double(Int64(500 * NSEC_PER_MSEC)) / Double(NSEC_PER_SEC)
-                DispatchQueue.main.asyncAfter(deadline: time) {
-                    self.screenshotHelper.takeScreenshot(tab)
-                    if webView.superview == self.view {
-                        webView.removeFromSuperview()
-                    }
-                }
-            }
-        }
-
-        // Remember whether or not a desktop site was requested
-        tab.desktopSite = webView.customUserAgent?.isEmpty == false
+        navigateInTab(tab: tab, to: navigation)
     }
 
     fileprivate func addViewForOpenInHelper(_ openInHelper: OpenInHelper) {
@@ -2908,7 +2914,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
     func introViewControllerDidFinish(_ introViewController: IntroViewController) {
         introViewController.dismiss(animated: true) { finished in
             if self.navigationController?.viewControllers.count ?? 0 > 1 {
-                let _ = self.navigationController?.popToRootViewController(animated: true)
+                _ = self.navigationController?.popToRootViewController(animated: true)
             }
         }
     }
@@ -3037,7 +3043,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                     }
                     accessDenied.addAction(settingsAction)
                     self.present(accessDenied, animated: true, completion: nil)
-                    LeanplumIntegration.sharedInstance.track(eventName: .downloadedImage)
+
                 }
             }
             actionSheetController.addAction(saveImageAction)
@@ -3098,6 +3104,12 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                     success(image)
                 }
             }
+    }
+}
+
+extension BrowserViewController: HistoryStateHelperDelegate {
+    func historyStateHelper(_ historyStateHelper: HistoryStateHelper, didPushOrReplaceStateInTab tab: Tab) {
+        navigateInTab(tab: tab)
     }
 }
 
@@ -3453,7 +3465,6 @@ extension BrowserViewController: TopTabsDelegate {
         if selectedTab.isPrivate {
             if profile.prefs.boolForKey("settings.closePrivateTabs") ?? false {
                 tabManager.removeAllPrivateTabsAndNotify(false)
-                tabManager.showFocusPromoToast()
             }
         }
     }

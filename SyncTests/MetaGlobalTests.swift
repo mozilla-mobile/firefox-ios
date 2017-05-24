@@ -29,7 +29,7 @@ class MockSyncAuthState: SyncAuthState {
     }
 
     func token(_ now: Timestamp, canBeExpired: Bool) -> Deferred<Maybe<(token: TokenServerToken, forKey: Data)>> {
-        let token = TokenServerToken(id: "id", key: "key", api_endpoint: serverRoot, uid: UInt64(0),
+        let token = TokenServerToken(id: "id", key: "key", api_endpoint: serverRoot, uid: UInt64(0), hashedFxAUID: "",
             durationInSeconds: UInt64(5 * 60), remoteTimestamp: Timestamp(now - 1))
         return deferMaybe((token, self.kB))
     }
@@ -106,7 +106,7 @@ class MetaGlobalTests: XCTestCase {
 
         let expectation = self.expectation(description: "Waiting on value.")
         stateMachine.toReady(authState).upon { result in
-            XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "resolveMetaGlobalVersion", "clientUpgradeRequired"])
+            XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "needsFreshMetaGlobal", "resolveMetaGlobalVersion", "clientUpgradeRequired"])
             XCTAssertNotNil(result.failureValue as? ClientUpgradeRequiredError)
             XCTAssertNil(result.successValue)
             expectation.fulfill()
@@ -124,8 +124,8 @@ class MetaGlobalTests: XCTestCase {
         let afterStores = Date.now()
         let expectation = self.expectation(description: "Waiting on value.")
         stateMachine.toReady(authState).upon { result in
-            XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "resolveMetaGlobalVersion", "remoteUpgradeRequired",
-                "freshStartRequired", "serverConfigurationRequired", "initialWithLiveToken", "initialWithLiveTokenAndInfo", "resolveMetaGlobalVersion", "resolveMetaGlobalContent", "hasMetaGlobal", "needsFreshCryptoKeys", "hasFreshCryptoKeys", "ready"])
+            XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "needsFreshMetaGlobal", "resolveMetaGlobalVersion", "remoteUpgradeRequired",
+                "freshStartRequired", "serverConfigurationRequired", "initialWithLiveToken", "initialWithLiveTokenAndInfo", "needsFreshMetaGlobal", "resolveMetaGlobalVersion", "resolveMetaGlobalContent", "hasMetaGlobal", "needsFreshCryptoKeys", "hasFreshCryptoKeys", "ready"])
             self.assertFreshStart(ready: result.successValue, after: afterStores)
             XCTAssertTrue(result.isSuccess)
             XCTAssertNil(result.failureValue)
@@ -142,8 +142,8 @@ class MetaGlobalTests: XCTestCase {
         let afterStores = Date.now()
         let expectation = self.expectation(description: "Waiting on value.")
         stateMachine.toReady(authState).upon { result in
-            XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "missingMetaGlobal",
-                "freshStartRequired", "serverConfigurationRequired", "initialWithLiveToken", "initialWithLiveTokenAndInfo", "resolveMetaGlobalVersion", "resolveMetaGlobalContent", "hasMetaGlobal", "needsFreshCryptoKeys", "hasFreshCryptoKeys", "ready"])
+            XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "needsFreshMetaGlobal", "missingMetaGlobal",
+                "freshStartRequired", "serverConfigurationRequired", "initialWithLiveToken", "initialWithLiveTokenAndInfo", "needsFreshMetaGlobal", "resolveMetaGlobalVersion", "resolveMetaGlobalContent", "hasMetaGlobal", "needsFreshCryptoKeys", "hasFreshCryptoKeys", "ready"])
             self.assertFreshStart(ready: result.successValue, after: afterStores)
             XCTAssertTrue(result.isSuccess)
             XCTAssertNil(result.failureValue)
@@ -162,7 +162,7 @@ class MetaGlobalTests: XCTestCase {
         let afterStores = Date.now()
         let expectation = self.expectation(description: "Waiting on value.")
         stateMachine.toReady(authState).upon { result in
-            XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "resolveMetaGlobalVersion", "resolveMetaGlobalContent", "hasMetaGlobal", "needsFreshCryptoKeys", "missingCryptoKeys", "freshStartRequired", "serverConfigurationRequired", "initialWithLiveToken", "initialWithLiveTokenAndInfo", "resolveMetaGlobalVersion", "resolveMetaGlobalContent", "hasMetaGlobal", "needsFreshCryptoKeys", "hasFreshCryptoKeys", "ready"])
+            XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "needsFreshMetaGlobal", "resolveMetaGlobalVersion", "resolveMetaGlobalContent", "hasMetaGlobal", "needsFreshCryptoKeys", "missingCryptoKeys", "freshStartRequired", "serverConfigurationRequired", "initialWithLiveToken", "initialWithLiveTokenAndInfo", "needsFreshMetaGlobal", "resolveMetaGlobalVersion", "resolveMetaGlobalContent", "hasMetaGlobal", "needsFreshCryptoKeys", "hasFreshCryptoKeys", "ready"])
             self.assertFreshStart(ready: result.successValue, after: afterStores)
             XCTAssertTrue(result.isSuccess)
             XCTAssertNil(result.failureValue)
@@ -183,7 +183,7 @@ class MetaGlobalTests: XCTestCase {
 
         let expectation = self.expectation(description: "Waiting on value.")
         stateMachine.toReady(authState).upon { result in
-            XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "resolveMetaGlobalVersion", "resolveMetaGlobalContent", "hasMetaGlobal", "needsFreshCryptoKeys", "hasFreshCryptoKeys", "ready"])
+            XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "needsFreshMetaGlobal", "resolveMetaGlobalVersion", "resolveMetaGlobalContent", "hasMetaGlobal", "needsFreshCryptoKeys", "hasFreshCryptoKeys", "ready"])
             XCTAssertNotNil(result.successValue)
             guard let ready = result.successValue else {
                 return
@@ -233,6 +233,68 @@ class MetaGlobalTests: XCTestCase {
         }
     }
 
+    func testFailingOptimisticStateMachine() {
+        // We test only the optimistic state machine, knowing it will need to go through 
+        // needsFreshMetaGlobal, and fail.
+        let metaGlobal = MetaGlobal(syncID: "id", storageVersion: 5, engines: [String: EngineMeta](), declined: [])
+        let cryptoKeys = Keys.random()
+        storeMetaGlobal(metaGlobal: metaGlobal)
+        storeCryptoKeys(keys: cryptoKeys)
+
+        stateMachine = SyncStateMachine(prefs: syncPrefs, allowingStates: SyncStateMachine.OptimisticStates)
+
+        let expectation = self.expectation(description: "Waiting on value.")
+        stateMachine.toReady(authState).upon { result in
+            XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "needsFreshMetaGlobal"])
+            XCTAssertNotNil(result.failureValue)
+            if let failure = result.failureValue as? DisallowedStateError {
+                XCTAssertEqual(failure.state, SyncStateLabel.NeedsFreshMetaGlobal)
+            } else {
+                XCTFail("SyncStatus failed, but with a different error")
+            }
+            expectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 2000) { (error) in
+            XCTAssertNil(error, "Error: \(error ??? "nil")")
+        }
+    }
+
+    func testHappyOptimisticStateMachine() {
+        // We should be able to quickly progress through a constrained (a.k.a. optimistic) state machine
+        let metaGlobal = MetaGlobal(syncID: "id", storageVersion: 5, engines: [String: EngineMeta](), declined: [])
+        let cryptoKeys = Keys.random()
+        storeMetaGlobal(metaGlobal: metaGlobal)
+        storeCryptoKeys(keys: cryptoKeys)
+
+        let expectation = self.expectation(description: "Waiting on value.")
+        stateMachine.toReady(authState).upon { result in
+            XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "needsFreshMetaGlobal", "resolveMetaGlobalVersion", "resolveMetaGlobalContent", "hasMetaGlobal", "needsFreshCryptoKeys", "hasFreshCryptoKeys", "ready"])
+            XCTAssertNotNil(result.successValue)
+            expectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 2000) { (error) in
+            XCTAssertNil(error, "Error: \(error ??? "nil")")
+        }
+
+        // Now, run through the state machine again.  Nothing's changed remotely, so we should advance quickly.
+        // We should be able to use this 'optimistic' path in an extension.
+        stateMachine = SyncStateMachine(prefs: syncPrefs, allowingStates: SyncStateMachine.OptimisticStates)
+
+        let secondExpectation = self.expectation(description: "Waiting on value.")
+
+        stateMachine.toReady(authState).upon { result in
+            XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "hasMetaGlobal", "hasFreshCryptoKeys", "ready"])
+            XCTAssertNotNil(result.successValue)
+            secondExpectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 2000) { (error) in
+            XCTAssertNil(error, "Error: \(error ??? "nil")")
+        }
+    }
+
     func testUpdatedCryptoKeys() {
         // When encountering a valid meta/global and crypto/keys, advance smoothly.
         let metaGlobal = MetaGlobal(syncID: "id", storageVersion: 5, engines: [String: EngineMeta](), declined: [])
@@ -244,7 +306,7 @@ class MetaGlobalTests: XCTestCase {
 
         let expectation = self.expectation(description: "Waiting on value.")
         stateMachine.toReady(authState).upon { result in
-            XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "resolveMetaGlobalVersion", "resolveMetaGlobalContent", "hasMetaGlobal", "needsFreshCryptoKeys", "hasFreshCryptoKeys", "ready"])
+            XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "needsFreshMetaGlobal", "resolveMetaGlobalVersion", "resolveMetaGlobalContent", "hasMetaGlobal", "needsFreshCryptoKeys", "hasFreshCryptoKeys", "ready"])
             XCTAssertNotNil(result.successValue)
             guard let ready = result.successValue else {
                 return
@@ -381,7 +443,7 @@ class MetaGlobalTests: XCTestCase {
 
         let expectation = self.expectation(description: "Waiting on value.")
         stateMachine.toReady(authState).upon { result in
-            XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "resolveMetaGlobalVersion", "resolveMetaGlobalContent", "hasMetaGlobal", "needsFreshCryptoKeys", "hasFreshCryptoKeys", "ready"])
+            XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "needsFreshMetaGlobal", "resolveMetaGlobalVersion", "resolveMetaGlobalContent", "hasMetaGlobal", "needsFreshCryptoKeys", "hasFreshCryptoKeys", "ready"])
             XCTAssertNotNil(result.successValue)
             guard let ready = result.successValue else {
                 return
@@ -409,7 +471,7 @@ class MetaGlobalTests: XCTestCase {
         // Now, run through the state machine again.  We should produce and upload a meta/global reflecting our engine configuration.
         let secondExpectation = self.expectation(description: "Waiting on value.")
         stateMachine.toReady(authState).upon { result in
-            XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "missingMetaGlobal", "freshStartRequired", "serverConfigurationRequired", "initialWithLiveToken", "initialWithLiveTokenAndInfo", "resolveMetaGlobalVersion", "resolveMetaGlobalContent", "hasMetaGlobal", "needsFreshCryptoKeys", "hasFreshCryptoKeys", "ready"])
+            XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "needsFreshMetaGlobal", "missingMetaGlobal", "freshStartRequired", "serverConfigurationRequired", "initialWithLiveToken", "initialWithLiveTokenAndInfo", "needsFreshMetaGlobal", "resolveMetaGlobalVersion", "resolveMetaGlobalContent", "hasMetaGlobal", "needsFreshCryptoKeys", "hasFreshCryptoKeys", "ready"])
             XCTAssertNotNil(result.successValue)
             guard let ready = result.successValue else {
                 return
@@ -448,7 +510,7 @@ class MetaGlobalTests: XCTestCase {
 
         let expectation = self.expectation(description: "Waiting on value.")
         stateMachine.toReady(authState).upon { result in
-            XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "resolveMetaGlobalVersion", "resolveMetaGlobalContent", "hasMetaGlobal", "needsFreshCryptoKeys", "hasFreshCryptoKeys", "ready"])
+            XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "needsFreshMetaGlobal", "resolveMetaGlobalVersion", "resolveMetaGlobalContent", "hasMetaGlobal", "needsFreshCryptoKeys", "hasFreshCryptoKeys", "ready"])
             XCTAssertNotNil(result.successValue)
             guard let ready = result.successValue else {
                 return
@@ -481,7 +543,7 @@ class MetaGlobalTests: XCTestCase {
         // Now, run through the state machine again.
         let secondExpectation = self.expectation(description: "Waiting on value.")
         stateMachine.toReady(authState).upon { result in
-            XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "resolveMetaGlobalVersion", "resolveMetaGlobalContent", "hasMetaGlobal", "needsFreshCryptoKeys", "hasFreshCryptoKeys", "ready"])
+            XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "needsFreshMetaGlobal", "resolveMetaGlobalVersion", "resolveMetaGlobalContent", "hasMetaGlobal", "needsFreshCryptoKeys", "hasFreshCryptoKeys", "ready"])
             XCTAssertNotNil(result.successValue)
             guard let ready = result.successValue else {
                 return
@@ -519,11 +581,12 @@ class MetaGlobalTests: XCTestCase {
         declined.append("unknownEngine1")
         let secondMetaGlobal = MetaGlobal(syncID: newMetaGlobal.syncID, storageVersion: 5, engines: engines, declined: declined)
         storeMetaGlobal(metaGlobal: secondMetaGlobal)
+        syncPrefs.removeObjectForKey("scratchpad.localCommands")
 
         // Now, run through the state machine again.
         let thirdExpectation = self.expectation(description: "Waiting on value.")
         stateMachine.toReady(authState).upon { result in
-            XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "resolveMetaGlobalVersion", "resolveMetaGlobalContent", "hasMetaGlobal", "hasFreshCryptoKeys", "ready"])
+            XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "needsFreshMetaGlobal", "resolveMetaGlobalVersion", "resolveMetaGlobalContent", "hasMetaGlobal", "hasFreshCryptoKeys", "ready"])
             XCTAssertNotNil(result.successValue)
             guard let ready = result.successValue else {
                 return

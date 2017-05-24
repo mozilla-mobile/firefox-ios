@@ -2,8 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>MozGroupSuffix</key>
-	<string>$(MOZ_GROUP_SUFFIX)</string>
+	<key>MozDevelopmentTeam</key>
+	<string>$(DEVELOPMENT_TEAM)</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -33,7 +33,5 @@
 	</dict>
 	<key>MozInternalURLScheme</key>
 	<string>$(MOZ_INTERNAL_URL_SCHEME)</string>
-	<key>MozDevelopmentTeam</key>
-	<string>$(DEVELOPMENT_TEAM)</string>
 </dict>
 </plist>

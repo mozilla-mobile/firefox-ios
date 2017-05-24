@@ -89,6 +89,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         let profile = getProfile(application)
         appStateStore = AppStateStore(prefs: profile.prefs)
 
+        log.debug("Initializing Sentry…")
+        SentryIntegration.shared.setup(profile: profile)
+
         log.debug("Initializing telemetry…")
         Telemetry.initWithPrefs(profile.prefs)
 
@@ -132,13 +135,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         self.window!.rootViewController = rootViewController
 
-        do {
-            log.debug("Configuring Crash Reporting...")
-            try PLCrashReporter.shared().enableAndReturnError()
-        } catch let error as NSError {
-            log.error("Failed to enable PLCrashReporter - \(error.description)")
-        }
-
         log.debug("Adding observers…")
         NotificationCenter.default.addObserver(forName: NSNotification.Name.FSReadingListAddReadingListItem, object: nil, queue: nil) { (notification) -> Void in
             if let userInfo = notification.userInfo, let url = userInfo["URL"] as? URL {
@@ -158,17 +154,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         
         adjustIntegration = AdjustIntegration(profile: profile)
 
-        LeanplumIntegration.sharedInstance.setup(profile: profile)
-        LeanplumIntegration.sharedInstance.start()
-
         // We need to check if the app is a clean install to use for
         // preventing the What's New URL from appearing.
         if getProfile(application).prefs.intForKey(IntroViewControllerSeenProfileKey) == nil {
             getProfile(application).prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
-            LeanplumIntegration.sharedInstance.track(eventName: .firstRun)
-        } else if getProfile(application).prefs.boolForKey("SecondRun") == nil {
-            getProfile(application).prefs.setBool(true, forKey: "SecondRun")
-            LeanplumIntegration.sharedInstance.track(eventName: .secondRun)
         }
 
         log.debug("Updating authentication keychain state to reflect system state")
@@ -189,7 +178,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         fxaLoginHelper.application(application, didLoadProfile: profile)
 
         // Run an invalidate when we come back into the app.
-        profile.panelDataObservers.activityStream.invalidate()
+        profile.panelDataObservers.activityStream.invalidate(highlights: true)
 
         log.debug("Done with setting up the application.")
         return true
@@ -504,7 +493,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // Set the UA for WKWebView (via defaults), the favicon fetcher, and the image loader.
         // This only needs to be done once per runtime. Note that we use defaults here that are
         // readable from extensions, so they can just use the cached identifier.
-        let defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier())!
+        let defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
         defaults.register(defaults: ["UserAgent": firefoxUA])
 
         SDWebImageDownloader.shared().setValue(firefoxUA, forHTTPHeaderField: "User-Agent")

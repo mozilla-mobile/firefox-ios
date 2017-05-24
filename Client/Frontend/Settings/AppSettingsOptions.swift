@@ -407,6 +407,45 @@ class ExportBrowserDataSetting: HiddenSetting {
     }
 }
 
+/*
+ FeatureSwitchSetting is a boolean switch for features that are enabled via a FeatureSwitch.
+ These are usually features behind a partial release and not features released to the entire population.
+ */
+class FeatureSwitchSetting: BoolSetting {
+    let featureSwitch: FeatureSwitch
+    let prefs: Prefs
+
+    init(prefs: Prefs, featureSwitch: FeatureSwitch, with title: NSAttributedString) {
+        self.featureSwitch = featureSwitch
+        self.prefs = prefs
+        super.init(prefs: prefs, defaultValue: featureSwitch.isMember(prefs), attributedTitleText: title)
+    }
+
+    override var hidden: Bool {
+        return !ShowDebugSettings
+    }
+
+    override func displayBool(_ control: UISwitch) {
+        control.isOn = featureSwitch.isMember(prefs)
+    }
+
+    override func writeBool(_ control: UISwitch) {
+        self.featureSwitch.setMembership(control.isOn, for: self.prefs)
+    }
+
+}
+
+class EnableActivtyStreamSetting: FeatureSwitchSetting {
+    let profile: Profile
+
+    init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
+        let title = NSAttributedString(string: "Enable the New Tab Experience", attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
+        super.init(prefs: settings.profile.prefs, featureSwitch: FeatureSwitches.activityStream, with: title)
+    }
+
+}
+
 class EnableBookmarkMergingSetting: HiddenSetting {
     override var title: NSAttributedString? {
         // Not localized for now.
@@ -415,6 +454,16 @@ class EnableBookmarkMergingSetting: HiddenSetting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         AppConstants.shouldMergeBookmarks = true
+    }
+}
+
+class ForceCrashSetting: HiddenSetting {
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: "Debug: Force Crash", attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        SentryIntegration.shared.crash()
     }
 }
 
@@ -439,13 +488,11 @@ class VersionSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        if AppConstants.BuildChannel != .aurora {
-            DebugSettingsClickCount += 1
-            if DebugSettingsClickCount >= 5 {
-                DebugSettingsClickCount = 0
-                ShowDebugSettings = !ShowDebugSettings
-                settings.tableView.reloadData()
-            }
+        DebugSettingsClickCount += 1
+        if DebugSettingsClickCount >= 5 {
+            DebugSettingsClickCount = 0
+            ShowDebugSettings = !ShowDebugSettings
+            settings.tableView.reloadData()
         }
     }
 }
@@ -485,6 +532,8 @@ class YourRightsSetting: Setting {
 class ShowIntroductionSetting: Setting {
     let profile: Profile
 
+    override var accessibilityIdentifier: String? { return "ShowTour" }
+
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
         super.init(title: NSAttributedString(string: NSLocalizedString("Show Tour", comment: "Show the on-boarding screen again from the settings"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]))
@@ -520,10 +569,7 @@ class SendAnonymousUsageDataSetting: BoolSetting {
             prefs: prefs, prefKey: "settings.sendUsageData", defaultValue: true,
             attributedTitleText: NSAttributedString(string: NSLocalizedString("Send Anonymous Usage Data", tableName: "SendAnonymousUsageData", comment: "See http://bit.ly/1SmEXU1")),
             attributedStatusText: NSAttributedString(string: NSLocalizedString("More Info…", tableName: "SendAnonymousUsageData", comment: "See http://bit.ly/1SmEXU1"), attributes: [NSForegroundColorAttributeName: UIConstants.HighlightBlue]),
-            settingDidChange: {
-                AdjustIntegration.setEnabled($0)
-                LeanplumIntegration.sharedInstance.setEnabled($0)
-            }
+            settingDidChange: { AdjustIntegration.setEnabled($0) }
         )
     }
 
@@ -607,7 +653,6 @@ class LoginsSetting: Setting {
     override func onClick(_: UINavigationController?) {
         guard let authInfo = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo() else {
             settings?.navigateToLoginsList()
-            LeanplumIntegration.sharedInstance.track(eventName: .openedLogins)
             return
         }
 
@@ -616,7 +661,6 @@ class LoginsSetting: Setting {
             touchIDReason: AuthenticationStrings.loginsTouchReason,
             success: {
                 self.settings?.navigateToLoginsList()
-                LeanplumIntegration.sharedInstance.track(eventName: .openedLogins)
             },
             cancel: {
                 self.deselectRow()
@@ -627,7 +671,6 @@ class LoginsSetting: Setting {
             })
         } else {
             settings?.navigateToLoginsList()
-            LeanplumIntegration.sharedInstance.track(eventName: .openedLogins)
         }
     }
 }

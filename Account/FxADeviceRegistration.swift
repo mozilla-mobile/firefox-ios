@@ -5,6 +5,7 @@
 import Foundation
 import Deferred
 import Shared
+import SwiftyJSON
 
 private let log = Logger.syncLogger
 
@@ -63,6 +64,14 @@ open class FxADeviceRegistration: NSObject, NSCoding {
         aCoder.encode(id, forKey: "id")
         aCoder.encode(version, forKey: "version")
         aCoder.encode(NSNumber(value: lastRegistered), forKey: "lastRegistered")
+    }
+
+    open func toJSON() -> JSON {
+        return JSON(object: [
+            "id": id,
+            "version": version,
+            "lastRegistered": lastRegistered,
+        ])
     }
 }
 
@@ -155,7 +164,7 @@ open class FxADeviceRegistrator {
 
     fileprivate static func recoverFromTokenError(_ account: FirefoxAccount, client: FxAClient10) -> Deferred<Maybe<FxADeviceRegistration>> {
         return client.status(forUID: account.uid) >>== { status in
-            let _ = account.makeDoghouse()
+            _ = account.makeDoghouse()
             if !status.exists {
                 // TODO: Should be in an "I have an iOS account, but the FxA is gone." state.
                 // This will do for now...

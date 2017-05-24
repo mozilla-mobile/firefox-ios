@@ -8,9 +8,11 @@ import Shared
 let TableClients = "clients"
 let TableTabs = "tabs"
 
+private let log = Logger.syncLogger
+
 class RemoteClientsTable<T>: GenericTable<RemoteClient> {
     override var name: String { return TableClients }
-    override var version: Int { return 1 }
+    override var version: Int { return 2 }
 
     // TODO: index on guid and last_modified.
     override var rows: String { return [
@@ -20,6 +22,7 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
             "type TEXT",
             "formfactor TEXT",
             "os TEXT",
+            "version TEXT",
         ].joined(separator: ",")
     }
 
@@ -32,8 +35,9 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
             item.type,
             item.formfactor,
             item.os,
+            item.version,
         ]
-        return ("INSERT INTO \(name) (guid, name, modified, type, formfactor, os) VALUES (?, ?, ?, ?, ?, ?)", args)
+        return ("INSERT INTO \(name) (guid, name, modified, type, formfactor, os, version) VALUES (?, ?, ?, ?, ?, ?, ?)", args)
     }
 
     override func getUpdateAndArgs(_ item: inout RemoteClient) -> (String, Args)? {
@@ -43,10 +47,11 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
             item.type,
             item.formfactor,
             item.os,
+            item.version,
             item.guid,
         ]
 
-        return ("UPDATE \(name) SET name = ?, modified = ?, type = ?, formfactor = ?, os = ? WHERE guid = ?", args)
+        return ("UPDATE \(name) SET name = ?, modified = ?, type = ?, formfactor = ?, os = ?, version = ? WHERE guid = ?", args)
     }
 
     override func getDeleteAndArgs(_ item: inout RemoteClient?) -> (String, Args)? {
@@ -65,12 +70,33 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
             let type = row["type"] as? String
             let form = row["formfactor"] as? String
             let os = row["os"] as? String
-            return RemoteClient(guid: guid, name: name, modified: mod, type: type, formfactor: form, os: os)
+            let version = row["version"] as? String
+            return RemoteClient(guid: guid, name: name, modified: mod, type: type, formfactor: form, os: os, version: version)
         }
     }
 
     override func getQueryAndArgs(_ options: QueryOptions?) -> (String, Args)? {
         return ("SELECT * FROM \(name) ORDER BY modified DESC", [])
+    }
+
+    override func updateTable(_ db: SQLiteDBConnection, from: Int) -> Bool {
+        let to = self.version
+        if from == to {
+            log.debug("Skipping update from \(from) to \(to).")
+            return true
+        }
+
+        if from < 2 && to >= 2 {
+            let sql = "ALTER TABLE \(TableClients) ADD COLUMN version TEXT"
+            let err = db.executeChange(sql)
+            if err != nil {
+                log.error("Error running SQL in RemoteClientsTable: \(err?.localizedDescription ?? "nil")")
+                log.error("SQL was \(sql)")
+                return false
+            }
+        }
+
+        return true
     }
 }
 

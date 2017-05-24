@@ -9,12 +9,7 @@ private var appDelegate: AppDelegate.Type
 if AppConstants.IsRunningTest {
     appDelegate = TestAppDelegate.self
 } else {
-    switch AppConstants.BuildChannel {
-    case .aurora:
-        appDelegate = AuroraAppDelegate.self
-    default:
-        appDelegate = AppDelegate.self
-    }
+    appDelegate = AppDelegate.self
 }
 
 private let pointer = UnsafeMutableRawPointer(CommandLine.unsafeArgv).bindMemory(to: UnsafeMutablePointer<Int8>.self, capacity: Int(CommandLine.argc))

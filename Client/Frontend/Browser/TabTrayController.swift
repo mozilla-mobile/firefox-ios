@@ -569,8 +569,6 @@ class TabTrayController: UIViewController {
         let exitingPrivateMode = !privateMode && profile.prefs.boolForKey("settings.closePrivateTabs") ?? false
         if exitingPrivateMode {
             tabManager.removeAllPrivateTabsAndNotify(false)
-
-            LeanplumIntegration.sharedInstance.track(eventName: .closedPrivateTabsWhenLeavingPrivateBrowsing)
         }
 
         toolbar.maskButton.setSelected(privateMode, animated: true)
@@ -587,10 +585,6 @@ class TabTrayController: UIViewController {
         } else {
             emptyPrivateTabsView.isHidden = false
             toView = emptyPrivateTabsView
-
-            if let bool = profile.prefs.boolForKey("settings.closePrivateTabs"), bool {
-                tabManager.showFocusPromoToast()
-            }
         }
         toView.alpha = 0
         toView.transform = scaleDownTransform
@@ -636,7 +630,7 @@ class TabTrayController: UIViewController {
         }, completion: { finished in
             self.toolbar.isUserInteractionEnabled = true
             if finished {
-                let _ = self.navigationController?.popViewController(animated: true)
+                _ = self.navigationController?.popViewController(animated: true)
 
                 if request == nil && NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage {
                     if let bvc = self.navigationController?.topViewController as? BrowserViewController {
@@ -682,7 +676,7 @@ extension TabTrayController: TabSelectionDelegate {
     func didSelectTabAtIndex(_ index: Int) {
         let tab = tabsToDisplay[index]
         tabManager.selectTab(tab)
-        let _ = self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
     }
 }
 
@@ -717,7 +711,7 @@ extension TabTrayController: TabManagerDelegate {
                 tabManager.selectTab(tab)
                 // don't pop the tab tray view controller if it is not in the foreground
                 if self.presentedViewController == nil {
-                    let _ = self.navigationController?.popViewController(animated: true)
+                    _ = self.navigationController?.popViewController(animated: true)
                 }
             }
         })
@@ -853,12 +847,10 @@ fileprivate class TabManagerDataSource: NSObject, UICollectionViewDataSource {
      */
     func removeTab(_ tabToRemove: Tab) -> Int {
         var index: Int = -1
-        for (i, tab) in tabs.enumerated() {
-            if tabToRemove === tab {
-                index = i
-                tabs.remove(at: index)
-                break
-            }
+        for (i, tab) in tabs.enumerated() where tabToRemove === tab {
+            index = i
+            tabs.remove(at: index)
+            break
         }
         return index
     }
@@ -1115,7 +1107,7 @@ extension TabTrayController: UIViewControllerPreviewingDelegate {
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
         guard let tpvc = viewControllerToCommit as? TabPeekViewController else { return }
         tabManager.selectTab(tpvc.tab)
-        let _ = self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
 
         delegate?.tabTrayDidDismiss(self)
 
@@ -1177,10 +1169,6 @@ extension TabTrayController: MenuActionDelegate {
             case .closeAllTabs:
                 DispatchQueue.main.async {
                     self.closeTabsForCurrentTray()
-                }
-
-                if privateMode {
-                    LeanplumIntegration.sharedInstance.track(eventName: .closedPrivateTabs)
                 }
             case .openTopSites:
                 DispatchQueue.main.async {

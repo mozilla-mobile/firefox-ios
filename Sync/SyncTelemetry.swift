@@ -5,8 +5,10 @@
 import Foundation
 import Shared
 import Account
+import Storage
 import SwiftyJSON
 import Telemetry
+import Deferred
 
 fileprivate let log = Logger.syncLogger
 
@@ -80,10 +82,28 @@ extension SyncDownloadStats: DictionaryRepresentable {
     }
 }
 
-// TODO(sleroux): Implement various bookmark validation issues we can run into.
-public struct ValidationStats: Stats {
+public struct ValidationStats: Stats, DictionaryRepresentable {
+    let problems: [ValidationProblem]
+    let took: Int64
+
     public func hasData() -> Bool {
-        return false
+        return !problems.isEmpty
+    }
+
+    func asDictionary() -> [String: Any] {
+        return [
+            "problems": problems.map { $0.asDictionary() },
+            "took": took
+        ]
+    }
+}
+
+public struct ValidationProblem: DictionaryRepresentable {
+    let name: String
+    let count: Int
+
+    func asDictionary() -> [String: Any] {
+        return ["name": name, "count": count]
     }
 }
 
@@ -156,6 +176,10 @@ extension SyncEngineStatsSession: DictionaryRepresentable {
             dict["outgoing"] = uploadStats.asDictionary()
         }
 
+        if let validation = self.validationStats, validation.hasData() {
+            dict["validation"] = validation.asDictionary()
+        }
+
         return dict
     }
 }
@@ -188,30 +212,83 @@ extension SyncOperationStatsSession: DictionaryRepresentable {
     }
 }
 
-public struct SyncPing: TelemetryPing {
-    public var payload: JSON
+public enum SyncPingError: MaybeErrorType {
+    case failedToRestoreScratchpad
 
-    public init(account: FirefoxAccount?, why: SyncPingReason, syncOperationResult: SyncOperationResult) {
-        var ping: [String: Any] = [
-            "version": 1,
-            "why": why.rawValue,
-            "uid": account?.uid ?? String(repeating: "0", count: 32)
-        ]
-
-        if let deviceID = account?.deviceRegistration?.id {
-            ping["deviceID"] = deviceID
+    public var description: String {
+        switch self {
+        case .failedToRestoreScratchpad: return "Failed to restore Scratchpad from prefs"
         }
+    }
+}
 
-        if let syncStats = syncOperationResult.stats {
-            var singleSync = syncStats.asDictionary()
-            if let engineResults = syncOperationResult.engineResults.successValue {
-                singleSync["engines"] = SyncPing.enginePingDataFrom(engineResults: engineResults)
+public struct SyncPing: TelemetryPing {
+    public private(set) var payload: JSON
+
+    public static func from(result: SyncOperationResult,
+                            account: FirefoxAccount,
+                            remoteClientsAndTabs: RemoteClientsAndTabs,
+                            prefs: Prefs,
+                            why: SyncPingReason) -> Deferred<Maybe<SyncPing>> {
+        // Grab our token so we can use the hashed_fxa_uid and clientGUID from our scratchpad for
+        // our ping's identifiers
+        return account.syncAuthState.token(Date.now(), canBeExpired: false) >>== { (token, kB) in
+            let scratchpadPrefs = prefs.branch("sync.scratchpad")
+            guard let scratchpad = Scratchpad.restoreFromPrefs(scratchpadPrefs, syncKeyBundle: KeyBundle.fromKB(kB)) else {
+                return deferMaybe(SyncPingError.failedToRestoreScratchpad)
             }
 
-            ping["syncs"] = [singleSync]
+            var ping: [String: Any] = [
+                "version": 1,
+                "why": why.rawValue,
+                "uid": token.hashedFxAUID,
+                "deviceID": (scratchpad.clientGUID + token.hashedFxAUID).sha256.hexEncodedString
+            ]
+
+            return dictionaryFrom(result: result, storage: remoteClientsAndTabs, token: token) >>== { syncDict in
+                // TODO: Split the sync ping metadata from storing a single sync.
+                ping["syncs"] = [syncDict]
+                return deferMaybe(SyncPing(payload: JSON(ping)))
+            }
+        }
+    }
+
+    // Generates a single sync ping payload that is stored in the 'syncs' list in the sync ping.
+    private static func dictionaryFrom(result: SyncOperationResult,
+                                       storage: RemoteClientsAndTabs,
+                                       token: TokenServerToken) -> Deferred<Maybe<[String: Any]>> {
+        return connectedDevices(fromStorage: storage, token: token) >>== { devices in
+            guard let stats = result.stats else {
+                return deferMaybe([String: Any]())
+            }
+
+            var dict = stats.asDictionary()
+            if let engineResults = result.engineResults.successValue {
+                dict["engines"] = SyncPing.enginePingDataFrom(engineResults: engineResults)
+            }
+            dict["devices"] = devices
+            return deferMaybe(dict)
+        }
+    }
+
+    // Returns a list of connected devices formatted for use in the 'devices' property in the sync ping.
+    private static func connectedDevices(fromStorage storage: RemoteClientsAndTabs,
+                                         token: TokenServerToken) -> Deferred<Maybe<[[String: Any]]>> {
+        func dictionaryFrom(client: RemoteClient) -> [String: Any]? {
+            var device = [String: Any]()
+            if let os = client.os {
+                device["os"] = os
+            }
+            if let version = client.version {
+                device["version"] = version
+            }
+            if let guid = client.guid {
+                device["id"] = (guid + token.hashedFxAUID).sha256.hexEncodedString
+            }
+            return device
         }
 
-        payload = JSON(ping)
+        return storage.getClients() >>== { deferMaybe($0.flatMap(dictionaryFrom)) }
     }
 
     private static func enginePingDataFrom(engineResults: EngineResults) -> [[String: Any]] {

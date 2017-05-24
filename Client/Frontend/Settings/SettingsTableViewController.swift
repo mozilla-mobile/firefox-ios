@@ -105,23 +105,19 @@ class SettingSection: Setting {
 
     var count: Int {
         var count = 0
-        for setting in children {
-            if !setting.hidden {
-                count += 1
-            }
+        for setting in children where !setting.hidden {
+            count += 1
         }
         return count
     }
 
     subscript(val: Int) -> Setting? {
         var i = 0
-        for setting in children {
-            if !setting.hidden {
-                if i == val {
-                    return setting
-                }
-                i += 1
+        for setting in children where !setting.hidden {
+            if i == val {
+                return setting
             }
+            i += 1
         }
         return nil
     }
@@ -147,14 +143,14 @@ private class PaddedSwitch: UIView {
 // A helper class for settings with a UISwitch.
 // Takes and optional settingsDidChange callback and status text.
 class BoolSetting: Setting {
-    let prefKey: String
+    let prefKey: String? // Sometimes a subclass will manage its own pref setting. In that case the prefkey will be nil
 
     fileprivate let prefs: Prefs
     fileprivate let defaultValue: Bool
     fileprivate let settingDidChange: ((Bool) -> Void)?
     fileprivate let statusText: NSAttributedString?
 
-    init(prefs: Prefs, prefKey: String, defaultValue: Bool, attributedTitleText: NSAttributedString, attributedStatusText: NSAttributedString? = nil, settingDidChange: ((Bool) -> Void)? = nil) {
+    init(prefs: Prefs, prefKey: String? = nil, defaultValue: Bool, attributedTitleText: NSAttributedString, attributedStatusText: NSAttributedString? = nil, settingDidChange: ((Bool) -> Void)? = nil) {
         self.prefs = prefs
         self.prefKey = prefKey
         self.defaultValue = defaultValue
@@ -163,7 +159,7 @@ class BoolSetting: Setting {
         super.init(title: attributedTitleText)
     }
 
-    convenience init(prefs: Prefs, prefKey: String, defaultValue: Bool, titleText: String, statusText: String? = nil, settingDidChange: ((Bool) -> Void)? = nil) {
+    convenience init(prefs: Prefs, prefKey: String? = nil, defaultValue: Bool, titleText: String, statusText: String? = nil, settingDidChange: ((Bool) -> Void)? = nil) {
         var statusTextAttributedString: NSAttributedString?
         if let statusTextString = statusText {
             statusTextAttributedString = NSAttributedString(string: statusTextString, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewHeaderTextColor])
@@ -181,7 +177,7 @@ class BoolSetting: Setting {
         let control = UISwitch()
         control.onTintColor = UIConstants.ControlTintColor
         control.addTarget(self, action: #selector(BoolSetting.switchValueChanged(_:)), for: UIControlEvents.valueChanged)
-        control.isOn = prefs.boolForKey(prefKey) ?? defaultValue
+        displayBool(control)
         if let title = title {
             if let status = status {
                 control.accessibilityLabel = "\(title.string), \(status.string)"
@@ -195,8 +191,23 @@ class BoolSetting: Setting {
     }
 
     @objc func switchValueChanged(_ control: UISwitch) {
-        prefs.setBool(control.isOn, forKey: prefKey)
+        writeBool(control)
         settingDidChange?(control.isOn)
+    }
+
+    // These methods allow a subclass to control how the pref is saved
+    func displayBool(_ control: UISwitch) {
+        guard let key = prefKey else {
+            return
+        }
+        control.isOn = prefs.boolForKey(key) ?? defaultValue
+    }
+
+    func writeBool(_ control: UISwitch) {
+        guard let key = prefKey else {
+            return
+        }
+        prefs.setBool(control.isOn, forKey: key)
     }
 }
 
@@ -364,13 +375,13 @@ class AccountSetting: Setting, FxAContentViewControllerDelegate {
 
         // Dismiss the FxA content view if the account is verified.
         if flags.verified {
-            let _ = settings.navigationController?.popToRootViewController(animated: true)
+            _ = settings.navigationController?.popToRootViewController(animated: true)
         }
     }
 
     func contentViewControllerDidCancel(_ viewController: FxAContentViewController) {
         NSLog("didCancel")
-        let _ = settings.navigationController?.popToRootViewController(animated: true)
+        _ = settings.navigationController?.popToRootViewController(animated: true)
     }
 }
 

@@ -128,6 +128,7 @@ class FxALoginStateMachine {
                 if let response = result.successValue {
                     if let kB = response.wrapkB.xoredWith(state.unwrapkB) {
                         log.info("Unwrapped keys response.  Transition to CohabitingBeforeKeyPair.")
+                        self.notifyAccountVerified()
                         let newState = CohabitingBeforeKeyPairState(sessionToken: state.sessionToken,
                             kA: response.kA, kB: kB)
                         return Deferred(value: newState)
@@ -173,5 +174,9 @@ class FxALoginStateMachine {
             log.warning("User interaction required; not transitioning.")
             return same
         }
+    }
+
+    fileprivate func notifyAccountVerified() {
+        NotificationCenter.default.post(name: NotificationFirefoxAccountVerified, object: nil, userInfo: nil)
     }
 }

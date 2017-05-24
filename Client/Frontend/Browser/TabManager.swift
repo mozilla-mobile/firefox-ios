@@ -148,10 +148,8 @@ class TabManager: NSObject {
     subscript(webView: WKWebView) -> Tab? {
         assert(Thread.isMainThread)
 
-        for tab in tabs {
-            if tab.webView === webView {
-                return tab
-            }
+        for tab in tabs where tab.webView === webView {
+            return tab
         }
 
         return nil
@@ -160,11 +158,10 @@ class TabManager: NSObject {
     func getTabFor(_ url: URL) -> Tab? {
         assert(Thread.isMainThread)
 
-        for tab in tabs {
-            if tab.webView?.url == url {
-                return tab
-            }
+        for tab in tabs where tab.webView?.url == url {
+            return tab
         }
+
         return nil
     }
 
@@ -450,11 +447,10 @@ class TabManager: NSObject {
             toast = ButtonToast(labelText: String.localizedStringWithFormat(Strings.TabsDeleteAllUndoTitle, numberOfTabs), buttonText: Strings.TabsDeleteAllUndoAction, completion: { buttonPressed in
                 if buttonPressed {
                     self.undoCloseTabs()
+                    self.storeChanges()
                     for delegate in self.delegates {
                         delegate.get()?.tabManagerDidAddTabs(self)
                     }
-                } else {
-                    self.showFocusPromoToast()
                 }
                 self.eraseUndoCache()
             })
@@ -462,31 +458,7 @@ class TabManager: NSObject {
 
         delegates.forEach { $0.get()?.tabManagerDidRemoveAllTabs(self, toast: toast) }
     }
-
-    func showFocusPromoToast() {
-        if !LeanplumIntegration.sharedInstance.shouldShowFocusUI() {
-            return
-        }
-
-        guard let templateDict = LeanplumIntegration.sharedInstance.getTemplateDictionary(), let labelText = templateDict["Template Text"], let buttonText = templateDict["Button Text"], let colorText = templateDict["Hex Color String"], let deepLink = templateDict["Deep Link"] else {
-            return
-        }
-
-        LeanplumIntegration.sharedInstance.track(eventName: .focusPromoImpression, withParameters: ["button name": buttonText as AnyObject])
-        let toast = LeanplumPromoButtonToast(labelText: labelText, buttonText: buttonText, colorText: colorText, completion: { buttonPressed in
-            guard let url = URL(string: deepLink) else {
-                return
-            }
-
-            if UIApplication.shared.canOpenURL(url) && buttonPressed {
-                LeanplumIntegration.sharedInstance.track(eventName: .userTappedFocusPromoButton)
-                UIApplication.shared.openURL(url)
-            }
-        })
-
-        delegates.forEach { $0.get()?.tabManagerDidRemoveAllTabs(self, toast: toast) }
-    }
-
+    
     func undoCloseTabs() {
         guard let tempTabs = self.tempTabs, tempTabs.count > 0 else {
             return
@@ -525,10 +497,8 @@ class TabManager: NSObject {
     func getIndex(_ tab: Tab) -> Int? {
         assert(Thread.isMainThread)
 
-        for i in 0..<count {
-            if tabs[i] === tab {
-                return i
-            }
+        for i in 0..<count where tabs[i] === tab {
+            return i
         }
 
         assertionFailure("Tab not in tabs list")
@@ -716,7 +686,7 @@ extension TabManager {
         }
 
         var tabToSelect: Tab?
-        for (_, savedTab) in savedTabs.enumerated() {
+        for savedTab in savedTabs {
             // Provide an empty request to prevent a new tab from loading the home screen
             let tab = self.addTab(nil, configuration: nil, afterTab: nil, flushToDisk: false, zombie: true, isPrivate: savedTab.isPrivate)
 
@@ -778,7 +748,7 @@ extension TabManager {
 
         if count == 0 && !AppConstants.IsRunningTest && !DebugSettingsBundleOptions.skipSessionRestore {
             // This is wrapped in an Objective-C @try/@catch handler because NSKeyedUnarchiver may throw exceptions which Swift cannot handle
-            let _ = Try(
+            _ = Try(
                 withTry: { () -> Void in
                     self.restoreTabsInternal()
                 },

@@ -323,6 +323,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
             cell.imageView!.alpha = 0.5
             cell.selectionStyle = .none
         }
+        cell.accessibilityIdentifier = "HistoryPanel.recentlyClosedCell"
         return cell
     }
 
@@ -332,6 +333,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         cell.detailTextLabel!.text = self.syncDetailText
         cell.imageView!.image = UIImage(named: "synced_devices")
         cell.imageView?.backgroundColor = UIColor.white
+        cell.accessibilityIdentifier = "HistoryPanel.syncedDevicesCell"
         return cell
     }
 
@@ -351,10 +353,8 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
     func numberOfSectionsInTableView(_ tableView: UITableView) -> Int {
         var count = 1
-        for category in self.categories {
-            if category.rows > 0 {
-                count += 1
-            }
+        for category in self.categories where category.rows > 0 {
+            count += 1
         }
         return count
     }

@@ -144,7 +144,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         buttonContainerView.addGestureRecognizer(dismissKeyboardGestureRecognizer)
 
         // Invalidate our activity stream data sources whenever we open up the home panels
-        self.profile.panelDataObservers.activityStream.invalidate()
+        self.profile.panelDataObservers.activityStream.invalidate(highlights: false)
     }
 
     fileprivate func updateAppState() {
@@ -231,12 +231,10 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     }
 
     func SELtappedButton(_ sender: UIButton!) {
-        for (index, button) in buttons.enumerated() {
-            if button == sender {
-                selectedPanel = HomePanelType(rawValue: index)
-                delegate?.homePanelViewController(self, didSelectPanel: index)
-                break
-            }
+        for (index, button) in buttons.enumerated() where button == sender {
+            selectedPanel = HomePanelType(rawValue: index)
+            delegate?.homePanelViewController(self, didSelectPanel: index)
+            break
         }
     }
 

@@ -278,7 +278,7 @@ extension ErrorPageHelper: TabHelper {
                    let host = originalURL.host {
                     let origin = "\(host):\(originalURL.port ?? 443)"
                     ErrorPageHelper.certStore?.addCertificate(cert, forOrigin: origin)
-                    let _ = message.webView?.reload()
+                    _ = message.webView?.reload()
                 }
             default:
                 assertionFailure("Unknown error message")

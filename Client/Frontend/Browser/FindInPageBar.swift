@@ -100,11 +100,15 @@ class FindInPageBar: UIView {
         searchText.snp.makeConstraints { make in
             make.leading.top.bottom.equalTo(self).inset(UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 0))
         }
+        searchText.setContentHuggingPriority(UILayoutPriorityDefaultLow, for: UILayoutConstraintAxis.horizontal)
+        searchText.setContentCompressionResistancePriority(UILayoutPriorityDefaultLow, for: UILayoutConstraintAxis.horizontal)
 
         matchCountView.snp.makeConstraints { make in
             make.leading.equalTo(searchText.snp.trailing)
             make.centerY.equalTo(self)
         }
+        matchCountView.setContentHuggingPriority(UILayoutPriorityDefaultHigh, for: UILayoutConstraintAxis.horizontal)
+        matchCountView.setContentCompressionResistancePriority(UILayoutPriorityDefaultHigh, for: UILayoutConstraintAxis.horizontal)
 
         previousButton.snp.makeConstraints { make in
             make.leading.equalTo(matchCountView.snp.trailing)

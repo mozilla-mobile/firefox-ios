@@ -67,7 +67,7 @@ class CustomSearchViewController: SettingsTableViewController {
                 return
             }
             self.profile.searchEngines.addSearchEngine(engine)
-            let _ = self.navigationController?.popViewController(animated: true)
+            _ = self.navigationController?.popViewController(animated: true)
             SimpleToast().showAlertWithText(Strings.ThirdPartySearchEngineAdded)
         }
     }

@@ -45,10 +45,16 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         } else {
             self.url = profile.accountConfiguration.signInURL
         }
+
+        NotificationCenter.default.addObserver(self, selector: #selector(FxAContentViewController.userDidVerify(_:)), name: NotificationFirefoxAccountVerified, object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: NotificationFirefoxAccountVerified, object: nil)
     }
 
     override func viewDidLoad() {
@@ -121,6 +127,21 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         let helper = FxALoginHelper.sharedInstance
         helper.delegate = self
         helper.application(app, didReceiveAccountJSON: data)
+    }
+
+    @objc fileprivate func userDidVerify(_ notification: Notification) {
+        guard let account = profile.getAccount() else {
+            return
+        }
+        // We can't verify against the actionNeeded of the account, 
+        // because of potential race conditions.
+        // However, we restrict visibility of this method, and make sure 
+        // we only Notify via the FxALoginStateMachine.
+        let flags = FxALoginFlags(pushEnabled: account.pushRegistration != nil,
+                                  verified: true)
+        DispatchQueue.main.async {
+            self.delegate?.contentViewControllerDidSignIn(self, withFlags: flags)
+        }
     }
 
     // The content server page is ready to be shown.

@@ -34,7 +34,6 @@ class MockingURLProtocol: URLProtocol {
 
     override func startLoading() {
         receivedNetworkRequests.append(request)
-
         let response = HTTPURLResponse(url: request.url!,
                                          statusCode: 200,
                                          httpVersion: "HTTP/1.1",
@@ -80,6 +79,26 @@ class PingCentreTests: XCTestCase {
         XCTAssertTrue(validationError.failureValue! is PingValidationError)
 
         // Double check that we actually sent the successful ping and not the invalid one
+        XCTAssertTrue(receivedNetworkRequests.count == 1)
+    }
+
+    func testSendBatch() {
+        let validPingA = ["title": "A"]
+        let validPingB = ["title": "B"]
+        let invalidPingC = [String: AnyObject]()
+
+        client.sendBatch([validPingA, validPingB], validate: true).succeeded()
+        let validationError = client.sendBatch([validPingA, invalidPingC], validate: true).value
+
+        XCTAssertNotNil(validationError.failureValue)
+        XCTAssertTrue(validationError.failureValue! is PingValidationError)
+
+        // Double check that we actually sent the successful ping and not the invalid one
+        XCTAssertTrue(receivedNetworkRequests.count == 1)
+
+        client.sendBatch([], validate: true).succeeded()
+        
+        // Double check that we didn't send the empty payloads request
         XCTAssertTrue(receivedNetworkRequests.count == 1)
     }
 }

@@ -270,11 +270,9 @@ class Tab: NSObject {
     var displayFavicon: Favicon? {
         var width = 0
         var largest: Favicon?
-        for icon in favicons {
-            if icon.width! > width {
-                width = icon.width!
-                largest = icon
-            }
+        for icon in favicons where icon.width! > width {
+            width = icon.width!
+            largest = icon
         }
         return largest
     }
@@ -288,15 +286,15 @@ class Tab: NSObject {
     }
 
     func goBack() {
-        let _ = webView?.goBack()
+        _ = webView?.goBack()
     }
 
     func goForward() {
-        let _ = webView?.goForward()
+        _ = webView?.goForward()
     }
 
     func goToBackForwardListItem(_ item: WKBackForwardListItem) {
-        let _ = webView?.go(to: item)
+        _ = webView?.go(to: item)
     }
 
     @discardableResult func loadRequest(_ request: URLRequest) -> WKNavigation? {

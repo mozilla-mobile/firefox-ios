@@ -171,6 +171,7 @@ open class BaseCollectionSynchronizer {
 
     let scratchpad: Scratchpad
     let delegate: SyncDelegate
+    let basePrefs: Prefs
     let prefs: Prefs
 
     var statsSession: SyncEngineStatsSession
@@ -184,6 +185,7 @@ open class BaseCollectionSynchronizer {
         self.scratchpad = scratchpad
         self.delegate = delegate
         self.collection = collection
+        self.basePrefs = basePrefs
         self.prefs = BaseCollectionSynchronizer.prefsForCollection(collection, withBasePrefs: basePrefs)
         self.statsSession = SyncEngineStatsSession(collection: collection)
 

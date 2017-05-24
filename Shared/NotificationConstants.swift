@@ -20,5 +20,8 @@ public let NotificationOnPageMetadataFetched = Notification.Name("OnPageMetadata
 // Fired when the login synchronizer has finished applying remote changes
 public let NotificationDataRemoteLoginChangesWereApplied = Notification.Name("NotificationDataRemoteLoginChangesWereApplied")
 
+// Fired when the FxA account has been verified. This should only be fired by the FxALoginStateMachine.
+public let NotificationFirefoxAccountVerified = Notification.Name("FirefoxAccountVerifiedNotification")
+
 // MARK: Notification UserInfo Keys
 public let NotificationUserInfoKeyHasSyncableAccount = Notification.Name("NotificationUserInfoKeyHasSyncableAccount")

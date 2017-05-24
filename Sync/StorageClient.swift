@@ -508,7 +508,7 @@ open class Sync15StorageClient {
             deferred.fill(Maybe(failure: RecordParseError()))
         }
 
-        let _ = req.responseParsedJSON(true, completionHandler: handler)
+        _ = req.responseParsedJSON(true, completionHandler: handler)
         return deferred
     }
 
@@ -663,7 +663,7 @@ open class Sync15CollectionClient<T: CleartextPayloadJSON> {
         }
 
         let req = client.requestPOST(requestURI, body: lines, ifUnmodifiedSince: ifUnmodifiedSince) as! DataRequest
-        let _ = req.responsePartialParsedJSON(queue: collectionQueue, completionHandler: self.client.errorWrap(deferred) { (response: DataResponse<JSON>) in
+        _ = req.responsePartialParsedJSON(queue: collectionQueue, completionHandler: self.client.errorWrap(deferred) { (response: DataResponse<JSON>) in
             if let json: JSON = response.result.value,
                let result = POSTResult.fromJSON(json) {
                 let storageResponse = StorageResponse(value: result, response: response.response!)
@@ -700,7 +700,7 @@ open class Sync15CollectionClient<T: CleartextPayloadJSON> {
         }
 
         let req = client.requestGET(uriForRecord(guid))
-        let _ = req.responsePartialParsedJSON(queue:collectionQueue, completionHandler: self.client.errorWrap(deferred) { (response: DataResponse<JSON>) in
+        _ = req.responsePartialParsedJSON(queue:collectionQueue, completionHandler: self.client.errorWrap(deferred) { (response: DataResponse<JSON>) in
 
             if let json: JSON = response.result.value {
                 let envelope = EnvelopeJSON(json)
@@ -757,7 +757,7 @@ open class Sync15CollectionClient<T: CleartextPayloadJSON> {
         log.debug("Issuing GET with newer = \(since), offset = \(offset ??? "nil"), sort = \(sort ??? "nil").")
         let req = client.requestGET(self.collectionURI.withQueryParams(params))
 
-        let _ = req.responsePartialParsedJSON(queue: collectionQueue, completionHandler: self.client.errorWrap(deferred) { (response: DataResponse<JSON>) in
+        _ = req.responsePartialParsedJSON(queue: collectionQueue, completionHandler: self.client.errorWrap(deferred) { (response: DataResponse<JSON>) in
 
             log.verbose("Response is \(response).")
             guard let json: JSON = response.result.value else {
