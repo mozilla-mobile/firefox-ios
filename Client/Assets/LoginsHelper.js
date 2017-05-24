@@ -11,6 +11,8 @@ var gStoreWhenAutocompleteOff = true;
 var gAutofillForms = true;
 var gDebug = false;
 
+var KEYCODE_ARROW_DOWN = 40;
+
 function log(pieces) {
   if (!gDebug)
     return;
@@ -541,13 +543,15 @@ var LoginManagerContent = {
         var userEnteredDifferentCase = userTriggered && userNameDiffers && usernameField.value.toLowerCase() == selectedLogin.username.toLowerCase();
 
         if (!disabledOrReadOnly && !userEnteredDifferentCase && userNameDiffers) {
-          // usernameField.setUserInput(selectedLogin.username);
-          usernameField.value = selectedLogin.username
+          usernameField.value = selectedLogin.username;
+          dispatchKeyboardEvent(usernameField, 'keydown', KEYCODE_ARROW_DOWN);
+          dispatchKeyboardEvent(usernameField, 'keyup', KEYCODE_ARROW_DOWN);
         }
       }
       if (passwordField.value != selectedLogin.password) {
-        // passwordField.setUserInput(selectedLogin.password);
-        passwordField.value = selectedLogin.password
+        passwordField.value = selectedLogin.password;
+        dispatchKeyboardEvent(passwordField, 'keydown', KEYCODE_ARROW_DOWN);
+        dispatchKeyboardEvent(passwordField, 'keyup', KEYCODE_ARROW_DOWN);
       }
       didFillForm = true;
     } else if (selectedLogin && !autofillForm) {
@@ -615,7 +619,7 @@ function findForms(nodes) {
   return false;
 }
 
- observer.observe(documentBody, { attributes: false, childList: true, characterData: false, subtree: true });
+observer.observe(documentBody, { attributes: false, childList: true, characterData: false, subtree: true });
 
 function findLogins(form) {
   try {
@@ -629,10 +633,10 @@ function findLogins(form) {
    }
  }
 
- window.addEventListener("load", function(event) {
-   for (var i = 0; i < document.forms.length; i++) {
-     findLogins(document.forms[i]);
-   }
+window.addEventListener("load", function(event) {
+  for (var i = 0; i < document.forms.length; i++) {
+    findLogins(document.forms[i]);
+  }
 });
 
 window.addEventListener("submit", function(event) {
@@ -672,7 +676,6 @@ Object.defineProperty(window.__firefox__, 'logins', {
 });
 
 function map(array, callback) {
-
   var T, A, k;
 
   if (array == null) {
@@ -690,7 +693,6 @@ function map(array, callback) {
   A = new Array(len);
   k = 0;
   while (k < len) {
-
     var kValue, mappedValue;
     if (k in O) {
       kValue = O[k];
@@ -701,5 +703,11 @@ function map(array, callback) {
   }
   return A;
 };
+ 
+function dispatchKeyboardEvent(element, eventName, keyCode) {
+  var event = document.createEvent('KeyboardEvent');
+  event.initKeyboardEvent(eventName, true, true, window, 0, 0, 0, 0, 0, keyCode);
+  element.dispatchEvent(event);
+}
 
-})()
+})();
