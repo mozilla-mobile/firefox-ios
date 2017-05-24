@@ -46,10 +46,6 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
