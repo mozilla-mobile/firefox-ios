@@ -506,9 +506,7 @@ extension ActivityStreamPanel: DataObserverDelegate {
     func presentContextMenu(_ contextMenu: ActionOverlayTableViewController) {
         contextMenu.modalPresentationStyle = .overFullScreen
         contextMenu.modalTransitionStyle = .crossDissolve
-
         self.present(contextMenu, animated: true, completion: nil)
-
     }
 
     func presentContextMenuForTopSiteCell(with indexPath: IndexPath, and sourceView: UIView?) {
