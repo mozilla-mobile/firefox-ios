@@ -2655,8 +2655,8 @@
 			children = (
 				39D18FAC1ED7651E002ED5D4 /* Entitlements */,
 				391AEFD11C8F11ED00691F84 /* Images.xcassets */,
-				3905274E1C874D35007E0BB7 /* TodayViewController.swift */,
 				390527531C874D35007E0BB7 /* Info.plist */,
+				3905274E1C874D35007E0BB7 /* TodayViewController.swift */,
 			);
 			path = Today;
 			sourceTree = "<group>";
@@ -3130,11 +3130,11 @@
 		E4BA8AA01B4B15EF00BC2E95 /* ViewLater */ = {
 			isa = PBXGroup;
 			children = (
-				39D18FB11ED76544002ED5D4 /* Entitlements */,
-				7B2142F31E5E03F800CDD3FC /* InfoPlist.strings */,
 				E4BA8AA11B4B15EF00BC2E95 /* ActionRequestHandler.swift */,
-				E4BA8AA61B4B15EF00BC2E95 /* ViewLater.xcassets */,
+				39D18FB11ED76544002ED5D4 /* Entitlements */,
 				E4BA8AA71B4B15EF00BC2E95 /* Info.plist */,
+				7B2142F31E5E03F800CDD3FC /* InfoPlist.strings */,
+				E4BA8AA61B4B15EF00BC2E95 /* ViewLater.xcassets */,
 			);
 			path = ViewLater;
 			sourceTree = "<group>";
@@ -3775,12 +3775,12 @@
 		F8708D1F1A0970990051AB07 /* SendTo */ = {
 			isa = PBXGroup;
 			children = (
-				39D18FB61ED7655B002ED5D4 /* Entitlements */,
-				7B2142F61E5E040200CDD3FC /* InfoPlist.strings */,
 				F8708D201A0970990051AB07 /* ActionViewController.swift */,
+				39D18FB61ED7655B002ED5D4 /* Entitlements */,
+				E4F21AA51A13C4A300B0FAAA /* Images.xcassets */,
+				7B2142F61E5E040200CDD3FC /* InfoPlist.strings */,
 				F8708D211A0970990051AB07 /* Info.plist */,
 				F8708D221A0970990051AB07 /* MainInterface.storyboard */,
-				E4F21AA51A13C4A300B0FAAA /* Images.xcassets */,
 			);
 			path = SendTo;
 			sourceTree = "<group>";
@@ -3789,11 +3789,11 @@
 			isa = PBXGroup;
 			children = (
 				39D18FBB1ED7657D002ED5D4 /* Entitlements */,
+				F8708D251A0970990051AB07 /* Images.xcassets */,
 				7B2142F91E5E040A00CDD3FC /* InfoPlist.strings */,
+				F8708D261A0970990051AB07 /* Info.plist */,
 				E41A7D4A1A1BE04500245963 /* InitialViewController.swift */,
 				F8708D291A0970990051AB07 /* ShareViewController.swift */,
-				F8708D261A0970990051AB07 /* Info.plist */,
-				F8708D251A0970990051AB07 /* Images.xcassets */,
 			);
 			path = ShareTo;
 			sourceTree = "<group>";
