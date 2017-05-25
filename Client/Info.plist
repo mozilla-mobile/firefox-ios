@@ -8,6 +8,8 @@
 	<string>$(ADJUST_ENVIRONMENT)</string>
 	<key>MozDevelopmentTeam</key>
 	<string>$(DEVELOPMENT_TEAM)</string>
+	<key>MozWhatsNewTopic</key>
+	<string></string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>

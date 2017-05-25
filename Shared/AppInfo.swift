@@ -47,4 +47,9 @@ open class AppInfo {
         }
         return baseBundleIdentifier
     }
+
+    // Return the MozWhatsNewTopic key from the Info.plist
+    open static var whatsNewTopic: String? {
+        return Bundle.main.object(forInfoDictionaryKey: "MozWhatsNewTopic") as? String
+    }
 }
