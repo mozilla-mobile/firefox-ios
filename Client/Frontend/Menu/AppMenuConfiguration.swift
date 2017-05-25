@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import AVFoundation
 import Shared
 
 enum AppMenuAction: String {
@@ -24,6 +25,7 @@ enum AppMenuAction: String {
     case hideImageMode = "HideImageMode"
     case showNightMode = "ShowNightMode"
     case hideNightMode = "HideNightMode"
+    case openQRCode = "OpenQRCode"
 }
 
 struct AppMenuConfiguration: MenuConfiguration {
@@ -33,6 +35,8 @@ struct AppMenuConfiguration: MenuConfiguration {
     internal fileprivate(set) var numberOfItemsInRow: Int = 0
 
     fileprivate(set) var isPrivateMode: Bool = false
+
+    private let hasVideoCaptureDevice: Bool = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo) != nil
 
     init(appState: AppState) {
         menuItems = menuItemsForAppState(appState)
@@ -135,6 +139,9 @@ struct AppMenuConfiguration: MenuConfiguration {
                     menuItems.append(AppMenuConfiguration.HideNightModeItem)
                 }
             }
+            if hasVideoCaptureDevice {
+                menuItems.append(AppMenuConfiguration.QRCodeMenuItem)
+            }
             menuItems.append(AppMenuConfiguration.SettingsMenuItem)
         case .homePanels:
             menuItems.append(AppMenuConfiguration.NewTabMenuItem)
@@ -156,6 +163,9 @@ struct AppMenuConfiguration: MenuConfiguration {
                     menuItems.append(AppMenuConfiguration.HideNightModeItem)
                 }
             }
+            if hasVideoCaptureDevice {
+                menuItems.append(AppMenuConfiguration.QRCodeMenuItem)
+            }
             menuItems.append(AppMenuConfiguration.SettingsMenuItem)
         case .emptyTab, .loading:
             menuItems.append(AppMenuConfiguration.NewTabMenuItem)
@@ -176,6 +186,9 @@ struct AppMenuConfiguration: MenuConfiguration {
                 } else {
                     menuItems.append(AppMenuConfiguration.HideNightModeItem)
                 }
+            }
+            if hasVideoCaptureDevice {
+                menuItems.append(AppMenuConfiguration.QRCodeMenuItem)
             }
             menuItems.append(AppMenuConfiguration.SettingsMenuItem)
         case .tabTray:
@@ -251,6 +264,10 @@ extension AppMenuConfiguration {
         return AppMenuItem(title: Strings.MenuNightModeTurnOffLabel, accessibilityIdentifier: "ShowNightModeItem", action:  MenuAction(action: AppMenuAction.showNightMode.rawValue), icon: "menu-NightMode-Engaged", privateModeIcon: "menu-NightMode-Engaged")
     }
 
+    fileprivate static var QRCodeMenuItem: MenuItem {
+        return AppMenuItem(title: QRCodeTitleString, accessibilityIdentifier: "QRCodeMenuItem", action: MenuAction(action: AppMenuAction.openQRCode.rawValue), icon: "menu-QRCode", privateModeIcon: "menu-QRCode-pbm", selectedIcon: "menu-QRCode-Engaged")
+    }
+
     fileprivate static var SettingsMenuItem: MenuItem {
         return AppMenuItem(title: SettingsTitleString, accessibilityIdentifier: "SettingsMenuItem", action:  MenuAction(action: AppMenuAction.openSettings.rawValue), icon: "menu-Settings", privateModeIcon: "menu-Settings-pbm")
     }
@@ -294,6 +311,7 @@ extension AppMenuConfiguration {
     static let FindInPageTitleString = NSLocalizedString("Menu.FindInPageAction.Title", tableName: "Menu", value: "Find In Page", comment: "Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page.")
     static let ViewDesktopSiteTitleString = NSLocalizedString("Menu.ViewDekstopSiteAction.Title", tableName: "Menu", value: "Request Desktop Site", comment: "Label for the button, displayed in the menu, used to request the desktop version of the current website.")
     static let ViewMobileSiteTitleString = NSLocalizedString("Menu.ViewMobileSiteAction.Title", tableName: "Menu", value: "Request Mobile Site", comment: "Label for the button, displayed in the menu, used to request the mobile version of the current website.")
+    static let QRCodeTitleString = NSLocalizedString("Menu.openQRCodeAction.Title", tableName: "Menu", value: "QR Code", comment: "Label for the button, displayed in the menu, used to open the qr code view chontroller.")
     static let SettingsTitleString = NSLocalizedString("Menu.OpenSettingsAction.Title", tableName: "Menu", value: "Settings", comment: "Label for the button, displayed in the menu, used to open the Settings menu.")
     static let CloseAllTabsTitleString = NSLocalizedString("Menu.CloseAllTabsAction.Title", tableName: "Menu", value: "Close All Tabs", comment: "Label for the button, displayed in the menu, used to close all tabs currently open.")
     static let OpenHomePageTitleString = NSLocalizedString("Menu.OpenHomePageAction.Title", tableName: "Menu", value: "Home", comment: "Label for the button, displayed in the menu, used to navigate to the home page.")
