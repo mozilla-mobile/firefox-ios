@@ -1475,6 +1475,22 @@
 		39AC59191CC574AA0042C2F5 /* HomePageSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomePageSettingsViewController.swift; sourceTree = "<group>"; };
 		39B0647C1E7ADAC2000BE173 /* PushCryptoTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PushCryptoTests.swift; path = PushTests/PushCryptoTests.swift; sourceTree = "<group>"; };
 		39C22C2C1E897B9A000C0E56 /* LivePushClientTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LivePushClientTests.swift; path = PushTests/LivePushClientTests.swift; sourceTree = "<group>"; };
+		39D18FAD1ED7653C002ED5D4 /* Fennec.enterprise.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; name = Fennec.enterprise.entitlements; path = Entitlements/Fennec.enterprise.entitlements; sourceTree = "<group>"; };
+		39D18FAE1ED7653C002ED5D4 /* Fennec.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; name = Fennec.entitlements; path = Entitlements/Fennec.entitlements; sourceTree = "<group>"; };
+		39D18FAF1ED7653C002ED5D4 /* Firefox.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; name = Firefox.entitlements; path = Entitlements/Firefox.entitlements; sourceTree = "<group>"; };
+		39D18FB01ED7653C002ED5D4 /* FirefoxBeta.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; name = FirefoxBeta.entitlements; path = Entitlements/FirefoxBeta.entitlements; sourceTree = "<group>"; };
+		39D18FB21ED76556002ED5D4 /* Fennec.enterprise.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; name = Fennec.enterprise.entitlements; path = Entitlements/Fennec.enterprise.entitlements; sourceTree = "<group>"; };
+		39D18FB31ED76556002ED5D4 /* Fennec.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; name = Fennec.entitlements; path = Entitlements/Fennec.entitlements; sourceTree = "<group>"; };
+		39D18FB41ED76556002ED5D4 /* Firefox.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; name = Firefox.entitlements; path = Entitlements/Firefox.entitlements; sourceTree = "<group>"; };
+		39D18FB51ED76556002ED5D4 /* FirefoxBeta.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; name = FirefoxBeta.entitlements; path = Entitlements/FirefoxBeta.entitlements; sourceTree = "<group>"; };
+		39D18FB71ED7656B002ED5D4 /* Fennec.enterprise.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; name = Fennec.enterprise.entitlements; path = Entitlements/Fennec.enterprise.entitlements; sourceTree = "<group>"; };
+		39D18FB81ED7656B002ED5D4 /* Fennec.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; name = Fennec.entitlements; path = Entitlements/Fennec.entitlements; sourceTree = "<group>"; };
+		39D18FB91ED7656B002ED5D4 /* Firefox.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; name = Firefox.entitlements; path = Entitlements/Firefox.entitlements; sourceTree = "<group>"; };
+		39D18FBA1ED7656B002ED5D4 /* FirefoxBeta.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; name = FirefoxBeta.entitlements; path = Entitlements/FirefoxBeta.entitlements; sourceTree = "<group>"; };
+		39D18FBC1ED7658C002ED5D4 /* Fennec.enterprise.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; name = Fennec.enterprise.entitlements; path = Entitlements/Fennec.enterprise.entitlements; sourceTree = "<group>"; };
+		39D18FBD1ED7658C002ED5D4 /* Fennec.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; name = Fennec.entitlements; path = Entitlements/Fennec.entitlements; sourceTree = "<group>"; };
+		39D18FBE1ED7658C002ED5D4 /* Firefox.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; name = Firefox.entitlements; path = Entitlements/Firefox.entitlements; sourceTree = "<group>"; };
+		39D18FBF1ED7658C002ED5D4 /* FirefoxBeta.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; name = FirefoxBeta.entitlements; path = Entitlements/FirefoxBeta.entitlements; sourceTree = "<group>"; };
 		39DD030C1CD53E1900BC09B3 /* HomePageHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomePageHelper.swift; sourceTree = "<group>"; };
 		39E65D261CA5B92000C63CE3 /* AsyncReducerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncReducerTests.swift; sourceTree = "<group>"; };
 		39EB46971E26DDB4006346E8 /* ScreenGraph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenGraph.swift; sourceTree = "<group>"; };
@@ -2640,9 +2656,10 @@
 		3905274D1C874D35007E0BB7 /* Today */ = {
 			isa = PBXGroup;
 			children = (
+				39D18FAC1ED7651E002ED5D4 /* Entitlements */,
 				391AEFD11C8F11ED00691F84 /* Images.xcassets */,
-				3905274E1C874D35007E0BB7 /* TodayViewController.swift */,
 				390527531C874D35007E0BB7 /* Info.plist */,
+				3905274E1C874D35007E0BB7 /* TodayViewController.swift */,
 			);
 			path = Today;
 			sourceTree = "<group>";
@@ -2674,6 +2691,50 @@
 				39B0647C1E7ADAC2000BE173 /* PushCryptoTests.swift */,
 			);
 			name = PushTests;
+			sourceTree = "<group>";
+		};
+		39D18FAC1ED7651E002ED5D4 /* Entitlements */ = {
+			isa = PBXGroup;
+			children = (
+				39D18FAD1ED7653C002ED5D4 /* Fennec.enterprise.entitlements */,
+				39D18FAE1ED7653C002ED5D4 /* Fennec.entitlements */,
+				39D18FAF1ED7653C002ED5D4 /* Firefox.entitlements */,
+				39D18FB01ED7653C002ED5D4 /* FirefoxBeta.entitlements */,
+			);
+			name = Entitlements;
+			sourceTree = "<group>";
+		};
+		39D18FB11ED76544002ED5D4 /* Entitlements */ = {
+			isa = PBXGroup;
+			children = (
+				39D18FB21ED76556002ED5D4 /* Fennec.enterprise.entitlements */,
+				39D18FB31ED76556002ED5D4 /* Fennec.entitlements */,
+				39D18FB41ED76556002ED5D4 /* Firefox.entitlements */,
+				39D18FB51ED76556002ED5D4 /* FirefoxBeta.entitlements */,
+			);
+			name = Entitlements;
+			sourceTree = "<group>";
+		};
+		39D18FB61ED7655B002ED5D4 /* Entitlements */ = {
+			isa = PBXGroup;
+			children = (
+				39D18FB71ED7656B002ED5D4 /* Fennec.enterprise.entitlements */,
+				39D18FB81ED7656B002ED5D4 /* Fennec.entitlements */,
+				39D18FB91ED7656B002ED5D4 /* Firefox.entitlements */,
+				39D18FBA1ED7656B002ED5D4 /* FirefoxBeta.entitlements */,
+			);
+			name = Entitlements;
+			sourceTree = "<group>";
+		};
+		39D18FBB1ED7657D002ED5D4 /* Entitlements */ = {
+			isa = PBXGroup;
+			children = (
+				39D18FBC1ED7658C002ED5D4 /* Fennec.enterprise.entitlements */,
+				39D18FBD1ED7658C002ED5D4 /* Fennec.entitlements */,
+				39D18FBE1ED7658C002ED5D4 /* Firefox.entitlements */,
+				39D18FBF1ED7658C002ED5D4 /* FirefoxBeta.entitlements */,
+			);
+			name = Entitlements;
 			sourceTree = "<group>";
 		};
 		39F99FC71E3A6DB700F353B4 /* Push */ = {
@@ -3073,10 +3134,11 @@
 		E4BA8AA01B4B15EF00BC2E95 /* ViewLater */ = {
 			isa = PBXGroup;
 			children = (
-				7B2142F31E5E03F800CDD3FC /* InfoPlist.strings */,
 				E4BA8AA11B4B15EF00BC2E95 /* ActionRequestHandler.swift */,
-				E4BA8AA61B4B15EF00BC2E95 /* ViewLater.xcassets */,
+				39D18FB11ED76544002ED5D4 /* Entitlements */,
 				E4BA8AA71B4B15EF00BC2E95 /* Info.plist */,
+				7B2142F31E5E03F800CDD3FC /* InfoPlist.strings */,
+				E4BA8AA61B4B15EF00BC2E95 /* ViewLater.xcassets */,
 			);
 			path = ViewLater;
 			sourceTree = "<group>";
@@ -3718,11 +3780,12 @@
 		F8708D1F1A0970990051AB07 /* SendTo */ = {
 			isa = PBXGroup;
 			children = (
-				7B2142F61E5E040200CDD3FC /* InfoPlist.strings */,
 				F8708D201A0970990051AB07 /* ActionViewController.swift */,
+				39D18FB61ED7655B002ED5D4 /* Entitlements */,
+				E4F21AA51A13C4A300B0FAAA /* Images.xcassets */,
+				7B2142F61E5E040200CDD3FC /* InfoPlist.strings */,
 				F8708D211A0970990051AB07 /* Info.plist */,
 				F8708D221A0970990051AB07 /* MainInterface.storyboard */,
-				E4F21AA51A13C4A300B0FAAA /* Images.xcassets */,
 			);
 			path = SendTo;
 			sourceTree = "<group>";
@@ -3730,11 +3793,12 @@
 		F8708D241A0970990051AB07 /* ShareTo */ = {
 			isa = PBXGroup;
 			children = (
+				39D18FBB1ED7657D002ED5D4 /* Entitlements */,
+				F8708D251A0970990051AB07 /* Images.xcassets */,
 				7B2142F91E5E040A00CDD3FC /* InfoPlist.strings */,
+				F8708D261A0970990051AB07 /* Info.plist */,
 				E41A7D4A1A1BE04500245963 /* InitialViewController.swift */,
 				F8708D291A0970990051AB07 /* ShareViewController.swift */,
-				F8708D261A0970990051AB07 /* Info.plist */,
-				F8708D251A0970990051AB07 /* Images.xcassets */,
 			);
 			path = ShareTo;
 			sourceTree = "<group>";
@@ -4426,6 +4490,9 @@
 							com.apple.Keychain = {
 								enabled = 1;
 							};
+							com.apple.Push = {
+								enabled = 0;
+							};
 						};
 					};
 					F84B225B1A09210A00AAB793 = {
@@ -4439,6 +4506,9 @@
 							};
 							com.apple.Keychain = {
 								enabled = 1;
+							};
+							com.apple.Push = {
+								enabled = 0;
 							};
 						};
 					};
@@ -6088,6 +6158,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/$(PRODUCT_NAME:rfc1034identifier)/Entitlements/$(MOZ_BUNDLE_SHORT_NAME).entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Extensions/Today/Info.plist;
@@ -6105,6 +6176,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/$(PRODUCT_NAME:rfc1034identifier)/Entitlements/$(MOZ_BUNDLE_SHORT_NAME).entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Extensions/Today/Info.plist;
@@ -6122,6 +6194,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/$(PRODUCT_NAME:rfc1034identifier)/Entitlements/$(MOZ_BUNDLE_SHORT_NAME).entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Extensions/Today/Info.plist;
@@ -6480,7 +6553,6 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/Entitlements/Firefox.entitlements";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_ACTIVITY_MODE = "";
@@ -6533,6 +6605,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/Entitlements/$(MOZ_BUNDLE_SHORT_NAME).entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6592,6 +6665,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/$(PRODUCT_NAME:rfc1034identifier)/Entitlements/$(MOZ_BUNDLE_SHORT_NAME).entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6616,6 +6690,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/$(PRODUCT_NAME:rfc1034identifier)/Entitlements/$(MOZ_BUNDLE_SHORT_NAME).entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6854,6 +6929,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/$(PRODUCT_NAME:rfc1034identifier)/Entitlements/$(MOZ_BUNDLE_SHORT_NAME).entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6877,6 +6953,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/$(PRODUCT_NAME:rfc1034identifier)/Entitlements/$(MOZ_BUNDLE_SHORT_NAME).entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -7380,7 +7457,6 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/Entitlements/Fennec.enterprise.entitlements";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_ACTIVITY_MODE = "";
@@ -7437,6 +7513,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_Developer;
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/Entitlements/$(MOZ_BUNDLE_SHORT_NAME).entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -7492,6 +7569,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/$(PRODUCT_NAME:rfc1034identifier)/Entitlements/$(MOZ_BUNDLE_SHORT_NAME).entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -7514,6 +7592,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/$(PRODUCT_NAME:rfc1034identifier)/Entitlements/$(MOZ_BUNDLE_SHORT_NAME).entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -7537,6 +7616,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/$(PRODUCT_NAME:rfc1034identifier)/Entitlements/$(MOZ_BUNDLE_SHORT_NAME).entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Extensions/Today/Info.plist;
@@ -7555,6 +7635,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/$(PRODUCT_NAME:rfc1034identifier)/Entitlements/$(MOZ_BUNDLE_SHORT_NAME).entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -8015,7 +8096,6 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/Entitlements/FirefoxBeta.entitlements";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_ACTIVITY_MODE = "";
@@ -8068,6 +8148,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_Beta;
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/Entitlements/$(MOZ_BUNDLE_SHORT_NAME).entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -8122,6 +8203,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/$(PRODUCT_NAME:rfc1034identifier)/Entitlements/$(MOZ_BUNDLE_SHORT_NAME).entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -8144,6 +8226,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/$(PRODUCT_NAME:rfc1034identifier)/Entitlements/$(MOZ_BUNDLE_SHORT_NAME).entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -8168,6 +8251,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/$(PRODUCT_NAME:rfc1034identifier)/Entitlements/$(MOZ_BUNDLE_SHORT_NAME).entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -8462,7 +8546,6 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/Entitlements/Fennec.entitlements";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_ACTIVITY_MODE = "";
@@ -8519,6 +8602,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_Developer;
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Client/Entitlements/$(MOZ_BUNDLE_SHORT_NAME).entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -8591,6 +8675,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/$(PRODUCT_NAME:rfc1034identifier)/Entitlements/$(MOZ_BUNDLE_SHORT_NAME).entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -8615,6 +8700,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/$(PRODUCT_NAME:rfc1034identifier)/Entitlements/$(MOZ_BUNDLE_SHORT_NAME).entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
