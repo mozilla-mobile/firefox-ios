@@ -105,9 +105,9 @@ class LeanplumIntegration {
         setupTemplateDictionary()
 
         var userAttributesDict = [AnyHashable: Any]()
-        userAttributesDict[UserAttributeKeyName.alternateMailClient] = "mailto:"
-        userAttributesDict[UserAttributeKeyName.focusInstalled] = !canInstallFocus()
-        userAttributesDict[UserAttributeKeyName.klarInstalled] = !canInstallKlar()
+        userAttributesDict[UserAttributeKeyName.alternateMailClient.rawValue] = "mailto:"
+        userAttributesDict[UserAttributeKeyName.focusInstalled.rawValue] = !canInstallFocus()
+        userAttributesDict[UserAttributeKeyName.klarInstalled.rawValue] = !canInstallKlar()
 
         if let mailtoScheme = self.profile?.prefs.stringForKey(PrefsKeys.KeyMailToOption), mailtoScheme != "mailto:" {
             userAttributesDict["Alternate Mail Client Installed"] = mailtoScheme
