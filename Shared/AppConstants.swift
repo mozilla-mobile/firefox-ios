@@ -132,7 +132,7 @@ public struct AppConstants {
     ///  Enables/disables deep linking form fill for FxA
     public static let MOZ_FXA_DEEP_LINK_FORM_FILL: Bool = {
         #if MOZ_CHANNEL_RELEASE
-            return false
+            return true
         #elseif MOZ_CHANNEL_BETA
             return false
         #elseif MOZ_CHANNEL_FENNEC
