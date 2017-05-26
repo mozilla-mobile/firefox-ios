@@ -560,6 +560,7 @@ extension SQLiteHistory: BrowserHistory {
         ", COALESCE(max(case \(TableVisits).is_local when 0 then \(TableVisits).date else 0 end), 0) AS remoteVisitDate" +
         ", COALESCE(sum(\(TableVisits).is_local), 0) AS localVisitCount" +
         ", COALESCE(sum(case \(TableVisits).is_local when 1 then 0 else 1 end), 0) AS remoteVisitCount" +
+        ", COALESCE(sum(case visits.type WHEN 2 THEN 1 ELSE 0 END), 0) AS typedCount" +
         " FROM \(TableHistory) " +
         "INNER JOIN \(TableDomains) ON \(TableDomains).id = \(TableHistory).domain_id " +
         "INNER JOIN \(TableVisits) ON \(TableVisits).siteID = \(TableHistory).id "
@@ -578,7 +579,7 @@ extension SQLiteHistory: BrowserHistory {
         // Discard all but the 1000 most frecent.
         // Compute and return the frecency for all 1000 URLs.
         let frecenciedSQL =
-        "SELECT *, (\(localFrecencySQL) + \(remoteFrecencySQL)) AS frecency" +
+        "SELECT *, max(1,typedCount) * (\(localFrecencySQL) + \(remoteFrecencySQL)) AS frecency" +
         " FROM (" + ungroupedSQL + ")" +
         " WHERE (" +
         "((localVisitCount > 0) OR (remoteVisitCount > 0)) AND " +                         // Eliminate dead rows from coalescing.
