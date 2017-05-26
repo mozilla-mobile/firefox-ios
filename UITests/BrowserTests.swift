@@ -38,6 +38,7 @@ class BrowserTests: KIFTestCase {
         EarlGrey.select(elementWithMatcher: matcher).perform(grey_tap())
         
         // Check to see if the JS Prompt is dequeued and showing
+        tester().waitForView(withAccessibilityLabel: "OK")
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("OK"))
             .inRoot(grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")!))
             .assert(grey_enabled())

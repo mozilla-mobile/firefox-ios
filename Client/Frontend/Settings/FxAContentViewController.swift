@@ -23,8 +23,6 @@ protocol FxAContentViewControllerDelegate: class {
  * fxa-content-server git repository.
  */
 class FxAContentViewController: SettingsContentViewController, WKScriptMessageHandler {
-    var fxaOptions = FxALaunchParams()
-
     fileprivate enum RemoteCommand: String {
         case canLinkAccount = "can_link_account"
         case loaded = "loaded"
@@ -37,9 +35,17 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
 
     let profile: Profile
 
-    init(profile: Profile) {
+    init(profile: Profile, fxaOptions: FxALaunchParams? = nil) {
         self.profile = profile
+        
         super.init(backgroundColor: UIColor(red: 242 / 255.0, green: 242 / 255.0, blue: 242 / 255.0, alpha: 1.0), title: NSAttributedString(string: "Firefox Accounts"))
+        
+        if AppConstants.MOZ_FXA_DEEP_LINK_FORM_FILL {
+            self.url = self.createFxAURLWith(fxaOptions, profile: profile)
+        } else {
+            self.url = profile.accountConfiguration.signInURL
+        }
+
         NotificationCenter.default.addObserver(self, selector: #selector(FxAContentViewController.userDidVerify(_:)), name: NotificationFirefoxAccountVerified, object: nil)
     }
 
@@ -142,21 +148,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     fileprivate func onLoaded() {
         self.timer?.invalidate()
         self.timer = nil
-        self.isLoaded = true
-
-        if AppConstants.MOZ_FXA_DEEP_LINK_FORM_FILL {
-            fillField("email", value: self.fxaOptions.email)
-            fillField("access_code", value: self.fxaOptions.access_code)
-        }
-    }
-    
-    // Attempt to fill out a field in content view
-    fileprivate func fillField(_ className: String?, value: String?) {
-        guard let name = className, let val = value else {
-            return
-        }
-        let script = "$('.\(name)').val('\(val)');"
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        self.isLoaded = true        
     }
 
     // Handle a message coming from the content server.
@@ -199,6 +191,26 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
             let detail = body["detail"]
             handleRemoteCommand(detail["command"].stringValue, data: detail["data"])
         }
+    }
+    
+    // Configure the FxA signin url based on any passed options.
+    public func createFxAURLWith(_ fxaOptions: FxALaunchParams?, profile: Profile) -> URL {
+        let profileUrl = profile.accountConfiguration.signInURL
+        
+        guard let launchParams = fxaOptions else {
+            return profileUrl
+        }
+        
+        // Only append `signin`, `entrypoint` and `utm_*` parameters. Note that you can't
+        // override the service and context params.
+        var params = launchParams.query
+        params.removeValue(forKey: "service")
+        params.removeValue(forKey: "context")
+        let queryURL = params.filter { $0.key == "signin" || $0.key == "entrypoint" || $0.key.range(of: "utm_") != nil }.map({
+            return "\($0.key)=\($0.value)"
+        }).joined(separator: "&")
+        
+        return  URL(string: "\(profileUrl)&\(queryURL)") ?? profileUrl
     }
 
     fileprivate func getJS() -> String {

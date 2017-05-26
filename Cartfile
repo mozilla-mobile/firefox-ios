@@ -1,7 +1,7 @@
 # These two have to be specified explicitely otherwise
 # Carthage complains about a dependency cycle.
 github "kstenerud/KSCrash"                  "1.15.8"
-github "getsentry/sentry-swift"             "2.1.9"
+github "getsentry/sentry-swift"             "2.1.10"
 
 github "Alamofire/Alamofire"                ~> 4.0
 github "sleroux/Deferred"                   "Swift3.0"

@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 MOZ_BUNDLE_DISPLAY_NAME = Fennec
+MOZ_BUNDLE_SHORT_NAME = Fennec.enterprise
 
 // Bundle Identifier
 MOZ_BUNDLE_ID = org.mozilla.ios.FennecEnterprise

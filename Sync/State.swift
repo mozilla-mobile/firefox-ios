@@ -415,7 +415,7 @@ open class Scratchpad {
         if let mg = prefs.stringForKey(PrefGlobal) {
             if let mgTS = prefs.unsignedLongForKey(PrefGlobalTS) {
                 if let global = MetaGlobal.fromJSON(JSON(parseJSON: mg)) {
-                    let _ = b.setGlobal(Fetched(value: global, timestamp: mgTS))
+                    _ = b.setGlobal(Fetched(value: global, timestamp: mgTS))
                 } else {
                     log.error("Malformed meta/global in prefs. Ignoring.")
                 }
@@ -433,7 +433,7 @@ open class Scratchpad {
                     let keys = Keys(payload: KeysPayload(keys))
                     if keys.valid {
                         log.debug("Read keys from Keychain with label \(keyLabel).")
-                        let _ = b.setKeys(Fetched(value: keys, timestamp: ckTS))
+                        _ = b.setKeys(Fetched(value: keys, timestamp: ckTS))
                     } else {
                         log.error("Invalid keys extracted from Keychain. Discarding.")
                     }

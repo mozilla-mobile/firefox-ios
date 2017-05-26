@@ -58,7 +58,7 @@ extension SystemUtils {
             return true
         }
         do {
-            let _ = try Data(contentsOf: lockFileURL, options: .mappedIfSafe)
+            _ = try Data(contentsOf: lockFileURL, options: .mappedIfSafe)
             return false
         } catch let err as NSError {
             return err.code == 257

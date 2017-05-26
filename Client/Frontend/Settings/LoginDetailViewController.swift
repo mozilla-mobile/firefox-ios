@@ -303,7 +303,7 @@ extension LoginDetailViewController {
         profile.logins.hasSyncedLogins().uponQueue(DispatchQueue.main) { yes in
             self.deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
                 self.profile.logins.removeLoginByGUID(self.login.guid).uponQueue(DispatchQueue.main) { _ in
-                    let _ = self.navigationController?.popViewController(animated: true)
+                    _ = self.navigationController?.popViewController(animated: true)
                 }
             }, hasSyncedLogins: yes.successValue ?? true)
 

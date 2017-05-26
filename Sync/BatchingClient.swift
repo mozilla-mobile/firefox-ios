@@ -8,8 +8,12 @@ import Shared
 import XCGLogger
 import Deferred
 
-open class SerializeRecordFailure<T: CleartextPayloadJSON>: MaybeErrorType {
+open class SerializeRecordFailure<T: CleartextPayloadJSON>: MaybeErrorType, SyncPingFailureFormattable {
     open let record: Record<T>
+
+    open var failureReasonName: SyncPingFailureReasonName {
+        return .otherError
+    }
 
     open var description: String {
         return "Failed to serialize record: \(record)"
@@ -220,7 +224,7 @@ open class Sync15BatchClient<T: CleartextPayloadJSON> {
     fileprivate func moveForward(_ response: StorageResponse<POSTResult>) {
         let lastModified = response.metadata.lastModifiedMilliseconds
         self.ifUnmodifiedSince = lastModified
-        let _ = self.onCollectionUploaded(response.value, lastModified)
+        _ = self.onCollectionUploaded(response.value, lastModified)
     }
 
     fileprivate func resetBatch() {

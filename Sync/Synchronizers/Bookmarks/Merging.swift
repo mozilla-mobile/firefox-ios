@@ -72,7 +72,7 @@ open class BookmarksMergeResult: PerhapsNoOp {
 
 // MARK: - Errors.
 
-open class BookmarksMergeError: MaybeErrorType {
+open class BookmarksMergeError: MaybeErrorType, SyncPingFailureFormattable {
     fileprivate let error: Error?
 
     init(error: Error?=nil) {
@@ -81,6 +81,10 @@ open class BookmarksMergeError: MaybeErrorType {
 
     open var description: String {
         return "Merge error: \(self.error ??? "nil")"
+    }
+
+    open var failureReasonName: SyncPingFailureReasonName {
+        return .otherError
     }
 }
 

@@ -128,13 +128,14 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         let urls = visitSites(noOfSites: 2)
         var errorOrNil: NSError?
         
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("History")).perform(grey_tap())
         let url1 = urls[0].url
         let url2 = urls[1].url
-        
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("History")).perform(grey_tap())
+        tester().waitForView(withAccessibilityLabel: url1)
+        tester().waitForView(withAccessibilityLabel: url2)
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(url1)).assert(grey_notNil())
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(url2)).assert(grey_notNil())
-
+        
         BrowserUtils.clearPrivateData([BrowserUtils.Clearable.History], swipe: false, tester: tester())
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Bookmarks")).perform(grey_tap())
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("History")).perform(grey_tap())
@@ -155,11 +156,11 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         let urls = visitSites(noOfSites: 2)
         var errorOrNil: NSError?
 
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("History")).perform(grey_tap())
         let url1 = urls[0].url
         let url2 = urls[1].url
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(url1)).assert(grey_notNil())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(url2)).assert(grey_notNil())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("History")).perform(grey_tap())
+        tester().waitForView(withAccessibilityLabel: url1)
+        tester().waitForView(withAccessibilityLabel: url2)
         BrowserUtils.clearPrivateData(BrowserUtils.AllClearables.subtracting([BrowserUtils.Clearable.History]), swipe: false, tester: tester())
         
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(url1))

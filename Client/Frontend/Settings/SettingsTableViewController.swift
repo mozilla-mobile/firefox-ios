@@ -105,23 +105,19 @@ class SettingSection: Setting {
 
     var count: Int {
         var count = 0
-        for setting in children {
-            if !setting.hidden {
-                count += 1
-            }
+        for setting in children where !setting.hidden {
+            count += 1
         }
         return count
     }
 
     subscript(val: Int) -> Setting? {
         var i = 0
-        for setting in children {
-            if !setting.hidden {
-                if i == val {
-                    return setting
-                }
-                i += 1
+        for setting in children where !setting.hidden {
+            if i == val {
+                return setting
             }
+            i += 1
         }
         return nil
     }
@@ -379,13 +375,13 @@ class AccountSetting: Setting, FxAContentViewControllerDelegate {
 
         // Dismiss the FxA content view if the account is verified.
         if flags.verified {
-            let _ = settings.navigationController?.popToRootViewController(animated: true)
+            _ = settings.navigationController?.popToRootViewController(animated: true)
         }
     }
 
     func contentViewControllerDidCancel(_ viewController: FxAContentViewController) {
         NSLog("didCancel")
-        let _ = settings.navigationController?.popToRootViewController(animated: true)
+        _ = settings.navigationController?.popToRootViewController(animated: true)
     }
 }
 

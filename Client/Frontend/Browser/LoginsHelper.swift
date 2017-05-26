@@ -95,7 +95,7 @@ class LoginsHelper: TabHelper {
         attributes[NSForegroundColorAttributeName] = UIColor.darkGray
         let attr = NSMutableAttributedString(string: string, attributes: attributes)
         let font: UIFont = UIFont.systemFont(ofSize: 13, weight: UIFontWeightMedium)
-        for (_, range) in ranges.enumerated() {
+        for range in ranges {
             attr.addAttribute(NSFontAttributeName, value: font, range: range)
         }
         return attr

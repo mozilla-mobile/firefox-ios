@@ -93,7 +93,7 @@ public struct ValidationStats: Stats, DictionaryRepresentable {
     func asDictionary() -> [String: Any] {
         return [
             "problems": problems.map { $0.asDictionary() },
-            "took" : took
+            "took": took
         ]
     }
 }
@@ -137,7 +137,6 @@ public class StatsSession {
 
 // Stats about a single engine's sync.
 public class SyncEngineStatsSession: StatsSession {
-    public var failureReason: Any?
     public var validationStats: ValidationStats?
 
     private(set) var uploadStats: SyncUploadStats
@@ -222,6 +221,17 @@ public enum SyncPingError: MaybeErrorType {
     }
 }
 
+public enum SyncPingFailureReasonName: String {
+    case httpError = "httperror"
+    case unexpectedError = "unexpectederror"
+    case sqlError = "sqlerror"
+    case otherError = "othererror"
+}
+
+public protocol SyncPingFailureFormattable {
+    var failureReasonName: SyncPingFailureReasonName { get }
+}
+
 public struct SyncPing: TelemetryPing {
     public private(set) var payload: JSON
 
@@ -265,7 +275,20 @@ public struct SyncPing: TelemetryPing {
             var dict = stats.asDictionary()
             if let engineResults = result.engineResults.successValue {
                 dict["engines"] = SyncPing.enginePingDataFrom(engineResults: engineResults)
+            } else if let failure = result.engineResults.failureValue {
+                var errorName: SyncPingFailureReasonName
+                if let formattableFailure = failure as? SyncPingFailureFormattable {
+                    errorName = formattableFailure.failureReasonName
+                } else {
+                    errorName = .unexpectedError
+                }
+
+                dict["failureReason"] = [
+                    "name": errorName.rawValue,
+                    "error": "\(type(of: failure))",
+                ]
             }
+
             dict["devices"] = devices
             return deferMaybe(dict)
         }
