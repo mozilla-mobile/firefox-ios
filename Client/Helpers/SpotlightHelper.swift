@@ -16,9 +16,6 @@ class SpotlightHelper: NSObject {
         willSet {
             activity?.invalidate()
         }
-        didSet {
-            activity?.delegate = self
-        }
     }
 
     fileprivate var urlForThumbnail: URL?
@@ -103,14 +100,6 @@ class SpotlightHelper: NSObject {
 
     func createUserActivity() -> NSUserActivity {
         return NSUserActivity(activityType: browsingActivityType)
-    }
-}
-
-extension SpotlightHelper: NSUserActivityDelegate {
-    @objc func userActivityWasContinued(_ userActivity: NSUserActivity) {
-        if let url = userActivity.webpageURL {
-            createNewTab?(url)
-        }
     }
 }
 
