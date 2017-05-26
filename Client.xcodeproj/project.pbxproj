@@ -47,6 +47,8 @@
 		0BF42D4F1A7CD09600889E28 /* TestFavicons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF42D4E1A7CD09600889E28 /* TestFavicons.swift */; };
 		0BF648111A9C54E900BA963C /* TopSitesPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF648101A9C54E900BA963C /* TopSitesPanel.swift */; };
 		0BF8F8DA1AEFF1C900E90BC2 /* noTitle.html in Resources */ = {isa = PBXBuildFile; fileRef = 0BF8F8D91AEFF1C900E90BC2 /* noTitle.html */; };
+		19DE1F671EC13B6400428B8C /* LeanplumIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DE1F661EC13B6400428B8C /* LeanplumIntegration.swift */; };
+		19DE1F7B1EC13E8C00428B8C /* Leanplum.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 19DE1F781EC13E8C00428B8C /* Leanplum.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2805F5A61B8BCA7A00268FD1 /* ReadingList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D567181ADECE2700F1EFE7 /* ReadingList.framework */; };
 		28078A471B1507EF0053B46A /* ReadingList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D567181ADECE2700F1EFE7 /* ReadingList.framework */; };
 		280CB1371C20E0A3005AF147 /* BookmarksSynchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280CB1361C20E0A3005AF147 /* BookmarksSynchronizer.swift */; };
@@ -1223,6 +1225,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				19DE1F7B1EC13E8C00428B8C /* Leanplum.framework in Copy Frameworks */,
 				E62CFB3D1C89EFF700C01324 /* FxA.framework in Copy Frameworks */,
 				E601386A1C89EB9800DF9756 /* SQLite.framework in Copy Frameworks */,
 				E69DB08B1E97DEAA008A67E6 /* Telemetry.framework in Copy Frameworks */,
@@ -1302,6 +1305,8 @@
 		0BF42D4E1A7CD09600889E28 /* TestFavicons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestFavicons.swift; sourceTree = "<group>"; };
 		0BF648101A9C54E900BA963C /* TopSitesPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopSitesPanel.swift; sourceTree = "<group>"; };
 		0BF8F8D91AEFF1C900E90BC2 /* noTitle.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = noTitle.html; sourceTree = "<group>"; };
+		19DE1F661EC13B6400428B8C /* LeanplumIntegration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeanplumIntegration.swift; sourceTree = "<group>"; };
+		19DE1F781EC13E8C00428B8C /* Leanplum.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Leanplum.framework; path = Carthage/Build/iOS/Leanplum.framework; sourceTree = "<group>"; };
 		280CB1361C20E0A3005AF147 /* BookmarksSynchronizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BookmarksSynchronizer.swift; path = Sync/Synchronizers/Bookmarks/BookmarksSynchronizer.swift; sourceTree = SOURCE_ROOT; };
 		28126F471C2F948E006466CC /* SQLiteBookmarksHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteBookmarksHelpers.swift; sourceTree = "<group>"; };
 		28126F6D1C2F94F9006466CC /* SQLiteBookmarksModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteBookmarksModel.swift; sourceTree = "<group>"; };
@@ -2772,6 +2777,7 @@
 		7B604FC11C496005006EEEC3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				19DE1F781EC13E8C00428B8C /* Leanplum.framework */,
 				E46175F11EBB73A10021AE8A /* KSCrash.framework */,
 				E46175F21EBB73A10021AE8A /* Sentry.framework */,
 				3B4988CD1E42B01800A12FDA /* SwiftyJSON.framework */,
@@ -3564,6 +3570,7 @@
 		F84B21E41A0910F600AAB793 /* Application */ = {
 			isa = PBXGroup;
 			children = (
+				19DE1F661EC13B6400428B8C /* LeanplumIntegration.swift */,
 				E652F6F91BF66A79007FFDD6 /* Delegates */,
 				28CE83E81A1D206D00576538 /* Client-Bridging-Header.h */,
 				E40FAB0B1A7ABB77009CB80D /* WebServer.swift */,
@@ -4892,6 +4899,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/SwiftyJSON.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/KSCrash.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Sentry.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Leanplum.framework",
 			);
 			name = "Copy Carthage Dependencies";
 			outputPaths = (
@@ -5547,6 +5555,7 @@
 				7BC68CC61CC152B70043562A /* MenuItem.swift in Sources */,
 				E633E2DA1C21EAF8001FFF6C /* LoginDetailViewController.swift in Sources */,
 				59A68B280D62462B85CF57A4 /* HistoryPanel.swift in Sources */,
+				19DE1F671EC13B6400428B8C /* LeanplumIntegration.swift in Sources */,
 				7BC68CCF1CC152B70043562A /* MenuToolbarItem.swift in Sources */,
 				E65D89181C8647420006EA35 /* AppAuthenticator.swift in Sources */,
 				28FDFF0C1C1F725800840F86 /* SeparatorTableCell.swift in Sources */,
