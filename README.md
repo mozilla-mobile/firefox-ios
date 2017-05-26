@@ -8,9 +8,9 @@ This branch
 
 This branch is for mainline development that will ship in *v8.0*.
 
-This branch works with Xcode 8.2.1, and supports iOS 9.x and 10.
+This branch only works with Xcode 8.3.1, and supports iOS 9.x and 10.
 
-This branch is written in Swift 3.0.
+This branch is written in Swift 3.1.
 
 Please make sure you aim your pull requests in the right direction.
 
