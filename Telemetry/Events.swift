@@ -8,11 +8,14 @@ import SwiftyJSON
 public typealias IdentifierString = String
 public extension IdentifierString {
     func validate() -> Bool {
+        // Regex located here: http://gecko.readthedocs.io/en/latest/toolkit/components/telemetry/telemetry/collection/events.html#limits
         let regex = try! NSRegularExpression(pattern: "^[a-zA-Z][a-zA-Z0-9_.]*[a-zA-Z0-9]$", options: [])
         return regex.matches(in: self, options: [], range: NSRange(location: 0, length: self.characters.count)).count > 0
     }
 }
 
+// Telemetry Events
+// Documentation: http://gecko.readthedocs.io/en/latest/toolkit/components/telemetry/telemetry/collection/events.html#events
 public struct Event {
     let timestamp: Timestamp
     let category: IdentifierString
