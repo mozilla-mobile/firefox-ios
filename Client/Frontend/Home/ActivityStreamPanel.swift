@@ -489,12 +489,14 @@ extension ActivityStreamPanel: DataObserverDelegate {
 
         switch Section(indexPath.section) {
         case .highlights:
-            presentContextMenuForHighlightCellWithIndexPath(indexPath)
+            let sourceView = self.collectionView?.cellForItem(at: indexPath)
+            presentContextMenuForHighlightCell(with: indexPath, and: sourceView)
         case .topSites:
             let topSiteCell = self.collectionView?.cellForItem(at: indexPath) as! ASHorizontalScrollCell
             let pointInTopSite = longPressGestureRecognizer.location(in: topSiteCell.collectionView)
             guard let topSiteIndexPath = topSiteCell.collectionView.indexPathForItem(at: pointInTopSite) else { return }
-            presentContextMenuForTopSiteCellWithIndexPath(topSiteIndexPath)
+            let sourceView = topSiteCell.collectionView.cellForItem(at: topSiteIndexPath)
+            presentContextMenuForTopSiteCell(with: topSiteIndexPath, and: sourceView)
         case .highlightIntro:
             break
         }
@@ -506,17 +508,17 @@ extension ActivityStreamPanel: DataObserverDelegate {
         self.present(contextMenu, animated: true, completion: nil)
     }
 
-    func presentContextMenuForTopSiteCellWithIndexPath(_ indexPath: IndexPath) {
+    func presentContextMenuForTopSiteCell(with indexPath: IndexPath, and sourceView: UIView?) {
         let site = self.topSitesManager.content[indexPath.item]
-        presentContextMenuForSite(site, atIndex: indexPath.item, forSection: .topSites)
+        presentContextMenu(for: site, atIndex: indexPath.item, forSection: .topSites, with: sourceView)
     }
 
-    func presentContextMenuForHighlightCellWithIndexPath(_ indexPath: IndexPath) {
+    func presentContextMenuForHighlightCell(with indexPath: IndexPath, and sourceView: UIView? ) {
         let site = highlights[indexPath.row]
-        presentContextMenuForSite(site, atIndex: indexPath.row, forSection: .highlights)
+        presentContextMenu(for: site, atIndex: indexPath.row, forSection: .highlights, with: sourceView)
     }
 
-    fileprivate func fetchBookmarkStatusThenPresentContextMenu(_ site: Site, atIndex index: Int, forSection section: Section) {
+    fileprivate func fetchBookmarkStatusThenPresentContextMenu(for site: Site, atIndex index: Int, forSection section: Section, with sourceView: UIView?) {
         profile.bookmarks.modelFactory >>== {
             $0.isBookmarked(site.url).uponQueue(.main) { result in
                 guard let isBookmarked = result.successValue else {
@@ -524,24 +526,24 @@ extension ActivityStreamPanel: DataObserverDelegate {
                     return
                 }
                 site.setBookmarked(isBookmarked)
-                self.presentContextMenuForSite(site, atIndex: index, forSection: section)
+                self.presentContextMenu(for: site, atIndex: index, forSection: section, with: sourceView)
             }
         }
     }
 
-    func presentContextMenuForSite(_ site: Site, atIndex index: Int, forSection section: Section) {
+    func presentContextMenu(for site: Site, atIndex index: Int, forSection section: Section, with sourceView: UIView?) {
         guard let _ = site.bookmarked else {
-            fetchBookmarkStatusThenPresentContextMenu(site, atIndex: index, forSection: section)
+            fetchBookmarkStatusThenPresentContextMenu(for: site, atIndex: index, forSection: section, with: sourceView)
             return
         }
-        guard let contextMenu = contextMenuForSite(site, atIndex: index, forSection: section) else {
+        guard let contextMenu = contextMenu(for: site, atIndex: index, forSection: section, with: sourceView) else {
             return
         }
 
         self.presentContextMenu(contextMenu)
     }
 
-    func contextMenuForSite(_ site: Site, atIndex index: Int, forSection section: Section) -> ActionOverlayTableViewController? {
+    func contextMenu(for site: Site, atIndex index: Int, forSection section: Section, with sourceView: UIView?) -> ActionOverlayTableViewController? {
 
         guard let siteURL = URL(string: site.url) else {
             return nil
@@ -602,6 +604,15 @@ extension ActivityStreamPanel: DataObserverDelegate {
             let controller = helper.createActivityViewController { completed, activityType in
                 self.telemetry.reportEvent(.Share, source: pingSource, position: index, shareProvider: activityType)
             }
+            if UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.pad, let popoverController = controller.popoverPresentationController {
+                let cellRect = sourceView?.frame ?? CGRect.zero
+                let cellFrameInSuperview = self.collectionView?.convert(cellRect, to: self.collectionView) ?? CGRect.zero
+
+                popoverController.sourceView = sourceView
+                popoverController.sourceRect = CGRect(origin: CGPoint(x: cellFrameInSuperview.size.width/2, y: cellFrameInSuperview.height/2), size: .zero)
+                popoverController.permittedArrowDirections = [.up, .down, .left]
+                popoverController.delegate = self
+            }
             self.present(controller, animated: true, completion: nil)
         })
 
@@ -634,6 +645,15 @@ extension ActivityStreamPanel: DataObserverDelegate {
         case .topSites, .highlightIntro:
             return
         }
+    }
+}
+
+extension ActivityStreamPanel: UIPopoverPresentationControllerDelegate {
+
+    // Dismiss the popover if the device is being rotated.
+    // This is used by the Share UIActivityViewController action sheet on iPad
+    func popoverPresentationController(_ popoverPresentationController: UIPopoverPresentationController, willRepositionPopoverTo rect: UnsafeMutablePointer<CGRect>, in view: AutoreleasingUnsafeMutablePointer<UIView>) {
+        popoverPresentationController.presentedViewController.dismiss(animated: false, completion: nil)
     }
 }
 
