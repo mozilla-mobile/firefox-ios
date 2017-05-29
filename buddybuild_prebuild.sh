@@ -21,6 +21,8 @@ elif [ "$BUDDYBUILD_SCHEME" == Firefox ]; then
   /usr/libexec/PlistBuddy -c "Set LeanplumKey $LEANPLUM_KEY_PRODUCTION" "Client/Info.plist"
 fi
 
+export SENTRY_DSN="https://8afa1cdeb71e4e4b84d38694e921683a:65fdb514f87749b9b854b0e53bb2ba1b@sentry.io/161858"
+
 echo "Setting Sentry DSN to $SENTRY_DSN"
 /usr/libexec/PlistBuddy -c "Set SentryDSN $SENTRY_DSN" "Client/Info.plist"
 
