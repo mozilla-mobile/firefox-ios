@@ -104,7 +104,7 @@ extension ActivityStreamTests {
 
     func testContextMenuOnTopSiteEmitsRemoveEvent() {
         let mockSite = Site(url: "http://mozilla.org", title: "Mozilla")
-        let topSitesContextMenu = panel.contextMenuForSite(mockSite, atIndex: 0, forSection: .topSites)
+        let topSitesContextMenu = panel.contextMenu(for: mockSite, atIndex: 0, forSection: .topSites, with: nil)
 
         let removeAction = topSitesContextMenu?.actions.find { $0.title == Strings.RemoveFromASContextMenuTitle }
         removeAction?.handler?(removeAction!)
@@ -117,7 +117,7 @@ extension ActivityStreamTests {
 
     func testContextMenuOnHighlightsEmitsRemoveDismissEvents() {
         let mockSite = Site(url: "http://mozilla.org", title: "Mozilla")
-        let highlightsContextMenu = panel.contextMenuForSite(mockSite, atIndex: 0, forSection: .highlights)
+        let highlightsContextMenu = panel.contextMenu(for: mockSite, atIndex: 0, forSection: .highlights, with: nil)
 
         let dismiss = highlightsContextMenu?.actions.find { $0.title == Strings.RemoveFromASContextMenuTitle }
         let delete = highlightsContextMenu?.actions.find { $0.title == Strings.DeleteFromHistoryContextMenuTitle }
