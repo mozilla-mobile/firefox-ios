@@ -7,6 +7,7 @@ import Foundation
 import Shared
 @testable import Storage
 @testable import Sync
+@testable import Telemetry
 import SwiftyJSON
 
 import XCTest
@@ -264,6 +265,29 @@ class TestBookmarksRepairRequestor: XCTestCase {
                 expectation.fulfill()
         }
         waitForExpectations(timeout: 10, handler: nil)
+    }
+
+    func testSyncEventsPickledInPrefs() {
+        let prefs = MockProfilePrefs()
+        let scratchpad = Scratchpad(b: KeyBundle.random(), persistingTo: prefs)
+        let localClient = RemoteClient(guid: nil, name: "Test local client", modified: (Date.now() - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS", version: nil)
+        let remoteClientA = RemoteClient(guid: "client-a", name: "Test remote client", modified: Date.now(), type: "desktop", formfactor: nil, os: nil, version: "55.0.1")
+        let remoteClientB = RemoteClient(guid: "client-b", name: "Test remote client", modified: (Date.now() - OneMinuteInMilliseconds), type: "desktop", formfactor: nil, os: nil, version: "55.0.1")
+        let remoteClients = MockRemoteClientsAndTabs([ClientAndTabs(client: remoteClientA, tabs: []), ClientAndTabs(client: localClient, tabs: []), ClientAndTabs(client: remoteClientB, tabs: [])])
+        let requestor = BookmarksRepairRequestor(scratchpad: scratchpad, basePrefs: prefs, remoteClients: remoteClients)
+
+        let mockTimestamp = Date.now()
+        let mockEvent = Event(timestamp: mockTimestamp, category: "test",
+                              method: "method", object: "object", value: "value",
+                              extra: ["test": "value"])
+
+        requestor.recordTelemetry(event: mockEvent)
+
+        let events = requestor.prefs.arrayForKey(PrefKeySyncEvents) as! [Data]
+        XCTAssertEqual(events.count, 1)
+
+        let pickledEvent = Event.unpickle(events[0])
+        XCTAssertEqual(pickledEvent.category, mockEvent.category)
     }
 }
 

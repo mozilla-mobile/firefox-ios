@@ -12,6 +12,8 @@ import Deferred
 
 fileprivate let log = Logger.syncLogger
 
+public let PrefKeySyncEvents = "SyncEventsKey"
+
 public enum SyncReason: String {
     case startup = "startup"
     case scheduled = "scheduled"
@@ -254,6 +256,14 @@ public struct SyncPing: TelemetryPing {
                 "uid": token.hashedFxAUID,
                 "deviceID": (scratchpad.clientGUID + token.hashedFxAUID).sha256.hexEncodedString
             ]
+
+            // TODO: We don't cache our sync pings so if it fails, it fails. Once we add
+            // some kind of caching we'll want to make sure we don't dump the events if
+            // the ping has failed.
+            let pickledEvents = prefs.arrayForKey(PrefKeySyncEvents) as? [Data] ?? []
+            let events = pickledEvents.map(Event.unpickle).map { $0.toArray() }
+            ping["events"] = events
+            prefs.setObject(nil, forKey: PrefKeySyncEvents)
 
             return dictionaryFrom(result: result, storage: remoteClientsAndTabs, token: token) >>== { syncDict in
                 // TODO: Split the sync ping metadata from storing a single sync.

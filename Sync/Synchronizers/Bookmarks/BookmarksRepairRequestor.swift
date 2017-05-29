@@ -7,6 +7,7 @@ import Shared
 import Storage
 import Deferred
 import SwiftyJSON
+import Telemetry
 
 private let log = Logger.syncLogger
 
@@ -144,18 +145,26 @@ class BookmarksRepairRequestor {
 
         guard ids.count <= MaxRequestedIDs else {
             log.info("Not starting a repair as there are over \(MaxRequestedIDs) problems")
-            // TODO: TELEMETRY
-            // let extra = { flowID, reason: `too many problems: ${ids.size}` }
-            // this.service.recordTelemetryEvent("repair", "aborted", undefined, extra)
+            let extra = [
+                "flowID": flowID,
+                "reason": "too many problems: \(ids.count)"
+            ]
+
+            let event = Event(category: "sync", method: "repair", object: "aborted", extra: extra)
+            recordTelemetry(event: event)
+
             return deferMaybe(false)
         }
 
         return self.anyClientsRepairing() >>== { clientsRepairing in
             guard !clientsRepairing else {
                 log.info("Can't start repair, since other clients are already repairing bookmarks")
-                // TODO: TELEMETRY
-                // let extra = { flowID, reason: "other clients repairing" }
-                // this.service.recordTelemetryEvent("repair", "aborted", undefined, extra)
+                let extra = [
+                    "flowID": flowID,
+                    "reason": "other clients repairing"
+                ]
+                let event = Event(category: "sync", method: "repair", object: "aborted", extra: extra)
+                self.recordTelemetry(event: event)
                 return deferMaybe(false)
             }
 
@@ -164,8 +173,11 @@ class BookmarksRepairRequestor {
             self.flowID = flowID
             self.currentIDs = ids
             self.currentState = .needNewClient
-            // TODO: TELEMETRY
-            // this.service.recordTelemetryEvent("repair", "started", undefined, { flowID, numIDs: ids.size.toString() })
+
+            let extra = ["flowID": flowID, "numIDs": String(ids.count)]
+            let event = Event(category: "sync", method: "repair", object: "started", extra: extra)
+            self.recordTelemetry(event: event)
+
             return self.continueRepairs()
         }
     }
@@ -236,16 +248,29 @@ class BookmarksRepairRequestor {
                 var extra = [
                     "flowID": self.flowID,
                     "numIDs": String(self.currentIDs.count),
-                    ]
+                ]
                 if abortReason != nil {
                     extra["reason"] = abortReason
                 }
-                // TODO: TELEMETRY
-                // this.service.recordTelemetryEvent("repair", method, undefined, extra)
-                // reset our state
+
+                let event = Event(category: "sync", method: "repair", object: method, extra: extra)
+                self.recordTelemetry(event: event)
+
                 self.prefs.clearAll()
             }
             return deferMaybe(true)
+        }
+    }
+
+    func recordTelemetry(event: Event) {
+        var events = self.prefs.arrayForKey(PrefKeySyncEvents) as? [Data] ?? []
+
+        let data = event.pickle()
+        if event.validate() {
+            events.append(data)
+            self.prefs.setObject(events, forKey: PrefKeySyncEvents)
+        } else {
+            log.info("Event not recorded due to validation failure -- \(String(data: data, encoding: .utf8))")
         }
     }
 
@@ -277,7 +302,10 @@ class BookmarksRepairRequestor {
                             "deviceID": "IMPLEMENT ME"/* TODO this.service.identity.hashedDeviceID(clientID) */,
                             "flowID": flowID
                         ]
-                        // this.service.recordTelemetryEvent("repair", "abandon", "missing", extra)
+
+                        let event = Event(category: "sync", method: "repair", object: "abandon", value: "missing", extra: extra)
+                        self.recordTelemetry(event: event)
+
                         return deferMaybe(.needNewClient)
                     }
                     return self.isCommandPending(clientID: clientID, flowID: flowID) >>== { isCommandPending in
@@ -292,8 +320,10 @@ class BookmarksRepairRequestor {
                                     "deviceID": "IMPLEMENT ME"/* TODO this.service.identity.hashedDeviceID(clientID) */,
                                     "flowID": flowID
                                 ]
-                                // TODO: TELEMETRY
-                                // this.service.recordTelemetryEvent("repair", "abandon", "silent", extra)
+
+                                let event = Event(category: "sync", method: "repair", object: "abandon", value: "silent", extra: extra)
+                                self.recordTelemetry(event: event)
+
                                 return deferMaybe(.needNewClient)
                             }
                             // Let's continue to wait for that client to respond.
@@ -388,8 +418,8 @@ class BookmarksRepairRequestor {
             "flowID": flowID,
             "numIDs": String(response.ids.count)
         ]
-        // TODO: TELEMETRY
-        // this.service.recordTelemetryEvent("repair", "response", "upload", extra)
+        let event = Event(category: "sync", method: "repair", object: "response", value: "upload", extra: extra)
+        recordTelemetry(event: event)
         return newState
     }
 
@@ -411,8 +441,10 @@ class BookmarksRepairRequestor {
                 "flowID": flowID,
                 "numIDs": String(ids.count),
                 ]
-            // TODO: TELEMETRY
-            // this.service.recordTelemetryEvent("repair", "request", "upload", extra)
+
+            let event = Event(category: "sync", method: "repair", object: "request", value: "upload", extra: extra)
+            self.recordTelemetry(event: event)
+
             return succeed()
         }
     }
