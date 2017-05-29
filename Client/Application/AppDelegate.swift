@@ -670,7 +670,7 @@ extension AppDelegate {
     }
 
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        log.info("APNS NOTIFICATION \(userInfo)")
+        NSLog("APNS NOTIFICATION \(userInfo)")
 
         guard let profile = self.profile else {
             return completionHandler(.noData)
