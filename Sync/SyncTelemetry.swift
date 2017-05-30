@@ -12,7 +12,7 @@ import Deferred
 
 fileprivate let log = Logger.syncLogger
 
-public let PrefKeySyncEvents = "SyncEventsKey"
+public let PrefKeySyncEvents = "sync.telemetry.events"
 
 public enum SyncReason: String {
     case startup = "startup"

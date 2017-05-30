@@ -39,11 +39,11 @@ public struct Event {
     }
 
     init(timestamp: Timestamp,
-                 category: IdentifierString,
-                 method: IdentifierString,
-                 object: IdentifierString,
-                 value: String? = nil,
-                 extra: [String: String]? = nil) {
+         category: IdentifierString,
+         method: IdentifierString,
+         object: IdentifierString,
+         value: String? = nil,
+         extra: [String: String]? = nil) {
         self.timestamp = timestamp
         self.category = category
         self.method = method
@@ -77,5 +77,11 @@ public struct Event {
 
     public func toArray() -> [Any] {
         return [timestamp, category, method, object, value ?? NSNull(), extra ?? NSNull()]
+    }
+}
+
+extension Event: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return toArray().description
     }
 }
