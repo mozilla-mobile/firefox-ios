@@ -172,6 +172,8 @@ open class MockProfilePrefs: Prefs {
     }
 
     open func clearAll() {
-        self.things.removeAllObjects()
+        let dictionary = things as! [String: Any]
+        let keysToDelete: [String] = dictionary.keys.filter { $0.startsWith(self.prefix) }
+        things.removeObjects(forKeys: keysToDelete)
     }
 }
