@@ -203,7 +203,8 @@ class FxALoginHelper {
             return pushRegistrationDidFail()
         }
 
-        let client = PushClient(endpointURL: configuration.endpointURL)
+        let experimentalMode = (configuration.label == PushConfigurationLabel.fennec)
+        let client = PushClient(endpointURL: configuration.endpointURL, experimentalMode: experimentalMode)
         client.register(apnsToken).upon { res in
             guard let pushRegistration = res.successValue else {
                 return self.pushRegistrationDidFail()

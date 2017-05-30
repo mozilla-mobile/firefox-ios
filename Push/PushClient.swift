@@ -73,7 +73,7 @@ public enum PushClientError: MaybeErrorType {
 
 public class PushClient {
     let endpointURL: NSURL
-    let isDebugging = true
+    let experimentalMode: Bool
 
     lazy fileprivate var alamofire: SessionManager = {
         let ua = UserAgent.fxaUserAgent
@@ -81,8 +81,9 @@ public class PushClient {
         return SessionManager.managerWithUserAgent(ua, configuration: configuration)
     }()
 
-    public init(endpointURL: NSURL) {
+    public init(endpointURL: NSURL, experimentalMode: Bool = false) {
         self.endpointURL = endpointURL
+        self.experimentalMode = experimentalMode
     }
 }
 
@@ -96,7 +97,7 @@ public extension PushClient {
 
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         let parameters: [String: Any]
-        if isDebugging {
+        if experimentalMode {
             parameters = [
                 "token": apnsToken,
                 "aps": apsEnvironment,
@@ -107,7 +108,7 @@ public extension PushClient {
 
         mutableURLRequest.httpBody = JSON(parameters).stringValue()?.utf8EncodedData
 
-        if isDebugging {
+        if experimentalMode {
             log.info("curl -X POST \(registerURL.absoluteString) --data '\(JSON(parameters).stringValue()!)'")
         }
 
