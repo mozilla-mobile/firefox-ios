@@ -759,7 +759,7 @@ extension AppDelegate {
     }
 
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        log.info("APNS NOTIFICATION \(userInfo)")
+        NSLog("APNS NOTIFICATION \(userInfo)")
 
         guard let profile = self.profile else {
             return completionHandler(.noData)
@@ -767,7 +767,7 @@ extension AppDelegate {
 
         let handler = FxAPushMessageHandler(with: profile)
         handler.handle(userInfo: userInfo).upon { res in
-            completionHandler(res.isSuccess ? .newData : .noData)
+            completionHandler(res.isSuccess ? .newData : .failed)
         }
     }
 

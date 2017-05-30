@@ -798,8 +798,8 @@ class StageSyncServiceDebugSetting: WithoutAccountSetting {
     }
 
     override var status: NSAttributedString? {
-        let isOn = prefs.boolForKey(prefKey) ?? false
-        let configurationURL = isOn ? StageFirefoxAccountConfiguration().authEndpointURL : ProductionFirefoxAccountConfiguration().authEndpointURL
+        // Derive the configuration we display from the profile, which knows about the prefKey.
+        let configurationURL = settings.profile.accountConfiguration.authEndpointURL
         return NSAttributedString(string: configurationURL.absoluteString, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewHeaderTextColor])
     }
 

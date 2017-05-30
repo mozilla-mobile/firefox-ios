@@ -507,11 +507,15 @@ open class BrowserProfile: Profile {
     }()
 
     var accountConfiguration: FirefoxAccountConfiguration {
+        if prefs.boolForKey("useStageSyncService") ?? false {
+            if AppConstants.BuildChannel == .developer {
+                return LatestDevFirefoxAccountConfiguration()
+            } else {
+                return StageFirefoxAccountConfiguration()
+            }
+        }
         if prefs.boolForKey("useChinaSyncService") ?? isChinaEdition {
             return ChinaEditionFirefoxAccountConfiguration()
-        }
-        if prefs.boolForKey("useStageSyncService") ?? false {
-            return StageFirefoxAccountConfiguration()
         }
         return ProductionFirefoxAccountConfiguration()
     }

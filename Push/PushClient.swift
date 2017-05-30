@@ -28,6 +28,15 @@ private let PushClientUnknownError = NSError(domain: PushClientErrorDomain, code
                                              userInfo: [NSLocalizedDescriptionKey: "Invalid server response"])
 private let log = Logger.browserLogger
 
+/// Bug 1364403 – This is to be put into the push registration
+private let apsEnvironment: [String: Any] = [
+    "mutable-content": 1,
+    "alert": [
+        "title": " ",
+        "body": " "
+    ],
+]
+
 public struct PushRemoteError {
     let code: Int
     let errno: Int
@@ -64,6 +73,7 @@ public enum PushClientError: MaybeErrorType {
 
 public class PushClient {
     let endpointURL: NSURL
+    let experimentalMode: Bool
 
     lazy fileprivate var alamofire: SessionManager = {
         let ua = UserAgent.fxaUserAgent
@@ -71,10 +81,10 @@ public class PushClient {
         return SessionManager.managerWithUserAgent(ua, configuration: configuration)
     }()
 
-    public init(endpointURL: NSURL) {
+    public init(endpointURL: NSURL, experimentalMode: Bool = false) {
         self.endpointURL = endpointURL
+        self.experimentalMode = experimentalMode
     }
-
 }
 
 public extension PushClient {
@@ -86,8 +96,21 @@ public extension PushClient {
         mutableURLRequest.httpMethod = HTTPMethod.post.rawValue
 
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        let parameters = ["token": apnsToken]
+        let parameters: [String: Any]
+        if experimentalMode {
+            parameters = [
+                "token": apnsToken,
+                "aps": apsEnvironment,
+            ]
+        } else {
+            parameters = ["token": apnsToken]
+        }
+
         mutableURLRequest.httpBody = JSON(parameters).stringValue()?.utf8EncodedData
+
+        if experimentalMode {
+            log.info("curl -X POST \(registerURL.absoluteString) --data '\(JSON(parameters).stringValue()!)'")
+        }
 
         return send(request: mutableURLRequest) >>== { json in
             guard let response = PushRegistration.from(json: json) else {
