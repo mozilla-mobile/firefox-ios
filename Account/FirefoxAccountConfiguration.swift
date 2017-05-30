@@ -68,7 +68,7 @@ public struct LatestDevFirefoxAccountConfiguration: FirefoxAccountConfiguration 
 
     public let sync15Configuration: Sync15Configuration = StageSync15Configuration()
 
-    public let pushConfiguration: PushConfiguration = DeveloperPushConfiguration()
+    public let pushConfiguration: PushConfiguration = FennecPushConfiguration()
 }
 
 public struct StableDevFirefoxAccountConfiguration: FirefoxAccountConfiguration {
@@ -87,7 +87,7 @@ public struct StableDevFirefoxAccountConfiguration: FirefoxAccountConfiguration 
 
     public let sync15Configuration: Sync15Configuration = StageSync15Configuration()
 
-    public let pushConfiguration: PushConfiguration = DeveloperPushConfiguration()
+    public let pushConfiguration: PushConfiguration = FennecPushConfiguration()
 }
 
 public struct StageFirefoxAccountConfiguration: FirefoxAccountConfiguration {
@@ -106,7 +106,7 @@ public struct StageFirefoxAccountConfiguration: FirefoxAccountConfiguration {
 
     public let sync15Configuration: Sync15Configuration = StageSync15Configuration()
 
-    public let pushConfiguration: PushConfiguration = StagePushConfiguration()
+    public let pushConfiguration: PushConfiguration = FirefoxBetaPushConfiguration()
 }
 
 public struct ProductionFirefoxAccountConfiguration: FirefoxAccountConfiguration {
@@ -125,7 +125,7 @@ public struct ProductionFirefoxAccountConfiguration: FirefoxAccountConfiguration
 
     public let sync15Configuration: Sync15Configuration = ProductionSync15Configuration()
 
-    public let pushConfiguration: PushConfiguration = ProductionPushConfiguration()
+    public let pushConfiguration: PushConfiguration = FirefoxPushConfiguration()
 }
 
 public struct ChinaEditionFirefoxAccountConfiguration: FirefoxAccountConfiguration {
@@ -144,7 +144,7 @@ public struct ChinaEditionFirefoxAccountConfiguration: FirefoxAccountConfigurati
 
     public let sync15Configuration: Sync15Configuration = ChinaEditionSync15Configuration()
 
-    public let pushConfiguration: PushConfiguration = ProductionPushConfiguration()
+    public let pushConfiguration: PushConfiguration = FirefoxPushConfiguration()
 }
 
 public struct ChinaEditionSync15Configuration: Sync15Configuration {
