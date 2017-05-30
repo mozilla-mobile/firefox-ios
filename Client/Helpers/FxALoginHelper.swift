@@ -198,13 +198,15 @@ class FxALoginHelper {
     func apnsRegisterDidSucceed(_ deviceToken: Data) {
         let apnsToken = deviceToken.hexEncodedString
 
-        guard let configuration = getPushConfiguration() ?? self.profile?.accountConfiguration.pushConfiguration else {
+        guard let pushConfiguration = getPushConfiguration() ?? self.profile?.accountConfiguration.pushConfiguration,
+            let accountConfiguration = profile?.accountConfiguration else {
             log.error("Push server endpoint could not be found")
             return pushRegistrationDidFail()
         }
 
-        let experimentalMode = (configuration.label == PushConfigurationLabel.fennec)
-        let client = PushClient(endpointURL: configuration.endpointURL, experimentalMode: experimentalMode)
+        // Experimental mode needs: a) the scheme to be Fennec, and b) the accountConfiguration to be flipped in debug mode.
+        let experimentalMode = (pushConfiguration.label == .fennec && accountConfiguration.label == .latestDev)
+        let client = PushClient(endpointURL: pushConfiguration.endpointURL, experimentalMode: experimentalMode)
         client.register(apnsToken).upon { res in
             guard let pushRegistration = res.successValue else {
                 return self.pushRegistrationDidFail()
