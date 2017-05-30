@@ -15,7 +15,7 @@ class NotificationService: UNNotificationServiceExtension {
 
         var userInfo = request.content.userInfo
         userInfo["url"] = "https://mozilla.org"
-
+        NSLog("NotificationService APNS NOTIFICATION \(userInfo)")
         if let bestAttemptContent = bestAttemptContent {
             // Modify the notification content here...
             bestAttemptContent.title = "\(bestAttemptContent.title) [modified]"
