@@ -52,7 +52,7 @@ class TabManager: NSObject {
         assert(Thread.isMainThread)
         for i in 0 ..< delegates.count {
             let del = delegates[i]
-            if delegate === del.get() {
+            if delegate === del.get() || del.get() == nil {
                 delegates.remove(at: i)
                 return
             }
