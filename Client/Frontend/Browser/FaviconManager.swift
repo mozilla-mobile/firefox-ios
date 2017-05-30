@@ -38,7 +38,7 @@ class FaviconManager: TabHelper {
         return "faviconsMessageHandler"
     }
     
-    fileprivate func loadFavicons(_ tab: Tab, profile: Profile, favicons: [Favicon]) -> Deferred<Maybe<[Favicon]>> {
+    fileprivate func loadFavicons(_ tab: Tab, profile: Profile, favicons: [Favicon]) -> Deferred<[Maybe<Favicon>]> {
         var deferreds: [() -> Deferred<Maybe<Favicon>>]
         deferreds = favicons.map { favicon in
             return { [weak tab] () -> Deferred<Maybe<Favicon>> in
@@ -51,7 +51,7 @@ class FaviconManager: TabHelper {
                 }
             }
         }
-        return accumulate(deferreds)
+        return all(deferreds.map({$0()}))
     }
     
     func getFavicon(_ tab: Tab, iconUrl: URL, currentURL: URL, icon: Favicon, profile: Profile) -> Deferred<Maybe<Favicon>> {
@@ -110,13 +110,13 @@ class FaviconManager: TabHelper {
                 }
             }
             loadFavicons(tab, profile: profile, favicons: favicons).uponQueue(DispatchQueue.main) { result in
-                if let result = result.successValue {
-                    let faviconsReadOnly = favicons
-                    if result.count == 1 && faviconsReadOnly[0].type == .guess {
-                        // No favicon is indicated in the HTML
-                        self.noFaviconAvailable(tab, atURL: currentURL as URL)
-                    }
+                let results = result.flatMap({ $0.successValue })
+                let faviconsReadOnly = favicons
+                if results.count == 1 && faviconsReadOnly[0].type == .guess {
+                    // No favicon is indicated in the HTML
+                    self.noFaviconAvailable(tab, atURL: currentURL as URL)
                 }
+
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: FaviconManager.FaviconDidLoad), object: tab)
             }
         }
