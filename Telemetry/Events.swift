@@ -5,6 +5,8 @@
 import Shared
 import SwiftyJSON
 
+private let log = Logger.browserLogger
+
 public typealias IdentifierString = String
 public extension IdentifierString {
     func validate() -> Bool {
@@ -58,21 +60,30 @@ public struct Event {
         return results.reduce(true) { $0 ? $1 :$0 }
     }
 
-    public func pickle() -> Data {
-        return try! JSONSerialization.data(withJSONObject: toArray(), options: [])
+    public func pickle() -> Data? {
+        do {
+            return try JSONSerialization.data(withJSONObject: toArray(), options: [])
+        } catch let error {
+            log.error("Error pickling telemetry event. Error: \(error), Event: \(self)")
+            return nil
+        }
     }
 
-    public static func unpickle(_ data: Data) -> Event {
-        let array = try! JSONSerialization.jsonObject(with: data, options: []) as! [Any]
-
-        return Event(
-            timestamp: Timestamp(array[0] as! UInt64),
-            category: array[1] as! String,
-            method: array[2] as! String,
-            object: array[3] as! String,
-            value: array[4] as? String,
-            extra: array[5] as? [String: String]
-        )
+    public static func unpickle(_ data: Data) -> Event? {
+        do {
+            let array = try JSONSerialization.jsonObject(with: data, options: []) as! [Any]
+            return Event(
+                timestamp: Timestamp(array[0] as! UInt64),
+                category: array[1] as! String,
+                method: array[2] as! String,
+                object: array[3] as! String,
+                value: array[4] as? String,
+                extra: array[5] as? [String: String]
+            )
+        } catch let error {
+            log.error("Error unpickling telemetry event: \(error)")
+            return nil
+        }
     }
 
     public func toArray() -> [Any] {

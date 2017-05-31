@@ -267,12 +267,11 @@ class BookmarksRepairRequestor {
     func recordTelemetry(event: Event) {
         var events = self.basePrefs.arrayForKey(PrefKeySyncEvents) as? [Data] ?? []
 
-        let data = event.pickle()
-        if event.validate() {
+        if let data = event.pickle(), event.validate() {
             events.append(data)
             self.basePrefs.setObject(events, forKey: PrefKeySyncEvents)
         } else {
-            log.info("Event not recorded due to validation failure -- \(String(data: data, encoding: .utf8)!)")
+            log.info("Event not recorded due to validation failure or pickling error!")
         }
     }
 

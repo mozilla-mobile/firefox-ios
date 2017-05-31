@@ -18,7 +18,7 @@ public let OneSecondInMilliseconds: UInt64 = 1000
 
 extension Timestamp {
     public static func uptimeInMilliseconds() -> Timestamp {
-        return Timestamp(DispatchTime.now().uptimeNanoseconds) / 100000
+        return Timestamp(DispatchTime.now().uptimeNanoseconds) / 1000000
     }
 }
 

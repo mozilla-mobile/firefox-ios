@@ -369,7 +369,7 @@ class TestBookmarksRepairRequestor: XCTestCase {
         XCTAssertEqual(events.count, 1)
 
         let pickledEvent = Event.unpickle(events[0])
-        XCTAssertEqual(pickledEvent.category, mockEvent.category)
+        XCTAssertEqual(pickledEvent!.category, mockEvent.category)
     }
 }
 

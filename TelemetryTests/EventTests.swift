@@ -10,11 +10,11 @@ import Shared
 class EventTests: XCTestCase {
     func testPickling() {
         let mockTimestamp = Date.now()
-        XCTAssertEqual(String(data: basicEvent(timestamp: mockTimestamp).pickle(), encoding: .utf8),
+        XCTAssertEqual(String(data: basicEvent(timestamp: mockTimestamp).pickle()!, encoding: .utf8),
                        basicEventString(timestamp: mockTimestamp))
-        XCTAssertEqual(String(data: basicWithValueEvent(timestamp: mockTimestamp).pickle(), encoding: .utf8),
+        XCTAssertEqual(String(data: basicWithValueEvent(timestamp: mockTimestamp).pickle()!, encoding: .utf8),
                        basicWithValueString(timestamp: mockTimestamp))
-        XCTAssertEqual(String(data: extraEvent(timestamp: mockTimestamp).pickle(), encoding: .utf8),
+        XCTAssertEqual(String(data: extraEvent(timestamp: mockTimestamp).pickle()!, encoding: .utf8),
                        extraEventString(timestamp: mockTimestamp))
     }
 
