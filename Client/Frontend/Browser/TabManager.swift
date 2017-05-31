@@ -173,6 +173,11 @@ class TabManager: NSObject {
             return
         }
 
+        // Make sure to wipe the private tabs if the user has the pref turned on
+        if shouldClearPrivateTabs(), !(tab?.isPrivate ?? false) {
+            removeAllPrivateTabsAndNotify(false)
+        }
+
         if let tab = tab {
             _selectedIndex = tabs.index(of: tab) ?? -1
         } else {
@@ -185,6 +190,10 @@ class TabManager: NSObject {
         selectedTab?.createWebview()
 
         delegates.forEach { $0.get()?.tabManager(self, didSelectedTabChange: tab, previous: previous) }
+    }
+
+    func shouldClearPrivateTabs() -> Bool {
+        return prefs.boolForKey("settings.closePrivateTabs") ?? false
     }
 
     func expireSnackbars() {
@@ -410,7 +419,7 @@ class TabManager: NSObject {
     /// Removes all private tabs from the manager.
     /// - Parameter notify: if set to true, the delegate is called when a tab is
     ///   removed.
-    func removeAllPrivateTabsAndNotify(_ notify: Bool) {
+    private func removeAllPrivateTabsAndNotify(_ notify: Bool) {
         // if there is a selected tab, it needs to be closed last
         // this is important for TopTabs as otherwise the selection of the new tab
         // causes problems as it may no longer be present.

@@ -217,6 +217,26 @@ class TabManagerTests: XCTestCase {
         delegate.verify("Not all delegate methods were called")
     }
 
+
+    func testDeletePrivateTabsOnExit() {
+        let profile = TabManagerMockProfile()
+        let manager = TabManager(prefs: profile.prefs, imageStore: nil)
+        profile.prefs.setBool(true, forKey: "settings.closePrivateTabs")
+
+        //create the tab before adding the mock delegate. So we don't have to check delegate calls we dont care about
+        let tab = manager.addTab()
+        manager.selectTab(tab)
+        let privateTab = manager.addTab(isPrivate: true)
+        manager.selectTab(privateTab)
+
+        XCTAssertEqual(manager.selectedTab?.isPrivate, true)
+        XCTAssertEqual(manager.privateTabs.count, 1)
+
+        manager.selectTab(tab)
+
+        XCTAssertEqual(manager.privateTabs.count, 0)
+    }
+
     func testDeleteNonSelectedTab() {
         let profile = TabManagerMockProfile()
         let manager = TabManager(prefs: profile.prefs, imageStore: nil)
