@@ -10,7 +10,7 @@ import UIKit
  **/
 class MenuItemCollectionViewCell: UICollectionViewCell {
 
-    var padding: CGFloat = 5.0
+    var padding: CGFloat = 2.0
 
     lazy var menuImageView: UIImageView = UIImageView()
     lazy var menuTitleLabel: UILabel = {
