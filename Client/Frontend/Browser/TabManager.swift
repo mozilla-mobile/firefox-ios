@@ -196,6 +196,14 @@ class TabManager: NSObject {
         return prefs.boolForKey("settings.closePrivateTabs") ?? false
     }
 
+    //Called by other classes to signal that they are entering/exiting private mode
+    //This is called by TabTrayVC when the private mode button is pressed and BEFORE we've switched to the new mode
+    func willSwitchTabMode() {
+        if shouldClearPrivateTabs() && (selectedTab?.isPrivate ?? false) {
+            removeAllPrivateTabsAndNotify(false)
+        }
+    }
+
     func expireSnackbars() {
         assert(Thread.isMainThread)
 
