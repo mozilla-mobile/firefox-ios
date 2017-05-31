@@ -13,11 +13,24 @@ import SwiftyJSON
 import XCTest
 
 class TestBookmarksRepairRequestor: XCTestCase {
+    private let MockHashedDeviceID = "4b66918e184c0a9a49c4a9dc7468d3495642141a08419e69c6cb107367366176"
+
+    private func buildMockScratchpad(prefs: Prefs) -> Scratchpad {
+        var scratchpad = Scratchpad(b: KeyBundle.random(), persistingTo: prefs)
+        let b = Scratchpad.Builder(p: scratchpad)
+        b.hashedUID = "1234"
+        scratchpad = b.build()
+
+        XCTAssertEqual(scratchpad.fxaDeviceId, "unknown_fxaDeviceId")
+        XCTAssertEqual(scratchpad.hashedDeviceID!, MockHashedDeviceID)
+        return scratchpad
+    }
+
     func testNoClients() {
         let expectation = self.expectation(description: #function)
 
         let prefs = MockProfilePrefs()
-        let scratchpad = Scratchpad(b: KeyBundle.random(), persistingTo: prefs)
+        let scratchpad = buildMockScratchpad(prefs: prefs)
         let localClient = RemoteClient(guid: nil, name: "Test local client", modified: (Date.now() - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS", version: nil)
         let remoteClients = MockRemoteClientsAndTabs([ClientAndTabs(client: localClient, tabs: [])])
         let validationInfo = [BufferInconsistency.missingValues: ["mock-guid1", "mock-guid2"]]
@@ -36,7 +49,8 @@ class TestBookmarksRepairRequestor: XCTestCase {
         let expectation = self.expectation(description: #function)
 
         let prefs = MockProfilePrefs()
-        let scratchpad = Scratchpad(b: KeyBundle.random(), persistingTo: prefs)
+        let scratchpad = buildMockScratchpad(prefs: prefs)
+
         let localClient = RemoteClient(guid: nil, name: "Test local client", modified: (Date.now() - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS", version: nil)
         let remoteClient = RemoteClient(guid: "client-a", name: "Test remote client", modified: (Date.now() - OneMinuteInMilliseconds), type: "desktop", formfactor: nil, os: nil, version: "55.0.1")
         let remoteClients = MockRemoteClientsAndTabs([ClientAndTabs(client: localClient, tabs: []), ClientAndTabs(client: remoteClient, tabs: [])])
@@ -46,7 +60,7 @@ class TestBookmarksRepairRequestor: XCTestCase {
 
         // Mock telemetry events
         let startedEvent = makeRepairEvent(["started", nil, ["flowID": mockFlowID, "numIDs": "2"]])
-        let uploadEvent = makeRepairEvent(["request", "upload", ["flowID": mockFlowID, "deviceID": "IMPLEMENT ME", "numIDs": "2"]])
+        let uploadEvent = makeRepairEvent(["request", "upload", ["flowID": mockFlowID, "deviceID": MockHashedDeviceID, "numIDs": "2"]])
         let finishedEvent = makeRepairEvent(["finished", nil, ["flowID": mockFlowID, "numIDs": "2"]])
 
         let requestor = BookmarksRepairRequestor(scratchpad: scratchpad, basePrefs: prefs, remoteClients: remoteClients)
@@ -92,7 +106,7 @@ class TestBookmarksRepairRequestor: XCTestCase {
         let expectation = self.expectation(description: #function)
 
         let prefs = MockProfilePrefs()
-        let scratchpad = Scratchpad(b: KeyBundle.random(), persistingTo: prefs)
+        let scratchpad = buildMockScratchpad(prefs: prefs)
         let localClient = RemoteClient(guid: nil, name: "Test local client", modified: (Date.now() - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS", version: nil)
         let remoteClient = RemoteClient(guid: "client-a", name: "Test remote client", modified: (Date.now() - OneMinuteInMilliseconds), type: "desktop", formfactor: nil, os: nil, version: "55.0.1")
         let remoteClients = MockRemoteClientsAndTabs([ClientAndTabs(client: localClient, tabs: []), ClientAndTabs(client: remoteClient, tabs: [])])
@@ -101,8 +115,8 @@ class TestBookmarksRepairRequestor: XCTestCase {
         // Mock telemetry events
         let mockFlowID = Bytes.generateGUID()
         let startedEvent = makeRepairEvent(["started", nil, ["flowID": mockFlowID, "numIDs": "2"]])
-        let uploadEvent = makeRepairEvent(["request", "upload", ["flowID": mockFlowID, "deviceID": "IMPLEMENT ME", "numIDs": "2"]])
-        let abandonEvent = makeRepairEvent(["abandon", "silent", ["flowID": mockFlowID, "deviceID": "IMPLEMENT ME"]])
+        let uploadEvent = makeRepairEvent(["request", "upload", ["flowID": mockFlowID, "deviceID": MockHashedDeviceID, "numIDs": "2"]])
+        let abandonEvent = makeRepairEvent(["abandon", "silent", ["flowID": mockFlowID, "deviceID": MockHashedDeviceID]])
         let finishedEvent = makeRepairEvent(["finished", nil, ["flowID": mockFlowID, "numIDs": "2"]])
 
         let requestor = BookmarksRepairRequestor(scratchpad: scratchpad, basePrefs: prefs, remoteClients: remoteClients)
@@ -128,7 +142,7 @@ class TestBookmarksRepairRequestor: XCTestCase {
         let expectation = self.expectation(description: #function)
 
         let prefs = MockProfilePrefs()
-        let scratchpad = Scratchpad(b: KeyBundle.random(), persistingTo: prefs)
+        let scratchpad = buildMockScratchpad(prefs: prefs)
         let localClient = RemoteClient(guid: nil, name: "Test local client", modified: (Date.now() - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS", version: nil)
         let clientEarly = RemoteClient(guid: "client-early", name: "Test remote client", modified: (Date.now() - OneWeekInMilliseconds), type: "desktop", formfactor: nil, os: nil, version: "55.0.1")
         let clientLate = RemoteClient(guid: "client-late", name: "Test remote client", modified: (Date.now() - OneMinuteInMilliseconds), type: "desktop", formfactor: nil, os: nil, version: "55.0.1")
@@ -138,7 +152,7 @@ class TestBookmarksRepairRequestor: XCTestCase {
         // Mock telemetry events
         let mockFlowID = Bytes.generateGUID()
         let startedEvent = makeRepairEvent(["started", nil, ["flowID": mockFlowID, "numIDs": "2"]])
-        let uploadEvent = makeRepairEvent(["request", "upload", ["flowID": mockFlowID, "deviceID": "IMPLEMENT ME", "numIDs": "2"]])
+        let uploadEvent = makeRepairEvent(["request", "upload", ["flowID": mockFlowID, "deviceID": MockHashedDeviceID, "numIDs": "2"]])
 
         let requestor = BookmarksRepairRequestor(scratchpad: scratchpad, basePrefs: prefs, remoteClients: remoteClients)
         requestor.startRepairs(validationInfo: validationInfo, flowID: mockFlowID) >>== { result in
@@ -156,7 +170,7 @@ class TestBookmarksRepairRequestor: XCTestCase {
         let expectation = self.expectation(description: #function)
 
         let prefs = MockProfilePrefs()
-        let scratchpad = Scratchpad(b: KeyBundle.random(), persistingTo: prefs)
+        let scratchpad = buildMockScratchpad(prefs: prefs)
         let localClient = RemoteClient(guid: nil, name: "Test local client", modified: (Date.now() - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS", version: nil)
         let remoteClientA = RemoteClient(guid: "client-a", name: "Test remote client", modified: Date.now(), type: "desktop", formfactor: nil, os: nil, version: "55.0.1")
         let remoteClientB = RemoteClient(guid: "client-b", name: "Test remote client", modified: (Date.now() - OneMinuteInMilliseconds), type: "desktop", formfactor: nil, os: nil, version: "55.0.1")
@@ -166,9 +180,9 @@ class TestBookmarksRepairRequestor: XCTestCase {
         // Mock telemetry events
         let flowID = Bytes.generateGUID()
         let startedEvent = makeRepairEvent(["started", nil, ["flowID": flowID, "numIDs": "2"]])
-        let uploadEvent = makeRepairEvent(["request", "upload", ["flowID": flowID, "deviceID": "IMPLEMENT ME", "numIDs": "2"]])
-        let missingEvent = makeRepairEvent(["abandon", "missing", ["flowID": flowID, "deviceID": "IMPLEMENT ME"]])
-        let responseEvent = makeRepairEvent(["response", "upload", ["flowID": flowID, "deviceID": "IMPLEMENT ME", "numIDs": "2"]])
+        let uploadEvent = makeRepairEvent(["request", "upload", ["flowID": flowID, "deviceID": MockHashedDeviceID, "numIDs": "2"]])
+        let missingEvent = makeRepairEvent(["abandon", "missing", ["flowID": flowID, "deviceID": MockHashedDeviceID]])
+        let responseEvent = makeRepairEvent(["response", "upload", ["flowID": flowID, "deviceID": MockHashedDeviceID, "numIDs": "2"]])
         let finishedEvent = makeRepairEvent(["finished", nil, ["flowID": flowID, "numIDs": "0"]])
 
         let requestor = BookmarksRepairRequestor(scratchpad: scratchpad, basePrefs: prefs, remoteClients: remoteClients)
@@ -219,7 +233,7 @@ class TestBookmarksRepairRequestor: XCTestCase {
         let expectation = self.expectation(description: #function)
 
         let prefs = MockProfilePrefs()
-        let scratchpad = Scratchpad(b: KeyBundle.random(), persistingTo: prefs)
+        let scratchpad = buildMockScratchpad(prefs: prefs)
         let localClient = RemoteClient(guid: nil, name: "Test local client", modified: (Date.now() - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS", version: nil)
         let remoteClientA = RemoteClient(guid: "client-a", name: "Test remote client", modified: Date.now(), type: "desktop", formfactor: nil, os: nil, version: "55.0.1")
         let remoteClientB = RemoteClient(guid: "client-b", name: "Test remote client", modified: (Date.now() - OneMinuteInMilliseconds), type: "desktop", formfactor: nil, os: nil, version: "55.0.1")
@@ -231,10 +245,10 @@ class TestBookmarksRepairRequestor: XCTestCase {
 
         // Mock telemetry events
         let startedEvent = makeRepairEvent(["started", nil, ["flowID": flowID, "numIDs": "3"]])
-        let firstUploadEvent = makeRepairEvent(["request", "upload", ["flowID": flowID, "deviceID": "IMPLEMENT ME", "numIDs": "3"]])
-        let secondUploadEvent = makeRepairEvent(["request", "upload", ["flowID": flowID, "deviceID": "IMPLEMENT ME", "numIDs": "1"]])
-        let firstResponseEvent = makeRepairEvent(["response", "upload", ["flowID": flowID, "deviceID": "IMPLEMENT ME", "numIDs": "2"]])
-        let secondResponseEvent = makeRepairEvent(["response", "upload", ["flowID": flowID, "deviceID": "IMPLEMENT ME", "numIDs": "1"]])
+        let firstUploadEvent = makeRepairEvent(["request", "upload", ["flowID": flowID, "deviceID": MockHashedDeviceID, "numIDs": "3"]])
+        let secondUploadEvent = makeRepairEvent(["request", "upload", ["flowID": flowID, "deviceID": MockHashedDeviceID, "numIDs": "1"]])
+        let firstResponseEvent = makeRepairEvent(["response", "upload", ["flowID": flowID, "deviceID": MockHashedDeviceID, "numIDs": "2"]])
+        let secondResponseEvent = makeRepairEvent(["response", "upload", ["flowID": flowID, "deviceID": MockHashedDeviceID, "numIDs": "1"]])
         let finishedEvent = makeRepairEvent(["finished", nil, ["flowID": flowID, "numIDs": "0"]])
 
         let requestor = BookmarksRepairRequestor(scratchpad: scratchpad, basePrefs: prefs, remoteClients: remoteClients)
@@ -286,7 +300,7 @@ class TestBookmarksRepairRequestor: XCTestCase {
         let expectation = self.expectation(description: #function)
 
         let prefs = MockProfilePrefs()
-        let scratchpad = Scratchpad(b: KeyBundle.random(), persistingTo: prefs)
+        let scratchpad = buildMockScratchpad(prefs: prefs)
         let localClient = RemoteClient(guid: nil, name: "Test local client", modified: (Date.now() - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS", version: nil)
         let remoteClientA = RemoteClient(guid: "client-a", name: "Test remote client", modified: Date.now(), type: "desktop", formfactor: nil, os: nil, version: "55.0.1")
         let remoteClientB = RemoteClient(guid: "client-b", name: "Test remote client", modified: (Date.now() - OneMinuteInMilliseconds), type: "desktop", formfactor: nil, os: nil, version: "55.0.1")
@@ -296,7 +310,7 @@ class TestBookmarksRepairRequestor: XCTestCase {
         // Mock telemetry events
         let flowID = Bytes.generateGUID()
         let startedEvent = makeRepairEvent(["started", nil, ["flowID": flowID, "numIDs": "3"]])
-        let uploadEvent = makeRepairEvent(["request", "upload", ["flowID": flowID, "deviceID": "IMPLEMENT ME", "numIDs": "3"]])
+        let uploadEvent = makeRepairEvent(["request", "upload", ["flowID": flowID, "deviceID": MockHashedDeviceID, "numIDs": "3"]])
         let abortedEvent = makeRepairEvent(["aborted", nil, ["flowID": flowID, "reason": "other clients repairing", "numIDs": "3"]])
 
         let requestor = BookmarksRepairRequestor(scratchpad: scratchpad, basePrefs: prefs, remoteClients: remoteClients)

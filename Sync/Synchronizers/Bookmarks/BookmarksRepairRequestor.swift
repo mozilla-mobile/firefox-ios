@@ -301,7 +301,7 @@ class BookmarksRepairRequestor {
                         // hrmph - the client has disappeared.
                         log.info("previously requested client \(clientID) has vanished - moving to next step")
                         let extra = [
-                            "deviceID": "IMPLEMENT ME"/* TODO this.service.identity.hashedDeviceID(clientID) */,
+                            "deviceID": self.scratchpad.hashedDeviceID ?? "unknown_deviceID",
                             "flowID": flowID
                         ]
 
@@ -319,7 +319,7 @@ class BookmarksRepairRequestor {
                                 log.info("previous request to client \(clientID) is pending, but has taken too long")
                                 // XXX - should we remove the command?
                                 let extra = [
-                                    "deviceID": "IMPLEMENT ME"/* TODO this.service.identity.hashedDeviceID(clientID) */,
+                                    "deviceID": self.scratchpad.hashedDeviceID ?? "unknown_deviceID",
                                     "flowID": flowID
                                 ]
 
@@ -416,7 +416,7 @@ class BookmarksRepairRequestor {
         }
         // record telemetry about this
         let extra = [
-            "deviceID": "IMPLEMENT ME"/* TODO this.service.identity.hashedDeviceID(clientID) */,
+            "deviceID": scratchpad.hashedDeviceID ?? "unknown_deviceID",
             "flowID": flowID,
             "numIDs": String(response.ids.count)
         ]
@@ -439,7 +439,7 @@ class BookmarksRepairRequestor {
             self.lastRepair = Date.now()
             // record telemetry about this
             let extra = [
-                "deviceID": "IMPLEMENT ME"/* TODO this.service.identity.hashedDeviceID(clientID) */,
+                "deviceID": self.scratchpad.hashedDeviceID ?? "unknown_deviceID",
                 "flowID": flowID,
                 "numIDs": String(ids.count),
                 ]
