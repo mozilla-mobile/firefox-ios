@@ -1404,7 +1404,7 @@ extension BrowserViewController: MenuActionDelegate {
             switch menuAction {
             case .openNewNormalTab:
                 self.openURLInNewTab(nil, isPrivate: false, isPrivileged: true)
-                LeanplumIntegration.sharedInstance.track(eventName: .openedNewTab)
+                LeanplumIntegration.sharedInstance.track(eventName: .openedNewTab, withInfo: "Source: Menu")
 
             // this is a case that is only available in iOS9
             case .openNewPrivateTab:
@@ -3021,6 +3021,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             let addTab = { (rURL: URL, isPrivate: Bool) in
                 self.scrollController.showToolbars(animated: !self.scrollController.toolbarsShowing, completion: { _ in
                     let tab = self.tabManager.addTab(URLRequest(url: rURL as URL), afterTab: currentTab, isPrivate: isPrivate)
+                    LeanplumIntegration.sharedInstance.track(eventName: .openedNewTab, withInfo: "Source: Long Press Context Menu")
                     guard self.topTabsViewController == nil else {
                         return
                     }
