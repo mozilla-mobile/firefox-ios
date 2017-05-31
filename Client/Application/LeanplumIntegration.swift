@@ -31,6 +31,7 @@ enum LeanplumEventName: String {
     case openedMailtoLink = "Opened Mailto Link"
     case saveImage = "Save Image"
     case savedLoginAndPassword = "Saved Login and Password"
+    case clearPrivateData = "Cleared Private Data"
 }
 
 enum UserAttributeKeyName: String {
