@@ -7,6 +7,7 @@ import Shared
 import Storage
 import Deferred
 import SwiftyJSON
+import Telemetry
 
 private let log = Logger.syncLogger
 
@@ -114,11 +115,13 @@ private class InvalidStateError: MaybeErrorType {
 
 class BookmarksRepairRequestor {
     let prefs: Prefs
+    let basePrefs: Prefs
     let remoteClients: RemoteClientsAndTabs
     let scratchpad: Scratchpad
 
     init(scratchpad: Scratchpad, basePrefs: Prefs, remoteClients: RemoteClientsAndTabs) {
         self.scratchpad = scratchpad
+        self.basePrefs = basePrefs
         self.prefs = basePrefs.branch("repairs.bookmark")
         self.remoteClients = remoteClients
     }
@@ -144,18 +147,26 @@ class BookmarksRepairRequestor {
 
         guard ids.count <= MaxRequestedIDs else {
             log.info("Not starting a repair as there are over \(MaxRequestedIDs) problems")
-            // TODO: TELEMETRY
-            // let extra = { flowID, reason: `too many problems: ${ids.size}` }
-            // this.service.recordTelemetryEvent("repair", "aborted", undefined, extra)
+            let extra = [
+                "flowID": flowID,
+                "reason": "too many problems: \(ids.count)"
+            ]
+
+            let event = Event(category: "sync", method: "repair", object: "aborted", extra: extra)
+            recordTelemetry(event: event)
+
             return deferMaybe(false)
         }
 
         return self.anyClientsRepairing() >>== { clientsRepairing in
             guard !clientsRepairing else {
                 log.info("Can't start repair, since other clients are already repairing bookmarks")
-                // TODO: TELEMETRY
-                // let extra = { flowID, reason: "other clients repairing" }
-                // this.service.recordTelemetryEvent("repair", "aborted", undefined, extra)
+                let extra = [
+                    "flowID": flowID,
+                    "reason": "other clients repairing"
+                ]
+                let event = Event(category: "sync", method: "repair", object: "aborted", extra: extra)
+                self.recordTelemetry(event: event)
                 return deferMaybe(false)
             }
 
@@ -164,8 +175,11 @@ class BookmarksRepairRequestor {
             self.flowID = flowID
             self.currentIDs = ids
             self.currentState = .needNewClient
-            // TODO: TELEMETRY
-            // this.service.recordTelemetryEvent("repair", "started", undefined, { flowID, numIDs: ids.size.toString() })
+
+            let extra = ["flowID": flowID, "numIDs": String(ids.count)]
+            let event = Event(category: "sync", method: "repair", object: "started", extra: extra)
+            self.recordTelemetry(event: event)
+
             return self.continueRepairs()
         }
     }
@@ -236,16 +250,28 @@ class BookmarksRepairRequestor {
                 var extra = [
                     "flowID": self.flowID,
                     "numIDs": String(self.currentIDs.count),
-                    ]
+                ]
                 if abortReason != nil {
                     extra["reason"] = abortReason
                 }
-                // TODO: TELEMETRY
-                // this.service.recordTelemetryEvent("repair", method, undefined, extra)
-                // reset our state
+
+                let event = Event(category: "sync", method: "repair", object: method, extra: extra)
+                self.recordTelemetry(event: event)
+
                 self.prefs.clearAll()
             }
             return deferMaybe(true)
+        }
+    }
+
+    func recordTelemetry(event: Event) {
+        var events = self.basePrefs.arrayForKey(PrefKeySyncEvents) as? [Data] ?? []
+
+        if let data = event.pickle(), event.validate() {
+            events.append(data)
+            self.basePrefs.setObject(events, forKey: PrefKeySyncEvents)
+        } else {
+            log.info("Event not recorded due to validation failure or pickling error!")
         }
     }
 
@@ -274,10 +300,13 @@ class BookmarksRepairRequestor {
                         // hrmph - the client has disappeared.
                         log.info("previously requested client \(clientID) has vanished - moving to next step")
                         let extra = [
-                            "deviceID": "IMPLEMENT ME"/* TODO this.service.identity.hashedDeviceID(clientID) */,
+                            "deviceID": self.scratchpad.hashedDeviceID ?? "unknown_deviceID",
                             "flowID": flowID
                         ]
-                        // this.service.recordTelemetryEvent("repair", "abandon", "missing", extra)
+
+                        let event = Event(category: "sync", method: "repair", object: "abandon", value: "missing", extra: extra)
+                        self.recordTelemetry(event: event)
+
                         return deferMaybe(.needNewClient)
                     }
                     return self.isCommandPending(clientID: clientID, flowID: flowID) >>== { isCommandPending in
@@ -289,11 +318,13 @@ class BookmarksRepairRequestor {
                                 log.info("previous request to client \(clientID) is pending, but has taken too long")
                                 // XXX - should we remove the command?
                                 let extra = [
-                                    "deviceID": "IMPLEMENT ME"/* TODO this.service.identity.hashedDeviceID(clientID) */,
+                                    "deviceID": self.scratchpad.hashedDeviceID ?? "unknown_deviceID",
                                     "flowID": flowID
                                 ]
-                                // TODO: TELEMETRY
-                                // this.service.recordTelemetryEvent("repair", "abandon", "silent", extra)
+
+                                let event = Event(category: "sync", method: "repair", object: "abandon", value: "silent", extra: extra)
+                                self.recordTelemetry(event: event)
+
                                 return deferMaybe(.needNewClient)
                             }
                             // Let's continue to wait for that client to respond.
@@ -384,12 +415,12 @@ class BookmarksRepairRequestor {
         }
         // record telemetry about this
         let extra = [
-            "deviceID": "IMPLEMENT ME"/* TODO this.service.identity.hashedDeviceID(clientID) */,
+            "deviceID": scratchpad.hashedDeviceID ?? "unknown_deviceID",
             "flowID": flowID,
             "numIDs": String(response.ids.count)
         ]
-        // TODO: TELEMETRY
-        // this.service.recordTelemetryEvent("repair", "response", "upload", extra)
+        let event = Event(category: "sync", method: "repair", object: "response", value: "upload", extra: extra)
+        recordTelemetry(event: event)
         return newState
     }
 
@@ -407,12 +438,14 @@ class BookmarksRepairRequestor {
             self.lastRepair = Date.now()
             // record telemetry about this
             let extra = [
-                "deviceID": "IMPLEMENT ME"/* TODO this.service.identity.hashedDeviceID(clientID) */,
+                "deviceID": self.scratchpad.hashedDeviceID ?? "unknown_deviceID",
                 "flowID": flowID,
                 "numIDs": String(ids.count),
                 ]
-            // TODO: TELEMETRY
-            // this.service.recordTelemetryEvent("repair", "request", "upload", extra)
+
+            let event = Event(category: "sync", method: "repair", object: "request", value: "upload", extra: extra)
+            self.recordTelemetry(event: event)
+
             return succeed()
         }
     }

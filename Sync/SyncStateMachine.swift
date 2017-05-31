@@ -132,7 +132,12 @@ open class SyncStateMachine {
             if prior == nil {
                 log.info("No persisted Sync state. Starting over.")
             }
-            let scratchpad = prior ?? Scratchpad(b: KeyBundle.fromKB(kB), persistingTo: self.scratchpadPrefs)
+            var scratchpad = prior ?? Scratchpad(b: KeyBundle.fromKB(kB), persistingTo: self.scratchpadPrefs)
+
+            // Take the scratchpad and add the hashedUID from the token
+            let b = Scratchpad.Builder(p: scratchpad)
+            b.hashedUID = token.hashedFxAUID
+            scratchpad = b.build()
 
             log.info("Advancing to InitialWithLiveToken.")
             let state = InitialWithLiveToken(scratchpad: scratchpad, token: token)
@@ -886,6 +891,10 @@ public protocol EngineStateChanges {
 open class Ready: BaseSyncStateWithInfo {
     open override var label: SyncStateLabel { return SyncStateLabel.Ready }
     let collectionKeys: Keys
+
+    public var hashedFxADeviceID: String {
+        return (scratchpad.fxaDeviceId + token.hashedFxAUID).sha256.hexEncodedString
+    }
 
     public init(client: Sync15StorageClient, scratchpad: Scratchpad, token: TokenServerToken, info: InfoCollections, keys: Keys) {
         self.collectionKeys = keys

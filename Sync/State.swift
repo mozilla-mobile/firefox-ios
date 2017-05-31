@@ -136,6 +136,7 @@ private let PrefLastFetched = "lastFetched"
 private let PrefLocalCommands = "localCommands"
 private let PrefClientName = "clientName"
 private let PrefClientGUID = "clientGUID"
+private let PrefHashedUID = "hashedUID"
 private let PrefEngineConfiguration = "engineConfiguration"
 
 /*
@@ -204,6 +205,7 @@ open class Scratchpad {
         var clientGUID: String
         var clientName: String
         var fxaDeviceId: String
+        var hashedUID: String?
         var prefs: Prefs
 
         init(p: Scratchpad) {
@@ -219,6 +221,7 @@ open class Scratchpad {
             self.clientGUID = p.clientGUID
             self.clientName = p.clientName
             self.fxaDeviceId = p.fxaDeviceId
+            self.hashedUID = p.hashedUID
         }
 
         open func clearLocalCommands() -> Builder {
@@ -296,6 +299,7 @@ open class Scratchpad {
                     clientGUID: self.clientGUID,
                     clientName: self.clientName,
                     fxaDeviceId: self.fxaDeviceId,
+                    hashedUID: self.hashedUID,
                     persistingTo: self.prefs
             )
         }
@@ -349,6 +353,14 @@ open class Scratchpad {
     let clientName: String
     let clientGUID: String
     let fxaDeviceId: String
+    let hashedUID: String?
+
+    var hashedDeviceID: String? {
+        guard let hashedUID = hashedUID else {
+            return nil
+        }
+        return (fxaDeviceId + hashedUID).sha256.hexEncodedString
+    }
 
     // Where do we persist when told?
     let prefs: Prefs
@@ -362,6 +374,7 @@ open class Scratchpad {
          clientGUID: String,
          clientName: String,
          fxaDeviceId: String,
+         hashedUID: String?,
          persistingTo prefs: Prefs
         ) {
         self.syncKeyBundle = b
@@ -375,6 +388,7 @@ open class Scratchpad {
         self.clientGUID = clientGUID
         self.clientName = clientName
         self.fxaDeviceId = fxaDeviceId
+        self.hashedUID = hashedUID
     }
 
     // This should never be used in the end; we'll unpickle instead.
@@ -398,6 +412,8 @@ open class Scratchpad {
             let json = JSON(parseJSON: string)
             return json["id"].string
         }() ?? "unknown_fxaDeviceId"
+
+        self.hashedUID = nil
     }
 
     func freshStartWithGlobal(_ global: Fetched<MetaGlobal>) -> Scratchpad {
@@ -452,6 +468,8 @@ open class Scratchpad {
             log.error("No value found in prefs for client name! Using default.")
             return DeviceInfo.defaultClientName()
         }()
+
+        b.hashedUID = prefs.stringForKey(PrefHashedUID)
 
         if let localCommands: [String] = prefs.stringArrayForKey(PrefLocalCommands) {
             b.localCommands = Set(localCommands.flatMap({LocalCommand.fromJSON(JSON(parseJSON: $0))}))
@@ -532,6 +550,10 @@ open class Scratchpad {
 
         prefs.setString(clientName, forKey: PrefClientName)
         prefs.setString(clientGUID, forKey: PrefClientGUID)
+
+        if let uid = hashedUID {
+            prefs.setString(uid, forKey: PrefHashedUID)
+        }
 
         let localCommands: [String] = Array(self.localCommands).map({$0.toJSON().stringValue()!})
         prefs.setObject(localCommands, forKey: PrefLocalCommands)
