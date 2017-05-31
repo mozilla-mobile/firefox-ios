@@ -42,17 +42,17 @@ class FxAPushMessageTest: XCTestCase {
     func testMessageHandler() {
         let subscription = PushSubscription(channelID: "channel",
                                             endpoint: URL(string: "https://example.ru")!,
-                                            p256dhPrivateKey: "GwkCJrRPc0GNp4XHuPdLiUdGXYa6RzLtJBaF8N0Mvss",
-                                            p256dhPublicKey: "BBOk-1UkZjLiTGbAw99JG17mdTTJuitgT7LX2wNS9ksh47gzSD-kCHeBnWF7EWi5XEHm2cxTydJL_3Co3v51Pb0",
-                                            authKey: "kXRbfx0TqLHNgTU7qgeeZA")
+                                            p256dhPrivateKey: "t7dcZIN4w37UYjE6u3lBLB0WOShxqelkbJFKKzMDSsE",
+                                            p256dhPublicKey: "BIXFDlhppL2lc5GcIXbGPa1iVdJn5ULYaF1ltJY9Qm17-tIC_9eEZXtalPpMRXsFmEKhdn2ttg3KQ3t-ztQ3ShQ",
+                                            authKey: "a8E3EO5F6FFWdv4hAGyGyw")
 
         let userInfo: [AnyHashable: Any] = [
-            AnyHashable("chid"): "5a700265e17d480fbf03090e688a0b5e",
-            AnyHashable("enc"): "keyid=p256dh;salt=WWHbRTOP_A7RzJHquMBT2A",
-            AnyHashable("body"): "0dKMh2RqlNCF6-8kdftvqiHpNzRVhiLAGXvVbTd96JuNScLoe8bqVjbeEMkTAQXSplq97ttR3CY4_ebBc_y1B30og7QOCO4e6SsHYjoZovxG6ELSnSAkD6x-08-EI4zZFb3EW7Zd",
-            AnyHashable("cryptokey"): "keyid=p256dh;dh=BOGBP19K7Kf91iI-6BVChETCrG6A4i_mtlGeDL4HoKvtDbMD6lDC8ZKrkgRmVb5E5mi6YXXMGMqo6BV-NZTJwOU;p256ecdsa=BP-OR33RzQSlrzD7_d1kYE9i9WjSIQAKTuhHxYNiPEF0i-wxeNIIwxthwU7zBTbumyxFUeydrmxcVKXugjBImRU",
+            AnyHashable("chid"): "f6defa012a6249e58bbfbf2995f8d425",
+            AnyHashable("enc"): "keyid=p256dh;salt=nslkEsUqUg5sQ7_sRZfOjg",
+            AnyHashable("body"): "Q1t-ttSwQMxUI64Ls3vOU-hE_qg1AIUzyLQSpEkx-8JITh5UJ7oq25faEc8XPoTYQoaHQ2d--QIK_yVorbt-0Yr7IO4BmtSSX-e4kSx76fWzqKjEpEt7Vr3Av5seEBeoAT2FZRzehkFjNVWoTw",
+            AnyHashable("cryptokey"): "keyid=p256dh;dh=BNfUPK_8eUTZGOyXq07lthBfHeIxC2B7L_gF3cMGK1jVfDe9tlgxpHD_mbKrt3p12d7_O__wizhne2a1Eb7pZgk;p256ecdsa=BFSuld8S4PbRcgGe3OQPN9NyIOXx-ccUIMb0q6nIpH7Qf894wz0TIQTXQ7I7pWjZiN9KCdYVjNhyPtr1--37ois",
             AnyHashable("con"): "aesgcm",
-            AnyHashable("ver"): "gAAAAABY57orjahDEtsVtTew7V2PSXxfqGRW9fsjJbPbQ-F6_eDPtgjlUGWwlmEVib0Nkw91k34IwJ6LSorwlenvgiM1ug07V92adN6hsLxLbYvtgnwk9ao7Ez6ldIzHhj1DCaBefcZnIfiFauvJvHrWaUXgiZRR22txyXs1UUBdcoqCtolmHox-hrHMw9qrkNfy67xIMKJ_"
+            AnyHashable("ver"): "gAAAAABZLbG-m7EHhcMdrqs51SkESIZHsZjvw2QIu8LOeXxcKEy6wDVCprOKFAfJU44cinfJcDtCnO9EEyzpFt5e0HBDCLybGyThoZzmiod6zTLhTfAKZe-SyElSVCL0UDpJ_-U3UTUUHUaJXeRf0z6NvFM-uL39Jy-dwr3cuJoSDIcTPdChRPFiIS1hwokqMlxOn36azxOi",
         ]
 
         let profile = MockProfile()
@@ -73,7 +73,8 @@ class FxAPushMessageTest: XCTestCase {
         let handler = FxAPushMessageHandler(with: profile)
 
         let expectation = XCTestExpectation()
-        handler.handle(userInfo: userInfo).upon { _ in
+        handler.handle(userInfo: userInfo).upon { maybe in
+            XCTAssertTrue(maybe.isSuccess)
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 10)
