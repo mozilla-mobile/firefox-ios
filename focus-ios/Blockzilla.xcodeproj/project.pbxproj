@@ -829,7 +829,7 @@
 				E4BF2DD11BACE8CA00DA9D68 /* Resources */,
 				E4BF2DF91BACE92400DA9D68 /* Embed App Extensions */,
 				D38D693F1C471AC7003EF211 /* Run Script (Carthage) */,
-				D02817331ECF37D900240CAA /* Run Script (Copy Adjust SDK - Focus Only) */,
+				D02817331ECF37D900240CAA /* Run Script (Carthage - Focus Only) */,
 			);
 			buildRules = (
 			);
@@ -987,19 +987,20 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		D02817331ECF37D900240CAA /* Run Script (Copy Adjust SDK - Focus Only) */ = {
+		D02817331ECF37D900240CAA /* Run Script (Carthage - Focus Only) */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/AdjustSdk.framework",
 			);
-			name = "Run Script (Copy Adjust SDK - Focus Only)";
+			name = "Run Script (Carthage - Focus Only)";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "echo $OTHER_SWIFT_FLAGS | grep -e \"-DFOCUS\" && /usr/local/bin/carthage copy-frameworks $(SRCROOT)/Carthage/Build/iOS/AdjustSdk.framework || echo \"1\"";
+			shellScript = "if echo $OTHER_SWIFT_FLAGS | grep -q -e \"-DFOCUS\"; then\n  echo \"Copying Focus-only Carthage frameworks\"\n  /usr/local/bin/carthage copy-frameworks\nelse\n  echo \"Skipping Build Phase for copying Focus-only Carthage frameworks\"\nfi\n";
 		};
 		D38D693F1C471AC7003EF211 /* Run Script (Carthage) */ = {
 			isa = PBXShellScriptBuildPhase;
