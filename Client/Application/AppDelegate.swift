@@ -11,6 +11,7 @@ import WebImage
 import SwiftKeychainWrapper
 import LocalAuthentication
 import Telemetry
+import SwiftRouter
 
 private let log = Logger.browserLogger
 
@@ -127,11 +128,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         navigationController.delegate = self
         navigationController.isNavigationBarHidden = true
 
-        if AppConstants.MOZ_STATUS_BAR_NOTIFICATION {
-            rootViewController = NotificationRootViewController(rootViewController: navigationController)
-        } else {
+        //  This was an old feature that never made it to release. It was kind of buggy so it might be worth either removing entirely or making the deep links worth with it. Essentially it replaces the UINavigationController we setup with a subclass that shows a notification view in place of the status bar.
+//        if AppConstants.MOZ_STATUS_BAR_NOTIFICATION {
+//            rootViewController = NotificationRootViewController(rootViewController: navigationController)
+//        } else {
             rootViewController = navigationController
-        }
+//        }
 
         self.window!.rootViewController = rootViewController
 
@@ -189,8 +191,86 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // Run an invalidate when we come back into the app.
         profile.panelDataObservers.activityStream.invalidate(highlights: true)
 
+        setUpDeepLinks(application: application)
+
         log.debug("Done with setting up the application.")
         return true
+    }
+
+    func setUpDeepLinks(application: UIApplication) {
+        let router = Router.shared
+        let rootNav = rootViewController as! UINavigationController
+
+        router.map("homepanel/:page", handler: { (params:[String: String]?) -> (Bool) in
+            guard let page = params?["page"] else {
+                return false
+            }
+
+            assert(Thread.isMainThread, "Opening homepanels requires being invoked on the main thread")
+
+            switch (page) {
+                case "bookmarks":
+                    self.browserViewController.openURLInNewTab(HomePanelType.bookmarks.localhostURL, isPrivileged: true)
+                case "history":
+                    self.browserViewController.openURLInNewTab(HomePanelType.history.localhostURL, isPrivileged: true)
+                case "new-private-tab":
+                    self.browserViewController.openBlankNewTab(isPrivate: true)
+            default:
+                break
+            }
+
+            return true
+        })
+
+        // Route to general settings page like this: "...settings/general"
+        router.map("settings/:page", handler: { (params:[String: String]?) -> (Bool) in
+            guard let page = params?["page"] else {
+                return false
+            }
+
+            assert(Thread.isMainThread, "Opening settings requires being invoked on the main thread")
+
+            let settingsTableViewController = AppSettingsTableViewController()
+            settingsTableViewController.profile = self.profile
+            settingsTableViewController.tabManager = self.tabManager
+            settingsTableViewController.settingsDelegate = self.browserViewController
+
+            let controller = SettingsNavigationController(rootViewController: settingsTableViewController)
+            controller.popoverDelegate = self.browserViewController
+            controller.modalPresentationStyle = UIModalPresentationStyle.formSheet
+
+            rootNav.present(controller, animated: true, completion: nil)
+
+            switch (page) {
+                case "newtab":
+                    let viewController = NewTabChoiceViewController(prefs: self.getProfile(application).prefs)
+                    controller.pushViewController(viewController, animated: true)
+                case "homepage":
+                    let viewController = HomePageSettingsViewController()
+                    viewController.profile = self.getProfile(application)
+                    viewController.tabManager = self.tabManager
+                    controller.pushViewController(viewController, animated: true)
+                case "mailto":
+                    let viewController = OpenWithSettingsViewController(prefs: self.getProfile(application).prefs)
+                    controller.pushViewController(viewController, animated: true)
+                case "search":
+                    let viewController = SearchSettingsTableViewController()
+                    viewController.model = self.getProfile(application).searchEngines
+                    viewController.profile = self.getProfile(application)
+                    controller.pushViewController(viewController, animated: true)
+                case "clear-private-data":
+                    let viewController = ClearPrivateDataTableViewController()
+                    viewController.profile = self.getProfile(application)
+                    viewController.tabManager = self.tabManager
+                    controller.pushViewController(viewController, animated: true)
+                case "fxa":
+                    self.browserViewController.presentSignInViewController()
+            default:
+                break
+            }
+
+            return true
+        })
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -303,6 +383,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
                 url = item.value
             case "private":
                 isPrivate = NSString(string: item.value ?? "false").boolValue
+            case "deep-link":
+                guard let value = item.value else { break }
+                Router.shared.routeURL(value)
+                return true
             default: ()
             }
         }
