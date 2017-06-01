@@ -61,11 +61,10 @@ class DownloadTests: XCTestCase {
         XCTAssertEqual(1, records1.count)
         XCTAssertEqual(guid1, records1[0].id)
         batcher.advance()
-        XCTAssertNotEqual(0, batcher.baseTimestamp)
 
         // Fetching again yields nothing, because the collection hasn't
         // changed.
-        XCTAssertEqual(batcher.go(ic1, limit: 1).value.successValue, DownloadEndState.noNewData)
+        XCTAssertEqual(batcher.go(ic1, limit: 1).value.successValue, DownloadEndState.complete)
 
         // More records. Start again.
         let _ = batcher.reset().value

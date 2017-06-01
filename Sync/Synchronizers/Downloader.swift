@@ -106,6 +106,16 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
         }
     }
 
+    // Set after we've fetched the first, most recent records.
+    var fetchedRecent: Bool {
+        get {
+            return self.prefs.boolForKey("fetchedRecent") ?? false
+        }
+        set (value) {
+            self.prefs.setBool(value, forKey: "fetchedRecent")
+        }
+    }
+
     /**
      * Call this when a significant structural server change has been detected.
      */
@@ -156,7 +166,8 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
         let (offset, since) = self.fetchParameters()
         log.debug("Fetching newer=\(since), offset=\(offset ?? "nil").")
 
-        let fetch = self.client.getSince(since, sort: SortOption.OldestFirst, limit: limit, offset: offset)
+        let sort: SortOption = fetchedRecent ? .OldestFirst : .NewestFirst
+        let fetch = self.client.getSince(since, sort: sort, limit: limit, offset: offset)
 
         func handleFailure(_ err: MaybeErrorType) -> Deferred<Maybe<DownloadEndState>> {
             log.debug("Handling failure.")
@@ -179,6 +190,15 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
             // Queue up our metadata advance. We wait until the consumer has fetched
             // and processed this batch; they'll call .advance() on success.
             self._advance = {
+                // Don't advance our metadata if we are fetching the most recent items in the first
+                // batch download request.
+                guard self.fetchedRecent else {
+                    // Don't shift the offset at all since we only want to grab the first set
+                    // of most recent items. Just return and start the next batch from the end (oldest).
+                    self.fetchedRecent = true
+                    return
+                }
+                
                 // Shift to the next offset. This might be nil, in which case… fine!
                 // Note that we preserve the previous 'newer' value from the offset or the original fetch,
                 // even as we update baseTimestamp.
