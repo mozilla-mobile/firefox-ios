@@ -29,7 +29,7 @@ class SettingAppearanceTest: BaseTestCase {
         
         // Check Help page, wait until the webpage is shown
         tablesQuery.staticTexts["Help"].tap()
-        waitforExistence(element: app.staticTexts["What is Firefox Focus for iOS?"])
+        waitforExistence(element: app.staticTexts["What is Firefox Focus?"])
         let firefoxFocusAboutcontentviewNavigationBar = app.navigationBars["Firefox_Focus.AboutContentView"]
         firefoxFocusAboutcontentviewNavigationBar.buttons["About"].tap()
         

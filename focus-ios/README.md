@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/mozilla-mobile/focus/branch/master/graph/badge.svg)](https://codecov.io/gh/mozilla-mobile/focus)
+
 # Firefox Focus for iOS
 
 _Browse like no one’s watching. The new Firefox Focus automatically blocks a wide range of online trackers — from the moment you launch it to the second you leave it. Easily erase your history, passwords and cookies, so you won’t get followed by things like unwanted ads._
