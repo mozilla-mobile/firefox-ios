@@ -192,6 +192,12 @@ class LeanplumIntegration {
         return  shouldShowFocusUI && (canInstallKlar() || canInstallFocus())
     }
 
+    func setUserAttributes(attributes: [AnyHashable : Any]) {
+        if shouldSendToLP() {
+            Leanplum.setUserAttributes(attributes)
+        }
+    }
+
     // Private
 
     private func getSettings() -> LeanplumSettings? {
