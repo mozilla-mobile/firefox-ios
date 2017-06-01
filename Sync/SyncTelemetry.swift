@@ -261,7 +261,7 @@ public struct SyncPing: TelemetryPing {
             // some kind of caching we'll want to make sure we don't dump the events if
             // the ping has failed.
             let pickledEvents = prefs.arrayForKey(PrefKeySyncEvents) as? [Data] ?? []
-            let events = pickledEvents.map(Event.unpickle).map { $0.toArray() }
+            let events = pickledEvents.flatMap(Event.unpickle).map { $0.toArray() }
             ping["events"] = events
             prefs.setObject(nil, forKey: PrefKeySyncEvents)
 
