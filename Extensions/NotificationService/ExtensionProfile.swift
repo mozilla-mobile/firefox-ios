@@ -9,14 +9,26 @@ import Sync
 // This will only ever be used in the NotificationService extension.
 // It allows us to customize the SyncDelegate, and later the SyncManager.
 class ExtensionProfile: BrowserProfile {
-    let syncDelegate: SyncDelegate
+    var syncDelegate: SyncDelegate!
 
-    init(localName: String, delegate: SyncDelegate) {
-        syncDelegate = delegate
+    init(localName: String) {
         super.init(localName: localName, app: nil, clear: false)
+        syncManager = ExtensionSyncManager(profile: self)
     }
 
     override func getSyncDelegate() -> SyncDelegate {
         return syncDelegate
+    }
+
+}
+
+class ExtensionSyncManager: BrowserProfile.BrowserSyncManager {
+
+    init(profile: ExtensionProfile) {
+        super.init(profile: profile)
+    }
+
+    override func canSendUsageData() -> Bool {
+        return false
     }
 }
