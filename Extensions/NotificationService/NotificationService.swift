@@ -9,7 +9,10 @@ import UserNotifications
 
 class NotificationService: UNNotificationServiceExtension {
     var display: SyncDataDisplay!
-    var profile: Profile!
+    lazy var profile: ExtensionProfile = {
+        NSLog("APNS ExtensionProfile being created")
+        return ExtensionProfile(localName: "profile")
+    }()
 
     override func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
 
@@ -21,7 +24,7 @@ class NotificationService: UNNotificationServiceExtension {
         NSLog("NotificationService APNS NOTIFICATION \(userInfo)")
 
         self.display = SyncDataDisplay(content: content, contentHandler: contentHandler)
-        self.profile = ExtensionProfile(localName: "profile", delegate: display)
+        self.profile.syncDelegate = display
 
         let handler = FxAPushMessageHandler(with: profile)
 
