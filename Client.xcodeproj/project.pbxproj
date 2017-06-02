@@ -6320,8 +6320,8 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Fennec.NotificationService;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "e94ec555-c6c5-45ee-817e-096b9cb590f9";
-				PROVISIONING_PROFILE_SPECIFIER = "Fennec NotificationService";
+				PROVISIONING_PROFILE = "2ca221e2-03db-45b5-ad98-41b0caa46000";
+				PROVISIONING_PROFILE_SPECIFIER = "Fennec NotificationService Development";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
