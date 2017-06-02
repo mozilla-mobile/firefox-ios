@@ -465,7 +465,7 @@ open class BrowserProfile: Profile {
         return ClosedTabsStore(prefs: self.prefs)
     }()
 
-    fileprivate func getSyncDelegate() -> SyncDelegate {
+    open func getSyncDelegate() -> SyncDelegate {
         if let app = self.app {
             return BrowserProfileSyncDelegate(app: app)
         }
