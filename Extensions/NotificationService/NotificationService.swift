@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import Shared
 import Storage
 import Sync
 import UserNotifications
@@ -75,10 +76,15 @@ class SyncDataDisplay {
             notificationContent.title = "Firefox Accounts"
             notificationContent.body = "Tap to begin"
         case 1:
-            let tab = sentTabs[0]
-            let title = tab.title ?? "a tab"
-            notificationContent.title = "Tap to open \(title)"
-            notificationContent.body = "\(tab.url)"
+            if SystemUtils.isDeviceLocked() {
+                notificationContent.title = "Received \(sentTabs.count) tab"
+                notificationContent.body = "Tap to open"
+            } else {
+                let tab = sentTabs[0]
+                let title = tab.title ?? "a tab"
+                notificationContent.title = "Tap to open \(title)"
+                notificationContent.body = "\(tab.url)"
+            }
         default:
             notificationContent.title = "Received \(sentTabs.count) tabs"
             notificationContent.body = "Tap to open"
