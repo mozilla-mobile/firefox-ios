@@ -4,7 +4,6 @@
 
 import Foundation
 import Shared
-import KSCrash
 import Sentry
 
 class SentryIntegration {
@@ -28,15 +27,21 @@ class SentryIntegration {
         }
 
         Logger.browserLogger.error("Enabling Sentry crash handler")
-        SentryClient.shared = SentryClient(dsnString: dsn)
-        SentryClient.shared?.startCrashHandler()
+        
+        do {
+            Client.shared = try Client(dsn: dsn)
+            try Client.shared?.startCrashHandler()
+        } catch let error {
+            Logger.browserLogger.error("Failed to initialize Sentry: \(error)")
+        }
+
     }
 
     var crashedLastLaunch: Bool {
-        return KSCrash.sharedInstance().crashedLastLaunch
+        return Client.shared?.crashedLastLaunch() ?? false
     }
 
     func crash() {
-        SentryClient.shared?.crash()
+        Client.shared?.crash()
     }
 }
