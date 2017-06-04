@@ -5,6 +5,7 @@
 import Foundation
 import Storage
 import SnapKit
+import Shared
 
 private struct ActionOverlayTableViewUX {
 
@@ -189,6 +190,7 @@ class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
     lazy var siteImageView: UIImageView = {
         let siteImageView = UIImageView()
         siteImageView.contentMode = UIViewContentMode.center
+        siteImageView.clipsToBounds = true
         siteImageView.layer.cornerRadius = ActionOverlayTableViewUX.CornerRadius
         siteImageView.layer.borderColor = ActionOverlayTableViewUX.BorderColor.cgColor
         siteImageView.layer.borderWidth = ActionOverlayTableViewUX.BorderWidth
