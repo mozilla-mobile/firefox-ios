@@ -546,12 +546,14 @@ var LoginManagerContent = {
           usernameField.value = selectedLogin.username;
           dispatchKeyboardEvent(usernameField, 'keydown', KEYCODE_ARROW_DOWN);
           dispatchKeyboardEvent(usernameField, 'keyup', KEYCODE_ARROW_DOWN);
+          forceAngularValidation(usernameField);
         }
       }
       if (passwordField.value != selectedLogin.password) {
         passwordField.value = selectedLogin.password;
         dispatchKeyboardEvent(passwordField, 'keydown', KEYCODE_ARROW_DOWN);
         dispatchKeyboardEvent(passwordField, 'keyup', KEYCODE_ARROW_DOWN);
+        forceAngularValidation(passwordField);
       }
       didFillForm = true;
     } else if (selectedLogin && !autofillForm) {
@@ -708,6 +710,24 @@ function dispatchKeyboardEvent(element, eventName, keyCode) {
   var event = document.createEvent('KeyboardEvent');
   event.initKeyboardEvent(eventName, true, true, window, 0, 0, 0, 0, 0, keyCode);
   element.dispatchEvent(event);
+}
+ 
+function forceAngularValidation(element) {
+  try {
+    if (!element.hasAttribute('ng-model')) {
+      return;
+    }
+
+    if ('angular' in window && typeof window.angular.element === 'function') {
+      var ngElement = angular.element(element);
+      if (ngElement && typeof ngElement.controller === 'function') {
+        var ngController = ngElement.controller('ngModel');
+        if (ngController && typeof ngController.$setViewValue === 'function') {
+          ngController.$setViewValue(element.value);
+        }
+      }
+    }
+  } catch (e) {}
 }
 
 })();
