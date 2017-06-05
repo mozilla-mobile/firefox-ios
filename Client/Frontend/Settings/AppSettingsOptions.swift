@@ -70,6 +70,8 @@ class DisconnectSetting: WithAccountSetting {
                 self.settings.profile.removeAccount()
                 self.settings.settings = self.settings.generateSettings()
                 self.settings.SELfirefoxAccountDidChange()
+
+                LeanplumIntegration.sharedInstance.setUserAttributes(attributes: [UserAttributeKeyName.signedInSync.rawValue : self.profile.hasAccount()])
             })
         navigationController?.present(alertController, animated: true, completion: nil)
     }
