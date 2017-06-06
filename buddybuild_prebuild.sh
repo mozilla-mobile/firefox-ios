@@ -7,8 +7,8 @@
 
 if [ "$BUDDYBUILD_SCHEME" == FirefoxBeta ]; then
   echo "Setting Adjust environment to SANDBOX for $BUDDYBUILD_SCHEME"
-  /usr/libexec/PlistBuddy -c "Set AdjustAppToken $ADJUST_KEY_SANDBOX" "Client/Info.plist"
-  /usr/libexec/PlistBuddy -c "Set AdjustEnvironment sandbox" "Client/Info.plist"
+  /usr/libexec/PlistBuddy -c "Set AdjustAppToken $ADJUST_KEY_BETA" "Client/Info.plist"
+  /usr/libexec/PlistBuddy -c "Set AdjustEnvironment production" "Client/Info.plist"
 elif [ "$BUDDYBUILD_SCHEME" == Firefox ]; then
   echo "Setting Adjust environment to PRODUCTION for $BUDDYBUILD_SCHEME"
   /usr/libexec/PlistBuddy -c "Set AdjustAppToken $ADJUST_KEY_PRODUCTION" "Client/Info.plist"
