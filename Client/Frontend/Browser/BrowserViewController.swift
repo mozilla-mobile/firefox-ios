@@ -1428,8 +1428,8 @@ extension BrowserViewController: MenuActionDelegate {
                 NightModeHelper.setNightMode(self.profile.prefs, tabManager: self.tabManager, enabled: false)
             case .hideNightMode:
                 NightModeHelper.setNightMode(self.profile.prefs, tabManager: self.tabManager, enabled: true)
-            case .openQRCode:
-                self.openQRCode()
+            case .scanQRCode:
+                self.scanQRCode()
             case .openSettings:
                 self.openSettings()
             case .openTopSites:
@@ -1466,7 +1466,7 @@ extension BrowserViewController: MenuActionDelegate {
         }
     }
 
-    fileprivate func openQRCode() {
+    fileprivate func scanQRCode() {
         let qrCodeViewController = QRCodeViewController()
         qrCodeViewController.qrCodeDelegate = self
         let controller = UINavigationController(rootViewController: qrCodeViewController)

@@ -25,7 +25,7 @@ enum AppMenuAction: String {
     case hideImageMode = "HideImageMode"
     case showNightMode = "ShowNightMode"
     case hideNightMode = "HideNightMode"
-    case openQRCode = "OpenQRCode"
+    case scanQRCode = "ScanQRCode"
 }
 
 struct AppMenuConfiguration: MenuConfiguration {
@@ -140,7 +140,7 @@ struct AppMenuConfiguration: MenuConfiguration {
                 }
             }
             if hasVideoCaptureDevice {
-                menuItems.append(AppMenuConfiguration.QRCodeMenuItem)
+                menuItems.append(AppMenuConfiguration.ScanQRCodeMenuItem)
             }
             menuItems.append(AppMenuConfiguration.SettingsMenuItem)
         case .homePanels:
@@ -164,7 +164,7 @@ struct AppMenuConfiguration: MenuConfiguration {
                 }
             }
             if hasVideoCaptureDevice {
-                menuItems.append(AppMenuConfiguration.QRCodeMenuItem)
+                menuItems.append(AppMenuConfiguration.ScanQRCodeMenuItem)
             }
             menuItems.append(AppMenuConfiguration.SettingsMenuItem)
         case .emptyTab, .loading:
@@ -188,7 +188,7 @@ struct AppMenuConfiguration: MenuConfiguration {
                 }
             }
             if hasVideoCaptureDevice {
-                menuItems.append(AppMenuConfiguration.QRCodeMenuItem)
+                menuItems.append(AppMenuConfiguration.ScanQRCodeMenuItem)
             }
             menuItems.append(AppMenuConfiguration.SettingsMenuItem)
         case .tabTray:
@@ -264,8 +264,8 @@ extension AppMenuConfiguration {
         return AppMenuItem(title: Strings.MenuNightModeTurnOffLabel, accessibilityIdentifier: "ShowNightModeItem", action:  MenuAction(action: AppMenuAction.showNightMode.rawValue), icon: "menu-NightMode-Engaged", privateModeIcon: "menu-NightMode-Engaged")
     }
 
-    fileprivate static var QRCodeMenuItem: MenuItem {
-        return AppMenuItem(title: QRCodeTitleString, accessibilityIdentifier: "QRCodeMenuItem", action: MenuAction(action: AppMenuAction.openQRCode.rawValue), icon: "menu-QRCode", privateModeIcon: "menu-QRCode-pbm", selectedIcon: "menu-QRCode-Engaged")
+    fileprivate static var ScanQRCodeMenuItem: MenuItem {
+        return AppMenuItem(title: ScanQRCodeTitleString, accessibilityIdentifier: "ScanQRCodeMenuItem", action: MenuAction(action: AppMenuAction.scanQRCode.rawValue), icon: "menu-ScanQRCode", privateModeIcon: "menu-ScanQRCode-pbm", selectedIcon: "menu-ScanQRCode-Engaged")
     }
 
     fileprivate static var SettingsMenuItem: MenuItem {
@@ -311,7 +311,7 @@ extension AppMenuConfiguration {
     static let FindInPageTitleString = NSLocalizedString("Menu.FindInPageAction.Title", tableName: "Menu", value: "Find In Page", comment: "Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page.")
     static let ViewDesktopSiteTitleString = NSLocalizedString("Menu.ViewDekstopSiteAction.Title", tableName: "Menu", value: "Request Desktop Site", comment: "Label for the button, displayed in the menu, used to request the desktop version of the current website.")
     static let ViewMobileSiteTitleString = NSLocalizedString("Menu.ViewMobileSiteAction.Title", tableName: "Menu", value: "Request Mobile Site", comment: "Label for the button, displayed in the menu, used to request the mobile version of the current website.")
-    static let QRCodeTitleString = NSLocalizedString("Menu.openQRCodeAction.Title", tableName: "Menu", value: "QR Code", comment: "Label for the button, displayed in the menu, used to open the qr code view chontroller.")
+    static let ScanQRCodeTitleString = NSLocalizedString("Menu.ScanQRCodeAction.Title", tableName: "Menu", value: "Scan QR Code", comment: "Label for the button, displayed in the menu, used to open the QR code scanner.")
     static let SettingsTitleString = NSLocalizedString("Menu.OpenSettingsAction.Title", tableName: "Menu", value: "Settings", comment: "Label for the button, displayed in the menu, used to open the Settings menu.")
     static let CloseAllTabsTitleString = NSLocalizedString("Menu.CloseAllTabsAction.Title", tableName: "Menu", value: "Close All Tabs", comment: "Label for the button, displayed in the menu, used to close all tabs currently open.")
     static let OpenHomePageTitleString = NSLocalizedString("Menu.OpenHomePageAction.Title", tableName: "Menu", value: "Home", comment: "Label for the button, displayed in the menu, used to navigate to the home page.")
