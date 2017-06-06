@@ -217,7 +217,6 @@ class TabManagerTests: XCTestCase {
         delegate.verify("Not all delegate methods were called")
     }
 
-
     func testDeletePrivateTabsOnExit() {
         //setup
         let profile = TabManagerMockProfile()
@@ -254,8 +253,6 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(manager.selectedTab?.isPrivate, false, "The selected tab should not be private")
         XCTAssertEqual(manager.privateTabs.count, 1, "If the flag is false then private tabs should still exist")
     }
-
-
 
     func testDeleteNonSelectedTab() {
         let profile = TabManagerMockProfile()
