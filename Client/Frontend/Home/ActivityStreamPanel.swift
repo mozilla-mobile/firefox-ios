@@ -562,6 +562,8 @@ extension ActivityStreamPanel: DataObserverDelegate {
         let openInNewTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewTabContextMenuTitle, iconString: "action_new_tab") { action in
             self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
             self.telemetry.reportEvent(.NewTab, source: pingSource, position: index)
+
+            LeanplumIntegration.sharedInstance.track(eventName: .openedNewTab, withInfo: "Source: Activity Stream Long Press Context Menu")
         }
 
         let openInNewPrivateTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "action_new_private_tab") { action in
