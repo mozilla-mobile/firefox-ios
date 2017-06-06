@@ -17,7 +17,7 @@ import MobileCoreServices
 import WebImage
 import SwiftyJSON
 import Telemetry
-import KSCrash
+import Sentry
 
 private let log = Logger.browserLogger
 
@@ -555,7 +555,7 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func hasPendingCrashReport() -> Bool {
-        return KSCrash.sharedInstance().crashedLastLaunch
+        return Client.shared?.crashedLastLaunch() ?? false
     }
 
     fileprivate func showRestoreTabsAlert() {
