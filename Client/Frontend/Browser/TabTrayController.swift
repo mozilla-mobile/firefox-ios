@@ -1213,7 +1213,7 @@ class TrayToolbar: UIView {
     lazy var menuButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage.templateImageNamed("bottomNav-menu-pbm"), for: .normal)
-        button.accessibilityLabel = AppMenuConfiguration.MenuButtonAccessibilityLabel
+        button.accessibilityLabel = Strings.AppMenuButtonAccessibilityLabel
         button.accessibilityIdentifier = "TabTrayController.menuButton"
         return button
     }()

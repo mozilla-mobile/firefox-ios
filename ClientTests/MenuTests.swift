@@ -28,32 +28,32 @@ class MenuTests: XCTestCase {
     func testMenuConfigurationForNonBookmarkedItemInTab() {
         let tabState = TabState(isPrivate: false, desktopSite: false, isBookmarked: false, url: URL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
         let browserConfiguration = AppMenuConfiguration(appState: appState(.tab(tabState: tabState)))
-        let bookmarkItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.AddBookmarkTitleString }
+        let bookmarkItem = browserConfiguration.menuItems.find { $0.title == Strings.AppMenuAddBookmarkTitleString }
         XCTAssertNotNil(bookmarkItem)
-        let bookmarkedItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.RemoveBookmarkTitleString }
+        let bookmarkedItem = browserConfiguration.menuItems.find { $0.title == Strings.AppMenuRemoveBookmarkTitleString }
         XCTAssertNil(bookmarkedItem)
     }
 
     func testMenuConfigurationForBookmarkedItemInTab() {
         let tabState = TabState(isPrivate: false, desktopSite: false, isBookmarked: true, url: URL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
         let browserConfiguration = AppMenuConfiguration(appState: appState(.tab(tabState: tabState)))
-        let bookmarkedItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.RemoveBookmarkTitleString }
+        let bookmarkedItem = browserConfiguration.menuItems.find { $0.title == Strings.AppMenuRemoveBookmarkTitleString }
         XCTAssertNotNil(bookmarkedItem)
-        let bookmarkItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.AddBookmarkTitleString }
+        let bookmarkItem = browserConfiguration.menuItems.find { $0.title == Strings.AppMenuAddBookmarkTitleString }
         XCTAssertNil(bookmarkItem)
     }
 
     func testBookmarkItemsNotPresentInMenuConfigurationForHomePanels() {
         let homePanelState = HomePanelState(isPrivate: false, selectedIndex: 0)
         let homePanelConfiguration = AppMenuConfiguration(appState: appState(.homePanels(homePanelState: homePanelState)))
-        let bookmarkItem = homePanelConfiguration.menuItems.find { ($0.title == AppMenuConfiguration.AddBookmarkTitleString || $0.title == AppMenuConfiguration.RemoveBookmarkTitleString) }
+        let bookmarkItem = homePanelConfiguration.menuItems.find { ($0.title == Strings.AppMenuAddBookmarkTitleString || $0.title == Strings.AppMenuRemoveBookmarkTitleString) }
         XCTAssertNil(bookmarkItem)
     }
 
     func testBookmarkItemsNotPresentInMenuConfigurationInTabTray() {
         let tabTrayState = TabTrayState(isPrivate: false)
         let tabTrayConfiguration = AppMenuConfiguration(appState: appState(.tabTray(tabTrayState: tabTrayState)))
-        let bookmarkItem = tabTrayConfiguration.menuItems.find { ($0.title == AppMenuConfiguration.AddBookmarkTitleString || $0.title == AppMenuConfiguration.RemoveBookmarkTitleString) }
+        let bookmarkItem = tabTrayConfiguration.menuItems.find { ($0.title == Strings.AppMenuAddBookmarkTitleString || $0.title == Strings.AppMenuRemoveBookmarkTitleString) }
         XCTAssertNil(bookmarkItem)
     }
 
@@ -61,21 +61,21 @@ class MenuTests: XCTestCase {
     func testNewPrivateTabItemPresentInMenuConfigurationInTab() {
         let tabState = TabState(isPrivate: false, desktopSite: false, isBookmarked: false, url: URL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
         let browserConfiguration = AppMenuConfiguration(appState: appState(.tab(tabState: tabState)))
-        let privateTabItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.NewPrivateTabTitleString }
+        let privateTabItem = browserConfiguration.menuItems.find { $0.title == Strings.AppMenuNewPrivateTabTitleString }
         XCTAssertNotNil(privateTabItem)
     }
 
     func testNewPrivateTabItemPresentInMenuConfigurationInHomePanels() {
         let homePanelState = HomePanelState(isPrivate: false, selectedIndex: 0)
         let homePanelConfiguration = AppMenuConfiguration(appState: appState(.homePanels(homePanelState: homePanelState)))
-        let privateTabItem = homePanelConfiguration.menuItems.find { $0.title == AppMenuConfiguration.NewPrivateTabTitleString }
+        let privateTabItem = homePanelConfiguration.menuItems.find { $0.title == Strings.AppMenuNewPrivateTabTitleString }
         XCTAssertNotNil(privateTabItem)
     }
 
     func testNewPrivateTabItemPresentInMenuConfigurationInTabTray() {
         let tabTrayState = TabTrayState(isPrivate: false)
         let tabTrayConfiguration = AppMenuConfiguration(appState: appState(.tabTray(tabTrayState: tabTrayState)))
-        let privateTabItem = tabTrayConfiguration.menuItems.find { $0.title == AppMenuConfiguration.NewPrivateTabTitleString }
+        let privateTabItem = tabTrayConfiguration.menuItems.find { $0.title == Strings.AppMenuNewPrivateTabTitleString }
         XCTAssertNotNil(privateTabItem)
     }
 
@@ -83,21 +83,21 @@ class MenuTests: XCTestCase {
     func testNewTabItemPresentInMenuConfigurationInTab() {
         let tabState = TabState(isPrivate: false, desktopSite: false, isBookmarked: false, url: URL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
         let browserConfiguration = AppMenuConfiguration(appState: appState(.tab(tabState: tabState)))
-        let tabItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.NewTabTitleString }
+        let tabItem = browserConfiguration.menuItems.find { $0.title == Strings.AppMenuNewTabTitleString }
         XCTAssertNotNil(tabItem)
     }
 
     func testNewTabItemPresentInMenuConfigurationInHomePanels() {
         let homePanelState = HomePanelState(isPrivate: false, selectedIndex: 0)
         let homePanelConfiguration = AppMenuConfiguration(appState: appState(.homePanels(homePanelState: homePanelState)))
-        let tabItem = homePanelConfiguration.menuItems.find { $0.title == AppMenuConfiguration.NewTabTitleString }
+        let tabItem = homePanelConfiguration.menuItems.find { $0.title == Strings.AppMenuNewTabTitleString }
         XCTAssertNotNil(tabItem)
     }
 
     func testNewTabItemPresentInMenuConfigurationInTabTray() {
         let tabTrayState = TabTrayState(isPrivate: false)
         let tabTrayConfiguration = AppMenuConfiguration(appState: appState(.tabTray(tabTrayState: tabTrayState)))
-        let tabItem = tabTrayConfiguration.menuItems.find { $0.title == AppMenuConfiguration.NewTabTitleString }
+        let tabItem = tabTrayConfiguration.menuItems.find { $0.title == Strings.AppMenuNewTabTitleString }
         XCTAssertNotNil(tabItem)
     }
 
@@ -105,21 +105,21 @@ class MenuTests: XCTestCase {
     func testFindInPageItemPresentInMenuConfigurationInTab() {
         let tabState = TabState(isPrivate: false, desktopSite: false, isBookmarked: false, url: URL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
         let browserConfiguration = AppMenuConfiguration(appState: appState(.tab(tabState: tabState)))
-        let findInPageItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.FindInPageTitleString }
+        let findInPageItem = browserConfiguration.menuItems.find { $0.title == Strings.AppMenuFindInPageTitleString }
         XCTAssertNotNil(findInPageItem)
     }
 
     func testFindInPageItemNotPresentInMenuConfigurationInHomePanels() {
         let homePanelState = HomePanelState(isPrivate: false, selectedIndex: 0)
         let homePanelConfiguration = AppMenuConfiguration(appState: appState(.homePanels(homePanelState: homePanelState)))
-        let findInPageItem = homePanelConfiguration.menuItems.find { $0.title == AppMenuConfiguration.FindInPageTitleString }
+        let findInPageItem = homePanelConfiguration.menuItems.find { $0.title == Strings.AppMenuFindInPageTitleString }
         XCTAssertNil(findInPageItem)
     }
 
     func testFindInPageItemNotPresentInMenuConfigurationInTabTray() {
         let tabTrayState = TabTrayState(isPrivate: false)
         let tabTrayConfiguration = AppMenuConfiguration(appState: appState(.tabTray(tabTrayState: tabTrayState)))
-        let findInPageItem = tabTrayConfiguration.menuItems.find { $0.title == AppMenuConfiguration.FindInPageTitleString }
+        let findInPageItem = tabTrayConfiguration.menuItems.find { $0.title == Strings.AppMenuFindInPageTitleString }
         XCTAssertNil(findInPageItem)
     }
 
@@ -127,32 +127,32 @@ class MenuTests: XCTestCase {
     func testMenuConfigurationForViewDesktopSiteItemInTab() {
         let tabState = TabState(isPrivate: false, desktopSite: false, isBookmarked: false, url: URL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
         let browserConfiguration = AppMenuConfiguration(appState: appState(.tab(tabState: tabState)))
-        let viewDesktopSiteItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.ViewDesktopSiteTitleString }
+        let viewDesktopSiteItem = browserConfiguration.menuItems.find { $0.title == Strings.AppMenuViewDesktopSiteTitleString }
         XCTAssertNotNil(viewDesktopSiteItem)
-        let viewMobileSiteItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.ViewMobileSiteTitleString }
+        let viewMobileSiteItem = browserConfiguration.menuItems.find { $0.title == Strings.AppMenuViewMobileSiteTitleString }
         XCTAssertNil(viewMobileSiteItem)
     }
 
     func testMenuConfigurationForViewMobileSiteItemInTab() {
         let tabState = TabState(isPrivate: false, desktopSite: true, isBookmarked: false, url: URL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
         let browserConfiguration = AppMenuConfiguration(appState: appState(.tab(tabState: tabState)))
-        let viewMobileSiteItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.ViewMobileSiteTitleString }
+        let viewMobileSiteItem = browserConfiguration.menuItems.find { $0.title == Strings.AppMenuViewMobileSiteTitleString }
         XCTAssertNotNil(viewMobileSiteItem)
-        let viewDesktopSiteItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.ViewDesktopSiteTitleString }
+        let viewDesktopSiteItem = browserConfiguration.menuItems.find { $0.title == Strings.AppMenuViewDesktopSiteTitleString }
         XCTAssertNil(viewDesktopSiteItem)
     }
 
     func testViewDesktopSiteItemsNotPresentInMenuConfigurationForHomePanels() {
         let homePanelState = HomePanelState(isPrivate: false, selectedIndex: 0)
         let homePanelConfiguration = AppMenuConfiguration(appState: appState(.homePanels(homePanelState: homePanelState)))
-        let viewDesktopSiteItems = homePanelConfiguration.menuItems.find { ($0.title == AppMenuConfiguration.ViewDesktopSiteTitleString || $0.title == AppMenuConfiguration.ViewMobileSiteTitleString) }
+        let viewDesktopSiteItems = homePanelConfiguration.menuItems.find { ($0.title == Strings.AppMenuViewDesktopSiteTitleString || $0.title == Strings.AppMenuViewMobileSiteTitleString) }
         XCTAssertNil(viewDesktopSiteItems)
     }
 
     func testViewDesktopSiteItemsNotPresentInMenuConfigurationInTabTray() {
         let tabTrayState = TabTrayState(isPrivate: false)
         let tabTrayConfiguration = AppMenuConfiguration(appState: appState(.tabTray(tabTrayState: tabTrayState)))
-        let viewDesktopSiteItems = tabTrayConfiguration.menuItems.find { ($0.title == AppMenuConfiguration.ViewDesktopSiteTitleString || $0.title == AppMenuConfiguration.ViewMobileSiteTitleString) }
+        let viewDesktopSiteItems = tabTrayConfiguration.menuItems.find { ($0.title == Strings.AppMenuViewDesktopSiteTitleString || $0.title == Strings.AppMenuViewMobileSiteTitleString) }
         XCTAssertNil(viewDesktopSiteItems)
     }
 
@@ -162,9 +162,9 @@ class MenuTests: XCTestCase {
         let appState = self.appState(.tab(tabState: tabState))
         appState.prefs.setString("http://mozilla.com", forKey: HomePageConstants.HomePageURLPrefKey)
         let browserConfiguration = AppMenuConfiguration(appState: appState)
-        let homePageMenuItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.OpenHomePageTitleString }
+        let homePageMenuItem = browserConfiguration.menuItems.find { $0.title == Strings.AppMenuOpenHomePageTitleString }
         XCTAssertNotNil(homePageMenuItem)
-        let setHomePageMenuItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.SetHomePageTitleString }
+        let setHomePageMenuItem = browserConfiguration.menuItems.find { $0.title == Strings.AppMenuSetHomePageTitleString }
         XCTAssertNil(setHomePageMenuItem)
     }
 
@@ -174,9 +174,9 @@ class MenuTests: XCTestCase {
         appState.prefs.removeObjectForKey(HomePageConstants.HomePageURLPrefKey)
 
         let browserConfiguration = AppMenuConfiguration(appState: appState)
-        let homePageMenuItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.OpenHomePageTitleString }
+        let homePageMenuItem = browserConfiguration.menuItems.find { $0.title == Strings.AppMenuOpenHomePageTitleString }
         XCTAssertNil(homePageMenuItem)
-        let setHomePageMenuItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.SetHomePageTitleString }
+        let setHomePageMenuItem = browserConfiguration.menuItems.find { $0.title == Strings.AppMenuSetHomePageTitleString }
         XCTAssertNotNil(setHomePageMenuItem)
     }
 
@@ -186,11 +186,11 @@ class MenuTests: XCTestCase {
         appState.prefs.setBool(false, forKey: HomePageConstants.HomePageButtonIsInMenuPrefKey)
         
         let browserConfiguration = AppMenuConfiguration(appState: appState)
-        let homePageMenuItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.OpenHomePageTitleString }
+        let homePageMenuItem = browserConfiguration.menuItems.find { $0.title == Strings.AppMenuOpenHomePageTitleString }
         XCTAssertNil(homePageMenuItem)
-        let setHomePageMenuItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.SetHomePageTitleString }
+        let setHomePageMenuItem = browserConfiguration.menuItems.find { $0.title == Strings.AppMenuSetHomePageTitleString }
         XCTAssertNil(setHomePageMenuItem)
-        let sendMenuItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.SharePageTitleString }
+        let sendMenuItem = browserConfiguration.menuItems.find { $0.title == Strings.AppMenuSharePageTitleString }
         XCTAssertNotNil(sendMenuItem)
     }
 
@@ -200,9 +200,9 @@ class MenuTests: XCTestCase {
         appState.prefs.setString("http://mozilla.com", forKey: HomePageConstants.HomePageURLPrefKey)
 
         let browserConfiguration = AppMenuConfiguration(appState: appState)
-        let homePageMenuItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.OpenHomePageTitleString }
+        let homePageMenuItem = browserConfiguration.menuItems.find { $0.title == Strings.AppMenuOpenHomePageTitleString }
         XCTAssertNotNil(homePageMenuItem)
-        let setHomePageMenuItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.SetHomePageTitleString }
+        let setHomePageMenuItem = browserConfiguration.menuItems.find { $0.title == Strings.AppMenuSetHomePageTitleString }
         XCTAssertNil(setHomePageMenuItem)
     }
 
@@ -212,9 +212,9 @@ class MenuTests: XCTestCase {
         appState.prefs.removeObjectForKey(HomePageConstants.HomePageURLPrefKey)
 
         let browserConfiguration = AppMenuConfiguration(appState: appState)
-        let homePageMenuItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.OpenHomePageTitleString }
+        let homePageMenuItem = browserConfiguration.menuItems.find { $0.title == Strings.AppMenuOpenHomePageTitleString }
         XCTAssertNil(homePageMenuItem)
-        let setHomePageMenuItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.SetHomePageTitleString }
+        let setHomePageMenuItem = browserConfiguration.menuItems.find { $0.title == Strings.AppMenuSetHomePageTitleString }
         XCTAssertNil(setHomePageMenuItem)
     }
 
@@ -225,9 +225,9 @@ class MenuTests: XCTestCase {
         appState.prefs.setBool(false, forKey: NoImageModePrefsKey.NoImageModeStatus)
 
         let browserConfiguration = AppMenuConfiguration(appState: appState)
-        let hideImageMenuItem = browserConfiguration.menuItems.find { $0.title == Strings.MenuNoImageModeTurnOnLabel }
+        let hideImageMenuItem = browserConfiguration.menuItems.find { $0.title == Strings.AppMenuNoImageModeTurnOnLabel }
         XCTAssertNotNil(hideImageMenuItem)
-        let showImageMenuItem = browserConfiguration.menuItems.find { $0.title == Strings.MenuNoImageModeTurnOffLabel }
+        let showImageMenuItem = browserConfiguration.menuItems.find { $0.title == Strings.AppMenuNoImageModeTurnOffLabel }
         XCTAssertNil(showImageMenuItem)
     }
 
@@ -237,9 +237,9 @@ class MenuTests: XCTestCase {
         appState.prefs.setBool(true, forKey: NoImageModePrefsKey.NoImageModeStatus)
 
         let browserConfiguration = AppMenuConfiguration(appState: appState)
-        let hideImageMenuItem = browserConfiguration.menuItems.find { $0.title == Strings.MenuNoImageModeTurnOnLabel }
+        let hideImageMenuItem = browserConfiguration.menuItems.find { $0.title == Strings.AppMenuNoImageModeTurnOnLabel }
         XCTAssertNil(hideImageMenuItem)
-        let showImageMenuItem = browserConfiguration.menuItems.find { $0.title == Strings.MenuNoImageModeTurnOffLabel }
+        let showImageMenuItem = browserConfiguration.menuItems.find { $0.title == Strings.AppMenuNoImageModeTurnOffLabel }
         XCTAssertNotNil(showImageMenuItem)
     }
 
@@ -247,21 +247,21 @@ class MenuTests: XCTestCase {
     func testSettingsItemPresentInMenuConfigurationInTab() {
         let tabState = TabState(isPrivate: false, desktopSite: false, isBookmarked: false, url: URL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
         let browserConfiguration = AppMenuConfiguration(appState: appState(.tab(tabState: tabState)))
-        let settingsItem = browserConfiguration.menuItems.find { $0.title == AppMenuConfiguration.SettingsTitleString }
+        let settingsItem = browserConfiguration.menuItems.find { $0.title == Strings.AppMenuSettingsTitleString }
         XCTAssertNotNil(settingsItem)
     }
 
     func testSettingsItemNotPresentInMenuConfigurationInHomePanels() {
         let homePanelState = HomePanelState(isPrivate: false, selectedIndex: 0)
         let homePanelConfiguration = AppMenuConfiguration(appState: appState(.homePanels(homePanelState: homePanelState)))
-        let settingsItem = homePanelConfiguration.menuItems.find { $0.title == AppMenuConfiguration.SettingsTitleString }
+        let settingsItem = homePanelConfiguration.menuItems.find { $0.title == Strings.AppMenuSettingsTitleString }
         XCTAssertNotNil(settingsItem)
     }
 
     func testSettingsItemNotPresentInMenuConfigurationInTabTray() {
         let tabTrayState = TabTrayState(isPrivate: false)
         let tabTrayConfiguration = AppMenuConfiguration(appState: appState(.tabTray(tabTrayState: tabTrayState)))
-        let settingsItem = tabTrayConfiguration.menuItems.find { $0.title == AppMenuConfiguration.SettingsTitleString }
+        let settingsItem = tabTrayConfiguration.menuItems.find { $0.title == Strings.AppMenuSettingsTitleString }
         XCTAssertNotNil(settingsItem)
     }
 
@@ -269,13 +269,13 @@ class MenuTests: XCTestCase {
     func testHomePanelToolbarItemsPresentInMenuConfigurationInTab() {
         let tabState = TabState(isPrivate: false, desktopSite: false, isBookmarked: false, url: URL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
         let browserConfiguration = AppMenuConfiguration(appState: appState(.tab(tabState: tabState)))
-        let topSitesItem = browserConfiguration.menuToolbarItems?.find { $0.title == AppMenuConfiguration.TopSitesTitleString }
+        let topSitesItem = browserConfiguration.menuToolbarItems?.find { $0.title == Strings.AppMenuTopSitesTitleString }
         XCTAssertNotNil(topSitesItem)
-        let bookmarksItem = browserConfiguration.menuToolbarItems?.find { $0.title == AppMenuConfiguration.BookmarksTitleString }
+        let bookmarksItem = browserConfiguration.menuToolbarItems?.find { $0.title == Strings.AppMenuBookmarksTitleString }
         XCTAssertNotNil(bookmarksItem)
-        let historyItem = browserConfiguration.menuToolbarItems?.find { $0.title == AppMenuConfiguration.HistoryTitleString }
+        let historyItem = browserConfiguration.menuToolbarItems?.find { $0.title == Strings.AppMenuHistoryTitleString }
         XCTAssertNotNil(historyItem)
-        let readingListItem = browserConfiguration.menuToolbarItems?.find { $0.title == AppMenuConfiguration.ReadingListTitleString }
+        let readingListItem = browserConfiguration.menuToolbarItems?.find { $0.title == Strings.AppMenuReadingListTitleString }
         XCTAssertNotNil(readingListItem)
     }
 
@@ -283,10 +283,10 @@ class MenuTests: XCTestCase {
         let homePanelState = HomePanelState(isPrivate: false, selectedIndex: 0)
         let homePanelConfiguration = AppMenuConfiguration(appState: appState(.homePanels(homePanelState: homePanelState)))
         let homePanelItems = homePanelConfiguration.menuToolbarItems?.find { menuToolbarItem in
-            let exists = menuToolbarItem.title == AppMenuConfiguration.TopSitesTitleString
-            || menuToolbarItem.title == AppMenuConfiguration.TopSitesTitleString
-            || menuToolbarItem.title == AppMenuConfiguration.TopSitesTitleString
-            || menuToolbarItem.title == AppMenuConfiguration.TopSitesTitleString
+            let exists = menuToolbarItem.title == Strings.AppMenuTopSitesTitleString
+            || menuToolbarItem.title == Strings.AppMenuTopSitesTitleString
+            || menuToolbarItem.title == Strings.AppMenuTopSitesTitleString
+            || menuToolbarItem.title == Strings.AppMenuTopSitesTitleString
             return exists
         }
         XCTAssertNil(homePanelItems)
@@ -295,13 +295,13 @@ class MenuTests: XCTestCase {
     func testHomePanelToolbarItemsPresentInMenuConfigurationInTabTray() {
         let tabTrayState = TabTrayState(isPrivate: false)
         let tabTrayConfiguration = AppMenuConfiguration(appState: appState(.tabTray(tabTrayState: tabTrayState)))
-        let topSitesItem = tabTrayConfiguration.menuToolbarItems?.find { $0.title == AppMenuConfiguration.TopSitesTitleString }
+        let topSitesItem = tabTrayConfiguration.menuToolbarItems?.find { $0.title == Strings.AppMenuTopSitesTitleString }
         XCTAssertNotNil(topSitesItem)
-        let bookmarksItem = tabTrayConfiguration.menuToolbarItems?.find { $0.title == AppMenuConfiguration.BookmarksTitleString }
+        let bookmarksItem = tabTrayConfiguration.menuToolbarItems?.find { $0.title == Strings.AppMenuBookmarksTitleString }
         XCTAssertNotNil(bookmarksItem)
-        let historyItem = tabTrayConfiguration.menuToolbarItems?.find { $0.title == AppMenuConfiguration.HistoryTitleString }
+        let historyItem = tabTrayConfiguration.menuToolbarItems?.find { $0.title == Strings.AppMenuHistoryTitleString }
         XCTAssertNotNil(historyItem)
-        let readingListItem = tabTrayConfiguration.menuToolbarItems?.find { $0.title == AppMenuConfiguration.ReadingListTitleString }
+        let readingListItem = tabTrayConfiguration.menuToolbarItems?.find { $0.title == Strings.AppMenuReadingListTitleString }
         XCTAssertNotNil(readingListItem)
     }
 }

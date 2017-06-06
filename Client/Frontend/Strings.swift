@@ -229,18 +229,6 @@ extension Strings {
     public static let UnableToOpenURLErrorTitle = NSLocalizedString("OpenURL.Error.Title", value: "Cannot Open Page", comment: "Title of the message shown when the user attempts to navigate to an invalid link.")
 }
 
-// Night mode
-extension Strings {
-    public static let MenuNightModeTurnOnLabel = NSLocalizedString("Menu.NightModeTurnOnAction.Label", value: "Night Mode", comment: "Label for the button, displayed in the menu, used to turn night mode on. 'Turn On' is an indication of state, and thus redundant.")
-    public static let MenuNightModeTurnOffLabel = NSLocalizedString("Menu.NightModeTurnOffAction.Label", value: "Night Mode Off", comment: "Label for the button, displayed in the menu, used to turn night mode off. 'Off' is only displayed when the mode is on.")
-}
-
-// No image mode
-extension Strings {
-    public static let MenuNoImageModeTurnOnLabel = NSLocalizedString("Menu.NoImageModeTurnOnAction.Label", value: "Hide Images", comment: "Label for the button, displayed in the menu, used to turn no image mode on.")
-    public static let MenuNoImageModeTurnOffLabel = NSLocalizedString("Menu.NoImageModeTurnOffAction.Label", value: "Show Images", comment: "Label for the button, displayed in the menu, used to turn no image mode off.")
-}
-
 // open in
 extension Strings {
     public static let OpenInDownloadHelperAlertTitle = NSLocalizedString("Downloads.Alert.Title", value: "Firefox Downloads", comment: "The title of the alert box asking the user if they want to use another app to open a file.")
@@ -279,6 +267,38 @@ extension Strings {
 extension Strings {
     public static let ReaderModeAvailableVoiceOverAnnouncement = NSLocalizedString("ReaderMode.Available.VoiceOverAnnouncement", value: "Reader Mode available", comment: "Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available.")
     public static let ReaderModeResetFontSizeAccessibilityLabel = NSLocalizedString("Reset text size", comment: "Accessibility label for button resetting font size in display settings of reader mode")
+}
+
+// QR Code scanner.
+extension Strings {
+    public static let ScanQRCodeViewTitle = NSLocalizedString("ScanQRCode.View.Title", value: "Scan QR Code", comment: "Title for the QR code scanner view.")
+    public static let ScanQRCodeInstructionsLabel = NSLocalizedString("ScanQRCode.Instructions.Label", value: "Align QR code within frame to scan", comment: "Text for the instructions label, displayed in the QR scanner view")
+}
+
+// App menu.
+extension Strings {
+    public static let AppMenuNewTabTitleString = NSLocalizedString("Menu.NewTabAction.Title", tableName: "Menu", value: "New Tab", comment: "Label for the button, displayed in the menu, used to open a new tab")
+    public static let AppMenuNewPrivateTabTitleString = NSLocalizedString("Menu.NewPrivateTabAction.Title", tableName: "Menu", value: "New Private Tab", comment: "Label for the button, displayed in the menu, used to open a new private tab.")
+    public static let AppMenuAddBookmarkTitleString = NSLocalizedString("Menu.AddBookmarkAction.Title", tableName: "Menu", value: "Add Bookmark", comment: "Label for the button, displayed in the menu, used to create a bookmark for the current website.")
+    public static let AppMenuRemoveBookmarkTitleString = NSLocalizedString("Menu.RemoveBookmarkAction.Title", tableName: "Menu", value: "Remove Bookmark", comment: "Label for the button, displayed in the menu, used to delete an existing bookmark for the current website.")
+    public static let AppMenuFindInPageTitleString = NSLocalizedString("Menu.FindInPageAction.Title", tableName: "Menu", value: "Find In Page", comment: "Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page.")
+    public static let AppMenuViewDesktopSiteTitleString = NSLocalizedString("Menu.ViewDekstopSiteAction.Title", tableName: "Menu", value: "Request Desktop Site", comment: "Label for the button, displayed in the menu, used to request the desktop version of the current website.")
+    public static let AppMenuViewMobileSiteTitleString = NSLocalizedString("Menu.ViewMobileSiteAction.Title", tableName: "Menu", value: "Request Mobile Site", comment: "Label for the button, displayed in the menu, used to request the mobile version of the current website.")
+    public static let AppMenuScanQRCodeTitleString = NSLocalizedString("Menu.ScanQRCodeAction.Title", tableName: "Menu", value: "Scan QR Code", comment: "Label for the button, displayed in the menu, used to open the QR code scanner.")
+    public static let AppMenuSettingsTitleString = NSLocalizedString("Menu.OpenSettingsAction.Title", tableName: "Menu", value: "Settings", comment: "Label for the button, displayed in the menu, used to open the Settings menu.")
+    public static let AppMenuCloseAllTabsTitleString = NSLocalizedString("Menu.CloseAllTabsAction.Title", tableName: "Menu", value: "Close All Tabs", comment: "Label for the button, displayed in the menu, used to close all tabs currently open.")
+    public static let AppMenuOpenHomePageTitleString = NSLocalizedString("Menu.OpenHomePageAction.Title", tableName: "Menu", value: "Home", comment: "Label for the button, displayed in the menu, used to navigate to the home page.")
+    public static let AppMenuSetHomePageTitleString = NSLocalizedString("Menu.SetHomePageAction.Title", tableName: "Menu", value: "Set Homepage", comment: "Label for the button, displayed in the menu, used to set the homepage if none is currently set.")
+    public static let AppMenuSharePageTitleString = NSLocalizedString("Menu.SendPageAction.Title", tableName: "Menu", value: "Send", comment: "Label for the button, displayed in the menu, used to open the share dialog.")
+    public static let AppMenuTopSitesTitleString = NSLocalizedString("Menu.OpenTopSitesAction.AccessibilityLabel", tableName: "Menu", value: "Top Sites", comment: "Accessibility label for the button, displayed in the menu, used to open the Top Sites home panel.")
+    public static let AppMenuBookmarksTitleString = NSLocalizedString("Menu.OpenBookmarksAction.AccessibilityLabel", tableName: "Menu", value: "Bookmarks", comment: "Accessibility label for the button, displayed in the menu, used to open the Bbookmarks home panel.")
+    public static let AppMenuHistoryTitleString = NSLocalizedString("Menu.OpenHistoryAction.AccessibilityLabel", tableName: "Menu", value: "History", comment: "Accessibility label for the button, displayed in the menu, used to open the History home panel.")
+    public static let AppMenuReadingListTitleString = NSLocalizedString("Menu.OpenReadingListAction.AccessibilityLabel", tableName: "Menu", value: "Reading List", comment: "Accessibility label for the button, displayed in the menu, used to open the Reading list home panel.")
+    public static let AppMenuButtonAccessibilityLabel = NSLocalizedString("Toolbar.Menu.AccessibilityLabel", value: "Menu", comment: "Accessibility label for the Menu button.")
+    public static let AppMenuNightModeTurnOnLabel = NSLocalizedString("Menu.NightModeTurnOnAction.Label", value: "Night Mode", comment: "Label for the button, displayed in the menu, used to turn night mode on. 'Turn On' is an indication of state, and thus redundant.")
+    public static let AppMenuNightModeTurnOffLabel = NSLocalizedString("Menu.NightModeTurnOffAction.Label", value: "Night Mode Off", comment: "Label for the button, displayed in the menu, used to turn night mode off. 'Off' is only displayed when the mode is on.")
+    public static let AppMenuNoImageModeTurnOnLabel = NSLocalizedString("Menu.NoImageModeTurnOnAction.Label", value: "Hide Images", comment: "Label for the button, displayed in the menu, used to turn no image mode on.")
+    public static let AppMenuNoImageModeTurnOffLabel = NSLocalizedString("Menu.NoImageModeTurnOffAction.Label", value: "Show Images", comment: "Label for the button, displayed in the menu, used to turn no image mode off.")
 }
 
 // MARK: Deprecated Strings (to be removed in next version)
