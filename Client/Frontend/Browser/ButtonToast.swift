@@ -172,3 +172,57 @@ class ButtonToast: UIView {
         dismiss(false)
     }
 }
+
+class FocusPromoButtonToast : ButtonToast {
+
+    override init(labelText: String, descriptionText: String? = nil, buttonText: String, completion:@escaping (_ buttonPressed: Bool) -> Void) {
+        super.init(labelText: labelText, descriptionText: descriptionText, buttonText: buttonText, completion: completion)
+
+        self.snp.remakeConstraints { make in
+            make.height.equalTo(96)
+        }
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func createView(_ labelText: String, descriptionText: String?, buttonText: String) -> UIView {
+        let label = UILabel()
+        label.textColor = UIColor.white
+        label.font = SimpleToastUX.ToastFont
+        label.text = labelText
+        label.lineBreakMode = .byWordWrapping
+        label.numberOfLines = 0
+        toast.addSubview(label)
+
+        let button = HighlightableButton()
+        button.layer.cornerRadius = ButtonToastUX.ToastButtonBorderRadius
+        button.layer.borderWidth = ButtonToastUX.ToastButtonBorderWidth
+        button.layer.borderColor = UIColor.white.cgColor
+        button.setTitle(buttonText, for: UIControlState())
+        button.setTitleColor(self.toast.backgroundColor, for: .highlighted)
+        button.titleLabel?.font = SimpleToastUX.ToastFont
+        button.contentEdgeInsets = UIEdgeInsetsMake(0, 16, 0, 16)
+
+        let recognizer = UITapGestureRecognizer(target: self, action:#selector(ButtonToast.buttonPressed(_:)))
+        button.addGestureRecognizer(recognizer)
+        toast.addSubview(button)
+
+        toast.backgroundColor = UIColor.init(red: 144/255, green: 19/255, blue: 254/255, alpha: 0.4)
+
+        label.snp.makeConstraints { (make) in
+            make.centerX.equalTo(toast)
+            make.top.equalTo(toast).offset(16)
+        }
+
+        button.snp.makeConstraints { (make) in
+            make.centerX.equalTo(toast)
+            make.top.equalTo(label.snp.bottom).offset(14)
+            make.height.equalTo(33)
+            make.bottom.equalTo(toast).inset(17)
+        }
+
+        return toast
+    }
+}

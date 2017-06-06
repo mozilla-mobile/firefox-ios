@@ -281,6 +281,12 @@ extension Strings {
     public static let ReaderModeResetFontSizeAccessibilityLabel = NSLocalizedString("Reset text size", comment: "Accessibility label for button resetting font size in display settings of reader mode")
 }
 
+// Leanplum Strings.
+extension Strings {
+    public static let FocusPromoString = NSLocalizedString("FocusPromo.Toast.LabelText", value: "Private browsing and nothing else.", comment: "Message for Leanplum Focus promo.")
+    public static let FocusPromoButtonString = NSLocalizedString("FocusPromo.Toast.ButtonText", value: "Get Focus", comment: "Button text for Leanplum Focus promo.")
+}
+
 // MARK: Deprecated Strings (to be removed in next version)
 private let logOut = NSLocalizedString("Log Out", comment: "Button in settings screen to disconnect from your account")
 private let logOutQuestion = NSLocalizedString("Log Out?", comment: "Title of the 'log out firefox account' alert")
