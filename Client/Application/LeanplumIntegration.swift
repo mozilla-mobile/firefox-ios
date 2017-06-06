@@ -38,6 +38,7 @@ enum UserAttributeKeyName: String {
     case alternateMailClient = "Alternate Mail Client Installed"
     case focusInstalled = "Focus Installed"
     case klarInstalled = "Klar Installed"
+    case signedInSync = "Signed In Sync"
 }
 
 private enum SupportedLocales: String {
@@ -109,6 +110,7 @@ class LeanplumIntegration {
         userAttributesDict[UserAttributeKeyName.alternateMailClient.rawValue] = "mailto:"
         userAttributesDict[UserAttributeKeyName.focusInstalled.rawValue] = !canInstallFocus()
         userAttributesDict[UserAttributeKeyName.klarInstalled.rawValue] = !canInstallKlar()
+        userAttributesDict[UserAttributeKeyName.signedInSync.rawValue] = profile?.hasAccount()
 
         if let mailtoScheme = self.profile?.prefs.stringForKey(PrefsKeys.KeyMailToOption), mailtoScheme != "mailto:" {
             userAttributesDict["Alternate Mail Client Installed"] = mailtoScheme
