@@ -217,6 +217,43 @@ class TabManagerTests: XCTestCase {
         delegate.verify("Not all delegate methods were called")
     }
 
+    func testDeletePrivateTabsOnExit() {
+        //setup
+        let profile = TabManagerMockProfile()
+        let manager = TabManager(prefs: profile.prefs, imageStore: nil)
+        profile.prefs.setBool(true, forKey: "settings.closePrivateTabs")
+
+        // create one private and one normal tab
+        let tab = manager.addTab()
+        manager.selectTab(tab)
+        manager.selectTab(manager.addTab(isPrivate: true))
+
+        XCTAssertEqual(manager.selectedTab?.isPrivate, true, "The selected tab should be the private tab")
+        XCTAssertEqual(manager.privateTabs.count, 1, "There should only be one private tab")
+
+        manager.selectTab(tab)
+        XCTAssertEqual(manager.privateTabs.count, 0, "If the normal tab is selected the private tab should have been deleted")
+        XCTAssertEqual(manager.normalTabs.count, 1, "The regular tab should stil be around")
+
+        manager.selectTab(manager.addTab(isPrivate: true))
+        XCTAssertEqual(manager.privateTabs.count, 1, "There should be one new private tab")
+        manager.willSwitchTabMode()
+        XCTAssertEqual(manager.privateTabs.count, 0, "After willSwitchTabMode there should be no more private tabs")
+
+        manager.selectTab(manager.addTab(isPrivate: true))
+        manager.selectTab(manager.addTab(isPrivate: true))
+        XCTAssertEqual(manager.privateTabs.count, 2, "Private tabs should not be deleted when another one is added")
+        manager.selectTab(manager.addTab())
+        XCTAssertEqual(manager.privateTabs.count, 0, "But once we add a normal tab we've switched out of private mode. Private tabs should be deleted")
+        XCTAssertEqual(manager.normalTabs.count, 2, "The original normal tab and the new one should both still exist")
+
+        profile.prefs.setBool(false, forKey: "settings.closePrivateTabs")
+        manager.selectTab(manager.addTab(isPrivate: true))
+        manager.selectTab(tab)
+        XCTAssertEqual(manager.selectedTab?.isPrivate, false, "The selected tab should not be private")
+        XCTAssertEqual(manager.privateTabs.count, 1, "If the flag is false then private tabs should still exist")
+    }
+
     func testDeleteNonSelectedTab() {
         let profile = TabManagerMockProfile()
         let manager = TabManager(prefs: profile.prefs, imageStore: nil)

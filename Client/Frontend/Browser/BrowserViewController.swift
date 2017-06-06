@@ -3504,12 +3504,6 @@ extension BrowserViewController: TopTabsDelegate {
             return
         }
         urlBar.leaveOverlayMode()
-        
-        if selectedTab.isPrivate {
-            if profile.prefs.boolForKey("settings.closePrivateTabs") ?? false {
-                tabManager.removeAllPrivateTabsAndNotify(false)
-            }
-        }
     }
     
     func topTabsDidChangeTab() {
