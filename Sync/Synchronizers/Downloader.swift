@@ -14,6 +14,7 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
     let client: Sync15CollectionClient<T>
     let collection: String
     let prefs: Prefs
+    let batchingState: BatchingStateMachine
 
     var batch: [Record<T>] = []
 
@@ -41,6 +42,7 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
         self.collection = collection
         let branchName = "downloader." + collection + "."
         self.prefs = basePrefs.branch(branchName)
+        self.batchingState = BatchingStateMachine(prefs: self.prefs)
 
         log.info("Downloader configured with prefs '\(self.prefs.getBranchPrefix())'.")
     }
@@ -59,6 +61,8 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
         prefs.removeObjectForKey("offsetNewer")
         prefs.removeObjectForKey("baseTimestamp")
         prefs.removeObjectForKey("lastModified")
+
+        BatchingStateMachine.resetFromPrefs(prefs)
     }
 
     /**
@@ -89,7 +93,7 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
     // Set after each batch, from record timestamps.
     var baseTimestamp: Timestamp {
         get {
-            return self.prefs.timestampForKey("baseTimestamp") ?? 0
+            return self.prefs.timestampForKey("baseTimestamp") ?? Date.now()
         }
         set (value) {
             self.prefs.setTimestamp(value, forKey: "baseTimestamp")
@@ -106,16 +110,6 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
         }
     }
 
-    // Set after we've fetched the first, most recent records.
-    var fetchedRecent: Bool {
-        get {
-            return self.prefs.boolForKey("fetchedRecent") ?? false
-        }
-        set (value) {
-            self.prefs.setBool(value, forKey: "fetchedRecent")
-        }
-    }
-
     /**
      * Call this when a significant structural server change has been detected.
      */
@@ -125,6 +119,7 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
         self.nextFetchParameters = nil
         self.batch = []
         self._advance = nil
+        self.batchingState.reset()
         return succeed()
     }
 
@@ -166,8 +161,8 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
         let (offset, since) = self.fetchParameters()
         log.debug("Fetching newer=\(since), offset=\(offset ?? "nil").")
 
-        let sort: SortOption = fetchedRecent ? .OldestFirst : .NewestFirst
-        let fetch = self.client.getSince(since, sort: sort, limit: limit, offset: offset)
+        let (sort, direction) = batchingState.fetchingParameters
+        let fetch = self.client.getSince(since, sort: sort, limit: limit, offset: offset, directionQuery: direction)
 
         func handleFailure(_ err: MaybeErrorType) -> Deferred<Maybe<DownloadEndState>> {
             log.debug("Handling failure.")
@@ -190,15 +185,8 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
             // Queue up our metadata advance. We wait until the consumer has fetched
             // and processed this batch; they'll call .advance() on success.
             self._advance = {
-                // Don't advance our metadata if we are fetching the most recent items in the first
-                // batch download request.
-                guard self.fetchedRecent else {
-                    // Don't shift the offset at all since we only want to grab the first set
-                    // of most recent items. Just return and start the next batch from the end (oldest).
-                    self.fetchedRecent = true
-                    return
-                }
-                
+                self.batchingState.advance()
+
                 // Shift to the next offset. This might be nil, in which case… fine!
                 // Note that we preserve the previous 'newer' value from the offset or the original fetch,
                 // even as we update baseTimestamp.
@@ -206,11 +194,20 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
 
                 // If there are records, advance to just before the timestamp of the last.
                 // If our next fetch with X-Weave-Next-Offset fails, at least we'll start here.
-                //
-                // This approach is only valid if we're fetching oldest-first.
                 if let newBase = responseModified {
-                    log.debug("Advancing baseTimestamp to \(newBase) - 1")
-                    self.baseTimestamp = newBase - 1
+                    // The base timestamp we use depends on what state we're in.
+                    var newBaseTimestamp: Timestamp
+                    switch self.batchingState.current {
+                    // To get the most recent we'll need to provide an up-to-date timestamp.
+                    case .mostRecentSet: newBaseTimestamp = Date.now()
+                    // To get the oldest, we need to make sure we start from 0.
+                    case .oldestSet: newBaseTimestamp = 0
+                    /// When backfilling, business as usual - step forwards as per the response modified time.
+                    case .backfillFromOldest: newBaseTimestamp = newBase - 1
+                    }
+                    
+                    log.debug("Advancing baseTimestamp to \(newBase)")
+                    self.baseTimestamp = newBaseTimestamp
                 }
 
                 if nextOffset == nil {
@@ -240,6 +237,77 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
             }
             return handleSuccess(response)
         }
+    }
+}
+
+enum BatchingState: Int32 {
+    case mostRecentSet = 1
+    case oldestSet = 2
+    case backfillFromOldest = 3
+
+    var sort: SortOption {
+        switch self {
+        case .mostRecentSet: return .NewestFirst
+        case .oldestSet: return .OldestFirst
+        case .backfillFromOldest: return .OldestFirst
+        }
+    }
+
+    var direction: String {
+        switch self {
+        case .mostRecentSet: return "older"
+        case .oldestSet: return "older"
+        case .backfillFromOldest: return "newer"
+        }
+    }
+
+    var asTuple: (SortOption, String) {
+        return (self.sort, self.direction)
+    }
+}
+
+// A mini state machine to keep track of the sorting/direction of how we batch
+class BatchingStateMachine {
+    let prefs: Prefs
+
+    private(set) var current: BatchingState {
+        get {
+            let rawValue = self.prefs.intForKey("batchingState") ?? BatchingState.mostRecentSet.rawValue
+            return BatchingState(rawValue: rawValue) ?? .mostRecentSet
+        }
+        set(value) {
+            self.prefs.setInt(value.rawValue, forKey: "batchingState")
+        }
+    }
+
+    var fetchingParameters: (SortOption, String) {
+        return current.asTuple
+    }
+    
+    init(prefs: Prefs) {
+        self.prefs = prefs
+    }
+
+    func advance() {
+        // Short circuit if we are already backfilling.
+        guard current != .backfillFromOldest else {
+            return
+        }
+
+        // Currently we change at every advance but this could be extended for more sophisticated batching strategies.
+        if current == .mostRecentSet {
+            current = .oldestSet
+        } else if current == .oldestSet {
+            current = .backfillFromOldest
+        }
+    }
+
+    func reset() {
+        current = .mostRecentSet
+    }
+
+    static func resetFromPrefs(_ prefs: Prefs) {
+        prefs.removeObjectForKey("batchingState")
     }
 }
 

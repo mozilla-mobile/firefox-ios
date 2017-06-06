@@ -61,10 +61,12 @@ class DownloadTests: XCTestCase {
         XCTAssertEqual(1, records1.count)
         XCTAssertEqual(guid1, records1[0].id)
         batcher.advance()
+        // Don't advance the base timestamp if we're only pulling in the first, recent batch.
+        XCTAssertNotEqual(0, batcher.baseTimestamp)
 
         // Fetching again yields nothing, because the collection hasn't
         // changed.
-        XCTAssertEqual(batcher.go(ic1, limit: 1).value.successValue, DownloadEndState.complete)
+        XCTAssertEqual(batcher.go(ic1, limit: 1).value.successValue, DownloadEndState.noNewData)
 
         // More records. Start again.
         let _ = batcher.reset().value
@@ -76,14 +78,14 @@ class DownloadTests: XCTestCase {
         XCTAssertEqual(fetch2.successValue, DownloadEndState.incomplete)
         let records2 = batcher.retrieve()
         XCTAssertEqual(1, records2.count)
-        XCTAssertEqual(guid1, records2[0].id)
+        XCTAssertEqual(guid2, records2[0].id)
         batcher.advance()
 
         let fetch3 = batcher.go(ic2, limit: 1).value
         XCTAssertEqual(fetch3.successValue, DownloadEndState.complete)
         let records3 = batcher.retrieve()
         XCTAssertEqual(1, records3.count)
-        XCTAssertEqual(guid2, records3[0].id)
+        XCTAssertEqual(guid1, records3[0].id)
         batcher.advance()
 
         let fetch4 = batcher.go(ic2, limit: 1).value

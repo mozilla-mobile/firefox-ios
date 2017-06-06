@@ -753,7 +753,7 @@ open class Sync15CollectionClient<T: CleartextPayloadJSON> {
      *
      * Only non-JSON and malformed envelopes will be dropped.
      */
-    open func getSince(_ since: Timestamp, sort: SortOption?=nil, limit: Int?=nil, offset: String?=nil) -> Deferred<Maybe<StorageResponse<[Record<T>]>>> {
+    open func getSince(_ since: Timestamp, sort: SortOption?=nil, limit: Int?=nil, offset: String?=nil, directionQuery: String = "newer") -> Deferred<Maybe<StorageResponse<[Record<T>]>>> {
         let deferred = Deferred<Maybe<StorageResponse<[Record<T>]>>>(defaultQueue: client.resultQueue)
 
         // Fills the Deferred for us.
@@ -763,7 +763,7 @@ open class Sync15CollectionClient<T: CleartextPayloadJSON> {
 
         var params: [URLQueryItem] = [
             URLQueryItem(name: "full", value: "1"),
-            URLQueryItem(name: "newer", value: millisecondsToDecimalSeconds(since)),
+            URLQueryItem(name: directionQuery, value: millisecondsToDecimalSeconds(since)),
         ]
 
         if let offset = offset {
