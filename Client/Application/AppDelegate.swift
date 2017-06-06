@@ -337,6 +337,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         } else {
             self.browserViewController.openBlankNewTab(isPrivate: isPrivate)
         }
+
+        LeanplumIntegration.sharedInstance.track(eventName: .openedNewTab, withInfo: "Source: External App or Extension")
     }
 
     func application(_ application: UIApplication, shouldAllowExtensionPointIdentifier extensionPointIdentifier: UIApplicationExtensionPointIdentifier) -> Bool {
