@@ -9,7 +9,7 @@ import SnapKit
 private struct ActionOverlayTableViewUX {
     static let MaxWidth: CGFloat = 375
     static let Padding: CGFloat = 14
-    static let HeaderHeight: CGFloat = 74
+    static let HeaderHeight: CGFloat = 80
     static let RowHeight: CGFloat = 56
     static let LabelColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.black : UIColor(rgb: 0x353535)
     static let DescriptionLabelColor = UIColor(colorString: "919191")
@@ -17,7 +17,7 @@ private struct ActionOverlayTableViewUX {
     static let CornerRadius: CGFloat = 3
     static let BorderWidth: CGFloat = 0.5
     static let BorderColor = UIColor(white: 0, alpha: 0.1)
-    static let SiteImageViewSize = 48
+    static let SiteImageViewSize = 52
     static let IconSize = CGSize(width: 32, height: 32)
 }
 
@@ -181,7 +181,7 @@ class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
 
     lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontMediumBold
+        titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontLargeBold
         titleLabel.textColor = ActionOverlayTableViewUX.LabelColor
         titleLabel.textAlignment = .left
         titleLabel.numberOfLines = 2
@@ -190,7 +190,7 @@ class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
 
     lazy var descriptionLabel: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontDescriptionActivityStream
+        titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontMedium
         titleLabel.textColor = ActionOverlayTableViewUX.DescriptionLabelColor
         titleLabel.textAlignment = .left
         titleLabel.numberOfLines = 1

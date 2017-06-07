@@ -12,7 +12,7 @@ struct ActionOverlayTableViewCellUX {
     static let CellSideOffset = 20
     static let TitleLabelOffset = 10
     static let CellTopBottomOffset = 12
-    static let StatusIconSize = 24
+    static let StatusIconSize = 28
     static let SelectedOverlayColor = UIColor(white: 0.0, alpha: 0.25)
     static let CornerRadius: CGFloat = 3
 }
@@ -20,7 +20,8 @@ struct ActionOverlayTableViewCellUX {
 class ActionOverlayTableViewCell: UITableViewCell {
     lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontMedium
+        titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontLarge
+        titleLabel.minimumScaleFactor = 0.8 // Scale the font if we run out of space
         titleLabel.textColor = ActionOverlayTableViewCellUX.LabelColor
         titleLabel.textAlignment = .left
         titleLabel.numberOfLines = 1
