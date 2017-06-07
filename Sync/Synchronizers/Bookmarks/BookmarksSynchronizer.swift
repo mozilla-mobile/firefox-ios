@@ -113,10 +113,11 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
             }
         })
 
+        statsSession.start()
+        
         let doMirror = mirrorer.go(info: info, greenLight: greenLight)
         let run: SyncResult
 
-        statsSession.start()
         if !AppConstants.shouldMergeBookmarks {
             run = doMirror >>== { result in
                 // Just validate to report statistics.
