@@ -212,7 +212,7 @@ open class BrowserProfile: Profile {
     weak fileprivate var app: UIApplication?
 
     let db: BrowserDB
-    let loginsDB: BrowserDB
+    let loginsDB: BrowserDB?
 
     private static var loginsKey: String? {
         let key = "sqlcipher.key.logins.db"
@@ -256,7 +256,11 @@ open class BrowserProfile: Profile {
         let isNewProfile = !files.exists("")
 
         // Setup our database handles
-        self.loginsDB = BrowserDB(filename: "logins.db", secretKey: BrowserProfile.loginsKey, files: files)
+
+        // We almost certainly don't want to be accessing the logins.db when in an extension, so let's avoid
+        // corrupting it by not opening it at all.
+        self.loginsDB = app != nil ? BrowserDB(filename: "logins.db", secretKey: BrowserProfile.loginsKey, files: files) : nil
+
         self.db = BrowserDB(filename: "browser.db", files: files)
         self.db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
 
@@ -308,7 +312,7 @@ open class BrowserProfile: Profile {
         isShutdown = false
         
         db.reopenIfClosed()
-        loginsDB.reopenIfClosed()
+        loginsDB?.reopenIfClosed()
     }
 
     func shutdown() {
@@ -316,7 +320,7 @@ open class BrowserProfile: Profile {
         isShutdown = true
 
         db.forceClose()
-        loginsDB.forceClose()
+        loginsDB?.forceClose()
     }
 
     @objc
@@ -499,7 +503,7 @@ open class BrowserProfile: Profile {
     }
 
     lazy var logins: BrowserLogins & SyncableLogins & ResettableSyncStorage = {
-        return SQLiteLogins(db: self.loginsDB)
+        return SQLiteLogins(db: self.loginsDB!)
     }()
 
     lazy var isChinaEdition: Bool = {
