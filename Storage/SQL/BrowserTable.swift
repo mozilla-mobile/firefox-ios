@@ -243,8 +243,8 @@ open class BrowserTable: Table {
         "CREATE TABLE IF NOT EXISTS \(TablePinnedTopSites) (" +
             "historyID INTEGER, " +
             "url TEXT NOT NULL UNIQUE, " +
-            "title TEXT NOT NULL, " +
-            "guid TEXT NOT NULL UNIQUE, " +
+            "title TEXT, " +
+            "guid TEXT, " +
             "pinDate REAL " +
         ")"
 

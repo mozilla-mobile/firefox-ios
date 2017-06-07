@@ -149,10 +149,15 @@ extension SQLiteHistory: BrowserHistory {
 
     public func addPinnedTopSite(_ site: Site) -> Success { // needs test
         let now = Date.now()
-        guard let siteID = site.id else {
+        guard let guid = site.guid, let host = (site.url as String).asURL?.normalizedHost else {
             return deferMaybe(DatabaseError(description: "Invalid site \(site.url)"))
         }
-        return db.run([("INSERT OR IGNORE INTO \(TablePinnedTopSites)(url, pinDate, title, historyID, guid) VALUES (?,?,?,?,?)", [site.url, now, site.title, siteID, site.guid])])
+
+        // Prevent the pinned site from being used in topsite calculations
+        // We dont have to worry about this when removing a pin because the assumption is that a user probably doesnt want it being recommended as a topsite either
+        return self.removeHostFromTopSites(host) >>== {
+            return self.db.run([("INSERT OR REPLACE INTO \(TablePinnedTopSites)(url, pinDate, title, historyID, guid) VALUES (?,?,?,?,?)", [site.url, now, site.title, site.id, guid])])
+        }
     }
 
     public func removeHostFromTopSites(_ host: String) -> Success {
