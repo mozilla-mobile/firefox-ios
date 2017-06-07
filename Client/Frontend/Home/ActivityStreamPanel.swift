@@ -641,7 +641,7 @@ extension ActivityStreamPanel: DataObserverDelegate {
             self.hideFromHighlights(site)
         })
 
-        let pinTopSite = ActionOverlayTableViewAction(title: "Pin TopSite", iconString: "action_share", handler: { action in
+        let pinTopSite = ActionOverlayTableViewAction(title: "Pin TopSite", iconString: "action_pin", handler: { action in
             self.pinTopSite(site)
         })
 
