@@ -477,7 +477,7 @@ class ASHorizontalScrollCellManager: NSObject, UICollectionViewDelegate, UIColle
 
     func numberOfHorizontalItems() -> Int {
         // The number of items to show per row.
-        if UIDevice.current.orientation == .landscapeLeft || UIDevice.current.orientation == .landscapeRight {
+        if UIInterfaceOrientationIsLandscape(UIApplication.shared.statusBarOrientation) {
             return 8
         } else if UIDevice.current.userInterfaceIdiom == .pad {
             return 6
