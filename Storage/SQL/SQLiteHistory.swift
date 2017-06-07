@@ -470,7 +470,7 @@ extension SQLiteHistory: BrowserHistory {
         "LIMIT \(limit)",
         ].joined(separator: " ")
         
-        let factory = SQLiteHistory.basicHistoryColumnFactory
+        let factory = includeIcon ? SQLiteHistory.iconHistoryColumnFactory : SQLiteHistory.basicHistoryColumnFactory
         return db.runQuery(sql, args: args, factory: factory)
     }
 
