@@ -5,6 +5,7 @@
 import Foundation
 import AVFoundation
 import SnapKit
+import Shared
 
 private struct QRCodeViewControllerUX {
     static let navigationBarBackgroundColor = UIColor.black
@@ -35,7 +36,7 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
     private let scanBorder: UIImageView = UIImageView(image: UIImage(named: "qrcode-scanBorder"))
     private lazy var instructionsLabel: UILabel = {
         let label = UILabel()
-        label.text = NSLocalizedString("Align QR Code within frame to scan", comment: "Text for the Label, displayed in the QRCodeViewController")
+        label.text = Strings.ScanQRCodeInstructionsLabel
         label.textColor = UIColor.white
         label.textAlignment = NSTextAlignment.center
         return label
@@ -49,7 +50,7 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.title = NSLocalizedString("QR Code", comment: "Title for the navigationItem")
+        self.navigationItem.title = Strings.ScanQRCodeViewTitle
 
         // Setup the NavigationBar
         self.navigationController?.navigationBar.barTintColor = QRCodeViewControllerUX.navigationBarBackgroundColor
