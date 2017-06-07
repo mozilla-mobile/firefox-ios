@@ -102,6 +102,7 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         coordinator.animate(alongsideTransition: {context in
+            self.presentedViewController?.dismiss(animated: true, completion: nil)
             self.collectionViewLayout.invalidateLayout()
             self.collectionView?.reloadData()
         }, completion: nil)
@@ -559,14 +560,14 @@ extension ActivityStreamPanel: DataObserverDelegate {
             pingSource = .HighlightsIntro
         }
 
-        let openInNewTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewTabContextMenuTitle, iconString: "action_new_tab") { action in
+        let openInNewTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewTabContextMenuTitle, iconString: "") { action in
             self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
             self.telemetry.reportEvent(.NewTab, source: pingSource, position: index)
 
             LeanplumIntegration.sharedInstance.track(eventName: .openedNewTab, withInfo: "Source: Activity Stream Long Press Context Menu")
         }
 
-        let openInNewPrivateTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "action_new_private_tab") { action in
+        let openInNewPrivateTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "") { action in
             self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
         }
 
