@@ -118,7 +118,7 @@ private let log = Logger.syncLogger
  * We rely on SQLiteHistory having initialized the favicon table first.
  */
 open class BrowserTable: Table {
-    static let DefaultVersion = 25    // Bug 1358154.
+    static let DefaultVersion = 25    // Bug 1370824.
 
     // TableInfo fields.
     var name: String { return "BROWSER" }
