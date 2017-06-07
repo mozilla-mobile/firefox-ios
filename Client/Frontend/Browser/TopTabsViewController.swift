@@ -291,7 +291,7 @@ extension TopTabsViewController: UICollectionViewDataSource {
         
         if tab.displayTitle.isEmpty {
             if tab.webView?.url?.baseDomain?.contains("localhost") ?? true {
-                tabCell.titleText.text = AppMenuConfiguration.NewTabTitleString
+                tabCell.titleText.text = Strings.AppMenuNewTabTitleString
             } else {
                 tabCell.titleText.text = tab.webView?.url?.absoluteDisplayString
             }
