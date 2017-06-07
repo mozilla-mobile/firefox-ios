@@ -1,4 +1,4 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
+ /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
@@ -1426,6 +1426,95 @@ class TestSQLiteHistory: XCTestCase {
         waitForExpectations(timeout: 10.0) { error in
             return
         }
+    }
+
+    func testPinnedTopSites() {
+        let db = BrowserDB(filename: "browser.db", files: files)
+        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
+        let prefs = MockProfilePrefs()
+        let history = SQLiteHistory(db: db, prefs: prefs)
+
+        history.setTopSitesCacheSize(20)
+        history.clearTopSitesCache().succeeded()
+        history.clearHistory().succeeded()
+
+        // add 2 sites to pinned topsite
+        // get pinned site and make sure it exists in the right order
+        // remove pinned sites
+        // make sure pinned sites dont exist
+
+        // create pinned sites.
+        let site1 = Site(url: "http://s\(1)ite\(1).com/foo", title: "A \(1)")
+        site1.id = 1
+        site1.guid = "abc\(1)def"
+        addVisitForSite(site1, intoHistory: history, from: .local, atTime: Date.now())
+        let site2 = Site(url: "http://s\(2)ite\(2).com/foo", title: "A \(2)")
+        site2.id = 2
+        site2.guid = "abc\(2)def"
+        addVisitForSite(site2, intoHistory: history, from: .local, atTime: Date.now())
+
+
+        let expectation = self.expectation(description: "First.")
+        func done() -> Success {
+            expectation.fulfill()
+            return succeed()
+        }
+
+        func addPinnedSites() -> Success {
+            return history.addPinnedTopSite(site1) >>== {
+                return history.addPinnedTopSite(site2)
+            }
+        }
+
+        func checkPinnedSites() -> Success {
+            return history.getPinnedTopSites() >>== { pinnedSites in
+                XCTAssertEqual(pinnedSites.count, 2)
+                XCTAssertEqual(pinnedSites[0]!.url, site2.url)
+                XCTAssertEqual(pinnedSites[1]!.url, site1.url, "The older pinned site should be last")
+                return succeed()
+            }
+        }
+
+        func removePinnedSites() -> Success {
+            return history.removeFromPinnedTopSites(site2) >>== {
+                return history.getPinnedTopSites() >>== { pinnedSites in
+                    XCTAssertEqual(pinnedSites.count, 1, "There should only be one pinned site")
+                    XCTAssertEqual(pinnedSites[0]!.url, site1.url, "Site2 should be the only pin left")
+                    return succeed()
+                }
+            }
+        }
+
+        func dupePinnedSite() -> Success {
+            return history.addPinnedTopSite(site1) >>== {
+                return history.getPinnedTopSites() >>== { pinnedSites in
+                    XCTAssertEqual(pinnedSites.count, 1, "There should not be a dupe")
+                    XCTAssertEqual(pinnedSites[0]!.url, site1.url, "Site2 should be the only pin left")
+                    return succeed()
+                }
+            }
+        }
+
+        func removeHistory() -> Success {
+            return history.clearHistory() >>== {
+                return history.getPinnedTopSites() >>== { pinnedSites in
+                    XCTAssertEqual(pinnedSites.count, 1, "Pinned sites should exist after a history clear")
+                    return succeed()
+                }
+            }
+        }
+
+        addPinnedSites()
+            >>> checkPinnedSites
+            >>> removePinnedSites
+            >>> dupePinnedSite
+            >>> removeHistory
+            >>> done
+
+        waitForExpectations(timeout: 10.0) { error in
+            return
+        }
+
     }
 }
 

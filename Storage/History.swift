@@ -37,6 +37,11 @@ public protocol BrowserHistory {
     func clearTopSitesCache() -> Success
     @discardableResult func refreshTopSitesCache() -> Success
     func areTopSitesDirty(withLimit limit: Int) -> Deferred<Maybe<Bool>>
+
+    // Pinning top sites
+    func removeFromPinnedTopSites(_ site: Site) -> Success
+    func addPinnedTopSite(_ site: Site) -> Success
+    func getPinnedTopSites() -> Deferred<Maybe<Cursor<Site>>>
 }
 
 /**

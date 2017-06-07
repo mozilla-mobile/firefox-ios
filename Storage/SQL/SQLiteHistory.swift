@@ -136,6 +136,25 @@ extension SQLiteHistory: BrowserHistory {
         return deferMaybe(DatabaseError(description: "Invalid url for site \(site.url)"))
     }
 
+    public func removeFromPinnedTopSites(_ site: Site) -> Success {
+        return db.run([("DELETE FROM \(TablePinnedTopSites) where url = ?", [site.url])])
+    }
+
+    public func getPinnedTopSites() -> Deferred<Maybe<Cursor<Site>>> {
+        let sql = "SELECT * from  \(TablePinnedTopSites) " +
+        "LEFT OUTER JOIN view_history_id_favicon on historyID = view_history_id_favicon.id ORDER BY pinDate DESC"
+        return db.runQuery(sql, args: [], factory: SQLiteHistory.iconHistoryMetadataColumnFactory)
+    }
+
+
+    public func addPinnedTopSite(_ site: Site) -> Success { // needs test
+        let now = Date.now()
+        guard let siteID = site.id else {
+            return deferMaybe(DatabaseError(description: "Invalid site \(site.url)"))
+        }
+        return db.run([("INSERT OR IGNORE INTO \(TablePinnedTopSites)(url, pinDate, title, historyID, guid) VALUES (?,?,?,?,?)", [site.url, now, site.title, siteID, site.guid])])
+    }
+
     public func removeHostFromTopSites(_ host: String) -> Success {
         return db.run([("UPDATE \(TableDomains) set showOnTopSites = 0 WHERE domain = ?", [host])])
             >>> { return self.refreshTopSitesCache() }
