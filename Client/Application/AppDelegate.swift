@@ -782,11 +782,12 @@ extension AppDelegate {
                 return URL(string: tabURL)
             }
 
-            for url in receivedURLs {
-                browserViewController.switchToTabForURLOrOpen(url, isPrivileged: false)
-            }
-
             if receivedURLs.count > 0 {
+                DispatchQueue.main.async {
+                    for url in receivedURLs {
+                        self.browserViewController.switchToTabForURLOrOpen(url, isPrivileged: false)
+                    }
+                }
                 return completionHandler(.newData)
             }
         }

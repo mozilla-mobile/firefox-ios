@@ -10,8 +10,10 @@ import UserNotifications
 class NotificationService: UNNotificationServiceExtension {
     var display: SyncDataDisplay!
     lazy var profile: ExtensionProfile = {
-        NSLog("APNS ExtensionProfile being created")
-        return ExtensionProfile(localName: "profile")
+        NSLog("APNS ExtensionProfile being created…")
+        let profile = ExtensionProfile(localName: "profile")
+        NSLog("APNS ExtensionProfile … now created")
+        return profile
     }()
 
     override func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
@@ -29,21 +31,26 @@ class NotificationService: UNNotificationServiceExtension {
         let handler = FxAPushMessageHandler(with: profile)
 
         handler.handle(userInfo: userInfo).upon {_ in
-            self.display.displayNotification(true)
+            self.finished(cleanly: true)
         }
     }
-    
+
+    func finished(cleanly: Bool) {
+        profile.shutdown()      
+        display.displayNotification(cleanly)
+    }
+
     override func serviceExtensionTimeWillExpire() {
         // Called just before the extension will be terminated by the system.
         // Use this as an opportunity to deliver your "best attempt" at modified content, otherwise the original push payload will be used.
-        display?.displayNotification(false)
+        finished(cleanly: false)
     }
 }
 
 class SyncDataDisplay {
     var contentHandler: ((UNNotificationContent) -> Void)
     var notificationContent: UNMutableNotificationContent
-    var sentTabs: [ShareItem]
+    var sentTabs: [SentTab]
 
     init(content: UNMutableNotificationContent, contentHandler: @escaping (UNNotificationContent) -> Void) {
         self.contentHandler = contentHandler
@@ -56,13 +63,12 @@ class SyncDataDisplay {
 
         // Add the tabs we've found to userInfo, so that the AppDelegate 
         // doesn't have to do it again.
-        let serializedTabs = sentTabs.flatMap { shareItem in
+        let serializedTabs = sentTabs.flatMap { t -> NSDictionary? in
             return [
-                "title": shareItem.title,
-                "url": shareItem.url,
-            ]
-        }
-
+                "title": t.title,
+                "url": t.url,
+                ] as NSDictionary
+            } as NSArray
         userInfo["sentTabs"] = serializedTabs
 
         userInfo["didFinish"] = didFinish
@@ -84,8 +90,7 @@ class SyncDataDisplay {
                 notificationContent.body = "Tap to open"
             } else {
                 let tab = sentTabs[0]
-                let title = tab.title ?? "a tab"
-                notificationContent.title = "Tap to open \(title)"
+                notificationContent.title = "Tap to open \(tab.title)"
                 notificationContent.body = "\(tab.url)"
             }
         default:
@@ -100,7 +105,12 @@ class SyncDataDisplay {
 extension SyncDataDisplay: SyncDelegate {
     func displaySentTabForURL(_ URL: URL, title: String) {
         if URL.isWebPage() {
-            sentTabs.append(ShareItem(url: URL.absoluteString, title: title, favicon: nil))
+            sentTabs.append(SentTab(url: URL.absoluteString, title: title))
         }
     }
+}
+
+struct SentTab {
+    let url: String
+    let title: String
 }
