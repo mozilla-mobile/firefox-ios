@@ -702,3 +702,10 @@ struct LaunchParams {
     let url: URL?
     let isPrivate: Bool?
 }
+
+extension UIApplication {
+    static var isInPrivateMode: Bool {
+        let appDelegate = UIApplication.shared.delegate as? AppDelegate
+        return appDelegate?.browserViewController.tabManager.selectedTab?.isPrivate ?? false
+    }
+}
