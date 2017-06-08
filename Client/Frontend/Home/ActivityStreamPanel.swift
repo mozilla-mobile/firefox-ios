@@ -565,14 +565,15 @@ extension ActivityStreamPanel: HomePanelContextMenu {
 
         let pingSource: ASPingSource
         let index: Int
-        let sourceView: UIView?
+        var sourceView: UIView?
         
         switch Section(indexPath.section) {
         case .topSites:
             pingSource = .TopSites
-            let topSiteCell = self.collectionView?.cellForItem(at: IndexPath(row: 0, section: 0)) as! ASHorizontalScrollCell
-            sourceView = topSiteCell.collectionView.cellForItem(at: indexPath)
             index = indexPath.item
+            if let topSiteCell = self.collectionView?.cellForItem(at: IndexPath(row: 0, section: 0)) as? ASHorizontalScrollCell {
+                sourceView = topSiteCell.collectionView.cellForItem(at: indexPath)
+            }
         case .highlights:
             pingSource = .Highlights
             index = indexPath.row
