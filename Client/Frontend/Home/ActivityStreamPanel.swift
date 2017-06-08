@@ -570,12 +570,13 @@ extension ActivityStreamPanel: HomePanelContextMenu {
         switch Section(indexPath.section) {
         case .topSites:
             pingSource = .TopSites
-            sourceView = self.collectionView?.cellForItem(at: indexPath)
+            let topSiteCell = self.collectionView?.cellForItem(at: IndexPath(row: 0, section: 0)) as! ASHorizontalScrollCell
+            sourceView = topSiteCell.collectionView.cellForItem(at: indexPath)
             index = indexPath.item
         case .highlights:
             pingSource = .Highlights
             index = indexPath.row
-            sourceView = topSiteCell.collectionView.cellForItem(at: indexPath)
+            sourceView =  self.collectionView?.cellForItem(at: indexPath)
         case .highlightIntro:
             return nil
         }
