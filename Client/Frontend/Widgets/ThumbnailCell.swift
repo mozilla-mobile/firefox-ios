@@ -243,12 +243,4 @@ class ThumbnailCell: UICollectionViewCell {
         }
     }
 
-    func extractImageFromCell() -> UIImage? {
-        UIGraphicsBeginImageContextWithOptions(CGSize(width: imageWrapper.bounds.width, height: imageWrapper.bounds.height - textWrapper.bounds.height), false, 0.0)
-        imageWrapper.layer.render(in: UIGraphicsGetCurrentContext()!)
-        let extractedImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-
-        return extractedImage
-    }
 }
