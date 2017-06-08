@@ -142,6 +142,38 @@ extension UIAlertController {
         alert.addAction(noOption)
         return alert
     }
+    
+    /**
+     Builds the Alert view that asks if the users wants to delete website from top sites.
+     
+     - parameter okayCallback: Okay option handler.
+     
+     - returns: UIAlertController for asking action for delete website from top sites
+     */
+    
+    class func deleteTopSitesAlert(okayCallback: @escaping (UIAlertAction) -> Void) -> UIAlertController {
+        let alert = UIAlertController(
+            title: "",
+            message: NSLocalizedString("This action will delete website from top sites.", tableName: "TopSitesDeleteConfirm", comment: "Description of the confirmation dialog shown when a user try to delete site from top sites."),
+            preferredStyle: UIAlertControllerStyle.alert
+        )
+        
+        let noOption = UIAlertAction(
+            title: NSLocalizedString("Cancel", tableName: "DeleteSiteConfirm", comment: "The cancel button when delete site from top sites."),
+            style: UIAlertActionStyle.cancel,
+            handler: nil
+        )
+        
+        let okayOption = UIAlertAction(
+            title: NSLocalizedString("OK", tableName: "DeleteSiteConfirm", comment: "The confirmation button that delete site from top sites."),
+            style: UIAlertActionStyle.destructive,
+            handler: okayCallback
+        )
+        
+        alert.addAction(okayOption)
+        alert.addAction(noOption)
+        return alert
+    }
 
     /**
      Creates an alert view to warn the user that their logins will either be completely deleted in the

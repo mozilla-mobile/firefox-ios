@@ -449,18 +449,24 @@ extension ActivityStreamPanel: DataObserverDelegate {
     }
 
     func hideURLFromTopSites(_ siteURL: URL) {
-        guard let host = siteURL.normalizedHost else {
-            return
+        func deleteURLFromTopPanel(_ action: UIAlertAction) {
+            guard let host = siteURL.normalizedHost else {
+                return
+            }
+
+            let url = siteURL.absoluteString
+            // if the default top sites contains the siteurl. also wipe it from default suggested sites.
+            if self.defaultTopSites().filter({$0.url == url}).isEmpty == false {
+                self.deleteTileForSuggestedSite(url)
+            }
+            self.profile.history.removeHostFromTopSites(host).uponQueue(.main) { result in
+                guard result.isSuccess else { return }
+                self.profile.panelDataObservers.activityStream.invalidate(highlights: false)
+            }
         }
-        let url = siteURL.absoluteString
-        // if the default top sites contains the siteurl. also wipe it from default suggested sites.
-        if defaultTopSites().filter({$0.url == url}).isEmpty == false {
-            deleteTileForSuggestedSite(url)
-        }
-        profile.history.removeHostFromTopSites(host).uponQueue(.main) { result in
-            guard result.isSuccess else { return }
-            self.profile.panelDataObservers.activityStream.invalidate(highlights: false)
-        }
+        
+        let alert = UIAlertController.deleteTopSitesAlert(okayCallback: deleteURLFromTopPanel)
+        present(alert, animated: true, completion: nil)
     }
 
     func hideFromHighlights(_ site: Site) {
