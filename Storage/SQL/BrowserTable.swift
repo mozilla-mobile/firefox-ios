@@ -23,6 +23,7 @@ let TableBookmarksLocalStructure = "bookmarksLocalStructure"           // Added 
 let TableFavicons = "favicons"
 let TableHistory = "history"
 let TableCachedTopSites = "cached_top_sites"
+let TablePinnedTopSites = "pinned_top_sites"
 let TableDomains = "domains"
 let TableVisits = "visits"
 let TableFaviconSites = "favicon_sites"
@@ -80,6 +81,7 @@ private let AllTables: [String] = [
     TableActivityStreamBlocklist,
     AttachedTablePageMetadata,
     AttachedTableHighlights,
+    TablePinnedTopSites
 ]
 
 private let AllViews: [String] = [
@@ -116,7 +118,7 @@ private let log = Logger.syncLogger
  * We rely on SQLiteHistory having initialized the favicon table first.
  */
 open class BrowserTable: Table {
-    static let DefaultVersion = 24    // Bug 1358154.
+    static let DefaultVersion = 25    // Bug 1370824.
 
     // TableInfo fields.
     var name: String { return "BROWSER" }
@@ -235,6 +237,15 @@ open class BrowserTable: Table {
             "iconType INTEGER, " +
             "iconWidth INTEGER, " +
             "frecencies REAL" +
+        ")"
+
+    let pinnedTopSitesTableCreate =
+        "CREATE TABLE IF NOT EXISTS \(TablePinnedTopSites) (" +
+            "historyID INTEGER, " +
+            "url TEXT NOT NULL UNIQUE, " +
+            "title TEXT, " +
+            "guid TEXT, " +
+            "pinDate REAL " +
         ")"
 
     let domainsTableCreate =
@@ -621,6 +632,7 @@ open class BrowserTable: Table {
             historyIDsWithIcon,
             iconForURL,
             attachedPageMetadataCreate,
+            pinnedTopSitesTableCreate,
             attachedHighlightsCreate,
             attachedIndexPageMetadataSiteURLCreate,
             attachedIndexPageMetadataCacheKeyCreate,
@@ -913,6 +925,14 @@ open class BrowserTable: Table {
                 "DROP TABLE IF EXISTS \(AttachedTableHighlights)",
                 attachedHighlightsCreate
             ]) {
+                return false
+            }
+        }
+
+        if from < 25 && to >= 25 {
+            if !self.run(db, queries: [
+                pinnedTopSitesTableCreate
+                ]) {
                 return false
             }
         }
