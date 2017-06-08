@@ -30,7 +30,7 @@ class ActivityStreamTests: XCTestCase {
     func testDeletionOfSingleSuggestedSite() {
         let siteToDelete = panel.defaultTopSites()[0]
 
-        panel.hideURLFromTopSites(URL(string: siteToDelete.url)!)
+        panel.hideURLFromTopSites(siteToDelete)
         let newSites = panel.defaultTopSites()
 
         XCTAssertFalse(newSites.contains(siteToDelete, f: { (a, b) -> Bool in
@@ -41,7 +41,7 @@ class ActivityStreamTests: XCTestCase {
     func testDeletionOfAllDefaultSites() {
         let defaultSites = panel.defaultTopSites()
         defaultSites.forEach({
-            panel.hideURLFromTopSites(URL(string: $0.url)!)
+            panel.hideURLFromTopSites($0)
         })
 
         let newSites = panel.defaultTopSites()
@@ -265,6 +265,10 @@ fileprivate class MockTopSitesHistory: MockableHistory {
 
     override func getTopSitesWithLimit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
         return deferMaybe(ArrayCursor(data: mockTopSites))
+    }
+
+    override func getPinnedTopSites() -> Deferred<Maybe<Cursor<Site>>> {
+        return deferMaybe(ArrayCursor(data: []))
     }
 
     override func updateTopSitesCacheIfInvalidated() -> Deferred<Maybe<Bool>> {

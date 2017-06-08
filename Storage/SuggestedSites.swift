@@ -20,6 +20,7 @@ open class SuggestedSite: Site {
         self.wordmark = Favicon(url: data.imageUrl, date: Date(), type: .icon)
         super.init(url: data.url, title: data.title, bookmarked: nil)
         self.icon = Favicon(url: data.faviconUrl, date: Date(), type: .icon)
+        self.guid = "default" + data.title // A guid is required in the case the site might become a pinned site
     }
 
     open var faviconImagePath: String? {

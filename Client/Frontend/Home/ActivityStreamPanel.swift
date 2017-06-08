@@ -399,15 +399,16 @@ extension ActivityStreamPanel: DataObserverDelegate {
     }
 
     func getTopSites() -> Success {
-        return self.profile.history.getTopSitesWithLimit(16).bindQueue(.main) { result in
-            guard let mySites = result.successValue?.asArray(), !self.pendingCacheUpdate else {
+        return self.profile.history.getTopSitesWithLimit(16).both(self.profile.history.getPinnedTopSites()).bindQueue(.main) { (topsites, pinnedSites) in
+            guard let mySites = topsites.successValue?.asArray(), let pinnedSites = pinnedSites.successValue?.asArray(), !self.pendingCacheUpdate else {
                 return succeed()
             }
-            
+
+            let usersSites = pinnedSites + mySites
             let defaultSites = self.defaultTopSites()
 
             // Merge default topsites with a user's topsites.
-            let mergedSites = mySites.union(defaultSites, f: { (site) -> String in
+            let mergedSites = usersSites.union(defaultSites, f: { (site) -> String in
                 return URL(string: site.url)?.hostSLD ?? ""
             })
 
@@ -418,7 +419,7 @@ extension ActivityStreamPanel: DataObserverDelegate {
             }
 
             // Don't report bad states for default sites we provide
-            self.reportMissingData(sites: mySites, source: .TopSites)
+            self.reportMissingData(sites: usersSites, source: .TopSites)
 
             self.topSitesManager.currentTraits = self.view.traitCollection
 
@@ -448,16 +449,24 @@ extension ActivityStreamPanel: DataObserverDelegate {
         reloadAll()
     }
 
-    func hideURLFromTopSites(_ siteURL: URL) {
-        guard let host = siteURL.normalizedHost else {
+    func hideURLFromTopSites(_ site: Site) {
+        guard let host = site.tileURL.normalizedHost else {
             return
         }
-        let url = siteURL.absoluteString
+        let url = site.tileURL.absoluteString
         // if the default top sites contains the siteurl. also wipe it from default suggested sites.
         if defaultTopSites().filter({$0.url == url}).isEmpty == false {
             deleteTileForSuggestedSite(url)
         }
+        _ = profile.history.removeFromPinnedTopSites(site) // The topsite might be a pin. Removing a non pinned site does nothing
         profile.history.removeHostFromTopSites(host).uponQueue(.main) { result in
+            guard result.isSuccess else { return }
+            self.profile.panelDataObservers.activityStream.invalidate(highlights: false)
+        }
+    }
+
+    func pinTopSite(_ site: Site) {
+        profile.history.addPinnedTopSite(site).uponQueue(.main) { result in
             guard result.isSuccess else { return }
             self.profile.panelDataObservers.activityStream.invalidate(highlights: false)
         }
@@ -624,7 +633,7 @@ extension ActivityStreamPanel: DataObserverDelegate {
 
         let removeTopSiteAction = ActionOverlayTableViewAction(title: Strings.RemoveFromASContextMenuTitle, iconString: "action_close", handler: { action in
             self.telemetry.reportEvent(.Remove, source: pingSource, position: index)
-            self.hideURLFromTopSites(site.tileURL)
+            self.hideURLFromTopSites(site)
         })
 
         let dismissHighlightAction = ActionOverlayTableViewAction(title: Strings.RemoveFromASContextMenuTitle, iconString: "action_close", handler: { action in
@@ -632,10 +641,14 @@ extension ActivityStreamPanel: DataObserverDelegate {
             self.hideFromHighlights(site)
         })
 
+        let pinTopSite = ActionOverlayTableViewAction(title: Strings.PinTopsiteActionTitle, iconString: "action_pin", handler: { action in
+            self.pinTopSite(site)
+        })
+
         var actions = [openInNewTabAction, openInNewPrivateTabAction, bookmarkAction, shareAction]
         switch section {
         case .highlights: actions.append(contentsOf: [dismissHighlightAction, deleteFromHistoryAction])
-        case .topSites: actions.append(removeTopSiteAction)
+        case .topSites: actions.append(contentsOf: [pinTopSite, removeTopSiteAction])
         case .highlightIntro: break
         }
 
