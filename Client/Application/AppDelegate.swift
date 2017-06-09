@@ -264,7 +264,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
                     viewController.tabManager = self.tabManager
                     controller.pushViewController(viewController, animated: true)
                 case "fxa":
-                    self.browserViewController.presentSignInViewController()
+                    let fxaOptions = FxALaunchParams(view: "signup", email: nil, access_code: nil)
+                    self.browserViewController.presentSignInViewController(fxaOptions)
             default:
                 break
             }
