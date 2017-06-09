@@ -20,7 +20,7 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
     var db: BrowserDB!
     var prefs: MockProfilePrefs!
     var history: SQLiteHistory!
-    var bookmarks: SQLiteBookmarkBufferStorage!
+    var bookmarks: MergedSQLiteBookmarks!
 
     override func setUp() {
         super.setUp()
@@ -29,7 +29,7 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
         prefs = MockProfilePrefs()
         history = SQLiteHistory(db: db, prefs: prefs)
-        bookmarks = SQLiteBookmarkBufferStorage(db: db)
+        bookmarks = MergedSQLiteBookmarks(db: db)
     }
 
     override func tearDown() {
@@ -187,6 +187,23 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         XCTAssertEqual(highlights[0]!.title, "A")
     }
 
+    func testBookmarkHighlights() {
+        let files = MockFiles()
+        let db = BrowserDB(filename: "browser.db", files: files)
+        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
+        let prefs = MockProfilePrefs()
+        let metadata = SQLiteMetadata(db: db)
+        let history = SQLiteHistory(db: db, prefs: prefs)
+        let bookmarks = MergedSQLiteBookmarks(db: db)
+
+        history.clearHistory().succeeded()
+        populateForRecommendationCalculations(history, bookmarks: bookmarks, metadata: metadata, historyCount: 10, bookmarkCount: 10)
+
+        let sites = history.getBookmarkHighlights(5).value.successValue?.asArray()
+        XCTAssertEqual(sites!.count, 5, "5 bookmarks should have been fetched")
+        sites!.forEach { XCTAssertEqual($0.guid, "bookmark-\(sites!.index(of: $0)!)"); XCTAssertEqual($0.metadata?.description, "Test Description") }
+    }
+
     func testMetadataReturnedInHighlights() {
         let startTime = Date.nowMicroseconds()
         let oneHourAgo = startTime - oneHourInMicroseconds
@@ -280,14 +297,15 @@ class TestSQLiteHistoryRecommendationsPerf: XCTestCase {
         let files = MockFiles()
         let db = BrowserDB(filename: "browser.db", files: files)
         db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
+        let metadata = SQLiteMetadata(db: db)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
-        let bookmarks = SQLiteBookmarkBufferStorage(db: db)
+        let bookmarks = MergedSQLiteBookmarks(db: db)
 
         let count = 500
 
         history.clearHistory().succeeded()
-        populateForRecommendationCalculations(history, bookmarks: bookmarks, historyCount: count, bookmarkCount: count)
+        populateForRecommendationCalculations(history, bookmarks: bookmarks, metadata: metadata, historyCount: count, bookmarkCount: count)
         self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true) {
             for _ in 0...5 {
                 history.invalidateHighlights().succeeded()
@@ -297,7 +315,7 @@ class TestSQLiteHistoryRecommendationsPerf: XCTestCase {
     }
 }
 
-private func populateForRecommendationCalculations(_ history: SQLiteHistory, bookmarks: SQLiteBookmarkBufferStorage, historyCount: Int, bookmarkCount: Int) {
+private func populateForRecommendationCalculations(_ history: SQLiteHistory, bookmarks: MergedSQLiteBookmarks, metadata: SQLiteMetadata, historyCount: Int, bookmarkCount: Int) {
     let baseMillis: UInt64 = baseInstantInMillis - 20000
 
     for i in 0..<historyCount {
@@ -305,7 +323,6 @@ private func populateForRecommendationCalculations(_ history: SQLiteHistory, boo
         site.guid = "abc\(i)def"
 
         history.insertOrUpdatePlace(site.asPlace(), modified: baseMillis).succeeded()
-
         for j in 0...20 {
             let visitTime = advanceMicrosecondTimestamp(baseInstantInMicros, by: (1000000 * i) + (1000 * j))
             addVisitForSite(site, intoHistory: history, from: .local, atTime: visitTime)
@@ -313,7 +330,7 @@ private func populateForRecommendationCalculations(_ history: SQLiteHistory, boo
         }
     }
 
-    let bookmarkItems: [BookmarkMirrorItem] = (0..<bookmarkCount).map { i in
+    (0..<bookmarkCount).forEach { i in
         let modifiedTime = advanceMicrosecondTimestamp(baseInstantInMicros, by: (1000000 * i))
         let bookmarkSite = Site(url: "http://bookmark-\(i)/", title: "\(i) Bookmark")
         bookmarkSite.guid = "bookmark-\(i)"
@@ -322,13 +339,9 @@ private func populateForRecommendationCalculations(_ history: SQLiteHistory, boo
         addVisitForSite(bookmarkSite, intoHistory: history, from: .remote, atTime: modifiedTime)
         addVisitForSite(bookmarkSite, intoHistory: history, from: .local, atTime: modifiedTime)
         addVisitForSite(bookmarkSite, intoHistory: history, from: .remote, atTime: modifiedTime)
-        
-        return BookmarkMirrorItem.bookmark("http://bookmark-\(i)/", modified: modifiedTime, hasDupe: false,
-                                            parentID: BookmarkRoots.MenuFolderGUID,
-                                            parentName: "Menu Bookmarks",
-                                            title: "\(i) Bookmark", description: nil,
-                                            URI: "http://bookmark-\(i)/", tags: "", keyword: nil)
+        let pageA = PageMetadata(id: nil, siteURL: bookmarkSite.url, mediaURL: "http://image.com",
+                                 title: bookmarkSite.title, description: "Test Description", type: nil, providerName: nil, mediaDataURI: nil, cacheImages: false)
+        metadata.storeMetadata(pageA, forPageURL: bookmarkSite.url.asURL!, expireAt: Date.now() + 3000).succeeded()
+        bookmarks.local.addToMobileBookmarks(URL(string:"http://bookmark-\(i)/")!, title: "\(i) Bookmark", favicon: nil).succeeded()
     }
-
-    bookmarks.applyRecords(bookmarkItems).succeeded()
 }

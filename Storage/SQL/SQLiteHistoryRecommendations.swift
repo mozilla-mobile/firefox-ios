@@ -106,6 +106,40 @@ extension SQLiteHistory: HistoryRecommendations {
         }
     }
 
+    func getBookmarkHighlights(_ limit: Int = 3) -> Deferred<Maybe<Cursor<Site>>> {
+        let threeDaysAgo: UInt64 = Date.now() - (OneDayInMilliseconds * 3) // The data is joined with a millisecond not a microsecond one. (History)
+
+        let subQuerySiteProjection = "historyID, url, siteTitle, guid, visitCount, is_bookmarked"
+        let removeMultipleDomainsSubquery =
+            " INNER JOIN (SELECT \(ViewHistoryVisits).domain_id AS domain_id" +
+            " FROM \(ViewHistoryVisits)" +
+            " GROUP BY \(ViewHistoryVisits).domain_id) AS domains ON domains.domain_id = \(TableHistory).domain_id"
+
+        let bookmarkHighlights =
+            "SELECT \(subQuerySiteProjection) FROM (" +
+                "   SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, \(TableHistory).title AS siteTitle, guid, \(TableHistory).domain_id, NULL AS visitDate, (SELECT count(1) FROM visits WHERE \(TableVisits).siteID = \(TableHistory).id) as visitCount, 1 AS is_bookmarked" +
+                "   FROM (" +
+                "       SELECT bmkUri" +
+                "       FROM \(ViewBookmarksLocalOnMirror)" +
+                "       WHERE \(ViewBookmarksLocalOnMirror).server_modified > ? OR \(ViewBookmarksLocalOnMirror).local_modified > ?" +
+                "   )" +
+                "   LEFT JOIN \(TableHistory) ON \(TableHistory).url = bmkUri" + removeMultipleDomainsSubquery +
+                "   WHERE visitCount >= 1 AND \(TableHistory).title NOT NULL and \(TableHistory).title != '' AND url NOT IN" +
+                "       (SELECT \(TableActivityStreamBlocklist).url FROM \(TableActivityStreamBlocklist))" +
+                "   LIMIT \(limit)" +
+            ")"
+        
+        let siteProjection = subQuerySiteProjection.replacingOccurrences(of: "siteTitle", with: "siteTitle AS title")
+        let highlightsQuery =
+            "SELECT \(siteProjection), iconID, iconURL, iconType, iconDate, iconWidth, \(AttachedTablePageMetadata).title AS metadata_title, media_url, type, description, provider_name " +
+                "FROM (\(bookmarkHighlights) ) " +
+                "LEFT JOIN \(ViewHistoryIDsWithWidestFavicons) ON \(ViewHistoryIDsWithWidestFavicons).id = historyID " +
+                "LEFT OUTER JOIN \(AttachedTablePageMetadata) ON \(AttachedTablePageMetadata).site_url = url " +
+        "GROUP BY url"
+        let args = [threeDaysAgo, threeDaysAgo] as Args
+        return self.db.runQuery(highlightsQuery, args: args, factory: SQLiteHistory.iconHistoryMetadataColumnFactory)
+    }
+
     private func computeHighlightsQuery() -> (String, Args) {
         let limit = 8
 
