@@ -117,6 +117,15 @@ class BrowserViewController: UIViewController {
     var topTabsViewController: TopTabsViewController?
     let topTabsContainer = UIView(frame: CGRect.zero)
 
+    var manager: NetworkReachabilityManager = {
+        if Locale.current.identifier == "zh_CN" {
+            let manager = NetworkReachabilityManager(host: "www.baidu.com")
+            return manager!
+        }
+        let manager = NetworkReachabilityManager(host: "www.google.com")
+        return manager!
+    }()
+
     init(profile: Profile, tabManager: TabManager) {
         self.profile = profile
         self.tabManager = tabManager
@@ -543,6 +552,20 @@ class BrowserViewController: UIViewController {
             log.debug("Done restoring tabs.")
         }
 
+        if profile.prefs.boolForKey(PrefsKeys.KeyNoImageModeIsOverWifiOnly) ?? false {
+            if self.manager.isReachableOnWWAN {
+                self.profile.prefs.setBool(true, forKey: PrefsKeys.KeyNoImageModeStatus)
+                for tab in self.tabManager.tabs {
+                    tab.setNoImageMode(true, force: true)
+                }
+                self.tabManager.selectedTab?.reload()
+            } else {
+                self.profile.prefs.setBool(false, forKey: PrefsKeys.KeyNoImageModeStatus)
+            }
+            self.addNoImageModeNetworkListener()
+            self.manager.startListening()
+        }
+
         log.debug("Updating tab count.")
         updateTabCountUsingTabManager(tabManager, animated: false)
         clipboardBarDisplayHandler.checkIfShouldDisplayBar()
@@ -639,6 +662,7 @@ class BrowserViewController: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: NotificationStatusNotificationTapped), object: nil)
+        self.manager.stopListening()
     }
 
     func resetBrowserChrome() {
@@ -1791,11 +1815,93 @@ extension BrowserViewController: TabToolbarDelegate {
     }
 
     fileprivate func setNoImageMode(_ enabled: Bool) {
-        self.profile.prefs.setBool(enabled, forKey: PrefsKeys.KeyNoImageModeStatus)
-        for tab in self.tabManager.tabs {
-            tab.setNoImageMode(enabled, force: true)
+        if enabled {
+            let noImaeModeTitle = NSLocalizedString("Show image", comment: "Lable for show image title")
+            let noImageModeAlertController = UIAlertController(title: noImaeModeTitle, message: "", preferredStyle: .actionSheet)
+
+            let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment:"Label for Cancel button"), style: .cancel, handler: { (alert: UIAlertAction) -> Void in
+            })
+            noImageModeAlertController.addAction(cancelAction)
+
+            let alwaysBlockAction = UIAlertAction(title: NSLocalizedString("Always Block", comment: "Context menu item for always block images"), style: .default, handler: { (alert: UIAlertAction) -> Void in
+                self.profile.prefs.setBool(false, forKey: PrefsKeys.KeyNoImageModeIsOverWifiOnly)
+                self.profile.prefs.setBool(enabled, forKey: PrefsKeys.KeyNoImageModeIconIsSelected)
+                self.profile.prefs.setBool(enabled, forKey: PrefsKeys.KeyNoImageModeStatus)
+                for tab in self.tabManager.tabs {
+                    tab.setNoImageMode(enabled, force: true)
+                }
+                self.tabManager.selectedTab?.reload()
+            })
+            noImageModeAlertController.addAction(alwaysBlockAction)
+
+            let overWiftOnlyAction = UIAlertAction(title: NSLocalizedString("Over Wifi Only", comment: "Context menu item for show images when over Wifi"), style: .default, handler: { (alert: UIAlertAction) -> Void in
+                self.profile.prefs.setBool(enabled, forKey: PrefsKeys.KeyNoImageModeIconIsSelected)
+                self.profile.prefs.setBool(true, forKey: PrefsKeys.KeyNoImageModeIsOverWifiOnly)
+
+                if self.manager.isReachableOnWWAN {
+                    self.profile.prefs.setBool(enabled, forKey: PrefsKeys.KeyNoImageModeStatus)
+                    for tab in self.tabManager.tabs {
+                        tab.setNoImageMode(enabled, force: true)
+                    }
+                    self.tabManager.selectedTab?.reload()
+                }
+                self.addNoImageModeNetworkListener()
+                self.manager.startListening()
+            })
+            noImageModeAlertController.addAction(overWiftOnlyAction)
+
+            let setupPopover = { [unowned self] in
+                if let popoverPresentationController = noImageModeAlertController.popoverPresentationController {
+                    popoverPresentationController.sourceView = self.urlBar
+                    popoverPresentationController.sourceRect = self.urlBar.frame
+                    popoverPresentationController.permittedArrowDirections = .any
+                    popoverPresentationController.delegate = self
+                }
+            }
+            setupPopover()
+
+            if noImageModeAlertController.popoverPresentationController != nil {
+                displayedPopoverController = noImageModeAlertController
+                updateDisplayedPopoverProperties = setupPopover
+            }
+            self.present(noImageModeAlertController, animated: true, completion: nil)
+
+        } else {
+            self.manager.stopListening()
+            self.profile.prefs.setBool(enabled, forKey: PrefsKeys.KeyNoImageModeIconIsSelected)
+            self.profile.prefs.setBool(enabled, forKey: PrefsKeys.KeyNoImageModeStatus)
+            if profile.prefs.boolForKey(PrefsKeys.KeyNoImageModeIsOverWifiOnly) ?? false && self.manager.isReachableOnEthernetOrWiFi {
+                return
+            }
+            for tab in self.tabManager.tabs {
+                tab.setNoImageMode(enabled, force: true)
+            }
+            self.tabManager.selectedTab?.reload()
         }
-        self.tabManager.selectedTab?.reload()
+    }
+
+    fileprivate func addNoImageModeNetworkListener() {
+        var currentConnectionType = self.manager.isReachableOnWWAN ? NetworkReachabilityManager.NetworkReachabilityStatus.reachable(NetworkReachabilityManager.ConnectionType.wwan) : NetworkReachabilityManager.NetworkReachabilityStatus.reachable(NetworkReachabilityManager.ConnectionType.ethernetOrWiFi)
+
+        self.manager.listener = { status in
+            if status == currentConnectionType {
+                return
+            }
+            currentConnectionType = status
+            if status == NetworkReachabilityManager.NetworkReachabilityStatus.reachable(NetworkReachabilityManager.ConnectionType.ethernetOrWiFi) {
+                self.profile.prefs.setBool(false, forKey: PrefsKeys.KeyNoImageModeStatus)
+                for tab in self.tabManager.tabs {
+                    tab.setNoImageMode(false, force: false)
+                }
+                self.tabManager.selectedTab?.reload()
+            } else if status == NetworkReachabilityManager.NetworkReachabilityStatus.reachable(NetworkReachabilityManager.ConnectionType.wwan) {
+                self.profile.prefs.setBool(true, forKey: PrefsKeys.KeyNoImageModeStatus)
+                for tab in self.tabManager.tabs {
+                    tab.setNoImageMode(true, force: true)
+                }
+                self.tabManager.selectedTab?.reload()
+            }
+        }
     }
 
     func toggleBookmarkForTabState(_ tabState: TabState) {

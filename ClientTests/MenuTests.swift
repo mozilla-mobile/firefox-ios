@@ -222,7 +222,7 @@ class MenuTests: XCTestCase {
     func testHideImagesMenuConfiguration() {
         let tabState = TabState(isPrivate: false, desktopSite: true, isBookmarked: false, url: URL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
         let appState = self.appState(.tab(tabState: tabState))
-        appState.prefs.setBool(false, forKey: NoImageModePrefsKey.NoImageModeStatus)
+        appState.prefs.setBool(false, forKey: NoImageModePrefsKey.NoImageModeIconIsSelected)
 
         let browserConfiguration = AppMenuConfiguration(appState: appState)
         let hideImageMenuItem = browserConfiguration.menuItems.find { $0.title == Strings.AppMenuNoImageModeTurnOnLabel }
@@ -234,7 +234,7 @@ class MenuTests: XCTestCase {
     func testShowImagesMenuConfiguration() {
         let tabState = TabState(isPrivate: false, desktopSite: true, isBookmarked: false, url: URL(string: "http://mozilla.com")!, title: "Mozilla", favicon: nil)
         let appState = self.appState(.tab(tabState: tabState))
-        appState.prefs.setBool(true, forKey: NoImageModePrefsKey.NoImageModeStatus)
+        appState.prefs.setBool(true, forKey: NoImageModePrefsKey.NoImageModeIconIsSelected)
 
         let browserConfiguration = AppMenuConfiguration(appState: appState)
         let hideImageMenuItem = browserConfiguration.menuItems.find { $0.title == Strings.AppMenuNoImageModeTurnOnLabel }

@@ -13,6 +13,8 @@ public struct PrefsKeys {
     public static let KeyHomePageButtonIsInMenu = "HomePageButtonIsInMenuPrefKey"
     public static let KeyNoImageModeButtonIsInMenu = "NoImageModeButtonIsInMenuPrefKey"
     public static let KeyNoImageModeStatus = "NoImageModeStatus"
+    public static let KeyNoImageModeIsOverWifiOnly = "NoImageModeIsOverWifiOnly"
+    public static let KeyNoImageModeIconIsSelected = "NoImageModeIconIsSelected"
     public static let KeyNewTab = "NewTabPrefKey"
     public static let KeyNightModeButtonIsInMenu = "NightModeButtonIsInMenuPrefKey"
     public static let KeyNightModeStatus = "NightModeStatus"
