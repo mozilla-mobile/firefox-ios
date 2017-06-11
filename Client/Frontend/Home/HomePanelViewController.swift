@@ -14,6 +14,7 @@ private struct HomePanelViewControllerUX {
     static let ButtonContainerBorderColor = UIColor.black.withAlphaComponent(0.1)
     static let BackgroundColorNormalMode = UIConstants.PanelBackgroundColor
     static let BackgroundColorPrivateMode = UIConstants.PrivateModeAssistantToolbarBackgroundColor
+    static let EditDoneButtonRightPadding: CGFloat = -12
     static let ToolbarButtonDeselectedColorNormalMode = UIColor(white: 0.2, alpha: 0.5)
     static let ToolbarButtonDeselectedColorPrivateMode = UIColor(white: 0.9, alpha: 1)
 }
@@ -26,20 +27,24 @@ protocol HomePanelViewControllerDelegate: class {
     func homePanelViewControllerDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)
 }
 
+@objc
 protocol HomePanel: class {
     weak var homePanelDelegate: HomePanelDelegate? { get set }
+    @objc optional func endEditing()
 }
 
 struct HomePanelUX {
     static let EmptyTabContentOffset = -180
 }
 
+@objc
 protocol HomePanelDelegate: class {
     func homePanelDidRequestToSignIn(_ homePanel: HomePanel)
     func homePanelDidRequestToCreateAccount(_ homePanel: HomePanel)
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)
     func homePanel(_ homePanel: HomePanel, didSelectURL url: URL, visitType: VisitType)
     func homePanel(_ homePanel: HomePanel, didSelectURLString url: String, visitType: VisitType)
+    @objc optional func homePanelWillEnterEditingMode(_ homePanel: HomePanel)
 }
 
 struct HomePanelState {
@@ -70,6 +75,9 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     fileprivate var buttonContainerBottomBorderView: UIView!
     fileprivate var controllerContainerView: UIView!
     fileprivate var buttons: [UIButton] = []
+
+    fileprivate var finishEditingButton: UIButton?
+    fileprivate var editingPanel: HomePanel?
 
     var isPrivateMode: Bool = false {
         didSet {
@@ -230,6 +238,12 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         }
     }
 
+    func endEditing(_ sender: UIButton!) {
+        toggleEditingMode(false)
+        editingPanel?.endEditing?()
+        editingPanel = nil
+    }
+
     fileprivate func updateButtons() {
         // Remove any existing buttons if we're rebuilding the toolbar.
         for button in buttons {
@@ -305,45 +319,40 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
         delegate?.homePanelViewControllerDidRequestToOpenInNewTab(url, isPrivate: isPrivate)
     }
-}
 
-protocol HomePanelContextMenu {
-    func getSiteDetails(for indexPath: IndexPath) -> Site?
-    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [ActionOverlayTableViewAction]?
-    func presentContextMenu(for indexPath: IndexPath)
-    func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> ActionOverlayTableViewController?)
-}
+    func homePanelWillEnterEditingMode(_ homePanel: HomePanel) {
+        editingPanel = homePanel
+        toggleEditingMode(true)
+    }
 
-extension HomePanelContextMenu {
-    func presentContextMenu(for indexPath: IndexPath) {
-        guard let site = getSiteDetails(for: indexPath) else { return }
+    func toggleEditingMode(_ editing: Bool) {
+        let translateDown = CGAffineTransform(translationX: 0, y: UIConstants.ToolbarHeight)
+        let translateUp = CGAffineTransform(translationX: 0, y: -UIConstants.ToolbarHeight)
 
-        presentContextMenu(for: site, with: indexPath, completionHandler: {
-            return self.contextMenu(for: site, with: indexPath)
+        if editing {
+            let button = UIButton(type: UIButtonType.system)
+            button.setTitle(NSLocalizedString("Done", comment: "Done editing button"), for: UIControlState())
+            button.addTarget(self, action: #selector(HomePanelViewController.endEditing(_:)), for: UIControlEvents.touchUpInside)
+            button.transform = translateDown
+            button.titleLabel?.textAlignment = .right
+            button.tintColor = self.isPrivateMode ? UIConstants.PrivateModeActionButtonTintColor : UIConstants.SystemBlueColor
+            self.buttonContainerView.addSubview(button)
+            button.snp.makeConstraints { make in
+                make.right.equalTo(self.buttonContainerView).offset(HomePanelViewControllerUX.EditDoneButtonRightPadding)
+                make.centerY.equalTo(self.buttonContainerView)
+            }
+            self.buttonContainerView.layoutIfNeeded()
+            finishEditingButton = button
+        }
+
+        UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: UIViewAnimationOptions.allowUserInteraction, animations: { () -> Void in
+            self.buttons.forEach { $0.transform = editing ? translateUp : CGAffineTransform.identity }
+            self.finishEditingButton?.transform = editing ? CGAffineTransform.identity : translateDown
+        }, completion: { _ in
+            if !editing {
+                self.finishEditingButton?.removeFromSuperview()
+                self.finishEditingButton = nil
+            }
         })
-    }
-
-    func contextMenu(for site: Site, with indexPath: IndexPath) -> ActionOverlayTableViewController? {
-        guard let actions = self.getContextMenuActions(for: site, with: indexPath) else { return nil }
-
-        let contextMenu = ActionOverlayTableViewController(site: site, actions: actions)
-        contextMenu.modalPresentationStyle = .overFullScreen
-        contextMenu.modalTransitionStyle = .crossDissolve
-
-        return contextMenu
-    }
-
-    func getDefaultContextMenuActions(for site: Site, homePanelDelegate: HomePanelDelegate?) -> [ActionOverlayTableViewAction]? {
-        guard let siteURL = URL(string: site.url) else { return nil }
-
-        let openInNewTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewTabContextMenuTitle, iconString: "") { action in
-            homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
-        }
-
-        let openInNewPrivateTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "") { action in
-            homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
-        }
-
-        return [openInNewTabAction, openInNewPrivateTabAction]
     }
 }

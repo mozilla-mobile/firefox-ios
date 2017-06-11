@@ -63,10 +63,24 @@ struct ThumbnailCellUX {
     static let LabelInsets = UIEdgeInsets(top: 10, left: 3, bottom: 10, right: 3)
     static let PlaceholderImage = UIImage(named: "defaultTopSiteIcon")
     static let CornerRadius: CGFloat = 3
+
+    // Make the remove button look 20x20 in size but have the clickable area be 44x44
+    static let RemoveButtonSize: CGFloat = 44
+    static let RemoveButtonInsets = UIEdgeInsets(top: 11, left: 11, bottom: 11, right: 11)
+    static let RemoveButtonAnimationDuration: TimeInterval = 0.4
+    static let RemoveButtonAnimationDamping: CGFloat = 0.6
+
     static let NearestNeighbordScalingThreshold: CGFloat = 24
 }
 
+@objc protocol ThumbnailCellDelegate {
+    func didRemoveThumbnail(_ thumbnailCell: ThumbnailCell)
+    func didLongPressThumbnail(_ thumbnailCell: ThumbnailCell)
+}
+
 class ThumbnailCell: UICollectionViewCell {
+    weak var delegate: ThumbnailCellDelegate?
+
     var imageInsets: UIEdgeInsets = UIEdgeInsets.zero
     var cellInsets: UIEdgeInsets = UIEdgeInsets.zero
 
@@ -112,6 +126,10 @@ class ThumbnailCell: UICollectionViewCell {
         }
     }
 
+    lazy var longPressGesture: UILongPressGestureRecognizer = {
+        return UILongPressGestureRecognizer(target: self, action: #selector(ThumbnailCell.SELdidLongPress))
+    }()
+
     lazy var textWrapper: UIView = {
         let wrapper = UIView()
         wrapper.backgroundColor = ThumbnailCellUX.LabelBackgroundColor
@@ -145,6 +163,17 @@ class ThumbnailCell: UICollectionViewCell {
         return imageWrapper
     }()
 
+    lazy var removeButton: UIButton = {
+        let removeButton = UIButton()
+        removeButton.isExclusiveTouch = true
+        removeButton.setImage(UIImage(named: "TileCloseButton"), for: UIControlState())
+        removeButton.addTarget(self, action: #selector(ThumbnailCell.SELdidRemove), for: UIControlEvents.touchUpInside)
+        removeButton.accessibilityLabel = NSLocalizedString("Remove page", comment: "Button shown in editing mode to remove this site from the top sites panel.")
+        removeButton.isHidden = true
+        removeButton.imageEdgeInsets = ThumbnailCellUX.RemoveButtonInsets
+        return removeButton
+    }()
+
     lazy var backgroundImage: UIImageView = {
         let backgroundImage = UIImageView()
         backgroundImage.contentMode = UIViewContentMode.scaleAspectFill
@@ -171,6 +200,7 @@ class ThumbnailCell: UICollectionViewCell {
         layer.rasterizationScale = UIScreen.main.scale
 
         isAccessibilityElement = true
+        addGestureRecognizer(longPressGesture)
 
         contentView.addSubview(imageWrapper)
         imageWrapper.addSubview(backgroundImage)
@@ -181,6 +211,7 @@ class ThumbnailCell: UICollectionViewCell {
         imageWrapper.addSubview(textWrapper)
         imageWrapper.addSubview(selectedOverlay)
         textWrapper.addSubview(textLabel)
+        contentView.addSubview(removeButton)
 
         textWrapper.snp.makeConstraints { make in
             make.bottom.equalTo(self.imageWrapper.snp.bottom) // .offset(ThumbnailCellUX.BorderWidth)
@@ -203,11 +234,57 @@ class ThumbnailCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        // TODO: We can avoid creating this button at all if we're not in editing mode.
+        var frame = removeButton.frame
+        let insets = cellInsets
+        frame.size = CGSize(width: ThumbnailCellUX.RemoveButtonSize, height: ThumbnailCellUX.RemoveButtonSize)
+        frame.center = CGPoint(x: insets.left, y: insets.top)
+        removeButton.frame = frame
+    }
+
     override func prepareForReuse() {
         super.prepareForReuse()
         backgroundImage.image = nil
+        removeButton.isHidden = true
         imageWrapper.backgroundColor = UIColor.clear
         textLabel.font = DynamicFontHelper.defaultHelper.DefaultSmallFont
+    }
+
+    func SELdidRemove() {
+        delegate?.didRemoveThumbnail(self)
+    }
+
+    func SELdidLongPress() {
+        delegate?.didLongPressThumbnail(self)
+    }
+
+    func toggleRemoveButton(_ show: Bool) {
+        // Only toggle if we change state
+        if removeButton.isHidden != show {
+            return
+        }
+
+        if show {
+            removeButton.isHidden = false
+        }
+
+        let scaleTransform = CGAffineTransform(scaleX: 0.01, y: 0.01)
+        removeButton.transform = show ? scaleTransform : CGAffineTransform.identity
+        UIView.animate(withDuration: ThumbnailCellUX.RemoveButtonAnimationDuration,
+            delay: 0,
+            usingSpringWithDamping: ThumbnailCellUX.RemoveButtonAnimationDamping,
+            initialSpringVelocity: 0,
+            options: UIViewAnimationOptions.allowUserInteraction,
+            animations: {
+                self.removeButton.transform = show ? CGAffineTransform.identity : scaleTransform
+            }, completion: { _ in
+                if !show {
+                    self.removeButton.isHidden = true
+                }
+            })
     }
 
     /**
@@ -242,5 +319,4 @@ class ThumbnailCell: UICollectionViewCell {
             }
         }
     }
-
 }

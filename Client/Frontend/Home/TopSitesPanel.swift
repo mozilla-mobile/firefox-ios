@@ -28,7 +28,7 @@ struct TopSitesPanelUX {
     fileprivate static let WelcomeScreenItemWidth = 170
 }
 
-class TopSitesPanel: UIViewController, HomePanel {
+class TopSitesPanel: UIViewController {
     weak var homePanelDelegate: HomePanelDelegate?
     fileprivate lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverlayView()
     fileprivate var collection: TopSitesCollectionView?
@@ -44,9 +44,20 @@ class TopSitesPanel: UIViewController, HomePanel {
         )
     }()
 
-    fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
-        return UILongPressGestureRecognizer(target: self, action: #selector(TopSitesPanel.longPress(_:)))
-    }()
+    var editingThumbnails: Bool = false {
+        didSet {
+            if editingThumbnails != oldValue {
+                dataSource.editingThumbnails = editingThumbnails
+                collection?.allowsSelection = !editingThumbnails
+
+                if editingThumbnails {
+                    homePanelDelegate?.homePanelWillEnterEditingMode?(self)
+                }
+
+                updateAllRemoveButtonStates()
+            }
+        }
+    }
 
     let profile: Profile
 
@@ -79,7 +90,6 @@ class TopSitesPanel: UIViewController, HomePanel {
     override func viewDidLoad() {
         super.viewDidLoad()
         let collection = TopSitesCollectionView(frame: self.view.frame, collectionViewLayout: layout)
-        collection.addGestureRecognizer(longPressRecognizer)
         collection.backgroundColor = UIConstants.PanelBackgroundColor
         collection.delegate = self
         collection.dataSource = dataSource
@@ -197,6 +207,10 @@ class TopSitesPanel: UIViewController, HomePanel {
         self.updateEmptyPanelState()
     }
 
+    fileprivate func updateAllRemoveButtonStates() {
+        collection?.indexPathsForVisibleItems.forEach(updateRemoveButtonStateForIndexPath)
+    }
+
     @discardableResult fileprivate func deleteTileForSuggestedSite(_ site: SuggestedSite) -> Success {
         var deletedSuggestedSites = profile.prefs.arrayForKey("topSites.deletedSuggestedSites") as! [String]
         deletedSuggestedSites.append(site.url)
@@ -227,6 +241,15 @@ class TopSitesPanel: UIViewController, HomePanel {
                 }
             }
         }
+    }
+
+    fileprivate func updateRemoveButtonStateForIndexPath(_ indexPath: IndexPath) {
+        // If we have a cell passed in, use it. If not, then use the indexPath to get it.
+        guard let cell = collection?.cellForItem(at: indexPath) as? ThumbnailCell else {
+            return
+        }
+
+        cell.toggleRemoveButton(editingThumbnails)
     }
 
     fileprivate func refreshTopSites(_ frecencyLimit: Int) {
@@ -272,6 +295,7 @@ class TopSitesPanel: UIViewController, HomePanel {
                 collection.insertItems(at: [ IndexPath(item: count, section: 0) ])
             }
         }, completion: { _ in
+            self.updateAllRemoveButtonStates()
             result.fill(Maybe(success: ()))
         })
 
@@ -312,44 +336,47 @@ class TopSitesPanel: UIViewController, HomePanel {
 
         return numberOfColumns * numberOfRows
     }
+}
 
-    @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
-        guard longPressGestureRecognizer.state == UIGestureRecognizerState.began else { return }
-        let touchPoint = longPressGestureRecognizer.location(in: collection)
-        guard let indexPath = collection?.indexPathForItem(at: touchPoint) else { return }
-        presentContextMenu(for: indexPath)
+extension TopSitesPanel: HomePanel {
+    func endEditing() {
+        editingThumbnails = false
     }
 }
 
 extension TopSitesPanel: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if editingThumbnails {
+            return
+        }
+
         if let site = dataSource[indexPath.item] {
             // We're gonna call Top Sites bookmarks for now.
             let visitType = VisitType.bookmark
             homePanelDelegate?.homePanel(self, didSelectURL: site.tileURL, visitType: visitType)
         }
     }
+
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if let thumbnailCell = cell as? ThumbnailCell {
+            thumbnailCell.delegate = self
+            if editingThumbnails && indexPath.item < dataSource.count() && thumbnailCell.removeButton.isHidden {
+                thumbnailCell.removeButton.isHidden = false
+            }
+        }
+    }
 }
 
-extension TopSitesPanel: HomePanelContextMenu {
-    func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> ActionOverlayTableViewController?) {
-        guard let contextMenu = completionHandler() else { return }
-        self.present(contextMenu, animated: true, completion: nil)
+extension TopSitesPanel: ThumbnailCellDelegate {
+    func didRemoveThumbnail(_ thumbnailCell: ThumbnailCell) {
+        guard let indexPath = collection?.indexPath(for: thumbnailCell),
+              let site = dataSource[indexPath.item] else { return }
+
+        self.deleteHistoryTileForSite(site, atIndexPath: indexPath)
     }
 
-    func getSiteDetails(for indexPath: IndexPath) -> Site? {
-        return dataSource.sites[indexPath.item]
-    }
-
-    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [ActionOverlayTableViewAction]? {
-        guard var actions = getDefaultContextMenuActions(for: site, homePanelDelegate: homePanelDelegate) else { return nil }
-
-        let removeTopSiteAction = ActionOverlayTableViewAction(title: Strings.RemoveContextMenuTitle, iconString: "action_remove", handler: { action in
-            self.deleteHistoryTileForSite(site, atIndexPath: indexPath)
-        })
-        actions.append(removeTopSiteAction)
-
-        return actions
+    func didLongPressThumbnail(_ thumbnailCell: ThumbnailCell) {
+        editingThumbnails = true
     }
 }
 
@@ -512,6 +539,7 @@ class TopSitesLayout: UICollectionViewLayout {
 
 fileprivate class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     var profile: Profile
+    var editingThumbnails: Bool = false
     var suggestedSites = [SuggestedSite]()
     var sites = [Site]()
     fileprivate var sitesInvalidated = true
@@ -581,7 +609,7 @@ fileprivate class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         }
     }
 
-    fileprivate func configureCell(_ cell: ThumbnailCell, forSite site: Site, profile: Profile) {
+    fileprivate func configureCell(_ cell: ThumbnailCell, forSite site: Site, isEditing editing: Bool, profile: Profile) {
 
         // We always want to show the domain URL, not the title.
         //
@@ -598,6 +626,10 @@ fileprivate class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         let domainURL = extractDomainURL(site.url)
         cell.textLabel.text = domainURL
         cell.accessibilityLabel = cell.textLabel.text
+        cell.removeButton.isHidden = !editing
+
+        let removeButtonAccessibilityLabel = String(format: Strings.TopSitesRemoveButtonAccessibilityLabel, domainURL)
+        cell.removeButton.accessibilityLabel = removeButtonAccessibilityLabel
 
         guard let icon = site.icon else {
             setDefaultThumbnailBackgroundForCell(cell)
@@ -629,6 +661,10 @@ fileprivate class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         cell.imageView.contentMode = .scaleAspectFit
         cell.imageView.layer.minificationFilter = kCAFilterTrilinear
         cell.accessibilityLabel = cell.textLabel.text
+
+        if let title = title {
+            cell.removeButton.accessibilityLabel =  String(format: Strings.TopSitesRemoveButtonAccessibilityLabel, title)
+        }
 
         guard let icon = site.wordmark.url.asURL,
             let host = icon.host else {
@@ -733,7 +769,7 @@ fileprivate class TopSitesDataSource: NSObject, UICollectionViewDataSource {
             return cell
         }
 
-        configureCell(cell, forSite: site, profile: profile)
+        configureCell(cell, forSite: site, isEditing: editingThumbnails, profile: profile)
         cell.updateLayoutForCollectionViewSize(collectionView.bounds.size, traitCollection: traitCollection, forSuggestedSite: false)
         return cell
     }
