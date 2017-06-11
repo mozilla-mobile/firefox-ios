@@ -82,30 +82,18 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
     var recentlyClosedTabs: [ClosedTab] = []
     weak var recentlyClosedTabsPanel: RecentlyClosedTabsPanel?
 
-    fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
-        return UILongPressGestureRecognizer(target: self, action: #selector(RecentlyClosedTabsPanelSiteTableViewController.longPress(_:)))
-    }()
-
     init() {
         super.init(nibName: nil, bundle: nil)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.addGestureRecognizer(longPressRecognizer)
         tableView.accessibilityIdentifier = "Recently Closed Tabs List"
         self.recentlyClosedTabs = profile.recentlyClosedTabs.tabs
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
-        guard longPressGestureRecognizer.state == UIGestureRecognizerState.began else { return }
-        let touchPoint = longPressGestureRecognizer.location(in: tableView)
-        guard let indexPath = tableView.indexPathForRow(at: touchPoint) else { return }
-        presentContextMenu(for: indexPath)
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -149,26 +137,4 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
         return profile.recentlyClosedTabs.tabs.count
     }
 
-}
-
-extension RecentlyClosedTabsPanelSiteTableViewController: HomePanelContextMenu {
-    func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> ActionOverlayTableViewController?) {
-        guard let contextMenu = completionHandler() else { return }
-        self.present(contextMenu, animated: true, completion: nil)
-    }
-
-    func getSiteDetails(for indexPath: IndexPath) -> Site? {
-        let closedTab = recentlyClosedTabs[indexPath.row]
-        let site: Site
-        if let title = closedTab.title {
-            site = Site(url: String(describing: closedTab.url), title: title)
-        } else {
-            site = Site(url: String(describing: closedTab.url), title: "")
-        }
-        return site
-    }
-
-    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [ActionOverlayTableViewAction]? {
-        return getDefaultContextMenuActions(for: site, homePanelDelegate: homePanelDelegate)
-    }
 }

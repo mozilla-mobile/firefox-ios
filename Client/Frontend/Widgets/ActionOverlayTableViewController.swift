@@ -5,7 +5,6 @@
 import Foundation
 import Storage
 import SnapKit
-import Shared
 
 private struct ActionOverlayTableViewUX {
     static let MaxWidth: CGFloat = 375
@@ -89,6 +88,8 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
             view.addSubview(imageView)
         }
     }
+
+
 
     fileprivate func setHeightConstraint(_ make: ConstraintMaker) {
         make.height.lessThanOrEqualTo(view.bounds.height)
@@ -199,7 +200,6 @@ class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
     lazy var siteImageView: UIImageView = {
         let siteImageView = UIImageView()
         siteImageView.contentMode = UIViewContentMode.center
-        siteImageView.clipsToBounds = true
         siteImageView.layer.cornerRadius = ActionOverlayTableViewUX.CornerRadius
         siteImageView.layer.borderColor = ActionOverlayTableViewUX.BorderColor.cgColor
         siteImageView.layer.borderWidth = ActionOverlayTableViewUX.BorderWidth
