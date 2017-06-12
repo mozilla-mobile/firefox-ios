@@ -21,7 +21,6 @@ class ExtensionProfile: BrowserProfile {
         set {}
     }
 
-
     init(localName: String) {
         super.init(localName: localName, app: nil, clear: false)
         syncManager = ExtensionSyncManager(profile: self)
