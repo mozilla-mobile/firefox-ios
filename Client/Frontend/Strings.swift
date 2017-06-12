@@ -42,10 +42,11 @@ extension Strings {
     public static let HighlightIntroDescription = NSLocalizedString("ActivityStream.HighlightIntro.Description", value: "Firefox will place things here that you've discovered on the web so you can find your way back to the great articles, videos, bookmarks and other pages", comment: "The detailed text that explains what highlights are in AS.")
     public static let ASPageControlButton = NSLocalizedString("ActivityStream.PageControl.Button", value: "Next Page", comment: "The page control button that lets you switch between pages in top sites")
     public static let ASHighlightsTitle =  NSLocalizedString("ActivityStream.Highlights.SectionTitle", value: "Visit Again", comment: "Section title label for Visit again section")
-    public static let ASBookmarksTitle =  NSLocalizedString("ActivityStream.Bookmarks.SectionTitle", value: "Bookmarks", comment: "Section title label for Bookmarks section in Activity Stream")
+    public static let ASBookmarksTitle =  NSLocalizedString("ActivityStream.Bookmarks.SectionTitle", value: "Recent Bookmarks", comment: "Section title label for Bookmarks section in Activity Stream")
     public static let ASTopSitesTitle =  NSLocalizedString("ActivityStream.TopSites.SectionTitle", value: "Top Sites", comment: "Section title label for Top Sites")
     public static let HighlightVistedText = NSLocalizedString("ActivityStream.Highlights.Visited", value: "Visited", comment: "The description of a highlight if it is a site the user has visited")
     public static let HighlightBookmarkText = NSLocalizedString("ActivityStream.Highlights.Bookmark", value: "Bookmarked", comment: "The description of a highlight if it is a site the user has bookmarked")
+    public static let ASBookmarksShowMore = NSLocalizedString("ActivityStream.Highlights.BookmarkShowMore", value: "Show more", comment: "The title of the button in the bookmarks section that lets you view all your bookmarks.")
 }
 
 // Home Panel Context Menu.
@@ -58,6 +59,7 @@ extension Strings {
     public static let ShareContextMenuTitle = NSLocalizedString("HomePanel.ContextMenu.Share", value: "Share", comment: "The title for the Share context menu action for sites in Home Panels")
     public static let RemoveContextMenuTitle = NSLocalizedString("HomePanel.ContextMenu.Remove", value: "Remove", comment: "The title for the Remove context menu action for sites in Home Panels")
     public static let PinTopsiteActionTitle = NSLocalizedString("ActivityStream.ContextMenu.PinTopsite", value: "Pin to Top Sites", comment: "The title for the pinning a topsite action")
+    public static let RemovePinTopsiteActionTitle = NSLocalizedString("ActivityStream.ContextMenu.RemovePinTopsite", value: "Remove Pinned Site", comment: "The title for removing a pinned topsite action")
 }
 
 // Settings.

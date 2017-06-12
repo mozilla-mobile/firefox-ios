@@ -107,7 +107,7 @@ extension SQLiteHistory: HistoryRecommendations {
     }
 
     public func getRecentBookmarks(_ limit: Int = 3) -> Deferred<Maybe<Cursor<Site>>> {
-        let threeDaysAgo: UInt64 = Date.now() - (OneDayInMilliseconds * 5) // The data is joined with a millisecond not a microsecond one. (History)
+        let fiveDaysAgo: UInt64 = Date.now() - (OneDayInMilliseconds * 5) // The data is joined with a millisecond not a microsecond one. (History)
 
         let subQuerySiteProjection = "historyID, url, siteTitle, guid, visitCount, is_bookmarked"
         let removeMultipleDomainsSubquery =
@@ -136,7 +136,7 @@ extension SQLiteHistory: HistoryRecommendations {
                 "LEFT JOIN \(ViewHistoryIDsWithWidestFavicons) ON \(ViewHistoryIDsWithWidestFavicons).id = historyID " +
                 "LEFT OUTER JOIN \(AttachedTablePageMetadata) ON \(AttachedTablePageMetadata).site_url = url " +
         "GROUP BY url"
-        let args = [threeDaysAgo, threeDaysAgo] as Args
+        let args = [fiveDaysAgo, fiveDaysAgo] as Args
         return self.db.runQuery(highlightsQuery, args: args, factory: SQLiteHistory.iconHistoryMetadataColumnFactory)
     }
 

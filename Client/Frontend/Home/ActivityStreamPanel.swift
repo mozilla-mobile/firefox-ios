@@ -459,7 +459,7 @@ extension ActivityStreamPanel: DataObserverDelegate {
 
     func getBookmarks() -> Success {
         // Try to fetch only a row of bookmarks. On rotation there might be a few more bookmarks than we want but thats okay.
-        let num = Int(Section(1).numberOfItemsForRow())
+        let num = Int(Section.bookmarks.numberOfItemsForRow())
         return self.profile.recommendations.getRecentBookmarks(num).bindQueue(.main) { result in
             guard let bookmarks = result.successValue?.asArray() else {
                 return succeed()
