@@ -245,6 +245,10 @@ fileprivate class MockRecommender: HistoryRecommendations {
     func getHighlights() -> Deferred<Maybe<Cursor<Site>>> {
         return deferMaybe(ArrayCursor(data: highlights))
     }
+
+    func getRecentBookmarks(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
+        return deferMaybe(ArrayCursor(data: []))
+    }
     
     func removeHighlightForURL(_ url: String) -> Success {
         guard let foundSite = highlights.filter({ $0.url == url }).first else {

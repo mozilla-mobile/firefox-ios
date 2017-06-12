@@ -199,7 +199,7 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         history.clearHistory().succeeded()
         populateForRecommendationCalculations(history, bookmarks: bookmarks, metadata: metadata, historyCount: 10, bookmarkCount: 10)
 
-        let sites = history.getBookmarkHighlights(5).value.successValue?.asArray()
+        let sites = history.getRecentBookmarks(5).value.successValue?.asArray()
         XCTAssertEqual(sites!.count, 5, "5 bookmarks should have been fetched")
         sites!.forEach { XCTAssertEqual($0.guid, "bookmark-\(sites!.index(of: $0)!)"); XCTAssertEqual($0.metadata?.description, "Test Description") }
     }

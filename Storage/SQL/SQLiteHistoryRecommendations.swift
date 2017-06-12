@@ -106,8 +106,8 @@ extension SQLiteHistory: HistoryRecommendations {
         }
     }
 
-    func getBookmarkHighlights(_ limit: Int = 3) -> Deferred<Maybe<Cursor<Site>>> {
-        let threeDaysAgo: UInt64 = Date.now() - (OneDayInMilliseconds * 3) // The data is joined with a millisecond not a microsecond one. (History)
+    public func getRecentBookmarks(_ limit: Int = 3) -> Deferred<Maybe<Cursor<Site>>> {
+        let threeDaysAgo: UInt64 = Date.now() - (OneDayInMilliseconds * 5) // The data is joined with a millisecond not a microsecond one. (History)
 
         let subQuerySiteProjection = "historyID, url, siteTitle, guid, visitCount, is_bookmarked"
         let removeMultipleDomainsSubquery =
@@ -124,7 +124,7 @@ extension SQLiteHistory: HistoryRecommendations {
                 "       WHERE \(ViewBookmarksLocalOnMirror).server_modified > ? OR \(ViewBookmarksLocalOnMirror).local_modified > ?" +
                 "   )" +
                 "   LEFT JOIN \(TableHistory) ON \(TableHistory).url = bmkUri" + removeMultipleDomainsSubquery +
-                "   WHERE visitCount >= 1 AND \(TableHistory).title NOT NULL and \(TableHistory).title != '' AND url NOT IN" +
+                "   WHERE visitCount >= 2 AND \(TableHistory).title NOT NULL and \(TableHistory).title != '' AND url NOT IN" +
                 "       (SELECT \(TableActivityStreamBlocklist).url FROM \(TableActivityStreamBlocklist))" +
                 "   LIMIT \(limit)" +
             ")"

@@ -129,8 +129,8 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
 
         statusIcon.snp.makeConstraints { make in
             make.size.equalTo(ActivityStreamHighlightCellUX.StatusIconSize)
+            make.centerY.equalTo(descriptionLabel.snp.centerY)
             make.leading.equalTo(siteImageView)
-            make.bottom.equalTo(contentView)
         }
     }
 
