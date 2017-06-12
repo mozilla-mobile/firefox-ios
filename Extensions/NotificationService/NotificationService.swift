@@ -25,7 +25,8 @@ class NotificationService: UNNotificationServiceExtension {
         let userInfo = request.content.userInfo
         NSLog("NotificationService APNS NOTIFICATION \(userInfo)")
 
-        self.display = SyncDataDisplay(content: content, contentHandler: contentHandler)
+        let queue = self.profile.queue
+        self.display = SyncDataDisplay(content: content, contentHandler: contentHandler, tabQueue: queue)
         self.profile.syncDelegate = display
 
         let handler = FxAPushMessageHandler(with: profile)
@@ -36,7 +37,11 @@ class NotificationService: UNNotificationServiceExtension {
     }
 
     func finished(cleanly: Bool) {
-        profile.shutdown()      
+        profile.shutdown()
+        // We cannot use tabqueue after the profile has shutdown;
+        // however, we can't use weak references, because TabQueue isn't a class.
+        // Rather than changing tabQueue, we manually nil it out here.
+        display.tabQueue = nil
         display.displayNotification(cleanly)
     }
 
@@ -52,10 +57,13 @@ class SyncDataDisplay {
     var notificationContent: UNMutableNotificationContent
     var sentTabs: [SentTab]
 
-    init(content: UNMutableNotificationContent, contentHandler: @escaping (UNNotificationContent) -> Void) {
+    var tabQueue: TabQueue?
+
+    init(content: UNMutableNotificationContent, contentHandler: @escaping (UNNotificationContent) -> Void, tabQueue: TabQueue) {
         self.contentHandler = contentHandler
         self.notificationContent = content
         self.sentTabs = []
+        self.tabQueue = tabQueue
     }
 
     func displayNotification(_ didFinish: Bool) {
@@ -106,6 +114,9 @@ extension SyncDataDisplay: SyncDelegate {
     func displaySentTabForURL(_ URL: URL, title: String) {
         if URL.isWebPage() {
             sentTabs.append(SentTab(url: URL, title: title))
+
+            let item = ShareItem(url: URL.absoluteString, title: title, favicon: nil)
+            _ = tabQueue?.addToQueue(item)
         }
     }
 }
