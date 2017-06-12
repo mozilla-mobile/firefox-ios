@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import Deferred
 import Foundation
 import Shared
 import Storage
@@ -48,5 +49,9 @@ class ExtensionSyncManager: BrowserProfile.BrowserSyncManager {
     override func syncNamedCollections(why: SyncReason, names: [String]) -> Success {
         let names = names.filter { extensionSafeNames.contains($0) }
         return super.syncNamedCollections(why: why, names: names)
+    }
+
+    override func takeActionsOnEngineStateChanges<T: EngineStateChanges>(_ changes: T) -> Deferred<Maybe<T>> {
+        return deferMaybe(changes)
     }
 }
