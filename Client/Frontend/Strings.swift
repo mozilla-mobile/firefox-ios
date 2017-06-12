@@ -274,7 +274,6 @@ extension Strings {
     // one tab, but on lockscreen
     public static let SentTab_UnnamedTabArrivingNotification_title = NSLocalizedString("SentTab.UnnamedTabArrivingNotification.title", value: "Tab received", comment: "Title of notification received after an unnamed tab has been sent from an unnamed connected device. This is likely to be displayed on the device lock screen.")
     public static let SentTab_UnnamedTabArrivingNotificationNoDevice_body = NSLocalizedString("SentTab.UnnamedTabArrivingNotificationNoDevice.body", value: "%1$i tab has arrived", comment: "Body of notification received after one tab has been received. %1$i is the number of tabs (1).")
-    public static let SentTab_UnnamedTabArrivingNotificationMultiple2_body = NSLocalizedString("SentTab.UnnamedTabArrivingNotificationMultiple2.body", value: "%1$i tab has arrived from your connected devices", comment: "Body of notification received after one tab has been sent from an unnamed connected device. %1$i is the number of tabs (1).")
 
     // one tab, on home screen
     public static let SentTab_TabArrivingNotificationNoDevice_title = NSLocalizedString("SentTab.TabArrivingNotification.title", value: "Tab received", comment: "Title of notification received after a tab has been sent from an unnamed connected device")
@@ -285,7 +284,6 @@ extension Strings {
     public static let SentTab_TabsArrivingNotification_title = NSLocalizedString("SentTab.TabsArrivingNotification.title", value: "Tabs received", comment: "Title of notification received after multiple tab have been sent from an unnamed connected device")
     public static let SentTab_TabsArrivingNotificationMultiple2_body = NSLocalizedString("SentTab.UnnamedTabsArrivingNotificationMultiple2.body", value: "%1$i tabs have arrived from your connected devices", comment: "Body of notification received after multiple tabs have been sent from an unnamed connected device. %1$i is the number of tabs.")
     public static let SentTab_TabsArrivingNotificationNoDevice_body = NSLocalizedString("SentTab.UnnamedTabsArrivingNotificationNoDevice.body", value: "%1$i tabs have arrived", comment: "Body of notification received after multiple tabs has been received. %1$i is the number of tabs.")
-
 }
 
 // Reader Mode.
