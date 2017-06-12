@@ -299,7 +299,7 @@ extension URL {
      */
     public var schemeIsValid: Bool {
         guard let scheme = scheme else { return false }
-        return permanentURISchemes.contains(scheme)
+        return permanentURISchemes.contains(scheme.lowercased())
     }
 
     public func havingRemovedAuthorisationComponents() -> URL {
