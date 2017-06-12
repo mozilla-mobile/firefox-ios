@@ -168,7 +168,7 @@ extension URL {
         return nil
     }
 
-    public var absoluteDisplayString: String? {
+    public var absoluteDisplayString: String {
         var urlString = self.absoluteString
         // For http URLs, get rid of the trailing slash if the path is empty or '/'
         if (self.scheme == "http" || self.scheme == "https") && (self.path == "/") && urlString.endsWith("/") {

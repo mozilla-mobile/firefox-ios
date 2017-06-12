@@ -66,7 +66,7 @@ class SyncDataDisplay {
         let serializedTabs = sentTabs.flatMap { t -> NSDictionary? in
             return [
                 "title": t.title,
-                "url": t.url,
+                "url": t.url.absoluteString,
                 ] as NSDictionary
             } as NSArray
         userInfo["sentTabs"] = serializedTabs
@@ -82,20 +82,20 @@ class SyncDataDisplay {
 
         switch sentTabs.count {
         case 0:
-            notificationContent.title = "Firefox Accounts"
-            notificationContent.body = "Tap to begin"
+            notificationContent.title = Strings.SentTab_NoTabArrivingNotification_title
+            notificationContent.body = Strings.SentTab_NoTabArrivingNotification_body
         case 1:
             if SystemUtils.isDeviceLocked() {
-                notificationContent.title = "Received \(sentTabs.count) tab"
-                notificationContent.body = "Tap to open"
+                notificationContent.title = Strings.SentTab_UnnamedTabArrivingNotification_title
+                notificationContent.body = String(format: Strings.SentTab_UnnamedTabArrivingNotificationNoDevice_body, 1)
             } else {
                 let tab = sentTabs[0]
-                notificationContent.title = "Tap to open \(tab.title)"
-                notificationContent.body = "\(tab.url)"
+                notificationContent.title = Strings.SentTab_TabArrivingNotificationNoDevice_title
+                notificationContent.body = tab.url.absoluteDisplayString
             }
         default:
-            notificationContent.title = "Received \(sentTabs.count) tabs"
-            notificationContent.body = "Tap to open"
+            notificationContent.title = Strings.SentTab_TabsArrivingNotification_title
+            notificationContent.body = String(format: Strings.SentTab_TabsArrivingNotificationNoDevice_body, sentTabs.count)
         }
 
         contentHandler(notificationContent)
@@ -105,12 +105,12 @@ class SyncDataDisplay {
 extension SyncDataDisplay: SyncDelegate {
     func displaySentTabForURL(_ URL: URL, title: String) {
         if URL.isWebPage() {
-            sentTabs.append(SentTab(url: URL.absoluteString, title: title))
+            sentTabs.append(SentTab(url: URL, title: title))
         }
     }
 }
 
 struct SentTab {
-    let url: String
+    let url: URL
     let title: String
 }

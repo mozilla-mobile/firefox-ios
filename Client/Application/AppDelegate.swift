@@ -451,6 +451,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // We could load these here, but then we have to futz with the tab counter
         // and making NSURLRequests.
         self.browserViewController.loadQueuedTabs()
+        application.applicationIconBadgeNumber = 0
 
         // handle quick actions is available
         let quickActions = QuickActions.sharedInstance
