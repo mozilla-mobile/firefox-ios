@@ -270,6 +270,28 @@ extension Strings {
     public static let SentTabAddToReadingListActionTitle = NSLocalizedString("SentTab.AddToReadingList", value: "Add to Reading List", comment: "Button title displayed in a notification when a sent tab has been received. Tapping on the button will add the page to the reading list.")
 }
 
+// Sent tabs notifications. These are displayed when the app is backgrounded or the device is locked.
+extension Strings {
+    // zero tabs
+    public static let SentTab_NoTabArrivingNotification_title = NSLocalizedString("SentTab.NoTabArrivingNotification.title", value: "Firefox Sync", comment: "Title of notification received after a spurious message from FxA has been received.")
+    public static let SentTab_NoTabArrivingNotification_body =
+        NSLocalizedString("SentTab.NoTabArrivingNotification.body", value: "Tap to begin", comment: "Body of notification received after a spurious message from FxA has been received.")
+
+    // one tab, but on lockscreen
+    public static let SentTab_UnnamedTabArrivingNotification_title = NSLocalizedString("SentTab.UnnamedTabArrivingNotification.title", value: "Tab received", comment: "Title of notification received after an unnamed tab has been sent from an unnamed connected device. This is likely to be displayed on the device lock screen.")
+    public static let SentTab_UnnamedTabArrivingNotificationNoDevice_body = NSLocalizedString("SentTab.UnnamedTabArrivingNotificationNoDevice.body", value: "%1$i tab has arrived", comment: "Body of notification received after one tab has been received. %1$i is the number of tabs (1).")
+
+    // one tab, on home screen
+    public static let SentTab_TabArrivingNotificationNoDevice_title = NSLocalizedString("SentTab.TabArrivingNotification.title", value: "Tab received", comment: "Title of notification received after a tab has been sent from an unnamed connected device")
+    public static let SentTab_TabArrivingNotificationWithDevice_title = NSLocalizedString("SentTab.TabArrivingNotificationWithDevice.title", value: "Tab from %@", comment: "Title of notification received after a tab has been sent from a named connected device. %@ is the name of the named device.")
+    // body is the URL
+
+    // multiple tabs.
+    public static let SentTab_TabsArrivingNotification_title = NSLocalizedString("SentTab.TabsArrivingNotification.title", value: "Tabs received", comment: "Title of notification received after multiple tab have been sent from an unnamed connected device")
+    public static let SentTab_TabsArrivingNotificationMultiple2_body = NSLocalizedString("SentTab.UnnamedTabsArrivingNotificationMultiple2.body", value: "%1$i tabs have arrived from your connected devices", comment: "Body of notification received after multiple tabs have been sent from an unnamed connected device. %1$i is the number of tabs.")
+    public static let SentTab_TabsArrivingNotificationNoDevice_body = NSLocalizedString("SentTab.UnnamedTabsArrivingNotificationNoDevice.body", value: "%1$i tabs have arrived", comment: "Body of notification received after multiple tabs has been received. %1$i is the number of tabs.")
+}
+
 // Reader Mode.
 extension Strings {
     public static let ReaderModeAvailableVoiceOverAnnouncement = NSLocalizedString("ReaderMode.Available.VoiceOverAnnouncement", value: "Reader Mode available", comment: "Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available.")
