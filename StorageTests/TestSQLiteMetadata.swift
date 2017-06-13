@@ -17,13 +17,14 @@ class TestSQLiteMetadata: XCTestCase {
     override func setUp() {
         super.setUp()
         self.db = BrowserDB(filename: "foo.db", files: self.files)
-        self.db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
+        self.db.attachDB(filename: "metatest.db", as: AttachedDatabaseMetadata)
         XCTAssertTrue(db.createOrUpdate(BrowserTable()) == .success)
 
         self.metadata = SQLiteMetadata(db: db)
     }
 
     override func tearDown() {
+
         removeAllMetadata(self.db).succeeded()
         super.tearDown()
     }
