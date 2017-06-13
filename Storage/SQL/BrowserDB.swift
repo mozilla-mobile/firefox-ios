@@ -6,7 +6,6 @@ import Foundation
 import XCGLogger
 import Deferred
 import Shared
-import Deferred
 
 public let NotificationDatabaseWasRecreated = Notification.Name("NotificationDatabaseWasRecreated")
 
@@ -183,7 +182,7 @@ open class BrowserDB {
             }
         }
 
-        if let _ = self.db.transaction({ connection -> Bool in
+        if let error = self.db.transaction({ connection -> Bool in
             let thread = Thread.current.description
             // If the table doesn't exist, we'll create it.
             for table in tables {
@@ -220,7 +219,9 @@ open class BrowserDB {
             }
             return success
         }) {
-            // Err getting a transaction
+            // Error getting a transaction
+            log.error("Unable to get a transaction: \(error.localizedDescription)")
+            SentryIntegration.shared.sendSync(message: error.localizedDescription, tag: "BrowserDB", severity: .error)
             success = false
         }
 
