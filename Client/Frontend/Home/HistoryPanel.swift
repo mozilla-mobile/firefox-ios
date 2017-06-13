@@ -389,6 +389,12 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         log.warning("No site or no URL when selecting row.")
     }
 
+    func pinTopSite(_ site: Site) {
+        profile.history.addPinnedTopSite(site).uponQueue(.main) { result in
+            guard result.isSuccess else { return }
+        }
+    }
+
     func showSyncedTabs() {
         let nextController = RemoteTabsPanel()
         nextController.homePanelDelegate = self.homePanelDelegate
@@ -562,7 +568,11 @@ extension HistoryPanel: HomePanelContextMenu {
             self.removeHistoryForURLAtIndexPath(indexPath: indexPath)
         })
 
-        actions.append(removeAction)
+        let pinTopSite = ActionOverlayTableViewAction(title: Strings.PinTopsiteActionTitle, iconString: "action_pin", handler: { action in
+            self.pinTopSite(site)
+        })
+
+        actions.append(contentsOf: [pinTopSite, removeAction])
         return actions
     }
 }

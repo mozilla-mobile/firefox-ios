@@ -918,6 +918,8 @@ open class PinnedSite: Site {
     init(site: Site) {
         isPinnedSite = true
         super.init(url: site.url, title: site.title, bookmarked: site.bookmarked)
+        self.icon = site.icon
+        self.metadata = site.metadata
     }
 
 }
