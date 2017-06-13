@@ -43,8 +43,14 @@ public extension UIImageView {
             completionBlock?(color, url)
         } else {
             image.getColors(scaleDownSize: CGSize(width: 25, height: 25)) {colors in
-                completionBlock?(colors.backgroundColor, url)
-                FaviconFetcher.colors[domain] = colors.backgroundColor
+                let isSame = [colors.primary, colors.secondary, colors.detail].every { $0 == colors.primary }
+                if isSame {
+                    completionBlock?(UIColor.white, url)
+                    FaviconFetcher.colors[domain] = UIColor.white
+                } else {
+                    completionBlock?(colors.background, url)
+                    FaviconFetcher.colors[domain] = colors.background
+                }
             }
         }
     }
