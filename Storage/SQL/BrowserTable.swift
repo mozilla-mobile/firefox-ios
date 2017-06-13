@@ -118,7 +118,7 @@ private let log = Logger.syncLogger
  * We rely on SQLiteHistory having initialized the favicon table first.
  */
 open class BrowserTable: Table {
-    static let DefaultVersion = 25    // Bug 1370824.
+    static let DefaultVersion = 26    // Bug 1370824.
 
     // TableInfo fields.
     var name: String { return "BROWSER" }
@@ -245,7 +245,8 @@ open class BrowserTable: Table {
             "url TEXT NOT NULL UNIQUE, " +
             "title TEXT, " +
             "guid TEXT, " +
-            "pinDate REAL " +
+            "pinDate REAL, " +
+            "domain TEXT NOT NULL " +
         ")"
 
     let domainsTableCreate =
@@ -932,6 +933,15 @@ open class BrowserTable: Table {
         if from < 25 && to >= 25 {
             if !self.run(db, queries: [
                 pinnedTopSitesTableCreate
+                ]) {
+                return false
+            }
+        }
+
+        if from < 26 && to >= 26 {
+            if !self.run(db, queries: [
+                // Add the domain column
+                "ALTER TABLE \(TablePinnedTopSites) ADD COLUMN domain TEXT",
                 ]) {
                 return false
             }

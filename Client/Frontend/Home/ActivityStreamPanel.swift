@@ -475,7 +475,7 @@ extension ActivityStreamPanel: DataObserverDelegate {
                 return succeed()
             }
 
-            let usersSites = pinnedSites + mySites
+            let usersSites = pinnedSites.map({ PinnedSite(site:$0) }) + mySites
             let defaultSites = self.defaultTopSites()
 
             // Merge default topsites with a user's topsites.
@@ -529,7 +529,6 @@ extension ActivityStreamPanel: DataObserverDelegate {
         if defaultTopSites().filter({$0.url == url}).isEmpty == false {
             deleteTileForSuggestedSite(url)
         }
-        _ = profile.history.removeFromPinnedTopSites(site) // The topsite might be a pin. Removing a non pinned site does nothing
         profile.history.removeHostFromTopSites(host).uponQueue(.main) { result in
             guard result.isSuccess else { return }
             self.profile.panelDataObservers.activityStream.invalidate(highlights: false)
@@ -542,6 +541,14 @@ extension ActivityStreamPanel: DataObserverDelegate {
             self.profile.panelDataObservers.activityStream.invalidate(highlights: false)
         }
     }
+
+    func removePinTopSite(_ site: Site) {
+        profile.history.removeFromPinnedTopSites(site).uponQueue(.main) { result in
+            guard result.isSuccess else { return }
+            self.profile.panelDataObservers.activityStream.invalidate(highlights: false)
+        }
+    }
+
 
     func hideFromHighlights(_ site: Site) {
         profile.recommendations.removeHighlightForURL(site.url).uponQueue(.main) { result in
@@ -736,11 +743,22 @@ extension ActivityStreamPanel: HomePanelContextMenu {
             self.pinTopSite(site)
         })
 
+        let removePinTopSite = ActionOverlayTableViewAction(title: Strings.RemovePinTopsiteActionTitle, iconString: "action_unpin", handler: { action in
+            self.removePinTopSite(site)
+        })
+
+        let topSiteActions: [ActionOverlayTableViewAction]
+        if let _ = site as? PinnedSite {
+            topSiteActions = [removePinTopSite]
+        } else {
+            topSiteActions = [pinTopSite, removeTopSiteAction]
+        }
+
         var actions = [openInNewTabAction, openInNewPrivateTabAction, bookmarkAction, shareAction]
 
         switch Section(indexPath.section) {
             case .highlights: actions.append(contentsOf: [dismissHighlightAction, deleteFromHistoryAction])
-            case .topSites: actions.append(contentsOf: [pinTopSite, removeTopSiteAction])
+            case .topSites: actions.append(contentsOf: topSiteActions)
             case .highlightIntro, .bookmarks: break
         }
         return actions
@@ -892,4 +910,14 @@ class ASHeaderView: UICollectionReusableView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+open class PinnedSite: Site {
+    let isPinnedSite: Bool
+
+    init(site: Site) {
+        isPinnedSite = true
+        super.init(url: site.url, title: site.title, bookmarked: site.bookmarked)
+    }
+
 }

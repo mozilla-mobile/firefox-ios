@@ -137,7 +137,15 @@ extension SQLiteHistory: BrowserHistory {
     }
 
     public func removeFromPinnedTopSites(_ site: Site) -> Success {
-        return db.run([("DELETE FROM \(TablePinnedTopSites) where url = ?", [site.url])])
+        guard let host = (site.url as String).asURL?.normalizedHost else {
+            return deferMaybe(DatabaseError(description: "Invalid url for site \(site.url)"))
+        }
+
+        //do a fuzzy delete so dupes can be removed
+        let query: (String, Args?) = ("DELETE FROM \(TablePinnedTopSites) where domain = ?", [host])
+        return db.run([query]) >>== {
+            return self.db.run([("UPDATE \(TableDomains) set showOnTopSites = 1 WHERE domain = ?", [host])])
+        }
     }
 
     public func getPinnedTopSites() -> Deferred<Maybe<Cursor<Site>>> {
@@ -153,10 +161,12 @@ extension SQLiteHistory: BrowserHistory {
             return deferMaybe(DatabaseError(description: "Invalid site \(site.url)"))
         }
 
+        let args: Args = [site.url, now, site.title, site.id, guid, host]
+        let arglist = BrowserDB.varlist(args.count)
         // Prevent the pinned site from being used in topsite calculations
         // We dont have to worry about this when removing a pin because the assumption is that a user probably doesnt want it being recommended as a topsite either
         return self.removeHostFromTopSites(host) >>== {
-            return self.db.run([("INSERT OR REPLACE INTO \(TablePinnedTopSites)(url, pinDate, title, historyID, guid) VALUES (?,?,?,?,?)", [site.url, now, site.title, site.id, guid])])
+            return self.db.run([("INSERT OR REPLACE INTO \(TablePinnedTopSites)(url, pinDate, title, historyID, guid, domain) VALUES \(arglist)", args)])
         }
     }
 
