@@ -118,7 +118,7 @@ private let log = Logger.syncLogger
  * We rely on SQLiteHistory having initialized the favicon table first.
  */
 open class BrowserTable: Table {
-    static let DefaultVersion = 25    // Bug 1370824.
+    static let DefaultVersion = 26    // Bug 1370824.
 
     // TableInfo fields.
     var name: String { return "BROWSER" }
@@ -932,6 +932,16 @@ open class BrowserTable: Table {
 
         if from < 25 && to >= 25 {
             if !self.run(db, queries: [
+                pinnedTopSitesTableCreate
+                ]) {
+                return false
+            }
+        }
+
+        if from < 26 && to >= 26 {
+            if !self.run(db, queries: [
+                // The old pin table was never released so we can safely drop
+                "DROP TABLE IF EXISTS \(TablePinnedTopSites)",
                 pinnedTopSitesTableCreate
                 ]) {
                 return false
