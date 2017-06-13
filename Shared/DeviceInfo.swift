@@ -63,7 +63,7 @@ open class DeviceInfo {
     }
 
     open class func isSimulator() -> Bool {
-        return UIDevice.current.model.contains("Simulator")
+        return ProcessInfo.processInfo.environment["SIMULATOR_ROOT"] != nil
     }
 
     open class func isBlurSupported() -> Bool {
