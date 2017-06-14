@@ -172,9 +172,9 @@ class LeanplumIntegration {
     // Utils
     
     func setEnabled(_ enabled: Bool) {
-        if enabled {
-            self.start()
-        }
+        // Setting up Test Mode stops sending things to server.
+        if enabled { start() }
+        Leanplum.setTestModeEnabled(!enabled)
     }
 
     func canInstallFocus() -> Bool {
