@@ -537,6 +537,8 @@ class BrowserViewController: UIViewController {
         if !displayedRestoreTabsAlert && hasPendingCrashReport() {
             displayedRestoreTabsAlert = true
             showRestoreTabsAlert()
+            log.debug("Displayed alert to restore tabs after a crash.")
+            SentryIntegration.shared.send(message: "Displayed alert to restore tabs after a crash.", tag: "BrowserDB", severity: .info)
         } else {
             log.debug("Restoring tabs.")
             tabManager.restoreTabs()
@@ -555,7 +557,7 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func hasPendingCrashReport() -> Bool {
-        return Client.shared?.crashedLastLaunch() ?? false
+        return SentryIntegration.crashedLastLaunch
     }
 
     fileprivate func showRestoreTabsAlert() {
