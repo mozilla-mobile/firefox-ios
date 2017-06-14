@@ -64,6 +64,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     }
 
     @discardableResult fileprivate func startApplication(_ application: UIApplication, withLaunchOptions launchOptions: [AnyHashable: Any]?) -> Bool {
+        log.debug("Initializing Sentry…")
+        // Need to get "settings.sendUsageData" this way so that Sentry can be initialized
+        // before getting the Profile.
+        let sendUsageData = NSUserDefaultsPrefs(prefix: "profile").boolForKey("settings.sendUsageData") ?? true
+        SentryIntegration.shared.setup(sendUsageData: sendUsageData)
+        
         log.debug("Setting UA…")
         // Set the Firefox UA for browsing.
         setUserAgent()
@@ -89,9 +95,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         log.debug("Getting profile…")
         let profile = getProfile(application)
         appStateStore = AppStateStore(prefs: profile.prefs)
-
-        log.debug("Initializing Sentry…")
-        SentryIntegration.shared.setup(profile: profile)
 
         log.debug("Initializing telemetry…")
         Telemetry.initWithPrefs(profile.prefs)
