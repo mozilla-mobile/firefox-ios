@@ -451,6 +451,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // We could load these here, but then we have to futz with the tab counter
         // and making NSURLRequests.
         self.browserViewController.loadQueuedTabs()
+        application.applicationIconBadgeNumber = 0
 
         // handle quick actions is available
         let quickActions = QuickActions.sharedInstance
@@ -758,10 +759,46 @@ extension AppDelegate {
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         NSLog("APNS NOTIFICATION \(userInfo)")
 
+        // At this point, we know that NotificationService has been run.
+        // We get to this point if the notification was received while the app was in the foreground
+        // OR the app was backgrounded and now the user has tapped on the notification.
+        // Either way, if this method is being run, then the app is foregrounded.
+
+        // Either way, we should zero the badge number.
+        application.applicationIconBadgeNumber = 0
+
         guard let profile = self.profile else {
             return completionHandler(.noData)
         }
 
+        // NotificationService will have decrypted the push message, and done some syncing 
+        // activity. If the `client` collection was synced, and there are `displayURI` commands (i.e. sent tabs)
+        // NotificationService will have collected them for us in the userInfo.
+        if let serializedTabs = userInfo["sentTabs"] as? [[String: String]] {
+            // Let's go ahead and open those.
+            let receivedURLs = serializedTabs.flatMap { item -> URL? in
+                guard let tabURL = item["url"] else {
+                    return nil
+                }
+                return URL(string: tabURL)
+            }
+
+            if receivedURLs.count > 0 {
+                DispatchQueue.main.async {
+                    for url in receivedURLs {
+                        self.browserViewController.switchToTabForURLOrOpen(url, isPrivileged: false)
+                    }
+                }
+                return completionHandler(.newData)
+            }
+        }
+
+        // So we've got here, and there are no sent tabs.
+        // There are a number of possibilities here: 
+        // a) we started syncing in the NotificationService, but aborted once we reached the end.
+        // b) we did some non-displayURI commands which finished properly.
+        // 
+        // For now, we should just re-process the message handling.
         let handler = FxAPushMessageHandler(with: profile)
         handler.handle(userInfo: userInfo).upon { res in
             completionHandler(res.isSuccess ? .newData : .failed)
@@ -769,13 +806,8 @@ extension AppDelegate {
     }
 
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
-        log.info("APNS NOTIFICATION \(userInfo)")
-        guard let profile = self.profile else {
-            return
-        }
-
-        let handler = FxAPushMessageHandler(with: profile)
-        handler.handle(userInfo: userInfo)
+        let completionHandler: (UIBackgroundFetchResult) -> Void = { _ in }
+        self.application(application, didReceiveRemoteNotification: userInfo, fetchCompletionHandler: completionHandler)
     }
 }
 

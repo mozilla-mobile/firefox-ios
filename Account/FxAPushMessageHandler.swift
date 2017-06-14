@@ -83,6 +83,8 @@ extension FxAPushMessageHandler {
                 result = handlePasswordReset()
             case .collectionChanged:
                 result = handleCollectionChanged(json["data"])
+            case .accountVerified:
+                result = handleVerification()
         }
         return result
     }
@@ -96,9 +98,11 @@ extension FxAPushMessageHandler {
         }
 
         // Progress through the FxAStateMachine, then explicitly sync.
-        return account.advance().bind { _ in
-            FxALoginHelper.performVerifiedSync(self.profile, account: account)
-        }
+        // We need a better solution than calling out to FxALoginHelper, because that class isn't 
+        // available in NotificationService, where this class is also used.
+        // Since verification via Push has never been seen to work, we can be comfortable
+        // leaving this as unimplemented.
+        return unimplemented(.accountVerified)
     }
 }
 
@@ -176,6 +180,9 @@ enum PushMessageType: String {
     case passwordChanged = "fxaccounts:password_changed"
     case passwordReset = "fxaccounts:password_reset"
     case collectionChanged = "sync:collection_changed"
+
+    // This isn't a real message type, just the absence of one.
+    case accountVerified = "account_verified"
 }
 
 enum PushMessageError: MaybeErrorType {
