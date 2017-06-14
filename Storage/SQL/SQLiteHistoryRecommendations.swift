@@ -109,7 +109,7 @@ extension SQLiteHistory: HistoryRecommendations {
     public func getRecentBookmarks(_ limit: Int = 3) -> Deferred<Maybe<Cursor<Site>>> {
         let fiveDaysAgo: UInt64 = Date.now() - (OneDayInMilliseconds * 5) // The data is joined with a millisecond not a microsecond one. (History)
 
-        let subQuerySiteProjection = "historyID, url, siteTitle, guid, visitCount, is_bookmarked"
+        let subQuerySiteProjection = "historyID, url, siteTitle, guid, is_bookmarked"
         let removeMultipleDomainsSubquery =
             " INNER JOIN (SELECT \(ViewHistoryVisits).domain_id AS domain_id" +
             " FROM \(ViewHistoryVisits)" +
@@ -117,14 +117,14 @@ extension SQLiteHistory: HistoryRecommendations {
 
         let bookmarkHighlights =
             "SELECT \(subQuerySiteProjection) FROM (" +
-                "   SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, \(TableHistory).title AS siteTitle, guid, \(TableHistory).domain_id, NULL AS visitDate, (SELECT count(1) FROM visits WHERE \(TableVisits).siteID = \(TableHistory).id) as visitCount, 1 AS is_bookmarked" +
+                "   SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, \(TableHistory).title AS siteTitle, guid, \(TableHistory).domain_id, NULL AS visitDate, 1 AS is_bookmarked" +
                 "   FROM (" +
                 "       SELECT bmkUri" +
                 "       FROM \(ViewBookmarksLocalOnMirror)" +
                 "       WHERE \(ViewBookmarksLocalOnMirror).server_modified > ? OR \(ViewBookmarksLocalOnMirror).local_modified > ?" +
                 "   )" +
                 "   LEFT JOIN \(TableHistory) ON \(TableHistory).url = bmkUri" + removeMultipleDomainsSubquery +
-                "   WHERE visitCount >= 2 AND \(TableHistory).title NOT NULL and \(TableHistory).title != '' AND url NOT IN" +
+                "   WHERE \(TableHistory).title NOT NULL and \(TableHistory).title != '' AND url NOT IN" +
                 "       (SELECT \(TableActivityStreamBlocklist).url FROM \(TableActivityStreamBlocklist))" +
                 "   LIMIT \(limit)" +
             ")"

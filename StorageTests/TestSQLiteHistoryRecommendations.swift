@@ -21,12 +21,14 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
     var prefs: MockProfilePrefs!
     var history: SQLiteHistory!
     var bookmarks: MergedSQLiteBookmarks!
+    var metadata: SQLiteMetadata!
 
     override func setUp() {
         super.setUp()
 
         db = BrowserDB(filename: "browser.db", files: files)
         db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
+        metadata = SQLiteMetadata(db: db)
         prefs = MockProfilePrefs()
         history = SQLiteHistory(db: db, prefs: prefs)
         bookmarks = MergedSQLiteBookmarks(db: db)
@@ -101,7 +103,6 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         XCTAssertEqual(highlights[0]!.title, "A")
         XCTAssertEqual(highlights[1]!.title, "C")
     }
-
 
     /*
      * Verify that we do not return a highlight if
@@ -188,14 +189,6 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
     }
 
     func testBookmarkHighlights() {
-        let files = MockFiles()
-        let db = BrowserDB(filename: "browser.db", files: files)
-        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
-        let prefs = MockProfilePrefs()
-        let metadata = SQLiteMetadata(db: db)
-        let history = SQLiteHistory(db: db, prefs: prefs)
-        let bookmarks = MergedSQLiteBookmarks(db: db)
-
         history.clearHistory().succeeded()
         populateForRecommendationCalculations(history, bookmarks: bookmarks, metadata: metadata, historyCount: 10, bookmarkCount: 10)
 
