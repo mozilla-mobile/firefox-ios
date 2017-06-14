@@ -154,7 +154,6 @@ extension SQLiteHistory: BrowserHistory {
         return db.runQuery(sql, args: [], factory: SQLiteHistory.iconHistoryMetadataColumnFactory)
     }
 
-
     public func addPinnedTopSite(_ site: Site) -> Success { // needs test
         let now = Date.now()
         guard let guid = site.guid, let host = (site.url as String).asURL?.normalizedHost else {

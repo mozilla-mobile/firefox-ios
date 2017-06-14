@@ -549,7 +549,6 @@ extension ActivityStreamPanel: DataObserverDelegate {
         }
     }
 
-
     func hideFromHighlights(_ site: Site) {
         profile.recommendations.removeHighlightForURL(site.url).uponQueue(.main) { result in
             guard result.isSuccess else { return }
@@ -913,10 +912,9 @@ class ASHeaderView: UICollectionReusableView {
 }
 
 open class PinnedSite: Site {
-    let isPinnedSite: Bool
+    let isPinnedSite = true
 
     init(site: Site) {
-        isPinnedSite = true
         super.init(url: site.url, title: site.title, bookmarked: site.bookmarked)
         self.icon = site.icon
         self.metadata = site.metadata

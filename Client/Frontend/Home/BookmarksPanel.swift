@@ -370,9 +370,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     }
 
     func pinTopSite(_ site: Site) {
-        profile.history.addPinnedTopSite(site).uponQueue(.main) { result in
-            guard result.isSuccess else { return }
-        }
+        _ = profile.history.addPinnedTopSite(site).value
     }
 
     func deleteBookmark(indexPath: IndexPath, source: BookmarksModel) {
@@ -443,9 +441,6 @@ extension BookmarksPanel: HomePanelContextMenu {
             })
             actions.append(removeAction)
         }
-
-
-
         return actions
     }
 }

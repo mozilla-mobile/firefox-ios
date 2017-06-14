@@ -390,9 +390,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     }
 
     func pinTopSite(_ site: Site) {
-        profile.history.addPinnedTopSite(site).uponQueue(.main) { result in
-            guard result.isSuccess else { return }
-        }
+        _ = profile.history.addPinnedTopSite(site).value
     }
 
     func showSyncedTabs() {
