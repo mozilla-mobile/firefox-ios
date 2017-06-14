@@ -252,12 +252,21 @@ class FxALoginHelper {
         // The only way we can tell if the account has been verified is to 
         // start a sync. If it works, then yay,
         account.advance().upon { state in
+            if attemptsLeft == verificationMaxRetries {
+                // We need to associate the fxaDeviceId with sync;
+                // We can do this anything after the first time we account.advance()
+                // but before the first time we sync.
+                let scratchpadPrefs = profile.prefs.branch("sync.scratchpad")
+                if let deviceRegistration = account.deviceRegistration {
+                    scratchpadPrefs.setString(deviceRegistration.toJSON().stringValue()!, forKey: PrefDeviceRegistration)
+                }
+            }
+
             guard state.actionNeeded == .needsVerification else {
                 // Verification has occurred remotely, and we can proceed.
                 // The state machine will have told any listening UIs that 
                 // we're done.
-                FxALoginHelper.performVerifiedSync(profile, account: account)
-                return
+                return self.performVerifiedSync(profile, account: account)
             }
 
             if account.pushRegistration != nil {
@@ -282,18 +291,7 @@ class FxALoginHelper {
         delegate?.accountLoginDidFail()
     }
 
-    // Class method so as to be callable from the FxAPushMessageHandler, whenever it is dealing with 
-    // verification.
-    @discardableResult class func performVerifiedSync(_ profile: Profile, account: FirefoxAccount) -> Success {
-        // First we need to associate the fxaDeviceId with sync;
-        // We can do this anything after the first time we account.advance()
-        // but before the first time we sync.
-        let scratchpadPrefs = profile.prefs.branch("sync.scratchpad")
-        if let deviceRegistration = account.deviceRegistration {
-            scratchpadPrefs.setString(deviceRegistration.toJSON().stringValue()!, forKey: PrefDeviceRegistration)
-        }
-
-        // Once we do that we can do an explicit sync.
-        return profile.syncManager.syncEverything(why: .didLogin) >>> succeed
+    func performVerifiedSync(_ profile: Profile, account: FirefoxAccount) {
+        profile.syncManager.syncEverything(why: .didLogin)
     }
 }

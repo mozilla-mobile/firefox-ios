@@ -212,7 +212,7 @@ open class BrowserProfile: Profile {
     weak fileprivate var app: UIApplication?
 
     let db: BrowserDB
-    let loginsDB: BrowserDB
+    let loginsDB: BrowserDB?
 
     private static var loginsKey: String? {
         let key = "sqlcipher.key.logins.db"
@@ -256,7 +256,11 @@ open class BrowserProfile: Profile {
         let isNewProfile = !files.exists("")
 
         // Setup our database handles
-        self.loginsDB = BrowserDB(filename: "logins.db", secretKey: BrowserProfile.loginsKey, files: files)
+
+        // We almost certainly don't want to be accessing the logins.db when in an extension, so let's avoid
+        // corrupting it by not opening it at all.
+        self.loginsDB = app != nil ? BrowserDB(filename: "logins.db", secretKey: BrowserProfile.loginsKey, files: files) : nil
+
         self.db = BrowserDB(filename: "browser.db", files: files)
         self.db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
 
@@ -308,7 +312,7 @@ open class BrowserProfile: Profile {
         isShutdown = false
         
         db.reopenIfClosed()
-        loginsDB.reopenIfClosed()
+        loginsDB?.reopenIfClosed()
     }
 
     func shutdown() {
@@ -316,7 +320,7 @@ open class BrowserProfile: Profile {
         isShutdown = true
 
         db.forceClose()
-        loginsDB.forceClose()
+        loginsDB?.forceClose()
     }
 
     @objc
@@ -465,7 +469,7 @@ open class BrowserProfile: Profile {
         return ClosedTabsStore(prefs: self.prefs)
     }()
 
-    fileprivate func getSyncDelegate() -> SyncDelegate {
+    open func getSyncDelegate() -> SyncDelegate {
         if let app = self.app {
             return BrowserProfileSyncDelegate(app: app)
         }
@@ -499,7 +503,7 @@ open class BrowserProfile: Profile {
     }
 
     lazy var logins: BrowserLogins & SyncableLogins & ResettableSyncStorage = {
-        return SQLiteLogins(db: self.loginsDB)
+        return SQLiteLogins(db: self.loginsDB!)
     }()
 
     lazy var isChinaEdition: Bool = {
@@ -584,7 +588,7 @@ open class BrowserProfile: Profile {
     }
 
     // Extends NSObject so we can use timers.
-    class BrowserSyncManager: NSObject, SyncManager {
+    public class BrowserSyncManager: NSObject, SyncManager {
         // We shouldn't live beyond our containing BrowserProfile, either in the main app or in
         // an extension.
         // But it's possible that we'll finish a side-effect sync after we've ditched the profile
@@ -599,12 +603,12 @@ open class BrowserProfile: Profile {
         fileprivate var syncTimer: Timer?
 
         fileprivate var backgrounded: Bool = true
-        func applicationDidEnterBackground() {
+        public func applicationDidEnterBackground() {
             self.backgrounded = true
             self.endTimedSyncs()
         }
 
-        func applicationDidBecomeActive() {
+        public func applicationDidBecomeActive() {
             self.backgrounded = false
 
             guard self.profile.hasSyncableAccount() else {
@@ -634,13 +638,13 @@ open class BrowserProfile: Profile {
          */
         fileprivate let syncLock = NSRecursiveLock()
 
-        var isSyncing: Bool {
+        public var isSyncing: Bool {
             syncLock.lock()
             defer { syncLock.unlock() }
             return syncDisplayState != nil && syncDisplayState! == .inProgress
         }
 
-        var syncDisplayState: SyncDisplayState?
+        public var syncDisplayState: SyncDisplayState?
 
         // The dispatch queue for coordinating syncing and resetting the database.
         fileprivate let syncQueue = DispatchQueue(label: "com.mozilla.firefox.sync")
@@ -673,7 +677,7 @@ open class BrowserProfile: Profile {
             syncReducer = nil
         }
 
-        fileprivate func canSendUsageData() -> Bool {
+        func canSendUsageData() -> Bool {
             return profile.prefs.boolForKey("settings.sendUsageData") ?? true
         }
 
@@ -839,7 +843,7 @@ open class BrowserProfile: Profile {
             }
         }
 
-        var lastSyncFinishTime: Timestamp? {
+        public var lastSyncFinishTime: Timestamp? {
             get {
                 return self.prefs.timestampForKey(PrefsKeys.KeyLastSyncFinishTime)
             }
@@ -871,7 +875,7 @@ open class BrowserProfile: Profile {
             return self.prefs.branch("sync")
         }
 
-        func onAddedAccount() -> Success {
+        public func onAddedAccount() -> Success {
             // Only sync if we're green lit. This makes sure that we don't sync unverified accounts.
             guard self.profile.hasSyncableAccount() else { return succeed() }
 
@@ -915,11 +919,11 @@ open class BrowserProfile: Profile {
             }
         }
 
-        func onNewProfile() {
+        public func onNewProfile() {
             SyncStateMachine.clearStateFromPrefs(self.prefsForSync)
         }
 
-        func onRemovedAccount(_ account: FirefoxAccount?) -> Success {
+        public func onRemovedAccount(_ account: FirefoxAccount?) -> Success {
             let profile = self.profile
 
             // Run these in order, because they might write to the same DB!
@@ -950,7 +954,7 @@ open class BrowserProfile: Profile {
             return Timer.scheduledTimer(timeInterval: interval, target: self, selector: selector, userInfo: nil, repeats: true)
         }
 
-        func beginTimedSyncs() {
+        public func beginTimedSyncs() {
             if self.syncTimer != nil {
                 log.debug("Already running sync timer.")
                 return
@@ -966,7 +970,7 @@ open class BrowserProfile: Profile {
          * The caller is responsible for calling this on the same thread on which it called
          * beginTimedSyncs.
          */
-        func endTimedSyncs() {
+        public func endTimedSyncs() {
             if let t = self.syncTimer {
                 log.debug("Stopping sync timer.")
                 self.syncTimer = nil
@@ -1126,7 +1130,7 @@ open class BrowserProfile: Profile {
             }
         }
 
-        @discardableResult func syncEverything(why: SyncReason) -> Success {
+        @discardableResult public func syncEverything(why: SyncReason) -> Success {
             return self.syncSeveral(
                 why: why,
                 synchronizers:
@@ -1182,20 +1186,20 @@ open class BrowserProfile: Profile {
             self.syncEverything(why: .scheduled)
         }
 
-        func hasSyncedHistory() -> Deferred<Maybe<Bool>> {
+        public func hasSyncedHistory() -> Deferred<Maybe<Bool>> {
             return self.profile.history.hasSyncedHistory()
         }
 
-        func hasSyncedLogins() -> Deferred<Maybe<Bool>> {
+        public func hasSyncedLogins() -> Deferred<Maybe<Bool>> {
             return self.profile.logins.hasSyncedLogins()
         }
 
-        func syncClients() -> SyncResult {
+        public func syncClients() -> SyncResult {
             // TODO: recognize .NotStarted.
             return self.sync("clients", function: syncClientsWithDelegate)
         }
 
-        func syncClientsThenTabs() -> SyncResult {
+        public func syncClientsThenTabs() -> SyncResult {
             return self.syncSeveral(
                 why: .user,
                 synchronizers:
@@ -1206,11 +1210,11 @@ open class BrowserProfile: Profile {
             }
         }
 
-        @discardableResult func syncLogins() -> SyncResult {
+        @discardableResult public func syncLogins() -> SyncResult {
             return self.sync("logins", function: syncLoginsWithDelegate)
         }
 
-        func syncHistory() -> SyncResult {
+        public func syncHistory() -> SyncResult {
             // TODO: recognize .NotStarted.
             return self.sync("history", function: syncHistoryWithDelegate)
         }
