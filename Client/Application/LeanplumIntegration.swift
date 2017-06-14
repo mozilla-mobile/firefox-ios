@@ -132,12 +132,6 @@ class LeanplumIntegration {
             Leanplum.track(eventName.rawValue, withParameters: parameters)
         }
     }
-
-    func track(eventName: LeanplumEventName, withInfo: String) {
-        if shouldSendToLP() {
-            Leanplum.track(eventName.rawValue, withInfo: withInfo)
-        }
-    }
     
     // States
 
