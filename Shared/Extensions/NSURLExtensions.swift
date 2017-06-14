@@ -318,13 +318,27 @@ extension URL {
 // Extensions to deal with ReaderMode URLs
 
 extension URL {
+    // Is this an internal ReaderMode url?
     public var isReaderModeURL: Bool {
         let scheme = self.scheme, host = self.host, path = self.path
         return scheme == "http" && host == "localhost" && path == "/reader-mode/page"
     }
 
+    // Is this a synced ReaderMode url? about:reader?url=http://...
+    public var isSyncedReaderModeURL: Bool {
+        if self.scheme != "about" {
+            return false
+        }
+        let urlParts = self.absoluteString.components(separatedBy: "?url=")
+        if urlParts.isEmpty || urlParts.count == 1 {
+            return false
+        }
+        return urlParts[0] == "about:reader"
+    }
+
     public var decodeReaderModeURL: URL? {
-        if self.isReaderModeURL {
+        // Both types of ReaderMode URLs have a 'url' query parameter.
+        if self.isReaderModeURL || self.isSyncedReaderModeURL {
             if let components = URLComponents(url: self, resolvingAgainstBaseURL: false), let queryItems = components.queryItems, queryItems.count == 1 {
                 if let queryItem = queryItems.first, let value = queryItem.value {
                     return URL(string: value)

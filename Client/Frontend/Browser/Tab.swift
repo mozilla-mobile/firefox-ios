@@ -299,6 +299,17 @@ class Tab: NSObject {
 
     @discardableResult func loadRequest(_ request: URLRequest) -> WKNavigation? {
         if let webView = webView {
+            // Convert any about:reader?url=http://example.com URLs into local ReaderMode URLs.
+            // We do this here to avoid adding about:reader URLs into webView's navigation stack.
+            if let url = request.url,
+                let syncedReaderModeURL = url.decodeReaderModeURL,
+                let localReaderModeURL = syncedReaderModeURL.encodeReaderModeURL(
+                    WebServer.sharedInstance.baseReaderModeURL()
+                ) {
+                    let readerModeRequest = PrivilegedRequest(url: localReaderModeURL) as URLRequest
+                    lastRequest = readerModeRequest
+                    return webView.load(readerModeRequest)
+                }
             lastRequest = request
             return webView.load(request)
         }

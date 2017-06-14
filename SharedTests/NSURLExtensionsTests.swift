@@ -257,12 +257,36 @@ class NSURLExtensionsTests: XCTestCase {
         badurls.forEach { XCTAssertFalse(URL(string:$0)!.isReaderModeURL, $0) }
     }
 
+    func testisSyncedReaderModeURL() {
+        let goodurls = [
+            "about:reader?url=http://example.com",
+            "about:reader?url=https%3A%2F%2Fen%2Em%2Ewikipedia%2Eorg%2Fwiki%2FMain%5FPage",
+            "about:reader?url="
+        ]
+        let badurls = [
+            "about:reader",
+            "about:reader?",
+            "about:reader?stuff=http://example.com",
+            "about:reader?stuff=",
+            "http://example.com",
+            "http://localhost:6571/reader-mode/page",
+            "http://localhost:6571/reader-mode/page?url=http://example.com",
+            "http://localhost:6571/reader-mode/page?url=https%3A%2F%2Fen%2Em%2Ewikipedia%2Eorg%2Fwiki%2FMain%5FPage"
+        ]
+
+        goodurls.forEach { XCTAssertTrue(URL(string:$0)!.isSyncedReaderModeURL, $0) }
+        badurls.forEach { XCTAssertFalse(URL(string:$0)!.isSyncedReaderModeURL, $0) }
+    }
+
     func testdecodeReaderModeURL() {
         let goodurls = [
-            ("http://localhost:6571/reader-mode/page?url=https%3A%2F%2Fen%2Em%2Ewikipedia%2Eorg%2Fwiki%2FMain%5FPage", URL(string: "https://en.m.wikipedia.org/wiki/Main_Page"))
+            ("http://localhost:6571/reader-mode/page?url=https%3A%2F%2Fen%2Em%2Ewikipedia%2Eorg%2Fwiki%2FMain%5FPage", URL(string: "https://en.m.wikipedia.org/wiki/Main_Page")),
+            ("about:reader?url=https%3A%2F%2Fen%2Em%2Ewikipedia%2Eorg%2Fwiki%2FMain%5FPage",
+                URL(string: "https://en.m.wikipedia.org/wiki/Main_Page"))
         ]
         let badurls = [
             "http://google.com",
+            "about:reader",
             "http://localhost:6571/sessionrestore.html",
             "http://localhost:1234/about/home/#panel=0",
             "http://localhost:6571/reader-mode/page"
