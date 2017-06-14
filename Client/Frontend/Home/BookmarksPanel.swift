@@ -432,7 +432,10 @@ extension BookmarksPanel: HomePanelContextMenu {
             self.pinTopSite(site)
         })
 
-        actions.append(pinTopSite)
+        if FeatureSwitches.activityStream.isMember(profile.prefs) {
+            actions.append(pinTopSite)
+        }
+
         // Only local bookmarks can be removed
         guard let source = source else { return nil }
         if source.current.itemIsEditableAtIndex(indexPath.row) {

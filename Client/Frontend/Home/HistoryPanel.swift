@@ -570,7 +570,11 @@ extension HistoryPanel: HomePanelContextMenu {
             self.pinTopSite(site)
         })
 
-        actions.append(contentsOf: [pinTopSite, removeAction])
+        if FeatureSwitches.activityStream.isMember(profile.prefs) {
+            actions.append(pinTopSite)
+        }
+
+        actions.append(removeAction)
         return actions
     }
 }
