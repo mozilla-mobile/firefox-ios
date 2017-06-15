@@ -78,13 +78,14 @@ open class Site: Identifiable {
     open fileprivate(set) var bookmarked: Bool?
 
     public convenience init(url: String, title: String) {
-        self.init(url: url, title: title, bookmarked: false)
+        self.init(url: url, title: title, bookmarked: false, guid: nil)
     }
 
-    public init(url: String, title: String, bookmarked: Bool?) {
+    public init(url: String, title: String, bookmarked: Bool?, guid: String? = nil) {
         self.url = url
         self.title = title
         self.bookmarked = bookmarked
+        self.guid = guid
     }
 
     open func setBookmarked(_ bookmarked: Bool) {

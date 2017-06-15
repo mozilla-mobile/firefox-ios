@@ -369,6 +369,10 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         return [delete]
     }
 
+    func pinTopSite(_ site: Site) {
+        _ = profile.history.addPinnedTopSite(site).value
+    }
+
     func deleteBookmark(indexPath: IndexPath, source: BookmarksModel) {
         guard let bookmark = source.current[indexPath.row] else {
             return
@@ -416,11 +420,21 @@ extension BookmarksPanel: HomePanelContextMenu {
 
     func getSiteDetails(for indexPath: IndexPath) -> Site? {
         guard let bookmarkItem = source?.current[indexPath.row] as? BookmarkItem else { return nil }
-        return Site(url: bookmarkItem.url, title: bookmarkItem.title)
+        let site = Site(url: bookmarkItem.url, title: bookmarkItem.title, bookmarked: true, guid: bookmarkItem.guid)
+        site.icon = bookmarkItem.favicon
+        return site
     }
 
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [ActionOverlayTableViewAction]? {
         guard var actions = getDefaultContextMenuActions(for: site, homePanelDelegate: homePanelDelegate) else { return nil }
+
+        let pinTopSite = ActionOverlayTableViewAction(title: Strings.PinTopsiteActionTitle, iconString: "action_pin", handler: { action in
+            self.pinTopSite(site)
+        })
+
+        if FeatureSwitches.activityStream.isMember(profile.prefs) {
+            actions.append(pinTopSite)
+        }
 
         // Only local bookmarks can be removed
         guard let source = source else { return nil }
@@ -430,7 +444,6 @@ extension BookmarksPanel: HomePanelContextMenu {
             })
             actions.append(removeAction)
         }
-
         return actions
     }
 }
