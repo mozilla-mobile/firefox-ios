@@ -2124,7 +2124,7 @@ extension BrowserViewController: HomePanelViewControllerDelegate {
     }
 
     func homePanelViewControllerDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
-        self.tabManager.addTab(PrivilegedRequest(url: url) as URLRequest, afterTab: self.tabManager.selectedTab, isPrivate: isPrivate)
+        let tab = self.tabManager.addTab(PrivilegedRequest(url: url) as URLRequest, afterTab: self.tabManager.selectedTab, isPrivate: isPrivate)
         // If we are showing toptabs a user can just use the top tab bar
         // If in overlay mode switching doesnt correctly dismiss the homepanels
         guard self.topTabsViewController == nil, !self.urlBar.inOverlayMode else {
