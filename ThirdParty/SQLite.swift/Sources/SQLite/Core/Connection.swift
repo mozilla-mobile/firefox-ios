@@ -29,7 +29,7 @@ import sqlite3
 #elseif SQLITE_SWIFT_SQLCIPHER
 import SQLCipher
 #else
-import CSQLite
+import SQLite3
 #endif
 
 /// A connection to SQLite.
