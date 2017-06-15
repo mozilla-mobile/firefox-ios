@@ -163,9 +163,9 @@ class TabCell: UICollectionViewCell {
 
         titleText.backgroundColor = UIColor.clear
 
-        title.addSubview(self.closeButton)
-        title.addSubview(self.titleText)
-        title.addSubview(self.favicon)
+        title.contentView.addSubview(self.closeButton)
+        title.contentView.addSubview(self.titleText)
+        title.contentView.addSubview(self.favicon)
 
         backgroundHolder.addSubview(title)
         self.title = title
