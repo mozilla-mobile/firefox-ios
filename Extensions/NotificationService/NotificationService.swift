@@ -98,12 +98,18 @@ class SyncDataDisplay {
                 notificationContent.body = String(format: Strings.SentTab_UnnamedTabArrivingNotificationNoDevice_body, 1)
             } else {
                 let tab = sentTabs[0]
-                notificationContent.title = Strings.SentTab_TabArrivingNotificationNoDevice_title
+                let title: String
+                if let deviceName = tab.deviceName  {
+                    title = String(format: Strings.SentTab_TabArrivingNotificationWithDevice_title, deviceName)
+                } else {
+                    title = Strings.SentTab_TabArrivingNotificationNoDevice_title
+                }
+                notificationContent.title = title
                 notificationContent.body = tab.url.absoluteDisplayString
             }
         default:
             notificationContent.title = Strings.SentTab_TabsArrivingNotification_title
-            notificationContent.body = String(format: Strings.SentTab_TabsArrivingNotificationNoDevice_body, sentTabs.count)
+            notificationContent.body = String(format: Strings.SentTab_TabsArrivingNotification_title, sentTabs.count)
         }
 
         contentHandler(notificationContent)
