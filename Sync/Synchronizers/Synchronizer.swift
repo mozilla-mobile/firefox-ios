@@ -15,7 +15,7 @@ private let log = Logger.syncLogger
  * expose notification functionality in this way.
  */
 public protocol SyncDelegate {
-    func displaySentTabForURL(_ URL: URL, title: String)
+    func displaySentTab(for url: URL, title: String, from deviceName: String)
     // TODO: storage.
 }
 

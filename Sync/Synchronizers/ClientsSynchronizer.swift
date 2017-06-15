@@ -50,12 +50,15 @@ open class WipeCommand: Command {
 open class DisplayURICommand: Command {
     let uri: URL
     let title: String
+    let sender: String
 
     public init?(command: String, args: [JSON]) {
         if let uri = args[0].string?.asURL,
+            let sender = args[1].string,
             let title = args[2].string {
-                self.uri = uri
-                self.title = title
+            self.uri = uri
+            self.sender = sender
+            self.title = title
         } else {
             // Oh, Swift.
             self.uri = "http://localhost/".asURL!
@@ -69,7 +72,7 @@ open class DisplayURICommand: Command {
     }
 
     open func run(_ synchronizer: ClientsSynchronizer) -> Success {
-        synchronizer.delegate.displaySentTabForURL(uri, title: title)
+        synchronizer.delegate.displaySentTab(for: uri, title: title, from: sender)
         return succeed()
     }
 

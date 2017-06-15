@@ -111,11 +111,11 @@ class SyncDataDisplay {
 }
 
 extension SyncDataDisplay: SyncDelegate {
-    func displaySentTabForURL(_ URL: URL, title: String) {
-        if URL.isWebPage() {
-            sentTabs.append(SentTab(url: URL, title: title))
+    func displaySentTab(for url: URL, title: String, from deviceName: String) {
+        if url.isWebPage() {
+            sentTabs.append(SentTab(url: url, title: title, deviceName: deviceName))
 
-            let item = ShareItem(url: URL.absoluteString, title: title, favicon: nil)
+            let item = ShareItem(url: url.absoluteString, title: title, favicon: nil)
             _ = tabQueue?.addToQueue(item)
         }
     }
@@ -124,4 +124,5 @@ extension SyncDataDisplay: SyncDelegate {
 struct SentTab {
     let url: URL
     let title: String
+    let deviceName: String
 }
