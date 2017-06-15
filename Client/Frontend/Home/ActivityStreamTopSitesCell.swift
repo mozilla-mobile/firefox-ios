@@ -133,6 +133,12 @@ class TopSiteItemCell: UICollectionViewCell {
         } else {
             titleLabel.text = site.tileURL.hostSLD
         }
+
+        // If its a pinned site add a bullet point to the front
+        if let _ = site as? PinnedSite, let titleText = titleLabel.text {
+            titleLabel.text = "• \(titleText)"
+        }
+
         accessibilityLabel = titleLabel.text
         if let suggestedSite = site as? SuggestedSite {
             let img = UIImage(named: suggestedSite.faviconImagePath!)
