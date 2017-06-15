@@ -106,6 +106,7 @@ class SearchTests: BaseTestCase {
         
         navigator.goto(URLBarOpen)
         app.textFields["address"].tap()
+        waitforExistence(app.menuItems["Paste"])
         app.menuItems["Paste"].tap()
         
         // Verify that the Paste shows the search controller with prompt
