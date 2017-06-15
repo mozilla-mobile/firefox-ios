@@ -173,8 +173,8 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         let cacheRoot = cachedServer.start()
         let url = "\(cacheRoot)/cachedPage.html"
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address"))
-            .perform(grey_typeText("\(url)\n"))
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_replaceText(url))
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_typeText("\n"))
         tester().waitForWebViewElementWithAccessibilityLabel("Cache test")
 
         let webView = tester().waitForView(withAccessibilityLabel: "Web content") as! WKWebView

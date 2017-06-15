@@ -82,10 +82,9 @@ class HistoryTests: KIFTestCase {
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("History")).perform(grey_tap())
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(urls[0]))
-            .perform(grey_swipeSlowInDirection(GREYDirection.left))
-        
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Delete"))
-            .inRoot(grey_kindOfClass(NSClassFromString("_UITableViewCellActionButton")!))
+            .perform(grey_longPress())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Delete from History"))
+            .inRoot(grey_kindOfClass(NSClassFromString("UITableViewCellContentView")!))
             .perform(grey_tap())
         
         // The second history entry still exists
@@ -121,9 +120,10 @@ class HistoryTests: KIFTestCase {
         EarlGrey.select(elementWithMatcher:grey_accessibilityLabel("History"))
             .perform(grey_tap())
         EarlGrey.select(elementWithMatcher:grey_accessibilityLabel(urlToDelete))
-            .perform(grey_swipeSlowInDirection(GREYDirection.left))
+          //  .perform(grey_swipeSlowInDirection(GREYDirection.left))
+        .perform(grey_swipeFastInDirectionWithStartPoint(GREYDirection.left, 40.0, 0.0))
         EarlGrey.select(elementWithMatcher:grey_accessibilityLabel("Delete"))
-            .inRoot(grey_kindOfClass(NSClassFromString("_UITableViewCellActionButton")!))
+            .inRoot(grey_kindOfClass(NSClassFromString("UISwipeActionStandardButton")!))
             .perform(grey_tap())
         
         // The history list still exists
