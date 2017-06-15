@@ -111,6 +111,12 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         }
     }
 
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        coordinator.animate(alongsideTransition: { context in
+            self.presentedViewController?.dismiss(animated: true, completion: nil)
+        }, completion: nil)
+    }
+
     fileprivate func createEmptyStateOverlayView() -> UIView {
         let overlayView = UIView()
         overlayView.backgroundColor = UIColor.white
