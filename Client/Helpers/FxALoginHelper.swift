@@ -184,7 +184,9 @@ class FxALoginHelper {
         }
 
         if AppConstants.MOZ_FXA_PUSH {
-            application.registerForRemoteNotifications()
+            DispatchQueue.main.async {
+                application.registerForRemoteNotifications()
+            }
         } else {
             readyForSyncing()
         }
