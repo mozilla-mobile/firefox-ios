@@ -55,6 +55,7 @@ class TopSitesPanel: UIViewController, HomePanel {
         if UIApplication.shared.applicationState != .background {
             coordinator.animate(alongsideTransition: { context in
                 self.collection?.reloadData()
+                self.presentedViewController?.dismiss(animated: true, completion: nil)
             }, completion: nil)
         }
     }

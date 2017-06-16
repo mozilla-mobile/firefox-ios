@@ -513,6 +513,12 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
         refreshControl?.removeTarget(self, action: #selector(RemoteTabsTableViewController.refreshTabs), for: .valueChanged)
     }
 
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        coordinator.animate(alongsideTransition: { context in
+            self.presentedViewController?.dismiss(animated: true, completion: nil)
+        }, completion: nil)
+    }
+
     fileprivate func startRefreshing() {
         if let refreshControl = self.refreshControl {
             let height = -refreshControl.bounds.size.height
