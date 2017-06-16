@@ -571,7 +571,7 @@ class SendAnonymousUsageDataSetting: BoolSetting {
             attributedStatusText: NSAttributedString(string: NSLocalizedString("More Info…", tableName: "SendAnonymousUsageData", comment: "See http://bit.ly/1SmEXU1"), attributes: [NSForegroundColorAttributeName: UIConstants.HighlightBlue]),
             settingDidChange: {
                 AdjustIntegration.setEnabled($0)
-                LeanplumIntegration.sharedInstance.setUserAttributes(attributes: ["Telemetry Opt In" : $0])
+                LeanplumIntegration.sharedInstance.setUserAttributes(attributes: [UserAttributeKeyName.telemetryOptIn.rawValue : $0])
                 LeanplumIntegration.sharedInstance.setEnabled($0)
             }
         )
