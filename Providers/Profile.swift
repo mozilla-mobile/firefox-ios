@@ -122,7 +122,14 @@ class BrowserProfileSyncDelegate: SyncDelegate {
                 let notification = UILocalNotification()
                 notification.fireDate = Date()
                 notification.timeZone = NSTimeZone.default
-                notification.alertBody = String(format: NSLocalizedString("New tab: %@: %@", comment:"New tab [title] [url]"), title, url.absoluteString)
+                let title: String
+                if let deviceName = deviceName {
+                    title = String(format: Strings.SentTab_TabArrivingNotificationWithDevice_title, deviceName)
+                } else {
+                    title = Strings.SentTab_TabArrivingNotificationNoDevice_title
+                }
+                notification.alertTitle = title
+                notification.alertBody = url.absoluteDisplayString
                 notification.userInfo = [TabSendURLKey: url.absoluteString, TabSendTitleKey: title]
                 notification.alertAction = nil
                 notification.category = TabSendCategory
