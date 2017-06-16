@@ -24,12 +24,12 @@ open class AppInfo {
     /// Return the shared container identifier (also known as the app group) to be used with for example background
     /// http requests. It is the base bundle identifier with a "group." prefix.
     open static var sharedContainerIdentifier: String {
-        return "group." + baseBundleIdentifier
+        return "group." + "org.mozilla.ios.Fennec.enterprise"
     }
 
     /// Return the keychain access group.
     open static func keychainAccessGroupWithPrefix(_ prefix: String) -> String {
-        return prefix + "." + baseBundleIdentifier
+        return prefix + "." + "org.mozilla.ios.Fennec.enterprise"
     }
 
     /// Return the base bundle identifier.
