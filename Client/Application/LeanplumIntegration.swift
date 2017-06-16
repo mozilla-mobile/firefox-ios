@@ -69,6 +69,8 @@ class LeanplumIntegration {
     private var enabled: Bool = false
     
     func shouldSendToLP() -> Bool {
+        // Need to be run on main thread since isInPrivateMode requires to be on the main thread.
+        assert(Thread.isMainThread)
         return enabled && Leanplum.hasStarted() && !UIApplication.isInPrivateMode
     }
 
@@ -106,7 +108,6 @@ class LeanplumIntegration {
             Leanplum.setAppId(settings.appId, withProductionKey: settings.key)
         }
         Leanplum.syncResourcesAsync(true)
-        setupTemplateDictionary()
 
         var userAttributesDict = [AnyHashable: Any]()
         userAttributesDict[UserAttributeKeyName.alternateMailClient.rawValue] = mailtoIsDefault()
@@ -121,45 +122,19 @@ class LeanplumIntegration {
     // Events
 
     func track(eventName: LeanplumEventName) {
-        if shouldSendToLP() {
-            Leanplum.track(eventName.rawValue)
-        }
+        DispatchQueue.main.async(execute: {
+            if self.shouldSendToLP() {
+                Leanplum.track(eventName.rawValue)
+            }
+        })
     }
 
     func track(eventName: LeanplumEventName, withParameters parameters: [String: AnyObject]) {
-        if shouldSendToLP() {
-            Leanplum.track(eventName.rawValue, withParameters: parameters)
-        }
-    }
-    
-    // States
-
-    func advanceTo(state: String) {
-        if shouldSendToLP() {
-            Leanplum.advance(to: state)
-        }
-    }
-
-    // Data Modeling
-
-    func setupTemplateDictionary() {
-        if shouldSendToLP() {
-            LPVar.define("Template Dictionary", with: ["Template Text": "", "Button Text": "", "Deep Link": "", "Hex Color String": ""])
-        }
-    }
-
-    func getTemplateDictionary() -> [String:String]? {
-        if shouldSendToLP() {
-            return Leanplum.object(forKeyPathComponents: ["Template Dictionary"]) as? [String : String]
-        }
-        return nil
-    }
-
-    func getBoolVariableFromServer(key: String) -> Bool? {
-        if shouldSendToLP() {
-            return Leanplum.object(forKeyPathComponents: [key]) as? Bool
-        }
-        return nil
+        DispatchQueue.main.async(execute: {
+            if self.shouldSendToLP() {
+                Leanplum.track(eventName.rawValue, withParameters: parameters)
+            }
+        })
     }
 
     // Utils
@@ -199,9 +174,11 @@ class LeanplumIntegration {
     }
 
     func setUserAttributes(attributes: [AnyHashable : Any]) {
-        if shouldSendToLP() {
-            Leanplum.setUserAttributes(attributes)
-        }
+        DispatchQueue.main.async(execute: {
+            if self.shouldSendToLP() {
+                Leanplum.setUserAttributes(attributes)
+            }
+        })
     }
 
     // Private
