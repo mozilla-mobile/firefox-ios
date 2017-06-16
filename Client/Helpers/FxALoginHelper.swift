@@ -117,6 +117,12 @@ class FxALoginHelper {
     }
 
     fileprivate func requestUserNotifications(_ application: UIApplication) {
+        DispatchQueue.main.async {
+            self.requestUserNotificationsMainThreadOnly(application)
+        }
+    }
+
+    fileprivate func requestUserNotificationsMainThreadOnly(_ application: UIApplication) {
         if #available(iOS 10, *) {
             let center = UNUserNotificationCenter.current()
             return center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
