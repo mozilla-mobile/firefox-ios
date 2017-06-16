@@ -49,7 +49,6 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
     }()
 
     var highlights: [Site] = []
-    var bookmarks: [Site] = []
 
     init(profile: Profile, telemetry: ActivityStreamTracker? = nil) {
         self.profile = profile
@@ -125,17 +124,15 @@ extension ActivityStreamPanel {
 
     enum Section: Int {
         case topSites
-        case bookmarks
         case highlights
         case highlightIntro
 
-        static let count = 4
-        static let allValues = [topSites, bookmarks, highlights, highlightIntro]
+        static let count = 3
+        static let allValues = [topSites, highlights, highlightIntro]
 
         var title: String? {
             switch self {
             case .highlights: return Strings.ASHighlightsTitle
-            case .bookmarks: return Strings.ASBookmarksTitle
             case .topSites: return nil
             case .highlightIntro: return nil
             }
@@ -143,7 +140,7 @@ extension ActivityStreamPanel {
 
         var headerHeight: CGSize {
             switch self {
-            case .highlights, .bookmarks: return CGSize(width: 50, height: 40)
+            case .highlights: return CGSize(width: 50, height: 40)
             case .topSites: return CGSize(width: 0, height: 0)
             case .highlightIntro: return CGSize(width: 50, height: 2)
             }
@@ -151,14 +148,14 @@ extension ActivityStreamPanel {
 
         var footerHeight: CGSize {
             switch self {
-            case .highlights, .bookmarks, .highlightIntro: return CGSize.zero
+            case .highlights, .highlightIntro: return CGSize.zero
             case .topSites: return CGSize(width: 50, height: 5)
             }
         }
 
         func cellHeight(_ traits: UITraitCollection, width: CGFloat) -> CGFloat {
             switch self {
-            case .highlights, .bookmarks: return ASPanelUX.highlightCellHeight
+            case .highlights: return ASPanelUX.highlightCellHeight
             case .topSites: return 0 //calculated dynamically
             case .highlightIntro: return 200
             }
@@ -166,7 +163,7 @@ extension ActivityStreamPanel {
 
         func sectionInsets() -> CGFloat {
             switch self {
-            case .highlights, .bookmarks:
+            case .highlights:
                 return UIDevice.current.userInterfaceIdiom == .pad ? ASPanelUX.SectionInsetsForIpad + ASHorizontalScrollCellUX.MinimumInsets : ASPanelUX.SectionInsetsForIphone
             case .topSites:
                 return UIDevice.current.userInterfaceIdiom == .pad ? ASPanelUX.SectionInsetsForIpad : 0
@@ -177,7 +174,7 @@ extension ActivityStreamPanel {
 
         func numberOfItemsForRow() -> CGFloat {
             switch self {
-            case .highlights, .bookmarks:
+            case .highlights:
                 var numItems: CGFloat = 0
                 if UIDevice.current.orientation == .landscapeLeft || UIDevice.current.orientation == .landscapeRight {
                     numItems = 4
@@ -199,8 +196,8 @@ extension ActivityStreamPanel {
             let inset = sectionInsets() * 2
 
             switch self {
-            case .highlights, .bookmarks:
-                var numItems = numberOfItemsForRow()
+            case .highlights:
+                let numItems = numberOfItemsForRow()
                 return CGSize(width: floor(((frameWidth - inset) - (ASHorizontalScrollCellUX.MinimumInsets * (numItems - 1))) / numItems), height: height)
             case .topSites:
                 return CGSize(width: frameWidth - inset, height: height)
@@ -211,7 +208,7 @@ extension ActivityStreamPanel {
 
         var headerView: UIView? {
             switch self {
-            case .highlights, .bookmarks:
+            case .highlights:
                 let view = ASHeaderView()
                 view.title = title
                 return view
@@ -227,7 +224,7 @@ extension ActivityStreamPanel {
         var cellIdentifier: String {
             switch self {
             case .topSites: return "TopSiteCell"
-            case .highlights, .bookmarks: return "HistoryCell"
+            case .highlights: return "HistoryCell"
             case .highlightIntro: return "HighlightIntroCell"
             }
         }
@@ -235,7 +232,7 @@ extension ActivityStreamPanel {
         var cellType: UICollectionViewCell.Type {
             switch self {
             case .topSites: return ASHorizontalScrollCell.self
-            case .highlights, .bookmarks: return ActivityStreamHighlightCell.self
+            case .highlights: return ActivityStreamHighlightCell.self
             case .highlightIntro: return HighlightIntroCell.self
             }
         }
@@ -259,7 +256,7 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
                 let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "Header", for: indexPath) as! ASHeaderView
                 let title = Section(indexPath.section).title
                 switch Section(indexPath.section) {
-                case .highlights, .bookmarks, .highlightIntro:
+                case .highlights, .highlightIntro:
                     view.title = title
                     return view
                 case .topSites:
@@ -268,7 +265,7 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
             case UICollectionElementKindSectionFooter:
                 let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionFooter, withReuseIdentifier: "Footer", for: indexPath) as! ASFooterView
                 switch Section(indexPath.section) {
-                case .highlights, .bookmarks, .highlightIntro:
+                case .highlights, .highlightIntro:
                     return UICollectionReusableView()
                 case .topSites:
                     return view
@@ -292,11 +289,6 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
                 return CGSize.zero
             }
             return cellSize
-        case .bookmarks:
-            if bookmarks.isEmpty {
-                return CGSize.zero
-            }
-            return cellSize
         case .topSites:
             // Create a temporary cell so we can calculate the height.
             let layout = topSiteCell.collectionView.collectionViewLayout as! HorizontalFlowLayout
@@ -313,8 +305,6 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
             return highlights.isEmpty ? CGSize.zero : Section(section).headerHeight
         case .highlightIntro:
             return !highlights.isEmpty ? CGSize.zero : Section(section).headerHeight
-        case .bookmarks:
-            return bookmarks.isEmpty ? CGSize.zero : Section(section).headerHeight
         case .topSites:
             return Section(section).headerHeight
         }
@@ -322,7 +312,7 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
         switch Section(section) {
-        case .highlights, .highlightIntro, .bookmarks:
+        case .highlights, .highlightIntro:
             return CGSize.zero
         case .topSites:
             return Section(section).footerHeight
@@ -352,7 +342,7 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
 extension ActivityStreamPanel {
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 4
+        return 3
     }
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -361,10 +351,8 @@ extension ActivityStreamPanel {
             return topSitesManager.content.isEmpty ? 0 : 1
         case .highlights:
             return self.highlights.count
-        case .bookmarks:
-            return self.bookmarks.count
         case .highlightIntro:
-            return (self.highlights.isEmpty && self.bookmarks.isEmpty) && showHighlightIntro ? 1 : 0
+            return self.highlights.isEmpty && showHighlightIntro ? 1 : 0
         }
     }
 
@@ -377,8 +365,6 @@ extension ActivityStreamPanel {
             return configureTopSitesCell(cell, forIndexPath: indexPath)
         case .highlights:
             return configureHistoryItemCell(cell, forIndexPath: indexPath)
-        case .bookmarks:
-            return configureBookmarkItemCell(cell, forIndexPath: indexPath)
         case .highlightIntro:
             return configureHighlightIntroCell(cell, forIndexPath: indexPath)
         }
@@ -391,13 +377,6 @@ extension ActivityStreamPanel {
         topSiteCell.setNeedsLayout()
         topSiteCell.collectionView.reloadData()
         return cell
-    }
-
-    func configureBookmarkItemCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
-        let site = bookmarks[indexPath.row]
-        let simpleHighlightCell = cell as! ActivityStreamHighlightCell
-        simpleHighlightCell.configureWithSite(site)
-        return simpleHighlightCell
     }
 
     func configureHistoryItemCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
@@ -438,7 +417,7 @@ extension ActivityStreamPanel: DataObserverDelegate {
     // Reloads both highlights and top sites data from their respective caches. Does not invalidate the cache.
     // See ActivityStreamDataObserver for invalidation logic.
     func reloadAll() {
-        accumulate([self.getHighlights, self.getTopSites, self.getBookmarks]).uponQueue(.main) { _ in
+        accumulate([self.getHighlights, self.getTopSites]).uponQueue(.main) { _ in
             // If there is no pending cache update and highlights are empty. Show the onboarding screen
             self.showHighlightIntro = self.highlights.isEmpty && !self.pendingCacheUpdate
             self.collectionView?.reloadData()
@@ -446,25 +425,15 @@ extension ActivityStreamPanel: DataObserverDelegate {
     }
 
     func getHighlights() -> Success {
-        return self.profile.recommendations.getHighlights().bindQueue(.main) { result in
-            guard let highlights = result.successValue?.asArray() else {
+        let num = Int(Section.highlights.numberOfItemsForRow())
+        return self.profile.recommendations.getHighlights().both(self.profile.recommendations.getRecentBookmarks(num)).bindQueue(.main) { (highlights, bookmarks) in
+            guard let highlights = highlights.successValue?.asArray(), let bookmarks = bookmarks.successValue?.asArray() else {
                 return succeed()
             }
+            let sites = bookmarks + highlights
             // Scan through the fetched highlights and report on anything that might be missing.
-            self.reportMissingData(sites: highlights, source: .Highlights)
-            self.highlights = highlights
-            return succeed()
-        }
-    }
-
-    func getBookmarks() -> Success {
-        // Try to fetch only a row of bookmarks. On rotation there might be a few more bookmarks than we want but thats okay.
-        let num = Int(Section.bookmarks.numberOfItemsForRow())
-        return self.profile.recommendations.getRecentBookmarks(num).bindQueue(.main) { result in
-            guard let bookmarks = result.successValue?.asArray() else {
-                return succeed()
-            }
-            self.bookmarks = bookmarks
+            self.reportMissingData(sites: sites, source: .Highlights)
+            self.highlights = sites
             return succeed()
         }
     }
@@ -575,7 +544,7 @@ extension ActivityStreamPanel: DataObserverDelegate {
         guard let indexPath = self.collectionView?.indexPathForItem(at: point) else { return }
 
         switch Section(indexPath.section) {
-        case .highlights, .bookmarks:
+        case .highlights:
             presentContextMenu(for: indexPath)
         case .topSites:
             let topSiteCell = self.collectionView?.cellForItem(at: indexPath) as! ASHorizontalScrollCell
@@ -605,8 +574,6 @@ extension ActivityStreamPanel: DataObserverDelegate {
         switch section {
         case .highlights:
             site = self.highlights[index]
-        case .bookmarks:
-            site = self.bookmarks[index]
         case .topSites, .highlightIntro:
             return
         }
@@ -633,8 +600,6 @@ extension ActivityStreamPanel: HomePanelContextMenu {
         switch Section(indexPath.section) {
         case .highlights:
             site = highlights[indexPath.row]
-        case .bookmarks:
-            site = bookmarks[indexPath.row]
         case .topSites:
             site = topSitesManager.content[indexPath.item]
         case .highlightIntro:
@@ -658,7 +623,7 @@ extension ActivityStreamPanel: HomePanelContextMenu {
             if let topSiteCell = self.collectionView?.cellForItem(at: IndexPath(row: 0, section: 0)) as? ASHorizontalScrollCell {
                 sourceView = topSiteCell.collectionView.cellForItem(at: indexPath)
             }
-        case .highlights, .bookmarks:
+        case .highlights:
             pingSource = .Highlights
             index = indexPath.row
             sourceView = self.collectionView?.cellForItem(at: indexPath)
@@ -758,7 +723,7 @@ extension ActivityStreamPanel: HomePanelContextMenu {
         switch Section(indexPath.section) {
             case .highlights: actions.append(contentsOf: [dismissHighlightAction, deleteFromHistoryAction])
             case .topSites: actions.append(contentsOf: topSiteActions)
-            case .highlightIntro, .bookmarks: break
+            case .highlightIntro: break
         }
         return actions
     }
