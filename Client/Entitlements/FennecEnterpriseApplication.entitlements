@@ -6,11 +6,11 @@
 	<string>production</string>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.org.mozilla.ios.Fennec.enterprise</string>
+		<string>group.org.mozilla.ios.FennecEnterprise</string>
 	</array>
 	<key>keychain-access-groups</key>
 	<array>
-		<string>$(AppIdentifierPrefix)org.mozilla.ios.Fennec.enterprise</string>
+		<string>$(AppIdentifierPrefix)org.mozilla.ios.FennecEnterprise</string>
 	</array>
 </dict>
 </plist>
