@@ -19,19 +19,19 @@ private enum LeanplumEnvironment: String {
 }
 
 enum LeanplumEventName: String {
-    case firstRun = "First Run"
-    case secondRun = "Second Run"
-    case openedApp = "Opened App"
+    case firstRun = "E_First_Run"
+    case secondRun = "E_Second_Run"
+    case openedApp = "E_Opened_App"
     case openedLogins = "Opened Login Manager"
-    case openedBookmark = "Opened Bookmark"
-    case openedNewTab = "Opened New Tab"
-    case interactWithURLBar = "Interact With Search URL Area"
-    case savedBookmark = "Saved Bookmark"
+    case openedBookmark = "E_Opened_Bookmark"
+    case openedNewTab = "E_Opened_New_Tab"
+    case interactWithURLBar = "E_Interact_With_Search_URL_Area"
+    case savedBookmark = "E_Saved_Bookmark"
     case openedTelephoneLink = "Opened Telephone Link"
-    case openedMailtoLink = "Opened Mailto Link"
-    case saveImage = "Save Image"
-    case savedLoginAndPassword = "Saved Login and Password"
-    case clearPrivateData = "Cleared Private Data"
+    case openedMailtoLink = "E_Opened_Mailto_Link"
+    case saveImage = "E_Download_Media_Saved_Image"
+    case savedLoginAndPassword = "E_Saved_Login_And_Password"
+    case clearPrivateData = "E_Cleared_Private_Data"
 }
 
 enum UserAttributeKeyName: String {
@@ -40,6 +40,7 @@ enum UserAttributeKeyName: String {
     case klarInstalled = "Klar Installed"
     case signedInSync = "Signed In Sync"
     case mailtoIsDefault = "Mailto Is Default"
+    case telemetryOptIn = "Telemetry Opt In"
 }
 
 private enum SupportedLocales: String {

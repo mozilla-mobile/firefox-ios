@@ -2124,7 +2124,19 @@ extension BrowserViewController: HomePanelViewControllerDelegate {
     }
 
     func homePanelViewControllerDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
-        self.tabManager.addTab(PrivilegedRequest(url: url) as URLRequest, afterTab: self.tabManager.selectedTab, isPrivate: isPrivate)
+        let tab = self.tabManager.addTab(PrivilegedRequest(url: url) as URLRequest, afterTab: self.tabManager.selectedTab, isPrivate: isPrivate)
+        // If we are showing toptabs a user can just use the top tab bar
+        // If in overlay mode switching doesnt correctly dismiss the homepanels
+        guard self.topTabsViewController == nil, !self.urlBar.inOverlayMode else {
+            return
+        }
+        // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
+        let toast = ButtonToast(labelText: Strings.ContextMenuButtonToastNewTabOpenedLabelText, buttonText: Strings.ContextMenuButtonToastNewTabOpenedButtonText, completion: { buttonPressed in
+            if buttonPressed {
+                self.tabManager.selectTab(tab)
+            }
+        })
+        self.show(buttonToast: toast)
     }
 }
 
@@ -2300,7 +2312,7 @@ extension BrowserViewController: TabManagerDelegate {
     fileprivate func updateTabCountUsingTabManager(_ tabManager: TabManager, animated: Bool = true) {
         if let selectedTab = tabManager.selectedTab {
             let count = selectedTab.isPrivate ? tabManager.privateTabs.count : tabManager.normalTabs.count
-            urlBar.updateTabCount(max(count, 1), animated: animated)
+            urlBar.updateTabCount(max(count, 1), animated: !urlBar.inOverlayMode)
             topTabsViewController?.updateTabCount(max(count, 1), animated: animated)
         }
     }
