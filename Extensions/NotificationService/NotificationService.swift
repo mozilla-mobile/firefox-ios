@@ -93,20 +93,15 @@ class SyncDataDisplay {
             notificationContent.title = Strings.SentTab_NoTabArrivingNotification_title
             notificationContent.body = Strings.SentTab_NoTabArrivingNotification_body
         case 1:
-            if SystemUtils.isDeviceLocked() {
-                notificationContent.title = Strings.SentTab_UnnamedTabArrivingNotification_title
-                notificationContent.body = String(format: Strings.SentTab_UnnamedTabArrivingNotificationNoDevice_body, 1)
+            let tab = sentTabs[0]
+            let title: String
+            if let deviceName = tab.deviceName {
+                title = String(format: Strings.SentTab_TabArrivingNotificationWithDevice_title, deviceName)
             } else {
-                let tab = sentTabs[0]
-                let title: String
-                if let deviceName = tab.deviceName  {
-                    title = String(format: Strings.SentTab_TabArrivingNotificationWithDevice_title, deviceName)
-                } else {
-                    title = Strings.SentTab_TabArrivingNotificationNoDevice_title
-                }
-                notificationContent.title = title
-                notificationContent.body = tab.url.absoluteDisplayString
+                title = Strings.SentTab_TabArrivingNotificationNoDevice_title
             }
+            notificationContent.title = title
+            notificationContent.body = tab.url.absoluteDisplayString
         default:
             notificationContent.title = Strings.SentTab_TabsArrivingNotification_title
             notificationContent.body = String(format: Strings.SentTab_TabsArrivingNotification_title, sentTabs.count)
