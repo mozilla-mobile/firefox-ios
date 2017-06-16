@@ -166,13 +166,6 @@ class LeanplumIntegration {
         return true
     }
 
-    func shouldShowFocusUI() -> Bool {
-        guard let shouldShowFocusUI = LeanplumIntegration.sharedInstance.getBoolVariableFromServer(key: "shouldShowFocusUI") else {
-            return false
-        }
-        return  shouldShowFocusUI && (canInstallKlar() || canInstallFocus())
-    }
-
     func setUserAttributes(attributes: [AnyHashable : Any]) {
         DispatchQueue.main.async(execute: {
             if self.shouldSendToLP() {
