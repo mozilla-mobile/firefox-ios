@@ -79,7 +79,7 @@ class CommandStoringSyncDelegate: SyncDelegate {
         self.profile = profile
     }
 
-    public func displaySentTab(for url: URL, title: String, from deviceName: String) {
+    public func displaySentTab(for url: URL, title: String, from deviceName: String?) {
         let item = ShareItem(url: url.absoluteString, title: title, favicon: nil)
         _ = self.profile.queue.addToQueue(item)
     }
@@ -110,7 +110,7 @@ class BrowserProfileSyncDelegate: SyncDelegate {
         self.app = app
     }
 
-    open func displaySentTab(for url: URL, title: String, from deviceName: String) {
+    open func displaySentTab(for url: URL, title: String, from deviceName: String?) {
         // check to see what the current notification settings are and only try and send a notification if
         // the user has agreed to them
         if let currentSettings = app.currentUserNotificationSettings {

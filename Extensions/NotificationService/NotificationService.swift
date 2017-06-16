@@ -111,7 +111,7 @@ class SyncDataDisplay {
 }
 
 extension SyncDataDisplay: SyncDelegate {
-    func displaySentTab(for url: URL, title: String, from deviceName: String) {
+    func displaySentTab(for url: URL, title: String, from deviceName: String?) {
         if url.isWebPage() {
             sentTabs.append(SentTab(url: url, title: title, deviceName: deviceName))
 
@@ -124,5 +124,5 @@ extension SyncDataDisplay: SyncDelegate {
 struct SentTab {
     let url: URL
     let title: String
-    let deviceName: String
+    let deviceName: String?
 }

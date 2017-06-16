@@ -72,8 +72,18 @@ open class DisplayURICommand: Command {
     }
 
     open func run(_ synchronizer: ClientsSynchronizer) -> Success {
-        synchronizer.delegate.displaySentTab(for: uri, title: title, from: sender)
-        return succeed()
+        func display(_ deviceName: String? = nil) -> Success {
+            synchronizer.delegate.displaySentTab(for: uri, title: title, from: deviceName)
+            return succeed()
+        }
+
+        guard let getClientWithId = synchronizer.localClients?.getClientWithId(sender) else {
+            return display()
+        }
+
+        return getClientWithId >>== { client in
+            return display(client?.name)
+        }
     }
 
     open static func commandFromSyncCommand(_ syncCommand: SyncCommand) -> Command? {

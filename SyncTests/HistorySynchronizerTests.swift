@@ -14,7 +14,7 @@ import SwiftyJSON
 private let log = Logger.syncLogger
 
 class MockSyncDelegate: SyncDelegate {
-    func displaySentTab(for url: URL, title: String, from deviceName: String) {
+    func displaySentTab(for url: URL, title: String, from deviceName: String?) {
     }
 }
 
