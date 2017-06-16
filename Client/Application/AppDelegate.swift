@@ -397,7 +397,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
             return true
         case "deep-link":
-            guard let url = query["url"] else {
+            guard let url = query["url"], Bundle.main.bundleIdentifier == sourceApplication else {
                 break
             }
             Router.shared.routeURL(url)
