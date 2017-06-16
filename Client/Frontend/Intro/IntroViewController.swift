@@ -4,13 +4,14 @@
 
 import UIKit
 import SnapKit
+import Shared
 
 struct IntroViewControllerUX {
     static let Width = 375
     static let Height = 667
 
-    static let CardSlides = ["organize", "customize", "share", "choose", "sync"]
-    static let NumberOfCards = CardSlides.count
+    static var CardSlides = ["organize", "customize", "share", "choose", "sync"]
+    static var NumberOfCards = CardSlides.count
 
     static let PagerCenterOffsetFromScrollViewBottom = 30
 
@@ -83,13 +84,25 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
     override func viewDidLoad() {
         view.backgroundColor = UIColor.white
 
+        if let prototypeDict = LeanplumIntegration.sharedInstance.getIntroPrototypeDict() {
+            IntroViewControllerUX.CardSlides.append("prototype")
+            IntroViewControllerUX.NumberOfCards = IntroViewControllerUX.CardSlides.count
+        }
+
         // scale the slides down for iPhone 4S
         if view.frame.height <=  480 {
             slideVerticalScaleFactor = 1.33
         }
 
         for slideName in IntroViewControllerUX.CardSlides {
-            slides.append(UIImage(named: slideName)!)
+            if slideName != "prototype" {
+                slides.append(UIImage(named: slideName)!)
+            } else {
+                do {
+                    try slides.append(UIImage(data: NSData(contentsOf: URL(string: LeanplumIntegration.sharedInstance.getIntroPrototypeDict()!["Card Image"]!)!) as Data)!)
+                } catch {
+                }
+            }
         }
 
         startBrowsingButton = UIButton()
@@ -170,6 +183,10 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         let syncCardView =  UIView()
         addViewsToIntroView(syncCardView, view: signInButton, title: IntroViewControllerUX.CardTitleSync)
         introViews.append(syncCardView)
+
+        if let dict = LeanplumIntegration.sharedInstance.getIntroPrototypeDict() {
+            addCard(dict["Card Text"]!, title: dict["Card Title"]!)
+        }
 
         // Add all the cards to the view, make them invisible with zero alpha
 
