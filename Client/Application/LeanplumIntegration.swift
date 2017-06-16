@@ -39,6 +39,7 @@ enum UserAttributeKeyName: String {
     case focusInstalled = "Focus Installed"
     case klarInstalled = "Klar Installed"
     case signedInSync = "Signed In Sync"
+    case mailtoIsDefault = "Mailto Is Default"
     case telemetryOptIn = "Telemetry Opt In"
 }
 
@@ -108,14 +109,10 @@ class LeanplumIntegration {
         setupTemplateDictionary()
 
         var userAttributesDict = [AnyHashable: Any]()
-        userAttributesDict[UserAttributeKeyName.alternateMailClient.rawValue] = "mailto:"
+        userAttributesDict[UserAttributeKeyName.alternateMailClient.rawValue] = mailtoIsDefault()
         userAttributesDict[UserAttributeKeyName.focusInstalled.rawValue] = !canInstallFocus()
         userAttributesDict[UserAttributeKeyName.klarInstalled.rawValue] = !canInstallKlar()
         userAttributesDict[UserAttributeKeyName.signedInSync.rawValue] = profile?.hasAccount()
-
-        if let mailtoScheme = self.profile?.prefs.stringForKey(PrefsKeys.KeyMailToOption), mailtoScheme != "mailto:" {
-            userAttributesDict["Alternate Mail Client Installed"] = mailtoScheme
-        }
 
         Leanplum.start(userAttributes: userAttributesDict)
 
@@ -186,6 +183,13 @@ class LeanplumIntegration {
             return false
         }
         return !UIApplication.shared.canOpenURL(klar)
+    }
+
+    func mailtoIsDefault() -> Bool {
+        if let mailtoScheme = self.profile?.prefs.stringForKey(PrefsKeys.KeyMailToOption), mailtoScheme != "mailto:" {
+            return false
+        }
+        return true
     }
 
     func shouldShowFocusUI() -> Bool {
