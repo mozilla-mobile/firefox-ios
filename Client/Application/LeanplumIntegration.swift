@@ -35,7 +35,6 @@ enum LeanplumEventName: String {
 }
 
 enum UserAttributeKeyName: String {
-    case alternateMailClient = "Alternate Mail Client Installed"
     case focusInstalled = "Focus Installed"
     case klarInstalled = "Klar Installed"
     case signedInSync = "Signed In Sync"
@@ -110,7 +109,7 @@ class LeanplumIntegration {
         Leanplum.syncResourcesAsync(true)
 
         var userAttributesDict = [AnyHashable: Any]()
-        userAttributesDict[UserAttributeKeyName.alternateMailClient.rawValue] = mailtoIsDefault()
+        userAttributesDict[UserAttributeKeyName.mailtoIsDefault.rawValue] = mailtoIsDefault()
         userAttributesDict[UserAttributeKeyName.focusInstalled.rawValue] = !canInstallFocus()
         userAttributesDict[UserAttributeKeyName.klarInstalled.rawValue] = !canInstallKlar()
         userAttributesDict[UserAttributeKeyName.signedInSync.rawValue] = profile?.hasAccount()
@@ -161,10 +160,7 @@ class LeanplumIntegration {
     }
 
     func mailtoIsDefault() -> Bool {
-        if let mailtoScheme = self.profile?.prefs.stringForKey(PrefsKeys.KeyMailToOption), mailtoScheme != "mailto:" {
-            return false
-        }
-        return true
+        return self.profile?.prefs.stringForKey(PrefsKeys.KeyMailToOption) == "mailto:"
     }
 
     func setUserAttributes(attributes: [AnyHashable : Any]) {
