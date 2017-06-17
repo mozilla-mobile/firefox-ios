@@ -123,6 +123,7 @@ class FxALoginHelper {
     }
 
     fileprivate func requestUserNotificationsMainThreadOnly(_ application: UIApplication) {
+        assert(Thread.isMainThread, "requestAuthorization should be run on the main thread")
         if #available(iOS 10, *) {
             let center = UNUserNotificationCenter.current()
             return center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
