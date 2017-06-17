@@ -79,8 +79,8 @@ class CommandStoringSyncDelegate: SyncDelegate {
         self.profile = profile
     }
 
-    public func displaySentTabForURL(_ URL: URL, title: String) {
-        let item = ShareItem(url: URL.absoluteString, title: title, favicon: nil)
+    public func displaySentTab(for url: URL, title: String, from deviceName: String?) {
+        let item = ShareItem(url: url.absoluteString, title: title, favicon: nil)
         _ = self.profile.queue.addToQueue(item)
     }
 }
@@ -110,20 +110,27 @@ class BrowserProfileSyncDelegate: SyncDelegate {
         self.app = app
     }
 
-    open func displaySentTabForURL(_ URL: URL, title: String) {
+    open func displaySentTab(for url: URL, title: String, from deviceName: String?) {
         // check to see what the current notification settings are and only try and send a notification if
         // the user has agreed to them
         if let currentSettings = app.currentUserNotificationSettings {
             if currentSettings.types.rawValue & UIUserNotificationType.alert.rawValue != 0 {
                 if Logger.logPII {
-                    log.info("Displaying notification for URL \(URL.absoluteString)")
+                    log.info("Displaying notification for URL \(url.absoluteString)")
                 }
 
                 let notification = UILocalNotification()
                 notification.fireDate = Date()
                 notification.timeZone = NSTimeZone.default
-                notification.alertBody = String(format: NSLocalizedString("New tab: %@: %@", comment:"New tab [title] [url]"), title, URL.absoluteString)
-                notification.userInfo = [TabSendURLKey: URL.absoluteString, TabSendTitleKey: title]
+                let title: String
+                if let deviceName = deviceName {
+                    title = String(format: Strings.SentTab_TabArrivingNotificationWithDevice_title, deviceName)
+                } else {
+                    title = Strings.SentTab_TabArrivingNotificationNoDevice_title
+                }
+                notification.alertTitle = title
+                notification.alertBody = url.absoluteDisplayString
+                notification.userInfo = [TabSendURLKey: url.absoluteString, TabSendTitleKey: title]
                 notification.alertAction = nil
                 notification.category = TabSendCategory
 
