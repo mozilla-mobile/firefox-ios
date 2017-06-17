@@ -93,17 +93,18 @@ class SyncDataDisplay {
             notificationContent.title = Strings.SentTab_NoTabArrivingNotification_title
             notificationContent.body = Strings.SentTab_NoTabArrivingNotification_body
         case 1:
-            if SystemUtils.isDeviceLocked() {
-                notificationContent.title = Strings.SentTab_UnnamedTabArrivingNotification_title
-                notificationContent.body = String(format: Strings.SentTab_UnnamedTabArrivingNotificationNoDevice_body, 1)
+            let tab = sentTabs[0]
+            let title: String
+            if let deviceName = tab.deviceName {
+                title = String(format: Strings.SentTab_TabArrivingNotificationWithDevice_title, deviceName)
             } else {
-                let tab = sentTabs[0]
-                notificationContent.title = Strings.SentTab_TabArrivingNotificationNoDevice_title
-                notificationContent.body = tab.url.absoluteDisplayString
+                title = Strings.SentTab_TabArrivingNotificationNoDevice_title
             }
+            notificationContent.title = title
+            notificationContent.body = tab.url.absoluteDisplayString
         default:
             notificationContent.title = Strings.SentTab_TabsArrivingNotification_title
-            notificationContent.body = String(format: Strings.SentTab_TabsArrivingNotificationNoDevice_body, sentTabs.count)
+            notificationContent.body = String(format: Strings.SentTab_TabsArrivingNotification_title, sentTabs.count)
         }
 
         contentHandler(notificationContent)
@@ -111,11 +112,11 @@ class SyncDataDisplay {
 }
 
 extension SyncDataDisplay: SyncDelegate {
-    func displaySentTabForURL(_ URL: URL, title: String) {
-        if URL.isWebPage() {
-            sentTabs.append(SentTab(url: URL, title: title))
+    func displaySentTab(for url: URL, title: String, from deviceName: String?) {
+        if url.isWebPage() {
+            sentTabs.append(SentTab(url: url, title: title, deviceName: deviceName))
 
-            let item = ShareItem(url: URL.absoluteString, title: title, favicon: nil)
+            let item = ShareItem(url: url.absoluteString, title: title, favicon: nil)
             _ = tabQueue?.addToQueue(item)
         }
     }
@@ -124,4 +125,5 @@ extension SyncDataDisplay: SyncDelegate {
 struct SentTab {
     let url: URL
     let title: String
+    let deviceName: String?
 }
