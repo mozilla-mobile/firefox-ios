@@ -344,7 +344,6 @@
 		7B604FBF1C495E60006EEEC3 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604FBA1C495D8A006EEEC3 /* XCGLogger.framework */; };
 		7B604FC01C495FD1006EEEC3 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604FBA1C495D8A006EEEC3 /* XCGLogger.framework */; };
 		7B6050011C49653B006EEEC3 /* AdjustSdk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B6050001C49653B006EEEC3 /* AdjustSdk.framework */; };
-		7B6FF7911C74A2C00007E196 /* WebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604F9A1C4950F2006EEEC3 /* WebImage.framework */; };
 		7B72E8221CAEC78100FB1D1C /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B72E8211CAEC78100FB1D1C /* AppState.swift */; };
 		7B844E3D1BBDDB9D00E733A2 /* ChevronView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B844E3C1BBDDB9D00E733A2 /* ChevronView.swift */; };
 		7B8A47F61D01D3B400C07734 /* PassKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B8A47F51D01D3B400C07734 /* PassKit.framework */; };
@@ -606,7 +605,6 @@
 		E633E2DA1C21EAF8001FFF6C /* LoginDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E633E2D91C21EAF8001FFF6C /* LoginDetailViewController.swift */; };
 		E633E37A1C2204BE001FFF6C /* LoginManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E633E3791C2204BE001FFF6C /* LoginManagerTests.swift */; };
 		E63ED7D81BFCD9990097D08E /* LoginTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63ED7D71BFCD9990097D08E /* LoginTableViewCell.swift */; };
-		E63ED8091BFCF9770097D08E /* SwiftSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65C5B9A1BEA4E7100D28BEF /* SwiftSupport.swift */; };
 		E63ED8E11BFD25580097D08E /* LoginListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63ED8E01BFD25580097D08E /* LoginListViewController.swift */; };
 		E63F71881DB7FBE200A995C9 /* TestSQLiteMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63F71871DB7FBE200A995C9 /* TestSQLiteMetadata.swift */; };
 		E640E85E1C73A45A00C5F072 /* PasscodeEntryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E640E85D1C73A45A00C5F072 /* PasscodeEntryViewController.swift */; };
@@ -669,12 +667,6 @@
 		E65075C21E37F956006961AC /* ExtensionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075C11E37F956006961AC /* ExtensionUtils.swift */; };
 		E653422D1C5944F90039DD9E /* BrowserPrompts.swift in Sources */ = {isa = PBXBuildFile; fileRef = E653422C1C5944F90039DD9E /* BrowserPrompts.swift */; };
 		E65607611C08B4E200534B02 /* SearchInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65607601C08B4E200534B02 /* SearchInputView.swift */; };
-		E65C5BD31BEA4F8A00D28BEF /* FBSnapshotTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = E65C5B951BEA4E7100D28BEF /* FBSnapshotTestCase.m */; };
-		E65C5BD41BEA4F8A00D28BEF /* FBSnapshotTestCasePlatform.m in Sources */ = {isa = PBXBuildFile; fileRef = E65C5B971BEA4E7100D28BEF /* FBSnapshotTestCasePlatform.m */; };
-		E65C5BD51BEA4F8A00D28BEF /* FBSnapshotTestController.m in Sources */ = {isa = PBXBuildFile; fileRef = E65C5B991BEA4E7100D28BEF /* FBSnapshotTestController.m */; };
-		E65C5BDE1BEA522600D28BEF /* UIImage+Compare.m in Sources */ = {isa = PBXBuildFile; fileRef = E65C5BD91BEA522600D28BEF /* UIImage+Compare.m */; };
-		E65C5BDF1BEA522600D28BEF /* UIImage+Diff.m in Sources */ = {isa = PBXBuildFile; fileRef = E65C5BDB1BEA522600D28BEF /* UIImage+Diff.m */; };
-		E65C5BE01BEA522600D28BEF /* UIImage+Snapshot.m in Sources */ = {isa = PBXBuildFile; fileRef = E65C5BDD1BEA522600D28BEF /* UIImage+Snapshot.m */; };
 		E65D89181C8647420006EA35 /* AppAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65D89171C8647420006EA35 /* AppAuthenticator.swift */; };
 		E660BDD91BB06521009AC090 /* TabsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E660BDD81BB06521009AC090 /* TabsButton.swift */; };
 		E660BE061BB0666D009AC090 /* InnerStrokedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E660BE051BB0666D009AC090 /* InnerStrokedView.swift */; };
@@ -1158,13 +1150,6 @@
 			remoteInfo = Shared;
 		};
 		E63CD1B21B31B66400A63AFF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
-			remoteInfo = Client;
-		};
-		E65C5BC91BEA4F6500D28BEF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
 			proxyType = 1;
@@ -1910,21 +1895,6 @@
 		E653422C1C5944F90039DD9E /* BrowserPrompts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserPrompts.swift; sourceTree = "<group>"; };
 		E65607601C08B4E200534B02 /* SearchInputView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchInputView.swift; sourceTree = "<group>"; };
 		E659A60A1EB7C1D300D7A6AD /* BuddyBuildSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BuddyBuildSDK.framework; sourceTree = "<group>"; };
-		E65C5B931BEA4E7100D28BEF /* FBSnapshotTestCase-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FBSnapshotTestCase-Info.plist"; sourceTree = "<group>"; };
-		E65C5B941BEA4E7100D28BEF /* FBSnapshotTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FBSnapshotTestCase.h; sourceTree = "<group>"; };
-		E65C5B951BEA4E7100D28BEF /* FBSnapshotTestCase.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FBSnapshotTestCase.m; sourceTree = "<group>"; };
-		E65C5B961BEA4E7100D28BEF /* FBSnapshotTestCasePlatform.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FBSnapshotTestCasePlatform.h; sourceTree = "<group>"; };
-		E65C5B971BEA4E7100D28BEF /* FBSnapshotTestCasePlatform.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FBSnapshotTestCasePlatform.m; sourceTree = "<group>"; };
-		E65C5B981BEA4E7100D28BEF /* FBSnapshotTestController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FBSnapshotTestController.h; sourceTree = "<group>"; };
-		E65C5B991BEA4E7100D28BEF /* FBSnapshotTestController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FBSnapshotTestController.m; sourceTree = "<group>"; };
-		E65C5B9A1BEA4E7100D28BEF /* SwiftSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftSupport.swift; sourceTree = "<group>"; };
-		E65C5BC41BEA4F6500D28BEF /* NativeRefTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NativeRefTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E65C5BD81BEA522600D28BEF /* UIImage+Compare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Compare.h"; sourceTree = "<group>"; };
-		E65C5BD91BEA522600D28BEF /* UIImage+Compare.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Compare.m"; sourceTree = "<group>"; };
-		E65C5BDA1BEA522600D28BEF /* UIImage+Diff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Diff.h"; sourceTree = "<group>"; };
-		E65C5BDB1BEA522600D28BEF /* UIImage+Diff.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Diff.m"; sourceTree = "<group>"; };
-		E65C5BDC1BEA522600D28BEF /* UIImage+Snapshot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Snapshot.h"; sourceTree = "<group>"; };
-		E65C5BDD1BEA522600D28BEF /* UIImage+Snapshot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Snapshot.m"; sourceTree = "<group>"; };
 		E65D89171C8647420006EA35 /* AppAuthenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppAuthenticator.swift; sourceTree = "<group>"; };
 		E660BDD81BB06521009AC090 /* TabsButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabsButton.swift; sourceTree = "<group>"; };
 		E660BE051BB0666D009AC090 /* InnerStrokedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InnerStrokedView.swift; sourceTree = "<group>"; };
@@ -2218,14 +2188,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		E65C5BC11BEA4F6500D28BEF /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				7B6FF7911C74A2C00007E196 /* WebImage.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		E69DB0711E97DEA9008A67E6 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -2486,7 +2448,6 @@
 				E659A6091EB7C1D300D7A6AD /* BuddyBuild */,
 				288A2D7F1AB8B2B20023ABC3 /* Box */,
 				28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */,
-				E65C5B8B1BEA4E7100D28BEF /* FBSnapshotTestCase */,
 				D30EBB5A1C75503800105AE9 /* KIF.xcodeproj */,
 				288A2D7E1AB8B2AD0023ABC3 /* Result */,
 				0B742CC61B32491400EE9264 /* sqlcipher.xcodeproj */,
@@ -3349,28 +3310,6 @@
 			path = ThirdParty/BuddyBuild;
 			sourceTree = "<group>";
 		};
-		E65C5B8B1BEA4E7100D28BEF /* FBSnapshotTestCase */ = {
-			isa = PBXGroup;
-			children = (
-				E65C5B931BEA4E7100D28BEF /* FBSnapshotTestCase-Info.plist */,
-				E65C5BD81BEA522600D28BEF /* UIImage+Compare.h */,
-				E65C5BD91BEA522600D28BEF /* UIImage+Compare.m */,
-				E65C5BDA1BEA522600D28BEF /* UIImage+Diff.h */,
-				E65C5BDB1BEA522600D28BEF /* UIImage+Diff.m */,
-				E65C5BDC1BEA522600D28BEF /* UIImage+Snapshot.h */,
-				E65C5BDD1BEA522600D28BEF /* UIImage+Snapshot.m */,
-				E65C5B941BEA4E7100D28BEF /* FBSnapshotTestCase.h */,
-				E65C5B951BEA4E7100D28BEF /* FBSnapshotTestCase.m */,
-				E65C5B961BEA4E7100D28BEF /* FBSnapshotTestCasePlatform.h */,
-				E65C5B971BEA4E7100D28BEF /* FBSnapshotTestCasePlatform.m */,
-				E65C5B981BEA4E7100D28BEF /* FBSnapshotTestController.h */,
-				E65C5B991BEA4E7100D28BEF /* FBSnapshotTestController.m */,
-				E65C5B9A1BEA4E7100D28BEF /* SwiftSupport.swift */,
-			);
-			name = FBSnapshotTestCase;
-			path = ThirdParty/FBSnapshotTestCase;
-			sourceTree = "<group>";
-		};
 		E664B4581CD7ECBB0045A6A4 /* Notifications */ = {
 			isa = PBXGroup;
 			children = (
@@ -3573,7 +3512,6 @@
 				E4D567221ADECE2700F1EFE7 /* ReadingListTests.xctest */,
 				E6F9650C1B2F1CF20034B023 /* SharedTests.xctest */,
 				E4BA8A2B1B4B0A1600BC2E95 /* ViewLater.appex */,
-				E65C5BC41BEA4F6500D28BEF /* NativeRefTests.xctest */,
 				7BEB644D1C7345600092C02E /* L10nSnapshotTests.xctest */,
 				7BEB645A1C7345990092C02E /* MarketingUITests.xctest */,
 				3905274A1C874D35007E0BB7 /* Today.appex */,
@@ -4204,24 +4142,6 @@
 			productReference = E4D567221ADECE2700F1EFE7 /* ReadingListTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		E65C5BC31BEA4F6500D28BEF /* NativeRefTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = E65C5BCB1BEA4F6500D28BEF /* Build configuration list for PBXNativeTarget "NativeRefTests" */;
-			buildPhases = (
-				E65C5BC01BEA4F6500D28BEF /* Sources */,
-				E65C5BC11BEA4F6500D28BEF /* Frameworks */,
-				E65C5BC21BEA4F6500D28BEF /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				E65C5BCA1BEA4F6500D28BEF /* PBXTargetDependency */,
-			);
-			name = NativeRefTests;
-			productName = NativeRefTests;
-			productReference = E65C5BC41BEA4F6500D28BEF /* NativeRefTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 		E69DB0741E97DEA9008A67E6 /* Telemetry */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E69DB08C1E97DEAA008A67E6 /* Build configuration list for PBXNativeTarget "Telemetry" */;
@@ -4483,12 +4403,6 @@
 						LastSwiftMigration = 0820;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
-					E65C5BC31BEA4F6500D28BEF = {
-						CreatedOnToolsVersion = 7.1;
-						DevelopmentTeam = 43AQ936H96;
-						LastSwiftMigration = 0800;
-						TestTargetID = F84B21BD1A090F8100AAB793;
-					};
 					E69DB0741E97DEA9008A67E6 = {
 						CreatedOnToolsVersion = 8.3;
 						DevelopmentTeam = 43AQ936H96;
@@ -4613,7 +4527,6 @@
 				E69DB0741E97DEA9008A67E6 /* Telemetry */,
 				F84B21D21A090F8100AAB793 /* ClientTests */,
 				D39FA15E1A83E0EC00EE869C /* UITests */,
-				E65C5BC31BEA4F6500D28BEF /* NativeRefTests */,
 				2FCAE2231ABB51F800877008 /* StorageTests */,
 				2FA436041ABB83B4008031D1 /* AccountTests */,
 				282731671ABC9BE700AA1954 /* SyncTests */,
@@ -4878,13 +4791,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		E4D567201ADECE2700F1EFE7 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E65C5BC21BEA4F6500D28BEF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -5483,20 +5389,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		E65C5BC01BEA4F6500D28BEF /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E65C5BDE1BEA522600D28BEF /* UIImage+Compare.m in Sources */,
-				E65C5BDF1BEA522600D28BEF /* UIImage+Diff.m in Sources */,
-				E65C5BE01BEA522600D28BEF /* UIImage+Snapshot.m in Sources */,
-				E65C5BD51BEA4F8A00D28BEF /* FBSnapshotTestController.m in Sources */,
-				E65C5BD41BEA4F8A00D28BEF /* FBSnapshotTestCasePlatform.m in Sources */,
-				E63ED8091BFCF9770097D08E /* SwiftSupport.swift in Sources */,
-				E65C5BD31BEA4F8A00D28BEF /* FBSnapshotTestCase.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		E69DB0701E97DEA9008A67E6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -6009,11 +5901,6 @@
 			isa = PBXTargetDependency;
 			name = FxA;
 			targetProxy = E60222E51C6E5A770061C436 /* PBXContainerItemProxy */;
-		};
-		E65C5BCA1BEA4F6500D28BEF /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = F84B21BD1A090F8100AAB793 /* Client */;
-			targetProxy = E65C5BC91BEA4F6500D28BEF /* PBXContainerItemProxy */;
 		};
 		E69DB0801E97DEAA008A67E6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -7366,53 +7253,6 @@
 			};
 			name = FirefoxBeta;
 		};
-		E65C5BCC1BEA4F6500D28BEF /* Fennec */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				GCC_NO_COMMON_BLOCKS = YES;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					$SRCROOT/,
-					$SDKROOT/usr/include/libxml2,
-					"$SRCROOT/ThirdParty/**",
-				);
-				INFOPLIST_FILE = NativeRefTests/Other/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Fennec.NativeRefTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/$TARGETNAME/Other/NativeRefTests-Bridging-Header.h";
-				SWIFT_VERSION = 2.3;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
-			};
-			name = Fennec;
-		};
-		E65C5BCE1BEA4F6500D28BEF /* Firefox */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_NO_COMMON_BLOCKS = YES;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					$SRCROOT/,
-					$SDKROOT/usr/include/libxml2,
-					"$SRCROOT/ThirdParty/**",
-				);
-				INFOPLIST_FILE = NativeRefTests/Other/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Fennec.NativeRefTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/$TARGETNAME/Other/NativeRefTests-Bridging-Header.h";
-				SWIFT_VERSION = 2.3;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
-			};
-			name = Firefox;
-		};
 		E69DB08D1E97DEAA008A67E6 /* Fennec */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -8263,29 +8103,6 @@
 			};
 			name = Fennec_Enterprise;
 		};
-		E6DCC2121DCBB6F100CEC4B7 /* Fennec_Enterprise */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				GCC_NO_COMMON_BLOCKS = YES;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					$SRCROOT/,
-					$SDKROOT/usr/include/libxml2,
-					"$SRCROOT/ThirdParty/**",
-				);
-				INFOPLIST_FILE = NativeRefTests/Other/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Fennec.NativeRefTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/$TARGETNAME/Other/NativeRefTests-Bridging-Header.h";
-				SWIFT_VERSION = 2.3;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
-			};
-			name = Fennec_Enterprise;
-		};
 		E6DCC2131DCBB6F100CEC4B7 /* Fennec_Enterprise */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -8731,30 +8548,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.allizom.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = UITests;
 				SWIFT_VERSION = 3.0;
-			};
-			name = FirefoxBeta;
-		};
-		E6FCC4301C40562400DF6113 /* FirefoxBeta */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_NO_COMMON_BLOCKS = YES;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					$SRCROOT/,
-					$SDKROOT/usr/include/libxml2,
-					"$SRCROOT/ThirdParty/**",
-				);
-				INFOPLIST_FILE = NativeRefTests/Other/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Fennec.NativeRefTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/$TARGETNAME/Other/NativeRefTests-Bridging-Header.h";
-				SWIFT_VERSION = 2.3;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = FirefoxBeta;
 		};
@@ -9363,17 +9156,6 @@
 				E6DCC2191DCBB6F100CEC4B7 /* Fennec_Enterprise */,
 				E60138521C89EAE600DF9756 /* Firefox */,
 				E60138531C89EAE600DF9756 /* FirefoxBeta */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
-		};
-		E65C5BCB1BEA4F6500D28BEF /* Build configuration list for PBXNativeTarget "NativeRefTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				E65C5BCC1BEA4F6500D28BEF /* Fennec */,
-				E6DCC2121DCBB6F100CEC4B7 /* Fennec_Enterprise */,
-				E65C5BCE1BEA4F6500D28BEF /* Firefox */,
-				E6FCC4301C40562400DF6113 /* FirefoxBeta */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
