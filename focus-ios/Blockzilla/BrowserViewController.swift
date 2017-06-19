@@ -522,4 +522,23 @@ extension BrowserViewController: OverlayViewDelegate {
 
         urlBar.dismiss()
     }
+    func overlayView(_ overlayView: OverlayView, didSubmitText text: String) {
+        let text = text.trimmingCharacters(in: .whitespaces)
+        guard !text.isEmpty else {
+            urlBar.url = browser.url
+            return
+        }
+        
+        var url = URIFixup.getURL(entry: text)
+        if url == nil {
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeQuery, object: TelemetryEventObject.searchBar)
+            url = searchEngineManager.activeEngine.urlForQuery(text)
+        } else {
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeURL, object: TelemetryEventObject.searchBar)
+        }
+        
+        submit(url: url!)
+        urlBar.url = url
+        urlBar.dismiss()
+    }
 }

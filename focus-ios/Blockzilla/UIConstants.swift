@@ -10,6 +10,7 @@ struct UIConstants {
         static let background = UIColor(rgb: 0x221F1F)
         static let buttonHighlight = UIColor(rgb: 0x333333)
         static let cellSelected = UIColor(rgb: 0x2C6EC8)
+        static let copyButtonBorder = UIColor(rgb: 0x5F6368, alpha: 0.8)
         static let defaultFont = UIColor(rgb: 0xE1E5EA)
         static let deleteButtonBackground = UIColor(white: 1, alpha: 0.2)
         static let deleteButtonBorder = UIColor(white: 1, alpha: 0.5)
@@ -56,6 +57,8 @@ struct UIConstants {
     struct fonts {
         static let aboutText = UIFont.systemFont(ofSize: 14)
         static let cancelButton = UIFont.systemFont(ofSize: 15)
+        static let copyButton = UIFont.systemFont(ofSize: 15)
+        static let copyButtonQuery = UIFont.boldSystemFont(ofSize: 15)
         static let deleteButton = UIFont.systemFont(ofSize: 11)
         static let firstRunButton = UIFont.systemFont(ofSize: 14, weight: UIFontWeightMedium)
         static let firstRunDisclaimer = UIFont.systemFont(ofSize: 14)
@@ -75,6 +78,7 @@ struct UIConstants {
     struct layout {
         static let browserToolbarDisabledOpacity: CGFloat = 0.3
         static let browserToolbarHeight: CGFloat = 44
+        static let copyButtonAnimationDuration: TimeInterval = 0.1
         static let deleteAnimationDuration: TimeInterval = 0.15
         static let lockIconInset: Float = 6
         static let navigationDoneOffset: Float = -10
