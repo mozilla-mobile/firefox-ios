@@ -117,6 +117,13 @@ class FxALoginHelper {
     }
 
     fileprivate func requestUserNotifications(_ application: UIApplication) {
+        DispatchQueue.main.async {
+            self.requestUserNotificationsMainThreadOnly(application)
+        }
+    }
+
+    fileprivate func requestUserNotificationsMainThreadOnly(_ application: UIApplication) {
+        assert(Thread.isMainThread, "requestAuthorization should be run on the main thread")
         if #available(iOS 10, *) {
             let center = UNUserNotificationCenter.current()
             return center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
@@ -184,7 +191,9 @@ class FxALoginHelper {
         }
 
         if AppConstants.MOZ_FXA_PUSH {
-            application.registerForRemoteNotifications()
+            DispatchQueue.main.async {
+                application.registerForRemoteNotifications()
+            }
         } else {
             readyForSyncing()
         }
