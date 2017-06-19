@@ -21,6 +21,11 @@ open class HistoryPayload: CleartextPayloadJSON {
             return false
         }
 
+        if !self["id"].isString() {
+            // This should never be reached. Super does the check.
+            return false
+        }
+
         if self["deleted"].bool ?? false {
             return true
         }

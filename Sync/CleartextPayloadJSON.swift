@@ -37,11 +37,27 @@ open class BasePayloadJSON {
 open class CleartextPayloadJSON: BasePayloadJSON {
     // Override me.
     override open func isValid() -> Bool {
-        return super.isValid() && self["id"].isString()
+        if !super.isValid() {
+            return false
+        }
+
+        let rawJSON: Any = self.json.rawValue
+        if let jsonDictionary = rawJSON as? NSDictionary {
+            if let val = jsonDictionary.value(forKey: "id") {
+                return val is NSString
+            }
+        }
+        return false
     }
 
     open var id: String {
-        return self["id"].string!
+        let rawJSON: Any = self.json.rawValue
+
+        // This must be a dictionary.
+        let jsonDictionary: NSDictionary = rawJSON as! NSDictionary
+        let val = jsonDictionary.value(forKey: "id")!
+        let ns = val as! NSString
+        return ns as String
     }
 
     open var deleted: Bool {
