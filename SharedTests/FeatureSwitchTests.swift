@@ -26,17 +26,29 @@ class FeatureSwitchTests: XCTestCase {
     func testConsistentWhenChangingPercentage() {
         let featureID = "test-persistent-over-releases"
         let prefs = MockProfilePrefs()
+        let guardFeatureSwitch = FeatureSwitch(named: featureID, allowPercentage: 50, buildChannel: buildChannel)
+        while guardFeatureSwitch.alwaysMembership(prefs) {
+            guardFeatureSwitch.resetMembership(prefs)
+        }
         var membership = false
         var changed = 0
         for percent in 0..<100 {
             let featureSwitch = FeatureSwitch(named: featureID, allowPercentage: percent, buildChannel: buildChannel)
+            print(membership)
             if featureSwitch.isMember(prefs) != membership {
                 membership = !membership
                 changed += 1
+                print("CHANGED")
             }
         }
 
         XCTAssertEqual(changed, 1, "Users should get and keep the feature if the feature is becoming successful")
+    }
+
+    func testReallyConsistentWhenChangingPercentage() {
+        for _ in 0..<1000 {
+            testConsistentWhenChangingPercentage()
+        }
     }
 
     func testUserEnabled() {
@@ -86,7 +98,7 @@ extension FeatureSwitchTests {
         let prefs = MockProfilePrefs()
         measure {
             for _ in 0..<1000 {
-                let _ = featureSwitch.isMember(prefs)
+                _ = featureSwitch.isMember(prefs)
             }
         }
     }
@@ -119,7 +131,7 @@ private extension FeatureSwitchTests {
     }
 
     func testExactly(_ featureSwitch: FeatureSwitch, expected: Int) {
-        let testCount = 10
+        let testCount = 1000
         let count = sampleN(featureSwitch, testCount: testCount)
         let normalizedExpectedCount = (testCount * expected) / 100
         XCTAssertEqual(count, normalizedExpectedCount)
