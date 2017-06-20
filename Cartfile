@@ -1,8 +1,4 @@
-# These two have to be specified explicitely otherwise
-# Carthage complains about a dependency cycle.
-github "kstenerud/KSCrash"                  "1.15.8"
-github "getsentry/sentry-swift"             "2.1.9"
-
+github "getsentry/sentry-cocoa"             "3.0.3"
 github "Alamofire/Alamofire"                ~> 4.0
 github "sleroux/Deferred"                   "Swift3.0"
 github "SnapKit/SnapKit"                    "3.1.2"
@@ -17,5 +13,7 @@ github "jrendel/SwiftKeychainWrapper"       "3.0.1"
 github "DaveWoodCom/XCGLogger"              "Version_4.0.0"
 github "cezheng/Fuzi"                       "1.0.1"
 github "SwiftyJSON/SwiftyJSON"              "3.1.4"
-github "farhanpatel/JSONSchema.swift" "master"
+github "farhanpatel/JSONSchema.swift"       "master"
 github "google/EarlGrey"                    "1.9.0"
+github "Leanplum/Leanplum-iOS-SDK"          "2.0.1"
+github "skyline75489/SwiftRouter"           "2.0.0"

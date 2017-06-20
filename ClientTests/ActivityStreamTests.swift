@@ -30,7 +30,7 @@ class ActivityStreamTests: XCTestCase {
     func testDeletionOfSingleSuggestedSite() {
         let siteToDelete = panel.defaultTopSites()[0]
 
-        panel.hideURLFromTopSites(URL(string: siteToDelete.url)!)
+        panel.hideURLFromTopSites(siteToDelete)
         let newSites = panel.defaultTopSites()
 
         XCTAssertFalse(newSites.contains(siteToDelete, f: { (a, b) -> Bool in
@@ -41,7 +41,7 @@ class ActivityStreamTests: XCTestCase {
     func testDeletionOfAllDefaultSites() {
         let defaultSites = panel.defaultTopSites()
         defaultSites.forEach({
-            panel.hideURLFromTopSites(URL(string: $0.url)!)
+            panel.hideURLFromTopSites($0)
         })
 
         let newSites = panel.defaultTopSites()
@@ -104,9 +104,9 @@ extension ActivityStreamTests {
 
     func testContextMenuOnTopSiteEmitsRemoveEvent() {
         let mockSite = Site(url: "http://mozilla.org", title: "Mozilla")
-        let topSitesContextMenu = panel.contextMenuForSite(mockSite, atIndex: 0, forSection: .topSites)
+        let topSitesContextMenu = panel.contextMenu(for: mockSite, with: IndexPath(item: 0, section: ActivityStreamPanel.Section.topSites.rawValue))
 
-        let removeAction = topSitesContextMenu?.actions.find { $0.title == Strings.RemoveFromASContextMenuTitle }
+        let removeAction = topSitesContextMenu?.actions.find { $0.title == Strings.RemoveContextMenuTitle }
         removeAction?.handler?(removeAction!)
 
         let pingsSent = (telemetry.eventsTracker as! MockPingClient).pingsReceived
@@ -117,9 +117,9 @@ extension ActivityStreamTests {
 
     func testContextMenuOnHighlightsEmitsRemoveDismissEvents() {
         let mockSite = Site(url: "http://mozilla.org", title: "Mozilla")
-        let highlightsContextMenu = panel.contextMenuForSite(mockSite, atIndex: 0, forSection: .highlights)
+        let highlightsContextMenu = panel.contextMenu(for: mockSite, with: IndexPath(row: 0, section: ActivityStreamPanel.Section.highlights.rawValue))
 
-        let dismiss = highlightsContextMenu?.actions.find { $0.title == Strings.RemoveFromASContextMenuTitle }
+        let dismiss = highlightsContextMenu?.actions.find { $0.title == Strings.RemoveContextMenuTitle }
         let delete = highlightsContextMenu?.actions.find { $0.title == Strings.DeleteFromHistoryContextMenuTitle }
 
         dismiss?.handler?(dismiss!)
@@ -245,6 +245,10 @@ fileprivate class MockRecommender: HistoryRecommendations {
     func getHighlights() -> Deferred<Maybe<Cursor<Site>>> {
         return deferMaybe(ArrayCursor(data: highlights))
     }
+
+    func getRecentBookmarks(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
+        return deferMaybe(ArrayCursor(data: []))
+    }
     
     func removeHighlightForURL(_ url: String) -> Success {
         guard let foundSite = highlights.filter({ $0.url == url }).first else {
@@ -265,6 +269,10 @@ fileprivate class MockTopSitesHistory: MockableHistory {
 
     override func getTopSitesWithLimit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
         return deferMaybe(ArrayCursor(data: mockTopSites))
+    }
+
+    override func getPinnedTopSites() -> Deferred<Maybe<Cursor<Site>>> {
+        return deferMaybe(ArrayCursor(data: []))
     }
 
     override func updateTopSitesCacheIfInvalidated() -> Deferred<Maybe<Bool>> {

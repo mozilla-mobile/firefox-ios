@@ -163,7 +163,7 @@ open class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchroniz
 
             if !self.remoteHasChanges(info) {
                 // upload local tabs if they've changed or we're in a fresh start.
-                let _ = uploadOurTabs(localTabs, toServer: tabsClient)
+                _ = uploadOurTabs(localTabs, toServer: tabsClient)
                 return deferMaybe(completedWithStats)
             }
 

@@ -50,12 +50,15 @@ open class WipeCommand: Command {
 open class DisplayURICommand: Command {
     let uri: URL
     let title: String
+    let sender: String
 
     public init?(command: String, args: [JSON]) {
         if let uri = args[0].string?.asURL,
+            let sender = args[1].string,
             let title = args[2].string {
-                self.uri = uri
-                self.title = title
+            self.uri = uri
+            self.sender = sender
+            self.title = title
         } else {
             // Oh, Swift.
             self.uri = "http://localhost/".asURL!
@@ -69,8 +72,18 @@ open class DisplayURICommand: Command {
     }
 
     open func run(_ synchronizer: ClientsSynchronizer) -> Success {
-        synchronizer.delegate.displaySentTabForURL(uri, title: title)
-        return succeed()
+        func display(_ deviceName: String? = nil) -> Success {
+            synchronizer.delegate.displaySentTab(for: uri, title: title, from: deviceName)
+            return succeed()
+        }
+
+        guard let getClientWithId = synchronizer.localClients?.getClientWithId(sender) else {
+            return display()
+        }
+
+        return getClientWithId >>== { client in
+            return display(client?.name)
+        }
     }
 
     open static func commandFromSyncCommand(_ syncCommand: SyncCommand) -> Command? {
@@ -124,7 +137,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
         super.init(scratchpad: scratchpad, delegate: delegate, basePrefs: basePrefs, collection: "clients")
     }
 
-    var localClients: RemoteClientsAndTabs? = nil
+    var localClients: RemoteClientsAndTabs?
 
     override var storageVersion: Int {
         return ClientsStorageVersion
@@ -363,8 +376,8 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
                     >>> { self.uploadClientCommands(toLocalClients: localClients, withServer: storageClient) }
                     >>> {
                         log.debug("Running \(commands.count) commands.")
-                        for (command) in commands {
-                            let _ = command.run(self)
+                        for command in commands {
+                            _ = command.run(self)
                         }
                         self.lastFetched = responseTimestamp!
                         return succeed()

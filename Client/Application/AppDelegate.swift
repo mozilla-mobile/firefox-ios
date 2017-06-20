@@ -11,6 +11,7 @@ import WebImage
 import SwiftKeychainWrapper
 import LocalAuthentication
 import Telemetry
+import SwiftRouter
 
 private let log = Logger.browserLogger
 
@@ -63,6 +64,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     }
 
     @discardableResult fileprivate func startApplication(_ application: UIApplication, withLaunchOptions launchOptions: [AnyHashable: Any]?) -> Bool {
+        log.debug("Initializing Sentry…")
+        // Need to get "settings.sendUsageData" this way so that Sentry can be initialized
+        // before getting the Profile.
+        let sendUsageData = NSUserDefaultsPrefs(prefix: "profile").boolForKey("settings.sendUsageData") ?? true
+        SentryIntegration.shared.setup(sendUsageData: sendUsageData)
+        
         log.debug("Setting UA…")
         // Set the Firefox UA for browsing.
         setUserAgent()
@@ -88,9 +95,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         log.debug("Getting profile…")
         let profile = getProfile(application)
         appStateStore = AppStateStore(prefs: profile.prefs)
-
-        log.debug("Initializing Sentry…")
-        SentryIntegration.shared.setup(profile: profile)
 
         log.debug("Initializing telemetry…")
         Telemetry.initWithPrefs(profile.prefs)
@@ -127,11 +131,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         navigationController.delegate = self
         navigationController.isNavigationBarHidden = true
 
-        if AppConstants.MOZ_STATUS_BAR_NOTIFICATION {
-            rootViewController = NotificationRootViewController(rootViewController: navigationController)
-        } else {
+        //  This was an old feature that never made it to release. It was kind of buggy so it might be worth either removing entirely or making the deep links worth with it. Essentially it replaces the UINavigationController we setup with a subclass that shows a notification view in place of the status bar.
+//        if AppConstants.MOZ_STATUS_BAR_NOTIFICATION {
+//            rootViewController = NotificationRootViewController(rootViewController: navigationController)
+//        } else {
             rootViewController = navigationController
-        }
+//        }
 
         self.window!.rootViewController = rootViewController
 
@@ -154,10 +159,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         
         adjustIntegration = AdjustIntegration(profile: profile)
 
+        let leanplum = LeanplumIntegration.sharedInstance
+        leanplum.setup(profile: profile)
+        leanplum.setEnabled(true)
+
         // We need to check if the app is a clean install to use for
         // preventing the What's New URL from appearing.
-        if getProfile(application).prefs.intForKey(IntroViewControllerSeenProfileKey) == nil {
-            getProfile(application).prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
+        let prefs = getProfile(application).prefs
+        if prefs.intForKey(IntroViewControllerSeenProfileKey) == nil {
+            prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
+            leanplum.track(eventName: .firstRun)
+        } else if prefs.boolForKey("SecondRun") == nil {
+            prefs.setBool(true, forKey: "SecondRun")
+            leanplum.track(eventName: .secondRun)
         }
 
         log.debug("Updating authentication keychain state to reflect system state")
@@ -180,8 +194,86 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // Run an invalidate when we come back into the app.
         profile.panelDataObservers.activityStream.invalidate(highlights: true)
 
+        setUpDeepLinks(application: application)
+
         log.debug("Done with setting up the application.")
         return true
+    }
+
+    func setUpDeepLinks(application: UIApplication) {
+        let router = Router.shared
+        let rootNav = rootViewController as! UINavigationController
+
+        router.map("homepanel/:page", handler: { (params:[String: String]?) -> (Bool) in
+            guard let page = params?["page"] else {
+                return false
+            }
+
+            assert(Thread.isMainThread, "Opening homepanels requires being invoked on the main thread")
+
+            switch (page) {
+                case "bookmarks":
+                    self.browserViewController.openURLInNewTab(HomePanelType.bookmarks.localhostURL, isPrivileged: true)
+                case "history":
+                    self.browserViewController.openURLInNewTab(HomePanelType.history.localhostURL, isPrivileged: true)
+                case "new-private-tab":
+                    self.browserViewController.openBlankNewTab(isPrivate: true)
+            default:
+                break
+            }
+
+            return true
+        })
+
+        // Route to general settings page like this: "...settings/general"
+        router.map("settings/:page", handler: { (params:[String: String]?) -> (Bool) in
+            guard let page = params?["page"] else {
+                return false
+            }
+
+            assert(Thread.isMainThread, "Opening settings requires being invoked on the main thread")
+
+            let settingsTableViewController = AppSettingsTableViewController()
+            settingsTableViewController.profile = self.profile
+            settingsTableViewController.tabManager = self.tabManager
+            settingsTableViewController.settingsDelegate = self.browserViewController
+
+            let controller = SettingsNavigationController(rootViewController: settingsTableViewController)
+            controller.popoverDelegate = self.browserViewController
+            controller.modalPresentationStyle = UIModalPresentationStyle.formSheet
+
+            rootNav.present(controller, animated: true, completion: nil)
+
+            switch (page) {
+                case "newtab":
+                    let viewController = NewTabChoiceViewController(prefs: self.getProfile(application).prefs)
+                    controller.pushViewController(viewController, animated: true)
+                case "homepage":
+                    let viewController = HomePageSettingsViewController()
+                    viewController.profile = self.getProfile(application)
+                    viewController.tabManager = self.tabManager
+                    controller.pushViewController(viewController, animated: true)
+                case "mailto":
+                    let viewController = OpenWithSettingsViewController(prefs: self.getProfile(application).prefs)
+                    controller.pushViewController(viewController, animated: true)
+                case "search":
+                    let viewController = SearchSettingsTableViewController()
+                    viewController.model = self.getProfile(application).searchEngines
+                    viewController.profile = self.getProfile(application)
+                    controller.pushViewController(viewController, animated: true)
+                case "clear-private-data":
+                    let viewController = ClearPrivateDataTableViewController()
+                    viewController.profile = self.getProfile(application)
+                    viewController.tabManager = self.tabManager
+                    controller.pushViewController(viewController, animated: true)
+                case "fxa":
+                    self.browserViewController.presentSignInViewController()
+            default:
+                break
+            }
+
+            return true
+        })
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -270,52 +362,66 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             return false
         }
 
-        if AppConstants.MOZ_FXA_DEEP_LINK_FORM_FILL {
-            // Extract optional FxA deep-linking options
-            let fxaQuery = url.getQuery()
-            let fxaParams: FxALaunchParams
-            fxaParams = FxALaunchParams(view: fxaQuery["fxa"], email: fxaQuery["email"], access_code: fxaQuery["access_code"])
-            
-            if fxaParams.view != nil {
+        guard let host = url.host else {
+            log.warning("Cannot handle nil URL host")
+            return false
+        }
+
+        let query = url.getQuery()
+
+        switch host {
+        case "open-url":
+            var url: String?
+            var isPrivate: Bool = false
+
+            if let queryUrl = query["url"]?.unescape() {
+                url = queryUrl
+                isPrivate = NSString(string: query["private"] ?? "false").boolValue
+            }
+
+            let params: LaunchParams
+
+            if let url = url, let newURL = URL(string: url) {
+                params = LaunchParams(url: newURL, isPrivate: isPrivate)
+            } else {
+                params = LaunchParams(url: nil, isPrivate: isPrivate)
+            }
+
+            if application.applicationState == .active {
+                // If we are active then we can ask the BVC to open the new tab right away.
+                // Otherwise, we remember the URL and we open it in applicationDidBecomeActive.
+                launchFromURL(params)
+            } else {
+                openInFirefoxParams = params
+            }
+
+            return true
+        case "deep-link":
+            guard let url = query["url"], Bundle.main.bundleIdentifier == sourceApplication else {
+                break
+            }
+            Router.shared.routeURL(url)
+            return true
+        case "fxa-signin":
+            if AppConstants.MOZ_FXA_DEEP_LINK_FORM_FILL {
+                // FxA form filling requires a `signin` query param and host = fxa-signin
+                // Ex. firefox://fxa-signin?signin=<token>&someQuery=<data>...
+                guard let signinQuery = query["signin"] else {
+                    break
+                }
+                let fxaParams: FxALaunchParams
+                fxaParams = FxALaunchParams(query: query)
                 launchFxAFromURL(fxaParams)
                 return true
             }
+            break
+        default: ()
         }
-
-        var url: String?
-        var isPrivate: Bool = false
-        
-        for item in (components.queryItems ?? []) as [URLQueryItem] {
-            switch item.name {
-            case "url":
-                url = item.value
-            case "private":
-                isPrivate = NSString(string: item.value ?? "false").boolValue
-            default: ()
-            }
-        }
-        
-        let params: LaunchParams
-
-        if let url = url, let newURL = URL(string: url) {
-            params = LaunchParams(url: newURL, isPrivate: isPrivate)
-        } else {
-            params = LaunchParams(url: nil, isPrivate: isPrivate)
-        }
-
-        if application.applicationState == .active {
-            // If we are active then we can ask the BVC to open the new tab right away. 
-            // Otherwise, we remember the URL and we open it in applicationDidBecomeActive.
-            launchFromURL(params)
-        } else {
-            openInFirefoxParams = params
-        }
-
-        return true
+        return false
     }
-    
+
     func launchFxAFromURL(_ params: FxALaunchParams) {
-        guard params.view != nil else {
+        guard params.query != nil else {
             return
         }
         self.browserViewController.presentSignInViewController(params)
@@ -328,6 +434,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         } else {
             self.browserViewController.openBlankNewTab(isPrivate: isPrivate)
         }
+
+        LeanplumIntegration.sharedInstance.track(eventName: .openedNewTab, withParameters: ["Source":"External App or Extension" as AnyObject])
     }
 
     func application(_ application: UIApplication, shouldAllowExtensionPointIdentifier extensionPointIdentifier: UIApplicationExtensionPointIdentifier) -> Bool {
@@ -353,6 +461,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // We could load these here, but then we have to futz with the tab counter
         // and making NSURLRequests.
         self.browserViewController.loadQueuedTabs()
+        application.applicationIconBadgeNumber = 0
 
         // handle quick actions is available
         let quickActions = QuickActions.sharedInstance
@@ -658,36 +767,72 @@ extension AppDelegate {
     }
 
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        log.info("APNS NOTIFICATION \(userInfo)")
+        NSLog("APNS NOTIFICATION \(userInfo)")
+
+        // At this point, we know that NotificationService has been run.
+        // We get to this point if the notification was received while the app was in the foreground
+        // OR the app was backgrounded and now the user has tapped on the notification.
+        // Either way, if this method is being run, then the app is foregrounded.
+
+        // Either way, we should zero the badge number.
+        application.applicationIconBadgeNumber = 0
 
         guard let profile = self.profile else {
             return completionHandler(.noData)
         }
 
+        // NotificationService will have decrypted the push message, and done some syncing 
+        // activity. If the `client` collection was synced, and there are `displayURI` commands (i.e. sent tabs)
+        // NotificationService will have collected them for us in the userInfo.
+        if let serializedTabs = userInfo["sentTabs"] as? [[String: String]] {
+            // Let's go ahead and open those.
+            let receivedURLs = serializedTabs.flatMap { item -> URL? in
+                guard let tabURL = item["url"] else {
+                    return nil
+                }
+                return URL(string: tabURL)
+            }
+
+            if receivedURLs.count > 0 {
+                DispatchQueue.main.async {
+                    for url in receivedURLs {
+                        self.browserViewController.switchToTabForURLOrOpen(url, isPrivileged: false)
+                    }
+                }
+                return completionHandler(.newData)
+            }
+        }
+
+        // So we've got here, and there are no sent tabs.
+        // There are a number of possibilities here: 
+        // a) we started syncing in the NotificationService, but aborted once we reached the end.
+        // b) we did some non-displayURI commands which finished properly.
+        // 
+        // For now, we should just re-process the message handling.
         let handler = FxAPushMessageHandler(with: profile)
         handler.handle(userInfo: userInfo).upon { res in
-            completionHandler(res.isSuccess ? .newData : .noData)
+            completionHandler(res.isSuccess ? .newData : .failed)
         }
     }
 
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
-        log.info("APNS NOTIFICATION \(userInfo)")
-        guard let profile = self.profile else {
-            return
-        }
-
-        let handler = FxAPushMessageHandler(with: profile)
-        handler.handle(userInfo: userInfo)
+        let completionHandler: (UIBackgroundFetchResult) -> Void = { _ in }
+        self.application(application, didReceiveRemoteNotification: userInfo, fetchCompletionHandler: completionHandler)
     }
 }
 
 struct FxALaunchParams {
-    var view: String?
-    var email: String?
-    var access_code: String?
+    var query: [String: String]
 }
 
 struct LaunchParams {
     let url: URL?
     let isPrivate: Bool?
+}
+
+extension UIApplication {
+    static var isInPrivateMode: Bool {
+        let appDelegate = UIApplication.shared.delegate as? AppDelegate
+        return appDelegate?.browserViewController.tabManager.selectedTab?.isPrivate ?? false
+    }
 }

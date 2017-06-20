@@ -168,7 +168,7 @@ extension URL {
         return nil
     }
 
-    public var absoluteDisplayString: String? {
+    public var absoluteDisplayString: String {
         var urlString = self.absoluteString
         // For http URLs, get rid of the trailing slash if the path is empty or '/'
         if (self.scheme == "http" || self.scheme == "https") && (self.path == "/") && urlString.endsWith("/") {
@@ -299,7 +299,7 @@ extension URL {
      */
     public var schemeIsValid: Bool {
         guard let scheme = scheme else { return false }
-        return permanentURISchemes.contains(scheme)
+        return permanentURISchemes.contains(scheme.lowercased())
     }
 
     public func havingRemovedAuthorisationComponents() -> URL {

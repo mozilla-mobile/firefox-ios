@@ -27,6 +27,18 @@ public struct AppConstants {
         #endif
     }()
 
+    public static let scheme: String = {
+        guard let identifier = Bundle.main.bundleIdentifier else {
+            return "unknown"
+        }
+
+        let scheme = identifier.replacingOccurrences(of: "org.mozilla.ios.", with: "")
+        if scheme == "FirefoxNightly.enterprise" {
+            return "FirefoxNightly"
+        }
+        return scheme
+    }()
+
     /// Whether we just mirror (false) or actively merge and upload (true).
     public static var shouldMergeBookmarks = false
 
@@ -132,9 +144,9 @@ public struct AppConstants {
     ///  Enables/disables deep linking form fill for FxA
     public static let MOZ_FXA_DEEP_LINK_FORM_FILL: Bool = {
         #if MOZ_CHANNEL_RELEASE
-            return false
+            return true
         #elseif MOZ_CHANNEL_BETA
-            return false
+            return true
         #elseif MOZ_CHANNEL_FENNEC
             return true
         #else

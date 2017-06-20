@@ -75,12 +75,12 @@ class ReadingListFetchSpec {
         }
 
         func setMinAttribute(_ attribute: String, value: String) -> Builder {
-            let _ = qualifyAttribute(attribute, withQualifier: "min_", value: value)
+            _ = qualifyAttribute(attribute, withQualifier: "min_", value: value)
             return self
         }
 
         func setMaxAttribute(_ attribute: String, value: String) -> Builder {
-            let _ = qualifyAttribute(attribute, withQualifier: "max_", value: value)
+            _ = qualifyAttribute(attribute, withQualifier: "max_", value: value)
             return self
         }
     }

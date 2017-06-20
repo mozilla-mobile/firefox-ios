@@ -31,7 +31,6 @@ public protocol BookmarkBufferStorage: class {
     func doneApplyingRecordsAfterDownload() -> Success
 
     func validate() -> Success
-    func repairValidation() -> Deferred<Maybe<[(type: String, ids: [String])]>>
     func getBufferedDeletions() -> Deferred<Maybe<[(GUID, Timestamp)]>>
     func applyBufferCompletionOp(_ op: BufferCompletionOp, itemSources: ItemSources) -> Success
 

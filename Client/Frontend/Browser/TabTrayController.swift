@@ -470,6 +470,7 @@ class TabTrayController: UIViewController {
 
     func SELdidClickAddTab() {
         openNewTab()
+        LeanplumIntegration.sharedInstance.track(eventName: .openedNewTab, withParameters: ["Source":"Tab Tray" as AnyObject])
     }
 
     func SELdidTapLearnMore() {
@@ -563,13 +564,11 @@ class TabTrayController: UIViewController {
             fromView = emptyPrivateTabsView
         }
 
+        tabManager.willSwitchTabMode()
         privateMode = !privateMode
         // If we are exiting private mode and we have the close private tabs option selected, make sure
         // we clear out all of the private tabs
-        let exitingPrivateMode = !privateMode && profile.prefs.boolForKey("settings.closePrivateTabs") ?? false
-        if exitingPrivateMode {
-            tabManager.removeAllPrivateTabsAndNotify(false)
-        }
+        let exitingPrivateMode = !privateMode && tabManager.shouldClearPrivateTabs()
 
         toolbar.maskButton.setSelected(privateMode, animated: true)
         collectionView.layoutSubviews()
@@ -630,7 +629,7 @@ class TabTrayController: UIViewController {
         }, completion: { finished in
             self.toolbar.isUserInteractionEnabled = true
             if finished {
-                let _ = self.navigationController?.popViewController(animated: true)
+                _ = self.navigationController?.popViewController(animated: true)
 
                 if request == nil && NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage {
                     if let bvc = self.navigationController?.topViewController as? BrowserViewController {
@@ -676,7 +675,7 @@ extension TabTrayController: TabSelectionDelegate {
     func didSelectTabAtIndex(_ index: Int) {
         let tab = tabsToDisplay[index]
         tabManager.selectTab(tab)
-        let _ = self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
     }
 }
 
@@ -711,7 +710,7 @@ extension TabTrayController: TabManagerDelegate {
                 tabManager.selectTab(tab)
                 // don't pop the tab tray view controller if it is not in the foreground
                 if self.presentedViewController == nil {
-                    let _ = self.navigationController?.popViewController(animated: true)
+                    _ = self.navigationController?.popViewController(animated: true)
                 }
             }
         })
@@ -847,12 +846,10 @@ fileprivate class TabManagerDataSource: NSObject, UICollectionViewDataSource {
      */
     func removeTab(_ tabToRemove: Tab) -> Int {
         var index: Int = -1
-        for (i, tab) in tabs.enumerated() {
-            if tabToRemove === tab {
-                index = i
-                tabs.remove(at: index)
-                break
-            }
+        for (i, tab) in tabs.enumerated() where tabToRemove === tab {
+            index = i
+            tabs.remove(at: index)
+            break
         }
         return index
     }
@@ -1109,7 +1106,7 @@ extension TabTrayController: UIViewControllerPreviewingDelegate {
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
         guard let tpvc = viewControllerToCommit as? TabPeekViewController else { return }
         tabManager.selectTab(tpvc.tab)
-        let _ = self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
 
         delegate?.tabTrayDidDismiss(self)
 
@@ -1217,7 +1214,7 @@ class TrayToolbar: UIView {
     lazy var menuButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage.templateImageNamed("bottomNav-menu-pbm"), for: .normal)
-        button.accessibilityLabel = AppMenuConfiguration.MenuButtonAccessibilityLabel
+        button.accessibilityLabel = Strings.AppMenuButtonAccessibilityLabel
         button.accessibilityIdentifier = "TabTrayController.menuButton"
         return button
     }()

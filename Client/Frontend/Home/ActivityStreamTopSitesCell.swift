@@ -133,6 +133,12 @@ class TopSiteItemCell: UICollectionViewCell {
         } else {
             titleLabel.text = site.tileURL.hostSLD
         }
+
+        // If its a pinned site add a bullet point to the front
+        if let _ = site as? PinnedSite, let titleText = titleLabel.text {
+            titleLabel.text = "• \(titleText)"
+        }
+
         accessibilityLabel = titleLabel.text
         if let suggestedSite = site as? SuggestedSite {
             let img = UIImage(named: suggestedSite.faviconImagePath!)
@@ -295,6 +301,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
     private var insets = UIEdgeInsets(equalInset: ASHorizontalScrollCellUX.MinimumInsets)
     private var sectionInsets: CGFloat = 0
     var itemSize = CGSize.zero
+    var cachedAttributes: [UICollectionViewLayoutAttributes]?
 
     override func prepare() {
         super.prepare()
@@ -302,6 +309,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
             self.collectionView?.setContentOffset(CGPoint.zero, animated: false)
         }
         boundsSize = self.collectionView?.frame.size ?? CGSize.zero
+        cachedAttributes = nil
         register(EmptyTopsiteDecorationCell.self, forDecorationViewOfKind: ASHorizontalScrollCellUX.TopSiteEmptyCellIdentifier)
     }
 
@@ -378,12 +386,16 @@ class HorizontalFlowLayout: UICollectionViewLayout {
         let decorationAttr =  UICollectionViewLayoutAttributes(forDecorationViewOfKind: elementKind, with: indexPath)
         let cellAttr = self.computeLayoutAttributesForCellAtIndexPath(indexPath)
         decorationAttr.frame = cellAttr.frame
+
         decorationAttr.frame.size.height -= TopSiteCellUX.TitleHeight
         decorationAttr.zIndex = -1
         return decorationAttr
     }
 
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+        if cachedAttributes != nil {
+            return cachedAttributes
+        }
         var allAttributes = [UICollectionViewLayoutAttributes]()
         for i in 0 ..< cellCount {
             let indexPath = IndexPath(row: i, section: 0)
@@ -396,11 +408,12 @@ class HorizontalFlowLayout: UICollectionViewLayout {
         var numberOfCells = cellCount
         while numberOfCells % horizontalItemsCount != 0 {
             //we need some empty cells dawg.
+
             let attr = self.layoutAttributesForDecorationView(ofKind: ASHorizontalScrollCellUX.TopSiteEmptyCellIdentifier, at: IndexPath(item: numberOfCells, section: 0))
             allAttributes.append(attr!)
             numberOfCells += 1
         }
-
+        cachedAttributes = allAttributes
         return allAttributes
     }
 
@@ -409,6 +422,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
     }
 
     override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
+        cachedAttributes = nil
         // Sometimes when the topsiteCell isnt on the screen the newbounds that it tries to layout in is very tiny
         // Resulting in incorrect layouts. So only layout when the width is greater than 320.
         return newBounds.width >= 320

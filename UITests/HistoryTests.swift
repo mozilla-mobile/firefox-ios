@@ -73,7 +73,7 @@ class HistoryTests: KIFTestCase {
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(urls[0]))
             .perform(grey_swipeSlowInDirection(GREYDirection.left))
         
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Remove"))
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Delete"))
             .inRoot(grey_kindOfClass(NSClassFromString("_UITableViewCellActionButton")!))
             .perform(grey_tap())
         
@@ -111,7 +111,7 @@ class HistoryTests: KIFTestCase {
             .perform(grey_tap())
         EarlGrey.select(elementWithMatcher:grey_accessibilityLabel(urlToDelete))
             .perform(grey_swipeSlowInDirection(GREYDirection.left))
-        EarlGrey.select(elementWithMatcher:grey_accessibilityLabel("Remove"))
+        EarlGrey.select(elementWithMatcher:grey_accessibilityLabel("Delete"))
             .inRoot(grey_kindOfClass(NSClassFromString("_UITableViewCellActionButton")!))
             .perform(grey_tap())
         

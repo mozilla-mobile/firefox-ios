@@ -63,6 +63,20 @@ class TwoLineTableViewCell: UITableViewCell {
         twoLineHelper.setupDynamicFonts()
     }
 
+    // Save background color on UITableViewCell "select" because it disappears in the default behavior
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        let color = imageView?.backgroundColor
+        super.setHighlighted(highlighted, animated: animated)
+        imageView?.backgroundColor = color
+    }
+
+    // Save background color on UITableViewCell "select" because it disappears in the default behavior
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        let color = imageView?.backgroundColor
+        super.setSelected(selected, animated: animated)
+        imageView?.backgroundColor = color
+    }
+    
     func setRightBadge(_ badge: UIImage?) {
         if let badge = badge {
             self.accessoryView = UIImageView(image: badge)

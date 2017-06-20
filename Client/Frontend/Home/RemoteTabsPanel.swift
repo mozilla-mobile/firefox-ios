@@ -110,7 +110,7 @@ class RemoteTabsPanel: UIViewController, HomePanel {
     }
 
     @objc fileprivate func historyBackButtonWasTapped(_ gestureRecognizer: UITapGestureRecognizer) {
-        let _ = self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
     }
 }
 
@@ -483,8 +483,13 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
         }
     }
 
+    fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
+        return UILongPressGestureRecognizer(target: self, action: #selector(RemoteTabsTableViewController.longPress(_:)))
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.addGestureRecognizer(longPressRecognizer)
         tableView.register(TwoLineHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: RemoteClientIdentifier)
         tableView.register(TwoLineTableViewCell.self, forCellReuseIdentifier: RemoteTabIdentifier)
 
@@ -506,6 +511,12 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         refreshControl?.removeTarget(self, action: #selector(RemoteTabsTableViewController.refreshTabs), for: .valueChanged)
+    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        coordinator.animate(alongsideTransition: { context in
+            self.presentedViewController?.dismiss(animated: true, completion: nil)
+        }, completion: nil)
     }
 
     fileprivate func startRefreshing() {
@@ -583,5 +594,28 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
                 self.endRefreshing()
             }
         }
+    }
+
+    @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+        guard longPressGestureRecognizer.state == UIGestureRecognizerState.began else { return }
+        let touchPoint = longPressGestureRecognizer.location(in: tableView)
+        guard let indexPath = tableView.indexPathForRow(at: touchPoint) else { return }
+        presentContextMenu(for: indexPath)
+    }
+}
+
+extension RemoteTabsTableViewController: HomePanelContextMenu {
+    func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> ActionOverlayTableViewController?) {
+        guard let contextMenu = completionHandler() else { return }
+        self.present(contextMenu, animated: true, completion: nil)
+    }
+
+    func getSiteDetails(for indexPath: IndexPath) -> Site? {
+        guard let tab = (tableViewDelegate as? RemoteTabsPanelClientAndTabsDataSource)?.tabAtIndexPath(indexPath) else { return nil }
+        return Site(url: String(describing: tab.URL), title: tab.title)
+    }
+
+    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [ActionOverlayTableViewAction]? {
+        return getDefaultContextMenuActions(for: site, homePanelDelegate: remoteTabsPanel?.homePanelDelegate)
     }
 }

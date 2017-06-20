@@ -215,6 +215,14 @@ class ClientPickerViewController: UITableViewController {
             clients.append(self.clients[(indexPath as AnyObject).row])
         }
         clientPickerDelegate?.clientPickerViewController(self, didPickClients: clients)
+
+        // Replace the Send button with a loading indicator since it takes a while to sync
+        // up our changes to the server.
+        let loadingIndicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 25, height: 25))
+        loadingIndicator.color = .darkGray
+        loadingIndicator.startAnimating()
+        let customBarButton = UIBarButtonItem(customView: loadingIndicator)
+        self.navigationItem.rightBarButtonItem = customBarButton
     }
 }
 

@@ -12,6 +12,8 @@ import Deferred
 
 fileprivate let log = Logger.syncLogger
 
+public let PrefKeySyncEvents = "sync.telemetry.events"
+
 public enum SyncReason: String {
     case startup = "startup"
     case scheduled = "scheduled"
@@ -82,10 +84,28 @@ extension SyncDownloadStats: DictionaryRepresentable {
     }
 }
 
-// TODO(sleroux): Implement various bookmark validation issues we can run into.
-public struct ValidationStats: Stats {
+public struct ValidationStats: Stats, DictionaryRepresentable {
+    let problems: [ValidationProblem]
+    let took: Int64
+
     public func hasData() -> Bool {
-        return false
+        return !problems.isEmpty
+    }
+
+    func asDictionary() -> [String: Any] {
+        return [
+            "problems": problems.map { $0.asDictionary() },
+            "took": took
+        ]
+    }
+}
+
+public struct ValidationProblem: DictionaryRepresentable {
+    let name: String
+    let count: Int
+
+    func asDictionary() -> [String: Any] {
+        return ["name": name, "count": count]
     }
 }
 
@@ -119,7 +139,6 @@ public class StatsSession {
 
 // Stats about a single engine's sync.
 public class SyncEngineStatsSession: StatsSession {
-    public var failureReason: Any?
     public var validationStats: ValidationStats?
 
     private(set) var uploadStats: SyncUploadStats
@@ -156,6 +175,10 @@ extension SyncEngineStatsSession: DictionaryRepresentable {
 
         if uploadStats.hasData() {
             dict["outgoing"] = uploadStats.asDictionary()
+        }
+
+        if let validation = self.validationStats, validation.hasData() {
+            dict["validation"] = validation.asDictionary()
         }
 
         return dict
@@ -200,6 +223,17 @@ public enum SyncPingError: MaybeErrorType {
     }
 }
 
+public enum SyncPingFailureReasonName: String {
+    case httpError = "httperror"
+    case unexpectedError = "unexpectederror"
+    case sqlError = "sqlerror"
+    case otherError = "othererror"
+}
+
+public protocol SyncPingFailureFormattable {
+    var failureReasonName: SyncPingFailureReasonName { get }
+}
+
 public struct SyncPing: TelemetryPing {
     public private(set) var payload: JSON
 
@@ -223,6 +257,14 @@ public struct SyncPing: TelemetryPing {
                 "deviceID": (scratchpad.clientGUID + token.hashedFxAUID).sha256.hexEncodedString
             ]
 
+            // TODO: We don't cache our sync pings so if it fails, it fails. Once we add
+            // some kind of caching we'll want to make sure we don't dump the events if
+            // the ping has failed.
+            let pickledEvents = prefs.arrayForKey(PrefKeySyncEvents) as? [Data] ?? []
+            let events = pickledEvents.flatMap(Event.unpickle).map { $0.toArray() }
+            ping["events"] = events
+            prefs.setObject(nil, forKey: PrefKeySyncEvents)
+
             return dictionaryFrom(result: result, storage: remoteClientsAndTabs, token: token) >>== { syncDict in
                 // TODO: Split the sync ping metadata from storing a single sync.
                 ping["syncs"] = [syncDict]
@@ -243,7 +285,20 @@ public struct SyncPing: TelemetryPing {
             var dict = stats.asDictionary()
             if let engineResults = result.engineResults.successValue {
                 dict["engines"] = SyncPing.enginePingDataFrom(engineResults: engineResults)
+            } else if let failure = result.engineResults.failureValue {
+                var errorName: SyncPingFailureReasonName
+                if let formattableFailure = failure as? SyncPingFailureFormattable {
+                    errorName = formattableFailure.failureReasonName
+                } else {
+                    errorName = .unexpectedError
+                }
+
+                dict["failureReason"] = [
+                    "name": errorName.rawValue,
+                    "error": "\(type(of: failure))",
+                ]
             }
+
             dict["devices"] = devices
             return deferMaybe(dict)
         }

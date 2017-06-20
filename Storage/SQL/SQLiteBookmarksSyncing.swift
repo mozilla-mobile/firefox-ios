@@ -229,7 +229,7 @@ extension SQLiteBookmarks {
             //   Overriding the parent involves copying the parent's structure, so that
             //   we can amend it, but also the parent's row itself so that we know it's
             //   changed.
-            let _ = overrideParentMirror()
+            _ = overrideParentMirror()
         } else {
             let (status, deleted) = localStatus!
             if deleted {
@@ -426,7 +426,7 @@ open class SQLiteBookmarkBufferStorage: BookmarkBufferStorage {
         let folders = records.filter { $0.type == BookmarkNodeType.folder }.map { $0.guid }
 
         var err: NSError?
-        let _ = self.db.transaction(&err) { (conn, err) -> Bool in
+        _ = self.db.transaction(&err) { (conn, err) -> Bool in
             // These have the same values in the same order.
             let update =
             "UPDATE \(TableBookmarksBuffer) SET " +
@@ -581,10 +581,6 @@ extension MergedSQLiteBookmarks: BookmarkBufferStorage {
 
     public func validate() -> Success {
         return self.buffer.validate()
-    }
-
-    public func repairValidation() -> Deferred<Maybe<[(type: String, ids: [String])]>> {
-        return self.buffer.repairValidation()
     }
 
     public func getBufferedDeletions() -> Deferred<Maybe<[(GUID, Timestamp)]>> {
@@ -788,43 +784,38 @@ public enum BufferInconsistency {
     public static let all: [BufferInconsistency] = [.missingValues, .missingStructure, .overlappingStructure, .parentIDDisagreement]
 }
 
-open class BookmarksDatabaseError: DatabaseError {}
+public struct BufferInvalidError: MaybeErrorType {
+    public let description = "Bookmarks buffer contains invalid data"
+    public let inconsistencies: [BufferInconsistency: [GUID]]
+    public let validationDuration: Int64
+
+    public init(inconsistencies: [BufferInconsistency: [GUID]], validationDuration: Int64) {
+        self.inconsistencies = inconsistencies
+        self.validationDuration = validationDuration
+    }
+}
 
 extension SQLiteBookmarkBufferStorage {
     public func validate() -> Success {
-        let notificationCenter = NotificationCenter.default
-
-        var validations: [String: Bool] = [:]
-        let deferred = BufferInconsistency.all.map { inc in
-            self.db.queryReturnsNoResults(inc.query) >>== { yes in
-                validations[inc.trackingEvent] = !yes
-                guard yes else {
-                    let message = inc.description
-                    log.warning(message)
-                    return deferMaybe(BookmarksDatabaseError(description: message))
-                }
-                return succeed()
-            }
-        }.allSucceed()
-
-        deferred.upon { _ in
-            notificationCenter.post(name: NotificationBookmarkBufferValidated, object: Box(validations))
-        }
-
-        return deferred
-    }
-
-    // XXX I'd rather have this renamed to validate() and the old validate() to isValid().
-    public func repairValidation() -> Deferred<Maybe<[(type: String, ids: [String])]>> {
-        func idsFor(inconsistency inc: BufferInconsistency) -> () -> Deferred<Maybe<(type: String, ids: [String])>> {
+        func idsFor(inconsistency inc: BufferInconsistency) -> () -> Deferred<Maybe<(type: BufferInconsistency, ids: [String])>> {
             return {
                 self.db.runQuery(inc.query, args: nil, factory: inc.idsFactory)
-                    >>== { deferMaybe((type: inc.trackingEvent, ids: $0.asArray().reduce([], +))) }
+                    >>== { deferMaybe((type: inc, ids: $0.asArray().reduce([], +))) }
             }
         }
 
+        let start = Date.now()
         let ops = BufferInconsistency.all.map { idsFor(inconsistency: $0) }
-        return accumulate(ops)
+        return accumulate(ops) >>== { results in
+            var inconsistencies = [BufferInconsistency: [GUID]]()
+            results.forEach { type, ids in
+                guard !ids.isEmpty else { return }
+                inconsistencies[type] = ids
+            }
+
+            return inconsistencies.isEmpty ? succeed() :
+                deferMaybe(BufferInvalidError(inconsistencies: inconsistencies, validationDuration: Int64(Date.now() - start)))
+        }
     }
 
     public func getBufferedDeletions() -> Deferred<Maybe<[(GUID, Timestamp)]>> {
@@ -1015,7 +1006,7 @@ extension MergedSQLiteBookmarks {
                 }
 
                 let sqlMirror = "DELETE FROM \(TableBookmarksMirror) WHERE guid IN \(varlist)"
-                let _ = change(sqlMirror, args: args)
+                _ = change(sqlMirror, args: args)
             }
 
             if err != nil {
@@ -1039,7 +1030,7 @@ extension MergedSQLiteBookmarks {
                     "WHERE guid IN",
                     varlist
                     ].joined(separator: " ")
-                let _ = change(copySQL, args: args)
+                _ = change(copySQL, args: args)
             }
 
             if err != nil {
@@ -1062,7 +1053,7 @@ extension MergedSQLiteBookmarks {
                     "FROM \(TableBookmarksLocal) WHERE guid IN",
                     varlist
                     ].joined(separator: " ")
-               let _ = change(copySQL, args: args)
+               _ = change(copySQL, args: args)
             }
 
             op.modifiedTimes.forEach { (time, guids) in
@@ -1080,7 +1071,7 @@ extension MergedSQLiteBookmarks {
                     "WHERE guid IN",
                     varlist,
                 ].joined(separator: " ")
-                let _ = change(updateSQL, args: args)
+                _ = change(updateSQL, args: args)
             }
 
             if err != nil {
@@ -1106,7 +1097,7 @@ extension MergedSQLiteBookmarks {
 
                 // If the values change, we'll handle those elsewhere, but at least we need to mark these as non-overridden.
                 let sqlMirrorOverride = "UPDATE \(TableBookmarksMirror) SET is_overridden = 0 WHERE guid IN \(varlist)"
-                let _ = change(sqlMirrorOverride, args: args)
+                _ = change(sqlMirrorOverride, args: args)
             }
 
             if err != nil {
@@ -1129,7 +1120,7 @@ extension MergedSQLiteBookmarks {
                     guard err == nil else { return }
 
                     let args = mirrorItem.getUpdateOrInsertArgs()
-                    let _ = change(updateSQL, args: args)
+                    _ = change(updateSQL, args: args)
                 }
 
                 if err != nil {
@@ -1154,7 +1145,7 @@ extension MergedSQLiteBookmarks {
                     guard err == nil else { return }
 
                     let args = mirrorItem.getUpdateOrInsertArgs()
-                    let _ = change(insertSQL, args: args)
+                    _ = change(insertSQL, args: args)
                 }
 
                 if err != nil {

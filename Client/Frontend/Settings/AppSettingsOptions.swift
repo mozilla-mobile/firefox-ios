@@ -70,6 +70,8 @@ class DisconnectSetting: WithAccountSetting {
                 self.settings.profile.removeAccount()
                 self.settings.settings = self.settings.generateSettings()
                 self.settings.SELfirefoxAccountDidChange()
+
+                LeanplumIntegration.sharedInstance.setUserAttributes(attributes: [UserAttributeKeyName.signedInSync.rawValue : self.profile.hasAccount()])
             })
         navigationController?.present(alertController, animated: true, completion: nil)
     }
@@ -569,7 +571,11 @@ class SendAnonymousUsageDataSetting: BoolSetting {
             prefs: prefs, prefKey: "settings.sendUsageData", defaultValue: true,
             attributedTitleText: NSAttributedString(string: NSLocalizedString("Send Anonymous Usage Data", tableName: "SendAnonymousUsageData", comment: "See http://bit.ly/1SmEXU1")),
             attributedStatusText: NSAttributedString(string: NSLocalizedString("More Info…", tableName: "SendAnonymousUsageData", comment: "See http://bit.ly/1SmEXU1"), attributes: [NSForegroundColorAttributeName: UIConstants.HighlightBlue]),
-            settingDidChange: { AdjustIntegration.setEnabled($0) }
+            settingDidChange: {
+                AdjustIntegration.setEnabled($0)
+                LeanplumIntegration.sharedInstance.setUserAttributes(attributes: [UserAttributeKeyName.telemetryOptIn.rawValue : $0])
+                LeanplumIntegration.sharedInstance.setEnabled($0)
+            }
         )
     }
 
@@ -653,6 +659,7 @@ class LoginsSetting: Setting {
     override func onClick(_: UINavigationController?) {
         guard let authInfo = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo() else {
             settings?.navigateToLoginsList()
+            LeanplumIntegration.sharedInstance.track(eventName: .openedLogins)
             return
         }
 
@@ -661,6 +668,7 @@ class LoginsSetting: Setting {
             touchIDReason: AuthenticationStrings.loginsTouchReason,
             success: {
                 self.settings?.navigateToLoginsList()
+                LeanplumIntegration.sharedInstance.track(eventName: .openedLogins)
             },
             cancel: {
                 self.deselectRow()
@@ -671,6 +679,7 @@ class LoginsSetting: Setting {
             })
         } else {
             settings?.navigateToLoginsList()
+            LeanplumIntegration.sharedInstance.track(eventName: .openedLogins)
         }
     }
 }
@@ -791,8 +800,8 @@ class StageSyncServiceDebugSetting: WithoutAccountSetting {
     }
 
     override var status: NSAttributedString? {
-        let isOn = prefs.boolForKey(prefKey) ?? false
-        let configurationURL = isOn ? StageFirefoxAccountConfiguration().authEndpointURL : ProductionFirefoxAccountConfiguration().authEndpointURL
+        // Derive the configuration we display from the profile, which knows about the prefKey.
+        let configurationURL = settings.profile.accountConfiguration.authEndpointURL
         return NSAttributedString(string: configurationURL.absoluteString, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewHeaderTextColor])
     }
 

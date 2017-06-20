@@ -35,7 +35,7 @@ class DeferredDBOperation<T>: Deferred<Maybe<T>>, Cancellable {
             })
         }
         set {
-            let _ = cancelledLock.withWriteLock { cancelled -> T? in
+            _ = cancelledLock.withWriteLock { cancelled -> T? in
                 cancelled = newValue
                 return nil
             }
@@ -51,7 +51,7 @@ class DeferredDBOperation<T>: Deferred<Maybe<T>>, Cancellable {
             return nil
         }
         set {
-            let _ = connectionLock.withWriteLock { connection -> T? in
+            _ = connectionLock.withWriteLock { connection -> T? in
                 connection = newValue
                 return nil
             }

@@ -21,6 +21,9 @@ class MockableHistory: BrowserHistory, SyncableHistory, ResettableSyncStorage {
     func removeHostFromTopSites(_ host: String) -> Success { fatalError() }
     func clearTopSitesCache() -> Success { fatalError() }
     func refreshTopSitesCache() -> Success { fatalError() }
+    func removeFromPinnedTopSites(_ site: Site) -> Success { fatalError() }
+    func addPinnedTopSite(_ site: Site) -> Success { fatalError() }
+    func getPinnedTopSites() -> Deferred<Maybe<Cursor<Site>>> { fatalError() }
     func getSitesByFrecencyWithHistoryLimit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>> { fatalError() }
     func getSitesByFrecencyWithHistoryLimit(_ limit: Int, whereURLContains filter: String) -> Deferred<Maybe<Cursor<Site>>> { fatalError() }
     func getSitesByFrecencyWithHistoryLimit(_ limit: Int, bookmarksLimit: Int, whereURLContains filter: String) -> Deferred<Maybe<Cursor<Site>>> { fatalError() }

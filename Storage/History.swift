@@ -37,6 +37,11 @@ public protocol BrowserHistory {
     func clearTopSitesCache() -> Success
     @discardableResult func refreshTopSitesCache() -> Success
     func areTopSitesDirty(withLimit limit: Int) -> Deferred<Maybe<Bool>>
+
+    // Pinning top sites
+    func removeFromPinnedTopSites(_ site: Site) -> Success
+    func addPinnedTopSite(_ site: Site) -> Success
+    func getPinnedTopSites() -> Deferred<Maybe<Cursor<Site>>>
 }
 
 /**
@@ -44,6 +49,8 @@ public protocol BrowserHistory {
  */
 public protocol HistoryRecommendations {
     func getHighlights() -> Deferred<Maybe<Cursor<Site>>>
+    func getRecentBookmarks(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>>
+
     func removeHighlightForURL(_ url: String) -> Success
     func invalidateHighlights() -> Success
 }

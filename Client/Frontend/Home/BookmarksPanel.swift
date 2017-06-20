@@ -43,6 +43,10 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     var source: BookmarksModel?
     var parentFolders = [BookmarkFolder]()
     var bookmarkFolder: BookmarkFolder?
+
+    fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
+        return UILongPressGestureRecognizer(target: self, action: #selector(BookmarksPanel.longPress(_:)))
+    }()
     fileprivate lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverlayView()
 
     fileprivate let BookmarkFolderCellIdentifier = "BookmarkFolderIdentifier"
@@ -68,6 +72,8 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.addGestureRecognizer(longPressRecognizer)
+
         self.tableView.accessibilityIdentifier = "Bookmarks List"
     }
 
@@ -103,6 +109,12 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             log.warning("Received unexpected notification \(notification.name)")
             break
         }
+    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        coordinator.animate(alongsideTransition: { context in
+            self.presentedViewController?.dismiss(animated: true, completion: nil)
+        }, completion: nil)
     }
 
     fileprivate func createEmptyStateOverlayView() -> UIView {
@@ -183,6 +195,13 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         self.source?.reloadData().upon(onModelFetched)
     }
 
+    @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+        guard longPressGestureRecognizer.state == UIGestureRecognizerState.began else { return }
+        let touchPoint = longPressGestureRecognizer.location(in: tableView)
+        guard let indexPath = tableView.indexPathForRow(at: touchPoint) else { return }
+        presentContextMenu(for: indexPath)
+    }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return source?.current.count ?? 0
     }
@@ -295,6 +314,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         switch bookmark {
         case let item as BookmarkItem:
             homePanelDelegate?.homePanel(self, didSelectURLString: item.url, visitType: VisitType.bookmark)
+            LeanplumIntegration.sharedInstance.track(eventName: .openedBookmark)
             break
 
         case let folder as BookmarkFolder:
@@ -349,44 +369,88 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         let title = NSLocalizedString("Delete", tableName: "BookmarkPanel", comment: "Action button for deleting bookmarks in the bookmarks panel.")
 
         let delete = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: title, handler: { (action, indexPath) in
-            guard let bookmark = source.current[indexPath.row] else {
-                return
-            }
-
-            assert(!(bookmark is BookmarkFolder))
-            if bookmark is BookmarkFolder {
-                // TODO: check whether the folder is empty (excluding separators). If it isn't
-                // then we must ask the user to confirm. Bug 1232810.
-                log.debug("Not deleting folder.")
-                return
-            }
-
-            log.debug("Removing rows \(indexPath).")
-
-            // Block to do this -- this is UI code.
-            guard let factory = source.modelFactory.value.successValue else {
-                log.error("Couldn't get model factory. This is unexpected.")
-                self.onModelFailure(DatabaseError(description: "Unable to get factory."))
-                return
-            }
-
-            if let err = factory.removeByGUID(bookmark.guid).value.failureValue {
-                log.debug("Failed to remove \(bookmark.guid).")
-                self.onModelFailure(err)
-                return
-            }
-
-            self.tableView.beginUpdates()
-            self.source = source.removeGUIDFromCurrent(bookmark.guid)
-            self.tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.left)
-            self.tableView.endUpdates()
-            self.updateEmptyPanelState()
-
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: BookmarkStatusChangedNotification), object: bookmark, userInfo: ["added": false]
-            )
+            self.deleteBookmark(indexPath: indexPath, source: source)
         })
 
         return [delete]
+    }
+
+    func pinTopSite(_ site: Site) {
+        _ = profile.history.addPinnedTopSite(site).value
+    }
+
+    func deleteBookmark(indexPath: IndexPath, source: BookmarksModel) {
+        guard let bookmark = source.current[indexPath.row] else {
+            return
+        }
+
+        assert(!(bookmark is BookmarkFolder))
+        if bookmark is BookmarkFolder {
+            // TODO: check whether the folder is empty (excluding separators). If it isn't
+            // then we must ask the user to confirm. Bug 1232810.
+            log.debug("Not deleting folder.")
+            return
+        }
+
+        log.debug("Removing rows \(indexPath).")
+
+        // Block to do this -- this is UI code.
+        guard let factory = source.modelFactory.value.successValue else {
+            log.error("Couldn't get model factory. This is unexpected.")
+            self.onModelFailure(DatabaseError(description: "Unable to get factory."))
+            return
+        }
+
+        if let err = factory.removeByGUID(bookmark.guid).value.failureValue {
+            log.debug("Failed to remove \(bookmark.guid).")
+            self.onModelFailure(err)
+            return
+        }
+
+        self.tableView.beginUpdates()
+        self.source = source.removeGUIDFromCurrent(bookmark.guid)
+        self.tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.left)
+        self.tableView.endUpdates()
+        self.updateEmptyPanelState()
+
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: BookmarkStatusChangedNotification), object: bookmark, userInfo: ["added": false]
+        )
+    }
+}
+
+extension BookmarksPanel: HomePanelContextMenu {
+    func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> ActionOverlayTableViewController?) {
+        guard let contextMenu = completionHandler() else { return }
+        self.present(contextMenu, animated: true, completion: nil)
+    }
+
+    func getSiteDetails(for indexPath: IndexPath) -> Site? {
+        guard let bookmarkItem = source?.current[indexPath.row] as? BookmarkItem else { return nil }
+        let site = Site(url: bookmarkItem.url, title: bookmarkItem.title, bookmarked: true, guid: bookmarkItem.guid)
+        site.icon = bookmarkItem.favicon
+        return site
+    }
+
+    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [ActionOverlayTableViewAction]? {
+        guard var actions = getDefaultContextMenuActions(for: site, homePanelDelegate: homePanelDelegate) else { return nil }
+
+        let pinTopSite = ActionOverlayTableViewAction(title: Strings.PinTopsiteActionTitle, iconString: "action_pin", handler: { action in
+            self.pinTopSite(site)
+        })
+
+        if FeatureSwitches.activityStream.isMember(profile.prefs) {
+            actions.append(pinTopSite)
+        }
+
+        // Only local bookmarks can be removed
+        guard let source = source else { return nil }
+        if source.current.itemIsEditableAtIndex(indexPath.row) {
+            let removeAction = ActionOverlayTableViewAction(title: Strings.RemoveBookmarkContextMenuTitle, iconString: "action_bookmark_remove", handler: { action in
+                self.deleteBookmark(indexPath: indexPath, source: source)
+            })
+            actions.append(removeAction)
+        }
+        return actions
     }
 }
 
@@ -396,7 +460,7 @@ private protocol BookmarkFolderTableViewHeaderDelegate {
 
 extension BookmarksPanel: BookmarkFolderTableViewHeaderDelegate {
     fileprivate func didSelectHeader() {
-        let _ = self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
     }
 }
 

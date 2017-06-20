@@ -8,6 +8,7 @@ import Foundation
 import Shared
 import SwiftyJSON
 import Sync
+import UserNotifications
 import XCGLogger
 
 private let applicationDidRequestUserNotificationPermissionPrefKey = "applicationDidRequestUserNotificationPermissionPrefKey"
@@ -116,6 +117,26 @@ class FxALoginHelper {
     }
 
     fileprivate func requestUserNotifications(_ application: UIApplication) {
+        DispatchQueue.main.async {
+            self.requestUserNotificationsMainThreadOnly(application)
+        }
+    }
+
+    fileprivate func requestUserNotificationsMainThreadOnly(_ application: UIApplication) {
+        assert(Thread.isMainThread, "requestAuthorization should be run on the main thread")
+        if #available(iOS 10, *) {
+            let center = UNUserNotificationCenter.current()
+            return center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
+                guard error == nil else {
+                    return self.application(application, canDisplayUserNotifications: false)
+                }
+                self.application(application, canDisplayUserNotifications: granted)
+            }
+        }
+
+        // This is for iOS 9 and below.
+        // We'll still be using local notifications, i.e. the old behavior,
+        // so we need to keep doing it like this.
         let viewAction = UIMutableUserNotificationAction()
         viewAction.identifier = SentTabAction.view.rawValue
         viewAction.title = Strings.SentTabViewActionTitle
@@ -152,35 +173,49 @@ class FxALoginHelper {
     // Once we have permission from the user to display notifications, we should 
     // try and register for APNS. If not, then start syncing.
     func application(_ application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
+        let types = notificationSettings.types
+        let allowed = types != .none && types.rawValue != 0
+        self.application(application, canDisplayUserNotifications: allowed)
+    }
+
+    func application(_ application: UIApplication, canDisplayUserNotifications allowed: Bool) {
+        guard allowed else {
+            return readyForSyncing()
+        }
+
         // Record that we have asked the user, and they have given an answer.
         profile?.prefs.setBool(true, forKey: applicationDidRequestUserNotificationPermissionPrefKey)
 
-        let types = notificationSettings.types
-
-        guard types != .none && types.rawValue != 0 else {
+        guard #available(iOS 10, *) else {
             return readyForSyncing()
         }
 
         if AppConstants.MOZ_FXA_PUSH {
-            application.registerForRemoteNotifications()
+            DispatchQueue.main.async {
+                application.registerForRemoteNotifications()
+            }
         } else {
             readyForSyncing()
         }
     }
 
     func getPushConfiguration() -> PushConfiguration? {
-        return ProductionPushConfiguration()
+        let label = PushConfigurationLabel(rawValue: AppConstants.scheme)
+        return label?.toConfiguration()
     }
 
     func apnsRegisterDidSucceed(_ deviceToken: Data) {
         let apnsToken = deviceToken.hexEncodedString
 
-        guard let configuration = getPushConfiguration() ?? self.profile?.accountConfiguration.pushConfiguration else {
+        guard let pushConfiguration = getPushConfiguration() ?? self.profile?.accountConfiguration.pushConfiguration,
+            let accountConfiguration = profile?.accountConfiguration else {
             log.error("Push server endpoint could not be found")
             return pushRegistrationDidFail()
         }
 
-        let client = PushClient(endpointURL: configuration.endpointURL)
+        // Experimental mode needs: a) the scheme to be Fennec, and b) the accountConfiguration to be flipped in debug mode.
+        let experimentalMode = (pushConfiguration.label == .fennec && accountConfiguration.label == .latestDev)
+        let client = PushClient(endpointURL: pushConfiguration.endpointURL, experimentalMode: experimentalMode)
         client.register(apnsToken).upon { res in
             guard let pushRegistration = res.successValue else {
                 return self.pushRegistrationDidFail()
@@ -226,12 +261,21 @@ class FxALoginHelper {
         // The only way we can tell if the account has been verified is to 
         // start a sync. If it works, then yay,
         account.advance().upon { state in
+            if attemptsLeft == verificationMaxRetries {
+                // We need to associate the fxaDeviceId with sync;
+                // We can do this anything after the first time we account.advance()
+                // but before the first time we sync.
+                let scratchpadPrefs = profile.prefs.branch("sync.scratchpad")
+                if let deviceRegistration = account.deviceRegistration {
+                    scratchpadPrefs.setString(deviceRegistration.toJSON().stringValue()!, forKey: PrefDeviceRegistration)
+                }
+            }
+
             guard state.actionNeeded == .needsVerification else {
                 // Verification has occurred remotely, and we can proceed.
                 // The state machine will have told any listening UIs that 
                 // we're done.
-                FxALoginHelper.performVerifiedSync(profile, account: account)
-                return
+                return self.performVerifiedSync(profile, account: account)
             }
 
             if account.pushRegistration != nil {
@@ -256,18 +300,7 @@ class FxALoginHelper {
         delegate?.accountLoginDidFail()
     }
 
-    // Class method so as to be callable from the FxAPushMessageHandler, whenever it is dealing with 
-    // verification.
-    class func performVerifiedSync(_ profile: Profile, account: FirefoxAccount) -> Success {
-        // First we need to associate the fxaDeviceId with sync;
-        // We can do this anything after the first time we account.advance()
-        // but before the first time we sync.
-        let scratchpadPrefs = profile.prefs.branch("sync.scratchpad")
-        if let deviceRegistration = account.deviceRegistration {
-            scratchpadPrefs.setString(deviceRegistration.toJSON().stringValue()!, forKey: PrefDeviceRegistration)
-        }
-
-        // Once we do that we can do an explicit sync.
-        return profile.syncManager.syncEverything(why: .didLogin) >>> succeed
+    func performVerifiedSync(_ profile: Profile, account: FirefoxAccount) {
+        profile.syncManager.syncEverything(why: .didLogin)
     }
 }

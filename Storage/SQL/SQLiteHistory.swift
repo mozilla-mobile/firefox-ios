@@ -136,6 +136,39 @@ extension SQLiteHistory: BrowserHistory {
         return deferMaybe(DatabaseError(description: "Invalid url for site \(site.url)"))
     }
 
+    public func removeFromPinnedTopSites(_ site: Site) -> Success {
+        guard let host = (site.url as String).asURL?.normalizedHost else {
+            return deferMaybe(DatabaseError(description: "Invalid url for site \(site.url)"))
+        }
+
+        //do a fuzzy delete so dupes can be removed
+        let query: (String, Args?) = ("DELETE FROM \(TablePinnedTopSites) where domain = ?", [host])
+        return db.run([query]) >>== {
+            return self.db.run([("UPDATE \(TableDomains) set showOnTopSites = 1 WHERE domain = ?", [host])])
+        }
+    }
+
+    public func getPinnedTopSites() -> Deferred<Maybe<Cursor<Site>>> {
+        let sql = "SELECT * from  \(TablePinnedTopSites) " +
+        "LEFT OUTER JOIN view_history_id_favicon on historyID = view_history_id_favicon.id ORDER BY pinDate DESC"
+        return db.runQuery(sql, args: [], factory: SQLiteHistory.iconHistoryMetadataColumnFactory)
+    }
+
+    public func addPinnedTopSite(_ site: Site) -> Success { // needs test
+        let now = Date.now()
+        guard let guid = site.guid, let host = (site.url as String).asURL?.normalizedHost else {
+            return deferMaybe(DatabaseError(description: "Invalid site \(site.url)"))
+        }
+
+        let args: Args = [site.url, now, site.title, site.id, guid, host]
+        let arglist = BrowserDB.varlist(args.count)
+        // Prevent the pinned site from being used in topsite calculations
+        // We dont have to worry about this when removing a pin because the assumption is that a user probably doesnt want it being recommended as a topsite either
+        return self.removeHostFromTopSites(host) >>== {
+            return self.db.run([("INSERT OR REPLACE INTO \(TablePinnedTopSites)(url, pinDate, title, historyID, guid, domain) VALUES \(arglist)", args)])
+        }
+    }
+
     public func removeHostFromTopSites(_ host: String) -> Success {
         return db.run([("UPDATE \(TableDomains) set showOnTopSites = 0 WHERE domain = ?", [host])])
             >>> { return self.refreshTopSitesCache() }
@@ -174,7 +207,7 @@ extension SQLiteHistory: BrowserHistory {
             return deferMaybe(IgnoredSiteError())
         }
 
-        let _ = db.withConnection(&error) { (conn, _) -> Int in
+        _ = db.withConnection(&error) { (conn, _) -> Int in
             let now = Date.now()
 
             let i = self.updateSite(site, atTime: now, withConnection: conn)
@@ -242,7 +275,7 @@ extension SQLiteHistory: BrowserHistory {
     // TODO: thread siteID into this to avoid the need to do the lookup.
     func addLocalVisitForExistingSite(_ visit: SiteVisit) -> Success {
         var error: NSError? = nil
-        let _ = db.withConnection(&error) { (conn, _) -> Int in
+        _ = db.withConnection(&error) { (conn, _) -> Int in
             // INSERT OR IGNORE because we *might* have a clock error that causes a timestamp
             // collision with an existing visit, and it would really suck to error out for that reason.
             let insert = "INSERT OR IGNORE INTO \(TableVisits) (siteID, date, type, is_local) VALUES (" +
@@ -451,46 +484,27 @@ extension SQLiteHistory: BrowserHistory {
             args = []
         }
 
-        let ungroupedSQL = [
-        "SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, title, guid, domain_id, domain,",
-        "COALESCE(max(case \(TableVisits).is_local when 1 then \(TableVisits).date else 0 end), 0) AS localVisitDate,",
-        "COALESCE(max(case \(TableVisits).is_local when 0 then \(TableVisits).date else 0 end), 0) AS remoteVisitDate,",
-        "COALESCE(count(\(TableVisits).is_local), 0) AS visitCount",
-        "FROM \(TableHistory)",
-        "INNER JOIN \(TableDomains) ON \(TableDomains).id = \(TableHistory).domain_id",
-        "INNER JOIN \(TableVisits) ON \(TableVisits).siteID = \(TableHistory).id",
+        let sql = [
+        "SELECT",
+            "history.id AS historyID, history.url, title, guid, domain_id, domain,",
+            "COALESCE(MAX(CASE visits.is_local WHEN 1 THEN visits.date ELSE 0 END), 0) AS localVisitDate,",
+            "COALESCE(MAX(CASE visits.is_local WHEN 0 THEN visits.date ELSE 0 END), 0) AS remoteVisitDate,",
+            "COALESCE(COUNT(visits.is_local), 0) AS visitCount",
+            includeIcon ? ", iconID, iconURL, iconDate, iconType, iconWidth" : "",
+        "FROM",
+            "history",
+                "INNER JOIN domains ON domains.id = history.domain_id",
+                "INNER JOIN visits ON visits.siteID = history.id",
+                includeIcon ? "LEFT OUTER JOIN view_history_id_favicon ON view_history_id_favicon.id = history.id" : "",
         whereClause,
         "GROUP BY historyID",
-        ].joined(separator: " ")
-
-        let historySQL = [
-        "SELECT historyID, url, title, guid, domain_id, domain, visitCount,",
-        "max(localVisitDate) AS localVisitDate,",
-        "max(remoteVisitDate) AS remoteVisitDate",
-        "FROM (", ungroupedSQL, ")",
-        "WHERE (visitCount > 0)",    // Eliminate dead rows from coalescing.
-        "GROUP BY historyID",
-        "ORDER BY max(localVisitDate, remoteVisitDate) DESC",
+        "HAVING COUNT(visits.is_local) > 0",
+        "ORDER BY MAX(localVisitDate, remoteVisitDate) DESC",
         "LIMIT \(limit)",
         ].joined(separator: " ")
-
-        if includeIcon {
-            // We select the history items then immediately join to get the largest icon.
-            // We do this so that we limit and filter *before* joining against icons.
-            let sql = [
-            "SELECT",
-            "historyID, url, title, guid, domain_id, domain,",
-            "localVisitDate, remoteVisitDate, visitCount, ",
-            "iconID, iconURL, iconDate, iconType, iconWidth ",
-            "FROM (", historySQL, ") LEFT OUTER JOIN ",
-            "view_history_id_favicon ON historyID = view_history_id_favicon.id",
-            ].joined(separator: " ")
-            let factory = SQLiteHistory.iconHistoryColumnFactory
-            return db.runQuery(sql, args: args, factory: factory)
-        }
-
-        let factory = SQLiteHistory.basicHistoryColumnFactory
-        return db.runQuery(historySQL, args: args, factory: factory)
+        
+        let factory = includeIcon ? SQLiteHistory.iconHistoryColumnFactory : SQLiteHistory.basicHistoryColumnFactory
+        return db.runQuery(sql, args: args, factory: factory)
     }
 
     fileprivate func getFilteredSitesByFrecencyWithHistoryLimit(_ limit: Int,
@@ -704,7 +718,7 @@ extension SQLiteHistory: Favicons {
     public func clearAllFavicons() -> Success {
         var err: NSError? = nil
 
-        let _ = db.withConnection(&err) { (conn, err: inout NSError?) -> Int in
+        _ = db.withConnection(&err) { (conn, err: inout NSError?) -> Int in
             err = conn.executeChange("DELETE FROM \(TableFaviconSites)")
             if err == nil {
                 err = conn.executeChange("DELETE FROM \(TableFavicons)")
@@ -754,8 +768,8 @@ extension SQLiteHistory: Favicons {
                 // multiple bookmarks with a particular URI, and a mirror bookmark can be
                 // locally changed, so either or both of these statements can update multiple rows.
                 if let id = id {
-                    let _ = conn.executeChange("UPDATE \(TableBookmarksLocal) SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
-                    let _ = conn.executeChange("UPDATE \(TableBookmarksMirror) SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
+                    _ = conn.executeChange("UPDATE \(TableBookmarksLocal) SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
+                    _ = conn.executeChange("UPDATE \(TableBookmarksMirror) SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
                 }
 
                 return id ?? 0
@@ -1008,7 +1022,6 @@ extension SQLiteHistory: SyncableHistory {
         // We can do this in a single query, rather than the N+1 that desktop takes.
         // We then need to flatten the cursor. We do that by collecting
         // places as a side-effect of the factory, producing visits as a result, and merging in memory.
-
 
         // Turn our lazy collection of integers into a comma-seperated string for the IN clause.
         let historyIDs = Array(places.keys)

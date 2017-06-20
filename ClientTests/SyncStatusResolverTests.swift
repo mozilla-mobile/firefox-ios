@@ -93,8 +93,8 @@ class SyncStatusResolverTests: XCTestCase {
         XCTAssertTrue(resolver.resolveResults() == expected)
     }
 
-    func testBookmarksDatabaseError() {
-        let maybeResults: Maybe<EngineResults> = Maybe(failure: BookmarksDatabaseError(err: nil))
+    func testBufferInvalidError() {
+        let maybeResults: Maybe<EngineResults> = Maybe(failure: BufferInvalidError(inconsistencies: [:], validationDuration: 0))
         let resolver = SyncStatusResolver(engineResults: maybeResults)
         let expected = SyncDisplayState.warning(message: String(format: Strings.FirefoxSyncPartialTitle, Strings.localizedStringForSyncComponent("bookmarks") ?? ""))
         XCTAssertTrue(resolver.resolveResults() == expected)

@@ -71,7 +71,7 @@ public struct PageMetadata {
 
     fileprivate func downloadAndCache(fromURL webUrl: URL) {
         let imageManager = SDWebImageManager.shared()
-        let _ = imageManager?.downloadImage(with: webUrl, options: SDWebImageOptions.continueInBackground, progress: nil) { (image, error, cacheType, success, url) in
+        _ = imageManager?.downloadImage(with: webUrl, options: SDWebImageOptions.continueInBackground, progress: nil) { (image, error, cacheType, success, url) in
             guard let image = image else {
                 return
             }

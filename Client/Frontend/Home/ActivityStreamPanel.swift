@@ -37,7 +37,7 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
     fileprivate var showHighlightIntro = false
     fileprivate var sessionStart: Timestamp?
 
-    lazy var longPressRecognizer: UILongPressGestureRecognizer = {
+    fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
         return UILongPressGestureRecognizer(target: self, action: #selector(ActivityStreamPanel.longPress(_:)))
     }()
 
@@ -80,7 +80,7 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
 
         Section.allValues.forEach { self.collectionView?.register(Section($0.rawValue).cellType, forCellWithReuseIdentifier: Section($0.rawValue).cellIdentifier) }
         self.collectionView?.register(ASHeaderView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "Header")
-
+        self.collectionView?.register(ASFooterView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionFooter, withReuseIdentifier: "Footer")
         collectionView?.backgroundColor = ASPanelUX.backgroundColor
         collectionView?.keyboardDismissMode = .onDrag
         
@@ -102,6 +102,7 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         coordinator.animate(alongsideTransition: {context in
+            self.presentedViewController?.dismiss(animated: true, completion: nil)
             self.collectionViewLayout.invalidateLayout()
             self.collectionView?.reloadData()
         }, completion: nil)
@@ -145,6 +146,13 @@ extension ActivityStreamPanel {
             }
         }
 
+        var footerHeight: CGSize {
+            switch self {
+            case .highlights, .highlightIntro: return CGSize.zero
+            case .topSites: return CGSize(width: 50, height: 5)
+            }
+        }
+
         func cellHeight(_ traits: UITraitCollection, width: CGFloat) -> CGFloat {
             switch self {
             case .highlights: return ASPanelUX.highlightCellHeight
@@ -164,10 +172,7 @@ extension ActivityStreamPanel {
             }
         }
 
-        func cellSize(for traits: UITraitCollection, frameWidth: CGFloat) -> CGSize {
-            let height = cellHeight(traits, width: frameWidth)
-            let inset = sectionInsets() * 2
-
+        func numberOfItemsForRow() -> CGFloat {
             switch self {
             case .highlights:
                 var numItems: CGFloat = 0
@@ -178,6 +183,21 @@ extension ActivityStreamPanel {
                 } else {
                     numItems = 2
                 }
+                return numItems
+            case .topSites:
+                return 1
+            case .highlightIntro:
+                return 1
+            }
+        }
+
+        func cellSize(for traits: UITraitCollection, frameWidth: CGFloat) -> CGSize {
+            let height = cellHeight(traits, width: frameWidth)
+            let inset = sectionInsets() * 2
+
+            switch self {
+            case .highlights:
+                let numItems = numberOfItemsForRow()
                 return CGSize(width: floor(((frameWidth - inset) - (ASHorizontalScrollCellUX.MinimumInsets * (numItems - 1))) / numItems), height: height)
             case .topSites:
                 return CGSize(width: frameWidth - inset, height: height)
@@ -231,17 +251,27 @@ extension ActivityStreamPanel {
 extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
 
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "Header", for: indexPath) as! ASHeaderView
-        let title = Section(indexPath.section).title
-        switch Section(indexPath.section) {
-        case .highlights:
-            view.title = title
-            return view
-        case .topSites:
-            return UICollectionReusableView()
-        case .highlightIntro:
-            view.title = title
-            return view
+        switch kind {
+            case UICollectionElementKindSectionHeader:
+                let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "Header", for: indexPath) as! ASHeaderView
+                let title = Section(indexPath.section).title
+                switch Section(indexPath.section) {
+                case .highlights, .highlightIntro:
+                    view.title = title
+                    return view
+                case .topSites:
+                    return UICollectionReusableView()
+            }
+            case UICollectionElementKindSectionFooter:
+                let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionFooter, withReuseIdentifier: "Footer", for: indexPath) as! ASFooterView
+                switch Section(indexPath.section) {
+                case .highlights, .highlightIntro:
+                    return UICollectionReusableView()
+                case .topSites:
+                    return view
+            }
+            default:
+                return UICollectionReusableView()
         }
     }
 
@@ -277,6 +307,15 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
             return !highlights.isEmpty ? CGSize.zero : Section(section).headerHeight
         case .topSites:
             return Section(section).headerHeight
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        switch Section(section) {
+        case .highlights, .highlightIntro:
+            return CGSize.zero
+        case .topSites:
+            return Section(section).footerHeight
         }
     }
 
@@ -386,27 +425,30 @@ extension ActivityStreamPanel: DataObserverDelegate {
     }
 
     func getHighlights() -> Success {
-        return self.profile.recommendations.getHighlights().bindQueue(.main) { result in
-            guard let highlights = result.successValue?.asArray() else {
+        let num = Int(Section.highlights.numberOfItemsForRow())
+        return self.profile.recommendations.getHighlights().both(self.profile.recommendations.getRecentBookmarks(num)).bindQueue(.main) { (highlights, bookmarks) in
+            guard let highlights = highlights.successValue?.asArray(), let bookmarks = bookmarks.successValue?.asArray() else {
                 return succeed()
             }
+            let sites = bookmarks + highlights
             // Scan through the fetched highlights and report on anything that might be missing.
-            self.reportMissingData(sites: highlights, source: .Highlights)
-            self.highlights = highlights
+            self.reportMissingData(sites: sites, source: .Highlights)
+            self.highlights = sites
             return succeed()
         }
     }
 
     func getTopSites() -> Success {
-        return self.profile.history.getTopSitesWithLimit(16).bindQueue(.main) { result in
-            guard let mySites = result.successValue?.asArray(), !self.pendingCacheUpdate else {
+        return self.profile.history.getTopSitesWithLimit(16).both(self.profile.history.getPinnedTopSites()).bindQueue(.main) { (topsites, pinnedSites) in
+            guard let mySites = topsites.successValue?.asArray(), let pinnedSites = pinnedSites.successValue?.asArray(), !self.pendingCacheUpdate else {
                 return succeed()
             }
-            
+
+            let usersSites = pinnedSites.map({ PinnedSite(site:$0) }) + mySites
             let defaultSites = self.defaultTopSites()
 
             // Merge default topsites with a user's topsites.
-            let mergedSites = mySites.union(defaultSites, f: { (site) -> String in
+            let mergedSites = usersSites.union(defaultSites, f: { (site) -> String in
                 return URL(string: site.url)?.hostSLD ?? ""
             })
 
@@ -417,7 +459,7 @@ extension ActivityStreamPanel: DataObserverDelegate {
             }
 
             // Don't report bad states for default sites we provide
-            self.reportMissingData(sites: mySites, source: .TopSites)
+            self.reportMissingData(sites: usersSites, source: .TopSites)
 
             self.topSitesManager.currentTraits = self.view.traitCollection
 
@@ -447,16 +489,30 @@ extension ActivityStreamPanel: DataObserverDelegate {
         reloadAll()
     }
 
-    func hideURLFromTopSites(_ siteURL: URL) {
-        guard let host = siteURL.normalizedHost else {
+    func hideURLFromTopSites(_ site: Site) {
+        guard let host = site.tileURL.normalizedHost else {
             return
         }
-        let url = siteURL.absoluteString
+        let url = site.tileURL.absoluteString
         // if the default top sites contains the siteurl. also wipe it from default suggested sites.
         if defaultTopSites().filter({$0.url == url}).isEmpty == false {
             deleteTileForSuggestedSite(url)
         }
         profile.history.removeHostFromTopSites(host).uponQueue(.main) { result in
+            guard result.isSuccess else { return }
+            self.profile.panelDataObservers.activityStream.invalidate(highlights: false)
+        }
+    }
+
+    func pinTopSite(_ site: Site) {
+        profile.history.addPinnedTopSite(site).uponQueue(.main) { result in
+            guard result.isSuccess else { return }
+            self.profile.panelDataObservers.activityStream.invalidate(highlights: false)
+        }
+    }
+
+    func removePinTopSite(_ site: Site) {
+        profile.history.removeFromPinnedTopSites(site).uponQueue(.main) { result in
             guard result.isSuccess else { return }
             self.profile.panelDataObservers.activityStream.invalidate(highlights: false)
         }
@@ -489,34 +545,18 @@ extension ActivityStreamPanel: DataObserverDelegate {
 
         switch Section(indexPath.section) {
         case .highlights:
-            presentContextMenuForHighlightCellWithIndexPath(indexPath)
+            presentContextMenu(for: indexPath)
         case .topSites:
             let topSiteCell = self.collectionView?.cellForItem(at: indexPath) as! ASHorizontalScrollCell
             let pointInTopSite = longPressGestureRecognizer.location(in: topSiteCell.collectionView)
             guard let topSiteIndexPath = topSiteCell.collectionView.indexPathForItem(at: pointInTopSite) else { return }
-            presentContextMenuForTopSiteCellWithIndexPath(topSiteIndexPath)
+            presentContextMenu(for: topSiteIndexPath)
         case .highlightIntro:
             break
         }
     }
 
-    func presentContextMenu(_ contextMenu: ActionOverlayTableViewController) {
-        contextMenu.modalPresentationStyle = .overFullScreen
-        contextMenu.modalTransitionStyle = .crossDissolve
-        self.present(contextMenu, animated: true, completion: nil)
-    }
-
-    func presentContextMenuForTopSiteCellWithIndexPath(_ indexPath: IndexPath) {
-        let site = self.topSitesManager.content[indexPath.item]
-        presentContextMenuForSite(site, atIndex: indexPath.item, forSection: .topSites)
-    }
-
-    func presentContextMenuForHighlightCellWithIndexPath(_ indexPath: IndexPath) {
-        let site = highlights[indexPath.row]
-        presentContextMenuForSite(site, atIndex: indexPath.row, forSection: .highlights)
-    }
-
-    fileprivate func fetchBookmarkStatusThenPresentContextMenu(_ site: Site, atIndex index: Int, forSection section: Section) {
+    fileprivate func fetchBookmarkStatusThenPresentContextMenu(for site: Site, with indexPath: IndexPath, forSection section: Section, completionHandler: @escaping () -> ActionOverlayTableViewController?) {
         profile.bookmarks.modelFactory >>== {
             $0.isBookmarked(site.url).uponQueue(.main) { result in
                 guard let isBookmarked = result.successValue else {
@@ -524,48 +564,83 @@ extension ActivityStreamPanel: DataObserverDelegate {
                     return
                 }
                 site.setBookmarked(isBookmarked)
-                self.presentContextMenuForSite(site, atIndex: index, forSection: section)
+                self.presentContextMenu(for: site, with: indexPath, completionHandler: completionHandler)
             }
         }
     }
 
-    func presentContextMenuForSite(_ site: Site, atIndex index: Int, forSection section: Section) {
-        guard let _ = site.bookmarked else {
-            fetchBookmarkStatusThenPresentContextMenu(site, atIndex: index, forSection: section)
+    func selectItemAtIndex(_ index: Int, inSection section: Section) {
+        let site: Site?
+        switch section {
+        case .highlights:
+            site = self.highlights[index]
+        case .topSites, .highlightIntro:
             return
         }
-        guard let contextMenu = contextMenuForSite(site, atIndex: index, forSection: section) else {
-            return
+        if let site = site {
+            telemetry.reportEvent(.Click, source: .Highlights, position: index)
+            showSiteWithURLHandler(URL(string:site.url)!)
         }
+    }
+}
 
-        self.presentContextMenu(contextMenu)
+extension ActivityStreamPanel: HomePanelContextMenu {
+    func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> ActionOverlayTableViewController?) {
+        guard let _ = site.bookmarked else {
+            fetchBookmarkStatusThenPresentContextMenu(for: site, with: indexPath, forSection: Section(indexPath.section), completionHandler: completionHandler)
+            return
+        }
+        guard let contextMenu = completionHandler() else { return }
+        self.present(contextMenu, animated: true, completion: nil)
     }
 
-    func contextMenuForSite(_ site: Site, atIndex index: Int, forSection section: Section) -> ActionOverlayTableViewController? {
+    func getSiteDetails(for indexPath: IndexPath) -> Site? {
+        let site: Site
 
-        guard let siteURL = URL(string: site.url) else {
+        switch Section(indexPath.section) {
+        case .highlights:
+            site = highlights[indexPath.row]
+        case .topSites:
+            site = topSitesManager.content[indexPath.item]
+        case .highlightIntro:
             return nil
         }
 
+        return site
+    }
+
+    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [ActionOverlayTableViewAction]? {
+        guard let siteURL = URL(string: site.url) else { return nil }
+
         let pingSource: ASPingSource
-        switch section {
+        let index: Int
+        var sourceView: UIView?
+        
+        switch Section(indexPath.section) {
         case .topSites:
             pingSource = .TopSites
+            index = indexPath.item
+            if let topSiteCell = self.collectionView?.cellForItem(at: IndexPath(row: 0, section: 0)) as? ASHorizontalScrollCell {
+                sourceView = topSiteCell.collectionView.cellForItem(at: indexPath)
+            }
         case .highlights:
             pingSource = .Highlights
+            index = indexPath.row
+            sourceView = self.collectionView?.cellForItem(at: indexPath)
         case .highlightIntro:
-            pingSource = .HighlightsIntro
+            return nil
         }
 
-        let openInNewTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewTabContextMenuTitle, iconString: "action_new_tab") { action in
+        let openInNewTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewTabContextMenuTitle, iconString: "") { action in
             self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
             self.telemetry.reportEvent(.NewTab, source: pingSource, position: index)
+            LeanplumIntegration.sharedInstance.track(eventName: .openedNewTab, withParameters: ["Source":"Activity Stream Long Press Context Menu" as AnyObject])
         }
 
-        let openInNewPrivateTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "action_new_private_tab") { action in
+        let openInNewPrivateTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "") { action in
             self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
         }
-
+        
         let bookmarkAction: ActionOverlayTableViewAction
         if site.bookmarked ?? false {
             bookmarkAction = ActionOverlayTableViewAction(title: Strings.RemoveBookmarkContextMenuTitle, iconString: "action_bookmark_remove", handler: { action in
@@ -573,6 +648,7 @@ extension ActivityStreamPanel: DataObserverDelegate {
                     $0.removeByURL(siteURL.absoluteString)
                     site.setBookmarked(false)
                 }
+                self.profile.panelDataObservers.activityStream.invalidate(highlights: false)
                 self.telemetry.reportEvent(.RemoveBookmark, source: pingSource, position: index)
 
             })
@@ -594,7 +670,10 @@ extension ActivityStreamPanel: DataObserverDelegate {
 
         let deleteFromHistoryAction = ActionOverlayTableViewAction(title: Strings.DeleteFromHistoryContextMenuTitle, iconString: "action_delete", handler: { action in
             self.telemetry.reportEvent(.Delete, source: pingSource, position: index)
-            self.profile.history.removeHistoryForURL(site.url)
+            self.profile.history.removeHistoryForURL(site.url).uponQueue(.main) { result in
+                guard result.isSuccess else { return }
+                self.profile.panelDataObservers.activityStream.invalidate(highlights: true)
+            }
         })
 
         let shareAction = ActionOverlayTableViewAction(title: Strings.ShareContextMenuTitle, iconString: "action_share", handler: { action in
@@ -602,38 +681,60 @@ extension ActivityStreamPanel: DataObserverDelegate {
             let controller = helper.createActivityViewController { completed, activityType in
                 self.telemetry.reportEvent(.Share, source: pingSource, position: index, shareProvider: activityType)
             }
+            if UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.pad, let popoverController = controller.popoverPresentationController {
+                let cellRect = sourceView?.frame ?? CGRect.zero
+                let cellFrameInSuperview = self.collectionView?.convert(cellRect, to: self.collectionView) ?? CGRect.zero
+
+                popoverController.sourceView = sourceView
+                popoverController.sourceRect = CGRect(origin: CGPoint(x: cellFrameInSuperview.size.width/2, y: cellFrameInSuperview.height/2), size: .zero)
+                popoverController.permittedArrowDirections = [.up, .down, .left]
+                popoverController.delegate = self
+            }
             self.present(controller, animated: true, completion: nil)
         })
 
-        let removeTopSiteAction = ActionOverlayTableViewAction(title: Strings.RemoveFromASContextMenuTitle, iconString: "action_close", handler: { action in
+        let removeTopSiteAction = ActionOverlayTableViewAction(title: Strings.RemoveContextMenuTitle, iconString: "action_remove", handler: { action in
             self.telemetry.reportEvent(.Remove, source: pingSource, position: index)
-            self.hideURLFromTopSites(site.tileURL)
+            self.hideURLFromTopSites(site)
         })
 
-        let dismissHighlightAction = ActionOverlayTableViewAction(title: Strings.RemoveFromASContextMenuTitle, iconString: "action_close", handler: { action in
+        let dismissHighlightAction = ActionOverlayTableViewAction(title: Strings.RemoveContextMenuTitle, iconString: "action_remove", handler: { action in
             self.telemetry.reportEvent(.Dismiss, source: pingSource, position: index)
             self.hideFromHighlights(site)
         })
 
+        let pinTopSite = ActionOverlayTableViewAction(title: Strings.PinTopsiteActionTitle, iconString: "action_pin", handler: { action in
+            self.pinTopSite(site)
+        })
+
+        let removePinTopSite = ActionOverlayTableViewAction(title: Strings.RemovePinTopsiteActionTitle, iconString: "action_unpin", handler: { action in
+            self.removePinTopSite(site)
+        })
+
+        let topSiteActions: [ActionOverlayTableViewAction]
+        if let _ = site as? PinnedSite {
+            topSiteActions = [removePinTopSite]
+        } else {
+            topSiteActions = [pinTopSite, removeTopSiteAction]
+        }
+
         var actions = [openInNewTabAction, openInNewPrivateTabAction, bookmarkAction, shareAction]
-        switch section {
-        case .highlights: actions.append(contentsOf: [dismissHighlightAction, deleteFromHistoryAction])
-        case .topSites: actions.append(removeTopSiteAction)
-        case .highlightIntro: break
-        }
 
-        return ActionOverlayTableViewController(site: site, actions: actions)
+        switch Section(indexPath.section) {
+            case .highlights: actions.append(contentsOf: [dismissHighlightAction, deleteFromHistoryAction])
+            case .topSites: actions.append(contentsOf: topSiteActions)
+            case .highlightIntro: break
+        }
+        return actions
     }
+}
 
-    func selectItemAtIndex(_ index: Int, inSection section: Section) {
-        switch section {
-        case .highlights:
-            telemetry.reportEvent(.Click, source: .Highlights, position: index)
-            let site = self.highlights[index]
-            showSiteWithURLHandler(URL(string:site.url)!)
-        case .topSites, .highlightIntro:
-            return
-        }
+extension ActivityStreamPanel: UIPopoverPresentationControllerDelegate {
+
+    // Dismiss the popover if the device is being rotated.
+    // This is used by the Share UIActivityViewController action sheet on iPad
+    func popoverPresentationController(_ popoverPresentationController: UIPopoverPresentationController, willRepositionPopoverTo rect: UnsafeMutablePointer<CGRect>, in view: AutoreleasingUnsafeMutablePointer<UIView>) {
+        popoverPresentationController.presentedViewController.dismiss(animated: false, completion: nil)
     }
 }
 
@@ -720,6 +821,28 @@ struct ASHeaderViewUX {
     static let TitleTopInset: CGFloat = 5
 }
 
+class ASFooterView: UICollectionReusableView {
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+
+        let seperatorLine = UIView()
+        seperatorLine.backgroundColor = ASHeaderViewUX.SeperatorColor
+        self.backgroundColor = UIColor.clear
+        addSubview(seperatorLine)
+        seperatorLine.snp.makeConstraints { make in
+            make.height.equalTo(ASHeaderViewUX.SeperatorHeight)
+            make.leading.equalTo(self.snp.leading)
+            make.trailing.equalTo(self.snp.trailing)
+            make.top.equalTo(self.snp.top)
+        }
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
 class ASHeaderView: UICollectionReusableView {
     lazy fileprivate var titleLabel: UILabel = {
         let titleLabel = UILabel()
@@ -746,20 +869,20 @@ class ASHeaderView: UICollectionReusableView {
             make.top.equalTo(self).inset(ASHeaderViewUX.TitleTopInset)
             make.bottom.equalTo(self)
         }
-        
-        let seperatorLine = UIView()
-        seperatorLine.backgroundColor = ASHeaderViewUX.SeperatorColor
-        self.backgroundColor = UIColor.clear
-        addSubview(seperatorLine)
-        seperatorLine.snp.makeConstraints { make in
-            make.height.equalTo(ASHeaderViewUX.SeperatorHeight)
-            make.leading.equalTo(self.snp.leading)
-            make.trailing.equalTo(self.snp.trailing)
-            make.top.equalTo(self.snp.top)
-        }
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+open class PinnedSite: Site {
+    let isPinnedSite = true
+
+    init(site: Site) {
+        super.init(url: site.url, title: site.title, bookmarked: site.bookmarked)
+        self.icon = site.icon
+        self.metadata = site.metadata
+    }
+
 }

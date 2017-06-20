@@ -129,8 +129,8 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
 
         statusIcon.snp.makeConstraints { make in
             make.size.equalTo(ActivityStreamHighlightCellUX.StatusIconSize)
+            make.centerY.equalTo(descriptionLabel.snp.centerY)
             make.leading.equalTo(siteImageView)
-            make.bottom.equalTo(contentView)
         }
     }
 
@@ -161,10 +161,10 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
         self.titleLabel.text = site.title.characters.count <= 1 ? site.url : site.title
 
         if let bookmarked = site.bookmarked, bookmarked {
-            self.descriptionLabel.text = "Bookmarked"
+            self.descriptionLabel.text = Strings.HighlightBookmarkText
             self.statusIcon.image = UIImage(named: "context_bookmark")
         } else {
-            self.descriptionLabel.text = "Visited"
+            self.descriptionLabel.text = Strings.HighlightVistedText
             self.statusIcon.image = UIImage(named: "context_viewed")
         }
     }

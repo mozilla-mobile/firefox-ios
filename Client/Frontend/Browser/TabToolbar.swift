@@ -115,7 +115,7 @@ open class TabToolbarHelper: NSObject {
 
         toolbar.menuButton.contentMode = UIViewContentMode.center
         toolbar.menuButton.setImage(UIImage.templateImageNamed("bottomNav-menu"), for: .normal)
-        toolbar.menuButton.accessibilityLabel = AppMenuConfiguration.MenuButtonAccessibilityLabel
+        toolbar.menuButton.accessibilityLabel = Strings.AppMenuButtonAccessibilityLabel
         toolbar.menuButton.addTarget(self, action: #selector(TabToolbarHelper.SELdidClickMenu), for: UIControlEvents.touchUpInside)
         toolbar.menuButton.accessibilityIdentifier = "TabToolbar.menuButton"
 

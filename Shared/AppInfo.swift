@@ -24,12 +24,24 @@ open class AppInfo {
     /// Return the shared container identifier (also known as the app group) to be used with for example background
     /// http requests. It is the base bundle identifier with a "group." prefix.
     open static var sharedContainerIdentifier: String {
-        return "group." + baseBundleIdentifier
+        var bundleIdentifier = baseBundleIdentifier
+        if bundleIdentifier == "org.mozilla.ios.FennecEnterprise" {
+            // Bug 1373726 - Base bundle identifier incorrectly generated for Nightly builds
+            // This can be removed when we are able to fix the app group in the developer portal
+            bundleIdentifier = "org.mozilla.ios.Fennec.enterprise"
+        }
+        return "group." + bundleIdentifier
     }
 
     /// Return the keychain access group.
     open static func keychainAccessGroupWithPrefix(_ prefix: String) -> String {
-        return prefix + "." + baseBundleIdentifier
+        var bundleIdentifier = baseBundleIdentifier
+        if bundleIdentifier == "org.mozilla.ios.FennecEnterprise" {
+            // Bug 1373726 - Base bundle identifier incorrectly generated for Nightly builds
+            // This can be removed when we are able to fix the app group in the developer portal
+            bundleIdentifier = "org.mozilla.ios.Fennec.enterprise"
+        }
+        return prefix + "." + bundleIdentifier
     }
 
     /// Return the base bundle identifier.
@@ -46,5 +58,10 @@ open class AppInfo {
             return components[0..<components.count-1].joined(separator: ".")
         }
         return baseBundleIdentifier
+    }
+
+    // Return the MozWhatsNewTopic key from the Info.plist
+    open static var whatsNewTopic: String? {
+        return Bundle.main.object(forInfoDictionaryKey: "MozWhatsNewTopic") as? String
     }
 }

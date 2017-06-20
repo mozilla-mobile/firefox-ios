@@ -52,7 +52,7 @@ class TabManager: NSObject {
         assert(Thread.isMainThread)
         for i in 0 ..< delegates.count {
             let del = delegates[i]
-            if delegate === del.get() {
+            if delegate === del.get() || del.get() == nil {
                 delegates.remove(at: i)
                 return
             }
@@ -148,10 +148,8 @@ class TabManager: NSObject {
     subscript(webView: WKWebView) -> Tab? {
         assert(Thread.isMainThread)
 
-        for tab in tabs {
-            if tab.webView === webView {
-                return tab
-            }
+        for tab in tabs where tab.webView === webView {
+            return tab
         }
 
         return nil
@@ -160,11 +158,10 @@ class TabManager: NSObject {
     func getTabFor(_ url: URL) -> Tab? {
         assert(Thread.isMainThread)
 
-        for tab in tabs {
-            if tab.webView?.url == url {
-                return tab
-            }
+        for tab in tabs where tab.webView?.url == url {
+            return tab
         }
+
         return nil
     }
 
@@ -174,6 +171,11 @@ class TabManager: NSObject {
 
         if previous === tab {
             return
+        }
+
+        // Make sure to wipe the private tabs if the user has the pref turned on
+        if shouldClearPrivateTabs(), !(tab?.isPrivate ?? false) {
+            removeAllPrivateTabsAndNotify(false)
         }
 
         if let tab = tab {
@@ -188,6 +190,18 @@ class TabManager: NSObject {
         selectedTab?.createWebview()
 
         delegates.forEach { $0.get()?.tabManager(self, didSelectedTabChange: tab, previous: previous) }
+    }
+
+    func shouldClearPrivateTabs() -> Bool {
+        return prefs.boolForKey("settings.closePrivateTabs") ?? false
+    }
+
+    //Called by other classes to signal that they are entering/exiting private mode
+    //This is called by TabTrayVC when the private mode button is pressed and BEFORE we've switched to the new mode
+    func willSwitchTabMode() {
+        if shouldClearPrivateTabs() && (selectedTab?.isPrivate ?? false) {
+            removeAllPrivateTabsAndNotify(false)
+        }
     }
 
     func expireSnackbars() {
@@ -413,7 +427,7 @@ class TabManager: NSObject {
     /// Removes all private tabs from the manager.
     /// - Parameter notify: if set to true, the delegate is called when a tab is
     ///   removed.
-    func removeAllPrivateTabsAndNotify(_ notify: Bool) {
+    private func removeAllPrivateTabsAndNotify(_ notify: Bool) {
         // if there is a selected tab, it needs to be closed last
         // this is important for TopTabs as otherwise the selection of the new tab
         // causes problems as it may no longer be present.
@@ -500,10 +514,8 @@ class TabManager: NSObject {
     func getIndex(_ tab: Tab) -> Int? {
         assert(Thread.isMainThread)
 
-        for i in 0..<count {
-            if tabs[i] === tab {
-                return i
-            }
+        for i in 0..<count where tabs[i] === tab {
+            return i
         }
 
         assertionFailure("Tab not in tabs list")
@@ -691,7 +703,7 @@ extension TabManager {
         }
 
         var tabToSelect: Tab?
-        for (_, savedTab) in savedTabs.enumerated() {
+        for savedTab in savedTabs {
             // Provide an empty request to prevent a new tab from loading the home screen
             let tab = self.addTab(nil, configuration: nil, afterTab: nil, flushToDisk: false, zombie: true, isPrivate: savedTab.isPrivate)
 
@@ -753,7 +765,7 @@ extension TabManager {
 
         if count == 0 && !AppConstants.IsRunningTest && !DebugSettingsBundleOptions.skipSessionRestore {
             // This is wrapped in an Objective-C @try/@catch handler because NSKeyedUnarchiver may throw exceptions which Swift cannot handle
-            let _ = Try(
+            _ = Try(
                 withTry: { () -> Void in
                     self.restoreTabsInternal()
                 },

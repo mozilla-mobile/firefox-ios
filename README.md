@@ -8,9 +8,9 @@ This branch
 
 This branch is for mainline development that will ship in *v8.0*.
 
-This branch works with Xcode 8.2.1, and supports iOS 9.x and 10.
+This branch only works with Xcode 8.3.2, and supports iOS 9.x and 10.
 
-This branch is written in Swift 3.0.
+This branch is written in Swift 3.1.
 
 Please make sure you aim your pull requests in the right direction.
 
@@ -39,25 +39,19 @@ Building the code
 
 1. Install the latest [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple.
 1. Install Carthage
-
-  ```shell
-  brew update
-  brew install carthage
-  ```
-
+    ```shell
+    brew update
+    brew install carthage
+    ```
 1. Clone the repository:
-
-  ```shell
-  git clone https://github.com/mozilla-mobile/firefox-ios
-  ```
-
+    ```shell
+    git clone https://github.com/mozilla-mobile/firefox-ios
+    ```
 1. Pull in the project dependencies:
-
-  ```shell
-  cd firefox-ios
-  sh ./bootstrap.sh
-  ```
-
+    ```shell
+    cd firefox-ios
+    sh ./bootstrap.sh
+    ```
 1. Open `Client.xcodeproj` in Xcode.
 1. Build the `Fennec` scheme in Xcode.
 

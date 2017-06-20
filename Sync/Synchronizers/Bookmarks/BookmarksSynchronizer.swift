@@ -113,39 +113,43 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
             }
         })
 
+        statsSession.start()
+        
         let doMirror = mirrorer.go(info: info, greenLight: greenLight)
         let run: SyncResult
 
-        statsSession.start()
         if !AppConstants.shouldMergeBookmarks {
-            if case .release = AppConstants.BuildChannel {
-                // On release, just mirror; don't validate.
-                run = doMirror
-            } else {
-                run = doMirror >>== effect({ result in
-                    // Just validate to report statistics.
-                    if case .completed = result {
-                        log.debug("Validating completed buffer download.")
-                        let _ = buffer.validate()
+            run = doMirror >>== { result in
+                // Just validate to report statistics.
+                if case .completed = result {
+                    log.debug("Validating completed buffer download.")
+                    return buffer.validate().bind { validationResult in
+                        if let invalidError = validationResult.failureValue as? BufferInvalidError {
+                            self.statsSession.validationStats = self.validationStatsFrom(error: invalidError)
+                        }
+                        return deferMaybe(result)
                     }
-                })
+                }
+
+                return deferMaybe(result)
             }
         } else {
             run = doMirror >>== { result in
                 // Only bother trying to sync if the mirror operation wasn't interrupted or partial.
                 if case .completed = result {
-                    return buffer.repairValidation() >>== { validationInfo in
-                        let problemCount = validationInfo.flatMap { $0.ids }.count
-                        if problemCount == 0 {
-                            let applier = MergeApplier(buffer: buffer, storage: storage, client: storer, statsSession: self.statsSession, greenLight: greenLight)
-                            return applier.go()
-                        } else {
+                    return buffer.validate().bind { result in
+                        if let invalidError = result.failureValue as? BufferInvalidError {
+                            self.statsSession.validationStats = self.validationStatsFrom(error: invalidError)
+
                             log.warning("Buffer inconsistent, starting repair procedure")
                             let repairer = BookmarksRepairRequestor(scratchpad: self.scratchpad, basePrefs: self.basePrefs, remoteClients: remoteClientsAndTabs)
-                            return repairer.startRepairs(validationInfo: validationInfo) >>> {
-                                deferMaybe(BookmarksDatabaseError(description: "Buffer inconsistent, repair started."))
+                            return repairer.startRepairs(validationInfo: invalidError.inconsistencies) >>> {
+                                deferMaybe(invalidError)
                             }
                         }
+                        
+                        let applier = MergeApplier(buffer: buffer, storage: storage, client: storer, statsSession: self.statsSession, greenLight: greenLight)
+                        return applier.go()
                     }
                 }
                 return deferMaybe(result)
@@ -159,6 +163,11 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
         }
 
         return run
+    }
+
+    private func validationStatsFrom(error: BufferInvalidError) -> ValidationStats {
+        let problems = error.inconsistencies.map { ValidationProblem(name: $0.trackingEvent, count: $1.count) }
+        return ValidationStats(problems: problems, took: error.validationDuration)
     }
 }
 

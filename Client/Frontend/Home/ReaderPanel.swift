@@ -182,6 +182,10 @@ class ReadingListPanel: UITableViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate?
     var profile: Profile!
 
+    fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
+        return UILongPressGestureRecognizer(target: self, action: #selector(ReadingListPanel.longPress(_:)))
+    }()
+
     fileprivate lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverview()
 
     fileprivate var records: [ReadingListClientRecord]?
@@ -199,6 +203,7 @@ class ReadingListPanel: UITableViewController, HomePanel {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        tableView.addGestureRecognizer(longPressRecognizer)
         tableView.accessibilityIdentifier = "ReadingTable"
         tableView.estimatedRowHeight = ReadingListTableViewCellUX.RowHeight
         tableView.rowHeight = UITableViewAutomaticDimension
@@ -228,6 +233,12 @@ class ReadingListPanel: UITableViewController, HomePanel {
     deinit {
         NotificationCenter.default.removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
         NotificationCenter.default.removeObserver(self, name: NotificationDynamicFontChanged, object: nil)
+    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        coordinator.animate(alongsideTransition: { context in
+            self.presentedViewController?.dismiss(animated: true, completion: nil)
+        }, completion: nil)
     }
 
     func notificationReceived(_ notification: Notification) {
@@ -359,6 +370,13 @@ class ReadingListPanel: UITableViewController, HomePanel {
         return overlayView
     }
 
+    @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+        guard longPressGestureRecognizer.state == UIGestureRecognizerState.began else { return }
+        let touchPoint = longPressGestureRecognizer.location(in: tableView)
+        guard let indexPath = tableView.indexPathForRow(at: touchPoint) else { return }
+        presentContextMenu(for: indexPath)
+    }
+
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -436,5 +454,27 @@ class ReadingListPanel: UITableViewController, HomePanel {
             }
         }
     }
+}
 
+extension ReadingListPanel: HomePanelContextMenu {
+    func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> ActionOverlayTableViewController?) {
+        guard let contextMenu = completionHandler() else { return }
+        self.present(contextMenu, animated: true, completion: nil)
+    }
+
+    func getSiteDetails(for indexPath: IndexPath) -> Site? {
+        guard let record = records?[indexPath.row] else { return nil }
+        return Site(url: record.url, title: record.title)
+    }
+
+    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [ActionOverlayTableViewAction]? {
+        guard var actions = getDefaultContextMenuActions(for: site, homePanelDelegate: homePanelDelegate) else { return nil }
+
+        let removeAction: ActionOverlayTableViewAction = ActionOverlayTableViewAction(title: Strings.RemoveContextMenuTitle, iconString: "action_remove", handler: { action in
+            self.deleteItem(atIndex: indexPath)
+        })
+
+        actions.append(removeAction)
+        return actions
+    }
 }

@@ -123,6 +123,8 @@ class ClearPrivateDataTableViewController: UITableViewController {
                 .upon { result in
                     assert(result.isSuccess, "Private data cleared successfully")
 
+                    LeanplumIntegration.sharedInstance.track(eventName: .clearPrivateData)
+
                     self.profile.prefs.setObject(self.toggles, forKey: TogglesPrefKey)
 
                     DispatchQueue.main.async {
