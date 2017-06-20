@@ -7,7 +7,7 @@ import FxA
 
 /// Class to wrap ecec which does the encryption, decryption and key generation with OpenSSL.
 /// This supports aesgcm and the newer aes128gcm.
-/// For each standard of decryption, two methods are supplied: one with Data parameters and return value, 
+/// For each standard of decryption, two methods are supplied: one with Data parameters and return value,
 /// and one with a String based one.
 class PushCrypto {
     // Stateless, we provide a singleton for convenience.
@@ -15,7 +15,6 @@ class PushCrypto {
 }
 
 // AES128GCM
-// Both encryption and decryption are supported.
 extension PushCrypto {
     func aes128gcm(payload data: String, decryptWith privateKey: String, authenticateWith authKey: String) throws -> String {
         guard let authSecret = authKey.base64urlSafeDecodedData,
@@ -48,7 +47,7 @@ extension PushCrypto {
         if err != ECE_OK {
             throw PushCryptoError.decryptionError(errCode: err)
         }
-        
+
         return Data(bytes: plaintext, count: plaintextLen)
     }
 
@@ -65,7 +64,11 @@ extension PushCrypto {
                                     authenticateWith: authSecret,
                                     rs: rs, padLen: padLen)
 
-        return payloadData.base64urlSafeEncodedString
+        guard let payload = payloadData.base64urlSafeEncodedString else {
+            throw PushCryptoError.base64EncodeError
+        }
+
+        return payload
     }
 
     func aes128gcm(plaintext: Data, encryptWith rawRecvPubKey: Data, authenticateWith authSecret: Data, rs rsInt: Int, padLen: Int) throws -> Data {
@@ -76,7 +79,7 @@ extension PushCrypto {
         var payloadLen = ece_aes128gcm_payload_max_length(rs, padLen, plaintext.count) + 1
         var payload = [UInt8](repeating: 0, count: payloadLen)
 
-        let err = ece_aes128gcm_encrypt(rawRecvPubKey.getBytes(), rawRecvPubKey.count,
+        let err = ece_webpush_aes128gcm_encrypt(rawRecvPubKey.getBytes(), rawRecvPubKey.count,
                                     authSecret.getBytes(), authSecret.count,
                                     rs, padLen,
                                     plaintext.getBytes(), plaintext.count,
@@ -90,9 +93,8 @@ extension PushCrypto {
 }
 
 // AESGCM
-// Encryption is not supported.
 extension PushCrypto {
-    func aesgcm(ciphertext data: String, decryptWith privateKey: String, authenticateWith authKey: String, encryptionHeader: String, cryptoKeyHeader: String) throws -> String {
+    func aesgcm(ciphertext data: String, withHeaders headers: PushCryptoHeaders, decryptWith privateKey: String, authenticateWith authKey: String) throws -> String {
         guard let authSecret = authKey.base64urlSafeDecodedData,
             let rawRecvPrivKey = privateKey.base64urlSafeDecodedData,
             let ciphertext = data.base64urlSafeDecodedData else {
@@ -100,10 +102,9 @@ extension PushCrypto {
         }
 
         let decrypted = try aesgcm(ciphertext: ciphertext,
+                          withHeaders: headers,
                           decryptWith: rawRecvPrivKey,
-                          authenticateWith: authSecret,
-                          encryptionHeader: encryptionHeader,
-                          cryptoKeyHeader: cryptoKeyHeader)
+                          authenticateWith: authSecret)
 
         guard let plaintext = decrypted.utf8EncodedString else {
             throw PushCryptoError.utf8EncodingError
@@ -112,22 +113,124 @@ extension PushCrypto {
         return plaintext
     }
 
-    func aesgcm(ciphertext: Data, decryptWith rawRecvPrivKey: Data, authenticateWith authSecret: Data, encryptionHeader: String, cryptoKeyHeader: String) throws -> Data {
-        var plaintextLen = ece_aesgcm_plaintext_max_length(ciphertext.count) + 1
+    func aesgcm(ciphertext: Data, withHeaders headers: PushCryptoHeaders, decryptWith rawRecvPrivKey: Data, authenticateWith authSecret: Data) throws -> Data {
+        let saltLength = Int(ECE_SALT_LENGTH)
+        var salt = [UInt8](repeating: 0, count: saltLength)
+
+        let rawSenderPubKeyLength = Int(ECE_WEBPUSH_PUBLIC_KEY_LENGTH)
+        var rawSenderPubKey = [UInt8](repeating: 0, count: rawSenderPubKeyLength)
+
+        var rs = UInt32(0)
+
+        let paramsErr = ece_webpush_aesgcm_headers_extract_params(
+                    headers.cryptoKey, headers.encryption,
+                    &salt, saltLength,
+                    &rawSenderPubKey, rawSenderPubKeyLength,
+                    &rs)
+        if paramsErr != ECE_OK {
+            throw PushCryptoError.decryptionError(errCode: paramsErr)
+        }
+
+        var plaintextLen = ece_aesgcm_plaintext_max_length(rs, ciphertext.count) + 1
         var plaintext = [UInt8](repeating: 0, count: plaintextLen)
 
-        let err = ece_webpush_aesgcm_decrypt(
+        let decryptErr = ece_webpush_aesgcm_decrypt(
                 rawRecvPrivKey.getBytes(), rawRecvPrivKey.count,
                 authSecret.getBytes(), authSecret.count,
-                cryptoKeyHeader, encryptionHeader,
+                &salt, salt.count,
+                &rawSenderPubKey, rawSenderPubKey.count,
+                rs,
                 ciphertext.getBytes(), ciphertext.count,
                 &plaintext, &plaintextLen)
 
-        if err != ECE_OK {
-            throw PushCryptoError.decryptionError(errCode: err)
+        if decryptErr != ECE_OK {
+            throw PushCryptoError.decryptionError(errCode: decryptErr)
         }
 
         return Data(bytes: plaintext, count: plaintextLen)
+    }
+
+    func aesgcm(plaintext: String, encryptWith rawRecvPubKey: String, authenticateWith authSecret: String, rs: Int, padLen: Int) throws -> (headers: PushCryptoHeaders, ciphertext: String) {
+        guard let rawRecvPubKey = rawRecvPubKey.base64urlSafeDecodedData,
+            let authSecret = authSecret.base64urlSafeDecodedData else {
+                throw PushCryptoError.base64DecodeError
+        }
+
+        let plaintextData = plaintext.utf8EncodedData
+
+        let (headers, messageData) = try aesgcm(
+            plaintext: plaintextData,
+            encryptWith: rawRecvPubKey,
+            authenticateWith: authSecret,
+            rs: rs, padLen: padLen)
+
+        guard let message = messageData.base64urlSafeEncodedString else {
+            throw PushCryptoError.base64EncodeError
+        }
+
+        return (headers, message)
+    }
+
+    func aesgcm(plaintext: Data, encryptWith rawRecvPubKey: Data, authenticateWith authSecret: Data, rs rsInt: Int, padLen: Int) throws -> (headers: PushCryptoHeaders, data: Data) {
+        let rs = UInt32(rsInt)
+
+        // rs needs to be >= 3.
+        assert(rsInt >= Int(ECE_AESGCM_MIN_RS))
+        var ciphertextLength = ece_aesgcm_ciphertext_max_length(rs, padLen, plaintext.count) + 1
+        var ciphertext = [UInt8](repeating: 0, count: ciphertextLength)
+
+        let saltLength = Int(ECE_SALT_LENGTH)
+        var salt = [UInt8](repeating: 0, count: saltLength)
+
+        let rawSenderPubKeyLength = Int(ECE_WEBPUSH_PUBLIC_KEY_LENGTH)
+        var rawSenderPubKey = [UInt8](repeating: 0, count: rawSenderPubKeyLength)
+
+        let encryptErr = ece_webpush_aesgcm_encrypt(rawRecvPubKey.getBytes(), rawRecvPubKey.count,
+                                                    authSecret.getBytes(), authSecret.count,
+                                                    rs, padLen,
+                                                    plaintext.getBytes(), plaintext.count,
+                                                    &salt, saltLength,
+                                                    &rawSenderPubKey, rawSenderPubKeyLength,
+                                                    &ciphertext, &ciphertextLength)
+        if encryptErr != ECE_OK {
+            throw PushCryptoError.encryptionError(errCode: encryptErr)
+        }
+
+        var cryptoKeyHeaderLength = 0
+        var encryptionHeaderLength = 0
+
+        let paramsSizeErr = ece_webpush_aesgcm_headers_from_params(
+            salt, saltLength,
+            rawSenderPubKey, rawSenderPubKeyLength,
+            rs,
+            nil, &cryptoKeyHeaderLength,
+            nil, &encryptionHeaderLength)
+        if paramsSizeErr != ECE_OK {
+            throw PushCryptoError.encryptionError(errCode: paramsSizeErr)
+        }
+
+        var cryptoKeyHeaderBytes = [CChar](repeating: 0, count: cryptoKeyHeaderLength)
+        var encryptionHeaderBytes = [CChar](repeating: 0, count: encryptionHeaderLength)
+
+        let paramsErr = ece_webpush_aesgcm_headers_from_params(
+            salt, saltLength,
+            rawSenderPubKey, rawSenderPubKeyLength,
+            rs,
+            &cryptoKeyHeaderBytes, &cryptoKeyHeaderLength,
+            &encryptionHeaderBytes, &encryptionHeaderLength)
+        if paramsErr != ECE_OK {
+            throw PushCryptoError.encryptionError(errCode: paramsErr)
+        }
+
+        guard let cryptoKeyHeader = String(data: Data(bytes: cryptoKeyHeaderBytes, count: cryptoKeyHeaderLength),
+                                           encoding: .ascii),
+              let encryptionHeader = String(data: Data(bytes: encryptionHeaderBytes, count: encryptionHeaderLength),
+                                            encoding: .ascii) else {
+            throw PushCryptoError.base64EncodeError
+        }
+
+        let headers = PushCryptoHeaders(encryption: encryptionHeader, cryptoKey: cryptoKeyHeader)
+        return (headers, Data(bytes: ciphertext, count: ciphertextLength))
     }
 }
 
@@ -160,9 +263,11 @@ extension PushCrypto {
             throw PushCryptoError.keyGenerationError(errCode: err)
         }
 
-        let privKey = Data(bytes: rawRecvPrivKey, count: privateKeyLength).base64urlSafeEncodedString
-        let pubKey =  Data(bytes: rawRecvPubKey, count: publicKeyLength).base64urlSafeEncodedString
-        let authKey = Data(bytes: authSecret, count: authSecretLength).base64urlSafeEncodedString
+        guard let privKey = Data(bytes: rawRecvPrivKey, count: privateKeyLength).base64urlSafeEncodedString,
+            let pubKey =  Data(bytes: rawRecvPubKey, count: publicKeyLength).base64urlSafeEncodedString,
+            let authKey = Data(bytes: authSecret, count: authSecretLength).base64urlSafeEncodedString else {
+                throw PushCryptoError.base64EncodeError
+        }
 
         return PushKeys(p256dhPrivateKey: privKey, p256dhPublicKey: pubKey, auth: authKey)
     }
@@ -176,10 +281,16 @@ struct PushKeys {
 
 enum PushCryptoError: Error {
     case base64DecodeError
+    case base64EncodeError
     case decryptionError(errCode: Int32)
     case encryptionError(errCode: Int32)
     case keyGenerationError(errCode: Int32)
     case utf8EncodingError
+}
+
+struct PushCryptoHeaders {
+    let encryption: String
+    let cryptoKey: String
 }
 
 extension String {
@@ -207,10 +318,18 @@ extension String {
 
 extension Data {
     /// Returns a base64 url safe encoding of the given data.
-    var base64urlSafeEncodedString: String {
-        return self.base64EncodedString
-            .replacingOccurrences(of: "+", with: "-", options: .literal)
-            .replacingOccurrences(of: "/", with: "_", options: .literal)
-            .replacingOccurrences(of: "=", with: "", options: [.anchored, .backwards])
+    var base64urlSafeEncodedString: String? {
+        let length = ece_base64url_encode(self.getBytes(), self.count, ECE_BASE64URL_OMIT_PADDING, nil, 0)
+        guard length > 0 else {
+            return nil
+        }
+
+        var bytes = [CChar](repeating: 0, count: length)
+        let checkLength = ece_base64url_encode(self.getBytes(), self.count, ECE_BASE64URL_OMIT_PADDING, &bytes, length)
+        guard checkLength == length else {
+            return nil
+        }
+
+        return String(data: Data(bytes: bytes, count: length), encoding: .ascii)
     }
 }
