@@ -22,6 +22,9 @@
 #define ECE_HEADER_STATE_END_VALUE 9
 #define ECE_HEADER_STATE_INVALID_HEADER 10
 
+#define ECE_HEADER_DH_PREFIX "dh="
+#define ECE_HEADER_DH_PREFIX_LENGTH 3
+
 // Extracts an unsigned 32-bit integer in network byte order.
 static inline uint32_t
 ece_read_uint32_be(const uint8_t* bytes) {
@@ -347,14 +350,12 @@ ece_aes128gcm_payload_extract_params(const uint8_t* payload, size_t payloadLen,
     return ECE_ERROR_SHORT_HEADER;
   }
 
-  *salt = payload;
   *saltLen = ECE_SALT_LENGTH;
 
   *keyIdLen = payload[ECE_SALT_LENGTH + 4];
   if (payloadLen < ECE_AES128GCM_HEADER_LENGTH + *keyIdLen) {
     return ECE_ERROR_SHORT_HEADER;
   }
-  *keyId = &payload[ECE_AES128GCM_HEADER_LENGTH];
 
   *rs = ece_read_uint32_be(&payload[ECE_SALT_LENGTH]);
   if (*rs < ECE_AES128GCM_MIN_RS) {
@@ -362,8 +363,18 @@ ece_aes128gcm_payload_extract_params(const uint8_t* payload, size_t payloadLen,
   }
 
   size_t payloadStart = ECE_AES128GCM_HEADER_LENGTH + *keyIdLen;
-  *ciphertext = &payload[payloadStart];
   *ciphertextLen = payloadLen - payloadStart;
+  if (!(*ciphertextLen)) {
+    return ECE_ERROR_ZERO_CIPHERTEXT;
+  }
+
+  *salt = payload;
+  if (keyIdLen) {
+    *keyId = &payload[ECE_AES128GCM_HEADER_LENGTH];
+  } else {
+    *keyId = NULL;
+  }
+  *ciphertext = &payload[payloadStart];
 
   return ECE_OK;
 }
@@ -420,7 +431,7 @@ ece_webpush_aesgcm_headers_extract_params(const char* cryptoKeyHeader,
       }
       int result = sscanf(value, "%" SCNu32, &rsValue);
       free(value);
-      if (result <= 0 || !rsValue) {
+      if (result <= 0 || rsValue < ECE_AESGCM_MIN_RS) {
         err = ECE_ERROR_INVALID_RS;
         goto end;
       }
@@ -436,8 +447,7 @@ ece_webpush_aesgcm_headers_extract_params(const char* cryptoKeyHeader,
         ece_base64url_decode(pair->value, pair->valueLen,
                              ECE_BASE64URL_REJECT_PADDING, salt, saltLen);
       if (!decodedSaltLen) {
-        err = ECE_ERROR_INVALID_SALT;
-        goto end;
+        break;
       }
       continue;
     }
@@ -497,7 +507,7 @@ ece_webpush_aesgcm_headers_extract_params(const char* cryptoKeyHeader,
                                          rawSenderPubKey, rawSenderPubKeyLen);
     break;
   }
-  if (!decodedKeyLen) {
+  if (decodedKeyLen != rawSenderPubKeyLen) {
     err = ECE_ERROR_INVALID_DH;
     goto end;
   }
@@ -507,4 +517,58 @@ end:
   ece_header_params_free(cryptoKeyParams);
   free(keyId);
   return err;
+}
+
+int
+ece_webpush_aesgcm_headers_from_params(const void* salt, size_t saltLen,
+                                       const void* rawSenderPubKey,
+                                       size_t rawSenderPubKeyLen, uint32_t rs,
+                                       char* cryptoKeyHeader,
+                                       size_t* cryptoKeyHeaderLen,
+                                       char* encryptionHeader,
+                                       size_t* encryptionHeaderLen) {
+  size_t b64SenderPubKeyLen = ece_base64url_encode(
+    rawSenderPubKey, rawSenderPubKeyLen, ECE_BASE64URL_OMIT_PADDING, NULL, 0);
+  if (!b64SenderPubKeyLen ||
+      b64SenderPubKeyLen > SIZE_MAX - ECE_HEADER_DH_PREFIX_LENGTH) {
+    return ECE_ERROR_INVALID_DH;
+  }
+  size_t requiredCryptoKeyHeaderLen =
+    b64SenderPubKeyLen + ECE_HEADER_DH_PREFIX_LENGTH;
+  if (*cryptoKeyHeaderLen) {
+    if (*cryptoKeyHeaderLen < requiredCryptoKeyHeaderLen) {
+      return ECE_ERROR_OUT_OF_MEMORY;
+    }
+    memcpy(cryptoKeyHeader, ECE_HEADER_DH_PREFIX, ECE_HEADER_DH_PREFIX_LENGTH);
+    ece_base64url_encode(
+      rawSenderPubKey, rawSenderPubKeyLen, ECE_BASE64URL_OMIT_PADDING,
+      &cryptoKeyHeader[ECE_HEADER_DH_PREFIX_LENGTH], b64SenderPubKeyLen);
+  }
+  *cryptoKeyHeaderLen = requiredCryptoKeyHeaderLen;
+
+  size_t b64SaltLen =
+    ece_base64url_encode(salt, saltLen, ECE_BASE64URL_OMIT_PADDING, NULL, 0);
+  if (!b64SaltLen) {
+    return ECE_ERROR_INVALID_SALT;
+  }
+  int maybeEncryptionPrefixLen = snprintf(NULL, 0, "rs=%" PRIu32 ";salt=", rs);
+  if (maybeEncryptionPrefixLen <= 0) {
+    return ECE_ERROR_INVALID_SALT;
+  }
+  size_t encryptionPrefixLen = (size_t) maybeEncryptionPrefixLen;
+  if (b64SaltLen > SIZE_MAX - encryptionPrefixLen) {
+    return ECE_ERROR_INVALID_SALT;
+  }
+  size_t requiredEncryptionHeaderLen = b64SaltLen + encryptionPrefixLen;
+  if (*encryptionHeaderLen) {
+    if (*encryptionHeaderLen < requiredEncryptionHeaderLen) {
+      return ECE_ERROR_OUT_OF_MEMORY;
+    }
+    sprintf(encryptionHeader, "rs=%" PRIu32 ";salt=", rs);
+    ece_base64url_encode(salt, saltLen, ECE_BASE64URL_OMIT_PADDING,
+                         &encryptionHeader[encryptionPrefixLen], b64SaltLen);
+  }
+  *encryptionHeaderLen = requiredEncryptionHeaderLen;
+
+  return ECE_OK;
 }

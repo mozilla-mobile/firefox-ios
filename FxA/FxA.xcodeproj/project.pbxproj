@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A80BCCE1EC538DD00926C6A /* base64url.c in Sources */ = {isa = PBXBuildFile; fileRef = 0A80BCC81EC538DD00926C6A /* base64url.c */; };
+		0A80BCCF1EC538DD00926C6A /* decrypt.c in Sources */ = {isa = PBXBuildFile; fileRef = 0A80BCC91EC538DD00926C6A /* decrypt.c */; };
+		0A80BCD01EC538DD00926C6A /* encrypt.c in Sources */ = {isa = PBXBuildFile; fileRef = 0A80BCCA1EC538DD00926C6A /* encrypt.c */; };
+		0A80BCD11EC538DD00926C6A /* keys.c in Sources */ = {isa = PBXBuildFile; fileRef = 0A80BCCB1EC538DD00926C6A /* keys.c */; };
+		0A80BCD21EC538DD00926C6A /* params.c in Sources */ = {isa = PBXBuildFile; fileRef = 0A80BCCC1EC538DD00926C6A /* params.c */; };
+		0A80BCD31EC538DD00926C6A /* trailer.c in Sources */ = {isa = PBXBuildFile; fileRef = 0A80BCCD1EC538DD00926C6A /* trailer.c */; };
+		0A80BCD61EC538F500926C6A /* ece in Resources */ = {isa = PBXBuildFile; fileRef = 0A80BCD41EC538F500926C6A /* ece */; };
+		0A80BCD71EC538F500926C6A /* ece.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A80BCD51EC538F500926C6A /* ece.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		28F9520119D0F9FA00DCE892 /* FxA.h in Headers */ = {isa = PBXBuildFile; fileRef = 28F9520019D0F9FA00DCE892 /* FxA.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		28F9520B19D0F9FB00DCE892 /* FxATests.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F9520A19D0F9FB00DCE892 /* FxATests.m */; };
 		2FA17FD219D3D32300F3D844 /* aes.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FA17F8219D3D32300F3D844 /* aes.h */; };
@@ -107,13 +115,6 @@
 		2FF8264B19D3CAFF003ED08E /* NSData+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF825E819D3CAFF003ED08E /* NSData+Utils.m */; };
 		2FF8264C19D3CAFF003ED08E /* NSString+Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FF825E919D3CAFF003ED08E /* NSString+Utils.h */; };
 		2FF8264D19D3CAFF003ED08E /* NSString+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF825EA19D3CAFF003ED08E /* NSString+Utils.m */; };
-		395C8E271E71826200A68E8C /* ece.h in Headers */ = {isa = PBXBuildFile; fileRef = 395C8E261E71826200A68E8C /* ece.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		395C8E2F1E71827200A68E8C /* base64url.c in Sources */ = {isa = PBXBuildFile; fileRef = 395C8E291E71827200A68E8C /* base64url.c */; };
-		395C8E311E71827200A68E8C /* decrypt.c in Sources */ = {isa = PBXBuildFile; fileRef = 395C8E2B1E71827200A68E8C /* decrypt.c */; };
-		395C8E321E71827200A68E8C /* keys.c in Sources */ = {isa = PBXBuildFile; fileRef = 395C8E2C1E71827200A68E8C /* keys.c */; };
-		395C8E331E71827200A68E8C /* keys.h in Headers */ = {isa = PBXBuildFile; fileRef = 395C8E2D1E71827200A68E8C /* keys.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		398042341E82A6630030B6F4 /* params.c in Sources */ = {isa = PBXBuildFile; fileRef = 398042321E82A6630030B6F4 /* params.c */; };
-		398042381E82AB920030B6F4 /* encrypt.c in Sources */ = {isa = PBXBuildFile; fileRef = 398042371E82AB920030B6F4 /* encrypt.c */; };
 		E63320451EC2052100F2BC80 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FA17FD019D3D32300F3D844 /* libcrypto.a */; };
 		E63320461EC2052100F2BC80 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FA17FD119D3D32300F3D844 /* libssl.a */; };
 /* End PBXBuildFile section */
@@ -129,6 +130,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0A80BCC81EC538DD00926C6A /* base64url.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = base64url.c; path = ../ThirdParty/ecec/src/base64url.c; sourceTree = "<group>"; };
+		0A80BCC91EC538DD00926C6A /* decrypt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = decrypt.c; path = ../ThirdParty/ecec/src/decrypt.c; sourceTree = "<group>"; };
+		0A80BCCA1EC538DD00926C6A /* encrypt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = encrypt.c; path = ../ThirdParty/ecec/src/encrypt.c; sourceTree = "<group>"; };
+		0A80BCCB1EC538DD00926C6A /* keys.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = keys.c; path = ../ThirdParty/ecec/src/keys.c; sourceTree = "<group>"; };
+		0A80BCCC1EC538DD00926C6A /* params.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = params.c; path = ../ThirdParty/ecec/src/params.c; sourceTree = "<group>"; };
+		0A80BCCD1EC538DD00926C6A /* trailer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = trailer.c; path = ../ThirdParty/ecec/src/trailer.c; sourceTree = "<group>"; };
+		0A80BCD41EC538F500926C6A /* ece */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ece; path = ../ThirdParty/ecec/include/ece; sourceTree = "<group>"; };
+		0A80BCD51EC538F500926C6A /* ece.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ece.h; path = ../ThirdParty/ecec/include/ece.h; sourceTree = "<group>"; };
 		28F951FB19D0F9FA00DCE892 /* FxA.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FxA.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		28F951FF19D0F9FA00DCE892 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		28F9520019D0F9FA00DCE892 /* FxA.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FxA.h; sourceTree = "<group>"; };
@@ -235,13 +244,6 @@
 		2FF825E819D3CAFF003ED08E /* NSData+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Utils.m"; sourceTree = "<group>"; };
 		2FF825E919D3CAFF003ED08E /* NSString+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Utils.h"; sourceTree = "<group>"; };
 		2FF825EA19D3CAFF003ED08E /* NSString+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Utils.m"; sourceTree = "<group>"; };
-		395C8E261E71826200A68E8C /* ece.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ece.h; sourceTree = "<group>"; };
-		395C8E291E71827200A68E8C /* base64url.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = base64url.c; path = src/base64url.c; sourceTree = "<group>"; };
-		395C8E2B1E71827200A68E8C /* decrypt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = decrypt.c; path = src/decrypt.c; sourceTree = "<group>"; };
-		395C8E2C1E71827200A68E8C /* keys.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = keys.c; path = src/keys.c; sourceTree = "<group>"; };
-		395C8E2D1E71827200A68E8C /* keys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = keys.h; sourceTree = "<group>"; };
-		398042321E82A6630030B6F4 /* params.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = params.c; path = src/params.c; sourceTree = "<group>"; };
-		398042371E82AB920030B6F4 /* encrypt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = encrypt.c; path = src/encrypt.c; sourceTree = "<group>"; };
 		E6D69D091EC241C100B80600 /* opensslconf_ios_arm64.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = opensslconf_ios_arm64.h; sourceTree = "<group>"; };
 		E6D69D0A1EC241C100B80600 /* opensslconf_ios_armv7.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = opensslconf_ios_armv7.h; sourceTree = "<group>"; };
 		E6D69D0B1EC241C100B80600 /* opensslconf_ios_armv7s.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = opensslconf_ios_armv7s.h; sourceTree = "<group>"; };
@@ -274,7 +276,14 @@
 		28F951F119D0F9FA00DCE892 = {
 			isa = PBXGroup;
 			children = (
-				395C8E251E7181FD00A68E8C /* ecec */,
+				0A80BCD41EC538F500926C6A /* ece */,
+				0A80BCD51EC538F500926C6A /* ece.h */,
+				0A80BCC81EC538DD00926C6A /* base64url.c */,
+				0A80BCC91EC538DD00926C6A /* decrypt.c */,
+				0A80BCCA1EC538DD00926C6A /* encrypt.c */,
+				0A80BCCB1EC538DD00926C6A /* keys.c */,
+				0A80BCCC1EC538DD00926C6A /* params.c */,
+				0A80BCCD1EC538DD00926C6A /* trailer.c */,
 				28F951FD19D0F9FA00DCE892 /* FxA */,
 				28F9520719D0F9FB00DCE892 /* FxATests */,
 				28F951FC19D0F9FA00DCE892 /* Products */,
@@ -455,37 +464,6 @@
 			path = lib;
 			sourceTree = "<group>";
 		};
-		395C8E251E7181FD00A68E8C /* ecec */ = {
-			isa = PBXGroup;
-			children = (
-				395C8E291E71827200A68E8C /* base64url.c */,
-				395C8E2B1E71827200A68E8C /* decrypt.c */,
-				398042371E82AB920030B6F4 /* encrypt.c */,
-				395C8E2C1E71827200A68E8C /* keys.c */,
-				398042321E82A6630030B6F4 /* params.c */,
-				398042351E82A74C0030B6F4 /* include */,
-			);
-			name = ecec;
-			path = ../ThirdParty/ecec;
-			sourceTree = SOURCE_ROOT;
-		};
-		398042351E82A74C0030B6F4 /* include */ = {
-			isa = PBXGroup;
-			children = (
-				395C8E261E71826200A68E8C /* ece.h */,
-				398042361E82A7610030B6F4 /* ece */,
-			);
-			path = include;
-			sourceTree = "<group>";
-		};
-		398042361E82A7610030B6F4 /* ece */ = {
-			isa = PBXGroup;
-			children = (
-				395C8E2D1E71827200A68E8C /* keys.h */,
-			);
-			path = ece;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -498,8 +476,8 @@
 				2FF824E619D3C6D8003ED08E /* RSAKeyPair.h in Headers */,
 				2FF8264419D3CAFF003ED08E /* NSData+Base32.h in Headers */,
 				2FA1801B19D3D32300F3D844 /* x509_vfy.h in Headers */,
+				0A80BCD71EC538F500926C6A /* ece.h in Headers */,
 				2FA1801419D3D32300F3D844 /* tls1.h in Headers */,
-				395C8E271E71826200A68E8C /* ece.h in Headers */,
 				28F9520119D0F9FA00DCE892 /* FxA.h in Headers */,
 				2FA1801D19D3D32300F3D844 /* JSONWebTokenUtils.h in Headers */,
 				2FA1801A19D3D32300F3D844 /* x509.h in Headers */,
@@ -526,7 +504,6 @@
 				2FA1801319D3D32300F3D844 /* symhacks.h in Headers */,
 				2FA1800B19D3D32300F3D844 /* sha.h in Headers */,
 				2FA17FE719D3D32300F3D844 /* dtls1.h in Headers */,
-				395C8E331E71827200A68E8C /* keys.h in Headers */,
 				2FA17FD819D3D32300F3D844 /* bn.h in Headers */,
 				2FA17FE019D3D32300F3D844 /* conf_api.h in Headers */,
 				2FA1801519D3D32300F3D844 /* ts.h in Headers */,
@@ -666,6 +643,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A80BCD61EC538F500926C6A /* ece in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -685,23 +663,24 @@
 			files = (
 				2FF825F219D3CAFF003ED08E /* CHNumber.m in Sources */,
 				2FF824E119D3C6D8003ED08E /* KeyPair.m in Sources */,
-				395C8E321E71827200A68E8C /* keys.c in Sources */,
 				2FF8264519D3CAFF003ED08E /* NSData+Base32.m in Sources */,
-				398042381E82AB920030B6F4 /* encrypt.c in Sources */,
-				395C8E2F1E71827200A68E8C /* base64url.c in Sources */,
 				2FF824E319D3C6D8003ED08E /* PrivateKey.m in Sources */,
-				395C8E311E71827200A68E8C /* decrypt.c in Sources */,
 				2FF8264319D3CAFF003ED08E /* NSData+Base16.m in Sources */,
+				0A80BCCF1EC538DD00926C6A /* decrypt.c in Sources */,
 				2FA1801E19D3D32300F3D844 /* JSONWebTokenUtils.m in Sources */,
 				2FF824E719D3C6D8003ED08E /* RSAKeyPair.m in Sources */,
 				2FF8264D19D3CAFF003ED08E /* NSString+Utils.m in Sources */,
+				0A80BCD21EC538DD00926C6A /* params.c in Sources */,
+				0A80BCCE1EC538DD00926C6A /* base64url.c in Sources */,
 				2FF825EC19D3CAFF003ED08E /* ASNUtils.m in Sources */,
 				2FF8264719D3CAFF003ED08E /* NSData+KeyDerivation.m in Sources */,
+				0A80BCD31EC538DD00926C6A /* trailer.c in Sources */,
 				2FF8264B19D3CAFF003ED08E /* NSData+Utils.m in Sources */,
+				0A80BCD11EC538DD00926C6A /* keys.c in Sources */,
 				2FF825EF19D3CAFF003ED08E /* CHMutableNumber.m in Sources */,
+				0A80BCD01EC538DD00926C6A /* encrypt.c in Sources */,
 				2FF8264919D3CAFF003ED08E /* NSData+SHA.m in Sources */,
 				2FF824E519D3C6D8003ED08E /* PublicKey.m in Sources */,
-				398042341E82A6630030B6F4 /* params.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
