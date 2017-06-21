@@ -9,6 +9,7 @@ import Storage
 import WebImage
 import XCGLogger
 import Telemetry
+import SnapKit
 
 private let log = Logger.browserLogger
 private let DefaultSuggestedSitesKey = "topSites.deletedSuggestedSites"
@@ -16,14 +17,44 @@ private let DefaultSuggestedSitesKey = "topSites.deletedSuggestedSites"
 // MARK: -  Lifecycle
 struct ASPanelUX {
     static let backgroundColor = UIColor(white: 1.0, alpha: 0.5)
-    static let historySize = 10
     static let rowSpacing: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 30 : 20
     static let highlightCellHeight: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 250 : 195
-
-    static let PageControlOffsetSize: CGFloat = 40
+    static let sectionInsetsForSizeClass = UXSizeClasses(compact: 0, regular: 101, other: 14)
+    static let numberOfItemsPerRowForSizeClsssIpad = UXSizeClasses(compact: 3, regular: 4, other: 2)
     static let SectionInsetsForIpad: CGFloat = 101
     static let SectionInsetsForIphone: CGFloat = 14
-    static let CompactWidth: CGFloat = 320
+    static let MinimumInsets: CGFloat = 14
+
+}
+
+/*
+ Size classes are the way Apple requires us to specify our UI.
+ Split view on iPad can make a lanscape app appear with the demensions of an iPhone app
+ Use UXSizeClasses to specify things like offsets/itemsizes with respect to size classes
+ For a primer on size classes https://useyourloaf.com/blog/size-classes/
+ */
+struct UXSizeClasses {
+    var compact: CGFloat
+    var regular: CGFloat
+    var unspecified: CGFloat
+
+    init(compact compact: CGFloat, regular regular: CGFloat, other other: CGFloat) {
+        self.compact = compact
+        self.regular = regular
+        self.unspecified = other
+    }
+
+    subscript(sizeClass: UIUserInterfaceSizeClass) -> CGFloat {
+        switch sizeClass {
+            case .compact:
+                return self.compact
+            case .regular:
+                return self.regular
+            case .unspecified:
+                return self.unspecified
+        }
+
+    }
 }
 
 class ActivityStreamPanel: UICollectionViewController, HomePanel {
@@ -121,7 +152,6 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
 
 // MARK: -  Section management
 extension ActivityStreamPanel {
-
     enum Section: Int {
         case topSites
         case highlights
@@ -161,48 +191,56 @@ extension ActivityStreamPanel {
             }
         }
 
-        func sectionInsets() -> CGFloat {
+        /*
+         There are edge cases to handle when calculating section insets
+        - An iPhone 7+ is considered regular width when in landscape
+        - An iPad in 66% split view is still considered regular width
+         */
+        func sectionInsets(_ traits: UITraitCollection, frameWidth: CGFloat) -> CGFloat {
+            var currentTraits = traits
+            if (traits.horizontalSizeClass == .regular && UIScreen.main.bounds.size.width != frameWidth) || UIDevice.current.userInterfaceIdiom == .phone {
+                currentTraits = UITraitCollection(horizontalSizeClass: .compact)
+            }
             switch self {
             case .highlights:
-                return UIDevice.current.userInterfaceIdiom == .pad ? ASPanelUX.SectionInsetsForIpad + ASHorizontalScrollCellUX.MinimumInsets : ASPanelUX.SectionInsetsForIphone
+                var insets = ASPanelUX.sectionInsetsForSizeClass[currentTraits.horizontalSizeClass]
+                insets = insets + ASPanelUX.MinimumInsets
+                return insets
             case .topSites:
-                return UIDevice.current.userInterfaceIdiom == .pad ? ASPanelUX.SectionInsetsForIpad : 0
+                return ASPanelUX.sectionInsetsForSizeClass[currentTraits.horizontalSizeClass]
             case .highlightIntro:
-                return UIDevice.current.userInterfaceIdiom == .pad ? ASPanelUX.SectionInsetsForIpad : 0
+                return ASPanelUX.sectionInsetsForSizeClass[currentTraits.horizontalSizeClass]
             }
         }
 
-        func numberOfItemsForRow() -> CGFloat {
+        func numberOfItemsForRow(_ traits: UITraitCollection) -> CGFloat {
             switch self {
             case .highlights:
-                var numItems: CGFloat = 0
-                if UIDevice.current.orientation == .landscapeLeft || UIDevice.current.orientation == .landscapeRight {
-                    numItems = 4
-                } else if UIDevice.current.userInterfaceIdiom == .pad {
-                    numItems = 3
-                } else {
-                    numItems = 2
+                var numItems: CGFloat = ASPanelUX.numberOfItemsPerRowForSizeClsssIpad[traits.horizontalSizeClass]
+                if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation) {
+                    numItems = numItems - 1
+                }
+                if traits.horizontalSizeClass == .compact && UIInterfaceOrientationIsLandscape(UIApplication.shared.statusBarOrientation) {
+                    numItems = numItems - 1
                 }
                 return numItems
-            case .topSites:
-                return 1
-            case .highlightIntro:
+            case .topSites, .highlightIntro:
                 return 1
             }
         }
 
         func cellSize(for traits: UITraitCollection, frameWidth: CGFloat) -> CGSize {
             let height = cellHeight(traits, width: frameWidth)
-            let inset = sectionInsets() * 2
+            let inset = sectionInsets(traits, frameWidth: frameWidth) * 2
 
             switch self {
             case .highlights:
-                let numItems = numberOfItemsForRow()
-                return CGSize(width: floor(((frameWidth - inset) - (ASHorizontalScrollCellUX.MinimumInsets * (numItems - 1))) / numItems), height: height)
+                let numItems = numberOfItemsForRow(traits)
+                return CGSize(width: floor(((frameWidth - inset) - (ASPanelUX.MinimumInsets * (numItems - 1))) / numItems), height: height)
             case .topSites:
                 return CGSize(width: frameWidth - inset, height: height)
             case .highlightIntro:
-                return CGSize(width: frameWidth - inset - (ASHorizontalScrollCellUX.MinimumInsets * 2), height: height)
+                return CGSize(width: frameWidth - inset - (ASPanelUX.MinimumInsets * 2), height: height)
             }
         }
 
@@ -302,9 +340,9 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         switch Section(section) {
         case .highlights:
-            return highlights.isEmpty ? CGSize.zero : Section(section).headerHeight
+            return highlights.isEmpty ? CGSize.zero : CGSize(width: self.view.frame.size.width, height: Section(section).headerHeight.height)
         case .highlightIntro:
-            return !highlights.isEmpty ? CGSize.zero : Section(section).headerHeight
+            return !highlights.isEmpty ? CGSize.zero : CGSize(width: self.view.frame.size.width, height: Section(section).headerHeight.height)
         case .topSites:
             return Section(section).headerHeight
         }
@@ -328,7 +366,7 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        let insets = Section(section).sectionInsets()
+        let insets = Section(section).sectionInsets(self.traitCollection, frameWidth: self.view.frame.width)
         return UIEdgeInsets(top: 0, left: insets, bottom: 0, right: insets)
     }
 
@@ -425,8 +463,7 @@ extension ActivityStreamPanel: DataObserverDelegate {
     }
 
     func getHighlights() -> Success {
-        let num = Int(Section.highlights.numberOfItemsForRow())
-        return self.profile.recommendations.getHighlights().both(self.profile.recommendations.getRecentBookmarks(num)).bindQueue(.main) { (highlights, bookmarks) in
+        return self.profile.recommendations.getHighlights().both(self.profile.recommendations.getRecentBookmarks(2)).bindQueue(.main) { (highlights, bookmarks) in
             guard let highlights = highlights.successValue?.asArray(), let bookmarks = bookmarks.successValue?.asArray() else {
                 return succeed()
             }
@@ -817,7 +854,7 @@ struct ASHeaderViewUX {
     static let SeperatorColor =  UIColor(rgb: 0xedecea)
     static let TextFont = DynamicFontHelper.defaultHelper.DefaultMediumBoldFont
     static let SeperatorHeight = 1
-    static let Insets: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? ASPanelUX.SectionInsetsForIpad : ASPanelUX.SectionInsetsForIphone
+    static let Insets: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? ASPanelUX.SectionInsetsForIpad + ASPanelUX.MinimumInsets : ASPanelUX.MinimumInsets
     static let TitleTopInset: CGFloat = 5
 }
 
@@ -858,17 +895,30 @@ class ASHeaderView: UICollectionReusableView {
         }
     }
 
+    var constraint: Constraint?
+     var titleInsets: CGFloat {
+        get {
+            return UIScreen.main.bounds.size.width == self.frame.size.width && UIDevice.current.userInterfaceIdiom == .pad ? ASHeaderViewUX.Insets : ASPanelUX.MinimumInsets
+        }
+    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
-
         addSubview(titleLabel)
-        let leftInset = UIDevice.current.userInterfaceIdiom == .pad ? ASHorizontalScrollCellUX.MinimumInsets : 0
         titleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(self).inset(ASHeaderViewUX.Insets + leftInset)
+            self.constraint = make.leading.equalTo(self).inset(titleInsets).constraint
             make.trailing.equalTo(self).inset(-ASHeaderViewUX.Insets)
             make.top.equalTo(self).inset(ASHeaderViewUX.TitleTopInset)
             make.bottom.equalTo(self)
         }
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        print(UIScreen.main.bounds.size.width)
+        print(self.frame.size.width)
+        print(titleInsets)
+        constraint?.update(offset: titleInsets)
     }
     
     required init?(coder aDecoder: NSCoder) {

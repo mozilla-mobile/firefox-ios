@@ -109,6 +109,12 @@ class TopSiteItemCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         titleBorder.frame = CGRect(x: 0, y: frame.height - TopSiteCellUX.TitleHeight -  TopSiteCellUX.BorderWidth, width: frame.width, height: TopSiteCellUX.BorderWidth)
+
+        imageView.snp.remakeConstraints { make in
+            make.size.equalTo(floor(self.frame.width * TopSiteCellUX.IconSizePercent))
+            make.centerX.equalTo(self)
+            make.centerY.equalTo(self).inset(-TopSiteCellUX.TitleHeight/2)
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -425,7 +431,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
         cachedAttributes = nil
         // Sometimes when the topsiteCell isnt on the screen the newbounds that it tries to layout in is very tiny
         // Resulting in incorrect layouts. So only layout when the width is greater than 320.
-        return newBounds.width >= 320
+        return newBounds.width > 0
     }
 
     func computeLayoutAttributesForCellAtIndexPath(_ indexPath: IndexPath) -> UICollectionViewLayoutAttributes {
@@ -490,14 +496,24 @@ class ASHorizontalScrollCellManager: NSObject, UICollectionViewDelegate, UIColle
     }
 
     func numberOfHorizontalItems() -> Int {
-        // The number of items to show per row.
-        if UIDevice.current.orientation == .landscapeLeft || UIDevice.current.orientation == .landscapeRight {
-            return 8
-        } else if UIDevice.current.userInterfaceIdiom == .pad {
-            return 6
-        } else {
-            return 4
+        guard let traits = currentTraits else {
+            return 0
         }
+        let isLandscape = UIInterfaceOrientationIsLandscape(UIApplication.shared.statusBarOrientation)
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            if isLandscape {
+                return 8
+            } else {
+                return 4
+            }
+        }
+        // On iPad
+        // The number of items in a row is equal to the number of highlights in a row * 2
+        var numItems: Int = Int(ASPanelUX.numberOfItemsPerRowForSizeClsssIpad[traits.horizontalSizeClass])
+        if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation) || (traits.horizontalSizeClass == .compact && isLandscape) {
+            numItems = numItems - 1
+        }
+        return numItems * 2
     }
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
