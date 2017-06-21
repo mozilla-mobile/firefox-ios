@@ -24,12 +24,13 @@ struct ASPanelUX {
     static let SectionInsetsForIpad: CGFloat = 101
     static let SectionInsetsForIphone: CGFloat = 14
     static let MinimumInsets: CGFloat = 14
+    static let BookmarkHighlights = 2
 
 }
 
 /*
  Size classes are the way Apple requires us to specify our UI.
- Split view on iPad can make a lanscape app appear with the demensions of an iPhone app
+ Split view on iPad can make a landscape app appear with the demensions of an iPhone app
  Use UXSizeClasses to specify things like offsets/itemsizes with respect to size classes
  For a primer on size classes https://useyourloaf.com/blog/size-classes/
  */
@@ -463,7 +464,8 @@ extension ActivityStreamPanel: DataObserverDelegate {
     }
 
     func getHighlights() -> Success {
-        return self.profile.recommendations.getHighlights().both(self.profile.recommendations.getRecentBookmarks(2)).bindQueue(.main) { (highlights, bookmarks) in
+        let count = ASPanelUX.BookmarkHighlights // Fetch 2 bookmarks
+        return self.profile.recommendations.getHighlights().both(self.profile.recommendations.getRecentBookmarks(count)).bindQueue(.main) { (highlights, bookmarks) in
             guard let highlights = highlights.successValue?.asArray(), let bookmarks = bookmarks.successValue?.asArray() else {
                 return succeed()
             }
@@ -896,7 +898,7 @@ class ASHeaderView: UICollectionReusableView {
     }
 
     var constraint: Constraint?
-     var titleInsets: CGFloat {
+    var titleInsets: CGFloat {
         get {
             return UIScreen.main.bounds.size.width == self.frame.size.width && UIDevice.current.userInterfaceIdiom == .pad ? ASHeaderViewUX.Insets : ASPanelUX.MinimumInsets
         }
@@ -917,7 +919,6 @@ class ASHeaderView: UICollectionReusableView {
         super.layoutSubviews()
         print(UIScreen.main.bounds.size.width)
         print(self.frame.size.width)
-        print(titleInsets)
         constraint?.update(offset: titleInsets)
     }
     

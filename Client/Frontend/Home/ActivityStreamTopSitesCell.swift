@@ -429,8 +429,8 @@ class HorizontalFlowLayout: UICollectionViewLayout {
 
     override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
         cachedAttributes = nil
-        // Sometimes when the topsiteCell isnt on the screen the newbounds that it tries to layout in is very tiny
-        // Resulting in incorrect layouts. So only layout when the width is greater than 320.
+        // Sometimes when the topsiteCell isnt on the screen the newbounds that it tries to layout in is 0
+        // Resulting in incorrect layouts. Only layout when a valid width is given
         return newBounds.width > 0
     }
 
