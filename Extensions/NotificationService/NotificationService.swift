@@ -31,8 +31,8 @@ class NotificationService: UNNotificationServiceExtension {
 
         let handler = FxAPushMessageHandler(with: profile)
 
-        handler.handle(userInfo: userInfo).upon {_ in
-            self.finished(cleanly: true)
+        handler.handle(userInfo: userInfo).upon { res in
+            self.finished(cleanly: res.isSuccess)
         }
     }
 
@@ -88,24 +88,31 @@ class SyncDataDisplay {
 
         notificationContent.userInfo = userInfo
 
-        switch sentTabs.count {
-        case 0:
-            notificationContent.title = Strings.SentTab_NoTabArrivingNotification_title
-            notificationContent.body = Strings.SentTab_NoTabArrivingNotification_body
-        case 1:
-            let tab = sentTabs[0]
-            let title: String
-            if let deviceName = tab.deviceName {
-                title = String(format: Strings.SentTab_TabArrivingNotificationWithDevice_title, deviceName)
+        let title: String
+        let body: String
+
+        if sentTabs.isEmpty {
+            title = Strings.SentTab_NoTabArrivingNotification_title
+            body = Strings.SentTab_NoTabArrivingNotification_body
+        } else {
+            let deviceNames = Set(sentTabs.flatMap { $0.deviceName })
+            if let deviceName = deviceNames.first, deviceNames.count == 1 {
+                title = String(format: Strings.SentTab_TabArrivingNotification_WithDevice_title, deviceName)
             } else {
-                title = Strings.SentTab_TabArrivingNotificationNoDevice_title
+                title = Strings.SentTab_TabArrivingNotification_NoDevice_title
             }
-            notificationContent.title = title
-            notificationContent.body = tab.url.absoluteDisplayString
-        default:
-            notificationContent.title = Strings.SentTab_TabsArrivingNotification_title
-            notificationContent.body = String(format: Strings.SentTab_TabsArrivingNotification_title, sentTabs.count)
+
+            if sentTabs.count == 1 {
+                body = sentTabs[0].url.absoluteDisplayString
+            } else if deviceNames.count == 0 {
+                body = Strings.SentTab_TabArrivingNotification_NoDevice_body
+            } else {
+                body = String(format: Strings.SentTab_TabArrivingNotification_WithDevice_body, DeviceInfo.appName())
+            }
         }
+
+        notificationContent.title = title
+        notificationContent.body = body
 
         contentHandler(notificationContent)
     }
