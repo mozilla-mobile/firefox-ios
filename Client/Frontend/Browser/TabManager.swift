@@ -692,6 +692,7 @@ extension TabManager {
             self.preserveTabsInternal()
             }) { (exception) -> Void in
             print("Failed to preserve tabs: \(exception ??? "nil")")
+            SentryIntegration.shared.send(message: "Failed to preserve tabs: \(exception ??? "nil")", tag: "TabManager", severity: .error)
         }
     }
 
@@ -771,6 +772,7 @@ extension TabManager {
                 },
                 catch: { exception in
                     print("Failed to restore tabs: \(exception ??? "nil")")
+                    SentryIntegration.shared.send(message: "Failed to restore tabs: \(exception ??? "nil")", tag: "TabManager", severity: .error)
                 }
             )
         }

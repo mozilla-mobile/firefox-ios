@@ -8,7 +8,7 @@ import Sentry
 public class SentryIntegration {
     public static let shared = SentryIntegration()
 
-    public var crashedLastLaunch: Bool {
+    public static var crashedLastLaunch: Bool {
         return Client.shared?.crashedLastLaunch() ?? false
     }
 
@@ -35,6 +35,10 @@ public class SentryIntegration {
             Client.shared = try Client(dsn: dsn)
             try Client.shared?.startCrashHandler()
             enabled = true
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                self.send(message: "Started Sentry crash handler")
+            }
         } catch let error {
             Logger.browserLogger.error("Failed to initialize Sentry: \(error)")
         }
@@ -58,20 +62,5 @@ public class SentryIntegration {
         event.tags = ["event": tag]
 
         Client.shared?.send(event: event, completion: completion)
-    }
-    
-    public func sendSync(message: String, tag: String = "general", severity: SentrySeverity = .info) {
-        if !enabled {
-            return
-        }
-
-        let dispatchGroup = DispatchGroup()
-        dispatchGroup.enter()
-
-        send(message: message, tag: tag, severity: severity, completion: { (error) in
-            dispatchGroup.leave()
-        })
-
-        dispatchGroup.wait()
     }
 }
