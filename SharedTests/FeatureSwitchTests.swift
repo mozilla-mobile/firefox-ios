@@ -34,11 +34,9 @@ class FeatureSwitchTests: XCTestCase {
         var changed = 0
         for percent in 0..<100 {
             let featureSwitch = FeatureSwitch(named: featureID, allowPercentage: percent, buildChannel: buildChannel)
-            print(membership)
             if featureSwitch.isMember(prefs) != membership {
                 membership = !membership
                 changed += 1
-                print("CHANGED")
             }
         }
 
