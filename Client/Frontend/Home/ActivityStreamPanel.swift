@@ -20,7 +20,7 @@ struct ASPanelUX {
     static let rowSpacing: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 30 : 20
     static let highlightCellHeight: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 250 : 195
     static let sectionInsetsForSizeClass = UXSizeClasses(compact: 0, regular: 101, other: 14)
-    static let numberOfItemsPerRowForSizeClsssIpad = UXSizeClasses(compact: 3, regular: 4, other: 2)
+    static let numberOfItemsPerRowForSizeClassIpad = UXSizeClasses(compact: 3, regular: 4, other: 2)
     static let SectionInsetsForIpad: CGFloat = 101
     static let SectionInsetsForIphone: CGFloat = 14
     static let MinimumInsets: CGFloat = 14
@@ -216,7 +216,7 @@ extension ActivityStreamPanel {
         func numberOfItemsForRow(_ traits: UITraitCollection) -> CGFloat {
             switch self {
             case .highlights:
-                var numItems: CGFloat = ASPanelUX.numberOfItemsPerRowForSizeClsssIpad[traits.horizontalSizeClass]
+                var numItems: CGFloat = ASPanelUX.numberOfItemsPerRowForSizeClassIpad[traits.horizontalSizeClass]
                 if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation) {
                     numItems = numItems - 1
                 }
