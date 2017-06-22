@@ -124,7 +124,7 @@ class NavigationTest: BaseTestCase {
     }
 
     private func checkMobileView() {
-        let mobileViewElement = app.webViews.links.staticTexts["View desktop site"]
+        let mobileViewElement = app.webViews.links.staticTexts["View classic desktop site"]
         waitforExistence(mobileViewElement)
         XCTAssertTrue (mobileViewElement.exists, "Mobile view is not available")
     }
@@ -144,16 +144,16 @@ class NavigationTest: BaseTestCase {
 
     func testToggleBetweenMobileAndDesktopSiteFromSite() {
         clearData()
-        let goToDesktopFromMobile = app.webViews.links.staticTexts["View desktop site"]
+        let goToDesktopFromMobile = app.webViews.links.staticTexts["View classic desktop site"]
         // Open URL by default in mobile view
         navigator.openURL(urlString: urlAddOns)
         waitForValueContains(app.textFields["url"], value: urlAddOns)
         waitforExistence(goToDesktopFromMobile)
-
+        
         // From the website go to Desktop view
         goToDesktopFromMobile.tap()
         checkDesktopView()
-
+        
         // From the website go back to Mobile view
         app.webViews.links.staticTexts["View Mobile Site"].tap()
         checkMobileView()
@@ -162,17 +162,30 @@ class NavigationTest: BaseTestCase {
     func testToggleBetweenMobileAndDesktopSiteFromMenu() {
         clearData()
         navigator.openURL(urlString: urlAddOns)
-
+        waitForValueContains(app.textFields["url"], value: urlAddOns)
+        
         // Mobile view by default, desktop view should be available
         navigator.browserPerformAction(.requestDesktop)
-        checkDesktopView()
+        checkDesktopSite()
 
         // From desktop view it is posible to change to mobile view again
         navigator.nowAt(BrowserTab)
         navigator.browserPerformAction(.requestMobile)
-        checkMobileView()
+        checkMobileSite()
     }
-
+    
+    private func checkMobileSite() {
+        app.buttons["TabToolbar.menuButton"].tap()
+        waitforExistence(app.collectionViews.cells["RequestDesktopMenuItem"])
+        navigator.goto(BrowserTab)
+    }
+    
+    private func checkDesktopSite() {
+        app.buttons["TabToolbar.menuButton"].tap()
+        waitforExistence(app.collectionViews.cells["RequestMobileMenuItem"])
+        navigator.goto(BrowserTab)
+    }
+    
     func testNavigationPreservesDesktopSiteOnSameHost() {
         clearData()
         navigator.openURL(urlString: urlAddOns)
