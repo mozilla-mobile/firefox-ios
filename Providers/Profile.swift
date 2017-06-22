@@ -252,7 +252,8 @@ open class BrowserProfile: Profile {
 
         if clear {
             do {
-                try FileManager.default.removeItem(atPath: self.files.rootPath as String)
+                try self.files.removeFilesInDirectory()
+                try self.files.remove("")
             } catch {
                 log.info("Cannot clear profile: \(error)")
             }

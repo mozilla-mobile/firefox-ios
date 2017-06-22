@@ -19,16 +19,7 @@ class TestAppDelegate: AppDelegate {
         if ProcessInfo.processInfo.arguments.contains(LaunchArguments.ClearProfile) {
             // Use a clean profile for each test session.
             log.debug("Deleting all files in 'Documents' directory to clear the profile")
-            let fileManager = FileManager.default
-            let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-            if let files = try? fileManager.contentsOfDirectory(atPath: documentsPath) {
-                for file in files {
-                    try? fileManager.removeItem(atPath: URL(fileURLWithPath: documentsPath).appendingPathComponent(file).path)
-                }
-            }
-
-            profile = BrowserProfile(localName: "testProfile", app: application)
-            profile.prefs.clearAll()
+            profile = BrowserProfile(localName: "testProfile", syncDelegate: application.syncDelegate(), clear: true)
 
             // Don't show the What's New page.
             profile.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
