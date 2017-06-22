@@ -63,34 +63,47 @@ func main() {
 		"CFBundleShortVersionString",
 	}
 
-	skipIncomplete := true
-
+Loop:
 	for _, path := range os.Args[1:] {
+		fmt.Println("Processing ", path)
+
 		doc, err := xliff.FromFile(path)
 		if err != nil {
-			panic(err)
+			fmt.Printf("Skipping: %s: %v\n", path, err)
+			continue Loop
 		}
 
-		if !doc.IsValid() {
-			fmt.Printf("%s is not valid\n", path)
-			continue
-		}
-
-		if skipIncomplete {
-			if !doc.IsComplete() {
-				fmt.Printf("%s is not complete yet\n", path)
-				continue
-			}
-		}
-
+		// Dry run to make sure this locale is part of the project already
 		for _, file := range doc.Files {
 			if unlocalizedDestination, ok := fileMappings[file.Original]; ok {
 				destination := localizedDestination(unlocalizedDestination, file.TargetLanguage)
 				if _, err := os.Stat(destination); os.IsNotExist(err) {
-					fmt.Println("Does not exist: ", destination)
-					continue
+					fmt.Printf("Skipping: %s: not imported into the project first\n", path)
+					continue Loop
 				}
-				writeStrings(file, destination, skipTransUnits)
+			}
+		}
+
+		if !doc.IsComplete() {
+			fmt.Printf("Skipping: %s: not completely localized\n", path)
+			continue Loop
+		}
+
+		errors := doc.Validate()
+		if len(errors) != 0 {
+			for _, err := range errors {
+				fmt.Printf("Skipping: %s: because of validation error: %s\n", path, err)
+			}
+			continue Loop
+		}
+
+		// Everything is good to go, actually import strings
+		for _, file := range doc.Files {
+			if unlocalizedDestination, ok := fileMappings[file.Original]; ok {
+				destination := localizedDestination(unlocalizedDestination, file.TargetLanguage)
+				if err := writeStrings(file, destination, skipTransUnits); err != nil {
+					fmt.Printf("Error: Failed to write strings for %s: %v\n", path, err)
+				}
 			}
 		}
 	}
