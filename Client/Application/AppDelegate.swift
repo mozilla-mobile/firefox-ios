@@ -878,7 +878,9 @@ class AppSyncDelegate: SyncDelegate {
                 notification.alertBody = url.absoluteDisplayString
                 notification.userInfo = [TabSendURLKey: url.absoluteString, TabSendTitleKey: title]
                 notification.alertAction = nil
-                notification.category = TabSendCategory
+
+                // Restore this when we fix Bug 1364420.
+                // notification.category = TabSendCategory
 
                 app.presentLocalNotificationNow(notification)
             }
