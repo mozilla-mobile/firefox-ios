@@ -54,7 +54,7 @@ class ActionViewController: UIViewController, ClientPickerViewControllerDelegate
             return finish()
         }
 
-        let profile = BrowserProfile(localName: "profile", app: nil)
+        let profile = BrowserProfile(localName: "profile")
         profile.sendItems([item], toClients: clients).uponQueue(DispatchQueue.main) { result in
             profile.shutdown()
             self.finish()
@@ -70,7 +70,7 @@ class ActionViewController: UIViewController, ClientPickerViewControllerDelegate
     }
 
     private func hasAccount() -> Bool {
-        let profile = BrowserProfile(localName: "profile", app: nil)
+        let profile = BrowserProfile(localName: "profile")
         defer {
             profile.shutdown()
         }

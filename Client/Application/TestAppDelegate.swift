@@ -29,7 +29,7 @@ class TestAppDelegate: AppDelegate {
                 profile.prefs.setInt(1, forKey: IntroViewControllerSeenProfileKey)
             }
         } else {
-            profile = BrowserProfile(localName: "testProfile", app: application)
+            profile = BrowserProfile(localName: "testProfile", syncDelegate: application.syncDelegate())
         }
 
         self.profile = profile
