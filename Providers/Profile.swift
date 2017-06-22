@@ -124,9 +124,9 @@ class BrowserProfileSyncDelegate: SyncDelegate {
                 notification.timeZone = NSTimeZone.default
                 let title: String
                 if let deviceName = deviceName {
-                    title = String(format: Strings.SentTab_TabArrivingNotificationWithDevice_title, deviceName)
+                    title = String(format: Strings.SentTab_TabArrivingNotification_WithDevice_title, deviceName)
                 } else {
-                    title = Strings.SentTab_TabArrivingNotificationNoDevice_title
+                    title = Strings.SentTab_TabArrivingNotification_NoDevice_title
                 }
                 notification.alertTitle = title
                 notification.alertBody = url.absoluteDisplayString
