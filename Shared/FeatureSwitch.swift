@@ -43,6 +43,25 @@ open class FeatureSwitch {
             return isEnabled
         }
 
+        return lowerCaseS(prefs) < self.percentage
+    }
+
+    /// Is this user always a member of the test set, whatever the percentage probability?
+    /// This _only_ tests the probabilities, not the other conditions.
+    open func alwaysMembership(_ prefs: Prefs) -> Bool {
+        return lowerCaseS(prefs) == 99
+    }
+
+    /// Reset the random component of this switch (`lowerCaseS`). This is primarily useful for testing.
+    open func resetMembership(_ prefs: Prefs) {
+        let uuidKey = "\(self.switchKey).uuid"
+        prefs.removeObjectForKey(uuidKey)
+    }
+
+    // If the set of all possible values the switch can be in is `S` (integers between 0 and 99)
+    // then the specific value is `s`.
+    // We use this to compare with the probability of membership.
+    fileprivate func lowerCaseS(_ prefs: Prefs) -> Int {
         // Use a branch of the prefs.
         let uuidKey = "\(self.switchKey).uuid"
 
@@ -55,7 +74,8 @@ open class FeatureSwitch {
         }
 
         let hash = abs(uuidString.hashValue)
-        return hash % 100 < self.percentage
+
+        return hash % 100
     }
 
     open func setMembership(_ isEnabled: Bool, for prefs: Prefs) {
