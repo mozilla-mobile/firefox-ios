@@ -850,6 +850,13 @@ class AppSyncDelegate: SyncDelegate {
     }
 
     open func displaySentTab(for url: URL, title: String, from deviceName: String?) {
+        if let appDelegate = app.delegate as? AppDelegate, app.applicationState == .active {
+            DispatchQueue.main.async {
+                appDelegate.browserViewController.switchToTabForURLOrOpen(url, isPrivileged: false)
+            }
+            return
+        }
+
         // check to see what the current notification settings are and only try and send a notification if
         // the user has agreed to them
         if let currentSettings = app.currentUserNotificationSettings {
