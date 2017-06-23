@@ -304,7 +304,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         if let profile = self.profile {
             return profile
         }
-        let p = BrowserProfile(localName: "profile", syncDelegate: application.syncDelegate())
+        let p = BrowserProfile(localName: "profile", syncDelegate: application.syncDelegate)
         self.profile = p
         return p
     }
@@ -832,13 +832,13 @@ struct LaunchParams {
 }
 
 extension UIApplication {
+    var syncDelegate: SyncDelegate {
+        return AppSyncDelegate(app: self)
+    }
+
     static var isInPrivateMode: Bool {
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
         return appDelegate?.browserViewController.tabManager.selectedTab?.isPrivate ?? false
-    }
-
-    func syncDelegate() -> SyncDelegate {
-        return AppSyncDelegate(app: self)
     }
 }
 

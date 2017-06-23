@@ -19,7 +19,7 @@ class TestAppDelegate: AppDelegate {
         if ProcessInfo.processInfo.arguments.contains(LaunchArguments.ClearProfile) {
             // Use a clean profile for each test session.
             log.debug("Deleting all files in 'Documents' directory to clear the profile")
-            profile = BrowserProfile(localName: "testProfile", syncDelegate: application.syncDelegate(), clear: true)
+            profile = BrowserProfile(localName: "testProfile", syncDelegate: application.syncDelegate, clear: true)
 
             // Don't show the What's New page.
             profile.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
@@ -29,7 +29,7 @@ class TestAppDelegate: AppDelegate {
                 profile.prefs.setInt(1, forKey: IntroViewControllerSeenProfileKey)
             }
         } else {
-            profile = BrowserProfile(localName: "testProfile", syncDelegate: application.syncDelegate())
+            profile = BrowserProfile(localName: "testProfile", syncDelegate: application.syncDelegate)
         }
 
         self.profile = profile
