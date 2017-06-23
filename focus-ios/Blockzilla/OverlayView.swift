@@ -117,11 +117,14 @@ class OverlayView: UIView {
         searchQuery = query
         let query = query.trimmingCharacters(in: .whitespaces)
         
-        if let pasteBoard = URIFixup.getURL(entry: UIPasteboard.general.string!) {
-            let attributedURL = NSAttributedString(string: pasteBoard.absoluteString, attributes: [NSForegroundColorAttributeName: UIColor.white])
-                copyButton.setAttributedTitle(attributedURL, for: .normal)
-        } else {
-            setAttributedButtonTitle(phrase: UIPasteboard.general.string!, button: copyButton)
+        if let pasteBoard = UIPasteboard.general.string {
+            if let pasteURL = URL(string: pasteBoard), pasteURL.isWebPage() {
+                let attributedURL = NSAttributedString(string: pasteURL.absoluteString, attributes: [NSForegroundColorAttributeName: UIColor.white])
+                    copyButton.setAttributedTitle(attributedURL, for: .normal)
+            }
+            else {
+                setAttributedButtonTitle(phrase: pasteBoard, button: copyButton)
+            }
         }
         // Show or hide the search button depending on whether there's entered text.
         if searchButton.isHidden != query.isEmpty {
@@ -133,19 +136,23 @@ class OverlayView: UIView {
         setAttributedButtonTitle(phrase: query, button: searchButton)
         updateCopyConstraint()
     }
-    
     fileprivate func updateCopyConstraint() {
-        copyButton.snp.remakeConstraints { make in
+        if UIPasteboard.general.string != nil {
+            copyButton.isHidden = false
+            copyBorder.isHidden = false
             if searchButton.isHidden || searchQuery.isEmpty {
-                make.top.leading.trailing.equalTo(self)
-            
+                copyButton.snp.remakeConstraints { make in
+                    make.top.leading.trailing.equalTo(self)
+                }
+            } else {
+                copyButton.snp.remakeConstraints { make in
+                    make.leading.trailing.equalTo(self)
+                    make.top.equalTo(searchBorder)
+                }
             }
-            else {
-                make.leading.trailing.equalTo(self)
-                make.top.equalTo(searchBorder)
-            
-            }
-            self.layoutIfNeeded()
+        } else {
+            copyButton.isHidden = true
+            copyBorder.isHidden = true
         }
     }
 
@@ -186,6 +193,15 @@ class OverlayView: UIView {
         animateHidden(false, duration: UIConstants.layout.overlayAnimationDuration) {
             self.isUserInteractionEnabled = true
         }
+    }
+}
+extension URL {
+    public func isWebPage() -> Bool {
+        let schemes = ["http", "https"]
+        if let scheme = scheme, schemes.contains(scheme) {
+            return true
+        }
+        return false
     }
 }
 

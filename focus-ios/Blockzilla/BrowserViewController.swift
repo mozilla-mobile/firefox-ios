@@ -256,9 +256,10 @@ extension BrowserViewController: URLBarDelegate {
         } else {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeURL, object: TelemetryEventObject.searchBar)
         }
-
-        submit(url: url!)
-        urlBar.url = url
+        if let urlBarURL = url {
+            submit(url: urlBarURL)
+            urlBar.url = urlBarURL
+        }
         urlBar.dismiss()
     }
 
@@ -536,9 +537,10 @@ extension BrowserViewController: OverlayViewDelegate {
         } else {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeURL, object: TelemetryEventObject.searchBar)
         }
-        
-        submit(url: url!)
-        urlBar.url = url
+        if let overlayURL = url {
+            submit(url: overlayURL)
+            urlBar.url = overlayURL
+        }
         urlBar.dismiss()
     }
 }
