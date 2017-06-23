@@ -151,8 +151,12 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
             self.siteImageView.sd_setImage(with: mediaURL)
             self.siteImageView.contentMode = .scaleAspectFill
         } else {
+            let itemURL = site.tileURL
             self.siteImageView.setFavicon(forSite: site, onCompletion: { [weak self] (color, url)  in
-                self?.siteImageView.image = self?.siteImageView.image?.createScaled(ActivityStreamHighlightCellUX.FaviconSize)
+                if itemURL == url {
+                    self?.siteImageView.image = self?.siteImageView.image?.createScaled(ActivityStreamHighlightCellUX.FaviconSize)
+                    self?.siteImageView.backgroundColor = color
+                }
             })
             self.siteImageView.contentMode = .center
         }

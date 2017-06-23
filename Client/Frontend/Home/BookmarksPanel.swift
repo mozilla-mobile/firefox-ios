@@ -221,9 +221,14 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             } else {
                 cell.imageView?.layer.borderColor = BookmarksPanelUX.IconBorderColor.cgColor
                 cell.imageView?.layer.borderWidth = BookmarksPanelUX.IconBorderWidth
-                cell.imageView?.setIcon(bookmark.favicon, forURL: URL(string: item.url))
-                cell.imageView?.image = cell.imageView?.image?.createScaled(CGSize(width: BookmarksPanelUX.IconSize, height: BookmarksPanelUX.IconSize))
-                cell.imageView?.contentMode = .center
+                let bookmarkURL = URL(string: item.url)
+                cell.imageView?.setIcon(bookmark.favicon, forURL: bookmarkURL, completed: { (color, url) in
+                    if bookmarkURL == url {
+                        cell.imageView?.image = cell.imageView?.image?.createScaled(CGSize(width: BookmarksPanelUX.IconSize, height: BookmarksPanelUX.IconSize))
+                        cell.imageView?.backgroundColor = color
+                        cell.imageView?.contentMode = .center
+                    }
+                })
             }
             return cell
         case is BookmarkSeparator:

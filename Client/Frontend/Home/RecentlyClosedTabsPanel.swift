@@ -126,8 +126,11 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
         cell.imageView!.layer.borderColor = RecentlyClosedPanelUX.IconBorderColor.cgColor
         cell.imageView!.layer.borderWidth = RecentlyClosedPanelUX.IconBorderWidth
         cell.imageView?.setIcon(site, forURL: displayURL, completed: { (color, url) in
-            cell.imageView?.image = cell.imageView?.image?.createScaled(RecentlyClosedPanelUX.IconSize)
-            cell.imageView?.contentMode = .center
+            if url == displayURL {
+                cell.imageView?.image = cell.imageView?.image?.createScaled(RecentlyClosedPanelUX.IconSize)
+                cell.imageView?.contentMode = .center
+                cell.imageView?.backgroundColor = color
+            }
         })
         return cell
     }
