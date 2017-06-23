@@ -221,7 +221,9 @@ open class BrowserProfile: Profile {
 
         if clear {
             do {
+                // Remove the contents of the directory…
                 try self.files.removeFilesInDirectory()
+                // …then remove the directory itself.
                 try self.files.remove("")
             } catch {
                 log.info("Cannot clear profile: \(error)")
