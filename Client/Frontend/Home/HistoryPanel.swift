@@ -365,8 +365,11 @@ class HistoryPanel: SiteTableViewController, HomePanel {
             cell.imageView!.layer.borderColor = HistoryPanelUX.IconBorderColor.cgColor
             cell.imageView!.layer.borderWidth = HistoryPanelUX.IconBorderWidth
             cell.imageView?.setIcon(site.icon, forURL: site.tileURL, completed: { (color, url) in
-                cell.imageView?.image = cell.imageView?.image?.createScaled(CGSize(width: HistoryPanelUX.IconSize, height: HistoryPanelUX.IconSize))
-                cell.imageView?.contentMode = .center
+                if site.tileURL == url {
+                    cell.imageView?.image = cell.imageView?.image?.createScaled(CGSize(width: HistoryPanelUX.IconSize, height: HistoryPanelUX.IconSize))
+                    cell.imageView?.backgroundColor = color
+                    cell.imageView?.contentMode = .center
+                }
             })
         }
         return cell
