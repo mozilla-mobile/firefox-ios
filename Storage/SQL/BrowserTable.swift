@@ -517,7 +517,7 @@ open class BrowserTable: Table {
         "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
         "guid TEXT NOT NULL UNIQUE, " +       // Not null, but the value might be replaced by the server's.
         "url TEXT UNIQUE, " +                 // May only be null for deleted records.
-        "title TEXT NOT NULL, " +
+        "title TEXT CHECK (title IS NOT NULL OR is_deleted = 1), " +
         "server_modified INTEGER, " +         // Can be null. Integer milliseconds.
         "local_modified INTEGER, " +          // Can be null. Client clock. In extremis only.
         "is_deleted TINYINT NOT NULL, " +     // Boolean. Locally deleted.
