@@ -673,7 +673,7 @@ class ThreeWayTreeMerger {
         case let .folder(_, localChildren):
             if case let .folder(_, remoteChildren) = remoteNode {
                 // Structural merge.
-                if localChildren.sameElements(remoteChildren, f: { $0.recordGUID == $1.recordGUID }) {
+                if localChildren.sameElements(remoteChildren) {
                     // Great!
                     log.debug("Local and remote records have same children in two-way merge.")
                     result.structureState = MergeState.new(value: localNode)    // TODO: what if it's the same as the mirror?

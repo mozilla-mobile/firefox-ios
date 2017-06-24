@@ -4,6 +4,20 @@
 
 import Foundation
 
+public extension Array where Element: Comparable {
+    func sameElements(_ arr: [Element]) -> Bool {
+        guard self.count == arr.count else { return false }
+        let sorted = self.sorted(by: <)
+        let arrSorted = arr.sorted(by: <)
+        for elements in sorted.zip(arrSorted) {
+            if elements.0 != elements.1 {
+                return false
+            }
+        }
+        return true
+    }
+}
+
 public extension Array {
 
     func find(_ f: (Iterator.Element) -> Bool) -> Iterator.Element? {
@@ -14,12 +28,7 @@ public extension Array {
         }
         return nil
     }
-
-    // Laughably inefficient, but good enough for a handful of items.
-    func sameElements(_ arr: [Element], f: (Element, Element) -> Bool) -> Bool {
-        return self.count == arr.count && every { arr.contains($0, f: f) }
-    }
-
+    
     func contains(_ x: Element, f: (Element, Element) -> Bool) -> Bool {
         for y in self {
             if f(x, y) {

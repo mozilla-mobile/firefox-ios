@@ -8,8 +8,7 @@ import Shared
 private let log = Logger.syncLogger
 
 // MARK: - Defining a tree structure for syncability.
-
-public enum BookmarkTreeNode: Equatable {
+public enum BookmarkTreeNode: Comparable {
     indirect case folder(guid: GUID, children: [BookmarkTreeNode])
     case nonFolder(guid: GUID)
     case unknown(guid: GUID)
@@ -96,6 +95,10 @@ public func == (lhs: BookmarkTreeNode, rhs: BookmarkTreeNode) -> Bool {
         }
         return false
     }
+}
+
+public func < (lhs: BookmarkTreeNode, rhs: BookmarkTreeNode) -> Bool {
+    return lhs.recordGUID < rhs.recordGUID
 }
 
 typealias StructureRow = (parent: GUID, child: GUID, type: BookmarkNodeType?)
