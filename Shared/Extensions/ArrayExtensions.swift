@@ -9,10 +9,8 @@ public extension Array where Element: Comparable {
         guard self.count == arr.count else { return false }
         let sorted = self.sorted(by: <)
         let arrSorted = arr.sorted(by: <)
-        for elements in sorted.zip(arrSorted) {
-            if elements.0 != elements.1 {
-                return false
-            }
+        for elements in sorted.zip(arrSorted) where elements.0 != elements.1 {
+            return false
         }
         return true
     }
