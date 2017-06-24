@@ -179,7 +179,7 @@ extension SQLiteHistory: BrowserHistory {
         let deleteVisits = "DELETE FROM \(TableVisits) WHERE siteID = (SELECT id FROM \(TableHistory) WHERE url = ?)"
 
         let markArgs: Args = [Date.nowNumber(), url]
-        let markDeleted = "UPDATE \(TableHistory) SET url = NULL, is_deleted = 1, should_upload = 1, local_modified = ? WHERE url = ?"
+        let markDeleted = "UPDATE \(TableHistory) SET url = NULL, is_deleted = 1, title = '', should_upload = 1, local_modified = ? WHERE url = ?"
         //return db.run([(sql: String, args: Args?)])
         let command = [(sql: deleteVisits, args: visitArgs), (sql: markDeleted, args: markArgs), favicons.getCleanupCommands()] as [(sql: String, args: Args?)]
         return db.run(command)
