@@ -103,43 +103,6 @@ enum SentTabAction: String {
     case readingList = "TabSendReadingListAction"
 }
 
-class BrowserProfileSyncDelegate: SyncDelegate {
-    let app: UIApplication
-
-    init(app: UIApplication) {
-        self.app = app
-    }
-
-    open func displaySentTab(for url: URL, title: String, from deviceName: String?) {
-        // check to see what the current notification settings are and only try and send a notification if
-        // the user has agreed to them
-        if let currentSettings = app.currentUserNotificationSettings {
-            if currentSettings.types.rawValue & UIUserNotificationType.alert.rawValue != 0 {
-                if Logger.logPII {
-                    log.info("Displaying notification for URL \(url.absoluteString)")
-                }
-
-                let notification = UILocalNotification()
-                notification.fireDate = Date()
-                notification.timeZone = NSTimeZone.default
-                let title: String
-                if let deviceName = deviceName {
-                    title = String(format: Strings.SentTab_TabArrivingNotification_WithDevice_title, deviceName)
-                } else {
-                    title = Strings.SentTab_TabArrivingNotification_NoDevice_title
-                }
-                notification.alertTitle = title
-                notification.alertBody = url.absoluteDisplayString
-                notification.userInfo = [TabSendURLKey: url.absoluteString, TabSendTitleKey: title]
-                notification.alertAction = nil
-                notification.category = TabSendCategory
-
-                app.presentLocalNotificationNow(notification)
-            }
-        }
-    }
-}
-
 /**
  * A Profile manages access to the user's data.
  */
@@ -234,6 +197,8 @@ open class BrowserProfile: Profile {
         return secret
     }
 
+    var syncDelegate: SyncDelegate?
+
     /**
      * N.B., BrowserProfile is used from our extensions, often via a pattern like
      *
@@ -242,17 +207,24 @@ open class BrowserProfile: Profile {
      * This can break if BrowserProfile's initializer does async work that
      * subsequently — and asynchronously — expects the profile to stick around:
      * see Bug 1218833. Be sure to only perform synchronous actions here.
+     *
+     * A SyncDelegate can be provided in this initializer, or once the profile is initialized. 
+     * However, if we provide it here, it's assumed that we're initializing it from the application, 
+     * and initialize the logins.db.
      */
-    init(localName: String, app: UIApplication?, clear: Bool = false) {
+    init(localName: String, syncDelegate: SyncDelegate? = nil, clear: Bool = false) {
         log.debug("Initing profile \(localName) on thread \(Thread.current).")
         self.name = localName
         self.files = ProfileFileAccessor(localName: localName)
-        self.app = app
         self.keychain = KeychainWrapper.sharedAppContainerKeychain
+        self.syncDelegate = syncDelegate
 
         if clear {
             do {
-                try FileManager.default.removeItem(atPath: self.files.rootPath as String)
+                // Remove the contents of the directory…
+                try self.files.removeFilesInDirectory()
+                // …then remove the directory itself.
+                try self.files.remove("")
             } catch {
                 log.info("Cannot clear profile: \(error)")
             }
@@ -266,7 +238,7 @@ open class BrowserProfile: Profile {
 
         // We almost certainly don't want to be accessing the logins.db when in an extension, so let's avoid
         // corrupting it by not opening it at all.
-        self.loginsDB = app != nil ? BrowserDB(filename: "logins.db", secretKey: BrowserProfile.loginsKey, files: files) : nil
+        self.loginsDB = syncDelegate != nil ? BrowserDB(filename: "logins.db", secretKey: BrowserProfile.loginsKey, files: files) : nil
 
         self.db = BrowserDB(filename: "browser.db", files: files)
         self.db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
@@ -307,11 +279,6 @@ open class BrowserProfile: Profile {
             // just the behaviour when there is no homepage.
             prefs.removeObjectForKey(PrefsKeys.KeyDefaultHomePageURL)
         }
-    }
-
-    // Extensions don't have a UIApplication.
-    convenience init(localName: String) {
-        self.init(localName: localName, app: nil)
     }
 
     func reopen() {
@@ -477,10 +444,7 @@ open class BrowserProfile: Profile {
     }()
 
     open func getSyncDelegate() -> SyncDelegate {
-        if let app = self.app {
-            return BrowserProfileSyncDelegate(app: app)
-        }
-        return CommandStoringSyncDelegate(profile: self)
+        return syncDelegate ?? CommandStoringSyncDelegate(profile: self)
     }
 
     public func getClients() -> Deferred<Maybe<[RemoteClient]>> {

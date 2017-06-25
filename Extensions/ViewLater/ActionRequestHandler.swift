@@ -13,7 +13,7 @@ class ActionRequestHandler: NSObject, NSExtensionRequestHandling {
     public func beginRequest(with context: NSExtensionContext) {
         ExtensionUtils.extractSharedItemFromExtensionContext(context, completionHandler: { (item, error) -> Void in
             if let item = item, error == nil && item.isShareable {
-                let profile = BrowserProfile(localName: "profile", app: nil)
+                let profile = BrowserProfile(localName: "profile")
                 profile.queue.addToQueue(item).uponQueue(DispatchQueue.main) { _ in
                     profile.shutdown()
                     context.completeRequest(returningItems: [], completionHandler: nil)
