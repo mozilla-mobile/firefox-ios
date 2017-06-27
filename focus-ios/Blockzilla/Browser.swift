@@ -51,6 +51,12 @@ class Browser: NSObject {
         webView.scrollView.layer.masksToBounds = false
         webView.scrollView.delegate = self
         webView.delegate = self
+        let swipeLeftRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(goForward))
+        swipeLeftRecognizer.direction = .left
+        let swipeRightRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(goBack))
+        swipeRightRecognizer.direction = .right
+        webView.addGestureRecognizer(swipeLeftRecognizer)
+        webView.addGestureRecognizer(swipeRightRecognizer)
         view.addSubview(webView)
 
         webView.snp.makeConstraints { make in
