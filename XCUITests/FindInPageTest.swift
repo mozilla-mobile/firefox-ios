@@ -82,12 +82,15 @@ class FindInPageTests: BaseTestCase {
     }
 
     func testBarDissapearsWhenOpeningTabsTray() {
+        let url = "www.mozilla.org/en-US/book"
+        navigator.openNewURL(urlString: url)
+        
         openFindInPageFromMenu()
-
+        
         // Going to tab tray and back to the website hides the search field.
         navigator.nowAt(BrowserTab)
         navigator.goto(TabTray)
-
+        
         waitforExistence(app.collectionViews.cells["The Book of Mozilla"])
         app.collectionViews.cells["The Book of Mozilla"].tap()
         XCTAssertFalse(app.textFields[""].exists)
