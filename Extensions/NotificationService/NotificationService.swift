@@ -88,11 +88,6 @@ class SyncDataDisplay {
 
         userInfo["didFinish"] = didFinish
 
-        // Increment the badges. This may cause us to find bugs with multiple 
-        // notifications in the future.
-        let badge = (notificationContent.badge?.intValue ?? 0) + sentTabs.count
-        notificationContent.badge = NSNumber(value: badge)
-
         notificationContent.userInfo = userInfo
 
         let title: String
