@@ -768,7 +768,10 @@ extension AppDelegate {
     }
 
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        NSLog("APNS NOTIFICATION \(userInfo)")
+        if Logger.logPII && log.isEnabledFor(level: .info) {
+            NSLog("APNS NOTIFICATION \(userInfo)")
+        }
+
 
         // At this point, we know that NotificationService has been run.
         // We get to this point if the notification was received while the app was in the foreground
