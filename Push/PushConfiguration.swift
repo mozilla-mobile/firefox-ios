@@ -39,6 +39,12 @@ public struct FennecPushConfiguration: PushConfiguration {
     public let endpointURL = NSURL(string: "https://updates.push.services.mozilla.com/v1/apns/fennec")!
 }
 
+public struct FennecStagingPushConfiguration: PushConfiguration {
+    public init() {}
+    public let label = PushConfigurationLabel.fennec
+    public let endpointURL = NSURL(string: "https://updates-autopush.stage.mozaws.net/v1/apns/fennec")!
+}
+
 public struct FennecEnterprisePushConfiguration: PushConfiguration {
     public init() {}
     public let label = PushConfigurationLabel.fennecEnterprise
@@ -51,6 +57,12 @@ public struct FirefoxBetaPushConfiguration: PushConfiguration {
     public let endpointURL = NSURL(string: "https://updates.push.services.mozilla.com/v1/apns/firefoxbeta")!
 }
 
+public struct FirefoxBetaStagingPushConfiguration: PushConfiguration {
+    public init() {}
+    public let label = PushConfigurationLabel.firefoxBeta
+    public let endpointURL = NSURL(string: "https://updates-autopush.stage.mozaws.net/v1/apns/firefoxbeta")!
+}
+
 public struct FirefoxNightlyEnterprisePushConfiguration: PushConfiguration {
     public init() {}
     public let label = PushConfigurationLabel.firefoxNightlyEnterprise
@@ -61,4 +73,10 @@ public struct FirefoxPushConfiguration: PushConfiguration {
     public init() {}
     public let label = PushConfigurationLabel.firefox
     public let endpointURL = NSURL(string: "https://updates.push.services.mozilla.com/v1/apns/firefox")!
+}
+
+public struct FirefoxStagingPushConfiguration: PushConfiguration {
+    public init() {}
+    public let label = PushConfigurationLabel.firefox
+    public let endpointURL = NSURL(string: "https://updates-autopush.stage.mozaws.net/v1/apns/firefox")!
 }
