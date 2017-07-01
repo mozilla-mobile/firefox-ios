@@ -49,15 +49,14 @@ class ArrayExtensionTests: XCTestCase {
     }
 
     func testSameElements() {
-        let k = [1,2,3,4,5]
-        let l = [1,2,3,4,5]
-        let m = [2,4,6,8,10]
+        let k = [1, 2, 3, 4, 5]
+        let l = [1, 2, 3, 4, 5]
+        let m = [2, 4, 6, 8, 10]
         let n: [Int]?
         n = k
         XCTAssertTrue(k.sameElements(l))
         XCTAssertFalse(l.sameElements(m))
         XCTAssertTrue((n?.sameElements(k))!)
     }
-
 
 }
