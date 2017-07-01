@@ -28,7 +28,8 @@ class ArrayExtensionTests: XCTestCase {
     func testUnion() {
         let a = [1, 2, 3, 4, 5, 6]
         let b = [7, 8, 9, 10]
-        XCTAssertEqual(a.union(b) { return $0 }, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+        XCTAssertEqual(a.union(b) { return $0 },
+                       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
 
         let c = [1, 2, 3, 4, 5, 6]
         let d = [4, 5, 6, 7, 8, 9, 10]
@@ -46,4 +47,17 @@ class ArrayExtensionTests: XCTestCase {
         let j = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         XCTAssertEqual(i.union(j) { return $0 }, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
     }
+
+    func testSameElements() {
+        let k = [1,2,3,4,5]
+        let l = [1,2,3,4,5]
+        let m = [2,4,6,8,10]
+        let n: [Int]?
+        n = k
+        XCTAssertTrue(k.sameElements(l))
+        XCTAssertFalse(l.sameElements(m))
+        XCTAssertTrue((n?.sameElements(k))!)
+    }
+
+
 }
