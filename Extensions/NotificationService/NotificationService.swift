@@ -7,23 +7,30 @@ import Storage
 import Sync
 import UserNotifications
 
+private let log = Logger.browserLogger
+
 class NotificationService: UNNotificationServiceExtension {
     var display: SyncDataDisplay!
     lazy var profile: ExtensionProfile = {
-        NSLog("APNS ExtensionProfile being created…")
         let profile = ExtensionProfile(localName: "profile")
-        NSLog("APNS ExtensionProfile … now created")
         return profile
     }()
 
+    // This is run when an APNS notification with `mutable-content` is received.
+    // If the app is backgrounded, then the alert notification is displayed.
+    // If the app is foregrounded, then the notification.userInfo is passed straight to
+    // AppDelegate.application(_:didReceiveRemoteNotification:completionHandler:)
+    // Once the notification is tapped, then the same userInfo is passed to the same method in the AppDelegate.
     override func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
+        let userInfo = request.content.userInfo
+        if Logger.logPII && log.isEnabledFor(level: .info) {
+            // This will be visible in the Console.app when a push notification is received.
+            NSLog("NotificationService APNS NOTIFICATION \(userInfo)")
+        }
 
         guard let content = (request.content.mutableCopy() as? UNMutableNotificationContent) else {
             return
         }
-
-        let userInfo = request.content.userInfo
-        NSLog("NotificationService APNS NOTIFICATION \(userInfo)")
 
         let queue = self.profile.queue
         self.display = SyncDataDisplay(content: content, contentHandler: contentHandler, tabQueue: queue)
@@ -80,11 +87,6 @@ class SyncDataDisplay {
         userInfo["sentTabs"] = serializedTabs
 
         userInfo["didFinish"] = didFinish
-
-        // Increment the badges. This may cause us to find bugs with multiple 
-        // notifications in the future.
-        let badge = (notificationContent.badge?.intValue ?? 0) + sentTabs.count
-        notificationContent.badge = NSNumber(value: badge)
 
         notificationContent.userInfo = userInfo
 

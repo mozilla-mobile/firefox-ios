@@ -14,6 +14,10 @@ class SettingsNavigationController: UINavigationController {
             self.dismiss(animated: true, completion: nil)
         }
     }
+
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return UIStatusBarStyle.default
+    }
 }
 
 protocol PresentingModalViewControllerDelegate {

@@ -12,8 +12,6 @@ import Sync
 // This will only ever be used in the NotificationService extension.
 // It allows us to customize the SyncDelegate, and later the SyncManager.
 class ExtensionProfile: BrowserProfile {
-    var syncDelegate: SyncDelegate!
-
     override var logins: BrowserLogins & SyncableLogins & ResettableSyncStorage {
         get {
             fatalError("Cannot use logins.db in extension")
@@ -22,12 +20,8 @@ class ExtensionProfile: BrowserProfile {
     }
 
     init(localName: String) {
-        super.init(localName: localName, app: nil, clear: false)
+        super.init(localName: localName, clear: false)
         syncManager = ExtensionSyncManager(profile: self)
-    }
-
-    override func getSyncDelegate() -> SyncDelegate {
-        return syncDelegate
     }
 }
 

@@ -61,7 +61,7 @@ class InitialViewController: UIViewController, ShareControllerDelegate {
         }, completion: { (Bool) -> Void in
             self.dismissShareDialog()
             
-            let profile = BrowserProfile(localName: "profile", app: nil)
+            let profile = BrowserProfile(localName: "profile")
 
             if destinations.contains(ShareDestinationReadingList) {
                 profile.readingList?.createRecordWithURL(item.url, title: item.title ?? "", addedBy: UIDevice.current.name)
