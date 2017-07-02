@@ -5,6 +5,8 @@ disabled_rules: # rule identifiers to exclude from running
   - trailing_newline
   - type_name
   - function_body_length
+  - force_try
+  - force_cast
   - missing_docs
   - valid_docs
   - cyclomatic_complexity
