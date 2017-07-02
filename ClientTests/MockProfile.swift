@@ -99,6 +99,9 @@ open class MockProfile: Profile {
     public var places: BrowserHistory & Favicons & SyncableHistory & ResettableSyncStorage & HistoryRecommendations
     public var files: FileAccessor
     public var history: BrowserHistory & SyncableHistory & ResettableSyncStorage
+    public var logins: BrowserLogins & SyncableLogins & ResettableSyncStorage
+    public var syncManager: SyncManager!
+
     public lazy var panelDataObservers: PanelDataObservers = {
         return MockPanelDataObservers(profile: self)
     }()
@@ -109,6 +112,8 @@ open class MockProfile: Profile {
 
     init() {
         files = MockFiles()
+        syncManager = MockSyncManager()
+        logins = MockLogins(files: files)
         db = BrowserDB(filename: "mock.db", files: files)
         db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
         places = SQLiteHistory(db: self.db, prefs: MockProfilePrefs())
@@ -142,10 +147,6 @@ open class MockProfile: Profile {
 
     lazy public var isChinaEdition: Bool = {
         return Locale.current.identifier == "zh_CN"
-    }()
-
-    lazy public var syncManager: SyncManager = {
-        return MockSyncManager()
     }()
 
     lazy public var certStore: CertStore = {
@@ -182,10 +183,6 @@ open class MockProfile: Profile {
 
     fileprivate lazy var syncCommands: SyncCommands = {
         return SQLiteRemoteClientsAndTabs(db: self.db)
-    }()
-
-    lazy public var logins: BrowserLogins & SyncableLogins & ResettableSyncStorage = {
-        return MockLogins(files: self.files)
     }()
 
     public let accountConfiguration: FirefoxAccountConfiguration = ProductionFirefoxAccountConfiguration()
