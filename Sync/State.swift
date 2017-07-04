@@ -444,7 +444,9 @@ open class Scratchpad {
         if let keyLabel = prefs.stringForKey(PrefKeyLabel) {
             b.keyLabel = keyLabel
             if let ckTS = prefs.unsignedLongForKey(PrefKeysTS) {
-                if let keys = KeychainWrapper.sharedAppContainerKeychain.string(forKey: "keys." + keyLabel) {
+                let key = "keys." + keyLabel
+                KeychainWrapper.sharedAppContainerKeychain.ensureStringItemAccessibility(.afterFirstUnlock, forKey: key)
+                if let keys = KeychainWrapper.sharedAppContainerKeychain.string(forKey: key) {
                     // We serialize as JSON.
                     let keys = Keys(payload: KeysPayload(keys))
                     if keys.valid {
@@ -540,9 +542,7 @@ open class Scratchpad {
             log.debug("Storing keys in Keychain with label \(label).")
             prefs.setString(self.keyLabel, forKey: PrefKeyLabel)
             prefs.setLong(keys.timestamp, forKey: PrefKeysTS)
-
-            // TODO: I could have sworn that we could specify kSecAttrAccessibleAfterFirstUnlock here.
-            KeychainWrapper.sharedAppContainerKeychain.set(payload, forKey: label)
+            KeychainWrapper.sharedAppContainerKeychain.set(payload, forKey: label, withAccessibility: .afterFirstUnlock)
         } else {
             log.debug("Removing keys from Keychain.")
             KeychainWrapper.sharedAppContainerKeychain.removeObject(forKey: self.keyLabel)

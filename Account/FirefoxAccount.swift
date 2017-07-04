@@ -36,7 +36,7 @@ open class FirefoxAccount {
 
     open var pushRegistration: PushRegistration?
 
-    fileprivate let stateCache: KeychainCache<FxAState>
+    open let stateCache: KeychainCache<FxAState>
     open var syncAuthState: SyncAuthState! // We can't give a reference to self if this is a let.
 
     // To prevent advance() consumers racing, we maintain a shared advance() deferred (`advanceDeferred`).  If an
