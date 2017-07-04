@@ -483,11 +483,7 @@ open class BrowserProfile: Profile {
 
     var accountConfiguration: FirefoxAccountConfiguration {
         if prefs.boolForKey("useStageSyncService") ?? false {
-            if AppConstants.BuildChannel == .developer {
-                return LatestDevFirefoxAccountConfiguration()
-            } else {
-                return StageFirefoxAccountConfiguration()
-            }
+            return StageFirefoxAccountConfiguration()
         }
         if prefs.boolForKey("useChinaSyncService") ?? isChinaEdition {
             return ChinaEditionFirefoxAccountConfiguration()

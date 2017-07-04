@@ -106,7 +106,17 @@ public struct StageFirefoxAccountConfiguration: FirefoxAccountConfiguration {
 
     public let sync15Configuration: Sync15Configuration = StageSync15Configuration()
 
-    public let pushConfiguration: PushConfiguration = FirefoxBetaPushConfiguration()
+    public var pushConfiguration: PushConfiguration {
+        get {
+            #if MOZ_CHANNEL_RELEASE
+                return FirefoxStagingPushConfiguration()
+            #elseif MOZ_CHANNEL_BETA
+                return FirefoxBetaStagingPushConfiguration()
+            #elseif MOZ_CHANNEL_FENNEC
+                return FennecStagingPushConfiguration()
+            #endif
+        }
+    }
 }
 
 public struct ProductionFirefoxAccountConfiguration: FirefoxAccountConfiguration {
