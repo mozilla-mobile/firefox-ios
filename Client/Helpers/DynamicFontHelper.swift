@@ -79,14 +79,40 @@ class DynamicFontHelper: NSObject {
     var DeviceFontMediumBold: UIFont {
         return UIFont.boldSystemFont(ofSize: deviceFontSize + 1)
     }
-    var DeviceFontMediumBoldActivityStream: UIFont {
-        return UIFont.systemFont(ofSize: deviceFontSize + 2, weight: UIFontWeightHeavy)
+
+    /*
+     Activity Stream supports dynamic fonts up to a certain point. Large fonts dont work.
+     Max out the supported font size.
+     Small = 14, medium = 18, larger = 20
+     */
+
+    var MediumSizeRegularWeightAS: UIFont {
+        let size = min(deviceFontSize, 18)
+        return UIFont.systemFont(ofSize: size)
     }
-    var DeviceFontSmallActivityStream: UIFont {
-        return UIFont.systemFont(ofSize: deviceFontSize - 2, weight: UIFontWeightMedium)
+
+    var LargeSizeRegularWeightAS: UIFont {
+        let size = min(deviceFontSize + 3, 20)
+        return UIFont.systemFont(ofSize: size)
     }
-    var DeviceFontDescriptionActivityStream: UIFont {
-        return UIFont.systemFont(ofSize: deviceFontSize - 2, weight: UIFontWeightRegular)
+
+    var MediumSizeHeavyWeightAS: UIFont {
+        let size = min(deviceFontSize + 2, 18)
+        return UIFont.systemFont(ofSize: size, weight: UIFontWeightHeavy)
+    }
+    var SmallSizeMediumWeightAS: UIFont {
+        let size = min(defaultSmallFontSize, 14)
+        return UIFont.systemFont(ofSize: size, weight: UIFontWeightMedium)
+    }
+
+    var MediumSizeBoldFontAS: UIFont {
+        let size = min(deviceFontSize, 18)
+        return UIFont.boldSystemFont(ofSize: size)
+    }
+
+    var SmallSizeRegularWeightAS: UIFont {
+        let size = min(defaultSmallFontSize, 14)
+        return UIFont.systemFont(ofSize: size, weight: UIFontWeightRegular)
     }
 
     /**

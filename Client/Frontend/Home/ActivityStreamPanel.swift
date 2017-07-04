@@ -18,7 +18,7 @@ private let DefaultSuggestedSitesKey = "topSites.deletedSuggestedSites"
 struct ASPanelUX {
     static let backgroundColor = UIColor(white: 1.0, alpha: 0.5)
     static let rowSpacing: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 30 : 20
-    static let highlightCellHeight: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 250 : 195
+    static let highlightCellHeight: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 250 : 200
     static let sectionInsetsForSizeClass = UXSizeClasses(compact: 0, regular: 101, other: 14)
     static let numberOfItemsPerRowForSizeClassIpad = UXSizeClasses(compact: 3, regular: 4, other: 2)
     static let SectionInsetsForIpad: CGFloat = 101
@@ -854,7 +854,7 @@ struct ActivityStreamTracker {
 // MARK: - Section Header View
 struct ASHeaderViewUX {
     static let SeperatorColor =  UIColor(rgb: 0xedecea)
-    static let TextFont = DynamicFontHelper.defaultHelper.DefaultMediumBoldFont
+    static let TextFont = DynamicFontHelper.defaultHelper.MediumSizeBoldFontAS
     static let SeperatorHeight = 1
     static let Insets: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? ASPanelUX.SectionInsetsForIpad + ASPanelUX.MinimumInsets : ASPanelUX.MinimumInsets
     static let TitleTopInset: CGFloat = 5
