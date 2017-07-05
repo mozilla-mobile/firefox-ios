@@ -470,7 +470,21 @@ open class BrowserProfile: Profile {
         let commands = items.map { item in
             SyncCommand.displayURIFromShareItem(item, asClient: id)
         }
-        return self.remoteClientsAndTabs.insertCommands(commands, forClients: clients) >>> { self.syncManager.syncClients() }
+        
+        func notifyClients() {
+            let deviceIDs = clients.flatMap { $0.fxaDeviceId }
+            guard let account = self.getAccount() else {
+                return
+            }
+            
+            account.notify(deviceIDs: deviceIDs, collectionsChanged: ["clients"])
+        }
+        
+        return self.remoteClientsAndTabs.insertCommands(commands, forClients: clients) >>> {
+            let syncStatus = self.syncManager.syncClients()
+            syncStatus >>> notifyClients
+            return syncStatus
+        }
     }
 
     lazy var logins: BrowserLogins & SyncableLogins & ResettableSyncStorage = {

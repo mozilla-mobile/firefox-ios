@@ -13,6 +13,7 @@ public struct RemoteClient: Equatable {
     public let type: String?
     public let os: String?
     public let version: String?
+    public let fxaDeviceId: String?
     
     let protocols: [String]?
 
@@ -35,9 +36,10 @@ public struct RemoteClient: Equatable {
         self.application = json["application"].string
         self.formfactor = json["formfactor"].string
         self.device = json["device"].string
+        self.fxaDeviceId = json["fxaDeviceId"].string
     }
 
-    public init(guid: GUID?, name: String, modified: Timestamp, type: String?, formfactor: String?, os: String?, version: String?) {
+    public init(guid: GUID?, name: String, modified: Timestamp, type: String?, formfactor: String?, os: String?, version: String?, fxaDeviceId: String?) {
         self.guid = guid
         self.name = name
         self.modified = modified
@@ -45,6 +47,7 @@ public struct RemoteClient: Equatable {
         self.formfactor = formfactor
         self.os = os
         self.version = version
+        self.fxaDeviceId = fxaDeviceId
 
         self.device = nil
         self.appPackage = nil
@@ -61,11 +64,12 @@ public func ==(lhs: RemoteClient, rhs: RemoteClient) -> Bool {
         lhs.type == rhs.type &&
         lhs.formfactor == rhs.formfactor &&
         lhs.os == rhs.os &&
-        lhs.version == rhs.version
+        lhs.version == rhs.version &&
+        lhs.fxaDeviceId == rhs.fxaDeviceId
 }
 
 extension RemoteClient: CustomStringConvertible {
     public var description: String {
-        return "<RemoteClient GUID: \(guid ?? "nil"), name: \(name), modified: \(modified), type: \(type ?? "nil"), formfactor: \(formfactor ?? "nil"), OS: \(os ?? "nil"), version: \(version ?? "nil")>"
+        return "<RemoteClient GUID: \(guid ?? "nil"), name: \(name), modified: \(modified), type: \(type ?? "nil"), formfactor: \(formfactor ?? "nil"), OS: \(os ?? "nil"), version: \(version ?? "nil"), fxaDeviceId: \(fxaDeviceId ?? "nil")>"
     }
 }
