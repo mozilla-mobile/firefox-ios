@@ -187,13 +187,14 @@ open class BrowserProfile: Profile {
     private static var loginsKey: String? {
         let key = "sqlcipher.key.logins.db"
         let keychain = KeychainWrapper.sharedAppContainerKeychain
+        keychain.ensureStringItemAccessibility(.afterFirstUnlock, forKey: key)
         if keychain.hasValue(forKey: key) {
             return keychain.string(forKey: key)
         }
 
         let Length: UInt = 256
         let secret = Bytes.generateRandomBytes(Length).base64EncodedString
-        keychain.set(secret, forKey: key)
+        keychain.set(secret, forKey: key, withAccessibility: .afterFirstUnlock)
         return secret
     }
 
@@ -506,7 +507,9 @@ open class BrowserProfile: Profile {
     }
 
     fileprivate lazy var account: FirefoxAccount? = {
-        if let dictionary = self.keychain.object(forKey: self.name + ".account") as? [String: AnyObject] {
+        let key = self.name + ".account"
+        self.keychain.ensureObjectItemAccessibility(.afterFirstUnlock, forKey: key)
+        if let dictionary = self.keychain.object(forKey: key) as? [String: AnyObject] {
             return FirefoxAccount.fromDictionary(dictionary)
         }
         return nil
@@ -563,8 +566,7 @@ open class BrowserProfile: Profile {
 
     func flushAccount() {
         if let account = account {
-            // Will this cause issues with people migrating?
-            self.keychain.set(account.dictionary() as NSCoding, forKey: name + ".account")
+            self.keychain.set(account.dictionary() as NSCoding, forKey: name + ".account", withAccessibility: .afterFirstUnlock)
         }
     }
 
