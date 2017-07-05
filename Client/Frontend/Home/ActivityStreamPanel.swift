@@ -479,26 +479,36 @@ extension ActivityStreamPanel: DataObserverDelegate {
 
     func getTopSites() -> Success {
         return self.profile.history.getTopSitesWithLimit(16).both(self.profile.history.getPinnedTopSites()).bindQueue(.main) { (topsites, pinnedSites) in
-            guard let mySites = topsites.successValue?.asArray(), let pinnedSites = pinnedSites.successValue?.asArray(), !self.pendingCacheUpdate else {
+            guard let mySites = topsites.successValue?.asArray(), let pinned = pinnedSites.successValue?.asArray(), !self.pendingCacheUpdate else {
                 return succeed()
             }
 
-            let usersSites = pinnedSites.map({ PinnedSite(site:$0) }) + mySites
+            // How sites are merged together. We compare against the urls second level domain. example m.youtube.com is compared against `youtube`
+            let unionOnURL = { (site: Site) -> String in
+                return URL(string: site.url)?.hostSLD ?? ""
+            }
+
+            // Fetch the default sites
             let defaultSites = self.defaultTopSites()
+            // create PinnedSite objects. used by the view layer to tell topsites apart
+            let pinnedSites: [Site] = pinned.map({ PinnedSite(site:$0) })
 
             // Merge default topsites with a user's topsites.
-            let mergedSites = usersSites.union(defaultSites, f: { (site) -> String in
-                return URL(string: site.url)?.hostSLD ?? ""
-            })
+            let mergedSites = mySites.union(defaultSites, f: unionOnURL)
+            // Merge pinnedSites with sites from the previous step
+            let allSites = pinnedSites.union(mergedSites, f: unionOnURL)
 
-            // Favour topsites from defaultSites as they have better favicons.
-            let newSites = mergedSites.map { site -> Site in
+            // Favour topsites from defaultSites as they have better favicons. But keep PinnedSites
+            let newSites = allSites.map { site -> Site in
+                if let _ = site as? PinnedSite {
+                    return site
+                }
                 let domain = URL(string: site.url)?.hostSLD
                 return defaultSites.find { $0.title.lowercased() == domain } ?? site
             }
 
             // Don't report bad states for default sites we provide
-            self.reportMissingData(sites: usersSites, source: .TopSites)
+            self.reportMissingData(sites: mySites, source: .TopSites)
 
             self.topSitesManager.currentTraits = self.view.traitCollection
 
