@@ -54,6 +54,7 @@ class BookmarkingTests: BaseTestCase {
         // Load a different page on a new tab, check it's not bookmarked
         //navigator.goto(NewTabScreen)
         navigator.openNewURL(urlString: url2)
+
         checkUnbookmarked()
         
         // Go back, check it's still bookmarked, check it's on bookmarks home panel

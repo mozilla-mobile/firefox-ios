@@ -36,46 +36,48 @@ class CompactModeUITests: BaseTestCase {
     }
     
     func testCompactModeUI() {
-        //Dsimiss intro screen
-        dismissFirstRunUI()
-        
-        //Creating array of 6 urls
-        let urls: [String] = [
-            "www.google.com",
-            "www.facebook.com",
-            "www.youtube.com",
-            "www.amazon.com",
-            "www.twitter.com",
-            "www.yahoo.com"
-        ]
-        
-        //Open the array of urls in 6 different tabs
-        loadWebPage(urls[0])
-        for i in 1..<urls.count {
-            //openNewTab()
-            navigator.createNewTab()
-            loadWebPage(urls[i])
+        if !iPad() {
+            //Dsimiss intro screen
+            dismissFirstRunUI()
+            
+            //Creating array of 6 urls
+            let urls: [String] = [
+                "www.google.com",
+                "www.facebook.com",
+                "www.youtube.com",
+                "www.amazon.com",
+                "www.twitter.com",
+                "www.yahoo.com"
+            ]
+            
+            //Open the array of urls in 6 different tabs
+            loadWebPage(urls[0])
+            for i in 1..<urls.count {
+                //openNewTab()
+                navigator.createNewTab()
+                loadWebPage(urls[i])
+            }
+            
+            //Navigate to tabs tray
+            navigator.goto(TabTray)
+            
+            //Wait until the cells show up
+            //CollectionView visible cells count should be 6
+            let exists = NSPredicate(format: "countForHittables > 1")
+            expectation(for: exists, evaluatedWith: app.collectionViews.cells, handler: nil)
+            waitForExpectations(timeout: 10, handler: nil)
+            XCTAssertTrue(app.collectionViews.cells.countForHittables == 6)
+            
+            compactModeOff()
+            
+            //CollectionView visible cells count should be less than or equal to 4
+            XCTAssertTrue(app.collectionViews.cells.countForHittables <= 4)
+            
+            compactModeOn()
+            
+            //CollectionView visible cells count should be 6
+            XCTAssertTrue(app.collectionViews.cells.countForHittables == 6)
         }
-        
-        //Navigate to tabs tray
-        navigator.goto(TabTray)
-        
-        //Wait until the cells show up
-        //CollectionView visible cells count should be 6
-        let exists = NSPredicate(format: "countForHittables > 1")
-        expectation(for: exists, evaluatedWith: app.collectionViews.cells, handler: nil)
-        waitForExpectations(timeout: 10, handler: nil)
-        XCTAssertTrue(app.collectionViews.cells.countForHittables == 6)
-        
-        compactModeOff()
-        
-        //CollectionView visible cells count should be less than or equal to 4
-        XCTAssertTrue(app.collectionViews.cells.countForHittables <= 4)
-        
-        compactModeOn()
-        
-        //CollectionView visible cells count should be 6
-        XCTAssertTrue(app.collectionViews.cells.countForHittables == 6)
     }
 }
 
