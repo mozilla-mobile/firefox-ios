@@ -185,7 +185,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     }
 
     fileprivate func openContainingApp(_ urlSuffix: String = "") {
-        let urlString = "\(scheme)://\(urlSuffix)"
+        let urlString = "\(scheme)://open-url\(urlSuffix)"
         self.extensionContext?.open(URL(string: urlString)!) { success in
             log.info("Extension opened containing app: \(success)")
         }
