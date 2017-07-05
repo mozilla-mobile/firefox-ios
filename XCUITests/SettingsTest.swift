@@ -21,20 +21,7 @@ class SettingsTest: BaseTestCase {
     func testHelpOpensSUMOInTab() {
         navigator.goto(SettingsScreen)
         let appsettingstableviewcontrollerTableviewTable = app.tables["AppSettingsTableViewController.tableView"]
-        appsettingstableviewcontrollerTableviewTable.cells["OpenWith.Setting"].swipeUp()
-        waitforExistence(appsettingstableviewcontrollerTableviewTable.staticTexts["Use Compact Tabs"])
-        appsettingstableviewcontrollerTableviewTable.staticTexts["Use Compact Tabs"].swipeUp()
-        
-        waitforExistence(appsettingstableviewcontrollerTableviewTable.staticTexts["Passcode"])
-        appsettingstableviewcontrollerTableviewTable.staticTexts["Passcode"].swipeUp()
-        
-        waitforExistence(appsettingstableviewcontrollerTableviewTable.staticTexts["Privacy Policy"])
-        appsettingstableviewcontrollerTableviewTable.staticTexts["Privacy Policy"].swipeUp()
-        
-        waitforExistence(appsettingstableviewcontrollerTableviewTable.staticTexts["Show Tour"])
-        appsettingstableviewcontrollerTableviewTable.staticTexts["Show Tour"].swipeUp()
-        
-        waitforExistence(appsettingstableviewcontrollerTableviewTable.staticTexts["Help"])
+        appsettingstableviewcontrollerTableviewTable.staticTexts["Firefox needs to reopen for this change to take effect."].swipeUp()
         let helpMenu = appsettingstableviewcontrollerTableviewTable.cells["Help"]
         helpMenu.swipeUp()
         XCTAssertTrue(helpMenu.isEnabled)

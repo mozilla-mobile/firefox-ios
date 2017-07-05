@@ -24,7 +24,7 @@ class ClipBoardTests: BaseTestCase {
     //Check for test url in the browser
     func checkUrl() {
         let urlTextField = app.textFields["url"]
-        waitForValueContains(urlTextField, value: url)
+        waitForValueContains(urlTextField, value: "www.google")
     }
     
     //Copy url from the browser
@@ -39,26 +39,35 @@ class ClipBoardTests: BaseTestCase {
     func checkCopiedUrl() {
         if let myString = UIPasteboard.general.string {
             var value = app.textFields["url"].value as! String
-            value = "\(value)/"
+            if myString.hasSuffix("/") {
+                value = "\(value)/"
+            }
             XCTAssertNotNil(myString)
             XCTAssertEqual(myString, value, "Url matches with the UIPasteboard")
         }
     }
     
-//    func testClipboard() {
-//        navigator.openURL(urlString: url)
-//        checkUrl()
-//        copyUrl()
-//        checkCopiedUrl()
-//        restart(app)
-//        
-//        //Skip the intro
-//        app.buttons["IntroViewController.startBrowsingButton"].tap()
-//        
-//        //Wait until recently copied pop up appears
-//        waitforExistence(app.buttons["Go"])
-//        
-//        //Click on the pop up Go button to load the recently copied url
-//        app.buttons["Go"].tap()
-//    }
+    // This test is disabled in release, but can still run on master
+    func testClipboard() {
+        navigator.openURL(urlString: url)
+        checkUrl()
+        copyUrl()
+        checkCopiedUrl()
+        restart(app)
+        dismissFirstRunUI()
+        
+        if iPad() {
+            app.textFields["url"].tap()
+            app.textFields["address"].press(forDuration: 1.7)
+            app.menuItems["Paste"].tap()
+            app.typeText("\r")
+        } else { // When Bug 1385054 is resolved, remove above branch
+            //Wait until recently copied pop up appears
+            waitforExistence(app.buttons["Go"])
+            
+            //Click on the pop up Go button to load the recently copied url
+            app.buttons["Go"].tap()
+        }
+    }
 }
+

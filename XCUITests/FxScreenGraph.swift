@@ -114,7 +114,11 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
     map.createScene(NewTabScreen) { scene in
         scene.tap(app.textFields["url"], to: URLBarOpen)
         scene.tap(app.buttons["TabToolbar.menuButton"], to: NewTabMenu)
-        scene.tap(app.buttons["URLBarView.tabsButton"], to: TabTray)
+        if map.isiPad() {
+            scene.tap(app.buttons["TopTabsViewController.tabsButton"], to: TabTray)
+        } else {
+            scene.tap(app.buttons["URLBarView.tabsButton"], to: TabTray)
+        }
 
         scene.noop(to: HomePanelsScreen)
     }
@@ -122,7 +126,11 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
     map.createScene(NewPrivateTabScreen) { scene in
         scene.tap(app.textFields["url"], to: URLBarOpen)
         scene.tap(app.buttons["TabToolbar.menuButton"], to: NewTabMenu)
-        scene.tap(app.buttons["URLBarView.tabsButton"], to: PrivateTabTray)
+        if map.isiPad() {
+            scene.tap(app.buttons["TopTabsViewController.tabsButton"], to: PrivateTabTray)
+        } else {
+            scene.tap(app.buttons["URLBarView.tabsButton"], to: PrivateTabTray)
+        }
 
         scene.noop(to: HomePanelsScreen)
     }
@@ -260,13 +268,21 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
     map.createScene(BrowserTab) { scene in
         scene.tap(app.textFields["url"], to: URLBarOpen)
         scene.tap(app.buttons["TabToolbar.menuButton"], to: BrowserTabMenu)
-        scene.tap(app.buttons["URLBarView.tabsButton"], to: TabTray)
+        if map.isiPad() {
+            scene.tap(app.buttons["TopTabsViewController.tabsButton"], to: TabTray)
+        } else {
+            scene.tap(app.buttons["URLBarView.tabsButton"], to: TabTray)
+        }
     }
 
     map.createScene(PrivateBrowserTab) { scene in
         scene.tap(app.textFields["url"], to: URLBarOpen)
         scene.tap(app.buttons["TabToolbar.menuButton"], to: BrowserTabMenu)
-        scene.tap(app.buttons["URLBarView.tabsButton"], to: PrivateTabTray)
+        if map.isiPad() {
+            scene.tap(app.buttons["TopTabsViewController.tabsButton"], to: PrivateTabTray)
+        } else {
+            scene.tap(app.buttons["URLBarView.tabsButton"], to: PrivateTabTray)
+        }
     }
 
     map.createScene(BrowserTabMenu) { scene in
@@ -301,8 +317,19 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
 
     return map
 }
+extension ScreenGraph {
+    
+    // Checks whether the current device is iPad or non-iPad
+    func isiPad() -> Bool {
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            return true
+        }
+        return false
+    }
+}
 
 extension Navigator {
+
     // Open a URL. Will use/re-use the first BrowserTab or NewTabScreen it comes to.
     func openURL(urlString: String) {
         self.goto(URLBarOpen)

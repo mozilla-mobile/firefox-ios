@@ -36,8 +36,12 @@ class ActivityStreamTest: BaseTestCase {
         let numberOfTopSites = topSites.cells.matching(identifier: "TopSite").count
 
         loadWebPage("http://example.com")
-        app.buttons["TabToolbar.backButton"].tap()
-
+        if iPad() {
+            app.buttons["URLBarView.backButton"].tap()
+        } else {
+            app.buttons["TabToolbar.backButton"].tap()
+        }
+        app.textFields["url"].tap()
         let sitesAfter = topSites.cells.matching(identifier: "TopSite").count
         XCTAssertTrue(sitesAfter == numberOfTopSites + 1, "A new site should have been added to the topSites")
     }
@@ -48,7 +52,12 @@ class ActivityStreamTest: BaseTestCase {
         let numberOfTopSites = topSites.cells.matching(identifier: "TopSite").count
 
         loadWebPage("http://example.com")
-        app.buttons["TabToolbar.backButton"].tap()
+        if iPad() {
+            app.buttons["URLBarView.backButton"].tap()
+        } else {
+            app.buttons["TabToolbar.backButton"].tap()
+        }
+        app.textFields["url"].tap()
         let sitesAfter = topSites.cells.matching(identifier: "TopSite").count
         XCTAssertTrue(sitesAfter == numberOfTopSites + 1, "A new site should have been added to the topSites")
 
@@ -84,7 +93,13 @@ class ActivityStreamTest: BaseTestCase {
 
         navigator.nowAt(NewTabScreen)
         navigator.openURL(urlString: newTopSite["url"]!)
-        app.buttons["TabToolbar.backButton"].tap()
+        if iPad() {
+            app.buttons["URLBarView.backButton"].tap()
+        } else {
+            app.buttons["TabToolbar.backButton"].tap()
+        }
+        app.textFields["url"].tap()
+        
         waitforExistence(app.collectionViews.cells["TopSitesCell"].cells[newTopSite["topSiteLabel"]!])
         let numberOfTopSitesAfter = topSites.cells.matching(identifier: "TopSite").count
         XCTAssertEqual(numberOfTopSitesAfter, 1, "A new top site should appear")
@@ -113,17 +128,32 @@ class ActivityStreamTest: BaseTestCase {
         let app = XCUIApplication()
 
         loadWebPage("http://example.com")
-        app.buttons["TabToolbar.backButton"].tap()
-
+        if iPad() {
+            app.buttons["URLBarView.backButton"].tap()
+        } else {
+            app.buttons["TabToolbar.backButton"].tap()
+        }
+        app.textFields["url"].tap()
         app.collectionViews.cells["TopSitesCell"].cells["example"].press(forDuration: 1)
         app.tables["Context Menu"].cells["Open in New Tab"].tap()
         XCTAssert(app.collectionViews.cells["TopSitesCell"].exists)
-        XCTAssertFalse(app.staticTexts["Example Domain"].exists)
+        XCTAssertFalse(app.staticTexts["example"].exists)
 
-        app.buttons["URLBarView.tabsButton"].tap()
-        app.cells["Example Domain"].tap()
+        app.buttons["Cancel"].tap()
+        if iPad() {
+            app.buttons["TopTabsViewController.tabsButton"].tap()
+        } else {
+            app.buttons["URLBarView.tabsButton"].tap()
+        }
+        
+        app.cells.element(boundBy: 0).tap() //"Example Domain"
         XCTAssertFalse(app.tables["Top sites"].exists)
-        XCTAssert(app.staticTexts["Example Domain"].exists)
+        
+        let staticTextsQuery = self.app.staticTexts.matching(identifier: "Example Domain")
+        if staticTextsQuery.count > 0 {
+            let firstText = staticTextsQuery.element(boundBy: 0)
+            XCTAssert(firstText.exists)
+        }
     }
 
     func testTopSitesOpenInNewTabDefaultTopSite() {
@@ -142,15 +172,26 @@ class ActivityStreamTest: BaseTestCase {
         let app = XCUIApplication()
 
         loadWebPage("http://example.com")
-        app.buttons["TabToolbar.backButton"].tap()
-
+        if iPad() {
+            app.buttons["URLBarView.backButton"].tap()
+        } else {
+            app.buttons["TabToolbar.backButton"].tap()
+        }
+        app.textFields["url"].tap()
+        
         app.collectionViews.cells["TopSitesCell"].cells["example"].press(forDuration: 1)
         app.tables["Context Menu"].cells["Open in New Private Tab"].tap()
 
         XCTAssert(app.collectionViews.cells["TopSitesCell"].exists)
-        XCTAssertFalse(app.staticTexts["Example Domain"].exists)
+        XCTAssertFalse(app.staticTexts["example"].exists)
+        
+        app.buttons["Cancel"].tap()
+        if iPad() {
+            app.buttons["TopTabsViewController.tabsButton"].tap()
+        } else {
+            app.buttons["URLBarView.tabsButton"].tap()
+        }
 
-        app.buttons["URLBarView.tabsButton"].tap()
         app.buttons["TabTrayController.maskButton"].tap()
         app.cells["Example Domain"].tap()
 
@@ -194,7 +235,13 @@ class ActivityStreamTest: BaseTestCase {
     func testTopSitesBookmarkNewTopSite () {
         // Bookmark a new TopSite
         navigator.openURL(urlString: newTopSite["url"]!)
-        app.buttons["TabToolbar.backButton"].tap()
+        if iPad() {
+            app.buttons["URLBarView.backButton"].tap()
+        } else {
+            app.buttons["TabToolbar.backButton"].tap()
+        }
+        app.textFields["url"].tap()
+        
         waitforExistence(app.collectionViews.cells["TopSitesCell"].cells[newTopSite["topSiteLabel"]!])
         app.collectionViews.cells["TopSitesCell"].cells[newTopSite["topSiteLabel"]!].press(forDuration: 1)
         selectOptionFromContextMenu (option: "Bookmark")
@@ -220,18 +267,24 @@ class ActivityStreamTest: BaseTestCase {
 
         // Tap on Share option and verify that the menu is shown and it is possible to cancel it
         selectOptionFromContextMenu (option: "Share")
-        app.buttons["Cancel"].tap()
+        if !iPad() {
+            app.buttons["Cancel"].tap()
+        }
     }
 
     func testTopSitesShareNewTopSite () {
         navigator.openURL(urlString: newTopSite["url"]!)
-        app.buttons["TabToolbar.backButton"].tap()
-        waitforExistence(app.collectionViews.cells["TopSitesCell"].cells[newTopSite["topSiteLabel"]!])
-        app.collectionViews.cells["TopSitesCell"].cells[newTopSite["topSiteLabel"]!].press(forDuration: 1)
+        navigator.goto(NewTabScreen)
+        waitforExistence(app.collectionViews.cells["TopSitesCell"]
+            .cells[newTopSite["topSiteLabel"]!])
+        app.collectionViews.cells["TopSitesCell"].cells[newTopSite["topSiteLabel"]!]
+            .press(forDuration: 1)
 
         // Tap on Share option and verify that the menu is shown and it is possible to cancel it....
         selectOptionFromContextMenu (option: "Share")
-        app.buttons["Cancel"].tap()
+        if !iPad() {
+            app.buttons["Cancel"].tap()
+        }
     }
 
     private func selectOptionFromContextMenu (option: String) {
@@ -245,28 +298,28 @@ class ActivityStreamTest: BaseTestCase {
         let pagecontrolButton = topSitesTable.buttons["Next Page"]
         XCTAssertFalse(pagecontrolButton.exists, "The Page Control button must not exist. Only 5 elements should be on the page")
 
-        loadWebPage("http://example.com")
-        app.buttons["TabToolbar.backButton"].tap()
+        navigator.openURL(urlString: "http://example.com")
+        navigator.openURL(urlString: "http://mozilla.org")
+        navigator.openURL(urlString: "http://apple.com")
+        navigator.openURL(urlString: "http://yahoo.com")
+        
+        if iPad() {
+            navigator.openURL(urlString: "http://cvs.com")
+            navigator.openURL(urlString: "http://walmart.com")
+            navigator.openURL(urlString: "http://zara.com")
+            navigator.openURL(urlString: "http://twitter.com")
+            navigator.openURL(urlString: "http://instagram.com")
+        }
 
-        loadWebPage("http://mozilla.org")
-        app.buttons["TabToolbar.backButton"].tap()
-
-        loadWebPage("http://people.mozilla.org")
-        app.buttons["TabToolbar.backButton"].tap()
-
-        loadWebPage("http://yahoo.com")
-        app.buttons["TabToolbar.backButton"].tap()
-
-        XCTAssert(pagecontrolButton.exists, "The Page Control button must exist if more than 8 elements are displayed.")
-
+        app.textFields["url"].tap()
+        XCTAssert(pagecontrolButton.exists, "The Page Control button must exist")
         pagecontrolButton.tap()
         pagecontrolButton.tap()
-
-        // Sleep so the pageControl animation finishes.
-        sleep(2)
+        waitforExistence(app.collectionViews.cells["TopSitesCell"].cells["example"])
 
         app.collectionViews.cells["TopSitesCell"].cells["example"].press(forDuration: 1)
         app.tables["Context Menu"].cells["Remove"].tap()
+        waitforNoExistence(pagecontrolButton)
         XCTAssertFalse(pagecontrolButton.exists, "The Page Control button should disappear after an item is deleted.")
     }
 
