@@ -20,7 +20,7 @@ struct ActionOverlayTableViewCellUX {
 class ActionOverlayTableViewCell: UITableViewCell {
     lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontLarge
+        titleLabel.font = DynamicFontHelper.defaultHelper.LargeSizeRegularWeightAS
         titleLabel.minimumScaleFactor = 0.8 // Scale the font if we run out of space
         titleLabel.textColor = ActionOverlayTableViewCellUX.LabelColor
         titleLabel.textAlignment = .left
