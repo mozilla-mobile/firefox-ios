@@ -484,16 +484,16 @@ class BrowserViewController: UIViewController {
         log.debug("BVC done.")
     }
 
-    func loadQueuedTabs() {
+    func loadQueuedTabs(receivedURLs: [URL]) {
         log.debug("Loading queued tabs in the background.")
 
         // Chain off of a trivial deferred in order to run on the background queue.
         succeed().upon() { res in
-            self.dequeueQueuedTabs()
+            self.dequeueQueuedTabs(receivedURLs: receivedURLs)
         }
     }
 
-    fileprivate func dequeueQueuedTabs() {
+    fileprivate func dequeueQueuedTabs(receivedURLs: [URL]) {
         assert(!Thread.current.isMainThread, "This must be called in the background.")
         self.profile.queue.getQueuedTabs() >>== { cursor in
 
@@ -504,7 +504,8 @@ class BrowserViewController: UIViewController {
                 return
             }
 
-            let urls = cursor.flatMap { $0?.url.asURL }
+            // Filter out any tabs received by a push notification to prevent dupes.
+            let urls = Array(Set(cursor.flatMap { $0?.url.asURL }).subtracting(receivedURLs))
             if !urls.isEmpty {
                 DispatchQueue.main.async {
                     self.tabManager.addTabsForURLs(urls, zombie: false)
