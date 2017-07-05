@@ -112,7 +112,7 @@ class DynamicFontHelper: NSObject {
 
     var SmallSizeRegularWeightAS: UIFont {
         let size = min(defaultSmallFontSize, 14)
-        return UIFont.systemFont(ofSize: size, weight: UIFontWeightRegular)
+        return UIFont.systemFont(ofSize: size)
     }
 
     /**
