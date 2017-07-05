@@ -25,7 +25,7 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
 
     fileprivate lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontMediumBoldActivityStream
+        titleLabel.font = DynamicFontHelper.defaultHelper.MediumSizeHeavyWeightAS
         titleLabel.textColor = ActivityStreamHighlightCellUX.LabelColor
         titleLabel.textAlignment = .left
         titleLabel.numberOfLines = 3
@@ -34,7 +34,7 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
 
     fileprivate lazy var descriptionLabel: UILabel = {
         let descriptionLabel = UILabel()
-        descriptionLabel.font = DynamicFontHelper.defaultHelper.DeviceFontDescriptionActivityStream
+        descriptionLabel.font = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
         descriptionLabel.textColor = ActivityStreamHighlightCellUX.DescriptionLabelColor
         descriptionLabel.textAlignment = .left
         descriptionLabel.numberOfLines = 1
@@ -43,7 +43,7 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
 
     fileprivate lazy var domainLabel: UILabel = {
         let descriptionLabel = UILabel()
-        descriptionLabel.font = DynamicFontHelper.defaultHelper.DeviceFontDescriptionActivityStream
+        descriptionLabel.font = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
         descriptionLabel.textColor = ActivityStreamHighlightCellUX.DescriptionLabelColor
         descriptionLabel.textAlignment = .left
         descriptionLabel.numberOfLines = 1
@@ -183,7 +183,7 @@ class HighlightIntroCell: UICollectionViewCell {
 
     lazy var titleLabel: UILabel = {
         let textLabel = UILabel()
-        textLabel.font = DynamicFontHelper.defaultHelper.DeviceFontMediumBold
+        textLabel.font = DynamicFontHelper.defaultHelper.MediumSizeBoldFontAS
         textLabel.textColor = UIColor.black
         textLabel.numberOfLines = 1
         textLabel.adjustsFontSizeToFitWidth = true
@@ -193,7 +193,7 @@ class HighlightIntroCell: UICollectionViewCell {
 
     lazy var descriptionLabel: UILabel = {
         let label = UILabel()
-        label.font = DynamicFontHelper.defaultHelper.DeviceFontDescriptionActivityStream
+        label.font = DynamicFontHelper.defaultHelper.MediumSizeRegularWeightAS
         label.textColor = UIColor.darkGray
         label.numberOfLines = 0
         return label

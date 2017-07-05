@@ -11,7 +11,7 @@ struct TopSiteCellUX {
     static let TitleHeight: CGFloat = 20
     static let TitleBackgroundColor = UIColor(colorLiteralRed: 1, green: 1, blue: 1, alpha: 0.7)
     static let TitleTextColor = UIColor.black
-    static let TitleFont = DynamicFontHelper.defaultHelper.DefaultSmallFont
+    static let TitleFont = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
     static let SelectedOverlayColor = UIColor(white: 0.0, alpha: 0.25)
     static let CellCornerRadius: CGFloat = 4
     static let TitleOffset: CGFloat = 5

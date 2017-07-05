@@ -180,7 +180,7 @@ class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
 
     lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontLargeBold
+        titleLabel.font = DynamicFontHelper.defaultHelper.MediumSizeBoldFontAS
         titleLabel.textColor = ActionOverlayTableViewUX.LabelColor
         titleLabel.textAlignment = .left
         titleLabel.numberOfLines = 2
@@ -189,7 +189,7 @@ class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
 
     lazy var descriptionLabel: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontMedium
+        titleLabel.font = DynamicFontHelper.defaultHelper.MediumSizeRegularWeightAS
         titleLabel.textColor = ActionOverlayTableViewUX.DescriptionLabelColor
         titleLabel.textAlignment = .left
         titleLabel.numberOfLines = 1
