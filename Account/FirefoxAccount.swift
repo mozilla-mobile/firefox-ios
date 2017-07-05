@@ -178,6 +178,18 @@ open class FirefoxAccount {
         }
     }
 
+    @discardableResult open func notify(deviceIDs: [GUID], collectionsChanged collections: [String]) -> Deferred<Maybe<FxANotifyResponse>> {
+        let cachedState = stateCache.value!
+        if let session = cachedState as? TokenState {
+            let client = FxAClient10(endpoint: self.configuration.authEndpointURL)
+            return client.notify(deviceIDs: deviceIDs, collectionsChanged: collections, withSessionToken: session.sessionToken as NSData)
+        }
+        
+        let deferred = Deferred<Maybe<FxANotifyResponse>>()
+        deferred.fill(Maybe(failure: FxAClientError.local(NSError())))
+        return deferred
+    }
+    
     @discardableResult open func advance() -> Deferred<FxAState> {
         OSSpinLockLock(&advanceLock)
         if let deferred = advanceDeferred {

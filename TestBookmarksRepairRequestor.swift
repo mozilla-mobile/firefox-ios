@@ -31,7 +31,7 @@ class TestBookmarksRepairRequestor: XCTestCase {
 
         let prefs = MockProfilePrefs()
         let scratchpad = buildMockScratchpad(prefs: prefs)
-        let localClient = RemoteClient(guid: nil, name: "Test local client", modified: (Date.now() - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS", version: nil)
+        let localClient = RemoteClient(guid: nil, name: "Test local client", modified: (Date.now() - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS", version: nil, fxaDeviceId: nil)
         let remoteClients = MockRemoteClientsAndTabs([ClientAndTabs(client: localClient, tabs: [])])
         let validationInfo = [BufferInconsistency.missingValues: ["mock-guid1", "mock-guid2"]]
 
@@ -51,8 +51,8 @@ class TestBookmarksRepairRequestor: XCTestCase {
         let prefs = MockProfilePrefs()
         let scratchpad = buildMockScratchpad(prefs: prefs)
 
-        let localClient = RemoteClient(guid: nil, name: "Test local client", modified: (Date.now() - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS", version: nil)
-        let remoteClient = RemoteClient(guid: "client-a", name: "Test remote client", modified: (Date.now() - OneMinuteInMilliseconds), type: "desktop", formfactor: nil, os: nil, version: "55.0.1")
+        let localClient = RemoteClient(guid: nil, name: "Test local client", modified: (Date.now() - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS", version: nil, fxaDeviceId: nil)
+        let remoteClient = RemoteClient(guid: "client-a", name: "Test remote client", modified: (Date.now() - OneMinuteInMilliseconds), type: "desktop", formfactor: nil, os: nil, version: "55.0.1", fxaDeviceId: nil)
         let remoteClients = MockRemoteClientsAndTabs([ClientAndTabs(client: localClient, tabs: []), ClientAndTabs(client: remoteClient, tabs: [])])
         let validationInfo = [BufferInconsistency.missingValues: ["mock-guid1", "mock-guid2"]]
 
@@ -107,8 +107,8 @@ class TestBookmarksRepairRequestor: XCTestCase {
 
         let prefs = MockProfilePrefs()
         let scratchpad = buildMockScratchpad(prefs: prefs)
-        let localClient = RemoteClient(guid: nil, name: "Test local client", modified: (Date.now() - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS", version: nil)
-        let remoteClient = RemoteClient(guid: "client-a", name: "Test remote client", modified: (Date.now() - OneMinuteInMilliseconds), type: "desktop", formfactor: nil, os: nil, version: "55.0.1")
+        let localClient = RemoteClient(guid: nil, name: "Test local client", modified: (Date.now() - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS", version: nil, fxaDeviceId: nil)
+        let remoteClient = RemoteClient(guid: "client-a", name: "Test remote client", modified: (Date.now() - OneMinuteInMilliseconds), type: "desktop", formfactor: nil, os: nil, version: "55.0.1", fxaDeviceId: nil)
         let remoteClients = MockRemoteClientsAndTabs([ClientAndTabs(client: localClient, tabs: []), ClientAndTabs(client: remoteClient, tabs: [])])
         let validationInfo = [BufferInconsistency.missingValues: ["mock-guid1", "mock-guid2"]]
 
@@ -143,9 +143,9 @@ class TestBookmarksRepairRequestor: XCTestCase {
 
         let prefs = MockProfilePrefs()
         let scratchpad = buildMockScratchpad(prefs: prefs)
-        let localClient = RemoteClient(guid: nil, name: "Test local client", modified: (Date.now() - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS", version: nil)
-        let clientEarly = RemoteClient(guid: "client-early", name: "Test remote client", modified: (Date.now() - OneWeekInMilliseconds), type: "desktop", formfactor: nil, os: nil, version: "55.0.1")
-        let clientLate = RemoteClient(guid: "client-late", name: "Test remote client", modified: (Date.now() - OneMinuteInMilliseconds), type: "desktop", formfactor: nil, os: nil, version: "55.0.1")
+        let localClient = RemoteClient(guid: nil, name: "Test local client", modified: (Date.now() - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS", version: nil, fxaDeviceId: nil)
+        let clientEarly = RemoteClient(guid: "client-early", name: "Test remote client", modified: (Date.now() - OneWeekInMilliseconds), type: "desktop", formfactor: nil, os: nil, version: "55.0.1", fxaDeviceId: nil)
+        let clientLate = RemoteClient(guid: "client-late", name: "Test remote client", modified: (Date.now() - OneMinuteInMilliseconds), type: "desktop", formfactor: nil, os: nil, version: "55.0.1", fxaDeviceId: nil)
         let remoteClients = MockRemoteClientsAndTabs([ClientAndTabs(client: localClient, tabs: []), ClientAndTabs(client: clientEarly, tabs: []), ClientAndTabs(client: clientLate, tabs: [])])
         let validationInfo = [BufferInconsistency.missingValues: ["mock-guid1", "mock-guid2"]]
 
@@ -171,9 +171,9 @@ class TestBookmarksRepairRequestor: XCTestCase {
 
         let prefs = MockProfilePrefs()
         let scratchpad = buildMockScratchpad(prefs: prefs)
-        let localClient = RemoteClient(guid: nil, name: "Test local client", modified: (Date.now() - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS", version: nil)
-        let remoteClientA = RemoteClient(guid: "client-a", name: "Test remote client", modified: Date.now(), type: "desktop", formfactor: nil, os: nil, version: "55.0.1")
-        let remoteClientB = RemoteClient(guid: "client-b", name: "Test remote client", modified: (Date.now() - OneMinuteInMilliseconds), type: "desktop", formfactor: nil, os: nil, version: "55.0.1")
+        let localClient = RemoteClient(guid: nil, name: "Test local client", modified: (Date.now() - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS", version: nil, fxaDeviceId: nil)
+        let remoteClientA = RemoteClient(guid: "client-a", name: "Test remote client", modified: Date.now(), type: "desktop", formfactor: nil, os: nil, version: "55.0.1", fxaDeviceId: nil)
+        let remoteClientB = RemoteClient(guid: "client-b", name: "Test remote client", modified: (Date.now() - OneMinuteInMilliseconds), type: "desktop", formfactor: nil, os: nil, version: "55.0.1", fxaDeviceId: nil)
         let remoteClients = MockRemoteClientsAndTabs([ClientAndTabs(client: remoteClientA, tabs: []), ClientAndTabs(client: localClient, tabs: []), ClientAndTabs(client: remoteClientB, tabs: [])])
         let validationInfo = [BufferInconsistency.missingValues: ["mock-guid1", "mock-guid2"]]
 
@@ -234,9 +234,9 @@ class TestBookmarksRepairRequestor: XCTestCase {
 
         let prefs = MockProfilePrefs()
         let scratchpad = buildMockScratchpad(prefs: prefs)
-        let localClient = RemoteClient(guid: nil, name: "Test local client", modified: (Date.now() - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS", version: nil)
-        let remoteClientA = RemoteClient(guid: "client-a", name: "Test remote client", modified: Date.now(), type: "desktop", formfactor: nil, os: nil, version: "55.0.1")
-        let remoteClientB = RemoteClient(guid: "client-b", name: "Test remote client", modified: (Date.now() - OneMinuteInMilliseconds), type: "desktop", formfactor: nil, os: nil, version: "55.0.1")
+        let localClient = RemoteClient(guid: nil, name: "Test local client", modified: (Date.now() - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS", version: nil, fxaDeviceId: nil)
+        let remoteClientA = RemoteClient(guid: "client-a", name: "Test remote client", modified: Date.now(), type: "desktop", formfactor: nil, os: nil, version: "55.0.1", fxaDeviceId: nil)
+        let remoteClientB = RemoteClient(guid: "client-b", name: "Test remote client", modified: (Date.now() - OneMinuteInMilliseconds), type: "desktop", formfactor: nil, os: nil, version: "55.0.1", fxaDeviceId: nil)
         let remoteClients = MockRemoteClientsAndTabs([ClientAndTabs(client: remoteClientA, tabs: []), ClientAndTabs(client: localClient, tabs: []), ClientAndTabs(client: remoteClientB, tabs: [])])
         let validationInfo = [BufferInconsistency.missingValues: ["mock-guid1", "mock-guid2",
             "mock-guid3"]]
@@ -301,9 +301,9 @@ class TestBookmarksRepairRequestor: XCTestCase {
 
         let prefs = MockProfilePrefs()
         let scratchpad = buildMockScratchpad(prefs: prefs)
-        let localClient = RemoteClient(guid: nil, name: "Test local client", modified: (Date.now() - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS", version: nil)
-        let remoteClientA = RemoteClient(guid: "client-a", name: "Test remote client", modified: Date.now(), type: "desktop", formfactor: nil, os: nil, version: "55.0.1")
-        let remoteClientB = RemoteClient(guid: "client-b", name: "Test remote client", modified: (Date.now() - OneMinuteInMilliseconds), type: "desktop", formfactor: nil, os: nil, version: "55.0.1")
+        let localClient = RemoteClient(guid: nil, name: "Test local client", modified: (Date.now() - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS", version: nil, fxaDeviceId: nil)
+        let remoteClientA = RemoteClient(guid: "client-a", name: "Test remote client", modified: Date.now(), type: "desktop", formfactor: nil, os: nil, version: "55.0.1", fxaDeviceId: nil)
+        let remoteClientB = RemoteClient(guid: "client-b", name: "Test remote client", modified: (Date.now() - OneMinuteInMilliseconds), type: "desktop", formfactor: nil, os: nil, version: "55.0.1", fxaDeviceId: nil)
         let remoteClients = MockRemoteClientsAndTabs([ClientAndTabs(client: remoteClientA, tabs: []), ClientAndTabs(client: localClient, tabs: []), ClientAndTabs(client: remoteClientB, tabs: [])])
         let validationInfo = [BufferInconsistency.missingValues: ["mock-guid1", "mock-guid2", "mock-guid3"]]
 
@@ -352,9 +352,9 @@ class TestBookmarksRepairRequestor: XCTestCase {
     func testSyncEventsPickledInPrefs() {
         let prefs = MockProfilePrefs()
         let scratchpad = Scratchpad(b: KeyBundle.random(), persistingTo: prefs)
-        let localClient = RemoteClient(guid: nil, name: "Test local client", modified: (Date.now() - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS", version: nil)
-        let remoteClientA = RemoteClient(guid: "client-a", name: "Test remote client", modified: Date.now(), type: "desktop", formfactor: nil, os: nil, version: "55.0.1")
-        let remoteClientB = RemoteClient(guid: "client-b", name: "Test remote client", modified: (Date.now() - OneMinuteInMilliseconds), type: "desktop", formfactor: nil, os: nil, version: "55.0.1")
+        let localClient = RemoteClient(guid: nil, name: "Test local client", modified: (Date.now() - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS", version: nil, fxaDeviceId: nil)
+        let remoteClientA = RemoteClient(guid: "client-a", name: "Test remote client", modified: Date.now(), type: "desktop", formfactor: nil, os: nil, version: "55.0.1", fxaDeviceId: nil)
+        let remoteClientB = RemoteClient(guid: "client-b", name: "Test remote client", modified: (Date.now() - OneMinuteInMilliseconds), type: "desktop", formfactor: nil, os: nil, version: "55.0.1", fxaDeviceId: nil)
         let remoteClients = MockRemoteClientsAndTabs([ClientAndTabs(client: remoteClientA, tabs: []), ClientAndTabs(client: localClient, tabs: []), ClientAndTabs(client: remoteClientB, tabs: [])])
         let requestor = BookmarksRepairRequestor(scratchpad: scratchpad, basePrefs: prefs, remoteClients: remoteClients)
 

@@ -52,6 +52,10 @@ public struct FxADevicesResponse {
     let devices: [FxADevice]
 }
 
+public struct FxANotifyResponse {
+    let success: Bool
+}
+
 // fxa-auth-server produces error details like:
 //        {
 //            "code": 400, // matches the HTTP status code
@@ -235,6 +239,10 @@ open class FxAClient10 {
 
         return FxADevicesResponse(devices: devices)
     }
+    
+    fileprivate class func notifyResponse(fromJSON json: JSON) -> FxANotifyResponse {
+        return FxANotifyResponse(success: json.error == nil)
+    }
 
     lazy fileprivate var alamofire: SessionManager = {
         let ua = UserAgent.fxaUserAgent
@@ -288,6 +296,34 @@ open class FxAClient10 {
         mutableURLRequest.addAuthorizationHeader(forHKDFSHA256Key: key)
 
         return makeRequest(mutableURLRequest, responseHandler: FxAClient10.devicesResponse)
+    }
+    
+    open func notify(deviceIDs: [GUID], collectionsChanged collections: [String], withSessionToken sessionToken: NSData) -> Deferred<Maybe<FxANotifyResponse>> {
+        let URL = self.URL.appendingPathComponent("/account/devices/notify")
+        var mutableURLRequest = URLRequest(url: URL)
+        mutableURLRequest.httpMethod = HTTPMethod.post.rawValue
+
+        mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let httpBody = JSON([
+            "to": deviceIDs,
+            "payload": [
+                "version": 1,
+                "command": "sync:collection_changed",
+                "data": [
+                    "collections": collections
+                ]
+            ]
+        ])
+
+        mutableURLRequest.httpBody = httpBody.stringValue()?.utf8EncodedData
+
+        let salt: Data = Data()
+        let contextInfo: Data = FxAClient10.KW("sessionToken")
+        let key = sessionToken.deriveHKDFSHA256Key(withSalt: salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))!
+        mutableURLRequest.addAuthorizationHeader(forHKDFSHA256Key: key)
+
+        return makeRequest(mutableURLRequest, responseHandler: FxAClient10.notifyResponse)
     }
 
     open func registerOrUpdate(device: FxADevice, withSessionToken sessionToken: NSData) -> Deferred<Maybe<FxADevice>> {

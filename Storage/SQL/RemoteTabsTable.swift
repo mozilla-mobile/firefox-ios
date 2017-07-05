@@ -12,7 +12,7 @@ private let log = Logger.syncLogger
 
 class RemoteClientsTable<T>: GenericTable<RemoteClient> {
     override var name: String { return TableClients }
-    override var version: Int { return 2 }
+    override var version: Int { return 3 }
 
     // TODO: index on guid and last_modified.
     override var rows: String { return [
@@ -23,6 +23,7 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
             "formfactor TEXT",
             "os TEXT",
             "version TEXT",
+            "fxaDeviceId TEXT",
         ].joined(separator: ",")
     }
 
@@ -36,8 +37,9 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
             item.formfactor,
             item.os,
             item.version,
+            item.fxaDeviceId,
         ]
-        return ("INSERT INTO \(name) (guid, name, modified, type, formfactor, os, version) VALUES (?, ?, ?, ?, ?, ?, ?)", args)
+        return ("INSERT INTO \(name) (guid, name, modified, type, formfactor, os, version, fxaDeviceId) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", args)
     }
 
     override func getUpdateAndArgs(_ item: inout RemoteClient) -> (String, Args)? {
@@ -48,10 +50,11 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
             item.formfactor,
             item.os,
             item.version,
+            item.fxaDeviceId,
             item.guid,
         ]
 
-        return ("UPDATE \(name) SET name = ?, modified = ?, type = ?, formfactor = ?, os = ?, version = ? WHERE guid = ?", args)
+        return ("UPDATE \(name) SET name = ?, modified = ?, type = ?, formfactor = ?, os = ?, version = ?, fxaDeviceId = ? WHERE guid = ?", args)
     }
 
     override func getDeleteAndArgs(_ item: inout RemoteClient?) -> (String, Args)? {
@@ -71,7 +74,8 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
             let form = row["formfactor"] as? String
             let os = row["os"] as? String
             let version = row["version"] as? String
-            return RemoteClient(guid: guid, name: name, modified: mod, type: type, formfactor: form, os: os, version: version)
+            let fxaDeviceId = row["fxaDeviceId"] as? String
+            return RemoteClient(guid: guid, name: name, modified: mod, type: type, formfactor: form, os: os, version: version, fxaDeviceId: fxaDeviceId)
         }
     }
 
@@ -88,6 +92,16 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
 
         if from < 2 && to >= 2 {
             let sql = "ALTER TABLE \(TableClients) ADD COLUMN version TEXT"
+            let err = db.executeChange(sql)
+            if err != nil {
+                log.error("Error running SQL in RemoteClientsTable: \(err?.localizedDescription ?? "nil")")
+                log.error("SQL was \(sql)")
+                return false
+            }
+        }
+        
+        if from < 3 && to >= 3 {
+            let sql = "ALTER TABLE \(TableClients) ADD COLUMN fxaDeviceId TEXT"
             let err = db.executeChange(sql)
             if err != nil {
                 log.error("Error running SQL in RemoteClientsTable: \(err?.localizedDescription ?? "nil")")
