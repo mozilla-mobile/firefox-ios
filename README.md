@@ -6,7 +6,7 @@ Download on the [App Store](https://itunes.apple.com/app/firefox-web-browser/id9
 This branch
 -----------
 
-This branch is for mainline development that will ship in *v8.0*.
+This branch is for mainline development that will ship in *v9.0*.
 
 This branch only works with Xcode 8.3.2, and supports iOS 9.x and 10.
 
@@ -14,7 +14,7 @@ This branch is written in Swift 3.1.
 
 Please make sure you aim your pull requests in the right direction.
 
-For bug fixes and features for the upcoming v7.0 release, please see the *v7.x* branch.
+For bug fixes and features for the upcoming v8.0 release, please see the *v8.x* branch.
 
 Getting involved
 ----------------
