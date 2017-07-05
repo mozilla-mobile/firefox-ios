@@ -175,7 +175,6 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
 }
 
 struct HighlightIntroCellUX {
-    static let foxImageName = "fox_finder"
     static let margin: CGFloat = 20
     static let foxImageWidth: CGFloat = 168
 }
@@ -192,12 +191,6 @@ class HighlightIntroCell: UICollectionViewCell {
         return textLabel
     }()
 
-    lazy var mainImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(named: HighlightIntroCellUX.foxImageName)
-        return imageView
-    }()
-
     lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.font = DynamicFontHelper.defaultHelper.MediumSizeRegularWeightAS
@@ -210,7 +203,6 @@ class HighlightIntroCell: UICollectionViewCell {
         super.init(frame: frame)
 
         contentView.addSubview(titleLabel)
-        contentView.addSubview(mainImageView)
         contentView.addSubview(descriptionLabel)
 
         titleLabel.text = Strings.HighlightIntroTitle
@@ -218,14 +210,7 @@ class HighlightIntroCell: UICollectionViewCell {
 
         let titleInsets = UIEdgeInsets(top: HighlightIntroCellUX.margin, left: 0, bottom: 0, right: 0)
         titleLabel.snp.makeConstraints { make in
-            make.leading.top.equalTo(self.contentView).inset(titleInsets)
-            make.trailing.equalTo(mainImageView.snp.leading)
-        }
-
-        mainImageView.snp.makeConstraints { make in
-            make.top.equalTo(self.contentView)
-            make.width.equalTo(HighlightIntroCellUX.foxImageWidth)
-            make.trailing.equalTo(self.contentView).offset(-HighlightIntroCellUX.margin/2)
+            make.leading.top.trailing.equalTo(self.contentView).inset(titleInsets)
         }
 
         descriptionLabel.snp.makeConstraints { make in
