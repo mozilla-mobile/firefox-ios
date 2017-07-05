@@ -19,6 +19,7 @@ struct TopSiteCellUX {
     static let IconSizePercent: CGFloat = 0.8
     static let BorderColor = UIColor(white: 0, alpha: 0.1)
     static let BorderWidth: CGFloat = 0.5
+    static let PinIconSize: CGFloat = 12
 }
 
 /*
@@ -31,6 +32,12 @@ class TopSiteItemCell: UICollectionViewCell {
     lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.masksToBounds = true
+        return imageView
+    }()
+
+    lazy var pinImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "pin_small")
         return imageView
     }()
 
@@ -103,7 +110,6 @@ class TopSiteItemCell: UICollectionViewCell {
             make.top.left.right.equalTo(self)
             make.bottom.equalTo(self).inset(TopSiteCellUX.TitleHeight)
         }
-
     }
 
     override func layoutSubviews() {
@@ -127,8 +133,12 @@ class TopSiteItemCell: UICollectionViewCell {
         imageView.image = nil
         imageView.backgroundColor = UIColor.clear
         faviconBG.backgroundColor = UIColor.clear
+        pinImageView.removeFromSuperview()
         imageView.sd_cancelCurrentImageLoad()
         titleLabel.text = ""
+        titleLabel.snp.updateConstraints { make in
+            make.left.equalTo(self).offset(TopSiteCellUX.TitleOffset)
+        }
     }
 
     func configureWithTopSiteItem(_ site: Site) {
@@ -141,8 +151,16 @@ class TopSiteItemCell: UICollectionViewCell {
         }
 
         // If its a pinned site add a bullet point to the front
-        if let _ = site as? PinnedSite, let titleText = titleLabel.text {
-            titleLabel.text = "• \(titleText)"
+        if let _ = site as? PinnedSite {
+            contentView.addSubview(pinImageView)
+            pinImageView.snp.makeConstraints { make in
+                make.right.equalTo(self.titleLabel.snp.left)
+                make.size.equalTo(TopSiteCellUX.PinIconSize)
+                make.centerY.equalTo(self.titleLabel.snp.centerY)
+            }
+            titleLabel.snp.updateConstraints { make in
+                make.left.equalTo(self).offset(TopSiteCellUX.PinIconSize)
+            }
         }
 
         accessibilityLabel = titleLabel.text
