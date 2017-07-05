@@ -16,6 +16,14 @@ elif [ "$BUDDYBUILD_SCHEME" == Firefox ]; then
 fi
 
 #
+# Enable File Sharing on all builds except release
+#
+
+if [ "$BUDDYBUILD_SCHEME" != "Firefox" ]; then
+  /usr/libexec/PlistBuddy -c "Add UIFileSharingEnabled bool true" "Client/Info.plist"
+fi
+
+#
 # Leanplum is set to production for all builds. Only Fennec locally will use
 # development settings, because those are not intended to ship to actual users.
 #
