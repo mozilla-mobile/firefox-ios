@@ -8,6 +8,7 @@ import SnapKit
 
 struct ButtonToastUX {
     static let ToastPadding = 15.0
+    static let TitleSpacing = 2.0
     static let ToastButtonPadding: CGFloat = 10.0
     static let ToastDelay = 0.9
     static let ToastButtonBorderRadius: CGFloat = 5
@@ -87,8 +88,7 @@ class ButtonToast: UIView {
         if let text = descriptionText {
             let textLabel = UILabel()
             textLabel.textColor = UIColor.white
-            label.font = UIFont.systemFont(ofSize: DynamicFontHelper.defaultHelper.DefaultMediumFontSize, weight: UIFontWeightRegular)
-            textLabel.font = UIFont.systemFont(ofSize: DynamicFontHelper.defaultHelper.DefaultMediumFontSize, weight: UIFontWeightRegular)
+            textLabel.font = SimpleToastUX.ToastFont
             textLabel.text = text
             textLabel.lineBreakMode = .byTruncatingTail
             toast.addSubview(textLabel)
@@ -96,6 +96,7 @@ class ButtonToast: UIView {
         }
         
         if let description = descriptionLabel {
+            label.numberOfLines = 1 // if showing a description we cant wrap to the second line
             label.snp.makeConstraints { (make) in
                 make.leading.equalTo(toast).offset(ButtonToastUX.ToastPadding)
                 make.top.equalTo(toast).offset(ButtonToastUX.ToastButtonPadding)
@@ -103,7 +104,7 @@ class ButtonToast: UIView {
             }
             description.snp.makeConstraints { (make) in
                 make.leading.equalTo(toast).offset(ButtonToastUX.ToastPadding)
-                make.bottom.equalTo(toast).offset(-ButtonToastUX.ToastButtonPadding)
+                make.top.equalTo(label.snp.bottom).offset(ButtonToastUX.TitleSpacing)
                 make.trailing.equalTo(button.snp.leading)
             }
         } else {
