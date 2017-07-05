@@ -1,8 +1,13 @@
 coverage:
+  precision: 0
+  round: down
   status:
+    project:
+      default:
+       if_not_found: success
     patch:
       default:
-        threshold: 10
-comment: 
-  layout: "header, tree"
-  require_changes: true
+        enabled: no
+        threshold: 30
+        if_not_found: success
+comment: false
