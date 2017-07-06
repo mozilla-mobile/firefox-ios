@@ -484,12 +484,12 @@ class BrowserViewController: UIViewController {
         log.debug("BVC done.")
     }
 
-    func loadQueuedTabs(receivedURLs: [URL]) {
+    func loadQueuedTabs(receivedURLs: [URL]? = nil) {
         log.debug("Loading queued tabs in the background.")
 
         // Chain off of a trivial deferred in order to run on the background queue.
         succeed().upon() { res in
-            self.dequeueQueuedTabs(receivedURLs: receivedURLs)
+            self.dequeueQueuedTabs(receivedURLs: receivedURLs ?? [])
         }
     }
 
@@ -500,22 +500,28 @@ class BrowserViewController: UIViewController {
             // This assumes that the DB returns rows in some kind of sane order.
             // It does in practice, so WFM.
             log.debug("Queue. Count: \(cursor.count).")
-            if cursor.count <= 0 {
-                return
-            }
+            if cursor.count > 0 {
 
-            // Filter out any tabs received by a push notification to prevent dupes.
-            let urls = Array(Set(cursor.flatMap { $0?.url.asURL }).subtracting(receivedURLs))
-            if !urls.isEmpty {
+                // Filter out any tabs received by a push notification to prevent dupes.
+                let urls = cursor.flatMap { $0?.url.asURL }.filter { !receivedURLs.contains($0) }
+                if !urls.isEmpty {
+                    DispatchQueue.main.async {
+                        self.tabManager.addTabsForURLs(urls, zombie: false)
+                    }
+                }
+
+                // Clear *after* making an attempt to open. We're making a bet that
+                // it's better to run the risk of perhaps opening twice on a crash,
+                // rather than losing data.
+                self.profile.queue.clearQueuedTabs()
+            }
+                
+            // Then, open any received URLs from push notifications.
+            if !receivedURLs.isEmpty {
                 DispatchQueue.main.async {
-                    self.tabManager.addTabsForURLs(urls, zombie: false)
+                    self.tabManager.addTabsForURLs(receivedURLs, zombie: false)
                 }
             }
-
-            // Clear *after* making an attempt to open. We're making a bet that
-            // it's better to run the risk of perhaps opening twice on a crash,
-            // rather than losing data.
-            self.profile.queue.clearQueuedTabs()
         }
     }
 
