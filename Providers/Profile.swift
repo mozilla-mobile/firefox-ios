@@ -650,10 +650,12 @@ open class BrowserProfile: Profile {
 
             syncDisplayState = SyncStatusResolver(engineResults: result.engineResults).resolveResults()
 
-            if profile.app != nil, let account = profile.account, canSendUsageData() {
-                sendSyncPing(account: account, result: result)
-            } else {
-                log.debug("Profile isn't sending usage data. Not sending sync status event.")
+            if AppInfo.isApplication {
+                if let account = profile.account, canSendUsageData() {
+                    sendSyncPing(account: account, result: result)
+                } else {
+                    log.debug("Profile isn't sending usage data. Not sending sync status event.")
+                }
             }
 
             notifySyncing(notification: NotificationProfileDidFinishSyncing)
