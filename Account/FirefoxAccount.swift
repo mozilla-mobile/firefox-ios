@@ -139,7 +139,10 @@ open class FirefoxAccount {
 
     open class func fromDictionary(_ dictionary: [String: Any]) -> FirefoxAccount? {
         if let version = dictionary["version"] as? Int {
-            if version == AccountSchemaVersion {
+            // As of this writing, the current version, v2, is backward compatible with v1. The only
+            // field added is pushRegistration, which is ok to be nil. If it is nil, then the app
+            // will attempt registration when it starts up.
+            if version <= AccountSchemaVersion {
                 return FirefoxAccount.fromDictionaryV1(dictionary)
             }
         }
