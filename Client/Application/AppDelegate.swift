@@ -43,6 +43,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     var appStateStore: AppStateStore!
 
     var systemBrightness: CGFloat = UIScreen.main.brightness
+    
+    var receivedURLs: [URL]?
 
     @discardableResult func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Hold references to willFinishLaunching parameters for delayed app launch
@@ -461,7 +463,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         // We could load these here, but then we have to futz with the tab counter
         // and making NSURLRequests.
-        self.browserViewController.loadQueuedTabs()
+        self.browserViewController.loadQueuedTabs(receivedURLs: receivedURLs ?? [])
+        receivedURLs = nil
         application.applicationIconBadgeNumber = 0
 
         // handle quick actions is available
@@ -798,6 +801,10 @@ extension AppDelegate {
             }
 
             if receivedURLs.count > 0 {
+                // Remember which URLs we received so we can filter them out later when
+                // loading the queued tabs.
+                self.receivedURLs = receivedURLs
+
                 DispatchQueue.main.async {
                     for url in receivedURLs {
                         self.browserViewController.switchToTabForURLOrOpen(url, isPrivileged: false)
