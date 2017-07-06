@@ -64,4 +64,9 @@ open class AppInfo {
     open static var whatsNewTopic: String? {
         return Bundle.main.object(forInfoDictionaryKey: "MozWhatsNewTopic") as? String
     }
+
+    // Return whether the currently executing code is running in an Application
+    open static var isApplication: Bool {
+        return Bundle.main.object(forInfoDictionaryKey: "CFBundlePackageType") as! String == "APPL"
+    }
 }
