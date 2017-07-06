@@ -1,8 +1,0 @@
-2017-07-05 15:56:08.456 [Info] > XCGLogger writing log to: file:///var/mobile/Containers/Data/Application/9B39050B-DB28-4E6E-BA2B-1B08C5543C19/Library/Caches/Logs/keychain.log
-2017-07-05 15:56:08.456 [Info] [KeychainCache.swift:36] fromBranch(_:withLabel:withDefault:factory:) > Read account.state from Keychain with label account.state.2LBB_UVUjdZJ.
-2017-07-05 15:56:08.456 [Info] [KeychainCache.swift:54] checkpoint() > Storing account.state in Keychain with label account.state.2LBB_UVUjdZJ.
-2017-07-05 15:56:08.472 [Warning] [KeychainCache.swift:42] fromBranch(_:withLabel:withDefault:factory:) > Did not find account.syncAuthState in Keychain with label account.syncAuthState.2LBB_UVUjdZJ.
-2017-07-05 15:56:08.472 [Warning] [KeychainCache.swift:48] fromBranch(_:withLabel:withDefault:factory:) > Failed to read account.syncAuthState from Keychain.
-2017-07-05 15:56:11.637 [Info] [KeychainCache.swift:54] checkpoint() > Storing account.state in Keychain with label account.state.2LBB_UVUjdZJ.
-2017-07-05 15:56:14.508 [Info] [KeychainCache.swift:54] checkpoint() > Storing account.state in Keychain with label account.state.2LBB_UVUjdZJ.
-2017-07-05 15:56:15.533 [Info] [KeychainCache.swift:54] checkpoint() > Storing account.syncAuthState in Keychain with label account.syncAuthState.2LBB_UVUjdZJ.
