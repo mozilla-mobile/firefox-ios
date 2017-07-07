@@ -89,9 +89,9 @@ open class Telemetry {
         formatter.dateFormat = "yyyy-MM-dd"
         let date = formatter.string(from: NSDate() as Date)
         let displayVersion =  [
-            AppInfo.appVersion,
+            AppInfo.appVersion ?? "0.0",
             "b",
-            AppInfo.buildNumber
+            AppInfo.buildNumber ?? "0"
         ].joined()
         let version = ProcessInfo.processInfo.operatingSystemVersion
         let osVersion = "\(version.majorVersion).\(version.minorVersion).\(version.patchVersion)"

@@ -166,14 +166,14 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
         let json = JSON(object: [
             "id": guid,
             "fxaDeviceId": self.scratchpad.fxaDeviceId,
-            "version": AppInfo.appVersion,
+            "version": AppInfo.appVersion ?? "0.0",
             "protocols": ["1.5"],
             "name": self.scratchpad.clientName,
             "os": "iOS",
             "commands": [JSON](),
             "type": "mobile",
             "appPackage": Bundle.main.bundleIdentifier ?? "org.mozilla.ios.FennecUnknown",
-            "application": DeviceInfo.appName(),
+            "application": AppInfo.displayName ?? "Unknown",
             "device": DeviceInfo.deviceModel(),
             "formfactor": formfactor])
 

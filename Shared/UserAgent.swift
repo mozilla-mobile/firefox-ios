@@ -9,8 +9,7 @@ open class UserAgent {
     private static var defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
 
     private static func clientUserAgent(prefix: String) -> String {
-        return "\(prefix)/\(AppInfo.appVersion)b\(AppInfo.buildNumber) " +
-               "(\(DeviceInfo.deviceModel()); iPhone OS \(UIDevice.current.systemVersion)) (\(DeviceInfo.appName()))"
+        return "\(prefix)/\(AppInfo.appVersion ?? "0.0")b\(AppInfo.buildNumber ?? "0") (\(DeviceInfo.deviceModel()); iPhone OS \(UIDevice.current.systemVersion)) (\(AppInfo.displayName ?? "Unknown"))"
     }
 
     open static var syncUserAgent: String {
@@ -94,7 +93,7 @@ open class UserAgent {
         }
 
         let mutableUA = NSMutableString(string: userAgent)
-        mutableUA.insert("FxiOS/\(appVersion)b\(AppInfo.buildNumber) ", at: mobileRange.location)
+        mutableUA.insert("FxiOS/\(appVersion ?? "0.0")b\(AppInfo.buildNumber ?? "0") ", at: mobileRange.location)
 
         let firefoxUA = "\(mutableUA) Safari/\(webKitVersion)"
 
