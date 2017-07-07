@@ -519,7 +519,9 @@ class BrowserViewController: UIViewController {
             // Then, open any received URLs from push notifications.
             if !receivedURLs.isEmpty {
                 DispatchQueue.main.async {
-                    self.tabManager.addTabsForURLs(receivedURLs, zombie: false)
+                    receivedURLs.forEach { receivedURL in
+                        self.switchToTabForURLOrOpen(receivedURL, isPrivileged: false)
+                    }
                 }
             }
         }
