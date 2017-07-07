@@ -677,6 +677,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Void) -> Bool {
         if let url = userActivity.webpageURL {
+            
+            // Per Adjust documenation, https://docs.adjust.com/en/universal-links/#running-campaigns-through-universal-links,
+            // it is recommended that links contain the `deep_link` query parameter. This link will also
+            // be url encoded.
+            let query = url.getQuery()
+            if let deepLink = query["deep_link"]?.removingPercentEncoding, let url = URL(string: deepLink) {
+                browserViewController.switchToTabForURLOrOpen(url, isPrivileged: true)
+                return true
+            }
+            
             browserViewController.switchToTabForURLOrOpen(url, isPrivileged: true)
             return true
         }
