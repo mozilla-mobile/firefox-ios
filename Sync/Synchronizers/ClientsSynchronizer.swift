@@ -172,7 +172,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
             "os": "iOS",
             "commands": [JSON](),
             "type": "mobile",
-            "appPackage": Bundle.main.bundleIdentifier ?? "org.mozilla.ios.FennecUnknown",
+            "appPackage": AppInfo.baseBundleIdentifier,
             "application": AppInfo.displayName ?? "Unknown",
             "device": DeviceInfo.deviceModel(),
             "formfactor": formfactor])
