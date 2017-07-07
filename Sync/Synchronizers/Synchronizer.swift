@@ -57,7 +57,7 @@ public protocol ResettableSynchronizer {
  * pickle instructions for eventual delivery next time one is made and synchronized…
  */
 public protocol Synchronizer {
-    init(scratchpad: Scratchpad, delegate: SyncDelegate, basePrefs: Prefs)
+    init(scratchpad: Scratchpad, delegate: SyncDelegate, basePrefs: Prefs, why: SyncReason)
 
     /**
      * Return a reason if the current state of this synchronizer -- particularly prefs and scratchpad --
@@ -173,6 +173,7 @@ open class BaseCollectionSynchronizer {
     let delegate: SyncDelegate
     let basePrefs: Prefs
     let prefs: Prefs
+    let why: SyncReason
 
     var statsSession: SyncEngineStatsSession
 
@@ -181,13 +182,14 @@ open class BaseCollectionSynchronizer {
         return basePrefs.branch(branchName)
     }
 
-    init(scratchpad: Scratchpad, delegate: SyncDelegate, basePrefs: Prefs, collection: String) {
+    init(scratchpad: Scratchpad, delegate: SyncDelegate, basePrefs: Prefs, why: SyncReason, collection: String) {
         self.scratchpad = scratchpad
         self.delegate = delegate
         self.collection = collection
         self.basePrefs = basePrefs
         self.prefs = BaseCollectionSynchronizer.prefsForCollection(collection, withBasePrefs: basePrefs)
         self.statsSession = SyncEngineStatsSession(collection: collection)
+        self.why = why
 
         log.info("Synchronizer configured with prefs '\(self.prefs.getBranchPrefix()).'")
     }

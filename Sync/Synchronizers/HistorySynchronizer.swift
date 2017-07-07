@@ -47,8 +47,8 @@ func makeHistoryRecord(_ place: Place, visits: [Visit]) -> Record<HistoryPayload
 }
 
 open class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
-    public required init(scratchpad: Scratchpad, delegate: SyncDelegate, basePrefs: Prefs) {
-        super.init(scratchpad: scratchpad, delegate: delegate, basePrefs: basePrefs, collection: "history")
+    public required init(scratchpad: Scratchpad, delegate: SyncDelegate, basePrefs: Prefs, why: SyncReason) {
+        super.init(scratchpad: scratchpad, delegate: delegate, basePrefs: basePrefs, why: why, collection: "history")
     }
 
     override var storageVersion: Int {

@@ -133,8 +133,8 @@ let Commands: [String: (String, [JSON]) -> Command?] = [
 ]
 
 open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchronizer {
-    public required init(scratchpad: Scratchpad, delegate: SyncDelegate, basePrefs: Prefs) {
-        super.init(scratchpad: scratchpad, delegate: delegate, basePrefs: basePrefs, collection: "clients")
+    public required init(scratchpad: Scratchpad, delegate: SyncDelegate, basePrefs: Prefs, why: SyncReason) {
+        super.init(scratchpad: scratchpad, delegate: delegate, basePrefs: basePrefs, why: why, collection: "clients")
     }
 
     var localClients: RemoteClientsAndTabs?
@@ -172,7 +172,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
             "os": "iOS",
             "commands": [JSON](),
             "type": "mobile",
-            "appPackage": Bundle.main.bundleIdentifier ?? "org.mozilla.ios.FennecUnknown",
+            "appPackage": AppInfo.baseBundleIdentifier,
             "application": DeviceInfo.appName(),
             "device": DeviceInfo.deviceModel(),
             "formfactor": formfactor])
@@ -372,7 +372,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
             }
             >>== { self.processCommandsFromRecord(ours, withServer: storageClient) }
             >>== { (shouldUpload, commands) in
-                return self.maybeUploadOurRecord(shouldUpload, ifUnmodifiedSince: ours?.modified, toServer: storageClient)
+                return self.maybeUploadOurRecord(shouldUpload || self.why == .didLogin, ifUnmodifiedSince: ours?.modified, toServer: storageClient)
                     >>> { self.uploadClientCommands(toLocalClients: localClients, withServer: storageClient) }
                     >>> {
                         log.debug("Running \(commands.count) commands.")

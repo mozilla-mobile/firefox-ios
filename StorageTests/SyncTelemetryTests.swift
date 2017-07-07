@@ -31,7 +31,7 @@ extension SyncTelemetryTests {
         let scratchpad = Scratchpad(b: KeyBundle.random(), persistingTo: prefs)
         let delegate = MockSyncDelegate()
 
-        return IndependentRecordSynchronizer(scratchpad: scratchpad, delegate: delegate, basePrefs: prefs, collection: "mockHistory")
+        return IndependentRecordSynchronizer(scratchpad: scratchpad, delegate: delegate, basePrefs: prefs, why: .scheduled, collection: "mockHistory")
     }
 
     func testApplyIncomingRecordsReportsDownloadStats() {

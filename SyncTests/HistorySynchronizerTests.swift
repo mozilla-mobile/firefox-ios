@@ -189,7 +189,7 @@ class HistorySynchronizerTests: XCTestCase {
         let prefs = MockProfilePrefs()
         let scratchpad = Scratchpad(b: KeyBundle.random(), persistingTo: prefs)
 
-        let synchronizer = HistorySynchronizer(scratchpad: scratchpad, delegate: delegate, basePrefs: prefs)
+        let synchronizer = HistorySynchronizer(scratchpad: scratchpad, delegate: delegate, basePrefs: prefs, why: .scheduled)
 
         let expectation = self.expectation(description: "Waiting for application.")
         var succeeded = false
