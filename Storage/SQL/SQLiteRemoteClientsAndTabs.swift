@@ -143,21 +143,11 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         return insertOrUpdateClients([client])
     }
 
+
+
+
     open func getClientWithId(_ clientID: GUID) -> Deferred<Maybe<RemoteClient?>> {
-        var err: NSError?
-
-        let clientCursor = db.withConnection(&err) { connection, _ in
-            return self.clients.query(connection, options: QueryOptions(filter: clientID, filterType: FilterType.guid))
-        }
-
-        if let err = err {
-            clientCursor.close()
-            return deferMaybe(DatabaseError(err: err))
-        }
-
-        let client = clientCursor.count > 0 ? clientCursor[0]! : nil
-        clientCursor.close()
-        return deferMaybe(client)
+        return self.db.runQuery("SELECT * FROM \(TableClients) WHERE guid = ?", args: [clientID], factory: clients.factory!) >>== { deferMaybe($0[0]) }
     }
 
     open func getClients() -> Deferred<Maybe<[RemoteClient]>> {
