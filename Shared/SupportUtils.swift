@@ -16,6 +16,6 @@ public struct SupportUtils {
                 let languageIdentifier = Locale.preferredLanguages.first else {
             return nil
         }
-        return URL(string: "https://support.mozilla.org/1/mobile/\(AppInfo.appVersion ?? "0.0")/iOS/\(languageIdentifier)/\(escapedTopic)")
+        return URL(string: "https://support.mozilla.org/1/mobile/\(AppInfo.appVersion)/iOS/\(languageIdentifier)/\(escapedTopic)")
     }
 }

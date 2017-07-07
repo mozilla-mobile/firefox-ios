@@ -28,12 +28,8 @@ open class DeviceInfo {
 
     /// Return the client name, which can be either "Fennec on Stefan's iPod" or simply "Stefan's iPod" if the application display name cannot be obtained.
     open class func defaultClientName() -> String {
-        if let displayName = AppInfo.displayName {
-            let format = NSLocalizedString("%@ on %@", tableName: "Shared", comment: "A brief descriptive name for this app on this device, used for Send Tab and Synced Tabs. The first argument is the app name. The second argument is the device name.")
-            return String(format: format, displayName, UIDevice.current.name)
-        } else {
-            return UIDevice.current.name
-        }
+        let format = NSLocalizedString("%@ on %@", tableName: "Shared", comment: "A brief descriptive name for this app on this device, used for Send Tab and Synced Tabs. The first argument is the app name. The second argument is the device name.")
+        return String(format: format, AppInfo.displayName, UIDevice.current.name)
     }
 
     open class func clientIdentifier(_ prefs: Prefs) -> String {

@@ -22,7 +22,7 @@ class TestAppDelegate: AppDelegate {
             profile = BrowserProfile(localName: "testProfile", syncDelegate: application.syncDelegate, clear: true)
 
             // Don't show the What's New page.
-            profile.prefs.setString(AppInfo.appVersion!, forKey: LatestAppVersionProfileKey)
+            profile.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
 
             // Skip the intro when requested by for example tests or automation
             if AppConstants.SkipIntro {

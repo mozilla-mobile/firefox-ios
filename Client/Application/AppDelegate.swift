@@ -170,9 +170,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // preventing the What's New URL from appearing.
         let prefs = getProfile(application).prefs
         if prefs.intForKey(IntroViewControllerSeenProfileKey) == nil {
-            if let currentAppVersion = AppInfo.appVersion {
-                prefs.setString(currentAppVersion, forKey: LatestAppVersionProfileKey)
-            }
+            prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
             leanplum.track(eventName: .firstRun)
         } else if prefs.boolForKey("SecondRun") == nil {
             prefs.setBool(true, forKey: "SecondRun")
