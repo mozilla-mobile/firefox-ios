@@ -463,8 +463,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         // We could load these here, but then we have to futz with the tab counter
         // and making NSURLRequests.
-        self.browserViewController.loadQueuedTabs(receivedURLs: receivedURLs ?? [])
-        receivedURLs = nil
+        self.browserViewController.loadQueuedTabs(receivedURLs: self.receivedURLs)
+        self.receivedURLs = nil
         application.applicationIconBadgeNumber = 0
 
         // handle quick actions is available
@@ -814,12 +814,15 @@ extension AppDelegate {
                 // Remember which URLs we received so we can filter them out later when
                 // loading the queued tabs.
                 self.receivedURLs = receivedURLs
-
-                DispatchQueue.main.async {
-                    for url in receivedURLs {
-                        self.browserViewController.switchToTabForURLOrOpen(url, isPrivileged: false)
+                
+                // If we're in the foreground, load the queued tabs now.
+                if application.applicationState == UIApplicationState.active {
+                    DispatchQueue.main.async {
+                        self.browserViewController.loadQueuedTabs(receivedURLs: self.receivedURLs)
+                        self.receivedURLs = nil
                     }
                 }
+
                 return completionHandler(.newData)
             }
         }
