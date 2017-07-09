@@ -157,7 +157,7 @@ class SyncDataDisplay {
             } else if deviceNames.count == 0 {
                 body = Strings.SentTab_TabArrivingNotification_NoDevice_body
             } else {
-                body = String(format: Strings.SentTab_TabArrivingNotification_WithDevice_body, DeviceInfo.appName())
+                body = String(format: Strings.SentTab_TabArrivingNotification_WithDevice_body, AppInfo.displayName)
             }
         }
 

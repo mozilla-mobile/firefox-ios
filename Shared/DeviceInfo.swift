@@ -26,27 +26,10 @@ open class DeviceInfo {
         return identifier
     }
 
-    open class func appName() -> String {
-        let localizedDict = Bundle.main.localizedInfoDictionary
-        let infoDict = Bundle.main.infoDictionary
-        let key = "CFBundleDisplayName"
-
-        // E.g., "Fennec Nightly".
-        return localizedDict?[key] as? String ??
-               infoDict?[key] as? String ??
-               "Firefox"
-    }
-
-    // I'd land a test for this, but it turns out it's hardly worthwhile -- both the
-    // app name and the device name are variable, and the format string itself varies
-    // by locale!
+    /// Return the client name, which can be either "Fennec on Stefan's iPod" or simply "Stefan's iPod" if the application display name cannot be obtained.
     open class func defaultClientName() -> String {
-        // E.g., "Sarah's iPhone".
-        let device = UIDevice.current.name
-
-        let f = NSLocalizedString("%@ on %@", tableName: "Shared", comment: "A brief descriptive name for this app on this device, used for Send Tab and Synced Tabs. The first argument is the app name. The second argument is the device name.")
-
-        return String(format: f, appName(), device)
+        let format = NSLocalizedString("%@ on %@", tableName: "Shared", comment: "A brief descriptive name for this app on this device, used for Send Tab and Synced Tabs. The first argument is the app name. The second argument is the device name.")
+        return String(format: format, AppInfo.displayName, UIDevice.current.name)
     }
 
     open class func clientIdentifier(_ prefs: Prefs) -> String {
