@@ -173,7 +173,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
             "commands": [JSON](),
             "type": "mobile",
             "appPackage": AppInfo.baseBundleIdentifier,
-            "application": DeviceInfo.appName(),
+            "application": AppInfo.displayName,
             "device": DeviceInfo.deviceModel(),
             "formfactor": formfactor])
 
