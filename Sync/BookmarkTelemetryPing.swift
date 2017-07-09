@@ -10,7 +10,7 @@ public func makeAdHocBookmarkMergePing(_ bundle: Bundle, clientID: String, attem
     var out: [String: Any] = [
         "v": 1,
         "appV": AppInfo.appVersion,
-        "build": bundle.object(forInfoDictionaryKey: "BuildID") as? String ?? "unknown",
+        "build": AppInfo.buildNumber,
         "id": clientID,
         "attempt": Int(attempt),
         "success": !anyFailed,
@@ -40,7 +40,7 @@ public func makeAdHocSyncStatusPing(_ bundle: Bundle, clientID: String, statusOb
     let out: [String: Any] = [
         "v": 1,
         "appV": AppInfo.appVersion,
-        "build": (bundle.object(forInfoDictionaryKey: "BuildID") as? String ?? "unknown"),
+        "build": AppInfo.buildNumber,
         "id": clientID,
         "date": Date().description,
         "clientCount": clientCount,
