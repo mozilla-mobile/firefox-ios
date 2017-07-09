@@ -262,8 +262,8 @@ open class BaseSyncState: SyncState {
         log.info("Inited \(self.label.rawValue)")
     }
 
-    open func synchronizer<T: Synchronizer>(_ synchronizerClass: T.Type, delegate: SyncDelegate, prefs: Prefs) -> T {
-        return T(scratchpad: self.scratchpad, delegate: delegate, basePrefs: prefs)
+    open func synchronizer<T: Synchronizer>(_ synchronizerClass: T.Type, delegate: SyncDelegate, prefs: Prefs, why: SyncReason) -> T {
+        return T(scratchpad: self.scratchpad, delegate: delegate, basePrefs: prefs, why: why)
     }
 
     // This isn't a convenience initializer 'cos subclasses can't call convenience initializers.

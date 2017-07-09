@@ -48,7 +48,7 @@ public protocol SyncManager {
     @discardableResult func onAddedAccount() -> Success
 }
 
-typealias SyncFunction = (SyncDelegate, Prefs, Ready) -> SyncResult
+typealias SyncFunction = (SyncDelegate, Prefs, Ready, SyncReason) -> SyncResult
 
 class ProfileFileAccessor: FileAccessor {
     convenience init(profile: Profile) {
@@ -969,33 +969,33 @@ open class BrowserProfile: Profile {
             }
         }
 
-        fileprivate func syncClientsWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> SyncResult {
+        fileprivate func syncClientsWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: SyncReason) -> SyncResult {
             log.debug("Syncing clients to storage.")
-            let clientSynchronizer = ready.synchronizer(ClientsSynchronizer.self, delegate: delegate, prefs: prefs)
+            let clientSynchronizer = ready.synchronizer(ClientsSynchronizer.self, delegate: delegate, prefs: prefs, why: why)
             return clientSynchronizer.synchronizeLocalClients(self.profile.remoteClientsAndTabs, withServer: ready.client, info: ready.info)
         }
 
-        fileprivate func syncTabsWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> SyncResult {
+        fileprivate func syncTabsWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: SyncReason) -> SyncResult {
             let storage = self.profile.remoteClientsAndTabs
-            let tabSynchronizer = ready.synchronizer(TabsSynchronizer.self, delegate: delegate, prefs: prefs)
+            let tabSynchronizer = ready.synchronizer(TabsSynchronizer.self, delegate: delegate, prefs: prefs, why: why)
             return tabSynchronizer.synchronizeLocalTabs(storage, withServer: ready.client, info: ready.info)
         }
 
-        fileprivate func syncHistoryWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> SyncResult {
+        fileprivate func syncHistoryWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: SyncReason) -> SyncResult {
             log.debug("Syncing history to storage.")
-            let historySynchronizer = ready.synchronizer(HistorySynchronizer.self, delegate: delegate, prefs: prefs)
+            let historySynchronizer = ready.synchronizer(HistorySynchronizer.self, delegate: delegate, prefs: prefs, why: why)
             return historySynchronizer.synchronizeLocalHistory(self.profile.history, withServer: ready.client, info: ready.info, greenLight: self.greenLight())
         }
 
-        fileprivate func syncLoginsWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> SyncResult {
+        fileprivate func syncLoginsWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: SyncReason) -> SyncResult {
             log.debug("Syncing logins to storage.")
-            let loginsSynchronizer = ready.synchronizer(LoginsSynchronizer.self, delegate: delegate, prefs: prefs)
+            let loginsSynchronizer = ready.synchronizer(LoginsSynchronizer.self, delegate: delegate, prefs: prefs, why: why)
             return loginsSynchronizer.synchronizeLocalLogins(self.profile.logins, withServer: ready.client, info: ready.info)
         }
 
-        fileprivate func mirrorBookmarksWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> SyncResult {
+        fileprivate func mirrorBookmarksWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: SyncReason) -> SyncResult {
             log.debug("Synchronizing server bookmarks to storage.")
-            let bookmarksMirrorer = ready.synchronizer(BufferingBookmarksSynchronizer.self, delegate: delegate, prefs: prefs)
+            let bookmarksMirrorer = ready.synchronizer(BufferingBookmarksSynchronizer.self, delegate: delegate, prefs: prefs, why: why)
             return bookmarksMirrorer.synchronizeBookmarksToStorage(self.profile.bookmarks, usingBuffer: self.profile.mirrorBookmarks, withServer: ready.client, info: ready.info, greenLight: self.greenLight(), remoteClientsAndTabs: self.profile.remoteClientsAndTabs)
         }
 
@@ -1068,7 +1068,7 @@ open class BrowserProfile: Profile {
                         return deferMaybe(statuses)
                     }
 
-                    return self.syncWith(synchronizers: remaining, account: account, statsSession: statsSession) >>== { deferMaybe(statuses + $0) }
+                    return self.syncWith(synchronizers: remaining, account: account, statsSession: statsSession, why: why) >>== { deferMaybe(statuses + $0) }
                 }
 
                 reducer.terminal.upon { results in
@@ -1099,7 +1099,7 @@ open class BrowserProfile: Profile {
         // This SHOULD NOT be called directly: use syncSeveral instead.
         fileprivate func syncWith(synchronizers: [(EngineIdentifier, SyncFunction)],
                                   account: FirefoxAccount,
-                                  statsSession: SyncOperationStatsSession) -> Deferred<Maybe<[(EngineIdentifier, SyncStatus)]>> {
+                                  statsSession: SyncOperationStatsSession, why: SyncReason) -> Deferred<Maybe<[(EngineIdentifier, SyncStatus)]>> {
             log.info("Syncing \(synchronizers.map { $0.0 })")
             let authState = account.syncAuthState
             let delegate = self.profile.getSyncDelegate()
@@ -1109,7 +1109,7 @@ open class BrowserProfile: Profile {
                 let thunks = synchronizers.map { (i, f) in
                     return { () -> Deferred<Maybe<EngineStatus>> in
                         log.debug("Syncing \(i)…")
-                        return f(delegate, syncPrefs, ready) >>== { deferMaybe((i, $0)) }
+                        return f(delegate, syncPrefs, ready, why) >>== { deferMaybe((i, $0)) }
                     }
                 }
                 return accumulate(thunks)
