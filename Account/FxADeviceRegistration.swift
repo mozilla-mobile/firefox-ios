@@ -11,7 +11,7 @@ private let log = Logger.syncLogger
 
 /// The current version of the device registration. We use this to re-register
 /// devices after we update what we send on device registration.
-private let DeviceRegistrationVersion = 1
+private let DeviceRegistrationVersion = 2
 
 public enum FxADeviceRegistrationResult {
     case registered
