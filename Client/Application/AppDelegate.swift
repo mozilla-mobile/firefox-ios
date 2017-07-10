@@ -374,21 +374,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         switch host {
         case "open-url":
-            var url: String?
-            var isPrivate: Bool = false
+            let url = query["url"]?.unescape() ?? ""
+            let isPrivate = NSString(string: query["private"] ?? "false").boolValue
 
-            if let queryUrl = query["url"]?.unescape() {
-                url = queryUrl
-                isPrivate = NSString(string: query["private"] ?? "false").boolValue
-            }
-
-            let params: LaunchParams
-
-            if let url = url, let newURL = URL(string: url) {
-                params = LaunchParams(url: newURL, isPrivate: isPrivate)
-            } else {
-                params = LaunchParams(url: nil, isPrivate: isPrivate)
-            }
+            let params = LaunchParams(url: URL(string: url), isPrivate: isPrivate)
 
             if application.applicationState == .active {
                 // If we are active then we can ask the BVC to open the new tab right away.
@@ -397,7 +386,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             } else {
                 openInFirefoxParams = params
             }
-
             return true
         case "deep-link":
             guard let url = query["url"], Bundle.main.bundleIdentifier == sourceApplication else {
