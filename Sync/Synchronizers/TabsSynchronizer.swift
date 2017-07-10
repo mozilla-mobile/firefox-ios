@@ -161,13 +161,13 @@ open class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchroniz
 
             statsSession.start()
 
-            if !self.remoteHasChanges(info) {
-                // upload local tabs if they've changed or we're in a fresh start.
-                _ = uploadOurTabs(localTabs, toServer: tabsClient)
-                return deferMaybe(completedWithStats)
-            }
+//            if !self.remoteHasChanges(info) {
+//                // upload local tabs if they've changed or we're in a fresh start.
+//                _ = uploadOurTabs(localTabs, toServer: tabsClient)
+//                return deferMaybe(completedWithStats)
+//            }
 
-            return tabsClient.getSince(self.lastFetched)
+            return tabsClient.getSince(0)
                 >>== onResponseReceived
                 >>> { self.uploadOurTabs(localTabs, toServer: tabsClient) }
                 >>> { deferMaybe(self.completedWithStats) }
