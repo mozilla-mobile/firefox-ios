@@ -146,7 +146,7 @@ class LeanplumIntegration {
     }
 
     func canInstallFocus() -> Bool {
-        guard let focus = URL(string: "focus://") else {
+        guard let focus = URL(string: "firefox-focus://") else {
             return false
         }
         return !UIApplication.shared.canOpenURL(focus)
