@@ -15,14 +15,14 @@ body {
     color: #333;
     font-size: 16px;
     -webkit-text-size-adjust: none;
-    font-family: "Helvetica Neue Medium" sans-serif;
+    font: -apple-system-body;
 }
 
 h1 {
     color: #333;
     font-size: 16px;
     -webkit-text-size-adjust: none;
-    font-family: "Helvetica Neue Medium" sans-serif;
+    font: -apple-system-body;
     font-weight: 300;
 }
 
@@ -54,7 +54,7 @@ button {
     width: 100%;
     border: none;
     padding: 1rem;
-    font-family: "Helvetica Neue Medium" sans-serif;
+    font: -apple-system-body;
     background-color: rgb(76, 158, 255);
     color: white;
     font-size: 16px;
@@ -100,7 +100,7 @@ button {
 }
 
 #errorLongContent {
-    font-family: "Helvetica Neue Light" sans-serif;
+    font: -apple-system-body;
     color: #ccc;
     font-size: 12px;
 }
