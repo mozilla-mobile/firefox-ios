@@ -417,11 +417,9 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
         // the fact that `fxaDeviceId` may not have been populated if the list of clients
         // hadn't changed since before the update to v8.0. To force a re-sync, we get all
         // clients since the beginning of time instead of looking at `self.lastFetched`.
-        // We also call `localClients.wipeClients()` directly instead of relying on
-        // `self.wipeIfNecessary(localClients)` to force the list to always be current.
         return clientsClient.getSince(0)
             >>== { response in
-                return localClients.wipeClients()
+                return self.wipeIfNecessary(localClients)
                     >>> { self.applyStorageResponse(response, toLocalClients: localClients, withServer: clientsClient) }
             }
             >>> { deferMaybe(self.completedWithStats) }
