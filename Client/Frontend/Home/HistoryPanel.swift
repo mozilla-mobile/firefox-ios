@@ -94,12 +94,6 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         }
     }
 
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        coordinator.animate(alongsideTransition: { context in
-            self.presentedViewController?.dismiss(animated: true, completion: nil)
-        }, completion: nil)
-    }
-
     @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         guard longPressGestureRecognizer.state == UIGestureRecognizerState.began else { return }
         let touchPoint = longPressGestureRecognizer.location(in: tableView)

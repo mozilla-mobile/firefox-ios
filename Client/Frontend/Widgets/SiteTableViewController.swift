@@ -113,6 +113,15 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.delegate = nil
     }
 
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        coordinator.animate(alongsideTransition: { context in
+            //The AS context menu does not behave correctly. Dismiss it when rotating.
+            if let _ = self.presentedViewController as? ActionOverlayTableViewController {
+                self.presentedViewController?.dismiss(animated: true, completion: nil)
+            }
+        }, completion: nil)
+    }
+
     func reloadData() {
         if data.status != .success {
             print("Err: \(data.statusMessage)", terminator: "\n")

@@ -76,11 +76,6 @@ class RecentlyClosedTabsPanel: UIViewController, HomePanel {
         _ = self.navigationController?.popViewController(animated: true)
     }
 
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        coordinator.animate(alongsideTransition: { context in
-            self.presentedViewController?.dismiss(animated: true, completion: nil)
-        }, completion: nil)
-    }
 }
 
 class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
