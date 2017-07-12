@@ -235,12 +235,6 @@ class ReadingListPanel: UITableViewController, HomePanel {
         NotificationCenter.default.removeObserver(self, name: NotificationDynamicFontChanged, object: nil)
     }
 
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        coordinator.animate(alongsideTransition: { context in
-            self.presentedViewController?.dismiss(animated: true, completion: nil)
-        }, completion: nil)
-    }
-
     func notificationReceived(_ notification: Notification) {
         switch notification.name {
         case NotificationFirefoxAccountChanged:

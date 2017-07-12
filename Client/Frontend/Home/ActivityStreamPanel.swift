@@ -134,7 +134,10 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         coordinator.animate(alongsideTransition: {context in
-            self.presentedViewController?.dismiss(animated: true, completion: nil)
+            //The AS context menu does not behave correctly. Dismiss it when rotating.
+            if let _ = self.presentedViewController as? ActionOverlayTableViewController {
+                self.presentedViewController?.dismiss(animated: true, completion: nil)
+            }
             self.collectionViewLayout.invalidateLayout()
             self.collectionView?.reloadData()
         }, completion: nil)
