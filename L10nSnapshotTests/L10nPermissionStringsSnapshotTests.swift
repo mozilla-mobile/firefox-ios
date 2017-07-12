@@ -6,8 +6,8 @@ import XCTest
 
 class L10nPermissionStringsSnapshotTests: L10nBaseSnapshotTests {
     func testNSLocationWhenInUseUsageDescription() {
-        loadWebPage(url: "http://people.mozilla.org/~sarentz/fxios/testpages/geolocation.html", waitForOtherElementWithAriaLabel: "body")
+        loadWebPage(url: "http://wopr.norad.org/~sarentz/fxios/testpages/geolocation.html", waitForOtherElementWithAriaLabel: "body")
         snapshot("15LocationDialog-01")
-        loadWebPage(url: "http://people.mozilla.org/~sarentz/fxios/testpages/index.html", waitForOtherElementWithAriaLabel: "body")
+        loadWebPage(url: "http://wopr.norad.org/~sarentz/fxios/testpages/index.html", waitForOtherElementWithAriaLabel: "body")
     }
 }
