@@ -20,6 +20,7 @@ eu
 fr
 ga-IE
 gd
+hi-IN
 hsb
 hu
 id
@@ -33,6 +34,7 @@ ko
 lo
 lt
 lv
+ms
 my
 nb-NO
 ne-NP
@@ -49,6 +51,7 @@ sk
 sl
 sq
 sv-SE
+ta
 te
 th
 tl
