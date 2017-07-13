@@ -608,7 +608,7 @@ extension ActivityStreamPanel: DataObserverDelegate {
         }
     }
 
-    fileprivate func fetchBookmarkStatusThenPresentContextMenu(for site: Site, with indexPath: IndexPath, forSection section: Section, completionHandler: @escaping () -> ActionOverlayTableViewController?) {
+    fileprivate func fetchBookmarkStatus(for site: Site, with indexPath: IndexPath, forSection section: Section, completionHandler: @escaping () -> Void) {
         profile.bookmarks.modelFactory >>== {
             $0.isBookmarked(site.url).uponQueue(.main) { result in
                 guard let isBookmarked = result.successValue else {
@@ -616,7 +616,7 @@ extension ActivityStreamPanel: DataObserverDelegate {
                     return
                 }
                 site.setBookmarked(isBookmarked)
-                self.presentContextMenu(for: site, with: indexPath, completionHandler: completionHandler)
+                completionHandler()
             }
         }
     }
@@ -638,12 +638,11 @@ extension ActivityStreamPanel: DataObserverDelegate {
 
 extension ActivityStreamPanel: HomePanelContextMenu {
     func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> ActionOverlayTableViewController?) {
-        guard let _ = site.bookmarked else {
-            fetchBookmarkStatusThenPresentContextMenu(for: site, with: indexPath, forSection: Section(indexPath.section), completionHandler: completionHandler)
-            return
+
+        fetchBookmarkStatus(for: site, with: indexPath, forSection: Section(indexPath.section)) {
+            guard let contextMenu = completionHandler() else { return }
+            self.present(contextMenu, animated: true, completion: nil)
         }
-        guard let contextMenu = completionHandler() else { return }
-        self.present(contextMenu, animated: true, completion: nil)
     }
 
     func getSiteDetails(for indexPath: IndexPath) -> Site? {
