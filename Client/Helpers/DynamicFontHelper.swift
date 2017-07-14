@@ -170,6 +170,9 @@ class DynamicFontHelper: NSObject {
     /**
      * Intro mode
      */
+    var IntroSmallFontSize: CGFloat {
+        return defaultStandardFontSize - 3
+    }
     var IntroStandardFontSize: CGFloat {
         return defaultStandardFontSize - 1
     }

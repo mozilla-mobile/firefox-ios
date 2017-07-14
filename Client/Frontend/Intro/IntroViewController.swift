@@ -9,47 +9,42 @@ struct IntroViewControllerUX {
     static let Width = 375
     static let Height = 667
 
-    static let CardSlides = ["organize", "customize", "share", "choose", "sync"]
+    static let CardSlides = ["tour-Welcome", "tour-Search", "tour-Private", "tour-Mail", "tour-Sync"]
     static let NumberOfCards = CardSlides.count
 
-    static let PagerCenterOffsetFromScrollViewBottom = 30
+    static let PagerCenterOffsetFromScrollViewBottom = UIScreen.main.bounds.width <= 320 ? 20 : 30
 
     static let StartBrowsingButtonTitle = NSLocalizedString("Start Browsing", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
-    static let StartBrowsingButtonColor = UIColor(rgb: 0x363B40)
+    static let StartBrowsingButtonColor = UIColor(rgb: 0x4A90E2)
     static let StartBrowsingButtonHeight = 56
 
     static let SignInButtonTitle = NSLocalizedString("Sign in to Firefox", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
-    static let SignInButtonColor = UIColor(red: 0.259, green: 0.49, blue: 0.831, alpha: 1.0)
-    static let SignInButtonHeight = 46
-    static let SignInButtonCornerRadius = CGFloat(4)
+    static let SignInButtonColor = UIColor(rgb: 0xFF5524)
+    static let SignInButtonHeight = 60
 
-    static let CardTextLineHeight = CGFloat(6)
-
-    static let CardTitleOrganize = NSLocalizedString("Organize", tableName: "Intro", comment: "Title for one of the panels in the First Run tour.")
-    static let CardTitleCustomize = NSLocalizedString("Customize", tableName: "Intro", comment: "Title for one of the panels in the First Run tour.")
-    static let CardTitleShare = NSLocalizedString("Share", tableName: "Intro", comment: "Title for one of the panels in the First Run tour.")
-    static let CardTitleChoose = NSLocalizedString("Choose", tableName: "Intro", comment: "Title for one of the panels in the First Run tour.")
-    static let CardTitleSync = NSLocalizedString("Sync your Devices.", tableName: "Intro", comment: "Title for one of the panels in the First Run tour.")
-
-    static let CardTextOrganize = NSLocalizedString("Easily switch between open pages with tabs.", tableName: "Intro", comment: "Description for the 'Organize' panel in the First Run tour.")
-    static let CardTextCustomize = NSLocalizedString("Personalize your default search engine and more in Settings.", tableName: "Intro", comment: "Description for the 'Customize' panel in the First Run tour.")
-    static let CardTextShare = NSLocalizedString("Use the share sheet to send links from other apps to Firefox.", tableName: "Intro", comment: "Description for the 'Share' panel in the First Run tour.")
-    static let CardTextChoose = NSLocalizedString("Tap, hold and move the Firefox icon into your dock for easy access.", tableName: "Intro", comment: "Description for the 'Choose' panel in the First Run tour.")
+    static let CardTextLineHeight = UIScreen.main.bounds.width <= 320 ? CGFloat(2) : CGFloat(6)
+    
+    static let CardTitleWelcome = NSLocalizedString("Welcome to Firefox!", tableName: "Intro", comment: "Title for one of the panels in the First Run tour.")
+    static let CardTitleSearch = NSLocalizedString("Play favorites with \nyour search engine", tableName: "Intro", comment: "Title for one of the panels in the First Run tour.")
+    
+    static let CardTitlePrivate = NSLocalizedString("Get stealthy", tableName: "Intro", comment: "Title for one of the panels in the First Run tour.")
+    static let CardTitleMail = NSLocalizedString("You've got mail... options", tableName: "Intro", comment: "Title for one of the panels in the First Run tour.")
+    static let CardTitleSync = NSLocalizedString("Sync your devices", tableName: "Intro", comment: "Title for one of the panels in the First Run tour.")
+    
+    static let CardTextWelcome = NSLocalizedString("Swipe to take a quick look at a few features we hope you'll enjoy.", tableName: "Intro", comment: "Description for the 'Welcome' panel in the First Run tour.")
+    static let CardTextSearch = NSLocalizedString("There are a lot of search engines out there, so select your favorite one and find what you need.", tableName: "Intro", comment: "Description for the 'Favorite Search Engine' panel in the First Run tour.")
+    static let CardTextPrivate = NSLocalizedString("Tap the mask icon to slip into Private Browsing mode.", tableName: "Intro", comment: "Description for the 'Private Browsing' panel in the First Run tour.")
+    static let CardTextMail = NSLocalizedString("Have another mail application installed? Use it with Firefox.", tableName: "Intro", comment: "Description for the 'Mail' panel in the First Run tour.")
 
     static let Card1ImageLabel = NSLocalizedString("The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs.", tableName: "Intro", comment: "Accessibility label for the UI element used to display the number of open tabs, and open the tab tray.")
     static let Card2ImageLabel = NSLocalizedString("The Settings button is at the beginning of the Tabs Tray.", tableName: "Intro", comment: "Accessibility label for the Settings button in the tab tray.")
     static let Card3ImageLabel = NSLocalizedString("Firefox and the cloud", tableName: "Intro", comment: "Accessibility label for the image displayed in the 'Sync' panel of the First Run tour.")
 
-    static let CardTextSyncOffsetFromCenter = 25
     static let Card3ButtonOffsetFromCenter = -10
 
     static let FadeDuration = 0.25
 
     static let BackForwardButtonEdgeInset = 20
-
-    static let Card1Color = UIColor(rgb: 0xFFC81E)
-    static let Card2Color = UIColor(rgb: 0x41B450)
-    static let Card3Color = UIColor(rgb: 0x0096DD)
 }
 
 let IntroViewControllerSeenProfileKey = "IntroViewControllerSeen"
@@ -93,9 +88,9 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         }
 
         startBrowsingButton = UIButton()
-        startBrowsingButton.backgroundColor = IntroViewControllerUX.StartBrowsingButtonColor
+        startBrowsingButton.backgroundColor = UIColor.clear
         startBrowsingButton.setTitle(IntroViewControllerUX.StartBrowsingButtonTitle, for: UIControlState())
-        startBrowsingButton.setTitleColor(UIColor.white, for: UIControlState())
+        startBrowsingButton.setTitleColor(IntroViewControllerUX.StartBrowsingButtonColor, for: UIControlState())
         startBrowsingButton.addTarget(self, action: #selector(IntroViewController.SELstartBrowsing), for: UIControlEvents.touchUpInside)
         startBrowsingButton.accessibilityIdentifier = "IntroViewController.startBrowsingButton"
 
@@ -117,7 +112,6 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         view.addSubview(scrollView)
 
         slideContainer = UIView()
-        slideContainer.backgroundColor = IntroViewControllerUX.Card1Color
         for i in 0..<IntroViewControllerUX.NumberOfCards {
             let imageView = UIImageView(frame: CGRect(x: CGFloat(i)*scaledWidthOfSlide, y: 0, width: scaledWidthOfSlide, height: scaledHeightOfSlide))
             imageView.image = slides[i]
@@ -148,19 +142,16 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
             self.introViews.append(introView)
             self.addLabelsToIntroView(introView, text: text, title: title)
         }
-
-        addCard(IntroViewControllerUX.CardTextOrganize, title: IntroViewControllerUX.CardTitleOrganize)
-        addCard(IntroViewControllerUX.CardTextCustomize, title: IntroViewControllerUX.CardTitleCustomize)
-        addCard(IntroViewControllerUX.CardTextShare, title: IntroViewControllerUX.CardTitleShare)
-        addCard(IntroViewControllerUX.CardTextChoose, title: IntroViewControllerUX.CardTitleChoose)
+        addCard(IntroViewControllerUX.CardTextWelcome, title: IntroViewControllerUX.CardTitleWelcome)
+        addCard(IntroViewControllerUX.CardTextSearch, title: IntroViewControllerUX.CardTitleSearch)
+        addCard(IntroViewControllerUX.CardTextPrivate, title: IntroViewControllerUX.CardTitlePrivate)
+        addCard(IntroViewControllerUX.CardTextMail, title: IntroViewControllerUX.CardTitleMail)
 
         // Sync card, with sign in to sync button.
-
         signInButton = UIButton()
         signInButton.backgroundColor = IntroViewControllerUX.SignInButtonColor
         signInButton.setTitle(IntroViewControllerUX.SignInButtonTitle, for: UIControlState())
         signInButton.setTitleColor(UIColor.white, for: UIControlState())
-        signInButton.layer.cornerRadius = IntroViewControllerUX.SignInButtonCornerRadius
         signInButton.clipsToBounds = true
         signInButton.addTarget(self, action: #selector(IntroViewController.SELlogin), for: UIControlEvents.touchUpInside)
         signInButton.snp.makeConstraints { (make) -> Void in
@@ -189,7 +180,6 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
 
         // Activate the first card
         setActiveIntroView(introViews[0], forPage: 0)
-
         setupDynamicFonts()
     }
 
@@ -302,35 +292,22 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let maximumHorizontalOffset = scrollView.contentSize.width - scrollView.frame.width
+        let maximumHorizontalOffset = scrollView.frame.width
         let currentHorizontalOffset = scrollView.contentOffset.x
 
-        var percentage = currentHorizontalOffset / maximumHorizontalOffset
-        var startColor: UIColor, endColor: UIColor
-
+        var percentageOfScroll = currentHorizontalOffset / maximumHorizontalOffset
+        percentageOfScroll = percentageOfScroll > 1.0 ? 1.0 : percentageOfScroll
+        let whiteComponent = UIColor.white.components
+        let grayComponent = UIColor(rgb: 0xF2F2F2).components
+        
         let page = Int(scrollView.contentOffset.x / scrollView.frame.size.width)
         pageControl.currentPage = page
-
-        if percentage < 0.5 {
-            startColor = IntroViewControllerUX.Card1Color
-            endColor = IntroViewControllerUX.Card2Color
-            percentage = percentage * 2
-        } else {
-            startColor = IntroViewControllerUX.Card2Color
-            endColor = IntroViewControllerUX.Card3Color
-            percentage = (percentage - 0.5) * 2
-        }
-
-        slideContainer.backgroundColor = colorForPercentage(percentage, start: startColor, end: endColor)
-    }
-
-    fileprivate func colorForPercentage(_ percentage: CGFloat, start: UIColor, end: UIColor) -> UIColor {
-        let s = start.components
-        let e = end.components
-        let newRed   = (1.0 - percentage) * s.red   + percentage * e.red
-        let newGreen = (1.0 - percentage) * s.green + percentage * e.green
-        let newBlue  = (1.0 - percentage) * s.blue  + percentage * e.blue
-        return UIColor(red: newRed, green: newGreen, blue: newBlue, alpha: 1.0)
+        
+        let newRed   = (1.0 - percentageOfScroll) * whiteComponent.red   + percentageOfScroll * grayComponent.red
+        let newGreen = (1.0 - percentageOfScroll) * whiteComponent.green + percentageOfScroll * grayComponent.green
+        let newBlue  = (1.0 - percentageOfScroll) * whiteComponent.blue  + percentageOfScroll * grayComponent.blue
+        let newColor =  UIColor(red: newRed, green: newGreen, blue: newBlue, alpha: 1.0)
+        slideContainer.backgroundColor = newColor
     }
 
     fileprivate func setActiveIntroView(_ newIntroView: UIView, forPage page: Int) {
@@ -339,6 +316,12 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
                 self.introView?.alpha = 0
                 self.introView = newIntroView
                 newIntroView.alpha = 1.0
+                if page == 0 {
+                    self.startBrowsingButton.alpha = 0
+                } else {
+                    self.startBrowsingButton.alpha = 1
+                }
+                
             }, completion: { _ in
                 if page == (IntroViewControllerUX.NumberOfCards - 1) {
                     self.scrollView.signinButton = self.signInButton
@@ -366,21 +349,19 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         string.addAttribute(NSParagraphStyleAttributeName, value: paragraphStyle, range: NSRange(location: 0, length: string.length))
         return string
     }
-
+    //Adds the descriptions
     fileprivate func addLabelsToIntroView(_ introView: UIView, text: String, title: String = "") {
         let label = UILabel()
-
         label.numberOfLines = 0
         label.attributedText = attributedStringForLabel(text)
         textLabels.append(label)
-
         addViewsToIntroView(introView, view: label, title: title)
     }
-
+    //Adds the titles
     fileprivate func addViewsToIntroView(_ introView: UIView, view: UIView, title: String = "") {
         introView.addSubview(view)
         view.snp.makeConstraints { (make) -> Void in
-            make.center.equalTo(introView)
+            make.centerX.equalTo(introView)
             make.width.equalTo(self.view.frame.width <= 320 ? 240 : 280) // TODO Talk to UX about small screen sizes
         }
 
@@ -392,8 +373,8 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
             titleLabels.append(titleLabel)
             introView.addSubview(titleLabel)
             titleLabel.snp.makeConstraints { (make) -> Void in
-                make.top.equalTo(introView)
-                make.bottom.equalTo(view.snp.top)
+                make.top.equalTo(introView).offset(self.view.frame.width <= 320 ? 15 : 20)
+                make.bottom.equalTo(view.snp.top).offset(self.view.frame.width <= 320 ? -10 : -15)
                 make.centerX.equalTo(introView)
                 make.width.equalTo(self.view.frame.width <= 320 ? 240 : 280) // TODO Talk to UX about small screen sizes
             }
@@ -402,15 +383,15 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
     }
 
     fileprivate func setupDynamicFonts() {
-        startBrowsingButton.titleLabel?.font = UIFont.systemFont(ofSize: DynamicFontHelper.defaultHelper.IntroBigFontSize)
-        signInButton.titleLabel?.font = UIFont.systemFont(ofSize: DynamicFontHelper.defaultHelper.IntroStandardFontSize, weight: UIFontWeightMedium)
+        startBrowsingButton.titleLabel?.font = UIFont(name: "FiraSans-Regular", size: DynamicFontHelper.defaultHelper.IntroSmallFontSize)
+        signInButton.titleLabel?.font = UIFont(name: "FiraSans-Regular", size: DynamicFontHelper.defaultHelper.IntroBigFontSize)
 
         for titleLabel in titleLabels {
-            titleLabel.font = UIFont.systemFont(ofSize: DynamicFontHelper.defaultHelper.IntroBigFontSize, weight: UIFontWeightBold)
+            titleLabel.font = UIFont(name: "FiraSans-Medium", size: DynamicFontHelper.defaultHelper.IntroBigFontSize)
         }
 
         for label in textLabels {
-            label.font = UIFont.systemFont(ofSize: DynamicFontHelper.defaultHelper.IntroStandardFontSize)
+            label.font = UIFont(name: "FiraSans-UltraLight", size: DynamicFontHelper.defaultHelper.IntroStandardFontSize)
         }
     }
 }
