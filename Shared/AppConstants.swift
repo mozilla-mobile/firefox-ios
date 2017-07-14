@@ -76,15 +76,7 @@ public struct AppConstants {
     
     ///  Enables/disables the top tabs for iPad
     public static let MOZ_TOP_TABS: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-            return false
-        #elseif MOZ_CHANNEL_BETA
-            return true
-        #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #else
-            return true
-        #endif
+        return true
     }()
 
     /// Toggles the ability to reorder tabs in the tab tray
@@ -116,15 +108,7 @@ public struct AppConstants {
 
     ///  Enables/disables the activity stream for iPhone
     public static let MOZ_AS_PANEL: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-            return false
-        #elseif MOZ_CHANNEL_BETA
-            return true
-        #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #else
-            return true
-        #endif
+        return true
     }()
 
     /// Enables support for International Domain Names (IDN)
@@ -143,15 +127,7 @@ public struct AppConstants {
     
     ///  Enables/disables deep linking form fill for FxA
     public static let MOZ_FXA_DEEP_LINK_FORM_FILL: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-            return true
-        #elseif MOZ_CHANNEL_BETA
-            return true
-        #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #else
-            return true
-        #endif
+        return true
     }()
 
     /// Toggles reporting our ad-hoc bookmark sync ping
@@ -169,27 +145,11 @@ public struct AppConstants {
 
     /// Toggles the ability to add a custom search engine
     public static let MOZ_CUSTOM_SEARCH_ENGINE: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-            return false
-        #elseif MOZ_CHANNEL_BETA
-            return true
-        #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #else
-            return true
-        #endif
+        return true
     }()
 
     ///  Enables/disables push notificatuibs for FxA
     public static let MOZ_FXA_PUSH: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-            return false
-        #elseif MOZ_CHANNEL_BETA
-            return true
-        #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #else
-            return true
-        #endif
+        return true
     }()
 }
