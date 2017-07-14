@@ -39,6 +39,9 @@ public struct AppConstants {
         return scheme
     }()
 
+    /// Should we try to sync (no merging) the Mobile Folder (if shouldMergeBookmarks is false)
+    public static var simpleBookmarksSyncing = false
+
     /// Whether we just mirror (false) or actively merge and upload (true).
     public static var shouldMergeBookmarks = false
 

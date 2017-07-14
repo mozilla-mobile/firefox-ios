@@ -88,6 +88,10 @@ class MockBufferItemSource: BufferItemSource {
         return deferMaybe(item)
     }
 
+    func getBufferChildrenGUIDsForParent(_ guid: GUID) -> Deferred<Maybe<[GUID]>> {
+        return deferMaybe(DatabaseError(description: "Not implemented"))
+    }
+
     func prefetchBufferItemsWithGUIDs<T: Collection>(_ guids: T) -> Success where T.Iterator.Element == GUID {
         return succeed()
     }

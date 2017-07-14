@@ -78,6 +78,15 @@ class TrivialBookmarkStorer: BookmarkStorer {
     }
 }
 
+open class MalformedRecordError: MaybeErrorType, SyncPingFailureFormattable {
+    open var description: String {
+        return "Malformed record."
+    }
+    open var failureReasonName: SyncPingFailureReasonName {
+        return .otherError
+    }
+}
+
 // MARK: - External synchronizer interface.
 
 open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchronizer, Synchronizer {
@@ -87,6 +96,53 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
 
     override var storageVersion: Int {
         return BookmarksStorageVersion
+    }
+
+    fileprivate func buildMobileRootRecord(_ local: LocalItemSource, _ buffer: BufferItemSource, additionalChildren: [BookmarkMirrorItem]) -> Deferred<Maybe<Record<BookmarkBasePayload>>> {
+        let newBookmarkGUIDs = additionalChildren.map { $0.guid }
+        return buffer.getBufferItemWithGUID(BookmarkRoots.MobileFolderGUID).bind { maybeMobileRoot in
+            // Update (or create!) the Mobile Root folder with its new children.
+            if let mobileRoot = maybeMobileRoot.successValue {
+                return buffer.getBufferChildrenGUIDsForParent(mobileRoot.guid)
+                    .map { $0.map({ (mobileRoot: mobileRoot, children: $0 + newBookmarkGUIDs) }) }
+            } else {
+                return local.getLocalItemWithGUID(BookmarkRoots.MobileFolderGUID)
+                    .map { $0.map({ (mobileRoot: $0, children: newBookmarkGUIDs) }) }
+            }
+        } >>== { (mobileRoot: BookmarkMirrorItem, children: [GUID]) in
+            let payload = mobileRoot.asPayloadWithChildren(children)
+            guard let mappedGUID = payload["id"].string else {
+                return deferMaybe(MalformedRecordError())
+            }
+            return deferMaybe(Record<BookmarkBasePayload>(id: mappedGUID, payload: payload))
+        }
+    }
+
+    func buildMobileRootAndChildrenRecords(_ local: LocalItemSource, _ buffer: BufferItemSource, additionalChildren: [BookmarkMirrorItem]) -> Deferred<Maybe<(mobileRootRecord: Record<BookmarkBasePayload>, childrenRecords: [Record<BookmarkBasePayload>])>> {
+        let childrenRecords = additionalChildren.map { bkm -> Record<BookmarkBasePayload> in
+            let payload = bkm.asPayload()
+            let mappedGUID = payload["id"].string ?? bkm.guid
+            return Record<BookmarkBasePayload>(id: mappedGUID, payload: payload)
+        }
+
+        return self.buildMobileRootRecord(local, buffer, additionalChildren: additionalChildren) >>== { mobileRootRecord in
+            return deferMaybe((mobileRootRecord: mobileRootRecord, childrenRecords: childrenRecords))
+        }
+    }
+
+    func uploadSomeLocalRecords(_ storage: SyncableBookmarks & LocalItemSource & MirrorItemSource, _ mirrorer: BookmarksMirrorer, _ bookmarksClient: Sync15CollectionClient<BookmarkBasePayload>, mobileRootRecord: Record<BookmarkBasePayload>, childrenRecords: [Record<BookmarkBasePayload>]) -> Success {
+        let records = [mobileRootRecord] + childrenRecords
+        let newBookmarkGUIDs = childrenRecords.map { $0.id }
+        return self.uploadRecordsSingleBatch(records, lastTimestamp: mirrorer.lastModified, storageClient: bookmarksClient) >>== { (timestamp: Timestamp, succeeded: [GUID]) -> Success in
+
+            let bufferValuesToMoveFromLocal = Set(newBookmarkGUIDs).intersection(Set(succeeded))
+            let mobileRoot = (mobileRootRecord.payload as MirrorItemable).toMirrorItem(timestamp)
+            let bufferOP = BufferUpdatedCompletionOp(bufferValuesToMoveFromLocal: bufferValuesToMoveFromLocal, mobileRoot: mobileRoot, modifiedTime: timestamp)
+            return storage.applyBufferUpdatedCompletionOp(bufferOP) >>> {
+                mirrorer.advanceNextDownloadTimestampTo(timestamp: timestamp) // We need to advance our batching downloader timestamp to match. See Bug 1253458.
+                return succeed()
+            }
+        }
     }
 
     open func synchronizeBookmarksToStorage(_ storage: SyncableBookmarks & LocalItemSource & MirrorItemSource, usingBuffer buffer: BookmarkBufferStorage & BufferItemSource, withServer storageClient: Sync15StorageClient, info: InfoCollections, greenLight: @escaping () -> Bool, remoteClientsAndTabs: RemoteClientsAndTabs) -> SyncResult {
@@ -119,8 +175,8 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
         let run: SyncResult
 
         if !AppConstants.shouldMergeBookmarks {
-            run = doMirror >>== { result in
-                // Just validate to report statistics.
+            run = doMirror >>== { result -> SyncResult in
+                // Validate the buffer to report statistics.
                 if case .completed = result {
                     log.debug("Validating completed buffer download.")
                     return buffer.validate().bind { validationResult in
@@ -130,8 +186,26 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
                         return deferMaybe(result)
                     }
                 }
-
                 return deferMaybe(result)
+            } >>== { result in
+                guard AppConstants.simpleBookmarksSyncing else {
+                    return deferMaybe(result)
+                }
+                guard case .completed = result else {
+                    return deferMaybe(result)
+                }
+
+                // -1 because we also need to upload the mobile root.
+                return storage.getLocalBookmarksAdditions(limit: bookmarksClient.maxBatchPostRecords - 1) >>== { newBookmarks -> Success in
+                    guard newBookmarks.count > 0 else {
+                        return succeed()
+                    }
+                    return self.buildMobileRootAndChildrenRecords(storage, buffer, additionalChildren: newBookmarks) >>== { (mobileRootRecord, childrenRecords) in
+                        return self.uploadSomeLocalRecords(storage, mirrorer, bookmarksClient, mobileRootRecord: mobileRootRecord, childrenRecords: childrenRecords)
+                    }
+                } >>> {
+                    return deferMaybe(result)
+                }
             }
         } else {
             run = doMirror >>== { result in

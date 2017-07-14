@@ -66,6 +66,12 @@ public class BookmarksMirrorer {
         self.statsSession = statsSession
     }
 
+    var lastModified: Timestamp {
+        get {
+            return self.downloader.lastModified
+        }
+    }
+
     // TODO
     public func storageFormatDidChange() {
     }

@@ -35,12 +35,7 @@ class MockSyncCollectionClient<T: CleartextPayloadJSON>: Sync15CollectionClient<
     }
     
     override func newBatch(ifUnmodifiedSince: Timestamp? = nil, onCollectionUploaded: @escaping (POSTResult, Timestamp?) -> DeferredTimestamp) -> Sync15BatchClient<T> {
-        let infoConfig = InfoConfiguration(maxRequestBytes: 1000,
-                                           maxPostRecords: 10,
-                                           maxPostBytes: 1000,
-                                           maxTotalRecords: 10,
-                                           maxTotalBytes: 1000)
-        return Sync15BatchClient(config: infoConfig,
+        return Sync15BatchClient(config: self.infoConfig,
                                  ifUnmodifiedSince: ifUnmodifiedSince,
                                  serializeRecord: self.serializeRecord,
                                  uploader: self.uploader,
