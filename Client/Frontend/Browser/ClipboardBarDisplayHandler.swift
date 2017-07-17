@@ -24,6 +24,8 @@ class ClipboardBarDisplayHandler {
     init(prefs: Prefs) {
         self.prefs = prefs
         NotificationCenter.default.addObserver(self, selector: #selector(self.SELAppWillEnterForegroundNotification), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.SELAppWillResignActive), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
     }
     
     deinit {
@@ -33,6 +35,11 @@ class ClipboardBarDisplayHandler {
     @objc private func SELAppWillEnterForegroundNotification() {
         sessionStarted = true
         checkIfShouldDisplayBar()
+    }
+    
+    @objc private func SELAppWillResignActive() {
+        sessionStarted = true
+        lastDisplayedURL = UIPasteboard.general.copiedURL?.absoluteString
     }
     
     private func shouldDisplayBar() -> Bool {
