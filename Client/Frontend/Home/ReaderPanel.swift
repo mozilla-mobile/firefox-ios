@@ -451,7 +451,7 @@ class ReadingListPanel: UITableViewController, HomePanel {
 }
 
 extension ReadingListPanel: HomePanelContextMenu {
-    func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> ActionOverlayTableViewController?) {
+    func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?) {
         guard let contextMenu = completionHandler() else { return }
         self.present(contextMenu, animated: true, completion: nil)
     }
@@ -461,10 +461,10 @@ extension ReadingListPanel: HomePanelContextMenu {
         return Site(url: record.url, title: record.title)
     }
 
-    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [ActionOverlayTableViewAction]? {
+    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]? {
         guard var actions = getDefaultContextMenuActions(for: site, homePanelDelegate: homePanelDelegate) else { return nil }
 
-        let removeAction: ActionOverlayTableViewAction = ActionOverlayTableViewAction(title: Strings.RemoveContextMenuTitle, iconString: "action_remove", handler: { action in
+        let removeAction: PhotonActionSheetItem = PhotonActionSheetItem(title: Strings.RemoveContextMenuTitle, iconString: "action_remove", handler: { action in
             self.deleteItem(atIndex: indexPath)
         })
 

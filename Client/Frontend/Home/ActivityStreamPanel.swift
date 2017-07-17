@@ -135,7 +135,7 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
         super.viewWillTransition(to: size, with: coordinator)
         coordinator.animate(alongsideTransition: {context in
             //The AS context menu does not behave correctly. Dismiss it when rotating.
-            if let _ = self.presentedViewController as? ActionOverlayTableViewController {
+            if let _ = self.presentedViewController as? PhotonActionSheet {
                 self.presentedViewController?.dismiss(animated: true, completion: nil)
             }
             self.collectionViewLayout.invalidateLayout()
@@ -637,7 +637,7 @@ extension ActivityStreamPanel: DataObserverDelegate {
 }
 
 extension ActivityStreamPanel: HomePanelContextMenu {
-    func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> ActionOverlayTableViewController?) {
+    func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?) {
 
         fetchBookmarkStatus(for: site, with: indexPath, forSection: Section(indexPath.section)) {
             guard let contextMenu = completionHandler() else { return }
@@ -660,7 +660,7 @@ extension ActivityStreamPanel: HomePanelContextMenu {
         return site
     }
 
-    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [ActionOverlayTableViewAction]? {
+    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]? {
         guard let siteURL = URL(string: site.url) else { return nil }
 
         let pingSource: ASPingSource
@@ -682,19 +682,19 @@ extension ActivityStreamPanel: HomePanelContextMenu {
             return nil
         }
 
-        let openInNewTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewTabContextMenuTitle, iconString: "") { action in
+        let openInNewTabAction = PhotonActionSheetItem(title: Strings.OpenInNewTabContextMenuTitle, iconString: "") { action in
             self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
             self.telemetry.reportEvent(.NewTab, source: pingSource, position: index)
             LeanplumIntegration.sharedInstance.track(eventName: .openedNewTab, withParameters: ["Source":"Activity Stream Long Press Context Menu" as AnyObject])
         }
 
-        let openInNewPrivateTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "") { action in
+        let openInNewPrivateTabAction = PhotonActionSheetItem(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "") { action in
             self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
         }
         
-        let bookmarkAction: ActionOverlayTableViewAction
+        let bookmarkAction: PhotonActionSheetItem
         if site.bookmarked ?? false {
-            bookmarkAction = ActionOverlayTableViewAction(title: Strings.RemoveBookmarkContextMenuTitle, iconString: "action_bookmark_remove", handler: { action in
+            bookmarkAction = PhotonActionSheetItem(title: Strings.RemoveBookmarkContextMenuTitle, iconString: "action_bookmark_remove", handler: { action in
                 self.profile.bookmarks.modelFactory >>== {
                     $0.removeByURL(siteURL.absoluteString)
                     site.setBookmarked(false)
@@ -704,7 +704,7 @@ extension ActivityStreamPanel: HomePanelContextMenu {
 
             })
         } else {
-            bookmarkAction = ActionOverlayTableViewAction(title: Strings.BookmarkContextMenuTitle, iconString: "action_bookmark", handler: { action in
+            bookmarkAction = PhotonActionSheetItem(title: Strings.BookmarkContextMenuTitle, iconString: "action_bookmark", handler: { action in
                 let shareItem = ShareItem(url: site.url, title: site.title, favicon: site.icon)
                 self.profile.bookmarks.shareItem(shareItem)
                 var userData = [QuickActions.TabURLKey: shareItem.url]
@@ -719,7 +719,7 @@ extension ActivityStreamPanel: HomePanelContextMenu {
             })
         }
 
-        let deleteFromHistoryAction = ActionOverlayTableViewAction(title: Strings.DeleteFromHistoryContextMenuTitle, iconString: "action_delete", handler: { action in
+        let deleteFromHistoryAction = PhotonActionSheetItem(title: Strings.DeleteFromHistoryContextMenuTitle, iconString: "action_delete", handler: { action in
             self.telemetry.reportEvent(.Delete, source: pingSource, position: index)
             self.profile.history.removeHistoryForURL(site.url).uponQueue(.main) { result in
                 guard result.isSuccess else { return }
@@ -727,7 +727,7 @@ extension ActivityStreamPanel: HomePanelContextMenu {
             }
         })
 
-        let shareAction = ActionOverlayTableViewAction(title: Strings.ShareContextMenuTitle, iconString: "action_share", handler: { action in
+        let shareAction = PhotonActionSheetItem(title: Strings.ShareContextMenuTitle, iconString: "action_share", handler: { action in
             let helper = ShareExtensionHelper(url: siteURL, tab: nil, activities: [])
             let controller = helper.createActivityViewController { completed, activityType in
                 self.telemetry.reportEvent(.Share, source: pingSource, position: index, shareProvider: activityType)
@@ -744,25 +744,25 @@ extension ActivityStreamPanel: HomePanelContextMenu {
             self.present(controller, animated: true, completion: nil)
         })
 
-        let removeTopSiteAction = ActionOverlayTableViewAction(title: Strings.RemoveContextMenuTitle, iconString: "action_remove", handler: { action in
+        let removeTopSiteAction = PhotonActionSheetItem(title: Strings.RemoveContextMenuTitle, iconString: "action_remove", handler: { action in
             self.telemetry.reportEvent(.Remove, source: pingSource, position: index)
             self.hideURLFromTopSites(site)
         })
 
-        let dismissHighlightAction = ActionOverlayTableViewAction(title: Strings.RemoveContextMenuTitle, iconString: "action_remove", handler: { action in
+        let dismissHighlightAction = PhotonActionSheetItem(title: Strings.RemoveContextMenuTitle, iconString: "action_remove", handler: { action in
             self.telemetry.reportEvent(.Dismiss, source: pingSource, position: index)
             self.hideFromHighlights(site)
         })
 
-        let pinTopSite = ActionOverlayTableViewAction(title: Strings.PinTopsiteActionTitle, iconString: "action_pin", handler: { action in
+        let pinTopSite = PhotonActionSheetItem(title: Strings.PinTopsiteActionTitle, iconString: "action_pin", handler: { action in
             self.pinTopSite(site)
         })
 
-        let removePinTopSite = ActionOverlayTableViewAction(title: Strings.RemovePinTopsiteActionTitle, iconString: "action_unpin", handler: { action in
+        let removePinTopSite = PhotonActionSheetItem(title: Strings.RemovePinTopsiteActionTitle, iconString: "action_unpin", handler: { action in
             self.removePinTopSite(site)
         })
 
-        let topSiteActions: [ActionOverlayTableViewAction]
+        let topSiteActions: [PhotonActionSheetItem]
         if let _ = site as? PinnedSite {
             topSiteActions = [removePinTopSite]
         } else {

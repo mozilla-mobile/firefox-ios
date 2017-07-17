@@ -7,7 +7,7 @@ import Storage
 import SnapKit
 import Shared
 
-private struct ActionOverlayTableViewUX {
+private struct PhotonActionSheetUX {
     static let MaxWidth: CGFloat = 375
     static let Padding: CGFloat = 14
     static let HeaderHeight: CGFloat = 80
@@ -20,24 +20,32 @@ private struct ActionOverlayTableViewUX {
     static let BorderColor = UIColor(white: 0, alpha: 0.1)
     static let SiteImageViewSize = 52
     static let IconSize = CGSize(width: 32, height: 32)
+    static let HeaderName  = "PhotonActionSheetHeaderView"
+    static let CellName = "PhotonActionSheetCell"
 }
 
-class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate {
-    fileprivate(set) var actions: [ActionOverlayTableViewAction]
+public struct PhotonActionSheetItem {
+    public fileprivate(set) var title: String
+    public fileprivate(set) var iconString: String
+    public fileprivate(set) var handler: ((PhotonActionSheetItem) -> Void)?
+}
+
+class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate {
+    fileprivate(set) var actions: [PhotonActionSheetItem]
 
     private var site: Site
     private var tableView = UITableView()
 
     lazy var tapRecognizer: UITapGestureRecognizer = {
         let tapRecognizer = UITapGestureRecognizer()
-        tapRecognizer.addTarget(self, action: #selector(ActionOverlayTableViewController.dismiss(_:)))
+        tapRecognizer.addTarget(self, action: #selector(PhotonActionSheet.dismiss(_:)))
         tapRecognizer.numberOfTapsRequired = 1
         tapRecognizer.cancelsTouchesInView = false
         tapRecognizer.delegate = self
         return tapRecognizer
     }()
 
-    init(site: Site, actions: [ActionOverlayTableViewAction]) {
+    init(site: Site, actions: [PhotonActionSheetItem]) {
         self.site = site
         self.actions = actions
         super.init(nibName: nil, bundle: nil)
@@ -53,13 +61,13 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
         applyBackgroundBlur()
         view.addGestureRecognizer(tapRecognizer)
         view.addSubview(tableView)
-        view.accessibilityIdentifier = "Action Overlay"
+        view.accessibilityIdentifier = "Action Sheet"
 
         tableView.delegate = self
         tableView.dataSource = self
         tableView.keyboardDismissMode = UIScrollViewKeyboardDismissMode.onDrag
-        tableView.register(ActionOverlayTableViewCell.self, forCellReuseIdentifier: "ActionOverlayTableViewCell")
-        tableView.register(ActionOverlayTableViewHeader.self, forHeaderFooterViewReuseIdentifier: "ActionOverlayTableViewHeader")
+        tableView.register(PhotonActionSheetCell.self, forCellReuseIdentifier: PhotonActionSheetUX.CellName)
+        tableView.register(PhotonActionSheetHeaderView.self, forHeaderFooterViewReuseIdentifier: PhotonActionSheetUX.HeaderName)
         tableView.backgroundColor = UIConstants.PanelBackgroundColor
         tableView.isScrollEnabled = true
         tableView.bounces = false
@@ -68,7 +76,7 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
         tableView.cellLayoutMarginsFollowReadableWidth = false
         tableView.accessibilityIdentifier = "Context Menu"
 
-        let width = min(self.view.frame.size.width, ActionOverlayTableViewUX.MaxWidth) - (ActionOverlayTableViewUX.Padding * 2)
+        let width = min(self.view.frame.size.width, PhotonActionSheetUX.MaxWidth) - (PhotonActionSheetUX.Padding * 2)
 
         tableView.snp.makeConstraints { make in
             make.center.equalTo(self.view)
@@ -92,7 +100,7 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
 
     fileprivate func setHeightConstraint(_ make: ConstraintMaker) {
         make.height.lessThanOrEqualTo(view.bounds.height)
-        make.height.equalTo(ActionOverlayTableViewUX.HeaderHeight + CGFloat(actions.count) * ActionOverlayTableViewUX.RowHeight).priority(10)
+        make.height.equalTo(PhotonActionSheetUX.HeaderHeight + CGFloat(actions.count) * PhotonActionSheetUX.RowHeight).priority(10)
     }
 
     func dismiss(_ gestureRecognizer: UIGestureRecognizer?) {
@@ -153,35 +161,35 @@ class ActionOverlayTableViewController: UIViewController, UITableViewDelegate, U
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return ActionOverlayTableViewUX.RowHeight
+        return PhotonActionSheetUX.RowHeight
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return ActionOverlayTableViewUX.HeaderHeight
+        return PhotonActionSheetUX.HeaderHeight
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ActionOverlayTableViewCell", for: indexPath) as! ActionOverlayTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: PhotonActionSheetUX.CellName, for: indexPath) as! PhotonActionSheetCell
         let action = actions[indexPath.row]
         cell.configureCell(action.title, imageString: action.iconString)
         return cell
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "ActionOverlayTableViewHeader") as! ActionOverlayTableViewHeader
+        let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: PhotonActionSheetUX.HeaderName) as! PhotonActionSheetHeaderView
         header.configureWithSite(site)
         return header
     }
 }
 
-class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
+private class PhotonActionSheetHeaderView: UITableViewHeaderFooterView {
     static let Padding: CGFloat = 12
     static let VerticalPadding: CGFloat = 2
 
     lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.font = DynamicFontHelper.defaultHelper.MediumSizeBoldFontAS
-        titleLabel.textColor = ActionOverlayTableViewUX.LabelColor
+        titleLabel.textColor = PhotonActionSheetUX.LabelColor
         titleLabel.textAlignment = .left
         titleLabel.numberOfLines = 2
         return titleLabel
@@ -190,7 +198,7 @@ class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
     lazy var descriptionLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.font = DynamicFontHelper.defaultHelper.MediumSizeRegularWeightAS
-        titleLabel.textColor = ActionOverlayTableViewUX.DescriptionLabelColor
+        titleLabel.textColor = PhotonActionSheetUX.DescriptionLabelColor
         titleLabel.textAlignment = .left
         titleLabel.numberOfLines = 1
         return titleLabel
@@ -200,9 +208,9 @@ class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
         let siteImageView = UIImageView()
         siteImageView.contentMode = UIViewContentMode.center
         siteImageView.clipsToBounds = true
-        siteImageView.layer.cornerRadius = ActionOverlayTableViewUX.CornerRadius
-        siteImageView.layer.borderColor = ActionOverlayTableViewUX.BorderColor.cgColor
-        siteImageView.layer.borderWidth = ActionOverlayTableViewUX.BorderWidth
+        siteImageView.layer.cornerRadius = PhotonActionSheetUX.CornerRadius
+        siteImageView.layer.borderColor = PhotonActionSheetUX.BorderColor.cgColor
+        siteImageView.layer.borderWidth = PhotonActionSheetUX.BorderWidth
         return siteImageView
     }()
 
@@ -218,20 +226,20 @@ class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
 
         siteImageView.snp.remakeConstraints { make in
             make.centerY.equalTo(contentView)
-            make.leading.equalTo(contentView).offset(ActionOverlayTableViewHeader.Padding)
-            make.size.equalTo(ActionOverlayTableViewUX.SiteImageViewSize)
+            make.leading.equalTo(contentView).offset(PhotonActionSheetHeaderView.Padding)
+            make.size.equalTo(PhotonActionSheetUX.SiteImageViewSize)
         }
 
         let stackView = UIStackView(arrangedSubviews: [titleLabel, descriptionLabel])
-        stackView.spacing = ActionOverlayTableViewHeader.VerticalPadding
+        stackView.spacing = PhotonActionSheetHeaderView.VerticalPadding
         stackView.alignment = .leading
         stackView.axis = .vertical
 
         contentView.addSubview(stackView)
 
         stackView.snp.makeConstraints { make in
-            make.leading.equalTo(siteImageView.snp.trailing).offset(ActionOverlayTableViewHeader.Padding)
-            make.trailing.equalTo(contentView).inset(ActionOverlayTableViewHeader.Padding)
+            make.leading.equalTo(siteImageView.snp.trailing).offset(PhotonActionSheetHeaderView.Padding)
+            make.trailing.equalTo(contentView).inset(PhotonActionSheetHeaderView.Padding)
             make.centerY.equalTo(siteImageView.snp.centerY)
         }
 
@@ -249,9 +257,106 @@ class ActionOverlayTableViewHeader: UITableViewHeaderFooterView {
     func configureWithSite(_ site: Site) {
         self.siteImageView.setFavicon(forSite: site) { (color, url) in
             self.siteImageView.backgroundColor = color
-            self.siteImageView.image = self.siteImageView.image?.createScaled(ActionOverlayTableViewUX.IconSize)
+            self.siteImageView.image = self.siteImageView.image?.createScaled(PhotonActionSheetUX.IconSize)
         }
         self.titleLabel.text = site.title.characters.count <= 1 ? site.url : site.title
         self.descriptionLabel.text = site.tileURL.baseDomain
     }
 }
+
+private struct PhotonActionSheetCellUX {
+    static let LabelColor = UIConstants.SystemBlueColor
+    static let BorderWidth: CGFloat = CGFloat(0.5)
+    static let CellSideOffset = 20
+    static let TitleLabelOffset = 10
+    static let CellTopBottomOffset = 12
+    static let StatusIconSize = 24
+    static let SelectedOverlayColor = UIColor(white: 0.0, alpha: 0.25)
+    static let CornerRadius: CGFloat = 3
+}
+
+private class PhotonActionSheetCell: UITableViewCell {
+    lazy var titleLabel: UILabel = {
+        let titleLabel = UILabel()
+        titleLabel.font = DynamicFontHelper.defaultHelper.LargeSizeRegularWeightAS
+        titleLabel.minimumScaleFactor = 0.8 // Scale the font if we run out of space
+        titleLabel.textColor = PhotonActionSheetCellUX.LabelColor
+        titleLabel.textAlignment = .left
+        titleLabel.numberOfLines = 1
+        return titleLabel
+    }()
+
+    lazy var statusIcon: UIImageView = {
+        let siteImageView = UIImageView()
+        siteImageView.contentMode = UIViewContentMode.scaleAspectFit
+        siteImageView.clipsToBounds = true
+        siteImageView.layer.cornerRadius = PhotonActionSheetCellUX.CornerRadius
+        return siteImageView
+    }()
+
+    lazy var selectedOverlay: UIView = {
+        let selectedOverlay = UIView()
+        selectedOverlay.backgroundColor = PhotonActionSheetCellUX.SelectedOverlayColor
+        selectedOverlay.isHidden = true
+        return selectedOverlay
+    }()
+
+    override var isSelected: Bool {
+        didSet {
+            self.selectedOverlay.isHidden = !isSelected
+        }
+    }
+
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+
+        layer.shouldRasterize = true
+        layer.rasterizationScale = UIScreen.main.scale
+
+        isAccessibilityElement = true
+
+        contentView.addSubview(selectedOverlay)
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(statusIcon)
+
+        let separatorLineView = UIView()
+        separatorLineView.backgroundColor = UIColor.lightGray
+        contentView.addSubview(separatorLineView)
+
+        separatorLineView.snp.makeConstraints { make in
+            make.leading.top.trailing.equalTo(self)
+            make.height.equalTo(0.25)
+        }
+
+        selectedOverlay.snp.makeConstraints { make in
+            make.edges.equalTo(contentView)
+        }
+
+        titleLabel.snp.makeConstraints { make in
+            make.leading.equalTo(contentView).offset(12)
+            make.trailing.equalTo(statusIcon.snp.leading)
+            make.centerY.equalTo(contentView)
+        }
+
+        statusIcon.snp.makeConstraints { make in
+            make.size.equalTo(PhotonActionSheetCellUX.StatusIconSize)
+            make.trailing.equalTo(contentView).inset(12)
+            make.centerY.equalTo(contentView)
+        }
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func configureCell(_ label: String, imageString: String) {
+        titleLabel.text = label
+
+        if let uiImage = UIImage(named: imageString) {
+            let image = uiImage.withRenderingMode(.alwaysTemplate)
+            statusIcon.image = image
+            statusIcon.tintColor = UIConstants.SystemBlueColor
+        }
+    }
+}
+

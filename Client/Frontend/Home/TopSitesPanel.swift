@@ -332,7 +332,7 @@ extension TopSitesPanel: UICollectionViewDelegate {
 }
 
 extension TopSitesPanel: HomePanelContextMenu {
-    func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> ActionOverlayTableViewController?) {
+    func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?) {
         guard let contextMenu = completionHandler() else { return }
         self.present(contextMenu, animated: true, completion: nil)
     }
@@ -341,10 +341,10 @@ extension TopSitesPanel: HomePanelContextMenu {
         return dataSource.sites[indexPath.item]
     }
 
-    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [ActionOverlayTableViewAction]? {
+    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]? {
         guard var actions = getDefaultContextMenuActions(for: site, homePanelDelegate: homePanelDelegate) else { return nil }
 
-        let removeTopSiteAction = ActionOverlayTableViewAction(title: Strings.RemoveContextMenuTitle, iconString: "action_remove", handler: { action in
+        let removeTopSiteAction = PhotonActionSheetItem(title: Strings.RemoveContextMenuTitle, iconString: "action_remove", handler: { action in
             self.deleteHistoryTileForSite(site, atIndexPath: indexPath)
         })
         actions.append(removeTopSiteAction)

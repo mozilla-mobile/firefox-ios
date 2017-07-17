@@ -553,7 +553,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 }
 
 extension HistoryPanel: HomePanelContextMenu {
-    func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> ActionOverlayTableViewController?) {
+    func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?) {
         guard let contextMenu = completionHandler() else { return }
         self.present(contextMenu, animated: true, completion: nil)
     }
@@ -562,14 +562,14 @@ extension HistoryPanel: HomePanelContextMenu {
         return siteForIndexPath(indexPath)
     }
 
-    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [ActionOverlayTableViewAction]? {
+    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]? {
         guard var actions = getDefaultContextMenuActions(for: site, homePanelDelegate: homePanelDelegate) else { return nil }
 
-        let removeAction = ActionOverlayTableViewAction(title: Strings.DeleteFromHistoryContextMenuTitle, iconString: "action_delete", handler: { action in
+        let removeAction = PhotonActionSheetItem(title: Strings.DeleteFromHistoryContextMenuTitle, iconString: "action_delete", handler: { action in
             self.removeHistoryForURLAtIndexPath(indexPath: indexPath)
         })
 
-        let pinTopSite = ActionOverlayTableViewAction(title: Strings.PinTopsiteActionTitle, iconString: "action_pin", handler: { action in
+        let pinTopSite = PhotonActionSheetItem(title: Strings.PinTopsiteActionTitle, iconString: "action_pin", handler: { action in
             self.pinTopSite(site)
         })
 

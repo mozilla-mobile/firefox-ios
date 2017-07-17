@@ -309,9 +309,9 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 
 protocol HomePanelContextMenu {
     func getSiteDetails(for indexPath: IndexPath) -> Site?
-    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [ActionOverlayTableViewAction]?
+    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]?
     func presentContextMenu(for indexPath: IndexPath)
-    func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> ActionOverlayTableViewController?)
+    func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?)
 }
 
 extension HomePanelContextMenu {
@@ -323,24 +323,24 @@ extension HomePanelContextMenu {
         })
     }
 
-    func contextMenu(for site: Site, with indexPath: IndexPath) -> ActionOverlayTableViewController? {
+    func contextMenu(for site: Site, with indexPath: IndexPath) -> PhotonActionSheet? {
         guard let actions = self.getContextMenuActions(for: site, with: indexPath) else { return nil }
 
-        let contextMenu = ActionOverlayTableViewController(site: site, actions: actions)
+        let contextMenu = PhotonActionSheet(site: site, actions: actions)
         contextMenu.modalPresentationStyle = .overFullScreen
         contextMenu.modalTransitionStyle = .crossDissolve
 
         return contextMenu
     }
 
-    func getDefaultContextMenuActions(for site: Site, homePanelDelegate: HomePanelDelegate?) -> [ActionOverlayTableViewAction]? {
+    func getDefaultContextMenuActions(for site: Site, homePanelDelegate: HomePanelDelegate?) -> [PhotonActionSheetItem]? {
         guard let siteURL = URL(string: site.url) else { return nil }
 
-        let openInNewTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewTabContextMenuTitle, iconString: "") { action in
+        let openInNewTabAction = PhotonActionSheetItem(title: Strings.OpenInNewTabContextMenuTitle, iconString: "") { action in
             homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
         }
 
-        let openInNewPrivateTabAction = ActionOverlayTableViewAction(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "") { action in
+        let openInNewPrivateTabAction = PhotonActionSheetItem(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "") { action in
             homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
         }
 

@@ -599,7 +599,7 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
 }
 
 extension RemoteTabsTableViewController: HomePanelContextMenu {
-    func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> ActionOverlayTableViewController?) {
+    func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?) {
         guard let contextMenu = completionHandler() else { return }
         self.present(contextMenu, animated: true, completion: nil)
     }
@@ -609,7 +609,7 @@ extension RemoteTabsTableViewController: HomePanelContextMenu {
         return Site(url: String(describing: tab.URL), title: tab.title)
     }
 
-    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [ActionOverlayTableViewAction]? {
+    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]? {
         return getDefaultContextMenuActions(for: site, homePanelDelegate: remoteTabsPanel?.homePanelDelegate)
     }
 }

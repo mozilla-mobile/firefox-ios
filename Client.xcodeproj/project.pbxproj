@@ -298,9 +298,7 @@
 		59A68E0B4ABBF55E14819668 /* BookmarksPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A6839879D615FC1C0D71CE /* BookmarksPanel.swift */; };
 		59A68FD5260B8D520F890F4A /* ReaderPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A685F4EAD19EDEC854BCA4 /* ReaderPanel.swift */; };
 		6BB2FD981B017DAB001A189B /* AuralProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BB2FD971B017DAB001A189B /* AuralProgressBar.swift */; };
-		741258A61D90B43E0064FC2A /* ActionOverlayTableViewAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741258A51D90B43E0064FC2A /* ActionOverlayTableViewAction.swift */; };
-		7416486A1D88B8A000FF22C6 /* ActionOverlayTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741648691D88B8A000FF22C6 /* ActionOverlayTableViewCell.swift */; };
-		742A56391D80B54A00BDB803 /* ActionOverlayTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742A56381D80B54A00BDB803 /* ActionOverlayTableViewController.swift */; };
+		742A56391D80B54A00BDB803 /* PhotonActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742A56381D80B54A00BDB803 /* PhotonActionSheet.swift */; };
 		744B0FFE1B4F172E00100422 /* ToolbarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744B0FFD1B4F172E00100422 /* ToolbarTests.swift */; };
 		744ED5611DBFEB8D00A2B5BE /* MailtoLinkHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744ED5601DBFEB8D00A2B5BE /* MailtoLinkHandler.swift */; };
 		745DAB301CDAAFAA00D44181 /* RecentlyClosedTabsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745DAB2F1CDAAFAA00D44181 /* RecentlyClosedTabsPanel.swift */; };
@@ -1560,9 +1558,7 @@
 		59A68B1F857A8638598A63A0 /* TwoLineCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwoLineCell.swift; sourceTree = "<group>"; };
 		59A68CCB63E2A565CB03F832 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		6BB2FD971B017DAB001A189B /* AuralProgressBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuralProgressBar.swift; sourceTree = "<group>"; };
-		741258A51D90B43E0064FC2A /* ActionOverlayTableViewAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionOverlayTableViewAction.swift; sourceTree = "<group>"; };
-		741648691D88B8A000FF22C6 /* ActionOverlayTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionOverlayTableViewCell.swift; sourceTree = "<group>"; };
-		742A56381D80B54A00BDB803 /* ActionOverlayTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionOverlayTableViewController.swift; sourceTree = "<group>"; };
+		742A56381D80B54A00BDB803 /* PhotonActionSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotonActionSheet.swift; sourceTree = "<group>"; };
 		744B0FFD1B4F172E00100422 /* ToolbarTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolbarTests.swift; sourceTree = "<group>"; };
 		744ED5601DBFEB8D00A2B5BE /* MailtoLinkHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MailtoLinkHandler.swift; sourceTree = "<group>"; };
 		745DAB2F1CDAAFAA00D44181 /* RecentlyClosedTabsPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecentlyClosedTabsPanel.swift; sourceTree = "<group>"; };
@@ -2976,9 +2972,7 @@
 				0BB5B2871AC0A2B90052877D /* Toolbar.swift */,
 				59A68B1F857A8638598A63A0 /* TwoLineCell.swift */,
 				745DAB3E1CDAB09E00D44181 /* HistoryBackButton.swift */,
-				742A56381D80B54A00BDB803 /* ActionOverlayTableViewController.swift */,
-				741648691D88B8A000FF22C6 /* ActionOverlayTableViewCell.swift */,
-				741258A51D90B43E0064FC2A /* ActionOverlayTableViewAction.swift */,
+				742A56381D80B54A00BDB803 /* PhotonActionSheet.swift */,
 			);
 			path = Widgets;
 			sourceTree = "<group>";
@@ -5521,7 +5515,7 @@
 				7BA8D1C71BA037F500C8AE9E /* OpenInHelper.swift in Sources */,
 				E4B423BE1AB9FE6A007E66C8 /* ReaderModeCache.swift in Sources */,
 				74E36D781B71323500D69DA1 /* SettingsContentViewController.swift in Sources */,
-				742A56391D80B54A00BDB803 /* ActionOverlayTableViewController.swift in Sources */,
+				742A56391D80B54A00BDB803 /* PhotonActionSheet.swift in Sources */,
 				C4EFEECF1CEBB6F2009762A4 /* BackForwardTableViewCell.swift in Sources */,
 				E689C7301E0C7617008BAADB /* NSAttributedStringExtensions.swift in Sources */,
 				E64ED8FA1BC55AE300DAF864 /* UIAlertControllerExtensions.swift in Sources */,
@@ -5575,7 +5569,6 @@
 				E65075541E37F6FC006961AC /* DynamicFontHelper.swift in Sources */,
 				7BC68D241CC153630043562A /* AppMenuToolbarItem.swift in Sources */,
 				C4E3984C1D21F2FD004E89BA /* TabTrayButtonExtensions.swift in Sources */,
-				7416486A1D88B8A000FF22C6 /* ActionOverlayTableViewCell.swift in Sources */,
 				D3FEC38D1AC4B42F00494F45 /* AutocompleteTextField.swift in Sources */,
 				E4ECD0881B70FD4F00B90D22 /* WindowCloseHelper.swift in Sources */,
 				0BD19A671A25309B0084FBA7 /* NSUserDefaultsPrefs.swift in Sources */,
@@ -5592,7 +5585,6 @@
 				392ED7E41D0AEF56009D9B62 /* NewTabAccessors.swift in Sources */,
 				D39949F51C22461A00E2A03C /* RequestDesktopSiteActivity.swift in Sources */,
 				D3A9949D1A3686BD008AD1AC /* Tab.swift in Sources */,
-				741258A61D90B43E0064FC2A /* ActionOverlayTableViewAction.swift in Sources */,
 				A93067E81D0FE18E00C49C6E /* NightModeHelper.swift in Sources */,
 				3B39EDCB1E16E1AA00EF029F /* CustomSearchViewController.swift in Sources */,
 				E65075571E37F714006961AC /* FaviconFetcher.swift in Sources */,

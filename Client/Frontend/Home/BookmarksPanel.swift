@@ -418,7 +418,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 }
 
 extension BookmarksPanel: HomePanelContextMenu {
-    func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> ActionOverlayTableViewController?) {
+    func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?) {
         guard let contextMenu = completionHandler() else { return }
         self.present(contextMenu, animated: true, completion: nil)
     }
@@ -430,10 +430,10 @@ extension BookmarksPanel: HomePanelContextMenu {
         return site
     }
 
-    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [ActionOverlayTableViewAction]? {
+    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]? {
         guard var actions = getDefaultContextMenuActions(for: site, homePanelDelegate: homePanelDelegate) else { return nil }
 
-        let pinTopSite = ActionOverlayTableViewAction(title: Strings.PinTopsiteActionTitle, iconString: "action_pin", handler: { action in
+        let pinTopSite = PhotonActionSheetItem(title: Strings.PinTopsiteActionTitle, iconString: "action_pin", handler: { action in
             self.pinTopSite(site)
         })
 
@@ -444,7 +444,7 @@ extension BookmarksPanel: HomePanelContextMenu {
         // Only local bookmarks can be removed
         guard let source = source else { return nil }
         if source.current.itemIsEditableAtIndex(indexPath.row) {
-            let removeAction = ActionOverlayTableViewAction(title: Strings.RemoveBookmarkContextMenuTitle, iconString: "action_bookmark_remove", handler: { action in
+            let removeAction = PhotonActionSheetItem(title: Strings.RemoveBookmarkContextMenuTitle, iconString: "action_bookmark_remove", handler: { action in
                 self.deleteBookmark(indexPath: indexPath, source: source)
             })
             actions.append(removeAction)
