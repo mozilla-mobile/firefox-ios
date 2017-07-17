@@ -279,7 +279,7 @@ class ActivityStreamTest: BaseTestCase {
         app.collectionViews.cells["TopSitesCell"].cells["example"].press(forDuration: 1)
 
         let contextMenuHeight = app.tables["Context Menu"].frame.size.height
-        let parentViewHeight = app.otherElements["Action Overlay"].frame.size.height
+        let parentViewHeight = app.otherElements["Action Sheet"].frame.size.height
 
         XCTAssertLessThanOrEqual(contextMenuHeight, parentViewHeight)
 

@@ -156,7 +156,7 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
 }
 
 extension RecentlyClosedTabsPanelSiteTableViewController: HomePanelContextMenu {
-    func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> ActionOverlayTableViewController?) {
+    func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?) {
         guard let contextMenu = completionHandler() else { return }
         self.present(contextMenu, animated: true, completion: nil)
     }
@@ -172,7 +172,7 @@ extension RecentlyClosedTabsPanelSiteTableViewController: HomePanelContextMenu {
         return site
     }
 
-    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [ActionOverlayTableViewAction]? {
+    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]? {
         return getDefaultContextMenuActions(for: site, homePanelDelegate: homePanelDelegate)
     }
 }
