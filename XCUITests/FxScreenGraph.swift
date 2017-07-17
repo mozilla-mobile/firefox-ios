@@ -38,17 +38,17 @@ let allSettingsScreens = [
     OpenWithSettings,
 ]
 
-let Intro_Organize = "Intro.Organize"
-let Intro_Customize = "Intro.Customize"
-let Intro_Share = "Intro.Share"
-let Intro_Choose = "Intro.Choose"
+let Intro_Welcome = "Intro.Welcome"
+let Intro_Search = "Intro.Search"
+let Intro_Private = "Intro.Private"
+let Intro_Mail = "Intro.Mail"
 let Intro_Sync = "Intro.Sync"
 
 let allIntroPages = [
-    Intro_Organize,
-    Intro_Customize,
-    Intro_Share,
-    Intro_Choose,
+    Intro_Welcome,
+    Intro_Search,
+    Intro_Private,
+    Intro_Mail,
     Intro_Sync,
 ]
 
@@ -71,9 +71,14 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
     let map = ScreenGraph()
 
     let startBrowsingButton = app.buttons["IntroViewController.startBrowsingButton"]
+    let introScrollView = app.scrollViews["IntroViewController.scrollView"]
     map.createScene(FirstRun) { scene in
+        // We don't yet have conditional edges, so we declare an edge from this node
+        // to NewTabScreen, and then just make it work.
         scene.gesture(to: NewTabScreen) {
-            if startBrowsingButton.exists {
+            if introScrollView.exists {
+                // go find the startBrowsing button on the second page of the intro.
+                introScrollView.swipeLeft()
                 startBrowsingButton.tap()
             }
         }
@@ -98,7 +103,9 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
                 scene.swipeLeft(introPager, to: next)
             }
 
-            scene.tap(startBrowsingButton, to: NewTabScreen)
+            if i > 0 {
+                scene.tap(startBrowsingButton, to: NewTabScreen)
+            }
         }
 
         i += 1
@@ -172,7 +179,7 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
         scene.tap(table.cells["Logins"], to: LoginsSettings)
         scene.tap(table.cells["ClearPrivateData"], to: ClearPrivateDataSettings)
         scene.tap(table.cells["OpenWith.Setting"], to: OpenWithSettings)
-        scene.tap(table.cells["ShowTour"], to: Intro_Organize)
+        scene.tap(table.cells["ShowTour"], to: Intro_Welcome)
 
         scene.backAction = navigationControllerBackAction
     }
