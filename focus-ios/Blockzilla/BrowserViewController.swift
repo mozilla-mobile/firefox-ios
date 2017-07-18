@@ -202,6 +202,8 @@ class BrowserViewController: UIViewController {
         let settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager)
         navigationController!.pushViewController(settingsViewController, animated: true)
         navigationController!.setNavigationBarHidden(false, animated: true)
+
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.settingsButton)
     }
 
     fileprivate func submit(url: URL) {

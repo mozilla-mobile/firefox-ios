@@ -28,6 +28,7 @@ class TelemetryEventObject {
     public static let app = "app"
     public static let searchBar = "search_bar"
     public static let eraseButton = "erase_button"
+    public static let settingsButton = "settings_button"
     public static let setting = "setting"
     public static let menu = "menu"
 }
