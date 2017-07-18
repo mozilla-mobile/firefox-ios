@@ -3,29 +3,29 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 (function() {
-  var selectors = {
-    title: "head title",
-    description: "head meta[name='description'], body p",
-  };
+"use strict";
 
-  function collectText ($document, selector) {
-    var $el = $document.querySelector(selector);
-    if ($el) {
-      return $el.getAttribute("content") || $el.innerText
-    }
+var selectors = {
+  title: "title",
+  description: "meta[name='description'], body p",
+};
+
+function collectText(selector) {
+  var el = document.querySelector(selector);
+  return el ? el.getAttribute("content") || el.innerText || "" : "";
+}
+
+function assemblePayload(selectors) {
+  var payload = {};
+  for (var key in selectors) {
+    payload[key] = collectText(selectors[key]);
   }
+  return payload;
+}
 
-  function assemblePayload ($document, selectors) {
-    var payload = {};
-    for (var key in selectors) {
-      payload[key] = collectText($document, selectors[key]) || "";
-    }
-    return payload;
-  }
+window.addEventListener("load", function() {
+  var payload = assemblePayload(selectors);
+  webkit.messageHandlers.spotlightMessageHandler.postMessage(payload);
+});
 
-  window.addEventListener("load", function() {
-     var payload = assemblePayload(document, selectors);
-     webkit.messageHandlers.spotlightMessageHandler.postMessage(payload);
-  });
-
-})()
+})();

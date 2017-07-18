@@ -33,7 +33,7 @@ Object.defineProperty(window.__firefox__, 'favicons', {
       var favicons = {};
     
       for (var selector in selectors) {
-        var icons = document.head.querySelectorAll(selector);
+        var icons = document.querySelectorAll(selector);
         for (var i = 0; i < icons.length; i++) {
           var href = icons[i].href;
           favicons[href] = selectors[selector];
