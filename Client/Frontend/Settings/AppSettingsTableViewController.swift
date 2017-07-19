@@ -118,7 +118,8 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 DeleteExportedDataSetting(settings: self),
                 EnableBookmarkMergingSetting(settings: self),
                 ForceCrashSetting(settings: self),
-                EnableActivtyStreamSetting(settings: self)
+                EnableActivtyStreamSetting(settings: self),
+                EnablePhotonMenuSetting(settings: self)
             ])]
             
             if profile.hasAccount() {

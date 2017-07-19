@@ -59,6 +59,11 @@ class NightModeHelper: TabHelper {
             }
         }
     }
+
+    static func toggle(_ prefs: Prefs, tabManager: TabManager) {
+        let isActive = prefs.boolForKey(NoImageModePrefsKey.NoImageModeStatus) ?? false
+        setNightMode(prefs, tabManager: tabManager, enabled: !isActive)
+    }
     
     static func setNightMode(_ prefs: Prefs, tabManager: TabManager, enabled: Bool) {
         prefs.setBool(enabled, forKey: PrefsKeys.KeyNightModeStatus)
@@ -66,6 +71,10 @@ class NightModeHelper: TabHelper {
             tab.setNightMode(enabled)
         }
         NightModeHelper.setNightModeBrightness(prefs, enabled: enabled)
+    }
+
+    static func isActivated(_ prefs: Prefs) -> Bool {
+        return prefs.boolForKey(NightModePrefsKey.NightModeStatus) ?? false
     }
 }
 

@@ -6,8 +6,8 @@ import Foundation
 
 /// Steadily growing set of feature switches controlling access to features by populations of Release users.
 open class FeatureSwitches {
-    open static let activityStream =
-        FeatureSwitch(named: "activity_stream", AppConstants.MOZ_AS_PANEL, allowPercentage: 50)
+    open static let activityStream = FeatureSwitch(named: "activity_stream", AppConstants.MOZ_AS_PANEL, allowPercentage: 50)
+    open static let photonMenu = FeatureSwitch(named: "photon_menu", false, allowPercentage: 0)
 }
 
 /// Small class to allow a percentage of users to access a given feature.
@@ -32,15 +32,15 @@ open class FeatureSwitch {
     /// in the preferences.
     /// This gives us stable properties across restarts and new releases.
     open func isMember(_ prefs: Prefs) -> Bool {
-        // Only use bucketing if we're in the correct build channel, and feature flag is true.
-        guard buildChannel == AppConstants.BuildChannel, nonChannelValue else {
-            return nonChannelValue
-        }
-
         // Check if this feature has been enabled by the user
         let key = "\(self.switchKey).enabled"
         if let isEnabled = prefs.boolForKey(key) {
             return isEnabled
+        }
+
+        // Only use bucketing if we're in the correct build channel, and feature flag is true.
+        guard buildChannel == AppConstants.BuildChannel, nonChannelValue else {
+            return nonChannelValue
         }
 
         return lowerCaseS(prefs) < self.percentage

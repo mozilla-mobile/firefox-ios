@@ -35,10 +35,24 @@ class NoImageModeHelper: TabHelper {
     }
 
     static func isNoImageModeAvailable(_ state: AppState) -> Bool {
+        // TODO: Doesnt look like anyone actually uses NoImageModePrefsKey.NoImageModeButtonIsInMenu
+        // was this added in the case that this feature might only launch in China?
         return state.prefs.boolForKey(NoImageModePrefsKey.NoImageModeButtonIsInMenu) ?? AppConstants.MOZ_NO_IMAGE_MODE
     }
 
     static func isNoImageModeActivated(_ state: AppState) -> Bool {
         return state.prefs.boolForKey(NoImageModePrefsKey.NoImageModeStatus) ?? false
+    }
+
+    static func isActivated(_ prefs: Prefs) -> Bool {
+        return prefs.boolForKey(NoImageModePrefsKey.NoImageModeStatus) ?? false
+    }
+
+    static func toggle(profile: Profile, tabManager: TabManager) {
+        let enabled = isActivated(profile.prefs)
+
+        profile.prefs.setBool(!enabled, forKey: PrefsKeys.KeyNoImageModeStatus)
+        tabManager.tabs.forEach { $0.setNoImageMode(!enabled, force: true) }
+        tabManager.selectedTab?.reload()
     }
 }
