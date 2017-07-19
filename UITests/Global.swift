@@ -272,7 +272,9 @@ class BrowserUtils {
     //If it is a first run, first run window should be gone
     class func dismissFirstRunUI(_ tester: KIFUITestActor) {
         do {
-            try tester.tryFindingTappableView(withAccessibilityLabel: "Start Browsing")
+            try tester.tryFindingView(withAccessibilityLabel: "Intro Tour Carousel")
+            tester.swipeView(withAccessibilityLabel: "Intro Tour Carousel", in: KIFSwipeDirection.left)
+            tester.waitForTappableView(withAccessibilityLabel: "Start Browsing")
             tester.tapView(withAccessibilityLabel: "Start Browsing")
         } catch {
             //First run dialog did not appear
@@ -283,12 +285,20 @@ class BrowserUtils {
 		var error: NSError?
         
 		let matcher = grey_allOf([
-			grey_accessibilityID("IntroViewController.startBrowsingButton"), grey_sufficientlyVisible()])
+			grey_accessibilityID("IntroViewController.scrollView"), grey_sufficientlyVisible()])
 		
         EarlGrey.select(elementWithMatcher: matcher).assert(grey_notNil(), error: &error)
 		
 		if error == nil {
-            EarlGrey.select(elementWithMatcher: matcher).perform(grey_tap())
+            EarlGrey.select(elementWithMatcher: matcher).perform(grey_swipeFastInDirection(GREYDirection.left))
+            let buttonMatcher = grey_allOf([
+                grey_accessibilityID("IntroViewController.startBrowsingButton"), grey_sufficientlyVisible()])
+            
+            EarlGrey.select(elementWithMatcher: buttonMatcher).assert(grey_notNil(), error: &error)
+        
+            if error == nil {
+                EarlGrey.select(elementWithMatcher: buttonMatcher).perform(grey_tap())
+            }
 		}
 	}
 
