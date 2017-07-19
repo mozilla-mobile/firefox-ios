@@ -1792,7 +1792,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             })
             actions.append(tabActions)
 
-            let actionMenuPresenter: (URL, Tab, UIView, UIPopoverArrowDirection) -> ()  = { (url, tab, view, direction) in
+            let actionMenuPresenter: (URL, Tab, UIView, UIPopoverArrowDirection) -> Void  = { (url, tab, view, direction) in
                 self.presentActivityViewController(url, tab: tab, sourceView: view, sourceRect: view.frame, arrowDirection: .up)
             }
 
@@ -1804,14 +1804,9 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
                 let systemActions = self.getOtherPanelActions(vcDelegate: self)
                 actions.append(systemActions)
             }
-
-
             self.presentSheetWith(actions: actions, on: self, from: button)
-
-
             return
         }
-
 
         // check the trait collection
         // open as modal if portrait\

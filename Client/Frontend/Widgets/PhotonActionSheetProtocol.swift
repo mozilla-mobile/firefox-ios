@@ -32,7 +32,7 @@ extension PhotonActionSheetProtocol {
 
     //Returns a list of actions which is used to build a menu
     //parameter OpenURL is a clousre that can open a given URL in some view controller. It is up to the class using the menu to know how to open the url
-    func getHomePanelActions(openURL: @escaping (URL) -> ()) -> [PhotonActionSheetItem] {
+    func getHomePanelActions(openURL: @escaping (URL) -> Void) -> [PhotonActionSheetItem] {
         let openTopSites = PhotonActionSheetItem(title: Strings.AppMenuTopSitesTitleString, iconString: "menupanel-TopSites") { action in
             openURL(HomePanelType.topSites.localhostURL)
         }
@@ -93,8 +93,7 @@ extension PhotonActionSheetProtocol {
         return [openSettings, openQR, noImageMode, nightMode]
     }
 
-
-    func getTabActions(tab: Tab, buttonView: UIView,   presentShareMenu: @escaping (URL, Tab, UIView, UIPopoverArrowDirection) -> ()) -> [PhotonActionSheetItem] {
+    func getTabActions(tab: Tab, buttonView: UIView,   presentShareMenu: @escaping (URL, Tab, UIView, UIPopoverArrowDirection) -> Void) -> [PhotonActionSheetItem] {
 
         let toggleActionTitle = tab.desktopSite ? Strings.AppMenuViewMobileSiteTitleString : Strings.AppMenuViewDesktopSiteTitleString
         let toggleDesktopSite = PhotonActionSheetItem(title: toggleActionTitle, iconString: "menu-RequestDesktopSite") { action in
@@ -143,12 +142,11 @@ extension PhotonActionSheetProtocol {
             presentShareMenu(url, tab, buttonView, .up)
         }
 
-
         let bookmarkAction = tab.isBookmarked ? removeBookmark : bookmarkPage
         return [toggleDesktopSite, bookmarkAction, setHomePage, share]
     }
 
-    func getTabMenuActions(openURL: @escaping (URL?, Bool) -> ()) -> [PhotonActionSheetItem] {
+    func getTabMenuActions(openURL: @escaping (URL?, Bool) -> Void) -> [PhotonActionSheetItem] {
         let openTab = PhotonActionSheetItem(title: "Open new Tab", iconString: "menu-NewTab") { action in
             openURL(nil, false)
         }
