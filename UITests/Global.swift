@@ -457,6 +457,10 @@ class SimplePageServer {
         webServer.addHandler(forMethod: "GET", path: "/loginForm.html", request: GCDWebServerRequest.self) { _ in
             return GCDWebServerDataResponse(html: self.getPageData("loginForm"))
         }
+        
+        webServer.addHandler(forMethod: "GET", path: "/navigationDelegate.html", request: GCDWebServerRequest.self) { _ in
+            return GCDWebServerDataResponse(html: self.getPageData("navigationDelegate"))
+        }
 
         webServer.addHandler(forMethod: "GET", path: "/localhostLoad.html", request: GCDWebServerRequest.self) { _ in
             return GCDWebServerDataResponse(html: self.getPageData("localhostLoad"))

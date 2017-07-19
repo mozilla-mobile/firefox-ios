@@ -321,6 +321,11 @@ extension Strings {
     public static let AppMenuNoImageModeTurnOffLabel = NSLocalizedString("Menu.NoImageModeTurnOffAction.Label", value: "Show Images", comment: "Label for the button, displayed in the menu, used to turn no image mode off.")
 }
 
+// Snackbar shown when tapping app store link
+extension Strings {
+    public static let ExternalLinkToAppStore_ConfirmationTitle = NSLocalizedString("ExternalLink.ConfirmMessage", value: "Open this link in the App Store app?", comment: "Question shown to user when tapping a link that opens the App Store app")
+}
+
 // MARK: Deprecated Strings (to be removed in next version)
 private let logOut = NSLocalizedString("Log Out", comment: "Button in settings screen to disconnect from your account")
 private let logOutQuestion = NSLocalizedString("Log Out?", comment: "Title of the 'log out firefox account' alert")
