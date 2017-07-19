@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import Storage
 
-protocol PhotonActionSheetProtocol  {
+protocol PhotonActionSheetProtocol {
     var tabManager: TabManager { get }
     var profile: Profile { get }
 }
@@ -93,7 +93,7 @@ extension PhotonActionSheetProtocol {
         return [openSettings, openQR, noImageMode, nightMode]
     }
 
-    func getTabActions(tab: Tab, buttonView: UIView,   presentShareMenu: @escaping (URL, Tab, UIView, UIPopoverArrowDirection) -> Void) -> [PhotonActionSheetItem] {
+    func getTabActions(tab: Tab, buttonView: UIView, presentShareMenu: @escaping (URL, Tab, UIView, UIPopoverArrowDirection) -> Void) -> [PhotonActionSheetItem] {
 
         let toggleActionTitle = tab.desktopSite ? Strings.AppMenuViewMobileSiteTitleString : Strings.AppMenuViewDesktopSiteTitleString
         let toggleDesktopSite = PhotonActionSheetItem(title: toggleActionTitle, iconString: "menu-RequestDesktopSite") { action in
