@@ -207,14 +207,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         let router = Router.shared
         let rootNav = rootViewController as! UINavigationController
 
-        router.map("homepanel/:page", handler: { (params:[String: String]?) -> (Bool) in
+        router.map("homepanel/:page", handler: { (params: [String: String]?) -> (Bool) in
             guard let page = params?["page"] else {
                 return false
             }
 
             assert(Thread.isMainThread, "Opening homepanels requires being invoked on the main thread")
 
-            switch (page) {
+            switch page {
                 case "bookmarks":
                     self.browserViewController.openURLInNewTab(HomePanelType.bookmarks.localhostURL, isPrivileged: true)
                 case "history":
@@ -229,7 +229,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         })
 
         // Route to general settings page like this: "...settings/general"
-        router.map("settings/:page", handler: { (params:[String: String]?) -> (Bool) in
+        router.map("settings/:page", handler: { (params: [String: String]?) -> (Bool) in
             guard let page = params?["page"] else {
                 return false
             }
@@ -247,7 +247,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
             rootNav.present(controller, animated: true, completion: nil)
 
-            switch (page) {
+            switch page {
                 case "newtab":
                     let viewController = NewTabChoiceViewController(prefs: self.getProfile(application).prefs)
                     controller.pushViewController(viewController, animated: true)
@@ -426,7 +426,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             self.browserViewController.openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
         }
 
-        LeanplumIntegration.sharedInstance.track(eventName: .openedNewTab, withParameters: ["Source":"External App or Extension" as AnyObject])
+        LeanplumIntegration.sharedInstance.track(eventName: .openedNewTab, withParameters: ["Source": "External App or Extension" as AnyObject])
     }
 
     func application(_ application: UIApplication, shouldAllowExtensionPointIdentifier extensionPointIdentifier: UIApplicationExtensionPointIdentifier) -> Bool {
@@ -772,7 +772,6 @@ extension AppDelegate {
         if Logger.logPII && log.isEnabledFor(level: .info) {
             NSLog("APNS NOTIFICATION \(userInfo)")
         }
-
 
         // At this point, we know that NotificationService has been run.
         // We get to this point if the notification was received while the app was in the foreground
