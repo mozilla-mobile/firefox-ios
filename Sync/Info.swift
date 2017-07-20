@@ -48,7 +48,7 @@ open class InfoCollections {
         // Same collections?
         let ours = self.collectionNames()
         let theirs = other.collectionNames()
-        return ours.sameElements(theirs, f: ==) && same(other, collections: ours)
+        return ours.sameElements(theirs) && same(other, collections: ours)
     }
 }
 
