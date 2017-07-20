@@ -82,10 +82,20 @@ open class MockRemoteClientsAndTabs: RemoteClientsAndTabs {
         return deferMaybe(self.clientsAndTabs.map { $0.client })
     }
 
-    open func getClientWithId(_ clientID: GUID) -> Deferred<Maybe<RemoteClient?>> {
+    public func getClient(guid: GUID) -> Deferred<Maybe<RemoteClient?>> {
         return deferMaybe(self.clientsAndTabs.find { clientAndTabs in
-            return clientAndTabs.client.guid == clientID
+            return clientAndTabs.client.guid == guid
         }?.client)
+    }
+
+    public func getClient(fxaDeviceId: GUID) -> Deferred<Maybe<RemoteClient?>> {
+        return deferMaybe(self.clientsAndTabs.find { clientAndTabs in
+            return clientAndTabs.client.fxaDeviceId == fxaDeviceId
+            }?.client)
+    }
+
+    open func getClientWithId(_ clientID: GUID) -> Deferred<Maybe<RemoteClient?>> {
+        return getClient(guid: clientID)
     }
 
     open func getClientGUIDs() -> Deferred<Maybe<Set<GUID>>> {
@@ -95,6 +105,8 @@ open class MockRemoteClientsAndTabs: RemoteClientsAndTabs {
     open func getTabsForClientWithGUID(_ guid: GUID?) -> Deferred<Maybe<[RemoteTab]>> {
         return deferMaybe(optFilter(self.clientsAndTabs.map { $0.client.guid == guid ? $0.tabs : nil })[0])
     }
+
+    open func deleteClientWithId(_ clientID: GUID) -> Success { return succeed() }
 
     open func deleteCommands() -> Success { return succeed() }
     open func deleteCommands(_ clientGUID: GUID) -> Success { return succeed() }
