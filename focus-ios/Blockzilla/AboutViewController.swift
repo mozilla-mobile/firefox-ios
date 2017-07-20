@@ -143,6 +143,12 @@ private class AboutHeaderView: UIView {
             attributed.append(string)
         }
 
+        let versionNumber = UILabel()
+        versionNumber.text = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
+        versionNumber.font = UIConstants.fonts.aboutText
+        versionNumber.textColor = UIConstants.colors.defaultFont.withAlphaComponent(0.5)
+        addSubview(versionNumber)
+
         let aboutParagraph = UILabel()
         aboutParagraph.attributedText = attributed
         aboutParagraph.textColor = UIConstants.colors.defaultFont
@@ -161,6 +167,11 @@ private class AboutHeaderView: UIView {
         logo.snp.makeConstraints { make in
             make.centerX.equalTo(self)
             make.top.equalTo(self).offset(50)
+        }
+
+        versionNumber.snp.makeConstraints { make in
+            make.centerX.equalTo(self)
+            make.top.equalTo(logo.snp.bottom).offset(8)
         }
 
         aboutParagraph.snp.makeConstraints { make in
