@@ -40,10 +40,6 @@ public class SentryIntegration {
             Client.shared = try Client(dsn: dsn)
             try Client.shared?.startCrashHandler()
             enabled = true
-
-            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-                self.send(message: "Started Sentry crash handler")
-            }
         } catch let error {
             Logger.browserLogger.error("Failed to initialize Sentry: \(error)")
         }
