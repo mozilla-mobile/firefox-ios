@@ -48,6 +48,18 @@ class FxALoginHelper {
 
     fileprivate var accountVerified: Bool!
 
+    fileprivate var pushClient: PushClient? {
+        guard let pushConfiguration = self.getPushConfiguration() ?? self.profile?.accountConfiguration.pushConfiguration,
+            let accountConfiguration = self.profile?.accountConfiguration else {
+                log.error("Push server endpoint could not be found")
+                return nil
+        }
+
+        // Experimental mode needs: a) the scheme to be Fennec, and b) the accountConfiguration to be flipped in debug mode.
+        let experimentalMode = (pushConfiguration.label == .fennec && accountConfiguration.label == .latestDev)
+        return PushClient(endpointURL: pushConfiguration.endpointURL, experimentalMode: experimentalMode)
+    }
+
     // This should be called when the application has started.
     // This configures the helper for logging into Firefox Accounts, and
     // if already logged in, checking if anything needs to be done in response
@@ -211,16 +223,11 @@ class FxALoginHelper {
     func apnsRegisterDidSucceed(_ deviceToken: Data) {
         let apnsToken = deviceToken.hexEncodedString
 
-        guard let pushConfiguration = getPushConfiguration() ?? self.profile?.accountConfiguration.pushConfiguration,
-            let accountConfiguration = profile?.accountConfiguration else {
-            log.error("Push server endpoint could not be found")
+        guard let pushClient = self.pushClient else {
             return pushRegistrationDidFail()
         }
 
-        // Experimental mode needs: a) the scheme to be Fennec, and b) the accountConfiguration to be flipped in debug mode.
-        let experimentalMode = (pushConfiguration.label == .fennec && accountConfiguration.label == .latestDev)
-        let client = PushClient(endpointURL: pushConfiguration.endpointURL, experimentalMode: experimentalMode)
-        client.register(apnsToken).upon { res in
+        pushClient.register(apnsToken).upon { res in
             guard let pushRegistration = res.successValue else {
                 return self.pushRegistrationDidFail()
             }
@@ -310,5 +317,32 @@ class FxALoginHelper {
 
     func performVerifiedSync(_ profile: Profile, account: FirefoxAccount) {
         profile.syncManager.syncEverything(why: .didLogin)
+    }
+}
+
+extension FxALoginHelper {
+    func applicationDidDisconnect(_ application: UIApplication) {
+        // According to https://developer.apple.com/documentation/uikit/uiapplication/1623093-unregisterforremotenotifications
+        // we should be calling:
+        application.unregisterForRemoteNotifications()
+        // However, https://forums.developer.apple.com/message/179264#179264 advises against it, suggesting there is 
+        // a 24h period after unregistering where re-registering fails. This doesn't seem to be the case (for me)
+        // but this may be useful to know if QA/user-testing find this a problem.
+
+        // Whatever, we should unregister from the autopush server. That means we definitely won't be getting any 
+        // messages.
+        if let pushRegistration = self.account.pushRegistration,
+            let pushClient = self.pushClient {
+            _ = pushClient.unregister(pushRegistration)
+        }
+
+        // TODO: fix https://bugzilla.mozilla.org/show_bug.cgi?id=1300641 , to tell Sync and FxA we're no longer attached.
+
+        // Cleanup the database.
+        self.profile?.removeAccount()
+
+        // Cleanup the FxALoginHelper.
+        self.account = nil
+        self.accountVerified = nil
     }
 }

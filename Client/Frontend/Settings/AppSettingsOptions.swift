@@ -67,7 +67,7 @@ class DisconnectSetting: WithAccountSetting {
             })
         alertController.addAction(
             UIAlertAction(title: Strings.SettingsSignOutDestructiveAction, style: .destructive) { (action) in
-                self.settings.profile.removeAccount()
+                FxALoginHelper.sharedInstance.applicationDidDisconnect(UIApplication.shared)
                 self.settings.settings = self.settings.generateSettings()
                 self.settings.SELfirefoxAccountDidChange()
 
