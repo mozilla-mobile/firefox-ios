@@ -90,7 +90,7 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
         if prePathURL.startsWith(query) {
             // Trailing slashes in the autocompleteTextField cause issues with Swype keyboard. Bug 1194714
             if prePathURL.endsWith("/") {
-                prePathURL.removeLast()
+                prePathURL.remove(at: prePathURL.index(before: prePathURL.endIndex))
             }
             return prePathURL
         }
