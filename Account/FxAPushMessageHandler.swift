@@ -124,23 +124,39 @@ extension FxAPushMessageHandler {
 
 extension FxAPushMessageHandler {
     func handleDeviceDisconnected(_ data: JSON?) -> PushMessageResult {
-        guard let deviceID = data?["id"].string else {
+        guard let deviceId = data?["id"].string else {
             return messageIncomplete(.deviceDisconnected)
         }
 
-        if deviceID == getOurClientId() {
-            // We can't disconnect the device from the account until we have
+        if let ourDeviceId = self.getOurDeviceId(), deviceId == ourDeviceId {
+            // We can't disconnect the device from the account until we have 
             // access to the application, so we'll handle this properly in the AppDelegate,
             // by calling the FxALoginHelper.applicationDidDisonnect(application).
             profile.prefs.setBool(true, forKey: PendingAccountDisconnectedKey)
             return deferMaybe(PushMessage.thisDeviceDisconnected)
         }
 
-        return deferMaybe(PushMessage.deviceDisconnected(nil))
+        guard let profile = self.profile as? BrowserProfile else {
+            // We can't look up a name in testing, so this is the same as
+            // not knowing about it.
+            return deferMaybe(PushMessage.deviceDisconnected(nil))
+        }
+
+        let clients = profile.remoteClientsAndTabs
+        let getClient = clients.getClient(fxaDeviceId: deviceId)
+        
+        return getClient >>== { device in
+            let message = PushMessage.deviceDisconnected(device?.name)
+            if let id = device?.guid {
+                return clients.deleteClientWithId(id) >>== { _ in deferMaybe(message) }
+            }
+
+            return deferMaybe(message)
+        }
     }
 
-    fileprivate func getOurClientId() -> GUID {
-        return profile.clientID
+    fileprivate func getOurDeviceId() -> String? {
+        return profile.getAccount()?.deviceRegistration?.id
     }
 }
 
