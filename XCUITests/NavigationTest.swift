@@ -60,7 +60,7 @@ class NavigationTest: BaseTestCase {
 
         // Open FxAccount from tour option in settings menu and go throughout all the screens there
         // Tour's first screen Organize
-        navigator.goto(Intro_Organize)
+        navigator.goto(Intro_Welcome)
         // Tour's last screen Sync
         navigator.goto(Intro_Sync)
 
