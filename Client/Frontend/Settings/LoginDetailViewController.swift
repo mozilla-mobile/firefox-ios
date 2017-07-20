@@ -7,7 +7,7 @@ import Storage
 import Shared
 import SwiftKeychainWrapper
 
-private enum InfoItem: Int {
+enum InfoItem: Int {
     case websiteItem = 0
     case usernameItem = 1
     case passwordItem = 2
@@ -63,9 +63,7 @@ class LoginDetailViewController: SensitiveViewController {
         self.login = login
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
-
-        NotificationCenter.default.addObserver(self, selector: #selector(LoginDetailViewController.SELwillShowMenuController), name: NSNotification.Name.UIMenuControllerWillShowMenu, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(LoginDetailViewController.SELwillHideMenuController), name: NSNotification.Name.UIMenuControllerWillHideMenu, object: nil)
+        
         NotificationCenter.default.addObserver(self, selector: #selector(LoginDetailViewController.dismissAlertController), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
     }
 
@@ -113,8 +111,6 @@ class LoginDetailViewController: SensitiveViewController {
     deinit {
         let notificationCenter = NotificationCenter.default
         notificationCenter.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
-        notificationCenter.removeObserver(self, name: NSNotification.Name.UIMenuControllerWillShowMenu, object: nil)
-        notificationCenter.removeObserver(self, name: NSNotification.Name.UIMenuControllerWillHideMenu, object: nil)
         notificationCenter.removeObserver(self, name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
     }
 
@@ -220,11 +216,28 @@ extension LoginDetailViewController: UITableViewDataSource {
 
 // MARK: - UITableViewDelegate
 extension LoginDetailViewController: UITableViewDelegate {
+    private func showMenuOnSingleTap(forIndexPath indexPath: IndexPath) {
+        guard let item = InfoItem(rawValue: indexPath.row) else { return }
+        if ![InfoItem.passwordItem, InfoItem.websiteItem, InfoItem.usernameItem].contains(item) {
+            return
+        }
+        
+        guard let cell = tableView.cellForRow(at: indexPath) as? LoginTableViewCell else { return }
+        
+        cell.becomeFirstResponder()
+        
+        let menu = UIMenuController.shared
+        menu.setTargetRect(cell.frame, in: self.tableView)
+        menu.setMenuVisible(true, animated: true)
+    }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath == InfoItem.deleteItem.indexPath {
             deleteLogin()
+        } else if !editingInfo {
+            showMenuOnSingleTap(forIndexPath: indexPath)
         }
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -236,43 +249,6 @@ extension LoginDetailViewController: UITableViewDelegate {
         case .deleteItem:
             return LoginDetailUX.DeleteRowHeight
         }
-    }
-
-    func tableView(_ tableView: UITableView, shouldShowMenuForRowAt indexPath: IndexPath) -> Bool {
-        let item = InfoItem(rawValue: indexPath.row)!
-        if item == .passwordItem || item == .websiteItem || item == .usernameItem {
-            menuControllerCell = tableView.cellForRow(at: indexPath) as? LoginTableViewCell
-            return true
-        }
-
-        return false
-    }
-
-    func tableView(_ tableView: UITableView, canPerformAction action: Selector, forRowAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
-        let item = InfoItem(rawValue: indexPath.row)!
-
-        // Menu actions for password
-        if item == .passwordItem {
-            let loginCell = tableView.cellForRow(at: indexPath) as! LoginTableViewCell
-            let showRevealOption = loginCell.descriptionLabel.isSecureTextEntry ? (action == MenuHelper.SelectorReveal) : (action == MenuHelper.SelectorHide)
-            return action == MenuHelper.SelectorCopy || showRevealOption
-        }
-
-        // Menu actions for Website
-        if item == .websiteItem {
-            return action == MenuHelper.SelectorCopy || action == MenuHelper.SelectorOpenAndFill
-        }
-
-        // Menu actions for Username
-        if item == .usernameItem {
-            return action == MenuHelper.SelectorCopy
-        }
-
-        return false
-    }
-
-    func tableView(_ tableView: UITableView, performAction action: Selector, forRowAt indexPath: IndexPath, withSender sender: Any?) {
-        // No-op. Needs to be overridden for custom menu action selectors to work.
     }
 }
 
@@ -332,7 +308,12 @@ extension LoginDetailViewController {
     func SELdoneEditing() {
         editingInfo = false
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(LoginDetailViewController.SELedit))
-
+        
+        defer {
+            // Required to get UI to reload with changed state
+            tableView.reloadData()
+        }
+        
         // We only care to update if we changed something
         guard let username = usernameField?.text,
                   let password = passwordField?.text, username != login.username || password != login.password else {
@@ -349,37 +330,6 @@ extension LoginDetailViewController {
         } else if let oldUsername = oldUsername {
             login.update(password: oldPassword, username: oldUsername)
         }
-    }
-
-    func SELwillShowMenuController() {
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIMenuControllerWillShowMenu, object: nil)
-
-        let menuController = UIMenuController.shared
-        guard let cell = menuControllerCell,
-              let textSize = cell.descriptionTextSize else {
-            return
-        }
-
-        // The description label constraints are such that it extends full width of the cell instead of only
-        // the size of its text. The reason is because when the description is used as a password, the dots
-        // are slightly larger characters than the font size which causes the password text to be truncated
-        // even though the revealed text fits. Since the label is actually full width, the menu controller will
-        // display in its center by default which looks weird with small passwords. To prevent this,
-        // the actual size of the text is used to determine where to correctly place the menu.
-
-        var descriptionFrame = passwordField?.frame ?? CGRect.zero
-        descriptionFrame.size = textSize
-
-        menuController.arrowDirection = .up
-        menuController.setTargetRect(descriptionFrame, in: cell)
-        menuController.setMenuVisible(true, animated: true)
-    }
-
-    func SELwillHideMenuController() {
-        menuControllerCell = nil
-
-        // Re-add observer
-        NotificationCenter.default.addObserver(self, selector: #selector(LoginDetailViewController.SELwillShowMenuController), name: NSNotification.Name.UIMenuControllerWillShowMenu, object: nil)
     }
 }
 
@@ -409,5 +359,13 @@ extension LoginDetailViewController: LoginTableViewCellDelegate {
         }
 
         return false
+    }
+    
+    func infoItemForCell(_ cell: LoginTableViewCell) -> InfoItem? {
+        if let index = tableView.indexPath(for: cell),
+            let item = InfoItem(rawValue: index.row) {
+            return item
+        }
+        return nil
     }
 }
