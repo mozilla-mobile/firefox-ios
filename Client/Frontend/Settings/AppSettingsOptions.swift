@@ -448,6 +448,17 @@ class EnableActivtyStreamSetting: FeatureSwitchSetting {
 
 }
 
+class EnablePhotonMenuSetting: FeatureSwitchSetting {
+    let profile: Profile
+
+    init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
+        let title = NSAttributedString(string: "Enable the Photon Menu", attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
+        super.init(prefs: settings.profile.prefs, featureSwitch: FeatureSwitches.photonMenu, with: title)
+    }
+
+}
+
 class EnableBookmarkMergingSetting: HiddenSetting {
     override var title: NSAttributedString? {
         // Not localized for now.

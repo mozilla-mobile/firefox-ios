@@ -258,6 +258,7 @@
 		3B0943811D6CC4FC004F24E1 /* FilledPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0943801D6CC4FC004F24E1 /* FilledPageControl.swift */; };
 		3B39EDBA1E16E18900EF029F /* CustomSearchEnginesTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B39EDB91E16E18900EF029F /* CustomSearchEnginesTest.swift */; };
 		3B39EDCB1E16E1AA00EF029F /* CustomSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B39EDCA1E16E1AA00EF029F /* CustomSearchViewController.swift */; };
+		3B400E521F1ED5C4005194DD /* PhotonActionSheetProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B400E431F1ED5C3005194DD /* PhotonActionSheetProtocol.swift */; };
 		3B4262E51E538EC400CA681C /* MetadataHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 3B4262E21E538EC400CA681C /* MetadataHelper.js */; };
 		3B4262E61E538EC400CA681C /* MetadataParserHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B4262E31E538EC400CA681C /* MetadataParserHelper.swift */; };
 		3B4262E71E538EC400CA681C /* page-metadata-parser.js in Resources */ = {isa = PBXBuildFile; fileRef = 3B4262E41E538EC400CA681C /* page-metadata-parser.js */; };
@@ -1518,6 +1519,7 @@
 		3B0943801D6CC4FC004F24E1 /* FilledPageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FilledPageControl.swift; path = ThirdParty/FilledPageControl.swift; sourceTree = "<group>"; };
 		3B39EDB91E16E18900EF029F /* CustomSearchEnginesTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomSearchEnginesTest.swift; sourceTree = "<group>"; };
 		3B39EDCA1E16E1AA00EF029F /* CustomSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomSearchViewController.swift; sourceTree = "<group>"; };
+		3B400E431F1ED5C3005194DD /* PhotonActionSheetProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetProtocol.swift; sourceTree = "<group>"; };
 		3B4262E21E538EC400CA681C /* MetadataHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = MetadataHelper.js; path = "Metadata Parsing/MetadataHelper.js"; sourceTree = "<group>"; };
 		3B4262E31E538EC400CA681C /* MetadataParserHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MetadataParserHelper.swift; path = "Metadata Parsing/MetadataParserHelper.swift"; sourceTree = "<group>"; };
 		3B4262E41E538EC400CA681C /* page-metadata-parser.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = "page-metadata-parser.js"; path = "Metadata Parsing/page-metadata-parser.js"; sourceTree = "<group>"; };
@@ -2969,6 +2971,7 @@
 				D30B0F2F1AA7D66300C01CA3 /* ThumbnailCell.swift */,
 				E663D5771BB341C4001EF30E /* ToggleButton.swift */,
 				7B844E3C1BBDDB9D00E733A2 /* ChevronView.swift */,
+				3B400E431F1ED5C3005194DD /* PhotonActionSheetProtocol.swift */,
 				E65607601C08B4E200534B02 /* SearchInputView.swift */,
 				E63ED7D71BFCD9990097D08E /* LoginTableViewCell.swift */,
 				C4E3984B1D21F2FD004E89BA /* TabTrayButtonExtensions.swift */,
@@ -5616,6 +5619,7 @@
 				19DE1F671EC13B6400428B8C /* LeanplumIntegration.swift in Sources */,
 				7BC68CCF1CC152B70043562A /* MenuToolbarItem.swift in Sources */,
 				E65D89181C8647420006EA35 /* AppAuthenticator.swift in Sources */,
+				3B400E521F1ED5C4005194DD /* PhotonActionSheetProtocol.swift in Sources */,
 				28FDFF0C1C1F725800840F86 /* SeparatorTableCell.swift in Sources */,
 				E69DB0BE1E97E301008A67E6 /* ClientTelemetry.swift in Sources */,
 				C400467C1CF4E43E00B08303 /* BackForwardListViewController.swift in Sources */,

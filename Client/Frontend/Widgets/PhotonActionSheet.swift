@@ -30,10 +30,16 @@ public struct PhotonActionSheetItem {
     public fileprivate(set) var handler: ((PhotonActionSheetItem) -> Void)?
 }
 
-class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate {
-    fileprivate(set) var actions: [PhotonActionSheetItem]
+private enum PresentationStyle {
+    case centered // used in the home panels
+    case bottom // used to display the menu
+}
 
-    private var site: Site
+class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate {
+    fileprivate(set) var actions: [[PhotonActionSheetItem]]
+
+    private var site: Site?
+    private let style: PresentationStyle
     private var tableView = UITableView()
 
     lazy var tapRecognizer: UITapGestureRecognizer = {
@@ -47,7 +53,14 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
 
     init(site: Site, actions: [PhotonActionSheetItem]) {
         self.site = site
+        self.actions = [actions]
+        self.style = .centered
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    init(actions: [[PhotonActionSheetItem]]) {
         self.actions = actions
+        self.style = .bottom
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -58,7 +71,10 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        applyBackgroundBlur()
+        if style == .centered {
+            applyBackgroundBlur()
+        }
+
         view.addGestureRecognizer(tapRecognizer)
         view.addSubview(tableView)
         view.accessibilityIdentifier = "Action Sheet"
@@ -77,11 +93,22 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         tableView.accessibilityIdentifier = "Context Menu"
 
         let width = min(self.view.frame.size.width, PhotonActionSheetUX.MaxWidth) - (PhotonActionSheetUX.Padding * 2)
+        let height = actionSheetHeight()
+        if self.modalPresentationStyle == .popover {
+            self.preferredContentSize = CGSize(width: width, height: height)
+        }
 
         tableView.snp.makeConstraints { make in
-            make.center.equalTo(self.view)
+            make.centerX.equalTo(self.view.snp.centerX)
+            switch style {
+                case .bottom:
+                    make.bottom.equalTo(self.view.snp.bottom)
+                case .centered:
+                    make.centerY.equalTo(self.view.snp.centerY)
+            }
             make.width.equalTo(width)
-            setHeightConstraint(make)
+            make.height.lessThanOrEqualTo(view.bounds.height)
+            make.height.equalTo(height).priority(10)
         }
     }
 
@@ -98,9 +125,10 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         }
     }
 
-    fileprivate func setHeightConstraint(_ make: ConstraintMaker) {
-        make.height.lessThanOrEqualTo(view.bounds.height)
-        make.height.equalTo(PhotonActionSheetUX.HeaderHeight + CGFloat(actions.count) * PhotonActionSheetUX.RowHeight).priority(10)
+    fileprivate func actionSheetHeight() -> CGFloat {
+        let count = actions.reduce(0) { $1.count + $0 }
+        let headerHeight = style == .centered ? PhotonActionSheetUX.HeaderHeight : CGFloat(0)
+        return headerHeight + CGFloat(count) * PhotonActionSheetUX.RowHeight
     }
 
     func dismiss(_ gestureRecognizer: UIGestureRecognizer?) {
@@ -108,15 +136,16 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     }
 
     deinit {
-        // The view might outlive this view controller thanks to animations;
-        // explicitly nil out its references to us to avoid crashes. Bug 1218826.
         tableView.dataSource = nil
         tableView.delegate = nil
     }
 
     override func updateViewConstraints() {
+        let height = actionSheetHeight()
+
         tableView.snp.updateConstraints { make in
-            setHeightConstraint(make)
+            make.height.lessThanOrEqualTo(view.bounds.height)
+            make.height.equalTo(height).priority(10)
         }
         super.updateViewConstraints()
     }
@@ -138,17 +167,16 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return actions.count
     }
 
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return actions[section].count
+    }
 
-        let action = actions[indexPath.row]
-        guard let handler = actions[indexPath.row].handler else {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let action = actions[indexPath.section][indexPath.row]
+        guard let handler = action.handler else {
             self.dismiss(nil)
             return
         }
@@ -165,17 +193,26 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return PhotonActionSheetUX.HeaderHeight
+        if section > 0 { //TODO: use enum here
+            return 1
+        }
+        return self.site != nil ? PhotonActionSheetUX.HeaderHeight : 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PhotonActionSheetUX.CellName, for: indexPath) as! PhotonActionSheetCell
-        let action = actions[indexPath.row]
-        cell.configureCell(action.title, imageString: action.iconString)
+        let action = actions[indexPath.section][indexPath.row]
+
+        // Only show separators when we have one section or on the first item of a section (we show separators at the top of a row)
+        let hasSeparator = actions.count == 1 ? true : indexPath.row == 0 && indexPath.section != 0
+        cell.configureCell(action.title, imageString: action.iconString, hasSeparator: hasSeparator)
         return cell
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let site = site else {
+            return nil
+        }
         let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: PhotonActionSheetUX.HeaderName) as! PhotonActionSheetHeaderView
         header.configureWithSite(site)
         return header
@@ -301,10 +338,17 @@ private class PhotonActionSheetCell: UITableViewCell {
         return selectedOverlay
     }()
 
+    lazy var separatorLineView = UIView()
+
+
     override var isSelected: Bool {
         didSet {
             self.selectedOverlay.isHidden = !isSelected
         }
+    }
+
+    override func prepareForReuse() {
+        self.statusIcon.image = nil
     }
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -319,7 +363,6 @@ private class PhotonActionSheetCell: UITableViewCell {
         contentView.addSubview(titleLabel)
         contentView.addSubview(statusIcon)
 
-        let separatorLineView = UIView()
         separatorLineView.backgroundColor = UIColor.lightGray
         contentView.addSubview(separatorLineView)
 
@@ -349,11 +392,11 @@ private class PhotonActionSheetCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configureCell(_ label: String, imageString: String) {
+    func configureCell(_ label: String, imageString: String, hasSeparator: Bool) {
         titleLabel.text = label
+        self.separatorLineView.isHidden = !hasSeparator
 
-        if let uiImage = UIImage(named: imageString) {
-            let image = uiImage.withRenderingMode(.alwaysTemplate)
+        if let image = UIImage(named: imageString)?.withRenderingMode(.alwaysTemplate) {
             statusIcon.image = image
             statusIcon.tintColor = UIConstants.SystemBlueColor
         }
