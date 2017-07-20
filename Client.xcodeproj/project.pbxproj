@@ -404,6 +404,8 @@
 		C4E398601D22C409004E89BA /* TopTabsLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4E3985F1D22C409004E89BA /* TopTabsLayout.swift */; };
 		C4EFEECF1CEBB6F2009762A4 /* BackForwardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EFEECE1CEBB6F2009762A4 /* BackForwardTableViewCell.swift */; };
 		C4F3B29A1CFCF93A00966259 /* ButtonToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4F3B2991CFCF93A00966259 /* ButtonToast.swift */; };
+		C8EB60C41F1FB12500F9B5B3 /* navigationDelegate.html in Resources */ = {isa = PBXBuildFile; fileRef = C8EB60C31F1FB12500F9B5B3 /* navigationDelegate.html */; };
+		C8EB60DC1F1FB9AD00F9B5B3 /* NavigationDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8EB60DB1F1FB9AD00F9B5B3 /* NavigationDelegateTests.swift */; };
 		CE564D8E1EB7BD7700BEDDDC /* BookmarksRepairRequestor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE564D8D1EB7BD7700BEDDDC /* BookmarksRepairRequestor.swift */; };
 		CEFC984B1EC0DCF5008A3E48 /* TestBookmarksRepairRequestor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFC983B1EC0DC60008A3E48 /* TestBookmarksRepairRequestor.swift */; };
 		D02816C21ECA5E2A00240CAA /* HistoryStateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02816C11ECA5E2A00240CAA /* HistoryStateHelper.swift */; };
@@ -1650,6 +1652,8 @@
 		C4E3985F1D22C409004E89BA /* TopTabsLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopTabsLayout.swift; sourceTree = "<group>"; };
 		C4EFEECE1CEBB6F2009762A4 /* BackForwardTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackForwardTableViewCell.swift; sourceTree = "<group>"; };
 		C4F3B2991CFCF93A00966259 /* ButtonToast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonToast.swift; sourceTree = "<group>"; };
+		C8EB60C31F1FB12500F9B5B3 /* navigationDelegate.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = navigationDelegate.html; sourceTree = "<group>"; };
+		C8EB60DB1F1FB9AD00F9B5B3 /* NavigationDelegateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationDelegateTests.swift; sourceTree = "<group>"; };
 		CE564D8D1EB7BD7700BEDDDC /* BookmarksRepairRequestor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarksRepairRequestor.swift; sourceTree = "<group>"; };
 		CEFC983B1EC0DC60008A3E48 /* TestBookmarksRepairRequestor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestBookmarksRepairRequestor.swift; sourceTree = "<group>"; };
 		D02816C11ECA5E2A00240CAA /* HistoryStateHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryStateHelper.swift; sourceTree = "<group>"; };
@@ -2997,6 +3001,7 @@
 				E6B4C3D71C68F55C001F97E8 /* JSPrompt.html */,
 				D31EC05E1CC57ED80096F4AB /* localhostLoad.html */,
 				D34E33021BA793C2006135F0 /* loginForm.html */,
+				C8EB60C31F1FB12500F9B5B3 /* navigationDelegate.html */,
 				0BF8F8D91AEFF1C900E90BC2 /* noTitle.html */,
 				0B6FBAB11AC1F830007EC669 /* numberedPage.html */,
 				0B5A93411B1EB572004F47A2 /* readablePage.html */,
@@ -3013,6 +3018,7 @@
 				4F514FD31ACD8F2C0022D7EA /* HistoryTests.swift */,
 				E6A92ADA1C52A8DA00743291 /* LoginInputTests.swift */,
 				E633E3791C2204BE001FFF6C /* LoginManagerTests.swift */,
+				C8EB60DB1F1FB9AD00F9B5B3 /* NavigationDelegateTests.swift */,
 				0B5A93211B1EB4C8004F47A2 /* ReadingListTest.swift */,
 				D3CFD3631CC5605B0064AB4A /* SecurityTests.swift */,
 				D3C3EB641B6FF44000388E9A /* SessionRestoreTests.swift */,
@@ -4776,6 +4782,7 @@
 				0BF8F8DA1AEFF1C900E90BC2 /* noTitle.html in Resources */,
 				E67422C51CFF2D39009E8373 /* youtube.ico in Resources */,
 				D3E171C21A841EAD00AB44CD /* KIFHelper.js in Resources */,
+				C8EB60C41F1FB12500F9B5B3 /* navigationDelegate.html in Resources */,
 				D31EC05F1CC57ED80096F4AB /* localhostLoad.html in Resources */,
 				4F97573B1AFA6F37006ECC24 /* readerContent.html in Resources */,
 			);
@@ -5335,6 +5342,7 @@
 				E6B4C4031C68F58B001F97E8 /* BrowserTests.swift in Sources */,
 				D39FA1811A83E84900EE869C /* Global.swift in Sources */,
 				4F514FD41ACD8F2C0022D7EA /* HistoryTests.swift in Sources */,
+				C8EB60DC1F1FB9AD00F9B5B3 /* NavigationDelegateTests.swift in Sources */,
 				E6A92ADB1C52A8DA00743291 /* LoginInputTests.swift in Sources */,
 				D375A9201AE71675001B30D5 /* ViewMemoryLeakTests.swift in Sources */,
 				D313BE981B2F5096009EF241 /* DomainAutocompleteTests.swift in Sources */,

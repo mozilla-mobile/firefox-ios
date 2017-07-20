@@ -281,6 +281,23 @@ class TimerSnackBar: SnackBar {
         fatalError("init(coder:) has not been implemented")
     }
 
+    static func showAppStoreConfirmationBar(forTab tab: Tab, appStoreURL: URL) {
+        let msg =  NSAttributedString(string: Strings.ExternalLinkToAppStore_ConfirmationTitle, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
+        let bar = TimerSnackBar(attrText: msg,
+                             img: UIImage(named: "defaultFavicon"),
+                             buttons: [
+                                SnackButton(title: UIConstants.OKString, accessibilityIdentifier: "ConfirmOpenInAppStore", callback: { bar in
+                                    tab.removeSnackbar(bar)
+                                    UIApplication.shared.openURL(appStoreURL)
+                                }),
+                                SnackButton(title: UIConstants.CancelString, accessibilityIdentifier: "CancelOpenInAppStore", callback: { bar in
+                                    tab.removeSnackbar(bar)
+                                })
+            ])
+        
+        tab.addSnackbar(bar)
+    }
+    
     override func show() {
         self.timer = Timer(timeInterval: timeout, target: self, selector: #selector(TimerSnackBar.SELTimerDone), userInfo: nil, repeats: false)
         RunLoop.current.add(self.timer!, forMode: RunLoopMode.defaultRunLoopMode)
