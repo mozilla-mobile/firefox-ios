@@ -2478,13 +2478,14 @@ extension BrowserViewController: WKNavigationDelegate {
         // Default to calling openURL(). What this does depends on the iOS version. On iOS 8, it will just work without
         // prompting. On iOS9, depending on the scheme, iOS will prompt: "Firefox" wants to open "Twitter". It will ask
         // every time. There is no way around this prompt. (TODO Confirm this is true by adding them to the Info.plist)
-
         let openedURL = UIApplication.shared.openURL(url)
         if !openedURL {
-            let alert = UIAlertController(title: Strings.UnableToOpenURLErrorTitle, message: Strings.UnableToOpenURLError, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: UIConstants.OKString, style: UIAlertActionStyle.default, handler: nil))
-            self.present(alert, animated: true, completion: nil)
+            // If the URL was unable to be opened by the application, allow it anyway to push responsibility
+            // off to the WKWebView to attempt to navigate to it.
+            decisionHandler(WKNavigationActionPolicy.allow)
+            return
         }
+
         decisionHandler(WKNavigationActionPolicy.cancel)
     }
 
