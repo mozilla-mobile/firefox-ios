@@ -220,7 +220,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
                 case "history":
                     self.browserViewController.openURLInNewTab(HomePanelType.history.localhostURL, isPrivileged: true)
                 case "new-private-tab":
-                    self.browserViewController.openBlankNewTab(isPrivate: true)
+                    self.browserViewController.openBlankNewTab(focusLocationField: false, isPrivate: true)
             default:
                 break
             }
@@ -423,7 +423,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         if let newURL = params.url {
             self.browserViewController.switchToTabForURLOrOpen(newURL, isPrivate: isPrivate, isPrivileged: false)
         } else {
-            self.browserViewController.openBlankNewTab(isPrivate: isPrivate)
+            self.browserViewController.openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
         }
 
         LeanplumIntegration.sharedInstance.track(eventName: .openedNewTab, withParameters: ["Source":"External App or Extension" as AnyObject])

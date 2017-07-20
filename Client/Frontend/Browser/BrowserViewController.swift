@@ -1110,9 +1110,16 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    func openBlankNewTab(isPrivate: Bool = false) {
+    func openBlankNewTab(focusLocationField: Bool, isPrivate: Bool = false) {
         popToBVC()
         openURLInNewTab(nil, isPrivate: isPrivate, isPrivileged: true)
+        
+        if focusLocationField {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                // Without a delay, the text field fails to become first responder
+                self.urlBar.tabLocationViewDidTapLocation(self.urlBar.locationView)
+            }
+        }
     }
 
     fileprivate func popToBVC() {
@@ -1438,7 +1445,7 @@ extension BrowserViewController: MenuActionDelegate {
 
 extension BrowserViewController: QRCodeViewControllerDelegate {
     func scanSuccessOpenNewTabWithData(data: String) {
-        self.openBlankNewTab()
+        self.openBlankNewTab(focusLocationField: false)
         self.urlBar(self.urlBar, didSubmitText: data)
     }
 }
@@ -3229,7 +3236,7 @@ extension BrowserViewController: TopTabsDelegate {
     }
     
     func topTabsDidPressNewTab(_ isPrivate: Bool) {
-        openBlankNewTab(isPrivate: isPrivate)
+        openBlankNewTab(focusLocationField: false, isPrivate: isPrivate)
     }
 
     func topTabsDidTogglePrivateMode() {
