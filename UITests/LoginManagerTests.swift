@@ -165,13 +165,13 @@ class LoginManagerTests: KIFTestCase {
         let list = tester().waitForView(withAccessibilityIdentifier: "Login Detail List") as! UITableView
         var passwordCell = list.cellForRow(at: IndexPath(row: 2, section: 0)) as! LoginTableViewCell
         
-        // longPressViewWithAcessibilityLabel fails when called directly because the cell is not a descendant in the
-        // responder chain since it's a cell so instead use the underlying longPressAtPoint method.
+        // tapViewWithAcessibilityLabel fails when called directly because the cell is not a descendant in the
+        // responder chain since it's a cell so instead use the underlying tapAtPoint method.
         let centerOfCell = CGPoint(x: passwordCell.frame.width / 2, y: passwordCell.frame.height / 2)
         XCTAssertTrue(passwordCell.descriptionLabel.isSecureTextEntry)
 
         // Tap the 'Reveal' menu option
-        passwordCell.longPress(at: centerOfCell, duration: 1)
+        passwordCell.tap(at: centerOfCell)
         tester().waitForView(withAccessibilityLabel: "Reveal")
         tester().tapView(withAccessibilityLabel: "Reveal")
 
@@ -179,7 +179,7 @@ class LoginManagerTests: KIFTestCase {
         XCTAssertFalse(passwordCell.descriptionLabel.isSecureTextEntry)
 
         // Tap the 'Hide' menu option
-        passwordCell.longPress(at: centerOfCell, duration: 2)
+        passwordCell.tap(at: centerOfCell)
         tester().waitForView(withAccessibilityLabel: "Hide")
         tester().tapView(withAccessibilityLabel: "Hide")
 
@@ -187,7 +187,7 @@ class LoginManagerTests: KIFTestCase {
         XCTAssertTrue(passwordCell.descriptionLabel.isSecureTextEntry)
 
         // Tap the 'Copy' menu option
-        passwordCell.longPress(at: centerOfCell, duration: 2)
+        passwordCell.tap(at: centerOfCell)
         tester().waitForView(withAccessibilityLabel: "Copy")
         tester().tapView(withAccessibilityLabel: "Copy")
 
@@ -208,20 +208,20 @@ class LoginManagerTests: KIFTestCase {
         let list = tester().waitForView(withAccessibilityIdentifier: "Login Detail List") as! UITableView
         let websiteCell = list.cellForRow(at: IndexPath(row: 0, section: 0)) as! LoginTableViewCell
 
-        // longPressViewWithAcessibilityLabel fails when called directly because the cell is not a descendant in the
-        // responder chain since it's a cell so instead use the underlying longPressAtPoint method.
+        // tapViewWithAcessibilityLabel fails when called directly because the cell is not a descendant in the
+        // responder chain since it's a cell so instead use the underlying tapAtPoint method.
         let centerOfCell = CGPoint(x: websiteCell.frame.width / 2, y: websiteCell.frame.height / 2)
 
         // Tap the 'Copy' menu option
-        websiteCell.longPress(at: centerOfCell, duration: 1)
-        websiteCell.longPress(at: centerOfCell, duration: 1)
+        websiteCell.tap(at: centerOfCell)
+        websiteCell.tap(at: centerOfCell)
         tester().waitForView(withAccessibilityLabel: "Copy")
         tester().tapView(withAccessibilityLabel: "Copy")
 
         XCTAssertEqual(UIPasteboard.general.string, "http://a0.com")
 
         // Tap the 'Open & Fill' menu option  just checks to make sure we navigate to the web page
-        websiteCell.longPress(at: centerOfCell, duration: 1)
+        websiteCell.tap(at: centerOfCell)
         tester().waitForView(withAccessibilityLabel: "Open & Fill")
         tester().tapView(withAccessibilityLabel: "Open & Fill")
 
@@ -241,13 +241,13 @@ class LoginManagerTests: KIFTestCase {
         let list = tester().waitForView(withAccessibilityIdentifier: "Login Detail List") as! UITableView
         let websiteCell = list.cellForRow(at: IndexPath(row: 0, section: 0)) as! LoginTableViewCell
 
-        // longPressViewWithAcessibilityLabel fails when called directly because the cell is not a descendant in the
-        // responder chain since it's a cell so instead use the underlying longPressAtPoint method.
+        // tapViewWithAcessibilityLabel fails when called directly because the cell is not a descendant in the
+        // responder chain since it's a cell so instead use the underlying tapAtPoint method.
         let centerOfCell = CGPoint(x: websiteCell.frame.width / 2, y: websiteCell.frame.height / 2)
 
         // Tap the 'Open & Fill' menu option  just checks to make sure we navigate to the web page
-        websiteCell.longPress(at: centerOfCell, duration: 2)
-        websiteCell.longPress(at: centerOfCell, duration: 2)
+        websiteCell.tap(at: centerOfCell)
+        websiteCell.tap(at: centerOfCell)
         tester().waitForView(withAccessibilityLabel: "Open & Fill")
         tester().tapView(withAccessibilityLabel: "Open & Fill")
 
@@ -273,13 +273,13 @@ class LoginManagerTests: KIFTestCase {
         let list = tester().waitForView(withAccessibilityIdentifier: "Login Detail List") as! UITableView
         let websiteCell = list.cellForRow(at: IndexPath(row: 0, section: 0)) as! LoginTableViewCell
 
-        // longPressViewWithAcessibilityLabel fails when called directly because the cell is not a descendant in the
-        // responder chain since it's a cell so instead use the underlying longPressAtPoint method.
+        // tapViewWithAcessibilityLabel fails when called directly because the cell is not a descendant in the
+        // responder chain since it's a cell so instead use the underlying tapAtPoint method.
         let centerOfCell = CGPoint(x: websiteCell.frame.width / 2, y: websiteCell.frame.height / 2)
 
         // Tap the 'Open & Fill' menu option  just checks to make sure we navigate to the web page
-        websiteCell.longPress(at: centerOfCell, duration: 1)
-        websiteCell.longPress(at: centerOfCell, duration: 1)
+        websiteCell.tap(at: centerOfCell)
+        websiteCell.tap(at: centerOfCell)
         tester().waitForView(withAccessibilityLabel: "Open & Fill")
         tester().tapView(withAccessibilityLabel: "Open & Fill")
 
@@ -298,13 +298,13 @@ class LoginManagerTests: KIFTestCase {
         let list = tester().waitForView(withAccessibilityIdentifier: "Login Detail List") as! UITableView
         let usernameCell = list.cellForRow(at: IndexPath(row: 1, section: 0)) as! LoginTableViewCell
 
-        // longPressViewWithAcessibilityLabel fails when called directly because the cell is not a descendant in the
-        // responder chain since it's a cell so instead use the underlying longPressAtPoint method.
+        // tapViewWithAcessibilityLabel fails when called directly because the cell is not a descendant in the
+        // responder chain since it's a cell so instead use the underlying tapAtPoint method.
         let centerOfCell = CGPoint(x: usernameCell.frame.width / 2, y: usernameCell.frame.height / 2)
 
         // Tap the 'Copy' menu option
-        usernameCell.longPress(at: centerOfCell, duration: 1)
-        usernameCell.longPress(at: centerOfCell, duration: 1)
+        usernameCell.tap(at: centerOfCell)
+        usernameCell.tap(at: centerOfCell)
         tester().waitForView(withAccessibilityLabel: "Copy")
         tester().tapView(withAccessibilityLabel: "Copy")
 
@@ -602,14 +602,13 @@ class LoginManagerTests: KIFTestCase {
         tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "changedpassword")
         tester().tapView(withAccessibilityLabel: "Done")
 
-        // longPressViewWithAcessibilityLabel fails when called directly because the cell is not a descendant in the
-        // responder chain since it's a cell so instead use the underlying longPressAtPoint method.
+        // tapViewWithAcessibilityLabel fails when called directly because the cell is not a descendant in the
+        // responder chain since it's a cell so instead use the underlying tapAtPoint method.
         let centerOfCell = CGPoint(x: passwordCell.frame.width / 2, y: passwordCell.frame.height / 2)
         XCTAssertTrue(passwordCell.descriptionLabel.isSecureTextEntry)
 
         // Tap the 'Reveal' menu option
-        passwordCell.longPress(at: centerOfCell, duration: 1)
-        passwordCell.longPress(at: centerOfCell, duration: 1)
+        passwordCell.tap(at: centerOfCell)
         tester().waitForView(withAccessibilityLabel: "Reveal")
         tester().tapView(withAccessibilityLabel: "Reveal")
 

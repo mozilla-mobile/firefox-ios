@@ -7,10 +7,10 @@ import UIKit
 import SnapKit
 import Storage
 
-@objc
 protocol LoginTableViewCellDelegate: class {
     func didSelectOpenAndFillForCell(_ cell: LoginTableViewCell)
     func shouldReturnAfterEditingDescription(_ cell: LoginTableViewCell) -> Bool
+    func infoItemForCell(_ cell: LoginTableViewCell) -> InfoItem?
 }
 
 private struct LoginTableViewCellUX {
@@ -41,6 +41,35 @@ class LoginTableViewCell: UITableViewCell {
     fileprivate let labelContainer = UIView()
 
     weak var delegate: LoginTableViewCellDelegate?
+
+    // In order for context menu handling, this is required
+    override var canBecomeFirstResponder: Bool {
+        return true
+    }
+
+    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+        guard let item = delegate?.infoItemForCell(self) else {
+            return false
+        }
+
+        // Menu actions for password
+        if item == .passwordItem {
+            let showRevealOption = self.descriptionLabel.isSecureTextEntry ? (action == MenuHelper.SelectorReveal) : (action == MenuHelper.SelectorHide)
+            return action == MenuHelper.SelectorCopy || showRevealOption
+        }
+
+        // Menu actions for Website
+        if item == .websiteItem {
+            return action == MenuHelper.SelectorCopy || action == MenuHelper.SelectorOpenAndFill
+        }
+
+        // Menu actions for Username
+        if item == .usernameItem {
+            return action == MenuHelper.SelectorCopy
+        }
+        
+        return false
+    }
 
     lazy var descriptionLabel: UITextField = {
         let label = UITextField()
