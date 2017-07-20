@@ -46,6 +46,7 @@ class BrowserViewController: UIViewController {
     var clipboardBarDisplayHandler: ClipboardBarDisplayHandler!
     var readerModeBar: ReaderModeBarView?
     var readerModeCache: ReaderModeCache
+    let webViewContainerToolbar = UIView()
     fileprivate var statusBarOverlay: UIView!
     fileprivate(set) var toolbar: TabToolbar?
     fileprivate var searchController: SearchViewController?
@@ -53,11 +54,10 @@ class BrowserViewController: UIViewController {
     fileprivate var homePanelIsInline = false
     fileprivate var searchLoader: SearchLoader!
     fileprivate let snackBars = UIView()
-    fileprivate let webViewContainerToolbar = UIView()
     fileprivate var findInPageBar: FindInPageBar?
     fileprivate let findInPageContainer = UIView()
 
-    fileprivate lazy var mailtoLinkHandler: MailtoLinkHandler = MailtoLinkHandler()
+    lazy var mailtoLinkHandler: MailtoLinkHandler = MailtoLinkHandler()
 
     lazy fileprivate var customSearchEngineButton: UIButton = {
         let searchButton = UIButton()
@@ -73,7 +73,7 @@ class BrowserViewController: UIViewController {
     fileprivate var displayedPopoverController: UIViewController?
     fileprivate var updateDisplayedPopoverProperties: (() -> Void)?
 
-    fileprivate var openInHelper: OpenInHelper?
+    var openInHelper: OpenInHelper?
 
     // location label actions
     fileprivate var pasteGoAction: AccessibleAction!
@@ -82,7 +82,7 @@ class BrowserViewController: UIViewController {
 
     fileprivate weak var tabTrayController: TabTrayController!
 
-    fileprivate let profile: Profile
+    let profile: Profile
     let tabManager: TabManager
 
     // These views wrap the urlbar and toolbar to provide background effects on them
@@ -97,7 +97,7 @@ class BrowserViewController: UIViewController {
     // Backdrop used for displaying greyed background for private tabs
     var webViewContainerBackdrop: UIView!
 
-    fileprivate var scrollController = TabScrollingController()
+    var scrollController = TabScrollingController()
 
     fileprivate var keyboardState: KeyboardState?
 
@@ -482,6 +482,15 @@ class BrowserViewController: UIViewController {
         }
         self.appDidUpdateState(getCurrentAppState())
         log.debug("BVC done.")
+    }
+
+    override var canBecomeFirstResponder: Bool {
+        return true
+    }
+    
+    override func becomeFirstResponder() -> Bool {
+        // Make the web view the first responder so that it can show the selection menu.
+        return tabManager.selectedTab?.webView?.becomeFirstResponder() ?? false
     }
 
     func loadQueuedTabs(receivedURLs: [URL]? = nil) {
@@ -1014,7 +1023,7 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    fileprivate func updateUIForReaderHomeStateForTab(_ tab: Tab) {
+    func updateUIForReaderHomeStateForTab(_ tab: Tab) {
         updateURLBarDisplayURL(tab)
         scrollController.showToolbars(animated: false)
 
@@ -1062,7 +1071,7 @@ class BrowserViewController: UIViewController {
             }
         }
     }
-    // Mark: Opening New Tabs
+    // MARK: Opening New Tabs
 
     func switchToPrivacyMode(isPrivate: Bool ) {
         applyTheme(isPrivate ? Theme.PrivateMode : Theme.NormalMode)
@@ -1118,16 +1127,16 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    // Mark: User Agent Spoofing
+    // MARK: User Agent Spoofing
 
-    fileprivate func resetSpoofedUserAgentIfRequired(_ webView: WKWebView, newURL: URL) {
+    func resetSpoofedUserAgentIfRequired(_ webView: WKWebView, newURL: URL) {
         // Reset the UA when a different domain is being loaded
         if webView.url?.host != newURL.host {
             webView.customUserAgent = nil
         }
     }
 
-    fileprivate func restoreSpoofedUserAgentIfRequired(_ webView: WKWebView, newRequest: URLRequest) {
+    func restoreSpoofedUserAgentIfRequired(_ webView: WKWebView, newRequest: URLRequest) {
         // Restore any non-default UA from the request's header
         let ua = newRequest.value(forHTTPHeaderField: "User-Agent")
         webView.customUserAgent = ua != UserAgent.defaultUserAgent() ? ua : nil
@@ -1180,7 +1189,7 @@ class BrowserViewController: UIViewController {
         self.present(controller, animated: true, completion: nil)
     }
 
-    fileprivate func updateFindInPageVisibility(visible: Bool) {
+    func updateFindInPageVisibility(visible: Bool) {
         if visible {
             if findInPageBar == nil {
                 let findInPageBar = FindInPageBar()
@@ -1214,108 +1223,11 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    override var canBecomeFirstResponder: Bool {
-        return true
-    }
-
-    override func becomeFirstResponder() -> Bool {
-        // Make the web view the first responder so that it can show the selection menu.
-        return tabManager.selectedTab?.webView?.becomeFirstResponder() ?? false
-    }
-
-    func reloadTab() {
-        if homePanelController == nil {
-            tabManager.selectedTab?.reload()
-        }
-    }
-
-    func goBack() {
-        if tabManager.selectedTab?.canGoBack == true && homePanelController == nil {
-            tabManager.selectedTab?.goBack()
-        }
-    }
-    func goForward() {
-        if tabManager.selectedTab?.canGoForward == true && homePanelController == nil {
-            tabManager.selectedTab?.goForward()
-        }
-    }
-
-    func findOnPage() {
-        if homePanelController == nil {
-            tab( (tabManager.selectedTab)!, didSelectFindInPageForSelection: "")
-        }
-    }
-
-    func selectLocationBar() {
-        scrollController.showToolbars(animated: true)
-        urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
-    }
-
-    func newTab() {
-        openBlankNewTab(isPrivate: false)
-    }
-    func newPrivateTab() {
-        openBlankNewTab(isPrivate: true)
-    }
-
-    func closeTab() {
-        guard let currentTab = tabManager.selectedTab else {
-            return
-        }
-        tabManager.removeTab(currentTab)
-    }
-
-    func nextTab() {
-        guard let currentTab = tabManager.selectedTab else {
-            return
-        }
-
-        let tabs = currentTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
-        if let index = tabs.index(of: currentTab), index + 1 < tabs.count {
-            tabManager.selectTab(tabs[index + 1])
-        } else if let firstTab = tabs.first {
-            tabManager.selectTab(firstTab)
-        }
-    }
-
-    func previousTab() {
-        guard let currentTab = tabManager.selectedTab else {
-            return
-        }
-
-        let tabs = currentTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
-        if let index = tabs.index(of: currentTab), index - 1 < tabs.count && index != 0 {
-            tabManager.selectTab(tabs[index - 1])
-        } else if let lastTab = tabs.last {
-            tabManager.selectTab(lastTab)
-        }
-    }
-
-    override var keyCommands: [UIKeyCommand]? {
-        return [
-            UIKeyCommand(input: "r", modifierFlags: .command, action: #selector(BrowserViewController.reloadTab), discoverabilityTitle: Strings.ReloadPageTitle),
-            UIKeyCommand(input: "[", modifierFlags: .command, action: #selector(BrowserViewController.goBack), discoverabilityTitle: Strings.BackTitle),
-            UIKeyCommand(input: UIKeyInputLeftArrow, modifierFlags: .command, action: #selector(BrowserViewController.goBack), discoverabilityTitle: Strings.BackTitle),
-            UIKeyCommand(input: "]", modifierFlags: .command, action: #selector(BrowserViewController.goForward), discoverabilityTitle: Strings.ForwardTitle),
-            UIKeyCommand(input: UIKeyInputRightArrow, modifierFlags: .command, action: #selector(BrowserViewController.goForward), discoverabilityTitle: Strings.ForwardTitle),
-
-            UIKeyCommand(input: "f", modifierFlags: .command, action: #selector(BrowserViewController.findOnPage), discoverabilityTitle: Strings.FindTitle),
-            UIKeyCommand(input: "l", modifierFlags: .command, action: #selector(BrowserViewController.selectLocationBar), discoverabilityTitle: Strings.SelectLocationBarTitle),
-            UIKeyCommand(input: "t", modifierFlags: .command, action: #selector(BrowserViewController.newTab), discoverabilityTitle: Strings.NewTabTitle),
-            UIKeyCommand(input: "p", modifierFlags: [.command, .shift], action: #selector(BrowserViewController.newPrivateTab), discoverabilityTitle: Strings.NewPrivateTabTitle),
-            UIKeyCommand(input: "w", modifierFlags: .command, action: #selector(BrowserViewController.closeTab), discoverabilityTitle: Strings.CloseTabTitle),
-            UIKeyCommand(input: "\t", modifierFlags: .control, action: #selector(BrowserViewController.nextTab), discoverabilityTitle: Strings.ShowNextTabTitle),
-            UIKeyCommand(input: UIKeyInputRightArrow, modifierFlags: [.command, .shift], action: #selector(BrowserViewController.nextTab), discoverabilityTitle: Strings.ShowNextTabTitle),
-            UIKeyCommand(input: "\t", modifierFlags: [.control, .shift], action: #selector(BrowserViewController.previousTab), discoverabilityTitle: Strings.ShowPreviousTabTitle),
-            UIKeyCommand(input: UIKeyInputLeftArrow, modifierFlags: [.command, .shift], action: #selector(BrowserViewController.previousTab), discoverabilityTitle: Strings.ShowPreviousTabTitle),
-        ]
-    }
-
-    fileprivate func getCurrentAppState() -> AppState {
+    func getCurrentAppState() -> AppState {
         return mainStore.updateState(getCurrentUIState())
     }
 
-    fileprivate func getCurrentUIState() -> UIState {
+    func getCurrentUIState() -> UIState {
         if let homePanelController = homePanelController {
             return .homePanels(homePanelState: homePanelController.homePanelState)
         }
@@ -1342,7 +1254,19 @@ class BrowserViewController: UIViewController {
         self.present(controller, animated: true, completion: nil)
     }
     
-    fileprivate func navigateInTab(tab: Tab, to navigation: WKNavigation? = nil) {
+    fileprivate func postLocationChangeNotificationForTab(_ tab: Tab, navigation: WKNavigation?) {
+        let notificationCenter = NotificationCenter.default
+        var info = [AnyHashable: Any]()
+        info["url"] = tab.url?.displayURL
+        info["title"] = tab.title
+        if let visitType = self.getVisitTypeForTab(tab, navigation: navigation)?.rawValue {
+            info["visitType"] = visitType
+        }
+        info["isPrivate"] = tab.isPrivate
+        notificationCenter.post(name: NotificationOnLocationChange, object: self, userInfo: info)
+    }
+
+    func navigateInTab(tab: Tab, to navigation: WKNavigation? = nil) {
         tabManager.expireSnackbars()
 
         guard let webView = tab.webView else {
@@ -1393,6 +1317,31 @@ class BrowserViewController: UIViewController {
         
         // Remember whether or not a desktop site was requested
         tab.desktopSite = webView.customUserAgent?.isEmpty == false
+    }
+    
+    // MARK: open in helper utils
+    func addViewForOpenInHelper(_ openInHelper: OpenInHelper) {
+        guard let view = openInHelper.openInView else { return }
+        webViewContainerToolbar.addSubview(view)
+        webViewContainerToolbar.snp.updateConstraints { make in
+            make.height.equalTo(OpenInViewUX.ViewHeight)
+        }
+        view.snp.makeConstraints { make in
+            make.edges.equalTo(webViewContainerToolbar)
+        }
+        
+        self.openInHelper = openInHelper
+    }
+    
+    func removeOpenInView() {
+        guard let _ = self.openInHelper else { return }
+        webViewContainerToolbar.subviews.forEach { $0.removeFromSuperview() }
+        
+        webViewContainerToolbar.snp.updateConstraints { make in
+            make.height.equalTo(0)
+        }
+        
+        self.openInHelper = nil
     }
 }
 
@@ -1471,9 +1420,9 @@ extension BrowserViewController: MenuActionDelegate {
 
     fileprivate func openHomePanel(_ panel: HomePanelType, forAppState appState: AppState) {
         switch appState.ui {
-        case .tab(_):
+        case .tab:
             self.openURLInNewTab(panel.localhostURL as URL, isPrivate: appState.ui.isPrivate(), isPrivileged: true)
-        case .homePanels(_):
+        case .homePanels:
             self.homePanelController?.selectedPanel = panel
         default: break
         }
@@ -2328,256 +2277,6 @@ extension BrowserViewController: TabManagerDelegate {
             urlBar.updateTabCount(max(count, 1), animated: !urlBar.inOverlayMode)
             topTabsViewController?.updateTabCount(max(count, 1), animated: animated)
         }
-    }
-}
-
-extension BrowserViewController: WKNavigationDelegate {
-    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        if tabManager.selectedTab?.webView !== webView {
-            return
-        }
-
-        updateFindInPageVisibility(visible: false)
-
-        // If we are going to navigate to a new page, hide the reader mode button. Unless we
-        // are going to a about:reader page. Then we keep it on screen: it will change status
-        // (orange color) as soon as the page has loaded.
-        if let url = webView.url {
-            if !url.isReaderModeURL {
-                urlBar.updateReaderModeState(ReaderModeState.unavailable)
-                hideReaderModeBar(animated: false)
-            }
-
-            // remove the open in overlay view if it is present
-            removeOpenInView()
-        }
-    }
-
-    // Recognize an Apple Maps URL. This will trigger the native app. But only if a search query is present. Otherwise
-    // it could just be a visit to a regular page on maps.apple.com.
-    fileprivate func isAppleMapsURL(_ url: URL) -> Bool {
-        if url.scheme == "http" || url.scheme == "https" {
-            if url.host == "maps.apple.com" && url.query != nil {
-                return true
-            }
-        }
-        return false
-    }
-
-    // Recognize a iTunes Store URL. These all trigger the native apps. Note that appstore.com and phobos.apple.com
-    // used to be in this list. I have removed them because they now redirect to itunes.apple.com. If we special case
-    // them then iOS will actually first open Safari, which then redirects to the app store. This works but it will
-    // leave a 'Back to Safari' button in the status bar, which we do not want.
-    fileprivate func isStoreURL(_ url: URL) -> Bool {
-        if url.scheme == "http" || url.scheme == "https" {
-            if url.host == "itunes.apple.com" {
-                return true
-            }
-        }
-        return false
-    }
-
-    // This is the place where we decide what to do with a new navigation action. There are a number of special schemes
-    // and http(s) urls that need to be handled in a different way. All the logic for that is inside this delegate
-    // method.
-
-    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        guard let url = navigationAction.request.url else {
-            decisionHandler(WKNavigationActionPolicy.cancel)
-            return
-        }
-
-        if url.scheme == "about" {
-            decisionHandler(WKNavigationActionPolicy.allow)
-            return
-        }
-
-        if !navigationAction.isAllowed && navigationAction.navigationType != .backForward {
-            log.warning("Denying unprivileged request: \(navigationAction.request)")
-            decisionHandler(WKNavigationActionPolicy.cancel)
-            return
-        }
-
-        // First special case are some schemes that are about Calling. We prompt the user to confirm this action. This
-        // gives us the exact same behaviour as Safari.
-
-        if url.scheme == "tel" || url.scheme == "facetime" || url.scheme == "facetime-audio" {
-
-            // Starting with iOS 10.3, phone number URLs will automatically prompt the user for
-            // confirmation when calling `openURL()`.
-            if #available(iOS 10.3, *) {
-                UIApplication.shared.openURL(url)
-            }
-
-            // Otherwise, we need to construct our own prompt to prevent automatic calling if the
-            // user is running a version of iOS older than 10.3.
-            else {
-                if let components = NSURLComponents(url: url, resolvingAgainstBaseURL: false), let phoneNumber = components.path, !phoneNumber.isEmpty {
-                    let formatter = PhoneNumberFormatter()
-                    let formattedPhoneNumber = formatter.formatPhoneNumber(phoneNumber)
-                    let alert = UIAlertController(title: formattedPhoneNumber, message: nil, preferredStyle: UIAlertControllerStyle.alert)
-                    alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment:"Label for Cancel button"), style: UIAlertActionStyle.cancel, handler: nil))
-                    alert.addAction(UIAlertAction(title: NSLocalizedString("Call", comment:"Alert Call Button"), style: UIAlertActionStyle.default, handler: { (action: UIAlertAction!) in
-                        UIApplication.shared.openURL(url)
-                    }))
-                    present(alert, animated: true, completion: nil)
-                }
-            }
-
-            decisionHandler(WKNavigationActionPolicy.cancel)
-            return
-        }
-
-        // Second special case are a set of URLs that look like regular http links, but should be handed over to iOS
-        // instead of being loaded in the webview. Note that there is no point in calling canOpenURL() here, because
-        // iOS will always say yes. TODO Is this the same as isWhitelisted?
-
-       if isAppleMapsURL(url) {
-           UIApplication.shared.openURL(url)
-           decisionHandler(WKNavigationActionPolicy.cancel)
-           return
-       }
-
-        if let tab = tabManager.selectedTab, isStoreURL(url) {
-            decisionHandler(WKNavigationActionPolicy.cancel)
-
-            let alreadyShowingSnackbarOnThisTab = tab.bars.count > 0
-            if !alreadyShowingSnackbarOnThisTab {
-                TimerSnackBar.showAppStoreConfirmationBar(forTab: tab, appStoreURL: url)
-            }
-            
-            return
-        }
-        
-        // Handles custom mailto URL schemes.
-        if url.scheme == "mailto" {
-            if let mailToMetadata = url.mailToMetadata(), let mailScheme = self.profile.prefs.stringForKey(PrefsKeys.KeyMailToOption), mailScheme != "mailto" {
-                self.mailtoLinkHandler.launchMailClientForScheme(mailScheme, metadata: mailToMetadata, defaultMailtoURL: url)
-            } else {
-                UIApplication.shared.openURL(url)
-            }
-
-            LeanplumIntegration.sharedInstance.track(eventName: .openedMailtoLink)
-            decisionHandler(WKNavigationActionPolicy.cancel)
-            return
-        }
-
-        // This is the normal case, opening a http or https url, which we handle by loading them in this WKWebView. We
-        // always allow this. Additionally, data URIs are also handled just like normal web pages.
-
-        if url.scheme == "http" || url.scheme == "https" || url.scheme == "data" || url.scheme == "blob" {
-            if navigationAction.navigationType == .linkActivated {
-                resetSpoofedUserAgentIfRequired(webView, newURL: url)
-            } else if navigationAction.navigationType == .backForward {
-                restoreSpoofedUserAgentIfRequired(webView, newRequest: navigationAction.request)
-            }
-            decisionHandler(WKNavigationActionPolicy.allow)
-            return
-        }
-
-        // Default to calling openURL(). What this does depends on the iOS version. On iOS 8, it will just work without
-        // prompting. On iOS9, depending on the scheme, iOS will prompt: "Firefox" wants to open "Twitter". It will ask
-        // every time. There is no way around this prompt. (TODO Confirm this is true by adding them to the Info.plist)
-
-        let openedURL = UIApplication.shared.openURL(url)
-        if !openedURL {
-            let alert = UIAlertController(title: Strings.UnableToOpenURLErrorTitle, message: Strings.UnableToOpenURLError, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: UIConstants.OKString, style: UIAlertActionStyle.default, handler: nil))
-            self.present(alert, animated: true, completion: nil)
-        }
-        decisionHandler(WKNavigationActionPolicy.cancel)
-    }
-
-    func webView(_ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
-
-        // If this is a certificate challenge, see if the certificate has previously been
-        // accepted by the user.
-        let origin = "\(challenge.protectionSpace.host):\(challenge.protectionSpace.port)"
-        if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
-           let trust = challenge.protectionSpace.serverTrust,
-           let cert = SecTrustGetCertificateAtIndex(trust, 0), profile.certStore.containsCertificate(cert, forOrigin: origin) {
-            completionHandler(URLSession.AuthChallengeDisposition.useCredential, URLCredential(trust: trust))
-            return
-        }
-
-        guard challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodHTTPBasic ||
-              challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodHTTPDigest ||
-              challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodNTLM,
-              let tab = tabManager[webView] else {
-            completionHandler(URLSession.AuthChallengeDisposition.performDefaultHandling, nil)
-            return
-        }
-
-        // If this is a request to our local web server, use our private credentials.
-        if challenge.protectionSpace.host == "localhost" && challenge.protectionSpace.port == Int(WebServer.sharedInstance.server.port) {
-            completionHandler(.useCredential, WebServer.sharedInstance.credentials)
-            return
-        }
-
-        // The challenge may come from a background tab, so ensure it's the one visible.
-        tabManager.selectTab(tab)
-
-        let loginsHelper = tab.getHelper(name: LoginsHelper.name()) as? LoginsHelper
-        Authenticator.handleAuthRequest(self, challenge: challenge, loginsHelper: loginsHelper).uponQueue(DispatchQueue.main) { res in
-            if let credentials = res.successValue {
-                completionHandler(.useCredential, credentials.credentials)
-            } else {
-                completionHandler(URLSession.AuthChallengeDisposition.rejectProtectionSpace, nil)
-            }
-        }
-    }
-
-    func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
-        guard let tab = tabManager[webView] else { return }
-
-        tab.url = webView.url
-        self.scrollController.resetZoomState()
-
-        if tabManager.selectedTab === tab {
-            updateUIForReaderHomeStateForTab(tab)
-            appDidUpdateState(getCurrentAppState())
-        }
-    }
-
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        let tab: Tab! = tabManager[webView]
-        navigateInTab(tab: tab, to: navigation)
-    }
-
-    fileprivate func addViewForOpenInHelper(_ openInHelper: OpenInHelper) {
-        guard let view = openInHelper.openInView else { return }
-        webViewContainerToolbar.addSubview(view)
-        webViewContainerToolbar.snp.updateConstraints { make in
-            make.height.equalTo(OpenInViewUX.ViewHeight)
-        }
-        view.snp.makeConstraints { make in
-            make.edges.equalTo(webViewContainerToolbar)
-        }
-
-        self.openInHelper = openInHelper
-    }
-
-    fileprivate func removeOpenInView() {
-        guard let _ = self.openInHelper else { return }
-        webViewContainerToolbar.subviews.forEach { $0.removeFromSuperview() }
-
-        webViewContainerToolbar.snp.updateConstraints { make in
-            make.height.equalTo(0)
-        }
-
-        self.openInHelper = nil
-    }
-
-    fileprivate func postLocationChangeNotificationForTab(_ tab: Tab, navigation: WKNavigation?) {
-        let notificationCenter = NotificationCenter.default
-        var info = [AnyHashable: Any]()
-        info["url"] = tab.url?.displayURL
-        info["title"] = tab.title
-        if let visitType = self.getVisitTypeForTab(tab, navigation: navigation)?.rawValue {
-            info["visitType"] = visitType
-        }
-        info["isPrivate"] = tab.isPrivate
-        notificationCenter.post(name: NotificationOnLocationChange, object: self, userInfo: info)
     }
 }
 
@@ -3520,17 +3219,6 @@ extension BrowserViewController: FindInPageBarDelegate, FindInPageHelperDelegate
 extension BrowserViewController: JSPromptAlertControllerDelegate {
     func promptAlertControllerDidDismiss(_ alertController: JSPromptAlertController) {
         showQueuedAlertIfAvailable()
-    }
-}
-
-private extension WKNavigationAction {
-    /// Allow local requests only if the request is privileged.
-    var isAllowed: Bool {
-        guard let url = request.url else {
-            return true
-        }
-
-        return !url.isWebPage(includeDataURIs: false) || !url.isLocal || request.isPrivileged
     }
 }
 
