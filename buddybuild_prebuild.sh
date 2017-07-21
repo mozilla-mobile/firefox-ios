@@ -38,8 +38,11 @@ echo "Setting Leanplum environment to PRODUCTION for $BUDDYBUILD_SCHEME"
 #
 
 if [ "$BUDDYBUILD_SCHEME" != "Firefox" ]; then
-  echo "Setting Sentry DSN to $SENTRY_DSN"
+  echo "Setting SentryDSN to $SENTRY_DSN"
   /usr/libexec/PlistBuddy -c "Set SentryDSN $SENTRY_DSN" "Client/Info.plist"
+else
+  echo "Deleting SentryDSN"
+  /usr/libexec/PlistBuddy -c "Delete SentryDSN" "Client/Info.plist"
 fi
 
 #
