@@ -120,9 +120,20 @@ extension BrowserViewController: WKNavigationDelegate {
         // instead of being loaded in the webview. Note that there is no point in calling canOpenURL() here, because
         // iOS will always say yes. TODO Is this the same as isWhitelisted?
 
-        if isAppleMapsURL(url) || isStoreURL(url) {
+        if isAppleMapsURL(url) {
             UIApplication.shared.openURL(url)
             decisionHandler(WKNavigationActionPolicy.cancel)
+            return
+        }
+
+        if let tab = tabManager.selectedTab, isStoreURL(url) {
+            decisionHandler(WKNavigationActionPolicy.cancel)
+
+            let alreadyShowingSnackbarOnThisTab = tab.bars.count > 0
+            if !alreadyShowingSnackbarOnThisTab {
+                TimerSnackBar.showAppStoreConfirmationBar(forTab: tab, appStoreURL: url)
+            }
+
             return
         }
 
