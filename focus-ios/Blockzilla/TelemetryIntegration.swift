@@ -22,6 +22,8 @@ class TelemetryEventMethod {
     public static let open = "open"
     public static let openAppStore = "open_app_store"
     public static let share = "share"
+    public static let swipeToNavigateBack = "swipe_to_navigate_back"
+    public static let swipeToNavigateForward = "swipe_to_navigate_forward"
 }
 
 class TelemetryEventObject {
