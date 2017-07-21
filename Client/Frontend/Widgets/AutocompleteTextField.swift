@@ -72,7 +72,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         super.addTarget(self, action: #selector(AutocompleteTextField.textDidChange(_:)), for: UIControlEvents.editingChanged)
         notifyTextChanged = debounce(0.1, action: {
             if self.isEditing {
-                self.autocompleteDelegate?.autocompleteTextField(self, didEnterText: self.text ?? "")
+                self.autocompleteDelegate?.autocompleteTextField(self, didEnterText: self.normalizeString(self.text ?? ""))
             }
         })
     }
@@ -135,7 +135,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     }
 
     fileprivate func normalizeString(_ string: String) -> String {
-        return string.lowercased()
+        return string.lowercased().stringByTrimmingLeadingCharactersInSet(CharacterSet.whitespaces)
     }
 
     /// Commits the completion by setting the text and removing the highlight.
