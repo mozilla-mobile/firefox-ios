@@ -11,17 +11,14 @@ import EarlGrey
 
 class NavigationDelegateTests: KIFTestCase {
     fileprivate var webRoot: String!
-    fileprivate var profile: Profile!
-    
+
     override func setUp() {
         super.setUp()
-        profile = (UIApplication.shared.delegate as! AppDelegate).profile!
         webRoot = SimplePageServer.start()
         BrowserUtils.dismissFirstRunUI()
     }
     
     override func tearDown() {
-        _ = profile.logins.removeAll().value
         BrowserUtils.resetToAboutHome(tester())
         BrowserUtils.clearPrivateData(tester: tester())
         super.tearDown()
