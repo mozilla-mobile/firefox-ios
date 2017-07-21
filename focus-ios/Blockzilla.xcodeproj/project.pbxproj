@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0B37F9A61E2FCAD4002DF74B /* SearchProviderTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B37F9A51E2FCAD4002DF74B /* SearchProviderTest.swift */; };
+		0B4868661F2250A3008C3C09 /* PastenGoTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4868651F2250A3008C3C09 /* PastenGoTest.swift */; };
 		0B70C1631DE6128900CEF7E0 /* WebsiteMemoryTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B70C1621DE6128900CEF7E0 /* WebsiteMemoryTest.swift */; };
 		0BA39A861DD2B8E4005F970A /* WebsiteAccessTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA39A851DD2B8E4005F970A /* WebsiteAccessTest.swift */; };
 		0BA7B7C01E9D6C7E0058EA5B /* XCUITests-Bridging-Header.h in Sources */ = {isa = PBXBuildFile; fileRef = 0BA7B7BF1E9D6C1B0058EA5B /* XCUITests-Bridging-Header.h */; };
@@ -161,6 +162,7 @@
 
 /* Begin PBXFileReference section */
 		0B37F9A51E2FCAD4002DF74B /* SearchProviderTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchProviderTest.swift; sourceTree = "<group>"; };
+		0B4868651F2250A3008C3C09 /* PastenGoTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PastenGoTest.swift; sourceTree = "<group>"; };
 		0B70C1621DE6128900CEF7E0 /* WebsiteMemoryTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebsiteMemoryTest.swift; sourceTree = "<group>"; };
 		0BA39A831DD2B8E4005F970A /* XCUITest.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = XCUITest.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0BA39A851DD2B8E4005F970A /* WebsiteAccessTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebsiteAccessTest.swift; sourceTree = "<group>"; };
@@ -576,6 +578,7 @@
 		0BBBED3F1DD3821600F9C565 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				0B4868651F2250A3008C3C09 /* PastenGoTest.swift */,
 				0BC928CD1E366A6E004AC581 /* AsianLocaleTest.swift */,
 				0BBBED401DD3823C00F9C565 /* BaseTestCase.swift */,
 			);
@@ -1048,6 +1051,7 @@
 				0B37F9A61E2FCAD4002DF74B /* SearchProviderTest.swift in Sources */,
 				0B70C1631DE6128900CEF7E0 /* WebsiteMemoryTest.swift in Sources */,
 				0BC928CE1E366A6E004AC581 /* AsianLocaleTest.swift in Sources */,
+				0B4868661F2250A3008C3C09 /* PastenGoTest.swift in Sources */,
 				0BA39A861DD2B8E4005F970A /* WebsiteAccessTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
