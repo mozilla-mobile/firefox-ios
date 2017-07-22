@@ -117,7 +117,7 @@ class QuickActions: NSObject {
     }
 
     fileprivate func handleOpenNewTab(withBrowserViewController bvc: BrowserViewController, isPrivate: Bool) {
-        bvc.openBlankNewTab(isPrivate: isPrivate)
+        bvc.openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
     }
 
     fileprivate func handleOpenURL(withBrowserViewController bvc: BrowserViewController, urlToOpen: URL) {
