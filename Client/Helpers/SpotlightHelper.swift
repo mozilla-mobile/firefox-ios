@@ -18,15 +18,18 @@ class SpotlightHelper: NSObject {
         }
     }
 
+    fileprivate var searchableItem: CSSearchableItem?
+
     fileprivate var urlForThumbnail: URL?
     fileprivate var thumbnailImage: UIImage?
 
-    fileprivate let createNewTab: ((_ url: URL) -> Void)?
-
     fileprivate weak var tab: Tab?
 
-    init(tab: Tab, openURL: ((_ url: URL) -> Void)? = nil) {
-        createNewTab = openURL
+    fileprivate var isPrivate: Bool {
+        return self.tab?.isPrivate ?? true
+    }
+
+    init(tab: Tab) {
         self.tab = tab
 
         if let path = Bundle.main.path(forResource: "SpotlightHelper", ofType: "js") {
@@ -38,6 +41,7 @@ class SpotlightHelper: NSObject {
     }
 
     deinit {
+
         // Invalidate the currently held user activity (in willSet)
         // and release it.
         self.activity = nil
@@ -48,24 +52,32 @@ class SpotlightHelper: NSObject {
             return
         }
 
+        let attributeSet = CSSearchableItemAttributeSet(itemContentType: kUTTypeHTML as String)
+
         var activity: NSUserActivity
-        if let currentActivity = self.activity, currentActivity.webpageURL == url {
-            activity = currentActivity
+        if self.activity != nil && self.activity?.webpageURL == url {
+            activity = self.activity!
         } else {
-            activity = createUserActivity()
+            activity = createUserActivity(forURL: url, attributeSet: attributeSet)
             self.activity = activity
-            activity.webpageURL = url
         }
 
-        activity.title = pageContent["title"]
+        if !self.isPrivate {
+            var searchableItem: CSSearchableItem
+            if self.searchableItem != nil && self.searchableItem?.attributeSet.contentURL == url {
+                searchableItem = self.searchableItem!
+            } else {
+                searchableItem = createSearchableItem(forURL: url, attributeSet: attributeSet)
+                self.searchableItem = searchableItem
+            }
 
-        if !(tab?.isPrivate ?? true) {
-            let attrs = CSSearchableItemAttributeSet(itemContentType: kUTTypeHTML as String)
-            attrs.contentDescription = pageContent["description"]
-            attrs.contentURL = url
-            activity.contentAttributeSet = attrs
-            activity.isEligibleForSearch = true
+            let title = pageContent["title"]
+            let description = pageContent["description"]
 
+            activity.title = title
+
+            attributeSet.title = title
+            attributeSet.contentDescription = description
         }
 
         // We can't be certain that the favicon isn't already available.
@@ -76,7 +88,8 @@ class SpotlightHelper: NSObject {
     }
 
     func updateImage(_ image: UIImage? = nil, forURL url: URL) {
-        guard let currentActivity = self.activity, currentActivity.webpageURL == url else {
+        if self.activity == nil || self.activity?.webpageURL != url {
+
             // We've got a favicon, but not for this URL.
             // Let's store it until we can get the title and description.
             urlForThumbnail = url
@@ -85,21 +98,37 @@ class SpotlightHelper: NSObject {
         }
 
         if let image = image {
-            activity?.contentAttributeSet?.thumbnailData = UIImagePNGRepresentation(image)
+            let thumbnailData = UIImagePNGRepresentation(image)
+
+            activity?.contentAttributeSet?.thumbnailData = thumbnailData
+
+            if !self.isPrivate {
+                searchableItem?.attributeSet.thumbnailData = thumbnailData
+            }
         }
+
+        if !self.isPrivate && searchableItem != nil {
+            CSSearchableIndex.default().indexSearchableItems([searchableItem!])
+        }
+
+        activity?.becomeCurrent()
 
         urlForThumbnail = nil
         thumbnailImage = nil
-
-        becomeCurrent()
     }
 
-    func becomeCurrent() {
-        activity?.becomeCurrent()
+    func createUserActivity(forURL url: URL, attributeSet: CSSearchableItemAttributeSet) -> NSUserActivity {
+        let userActivity = NSUserActivity(activityType: browsingActivityType)
+        userActivity.webpageURL = url
+        userActivity.contentAttributeSet = attributeSet
+        userActivity.isEligibleForSearch = false
+        return userActivity
     }
 
-    func createUserActivity() -> NSUserActivity {
-        return NSUserActivity(activityType: browsingActivityType)
+    func createSearchableItem(forURL url: URL, attributeSet: CSSearchableItemAttributeSet) -> CSSearchableItem {
+        let searchableItem = CSSearchableItem(uniqueIdentifier: url.absoluteString, domainIdentifier: "webpages", attributeSet: attributeSet)
+        attributeSet.contentURL = url
+        return searchableItem
     }
 }
 
