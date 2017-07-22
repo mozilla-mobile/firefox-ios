@@ -8,6 +8,11 @@
 	<array>
 		<string>group.org.mozilla.ios.Firefox</string>
 	</array>
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>applinks:rzte.adj.st</string>
+		<string>applinks:nn8g.adj.st</string>
+	</array>
 	<key>keychain-access-groups</key>
 	<array>
 		<string>$(AppIdentifierPrefix)org.mozilla.ios.Firefox</string>
