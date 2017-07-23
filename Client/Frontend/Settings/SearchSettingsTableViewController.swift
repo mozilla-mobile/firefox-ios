@@ -68,6 +68,7 @@ class SearchSettingsTableViewController: UITableViewController {
         // Only show the Edit button if custom search engines are in the list.
         // Otherwise, there is nothing to delete.
         navigationItem.rightBarButtonItem?.isEnabled = isEditable
+        tableView.reloadData()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
