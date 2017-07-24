@@ -19,14 +19,14 @@ class DomainAutocompleteTests: KIFTestCase {
 
         // Multiple subdomains.
         tester().enterText(intoCurrentFirstResponder: "f")
-        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "f", completion: "oo.bar.baz.org/")
+        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "f", completion: "oo.bar.baz.org")
         tester().clearTextFromFirstResponder()
         tester().enterText(intoCurrentFirstResponder: "b")
-        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "b", completion: "ar.baz.org/")
+        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "b", completion: "ar.baz.org")
         tester().enterText(intoCurrentFirstResponder: "a")
-        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "ba", completion: "r.baz.org/")
+        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "ba", completion: "r.baz.org")
         tester().enterText(intoCurrentFirstResponder: "z")
-        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "baz", completion: ".org/")
+        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "baz", completion: ".org")
     }
 
     override func tearDown() {
