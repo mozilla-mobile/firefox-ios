@@ -4,7 +4,7 @@
 
 import XCTest
 
-let website = ["url": "www.mozilla.org", "value": "www.mozilla.org/", "subDomain": "https://www.mozilla.org/en-US/firefox/products"]
+let website = ["url": "www.mozilla.org", "value": "www.mozilla.org", "subDomain": "https://www.mozilla.org/en-US/firefox/products"]
 
 class DomainAutocompleteTest: BaseTestCase {
     var navigator: Navigator!
@@ -79,7 +79,7 @@ class DomainAutocompleteTest: BaseTestCase {
         app.textFields["address"].typeText("https")
         waitForValueContains(app.textFields["address"], value: "mozilla")
         let value = app.textFields["address"].value
-        XCTAssertEqual(value as? String, "https://www.mozilla.org/", "Wrong autocompletion")
+        XCTAssertEqual(value as? String, "https://www.mozilla.org", "Wrong autocompletion")
     }
     // Non-matches.
     func testNoMatches() {
@@ -132,19 +132,19 @@ class DomainAutocompleteTest: BaseTestCase {
         app.textFields["address"].typeText("a")
         waitForValueContains(app.textFields["address"], value: ".com")
         let value = app.textFields["address"].value
-        XCTAssertEqual(value as? String, "amazon.com/", "Wrong autocompletion")
+        XCTAssertEqual(value as? String, "amazon.com", "Wrong autocompletion")
 
         app.buttons["Clear text"].tap()
         app.textFields["address"].typeText("an")
         waitForValueContains(app.textFields["address"], value: ".com")
         let value2 = app.textFields["address"].value
-        XCTAssertEqual(value2 as? String, "answers.com/", "Wrong autocompletion")
+        XCTAssertEqual(value2 as? String, "answers.com", "Wrong autocompletion")
 
         app.buttons["Clear text"].tap()
         app.textFields["address"].typeText("anc")
         waitForValueContains(app.textFields["address"], value: ".com")
         let value3 = app.textFields["address"].value
-        XCTAssertEqual(value3 as? String, "ancestry.com/", "Wrong autocompletion")
+        XCTAssertEqual(value3 as? String, "ancestry.com", "Wrong autocompletion")
     }
     // Test mixed case autocompletion.
     func testMixedCaseAutocompletion() {
@@ -153,14 +153,14 @@ class DomainAutocompleteTest: BaseTestCase {
         app.textFields["address"].typeText("MoZ")
         waitForValueContains(app.textFields["address"], value: ".org")
         let value = app.textFields["address"].value
-        XCTAssertEqual(value as? String, "MoZilla.org/", "Wrong autocompletion")
+        XCTAssertEqual(value as? String, "MoZilla.org", "Wrong autocompletion")
 
         // Test that leading spaces still show suggestions.
         app.buttons["Clear text"].tap()
         app.textFields["address"].typeText("    moz")
         waitForValueContains(app.textFields["address"], value: ".org")
         let value2 = app.textFields["address"].value
-        XCTAssertEqual(value2 as? String, "    mozilla.org/", "Wrong autocompletion")
+        XCTAssertEqual(value2 as? String, "    mozilla.org", "Wrong autocompletion")
 
         // Test that trailing spaces do *not* show suggestions.
         app.buttons["Clear text"].tap()
