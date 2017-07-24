@@ -106,7 +106,7 @@ open class BrowserDB {
             fatalError()
         case .closed:
             log.info("Database not created as the SQLiteConnection is closed.")
-            SentryIntegration.shared.send(message: "Database not created as the SQLiteConnection is closed.", tag: "BrowserDB", severity: .info)
+            SentryIntegration.shared.sendWithStacktrace(message: "Database not created as the SQLiteConnection is closed.", tag: "BrowserDB", severity: .info)
         case .success:
             log.debug("db: \(self.filename) has been created")
         }
@@ -229,7 +229,7 @@ open class BrowserDB {
         }) {
             // Error getting a transaction
             log.error("Unable to get a transaction: \(error.localizedDescription)")
-            SentryIntegration.shared.send(message: "Unable to get a transaction: \(error.localizedDescription)", tag: "BrowserDB", severity: .error)
+            SentryIntegration.shared.sendWithStacktrace(message: "Unable to get a transaction: \(error.localizedDescription)", tag: "BrowserDB", severity: .error)
             success = false
         }
 
@@ -244,7 +244,7 @@ open class BrowserDB {
             // Attempt to make a backup as long as the DB file still exists
             if self.files.exists(self.filename) {
                 log.warning("Couldn't create or update \(tables.map { $0.name }). Attempting to move \(self.filename) to another location.")
-                SentryIntegration.shared.send(message: "Couldn't create or update \(tables.map { $0.name }). Attempting to move \(self.filename) to another location.", tag: "BrowserDB", severity: .warning)
+                SentryIntegration.shared.sendWithStacktrace(message: "Couldn't create or update \(tables.map { $0.name }). Attempting to move \(self.filename) to another location.", tag: "BrowserDB", severity: .warning)
 
                 // Note that a backup file might already exist! We append a counter to avoid this.
                 var bakCounter = 0
@@ -272,12 +272,12 @@ open class BrowserDB {
                     log.debug("Finished moving \(self.filename) successfully.")
                 } catch _ {
                     log.error("Unable to move \(self.filename) to another location.")
-                    SentryIntegration.shared.send(message: "Unable to move \(self.filename) to another location.", tag: "BrowserDB", severity: .error)
+                    SentryIntegration.shared.sendWithStacktrace(message: "Unable to move \(self.filename) to another location.", tag: "BrowserDB", severity: .error)
                 }
             } else {
                 // No backup was attempted since the DB file did not exist
                 log.error("The DB \(self.filename) has been deleted while previously in use.")
-                SentryIntegration.shared.send(message: "The DB \(self.filename) has been deleted while previously in use.", tag: "BrowserDB", severity: .info)
+                SentryIntegration.shared.sendWithStacktrace(message: "The DB \(self.filename) has been deleted while previously in use.", tag: "BrowserDB", severity: .info)
             }
 
             // Do this after the relevant tables have been created.
