@@ -290,13 +290,20 @@ open class BrowserDB {
 
             self.reopenIfClosed()
             
-            // Attempt to re-create the DB
+            // Attempt to re-create the DB.
             success = true
             
-            // Re-create all previously-created tables
+            // Re-create all previously-created tables.
             if let _ = db.transaction({ connection -> Bool in
                 doCreate(self.schemaTable, connection)
                 for table in tables {
+                    if table as? SchemaTable === self.schemaTable {
+                        // Don't do it twice! Sometimes we hit this failure when creating the
+                        // initial schema table, in which case `schemaTable` will actually be
+                        // in this table list.
+                        continue
+                    }
+
                     doCreate(table, connection)
                     if !success {
                         log.error("Unable to re-create table '\(table.name)'.")
