@@ -265,8 +265,10 @@ class URLBar: UIView {
     }
     //Adds Menu Item
     func addCustomMenu() {
-        let lookupMenu = UIMenuItem(title: "Paste & Go", action: #selector(pasteAndGo))
-        UIMenuController.shared.menuItems = [lookupMenu]
+        if UIPasteboard.general.string != nil {
+            let lookupMenu = UIMenuItem(title: UIConstants.strings.urlPasteAndGo, action: #selector(pasteAndGo))
+            UIMenuController.shared.menuItems = [lookupMenu]
+        }
     }
 
     var url: URL? = nil {
