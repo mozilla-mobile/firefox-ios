@@ -34,16 +34,11 @@ echo "Setting Leanplum environment to PRODUCTION for $BUDDYBUILD_SCHEME"
 /usr/libexec/PlistBuddy -c "Set LeanplumKey $LEANPLUM_KEY_PRODUCTION" "Client/Info.plist"
 
 #
-# Enable Sentry on all builds except release
+# Enable Sentry on all builds
 #
 
-if [ "$BUDDYBUILD_SCHEME" != "Firefox" ]; then
-  echo "Setting SentryDSN to $SENTRY_DSN"
-  /usr/libexec/PlistBuddy -c "Set SentryDSN $SENTRY_DSN" "Client/Info.plist"
-else
-  echo "Deleting SentryDSN"
-  /usr/libexec/PlistBuddy -c "Delete SentryDSN" "Client/Info.plist"
-fi
+echo "Setting SentryDSN to $SENTRY_DSN"
+/usr/libexec/PlistBuddy -c "Set SentryDSN $SENTRY_DSN" "Client/Info.plist"
 
 #
 # Set the build number to match the Buddybuild number
