@@ -2,7 +2,7 @@ github "getsentry/sentry-cocoa"             "3.1.0"
 github "Alamofire/Alamofire"                ~> 4.0
 github "sleroux/Deferred"                   "Swift3.0"
 github "SnapKit/SnapKit"                    "3.1.2"
-github "rs/SDWebImage"                      "3.7.4"
+github "rs/SDWebImage"                      "4.0.0"
 github "swisspol/GCDWebServer"              "3.3.2"
 github "kif-framework/KIF"                  "v3.5.1"
 github "adjust/ios_sdk"                     "v4.10.2"
