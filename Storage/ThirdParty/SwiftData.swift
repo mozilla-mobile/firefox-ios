@@ -157,20 +157,32 @@ open class SwiftData {
     func transaction(synchronous: Bool=true, transactionClosure: @escaping (_ db: SQLiteDBConnection) -> Bool) -> NSError? {
         return withConnection(SwiftData.Flags.readWriteCreate, synchronous: synchronous) { db in
             if let err = db.executeChange("BEGIN EXCLUSIVE") {
-                log.warning("BEGIN EXCLUSIVE failed.")
+                log.error("BEGIN EXCLUSIVE failed. Error code: \(err.code), \(err)")
+                SentryIntegration.shared.sendWithStacktrace(message: "BEGIN EXCLUSIVE failed. Error code: \(err.code), \(err)", tag: "SwiftData", severity: .error)
                 return err
             }
 
             if transactionClosure(db) {
                 log.verbose("Op in transaction succeeded. Committing.")
+
                 if let err = db.executeChange("COMMIT") {
-                    log.error("COMMIT failed. Rolling back.")
-                    let _ = db.executeChange("ROLLBACK")
+                    log.error("COMMIT failed. Rolling back. Error code: \(err.code), \(err)")
+                    SentryIntegration.shared.sendWithStacktrace(message: "COMMIT failed. Rolling back. Error code: \(err.code), \(err)", tag: "SwiftData", severity: .error)
+
+                    if let rollbackErr = db.executeChange("ROLLBACK") {
+                        log.error("ROLLBACK after failed COMMIT failed. Error code: \(rollbackErr.code), \(rollbackErr)")
+                        SentryIntegration.shared.sendWithStacktrace(message: "ROLLBACK after failed COMMIT failed. Error code: \(rollbackErr.code), \(rollbackErr)", tag: "SwiftData", severity: .error)
+                    }
+
                     return err
                 }
             } else {
-                log.debug("Op in transaction failed. Rolling back.")
+                log.error("Op in transaction failed. Rolling back.")
+                SentryIntegration.shared.sendWithStacktrace(message: "Op in transaction failed. Rolling back.", tag: "SwiftData", severity: .error)
+
                 if let err = db.executeChange("ROLLBACK") {
+                    log.error("ROLLBACK after failed op in transaction failed. Error code: \(err.code), \(err)")
+                    SentryIntegration.shared.sendWithStacktrace(message: "ROLLBACK after failed op in transaction failed. Error code: \(err.code), \(err)", tag: "SwiftData", severity: .error)
                     return err
                 }
             }
@@ -424,10 +436,14 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
                 throw err
             }
             if let err = openWithFlags(flags) {
+                log.error("Error opening database with flags. Error code: \(err.code), \(err)")
+                SentryIntegration.shared.sendWithStacktrace(message: "Error opening database with flags. Error code: \(err.code), \(err)", tag: "SwiftData", severity: .error)
                 throw err
             }
             if let err = reKey(prevKey, newKey: key) {
-                log.error("Unable to encrypt database")
+                // Note: Don't log the error here as it may contain sensitive data.
+                log.error("Unable to encrypt database.")
+                SentryIntegration.shared.sendWithStacktrace(message: "Unable to encrypt database.", tag: "SwiftData", severity: .error)
                 throw err
             }
         }
@@ -609,13 +625,27 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
             return nil
         }
 
-        let status = immediately ? sqlite3_close(db) : sqlite3_close_v2(db)
+        var status = sqlite3_close(db)
 
-        // Note that if we use sqlite3_close_v2, this will still return SQLITE_OK even if
-        // there are outstanding prepared statements
         if status != SQLITE_OK {
             log.error("Got status \(status) while attempting to close.")
-            return createErr("During: closing database with flags", status: Int(status))
+            SentryIntegration.shared.sendWithStacktrace(message: "Got status \(status) while attempting to close.", tag: "SwiftData", severity: .error)
+            
+            if immediately {
+                return createErr("During: closing database with flags", status: Int(status))
+            }
+            
+            // Note that if we use sqlite3_close_v2, this will still return SQLITE_OK even if
+            // there are outstanding prepared statements
+            status = sqlite3_close_v2(db)
+            
+            if status != SQLITE_OK {
+                
+                // Based on the above comment regarding sqlite3_close_v2, this shouldn't happen.
+                log.error("Got status \(status) while attempting to close_v2.")
+                SentryIntegration.shared.sendWithStacktrace(message: "Got status \(status) while attempting to close_v2.", tag: "SwiftData", severity: .error)
+                return createErr("During: closing database with flags", status: Int(status))
+            }
         }
 
         log.debug("Closed \(self.filename).")
@@ -635,7 +665,6 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         } catch let error1 as NSError {
             error = error1
             statement = nil
-            log.error("SQL error: \(error1.localizedDescription) for SQL \(sqlStr).")
         }
 
         // Close, not reset -- this isn't going to be reused.
@@ -645,9 +674,13 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
             // Special case: Write additional info to the database log in the case of a database corruption.
             if error.code == Int(SQLITE_CORRUPT) {
                 writeCorruptionInfoForDBNamed(filename, toLogger: Logger.corruptLogger)
+
+                SentryIntegration.shared.sendWithStacktrace(message: "SQLITE_CORRUPT for DB \(filename), \(error)", tag: "SwiftData", severity: .error)
             }
 
-            log.error("SQL error: \(error.localizedDescription) for SQL \(sqlStr).")
+            log.error("SQL error. Error code: \(error.code), \(error) for SQL \(sqlStr).")
+            SentryIntegration.shared.sendWithStacktrace(message: "SQL error. Error code: \(error.code), \(error)", tag: "SwiftData", severity: .error)
+
             return error
         }
 
@@ -684,9 +717,13 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
             // Special case: Write additional info to the database log in the case of a database corruption.
             if error.code == Int(SQLITE_CORRUPT) {
                 writeCorruptionInfoForDBNamed(filename, toLogger: Logger.corruptLogger)
+                
+                SentryIntegration.shared.sendWithStacktrace(message: "SQLITE_CORRUPT for DB \(filename), \(error)", tag: "SwiftData", severity: .error)
             }
 
-            log.error("SQL error: \(error.localizedDescription).")
+            log.error("SQL error. Error code: \(error.code), \(error) for SQL \(sqlStr).")
+            SentryIntegration.shared.sendWithStacktrace(message: "SQL error. Error code: \(error.code), \(error)", tag: "SwiftData", severity: .error)
+
             return Cursor<T>(err: error)
         }
 
