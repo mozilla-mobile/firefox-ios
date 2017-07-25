@@ -270,9 +270,9 @@ open class BrowserDB {
                     }
                     
                     log.debug("Finished moving \(self.filename) successfully.")
-                } catch _ {
-                    log.error("Unable to move \(self.filename) to another location.")
-                    SentryIntegration.shared.sendWithStacktrace(message: "Unable to move \(self.filename) to another location.", tag: "BrowserDB", severity: .error)
+                } catch let error as NSError {
+                    log.error("Unable to move \(self.filename) to another location. \(error)")
+                    SentryIntegration.shared.sendWithStacktrace(message: "Unable to move \(self.filename) to another location. \(error)", tag: "BrowserDB", severity: .error)
                 }
             } else {
                 // No backup was attempted since the DB file did not exist

@@ -52,8 +52,8 @@ public class SentryIntegration {
     
     public func send(message: String, tag: String = "general", severity: SentrySeverity = .info, completion: SentryRequestFinished? = nil) {
         if !enabled {
-            if completion != nil {
-                completion!(nil)
+            if let completion = completion {
+                completion(nil)
             }
             return
         }
@@ -67,8 +67,8 @@ public class SentryIntegration {
 
     public func sendWithStacktrace(message: String, tag: String = "general", severity: SentrySeverity = .info, completion: SentryRequestFinished? = nil) {
         if !enabled {
-            if completion != nil {
-                completion!(nil)
+            if let completion = completion {
+                completion(nil)
             }
             return
         }
