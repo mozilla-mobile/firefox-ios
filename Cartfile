@@ -1,4 +1,4 @@
-github "getsentry/sentry-cocoa"             "3.1.0"
+github "getsentry/sentry-cocoa"             "3.2.1"
 github "Alamofire/Alamofire"                ~> 4.0
 github "sleroux/Deferred"                   "Swift3.0"
 github "SnapKit/SnapKit"                    "3.1.2"

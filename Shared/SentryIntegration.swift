@@ -52,8 +52,8 @@ public class SentryIntegration {
     
     public func send(message: String, tag: String = "general", severity: SentrySeverity = .info, completion: SentryRequestFinished? = nil) {
         if !enabled {
-            if completion != nil {
-                completion!(nil)
+            if let completion = completion {
+                completion(nil)
             }
             return
         }
@@ -63,5 +63,24 @@ public class SentryIntegration {
         event.tags = ["event": tag]
 
         Client.shared?.send(event: event, completion: completion)
+    }
+
+    public func sendWithStacktrace(message: String, tag: String = "general", severity: SentrySeverity = .info, completion: SentryRequestFinished? = nil) {
+        if !enabled {
+            if let completion = completion {
+                completion(nil)
+            }
+            return
+        }
+
+        Client.shared?.snapshotStacktrace {
+            let event = Event(level: severity)
+            event.message = message
+            event.tags = ["event": tag]
+
+            Client.shared?.appendStacktrace(to: event)
+            event.debugMeta = nil
+            Client.shared?.send(event: event, completion: completion)
+        }
     }
 }
