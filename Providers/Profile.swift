@@ -244,7 +244,6 @@ open class BrowserProfile: Profile {
         self.syncManager = BrowserSyncManager(profile: self)
 
         self.db.prepareSchema()
-        self.db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
 
         if syncDelegate != nil {
             // We almost certainly don't want to be accessing the logins.db when in an extension, so let's avoid

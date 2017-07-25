@@ -13,9 +13,9 @@ extension SQLiteHistory: HistoryRecommendations {
     public func getHighlights() -> Deferred<Maybe<Cursor<Site>>> {
         let highlightsProjection = [
             "historyID",
-            "\(AttachedTableHighlights).cache_key AS cache_key",
+            "\(TableHighlights).cache_key AS cache_key",
             "url",
-            "\(AttachedTableHighlights).title AS title",
+            "\(TableHighlights).title AS title",
             "guid",
             "visitCount",
             "visitDate",
@@ -23,7 +23,7 @@ extension SQLiteHistory: HistoryRecommendations {
         ]
         let faviconsProjection = ["iconID", "iconURL", "iconType", "iconDate", "iconWidth"]
         let metadataProjections = [
-            "\(AttachedTablePageMetadata).title AS metadata_title",
+            "\(TablePageMetadata).title AS metadata_title",
             "media_url",
             "type",
             "description",
@@ -33,7 +33,7 @@ extension SQLiteHistory: HistoryRecommendations {
         let allProjection = highlightsProjection + faviconsProjection + metadataProjections
 
         let highlightsHistoryIDs =
-        "SELECT historyID FROM \(AttachedTableHighlights)"
+        "SELECT historyID FROM \(TableHighlights)"
 
         // Search the history/favicon view with our limited set of highlight IDs
         // to avoid doing a full table scan on history
@@ -42,10 +42,10 @@ extension SQLiteHistory: HistoryRecommendations {
 
         let sql =
         "SELECT \(allProjection.joined(separator: ",")) " +
-        "FROM \(AttachedTableHighlights) " +
+        "FROM \(TableHighlights) " +
         "LEFT JOIN (\(faviconSearch)) AS f1 ON f1.id = historyID " +
-        "LEFT OUTER JOIN \(AttachedTablePageMetadata) ON " +
-        "\(AttachedTablePageMetadata).cache_key = \(AttachedTableHighlights).cache_key"
+        "LEFT OUTER JOIN \(TablePageMetadata) ON " +
+        "\(TablePageMetadata).cache_key = \(TableHighlights).cache_key"
 
         return self.db.runQuery(sql, args: nil, factory: SQLiteHistory.iconHistoryMetadataColumnFactory)
     }
@@ -59,7 +59,7 @@ extension SQLiteHistory: HistoryRecommendations {
     }
 
     public func clearHighlights() -> Success {
-        return self.db.run("DELETE FROM \(AttachedTableHighlights)", withArgs: nil)
+        return self.db.run("DELETE FROM \(TableHighlights)", withArgs: nil)
     }
 
     private func populateHighlights() -> Success {
@@ -98,7 +98,7 @@ extension SQLiteHistory: HistoryRecommendations {
                 ]
 
                 return self.db.bulkInsert(
-                    AttachedTableHighlights,
+                    TableHighlights,
                     op: .InsertOrReplace,
                     columns: highlightsProjection,
                     values: values
@@ -131,10 +131,10 @@ extension SQLiteHistory: HistoryRecommendations {
         
         let siteProjection = subQuerySiteProjection.replacingOccurrences(of: "siteTitle", with: "siteTitle AS title")
         let highlightsQuery =
-            "SELECT \(siteProjection), iconID, iconURL, iconType, iconDate, iconWidth, \(AttachedTablePageMetadata).title AS metadata_title, media_url, type, description, provider_name " +
+            "SELECT \(siteProjection), iconID, iconURL, iconType, iconDate, iconWidth, \(TablePageMetadata).title AS metadata_title, media_url, type, description, provider_name " +
                 "FROM (\(bookmarkHighlights) ) " +
                 "LEFT JOIN \(ViewHistoryIDsWithWidestFavicons) ON \(ViewHistoryIDsWithWidestFavicons).id = historyID " +
-                "LEFT OUTER JOIN \(AttachedTablePageMetadata) ON \(AttachedTablePageMetadata).site_url = url " +
+                "LEFT OUTER JOIN \(TablePageMetadata) ON \(TablePageMetadata).site_url = url " +
         "GROUP BY url"
         let args = [fiveDaysAgo, fiveDaysAgo] as Args
         return self.db.runQuery(highlightsQuery, args: args, factory: SQLiteHistory.iconHistoryMetadataColumnFactory)
@@ -183,8 +183,8 @@ extension SQLiteHistory: HistoryRecommendations {
                 removeMultipleDomainsSubquery +
             "   LEFT OUTER JOIN \(ViewHistoryIDsWithWidestFavicons) ON" +
             "       \(ViewHistoryIDsWithWidestFavicons).id = \(TableHistory).id" +
-            "   LEFT OUTER JOIN \(AttachedTablePageMetadata) ON" +
-            "       \(AttachedTablePageMetadata).site_url = \(TableHistory).url" +
+            "   LEFT OUTER JOIN \(TablePageMetadata) ON" +
+            "       \(TablePageMetadata).site_url = \(TableHistory).url" +
             "   WHERE visitCount <= 3 AND \(TableHistory).title NOT NULL AND \(TableHistory).title != '' AND is_bookmarked == 0 AND url NOT IN" +
             "       (SELECT url FROM \(TableActivityStreamBlocklist))" +
             "        AND \(TableHistory).domain_id NOT IN ("

@@ -27,7 +27,6 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         super.setUp()
 
         db = BrowserDB(filename: "browser.db", files: files)
-        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
         metadata = SQLiteMetadata(db: db)
         prefs = MockProfilePrefs()
         history = SQLiteHistory(db: db, prefs: prefs)
@@ -38,7 +37,7 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         // Clear out anything we might have changed on disk
         history.clearHistory().succeeded()
         history.clearHighlights().succeeded()
-        db.run("DELETE FROM \(AttachedTablePageMetadata)").succeeded()
+        db.run("DELETE FROM \(TablePageMetadata)").succeeded()
         db.run("DELETE FROM \(TableActivityStreamBlocklist)").succeeded()
 
         SDWebImageManager.shared().imageCache.clearDisk()
@@ -289,7 +288,6 @@ class TestSQLiteHistoryRecommendationsPerf: XCTestCase {
     func testRecommendationPref() {
         let files = MockFiles()
         let db = BrowserDB(filename: "browser.db", files: files)
-        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
         let metadata = SQLiteMetadata(db: db)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
