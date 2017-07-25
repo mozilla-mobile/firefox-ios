@@ -165,5 +165,8 @@ struct UIConstants {
         static let toggleSafari = NSLocalizedString("Settings.toggleSafari", value: "Safari", comment: "Safari toggle label on settings screen")
         static let urlBarCancel = NSLocalizedString("URL.cancelLabel", value: "Cancel", comment: "Label for cancel button shown when entering a URL or search")
         static let urlTextPlaceholder = NSLocalizedString("URL.placeholderText", value: "Search or enter address", comment: "Placeholder text shown in the URL bar before the user navigates to a page")
+        static let shareMenuOpenInFocus = NSLocalizedString("ShareMenu.OpenInFocus", value: "Open in Focus", comment: "Text for the share menu option when a user wants to open a page in Focus.")
+        static let shareMenuGetTheFirefoxApp = NSLocalizedString("ShareMenu.GetFirefox", value: "Get the Firefox App", comment: "Text for the share menu option when a user wants to open a page in Firefox but doesn't have it installed.")
+        static let urlPasteAndGo = NSLocalizedString("URL.contextMenu", value: "Paste & Go", comment: "Text for the URL context menu when a user long presses on the URL bar with clipboard contents.")
     }
 }
