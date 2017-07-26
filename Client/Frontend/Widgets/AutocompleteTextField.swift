@@ -33,7 +33,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     // in touchesEnd() (eg. applyCompletion() is called or not)
     fileprivate var shouldApplyCompletion = false
     fileprivate var enteredText = ""
-    fileprivate var previousSuggestion = ""
+    fileprivate var completionRange: NSRange?
     fileprivate var notifyTextChanged: (() -> Void)?
     private var lastReplacement: String?
 
@@ -131,7 +131,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         let text = self.text
         self.text = nil
         setAutocompleteSuggestion(text ?? "")
-        selectedTextRange = textRange(from: beginningOfDocument, to: beginningOfDocument)
+        selectedTextRange = textRange(from: endOfDocument, to: endOfDocument)
     }
 
     fileprivate func normalizeString(_ string: String) -> String {
@@ -141,7 +141,9 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     /// Commits the completion by setting the text and removing the highlight.
     fileprivate func applyCompletion() {
         guard completionActive else { return }
+        guard completionRange != nil else { return }
 
+        completionRange = nil
         completionActive = false
         // Clear the current completion, then set the text without the attributed style.
         // The attributed string must have at least one character to clear the current style.
@@ -156,10 +158,10 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     /// Removes the autocomplete-highlighted text from the field.
     fileprivate func removeCompletion() {
         guard completionActive else { return }
+        guard let completionRange = completionRange else { return }
 
         applyCompletion()
-        text = (text as NSString?)?.replacingOccurrences(of: previousSuggestion, with: "")
-        previousSuggestion = ""
+        text = (text as NSString?)?.replacingCharacters(in: completionRange, with: "")
     }
 
     // `shouldChangeCharactersInRange` is called before the text changes, and textDidChange is called after.
@@ -179,11 +181,13 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
             // suggest (which will suppress the caret).
             if suggestion.startsWith(normalizeString(enteredText)) && normalizeString(enteredText).characters.count < suggestion.characters.count {
                 let endingString = suggestion.substring(from: suggestion.characters.index(suggestion.startIndex, offsetBy: normalizeString(enteredText).characters.count))
-                previousSuggestion = endingString
                 let completedAndMarkedString = NSMutableAttributedString(string: enteredText + endingString)
+                let range = NSMakeRange((enteredText as NSString).length, (endingString as NSString).length)
+
                 completedAndMarkedString.addAttribute(NSBackgroundColorAttributeName, value: highlightColor, range: NSRange(location: enteredText.characters.count, length: endingString.characters.count))
                 attributedText = completedAndMarkedString
                 completionActive = true
+                completionRange = range
             }
         }
     }
