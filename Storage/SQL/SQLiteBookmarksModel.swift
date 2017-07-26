@@ -531,6 +531,15 @@ extension SQLiteBookmarks {
             (deleteStructure, args),
         ])
     }
+
+    fileprivate func markBufferBookmarkAsDeleted(_ guid: GUID) -> Success {
+        let insertInPendingDeletions =
+        "INSERT OR IGNORE INTO \(TablePendingBookmarksDeletions) " +
+        "(id) " +
+        "VALUES (?)"
+        let args: Args = [guid]
+        return self.db.run(insertInPendingDeletions, withArgs: args)
+    }
 }
 
 class SQLiteBookmarkFolder: BookmarkFolder {
