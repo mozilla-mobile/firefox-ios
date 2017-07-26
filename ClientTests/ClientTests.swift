@@ -17,7 +17,7 @@ class ClientTests: XCTestCase {
         let ua = UserAgent.syncUserAgent
         let device = DeviceInfo.deviceModel()
         let systemVersion = UIDevice.current.systemVersion
-        let expectedRegex = "^Firefox-iOS-Sync/[0-9]\\.[0-9]b[0-9]* \\(\(device); iPhone OS \(systemVersion)\\) \\([-_A-Za-z0-9= \\(\\)]+\\)$"
+        let expectedRegex = "^Firefox-iOS-Sync/[0-9]\\.[0-9](?:\\.[0-9])b[0-9]* \\(\(device); iPhone OS \(systemVersion)\\) \\([-_A-Za-z0-9= \\(\\)]+\\)$"
         let loc = ua.range(of: expectedRegex, options: NSString.CompareOptions.regularExpression)
         XCTAssertTrue(loc != nil, "Sync UA is as expected. Was \(ua)")
     }
