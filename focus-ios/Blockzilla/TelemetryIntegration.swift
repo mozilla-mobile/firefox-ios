@@ -33,4 +33,5 @@ class TelemetryEventObject {
     public static let settingsButton = "settings_button"
     public static let setting = "setting"
     public static let menu = "menu"
+    public static let pasteAndGo = "paste_and_go"
 }

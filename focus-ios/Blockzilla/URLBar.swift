@@ -5,6 +5,7 @@
 import Foundation
 import AutocompleteTextField
 import SnapKit
+import Telemetry
 
 protocol URLBarDelegate: class {
     func urlBar(_ urlBar: URLBar, didEnterText text: String)
@@ -257,12 +258,17 @@ class URLBar: UIView {
         
         addCustomMenu()
     }
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
     func pasteAndGo() {
         delegate?.urlBar(self, didSubmitText: UIPasteboard.general.string!)
+
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.pasteAndGo)
     }
+
     //Adds Menu Item
     func addCustomMenu() {
         if UIPasteboard.general.string != nil {
