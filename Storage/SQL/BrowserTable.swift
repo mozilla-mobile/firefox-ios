@@ -36,6 +36,7 @@ let TablePageMetadata = "page_metadata"
 let TableHighlights = "highlights"
 
 let ViewBookmarksBufferOnMirror = "view_bookmarksBuffer_on_mirror"
+let ViewBookmarksBufferWithDeletionsOnMirror = "view_bookmarksBuffer_with_deletions_on_mirror"
 let ViewBookmarksBufferStructureOnMirror = "view_bookmarksBufferStructure_on_mirror"
 let ViewBookmarksLocalOnMirror = "view_bookmarksLocal_on_mirror"
 let ViewBookmarksLocalStructureOnMirror = "view_bookmarksLocalStructure_on_mirror"
@@ -87,6 +88,7 @@ private let AllViews: [String] = [
     ViewWidestFaviconsForSites,
     ViewIconForURL,
     ViewBookmarksBufferOnMirror,
+    ViewBookmarksBufferWithDeletionsOnMirror,
     ViewBookmarksBufferStructureOnMirror,
     ViewBookmarksLocalOnMirror,
     ViewBookmarksLocalStructureOnMirror,
@@ -400,6 +402,52 @@ open class BrowserTable: Table {
     ", 1 AS is_overridden" +
     " FROM \(TableBookmarksBuffer) WHERE is_deleted IS 0"
 
+    fileprivate let bufferBookmarksWithDeletionsView =
+    "CREATE VIEW \(ViewBookmarksBufferWithDeletionsOnMirror) AS " +
+    "SELECT" +
+    "  -1 AS id" +
+    ", mirror.guid AS guid" +
+    ", mirror.type AS type" +
+    ", mirror.is_deleted AS is_deleted" +
+    ", mirror.parentid AS parentid" +
+    ", mirror.parentName AS parentName" +
+    ", mirror.feedUri AS feedUri" +
+    ", mirror.siteUri AS siteUri" +
+    ", mirror.pos AS pos" +
+    ", mirror.title AS title" +
+    ", mirror.description AS description" +
+    ", mirror.bmkUri AS bmkUri" +
+    ", mirror.keyword AS keyword" +
+    ", mirror.folderName AS folderName" +
+    ", null AS faviconID" +
+    ", 0 AS is_overridden" +
+
+    // LEFT EXCLUDING JOIN to get mirror records that aren't in the buffer.
+    // We don't have an is_overridden flag to help us here.
+    " FROM \(TableBookmarksMirror) mirror LEFT JOIN" +
+    " \(TableBookmarksBuffer) buffer ON mirror.guid = buffer.guid" +
+    " WHERE buffer.guid IS NULL" +
+    " UNION ALL " +
+    "SELECT" +
+    "  -1 AS id" +
+    ", guid" +
+    ", type" +
+    ", is_deleted" +
+    ", parentid" +
+    ", parentName" +
+    ", feedUri" +
+    ", siteUri" +
+    ", pos" +
+    ", title" +
+    ", description" +
+    ", bmkUri" +
+    ", keyword" +
+    ", folderName" +
+    ", null AS faviconID" +
+    ", 1 AS is_overridden" +
+    " FROM \(TableBookmarksBuffer) WHERE is_deleted IS 0" +
+    " AND NOT EXISTS (SELECT 1 FROM \(TablePendingBookmarksDeletions) deletions WHERE deletions.id = guid)"
+
     // TODO: phrase this without the subselect…
     fileprivate let bufferBookmarksStructureView =
     // We don't need to exclude deleted parents, because we drop those from the structure
@@ -626,6 +674,7 @@ open class BrowserTable: Table {
             self.localBookmarksView,
             self.localBookmarksStructureView,
             self.bufferBookmarksView,
+            self.bufferBookmarksWithDeletionsView,
             self.bufferBookmarksStructureView,
             allBookmarksView,
             historyVisitsView,
@@ -953,7 +1002,8 @@ open class BrowserTable: Table {
 
         if from < 28 && to >= 28 {
             if !self.run(db, queries: [
-                self.pendingBookmarksDeletions
+                self.pendingBookmarksDeletions,
+                self.bufferBookmarksWithDeletionsView
             ]) {
                 return false
             }

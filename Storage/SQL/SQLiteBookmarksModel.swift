@@ -36,7 +36,7 @@ public enum Direction {
         case .local:
             return ViewBookmarksLocalOnMirror
         case .buffer:
-            return ViewBookmarksBufferOnMirror
+            return ViewBookmarksBufferWithDeletionsOnMirror
         }
     }
 
