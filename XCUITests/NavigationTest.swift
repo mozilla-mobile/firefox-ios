@@ -31,27 +31,50 @@ class NavigationTest: BaseTestCase {
 
         // Check the url placeholder text and that the back and forward buttons are disabled
         XCTAssert(urlPlaceholder == defaultValuePlaceholder)
-        XCTAssertFalse(app.buttons["TabToolbar.backButton"].isEnabled)
-        XCTAssertFalse(app.buttons["TabToolbar.forwardButton"].isEnabled)
-
+        if iPad() {
+            app.buttons["Cancel"].tap()
+            XCTAssertFalse(app.buttons["URLBarView.backButton"].isEnabled)
+            XCTAssertFalse(app.buttons["Forward"].isEnabled)
+            app.textFields["url"].tap()
+        } else {
+            XCTAssertFalse(app.buttons["TabToolbar.backButton"].isEnabled)
+            XCTAssertFalse(app.buttons["TabToolbar.forwardButton"].isEnabled)
+        }
+    
         // Once an url has been open, the back button is enabled but not the forward button
         navigator.openURL(urlString: website_1["url"]!)
         waitForValueContains(app.textFields["url"], value: website_1["value"]!)
-        XCTAssertTrue(app.buttons["TabToolbar.backButton"].isEnabled)
-        XCTAssertFalse(app.buttons["TabToolbar.forwardButton"].isEnabled)
+        if iPad() {
+            XCTAssertTrue(app.buttons["URLBarView.backButton"].isEnabled)
+            XCTAssertFalse(app.buttons["Forward"].isEnabled)
+        } else {
+            XCTAssertTrue(app.buttons["TabToolbar.backButton"].isEnabled)
+            XCTAssertFalse(app.buttons["TabToolbar.forwardButton"].isEnabled)
+        }
 
         // Once a second url is open, back button is enabled but not the forward one till we go back to url_1
         navigator.openURL(urlString:  website_2["url"]!)
         waitForValueContains(app.textFields["url"], value: website_2["value"]!)
-        XCTAssertTrue(app.buttons["TabToolbar.backButton"].isEnabled)
-        XCTAssertFalse(app.buttons["TabToolbar.forwardButton"].isEnabled)
+        if iPad() {
+            XCTAssertTrue(app.buttons["URLBarView.backButton"].isEnabled)
+            XCTAssertFalse(app.buttons["Forward"].isEnabled)
+            // Go back to previous visited web site
+            app.buttons["URLBarView.backButton"].tap()
+        } else {
+            XCTAssertTrue(app.buttons["TabToolbar.backButton"].isEnabled)
+            XCTAssertFalse(app.buttons["TabToolbar.forwardButton"].isEnabled)
+            // Go back to previous visited web site
+            app.buttons["TabToolbar.backButton"].tap()
+        }
 
-        // Go back to previous visited web site
-        app.buttons["TabToolbar.backButton"].tap()
         waitForValueContains(app.textFields["url"], value: website_1["value"]!)
 
-        // Go forward to next visited web site
-        app.buttons["TabToolbar.forwardButton"].tap()
+        if iPad() {
+            app.buttons["Forward"].tap()
+        } else {
+            // Go forward to next visited web site
+            app.buttons["TabToolbar.forwardButton"].tap()
+        }
         waitForValueContains(app.textFields["url"], value: website_2["value"]!)
     }
 
@@ -117,7 +140,11 @@ class NavigationTest: BaseTestCase {
 
         // Scroll to bottom
         bottomElement.tap()
-        app.buttons["TabToolbar.backButton"].tap()
+        if iPad() {
+            app.buttons["URLBarView.backButton"].tap()
+        } else {
+            app.buttons["TabToolbar.backButton"].tap()
+        }
 
         // Scroll to top
         topElement.tap()

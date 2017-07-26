@@ -52,7 +52,9 @@ class ReaderViewTest: BaseTestCase {
         // Add item to reading list and check that it appears
         addContentToReaderView()
         navigator.goto(NewTabScreen)
+
         waitforExistence(app.buttons["HomePanels.ReadingList"])
+        
         navigator.goto(HomePanel_ReadingList)
 
         // Check that there is one item
@@ -85,8 +87,11 @@ class ReaderViewTest: BaseTestCase {
         waitforExistence(app.buttons["Add to Reading List"])
 
         // Go to reader list view to check that there is not any item there
+        
         navigator.goto(NewTabScreen)
+
         waitforExistence(app.buttons["HomePanels.ReadingList"])
+
         navigator.goto(HomePanel_ReadingList)
 
         let readingtableTable = app.tables["ReadingTable"]

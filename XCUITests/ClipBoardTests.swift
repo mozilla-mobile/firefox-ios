@@ -8,7 +8,7 @@ class ClipBoardTests: BaseTestCase {
     let url = "www.google.com"
     var navigator: Navigator!
     var app: XCUIApplication!
-
+    
     override func setUp() {
         super.setUp()
         app = XCUIApplication()
@@ -39,7 +39,9 @@ class ClipBoardTests: BaseTestCase {
     func checkCopiedUrl() {
         if let myString = UIPasteboard.general.string {
             var value = app.textFields["url"].value as! String
-            value = "\(value)/"
+            if myString.hasSuffix("/") {
+                value = "\(value)/"
+            }
             XCTAssertNotNil(myString)
             XCTAssertEqual(myString, value, "Url matches with the UIPasteboard")
         }
@@ -53,12 +55,20 @@ class ClipBoardTests: BaseTestCase {
         restart(app)
         
         //Skip the intro
+        app.scrollViews["IntroViewController.scrollView"].swipeLeft()
         app.buttons["IntroViewController.startBrowsingButton"].tap()
         
-        //Wait until recently copied pop up appears
-        waitforExistence(app.buttons["Go"])
-        
-        //Click on the pop up Go button to load the recently copied url
-        app.buttons["Go"].tap()
-    }
-}
+        if iPad() {
+            app.textFields["url"].tap()
+            app.textFields["address"].press(forDuration: 1.7)
+            app.menuItems["Paste"].tap()
+            app.typeText("\r")
+        } else {
+            //Wait until recently copied pop up appears
+            waitforExistence(app.buttons["Go"])
+            
+            //Click on the pop up Go button to load the recently copied url
+            app.buttons["Go"].tap()
+        }
+    }}
+

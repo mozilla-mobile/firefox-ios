@@ -116,7 +116,11 @@ class SearchTests: BaseTestCase {
         waitForValueContains(app.textFields["url"], value: "https://www.mozilla.org")
         
         // Go back, write part of moz, check the autocompletion
-        app.buttons["TabToolbar.backButton"].tap()
+        if iPad() {
+            app.buttons["URLBarView.backButton"].tap()
+        } else {
+            app.buttons["TabToolbar.backButton"].tap()
+        }
         navigator.nowAt(NewTabScreen)
         typeOnSearchBar(text: "moz")
         waitForValueContains(app.textFields["address"], value: "mozilla.org")
