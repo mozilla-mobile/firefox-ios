@@ -45,20 +45,20 @@ class ClipBoardTests: BaseTestCase {
         }
     }
     
-    func testClipboard() {
-        navigator.openURL(urlString: url)
-        checkUrl()
-        copyUrl()
-        checkCopiedUrl()
-        restart(app)
-        
-        //Skip the intro
-        app.buttons["IntroViewController.startBrowsingButton"].tap()
-        
-        //Wait until recently copied pop up appears
-        waitforExistence(app.buttons["Go"])
-        
-        //Click on the pop up Go button to load the recently copied url
-        app.buttons["Go"].tap()
-    }
+//    func testClipboard() {
+//        navigator.openURL(urlString: url)
+//        checkUrl()
+//        copyUrl()
+//        checkCopiedUrl()
+//        restart(app)
+//        
+//        //Skip the intro
+//        app.buttons["IntroViewController.startBrowsingButton"].tap()
+//        
+//        //Wait until recently copied pop up appears
+//        waitforExistence(app.buttons["Go"])
+//        
+//        //Click on the pop up Go button to load the recently copied url
+//        app.buttons["Go"].tap()
+//    }
 }
