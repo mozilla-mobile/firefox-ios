@@ -20,6 +20,8 @@ let TableBookmarksBufferStructure = "bookmarksBufferStructure"         // Added 
 let TableBookmarksLocal = "bookmarksLocal"                             // Added in v12. Supersedes 'bookmarks'.
 let TableBookmarksLocalStructure = "bookmarksLocalStructure"           // Added in v12.
 
+let TablePendingBookmarksDeletions = "pending_deletions"               // Added in v28.
+
 let TableFavicons = "favicons"
 let TableHistory = "history"
 let TableCachedTopSites = "cached_top_sites"
@@ -71,6 +73,7 @@ private let AllTables: [String] = [
     TableBookmarksLocalStructure,
     TableBookmarksMirror,
     TableBookmarksMirrorStructure,
+    TablePendingBookmarksDeletions,
     TableQueuedTabs,
 
     TableActivityStreamBlocklist,
@@ -113,7 +116,7 @@ private let log = Logger.syncLogger
  * We rely on SQLiteHistory having initialized the favicon table first.
  */
 open class BrowserTable: Table {
-    static let DefaultVersion = 27    // Bug 1384278.
+    static let DefaultVersion = 28    // Bug 1380062.
 
     // TableInfo fields.
     var name: String { return "BROWSER" }
@@ -476,6 +479,11 @@ open class BrowserTable: Table {
     "LEFT JOIN " +
     "\(TableFavicons) f ON f.id = b.faviconID"
 
+    fileprivate let pendingBookmarksDeletions =
+    "CREATE TABLE IF NOT EXISTS \(TablePendingBookmarksDeletions) (" +
+    "id TEXT PRIMARY KEY REFERENCES \(TableBookmarksBuffer)(guid) ON DELETE CASCADE" +
+    ")"
+
     func create(_ db: SQLiteDBConnection) -> Bool {
         let favicons =
         "CREATE TABLE IF NOT EXISTS \(TableFavicons) (" +
@@ -597,6 +605,7 @@ open class BrowserTable: Table {
             bookmarksLocalStructure,
             bookmarksMirror,
             bookmarksMirrorStructure,
+            self.pendingBookmarksDeletions,
             indexBufferStructureParentIdx,
             indexLocalStructureParentIdx,
             indexMirrorStructureParentIdx,
@@ -938,6 +947,14 @@ open class BrowserTable: Table {
                 indexPageMetadataSiteURLCreate,
                 highlightsCreate
                 ]) {
+                return false
+            }
+        }
+
+        if from < 28 && to >= 28 {
+            if !self.run(db, queries: [
+                self.pendingBookmarksDeletions
+            ]) {
                 return false
             }
         }
