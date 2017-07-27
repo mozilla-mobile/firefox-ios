@@ -160,4 +160,17 @@ public struct AppConstants {
     public static let MOZ_FXA_PUSH: Bool = {
         return true
     }()
+
+    ///  Toggle the feature that shows the blue 'Open copied link' banner
+    public static let MOZ_CLIPBOARD_BAR: Bool = {
+        #if MOZ_CHANNEL_RELEASE
+            return false
+        #elseif MOZ_CHANNEL_BETA
+            return true
+        #elseif MOZ_CHANNEL_FENNEC
+            return true
+        #else
+            return true
+        #endif
+    }()
 }
