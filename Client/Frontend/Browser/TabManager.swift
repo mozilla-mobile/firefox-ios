@@ -649,7 +649,12 @@ extension TabManager {
     static func tabsToRestore() -> [SavedTab]? {
         if let tabData = tabArchiveData() {
             let unarchiver = NSKeyedUnarchiver(forReadingWith: tabData)
-            return unarchiver.decodeObject(forKey: "tabs") as? [SavedTab]
+            unarchiver.decodingFailurePolicy = .setErrorAndReturn
+            guard let tabs = unarchiver.decodeObject(forKey: "tabs") as? [SavedTab] else {
+                SentryIntegration.shared.send(message: "Failed to restore tabs: \(unarchiver.error ??? "nil")", tag: "TabManager", severity: .error)
+                return nil
+            }
+            return tabs
         } else {
             return nil
         }
