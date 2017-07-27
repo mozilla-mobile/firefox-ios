@@ -50,24 +50,35 @@ class NoImageTests: BaseTestCase {
     }
     
     func testImageOnOff() {
-    let url1 = "www.google.com"
-    
-    // Go to a webpage, and select no images or hide images, check it's hidden or not
-    navigator.openNewURL(urlString: url1)
-    XCTAssertTrue(app.images.count == 2)
-    hideImages()
-    
-    //After image is hidden, only image detected is the lock icon in the UI
-    XCTAssertTrue(app.images.count == 1)
-    checkShowImages()
-    
-    // Load a same page on a new tab, check images are hidden
-    //navigator.goto(NewTabScreen)
-    navigator.openNewURL(urlString: url1)
-    
-    // Open it, then select show images it, and check it's showing the images
-    showImages()
-    XCTAssertTrue(app.images.count == 2)
-    checkHideImages()
+        let url1 = "www.google.com"
+        
+        // Go to a webpage, and select no images or hide images, check it's hidden or not
+        navigator.openNewURL(urlString: url1)
+        if iPad() {
+            XCTAssertTrue(app.images.count == 3)
+        } else {
+            XCTAssertTrue(app.images.count == 2)
+        }
+        hideImages()
+        
+        //After image is hidden, only image detected is the lock icon in the UI
+        if iPad() {
+            XCTAssertTrue(app.images.count == 2)
+        } else {
+            XCTAssertTrue(app.images.count == 1)
+        }
+        checkShowImages()
+        
+        // Load a same page on a new tab, check images are hidden
+        navigator.openURL(urlString: url1)
+        
+        // Open it, then select show images it, and check it's showing the images
+        showImages()
+        if iPad() {
+            XCTAssertTrue(app.images.count == 3)
+        } else {
+            XCTAssertTrue(app.images.count == 2)
+        }
+        checkHideImages()
     }
 }

@@ -78,12 +78,14 @@ class TopTabsTest: BaseTestCase {
         navigator.goto(TabTray)
         navigator.openURL(urlString: urlYah)
         navigator.goto(TabTray)
+
         waitforExistence(app.collectionViews.cells[urlLabel])
         app.collectionViews.cells[urlLabel].tap()
         waitForValueContains(app.textFields["url"], value: urlValue)
 
         navigator.nowAt(BrowserTab)
         navigator.goto(TabTray)
+
         waitforExistence(app.collectionViews.cells[urlLabelYah])
         app.collectionViews.cells[urlLabelYah].tap()
         waitForValueContains(app.textFields["url"], value: urlValueYah)
@@ -93,6 +95,7 @@ class TopTabsTest: BaseTestCase {
         navigator.openURL(urlString: url)
         navigator.goto(NewTabScreen)
         navigator.goto(TabTray)
+
         waitforExistence(app.collectionViews.cells[urlLabel])
 
         // 'x' button to close the tab is not visible, so closing by swiping the tab
@@ -108,7 +111,6 @@ class TopTabsTest: BaseTestCase {
     func testCloseAllTabsUndo() {
         // A different tab than home is open to do the proper checks
         navigator.openURL(urlString: url)
-        // Add several tabs and check that the number is correct
         navigator.createSeveralTabsFromTabTray (numberTabs: 3)
         navigator.goto(TabTray)
 
@@ -140,6 +142,7 @@ class TopTabsTest: BaseTestCase {
         // Close all tabs and check that the number of tabs is correct
         navigator.closeAllTabs()
         navigator.goto(TabTray)
+
         waitforNoExistence(app.collectionViews.cells[urlLabel])
         let numTabsAfterClosingAll = app.collectionViews.cells.count
         XCTAssertEqual(numTabsAfterClosingAll, 1, "The number of tabs is not correct after closing all")
