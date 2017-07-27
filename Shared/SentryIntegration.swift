@@ -13,6 +13,9 @@ public class SentryIntegration {
     }
 
     private let SentryDSNKey = "SentryDSN"
+    private let SentryDeviceAppHashKey = "SentryDeviceAppHash"
+    private let DefaultDeviceAppHash = "0000000000000000000000000000000000000000"
+    private let DeviceAppHashLength = UInt(20)
 
     private var enabled = false
 
@@ -40,6 +43,21 @@ public class SentryIntegration {
             Client.shared = try Client(dsn: dsn)
             try Client.shared?.startCrashHandler()
             enabled = true
+
+            // If we have not already for this install, generate a completely random identifier
+            // for this device. It is stored in the app group so that the same value will
+            // be used for both the main application and the app extensions.
+            if let defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier), defaults.string(forKey: SentryDeviceAppHashKey) == nil {
+                defaults.set(Bytes.generateRandomBytes(DeviceAppHashLength).hexEncodedString, forKey: SentryDeviceAppHashKey)
+                defaults.synchronize()
+            }
+
+            // For all outgoing reports, override the default device identifier with our own random
+            // version. Default to a blank (zero) identifier in case of errors.
+            Client.shared?.beforeSerializeEvent = { event in
+                let deviceAppHash = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)?.string(forKey: self.SentryDeviceAppHashKey)
+                event.context?.appContext?["device_app_hash"] = deviceAppHash ?? self.DefaultDeviceAppHash
+            }
         } catch let error {
             Logger.browserLogger.error("Failed to initialize Sentry: \(error)")
         }
