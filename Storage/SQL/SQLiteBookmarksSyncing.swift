@@ -777,7 +777,7 @@ public enum BufferInconsistency {
 
     private func getConcernedIDs(colNames: [String]) -> ((SDRow) -> [String]) {
         return { (row: SDRow) in
-             colNames.map({ row[$0] as! String})
+             colNames.flatMap({ row[$0] as? String})
         }
     }
 
