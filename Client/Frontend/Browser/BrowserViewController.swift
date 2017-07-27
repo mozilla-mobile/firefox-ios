@@ -43,7 +43,7 @@ class BrowserViewController: UIViewController {
     var webViewContainer: UIView!
     var menuViewController: MenuViewController?
     var urlBar: URLBarView!
-    var clipboardBarDisplayHandler: ClipboardBarDisplayHandler!
+    var clipboardBarDisplayHandler: ClipboardBarDisplayHandler?
     var readerModeBar: ReaderModeBarView?
     var readerModeCache: ReaderModeCache
     let webViewContainerToolbar = UIView()
@@ -425,8 +425,10 @@ class BrowserViewController: UIViewController {
         snackBars.backgroundColor = UIColor.clear
         self.view.addSubview(findInPageContainer)
 
-        clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs)
-        clipboardBarDisplayHandler.delegate = self
+        if AppConstants.MOZ_CLIPBOARD_BAR {
+            clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs)
+            clipboardBarDisplayHandler?.delegate = self
+        }
         
         scrollController.urlBar = urlBar
         scrollController.header = header
@@ -567,7 +569,7 @@ class BrowserViewController: UIViewController {
 
         log.debug("Updating tab count.")
         updateTabCountUsingTabManager(tabManager, animated: false)
-        clipboardBarDisplayHandler.checkIfShouldDisplayBar()
+        clipboardBarDisplayHandler?.checkIfShouldDisplayBar()
         log.debug("BVC done.")
 
         NotificationCenter.default.addObserver(self,
@@ -1674,7 +1676,7 @@ extension BrowserViewController: URLBarDelegate {
         if .blankPage == NewTabAccessors.getNewTabPage(profile.prefs) {
             UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
         } else {
-            if let toast = clipboardBarDisplayHandler.clipboardToast {
+            if let toast = clipboardBarDisplayHandler?.clipboardToast {
                 toast.removeFromSuperview()
             }
             showHomePanelController(inline: false)
