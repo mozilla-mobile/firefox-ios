@@ -29,31 +29,6 @@ public enum DatabaseOpResult {
     case closed
 }
 
-class AttachedDB {
-    public let filename: String
-    public let schemaName: String
-    
-    init(filename: String, schemaName: String) {
-        self.filename = filename
-        self.schemaName = schemaName
-    }
-    
-    func attach(to browserDB: BrowserDB) -> NSError? {
-        let file = URL(fileURLWithPath: (try! browserDB.files.getAndEnsureDirectory())).appendingPathComponent(filename).path
-        let command = "ATTACH DATABASE '\(file)' AS '\(schemaName)'"
-        return browserDB.db.withConnection(SwiftData.Flags.readWriteCreate, synchronous: true) { connection in
-            return connection.executeChange(command, withArgs: [])
-        }
-    }
-    
-    func detach(from browserDB: BrowserDB) -> NSError? {
-        let command = "DETACH DATABASE '\(schemaName)'"
-        return browserDB.db.withConnection(SwiftData.Flags.readWriteCreate, synchronous: true) { connection in
-            return connection.executeChange(command, withArgs: [])
-        }
-    }
-}
-
 // Version 1 - Basic history table.
 // Version 2 - Added a visits table, refactored the history table to be a GenericTable.
 // Version 3 - Added a favicons table.
@@ -69,8 +44,7 @@ open class BrowserDB {
     fileprivate let filename: String
     fileprivate let secretKey: String?
     fileprivate let schemaTable: SchemaTable
-    
-    fileprivate var attachedDBs: [AttachedDB]
+
     fileprivate var initialized = [String]()
 
     // SQLITE_MAX_VARIABLE_NUMBER = 999 by default. This controls how many ?s can
@@ -83,7 +57,6 @@ open class BrowserDB {
         self.filename = filename
         self.schemaTable = SchemaTable()
         self.secretKey = secretKey
-        self.attachedDBs = []
 
         let file = URL(fileURLWithPath: (try! files.getAndEnsureDirectory())).appendingPathComponent(filename).path
         self.db = SwiftData(filename: file, key: secretKey, prevKey: nil)
@@ -319,15 +292,6 @@ open class BrowserDB {
         return success ? .success : .failure
     }
 
-    open func attachDB(filename: String, as schemaName: String) {
-        let attachedDB = AttachedDB(filename: filename, schemaName: schemaName)
-        if let err = attachedDB.attach(to: self) {
-            log.error("Error attaching DB. \(err.localizedDescription)")
-        } else {
-            self.attachedDBs.append(attachedDB)
-        }
-    }
-
     typealias IntCallback = (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> Int
 
     func withConnection<T>(flags: SwiftData.Flags, err: inout NSError?, callback: @escaping (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> T) -> T {
@@ -474,17 +438,6 @@ extension BrowserDB {
         let wasClosed = db.closed
 
         db.reopenIfClosed()
-        
-        // Need to re-attach any previously-attached DBs if the DB was closed
-        if wasClosed {
-            for attachedDB in attachedDBs {
-                log.debug("Re-attaching DB \(attachedDB.filename) as \(attachedDB.schemaName).")
-
-                if let err = attachedDB.attach(to: self) {
-                    log.error("Error re-attaching DB. \(err.localizedDescription)")
-                }
-            }
-        }
     }
 }
 
