@@ -878,40 +878,46 @@ open class BrowserTable: Table {
             }
         }
 
-        if from < 22 && to >= 22 {
-            if !self.run(db, queries: [
-                "DROP TABLE IF EXISTS \(TablePageMetadata)",
-                pageMetadataCreate,
-                indexPageMetadataCacheKeyCreate,
-                indexPageMetadataSiteURLCreate]) {
-                return false
-            }
-        }
+        // Someone upgrading from v21 will get these tables anyway.
+        // So, there's no need to create them only to be dropped and
+        // re-created at v27 anyway.
+        // if from < 22 && to >= 22 {
+        //     if !self.run(db, queries: [
+        //         "DROP TABLE IF EXISTS \(TablePageMetadata)",
+        //         pageMetadataCreate,
+        //         indexPageMetadataCacheKeyCreate,
+        //         indexPageMetadataSiteURLCreate]) {
+        //         return false
+        //     }
+        // }
+        //
+        // if from < 23 && to >= 23 {
+        //     if !self.run(db, queries: [
+        //         highlightsCreate]) {
+        //         return false
+        //     }
+        // }
+        //
+        // if from < 24 && to >= 24 {
+        //     if !self.run(db, queries: [
+        //         // We can safely drop the highlights cache table since it gets cleared on every invalidate anyways.
+        //         "DROP TABLE IF EXISTS \(TableHighlights)",
+        //         highlightsCreate
+        //     ]) {
+        //         return false
+        //     }
+        // }
 
-        if from < 23 && to >= 23 {
-            if !self.run(db, queries: [
-                highlightsCreate]) {
-                return false
-            }
-        }
-
-        if from < 24 && to >= 24 {
-            if !self.run(db, queries: [
-                // We can safely drop the highlights cache table since it gets cleared on every invalidate anyways.
-                "DROP TABLE IF EXISTS \(TableHighlights)",
-                highlightsCreate
-            ]) {
-                return false
-            }
-        }
-
-        if from < 25 && to >= 25 {
-            if !self.run(db, queries: [
-                pinnedTopSitesTableCreate
-                ]) {
-                return false
-            }
-        }
+        // Someone upgrading from v21 will get this table anyway.
+        // So, there's no need to create it only to be dropped and
+        // re-created at v26 anyway.
+        // if from < 25 && to >= 25 {
+        //     if !self.run(db, queries: [
+        //         pinnedTopSitesTableCreate
+        //         ]) {
+        //         return false
+        //     }
+        // }
 
         if from < 26 && to >= 26 {
             if !self.run(db, queries: [
@@ -926,10 +932,10 @@ open class BrowserTable: Table {
         if from < 27 && to >= 27 {
             if !self.run(db, queries: [
                 "DROP TABLE IF EXISTS \(TablePageMetadata)",
+                "DROP TABLE IF EXISTS \(TableHighlights)",
                 pageMetadataCreate,
                 indexPageMetadataCacheKeyCreate,
                 indexPageMetadataSiteURLCreate,
-                "DROP TABLE IF EXISTS \(TableHighlights)",
                 highlightsCreate
                 ]) {
                 return false
