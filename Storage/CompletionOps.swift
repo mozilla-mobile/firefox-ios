@@ -66,3 +66,21 @@ open class BufferCompletionOp: PerhapsNoOp {
     public init() {
     }
 }
+
+// This supports the "simple" bookmark syncing scenario where 3-way-merging is disabled and we
+// move local records to the buffer after upload.
+open class BufferUpdatedCompletionOp: PerhapsNoOp {
+    internal let bufferValuesToMoveFromLocal: Set<GUID>
+    internal let mobileRoot: BookmarkMirrorItem
+    internal let modifiedTime: Timestamp
+
+    open var isNoOp: Bool {
+        return false
+    }
+
+    public init(bufferValuesToMoveFromLocal: Set<GUID>, mobileRoot: BookmarkMirrorItem, modifiedTime: Timestamp) {
+        self.bufferValuesToMoveFromLocal = bufferValuesToMoveFromLocal
+        self.mobileRoot = mobileRoot
+        self.modifiedTime = modifiedTime
+    }
+}

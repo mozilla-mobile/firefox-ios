@@ -301,15 +301,15 @@ extension SQLiteBookmarks {
 }
 
 private extension BookmarkMirrorItem {
-    func getChildrenArgs() -> [Args] {
+    func getChildrenArgs(startAt: Int = 0) -> [Args] {
         // Only folders have children, and we manage roots ourselves.
         if self.type != .folder ||
            self.guid == BookmarkRoots.RootGUID {
             return []
         }
         let parent = self.guid
-        var idx = 0
-        return self.children?.map { child in
+        var idx = startAt
+        return self.children?.suffix(from: startAt).map { child in
             let ret: Args = [parent, child, idx]
             idx += 1
             return ret
@@ -517,6 +517,10 @@ extension SQLiteBookmarkBufferStorage: BufferItemSource {
         return self.db.getMirrorItemsFromTable(TableBookmarksBuffer, guids: guids)
     }
 
+    public func getBufferChildrenGUIDsForParent(_ guid: GUID) -> Deferred<Maybe<[GUID]>> {
+        return self.getChildrenGUIDsOf(guid)
+    }
+
     public func prefetchBufferItemsWithGUIDs<T: Collection>(_ guids: T) -> Success where T.Iterator.Element == GUID {
         log.debug("Not implemented.")
         return succeed()
@@ -601,6 +605,10 @@ extension MergedSQLiteBookmarks: BufferItemSource {
         return self.buffer.getBufferItemsWithGUIDs(guids)
     }
 
+    public func getBufferChildrenGUIDsForParent(_ guid: GUID) -> Deferred<Maybe<[GUID]>> {
+        return self.buffer.getChildrenGUIDsOf(guid)
+    }
+
     public func prefetchBufferItemsWithGUIDs<T: Collection>(_ guids: T) -> Success where T.Iterator.Element == GUID {
         return self.buffer.prefetchBufferItemsWithGUIDs(guids)
     }
@@ -646,6 +654,19 @@ extension SQLiteBookmarks {
         return self.db.queryReturnsNoResults("SELECT 1 FROM \(TableBookmarksLocal)")
     }
 
+    // Retrieve all the local bookmarks that are not present remotely in order to avoid merge logic later.
+    public func getLocalBookmarksAdditions(limit: Int) -> Deferred<Maybe<[BookmarkMirrorItem]>> {
+        let sql =
+        "SELECT * FROM \(TableBookmarksLocal) AS bookmarks " +
+        "WHERE type = \(BookmarkNodeType.bookmark.rawValue) AND sync_status = \(SyncStatus.new.rawValue) AND parentID = ? " +
+        "AND NOT EXISTS (SELECT 1 FROM \(TableBookmarksBuffer) buf WHERE buf.guid = bookmarks.guid) " +
+        "LIMIT ?"
+        let args: Args = [BookmarkRoots.MobileFolderGUID, limit]
+
+        return db.runQuery(sql, args: args, factory: BookmarkFactory.mirrorItemFactory)
+          >>== { deferMaybe($0.asArray()) }
+    }
+
     public func getLocalDeletions() -> Deferred<Maybe<[(GUID, Timestamp)]>> {
         let sql =
         "SELECT guid, local_modified FROM \(TableBookmarksLocal) " +
@@ -659,6 +680,10 @@ extension SQLiteBookmarks {
 extension MergedSQLiteBookmarks: SyncableBookmarks {
     public func isUnchanged() -> Deferred<Maybe<Bool>> {
         return self.local.isUnchanged()
+    }
+
+    public func getLocalBookmarksAdditions(limit: Int) -> Deferred<Maybe<[BookmarkMirrorItem]>> {
+        return self.local.getLocalBookmarksAdditions(limit: limit)
     }
 
     public func getLocalDeletions() -> Deferred<Maybe<[(GUID, Timestamp)]>> {
@@ -959,6 +984,13 @@ public extension SQLiteBookmarkBufferStorage {
 
         return self.db.run(queries)
     }
+
+    public func getChildrenGUIDsOf(_ guid: GUID) -> Deferred<Maybe<[GUID]>> {
+        let sql = "SELECT child FROM \(TableBookmarksBufferStructure) WHERE parent = ? ORDER BY idx ASC"
+        let args: Args = [guid]
+
+        return self.db.runQuery(sql, args: args, factory: StringFactory) >>== { deferMaybe($0.asArray()) }
+    }
 }
 
 extension MergedSQLiteBookmarks {
@@ -1174,6 +1206,135 @@ extension MergedSQLiteBookmarks {
                     deferred.fill(Maybe(failure: DatabaseError(err: err)))
                     return false
                 }
+            }
+
+            // Commit the result.
+            return true
+        }
+
+        if let err = resultError {
+            log.warning("Got error “\(err.localizedDescription)”")
+            deferred.fillIfUnfilled(Maybe(failure: DatabaseError(err: err)))
+        } else {
+            deferred.fillIfUnfilled(Maybe(success: ()))
+        }
+
+        return deferred
+    }
+
+    public func applyBufferUpdatedCompletionOp(_ op: BufferUpdatedCompletionOp) -> Success {
+        log.debug("Applying buffer updates.")
+        if op.isNoOp {
+            log.debug("Nothing to do.")
+            return succeed()
+        }
+
+        let deferred = Success()
+
+        var err: NSError?
+        let resultError = self.local.db.transaction(&err) { (conn, err: inout NSError?) in
+            func change(_ sql: String, args: Args?=nil) -> Bool {
+                if let e = conn.executeChange(sql, withArgs: args) {
+                    err = e
+                    deferred.fillIfUnfilled(Maybe(failure: DatabaseError(err: e)))
+                    return false
+                }
+                return true
+            }
+
+            // So we can trample the DB in any order.
+            if !change("PRAGMA defer_foreign_keys = ON") {
+                return false
+            }
+
+            let insertSQL = [
+                "INSERT OR IGNORE INTO \(TableBookmarksBuffer) (",
+                "type, server_modified, is_deleted,",
+                "hasDupe, parentid, parentName,",
+                "feedUri, siteUri, pos, title,",
+                "description, bmkUri, tags, keyword,",
+                "folderName, queryId, guid)",
+                "VALUES",
+                "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                ].joined(separator: " ")
+
+            let args = op.mobileRoot.getUpdateOrInsertArgs()
+            _ = change(insertSQL, args: args)
+
+            if err != nil {
+                return false
+            }
+
+            // We update server_modified in another operation because the first statement is an INSERT OR IGNORE
+            // and we can't turn that into a INSERT OR REPLACE because this will cascade delete children
+            // in the buffer structure table.
+            let updateMobileRootTimeSQL = [
+                "UPDATE \(TableBookmarksBuffer) SET server_modified = \(op.modifiedTime)",
+                "WHERE guid = ?",
+                ].joined(separator: " ")
+            _ = change(updateMobileRootTimeSQL, args: [op.mobileRoot.guid])
+
+            if err != nil {
+                return false
+            }
+
+            op.bufferValuesToMoveFromLocal
+                .withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
+                    let args: Args = guids.map { $0 }
+                    let varlist = BrowserDB.varlist(guids.count)
+
+                    let copySQL = [
+                        "INSERT OR REPLACE INTO \(TableBookmarksBuffer)",
+                        "(guid, type, parentid, parentName, feedUri, siteUri, pos, title, description,",
+                        "bmkUri, tags, keyword, folderName, queryId, server_modified)",
+                        "SELECT guid, type, parentid, parentName, feedUri, siteUri, pos, title, description,",
+                        "bmkUri, tags, keyword, folderName, queryId,",
+                        "\(op.modifiedTime) AS server_modified",
+                        "FROM \(TableBookmarksLocal) WHERE guid IN",
+                        varlist
+                        ].joined(separator: " ")
+                    if !change(copySQL, args: args) {
+                        return
+                    }
+            }
+
+            if err != nil {
+                return false
+            }
+
+            op.bufferValuesToMoveFromLocal
+                .withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
+                    guard err == nil else { return }
+                    let args: Args = guids.map { $0 }
+                    let varlist = BrowserDB.varlist(guids.count)
+
+                    // This will leave the idx column sparse for the local children.
+                    let sqlLocalStructure = "DELETE FROM \(TableBookmarksLocalStructure) WHERE child IN \(varlist)"
+                    if !change(sqlLocalStructure, args: args) {
+                        return
+                    }
+
+                    let sqlLocal = "DELETE FROM \(TableBookmarksLocal) WHERE guid IN \(varlist)"
+                    if !change(sqlLocal, args: args) {
+                        return
+                    }
+            }
+
+            if err != nil {
+                return false
+            }
+
+            guard let allChildren = op.mobileRoot.children else {
+                log.error("Absent mobileRoot children. Aborting.")
+                return false
+            }
+            let startIndex = allChildren.count - op.bufferValuesToMoveFromLocal.count
+            let toInsertArgs = Array(op.mobileRoot.getChildrenArgs(startAt: startIndex))
+
+            if let e = insertStructureIntoTable(TableBookmarksBufferStructure, connection: conn, children: toInsertArgs, maxVars: BrowserDB.MaxVariableNumber) {
+                err = e
+                deferred.fill(Maybe(failure: DatabaseError(err: err)))
+                return false
             }
 
             // Commit the result.

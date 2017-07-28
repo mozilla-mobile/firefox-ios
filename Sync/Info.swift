@@ -55,21 +55,21 @@ open class InfoCollections {
 // Response object from https://<sync-endpoint-url>/info/configuration
 public struct InfoConfiguration {
 
-    // Maximum size in bytes of the overall HTTP request body
+    // Maximum size in bytes of the overall HTTP request body.
     public let maxRequestBytes: Int
 
-    // Maximum number of records that can be uploade to a collection in a single POST request
+    // Maximum number of records that can be uploaded to a collection in a single POST request.
     public let maxPostRecords: Int
 
     // Maximum combined size in bytes of the record payloads that can be uploaded to a collection in
-    // a single POST request
+    // a single POST request.
     public let maxPostBytes: Int
 
-    // Maximum total number of records that can be uploaded to a collection as part of a batched upload
+    // Maximum total number of records that can be uploaded to a collection as part of a batched upload.
     public let maxTotalRecords: Int
 
     // Maximum total combined size in bytes of the record payloads that can be uploaded to a collection
-    // as part of a batched upload
+    // as part of a batched upload.
     public let maxTotalBytes: Int
 }
 
