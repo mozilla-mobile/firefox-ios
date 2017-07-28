@@ -36,7 +36,7 @@ class OpenUtils {
     static func buildShareAlert(url: URL, anchor: UIView, shareCallback: @escaping (UIActivityViewController) -> ()) -> UIAlertController {
         let alert = UIAlertController(title: url.absoluteString, message: nil, preferredStyle: .actionSheet)
 
-        alert.addAction(UIAlertAction(title: UIConstants.strings.openFirefox, style: .default) { _ in
+        alert.addAction(UIAlertAction(title: canOpenInFirefox ? UIConstants.strings.openFirefox : UIConstants.strings.shareMenuGetTheFirefoxApp, style: .default) { _ in
             // If Firefox isn't installed, launch the URL to download it in the App Store.
             guard canOpenInFirefox else {
                 openFirefoxInstall()
