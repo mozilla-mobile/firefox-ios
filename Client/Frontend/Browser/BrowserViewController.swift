@@ -558,7 +558,8 @@ class BrowserViewController: UIViewController {
             self.view.alpha = (profile.prefs.intForKey(IntroViewControllerSeenProfileKey) != nil) ? 1.0 : 0.0
         }
 
-        if !displayedRestoreTabsAlert && hasPendingCrashReport() {
+        if !displayedRestoreTabsAlert && !cleanlyBackgrounded() && crashedLastLaunch() {
+            SentryIntegration.shared.send(message: "Asking to restore tabs", tag: "BrowserViewController", severity: .info, completion: nil)
             displayedRestoreTabsAlert = true
             showRestoreTabsAlert()
         } else {
@@ -578,8 +579,15 @@ class BrowserViewController: UIViewController {
                                                          object: nil)
     }
 
-    fileprivate func hasPendingCrashReport() -> Bool {
+    fileprivate func crashedLastLaunch() -> Bool {
         return SentryIntegration.crashedLastLaunch
+    }
+
+    fileprivate func cleanlyBackgrounded() -> Bool {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return false
+        }
+        return appDelegate.applicationCleanlyBackgrounded
     }
 
     fileprivate func showRestoreTabsAlert() {
