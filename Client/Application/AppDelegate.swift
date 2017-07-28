@@ -32,6 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     var tabManager: TabManager!
     var adjustIntegration: AdjustIntegration?
     var foregroundStartTime = 0
+    var applicationCleanlyBackgrounded = true
 
     weak var application: UIApplication?
     var launchOptions: [AnyHashable: Any]?
@@ -47,6 +48,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     var receivedURLs: [URL]?
 
     @discardableResult func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        //
+        // Determine if the application cleanly exited last time it was used. We default to true in
+        // case we have never done this before. Then check if the "ApplicationCleanlyBackgrounded" user
+        // default exists and whether was properly set to true on app exit.
+        //
+        // Then we always set the user default to false. It will be set to true when we the application
+        // is backgrounded.
+        //
+
+        self.applicationCleanlyBackgrounded = true
+
+        let defaults = UserDefaults()
+        if defaults.object(forKey: "ApplicationCleanlyBackgrounded") != nil {
+            self.applicationCleanlyBackgrounded = defaults.bool(forKey: "ApplicationCleanlyBackgrounded")
+        }
+        defaults.set(false, forKey: "ApplicationCleanlyBackgrounded")
+        defaults.synchronize()
+
         // Hold references to willFinishLaunching parameters for delayed app launch
         self.application = application
         self.launchOptions = launchOptions
@@ -444,6 +463,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             return
         }
 
+        //
+        // We are back in the foreground, so set CleanlyBackgrounded to false so that we can detect that
+        // the application was cleanly backgrounded later.
+        //
+
+        let defaults = UserDefaults()
+        defaults.set(false, forKey: "ApplicationCleanlyBackgrounded")
+        defaults.synchronize()
+
         profile?.reopen()
 
         NightModeHelper.restoreNightModeBrightness((self.profile?.prefs)!, toForeground: true)
@@ -475,6 +503,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
+        //
+        // At this point we are happy to mark the app as CleanlyBackgrounded. If a crash happens in background
+        // sync then that crash will still be reported. But we won't bother the user with the Restore Tabs
+        // dialog. We don't have to because at this point we already saved the tab state properly.
+        //
+
+        let defaults = UserDefaults()
+        defaults.set(true, forKey: "ApplicationCleanlyBackgrounded")
+        defaults.synchronize()
+
         syncOnDidEnterBackground(application: application)
 
         let elapsed = Int(Date().timeIntervalSince1970) - foregroundStartTime
