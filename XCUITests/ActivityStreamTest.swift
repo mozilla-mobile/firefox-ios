@@ -310,8 +310,8 @@ class ActivityStreamTest: BaseTestCase {
             navigator.openURL(urlString: "http://twitter.com")
             navigator.openURL(urlString: "http://instagram.com")
         }
-
-        app.textFields["url"].tap()
+        navigator.goto(URLBarOpen)
+        waitforExistence(pagecontrolButton)
         XCTAssert(pagecontrolButton.exists, "The Page Control button must exist")
         pagecontrolButton.tap()
         pagecontrolButton.tap()
