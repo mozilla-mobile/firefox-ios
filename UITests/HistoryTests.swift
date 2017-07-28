@@ -19,7 +19,9 @@ class HistoryTests: KIFTestCase {
         // Load a page
         let url = "\(webRoot!)/numberedPage.html?page=\(pageNo)"
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_typeText("\(url)\n"))
+        
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_replaceText(url))
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_typeText("\n"))
         tester().waitForWebViewElementWithAccessibilityLabel("Page \(pageNo)")
         return url
     }
@@ -42,21 +44,30 @@ class HistoryTests: KIFTestCase {
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("History")).perform(grey_tap())
         
-        let topConstraint = GREYLayoutConstraint(attribute: GREYLayoutAttribute.top,
-                                                 relatedBy: GREYLayoutRelation.lessThanOrEqual,
-                                                 toReferenceAttribute: GREYLayoutAttribute.bottom,
-                                                 multiplier: 1.0,
-                                                 constant: 0.0)
+        // Wait until the dialog shows up
+        let listAppeared = GREYCondition(name: "Wait the history list to appear", block: { _ in
+            var errorOrNil: NSError?
+            let matcher = grey_allOf([grey_accessibilityLabel("Page 2"),
+                                      grey_sufficientlyVisible()])
+            EarlGrey.select(elementWithMatcher: matcher)
+                .inRoot(grey_accessibilityID("History List"))
+                .assert(grey_notNil(), error: &errorOrNil)
+            return errorOrNil == nil
+        }).wait(withTimeout: 20)
+        GREYAssertTrue(listAppeared, reason: "Failed to display history")
         
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Page 2"))
             .inRoot(grey_accessibilityID("History List"))
-            .assert(grey_layout([topConstraint!], grey_accessibilityLabel("Page 1")))
+            .assert(grey_sufficientlyVisible())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Page 1"))
+            .inRoot(grey_accessibilityID("History List"))
+            .assert(grey_sufficientlyVisible())
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("\(webRoot!)/numberedPage.html?page=2"))
             .inRoot(grey_accessibilityID("History List"))
-            .assert(grey_layout([topConstraint!], grey_accessibilityLabel("\(webRoot!)/numberedPage.html?page=1")))
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("\(webRoot!)/numberedPage.html?page=2"))
+            .assert(grey_sufficientlyVisible())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("\(webRoot!)/numberedPage.html?page=1"))
             .inRoot(grey_accessibilityID("History List"))
-            .assert(grey_layout([topConstraint!], grey_accessibilityLabel("Page 1")))
+            .assert(grey_sufficientlyVisible())
         
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Cancel"))
             .inRoot(grey_kindOfClass(NSClassFromString("Client.InsetButton")!))

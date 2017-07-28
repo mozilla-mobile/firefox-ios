@@ -35,7 +35,12 @@ class LoginManagerTests: KIFTestCase {
             return success
         })
         
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Show Tabs")).perform(grey_tap())
+        if BrowserUtils.iPad() {
+            EarlGrey.select(elementWithMatcher: grey_accessibilityID("TopTabsViewController.tabsButton"))
+                .perform(grey_tap())
+        } else {
+            EarlGrey.select(elementWithMatcher: grey_accessibilityID("URLBarView.tabsButton")).perform(grey_tap())
+        }
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Menu")).perform(grey_tap())
         EarlGrey.select(elementWithMatcher: grey_text("Settings")).perform(grey_tap())
         let success = menuAppeared?.wait(withTimeout: 20)
@@ -256,8 +261,12 @@ class LoginManagerTests: KIFTestCase {
     }
 
     func testOpenAndFillFromPrivateContext() {
-        
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Show Tabs")).perform(grey_tap())
+        if BrowserUtils.iPad() {
+            EarlGrey.select(elementWithMatcher: grey_accessibilityID("TopTabsViewController.tabsButton"))
+            .perform(grey_tap())
+        } else {
+            EarlGrey.select(elementWithMatcher: grey_accessibilityID("URLBarView.tabsButton")).perform(grey_tap())
+        }
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Private Mode")).perform(grey_tap())
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Menu")).perform(grey_tap())
         EarlGrey.select(elementWithMatcher: grey_allOf([grey_accessibilityID("SettingsMenuItem"),

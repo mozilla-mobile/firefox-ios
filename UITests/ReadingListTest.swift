@@ -19,7 +19,8 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
     
     func enterUrl(url: String) {
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_typeText("\(url)\n"))
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_replaceText(url))
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_typeText("\n"))
     }
     
     func waitForReadingList() {
@@ -38,14 +39,13 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
     
     func waitForEmptyReadingList() {
         let readable = GREYCondition(name: "Check readable list is empty", block: { _ in
-            var errorOrNil: NSError?
-            let matcher = grey_allOf([grey_accessibilityLabel("Readable page"),
+            var error: NSError?
+            let matcher = grey_allOf([grey_accessibilityID("ReadingListEmptyPanel"),
                                               grey_sufficientlyVisible()])
             EarlGrey.select(elementWithMatcher: matcher)
-                .assert(grey_notNil(), error: &errorOrNil)
+                .assert(grey_notNil(), error: &error)
             
-            let success = errorOrNil != nil
-            return success
+            return error == nil
         }).wait(withTimeout: 10)
         GREYAssertTrue(readable, reason: "Read list should not appear")
     }
@@ -136,6 +136,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
         
         // Make sure the article is marked as read
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Readable page"))
+            .inRoot(grey_kindOfClass(NSClassFromString("UITableViewCellContentView")!))
             .assert(grey_notNil())
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("MarkAsUnread"))
             .inRoot(grey_kindOfClass(NSClassFromString("UITableViewCellContentView")!))
@@ -145,6 +146,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
         
         // Remove the list entry
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Readable page"))
+            .inRoot(grey_kindOfClass(NSClassFromString("UITableViewCellContentView")!))
             .perform(grey_swipeSlowInDirection(GREYDirection.left))
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Remove"))
             .inRoot(grey_kindOfClass(NSClassFromString("_UITableViewCellActionButton")!))

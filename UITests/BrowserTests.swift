@@ -32,10 +32,16 @@ class BrowserTests: KIFTestCase {
         
         // Show share sheet and wait for the JS prompt to fire
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Share")).perform(grey_tap())
-        let matcher = grey_allOf([grey_accessibilityLabel("Cancel"),
-                                          grey_accessibilityTrait(UIAccessibilityTraitButton),
-                                          grey_sufficientlyVisible()])
-        EarlGrey.select(elementWithMatcher: matcher).perform(grey_tap())
+        
+        if BrowserUtils.iPad() {
+            // iPad does not have cancel btn to close dialog
+            EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Share")).perform(grey_tap())
+        } else {
+            let matcher = grey_allOf([grey_accessibilityLabel("Cancel"),
+                                      grey_accessibilityTrait(UIAccessibilityTraitButton),
+                                      grey_sufficientlyVisible()])
+            EarlGrey.select(elementWithMatcher: matcher).perform(grey_tap())
+        }
         
         // Check to see if the JS Prompt is dequeued and showing
         tester().waitForView(withAccessibilityLabel: "OK")
