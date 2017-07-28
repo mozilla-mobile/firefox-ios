@@ -1,0 +1,189 @@
+/* Button on About screen */
+"About.learnMoreButton" = "Batafsil ma’lumot";
+
+/* Label on About screen */
+"About.missionLabel" = "%@ – Mozilla tomonidan tuzilgan. Vazifamiz – internetning ochiqligi va xavfsizligini ta’minlash.";
+
+/* Label on About screen */
+"About.privateBullet1" = "Ilova orqali to‘g‘ridan to‘g‘ri internetga kirish va izlashingiz mumkin";
+
+/* Label on About screen */
+"About.privateBullet2" = "Kuzatuvchilarni bloklang (ularga ruxsat berish uchun parametrlarni yangilang)";
+
+/* Label on About screen */
+"About.privateBullet3" = "Kirilgan saytlar tarixi va amalga oshirilgan qidiruv ma’lumotlari hamda kukilarni o‘chirish uchun tozalab tashlang";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "Undan maxfiy brauzer sifatida foydalaning:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "Yordam";
+
+/* Label for row in About screen */
+"About.rowRights" = "Huquqlaringiz";
+
+/* Label on About screen */
+"About.safariBullet1" = "Maxfiylikni ta’minlash uchun kuzatuvchilarni bloklang";
+
+/* Label on About screen */
+"About.safariBullet2" = "Sahifa hajmini kichiklashtirish uchun veb-shriftlarni bloklang";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "Undan Safari kengaytmasi sifatida foydalaning:";
+
+/* Title for the About screen */
+"About.screenTitle" = "Dastur haqida";
+
+/* Label on About screen */
+"About.topLabel" = "%@ boshqarish imkonini sizga beradi.";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "Orqaga";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "Oldinga";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "Yangilash";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "Sozlamalar";
+
+/* Accessibility label for the share button */
+"Browser.shareLabel" = "Ulashish";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "To‘xtatish";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "Yana urinib ko‘rish";
+
+/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.callButton" = "Qo‘ng‘iroq qilish";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "Bekor qilish";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "E-pochta";
+
+/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.messageTitleWithPlaceholder" = "%@ brauzeridan chiqyapsiz.";
+
+/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openAppStoreButton" = "App Store do‘konini ochish";
+
+/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openMapsButton" = "Xaritalarni ochish";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.buttonLabel" = "Tushundim!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelDescription" = "Internetga kirganingizda kuzatuvchilar avtomatik tarzda bloklaydi. So‘ngra kirilgan sahifalar, qidiruv, kuki va parollarni qurilmadan o‘chirish uchun tugmachani bosing.";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "Kuzatishlaridan xavotir olmasdan internetda ishlay olasiz.";
+
+/* First label for product description on the home screen */
+"Home.descriptionLabel1" = "Avtomatik maxfiy tazda internetda ishlash.";
+
+/* Second label for product description on the home screen */
+"Home.descriptionLabel2" = "Ko‘ring, O‘chiring, Qaytaring.";
+
+/* Label in share alert to cancel the alert */
+"Open.Cancel" = "Bekor qilish";
+
+/* Label in share alert to open the URL in Firefox */
+"Open.Firefox" = "Firefox (Maxfiy tarzda ishlash)";
+
+/* Label in share alert to open the full system share menu */
+"Open.More" = "Yana";
+
+/* Label in share alert to open the URL in Safari */
+"Open.Safari" = "Safari";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "Safari ustiga bosing, so‘ngra \"Kontentni bloklash qoidasi\"ni tanlang.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "%@ni yoqing";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ o‘chiq";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "Ilova sozlamalarini oching";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Kuzatuvchilarning boshqa kontentlarini bloklasangiz, ba’zi video va veb-sahifalar ishlamay qolishi mumkin.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "Rahmat, kerak emas";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "Tushundim";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "Sozlamalar";
+
+/* Title for the search engine row */
+"Settings.searchSection" = "QIDIRUV TIZIMI";
+
+/* Title for the search engine selection screen */
+"Settings.searchTitle" = "Qidiruv tizimi";
+
+/* Label for Safari integration section */
+"Settings.sectionIntegration" = "INTEGRATSIYA";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for performance toggles */
+"Settings.sectionPerformance" = "SAMARADORLIK";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "MAXFIYLIK";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAds" = "Kuzatuvchilarning reklamalarini bloklash";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAnalytics" = "Kuzatuvchilarning tashxislarini bloklash";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Veb-shriftlarni bloklash";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockOther" = "Kuzatuvchilarnin boshqa kontentlarini bloklash";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockSocial" = "Ijtimoiy kuzatuvchilarni bloklash";
+
+/* Label subtitle for toggle on main screen */
+"Settings.toggleOtherSubtitle" = "Ba’zi video va veb sahifalarning ishlashiga halaqit berishi mumkin";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageData" = "Foydalanish ma’lumotlarini anonim tarzda jo‘natish";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "Batafsil ma’lumot";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "Bekor qilish";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "TOZALASH";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "Kirilgan saytlar haqidagi ma’lumot tozalandi.";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Izlang yoki manzilni kiriting";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Izlash: %@";
+

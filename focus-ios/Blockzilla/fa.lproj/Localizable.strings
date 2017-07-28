@@ -5,7 +5,7 @@
 "About.missionLabel" = "برنامهٔ %@ توسط موزیلا تولید شده است. ماموریت ما پرورشِ اینترنتی سالم و باز می‌باشد.";
 
 /* Label on About screen */
-"About.privateBullet1" = "جست‌وجو و مرور تنها با استفاده از این برنامه";
+"About.privateBullet1" = "بدون خروج از برنامه، اینترنت را جست‌وجو و مرور کنید";
 
 /* Label on About screen */
 "About.privateBullet2" = "ردیاب‌ها را مسدود کنید (یا اینکه تنظیمات خود را برای اجازه دادن به ردیاب‌ها تغییر دهید)";
@@ -14,7 +14,7 @@
 "About.privateBullet3" = "پاک کنید تا اطلاعاتی مانند کوکی‌ها و همچنین جست‌وجوها و تاریخچه مرور حذف شوند";
 
 /* Label on About screen */
-"About.privateBulletHeader" = "از آن به عنوان یک مرورگر ناشناس استفاده کنید:";
+"About.privateBulletHeader" = "از این برنامه به عنوان یک مرورگر ناشناس استفاده کنید:";
 
 /* Label for row in About screen */
 "About.rowHelp" = "راهنما";
@@ -83,7 +83,7 @@
 "FirstRun.messageLabelDescription" = "به طور خودکار ردیاب‌های آنلاین را هنگام مرورِ خود مسدود کنید. سپس تنها با یک ضربه صفحه‌های بازدید کرده، جست‌وجوها، کوکی‌ها و گذرواژه‌های خود را از روی دستگاه حذف کنید.";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelTagline" = "طوری مرور کنید، انگار که کسی شما را تحت نظر ندارد.";
+"FirstRun.messageLabelTagline" = "بدون دغدغهٔ نگاه‌ها مرور کنید.";
 
 /* First label for product description on the home screen */
 "Home.descriptionLabel1" = "مرورِ خودکارِ ناشناس.";

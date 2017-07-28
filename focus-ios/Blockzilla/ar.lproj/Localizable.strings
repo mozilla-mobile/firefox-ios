@@ -2,16 +2,16 @@
 "About.learnMoreButton" = "اطّلع على المزيد";
 
 /* Label on About screen */
-"About.missionLabel" = "%@ منتج من موزيلا. مهمتنا تشجيع إنترنت مفتوح و صحي.";
+"About.missionLabel" = "‏%@ منتج من موزيلا. مهمتنا تشجيع إنترنت مفتوح و صحي.";
 
 /* Label on About screen */
 "About.privateBullet1" = "ابحث و تصفح مباشرة في التطبيق";
 
 /* Label on About screen */
-"About.privateBullet2" = "احظر المتعقبات (أو حدّث الإعدادات للسماح بالمتعقبات)";
+"About.privateBullet2" = "احجب المتعقبات (أو حدّث الإعدادات للسماح بالمتعقبات)";
 
 /* Label on About screen */
-"About.privateBullet3" = "امسح أو احذف الكعكات بالإضافة إلى حذف تأريخ البحث و التصفح";
+"About.privateBullet3" = "امسح الكعكات بالإضافة إلى حذف تأريخ البحث و التصفح";
 
 /* Label on About screen */
 "About.privateBulletHeader" = "استخدمه كمتصفح خاص:";
@@ -23,10 +23,10 @@
 "About.rowRights" = "حقوقك";
 
 /* Label on About screen */
-"About.safariBullet1" = "احظر المتعقبات لتحسين الخصوصية";
+"About.safariBullet1" = "احجب المتعقبات لتحسين الخصوصية";
 
 /* Label on About screen */
-"About.safariBullet2" = "احظر خطوط الوب لتقليل حجم الصفحات";
+"About.safariBullet2" = "احجب خطوط الوب لتقليل حجم الصفحات";
 
 /* Label on About screen */
 "About.safariBulletHeader" = "استخدمه كامتداد لمتصفح سفاري:";
@@ -80,7 +80,7 @@
 "FirstRun.buttonLabel" = "شكرا، فهمت.";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "احظر متعقبات الإنترنت تلقائيًا أثناء التصفح. ثم انقر لمسح الصفحات التي زرتها، و تأريخ البحث، و الكعكات، و كلمات السر من جهازك.";
+"FirstRun.messageLabelDescription" = "احجب متعقبات الإنترنت تلقائيًا أثناء التصفح. ثم انقر لمسح الصفحات التي زرتها، و تأريخ البحث، و الكعكات، و كلمات السر من جهازك.";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "تصفح و لا أحد يراقبك.";
@@ -104,7 +104,7 @@
 "Open.Safari" = "سفاري";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsContentBlockers" = "انقر على سفاري ثم اختر ”أدوات حظر المحتوى“";
+"Safari.instructionsContentBlockers" = "انقر على سفاري ثم اختر ”أدوات حجب المحتوى“";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsEnable" = "فعّل %@";
@@ -116,7 +116,7 @@
 "Safari.instructionsOpen" = "افتح تطبيق الإعدادات";
 
 /* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "حظر متعقبات المحتوى الأخرى قد يعطل بعض الڤديو و صفحات الوب.";
+"Settings.blockOtherMessage" = "حجب متعقبات المحتوى الأخرى قد يعطل بعض الڤديو و صفحات الوب.";
 
 /* Button label for declining Content blocker alert */
 "Settings.blockOtherNo" = "لا، شكرًا";
@@ -146,19 +146,19 @@
 "Settings.sectionPrivacy" = "الخصوصية";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "احظر متعقبات الإعلانات";
+"Settings.toggleBlockAds" = "احجب متعقبات الإعلانات";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "احظر متعقبات التحليلات";
+"Settings.toggleBlockAnalytics" = "احجب متعقبات التحليلات";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "احظر خطوط الوب";
+"Settings.toggleBlockFonts" = "احجب خطوط الوب";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "احظر متعقبات المحتوى الأخرى";
+"Settings.toggleBlockOther" = "احجب متعقبات المحتوى الأخرى";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "احظر المتعقبات الاجتماعية";
+"Settings.toggleBlockSocial" = "احجب المتعقبات الاجتماعية";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "قد يعطل بعض الڤديو و صفحات الوب";
@@ -172,8 +172,17 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.toggleSendAnonymousUsageDataSubtitle" = "اطّلع على المزيد";
 
+/* Text for the share menu option when a user wants to open a page in Firefox but doesn't have it installed. */
+"ShareMenu.GetFirefox" = "نزّل تطبيق فَيرفُكس";
+
+/* Text for the share menu option when a user wants to open a page in Focus. */
+"ShareMenu.OpenInFocus" = "افتح في فُوكَس";
+
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "ألغِ";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "ألصق و اذهب";
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "امسح";

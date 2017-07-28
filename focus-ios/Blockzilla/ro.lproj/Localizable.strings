@@ -1,0 +1,189 @@
+/* Button on About screen */
+"About.learnMoreButton" = "Află mai multe";
+
+/* Label on About screen */
+"About.missionLabel" = "%@ este produs de Mozilla. Misiunea noastră este de a promova un internet sănătos și deschis.";
+
+/* Label on About screen */
+"About.privateBullet1" = "Caută și navighează direct din aplicație";
+
+/* Label on About screen */
+"About.privateBullet2" = "Blochează mecanismele de urmărire (sau actualizează setările pentru a le permite)";
+
+/* Label on About screen */
+"About.privateBullet3" = "Șterge pentru a elimina cookie-urile și istoricul de navigare și căutare";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "Folosește-l ca browser privat:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "Ajutor";
+
+/* Label for row in About screen */
+"About.rowRights" = "Drepturile tale";
+
+/* Label on About screen */
+"About.safariBullet1" = "Blochează urmăritorii pentru confidențialitate crescută";
+
+/* Label on About screen */
+"About.safariBullet2" = "Blochează fonturile web pentru a reduce mărimea paginii";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "Folosește-l ca extensie Safari:";
+
+/* Title for the About screen */
+"About.screenTitle" = "Despre";
+
+/* Label on About screen */
+"About.topLabel" = "%@ îți oferă controlul.";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "Înapoi";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "Înainte";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "Reîncarcă";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "Setări";
+
+/* Accessibility label for the share button */
+"Browser.shareLabel" = "Împărtășește";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "Oprește";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "Încearcă din nou";
+
+/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.callButton" = "Apelează";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "Renunță";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "Trimite e-mail";
+
+/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.messageTitleWithPlaceholder" = "Părăsești acum %@.";
+
+/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openAppStoreButton" = "Deschide App Store";
+
+/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openMapsButton" = "Deschide Hărți";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.buttonLabel" = "Ok, am priceput!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelDescription" = "Blochează automat mecanismele de urmărire în timp ce navighezi. Apoi apasă pentru a șterge paginile vizitate, căutările, cookie-urile și parolele din dispozitiv.";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "Navighează ca și cum nimeni nu te urmărește.";
+
+/* First label for product description on the home screen */
+"Home.descriptionLabel1" = "Navigare privată automată.";
+
+/* Second label for product description on the home screen */
+"Home.descriptionLabel2" = "Navighează. Șterge. Repetă.";
+
+/* Label in share alert to cancel the alert */
+"Open.Cancel" = "Renunță";
+
+/* Label in share alert to open the URL in Firefox */
+"Open.Firefox" = "Firefox (Navigare privată)";
+
+/* Label in share alert to open the full system share menu */
+"Open.More" = "Mai multe";
+
+/* Label in share alert to open the URL in Safari */
+"Open.Safari" = "Safari";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "Apasă pe Safari, apoi selectează Sisteme de blocare a conținutului";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "Activează %@";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ nu este activat.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "Deschide aplicația Configurări";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Blocarea altor mecanisme de urmărire a conținutului ar putea afecta funcționalitatea unor videouri sau pagini web.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "Nu, mersi";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "Înțeleg";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "Setări";
+
+/* Title for the search engine row */
+"Settings.searchSection" = "MOTOR DE CĂUTARE";
+
+/* Title for the search engine selection screen */
+"Settings.searchTitle" = "Motor de căutare";
+
+/* Label for Safari integration section */
+"Settings.sectionIntegration" = "INTEGRARE";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for performance toggles */
+"Settings.sectionPerformance" = "PERFORMANȚĂ";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "CONFIDENȚIALITATE";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAds" = "Blochează urmăritorii publicitari";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAnalytics" = "Blochează urmăritorii de analitici";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Blochează fonturile web";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockOther" = "Blochează alți urmăritori de conținut";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockSocial" = "Blochează urmăritorii de rețele sociale";
+
+/* Label subtitle for toggle on main screen */
+"Settings.toggleOtherSubtitle" = "Ar putea afecta funcționalitatea unor videouri sau pagini web";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageData" = "Trimite date anonime privind utilizarea";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "Află mai multe";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "Renunță";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "ȘTERGE";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "Istoricul de navigare a fost șters.";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Caută sau introdu adresa";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Caută &@";
+

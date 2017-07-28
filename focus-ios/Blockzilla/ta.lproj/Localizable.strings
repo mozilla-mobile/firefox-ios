@@ -1,0 +1,198 @@
+/* Button on About screen */
+"About.learnMoreButton" = "மேலும் அறிய";
+
+/* Label on About screen */
+"About.missionLabel" = "%@ ஒரு மொசில்லா தயாரிப்பாகும். ஆரோக்கியமான திறந்த இணையத்தை கிடைக்கச் செய்வதே எங்களின் நோக்கம்.";
+
+/* Label on About screen */
+"About.privateBullet1" = "செயலி மூலம் தேடங்கள் உலாவுங்கள்";
+
+/* Label on About screen */
+"About.privateBullet2" = "தடமறிபவைகளைத் தடு(அல்லது தடமறிபவைகளை அனுமதிக்க அமைவுகளைப் புதுப்பி)";
+
+/* Label on About screen */
+"About.privateBullet3" = "நினைவிகளை அழிப்பதுடன் தேடல் உலாவல் வரலாற்றையும் அகற்று";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "அந்தரங்க உலாவியாகப் பயன்படுத்தவும்:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "உதவி";
+
+/* Label for row in About screen */
+"About.rowRights" = "உரிமைகள்";
+
+/* Label on About screen */
+"About.safariBullet1" = "மேம்பட்ட தனியுரிமைக்காக தடமறிதலைத் தடு";
+
+/* Label on About screen */
+"About.safariBullet2" = "பக்க அளவை குறைக்க இணைய எழுத்துருக்களைத் தடு";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "சப்பாரி நீட்சியாகப் பயன்படுத்து:";
+
+/* Title for the About screen */
+"About.screenTitle" = "பற்றி";
+
+/* Label on About screen */
+"About.topLabel" = "%@ உங்களை கட்டுப்பாட்டில் வைக்கும்.";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "பின்செல்";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "முன்செல்";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "மீளேற்று";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "அமைவுகள்";
+
+/* Accessibility label for the share button */
+"Browser.shareLabel" = "பகிர்க";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "நிறுத்து";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "மீண்டும் முயற்சி";
+
+/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.callButton" = "அழை";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "ரத்து";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "மின்னஞ்சல்";
+
+/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.messageTitleWithPlaceholder" = "%@ விட்டு வெளியேறுகிறீர்கள்.";
+
+/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openAppStoreButton" = "செயலி கடையைத் திற";
+
+/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openMapsButton" = "வரைபடத்தைத் திற";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.buttonLabel" = "சரி, புரிந்தது!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelDescription" = "நீங்கள் உலாவும் போது தடமறிபவைகளை தானாக தடு. உங்கள் சாதனத்தில் நீங்கள் பார்த்த வலைப்பக்கங்கள், தேடல்கள், நினைவிகள், மற்றும் கடவுச்சொல்லை அகற்ற தட்டவும்.";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "மற்றவர்களுக்கு தெரியா வண்ணம் உலாவு.";
+
+/* First label for product description on the home screen */
+"Home.descriptionLabel1" = "தானியக்க தனிப்பட்ட உலாவல்.";
+
+/* Second label for product description on the home screen */
+"Home.descriptionLabel2" = "உலாவு. அகற்று. திரும்பச்செய்.";
+
+/* Label in share alert to cancel the alert */
+"Open.Cancel" = "ரத்து";
+
+/* Label in share alert to open the URL in Firefox */
+"Open.Firefox" = "பயர்பாக்ஸ் (தனிப்பட்ட உலாவல்)";
+
+/* Label in share alert to open the full system share menu */
+"Open.More" = "மேலும்";
+
+/* Label in share alert to open the URL in Safari */
+"Open.Safari" = "சப்பாரி";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "சப்பாரி உலாவியைத் தட்டி, உள்ளடக்க தடுப்புகளைத் தேர்";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "%@ செயற்படுத்து";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ செயலற்றுள்ளது.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "அமைவுகள் செயலியைத் திற";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "மற்ற உள்ளடக்க தடமறிதல்களைத் தடுப்பதால் சில காணொளிகள் மற்றும் வலைப்பக்கங்கள் முறியலாம்.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "இல்லை, நன்றி";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "எனக்கு புரிந்தது";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "அமைவுகள்";
+
+/* Title for the search engine row */
+"Settings.searchSection" = "தேடுபொறி";
+
+/* Title for the search engine selection screen */
+"Settings.searchTitle" = "தேடுபொறி";
+
+/* Label for Safari integration section */
+"Settings.sectionIntegration" = "ஒன்றிணைத்தல்";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "மொசில்லா";
+
+/* Section label for performance toggles */
+"Settings.sectionPerformance" = "செயல்திறன்";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "தனியுரிமை";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAds" = "விளம்பர பின்தொடரிகளைத் தடு";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAnalytics" = "பகுப்பாய்வு பின்தொடரிகளைத் தடு";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "இணைய எழுத்துருக்களைத் தடு";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockOther" = "பிற உள்ளடக்க பின்தொடரலை தடு";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockSocial" = "சமூக பின்தொடரலை தடு";
+
+/* Label subtitle for toggle on main screen */
+"Settings.toggleOtherSubtitle" = "சில காணொளிகளும் இணையப் பக்கங்களும் உடையலாம்";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "சப்பாரி";
+
+/* Label for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageData" = "பெயரற்ற பயனளவு தரவை அனுப்பு";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "மேலும் அறிக";
+
+/* Text for the share menu option when a user wants to open a page in Firefox but doesn't have it installed. */
+"ShareMenu.GetFirefox" = "பயர்பாக்ஸ் செயலியைப் பெறுக";
+
+/* Text for the share menu option when a user wants to open a page in Focus. */
+"ShareMenu.OpenInFocus" = "போஃசில் திற";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "ரத்து";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "ஒட்டிச் செல்";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "அகற்று";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "உங்கள் உலாவல் வரலாறு அழிக்கப்பட்டது.";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "தேடு அல்லது முகவரியை இடு";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "%@ சொல்லைத் தேடு";
+

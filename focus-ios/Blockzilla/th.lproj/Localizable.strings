@@ -116,7 +116,7 @@
 "Safari.instructionsOpen" = "เปิดแอป การตั้งค่า";
 
 /* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "การปิดกั้นตัวติดตามของเนื้อหาอื่น ๆ อาจทำให้บางวิดีโอและหน้าเว็บไม่สมบูรณ์";
+"Settings.blockOtherMessage" = "การปิดกั้นตัวติดตามของเนื้อหาอื่น ๆ อาจทำให้วิดีโอและหน้าเว็บบางส่วนไม่สมบูรณ์";
 
 /* Button label for declining Content blocker alert */
 "Settings.blockOtherNo" = "ไม่ ขอบคุณ";
@@ -161,7 +161,7 @@
 "Settings.toggleBlockSocial" = "ปิดกั้นตัวติดตามทางสังคม";
 
 /* Label subtitle for toggle on main screen */
-"Settings.toggleOtherSubtitle" = "อาจทำให้บางวิดีโอและหน้าเว็บไม่สมบูรณ์";
+"Settings.toggleOtherSubtitle" = "อาจทำให้วิดีโอและหน้าเว็บบางส่วนไม่สมบูรณ์";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
@@ -172,8 +172,17 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.toggleSendAnonymousUsageDataSubtitle" = "เรียนรู้เพิ่มเติม";
 
+/* Text for the share menu option when a user wants to open a page in Firefox but doesn't have it installed. */
+"ShareMenu.GetFirefox" = "รับแอป Firefox";
+
+/* Text for the share menu option when a user wants to open a page in Focus. */
+"ShareMenu.OpenInFocus" = "เปิดใน Focus";
+
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "ยกเลิก";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "วางแล้วไป";
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "ล้าง";

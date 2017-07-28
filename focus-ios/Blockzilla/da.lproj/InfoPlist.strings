@@ -1,0 +1,12 @@
+/* (No Commment) */
+"NSCameraUsageDescription" = "Dette lader dig tage og uploade fotografier.";
+
+/* (No Commment) */
+"NSLocationWhenInUseUsageDescription" = "Websteder kan anmode om din position, når du besøger dem.";
+
+/* (No Commment) */
+"NSMicrophoneUsageDescription" = "Dette lader dig optage og uploade videoer.";
+
+/* (No Commment) */
+"NSPhotoLibraryUsageDescription" = "Dette lader dig gemme og uploade fotografier.";
+

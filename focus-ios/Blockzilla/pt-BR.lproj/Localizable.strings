@@ -80,7 +80,7 @@
 "FirstRun.buttonLabel" = "OK, ENTENDI!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Bloquear automaticamente os rastreadores on-line enquanto navega. Então, toque para apagar páginas visitadas, pesquisas, cookies e senhas do seu dispositivo.";
+"FirstRun.messageLabelDescription" = "Bloqueie automaticamente os rastreadores online enquanto navega. Em seguida, toque para apagar páginas visitadas, pesquisas, cookies e senhas do seu dispositivo.";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "Navegar como se ninguém estivesse olhando.";
@@ -116,7 +116,7 @@
 "Safari.instructionsOpen" = "Abrir configurações do aplicativo";
 
 /* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Bloquear outros rastreadores de conteúdo pode quebrar alguns vídeos e páginas da Web.";
+"Settings.blockOtherMessage" = "O bloqueio de outros rastreadores pode quebrar alguns vídeos e páginas da Web.";
 
 /* Button label for declining Content blocker alert */
 "Settings.blockOtherNo" = "Não, obrigado";
@@ -146,7 +146,7 @@
 "Settings.sectionPrivacy" = "PRIVACIDADE";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Bloquear rastreadores de anúncio";
+"Settings.toggleBlockAds" = "Bloquear rastreadores de anúncios";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockAnalytics" = "Bloquear rastreadores analíticos";
@@ -155,10 +155,10 @@
 "Settings.toggleBlockFonts" = "Bloquear fontes web";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Bloquear outros rastreadores de conteúdo";
+"Settings.toggleBlockOther" = "Bloquear outros rastreadores";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Bloquear rastreadores de mídias sociais";
+"Settings.toggleBlockSocial" = "Bloquear rastreadores sociais";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Pode quebrar alguns vídeos e páginas web";
@@ -172,8 +172,17 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.toggleSendAnonymousUsageDataSubtitle" = "Saber mais";
 
+/* Text for the share menu option when a user wants to open a page in Firefox but doesn't have it installed. */
+"ShareMenu.GetFirefox" = "Obter o Firefox";
+
+/* Text for the share menu option when a user wants to open a page in Focus. */
+"ShareMenu.OpenInFocus" = "Abrir no Focus";
+
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Cancelar";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Colar e ir";
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "APAGAR";

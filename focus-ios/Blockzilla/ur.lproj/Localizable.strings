@@ -1,0 +1,189 @@
+/* Button on About screen */
+"About.learnMoreButton" = "مزید سیکھیں";
+
+/* Label on About screen */
+"About.missionLabel" = "%@ Mozilla کی پیداوار ھے۔ ھماری مہم ایک صحت مند کھلے انٹرنیٹ کو فروعٰ دینا ھے۔";
+
+/* Label on About screen */
+"About.privateBullet1" = "ایپلیکیشن کے اندر ہی تلاش اور برائوز کریں";
+
+/* Label on About screen */
+"About.privateBullet2" = "ٹریکررٰ کو بلاک کریں (یا سٹینگوں کی تازہ کاری کر کے ٹریکررٰ کو اجازت دیں)";
+
+/* Label on About screen */
+"About.privateBullet3" = "کوکیز کے ساتھ تلاش اور براؤزنگ سابقات کو بھی حذف کرنے کیلیے مٹائیں";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "اس کو نجی براؤزر کے طور پر استعمال کریں:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "مدد";
+
+/* Label for row in About screen */
+"About.rowRights" = "آپ کے حقوق";
+
+/* Label on About screen */
+"About.safariBullet1" = "بہتر رازداریکے لیئے سراغ راہ بلاک کریں";
+
+/* Label on About screen */
+"About.safariBullet2" = "صفحہ کا ماپ گھٹانے کے لیے ویب فانٹ بلاک کریں";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "اس کو Safari کی توسیعات کے طور پر استعمال کریں:";
+
+/* Title for the About screen */
+"About.screenTitle" = "کے بارے میں";
+
+/* Label on About screen */
+"About.topLabel" = "%@ آپ کو کنٹرول میں رکھتا ہے۔";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "واپس";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "آگے";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "پھر لوڈ کریں";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "سیٹنگیں";
+
+/* Accessibility label for the share button */
+"Browser.shareLabel" = "شیئر کریں";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "رکیں";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "دوبارہ کوشش کریں";
+
+/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.callButton" = "کال کریں";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "منسوخ کریں";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "ای میل";
+
+/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.messageTitleWithPlaceholder" = "آپ %@ اب چھوڑ رہے ہی";
+
+/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openAppStoreButton" = "ایپ سٹور کھولیں";
+
+/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openMapsButton" = "نقشہ جات کھولیں";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.buttonLabel" = "ٹھیک پے سمجھ آ آگئی!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelDescription" = "براوز کرنے وقت آنلائن سراغ راہ خودکار طور پر بلاک کریں۔ پھر دورہ شدہ صفحات، تلاش، کوکیاں اور پاسورڈ کو تھپتھپا کر اپنے آلہ سے مٹائیں۔";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "اس طرح براؤز کریں جیسے کوئی نہیں دیکھ رہا۔";
+
+/* First label for product description on the home screen */
+"Home.descriptionLabel1" = "خود کار نجی براؤزنگ۔";
+
+/* Second label for product description on the home screen */
+"Home.descriptionLabel2" = "براؤز کریں ۔ مٹائیں ۔ دہرائیں۔";
+
+/* Label in share alert to cancel the alert */
+"Open.Cancel" = "منسوخ کریں";
+
+/* Label in share alert to open the URL in Firefox */
+"Open.Firefox" = "Firefox (نجی براؤزنگ)";
+
+/* Label in share alert to open the full system share menu */
+"Open.More" = "مزید";
+
+/* Label in share alert to open the URL in Safari */
+"Open.Safari" = "Safari";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "۔Safari کو تھپتھپائیں، پھر مواد بلاکرز کو منتخب کریں";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "%@ اہل بنائی";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ اہل نہیں ہے۔";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "سیٹنگیں ایپلیکیشن کھولیں";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "دیگر مواد ٹریکرز کو روکنے سے کچھ ویڈیوز اور ویب صفحات ٹوٹ سکتے ہیں۔";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "نہیں، شکریہ";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "مجھے سمجھ آ گئی";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "سیٹنگیں";
+
+/* Title for the search engine row */
+"Settings.searchSection" = "تلاش انجن";
+
+/* Title for the search engine selection screen */
+"Settings.searchTitle" = "تلاش انجن";
+
+/* Label for Safari integration section */
+"Settings.sectionIntegration" = "تکمل";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for performance toggles */
+"Settings.sectionPerformance" = "کارکردگی";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "رازداری";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAds" = "اشتھار ٹریکرز کو بلاک کریں";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAnalytics" = "تجزیاتی ٹریکرز کو بلاک کریں";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "ویب فونٹس بلاک کریں";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockOther" = "دیگر مواد کے ٹڑیکرز بلاک کریں";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockSocial" = "سماجی ٹریکرس بلاک کریں";
+
+/* Label subtitle for toggle on main screen */
+"Settings.toggleOtherSubtitle" = "شاید کچھ وڈیوز اور ویب صفحات کو توڑ دے";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageData" = "گمنام استعمال شدہ کوائف ارسال کریں";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "مزید سیکھیں";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "منسوخ کریں";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "مٹائيں";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "آپ کے برائوزنگ سابقات مٹا دیئے گئے ہیں۔";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "پتہ تلاش یا داخل کریں";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "%@ کی تلاش کریں";
+

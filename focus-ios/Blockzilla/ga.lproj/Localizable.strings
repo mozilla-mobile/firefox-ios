@@ -44,7 +44,7 @@
 "Browser.forwardLabel" = "Ar Aghaidh";
 
 /* Accessibility label for the reload button */
-"Browser.reloadLabel" = "Athluchtaigh";
+"Browser.reloadLabel" = "Athlódáil";
 
 /* Accessibility label for the settings button */
 "Browser.settingsLabel" = "Socruithe";
@@ -80,7 +80,7 @@
 "FirstRun.buttonLabel" = "TUIGIM!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Cuir cosc ar lorgairí ar líne go huathoibríoch le linn brabhsála. Ansin, tapáil chun na leathanaigh a ndearna tú cuairt orthu a bhánú ó do ghléas, chomh maith le haon fhianáin, focail fhaire, nó cuardaigh a rinne tú.";
+"FirstRun.messageLabelDescription" = "Cuir cosc ar lorgairí ar líne go huathoibríoch le linn brabhsála. Ansin, tapáil chun na leathanaigh ar thug tú cuairt orthu a bhánú ó do ghléas, chomh maith le haon fhianáin, focail fhaire, nó cuardaigh a rinne tú.";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "Brabhsáil i leith is nach bhfuil éinne ag cúlchoimhéad ort.";

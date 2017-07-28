@@ -5,7 +5,7 @@
 "About.missionLabel" = "%@ wird von Mozilla entwickelt. Wir setzen uns für ein gesundes, offenes Internet ein.";
 
 /* Label on About screen */
-"About.privateBullet1" = "Suchen und Surfen direkt in der App";
+"About.privateBullet1" = "Suchen und surfen direkt in der App";
 
 /* Label on About screen */
 "About.privateBullet2" = "Verfolger blockieren (oder Einstellungen ändern, um Verfolger zuzulassen)";
@@ -26,7 +26,7 @@
 "About.safariBullet1" = "Verfolger blockieren, um Datenschutz zu verbessern";
 
 /* Label on About screen */
-"About.safariBullet2" = "Web-Schriftarten blockieren, um zum Anzeigen der Seite benötigten Datenverkehr zu reduzieren";
+"About.safariBullet2" = "Web-Schriftarten blockieren, um den zum Anzeigen der Seite benötigten Datenverkehr zu reduzieren";
 
 /* Label on About screen */
 "About.safariBulletHeader" = "Als Safari-Erweiterung nutzen:";
@@ -172,8 +172,17 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.toggleSendAnonymousUsageDataSubtitle" = "Mehr erfahren";
 
+/* Text for the share menu option when a user wants to open a page in Firefox but doesn't have it installed. */
+"ShareMenu.GetFirefox" = "Holen Sie sich die Firefox-App";
+
+/* Text for the share menu option when a user wants to open a page in Focus. */
+"ShareMenu.OpenInFocus" = "In Klar öffnen";
+
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Abbrechen";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Einfügen & Los";
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "ENTFERNEN";

@@ -1,0 +1,198 @@
+/* Button on About screen */
+"About.learnMoreButton" = "Læs mere";
+
+/* Label on About screen */
+"About.missionLabel" = "%@ er lavet af Mozilla. Vores mission er at fremme et sundt og åbent internet.";
+
+/* Label on About screen */
+"About.privateBullet1" = "Søg og surf direkte i appen";
+
+/* Label on About screen */
+"About.privateBullet2" = "Blokerer sporings-tjenester (du kan ændre i indstillingerne for at tillade dem)";
+
+/* Label on About screen */
+"About.privateBullet3" = "Slet for at fjerne cookies samt søge- og browsing-historik";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "Brug den som en privat browser:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "Hjælp";
+
+/* Label for row in About screen */
+"About.rowRights" = "Dine rettigheder";
+
+/* Label on About screen */
+"About.safariBullet1" = "Bloker sporings-tjenester for at beskytte dit privatliv bedre";
+
+/* Label on About screen */
+"About.safariBullet2" = "Bloker web-fonte, så sider indlæses hurtigere";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "Brug som udvidelse til Safari:";
+
+/* Title for the About screen */
+"About.screenTitle" = "Om";
+
+/* Label on About screen */
+"About.topLabel" = "%@ lader dig bestemme.";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "Tilbage";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "Frem";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "Genindlæs";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "Indstillinger";
+
+/* Accessibility label for the share button */
+"Browser.shareLabel" = "Del";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "Stop";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "Prøv igen";
+
+/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.callButton" = "Ring";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "Fortryd";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "Mail";
+
+/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.messageTitleWithPlaceholder" = "Du forlader nu %@.";
+
+/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openAppStoreButton" = "Åbn App Store";
+
+/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openMapsButton" = "Åbn Kort";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.buttonLabel" = "OK, FORSTÅET!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelDescription" = "Bloker automatisk online sporings-tjenester, når du bruger nettet. Tryk for at slette besøgte sider, søgninger, cookies og adgangskoder fra din enhed.";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "Surf uden øjenvidner.";
+
+/* First label for product description on the home screen */
+"Home.descriptionLabel1" = "Automatisk privat browsing.";
+
+/* Second label for product description on the home screen */
+"Home.descriptionLabel2" = "Surf. Slet. Gentag.";
+
+/* Label in share alert to cancel the alert */
+"Open.Cancel" = "Fortryd";
+
+/* Label in share alert to open the URL in Firefox */
+"Open.Firefox" = "Firefox (privat browsing)";
+
+/* Label in share alert to open the full system share menu */
+"Open.More" = "Mere";
+
+/* Label in share alert to open the URL in Safari */
+"Open.Safari" = "Safari";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "Tryk på Safari, og vælg Software til blokering af indhold";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "Aktiver %@";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ er ikke aktiveret.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "Åbn appen Indstillinger";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Blokering af andre indholdstrackere kan forhindre visning af nogle videoer og websider.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "Nej tak";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "Forstået";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "Indstillinger";
+
+/* Title for the search engine row */
+"Settings.searchSection" = "SØGETJENESTE";
+
+/* Title for the search engine selection screen */
+"Settings.searchTitle" = "Søgetjeneste";
+
+/* Label for Safari integration section */
+"Settings.sectionIntegration" = "INTEGRATION";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for performance toggles */
+"Settings.sectionPerformance" = "YDELSE";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "PRIVATLIV";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAds" = "Bloker reklame-trackere";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAnalytics" = "Bloker analyse-trackere";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Bloker web-fonte";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockOther" = "Bloker andre indholds-trackere";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockSocial" = "Bloker sociale trackere";
+
+/* Label subtitle for toggle on main screen */
+"Settings.toggleOtherSubtitle" = "Kan forhindre visning af nogle videoer og websider";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageData" = "Send anonyme brugsdata";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "Læs mere";
+
+/* Text for the share menu option when a user wants to open a page in Firefox but doesn't have it installed. */
+"ShareMenu.GetFirefox" = "Hent appen Firefox";
+
+/* Text for the share menu option when a user wants to open a page in Focus. */
+"ShareMenu.OpenInFocus" = "Åbn i Focus";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "Fortryd";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Indsæt og gå";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "SLET";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "Din browsing-historik er blevet slettet.";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Søg eller indtast adresse";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Søg efter %@";
+

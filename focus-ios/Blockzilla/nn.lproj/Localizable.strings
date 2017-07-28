@@ -170,10 +170,19 @@
 "Settings.toggleSendAnonymousUsageData" = "Send anonyme brukardata";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageDataSubtitle" = "Les mer";
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "Les meir";
+
+/* Text for the share menu option when a user wants to open a page in Firefox but doesn't have it installed. */
+"ShareMenu.GetFirefox" = "Hent Firefox-appen";
+
+/* Text for the share menu option when a user wants to open a page in Focus. */
+"ShareMenu.OpenInFocus" = "Opne i Focus";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Avbryt";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Lim inn og opne";
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "SLETT";

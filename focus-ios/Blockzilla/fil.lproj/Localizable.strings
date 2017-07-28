@@ -1,0 +1,189 @@
+/* Button on About screen */
+"About.learnMoreButton" = "Alamin";
+
+/* Label on About screen */
+"About.missionLabel" = "%@ ay ginawa ng Mozilla. Ang aming misyon ay upang pagyamanin ang isang malusog, bukas na Internet.";
+
+/* Label on About screen */
+"About.privateBullet1" = "Maghanap at mag-browse sa app";
+
+/* Label on About screen */
+"About.privateBullet2" = "Harangin ang mga tracker (o update setting upang mabigyan ng pahintulot ang mga tracker)";
+
+/* Label on About screen */
+"About.privateBullet3" = "Burahin at tanggalin ang mga cookies pati na rin ang paghahanap at pag-browse ng kasaysayan";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "Gamitin ito bilang isang pribadong browser:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "Tulong";
+
+/* Label for row in About screen */
+"About.rowRights" = "Ang Iyong mga Karapatan";
+
+/* Label on About screen */
+"About.safariBullet1" = "Harangin ang mga tracker para mapabuti ang privacy";
+
+/* Label on About screen */
+"About.safariBullet2" = "I-block ang Web font upang bawasan ang laki ng pahina";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "Gamitin ito bilang isang Safari extension:";
+
+/* Title for the About screen */
+"About.screenTitle" = "Tungkol sa";
+
+/* Label on About screen */
+"About.topLabel" = "%@ binibigyan ka ng kontrol.";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "Balikan";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "Pasulong";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "E-reload";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "Mga Setting";
+
+/* Accessibility label for the share button */
+"Browser.shareLabel" = "Ibahagi";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "Huminto";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "Subukang muli";
+
+/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.callButton" = "Tumawag";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "I-cancel";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "Email";
+
+/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.messageTitleWithPlaceholder" = "Ikaw ngayon ay umaalis %@.";
+
+/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openAppStoreButton" = "Buksan ang App Store";
+
+/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openMapsButton" = "Buksan ang Mapa";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.buttonLabel" = "OK, GOT IT!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelDescription" = "Awtomatikong i-block ang mga online trackers habang nagba-browse ka. Pagkatapos ay tapikin upang burahin ang binisita na mga pahina, mga paghahanap, cookies at mga password mula sa iyong aparato.";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "Mag-browse tulad ng walang nanonood.";
+
+/* First label for product description on the home screen */
+"Home.descriptionLabel1" = "Automatic na pribadong pagba-browse.";
+
+/* Second label for product description on the home screen */
+"Home.descriptionLabel2" = "Magtingin. Burahin. Ulitin.";
+
+/* Label in share alert to cancel the alert */
+"Open.Cancel" = "I-cancel";
+
+/* Label in share alert to open the URL in Firefox */
+"Open.Firefox" = "Firefox (pribadong pagba-browse)";
+
+/* Label in share alert to open the full system share menu */
+"Open.More" = "Higit pa";
+
+/* Label in share alert to open the URL in Safari */
+"Open.Safari" = "Safari";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "Tap Safari, pagkatapos ay piliin ang Nilalaman ng Blockers";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "Enable %@";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ ay hindi pinagana.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "Buksan ang mga Setting App";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Ang pag-block ng iba pang nilalaman ng trackers ay maaaring masira ang ilang mga video at mga pahina ng Web pages.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "Salamat nalang";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "Naiintindihan ko";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "Mga Setting";
+
+/* Title for the search engine row */
+"Settings.searchSection" = "SEARCH ENGINE";
+
+/* Title for the search engine selection screen */
+"Settings.searchTitle" = "Search Engine";
+
+/* Label for Safari integration section */
+"Settings.sectionIntegration" = "INTEGRATION";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for performance toggles */
+"Settings.sectionPerformance" = "PERFORMANCE";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "PRIVACY";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAds" = "Harangan ang ad trackers";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAnalytics" = "Harangan ang analytics trackers";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Harangan ang Web fonts";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockOther" = "Harangan ang iba pang nilalaman ng trackers";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockSocial" = "Harangan ang mga social trackers";
+
+/* Label subtitle for toggle on main screen */
+"Settings.toggleOtherSubtitle" = "Maaaring masira ang ilang mga video at mga pahina ng Web pages";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageData" = "Magpadala ng anonymous sa paggamit ng data";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "Matuto ng higit pa";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "I-cancel";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "BURAHIN";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "Ang iyong kasaysayan sa pag-browse ay nabura na.";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Maghanap o ipasok ang address";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Maghanap para sa %@";
+

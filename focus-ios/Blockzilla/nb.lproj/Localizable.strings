@@ -11,7 +11,7 @@
 "About.privateBullet2" = "Blokker sporere (eller oppdater innstillingene for å tillate sporere)";
 
 /* Label on About screen */
-"About.privateBullet3" = "Slett for å fjerne informasjonskapsler samt søk- og nettleserhistorikk";
+"About.privateBullet3" = "Slett for å fjerne infokapsler samt søk- og nettleserhistorikk";
 
 /* Label on About screen */
 "About.privateBulletHeader" = "Bruk den som en privat nettleser:";
@@ -172,8 +172,17 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.toggleSendAnonymousUsageDataSubtitle" = "Les mer";
 
+/* Text for the share menu option when a user wants to open a page in Firefox but doesn't have it installed. */
+"ShareMenu.GetFirefox" = "Hent Firefox-appen";
+
+/* Text for the share menu option when a user wants to open a page in Focus. */
+"ShareMenu.OpenInFocus" = "Åpne i Focus";
+
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Avbryt";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Lim inn og åpne";
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "SLETT";

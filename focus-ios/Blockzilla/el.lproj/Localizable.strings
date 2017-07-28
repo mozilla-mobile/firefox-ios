@@ -1,0 +1,198 @@
+/* Button on About screen */
+"About.learnMoreButton" = "Μάθετε περισσότερα";
+
+/* Label on About screen */
+"About.missionLabel" = "Το %@ δημιουργήθηκε από τη Mozilla. Η αποστολή μας είναι να προαγάγουμε ένα υγιές, ανοιχτό διαδίκτυο.";
+
+/* Label on About screen */
+"About.privateBullet1" = "Αναζητήστε και περιηγηθείτε εντός της εφαρμογής";
+
+/* Label on About screen */
+"About.privateBullet2" = "Αποκλείστε trackers (ή ενημερώστε τις ρυθμίσεις σας ώστε να επιτρέπονται)";
+
+/* Label on About screen */
+"About.privateBullet3" = "Διαγράψτε τα cookies, καθώς και το ιστορικό αναζητήσεων και περιήγησης";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "Χρησιμοποιήστε το ως πρόγραμμα ιδιωτικής περιήγησης:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "Βοήθεια";
+
+/* Label for row in About screen */
+"About.rowRights" = "Τα δικαιώματά σας";
+
+/* Label on About screen */
+"About.safariBullet1" = "Αποκλείστε trackers για βελτιωμένο απόρρητο";
+
+/* Label on About screen */
+"About.safariBullet2" = "Αποκλείστε τις γραμματοσειρές ιστού για μείωση μεγέθους σελίδας";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "Χρησιμοποιήστε το ως επέκταση του Safari:";
+
+/* Title for the About screen */
+"About.screenTitle" = "Πληροφορίες";
+
+/* Label on About screen */
+"About.topLabel" = "Το %@ σάς δίνει τον έλεγχο.";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "Πίσω";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "Εμπρός";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "Ανανέωση";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "Ρυθμίσεις";
+
+/* Accessibility label for the share button */
+"Browser.shareLabel" = "Κοινή χρήση";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "Διακοπή";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "Δοκιμάστε ξανά";
+
+/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.callButton" = "Κλήση";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "Ακύρωση";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "Email";
+
+/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.messageTitleWithPlaceholder" = "Πρόκειται να αποχωρήσετε από το %@.";
+
+/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openAppStoreButton" = "Άνοιγμα App Store";
+
+/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openMapsButton" = "Άνοιγμα Χαρτών";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.buttonLabel" = "OK, ΤΟ 'ΠΙΑΣΑ!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelDescription" = "Αποκλείστε αυτόματα τα διαδικτυακά trackers όσο περιηγείστε. Έπειτα, πατήστε για διαγραφή του ιστορικού, των αναζητήσεων, των cookies και των κωδικών πρόσβασης από τη συσκευή σας.";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "Περιηγηθείτε σαν να μην σάς βλέπει κανείς.";
+
+/* First label for product description on the home screen */
+"Home.descriptionLabel1" = "Αυτόματη ιδιωτική περιήγηση.";
+
+/* Second label for product description on the home screen */
+"Home.descriptionLabel2" = "Περιηγηθείτε. Διαγράψτε. Επαναλάβετε.";
+
+/* Label in share alert to cancel the alert */
+"Open.Cancel" = "Ακύρωση";
+
+/* Label in share alert to open the URL in Firefox */
+"Open.Firefox" = "Firefox (Ιδιωτική περιήγηση)";
+
+/* Label in share alert to open the full system share menu */
+"Open.More" = "Περισσότερα";
+
+/* Label in share alert to open the URL in Safari */
+"Open.Safari" = "Safari";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "Πατήστε το Safari και, έπειτα, επιλέξτε Προγράμματα αποκλεισμού περιεχομένου";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "Ενεργοποίηση στο %@";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "Το %@ δεν είναι ενεργό.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "Άνοιγμα εφαρμογής \"Ρυθμίσεις\"";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Η φραγή των trackers άλλου περιεχομένου ενδέχεται να χαλάσει μερικά βίντεο και ιστοσελίδες.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "Όχι, ευχαριστώ";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "Καταλαβαίνω";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "Ρυθμίσεις";
+
+/* Title for the search engine row */
+"Settings.searchSection" = "ΜΗΧΑΝΗ ΑΝΑΖΗΤΗΣΗΣ";
+
+/* Title for the search engine selection screen */
+"Settings.searchTitle" = "Μηχανή αναζήτησης";
+
+/* Label for Safari integration section */
+"Settings.sectionIntegration" = "ΕΝΣΩΜΑΤΩΣΗ";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for performance toggles */
+"Settings.sectionPerformance" = "ΑΠΟΔΟΣΗ";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "ΑΠΟΡΡΗΤΟ";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAds" = "Φραγή trackers διαφημίσεων";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAnalytics" = "Φραγή trackers αναλύσεων";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Φραγή γραμματοσειρών ιστού";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockOther" = "Φραγή trackers άλλου περιεχομένου";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockSocial" = "Φραγή κοινωνικών trackers";
+
+/* Label subtitle for toggle on main screen */
+"Settings.toggleOtherSubtitle" = "Ενδέχεται να χαλάσει μερικά βίντεο και ιστοσελίδες";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageData" = "Αποστολή ανώνυμων δεδομένων χρήσης";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "Μάθετε περισσότερα";
+
+/* Text for the share menu option when a user wants to open a page in Firefox but doesn't have it installed. */
+"ShareMenu.GetFirefox" = "Λήψη του Firefox";
+
+/* Text for the share menu option when a user wants to open a page in Focus. */
+"ShareMenu.OpenInFocus" = "Άνοιγμα στο Focus";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "Ακύρωση";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Επικόλληση & μετάβαση";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "ΔΙΑΓΡΑΦΗ";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "Το ιστορικό περιήγησής σας έχει εκκαθαριστεί.";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Αναζήτηση ή πληκτρολόγηση διεύθυνσης";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Αναζήτηση για %@";
+

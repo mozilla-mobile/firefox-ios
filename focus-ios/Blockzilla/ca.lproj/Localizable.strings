@@ -8,7 +8,7 @@
 "About.privateBullet1" = "Cercar i navegar directament des de l'aplicació";
 
 /* Label on About screen */
-"About.privateBullet2" = "Bloquejar els elements de seguiment (o canviar els paràmetres per permetre'ls)";
+"About.privateBullet2" = "Blocar els elements de seguiment (o canviar els paràmetres per permetre'ls)";
 
 /* Label on About screen */
 "About.privateBullet3" = "Esborrar les galetes i l'historial de cerques i de navegació";
@@ -23,10 +23,10 @@
 "About.rowRights" = "Els vostres drets";
 
 /* Label on About screen */
-"About.safariBullet1" = "Bloquejar els elements de seguiment per millorar la privadesa";
+"About.safariBullet1" = "Blocar els elements de seguiment per millorar la privadesa";
 
 /* Label on About screen */
-"About.safariBullet2" = "Bloquejar els tipus de lletra web per reduir la mida de la pàgina";
+"About.safariBullet2" = "Blocar els tipus de lletra web per reduir la mida de la pàgina";
 
 /* Label on About screen */
 "About.safariBulletHeader" = "Com a extensió del Safari, us permet:";
@@ -80,10 +80,10 @@
 "FirstRun.buttonLabel" = "ENTESOS";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Bloquegeu automàticament els elements que us fan el seguiment mentre navegueu. Esborreu amb un sol toc les pàgines visitades, cerques, galetes i contrasenyes del dispositiu.";
+"FirstRun.messageLabelDescription" = "Bloqueu automàticament els elements que us fan el seguiment mentre navegueu. Esborreu amb un sol toc les pàgines visitades, cerques, galetes i contrasenyes del dispositiu.";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelTagline" = "Navegueu sense sentir-vos observats.";
+"FirstRun.messageLabelTagline" = "Navegueu sense sentir-vos observat.";
 
 /* First label for product description on the home screen */
 "Home.descriptionLabel1" = "Navegació privada automàtica.";
@@ -116,7 +116,7 @@
 "Safari.instructionsOpen" = "Obriu l'aplicació «Configuració»";
 
 /* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Si bloquegeu altres elements de seguiment de contingut, és possible que alguns vídeos i pàgines web no funcionin correctament.";
+"Settings.blockOtherMessage" = "Si bloqueu altres elements de seguiment de contingut, és possible que alguns vídeos i pàgines web no funcionin correctament.";
 
 /* Button label for declining Content blocker alert */
 "Settings.blockOtherNo" = "No, gràcies";
@@ -146,19 +146,19 @@
 "Settings.sectionPrivacy" = "PRIVADESA";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Bloqueja els elements de seguiment de publicitat";
+"Settings.toggleBlockAds" = "Bloca els elements de seguiment de publicitat";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Bloqueja els elements de seguiment d'anàlisi";
+"Settings.toggleBlockAnalytics" = "Bloca els elements de seguiment d'anàlisi";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "Bloqueja tipus de lletra web";
+"Settings.toggleBlockFonts" = "Bloca tipus de lletra web";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Bloqueja altres elements de seguiment de contingut";
+"Settings.toggleBlockOther" = "Bloca altres elements de seguiment de contingut";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Bloqueja els elements de seguiment social";
+"Settings.toggleBlockSocial" = "Bloca els elements de seguiment social";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Pot causar problemes amb alguns vídeos i pàgines web";
@@ -172,8 +172,17 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.toggleSendAnonymousUsageDataSubtitle" = "Més informació";
 
+/* Text for the share menu option when a user wants to open a page in Firefox but doesn't have it installed. */
+"ShareMenu.GetFirefox" = "Instal·leu el Firefox";
+
+/* Text for the share menu option when a user wants to open a page in Focus. */
+"ShareMenu.OpenInFocus" = "Obre al Focus";
+
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Cancel·la";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Enganxa i vés-hi";
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "ESBORRA";

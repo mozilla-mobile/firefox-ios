@@ -172,8 +172,17 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.toggleSendAnonymousUsageDataSubtitle" = "Dysgu rhagor";
 
+/* Text for the share menu option when a user wants to open a page in Firefox but doesn't have it installed. */
+"ShareMenu.GetFirefox" = "Estyn Ap Firefox";
+
+/* Text for the share menu option when a user wants to open a page in Focus. */
+"ShareMenu.OpenInFocus" = "Agor yn Focus";
+
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Diddymu";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Gludo a Mynd";
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "DILEU";

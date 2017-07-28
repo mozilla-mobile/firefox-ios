@@ -1,12 +1,12 @@
 /* (No Commment) */
-"NSCameraUsageDescription" = "这允许您拍摄和上传照片。";
+"NSCameraUsageDescription" = "此权限让您可以拍摄和上传照片。";
 
 /* (No Commment) */
 "NSLocationWhenInUseUsageDescription" = "您访问的网站可能请求您的位置。";
 
 /* (No Commment) */
-"NSMicrophoneUsageDescription" = "这允许您拍摄和上传视频。";
+"NSMicrophoneUsageDescription" = "此权限让您可以拍摄和上传视频。";
 
 /* (No Commment) */
-"NSPhotoLibraryUsageDescription" = "这允许您保存和上传照片。";
+"NSPhotoLibraryUsageDescription" = "此权限让您可以保存和上传照片。";
 

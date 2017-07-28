@@ -5,7 +5,7 @@
 "About.missionLabel" = "%@ estas kreita de Mozilla. Nia misio estas stimuli sanan kaj malfermitan interreton.";
 
 /* Label on About screen */
-"About.privateBullet1" = "Serĉu kaj retumi rekte en la programo";
+"About.privateBullet1" = "Serĉu kaj retumu rekte en la programo";
 
 /* Label on About screen */
 "About.privateBullet2" = "Bloku spurilojn (aŭ agordu por permesi spurilojn)";
@@ -26,7 +26,7 @@
 "About.safariBullet1" = "Bloku spurilojn por plibonigita privateco";
 
 /* Label on About screen */
-"About.safariBullet2" = "Bloku teksaĵajn tiparojn por malgrandigi la paĝon";
+"About.safariBullet2" = "Bloku teksaĵajn tiparojn por malpezigi paĝojn";
 
 /* Label on About screen */
 "About.safariBulletHeader" = "Uzu ĝin kiel etendaĵon de Safari:";

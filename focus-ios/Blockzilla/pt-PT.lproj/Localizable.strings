@@ -2,7 +2,7 @@
 "About.learnMoreButton" = "Saber mais";
 
 /* Label on About screen */
-"About.missionLabel" = "O %@ é produzido pela Mozilla. A nossa missão é fomentar uma Internet saudável e aberta.";
+"About.missionLabel" = "O %@ é produzido pela Mozilla. A nossa missão é fomentar uma Internet aberta e saudável.";
 
 /* Label on About screen */
 "About.privateBullet1" = "Pesquise e navegue na aplicação";
@@ -11,7 +11,7 @@
 "About.privateBullet2" = "Bloqueie trackers (ou atualizar definições para permitir trackers)";
 
 /* Label on About screen */
-"About.privateBullet3" = "Apague para eliminar cookies assim como o histórico de pesquisa e navegação";
+"About.privateBullet3" = "Apague para eliminar cookies bem como o histórico de pesquisa e navegação";
 
 /* Label on About screen */
 "About.privateBulletHeader" = "Utilize-o como um navegador privado:";
@@ -35,7 +35,7 @@
 "About.screenTitle" = "Acerca";
 
 /* Label on About screen */
-"About.topLabel" = "O %@ coloca-o em controlo.";
+"About.topLabel" = "O %@ coloca-lhe em controlo.";
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Retroceder";
@@ -172,8 +172,17 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.toggleSendAnonymousUsageDataSubtitle" = "Saber mais";
 
+/* Text for the share menu option when a user wants to open a page in Firefox but doesn't have it installed. */
+"ShareMenu.GetFirefox" = "Obter o Firefox";
+
+/* Text for the share menu option when a user wants to open a page in Focus. */
+"ShareMenu.OpenInFocus" = "Abrir no Focus";
+
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Cancelar";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Colar e ir";
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "APAGAR";

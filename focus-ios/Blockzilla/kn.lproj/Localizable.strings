@@ -1,0 +1,105 @@
+/* Button on About screen */
+"About.learnMoreButton" = "ಇನ್ನಷ್ಟು ತಿಳಿಯಿರಿ";
+
+/* Label on About screen */
+"About.privateBullet1" = "‍ಅನ್ವಯದಲ್ಲಿ ನೇರವಾಗಿ ಹುಡುಕಿ ಮತ್ತು ಜಾಲಾಡಿ";
+
+/* Label for row in About screen */
+"About.rowHelp" = "ಸಹಾಯ";
+
+/* Label for row in About screen */
+"About.rowRights" = "‍ನಿಮ್ಮ ಹಕ್ಕುಗಳು";
+
+/* Title for the About screen */
+"About.screenTitle" = "‍ಬಗ್ಗೆ";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "ಹಿಂದಕ್ಕೆ";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "ಮುಂದಕ್ಕೆ";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "ಪುನಃ ಲೋಡ್ ಮಾಡು";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "ಸಿದ್ಧತೆಗಳು";
+
+/* Accessibility label for the share button */
+"Browser.shareLabel" = "ಹಂಚು";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "ನಿಲ್ಲಿಸು";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "ಇನ್ನೊಮ್ಮೆ ಪ್ರಯತ್ನಿಸು";
+
+/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.callButton" = "ಕರೆ";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "ರದ್ದು ಮಾಡು";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "ಇಮೇಲ್";
+
+/* Label in share alert to cancel the alert */
+"Open.Cancel" = "ರದ್ದು ಮಾಡು‍";
+
+/* Label in share alert to open the URL in Firefox */
+"Open.Firefox" = "Firefox (ಖಾಸಗಿ‍ ಜಾಲಾಟ)‍";
+
+/* Label in share alert to open the full system share menu */
+"Open.More" = "ಮತ್ತಷ್ಟು";
+
+/* Label in share alert to open the URL in Safari */
+"Open.Safari" = "ಸಫಾರಿ‍";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "‍‍%@ ಸಕ್ರಿಯಗೊಳಿಸು‍";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ ಸಕ್ರಿಯಗೊಂಡಿಲ್ಲ‍";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "‍ಸಿದ್ದತೆಗಳು‍ ಆಫ್ ತೆರೆ";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "ನನಗೆ ಅರ್ಥವಾಗುತ್ತದೆ‍";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "ಸಿದ್ಧತೆಗಳು";
+
+/* Title for the search engine row */
+"Settings.searchSection" = "‍ಹುಡುಕು‍ ಇಂಜಿನ್‍";
+
+/* Title for the search engine selection screen */
+"Settings.searchTitle" = "ಹುಡುಕು ಇಂಜಿನ್‍";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA‍";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "ಗೌಪ್ಯತೆ";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "ಸಫಾರಿ";
+
+/* Label for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageData" = "ಅನಾಮಧೇಯ ಡೇಟಾ ಬಳಕೆ ಕಳಿಸು";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "ಇನ್ನಷ್ಟು ತಿಳಿಯಿರಿ";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "ರದ್ದು ಮಾಡು";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "ಅಳಿಸು";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "ಹುಡುಕಿ ಅಥವ ವಿಳಾಸ ನಮೂದಿಸಿ";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "%@ ಗಾಗಿ ಹುಡುಕು‍";
+

@@ -1,1 +1,6 @@
-/* No Localized Strings */
+/* (No Commment) */
+"CFBundleName" = "$(PRODUCT_NAME)";
+
+/* (No Commment) */
+"CFBundleShortVersionString" = "1.0";
+

@@ -1,0 +1,81 @@
+/* Button on About screen */
+"About.learnMoreButton" = "अझै जान्नुहोस्";
+
+/* Label on About screen */
+"About.missionLabel" = "%@ Mozilla ले उत्पादन गरेको हो। हाम्रो उद्देश्य एक स्वस्थ र खुला इन्टरनेटलाई बढावा दिनु हो।";
+
+/* Label on About screen */
+"About.privateBullet2" = "ट्रयाकरहरुलाई बन्द गर्नुहोस् (अथवा ट्रयाकरहरुलाई अनुमति दिन सेटिङहरू अद्यावधिक गर्नुहोस्)";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "यसलाई निजी ब्राउजरको रूपमा प्रयोग गर्नुहोस्:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "मद्दत";
+
+/* Label for row in About screen */
+"About.rowRights" = "तपाईँका अधिकारहरु";
+
+/* Label on About screen */
+"About.safariBullet1" = "सुधारिएको गोपनीयताको लागि ट्रयाकरहरु बन्द गर्नुहोस्";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "Safari विस्तारको रुपमा प्रयोग गर्नुहोस्:";
+
+/* Title for the About screen */
+"About.screenTitle" = "हाम्रो बारे";
+
+/* Label on About screen */
+"About.topLabel" = "%@ ले तपाईंलाई नियन्त्रणमा राख्छ।";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "पछाडि";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "अगाडि";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "पुन: लोड गर्नुहोस्";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "सेटिङहरू";
+
+/* Accessibility label for the share button */
+"Browser.shareLabel" = "साझेदारी";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "रोक्नुहोस्";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "फेरि प्रयास गर्नुहोस्";
+
+/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.callButton" = "फोन गर्नुहोस्";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "रद्द गर्नुहोस्";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "इमेल गर्नुहोस्";
+
+/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.messageTitleWithPlaceholder" = "तपाईं अहिले %@ छोड्दै हुनुहुन्छ।";
+
+/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openAppStoreButton" = "App Store खोल्नुहोस्";
+
+/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openMapsButton" = "Maps खोल्नुहोस्";
+
+/* Label in share alert to cancel the alert */
+"Open.Cancel" = "रद्द गर्नुहोस्";
+
+/* Label in share alert to open the URL in Firefox */
+"Open.Firefox" = "Firefox (गोप्य ब्राउजिङ)";
+
+/* Label in share alert to open the full system share menu */
+"Open.More" = "थप";
+
+/* Label in share alert to open the URL in Safari */
+"Open.Safari" = "Safari";
+

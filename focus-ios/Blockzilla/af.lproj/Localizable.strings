@@ -1,0 +1,189 @@
+/* Button on About screen */
+"About.learnMoreButton" = "Meer inligting";
+
+/* Label on About screen */
+"About.missionLabel" = "%@ word deur Mozilla gebou. Ons missie is om ’n gesonde, oop Internet te bevorder.";
+
+/* Label on About screen */
+"About.privateBullet1" = "Soek en blaai direk binne-in die program";
+
+/* Label on About screen */
+"About.privateBullet2" = "Blokkeer speurders (of verander instellings om hulle toe te laat)";
+
+/* Label on About screen */
+"About.privateBullet3" = "Vee koekies, soek- en blaaigeskiedenis uit";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "Gebruik dit as ’n private blaaier:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "Hulp";
+
+/* Label for row in About screen */
+"About.rowRights" = "U regte";
+
+/* Label on About screen */
+"About.safariBullet1" = "Blokkeer speurders vir beter privaatheid";
+
+/* Label on About screen */
+"About.safariBullet2" = "Blokkeer webfonte om bladsygrootte te verminder";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "Gebruik dit as ’n uitbreiding vir Safari:";
+
+/* Title for the About screen */
+"About.screenTitle" = "Aangaande";
+
+/* Label on About screen */
+"About.topLabel" = "%@ plaas mens in beheer.";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "Terug";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "Vorentoe";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "Herlaai";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "Instellings";
+
+/* Accessibility label for the share button */
+"Browser.shareLabel" = "Deel";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "Stop";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "Probeer weer";
+
+/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.callButton" = "Bel";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "Kanselleer";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "E-pos";
+
+/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.messageTitleWithPlaceholder" = "U verlaat nou %@.";
+
+/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openAppStoreButton" = "Maak die App Store oop";
+
+/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openMapsButton" = "Maak Maps oop";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.buttonLabel" = "REG SO! HET DIT!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelDescription" = "Blokkeer speurders op die web outomaties. Raak dan op ’n knoppie om besoekte bladsye, soektogte, koekies en wagwoorde vanaf die toestel uit te vee.";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "Blaai asof niemand kyk nie.";
+
+/* First label for product description on the home screen */
+"Home.descriptionLabel1" = "Outomatiese private blaaiery.";
+
+/* Second label for product description on the home screen */
+"Home.descriptionLabel2" = "Blaai. Vee uit. Herhaal.";
+
+/* Label in share alert to cancel the alert */
+"Open.Cancel" = "Kanselleer";
+
+/* Label in share alert to open the URL in Firefox */
+"Open.Firefox" = "Firefox (private blaaiery)";
+
+/* Label in share alert to open the full system share menu */
+"Open.More" = "Meer";
+
+/* Label in share alert to open the URL in Safari */
+"Open.Safari" = "Safari";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "Raak op Safari en kies dan Content Blockers";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "Aktiveer %@";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ is nie geaktiveer nie.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "Maak die instellings oop";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Die blokkering van ander inhoudspeurders kan sommige video’s en webbladsye breek.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "Nee, dankie";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "Ek verstaan";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "Instellings";
+
+/* Title for the search engine row */
+"Settings.searchSection" = "SOEKENJIN";
+
+/* Title for the search engine selection screen */
+"Settings.searchTitle" = "Soekenjin";
+
+/* Label for Safari integration section */
+"Settings.sectionIntegration" = "INTEGRASIE";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for performance toggles */
+"Settings.sectionPerformance" = "WERKVERRIGTING";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "PRIVAATHEID";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAds" = "Blokkeer advertensie­speurders";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAnalytics" = "Blokkeer analise­speurders";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Blokkeer webfonte";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockOther" = "Blokkeer ander inhoud­speurders";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockSocial" = "Blokkeer sosiale speurders";
+
+/* Label subtitle for toggle on main screen */
+"Settings.toggleOtherSubtitle" = "Kan sommige video's en webbladsye breek";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageData" = "Stuur anonieme gebruiksdata";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "Meer inligting";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "Kanselleer";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "VEE UIT";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "U blaaigeskiedenis is uitgevee.";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Soek, of tik adres in";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Soek vir %@";
+

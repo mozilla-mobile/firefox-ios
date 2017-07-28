@@ -1,0 +1,198 @@
+/* Button on About screen */
+"About.learnMoreButton" = "ఇంకా తెలుసుకోండి";
+
+/* Label on About screen */
+"About.missionLabel" = "%@ Mozillaచే తయారుచేయబడినది. ఆరోగ్యమైన, స్వతంత్రమైన అంతర్జాలాన్ని పెంపొందించడం మా ధ్యేయం.";
+
+/* Label on About screen */
+"About.privateBullet1" = "యాప్ లోనే వెతకండి మరియు విహరించండి";
+
+/* Label on About screen */
+"About.privateBullet2" = "ట్రాకర్లని నిరోధించండి (లేదా ట్రాకర్లని అనుమతించడానికి అమరికలు నవీకరించండి)";
+
+/* Label on About screen */
+"About.privateBullet3" = "కుక్కీలతో పాటు విహరణ మరియు వెతికిన చరిత్ర తొలగించుటకు చెరపండి";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "వ్యక్తిగత బ్రౌజర్ గా వాడు:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "సహాయం";
+
+/* Label for row in About screen */
+"About.rowRights" = "మీ హక్కులు";
+
+/* Label on About screen */
+"About.safariBullet1" = "మెరుగైన గోప్యత కోసం ట్రాకర్లని నిరోధించండి";
+
+/* Label on About screen */
+"About.safariBullet2" = "పేజీ పరిమాణం తగ్గించుటకు వెబ్ ఫాంట్లని నిరోధించండి";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "దీనిని Safari పొడిగింతగా వాడండి:";
+
+/* Title for the About screen */
+"About.screenTitle" = "గురించి";
+
+/* Label on About screen */
+"About.topLabel" = "%@ మిమ్మల్ని నియంత్రణలో ఉంచును.";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "వెనక్కి";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "ముందుకు";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "తిరిగిలోడు చేయి";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "అమరికలు";
+
+/* Accessibility label for the share button */
+"Browser.shareLabel" = "పంచు";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "ఆపుము";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "మళ్ళీ ప్రయత్నించు";
+
+/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.callButton" = "కాల్‌";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "రద్దుచేయి";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "ఇమెయిల్";
+
+/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.messageTitleWithPlaceholder" = "మీరు ఇప్పుడు %@ని వదిలి వెళ్తున్నారు.";
+
+/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openAppStoreButton" = "App Store తెరువు";
+
+/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openMapsButton" = "పటములు తెరువు";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.buttonLabel" = "సరే, అర్థమయ్యింది!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelDescription" = "మీరు విహరిస్తున్నపుడు స్వయంచాలితంగా ఆన్లైన్ ట్రాకర్లని నిరోధించండి. ఆ తరువాత సందర్శించిన పేజీలను, శోధనలు, సంకేతపదాలు మరియు కుక్కీలని మీ పరికరం నుండి చెరపండి.";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "ఎవరూ చూడనట్టుగా విహరణ చెయ్యండి.";
+
+/* First label for product description on the home screen */
+"Home.descriptionLabel1" = "స్వయంచాలనంగా వ్యక్తిగతంగా విహరించు.";
+
+/* Second label for product description on the home screen */
+"Home.descriptionLabel2" = "విహరించు. చెరిపివెయ్యు. మరల చెయ్యు.";
+
+/* Label in share alert to cancel the alert */
+"Open.Cancel" = "రద్దుచేయి";
+
+/* Label in share alert to open the URL in Firefox */
+"Open.Firefox" = "Firefox (వ్యక్తిగత విహరణ)";
+
+/* Label in share alert to open the full system share menu */
+"Open.More" = "మరింత";
+
+/* Label in share alert to open the URL in Safari */
+"Open.Safari" = "Safari";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "కంటెంట్ బ్లాకర్లను ఎంచుకోవడానికి Safariని సఫారిని నొక్కండి";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "%@ చేతనం చేయి";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ ప్రారంభించబడలేదు.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "సెట్టింగ్‌లను తెరవండి";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "ఇతర కంటెంట్ ట్రాకర్లను నిరోధించడం వలన కొన్ని వీడియోలు మరియు వెబ్ పేజీలు విరిగిపోవచ్చు.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "ఫరవాలేదు";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "నాకు అర్థమయ్యింది";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "అమరికలు";
+
+/* Title for the search engine row */
+"Settings.searchSection" = "SEARCH ENGINE";
+
+/* Title for the search engine selection screen */
+"Settings.searchTitle" = "శోధన యంత్రము";
+
+/* Label for Safari integration section */
+"Settings.sectionIntegration" = "INTEGRATION";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for performance toggles */
+"Settings.sectionPerformance" = "PERFORMANCE";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "PRIVACY";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAds" = "యాడ్ ట్రాకర్లను నిరోధించండి";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAnalytics" = "వైశ్లేషిక ట్రాకర్లను నిరోధించండి";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "వెబ్ ఫాంట్లను నిరోధించండి";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockOther" = "ఇతర విషయ ట్రాకర్లను నిరోధించండి";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockSocial" = "సామాజిక ట్రాకర్లను నిరోధించండి";
+
+/* Label subtitle for toggle on main screen */
+"Settings.toggleOtherSubtitle" = "కొన్ని వీడియోలను మరియు వెబ్ పేజీలను విచ్ఛిన్నం చేయవచ్చు";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageData" = "అనామక వాడుక డేటాను పంపు";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "ఇంకా తెలుసుకోండి";
+
+/* Text for the share menu option when a user wants to open a page in Firefox but doesn't have it installed. */
+"ShareMenu.GetFirefox" = "Firefox App ను పొందండి";
+
+/* Text for the share menu option when a user wants to open a page in Focus. */
+"ShareMenu.OpenInFocus" = "Focusలో తెరువుము";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "రద్దు చేయి";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "అంటించి & వెళ్ళు";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "ERASE";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "మీ విహరణ చరిత్ర తొలగించబడింది.";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "వెతకండి లేదా చిరునామాను ఇవ్వండి";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "%@ కోసం వెతుకు";
+

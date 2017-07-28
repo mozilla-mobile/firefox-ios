@@ -77,7 +77,7 @@
 "ExternalLink.openMapsButton" = "Ouvrir Plans";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "OK, j’ai compris.";
+"FirstRun.buttonLabel" = "D’accord, j’ai compris.";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "Bloquez automatiquement les traqueurs lorsque vous naviguez. Appuyez ensuite sur le bouton Effacer pour supprimer les pages visitées, les recherches, les cookies et les mots de passe.";
@@ -172,8 +172,17 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.toggleSendAnonymousUsageDataSubtitle" = "En savoir plus";
 
+/* Text for the share menu option when a user wants to open a page in Firefox but doesn't have it installed. */
+"ShareMenu.GetFirefox" = "Installer Firefox";
+
+/* Text for the share menu option when a user wants to open a page in Focus. */
+"ShareMenu.OpenInFocus" = "Ouvrir dans Focus";
+
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Annuler";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Coller et ouvrir";
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "EFFACER";

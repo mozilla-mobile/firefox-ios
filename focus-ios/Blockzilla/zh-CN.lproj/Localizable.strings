@@ -5,16 +5,16 @@
 "About.missionLabel" = "%@ 由 Mozilla 出品。我们的使命是促成健康、开放的互联网。";
 
 /* Label on About screen */
-"About.privateBullet1" = "在应用中搜索和浏览";
+"About.privateBullet1" = "直接在应用中搜索和浏览";
 
 /* Label on About screen */
-"About.privateBullet2" = "屏蔽跟踪器（或设置为允许跟踪器）";
+"About.privateBullet2" = "拦截跟踪器（也可调整为允许跟踪器）";
 
 /* Label on About screen */
-"About.privateBullet3" = "自动删除 Cookie 及搜索和浏览记录";
+"About.privateBullet3" = "清除 Cookie、搜索记录和浏览记录";
 
 /* Label on About screen */
-"About.privateBulletHeader" = "使用它作为隐私浏览器：";
+"About.privateBulletHeader" = "用作私密浏览器，可以：";
 
 /* Label for row in About screen */
 "About.rowHelp" = "帮助";
@@ -23,13 +23,13 @@
 "About.rowRights" = "您的权利";
 
 /* Label on About screen */
-"About.safariBullet1" = "屏蔽跟踪器以保障隐私";
+"About.safariBullet1" = "拦截跟踪器，加强隐私";
 
 /* Label on About screen */
-"About.safariBullet2" = "屏蔽网络字体以减少页面大小";
+"About.safariBullet2" = "拦截网络字体，减少网页大小";
 
 /* Label on About screen */
-"About.safariBulletHeader" = "使用它作为 Safari 扩展：";
+"About.safariBulletHeader" = "用作 Safari 扩展，可以：";
 
 /* Title for the About screen */
 "About.screenTitle" = "关于";
@@ -77,19 +77,19 @@
 "ExternalLink.openMapsButton" = "打开地图";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "明白了";
+"FirstRun.buttonLabel" = "明白了！";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "在您浏览时自动屏蔽在线跟踪器。一按即可清除您的设备上的访问记录、搜索记录、Cookie 以及保存的密码。";
+"FirstRun.messageLabelDescription" = "在您浏览时自动拦截在线跟踪器。一按即可清除您的设备上的访问记录、搜索记录、Cookie 以及密码。";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelTagline" = "安心浏览";
+"FirstRun.messageLabelTagline" = "畅游网络，拒绝监视。";
 
 /* First label for product description on the home screen */
-"Home.descriptionLabel1" = "自动化隐私浏览。";
+"Home.descriptionLabel1" = "全自动的隐私浏览。";
 
 /* Second label for product description on the home screen */
-"Home.descriptionLabel2" = "无痕浏览，无需劳心。";
+"Home.descriptionLabel2" = "无痕浏览，不必劳心。";
 
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "取消";
@@ -116,13 +116,13 @@
 "Safari.instructionsOpen" = "打开“设置”应用";
 
 /* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "“屏蔽其他内容拦截器”可能影响某些视频和网页。";
+"Settings.blockOtherMessage" = "拦截其他内容跟踪器可能对某些视频和网页有影响。";
 
 /* Button label for declining Content blocker alert */
 "Settings.blockOtherNo" = "不用了";
 
 /* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "我已了解";
+"Settings.blockOtherYes" = "知道了";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "设置";
@@ -134,7 +134,7 @@
 "Settings.searchTitle" = "搜索引擎";
 
 /* Label for Safari integration section */
-"Settings.sectionIntegration" = "整合";
+"Settings.sectionIntegration" = "集成";
 
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";
@@ -146,34 +146,43 @@
 "Settings.sectionPrivacy" = "隐私";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "屏蔽广告跟踪器";
+"Settings.toggleBlockAds" = "拦截广告跟踪器";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "屏蔽分析跟踪器";
+"Settings.toggleBlockAnalytics" = "拦截分析跟踪器";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "屏蔽网络字体";
+"Settings.toggleBlockFonts" = "拦截网络字体";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "屏蔽其他内容跟踪器";
+"Settings.toggleBlockOther" = "拦截其他内容跟踪器";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "屏蔽社交跟踪器";
+"Settings.toggleBlockSocial" = "拦截社交跟踪器";
 
 /* Label subtitle for toggle on main screen */
-"Settings.toggleOtherSubtitle" = "可能影响某些视频和网页";
+"Settings.toggleOtherSubtitle" = "可能对某些网页与视频有影响";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
 /* Label for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageData" = "发送匿名使用统计";
+"Settings.toggleSendAnonymousUsageData" = "发送匿名的使用统计数据";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.toggleSendAnonymousUsageDataSubtitle" = "详细了解";
 
+/* Text for the share menu option when a user wants to open a page in Firefox but doesn't have it installed. */
+"ShareMenu.GetFirefox" = "获取 Firefox 应用";
+
+/* Text for the share menu option when a user wants to open a page in Focus. */
+"ShareMenu.OpenInFocus" = "在 Focus 中打开";
+
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "取消";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "粘贴并转到";
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "擦除";

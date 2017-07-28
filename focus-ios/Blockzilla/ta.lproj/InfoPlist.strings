@@ -1,0 +1,12 @@
+/* (No Commment) */
+"NSCameraUsageDescription" = "இது படங்களை எடுத்து பதிவேற்றச் செய்கிறது.";
+
+/* (No Commment) */
+"NSLocationWhenInUseUsageDescription" = "வலைதள பக்கங்கள் உங்கள் இடத்தை அறிய விரும்பலாம்.";
+
+/* (No Commment) */
+"NSMicrophoneUsageDescription" = "இது காணொளிகளை எடுத்து பதிவேற்றச் செய்கிறது.";
+
+/* (No Commment) */
+"NSPhotoLibraryUsageDescription" = "இது படங்களைச் சேமித்து பதிவேற்றச் செய்கிறது.";
+

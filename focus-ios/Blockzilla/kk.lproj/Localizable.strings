@@ -41,10 +41,10 @@
 "Browser.backLabel" = "Артқа";
 
 /* Accessibility label for the forward button */
-"Browser.forwardLabel" = "Forward";
+"Browser.forwardLabel" = "Алға";
 
 /* Accessibility label for the reload button */
-"Browser.reloadLabel" = "Қайта жүктеп алу";
+"Browser.reloadLabel" = "Қайта жүктеу";
 
 /* Accessibility label for the settings button */
 "Browser.settingsLabel" = "Баптаулар";
@@ -172,8 +172,17 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.toggleSendAnonymousUsageDataSubtitle" = "Көбірек білу";
 
+/* Text for the share menu option when a user wants to open a page in Firefox but doesn't have it installed. */
+"ShareMenu.GetFirefox" = "Firefox қолданбасын алу";
+
+/* Text for the share menu option when a user wants to open a page in Focus. */
+"ShareMenu.OpenInFocus" = "Focus-та ашу";
+
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Бас тарту";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Кірістіру және өту";
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "ӨШІРУ";

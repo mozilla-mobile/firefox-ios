@@ -172,8 +172,17 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.toggleSendAnonymousUsageDataSubtitle" = "Argibide gehiago";
 
+/* Text for the share menu option when a user wants to open a page in Firefox but doesn't have it installed. */
+"ShareMenu.GetFirefox" = "Eskuratu Firefox";
+
+/* Text for the share menu option when a user wants to open a page in Focus. */
+"ShareMenu.OpenInFocus" = "Ireki Focusen";
+
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Utzi";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Itsatsi eta joan";
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "EZABATU";

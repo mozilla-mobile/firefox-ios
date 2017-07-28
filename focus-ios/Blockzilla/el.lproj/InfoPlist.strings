@@ -1,0 +1,12 @@
+/* (No Commment) */
+"NSCameraUsageDescription" = "Αυτό σάς επιτρέπει να τραβάτε και να μεταφορτώνετε φωτογραφίες.";
+
+/* (No Commment) */
+"NSLocationWhenInUseUsageDescription" = "Οι ιστοσελίδες που επισκέπτεστε ενδέχεται να ζητήσουν την τοποθεσία σας.";
+
+/* (No Commment) */
+"NSMicrophoneUsageDescription" = "Αυτό σάς επιτρέπει να τραβάτε και να μεταφορτώνετε βίντεο.";
+
+/* (No Commment) */
+"NSPhotoLibraryUsageDescription" = "Αυτό σάς επιτρέπει να αποθηκεύετε και να μεταφορτώνετε φωτογραφίες.";
+

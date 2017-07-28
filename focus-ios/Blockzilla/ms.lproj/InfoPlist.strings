@@ -1,0 +1,12 @@
+/* (No Commment) */
+"NSCameraUsageDescription" = "Ciri ini membolehkan anda mengambil dan memuat naik foto.";
+
+/* (No Commment) */
+"NSLocationWhenInUseUsageDescription" = "Laman web yang anda lawati mungkin meminta lokasi anda.";
+
+/* (No Commment) */
+"NSMicrophoneUsageDescription" = "Ciri ini membolehkan anda mengambil dan memuat naik video.";
+
+/* (No Commment) */
+"NSPhotoLibraryUsageDescription" = "Ciri ini membolehkan anda menyimpan dan memuat naik foto.";
+

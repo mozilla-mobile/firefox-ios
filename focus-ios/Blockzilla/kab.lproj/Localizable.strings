@@ -2,7 +2,7 @@
 "About.learnMoreButton" = "Issin ugar";
 
 /* Label on About screen */
-"About.missionLabel" = "%@ yegga-t Mozilla. Tuɣdaṭ nneɣ d aḥareb ɣef tulya akked tezmert yelhan n Internet.";
+"About.missionLabel" = "%@ yegga-t Mozilla. Tuɣdaṭ-nneɣ d aḥareb ɣef tulya akked tezmert yelhan n Internet.";
 
 /* Label on About screen */
 "About.privateBullet1" = "Nadi udiɣ inig seg usnas";
@@ -26,19 +26,19 @@
 "About.safariBullet1" = "Sewḥel inedfaṛen i ugar n tudert tusligt";
 
 /* Label on About screen */
-"About.safariBullet2" = "Sewḥ€l tisefsiyin web akken ad ifsusen isebtar";
+"About.safariBullet2" = "Sewḥel tisefsiyin web akken ad ifsusen isebtar";
 
 /* Label on About screen */
 "About.safariBulletHeader" = "Seqdec-it am usiɣzef Safari:";
 
 /* Title for the About screen */
-"About.screenTitle" = "Ɣef";
+"About.screenTitle" = "Γef";
 
 /* Label on About screen */
 "About.topLabel" = "%@ ak-d-yefk afus ad teqqimeḍ d aqeṛṛu.";
 
 /* Accessibility label for the back button */
-"Browser.backLabel" = "Ɣer deffir";
+"Browser.backLabel" = "Γer deffir";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "Ɣer zdat";
@@ -172,8 +172,17 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.toggleSendAnonymousUsageDataSubtitle" = "Issin ugar";
 
+/* Text for the share menu option when a user wants to open a page in Firefox but doesn't have it installed. */
+"ShareMenu.GetFirefox" = "Awi-d asnas Firefox";
+
+/* Text for the share menu option when a user wants to open a page in Focus. */
+"ShareMenu.OpenInFocus" = "Ldi di Focus";
+
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Sefsex";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Senṭeḍ & ddu";
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "KKES";

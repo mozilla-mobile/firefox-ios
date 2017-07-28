@@ -1,12 +1,12 @@
 /* (No Commment) */
-"NSCameraUsageDescription" = "Consente di scattare e caricare foto.";
+"NSCameraUsageDescription" = "Garantisci il permesso di scattare e caricare foto.";
 
 /* (No Commment) */
 "NSLocationWhenInUseUsageDescription" = "I siti web visitati possono richiedere la tua posizione.";
 
 /* (No Commment) */
-"NSMicrophoneUsageDescription" = "Consente di registrare e caricare video.";
+"NSMicrophoneUsageDescription" = "Garantisci il permesso di registrare e caricare video.";
 
 /* (No Commment) */
-"NSPhotoLibraryUsageDescription" = "Consente di salvare e caricare foto.";
+"NSPhotoLibraryUsageDescription" = "Garantisci il permesso di salvare e caricare foto.";
 
