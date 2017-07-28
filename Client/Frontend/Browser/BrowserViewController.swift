@@ -1956,10 +1956,14 @@ extension BrowserViewController: TabDelegate {
         let customSearchHelper = CustomSearchHelper(tab: tab)
         tab.addHelper(customSearchHelper, name: CustomSearchHelper.name())
 
+        let openURL = {(url: URL) -> Void in
+            self.switchToTabForURLOrOpen(url, isPrivileged: true)
+        }
+
         let nightModeHelper = NightModeHelper(tab: tab)
         tab.addHelper(nightModeHelper, name: NightModeHelper.name())
 
-        let spotlightHelper = SpotlightHelper(tab: tab)
+        let spotlightHelper = SpotlightHelper(tab: tab, openURL: openURL)
         tab.addHelper(spotlightHelper, name: SpotlightHelper.name())
 
         tab.addHelper(LocalRequestHelper(), name: LocalRequestHelper.name())

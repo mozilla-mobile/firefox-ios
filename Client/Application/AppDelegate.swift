@@ -13,7 +13,6 @@ import LocalAuthentication
 import Telemetry
 import SwiftRouter
 import Sync
-import CoreSpotlight
 
 private let log = Logger.browserLogger
 
@@ -665,11 +664,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     }
 
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Void) -> Bool {
-
-        // If the `NSUserActivity` has a `webpageURL`, it is either a deep link or an old history item
-        // reached via a "Spotlight" search before we began indexing visited pages via CoreSpotlight.
         if let url = userActivity.webpageURL {
-
+            
             // Per Adjust documenation, https://docs.adjust.com/en/universal-links/#running-campaigns-through-universal-links,
             // it is recommended that links contain the `deep_link` query parameter. This link will also
             // be url encoded.
@@ -678,22 +674,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
                 browserViewController.switchToTabForURLOrOpen(url, isPrivileged: true)
                 return true
             }
-
+            
             browserViewController.switchToTabForURLOrOpen(url, isPrivileged: true)
             return true
         }
-
-        // Otherwise, check if the `NSUserActivity` is a CoreSpotlight item and switch to its tab or
-        // open a new one.
-        if userActivity.activityType == CSSearchableItemActionType {
-            if let userInfo = userActivity.userInfo,
-                let urlString = userInfo[CSSearchableItemActivityIdentifier] as? String,
-                let url = URL(string: urlString) {
-                browserViewController.switchToTabForURLOrOpen(url, isPrivileged: true)
-                return true
-            }
-        }
-
         return false
     }
 
