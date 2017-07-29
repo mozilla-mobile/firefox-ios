@@ -22,11 +22,11 @@ class SnapshotTests: XCTestCase {
 
         app.buttons["URLBar.activateButton"].tap()
         snapshot("02LocationBarEmptyState")
-        app.textFields["URLBar.urlText"].typeText("people-mozilla.org")
+        app.textFields["URLBar.urlText"].typeText("bugzilla.mozilla.org")
         snapshot("03SearchFor")
 
         app.typeText("\n")
-        waitForValueContains(element: app.textFields["URLBar.urlText"], value: "https://people-mozilla.org/")
+        waitForValueContains(element: app.textFields["URLBar.urlText"], value: "https://bugzilla.mozilla.org/")
         snapshot("04EraseButton")
 
         app.buttons["URLBar.deleteButton"].tap()
@@ -61,8 +61,8 @@ class SnapshotTests: XCTestCase {
     func test04ShareMenu() {
         let app = XCUIApplication()
         app.buttons["URLBar.activateButton"].tap()
-        app.textFields["URLBar.urlText"].typeText("people-mozilla.org\n")
-        waitForValueContains(element: app.textFields["URLBar.urlText"], value: "https://people-mozilla.org/")
+        app.textFields["URLBar.urlText"].typeText("bugzilla.mozilla.org\n")
+        waitForValueContains(element: app.textFields["URLBar.urlText"], value: "https://bugzilla.mozilla.org/")
         app.buttons["BrowserToolset.sendButton"].tap()
         snapshot("12ShareMenu")
     }
@@ -88,6 +88,19 @@ class SnapshotTests: XCTestCase {
         app.textFields["URLBar.urlText"].typeText("itunes.apple.com\n")
         waitForValueContains(element: app.textFields["URLBar.urlText"], value: "http://itunes.apple.com")
         snapshot("07OpenAppStore")
+    }
+
+    func test08PasteAndGo() {
+        let app = XCUIApplication()
+        app.buttons["URLBar.activateButton"].tap()
+        app.textFields["URLBar.urlText"].typeText("mozilla.org\n")
+        app.textFields["URLBar.urlText"].tap(withNumberOfTaps: 3, numberOfTouches: 1)
+        app.menuItems.element(boundBy: 1).tap()
+        app.buttons.element(boundBy: 1).tap()
+        app.buttons["URLBar.deleteButton"].tap()
+        app.buttons["URLBar.activateButton"].tap()
+        app.textFields["URLBar.urlText"].tap()
+        snapshot("08PasteAndGo")
     }
 
     func waitForValueContains(element:XCUIElement, value:String, file: String = #file, line: UInt = #line) {
