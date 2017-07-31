@@ -43,8 +43,9 @@ class TestSQLiteBookmarks: XCTestCase {
         self.remove("TSQLBtestRecursiveAndURLDelete.db")
         self.remove("TSQLBtestUnrooted.db")
         self.remove("TSQLBtestTreeBuilding.db")
-        self.remove("TSQLBtestLocalBookmarksAdditions.db")
+        self.remove("TSQLBtestLocalBookmarksModifications.db")
         self.remove("TSQLBtestApplyBufferUpdatedCompletionOp.db")
+        self.remove("TSQLBtestApplyRecordsPendingDeletions.db")
         super.tearDown()
     }
 
@@ -78,8 +79,8 @@ class TestSQLiteBookmarks: XCTestCase {
         XCTAssertTrue(factory.hasDesktopBookmarks().value.successValue ?? true)
     }
 
-    func testGetLocalBookmarksAdditions() {
-        guard let db = getBrowserDB("TSQLBtestLocalBookmarksAdditions.db", files: self.files) else {
+    func testGetLocalBookmarksModifications() {
+        guard let db = getBrowserDB("TSQLBtestLocalBookmarksModifications.db", files: self.files) else {
             XCTFail("Unable to create browser DB.")
             return
         }
@@ -103,7 +104,7 @@ class TestSQLiteBookmarks: XCTestCase {
             "bookmark_other_folder", "http://example.org/2", "Bookmark in another folder (nok)", BookmarkRoots.ToolbarFolderGUID,
             "bookmark_good_nonsynced", "http://example.org/3", "Bookmark 1 (ok)", BookmarkRoots.MobileFolderGUID,
             "bookmark_good_synced", "http://example.org/4", "Bookmark 2 (nok)", BookmarkRoots.MobileFolderGUID,
-            "bookmark_in_buffer", "http://example.org/5", "Bookmark in buffer(nok)", BookmarkRoots.MobileFolderGUID,
+            "bookmark_duplicate_in_buffer", "http://example.org/5", "Bookmark in buffer(nok)", BookmarkRoots.MobileFolderGUID,
             "bookmark_good_additional", "http://example.org/6", "Bookmark additional 1", BookmarkRoots.MobileFolderGUID,
             "bookmark_good_additional_over_limit", "http://example.org/7", "Bookmark additional 2", BookmarkRoots.MobileFolderGUID,
         ]
@@ -125,25 +126,37 @@ class TestSQLiteBookmarks: XCTestCase {
             BookmarkRoots.ToolbarFolderGUID, "bookmark_other_folder", 0,
             BookmarkRoots.MobileFolderGUID, "bookmark_good_nonsynced", 1,
             BookmarkRoots.MobileFolderGUID, "bookmark_good_synced", 2,
-            BookmarkRoots.MobileFolderGUID, "bookmark_in_buffer", 3,
+            BookmarkRoots.MobileFolderGUID, "bookmark_duplicate_in_buffer", 3,
             BookmarkRoots.MobileFolderGUID, "bookmark_good_additional", 4,
             BookmarkRoots.MobileFolderGUID, "bookmark_good_additional_over_limit", 5,
         ]
 
         let bufferQuery =
         "INSERT INTO \(TableBookmarksBuffer) (guid, type, bmkUri, title, parentid, parentName, server_modified) VALUES " +
+        "(?, \(BookmarkNodeType.bookmark.rawValue), ?, ?, ?, '', ?), " +
         "(?, \(BookmarkNodeType.bookmark.rawValue), ?, ?, ?, '', ?) "
 
         let bufferArgs: Args = [
-            "bookmark_in_buffer", "http://example.org/5", "Bookmark in buffer(nok)", BookmarkRoots.MobileFolderGUID, Date.now()
+            "bookmark_duplicate_in_buffer", "http://example.org/5", "Bookmark in buffer(nok)", BookmarkRoots.MobileFolderGUID, Date.now(),
+            "bookmark_to_delete", "http://example.org/delme", "Bookmark in buffer to delete(ok)", BookmarkRoots.MobileFolderGUID, 88888
         ]
 
         let bufferStructureQuery =
         "INSERT INTO \(TableBookmarksBufferStructure) (parent, child, idx) VALUES " +
+        "(?, ?, ?), " +
         "(?, ?, ?)"
 
         let bufferStructureArgs: Args = [
-            "bookmark_in_buffer", "bookmark_in_buffer", 0, // It's its own parent because we are lazy.
+            "bookmark_duplicate_in_buffer", "bookmark_duplicate_in_buffer", 0, // It's its own parent because we are lazy.
+            "bookmark_to_delete", "bookmark_to_delete", 0
+        ]
+
+        let pendingDeletionsQuery =
+        "INSERT INTO \(TablePendingBookmarksDeletions) (id) VALUES " +
+        "(?)"
+
+        let pendingDeletionsArgs: Args = [
+            "bookmark_to_delete"
         ]
 
         db.run([
@@ -151,11 +164,69 @@ class TestSQLiteBookmarks: XCTestCase {
             (sql: structureQuery, args: structureArgs),
             (sql: bufferQuery, args: bufferArgs),
             (sql: bufferStructureQuery, args: bufferStructureArgs),
+            (sql: pendingDeletionsQuery, args: pendingDeletionsArgs),
         ]).succeeded()
 
-        let results = bookmarks.getLocalBookmarksAdditions(limit: 2).value.successValue!
-        XCTAssertEqual(results.count, 2)
-        XCTAssertEqual(results.map { $0.guid }, ["bookmark_good_nonsynced", "bookmark_good_additional"])
+        var modifications = bookmarks.getLocalBookmarksModifications(limit: 3).value.successValue!
+        XCTAssertEqual(modifications.additions.count, 2)
+        XCTAssertEqual(modifications.additions.map { $0.guid }, ["bookmark_good_nonsynced", "bookmark_good_additional"])
+        XCTAssertEqual(modifications.deletions.count, 1)
+        XCTAssertEqual(modifications.deletions, ["bookmark_to_delete"])
+
+        // Deletions are prioritized.
+        modifications = bookmarks.getLocalBookmarksModifications(limit: 1).value.successValue!
+        XCTAssertEqual(modifications.additions.count, 0)
+        XCTAssertEqual(modifications.deletions.count, 1)
+        XCTAssertEqual(modifications.deletions, ["bookmark_to_delete"])
+    }
+
+    func testApplyRecordsRemovesPendingDeletions() {
+        guard let db = getBrowserDB("TSQLBtestApplyRecordsPendingDeletions.db", files: self.files) else {
+            XCTFail("Unable to create browser DB.")
+            return
+        }
+        let bookmarks = MergedSQLiteBookmarks(db: db)
+
+        let bufferQuery =
+        "INSERT INTO \(TableBookmarksBuffer) (guid, type, bmkUri, title, parentid, parentName, server_modified) VALUES " +
+        "(?, \(BookmarkNodeType.bookmark.rawValue), ?, ?, ?, '', ?), " +
+        "(?, \(BookmarkNodeType.bookmark.rawValue), ?, ?, ?, '', ?) "
+
+        let bufferArgs: Args = [
+            "bkm1", "http://example.org/1", "Bookmark 1", BookmarkRoots.MobileFolderGUID, Date.now(),
+            "bkm2", "http://example.org/2", "Bookmark 2", BookmarkRoots.MobileFolderGUID, Date.now()
+        ]
+
+        let bufferStructureQuery =
+        "INSERT INTO \(TableBookmarksBufferStructure) (parent, child, idx) VALUES " +
+        "(?, ?, ?), " +
+        "(?, ?, ?)"
+
+        let bufferStructureArgs: Args = [
+            "bkm1", "bkm1", 0, // It's its own parent because we are lazy.
+            "bkm2", "bkm2", 0
+        ]
+
+        let pendingDeletionsQuery =
+        "INSERT INTO \(TablePendingBookmarksDeletions) (id) VALUES " +
+        "(?)"
+
+        let pendingDeletionsArgs: Args = [
+            "bkm2"
+        ]
+
+        db.run([
+            (sql: bufferQuery, args: bufferArgs),
+            (sql: bufferStructureQuery, args: bufferStructureArgs),
+            (sql: bufferQuery, args: bufferArgs),
+            (sql: bufferStructureQuery, args: bufferStructureArgs),
+            (sql: pendingDeletionsQuery, args: pendingDeletionsArgs),
+        ]).succeeded()
+
+        let modified: [BookmarkMirrorItem] = [BookmarkMirrorItem.bookmark("bkm2", modified: Date.now(), hasDupe: false, parentID: "bkm2", parentName: nil, title: "BKM 2", description: nil, URI: "https://test.com", tags: "", keyword: nil)]
+        bookmarks.applyRecords(modified).succeeded()
+
+        XCTAssertTrue(db.queryReturnsNoResults("SELECT * FROM \(TablePendingBookmarksDeletions)").value.successValue!)
     }
 
     func testApplyBufferUpdatedCompletionOp() {
@@ -179,17 +250,23 @@ class TestSQLiteBookmarks: XCTestCase {
         "INSERT INTO \(TableBookmarksBuffer) (guid, type, bmkUri, title, parentid, parentName, server_modified) VALUES " +
         "(?, \(BookmarkNodeType.folder.rawValue), NULL, ?, ?, '', ?), " +
         "(?, \(BookmarkNodeType.folder.rawValue), NULL, ?, ?, '', ?), " +
+        "(?, \(BookmarkNodeType.bookmark.rawValue), ?, ?, ?, '', ?), " +
+        "(?, \(BookmarkNodeType.bookmark.rawValue), ?, ?, ?, '', ?), " +
         "(?, \(BookmarkNodeType.bookmark.rawValue), ?, ?, ?, '', ?) "
 
         let bkmBufModified = Date.now()
         let bufferArgs: Args = [
             BookmarkRoots.RootGUID, "", BookmarkRoots.RootGUID, 123,
             BookmarkRoots.MobileFolderGUID, "Mobile Bookmarks", BookmarkRoots.RootGUID, 456,
-            "bkmbuf", "http://example.org/5", "Bookmark 5", BookmarkRoots.MobileFolderGUID, bkmBufModified
+            "bkmbuf", "http://example.org/5", "Bookmark 5", BookmarkRoots.MobileFolderGUID, bkmBufModified,
+            "bkmtodelete", "http://example.org/to_delete", "Bookmark to delete", BookmarkRoots.MobileFolderGUID, 88888,
+            "bkmtodelete_uploadfail", "http://example.org/to_delete_updfail", "Bookmark to delete but upload failed", BookmarkRoots.MobileFolderGUID, 88888
         ]
 
         let bufferStructureQuery =
         "INSERT INTO \(TableBookmarksBufferStructure) (parent, child, idx) VALUES " +
+        "(?, ?, ?), " +
+        "(?, ?, ?), " +
         "(?, ?, ?), " +
         "(?, ?, ?), " +
         "(?, ?, ?)"
@@ -198,16 +275,28 @@ class TestSQLiteBookmarks: XCTestCase {
             BookmarkRoots.RootGUID, BookmarkRoots.RootGUID, 0,
             BookmarkRoots.RootGUID, BookmarkRoots.MobileFolderGUID, 0,
             BookmarkRoots.MobileFolderGUID, "bkmbuf", 0,
+            BookmarkRoots.MobileFolderGUID, "bkmtodelete", 1,
+            BookmarkRoots.MobileFolderGUID, "bkmtodelete_uploadfail", 2,
+        ]
+
+        let pendingDeletionsQuery =
+        "INSERT INTO \(TablePendingBookmarksDeletions) (id) VALUES " +
+        "(?), " +
+        "(?)"
+
+        let pendingDeletionsArgs: Args = [
+            "bkmtodelete", "bkmtodelete_uploadfail"
         ]
 
         db.run([
             (sql: bufferQuery, args: bufferArgs),
             (sql: bufferStructureQuery, args: bufferStructureArgs),
+            (sql: pendingDeletionsQuery, args: pendingDeletionsArgs),
             ]).succeeded()
 
         let mobileRoot = BookmarkMirrorItem.folder(BookmarkRoots.MobileFolderGUID, modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.MobileFolderGUID,
                                                    parentName: nil, title: "Mobile Bookmarks", description: nil, children: ["bkmbuf"] + childrenGUIDsUploaded)
-        let op = BufferUpdatedCompletionOp(bufferValuesToMoveFromLocal: Set(childrenGUIDsUploaded), mobileRoot: mobileRoot, modifiedTime: 123456)
+        let op = BufferUpdatedCompletionOp(bufferValuesToMoveFromLocal: Set(childrenGUIDsUploaded), deletedValues: Set(["bkmtodelete"]), mobileRoot: mobileRoot, modifiedTime: 123456)
 
         let mergedBookmarks = MergedSQLiteBookmarks(db: db)
         mergedBookmarks.applyBufferUpdatedCompletionOp(op).succeeded()
@@ -217,7 +306,7 @@ class TestSQLiteBookmarks: XCTestCase {
         let mobileFolder = mergedBookmarks.getBufferItemWithGUID(BookmarkRoots.MobileFolderGUID).value.successValue!
         XCTAssertEqual(mobileFolder.serverModified, 123456)
         let childrenGUIDs = mergedBookmarks.getBufferChildrenGUIDsForParent(BookmarkRoots.MobileFolderGUID).value.successValue!
-        XCTAssertEqual(childrenGUIDs, ["bkmbuf"] + childrenGUIDsUploaded)
+        XCTAssertEqual(childrenGUIDs, ["bkmbuf", "bkmtodelete_uploadfail"] + childrenGUIDsUploaded)
         let children = mergedBookmarks.getBufferItemsWithGUIDs(["bkmbuf"] + childrenGUIDsUploaded).value.successValue!
         for item in children.values {
             XCTAssertEqual(item.serverModified, item.guid == "bkmbuf" ? bkmBufModified : 123456)
