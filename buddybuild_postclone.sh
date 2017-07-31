@@ -3,6 +3,7 @@
 # Only setup virtualenv if we intend on localizing the app.
 function setup_virtualenv {
   # Install Python tooling for localizations scripts
+  echo password | sudo easy_install pip
   echo password | sudo -S pip install --upgrade pip
   echo password | sudo -S pip install virtualenv
 }
