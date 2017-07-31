@@ -94,7 +94,7 @@ class SettingAppearanceTest: BaseTestCase {
         waitForValueContains(element: label, value: "https://www.mozilla.org")
         
         app.buttons["Share"].tap()
-        XCTAssertTrue(app.buttons["Firefox (Private Browsing)"].exists)
+        XCTAssertTrue(app.buttons["Get the Firefox App"].exists)
         XCTAssertTrue(app.buttons["Safari"].exists)
         XCTAssertTrue(app.buttons["More"].exists)
         XCTAssertTrue(app.buttons["Cancel"].exists)
