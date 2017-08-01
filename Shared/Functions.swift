@@ -108,6 +108,31 @@ public func chunk<T>(_ arr: [T], by: Int) -> [ArraySlice<T>] {
     return result
 }
 
+public func chunkCollection<E, X, T: Collection>(_ items: T, by: Int, f: ([E]) -> [X]) -> [X] where T.Iterator.Element == E {
+    assert(by >= 0)
+    let max = by > 0 ? by : 1
+    var i = 0
+    var acc: [E] = []
+    var results: [X] = []
+    var iter = items.makeIterator()
+
+    while let item = iter.next() {
+        if i >= max {
+            results.append(contentsOf: f(acc))
+            acc = []
+            i = 0
+        }
+        acc.append(item)
+        i += 1
+    }
+
+    if !acc.isEmpty {
+        results.append(contentsOf: f(acc))
+    }
+
+    return results
+}
+
 public extension Sequence {
     // [T] -> (T -> K) -> [K: [T]]
     // As opposed to `groupWith` (to follow Haskell's naming), which would be
