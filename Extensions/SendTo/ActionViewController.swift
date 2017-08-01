@@ -15,10 +15,18 @@ import SnapKit
 class ActionViewController: UIViewController, ClientPickerViewControllerDelegate, InstructionsViewControllerDelegate {
     private var sharedItem: ShareItem?
 
+    private var didSetupSentry: Bool = false
+
     override func viewDidLoad() {
         view.backgroundColor = UIColor.white
 
         super.viewDidLoad()
+
+        if !didSetupSentry {
+            let sendUsageData = NSUserDefaultsPrefs(prefix: "profile").boolForKey("settings.sendUsageData") ?? true
+            SentryIntegration.shared.setup(sendUsageData: sendUsageData)
+            didSetupSentry = true
+        }
 
         if !hasAccount() {
             let instructionsViewController = InstructionsViewController()

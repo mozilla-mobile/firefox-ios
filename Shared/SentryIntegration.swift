@@ -32,7 +32,7 @@ public class SentryIntegration {
             return
         }
 
-        guard let dsn = Bundle.main.object(forInfoDictionaryKey: SentryDSNKey) as? String, !dsn.isEmpty else {
+        guard let dsn = AppInfo.applicationBundle.object(forInfoDictionaryKey: SentryDSNKey) as? String, !dsn.isEmpty else {
             Logger.browserLogger.error("Not enabling Sentry; Not configured in Info.plist")
             return
         }

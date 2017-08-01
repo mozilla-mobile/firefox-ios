@@ -18,12 +18,20 @@ class NotificationService: UNNotificationServiceExtension {
         return profile
     }()
 
+    private var didSetupSentry: Bool = false
+
     // This is run when an APNS notification with `mutable-content` is received.
     // If the app is backgrounded, then the alert notification is displayed.
     // If the app is foregrounded, then the notification.userInfo is passed straight to
     // AppDelegate.application(_:didReceiveRemoteNotification:completionHandler:)
     // Once the notification is tapped, then the same userInfo is passed to the same method in the AppDelegate.
     override func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
+        if !didSetupSentry {
+            let sendUsageData = NSUserDefaultsPrefs(prefix: "profile").boolForKey("settings.sendUsageData") ?? true
+            SentryIntegration.shared.setup(sendUsageData: sendUsageData)
+            didSetupSentry = true
+        }
+
         let userInfo = request.content.userInfo
         if Logger.logPII && log.isEnabledFor(level: .info) {
             // This will be visible in the Console.app when a push notification is received.

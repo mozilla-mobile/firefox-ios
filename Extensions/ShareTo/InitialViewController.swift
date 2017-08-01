@@ -12,9 +12,17 @@ private let LastUsedShareDestinationsKey = "LastUsedShareDestinations"
 class InitialViewController: UIViewController, ShareControllerDelegate {
     var shareDialogController: ShareDialogController!
 
+    private var didSetupSentry: Bool = false
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor(white: 0.0, alpha: 0.66) // TODO: Is the correct color documented somewhere?
+
+        if !didSetupSentry {
+            let sendUsageData = NSUserDefaultsPrefs(prefix: "profile").boolForKey("settings.sendUsageData") ?? true
+            SentryIntegration.shared.setup(sendUsageData: sendUsageData)
+            didSetupSentry = true
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
