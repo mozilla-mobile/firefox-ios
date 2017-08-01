@@ -16,12 +16,11 @@ class ThirdPartySearchTest: BaseTestCase {
     }
     
     fileprivate func dismissKeyboardAssistant(forApp app: XCUIApplication) {
-        if app.buttons["Done"].exists {
-            // iPhone
-            app.buttons["Done"].tap()
+        if iPad() {
+            let searchTheDocsSearchField = app.webViews.searchFields["Search the docs"]
+            searchTheDocsSearchField.typeText("\r")
         } else {
-            // iPad
-            app.buttons["Dismiss"].tap()
+            app.buttons["Done"].tap()
         }
     }
     
@@ -31,7 +30,14 @@ class ThirdPartySearchTest: BaseTestCase {
         // Visit MDN to add a custom search engine
         loadWebPage("https://developer.mozilla.org/en-US/search", waitForLoadToFinish: true)
         
-        app.webViews.searchFields.element(boundBy: 0).tap()
+        if iPad() {
+            let searchTheDocsSearchField = app.webViews.searchFields["Search the docs"]
+            searchTheDocsSearchField.tap()
+            app.keyboards.buttons["Search"].tap()
+            searchTheDocsSearchField.tap()
+        } else {
+            app.webViews.searchFields.element(boundBy: 0).tap()
+        }
         app.buttons["AddSearch"].tap()
         app.alerts["Add Search Provider?"].buttons["OK"].tap()
         XCTAssertFalse(app.buttons["AddSearch"].isEnabled)
@@ -55,7 +61,14 @@ class ThirdPartySearchTest: BaseTestCase {
         // Visit MDN to add a custom search engine
         loadWebPage("https://developer.mozilla.org/en-US/search", waitForLoadToFinish: true)
         
-        app.webViews.searchFields.element(boundBy: 0).tap()
+        if iPad() {
+            let searchTheDocsSearchField = app.webViews.searchFields["Search the docs"]
+            searchTheDocsSearchField.tap()
+            app.keyboards.buttons["Search"].tap()
+            searchTheDocsSearchField.tap()
+        } else {
+            app.webViews.searchFields.element(boundBy: 0).tap()
+        }
         app.buttons["AddSearch"].tap()
         app.alerts["Add Search Provider?"].buttons["OK"].tap()
         XCTAssertFalse(app.buttons["AddSearch"].isEnabled)
@@ -88,7 +101,14 @@ class ThirdPartySearchTest: BaseTestCase {
         // Visit MDN to add a custom search engine
         loadWebPage("https://developer.mozilla.org/en-US/search", waitForLoadToFinish: true)
         
-        app.webViews.searchFields.element(boundBy: 0).tap()
+        if iPad() {
+            let searchTheDocsSearchField = app.webViews.searchFields["Search the docs"]
+            searchTheDocsSearchField.tap()
+            app.keyboards.buttons["Search"].tap()
+            searchTheDocsSearchField.tap()
+        } else {
+            app.webViews.searchFields.element(boundBy: 0).tap()
+        }
         app.buttons["AddSearch"].tap()
         app.alerts["Add Search Provider?"].buttons["OK"].tap()
         XCTAssertFalse(app.buttons["AddSearch"].isEnabled)
@@ -125,7 +145,7 @@ class ThirdPartySearchTest: BaseTestCase {
         
         app.textFields["url"].tap()
         app.typeText("window")
-        waitforExistence(app.scrollViews.otherElements.buttons["developer.mozilla.org search"])
+        waitforNoExistence(app.scrollViews.otherElements.buttons["developer.mozilla.org search"])
         XCTAssertFalse(app.scrollViews.otherElements.buttons["developer.mozilla.org search"].exists)
         
     }
