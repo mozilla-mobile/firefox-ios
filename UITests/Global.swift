@@ -301,6 +301,10 @@ class BrowserUtils {
             }
 		}
 	}
+    
+    class func iPad() -> Bool {
+        return UIDevice.current.userInterfaceIdiom == .pad
+    }
 
     /// Injects a URL and title into the browser's history database.
     class func addHistoryEntry(_ title: String, url: URL) {

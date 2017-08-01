@@ -29,8 +29,8 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         for pageNo in 1...noOfSites {
             let url = "\(webRoot!)/numberedPage.html?page=\(pageNo)"
             EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
-            EarlGrey.select(elementWithMatcher: grey_accessibilityID("address"))
-                .perform(grey_typeText("\(url)\n"))
+            EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_replaceText(url))
+            EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_typeText("\n"))
 
             tester().waitForWebViewElementWithAccessibilityLabel("Page \(pageNo)")
             let dom = URL(string: url)!.normalizedHost!
@@ -100,18 +100,19 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         
         // Only one will be found -- we collapse by domain.
         anyDomainsExistOnTopSites(dispDomains, fulldomains: fullDomains)
-
         BrowserUtils.clearPrivateData([BrowserUtils.Clearable.History], swipe: false, tester: tester())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(urls[0].title))
+    
+        // Refresh the collection view
+        EarlGrey.select(elementWithMatcher:  grey_accessibilityID("HomePanels.Bookmarks")).perform(grey_tap())
+        EarlGrey.select(elementWithMatcher:  grey_accessibilityID("HomePanels.TopSites")).perform(grey_tap())
+        
+        let displayed = urls[0].dispDomain.replacingOccurrences(of: ".", with: " ")
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(displayed))
             .assert(grey_notNil(), error: &errorOrNil)
+        
         XCTAssertEqual(GREYInteractionErrorCode(rawValue: errorOrNil!.code),
         GREYInteractionErrorCode.elementNotFoundErrorCode,
         "Expected to have removed top site panel \(urls[0])")
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(urls[1].title))
-            .assert(grey_notNil(), error: &errorOrNil)
-        XCTAssertEqual(GREYInteractionErrorCode(rawValue: errorOrNil!.code),
-        GREYInteractionErrorCode.elementNotFoundErrorCode,
-        "We shouldn't find the other URL, either.")
     }
 
     func testDisabledHistoryDoesNotClearTopSitesPanel() {
@@ -171,10 +172,11 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
 
     func testClearsCookies() {
         let url = "\(webRoot!)/numberedPage.html?page=1"
-        
+    
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address"))
-            .perform(grey_typeText("\(url)\n"))
+        
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_replaceText(url))
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_typeText("\n"))
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
 
         let webView = tester().waitForView(withAccessibilityLabel: "Web content") as! WKWebView
