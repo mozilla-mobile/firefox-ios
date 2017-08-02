@@ -50,60 +50,33 @@ extension SQLiteHistory: HistoryRecommendations {
         return self.db.runQuery(sql, args: nil, factory: SQLiteHistory.iconHistoryMetadataColumnFactory)
     }
 
-    public func invalidateHighlights() -> Success {
-        return clearHighlights() >>> populateHighlights
-    }
-
     public func removeHighlightForURL(_ url: String) -> Success {
         return self.db.run([("INSERT INTO \(TableActivityStreamBlocklist) (url) VALUES (?)", [url])])
     }
 
-    public func clearHighlights() -> Success {
-        return self.db.run("DELETE FROM \(TableHighlights)", withArgs: nil)
+    public func repopulateHighlights() -> Success {
+        return self.db.run(self.repopulateHighlightsQuery())
     }
 
-    private func populateHighlights() -> Success {
+    private func repopulateHighlightsQuery() -> [(String, Args?)] {
         let (query, args) = computeHighlightsQuery()
+        let clearHighlightsQuery = "DELETE FROM \(TableHighlights)"
 
-        // Convert the fetched row into arguments for a bulk insert along with the
-        // generated cache_key value.
-        func argsFrom(row: SDRow) -> Args? {
-            let urlString = row["url"] as! String
-            let cacheKey = SQLiteMetadata.cacheKeyForURL(urlString.asURL!)!
-            return [
-                row["historyID"],
-                cacheKey,
-                urlString,
-                row["title"],
-                row["guid"],
-                row["visitCount"],
-                row["visitDate"],
-                row["is_bookmarked"]
-            ]
-        }
-        
-        // Run the highlights computation query and take the results to bulk insert into the cached highlights table
-        return self.db.runQuery(query, args: args, factory: argsFrom)
-            >>== { highlightRows in
-                let values: [Args] = highlightRows.asArray().flatMap { $0 }
-                let highlightsProjection = [
-                    "historyID",
-                    "cache_key",
-                    "url",
-                    "title",
-                    "guid",
-                    "visitCount",
-                    "visitDate",
-                    "is_bookmarked"
-                ]
+        let sql = "INSERT INTO \(TableHighlights) " +
+            "SELECT historyID, url as cache_key, url, title, guid, visitCount, visitDate, is_bookmarked " +
+            "FROM (\(query))"
+        return [(clearHighlightsQuery, nil), (sql, args)]
+    }
 
-                return self.db.bulkInsert(
-                    TableHighlights,
-                    op: .InsertOrReplace,
-                    columns: highlightsProjection,
-                    values: values
-            )
+    public func repopulateAll(_ invalidateTopSites: Bool, invalidateHighlights: Bool) -> Success {
+        var queries: [(String, Args?)] = []
+        if invalidateHighlights {
+            queries.append(contentsOf: self.repopulateHighlightsQuery())
         }
+        if invalidateTopSites {
+            queries.append(contentsOf: self.refreshTopsitesQuery())
+        }
+        return self.db.run(queries)
     }
 
     public func getRecentBookmarks(_ limit: Int = 3) -> Deferred<Maybe<Cursor<Site>>> {
@@ -134,7 +107,7 @@ extension SQLiteHistory: HistoryRecommendations {
             "SELECT \(siteProjection), iconID, iconURL, iconType, iconDate, iconWidth, \(TablePageMetadata).title AS metadata_title, media_url, type, description, provider_name " +
                 "FROM (\(bookmarkHighlights) ) " +
                 "LEFT JOIN \(ViewHistoryIDsWithWidestFavicons) ON \(ViewHistoryIDsWithWidestFavicons).id = historyID " +
-                "LEFT OUTER JOIN \(TablePageMetadata) ON \(TablePageMetadata).site_url = url " +
+                "LEFT OUTER JOIN \(TablePageMetadata) ON \(TablePageMetadata).cache_key = url " +
         "GROUP BY url"
         let args = [fiveDaysAgo, fiveDaysAgo] as Args
         return self.db.runQuery(highlightsQuery, args: args, factory: SQLiteHistory.iconHistoryMetadataColumnFactory)

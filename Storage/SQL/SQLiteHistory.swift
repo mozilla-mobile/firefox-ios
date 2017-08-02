@@ -8,6 +8,8 @@ import XCGLogger
 import Deferred
 
 private let log = Logger.syncLogger
+public let TopSiteCacheSize: Int32 = 16
+
 
 class NoSuchRecordError: MaybeErrorType {
     let guid: GUID
@@ -333,8 +335,7 @@ extension SQLiteHistory: BrowserHistory {
     }
 
     public func refreshTopSitesCache() -> Success {
-        let cacheSize = Int(prefs.intForKey(PrefsKeys.KeyTopSitesCacheSize) ?? 0)
-        return updateTopSitesCacheWithLimit(cacheSize)
+        return updateTopSitesCache()
     }
 
     //swiftlint:disable opening_brace
@@ -376,7 +377,16 @@ extension SQLiteHistory: BrowserHistory {
     }
     //swiftlint:enable opening_brace
 
-    fileprivate func updateTopSitesCacheWithLimit(_ limit: Int) -> Success {
+    fileprivate func updateTopSitesCache() -> Success {
+        return self.db.run(self.refreshTopsitesQuery()) >>> {
+            self.prefs.setBool(true, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
+            return succeed()
+        }
+    }
+
+    fileprivate func updateTopSitesCacheQuery() -> (String, Args?) {
+        let limit = Int(prefs.intForKey(PrefsKeys.KeyTopSitesCacheSize) ?? TopSiteCacheSize)
+
         let (whereData, groupBy) = self.topSiteClauses()
         let (query, args) = self.filteredSitesByFrecencyQueryWithHistoryLimit(limit, bookmarksLimit: 0, groupClause: groupBy, whereData: whereData)
 
@@ -387,22 +397,25 @@ extension SQLiteHistory: BrowserHistory {
             "localVisitDate, remoteVisitDate, localVisitCount, remoteVisitCount,",
             "iconID, iconURL, iconDate, iconType, iconWidth, frecencies",
             "FROM (", query, ")"
-        ].joined(separator: " ")
+            ].joined(separator: " ")
+        return (insertQuery, args)
+    }
 
-        return self.clearTopSitesCache() >>> {
-            return self.db.run(insertQuery, withArgs: args)
-        } >>> {
-            self.prefs.setBool(true, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
+    public func refreshTopsitesQuery() -> [(String, Args?)] {
+        return [clearTopsitesQuery(), updateTopSitesCacheQuery()]
+    }
+
+    public func clearTopSitesCache() -> Success {
+        let (query, args) = clearTopsitesQuery()
+        return self.db.run(query, withArgs: args) >>> {
+            self.prefs.removeObjectForKey(PrefsKeys.KeyTopSitesCacheIsValid)
             return succeed()
         }
     }
 
-    public func clearTopSitesCache() -> Success {
+    private func clearTopsitesQuery() -> (String, Args?) {
         let deleteQuery = "DELETE FROM \(TableCachedTopSites)"
-        return self.db.run(deleteQuery, withArgs: nil) >>> {
-            self.prefs.removeObjectForKey(PrefsKeys.KeyTopSitesCacheIsValid)
-            return succeed()
-        }
+        return (deleteQuery, nil)
     }
 
     public func getSitesByFrecencyWithHistoryLimit(_ limit: Int, bookmarksLimit: Int, whereURLContains filter: String) -> Deferred<Maybe<Cursor<Site>>> {

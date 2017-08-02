@@ -231,8 +231,7 @@ class MockPingClient: PingCentreClient {
 }
 
 fileprivate class MockRecommender: HistoryRecommendations {
-    func invalidateHighlights() -> Success {
-        // no-op since we don't need to purge a cache for our mock recommender
+    func repopulateHighlights() -> Success {
         return succeed()
     }
 

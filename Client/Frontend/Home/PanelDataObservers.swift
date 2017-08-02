@@ -13,8 +13,10 @@ private let log = Logger.browserLogger
 protocol DataObserver {
     var profile: Profile { get }
     weak var delegate: DataObserverDelegate? { get set }
-    
-    func invalidate(highlights: Bool)
+
+
+    func refresh(highlights: Bool)
+    func invalidateTopSites()
 }
 
 @objc protocol DataObserverDelegate: class {
@@ -34,7 +36,7 @@ class ActivityStreamDataObserver: DataObserver {
     let profile: Profile
     weak var delegate: DataObserverDelegate?
     private var invalidationTime = OneMinuteInMilliseconds * 15
-    private var lastInvalidation = Date.now()
+    private var lastInvalidation: UInt64 = 0
 
     fileprivate let events = [NotificationFirefoxAccountChanged, NotificationProfileDidFinishSyncing, NotificationPrivateDataClearedHistory]
 
@@ -48,28 +50,33 @@ class ActivityStreamDataObserver: DataObserver {
         events.forEach { NotificationCenter.default.removeObserver(self, name: $0, object: nil) }
     }
     
-    func invalidate(highlights: Bool) {
+    func refresh(highlights: Bool) {
+        guard !profile.isShutdown else {
+            return
+        }
         self.delegate?.willInvalidateDataSources()
 
-        let notify = {
+        // Highlights are cached for 15 mins
+        let invalidateHighlights = highlights ? true : (Date.now() - lastInvalidation > invalidationTime)
+        lastInvalidation = invalidateHighlights ? Date.now() : lastInvalidation
+
+        let topSitesIsValid = profile.prefs.boolForKey(PrefsKeys.KeyTopSitesCacheIsValid) ?? false
+
+        self.profile.recommendations.repopulateAll(!topSitesIsValid, invalidateHighlights: invalidateHighlights).uponQueue(.main) { _ in
+            self.profile.prefs.setBool(true, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
             self.delegate?.didInvalidateDataSources()
         }
-        
-        let invalidateTopSites: () -> Success = {
-            self.profile.history.setTopSitesNeedsInvalidation()
-            return self.profile.history.updateTopSitesCacheIfInvalidated() >>> succeed
-        }
+    }
 
-        let shouldInvalidate = highlights ? true : (Date.now() - lastInvalidation > invalidationTime)
-        lastInvalidation = shouldInvalidate ? Date.now() : lastInvalidation
-        let query = shouldInvalidate ? [self.profile.recommendations.invalidateHighlights, invalidateTopSites] : [invalidateTopSites]
-        accumulate(query) >>> effect(notify)
+    func invalidateTopSites() {
+         profile.prefs.setBool(false, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
     }
     
     @objc func notificationReceived(_ notification: Notification) {
         switch notification.name {
         case NotificationProfileDidFinishSyncing, NotificationFirefoxAccountChanged, NotificationPrivateDataClearedHistory:
-            invalidate(highlights: true)
+            profile.prefs.setBool(false, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
+            refresh(highlights: true)
         default:
             log.warning("Received unexpected notification \(notification.name)")
         }

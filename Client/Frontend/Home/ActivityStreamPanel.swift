@@ -552,28 +552,32 @@ extension ActivityStreamPanel: DataObserverDelegate {
         }
         profile.history.removeHostFromTopSites(host).uponQueue(.main) { result in
             guard result.isSuccess else { return }
-            self.profile.panelDataObservers.activityStream.invalidate(highlights: false)
+            self.profile.panelDataObservers.activityStream.invalidateTopSites()
+            self.profile.panelDataObservers.activityStream.refresh(highlights: false)
         }
     }
 
     func pinTopSite(_ site: Site) {
         profile.history.addPinnedTopSite(site).uponQueue(.main) { result in
             guard result.isSuccess else { return }
-            self.profile.panelDataObservers.activityStream.invalidate(highlights: false)
+            self.profile.panelDataObservers.activityStream.invalidateTopSites()
+            self.profile.panelDataObservers.activityStream.refresh(highlights: false)
         }
     }
 
     func removePinTopSite(_ site: Site) {
         profile.history.removeFromPinnedTopSites(site).uponQueue(.main) { result in
             guard result.isSuccess else { return }
-            self.profile.panelDataObservers.activityStream.invalidate(highlights: false)
+            self.profile.panelDataObservers.activityStream.invalidateTopSites()
+            self.profile.panelDataObservers.activityStream.refresh(highlights: false)
         }
     }
 
     func hideFromHighlights(_ site: Site) {
         profile.recommendations.removeHighlightForURL(site.url).uponQueue(.main) { result in
             guard result.isSuccess else { return }
-            self.profile.panelDataObservers.activityStream.invalidate(highlights: true)
+            self.profile.panelDataObservers.activityStream.invalidateTopSites()
+            self.profile.panelDataObservers.activityStream.refresh(highlights: true)
         }
     }
 
@@ -699,7 +703,8 @@ extension ActivityStreamPanel: HomePanelContextMenu {
                     $0.removeByURL(siteURL.absoluteString)
                     site.setBookmarked(false)
                 }
-                self.profile.panelDataObservers.activityStream.invalidate(highlights: false)
+                self.profile.panelDataObservers.activityStream.invalidateTopSites()
+                self.profile.panelDataObservers.activityStream.refresh(highlights: false)
                 self.telemetry.reportEvent(.RemoveBookmark, source: pingSource, position: index)
 
             })
@@ -723,7 +728,8 @@ extension ActivityStreamPanel: HomePanelContextMenu {
             self.telemetry.reportEvent(.Delete, source: pingSource, position: index)
             self.profile.history.removeHistoryForURL(site.url).uponQueue(.main) { result in
                 guard result.isSuccess else { return }
-                self.profile.panelDataObservers.activityStream.invalidate(highlights: true)
+                self.profile.panelDataObservers.activityStream.invalidateTopSites()
+                self.profile.panelDataObservers.activityStream.refresh(highlights: true)
             }
         })
 

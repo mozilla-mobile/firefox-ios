@@ -29,7 +29,7 @@ extension SQLiteMetadata: Metadata {
     /// - returns: Deferred on success
     public func storeMetadata(_ metadata: PageMetadata, forPageURL pageURL: URL,
                               expireAt: UInt64) -> Success {
-        guard let cacheKey = SQLiteMetadata.cacheKeyForURL(pageURL as URL) else {
+        guard let cacheKey = pageURL.displayURL?.absoluteString else {
             return succeed()
         }
 
@@ -55,9 +55,4 @@ extension SQLiteMetadata: Metadata {
         return self.db.run(sql)
     }
 
-    static func cacheKeyForURL(_ url: URL) -> CacheKey? {
-        var key = url.normalizedHost ?? ""
-        key = key + url.path + (url.query ?? "")
-        return key
-    }
 }

@@ -52,7 +52,8 @@ public protocol HistoryRecommendations {
     func getRecentBookmarks(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>>
 
     func removeHighlightForURL(_ url: String) -> Success
-    func invalidateHighlights() -> Success
+    func repopulateHighlights() -> Success
+    func repopulateAll(_ invalidateTopSites: Bool, invalidateHighlights: Bool) -> Success
 }
 
 /**

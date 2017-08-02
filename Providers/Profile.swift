@@ -255,8 +255,6 @@ open class BrowserProfile: Profile {
 
         notificationCenter.addObserver(self, selector: #selector(onLocationChange(notification:)), name: NotificationOnLocationChange, object: nil)
         notificationCenter.addObserver(self, selector: #selector(onPageMetadataFetched(notification:)), name: NotificationOnPageMetadataFetched, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(onProfileDidFinishSyncing(notification:)), name: NotificationProfileDidFinishSyncing, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(onPrivateDataClearedHistory(notification:)), name: NotificationPrivateDataClearedHistory, object: nil)
 
         if isNewProfile {
             log.info("New profile. Removing old account metadata.")
@@ -332,28 +330,15 @@ open class BrowserProfile: Profile {
             log.debug("Private mode - Ignoring page metadata.")
             return
         }
-
         guard let metadataDict = notification.userInfo?["metadata"] as? [String: Any],
-              let pageURL = (metadataDict["url"] as? String)?.asURL,
+              let pageURL = (notification.userInfo?["tabURL"] as? String)?.asURL,
               let pageMetadata = PageMetadata.fromDictionary(metadataDict) else {
             log.debug("Metadata notification doesn't contain any metadata!")
             return
         }
-
+        print(pageURL)
         let defaultMetadataTTL: UInt64 = 3 * 24 * 60 * 60 * 1000 // 3 days for the metadata to live
         self.metadata.storeMetadata(pageMetadata, forPageURL: pageURL, expireAt: defaultMetadataTTL + Date.now())
-    }
-
-    // These selectors run on which ever thread sent the notifications (not the main thread)
-    @objc
-    func onProfileDidFinishSyncing(notification: NSNotification) {
-        history.setTopSitesNeedsInvalidation()
-    }
-
-    @objc
-    func onPrivateDataClearedHistory(notification: NSNotification) {
-        // Immediately invalidate the top sites cache
-        history.refreshTopSitesCache()
     }
 
     deinit {
@@ -361,8 +346,6 @@ open class BrowserProfile: Profile {
         self.syncManager.endTimedSyncs()
         NotificationCenter.default.removeObserver(self, name: NotificationOnLocationChange, object: nil)
         NotificationCenter.default.removeObserver(self, name: NotificationOnPageMetadataFetched, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NotificationPrivateDataClearedHistory, object: nil)
     }
 
     func localName() -> String {
