@@ -19,31 +19,43 @@ class BookmarksPanelTests: KIFTestCase {
         super.tearDown()
 		BrowserUtils.resetToAboutHome(tester()) 
     }
+
+    private func getAppBookmarkStorage() -> BookmarkBufferStorage? {
+        let application = UIApplication.shared
+        
+        guard let delegate = application.delegate as? TestAppDelegate else {
+            XCTFail("Couldn't get app delegate.")
+            return nil
+        }
+        
+        let profile = delegate.getProfile(application)
+        
+        guard let bookmarks = profile.bookmarks as? BookmarkBufferStorage else {
+            XCTFail("Couldn't get buffer storage.")
+            return nil
+        }
+        
+        return bookmarks
+    }
     
+    private func createSomeBufferBookmarks() {
+        // Set up the buffer.
+        let bufferDate = Date.now()
+        let changedBufferRecords = [
+            BookmarkMirrorItem.folder(BookmarkRoots.ToolbarFolderGUID, modified: bufferDate, hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: nil, title: "Bookmarks Toolbar", description: nil, children: ["aaa", "bbb"]),
+            BookmarkMirrorItem.bookmark("aaa", modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.ToolbarFolderGUID, parentName: nil, title: "AAA", description: nil, URI: "http://getfirefox.com", tags: "[]", keyword: nil),
+            BookmarkMirrorItem.livemark("bbb", modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.ToolbarFolderGUID, parentName: nil, title: "Some Livemark", description: nil, feedURI: "https://people-mozilla.org/~npark", siteURI: "https://people-mozilla.org/~npark") ]
+        
+        if let bookmarks = getAppBookmarkStorage() {
+            XCTAssert(bookmarks.applyRecords(changedBufferRecords).value.isSuccess)
+        }
+    }
+
     func testBookmarkPanelBufferOnly() {
         // Insert some data into the buffer. There will be nothing in the mirror, but we can still
         // show Desktop Bookmarks.
 
-        let application = UIApplication.shared
-
-        guard let delegate = application.delegate as? TestAppDelegate else {
-            XCTFail("Couldn't get app delegate.")
-            return
-        }
-
-        let profile = delegate.getProfile(application)
-
-        guard let bookmarks = profile.bookmarks as? BookmarkBufferStorage else {
-            XCTFail("Couldn't get buffer storage.")
-            return
-        }
-
-        let record1 = BookmarkMirrorItem.bookmark("aaaaaaaaaaaa", modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.ToolbarFolderGUID, parentName: "Bookmarks Toolbar", title: "AAA", description: "AAA desc", URI: "http://getfirefox.com", tags: "[]", keyword: nil)
-        let record2 = BookmarkMirrorItem.livemark("bbbbbbbbbbbb", modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.ToolbarFolderGUID, parentName: "Bookmarks Toolbar", title: "Some Livemark", description: nil, feedURI: "https://people-mozilla.org/~npark", siteURI: "https://people-mozilla.org/~npark")
-        let toolbar = BookmarkMirrorItem.folder("toolbar", modified: Date.now(), hasDupe: false, parentID: "places", parentName: "", title: "Bookmarks Toolbar", description: "Add bookmarks to this folder to see them displayed on the Bookmarks Toolbar", children: ["aaaaaaaaaaaa", "bbbbbbbbbbbb"])
-        let recordsA: [BookmarkMirrorItem] = [record1, toolbar, record2]
-
-        XCTAssertTrue(bookmarks.applyRecords(recordsA).value.isSuccess)
+        createSomeBufferBookmarks()
 
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Bookmarks")).perform(grey_tap())
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Desktop Bookmarks")).perform(grey_tap())
@@ -61,5 +73,36 @@ class BookmarksPanelTests: KIFTestCase {
         // Using KIF for this check for now.
         tester().waitForView(withAccessibilityLabel: "https://people-mozilla.org/~npark")
         
+    }
+
+    func testRootHasLocalAndBuffer() {
+        // Add buffer data, then later in the test verify that the buffer mobile folder is not shown in there anymore.
+        createSomeBufferBookmarks()
+        
+        guard let bookmarks = getAppBookmarkStorage() else {
+            return
+        }
+        
+        let changedBufferRecords = [
+            BookmarkMirrorItem.bookmark("guid0", modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.MobileFolderGUID, parentName: nil, title: "xyz", description: nil, URI: "http://unused.com", tags: "[]", keyword: nil),
+            BookmarkMirrorItem.folder(BookmarkRoots.MobileFolderGUID, modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: nil, title: "", description: nil, children: ["guid0"])
+        ]
+        XCTAssert(bookmarks.applyRecords(changedBufferRecords).value.isSuccess)
+        
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Bookmarks")).perform(grey_tap())
+        
+        // is this in the root?
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("xyz")).assert(grey_notNil())
+        
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Desktop Bookmarks")).perform(grey_tap())
+        // this should be missing, they are shown in the root
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Mobile Bookmarks")).assert(grey_nil())
+        
+        // Add a local bookmark, and then navigate back to the root view (the navigation will refresh the table).
+        let ok = (bookmarks as! MergedSQLiteBookmarks).local.addToMobileBookmarks(URL(string: "http://another-unused")!, title: "123", favicon: nil)
+        XCTAssert(ok.value.isSuccess)
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Bookmarks")).inRoot(grey_kindOfClass(NSClassFromString("UITableView")!)).perform(grey_tap())
+        // is this in the root?
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("123")).assert(grey_notNil())
     }
 }
