@@ -23,11 +23,11 @@ struct AutocompleteTextFieldUX {
 class AutocompleteTextField: UITextField, UITextFieldDelegate {
     var autocompleteDelegate: AutocompleteTextFieldDelegate?
 
-    private var selectionLabel: UILabel?
+    private var autocompleteTextLabel: UILabel?
     private var hideCursor: Bool = false
 
     var isSelectionActive: Bool {
-        return selectionLabel != nil
+        return autocompleteTextLabel != nil
     }
 
     // This variable is a solution to get the right behavior for refocusing
@@ -50,7 +50,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
     override var accessibilityValue: String? {
         get {
-            return (self.text ?? "") + (self.selectionLabel?.text ?? "")
+            return (self.text ?? "") + (self.autocompleteTextLabel?.text ?? "")
         }
         set(value) {
             super.accessibilityValue = value
@@ -142,7 +142,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     fileprivate func applyCompletion() {
 
         // Clear the current completion, then set the text without the attributed style.
-        let text = (self.text ?? "") + (self.selectionLabel?.text ?? "")
+        let text = (self.text ?? "") + (self.autocompleteTextLabel?.text ?? "")
         removeCompletion()
         self.text = text
         hideCursor = false
@@ -152,8 +152,8 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
     /// Removes the autocomplete-highlighted
     fileprivate func removeCompletion() {
-        selectionLabel?.removeFromSuperview()
-        selectionLabel = nil
+        autocompleteTextLabel?.removeFromSuperview()
+        autocompleteTextLabel = nil
     }
 
     // `shouldChangeCharactersInRange` is called before the text changes, and textDidChange is called after.
@@ -181,9 +181,9 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         let suggestionText = suggestion.substring(from: suggestion.characters.index(suggestion.startIndex, offsetBy: normalized.characters.count))
         let autocompleteText = NSMutableAttributedString(string: suggestionText)
         autocompleteText.addAttribute(NSBackgroundColorAttributeName, value: highlightColor, range: NSRange(location: 0, length: suggestionText.characters.count))
-        selectionLabel?.removeFromSuperview() // should be nil. But just in case
-        selectionLabel = createSelectionLabelWith(autocompleteText)
-        if let l = selectionLabel {
+        autocompleteTextLabel?.removeFromSuperview() // should be nil. But just in case
+        autocompleteTextLabel = createAutocompleteLabelWith(autocompleteText)
+        if let l = autocompleteTextLabel {
             addSubview(l)
             hideCursor = true
             forceResetCursor()
@@ -194,7 +194,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         return hideCursor ? CGRect.zero : super.caretRect(for: position)
     }
 
-    func createSelectionLabelWith(_ autocompleteText: NSAttributedString) -> UILabel {
+    private func createAutocompleteLabelWith(_ autocompleteText: NSAttributedString) -> UILabel {
         let label = UILabel()
         var frame = self.bounds
         label.attributedText = autocompleteText
@@ -237,7 +237,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     }
 
     func textDidChange(_ textField: UITextField) {
-        hideCursor = selectionLabel != nil
+        hideCursor = autocompleteTextLabel != nil
         removeCompletion()
 
         let isAtEnd = selectedTextRange?.start == endOfDocument
