@@ -60,6 +60,7 @@ class OverlayView: UIView {
         
         copyButton.snp.makeConstraints { make in
             make.top.leading.trailing.equalTo(self)
+            make.height.equalTo(56)
         }
         copyBorder.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self)
@@ -143,11 +144,13 @@ class OverlayView: UIView {
             if searchButton.isHidden || searchQuery.isEmpty {
                 copyButton.snp.remakeConstraints { make in
                     make.top.leading.trailing.equalTo(self)
+                    make.height.equalTo(56)
                 }
             } else {
                 copyButton.snp.remakeConstraints { make in
                     make.leading.trailing.equalTo(self)
                     make.top.equalTo(searchBorder)
+                    make.height.equalTo(56)
                 }
             }
         } else {
