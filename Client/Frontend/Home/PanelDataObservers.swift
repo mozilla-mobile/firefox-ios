@@ -14,7 +14,6 @@ protocol DataObserver {
     var profile: Profile { get }
     weak var delegate: DataObserverDelegate? { get set }
 
-
     func refresh(highlights: Bool)
     func invalidateTopSites()
 }

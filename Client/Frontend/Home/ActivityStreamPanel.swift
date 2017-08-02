@@ -935,8 +935,6 @@ class ASHeaderView: UICollectionReusableView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        print(UIScreen.main.bounds.size.width)
-        print(self.frame.size.width)
         constraint?.update(offset: titleInsets)
     }
     

@@ -336,7 +336,6 @@ open class BrowserProfile: Profile {
             log.debug("Metadata notification doesn't contain any metadata!")
             return
         }
-        print(pageURL)
         let defaultMetadataTTL: UInt64 = 3 * 24 * 60 * 60 * 1000 // 3 days for the metadata to live
         self.metadata.storeMetadata(pageMetadata, forPageURL: pageURL, expireAt: defaultMetadataTTL + Date.now())
     }

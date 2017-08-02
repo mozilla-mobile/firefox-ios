@@ -10,7 +10,6 @@ import Deferred
 private let log = Logger.syncLogger
 public let TopSiteCacheSize: Int32 = 16
 
-
 class NoSuchRecordError: MaybeErrorType {
     let guid: GUID
     init(guid: GUID) {
