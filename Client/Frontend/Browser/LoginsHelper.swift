@@ -109,10 +109,6 @@ class LoginsHelper: TabHelper {
         return profile.logins.updateLoginByGUID(guid, new: new, significant: significant)
     }
 
-    func removeLoginsWithGUIDs(_ guids: [GUID]) -> Success {
-        return profile.logins.removeLoginsWithGUIDs(guids)
-    }
-
     func setCredentials(_ login: LoginData) {
         if login.password.isEmpty {
             log.debug("Empty password")

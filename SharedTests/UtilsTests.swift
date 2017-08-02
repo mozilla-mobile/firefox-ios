@@ -62,6 +62,21 @@ class UtilsTests: XCTestCase {
         }
     }
 
+    func testChunkCollection() {
+        let examples: [([Int], Int, [[Int]])] = [
+            ([], 2, []),
+            ([1, 2], 0, [[1], [2]]),
+            ([1, 2], 1, [[1], [2]]),
+            ([1, 2, 3], 2, [[1, 2], [3]]),
+            ([1, 2], 3, [[1, 2]]),
+            ([1, 2, 3], 1, [[1], [2], [3]]),
+            ]
+        for (arr, by, expected) in examples {
+            let actual = chunkCollection(arr, by: by) { xs in [xs] }
+            XCTAssertEqual(expected as NSArray, actual as NSArray)
+        }
+    }
+
     func testParseTimestamps() {
         let millis = "1492316843992"        // Firefox for iOS produced millisecond timestamps. Oops.
         let decimal = "1492316843.99"

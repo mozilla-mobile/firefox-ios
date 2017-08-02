@@ -922,41 +922,48 @@ extension SQLiteLogins: SyncableLogins {
         // local overlay that we just uploaded with another DELETE.
         log.debug("Marking \(guids.count) GUIDs as synchronized.")
 
-        // TODO: transaction!
-        let args: Args = guids.flatMap { $0 }
-        let inClause = BrowserDB.varlist(args.count)
+        let queries: [(String, Args?)] = chunkCollection(guids, by: BrowserDB.MaxVariableNumber) { guids in
+            let args: Args = guids.map { $0 }
+            let inClause = BrowserDB.varlist(args.count)
 
-        let delMirror = "DELETE FROM \(TableLoginsMirror) WHERE guid IN \(inClause)"
+            let delMirror = "DELETE FROM \(TableLoginsMirror) WHERE guid IN \(inClause)"
 
-        let insMirror =
-        "INSERT OR IGNORE INTO \(TableLoginsMirror) (" +
-            " is_overridden, server_modified" +
+            let insMirror =
+            "INSERT OR IGNORE INTO \(TableLoginsMirror) (" +
+                " is_overridden, server_modified" +
+                ", httpRealm, formSubmitURL, usernameField" +
+                ", passwordField, timesUsed, timeLastUsed, timePasswordChanged, timeCreated" +
+                ", password, hostname, username, guid" +
+            ") SELECT 0, \(modified)" +
             ", httpRealm, formSubmitURL, usernameField" +
             ", passwordField, timesUsed, timeLastUsed, timePasswordChanged, timeCreated" +
-            ", password, hostname, username, guid" +
-        ") SELECT 0, \(modified)" +
-        ", httpRealm, formSubmitURL, usernameField" +
-        ", passwordField, timesUsed, timeLastUsed, timePasswordChanged, timeCreated" +
-        ", password, hostname, username, guid " +
-        "FROM \(TableLoginsLocal) " +
-        "WHERE guid IN \(inClause)"
+            ", password, hostname, username, guid " +
+            "FROM \(TableLoginsLocal) " +
+            "WHERE guid IN \(inClause)"
 
-        let delLocal = "DELETE FROM \(TableLoginsLocal) WHERE guid IN \(inClause)"
+            let delLocal = "DELETE FROM \(TableLoginsLocal) WHERE guid IN \(inClause)"
 
-        return self.db.run(delMirror, withArgs: args)
-         >>> { self.db.run(insMirror, withArgs: args) }
-         >>> { self.db.run(delLocal, withArgs: args) }
+            return [(delMirror, args),
+                    (insMirror, args),
+                    (delLocal, args)]
+        }
+
+        return self.db.run(queries)
          >>> always(modified)
     }
+
 
     public func markAsDeleted<T: Collection>(_ guids: T) -> Success where T.Iterator.Element == GUID {
         log.debug("Marking \(guids.count) GUIDs as deleted.")
 
-        let args: Args = guids.map { $0 }
-        let inClause = BrowserDB.varlist(args.count)
+        let queries: [(String, Args?)] = chunkCollection(guids, by: BrowserDB.MaxVariableNumber) { guids in
+            let args: Args = guids.map { $0 }
+            let inClause = BrowserDB.varlist(args.count)
+            return [("DELETE FROM \(TableLoginsMirror) WHERE guid IN \(inClause)", args),
+                    ("DELETE FROM \(TableLoginsLocal) WHERE guid IN \(inClause)", args)]
+        }
 
-        return self.db.run("DELETE FROM \(TableLoginsMirror) WHERE guid IN \(inClause)", withArgs: args)
-         >>> { self.db.run("DELETE FROM \(TableLoginsLocal) WHERE guid IN \(inClause)", withArgs: args) }
+        return self.db.run(queries)
     }
 
     public func hasSyncedLogins() -> Deferred<Maybe<Bool>> {

@@ -678,8 +678,9 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
                 SentryIntegration.shared.sendWithStacktrace(message: "SQLITE_CORRUPT for DB \(filename), \(error)", tag: "SwiftData", severity: .error)
             }
 
-            log.error("SQL error. Error code: \(error.code), \(error) for SQL \(sqlStr).")
-            SentryIntegration.shared.sendWithStacktrace(message: "SQL error. Error code: \(error.code), \(error)", tag: "SwiftData", severity: .error)
+            let message = "SQL error. Error code: \(error.code), \(error) for SQL \(sqlStr.characters.prefix(500))."
+            log.error(message)
+            SentryIntegration.shared.sendWithStacktrace(message: message, tag: "SwiftData", severity: .error)
 
             return error
         }
@@ -721,8 +722,9 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
                 SentryIntegration.shared.sendWithStacktrace(message: "SQLITE_CORRUPT for DB \(filename), \(error)", tag: "SwiftData", severity: .error)
             }
 
-            log.error("SQL error. Error code: \(error.code), \(error) for SQL \(sqlStr).")
-            SentryIntegration.shared.sendWithStacktrace(message: "SQL error. Error code: \(error.code), \(error)", tag: "SwiftData", severity: .error)
+            let message = "SQL error. Error code: \(error.code), \(error) for SQL \(sqlStr.characters.prefix(500))."
+            log.error(message)
+            SentryIntegration.shared.sendWithStacktrace(message: message, tag: "SwiftData", severity: .error)
 
             return Cursor<T>(err: error)
         }
