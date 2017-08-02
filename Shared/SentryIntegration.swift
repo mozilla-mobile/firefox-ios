@@ -69,7 +69,7 @@ public class SentryIntegration {
     }
     
     public func send(message: String, tag: String = "general", severity: SentrySeverity = .info, completion: SentryRequestFinished? = nil) {
-        if !enabled {
+        if !enabled || tag == "SwiftData" || tag == "BrowserDB" {
             if let completion = completion {
                 completion(nil)
             }
@@ -84,7 +84,7 @@ public class SentryIntegration {
     }
 
     public func sendWithStacktrace(message: String, tag: String = "general", severity: SentrySeverity = .info, completion: SentryRequestFinished? = nil) {
-        if !enabled {
+        if !enabled || tag == "SwiftData" || tag == "BrowserDB" {
             if let completion = completion {
                 completion(nil)
             }
