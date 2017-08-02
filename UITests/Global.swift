@@ -390,36 +390,16 @@ class BrowserUtils {
         // searches are async (and debounced), so we have to wait for the results to appear.
         tester.waitForViewWithAccessibilityValue(prefix + completion)
 
-        var range = NSRange()
-        var attribute: AnyObject?
-        let textLength = textField.text!.characters.count
+        let autocompleteFieldlabel = textField.subviews.filter { $0.accessibilityIdentifier == "autocomplete" }.first as? UILabel
 
-        attribute = textField.attributedText!.attribute(NSBackgroundColorAttributeName, at: 0, effectiveRange: &range) as AnyObject?
-
-        if attribute != nil {
-            // If the background attribute exists for the first character, the entire string is highlighted.
-            XCTAssertEqual(prefix, "")
-            XCTAssertEqual(completion, textField.text)
+        if completion == "" {
+            XCTAssertTrue(autocompleteFieldlabel == nil, "The autocomplete was empty but the label still exists.")
             return
         }
 
-        let prefixLength = range.length
+        XCTAssertTrue(autocompleteFieldlabel != nil, "The autocomplete was not found")
+        XCTAssertEqual(completion, autocompleteFieldlabel!.text, "Expected prefix matches actual prefix")
 
-        attribute = textField.attributedText!.attribute(NSBackgroundColorAttributeName, at: textLength - 1, effectiveRange: &range) as AnyObject?
-
-        if attribute == nil {
-            // If the background attribute exists for the last character, the entire string is not highlighted.
-            XCTAssertEqual(prefix, textField.text)
-            XCTAssertEqual(completion, "")
-            return
-        }
-
-        let completionStartIndex = textField.text!.characters.index(textField.text!.startIndex, offsetBy: prefixLength)
-        let actualPrefix = textField.text!.substring(to: completionStartIndex)
-        let actualCompletion = textField.text!.substring(from: completionStartIndex)
-
-        XCTAssertEqual(prefix, actualPrefix, "Expected prefix matches actual prefix")
-        XCTAssertEqual(completion, actualCompletion, "Expected completion matches actual completion")
     }
 }
 

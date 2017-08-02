@@ -48,6 +48,15 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         }
     }
 
+    override var accessibilityValue: String? {
+        get {
+            return (self.text ?? "") + (self.selectionLabel?.text ?? "")
+        }
+        set(value) {
+            super.accessibilityValue = value
+        }
+    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -177,9 +186,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         if let l = selectionLabel {
             addSubview(l)
             hideCursor = true
-            // Resetting the selectedTextRange force hides the cursor
-            selectedTextRange = nil
-            selectedTextRange = textRange(from: endOfDocument, to: endOfDocument)
+            forceResetCursor()
         }
     }
 
@@ -192,6 +199,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         var frame = self.bounds
         label.attributedText = autocompleteText
         label.font = self.font
+        label.accessibilityIdentifier = "autocomplete"
         label.backgroundColor = self.backgroundColor
 
         let enteredTextSize = self.attributedText?.boundingRect(with: self.frame.size, options: NSStringDrawingOptions.usesLineFragmentOrigin, context: nil)
@@ -241,11 +249,23 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         }
     }
 
+    // Reset the cursor to the end of the text field.
+    // This forces `caretRect(for position: UITextPosition)` to be called which will decide if we should show the cursor
+    // This exists because ` caretRect(for position: UITextPosition)` is not called after we apply an autocompletion.
+    private func forceResetCursor() {
+        selectedTextRange = nil
+        selectedTextRange = textRange(from: endOfDocument, to: endOfDocument)
+    }
+
     override func deleteBackward() {
         lastReplacement = nil
         hideCursor = false
-        removeCompletion()
-        super.deleteBackward()
+        if isSelectionActive {
+            removeCompletion()
+            forceResetCursor()
+        } else {
+            super.deleteBackward()
+        }
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
