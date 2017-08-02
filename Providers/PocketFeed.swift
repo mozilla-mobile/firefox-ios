@@ -10,7 +10,7 @@ import Storage
 
 private let PocketEnvAPIKey = "PocketEnvironmentAPIKey"
 private let PocketGlobalFeed = "https://getpocket.com/v3/firefox/global-recs"
-private let MaxCacheAge = OneMinuteInMilliseconds * 60 // 1 hour in seconds
+private let MaxCacheAge: Timestamp = OneMinuteInMilliseconds * 60 // 1 hour in milliseconds
 
 /*s
  The Pocket class is used to fetch stories from the Pocked API.
@@ -21,7 +21,7 @@ private let MaxCacheAge = OneMinuteInMilliseconds * 60 // 1 hour in seconds
 struct PocketStory {
     let url: URL
     let title: String
-    let storyDescription: String
+    let storyDescription: String 
     let imageURL: URL
     let domain: String
 
@@ -47,7 +47,7 @@ private class PocketError: MaybeErrorType {
 
 class Pocket {
 
-    let pocketGlobalFeed: String
+    private let pocketGlobalFeed: String
     // Allow endPoint to be overriden for testing
     init(endPoint: String? = nil) {
         pocketGlobalFeed = endPoint ?? PocketGlobalFeed
@@ -59,9 +59,9 @@ class Pocket {
         return SessionManager.managerWithUserAgent(ua, configuration: configuration)
     }()
 
-    func findCachedResposneFor(request: URLRequest) -> [String: Any]? {
+    private func findCachedResponse(for request: URLRequest) -> [String: Any]? {
         let cachedResponse = URLCache.shared.cachedResponse(for: request)
-        guard let cachedAtTime = cachedResponse?.userInfo?["cache-time"] as? Timestamp, (Date.now() - cachedAtTime) < MaxCacheAge else  {
+        guard let cachedAtTime = cachedResponse?.userInfo?["cache-time"] as? Timestamp, (Date.now() - cachedAtTime) < MaxCacheAge else {
             return nil
         }
 
@@ -72,7 +72,7 @@ class Pocket {
         return json as? [String: Any]
     }
 
-    func cacheResponseFor(response: HTTPURLResponse?, request: URLRequest, data: Data?) {
+    private func cache(response: HTTPURLResponse?, for request: URLRequest, with data: Data?) {
         guard let resp = response, let data  = data else {
             return
         }
@@ -83,28 +83,28 @@ class Pocket {
     }
 
     // Fetch items from the global pocket feed
-    func globalFeed(items: Int = 2) -> Deferred<Maybe<Array<PocketStory>>> {
-        let deferred = Deferred<Maybe<Array<PocketStory>>>()
+    func globalFeed(items: Int = 2) -> Deferred<Array<PocketStory>> {
+        let deferred = Deferred<Array<PocketStory>>()
 
         guard let request = createGlobalFeedRequest(items: items) else {
-            return deferMaybe(PocketError())
+            deferred.fill([])
+            return deferred
         }
 
-        if let cachedResponse = findCachedResposneFor(request: request), let items = cachedResponse["list"] as? Array<[String: Any]> {
-            deferred.fill(Maybe(success: PocketStory.parseJSON(list: items)))
+        if let cachedResponse = findCachedResponse(for: request), let items = cachedResponse["list"] as? Array<[String: Any]> {
+            deferred.fill(PocketStory.parseJSON(list: items))
             return deferred
         }
 
         alamofire.request(request).validate(contentType: ["application/json"]).responseJSON { response in
             guard response.error == nil, let result = response.result.value as? [String: Any] else {
-                return deferred.fill(Maybe(failure: PocketError()))
+                return deferred.fill([])
             }
-
-            self.cacheResponseFor(response: response.response, request: request, data: response.data)
+            self.cache(response: response.response, for: request, with: response.data)
             guard let items = result["list"] as? Array<[String: Any]> else {
-                return deferred.fill(Maybe(failure: PocketError()))
+                return deferred.fill([])
             }
-            return deferred.fill(Maybe(success: PocketStory.parseJSON(list: items)))
+            return deferred.fill(PocketStory.parseJSON(list: items))
         }
 
         return deferred
