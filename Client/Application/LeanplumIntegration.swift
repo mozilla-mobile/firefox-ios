@@ -32,6 +32,7 @@ enum LeanplumEventName: String {
     case saveImage = "E_Download_Media_Saved_Image"
     case savedLoginAndPassword = "E_Saved_Login_And_Password"
     case clearPrivateData = "E_Cleared_Private_Data"
+    case signsInFxa = "E_User_Signed_In_To_FxA"
 }
 
 enum UserAttributeKeyName: String {
