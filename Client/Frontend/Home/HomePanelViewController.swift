@@ -135,8 +135,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         dismissKeyboardGestureRecognizer.cancelsTouchesInView = false
         buttonContainerView.addGestureRecognizer(dismissKeyboardGestureRecognizer)
 
-        // Invalidate our activity stream data sources whenever we open up the home panels
-        self.profile.panelDataObservers.activityStream.refresh(highlights: false)
+        self.profile.panelDataObservers.activityStream.refreshIfNeeded(forceHighlights: false, forceTopSites: true)
     }
 
     fileprivate func updateAppState() {

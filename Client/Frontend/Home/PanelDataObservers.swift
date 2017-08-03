@@ -14,8 +14,7 @@ protocol DataObserver {
     var profile: Profile { get }
     weak var delegate: DataObserverDelegate? { get set }
 
-    func refresh(highlights: Bool)
-    func invalidateTopSites()
+    func refreshIfNeeded(forceHighlights highlights: Bool, forceTopSites topsites: Bool)
 }
 
 @objc protocol DataObserverDelegate: class {
@@ -48,34 +47,42 @@ class ActivityStreamDataObserver: DataObserver {
     deinit {
         events.forEach { NotificationCenter.default.removeObserver(self, name: $0, object: nil) }
     }
-    
-    func refresh(highlights: Bool) {
+
+    /*
+     refreshIfNeeded will refresh the underlying caches for both Topsites and Highlights.
+     By default this will only refresh the highlights if the last fetch is older than 15 mins
+     By default this will only refresh topsites if KeyTopSitesCacheIsValid is false
+     */
+    func refreshIfNeeded(forceHighlights highlights: Bool, forceTopSites topSites: Bool) {
         guard !profile.isShutdown else {
             return
         }
-        self.delegate?.willInvalidateDataSources()
 
-        // Highlights are cached for 15 mins
+        // Highlights are cached for 15 mins 200 - 0 > 900 || 200 < 900
         let invalidateHighlights = highlights ? true : (Date.now() - lastInvalidation > invalidationTime)
         lastInvalidation = invalidateHighlights ? Date.now() : lastInvalidation
 
-        let topSitesIsValid = profile.prefs.boolForKey(PrefsKeys.KeyTopSitesCacheIsValid) ?? false
+        // KeyTopSitesCacheIsValid is false when we want to invalidate. Thats why this logic is so backwards
+        let invalidateTopSites = topSites ? true : !(profile.prefs.boolForKey(PrefsKeys.KeyTopSitesCacheIsValid) ?? false)
+        if !invalidateTopSites && !invalidateHighlights {
+            // There is nothing to refresh. Bye
+            return
+        }
 
-        self.profile.recommendations.repopulateAll(!topSitesIsValid, invalidateHighlights: invalidateHighlights).uponQueue(.main) { _ in
-            self.profile.prefs.setBool(true, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
+        self.delegate?.willInvalidateDataSources()
+        self.profile.recommendations.repopulateAll(invalidateTopSites, invalidateHighlights: invalidateHighlights).uponQueue(.main) { _ in
+            if invalidateTopSites {
+                self.profile.prefs.setBool(true, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
+            }
             self.delegate?.didInvalidateDataSources()
         }
     }
 
-    func invalidateTopSites() {
-         profile.prefs.setBool(false, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
-    }
-    
     @objc func notificationReceived(_ notification: Notification) {
         switch notification.name {
         case NotificationProfileDidFinishSyncing, NotificationFirefoxAccountChanged, NotificationPrivateDataClearedHistory:
             profile.prefs.setBool(false, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
-            refresh(highlights: true)
+            refreshIfNeeded(forceHighlights: true, forceTopSites: true)
         default:
             log.warning("Received unexpected notification \(notification.name)")
         }
