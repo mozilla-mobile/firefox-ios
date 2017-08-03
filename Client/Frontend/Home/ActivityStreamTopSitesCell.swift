@@ -164,21 +164,12 @@ class TopSiteItemCell: UICollectionViewCell {
         }
 
         accessibilityLabel = titleLabel.text
-        if let suggestedSite = site as? SuggestedSite {
-            let img = UIImage(named: suggestedSite.faviconImagePath!)
-            imageView.image = img
-            // This is a temporary hack to make amazon/wikipedia have white backrounds instead of their default blacks
-            // Once we remove the old TopSitesPanel we can change the values of amazon/wikipedia to be white instead of black.
-            self.faviconBG.backgroundColor = suggestedSite.backgroundColor.isBlackOrWhite ? UIColor.white : suggestedSite.backgroundColor
-            imageView.backgroundColor = self.faviconBG.backgroundColor
-        } else {
-            imageView.setFavicon(forSite: site, onCompletion: { [weak self] (color, url) in
-                if let url = url, url == self?.url {
-                    self?.faviconBG.backgroundColor = color
-                    self?.imageView.backgroundColor = color
-                }
-            })
-        }
+        imageView.setFavicon(forSite: site, onCompletion: { [weak self] (color, url) in
+            if let url = url, url == self?.url {
+                self?.faviconBG.backgroundColor = color
+                self?.imageView.backgroundColor = color
+            }
+        })
     }
 
 }

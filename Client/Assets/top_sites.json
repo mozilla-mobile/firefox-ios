@@ -829,6 +829,13 @@
     "domain": "msn.com"
   },
   {
+    "title": "mozilla",
+    "url": "http://www.mozilla.com.cn/",
+    "image_url": "mozilla-com.png",
+    "background_color": "#000",
+    "domain": "mozilla.com.cn"
+  },
+  {
     "title": "nbcnews",
     "url": "http://www.nbcnews.com/",
     "image_url": "nbcnews-com.png",
@@ -995,6 +1002,13 @@
     "image_url": "sears-com.png",
     "background_color": "#00265a",
     "domain": "sears.com"
+  },
+  {
+    "title": "sina",
+    "url": "http://www.sina.cn/",
+    "image_url": "sina-com.png",
+    "background_color": "#ff0000",
+    "domain": "sina.cn"
   },
   {
     "title": "sina",

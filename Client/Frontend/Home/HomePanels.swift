@@ -20,11 +20,7 @@ class HomePanels {
     let enabledPanels = [
         HomePanelDescriptor(
             makeViewController: { profile in
-                if FeatureSwitches.activityStream.isMember(profile.prefs) {
                     return ActivityStreamPanel(profile: profile)
-                } else {
-                    return TopSitesPanel(profile: profile)
-                }
             },
             imageName: "TopSites",
             accessibilityLabel: NSLocalizedString("Top sites", comment: "Panel accessibility label"),
