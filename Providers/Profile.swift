@@ -237,7 +237,11 @@ open class BrowserProfile: Profile {
         // Set up our database handles.
 
         self.loginsDB = BrowserDB(filename: "logins.db", secretKey: BrowserProfile.loginsKey, files: files, leaveClosed: true)
+        
+        // IMPORTANT: Must leave browser.db closed when initializing so we have a chance
+        // to attach metadata.db before anything else happens.
         self.db = BrowserDB(filename: "browser.db", files: files, leaveClosed: true)
+        self.db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
 
         // This has to happen prior to the databases being opened, because opening them can trigger
         // events to which the SyncManager listens.
