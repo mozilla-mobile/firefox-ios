@@ -6,25 +6,15 @@ import UIKit
 import Shared
 
 open class SuggestedSite: Site {
-    open let wordmark: Favicon
-    open let backgroundColor: UIColor
-
     override open var tileURL: URL {
         return URL(string: url as String) ?? URL(string: "about:blank")!
     }
 
     let trackingId: Int
     init(data: SuggestedSiteData) {
-        self.backgroundColor = UIColor(colorString: data.bgColor)
         self.trackingId = data.trackingId
-        self.wordmark = Favicon(url: data.imageUrl, date: Date(), type: .icon)
         super.init(url: data.url, title: data.title, bookmarked: nil)
-        self.icon = Favicon(url: data.faviconUrl, date: Date(), type: .icon)
         self.guid = "default" + data.title // A guid is required in the case the site might become a pinned site
-    }
-
-    open var faviconImagePath: String? {
-        return wordmark.url.replacingOccurrences(of: "asset://suggestedsites", with: "as")
     }
 }
 
