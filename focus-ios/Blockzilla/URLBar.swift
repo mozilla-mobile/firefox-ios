@@ -44,8 +44,6 @@ class URLBar: UIView {
     private var preActivationConstraints = [Constraint]()
     private var postActivationConstraints = [Constraint]()
     
-    let menuController = UIMenuController.shared
-
     init() {
         super.init(frame: CGRect.zero)
 
@@ -256,7 +254,6 @@ class URLBar: UIView {
         showToolsetConstraints.forEach { $0.deactivate() }
         postActivationConstraints.forEach { $0.deactivate() }
         
-        addCustomMenu()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -276,7 +273,10 @@ class URLBar: UIView {
             UIMenuController.shared.menuItems = [lookupMenu]
         }
     }
-
+    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+        addCustomMenu()
+        return super.canPerformAction(action, withSender: sender)
+    }
     var url: URL? = nil {
         didSet {
             if !urlText.isEditing {
@@ -285,7 +285,6 @@ class URLBar: UIView {
             }
         }
     }
-
     weak var toolsetDelegate: BrowserToolsetDelegate? {
         didSet {
             toolset.delegate = toolsetDelegate
@@ -329,7 +328,6 @@ class URLBar: UIView {
                 return
             }
         }
-
         super.touchesEnded(touches, with: event)
     }
 
