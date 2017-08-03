@@ -296,6 +296,35 @@ open class PrependedBookmarkFolder: BookmarkFolder {
     }
 }
 
+open class ConcatenatedBookmarkFolder: BookmarkFolder {
+    fileprivate let main: BookmarkFolder
+    fileprivate let append: BookmarkFolder
+
+    init(main: BookmarkFolder, append: BookmarkFolder) {
+        self.main = main
+        self.append = append
+        super.init(guid: main.guid, title: main.title)
+    }
+
+    override open var count: Int {
+        return main.count + append.count
+    }
+
+    override open subscript(index: Int) -> BookmarkNode? {
+        return index < main.count ? main[index] : append[index - main.count]
+    }
+
+    override open func itemIsEditableAtIndex(_ index: Int) -> Bool {
+        return index < main.count ? main.itemIsEditableAtIndex(index) : append.itemIsEditableAtIndex(index - main.count)
+    }
+
+    override open func removeItemWithGUID(_ guid: GUID) -> BookmarkFolder? {
+        let newMain = main.removeItemWithGUID(guid) ?? main
+        let newAppend = append.removeItemWithGUID(guid) ?? append
+        return ConcatenatedBookmarkFolder(main: newMain, append: newAppend)
+    }
+}
+
 /**
  * A trivial offline model factory that represents a simple hierarchy.
  */

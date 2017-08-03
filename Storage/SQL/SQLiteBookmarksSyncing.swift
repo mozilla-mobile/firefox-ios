@@ -301,15 +301,25 @@ extension SQLiteBookmarks {
 }
 
 private extension BookmarkMirrorItem {
-    func getChildrenArgs(startAt: Int = 0) -> [Args] {
+    // Let's say the buffer structure table looks like this:
+    // ===============================
+    // | parent    | child     | idx |
+    // -------------------------------
+    // | aaaa      | bbbb      | 5   |
+    // | aaaa      | cccc      | 8   |
+    // | aaaa      | dddd      | 19  |
+    // ===============================
+    // And the self.children array has 5 children (2 new to insert).
+    // Then this function should be called with offset = 3 and nextIdx = 20
+    func getChildrenArgs(offset: Int = 0, nextIdx: Int = 0) -> [Args] {
         // Only folders have children, and we manage roots ourselves.
         if self.type != .folder ||
            self.guid == BookmarkRoots.RootGUID {
             return []
         }
         let parent = self.guid
-        var idx = startAt
-        return self.children?.suffix(from: startAt).map { child in
+        var idx = nextIdx
+        return self.children?.suffix(from: offset).map { child in
             let ret: Args = [parent, child, idx]
             idx += 1
             return ret
@@ -345,8 +355,7 @@ private func deleteStructureForGUIDs(_ guids: [GUID], fromTable table: String, c
     log.debug("Deleting \(guids.count) parents from \(table).")
     let chunks = chunk(guids, by: maxVars)
     for chunk in chunks {
-        let inList = Array<String>(repeating: "?", count: chunk.count).joined(separator: ", ")
-        let delStructure = "DELETE FROM \(table) WHERE parent IN (\(inList))"
+        let delStructure = "DELETE FROM \(table) WHERE parent IN \(BrowserDB.varlist(chunk.count))"
 
         let args: Args = chunk.flatMap { $0 }
         if let error = connection.executeChange(delStructure, withArgs: args) {
@@ -420,6 +429,7 @@ open class SQLiteBookmarkBufferStorage: BookmarkBufferStorage {
     open func applyRecords(_ records: [BookmarkMirrorItem], withMaxVars maxVars: Int) -> Success {
         let deferred = Deferred<Maybe<()>>(defaultQueue: DispatchQueue.main)
 
+        let guids = records.map { $0.guid }
         let deleted = records.filter { $0.isDeleted }.map { $0.guid }
         let values = records.map { $0.getUpdateOrInsertArgs() }
         let children = records.filter { !$0.isDeleted }.flatMap { $0.getChildrenArgs() }
@@ -488,6 +498,23 @@ open class SQLiteBookmarkBufferStorage: BookmarkBufferStorage {
                 err = error
                 deferred.fill(Maybe(failure: DatabaseError(err: error)))
                 return false
+            }
+
+            // Drop pending deletions of items we just received.
+            // In practice that means we have made the choice that we will always
+            // discard local deletions if there was a modification or a deletion made remotely.
+            log.debug("Deleting \(guids.count) pending deletions.")
+            let chunks = chunk(guids, by: BrowserDB.MaxVariableNumber)
+            for chunk in chunks {
+                let delPendingDeletions = "DELETE FROM \(TablePendingBookmarksDeletions) WHERE id IN \(BrowserDB.varlist(chunk.count))"
+
+                let args: Args = chunk.flatMap { $0 }
+                if let error = conn.executeChange(delPendingDeletions, withArgs: args) {
+                    log.error("Deleting pending deletions: \(error.description).")
+                    err = error
+                    deferred.fill(Maybe(failure: DatabaseError(err: error)))
+                    return false
+                }
             }
 
             if err == nil {
@@ -655,16 +682,27 @@ extension SQLiteBookmarks {
     }
 
     // Retrieve all the local bookmarks that are not present remotely in order to avoid merge logic later.
-    public func getLocalBookmarksAdditions(limit: Int) -> Deferred<Maybe<[BookmarkMirrorItem]>> {
-        let sql =
-        "SELECT * FROM \(TableBookmarksLocal) AS bookmarks " +
-        "WHERE type = \(BookmarkNodeType.bookmark.rawValue) AND sync_status = \(SyncStatus.new.rawValue) AND parentID = ? " +
-        "AND NOT EXISTS (SELECT 1 FROM \(TableBookmarksBuffer) buf WHERE buf.guid = bookmarks.guid) " +
+    public func getLocalBookmarksModifications(limit: Int) -> Deferred<Maybe<(deletions: [GUID], additions: [BookmarkMirrorItem])>> {
+        let deletionsQuery =
+        "SELECT id FROM \(TablePendingBookmarksDeletions) " +
         "LIMIT ?"
-        let args: Args = [BookmarkRoots.MobileFolderGUID, limit]
+        let deletionsArgs: Args = [limit]
 
-        return db.runQuery(sql, args: args, factory: BookmarkFactory.mirrorItemFactory)
-          >>== { deferMaybe($0.asArray()) }
+        return db.runQuery(deletionsQuery, args: deletionsArgs, factory: StringFactory) >>== {
+            let deletedGUIDs = $0.asArray()
+            let newLimit = limit - deletedGUIDs.count
+
+            let additionsQuery =
+            "SELECT * FROM \(TableBookmarksLocal) AS bookmarks " +
+            "WHERE type = \(BookmarkNodeType.bookmark.rawValue) AND sync_status = \(SyncStatus.new.rawValue) AND parentID = ? " +
+            "AND NOT EXISTS (SELECT 1 FROM \(TableBookmarksBuffer) buf WHERE buf.guid = bookmarks.guid) " +
+            "LIMIT ?"
+            let additionsArgs: Args = [BookmarkRoots.MobileFolderGUID, newLimit]
+
+            return self.db.runQuery(additionsQuery, args: additionsArgs, factory: BookmarkFactory.mirrorItemFactory) >>== {
+                return deferMaybe((deletedGUIDs, $0.asArray()))
+            }
+        }
     }
 
     public func getLocalDeletions() -> Deferred<Maybe<[(GUID, Timestamp)]>> {
@@ -682,8 +720,8 @@ extension MergedSQLiteBookmarks: SyncableBookmarks {
         return self.local.isUnchanged()
     }
 
-    public func getLocalBookmarksAdditions(limit: Int) -> Deferred<Maybe<[BookmarkMirrorItem]>> {
-        return self.local.getLocalBookmarksAdditions(limit: limit)
+    public func getLocalBookmarksModifications(limit: Int) -> Deferred<Maybe<(deletions: [GUID], additions: [BookmarkMirrorItem])>> {
+        return self.local.getLocalBookmarksModifications(limit: limit)
     }
 
     public func getLocalDeletions() -> Deferred<Maybe<[(GUID, Timestamp)]>> {
@@ -1247,6 +1285,29 @@ extension MergedSQLiteBookmarks {
                 return false
             }
 
+            op.deletedValues
+                .withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
+                    guard err == nil else { return }
+                    let args: Args = guids.map { $0 }
+                    let varlist = BrowserDB.varlist(guids.count)
+
+                    // This will leave the idx column sparse for the buffer children.
+                    let sqlBufferStructure = "DELETE FROM \(TableBookmarksBufferStructure) WHERE child IN \(varlist)"
+                    if !change(sqlBufferStructure, args: args) {
+                        return
+                    }
+
+                    // This will also delete items from the pending deletions table on cascade.
+                    let sqlBuffer = "DELETE FROM \(TableBookmarksBuffer) WHERE guid IN \(varlist)"
+                    if !change(sqlBuffer, args: args) {
+                        return
+                    }
+            }
+
+            if err != nil {
+                return false
+            }
+
             let insertSQL = [
                 "INSERT OR IGNORE INTO \(TableBookmarksBuffer) (",
                 "type, server_modified, is_deleted,",
@@ -1324,16 +1385,27 @@ extension MergedSQLiteBookmarks {
                 return false
             }
 
-            guard let allChildren = op.mobileRoot.children else {
-                log.error("Absent mobileRoot children. Aborting.")
-                return false
-            }
-            let startIndex = allChildren.count - op.bufferValuesToMoveFromLocal.count
-            let toInsertArgs = Array(op.mobileRoot.getChildrenArgs(startAt: startIndex))
+            if op.bufferValuesToMoveFromLocal.count > 0 {
+                guard let allChildren = op.mobileRoot.children else {
+                    log.error("Absent mobileRoot children. Aborting.")
+                    return false
+                }
+                let offset = allChildren.count - op.bufferValuesToMoveFromLocal.count
 
-            if let e = insertStructureIntoTable(TableBookmarksBufferStructure, connection: conn, children: toInsertArgs, maxVars: BrowserDB.MaxVariableNumber) {
-                err = e
-                deferred.fill(Maybe(failure: DatabaseError(err: err)))
+                let sqlNextIdx = "SELECT (COALESCE(MAX(idx), -1) + 1) AS newIndex FROM \(TableBookmarksBufferStructure) WHERE parent = ?"
+                let nextIdxArgs: Args = [BookmarkRoots.MobileFolderGUID]
+                let nextIdx = conn.executeQuery(sqlNextIdx, factory: IntFactory, withArgs: nextIdxArgs).asArray()[0]
+
+                let toInsertArgs = Array(op.mobileRoot.getChildrenArgs(offset: offset, nextIdx: nextIdx))
+
+                if let e = insertStructureIntoTable(TableBookmarksBufferStructure, connection: conn, children: toInsertArgs, maxVars: BrowserDB.MaxVariableNumber) {
+                    err = e
+                    deferred.fill(Maybe(failure: DatabaseError(err: err)))
+                    return false
+                }
+            }
+
+            if err != nil {
                 return false
             }
 

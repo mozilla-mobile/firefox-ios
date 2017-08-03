@@ -98,13 +98,13 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
         return BookmarksStorageVersion
     }
 
-    fileprivate func buildMobileRootRecord(_ local: LocalItemSource, _ buffer: BufferItemSource, additionalChildren: [BookmarkMirrorItem]) -> Deferred<Maybe<Record<BookmarkBasePayload>>> {
+    fileprivate func buildMobileRootRecord(_ local: LocalItemSource, _ buffer: BufferItemSource, additionalChildren: [BookmarkMirrorItem], deletedChildren: [GUID]) -> Deferred<Maybe<Record<BookmarkBasePayload>>> {
         let newBookmarkGUIDs = additionalChildren.map { $0.guid }
         return buffer.getBufferItemWithGUID(BookmarkRoots.MobileFolderGUID).bind { maybeMobileRoot in
             // Update (or create!) the Mobile Root folder with its new children.
             if let mobileRoot = maybeMobileRoot.successValue {
                 return buffer.getBufferChildrenGUIDsForParent(mobileRoot.guid)
-                    .map { $0.map({ (mobileRoot: mobileRoot, children: $0 + newBookmarkGUIDs) }) }
+                    .map { $0.map({ (mobileRoot: mobileRoot, children: $0.filter { !deletedChildren.contains($0) } + newBookmarkGUIDs) }) }
             } else {
                 return local.getLocalItemWithGUID(BookmarkRoots.MobileFolderGUID)
                     .map { $0.map({ (mobileRoot: $0, children: newBookmarkGUIDs) }) }
@@ -118,26 +118,42 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
         }
     }
 
-    func buildMobileRootAndChildrenRecords(_ local: LocalItemSource, _ buffer: BufferItemSource, additionalChildren: [BookmarkMirrorItem]) -> Deferred<Maybe<(mobileRootRecord: Record<BookmarkBasePayload>, childrenRecords: [Record<BookmarkBasePayload>])>> {
-        let childrenRecords = additionalChildren.map { bkm -> Record<BookmarkBasePayload> in
+    func buildMobileRootAndChildrenRecords(_ local: LocalItemSource, _ buffer: BufferItemSource, additionalChildren: [BookmarkMirrorItem], deletedChildren: [GUID]) -> Deferred<Maybe<(mobileRootRecord: Record<BookmarkBasePayload>, childrenRecords: [Record<BookmarkBasePayload>])>> {
+        let childrenRecords =
+        additionalChildren.map { bkm -> Record<BookmarkBasePayload> in
             let payload = bkm.asPayload()
             let mappedGUID = payload["id"].string ?? bkm.guid
             return Record<BookmarkBasePayload>(id: mappedGUID, payload: payload)
+        } +
+        deletedChildren.map { guid -> Record<BookmarkBasePayload> in
+            let payload = BookmarkBasePayload.deletedPayload(guid)
+            let mappedGUID = payload["id"].string ?? guid
+            return Record<BookmarkBasePayload>(id: mappedGUID, payload: payload)
         }
 
-        return self.buildMobileRootRecord(local, buffer, additionalChildren: additionalChildren) >>== { mobileRootRecord in
+        return self.buildMobileRootRecord(local, buffer, additionalChildren: additionalChildren, deletedChildren: deletedChildren) >>== { mobileRootRecord in
             return deferMaybe((mobileRootRecord: mobileRootRecord, childrenRecords: childrenRecords))
         }
     }
 
     func uploadSomeLocalRecords(_ storage: SyncableBookmarks & LocalItemSource & MirrorItemSource, _ mirrorer: BookmarksMirrorer, _ bookmarksClient: Sync15CollectionClient<BookmarkBasePayload>, mobileRootRecord: Record<BookmarkBasePayload>, childrenRecords: [Record<BookmarkBasePayload>]) -> Success {
+        var newBookmarkGUIDs: [GUID] = []
+        var deletedBookmarksGUIDs: [GUID] = []
+        for record in childrenRecords {
+            // No mutable l-values in Swift :(
+            if record.payload.deleted {
+                deletedBookmarksGUIDs.append(record.id)
+            } else {
+                newBookmarkGUIDs.append(record.id)
+            }
+        }
         let records = [mobileRootRecord] + childrenRecords
-        let newBookmarkGUIDs = childrenRecords.map { $0.id }
         return self.uploadRecordsSingleBatch(records, lastTimestamp: mirrorer.lastModified, storageClient: bookmarksClient) >>== { (timestamp: Timestamp, succeeded: [GUID]) -> Success in
 
             let bufferValuesToMoveFromLocal = Set(newBookmarkGUIDs).intersection(Set(succeeded))
+            let deletedValues = Set(deletedBookmarksGUIDs).intersection(Set(succeeded))
             let mobileRoot = (mobileRootRecord.payload as MirrorItemable).toMirrorItem(timestamp)
-            let bufferOP = BufferUpdatedCompletionOp(bufferValuesToMoveFromLocal: bufferValuesToMoveFromLocal, mobileRoot: mobileRoot, modifiedTime: timestamp)
+            let bufferOP = BufferUpdatedCompletionOp(bufferValuesToMoveFromLocal: bufferValuesToMoveFromLocal, deletedValues: deletedValues, mobileRoot: mobileRoot, modifiedTime: timestamp)
             return storage.applyBufferUpdatedCompletionOp(bufferOP) >>> {
                 mirrorer.advanceNextDownloadTimestampTo(timestamp: timestamp) // We need to advance our batching downloader timestamp to match. See Bug 1253458.
                 return succeed()
@@ -196,11 +212,11 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
                 }
 
                 // -1 because we also need to upload the mobile root.
-                return storage.getLocalBookmarksAdditions(limit: bookmarksClient.maxBatchPostRecords - 1) >>== { newBookmarks -> Success in
-                    guard newBookmarks.count > 0 else {
+                return storage.getLocalBookmarksModifications(limit: bookmarksClient.maxBatchPostRecords - 1) >>== { (deletedGUIDs, newBookmarks) -> Success in
+                    guard newBookmarks.count > 0 || deletedGUIDs.count > 0 else {
                         return succeed()
                     }
-                    return self.buildMobileRootAndChildrenRecords(storage, buffer, additionalChildren: newBookmarks) >>== { (mobileRootRecord, childrenRecords) in
+                    return self.buildMobileRootAndChildrenRecords(storage, buffer, additionalChildren: newBookmarks, deletedChildren: deletedGUIDs) >>== { (mobileRootRecord, childrenRecords) in
                         return self.uploadSomeLocalRecords(storage, mirrorer, bookmarksClient, mobileRootRecord: mobileRootRecord, childrenRecords: childrenRecords)
                     }
                 } >>> {
