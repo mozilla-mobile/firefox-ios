@@ -168,5 +168,8 @@ struct UIConstants {
         static let shareMenuOpenInFocus = NSLocalizedString("ShareMenu.OpenInFocus", value: "Open in Focus", comment: "Text for the share menu option when a user wants to open a page in Focus.")
         static let shareMenuGetTheFirefoxApp = NSLocalizedString("ShareMenu.GetFirefox", value: "Get the Firefox App", comment: "Text for the share menu option when a user wants to open a page in Firefox but doesn't have it installed.")
         static let urlPasteAndGo = NSLocalizedString("URL.contextMenu", value: "Paste & Go", comment: "Text for the URL context menu when a user long presses on the URL bar with clipboard contents.")
+        static let saveImage = NSLocalizedString("contextMenu.saveImageTitle", value: "Save Image", comment: "Text for the context menu when a user wants to save an image after long pressing it.")
+        static let copyImage = NSLocalizedString("contextMenu.copyImageTitle", value: "Copy Image", comment: "Text for the context menu when a user wants to copy an image after long pressing it.")
+        static let trackersBlocked = NSLocalizedString("URL.trackersBlockedLabel", value: "Trackers blocked", comment: "Text for the URL bar showing the number of trackers blocked on a webpage.")
     }
 }
