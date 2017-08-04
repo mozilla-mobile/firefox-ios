@@ -185,6 +185,8 @@ class OverlayView: UIView {
     func dismiss() {
         setSearchQuery(query: "", animated: false)
         self.isUserInteractionEnabled = false
+        copyButton.isHidden = true
+        copyBorder.isHidden = true
         animateHidden(true, duration: UIConstants.layout.overlayAnimationDuration) {
             self.isUserInteractionEnabled = true
         }
@@ -193,6 +195,8 @@ class OverlayView: UIView {
     func present() {
         setSearchQuery(query: "", animated: false)
         self.isUserInteractionEnabled = false
+        copyButton.isHidden = false
+        copyBorder.isHidden = false
         animateHidden(false, duration: UIConstants.layout.overlayAnimationDuration) {
             self.isUserInteractionEnabled = true
         }
