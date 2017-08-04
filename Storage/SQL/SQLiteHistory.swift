@@ -130,7 +130,6 @@ open class SQLiteHistory {
 private let topSitesQuery = "SELECT \(TableCachedTopSites).*, \(TablePageMetadata).provider_name FROM \(TableCachedTopSites) LEFT OUTER JOIN \(TablePageMetadata) ON \(TableCachedTopSites).url = \(TablePageMetadata).site_url ORDER BY frecencies DESC LIMIT (?)"
 
 extension SQLiteHistory: BrowserHistory {
-
     public func removeSiteFromTopSites(_ site: Site) -> Success {
         if let host = (site.url as String).asURL?.normalizedHost {
             return self.removeHostFromTopSites(host)
@@ -362,12 +361,6 @@ extension SQLiteHistory: BrowserHistory {
         let deleteQuery = "DELETE FROM \(TableCachedTopSites)"
         return (deleteQuery, nil)
     }
-
-
-
-//    public func getSitesByFrecencyWithHistoryLimit(_ limit: Int, whereURLContains filter: String) -> Deferred<Maybe<Cursor<Site>>> {
-//        return self.getFilteredSitesByFrecencyWithHistoryLimit(limit, bookmarksLimit: 0, whereURLContains: filter, includeIcon: true)
-//    }
 
     public func getSitesByLastVisit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
         return self.getFilteredSitesByVisitDateWithLimit(limit, whereURLContains: nil, includeIcon: true)
