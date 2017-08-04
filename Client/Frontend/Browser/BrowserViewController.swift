@@ -1125,10 +1125,26 @@ class BrowserViewController: UIViewController {
         openURLInNewTab(nil, isPrivate: isPrivate, isPrivileged: true)
         
         if focusLocationField {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                // Without a delay, the text field fails to become first responder
-                self.urlBar.tabLocationViewDidTapLocation(self.urlBar.locationView)
+            // Wait ⅓ sec for UI events to complete, try set focus, if failed, try again.
+            func setFocusToLocation(attempt: Int, maxAttempts: Int) {
+                if attempt >= maxAttempts {
+                    return
+                }
+                let attempt = attempt + 1
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    // Without a delay, the text field fails to become first responder
+                    self.urlBar.tabLocationViewDidTapLocation(self.urlBar.locationView)
+
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        let focused = UIView.findSubViewWithFirstResponder(self.urlBar)
+                        if focused == nil {
+                            setFocusToLocation(attempt: attempt, maxAttempts: maxAttempts)
+                        }
+                    }
+                }
             }
+
+            setFocusToLocation(attempt: 0, maxAttempts: 2)
         }
     }
 
