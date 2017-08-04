@@ -20,18 +20,15 @@ class MockableHistory: BrowserHistory, SyncableHistory, ResettableSyncStorage {
     func removeSiteFromTopSites(_ site: Site) -> Success { fatalError() }
     func removeHostFromTopSites(_ host: String) -> Success { fatalError() }
     func clearTopSitesCache() -> Success { fatalError() }
-    func refreshTopSitesCache() -> Success { fatalError() }
     func removeFromPinnedTopSites(_ site: Site) -> Success { fatalError() }
     func addPinnedTopSite(_ site: Site) -> Success { fatalError() }
     func getPinnedTopSites() -> Deferred<Maybe<Cursor<Site>>> { fatalError() }
     func getSitesByFrecencyWithHistoryLimit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>> { fatalError() }
-    func getSitesByFrecencyWithHistoryLimit(_ limit: Int, whereURLContains filter: String) -> Deferred<Maybe<Cursor<Site>>> { fatalError() }
     func getSitesByFrecencyWithHistoryLimit(_ limit: Int, bookmarksLimit: Int, whereURLContains filter: String) -> Deferred<Maybe<Cursor<Site>>> { fatalError() }
     func getSitesByLastVisit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>> { fatalError() }
     func setTopSitesNeedsInvalidation() { fatalError() }
     func updateTopSitesCacheIfInvalidated() -> Deferred<Maybe<Bool>> { fatalError() }
     func setTopSitesCacheSize(_ size: Int32) { fatalError() }
-    func areTopSitesDirty(withLimit limit: Int) -> Deferred<Maybe<Bool>> { fatalError() }
     func onRemovedAccount() -> Success { fatalError() }
     func ensurePlaceWithURL(_ url: String, hasGUID guid: GUID) -> Success { fatalError() }
     func deleteByGUID(_ guid: GUID, deletedAt: Timestamp) -> Success { fatalError() }
