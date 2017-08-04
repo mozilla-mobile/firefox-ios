@@ -4,6 +4,7 @@ coverage:
   status:
     project:
       default:
+       threshold: 5
        if_not_found: success
     patch:
       default:
@@ -11,3 +12,7 @@ coverage:
         threshold: 30
         if_not_found: success
 comment: false
+ignore:
+- "UITests/.*"
+- "XCUITests/.*"
+- "ThirdParty/.*"
