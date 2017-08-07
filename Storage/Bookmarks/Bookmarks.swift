@@ -17,7 +17,7 @@ public protocol SearchableBookmarks: class {
 public protocol SyncableBookmarks: class, ResettableSyncStorage, AccountRemovalDelegate {
     // TODO
     func isUnchanged() -> Deferred<Maybe<Bool>>
-    func getLocalBookmarksAdditions(limit: Int) -> Deferred<Maybe<[BookmarkMirrorItem]>>
+    func getLocalBookmarksModifications(limit: Int) -> Deferred<Maybe<(deletions: [GUID], additions: [BookmarkMirrorItem])>>
     func getLocalDeletions() -> Deferred<Maybe<[(GUID, Timestamp)]>>
     func treesForEdges() -> Deferred<Maybe<(local: BookmarkTree, buffer: BookmarkTree)>>
     func treeForMirror() -> Deferred<Maybe<BookmarkTree>>

@@ -36,7 +36,7 @@ public enum Direction {
         case .local:
             return ViewBookmarksLocalOnMirror
         case .buffer:
-            return ViewBookmarksBufferOnMirror
+            return ViewBookmarksBufferWithDeletionsOnMirror
         }
     }
 
@@ -530,6 +530,15 @@ extension SQLiteBookmarks {
             (markChanged, args),
             (deleteStructure, args),
         ])
+    }
+
+    fileprivate func markBufferBookmarkAsDeleted(_ guid: GUID) -> Success {
+        let insertInPendingDeletions =
+        "INSERT OR IGNORE INTO \(TablePendingBookmarksDeletions) " +
+        "(id) " +
+        "VALUES (?)"
+        let args: Args = [guid]
+        return self.db.run(insertInPendingDeletions, withArgs: args)
     }
 }
 
