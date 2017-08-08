@@ -189,10 +189,8 @@ open class SQLiteBookmarksModelFactory: BookmarksModelFactory {
 
     func getDesktopRoots() -> Deferred<Maybe<Cursor<BookmarkNode>>> {
         if self.direction == .buffer {
-            // The buffer never includes the Places root, so we look one level deeper.
-            // Because this is a special-case overlay, we include Mobile Bookmarks here --
-            // that'll show bookmarks from other mobile devices.
-            return self.bookmarks.getRecordsWithGUIDs(BookmarkRoots.RootChildren, direction: self.direction, includeIcon: false)
+            // DesktopRoots excludes the Mobile folder, local and non-local mobile are aggregated
+            return self.bookmarks.getRecordsWithGUIDs(BookmarkRoots.DesktopRoots, direction: self.direction, includeIcon: false)
         }
 
         // We deliberately exclude the mobile folder, because we're inverting the containment
@@ -806,12 +804,19 @@ open class UnsyncedBookmarksFallbackModelFactory: BookmarksModelFactory {
         log.debug("Getting model for fallback root.")
         // Return a virtual model containing "Desktop bookmarks" prepended to the local mobile bookmarks.
         return self.localFactory.folderForGUID(BookmarkRoots.MobileFolderGUID, title: BookmarksFolderTitleMobile)
-            >>== { folder in
-            return self.bufferFactory.getDesktopRoots() >>== { cursor in
-                let desktop = self.bufferFactory.folderForDesktopBookmarksCursor(cursor)
-                let prepended = PrependedBookmarkFolder(main: folder, prepend: desktop)
-                return deferMaybe(BookmarksModel(modelFactory: self, root: prepended))
-            }
+            >>== {
+                localMobileFolder in
+                
+                self.bufferFactory.folderForGUID(BookmarkRoots.MobileFolderGUID, title: BookmarksFolderTitleMobile) >>== {
+                    bufferMobileFolder in
+
+                    self.bufferFactory.getDesktopRoots() >>== { cursor in
+                        let bufferAndLocalMobile = ConcatenatedBookmarkFolder(main: bufferMobileFolder, append: localMobileFolder)
+                        let desktop = self.bufferFactory.folderForDesktopBookmarksCursor(cursor)
+                        let withDesktopPrepended = PrependedBookmarkFolder(main: bufferAndLocalMobile, prepend: desktop)
+                        return deferMaybe(BookmarksModel(modelFactory: self, root: withDesktopPrepended))
+                    }
+                }
         }
     }
 
