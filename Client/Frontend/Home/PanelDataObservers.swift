@@ -58,12 +58,11 @@ class ActivityStreamDataObserver: DataObserver {
             return
         }
 
-        // Highlights are cached for 15 mins 200 - 0 > 900 || 200 < 900
-        let invalidateHighlights = highlights ? true : (Timestamp.uptimeInMilliseconds() - lastInvalidation > invalidationTime)
-        lastInvalidation = invalidateHighlights ? Timestamp.uptimeInMilliseconds() : lastInvalidation
+        // Highlights are cached for 15 mins
+        let invalidateHighlights = highlights || (Timestamp.uptimeInMilliseconds() - lastInvalidation > invalidationTime)
 
         // KeyTopSitesCacheIsValid is false when we want to invalidate. Thats why this logic is so backwards
-        let invalidateTopSites = topSites ? true : !(profile.prefs.boolForKey(PrefsKeys.KeyTopSitesCacheIsValid) ?? false)
+        let invalidateTopSites = topSites || !(profile.prefs.boolForKey(PrefsKeys.KeyTopSitesCacheIsValid) ?? false)
         if !invalidateTopSites && !invalidateHighlights {
             // There is nothing to refresh. Bye
             return
@@ -74,6 +73,7 @@ class ActivityStreamDataObserver: DataObserver {
             if invalidateTopSites {
                 self.profile.prefs.setBool(true, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
             }
+            self.lastInvalidation = invalidateHighlights ? Timestamp.uptimeInMilliseconds() : self.lastInvalidation
             self.delegate?.didInvalidateDataSources()
         }
     }
@@ -81,8 +81,7 @@ class ActivityStreamDataObserver: DataObserver {
     @objc func notificationReceived(_ notification: Notification) {
         switch notification.name {
         case NotificationProfileDidFinishSyncing, NotificationFirefoxAccountChanged, NotificationPrivateDataClearedHistory:
-            profile.prefs.setBool(false, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
-            refreshIfNeeded(forceHighlights: true, forceTopSites: true)
+             refreshIfNeeded(forceHighlights: true, forceTopSites: true)
         default:
             log.warning("Received unexpected notification \(notification.name)")
         }
