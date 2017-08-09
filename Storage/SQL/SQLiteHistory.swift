@@ -107,6 +107,7 @@ open class SQLiteHistory {
     let db: BrowserDB
     let favicons: FaviconsTable<Favicon>
     let prefs: Prefs
+    let clearTopSitesQuery: (String, Args?) = ("DELETE FROM \(TableCachedTopSites)", nil)
 
     required public init(db: BrowserDB, prefs: Prefs) {
         self.db = db
@@ -345,21 +346,15 @@ extension SQLiteHistory: BrowserHistory {
         return (insertQuery, args)
     }
 
-    public func refreshTopsitesQuery() -> [(String, Args?)] {
-        return [clearTopsitesQuery(), updateTopSitesCacheQuery()]
+    public func refreshTopSitesQuery1() -> [(String, Args?)] {
+        return [clearTopSitesQuery, updateTopSitesCacheQuery()]
     }
 
     public func clearTopSitesCache() -> Success {
-        let (query, args) = clearTopsitesQuery()
-        return self.db.run(query, withArgs: args) >>> {
+        return self.db.run([clearTopSitesQuery]) >>> {
             self.prefs.removeObjectForKey(PrefsKeys.KeyTopSitesCacheIsValid)
             return succeed()
         }
-    }
-
-    private func clearTopsitesQuery() -> (String, Args?) {
-        let deleteQuery = "DELETE FROM \(TableCachedTopSites)"
-        return (deleteQuery, nil)
     }
 
     public func getSitesByLastVisit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>> {

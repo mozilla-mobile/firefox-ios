@@ -14,7 +14,7 @@ protocol DataObserver {
     var profile: Profile { get }
     weak var delegate: DataObserverDelegate? { get set }
 
-    func refreshIfNeeded(forceHighlights highlights: Bool, forceTopSites topsites: Bool)
+    func refreshIfNeeded(forceHighlights highlights: Bool, forceTopSites topSites: Bool)
 }
 
 @objc protocol DataObserverDelegate: class {
@@ -49,9 +49,9 @@ class ActivityStreamDataObserver: DataObserver {
     }
 
     /*
-     refreshIfNeeded will refresh the underlying caches for both Topsites and Highlights.
+     refreshIfNeeded will refresh the underlying caches for both TopSites and Highlights.
      By default this will only refresh the highlights if the last fetch is older than 15 mins
-     By default this will only refresh topsites if KeyTopSitesCacheIsValid is false
+     By default this will only refresh topSites if KeyTopSitesCacheIsValid is false
      */
     func refreshIfNeeded(forceHighlights highlights: Bool, forceTopSites topSites: Bool) {
         guard !profile.isShutdown else {
@@ -59,21 +59,21 @@ class ActivityStreamDataObserver: DataObserver {
         }
 
         // Highlights are cached for 15 mins
-        let invalidateHighlights = highlights || (Timestamp.uptimeInMilliseconds() - lastInvalidation > invalidationTime)
+        let shouldInvalidateHighlights = highlights || (Timestamp.uptimeInMilliseconds() - lastInvalidation > invalidationTime)
 
         // KeyTopSitesCacheIsValid is false when we want to invalidate. Thats why this logic is so backwards
-        let invalidateTopSites = topSites || !(profile.prefs.boolForKey(PrefsKeys.KeyTopSitesCacheIsValid) ?? false)
-        if !invalidateTopSites && !invalidateHighlights {
+        let shouldInvalidateTopSites = topSites || !(profile.prefs.boolForKey(PrefsKeys.KeyTopSitesCacheIsValid) ?? false)
+        if !shouldInvalidateTopSites && !shouldInvalidateHighlights {
             // There is nothing to refresh. Bye
             return
         }
 
         self.delegate?.willInvalidateDataSources()
-        self.profile.recommendations.repopulateAll(invalidateTopSites, invalidateHighlights: invalidateHighlights).uponQueue(.main) { _ in
-            if invalidateTopSites {
+        self.profile.recommendations.repopulate(invalidateTopSites: shouldInvalidateTopSites, invalidateHighlights: shouldInvalidateHighlights).uponQueue(.main) { _ in
+            if shouldInvalidateTopSites {
                 self.profile.prefs.setBool(true, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
             }
-            self.lastInvalidation = invalidateHighlights ? Timestamp.uptimeInMilliseconds() : self.lastInvalidation
+            self.lastInvalidation = shouldInvalidateHighlights ? Timestamp.uptimeInMilliseconds() : self.lastInvalidation
             self.delegate?.didInvalidateDataSources()
         }
     }
