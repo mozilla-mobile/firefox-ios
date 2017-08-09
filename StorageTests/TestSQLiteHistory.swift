@@ -1169,6 +1169,8 @@ class TestSQLiteHistory: XCTestCase {
         let history = SQLiteHistory(db: db, prefs: prefs)
         let bookmarks = SQLiteBookmarks(db: db)
 
+        XCTAssertTrue(db.createOrUpdate(BrowserTable()) == .success)
+        
         let expectation = self.expectation(description: "First.")
         func done() -> Success {
             expectation.fulfill()

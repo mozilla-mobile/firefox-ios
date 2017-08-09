@@ -13,11 +13,10 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     let db: BrowserDB
     let clients = RemoteClientsTable<RemoteClient>()
     let tabs = RemoteTabsTable<RemoteTab>()
-    let commands = SyncCommandsTable<SyncCommand>()
 
     public init(db: BrowserDB) {
         self.db = db
-        _ = self.db.createOrUpdate(clients, tabs, commands)
+        _ = self.db.createOrUpdate(clients, tabs)
     }
 
     fileprivate func doWipe(_ f: @escaping (_ conn: SQLiteDBConnection, _ err: inout NSError?) -> Void) -> Deferred<Maybe<()>> {
@@ -260,10 +259,12 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     open func deleteCommands() -> Success {
         var err: NSError?
         _ = db.transaction(&err) { connection, _ in
-            _ = self.commands.delete(connection, item: nil, err: &err)
-            if let _ = err {
+            if let error = connection.executeChange("DELETE FROM \(TableSyncCommands)", withArgs: [] as Args) {
+                print(error.description)
+                err = error
                 return false
             }
+            
             return true
         }
 
@@ -273,10 +274,12 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     open func deleteCommands(_ clientGUID: GUID) -> Success {
         var err: NSError?
         _ = db.transaction(&err) { connection, _ in
-            _ = self.commands.delete(connection, item: SyncCommand(id: nil, value: "", clientGUID: clientGUID), err: &err)
-            if let _ = err {
+            if let error = connection.executeChange("DELETE FROM \(TableSyncCommands) WHERE client_guid = ?", withArgs: [clientGUID] as Args) {
+                print(error.description)
+                err = error
                 return false
             }
+            
             return true
         }
 
@@ -294,7 +297,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
             // Update or insert client records.
             for command in commands {
                 for client in clients {
-                    if let commandID = self.commands.insert(connection, item: command.withClientGUID(client.guid), err: &err) {
+                    if let commandID = self.insert(connection, sql: "INSERT INTO \(TableSyncCommands) (client_guid, value) VALUES (?, ?)", args: [client.guid, command.value] as Args, err: &err) {
                         log.verbose("Inserted command: \(commandID)")
                         numberOfInserts += 1
                     } else {
@@ -310,13 +313,18 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         }
         return failOrSucceed(err, op: "insert command", val: numberOfInserts)
     }
-
+    
     open func getCommands() -> Deferred<Maybe<[GUID: [SyncCommand]]>> {
         var err: NSError?
 
         // Now find the clients.
         let commandCursor = db.withConnection(&err) { connection, _ in
-            return self.commands.query(connection, options: nil)
+            return connection.executeQuery("SELECT * FROM \(TableSyncCommands)", factory: { row -> SyncCommand in
+                return SyncCommand(
+                    id: row["command_id"] as? Int,
+                    value: row["value"] as! String,
+                    clientGUID: row["client_guid"] as? GUID)
+            })
         }
 
         if let err = err {
@@ -341,6 +349,22 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
             syncCommands[command.clientGUID!] = cmds
         }
         return syncCommands
+    }
+    
+    func insert(_ db: SQLiteDBConnection, sql: String, args: Args?, err: inout NSError?) -> Int? {
+        let lastID = db.lastInsertedRowID
+        if let error = db.executeChange(sql, withArgs: args) {
+            err = error
+            return nil
+        }
+        
+        let id = db.lastInsertedRowID
+        if id == lastID {
+            log.debug("INSERT did not change last inserted row ID.")
+            return nil
+        }
+        
+        return id
     }
 }
 

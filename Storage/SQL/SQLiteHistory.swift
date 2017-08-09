@@ -105,13 +105,13 @@ extension SDRow {
  */
 open class SQLiteHistory {
     let db: BrowserDB
-    let favicons: FaviconsTable<Favicon>
+    let favicons: SQLiteFavicons
     let prefs: Prefs
     let clearTopSitesQuery: (String, Args?) = ("DELETE FROM \(TableCachedTopSites)", nil)
 
     required public init(db: BrowserDB, prefs: Prefs) {
         self.db = db
-        self.favicons = FaviconsTable<Favicon>()
+        self.favicons = SQLiteFavicons(db: self.db)
         self.prefs = prefs
 
         // BrowserTable exists only to perform create/update etc. operations -- it's not
@@ -182,7 +182,7 @@ extension SQLiteHistory: BrowserHistory {
         let markArgs: Args = [Date.nowNumber(), url]
         let markDeleted = "UPDATE \(TableHistory) SET url = NULL, is_deleted = 1, should_upload = 1, local_modified = ? WHERE url = ?"
         //return db.run([(sql: String, args: Args?)])
-        let command = [(sql: deleteVisits, args: visitArgs), (sql: markDeleted, args: markArgs), favicons.getCleanupCommands()] as [(sql: String, args: Args?)]
+        let command = [(sql: deleteVisits, args: visitArgs), (sql: markDeleted, args: markArgs), self.favicons.getCleanupFaviconsQuery()] as [(sql: String, args: Args?)]
         return db.run(command)
     }
 
@@ -194,7 +194,7 @@ extension SQLiteHistory: BrowserHistory {
             ("DELETE FROM \(TableVisits)", nil),
             ("DELETE FROM \(TableHistory)", nil),
             ("DELETE FROM \(TableDomains)", nil),
-            self.favicons.getCleanupCommands(),
+            self.favicons.getCleanupFaviconsQuery()
             ])
             // We've probably deleted a lot of stuff. Vacuum now to recover the space.
             >>> effect(self.db.vacuum)
@@ -674,17 +674,7 @@ extension SQLiteHistory: Favicons {
     }
 
     public func addFavicon(_ icon: Favicon) -> Deferred<Maybe<Int>> {
-        var err: NSError?
-        let res = db.withConnection(&err) { (conn, err: inout NSError?) -> Int in
-            // Blind! We don't see failure here.
-            let id = self.favicons.insertOrUpdate(conn, obj: icon)
-            return id ?? 0
-        }
-
-        if err == nil {
-            return deferMaybe(res)
-        }
-        return deferMaybe(DatabaseError(err: err))
+        return self.favicons.insertOrUpdateFavicon(icon)
     }
 
     /**
@@ -699,7 +689,7 @@ extension SQLiteHistory: Favicons {
             var err: NSError?
             let res = db.withConnection(&err) { (conn, err: inout NSError?) -> Int in
                 // Blind! We don't see failure here.
-                let id = self.favicons.insertOrUpdate(conn, obj: icon)
+                let id = self.favicons.insertOrUpdateFaviconInTransaction(icon, conn: conn)
 
                 // Now set up the mapping.
                 err = conn.executeChange(query, withArgs: args)
@@ -707,22 +697,24 @@ extension SQLiteHistory: Favicons {
                     log.error("Got error adding icon: \(err).")
                     return 0
                 }
-
+                
                 // Try to update the favicon ID column in each bookmarks table. There can be
                 // multiple bookmarks with a particular URI, and a mirror bookmark can be
                 // locally changed, so either or both of these statements can update multiple rows.
                 if let id = id {
+                    icon.id = id
+
                     _ = conn.executeChange("UPDATE \(TableBookmarksLocal) SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
                     _ = conn.executeChange("UPDATE \(TableBookmarksMirror) SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
                 }
-
+                
                 return id ?? 0
             }
-
+            
             if res == 0 {
                 return deferMaybe(DatabaseError(err: err))
             }
-            return deferMaybe(icon.id!)
+            return deferMaybe(icon.id ?? 0)
         }
 
         let siteSubselect = "(SELECT id FROM \(TableHistory) WHERE url = ?)"

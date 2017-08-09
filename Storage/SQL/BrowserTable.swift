@@ -30,6 +30,9 @@ let TableDomains = "domains"
 let TableVisits = "visits"
 let TableFaviconSites = "favicon_sites"
 let TableQueuedTabs = "queue"
+let TableSyncCommands = "commands"
+let TableClients = "clients"
+let TableTabs = "tabs"
 
 let TableActivityStreamBlocklist = "activity_stream_blocklist"
 let TablePageMetadata = "page_metadata"
@@ -83,7 +86,11 @@ private let AllTables: [String] = [
     TablePageMetadata,
     TableHighlights,
     TablePinnedTopSites,
-    TableRemoteDevices
+    TableRemoteDevices,
+
+    TableSyncCommands,
+//    TableClients,
+//    TableTabs
 ]
 
 private let AllViews: [String] = [
@@ -121,7 +128,7 @@ private let log = Logger.syncLogger
  * We rely on SQLiteHistory having initialized the favicon table first.
  */
 open class BrowserTable: Table {
-    static let DefaultVersion = 30    // Bug 1387492.
+    static let DefaultVersion = 31    // Bug 1388147.
 
     // TableInfo fields.
     var name: String { return "BROWSER" }
@@ -264,6 +271,35 @@ open class BrowserTable: Table {
             "url TEXT NOT NULL UNIQUE, " +
             "title TEXT" +
         ") "
+
+    let syncCommandsTableCreate =
+        "CREATE TABLE IF NOT EXISTS \(TableSyncCommands) (" +
+            "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "client_guid TEXT NOT NULL, " +
+            "value TEXT NOT NULL" +
+        ")"
+
+//    let clientsTableCreate =
+//        "CREATE TABLE IF NOT EXISTS \(TableClients) (" +
+//            "guid TEXT PRIMARY KEY, " +
+//            "name TEXT NOT NULL, " +
+//            "modified INTEGER NOT NULL, " +
+//            "type TEXT, " +
+//            "formfactor TEXT, " +
+//            "os TEXT, " +
+//            "version TEXT, " +
+//            "fxaDeviceId TEXT" +
+//        ")"
+
+//    let tabsTableCreate =
+//        "CREATE TABLE IF NOT EXISTS \(TableTabs) (" +
+//            "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+//            "client_guid TEXT REFERENCES clients(guid) ON DELETE CASCADE, " +
+//            "url TEXT NOT NULL, " +
+//            "title TEXT, " +
+//            "history TEXT, " +
+//            "last_used INTEGER" +
+//        ")"
 
     let activityStreamBlocklistCreate =
         "CREATE TABLE IF NOT EXISTS \(TableActivityStreamBlocklist) (" +
@@ -694,6 +730,9 @@ open class BrowserTable: Table {
             indexPageMetadataCacheKeyCreate,
             self.queueTableCreate,
             self.topSitesTableCreate,
+            syncCommandsTableCreate,
+//            clientsTableCreate,
+//            tabsTableCreate,
 
             // Indices.
             indexBufferStructureParentIdx,
@@ -712,7 +751,7 @@ open class BrowserTable: Table {
             allBookmarksView,
             historyVisitsView,
             awesomebarBookmarksView,
-            awesomebarBookmarksWithIconsView,
+            awesomebarBookmarksWithIconsView
         ]
 
         assert(queries.count == AllTablesIndicesAndViews.count, "Did you forget to add your table, index, or view to the list?")
@@ -731,7 +770,18 @@ open class BrowserTable: Table {
         }
 
         if from == 0 {
-            // This is likely an upgrade from before Bug 1160399.
+
+            // If we're upgrading from "zero", we may just need to migrate
+            // from using the old `tableList` schema table.
+            if self.migrateFromSchemaTableIfNeeded(db) {
+                let version = db.version
+                if version > 0 {
+                    return self.updateTable(db, from: version)
+                }
+            }
+
+            // Otherwise, this is likely an upgrade from before Bug 1160399, so
+            // let's drop and re-create.
             log.debug("Updating browser tables from zero. Assuming drop and recreate.")
             return drop(db) && create(db)
         }
@@ -1018,7 +1068,7 @@ open class BrowserTable: Table {
                 return false
             }
         }
-        
+
         if from < 27 && to >= 27 {
             if !self.run(db, queries: [
                 "DROP TABLE IF EXISTS \(TablePageMetadata)",
@@ -1057,6 +1107,107 @@ open class BrowserTable: Table {
                 allBookmarksView
             ]) {
                 return false
+            }
+        }
+
+        // NOTE: These tables should have already existed in prior
+        // versions, but were managed separately via the SchemaTable.
+        // Here we create them if they don't already exist to handle
+        // cases where we are creating a brand new DB.
+        if from < 31 && to >= 31 {
+            if !self.run(db, queries: [
+                syncCommandsTableCreate,
+//                clientsTableCreate,
+//                tabsTableCreate
+                ]) {
+                return false
+            }
+        }
+
+        return true
+    }
+
+    fileprivate func migrateFromSchemaTableIfNeeded(_ db: SQLiteDBConnection) -> Bool {
+        log.info("Checking if schema table migration is needed.")
+
+        // If `user_version` has not been set or is far older than v31, we need to check
+        // to see if any additional migrations are necessary.
+        if db.version < 31 {
+
+            // Query for the existence of the `tableList` table to determine if we are
+            // migrating from an older DB version or if this is just a brand new DB.
+            let cursor = db.executeQueryUnsafe("SELECT COUNT(*) AS number FROM sqlite_master WHERE type = 'table' AND name = 'tableList'", factory: IntFactory, withArgs: [] as Args)
+
+            // If `tableList` still exists in this DB, then check to see if any table-specific
+            // migrations are required before removing it. Otherwise, if `tableList` does not
+            // exist, it is likely due to this being a brand new DB and no additional steps
+            // need to be taken at this point.
+            let tableListTableExists = cursor[0] == 1
+            cursor.close()
+
+            if tableListTableExists {
+
+                // Query for the existence of the `clients` table to determine if we are
+                // migrating from an older DB version or if this is just a brand new DB.
+                let cursor = db.executeQueryUnsafe("SELECT COUNT(*) AS number FROM sqlite_master WHERE type = 'table' AND name = '\(TableClients)'", factory: IntFactory, withArgs: [] as Args)
+
+                let clientsTableExists = cursor[0] == 1
+                cursor.close()
+
+                if clientsTableExists {
+
+                    // Check if intermediary migrations are necessary for the 'clients' table.
+                    let cursor = db.executeQueryUnsafe("SELECT version FROM tableList WHERE name = '\(TableClients)'", factory: IntFactory, withArgs: [] as Args)
+
+                    let clientsTableVersion = cursor[0] ?? 0
+                    cursor.close()
+
+                    if clientsTableVersion > 0 && clientsTableVersion <= 3 {
+                        log.info("Migrating '\(TableClients)' table from version \(clientsTableVersion).")
+
+                        if clientsTableVersion < 2 {
+                            let sql = "ALTER TABLE \(TableClients) ADD COLUMN version TEXT"
+                            let err = db.executeChange(sql)
+                            if err != nil {
+                                log.error("Error altering \(TableClients) table: \(err?.localizedDescription ?? "nil"); SQL was \(sql)")
+                                SentryIntegration.shared.sendWithStacktrace(message: "Error altering \(TableClients) table: \(err?.localizedDescription ?? "nil"); SQL was \(sql)", tag: "BrowserDB", severity: .error)
+                                return false
+                            }
+                        }
+
+                        if clientsTableVersion < 3 {
+                            let sql = "ALTER TABLE \(TableClients) ADD COLUMN fxaDeviceId TEXT"
+                            let err = db.executeChange(sql)
+                            if err != nil {
+                                log.error("Error altering \(TableClients) table: \(err?.localizedDescription ?? "nil"); SQL was \(sql)")
+                                SentryIntegration.shared.sendWithStacktrace(message: "Error altering \(TableClients) table: \(err?.localizedDescription ?? "nil"); SQL was \(sql)", tag: "BrowserDB", severity: .error)
+                                return false
+                            }
+                        }
+                    }
+                }
+
+                // Get the *actual* version for the BROWSER table from `tableList` before
+                // dropping it.
+                let versionCursor = db.executeQueryUnsafe("SELECT version FROM tableList WHERE name = 'BROWSER'", factory: IntFactory, withArgs: [] as Args)
+
+                let version = versionCursor[0] ?? 0
+                versionCursor.close()
+
+                // No other intermediary migrations are needed for the remaining tables, so
+                // now we can drop the `tableList` table.
+                log.info("Schema table migrations complete; Dropping 'tableList' table.")
+
+                let sql = "DROP TABLE IF EXISTS tableList"
+                let err = db.executeChange(sql)
+                if err != nil {
+                    log.error("Error dropping tableList table: \(err?.localizedDescription ?? "nil")")
+                    SentryIntegration.shared.sendWithStacktrace(message: "Error dropping tableList table: \(err?.localizedDescription ?? "nil")", tag: "BrowserDB", severity: .error)
+                    return false
+                }
+
+                // Lastly, set the *actual* version to the database.
+                db.setVersion(version)
             }
         }
 

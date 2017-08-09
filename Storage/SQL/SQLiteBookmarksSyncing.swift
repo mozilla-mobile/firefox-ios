@@ -153,7 +153,7 @@ extension SQLiteBookmarks {
 
         // Insert the favicon.
         if let icon = favicon {
-            faviconID = self.favicons.insertOrUpdate(conn, obj: icon)
+            faviconID = self.favicons.insertOrUpdateFaviconInTransaction(icon, conn: conn)
         } else {
             faviconID = nil
         }

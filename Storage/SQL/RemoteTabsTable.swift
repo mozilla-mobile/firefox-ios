@@ -5,14 +5,11 @@
 import Foundation
 import Shared
 
-let TableClients = "clients"
-let TableTabs = "tabs"
-
 private let log = Logger.syncLogger
 
 class RemoteClientsTable<T>: GenericTable<RemoteClient> {
     override var name: String { return TableClients }
-    override var version: Int { return 3 }
+//    override var version: Int { return 3 }
 
     // TODO: index on guid and last_modified.
     override var rows: String { return [
@@ -26,6 +23,11 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
             "fxaDeviceId TEXT",
         ].joined(separator: ",")
     }
+
+//    override func create(_ db: SQLiteDBConnection) -> Bool {
+//        // Nothing to do: BrowserTable does it all.
+//        return true
+//    }
 
     // TODO: this won't work correctly with NULL fields.
     override func getInsertAndArgs(_ item: inout RemoteClient) -> (String, Args)? {
@@ -116,7 +118,7 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
 
 class RemoteTabsTable<T>: GenericTable<RemoteTab> {
     override var name: String { return TableTabs }
-    override var version: Int { return 2 }
+//    override var version: Int { return 2 }
 
     // TODO: index on id, client_guid, last_used, and position.
     override var rows: String { return [
@@ -128,6 +130,11 @@ class RemoteTabsTable<T>: GenericTable<RemoteTab> {
             "last_used INTEGER",
         ].joined(separator: ",")
     }
+
+//    override func create(_ db: SQLiteDBConnection) -> Bool {
+//        // Nothing to do: BrowserTable does it all.
+//        return true
+//    }
 
     private static func convertHistoryToString(_ history: [URL]) -> String? {
         let historyAsStrings = optFilter(history.map { $0.absoluteString })

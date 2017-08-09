@@ -43,7 +43,6 @@ open class BrowserDB {
     fileprivate let files: FileAccessor
     fileprivate let filename: String
     fileprivate let secretKey: String?
-    fileprivate let schemaTable: SchemaTable
 
     fileprivate var initialized = [String]()
 
@@ -55,7 +54,6 @@ open class BrowserDB {
         log.debug("Initializing BrowserDB: \(filename).")
         self.files = files
         self.filename = filename
-        self.schemaTable = SchemaTable()
         self.secretKey = secretKey
 
         let file = URL(fileURLWithPath: (try! files.getAndEnsureDirectory())).appendingPathComponent(filename).path
@@ -72,17 +70,7 @@ open class BrowserDB {
 
     // Do the same work that we normally do at the end of init.
     public func prepareSchema() {
-        // Create or update will also delete and create the database if our key was incorrect.
-        switch self.createOrUpdate(self.schemaTable) {
-        case .failure:
-            log.error("Failed to create/update the schema table. Aborting.")
-            fatalError()
-        case .closed:
-            log.info("Database not created as the SQLiteConnection is closed.")
-            SentryIntegration.shared.sendWithStacktrace(message: "Database not created as the SQLiteConnection is closed.", tag: "BrowserDB", severity: .info)
-        case .success:
-            log.debug("db: \(self.filename) has been created")
-        }
+        
     }
 
     // Creates a table and writes its table info into the table-table database.
@@ -94,56 +82,46 @@ open class BrowserDB {
             return .failed
         }
 
-        var err: NSError? = nil
-        guard let result = schemaTable.insert(conn, item: table, err: &err) else {
-            return .failed
+        if table.version > 0 {
+            if let error = conn.setVersion(table.version) {
+                log.error("Unable to update the schema version; \(error.localizedDescription)")
+            }
         }
         
-        return result > -1 ? .created : .failed
+        return .created
     }
 
     // Updates a table and writes its table into the table-table database.
     // Exposed internally for testing.
     func updateTable(_ conn: SQLiteDBConnection, table: SectionUpdater) -> TableResult {
-        log.debug("Trying update \(table.name) version \(table.version)")
-        var from = 0
-        // Try to find the stored version of the table
-        let cursor = schemaTable.query(conn, options: QueryOptions(filter: table.name))
-        if cursor.count > 0 {
-            if let info = cursor[0] as? TableInfoWrapper {
-                from = info.version
-            }
-        }
-
+        
         // If the versions match, no need to update
+        let from = conn.version
         if from == table.version {
             return .exists
         }
 
+        log.debug("Trying to update table '\(table.name)' from version \(from) to \(table.version)")
         if !table.updateTable(conn, from: from) {
             // If the update failed, we'll bail without writing the change to the table-table.
             log.debug("Updating failed.")
             return .failed
         }
 
-        var err: NSError? = nil
-
-        // Yes, we UPDATE OR INSERT… because we might be transferring ownership of a database table
-        // to a different Table. It'll trigger exists, and thus take the update path, but we won't
-        // necessarily have an existing schema entry -- i.e., we'll be updating from 0.
-        let insertResult = schemaTable.insert(conn, item: table, err: &err) ?? 0
-        let updateResult = schemaTable.update(conn, item: table, err: &err)
-        if  updateResult > 0 || insertResult > 0 {
-            return .updated
+        if table.version > 0 {
+            if let error = conn.setVersion(table.version) {
+                log.error("Unable to update the schema version; \(error.localizedDescription)")
+            }
         }
-        return .failed
-    }
 
+        return .updated
+    }
+    
     // Utility for table classes. They should call this when they're initialized to force
     // creation of the table in the database.
     func createOrUpdate(_ tables: Table...) -> DatabaseOpResult {
         guard !db.closed else {
-            log.info("Database is closed - skipping schema create/updates")
+            log.info("Database is closed; Skipping schema create or update.")
             return .closed
         }
 
@@ -184,11 +162,7 @@ open class BrowserDB {
                         break
                     default:
                         log.error("Update failed for \(table.name). Dropping and recreating.")
-
                         let _ = table.drop(connection)
-                        var err: NSError? = nil
-                        let _ = self.schemaTable.delete(connection, item: table, err: &err)
-
                         doCreate(table, connection)
                     }
                 }
@@ -268,15 +242,7 @@ open class BrowserDB {
             
             // Re-create all previously-created tables.
             if let _ = db.transaction({ connection -> Bool in
-                doCreate(self.schemaTable, connection)
                 for table in tables {
-                    if table as? SchemaTable === self.schemaTable {
-                        // Don't do it twice! Sometimes we hit this failure when creating the
-                        // initial schema table, in which case `schemaTable` will actually be
-                        // in this table list.
-                        continue
-                    }
-
                     doCreate(table, connection)
                     if !success {
                         log.error("Unable to re-create table '\(table.name)'.")
@@ -435,8 +401,6 @@ extension BrowserDB {
     }
 
     public func reopenIfClosed() {
-        let wasClosed = db.closed
-
         db.reopenIfClosed()
     }
 }
