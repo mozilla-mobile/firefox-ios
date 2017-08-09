@@ -680,8 +680,9 @@ extension TabManager {
             }
         }
 
-        // Clean up any screenshots that are no longer associated with a tab.
-        imageStore?.clearExcluding(savedUUIDs)
+        // Clean up any screenshots that are no longer associated with a tab. This is an async operation
+        // but we don't have to wait for it. The DiskImageStore will schedule all changes on it's own queue.
+        _ = imageStore?.clearExcluding(savedUUIDs)
 
         let tabStateData = NSMutableData()
         let archiver = NSKeyedArchiver(forWritingWith: tabStateData)
