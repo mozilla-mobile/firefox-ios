@@ -60,6 +60,7 @@
     "url": "http://www.amazon.com/",
     "image_url": "amazon-com.png",
     "background_color": "#FFF",
+    "is_multi_region_domain": "true",
     "domain": "amazon"
   },
   {
@@ -277,6 +278,7 @@
     "url": "http://craigslist.org/",
     "image_url": "craigslist-org.png",
     "background_color": "#652892",
+    "is_multi_region_domain": "true",
     "domain": "craigslist"
   },
   {
@@ -508,6 +510,7 @@
     "url": "https://www.google.com/",
     "image_url": "google-com.png",
     "background_color": "#FFF",
+    "is_multi_region_domain": "true",
     "domain": "google"
   },
   {
