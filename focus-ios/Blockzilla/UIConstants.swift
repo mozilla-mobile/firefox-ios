@@ -171,8 +171,8 @@ struct UIConstants {
         static let saveImage = NSLocalizedString("contextMenu.saveImageTitle", value: "Save Image", comment: "Text for the context menu when a user wants to save an image after long pressing it.")
         static let copyImage = NSLocalizedString("contextMenu.copyImageTitle", value: "Copy Image", comment: "Text for the context menu when a user wants to copy an image after long pressing it.")
         static let trackersBlocked = NSLocalizedString("URL.trackersBlockedLabel", value: "Trackers blocked", comment: "Text for the URL bar showing the number of trackers blocked on a webpage.")
-        static let externalAppLink = NSLocalizedString("ExternalAppLink.messageTitle", value: "%@ wants to open another App", comment: "Dialog title used for opening an external app from Focus")
-        static let externalAppLinkWithAppName = NSLocalizedString("externalAppLinkWithAppName.messageTitle", value: "%@ wants to open %@", comment: "Dialog title used for opening an external app from Focus")
+        static let externalAppLink = NSLocalizedString("ExternalAppLink.messageTitle", value: "%@ wants to open another App", comment: "Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar.")
+        static let externalAppLinkWithAppName = NSLocalizedString("externalAppLinkWithAppName.messageTitle", value: "%@ wants to open %@", comment: "Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open.")
         static let open = NSLocalizedString("ExternalAppLink.openTitle", value: "Open", comment: "Button label for opening another app from Focus")
         static let cancel = NSLocalizedString("ExternalAppLink.cancelTitle", value: "Cancel", comment: "Button label used for cancelling to open another app from Focus")
     }
