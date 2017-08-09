@@ -346,7 +346,7 @@ extension SQLiteHistory: BrowserHistory {
         return (insertQuery, args)
     }
 
-    public func refreshTopSitesQuery1() -> [(String, Args?)] {
+    public func refreshTopSitesQuery() -> [(String, Args?)] {
         return [clearTopSitesQuery, updateTopSitesCacheQuery()]
     }
 

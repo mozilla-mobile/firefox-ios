@@ -142,7 +142,7 @@ extension SQLiteHistory: HistoryRecommendations {
             queries.append(contentsOf: self.repopulateHighlightsQuery())
         }
         if shouldInvalidateHighlights {
-            queries.append(contentsOf: self.refreshTopSitesQuery1())
+            queries.append(contentsOf: self.refreshTopSitesQuery())
         }
         return self.db.run(queries)
     }
