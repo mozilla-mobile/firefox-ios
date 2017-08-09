@@ -63,6 +63,10 @@ open class SQLiteBookmarksModelFactory: BookmarksModelFactory {
         self.direction = direction
     }
 
+    public func factoryForIndex(_ index: Int, inFolder folder: BookmarkFolder) -> BookmarksModelFactory {
+        return self
+    }
+
     fileprivate func withDifferentDirection(_ direction: Direction) -> SQLiteBookmarksModelFactory {
         if self.direction == direction {
             return self
@@ -780,6 +784,40 @@ open class UnsyncedBookmarksFallbackModelFactory: BookmarksModelFactory {
         self.bufferFactory = SQLiteBookmarksModelFactory(bookmarks: bookmarks, direction: .buffer)
     }
 
+    // This is a special-case class, so here's the special-case behavior to
+    // know how to handle a folder that contains items drawn from different
+    // parts of the database. We look for the special kinds of folders we
+    // nest at the top level, and then we pick a folder to match.
+    public func factoryForIndex(_ index: Int, inFolder folder: BookmarkFolder) -> BookmarksModelFactory {
+        let concatenated: ConcatenatedBookmarkFolder
+        let i: Int
+
+        // We have either just remote and local mobile bookmarks, or we have Desktop Bookmarks
+        // followed by remote and local mobile bookmarks. Handle either.
+        if let prepended = folder as? PrependedBookmarkFolder {
+            if index == 0 {
+                return self
+            }
+
+            guard let c = prepended.main as? ConcatenatedBookmarkFolder else {
+                return self
+            }
+            i = index - 1        // Drop the prepend.
+            concatenated = c
+        } else {
+            guard let c = folder as? ConcatenatedBookmarkFolder else {
+                return self
+            }
+            i = index
+            concatenated = c
+        }
+
+        if i < concatenated.pivot {
+            return self.bufferFactory   // This comes first in our concatenation.
+        }
+        return self.localFactory
+    }
+
     open func modelForFolder(_ folder: BookmarkFolder) -> Deferred<Maybe<BookmarksModel>> {
         return self.modelForFolder(folder.guid, title: folder.title)
     }
@@ -810,11 +848,16 @@ open class UnsyncedBookmarksFallbackModelFactory: BookmarksModelFactory {
                 self.bufferFactory.folderForGUID(BookmarkRoots.MobileFolderGUID, title: BookmarksFolderTitleMobile) >>== {
                     bufferMobileFolder in
 
-                    self.bufferFactory.getDesktopRoots() >>== { cursor in
-                        let bufferAndLocalMobile = ConcatenatedBookmarkFolder(main: bufferMobileFolder, append: localMobileFolder)
-                        let desktop = self.bufferFactory.folderForDesktopBookmarksCursor(cursor)
-                        let withDesktopPrepended = PrependedBookmarkFolder(main: bufferAndLocalMobile, prepend: desktop)
-                        return deferMaybe(BookmarksModel(modelFactory: self, root: withDesktopPrepended))
+                    let bufferAndLocalMobile = ConcatenatedBookmarkFolder(main: bufferMobileFolder, append: localMobileFolder)
+                    return self.bufferFactory.hasDesktopBookmarks() >>== { yes in
+                        guard yes else {
+                            return deferMaybe(BookmarksModel(modelFactory: self, root: bufferAndLocalMobile))
+                        }
+                        return self.bufferFactory.getDesktopRoots() >>== { cursor in
+                            let desktop = self.bufferFactory.folderForDesktopBookmarksCursor(cursor)
+                            let withDesktopPrepended = PrependedBookmarkFolder(main: bufferAndLocalMobile, prepend: desktop)
+                            return deferMaybe(BookmarksModel(modelFactory: self, root: withDesktopPrepended))
+                        }
                     }
                 }
         }

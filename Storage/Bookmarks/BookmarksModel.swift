@@ -140,6 +140,7 @@ public protocol BookmarksModelFactorySource {
 }
 
 public protocol BookmarksModelFactory {
+    func factoryForIndex(_ index: Int, inFolder folder: BookmarkFolder) -> BookmarksModelFactory
     func modelForFolder(_ folder: BookmarkFolder) -> Deferred<Maybe<BookmarksModel>>
     func modelForFolder(_ guid: GUID) -> Deferred<Maybe<BookmarksModel>>
     func modelForFolder(_ guid: GUID, title: String) -> Deferred<Maybe<BookmarksModel>>
@@ -262,7 +263,7 @@ private extension SuggestedSite {
 }
 
 open class PrependedBookmarkFolder: BookmarkFolder {
-    fileprivate let main: BookmarkFolder
+    let main: BookmarkFolder
     fileprivate let prepend: BookmarkNode
 
     init(main: BookmarkFolder, prepend: BookmarkNode) {
@@ -306,6 +307,10 @@ open class ConcatenatedBookmarkFolder: BookmarkFolder {
         super.init(guid: main.guid, title: main.title)
     }
 
+    var pivot: Int {
+        return main.count
+    }
+
     override open var count: Int {
         return main.count + append.count
     }
@@ -344,6 +349,10 @@ open class MockMemoryBookmarksStore: BookmarksModelFactory, ShareToDestination {
         sink = MemoryBookmarksSink()
 
         root = MemoryBookmarkFolder(guid: BookmarkRoots.RootGUID, title: "Root", children: [mobile, unsorted])
+    }
+
+    public func factoryForIndex(_ index: Int, inFolder folder: BookmarkFolder) -> BookmarksModelFactory {
+        return self
     }
 
     open func modelForFolder(_ folder: BookmarkFolder) -> Deferred<Maybe<BookmarksModel>> {

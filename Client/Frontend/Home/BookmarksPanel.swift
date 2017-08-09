@@ -328,7 +328,8 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
                     // Nothing we can do.
                     return
                 }
-                nextController.source = BookmarksModel(modelFactory: factory, root: folder)
+                let specificFactory = factory.factoryForIndex(indexPath.row, inFolder: source.current)
+                nextController.source = BookmarksModel(modelFactory: specificFactory, root: folder)
                 self.navigationController?.pushViewController(nextController, animated: true)
             }
             break
