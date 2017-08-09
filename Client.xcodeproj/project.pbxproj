@@ -747,6 +747,12 @@
 		E6F9653C1B2F1D5D0034B023 /* NSURLExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F9653B1B2F1D5D0034B023 /* NSURLExtensionsTests.swift */; };
 		E6F965421B2F25110034B023 /* NSMutableAttributedStringExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F965411B2F25110034B023 /* NSMutableAttributedStringExtensionsTests.swift */; };
 		E6FF6ACA1D873CFF0070C294 /* PageMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FF6AC91D873CFF0070C294 /* PageMetadata.swift */; };
+		EB2A63341F3B49A7004EF8B0 /* ContentBlockerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2A63251F3B49A7004EF8B0 /* ContentBlockerHelper.swift */; };
+		EB2A633B1F3B513B004EF8B0 /* disconnect-advertising.json in Resources */ = {isa = PBXBuildFile; fileRef = EB2A63381F3B5135004EF8B0 /* disconnect-advertising.json */; };
+		EB2A633C1F3B513E004EF8B0 /* disconnect-analytics.json in Resources */ = {isa = PBXBuildFile; fileRef = EB2A63361F3B5134004EF8B0 /* disconnect-analytics.json */; };
+		EB2A633E1F3B514A004EF8B0 /* disconnect-content.json in Resources */ = {isa = PBXBuildFile; fileRef = EB2A63371F3B5135004EF8B0 /* disconnect-content.json */; };
+		EB2A633F1F3B514B004EF8B0 /* disconnect-social.json in Resources */ = {isa = PBXBuildFile; fileRef = EB2A63391F3B5135004EF8B0 /* disconnect-social.json */; };
+		EB2A63401F3B515C004EF8B0 /* web-fonts.json in Resources */ = {isa = PBXBuildFile; fileRef = EB2A63351F3B4EA7004EF8B0 /* web-fonts.json */; };
 		F35B8D2B1D6380EA008E3D61 /* SessionRestore.html in Resources */ = {isa = PBXBuildFile; fileRef = F35B8D2A1D6380EA008E3D61 /* SessionRestore.html */; };
 		F35B8D2D1D6383E9008E3D61 /* SessionRestoreHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F35B8D2C1D6383E9008E3D61 /* SessionRestoreHelper.swift */; };
 		F35B8D2F1D638408008E3D61 /* SessionRestoreHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F35B8D2E1D638408008E3D61 /* SessionRestoreHandler.swift */; };
@@ -1975,6 +1981,12 @@
 		E6F965411B2F25110034B023 /* NSMutableAttributedStringExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSMutableAttributedStringExtensionsTests.swift; sourceTree = "<group>"; };
 		E6FCC43C1C40565200DF6113 /* FirefoxBeta.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = FirefoxBeta.xcconfig; path = Configuration/FirefoxBeta.xcconfig; sourceTree = "<group>"; };
 		E6FF6AC91D873CFF0070C294 /* PageMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageMetadata.swift; sourceTree = "<group>"; };
+		EB2A63251F3B49A7004EF8B0 /* ContentBlockerHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentBlockerHelper.swift; sourceTree = "<group>"; };
+		EB2A63351F3B4EA7004EF8B0 /* web-fonts.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "web-fonts.json"; sourceTree = "<group>"; };
+		EB2A63361F3B5134004EF8B0 /* disconnect-analytics.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "disconnect-analytics.json"; sourceTree = "<group>"; };
+		EB2A63371F3B5135004EF8B0 /* disconnect-content.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "disconnect-content.json"; sourceTree = "<group>"; };
+		EB2A63381F3B5135004EF8B0 /* disconnect-advertising.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "disconnect-advertising.json"; sourceTree = "<group>"; };
+		EB2A63391F3B5135004EF8B0 /* disconnect-social.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "disconnect-social.json"; sourceTree = "<group>"; };
 		F35B8D2A1D6380EA008E3D61 /* SessionRestore.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = SessionRestore.html; sourceTree = "<group>"; };
 		F35B8D2C1D6383E9008E3D61 /* SessionRestoreHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionRestoreHelper.swift; sourceTree = "<group>"; };
 		F35B8D2E1D638408008E3D61 /* SessionRestoreHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionRestoreHandler.swift; sourceTree = "<group>"; };
@@ -3478,6 +3490,19 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		EB2A63241F3B49A7004EF8B0 /* ContentBlocker */ = {
+			isa = PBXGroup;
+			children = (
+				EB2A63381F3B5135004EF8B0 /* disconnect-advertising.json */,
+				EB2A63361F3B5134004EF8B0 /* disconnect-analytics.json */,
+				EB2A63371F3B5135004EF8B0 /* disconnect-content.json */,
+				EB2A63391F3B5135004EF8B0 /* disconnect-social.json */,
+				EB2A63351F3B4EA7004EF8B0 /* web-fonts.json */,
+				EB2A63251F3B49A7004EF8B0 /* ContentBlockerHelper.swift */,
+			);
+			path = ContentBlocker;
+			sourceTree = "<group>";
+		};
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
@@ -3664,6 +3689,7 @@
 		F84B21F11A0910F600AAB793 /* Frontend */ = {
 			isa = PBXGroup;
 			children = (
+				EB2A63241F3B49A7004EF8B0 /* ContentBlocker */,
 				D331DFC91CB6E9EE009B5DA2 /* OldStrings.swift */,
 				2816EFFF1B33E05400522243 /* UIConstants.swift */,
 				392ED7D51D0AEEEE009D9B62 /* Accessors */,
@@ -4849,6 +4875,7 @@
 				0BA1E0301B051A07007675AF /* NetError.css in Resources */,
 				3BC659491E5BA4AE006D560F /* TopSites in Resources */,
 				E4B7B77E1A793CF20022C5E0 /* FiraSans-SemiBold.ttf in Resources */,
+				EB2A633C1F3B513E004EF8B0 /* disconnect-analytics.json in Resources */,
 				F84B220B1A0910F600AAB793 /* Images.xcassets in Resources */,
 				F35B8D2B1D6380EA008E3D61 /* SessionRestore.html in Resources */,
 				7B42406E1CA04CAC009B5C28 /* Menu.xcassets in Resources */,
@@ -4857,6 +4884,7 @@
 				D02816D21ECA60DF00240CAA /* HistoryStateHelper.js in Resources */,
 				E4B7B7631A793CF20022C5E0 /* CharisSILI.ttf in Resources */,
 				E4CD9F541A71506400318571 /* Reader.html in Resources */,
+				EB2A633E1F3B514A004EF8B0 /* disconnect-content.json in Resources */,
 				7B2142FE1E5E055000CDD3FC /* InfoPlist.strings in Resources */,
 				E69922171B94E3EF007C480D /* Licenses.html in Resources */,
 				D3B692411B9F9CC8004B87A4 /* FindInPage.js in Resources */,
@@ -4870,7 +4898,9 @@
 				E4B7B7861A793CF20022C5E0 /* FiraSans-UltraLight.ttf in Resources */,
 				2F44FB2C1A9D5D8500FD20CC /* Home.xcassets in Resources */,
 				E4ECCD8D1AB091470005E717 /* Reader.xcassets in Resources */,
+				EB2A63401F3B515C004EF8B0 /* web-fonts.json in Resources */,
 				E4B7B77D1A793CF20022C5E0 /* FiraSans-Regular.ttf in Resources */,
+				EB2A633B1F3B513B004EF8B0 /* disconnect-advertising.json in Resources */,
 				0BDA568B1B26B1BE008C9B96 /* LoginsHelper.js in Resources */,
 				E4B7B7791A793CF20022C5E0 /* FiraSans-Light.ttf in Resources */,
 				E49BFF591B1F48C3009368CC /* Readability.js in Resources */,
@@ -4890,6 +4920,7 @@
 				A91528D21D0E637600CD0425 /* NoImageModeHelper.js in Resources */,
 				0BA1E00E1B03FB0B007675AF /* NetError.html in Resources */,
 				E4A961381AC06FA50069AD6F /* ReaderViewLoading.html in Resources */,
+				EB2A633F1F3B514B004EF8B0 /* disconnect-social.json in Resources */,
 				E4ECCDAE1AB131770005E717 /* FiraSans-Medium.ttf in Resources */,
 				E4424B3C1AC71FB400F44C38 /* FiraSans-Book.ttf in Resources */,
 				0BF42D391A7C0E8900889E28 /* Favicons.js in Resources */,
@@ -5487,6 +5518,7 @@
 				C45F44691D087DB600CB7EF0 /* TopTabsViewController.swift in Sources */,
 				0BF0DB941A8545800039F300 /* URLBarView.swift in Sources */,
 				E65607611C08B4E200534B02 /* SearchInputView.swift in Sources */,
+				EB2A63341F3B49A7004EF8B0 /* ContentBlockerHelper.swift in Sources */,
 				FA6B2AC21D41F02D00429414 /* Punycode.swift in Sources */,
 				7BC68CC71CC152B70043562A /* MenuItemImageView.swift in Sources */,
 				D301AAEE1A3A55B70078DD1D /* TabTrayController.swift in Sources */,
