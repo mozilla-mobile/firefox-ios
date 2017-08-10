@@ -1254,7 +1254,7 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         func loadCache() -> Success {
-            return history.updateTopSitesCacheIfInvalidated() >>> succeed
+            return history.repopulate(invalidateTopSites: true, invalidateHighlights: true) >>> succeed
         }
 
         func checkTopSitesReturnsResults() -> Success {
@@ -1307,7 +1307,7 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         func loadCache() -> Success {
-            return history.updateTopSitesCacheIfInvalidated() >>> succeed
+            return history.repopulate(invalidateTopSites: true, invalidateHighlights: true) >>> succeed
         }
 
         func checkTopSitesReturnsResults() -> Success {
@@ -1358,7 +1358,7 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         func loadCache() -> Success {
-            return history.updateTopSitesCacheIfInvalidated() >>> succeed
+            return history.repopulate(invalidateTopSites: true, invalidateHighlights: true) >>> succeed
         }
 
         func checkTopSitesReturnsResults() -> Success {
@@ -1370,7 +1370,7 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         func invalidateIfNeededDoesntChangeResults() -> Success {
-            return history.updateTopSitesCacheIfInvalidated() >>> {
+            return history.repopulate(invalidateTopSites: true, invalidateHighlights: true) >>> {
                 return history.getTopSitesWithLimit(20) >>== { topSites in
                     XCTAssertEqual(topSites.count, 20)
                     XCTAssertEqual(topSites[0]!.guid, "abc\(5)def")
@@ -1394,7 +1394,7 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         func checkSitesInvalidate() -> Success {
-            history.updateTopSitesCacheIfInvalidated().succeeded()
+            history.repopulate(invalidateTopSites: true, invalidateHighlights: true).succeeded()
 
             return history.getTopSitesWithLimit(20) >>== { topSites in
                 XCTAssertEqual(topSites.count, 20)
