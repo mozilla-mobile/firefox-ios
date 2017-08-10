@@ -32,6 +32,7 @@ enum LeanplumEventName: String {
     case saveImage = "E_Download_Media_Saved_Image"
     case savedLoginAndPassword = "E_Saved_Login_And_Password"
     case clearPrivateData = "E_Cleared_Private_Data"
+    case downloadedFocus = "E_User_Downloaded_Focus"
     case signsInFxa = "E_User_Signed_In_To_FxA"
 }
 
@@ -109,6 +110,10 @@ class LeanplumIntegration {
         }
         Leanplum.syncResourcesAsync(true)
 
+        if profile?.prefs.boolForKey(PrefsKeys.HasFocusInstalled) == nil {
+            profile?.prefs.setBool(!canInstallFocus(), forKey: PrefsKeys.HasFocusInstalled)
+        }
+
         var userAttributesDict = [AnyHashable: Any]()
         userAttributesDict[UserAttributeKeyName.mailtoIsDefault.rawValue] = mailtoIsDefault()
         userAttributesDict[UserAttributeKeyName.focusInstalled.rawValue] = !canInstallFocus()
@@ -116,7 +121,15 @@ class LeanplumIntegration {
 
         Leanplum.start(userAttributes: userAttributesDict)
 
-        Leanplum.track(LeanplumEventName.openedApp.rawValue)
+        track(eventName: LeanplumEventName.openedApp)
+
+        // Only drops Leanplum event when a user has installed Focus (from a fresh state or a re-install)
+        if profile?.prefs.boolForKey(PrefsKeys.HasFocusInstalled) == canInstallFocus() {
+            profile?.prefs.setBool(!canInstallFocus(), forKey: PrefsKeys.HasFocusInstalled)
+            if !canInstallFocus() {
+                track(eventName: LeanplumEventName.downloadedFocus)
+            }
+        }
     }
 
     // Events
