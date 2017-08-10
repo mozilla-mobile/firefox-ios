@@ -42,6 +42,7 @@ enum UserAttributeKeyName: String {
     case signedInSync = "Signed In Sync"
     case mailtoIsDefault = "Mailto Is Default"
     case telemetryOptIn = "Telemetry Opt In"
+    case firefoxAppVersion = "Firefox App Version"
 }
 
 private enum SupportedLocales: String {
@@ -114,11 +115,14 @@ class LeanplumIntegration {
             profile?.prefs.setBool(!canInstallFocus(), forKey: PrefsKeys.HasFocusInstalled)
         }
 
+        let appVersion = Float(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String)
+
         var userAttributesDict = [AnyHashable: Any]()
         userAttributesDict[UserAttributeKeyName.mailtoIsDefault.rawValue] = mailtoIsDefault()
         userAttributesDict[UserAttributeKeyName.focusInstalled.rawValue] = !canInstallFocus()
         userAttributesDict[UserAttributeKeyName.klarInstalled.rawValue] = !canInstallKlar()
         userAttributesDict[UserAttributeKeyName.signedInSync.rawValue] = profile?.hasAccount()
+        userAttributesDict[UserAttributeKeyName.firefoxAppVersion.rawValue] = appVersion
 
         Leanplum.start(userAttributes: userAttributesDict)
 
