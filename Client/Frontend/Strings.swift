@@ -280,7 +280,19 @@ extension Strings {
     public static let SentTab_TabArrivingNotification_NoDevice_body = NSLocalizedString("SentTab_TabArrivingNotification_NoDevice_body", value: "New tab arrived from another device.", comment: "Body of notification shown when the device is sent one or more tabs from an unnamed device.")
     public static let SentTab_TabArrivingNotification_WithDevice_title = NSLocalizedString("SentTab_TabArrivingNotification_WithDevice_title", value: "Tab received from %@", comment: "Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device.")
     public static let SentTab_TabArrivingNotification_WithDevice_body = NSLocalizedString("SentTab_TabArrivingNotification_WithDevice_body", value: "New tab arrived in %@", comment: "Body of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the app name.")
+}
 
+// Additional messages sent via Push from FxA
+extension Strings {
+    public static let FxAPush_DeviceDisconnected_ThisDevice_title = NSLocalizedString("FxAPush_DeviceDisconnected_ThisDevice_title", value: "Sync Disconnected", comment: "Title of a notification displayed when this device has been disconnected by another device.")
+    public static let FxAPush_DeviceDisconnected_ThisDevice_body = NSLocalizedString("FxAPush_DeviceDisconnected_ThisDevice_body", value: "This device has been successfully disconnected from Firefox Sync.", comment: "Body of a notification displayed when this device has been disconnected from FxA by another device.")
+    public static let FxAPush_DeviceDisconnected_title = NSLocalizedString("FxAPush_DeviceDisconnected_title", value: "Sync Disconnected", comment: "Title of a notification displayed when named device has been disconnected from FxA.")
+    public static let FxAPush_DeviceDisconnected_body = NSLocalizedString("FxAPush_DeviceDisconnected_body", value: "Firefox Sync has disconnected %@", comment: "Body of a notification displayed when named device has been disconnected from FxA. %@ refers to the name of the disconnected device.")
+
+    public static let FxAPush_DeviceDisconnected_UnknownDevice_body = NSLocalizedString("FxAPush_DeviceDisconnected_UnknownDevice_body", value: "A device has disconnected from Firefox Sync", comment: "Body of a notification displayed when unnamed device has been disconnected from FxA.")
+
+    public static let FxAPush_DeviceConnected_title = NSLocalizedString("FxAPush_DeviceConnected_title", value: "Sync Connected", comment: "Title of a notification displayed when another device has connected to FxA.")
+    public static let FxAPush_DeviceConnected_body = NSLocalizedString("FxAPush_DeviceConnected_body", value: "Firefox Sync has connected to %@", comment: "Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device.")
 }
 
 // Reader Mode.

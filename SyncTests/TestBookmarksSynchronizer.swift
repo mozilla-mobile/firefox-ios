@@ -14,6 +14,7 @@ import SwiftyJSON
 class MockStorage: LocalItemSource, MirrorItemSource, SyncableBookmarks {
     var local: [GUID: BookmarkMirrorItem] = [:]
     var localAdditions: [GUID] = []
+    var localDeletions: [GUID] = []
     var lastBufferUpdatedCompletionOpApplied: BufferUpdatedCompletionOp?
 
     // LocalItemSource methods.
@@ -59,8 +60,10 @@ class MockStorage: LocalItemSource, MirrorItemSource, SyncableBookmarks {
         return deferMaybe(DatabaseError(description: "Not implemented"))
     }
 
-    func getLocalBookmarksAdditions(limit: Int) -> Deferred<Maybe<[BookmarkMirrorItem]>> {
-        return deferMaybe(self.localAdditions.prefix(limit).flatMap { self.local[$0] })
+    func getLocalBookmarksModifications(limit: Int) -> Deferred<Maybe<(deletions: [GUID], additions: [BookmarkMirrorItem])>> {
+        let deletions = Array(self.localDeletions.prefix(limit))
+        let additions = Array(self.localAdditions.prefix(limit - deletions.count)).map { self.local[$0]! }
+        return deferMaybe((deletions: deletions, additions: additions))
     }
 
     func getLocalDeletions() -> Deferred<Maybe<[(GUID, Timestamp)]>> {
@@ -171,7 +174,7 @@ class TestBookmarksSynchronizer: XCTestCase {
         storage.local["bk3"] = bk3
 
         let synchronizer = BufferingBookmarksSynchronizer(scratchpad: scratchpad, delegate: delegate, basePrefs: prefs, why: .scheduled)
-        let (mobileRootRecord, childrenRecords) = synchronizer.buildMobileRootAndChildrenRecords(storage, buffer, additionalChildren: [bk2, bk3]).value.successValue!
+        let (mobileRootRecord, childrenRecords) = synchronizer.buildMobileRootAndChildrenRecords(storage, buffer, additionalChildren: [bk2, bk3], deletedChildren: []).value.successValue!
         XCTAssertEqual(mobileRootRecord.id, BookmarkRoots.translateOutgoingRootGUID(BookmarkRoots.MobileFolderGUID))
         XCTAssertEqual(mobileRootRecord.payload.json["title"], "Mobile Bookmarks")
         // We are not including bk1 in the call to buildMobileRootRecord() therefore it should NOT be included in the returned record
@@ -188,9 +191,10 @@ class TestBookmarksSynchronizer: XCTestCase {
         let scratchpad = Scratchpad(b: KeyBundle.random(), persistingTo: prefs)
 
         let buffer = MockBuffer()
-        buffer.buffer[BookmarkRoots.MobileFolderGUID] = BookmarkMirrorItem.folder(BookmarkRoots.MobileFolderGUID, modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: nil, title: "Mobile Bookmarks", description: nil, children: ["bk1"])
-        buffer.children[BookmarkRoots.MobileFolderGUID] = ["bk1"]
+        buffer.buffer[BookmarkRoots.MobileFolderGUID] = BookmarkMirrorItem.folder(BookmarkRoots.MobileFolderGUID, modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: nil, title: "Mobile Bookmarks", description: nil, children: ["bk1", "bkmdeleteme"])
+        buffer.children[BookmarkRoots.MobileFolderGUID] = ["bk1", "bkmdeleteme"]
         buffer.buffer["bk1"] = BookmarkMirrorItem.bookmark("bk1", modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.MobileFolderGUID, parentName: nil, title: "Bookmark 1", description: nil, URI: "https://example.com/1", tags: "", keyword: nil)
+        buffer.buffer["bkmdeleteme"] = BookmarkMirrorItem.bookmark("bkmdeleteme", modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.MobileFolderGUID, parentName: nil, title: "Bookmark to delete", description: nil, URI: "https://example.com/todelete", tags: "", keyword: nil)
 
         let storage = MockStorage()
         storage.local["bk1"] = BookmarkMirrorItem.bookmark("bk1", modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.MobileFolderGUID, parentName: nil, title: "Bookmark 1", description: nil, URI: "https://example.com/1", tags: "", keyword: nil)
@@ -200,16 +204,18 @@ class TestBookmarksSynchronizer: XCTestCase {
         storage.local["bk3"] = bk3
 
         let synchronizer = BufferingBookmarksSynchronizer(scratchpad: scratchpad, delegate: delegate, basePrefs: prefs, why: .scheduled)
-        let (mobileRootRecord, childrenRecords) = synchronizer.buildMobileRootAndChildrenRecords(storage, buffer, additionalChildren: [bk2, bk3]).value.successValue!
+        let (mobileRootRecord, childrenRecords) = synchronizer.buildMobileRootAndChildrenRecords(storage, buffer, additionalChildren: [bk2, bk3], deletedChildren: ["bkmdeleteme"]).value.successValue!
         XCTAssertEqual(mobileRootRecord.id, BookmarkRoots.translateOutgoingRootGUID(BookmarkRoots.MobileFolderGUID))
         XCTAssertEqual(mobileRootRecord.payload.json["title"], "Mobile Bookmarks")
         // bk1 is a children of mobile root in the buffer, therefore it should be included here.
         XCTAssertEqual(mobileRootRecord.payload.json["children"], ["bk1", "bk2", "bk3"])
 
-        // We are only sending the new records though!
-        XCTAssertEqual(childrenRecords.count, 2)
+        // We are only sending the new/deleted records though!
+        XCTAssertEqual(childrenRecords.count, 3)
         XCTAssertEqual(childrenRecords[0].id, "bk2")
         XCTAssertEqual(childrenRecords[1].id, "bk3")
+        XCTAssertEqual(childrenRecords[2].id, "bkmdeleteme")
+        XCTAssertTrue(childrenRecords[2].payload.deleted)
     }
 
     func testUploadSomeLocalRecords_batched_ok() {

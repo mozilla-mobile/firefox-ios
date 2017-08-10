@@ -131,6 +131,8 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         if profile.hasAccount() {
             LeanplumIntegration.sharedInstance.setUserAttributes(attributes: [UserAttributeKeyName.signedInSync.rawValue:  true])
         }
+
+        LeanplumIntegration.sharedInstance.track(eventName: LeanplumEventName.signsInFxa)
     }
 
     @objc fileprivate func userDidVerify(_ notification: Notification) {

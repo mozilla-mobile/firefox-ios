@@ -10,7 +10,7 @@ import Shared
 public extension UIImageView {
 
     public func setIcon(_ icon: Favicon?, forURL url: URL?, completed completionBlock: ((UIColor, URL?) -> Void)? = nil ) {
-        if let siteURL = url?.baseDomain, let defaultIcon = FaviconFetcher.defaultIcons[siteURL] {
+        if let url = url, let defaultIcon = FaviconFetcher.getDefaultIconForURL(url: url) {
             self.image = UIImage(contentsOfFile: defaultIcon.url)
             self.backgroundColor = defaultIcon.color
             completionBlock?(defaultIcon.color, url)
