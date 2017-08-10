@@ -19,6 +19,7 @@ class Setting: NSObject {
     fileprivate var _title: NSAttributedString?
     fileprivate var _footerTitle: NSAttributedString?
     fileprivate var _cellHeight: CGFloat?
+    fileprivate var _image: UIImage?
 
     weak var delegate: SettingsDelegate?
 
@@ -43,6 +44,8 @@ class Setting: NSObject {
 
     var textAlignment: NSTextAlignment { return .natural }
     
+    var image: UIImage? { return _image }
+    
     fileprivate(set) var enabled: Bool = true
 
     // Called when the cell is setup. Call if you need the default behaviour.
@@ -56,6 +59,7 @@ class Setting: NSObject {
         cell.accessoryView = nil
         cell.selectionStyle = enabled ? .default : .none
         cell.accessibilityIdentifier = accessibilityIdentifier
+        cell.imageView?.image = _image
         if let title = title?.string {
             if let detailText = cell.detailTextLabel?.text {
                 cell.accessibilityLabel = "\(title), \(detailText)"
