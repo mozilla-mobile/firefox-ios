@@ -2259,14 +2259,14 @@ extension BrowserViewController: TabManagerDelegate {
         updateTabCountUsingTabManager(tabManager)
     }
 
-    func show(buttonToast: ButtonToast, afterWaiting delay: Double = 0, duration: Double = SimpleToastUX.ToastDismissAfter) {
+    func show(buttonToast: ButtonToast, afterWaiting delay: DispatchTimeInterval = SimpleToastUX.ToastDelayBefore, duration: DispatchTimeInterval = SimpleToastUX.ToastDismissAfter) {
         // If BVC isnt visible hold on to this toast until viewDidAppear
         if self.view.window == nil {
             self.pendingToast = buttonToast
             return
         }
 
-        let time = DispatchTime(uptimeNanoseconds: DispatchTime.now().uptimeNanoseconds) + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+        let time = DispatchTime(uptimeNanoseconds: DispatchTime.now().uptimeNanoseconds) + delay
         DispatchQueue.main.asyncAfter(deadline: time) {
             self.view.addSubview(buttonToast)
             buttonToast.snp.makeConstraints { make in

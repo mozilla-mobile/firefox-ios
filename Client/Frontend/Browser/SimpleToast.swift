@@ -10,7 +10,8 @@ struct SimpleToastUX {
     static let ToastAnimationDuration = 0.5
     static let ToastDefaultColor = UIColor(red: 76.0 / 255, green: 158.0 / 255, blue: 255.0 / 255, alpha: 1)
     static let ToastFont = UIFont.systemFont(ofSize: 15)
-    static let ToastDismissAfter = 4.0
+    static let ToastDismissAfter = DispatchTimeInterval.milliseconds(4500) // 4.5 seconds.
+    static let ToastDelayBefore = DispatchTimeInterval.milliseconds(0) // 0 seconds
 }
 
 struct SimpleToast {
@@ -62,7 +63,8 @@ struct SimpleToast {
                 toast.frame = frame
             },
             completion: { finished in
-                let dispatchTime = DispatchTime.now() + Double(Int64(SimpleToastUX.ToastDismissAfter * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+                let dispatchTime = DispatchTime.now() + SimpleToastUX.ToastDismissAfter
+
                 DispatchQueue.main.asyncAfter(deadline: dispatchTime, execute: {
                     self.dismiss(toast)
                 })
