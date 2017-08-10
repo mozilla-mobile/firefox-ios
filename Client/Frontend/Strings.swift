@@ -134,6 +134,32 @@ extension Strings {
     }
 }
 
+// Firefox Account
+extension Strings {
+    // Settings strings
+    public static let FxAFirefoxAccount = NSLocalizedString("FxA.FirefoxAccount", value: "Firefox Account", comment: "Settings section title for Firefox Account")
+    public static let FxASignIntoSync = NSLocalizedString("FxA.SignIntoSync", value: "Sign in to Sync", comment: "Button label to sign into Sync")
+    public static let FxATakeYourWebWithYou = NSLocalizedString("FxA.TakeYourWebWithYou", value: "Take Your Web With You", comment: "Call to action for sign into sync button")
+    public static let FxASyncUsageDetails = NSLocalizedString("FxA.SyncExplain", value: "Get your tabs, bookmarks, and passwords from your other devices.", comment: "Label explaining what sync does")
+    public static let FxAAccountVerificationRequired = NSLocalizedString("FxA.AccountVerificationRequired", value: "Account Verification Required", comment: "Label stating your account is not verified")
+    public static let FxAAccountVerificationDetails = NSLocalizedString("FxA.AccountVerificationDetails", value: "Wrong email? Disconnect below to start over.", comment: "Label stating how to disconnect account")
+    public static let FxAManageAccount = NSLocalizedString("FxA.ManageAccount", value: "Manage Account", comment: "Button label to goto Firefox Account settings")
+    public static let FxASyncNow = NSLocalizedString("FxA.SyncNow", value: "Sync Now", comment: "Button label to Sync your Firefox Account")
+    public static let FxANoInternetConnection = NSLocalizedString("FxA.NoInternetConnection", value: "No Internet Connection", comment: "Label when no internet is present")
+    
+    // Surface error strings
+    public static let FxAAccountVerificationRequiredSurface = NSLocalizedString("FxA.AccountVerificationRequiredSurface", value: "You need to verify %@. Check your email for the verification link from Firefox.", comment: "Message explaining that user needs to check email for Firefox Account verfication link.")
+    public static let FxAResendEmail = NSLocalizedString("FxA.ResendEmail", value: "Resend Email", comment: "Button label to resend email")
+}
+
+// Push opt-in
+extension Strings {
+    public static let FxAPushUsePushToSync = NSLocalizedString("Push.UsePushToSync", value: "Use Push to Sync", comment: "Label to use push to sync")
+    public static let FxAPushUsageDetails = NSLocalizedString("Push.PushUsageDetails", value: "Push technology makes Firefox Sync blazing fast on iOS.", comment: "Label explaining the benefit of using push notifications")
+    public static let FxAPushAllowNotifications = NSLocalizedString("Push.PushAllowNotification", value: "Allow Push Notifications", comment: "Button label to allow push notifications")
+    public static let FxAPushSkipNotifications = NSLocalizedString("Push.PushSkipNotifications", value: "Use Sync Without Push", comment: "Button label to skip allowing push notifications")
+}
+
 //Hotkey Titles
 extension Strings {
     public static let ReloadPageTitle = NSLocalizedString("Hotkeys.Reload.DiscoveryTitle", value: "Reload Page", comment: "Label to display in the Discoverability overlay for keyboard shortcuts")
