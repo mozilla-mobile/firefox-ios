@@ -32,12 +32,17 @@ class URLBar: UIView {
     private let toolset = BrowserToolset()
     private let urlTextContainer = UIView()
     private let urlText = URLTextField()
+    private let truncatedUrlText = UITextView()
     private let lockIcon = UIImageView(image: #imageLiteral(resourceName: "icon_https"))
+    private let smallLockIcon = UIImageView(image: #imageLiteral(resourceName: "icon_https_small"))
     private let urlBarBackgroundView = UIView()
+    private let textAndLockContainer = UIView()
+    private let collapsedUrlAndLockWrapper = UIView()
 
     private var fullWidthURLTextConstraints = [Constraint]()
     private var centeredURLConstraints = [Constraint]()
     private var hideLockConstraints = [Constraint]()
+    private var hideSmallLockConstraints = [Constraint]()
     private var hideToolsetConstraints = [Constraint]()
     private var showToolsetConstraints = [Constraint]()
     private var isEditingConstraints = [Constraint]()
@@ -58,7 +63,6 @@ class URLBar: UIView {
 
         addSubview(urlTextContainer)
 
-        let textAndLockContainer = UIView()
         urlTextContainer.addSubview(textAndLockContainer)
 
         lockIcon.isHidden = true
@@ -67,6 +71,25 @@ class URLBar: UIView {
         lockIcon.setContentCompressionResistancePriority(1000, for: .horizontal)
         lockIcon.setContentHuggingPriority(1000, for: .horizontal)
         textAndLockContainer.addSubview(lockIcon)
+
+        smallLockIcon.alpha = 0
+        smallLockIcon.contentMode = .center
+        smallLockIcon.setContentCompressionResistancePriority(1000, for: .horizontal)
+        smallLockIcon.setContentHuggingPriority(1000, for: .horizontal)
+
+        truncatedUrlText.alpha = 0
+        truncatedUrlText.isUserInteractionEnabled = false
+        truncatedUrlText.font = UIConstants.fonts.truncatedUrlText
+        truncatedUrlText.tintColor = UIConstants.colors.urlTextFont
+        truncatedUrlText.backgroundColor = UIColor.clear
+        truncatedUrlText.contentMode = .bottom
+        truncatedUrlText.textColor = UIConstants.colors.urlTextFont
+        truncatedUrlText.setContentHuggingPriority(1000, for: .vertical)
+        truncatedUrlText.isScrollEnabled = false
+
+        collapsedUrlAndLockWrapper.addSubview(smallLockIcon)
+        collapsedUrlAndLockWrapper.addSubview(truncatedUrlText)
+        addSubview(collapsedUrlAndLockWrapper)
 
         // UITextField doesn't allow customization of the clear button, so we create
         // our own so we can use it as the rightView.
@@ -250,6 +273,30 @@ class URLBar: UIView {
             make.edges.equalTo(urlTextContainer)
         }
 
+        smallLockIcon.snp.makeConstraints { make in
+            make.leading.equalTo(collapsedUrlAndLockWrapper)
+            make.trailing.equalTo(truncatedUrlText.snp.leading)
+            make.bottom.equalTo(self)
+
+            hideLockConstraints.append(contentsOf: [
+                make.width.equalTo(0).constraint
+            ])
+        }
+
+        truncatedUrlText.snp.makeConstraints { make in
+            make.leading.equalTo(smallLockIcon.snp.trailing)
+            make.trailing.equalTo(collapsedUrlAndLockWrapper)
+            make.bottom.equalTo(smallLockIcon).offset(5)
+        }
+
+        collapsedUrlAndLockWrapper.snp.makeConstraints { make in
+            make.centerX.equalTo(self)
+            make.top.bottom.equalTo(smallLockIcon)
+            make.height.equalTo(UIConstants.layout.collapsedUrlBarHeight)
+            make.leading.equalTo(smallLockIcon)
+            make.trailing.equalTo(truncatedUrlText)
+        }
+
         centeredURLConstraints.forEach { $0.deactivate() }
         showToolsetConstraints.forEach { $0.deactivate() }
         postActivationConstraints.forEach { $0.deactivate() }
@@ -341,8 +388,10 @@ class URLBar: UIView {
         UIView.animate(withDuration: duration) {
             if visible {
                 self.hideLockConstraints.forEach { $0.deactivate() }
+                self.hideSmallLockConstraints.forEach { $0.deactivate() }
             } else {
                 self.hideLockConstraints.forEach { $0.activate() }
+                self.hideSmallLockConstraints.forEach { $0.activate() }
             }
 
             self.layoutIfNeeded()
@@ -496,6 +545,7 @@ class URLBar: UIView {
 
     fileprivate func setTextToURL() {
         var displayURL: String? = nil
+        var truncatedURL: String? = nil
 
         if let url = url {
             // Strip the username/password to prevent domain spoofing.
@@ -503,8 +553,29 @@ class URLBar: UIView {
             components?.user = nil
             components?.password = nil
             displayURL = components?.url?.absoluteString
+            truncatedURL = components?.host
         }
         urlText.text = displayURL
+        truncatedUrlText.text = truncatedURL
+    }
+
+    func collapseUrlBar(expandAlpha: CGFloat, collapseAlpha: CGFloat) {
+        if expandAlpha == 1 {
+            self.isUserInteractionEnabled = true
+        }
+
+        if expandAlpha == 0 {
+            self.isUserInteractionEnabled = false
+        }
+        deleteButton.alpha = expandAlpha
+        urlTextContainer.alpha = expandAlpha
+        truncatedUrlText.alpha = collapseAlpha
+        collapsedUrlAndLockWrapper.alpha = collapseAlpha
+
+        // updating the small lock icon status here in order to prevent the icon from flashing on start up
+        let visible = !isEditing && (url?.scheme == "https")
+        smallLockIcon.alpha = visible ? collapseAlpha : 0
+        self.layoutIfNeeded()
     }
 }
 

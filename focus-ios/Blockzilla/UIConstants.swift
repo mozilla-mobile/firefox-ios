@@ -73,6 +73,7 @@ struct UIConstants {
         static let tableSectionHeader = UIFont.systemFont(ofSize: 12, weight: UIFontWeightSemibold)
         static let toast = UIFont.systemFont(ofSize: 12)
         static let urlText = UIFont.systemFont(ofSize: 15)
+        static let truncatedUrlText = UIFont.systemFont(ofSize: 12)
     }
 
     struct layout {
@@ -92,6 +93,7 @@ struct UIConstants {
         static let toolbarButtonInsets = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
         static let urlBarCornerRadius: CGFloat = 2
         static let urlBarHeight: CGFloat = 54
+        static let collapsedUrlBarHeight: CGFloat = 22
         static let urlBarTransitionAnimationDuration: TimeInterval = 0.2
         static let urlBarMargin: CGFloat = 8
         static let urlBarHeightInset: CGFloat = 10
