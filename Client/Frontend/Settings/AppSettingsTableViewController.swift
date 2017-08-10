@@ -67,6 +67,12 @@ class AppSettingsTableViewController: SettingsTableViewController {
             ]
         }
 
+        generalSettings += [
+            BoolSetting(prefs: prefs, prefKey: "showClipboardBar", defaultValue: true,
+                        titleText: Strings.Settings_OfferClipboardBar_title,
+                        statusText: Strings.Settings_OfferClipboardBar_status)
+        ]
+
         settings += [
             SettingSection(title: nil, children: [
                 // Without a Firefox Account:
