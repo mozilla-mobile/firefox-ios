@@ -61,11 +61,21 @@ class NightModeHelper: TabHelper {
     }
     
     static func setNightMode(_ prefs: Prefs, tabManager: TabManager, enabled: Bool) {
-        prefs.setBool(enabled, forKey: PrefsKeys.KeyNightModeStatus)
+        //prefs.setBool(enabled, forKey: PrefsKeys.KeyNightModeStatus)
+        struct Static { static var isOn = false }
+        Static.isOn = !Static.isOn
+        let enabled = Static.isOn
+        
         for tab in tabManager.tabs {
-            tab.setNightMode(enabled)
+//            tab.setNightMode(enabled)
+            if #available(iOS 11, *){
+                if let cb = tab.contentBlocker as? ContentBlockerHelper {
+                    cb.blockingMode(enabled: enabled)
+                    tab.reload()
+                }
+            }
         }
-        NightModeHelper.setNightModeBrightness(prefs, enabled: enabled)
+//        NightModeHelper.setNightModeBrightness(prefs, enabled: enabled)
     }
 }
 

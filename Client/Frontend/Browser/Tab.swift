@@ -445,11 +445,11 @@ class Tab: NSObject {
     func setNoImageMode(_ enabled: Bool = false, force: Bool) {
         if enabled || force {
           //  webView?.evaluateJavaScript("window.__firefox__.NoImageMode.setEnabled(\(enabled))", completionHandler: nil)
-            if #available(iOS 11, *){
-                if let cb = contentBlocker as? ContentBlockerHelper {
-                    cb.blockImages(enabled: enabled)
-                }
+        if #available(iOS 11, *){
+            if let cb = contentBlocker as? ContentBlockerHelper {
+                cb.blockImages(enabled: enabled)
             }
+        }
         }
     }
 

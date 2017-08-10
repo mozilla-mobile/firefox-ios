@@ -124,7 +124,12 @@ class ContentBlockerHelper {
         }
     }
 
-    func installToTab() {
+    func blockingMode(enabled: Bool) {
+        if !enabled {
+            removeAllFromTab() // removes image blocking!
+            return
+        }
+
         if isInstalledToTab {
             return
         }
