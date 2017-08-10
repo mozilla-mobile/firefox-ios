@@ -65,6 +65,8 @@
 		<string>readdle-spark</string>
 		<string>itms-books</string>
 		<string>org-appextension-feature-password-management</string>
+		<string>googlegmail</string>
+		<string>inbox-gmail</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>

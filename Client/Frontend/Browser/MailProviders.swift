@@ -124,3 +124,33 @@ class YMailIntegration: MailProvider {
         return constructEmailURLString(beginningScheme, metadata: metadata, supportedHeaders: supportedHeaders).asURL
     }
 }
+
+class GoogleGmailIntegration: MailProvider {
+    var beginningScheme = "googlegmail:///co?"
+    var supportedHeaders = [
+        "to",
+        "cc",
+        "bcc",
+        "subject",
+        "body"
+    ]
+
+    func newEmailURLFromMetadata(_ metadata: MailToMetadata) -> URL? {
+        return constructEmailURLString(beginningScheme, metadata: metadata, supportedHeaders: supportedHeaders).asURL
+    }
+}
+
+class GoogleInboxIntegration: MailProvider {
+    var beginningScheme = "inbox-gmail://co?"
+    var supportedHeaders = [
+        "to",
+        "cc",
+        "bcc",
+        "subject",
+        "body"
+    ]
+
+    func newEmailURLFromMetadata(_ metadata: MailToMetadata) -> URL? {
+        return constructEmailURLString(beginningScheme, metadata: metadata, supportedHeaders: supportedHeaders).asURL
+    }
+}

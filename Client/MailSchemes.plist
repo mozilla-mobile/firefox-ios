@@ -44,5 +44,17 @@
 		<key>scheme</key>
 		<string>ymail://</string>
 	</dict>
+	<dict>
+		<key>name</key>
+		<string>Gmail</string>
+		<key>scheme</key>
+		<string>googlegmail://</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Inbox by Gmail</string>
+		<key>scheme</key>
+		<string>inbox-gmail://</string>
+	</dict>
 </array>
 </plist>
