@@ -27,10 +27,10 @@ open class MockRemoteClientsAndTabs: RemoteClientsAndTabs {
         let u22 = URL(string: "http://different.com/test2")!
         let tab22 = RemoteTab(clientGUID: client2GUID, URL: u22, title: "Different Test 2", history: [], lastUsed: now + OneHourInMilliseconds, icon: nil)
 
-        let client1 = RemoteClient(guid: client1GUID, name: "Test client 1", modified: (now - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS", version: "55.0.1", fxaDeviceId: nil)
-        let client2 = RemoteClient(guid: client2GUID, name: "Test client 2", modified: (now - OneHourInMilliseconds), type: "desktop", formfactor: "laptop", os: "Darwin", version: "55.0.1", fxaDeviceId: nil)
+        let client1 = RemoteClient(guid: client1GUID, name: "Test client 1", modified: (now - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS", version: "55.0.1", fxaDeviceId: "fxa1")
+        let client2 = RemoteClient(guid: client2GUID, name: "Test client 2", modified: (now - OneHourInMilliseconds), type: "desktop", formfactor: "laptop", os: "Darwin", version: "55.0.1", fxaDeviceId: "fxa2")
 
-        let localClient = RemoteClient(guid: nil, name: "Test local client", modified: (now - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS", version: "55.0.1", fxaDeviceId: nil)
+        let localClient = RemoteClient(guid: nil, name: "Test local client", modified: (now - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS", version: "55.0.1", fxaDeviceId: "fxa3")
         let localUrl1 = URL(string: "http://test.com/testlocal1")!
         let localTab1 = RemoteTab(clientGUID: nil, URL: localUrl1, title: "Local test 1", history: [], lastUsed: (now - OneMinuteInMilliseconds), icon: nil)
         let localUrl2 = URL(string: "http://test.com/testlocal2")!
@@ -132,18 +132,25 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
         } catch _ {
         }
         clientsAndTabs = SQLiteRemoteClientsAndTabs(db: BrowserDB(filename: "browser.db", files: files))
+
+        // Workaround: the remote devices table is created in BrowserTable, not in SQLiteRemoteClientsAndTabs.
+        _ = clientsAndTabs.db.createOrUpdate(BrowserTable())
     }
 
     func testInsertGetClear() {
         // Insert some test data.
+        var remoteDevicesToInsert: [RemoteDevice] = []
         for c in clients {
             let e = self.expectation(description: "Insert.")
             clientsAndTabs.insertOrUpdateClient(c.client).upon {
                 XCTAssertTrue($0.isSuccess)
                 e.fulfill()
             }
+            let remoteDevice = RemoteDevice(id: c.client.fxaDeviceId!, name: "FxA Device", type: "desktop", isCurrentDevice: false, lastAccessTime: 12345678)
+            remoteDevicesToInsert.append(remoteDevice)
             clientsAndTabs.insertOrUpdateTabsForClientGUID(c.client.guid, tabs: c.tabs).succeeded()
         }
+        _ = clientsAndTabs.replaceRemoteDevices(remoteDevicesToInsert).succeeded()
 
         let f = self.expectation(description: "Get after insert.")
         clientsAndTabs.getClientsAndTabs().upon {
@@ -254,5 +261,32 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
         }
 
         self.waitForExpectations(timeout: 10, handler: nil)
+    }
+
+    func remoteDeviceFactory(_ row: SDRow) -> RemoteDevice {
+        return RemoteDevice(
+            id: row["guid"] as? String,
+            name: row["name"] as! String,
+            type: row["type"] as? String,
+            isCurrentDevice: row["is_current_device"] as! Int > 0,
+            lastAccessTime: row["last_access_time"] as? Timestamp)
+    }
+
+    func testReplaceRemoteDevices() {
+        let device1 = RemoteDevice(id: "fx1", name: "Device 1", type: "mobile", isCurrentDevice: false, lastAccessTime: 12345678)
+        let device2 = RemoteDevice(id: "fx2", name: "Device 2 (local)", type: "desktop", isCurrentDevice: true, lastAccessTime: nil)
+        let device3 = RemoteDevice(id: nil, name: "Device 3 (fauly)", type: "desktop", isCurrentDevice: false, lastAccessTime: 12345678)
+        let device4 = RemoteDevice(id: "fx4", name: "Device 4 (fauly)", type: nil, isCurrentDevice: false, lastAccessTime: 12345678)
+
+        _ = clientsAndTabs.replaceRemoteDevices([device1, device2, device3, device4]).succeeded()
+
+        let devices = clientsAndTabs.db.runQuery("SELECT * FROM \(TableRemoteDevices)", args: nil, factory: remoteDeviceFactory).value.successValue!.asArray()
+        XCTAssertEqual(devices.count, 1) // Fauly devices + local device were not inserted.
+
+        let device5 = RemoteDevice(id: "fx5", name: "Device 5", type: "mobile", isCurrentDevice: false, lastAccessTime: 12345678)
+        _ = clientsAndTabs.replaceRemoteDevices([device5]).succeeded()
+
+        let newDevices = clientsAndTabs.db.runQuery("SELECT * FROM \(TableRemoteDevices)", args: nil, factory: remoteDeviceFactory).value.successValue!.asArray()
+        XCTAssertEqual(newDevices.count, 1) // replaceRemoteDevices wipes the whole list before inserting.
     }
 }

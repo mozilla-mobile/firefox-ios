@@ -4,7 +4,7 @@
 
 @testable import Client
 import Shared
-import Storage
+@testable import Storage
 import Sync
 import UIKit
 
@@ -53,9 +53,13 @@ class ResetTests: XCTestCase {
     func testResetting() {
         let profile = MockBrowserProfile(localName: "testResetTests")
 
+        // Workaround: the remote devices table is created in BrowserTable, not in SQLiteRemoteClientsAndTabs.
+        _ = profile.db.createOrUpdate(BrowserTable())
+
         // Add a client.
         let tabs = profile.peekTabs
-        XCTAssertTrue(tabs.insertOrUpdateClient(RemoteClient(guid: "abcdefghijkl", name: "Remote", modified: Date.now(), type: "mobile", formfactor: "tablet", os: "Windows", version: "55.0.1a", fxaDeviceId: nil)).value.isSuccess)
+        XCTAssertTrue(tabs.insertOrUpdateClient(RemoteClient(guid: "abcdefghijkl", name: "Remote", modified: Date.now(), type: "mobile", formfactor: "tablet", os: "Windows", version: "55.0.1a", fxaDeviceId: "fxa1")).value.isSuccess)
+        _ = tabs.replaceRemoteDevices([RemoteDevice(id: "fxa1", name: "Device 1", type: "desktop", isCurrentDevice: false, lastAccessTime: 123)]).succeeded()
 
         // Verify that it's there.
         assertClientsHaveGUIDsFromStorage(tabs, expected: ["abcdefghijkl"])

@@ -35,6 +35,8 @@ let TableActivityStreamBlocklist = "activity_stream_blocklist"
 let TablePageMetadata = "page_metadata"
 let TableHighlights = "highlights"
 
+let TableRemoteDevices = "remote_devices" // Added in v29.
+
 let ViewBookmarksBufferOnMirror = "view_bookmarksBuffer_on_mirror"
 let ViewBookmarksBufferWithDeletionsOnMirror = "view_bookmarksBuffer_with_deletions_on_mirror"
 let ViewBookmarksBufferStructureOnMirror = "view_bookmarksBufferStructure_on_mirror"
@@ -80,7 +82,8 @@ private let AllTables: [String] = [
     TableActivityStreamBlocklist,
     TablePageMetadata,
     TableHighlights,
-    TablePinnedTopSites
+    TablePinnedTopSites,
+    TableRemoteDevices
 ]
 
 private let AllViews: [String] = [
@@ -118,7 +121,7 @@ private let log = Logger.syncLogger
  * We rely on SQLiteHistory having initialized the favicon table first.
  */
 open class BrowserTable: Table {
-    static let DefaultVersion = 28    // Bug 1380062.
+    static let DefaultVersion = 29    // Bug 1386017.
 
     // TableInfo fields.
     var name: String { return "BROWSER" }
@@ -532,6 +535,18 @@ open class BrowserTable: Table {
     "id TEXT PRIMARY KEY REFERENCES \(TableBookmarksBuffer)(guid) ON DELETE CASCADE" +
     ")"
 
+    fileprivate let remoteDevices =
+    "CREATE TABLE IF NOT EXISTS \(TableRemoteDevices) (" +
+    "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+    "guid TEXT UNIQUE NOT NULL, " +
+    "name TEXT NOT NULL, " +
+    "type TEXT NOT NULL, " +
+    "is_current_device INTEGER NOT NULL, " +
+    "date_created INTEGER NOT NULL, " + // Timestamps in ms.
+    "date_modified INTEGER NOT NULL, " +
+    "last_access_time INTEGER" +
+    ")"
+
     func create(_ db: SQLiteDBConnection) -> Bool {
         let favicons =
         "CREATE TABLE IF NOT EXISTS \(TableFavicons) (" +
@@ -680,7 +695,8 @@ open class BrowserTable: Table {
             historyVisitsView,
             awesomebarBookmarksView,
             awesomebarBookmarksWithIconsView,
-            activityStreamBlocklistCreate
+            activityStreamBlocklistCreate,
+            self.remoteDevices
         ]
 
         assert(queries.count == AllTablesIndicesAndViews.count, "Did you forget to add your table, index, or view to the list?")
@@ -1004,6 +1020,14 @@ open class BrowserTable: Table {
             if !self.run(db, queries: [
                 self.pendingBookmarksDeletions,
                 self.bufferBookmarksWithDeletionsView
+            ]) {
+                return false
+            }
+        }
+
+        if from < 29 && to >= 29 {
+            if !self.run(db, queries: [
+                self.remoteDevices
             ]) {
                 return false
             }

@@ -143,9 +143,6 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         return insertOrUpdateClients([client])
     }
 
-
-
-
     open func getClientWithId(_ clientID: GUID) -> Deferred<Maybe<RemoteClient?>> {
         return self.db.runQuery("SELECT * FROM \(TableClients) WHERE guid = ?", args: [clientID], factory: clients.factory!) >>== { deferMaybe($0[0]) }
     }
@@ -344,6 +341,59 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
             syncCommands[command.clientGUID!] = cmds
         }
         return syncCommands
+    }
+}
+
+extension SQLiteRemoteClientsAndTabs: RemoteDevices {
+    open func replaceRemoteDevices(_ remoteDevices: [RemoteDevice]) -> Success {
+        // Drop corrupted records and our own record too.
+        let remoteDevices = remoteDevices.filter { $0.id != nil && $0.type != nil && !$0.isCurrentDevice }
+
+        let deferred = Success()
+        var err: NSError?
+        let resultError = self.db.transaction(&err) { (conn, err: inout NSError?) in
+            func change(_ sql: String, args: Args?=nil) -> Bool {
+                if let e = conn.executeChange(sql, withArgs: args) {
+                    err = e
+                    deferred.fillIfUnfilled(Maybe(failure: DatabaseError(err: e)))
+                    return false
+                }
+                return true
+            }
+
+            _ = change("DELETE FROM \(TableRemoteDevices)")
+
+            if err != nil {
+                return false
+            }
+
+            let now = Date.now()
+            for device in remoteDevices {
+                let sql =
+                    "INSERT INTO \(TableRemoteDevices) (guid, name, type, is_current_device, date_created, date_modified, last_access_time) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)"
+                let args: Args = [device.id, device.name, device.type, device.isCurrentDevice, now, now, device.lastAccessTime]
+                if !change(sql, args: args) {
+                    break
+                }
+            }
+
+            if err != nil {
+                return false
+            }
+
+            // Commit the result.
+            return true
+        }
+
+        if let err = resultError {
+            log.warning("Got error “\(err.localizedDescription)”")
+            deferred.fillIfUnfilled(Maybe(failure: DatabaseError(err: err)))
+        } else {
+            deferred.fillIfUnfilled(Maybe(success: ()))
+        }
+
+        return deferred
     }
 }
 

@@ -410,6 +410,7 @@
 		C8F457AA1F1FDD9B000CB895 /* BrowserViewController+KeyCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F457A91F1FDD9B000CB895 /* BrowserViewController+KeyCommands.swift */; };
 		CE339EE61F2507C0009BE0E6 /* TestBookmarksSynchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE339ED61F2507A1009BE0E6 /* TestBookmarksSynchronizer.swift */; };
 		CE564D8E1EB7BD7700BEDDDC /* BookmarksRepairRequestor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE564D8D1EB7BD7700BEDDDC /* BookmarksRepairRequestor.swift */; };
+		CE7F11941F3CEEC800ABFC0B /* RemoteDevices.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7F115E1F3CCEF900ABFC0B /* RemoteDevices.swift */; };
 		CEFC984B1EC0DCF5008A3E48 /* TestBookmarksRepairRequestor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFC983B1EC0DC60008A3E48 /* TestBookmarksRepairRequestor.swift */; };
 		D02816C21ECA5E2A00240CAA /* HistoryStateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02816C11ECA5E2A00240CAA /* HistoryStateHelper.swift */; };
 		D02816D21ECA60DF00240CAA /* HistoryStateHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = D02816D11ECA60DF00240CAA /* HistoryStateHelper.js */; };
@@ -1657,6 +1658,7 @@
 		C8F457A91F1FDD9B000CB895 /* BrowserViewController+KeyCommands.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+KeyCommands.swift"; sourceTree = "<group>"; };
 		CE339ED61F2507A1009BE0E6 /* TestBookmarksSynchronizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestBookmarksSynchronizer.swift; path = SyncTests/TestBookmarksSynchronizer.swift; sourceTree = "<group>"; };
 		CE564D8D1EB7BD7700BEDDDC /* BookmarksRepairRequestor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarksRepairRequestor.swift; sourceTree = "<group>"; };
+		CE7F115E1F3CCEF900ABFC0B /* RemoteDevices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteDevices.swift; sourceTree = "<group>"; };
 		CEFC983B1EC0DC60008A3E48 /* TestBookmarksRepairRequestor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestBookmarksRepairRequestor.swift; path = SyncTests/TestBookmarksRepairRequestor.swift; sourceTree = "<group>"; };
 		D02816C11ECA5E2A00240CAA /* HistoryStateHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryStateHelper.swift; sourceTree = "<group>"; };
 		D02816D11ECA60DF00240CAA /* HistoryStateHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = HistoryStateHelper.js; sourceTree = "<group>"; };
@@ -3230,6 +3232,7 @@
 				E65075891E37F7AB006961AC /* NotificationConstants.swift */,
 				E650758A1E37F7AB006961AC /* PhoneNumberFormatter.swift */,
 				E650758B1E37F7AB006961AC /* Prefs.swift */,
+				CE7F115E1F3CCEF900ABFC0B /* RemoteDevices.swift */,
 				E650758C1E37F7AB006961AC /* RollingFileLogger.swift */,
 				D02818601EF056C800240CAA /* SentryIntegration.swift */,
 				E650758D1E37F7AB006961AC /* SupportUtils.swift */,
@@ -5097,6 +5100,7 @@
 				3964B09A1EA8F06F00F2EEF4 /* FeatureSwitch.swift in Sources */,
 				E65075981E37F7AB006961AC /* Bytes.swift in Sources */,
 				E65075B11E37F7AB006961AC /* FSUtils.m in Sources */,
+				CE7F11941F3CEEC800ABFC0B /* RemoteDevices.swift in Sources */,
 				D3A14C221CB3145E00253BC6 /* Strings.swift in Sources */,
 				7B10AA9F1E3A15020002DD08 /* DataExtensions.swift in Sources */,
 				7B3D9E651E4CBFDB007A50DA /* NSCoderExtensions.swift in Sources */,
