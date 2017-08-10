@@ -202,12 +202,37 @@ open class FirefoxAccount {
         }
     }
 
-    @discardableResult open func notify(deviceIDs: [GUID], collectionsChanged collections: [String]) -> Deferred<Maybe<FxANotifyResponse>> {
+    public class NotifyError: MaybeErrorType {
+        public var description = "The server could not notify the clients."
+    }
+
+    @discardableResult open func notify(deviceIDs: [GUID], collectionsChanged collections: [String]) -> Success {
         guard let session = stateCache.value as? TokenState else {
             return deferMaybe(NotATokenStateError(state: stateCache.value))
         }
         let client = FxAClient10(endpoint: self.configuration.authEndpointURL)
-        return client.notify(deviceIDs: deviceIDs, collectionsChanged: collections, withSessionToken: session.sessionToken as NSData)
+        return client.notify(deviceIDs: deviceIDs, collectionsChanged: collections, withSessionToken: session.sessionToken as NSData) >>== { resp in
+            guard resp.success else {
+                return deferMaybe(NotifyError())
+            }
+            return succeed()
+        }
+    }
+
+    @discardableResult open func notifyAll(collectionsChanged collections: [String]) -> Success {
+        guard let session = stateCache.value as? TokenState else {
+            return deferMaybe(NotATokenStateError(state: stateCache.value))
+        }
+        guard let ownDeviceId = self.deviceRegistration?.id else {
+            return deferMaybe(FxAClientError.local(NSError()))
+        }
+        let client = FxAClient10(endpoint: self.configuration.authEndpointURL)
+        return client.notifyAll(ownDeviceId: ownDeviceId, collectionsChanged: collections, withSessionToken: session.sessionToken as NSData) >>== { resp in
+            guard resp.success else {
+                return deferMaybe(NotifyError())
+            }
+            return succeed()
+        }
     }
 
     @discardableResult open func advance() -> Deferred<FxAState> {
