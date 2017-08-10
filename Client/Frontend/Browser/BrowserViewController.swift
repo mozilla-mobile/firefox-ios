@@ -1938,7 +1938,7 @@ extension BrowserViewController: TabDelegate {
         }
 
         if #available(iOS 11, *) {
-            ContentBlockerHelper(tab: tab)
+            tab.contentBlocker = ContentBlockerHelper(tab: tab)
         }
     }
 

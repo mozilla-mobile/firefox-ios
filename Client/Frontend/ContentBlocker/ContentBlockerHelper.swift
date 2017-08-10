@@ -108,7 +108,14 @@ class ContentBlockerHelper {
         }
     }
 
-    private func addToConfig(contentRuleList: WKContentRuleList?, error: Error?) {
+    var isInstalledToTab = false
+
+    func removeAllFromTab() {
+        isInstalledToTab = false
+        tab?.webView?.configuration.userContentController.removeAllContentRuleLists()
+    }
+
+    private func addToTab(contentRuleList: WKContentRuleList?, error: Error?) {
         if let rules = contentRuleList {
             tab?.webView?.configuration.userContentController.add(rules)
         } else {
@@ -117,13 +124,32 @@ class ContentBlockerHelper {
         }
     }
 
-    func removeAllFromTab() {
-        tab?.webView?.configuration.userContentController.removeAllContentRuleLists()
+    func installToTab() {
+        if isInstalledToTab {
+            return
+        }
+        isInstalledToTab = true
+
+        for (_, filename) in self.blocklists {
+            ruleStore.lookUpContentRuleList(forIdentifier: filename, completionHandler: addToTab)
+        }
     }
 
-    func reinstallToTab() {
-        for (_, filename) in self.blocklists {
-            ruleStore.lookUpContentRuleList(forIdentifier: filename, completionHandler: addToConfig)
+    var blockImagesRule: WKContentRuleList?
+
+    func blockImages(enabled: Bool) {
+        if let rule = blockImagesRule, !enabled {
+            tab?.webView?.configuration.userContentController.remove(rule)
+            return
+        }
+
+        let json = "[{'trigger':{'url-filter':'.*','resource-type':['image']},'action':{'type':'block'}}]".replacingOccurrences(of: "'", with:"\"")
+        self.ruleStore.compileContentRuleList(forIdentifier: "images", encodedContentRuleList: json) {
+            rule, error in
+            assert(rule != nil)
+            assert(error == nil)
+            self.blockImagesRule = rule
+            self.addToTab(contentRuleList: rule, error: error)
         }
     }
 
@@ -138,15 +164,23 @@ class ContentBlockerHelper {
         self.tab = tab
 
         removeStaleRules() {
+            let dispatchGroup = DispatchGroup()
+            dispatchGroup.notify(queue: .main) {
+                // self.installToTab()  // or initComplete = true, if isInstalled means has been called to install, do again
+
+            }
+
             for (_, filename) in self.blocklists {
+                dispatchGroup.enter()
                 self.ruleStore.lookUpContentRuleList(forIdentifier: filename) { contentRuleList, error in
                     if contentRuleList != nil {
-                        self.addToConfig(contentRuleList: contentRuleList, error: error)
+                        dispatchGroup.leave()
                         return
                     }
-
                     self.loadJsonFromBundle(forResource: filename) { jsonString in
-                        self.ruleStore.compileContentRuleList(forIdentifier: filename, encodedContentRuleList: jsonString, completionHandler: self.addToConfig)
+                        self.ruleStore.compileContentRuleList(forIdentifier: filename, encodedContentRuleList: jsonString) { _,_ in
+                            dispatchGroup.leave()
+                        }
                     }
                 }
             }

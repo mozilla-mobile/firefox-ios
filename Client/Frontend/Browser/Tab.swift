@@ -65,6 +65,8 @@ class Tab: NSObject {
     var pendingScreenshot = false
     var url: URL?
 
+    var contentBlocker: AnyObject?
+
     /// The last title shown by this tab. Used by the tab tray to show titles for zombie tabs.
     var lastTitle: String?
 
@@ -442,7 +444,12 @@ class Tab: NSObject {
 
     func setNoImageMode(_ enabled: Bool = false, force: Bool) {
         if enabled || force {
-            webView?.evaluateJavaScript("window.__firefox__.NoImageMode.setEnabled(\(enabled))", completionHandler: nil)
+          //  webView?.evaluateJavaScript("window.__firefox__.NoImageMode.setEnabled(\(enabled))", completionHandler: nil)
+            if #available(iOS 11, *){
+                if let cb = contentBlocker as? ContentBlockerHelper {
+                    cb.blockImages(enabled: enabled)
+                }
+            }
         }
     }
 
