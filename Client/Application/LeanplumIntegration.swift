@@ -33,6 +33,7 @@ enum LeanplumEventName: String {
     case savedLoginAndPassword = "E_Saved_Login_And_Password"
     case clearPrivateData = "E_Cleared_Private_Data"
     case downloadedFocus = "E_User_Downloaded_Focus"
+    case downloadedPocket = "E_User_Downloaded_Pocket"
     case signsInFxa = "E_User_Signed_In_To_FxA"
 }
 
@@ -41,6 +42,7 @@ enum UserAttributeKeyName: String {
     case klarInstalled = "Klar Installed"
     case signedInSync = "Signed In Sync"
     case mailtoIsDefault = "Mailto Is Default"
+    case pocketInstalled = "Pocket Installed"
     case telemetryOptIn = "Telemetry Opt In"
 }
 
@@ -114,10 +116,15 @@ class LeanplumIntegration {
             profile?.prefs.setBool(!canInstallFocus(), forKey: PrefsKeys.HasFocusInstalled)
         }
 
+        if profile?.prefs.boolForKey(PrefsKeys.HasPocketInstalled) == nil {
+            profile?.prefs.setBool(!canInstallPocket(), forKey: PrefsKeys.HasPocketInstalled)
+        }
+
         var userAttributesDict = [AnyHashable: Any]()
         userAttributesDict[UserAttributeKeyName.mailtoIsDefault.rawValue] = mailtoIsDefault()
         userAttributesDict[UserAttributeKeyName.focusInstalled.rawValue] = !canInstallFocus()
         userAttributesDict[UserAttributeKeyName.klarInstalled.rawValue] = !canInstallKlar()
+        userAttributesDict[UserAttributeKeyName.pocketInstalled.rawValue] = !canInstallPocket()
         userAttributesDict[UserAttributeKeyName.signedInSync.rawValue] = profile?.hasAccount()
 
         Leanplum.start(userAttributes: userAttributesDict)
@@ -129,6 +136,14 @@ class LeanplumIntegration {
             profile?.prefs.setBool(!canInstallFocus(), forKey: PrefsKeys.HasFocusInstalled)
             if !canInstallFocus() {
                 track(eventName: LeanplumEventName.downloadedFocus)
+            }
+        }
+
+        // Only drops Leanplum event when a user has installed Pocket (from a fresh state or a re-install)
+        if profile?.prefs.boolForKey(PrefsKeys.HasPocketInstalled) == canInstallPocket() {
+            profile?.prefs.setBool(!canInstallPocket(), forKey: PrefsKeys.HasPocketInstalled)
+            if !canInstallPocket() {
+                track(eventName: LeanplumEventName.downloadedPocket)
             }
         }
     }
@@ -171,6 +186,13 @@ class LeanplumIntegration {
             return false
         }
         return !UIApplication.shared.canOpenURL(klar)
+    }
+
+    func canInstallPocket() -> Bool {
+        guard let pocket = URL(string: "pocket://") else {
+            return false
+        }
+        return !UIApplication.shared.canOpenURL(pocket)
     }
 
     func mailtoIsDefault() -> Bool {

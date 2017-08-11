@@ -54,6 +54,7 @@
 	<false/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
+		<string>pocket</string>
 		<string>firefox-focus</string>
 		<string>firefox-klar</string>
 		<string>ymail</string>
