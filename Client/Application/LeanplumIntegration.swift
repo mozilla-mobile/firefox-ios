@@ -33,6 +33,7 @@ enum LeanplumEventName: String {
     case savedLoginAndPassword = "E_Saved_Login_And_Password"
     case clearPrivateData = "E_Cleared_Private_Data"
     case downloadedFocus = "E_User_Downloaded_Focus"
+    case userSharedWebpage = "E_User_Tapped_Share_Button"
     case signsInFxa = "E_User_Signed_In_To_FxA"
 }
 
