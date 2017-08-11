@@ -97,17 +97,17 @@ extension FxAPushMessageHandler {
 
 extension FxAPushMessageHandler {
     func handleVerification() -> PushMessageResult {
-        guard let account = profile.getAccount(), account.actionNeeded == .needsVerification else {
-            log.info("Account verified by server either doesn't exist or doesn't need verifying")
-            return deferMaybe(.accountVerified)
-        }
+        // What we'd really like to be able to start syncing immediately we receive this
+        // message, but this method is run by the extension, so we can't do it here.
+        return deferMaybe(.accountVerified)
+    }
 
-        // Progress through the FxAStateMachine, then explicitly sync.
-        // We need a better solution than calling out to FxALoginHelper, because that class isn't
-        // available in NotificationService, where this class is also used.
-        // Since verification via Push has never been seen to work, we can be comfortable
-        // leaving this as unimplemented.
-        return unimplemented(.accountVerified)
+    // This will be executed by the app, not the extension.
+    // This isn't guaranteed to be run (when the app is backgrounded, and the user
+    // doesn't tap on the notification), but that's okay because:
+    // We'll naturally be syncing shortly after startup.
+    func postVerification() -> Success {
+        return profile.syncManager?.syncEverything(why: .didLogin) ?? succeed()
     }
 }
 
