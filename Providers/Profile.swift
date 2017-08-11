@@ -662,8 +662,10 @@ open class BrowserProfile: Profile {
                     log.debug("Profile isn't sending usage data. Not sending sync status event.")
                 }
             }
-
-            notifySyncing(notification: NotificationProfileDidFinishSyncing)
+            // Dont notify if we are performing a sync in the background. This prevents more db access from happening
+            if !self.backgrounded {
+                notifySyncing(notification: NotificationProfileDidFinishSyncing)
+            }
             syncReducer = nil
         }
 
