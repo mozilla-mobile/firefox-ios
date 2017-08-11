@@ -49,7 +49,7 @@ class TestHistory: ProfileTest {
         let expectation = self.expectation(description: "Wait for history")
         history.getSitesByLastVisit(100).upon { result in
             XCTAssertTrue(result.isSuccess)
-            history.getSitesByFrecencyWithHistoryLimit(100, whereURLContains: url).upon { result in
+            history.getSitesByFrecencyWithHistoryLimit(100, bookmarksLimit: 0, whereURLContains: url).upon { result in
                 XCTAssertTrue(result.isSuccess)
                 let cursor = result.successValue!
                 XCTAssertEqual(cursor.status, CursorStatus.success, "returned success \(cursor.statusMessage)")
