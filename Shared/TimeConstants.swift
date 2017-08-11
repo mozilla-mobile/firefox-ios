@@ -16,6 +16,12 @@ public let OneHourInMilliseconds = 60 * OneMinuteInMilliseconds
 public let OneMinuteInMilliseconds = 60 * OneSecondInMilliseconds
 public let OneSecondInMilliseconds: UInt64 = 1000
 
+extension Timestamp {
+    public static func uptimeInMilliseconds() -> Timestamp {
+        return Timestamp(DispatchTime.now().uptimeNanoseconds) / 1000000
+    }
+}
+
 extension Date {
     public static func now() -> Timestamp {
         return UInt64(1000 * Date().timeIntervalSince1970)
