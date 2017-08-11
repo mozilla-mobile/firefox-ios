@@ -76,6 +76,7 @@ class URLBar: UIView {
         smallLockIcon.contentMode = .center
         smallLockIcon.setContentCompressionResistancePriority(1000, for: .horizontal)
         smallLockIcon.setContentHuggingPriority(1000, for: .horizontal)
+        smallLockIcon.accessibilityIdentifier = "Collapsed.smallLockIcon"
 
         truncatedUrlText.alpha = 0
         truncatedUrlText.isUserInteractionEnabled = false
@@ -86,6 +87,7 @@ class URLBar: UIView {
         truncatedUrlText.textColor = UIConstants.colors.urlTextFont
         truncatedUrlText.setContentHuggingPriority(1000, for: .vertical)
         truncatedUrlText.isScrollEnabled = false
+        truncatedUrlText.accessibilityIdentifier = "Collapsed.truncatedUrlText"
 
         collapsedUrlAndLockWrapper.addSubview(smallLockIcon)
         collapsedUrlAndLockWrapper.addSubview(truncatedUrlText)

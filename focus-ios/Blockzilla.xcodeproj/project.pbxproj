@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0B0D6BC41F3CDDBB00497D08 /* CollapsedURLTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B0D6BC31F3CDDBB00497D08 /* CollapsedURLTest.swift */; };
 		0B37F9A61E2FCAD4002DF74B /* SearchProviderTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B37F9A51E2FCAD4002DF74B /* SearchProviderTest.swift */; };
 		0B4868661F2250A3008C3C09 /* PastenGoTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4868651F2250A3008C3C09 /* PastenGoTest.swift */; };
 		0B70C1631DE6128900CEF7E0 /* WebsiteMemoryTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B70C1621DE6128900CEF7E0 /* WebsiteMemoryTest.swift */; };
@@ -161,6 +162,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0B0D6BC31F3CDDBB00497D08 /* CollapsedURLTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollapsedURLTest.swift; sourceTree = "<group>"; };
 		0B37F9A51E2FCAD4002DF74B /* SearchProviderTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchProviderTest.swift; sourceTree = "<group>"; };
 		0B4868651F2250A3008C3C09 /* PastenGoTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PastenGoTest.swift; sourceTree = "<group>"; };
 		0B70C1621DE6128900CEF7E0 /* WebsiteMemoryTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebsiteMemoryTest.swift; sourceTree = "<group>"; };
@@ -653,6 +655,7 @@
 		0BBBED3F1DD3821600F9C565 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				0B0D6BC31F3CDDBB00497D08 /* CollapsedURLTest.swift */,
 				0B4868651F2250A3008C3C09 /* PastenGoTest.swift */,
 				0BC928CD1E366A6E004AC581 /* AsianLocaleTest.swift */,
 				0BBBED401DD3823C00F9C565 /* BaseTestCase.swift */,
@@ -1128,6 +1131,7 @@
 				0BC928CE1E366A6E004AC581 /* AsianLocaleTest.swift in Sources */,
 				0B4868661F2250A3008C3C09 /* PastenGoTest.swift in Sources */,
 				0BA39A861DD2B8E4005F970A /* WebsiteAccessTest.swift in Sources */,
+				0B0D6BC41F3CDDBB00497D08 /* CollapsedURLTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
