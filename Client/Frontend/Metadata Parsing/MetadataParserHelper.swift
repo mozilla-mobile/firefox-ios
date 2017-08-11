@@ -37,6 +37,7 @@ class MetadataParserHelper: TabHelper {
         var userInfo = [String: Any]()
         userInfo["isPrivate"] = self.tab?.isPrivate ?? true
         userInfo["metadata"] = dict
+        userInfo["tabURL"] = self.tab?.url?.displayURL?.absoluteString
         NotificationCenter.default.post(name: NotificationOnPageMetadataFetched, object: nil, userInfo: userInfo)
     }
 }

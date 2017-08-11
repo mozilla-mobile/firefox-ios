@@ -552,28 +552,28 @@ extension ActivityStreamPanel: DataObserverDelegate {
         }
         profile.history.removeHostFromTopSites(host).uponQueue(.main) { result in
             guard result.isSuccess else { return }
-            self.profile.panelDataObservers.activityStream.invalidate(highlights: false)
+            self.profile.panelDataObservers.activityStream.refreshIfNeeded(forceHighlights: false, forceTopSites: true)
         }
     }
 
     func pinTopSite(_ site: Site) {
         profile.history.addPinnedTopSite(site).uponQueue(.main) { result in
             guard result.isSuccess else { return }
-            self.profile.panelDataObservers.activityStream.invalidate(highlights: false)
+            self.profile.panelDataObservers.activityStream.refreshIfNeeded(forceHighlights: false, forceTopSites: true)
         }
     }
 
     func removePinTopSite(_ site: Site) {
         profile.history.removeFromPinnedTopSites(site).uponQueue(.main) { result in
             guard result.isSuccess else { return }
-            self.profile.panelDataObservers.activityStream.invalidate(highlights: false)
+            self.profile.panelDataObservers.activityStream.refreshIfNeeded(forceHighlights: false, forceTopSites: true)
         }
     }
 
     func hideFromHighlights(_ site: Site) {
         profile.recommendations.removeHighlightForURL(site.url).uponQueue(.main) { result in
             guard result.isSuccess else { return }
-            self.profile.panelDataObservers.activityStream.invalidate(highlights: true)
+            self.profile.panelDataObservers.activityStream.refreshIfNeeded(forceHighlights: true, forceTopSites: false)
         }
     }
 
@@ -699,7 +699,7 @@ extension ActivityStreamPanel: HomePanelContextMenu {
                     $0.removeByURL(siteURL.absoluteString)
                     site.setBookmarked(false)
                 }
-                self.profile.panelDataObservers.activityStream.invalidate(highlights: false)
+                self.profile.panelDataObservers.activityStream.refreshIfNeeded(forceHighlights: false, forceTopSites: true)
                 self.telemetry.reportEvent(.RemoveBookmark, source: pingSource, position: index)
 
             })
@@ -723,7 +723,7 @@ extension ActivityStreamPanel: HomePanelContextMenu {
             self.telemetry.reportEvent(.Delete, source: pingSource, position: index)
             self.profile.history.removeHistoryForURL(site.url).uponQueue(.main) { result in
                 guard result.isSuccess else { return }
-                self.profile.panelDataObservers.activityStream.invalidate(highlights: true)
+                self.profile.panelDataObservers.activityStream.refreshIfNeeded(forceHighlights: true, forceTopSites: true)
             }
         })
 
@@ -929,8 +929,6 @@ class ASHeaderView: UICollectionReusableView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        print(UIScreen.main.bounds.size.width)
-        print(self.frame.size.width)
         constraint?.update(offset: titleInsets)
     }
     

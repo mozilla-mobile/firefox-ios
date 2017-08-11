@@ -90,41 +90,6 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         BrowserUtils.closeClearPrivateDataDialog(tester())
     }
 
-    func testClearsTopSitesPanel() {
-        let urls = visitSites(noOfSites: 2)
-        let dispDomains = Set<String>(urls.map { $0.dispDomain })
-        let fullDomains = Set<String>(urls.map { $0.domain })
-        var errorOrNil: NSError?
-        
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Top sites")).perform(grey_tap())
-        
-        // Only one will be found -- we collapse by domain.
-        anyDomainsExistOnTopSites(dispDomains, fulldomains: fullDomains)
-        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.History], swipe: false, tester: tester())
-    
-        // Refresh the collection view
-        EarlGrey.select(elementWithMatcher:  grey_accessibilityID("HomePanels.Bookmarks")).perform(grey_tap())
-        EarlGrey.select(elementWithMatcher:  grey_accessibilityID("HomePanels.TopSites")).perform(grey_tap())
-        
-        let displayed = urls[0].dispDomain.replacingOccurrences(of: ".", with: " ")
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(displayed))
-            .assert(grey_notNil(), error: &errorOrNil)
-        
-        XCTAssertEqual(GREYInteractionErrorCode(rawValue: errorOrNil!.code),
-        GREYInteractionErrorCode.elementNotFoundErrorCode,
-        "Expected to have removed top site panel \(urls[0])")
-    }
-
-    func testDisabledHistoryDoesNotClearTopSitesPanel() {
-        let urls = visitSites(noOfSites: 2)
-        let dispDomains = Set<String>(urls.map { $0.dispDomain })
-        let fullDomains = Set<String>(urls.map { $0.domain })
-
-        anyDomainsExistOnTopSites(dispDomains, fulldomains: fullDomains)
-        BrowserUtils.clearPrivateData(BrowserUtils.AllClearables.subtracting([BrowserUtils.Clearable.History]), swipe: false, tester: tester())
-        anyDomainsExistOnTopSites(dispDomains, fulldomains: fullDomains)
-    }
-
     func testClearsHistoryPanel() {
         let urls = visitSites(noOfSites: 2)
         var errorOrNil: NSError?
