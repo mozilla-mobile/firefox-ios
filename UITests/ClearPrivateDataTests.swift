@@ -90,40 +90,6 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         BrowserUtils.closeClearPrivateDataDialog(tester())
     }
 
-    func testClearsTopSitesPanel() {
-        let urls = visitSites(noOfSites: 2)
-        let dispDomains = Set<String>(urls.map { $0.dispDomain })
-        let fullDomains = Set<String>(urls.map { $0.domain })
-        var errorOrNil: NSError?
-        
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Top sites")).perform(grey_tap())
-        
-        // Only one will be found -- we collapse by domain.
-        anyDomainsExistOnTopSites(dispDomains, fulldomains: fullDomains)
-
-        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.History], swipe: false, tester: tester())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(urls[0].title))
-            .assert(grey_notNil(), error: &errorOrNil)
-        XCTAssertEqual(GREYInteractionErrorCode(rawValue: errorOrNil!.code),
-        GREYInteractionErrorCode.elementNotFoundErrorCode,
-        "Expected to have removed top site panel \(urls[0])")
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(urls[1].title))
-            .assert(grey_notNil(), error: &errorOrNil)
-        XCTAssertEqual(GREYInteractionErrorCode(rawValue: errorOrNil!.code),
-        GREYInteractionErrorCode.elementNotFoundErrorCode,
-        "We shouldn't find the other URL, either.")
-    }
-
-    func testDisabledHistoryDoesNotClearTopSitesPanel() {
-        let urls = visitSites(noOfSites: 2)
-        let dispDomains = Set<String>(urls.map { $0.dispDomain })
-        let fullDomains = Set<String>(urls.map { $0.domain })
-
-        anyDomainsExistOnTopSites(dispDomains, fulldomains: fullDomains)
-        BrowserUtils.clearPrivateData(BrowserUtils.AllClearables.subtracting([BrowserUtils.Clearable.History]), swipe: false, tester: tester())
-        anyDomainsExistOnTopSites(dispDomains, fulldomains: fullDomains)
-    }
-
     func testClearsHistoryPanel() {
         let urls = visitSites(noOfSites: 2)
         var errorOrNil: NSError?

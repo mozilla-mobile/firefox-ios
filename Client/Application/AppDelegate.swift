@@ -214,9 +214,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         let fxaLoginHelper = FxALoginHelper.sharedInstance
         fxaLoginHelper.application(application, didLoadProfile: profile)
 
-        // Run an invalidate when we come back into the app.
-        profile.panelDataObservers.activityStream.invalidate(highlights: true)
-
         setUpDeepLinks(application: application)
 
         log.debug("Done with setting up the application.")

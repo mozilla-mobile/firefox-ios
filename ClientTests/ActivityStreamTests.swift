@@ -231,8 +231,7 @@ class MockPingClient: PingCentreClient {
 }
 
 fileprivate class MockRecommender: HistoryRecommendations {
-    func invalidateHighlights() -> Success {
-        // no-op since we don't need to purge a cache for our mock recommender
+    func repopulateHighlights() -> Success {
         return succeed()
     }
 
@@ -250,6 +249,10 @@ fileprivate class MockRecommender: HistoryRecommendations {
         return deferMaybe(ArrayCursor(data: []))
     }
     
+    func repopulate(invalidateTopSites shouldInvalidateTopSites: Bool, invalidateHighlights shouldInvalidateHighlights: Bool) -> Success {
+        return succeed()
+    }
+
     func removeHighlightForURL(_ url: String) -> Success {
         guard let foundSite = highlights.filter({ $0.url == url }).first else {
             return succeed()

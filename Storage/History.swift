@@ -26,17 +26,13 @@ public protocol BrowserHistory {
     func removeHostFromTopSites(_ host: String) -> Success
 
     func getSitesByFrecencyWithHistoryLimit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>>
-    func getSitesByFrecencyWithHistoryLimit(_ limit: Int, whereURLContains filter: String) -> Deferred<Maybe<Cursor<Site>>>
     func getSitesByFrecencyWithHistoryLimit(_ limit: Int, bookmarksLimit: Int, whereURLContains filter: String) -> Deferred<Maybe<Cursor<Site>>>
     func getSitesByLastVisit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>>
 
     func getTopSitesWithLimit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>>
     func setTopSitesNeedsInvalidation()
-    func updateTopSitesCacheIfInvalidated() -> Deferred<Maybe<Bool>>
     func setTopSitesCacheSize(_ size: Int32)
     func clearTopSitesCache() -> Success
-    @discardableResult func refreshTopSitesCache() -> Success
-    func areTopSitesDirty(withLimit limit: Int) -> Deferred<Maybe<Bool>>
 
     // Pinning top sites
     func removeFromPinnedTopSites(_ site: Site) -> Success
@@ -52,7 +48,7 @@ public protocol HistoryRecommendations {
     func getRecentBookmarks(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>>
 
     func removeHighlightForURL(_ url: String) -> Success
-    func invalidateHighlights() -> Success
+    func repopulate(invalidateTopSites shouldInvalidateTopSites: Bool, invalidateHighlights shouldInvalidateHighlights: Bool) -> Success
 }
 
 /**

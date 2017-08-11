@@ -36,8 +36,8 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
     override func tearDown() {
         // Clear out anything we might have changed on disk
         history.clearHistory().succeeded()
-        history.clearHighlights().succeeded()
         db.run("DELETE FROM \(TablePageMetadata)").succeeded()
+        db.run("DELETE FROM \(TableHighlights)").succeeded()
         db.run("DELETE FROM \(TableActivityStreamBlocklist)").succeeded()
 
         SDWebImageManager.shared().imageCache.clearDisk()
@@ -95,8 +95,7 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         history.addLocalVisit(siteVisitD2).succeeded()
         history.addLocalVisit(siteVisitD3).succeeded()
         history.addLocalVisit(siteVisitD4).succeeded()
-
-        history.invalidateHighlights().succeeded()
+        history.repopulate(invalidateTopSites: true, invalidateHighlights: true).succeeded()
         let highlights = history.getHighlights().value.successValue!
         XCTAssertEqual(highlights.count, 2)
         XCTAssertEqual(highlights[0]!.title, "A")
@@ -150,7 +149,7 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         history.addLocalVisit(siteVisitD3).succeeded()
         history.addLocalVisit(siteVisitD4).succeeded()
 
-        history.invalidateHighlights().succeeded()
+        history.repopulate(invalidateTopSites: true, invalidateHighlights: true).succeeded()
         let highlights = history.getHighlights().value.successValue!
         XCTAssertEqual(highlights.count, 0)
     }
@@ -181,7 +180,7 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         history.addLocalVisit(siteVisitC1).succeeded()
         history.addLocalVisit(siteVisitC2).succeeded()
 
-        history.invalidateHighlights().succeeded()
+        history.repopulate(invalidateTopSites: true, invalidateHighlights: true).succeeded()
         let highlights = history.getHighlights().value.successValue!
         XCTAssertEqual(highlights.count, 1)
         XCTAssertEqual(highlights[0]!.title, "A")
@@ -232,7 +231,7 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
                                  title: siteC.title, description: "Test Description", type: nil, providerName: nil, mediaDataURI: nil, cacheImages: false)
         metadata.storeMetadata(pageC, forPageURL: siteC.url.asURL!, expireAt: Date.now() + 3000).succeeded()
 
-        history.invalidateHighlights().succeeded()
+        history.repopulate(invalidateTopSites: true, invalidateHighlights: true).succeeded()
         let highlights = history.getHighlights().value.successValue!
         XCTAssertEqual(highlights.count, 3)
 
@@ -252,13 +251,13 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         history.clearHistory().succeeded()
         history.addLocalVisit(siteVisitA1).succeeded()
 
-        history.invalidateHighlights().succeeded()
+        history.repopulate(invalidateTopSites: true, invalidateHighlights: true).succeeded()
         var highlights = history.getHighlights().value.successValue!
         XCTAssertEqual(highlights.count, 1)
         XCTAssertEqual(highlights[0]!.title, "A")
 
         history.removeHighlightForURL(siteA.url).succeeded()
-        history.invalidateHighlights().succeeded()
+        history.repopulate(invalidateTopSites: true, invalidateHighlights: true).succeeded()
         highlights = history.getHighlights().value.successValue!
         XCTAssertEqual(highlights.count, 0)
     }
@@ -273,14 +272,10 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         history.clearHistory().succeeded()
         history.addLocalVisit(siteVisitA1).succeeded()
 
-        history.invalidateHighlights().succeeded()
+        history.repopulate(invalidateTopSites: true, invalidateHighlights: true).succeeded()
         var highlights = history.getHighlights().value.successValue!
         XCTAssertEqual(highlights.count, 1)
         XCTAssertEqual(highlights[0]!.title, "A")
-
-        history.clearHighlights().succeeded()
-        highlights = history.getHighlights().value.successValue!
-        XCTAssertEqual(highlights.count, 0)
     }
 }
 
@@ -299,7 +294,7 @@ class TestSQLiteHistoryRecommendationsPerf: XCTestCase {
         populateForRecommendationCalculations(history, bookmarks: bookmarks, metadata: metadata, historyCount: count, bookmarkCount: count)
         self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true) {
             for _ in 0...5 {
-                history.invalidateHighlights().succeeded()
+                history.repopulate(invalidateTopSites: true, invalidateHighlights: true).succeeded()
             }
             self.stopMeasuring()
         }

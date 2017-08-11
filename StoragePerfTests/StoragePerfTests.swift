@@ -67,7 +67,7 @@ class TestSQLiteHistoryTopSitesCachePref: XCTestCase {
 
         history.setTopSitesNeedsInvalidation()
         self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true) {
-            history.updateTopSitesCacheIfInvalidated().succeeded()
+            history.repopulate(invalidateTopSites: true, invalidateHighlights: true).succeeded()
             self.stopMeasuring()
         }
     }

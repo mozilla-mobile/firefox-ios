@@ -88,7 +88,7 @@ open class MockActivityStreamDataObserver: DataObserver {
         self.profile = profile
     }
 
-    public func invalidate(highlights: Bool) {
+    public func refreshIfNeeded(forceHighlights highlights: Bool, forceTopSites topsites: Bool) {
 
     }
 }
