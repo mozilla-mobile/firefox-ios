@@ -18,6 +18,7 @@ import WebImage
 import SwiftyJSON
 import Telemetry
 import Sentry
+import Leanplum
 
 private let log = Logger.browserLogger
 
@@ -3003,6 +3004,15 @@ extension BrowserViewController: IntroViewControllerDelegate {
                 _ = self.navigationController?.popToRootViewController(animated: true)
             }
         }
+    }
+    
+    func introViewControllerShouldAskForNotifications(_ introViewController: IntroViewController) -> Bool {
+        // Only include the slide if Leanplum has decided it needs to run and if the current locale is en_US/GB/CA/AU/HK/SG
+        return Leanplum.hasStarted() && Locale.current.identifier.startsWith("en_")
+    }
+    
+    func introViewControllerDidRequestToEnableNotifications(_ introViewController: IntroViewController) {
+        // TODO Calling into the FxaLoginHelper shows the permissions dialog but then crashes
     }
 
     func presentSignInViewController(_ fxaOptions: FxALaunchParams? = nil) {
