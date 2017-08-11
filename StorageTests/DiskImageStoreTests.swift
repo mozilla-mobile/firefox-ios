@@ -17,7 +17,7 @@ class DiskImageStoreTests: XCTestCase {
         files = MockFiles()
         store = DiskImageStore(files: files, namespace: "DiskImageStoreTests", quality: 1)
 
-        store.clearExcluding(Set())
+        _ = store.clearExcluding(Set()).value
     }
 
     func testStore() {
@@ -44,7 +44,7 @@ class DiskImageStoreTests: XCTestCase {
         success = putImage("blue", image: blueImage)
         XCTAssertFalse(success, "Blue image not added again")
 
-        store.clearExcluding(Set(["red"]))
+        _ = store.clearExcluding(Set(["red"])).value
         XCTAssertNotNil(getImage("red"), "Red image still exists")
         XCTAssertNil(getImage("blue"), "Blue image cleared")
     }

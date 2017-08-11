@@ -681,7 +681,7 @@ extension TabManager {
         }
 
         // Clean up any screenshots that are no longer associated with a tab.
-        imageStore?.clearExcluding(savedUUIDs)
+        _ = imageStore?.clearExcluding(savedUUIDs)
 
         let tabStateData = NSMutableData()
         let archiver = NSKeyedArchiver(forWritingWith: tabStateData)
