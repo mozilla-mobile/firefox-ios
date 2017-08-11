@@ -40,6 +40,10 @@ open class MailtoLinkHandler {
                     providerDict[scheme] = MSOutlookIntegration()
                 } else if scheme == "ymail://" {
                     providerDict[scheme] = YMailIntegration()
+                } else if scheme == "googlegmail://" {
+                    providerDict[scheme] = GoogleGmailIntegration()
+                } else if scheme == "inbox-gmail://" {
+                    providerDict[scheme] = GoogleInboxIntegration()
                 }
             })
         }
