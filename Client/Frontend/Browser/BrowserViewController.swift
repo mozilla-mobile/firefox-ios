@@ -1533,6 +1533,8 @@ extension BrowserViewController: URLBarDelegate {
                 switch readerMode.state {
                 case .available:
                     enableReaderMode()
+
+                    LeanplumIntegration.sharedInstance.track(eventName: .useReaderView)
                 case .active:
                     disableReaderMode()
                 case .unavailable:
