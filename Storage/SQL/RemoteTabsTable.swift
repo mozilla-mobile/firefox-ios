@@ -80,7 +80,7 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
     }
 
     override func getQueryAndArgs(_ options: QueryOptions?) -> (String, Args)? {
-        return ("SELECT * FROM \(name) ORDER BY modified DESC", [])
+        return ("SELECT * FROM \(name) WHERE EXISTS (SELECT 1 FROM \(TableRemoteDevices) rd WHERE rd.guid = fxaDeviceId) ORDER BY modified DESC", [])
     }
 
     override func updateTable(_ db: SQLiteDBConnection, from: Int) -> Bool {

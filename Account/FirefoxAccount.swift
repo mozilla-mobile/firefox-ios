@@ -181,18 +181,35 @@ open class FirefoxAccount {
         }
     }
 
-    @discardableResult open func notify(deviceIDs: [GUID], collectionsChanged collections: [String]) -> Deferred<Maybe<FxANotifyResponse>> {
-        let cachedState = stateCache.value!
-        if let session = cachedState as? TokenState {
-            let client = FxAClient10(endpoint: self.configuration.authEndpointURL)
-            return client.notify(deviceIDs: deviceIDs, collectionsChanged: collections, withSessionToken: session.sessionToken as NSData)
+    public class NotATokenStateError: MaybeErrorType {
+        let state: FxAState?
+        init(state: FxAState?) {
+            self.state = state
         }
-        
-        let deferred = Deferred<Maybe<FxANotifyResponse>>()
-        deferred.fill(Maybe(failure: FxAClientError.local(NSError())))
-        return deferred
+        public var description: String {
+            return "Not in a Token State: \(state?.label.rawValue ?? "Empty State")"
+        }
     }
-    
+
+    // Fetch the devices list from FxA then replace the current stored remote devices.
+    open func updateFxADevices(remoteDevices: RemoteDevices) -> Success {
+        guard let session = stateCache.value as? TokenState else {
+            return deferMaybe(NotATokenStateError(state: stateCache.value))
+        }
+        let client = FxAClient10(endpoint: self.configuration.authEndpointURL)
+        return client.devices(withSessionToken: session.sessionToken as NSData) >>== { resp in
+            return remoteDevices.replaceRemoteDevices(resp.devices)
+        }
+    }
+
+    @discardableResult open func notify(deviceIDs: [GUID], collectionsChanged collections: [String]) -> Deferred<Maybe<FxANotifyResponse>> {
+        guard let session = stateCache.value as? TokenState else {
+            return deferMaybe(NotATokenStateError(state: stateCache.value))
+        }
+        let client = FxAClient10(endpoint: self.configuration.authEndpointURL)
+        return client.notify(deviceIDs: deviceIDs, collectionsChanged: collections, withSessionToken: session.sessionToken as NSData)
+    }
+
     @discardableResult open func advance() -> Deferred<FxAState> {
         OSSpinLockLock(&advanceLock)
         if let deferred = advanceDeferred {

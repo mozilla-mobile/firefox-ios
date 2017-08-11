@@ -435,7 +435,7 @@ open class BrowserProfile: Profile {
         return ReadingListService(profileStoragePath: self.files.rootPath as String)
     }()
 
-    lazy var remoteClientsAndTabs: RemoteClientsAndTabs & ResettableSyncStorage & AccountRemovalDelegate = {
+    lazy var remoteClientsAndTabs: RemoteClientsAndTabs & ResettableSyncStorage & AccountRemovalDelegate & RemoteDevices = {
         return SQLiteRemoteClientsAndTabs(db: self.db)
     }()
 
@@ -966,7 +966,18 @@ open class BrowserProfile: Profile {
         fileprivate func syncClientsWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: SyncReason) -> SyncResult {
             log.debug("Syncing clients to storage.")
             let clientSynchronizer = ready.synchronizer(ClientsSynchronizer.self, delegate: delegate, prefs: prefs, why: why)
-            return clientSynchronizer.synchronizeLocalClients(self.profile.remoteClientsAndTabs, withServer: ready.client, info: ready.info)
+            return clientSynchronizer.synchronizeLocalClients(self.profile.remoteClientsAndTabs, withServer: ready.client, info: ready.info) >>== { result in
+                guard case .completed = result else {
+                    return deferMaybe(result)
+                }
+                guard let account = self.profile.account else {
+                    return deferMaybe(result)
+                }
+                log.debug("Updating FxA devices list.")
+                return account.updateFxADevices(remoteDevices: self.profile.remoteClientsAndTabs).bind { _ in
+                    return deferMaybe(result)
+                }
+            }
         }
 
         fileprivate func syncTabsWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: SyncReason) -> SyncResult {
