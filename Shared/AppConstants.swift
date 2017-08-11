@@ -39,11 +39,21 @@ public struct AppConstants {
         return scheme
     }()
 
-    /// Should we try to sync (no merging) the Mobile Folder (if shouldMergeBookmarks is false)
-    public static var simpleBookmarksSyncing = false
-
-    /// Whether we just mirror (false) or actively merge and upload (true).
+    /// Whether we just mirror (false) or actively do a full bookmark merge and upload (true).
     public static var shouldMergeBookmarks = false
+
+    /// Should we try to sync (no merging) the Mobile Folder (if shouldMergeBookmarks is false).
+    public static let MOZ_SIMPLE_BOOKMARKS_SYNCING: Bool = {
+        #if MOZ_CHANNEL_RELEASE
+            return false
+        #elseif MOZ_CHANNEL_BETA
+            return false
+        #elseif MOZ_CHANNEL_FENNEC
+            return false
+        #else
+            return false
+        #endif
+    }()
 
     /// Flag indiciating if we are running in Debug mode or not.
     public static let isDebug: Bool = {

@@ -245,6 +245,20 @@ open class SQLiteBookmarksModelFactory: BookmarksModelFactory {
     }
 }
 
+class EditableBufferBookmarksSQLiteBookmarksModelFactory: SQLiteBookmarksModelFactory {
+    override func getChildrenWithParent(_ parentGUID: GUID, excludingGUIDs: [GUID]?, includeIcon: Bool) -> Deferred<Maybe<Cursor<BookmarkNode>>> {
+        if parentGUID == BookmarkRoots.MobileFolderGUID {
+            return self.bookmarks.getChildrenWithParent(parentGUID, direction: self.direction, excludingGUIDs: excludingGUIDs, includeIcon: includeIcon, factory: BookmarkFactory.editableItemsFactory)
+        }
+        return super.getChildrenWithParent(parentGUID, excludingGUIDs: excludingGUIDs, includeIcon: includeIcon)
+    }
+
+    override func removeByGUID(_ guid: GUID) -> Success {
+        log.debug("Removing \(guid) from buffer.")
+        return self.bookmarks.markBufferBookmarkAsDeleted(guid)
+    }
+}
+
 private func isEditableExpression(_ direction: Direction) -> String {
     if direction == .buffer {
         return "0"
@@ -290,7 +304,7 @@ extension SQLiteBookmarks {
      * This method is aware of is_overridden and deletion, using local override structure by preference.
      * Note that a folder can be empty locally; we thus use the flag rather than looking at the structure itself.
      */
-    func getChildrenWithParent(_ parentGUID: GUID, direction: Direction, excludingGUIDs: [GUID]?=nil, includeIcon: Bool) -> Deferred<Maybe<Cursor<BookmarkNode>>> {
+    func getChildrenWithParent(_ parentGUID: GUID, direction: Direction, excludingGUIDs: [GUID]?=nil, includeIcon: Bool, factory: @escaping (SDRow) -> BookmarkNode = BookmarkFactory.factory) -> Deferred<Maybe<Cursor<BookmarkNode>>> {
 
         precondition((excludingGUIDs ?? []).count < 100, "Sanity bound for the number of GUIDs we can exclude.")
 
@@ -348,7 +362,7 @@ extension SQLiteBookmarks {
         "LEFT OUTER JOIN favicons ON bookmarks.faviconID = favicons.id"
 
         let sql = (includeIcon ? withIcon : fleshed) + " ORDER BY idx ASC"
-        return self.db.runQuery(sql, args: args, factory: BookmarkFactory.factory)
+        return self.db.runQuery(sql, args: args, factory: factory)
     }
 
     // This is only used from tests.
@@ -612,16 +626,20 @@ class BookmarkFactory {
         return separator
     }
 
-    fileprivate class func itemFactory(_ row: SDRow) -> BookmarkItem {
+    fileprivate class func itemRowFactory(_ row: SDRow, forceEditable: Bool = false) -> BookmarkItem {
         let id = row["id"] as! Int
         let guid = row["guid"] as! String
         let url = row["bmkUri"] as! String
         let title = row["title"] as? String ?? url
-        let isEditable = row.getBoolean("isEditable")           // Defaults to false.
+        let isEditable = forceEditable || row.getBoolean("isEditable")           // Defaults to false.
         let bookmark = BookmarkItem(guid: guid, title: title, url: url, isEditable: isEditable)
         bookmark.id = id
         BookmarkFactory.addIcon(bookmark, row: row)
         return bookmark
+    }
+
+    fileprivate class func itemFactory(_ row: SDRow) -> BookmarkItem {
+        return BookmarkFactory.itemRowFactory(row, forceEditable: false)
     }
 
     fileprivate class func folderFactory(_ row: SDRow) -> BookmarkFolder {
@@ -639,10 +657,18 @@ class BookmarkFactory {
     }
 
     class func factory(_ row: SDRow) -> BookmarkNode {
+        return BookmarkFactory.rowFactory(row, forceEditable: false)
+    }
+
+    class func editableItemsFactory(_ row: SDRow) -> BookmarkNode {
+        return BookmarkFactory.rowFactory(row, forceEditable: true)
+    }
+
+    class func rowFactory(_ row: SDRow, forceEditable: Bool = false) -> BookmarkNode {
         if let typeCode = row["type"] as? Int, let type = BookmarkNodeType(rawValue: typeCode) {
             switch type {
             case .bookmark:
-                return itemFactory(row)
+                return itemRowFactory(row, forceEditable: forceEditable)
             case .dynamicContainer:
                 // This should never be hit: we exclude dynamic containers from our models.
                 fallthrough
@@ -781,7 +807,11 @@ open class UnsyncedBookmarksFallbackModelFactory: BookmarksModelFactory {
     init(bookmarks: SQLiteBookmarks) {
         // This relies on SQLiteBookmarks being the storage for both directions.
         self.localFactory = SQLiteBookmarksModelFactory(bookmarks: bookmarks, direction: .local)
-        self.bufferFactory = SQLiteBookmarksModelFactory(bookmarks: bookmarks, direction: .buffer)
+        if AppConstants.MOZ_SIMPLE_BOOKMARKS_SYNCING {
+            self.bufferFactory = EditableBufferBookmarksSQLiteBookmarksModelFactory(bookmarks: bookmarks, direction: .buffer)
+        } else {
+            self.bufferFactory = SQLiteBookmarksModelFactory(bookmarks: bookmarks, direction: .buffer)
+        }
     }
 
     // This is a special-case class, so here's the special-case behavior to
