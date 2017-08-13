@@ -1188,6 +1188,8 @@ class BrowserViewController: UIViewController {
         }
 
         self.present(controller, animated: true, completion: nil)
+
+        LeanplumIntegration.sharedInstance.track(eventName: .userSharedWebpage)
     }
 
     fileprivate func updateFindInPageVisibility(visible: Bool) {
