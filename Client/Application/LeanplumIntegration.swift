@@ -35,6 +35,7 @@ enum LeanplumEventName: String {
     case downloadedFocus = "E_User_Downloaded_Focus"
     case userSharedWebpage = "E_User_Tapped_Share_Button"
     case signsInFxa = "E_User_Signed_In_To_FxA"
+    case useReaderView = "E_User_Used_Reader_View"
 }
 
 enum UserAttributeKeyName: String {
