@@ -12,6 +12,7 @@ enum ShortcutType: String {
     case newTab = "NewTab"
     case newPrivateTab = "NewPrivateTab"
     case openLastBookmark = "OpenLastBookmark"
+    case qrCode = "QRCode"
 
     init?(fullType: String) {
         guard let last = fullType.components(separatedBy: ".").last else { return nil }
@@ -113,6 +114,8 @@ class QuickActions: NSObject {
             if let urlToOpen = (userData?[QuickActions.TabURLKey] as? String)?.asURL {
                 handleOpenURL(withBrowserViewController: browserViewController, urlToOpen: urlToOpen)
             }
+        case .qrCode:
+            handleQRCode(withBrowserViewController: browserViewController)
         }
     }
 
@@ -128,5 +131,9 @@ class QuickActions: NSObject {
         // if so, open to that tab,
         // otherwise, create a new tab with the bookmarked URL
         bvc.switchToTabForURLOrOpen(urlToOpen, isPrivileged: true)
+    }
+    
+    fileprivate func handleQRCode(withBrowserViewController bvc: BrowserViewController) {
+        bvc.openQRReader()
     }
 }

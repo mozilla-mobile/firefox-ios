@@ -1131,6 +1131,10 @@ class BrowserViewController: UIViewController {
             }
         }
     }
+    
+    func openQRReader() {
+        self.scanQRCode()
+    }
 
     fileprivate func popToBVC() {
         guard let currentViewController = navigationController?.topViewController else {
