@@ -212,14 +212,17 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
                 }
 
                 // -1 because we also need to upload the mobile root.
-                return storage.getLocalBookmarksModifications(limit: bookmarksClient.maxBatchPostRecords - 1) >>== { (deletedGUIDs, newBookmarks) -> Success in
+                return (storage.getLocalBookmarksModifications(limit: bookmarksClient.maxBatchPostRecords - 1) >>== { (deletedGUIDs, newBookmarks) -> Success in
                     guard newBookmarks.count > 0 || deletedGUIDs.count > 0 else {
                         return succeed()
                     }
                     return self.buildMobileRootAndChildrenRecords(storage, buffer, additionalChildren: newBookmarks, deletedChildren: deletedGUIDs) >>== { (mobileRootRecord, childrenRecords) in
                         return self.uploadSomeLocalRecords(storage, mirrorer, bookmarksClient, mobileRootRecord: mobileRootRecord, childrenRecords: childrenRecords)
                     }
-                } >>> {
+                }).bind { simpleSyncingResult in
+                    if let failure = simpleSyncingResult.failureValue {
+                        SentryIntegration.shared.send(message: "Failed to simple sync bookmarks: " + failure.description, tag: "BookmarksSyncing", severity: .error)
+                    }
                     return deferMaybe(result)
                 }
             }
