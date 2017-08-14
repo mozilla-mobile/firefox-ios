@@ -155,6 +155,10 @@ class MockBuffer: BookmarkBufferStorage, BufferItemSource {
     func synchronousBufferCount() -> Int? {
         return nil
     }
+
+    func getUpstreamRecordCount() -> Deferred<Int?> {
+        return Deferred(value: nil)
+    }
 }
 
 class TestBookmarksSynchronizer: XCTestCase {

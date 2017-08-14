@@ -404,6 +404,17 @@ open class SQLiteBookmarkBufferStorage: BookmarkBufferStorage {
         return self.db.runQuery("SELECT COUNT(*) FROM \(TableBookmarksBuffer)", args: nil, factory: IntFactory).value.successValue?[0]
     }
 
+    public func getUpstreamRecordCount() -> Deferred<Int?> {
+        let sql =
+        "SELECT (SELECT COUNT(*) FROM \(TableBookmarksBuffer)) + " +
+        "(SELECT COUNT(*) FROM \(TableBookmarksMirror) WHERE is_overridden = 0) " +
+        "AS c"
+
+        return self.db.runQuery(sql, args: nil, factory: IntFactory).bind { result in
+            return Deferred(value: result.successValue?[0]!)
+        }
+    }
+
     /**
      * Remove child records for any folders that've been deleted or are empty.
      */
@@ -595,6 +606,10 @@ extension BrowserDB {
 extension MergedSQLiteBookmarks: BookmarkBufferStorage {
     public func synchronousBufferCount() -> Int? {
         return self.buffer.synchronousBufferCount()
+    }
+
+    public func getUpstreamRecordCount() -> Deferred<Int?> {
+        return self.buffer.getUpstreamRecordCount()
     }
 
     public func isEmpty() -> Deferred<Maybe<Bool>> {
