@@ -206,7 +206,15 @@ class BrowserViewController: UIViewController {
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.settingsButton)
     }
 
-    fileprivate func submit(url: URL) {
+    func ensureBrowsingMode() {
+        guard !urlBar.inBrowsingMode else { return }
+
+        urlBar.ensureBrowsingMode()
+
+        topURLBarConstraints.forEach { $0.activate() }
+    }
+
+    func submit(url: URL) {
         // If this is the first navigation, show the browser and the toolbar.
         if browser.view.isHidden {
             browser.view.isHidden = false

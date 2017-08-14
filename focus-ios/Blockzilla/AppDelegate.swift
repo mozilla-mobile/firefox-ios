@@ -12,6 +12,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var splashView: UIView?
     private static let prefIntroDone = "IntroDone"
     private static let prefIntroVersion = 2
+    private let browserViewController = BrowserViewController()
+    private var queuedUrl: URL?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         #if BUDDYBUILD
@@ -79,7 +81,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         LocalWebServer.sharedInstance.start()
 
         window = UIWindow(frame: UIScreen.main.bounds)
-        let browserViewController = BrowserViewController()
+
         let rootViewController = UINavigationController(rootViewController: browserViewController)
         window?.rootViewController = rootViewController
         window?.makeKeyAndVisible()
@@ -102,6 +104,67 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         return true
+    }
+
+    func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
+        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
+            return false
+        }
+
+        guard let urlTypes = Bundle.main.object(forInfoDictionaryKey: "CFBundleURLTypes") as? [AnyObject],
+            let urlSchemes = urlTypes.first?["CFBundleURLSchemes"] as? [String] else {
+                // Something very strange has happened; org.mozilla.Blockzilla should be the zeroeth URL type.
+                return false
+        }
+
+        guard let scheme = components.scheme,
+            let host = url.host,
+            urlSchemes.contains(scheme) else {
+            return false
+        }
+
+        let query = getQuery(url: url)
+
+        guard host == "open-url" else { return false }
+
+        let urlString = unescape(string: query["url"]) ?? ""
+        guard let url = URL(string: urlString) else { return false }
+
+        if application.applicationState == .active {
+            // If we are active then we can ask the BVC to open the new tab right away.
+            // Otherwise, we remember the URL and we open it in applicationDidBecomeActive.
+            browserViewController.submit(url: url)
+        } else {
+            queuedUrl = url
+        }
+
+        return true
+    }
+
+    public func getQuery(url: URL) -> [String: String] {
+        var results = [String: String]()
+        let keyValues =  url.query?.components(separatedBy: "&")
+
+        if keyValues?.count ?? 0 > 0 {
+            for pair in keyValues! {
+                let kv = pair.components(separatedBy: "=")
+                if kv.count > 1 {
+                    results[kv[0]] = kv[1]
+                }
+            }
+        }
+
+        return results
+    }
+
+    public func unescape(string: String?) -> String? {
+        guard let string = string else {
+            return nil
+        }
+        return CFURLCreateStringByReplacingPercentEscapes(
+            kCFAllocatorDefault,
+            string as CFString,
+            "[]." as CFString) as String
     }
 
     fileprivate func displaySplashAnimation() {
@@ -141,6 +204,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         splashView?.animateHidden(true, duration: 0.25)
+        if let url = queuedUrl {
+
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.openedFromExtension, object: TelemetryEventObject.app)
+
+            browserViewController.ensureBrowsingMode()
+            browserViewController.submit(url: url)
+            queuedUrl = nil
+        }
     }
     
     func applicationWillEnterForeground(_ application: UIApplication) {

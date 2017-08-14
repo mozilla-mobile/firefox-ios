@@ -49,8 +49,8 @@ class URLBar: UIView {
     private var preActivationConstraints = [Constraint]()
     private var postActivationConstraints = [Constraint]()
     
-    init() {
-        super.init(frame: CGRect.zero)
+    convenience init() {
+        self.init(frame: CGRect.zero)
 
         addSubview(toolset.backButton)
         addSubview(toolset.forwardButton)
@@ -305,10 +305,6 @@ class URLBar: UIView {
         
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
     func pasteAndGo() {
         delegate?.urlBar(self, didSubmitText: UIPasteboard.general.string!)
 
@@ -378,6 +374,15 @@ class URLBar: UIView {
             }
         }
         super.touchesEnded(touches, with: event)
+    }
+
+    func ensureBrowsingMode() {
+        isEditing = true
+        inBrowsingMode = true
+        dismiss()
+        postActivationConstraints.forEach { $0.activate() }
+        preActivationConstraints.forEach { $0.deactivate() }
+        activateButton.isHidden = true
     }
 
     private func updateLockIcon() {
