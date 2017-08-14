@@ -222,6 +222,9 @@ extension Strings {
 extension Strings {
     public static let GoToCopiedLink = NSLocalizedString("ClipboardToast.GoToCopiedLink.Title", value: "Go to copied link?", comment: "Message displayed when the user has a copied link on the clipboard")
     public static let GoButtonTittle = NSLocalizedString("ClipboardToast.GoToCopiedLink.Button", value: "Go", comment: "The button to open a new tab with the copied link")
+
+    public static let Settings_OfferClipboardBar_title = NSLocalizedString("Settings_OfferClipboardBar_title", value: "Offer to open copied links", comment: "Title of setting to enable the Go to Copied URL feature")
+    public static let Settings_OfferClipboardBar_status = NSLocalizedString("Setting_OfferClipboardBar_status", value: "When opening Firefox", comment: "Status text of setting to enable the Go to Copied URL feature")
 }
 
 // errors
