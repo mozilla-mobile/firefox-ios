@@ -341,6 +341,13 @@ extension Strings {
     public static let ExternalLinkToAppStore_ConfirmationTitle = NSLocalizedString("ExternalLink.ConfirmMessage", value: "Open this link in the App Store app?", comment: "Question shown to user when tapping a link that opens the App Store app")
 }
 
+// Onboarding slide to ask for notification permissions (MMA Related)
+extension Strings {
+    public static let OnboardingSlideNotificationsTitle = NSLocalizedString("Onboarding.Slide.Notifications.Title", value: "Stay in the know", comment: "See https://github.com/mozilla-mobile/firefox-ios/pull/3031")
+    public static let OnboardingSlideNotificationsText = NSLocalizedString("Onboarding.Slide.Notifications.Text", value: "Turn on notifications so you're always up-to-date on the latest features.", comment: "See https://github.com/mozilla-mobile/firefox-ios/pull/3031")
+    public static let OnboardingSlideNotificationsButton = NSLocalizedString("Onboarding.Slide.Notifications.ButtonTitle", value: "Turn on notifications", comment: "See https://github.com/mozilla-mobile/firefox-ios/pull/3031")
+}
+
 // MARK: Deprecated Strings (to be removed in next version)
 private let logOut = NSLocalizedString("Log Out", comment: "Button in settings screen to disconnect from your account")
 private let logOutQuestion = NSLocalizedString("Log Out?", comment: "Title of the 'log out firefox account' alert")
