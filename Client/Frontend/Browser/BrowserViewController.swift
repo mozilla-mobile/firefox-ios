@@ -1125,7 +1125,7 @@ class BrowserViewController: UIViewController {
         openURLInNewTab(nil, isPrivate: isPrivate, isPrivileged: true)
         
         if focusLocationField {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(300)) {
                 // Without a delay, the text field fails to become first responder
                 self.urlBar.tabLocationViewDidTapLocation(self.urlBar.locationView)
             }
@@ -1324,8 +1324,7 @@ class BrowserViewController: UIViewController {
             // then wait enough time for the webview to render.
             if let webView =  tab.webView {
                 view.insertSubview(webView, at: 0)
-                let time = DispatchTime.now() + Double(Int64(500 * NSEC_PER_MSEC)) / Double(NSEC_PER_SEC)
-                DispatchQueue.main.asyncAfter(deadline: time) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
                     self.screenshotHelper.takeScreenshot(tab)
                     if webView.superview == self.view {
                         webView.removeFromSuperview()
@@ -2263,15 +2262,14 @@ extension BrowserViewController: TabManagerDelegate {
         updateTabCountUsingTabManager(tabManager)
     }
 
-    func show(buttonToast: ButtonToast, afterWaiting delay: Double = 0, duration: Double = SimpleToastUX.ToastDismissAfter) {
+    func show(buttonToast: ButtonToast, afterWaiting delay: DispatchTimeInterval = SimpleToastUX.ToastDelayBefore, duration: DispatchTimeInterval = SimpleToastUX.ToastDismissAfter) {
         // If BVC isnt visible hold on to this toast until viewDidAppear
         if self.view.window == nil {
             self.pendingToast = buttonToast
             return
         }
 
-        let time = DispatchTime(uptimeNanoseconds: DispatchTime.now().uptimeNanoseconds) + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
-        DispatchQueue.main.asyncAfter(deadline: time) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
             self.view.addSubview(buttonToast)
             buttonToast.snp.makeConstraints { make in
                 make.left.right.equalTo(self.view)

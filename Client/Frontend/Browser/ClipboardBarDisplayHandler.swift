@@ -6,7 +6,7 @@ import Foundation
 import Shared
 
 public struct ClipboardBarToastUX {
-    static let ToastDelay = 4.0
+    static let ToastDelay = DispatchTimeInterval.milliseconds(4000)
 }
 
 protocol ClipboardBarDisplayHandlerDelegate: class {
