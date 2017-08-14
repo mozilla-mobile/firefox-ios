@@ -151,10 +151,9 @@ class ButtonToast: UIView {
                 self.layoutIfNeeded()
             },
             completion: { finished in
-                let dispatchTime = DispatchTime.now() + duration
-                DispatchQueue.main.asyncAfter(deadline: dispatchTime, execute: {
+                DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
                     self.dismiss(false)
-                })
+                }
             }
         )
     }
