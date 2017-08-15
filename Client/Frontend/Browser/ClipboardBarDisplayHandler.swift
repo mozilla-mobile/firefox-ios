@@ -6,7 +6,7 @@ import Foundation
 import Shared
 
 public struct ClipboardBarToastUX {
-    static let ToastDelay = 4.0
+    static let ToastDelay = DispatchTimeInterval.milliseconds(4000)
 }
 
 protocol ClipboardBarDisplayHandlerDelegate: class {
@@ -51,7 +51,7 @@ class ClipboardBarDisplayHandler {
         }
         sessionStarted = false
         lastDisplayedURL = UIPasteboard.general.copiedURL?.absoluteString
-        return true
+        return self.prefs.boolForKey("showClipboardBar") ?? true
     }
     
     //If we already displayed this URL on the previous session

@@ -10,7 +10,7 @@ struct ButtonToastUX {
     static let ToastPadding = 15.0
     static let TitleSpacing = 2.0
     static let ToastButtonPadding: CGFloat = 10.0
-    static let ToastDelay = 0.9
+    static let ToastDelay = DispatchTimeInterval.milliseconds(900)
     static let ToastButtonBorderRadius: CGFloat = 5
     static let ToastButtonBorderWidth: CGFloat = 1
 }
@@ -144,17 +144,16 @@ class ButtonToast: UIView {
         )
     }
     
-    func showToast(duration: Double = SimpleToastUX.ToastDismissAfter) {
+    func showToast(duration: DispatchTimeInterval = SimpleToastUX.ToastDismissAfter) {
         layoutIfNeeded()
         UIView.animate(withDuration: SimpleToastUX.ToastAnimationDuration, animations: {
                 self.animationConstraint?.update(offset: 0)
                 self.layoutIfNeeded()
             },
             completion: { finished in
-                let dispatchTime = DispatchTime.now() + Double(Int64(duration * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
-                DispatchQueue.main.asyncAfter(deadline: dispatchTime, execute: {
+                DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
                     self.dismiss(false)
-                })
+                }
             }
         )
     }

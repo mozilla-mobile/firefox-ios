@@ -401,7 +401,8 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             return
         }
 
-        if let err = factory.removeByGUID(bookmark.guid).value.failureValue {
+        let specificFactory = factory.factoryForIndex(indexPath.row, inFolder: source.current)
+        if let err = specificFactory.removeByGUID(bookmark.guid).value.failureValue {
             log.debug("Failed to remove \(bookmark.guid).")
             self.onModelFailure(err)
             return

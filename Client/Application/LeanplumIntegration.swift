@@ -34,7 +34,9 @@ enum LeanplumEventName: String {
     case clearPrivateData = "E_Cleared_Private_Data"
     case downloadedFocus = "E_User_Downloaded_Focus"
     case downloadedPocket = "E_User_Downloaded_Pocket"
+    case userSharedWebpage = "E_User_Tapped_Share_Button"
     case signsInFxa = "E_User_Signed_In_To_FxA"
+    case useReaderView = "E_User_Used_Reader_View"
 }
 
 enum UserAttributeKeyName: String {
