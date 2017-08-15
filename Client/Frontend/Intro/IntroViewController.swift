@@ -231,6 +231,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
     }
 
     func SELstartBrowsing() {
+        LeanplumIntegration.sharedInstance.track(eventName: .dismissedOnboarding)
         delegate?.introViewControllerDidFinish(self)
     }
 
