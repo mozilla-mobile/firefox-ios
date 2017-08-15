@@ -209,6 +209,7 @@ class BrowserViewController: UIViewController {
     func ensureBrowsingMode() {
         guard !urlBar.inBrowsingMode else { return }
 
+        urlBarContainer.alpha = 1
         urlBar.ensureBrowsingMode()
 
         topURLBarConstraints.forEach { $0.activate() }
