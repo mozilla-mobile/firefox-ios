@@ -374,6 +374,27 @@ extension Strings {
     public static let OnboardingSlideNotificationsButton = NSLocalizedString("Onboarding.Slide.Notifications.ButtonTitle", value: "Turn on notifications", comment: "See https://github.com/mozilla-mobile/firefox-ios/pull/3031")
 }
 
+// ContentBlocker/TrackingProtection strings
+extension Strings {
+    public static let SettingsTrackingProtectionSectionName = NSLocalizedString("Settings.TrackingProtection.SectionName", value: "Tracking Protection", comment: "Row in top-level of settings that gets tapped to show the tracking protection settings detail view.")
+
+    public static let TrackingProtectionOptionAlwaysOn = NSLocalizedString("Settings.TrackingProtectionOption.OnLabel", value: "Always On", comment: "Settings option to specify that Tracking Protection is always on.")
+    public static let TrackingProtectionOptionAlwaysOff = NSLocalizedString("Settings.TrackingProtectionOption.OffLabel", value: "Never", comment: "Settings option to specify that Tracking Protection is always off.")
+    public static let TrackingProtectionOptionOnInPrivateBrowsing = NSLocalizedString("Settings.TrackingProtectionOption.OnInPrivateBrowsingLabel", value: "Private Browsing Mode Only", comment: "Settings option to specify that Tracking Protection is on only in Private Browsing mode.")
+
+    public static let TrackingProtectionOptionOnOffHeader = NSLocalizedString("Settings.TrackingProtectionOption.EnabledStateHeaderLabel", value: "Use Tracking Protection to Block Known Trackers", comment: "Description label shown at the top of tracking protection options screen.")
+    public static let TrackingProtectionOptionOnOffFooter = NSLocalizedString("Settings.TrackingProtectionOption.EnabledStateFooterLabel", value: "Tracking is the collection of your browsing data across multiple websites. Tracking can be used to build a profile and display content based on your browsing and personal information.", comment: "Description label shown on tracking protection options screen.")
+    public static let TrackingProtectionOptionBlockListsTitle = NSLocalizedString("Settings.TrackingProtection.BlockListsTitle", value: "Block Lists", comment: "Title for tracking protection options section where Basic/Strict block list can be selected")
+    public static let TrackingProtectionOptionBlockListsHeader = NSLocalizedString("Settings.TrackingProtection.BlockListsHeader", value:  "You can choose which list Firefox will use to block Web elements that may track your browsing activity.", comment: "Header description for tracking protection options section where Basic/Strict block list can be selected")
+
+    public static let TrackingProtectionOptionBlockListTypeBasic = NSLocalizedString("Settings.TrackingProtectionOption.BlockListBasic", value: "Basic (Recommended)", comment: "Tracking protection settings option for using the basic blocklist.")
+    public static let TrackingProtectionOptionBlockListTypeBasicDescription = NSLocalizedString("Settings.TrackingProtectionOption.BlockListBasicDescription", value: "Allows some trackers so websites function properly.", comment: "Tracking protection settings option description for using the basic blocklist.")
+    public static let TrackingProtectionOptionBlockListTypeStrict = NSLocalizedString("Settings.TrackingProtectionOption.BlockListStrict", value: "Strict", comment: "Tracking protection settings option for using the strict blocklist.")
+    public static let TrackingProtectionOptionBlockListTypeStrictDescription = NSLocalizedString("Settings.TrackingProtectionOption.BlockListStrictDescription", value: "Blocks known trackers. Some websites may not function properly.", comment: "Tracking protection settings option description for using the strict blocklist.")
+
+    public static let TrackingProtectionOptionFooter = NSLocalizedString("Settings.TrackingProtectionOption.BlockListTypeFooter", value: "You can choose which list Firefox will use to block Web elements that may track your browsing activity.", comment: "Description label shown at bottom of tracking protection options for which Block List to use")
+}
+
 // MARK: Deprecated Strings (to be removed in next version)
 private let logOut = NSLocalizedString("Log Out", comment: "Button in settings screen to disconnect from your account")
 private let logOutQuestion = NSLocalizedString("Log Out?", comment: "Title of the 'log out firefox account' alert")
