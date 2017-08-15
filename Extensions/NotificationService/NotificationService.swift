@@ -41,23 +41,23 @@ class NotificationService: UNNotificationServiceExtension {
         let handler = FxAPushMessageHandler(with: profile)
 
         handler.handle(userInfo: userInfo).upon { res in
-            self.finished(cleanly: res.isSuccess)
+            self.didFinish(res.successValue, with: res.failureValue as? PushMessageError)
         }
     }
 
-    func finished(cleanly: Bool) {
+    func didFinish(_ what: PushMessage? = nil, with error: PushMessageError? = nil) {
         profile.shutdown()
         // We cannot use tabqueue after the profile has shutdown;
         // however, we can't use weak references, because TabQueue isn't a class.
         // Rather than changing tabQueue, we manually nil it out here.
         display.tabQueue = nil
-        display.displayNotification(cleanly)
+        display.displayNotification(what, with: error)
     }
 
     override func serviceExtensionTimeWillExpire() {
         // Called just before the extension will be terminated by the system.
         // Use this as an opportunity to deliver your "best attempt" at modified content, otherwise the original push payload will be used.
-        finished(cleanly: false)
+        didFinish(with: .timeout)
     }
 }
 
@@ -75,15 +75,83 @@ class SyncDataDisplay {
         self.tabQueue = tabQueue
     }
 
-    func displayNotification(_ didFinish: Bool) {
-        // We will need to be more precise about calling these SentTab alerts 
+    func displayNotification(_ message: PushMessage? = nil, with error: PushMessageError? = nil) {
+        guard let message = message, error == nil else {
+            return displayUnknownMessageNotification()
+        }
+
+        switch message {
+        case .accountVerified:
+            displayAccountVerifiedNotification()
+            break
+        case .deviceConnected(let deviceName):
+            displayDeviceConnectedNotification(deviceName)
+        case .deviceDisconnected(let deviceName):
+            displayDeviceDisconnectedNotification(deviceName)
+        case .thisDeviceDisconnected:
+            displayThisDeviceDisconnectedNotification()
+        case .collectionChanged(let collections):
+            if collections.contains("clients") {
+                displaySentTabNotification()
+            } else {
+                displayUnknownMessageNotification()
+            }
+        default:
+            displayUnknownMessageNotification()
+            break
+        }
+    }
+}
+
+extension SyncDataDisplay {
+    func displayDeviceConnectedNotification(_ deviceName: String) {
+        presentNotification(title: Strings.FxAPush_DeviceConnected_title,
+                            body: Strings.FxAPush_DeviceConnected_body,
+                            bodyArg: deviceName)
+    }
+
+    func displayDeviceDisconnectedNotification(_ deviceName: String?) {
+        if let deviceName = deviceName {
+            presentNotification(title: Strings.FxAPush_DeviceDisconnected_title,
+                                body: Strings.FxAPush_DeviceDisconnected_body,
+                                bodyArg: deviceName)
+        } else {
+            // We should never see this branch
+            presentNotification(title: Strings.FxAPush_DeviceDisconnected_title,
+                                body: Strings.FxAPush_DeviceDisconnected_UnknownDevice_body)
+        }
+    }
+
+    func displayThisDeviceDisconnectedNotification() {
+        presentNotification(title: Strings.FxAPush_DeviceDisconnected_ThisDevice_title,
+                            body: Strings.FxAPush_DeviceDisconnected_ThisDevice_body)
+    }
+
+    func displayAccountVerifiedNotification() {
+        presentNotification(title: Strings.SentTab_NoTabArrivingNotification_title, body: Strings.SentTab_NoTabArrivingNotification_body)
+    }
+
+    func displayUnknownMessageNotification() {
+        // if, by any change we haven't dealt with the message, then perhaps we
+        // can recycle it as a sent tab message.
+        if sentTabs.count > 0 {
+            displaySentTabNotification()
+        } else {
+            presentNotification(title: Strings.SentTab_NoTabArrivingNotification_title, body: Strings.SentTab_NoTabArrivingNotification_body)
+        }
+    }
+}
+
+extension SyncDataDisplay {
+    func displaySentTabNotification() {
+        // We will need to be more precise about calling these SentTab alerts
         // once we are a) detecting different types of notifications and b) adding actions.
         // For now, we need to add them so we can handle zero-tab sent-tab-notifications.
         notificationContent.categoryIdentifier = CategorySentTab
 
         var userInfo = notificationContent.userInfo
 
-        // Add the tabs we've found to userInfo, so that the AppDelegate 
+        // Add the tabs we've found to userInfo, so that the AppDelegate
         // doesn't have to do it again.
         let serializedTabs = sentTabs.flatMap { t -> NSDictionary? in
             return [
@@ -92,16 +160,14 @@ class SyncDataDisplay {
                 "displayURL": t.url.absoluteDisplayString,
                 "deviceName": t.deviceName as Any,
                 ] as NSDictionary
-            }
-
-        userInfo["didFinish"] = didFinish
+        }
 
         func present(_ tabs: [NSDictionary]) {
             if !tabs.isEmpty {
                 userInfo["sentTabs"] = tabs as NSArray
             }
             notificationContent.userInfo = userInfo
-            presentNotification(tabs)
+            presentSentTabsNotification(tabs)
         }
 
         let center = UNUserNotificationCenter.current()
@@ -134,7 +200,7 @@ class SyncDataDisplay {
         }
     }
 
-    func presentNotification(_ tabs: [NSDictionary]) {
+    func presentSentTabsNotification(_ tabs: [NSDictionary]) {
         let title: String
         let body: String
 
@@ -161,8 +227,19 @@ class SyncDataDisplay {
             }
         }
 
-        notificationContent.title = title
-        notificationContent.body = body
+        presentNotification(title: title, body: body)
+    }
+
+    func presentNotification(title: String, body: String, titleArg: String? = nil, bodyArg: String? = nil) {
+        func stringWithOptionalArg(_ s: String, _ a: String?) -> String {
+            if let a = a {
+                return String(format: s, a)
+            }
+            return s
+        }
+
+        notificationContent.title = stringWithOptionalArg(title, titleArg)
+        notificationContent.body = stringWithOptionalArg(body, bodyArg)
 
         contentHandler(notificationContent)
     }

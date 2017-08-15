@@ -38,6 +38,7 @@ public protocol BookmarkBufferStorage: class {
 
     // Only use for diagnostics.
     func synchronousBufferCount() -> Int?
+    func getUpstreamRecordCount() -> Deferred<Int?>
 }
 
 public protocol MirrorItemSource: class {

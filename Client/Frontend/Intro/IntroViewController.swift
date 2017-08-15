@@ -19,22 +19,23 @@ struct IntroViewControllerUX {
     static let StartBrowsingButtonHeight = 56
 
     static let SignInButtonTitle = NSLocalizedString("Sign in to Firefox", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
-    static let SignInButtonColor = UIColor(rgb: 0xFF5524)
+    static let SignInButtonColor = UIColor(rgb: 0x45A1FF)
     static let SignInButtonHeight = 60
 
     static let CardTextLineHeight = UIScreen.main.bounds.width <= 320 ? CGFloat(2) : CGFloat(6)
     
-    static let CardTitleWelcome = NSLocalizedString("Welcome to Firefox!", tableName: "Intro", comment: "Title for one of the panels in the First Run tour.")
-    static let CardTitleSearch = NSLocalizedString("Play favorites with \nyour search engine", tableName: "Intro", comment: "Title for one of the panels in the First Run tour.")
+    static let CardTitleWelcome = NSLocalizedString("Thanks for choosing Firefox!", tableName: "Intro", comment: "Title for one of the panels in the First Run tour.")
+    static let CardTitleSearch = NSLocalizedString("Your search, your way", tableName: "Intro", comment: "Title for one of the panels in the First Run tour.")
     
-    static let CardTitlePrivate = NSLocalizedString("Get stealthy", tableName: "Intro", comment: "Title for one of the panels in the First Run tour.")
-    static let CardTitleMail = NSLocalizedString("You've got mail... options", tableName: "Intro", comment: "Title for one of the panels in the First Run tour.")
-    static let CardTitleSync = NSLocalizedString("Sync your devices", tableName: "Intro", comment: "Title for one of the panels in the First Run tour.")
+    static let CardTitlePrivate = NSLocalizedString("Browse like no one's watching", tableName: "Intro", comment: "Title for one of the panels in the First Run tour.")
+    static let CardTitleMail = NSLocalizedString("You've got mail… options", tableName: "Intro", comment: "Title for one of the panels in the First Run tour.")
+    static let CardTitleSync = NSLocalizedString("Pick up where you left off", tableName: "Intro", comment: "Title for one of the panels in the First Run tour.")
     
-    static let CardTextWelcome = NSLocalizedString("Swipe to take a quick look at a few features we hope you'll enjoy.", tableName: "Intro", comment: "Description for the 'Welcome' panel in the First Run tour.")
-    static let CardTextSearch = NSLocalizedString("There are a lot of search engines out there, so select your favorite one and find what you need.", tableName: "Intro", comment: "Description for the 'Favorite Search Engine' panel in the First Run tour.")
+    static let CardTextWelcome = NSLocalizedString("A modern mobile browser from Mozilla, the non-profit committed to a free and open web.", tableName: "Intro", comment: "Description for the 'Welcome' panel in the First Run tour.")
+    static let CardTextSearch = NSLocalizedString("Searching for something different? Choose another default search engine (or add your own) in Settings.", tableName: "Intro", comment: "Description for the 'Favorite Search Engine' panel in the First Run tour.")
     static let CardTextPrivate = NSLocalizedString("Tap the mask icon to slip into Private Browsing mode.", tableName: "Intro", comment: "Description for the 'Private Browsing' panel in the First Run tour.")
-    static let CardTextMail = NSLocalizedString("Have another mail application installed? Use it with Firefox.", tableName: "Intro", comment: "Description for the 'Mail' panel in the First Run tour.")
+    static let CardTextMail = NSLocalizedString("Use any email app - not just Mail - with Firefox.", tableName: "Intro", comment: "Description for the 'Mail' panel in the First Run tour.")
+    static let CardTextSync = NSLocalizedString("Use Sync to find the bookmarks, passwords, and other things you save to Firefox on all your devices.", tableName: "Intro", comment: "Description for the 'Sync' panel in the First Run tour.")
 
     static let Card1ImageLabel = NSLocalizedString("The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs.", tableName: "Intro", comment: "Accessibility label for the UI element used to display the number of open tabs, and open the tab tray.")
     static let Card2ImageLabel = NSLocalizedString("The Settings button is at the beginning of the Tabs Tray.", tableName: "Intro", comment: "Accessibility label for the Settings button in the tab tray.")
@@ -231,6 +232,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
     }
 
     func SELstartBrowsing() {
+        LeanplumIntegration.sharedInstance.track(eventName: .dismissedOnboarding)
         delegate?.introViewControllerDidFinish(self)
     }
 
