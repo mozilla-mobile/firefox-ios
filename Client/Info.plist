@@ -17,7 +17,7 @@
 	<key>AppIdentifierPrefix</key>
 	<string>$(APP_IDENTIFIER_PREFIX)</string>
 	<key>MozWhatsNewTopic</key>
-	<string></string>
+	<string>new-ios-8</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
