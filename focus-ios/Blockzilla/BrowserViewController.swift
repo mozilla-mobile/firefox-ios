@@ -35,6 +35,9 @@ class BrowserViewController: UIViewController {
     private var homeViewContainer = UIView()
     fileprivate var showsToolsetInURLBar = false
 
+    private var shouldEnsureBrowsingMode = false
+    private var initialUrl: URL?
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -97,6 +100,11 @@ class BrowserViewController: UIViewController {
 
         createHomeView()
         createURLBar()
+
+        guard shouldEnsureBrowsingMode else { return }
+        ensureBrowsingMode()
+        guard let url = initialUrl else { return }
+        submit(url: url)
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -207,16 +215,20 @@ class BrowserViewController: UIViewController {
     }
 
     func ensureBrowsingMode() {
+        guard urlBar != nil else { shouldEnsureBrowsingMode = true; return }
         guard !urlBar.inBrowsingMode else { return }
 
         urlBarContainer.alpha = 1
         urlBar.ensureBrowsingMode()
 
         topURLBarConstraints.forEach { $0.activate() }
+        shouldEnsureBrowsingMode = false
     }
 
     func submit(url: URL) {
         // If this is the first navigation, show the browser and the toolbar.
+        guard isViewLoaded else { initialUrl = url; return }
+
         if browser.view.isHidden {
             browser.view.isHidden = false
             homeView?.removeFromSuperview()
