@@ -7,6 +7,7 @@ import Shared
 import WebKit
 import Deferred
 import WebImage
+import CoreSpotlight
 
 private let log = Logger.browserLogger
 
@@ -44,7 +45,7 @@ class HistoryClearable: Clearable {
             SDImageCache.shared().clearDisk()
             SDImageCache.shared().clearMemory()
             self.profile.recentlyClosedTabs.clearTabs()
-            SpotlightHelper.clearSearchIndex()
+            CSSearchableIndex.default().deleteAllSearchableItems()
             NotificationCenter.default.post(name: NotificationPrivateDataClearedHistory, object: nil)
             log.debug("HistoryClearable succeeded: \(success).")
             return Deferred(value: success)

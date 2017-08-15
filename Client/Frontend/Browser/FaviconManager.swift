@@ -123,14 +123,15 @@ class FaviconManager: TabHelper {
     }
 
     func makeFaviconAvailable(_ tab: Tab, atURL url: URL, favicon: Favicon, withImage image: UIImage) {
-        let helper = tab.getHelper(name: "SpotlightHelper") as? SpotlightHelper
-        helper?.updateImage(image, forURL: url)
+        // XXX: Bug 1390200 - Disable NSUserActivity/CoreSpotlight temporarily
+        // let helper = tab.getHelper(name: "SpotlightHelper") as? SpotlightHelper
+        // helper?.updateImage(image, forURL: url)
     }
 
     func noFaviconAvailable(_ tab: Tab, atURL url: URL) {
-        let helper = tab.getHelper(name: "SpotlightHelper") as? SpotlightHelper
-        helper?.updateImage(forURL: url)
-
+        // XXX: Bug 1390200 - Disable NSUserActivity/CoreSpotlight temporarily
+        // let helper = tab.getHelper(name: "SpotlightHelper") as? SpotlightHelper
+        // helper?.updateImage(forURL: url)
     }
 }
 
