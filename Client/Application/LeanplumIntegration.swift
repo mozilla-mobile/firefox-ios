@@ -22,6 +22,7 @@ enum LeanplumEventName: String {
     case firstRun = "E_First_Run"
     case secondRun = "E_Second_Run"
     case openedApp = "E_Opened_App"
+    case dismissedOnboarding = "E_Dismissed_Onboarding"
     case openedLogins = "Opened Login Manager"
     case openedBookmark = "E_Opened_Bookmark"
     case openedNewTab = "E_Opened_New_Tab"
