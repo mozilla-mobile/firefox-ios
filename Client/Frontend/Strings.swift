@@ -395,6 +395,13 @@ extension Strings {
     public static let TrackingProtectionOptionFooter = NSLocalizedString("Settings.TrackingProtectionOption.BlockListTypeFooter", value: "You can choose which list Firefox will use to block Web elements that may track your browsing activity.", comment: "Description label shown at bottom of tracking protection options for which Block List to use")
 }
 
+// Do not track 
+extension Strings {
+    public static let SettingsDoNotTrackTitle = NSLocalizedString("Settings.DNT.Title", value: "Send websites a “Do Not Track” signal that you don’t want to be tracked", comment: "DNT Settings title")
+    public static let SettingsDoNotTrackOptionOnWithTP = NSLocalizedString("Settings.DNT.OptionOnWithTP", value: "Only when using Tracking Protection", comment: "DNT Settings option for only turning on when Tracking Protection is also on")
+    public static let SettingsDoNotTrackOptionAlwaysOn = NSLocalizedString("Settings.DNT.OptionAlwaysOn", value: "Always", comment: "DNT Settings option for always on")
+}
+
 // MARK: Deprecated Strings (to be removed in next version)
 private let logOut = NSLocalizedString("Log Out", comment: "Button in settings screen to disconnect from your account")
 private let logOutQuestion = NSLocalizedString("Log Out?", comment: "Title of the 'log out firefox account' alert")
