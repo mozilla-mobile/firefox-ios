@@ -92,12 +92,13 @@ class PrivateBrowsingTest: BaseTestCase {
     func testClosePrivateTabsOptionClosesPrivateTabs() {
         // Check that Close Private Tabs when closing the Private Browsing Button is off by default
         navigator.goto(SettingsScreen)
+        
         let appsettingstableviewcontrollerTableviewTable = app.tables["AppSettingsTableViewController.tableView"]
         while app.staticTexts["Close Private Tabs"].exists == false {
             appsettingstableviewcontrollerTableviewTable.swipeUp()
         }
+        
         let closePrivateTabsSwitch = appsettingstableviewcontrollerTableviewTable.switches["Close Private Tabs, When Leaving Private Browsing"]
-
         XCTAssertFalse(closePrivateTabsSwitch.isSelected)
 
         //  Open a Private tab

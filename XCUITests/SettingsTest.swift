@@ -20,6 +20,7 @@ class SettingsTest: BaseTestCase {
     
     func testHelpOpensSUMOInTab() {
         navigator.goto(SettingsScreen)
+        
         let appsettingstableviewcontrollerTableviewTable = app.tables["AppSettingsTableViewController.tableView"]
         while app.staticTexts["Help"].exists == false {
             appsettingstableviewcontrollerTableviewTable.swipeUp()
