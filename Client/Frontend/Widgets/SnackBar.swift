@@ -282,7 +282,7 @@ class TimerSnackBar: SnackBar {
     }
 
     static func showAppStoreConfirmationBar(forTab tab: Tab, appStoreURL: URL) {
-        let msg =  NSAttributedString(string: Strings.ExternalLinkToAppStore_ConfirmationTitle, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
+        let msg =  NSAttributedString(string: Strings.ExternalLinkAppStoreConfirmationTitle, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
         let bar = TimerSnackBar(attrText: msg,
                              img: UIImage(named: "defaultFavicon"),
                              buttons: [
