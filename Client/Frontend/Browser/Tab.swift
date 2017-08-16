@@ -64,6 +64,7 @@ class Tab: NSObject {
     var restoring: Bool = false
     var pendingScreenshot = false
     var url: URL?
+    var contentBlocker: AnyObject?
 
     /// The last title shown by this tab. Used by the tab tray to show titles for zombie tabs.
     var lastTitle: String?
