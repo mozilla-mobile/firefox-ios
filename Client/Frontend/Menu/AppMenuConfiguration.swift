@@ -104,27 +104,27 @@ struct AppMenuConfiguration: MenuConfiguration {
         var menuItems = [MenuItem]()
         switch appState.ui {
         case .tab(let tabState):
-            menuItems.append(AppMenuConfiguration.FindInPageMenuItem)
-            menuItems.append(tabState.desktopSite ? AppMenuConfiguration.RequestMobileMenuItem : AppMenuConfiguration.RequestDesktopMenuItem)
-
-            if !HomePageAccessors.isButtonInMenu(appState) {
-                menuItems.append(AppMenuConfiguration.SharePageMenuItem)
-            } else if HomePageAccessors.hasHomePage(appState) {
-                menuItems.append(AppMenuConfiguration.OpenHomePageMenuItem)
-            } else {
-                var homePageMenuItem = AppMenuConfiguration.SetHomePageMenuItem
-                if let url = tabState.url, !url.isWebPage(includeDataURIs: true) || url.isLocal {
-                    homePageMenuItem.isDisabled = true
-                }
-                menuItems.append(homePageMenuItem)
-            }
-            menuItems.append(AppMenuConfiguration.NewTabMenuItem)
-            menuItems.append(AppMenuConfiguration.NewPrivateTabMenuItem)
-            var bookmarkMenuItem = tabState.isBookmarked ? AppMenuConfiguration.RemoveBookmarkMenuItem : AppMenuConfiguration.AddBookmarkMenuItem
-            if let url = tabState.url, !url.isWebPage(includeDataURIs: true) || url.isLocal {
-                bookmarkMenuItem.isDisabled = true
-            }
-            menuItems.append(bookmarkMenuItem)
+//            menuItems.append(AppMenuConfiguration.FindInPageMenuItem)
+//            menuItems.append(tabState.desktopSite ? AppMenuConfiguration.RequestMobileMenuItem : AppMenuConfiguration.RequestDesktopMenuItem)
+//
+//            if !HomePageAccessors.isButtonInMenu(appState) {
+//                menuItems.append(AppMenuConfiguration.SharePageMenuItem)
+//            } else if HomePageAccessors.hasHomePage(appState) {
+//                menuItems.append(AppMenuConfiguration.OpenHomePageMenuItem)
+//            } else {
+//                var homePageMenuItem = AppMenuConfiguration.SetHomePageMenuItem
+//                if let url = tabState.url, !url.isWebPage(includeDataURIs: true) || url.isLocal {
+//                    homePageMenuItem.isDisabled = true
+//                }
+//                menuItems.append(homePageMenuItem)
+//            }
+//            menuItems.append(AppMenuConfiguration.NewTabMenuItem)
+//            menuItems.append(AppMenuConfiguration.NewPrivateTabMenuItem)
+//            var bookmarkMenuItem = tabState.isBookmarked ? AppMenuConfiguration.RemoveBookmarkMenuItem : AppMenuConfiguration.AddBookmarkMenuItem
+//            if let url = tabState.url, !url.isWebPage(includeDataURIs: true) || url.isLocal {
+//                bookmarkMenuItem.isDisabled = true
+//            }
+//            menuItems.append(bookmarkMenuItem)
             if NoImageModeHelper.isNoImageModeAvailable(appState) {
                 if NoImageModeHelper.isNoImageModeActivated(appState) {
                     menuItems.append(AppMenuConfiguration.ShowImageModeMenuItem)
