@@ -152,14 +152,6 @@ extension Strings {
     public static let FxAResendEmail = NSLocalizedString("FxA.ResendEmail", value: "Resend Email", comment: "Button label to resend email")
 }
 
-// Push opt-in
-extension Strings {
-    public static let FxAPushUsePushToSync = NSLocalizedString("Push.UsePushToSync", value: "Use Push to Sync", comment: "Label to use push to sync")
-    public static let FxAPushUsageDetails = NSLocalizedString("Push.PushUsageDetails", value: "Push technology makes Firefox Sync blazing fast on iOS.", comment: "Label explaining the benefit of using push notifications")
-    public static let FxAPushAllowNotifications = NSLocalizedString("Push.PushAllowNotification", value: "Allow Push Notifications", comment: "Button label to allow push notifications")
-    public static let FxAPushSkipNotifications = NSLocalizedString("Push.PushSkipNotifications", value: "Use Sync Without Push", comment: "Button label to skip allowing push notifications")
-}
-
 //Hotkey Titles
 extension Strings {
     public static let ReloadPageTitle = NSLocalizedString("Hotkeys.Reload.DiscoveryTitle", value: "Reload Page", comment: "Label to display in the Discoverability overlay for keyboard shortcuts")
@@ -365,13 +357,6 @@ extension Strings {
 // Snackbar shown when tapping app store link
 extension Strings {
     public static let ExternalLinkToAppStore_ConfirmationTitle = NSLocalizedString("ExternalLink.ConfirmMessage", value: "Open this link in the App Store app?", comment: "Question shown to user when tapping a link that opens the App Store app")
-}
-
-// Onboarding slide to ask for notification permissions (MMA Related)
-extension Strings {
-    public static let OnboardingSlideNotificationsTitle = NSLocalizedString("Onboarding.Slide.Notifications.Title", value: "Stay in the know", comment: "See https://github.com/mozilla-mobile/firefox-ios/pull/3031")
-    public static let OnboardingSlideNotificationsText = NSLocalizedString("Onboarding.Slide.Notifications.Text", value: "Turn on notifications so you're always up-to-date on the latest features.", comment: "See https://github.com/mozilla-mobile/firefox-ios/pull/3031")
-    public static let OnboardingSlideNotificationsButton = NSLocalizedString("Onboarding.Slide.Notifications.ButtonTitle", value: "Turn on notifications", comment: "See https://github.com/mozilla-mobile/firefox-ios/pull/3031")
 }
 
 // ContentBlocker/TrackingProtection strings
