@@ -26,7 +26,7 @@
 		6616A36F1BD17EFA00C7E493 /* style.css in Resources */ = {isa = PBXBuildFile; fileRef = 6616A36E1BD17EFA00C7E493 /* style.css */; };
 		742C99D41F3A3AD200717D69 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 742C99D31F3A3AD200717D69 /* Assets.xcassets */; };
 		745DC5DD1F39221100661635 /* ActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745DC5DC1F39221100661635 /* ActionViewController.swift */; };
-		745DC5E41F39221100661635 /* OpenInFocus.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 745DC5DA1F39221100661635 /* OpenInFocus.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		745DC5E41F39221100661635 /* ShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 745DC5DA1F39221100661635 /* ShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A57245250F88CCA4993E55B2 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4C4943B406FCA9B74B4E186 /* CoreText.framework */; };
 		D00A44111EB8F80A00DB0218 /* Telemetry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D00A44101EB8F80A00DB0218 /* Telemetry.framework */; };
 		D0967A811EC50002009D937F /* TelemetryIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0967A801EC50002009D937F /* TelemetryIntegration.swift */; };
@@ -164,7 +164,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				745DC5E41F39221100661635 /* OpenInFocus.appex in Embed App Extensions */,
+				745DC5E41F39221100661635 /* ShareExtension.appex in Embed App Extensions */,
 				E4BF2DF51BACE92400DA9D68 /* ContentBlocker.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
@@ -264,7 +264,7 @@
 		7449B17E1F291D77001A199D /* uz */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uz; path = uz.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7449B17F1F291D77001A199D /* uz */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uz; path = uz.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7449B1801F291D77001A199D /* uz */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uz; path = uz.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		745DC5DA1F39221100661635 /* OpenInFocus.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OpenInFocus.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		745DC5DA1F39221100661635 /* ShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		745DC5DC1F39221100661635 /* ActionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionViewController.swift; sourceTree = "<group>"; };
 		745DC5E11F39221100661635 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		80D9AA926EFBD788739486EB /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
@@ -813,7 +813,7 @@
 				E4BF2DEC1BACE92400DA9D68 /* ContentBlocker.appex */,
 				0BA39A831DD2B8E4005F970A /* XCUITest.xctest */,
 				E44A34671E0A18C100BFD777 /* SnapshotTests.xctest */,
-				745DC5DA1F39221100661635 /* OpenInFocus.appex */,
+				745DC5DA1F39221100661635 /* ShareExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -916,9 +916,9 @@
 			productReference = 0BA39A831DD2B8E4005F970A /* XCUITest.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
-		745DC5D91F39221100661635 /* OpenInFocus */ = {
+		745DC5D91F39221100661635 /* ShareExtension */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 745DC5EB1F39221100661635 /* Build configuration list for PBXNativeTarget "OpenInFocus" */;
+			buildConfigurationList = 745DC5EB1F39221100661635 /* Build configuration list for PBXNativeTarget "ShareExtension" */;
 			buildPhases = (
 				745DC5D61F39221100661635 /* Sources */,
 				745DC5D71F39221100661635 /* Frameworks */,
@@ -928,9 +928,9 @@
 			);
 			dependencies = (
 			);
-			name = OpenInFocus;
+			name = ShareExtension;
 			productName = OpenInFocus;
-			productReference = 745DC5DA1F39221100661635 /* OpenInFocus.appex */;
+			productReference = 745DC5DA1F39221100661635 /* ShareExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 		E44A34661E0A18C100BFD777 /* SnapshotTests */ = {
@@ -1009,7 +1009,7 @@
 					745DC5D91F39221100661635 = {
 						CreatedOnToolsVersion = 8.3.3;
 						DevelopmentTeam = 43AQ936H96;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 					E44A34661E0A18C100BFD777 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -1058,7 +1058,7 @@
 				E4BF2DEB1BACE92400DA9D68 /* ContentBlocker */,
 				0BA39A821DD2B8E4005F970A /* XCUITest */,
 				E44A34661E0A18C100BFD777 /* SnapshotTests */,
-				745DC5D91F39221100661635 /* OpenInFocus */,
+				745DC5D91F39221100661635 /* ShareExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -1298,7 +1298,7 @@
 		};
 		745DC5E31F39221100661635 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 745DC5D91F39221100661635 /* OpenInFocus */;
+			target = 745DC5D91F39221100661635 /* ShareExtension */;
 			targetProxy = 745DC5E21F39221100661635 /* PBXContainerItemProxy */;
 		};
 		E44A346D1E0A18C100BFD777 /* PBXTargetDependency */ = {
@@ -1943,10 +1943,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				DISPLAY_NAME = "Open in Klar";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -1968,8 +1969,10 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar.OpenInFocus;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar.ShareExtension;
+				PRODUCT_NAME = ShareExtension;
+				PROVISIONING_PROFILE = "bbbf3651-0c25-4720-884b-f9253d8feccd";
+				PROVISIONING_PROFILE_SPECIFIER = "Klar Share Profile";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -2002,10 +2005,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 43AQ936H96;
+				DISPLAY_NAME = "Open In Focus";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -2020,8 +2024,10 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus.OpenInFocus;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus.ShareExtension;
+				PRODUCT_NAME = ShareExtension;
+				PROVISIONING_PROFILE = "8e299321-8c8c-4811-bafe-ac535f64344c";
+				PROVISIONING_PROFILE_SPECIFIER = "Focus Share Profile";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -2058,6 +2064,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 43AQ936H96;
+				DISPLAY_NAME = "Open in Klar";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -2072,8 +2079,10 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar.OpenInFocus;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar.ShareExtension;
+				PRODUCT_NAME = ShareExtension;
+				PROVISIONING_PROFILE = "bbbf3651-0c25-4720-884b-f9253d8feccd";
+				PROVISIONING_PROFILE_SPECIFIER = "Klar Share Profile";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -2110,6 +2119,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 43AQ936H96;
+				DISPLAY_NAME = "Open In Focus";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -2124,8 +2134,10 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus.OpenInFocus;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus.ShareExtension;
+				PRODUCT_NAME = ShareExtension;
+				PROVISIONING_PROFILE = "8e299321-8c8c-4811-bafe-ac535f64344c";
+				PROVISIONING_PROFILE_SPECIFIER = "Focus Share Profile";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -2162,6 +2174,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = "";
+				DISPLAY_NAME = "Open In Focus";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -2176,8 +2189,9 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus.enterprise.OpenInFocus;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus.enterprise.ShareExtension;
+				PRODUCT_NAME = ShareExtension;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -2214,6 +2228,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = "";
+				DISPLAY_NAME = "Open in Klar";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -2228,8 +2243,9 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar.enterprise.OpenInFocus;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar.enterprise.ShareExtension;
+				PRODUCT_NAME = ShareExtension;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -3157,7 +3173,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = FocusRelease;
 		};
-		745DC5EB1F39221100661635 /* Build configuration list for PBXNativeTarget "OpenInFocus" */ = {
+		745DC5EB1F39221100661635 /* Build configuration list for PBXNativeTarget "ShareExtension" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				745DC5E51F39221100661635 /* KlarDebug */,
