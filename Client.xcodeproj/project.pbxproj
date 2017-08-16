@@ -189,8 +189,6 @@
 		2FCAE2651ABB531100877008 /* RemoteTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2471ABB531100877008 /* RemoteTabs.swift */; };
 		2FCAE2661ABB531100877008 /* Site.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2481ABB531100877008 /* Site.swift */; };
 		2FCAE2681ABB531100877008 /* BrowserDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE24B1ABB531100877008 /* BrowserDB.swift */; };
-		2FCAE26A1ABB531100877008 /* GenericTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE24D1ABB531100877008 /* GenericTable.swift */; };
-		2FCAE26F1ABB531100877008 /* RemoteTabsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2521ABB531100877008 /* RemoteTabsTable.swift */; };
 		2FCAE2751ABB531100877008 /* SQLiteRemoteClientsAndTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2581ABB531100877008 /* SQLiteRemoteClientsAndTabs.swift */; };
 		2FCAE2771ABB531100877008 /* SwiftData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE25B1ABB531100877008 /* SwiftData.swift */; };
 		2FCAE2781ABB531100877008 /* Visit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE25C1ABB531100877008 /* Visit.swift */; };
@@ -408,6 +406,7 @@
 		CE7F11941F3CEEC800ABFC0B /* RemoteDevices.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7F115E1F3CCEF900ABFC0B /* RemoteDevices.swift */; };
 		CEFC984B1EC0DCF5008A3E48 /* TestBookmarksRepairRequestor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFC983B1EC0DC60008A3E48 /* TestBookmarksRepairRequestor.swift */; };
 		D0131B4D1F3CF7D8000CDE86 /* SQLiteFavicons.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0131B4C1F3CF7D8000CDE86 /* SQLiteFavicons.swift */; };
+		D018F93E1F44A71A0098F8CA /* Table.swift in Sources */ = {isa = PBXBuildFile; fileRef = D018F93D1F44A7190098F8CA /* Table.swift */; };
 		D02816C21ECA5E2A00240CAA /* HistoryStateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02816C11ECA5E2A00240CAA /* HistoryStateHelper.swift */; };
 		D02816D21ECA60DF00240CAA /* HistoryStateHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = D02816D11ECA60DF00240CAA /* HistoryStateHelper.js */; };
 		D02818611EF056C800240CAA /* SentryIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02818601EF056C800240CAA /* SentryIntegration.swift */; };
@@ -1457,8 +1456,6 @@
 		2FCAE2471ABB531100877008 /* RemoteTabs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteTabs.swift; sourceTree = "<group>"; };
 		2FCAE2481ABB531100877008 /* Site.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Site.swift; sourceTree = "<group>"; };
 		2FCAE24B1ABB531100877008 /* BrowserDB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserDB.swift; sourceTree = "<group>"; };
-		2FCAE24D1ABB531100877008 /* GenericTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericTable.swift; sourceTree = "<group>"; };
-		2FCAE2521ABB531100877008 /* RemoteTabsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteTabsTable.swift; sourceTree = "<group>"; };
 		2FCAE2551ABB531100877008 /* SQLiteHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteHistory.swift; sourceTree = "<group>"; };
 		2FCAE2581ABB531100877008 /* SQLiteRemoteClientsAndTabs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteRemoteClientsAndTabs.swift; sourceTree = "<group>"; };
 		2FCAE25B1ABB531100877008 /* SwiftData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftData.swift; sourceTree = "<group>"; };
@@ -1652,6 +1649,7 @@
 		CE7F115E1F3CCEF900ABFC0B /* RemoteDevices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteDevices.swift; sourceTree = "<group>"; };
 		CEFC983B1EC0DC60008A3E48 /* TestBookmarksRepairRequestor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestBookmarksRepairRequestor.swift; path = SyncTests/TestBookmarksRepairRequestor.swift; sourceTree = "<group>"; };
 		D0131B4C1F3CF7D8000CDE86 /* SQLiteFavicons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteFavicons.swift; sourceTree = "<group>"; };
+		D018F93D1F44A7190098F8CA /* Table.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Table.swift; sourceTree = "<group>"; };
 		D02816C11ECA5E2A00240CAA /* HistoryStateHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryStateHelper.swift; sourceTree = "<group>"; };
 		D02816D11ECA60DF00240CAA /* HistoryStateHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = HistoryStateHelper.js; sourceTree = "<group>"; };
 		D02818601EF056C800240CAA /* SentryIntegration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SentryIntegration.swift; sourceTree = "<group>"; };
@@ -2630,8 +2628,6 @@
 				2FCAE24B1ABB531100877008 /* BrowserDB.swift */,
 				282915E51AF1A7920006EEB5 /* BrowserTable.swift */,
 				0B5A93031B1E60B4004F47A2 /* DeferredDBOperation.swift */,
-				2FCAE24D1ABB531100877008 /* GenericTable.swift */,
-				2FCAE2521ABB531100877008 /* RemoteTabsTable.swift */,
 				28126F761C2F9833006466CC /* SQLiteBookmarksBase.swift */,
 				28126F471C2F948E006466CC /* SQLiteBookmarksHelpers.swift */,
 				28126F6D1C2F94F9006466CC /* SQLiteBookmarksModel.swift */,
@@ -2645,6 +2641,7 @@
 				E677F0441D9423FB00ECF1FB /* SQLiteMetadata.swift */,
 				285D3B8F1B4386520035FD22 /* SQLiteQueue.swift */,
 				2FCAE2581ABB531100877008 /* SQLiteRemoteClientsAndTabs.swift */,
+				D018F93D1F44A7190098F8CA /* Table.swift */,
 			);
 			path = SQL;
 			sourceTree = "<group>";
@@ -4366,7 +4363,7 @@
 					};
 					3B43E3CF1D95C48D00BBA9DB = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 						ProvisioningStyle = Automatic;
 						TestTargetID = F84B21BD1A090F8100AAB793;
@@ -4387,7 +4384,7 @@
 					};
 					D39FA15E1A83E0EC00EE869C = {
 						CreatedOnToolsVersion = 6.1.1;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -4409,7 +4406,7 @@
 					};
 					E4D567211ADECE2700F1EFE7 = {
 						CreatedOnToolsVersion = 6.3;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -5177,14 +5174,12 @@
 				E6F368291D7F594F008CDD67 /* SQLiteHistoryRecommendations.swift in Sources */,
 				2829D3A01C2F0AD400DCF931 /* Sharing.swift in Sources */,
 				2FCAE2751ABB531100877008 /* SQLiteRemoteClientsAndTabs.swift in Sources */,
-				2FCAE26A1ABB531100877008 /* GenericTable.swift in Sources */,
 				285F2DC11AF80B4600211843 /* SQLiteBookmarksSyncing.swift in Sources */,
 				28C4AB721AD42D4300D9ACE3 /* Clients.swift in Sources */,
 				D0131B4D1F3CF7D8000CDE86 /* SQLiteFavicons.swift in Sources */,
 				28126F741C2F96F1006466CC /* SQLiteBookmarksResetting.swift in Sources */,
 				28B62ACE1BC745E7004A585A /* Syncable.swift in Sources */,
 				74B195441CF503FC007F36EF /* RecentlyClosedTabs.swift in Sources */,
-				2FCAE26F1ABB531100877008 /* RemoteTabsTable.swift in Sources */,
 				E65075C21E37F956006961AC /* ExtensionUtils.swift in Sources */,
 				7BF5A1EA1B41640500EA9DD8 /* SyncQueue.swift in Sources */,
 				2852B8441C51996B00591EAC /* Trees.swift in Sources */,
@@ -5201,6 +5196,7 @@
 				28126F481C2F948E006466CC /* SQLiteBookmarksHelpers.swift in Sources */,
 				E677F0451D9423FB00ECF1FB /* SQLiteMetadata.swift in Sources */,
 				D37DE2831CA2047500A5EC69 /* CertStore.swift in Sources */,
+				D018F93E1F44A71A0098F8CA /* Table.swift in Sources */,
 				2829D37A1C2F0A7F00DCF931 /* BookmarksModel.swift in Sources */,
 				2FCAE2661ABB531100877008 /* Site.swift in Sources */,
 				0B54BD191B698B7C004C822C /* SuggestedSites.swift in Sources */,

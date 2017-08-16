@@ -89,8 +89,8 @@ private let AllTables: [String] = [
     TableRemoteDevices,
 
     TableSyncCommands,
-//    TableClients,
-//    TableTabs
+    TableClients,
+    TableTabs
 ]
 
 private let AllViews: [String] = [
@@ -279,27 +279,27 @@ open class BrowserTable: Table {
             "value TEXT NOT NULL" +
         ")"
 
-//    let clientsTableCreate =
-//        "CREATE TABLE IF NOT EXISTS \(TableClients) (" +
-//            "guid TEXT PRIMARY KEY, " +
-//            "name TEXT NOT NULL, " +
-//            "modified INTEGER NOT NULL, " +
-//            "type TEXT, " +
-//            "formfactor TEXT, " +
-//            "os TEXT, " +
-//            "version TEXT, " +
-//            "fxaDeviceId TEXT" +
-//        ")"
+    let clientsTableCreate =
+        "CREATE TABLE IF NOT EXISTS \(TableClients) (" +
+            "guid TEXT PRIMARY KEY, " +
+            "name TEXT NOT NULL, " +
+            "modified INTEGER NOT NULL, " +
+            "type TEXT, " +
+            "formfactor TEXT, " +
+            "os TEXT, " +
+            "version TEXT, " +
+            "fxaDeviceId TEXT" +
+        ")"
 
-//    let tabsTableCreate =
-//        "CREATE TABLE IF NOT EXISTS \(TableTabs) (" +
-//            "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-//            "client_guid TEXT REFERENCES clients(guid) ON DELETE CASCADE, " +
-//            "url TEXT NOT NULL, " +
-//            "title TEXT, " +
-//            "history TEXT, " +
-//            "last_used INTEGER" +
-//        ")"
+    let tabsTableCreate =
+        "CREATE TABLE IF NOT EXISTS \(TableTabs) (" +
+            "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "client_guid TEXT REFERENCES clients(guid) ON DELETE CASCADE, " +
+            "url TEXT NOT NULL, " +
+            "title TEXT, " +
+            "history TEXT, " +
+            "last_used INTEGER" +
+        ")"
 
     let activityStreamBlocklistCreate =
         "CREATE TABLE IF NOT EXISTS \(TableActivityStreamBlocklist) (" +
@@ -731,8 +731,8 @@ open class BrowserTable: Table {
             self.queueTableCreate,
             self.topSitesTableCreate,
             syncCommandsTableCreate,
-//            clientsTableCreate,
-//            tabsTableCreate,
+            clientsTableCreate,
+            tabsTableCreate,
 
             // Indices.
             indexBufferStructureParentIdx,
@@ -1117,8 +1117,8 @@ open class BrowserTable: Table {
         if from < 31 && to >= 31 {
             if !self.run(db, queries: [
                 syncCommandsTableCreate,
-//                clientsTableCreate,
-//                tabsTableCreate
+                clientsTableCreate,
+                tabsTableCreate
                 ]) {
                 return false
             }
