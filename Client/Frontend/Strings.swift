@@ -356,7 +356,7 @@ extension Strings {
 
 // Snackbar shown when tapping app store link
 extension Strings {
-    public static let ExternalLinkToAppStore_ConfirmationTitle = NSLocalizedString("ExternalLink.ConfirmMessage", value: "Open this link in the App Store app?", comment: "Question shown to user when tapping a link that opens the App Store app")
+    public static let ExternalLinkAppStoreConfirmationTitle = NSLocalizedString("ExternalLink.AppStore.ConfirmationTitle", value: "Open this link in the App Store app?", comment: "Question shown to user when tapping a link that opens the App Store app")
 }
 
 // ContentBlocker/TrackingProtection strings
