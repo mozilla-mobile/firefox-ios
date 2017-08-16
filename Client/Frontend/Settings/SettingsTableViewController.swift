@@ -22,6 +22,9 @@ class Setting: NSObject {
 
     weak var delegate: SettingsDelegate?
 
+    // For wrapping footer titles, double the footer height. A better solution would be to calculate the height needed.
+    var isFooterDoubleHeight = false
+    
     // The url the SettingsContentViewController will show, e.g. Licenses and Privacy Policy.
     var url: URL? { return nil }
 
@@ -85,12 +88,13 @@ class Setting: NSObject {
         }
     }
 
-    init(title: NSAttributedString? = nil, footerTitle: NSAttributedString? = nil, cellHeight: CGFloat? = nil, delegate: SettingsDelegate? = nil, enabled: Bool? = nil) {
+    init(title: NSAttributedString? = nil, footerTitle: NSAttributedString? = nil, isFooterDoubleHeight: Bool = false, cellHeight: CGFloat? = nil, delegate: SettingsDelegate? = nil, enabled: Bool? = nil) {
         self._title = title
         self._footerTitle = footerTitle
         self._cellHeight = cellHeight
         self.delegate = delegate
         self.enabled = enabled ?? true
+        self.isFooterDoubleHeight = isFooterDoubleHeight
     }
 }
 
@@ -98,9 +102,9 @@ class Setting: NSObject {
 class SettingSection: Setting {
     fileprivate let children: [Setting]
 
-    init(title: NSAttributedString? = nil, footerTitle: NSAttributedString? = nil, cellHeight: CGFloat? = nil, children: [Setting]) {
+    init(title: NSAttributedString? = nil, footerTitle: NSAttributedString? = nil, isFooterDoubleHeight: Bool = false, cellHeight: CGFloat? = nil, children: [Setting]) {
         self.children = children
-        super.init(title: title, footerTitle: footerTitle, cellHeight: cellHeight)
+        super.init(title: title, footerTitle: footerTitle, isFooterDoubleHeight: isFooterDoubleHeight, cellHeight: cellHeight)
     }
 
     var count: Int {
@@ -300,6 +304,37 @@ class StringSetting: Setting, UITextFieldDelegate {
         }
         // Call settingDidChange with text or nil.
         settingDidChange?(text)
+    }
+}
+
+class CheckmarkSetting: Setting {
+    let onChanged: () -> Void
+    let isEnabled: () -> Bool
+    private let subtitle: NSAttributedString?
+
+    override var status: NSAttributedString? {
+        return subtitle
+    }
+
+    init(title: NSAttributedString, subtitle: NSAttributedString?, accessibilityIdentifier: String? = nil, isEnabled: @escaping () -> Bool, onChanged: @escaping () -> Void) {
+        self.subtitle = subtitle
+        self.onChanged = onChanged
+        self.isEnabled = isEnabled
+        super.init(title: title)
+        self.accessibilityIdentifier = accessibilityIdentifier
+    }
+
+    override func onConfigureCell(_ cell: UITableViewCell) {
+        super.onConfigureCell(cell)
+        cell.accessoryType = isEnabled() ? .checkmark : .none
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        // Force editing to end for any focused text fields so they can finish up validation first.
+        navigationController?.view.endEditing(true)
+        if !isEnabled() {
+            onChanged()
+        }
     }
 }
 
@@ -545,7 +580,7 @@ class SettingsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         let sectionSetting = settings[section]
         if let _ = sectionSetting.footerTitle?.string {
-            return 44
+            return sectionSetting.isFooterDoubleHeight ? 88 : 44
         }
         return 0
     }
@@ -725,13 +760,13 @@ class SettingsTableSectionHeaderFooterView: UITableViewHeaderFooterView {
             titleLabel.snp.remakeConstraints { make in
                 make.left.right.equalTo(self).inset(SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
                 make.top.equalTo(self).offset(SettingsTableSectionHeaderFooterViewUX.titleVerticalPadding)
-                make.bottom.equalTo(self).offset(-SettingsTableSectionHeaderFooterViewUX.titleVerticalLongPadding)
+                make.bottom.equalTo(self).offset(-SettingsTableSectionHeaderFooterViewUX.titleVerticalPadding)
             }
         case .bottom:
             titleLabel.snp.remakeConstraints { make in
                 make.left.right.equalTo(self).inset(SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
                 make.bottom.equalTo(self).offset(-SettingsTableSectionHeaderFooterViewUX.titleVerticalPadding)
-                make.top.equalTo(self).offset(SettingsTableSectionHeaderFooterViewUX.titleVerticalLongPadding)
+                make.top.equalTo(self).offset(SettingsTableSectionHeaderFooterViewUX.titleVerticalPadding)
             }
         }
     }
