@@ -31,6 +31,23 @@ struct FxALoginFlags {
     let verified: Bool
 }
 
+enum PushNotificationError: MaybeErrorType {
+    case registrationFailed
+    case userDisallowed
+    case wrongOSVersion
+
+    var description: String {
+        switch self {
+        case .registrationFailed:
+            return "The OS was unable to complete APNS registration"
+        case .userDisallowed:
+            return "User refused permission for notifications"
+        case .wrongOSVersion:
+            return "The version of iOS is not recent enough"
+        }
+    }
+}
+
 /// This class manages the from successful login for FxAccounts to 
 /// asking the user for notification permissions, registering for 
 /// remote push notifications (APNS), then creating an account and 
@@ -60,6 +77,8 @@ class FxALoginHelper {
         return PushClient(endpointURL: pushConfiguration.endpointURL, experimentalMode: experimentalMode)
     }
 
+    fileprivate var apnsTokenDeferred: Deferred<Maybe<String>>!
+
     // This should be called when the application has started.
     // This configures the helper for logging into Firefox Accounts, and
     // if already logged in, checking if anything needs to be done in response
@@ -67,6 +86,8 @@ class FxALoginHelper {
     func application(_ application: UIApplication, didLoadProfile profile: Profile) {
         self.profile = profile
         self.account = profile.getAccount()
+
+        self.apnsTokenDeferred = Deferred()
 
         guard let account = self.account else {
             // There's no account, no further action.
@@ -132,7 +153,19 @@ class FxALoginHelper {
         requestUserNotifications(application)
     }
 
+    func getDeviceToken(_ application: UIApplication) -> Deferred<Maybe<String>> {
+        self.requestUserNotifications(application)
+        return self.apnsTokenDeferred
+    }
+
     fileprivate func requestUserNotifications(_ application: UIApplication) {
+        if let deferred = self.apnsTokenDeferred, deferred.isFilled,
+            let token = deferred.value.successValue {
+            // If we have an account, then it'll go through ahead and register 
+            // with autopush here.
+            // If not we'll just bail. The Deferred will do the rest.
+            return self.apnsRegisterDidSucceed(token)
+        }
         DispatchQueue.main.async {
             self.requestUserNotificationsMainThreadOnly(application)
         }
@@ -196,6 +229,7 @@ class FxALoginHelper {
 
     func application(_ application: UIApplication, canDisplayUserNotifications allowed: Bool) {
         guard allowed else {
+            apnsTokenDeferred?.fillIfUnfilled(Maybe.failure(PushNotificationError.userDisallowed))
             return readyForSyncing()
         }
 
@@ -203,6 +237,7 @@ class FxALoginHelper {
         profile?.prefs.setBool(true, forKey: applicationDidRequestUserNotificationPermissionPrefKey)
 
         guard #available(iOS 10, *) else {
+            apnsTokenDeferred?.fill(Maybe.failure(PushNotificationError.wrongOSVersion))
             return readyForSyncing()
         }
 
@@ -214,7 +249,7 @@ class FxALoginHelper {
             readyForSyncing()
         }
     }
-
+        
     func getPushConfiguration() -> PushConfiguration? {
         let label = PushConfigurationLabel(rawValue: AppConstants.scheme)
         return label?.toConfiguration()
@@ -222,6 +257,16 @@ class FxALoginHelper {
 
     func apnsRegisterDidSucceed(_ deviceToken: Data) {
         let apnsToken = deviceToken.hexEncodedString
+        self.apnsTokenDeferred?.fill(Maybe(success: apnsToken))
+        self.apnsRegisterDidSucceed(apnsToken)
+    }
+
+    fileprivate func apnsRegisterDidSucceed(_ apnsToken: String) {
+        guard self.account != nil else {
+            // If we aren't logged in to FxA at this point
+            // we should bail.
+            return loginDidFail()
+        }
 
         guard let pushClient = self.pushClient else {
             return pushRegistrationDidFail()
@@ -236,6 +281,7 @@ class FxALoginHelper {
     }
 
     func apnsRegisterDidFail() {
+        self.apnsTokenDeferred?.fill(Maybe(failure: PushNotificationError.registrationFailed))
         readyForSyncing()
     }
 
@@ -250,7 +296,7 @@ class FxALoginHelper {
 
     fileprivate func readyForSyncing() {
         guard let profile = self.profile, let account = self.account else {
-            return loginDidSucceed()
+            return loginDidFail()
         }
 
         profile.setAccount(account)
