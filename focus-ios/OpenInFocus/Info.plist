@@ -35,7 +35,7 @@
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.share-services</string>
 		<key>NSExtensionPrincipalClass</key>
-		<string>OpenInFocus.ActionViewController</string>
+		<string>ShareExtension.ActionViewController</string>
 	</dict>
 </dict>
 </plist>
