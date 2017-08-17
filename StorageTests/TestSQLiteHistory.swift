@@ -33,6 +33,7 @@ extension Site {
 class BaseHistoricalBrowserTable {
     func updateTable(_ db: SQLiteDBConnection, from: Int) -> Bool {
         assert(false, "Should never be called.")
+        return false
     }
 
     func exists(_ db: SQLiteDBConnection) -> Bool {
