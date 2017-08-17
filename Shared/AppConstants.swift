@@ -66,12 +66,15 @@ public struct AppConstants {
     
     /// Enables/disables the availability of No Image Mode.
     public static let MOZ_NO_IMAGE_MODE: Bool = {
-        return true
-    }()
-
-    /// Enables/disables the availability of Night Mode.
-    public static let MOZ_NIGHT_MODE: Bool = {
-        return true
+        #if MOZ_CHANNEL_RELEASE
+            return false
+        #elseif MOZ_CHANNEL_BETA
+            return false
+        #elseif MOZ_CHANNEL_FENNEC
+            return true
+        #else
+            return true
+        #endif
     }()
 
     /// Toggles the ability to reorder tabs in the tab tray
