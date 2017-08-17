@@ -114,9 +114,8 @@ open class SQLiteHistory {
         self.favicons = SQLiteFavicons(db: self.db)
         self.prefs = prefs
 
-        // BrowserTable exists only to perform create/update etc. operations -- it's not
-        // a queryable thing that needs to stick around.
-        switch db.createOrUpdate(BrowserTable()) {
+        // BrowserSchema doesn't need to stick around once the schema has been created/updated.
+        switch db.createOrUpdate(BrowserSchema()) {
         case .failure:
             log.error("Failed to create/update DB schema!")
             fatalError()

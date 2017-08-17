@@ -127,9 +127,8 @@ class MockUploader {
 private func getBrowserDBForFile(filename: String, files: FileAccessor) -> BrowserDB? {
     let db = BrowserDB(filename: filename, files: files)
 
-    // BrowserTable exists only to perform create/update etc. operations -- it's not
-    // a queryable thing that needs to stick around.
-    if db.createOrUpdate(BrowserTable()) != .success {
+    // BrowserSchema doesn't need to stick around once the schema has been created/updated.
+    if db.createOrUpdate(BrowserSchema()) != .success {
         return nil
     }
     return db

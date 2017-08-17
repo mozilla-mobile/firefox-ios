@@ -35,7 +35,7 @@ class SyncCommandsTests: XCTestCase {
         } catch _ {
         }
         db = BrowserDB(filename: "browser.db", files: files)
-        XCTAssertTrue(db.createOrUpdate(BrowserTable()) == .success)
+        XCTAssertTrue(db.createOrUpdate(BrowserSchema()) == .success)
         // create clients
 
         let now = Date.now()

@@ -13,10 +13,18 @@ open class SQLiteQueue: TabQueue {
     let db: BrowserDB
 
     public init(db: BrowserDB) {
-        // BrowserTable exists only to perform create/update etc. operations -- it's not
-        // a queryable thing that needs to stick around.
-        _ = db.createOrUpdate(BrowserTable())
         self.db = db
+        
+        // BrowserSchema doesn't need to stick around once the schema has been created/updated.
+        switch db.createOrUpdate(BrowserSchema()) {
+        case .failure:
+            log.error("Failed to create/update DB schema!")
+            fatalError()
+        case .closed:
+            log.info("Database not created as the SQLiteConnection is closed.")
+        case .success:
+            log.debug("Database succesfully created/updated")
+        }
     }
 
     open func addToQueue(_ tab: ShareItem) -> Success {

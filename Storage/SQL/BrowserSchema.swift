@@ -127,12 +127,11 @@ private let log = Logger.syncLogger
  * The monolithic class that manages the inter-related history etc. tables.
  * We rely on SQLiteHistory having initialized the favicon table first.
  */
-open class BrowserTable: Table {
+open class BrowserSchema: Schema {
     static let DefaultVersion = 31    // Bug 1388147.
 
-    // TableInfo fields.
     var name: String { return "BROWSER" }
-    var version: Int { return BrowserTable.DefaultVersion }
+    var version: Int { return BrowserSchema.DefaultVersion }
 
     let sqliteVersion: Int32
     let supportsPartialIndices: Bool
@@ -148,7 +147,7 @@ open class BrowserTable: Table {
     func run(_ db: SQLiteDBConnection, sql: String, args: Args? = nil) -> Bool {
         let err = db.executeChange(sql, withArgs: args)
         if err != nil {
-            log.error("Error running SQL in BrowserTable: \(err?.localizedDescription ?? "nil")")
+            log.error("Error running SQL in BrowserSchema: \(err?.localizedDescription ?? "nil")")
             log.error("SQL was \(sql)")
         }
         return err == nil
@@ -762,8 +761,8 @@ open class BrowserTable: Table {
                self.prepopulateRootFolders(db)
     }
 
-    func updateTable(_ db: SQLiteDBConnection, from: Int) -> Bool {
-        let to = BrowserTable.DefaultVersion
+    func update(_ db: SQLiteDBConnection, from: Int) -> Bool {
+        let to = self.version
         if from == to {
             log.debug("Skipping update from \(from) to \(to).")
             return true
@@ -776,7 +775,7 @@ open class BrowserTable: Table {
             if self.migrateFromSchemaTableIfNeeded(db) {
                 let version = db.version
                 if version > 0 {
-                    return self.updateTable(db, from: version)
+                    return self.update(db, from: version)
                 }
             }
 
@@ -984,7 +983,6 @@ open class BrowserTable: Table {
 
         if from < 18 && to >= 18 {
             if !self.run(db, queries: [
-
                 // Adds the Activity Stream blocklist table
                 activityStreamBlocklistCreate]) {
                 return false
@@ -993,7 +991,6 @@ open class BrowserTable: Table {
 
         if from < 19 && to >= 19 {
             if !self.run(db, queries: [
-
                 // Adds tables/indicies for metadata content
                 pageMetadataCreate,
                 indexPageMetadataCacheKeyCreate]) {
@@ -1199,15 +1196,18 @@ open class BrowserTable: Table {
                 log.info("Schema table migrations complete; Dropping 'tableList' table.")
 
                 let sql = "DROP TABLE IF EXISTS tableList"
-                let err = db.executeChange(sql)
-                if err != nil {
-                    log.error("Error dropping tableList table: \(err?.localizedDescription ?? "nil")")
-                    SentryIntegration.shared.sendWithStacktrace(message: "Error dropping tableList table: \(err?.localizedDescription ?? "nil")", tag: "BrowserDB", severity: .error)
+                if let err = db.executeChange(sql) {
+                    log.error("Error dropping tableList table: \(err.localizedDescription)")
+                    SentryIntegration.shared.sendWithStacktrace(message: "Error dropping tableList table: \(err.localizedDescription)", tag: "BrowserDB", severity: .error)
                     return false
                 }
 
                 // Lastly, set the *actual* version to the database.
-                db.setVersion(version)
+                if let err = db.setVersion(version) {
+                    log.error("Error setting database version: \(err.localizedDescription)")
+                    SentryIntegration.shared.sendWithStacktrace(message: "Error setting database version: \(err.localizedDescription)", tag: "BrowserDB", severity: .error)
+                    return false
+                }
             }
         }
 
@@ -1280,7 +1280,7 @@ open class BrowserTable: Table {
      * Note that we don't check for views -- trust to luck.
      */
     func exists(_ db: SQLiteDBConnection) -> Bool {
-        return db.tablesExist(AllTables)
+        return db.someTablesExist(AllTables)
     }
 
     func drop(_ db: SQLiteDBConnection) -> Bool {
