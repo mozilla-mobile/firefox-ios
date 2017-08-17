@@ -696,7 +696,7 @@ extension SQLiteHistory: Favicons {
                     log.error("Got error adding icon: \(err).")
                     return 0
                 }
-                
+
                 // Try to update the favicon ID column in each bookmarks table. There can be
                 // multiple bookmarks with a particular URI, and a mirror bookmark can be
                 // locally changed, so either or both of these statements can update multiple rows.
@@ -706,10 +706,10 @@ extension SQLiteHistory: Favicons {
                     _ = conn.executeChange("UPDATE \(TableBookmarksLocal) SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
                     _ = conn.executeChange("UPDATE \(TableBookmarksMirror) SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
                 }
-                
+
                 return id ?? 0
             }
-            
+
             if res == 0 {
                 return deferMaybe(DatabaseError(err: err))
             }

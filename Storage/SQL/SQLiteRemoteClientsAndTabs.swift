@@ -393,7 +393,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         }
         return failOrSucceed(err, op: "insert command", val: numberOfInserts)
     }
-    
+
     open func getCommands() -> Deferred<Maybe<[GUID: [SyncCommand]]>> {
         var err: NSError?
 

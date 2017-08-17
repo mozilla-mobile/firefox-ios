@@ -770,10 +770,18 @@ open class BrowserSchema: Schema {
 
         if from == 0 {
 
-            // If we're upgrading from "zero", we may just need to migrate
-            // from using the old `tableList` schema table.
+            // If we're upgrading from `0`, it is likely that we have not yet switched
+            // from tracking the schema version using `tableList` to `PRAGMA user_version`.
+            // This will write the *previous* version number from `tableList` into
+            // `PRAGMA user_version` if necessary in addition to upgrading the schema of
+            // some of the old tables that were previously managed separately.
             if self.migrateFromSchemaTableIfNeeded(db) {
                 let version = db.version
+                
+                // If the database is now properly reporting a `user_version`, it may
+                // still need to be upgraded further to get to the current version of
+                // the schema. So, let's simply call this `update()` function a second
+                // time to handle any remaining post-v31 migrations.
                 if version > 0 {
                     return self.update(db, from: version)
                 }
@@ -1123,97 +1131,111 @@ open class BrowserSchema: Schema {
 
         return true
     }
-
+    
     fileprivate func migrateFromSchemaTableIfNeeded(_ db: SQLiteDBConnection) -> Bool {
         log.info("Checking if schema table migration is needed.")
 
-        // If `user_version` has not been set or is far older than v31, we need to check
-        // to see if any additional migrations are necessary.
-        if db.version < 31 {
-
-            // Query for the existence of the `tableList` table to determine if we are
-            // migrating from an older DB version or if this is just a brand new DB.
-            let cursor = db.executeQueryUnsafe("SELECT COUNT(*) AS number FROM sqlite_master WHERE type = 'table' AND name = 'tableList'", factory: IntFactory, withArgs: [] as Args)
-
-            // If `tableList` still exists in this DB, then check to see if any table-specific
-            // migrations are required before removing it. Otherwise, if `tableList` does not
-            // exist, it is likely due to this being a brand new DB and no additional steps
-            // need to be taken at this point.
-            let tableListTableExists = cursor[0] == 1
-            cursor.close()
-
-            if tableListTableExists {
-
-                // Query for the existence of the `clients` table to determine if we are
-                // migrating from an older DB version or if this is just a brand new DB.
-                let cursor = db.executeQueryUnsafe("SELECT COUNT(*) AS number FROM sqlite_master WHERE type = 'table' AND name = '\(TableClients)'", factory: IntFactory, withArgs: [] as Args)
-
-                let clientsTableExists = cursor[0] == 1
-                cursor.close()
-
-                if clientsTableExists {
-
-                    // Check if intermediary migrations are necessary for the 'clients' table.
-                    let cursor = db.executeQueryUnsafe("SELECT version FROM tableList WHERE name = '\(TableClients)'", factory: IntFactory, withArgs: [] as Args)
-
-                    let clientsTableVersion = cursor[0] ?? 0
-                    cursor.close()
-
-                    if clientsTableVersion > 0 && clientsTableVersion <= 3 {
-                        log.info("Migrating '\(TableClients)' table from version \(clientsTableVersion).")
-
-                        if clientsTableVersion < 2 {
-                            let sql = "ALTER TABLE \(TableClients) ADD COLUMN version TEXT"
-                            let err = db.executeChange(sql)
-                            if err != nil {
-                                log.error("Error altering \(TableClients) table: \(err?.localizedDescription ?? "nil"); SQL was \(sql)")
-                                SentryIntegration.shared.sendWithStacktrace(message: "Error altering \(TableClients) table: \(err?.localizedDescription ?? "nil"); SQL was \(sql)", tag: "BrowserDB", severity: .error)
-                                return false
-                            }
-                        }
-
-                        if clientsTableVersion < 3 {
-                            let sql = "ALTER TABLE \(TableClients) ADD COLUMN fxaDeviceId TEXT"
-                            let err = db.executeChange(sql)
-                            if err != nil {
-                                log.error("Error altering \(TableClients) table: \(err?.localizedDescription ?? "nil"); SQL was \(sql)")
-                                SentryIntegration.shared.sendWithStacktrace(message: "Error altering \(TableClients) table: \(err?.localizedDescription ?? "nil"); SQL was \(sql)", tag: "BrowserDB", severity: .error)
-                                return false
-                            }
-                        }
-                    }
-                }
-
-                // Get the *actual* version for the BROWSER table from `tableList` before
-                // dropping it.
-                let versionCursor = db.executeQueryUnsafe("SELECT version FROM tableList WHERE name = 'BROWSER'", factory: IntFactory, withArgs: [] as Args)
-
-                let version = versionCursor[0] ?? 0
-                versionCursor.close()
-
-                // No other intermediary migrations are needed for the remaining tables, so
-                // now we can drop the `tableList` table.
-                log.info("Schema table migrations complete; Dropping 'tableList' table.")
-
-                let sql = "DROP TABLE IF EXISTS tableList"
-                if let err = db.executeChange(sql) {
-                    log.error("Error dropping tableList table: \(err.localizedDescription)")
-                    SentryIntegration.shared.sendWithStacktrace(message: "Error dropping tableList table: \(err.localizedDescription)", tag: "BrowserDB", severity: .error)
-                    return false
-                }
-
-                // Lastly, set the *actual* version to the database.
-                if let err = db.setVersion(version) {
-                    log.error("Error setting database version: \(err.localizedDescription)")
-                    SentryIntegration.shared.sendWithStacktrace(message: "Error setting database version: \(err.localizedDescription)", tag: "BrowserDB", severity: .error)
-                    return false
-                }
-            }
+        // If `PRAGMA user_version` is v31 or later, we don't need to do anything here.
+        guard db.version >= 31 else {
+            return true
         }
 
+        // Query for the existence of the `tableList` table to determine if we are
+        // migrating from an older DB version or if this is just a brand new DB.
+        let sqliteMasterCursor = db.executeQueryUnsafe("SELECT COUNT(*) AS number FROM sqlite_master WHERE type = 'table' AND name = 'tableList'", factory: IntFactory, withArgs: [] as Args)
+
+        let tableListTableExists = sqliteMasterCursor[0] == 1
+        sqliteMasterCursor.close()
+
+        // If `tableList` still exists in this DB, then we need to continue to check if
+        // any table-specific migrations are required before removing it. Otherwise, if
+        // `tableList` does not exist, it is likely due to this being a brand new DB and
+        // no additional steps need to be taken at this point.
+        guard tableListTableExists else {
+            return true
+        }
+
+        // If we are unable to migrate the `clients` table from the schema table, we
+        // have failed and cannot continue.
+        guard migrateClientsTableFromSchemaTableIfNeeded(db) else {
+            return false
+        }
+
+        // Get the *previous* schema version (prior to v31) specified in `tableList`
+        // before dropping it.
+        let previousVersionCursor = db.executeQueryUnsafe("SELECT version FROM tableList WHERE name = 'BROWSER'", factory: IntFactory, withArgs: [] as Args)
+
+        let previousVersion = previousVersionCursor[0] ?? 0
+        previousVersionCursor.close()
+
+        // No other intermediary migrations are needed for the remaining tables and
+        // we have already captured the *previous* schema version specified in
+        // `tableList`, so we can now safely drop it.
+        log.info("Schema table migrations complete; Dropping 'tableList' table.")
+
+        let sql = "DROP TABLE IF EXISTS tableList"
+        if let err = db.executeChange(sql) {
+            log.error("Error dropping tableList table: \(err.localizedDescription)")
+            SentryIntegration.shared.sendWithStacktrace(message: "Error dropping tableList table: \(err.localizedDescription)", tag: "BrowserDB", severity: .error)
+            return false
+        }
+
+        // Lastly, write the *previous* schema version (prior to v31) to the database
+        // using `PRAGMA user_version = ?`.
+        if let err = db.setVersion(previousVersion) {
+            log.error("Error setting database version: \(err.localizedDescription)")
+            SentryIntegration.shared.sendWithStacktrace(message: "Error setting database version: \(err.localizedDescription)", tag: "BrowserDB", severity: .error)
+            return false
+        }
+        
         return true
     }
 
+    fileprivate func migrateClientsTableFromSchemaTableIfNeeded(_ db: SQLiteDBConnection) -> Bool {
+        // Query for the existence of the `clients` table to determine if we are
+        // migrating from an older DB version or if this is just a brand new DB.
+        let sqliteMasterCursor = db.executeQueryUnsafe("SELECT COUNT(*) AS number FROM sqlite_master WHERE type = 'table' AND name = '\(TableClients)'", factory: IntFactory, withArgs: [] as Args)
+        
+        let clientsTableExists = sqliteMasterCursor[0] == 1
+        sqliteMasterCursor.close()
+        
+        guard clientsTableExists else {
+            return true
+        }
+        
+        // Check if intermediary migrations are necessary for the 'clients' table.
+        let previousVersionCursor = db.executeQueryUnsafe("SELECT version FROM tableList WHERE name = '\(TableClients)'", factory: IntFactory, withArgs: [] as Args)
+        
+        let previousClientsTableVersion = previousVersionCursor[0] ?? 0
+        previousVersionCursor.close()
+        
+        guard previousClientsTableVersion > 0 && previousClientsTableVersion <= 3 else {
+            return true
+        }
+        
+        log.info("Migrating '\(TableClients)' table from version \(previousClientsTableVersion).")
+        
+        if previousClientsTableVersion < 2 {
+            let sql = "ALTER TABLE \(TableClients) ADD COLUMN version TEXT"
+            if let err = db.executeChange(sql) {
+                log.error("Error altering \(TableClients) table: \(err.localizedDescription); SQL was \(sql)")
+                SentryIntegration.shared.sendWithStacktrace(message: "Error altering \(TableClients) table: \(err.localizedDescription); SQL was \(sql)", tag: "BrowserDB", severity: .error)
+                return false
+            }
+        }
+        
+        if previousClientsTableVersion < 3 {
+            let sql = "ALTER TABLE \(TableClients) ADD COLUMN fxaDeviceId TEXT"
+            if let err = db.executeChange(sql) {
+                log.error("Error altering \(TableClients) table: \(err.localizedDescription); SQL was \(sql)")
+                SentryIntegration.shared.sendWithStacktrace(message: "Error altering \(TableClients) table: \(err.localizedDescription); SQL was \(sql)", tag: "BrowserDB", severity: .error)
+                return false
+            }
+        }
+        
+        return true
+    }
+    
     fileprivate func fillDomainNamesFromCursor(_ cursor: Cursor<String>, db: SQLiteDBConnection) -> Bool {
         if cursor.count == 0 {
             return true
