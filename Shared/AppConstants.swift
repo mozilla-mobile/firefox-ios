@@ -63,19 +63,6 @@ public struct AppConstants {
             return false
         #endif
     }()
-
-    ///  Enables/disables the notification bar that appears on the status bar area
-    public static let MOZ_STATUS_BAR_NOTIFICATION: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-            return false
-        #elseif MOZ_CHANNEL_BETA
-            return true
-        #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #else
-            return true
-        #endif
-    }()
     
     /// Enables/disables the availability of No Image Mode.
     public static let MOZ_NO_IMAGE_MODE: Bool = {
