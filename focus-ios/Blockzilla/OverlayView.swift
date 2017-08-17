@@ -14,10 +14,8 @@ protocol OverlayViewDelegate: class {
 
 class OverlayView: UIView {
     weak var delegate: OverlayViewDelegate?
-    fileprivate let settingsButton = UIButton()
     private let searchButton = InsetButton()
     private let searchBorder = UIView()
-    private var bottomConstraint: Constraint!
     private var presented = false
     private var searchQuery = ""
     private let copyButton = InsetButton()
@@ -66,17 +64,6 @@ class OverlayView: UIView {
             make.leading.trailing.equalTo(self)
             make.top.equalTo(copyButton.snp.bottom)
             make.height.equalTo(1)
-        }
-        
-        settingsButton.setImage(#imageLiteral(resourceName: "icon_settings"), for: .normal)
-        settingsButton.contentEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
-        settingsButton.addTarget(self, action: #selector(didPressSettings), for: .touchUpInside)
-        settingsButton.accessibilityLabel = UIConstants.strings.browserSettings
-        addSubview(settingsButton)
-        
-        settingsButton.snp.makeConstraints { make in
-            make.trailing.equalTo(self)
-            bottomConstraint = make.bottom.equalTo(self).constraint
         }
     }
     required init?(coder aDecoder: NSCoder) {
@@ -159,14 +146,6 @@ class OverlayView: UIView {
         }
     }
 
-    fileprivate func animateWithKeyboard(keyboardState: KeyboardState) {
-        UIView.animate(withDuration: keyboardState.animationDuration, animations: {
-            let keyboardHeight = keyboardState.intersectionHeightForView(view: self)
-            self.bottomConstraint.update(offset: -keyboardHeight)
-            self.layoutIfNeeded()
-        })
-    }
-
     @objc private func didPressSearch() {
         delegate?.overlayView(self, didSearchForQuery: searchQuery)
     }
@@ -213,14 +192,8 @@ extension URL {
 }
 
 extension OverlayView: KeyboardHelperDelegate {
-    public func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
-        animateWithKeyboard(keyboardState: state)
-    }
-
-    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
-        animateWithKeyboard(keyboardState: state)
-    }
-
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {}
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {}
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {}
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {}
 }
