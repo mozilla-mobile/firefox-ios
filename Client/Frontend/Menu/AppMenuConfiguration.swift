@@ -298,5 +298,4 @@ extension AppMenuConfiguration {
         return  AppMenuToolbarItem(title: Strings.AppMenuReadingListTitleString, accessibilityIdentifier: "ReadingListMenuToolbarItem", action:  MenuAction(action: AppMenuAction.openReadingList.rawValue), icon: "menu-panel-ReadingList")
     }
 
-
 }
