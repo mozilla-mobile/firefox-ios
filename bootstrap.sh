@@ -28,7 +28,4 @@ if [ ! -z "$XCS_BOT_ID"  ]; then
   CARTHAGE_VERBOSE="--verbose"
 fi
 
-if [ ! -f Carthage/Cartfile.resolved ]; then
-  carthage bootstrap $CARTHAGE_VERBOSE --platform ios --color auto
-  cp Cartfile.resolved Carthage/Cartfile.resolved
-fi
+carthage bootstrap $CARTHAGE_VERBOSE --platform ios --color auto --cache-builds 
