@@ -50,8 +50,11 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
             })
         }
 
-        let firstSection = SettingSection(title: NSAttributedString(string: Strings.TrackingProtectionOptionOnOffHeader), footerTitle: NSAttributedString(string: Strings.TrackingProtectionOptionOnOffFooter), isFooterDoubleHeight: true, children: enabledSetting)
-        let secondSection = SettingSection(title: NSAttributedString(string: Strings.TrackingProtectionOptionBlockListsTitle), footerTitle: NSAttributedString(string: Strings.TrackingProtectionOptionFooter), isFooterDoubleHeight: true, children: strengthSetting)
+        let firstSection = SettingSection(title: NSAttributedString(string: Strings.TrackingProtectionOptionOnOffHeader), footerTitle: NSAttributedString(string: Strings.TrackingProtectionOptionOnOffFooter), children: enabledSetting)
+
+        // Adding a linebreak to increase spacing above header title as per UI design
+        let blockListsTitle = "\n" + Strings.TrackingProtectionOptionBlockListsTitle
+        let secondSection = SettingSection(title: NSAttributedString(string: blockListsTitle), footerTitle: NSAttributedString(string: Strings.TrackingProtectionOptionFooter), children: strengthSetting)
         return [firstSection, secondSection]
     }
 }

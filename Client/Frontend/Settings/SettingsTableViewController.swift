@@ -22,9 +22,6 @@ class Setting: NSObject {
 
     weak var delegate: SettingsDelegate?
 
-    // For wrapping footer titles, double the footer height. A better solution would be to calculate the height needed.
-    var isFooterDoubleHeight = false
-    
     // The url the SettingsContentViewController will show, e.g. Licenses and Privacy Policy.
     var url: URL? { return nil }
 
@@ -88,13 +85,12 @@ class Setting: NSObject {
         }
     }
 
-    init(title: NSAttributedString? = nil, footerTitle: NSAttributedString? = nil, isFooterDoubleHeight: Bool = false, cellHeight: CGFloat? = nil, delegate: SettingsDelegate? = nil, enabled: Bool? = nil) {
+    init(title: NSAttributedString? = nil, footerTitle: NSAttributedString? = nil, cellHeight: CGFloat? = nil, delegate: SettingsDelegate? = nil, enabled: Bool? = nil) {
         self._title = title
         self._footerTitle = footerTitle
         self._cellHeight = cellHeight
         self.delegate = delegate
         self.enabled = enabled ?? true
-        self.isFooterDoubleHeight = isFooterDoubleHeight
     }
 }
 
@@ -102,9 +98,9 @@ class Setting: NSObject {
 class SettingSection: Setting {
     fileprivate let children: [Setting]
 
-    init(title: NSAttributedString? = nil, footerTitle: NSAttributedString? = nil, isFooterDoubleHeight: Bool = false, cellHeight: CGFloat? = nil, children: [Setting]) {
+    init(title: NSAttributedString? = nil, footerTitle: NSAttributedString? = nil, cellHeight: CGFloat? = nil, children: [Setting]) {
         self.children = children
-        super.init(title: title, footerTitle: footerTitle, isFooterDoubleHeight: isFooterDoubleHeight, cellHeight: cellHeight)
+        super.init(title: title, footerTitle: footerTitle, cellHeight: cellHeight)
     }
 
     var count: Int {
@@ -578,13 +574,31 @@ class SettingsTableViewController: UITableViewController {
         return footerView
     }
 
-    //is this needed?
+//    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+//        return 150
+//    }
+
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         let sectionSetting = settings[section]
-        if let _ = sectionSetting.footerTitle?.string {
-            return sectionSetting.isFooterDoubleHeight ? 88 : 44
+        guard let text = sectionSetting.footerTitle?.string else {
+            return 0
         }
-        return 0
+
+        let attr = NSAttributedString(string: text)
+        let maxWidth = view.frame.width - SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding * 2
+        let maxHeight = CGFloat(100) // An arbitrary upper bound, FYI 4 lines of text is 56 points high.
+        let rect = attr.boundingRect(with: CGSize(width: maxWidth, height: maxHeight), options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil)
+        print(ceil(rect.size.height))
+        let textHeight = ceil(rect.size.height)
+        if textHeight < 30 {
+            // Two lines of text is ~28 points, and most footers in the settings are 1-2 lines of text;
+            // we only want to special case the cell height for 3+ lines of text, otherwise just use a
+            // consistent cell height
+            return 44
+        }
+
+        let verticalPadding = CGFloat(8)
+        return textHeight + verticalPadding * 2
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
