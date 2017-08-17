@@ -15,14 +15,15 @@ struct IntroViewControllerUX {
     static let PagerCenterOffsetFromScrollViewBottom = UIScreen.main.bounds.width <= 320 ? 20 : 30
 
     static let StartBrowsingButtonTitle = NSLocalizedString("Start Browsing", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
-    static let StartBrowsingButtonColor = UIColor(rgb: 0x4A90E2)
+    static let StartBrowsingButtonColor = UIColor(rgb: 0x4990E2)
     static let StartBrowsingButtonHeight = 56
-
     static let SignInButtonTitle = NSLocalizedString("Sign in to Firefox", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
     static let SignInButtonColor = UIColor(rgb: 0x45A1FF)
     static let SignInButtonHeight = 60
+    static let SignInButtonWidth = 290
 
     static let CardTextLineHeight = UIScreen.main.bounds.width <= 320 ? CGFloat(2) : CGFloat(6)
+    static let CardTextWidth = UIScreen.main.bounds.width <= 320 ? 240 : 280
     
     static let CardTitleWelcome = NSLocalizedString("Intro.Slides.Welcome.Title", tableName: "Intro", value: "Thanks for choosing Firefox!", comment: "Title for the first panel 'Welcome' in the First Run tour.")
     static let CardTitleSearch = NSLocalizedString("Intro.Slides.Search.Title", tableName: "Intro", value: "Your search, your way", comment: "Title for the second  panel 'Search' in the First Run tour.")
@@ -37,8 +38,6 @@ struct IntroViewControllerUX {
     static let CardTextSync = NSLocalizedString("Intro.Slides.Sync.Description", tableName: "Intro", value: "Use Sync to find the bookmarks, passwords, and other things you save to Firefox on all your devices.", comment: "Description for the 'Sync' panel in the First Run tour.")
 
     static let FadeDuration = 0.25
-
-    static let BackForwardButtonEdgeInset = 20
 }
 
 let IntroViewControllerSeenProfileKey = "IntroViewControllerSeen"
@@ -75,6 +74,9 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         // scale the slides down for iPhone 4S
         if view.frame.height <=  480 {
             slideVerticalScaleFactor = 1.33
+            slideVerticalScaleFactor = 1.33 //4S
+        } else if view.frame.height <= 568 {
+            slideVerticalScaleFactor = 1.15 //SE
         }
 
         for slideName in IntroViewControllerUX.CardSlides {
@@ -117,7 +119,9 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
             make.left.right.top.equalTo(self.view)
             make.bottom.equalTo(startBrowsingButton.snp.top)
         }
-
+        self.view.layoutIfNeeded()
+        self.scrollView.layoutIfNeeded()
+        
         pageControl = UIPageControl()
         pageControl.pageIndicatorTintColor = UIColor.black.withAlphaComponent(0.3)
         pageControl.currentPageIndicatorTintColor = UIColor.black
@@ -131,15 +135,36 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
             make.centerY.equalTo(self.startBrowsingButton.snp.top).offset(-IntroViewControllerUX.PagerCenterOffsetFromScrollViewBottom)
         }
 
-        func addCard(_ text: String, title: String) {
-            let introView = UIView()
+        func addCard(title: String, text: String, introView: UIView) {
             self.introViews.append(introView)
-            self.addLabelsToIntroView(introView, text: text, title: title)
+            
+            let titleLabel = UILabel()
+            titleLabel.numberOfLines = 0
+            titleLabel.textAlignment = NSTextAlignment.center
+            titleLabel.text = title
+            titleLabels.append(titleLabel)
+            introView.addSubview(titleLabel)
+            titleLabel.snp.makeConstraints { (make ) -> Void in
+                make.top.equalTo(introView).offset(20)
+                make.centerX.equalTo(introView)
+                make.width.equalTo(IntroViewControllerUX.CardTextWidth)
+            }
+            
+            let textLabel = UILabel()
+            textLabel.numberOfLines = 0
+            textLabel.attributedText = attributedStringForLabel(text)
+            textLabels.append(textLabel)
+            introView.addSubview(textLabel)
+            textLabel.snp.makeConstraints({ (make) -> Void in
+                make.top.equalTo(titleLabel.snp.bottom).offset(20)
+                make.centerX.equalTo(introView)
+                make.width.equalTo(IntroViewControllerUX.CardTextWidth)
+            })
         }
-        addCard(IntroViewControllerUX.CardTextWelcome, title: IntroViewControllerUX.CardTitleWelcome)
-        addCard(IntroViewControllerUX.CardTextSearch, title: IntroViewControllerUX.CardTitleSearch)
-        addCard(IntroViewControllerUX.CardTextPrivate, title: IntroViewControllerUX.CardTitlePrivate)
-        addCard(IntroViewControllerUX.CardTextMail, title: IntroViewControllerUX.CardTitleMail)
+        addCard(title: IntroViewControllerUX.CardTitleWelcome, text: IntroViewControllerUX.CardTextWelcome, introView: UIView())
+        addCard(title: IntroViewControllerUX.CardTitleSearch, text: IntroViewControllerUX.CardTextSearch, introView: UIView())
+        addCard(title: IntroViewControllerUX.CardTitlePrivate, text: IntroViewControllerUX.CardTextPrivate, introView: UIView())
+        addCard(title: IntroViewControllerUX.CardTitleMail, text: IntroViewControllerUX.CardTextMail, introView: UIView())
 
         // Sync card, with sign in to sync button.
         signInButton = UIButton()
@@ -151,13 +176,20 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         signInButton.snp.makeConstraints { (make) -> Void in
             make.height.equalTo(IntroViewControllerUX.SignInButtonHeight)
         }
+        
+        let syncCardView = UIView()
+        // introViews.append(syncCardView)
+        addCard(title: IntroViewControllerUX.CardTitleSync, text: IntroViewControllerUX.CardTextSync, introView: syncCardView)
 
-        let syncCardView =  UIView()
-        addViewsToIntroView(syncCardView, view: signInButton, title: IntroViewControllerUX.CardTitleSync)
-        introViews.append(syncCardView)
+        syncCardView.addSubview(signInButton)
+        syncCardView.bringSubview(toFront: signInButton)
+        signInButton.snp.makeConstraints { (make) -> Void in
+            make.centerX.equalTo(syncCardView)
+            make.width.equalTo(IntroViewControllerUX.CardTextWidth) // TODO Talk to UX about small screen sizes
+            make.bottom.equalTo(syncCardView)
+        }
 
         // Add all the cards to the view, make them invisible with zero alpha
-
         for introView in introViews {
             introView.alpha = 0
             self.view.addSubview(introView)
@@ -170,13 +202,14 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
 
         // Make whole screen scrollable by bringing the scrollview to the top
         view.bringSubview(toFront: scrollView)
-        view.bringSubview(toFront: pageControl)
+        view.sendSubview(toBack: pageControl)
+        scrollView?.bringSubview(toFront: syncCardView)
+        signInButton.superview?.bringSubview(toFront: signInButton)
 
         // Activate the first card
         setActiveIntroView(introViews[0], forPage: 0)
         setupDynamicFonts()
     }
-
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         NotificationCenter.default.addObserver(self, selector: #selector(SELDynamicFontChanged(_:)), name: NotificationDynamicFontChanged, object: nil)
@@ -316,7 +349,6 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
                 } else {
                     self.startBrowsingButton.alpha = 1
                 }
-                
             }, completion: { _ in
                 if page == (IntroViewControllerUX.NumberOfCards - 1) {
                     self.scrollView.signinButton = self.signInButton
@@ -344,39 +376,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         string.addAttribute(NSParagraphStyleAttributeName, value: paragraphStyle, range: NSRange(location: 0, length: string.length))
         return string
     }
-    //Adds the descriptions
-    fileprivate func addLabelsToIntroView(_ introView: UIView, text: String, title: String = "") {
-        let label = UILabel()
-        label.numberOfLines = 0
-        label.attributedText = attributedStringForLabel(text)
-        textLabels.append(label)
-        addViewsToIntroView(introView, view: label, title: title)
-    }
-    //Adds the titles
-    fileprivate func addViewsToIntroView(_ introView: UIView, view: UIView, title: String = "") {
-        introView.addSubview(view)
-        view.snp.makeConstraints { (make) -> Void in
-            make.centerX.equalTo(introView)
-            make.width.equalTo(self.view.frame.width <= 320 ? 240 : 280) // TODO Talk to UX about small screen sizes
-        }
-
-        if !title.isEmpty {
-            let titleLabel = UILabel()
-            titleLabel.numberOfLines = 0
-            titleLabel.textAlignment = NSTextAlignment.center
-            titleLabel.text = title
-            titleLabels.append(titleLabel)
-            introView.addSubview(titleLabel)
-            titleLabel.snp.makeConstraints { (make) -> Void in
-                make.top.equalTo(introView).offset(self.view.frame.width <= 320 ? 15 : 20)
-                make.bottom.equalTo(view.snp.top).offset(self.view.frame.width <= 320 ? -10 : -15)
-                make.centerX.equalTo(introView)
-                make.width.equalTo(self.view.frame.width <= 320 ? 240 : 280) // TODO Talk to UX about small screen sizes
-            }
-        }
-
-    }
-
+    
     fileprivate func setupDynamicFonts() {
         startBrowsingButton.titleLabel?.font = UIFont(name: "FiraSans-Regular", size: DynamicFontHelper.defaultHelper.IntroSmallFontSize)
         signInButton.titleLabel?.font = UIFont(name: "FiraSans-Regular", size: DynamicFontHelper.defaultHelper.IntroBigFontSize)
