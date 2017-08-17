@@ -8,7 +8,7 @@ import Shared
 
 struct NoImageModePrefsKey {
     static let NoImageModeButtonIsInMenu = PrefsKeys.KeyNoImageModeButtonIsInMenu
-    static let NoImageModeStatus = PrefsKeys.KeyNoImageModeStatus
+    static let NoImageModeIconIsSelected = PrefsKeys.KeyNoImageModeIconIsSelected
 }
 
 class NoImageModeHelper: TabHelper {
@@ -39,6 +39,6 @@ class NoImageModeHelper: TabHelper {
     }
 
     static func isNoImageModeActivated(_ state: AppState) -> Bool {
-        return state.prefs.boolForKey(NoImageModePrefsKey.NoImageModeStatus) ?? false
+        return state.prefs.boolForKey(NoImageModePrefsKey.NoImageModeIconIsSelected) ?? false
     }
 }
