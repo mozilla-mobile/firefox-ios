@@ -24,24 +24,17 @@ struct IntroViewControllerUX {
 
     static let CardTextLineHeight = UIScreen.main.bounds.width <= 320 ? CGFloat(2) : CGFloat(6)
     
-    static let CardTitleWelcome = NSLocalizedString("Thanks for choosing Firefox!", tableName: "Intro", comment: "Title for one of the panels in the First Run tour.")
-    static let CardTitleSearch = NSLocalizedString("Your search, your way", tableName: "Intro", comment: "Title for one of the panels in the First Run tour.")
+    static let CardTitleWelcome = NSLocalizedString("Intro.Slides.Welcome.Title", tableName: "Intro", value: "Thanks for choosing Firefox!", comment: "Title for the first panel 'Welcome' in the First Run tour.")
+    static let CardTitleSearch = NSLocalizedString("Intro.Slides.Search.Title", tableName: "Intro", value: "Your search, your way", comment: "Title for the second  panel 'Search' in the First Run tour.")
+    static let CardTitlePrivate = NSLocalizedString("Intro.Slides.Private.Title", tableName: "Intro", value: "Browse like no one's watching", comment: "Title for the third panel 'Private Browsing' in the First Run tour.")
+    static let CardTitleMail = NSLocalizedString("Intro.Slides.Mail.Title", tableName: "Intro", value: "You've got mail… options", comment: "Title for the fourth panel 'Mail' in the First Run tour.")
+    static let CardTitleSync = NSLocalizedString("Intro.Slides.Sync.Title", tableName: "Intro", value: "Pick up where you left off", comment: "Title for the fifth panel 'Sync' in the First Run tour.")
     
-    static let CardTitlePrivate = NSLocalizedString("Browse like no one's watching", tableName: "Intro", comment: "Title for one of the panels in the First Run tour.")
-    static let CardTitleMail = NSLocalizedString("You've got mail… options", tableName: "Intro", comment: "Title for one of the panels in the First Run tour.")
-    static let CardTitleSync = NSLocalizedString("Pick up where you left off", tableName: "Intro", comment: "Title for one of the panels in the First Run tour.")
-    
-    static let CardTextWelcome = NSLocalizedString("A modern mobile browser from Mozilla, the non-profit committed to a free and open web.", tableName: "Intro", comment: "Description for the 'Welcome' panel in the First Run tour.")
-    static let CardTextSearch = NSLocalizedString("Searching for something different? Choose another default search engine (or add your own) in Settings.", tableName: "Intro", comment: "Description for the 'Favorite Search Engine' panel in the First Run tour.")
-    static let CardTextPrivate = NSLocalizedString("Tap the mask icon to slip into Private Browsing mode.", tableName: "Intro", comment: "Description for the 'Private Browsing' panel in the First Run tour.")
-    static let CardTextMail = NSLocalizedString("Use any email app - not just Mail - with Firefox.", tableName: "Intro", comment: "Description for the 'Mail' panel in the First Run tour.")
-    static let CardTextSync = NSLocalizedString("Use Sync to find the bookmarks, passwords, and other things you save to Firefox on all your devices.", tableName: "Intro", comment: "Description for the 'Sync' panel in the First Run tour.")
-
-    static let Card1ImageLabel = NSLocalizedString("The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs.", tableName: "Intro", comment: "Accessibility label for the UI element used to display the number of open tabs, and open the tab tray.")
-    static let Card2ImageLabel = NSLocalizedString("The Settings button is at the beginning of the Tabs Tray.", tableName: "Intro", comment: "Accessibility label for the Settings button in the tab tray.")
-    static let Card3ImageLabel = NSLocalizedString("Firefox and the cloud", tableName: "Intro", comment: "Accessibility label for the image displayed in the 'Sync' panel of the First Run tour.")
-
-    static let Card3ButtonOffsetFromCenter = -10
+    static let CardTextWelcome = NSLocalizedString("Intro.Slides.Welcome.Description", tableName: "Intro", value: "A modern mobile browser from Mozilla, the non-profit committed to a free and open web.", comment: "Description for the 'Welcome' panel in the First Run tour.")
+    static let CardTextSearch = NSLocalizedString("Intro.Slides.Search.Description", tableName: "Intro", value: "Searching for something different? Choose another default search engine (or add your own) in Settings.", comment: "Description for the 'Favorite Search Engine' panel in the First Run tour.")
+    static let CardTextPrivate = NSLocalizedString("Intro.Slides.Private.Description", tableName: "Intro", value: "Tap the mask icon to slip into Private Browsing mode.", comment: "Description for the 'Private Browsing' panel in the First Run tour.")
+    static let CardTextMail = NSLocalizedString("Intro.Slides.Mail.Description", tableName: "Intro", value:"Use any email app - not just Mail - with Firefox.", comment: "Description for the 'Mail' panel in the First Run tour.")
+    static let CardTextSync = NSLocalizedString("Intro.Slides.Sync.Description", tableName: "Intro", value: "Use Sync to find the bookmarks, passwords, and other things you save to Firefox on all your devices.", comment: "Description for the 'Sync' panel in the First Run tour.")
 
     static let FadeDuration = 0.25
 
