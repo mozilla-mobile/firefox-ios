@@ -51,7 +51,7 @@ class ClipboardBarDisplayHandler {
         }
         sessionStarted = false
         lastDisplayedURL = UIPasteboard.general.copiedURL?.absoluteString
-        return self.prefs.boolForKey("showClipboardBar") ?? true
+        return self.prefs.boolForKey("showClipboardBar") ?? false
     }
     
     //If we already displayed this URL on the previous session
