@@ -437,17 +437,6 @@ class FeatureSwitchSetting: BoolSetting {
 
 }
 
-class EnableActivtyStreamSetting: FeatureSwitchSetting {
-    let profile: Profile
-
-    init(settings: SettingsTableViewController) {
-        self.profile = settings.profile
-        let title = NSAttributedString(string: "Enable the New Tab Experience", attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
-        super.init(prefs: settings.profile.prefs, featureSwitch: FeatureSwitches.activityStream, with: title)
-    }
-
-}
-
 class EnableBookmarkMergingSetting: HiddenSetting {
     override var title: NSAttributedString? {
         // Not localized for now.
