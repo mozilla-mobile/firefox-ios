@@ -68,7 +68,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
         }
 
         generalSettings += [
-            BoolSetting(prefs: prefs, prefKey: "showClipboardBar", defaultValue: true,
+            BoolSetting(prefs: prefs, prefKey: "showClipboardBar", defaultValue: false,
                         titleText: Strings.SettingsOfferClipboardBarTitle,
                         statusText: Strings.SettingsOfferClipboardBarStatus)
         ]
