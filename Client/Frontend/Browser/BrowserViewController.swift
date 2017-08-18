@@ -567,11 +567,6 @@ class BrowserViewController: UIViewController {
         updateTabCountUsingTabManager(tabManager, animated: false)
         clipboardBarDisplayHandler?.checkIfShouldDisplayBar()
         log.debug("BVC done.")
-
-        NotificationCenter.default.addObserver(self,
-                                                         selector: #selector(BrowserViewController.openSettings),
-                                                         name: NSNotification.Name(rawValue: NotificationStatusNotificationTapped),
-                                                         object: nil)
     }
 
     fileprivate func crashedLastLaunch() -> Bool {
@@ -665,7 +660,6 @@ class BrowserViewController: UIViewController {
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: NotificationStatusNotificationTapped), object: nil)
     }
 
     func resetBrowserChrome() {
