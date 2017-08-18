@@ -303,6 +303,37 @@ class StringSetting: Setting, UITextFieldDelegate {
     }
 }
 
+class CheckmarkSetting: Setting {
+    let onChanged: () -> Void
+    let isEnabled: () -> Bool
+    private let subtitle: NSAttributedString?
+
+    override var status: NSAttributedString? {
+        return subtitle
+    }
+
+    init(title: NSAttributedString, subtitle: NSAttributedString?, accessibilityIdentifier: String? = nil, isEnabled: @escaping () -> Bool, onChanged: @escaping () -> Void) {
+        self.subtitle = subtitle
+        self.onChanged = onChanged
+        self.isEnabled = isEnabled
+        super.init(title: title)
+        self.accessibilityIdentifier = accessibilityIdentifier
+    }
+
+    override func onConfigureCell(_ cell: UITableViewCell) {
+        super.onConfigureCell(cell)
+        cell.accessoryType = isEnabled() ? .checkmark : .none
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        // Force editing to end for any focused text fields so they can finish up validation first.
+        navigationController?.view.endEditing(true)
+        if !isEnabled() {
+            onChanged()
+        }
+    }
+}
+
 /// A helper class for a setting backed by a UITextField.
 /// This takes an optional isEnabled and mandatory onClick callback
 /// isEnabled is called on each tableview.reloadData. If it returns
@@ -411,6 +442,8 @@ class SettingsTableViewController: UITableViewController {
 
     var profile: Profile!
     var tabManager: TabManager!
+
+    var hasSectionSeparatorLine = true
 
     /// Used to calculate cell heights.
     fileprivate lazy var dummyToggleCell: UITableViewCell = {
@@ -521,7 +554,7 @@ class SettingsTableViewController: UITableViewController {
         }
 
         // Hide the top border for the top section to avoid having a double line at the top
-        if section == 0 {
+        if section == 0 || !hasSectionSeparatorLine {
             headerView.showTopBorder = false
         } else {
             headerView.showTopBorder = true
@@ -541,13 +574,31 @@ class SettingsTableViewController: UITableViewController {
         return footerView
     }
 
-    //is this needed?
+//    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+//        return 150
+//    }
+
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         let sectionSetting = settings[section]
-        if let _ = sectionSetting.footerTitle?.string {
+        guard let text = sectionSetting.footerTitle?.string else {
+            return 0
+        }
+
+        let attr = NSAttributedString(string: text)
+        let maxWidth = view.frame.width - SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding * 2
+        let maxHeight = CGFloat(100) // An arbitrary upper bound, FYI 4 lines of text is 56 points high.
+        let rect = attr.boundingRect(with: CGSize(width: maxWidth, height: maxHeight), options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil)
+        print(ceil(rect.size.height))
+        let textHeight = ceil(rect.size.height)
+        if textHeight < 30 {
+            // Two lines of text is ~28 points, and most footers in the settings are 1-2 lines of text;
+            // we only want to special case the cell height for 3+ lines of text, otherwise just use a
+            // consistent cell height
             return 44
         }
-        return 0
+
+        let verticalPadding = CGFloat(8)
+        return textHeight + verticalPadding * 2
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -725,13 +776,13 @@ class SettingsTableSectionHeaderFooterView: UITableViewHeaderFooterView {
             titleLabel.snp.remakeConstraints { make in
                 make.left.right.equalTo(self).inset(SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
                 make.top.equalTo(self).offset(SettingsTableSectionHeaderFooterViewUX.titleVerticalPadding)
-                make.bottom.equalTo(self).offset(-SettingsTableSectionHeaderFooterViewUX.titleVerticalLongPadding)
+                make.bottom.equalTo(self).offset(-SettingsTableSectionHeaderFooterViewUX.titleVerticalPadding)
             }
         case .bottom:
             titleLabel.snp.remakeConstraints { make in
                 make.left.right.equalTo(self).inset(SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
                 make.bottom.equalTo(self).offset(-SettingsTableSectionHeaderFooterViewUX.titleVerticalPadding)
-                make.top.equalTo(self).offset(SettingsTableSectionHeaderFooterViewUX.titleVerticalLongPadding)
+                make.top.equalTo(self).offset(SettingsTableSectionHeaderFooterViewUX.titleVerticalPadding)
             }
         }
     }
