@@ -17,6 +17,9 @@ extension NSObject {
 }
 
 class ActionViewController: SLComposeServiceViewController {
+    private var isKlar: Bool { return (Bundle.main.infoDictionary!["CFBundleIdentifier"] as! String).contains("Klar") }
+    private var urlScheme: String { return isKlar ? "firefox-klar" : "firefox-focus" }
+
     override func isContentValid() -> Bool {
         return true
     }
@@ -35,7 +38,7 @@ class ActionViewController: SLComposeServiceViewController {
                 (urlItem, error) in
 
                 guard let url = (urlItem as! NSURL).absoluteString?.addingPercentEncoding(withAllowedCharacters:NSCharacterSet.alphanumerics),
-                    let focusUrl = NSURL(string: "firefox-focus://open-url?url=\(url)") else { return }
+                    let focusUrl = NSURL(string: "\(self.urlScheme)://open-url?url=\(url)") else { return }
 
                 // From http://stackoverflow.com/questions/24297273/openurl-not-work-in-action-extension
                 var responder = self as UIResponder?
