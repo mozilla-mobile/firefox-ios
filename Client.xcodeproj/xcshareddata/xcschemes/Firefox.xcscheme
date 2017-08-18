@@ -56,20 +56,6 @@
             buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7BEB644F1C7345990092C02E"
-               BuildableName = "MarketingUITests.xctest"
-               BlueprintName = "MarketingUITests"
-               ReferencedContainer = "container:Client.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "NO"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "E4D567211ADECE2700F1EFE7"
                BuildableName = "ReadingListTests.xctest"
                BlueprintName = "ReadingListTests"
@@ -160,6 +146,11 @@
                BlueprintName = "AccountTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "SyncAuthStateTests">
+               </Test>
+            </SkippedTests>
          </TestableReference>
          <TestableReference
             skipped = "NO">
@@ -168,16 +159,6 @@
                BlueprintIdentifier = "F84B21D21A090F8100AAB793"
                BuildableName = "ClientTests.xctest"
                BlueprintName = "ClientTests"
-               ReferencedContainer = "container:Client.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7BEB644F1C7345990092C02E"
-               BuildableName = "MarketingUITests.xctest"
-               BlueprintName = "MarketingUITests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -229,6 +210,24 @@
                BuildableName = "SyncTests.xctest"
                BlueprintName = "SyncTests"
                ReferencedContainer = "container:Client.xcodeproj">
+            </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "LiveAccountTest">
+               </Test>
+               <Test
+                  Identifier = "LiveStorageClientTests">
+               </Test>
+            </SkippedTests>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "28F9520519D0F9FB00DCE892"
+               BuildableName = "FxATests.xctest"
+               BlueprintName = "FxATests"
+               ReferencedContainer = "container:FxA/FxA.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
