@@ -29,14 +29,23 @@ class SettingAppearanceTest: BaseTestCase {
         
         // Check Help page, wait until the webpage is shown
         tablesQuery.staticTexts["Help"].tap()
-        waitforExistence(element: app.staticTexts["What is Firefox Focus?"])
-        let firefoxFocusAboutcontentviewNavigationBar = app.navigationBars["Firefox_Focus.AboutContentView"]
-        firefoxFocusAboutcontentviewNavigationBar.buttons["About"].tap()
+        if app.label == "Firefox Focus" {
+            waitforExistence(element: app.staticTexts["What is Firefox Focus?"])
+            app.navigationBars["Firefox_Focus.AboutContentView"].buttons["About"].tap()
+        } else {
+            waitforExistence(element: app.staticTexts["Firefox Klar"])
+            app.navigationBars["Firefox_Klar.AboutContentView"].buttons["About"].tap()
+        }
         
         // Check Your Rights page, until the text is displayed
         tablesQuery.staticTexts["Your Rights"].tap()
-        XCTAssert(app.staticTexts["Your Rights"].exists)
-        app.navigationBars["Firefox_Focus.AboutContentView"].buttons["About"].tap()
+        if app.label == "Firefox Focus" {
+            XCTAssert(app.staticTexts["Your Rights"].exists)
+            app.navigationBars["Firefox_Focus.AboutContentView"].buttons["About"].tap()
+        } else {
+            XCTAssert(app.staticTexts["Ihre Rechte"].exists)
+            app.navigationBars["Firefox_Klar.AboutContentView"].buttons["About"].tap()
+        }
         
         // Go to Settings
         app.navigationBars["About"].buttons["Settings"].tap()
@@ -51,8 +60,15 @@ class SettingAppearanceTest: BaseTestCase {
         // Check the information page
         XCTAssert(app.staticTexts["Open Settings App"].exists)
         XCTAssert(app.staticTexts["Tap Safari, then select Content Blockers"].exists)
-        XCTAssert(app.staticTexts["Enable Firefox Focus"].exists)
-        app.navigationBars["Firefox_Focus.SafariInstructionsView"].buttons["Settings"].tap()
+        if app.label == "Firefox Focus" {
+            XCTAssert(app.staticTexts["Firefox Focus is not enabled."].exists)
+            XCTAssert(app.staticTexts["Enable Firefox Focus"].exists)
+            app.navigationBars["Firefox_Focus.SafariInstructionsView"].buttons["Settings"].tap()
+        } else {
+            XCTAssert(app.staticTexts["Firefox Klar is not enabled."].exists)
+            XCTAssert(app.staticTexts["Enable Firefox Klar"].exists)
+            app.navigationBars["Firefox_Klar.SafariInstructionsView"].buttons["Settings"].tap()
+        }
         
         // Swipe up
         waitforExistence(element: app.tables.switches["Block ad trackers"])
@@ -63,7 +79,11 @@ class SettingAppearanceTest: BaseTestCase {
         XCTAssertEqual(app.tables.switches["Block social trackers"].value as! String, "1")
         XCTAssertEqual(otherContentSwitch.value as! String, "0")
         XCTAssertEqual(app.tables.switches["Block Web fonts"].value as! String, "0")
-        XCTAssertEqual(app.tables.switches["Send anonymous usage data, Learn more"].value as! String, "1")
+        if app.label == "Firefox Focus" {
+            XCTAssertEqual(app.tables.switches["Send anonymous usage data, Learn more"].value as! String, "1")
+        } else {
+            XCTAssertEqual(app.tables.switches["Send anonymous usage data, Learn more"].value as! String, "0")
+        }
         
         otherContentSwitch.tap()
         let sheetsQuery = app.sheets
@@ -98,13 +118,19 @@ class SettingAppearanceTest: BaseTestCase {
         XCTAssertTrue(app.buttons["Safari"].exists)
         XCTAssertTrue(app.buttons["More"].exists)
         XCTAssertTrue(app.buttons["Cancel"].exists)
+        let appName = app.label
         app.buttons["Safari"].tap()
         
         // Now in Safari
         let safariLabel = safariapp.otherElements["Address"]
         waitForValueContains(element: safariLabel, value: "Mozilla Corporation")
-        XCTAssertTrue(safariapp.buttons["Return to Firefox Focus"].exists)
-        safariapp.statusBars.buttons["Return to Firefox Focus"].tap()
+        if appName == "Firefox Focus" {
+            XCTAssertTrue(safariapp.buttons["Return to Firefox Focus"].exists)
+            safariapp.statusBars.buttons["Return to Firefox Focus"].tap()
+        } else {
+            XCTAssertTrue(safariapp.buttons["Return to Firefox Klar"].exists)
+            safariapp.statusBars.buttons["Return to Firefox Klar"].tap()
+        }
         
         // Now back to Focus
         waitForValueContains(element: label, value: "https://www.mozilla.org")

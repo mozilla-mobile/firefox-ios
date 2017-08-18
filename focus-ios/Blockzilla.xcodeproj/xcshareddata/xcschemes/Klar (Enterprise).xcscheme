@@ -38,11 +38,6 @@
                BlueprintName = "XCUITest"
                ReferencedContainer = "container:Blockzilla.xcodeproj">
             </BuildableReference>
-            <SkippedTests>
-               <Test
-                  Identifier = "SettingAppearanceTest">
-               </Test>
-            </SkippedTests>
          </TestableReference>
       </Testables>
       <MacroExpansion>
