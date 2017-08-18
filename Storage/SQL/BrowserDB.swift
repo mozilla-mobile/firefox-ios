@@ -54,85 +54,77 @@ open class BrowserDB {
     }
 
     // Creates the specified database schema in a new database.
-    fileprivate func createSchema(_ conn: SQLiteDBConnection, schema: Schema) -> SchemaResult {
+    fileprivate func createSchema(_ conn: SQLiteDBConnection, schema: Schema) -> Bool {
         log.debug("Try create \(schema.name) version \(schema.version)")
         if !schema.create(conn) {
             // If schema couldn't be created, we'll bail without writing the schema version.
             log.debug("Creation failed.")
-            return .failed
+            return false
         }
 
         if let error = conn.setVersion(schema.version) {
             log.error("Unable to update the schema version; \(error.localizedDescription)")
         }
         
-        return .created
+        return true
     }
 
     // Updates the specified database schema in an existing database.
-    func updateSchema(_ conn: SQLiteDBConnection, schema: Schema) -> SchemaResult {
-        
-        // If the versions match, no need to update
-        let from = conn.version
-        if from == schema.version {
-            return .exists
-        }
-
-        log.debug("Trying to update table '\(schema.name)' from version \(from) to \(schema.version)")
-        if !schema.update(conn, from: from) {
+    fileprivate func updateSchema(_ conn: SQLiteDBConnection, schema: Schema) -> Bool {
+        log.debug("Trying to update table '\(schema.name)' from version \(conn.version) to \(schema.version)")
+        if !schema.update(conn, from: conn.version) {
             // If schema couldn't be updated, we'll bail without writing the schema version.
             log.debug("Updating failed.")
-            return .failed
+            return false
         }
 
         if let error = conn.setVersion(schema.version) {
             log.error("Unable to update the schema version; \(error.localizedDescription)")
         }
 
-        return .updated
+        return true
     }
-    
-    // Utility for table classes. They should call this when they're initialized to force
-    // creation of the table in the database.
-    func createOrUpdate(_ schema: Schema) -> DatabaseOpResult {
+
+    // Checks if the database schema needs created or updated and acts accordingly.
+    func prepareSchema(_ schema: Schema) -> DatabaseOpResult {
         guard !db.closed else {
             log.info("Database is closed; Skipping schema create or update.")
             return .closed
         }
 
-        let doCreate = { (schema: Schema, connection: SQLiteDBConnection) -> Bool in
-            switch self.createSchema(connection, schema: schema) {
-            case .created:
-                return true
-            case .exists:
-                log.debug("Table already exists.")
-                return true
-            default:
-                return false
-            }
+        // Get the current schema version for the database.
+        var currentVersion = 0
+        _ = self.db.withConnection(.readOnly, cb: { connection -> NSError? in
+            currentVersion = connection.version
+            return nil
+        })
+        
+        // If the current schema version for the database matches the specified
+        // `Schema` version, no further action is necessary and we can bail out.
+        if currentVersion == schema.version {
+            log.debug("Schema \(schema.name) already exists at version \(schema.version). Skipping additional schema preparation.")
+            return .success
         }
+        
+        log.debug("Schema \(schema.name) needs created or updated from version \(currentVersion) to \(schema.version).")
 
         var success = true
-        
+
         if let error = self.db.transaction({ connection -> Bool in
             // If the schema doesn't exist, we'll create it.
             log.debug("Create or update \(schema.name) version \(schema.version) on \(Thread.current.description).")
             if !schema.exists(connection) {
                 log.debug("Schema \(schema.name) doesn't exist. Creating.")
-                success = doCreate(schema, connection)
+                success = self.createSchema(connection, schema: schema)
             } else {
                 // Otherwise, we'll update it
-                switch self.updateSchema(connection, schema: schema) {
-                case .updated:
+                if self.updateSchema(connection, schema: schema) {
                     log.debug("Updated schema \(schema.name).")
                     success = true
-                case .exists:
-                    log.debug("Schema \(schema.name) already exists.")
-                    success = true
-                default:
+                } else {
                     log.error("Update failed for schema \(schema.name). Dropping and re-creating.")
                     let _ = schema.drop(connection)
-                    success = doCreate(schema, connection)
+                    success = self.createSchema(connection, schema: schema)
                 }
             }
             
@@ -142,6 +134,7 @@ open class BrowserDB {
             // already attached and expecting a working DB, but at least we should be able to restart.
             log.error("Unable to get a transaction: \(error.localizedDescription)")
             SentryIntegration.shared.sendWithStacktrace(message: "Unable to get a transaction: \(error.localizedDescription)", tag: "BrowserDB", severity: .error)
+            success = false
         }
         
         if success {
@@ -204,7 +197,7 @@ open class BrowserDB {
         
         // Attempt to re-create the DB.
         if let error = self.db.transaction({ connection -> Bool in
-            success = doCreate(schema, connection)
+            success = self.createSchema(connection, schema: schema)
             return success
         }) {
             log.error("Unable to get a transaction while re-creating the database: \(error.localizedDescription)")

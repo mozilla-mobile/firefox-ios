@@ -789,7 +789,7 @@ open class BrowserSchema: Schema {
 
             // Otherwise, this is likely an upgrade from before Bug 1160399, so
             // let's drop and re-create.
-            log.debug("Updating browser tables from zero. Assuming drop and recreate.")
+            log.debug("Updating schema \(self.name) from zero. Assuming drop and recreate.")
             return drop(db) && create(db)
         }
 
@@ -799,7 +799,7 @@ open class BrowserSchema: Schema {
             return drop(db) && create(db)
         }
 
-        log.debug("Updating browser tables from \(from) to \(to).")
+        log.debug("Updating schema \(self.name) from \(from) to \(to).")
 
         if from < 4 && to >= 4 {
             return drop(db) && create(db)
@@ -1136,7 +1136,7 @@ open class BrowserSchema: Schema {
         log.info("Checking if schema table migration is needed.")
 
         // If `PRAGMA user_version` is v31 or later, we don't need to do anything here.
-        guard db.version >= 31 else {
+        guard db.version < 31 else {
             return true
         }
 

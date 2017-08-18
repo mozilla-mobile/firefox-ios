@@ -16,10 +16,3 @@ protocol Schema {
     func exists(_ db: SQLiteDBConnection) -> Bool
     func drop(_ db: SQLiteDBConnection) -> Bool
 }
-
-enum SchemaResult {
-    case exists             // The table already existed.
-    case created            // The table was correctly created.
-    case updated            // The table was updated to a new version.
-    case failed             // Table creation failed.
-}

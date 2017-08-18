@@ -115,7 +115,7 @@ open class SQLiteHistory {
         self.prefs = prefs
 
         // BrowserSchema doesn't need to stick around once the schema has been created/updated.
-        switch db.createOrUpdate(BrowserSchema()) {
+        switch db.prepareSchema(BrowserSchema()) {
         case .failure:
             log.error("Failed to create/update DB schema!")
             fatalError()

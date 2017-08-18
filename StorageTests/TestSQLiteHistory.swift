@@ -927,7 +927,7 @@ class TestSQLiteHistory: XCTestCase {
     func testUpgradesWithData() {
         let db = BrowserDB(filename: "browser-v6-data.db", files: files)
 
-        XCTAssertTrue(db.createOrUpdate(BrowserSchemaV6()) == .success, "Creating browser schema version 6")
+        XCTAssertTrue(db.prepareSchema(BrowserSchemaV6()) == .success, "Creating browser schema version 6")
 
         // Insert some data.
         let queries = [
@@ -942,7 +942,7 @@ class TestSQLiteHistory: XCTestCase {
         XCTAssertTrue(db.run(queries).value.isSuccess)
 
         // And we can upgrade to the current version.
-        XCTAssertTrue(db.createOrUpdate(BrowserSchema()) == .success, "Upgrading browser schema from version 6")
+        XCTAssertTrue(db.prepareSchema(BrowserSchema()) == .success, "Upgrading browser schema from version 6")
 
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
@@ -1164,7 +1164,7 @@ class TestSQLiteHistory: XCTestCase {
         let history = SQLiteHistory(db: db, prefs: prefs)
         let bookmarks = SQLiteBookmarks(db: db)
 
-        XCTAssertTrue(db.createOrUpdate(BrowserSchema()) == .success)
+        XCTAssertTrue(db.prepareSchema(BrowserSchema()) == .success)
         
         let expectation = self.expectation(description: "First.")
         func done() -> Success {

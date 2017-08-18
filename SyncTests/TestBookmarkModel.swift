@@ -14,7 +14,7 @@ private func getBrowserDBForFile(filename: String, files: FileAccessor) -> Brows
     let db = BrowserDB(filename: filename, files: files)
 
     // BrowserSchema doesn't need to stick around once the schema has been created/updated.
-    if db.createOrUpdate(BrowserSchema()) != .success {
+    if db.prepareSchema(BrowserSchema()) != .success {
         return nil
     }
     return db
