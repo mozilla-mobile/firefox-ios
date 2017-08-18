@@ -21,22 +21,24 @@ private let MaxCacheAge: Timestamp = OneMinuteInMilliseconds * 60 // 1 hour in m
 struct PocketStory {
     let url: URL
     let title: String
-    let storyDescription: String 
+    let storyDescription: String
     let imageURL: URL
     let domain: String
+    let dedupeURL: URL
 
     static func parseJSON(list: Array<[String: Any]>) -> [PocketStory] {
         return list.flatMap({ (storyDict) -> PocketStory? in
             guard let urlS = storyDict["url"] as? String, let domain = storyDict["domain"] as? String,
+                let dedupe_URL = storyDict["dedupe_url"] as? String,
                 let imageURLS = storyDict["image_src"] as? String,
                 let title = storyDict["title"] as? String,
                 let description = storyDict["excerpt"] as? String else {
                     return nil
             }
-            guard let url = URL(string: urlS), let imageURL = URL(string: imageURLS) else {
+            guard let url = URL(string: urlS), let imageURL = URL(string: imageURLS), let dedupeURL = URL(string: dedupe_URL) else {
                 return nil
             }
-            return PocketStory(url: url, title: title, storyDescription: description, imageURL: imageURL, domain: domain)
+            return PocketStory(url: url, title: title, storyDescription: description, imageURL: imageURL, domain: domain, dedupeURL: dedupeURL)
         })
     }
 }
