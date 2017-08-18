@@ -1944,6 +1944,10 @@ extension BrowserViewController: TabDelegate {
             let metadataHelper = MetadataParserHelper(tab: tab, profile: profile)
             tab.addHelper(metadataHelper, name: MetadataParserHelper.name())
         }
+
+        if #available(iOS 11, *) {
+            tab.contentBlocker = ContentBlockerHelper(tab: tab, profile: profile)
+        }
     }
 
     func tab(_ tab: Tab, willDeleteWebView webView: WKWebView) {
@@ -3263,3 +3267,4 @@ extension BrowserViewController: TopTabsDelegate {
         urlBar.leaveOverlayMode(didCancel: true)
     }
 }
+

@@ -102,6 +102,11 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 statusText: NSLocalizedString("When Leaving Private Browsing", tableName: "PrivateBrowsing", comment: "Will be displayed in Settings under 'Close Private Tabs'"))
         ]
 
+if
+            #available(iOS 11, *) {
+        privacySettings.append(ContentBlockerSetting(settings:self))
+    }
+
         privacySettings += [
             PrivacyPolicySetting()
         ]
