@@ -139,10 +139,10 @@ extension SQLiteHistory: HistoryRecommendations {
     public func repopulate(invalidateTopSites shouldInvalidateTopSites: Bool, invalidateHighlights shouldInvalidateHighlights: Bool) -> Success {
         var queries: [(String, Args?)] = []
         if shouldInvalidateTopSites {
-            queries.append(contentsOf: self.repopulateHighlightsQuery())
+            queries.append(contentsOf: self.refreshTopSitesQuery())
         }
         if shouldInvalidateHighlights {
-            queries.append(contentsOf: self.refreshTopSitesQuery())
+            queries.append(contentsOf: self.repopulateHighlightsQuery())
         }
         return self.db.run(queries)
     }
