@@ -61,7 +61,11 @@ class SearchProviderTest: BaseTestCase {
 				waitForValueContains(element: app.otherElements["Search"], value: searchWord)
 		    case "Yahoo":
 				waitForValueContains(element: urlbarUrltextTextField, value: "https://search.yahoo.com")
-				waitForValueContains(element: app.otherElements["banner"].searchFields["Search"], value: searchWord)
+                if !iPad() {
+                    waitForValueContains(element: app.otherElements["banner"].searchFields["Search"], value: searchWord)
+                } else {
+                    waitforExistence(element: app.webViews.otherElements[searchWord + " - - Yahoo Search Results"])
+                }
 			case "DuckDuckGo":
 				waitForValueContains(element: urlbarUrltextTextField, value: "https://duckduckgo.com/?q=mozilla")
 				waitforExistence(element: app.otherElements["mozilla at DuckDuckGo"])

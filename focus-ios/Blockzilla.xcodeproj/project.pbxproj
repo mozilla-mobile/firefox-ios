@@ -664,6 +664,9 @@
 		0BA39A841DD2B8E4005F970A /* XCUITest */ = {
 			isa = PBXGroup;
 			children = (
+				0B4868651F2250A3008C3C09 /* PastenGoTest.swift */,
+				0BC928CD1E366A6E004AC581 /* AsianLocaleTest.swift */,
+				0B0D6BC31F3CDDBB00497D08 /* CollapsedURLTest.swift */,
 				0B37F9A51E2FCAD4002DF74B /* SearchProviderTest.swift */,
 				E4BC84F31E2A862400833B45 /* InfoPlist.strings */,
 				0B70C1621DE6128900CEF7E0 /* WebsiteMemoryTest.swift */,
@@ -680,9 +683,6 @@
 		0BBBED3F1DD3821600F9C565 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				0B0D6BC31F3CDDBB00497D08 /* CollapsedURLTest.swift */,
-				0B4868651F2250A3008C3C09 /* PastenGoTest.swift */,
-				0BC928CD1E366A6E004AC581 /* AsianLocaleTest.swift */,
 				0BBBED401DD3823C00F9C565 /* BaseTestCase.swift */,
 			);
 			name = Utils;

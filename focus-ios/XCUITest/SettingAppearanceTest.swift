@@ -117,7 +117,9 @@ class SettingAppearanceTest: BaseTestCase {
         XCTAssertTrue(app.buttons["Get the Firefox App"].exists)
         XCTAssertTrue(app.buttons["Safari"].exists)
         XCTAssertTrue(app.buttons["More"].exists)
-        XCTAssertTrue(app.buttons["Cancel"].exists)
+        if !iPad() {
+            XCTAssertTrue(app.buttons["Cancel"].exists)
+        }
         let appName = app.label
         app.buttons["Safari"].tap()
         
