@@ -8,19 +8,19 @@ import Shared
 @available(iOS 11.0, *)
 class ContentBlockerSettingViewController: SettingsTableViewController {
     let prefs: Prefs
-    let enabledOptions = ContentBlockerHelper.EnabledOption.allOptions
-    let strengthOptions = ContentBlockerHelper.StrengthOption.allOptions
-    var currentEnabledOption: ContentBlockerHelper.EnabledOption = .onInPrivateBrowsing
-    var currentStrengthOption: ContentBlockerHelper.StrengthOption = .basic
+    let EnabledStates = ContentBlockerHelper.EnabledState.allOptions
+    let BlockingStrengths = ContentBlockerHelper.BlockingStrength.allOptions
+    var currentEnabledState: ContentBlockerHelper.EnabledState
+    var currentBlockingStrength: ContentBlockerHelper.BlockingStrength
 
     init(prefs: Prefs) {
         self.prefs = prefs
+        currentEnabledState = ContentBlockerHelper.EnabledState(rawValue: prefs.stringForKey(ContentBlockerHelper.PrefKeyEnabledState) ?? "") ?? .onInPrivateBrowsing
+        currentBlockingStrength = ContentBlockerHelper.BlockingStrength(rawValue: prefs.stringForKey(ContentBlockerHelper.PrefKeyStrength) ?? "") ?? .basic
+        
         super.init(nibName: nil, bundle: nil)
         self.title = Strings.SettingsTrackingProtectionSectionName
         hasSectionSeparatorLine = false
-
-        currentEnabledOption = ContentBlockerHelper.EnabledOption(rawValue: prefs.stringForKey(ContentBlockerHelper.PrefKeyEnabledState) ?? "") ?? .onInPrivateBrowsing
-        currentStrengthOption = ContentBlockerHelper.StrengthOption(rawValue: prefs.stringForKey(ContentBlockerHelper.PrefKeyStrength) ?? "") ?? .basic
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -28,23 +28,23 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
     }
 
     override func generateSettings() -> [SettingSection] {
-        let enabledSetting: [CheckmarkSetting] = enabledOptions.map { option in
+        let enabledSetting: [CheckmarkSetting] = EnabledStates.map { option in
             return CheckmarkSetting(title: NSAttributedString(string: option.settingTitle), subtitle: nil, isEnabled: {
-                return option == self.currentEnabledOption
+                return option == self.currentEnabledState
             }, onChanged: {
-                self.currentEnabledOption = option
-                self.prefs.setString(self.currentEnabledOption.rawValue, forKey: ContentBlockerHelper.PrefKeyEnabledState)
+                self.currentEnabledState = option
+                self.prefs.setString(self.currentEnabledState.rawValue, forKey: ContentBlockerHelper.PrefKeyEnabledState)
                 self.tableView.reloadData()
                 ContentBlockerHelper.prefsChanged()
             })
         }
 
-        let strengthSetting: [CheckmarkSetting] = strengthOptions.map { option in
+        let strengthSetting: [CheckmarkSetting] = BlockingStrengths.map { option in
             return CheckmarkSetting(title: NSAttributedString(string: option.settingTitle), subtitle: NSAttributedString(string: option.subtitle), isEnabled: {
-                return option == self.currentStrengthOption
+                return option == self.currentBlockingStrength
             }, onChanged: {
-                self.currentStrengthOption = option
-                self.prefs.setString(self.currentStrengthOption.rawValue, forKey: ContentBlockerHelper.PrefKeyStrength)
+                self.currentBlockingStrength = option
+                self.prefs.setString(self.currentBlockingStrength.rawValue, forKey: ContentBlockerHelper.PrefKeyStrength)
                 self.tableView.reloadData()
                 ContentBlockerHelper.prefsChanged()
             })

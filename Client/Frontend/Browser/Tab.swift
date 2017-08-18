@@ -64,6 +64,8 @@ class Tab: NSObject {
     var restoring: Bool = false
     var pendingScreenshot = false
     var url: URL?
+
+    // There is no 'available macro' on props, we currently just need to store ownership.
     var contentBlocker: AnyObject?
 
     /// The last title shown by this tab. Used by the tab tray to show titles for zombie tabs.

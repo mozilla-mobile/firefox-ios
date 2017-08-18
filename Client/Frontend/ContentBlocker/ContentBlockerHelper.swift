@@ -4,6 +4,7 @@
 
 import WebKit
 import Shared
+import Deferred
 
 fileprivate let NotificationContentBlockerReloadNeeded = "NotificationContentBlockerReloadNeeded"
 
@@ -18,10 +19,10 @@ class ContentBlockerHelper {
     fileprivate weak var profile: Profile?
 
     // Raw values are stored to prefs, be careful changing them.
-    enum EnabledOption: String {
-        case on = "option-on"
-        case onInPrivateBrowsing = "option-on-private-browsing-only"
-        case off = "option-off"
+    enum EnabledState: String {
+        case on
+        case onInPrivateBrowsing
+        case off
 
         var settingTitle: String {
             switch self {
@@ -34,13 +35,13 @@ class ContentBlockerHelper {
             }
         }
 
-        static let allOptions: [EnabledOption] = [.on, .onInPrivateBrowsing, .off]
+        static let allOptions: [EnabledState] = [.on, .onInPrivateBrowsing, .off]
     }
 
     // Raw values are stored to prefs, be careful changing them.
-    enum StrengthOption: String {
-        case basic = "option-basic"
-        case strict = "option-strict"
+    enum BlockingStrength: String {
+        case basic
+        case strict
 
         var settingTitle: String {
             switch self {
@@ -60,7 +61,7 @@ class ContentBlockerHelper {
             }
         }
 
-        static let allOptions: [StrengthOption] = [.basic, .strict]
+        static let allOptions: [BlockingStrength] = [.basic, .strict]
     }
 
     static func prefsChanged() {
@@ -76,8 +77,7 @@ class ContentBlockerHelper {
     init(tab: Tab, profile: Profile) {
         self.ruleStore = WKContentRuleListStore.default()
         if self.ruleStore == nil {
-            print("WKContentRuleListStore unavailable.")
-            assert(false)
+            assert(false, "WKContentRuleListStore unavailable.")
             return
         }
 
@@ -93,20 +93,9 @@ class ContentBlockerHelper {
         }
         ContentBlockerHelper.heavyInitHasRunOnce = true
 
-        var wasRuleListChangedDuringInit = false
-        removeOldListsByDateFromStore() { isListChanged in
-            wasRuleListChangedDuringInit = isListChanged
-
-            self.removeOldListsByNameFromStore() { isListChanged in
-                wasRuleListChangedDuringInit = wasRuleListChangedDuringInit || isListChanged
-
-                self.compileListsNotInStore() { isListChanged in
-                    wasRuleListChangedDuringInit = wasRuleListChangedDuringInit || isListChanged
-
-                    if wasRuleListChangedDuringInit {
-                        NotificationCenter.default.post(name: Notification.Name(rawValue: NotificationContentBlockerReloadNeeded), object: nil)
-                    }
-                }
+        removeOldListsByDateFromStore() {
+            self.removeOldListsByNameFromStore() {
+                self.compileListsNotInStore(completion: {})
             }
         }
     }
@@ -115,14 +104,14 @@ class ContentBlockerHelper {
         NotificationCenter.default.removeObserver(self)
     }
 
-    fileprivate func readStrengthPref() -> StrengthOption {
+    fileprivate var blockingStrengthPref: BlockingStrength {
         let pref = profile?.prefs.stringForKey(ContentBlockerHelper.PrefKeyStrength) ?? ""
-        return StrengthOption(rawValue: pref) ?? .basic
+        return BlockingStrength(rawValue: pref) ?? .basic
     }
 
-    fileprivate func readEnabledPref() -> EnabledOption {
+    fileprivate var enabledStatePref: EnabledState {
         let pref = profile?.prefs.stringForKey(ContentBlockerHelper.PrefKeyEnabledState) ?? ""
-        return EnabledOption(rawValue: pref) ?? .onInPrivateBrowsing
+        return EnabledState(rawValue: pref) ?? .onInPrivateBrowsing
     }
 
     @objc func reloadTab() {
@@ -131,8 +120,8 @@ class ContentBlockerHelper {
 
     fileprivate func addActiveRulesToTab(reloadTab: Bool) {
         guard let ruleStore = ruleStore else { return }
-        let rules = blocklistBasic + (readStrengthPref() == .strict ? blocklistStrict : [])
-        let enabledMode = readEnabledPref()
+        let rules = blocklistBasic + (blockingStrengthPref == .strict ? blocklistStrict : [])
+        let enabledMode = enabledStatePref
         removeAllFromTab()
 
         func addRules() {
@@ -148,7 +137,7 @@ class ContentBlockerHelper {
             }
         }
 
-        switch readEnabledPref() {
+        switch enabledStatePref {
         case .off:
             if reloadTab {
                 self.tab?.reload()
@@ -179,7 +168,7 @@ class ContentBlockerHelper {
     }
 }
 
-// Private initialization code
+// MARK: Private initialization code
 // The rule store can compile JSON rule files into a private format which is cached on disk.
 // On app boot, we need to check if the ruleStore's data is out-of-date, or if the names of the rule files
 // no longer match. Finally, any JSON rule files that aren't in the ruleStore need to be compiled and stored in the
@@ -198,22 +187,22 @@ extension ContentBlockerHelper {
         }
     }
 
-    fileprivate func lastModifiedSince1970(path: String) -> TimeInterval? {
+    fileprivate func lastModifiedSince1970(forFileAtPath path: String) -> Timestamp? {
         do {
             let url = URL(fileURLWithPath: path)
             let attr = try FileManager.default.attributesOfItem(atPath: url.path)
-            let date = attr[FileAttributeKey.modificationDate] as? Date
-            return date?.timeIntervalSince1970
+            guard let date = attr[FileAttributeKey.modificationDate] as? Date else { return nil }
+            return UInt64(1000.0 * date.timeIntervalSince1970)
         } catch {
             return nil
         }
     }
 
-    fileprivate func dateOfMostRecentBlockerFile() -> TimeInterval {
+    fileprivate func dateOfMostRecentBlockerFile() -> Timestamp {
         let blocklists = blocklistBasic + blocklistStrict
-        return blocklists.reduce(TimeInterval(0)) { result, filename in
+        return blocklists.reduce(Timestamp(0)) { result, filename in
             guard let path = Bundle.main.path(forResource: filename, ofType: "json") else { return result }
-            let date = lastModifiedSince1970(path: path) ?? 0
+            let date = lastModifiedSince1970(forFileAtPath: path) ?? 0
             return date > result ? date : result
         }
     }
@@ -226,43 +215,42 @@ extension ContentBlockerHelper {
                 completion()
                 return
             }
-            var completionCount = 0
-            available.forEach {
-                ruleStore.removeContentRuleList(forIdentifier: $0) { _ in
-                    completionCount += 1
-                    if completionCount == available.count {
-                        completion()
-                    }
+            let deferreds: [Deferred<Void>] = available.map { filename in
+                let result = Deferred<Void>()
+                ruleStore.removeContentRuleList(forIdentifier: filename) { _ in
+                   result.fill()
                 }
+                return result
+            }
+            all(deferreds).uponQueue(.main) { _ in
+                completion()
             }
         }
     }
 
     // If any blocker files are newer than the date saved in prefs,
     // remove all the content blockers and reload them.
-    // Pass true to completion block if the rule store was modified.
-    fileprivate func removeOldListsByDateFromStore(completion: @escaping (_ modified: Bool) -> Void) {
+    fileprivate func removeOldListsByDateFromStore(completion: @escaping () -> Void) {
         let fileDate = self.dateOfMostRecentBlockerFile()
-        let prefsNewestDate = UserDefaults.standard.double(forKey: "blocker-file-date")
+        let prefsNewestDate = profile?.prefs.longForKey("blocker-file-date") ?? 0
         if prefsNewestDate < 1 || fileDate <= prefsNewestDate {
-            completion(false)
+            completion()
             return
         }
 
-        UserDefaults.standard.set(fileDate, forKey: "blocker-file-date")
+        profile?.prefs.setTimestamp(fileDate, forKey: "blocker-file-date")
         self.removeAllRulesInStore() {
-            completion(true)
+            completion()
         }
     }
 
-    // Pass true to completion block if the rule store was modified.
-    fileprivate func removeOldListsByNameFromStore(completion: @escaping (_ modified: Bool) -> Void) {
+    fileprivate func removeOldListsByNameFromStore(completion: @escaping () -> Void) {
         guard let ruleStore = ruleStore else { return }
         var noMatchingIdentifierFoundForRule = false
 
         ruleStore.getAvailableContentRuleListIdentifiers { available in
             guard let available = available else {
-                completion(false)
+                completion()
                 return
             }
 
@@ -275,42 +263,41 @@ extension ContentBlockerHelper {
             }
 
             let fileDate = self.dateOfMostRecentBlockerFile()
-            let prefsNewestDate = UserDefaults.standard.double(forKey: "blocker-file-date")
-            if fileDate <= prefsNewestDate && !noMatchingIdentifierFoundForRule {
-                completion(false)
+            let prefsNewestDate = self.profile?.prefs.timestampForKey("blocker-file-date") ?? 0
+            if prefsNewestDate > 0 && fileDate <= prefsNewestDate && !noMatchingIdentifierFoundForRule {
+                completion()
                 return
             }
-            UserDefaults.standard.set(fileDate, forKey: "blocker-file-date")
+            self.profile?.prefs.setTimestamp(fileDate, forKey: "blocker-file-date")
 
-            self.removeAllRulesInStore() {
-                completion(true)
+            self.removeAllRulesInStore {
+                completion()
             }
         }
     }
 
     // Pass true to completion block if the rule store was modified.
-    fileprivate func compileListsNotInStore(completion: @escaping (_ modified: Bool) -> Void) {
+    fileprivate func compileListsNotInStore(completion: @escaping () -> Void) {
         guard let ruleStore = ruleStore else { return }
-        let dispatchGroup = DispatchGroup()
-        var wasCompilationNeeded = false
-        for filename in blocklistBasic + blocklistStrict {
-            dispatchGroup.enter()
+        let blocklists = blocklistBasic + blocklistStrict
+        let deferreds: [Deferred<Void>] = blocklists.map { filename in
+            let result = Deferred<Void>()
             ruleStore.lookUpContentRuleList(forIdentifier: filename) { contentRuleList, error in
                 if contentRuleList != nil {
-                    dispatchGroup.leave()
+                    result.fill()
                     return
                 }
-                wasCompilationNeeded = true
                 self.loadJsonFromBundle(forResource: filename) { jsonString in
                     ruleStore.compileContentRuleList(forIdentifier: filename, encodedContentRuleList: jsonString) { _, _ in
-                        dispatchGroup.leave()
+                        result.fill()
                     }
                 }
             }
+            return result
         }
 
-        dispatchGroup.notify(queue: .main) {
-            completion(wasCompilationNeeded)
+        all(deferreds).uponQueue(.main) { _ in
+            completion()
         }
     }
 }
