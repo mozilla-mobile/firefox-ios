@@ -572,11 +572,7 @@ extension HistoryPanel: HomePanelContextMenu {
         let pinTopSite = PhotonActionSheetItem(title: Strings.PinTopsiteActionTitle, iconString: "action_pin", handler: { action in
             self.pinTopSite(site)
         })
-
-        if FeatureSwitches.activityStream.isMember(profile.prefs) {
-            actions.append(pinTopSite)
-        }
-
+        actions.append(pinTopSite)
         actions.append(removeAction)
         return actions
     }

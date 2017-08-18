@@ -126,16 +126,11 @@ if
                 ExportBrowserDataSetting(settings: self),
                 DeleteExportedDataSetting(settings: self),
                 EnableBookmarkMergingSetting(settings: self),
-                ForceCrashSetting(settings: self),
-                EnableActivtyStreamSetting(settings: self)
+                ForceCrashSetting(settings: self)
             ])]
-            
+    
             if profile.hasAccount() {
-                settings += [
-                    SettingSection(title: nil, children: [
-                        DisconnectSetting(settings: self),
-                        ])
-                ]
+                settings += [SettingSection(title: nil, children: [DisconnectSetting(settings: self)])]
             }
 
         return settings

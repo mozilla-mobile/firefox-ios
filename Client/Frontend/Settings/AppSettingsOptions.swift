@@ -71,7 +71,7 @@ class DisconnectSetting: WithAccountSetting {
                 self.settings.settings = self.settings.generateSettings()
                 self.settings.SELfirefoxAccountDidChange()
 
-                LeanplumIntegration.sharedInstance.setUserAttributes(attributes: [UserAttributeKeyName.signedInSync.rawValue : self.profile.hasAccount()])
+                LeanplumIntegration.sharedInstance.setUserAttributes(attributes: [UserAttributeKeyName.signedInSync.rawValue: self.profile.hasAccount()])
             })
         navigationController?.present(alertController, animated: true, completion: nil)
     }
@@ -437,17 +437,6 @@ class FeatureSwitchSetting: BoolSetting {
 
 }
 
-class EnableActivtyStreamSetting: FeatureSwitchSetting {
-    let profile: Profile
-
-    init(settings: SettingsTableViewController) {
-        self.profile = settings.profile
-        let title = NSAttributedString(string: "Enable the New Tab Experience", attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
-        super.init(prefs: settings.profile.prefs, featureSwitch: FeatureSwitches.activityStream, with: title)
-    }
-
-}
-
 class EnableBookmarkMergingSetting: HiddenSetting {
     override var title: NSAttributedString? {
         // Not localized for now.
@@ -573,7 +562,7 @@ class SendAnonymousUsageDataSetting: BoolSetting {
             attributedStatusText: NSAttributedString(string: NSLocalizedString("More Info…", tableName: "SendAnonymousUsageData", comment: "See http://bit.ly/1SmEXU1"), attributes: [NSForegroundColorAttributeName: UIConstants.HighlightBlue]),
             settingDidChange: {
                 AdjustIntegration.setEnabled($0)
-                LeanplumIntegration.sharedInstance.setUserAttributes(attributes: [UserAttributeKeyName.telemetryOptIn.rawValue : $0])
+                LeanplumIntegration.sharedInstance.setUserAttributes(attributes: [UserAttributeKeyName.telemetryOptIn.rawValue: $0])
                 LeanplumIntegration.sharedInstance.setEnabled($0)
             }
         )

@@ -153,13 +153,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         let navigationController = UINavigationController(rootViewController: browserViewController)
         navigationController.delegate = self
         navigationController.isNavigationBarHidden = true
-
-        //  This was an old feature that never made it to release. It was kind of buggy so it might be worth either removing entirely or making the deep links worth with it. Essentially it replaces the UINavigationController we setup with a subclass that shows a notification view in place of the status bar.
-//        if AppConstants.MOZ_STATUS_BAR_NOTIFICATION {
-//            rootViewController = NotificationRootViewController(rootViewController: navigationController)
-//        } else {
-            rootViewController = navigationController
-//        }
+        rootViewController = navigationController
 
         self.window!.rootViewController = rootViewController
 
