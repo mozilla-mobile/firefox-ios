@@ -26,24 +26,24 @@ open class MailtoLinkHandler {
         var providerDict = [String: MailProvider]()
         if let path = Bundle.main.path(forResource: "MailSchemes", ofType: "plist"), let dictRoot = NSArray(contentsOfFile: path) {
             dictRoot.forEach({ dict in
-                let schemeDict = dict as! [String: Any]
-                let scheme = schemeDict["scheme"] as! String
-                if scheme == "readdle-spark://" {
-                    providerDict[scheme] = ReaddleSparkIntegration()
-                } else if scheme == "mymail-mailto://" {
-                    providerDict[scheme] = MyMailIntegration()
-                } else if scheme == "mailru-mailto://" {
-                    providerDict[scheme] = MailRuIntegration()
-                } else if scheme == "airmail://" {
-                    providerDict[scheme] = AirmailIntegration()
-                } else if scheme == "ms-outlook://" {
-                    providerDict[scheme] = MSOutlookIntegration()
-                } else if scheme == "ymail://" {
-                    providerDict[scheme] = YMailIntegration()
-                } else if scheme == "googlegmail://" {
-                    providerDict[scheme] = GoogleGmailIntegration()
-                } else if scheme == "inbox-gmail://" {
-                    providerDict[scheme] = GoogleInboxIntegration()
+                if let schemeDict = dict as? [String: Any], let scheme = schemeDict["scheme"] as? String {
+                    if scheme == "readdle-spark://" {
+                        providerDict[scheme] = ReaddleSparkIntegration()
+                    } else if scheme == "mymail-mailto://" {
+                        providerDict[scheme] = MyMailIntegration()
+                    } else if scheme == "mailru-mailto://" {
+                        providerDict[scheme] = MailRuIntegration()
+                    } else if scheme == "airmail://" {
+                        providerDict[scheme] = AirmailIntegration()
+                    } else if scheme == "ms-outlook://" {
+                        providerDict[scheme] = MSOutlookIntegration()
+                    } else if scheme == "ymail://" {
+                        providerDict[scheme] = YMailIntegration()
+                    } else if scheme == "googlegmail://" {
+                        providerDict[scheme] = GoogleGmailIntegration()
+                    } else if scheme == "inbox-gmail://" {
+                        providerDict[scheme] = GoogleInboxIntegration()
+                    }
                 }
             })
         }
