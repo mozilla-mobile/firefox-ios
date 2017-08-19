@@ -46,7 +46,7 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
         // TODO Scroll through the settings and make a screenshot of every page
 
         // Screenshot all the settings that have a separate page
-        for cellName in ["Search", "NewTab", "Homepage", "Logins", "TouchIDPasscode", "ClearPrivateData"] {
+        for cellName in ["Search", "NewTab", "Homepage", "Logins", "TouchIDPasscode", "ClearPrivateData", "TrackingProtection"] {
             app.tables["AppSettingsTableViewController.tableView"].cells[cellName].tap()
             snapshot("04Settings-\(cellName)")
             app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).tap()
