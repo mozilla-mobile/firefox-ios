@@ -40,7 +40,6 @@ nb-NO
 ne-NP
 nl
 nn-NO
-pl
 pt-BR
 pt-PT
 rm
