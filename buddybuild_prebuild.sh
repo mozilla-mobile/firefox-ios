@@ -34,7 +34,7 @@ echo "Setting Leanplum environment to PRODUCTION for $BUDDYBUILD_SCHEME"
 /usr/libexec/PlistBuddy -c "Set LeanplumKey $LEANPLUM_KEY_PRODUCTION" "Client/Info.plist"
 
 echo "Setting up Pocket Stories API Key"
-/usr/libexec/PlistBuddy -c "Set PocketEnvironmentAPIKey $Pocket_Environment_API_Key" "Client/Info.plist"
+/usr/libexec/PlistBuddy -c "Set PocketEnvironmentAPIKey $POCKET_API_KEY" "Client/Info.plist"
 
 
 #
