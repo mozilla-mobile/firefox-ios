@@ -243,4 +243,16 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
         app.tables["ReadingTable"].cells.element(boundBy: 0).swipeLeft()
         snapshot("23ReadingListTableRowMenu-02")
     }
+
+    func test24BookmarksListTableRowMenu() {
+        let app = XCUIApplication()
+        loadWebPage(url: "http://wopr.norad.org/~sarentz/fxios/testpages/index.html", waitForOtherElementWithAriaLabel: "body")
+        app.buttons["TabToolbar.menuButton"].tap()
+        app.cells["AddBookmarkMenuItem"].tap()
+        waitforNoExistence(app.otherElements["MenuViewController.menuView"])
+        app.textFields["url"].tap()
+        app.buttons["HomePanels.Bookmarks"].tap()
+        app.tables["Bookmarks List"].cells.element(boundBy: 0).swipeLeft()
+        snapshot("24BookmarksListTableRowMenu-01")
+    }
 }
