@@ -182,4 +182,11 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
         app.webViews.element(boundBy: 0).buttons["submit"].tap()
         snapshot("17PasswordSnackbar-02")
     }
+
+    func test18TopSitesMenu() {
+        let app = XCUIApplication()
+        let topSites = app.cells["TopSitesCell"]
+        topSites.cells.matching(identifier: "TopSite").element(boundBy: 0).press(forDuration: 2.0)
+        snapshot("18TopSitesMenu-01")
+    }
 }
