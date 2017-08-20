@@ -139,6 +139,7 @@ class TabLocationView: UIView {
         readerModeButton.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(TabLocationView.SELlongPressReaderModeButton(_:))))
         readerModeButton.isAccessibilityElement = true
         readerModeButton.accessibilityLabel = NSLocalizedString("Reader View", comment: "Accessibility label for the Reader View button")
+        readerModeButton.accessibilityIdentifier = "TabLocationView.readerModeButton"
         readerModeButton.accessibilityCustomActions = [UIAccessibilityCustomAction(name: NSLocalizedString("Add to Reading List", comment: "Accessibility label for action adding current page to reading list."), target: self, selector: #selector(TabLocationView.SELreaderModeCustomAction))]
         return readerModeButton
     }()
