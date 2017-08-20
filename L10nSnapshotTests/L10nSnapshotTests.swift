@@ -189,4 +189,14 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
         topSites.cells.matching(identifier: "TopSite").element(boundBy: 0).press(forDuration: 2.0)
         snapshot("18TopSitesMenu-01")
     }
+
+    func test19HistoryTableContextMenu() {
+        let app = XCUIApplication()
+        loadWebPage(url: "http://wopr.norad.org/~sarentz/fxios/testpages/index.html", waitForOtherElementWithAriaLabel: "body")
+        app.buttons["TabToolbar.menuButton"].tap()
+        app.toolbars.buttons["HistoryMenuToolbarItem"].tap()
+        app.tables["History List"].cells.element(boundBy: 2).press(forDuration: 2.0)
+        snapshot("19HistoryTableContextMenu-01")
+    }
+
 }
