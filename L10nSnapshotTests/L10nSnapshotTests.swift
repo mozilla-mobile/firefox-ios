@@ -218,4 +218,15 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
         app.buttons["ReaderModeBarView.settingsButton"].tap()
         snapshot("21ReaderModeSettingsMenu-01")
     }
+
+    func test22ReadingListTableContextMenu() {
+        let app = XCUIApplication()
+        loadWebPage(url: "http://wopr.norad.org/~sarentz/fxios/testpages/index.html", waitForOtherElementWithAriaLabel: "body")
+        app.buttons["TabLocationView.readerModeButton"].tap()
+        app.buttons["ReaderModeBarView.listStatusButton"].tap()
+        app.textFields["url"].tap()
+        app.buttons["HomePanels.ReadingList"].tap()
+        app.tables["ReadingTable"].cells.element(boundBy: 0).press(forDuration: 2.0)
+        snapshot("22ReadingListTableContextMenu-01")
+    }
 }
