@@ -199,4 +199,15 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
         snapshot("19HistoryTableContextMenu-01")
     }
 
+    func test20BookmarksTableContextMenu() {
+        let app = XCUIApplication()
+        loadWebPage(url: "http://wopr.norad.org/~sarentz/fxios/testpages/index.html", waitForOtherElementWithAriaLabel: "body")
+        app.buttons["TabToolbar.menuButton"].tap()
+        app.cells["AddBookmarkMenuItem"].tap()
+        waitforNoExistence(app.otherElements["MenuViewController.menuView"])
+        app.textFields["url"].tap()
+        app.buttons["HomePanels.Bookmarks"].tap()
+        app.tables["Bookmarks List"].cells.element(boundBy: 0).press(forDuration: 2.0)
+        snapshot("20BookmarksTableContextMenu-01")
+    }
 }
