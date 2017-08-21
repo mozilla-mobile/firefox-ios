@@ -90,7 +90,7 @@ private let AllTables: [String] = [
 
     TableSyncCommands,
     TableClients,
-    TableTabs
+    TableTabs,
 ]
 
 private let AllViews: [String] = [
@@ -105,7 +105,7 @@ private let AllViews: [String] = [
     ViewAllBookmarks,
     ViewAwesomebarBookmarks,
     ViewAwesomebarBookmarksWithIcons,
-    ViewHistoryVisits
+    ViewHistoryVisits,
 ]
 
 private let AllIndices: [String] = [
@@ -116,7 +116,7 @@ private let AllIndices: [String] = [
     IndexBookmarksMirrorStructureParentIdx,
     IndexBookmarksMirrorStructureChild,
     IndexPageMetadataCacheKey,
-    IndexPageMetadataSiteURL
+    IndexPageMetadataSiteURL,
 ]
 
 private let AllTablesIndicesAndViews: [String] = AllViews + AllIndices + AllTables
@@ -750,7 +750,7 @@ open class BrowserSchema: Schema {
             allBookmarksView,
             historyVisitsView,
             awesomebarBookmarksView,
-            awesomebarBookmarksWithIconsView
+            awesomebarBookmarksWithIconsView,
         ]
 
         assert(queries.count == AllTablesIndicesAndViews.count, "Did you forget to add your table, index, or view to the list?")
@@ -929,7 +929,7 @@ open class BrowserSchema: Schema {
                 // Create indices for each structure table.
                 (indexBufferStructureParentIdx, nil),
                 (indexLocalStructureParentIdx, nil),
-                (indexMirrorStructureParentIdx, nil)
+                (indexMirrorStructureParentIdx, nil),
             ]
 
             if !self.run(db, queries: prep) ||
@@ -1157,7 +1157,7 @@ open class BrowserSchema: Schema {
 
         // If we are unable to migrate the `clients` table from the schema table, we
         // have failed and cannot continue.
-        guard migrateClientsTableFromSchemaTableIfNeeded(db) else {
+        guard migrateClientsTableFromSchemaTableIfNeeded(db) != .failure else {
             return false
         }
 
@@ -1191,7 +1191,12 @@ open class BrowserSchema: Schema {
         return true
     }
 
-    fileprivate func migrateClientsTableFromSchemaTableIfNeeded(_ db: SQLiteDBConnection) -> Bool {
+    // Performs the intermediary migrations for the `clients` table that were previously
+    // being handled by the schema table. This should update older versions of the `clients`
+    // prior to v31. If the `clients` table is able to be successfully migrated or if it
+    // does not require any migration, this function will return `true`. Otherwise, if the
+    // `clients` table *requires* migration and fails, it will return `false`.
+    fileprivate func migrateClientsTableFromSchemaTableIfNeeded(_ db: SQLiteDBConnection) -> SchemaUpgradeResult {
         // Query for the existence of the `clients` table to determine if we are
         // migrating from an older DB version or if this is just a brand new DB.
         let sqliteMasterCursor = db.executeQueryUnsafe("SELECT COUNT(*) AS number FROM sqlite_master WHERE type = 'table' AND name = '\(TableClients)'", factory: IntFactory, withArgs: [] as Args)
@@ -1200,7 +1205,7 @@ open class BrowserSchema: Schema {
         sqliteMasterCursor.close()
         
         guard clientsTableExists else {
-            return true
+            return .skipped
         }
         
         // Check if intermediary migrations are necessary for the 'clients' table.
@@ -1210,7 +1215,7 @@ open class BrowserSchema: Schema {
         previousVersionCursor.close()
         
         guard previousClientsTableVersion > 0 && previousClientsTableVersion <= 3 else {
-            return true
+            return .skipped
         }
         
         log.info("Migrating '\(TableClients)' table from version \(previousClientsTableVersion).")
@@ -1220,7 +1225,7 @@ open class BrowserSchema: Schema {
             if let err = db.executeChange(sql) {
                 log.error("Error altering \(TableClients) table: \(err.localizedDescription); SQL was \(sql)")
                 SentryIntegration.shared.sendWithStacktrace(message: "Error altering \(TableClients) table: \(err.localizedDescription); SQL was \(sql)", tag: "BrowserDB", severity: .error)
-                return false
+                return .failure
             }
         }
         
@@ -1229,11 +1234,11 @@ open class BrowserSchema: Schema {
             if let err = db.executeChange(sql) {
                 log.error("Error altering \(TableClients) table: \(err.localizedDescription); SQL was \(sql)")
                 SentryIntegration.shared.sendWithStacktrace(message: "Error altering \(TableClients) table: \(err.localizedDescription); SQL was \(sql)", tag: "BrowserDB", severity: .error)
-                return false
+                return .failure
             }
         }
         
-        return true
+        return .success
     }
     
     fileprivate func fillDomainNamesFromCursor(_ cursor: Cursor<String>, db: SQLiteDBConnection) -> Bool {

@@ -49,7 +49,7 @@ open class BrowserDB {
         self.db = SwiftData(filename: file, key: secretKey, prevKey: nil)
 
         if AppConstants.BuildChannel == .developer && secretKey != nil {
-            log.debug("Creating db: \(file) with secret = \(secretKey!)")
+            log.debug("Will attempt to use encrypted DB: \(file) with secret = \(secretKey ?? "nil")")
         }
     }
 
@@ -57,7 +57,7 @@ open class BrowserDB {
     fileprivate func createSchema(_ conn: SQLiteDBConnection, schema: Schema) -> Bool {
         log.debug("Try create \(schema.name) version \(schema.version)")
         if !schema.create(conn) {
-            // If schema couldn't be created, we'll bail without writing the schema version.
+            // If schema couldn't be created, we'll bail without setting the `PRAGMA user_version`.
             log.debug("Creation failed.")
             return false
         }
@@ -73,7 +73,7 @@ open class BrowserDB {
     fileprivate func updateSchema(_ conn: SQLiteDBConnection, schema: Schema) -> Bool {
         log.debug("Trying to update table '\(schema.name)' from version \(conn.version) to \(schema.version)")
         if !schema.update(conn, from: conn.version) {
-            // If schema couldn't be updated, we'll bail without writing the schema version.
+            // If schema couldn't be updated, we'll bail without setting the `PRAGMA user_version`.
             log.debug("Updating failed.")
             return false
         }
@@ -101,28 +101,52 @@ open class BrowserDB {
         
         // If the current schema version for the database matches the specified
         // `Schema` version, no further action is necessary and we can bail out.
+        // NOTE: This assumes that we always use *ONE* `Schema` per database file
+        // since SQLite can only track a single value in `PRAGMA user_version`.
         if currentVersion == schema.version {
             log.debug("Schema \(schema.name) already exists at version \(schema.version). Skipping additional schema preparation.")
             return .success
         }
         
+        // This should not ever happen since the schema version should always be
+        // increasing whenever a structural change is made in an app update.
+        guard currentVersion <= schema.version else {
+            log.error("Schema \(schema.name) cannot be downgraded from version \(currentVersion) to \(schema.version).")
+            SentryIntegration.shared.sendWithStacktrace(message: "Schema \(schema.name) cannot be downgraded from version \(currentVersion) to \(schema.version).", tag: "BrowserDB", severity: .error)
+            return .failure
+        }
+
         log.debug("Schema \(schema.name) needs created or updated from version \(currentVersion) to \(schema.version).")
 
         var success = true
 
         if let error = self.db.transaction({ connection -> Bool in
-            // If the schema doesn't exist, we'll create it.
             log.debug("Create or update \(schema.name) version \(schema.version) on \(Thread.current.description).")
+
+            // Use `schema.exists()` to check if *ANY* of the tables already exist in the DB.
+            // If none of the tables exist in the DB, we can simply invoke `createSchema()`
+            // to create a brand new DB from scratch.
             if !schema.exists(connection) {
                 log.debug("Schema \(schema.name) doesn't exist. Creating.")
                 success = self.createSchema(connection, schema: schema)
-            } else {
-                // Otherwise, we'll update it
+            }
+
+            // Otherwise, we must call `updateSchema()` to go through the update process.
+            else {
+                // If the schema update succeeds, our work here is done.
                 if self.updateSchema(connection, schema: schema) {
                     log.debug("Updated schema \(schema.name).")
                     success = true
-                } else {
-                    log.error("Update failed for schema \(schema.name). Dropping and re-creating.")
+                }
+                
+                // Otherwise, we'll drop everything from the DB and create everything
+                // again from scratch. Assuming our schema upgrade code is correct, this
+                // *shouldn't* happen. If it does, log it to Sentry to the offending
+                // code can be identified and corrected.
+                else {
+                    log.error("Update failed for schema \(schema.name) from version \(currentVersion) to \(schema.version). Dropping and re-creating.")
+                    SentryIntegration.shared.sendWithStacktrace(message: "Update failed for schema \(schema.name) from version \(currentVersion) to \(schema.version). Dropping and re-creating.", tag: "BrowserDB", severity: .error)
+
                     let _ = schema.drop(connection)
                     success = self.createSchema(connection, schema: schema)
                 }

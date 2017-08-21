@@ -399,8 +399,8 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
 
         // Now find the clients.
         let commandCursor = db.withConnection(&err) { connection, _ in
-            return connection.executeQuery("SELECT * FROM \(TableSyncCommands)", factory: { row -> SyncCommand in
-                return SyncCommand(
+            connection.executeQuery("SELECT * FROM \(TableSyncCommands)", factory: { row -> SyncCommand in
+                SyncCommand(
                     id: row["command_id"] as? Int,
                     value: row["value"] as! String,
                     clientGUID: row["client_guid"] as? GUID)

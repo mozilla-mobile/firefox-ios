@@ -16,3 +16,9 @@ protocol Schema {
     func exists(_ db: SQLiteDBConnection) -> Bool
     func drop(_ db: SQLiteDBConnection) -> Bool
 }
+
+enum SchemaUpgradeResult {
+    case success
+    case failure
+    case skipped
+}
