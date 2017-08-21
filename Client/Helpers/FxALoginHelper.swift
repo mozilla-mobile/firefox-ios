@@ -237,7 +237,7 @@ class FxALoginHelper {
         profile?.prefs.setBool(true, forKey: applicationDidRequestUserNotificationPermissionPrefKey)
 
         guard #available(iOS 10, *) else {
-            apnsTokenDeferred?.fill(Maybe.failure(PushNotificationError.wrongOSVersion))
+            apnsTokenDeferred?.fillIfUnfilled(Maybe.failure(PushNotificationError.wrongOSVersion))
             return readyForSyncing()
         }
 
@@ -257,7 +257,7 @@ class FxALoginHelper {
 
     func apnsRegisterDidSucceed(_ deviceToken: Data) {
         let apnsToken = deviceToken.hexEncodedString
-        self.apnsTokenDeferred?.fill(Maybe(success: apnsToken))
+        self.apnsTokenDeferred?.fillIfUnfilled(Maybe(success: apnsToken))
         self.apnsRegisterDidSucceed(apnsToken)
     }
 
@@ -281,7 +281,7 @@ class FxALoginHelper {
     }
 
     func apnsRegisterDidFail() {
-        self.apnsTokenDeferred?.fill(Maybe(failure: PushNotificationError.registrationFailed))
+        self.apnsTokenDeferred?.fillIfUnfilled(Maybe(failure: PushNotificationError.registrationFailed))
         readyForSyncing()
     }
 
