@@ -2837,8 +2837,8 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                     }
                     accessDenied.addAction(settingsAction)
                     self.present(accessDenied, animated: true, completion: nil)
-                    LeanplumIntegration.sharedInstance.track(eventName: .saveImage)
                 }
+                LeanplumIntegration.sharedInstance.track(eventName: .saveImage)
             }
             actionSheetController.addAction(saveImageAction)
 
