@@ -105,10 +105,6 @@ open class LoginsSchema: Schema {
         return drop(db) && create(db)
     }
     
-    func exists(_ db: SQLiteDBConnection) -> Bool {
-        return db.someTablesExist(AllTables)
-    }
-    
     func drop(_ db: SQLiteDBConnection) -> Bool {
         log.debug("Dropping logins table.")
         let err = db.executeChange("DROP TABLE IF EXISTS \(name)")

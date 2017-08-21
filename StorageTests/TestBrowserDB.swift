@@ -33,10 +33,7 @@ class TestBrowserDB: XCTestCase {
 
     class MockFailingSchema: Schema {
         var name: String { return "FAILURE" }
-        var version: Int { return 1 }
-        func exists(_ db: SQLiteDBConnection) -> Bool {
-            return false
-        }
+        var version: Int { return BrowserSchema.DefaultVersion + 1 }
         func drop(_ db: SQLiteDBConnection) -> Bool {
             return true
         }

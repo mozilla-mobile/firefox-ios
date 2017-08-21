@@ -38,10 +38,6 @@ class BaseHistoricalBrowserSchema: Schema {
         assert(false, "Should never be called.")
     }
 
-    func exists(_ db: SQLiteDBConnection) -> Bool {
-        return false
-    }
-
     func create(_ db: SQLiteDBConnection) -> Bool {
         return false
     }

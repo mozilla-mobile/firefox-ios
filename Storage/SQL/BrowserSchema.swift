@@ -1168,7 +1168,7 @@ open class BrowserSchema: Schema {
         let previousVersion = previousVersionCursor[0] ?? 0
         previousVersionCursor.close()
 
-        // No other intermediary migrations are needed for the remaining tables and
+        // No other intermediate migrations are needed for the remaining tables and
         // we have already captured the *previous* schema version specified in
         // `tableList`, so we can now safely drop it.
         log.info("Schema table migrations complete; Dropping 'tableList' table.")
@@ -1191,11 +1191,13 @@ open class BrowserSchema: Schema {
         return true
     }
 
-    // Performs the intermediary migrations for the `clients` table that were previously
+    // Performs the intermediate migrations for the `clients` table that were previously
     // being handled by the schema table. This should update older versions of the `clients`
-    // prior to v31. If the `clients` table is able to be successfully migrated or if it
-    // does not require any migration, this function will return `true`. Otherwise, if the
-    // `clients` table *requires* migration and fails, it will return `false`.
+    // table prior to v31. If the `clients` table is able to be successfully migrated, this
+    // will return `.success`. If no migration is required because either the `clients` table
+    // is already at v31 or it does not exist yet at all, this will return `.skipped`.
+    // Otherwise, if the `clients` table migration is needed and an error was encountered, we
+    // return `.failure`.
     fileprivate func migrateClientsTableFromSchemaTableIfNeeded(_ db: SQLiteDBConnection) -> SchemaUpgradeResult {
         // Query for the existence of the `clients` table to determine if we are
         // migrating from an older DB version or if this is just a brand new DB.
@@ -1208,7 +1210,7 @@ open class BrowserSchema: Schema {
             return .skipped
         }
         
-        // Check if intermediary migrations are necessary for the 'clients' table.
+        // Check if intermediate migrations are necessary for the 'clients' table.
         let previousVersionCursor = db.executeQueryUnsafe("SELECT version FROM tableList WHERE name = '\(TableClients)'", factory: IntFactory, withArgs: [] as Args)
         
         let previousClientsTableVersion = previousVersionCursor[0] ?? 0
@@ -1297,17 +1299,6 @@ open class BrowserSchema: Schema {
         }
 
         return true
-    }
-
-    /**
-     * The Table mechanism expects to be able to check if a 'table' exists. In our (ab)use
-     * of Table, that means making sure that any of our tables and views exist.
-     * We do that by fetching all tables from sqlite_master with matching names, and verifying
-     * that we get back more than one.
-     * Note that we don't check for views -- trust to luck.
-     */
-    func exists(_ db: SQLiteDBConnection) -> Bool {
-        return db.someTablesExist(AllTables)
     }
 
     func drop(_ db: SQLiteDBConnection) -> Bool {
