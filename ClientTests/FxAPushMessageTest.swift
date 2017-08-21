@@ -132,10 +132,14 @@ class FxAPushMessageTest: XCTestCase {
     func test_thisDeviceDisconnected() {
         let profile = MockProfile()
         let handler = createHandler(profile)
+
+        let deviceRegistration = FxADeviceRegistration(id: "this-device-id", version: 1, lastRegistered: 0)
+        profile.account?.deviceRegistration = deviceRegistration
+
         let prefs = profile.prefs
 
         let expectation = XCTestExpectation()
-        handler.handle(plaintext: "{\"command\":\"fxaccounts:device_disconnected\",\"data\":{\"id\": \"\(profile.clientID)\"}}").upon { maybe in
+        handler.handle(plaintext: "{\"command\":\"fxaccounts:device_disconnected\",\"data\":{\"id\": \"\(deviceRegistration.id)\"}}").upon { maybe in
             guard let message = maybe.successValue else {
                 return expectation.fulfill()
             }
