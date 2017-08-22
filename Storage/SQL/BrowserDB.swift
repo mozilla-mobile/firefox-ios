@@ -146,41 +146,41 @@ open class BrowserDB {
                 return success
             }
 
-            // Query for the existence of the `tableList` table to determine if we are
-            // migrating from an older DB version.
-            let sqliteMasterCursor = connection.executeQueryUnsafe("SELECT COUNT(*) AS number FROM sqlite_master WHERE type = 'table' AND name = 'tableList'", factory: IntFactory, withArgs: [] as Args)
-
-            let tableListTableExists = sqliteMasterCursor[0] == 1
-            sqliteMasterCursor.close()
-
-            // If `PRAGMA user_version` is zero and the `tableList` table doesn't exist, we
-            // can simply invoke `createSchema()` to create a brand new DB from scratch.
-            if connection.version == 0 && !tableListTableExists {
-                log.debug("Schema \(schema.name) doesn't exist. Creating.")
-                success = self.createSchema(connection, schema: schema)
-            }
-
-            // Otherwise, we must call `updateSchema()` to go through the update process.
-            else {
-                // If the schema update succeeds, our work here is done.
-                if self.updateSchema(connection, schema: schema) {
-                    log.debug("Updated schema \(schema.name).")
-                    success = true
-                }
-
-                // Otherwise, we'll drop everything from the DB and create everything
-                // again from scratch. Assuming our schema upgrade code is correct, this
-                // *shouldn't* happen. If it does, log it to Sentry to the offending
-                // code can be identified and corrected.
-                else {
-                    log.error("Update failed for schema \(schema.name) from version \(currentVersion) to \(schema.version). Dropping and re-creating.")
-                    SentryIntegration.shared.sendWithStacktrace(message: "Update failed for schema \(schema.name) from version \(currentVersion) to \(schema.version). Dropping and re-creating.", tag: "BrowserDB", severity: .error)
-
-                    let _ = schema.drop(connection)
+            // If `PRAGMA user_version` is zero, check if we can safely create the
+            // database schema from scratch.
+            if connection.version == 0 {
+                // Query for the existence of the `tableList` table to determine if we are
+                // migrating from an older DB version.
+                let sqliteMasterCursor = connection.executeQueryUnsafe("SELECT COUNT(*) AS number FROM sqlite_master WHERE type = 'table' AND name = 'tableList'", factory: IntFactory, withArgs: [] as Args)
+                
+                let tableListTableExists = sqliteMasterCursor[0] == 1
+                sqliteMasterCursor.close()
+                
+                // If the `tableList` table doesn't exist, we can simply invoke
+                // `createSchema()` to create a brand new DB from scratch.
+                if !tableListTableExists {
+                    log.debug("Schema \(schema.name) doesn't exist. Creating.")
                     success = self.createSchema(connection, schema: schema)
+                    return success
                 }
             }
 
+            // If we can't create a brand new schema from scratch, we must
+            // call `updateSchema()` to go through the update process.
+            if self.updateSchema(connection, schema: schema) {
+                log.debug("Updated schema \(schema.name).")
+                success = true
+                return success
+            }
+
+            // If we failed to update the schema, we'll drop everything from the DB
+            // and create everything again from scratch. Assuming our schema upgrade
+            // code is correct, this *shouldn't* happen. If it does, log it to Sentry.
+            log.error("Update failed for schema \(schema.name) from version \(currentVersion) to \(schema.version). Dropping and re-creating.")
+            SentryIntegration.shared.sendWithStacktrace(message: "Update failed for schema \(schema.name) from version \(currentVersion) to \(schema.version). Dropping and re-creating.", tag: "BrowserDB", severity: .error)
+
+            let _ = schema.drop(connection)
+            success = self.createSchema(connection, schema: schema)
             return success
         }) {
             guard !db.closed else {
@@ -197,7 +197,7 @@ open class BrowserDB {
             // If so, we *shouldn't* move the database file to a backup location and re-create it.
             // Instead, just crash so that we don't lose any data.
             if let _ = SQLiteRecoverableError.init(rawValue: error.code) {
-                fatalError()
+                fatalError(error.localizedDescription)
             }
 
             success = false
@@ -211,13 +211,6 @@ open class BrowserDB {
     }
 
     func moveDatabaseToBackupLocation(_ schema: Schema) -> DatabaseOpResult {
-        // Notify the world that we moved the database after the schema as been
-        // created. This allows us to reset Sync and start over in the case of
-        // corruption.
-        defer {
-            NotificationCenter.default.post(name: NotificationDatabaseWasRecreated, object: self.filename)
-        }
-
         // Make sure that we don't still have open the files that we want to move!
         // Note that we use sqlite3_close_v2, which might actually _not_ close the
         // database file yet. For this reason we move the -shm and -wal files, too.
@@ -264,6 +257,13 @@ open class BrowserDB {
 
         // Re-open the connection to the new database file.
         self.reopenIfClosed()
+
+        // Notify the world that we moved the database after the schema has been
+        // created. This allows us to reset Sync and start over in the case of
+        // corruption.
+        defer {
+            NotificationCenter.default.post(name: NotificationDatabaseWasRecreated, object: self.filename)
+        }
 
         var success = true
 
