@@ -35,7 +35,7 @@ class BaseHistoricalBrowserSchema: Schema {
     var version: Int { return -1 }
     
     func update(_ db: SQLiteDBConnection, from: Int) -> Bool {
-        assert(false, "Should never be called.")
+        fatalError("Should never be called.")
     }
 
     func create(_ db: SQLiteDBConnection) -> Bool {
