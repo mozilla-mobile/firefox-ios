@@ -69,6 +69,12 @@ class InitialViewController: UIViewController, ShareControllerDelegate {
 
             if destinations.contains(ShareDestinationBookmarks) {
                 _ = profile.bookmarks.shareItem(item).value // Blocks until database has settled
+
+                // Saves the number of times a user bookmarked using the extension to send the info to Leanplum
+                let defaults = UserDefaults(suiteName: "group.org.mozilla.ios.Fennec")
+                let previousInt = defaults?.integer(forKey: "numberOfBookmarksFromShareToExtension") ?? 0
+                defaults?.set(previousInt + 1, forKey: "numberOfBookmarksFromShareToExtension")
+                defaults?.synchronize()
             }
 
             profile.shutdown()

@@ -490,6 +490,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
                 self.launchFromURL(params)
             }
         }
+
+        guard let extensionDefaults = UserDefaults(suiteName: "group.org.mozilla.ios.Fennec") else { return }
+        var numberOfBookmarks = extensionDefaults.integer(forKey: "numberOfBookmarksFromShareToExtension")
+        while numberOfBookmarks > 0 {
+            LeanplumIntegration.sharedInstance.track(eventName: .savedBookmark)
+            numberOfBookmarks-=1
+        }
+        extensionDefaults.set(0, forKey: "numberOfBookmarksFromShareToExtension")
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
