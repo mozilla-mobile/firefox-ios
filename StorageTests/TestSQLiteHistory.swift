@@ -30,15 +30,18 @@ extension Site {
     }
 }
 
-class BaseHistoricalBrowserTable {
-    func updateTable(_ db: SQLiteDBConnection, from: Int) -> Bool {
+class BaseHistoricalBrowserSchema: Schema {
+    var name: String { return "BROWSER" }
+    var version: Int { return -1 }
+    
+    func update(_ db: SQLiteDBConnection, from: Int) -> Bool {
         assert(false, "Should never be called.")
     }
 
-    func exists(_ db: SQLiteDBConnection) -> Bool {
+    func create(_ db: SQLiteDBConnection) -> Bool {
         return false
     }
-
+    
     func drop(_ db: SQLiteDBConnection) -> Bool {
         return false
     }
@@ -87,7 +90,7 @@ class BaseHistoricalBrowserTable {
     }
 }
 
-// Versions of BrowserTable that we care about:
+// Versions of BrowserSchema that we care about:
 // v6, prior to 001c73ea1903c238be1340950770879b40c41732, July 2015.
 // This is when we first started caring about database versions.
 //
@@ -99,9 +102,8 @@ class BaseHistoricalBrowserTable {
 //
 // These tests snapshot the table creation code at each of these points.
 
-class BrowserTableV6: BaseHistoricalBrowserTable {
-    var name: String { return "BROWSER" }
-    var version: Int { return 6 }
+class BrowserSchemaV6: BaseHistoricalBrowserSchema {
+    override var version: Int { return 6 }
 
     func prepopulateRootFolders(_ db: SQLiteDBConnection) -> Bool {
         let type = BookmarkNodeType.folder.rawValue
@@ -160,10 +162,8 @@ class BrowserTableV6: BaseHistoricalBrowserTable {
             "title TEXT" +
         ") "
     }
-}
 
-extension BrowserTableV6: Table {
-    func create(_ db: SQLiteDBConnection) -> Bool {
+    override func create(_ db: SQLiteDBConnection) -> Bool {
         let visits =
         "CREATE TABLE IF NOT EXISTS \(TableVisits) (" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -252,9 +252,8 @@ extension BrowserTableV6: Table {
     }
 }
 
-class BrowserTableV7: BaseHistoricalBrowserTable {
-    var name: String { return "BROWSER" }
-    var version: Int { return 7 }
+class BrowserSchemaV7: BaseHistoricalBrowserSchema {
+    override var version: Int { return 7 }
 
     func prepopulateRootFolders(_ db: SQLiteDBConnection) -> Bool {
         let type = BookmarkNodeType.folder.rawValue
@@ -313,10 +312,8 @@ class BrowserTableV7: BaseHistoricalBrowserTable {
             "title TEXT" +
         ") "
     }
-}
 
-extension BrowserTableV7: SectionCreator, TableInfo {
-    func create(_ db: SQLiteDBConnection) -> Bool {
+    override func create(_ db: SQLiteDBConnection) -> Bool {
         // Right now we don't need to track per-visit deletions: Sync can't
         // represent them! See Bug 1157553 Comment 6.
         // We flip the should_upload flag on the history item when we add a visit.
@@ -410,9 +407,8 @@ extension BrowserTableV7: SectionCreator, TableInfo {
     }
 }
 
-class BrowserTableV8: BaseHistoricalBrowserTable {
-    var name: String { return "BROWSER" }
-    var version: Int { return 8 }
+class BrowserSchemaV8: BaseHistoricalBrowserSchema {
+    override var version: Int { return 8 }
 
     func prepopulateRootFolders(_ db: SQLiteDBConnection) -> Bool {
         let type = BookmarkNodeType.folder.rawValue
@@ -471,10 +467,8 @@ class BrowserTableV8: BaseHistoricalBrowserTable {
             "title TEXT" +
         ") "
     }
-}
 
-extension BrowserTableV8: SectionCreator, TableInfo {
-    func create(_ db: SQLiteDBConnection) -> Bool {
+    override func create(_ db: SQLiteDBConnection) -> Bool {
         let favicons =
         "CREATE TABLE IF NOT EXISTS favicons (" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -582,9 +576,8 @@ extension BrowserTableV8: SectionCreator, TableInfo {
     }
 }
 
-class BrowserTableV10: BaseHistoricalBrowserTable {
-    var name: String { return "BROWSER" }
-    var version: Int { return 10 }
+class BrowserSchemaV10: BaseHistoricalBrowserSchema {
+    override var version: Int { return 10 }
 
     func prepopulateRootFolders(_ db: SQLiteDBConnection) -> Bool {
         let type = BookmarkNodeType.folder.rawValue
@@ -614,7 +607,7 @@ class BrowserTableV10: BaseHistoricalBrowserTable {
         return self.run(db, sql: sql, args: args)
     }
 
-    func getHistoryTableCreationString(forVersion version: Int = BrowserTable.DefaultVersion) -> String {
+    func getHistoryTableCreationString(forVersion version: Int = BrowserSchema.DefaultVersion) -> String {
         return "CREATE TABLE IF NOT EXISTS history (" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "guid TEXT NOT NULL UNIQUE, " +       // Not null, but the value might be replaced by the server's.
@@ -688,10 +681,8 @@ class BrowserTableV10: BaseHistoricalBrowserTable {
             ", idx INTEGER NOT NULL" +     // Should advance from 0.
         ")"
     }
-}
 
-extension BrowserTableV10: SectionCreator, TableInfo {
-    func create(_ db: SQLiteDBConnection) -> Bool {
+    override func create(_ db: SQLiteDBConnection) -> Bool {
         let favicons =
         "CREATE TABLE IF NOT EXISTS favicons (" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -906,14 +897,14 @@ class TestSQLiteHistory: XCTestCase {
     }
 
     func testUpgrades() {
-        let sources: [(Int, SectionCreator)] = [
-            (6, BrowserTableV6()),
-            (7, BrowserTableV7()),
-            (8, BrowserTableV8()),
-            (10, BrowserTableV10()),
+        let sources: [(Int, Schema)] = [
+            (6, BrowserSchemaV6()),
+            (7, BrowserSchemaV7()),
+            (8, BrowserSchemaV8()),
+            (10, BrowserSchemaV10()),
         ]
 
-        let destination = BrowserTable()
+        let destination = BrowserSchema()
 
         for (version, table) in sources {
             let db = BrowserDB(filename: "browser-v\(version).db", files: files)
@@ -922,7 +913,7 @@ class TestSQLiteHistory: XCTestCase {
                     XCTAssertTrue(table.create(conn), "Creating browser table version \(version)")
 
                     // And we can upgrade to the current version.
-                    XCTAssertTrue(destination.updateTable(conn, from: table.version), "Upgrading browser table from version \(version)")
+                    XCTAssertTrue(destination.update(conn, from: table.version), "Upgrading browser table from version \(version)")
                 }.value.isSuccess
             )
             db.forceClose()
@@ -932,7 +923,7 @@ class TestSQLiteHistory: XCTestCase {
     func testUpgradesWithData() {
         let db = BrowserDB(filename: "browser-v6-data.db", files: files)
 
-        XCTAssertTrue(db.createOrUpdate(BrowserTableV6()) == .success, "Creating browser table version 6")
+        XCTAssertTrue(db.prepareSchema(BrowserSchemaV6()) == .success, "Creating browser schema version 6")
 
         // Insert some data.
         let queries = [
@@ -947,7 +938,7 @@ class TestSQLiteHistory: XCTestCase {
         XCTAssertTrue(db.run(queries).value.isSuccess)
 
         // And we can upgrade to the current version.
-        XCTAssertTrue(db.createOrUpdate(BrowserTable()) == .success, "Upgrading browser table from version 6")
+        XCTAssertTrue(db.prepareSchema(BrowserSchema()) == .success, "Upgrading browser schema from version 6")
 
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
@@ -1169,6 +1160,8 @@ class TestSQLiteHistory: XCTestCase {
         let history = SQLiteHistory(db: db, prefs: prefs)
         let bookmarks = SQLiteBookmarks(db: db)
 
+        XCTAssertTrue(db.prepareSchema(BrowserSchema()) == .success)
+        
         let expectation = self.expectation(description: "First.")
         func done() -> Success {
             expectation.fulfill()

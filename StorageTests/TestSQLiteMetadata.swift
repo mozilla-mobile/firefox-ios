@@ -17,7 +17,7 @@ class TestSQLiteMetadata: XCTestCase {
     override func setUp() {
         super.setUp()
         self.db = BrowserDB(filename: "foo.db", files: self.files)
-        XCTAssertTrue(db.createOrUpdate(BrowserTable()) == .success)
+        XCTAssertTrue(db.prepareSchema(BrowserSchema()) == .success)
 
         self.metadata = SQLiteMetadata(db: db)
     }

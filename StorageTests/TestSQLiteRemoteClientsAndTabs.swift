@@ -133,8 +133,8 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
         }
         clientsAndTabs = SQLiteRemoteClientsAndTabs(db: BrowserDB(filename: "browser.db", files: files))
 
-        // Workaround: the remote devices table is created in BrowserTable, not in SQLiteRemoteClientsAndTabs.
-        _ = clientsAndTabs.db.createOrUpdate(BrowserTable())
+        // Workaround: the remote devices table is created in BrowserSchema, not in SQLiteRemoteClientsAndTabs.
+        _ = clientsAndTabs.db.prepareSchema(BrowserSchema())
     }
 
     func testInsertGetClear() {

@@ -30,6 +30,9 @@ let TableDomains = "domains"
 let TableVisits = "visits"
 let TableFaviconSites = "favicon_sites"
 let TableQueuedTabs = "queue"
+let TableSyncCommands = "commands"
+let TableClients = "clients"
+let TableTabs = "tabs"
 
 let TableActivityStreamBlocklist = "activity_stream_blocklist"
 let TablePageMetadata = "page_metadata"
@@ -83,7 +86,11 @@ private let AllTables: [String] = [
     TablePageMetadata,
     TableHighlights,
     TablePinnedTopSites,
-    TableRemoteDevices
+    TableRemoteDevices,
+
+    TableSyncCommands,
+    TableClients,
+    TableTabs,
 ]
 
 private let AllViews: [String] = [
@@ -98,7 +105,7 @@ private let AllViews: [String] = [
     ViewAllBookmarks,
     ViewAwesomebarBookmarks,
     ViewAwesomebarBookmarksWithIcons,
-    ViewHistoryVisits
+    ViewHistoryVisits,
 ]
 
 private let AllIndices: [String] = [
@@ -109,7 +116,7 @@ private let AllIndices: [String] = [
     IndexBookmarksMirrorStructureParentIdx,
     IndexBookmarksMirrorStructureChild,
     IndexPageMetadataCacheKey,
-    IndexPageMetadataSiteURL
+    IndexPageMetadataSiteURL,
 ]
 
 private let AllTablesIndicesAndViews: [String] = AllViews + AllIndices + AllTables
@@ -120,12 +127,11 @@ private let log = Logger.syncLogger
  * The monolithic class that manages the inter-related history etc. tables.
  * We rely on SQLiteHistory having initialized the favicon table first.
  */
-open class BrowserTable: Table {
-    static let DefaultVersion = 30    // Bug 1387492.
+open class BrowserSchema: Schema {
+    static let DefaultVersion = 31    // Bug 1388147.
 
-    // TableInfo fields.
     var name: String { return "BROWSER" }
-    var version: Int { return BrowserTable.DefaultVersion }
+    var version: Int { return BrowserSchema.DefaultVersion }
 
     let sqliteVersion: Int32
     let supportsPartialIndices: Bool
@@ -141,7 +147,7 @@ open class BrowserTable: Table {
     func run(_ db: SQLiteDBConnection, sql: String, args: Args? = nil) -> Bool {
         let err = db.executeChange(sql, withArgs: args)
         if err != nil {
-            log.error("Error running SQL in BrowserTable: \(err?.localizedDescription ?? "nil")")
+            log.error("Error running SQL in BrowserSchema: \(err?.localizedDescription ?? "nil")")
             log.error("SQL was \(sql)")
         }
         return err == nil
@@ -264,6 +270,35 @@ open class BrowserTable: Table {
             "url TEXT NOT NULL UNIQUE, " +
             "title TEXT" +
         ") "
+
+    let syncCommandsTableCreate =
+        "CREATE TABLE IF NOT EXISTS \(TableSyncCommands) (" +
+            "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "client_guid TEXT NOT NULL, " +
+            "value TEXT NOT NULL" +
+        ")"
+
+    let clientsTableCreate =
+        "CREATE TABLE IF NOT EXISTS \(TableClients) (" +
+            "guid TEXT PRIMARY KEY, " +
+            "name TEXT NOT NULL, " +
+            "modified INTEGER NOT NULL, " +
+            "type TEXT, " +
+            "formfactor TEXT, " +
+            "os TEXT, " +
+            "version TEXT, " +
+            "fxaDeviceId TEXT" +
+        ")"
+
+    let tabsTableCreate =
+        "CREATE TABLE IF NOT EXISTS \(TableTabs) (" +
+            "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "client_guid TEXT REFERENCES clients(guid) ON DELETE CASCADE, " +
+            "url TEXT NOT NULL, " +
+            "title TEXT, " +
+            "history TEXT, " +
+            "last_used INTEGER" +
+        ")"
 
     let activityStreamBlocklistCreate =
         "CREATE TABLE IF NOT EXISTS \(TableActivityStreamBlocklist) (" +
@@ -694,6 +729,9 @@ open class BrowserTable: Table {
             indexPageMetadataCacheKeyCreate,
             self.queueTableCreate,
             self.topSitesTableCreate,
+            syncCommandsTableCreate,
+            clientsTableCreate,
+            tabsTableCreate,
 
             // Indices.
             indexBufferStructureParentIdx,
@@ -723,16 +761,35 @@ open class BrowserTable: Table {
                self.prepopulateRootFolders(db)
     }
 
-    func updateTable(_ db: SQLiteDBConnection, from: Int) -> Bool {
-        let to = BrowserTable.DefaultVersion
+    func update(_ db: SQLiteDBConnection, from: Int) -> Bool {
+        let to = self.version
         if from == to {
             log.debug("Skipping update from \(from) to \(to).")
             return true
         }
 
         if from == 0 {
-            // This is likely an upgrade from before Bug 1160399.
-            log.debug("Updating browser tables from zero. Assuming drop and recreate.")
+
+            // If we're upgrading from `0`, it is likely that we have not yet switched
+            // from tracking the schema version using `tableList` to `PRAGMA user_version`.
+            // This will write the *previous* version number from `tableList` into
+            // `PRAGMA user_version` if necessary in addition to upgrading the schema of
+            // some of the old tables that were previously managed separately.
+            if self.migrateFromSchemaTableIfNeeded(db) {
+                let version = db.version
+                
+                // If the database is now properly reporting a `user_version`, it may
+                // still need to be upgraded further to get to the current version of
+                // the schema. So, let's simply call this `update()` function a second
+                // time to handle any remaining post-v31 migrations.
+                if version > 0 {
+                    return self.update(db, from: version)
+                }
+            }
+
+            // Otherwise, this is likely an upgrade from before Bug 1160399, so
+            // let's drop and re-create.
+            log.debug("Updating schema \(self.name) from zero. Assuming drop and recreate.")
             return drop(db) && create(db)
         }
 
@@ -742,7 +799,7 @@ open class BrowserTable: Table {
             return drop(db) && create(db)
         }
 
-        log.debug("Updating browser tables from \(from) to \(to).")
+        log.debug("Updating schema \(self.name) from \(from) to \(to).")
 
         if from < 4 && to >= 4 {
             return drop(db) && create(db)
@@ -872,7 +929,7 @@ open class BrowserTable: Table {
                 // Create indices for each structure table.
                 (indexBufferStructureParentIdx, nil),
                 (indexLocalStructureParentIdx, nil),
-                (indexMirrorStructureParentIdx, nil)
+                (indexMirrorStructureParentIdx, nil),
             ]
 
             if !self.run(db, queries: prep) ||
@@ -934,7 +991,6 @@ open class BrowserTable: Table {
 
         if from < 18 && to >= 18 {
             if !self.run(db, queries: [
-
                 // Adds the Activity Stream blocklist table
                 activityStreamBlocklistCreate]) {
                 return false
@@ -943,7 +999,6 @@ open class BrowserTable: Table {
 
         if from < 19 && to >= 19 {
             if !self.run(db, queries: [
-
                 // Adds tables/indicies for metadata content
                 pageMetadataCreate,
                 indexPageMetadataCacheKeyCreate]) {
@@ -1018,7 +1073,7 @@ open class BrowserTable: Table {
                 return false
             }
         }
-        
+
         if from < 27 && to >= 27 {
             if !self.run(db, queries: [
                 "DROP TABLE IF EXISTS \(TablePageMetadata)",
@@ -1060,9 +1115,134 @@ open class BrowserTable: Table {
             }
         }
 
+        // NOTE: These tables should have already existed in prior
+        // versions, but were managed separately via the SchemaTable.
+        // Here we create them if they don't already exist to handle
+        // cases where we are creating a brand new DB.
+        if from < 31 && to >= 31 {
+            if !self.run(db, queries: [
+                syncCommandsTableCreate,
+                clientsTableCreate,
+                tabsTableCreate
+                ]) {
+                return false
+            }
+        }
+
+        return true
+    }
+    
+    fileprivate func migrateFromSchemaTableIfNeeded(_ db: SQLiteDBConnection) -> Bool {
+        log.info("Checking if schema table migration is needed.")
+
+        // If `PRAGMA user_version` is v31 or later, we don't need to do anything here.
+        guard db.version < 31 else {
+            return true
+        }
+
+        // Query for the existence of the `tableList` table to determine if we are
+        // migrating from an older DB version or if this is just a brand new DB.
+        let sqliteMasterCursor = db.executeQueryUnsafe("SELECT COUNT(*) AS number FROM sqlite_master WHERE type = 'table' AND name = 'tableList'", factory: IntFactory, withArgs: [] as Args)
+
+        let tableListTableExists = sqliteMasterCursor[0] == 1
+        sqliteMasterCursor.close()
+
+        // If `tableList` still exists in this DB, then we need to continue to check if
+        // any table-specific migrations are required before removing it. Otherwise, if
+        // `tableList` does not exist, it is likely due to this being a brand new DB and
+        // no additional steps need to be taken at this point.
+        guard tableListTableExists else {
+            return true
+        }
+
+        // If we are unable to migrate the `clients` table from the schema table, we
+        // have failed and cannot continue.
+        guard migrateClientsTableFromSchemaTableIfNeeded(db) != .failure else {
+            return false
+        }
+
+        // Get the *previous* schema version (prior to v31) specified in `tableList`
+        // before dropping it.
+        let previousVersionCursor = db.executeQueryUnsafe("SELECT version FROM tableList WHERE name = 'BROWSER'", factory: IntFactory, withArgs: [] as Args)
+
+        let previousVersion = previousVersionCursor[0] ?? 0
+        previousVersionCursor.close()
+
+        // No other intermediate migrations are needed for the remaining tables and
+        // we have already captured the *previous* schema version specified in
+        // `tableList`, so we can now safely drop it.
+        log.info("Schema table migrations complete; Dropping 'tableList' table.")
+
+        let sql = "DROP TABLE IF EXISTS tableList"
+        if let err = db.executeChange(sql) {
+            log.error("Error dropping tableList table: \(err.localizedDescription)")
+            SentryIntegration.shared.sendWithStacktrace(message: "Error dropping tableList table: \(err.localizedDescription)", tag: "BrowserDB", severity: .error)
+            return false
+        }
+
+        // Lastly, write the *previous* schema version (prior to v31) to the database
+        // using `PRAGMA user_version = ?`.
+        if let err = db.setVersion(previousVersion) {
+            log.error("Error setting database version: \(err.localizedDescription)")
+            SentryIntegration.shared.sendWithStacktrace(message: "Error setting database version: \(err.localizedDescription)", tag: "BrowserDB", severity: .error)
+            return false
+        }
+        
         return true
     }
 
+    // Performs the intermediate migrations for the `clients` table that were previously
+    // being handled by the schema table. This should update older versions of the `clients`
+    // table prior to v31. If the `clients` table is able to be successfully migrated, this
+    // will return `.success`. If no migration is required because either the `clients` table
+    // is already at v31 or it does not exist yet at all, this will return `.skipped`.
+    // Otherwise, if the `clients` table migration is needed and an error was encountered, we
+    // return `.failure`.
+    fileprivate func migrateClientsTableFromSchemaTableIfNeeded(_ db: SQLiteDBConnection) -> SchemaUpgradeResult {
+        // Query for the existence of the `clients` table to determine if we are
+        // migrating from an older DB version or if this is just a brand new DB.
+        let sqliteMasterCursor = db.executeQueryUnsafe("SELECT COUNT(*) AS number FROM sqlite_master WHERE type = 'table' AND name = '\(TableClients)'", factory: IntFactory, withArgs: [] as Args)
+        
+        let clientsTableExists = sqliteMasterCursor[0] == 1
+        sqliteMasterCursor.close()
+        
+        guard clientsTableExists else {
+            return .skipped
+        }
+        
+        // Check if intermediate migrations are necessary for the 'clients' table.
+        let previousVersionCursor = db.executeQueryUnsafe("SELECT version FROM tableList WHERE name = '\(TableClients)'", factory: IntFactory, withArgs: [] as Args)
+        
+        let previousClientsTableVersion = previousVersionCursor[0] ?? 0
+        previousVersionCursor.close()
+        
+        guard previousClientsTableVersion > 0 && previousClientsTableVersion <= 3 else {
+            return .skipped
+        }
+        
+        log.info("Migrating '\(TableClients)' table from version \(previousClientsTableVersion).")
+        
+        if previousClientsTableVersion < 2 {
+            let sql = "ALTER TABLE \(TableClients) ADD COLUMN version TEXT"
+            if let err = db.executeChange(sql) {
+                log.error("Error altering \(TableClients) table: \(err.localizedDescription); SQL was \(sql)")
+                SentryIntegration.shared.sendWithStacktrace(message: "Error altering \(TableClients) table: \(err.localizedDescription); SQL was \(sql)", tag: "BrowserDB", severity: .error)
+                return .failure
+            }
+        }
+        
+        if previousClientsTableVersion < 3 {
+            let sql = "ALTER TABLE \(TableClients) ADD COLUMN fxaDeviceId TEXT"
+            if let err = db.executeChange(sql) {
+                log.error("Error altering \(TableClients) table: \(err.localizedDescription); SQL was \(sql)")
+                SentryIntegration.shared.sendWithStacktrace(message: "Error altering \(TableClients) table: \(err.localizedDescription); SQL was \(sql)", tag: "BrowserDB", severity: .error)
+                return .failure
+            }
+        }
+        
+        return .success
+    }
+    
     fileprivate func fillDomainNamesFromCursor(_ cursor: Cursor<String>, db: SQLiteDBConnection) -> Bool {
         if cursor.count == 0 {
             return true
@@ -1119,17 +1299,6 @@ open class BrowserTable: Table {
         }
 
         return true
-    }
-
-    /**
-     * The Table mechanism expects to be able to check if a 'table' exists. In our (ab)use
-     * of Table, that means making sure that any of our tables and views exist.
-     * We do that by fetching all tables from sqlite_master with matching names, and verifying
-     * that we get back more than one.
-     * Note that we don't check for views -- trust to luck.
-     */
-    func exists(_ db: SQLiteDBConnection) -> Bool {
-        return db.tablesExist(AllTables)
     }
 
     func drop(_ db: SQLiteDBConnection) -> Bool {
