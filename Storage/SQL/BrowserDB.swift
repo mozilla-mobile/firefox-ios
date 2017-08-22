@@ -101,7 +101,7 @@ open class BrowserDB {
     // Calls to this function will be serialized to prevent race conditions when
     // creating or updating the schema.
     func prepareSchema(_ schema: Schema) -> DatabaseOpResult {
-        SentryIntegration.shared.setAttributes(["dbSchema.\(schema.name).version": schema.version])
+        SentryIntegration.shared.addAttributes(["dbSchema.\(schema.name).version": schema.version])
 
         // Ensure the database has not already been closed before attempting to
         // create or update the schema.
@@ -128,7 +128,7 @@ open class BrowserDB {
 
         // Set an attribute for Sentry to include with any future error/crash
         // logs to indicate what schema version we're coming from and going to.
-        SentryIntegration.shared.setAttributes(["dbUpgrade.\(schema.name).from": currentVersion, "dbUpgrade.\(schema.name).to": schema.version])
+        SentryIntegration.shared.addAttributes(["dbUpgrade.\(schema.name).from": currentVersion, "dbUpgrade.\(schema.name).to": schema.version])
 
         // This should not ever happen since the schema version should always be
         // increasing whenever a structural change is made in an app update.
@@ -172,7 +172,7 @@ open class BrowserDB {
             }
 
             log.info("Attempting to update schema from version \(currentVersion) to \(schema.version).")
-            SentryIntegration.shared.sendWithStacktrace(message: "Attempting to update schema from version \(currentVersion) to \(schema.version).", tag: "BrowserDB", severity: .info)
+            SentryIntegration.shared.send(message: "Attempting to update schema from version \(currentVersion) to \(schema.version).", tag: "BrowserDB", severity: .info)
 
             // If we can't create a brand new schema from scratch, we must
             // call `updateSchema()` to go through the update process.

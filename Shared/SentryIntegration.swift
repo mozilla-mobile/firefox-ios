@@ -110,7 +110,7 @@ public class SentryIntegration {
         }
     }
 
-    public func setAttributes(_ attributes: [String : Any]) {
+    public func addAttributes(_ attributes: [String : Any]) {
         self.attributes.merge(with: attributes)
     }
 }
