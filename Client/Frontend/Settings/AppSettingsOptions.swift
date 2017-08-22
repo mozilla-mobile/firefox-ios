@@ -252,28 +252,28 @@ class AccountStatusSetting: WithAccountSetting {
 
     override var status: NSAttributedString? {
         if let account = profile.getAccount() {
+            var string:String
+            
             switch account.actionNeeded {
             case .none:
                 return nil
             case .needsVerification:
-                return NSAttributedString(string: NSLocalizedString("Verify your email address.", comment: "Text message in the settings table view"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
+                string = NSLocalizedString("Verify your email address.", comment: "Text message in the settings table view")
+                break
             case .needsPassword:
-                let string = NSLocalizedString("Enter your password to connect.", comment: "Text message in the settings table view")
-                let range = NSRange(location: 0, length: string.characters.count)
-                let orange = UIColor(red: 255.0 / 255, green: 149.0 / 255, blue: 0.0 / 255, alpha: 1)
-                let attrs = [NSForegroundColorAttributeName: orange]
-                let res = NSMutableAttributedString(string: string)
-                res.setAttributes(attrs, range: range)
-                return res
+                string = NSLocalizedString("Enter your password to connect.", comment: "Text message in the settings table view")
+                break
             case .needsUpgrade:
-                let string = NSLocalizedString("Upgrade Firefox to connect.", comment: "Text message in the settings table view")
-                let range = NSRange(location: 0, length: string.characters.count)
-                let orange = UIColor(red: 255.0 / 255, green: 149.0 / 255, blue: 0.0 / 255, alpha: 1)
-                let attrs = [NSForegroundColorAttributeName: orange]
-                let res = NSMutableAttributedString(string: string)
-                res.setAttributes(attrs, range: range)
-                return res
+                string = NSLocalizedString("Upgrade Firefox to connect.", comment: "Text message in the settings table view")
+                break
             }
+            
+            let orange = UIColor(red: 255.0 / 255, green: 149.0 / 255, blue: 0.0 / 255, alpha: 1)
+            let range = NSRange(location: 0, length: string.characters.count)
+            let attrs = [NSForegroundColorAttributeName: orange]
+            let res = NSMutableAttributedString(string: string)
+            res.setAttributes(attrs, range: range)
+            return res
         }
         return nil
     }
