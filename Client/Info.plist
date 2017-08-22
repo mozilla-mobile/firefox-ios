@@ -16,6 +16,8 @@
 	<string>$(LEANPLUM_KEY)</string>
 	<key>AppIdentifierPrefix</key>
 	<string>$(APP_IDENTIFIER_PREFIX)</string>
+	<key>PocketEnvironmentAPIKey</key>
+	<string>$(POCKET_API_KEY)</string>
 	<key>MozWhatsNewTopic</key>
 	<string></string>
 	<key>CFBundleDevelopmentRegion</key>
