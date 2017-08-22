@@ -574,21 +574,21 @@ class SettingsTableViewController: UITableViewController {
         return footerView
     }
 
+//    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+//        return 150
+//    }
+
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         let sectionSetting = settings[section]
         guard let text = sectionSetting.footerTitle?.string else {
             return 0
         }
 
-        // The footer view is typically 1-2 lines of text, and is the standard row height (44 pixels).
-        // If the text is longer than 2 lines, we need to calculate a cell height that fits the text.
-
         let attr = NSAttributedString(string: text)
-        // Use 5% less width to avoid text being too tight to bounds and possibly cut off
-        let maxWidth = 0.95 * (view.frame.width - SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding * 2)
+        let maxWidth = view.frame.width - SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding * 2
         let maxHeight = CGFloat(100) // An arbitrary upper bound, FYI 4 lines of text is 56 points high.
         let rect = attr.boundingRect(with: CGSize(width: maxWidth, height: maxHeight), options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil)
-
+        print(ceil(rect.size.height))
         let textHeight = ceil(rect.size.height)
         if textHeight < 30 {
             // Two lines of text is ~28 points, and most footers in the settings are 1-2 lines of text;
