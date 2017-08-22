@@ -5,6 +5,7 @@
 @testable import Account
 import Foundation
 import FxA
+import Shared
 import UIKit
 
 import XCTest
@@ -65,7 +66,8 @@ class TokenServerClientTests: LiveAccountTest {
                     XCTAssertNotNil(token.hashedFxAUID)
                     XCTAssertTrue(token.uid >= 0)
                     XCTAssertTrue(token.api_endpoint.hasSuffix(String(token.uid)))
-                    XCTAssertTrue(token.remoteTimestamp >= 1429121686000) // Not a special timestamp; just a sanity check.
+                    let expectedRemoteTimestamp: Timestamp = 1429121686000
+                    XCTAssertTrue(token.remoteTimestamp >= expectedRemoteTimestamp) // Not a special timestamp; just a sanity check.
                 } else {
                     XCTAssertEqual(result.failureValue!.description, "")
                 }
@@ -93,7 +95,8 @@ class TokenServerClientTests: LiveAccountTest {
                             XCTAssertEqual(code, Int32(401)) // Bad auth.
                             XCTAssertEqual(status!, "error")
                             XCTAssertFalse(remoteTimestamp == nil)
-                            XCTAssertTrue(remoteTimestamp! >= 1429121686000) // Not a special timestamp; just a sanity check.
+                            let expectedRemoteTimestamp: Timestamp = 1429121686000
+                            XCTAssertTrue(remoteTimestamp! >= expectedRemoteTimestamp) // Not a special timestamp; just a sanity check.
                         case let .local(error):
                             XCTAssertNil(error)
                         }
