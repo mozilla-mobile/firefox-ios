@@ -132,23 +132,25 @@ class LeanplumIntegration {
 
         Leanplum.start(userAttributes: userAttributesDict)
 
-        track(eventName: LeanplumEventName.openedApp)
+        Leanplum.onStartResponse({ _ in
+            self.track(eventName: LeanplumEventName.openedApp)
 
-        // Only drops Leanplum event when a user has installed Focus (from a fresh state or a re-install)
-        if profile?.prefs.boolForKey(PrefsKeys.HasFocusInstalled) == canInstallFocus() {
-            profile?.prefs.setBool(!canInstallFocus(), forKey: PrefsKeys.HasFocusInstalled)
-            if !canInstallFocus() {
-                track(eventName: LeanplumEventName.downloadedFocus)
+            // Only drops Leanplum event when a user has installed Focus (from a fresh state or a re-install)
+            if self.profile?.prefs.boolForKey(PrefsKeys.HasFocusInstalled) == self.canInstallFocus() {
+                self.profile?.prefs.setBool(!self.canInstallFocus(), forKey: PrefsKeys.HasFocusInstalled)
+                if !self.canInstallFocus() {
+                    self.track(eventName: LeanplumEventName.downloadedFocus)
+                }
             }
-        }
 
-        // Only drops Leanplum event when a user has installed Pocket (from a fresh state or a re-install)
-        if profile?.prefs.boolForKey(PrefsKeys.HasPocketInstalled) == canInstallPocket() {
-            profile?.prefs.setBool(!canInstallPocket(), forKey: PrefsKeys.HasPocketInstalled)
-            if !canInstallPocket() {
-                track(eventName: LeanplumEventName.downloadedPocket)
+            // Only drops Leanplum event when a user has installed Pocket (from a fresh state or a re-install)
+            if self.profile?.prefs.boolForKey(PrefsKeys.HasPocketInstalled) == self.canInstallPocket() {
+                self.profile?.prefs.setBool(!self.canInstallPocket(), forKey: PrefsKeys.HasPocketInstalled)
+                if !self.canInstallPocket() {
+                    self.track(eventName: LeanplumEventName.downloadedPocket)
+                }
             }
-        }
+        })
     }
 
     // Events
