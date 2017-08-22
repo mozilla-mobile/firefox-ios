@@ -77,6 +77,17 @@ open class FileAccessor {
 
         try FileManager.default.moveItem(atPath: fromPath, toPath: toPath.path)
     }
+    
+    open func copy(_ fromRelativePath: String, toRelativePath: String) throws {
+        let rootPathURL = URL(fileURLWithPath: rootPath)
+        let fromPath = rootPathURL.appendingPathComponent(fromRelativePath).path
+        let toPath = rootPathURL.appendingPathComponent(toRelativePath)
+        let toDir = toPath.deletingLastPathComponent()
+        let toDirPath = toDir.path
+        try createDir(toDirPath)
+        
+        try FileManager.default.copyItem(atPath: fromPath, toPath: toPath.path)
+    }
 
     open func copyMatching(fromRelativeDirectory relativePath: String, toAbsoluteDirectory absolutePath: String, matching: (String) -> Bool) throws {
         let fileManager = FileManager.default

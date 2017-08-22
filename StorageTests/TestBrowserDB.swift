@@ -80,7 +80,7 @@ class TestBrowserDB: XCTestCase {
         // It'll still fail, but it moved our old DB.
         // Our current observation is that closing the DB deletes the .shm file and also
         // checkpoints the WAL.
-        XCTAssertFalse(db.prepareSchema(MockFailingSchema()) == .success)
+        XCTAssertFalse(db.prepareSchema(MockFailingSchema()) == .failure)
         db.run("CREATE TABLE foo (bar TEXT)").succeeded() // Just so we have writes in the WAL.
 
         XCTAssertTrue(files.exists("foo.db"))

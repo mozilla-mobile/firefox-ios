@@ -203,65 +203,60 @@ open class BrowserDB {
             SentryIntegration.shared.sendWithStacktrace(message: "Unable to get a transaction: \(error.localizedDescription)", tag: "BrowserDB", severity: .error)
 
             // Check if the error we got is recoverable (e.g. SQLITE_BUSY, SQLITE_LOCK, SQLITE_FULL).
-            // If so, we *shouldn't* move the database file to a backup location and re-create it.
-            // Instead, just crash so that we don't lose any data.
+            // If so, we will try moving the database file to a backup location and copy it back to
+            // its original location. This should effectively "unlock" the database file.
             if let _ = SQLiteRecoverableError.init(rawValue: error.code) {
-                fatalError(error.localizedDescription)
-            }
+                success = attemptDatabaseRecovery(schema, recreateSchema: false)
 
-            success = false
+                // If we succeeded in "unlocking" the database file, we'll re-invoke this function
+                // to continue with updating the schema.
+                if success {
+                    return self.prepareSchema(schema)
+                }
+            } else {
+                success = false
+            }
         }
 
+        // If we get to this point, we've exhausted all of our options in updating the schema. We
+        // will now move the database file to a backup location and recreate the schema in a new
+        // database file. Unfortunately, this will result in data loss.
         guard success else {
-            return moveDatabaseToBackupLocation(schema)
+            log.warning("Couldn't create or update schema \(schema.name). Attempting to move \(self.filename) to another location.")
+            SentryIntegration.shared.sendWithStacktrace(message: "Couldn't create or update schema \(schema.name). Attempting to move \(self.filename) to another location.", tag: "BrowserDB", severity: .warning)
+            return attemptDatabaseRecovery(schema, recreateSchema: true) ? .success : .failure
         }
 
         return .success
     }
 
-    func moveDatabaseToBackupLocation(_ schema: Schema) -> DatabaseOpResult {
+    //
+    func attemptDatabaseRecovery(_ schema: Schema, recreateSchema: Bool) -> Bool {
         // Make sure that we don't still have open the files that we want to move!
         // Note that we use sqlite3_close_v2, which might actually _not_ close the
         // database file yet. For this reason we move the -shm and -wal files, too.
         db.forceClose()
-
-        // Attempt to make a backup as long as the DB file still exists
+        
+        // Ensure the database file exists before trying to back it up.
         if self.files.exists(self.filename) {
-            log.warning("Couldn't create or update schema \(schema.name). Attempting to move \(self.filename) to another location.")
-            SentryIntegration.shared.sendWithStacktrace(message: "Couldn't create or update schema \(schema.name). Attempting to move \(self.filename) to another location.", tag: "BrowserDB", severity: .warning)
 
-            // Note that a backup file might already exist! We append a counter to avoid this.
-            var bakCounter = 0
-            var bak: String
-            repeat {
-                bakCounter += 1
-                bak = "\(self.filename).bak.\(bakCounter)"
-            } while self.files.exists(bak)
-
-            do {
-                try self.files.move(self.filename, toRelativePath: bak)
-
-                let shm = self.filename + "-shm"
-                let wal = self.filename + "-wal"
-                log.debug("Moving \(shm) and \(wal)…")
-                if self.files.exists(shm) {
-                    log.debug("\(shm) exists.")
-                    try self.files.move(shm, toRelativePath: bak + "-shm")
-                }
-                if self.files.exists(wal) {
-                    log.debug("\(wal) exists.")
-                    try self.files.move(wal, toRelativePath: bak + "-wal")
-                }
-
-                log.debug("Finished moving \(self.filename) successfully.")
-            } catch let error as NSError {
-                log.error("Unable to move \(self.filename) to another location. \(error)")
-                SentryIntegration.shared.sendWithStacktrace(message: "Unable to move \(self.filename) to another location. \(error)", tag: "BrowserDB", severity: .error)
+            // Try to backup the database before proceeding with recovery. If we cannot
+            // backup the database, it means that either the database file has already
+            // been deleted somehow (shouldn't happen) or perhaps the disk is full.
+            guard let backupFilename = moveDatabaseToBackupLocation() else {
+                return false
             }
-        } else {
-            // No backup was attempted since the DB file did not exist
-            log.error("The DB \(self.filename) has been deleted while previously in use.")
-            SentryIntegration.shared.sendWithStacktrace(message: "The DB \(self.filename) has been deleted while previously in use.", tag: "BrowserDB", severity: .info)
+
+            // Try restoring the backup file to its original location.
+            if !recreateSchema {
+                // If this succeeds, the app should be able to continue functioning as
+                // normal without any data loss. If not, we'll end up re-invoking this
+                // function with `recreateSchema` set to `true` which will start over
+                // with a brand new database.
+                if !restoreDatabase(backupFilename) {
+                    return false
+                }
+            }
         }
 
         // Re-open the connection to the new database file.
@@ -274,19 +269,90 @@ open class BrowserDB {
             NotificationCenter.default.post(name: NotificationDatabaseWasRecreated, object: self.filename)
         }
 
-        var success = true
+        // Attempt to re-create the schema in a new database file. If we get here,
+        // any previous database should already be saved to a backup location, but
+        // the app will begin using a brand new database file resulting in data loss.
+        // This should only run if we've exhausted all other options.
+        if recreateSchema {
+            if let error = self.db.transaction({ connection -> Bool in
+                return self.createSchema(connection, schema: schema)
+            }) {
+                log.error("Unable to get a transaction while re-creating the database: \(error.localizedDescription)")
+                SentryIntegration.shared.sendWithStacktrace(message: "Unable to get a transaction while re-creating the database: \(error.localizedDescription)", tag: "BrowserDB", severity: .error)
+                return false
+            }
+        }
+        
+        return true
+    }
 
-        // Attempt to re-create the schema in the new database file.
-        if let error = self.db.transaction({ connection -> Bool in
-            success = self.createSchema(connection, schema: schema)
-            return success
-        }) {
-            log.error("Unable to get a transaction while re-creating the database: \(error.localizedDescription)")
-            SentryIntegration.shared.sendWithStacktrace(message: "Unable to get a transaction while re-creating the database: \(error.localizedDescription)", tag: "BrowserDB", severity: .error)
-            return .failure
+    // Moves the database file to an auto-incrementing backup location. If the operation
+    // succeeds, it returns the backup database filename.
+    func moveDatabaseToBackupLocation() -> String? {
+        // Ensure the database file exists that we're trying to backup.
+        guard self.files.exists(self.filename) else {
+            log.error("The DB \(self.filename) has been deleted while previously in use.")
+            SentryIntegration.shared.sendWithStacktrace(message: "The DB \(self.filename) has been deleted while previously in use.", tag: "BrowserDB", severity: .info)
+            return nil
         }
 
-        return success ? .success : .failure
+        // Increment a file counter to find a backup filename that doesn't already exist.
+        var counter = 0
+        var backupFilename: String
+        repeat {
+            counter += 1
+            backupFilename = "\(self.filename).bak.\(counter)"
+        } while self.files.exists(backupFilename)
+
+        do {
+            try self.files.move(self.filename, toRelativePath: backupFilename)
+
+            // Only try to move the "-shm" file if it exists.
+            if self.files.exists("\(self.filename)-shm") {
+                log.debug("Backing up \(self.filename)-shm to \(backupFilename)-shm")
+                try self.files.move("\(self.filename)-shm", toRelativePath: "\(backupFilename)-shm")
+            }
+
+            // Only try to move the "-wal" file if it exists.
+            if self.files.exists("\(self.filename)-wal") {
+                log.debug("Backing up \(self.filename)-wal to \(backupFilename)-wal")
+                try self.files.move("\(self.filename)-wal", toRelativePath: "\(backupFilename)-wal")
+            }
+        } catch let error as NSError {
+            log.error("Unable to backup \(self.filename) to \(backupFilename). \(error)")
+            SentryIntegration.shared.sendWithStacktrace(message: "Unable to backup \(self.filename) to \(backupFilename). \(error)", tag: "BrowserDB", severity: .error)
+            return nil
+        }
+
+        log.debug("Finished moving \(self.filename) successfully.")
+        return backupFilename
+    }
+
+    // Restores the specified backup database by copying it back to the original
+    // database file location. Returns `true` if the operation was successful.
+    func restoreDatabase(_ backupFilename: String) -> Bool {
+        log.debug("Attempting to restore backup database \(backupFilename) to \(self.filename).")
+
+        do {
+            try self.files.copy(backupFilename, toRelativePath: self.filename)
+
+            // Only try to copy the "-shm" file if it exists.
+            if self.files.exists("\(backupFilename)-shm") {
+                try self.files.copy("\(backupFilename)-shm", toRelativePath: "\(self.filename)-shm")
+            }
+
+            // Only try to copy the "-wal" file if it exists.
+            if self.files.exists("\(backupFilename)-wal") {
+                try self.files.copy("\(backupFilename)-wal", toRelativePath: "\(self.filename)-wal")
+            }
+        } catch let error as NSError {
+            log.error("Unable to restore \(backupFilename) to \(self.filename). \(error.localizedDescription)")
+            SentryIntegration.shared.sendWithStacktrace(message: "Unable to restore \(backupFilename) to \(self.filename). \(error.localizedDescription)", tag: "BrowserDB", severity: .error)
+            return false
+        }
+
+        log.debug("Finished restoring backup database \(backupFilename) to \(self.filename) successfully.")
+        return true
     }
 
     func withConnection<T>(flags: SwiftData.Flags, err: inout NSError?, callback: @escaping (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> T) -> T {
