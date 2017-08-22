@@ -235,8 +235,11 @@ class AccountStatusSetting: WithAccountSetting {
             case .needsPassword:
                  // We link to the re-enter password page.
                 return .disclosureIndicator
-            case .none, .needsUpgrade:
-                // In future, we'll want to link to /settings and an upgrade page, respectively.
+            case .none:
+                 // We link to FxA web /settings.
+                return .disclosureIndicator
+            case .needsUpgrade:
+                 // In future, we'll want to link to an upgrade page.
                 return .none
             }
         }
@@ -284,16 +287,23 @@ class AccountStatusSetting: WithAccountSetting {
 
         if let account = profile.getAccount() {
             switch account.actionNeeded {
-            case .needsVerification:
+            case .none, .needsVerification:
                 var cs = URLComponents(url: account.configuration.settingsURL, resolvingAgainstBaseURL: false)
                 cs?.queryItems?.append(URLQueryItem(name: "email", value: account.email))
-                viewController.url = try! cs?.asURL()
+                
+                if let url = try? cs?.asURL() {
+                    viewController.url = url
+                }
+                
             case .needsPassword:
                 var cs = URLComponents(url: account.configuration.forceAuthURL, resolvingAgainstBaseURL: false)
                 cs?.queryItems?.append(URLQueryItem(name: "email", value: account.email))
-                viewController.url = try! cs?.asURL()
-            case .none, .needsUpgrade:
-                // In future, we'll want to link to /settings and an upgrade page, respectively.
+                
+                if let url = try? cs?.asURL() {
+                    viewController.url = url
+                }
+            case .needsUpgrade:
+                // In future, we'll want to link to an upgrade page.
                 return
             }
         }
