@@ -370,7 +370,7 @@ extension SQLiteBookmarks {
         log.warning("CALLING clearBookmarks -- this should only be used from tests.")
         return self.db.run([
             ("DELETE FROM \(TableBookmarksLocal) WHERE parentid IS NOT ?", [BookmarkRoots.RootGUID]),
-            self.favicons.getCleanupCommands()
+            self.favicons.getCleanupFaviconsQuery()
         ])
     }
 
