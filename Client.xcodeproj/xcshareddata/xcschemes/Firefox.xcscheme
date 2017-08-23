@@ -63,6 +63,14 @@
                BlueprintName = "ClientTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "MenuTests/testHideImagesMenuConfiguration()">
+               </Test>
+               <Test
+                  Identifier = "MenuTests/testShowImagesMenuConfiguration()">
+               </Test>
+            </SkippedTests>
          </TestableReference>
          <TestableReference
             skipped = "NO">
