@@ -180,4 +180,14 @@ extension AdjustIntegration: AdjustDelegate {
     static func setEnabled(_ enabled: Bool) {
         Adjust.setEnabled(enabled)
     }
+    
+    /// Store the deeplink url from Adjust SDK. Per Adjust documentation, any interstitial view launched could interfere
+    /// with launching the deeplink. We let the interstial view decide what to do with deeplink.
+    /// Ref: https://github.com/adjust/ios_sdk#deferred-deep-linking-scenario
+    
+    func adjustDeeplinkResponse(_ deeplink: URL!) -> Bool {
+        profile.prefs.setString("\(deeplink)", forKey: "AdjustDeeplinkKey")
+        return true
+    }
+
 }
