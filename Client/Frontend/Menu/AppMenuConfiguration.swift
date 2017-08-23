@@ -92,8 +92,6 @@ struct AppMenuConfiguration: MenuConfiguration {
 
     fileprivate func numberOfMenuItemsPerRowForAppState(_ appState: AppState) -> Int {
         switch appState.ui {
-        case .tabTray:
-            return 4
         default:
             return 3
         }
@@ -185,11 +183,6 @@ struct AppMenuConfiguration: MenuConfiguration {
                 menuItems.append(AppMenuConfiguration.ScanQRCodeMenuItem)
             }
             menuItems.append(AppMenuConfiguration.SettingsMenuItem)
-        case .tabTray:
-            menuItems.append(AppMenuConfiguration.NewTabMenuItem)
-            menuItems.append(AppMenuConfiguration.NewPrivateTabMenuItem)
-            menuItems.append(AppMenuConfiguration.CloseAllTabsMenuItem)
-            menuItems.append(AppMenuConfiguration.SettingsMenuItem)
         }
         return menuItems
     }
@@ -198,7 +191,7 @@ struct AppMenuConfiguration: MenuConfiguration {
     fileprivate func menuToolbarItemsForAppState(_ appState: AppState) -> [MenuToolbarItem]? {
         let menuToolbarItems: [MenuToolbarItem]?
         switch appState.ui {
-        case .tab, .tabTray:
+        case .tab:
             menuToolbarItems = [AppMenuConfiguration.TopSitesMenuToolbarItem,
                                 AppMenuConfiguration.BookmarksMenuToolbarItem,
                                 AppMenuConfiguration.HistoryMenuToolbarItem,

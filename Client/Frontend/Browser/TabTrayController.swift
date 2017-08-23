@@ -224,10 +224,6 @@ protocol TabTrayDelegate: class {
     func tabTrayRequestsPresentationOf(_ viewController: UIViewController)
 }
 
-struct TabTrayState {
-    var isPrivate: Bool = false
-}
-
 class TabTrayController: UIViewController {
     let tabManager: TabManager
     let profile: Profile
@@ -240,12 +236,9 @@ class TabTrayController: UIViewController {
         let toolbar = TrayToolbar()
         toolbar.addTabButton.addTarget(self, action: #selector(TabTrayController.SELdidClickAddTab), for: .touchUpInside)
         toolbar.maskButton.addTarget(self, action: #selector(TabTrayController.SELdidTogglePrivateMode), for: .touchUpInside)
+        toolbar.menuButton.addTarget(self, action: #selector(TabTrayController.didTapMenu), for: .touchUpInside)
         return toolbar
     }()
-
-    var tabTrayState: TabTrayState {
-        return TabTrayState(isPrivate: self.privateMode)
-    }
 
     var leftToolbarButtons: [UIButton] {
         return [toolbar.addTabButton]
@@ -686,6 +679,15 @@ extension TabTrayController: SettingsDelegate {
     func settingsOpenURLInNewTab(_ url: URL) {
         let request = URLRequest(url: url)
         openNewTab(request)
+    }
+}
+
+extension TabTrayController: PhotonActionSheetProtocol {
+    func didTapMenu() {
+        let closeAllTabs = PhotonActionSheetItem(title: "Close All Tabs", iconString: "action_remove") { _ in
+            self.closeTabsForCurrentTray()
+        }
+        self.presentSheetWith(actions: [[closeAllTabs]], on: self, from: self.view)
     }
 }
 
