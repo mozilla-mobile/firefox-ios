@@ -57,7 +57,7 @@ extension MenuPresentationAnimator {
         let sourceView: UIView?
         if let toolbar = bvc.toolbar {
             leftViews = [toolbar.backButton, toolbar.forwardButton]
-            rightViews = [toolbar.stopReloadButton, toolbar.shareButton, toolbar.homePageButton]
+            rightViews = [toolbar.stopReloadButton, toolbar.shareButton]
             sourceView = toolbar.menuButton
         } else {
             sourceView = nil

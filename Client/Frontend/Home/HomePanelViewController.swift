@@ -43,7 +43,6 @@ protocol HomePanelDelegate: class {
 }
 
 struct HomePanelState {
-    var isPrivate: Bool = false
     var selectedIndex: Int = 0
 }
 
@@ -71,18 +70,8 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     fileprivate var controllerContainerView: UIView!
     fileprivate var buttons: [UIButton] = []
 
-    var isPrivateMode: Bool = false {
-        didSet {
-            if oldValue != isPrivateMode {
-                self.buttonContainerView.backgroundColor = isPrivateMode ? HomePanelViewControllerUX.BackgroundColorPrivateMode : HomePanelViewControllerUX.BackgroundColorNormalMode
-                self.updateButtonTints()
-                self.updateAppState()
-            }
-        }
-    }
-
     var homePanelState: HomePanelState {
-        return HomePanelState(isPrivate: isPrivateMode, selectedIndex: selectedPanel?.rawValue ?? 0)
+        return HomePanelState(selectedIndex: selectedPanel?.rawValue ?? 0)
     }
 
     override func viewDidLoad() {
@@ -265,9 +254,9 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     func updateButtonTints() {
         for (index, button) in self.buttons.enumerated() {
             if index == self.selectedPanel?.rawValue {
-                button.tintColor = isPrivateMode ? UIConstants.PrivateModePurple : UIConstants.HighlightBlue
+                button.tintColor = UIConstants.HighlightBlue
             } else {
-                button.tintColor = isPrivateMode ? HomePanelViewControllerUX.ToolbarButtonDeselectedColorPrivateMode : HomePanelViewControllerUX.ToolbarButtonDeselectedColorNormalMode
+                button.tintColor = HomePanelViewControllerUX.ToolbarButtonDeselectedColorNormalMode
             }
         }
     }

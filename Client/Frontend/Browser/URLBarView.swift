@@ -14,19 +14,12 @@ struct URLBarViewUX {
     static let TextFieldBorderColor = UIColor(rgb: 0xBBBBBB)
     static let TextFieldActiveBorderColor = UIColor(rgb: 0x4A90E2)
     static let LocationLeftPadding = 5
-    static let LocationHeight = 28
+    static let LocationHeight = 42
     static let LocationContentOffset: CGFloat = 8
-    static let TextFieldCornerRadius: CGFloat = 3
-    static let TextFieldBorderWidth: CGFloat = 1
+    static let TextFieldCornerRadius: CGFloat = 8
+    static let TextFieldBorderWidth: CGFloat = 0
     // offset from edge of tabs button
-    static let URLBarCurveOffset: CGFloat = 14
-    static let URLBarCurveOffsetLeft: CGFloat = -10
-    // A larger offset is needed when viewing URL bar in overlay mode to get the corners right
-    static let URLBarCurveOverlayOffset: CGFloat = 8
-    static let URLBarMinimumOffsetToAnimate: CGFloat = 30
-    // buffer so we dont see edges when animation overshoots with spring
-    static let URLBarCurveBounceBuffer: CGFloat = 8
-    static let ProgressTintColor = UIColor(red:1, green:0.32, blue:0, alpha:1)
+    static let ProgressTintColor = UIColor(rgb: 0x00dcfc)
 
     static let TabsButtonRotationOffset: CGFloat = 1.5
     static let TabsButtonHeight: CGFloat = 18.0
@@ -35,19 +28,25 @@ struct URLBarViewUX {
     static let Themes: [String: Theme] = {
         var themes = [String: Theme]()
         var theme = Theme()
-        theme.borderColor = UIConstants.PrivateModeLocationBorderColor
+        theme.borderColor = UIColor(rgb: 0xf9f9fa)
+        theme.backgroundColor = UIColor(rgb: 0x4A4A4F)
         theme.activeBorderColor = UIConstants.PrivateModePurple
-        theme.tintColor = UIConstants.PrivateModePurple
-        theme.textColor = UIColor.white
+        theme.tintColor = UIColor(rgb: 0xf9f9fa)
+        theme.textColor = UIColor(rgb: 0xf9f9fa)
         theme.buttonTintColor = UIConstants.PrivateModeActionButtonTintColor
+        theme.disabledButtonColor = UIColor.gray
+        theme.highlightButtonColor = UIColor(rgb: 0xAC39FF)
         themes[Theme.PrivateMode] = theme
 
         theme = Theme()
         theme.borderColor = TextFieldBorderColor
         theme.activeBorderColor = TextFieldActiveBorderColor
+        theme.disabledButtonColor = UIColor.lightGray
+        theme.highlightButtonColor = UIColor(rgb: 0x00A2FE)
         theme.tintColor = ProgressTintColor
-        theme.textColor = UIColor.black
-        theme.buttonTintColor = UIColor.darkGray
+        theme.textColor = UIColor(rgb: 0x272727)
+        theme.backgroundColor = UIConstants.AppBackgroundColor
+        theme.buttonTintColor = UIColor(rgb: 0x272727)
         themes[Theme.NormalMode] = theme
 
         return themes
@@ -108,11 +107,7 @@ class URLBarView: UIView {
     fileprivate var currentTheme: String = Theme.NormalMode
 
     var toolbarIsShowing = false
-    var topTabsIsShowing = false {
-        didSet {
-            curveShape.isHidden = topTabsIsShowing
-        }
-    }
+    var topTabsIsShowing = false
 
     fileprivate var locationTextField: ToolbarTextField?
 
@@ -140,9 +135,12 @@ class URLBarView: UIView {
         locationContainer.layer.borderColor = self.locationBorderColor.cgColor
         locationContainer.layer.cornerRadius = URLBarViewUX.TextFieldCornerRadius
         locationContainer.layer.borderWidth = URLBarViewUX.TextFieldBorderWidth
+        locationContainer.backgroundColor = UIConstants.locationBarBG
 
         return locationContainer
     }()
+    
+    let line = UIView()
 
     fileprivate lazy var tabsButton: TabsButton = {
         let tabsButton = TabsButton.tabTrayButton()
@@ -155,13 +153,14 @@ class URLBarView: UIView {
         let progressBar = UIProgressView()
         progressBar.progressTintColor = URLBarViewUX.ProgressTintColor
         progressBar.alpha = 0
+        progressBar.trackTintColor = .clear
         progressBar.isHidden = true
         return progressBar
     }()
 
     fileprivate lazy var cancelButton: UIButton = {
         let cancelButton = InsetButton()
-        cancelButton.setTitleColor(UIColor.black, for: UIControlState())
+        cancelButton.setTitleColor(UIColor(rgb: 0x272727), for: UIControlState())
         let cancelTitle = NSLocalizedString("Cancel", comment: "Label for Cancel button")
         cancelButton.setTitle(cancelTitle, for: UIControlState())
         cancelButton.titleLabel?.font = UIConstants.DefaultChromeFont
@@ -173,7 +172,6 @@ class URLBarView: UIView {
         return cancelButton
     }()
 
-    fileprivate lazy var curveShape: CurveView = { return CurveView() }()
 
     fileprivate lazy var scrollToTopButton: UIButton = {
         let button = UIButton()
@@ -181,28 +179,22 @@ class URLBarView: UIView {
         return button
     }()
 
-    var shareButton: UIButton = UIButton()
-
-    var menuButton: UIButton = UIButton()
-
-    var bookmarkButton: UIButton = UIButton()
-
-    var forwardButton: UIButton = UIButton()
+    var shareButton: UIButton = ToolbarButton()
+    var menuButton: UIButton = ToolbarButton()
+    var bookmarkButton: UIButton = ToolbarButton()
+    var forwardButton: UIButton = ToolbarButton()
+    var stopReloadButton: UIButton = ToolbarButton()
 
     var backButton: UIButton = {
-        let backButton = UIButton()
+        let backButton = ToolbarButton()
         backButton.accessibilityIdentifier = "URLBarView.backButton"
         return backButton
     }()
 
-    var stopReloadButton: UIButton = UIButton()
-
-    var homePageButton: UIButton = UIButton()
-
-    lazy var actionButtons: [UIButton] = [self.shareButton, self.menuButton, self.forwardButton, self.backButton, self.stopReloadButton, self.homePageButton]
+    lazy var actionButtons: [UIButton] = [self.shareButton, self.menuButton, self.forwardButton, self.backButton, self.stopReloadButton]
 
     fileprivate var rightBarConstraint: Constraint?
-    fileprivate let defaultRightOffset: CGFloat = URLBarViewUX.URLBarCurveOffset - URLBarViewUX.URLBarCurveBounceBuffer
+    fileprivate let defaultRightOffset: CGFloat = 0
 
     var currentURL: URL? {
         get {
@@ -225,24 +217,11 @@ class URLBarView: UIView {
     }
 
     fileprivate func commonInit() {
-        backgroundColor = URLBarViewUX.backgroundColorWithAlpha(0)
-        addSubview(curveShape)
-        addSubview(scrollToTopButton)
-
-        addSubview(progressBar)
-        addSubview(tabsButton)
-        addSubview(cancelButton)
-
-        addSubview(shareButton)
-        addSubview(menuButton)
-        addSubview(homePageButton)
-        addSubview(forwardButton)
-        addSubview(backButton)
-        addSubview(stopReloadButton)
-
         locationContainer.addSubview(locationView)
-        addSubview(locationContainer)
-
+    
+        [scrollToTopButton, line, progressBar, tabsButton, cancelButton, shareButton].forEach { addSubview($0) }
+        [menuButton, forwardButton, backButton, stopReloadButton, locationContainer].forEach { addSubview($0) }
+        
         helper = TabToolbarHelper(toolbar: self)
         setupConstraints()
 
@@ -251,13 +230,19 @@ class URLBarView: UIView {
     }
 
     fileprivate func setupConstraints() {
+        
+        line.snp.makeConstraints { make in
+            make.bottom.leading.trailing.equalTo(self)
+            make.height.equalTo(1)
+        }
+        
         scrollToTopButton.snp.makeConstraints { make in
             make.top.equalTo(self)
             make.left.right.equalTo(self.locationContainer)
         }
 
         progressBar.snp.makeConstraints { make in
-            make.top.equalTo(self.snp.bottom)
+            make.top.equalTo(self.snp.bottom).offset(-1.5)
             make.left.right.equalTo(self)
         }
 
@@ -273,47 +258,36 @@ class URLBarView: UIView {
         tabsButton.snp.makeConstraints { make in
             make.centerY.equalTo(self.locationContainer)
             make.trailing.equalTo(self)
-            make.size.equalTo(UIConstants.ToolbarHeight)
-        }
-
-        curveShape.snp.makeConstraints { make in
-            make.top.left.bottom.equalTo(self)
-            self.rightBarConstraint = make.right.equalTo(self).constraint
-            self.rightBarConstraint?.update(offset: defaultRightOffset)
+            make.size.equalTo(UIConstants.TopToolbarHeight)
         }
 
         backButton.snp.makeConstraints { make in
             make.left.centerY.equalTo(self)
-            make.size.equalTo(UIConstants.ToolbarHeight)
+            make.size.equalTo(UIConstants.TopToolbarHeight)
         }
 
         forwardButton.snp.makeConstraints { make in
             make.left.equalTo(self.backButton.snp.right)
             make.centerY.equalTo(self)
-            make.size.equalTo(backButton)
+            make.size.equalTo(UIConstants.TopToolbarHeight)
         }
 
         stopReloadButton.snp.makeConstraints { make in
             make.left.equalTo(self.forwardButton.snp.right)
             make.centerY.equalTo(self)
-            make.size.equalTo(backButton)
+            make.size.equalTo(UIConstants.TopToolbarHeight)
         }
 
         shareButton.snp.makeConstraints { make in
             make.right.equalTo(self.menuButton.snp.left)
             make.centerY.equalTo(self)
-            make.size.equalTo(backButton)
-        }
-
-        homePageButton.snp.makeConstraints { make in
-            make.center.equalTo(shareButton)
-            make.size.equalTo(shareButton)
+            make.size.equalTo(UIConstants.TopToolbarHeight)
         }
 
         menuButton.snp.makeConstraints { make in
-            make.right.equalTo(self.tabsButton.snp.left).offset(URLBarViewUX.URLBarCurveOffsetLeft)
+            make.right.equalTo(self.tabsButton.snp.left)
             make.centerY.equalTo(self)
-            make.size.equalTo(backButton)
+            make.size.equalTo(UIConstants.TopToolbarHeight)
         }
     }
 
@@ -332,13 +306,13 @@ class URLBarView: UIView {
                 tabsButton.snp.remakeConstraints { make in
                     make.centerY.equalTo(self.locationContainer)
                     make.leading.equalTo(self.snp.trailing)
-                    make.size.equalTo(UIConstants.ToolbarHeight)
+                    make.size.equalTo(44)
                 }
             } else {
                 tabsButton.snp.remakeConstraints { make in
                     make.centerY.equalTo(self.locationContainer)
                     make.trailing.equalTo(self)
-                    make.size.equalTo(UIConstants.ToolbarHeight)
+                    make.size.equalTo(44)
                 }
             }
             self.locationContainer.snp.remakeConstraints { make in
@@ -349,7 +323,7 @@ class URLBarView: UIView {
                 } else {
                     // Otherwise, left align the location view
                     make.leading.equalTo(self).offset(URLBarViewUX.LocationLeftPadding)
-                    make.trailing.equalTo(self.tabsButton.snp.leading).offset(-14)
+                    make.trailing.equalTo(self.tabsButton.snp.leading)
                 }
 
                 make.height.equalTo(URLBarViewUX.LocationHeight)
@@ -381,7 +355,8 @@ class URLBarView: UIView {
         locationContainer.addSubview(locationTextField)
 
         locationTextField.snp.makeConstraints { make in
-            make.edges.equalTo(self.locationView.urlTextField)
+            make.right.top.bottom.equalTo(self.locationView.urlTextField)
+            make.left.equalTo(self.locationView)
         }
 
         locationTextField.applyTheme(currentTheme)
@@ -409,7 +384,7 @@ class URLBarView: UIView {
     func updateAlphaForSubviews(_ alpha: CGFloat) {
         self.tabsButton.alpha = alpha
         self.locationContainer.alpha = alpha
-        self.backgroundColor = URLBarViewUX.backgroundColorWithAlpha(1 - alpha)
+        self.alpha = alpha
         self.actionButtons.forEach { $0.alpha = alpha }
     }
 
@@ -484,8 +459,8 @@ class URLBarView: UIView {
         self.menuButton.isHidden = !self.toolbarIsShowing
         self.forwardButton.isHidden = !self.toolbarIsShowing
         self.backButton.isHidden = !self.toolbarIsShowing
+        self.shareButton.isHidden = !self.toolbarIsShowing
         self.stopReloadButton.isHidden = !self.toolbarIsShowing
-        self.homePageButton.isHidden = !self.toolbarIsShowing
     }
 
     func transitionToOverlay(_ didCancel: Bool = false) {
@@ -496,16 +471,15 @@ class URLBarView: UIView {
         self.forwardButton.alpha = inOverlayMode ? 0 : 1
         self.backButton.alpha = inOverlayMode ? 0 : 1
         self.stopReloadButton.alpha = inOverlayMode ? 0 : 1
-        self.homePageButton.alpha = inOverlayMode ? 0 : 1
 
         let borderColor = inOverlayMode ? locationActiveBorderColor : locationBorderColor
         locationContainer.layer.borderColor = borderColor.cgColor
 
         if inOverlayMode {
             self.cancelButton.transform = CGAffineTransform.identity
-            let tabsButtonTransform = CGAffineTransform(translationX: self.tabsButton.frame.width + URLBarViewUX.URLBarCurveOffset, y: 0)
+            let tabsButtonTransform = CGAffineTransform(translationX: self.tabsButton.frame.width, y: 0)
             self.tabsButton.transform = tabsButtonTransform
-            self.rightBarConstraint?.update(offset: URLBarViewUX.URLBarCurveOffset + URLBarViewUX.URLBarCurveBounceBuffer + tabsButton.frame.width)
+            self.rightBarConstraint?.update(offset: 0 + tabsButton.frame.width)
 
             // Make the editable text field span the entire URL bar, covering the lock and reader icons.
             self.locationTextField?.snp.remakeConstraints { make in
@@ -530,6 +504,7 @@ class URLBarView: UIView {
         self.menuButton.isHidden = !self.toolbarIsShowing || inOverlayMode
         self.forwardButton.isHidden = !self.toolbarIsShowing || inOverlayMode
         self.backButton.isHidden = !self.toolbarIsShowing || inOverlayMode
+        self.shareButton.isHidden = !self.toolbarIsShowing || inOverlayMode
         self.stopReloadButton.isHidden = !self.toolbarIsShowing || inOverlayMode
         self.tabsButton.isHidden = self.topTabsIsShowing
     }
@@ -583,10 +558,8 @@ extension URLBarView: TabToolbarProtocol {
         helper?.updateReloadStatus(isLoading)
         if isLoading {
             stopReloadButton.setImage(helper?.ImageStop, for: .normal)
-            stopReloadButton.setImage(helper?.ImageStopPressed, for: .highlighted)
         } else {
             stopReloadButton.setImage(helper?.ImageReload, for: .normal)
-            stopReloadButton.setImage(helper?.ImageReloadPressed, for: .highlighted)
         }
     }
 
@@ -695,6 +668,21 @@ extension URLBarView {
         }
     }
 
+    dynamic var actionButtonSelectedTintColor: UIColor? {
+        get { return helper?.selectedButtonTintColor }
+        set {
+            guard let value = newValue else { return }
+            helper?.selectedButtonTintColor = value
+        }
+    }
+    
+    dynamic var actionButtonDisabledTintColor: UIColor? {
+        get { return helper?.disabledButtonTintColor }
+        set {
+            guard let value = newValue else { return }
+            helper?.disabledButtonTintColor = value
+        }
+    }
 }
 
 extension URLBarView: Themeable {
@@ -704,8 +692,7 @@ extension URLBarView: Themeable {
         locationTextField?.applyTheme(themeName)
 
         guard let theme = URLBarViewUX.Themes[themeName] else {
-            log.error("Unable to apply unknown theme \(themeName)")
-            return
+            fatalError("Theme not found")
         }
 
         currentTheme = themeName
@@ -714,106 +701,14 @@ extension URLBarView: Themeable {
         progressBarTint = theme.tintColor
         cancelTextColor = theme.textColor
         actionButtonTintColor = theme.buttonTintColor
-
+        actionButtonSelectedTintColor = theme.highlightButtonColor
+        actionButtonDisabledTintColor = theme.disabledButtonColor!
+        backgroundColor = theme.backgroundColor
         tabsButton.applyTheme(themeName)
-    }
-}
-
-extension URLBarView: AppStateDelegate {
-    func appDidUpdateState(_ appState: AppState) {
-        if toolbarIsShowing {
-            let showShareButton = HomePageAccessors.isButtonInMenu(appState)
-            homePageButton.isHidden = showShareButton
-            shareButton.isHidden = !showShareButton || inOverlayMode
-            homePageButton.isEnabled = HomePageAccessors.isButtonEnabled(appState)
-        } else {
-            homePageButton.isHidden = true
-            shareButton.isHidden = true
-        }
-    }
-}
-
-/* Code for drawing the urlbar curve */
-// Curve's aspect ratio
-private let ASPECT_RATIO = 0.729
-
-// Width multipliers
-private let W_M1 = 0.343
-private let W_M2 = 0.514
-private let W_M3 = 0.49
-private let W_M4 = 0.545
-private let W_M5 = 0.723
-
-// Height multipliers
-private let H_M1 = 0.25
-private let H_M2 = 0.5
-private let H_M3 = 0.72
-private let H_M4 = 0.961
-
-/* Code for drawing the urlbar curve */
-private class CurveView: UIView {
-    fileprivate lazy var leftCurvePath: UIBezierPath = {
-        var leftArc = UIBezierPath(arcCenter: CGPoint(x: 5, y: 5), radius: CGFloat(5), startAngle: CGFloat(-Double.pi), endAngle: CGFloat(-(Double.pi / 2)), clockwise: true)
-        leftArc.addLine(to: CGPoint(x: 0, y: 0))
-        leftArc.addLine(to: CGPoint(x: 0, y: 5))
-        leftArc.close()
-        return leftArc
-    }()
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        commonInit()
+        line.backgroundColor = UIConstants.URLBarDivider.color(isPBM: themeName == Theme.PrivateMode)
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        commonInit()
-    }
 
-    fileprivate func commonInit() {
-        self.isOpaque = false
-        self.contentMode = .redraw
-    }
-
-    fileprivate func getWidthForHeight(_ height: Double) -> Double {
-        return height * ASPECT_RATIO
-    }
-
-    fileprivate func drawFromTop(_ path: UIBezierPath) {
-        let height: Double = Double(UIConstants.ToolbarHeight)
-        let width = getWidthForHeight(height)
-        let from = (Double(self.frame.width) - width * 2 - Double(URLBarViewUX.URLBarCurveOffset - URLBarViewUX.URLBarCurveBounceBuffer), Double(0))
-
-        path.move(to: CGPoint(x: from.0, y: from.1))
-        path.addCurve(to: CGPoint(x: from.0 + width * W_M2, y: from.1 + height * H_M2),
-              controlPoint1: CGPoint(x: from.0 + width * W_M1, y: from.1),
-              controlPoint2: CGPoint(x: from.0 + width * W_M3, y: from.1 + height * H_M1))
-
-        path.addCurve(to: CGPoint(x: from.0 + width, y: from.1 + height),
-              controlPoint1: CGPoint(x: from.0 + width * W_M4, y: from.1 + height * H_M3),
-              controlPoint2: CGPoint(x: from.0 + width * W_M5, y: from.1 + height * H_M4))
-    }
-
-    fileprivate func getPath() -> UIBezierPath {
-        let path = UIBezierPath()
-        self.drawFromTop(path)
-        path.addLine(to: CGPoint(x: self.frame.width, y: UIConstants.ToolbarHeight))
-        path.addLine(to: CGPoint(x: self.frame.width, y: 0))
-        path.addLine(to: CGPoint(x: 0, y: 0))
-        path.close()
-        return path
-    }
-
-    override func draw(_ rect: CGRect) {
-        guard let context = UIGraphicsGetCurrentContext() else { return }
-        context.saveGState()
-        context.clear(rect)
-        context.setFillColor(URLBarViewUX.backgroundColorWithAlpha(1).cgColor)
-        getPath().fill()
-        leftCurvePath.fill()
-        context.drawPath(using: CGPathDrawingMode.fill)
-        context.restoreGState()
-    }
 }
 
 class ToolbarTextField: AutocompleteTextField {
@@ -827,8 +722,8 @@ class ToolbarTextField: AutocompleteTextField {
         themes[Theme.PrivateMode] = theme
 
         theme = Theme()
-        theme.backgroundColor = UIColor.white
-        theme.textColor = UIColor.black
+        theme.backgroundColor = UIColor(rgb: 0xD7D7DB)
+        theme.textColor = UIColor(rgb: 0x272727)
         theme.highlightColor = AutocompleteTextFieldUX.HighlightColor
         themes[Theme.NormalMode] = theme
 
@@ -900,11 +795,11 @@ class ToolbarTextField: AutocompleteTextField {
     }
 }
 
+
 extension ToolbarTextField: Themeable {
     func applyTheme(_ themeName: String) {
         guard let theme = ToolbarTextField.Themes[themeName] else {
-            log.error("Unable to apply unknown theme \(themeName)")
-            return
+            fatalError("Theme not found")
         }
 
         backgroundColor = theme.backgroundColor

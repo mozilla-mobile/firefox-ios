@@ -74,7 +74,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         log.debug("Configuring window…")
 
         self.window = UIWindow(frame: UIScreen.main.bounds)
-        self.window!.backgroundColor = UIConstants.AppBackgroundColor
+        self.window!.backgroundColor = UIColor.white
 
         // Short circuit the app if we want to email logs from the debug menu
         if DebugSettingsBundleOptions.launchIntoEmailComposer {
@@ -147,12 +147,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         log.debug("Initing BVC…")
 
         browserViewController = BrowserViewController(profile: self.profile!, tabManager: self.tabManager)
+        browserViewController.edgesForExtendedLayout = []
+
         browserViewController.restorationIdentifier = NSStringFromClass(BrowserViewController.self)
         browserViewController.restorationClass = AppDelegate.self
 
         let navigationController = UINavigationController(rootViewController: browserViewController)
         navigationController.delegate = self
         navigationController.isNavigationBarHidden = true
+        navigationController.edgesForExtendedLayout = UIRectEdge(rawValue: 0)
         rootViewController = navigationController
 
         self.window!.rootViewController = rootViewController

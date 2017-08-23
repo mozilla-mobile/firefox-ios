@@ -25,8 +25,6 @@ enum UIState {
         switch self {
         case .tab(let tabState):
             return tabState.isPrivate
-        case .homePanels(let homePanelState):
-            return homePanelState.isPrivate
         case .tabTray(let tabTrayState):
             return tabTrayState.isPrivate
         default:
