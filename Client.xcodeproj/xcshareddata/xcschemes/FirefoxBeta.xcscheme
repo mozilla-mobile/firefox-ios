@@ -26,6 +26,7 @@
       buildConfiguration = "FirefoxBeta"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      language = ""
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
          <TestableReference
@@ -35,6 +36,76 @@
                BlueprintIdentifier = "E69DB07C1E97DEA9008A67E6"
                BuildableName = "TelemetryTests.xctest"
                BlueprintName = "TelemetryTests"
+               ReferencedContainer = "container:Client.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "2FA436041ABB83B4008031D1"
+               BuildableName = "AccountTests.xctest"
+               BlueprintName = "AccountTests"
+               ReferencedContainer = "container:Client.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "F84B21D21A090F8100AAB793"
+               BuildableName = "ClientTests.xctest"
+               BlueprintName = "ClientTests"
+               ReferencedContainer = "container:Client.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E4D567211ADECE2700F1EFE7"
+               BuildableName = "ReadingListTests.xctest"
+               BlueprintName = "ReadingListTests"
+               ReferencedContainer = "container:Client.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E6F9650B1B2F1CF20034B023"
+               BuildableName = "SharedTests.xctest"
+               BlueprintName = "SharedTests"
+               ReferencedContainer = "container:Client.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "3B43E3CF1D95C48D00BBA9DB"
+               BuildableName = "StoragePerfTests.xctest"
+               BlueprintName = "StoragePerfTests"
+               ReferencedContainer = "container:Client.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "2FCAE2231ABB51F800877008"
+               BuildableName = "StorageTests.xctest"
+               BlueprintName = "StorageTests"
+               ReferencedContainer = "container:Client.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "282731671ABC9BE700AA1954"
+               BuildableName = "SyncTests.xctest"
+               BlueprintName = "SyncTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -55,6 +126,7 @@
       buildConfiguration = "FirefoxBeta"
       selectedDebuggerIdentifier = ""
       selectedLauncherIdentifier = "Xcode.IDEFoundation.Launcher.PosixSpawn"
+      language = ""
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
