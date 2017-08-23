@@ -232,7 +232,6 @@ class TabTrayController: UIViewController {
     let tabManager: TabManager
     let profile: Profile
     weak var delegate: TabTrayDelegate?
-    weak var appStateDelegate: AppStateDelegate?
 
     var collectionView: UICollectionView!
     var draggedCell: TabCell?
@@ -258,10 +257,6 @@ class TabTrayController: UIViewController {
 
     fileprivate(set) internal var privateMode: Bool = false {
         didSet {
-            if oldValue != privateMode {
-                updateAppState()
-            }
-
             tabDataSource.tabs = tabsToDisplay
             toolbar.styleToolbar(privateMode)
             collectionView?.reloadData()
@@ -527,11 +522,6 @@ class TabTrayController: UIViewController {
                 }
             }
         })
-    }
-
-    fileprivate func updateAppState() {
-        let state = mainStore.updateState(.tabTray(tabTrayState: self.tabTrayState))
-        self.appStateDelegate?.appDidUpdateState(state)
     }
 
     fileprivate func closeTabsForCurrentTray() {
