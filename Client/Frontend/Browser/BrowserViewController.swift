@@ -84,11 +84,8 @@ class BrowserViewController: UIViewController {
     let tabManager: TabManager
 
     // These views wrap the urlbar and toolbar to provide background effects on them
-    var header: BlurWrapper!
-    var headerBackdrop: UIView!
+    var header: UIView!
     var footer: UIView!
-    var footerBackdrop: UIView!
-    fileprivate var footerBackground: BlurWrapper?
     fileprivate var topTouchArea: UIButton!
     let urlBarTopTabsContainer = UIView(frame: CGRect.zero)
 
@@ -198,22 +195,17 @@ class BrowserViewController: UIViewController {
         urlBar.setShowToolbar(!showToolbar)
         toolbar?.removeFromSuperview()
         toolbar?.tabToolbarDelegate = nil
-        footerBackground?.removeFromSuperview()
-        footerBackground = nil
         toolbar = nil
 
         if showToolbar {
             toolbar = TabToolbar()
+            self.footer.addSubview(toolbar!)
             toolbar?.tabToolbarDelegate = self
-            footerBackground = BlurWrapper(view: toolbar!)
-            footerBackground?.translatesAutoresizingMaskIntoConstraints = false
 
             // Need to reset the proper blur style
             if let selectedTab = tabManager.selectedTab, selectedTab.isPrivate {
-                footerBackground!.blurStyle = .dark
                 toolbar?.applyTheme(Theme.PrivateMode)
             }
-            footer.addSubview(footerBackground!)
         }
         
         if showTopTabs {
@@ -232,7 +224,6 @@ class BrowserViewController: UIViewController {
             topTabsContainer.snp.updateConstraints { make in
                 make.height.equalTo(TopTabsUX.TopTabsViewHeight)
             }
-            header.disableBlur = true
         } else {
             topTabsContainer.snp.updateConstraints { make in
                 make.height.equalTo(0)
@@ -240,7 +231,6 @@ class BrowserViewController: UIViewController {
             topTabsViewController?.view.removeFromSuperview()
             topTabsViewController?.removeFromParentViewController()
             topTabsViewController = nil
-            header.disableBlur = false
         }
 
         view.setNeedsUpdateConstraints()
@@ -337,14 +327,6 @@ class BrowserViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(BrowserViewController.SELappDidEnterBackgroundNotification), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
         KeyboardHelper.defaultHelper.addDelegate(self)
 
-        log.debug("BVC adding footer and header…")
-        footerBackdrop = UIView()
-        footerBackdrop.backgroundColor = UIColor.clear
-        view.addSubview(footerBackdrop)
-        headerBackdrop = UIView()
-        headerBackdrop.backgroundColor = UIColor.clear
-        view.addSubview(headerBackdrop)
-
         log.debug("BVC setting up webViewContainer…")
         webViewContainerBackdrop = UIView()
         webViewContainerBackdrop.backgroundColor = UIColor.gray
@@ -372,7 +354,7 @@ class BrowserViewController: UIViewController {
         urlBar.translatesAutoresizingMaskIntoConstraints = false
         urlBar.delegate = self
         urlBar.tabToolbarDelegate = self
-        header = BlurWrapper(view: urlBarTopTabsContainer)
+        header = urlBarTopTabsContainer
         urlBarTopTabsContainer.addSubview(urlBar)
         urlBarTopTabsContainer.addSubview(topTabsContainer)
         view.addSubview(header)
@@ -444,10 +426,6 @@ class BrowserViewController: UIViewController {
         header.snp.makeConstraints { make in
             scrollController.headerTopConstraint = make.top.equalTo(self.topLayoutGuide.snp.bottom).constraint
             make.left.right.equalTo(self.view)
-        }
-
-        headerBackdrop.snp.makeConstraints { make in
-            make.edges.equalTo(self.header)
         }
 
         webViewContainerBackdrop.snp.makeConstraints { make in
@@ -656,11 +634,7 @@ class BrowserViewController: UIViewController {
         urlBar.updateAlphaForSubviews(1)
         footer.alpha = 1
 
-        [header,
-            footer,
-            readerModeBar,
-            footerBackdrop,
-            headerBackdrop].forEach { view in
+        [header, footer, readerModeBar].forEach { view in
                 view?.transform = CGAffineTransform.identity
         }
     }
@@ -698,7 +672,7 @@ class BrowserViewController: UIViewController {
 
         // Setup the bottom toolbar
         toolbar?.snp.remakeConstraints { make in
-            make.edges.equalTo(self.footerBackground!)
+            make.edges.equalTo(self.footer)
             make.height.equalTo(UIConstants.ToolbarHeight)
         }
 
@@ -708,15 +682,7 @@ class BrowserViewController: UIViewController {
             make.leading.trailing.equalTo(self.view)
         }
 
-        footerBackdrop.snp.remakeConstraints { make in
-            make.edges.equalTo(self.footer)
-        }
-
         updateSnackBarConstraints()
-        footerBackground?.snp.remakeConstraints { make in
-            make.bottom.left.right.equalTo(self.footer)
-            make.height.equalTo(UIConstants.ToolbarHeight)
-        }
         urlBar.setNeedsUpdateConstraints()
 
         // Remake constraints even if we're already showing the home controller.
@@ -2944,82 +2910,6 @@ extension BrowserViewController: Themeable {
         ui.forEach { $0?.applyTheme(themeName) }
         statusBarOverlay.backgroundColor = urlBar.backgroundColor
         self.setNeedsStatusBarAppearanceUpdate()
-        switch themeName {
-            case Theme.NormalMode:
-                header.blurStyle = .extraLight
-                footerBackground?.blurStyle = .extraLight
-            case Theme.PrivateMode:
-                header.blurStyle = .dark
-                footerBackground?.blurStyle = .dark
-            default:
-                log.debug("Unknown Theme \(themeName)")
-        }
-    }
-}
-
-// A small convienent class for wrapping a view with a blur background that can be modified
-class BlurWrapper: UIView {
-    var blurStyle: UIBlurEffectStyle = .extraLight {
-        didSet {
-            let newEffect = UIVisualEffectView(effect: UIBlurEffect(style: blurStyle))
-            effectView.removeFromSuperview()
-            effectView = newEffect
-            insertSubview(effectView, belowSubview: wrappedView)
-            effectView.snp.remakeConstraints { make in
-                make.edges.equalTo(self)
-            }
-            effectView.isHidden = disableBlur
-            switch blurStyle {
-            case .extraLight, .light:
-                background.backgroundColor = TopTabsUX.TopTabsBackgroundNormalColor
-                background.backgroundColor = .clear
-            case .extraDark, .dark:
-                background.backgroundColor = TopTabsUX.TopTabsBackgroundPrivateColor
-            default:
-                assertionFailure("Unsupported blur style")
-            }
-        }
-    }
-    
-    var disableBlur = false {
-        didSet {
-            effectView.isHidden = disableBlur
-            background.isHidden = !disableBlur
-        }
-    }
-
-    fileprivate var effectView: UIVisualEffectView
-    fileprivate var wrappedView: UIView
-    fileprivate lazy var background: UIView = {
-        let background = UIView()
-        background.isHidden = true
-        return background
-    }()
-
-    init(view: UIView) {
-        wrappedView = view
-        effectView = UIVisualEffectView(effect: UIBlurEffect(style: blurStyle))
-        super.init(frame: CGRect.zero)
-
-        addSubview(background)
-        addSubview(effectView)
-        addSubview(wrappedView)
-
-        effectView.snp.makeConstraints { make in
-            make.edges.equalTo(self)
-        }
-
-        wrappedView.snp.makeConstraints { make in
-            make.edges.equalTo(self)
-        }
-        
-        background.snp.makeConstraints { make in
-            make.edges.equalTo(self)
-        }
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }
 

@@ -213,12 +213,14 @@ class TabToolbar: Toolbar, TabToolbarProtocol {
         theme.buttonTintColor = UIConstants.PrivateModeActionButtonTintColor
         theme.highlightButtonColor = UIColor(rgb: 0xAC39FF)
         theme.disabledButtonColor = UIColor.gray
+        theme.backgroundColor = UIColor(rgb: 0x4A4A4F)
         themes[Theme.PrivateMode] = theme
 
         theme = Theme()
         theme.buttonTintColor = UIColor(rgb: 0x272727)
         theme.highlightButtonColor = UIColor(rgb: 0x00A2FE)
         theme.disabledButtonColor = UIColor.lightGray
+        theme.backgroundColor = UIConstants.AppBackgroundColor
         themes[Theme.NormalMode] = theme
 
         return themes
@@ -325,5 +327,6 @@ extension TabToolbar: Themeable {
         actionButtonSelectedTintColor = theme.highlightButtonColor!
         actionButtonDisabledTintColor = theme.disabledButtonColor!
         actionButtonTintColor = theme.buttonTintColor!
+        self.backgroundColor = theme.backgroundColor!
     }
 }
