@@ -222,8 +222,52 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         return insertOrUpdateClients([client])
     }
 
+    open func deleteClient(guid: GUID) -> Success {
+        let deferred = Success(defaultQueue: DispatchQueue.main)
+
+        let deleteTabsQuery = "DELETE FROM \(TableTabs) WHERE client_guid = ?"
+        let deleteClientQuery = "DELETE FROM \(TableClients) WHERE guid = ?"
+        let deleteArgs: Args = [guid]
+
+        var err: NSError?
+
+        _ = db.transaction(&err) { connection, _ in
+            var success = true
+            if let _ = connection.executeChange(deleteClientQuery, withArgs: deleteArgs) {
+                log.warning("Deleting client failed.")
+                success = false
+            }
+
+            // Delete any existing tabs.
+            if let _ = connection.executeChange(deleteTabsQuery, withArgs: deleteArgs) {
+                log.warning("Deleting client tabs failed.")
+
+                success = false
+            }
+
+            if success {
+                deferred.fill(Maybe(success: ()))
+            } else {
+                deferred.fill(Maybe(failure: DatabaseError(err: err)))
+            }
+            return success
+        }
+        
+        return deferred
+    }
+
+    open func getClient(guid: GUID) -> Deferred<Maybe<RemoteClient?>> {
+        let factory = SQLiteRemoteClientsAndTabs.remoteClientFactory
+        return self.db.runQuery("SELECT * FROM \(TableClients) WHERE guid = ?", args: [guid], factory: factory) >>== { deferMaybe($0[0]) }
+    }
+
+    open func getClient(fxaDeviceId: String) -> Deferred<Maybe<RemoteClient?>> {
+        let factory = SQLiteRemoteClientsAndTabs.remoteClientFactory
+        return self.db.runQuery("SELECT * FROM \(TableClients) WHERE fxaDeviceId = ?", args: [fxaDeviceId], factory: factory) >>== { deferMaybe($0[0]) }
+    }
+
     open func getClientWithId(_ clientID: GUID) -> Deferred<Maybe<RemoteClient?>> {
-        return self.db.runQuery("SELECT * FROM \(TableClients) WHERE guid = ?", args: [clientID], factory: SQLiteRemoteClientsAndTabs.remoteClientFactory) >>== { deferMaybe($0[0]) }
+        return self.getClient(guid: clientID)
     }
 
     open func getClients() -> Deferred<Maybe<[RemoteClient]>> {
