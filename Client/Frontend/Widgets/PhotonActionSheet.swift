@@ -69,10 +69,11 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     
     lazy var cancelButton: UIButton = {
         let button = UIButton()
-        button.setTitle(Strings.CancelButtonTitle, for: .normal)
-        button.backgroundColor = .white
+        button.setTitle("Close", for: .normal)
+        button.backgroundColor = UIConstants.AppBackgroundColor
         button.setTitleColor(UIConstants.SystemBlueColor, for: .normal)
         button.layer.cornerRadius = PhotonActionSheetUX.CornerRadius
+        button.titleLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontLargeBold
         button.addTarget(self, action: #selector(PhotonActionSheet.dismiss(_:)), for:.touchUpInside)
         return button
     }()
@@ -128,10 +129,13 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         let footer = UIView(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: tableView.frame.width, height: PhotonActionSheetUX.TablePadding)))
         tableView.tableFooterView = footer
         tableView.tableHeaderView = footer.clone()
-        //   tableView.backgroundColor = UIColor(colorLiteralRed: 1, green: 1, blue: 1, alpha: 0.4)
-        let blurEffect = UIBlurEffect(style: .extraLight)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        tableView.backgroundView = blurEffectView
+        tableView.backgroundColor = UIConstants.AppBackgroundColor.withAlphaComponent(0.7)
+        // TODO: Remove once we remove support for 9.0 (which is before this ships)
+        if #available(iOS 10.0, *) {
+            let blurEffect = UIBlurEffect(style: .light)
+            let blurEffectView = UIVisualEffectView(effect: blurEffect)
+            tableView.backgroundView = blurEffectView
+        }
         
         var width = min(self.view.frame.size.width, PhotonActionSheetUX.MaxWidth) - (PhotonActionSheetUX.Padding * 2)
         width = UIDevice.current.userInterfaceIdiom == .pad ? width : (self.view.frame.width - (PhotonActionSheetUX.Padding * 2))

@@ -11,7 +11,7 @@ class PhotonActionSheetAnimator: NSObject, UIViewControllerAnimatedTransitioning
     
     lazy var shadow: UIView = {
         let shadow = UIView()
-        shadow.backgroundColor = UIColor(white: 0, alpha: 0.3)
+        shadow.backgroundColor = UIColor(white: 0, alpha: 0.5)
         return shadow
     }()
     
