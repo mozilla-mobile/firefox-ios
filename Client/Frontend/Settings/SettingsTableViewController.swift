@@ -564,41 +564,27 @@ class SettingsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as! SettingsTableSectionHeaderFooterView
         let sectionSetting = settings[section]
-        if let sectionFooter = sectionSetting.footerTitle?.string {
-            footerView.titleLabel.text = sectionFooter
+        guard let sectionFooter = sectionSetting.footerTitle?.string else {
+            return nil
         }
+        let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as! SettingsTableSectionHeaderFooterView
+        footerView.titleLabel.text = sectionFooter
         footerView.titleAlignment = .top
         footerView.showBottomBorder = false
         return footerView
     }
 
+    // To hide a footer dynamically requires returning nil from viewForFooterInSection
+    // and setting the height to zero.
+    // However, we also want the height dynamically calculated, there is a magic constant
+    // for that: `UITableViewAutomaticDimension`.
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         let sectionSetting = settings[section]
-        guard let text = sectionSetting.footerTitle?.string else {
-            return 0
+        if let _ = sectionSetting.footerTitle?.string {
+            return UITableViewAutomaticDimension
         }
-
-        // The footer view is typically 1-2 lines of text, and is the standard row height (44 pixels).
-        // If the text is longer than 2 lines, we need to calculate a cell height that fits the text.
-
-        let attr = NSAttributedString(string: text)
-        // Use 5% less width to avoid text being too tight to bounds and possibly cut off
-        let maxWidth = 0.95 * (view.frame.width - SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding * 2)
-        let maxHeight = CGFloat(100) // An arbitrary upper bound, FYI 4 lines of text is 56 points high.
-        let rect = attr.boundingRect(with: CGSize(width: maxWidth, height: maxHeight), options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil)
-
-        let textHeight = ceil(rect.size.height)
-        if textHeight < 30 {
-            // Two lines of text is ~28 points, and most footers in the settings are 1-2 lines of text;
-            // we only want to special case the cell height for 3+ lines of text, otherwise just use a
-            // consistent cell height
-            return 44
-        }
-
-        let verticalPadding = CGFloat(8)
-        return textHeight + verticalPadding * 2
+        return 0
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -776,14 +762,15 @@ class SettingsTableSectionHeaderFooterView: UITableViewHeaderFooterView {
             titleLabel.snp.remakeConstraints { make in
                 make.left.right.equalTo(self).inset(SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
                 make.top.equalTo(self).offset(SettingsTableSectionHeaderFooterViewUX.titleVerticalPadding)
-                make.bottom.equalTo(self).offset(-SettingsTableSectionHeaderFooterViewUX.titleVerticalPadding)
+                make.bottom.equalTo(self).offset(-SettingsTableSectionHeaderFooterViewUX.titleVerticalLongPadding)
             }
         case .bottom:
             titleLabel.snp.remakeConstraints { make in
                 make.left.right.equalTo(self).inset(SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
                 make.bottom.equalTo(self).offset(-SettingsTableSectionHeaderFooterViewUX.titleVerticalPadding)
-                make.top.equalTo(self).offset(SettingsTableSectionHeaderFooterViewUX.titleVerticalPadding)
+                make.top.equalTo(self).offset(SettingsTableSectionHeaderFooterViewUX.titleVerticalLongPadding)
             }
         }
     }
 }
+
