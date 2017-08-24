@@ -222,12 +222,12 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         return insertOrUpdateClients([client])
     }
 
-    open func deleteClientWithId(_ clientID: GUID) -> Success {
+    open func deleteClient(guid: GUID) -> Success {
         let deferred = Success(defaultQueue: DispatchQueue.main)
 
-        let deleteTabsQuery = "DELETE FROM \(self.tabs.name) WHERE client_guid IS ?"
-        let deleteClientQuery = "DELETE FROM \(self.clients.name) WHERE guid IS ?"
-        let deleteArgs: Args = [clientID]
+        let deleteTabsQuery = "DELETE FROM \(TableTabs) WHERE client_guid = ?"
+        let deleteClientQuery = "DELETE FROM \(TableClients) WHERE guid = ?"
+        let deleteArgs: Args = [guid]
 
         var err: NSError?
 
@@ -257,11 +257,13 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     }
 
     open func getClient(guid: GUID) -> Deferred<Maybe<RemoteClient?>> {
-        return self.db.runQuery("SELECT * FROM \(TableClients) WHERE guid = ?", args: [clientID], factory: SQLiteRemoteClientsAndTabs.remoteClientFactory) >>== { deferMaybe($0[0]) }
+        let factory = SQLiteRemoteClientsAndTabs.remoteClientFactory
+        return self.db.runQuery("SELECT * FROM \(TableClients) WHERE guid = ?", args: [guid], factory: factory) >>== { deferMaybe($0[0]) }
     }
 
     open func getClient(fxaDeviceId: String) -> Deferred<Maybe<RemoteClient?>> {
-        return self.db.runQuery("SELECT * FROM \(TableClients) WHERE fxaDeviceId = ?", args: [fxaDeviceId], factory: clients.factory!) >>== { deferMaybe($0[0]) }
+        let factory = SQLiteRemoteClientsAndTabs.remoteClientFactory
+        return self.db.runQuery("SELECT * FROM \(TableClients) WHERE fxaDeviceId = ?", args: [fxaDeviceId], factory: factory) >>== { deferMaybe($0[0]) }
     }
 
     open func getClientWithId(_ clientID: GUID) -> Deferred<Maybe<RemoteClient?>> {

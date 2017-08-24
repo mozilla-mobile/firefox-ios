@@ -148,7 +148,7 @@ extension FxAPushMessageHandler {
         return getClient >>== { device in
             let message = PushMessage.deviceDisconnected(device?.name)
             if let id = device?.guid {
-                return clients.deleteClientWithId(id) >>== { _ in deferMaybe(message) }
+                return clients.deleteClient(guid: id) >>== { _ in deferMaybe(message) }
             }
 
             return deferMaybe(message)

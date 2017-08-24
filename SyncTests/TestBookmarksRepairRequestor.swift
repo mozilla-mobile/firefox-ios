@@ -479,8 +479,8 @@ open class MockRemoteClientsAndTabs: RemoteClientsAndTabs {
             }?.client)
     }
 
-    open func deleteClientWithId(_ clientID: GUID) -> Success {
-        clientsAndTabs = clientsAndTabs.filter { $0.client.guid != clientID }
+    open func deleteClient(guid: GUID) -> Success {
+        clientsAndTabs = clientsAndTabs.filter { $0.client.guid != guid }
         return succeed()
     }
 

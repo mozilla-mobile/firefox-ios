@@ -50,7 +50,7 @@ public protocol RemoteClientsAndTabs: SyncCommands {
     func insertOrUpdateTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>> // Insert into the local client.
     func insertOrUpdateTabsForClientGUID(_ clientGUID: String?, tabs: [RemoteTab]) -> Deferred<Maybe<Int>>
 
-    func deleteClientWithId(_ clientID: GUID) -> Success
+    func deleteClient(guid: GUID) -> Success
 }
 
 public struct RemoteTab: Equatable {
