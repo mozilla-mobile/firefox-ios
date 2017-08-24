@@ -105,7 +105,7 @@ class OverlayView: UIView {
         searchQuery = query
         let query = query.trimmingCharacters(in: .whitespaces)
         
-        if let pasteBoard = UIPasteboard.general.string {
+        if false, let pasteBoard = UIPasteboard.general.string {
             if let pasteURL = URL(string: pasteBoard), pasteURL.isWebPage() {
                 let attributedURL = NSAttributedString(string: pasteURL.absoluteString, attributes: [NSForegroundColorAttributeName: UIColor.white])
                     copyButton.setAttributedTitle(attributedURL, for: .normal)
@@ -125,6 +125,7 @@ class OverlayView: UIView {
         updateCopyConstraint()
     }
     fileprivate func updateCopyConstraint() {
+        return
         if UIPasteboard.general.string != nil {
             copyButton.isHidden = false
             copyBorder.isHidden = false
@@ -174,8 +175,8 @@ class OverlayView: UIView {
     func present() {
         setSearchQuery(query: "", animated: false)
         self.isUserInteractionEnabled = false
-        copyButton.isHidden = false
-        copyBorder.isHidden = false
+        copyButton.isHidden = true
+        copyBorder.isHidden = true
         animateHidden(false, duration: UIConstants.layout.overlayAnimationDuration) {
             self.isUserInteractionEnabled = true
         }

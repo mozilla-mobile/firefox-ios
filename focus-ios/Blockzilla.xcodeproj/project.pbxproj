@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		0B0D6BC41F3CDDBB00497D08 /* CollapsedURLTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B0D6BC31F3CDDBB00497D08 /* CollapsedURLTest.swift */; };
 		0B37F9A61E2FCAD4002DF74B /* SearchProviderTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B37F9A51E2FCAD4002DF74B /* SearchProviderTest.swift */; };
-		0B4868661F2250A3008C3C09 /* PastenGoTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4868651F2250A3008C3C09 /* PastenGoTest.swift */; };
 		0B70C1631DE6128900CEF7E0 /* WebsiteMemoryTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B70C1621DE6128900CEF7E0 /* WebsiteMemoryTest.swift */; };
 		0BA39A861DD2B8E4005F970A /* WebsiteAccessTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA39A851DD2B8E4005F970A /* WebsiteAccessTest.swift */; };
 		0BA7B7C01E9D6C7E0058EA5B /* XCUITests-Bridging-Header.h in Sources */ = {isa = PBXBuildFile; fileRef = 0BA7B7BF1E9D6C1B0058EA5B /* XCUITests-Bridging-Header.h */; };
@@ -1199,7 +1198,6 @@
 				0B70C1631DE6128900CEF7E0 /* WebsiteMemoryTest.swift in Sources */,
 				4F582F7B1F44A10F006C744B /* OpenInFocusTest.swift in Sources */,
 				0BC928CE1E366A6E004AC581 /* AsianLocaleTest.swift in Sources */,
-				0B4868661F2250A3008C3C09 /* PastenGoTest.swift in Sources */,
 				0BA39A861DD2B8E4005F970A /* WebsiteAccessTest.swift in Sources */,
 				0B0D6BC41F3CDDBB00497D08 /* CollapsedURLTest.swift in Sources */,
 			);
