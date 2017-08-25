@@ -35,6 +35,8 @@
 	<false/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
+		<string>googlechromes</string>
+		<string>googlechrome</string>
 		<string>firefox</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>

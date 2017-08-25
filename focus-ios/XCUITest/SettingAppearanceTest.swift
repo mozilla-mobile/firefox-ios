@@ -86,16 +86,16 @@ class SettingAppearanceTest: BaseTestCase {
         }
         
         otherContentSwitch.tap()
-        let sheetsQuery = app.alerts
+        let alertsQuery = app.alerts
         
         // Say yes this time, the switch should be enabled
-        sheetsQuery.buttons["I Understand"].tap()
+        alertsQuery.buttons["I Understand"].tap()
         XCTAssertEqual(otherContentSwitch.value as! String, "1")
         otherContentSwitch.tap()
         
         // Say No this time, the switch should remain disabled
         otherContentSwitch.tap()
-        sheetsQuery.buttons["No, Thanks"].tap()
+        alertsQuery.buttons["No, Thanks"].tap()
         XCTAssertEqual(otherContentSwitch.value as! String, "0")
     }
     
@@ -114,15 +114,11 @@ class SettingAppearanceTest: BaseTestCase {
         waitForValueContains(element: label, value: "https://www.mozilla.org")
         
         app.buttons["Share"].tap()
-        XCTAssertTrue(app.buttons["Get the Firefox App"].exists)
-        XCTAssertTrue(app.buttons["Safari"].exists)
-        XCTAssertTrue(app.buttons["More"].exists)
-        if !iPad() {
-            XCTAssertTrue(app.buttons["Cancel"].exists)
-        }
+        XCTAssertTrue(app.buttons["Open in Safari"].exists)
+
         let appName = app.label
-        app.buttons["Safari"].tap()
-        
+        app.buttons["Open in Safari"].tap()
+
         // Now in Safari
         let safariLabel = safariapp.otherElements["Address"]
         waitForValueContains(element: safariLabel, value: "Mozilla Corporation")
