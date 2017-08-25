@@ -56,7 +56,7 @@ class OpenUtils {
         app.openURL(url)
     }
 
-    static func buildShareViewController(url: URL) -> UIActivityViewController {
+    static func buildShareViewController(url: URL, anchor: UIView) -> UIActivityViewController {
         var activities = [UIActivity]()
 
         if canOpenInFirefox {
@@ -68,6 +68,13 @@ class OpenUtils {
         }
 
         activities.append(OpenInSafariActivity(url: url))
-        return UIActivityViewController(activityItems: [url], applicationActivities: activities)
+
+        let shareController = UIActivityViewController(activityItems: [url], applicationActivities: activities)
+
+        shareController.popoverPresentationController?.sourceView = anchor
+        shareController.popoverPresentationController?.sourceRect = anchor.bounds
+        shareController.popoverPresentationController?.permittedArrowDirections = .up
+        
+        return shareController
     }
 }
