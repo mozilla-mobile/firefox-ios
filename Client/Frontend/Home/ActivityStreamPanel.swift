@@ -716,6 +716,7 @@ extension ActivityStreamPanel: HomePanelContextMenu {
                                                                                     toApplication: UIApplication.shared)
                 site.setBookmarked(true)
                 self.telemetry.reportEvent(.AddBookmark, source: pingSource, position: index)
+                LeanplumIntegration.sharedInstance.track(eventName: .savedBookmark)
             })
         }
 
