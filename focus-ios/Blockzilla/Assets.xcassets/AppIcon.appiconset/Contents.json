@@ -13,31 +13,31 @@
     {
       "size" : "29x29",
       "idiom" : "iphone",
-      "filename" : "58 - Settings@1x.png",
+      "filename" : "Icon-Small-1.png",
       "scale" : "1x"
     },
     {
       "size" : "29x29",
       "idiom" : "iphone",
-      "filename" : "58 - Settings@2x.png",
+      "filename" : "Icon-Small@2x-1.png",
       "scale" : "2x"
     },
     {
       "size" : "29x29",
       "idiom" : "iphone",
-      "filename" : "58 - Settings@3x.png",
+      "filename" : "Icon-Small@3x.png",
       "scale" : "3x"
     },
     {
       "size" : "40x40",
       "idiom" : "iphone",
-      "filename" : "80 - Spotlight@2x.png",
+      "filename" : "Icon-Small-40.png",
       "scale" : "2x"
     },
     {
       "size" : "40x40",
       "idiom" : "iphone",
-      "filename" : "80 - Spotlight@3x.png",
+      "filename" : "Icon-Small-40@2x.png",
       "scale" : "3x"
     },
     {
@@ -53,13 +53,13 @@
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "120 - iPhone@2x.png",
+      "filename" : "Icon-60@2x.png",
       "scale" : "2x"
     },
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "120 - iPhone@3x.png",
+      "filename" : "Icon-60@3x.png",
       "scale" : "3x"
     },
     {
@@ -75,25 +75,25 @@
     {
       "size" : "29x29",
       "idiom" : "ipad",
-      "filename" : "58 - Settings@1x-1.png",
+      "filename" : "Icon-Small.png",
       "scale" : "1x"
     },
     {
       "size" : "29x29",
       "idiom" : "ipad",
-      "filename" : "58 - Settings@2x-1.png",
+      "filename" : "Icon-Small@2x.png",
       "scale" : "2x"
     },
     {
       "size" : "40x40",
       "idiom" : "ipad",
-      "filename" : "80 - Spotlight@1x.png",
+      "filename" : "Icon-Small-41.png",
       "scale" : "1x"
     },
     {
       "size" : "40x40",
       "idiom" : "ipad",
-      "filename" : "80 - Spotlight@2x-1.png",
+      "filename" : "Icon-Small-40@2x-1.png",
       "scale" : "2x"
     },
     {
@@ -119,20 +119,25 @@
     {
       "size" : "76x76",
       "idiom" : "ipad",
-      "filename" : "152 - iPad@1x.png",
+      "filename" : "Icon-76.png",
       "scale" : "1x"
     },
     {
       "size" : "76x76",
       "idiom" : "ipad",
-      "filename" : "152 - iPad@2x.png",
+      "filename" : "Icon-76@2x.png",
       "scale" : "2x"
     },
     {
       "size" : "83.5x83.5",
       "idiom" : "ipad",
-      "filename" : "167 - iPad Pro@2x.png",
+      "filename" : "Icon-iPadPro@2x.png",
       "scale" : "2x"
+    },
+    {
+      "idiom" : "ios-marketing",
+      "size" : "1024x1024",
+      "scale" : "1x"
     },
     {
       "idiom" : "car",
