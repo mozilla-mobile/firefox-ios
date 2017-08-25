@@ -4,6 +4,7 @@
 
 NSLocationWhenInUseUsageDescription = "Websites you visit may request your location.";
 NSPhotoLibraryUsageDescription = "This lets you save and upload photos.";
+NSPhotoLibraryAddUsageDescription = "This lets you save photos.";
 NSCameraUsageDescription = "This lets you take and upload photos.";
 NSMicrophoneUsageDescription = "This lets you take and upload videos.";
 ShortcutItemTitleNewTab = "New Tab";

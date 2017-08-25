@@ -2703,12 +2703,25 @@ extension BrowserViewController: IntroViewControllerDelegate {
 
         return false
     }
+    
+    func launchFxAFromDeeplinkURL(_ url: URL) {
+        self.profile.prefs.removeObjectForKey("AdjustDeeplinkKey")
+        let query = url.getQuery()
+        let fxaParams: FxALaunchParams
+        fxaParams = FxALaunchParams(query: query)
+        self.presentSignInViewController(fxaParams)
+    }
 
     func introViewControllerDidFinish(_ introViewController: IntroViewController) {
         introViewController.dismiss(animated: true) { finished in
             if self.navigationController?.viewControllers.count ?? 0 > 1 {
                 _ = self.navigationController?.popToRootViewController(animated: true)
             }
+            
+            guard let deeplink = self.profile.prefs.stringForKey("AdjustDeeplinkKey"), let url = URL(string: deeplink) else {
+                return
+            }
+            self.launchFxAFromDeeplinkURL(url)
         }
     }
 
@@ -2723,7 +2736,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
         } else {
             let signInVC = FxAContentViewController(profile: profile, fxaOptions: fxaOptions)
             signInVC.delegate = self            
-            signInVC.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.cancel, target: self, action: #selector(BrowserViewController.dismissSignInViewController))
+            signInVC.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(BrowserViewController.dismissSignInViewController))
             vcToPresent = signInVC
         }
 
@@ -2738,7 +2751,11 @@ extension BrowserViewController: IntroViewControllerDelegate {
 
     func introViewControllerDidRequestToLogin(_ introViewController: IntroViewController) {
         introViewController.dismiss(animated: true, completion: { () -> Void in
-            self.presentSignInViewController()
+            guard let deeplink = self.profile.prefs.stringForKey("AdjustDeeplinkKey"), let url = URL(string: deeplink) else {
+                self.presentSignInViewController()
+                return
+            }
+            self.launchFxAFromDeeplinkURL(url)
         })
     }
 }

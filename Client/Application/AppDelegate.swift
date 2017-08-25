@@ -456,10 +456,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         defaults.set(false, forKey: "ApplicationCleanlyBackgrounded")
         defaults.synchronize()
 
-        profile?.reopen()
+        if let profile = self.profile {
+            profile.reopen()
 
-        NightModeHelper.restoreNightModeBrightness((self.profile?.prefs)!, toForeground: true)
-        self.profile?.syncManager.applicationDidBecomeActive()
+            if profile.prefs.boolForKey(PendingAccountDisconnectedKey) ?? false {
+                FxALoginHelper.sharedInstance.applicationDidDisconnect(application)
+            }
+
+            NightModeHelper.restoreNightModeBrightness(profile.prefs, toForeground: true)
+            profile.syncManager.applicationDidBecomeActive()
+        }
 
         // We could load these here, but then we have to futz with the tab counter
         // and making NSURLRequests.
@@ -851,14 +857,25 @@ extension AppDelegate {
             }
         }
 
-        // So we've got here, and there are no sent tabs.
-        // There are a number of possibilities here: 
-        // a) we started syncing in the NotificationService, but aborted once we reached the end.
-        // b) we did some non-displayURI commands which finished properly.
+        // By now, we've dealt with any sent tab notifications.
+        //
+        // The only thing left to do now is to perform actions that can only be performed
+        // while the app is foregrounded.
         // 
-        // For now, we should just re-process the message handling.
+        // Use the push message handler to re-parse the message,
+        // this time with a BrowserProfile and processing the return
+        // differently than in NotificationService.
         let handler = FxAPushMessageHandler(with: profile)
         handler.handle(userInfo: userInfo).upon { res in
+            if let message = res.successValue {
+                switch message {
+                case .thisDeviceDisconnected:
+                    FxALoginHelper.sharedInstance.applicationDidDisconnect(application)
+                default:
+                    break
+                }
+            }
+
             completionHandler(res.isSuccess ? .newData : .failed)
         }
     }
