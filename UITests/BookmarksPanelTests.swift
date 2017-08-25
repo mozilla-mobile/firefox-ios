@@ -44,7 +44,7 @@ class BookmarksPanelTests: KIFTestCase {
         let changedBufferRecords = [
             BookmarkMirrorItem.folder(BookmarkRoots.ToolbarFolderGUID, modified: bufferDate, hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: nil, title: "Bookmarks Toolbar", description: nil, children: ["aaa", "bbb"]),
             BookmarkMirrorItem.bookmark("aaa", modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.ToolbarFolderGUID, parentName: nil, title: "AAA", description: nil, URI: "http://getfirefox.com", tags: "[]", keyword: nil),
-            BookmarkMirrorItem.livemark("bbb", modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.ToolbarFolderGUID, parentName: nil, title: "Some Livemark", description: nil, feedURI: "https://people-mozilla.org/~npark", siteURI: "https://people-mozilla.org/~npark") ]
+            BookmarkMirrorItem.livemark("bbb", modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.ToolbarFolderGUID, parentName: nil, title: "Some Livemark", description: nil, feedURI: "https://www.google.ca", siteURI: "https://www.google.ca") ]
         
         if let bookmarks = getAppBookmarkStorage() {
             XCTAssert(bookmarks.applyRecords(changedBufferRecords).value.isSuccess)
@@ -71,8 +71,7 @@ class BookmarksPanelTests: KIFTestCase {
         // … so we show the truncated URL.
         // Strangely, earlgrey cannot find the label in buddybuild, but passes locally. 
         // Using KIF for this check for now.
-        tester().waitForView(withAccessibilityLabel: "https://people-mozilla.org/~npark")
-        
+        EarlGrey.select(elementWithMatcher: grey_accessibilityValue("https://www.google.ca")).assert(grey_sufficientlyVisible())
     }
 
     func testRootHasLocalAndBuffer() {
