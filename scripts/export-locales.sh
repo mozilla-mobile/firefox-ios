@@ -52,6 +52,7 @@ then
     CFLAGS=-I"$SDK_PATH/usr/include/libxml2" LIBXML2_VERSION=2.9.2 pip install lxml || exit 1
 else
     echo "Reusing existing virtualenv found in export-locales-env"
+    source export-locales-env/bin/activate || exit 1
 fi
 
 # Check out a clean copy of the l10n repo
