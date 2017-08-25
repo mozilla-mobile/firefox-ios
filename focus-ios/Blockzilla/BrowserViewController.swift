@@ -281,6 +281,9 @@ class BrowserViewController: UIViewController {
         alertController.addAction(UIAlertAction(title: UIConstants.strings.copyImage, style: .default) { _ in copyAction() })
         alertController.addAction(UIAlertAction(title: UIConstants.strings.cancel, style: .cancel))
 
+        alertController.popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection.init(rawValue: 0)
+        alertController.popoverPresentationController?.sourceView = self.view
+        alertController.popoverPresentationController?.sourceRect = CGRect(x: self.view.bounds.size.width / 2.0, y: self.view.bounds.size.height / 2.0, width: 1.0, height: 1.0)
         present(alertController, animated: true, completion: nil)
     }
 }
