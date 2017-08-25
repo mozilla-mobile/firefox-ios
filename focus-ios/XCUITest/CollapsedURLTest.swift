@@ -20,7 +20,6 @@ class CollapsedURLTest: BaseTestCase {
         let app = XCUIApplication()
         
         // Enter 'mozilla' on the search field
-        app.buttons["Search or enter address"].tap()
         let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
         
         // Check the text autocompletes to mozilla.org/, and also look for 'Search for mozilla' button below

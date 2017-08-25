@@ -103,7 +103,6 @@ class SettingAppearanceTest: BaseTestCase {
         let app = XCUIApplication()
         let safariapp = XCUIApplication(privateWithPath: nil, bundleID: "com.apple.mobilesafari")!
         // Enter 'mozilla' on the search field
-        app.buttons["Search or enter address"].tap()
         let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
         
         // Check the text autocompletes to mozilla.org/, and also look for 'Search for mozilla' button below

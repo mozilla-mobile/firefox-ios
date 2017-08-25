@@ -20,6 +20,7 @@ class BrowserViewController: UIViewController {
 
     fileprivate var toolbarBottomConstraint: Constraint!
     fileprivate var urlBarTopConstraint: Constraint!
+    fileprivate var homeViewBottomConstraint: Constraint!
     fileprivate var lastScrollOffset = CGPoint.zero
     fileprivate var lastScrollTranslation = CGPoint.zero
     fileprivate var scrollBarOffsetAlpha: CGFloat = 0
@@ -40,6 +41,11 @@ class BrowserViewController: UIViewController {
 
     private var shouldEnsureBrowsingMode = false
     private var initialUrl: URL?
+
+    convenience init() {
+        self.init(nibName: nil, bundle: nil)
+        KeyboardHelper.defaultHelper.addDelegate(delegate: self)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -89,7 +95,9 @@ class BrowserViewController: UIViewController {
 
         homeViewContainer.snp.makeConstraints { make in
             make.top.equalTo(topLayoutGuide.snp.bottom)
-            make.leading.trailing.bottom.equalTo(view)
+            make.leading.trailing.equalTo(view)
+            homeViewBottomConstraint = make.bottom.equalTo(view).constraint
+            homeViewBottomConstraint.activate()
         }
 
         browser.view.snp.makeConstraints { make in
@@ -105,6 +113,7 @@ class BrowserViewController: UIViewController {
 
         createHomeView()
         createURLBar()
+        urlBar.becomeFirstResponder()   
 
         guard shouldEnsureBrowsingMode else { return }
         ensureBrowsingMode()
@@ -158,8 +167,9 @@ class BrowserViewController: UIViewController {
 
             // Initial centered constraints, which will effectively be deactivated when
             // the top constraints are active because of their reduced priorities.
-            make.width.equalTo(view).multipliedBy(0.95).priority(500)
-            make.center.equalTo(homeView).priority(500)
+            make.leading.equalTo(view).priority(500)
+            make.top.equalTo(homeView).priority(500)
+            make.trailing.equalTo(homeView.settingsButton.snp.leading).offset(-8).priority(500)
         }
         topURLBarConstraints.forEach { $0.deactivate() }
     }
@@ -203,6 +213,7 @@ class BrowserViewController: UIViewController {
                 screenshotView.alpha = 0
                 self.view.layoutIfNeeded()
             }, completion: { _ in
+                self.urlBar.becomeFirstResponder()
                 Toast(text: UIConstants.strings.eraseMessage).show()
                 screenshotView.removeFromSuperview()
             })
@@ -595,6 +606,7 @@ extension BrowserViewController: OverlayViewDelegate {
         if let url = searchEngineManager.activeEngine.urlForQuery(query) {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeQuery, object: TelemetryEventObject.searchBar)
             submit(url: url)
+            urlBar.url = url
         }
 
         urlBar.dismiss()
@@ -637,4 +649,24 @@ extension BrowserViewController: PhotoManagerDelegate {
 
         self.present(accessDenied, animated: true, completion: nil)
     }
+}
+
+extension BrowserViewController: KeyboardHelperDelegate {
+
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
+        UIView.animate(withDuration: state.animationDuration) {
+            self.homeViewBottomConstraint.update(offset: -state.intersectionHeightForView(view: self.view))
+            self.view.layoutIfNeeded()
+        }
+    }
+
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
+        UIView.animate(withDuration: state.animationDuration) {
+            self.homeViewBottomConstraint.update(offset: 0)
+            self.view.layoutIfNeeded()
+        }
+    }
+
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) { }
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) { }
 }

@@ -22,12 +22,12 @@ class URLBar: UIView {
 
     let progressBar = UIProgressView(progressViewStyle: .bar)
     var inBrowsingMode: Bool = false
+    fileprivate var shouldPresent = false
     fileprivate(set) var isEditing = false
 
     fileprivate let cancelButton = InsetButton()
     fileprivate let deleteButton = InsetButton()
     fileprivate let domainCompletion = DomainCompletion()
-    fileprivate let activateButton = UIButton()
 
     private let toolset = BrowserToolset()
     private let urlTextContainer = UIView()
@@ -100,7 +100,6 @@ class URLBar: UIView {
         clearButton.setImage(#imageLiteral(resourceName: "icon_clear"), for: .normal)
         clearButton.addTarget(self, action: #selector(didPressClear), for: .touchUpInside)
 
-        urlText.isUserInteractionEnabled = false
         urlText.font = UIConstants.fonts.urlText
         urlText.tintColor = UIConstants.colors.urlTextFont
         urlText.textColor = UIConstants.colors.urlTextFont
@@ -114,6 +113,7 @@ class URLBar: UIView {
         urlText.autocompleteDelegate = self
         urlText.completionSource = domainCompletion
         urlText.accessibilityIdentifier = "URLBar.urlText"
+        urlText.placeholder = UIConstants.strings.urlTextPlaceholder
         textAndLockContainer.addSubview(urlText)
 
         cancelButton.isHidden = true
@@ -153,14 +153,6 @@ class URLBar: UIView {
         hiddenDeleteButton.setContentHuggingPriority(1000, for: .horizontal)
         hiddenDeleteButton.setContentCompressionResistancePriority(1000, for: .horizontal)
         addSubview(hiddenDeleteButton)
-
-        activateButton.setTitle(UIConstants.strings.urlTextPlaceholder, for: .normal)
-        activateButton.titleLabel?.font = UIConstants.fonts.urlText
-        activateButton.setTitleColor(UIConstants.colors.urlTextPlaceholder, for: .normal)
-        activateButton.titleEdgeInsets = UIEdgeInsetsMake(0, UIConstants.layout.urlBarWidthInset, 0, UIConstants.layout.urlBarWidthInset)
-        activateButton.addTarget(self, action: #selector(didPressActivate), for: .touchUpInside)
-        activateButton.accessibilityIdentifier = "URLBar.activateButton"
-        addSubview(activateButton)
 
         progressBar.isHidden = true
         progressBar.alpha = 0
@@ -271,10 +263,6 @@ class URLBar: UIView {
             make.height.equalTo(1)
         }
 
-        activateButton.snp.makeConstraints { make in
-            make.edges.equalTo(urlTextContainer)
-        }
-
         smallLockIcon.snp.makeConstraints { make in
             make.leading.equalTo(collapsedUrlAndLockWrapper)
             make.trailing.equalTo(truncatedUrlText.snp.leading)
@@ -304,7 +292,11 @@ class URLBar: UIView {
         postActivationConstraints.forEach { $0.deactivate() }
         
     }
-
+    
+    @discardableResult override func becomeFirstResponder() -> Bool {
+        return urlText.becomeFirstResponder()
+    }
+    
     func pasteAndGo() {
         delegate?.urlBar(self, didSubmitText: UIPasteboard.general.string!)
 
@@ -382,7 +374,6 @@ class URLBar: UIView {
         dismiss()
         postActivationConstraints.forEach { $0.activate() }
         preActivationConstraints.forEach { $0.deactivate() }
-        activateButton.isHidden = true
     }
 
     private func updateLockIcon() {
@@ -408,7 +399,14 @@ class URLBar: UIView {
     fileprivate func present() {
         guard !isEditing else { return }
 
+        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration) {
+            self.preActivationConstraints.forEach { $0.deactivate() }
+            self.postActivationConstraints.forEach { $0.activate() }
+            self.layoutIfNeeded()
+        }
+
         isEditing = true
+        shouldPresent = false
         updateLockIcon()
         toolset.sendButton.isEnabled = false
         delegate?.urlBarDidFocus(self)
@@ -517,31 +515,11 @@ class URLBar: UIView {
         delegate?.urlBar(self, didEnterText: "")
     }
 
-    @objc private func didPressActivate(_ button: UIButton) {
-        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, animations: {
-            button.contentHorizontalAlignment = .left
-            self.preActivationConstraints.forEach { $0.deactivate() }
-            self.postActivationConstraints.forEach { $0.activate() }
-            self.layoutIfNeeded()
-        }, completion: { finished in
-            self.urlText.placeholder = UIConstants.strings.urlTextPlaceholder
-            button.isHidden = true
-        })
-
-        urlText.isUserInteractionEnabled = true
-        urlText.becomeFirstResponder()
-        delegate?.urlBarDidActivate(self)
-    }
-
     private func deactivate() {
         urlText.text = nil
-        urlText.placeholder = nil
         urlText.rightView?.isHidden = true
-        activateButton.isHidden = false
-        urlText.isUserInteractionEnabled = false
 
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, animations: {
-            self.activateButton.contentHorizontalAlignment = .center
             self.postActivationConstraints.forEach { $0.deactivate() }
             self.preActivationConstraints.forEach { $0.activate() }
             self.layoutIfNeeded()
@@ -586,12 +564,13 @@ class URLBar: UIView {
 
 extension URLBar: AutocompleteTextFieldDelegate {
     func autocompleteTextFieldShouldBeginEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool {
-        // shouldBeginEditing is fired out-of-band from the touch event, so check the user interaction
-        // flag here to make sure it hasn't changed.
-        guard isUserInteractionEnabled else { return false }
+        if !isEditing && inBrowsingMode {
+            present()
+            delegate?.urlBarDidActivate(self)
+        } else {
+            shouldPresent = true
+        }
 
-        present()
-        autocompleteTextField.highlightAll()
         return true
     }
 
@@ -602,6 +581,15 @@ extension URLBar: AutocompleteTextFieldDelegate {
 
     func autocompleteTextField(_ autocompleteTextField: AutocompleteTextField, didTextChange text: String) {
         autocompleteTextField.rightView?.isHidden = text.isEmpty
+
+        if text.isEmpty && !isEditing {
+            dismiss()
+            delegate?.urlBarDidDeactivate(self)
+        } else if !isEditing && shouldPresent {
+            present()
+            delegate?.urlBarDidActivate(self)
+        }
+
         delegate?.urlBar(self, didEnterText: text)
     }
 }

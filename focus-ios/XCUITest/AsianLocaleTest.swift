@@ -26,7 +26,6 @@ class AsianLocaleTest: BaseTestCase {
 		app.tables.staticTexts["Google"].tap()
 		app.navigationBars["Settings"].children(matching: .button).matching(identifier: "Back").element(boundBy: 0).tap()
 		
-		waitforExistence(element: app.buttons["Search or enter address"])
 		
 		// Enter 'mozilla' on the search field
 		search(searchWord: "모질라")
@@ -37,12 +36,12 @@ class AsianLocaleTest: BaseTestCase {
 	func search(searchWord: String) {
 		let app = XCUIApplication()
 		
-		app.buttons["Search or enter address"].tap()
 		let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
 		XCTAssertTrue(searchOrEnterAddressTextField.exists)
 		XCTAssertTrue(searchOrEnterAddressTextField.isEnabled)
 		
 		// Check the text autocompletes to mozilla.org/, and also look for 'Search for mozilla' button below
+        searchOrEnterAddressTextField.tap()
 		searchOrEnterAddressTextField.typeText(searchWord)
 		waitforExistence(element: app.buttons["Search for " + searchWord])
 		app.buttons["Search for " + searchWord].tap()

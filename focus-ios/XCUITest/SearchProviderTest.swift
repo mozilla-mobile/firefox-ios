@@ -45,8 +45,6 @@ class SearchProviderTest: BaseTestCase {
 		let app = XCUIApplication()
 		let searchForText = "Search for " + searchWord
 		
-		app.buttons["URLBar.activateButton"].tap()
-		
 		let urlbarUrltextTextField = app.textFields["URLBar.urlText"]
 		urlbarUrltextTextField.tap()
 		

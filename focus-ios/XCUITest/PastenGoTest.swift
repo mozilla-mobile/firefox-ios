@@ -25,7 +25,6 @@ class PastenGoTest: BaseTestCase {
         UIPasteboard.general.string = clipboardString
         
         // Enter 'mozilla' on the search field
-        app.buttons["URLBar.activateButton"].tap()
         let searchOrEnterAddressTextField = app.textFields["URLBar.urlText"]
         searchOrEnterAddressTextField.typeText("mozilla")
         
@@ -71,7 +70,6 @@ class PastenGoTest: BaseTestCase {
         UIPasteboard.general.string = clipboard
         
         // Tap url bar to show context menu
-        app.buttons["URLBar.activateButton"].tap()
         let searchOrEnterAddressTextField = app.textFields["URLBar.urlText"]
         waitforExistence(element: app.buttons[clipboard])
         searchOrEnterAddressTextField.press(forDuration: 1.5)
@@ -88,7 +86,6 @@ class PastenGoTest: BaseTestCase {
         
         clipboard = "1(*&)(*%@@$^%^12345)"
         UIPasteboard.general.string = clipboard
-        app.buttons["URLBar.activateButton"].tap()
         waitforExistence(element: app.buttons["Search for " + clipboard])
     }
 }

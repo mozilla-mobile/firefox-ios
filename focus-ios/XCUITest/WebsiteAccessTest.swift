@@ -24,7 +24,6 @@ class WebsiteAccessTests: BaseTestCase {
         XCTAssertTrue(app.staticTexts["Automatic private browsing."].exists)
         
         // Enter 'mozilla' on the search field
-        app.buttons["Search or enter address"].tap()
         let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
         XCTAssertTrue(searchOrEnterAddressTextField.exists)
         XCTAssertTrue(searchOrEnterAddressTextField.isEnabled)

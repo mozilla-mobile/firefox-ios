@@ -20,7 +20,6 @@ class SnapshotTests: XCTestCase {
 
         snapshot("01Home")
 
-        app.buttons["URLBar.activateButton"].tap()
         snapshot("02LocationBarEmptyState")
         app.textFields["URLBar.urlText"].typeText("bugzilla.mozilla.org")
         snapshot("03SearchFor")
@@ -60,7 +59,6 @@ class SnapshotTests: XCTestCase {
 
     func test04ShareMenu() {
         let app = XCUIApplication()
-        app.buttons["URLBar.activateButton"].tap()
         app.textFields["URLBar.urlText"].typeText("bugzilla.mozilla.org\n")
         waitForValueContains(element: app.textFields["URLBar.urlText"], value: "https://bugzilla.mozilla.org/")
         app.buttons["BrowserToolset.sendButton"].tap()
@@ -76,7 +74,6 @@ class SnapshotTests: XCTestCase {
 
     func test06OpenMaps() {
         let app = XCUIApplication()
-        app.buttons["URLBar.activateButton"].tap()
         app.textFields["URLBar.urlText"].typeText("maps.apple.com\n")
         waitForValueContains(element: app.textFields["URLBar.urlText"], value: "http://maps.apple.com")
         snapshot("06OpenMaps")
@@ -84,7 +81,6 @@ class SnapshotTests: XCTestCase {
 
     func test07OpenAppStore() {
         let app = XCUIApplication()
-        app.buttons["URLBar.activateButton"].tap()
         app.textFields["URLBar.urlText"].typeText("itunes.apple.com\n")
         waitForValueContains(element: app.textFields["URLBar.urlText"], value: "http://itunes.apple.com")
         snapshot("07OpenAppStore")
@@ -92,13 +88,11 @@ class SnapshotTests: XCTestCase {
 
     func test08PasteAndGo() {
         let app = XCUIApplication()
-        app.buttons["URLBar.activateButton"].tap()
         app.textFields["URLBar.urlText"].typeText("mozilla.org\n")
         app.textFields["URLBar.urlText"].tap(withNumberOfTaps: 3, numberOfTouches: 1)
         app.menuItems.element(boundBy: 1).tap()
         app.buttons.element(boundBy: 1).tap()
         app.buttons["URLBar.deleteButton"].tap()
-        app.buttons["URLBar.activateButton"].tap()
         app.textFields["URLBar.urlText"].tap()
         snapshot("08PasteAndGo")
     }

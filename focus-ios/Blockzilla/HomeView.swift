@@ -10,6 +10,7 @@ protocol HomeViewDelegate: class {
 
 class HomeView: UIView {
     weak var delegate: HomeViewDelegate?
+    private(set) var settingsButton: UIButton! = nil
 
     init() {
         super.init(frame: CGRect.zero)
@@ -36,20 +37,21 @@ class HomeView: UIView {
 
         let settingsButton = UIButton()
         settingsButton.setImage(#imageLiteral(resourceName: "icon_settings"), for: .normal)
-        settingsButton.contentEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+        settingsButton.contentEdgeInsets = UIEdgeInsets(top: 18, left: 4, bottom: 14, right: 16)
         settingsButton.addTarget(self, action: #selector(didPressSettings), for: .touchUpInside)
         settingsButton.accessibilityLabel = UIConstants.strings.browserSettings
         settingsButton.accessibilityIdentifier = "HomeView.settingsButton"
         addSubview(settingsButton)
+        self.settingsButton = settingsButton
 
         textLogo.snp.makeConstraints { make in
             make.centerX.equalTo(self)
-            make.bottom.equalTo(snp.centerY).offset(-60)
+            make.top.equalTo(snp.centerY).offset(-10)
         }
 
         description1.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self)
-            make.top.equalTo(snp.centerY).offset(50)
+            make.top.equalTo(textLogo.snp.bottom).offset(30)
         }
 
         description2.snp.makeConstraints { make in
@@ -59,6 +61,8 @@ class HomeView: UIView {
 
         settingsButton.snp.makeConstraints { make in
             make.top.trailing.equalTo(self)
+            make.height.equalTo(52)
+            make.width.equalTo(40)
         }
     }
 
