@@ -13,6 +13,7 @@ protocol BrowserDelegate: class {
     func browser(_ browser: Browser, didUpdateCanGoForward canGoForward: Bool)
     func browser(_ browser: Browser, didUpdateEstimatedProgress estimatedProgress: Float)
     func browser(_ browser: Browser, didUpdateURL url: URL?)
+    func browser(_ browser: Browser, didLongPressImage path: String?, link: String?)
     func browser(_ browser: Browser, shouldStartLoadWith request: URLRequest) -> Bool
     func browser(_ browser: Browser, scrollViewWillBeginDragging scrollView: UIScrollView)
     func browser(_ browser: Browser, scrollViewDidEndDragging scrollView: UIScrollView)
@@ -29,7 +30,15 @@ class Browser: NSObject {
         return webView?.scrollView
     }
 
+
     fileprivate var webView: UIWebView?
+    fileprivate lazy var contextMenuJs: String = {
+        guard let js = Bundle.main.path(forResource: "ContextMenu", ofType: "js")
+            .flatMap({ try? String(contentsOfFile: $0) }) else { fatalError("ContextMenu.js missing from bundle") }
+
+
+        return js
+    }()
 
     /// The main document of the latest request, which might be set before we've actually
     /// started loading the document.
@@ -52,10 +61,12 @@ class Browser: NSObject {
         webView.scrollView.layer.masksToBounds = false
         webView.scrollView.delegate = self
         webView.delegate = self
+
         let swipeLeftRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(goForwardByGesture))
         swipeLeftRecognizer.direction = .left
         let swipeRightRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(goBackByGesture))
         swipeRightRecognizer.direction = .right
+
         webView.addGestureRecognizer(swipeLeftRecognizer)
         webView.addGestureRecognizer(swipeRightRecognizer)
         view.addSubview(webView)
@@ -94,6 +105,24 @@ class Browser: NSObject {
     func goForwardByGesture() {
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.swipeToNavigateForward, object: TelemetryEventObject.app)
         goForward()
+    }
+
+    func handleMessage(request: URLRequest) -> Bool {
+        guard request.url?.scheme == "focusmessage" else { return false }
+        let queryItems = request.url.flatMap({ URLComponents(url: $0, resolvingAgainstBaseURL: false) })?.queryItems ?? []
+        var parameters: (link: String?, image: String?) = (nil, nil)
+
+        for item in queryItems {
+            switch item.name {
+            case "link": parameters.link = item.value
+            case "image": parameters.image = item.value
+            default: continue
+            }
+        }
+
+        delegate?.browser(self, didLongPressImage: parameters.image, link: parameters.link)
+
+        return true
     }
 
     func goBack() {
@@ -171,7 +200,9 @@ extension Browser: UIWebViewDelegate {
         updateBackForwardStates(webView)
     }
 
+
     func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
+        guard !handleMessage(request: request) else { return false }
         guard delegate?.browser(self, shouldStartLoadWith: request) ?? true else { return false }
 
         // If the load isn't on the main frame, we don't need any other special handling.
@@ -204,6 +235,7 @@ extension Browser: UIWebViewDelegate {
             delegate?.browserDidFinishNavigation(self)
         }
 
+        webView.stringByEvaluatingJavaScript(from: contextMenuJs)
         updatePostLoad()
     }
 

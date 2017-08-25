@@ -35,4 +35,6 @@ class TelemetryEventObject {
     public static let setting = "setting"
     public static let menu = "menu"
     public static let pasteAndGo = "paste_and_go"
+    public static let copyImage = "copy_image_buuton"
+    public static let saveImage = "save_image_button"
 }
