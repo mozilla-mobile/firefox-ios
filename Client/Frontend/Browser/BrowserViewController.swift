@@ -3137,7 +3137,9 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             let saveImageTitle = NSLocalizedString("Save Image", comment: "Context menu item for saving an image")
             let saveImageAction = UIAlertAction(title: saveImageTitle, style: UIAlertActionStyle.default) { (action: UIAlertAction) -> Void in
                 if photoAuthorizeStatus == PHAuthorizationStatus.authorized || photoAuthorizeStatus == PHAuthorizationStatus.notDetermined {
-                    self.getImage(url as URL) { UIImageWriteToSavedPhotosAlbum($0, nil, nil, nil) }
+                    self.getImage(url as URL) {
+                        UIImageWriteToSavedPhotosAlbum($0, self, #selector(self.image(_:didFinishSavingWithError:contextInfo:)), nil)
+                    }
                 } else {
                     let accessDenied = UIAlertController(title: NSLocalizedString("Firefox would like to access your Photos", comment: "See http://mzl.la/1G7uHo7"), message: NSLocalizedString("This allows you to save the image to your Camera Roll.", comment: "See http://mzl.la/1G7uHo7"), preferredStyle: UIAlertControllerStyle.alert)
                     let dismissAction = UIAlertAction(title: UIConstants.CancelString, style: UIAlertActionStyle.default, handler: nil)
@@ -3147,7 +3149,6 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                     }
                     accessDenied.addAction(settingsAction)
                     self.present(accessDenied, animated: true, completion: nil)
-                    LeanplumIntegration.sharedInstance.track(eventName: .saveImage)
                 }
             }
             actionSheetController.addAction(saveImageAction)
@@ -3208,6 +3209,14 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                     success(image)
                 }
             }
+    }
+}
+
+extension BrowserViewController {
+    func image(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) {
+        if error == nil {
+            LeanplumIntegration.sharedInstance.track(eventName: .saveImage)
+        }
     }
 }
 
