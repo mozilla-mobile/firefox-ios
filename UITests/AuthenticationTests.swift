@@ -99,34 +99,11 @@ class AuthenticationTests: KIFTestCase {
 
     fileprivate func enterCredentials(usernameValue: String, passwordValue: String, username: String, password: String) {
 		
-		// Wait until the dialog shows up
-		let dialogAppeared = GREYCondition(name: "Wait the login dialog to appear", block: { () -> Bool in
-			var errorOrNil: NSError?
-			let matcher = grey_allOf([grey_accessibilityValue(usernameValue),
-				grey_sufficientlyVisible()])
-            EarlGrey.select(elementWithMatcher: matcher).assert(grey_notNil(), error: &errorOrNil)
-			let success = errorOrNil == nil
-			return success
-        })
-		
-        let success = dialogAppeared?.wait(withTimeout: 20)
-		GREYAssertTrue(success!, reason: "Failed to display login dialog")
-		
-        let usernameField = EarlGrey.select(elementWithMatcher: grey_accessibilityValue(usernameValue))
-        let passwordField = EarlGrey.select(elementWithMatcher: grey_accessibilityValue(passwordValue))
-        
-        if usernameValue != "Username" {
-            usernameField.perform(grey_doubleTap())
-            EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Select All"))
-                .inRoot(grey_kindOfClass(NSClassFromString("UICalloutBarButton")!))
-                .perform(grey_tap())
-        }
-        
-        usernameField.perform(grey_typeText(username))
-        passwordField.perform(grey_typeText(password))
-        
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Log in"))
-            .inRoot(grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")!))
-            .perform(grey_tap())
+        // In case of IPad, Earl Grey complains that UI Loop has not been finished for password field, reverting.
+        let usernameField = tester().waitForViewWithAccessibilityValue(usernameValue) as! UITextField
+        let passwordField = tester().waitForViewWithAccessibilityValue(passwordValue) as! UITextField
+        usernameField.text = username
+        passwordField.text = password
+        tester().tapView(withAccessibilityLabel: "Log in")
 	}
 }
