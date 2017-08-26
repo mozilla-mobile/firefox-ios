@@ -87,7 +87,7 @@ class ContentBlockerHelper {
 
         removeOldListsByDateFromStore() {
             self.removeOldListsByNameFromStore() {
-                self.compileListsNotInStore(completion: {})
+                self.compileListsNotInStore(completion: { _ in })
             }
         }
     }
@@ -185,7 +185,7 @@ extension ContentBlockerHelper {
         }
     }
 
-    fileprivate func removeAllRulesInStore(completion: @escaping () -> Void) {
+    func removeAllRulesInStore(completion: @escaping () -> Void) {
         guard let ruleStore = ruleStore else { return }
 
         ruleStore.getAvailableContentRuleListIdentifiers { available in
@@ -254,27 +254,31 @@ extension ContentBlockerHelper {
         }
     }
 
-    fileprivate func compileListsNotInStore(completion: @escaping () -> Void) {
+    func compileListsNotInStore(completion: @escaping (_ success: Bool) -> Void) {
         guard let ruleStore = ruleStore else { return }
         let blocklists = blocklistBasic + blocklistStrict
-        let deferreds: [Deferred<Void>] = blocklists.map { filename in
-            let result = Deferred<Void>()
+        let deferreds: [Deferred<Error?>] = blocklists.map { filename in
+            let result = Deferred<Error?>()
             ruleStore.lookUpContentRuleList(forIdentifier: filename) { contentRuleList, error in
                 if contentRuleList != nil {
-                    result.fill()
+                    result.fill(nil)
                     return
                 }
                 self.loadJsonFromBundle(forResource: filename) { jsonString in
-                    ruleStore.compileContentRuleList(forIdentifier: filename, encodedContentRuleList: jsonString) { _, _ in
-                        result.fill()
+                    ruleStore.compileContentRuleList(forIdentifier: filename, encodedContentRuleList: jsonString) { _, error in
+                        if let error = error {
+                            print(error)
+                        }
+                        result.fill(error)
                     }
                 }
             }
             return result
         }
 
-        all(deferreds).uponQueue(.main) { _ in
-            completion()
+        all(deferreds).uponQueue(.main) { results in
+            let isOk = results.flatMap({$0}).count == 0
+            completion(isOk)
         }
     }
 }
