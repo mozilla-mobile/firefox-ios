@@ -479,6 +479,11 @@
 		D3E8EF101B97BE69001900FB /* ClearPrivateDataTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E8EEE71B97A87A001900FB /* ClearPrivateDataTableViewController.swift */; };
 		D3FA777B1A43B2990010CD32 /* SearchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FA777A1A43B2990010CD32 /* SearchTests.swift */; };
 		D3FEC38D1AC4B42F00494F45 /* AutocompleteTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FEC38C1AC4B42F00494F45 /* AutocompleteTextField.swift */; };
+		D879C9901F4E0CFF00EB75A6 /* LivemarkPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D879C98F1F4E0CFF00EB75A6 /* LivemarkPanel.swift */; };
+		D879C9A01F4E359800EB75A6 /* FeedKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D879C99F1F4E359800EB75A6 /* FeedKit.framework */; };
+		D879C9A21F4E370E00EB75A6 /* FeedKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D879C9A11F4E370E00EB75A6 /* FeedKit.framework */; };
+		D879C9A31F4E390200EB75A6 /* FeedKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D879C99F1F4E359800EB75A6 /* FeedKit.framework */; };
+		D879C9A41F4E390200EB75A6 /* FeedKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = D879C99F1F4E359800EB75A6 /* FeedKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DD31E0FB1B382B520077078A /* TabPrintPageRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD31E0FA1B382B520077078A /* TabPrintPageRenderer.swift */; };
 		E402000A1E6493C800B45AFF /* LaunchArguments.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075861E37F7AB006961AC /* LaunchArguments.swift */; };
 		E40AFC541DD0E93300DA5651 /* L10nPermissionStringsSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40AFC531DD0E93300DA5651 /* L10nPermissionStringsSnapshotTests.swift */; };
@@ -1258,6 +1263,7 @@
 				E69DB08B1E97DEAA008A67E6 /* Telemetry.framework in Copy Frameworks */,
 				E60138691C89EB8E00DF9756 /* ReadingList.framework in Copy Frameworks */,
 				E60138681C89EB8800DF9756 /* Sync.framework in Copy Frameworks */,
+				D879C9A41F4E390200EB75A6 /* FeedKit.framework in Copy Frameworks */,
 				E60138671C89EB8300DF9756 /* Account.framework in Copy Frameworks */,
 				E60138661C89EB7D00DF9756 /* Storage.framework in Copy Frameworks */,
 				E60138651C89EB7600DF9756 /* Shared.framework in Copy Frameworks */,
@@ -1727,6 +1733,9 @@
 		D3FA777A1A43B2990010CD32 /* SearchTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTests.swift; sourceTree = "<group>"; };
 		D3FA77831A43B2CE0010CD32 /* OpenSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenSearch.swift; sourceTree = "<group>"; };
 		D3FEC38C1AC4B42F00494F45 /* AutocompleteTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutocompleteTextField.swift; sourceTree = "<group>"; };
+		D879C98F1F4E0CFF00EB75A6 /* LivemarkPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LivemarkPanel.swift; sourceTree = "<group>"; };
+		D879C99F1F4E359800EB75A6 /* FeedKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FeedKit.framework; path = Carthage/Build/iOS/FeedKit.framework; sourceTree = "<group>"; };
+		D879C9A11F4E370E00EB75A6 /* FeedKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FeedKit.framework; path = Carthage/Build/iOS/FeedKit.framework; sourceTree = "<group>"; };
 		DD31E0FA1B382B520077078A /* TabPrintPageRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabPrintPageRenderer.swift; sourceTree = "<group>"; };
 		E40A18F71EDC73D5006B7F28 /* Fennec.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Fennec.entitlements; sourceTree = "<group>"; };
 		E40A18F81EDC73D5006B7F28 /* FennecEnterprise.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = FennecEnterprise.entitlements; sourceTree = "<group>"; };
@@ -2043,6 +2052,7 @@
 				7B8A47F61D01D3B400C07734 /* PassKit.framework in Frameworks */,
 				E69DB08A1E97DEAA008A67E6 /* Telemetry.framework in Frameworks */,
 				7B604F861C494983006EEEC3 /* Alamofire.framework in Frameworks */,
+				D879C9A21F4E370E00EB75A6 /* FeedKit.framework in Frameworks */,
 				7B604F9B1C4950F2006EEEC3 /* WebImage.framework in Frameworks */,
 				3BA9A0231D2C208C00BD418C /* Fuzi.framework in Frameworks */,
 				7B604FA21C495268006EEEC3 /* SnapKit.framework in Frameworks */,
@@ -2050,9 +2060,11 @@
 				7BA4A94A1C4CEFC70091D032 /* OnePasswordExtension.framework in Frameworks */,
 				7B604FBB1C495D8A006EEEC3 /* XCGLogger.framework in Frameworks */,
 				7B6050011C49653B006EEEC3 /* AdjustSdk.framework in Frameworks */,
+				D879C9A01F4E359800EB75A6 /* FeedKit.framework in Frameworks */,
 				E4B3348A1BBF23F9004E2BFF /* AdSupport.framework in Frameworks */,
 				E4B334881BBF23F3004E2BFF /* iAd.framework in Frameworks */,
 				E6231C051B90A472005ABB0D /* libxml2.2.tbd in Frameworks */,
+				D879C9A31F4E390200EB75A6 /* FeedKit.framework in Frameworks */,
 				E6231C031B90A466005ABB0D /* libstdc++.6.0.9.tbd in Frameworks */,
 				E6231C011B90A44F005ABB0D /* libz.tbd in Frameworks */,
 				288A2D9D1AB8B3260023ABC3 /* Shared.framework in Frameworks */,
@@ -2823,6 +2835,8 @@
 		7B604FC11C496005006EEEC3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D879C9A11F4E370E00EB75A6 /* FeedKit.framework */,
+				D879C99F1F4E359800EB75A6 /* FeedKit.framework */,
 				19DE1F781EC13E8C00428B8C /* Leanplum.framework */,
 				E46175F21EBB73A10021AE8A /* Sentry.framework */,
 				3B4988CD1E42B01800A12FDA /* SwiftyJSON.framework */,
@@ -3715,6 +3729,7 @@
 		F84B22211A09122500AAB793 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				D879C98F1F4E0CFF00EB75A6 /* LivemarkPanel.swift */,
 				F84B22261A09127C00AAB793 /* Home.xcassets */,
 				3BB50E1F1D627539004B33DF /* ActivityStreamPanel.swift */,
 				3BB50E101D6274CD004B33DF /* ActivityStreamTopSitesCell.swift */,
@@ -4910,7 +4925,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				3B61CD631F2A769D00D38DE1 /* pocketglobalfeed.json in Resources */,
-				D38A1BF11A9FA2CA00F6A386 /* SiteTableViewControllerHeader.xib in Resources */,
 				A83E5B1A1C1DA8BF0026D912 /* image.gif in Resources */,
 				A83E5B1B1C1DA8BF0026D912 /* image.png in Resources */,
 			);
@@ -5597,6 +5611,7 @@
 				3BF56D271CDBBE1F00AC4D75 /* SimpleToast.swift in Sources */,
 				D31F95E91AC226CB005C9F3B /* ScreenshotHelper.swift in Sources */,
 				28EADE5D1AFC3A78007FB2FB /* UIImageViewExtensions.swift in Sources */,
+				D879C9901F4E0CFF00EB75A6 /* LivemarkPanel.swift in Sources */,
 				D3968F251A38FE8500CEFD3B /* TabManager.swift in Sources */,
 				C4E398601D22C409004E89BA /* TopTabsLayout.swift in Sources */,
 				2816F0001B33E05400522243 /* UIConstants.swift in Sources */,

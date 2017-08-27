@@ -52,6 +52,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     fileprivate let BookmarkFolderCellIdentifier = "BookmarkFolderIdentifier"
     fileprivate let BookmarkSeparatorCellIdentifier = "BookmarkSeparatorIdentifier"
     fileprivate let BookmarkFolderHeaderViewIdentifier = "BookmarkFolderHeaderIdentifier"
+    fileprivate let BookmarkLivemarkCellIdentifier = "BookmarkLivemarkIdentifier"
 
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -60,6 +61,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         self.tableView.register(SeparatorTableCell.self, forCellReuseIdentifier: BookmarkSeparatorCellIdentifier)
         self.tableView.register(BookmarkFolderTableViewCell.self, forCellReuseIdentifier: BookmarkFolderCellIdentifier)
         self.tableView.register(BookmarkFolderTableViewHeader.self, forHeaderFooterViewReuseIdentifier: BookmarkFolderHeaderViewIdentifier)
+        self.tableView.register(LivemarkTableViewCell.self, forCellReuseIdentifier: BookmarkLivemarkCellIdentifier)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -203,6 +205,10 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let source = source, let bookmark = source.current[indexPath.row] else { return super.tableView(tableView, cellForRowAt: indexPath) }
         switch bookmark {
+        case let livemark as LivemarkItem:
+            let cell = tableView.dequeueReusableCell(withIdentifier: BookmarkLivemarkCellIdentifier, for: indexPath)
+            cell.textLabel?.text = livemark.title
+            return cell
         case let item as BookmarkItem:
             let cell = super.tableView(tableView, cellForRowAt: indexPath)
             if item.title.isEmpty {
@@ -311,6 +317,12 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         let bookmark = source.current[indexPath.row]
 
         switch bookmark {
+        case let livemark as LivemarkItem:
+            let livemarkViewController = LivemarkPanel(livemark:livemark)
+//            livemarkViewController.livemark = livemark
+            self.navigationController?.pushViewController(livemarkViewController, animated: true)
+            break
+            
         case let item as BookmarkItem:
             homePanelDelegate?.homePanel(self, didSelectURLString: item.url, visitType: VisitType.bookmark)
             LeanplumIntegration.sharedInstance.track(eventName: .openedBookmark)
@@ -482,6 +494,28 @@ class BookmarkFolderTableViewCell: TwoLineTableViewCell {
         super.layoutSubviews()
     }
 
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+fileprivate class LivemarkTableViewCell: BookmarkFolderTableViewCell {
+    
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.backgroundColor = BookmarksPanelUX.BookmarkFolderBGColor
+        textLabel?.backgroundColor = UIColor.clear
+        textLabel?.tintColor = BookmarksPanelUX.BookmarkFolderTextColor
+        
+        imageView?.image = UIImage(named: "bookmarkFolder")
+        accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+        separatorInset = UIEdgeInsets.zero
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

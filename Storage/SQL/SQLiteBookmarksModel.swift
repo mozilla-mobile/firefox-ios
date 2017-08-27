@@ -593,13 +593,14 @@ class BookmarkFactory {
         }
     }
 
-    fileprivate class func livemarkFactory(_ row: SDRow) -> BookmarkItem {
+    fileprivate class func livemarkFactory(_ row: SDRow) -> LivemarkItem {
         let id = row["id"] as! Int
         let guid = row["guid"] as! String
         let url = row["siteUri"] as! String
         let title = row["title"] as? String ?? "Livemark"       // TODO
+        let feedUri = row["feedUri"] as! String
         let isEditable = row.getBoolean("isEditable")           // Defaults to false.
-        let bookmark = BookmarkItem(guid: guid, title: title, url: url, isEditable: isEditable)
+        let bookmark = LivemarkItem(guid: guid, title: title, url: url, feedUri: feedUri, isEditable: isEditable)
         bookmark.id = id
         BookmarkFactory.addIcon(bookmark, row: row)
         return bookmark
