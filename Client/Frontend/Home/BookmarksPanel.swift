@@ -318,8 +318,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
         switch bookmark {
         case let livemark as LivemarkItem:
-            let livemarkViewController = LivemarkPanel(livemark:livemark)
-//            livemarkViewController.livemark = livemark
+            let livemarkViewController = LivemarkPanel(livemark:livemark, homePanelDelegate:self.homePanelDelegate)
             self.navigationController?.pushViewController(livemarkViewController, animated: true)
             break
             

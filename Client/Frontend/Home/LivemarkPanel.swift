@@ -77,15 +77,17 @@ class LivemarkItemTableCell: UITableViewCell {
     }
 }
 
-class LivemarkPanel: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class LivemarkPanel: UIViewController, HomePanel, UITableViewDelegate, UITableViewDataSource {
     private var livemark: LivemarkItem
     private var items: [Item] = []
     private var tableView = UITableView()
+    internal var homePanelDelegate: HomePanelDelegate?
     
     private let CellIdentifier = "CellIdentifier"
     
-    init(livemark: LivemarkItem) {
+    init(livemark: LivemarkItem, homePanelDelegate: HomePanelDelegate?) {
         self.livemark = livemark
+        self.homePanelDelegate = homePanelDelegate
         self.tableView.register(LivemarkItemTableCell.self, forCellReuseIdentifier: CellIdentifier)
         super.init(nibName: nil, bundle: nil)
     }
@@ -152,6 +154,13 @@ class LivemarkPanel: UIViewController, UITableViewDelegate, UITableViewDataSourc
         cel.authorLabel.text = item.Author
         
         return cel
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: false)
+        // TODO: Leanplum tracking?
+        let item = items[indexPath.row]
+        homePanelDelegate?.homePanel(self, didSelectURLString: item.Url, visitType: VisitType.bookmark)
     }
     
 //    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
