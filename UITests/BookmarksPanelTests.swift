@@ -4,6 +4,7 @@
 
 @testable import Client
 @testable import Storage
+import Shared
 import Foundation
 import WebKit
 import EarlGrey
@@ -61,7 +62,7 @@ class BookmarksPanelTests: KIFTestCase {
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Desktop Bookmarks")).perform(grey_tap())
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Bookmarks Toolbar")).perform(grey_tap())
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("AAA"))
-        .assert(grey_sufficientlyVisible())
+            .assert(grey_sufficientlyVisible())
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Some Livemark"))
             .assert(grey_sufficientlyVisible())
         
@@ -69,11 +70,31 @@ class BookmarksPanelTests: KIFTestCase {
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Some Livemark")).perform(grey_tap())
         
         // … so we show the truncated URL.
-        // Strangely, earlgrey cannot find the label in buddybuild, but passes locally. 
+        // Strangely, earlgrey cannot find the label in buddybuild, but passes locally.
         // Using KIF for this check for now.
         EarlGrey.select(elementWithMatcher: grey_accessibilityValue("https://www.google.ca")).assert(grey_sufficientlyVisible())
     }
 
+    private func navigateBackInTableView() {
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Bookmarks")).inRoot(grey_kindOfClass(NSClassFromString("UITableView")!)).perform(grey_tap())
+    }
+    
+    private func navigateFolder(withTitle title: String) {
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(title)).perform(grey_tap())
+    }
+
+    private func makeBookmark(guid: GUID, parentID: GUID, title: String) -> BookmarkMirrorItem {
+        return BookmarkMirrorItem.bookmark(guid, modified: Date.now(), hasDupe: false, parentID: parentID, parentName: nil, title: title, description: nil, URI: "http://unused.com", tags: "[]", keyword: nil)
+    }
+    
+    private func makeFolder(guid: GUID, parentID: GUID, title: String, childrenGuids: [GUID]) -> BookmarkMirrorItem {
+        return BookmarkMirrorItem.folder(guid, modified: Date.now(), hasDupe: false, parentID: parentID, parentName: nil, title: title, description: nil, children: childrenGuids)
+    }
+    
+    private func assertRowExists(withTitle title: String) {
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(title)).inRoot(grey_kindOfClass(NSClassFromString("UITableView")!)).assert(grey_notNil())
+    }
+    
     func testRootHasLocalAndBuffer() {
         // Add buffer data, then later in the test verify that the buffer mobile folder is not shown in there anymore.
         createSomeBufferBookmarks()
@@ -82,26 +103,45 @@ class BookmarksPanelTests: KIFTestCase {
             return
         }
         
-        let changedBufferRecords = [
-            BookmarkMirrorItem.bookmark("guid0", modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.MobileFolderGUID, parentName: nil, title: "xyz", description: nil, URI: "http://unused.com", tags: "[]", keyword: nil),
-            BookmarkMirrorItem.folder(BookmarkRoots.MobileFolderGUID, modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: nil, title: "", description: nil, children: ["guid0"])
-        ]
-        XCTAssert(bookmarks.applyRecords(changedBufferRecords).value.isSuccess)
-        
+        // TEST: Create remote mobile bookmark, and verify the bookmark appears in the root and the remote mobile folder is not shown
+        var applyResult = bookmarks.applyRecords([
+            makeBookmark(guid: "bm-guid0", parentID: BookmarkRoots.MobileFolderGUID, title: "xyz"),
+            makeFolder(guid: BookmarkRoots.MobileFolderGUID, parentID: BookmarkRoots.RootGUID, title: "", childrenGuids: ["bm-guid0"])
+            ])
+        XCTAssert(applyResult.value.isSuccess)
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Bookmarks")).perform(grey_tap())
         
         // is this in the root?
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("xyz")).assert(grey_notNil())
+        assertRowExists(withTitle: "xyz")
         
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Desktop Bookmarks")).perform(grey_tap())
+        navigateFolder(withTitle: "Desktop Bookmarks")
         // this should be missing, they are shown in the root
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Mobile Bookmarks")).assert(grey_nil())
         
-        // Add a local bookmark, and then navigate back to the root view (the navigation will refresh the table).
-        let ok = (bookmarks as! MergedSQLiteBookmarks).local.addToMobileBookmarks(URL(string: "http://another-unused")!, title: "123", favicon: nil)
-        XCTAssert(ok.value.isSuccess)
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Bookmarks")).inRoot(grey_kindOfClass(NSClassFromString("UITableView")!)).perform(grey_tap())
+        // TEST: Add a local bookmark, and then navigate back to the root view (the navigation will refresh the table).
+        let isAdded = (bookmarks as! MergedSQLiteBookmarks).local.addToMobileBookmarks(URL(string: "http://another-unused")!, title: "123", favicon: nil)
+        XCTAssert(isAdded.value.isSuccess)
+        navigateBackInTableView()
         // is this in the root?
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("123")).assert(grey_notNil())
+        assertRowExists(withTitle: "123")
+        
+        // TEST: Add sub-folder to MobileFolderGUID, ensure it is navigable
+        applyResult = bookmarks.applyRecords([
+            makeBookmark(guid: "bm-guid1", parentID: "folder-guid0", title: "item-in-remote-subfolder"),
+            makeFolder(guid: "folder-guid0", parentID: BookmarkRoots.MobileFolderGUID, title: "remote-subfolder", childrenGuids: ["bm-guid1"]),
+            makeFolder(guid: BookmarkRoots.MobileFolderGUID, parentID: BookmarkRoots.RootGUID, title: "", childrenGuids: ["bm-guid0", "folder-guid0"])
+            ])
+        XCTAssert(applyResult.value.isSuccess)
+        
+        // refresh view
+        navigateFolder(withTitle: "Desktop Bookmarks")
+        navigateBackInTableView()
+        
+        // subfolder should now be in the root
+        assertRowExists(withTitle: "remote-subfolder")
+        
+        // navigate remote mobile subfolder, ensure bookmark is shown in the subfolder
+        navigateFolder(withTitle: "remote-subfolder")
+        assertRowExists(withTitle: "item-in-remote-subfolder")
     }
 }
