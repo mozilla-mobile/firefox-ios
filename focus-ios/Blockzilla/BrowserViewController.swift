@@ -113,7 +113,6 @@ class BrowserViewController: UIViewController {
 
         createHomeView()
         createURLBar()
-        urlBar.becomeFirstResponder()   
 
         guard shouldEnsureBrowsingMode else { return }
         ensureBrowsingMode()
@@ -127,6 +126,12 @@ class BrowserViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(true, animated: animated)
+
+        // Prevent the keyboard from showing up until after the user has viewed the Intro.
+        if UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone) == AppDelegate.prefIntroVersion {
+            urlBar.becomeFirstResponder()
+        }
+
         super.viewWillAppear(animated)
     }
 

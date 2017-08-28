@@ -10,8 +10,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     private var splashView: UIView?
-    private static let prefIntroDone = "IntroDone"
-    private static let prefIntroVersion = 2
+    static let prefIntroDone = "IntroDone"
+    static let prefIntroVersion = 2
     private let browserViewController = BrowserViewController()
     private var queuedUrl: URL?
 
@@ -97,10 +97,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         KeyboardHelper.defaultHelper.startObserving()
 
         if UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone) < AppDelegate.prefIntroVersion {
-            UserDefaults.standard.set(AppDelegate.prefIntroVersion, forKey: AppDelegate.prefIntroDone)
 
             // Show the first run UI asynchronously to avoid the "unbalanced calls to begin/end appearance transitions" warning.
             DispatchQueue.main.async {
+                // Set the prefIntroVersion viewed number in the same context as the presentation.
+                UserDefaults.standard.set(AppDelegate.prefIntroVersion, forKey: AppDelegate.prefIntroDone)
+
                 let firstRunViewController = FirstRunViewController()
                 rootViewController.present(firstRunViewController, animated: false, completion: nil)
             }
