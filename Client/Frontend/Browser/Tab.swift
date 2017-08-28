@@ -155,8 +155,7 @@ class Tab: NSObject {
             configuration!.preferences = WKPreferences()
             configuration!.preferences.javaScriptCanOpenWindowsAutomatically = false
             configuration!.allowsInlineMediaPlayback = true
-            let webView = TabWebView(frame: CGRect.zero, configuration: configuration!)
-            webView.delegate = self
+            let webView = WKWebView(frame: CGRect.zero, configuration: configuration!)
             configuration = nil
 
             webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
@@ -465,11 +464,7 @@ class Tab: NSObject {
     }
 }
 
-extension Tab: TabWebViewDelegate {
-    fileprivate func tabWebView(_ tabWebView: TabWebView, didSelectFindInPageForSelection selection: String) {
-        tabDelegate?.tab(self, didSelectFindInPageForSelection: selection)
-    }
-}
+
 
 private class HelperManager: NSObject, WKScriptMessageHandler {
     fileprivate var helpers = [String: TabHelper]()
@@ -506,31 +501,5 @@ private class HelperManager: NSObject, WKScriptMessageHandler {
 
     func getHelper(_ name: String) -> TabHelper? {
         return helpers[name]
-    }
-}
-
-private protocol TabWebViewDelegate: class {
-    func tabWebView(_ tabWebView: TabWebView, didSelectFindInPageForSelection selection: String)
-}
-
-private class TabWebView: WKWebView, MenuHelperInterface {
-    fileprivate weak var delegate: TabWebViewDelegate?
-
-    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
-        return action == MenuHelper.SelectorFindInPage
-    }
-
-    @objc func menuHelperFindInPage() {
-        evaluateJavaScript("getSelection().toString()") { result, _ in
-            let selection = result as? String ?? ""
-            self.delegate?.tabWebView(self, didSelectFindInPageForSelection: selection)
-        }
-    }
-
-    fileprivate override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        // The find-in-page selection menu only appears if the webview is the first responder.
-        becomeFirstResponder()
-
-        return super.hitTest(point, with: event)
     }
 }

@@ -9,7 +9,6 @@ import Foundation
     @objc optional func menuHelperOpenAndFill()
     @objc optional func menuHelperReveal()
     @objc optional func menuHelperSecure()
-    @objc optional func menuHelperFindInPage()
 }
 
 open class MenuHelper: NSObject {
@@ -17,7 +16,6 @@ open class MenuHelper: NSObject {
     open static let SelectorHide: Selector = #selector(MenuHelperInterface.menuHelperSecure)
     open static let SelectorOpenAndFill: Selector = #selector(MenuHelperInterface.menuHelperOpenAndFill)
     open static let SelectorReveal: Selector = #selector(MenuHelperInterface.menuHelperReveal)
-    open static let SelectorFindInPage: Selector = #selector(MenuHelperInterface.menuHelperFindInPage)
 
     open class var defaultHelper: MenuHelper {
         struct Singleton {
@@ -39,9 +37,6 @@ open class MenuHelper: NSObject {
         let openAndFillTitle = NSLocalizedString("Open & Fill", tableName: "LoginManager", comment: "Open and Fill website text selection menu item")
         let openAndFillItem = UIMenuItem(title: openAndFillTitle, action: MenuHelper.SelectorOpenAndFill)
 
-        let findInPageTitle = NSLocalizedString("Find in Page", tableName: "FindInPage", comment: "Text selection menu item")
-        let findInPageItem = UIMenuItem(title: findInPageTitle, action: MenuHelper.SelectorFindInPage)
-
-        UIMenuController.shared.menuItems = [copyItem, revealPasswordItem, hidePasswordItem, openAndFillItem, findInPageItem]
+        UIMenuController.shared.menuItems = [copyItem, revealPasswordItem, hidePasswordItem, openAndFillItem]
     }
 }
