@@ -82,6 +82,17 @@ class LivemarkPanel: UIViewController, HomePanel, UITableViewDelegate, UITableVi
     private var items: [Item] = []
     private var tableView = UITableView()
     internal var homePanelDelegate: HomePanelDelegate?
+    private var refreshControl = UIRefreshControl()
+    
+    private var isLoading = false {
+        didSet {
+            if (isLoading) {
+                refreshControl.beginRefreshing()
+            } else {
+                refreshControl.endRefreshing()
+            }
+        }
+    }
     
     private let CellIdentifier = "CellIdentifier"
     
@@ -101,7 +112,7 @@ class LivemarkPanel: UIViewController, HomePanel, UITableViewDelegate, UITableVi
         
         title = livemark.title
         
-        let feedUrl = URL(string:"https://www.vox.com/rss/index.xml")!
+        let feedUrl = URL(string:livemark.feedUri)!
         
         FeedParser(URL: feedUrl)?.parseAsync { result in
             switch result {
@@ -117,6 +128,9 @@ class LivemarkPanel: UIViewController, HomePanel, UITableViewDelegate, UITableVi
             case let .failure(error):
                 self.handleFailure()
             }
+            
+            self.tableView.reloadData()
+            self.isLoading = false
         }
         
         
@@ -125,7 +139,17 @@ class LivemarkPanel: UIViewController, HomePanel, UITableViewDelegate, UITableVi
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if #available(iOS 10.0, *) {
+            tableView.refreshControl = refreshControl
+        } else {
+            tableView.addSubview(refreshControl)
+        }
+        
+        self.isLoading = true
+        
+        
 //        tableView.addGestureRecognizer(longPressRecognizer)
+
         tableView.accessibilityIdentifier = "LivemarkTable"
         tableView.estimatedRowHeight = LivemarkItemTableCell.RowHeight
         tableView.rowHeight = UITableViewAutomaticDimension
@@ -141,6 +165,7 @@ class LivemarkPanel: UIViewController, HomePanel, UITableViewDelegate, UITableVi
         
         tableView.delegate = self
         tableView.dataSource = self
+        
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -189,20 +214,36 @@ class LivemarkPanel: UIViewController, HomePanel, UITableViewDelegate, UITableVi
             let published = entry.published
             addItem(url: url, title: title, author: author, published: published)
         }
-        
-        self.tableView.reloadData()
     }
     
     private func handleRssFeed(feed: RSSFeed) {
+        guard let rssItems = feed.items else { return }
         
+        for rssItem: RSSFeedItem in rssItems {
+            guard let url = rssItem.link else { continue }
+            guard let title = rssItem.title else { continue }
+            let author = rssItem.author
+            let published = rssItem.pubDate
+            addItem(url: url, title: title, author: author, published: published)
+        }
     }
     
     private func handleJsonFeed(feed: JSONFeed) {
+        // NOTE: These are not yet supported by Firefox Desktop
+        // https://jsonfeed.org/version/1
         
+        guard let feedItems = feed.items else { return }
+        for feedItem: JSONFeedItem in feedItems {
+            guard let url = feedItem.url else { return }
+            guard let title = feedItem.title else { return }
+            let author = feedItem.author?.name
+            let published = feedItem.datePublished
+            addItem(url: url, title: title, author: author, published: published)
+        }
     }
     
     private func handleFailure() {
-        
+        // TODO: Display error
     }
     
     private func addItem(url: String, title: String, author: String?, published: Date?) {
