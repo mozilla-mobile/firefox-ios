@@ -23,10 +23,8 @@ class RequestHandler {
             let title = components.path
 
             switch scheme {
-            case "facetime": fallthrough
-            case "facetime-audio": fallthrough
-            case "tel":
-                let alert = RequestHandler.makeAlert(title: title, action: UIConstants.strings.externalLinkCall, forURL: url)
+            case "facetime", "facetime-audio":
+                let alert = RequestHandler.makeAlert(title: title, action: "FaceTime", forURL: url)
                 alertCallback(alert)
             case "mailto":
                 let alert = RequestHandler.makeAlert(title: title, action: UIConstants.strings.externalLinkEmail, forURL: url)
@@ -45,11 +43,11 @@ class RequestHandler {
 
         switch host {
         case "maps.apple.com":
-            let alert = RequestHandler.makeAlert(title: String(format: UIConstants.strings.externalLinkTitle, AppInfo.productName.replacingOccurrences(of: " ", with: " ")), action: UIConstants.strings.externalLinkOpenMaps, forURL: url)
+            let alert = RequestHandler.makeAlert(title: String(format: UIConstants.strings.externalAppLinkWithAppName, AppInfo.productName, "Maps"), action: UIConstants.strings.open, forURL: url)
             alertCallback(alert)
             return false
         case "itunes.apple.com":
-            let alert = RequestHandler.makeAlert(title: String(format: UIConstants.strings.externalLinkTitle, AppInfo.productName.replacingOccurrences(of: " ", with: " ")), action: UIConstants.strings.externalLinkOpenAppStore, forURL: url)
+            let alert = RequestHandler.makeAlert(title: String(format: UIConstants.strings.externalAppLinkWithAppName, AppInfo.productName, "App Store"), action: UIConstants.strings.open, forURL: url)
             alertCallback(alert)
             return false
         default:
