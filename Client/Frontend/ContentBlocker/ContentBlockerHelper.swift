@@ -6,8 +6,6 @@ import WebKit
 import Shared
 import Deferred
 
-fileprivate let NotificationContentBlockerReloadNeeded = "NotificationContentBlockerReloadNeeded"
-
 @available(iOS 11.0, *)
 class ContentBlockerHelper {
     static let PrefKeyEnabledState = "prefkey.trackingprotection.enabled"
@@ -64,10 +62,6 @@ class ContentBlockerHelper {
         static let allOptions: [BlockingStrength] = [.basic, .strict]
     }
 
-    static func prefsChanged() {
-        NotificationCenter.default.post(name: Notification.Name(rawValue: NotificationContentBlockerReloadNeeded), object: nil)
-    }
-
     class func name() -> String {
         return "ContentBlockerHelper"
     }
@@ -84,9 +78,7 @@ class ContentBlockerHelper {
         self.tab = tab
         self.profile = profile
 
-        NotificationCenter.default.addObserver(self, selector: #selector(ContentBlockerHelper.reloadTab), name: NSNotification.Name(rawValue: NotificationContentBlockerReloadNeeded), object: nil)
-
-        addActiveRulesToTab(reloadTab: false)
+        addActiveRulesToTab()
 
         if ContentBlockerHelper.heavyInitHasRunOnce {
             return
@@ -114,42 +106,28 @@ class ContentBlockerHelper {
         return EnabledState(rawValue: pref) ?? .onInPrivateBrowsing
     }
 
-    @objc func reloadTab() {
-        addActiveRulesToTab(reloadTab: true)
-    }
-
-    fileprivate func addActiveRulesToTab(reloadTab: Bool) {
+    fileprivate func addActiveRulesToTab() {
         guard let ruleStore = ruleStore else { return }
         let rules = blocklistBasic + (blockingStrengthPref == .strict ? blocklistStrict : [])
         let enabledMode = enabledStatePref
         removeAllFromTab()
 
         func addRules() {
-            var completed = 0
             for name in rules {
                 ruleStore.lookUpContentRuleList(forIdentifier: name) { rule, error in
                     self.addToTab(contentRuleList: rule, error: error)
-                    completed += 1
-                    if reloadTab && completed == rules.count {
-                        self.tab?.reload()
-                    }
                 }
             }
         }
 
         switch enabledStatePref {
         case .off:
-            if reloadTab {
-                self.tab?.reload()
-            }
             return
         case .on:
             addRules()
         case .onInPrivateBrowsing:
             if tab?.isPrivate ?? false {
                 addRules()
-            } else {
-                self.tab?.reload()
             }
         }
     }
@@ -276,7 +254,6 @@ extension ContentBlockerHelper {
         }
     }
 
-    // Pass true to completion block if the rule store was modified.
     fileprivate func compileListsNotInStore(completion: @escaping () -> Void) {
         guard let ruleStore = ruleStore else { return }
         let blocklists = blocklistBasic + blocklistStrict

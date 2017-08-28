@@ -35,7 +35,6 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
                 self.currentEnabledState = option
                 self.prefs.setString(self.currentEnabledState.rawValue, forKey: ContentBlockerHelper.PrefKeyEnabledState)
                 self.tableView.reloadData()
-                ContentBlockerHelper.prefsChanged()
             })
         }
 
@@ -46,7 +45,6 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
                 self.currentBlockingStrength = option
                 self.prefs.setString(self.currentBlockingStrength.rawValue, forKey: ContentBlockerHelper.PrefKeyStrength)
                 self.tableView.reloadData()
-                ContentBlockerHelper.prefsChanged()
             })
         }
 
