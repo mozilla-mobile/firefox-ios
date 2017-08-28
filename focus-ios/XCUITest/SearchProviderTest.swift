@@ -71,7 +71,9 @@ class SearchProviderTest: BaseTestCase {
 				waitForValueContains(element: urlbarUrltextTextField, value: "https://en.m.wikipedia.org/wiki/Mozilla")
             case "Amazon.com":
 				waitForValueContains(element: urlbarUrltextTextField, value: "https://www.amazon")
-				waitForValueContains(element: app.textFields["Search"], value: searchWord)
+                waitForValueContains(element: app.webViews.textFields["Type search keywords"],
+                    value: searchWord)
+            
 			default:
 				XCTFail("Invalid Search Provider")
 		}
