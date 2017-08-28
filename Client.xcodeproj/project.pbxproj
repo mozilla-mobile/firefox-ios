@@ -750,6 +750,7 @@
 		EB2A633E1F3B514A004EF8B0 /* disconnect-content.json in Resources */ = {isa = PBXBuildFile; fileRef = EB2A63371F3B5135004EF8B0 /* disconnect-content.json */; };
 		EB2A633F1F3B514B004EF8B0 /* disconnect-social.json in Resources */ = {isa = PBXBuildFile; fileRef = EB2A63391F3B5135004EF8B0 /* disconnect-social.json */; };
 		EB2A63401F3B515C004EF8B0 /* web-fonts.json in Resources */ = {isa = PBXBuildFile; fileRef = EB2A63351F3B4EA7004EF8B0 /* web-fonts.json */; };
+		EB5A5B961F5471150036E1BB /* ContentBlockerSettingsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5A5B871F5471150036E1BB /* ContentBlockerSettingsTest.swift */; };
 		EBC17F8B1F511A16000EEEB7 /* ContentBlockerInitTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC17F7C1F511A15000EEEB7 /* ContentBlockerInitTest.swift */; };
 		F35B8D2B1D6380EA008E3D61 /* SessionRestore.html in Resources */ = {isa = PBXBuildFile; fileRef = F35B8D2A1D6380EA008E3D61 /* SessionRestore.html */; };
 		F35B8D2D1D6383E9008E3D61 /* SessionRestoreHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F35B8D2C1D6383E9008E3D61 /* SessionRestoreHelper.swift */; };
@@ -1982,6 +1983,7 @@
 		EB2A63371F3B5135004EF8B0 /* disconnect-content.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "disconnect-content.json"; sourceTree = "<group>"; };
 		EB2A63381F3B5135004EF8B0 /* disconnect-advertising.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "disconnect-advertising.json"; sourceTree = "<group>"; };
 		EB2A63391F3B5135004EF8B0 /* disconnect-social.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "disconnect-social.json"; sourceTree = "<group>"; };
+		EB5A5B871F5471150036E1BB /* ContentBlockerSettingsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentBlockerSettingsTest.swift; sourceTree = "<group>"; };
 		EBC17F7C1F511A15000EEEB7 /* ContentBlockerInitTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentBlockerInitTest.swift; sourceTree = "<group>"; };
 		F35B8D2A1D6380EA008E3D61 /* SessionRestore.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = SessionRestore.html; sourceTree = "<group>"; };
 		F35B8D2C1D6383E9008E3D61 /* SessionRestoreHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionRestoreHelper.swift; sourceTree = "<group>"; };
@@ -3007,6 +3009,7 @@
 		D39FA1601A83E0EC00EE869C /* UITests */ = {
 			isa = PBXGroup;
 			children = (
+				EB5A5B871F5471150036E1BB /* ContentBlockerSettingsTest.swift */,
 				0BEF44621E31165700187C32 /* EarlGrey.swift */,
 				D39FA16F1A83E62600EE869C /* UITests-Bridging-Header.h */,
 				D343DCFD1C446BDB00D7EEE8 /* findPage.html */,
@@ -5370,6 +5373,7 @@
 				D313BE981B2F5096009EF241 /* DomainAutocompleteTests.swift in Sources */,
 				D3CFD3641CC5605B0064AB4A /* SecurityTests.swift in Sources */,
 				D3C3EB651B6FF44000388E9A /* SessionRestoreTests.swift in Sources */,
+				EB5A5B961F5471150036E1BB /* ContentBlockerSettingsTest.swift in Sources */,
 				7B24DC9C1B67B3590005766B /* ClearPrivateDataTests.swift in Sources */,
 				E633E37A1C2204BE001FFF6C /* LoginManagerTests.swift in Sources */,
 				744B0FFE1B4F172E00100422 /* ToolbarTests.swift in Sources */,

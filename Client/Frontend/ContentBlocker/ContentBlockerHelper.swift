@@ -10,9 +10,9 @@ import Deferred
 class ContentBlockerHelper {
     static let PrefKeyEnabledState = "prefkey.trackingprotection.enabled"
     static let PrefKeyStrength = "prefkey.trackingprotection.strength"
-    fileprivate let blocklistBasic = ["disconnect-advertising", "disconnect-analytics", "disconnect-social"]
-    fileprivate let blocklistStrict = ["disconnect-content", "web-fonts"]
     fileprivate let ruleStore: WKContentRuleListStore?
+    let blocklistBasic = ["disconnect-advertising", "disconnect-analytics", "disconnect-social"]
+    let blocklistStrict = ["disconnect-content", "web-fonts"]
     fileprivate weak var tab: Tab?
     fileprivate weak var profile: Profile?
 
@@ -106,42 +106,56 @@ class ContentBlockerHelper {
         return EnabledState(rawValue: pref) ?? .onInPrivateBrowsing
     }
 
-    fileprivate func addActiveRulesToTab() {
-        guard let ruleStore = ruleStore else { return }
+    func addActiveRulesToTab() -> Deferred<[String]> {
+        let result = Deferred<[String]>()
+        guard let ruleStore = ruleStore else { return result }
         let rules = blocklistBasic + (blockingStrengthPref == .strict ? blocklistStrict : [])
         let enabledMode = enabledStatePref
         removeAllFromTab()
 
         func addRules() {
-            for name in rules {
+            let deferreds: [Deferred<String?>] = rules.map { name in
+                let result = Deferred<String?>()
                 ruleStore.lookUpContentRuleList(forIdentifier: name) { rule, error in
-                    self.addToTab(contentRuleList: rule, error: error)
+                    let ok = self.addToTab(contentRuleList: rule, error: error)
+                    result.fill(ok ? name : nil)
                 }
+                return result
+            }
+            all(deferreds).uponQueue(.main) { list in
+                let list = list.flatMap { $0 }
+                result.fill(list)
             }
         }
 
         switch enabledStatePref {
         case .off:
-            return
+            result.fill([])
         case .on:
             addRules()
         case .onInPrivateBrowsing:
             if tab?.isPrivate ?? false {
                 addRules()
+            } else {
+                result.fill([])
             }
         }
+
+        return result
     }
 
     func removeAllFromTab() {
         tab?.webView?.configuration.userContentController.removeAllContentRuleLists()
     }
 
-    fileprivate func addToTab(contentRuleList: WKContentRuleList?, error: Error?) {
+    fileprivate func addToTab(contentRuleList: WKContentRuleList?, error: Error?) -> Bool {
         if let rules = contentRuleList {
             tab?.webView?.configuration.userContentController.add(rules)
+            return true
         } else {
             print("Content blocker load error: " + (error?.localizedDescription ?? "empty rules"))
             assert(false)
+            return false
         }
     }
 }
