@@ -63,6 +63,11 @@ class ShareExtensionHelper: NSObject {
                 completionHandler(completed, activityType.map { $0.rawValue })
                 return
             }
+            // Bug 1392418 - When copying a url using the share extension there are 2 urls in the pasteboard.
+            // Make sure the pasteboard only has one url.
+            if let url = UIPasteboard.general.urls?.first {
+                UIPasteboard.general.urls = [url]
+            }
 
             if self.isPasswordManagerActivityType(activityType.map { $0.rawValue }) {
                 if let logins = returnedItems {
