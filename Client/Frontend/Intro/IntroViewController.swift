@@ -378,7 +378,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
     }
     
     fileprivate func setupDynamicFonts() {
-        startBrowsingButton.titleLabel?.font = UIFont(name: "FiraSans-Regular", size: DynamicFontHelper.defaultHelper.IntroSmallFontSize)
+        startBrowsingButton.titleLabel?.font = UIFont(name: "FiraSans-Regular", size: DynamicFontHelper.defaultHelper.IntroStandardFontSize)
         signInButton.titleLabel?.font = UIFont(name: "FiraSans-Regular", size: DynamicFontHelper.defaultHelper.IntroBigFontSize)
 
         for titleLabel in titleLabels {
