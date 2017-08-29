@@ -1153,6 +1153,7 @@ extension TabTrayController: MenuActionDelegate {
                         self.SELdidTogglePrivateMode()
                     }
                     self.openNewTab()
+                    LeanplumIntegration.sharedInstance.track(eventName: .openedNewTab, withParameters: ["Source":"Tab Tray Menu" as AnyObject])
                 }
             case .openNewPrivateTab:
                 DispatchQueue.main.async {
