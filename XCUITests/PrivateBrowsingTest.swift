@@ -93,7 +93,11 @@ class PrivateBrowsingTest: BaseTestCase {
         // Check that Close Private Tabs when closing the Private Browsing Button is off by default
         navigator.goto(SettingsScreen)
         let appsettingstableviewcontrollerTableviewTable = app.tables["AppSettingsTableViewController.tableView"]
-        appsettingstableviewcontrollerTableviewTable.staticTexts["Firefox needs to reopen for this change to take effect."].swipeUp()
+        
+        while appsettingstableviewcontrollerTableviewTable.staticTexts["Close Private Tabs"].exists == false {
+            appsettingstableviewcontrollerTableviewTable.swipeUp()
+        }
+
         let closePrivateTabsSwitch = appsettingstableviewcontrollerTableviewTable.switches["Close Private Tabs, When Leaving Private Browsing"]
 
         XCTAssertFalse(closePrivateTabsSwitch.isSelected)
@@ -144,6 +148,7 @@ class PrivateBrowsingTest: BaseTestCase {
         // Go back to private brosing
         navigator.goto(PrivateTabTray)
         
+        waitforNoExistence(app.staticTexts["Private Browsing"])
         XCTAssertFalse(app.staticTexts["Private Browsing"].exists, "Private Browsing screen is shown")
         let numPrivTabsOpen = app.collectionViews.cells.count
         XCTAssertEqual(numPrivTabsOpen, 1, "The number of tabs is not correct, there should be one private tab")

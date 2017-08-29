@@ -25,7 +25,7 @@ class HomePageSettingsUITests: BaseTestCase {
     func testNavigation() {
         // Check that the homepage menu exists
         navigator.goto(HomePageSettings)
-        XCTAssertTrue(app.staticTexts["Homepage Settings"].exists)
+            waitforExistence(app.navigationBars["Homepage Settings"])
     }
 
     private func enterWebPageAsHomepage(text: String) {
@@ -65,7 +65,7 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.goto(NewTabScreen)
         navigator.goto(HomePageSettings)
         let valueAfter = app.textFields["HomePageSettingTextField"].value
-        XCTAssertEqual(valueAfter as? String, "")
+        XCTAssertEqual("Enter a webpage", valueAfter as! String)
 
         // There is no option to go to Home, instead the website open has the option to be set as HomePageSettings
         navigator.goto(NewTabScreen)
@@ -110,6 +110,9 @@ class HomePageSettingsUITests: BaseTestCase {
         // Check that nothing is copied in the Set webpage field
         app.cells["Use Copied Link"].tap()
         let value = app.textFields["HomePageSettingTextField"].value
-        XCTAssertEqual(value as? String, "", "An invalid url cannot be copied in thto the HomePageSettingsTextField")
+        
+        XCTAssertEqual("Enter a webpage", value as! String)
+
+//        XCTAssertEqual(value as? String, "", "An invalid url cannot be copied in thto the HomePageSettingsTextField")
     }
 }

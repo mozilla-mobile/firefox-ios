@@ -92,7 +92,7 @@ class NavigationTest: BaseTestCase {
         checkFirefoxSyncScreenShown()
 
         // Go back to NewTabScreen
-        app.navigationBars["Client.FxAContentView"].buttons["Cancel"].tap()
+        app.navigationBars["Client.FxAContentView"].buttons["Done"].tap()
         navigator.nowAt(NewTabScreen)
     }
 
@@ -116,7 +116,7 @@ class NavigationTest: BaseTestCase {
         app.tables["History List"].staticTexts["Synced Devices"].tap()
         app.tables.buttons["Sign in"].tap()
         checkFirefoxSyncScreenShown()
-        app.navigationBars["Client.FxAContentView"].buttons["Cancel"].tap()
+        app.navigationBars["Client.FxAContentView"].buttons["Done"].tap()
         navigator.nowAt(HomePanel_History)
     }
 
