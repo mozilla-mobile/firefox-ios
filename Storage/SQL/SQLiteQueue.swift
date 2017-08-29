@@ -14,17 +14,6 @@ open class SQLiteQueue: TabQueue {
 
     public init(db: BrowserDB) {
         self.db = db
-        
-        // BrowserSchema doesn't need to stick around once the schema has been created/updated.
-        switch db.prepareSchema(BrowserSchema()) {
-        case .failure:
-            log.error("Failed to create/update DB schema!")
-            fatalError()
-        case .closed:
-            log.info("Database not created as the SQLiteConnection is closed.")
-        case .success:
-            log.debug("Database succesfully created/updated")
-        }
     }
 
     open func addToQueue(_ tab: ShareItem) -> Success {

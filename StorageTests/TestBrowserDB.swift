@@ -54,8 +54,7 @@ class TestBrowserDB: XCTestCase {
     }
 
     func testMovesDB() {
-        let db = BrowserDB(filename: "foo.db", files: self.files)
-        XCTAssertTrue(db.prepareSchema(BrowserSchema()) == .success)
+        let db = try! BrowserDB(filename: "foo.db", schema: BrowserSchema(), files: self.files)
 
         db.run("CREATE TABLE foo (bar TEXT)").succeeded() // Just so we have writes in the WAL.
 

@@ -11,13 +11,7 @@ import XCTest
 
 // Thieved mercilessly from TestSQLiteBookmarks.
 private func getBrowserDBForFile(filename: String, files: FileAccessor) -> BrowserDB? {
-    let db = BrowserDB(filename: filename, files: files)
-
-    // BrowserSchema doesn't need to stick around once the schema has been created/updated.
-    if db.prepareSchema(BrowserSchema()) != .success {
-        return nil
-    }
-    return db
+    return try! BrowserDB(filename: filename, schema: BrowserSchema(), files: files)
 }
 
 class TestBookmarkModel: FailFastTestCase {

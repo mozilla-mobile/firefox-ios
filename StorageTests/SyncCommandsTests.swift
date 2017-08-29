@@ -34,10 +34,9 @@ class SyncCommandsTests: XCTestCase {
             try files.remove("browser.db")
         } catch _ {
         }
-        db = BrowserDB(filename: "browser.db", files: files)
-        XCTAssertTrue(db.prepareSchema(BrowserSchema()) == .success)
-        // create clients
+        db = try! BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
 
+        // create clients
         let now = Date.now()
         let client1GUID = Bytes.generateGUID()
         let client2GUID = Bytes.generateGUID()

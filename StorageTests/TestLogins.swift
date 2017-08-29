@@ -22,7 +22,7 @@ class TestSQLiteLogins: XCTestCase {
         super.setUp()
 
         let files = MockFiles()
-        self.db = BrowserDB(filename: "testsqlitelogins.db", files: files)
+        self.db = try! BrowserDB(filename: "testsqlitelogins.db", schema: LoginsSchema(), files: files)
         self.logins = SQLiteLogins(db: self.db)
 
         let expectation = self.expectation(description: "Remove all logins.")
@@ -338,7 +338,7 @@ class TestSQLiteLoginsPerf: XCTestCase {
     override func setUp() {
         super.setUp()
         let files = MockFiles()
-        self.db = BrowserDB(filename: "testsqlitelogins.db", files: files)
+        self.db = try! BrowserDB(filename: "testsqlitelogins.db", schema: LoginsSchema(), files: files)
         self.logins = SQLiteLogins(db: self.db)
     }
 
@@ -410,7 +410,7 @@ class TestSyncableLogins: XCTestCase {
         super.setUp()
 
         let files = MockFiles()
-        self.db = BrowserDB(filename: "testsyncablelogins.db", files: files)
+        self.db = try! BrowserDB(filename: "testsyncablelogins.db", schema: LoginsSchema(), files: files)
         self.logins = SQLiteLogins(db: self.db)
 
         let expectation = self.expectation(description: "Remove all logins.")

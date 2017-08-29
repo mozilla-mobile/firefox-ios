@@ -114,7 +114,7 @@ open class MockProfile: Profile {
         files = MockFiles()
         syncManager = MockSyncManager()
         logins = MockLogins(files: files)
-        db = BrowserDB(filename: "mock.db", files: files)
+        db = try! BrowserDB(filename: "mock.db", schema: BrowserSchema(), files: files)
         places = SQLiteHistory(db: self.db, prefs: MockProfilePrefs())
         recommendations = places
         history = places

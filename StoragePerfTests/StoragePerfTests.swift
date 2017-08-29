@@ -35,7 +35,7 @@ extension Site {
 class TestSQLiteHistoryFrecencyPerf: XCTestCase {
     func testFrecencyPerf() {
         let files = MockFiles()
-        let db = BrowserDB(filename: "browser.db", files: files)
+        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
@@ -56,7 +56,7 @@ class TestSQLiteHistoryFrecencyPerf: XCTestCase {
 class TestSQLiteHistoryTopSitesCachePref: XCTestCase {
     func testCachePerf() {
         let files = MockFiles()
-        let db = BrowserDB(filename: "browser.db", files: files)
+        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 

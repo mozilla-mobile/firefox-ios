@@ -113,17 +113,6 @@ open class SQLiteHistory {
         self.db = db
         self.favicons = SQLiteFavicons(db: self.db)
         self.prefs = prefs
-
-        // BrowserSchema doesn't need to stick around once the schema has been created/updated.
-        switch db.prepareSchema(BrowserSchema()) {
-        case .failure:
-            log.error("Failed to create/update DB schema!")
-            fatalError()
-        case .closed:
-            log.info("Database not created as the SQLiteConnection is closed.")
-        case .success:
-            log.debug("Database succesfully created/updated")
-        }
     }
 }
 

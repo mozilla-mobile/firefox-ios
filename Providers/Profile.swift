@@ -234,9 +234,9 @@ open class BrowserProfile: Profile {
         // since the DB handles will create new DBs under the new profile folder.
         let isNewProfile = !files.exists("")
 
-        // Set up our database handles.
-        self.loginsDB = BrowserDB(filename: "logins.db", secretKey: BrowserProfile.loginsKey, files: files)
-        self.db = BrowserDB(filename: "browser.db", files: files)
+        // Set up our database handles. A crash is intended if the schema cannot be set up successfully.
+        self.loginsDB = try! BrowserDB(filename: "logins.db", secretKey: BrowserProfile.loginsKey, schema: LoginsSchema(), files: files)
+        self.db = try! BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
 
         // This has to happen prior to the databases being opened, because opening them can trigger
         // events to which the SyncManager listens.
@@ -282,8 +282,8 @@ open class BrowserProfile: Profile {
         log.debug("Reopening profile.")
         isShutdown = false
         
-        db.reopenIfClosed()
-        loginsDB.reopenIfClosed()
+        try! db.reopenIfClosed()
+        try! loginsDB.reopenIfClosed()
     }
 
     func shutdown() {
@@ -751,7 +751,7 @@ open class BrowserProfile: Profile {
             }
         }
 
-        func doInBackgroundAfter(_ millis: Int64, _ block: @escaping (Void) -> Void) {
+        func doInBackgroundAfter(_ millis: Int64, _ block: @escaping () -> Void) {
             let queue = DispatchQueue.global(qos: DispatchQoS.background.qosClass)
             //Pretty ambiguous here. I'm thinking .now was DispatchTime.now() and not Date.now()
             queue.asyncAfter(deadline: DispatchTime.now() + DispatchTimeInterval.milliseconds(Int(millis)), execute: block)

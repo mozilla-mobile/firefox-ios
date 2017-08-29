@@ -31,9 +31,12 @@ public enum DatabaseOpResult {
 
 open class BrowserDB {
     fileprivate let db: SwiftData
+    fileprivate let schema: Schema
     fileprivate let files: FileAccessor
     fileprivate let filename: String
     fileprivate let secretKey: String?
+
+    fileprivate var isSchemaPrepared = false
 
     // SQLITE_MAX_VARIABLE_NUMBER = 999 by default. This controls how many ?s can
     // appear in a query string.
@@ -51,18 +54,22 @@ open class BrowserDB {
         case Full = 13
     }
 
-    public init(filename: String, secretKey: String? = nil, files: FileAccessor) {
-        log.debug("Initializing BrowserDB: \(filename).")
+    public init(filename: String, secretKey: String? = nil, schema: Schema, files: FileAccessor) throws {
+        self.schema = schema
         self.files = files
         self.filename = filename
         self.secretKey = secretKey
 
+        log.debug("Initializing BrowserDB: \(filename).")
+
         let file = URL(fileURLWithPath: (try! files.getAndEnsureDirectory())).appendingPathComponent(filename).path
-        self.db = SwiftData(filename: file, key: secretKey, prevKey: nil)
 
         if AppConstants.BuildChannel == .developer && secretKey != nil {
             log.debug("Will attempt to use encrypted DB: \(file) with secret = \(secretKey ?? "nil")")
         }
+
+        self.db = SwiftData(filename: file, key: secretKey, prevKey: nil)
+        try reopenIfClosed()
     }
 
     // Creates the specified database schema in a new database.
@@ -99,7 +106,7 @@ open class BrowserDB {
 
     // Checks if the database schema needs created or updated and acts accordingly.
     // Calls to this function will be serialized to prevent race conditions when
-    // creating or updating the schema.
+    // creating or updating the schema. (Exposed for testing purposes only.)
     func prepareSchema(_ schema: Schema) -> DatabaseOpResult {
         SentryIntegration.shared.addAttributes(["dbSchema.\(schema.name).version": schema.version])
 
@@ -205,7 +212,7 @@ open class BrowserDB {
             // Check if the error we got is recoverable (e.g. SQLITE_BUSY, SQLITE_LOCK, SQLITE_FULL).
             // If so, we *shouldn't* move the database file to a backup location and re-create it.
             // Instead, just crash so that we don't lose any data.
-            if let _ = SQLiteRecoverableError.init(rawValue: error.code) {
+            if let _ = SQLiteRecoverableError(rawValue: error.code) {
                 fatalError(error.localizedDescription)
             }
 
@@ -265,7 +272,7 @@ open class BrowserDB {
         }
 
         // Re-open the connection to the new database file.
-        self.reopenIfClosed()
+        db.reopenIfClosed()
 
         // Notify the world that we moved the database after the schema has been
         // created. This allows us to reset Sync and start over in the case of
@@ -429,8 +436,20 @@ extension BrowserDB {
         db.forceClose()
     }
 
-    public func reopenIfClosed() {
+    public func reopenIfClosed() throws {
         db.reopenIfClosed()
+
+        if !isSchemaPrepared {
+            switch prepareSchema(schema) {
+            case .failure:
+                throw DatabaseError(description: "Failed to create or update the database schema.")
+            case .closed:
+                log.info("Database not created as the SQLiteConnection is closed.")
+            case .success:
+                isSchemaPrepared = true
+                log.debug("Database succesfully created or updated.")
+            }
+        }
     }
 }
 
