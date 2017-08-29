@@ -18,6 +18,7 @@ class OpenInFocusTest : BaseTestCase {
 
     func testOpenViaSafari() {
         let app = XCUIApplication()
+        waitforExistence(element: app.textFields["URLBar.urlText"]) // wait for app.label
         let sharedExtName = app.label.contains("Klar") ? "Firefox Klar" : "Firefox Focus" as String
         
         let safariApp = XCUIApplication(privateWithPath: nil, bundleID: "com.apple.mobilesafari")!
