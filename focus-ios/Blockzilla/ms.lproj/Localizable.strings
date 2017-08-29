@@ -2,7 +2,7 @@
 "About.learnMoreButton" = "Ketahui lanjut";
 
 /* Label on About screen */
-"About.missionLabel" = "%@ dihasilkan oleh Mozilla. Misi kami adalah untuk memupuk Internet yang terbuka, sihat.";
+"About.missionLabel" = "%@ dihasilkan oleh Mozilla. Misi kami adalah untuk memupuk Internet yang terbuka dan sihat.";
 
 /* Label on About screen */
 "About.privateBullet1" = "Cari dan layari dari dalam aplikasi";
@@ -11,7 +11,7 @@
 "About.privateBullet2" = "Sekat penjejak (atau kemas kini tetapan untuk membenarkan penjejak)";
 
 /* Label on About screen */
-"About.privateBullet3" = "Padam untuk menghapuskan kuki serta sejarah pencarian dan pelayaran";
+"About.privateBullet3" = "Buang untuk menghapuskan kuki serta sejarah pencarian dan pelayaran";
 
 /* Label on About screen */
 "About.privateBulletHeader" = "Gunakan sebagai pelayar peribadi:";
@@ -58,6 +58,15 @@
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "Cuba lagi";
 
+/* Button label used for cancelling to open another app from Focus */
+"ExternalAppLink.cancelTitle" = "Batal";
+
+/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+"ExternalAppLink.messageTitle" = "%@ mahu membuka aplikasi lain";
+
+/* Button label for opening another app from Focus */
+"ExternalAppLink.openTitle" = "Buka";
+
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.callButton" = "Hubungi";
 
@@ -72,6 +81,9 @@
 
 /* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openAppStoreButton" = "Buka App Store";
+
+/* Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"ExternalLink.openAppStoreTitle" = "%@ mahu membuka App Store.";
 
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Buka Maps";
@@ -89,7 +101,7 @@
 "Home.descriptionLabel1" = "Pelayaran peribadi automatik.";
 
 /* Second label for product description on the home screen */
-"Home.descriptionLabel2" = "Layar. Padam. Ulang.";
+"Home.descriptionLabel2" = "Layar. Buang. Ulang.";
 
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Batal";
@@ -116,7 +128,7 @@
 "Safari.instructionsOpen" = "Buka Tetapan Aplikasi";
 
 /* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Penyekatan penjejak kandungan lain boleh mengganggu beberapa video dan laman Web.";
+"Settings.blockOtherMessage" = "Penyekatan penjejak kandungan lain boleh mengganggu sesetengah kandungan video dan laman Web.";
 
 /* Button label for declining Content blocker alert */
 "Settings.blockOtherNo" = "Tidak, Terima kasih";
@@ -161,7 +173,7 @@
 "Settings.toggleBlockSocial" = "Sekat penjejak sosial";
 
 /* Label subtitle for toggle on main screen */
-"Settings.toggleOtherSubtitle" = "Boleh mengganggu beberapa video dan laman Web";
+"Settings.toggleOtherSubtitle" = "Boleh mengganggu sesetengah kandungan video dan laman Web";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
@@ -172,7 +184,7 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.toggleSendAnonymousUsageDataSubtitle" = "Ketahui lanjut";
 
-/* Text for the share menu option when a user wants to open a page in Firefox but doesn't have it installed. */
+/* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Dapatkan app Firefox";
 
 /* Text for the share menu option when a user wants to open a page in Focus. */
@@ -188,11 +200,41 @@
 "URL.eraseButtonLabel" = "ERASE";
 
 /* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "Sejarah pelayaran anda telah dipadam.";
+"URL.eraseMessageLabel" = "Sejarah pelayaran anda telah dibuang.";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Cari atau masukkan alamat web";
 
 /* Label displayed for search button when typing in the URL bar */
 "URL.searchLabel" = "Cari %@";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "Penjejak disekat";
+
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "Buka dalam %@";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "Salin Imej";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "Salin Pautan";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "Simpan Imej";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "Kongsi Pautan";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ mahu membuka %2$@";
+
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "Ini membolehkan anda menyimpan imej ke dalam Jalur Kamera";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "Buka Tetapan";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "“%@” Mahu Mengakses Foto Anda";
 
