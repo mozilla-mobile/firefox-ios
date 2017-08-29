@@ -37,7 +37,14 @@ class HomePageSettingsTest: BaseTestCase {
         // check the value of the current homepage
         XCTAssertEqual(currentURL, app.tables.textFields["HomePageSettingTextField"].value as? String)
         tablesQuery.staticTexts["Clear"].tap()
-        XCTAssertEqual("", app.tables.textFields["HomePageSettingTextField"].value as? String)
+        
+        let urlString = app.tables.textFields["HomePageSettingTextField"].value ?? ""
+        
+        if iPad() {
+            XCTAssertEqual("", urlString as! String)
+        } else {
+            XCTAssertEqual("Enter a webpage", urlString as! String)
+        }
     }
     
     // Check whether the toolbar/menu shows homepage icon
