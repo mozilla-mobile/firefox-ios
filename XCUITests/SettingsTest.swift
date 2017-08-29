@@ -20,10 +20,13 @@ class SettingsTest: BaseTestCase {
     
     func testHelpOpensSUMOInTab() {
         navigator.goto(SettingsScreen)
+        
         let appsettingstableviewcontrollerTableviewTable = app.tables["AppSettingsTableViewController.tableView"]
-        appsettingstableviewcontrollerTableviewTable.staticTexts["Firefox needs to reopen for this change to take effect."].swipeUp()
+        while app.staticTexts["Help"].exists == false {
+            appsettingstableviewcontrollerTableviewTable.swipeUp()
+        }
+        
         let helpMenu = appsettingstableviewcontrollerTableviewTable.cells["Help"]
-        helpMenu.swipeUp()
         XCTAssertTrue(helpMenu.isEnabled)
         helpMenu.tap()
         
