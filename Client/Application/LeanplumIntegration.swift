@@ -51,7 +51,7 @@ enum UserAttributeKeyName: String {
 
 private enum SupportedLocales: String {
     case US = "en_US"
-    case DE = "de"
+    case DE = "de_DE"
     case UK = "en_GB"
     case CA_EN = "en_CA"
     case AU = "en_AU"
