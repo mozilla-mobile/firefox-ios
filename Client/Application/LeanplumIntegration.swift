@@ -201,7 +201,10 @@ class LeanplumIntegration {
     }
 
     func mailtoIsDefault() -> Bool {
-        return self.profile?.prefs.stringForKey(PrefsKeys.KeyMailToOption) == nil || self.profile?.prefs.stringForKey(PrefsKeys.KeyMailToOption) == "mailto:"
+        if let option = self.profile?.prefs.stringForKey(PrefsKeys.KeyMailToOption), option != "mailto:" {
+            return false
+        }
+        return true
     }
 
     func setUserAttributes(attributes: [AnyHashable : Any]) {
