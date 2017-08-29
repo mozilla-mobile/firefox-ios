@@ -42,6 +42,7 @@ class CollapsedURLTest: BaseTestCase {
         
         // After swiping down, the collapsed URL should not be displayed
         webView.swipeDown()
+        waitforNoExistence(element: collapsedLockIcon)
         XCTAssertFalse(collapsedLockIcon.exists)
         XCTAssertFalse(collapsedTruncatedurltextTextView.exists)
     }
