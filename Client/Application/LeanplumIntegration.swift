@@ -135,6 +135,16 @@ class LeanplumIntegration {
         Leanplum.onStartResponse({ _ in
             self.track(eventName: LeanplumEventName.openedApp)
 
+            // We need to check if the app is a clean install to use for
+            // preventing the What's New URL from appearing.
+            if self.profile?.prefs.intForKey(IntroViewControllerSeenProfileKey) == nil {
+                self.profile?.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
+                self.track(eventName: .firstRun)
+            } else if self.profile?.prefs.boolForKey("SecondRun") == nil {
+                self.profile?.prefs.setBool(true, forKey: "SecondRun")
+                self.track(eventName: .secondRun)
+            }
+
             // Only drops Leanplum event when a user has installed Focus (from a fresh state or a re-install)
             if self.profile?.prefs.boolForKey(PrefsKeys.HasFocusInstalled) == self.canInstallFocus() {
                 self.profile?.prefs.setBool(!self.canInstallFocus(), forKey: PrefsKeys.HasFocusInstalled)
