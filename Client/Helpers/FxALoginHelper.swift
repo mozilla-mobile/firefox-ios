@@ -264,14 +264,17 @@ class FxALoginHelper {
 
         // Experimental mode needs: a) the scheme to be Fennec, and b) the accountConfiguration to be flipped in debug mode.
         let experimentalMode = (pushConfiguration.label == .fennec && accountConfiguration.label == .latestDev)
-        let client = PushClient(endpointURL: pushConfiguration.endpointURL, experimentalMode: experimentalMode)
-        
-        if let pushRegestration = account.pushRegistration {
-            _ = client.updateUAID(apnsToken, withRegistration: pushRegestration)
+        let pushClient = PushClient(endpointURL: pushConfiguration.endpointURL, experimentalMode: experimentalMode)
+
+        if let pushRegistration = account.pushRegistration {
+            // Currently, we don't support routine changing of push subscriptions
+            // then we can assume that if we've already registered with the
+            // push server, then we don't need to do it again.
+            _ = pushClient.updateUAID(apnsToken, withRegistration: pushRegistration)
             return
         }
 
-        client.register(apnsToken).upon { res in
+        pushClient.register(apnsToken).upon { res in
             guard let pushRegistration = res.successValue else {
                 return self.pushRegistrationDidFail()
             }
