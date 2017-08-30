@@ -265,12 +265,19 @@ class FxALoginHelper {
         // Experimental mode needs: a) the scheme to be Fennec, and b) the accountConfiguration to be flipped in debug mode.
         let experimentalMode = (pushConfiguration.label == .fennec && accountConfiguration.label == .latestDev)
         let client = PushClient(endpointURL: pushConfiguration.endpointURL, experimentalMode: experimentalMode)
+        
+        if let pushRegestration = account.pushRegistration {
+            _ = client.updateUAID(apnsToken, withRegistration: pushRegestration)
+            return
+        }
+
         client.register(apnsToken).upon { res in
             guard let pushRegistration = res.successValue else {
                 return self.pushRegistrationDidFail()
             }
             return self.pushRegistrationDidSucceed(apnsToken: apnsToken, pushRegistration: pushRegistration)
         }
+
     }
 
     func apnsRegisterDidFail() {
