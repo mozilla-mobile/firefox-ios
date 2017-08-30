@@ -64,6 +64,9 @@ open class SwiftData {
     fileprivate var key: String?
     fileprivate var prevKey: String?
 
+    /// Callback to do add'l DB setup (i.e. prepare schema) when connection is created.
+    fileprivate var connectionCreatedCallback: (() -> Bool)?
+
     /// A simple state flag to track whether we should accept new connection requests.
     /// If a connection request is made while the database is closed, a
     /// FailedSQLiteDBConnection will be returned.
@@ -80,8 +83,13 @@ open class SwiftData {
         self.prevKey = prevKey
     }
 
+    func onConnectionCreated(_ connectionCreatedCallback: @escaping () -> Bool) {
+        self.connectionCreatedCallback = connectionCreatedCallback
+    }
+
     fileprivate func getSharedConnection() -> ConcreteSQLiteDBConnection? {
         var connection: ConcreteSQLiteDBConnection?
+        var didCreateConnection: Bool = false
 
         sharedConnectionQueue.sync {
             if self.closed {
@@ -92,8 +100,28 @@ open class SwiftData {
             if self.sharedConnection == nil {
                 log.debug(">>> Creating shared SQLiteDBConnection for \(self.filename) on thread \(Thread.current).")
                 self.sharedConnection = ConcreteSQLiteDBConnection(filename: self.filename, flags: SwiftData.Flags.readWriteCreate.toSQL(), key: self.key, prevKey: self.prevKey)
+                didCreateConnection = true
             }
             connection = self.sharedConnection
+        }
+
+        // Should only be `true` when the `ConcreteSQLiteDBConnection` is first created. This
+        // happens when the database is accessed for the very first time. It should also happen
+        // again when the database is first accessed after being re-opened. Either way, this is
+        // the moment when we want to attempt to setup our connection (i.e. create the schema).
+        if didCreateConnection {
+            // If there is no callback for setting up the connection, it means we have already
+            // succeeded in setting it up and there is no need to re-run it.
+            guard let connectionCreatedCallback = self.connectionCreatedCallback else {
+                return connection
+            }
+
+            // Run our callback to set up the the connection (i.e. create the schema). If it
+            // succeeds (returns `true`), we can forget it so we don't attempt to re-run it
+            // later if the connection gets re-opened.
+            if connectionCreatedCallback() {
+                self.connectionCreatedCallback = nil
+            }
         }
 
         return connection

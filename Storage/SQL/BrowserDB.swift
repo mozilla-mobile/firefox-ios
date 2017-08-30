@@ -31,12 +31,9 @@ public enum DatabaseOpResult {
 
 open class BrowserDB {
     fileprivate let db: SwiftData
-    fileprivate let schema: Schema
     fileprivate let files: FileAccessor
     fileprivate let filename: String
     fileprivate let secretKey: String?
-
-    fileprivate var isSchemaPrepared = false
 
     // SQLITE_MAX_VARIABLE_NUMBER = 999 by default. This controls how many ?s can
     // appear in a query string.
@@ -55,7 +52,6 @@ open class BrowserDB {
     }
 
     public init(filename: String, secretKey: String? = nil, schema: Schema, files: FileAccessor) throws {
-        self.schema = schema
         self.files = files
         self.filename = filename
         self.secretKey = secretKey
@@ -69,7 +65,18 @@ open class BrowserDB {
         }
 
         self.db = SwiftData(filename: file, key: secretKey, prevKey: nil)
-        try reopenIfClosed()
+        self.db.onConnectionCreated { () -> Bool in
+            switch self.prepareSchema(schema) {
+            case .failure:
+                fatalError("Failed to create or update the database schema.")
+            case .closed:
+                log.info("Database not created as the SQLiteConnection is closed.")
+                return false
+            case .success:
+                log.debug("Database succesfully created or updated.")
+                return true
+            }
+        }
     }
 
     // Creates the specified database schema in a new database.
@@ -438,18 +445,6 @@ extension BrowserDB {
 
     public func reopenIfClosed() throws {
         db.reopenIfClosed()
-
-        if !isSchemaPrepared {
-            switch prepareSchema(schema) {
-            case .failure:
-                throw DatabaseError(description: "Failed to create or update the database schema.")
-            case .closed:
-                log.info("Database not created as the SQLiteConnection is closed.")
-            case .success:
-                isSchemaPrepared = true
-                log.debug("Database succesfully created or updated.")
-            }
-        }
     }
 }
 
