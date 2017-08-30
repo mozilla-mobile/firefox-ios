@@ -11,7 +11,7 @@ import XCTest
 
 // Thieved mercilessly from TestSQLiteBookmarks.
 private func getBrowserDBForFile(filename: String, files: FileAccessor) -> BrowserDB? {
-    return try! BrowserDB(filename: filename, schema: BrowserSchema(), files: files)
+    return BrowserDB(filename: filename, schema: BrowserSchema(), files: files)
 }
 
 class TestBookmarkModel: FailFastTestCase {

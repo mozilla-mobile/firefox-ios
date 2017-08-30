@@ -23,17 +23,8 @@ open class LoginsSchema: Schema {
     
     public var name: String { return "LOGINS" }
     public var version: Int { return LoginsSchema.DefaultVersion }
-    
-    let sqliteVersion: Int32
-    let supportsPartialIndices: Bool
 
-    public init() {
-        let v = sqlite3_libversion_number()
-        self.sqliteVersion = v
-        self.supportsPartialIndices = v >= 3008000          // 3.8.0.
-        let ver = String(cString: sqlite3_libversion())
-        log.info("SQLite version: \(ver) (\(v)).")
-    }
+    public init() {}
 
     func run(_ db: SQLiteDBConnection, sql: String, args: Args? = nil) -> Bool {
         let err = db.executeChange(sql, withArgs: args)

@@ -71,7 +71,7 @@ class AuthenticatorTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        self.db = try! BrowserDB(filename: "testsqlitelogins.db", schema: LoginsSchema(), files: MockFiles())
+        self.db = BrowserDB(filename: "testsqlitelogins.db", schema: LoginsSchema(), files: MockFiles())
         self.logins = SQLiteLogins(db: self.db)
         self.logins.removeAll().succeeded()
     }

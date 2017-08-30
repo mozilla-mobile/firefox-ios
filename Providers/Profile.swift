@@ -235,8 +235,8 @@ open class BrowserProfile: Profile {
         let isNewProfile = !files.exists("")
 
         // Set up our database handles. A crash is intended if the schema cannot be set up successfully.
-        self.loginsDB = try! BrowserDB(filename: "logins.db", secretKey: BrowserProfile.loginsKey, schema: LoginsSchema(), files: files)
-        self.db = try! BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
+        self.loginsDB = BrowserDB(filename: "logins.db", secretKey: BrowserProfile.loginsKey, schema: LoginsSchema(), files: files)
+        self.db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
 
         // This has to happen prior to the databases being opened, because opening them can trigger
         // events to which the SyncManager listens.
@@ -282,8 +282,8 @@ open class BrowserProfile: Profile {
         log.debug("Reopening profile.")
         isShutdown = false
         
-        try! db.reopenIfClosed()
-        try! loginsDB.reopenIfClosed()
+        db.reopenIfClosed()
+        loginsDB.reopenIfClosed()
     }
 
     func shutdown() {

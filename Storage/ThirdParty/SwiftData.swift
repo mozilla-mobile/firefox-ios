@@ -46,6 +46,7 @@ private let log = Logger.syncLogger
  */
 open class SwiftData {
     let filename: String
+    let files: FileAccessor
 
     static var EnableWAL = true
     static var EnableForeignKeys = true
@@ -65,25 +66,27 @@ open class SwiftData {
     fileprivate var prevKey: String?
 
     /// Callback to do add'l DB setup (i.e. prepare schema) when connection is created.
-    fileprivate var connectionCreatedCallback: (() -> Bool)?
+    fileprivate var connectionCreatedCallback: ((_ db: SwiftData, _ connection: SQLiteDBConnection) -> Bool)?
 
     /// A simple state flag to track whether we should accept new connection requests.
     /// If a connection request is made while the database is closed, a
     /// FailedSQLiteDBConnection will be returned.
     fileprivate(set) var closed = false
 
-    init(filename: String, key: String? = nil, prevKey: String? = nil) {
+    init(filename: String, key: String? = nil, prevKey: String? = nil, files: FileAccessor) {
         self.filename = filename
+        self.key = key
+        self.prevKey = prevKey
+        self.files = files
+
         self.sharedConnectionQueue = DispatchQueue(label: "SwiftData queue: \(filename)", attributes: [])
 
         // Ensure that multi-thread mode is enabled by default.
         // See https://www.sqlite.org/threadsafe.html
         assert(sqlite3_threadsafe() == 2)
-        self.key = key
-        self.prevKey = prevKey
     }
 
-    func onConnectionCreated(_ connectionCreatedCallback: @escaping () -> Bool) {
+    func onConnectionCreated(_ connectionCreatedCallback: @escaping (_ db: SwiftData, _ connection: SQLiteDBConnection) -> Bool) {
         self.connectionCreatedCallback = connectionCreatedCallback
     }
 
@@ -116,11 +119,11 @@ open class SwiftData {
                 return connection
             }
 
-            // Run our callback to set up the the connection (i.e. create the schema). If it
-            // succeeds (returns `true`), we can forget it so we don't attempt to re-run it
-            // later if the connection gets re-opened.
-            if connectionCreatedCallback() {
-                self.connectionCreatedCallback = nil
+            // Run our callback to finish setting up the the connection (i.e. create the schema).
+            // If it fails (returns `false`), close the connection so we can retry later.
+            guard let connection = connection, connectionCreatedCallback(self, connection) else {
+                forceClose()
+                return nil
             }
         }
 

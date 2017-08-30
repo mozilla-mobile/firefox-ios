@@ -26,7 +26,7 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
     override func setUp() {
         super.setUp()
 
-        db = try! BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
+        db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
         metadata = SQLiteMetadata(db: db)
         prefs = MockProfilePrefs()
         history = SQLiteHistory(db: db, prefs: prefs)
@@ -282,7 +282,7 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
 class TestSQLiteHistoryRecommendationsPerf: XCTestCase {
     func testRecommendationPref() {
         let files = MockFiles()
-        let db = try! BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
+        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
         let metadata = SQLiteMetadata(db: db)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)

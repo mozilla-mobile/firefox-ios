@@ -143,7 +143,7 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
             try files.remove("browser.db")
         } catch _ {
         }
-        clientsAndTabs = SQLiteRemoteClientsAndTabs(db: try! BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files))
+        clientsAndTabs = SQLiteRemoteClientsAndTabs(db: BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files))
     }
 
     func testInsertGetClear() {

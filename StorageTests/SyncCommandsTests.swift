@@ -34,7 +34,7 @@ class SyncCommandsTests: XCTestCase {
             try files.remove("browser.db")
         } catch _ {
         }
-        db = try! BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
+        db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
 
         // create clients
         let now = Date.now()

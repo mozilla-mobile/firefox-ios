@@ -9,7 +9,7 @@ import Shared
 import XCTest
 
 private func getBrowserDB(_ filename: String, files: FileAccessor) -> BrowserDB? {
-    return try! BrowserDB(filename: filename, schema: BrowserSchema(), files: files)
+    return BrowserDB(filename: filename, schema: BrowserSchema(), files: files)
 }
 
 extension SQLiteBookmarks {
