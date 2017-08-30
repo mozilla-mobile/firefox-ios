@@ -9,9 +9,6 @@ struct IntroViewControllerUX {
     static let Width = 375
     static let Height = 667
 
-    static let CardSlides = ["organize", "customize", "share", "choose", "sync"]
-    static let NumberOfCards = CardSlides.count
-
     static let PagerCenterOffsetFromScrollViewBottom = 30
 
     static let StartBrowsingButtonTitle = NSLocalizedString("Start Browsing", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
@@ -23,18 +20,25 @@ struct IntroViewControllerUX {
     static let SignInButtonHeight = 46
     static let SignInButtonCornerRadius = CGFloat(4)
 
+    static let TurnOnNotificationsButtonTitle = NSLocalizedString("Turn on notifications", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
+    static let TurnOnNotificationsButtonColor = UIColor(red: 0.259, green: 0.49, blue: 0.831, alpha: 1.0)
+    static let TurnOnNotificationsButtonHeight = 46
+    static let TurnOnNotificationsButtonCornerRadius = CGFloat(4)
+
     static let CardTextLineHeight = CGFloat(6)
 
     static let CardTitleOrganize = NSLocalizedString("Organize", tableName: "Intro", comment: "Title for one of the panels in the First Run tour.")
     static let CardTitleCustomize = NSLocalizedString("Customize", tableName: "Intro", comment: "Title for one of the panels in the First Run tour.")
     static let CardTitleShare = NSLocalizedString("Share", tableName: "Intro", comment: "Title for one of the panels in the First Run tour.")
     static let CardTitleChoose = NSLocalizedString("Choose", tableName: "Intro", comment: "Title for one of the panels in the First Run tour.")
+    static let CardTitleStayInTheKnow = NSLocalizedString("Stay in the know", tableName: "Intro", comment: "Title for one of the panels in the First Run tour.")
     static let CardTitleSync = NSLocalizedString("Sync your Devices.", tableName: "Intro", comment: "Title for one of the panels in the First Run tour.")
 
     static let CardTextOrganize = NSLocalizedString("Easily switch between open pages with tabs.", tableName: "Intro", comment: "Description for the 'Organize' panel in the First Run tour.")
     static let CardTextCustomize = NSLocalizedString("Personalize your default search engine and more in Settings.", tableName: "Intro", comment: "Description for the 'Customize' panel in the First Run tour.")
     static let CardTextShare = NSLocalizedString("Use the share sheet to send links from other apps to Firefox.", tableName: "Intro", comment: "Description for the 'Share' panel in the First Run tour.")
     static let CardTextChoose = NSLocalizedString("Tap, hold and move the Firefox icon into your dock for easy access.", tableName: "Intro", comment: "Description for the 'Choose' panel in the First Run tour.")
+    static let CardTextStayInTheKnow = NSLocalizedString("Turn on notifications so you're always up-to-date on the latest features.", tableName: "Intro", comment: "Description for the 'Stay in the know' panel in the First Run tour.")
 
     static let Card1ImageLabel = NSLocalizedString("The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs.", tableName: "Intro", comment: "Accessibility label for the UI element used to display the number of open tabs, and open the tab tray.")
     static let Card2ImageLabel = NSLocalizedString("The Settings button is at the beginning of the Tabs Tray.", tableName: "Intro", comment: "Accessibility label for the Settings button in the tab tray.")
@@ -57,6 +61,8 @@ let IntroViewControllerSeenProfileKey = "IntroViewControllerSeen"
 protocol IntroViewControllerDelegate: class {
     func introViewControllerDidFinish(_ introViewController: IntroViewController)
     func introViewControllerDidRequestToLogin(_ introViewController: IntroViewController)
+    func introViewControllerShouldAskForNotifications(_ introViewController: IntroViewController) -> Bool
+    func introViewControllerDidRequestToEnableNotifications(_ introViewController: IntroViewController)
 }
 
 class IntroViewController: UIViewController, UIScrollViewDelegate {
@@ -74,6 +80,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
     var pageControl: UIPageControl!
     var backButton: UIButton!
     var forwardButton: UIButton!
+    var turnOnNotificationsButton: UIButton!
     var signInButton: UIButton!
 
     fileprivate var scrollView: IntroOverlayScrollView!
@@ -83,12 +90,21 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
     override func viewDidLoad() {
         view.backgroundColor = UIColor.white
 
-        // scale the slides down for iPhone 4S
+        // scale the slides down for small devices
         if view.frame.height <=  480 {
-            slideVerticalScaleFactor = 1.33
+            slideVerticalScaleFactor = 1.33 // 4S
+        } else if view.frame.height <= 568 {
+            slideVerticalScaleFactor = 1.15 // SE
+        }
+        
+        let cardSlides: [String]
+        if delegate?.introViewControllerShouldAskForNotifications(self) == true {
+            cardSlides = ["organize", "customize", "share", "choose", "know", "sync"]
+        } else {
+            cardSlides = ["organize", "customize", "share", "choose", "sync"]
         }
 
-        for slideName in IntroViewControllerUX.CardSlides {
+        for slideName in cardSlides {
             slides.append(UIImage(named: slideName)!)
         }
 
@@ -112,13 +128,13 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         scrollView.bounces = false
         scrollView.isPagingEnabled = true
         scrollView.showsHorizontalScrollIndicator = false
-        scrollView.contentSize = CGSize(width: scaledWidthOfSlide * CGFloat(IntroViewControllerUX.NumberOfCards), height: scaledHeightOfSlide)
+        scrollView.contentSize = CGSize(width: scaledWidthOfSlide * CGFloat(cardSlides.count), height: scaledHeightOfSlide)
         scrollView.accessibilityIdentifier = "IntroViewController.scrollView"
         view.addSubview(scrollView)
 
         slideContainer = UIView()
         slideContainer.backgroundColor = IntroViewControllerUX.Card1Color
-        for i in 0..<IntroViewControllerUX.NumberOfCards {
+        for i in 0..<cardSlides.count {
             let imageView = UIImageView(frame: CGRect(x: CGFloat(i)*scaledWidthOfSlide, y: 0, width: scaledWidthOfSlide, height: scaledHeightOfSlide))
             imageView.image = slides[i]
             slideContainer.addSubview(imageView)
@@ -133,7 +149,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         pageControl = UIPageControl()
         pageControl.pageIndicatorTintColor = UIColor.black.withAlphaComponent(0.3)
         pageControl.currentPageIndicatorTintColor = UIColor.black
-        pageControl.numberOfPages = IntroViewControllerUX.NumberOfCards
+        pageControl.numberOfPages = cardSlides.count
         pageControl.accessibilityIdentifier = "IntroViewController.pageControl"
         pageControl.addTarget(self, action: #selector(IntroViewController.changePage), for: UIControlEvents.valueChanged)
 
@@ -143,16 +159,84 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
             make.centerY.equalTo(self.startBrowsingButton.snp.top).offset(-IntroViewControllerUX.PagerCenterOffsetFromScrollViewBottom)
         }
 
-        func addCard(_ text: String, title: String) {
+        func addCard(title: String, text: String, button: UIButton? = nil) {
             let introView = UIView()
+            //introView.backgroundColor = UIColor.yellow
             self.introViews.append(introView)
-            self.addLabelsToIntroView(introView, text: text, title: title)
+            
+            let titleLabel = UILabel()
+            //titleLabel.backgroundColor = UIColor.red
+            titleLabel.numberOfLines = 0
+            titleLabel.textAlignment = NSTextAlignment.center
+            titleLabel.text = title
+            titleLabels.append(titleLabel)
+            introView.addSubview(titleLabel)
+            titleLabel.snp.makeConstraints { (make) -> Void in
+                make.top.equalTo(introView).offset(20)
+                make.centerX.equalTo(introView)
+                make.width.equalTo(self.view.frame.width <= 320 ? 240 : 280)
+            }
+            
+            let titleAndButtonContainer = UIView()
+            //titleAndButtonContainer.backgroundColor = UIColor.orange
+            introView.addSubview(titleAndButtonContainer)
+
+            let textLabel = UILabel()
+            //textLabel.backgroundColor = UIColor.green
+            textLabel.numberOfLines = 0
+            textLabel.attributedText = attributedStringForLabel(text)
+            textLabels.append(textLabel)
+            titleAndButtonContainer.addSubview(textLabel)
+            textLabel.snp.makeConstraints({ (make) -> Void in
+                make.top.equalTo(titleAndButtonContainer)
+                if button == nil {
+                    make.bottom.equalTo(titleAndButtonContainer)
+                }
+                make.centerX.equalTo(titleAndButtonContainer)
+                make.width.equalTo(titleAndButtonContainer)
+            })
+            
+            if let button = button {
+                titleAndButtonContainer.addSubview(button)
+                button.snp.makeConstraints { (make) -> Void in
+                    if text == "" {
+                        make.top.equalTo(titleAndButtonContainer.snp.top)
+                    } else {
+                        make.top.equalTo(textLabel.snp.bottom).offset(16)
+                    }
+                    make.centerX.equalTo(titleAndButtonContainer)
+                    make.width.equalTo(titleAndButtonContainer)
+                    make.bottom.equalTo(titleAndButtonContainer)
+                }
+            }
+            
+            titleAndButtonContainer.snp.makeConstraints { (make) in
+                make.centerX.equalTo(introView)
+                make.centerY.equalTo(introView) // .offset(-IntroViewControllerUX.StartBrowsingButtonHeight/2)
+                make.width.equalTo(self.view.frame.width <= 320 ? 240 : 280)
+            }
         }
 
-        addCard(IntroViewControllerUX.CardTextOrganize, title: IntroViewControllerUX.CardTitleOrganize)
-        addCard(IntroViewControllerUX.CardTextCustomize, title: IntroViewControllerUX.CardTitleCustomize)
-        addCard(IntroViewControllerUX.CardTextShare, title: IntroViewControllerUX.CardTitleShare)
-        addCard(IntroViewControllerUX.CardTextChoose, title: IntroViewControllerUX.CardTitleChoose)
+        addCard(title: IntroViewControllerUX.CardTitleOrganize, text: IntroViewControllerUX.CardTextOrganize)
+        addCard(title: IntroViewControllerUX.CardTitleCustomize, text: IntroViewControllerUX.CardTextCustomize)
+        addCard(title: IntroViewControllerUX.CardTitleShare, text: IntroViewControllerUX.CardTextShare)
+        addCard(title: IntroViewControllerUX.CardTitleChoose, text: IntroViewControllerUX.CardTextChoose)
+
+        // Stay in the know card, with Turn on notifications button.
+
+        if delegate?.introViewControllerShouldAskForNotifications(self) == true {
+            turnOnNotificationsButton = UIButton()
+            turnOnNotificationsButton.backgroundColor = IntroViewControllerUX.TurnOnNotificationsButtonColor
+            turnOnNotificationsButton.setTitle(IntroViewControllerUX.TurnOnNotificationsButtonTitle, for: UIControlState())
+            turnOnNotificationsButton.setTitleColor(UIColor.white, for: UIControlState())
+            turnOnNotificationsButton.layer.cornerRadius = IntroViewControllerUX.TurnOnNotificationsButtonCornerRadius
+            turnOnNotificationsButton.clipsToBounds = true
+            turnOnNotificationsButton.addTarget(self, action: #selector(IntroViewController.SELturnOnNotifications), for: UIControlEvents.touchUpInside)
+            turnOnNotificationsButton.snp.makeConstraints { (make) -> Void in
+                make.height.equalTo(IntroViewControllerUX.TurnOnNotificationsButtonHeight)
+            }
+            addCard(title: IntroViewControllerUX.CardTitleStayInTheKnow, text: IntroViewControllerUX.CardTextStayInTheKnow, button: turnOnNotificationsButton)
+        }
 
         // Sync card, with sign in to sync button.
 
@@ -166,10 +250,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         signInButton.snp.makeConstraints { (make) -> Void in
             make.height.equalTo(IntroViewControllerUX.SignInButtonHeight)
         }
-
-        let syncCardView =  UIView()
-        addViewsToIntroView(syncCardView, view: signInButton, title: IntroViewControllerUX.CardTitleSync)
-        introViews.append(syncCardView)
+        addCard(title: IntroViewControllerUX.CardTitleSync, text: "", button: signInButton)
 
         // Add all the cards to the view, make them invisible with zero alpha
 
@@ -216,13 +297,13 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
             make.bottom.equalTo(self.startBrowsingButton.snp.top)
         }
 
-        for i in 0..<IntroViewControllerUX.NumberOfCards {
+        for i in 0..<slides.count {
             if let imageView = slideContainer.subviews[i] as? UIImageView {
                 imageView.frame = CGRect(x: CGFloat(i)*scaledWidthOfSlide, y: 0, width: scaledWidthOfSlide, height: scaledHeightOfSlide)
                 imageView.contentMode = UIViewContentMode.scaleAspectFit
             }
         }
-        slideContainer.frame = CGRect(x: 0, y: 0, width: scaledWidthOfSlide * CGFloat(IntroViewControllerUX.NumberOfCards), height: scaledHeightOfSlide)
+        slideContainer.frame = CGRect(x: 0, y: 0, width: scaledWidthOfSlide * CGFloat(slides.count), height: scaledHeightOfSlide)
         scrollView.contentSize = CGSize(width: slideContainer.frame.width, height: slideContainer.frame.height)
     }
 
@@ -273,9 +354,13 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
 		delegate?.introViewControllerDidRequestToLogin(self)
     }
 
+    func SELturnOnNotifications() {
+        delegate?.introViewControllerDidRequestToEnableNotifications(self)
+    }
+
     fileprivate var accessibilityScrollStatus: String {
         let number = NSNumber(value: pageControl.currentPage + 1)
-        return String(format: NSLocalizedString("Introductory slide %@ of %@", tableName: "Intro", comment: "String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3"), NumberFormatter.localizedString(from: number, number: .decimal), NumberFormatter.localizedString(from: NSNumber(value: IntroViewControllerUX.NumberOfCards), number: .decimal))
+        return String(format: NSLocalizedString("Introductory slide %@ of %@", tableName: "Intro", comment: "String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3"), NumberFormatter.localizedString(from: number, number: .decimal), NumberFormatter.localizedString(from: NSNumber(value: slides.count), number: .decimal))
     }
 
     func changePage() {
@@ -341,10 +426,17 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
                 self.introView = newIntroView
                 newIntroView.alpha = 1.0
             }, completion: { _ in
-                if page == (IntroViewControllerUX.NumberOfCards - 1) {
+                if page == (self.slides.count - 1) {
                     self.scrollView.signinButton = self.signInButton
                 } else {
                     self.scrollView.signinButton = nil
+                }
+                if self.delegate?.introViewControllerShouldAskForNotifications(self) == true {
+                    if page == (self.slides.count - 2) {
+                        self.scrollView.turnOnNotificationsButton = self.turnOnNotificationsButton
+                    } else {
+                        self.scrollView.turnOnNotificationsButton = nil
+                    }
                 }
             })
         }
@@ -368,40 +460,6 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         return string
     }
 
-    fileprivate func addLabelsToIntroView(_ introView: UIView, text: String, title: String = "") {
-        let label = UILabel()
-
-        label.numberOfLines = 0
-        label.attributedText = attributedStringForLabel(text)
-        textLabels.append(label)
-
-        addViewsToIntroView(introView, view: label, title: title)
-    }
-
-    fileprivate func addViewsToIntroView(_ introView: UIView, view: UIView, title: String = "") {
-        introView.addSubview(view)
-        view.snp.makeConstraints { (make) -> Void in
-            make.center.equalTo(introView)
-            make.width.equalTo(self.view.frame.width <= 320 ? 240 : 280) // TODO Talk to UX about small screen sizes
-        }
-
-        if !title.isEmpty {
-            let titleLabel = UILabel()
-            titleLabel.numberOfLines = 0
-            titleLabel.textAlignment = NSTextAlignment.center
-            titleLabel.text = title
-            titleLabels.append(titleLabel)
-            introView.addSubview(titleLabel)
-            titleLabel.snp.makeConstraints { (make) -> Void in
-                make.top.equalTo(introView)
-                make.bottom.equalTo(view.snp.top)
-                make.centerX.equalTo(introView)
-                make.width.equalTo(self.view.frame.width <= 320 ? 240 : 280) // TODO Talk to UX about small screen sizes
-            }
-        }
-
-    }
-
     fileprivate func setupDynamicFonts() {
         startBrowsingButton.titleLabel?.font = UIFont.systemFont(ofSize: DynamicFontHelper.defaultHelper.IntroBigFontSize)
         signInButton.titleLabel?.font = UIFont.systemFont(ofSize: DynamicFontHelper.defaultHelper.IntroStandardFontSize, weight: UIFontWeightMedium)
@@ -418,10 +476,18 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
 
 fileprivate class IntroOverlayScrollView: UIScrollView {
     weak var signinButton: UIButton?
+    weak var turnOnNotificationsButton: UIButton?
 
     fileprivate override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         if let signinFrame = signinButton?.frame {
             let convertedFrame = convert(signinFrame, from: signinButton?.superview)
+            if convertedFrame.contains(point) {
+                return false
+            }
+        }
+
+        if let turnOnNotificationsFrame = turnOnNotificationsButton?.frame {
+            let convertedFrame = convert(turnOnNotificationsFrame, from: turnOnNotificationsButton?.superview)
             if convertedFrame.contains(point) {
                 return false
             }
