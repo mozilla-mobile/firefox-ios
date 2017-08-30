@@ -8,6 +8,8 @@ import SnapKit
 struct IntroViewControllerUX {
     static let Width = 375
     static let Height = 667
+    static let SyncButonTopPadding = 5
+    static let minimumFontScale = 0.5
 
     static let CardSlides = ["tour-Welcome", "tour-Search", "tour-Private", "tour-Mail", "tour-Sync"]
     static let NumberOfCards = CardSlides.count
@@ -153,6 +155,9 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
             let textLabel = UILabel()
             textLabel.numberOfLines = 0
             textLabel.attributedText = attributedStringForLabel(text)
+            textLabel.adjustsFontSizeToFitWidth = true
+            textLabel.minimumScaleFactor = IntroViewControllerUX.minimumFontScale
+            textLabel.lineBreakMode = .byTruncatingTail
             textLabels.append(textLabel)
             introView.addSubview(textLabel)
             textLabel.snp.makeConstraints({ (make) -> Void in
@@ -189,6 +194,13 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
             make.bottom.equalTo(syncCardView)
         }
 
+        // We need a refrence to the sync pages textlabel so we can adjust the constraints
+        if let index = introViews.index(of: syncCardView), index < textLabels.count {
+            let syncTextLabel = textLabels[index]
+            syncTextLabel.snp.makeConstraints { make in
+                make.bottom.equalTo(signInButton.snp.top).offset(-IntroViewControllerUX.SyncButonTopPadding)
+            }
+        }
         // Add all the cards to the view, make them invisible with zero alpha
         for introView in introViews {
             introView.alpha = 0
