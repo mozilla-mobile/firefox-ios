@@ -194,7 +194,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
             make.bottom.equalTo(syncCardView)
         }
 
-        // We need a refrence to the sync pages textlabel so we can adjust the constraints
+        // We need a reference to the sync pages textlabel so we can adjust the constraints
         if let index = introViews.index(of: syncCardView), index < textLabels.count {
             let syncTextLabel = textLabels[index]
             syncTextLabel.snp.makeConstraints { make in
