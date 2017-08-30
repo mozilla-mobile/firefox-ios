@@ -77,12 +77,13 @@ class LivemarkItemTableCell: UITableViewCell {
     }
 }
 
-class LivemarkPanel: UIViewController, HomePanel, UITableViewDelegate, UITableViewDataSource {
+class LivemarkPanel: UIViewController, HomePanel, UITableViewDelegate, UITableViewDataSource, BookmarkFolderTableViewHeaderDelegate {
     private var livemark: LivemarkItem
     private var items: [Item] = []
     private var tableView = UITableView()
     internal var homePanelDelegate: HomePanelDelegate?
     private var refreshControl = UIRefreshControl()
+    private var bookmarkFolder: BookmarkFolder?
     
     private var isLoading = false {
         didSet {
@@ -95,12 +96,17 @@ class LivemarkPanel: UIViewController, HomePanel, UITableViewDelegate, UITableVi
     }
     
     private let CellIdentifier = "CellIdentifier"
+    private let BookmarkFolderHeaderViewIdentifier = "BookmarkFolderHeaderIdentifier"
     
-    init(livemark: LivemarkItem, homePanelDelegate: HomePanelDelegate?) {
+    init(livemark: LivemarkItem, homePanelDelegate: HomePanelDelegate?, bookmarkFolder: BookmarkFolder?) {
         self.livemark = livemark
         self.homePanelDelegate = homePanelDelegate
+        self.bookmarkFolder = bookmarkFolder
         self.tableView.register(LivemarkItemTableCell.self, forCellReuseIdentifier: CellIdentifier)
+        self.tableView.register(BookmarkFolderTableViewHeader.self, forHeaderFooterViewReuseIdentifier: BookmarkFolderHeaderViewIdentifier)
         super.init(nibName: nil, bundle: nil)
+        
+        refreshControl.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -111,29 +117,7 @@ class LivemarkPanel: UIViewController, HomePanel, UITableViewDelegate, UITableVi
         super.viewDidAppear(animated)
         
         title = livemark.title
-        
-        let feedUrl = URL(string:livemark.feedUri)!
-        
-        FeedParser(URL: feedUrl)?.parseAsync { result in
-            switch result {
-            case let .atom(feed):
-                self.handleAtomFeed(feed: feed)
-                break
-            case let .rss(feed):
-                self.handleRssFeed(feed: feed)
-                break
-            case let .json(feed):
-                self.handleJsonFeed(feed: feed)
-                break
-            case let .failure(error):
-                self.handleFailure()
-            }
-            
-            self.tableView.reloadData()
-            self.isLoading = false
-        }
-        
-        
+        fetchData()
     }
     
     override func viewDidLoad() {
@@ -168,6 +152,36 @@ class LivemarkPanel: UIViewController, HomePanel, UITableViewDelegate, UITableVi
         
     }
     
+    @objc private func refresh(_ sender: Any) {
+        fetchData()
+    }
+    
+    private func fetchData() {
+        self.isLoading = true
+        let feedUrl = URL(string:livemark.feedUri)!
+        
+        FeedParser(URL: feedUrl)?.parseAsync { result in
+            switch result {
+            case let .atom(feed):
+                self.handleAtomFeed(feed: feed)
+                break
+            case let .rss(feed):
+                self.handleRssFeed(feed: feed)
+                break
+            case let .json(feed):
+                self.handleJsonFeed(feed: feed)
+                break
+            case let .failure(error):
+                self.handleFailure()
+            }
+            
+            self.tableView.reloadData()
+            self.isLoading = false
+        }
+        
+
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return items.count
     }
@@ -188,21 +202,28 @@ class LivemarkPanel: UIViewController, HomePanel, UITableViewDelegate, UITableVi
         homePanelDelegate?.homePanel(self, didSelectURLString: item.Url, visitType: VisitType.bookmark)
     }
     
-//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        return tableView.dequeueReusableHeaderFooterView(withIdentifier: HeaderIdentifier)
-//    }
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let folderTitle = bookmarkFolder?.title else { return nil }
+        
+        guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: BookmarkFolderHeaderViewIdentifier) as? BookmarkFolderTableViewHeader else { return nil }
+        
+        // register as delegate to ensure we get notified when the user interacts with this header
+        if header.delegate == nil {
+            header.delegate = self
+        }
+        
+        header.textLabel?.text = folderTitle
+        
+        return header
+    }
     
-//    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-//        return SiteTableViewControllerUX.HeaderHeight
-//    }
+    internal func didSelectHeader() {
+        _ = self.navigationController?.popViewController(animated: true)
+    }
     
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        return CGFloat(44)
-//    }
-    
-//    func tableView(_ tableView: UITableView, hasFullWidthSeparatorForRowAtIndexPath indexPath: IndexPath) -> Bool {
-//        return false
-//    }
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return bookmarkFolder == nil ? 0 : SiteTableViewControllerUX.HeaderHeight
+    }
     
     private func handleAtomFeed(feed: AtomFeed) {
         guard let entries = feed.entries else { return }

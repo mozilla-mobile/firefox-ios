@@ -318,7 +318,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
         switch bookmark {
         case let livemark as LivemarkItem:
-            let livemarkViewController = LivemarkPanel(livemark:livemark, homePanelDelegate:self.homePanelDelegate)
+            let livemarkViewController = LivemarkPanel(livemark:livemark, homePanelDelegate:self.homePanelDelegate, bookmarkFolder:bookmarkFolder)
             self.navigationController?.pushViewController(livemarkViewController, animated: true)
             break
             
@@ -466,12 +466,12 @@ extension BookmarksPanel: HomePanelContextMenu {
     }
 }
 
-private protocol BookmarkFolderTableViewHeaderDelegate {
+protocol BookmarkFolderTableViewHeaderDelegate {
     func didSelectHeader()
 }
 
 extension BookmarksPanel: BookmarkFolderTableViewHeaderDelegate {
-    fileprivate func didSelectHeader() {
+    internal func didSelectHeader() {
         _ = self.navigationController?.popViewController(animated: true)
     }
 }
@@ -520,7 +520,7 @@ fileprivate class LivemarkTableViewCell: BookmarkFolderTableViewCell {
     }
 }
 
-fileprivate class BookmarkFolderTableViewHeader: UITableViewHeaderFooterView {
+class BookmarkFolderTableViewHeader: UITableViewHeaderFooterView {
     var delegate: BookmarkFolderTableViewHeaderDelegate?
 
     lazy var titleLabel: UILabel = {
