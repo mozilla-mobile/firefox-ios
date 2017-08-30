@@ -128,7 +128,9 @@ class BrowserViewController: UIViewController {
         navigationController?.setNavigationBarHidden(true, animated: animated)
 
         // Prevent the keyboard from showing up until after the user has viewed the Intro.
-        if UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone) == AppDelegate.prefIntroVersion {
+        let userHasSeenIntro = UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone) == AppDelegate.prefIntroVersion
+
+        if userHasSeenIntro && !urlBar.inBrowsingMode {
             urlBar.becomeFirstResponder()
         }
 
@@ -228,6 +230,7 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func showSettings() {
+        urlBar.shouldPresent = false
         let settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager)
         navigationController!.pushViewController(settingsViewController, animated: true)
         navigationController!.setNavigationBarHidden(false, animated: true)

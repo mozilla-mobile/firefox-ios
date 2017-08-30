@@ -22,7 +22,7 @@ class URLBar: UIView {
 
     let progressBar = UIProgressView(progressViewStyle: .bar)
     var inBrowsingMode: Bool = false
-    fileprivate var shouldPresent = false
+    var shouldPresent = false
     fileprivate(set) var isEditing = false
 
     fileprivate let cancelButton = InsetButton()
@@ -369,6 +369,7 @@ class URLBar: UIView {
     }
 
     func ensureBrowsingMode() {
+        shouldPresent = false
         isEditing = true
         inBrowsingMode = true
         dismiss()
@@ -582,10 +583,7 @@ extension URLBar: AutocompleteTextFieldDelegate {
     func autocompleteTextField(_ autocompleteTextField: AutocompleteTextField, didTextChange text: String) {
         autocompleteTextField.rightView?.isHidden = text.isEmpty
 
-        if text.isEmpty && !isEditing {
-            dismiss()
-            delegate?.urlBarDidDeactivate(self)
-        } else if !isEditing && shouldPresent {
+        if !isEditing && shouldPresent {
             present()
             delegate?.urlBarDidActivate(self)
         }
