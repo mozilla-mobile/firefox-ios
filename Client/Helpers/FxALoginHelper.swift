@@ -272,6 +272,14 @@ class FxALoginHelper {
             return pushRegistrationDidFail()
         }
 
+        if let pushRegistration = account.pushRegistration {
+            // Currently, we don't support routine changing of push subscriptions
+            // then we can assume that if we've already registered with the
+            // push server, then we don't need to do it again.
+            _ = pushClient.updateUAID(apnsToken, withRegistration: pushRegistration)
+            return
+        }
+
         pushClient.register(apnsToken).upon { res in
             guard let pushRegistration = res.successValue else {
                 return self.pushRegistrationDidFail()
