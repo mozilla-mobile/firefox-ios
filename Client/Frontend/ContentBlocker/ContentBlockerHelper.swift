@@ -6,13 +6,15 @@ import WebKit
 import Shared
 import Deferred
 
+fileprivate let NotificationContentBlockerReloadNeeded = "NotificationContentBlockerReloadNeeded"
+
 @available(iOS 11.0, *)
 class ContentBlockerHelper {
     static let PrefKeyEnabledState = "prefkey.trackingprotection.enabled"
     static let PrefKeyStrength = "prefkey.trackingprotection.strength"
     fileprivate let blocklistBasic = ["disconnect-advertising", "disconnect-analytics", "disconnect-social"]
     fileprivate let blocklistStrict = ["disconnect-content", "web-fonts"]
-    fileprivate let ruleStore: WKContentRuleListStore?
+    fileprivate let ruleStore: WKContentRuleListStore
     fileprivate weak var tab: Tab?
     fileprivate weak var profile: Profile?
 
@@ -62,6 +64,10 @@ class ContentBlockerHelper {
         static let allOptions: [BlockingStrength] = [.basic, .strict]
     }
 
+    static func prefsChanged() {
+        NotificationCenter.default.post(name: Notification.Name(rawValue: NotificationContentBlockerReloadNeeded), object: nil)
+    }
+
     class func name() -> String {
         return "ContentBlockerHelper"
     }
@@ -70,14 +76,10 @@ class ContentBlockerHelper {
 
     init(tab: Tab, profile: Profile) {
         self.ruleStore = WKContentRuleListStore.default()
-        if self.ruleStore == nil {
-            assert(false, "WKContentRuleListStore unavailable.")
-            return
-        }
-
         self.tab = tab
         self.profile = profile
 
+        NotificationCenter.default.addObserver(self, selector: #selector(ContentBlockerHelper.reloadTab), name: NSNotification.Name(rawValue: NotificationContentBlockerReloadNeeded), object: nil)
         addActiveRulesToTab()
 
         if ContentBlockerHelper.heavyInitHasRunOnce {
@@ -96,6 +98,10 @@ class ContentBlockerHelper {
         NotificationCenter.default.removeObserver(self)
     }
 
+    @objc func reloadTab() {
+        addActiveRulesToTab()
+    }
+
     fileprivate var blockingStrengthPref: BlockingStrength {
         let pref = profile?.prefs.stringForKey(ContentBlockerHelper.PrefKeyStrength) ?? ""
         return BlockingStrength(rawValue: pref) ?? .basic
@@ -107,27 +113,24 @@ class ContentBlockerHelper {
     }
 
     fileprivate func addActiveRulesToTab() {
-        guard let ruleStore = ruleStore else { return }
-        let rules = blocklistBasic + (blockingStrengthPref == .strict ? blocklistStrict : [])
-        let enabledMode = enabledStatePref
+        guard let tab = tab else { return }
         removeAllFromTab()
-
-        func addRules() {
-            for name in rules {
-                ruleStore.lookUpContentRuleList(forIdentifier: name) { rule, error in
-                    self.addToTab(contentRuleList: rule, error: error)
-                }
-            }
-        }
 
         switch enabledStatePref {
         case .off:
             return
         case .on:
-            addRules()
+            break
         case .onInPrivateBrowsing:
-            if tab?.isPrivate ?? false {
-                addRules()
+            if !tab.isPrivate {
+                return
+            }
+        }
+
+        let rules = blocklistBasic + (blockingStrengthPref == .strict ? blocklistStrict : [])
+        for name in rules {
+            ruleStore.lookUpContentRuleList(forIdentifier: name) { rule, error in
+                self.addToTab(contentRuleList: rule, error: error)
             }
         }
     }
@@ -186,8 +189,6 @@ extension ContentBlockerHelper {
     }
 
     fileprivate func removeAllRulesInStore(completion: @escaping () -> Void) {
-        guard let ruleStore = ruleStore else { return }
-
         ruleStore.getAvailableContentRuleListIdentifiers { available in
             guard let available = available else {
                 completion()
@@ -195,7 +196,7 @@ extension ContentBlockerHelper {
             }
             let deferreds: [Deferred<Void>] = available.map { filename in
                 let result = Deferred<Void>()
-                ruleStore.removeContentRuleList(forIdentifier: filename) { _ in
+                self.ruleStore.removeContentRuleList(forIdentifier: filename) { _ in
                    result.fill()
                 }
                 return result
@@ -223,7 +224,6 @@ extension ContentBlockerHelper {
     }
 
     fileprivate func removeOldListsByNameFromStore(completion: @escaping () -> Void) {
-        guard let ruleStore = ruleStore else { return }
         var noMatchingIdentifierFoundForRule = false
 
         ruleStore.getAvailableContentRuleListIdentifiers { available in
@@ -255,7 +255,6 @@ extension ContentBlockerHelper {
     }
 
     fileprivate func compileListsNotInStore(completion: @escaping () -> Void) {
-        guard let ruleStore = ruleStore else { return }
         let blocklists = blocklistBasic + blocklistStrict
         let deferreds: [Deferred<Void>] = blocklists.map { filename in
             let result = Deferred<Void>()
@@ -265,7 +264,7 @@ extension ContentBlockerHelper {
                     return
                 }
                 self.loadJsonFromBundle(forResource: filename) { jsonString in
-                    ruleStore.compileContentRuleList(forIdentifier: filename, encodedContentRuleList: jsonString) { _, _ in
+                    self.ruleStore.compileContentRuleList(forIdentifier: filename, encodedContentRuleList: jsonString) { _, _ in
                         result.fill()
                     }
                 }
