@@ -1,240 +1,240 @@
 /* Button on About screen */
-"About.learnMoreButton" = "Ketahui lanjut";
+"About.learnMoreButton" = "Conocer más";
 
 /* Label on About screen */
-"About.missionLabel" = "%@ dihasilkan oleh Mozilla. Misi kami adalah untuk memupuk Internet yang terbuka dan sihat.";
+"About.missionLabel" = "%@ está producido por Mozilla. Nuestra misión es promover una Internet sana y abierta.";
 
 /* Label on About screen */
-"About.privateBullet1" = "Cari dan layari dari dalam aplikasi";
+"About.privateBullet1" = "Buscá y navegá directamente desde la app";
 
 /* Label on About screen */
-"About.privateBullet2" = "Sekat penjejak (atau kemas kini tetapan untuk membenarkan penjejak)";
+"About.privateBullet2" = "Bloquear rastreadores (o actualizar las configuraciones para permitirlos)";
 
 /* Label on About screen */
-"About.privateBullet3" = "Buang untuk menghapuskan kuki serta sejarah pencarian dan pelayaran";
+"About.privateBullet3" = "Borrar para eliminar las cookies así como las búsquedas y el historial de navegación";
 
 /* Label on About screen */
-"About.privateBulletHeader" = "Gunakan sebagai pelayar peribadi:";
+"About.privateBulletHeader" = "Usalo como un navegador privado:";
 
 /* Label for row in About screen */
-"About.rowHelp" = "Bantuan";
+"About.rowHelp" = "Ayuda";
 
 /* Label for row in About screen */
-"About.rowRights" = "Hak Anda";
+"About.rowRights" = "Tus derechos";
 
 /* Label on About screen */
-"About.safariBullet1" = "Sekat penjejak untuk privasi yang lebih baik";
+"About.safariBullet1" = "Bloquear rastreadores para mejorar la privacidad";
 
 /* Label on About screen */
-"About.safariBullet2" = "Sekat fon Web untuk mengurangkan saiz halaman";
+"About.safariBullet2" = "Bloquear fuentes web para reducir el peso de las páginas";
 
 /* Label on About screen */
-"About.safariBulletHeader" = "Gunakan sebagai ekstensi Safari:";
+"About.safariBulletHeader" = "Usalo como extensión de Safari:";
 
 /* Title for the About screen */
-"About.screenTitle" = "Perihal";
+"About.screenTitle" = "Acerca de";
 
 /* Label on About screen */
-"About.topLabel" = "%@ meletakkan anda dalam kawalan.";
+"About.topLabel" = "%@ te da el control.";
 
 /* Accessibility label for the back button */
-"Browser.backLabel" = "Undur";
+"Browser.backLabel" = "Atrás";
 
 /* Accessibility label for the forward button */
-"Browser.forwardLabel" = "Hadapan";
+"Browser.forwardLabel" = "Adelante";
 
 /* Accessibility label for the reload button */
-"Browser.reloadLabel" = "Muat semula";
+"Browser.reloadLabel" = "Recargar";
 
 /* Accessibility label for the settings button */
-"Browser.settingsLabel" = "Tetapan";
+"Browser.settingsLabel" = "Configuración";
 
 /* Accessibility label for the share button */
-"Browser.shareLabel" = "Kongsi";
+"Browser.shareLabel" = "Compartir";
 
 /* Accessibility label for the stop button */
-"Browser.stopLabel" = "Berhenti";
+"Browser.stopLabel" = "Detener";
 
 /* Button label to reload the error page */
-"Error.tryAgainButton" = "Cuba lagi";
+"Error.tryAgainButton" = "Reintentar";
 
 /* Button label used for cancelling to open another app from Focus */
-"ExternalAppLink.cancelTitle" = "Batal";
+"ExternalAppLink.cancelTitle" = "Cancelar";
 
 /* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
-"ExternalAppLink.messageTitle" = "%@ mahu membuka aplikasi lain";
+"ExternalAppLink.messageTitle" = "%@ quiere abrir otra aplicación";
 
 /* Button label for opening another app from Focus */
-"ExternalAppLink.openTitle" = "Buka";
+"ExternalAppLink.openTitle" = "Abrir";
 
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.callButton" = "Hubungi";
+"ExternalLink.callButton" = "Llamar";
 
 /* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.cancelButton" = "Batal";
+"ExternalLink.cancelButton" = "Cancelar";
 
 /* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.emailButton" = "Emel";
+"ExternalLink.emailButton" = "Correo electrónico";
 
 /* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.messageTitleWithPlaceholder" = "Anda kini meninggalkan %@.";
+"ExternalLink.messageTitleWithPlaceholder" = "Estás saliendo de %@.";
 
 /* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openAppStoreButton" = "Buka App Store";
+"ExternalLink.openAppStoreButton" = "Abrir App Store";
 
 /* Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"ExternalLink.openAppStoreTitle" = "%@ mahu membuka App Store.";
+"ExternalLink.openAppStoreTitle" = "%@ quiere abrir la App Store.";
 
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.openMapsButton" = "Buka Maps";
+"ExternalLink.openMapsButton" = "Abrir Maps";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "OK, FAHAM!";
+"FirstRun.buttonLabel" = "OK, ¡ENTENDIDO!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Sekat penjejak atas talian secara automatik semasa anda berlayar. Kemudian tap untuk memadam halaman dilawati, carian, kuki dan kata laluan dari peranti anda.";
+"FirstRun.messageLabelDescription" = "Bloqueá automáticamente rastreadores en línea al navegar. Después tocá para borrar páginas visitadas, búsquedas, cookies y contraseñas de tu dispositivo.";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelTagline" = "Layari seperti tiada sesiapa yang melihat.";
+"FirstRun.messageLabelTagline" = "Navegá como si nadie mirara.";
 
 /* First label for product description on the home screen */
-"Home.descriptionLabel1" = "Pelayaran peribadi automatik.";
+"Home.descriptionLabel1" = "Navegación privada automática.";
 
 /* Second label for product description on the home screen */
-"Home.descriptionLabel2" = "Layar. Buang. Ulang.";
+"Home.descriptionLabel2" = "Navegar. Borrar. Repetir.";
 
 /* Label in share alert to cancel the alert */
-"Open.Cancel" = "Batal";
+"Open.Cancel" = "Cancelar";
 
 /* Label in share alert to open the URL in Firefox */
-"Open.Firefox" = "Firefox (Pelayaran Peribadi)";
+"Open.Firefox" = "Firefox (navegación privada)";
 
 /* Label in share alert to open the full system share menu */
-"Open.More" = "Selanjutnya";
+"Open.More" = "Más";
 
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsContentBlockers" = "Tap Safari, kemudian pilih Penyekat Kandungan";
+"Safari.instructionsContentBlockers" = "Tocá Safri y seleccioná Bloqueadores de contenido";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsEnable" = "Dayakan %@";
+"Safari.instructionsEnable" = "Habilitar %@";
 
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
-"Safari.instructionsNotEnabled" = "%@ tidak didayakan.";
+"Safari.instructionsNotEnabled" = "%@ no está habilitado.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsOpen" = "Buka Tetapan Aplikasi";
+"Safari.instructionsOpen" = "Abrir los Ajustes de la aplicación";
 
 /* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Penyekatan penjejak kandungan lain boleh mengganggu sesetengah kandungan video dan laman Web.";
+"Settings.blockOtherMessage" = "Bloquear otros rastreadores de contenidos puede hacer que algunos videos y páginas web fallen.";
 
 /* Button label for declining Content blocker alert */
-"Settings.blockOtherNo" = "Tidak, Terima kasih";
+"Settings.blockOtherNo" = "No, gracias";
 
 /* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes" = "Saya Faham";
+"Settings.blockOtherYes" = "Entiendo";
 
 /* Title for settings screen */
-"Settings.screenTitle" = "Tetapan";
+"Settings.screenTitle" = "Configuración";
 
 /* Title for the search engine row */
-"Settings.searchSection" = "SEARCH ENGINE";
+"Settings.searchSection" = "BUSCADOR";
 
 /* Title for the search engine selection screen */
-"Settings.searchTitle" = "Enjin Carian";
+"Settings.searchTitle" = "Buscador";
 
 /* Label for Safari integration section */
-"Settings.sectionIntegration" = "INTEGRATION";
+"Settings.sectionIntegration" = "INTEGRACIÓN";
 
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA";
 
 /* Section label for performance toggles */
-"Settings.sectionPerformance" = "PERFORMANCE";
+"Settings.sectionPerformance" = "RENDIMIENTO";
 
 /* Section label for privacy toggles */
-"Settings.sectionPrivacy" = "PRIVACY";
+"Settings.sectionPrivacy" = "PRIVACIDAD";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Sekat penjejak iklan";
+"Settings.toggleBlockAds" = "Bloquear rastreadores de publicidad";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Sekat penjejak analitik";
+"Settings.toggleBlockAnalytics" = "Bloquear rastreadores analíticos";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "Sekat fon Web";
+"Settings.toggleBlockFonts" = "Bloquear fuentes web";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Sekat penjejak kandungan lain";
+"Settings.toggleBlockOther" = "Bloquear otros rastreadores de contenido";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Sekat penjejak sosial";
+"Settings.toggleBlockSocial" = "Bloquear rastreadores de redes sociales";
 
 /* Label subtitle for toggle on main screen */
-"Settings.toggleOtherSubtitle" = "Boleh mengganggu sesetengah kandungan video dan laman Web";
+"Settings.toggleOtherSubtitle" = "Algunos videos y páginas web pueden fallar";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
 /* Label for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageData" = "Hantar data penggunaan anonimus";
+"Settings.toggleSendAnonymousUsageData" = "Enviar datos de uso anónimos";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageDataSubtitle" = "Ketahui lanjut";
+"Settings.toggleSendAnonymousUsageDataSubtitle" = "Conocer más";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
-"ShareMenu.GetFirefox" = "Dapatkan app Firefox";
+"ShareMenu.GetFirefox" = "Conseguí la aplicación Firefox";
 
 /* Text for the share menu option when a user wants to open a page in Focus. */
-"ShareMenu.OpenInFocus" = "Buka dalam Focus";
+"ShareMenu.OpenInFocus" = "Abrir en Focus";
 
 /* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "Batal";
+"URL.cancelLabel" = "Cancelar";
 
 /* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
-"URL.contextMenu" = "Tampal & Lancarkan";
+"URL.contextMenu" = "Pegar e ir";
 
 /* Erase button in the URL bar */
-"URL.eraseButtonLabel" = "ERASE";
+"URL.eraseButtonLabel" = "BORRAR";
 
 /* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "Sejarah pelayaran anda telah dibuang.";
+"URL.eraseMessageLabel" = "Tu historial de navegación fue borrado.";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "Cari atau masukkan alamat web";
+"URL.placeholderText" = "Buscar o ingresar dirección";
 
 /* Label displayed for search button when typing in the URL bar */
-"URL.searchLabel" = "Cari %@";
+"URL.searchLabel" = "Buscar %@";
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
-"URL.trackersBlockedLabel" = "Penjejak disekat";
+"URL.trackersBlockedLabel" = "Rastreadores bloqueados";
 
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
-"actionSheet.openIn" = "Buka dalam %@";
+"actionSheet.openIn" = "Abrir en %@";
 
 /* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "Salin Imej";
+"contextMenu.copyImageTitle" = "Copiar imagen";
 
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "Salin Pautan";
+"contextMenu.copyLink" = "Copiar enlace";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "Simpan Imej";
+"contextMenu.saveImageTitle" = "Guardar imagen";
 
 /* Text for the context menu when a user wants to share a link after long pressing it. */
-"contextMenu.shareLinkTitle" = "Kongsi Pautan";
+"contextMenu.shareLinkTitle" = "Compartir enlace";
 
 /* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
-"externalAppLinkWithAppName.messageTitle" = "%1$@ mahu membuka %2$@";
+"externalAppLinkWithAppName.messageTitle" = "%1$@ quiere abrir %2$@";
 
 /* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "Ini membolehkan anda menyimpan imej ke dalam Jalur Kamera";
+"photosPermission.description" = "Esto te permite guardar las imágenes en el Rollo de tu cámara";
 
 /* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "Buka Tetapan";
+"photosPermission.openSettings" = "Abrir configuración";
 
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "“%@” Mahu Mengakses Foto Anda";
+"photosPermission.title" = "“%@” quiere acceder a tus fotos";
 

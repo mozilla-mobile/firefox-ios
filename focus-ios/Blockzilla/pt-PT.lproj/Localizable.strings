@@ -62,7 +62,7 @@
 "ExternalAppLink.cancelTitle" = "Cancelar";
 
 /* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
-"ExternalAppLink.messageTitle" = "%@ pretende abrir outra aplicação";
+"ExternalAppLink.messageTitle" = "O %@ pretende abrir outra aplicação";
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "Abrir";
@@ -203,7 +203,7 @@
 "URL.eraseMessageLabel" = "O seu histórico de navegação foi apagado.";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "Pesquise ou digite um endereço";
+"URL.placeholderText" = "Pesquisar ou digitar um endereço";
 
 /* Label displayed for search button when typing in the URL bar */
 "URL.searchLabel" = "Pesquisar por %@";
@@ -227,7 +227,7 @@
 "contextMenu.shareLinkTitle" = "Partilhar ligação";
 
 /* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
-"externalAppLinkWithAppName.messageTitle" = "%1$@ pretende abrir o %2$@";
+"externalAppLinkWithAppName.messageTitle" = "O %1$@ pretende abrir %2$@";
 
 /* Description for dialog used for requesting a user to enable access to Photos. */
 "photosPermission.description" = "Isto permite-lhe guardar a imagem para o seu Rolo da câmara";
