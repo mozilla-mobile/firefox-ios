@@ -94,6 +94,13 @@ class CorePing: TelemetryPing {
             out["defaultMailClient"] = chosenEmailClient as AnyObject?
         }
 
+        if #available(iOS 11.0, *) {
+            if let strength = self.prefs.stringForKey(ContentBlockerHelper.PrefKeyStrength), let enabled = self.prefs.stringForKey(ContentBlockerHelper.PrefKeyEnabledState) {
+                out["trackingProtectionStrength"] = strength as AnyObject?
+                out["trackingProtectionEnabled"] = enabled as AnyObject?
+            }
+        }
+
         payload = JSON(out)
     }
 }

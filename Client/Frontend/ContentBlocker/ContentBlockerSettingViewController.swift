@@ -35,8 +35,6 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
                 self.currentEnabledState = option
                 self.prefs.setString(self.currentEnabledState.rawValue, forKey: ContentBlockerHelper.PrefKeyEnabledState)
                 self.tableView.reloadData()
-
-                LeanplumIntegration.sharedInstance.track(eventName: .trackingProtectionSettings, withParameters: ["Enabled option": option.rawValue as AnyObject])
             })
         }
 
@@ -47,8 +45,6 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
                 self.currentBlockingStrength = option
                 self.prefs.setString(self.currentBlockingStrength.rawValue, forKey: ContentBlockerHelper.PrefKeyStrength)
                 self.tableView.reloadData()
-
-                LeanplumIntegration.sharedInstance.track(eventName: .trackingProtectionSettings, withParameters: ["Strength option": option.rawValue as AnyObject])
             })
         }
 
