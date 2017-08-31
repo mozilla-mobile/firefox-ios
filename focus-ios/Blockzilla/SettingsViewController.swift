@@ -111,8 +111,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         if section == 4 {
             let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
-            cell.detailTextLabel?.text = UIConstants.strings.subtitleSendAnonymousUsageData
-            cell.detailTextLabel?.textColor = UIConstants.colors.toggleOn
+            let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [NSForegroundColorAttributeName : UIConstants.colors.toggleOn])
+            let subtitle = NSMutableAttributedString(string: UIConstants.strings.detailTextSendUsageData, attributes: [NSForegroundColorAttributeName : UIConstants.colors.settingsDetailLabel])
+            subtitle.append(learnMore)
+            cell.detailTextLabel?.attributedText = subtitle
+            cell.detailTextLabel?.numberOfLines = 0
             cell.accessibilityIdentifier = "SettingsViewController.learnMoreCell"
             cell.selectionStyle = .none
             cell.backgroundColor = UIConstants.colors.background
@@ -133,7 +136,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return section == 4 ? 40 : 0
+        return section == 4 ? 50 : 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

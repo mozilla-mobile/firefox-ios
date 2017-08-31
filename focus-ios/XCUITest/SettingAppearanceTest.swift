@@ -80,9 +80,9 @@ class SettingAppearanceTest: BaseTestCase {
         XCTAssertEqual(otherContentSwitch.value as! String, "0")
         XCTAssertEqual(app.tables.switches["Block Web fonts"].value as! String, "0")
         if app.label == "Firefox Focus" {
-            XCTAssertEqual(app.tables.switches["Send anonymous usage data"].value as! String, "1")
+            XCTAssertEqual(app.tables.switches["Send usage data"].value as! String, "1")
         } else {
-            XCTAssertEqual(app.tables.switches["Send anonymous usage data"].value as! String, "0")
+            XCTAssertEqual(app.tables.switches["Send usage data"].value as! String, "0")
         }
         
         otherContentSwitch.tap()
