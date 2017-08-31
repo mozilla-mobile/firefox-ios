@@ -131,9 +131,7 @@ class LeanplumIntegration {
         userAttributesDict[UserAttributeKeyName.pocketInstalled.rawValue] = !canInstallPocket()
         userAttributesDict[UserAttributeKeyName.signedInSync.rawValue] = profile?.hasAccount()
 
-        Leanplum.start(userAttributes: userAttributesDict)
-
-        Leanplum.onStartResponse({ _ in
+        Leanplum.start(withUserId: nil, userAttributes: userAttributesDict, responseHandler: { _ in
             self.track(eventName: LeanplumEventName.openedApp)
 
             // We need to check if the app is a clean install to use for
