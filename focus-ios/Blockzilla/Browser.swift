@@ -55,6 +55,7 @@ class Browser: NSObject {
 
     private func createWebView() {
         let webView = UIWebView()
+        webView.backgroundColor = .black
         webView.scalesPageToFit = true
         webView.mediaPlaybackRequiresUserAction = true
         webView.scrollView.backgroundColor = UIConstants.colors.background

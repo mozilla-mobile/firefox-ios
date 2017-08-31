@@ -21,6 +21,7 @@ class BrowserViewController: UIViewController {
     fileprivate var toolbarBottomConstraint: Constraint!
     fileprivate var urlBarTopConstraint: Constraint!
     fileprivate var homeViewBottomConstraint: Constraint!
+    fileprivate var browserBottomConstraint: Constraint!
     fileprivate var lastScrollOffset = CGPoint.zero
     fileprivate var lastScrollTranslation = CGPoint.zero
     fileprivate var scrollBarOffsetAlpha: CGFloat = 0
@@ -37,7 +38,16 @@ class BrowserViewController: UIViewController {
     }
 
     private var homeViewContainer = UIView()
-    fileprivate var showsToolsetInURLBar = false
+
+    fileprivate var showsToolsetInURLBar = false {
+        didSet {
+            if showsToolsetInURLBar {
+                browserBottomConstraint.deactivate()
+            } else {
+                browserBottomConstraint.activate()
+            }
+        }
+    }
 
     private var shouldEnsureBrowsingMode = false
     private var initialUrl: URL?
@@ -49,8 +59,6 @@ class BrowserViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        showsToolsetInURLBar = UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.orientation.isLandscape
 
         photoManager.delegate = self
 
@@ -102,7 +110,13 @@ class BrowserViewController: UIViewController {
 
         browser.view.snp.makeConstraints { make in
             make.top.equalTo(urlBarContainer.snp.bottom).priority(500)
-            make.bottom.equalTo(browserToolbar.snp.top).priority(500)
+            make.bottom.equalTo(view).priority(500)
+            browserBottomConstraint = make.bottom.equalTo(browserToolbar.snp.top).priority(1000).constraint
+
+            if !showsToolsetInURLBar {
+                browserBottomConstraint.activate()
+            }
+
             make.leading.trailing.equalTo(view)
         }
 
@@ -110,6 +124,8 @@ class BrowserViewController: UIViewController {
             make.top.equalTo(urlBarContainer.snp.bottom)
             make.leading.trailing.bottom.equalTo(view)
         }
+
+        showsToolsetInURLBar = UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.orientation.isLandscape
 
         createHomeView()
         createURLBar()
