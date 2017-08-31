@@ -565,12 +565,16 @@ class URLBar: UIView {
 
 extension URLBar: AutocompleteTextFieldDelegate {
     func autocompleteTextFieldShouldBeginEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool {
+
+        autocompleteTextField.highlightAll()
+        
         if !isEditing && inBrowsingMode {
             present()
             delegate?.urlBarDidActivate(self)
         } else {
             shouldPresent = true
         }
+
 
         return true
     }
