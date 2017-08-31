@@ -2983,7 +2983,6 @@ extension BrowserViewController: IntroViewControllerDelegate {
                 introViewController.modalPresentationStyle = UIModalPresentationStyle.formSheet
             }
             present(introViewController, animated: true) {
-                self.profile.prefs.setInt(1, forKey: IntroViewControllerSeenProfileKey)
                 // On first run (and forced) open up the homepage in the background.
                 let state = self.getCurrentAppState()
                 if let homePageURL = HomePageAccessors.getHomePage(state), let tab = self.tabManager.selectedTab, DeviceInfo.hasConnectivity() {
@@ -3005,16 +3004,20 @@ extension BrowserViewController: IntroViewControllerDelegate {
         self.presentSignInViewController(fxaParams)
     }
 
-    func introViewControllerDidFinish(_ introViewController: IntroViewController) {
+    func introViewControllerDidFinish(_ introViewController: IntroViewController, requestToLogin: Bool) {
+        self.profile.prefs.setInt(1, forKey: IntroViewControllerSeenProfileKey)
         introViewController.dismiss(animated: true) { finished in
             if self.navigationController?.viewControllers.count ?? 0 > 1 {
                 _ = self.navigationController?.popToRootViewController(animated: true)
             }
             
-            guard let deeplink = self.profile.prefs.stringForKey("AdjustDeeplinkKey"), let url = URL(string: deeplink) else {
+            if let deeplink = self.profile.prefs.stringForKey("AdjustDeeplinkKey"), let url = URL(string: deeplink) {
+                self.launchFxAFromDeeplinkURL(url)
                 return
             }
-            self.launchFxAFromDeeplinkURL(url)
+            if requestToLogin {
+                self.presentSignInViewController()
+            }
         }
     }
 
@@ -3042,15 +3045,6 @@ extension BrowserViewController: IntroViewControllerDelegate {
         self.dismiss(animated: true, completion: nil)
     }
 
-    func introViewControllerDidRequestToLogin(_ introViewController: IntroViewController) {
-        introViewController.dismiss(animated: true, completion: { () -> Void in
-            guard let deeplink = self.profile.prefs.stringForKey("AdjustDeeplinkKey"), let url = URL(string: deeplink) else {
-                self.presentSignInViewController()
-                return
-            }
-            self.launchFxAFromDeeplinkURL(url)
-        })
-    }
 }
 
 extension BrowserViewController: FxAContentViewControllerDelegate {
