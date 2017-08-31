@@ -24,6 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let telemetryConfig = Telemetry.default.configuration
         telemetryConfig.appName = AppInfo.isKlar ? "Klar" : "Focus"
         telemetryConfig.userDefaultsSuiteName = AppInfo.sharedContainerIdentifier
+        telemetryConfig.appVersion = AppInfo.shortVersion
 
         // Since Focus always clears the caches directory and Telemetry files are
         // excluded from iCloud backup, we store pings in documents.
