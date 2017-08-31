@@ -45,8 +45,7 @@ struct IntroViewControllerUX {
 let IntroViewControllerSeenProfileKey = "IntroViewControllerSeen"
 
 protocol IntroViewControllerDelegate: class {
-    func introViewControllerDidFinish(_ introViewController: IntroViewController)
-    func introViewControllerDidRequestToLogin(_ introViewController: IntroViewController)
+    func introViewControllerDidFinish(_ introViewController: IntroViewController, requestToLogin: Bool)
 }
 
 class IntroViewController: UIViewController, UIScrollViewDelegate {
@@ -271,7 +270,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
 
     func SELstartBrowsing() {
         LeanplumIntegration.sharedInstance.track(eventName: .dismissedOnboarding)
-        delegate?.introViewControllerDidFinish(self)
+        delegate?.introViewControllerDidFinish(self, requestToLogin: false)
     }
 
     func SELback() {
@@ -299,7 +298,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
     }
 
     func SELlogin() {
-		delegate?.introViewControllerDidRequestToLogin(self)
+        delegate?.introViewControllerDidFinish(self, requestToLogin: true)
     }
 
     fileprivate var accessibilityScrollStatus: String {
