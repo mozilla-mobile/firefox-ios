@@ -52,6 +52,10 @@ class NewTabChoiceViewController: UITableViewController {
         super.viewWillAppear(animated)
         self.currentChoice = NewTabAccessors.getNewTabPage(prefs)
         self.hasHomePage = HomePageAccessors.getHomePage(prefs) != nil
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         tableView.reloadData()
     }
 
