@@ -74,7 +74,7 @@ class LeanplumIntegration {
     fileprivate weak var profile: Profile?
     private var enabled: Bool = false
     
-    func shouldSendToLP() -> Bool {
+    fileprivate func shouldSendToLP() -> Bool {
         // Need to be run on main thread since isInPrivateMode requires to be on the main thread.
         assert(Thread.isMainThread)
         return enabled && Leanplum.hasStarted() && !UIApplication.isInPrivateMode
@@ -85,6 +85,11 @@ class LeanplumIntegration {
     }
 
     fileprivate func start() {
+        guard AppConstants.MOZ_ENABLE_LEANPLUM else {
+            enabled = false
+            return
+        }
+
         self.enabled = self.profile?.prefs.boolForKey("settings.sendUsageData") ?? true
         if !self.enabled {
             return
@@ -182,8 +187,12 @@ class LeanplumIntegration {
     // Utils
     
     func setEnabled(_ enabled: Bool) {
+        guard AppConstants.MOZ_ENABLE_LEANPLUM else {
+            return
+        }
         // Setting up Test Mode stops sending things to server.
         if enabled { start() }
+        self.enabled = enabled
         Leanplum.setTestModeEnabled(!enabled)
     }
 
