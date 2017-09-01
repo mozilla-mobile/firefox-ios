@@ -26,7 +26,7 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
     override func setUp() {
         super.setUp()
 
-        db = BrowserDB(filename: "browser.db", files: files)
+        db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
         metadata = SQLiteMetadata(db: db)
         prefs = MockProfilePrefs()
         history = SQLiteHistory(db: db, prefs: prefs)
@@ -273,7 +273,7 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         history.addLocalVisit(siteVisitA1).succeeded()
 
         history.repopulate(invalidateTopSites: true, invalidateHighlights: true).succeeded()
-        var highlights = history.getHighlights().value.successValue!
+        let highlights = history.getHighlights().value.successValue!
         XCTAssertEqual(highlights.count, 1)
         XCTAssertEqual(highlights[0]!.title, "A")
     }
@@ -282,7 +282,7 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
 class TestSQLiteHistoryRecommendationsPerf: XCTestCase {
     func testRecommendationPref() {
         let files = MockFiles()
-        let db = BrowserDB(filename: "browser.db", files: files)
+        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
         let metadata = SQLiteMetadata(db: db)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)

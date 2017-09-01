@@ -130,8 +130,8 @@ private let log = Logger.syncLogger
 open class BrowserSchema: Schema {
     static let DefaultVersion = 31    // Bug 1388147.
 
-    var name: String { return "BROWSER" }
-    var version: Int { return BrowserSchema.DefaultVersion }
+    public var name: String { return "BROWSER" }
+    public var version: Int { return BrowserSchema.DefaultVersion }
 
     let sqliteVersion: Int32
     let supportsPartialIndices: Bool
@@ -593,7 +593,7 @@ open class BrowserSchema: Schema {
     "last_access_time INTEGER" +
     ")"
 
-    func create(_ db: SQLiteDBConnection) -> Bool {
+    public func create(_ db: SQLiteDBConnection) -> Bool {
         let favicons =
         "CREATE TABLE IF NOT EXISTS \(TableFavicons) (" +
         "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -761,7 +761,7 @@ open class BrowserSchema: Schema {
                self.prepopulateRootFolders(db)
     }
 
-    func update(_ db: SQLiteDBConnection, from: Int) -> Bool {
+    public func update(_ db: SQLiteDBConnection, from: Int) -> Bool {
         let to = self.version
         if from == to {
             log.debug("Skipping update from \(from) to \(to).")
@@ -1301,7 +1301,7 @@ open class BrowserSchema: Schema {
         return true
     }
 
-    func drop(_ db: SQLiteDBConnection) -> Bool {
+    public func drop(_ db: SQLiteDBConnection) -> Bool {
         log.debug("Dropping all browser tables.")
         let additional = [
             "DROP TABLE IF EXISTS faviconSites" // We renamed it to match naming convention.

@@ -54,9 +54,7 @@ class TestBrowserDB: XCTestCase {
     }
 
     func testMovesDB() {
-        let db = BrowserDB(filename: "foo.db", files: self.files)
-        XCTAssertTrue(db.prepareSchema(BrowserSchema()) == .success)
-
+        var db = BrowserDB(filename: "foo.db", schema: BrowserSchema(), files: self.files)
         db.run("CREATE TABLE foo (bar TEXT)").succeeded() // Just so we have writes in the WAL.
 
         XCTAssertTrue(files.exists("foo.db"))
@@ -80,7 +78,11 @@ class TestBrowserDB: XCTestCase {
         // It'll still fail, but it moved our old DB.
         // Our current observation is that closing the DB deletes the .shm file and also
         // checkpoints the WAL.
-        XCTAssertFalse(db.prepareSchema(MockFailingSchema()) == .success)
+        db.forceClose()
+
+        db = BrowserDB(filename: "foo.db", schema: MockFailingSchema(), files: self.files)
+        db.run("CREATE TABLE foo (bar TEXT)").failed() // This won't actually write since we'll get a failed connection
+        db = BrowserDB(filename: "foo.db", schema: BrowserSchema(), files: self.files)
         db.run("CREATE TABLE foo (bar TEXT)").succeeded() // Just so we have writes in the WAL.
 
         XCTAssertTrue(files.exists("foo.db"))

@@ -23,270 +23,40 @@ protocol Queryable {
     func runQuery<T>(_ sql: String, args: Args?, factory: @escaping (SDRow) -> T) -> Deferred<Maybe<Cursor<T>>>
 }
 
-public enum DatabaseOpResult {
-    case success
-    case failure
-    case closed
-}
-
 open class BrowserDB {
     fileprivate let db: SwiftData
-    fileprivate let files: FileAccessor
-    fileprivate let filename: String
-    fileprivate let secretKey: String?
 
     // SQLITE_MAX_VARIABLE_NUMBER = 999 by default. This controls how many ?s can
     // appear in a query string.
     open static let MaxVariableNumber = 999
 
-    // SQLite standard error codes when the DB file is locked, busy or the disk is
-    // full. These error codes indicate that any issues with writing to the database
-    // are temporary and we should not wipe out and re-create the database file when
-    // we encounter them.
-    enum SQLiteRecoverableError: Int {
-        case Busy = 5
-        case Locked = 6
-        case ReadOnly = 8
-        case IOErr = 10
-        case Full = 13
-    }
-
-    public init(filename: String, secretKey: String? = nil, files: FileAccessor) {
+    public init(filename: String, secretKey: String? = nil, schema: Schema, files: FileAccessor) {
         log.debug("Initializing BrowserDB: \(filename).")
-        self.files = files
-        self.filename = filename
-        self.secretKey = secretKey
 
         let file = URL(fileURLWithPath: (try! files.getAndEnsureDirectory())).appendingPathComponent(filename).path
-        self.db = SwiftData(filename: file, key: secretKey, prevKey: nil)
 
         if AppConstants.BuildChannel == .developer && secretKey != nil {
             log.debug("Will attempt to use encrypted DB: \(file) with secret = \(secretKey ?? "nil")")
         }
+
+        self.db = SwiftData(filename: file, key: secretKey, prevKey: nil, schema: schema, files: files)
     }
 
-    // Creates the specified database schema in a new database.
-    fileprivate func createSchema(_ conn: SQLiteDBConnection, schema: Schema) -> Bool {
-        log.debug("Try create \(schema.name) version \(schema.version)")
-        if !schema.create(conn) {
-            // If schema couldn't be created, we'll bail without setting the `PRAGMA user_version`.
-            log.debug("Creation failed.")
-            return false
-        }
-
-        if let error = conn.setVersion(schema.version) {
-            log.error("Unable to update the schema version; \(error.localizedDescription)")
-        }
-        
-        return true
-    }
-
-    // Updates the specified database schema in an existing database.
-    fileprivate func updateSchema(_ conn: SQLiteDBConnection, schema: Schema) -> Bool {
-        log.debug("Trying to update table '\(schema.name)' from version \(conn.version) to \(schema.version)")
-        if !schema.update(conn, from: conn.version) {
-            // If schema couldn't be updated, we'll bail without setting the `PRAGMA user_version`.
-            log.debug("Updating failed.")
-            return false
-        }
-
-        if let error = conn.setVersion(schema.version) {
-            log.error("Unable to update the schema version; \(error.localizedDescription)")
-        }
-
-        return true
-    }
-
-    // Checks if the database schema needs created or updated and acts accordingly.
-    // Calls to this function will be serialized to prevent race conditions when
-    // creating or updating the schema.
-    func prepareSchema(_ schema: Schema) -> DatabaseOpResult {
-        SentryIntegration.shared.addAttributes(["dbSchema.\(schema.name).version": schema.version])
-
-        // Ensure the database has not already been closed before attempting to
-        // create or update the schema.
-        guard !db.closed else {
-            log.info("Database is closed; Skipping schema create or update.")
-            return .closed
-        }
-
-        // Get the current schema version for the database.
-        var currentVersion = 0
-        _ = self.db.withConnection(.readOnly, cb: { connection -> NSError? in
-            currentVersion = connection.version
-            return nil
-        })
-        
-        // If the current schema version for the database matches the specified
-        // `Schema` version, no further action is necessary and we can bail out.
-        // NOTE: This assumes that we always use *ONE* `Schema` per database file
-        // since SQLite can only track a single value in `PRAGMA user_version`.
-        if currentVersion == schema.version {
-            log.debug("Schema \(schema.name) already exists at version \(schema.version). Skipping additional schema preparation.")
-            return .success
-        }
-
-        // Set an attribute for Sentry to include with any future error/crash
-        // logs to indicate what schema version we're coming from and going to.
-        SentryIntegration.shared.addAttributes(["dbUpgrade.\(schema.name).from": currentVersion, "dbUpgrade.\(schema.name).to": schema.version])
-
-        // This should not ever happen since the schema version should always be
-        // increasing whenever a structural change is made in an app update.
-        guard currentVersion <= schema.version else {
-            log.error("Schema \(schema.name) cannot be downgraded from version \(currentVersion) to \(schema.version).")
-            SentryIntegration.shared.sendWithStacktrace(message: "Schema \(schema.name) cannot be downgraded from version \(currentVersion) to \(schema.version).", tag: "BrowserDB", severity: .error)
-            return .failure
-        }
-
-        log.debug("Schema \(schema.name) needs created or updated from version \(currentVersion) to \(schema.version).")
-
-        var success = true
-
-        if let error = self.db.transaction({ connection -> Bool in
-            log.debug("Create or update \(schema.name) version \(schema.version) on \(Thread.current.description).")
-
-            // In the event that `prepareSchema()` is called a second time before the schema
-            // update is complete, we can check if we're *now* up-to-date and bail out early.
-            if connection.version == schema.version {
-                success = true
-                return success
+    // For testing purposes or other cases where we want to ensure that this `BrowserDB`
+    // instance has been initialized (schema is created/updated).
+    public func touch() -> Success {
+        let deferred = Success()
+        var err: NSError? = nil
+        withConnection(&err) { connection, error -> Void in
+            guard let _ = connection as? ConcreteSQLiteDBConnection else {
+                deferred.fill(Maybe(failure: DatabaseError(description: "Could not establish a database connection")))
+                return
             }
 
-            // If `PRAGMA user_version` is zero, check if we can safely create the
-            // database schema from scratch.
-            if connection.version == 0 {
-                // Query for the existence of the `tableList` table to determine if we are
-                // migrating from an older DB version.
-                let sqliteMasterCursor = connection.executeQueryUnsafe("SELECT COUNT(*) AS number FROM sqlite_master WHERE type = 'table' AND name = 'tableList'", factory: IntFactory, withArgs: [] as Args)
-                
-                let tableListTableExists = sqliteMasterCursor[0] == 1
-                sqliteMasterCursor.close()
-                
-                // If the `tableList` table doesn't exist, we can simply invoke
-                // `createSchema()` to create a brand new DB from scratch.
-                if !tableListTableExists {
-                    log.debug("Schema \(schema.name) doesn't exist. Creating.")
-                    success = self.createSchema(connection, schema: schema)
-                    return success
-                }
-            }
-
-            log.info("Attempting to update schema from version \(currentVersion) to \(schema.version).")
-            SentryIntegration.shared.send(message: "Attempting to update schema from version \(currentVersion) to \(schema.version).", tag: "BrowserDB", severity: .info)
-
-            // If we can't create a brand new schema from scratch, we must
-            // call `updateSchema()` to go through the update process.
-            if self.updateSchema(connection, schema: schema) {
-                log.debug("Updated schema \(schema.name).")
-                success = true
-                return success
-            }
-
-            // If we failed to update the schema, we'll drop everything from the DB
-            // and create everything again from scratch. Assuming our schema upgrade
-            // code is correct, this *shouldn't* happen. If it does, log it to Sentry.
-            log.error("Update failed for schema \(schema.name) from version \(currentVersion) to \(schema.version). Dropping and re-creating.")
-            SentryIntegration.shared.sendWithStacktrace(message: "Update failed for schema \(schema.name) from version \(currentVersion) to \(schema.version). Dropping and re-creating.", tag: "BrowserDB", severity: .error)
-
-            let _ = schema.drop(connection)
-            success = self.createSchema(connection, schema: schema)
-            return success
-        }) {
-            guard !db.closed else {
-                log.info("Database is closed; Skipping schema create or update.")
-                return .closed
-            }
-
-            // If we got an error, move the file and try again. This will probably break things that are
-            // already attached and expecting a working DB, but at least we should be able to restart.
-            log.error("Unable to get a transaction: \(error.localizedDescription)")
-            SentryIntegration.shared.sendWithStacktrace(message: "Unable to get a transaction: \(error.localizedDescription)", tag: "BrowserDB", severity: .error)
-
-            // Check if the error we got is recoverable (e.g. SQLITE_BUSY, SQLITE_LOCK, SQLITE_FULL).
-            // If so, we *shouldn't* move the database file to a backup location and re-create it.
-            // Instead, just crash so that we don't lose any data.
-            if let _ = SQLiteRecoverableError.init(rawValue: error.code) {
-                fatalError(error.localizedDescription)
-            }
-
-            success = false
+            deferred.fill(Maybe(success: ()))
         }
 
-        guard success else {
-            return moveDatabaseToBackupLocation(schema)
-        }
-
-        return .success
-    }
-
-    func moveDatabaseToBackupLocation(_ schema: Schema) -> DatabaseOpResult {
-        // Make sure that we don't still have open the files that we want to move!
-        // Note that we use sqlite3_close_v2, which might actually _not_ close the
-        // database file yet. For this reason we move the -shm and -wal files, too.
-        db.forceClose()
-
-        // Attempt to make a backup as long as the DB file still exists
-        if self.files.exists(self.filename) {
-            log.warning("Couldn't create or update schema \(schema.name). Attempting to move \(self.filename) to another location.")
-            SentryIntegration.shared.sendWithStacktrace(message: "Couldn't create or update schema \(schema.name). Attempting to move \(self.filename) to another location.", tag: "BrowserDB", severity: .warning)
-
-            // Note that a backup file might already exist! We append a counter to avoid this.
-            var bakCounter = 0
-            var bak: String
-            repeat {
-                bakCounter += 1
-                bak = "\(self.filename).bak.\(bakCounter)"
-            } while self.files.exists(bak)
-
-            do {
-                try self.files.move(self.filename, toRelativePath: bak)
-
-                let shm = self.filename + "-shm"
-                let wal = self.filename + "-wal"
-                log.debug("Moving \(shm) and \(wal)…")
-                if self.files.exists(shm) {
-                    log.debug("\(shm) exists.")
-                    try self.files.move(shm, toRelativePath: bak + "-shm")
-                }
-                if self.files.exists(wal) {
-                    log.debug("\(wal) exists.")
-                    try self.files.move(wal, toRelativePath: bak + "-wal")
-                }
-
-                log.debug("Finished moving \(self.filename) successfully.")
-            } catch let error as NSError {
-                log.error("Unable to move \(self.filename) to another location. \(error)")
-                SentryIntegration.shared.sendWithStacktrace(message: "Unable to move \(self.filename) to another location. \(error)", tag: "BrowserDB", severity: .error)
-            }
-        } else {
-            // No backup was attempted since the DB file did not exist
-            log.error("The DB \(self.filename) has been deleted while previously in use.")
-            SentryIntegration.shared.sendWithStacktrace(message: "The DB \(self.filename) has been deleted while previously in use.", tag: "BrowserDB", severity: .info)
-        }
-
-        // Re-open the connection to the new database file.
-        self.reopenIfClosed()
-
-        // Notify the world that we moved the database after the schema has been
-        // created. This allows us to reset Sync and start over in the case of
-        // corruption.
-        defer {
-            NotificationCenter.default.post(name: NotificationDatabaseWasRecreated, object: self.filename)
-        }
-
-        var success = true
-
-        // Attempt to re-create the schema in the new database file.
-        if let error = self.db.transaction({ connection -> Bool in
-            success = self.createSchema(connection, schema: schema)
-            return success
-        }) {
-            log.error("Unable to get a transaction while re-creating the database: \(error.localizedDescription)")
-            SentryIntegration.shared.sendWithStacktrace(message: "Unable to get a transaction while re-creating the database: \(error.localizedDescription)", tag: "BrowserDB", severity: .error)
-            return .failure
-        }
-
-        return success ? .success : .failure
+        return deferred
     }
 
     func withConnection<T>(flags: SwiftData.Flags, err: inout NSError?, callback: @escaping (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> T) -> T {
@@ -320,9 +90,7 @@ open class BrowserDB {
             return callback(connection, &err)
         }
     }
-}
 
-extension BrowserDB {
     func vacuum() {
         log.debug("Vacuuming a BrowserDB.")
         _ = db.withConnection(SwiftData.Flags.readWriteCreate, synchronous: true) { connection in
@@ -337,9 +105,7 @@ extension BrowserDB {
             return true
         }
     }
-}
 
-extension BrowserDB {
     public class func varlist(_ count: Int) -> String {
         return "(" + Array(repeating: "?", count: count).joined(separator: ", ") + ")"
     }
@@ -474,7 +240,6 @@ extension BrowserDB: Changeable {
 }
 
 extension BrowserDB: Queryable {
-
     func runQuery<T>(_ sql: String, args: Args?, factory: @escaping (SDRow) -> T) -> Deferred<Maybe<Cursor<T>>> {
         return runWithConnection { (connection, _) -> Cursor<T> in
             return connection.executeQuery(sql, factory: factory, withArgs: args)
