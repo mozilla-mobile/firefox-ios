@@ -112,7 +112,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         if section == 4 {
             let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
             let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [NSForegroundColorAttributeName : UIConstants.colors.toggleOn])
-            let subtitle = NSMutableAttributedString(string: UIConstants.strings.detailTextSendUsageData, attributes: [NSForegroundColorAttributeName : UIConstants.colors.settingsDetailLabel])
+            let subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.detailTextSendUsageData, AppInfo.productName), attributes: [NSForegroundColorAttributeName : UIConstants.colors.settingsDetailLabel])
             subtitle.append(learnMore)
             cell.detailTextLabel?.attributedText = subtitle
             cell.detailTextLabel?.numberOfLines = 0
