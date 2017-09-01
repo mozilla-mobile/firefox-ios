@@ -144,7 +144,7 @@ struct UIConstants {
         static let labelBlockOther = NSLocalizedString("Settings.toggleBlockOther", value: "Block other content trackers", comment: "Label for toggle on main screen")
         static let labelBlockFonts = NSLocalizedString("Settings.toggleBlockFonts", value: "Block Web fonts", comment: "Label for toggle on main screen")
         static let labelSendAnonymousUsageData = NSLocalizedString("Settings.toggleSendUsageData", value: "Send usage data", comment: "Label for Send Usage Data toggle on main screen")
-        static let detailTextSendUsageData = NSLocalizedString("Settings.detailTextSendUsageData", value: "Mozilla strives to collect only what we need to provide and improve Focus for everyone. ", comment: "Detail Label for Send Usage Data toggle on main screen")
+        static let detailTextSendUsageData = NSLocalizedString("Settings.detailTextSendUsageData", value: "Mozilla strives to collect only what we need to provide and improve Focus for everyone.", comment: "Description associated to the Send Usage Data toggle on main screen")
         static let openCancel = NSLocalizedString("Open.Cancel", value: "Cancel", comment: "Label in share alert to cancel the alert")
         static let openFirefox = NSLocalizedString("Open.Firefox", value: "Firefox (Private Browsing)", comment: "Label in share alert to open the URL in Firefox")
         static let openMore = NSLocalizedString("Open.More", value: "More", comment: "Label in share alert to open the full system share menu")
@@ -185,9 +185,8 @@ struct UIConstants {
         static let photosPermissionDescription = NSLocalizedString("photosPermission.description", value: "This lets you save images to your Camera Roll", comment: "Description for dialog used for requesting a user to enable access to Photos.")
         static let openSettingsButtonTitle = NSLocalizedString("photosPermission.openSettings", value: "Open Settings", comment: "Title for button that takes the user to system settings")
         static let openIn = NSLocalizedString("actionSheet.openIn", value: "Open in %@", comment: "Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page.")
-        static let handoffSyncing = NSLocalizedString("Focus.handoffSyncing", value: "Apple Handoff is syncing", comment: "Title for the loading screen when the handoff of clipboard delays Focus launch.")
-        static let linkYouCopied = NSLocalizedString("contextMenu.clipboardLink", value: "Link you copied:", comment: "Text for the context menu when a user has a link on their clipboard.")
-        static let aboutRowPrivacy = NSLocalizedString("About.rowPrivacy", value: "Privacy Notice", comment: "Label for row in About screen")
-
+        static let handoffSyncing = NSLocalizedString("Focus.handoffSyncing", value: "Apple Handoff is syncing", comment: "Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681")
+        static let linkYouCopied = NSLocalizedString("contextMenu.clipboardLink", value: "Link you copied: %@", comment: "Text for the context menu when a user has a link on their clipboard.")
+        static let aboutRowPrivacy = NSLocalizedString("About.rowPrivacy", value: "Privacy Notice", comment: "Link to Privacy Notice in the About screen")
     }
 }

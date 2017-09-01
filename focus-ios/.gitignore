@@ -38,4 +38,4 @@ screenshots-derived-data
 
 # l10n clone for scripts
 focusios-l10n
-
+export-locales-env

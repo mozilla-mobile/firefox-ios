@@ -178,17 +178,11 @@
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
-/* Label for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageData" = "Send anonymous usage data";
-
-/* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageDataSubtitle" = "Learn more";
-
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Get the Firefox App";
 
 /* Text for the share menu option when a user wants to open a page in Focus. */
-"ShareMenu.OpenInFocus" = "Open in Focus";
+"ShareMenu.OpenInFocus" = "Open in %@";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Cancel";
@@ -237,4 +231,3 @@
 
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” Would Like to Access Your Photos";
-
