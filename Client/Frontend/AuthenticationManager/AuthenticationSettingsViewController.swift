@@ -24,7 +24,7 @@ class TurnPasscodeOnSetting: Setting {
 
     init(settings: SettingsTableViewController, delegate: SettingsDelegate? = nil) {
         self.settings = settings as? AuthenticationSettingsViewController
-        super.init(title: NSAttributedString.tableRowTitle(AuthenticationStrings.turnOnPasscode),
+        super.init(title: NSAttributedString.tableRowTitle(AuthenticationStrings.turnOnPasscode, enabled: true),
                    delegate: delegate)
     }
 
@@ -40,7 +40,7 @@ class TurnPasscodeOffSetting: Setting {
 
     init(settings: SettingsTableViewController, delegate: SettingsDelegate? = nil) {
         self.settings = settings as? AuthenticationSettingsViewController
-        super.init(title: NSAttributedString.tableRowTitle(AuthenticationStrings.turnOffPasscode),
+        super.init(title: NSAttributedString.tableRowTitle(AuthenticationStrings.turnOffPasscode, enabled: true),
                    delegate: delegate)
     }
 
@@ -57,9 +57,7 @@ class ChangePasscodeSetting: Setting {
     init(settings: SettingsTableViewController, delegate: SettingsDelegate? = nil, enabled: Bool) {
         self.settings = settings as? AuthenticationSettingsViewController
 
-        let attributedTitle: NSAttributedString = enabled ?
-            NSAttributedString.tableRowTitle(AuthenticationStrings.changePasscode) :
-            NSAttributedString.disabledTableRowTitle(AuthenticationStrings.changePasscode)
+        let attributedTitle: NSAttributedString = NSAttributedString.tableRowTitle(AuthenticationStrings.changePasscode, enabled: enabled)
 
         super.init(title: attributedTitle,
                    delegate: delegate,
@@ -86,7 +84,7 @@ class RequirePasscodeSetting: Setting {
         // Only show the interval if we are enabled and have an interval set.
         let authenticationInterval = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo()
         if let interval = authenticationInterval?.requiredPasscodeInterval, enabled {
-            return NSAttributedString.disabledTableRowTitle(interval.settingTitle)
+            return NSAttributedString.tableRowTitle(interval.settingTitle, enabled: false)
         }
         return NSAttributedString(string: "")
     }
@@ -96,7 +94,7 @@ class RequirePasscodeSetting: Setting {
         self.settings = settings as? AuthenticationSettingsViewController
 
         let title = AuthenticationStrings.requirePasscode
-        let attributedTitle = (enabled ?? true) ? NSAttributedString.tableRowTitle(title) : NSAttributedString.disabledTableRowTitle(title)
+        let attributedTitle = NSAttributedString.tableRowTitle(title, enabled: enabled ?? true)
         super.init(title: attributedTitle,
                    delegate: delegate,
                    enabled: enabled)
@@ -265,7 +263,7 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
             requirePasscodeSectionChildren.append(
                 TouchIDSetting(
                     title: NSAttributedString.tableRowTitle(
-                        NSLocalizedString("Use Touch ID", tableName:  "AuthenticationManager", comment: "List section title for when to use Touch ID")
+                        NSLocalizedString("Use Touch ID", tableName:  "AuthenticationManager", comment: "List section title for when to use Touch ID"), enabled: true
                     ),
                     navigationController: self.navigationController,
                     delegate: nil,
