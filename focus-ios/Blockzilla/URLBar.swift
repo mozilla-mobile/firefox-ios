@@ -298,6 +298,8 @@ class URLBar: UIView {
     }
     
     func pasteAndGo() {
+        present()
+        delegate?.urlBarDidActivate(self)
         delegate?.urlBar(self, didSubmitText: UIPasteboard.general.string!)
 
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.pasteAndGo)
