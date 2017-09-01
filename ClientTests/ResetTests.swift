@@ -53,9 +53,6 @@ class ResetTests: XCTestCase {
     func testResetting() {
         let profile = MockBrowserProfile(localName: "testResetTests")
 
-        // Workaround: the remote devices table is created in BrowserSchema, not in SQLiteRemoteClientsAndTabs.
-        _ = profile.db.prepareSchema(BrowserSchema())
-
         // Add a client.
         let tabs = profile.peekTabs
         XCTAssertTrue(tabs.insertOrUpdateClient(RemoteClient(guid: "abcdefghijkl", name: "Remote", modified: Date.now(), type: "mobile", formfactor: "tablet", os: "Windows", version: "55.0.1a", fxaDeviceId: "fxa1")).value.isSuccess)

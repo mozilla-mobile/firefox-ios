@@ -131,10 +131,7 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
             try files.remove("browser.db")
         } catch _ {
         }
-        clientsAndTabs = SQLiteRemoteClientsAndTabs(db: BrowserDB(filename: "browser.db", files: files))
-
-        // Workaround: the remote devices table is created in BrowserSchema, not in SQLiteRemoteClientsAndTabs.
-        _ = clientsAndTabs.db.prepareSchema(BrowserSchema())
+        clientsAndTabs = SQLiteRemoteClientsAndTabs(db: BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files))
     }
 
     func testInsertGetClear() {
