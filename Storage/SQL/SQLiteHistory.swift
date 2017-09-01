@@ -918,17 +918,23 @@ extension SQLiteHistory: SyncableHistory {
 
     private func getModifiedHistory(limit: Int) -> Deferred<Maybe<[Int: Place]>> {
         let sql =
-        "SELECT id, guid, url, title FROM \(TableHistory) " +
-        "WHERE should_upload = 1 " +
+        "SELECT id, guid, url, title " +
+        "FROM \(TableHistory) " +
+        "WHERE should_upload = 1 AND NOT is_deleted = 1 " +
         "ORDER BY id " +
         "LIMIT ?"
 
         var places = [Int: Place]()
         let placeFactory: (SDRow) -> Void = { row in
-            let id = row["id"] as! Int
-            let guid = row["guid"] as! String
-            let url = row["url"] as! String
-            let title = row["title"] as! String
+            guard let id = row["id"] as? Int,
+                let guid = row["guid"] as? String,
+                let url = row["url"] as? String,
+                let title = row["title"] as? String else {
+                log.error("Invalid Place in SQLiteHistory.getModifiedHistory(). (id = \(row["id"] ?? "nil"), guid = \(row["guid"] ?? "nil"), url = \(row["url"] ?? "nil"), title = \(row["title"] ?? "nil"))")
+                SentryIntegration.shared.send(message: "Invalid Place in SQLiteHistory.getModifiedHistory().", tag: "Storage", severity: .error)
+                return
+            }
+
             places[id] = Place(guid: guid, url: url, title: title)
         }
 
