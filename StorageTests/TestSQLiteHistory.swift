@@ -907,14 +907,22 @@ class TestSQLiteHistory: XCTestCase {
         let destination = BrowserSchema()
 
         for (version, schema) in sources {
-            let db = BrowserDB(filename: "browser-v\(version).db", schema: schema, files: files)
-            XCTAssertTrue(db.prepareSchema(destination) == .success, "Upgrading BrowserSchema from version \(version)")
+            var db = BrowserDB(filename: "browser-v\(version).db", schema: schema, files: files)
+            XCTAssertTrue(db.runWithConnection({ connection, _ -> Int in
+                connection.version
+            }).value.successValue == schema.version, "Creating BrowserSchema at version \(version)")
+            db.forceClose()
+
+            db = BrowserDB(filename: "browser-v\(version).db", schema: destination, files: files)
+            XCTAssertTrue(db.runWithConnection({ connection, _ -> Int in
+                connection.version
+            }).value.successValue == destination.version, "Upgrading BrowserSchema from version \(version) to version \(schema.version)")
             db.forceClose()
         }
     }
 
     func testUpgradesWithData() {
-        let db = BrowserDB(filename: "browser-v6-data.db", schema: BrowserSchemaV6(), files: files)
+        var db = BrowserDB(filename: "browser-v6-data.db", schema: BrowserSchemaV6(), files: files)
 
         // Insert some data.
         let queries = [
@@ -929,7 +937,7 @@ class TestSQLiteHistory: XCTestCase {
         XCTAssertTrue(db.run(queries).value.isSuccess)
 
         // And we can upgrade to the current version.
-        XCTAssertTrue(db.prepareSchema(BrowserSchema()) == .success, "Upgrading browser schema from version 6")
+        db = BrowserDB(filename: "browser-v6-data.db", schema: BrowserSchema(), files: files)
 
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)

@@ -234,7 +234,7 @@ open class BrowserProfile: Profile {
         // since the DB handles will create new DBs under the new profile folder.
         let isNewProfile = !files.exists("")
 
-        // Set up our database handles. A crash is intended if the schema cannot be set up successfully.
+        // Set up our database handles.
         self.loginsDB = BrowserDB(filename: "logins.db", secretKey: BrowserProfile.loginsKey, schema: LoginsSchema(), files: files)
         self.db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
 
