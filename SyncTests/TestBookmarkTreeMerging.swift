@@ -125,7 +125,9 @@ class MockUploader {
 
 // Thieved mercilessly from TestSQLiteBookmarks.
 private func getBrowserDBForFile(filename: String, files: FileAccessor) -> BrowserDB? {
-    return BrowserDB(filename: filename, schema: BrowserSchema(), files: files)
+    let db = BrowserDB(filename: filename, schema: BrowserSchema(), files: files)
+    db.touch().succeeded() // Ensure the schema is created/updated in advance
+    return db
 }
 
 class FailFastTestCase: XCTestCase {

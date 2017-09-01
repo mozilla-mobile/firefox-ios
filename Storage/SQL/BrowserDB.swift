@@ -42,6 +42,23 @@ open class BrowserDB {
         self.db = SwiftData(filename: file, key: secretKey, prevKey: nil, schema: schema, files: files)
     }
 
+    // For testing purposes or other cases where we want to ensure that this `BrowserDB`
+    // instance has been initialized (schema is created/updated).
+    public func touch() -> Success {
+        let deferred = Success()
+        var err: NSError? = nil
+        withConnection(&err) { connection, error -> Void in
+            guard let _ = connection as? ConcreteSQLiteDBConnection else {
+                deferred.fill(Maybe(failure: DatabaseError(description: "Could not establish a database connection")))
+                return
+            }
+
+            deferred.fill(Maybe(success: ()))
+        }
+
+        return deferred
+    }
+
     func withConnection<T>(flags: SwiftData.Flags, err: inout NSError?, callback: @escaping (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> T) -> T {
         var res: T!
         err = db.withConnection(flags) { connection in
