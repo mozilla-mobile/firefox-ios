@@ -170,9 +170,6 @@ class LeanplumIntegration {
     // Events
 
     func track(eventName: LeanplumEventName) {
-        guard enabled else {
-            return
-        }
         DispatchQueue.main.async(execute: {
             if self.shouldSendToLP() {
                 Leanplum.track(eventName.rawValue)
@@ -181,9 +178,6 @@ class LeanplumIntegration {
     }
 
     func track(eventName: LeanplumEventName, withParameters parameters: [String: AnyObject]) {
-        guard enabled else {
-            return
-        }
         DispatchQueue.main.async(execute: {
             if self.shouldSendToLP() {
                 Leanplum.track(eventName.rawValue, withParameters: parameters)
@@ -232,9 +226,6 @@ class LeanplumIntegration {
     }
 
     func setUserAttributes(attributes: [AnyHashable : Any]) {
-        guard enabled else {
-            return
-        }
         DispatchQueue.main.async(execute: {
             if self.shouldSendToLP() {
                 Leanplum.setUserAttributes(attributes)
