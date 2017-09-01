@@ -75,7 +75,7 @@ class LeanplumIntegration {
     fileprivate weak var profile: Profile?
     private var enabled: Bool = false
     
-    func shouldSendToLP() -> Bool {
+    fileprivate func shouldSendToLP() -> Bool {
         // Need to be run on main thread since isInPrivateMode requires to be on the main thread.
         assert(Thread.isMainThread)
         return enabled && Leanplum.hasStarted() && !UIApplication.isInPrivateMode
@@ -86,6 +86,11 @@ class LeanplumIntegration {
     }
 
     fileprivate func start() {
+        guard AppConstants.MOZ_ENABLE_LEANPLUM else {
+            enabled = false
+            return
+        }
+
         self.enabled = self.profile?.prefs.boolForKey("settings.sendUsageData") ?? true
         if !self.enabled {
             return
@@ -165,6 +170,9 @@ class LeanplumIntegration {
     // Events
 
     func track(eventName: LeanplumEventName) {
+        guard enabled else {
+            return
+        }
         DispatchQueue.main.async(execute: {
             if self.shouldSendToLP() {
                 Leanplum.track(eventName.rawValue)
@@ -173,6 +181,9 @@ class LeanplumIntegration {
     }
 
     func track(eventName: LeanplumEventName, withParameters parameters: [String: AnyObject]) {
+        guard enabled else {
+            return
+        }
         DispatchQueue.main.async(execute: {
             if self.shouldSendToLP() {
                 Leanplum.track(eventName.rawValue, withParameters: parameters)
@@ -183,8 +194,12 @@ class LeanplumIntegration {
     // Utils
     
     func setEnabled(_ enabled: Bool) {
+        guard AppConstants.MOZ_ENABLE_LEANPLUM else {
+            return
+        }
         // Setting up Test Mode stops sending things to server.
         if enabled { start() }
+        self.enabled = enabled
         Leanplum.setTestModeEnabled(!enabled)
     }
 
@@ -217,6 +232,9 @@ class LeanplumIntegration {
     }
 
     func setUserAttributes(attributes: [AnyHashable : Any]) {
+        guard enabled else {
+            return
+        }
         DispatchQueue.main.async(execute: {
             if self.shouldSendToLP() {
                 Leanplum.setUserAttributes(attributes)
