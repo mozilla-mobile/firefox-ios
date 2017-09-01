@@ -30,16 +30,16 @@ extension PhotonActionSheetProtocol {
     }
     
     //Returns a list of actions which is used to build a menu
-    //parameter OpenURL is a clousre that can open a given URL in some view controller. It is up to the class using the menu to know how to open the url
+    //parameter OpenURL is a closure that can open a given URL in some view controller. It is up to the class using the menu to know how to open the url
     func getHomePanelActions(openURL: @escaping (URL) -> Void, vcDelegate: PageOptionsVC) -> [PhotonActionSheetItem] {
-        let openQR = PhotonActionSheetItem(title: "QR Scanner", iconString: "menu-ScanQRCode") { action in
+        let openQR = PhotonActionSheetItem(title: Strings.ScanQRCodeViewTitle, iconString: "menu-ScanQRCode") { action in
             let qrCodeViewController = QRCodeViewController()
             qrCodeViewController.qrCodeDelegate = vcDelegate
             let controller = UINavigationController(rootViewController: qrCodeViewController)
             vcDelegate.present(controller, animated: true, completion: nil)
         }
         
-        let openSettings = PhotonActionSheetItem(title: "Settings", iconString: "menu-Settings") { action in
+        let openSettings = PhotonActionSheetItem(title: Strings.AppMenuSettingsTitleString, iconString: "menu-Settings") { action in
             let settingsTableViewController = AppSettingsTableViewController()
             settingsTableViewController.profile = self.profile
             settingsTableViewController.tabManager = self.tabManager
@@ -81,13 +81,13 @@ extension PhotonActionSheetProtocol {
     func getOtherPanelActions() -> [PhotonActionSheetItem] {
         
         let noImageEnabled = NoImageModeHelper.isActivated(profile.prefs)
-        let noImageText = "Hide Images: \(noImageEnabled ? "On" : "Off")"
+        let noImageText = noImageEnabled ? Strings.AppMenuNoImageModeIsOnLabel : Strings.AppMenuNoImageModeIsOffLabel
         let noImageMode = PhotonActionSheetItem(title: noImageText, iconString: "menu-NoImageMode", isEnabled: noImageEnabled) { action in
             NoImageModeHelper.toggle(profile: self.profile, tabManager: self.tabManager)
         }
         
         let nightModeEnabled = NightModeHelper.isActivated(profile.prefs)
-        let nightModeText = "Night Mode: \(nightModeEnabled ? "On" : "Off")"
+        let nightModeText = nightModeEnabled ? Strings.AppMenuNightModeIsOnLabel :  Strings.AppMenuNightModeIsOffLabel
         let nightMode = PhotonActionSheetItem(title: nightModeText, iconString: "menu-NightMode", isEnabled: nightModeEnabled) { action in
             NightModeHelper.toggle(self.profile.prefs, tabManager: self.tabManager)
         }
@@ -106,11 +106,10 @@ extension PhotonActionSheetProtocol {
         }
         
         let setHomePage = PhotonActionSheetItem(title: Strings.AppMenuSetHomePageTitleString, iconString: "menu-Home") { action in
-            //TODO: pass a VC. this doesnt _need_ to be a HomePageHelper
             HomePageHelper(prefs: self.profile.prefs).setHomePage(toTab: tab, presentAlertOn: presentableVC)
         }
         
-        let addReadingList = PhotonActionSheetItem(title: "Add to Reading List", iconString: "addToReadingList") { action in
+        let addReadingList = PhotonActionSheetItem(title: Strings.AppMenuAddToReadingListTitleString, iconString: "addToReadingList") { action in
             guard let tab = self.tabManager.selectedTab else { return }
             guard let url = tab.url else { return }
             self.profile.readingList?.createRecordWithURL(url.absoluteString, title: tab.title ?? "", addedBy: UIDevice.current.name)
@@ -149,12 +148,12 @@ extension PhotonActionSheetProtocol {
             }
         }
         
-        let share = PhotonActionSheetItem(title: "Share", iconString: "action_share") { action in
+        let share = PhotonActionSheetItem(title: Strings.AppMenuSharePageTitleString, iconString: "action_share") { action in
             guard let url = self.tabManager.selectedTab?.url else { return }
             guard let tab = self.tabManager.selectedTab else { return }
             presentShareMenu(url, tab, buttonView, .up)
         }
-        let copyURL = PhotonActionSheetItem(title: "Copy URL", iconString: "menu-Copy-Link") { _ in
+        let copyURL = PhotonActionSheetItem(title: Strings.AppMenuCopyURLTitleString, iconString: "menu-Copy-Link") { _ in
             UIPasteboard.general.string = self.tabManager.selectedTab?.url?.absoluteString ?? ""
         }
         
@@ -168,16 +167,16 @@ extension PhotonActionSheetProtocol {
     
     func getTabMenuActions(openURL: @escaping (URL?, Bool) -> Void) -> [PhotonActionSheetItem] {
         
-        let openHomePage = PhotonActionSheetItem(title: "Open Home Page", iconString: "menu-Home") { _ in
+        let openHomePage = PhotonActionSheetItem(title: Strings.AppMenuOpenHomePageTitleString, iconString: "menu-Home") { _ in
             guard let tab = self.tabManager.selectedTab else { return }
             HomePageHelper(prefs: self.profile.prefs).openHomePage(tab)
         }
         
-        let openTab = PhotonActionSheetItem(title: "Open new Tab", iconString: "menu-NewTab") { action in
+        let openTab = PhotonActionSheetItem(title: Strings.AppMenuNewTabTitleString, iconString: "menu-NewTab") { action in
             openURL(nil, false)
         }
         
-        let openPrivateTab = PhotonActionSheetItem(title: "Open private Tab", iconString: "smallPrivateMask") { action in
+        let openPrivateTab = PhotonActionSheetItem(title: Strings.AppMenuNewPrivateTabTitleString, iconString: "smallPrivateMask") { action in
             openURL(nil, true)
         }
         

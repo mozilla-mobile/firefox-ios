@@ -905,21 +905,6 @@ class BrowserViewController: UIViewController {
         JumpAndSpinAnimator.animateFromView(button.imageView ?? button, offset: offset, completion: nil)
     }
 
-    fileprivate func removeBookmark(_ tabState: TabState) {
-        guard let url = tabState.url else { return }
-        let absoluteString = url.absoluteString
-        profile.bookmarks.modelFactory >>== {
-            $0.removeByURL(absoluteString)
-                .uponQueue(DispatchQueue.main) { res in
-                if res.isSuccess {
-                    if let tab = self.tabManager.getTabForURL(url) {
-                        tab.isBookmarked = false
-                    }
-                }
-            }
-        }
-    }
-
     func SELBookmarkStatusDidChange(_ notification: Notification) {
         if let bookmark = notification.object as? BookmarkItem {
             if bookmark.url == urlBar.currentURL?.absoluteString {

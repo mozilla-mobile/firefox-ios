@@ -47,7 +47,7 @@ class SwipeAnimator: NSObject {
 
         super.init()
 
-        self.panGestureRecogniser = UIPanGestureRecognizer(target: self, action: #selector(SwipeAnimator.SELdidPan(_:)))
+        self.panGestureRecogniser = UIPanGestureRecognizer(target: self, action: #selector(SwipeAnimator.didPan(_:)))
         container.addGestureRecognizer(self.panGestureRecogniser)
         self.panGestureRecogniser.delegate = self
     }
@@ -104,7 +104,7 @@ extension SwipeAnimator {
 
 //MARK: Selectors
 extension SwipeAnimator {
-    @objc func SELdidPan(_ recognizer: UIPanGestureRecognizer!) {
+    @objc func didPan(_ recognizer: UIPanGestureRecognizer!) {
         let translation = recognizer.translation(in: container)
 
         switch recognizer.state {
@@ -135,7 +135,7 @@ extension SwipeAnimator {
         animateAwayWithVelocity(CGPoint(x: -direction * params.minExitVelocity, y: 0), speed: direction * params.minExitVelocity)
     }
 
-    @discardableResult @objc func SELcloseWithoutGesture() -> Bool {
+    @discardableResult @objc func closeWithoutGesture() -> Bool {
         close(right: false)
         return true
     }

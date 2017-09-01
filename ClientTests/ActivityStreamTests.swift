@@ -106,7 +106,7 @@ extension ActivityStreamTests {
         let mockSite = Site(url: "http://mozilla.org", title: "Mozilla")
         let topSitesContextMenu = panel.contextMenu(for: mockSite, with: IndexPath(item: 0, section: ActivityStreamPanel.Section.topSites.rawValue))
 
-        let removeAction = topSitesContextMenu?.actions.find { $0.title == Strings.RemoveContextMenuTitle }
+        let removeAction = topSitesContextMenu?.actions[0].find { $0.title == Strings.RemoveContextMenuTitle }
         removeAction?.handler?(removeAction!)
 
         let pingsSent = (telemetry.eventsTracker as! MockPingClient).pingsReceived
