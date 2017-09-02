@@ -3,12 +3,12 @@ Firefox for iOS [![codebeat badge](https://codebeat.co/badges/67e58b6d-bc89-4f22
 
 Download on the [App Store](https://itunes.apple.com/app/firefox-web-browser/id989804926).
 
-This branch
+This branch (master)
 -----------
 
 This branch is for mainline development that will ship in *v9.0*.
 
-This branch only works with Xcode 8.3.2, and supports iOS 9.x and 10.
+This branch only works with Xcode 9 (currently in beta), and supports iOS 9.x, 10, and 11.
 
 This branch is written in Swift 3.1.
 
@@ -54,8 +54,6 @@ Building the code
     ```
 1. Open `Client.xcodeproj` in Xcode.
 1. Build the `Fennec` scheme in Xcode.
-
-It is possible to use [App Code](https://www.jetbrains.com/objc/download/) instead of Xcode, but you will still require the Xcode developer tools.
 
 ## Contributor guidelines
 

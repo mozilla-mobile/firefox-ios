@@ -93,21 +93,23 @@ class FindInPageTests: BaseTestCase {
         XCTAssertFalse(app.textFields[""].exists)
     }
 
-    func testFindFromSelection() {
-        navigator.goto(BrowserTab)
-        let textToFind = "from"
-
-        // Long press on the word to be found
-        let stringToFind = app.webViews.staticTexts.matching(identifier: textToFind)
-        let firstStringToFind = stringToFind.element(boundBy: 0)
-        firstStringToFind.press(forDuration: 5)
-
-        // Find in page is correctly launched, bar with text pre-filled and the buttons to find next and previous
-        waitforExistence(app.menuItems["Find in Page"])
-        app.menuItems["Find in Page"].tap()
-        waitforExistence(app.textFields[textToFind])
-        XCTAssertTrue(app.textFields[textToFind].exists, "The bar does not appear with the text selected to be found")
-        XCTAssertTrue(app.buttons["Previous in-page result"].exists, "Find previus button exists")
-        XCTAssertTrue(app.buttons["Next in-page result"].exists, "Find next button exists")
-    }
+//    func testFindFromSelection() {
+//        navigator.goto(BrowserTab)
+//        let textToFind = "from"
+//
+//        // Long press on the word to be found
+//        waitforExistence(app.webViews.staticTexts[textToFind])
+//        let stringToFind = app.webViews.staticTexts.matching(identifier: textToFind)
+//        let firstStringToFind = stringToFind.element(boundBy: 0)
+//        firstStringToFind.press(forDuration: 5)
+//
+//        // Find in page is correctly launched, bar with text pre-filled and the buttons to find next and previous
+//        waitforExistence(app.menuItems["Find in Page"])
+//        app.menuItems["Find in Page"].tap()
+//        waitforExistence(app.textFields[textToFind])
+//        XCTAssertTrue(app.textFields[textToFind].exists, "The bar does not appear with the text selected to be found")
+//        XCTAssertTrue(app.buttons["Previous in-page result"].exists, "Find previus button exists")
+//        XCTAssertTrue(app.buttons["Next in-page result"].exists, "Find next button exists")
+//    }
 }
+

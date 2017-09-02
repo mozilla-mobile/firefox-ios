@@ -19,6 +19,8 @@ public class SentryIntegration {
 
     private var enabled = false
 
+    private var attributes: [String : Any] = [:]
+
     public func setup(sendUsageData: Bool) {
         assert(!enabled, "SentryIntegration.setup() should only be called once")
 
@@ -57,6 +59,10 @@ public class SentryIntegration {
             Client.shared?.beforeSerializeEvent = { event in
                 let deviceAppHash = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)?.string(forKey: self.SentryDeviceAppHashKey)
                 event.context?.appContext?["device_app_hash"] = deviceAppHash ?? self.DefaultDeviceAppHash
+
+                var attributes = event.extra ?? [:]
+                attributes.merge(with: self.attributes)
+                event.extra = attributes
             }
         } catch let error {
             Logger.browserLogger.error("Failed to initialize Sentry: \(error)")
@@ -79,7 +85,7 @@ public class SentryIntegration {
 
         let event = Event(level: severity)
         event.message = message
-        event.tags = ["event": tag]
+        event.tags = ["tag": tag]
 
         Client.shared?.send(event: event, completion: completion)
     }
@@ -96,11 +102,15 @@ public class SentryIntegration {
         Client.shared?.snapshotStacktrace {
             let event = Event(level: severity)
             event.message = message
-            event.tags = ["event": tag]
+            event.tags = ["tag": tag]
 
             Client.shared?.appendStacktrace(to: event)
             event.debugMeta = nil
             Client.shared?.send(event: event, completion: completion)
         }
+    }
+
+    public func addAttributes(_ attributes: [String : Any]) {
+        self.attributes.merge(with: attributes)
     }
 }

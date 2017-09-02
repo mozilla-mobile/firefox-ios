@@ -198,7 +198,7 @@ class LoginManagerTests: KIFTestCase {
 
         XCTAssertEqual(UIPasteboard.general.string, "passworda0")
 
-        tester().tapView(withAccessibilityLabel: "Back")
+        tester().tapView(withAccessibilityLabel: "Logins")
         closeLoginManager()
     }
 
@@ -231,8 +231,7 @@ class LoginManagerTests: KIFTestCase {
         tester().tapView(withAccessibilityLabel: "Open & Fill")
 
         tester().wait(forTimeInterval: 2)
-        tester().waitForView(withAccessibilityLabel: "a0.com")
-
+        tester().waitForViewWithAccessibilityValue("a0.com")
     }
 
     func testOpenAndFillFromNormalContext() {
@@ -256,8 +255,8 @@ class LoginManagerTests: KIFTestCase {
         tester().waitForView(withAccessibilityLabel: "Open & Fill")
         tester().tapView(withAccessibilityLabel: "Open & Fill")
 
-        tester().wait(forTimeInterval: 2)
-        tester().waitForView(withAccessibilityLabel: "a0.com")
+        tester().wait(forTimeInterval: 5)
+        tester().waitForViewWithAccessibilityValue("a0.com")
     }
 
     func testOpenAndFillFromPrivateContext() {
@@ -293,7 +292,7 @@ class LoginManagerTests: KIFTestCase {
         tester().tapView(withAccessibilityLabel: "Open & Fill")
 
         tester().wait(forTimeInterval: 2)
-        tester().waitForView(withAccessibilityLabel: "a0.com")
+        tester().waitForViewWithAccessibilityValue("a0.com")
     }
 
     func testDetailUsernameMenuOptions() {
@@ -319,7 +318,7 @@ class LoginManagerTests: KIFTestCase {
 
         XCTAssertEqual(UIPasteboard.general.string, "a0@email.com")
 
-        tester().tapView(withAccessibilityLabel: "Back")
+        tester().tapView(withAccessibilityLabel: "Logins")
         closeLoginManager()
     }
 
@@ -624,7 +623,7 @@ class LoginManagerTests: KIFTestCase {
         passwordCell = list.cellForRow(at: IndexPath(row: 2, section: 0)) as! LoginTableViewCell
         XCTAssertEqual(passwordCell.descriptionLabel.text, "changedpassword")
 
-        tester().tapView(withAccessibilityLabel: "Back")
+        tester().tapView(withAccessibilityLabel: "Logins")
         closeLoginManager()
     }
 
@@ -663,7 +662,7 @@ class LoginManagerTests: KIFTestCase {
         tester().waitForView(withAccessibilityLabel: "password")
 
         XCTAssertTrue(tester().viewExistsWithLabelPrefixedBy("Last modified"))
-        tester().tapView(withAccessibilityLabel: "Back")
+        tester().tapView(withAccessibilityLabel: "Logins")
         closeLoginManager()
     }
 
@@ -693,7 +692,7 @@ class LoginManagerTests: KIFTestCase {
         // Confirm that when entering a blank password we revert back to the original
         XCTAssertEqual(passwordField.text, "passworda0")
 
-        tester().tapView(withAccessibilityLabel: "Back")
+        tester().tapView(withAccessibilityLabel: "Logins")
         closeLoginManager()
     }
 
@@ -719,94 +718,6 @@ class LoginManagerTests: KIFTestCase {
         // Check that edit button has been disabled
         tester().waitForView(withAccessibilityLabel: "Edit", traits: UIAccessibilityTraitNotEnabled)
 
-        closeLoginManager()
-    }
-    
-    func testLoginsListPromptsForPasscodeOnReentryFromBackground() {
-        PasscodeUtils.setPasscode("1337", interval: .immediately)
-        
-        tester().tapView(withAccessibilityLabel: "Show Tabs")
-        tester().tapView(withAccessibilityLabel: "Menu")
-        tester().tapView(withAccessibilityLabel: "Settings")
-        tester().tapView(withAccessibilityLabel: "Logins")
-        
-        tester().waitForView(withAccessibilityLabel: "Enter Passcode")
-        PasscodeUtils.enterPasscode(tester(), digits: "1337")
-        
-        tester().waitForView(withAccessibilityLabel: "Logins")
-        system().deactivateApp(forDuration: 3)
-        tester().waitForView(withAccessibilityLabel: "Logins")
-        tester().tapView(withAccessibilityLabel: "Logins")
-        tester().waitForView(withAccessibilityLabel: "Enter Passcode")
-        PasscodeUtils.enterPasscode(tester(), digits: "1337")
-        tester().waitForView(withAccessibilityLabel: "Logins")
-        
-        closeLoginManager()
-    }
-    
-    func testLoginsListPromptsForPasscodeOnReentryFromBackgroundWithDelay() {
-        PasscodeUtils.setPasscode("1337", interval: .fiveMinutes)
-        
-        tester().tapView(withAccessibilityLabel: "Show Tabs")
-        tester().tapView(withAccessibilityLabel: "Menu")
-        tester().tapView(withAccessibilityLabel: "Settings")
-        tester().tapView(withAccessibilityLabel: "Logins")
-        
-        tester().waitForView(withAccessibilityLabel: "Enter Passcode")
-        PasscodeUtils.enterPasscode(tester(), digits: "1337")
-        
-        tester().waitForView(withAccessibilityLabel: "Logins")
-        // issue with running it on real device: https://github.com/kifframework/KIF/issues/707
-        system().deactivateApp(forDuration: 3)
-        tester().waitForView(withAccessibilityLabel: "Logins")
-        tester().tapView(withAccessibilityLabel: "Done")
-    }
-    
-    func testLoginsDetailsPromptsForPasscodeOnReentryFromBackground() {
-        PasscodeUtils.setPasscode("1337", interval: .immediately)
-        
-        tester().tapView(withAccessibilityLabel: "Show Tabs")
-        tester().tapView(withAccessibilityLabel: "Menu")
-        tester().tapView(withAccessibilityLabel: "Settings")
-        tester().tapView(withAccessibilityLabel: "Logins")
-        
-        tester().waitForView(withAccessibilityLabel: "Enter Passcode")
-        PasscodeUtils.enterPasscode(tester(), digits: "1337")
-        
-        tester().waitForView(withAccessibilityLabel: "a0@email.com, http://a0.com")
-        tester().tapView(withAccessibilityLabel: "a0@email.com, http://a0.com")
-        
-        // issue with running it on real device: https://github.com/kifframework/KIF/issues/707
-        system().deactivateApp(forDuration: 3)
-        tester().waitForView(withAccessibilityLabel: "Logins")
-        tester().tapView(withAccessibilityLabel: "Logins")
-        tester().waitForView(withAccessibilityLabel: "Enter Passcode")
-        PasscodeUtils.enterPasscode(tester(), digits: "1337")
-        tester().waitForView(withAccessibilityLabel: "a0@email.com")
-        
-        closeLoginManager()
-    }
-    
-    func testLoginsDetailsPromptsForPasscodeOnReentryFromBackgroundWithDelay() {
-        PasscodeUtils.setPasscode("1337", interval: .fiveMinutes)
-        
-        tester().tapView(withAccessibilityLabel: "Show Tabs")
-        tester().tapView(withAccessibilityLabel: "Menu")
-        tester().tapView(withAccessibilityLabel: "Settings")
-        tester().tapView(withAccessibilityLabel: "Logins")
-        
-        tester().waitForView(withAccessibilityLabel: "Enter Passcode")
-        PasscodeUtils.enterPasscode(tester(), digits: "1337")
-        
-        tester().waitForView(withAccessibilityLabel: "a0@email.com, http://a0.com")
-        tester().tapView(withAccessibilityLabel: "a0@email.com, http://a0.com")
-        
-        // issue with running it on real device: https://github.com/kifframework/KIF/issues/707
-        system().deactivateApp(forDuration: 3)
-        tester().waitForView(withAccessibilityLabel: "Logins")
-        tester().tapView(withAccessibilityLabel: "Logins")
-        tester().waitForView(withAccessibilityLabel: "a0@email.com")
-        
         closeLoginManager()
     }
 }

@@ -87,16 +87,21 @@ extension SyncDownloadStats: DictionaryRepresentable {
 public struct ValidationStats: Stats, DictionaryRepresentable {
     let problems: [ValidationProblem]
     let took: Int64
+    let checked: Int?
 
     public func hasData() -> Bool {
         return !problems.isEmpty
     }
 
     func asDictionary() -> [String: Any] {
-        return [
+        var dict: [String : Any] = [
             "problems": problems.map { $0.asDictionary() },
             "took": took
         ]
+        if let checked = self.checked {
+            dict["checked"] = checked
+        }
+        return dict
     }
 }
 

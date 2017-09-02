@@ -65,6 +65,9 @@ class Tab: NSObject {
     var pendingScreenshot = false
     var url: URL?
 
+    // There is no 'available macro' on props, we currently just need to store ownership.
+    var contentBlocker: AnyObject?
+
     /// The last title shown by this tab. Used by the tab tray to show titles for zombie tabs.
     var lastTitle: String?
 
@@ -87,7 +90,7 @@ class Tab: NSObject {
 
     fileprivate(set) var screenshot: UIImage?
     var screenshotUUID: UUID?
-    
+
     // If this tab has been opened from another, its parent will point to the tab from which it was opened
     var parent: Tab?
 
@@ -428,7 +431,7 @@ class Tab: NSObject {
 
         updateAppState()
     }
-    
+
     func isDescendentOf(_ ancestor: Tab) -> Bool {
         var tab = parent
         while tab != nil {
@@ -514,7 +517,7 @@ private class TabWebView: WKWebView, MenuHelperInterface {
     fileprivate weak var delegate: TabWebViewDelegate?
 
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
-        return action == MenuHelper.SelectorFindInPage
+        return super.canPerformAction(action, withSender: sender) || action == MenuHelper.SelectorFindInPage
     }
 
     @objc func menuHelperFindInPage() {

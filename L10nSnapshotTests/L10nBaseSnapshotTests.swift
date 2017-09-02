@@ -21,6 +21,20 @@ class L10nBaseSnapshotTests: XCTestCase {
         app.launch()
     }
 
+    func waitforExistence(_ element: XCUIElement) {
+        let exists = NSPredicate(format: "exists == true")
+
+        expectation(for: exists, evaluatedWith: element, handler: nil)
+        waitForExpectations(timeout: 20, handler: nil)
+    }
+
+    func waitforNoExistence(_ element: XCUIElement) {
+        let exists = NSPredicate(format: "exists != true")
+
+        expectation(for: exists, evaluatedWith: element, handler: nil)
+        waitForExpectations(timeout: 20, handler: nil)
+    }
+
     func loadWebPage(url: String, waitForOtherElementWithAriaLabel ariaLabel: String) {
         let app = XCUIApplication()
         UIPasteboard.general.string = url

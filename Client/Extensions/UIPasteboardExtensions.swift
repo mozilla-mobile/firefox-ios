@@ -2,8 +2,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import Deferred
 import Foundation
 import MobileCoreServices
+import Shared
 import UIKit
 
 extension UIPasteboard {
@@ -21,13 +23,49 @@ extension UIPasteboard {
     fileprivate func imageTypeKey(_ isGIF: Bool) -> String {
         return (isGIF ? kUTTypeGIF : kUTTypePNG) as String
     }
-    
+
+    @available(*, deprecated, message: "use asyncURL(:) instead")
     var copiedURL: URL? {
+        return self.syncURL
+    }
+
+    private var syncURL: URL? {
         if let string = UIPasteboard.general.string,
             let url = URL(string: string), url.isWebPage() {
             return url
         } else {
             return nil
         }
+    }
+
+    /// Preferred method to get strings out of the clipboard.
+    /// The given queue defaults to the main thread.
+    /// When iCloud pasteboards are enabled, the usually fast, synchronous calls
+    /// become slow and synchronous causing very slow start up times.
+    func asyncString(queue: DispatchQueue = DispatchQueue.main) -> Deferred<Maybe<String?>> {
+        return fetchAsync(queue: queue) {
+            return UIPasteboard.general.string
+        }
+    }
+
+    /// Preferred method to get URLs out of the clipboard.
+    /// The given queue defaults to the main thread.
+    /// We use Deferred<Maybe<T?>> to fit in to the rest of the Deferred<Maybe> tools
+    /// we already use; but use optionals instead of errorTypes, because not having a URL
+    /// on the clipboard isn't an error.
+    func asyncURL(queue: DispatchQueue = DispatchQueue.main) -> Deferred<Maybe<URL?>> {
+        return fetchAsync(queue: queue) {
+            return self.syncURL
+        }
+    }
+
+    // Converts the potentially long running synchronous operation into an asynchronous one.
+    private func fetchAsync<T>(queue: DispatchQueue, getter: @escaping () -> T) -> Deferred<Maybe<T>> {
+        let deferred = Deferred<Maybe<T>>(defaultQueue: queue)
+        DispatchQueue.global().async {
+            let value = getter()
+            deferred.fill(Maybe(success: value))
+        }
+        return deferred
     }
 }

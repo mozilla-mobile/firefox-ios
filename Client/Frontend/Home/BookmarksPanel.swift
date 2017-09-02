@@ -355,7 +355,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         // Intentionally blank. Required to use UITableViewRowActions
     }
 
-    func tableView(_ tableView: UITableView, editingStyleForRowAtIndexPath indexPath: IndexPath) -> UITableViewCellEditingStyle {
+    private func editingStyleforRow(atIndexPath indexPath: IndexPath) -> UITableViewCellEditingStyle {
         guard let source = source else {
             return .none
         }
@@ -372,9 +372,14 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         return .none
     }
 
+    func tableView(_ tableView: UITableView, editingStyleForRowAtIndexPath indexPath: IndexPath) -> UITableViewCellEditingStyle {
+        return editingStyleforRow(atIndexPath: indexPath)
+    }
+
     func tableView(_ tableView: UITableView, editActionsForRowAtIndexPath indexPath: IndexPath) -> [AnyObject]? {
-        guard let source = self.source else {
-            return [AnyObject]()
+        let editingStyle = editingStyleforRow(atIndexPath: indexPath)
+        guard let source = self.source, editingStyle == .delete else {
+            return nil
         }
 
         let title = NSLocalizedString("Delete", tableName: "BookmarkPanel", comment: "Action button for deleting bookmarks in the bookmarks panel.")
@@ -450,10 +455,8 @@ extension BookmarksPanel: HomePanelContextMenu {
             self.pinTopSite(site)
         })
 
-        if FeatureSwitches.activityStream.isMember(profile.prefs) {
-            actions.append(pinTopSite)
-        }
-
+        actions.append(pinTopSite)
+        
         // Only local bookmarks can be removed
         guard let source = source else { return nil }
         if source.current.itemIsEditableAtIndex(indexPath.row) {

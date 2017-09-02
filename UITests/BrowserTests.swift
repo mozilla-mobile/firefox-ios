@@ -26,9 +26,11 @@ class BrowserTests: KIFTestCase {
     func testDisplaySharesheetWhileJSPromptOccurs() {
         let url = "\(webRoot!)/JSPrompt.html"
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address"))
-            .perform(grey_typeText("\(url)\n"))
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_replaceText(url))
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_typeText("\n"))
         tester().waitForWebViewElementWithAccessibilityLabel("JS Prompt")
+        //EarlGrey.select(elementWithMatcher: grey_kindOfClass(NSClassFromString("_UIAlertControllerInterfaceActionGroupView")!))
+        //    .assert(grey_sufficientlyVisible())
         
         // Show share sheet and wait for the JS prompt to fire
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Share")).perform(grey_tap())

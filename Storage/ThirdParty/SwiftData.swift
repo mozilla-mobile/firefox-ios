@@ -310,6 +310,7 @@ private class SQLiteDBStatement {
 protocol SQLiteDBConnection {
     var lastInsertedRowID: Int { get }
     var numberOfRowsModified: Int { get }
+    var version: Int { get }
 
     func executeChange(_ sqlStr: String) -> NSError?
     func executeChange(_ sqlStr: String, withArgs args: Args?) -> NSError?
@@ -322,10 +323,12 @@ protocol SQLiteDBConnection {
     func checkpoint()
     func checkpoint(_ mode: Int32)
     func vacuum() -> NSError?
+    func setVersion(_ version: Int) -> NSError?
 }
 
 // Represents a failure to open.
 class FailedSQLiteDBConnection: SQLiteDBConnection {
+    var version: Int = 0
 
     func executeChange(_ sqlStr: String, withArgs args: Args?) -> NSError? {
         return self.fail("Non-open connection; can't execute change.")
@@ -359,6 +362,9 @@ class FailedSQLiteDBConnection: SQLiteDBConnection {
     func vacuum() -> NSError? {
         return self.fail("Non-open connection; can't vacuum.")
     }
+    func setVersion(_ version: Int) -> NSError? {
+        return self.fail("Non-open connection; can't set user_version.")
+    }
 }
 
 open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
@@ -372,10 +378,10 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         get {
             return pragma("user_version", factory: IntFactory) ?? 0
         }
+    }
 
-        set {
-            let _ = executeChange("PRAGMA user_version = \(newValue)")
-        }
+    func setVersion(_ version: Int) -> NSError? {
+        return executeChange("PRAGMA user_version = \(version)")
     }
 
     fileprivate func setKey(_ key: String?) -> NSError? {
@@ -678,7 +684,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
                 SentryIntegration.shared.sendWithStacktrace(message: "SQLITE_CORRUPT for DB \(filename), \(error)", tag: "SwiftData", severity: .error)
             }
 
-            let message = "SQL error. Error code: \(error.code), \(error) for SQL \(sqlStr.characters.prefix(500))."
+            let message = "SQL error. Error code: \(error.code), \(error) for SQL \(String(sqlStr.characters.prefix(500)))."
             log.error(message)
             SentryIntegration.shared.sendWithStacktrace(message: message, tag: "SwiftData", severity: .error)
 
@@ -722,7 +728,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
                 SentryIntegration.shared.sendWithStacktrace(message: "SQLITE_CORRUPT for DB \(filename), \(error)", tag: "SwiftData", severity: .error)
             }
 
-            let message = "SQL error. Error code: \(error.code), \(error) for SQL \(sqlStr.characters.prefix(500))."
+            let message = "SQL error. Error code: \(error.code), \(error) for SQL \(String(sqlStr.characters.prefix(500)))."
             log.error(message)
             SentryIntegration.shared.sendWithStacktrace(message: message, tag: "SwiftData", severity: .error)
 

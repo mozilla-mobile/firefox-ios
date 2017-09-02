@@ -8,7 +8,7 @@ import Shared
 
 import XCTest
 
-// TODO: rewrite this test to not use BrowserTable. It used to use HistoryTable…
+// TODO: rewrite this test to not use BrowserSchema. It used to use HistoryTable…
 class TestSwiftData: XCTestCase {
     var swiftData: SwiftData?
     var urlCounter = 1
@@ -23,7 +23,7 @@ class TestSwiftData: XCTestCase {
         }
         testDB = (try! (files.getAndEnsureDirectory() as NSString)).appendingPathComponent("testSwiftData.db")
         swiftData = SwiftData(filename: testDB)
-        let table = BrowserTable()
+        let table = BrowserSchema()
 
         // Ensure static flags match expected values.
         XCTAssert(SwiftData.ReuseConnections, "Reusing database connections")
@@ -36,8 +36,6 @@ class TestSwiftData: XCTestCase {
         }
         
         let _ = swiftData!.withConnection(SwiftData.Flags.readWriteCreate) { db in
-            let f = FaviconsTable<Favicon>()
-            let _ = f.create(db)    // Because BrowserTable needs it.
             let _ = table.create(db)
             return nil
         }
@@ -123,10 +121,10 @@ class TestSwiftData: XCTestCase {
         }
 
         defer { urlCounter += 1 }
-        return addSite(BrowserTable(), url: "http://url/\(urlCounter)", title: "title\(urlCounter)")
+        return addSite(BrowserSchema(), url: "http://url/\(urlCounter)", title: "title\(urlCounter)")
     }
 
-    fileprivate func addSite(_ table: BrowserTable, url: String, title: String) -> NSError? {
+    fileprivate func addSite(_ table: BrowserSchema, url: String, title: String) -> NSError? {
         return swiftData!.withConnection(SwiftData.Flags.readWrite) { connection -> NSError? in
             let args: Args = [Bytes.generateGUID(), url, title]
             return connection.executeChange("INSERT INTO history (guid, url, title, is_deleted, should_upload) VALUES (?, ?, ?, 0, 0)", withArgs: args)

@@ -153,13 +153,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         let navigationController = UINavigationController(rootViewController: browserViewController)
         navigationController.delegate = self
         navigationController.isNavigationBarHidden = true
-
-        //  This was an old feature that never made it to release. It was kind of buggy so it might be worth either removing entirely or making the deep links worth with it. Essentially it replaces the UINavigationController we setup with a subclass that shows a notification view in place of the status bar.
-//        if AppConstants.MOZ_STATUS_BAR_NOTIFICATION {
-//            rootViewController = NotificationRootViewController(rootViewController: navigationController)
-//        } else {
-            rootViewController = navigationController
-//        }
+        rootViewController = navigationController
 
         self.window!.rootViewController = rootViewController
 
@@ -185,17 +179,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         let leanplum = LeanplumIntegration.sharedInstance
         leanplum.setup(profile: profile)
         leanplum.setEnabled(true)
-
-        // We need to check if the app is a clean install to use for
-        // preventing the What's New URL from appearing.
-        let prefs = getProfile(application).prefs
-        if prefs.intForKey(IntroViewControllerSeenProfileKey) == nil {
-            prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
-            leanplum.track(eventName: .firstRun)
-        } else if prefs.boolForKey("SecondRun") == nil {
-            prefs.setBool(true, forKey: "SecondRun")
-            leanplum.track(eventName: .secondRun)
-        }
 
         log.debug("Updating authentication keychain state to reflect system state")
         self.updateAuthenticationInfo()
@@ -462,10 +445,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         defaults.set(false, forKey: "ApplicationCleanlyBackgrounded")
         defaults.synchronize()
 
-        profile?.reopen()
+        if let profile = self.profile {
+            profile.reopen()
 
-        NightModeHelper.restoreNightModeBrightness((self.profile?.prefs)!, toForeground: true)
-        self.profile?.syncManager.applicationDidBecomeActive()
+            if profile.prefs.boolForKey(PendingAccountDisconnectedKey) ?? false {
+                FxALoginHelper.sharedInstance.applicationDidDisconnect(application)
+            }
+
+            NightModeHelper.restoreNightModeBrightness(profile.prefs, toForeground: true)
+            profile.syncManager.applicationDidBecomeActive()
+        }
 
         // We could load these here, but then we have to futz with the tab counter
         // and making NSURLRequests.
@@ -857,14 +846,25 @@ extension AppDelegate {
             }
         }
 
-        // So we've got here, and there are no sent tabs.
-        // There are a number of possibilities here: 
-        // a) we started syncing in the NotificationService, but aborted once we reached the end.
-        // b) we did some non-displayURI commands which finished properly.
+        // By now, we've dealt with any sent tab notifications.
+        //
+        // The only thing left to do now is to perform actions that can only be performed
+        // while the app is foregrounded.
         // 
-        // For now, we should just re-process the message handling.
+        // Use the push message handler to re-parse the message,
+        // this time with a BrowserProfile and processing the return
+        // differently than in NotificationService.
         let handler = FxAPushMessageHandler(with: profile)
         handler.handle(userInfo: userInfo).upon { res in
+            if let message = res.successValue {
+                switch message {
+                case .thisDeviceDisconnected:
+                    FxALoginHelper.sharedInstance.applicationDidDisconnect(application)
+                default:
+                    break
+                }
+            }
+
             completionHandler(res.isSuccess ? .newData : .failed)
         }
     }

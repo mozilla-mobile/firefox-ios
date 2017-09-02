@@ -132,12 +132,10 @@ struct AppMenuConfiguration: MenuConfiguration {
                     menuItems.append(AppMenuConfiguration.HideImageModeMenuItem)
                 }
             }
-            if NightModeAccessors.isNightModeAvailable(appState) {
-                if NightModeAccessors.isNightModeActivated(appState) {
-                    menuItems.append(AppMenuConfiguration.ShowNightModeItem)
-                } else {
-                    menuItems.append(AppMenuConfiguration.HideNightModeItem)
-                }
+            if NightModeAccessors.isNightModeActivated(appState) {
+                menuItems.append(AppMenuConfiguration.ShowNightModeItem)
+            } else {
+                menuItems.append(AppMenuConfiguration.HideNightModeItem)
             }
             if hasVideoCaptureDevice {
                 menuItems.append(AppMenuConfiguration.ScanQRCodeMenuItem)
@@ -156,12 +154,10 @@ struct AppMenuConfiguration: MenuConfiguration {
                     menuItems.append(AppMenuConfiguration.HideImageModeMenuItem)
                 }
             }
-            if NightModeAccessors.isNightModeAvailable(appState) {
-                if NightModeAccessors.isNightModeActivated(appState) {
-                    menuItems.append(AppMenuConfiguration.ShowNightModeItem)
-                } else {
-                    menuItems.append(AppMenuConfiguration.HideNightModeItem)
-                }
+            if NightModeAccessors.isNightModeActivated(appState) {
+                menuItems.append(AppMenuConfiguration.ShowNightModeItem)
+            } else {
+                menuItems.append(AppMenuConfiguration.HideNightModeItem)
             }
             if hasVideoCaptureDevice {
                 menuItems.append(AppMenuConfiguration.ScanQRCodeMenuItem)
@@ -180,12 +176,10 @@ struct AppMenuConfiguration: MenuConfiguration {
                     menuItems.append(AppMenuConfiguration.HideImageModeMenuItem)
                 }
             }
-            if NightModeAccessors.isNightModeAvailable(appState) {
-                if NightModeAccessors.isNightModeActivated(appState) {
-                    menuItems.append(AppMenuConfiguration.ShowNightModeItem)
-                } else {
-                    menuItems.append(AppMenuConfiguration.HideNightModeItem)
-                }
+            if NightModeAccessors.isNightModeActivated(appState) {
+                menuItems.append(AppMenuConfiguration.ShowNightModeItem)
+            } else {
+                menuItems.append(AppMenuConfiguration.HideNightModeItem)
             }
             if hasVideoCaptureDevice {
                 menuItems.append(AppMenuConfiguration.ScanQRCodeMenuItem)
@@ -303,6 +297,5 @@ extension AppMenuConfiguration {
     fileprivate static var ReadingListMenuToolbarItem: MenuToolbarItem {
         return  AppMenuToolbarItem(title: Strings.AppMenuReadingListTitleString, accessibilityIdentifier: "ReadingListMenuToolbarItem", action:  MenuAction(action: AppMenuAction.openReadingList.rawValue), icon: "menu-panel-ReadingList")
     }
-
 
 }

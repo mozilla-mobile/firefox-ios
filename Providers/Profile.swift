@@ -235,21 +235,12 @@ open class BrowserProfile: Profile {
         let isNewProfile = !files.exists("")
 
         // Set up our database handles.
-
-        self.loginsDB = BrowserDB(filename: "logins.db", secretKey: BrowserProfile.loginsKey, files: files, leaveClosed: true)
-        self.db = BrowserDB(filename: "browser.db", files: files, leaveClosed: true)
+        self.loginsDB = BrowserDB(filename: "logins.db", secretKey: BrowserProfile.loginsKey, files: files)
+        self.db = BrowserDB(filename: "browser.db", files: files)
 
         // This has to happen prior to the databases being opened, because opening them can trigger
         // events to which the SyncManager listens.
         self.syncManager = BrowserSyncManager(profile: self)
-
-        self.db.prepareSchema()
-
-        if syncDelegate != nil {
-            // We almost certainly don't want to be accessing the logins.db when in an extension, so let's avoid
-            // corrupting it by not opening it at all.
-            self.loginsDB.prepareSchema()
-        }
 
         let notificationCenter = NotificationCenter.default
 
@@ -540,8 +531,13 @@ open class BrowserProfile: Profile {
         flushAccount()
         
         // tell any observers that our account has changed
-        let userInfo = [NotificationUserInfoKeyHasSyncableAccount: hasSyncableAccount()]
-        NotificationCenter.default.post(name: NotificationFirefoxAccountChanged, object: nil, userInfo: userInfo)
+        DispatchQueue.main.async {
+            // Many of the observers for this notifications are on the main thread,
+            // so we should post the notification there, just in case we're not already
+            // on the main thread.
+            let userInfo = [NotificationUserInfoKeyHasSyncableAccount: self.hasSyncableAccount()]
+            NotificationCenter.default.post(name: NotificationFirefoxAccountChanged, object: nil, userInfo: userInfo)
+        }
 
         self.syncManager.onAddedAccount()
     }

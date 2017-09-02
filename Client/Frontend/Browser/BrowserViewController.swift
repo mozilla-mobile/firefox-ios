@@ -172,16 +172,11 @@ class BrowserViewController: UIViewController {
     }
 
     func shouldShowFooterForTraitCollection(_ previousTraitCollection: UITraitCollection) -> Bool {
-        return previousTraitCollection.verticalSizeClass != .compact &&
-               previousTraitCollection.horizontalSizeClass != .regular
+        return previousTraitCollection.verticalSizeClass != .compact && previousTraitCollection.horizontalSizeClass != .regular
     }
 
     func shouldShowTopTabsForTraitCollection(_ newTraitCollection: UITraitCollection) -> Bool {
-        guard AppConstants.MOZ_TOP_TABS else {
-            return false
-        }
-        return newTraitCollection.verticalSizeClass == .regular &&
-            newTraitCollection.horizontalSizeClass == .regular
+        return newTraitCollection.verticalSizeClass == .regular && newTraitCollection.horizontalSizeClass == .regular
     }
 
     func toggleSnackBarVisibility(show: Bool) {
@@ -572,11 +567,6 @@ class BrowserViewController: UIViewController {
         updateTabCountUsingTabManager(tabManager, animated: false)
         clipboardBarDisplayHandler?.checkIfShouldDisplayBar()
         log.debug("BVC done.")
-
-        NotificationCenter.default.addObserver(self,
-                                                         selector: #selector(BrowserViewController.openSettings),
-                                                         name: NSNotification.Name(rawValue: NotificationStatusNotificationTapped),
-                                                         object: nil)
     }
 
     fileprivate func crashedLastLaunch() -> Bool {
@@ -670,7 +660,6 @@ class BrowserViewController: UIViewController {
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: NotificationStatusNotificationTapped), object: nil)
     }
 
     func resetBrowserChrome() {
@@ -1027,10 +1016,7 @@ class BrowserViewController: UIViewController {
 
     fileprivate func runScriptsOnWebView(_ webView: WKWebView) {
         webView.evaluateJavaScript("__firefox__.favicons.getFavicons()", completionHandler: nil)
-
-        if AppConstants.MOZ_CONTENT_METADATA_PARSING {
-            webView.evaluateJavaScript("__firefox__.metadata.extractMetadata()", completionHandler: nil)
-        }
+        webView.evaluateJavaScript("__firefox__.metadata.extractMetadata()", completionHandler: nil)
     }
 
     func updateUIForReaderHomeStateForTab(_ tab: Tab) {
@@ -1125,11 +1111,15 @@ class BrowserViewController: UIViewController {
         openURLInNewTab(nil, isPrivate: isPrivate, isPrivileged: true)
         
         if focusLocationField {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(300)) {
                 // Without a delay, the text field fails to become first responder
                 self.urlBar.tabLocationViewDidTapLocation(self.urlBar.locationView)
             }
         }
+    }
+    
+    func openQRReader() {
+        self.scanQRCode()
     }
 
     fileprivate func popToBVC() {
@@ -1204,6 +1194,8 @@ class BrowserViewController: UIViewController {
         }
 
         self.present(controller, animated: true, completion: nil)
+
+        LeanplumIntegration.sharedInstance.track(eventName: .userSharedWebpage)
     }
 
     func updateFindInPageVisibility(visible: Bool) {
@@ -1322,8 +1314,7 @@ class BrowserViewController: UIViewController {
             // then wait enough time for the webview to render.
             if let webView =  tab.webView {
                 view.insertSubview(webView, at: 0)
-                let time = DispatchTime.now() + Double(Int64(500 * NSEC_PER_MSEC)) / Double(NSEC_PER_SEC)
-                DispatchQueue.main.asyncAfter(deadline: time) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
                     self.screenshotHelper.takeScreenshot(tab)
                     if webView.superview == self.view {
                         webView.removeFromSuperview()
@@ -1533,6 +1524,8 @@ extension BrowserViewController: URLBarDelegate {
                 switch readerMode.state {
                 case .available:
                     enableReaderMode()
+
+                    LeanplumIntegration.sharedInstance.track(eventName: .useReaderView)
                 case .active:
                     disableReaderMode()
                 case .unavailable:
@@ -1923,8 +1916,9 @@ extension BrowserViewController: TabDelegate {
         let nightModeHelper = NightModeHelper(tab: tab)
         tab.addHelper(nightModeHelper, name: NightModeHelper.name())
 
-        let spotlightHelper = SpotlightHelper(tab: tab)
-        tab.addHelper(spotlightHelper, name: SpotlightHelper.name())
+        // XXX: Bug 1390200 - Disable NSUserActivity/CoreSpotlight temporarily
+        // let spotlightHelper = SpotlightHelper(tab: tab)
+        // tab.addHelper(spotlightHelper, name: SpotlightHelper.name())
 
         tab.addHelper(LocalRequestHelper(), name: LocalRequestHelper.name())
 
@@ -1932,10 +1926,12 @@ extension BrowserViewController: TabDelegate {
         historyStateHelper.delegate = self
         tab.addHelper(historyStateHelper, name: HistoryStateHelper.name())
         
-        if AppConstants.MOZ_CONTENT_METADATA_PARSING {
-            let metadataHelper = MetadataParserHelper(tab: tab, profile: profile)
-            tab.addHelper(metadataHelper, name: MetadataParserHelper.name())
+        if #available(iOS 11, *) {
+            tab.contentBlocker = ContentBlockerHelper(tab: tab, profile: profile)
         }
+
+        let metadataHelper = MetadataParserHelper(tab: tab, profile: profile)
+        tab.addHelper(metadataHelper, name: MetadataParserHelper.name())
     }
 
     func tab(_ tab: Tab, willDeleteWebView webView: WKWebView) {
@@ -2259,15 +2255,14 @@ extension BrowserViewController: TabManagerDelegate {
         updateTabCountUsingTabManager(tabManager)
     }
 
-    func show(buttonToast: ButtonToast, afterWaiting delay: Double = 0, duration: Double = SimpleToastUX.ToastDismissAfter) {
+    func show(buttonToast: ButtonToast, afterWaiting delay: DispatchTimeInterval = SimpleToastUX.ToastDelayBefore, duration: DispatchTimeInterval = SimpleToastUX.ToastDismissAfter) {
         // If BVC isnt visible hold on to this toast until viewDidAppear
         if self.view.window == nil {
             self.pendingToast = buttonToast
             return
         }
 
-        let time = DispatchTime(uptimeNanoseconds: DispatchTime.now().uptimeNanoseconds) + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
-        DispatchQueue.main.asyncAfter(deadline: time) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
             self.view.addSubview(buttonToast)
             buttonToast.snp.makeConstraints { make in
                 make.left.right.equalTo(self.view)
@@ -2695,7 +2690,6 @@ extension BrowserViewController: IntroViewControllerDelegate {
                 introViewController.modalPresentationStyle = UIModalPresentationStyle.formSheet
             }
             present(introViewController, animated: true) {
-                self.profile.prefs.setInt(1, forKey: IntroViewControllerSeenProfileKey)
                 // On first run (and forced) open up the homepage in the background.
                 let state = self.getCurrentAppState()
                 if let homePageURL = HomePageAccessors.getHomePage(state), let tab = self.tabManager.selectedTab, DeviceInfo.hasConnectivity() {
@@ -2708,11 +2702,28 @@ extension BrowserViewController: IntroViewControllerDelegate {
 
         return false
     }
+    
+    func launchFxAFromDeeplinkURL(_ url: URL) {
+        self.profile.prefs.removeObjectForKey("AdjustDeeplinkKey")
+        let query = url.getQuery()
+        let fxaParams: FxALaunchParams
+        fxaParams = FxALaunchParams(query: query)
+        self.presentSignInViewController(fxaParams)
+    }
 
-    func introViewControllerDidFinish(_ introViewController: IntroViewController) {
+    func introViewControllerDidFinish(_ introViewController: IntroViewController, requestToLogin: Bool) {
+        self.profile.prefs.setInt(1, forKey: IntroViewControllerSeenProfileKey)
         introViewController.dismiss(animated: true) { finished in
             if self.navigationController?.viewControllers.count ?? 0 > 1 {
                 _ = self.navigationController?.popToRootViewController(animated: true)
+            }
+            
+            if let deeplink = self.profile.prefs.stringForKey("AdjustDeeplinkKey"), let url = URL(string: deeplink) {
+                self.launchFxAFromDeeplinkURL(url)
+                return
+            }
+            if requestToLogin {
+                self.presentSignInViewController()
             }
         }
     }
@@ -2728,7 +2739,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
         } else {
             let signInVC = FxAContentViewController(profile: profile, fxaOptions: fxaOptions)
             signInVC.delegate = self            
-            signInVC.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.cancel, target: self, action: #selector(BrowserViewController.dismissSignInViewController))
+            signInVC.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(BrowserViewController.dismissSignInViewController))
             vcToPresent = signInVC
         }
 
@@ -2741,11 +2752,6 @@ extension BrowserViewController: IntroViewControllerDelegate {
         self.dismiss(animated: true, completion: nil)
     }
 
-    func introViewControllerDidRequestToLogin(_ introViewController: IntroViewController) {
-        introViewController.dismiss(animated: true, completion: { () -> Void in
-            self.presentSignInViewController()
-        })
-    }
 }
 
 extension BrowserViewController: FxAContentViewControllerDelegate {
@@ -2832,7 +2838,9 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             let saveImageTitle = NSLocalizedString("Save Image", comment: "Context menu item for saving an image")
             let saveImageAction = UIAlertAction(title: saveImageTitle, style: UIAlertActionStyle.default) { (action: UIAlertAction) -> Void in
                 if photoAuthorizeStatus == PHAuthorizationStatus.authorized || photoAuthorizeStatus == PHAuthorizationStatus.notDetermined {
-                    self.getImage(url as URL) { UIImageWriteToSavedPhotosAlbum($0, nil, nil, nil) }
+                    self.getImage(url as URL) {
+                        UIImageWriteToSavedPhotosAlbum($0, self, #selector(self.image(_:didFinishSavingWithError:contextInfo:)), nil)
+                    }
                 } else {
                     let accessDenied = UIAlertController(title: NSLocalizedString("Firefox would like to access your Photos", comment: "See http://mzl.la/1G7uHo7"), message: NSLocalizedString("This allows you to save the image to your Camera Roll.", comment: "See http://mzl.la/1G7uHo7"), preferredStyle: UIAlertControllerStyle.alert)
                     let dismissAction = UIAlertAction(title: UIConstants.CancelString, style: UIAlertActionStyle.default, handler: nil)
@@ -2842,7 +2850,6 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                     }
                     accessDenied.addAction(settingsAction)
                     self.present(accessDenied, animated: true, completion: nil)
-                    LeanplumIntegration.sharedInstance.track(eventName: .saveImage)
                 }
             }
             actionSheetController.addAction(saveImageAction)
@@ -2903,6 +2910,14 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                     success(image)
                 }
             }
+    }
+}
+
+extension BrowserViewController {
+    func image(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) {
+        if error == nil {
+            LeanplumIntegration.sharedInstance.track(eventName: .saveImage)
+        }
     }
 }
 
@@ -3256,3 +3271,4 @@ extension BrowserViewController: TopTabsDelegate {
         urlBar.leaveOverlayMode(didCancel: true)
     }
 }
+

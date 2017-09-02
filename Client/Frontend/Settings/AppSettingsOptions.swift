@@ -71,7 +71,7 @@ class DisconnectSetting: WithAccountSetting {
                 self.settings.settings = self.settings.generateSettings()
                 self.settings.SELfirefoxAccountDidChange()
 
-                LeanplumIntegration.sharedInstance.setUserAttributes(attributes: [UserAttributeKeyName.signedInSync.rawValue : self.profile.hasAccount()])
+                LeanplumIntegration.sharedInstance.setUserAttributes(attributes: [UserAttributeKeyName.signedInSync.rawValue: self.profile.hasAccount()])
             })
         navigationController?.present(alertController, animated: true, completion: nil)
     }
@@ -235,8 +235,11 @@ class AccountStatusSetting: WithAccountSetting {
             case .needsPassword:
                  // We link to the re-enter password page.
                 return .disclosureIndicator
-            case .none, .needsUpgrade:
-                // In future, we'll want to link to /settings and an upgrade page, respectively.
+            case .none:
+                 // We link to FxA web /settings.
+                return .disclosureIndicator
+            case .needsUpgrade:
+                 // In future, we'll want to link to an upgrade page.
                 return .none
             }
         }
@@ -252,28 +255,28 @@ class AccountStatusSetting: WithAccountSetting {
 
     override var status: NSAttributedString? {
         if let account = profile.getAccount() {
+            var string:String
+            
             switch account.actionNeeded {
             case .none:
                 return nil
             case .needsVerification:
-                return NSAttributedString(string: NSLocalizedString("Verify your email address.", comment: "Text message in the settings table view"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
+                string = NSLocalizedString("Verify your email address.", comment: "Text message in the settings table view")
+                break
             case .needsPassword:
-                let string = NSLocalizedString("Enter your password to connect.", comment: "Text message in the settings table view")
-                let range = NSRange(location: 0, length: string.characters.count)
-                let orange = UIColor(red: 255.0 / 255, green: 149.0 / 255, blue: 0.0 / 255, alpha: 1)
-                let attrs = [NSForegroundColorAttributeName: orange]
-                let res = NSMutableAttributedString(string: string)
-                res.setAttributes(attrs, range: range)
-                return res
+                string = NSLocalizedString("Enter your password to connect.", comment: "Text message in the settings table view")
+                break
             case .needsUpgrade:
-                let string = NSLocalizedString("Upgrade Firefox to connect.", comment: "Text message in the settings table view")
-                let range = NSRange(location: 0, length: string.characters.count)
-                let orange = UIColor(red: 255.0 / 255, green: 149.0 / 255, blue: 0.0 / 255, alpha: 1)
-                let attrs = [NSForegroundColorAttributeName: orange]
-                let res = NSMutableAttributedString(string: string)
-                res.setAttributes(attrs, range: range)
-                return res
+                string = NSLocalizedString("Upgrade Firefox to connect.", comment: "Text message in the settings table view")
+                break
             }
+            
+            let orange = UIColor(red: 255.0 / 255, green: 149.0 / 255, blue: 0.0 / 255, alpha: 1)
+            let range = NSRange(location: 0, length: string.characters.count)
+            let attrs = [NSForegroundColorAttributeName: orange]
+            let res = NSMutableAttributedString(string: string)
+            res.setAttributes(attrs, range: range)
+            return res
         }
         return nil
     }
@@ -284,16 +287,23 @@ class AccountStatusSetting: WithAccountSetting {
 
         if let account = profile.getAccount() {
             switch account.actionNeeded {
-            case .needsVerification:
+            case .none, .needsVerification:
                 var cs = URLComponents(url: account.configuration.settingsURL, resolvingAgainstBaseURL: false)
                 cs?.queryItems?.append(URLQueryItem(name: "email", value: account.email))
-                viewController.url = try! cs?.asURL()
+                
+                if let url = try? cs?.asURL() {
+                    viewController.url = url
+                }
+                
             case .needsPassword:
                 var cs = URLComponents(url: account.configuration.forceAuthURL, resolvingAgainstBaseURL: false)
                 cs?.queryItems?.append(URLQueryItem(name: "email", value: account.email))
-                viewController.url = try! cs?.asURL()
-            case .none, .needsUpgrade:
-                // In future, we'll want to link to /settings and an upgrade page, respectively.
+                
+                if let url = try? cs?.asURL() {
+                    viewController.url = url
+                }
+            case .needsUpgrade:
+                // In future, we'll want to link to an upgrade page.
                 return
             }
         }
@@ -437,17 +447,6 @@ class FeatureSwitchSetting: BoolSetting {
 
 }
 
-class EnableActivtyStreamSetting: FeatureSwitchSetting {
-    let profile: Profile
-
-    init(settings: SettingsTableViewController) {
-        self.profile = settings.profile
-        let title = NSAttributedString(string: "Enable the New Tab Experience", attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
-        super.init(prefs: settings.profile.prefs, featureSwitch: FeatureSwitches.activityStream, with: title)
-    }
-
-}
-
 class EnableBookmarkMergingSetting: HiddenSetting {
     override var title: NSAttributedString? {
         // Not localized for now.
@@ -573,7 +572,7 @@ class SendAnonymousUsageDataSetting: BoolSetting {
             attributedStatusText: NSAttributedString(string: NSLocalizedString("More Info…", tableName: "SendAnonymousUsageData", comment: "See http://bit.ly/1SmEXU1"), attributes: [NSForegroundColorAttributeName: UIConstants.HighlightBlue]),
             settingDidChange: {
                 AdjustIntegration.setEnabled($0)
-                LeanplumIntegration.sharedInstance.setUserAttributes(attributes: [UserAttributeKeyName.telemetryOptIn.rawValue : $0])
+                LeanplumIntegration.sharedInstance.setUserAttributes(attributes: [UserAttributeKeyName.telemetryOptIn.rawValue: $0])
                 LeanplumIntegration.sharedInstance.setEnabled($0)
             }
         )
@@ -709,6 +708,28 @@ class TouchIDPasscodeSetting: Setting {
     override func onClick(_ navigationController: UINavigationController?) {
         let viewController = AuthenticationSettingsViewController()
         viewController.profile = profile
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+}
+
+
+@available(iOS 11, *)
+class ContentBlockerSetting: Setting {
+    let profile: Profile
+    var tabManager: TabManager!
+    override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }
+    override var accessibilityIdentifier: String? { return "TrackingProtection" }
+
+    init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
+        self.tabManager = settings.tabManager
+        super.init(title: NSAttributedString(string: Strings.SettingsTrackingProtectionSectionName, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]))
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        let viewController = ContentBlockerSettingViewController(prefs: profile.prefs)
+        viewController.profile = profile
+        viewController.tabManager = tabManager
         navigationController?.pushViewController(viewController, animated: true)
     }
 }

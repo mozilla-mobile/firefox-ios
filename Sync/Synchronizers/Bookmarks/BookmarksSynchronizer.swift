@@ -197,7 +197,10 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
                     log.debug("Validating completed buffer download.")
                     return buffer.validate().bind { validationResult in
                         if let invalidError = validationResult.failureValue as? BufferInvalidError {
-                            self.statsSession.validationStats = self.validationStatsFrom(error: invalidError)
+                            return buffer.getUpstreamRecordCount().bind { checked in
+                                self.statsSession.validationStats = self.validationStatsFrom(error: invalidError, checked: checked)
+                                return deferMaybe(result)
+                            }
                         }
                         return deferMaybe(result)
                     }
@@ -212,14 +215,17 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
                 }
 
                 // -1 because we also need to upload the mobile root.
-                return storage.getLocalBookmarksModifications(limit: bookmarksClient.maxBatchPostRecords - 1) >>== { (deletedGUIDs, newBookmarks) -> Success in
+                return (storage.getLocalBookmarksModifications(limit: bookmarksClient.maxBatchPostRecords - 1) >>== { (deletedGUIDs, newBookmarks) -> Success in
                     guard newBookmarks.count > 0 || deletedGUIDs.count > 0 else {
                         return succeed()
                     }
                     return self.buildMobileRootAndChildrenRecords(storage, buffer, additionalChildren: newBookmarks, deletedChildren: deletedGUIDs) >>== { (mobileRootRecord, childrenRecords) in
                         return self.uploadSomeLocalRecords(storage, mirrorer, bookmarksClient, mobileRootRecord: mobileRootRecord, childrenRecords: childrenRecords)
                     }
-                } >>> {
+                }).bind { simpleSyncingResult in
+                    if let failure = simpleSyncingResult.failureValue {
+                        SentryIntegration.shared.send(message: "Failed to simple sync bookmarks: " + failure.description, tag: "BookmarksSyncing", severity: .error)
+                    }
                     return deferMaybe(result)
                 }
             }
@@ -229,12 +235,14 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
                 if case .completed = result {
                     return buffer.validate().bind { result in
                         if let invalidError = result.failureValue as? BufferInvalidError {
-                            self.statsSession.validationStats = self.validationStatsFrom(error: invalidError)
+                            return buffer.getUpstreamRecordCount().bind { checked in
+                                self.statsSession.validationStats = self.validationStatsFrom(error: invalidError, checked: checked)
 
-                            log.warning("Buffer inconsistent, starting repair procedure")
-                            let repairer = BookmarksRepairRequestor(scratchpad: self.scratchpad, basePrefs: self.basePrefs, remoteClients: remoteClientsAndTabs)
-                            return repairer.startRepairs(validationInfo: invalidError.inconsistencies) >>> {
-                                deferMaybe(invalidError)
+                                log.warning("Buffer inconsistent, starting repair procedure")
+                                let repairer = BookmarksRepairRequestor(scratchpad: self.scratchpad, basePrefs: self.basePrefs, remoteClients: remoteClientsAndTabs)
+                                return repairer.startRepairs(validationInfo: invalidError.inconsistencies) >>> {
+                                    deferMaybe(invalidError)
+                                }
                             }
                         }
                         
@@ -255,9 +263,9 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
         return run
     }
 
-    private func validationStatsFrom(error: BufferInvalidError) -> ValidationStats {
+    private func validationStatsFrom(error: BufferInvalidError, checked: Int?) -> ValidationStats {
         let problems = error.inconsistencies.map { ValidationProblem(name: $0.trackingEvent, count: $1.count) }
-        return ValidationStats(problems: problems, took: error.validationDuration)
+        return ValidationStats(problems: problems, took: error.validationDuration, checked: checked)
     }
 }
 

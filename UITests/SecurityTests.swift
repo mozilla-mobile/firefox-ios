@@ -19,7 +19,9 @@ class SecurityTests: KIFTestCase {
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("url"))
             .perform(grey_tap())
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("address"))
-            .perform(grey_typeText("\(url)\n"))
+            .perform(grey_replaceText(url))
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address"))
+            .perform(grey_typeText("\n"))
     }
     
     override func beforeEach() {

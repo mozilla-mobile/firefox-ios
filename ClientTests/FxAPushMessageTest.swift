@@ -53,7 +53,7 @@ class FxAPushMessageTest: XCTestCase {
             AnyHashable("cryptokey"): "keyid=p256dh;dh=BNfUPK_8eUTZGOyXq07lthBfHeIxC2B7L_gF3cMGK1jVfDe9tlgxpHD_mbKrt3p12d7_O__wizhne2a1Eb7pZgk;p256ecdsa=BFSuld8S4PbRcgGe3OQPN9NyIOXx-ccUIMb0q6nIpH7Qf894wz0TIQTXQ7I7pWjZiN9KCdYVjNhyPtr1--37ois",
             AnyHashable("con"): "aesgcm",
             AnyHashable("ver"): "gAAAAABZLbG-m7EHhcMdrqs51SkESIZHsZjvw2QIu8LOeXxcKEy6wDVCprOKFAfJU44cinfJcDtCnO9EEyzpFt5e0HBDCLybGyThoZzmiod6zTLhTfAKZe-SyElSVCL0UDpJ_-U3UTUUHUaJXeRf0z6NvFM-uL39Jy-dwr3cuJoSDIcTPdChRPFiIS1hwokqMlxOn36azxOi",
-        ]
+            ]
 
         let profile = MockProfile()
 
@@ -75,9 +75,79 @@ class FxAPushMessageTest: XCTestCase {
         let expectation = XCTestExpectation()
         handler.handle(userInfo: userInfo).upon { maybe in
             XCTAssertTrue(maybe.isSuccess)
+            XCTAssertEqual(maybe.successValue!, PushMessage.collectionChanged(collections: ["clients", "tabs"]))
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 10)
     }
 
+    func createHandler(_ profile: Profile = MockProfile()) -> FxAPushMessageHandler {
+        let account = FirefoxAccount(
+            configuration: FirefoxAccountConfigurationLabel.production.toConfiguration(),
+            email: "testtest@test.com",
+            uid: "uid",
+            deviceRegistration: nil,
+            stateKeyLabel: "xxx",
+            state: SeparatedState())
+
+        profile.setAccount(account)
+
+        return FxAPushMessageHandler(with: profile)
+    }
+
+    func test_deviceConnected() {
+        let handler = createHandler()
+
+        let expectation = XCTestExpectation()
+        handler.handle(plaintext: "{\"command\":\"fxaccounts:device_connected\",\"data\":{\"deviceName\": \"Use Nightly on Desktop\"}}").upon { maybe in
+            XCTAssertTrue(maybe.isSuccess)
+            guard let message = maybe.successValue else {
+                return expectation.fulfill()
+            }
+            XCTAssertEqual(message, PushMessage.deviceConnected("Use Nightly on Desktop"))
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: 10)
+    }
+
+    func test_deviceDisconnected() {
+        let profile = MockProfile()
+        let handler = createHandler(profile)
+        let prefs = profile.prefs
+
+        let expectation = XCTestExpectation()
+        handler.handle(plaintext: "{\"command\":\"fxaccounts:device_disconnected\",\"data\":{\"id\": \"not_this_device\"}}").upon { maybe in
+            XCTAssertTrue(maybe.isSuccess)
+            guard let message = maybe.successValue else {
+                return expectation.fulfill()
+            }
+            XCTAssertEqual(message.messageType, .deviceDisconnected)
+            XCTAssertFalse(prefs.boolForKey(PendingAccountDisconnectedKey) ?? false)
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: 10)
+
+    }
+
+    func test_thisDeviceDisconnected() {
+        let profile = MockProfile()
+        let handler = createHandler(profile)
+
+        let deviceRegistration = FxADeviceRegistration(id: "this-device-id", version: 1, lastRegistered: 0)
+        profile.account?.deviceRegistration = deviceRegistration
+
+        let prefs = profile.prefs
+
+        let expectation = XCTestExpectation()
+        handler.handle(plaintext: "{\"command\":\"fxaccounts:device_disconnected\",\"data\":{\"id\": \"\(deviceRegistration.id)\"}}").upon { maybe in
+            guard let message = maybe.successValue else {
+                return expectation.fulfill()
+            }
+            XCTAssertEqual(message, PushMessage.thisDeviceDisconnected)
+            XCTAssertTrue(prefs.boolForKey(PendingAccountDisconnectedKey) ?? false)
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: 10)
+        
+    }
 }

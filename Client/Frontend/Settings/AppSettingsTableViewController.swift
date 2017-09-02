@@ -67,6 +67,12 @@ class AppSettingsTableViewController: SettingsTableViewController {
             ]
         }
 
+        generalSettings += [
+            BoolSetting(prefs: prefs, prefKey: "showClipboardBar", defaultValue: false,
+                        titleText: Strings.SettingsOfferClipboardBarTitle,
+                        statusText: Strings.SettingsOfferClipboardBarStatus)
+        ]
+
         settings += [
             SettingSection(title: nil, children: [
                 // Without a Firefox Account:
@@ -96,6 +102,11 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 statusText: NSLocalizedString("When Leaving Private Browsing", tableName: "PrivateBrowsing", comment: "Will be displayed in Settings under 'Close Private Tabs'"))
         ]
 
+if
+            #available(iOS 11, *) {
+        privacySettings.append(ContentBlockerSetting(settings:self))
+    }
+
         privacySettings += [
             PrivacyPolicySetting()
         ]
@@ -115,16 +126,11 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 ExportBrowserDataSetting(settings: self),
                 DeleteExportedDataSetting(settings: self),
                 EnableBookmarkMergingSetting(settings: self),
-                ForceCrashSetting(settings: self),
-                EnableActivtyStreamSetting(settings: self)
+                ForceCrashSetting(settings: self)
             ])]
-            
+    
             if profile.hasAccount() {
-                settings += [
-                    SettingSection(title: nil, children: [
-                        DisconnectSetting(settings: self),
-                        ])
-                ]
+                settings += [SettingSection(title: nil, children: [DisconnectSetting(settings: self)])]
             }
 
         return settings

@@ -303,6 +303,37 @@ class StringSetting: Setting, UITextFieldDelegate {
     }
 }
 
+class CheckmarkSetting: Setting {
+    let onChanged: () -> Void
+    let isEnabled: () -> Bool
+    private let subtitle: NSAttributedString?
+
+    override var status: NSAttributedString? {
+        return subtitle
+    }
+
+    init(title: NSAttributedString, subtitle: NSAttributedString?, accessibilityIdentifier: String? = nil, isEnabled: @escaping () -> Bool, onChanged: @escaping () -> Void) {
+        self.subtitle = subtitle
+        self.onChanged = onChanged
+        self.isEnabled = isEnabled
+        super.init(title: title)
+        self.accessibilityIdentifier = accessibilityIdentifier
+    }
+
+    override func onConfigureCell(_ cell: UITableViewCell) {
+        super.onConfigureCell(cell)
+        cell.accessoryType = isEnabled() ? .checkmark : .none
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        // Force editing to end for any focused text fields so they can finish up validation first.
+        navigationController?.view.endEditing(true)
+        if !isEnabled() {
+            onChanged()
+        }
+    }
+}
+
 /// A helper class for a setting backed by a UITextField.
 /// This takes an optional isEnabled and mandatory onClick callback
 /// isEnabled is called on each tableview.reloadData. If it returns
@@ -411,6 +442,8 @@ class SettingsTableViewController: UITableViewController {
 
     var profile: Profile!
     var tabManager: TabManager!
+
+    var hasSectionSeparatorLine = true
 
     /// Used to calculate cell heights.
     fileprivate lazy var dummyToggleCell: UITableViewCell = {
@@ -521,7 +554,7 @@ class SettingsTableViewController: UITableViewController {
         }
 
         // Hide the top border for the top section to avoid having a double line at the top
-        if section == 0 {
+        if section == 0 || !hasSectionSeparatorLine {
             headerView.showTopBorder = false
         } else {
             headerView.showTopBorder = true
@@ -531,21 +564,25 @@ class SettingsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as! SettingsTableSectionHeaderFooterView
         let sectionSetting = settings[section]
-        if let sectionFooter = sectionSetting.footerTitle?.string {
-            footerView.titleLabel.text = sectionFooter
+        guard let sectionFooter = sectionSetting.footerTitle?.string else {
+            return nil
         }
+        let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as! SettingsTableSectionHeaderFooterView
+        footerView.titleLabel.text = sectionFooter
         footerView.titleAlignment = .top
         footerView.showBottomBorder = false
         return footerView
     }
 
-    //is this needed?
+    // To hide a footer dynamically requires returning nil from viewForFooterInSection
+    // and setting the height to zero.
+    // However, we also want the height dynamically calculated, there is a magic constant
+    // for that: `UITableViewAutomaticDimension`.
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         let sectionSetting = settings[section]
         if let _ = sectionSetting.footerTitle?.string {
-            return 44
+            return UITableViewAutomaticDimension
         }
         return 0
     }
@@ -736,3 +773,4 @@ class SettingsTableSectionHeaderFooterView: UITableViewHeaderFooterView {
         }
     }
 }
+
