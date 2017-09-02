@@ -102,12 +102,11 @@ class SettingAppearanceTest: BaseTestCase {
         // Enter 'mozilla' on the search field
         let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
         
-        // Check the text autocompletes to mozilla.org/, and also look for 'Search for mozilla' button below
         let label = app.textFields["Search or enter address"]
-        searchOrEnterAddressTextField.typeText("mozilla\n")
+        searchOrEnterAddressTextField.typeText("https://www.mozilla.org\n")
         
         // Check the correct site is reached
-        waitForValueContains(element: label, value: "https://www.mozilla.org")
+        waitForValueContains(element: label, value: "https://www.mozilla.org/en-US/")
         
         app.buttons["Share"].tap()
         XCTAssertTrue(app.buttons["Open in Safari"].exists)

@@ -19,14 +19,10 @@ class CollapsedURLTest: BaseTestCase {
     func testCheckCollapsedURL() {
         let app = XCUIApplication()
         
-        // Enter 'mozilla' on the search field
+        // Go to mozilla.org
         let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
-        
-        // Check the text autocompletes to mozilla.org/, and also look for 'Search for mozilla' button below
         let label = app.textFields["Search or enter address"]
-        searchOrEnterAddressTextField.typeText("mozilla")
-        waitForValueMatch(element: label, value: "mozilla.org/")
-        waitforExistence(element: app.buttons["Search for mozilla"])
+        searchOrEnterAddressTextField.typeText("https://www.mozilla.org")
         app.typeText("\n")
         
         // Swipe up to show the collapsed URL view
