@@ -12,7 +12,7 @@ class CollapsedURLTest: BaseTestCase {
     }
     
     override func tearDown() {
-        XCUIApplication().terminate()
+        app.terminate()
         super.tearDown()
     }
     

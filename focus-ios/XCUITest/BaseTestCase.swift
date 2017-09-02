@@ -5,7 +5,9 @@
 import XCTest
 
 class BaseTestCase: XCTestCase {
-        
+    
+    let app = XCUIApplication()
+    
     override func setUp() {
         super.setUp()
         continueAfterFailure = false

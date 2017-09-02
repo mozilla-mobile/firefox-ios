@@ -12,13 +12,11 @@ class WebsiteAccessTests: BaseTestCase {
     }
     
     override func tearDown() {
-        XCUIApplication().terminate()
+        app.terminate()
         super.tearDown()
     }
  
     func testVisitWebsite() {
-        let app = XCUIApplication()
-        
         // Check initial page
         XCTAssertTrue(app.staticTexts["Browse. Erase. Repeat."].exists)
         XCTAssertTrue(app.staticTexts["Automatic private browsing."].exists)

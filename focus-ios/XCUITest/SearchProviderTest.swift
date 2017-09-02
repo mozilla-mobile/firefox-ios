@@ -13,25 +13,23 @@ class SearchProviderTest: BaseTestCase {
     
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
-		XCUIApplication().terminate()
+		app.terminate()
         super.tearDown()
     }
 	
     func testSearchProvider() {
-		let app = XCUIApplication()
-        // Removing Twitter since it seems to be blocked from BB devices
+		// Removing Twitter since it seems to be blocked from BB devices
 		let searchEngines = ["Google", "Yahoo", "DuckDuckGo", "Wikipedia", "Amazon.com"]
 		
 		for searchEngine in searchEngines {
 			changeSearchProvider(provider: searchEngine)
 			doSearch(searchWord: "mozilla", provider: searchEngine)
 			app.buttons["ERASE"].tap()
-			waitforExistence(element: app.staticTexts["Your browsing history has been erased."])
+			XCTAssert(app.staticTexts["Your browsing history has been erased."].exists)
 		}
 	}
 	
 	private func changeSearchProvider(provider: String) {
-		let app = XCUIApplication()
 		
 		app.buttons["Settings"].tap()
 		app.tables.cells["SettingsViewController.searchCell"].tap()
@@ -42,10 +40,8 @@ class SearchProviderTest: BaseTestCase {
 	}
 	
 	private func doSearch(searchWord: String, provider: String) {
-		let app = XCUIApplication()
 		let searchForText = "Search for " + searchWord
-		
-		let urlbarUrltextTextField = app.textFields["URLBar.urlText"]
+        let urlbarUrltextTextField = app.textFields["URLBar.urlText"]
 		urlbarUrltextTextField.tap()
 		
 		urlbarUrltextTextField.typeText(searchWord)
@@ -55,9 +51,15 @@ class SearchProviderTest: BaseTestCase {
 		// Check the correct site is reached
 		switch provider {
 			case "Google":
-				waitForValueContains(element: urlbarUrltextTextField, value: "https://www.google")
-				waitForValueContains(element: app.otherElements["Search"], value: searchWord)
-		    case "Yahoo":
+                var googleSearchField = app.webViews.searchFields["Search"]
+                if iPad() {
+                    googleSearchField =  app.webViews.textFields["Search"]
+                }
+                    waitforExistence(element: googleSearchField)
+                    waitForValueContains(element: urlbarUrltextTextField, value: "https://www.google")
+                    googleSearchField.tap()
+                    waitForValueContains(element: googleSearchField, value: searchWord)
+            case "Yahoo":
 				waitForValueContains(element: urlbarUrltextTextField, value: "https://search.yahoo.com")
                 if !iPad() {
                     waitForValueContains(element: app.otherElements["banner"].searchFields["Search"], value: searchWord)

@@ -12,14 +12,12 @@ class SettingAppearanceTest: BaseTestCase {
     }
     
     override func tearDown() {
-        XCUIApplication().terminate()
+        app.terminate()
         super.tearDown()
     }
     
     // Check for the basic appearance of the Settings Menu
     func testCheckSetting() {
-        let app = XCUIApplication()
-       
         app.buttons["Settings"].tap()
         
         // Check About page
@@ -100,7 +98,6 @@ class SettingAppearanceTest: BaseTestCase {
     }
     
     func testOpenInSafari() {
-        let app = XCUIApplication()
         let safariapp = XCUIApplication(privateWithPath: nil, bundleID: "com.apple.mobilesafari")!
         // Enter 'mozilla' on the search field
         let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
