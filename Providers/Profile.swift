@@ -549,7 +549,7 @@ open class BrowserProfile: Profile {
     }
 
     // Extends NSObject so we can use timers.
-    public class BrowserSyncManager: NSObject, SyncManager {
+    public class BrowserSyncManager: NSObject, SyncManager, CollectionChangedNotifier {
         // We shouldn't live beyond our containing BrowserProfile, either in the main app or in
         // an extension.
         // But it's possible that we'll finish a side-effect sync after we've ditched the profile
@@ -945,8 +945,9 @@ open class BrowserProfile: Profile {
 
         fileprivate func syncClientsWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: SyncReason) -> SyncResult {
             log.debug("Syncing clients to storage.")
+
             let clientSynchronizer = ready.synchronizer(ClientsSynchronizer.self, delegate: delegate, prefs: prefs, why: why)
-            return clientSynchronizer.synchronizeLocalClients(self.profile.remoteClientsAndTabs, withServer: ready.client, info: ready.info) >>== { result in
+            return clientSynchronizer.synchronizeLocalClients(self.profile.remoteClientsAndTabs, withServer: ready.client, info: ready.info, notifier: self) >>== { result in
                 guard case .completed = result else {
                     return deferMaybe(result)
                 }
@@ -1213,6 +1214,24 @@ open class BrowserProfile: Profile {
                 Date.now() < stopBy &&
                 self.profile.hasSyncableAccount()
             }
+        }
+
+        class NoAccountError: MaybeErrorType {
+            var description = "No account."
+        }
+
+        public func notify(deviceIDs: [GUID], collectionsChanged collections: [String]) -> Success {
+            guard let account = self.profile.account else {
+                return deferMaybe(NoAccountError())
+            }
+            return account.notify(deviceIDs: deviceIDs, collectionsChanged: collections)
+        }
+
+        public func notifyAll(collectionsChanged collections: [String]) -> Success {
+            guard let account = self.profile.account else {
+                return deferMaybe(NoAccountError())
+            }
+            return account.notifyAll(collectionsChanged: collections)
         }
     }
 }

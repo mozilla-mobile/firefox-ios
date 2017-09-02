@@ -36,6 +36,15 @@ public protocol ResettableSynchronizer {
     static func resetSynchronizerWithStorage(_ storage: ResettableSyncStorage, basePrefs: Prefs, collection: String) -> Success
 }
 
+/**
+ * This is a delegate that allows synchronizers to notify other devices in the Sync account
+ * that a collection changed.
+ */
+public protocol CollectionChangedNotifier {
+    func notify(deviceIDs: [GUID], collectionsChanged collections: [String]) -> Success
+    func notifyAll(collectionsChanged collections: [String]) -> Success
+}
+
 // TODO: return values?
 /**
  * A Synchronizer is (unavoidably) entirely in charge of what it does within a sync.

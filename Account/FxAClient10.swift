@@ -299,12 +299,6 @@ open class FxAClient10 {
     }
     
     open func notify(deviceIDs: [GUID], collectionsChanged collections: [String], withSessionToken sessionToken: NSData) -> Deferred<Maybe<FxANotifyResponse>> {
-        let URL = self.URL.appendingPathComponent("/account/devices/notify")
-        var mutableURLRequest = URLRequest(url: URL)
-        mutableURLRequest.httpMethod = HTTPMethod.post.rawValue
-
-        mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
         let httpBody = JSON([
             "to": deviceIDs,
             "payload": [
@@ -315,7 +309,29 @@ open class FxAClient10 {
                 ]
             ]
         ])
+        return self.notify(httpBody: httpBody, withSessionToken: sessionToken)
+    }
 
+    open func notifyAll(ownDeviceId: GUID, collectionsChanged collections: [String], withSessionToken sessionToken: NSData) -> Deferred<Maybe<FxANotifyResponse>> {
+        let httpBody = JSON([
+            "to": "all",
+            "excluded": [ownDeviceId],
+            "payload": [
+                "version": 1,
+                "command": "sync:collection_changed",
+                "data": [
+                    "collections": collections
+                ]
+            ]
+        ])
+        return self.notify(httpBody: httpBody, withSessionToken: sessionToken)
+    }
+
+    fileprivate func notify(httpBody: JSON, withSessionToken sessionToken: NSData) -> Deferred<Maybe<FxANotifyResponse>> {
+        let URL = self.URL.appendingPathComponent("/account/devices/notify")
+        var mutableURLRequest = URLRequest(url: URL)
+        mutableURLRequest.httpMethod = HTTPMethod.post.rawValue
+        mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         mutableURLRequest.httpBody = httpBody.stringValue()?.utf8EncodedData
 
         let salt: Data = Data()
