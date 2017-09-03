@@ -255,6 +255,7 @@ extension Strings {
     public static let UnableToAddPassErrorDismiss = NSLocalizedString("AddPass.Error.Dismiss", value: "OK", comment: "Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet.")
     public static let UnableToOpenURLError = NSLocalizedString("OpenURL.Error.Message", value: "Firefox cannot open the page because it has an invalid address.", comment: "The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app.")
     public static let UnableToOpenURLErrorTitle = NSLocalizedString("OpenURL.Error.Title", value: "Cannot Open Page", comment: "Title of the message shown when the user attempts to navigate to an invalid link.")
+    public static let UnableToRetrieveFeed = NSLocalizedString("LivemarkPanel.Error.Message", value: "An error occured while retrieving the feed", comment: "Error message displayed in an alert when a Live Bookmark feed is not retrieved or parsed properly.")
 }
 
 // open in

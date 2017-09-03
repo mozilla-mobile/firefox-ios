@@ -264,7 +264,15 @@ class LivemarkPanel: UIViewController, HomePanel, UITableViewDelegate, UITableVi
     }
     
     private func handleFailure() {
-        // TODO: Display error
+        let alertController = UIAlertController(
+            title: Strings.UnableToRetrieveFeed,
+            message: "",
+            preferredStyle: UIAlertControllerStyle.alert)
+        alertController.addAction(
+            UIAlertAction(title: Strings.UnableToAddPassErrorDismiss, style: .cancel) { (action) in
+                // Do nothing.
+        })
+        UIApplication.shared.keyWindow?.rootViewController?.present(alertController, animated: true, completion: nil)
     }
     
     private func addItem(url: String, title: String, author: String?, published: Date?) {
