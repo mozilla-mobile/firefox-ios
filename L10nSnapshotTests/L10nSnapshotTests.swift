@@ -42,7 +42,7 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
         app.buttons["TabToolbar.menuButton"].tap()
         app.otherElements["MenuViewController.menuView"].swipeLeft()
         app.cells["SettingsMenuItem"].tap()
-        snapshot("04SettingsTopLevel-\(cellName)")
+        snapshot("04SettingsTopLevel")
 
         // TODO Scroll through the settings and make a screenshot of every page
 
