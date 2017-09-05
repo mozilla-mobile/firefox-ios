@@ -59,7 +59,7 @@ class RequirePasscodeIntervalViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: BasicCheckmarkCell, for: indexPath)
         let option = intervalOptions[indexPath.row]
-        let intervalTitle = NSAttributedString.tableRowTitle(option.settingTitle)
+        let intervalTitle = NSAttributedString.tableRowTitle(option.settingTitle, enabled: true)
         cell.textLabel?.attributedText = intervalTitle
         cell.accessoryType = authenticationInfo?.requiredPasscodeInterval == option ? .checkmark : .none
         return cell
