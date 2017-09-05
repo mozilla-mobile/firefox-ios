@@ -473,11 +473,14 @@ open class BrowserProfile: Profile {
     }()
 
     var accountConfiguration: FirefoxAccountConfiguration {
-        if prefs.boolForKey("useStageSyncService") ?? false {
-            return StageFirefoxAccountConfiguration()
+        if prefs.boolForKey("useCustomSyncService") ?? false {
+            return CustomFirefoxAccountConfiguration(prefs: self.prefs)
         }
         if prefs.boolForKey("useChinaSyncService") ?? isChinaEdition {
             return ChinaEditionFirefoxAccountConfiguration()
+        }
+        if prefs.boolForKey("useStageSyncService") ?? false {
+            return StageFirefoxAccountConfiguration()
         }
         return ProductionFirefoxAccountConfiguration()
     }
@@ -486,7 +489,15 @@ open class BrowserProfile: Profile {
         let key = self.name + ".account"
         self.keychain.ensureObjectItemAccessibility(.afterFirstUnlock, forKey: key)
         if let dictionary = self.keychain.object(forKey: key) as? [String: AnyObject] {
-            return FirefoxAccount.fromDictionary(dictionary)
+            let account =  FirefoxAccount.fromDictionary(dictionary)
+            
+            // Check to see if the account configuration set is a custom service
+            // and update it to use the custom servers.
+            if let configuration = account?.configuration as? CustomFirefoxAccountConfiguration {
+                account?.configuration = CustomFirefoxAccountConfiguration(prefs: self.prefs)
+            }
+            
+            return account
         }
         return nil
     }()
