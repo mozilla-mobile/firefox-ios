@@ -10,6 +10,7 @@ struct ButtonToastUX {
     static let ToastPadding = 15.0
     static let TitleSpacing = 2.0
     static let ToastButtonPadding: CGFloat = 10.0
+    static let TitleButtonPadding: CGFloat = 5.0
     static let ToastDelay = DispatchTimeInterval.milliseconds(900)
     static let ToastButtonBorderRadius: CGFloat = 5
     static let ToastButtonBorderWidth: CGFloat = 1
@@ -79,7 +80,11 @@ class ButtonToast: UIView {
         button.setTitle(buttonText, for: UIControlState())
         button.setTitleColor(self.toast.backgroundColor, for: .highlighted)
         button.titleLabel?.font = SimpleToastUX.ToastFont
-        
+        button.titleLabel?.numberOfLines = 1
+        button.titleLabel?.lineBreakMode = .byClipping
+        button.titleLabel?.adjustsFontSizeToFitWidth = true
+        button.titleLabel?.minimumScaleFactor = 0.1
+
         let recognizer = UITapGestureRecognizer(target: self, action:#selector(ButtonToast.buttonPressed(_:)))
         button.addGestureRecognizer(recognizer)
         toast.addSubview(button)
@@ -97,21 +102,23 @@ class ButtonToast: UIView {
         
         if let description = descriptionLabel {
             label.numberOfLines = 1 // if showing a description we cant wrap to the second line
+            label.lineBreakMode = .byClipping
+            label.adjustsFontSizeToFitWidth = true
             label.snp.makeConstraints { (make) in
                 make.leading.equalTo(toast).offset(ButtonToastUX.ToastPadding)
                 make.top.equalTo(toast).offset(ButtonToastUX.ToastButtonPadding)
-                make.trailing.equalTo(button.snp.leading)
+                make.trailing.equalTo(button.snp.leading).offset(-ButtonToastUX.TitleButtonPadding)
             }
             description.snp.makeConstraints { (make) in
                 make.leading.equalTo(toast).offset(ButtonToastUX.ToastPadding)
                 make.top.equalTo(label.snp.bottom).offset(ButtonToastUX.TitleSpacing)
-                make.trailing.equalTo(button.snp.leading)
+                make.trailing.equalTo(button.snp.leading).offset(-ButtonToastUX.TitleButtonPadding)
             }
         } else {
             label.snp.makeConstraints { (make) in
                 make.leading.equalTo(toast).offset(ButtonToastUX.ToastPadding)
                 make.centerY.equalTo(toast)
-                make.trailing.equalTo(button.snp.leading)
+                make.trailing.equalTo(button.snp.leading).offset(-ButtonToastUX.TitleButtonPadding)
             }
         }
         
