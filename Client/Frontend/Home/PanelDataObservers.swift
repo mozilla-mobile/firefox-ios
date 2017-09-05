@@ -33,6 +33,7 @@ open class PanelDataObservers {
 class ActivityStreamDataObserver: DataObserver {
     let profile: Profile
     weak var delegate: DataObserverDelegate?
+    private let queue: DispatchQueue = DispatchQueue(label: "com.mozilla.providers.activitystream")
     private var invalidationTime = OneMinuteInMilliseconds * 15
     private var lastInvalidation: UInt64 = 0
 
@@ -69,7 +70,7 @@ class ActivityStreamDataObserver: DataObserver {
         }
 
         self.delegate?.willInvalidateDataSources()
-        self.profile.recommendations.repopulate(invalidateTopSites: shouldInvalidateTopSites, invalidateHighlights: shouldInvalidateHighlights).uponQueue(.main) { _ in
+        self.profile.recommendations.repopulate(invalidateTopSites: shouldInvalidateTopSites, invalidateHighlights: shouldInvalidateHighlights).uponQueue(queue) { _ in
             if shouldInvalidateTopSites {
                 self.profile.prefs.setBool(true, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
             }
