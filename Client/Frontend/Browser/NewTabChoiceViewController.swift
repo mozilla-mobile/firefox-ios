@@ -64,13 +64,10 @@ class NewTabChoiceViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: BasicCheckmarkCell, for: indexPath)
 
         let option = newTabOptions[indexPath.row]
-        cell.textLabel?.attributedText = NSAttributedString.tableRowTitle(option.settingTitle)
-
-        cell.accessoryType = (currentChoice == option) ? .checkmark : .none
-
         let enabled = (option != .homePage) || hasHomePage
 
-        cell.textLabel?.textColor = enabled ? UIConstants.TableViewRowTextColor : UIConstants.TableViewDisabledRowTextColor
+        cell.accessoryType = (currentChoice == option) ? .checkmark : .none
+        cell.textLabel?.attributedText = NSAttributedString.tableRowTitle(option.settingTitle, enabled: enabled)
         cell.isUserInteractionEnabled = enabled
 
         return cell

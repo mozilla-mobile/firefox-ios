@@ -105,10 +105,8 @@ class OpenWithSettingsViewController: UITableViewController {
 
         let option = mailProviderSource[indexPath.row]
 
-        cell.textLabel?.attributedText = NSAttributedString.tableRowTitle(option.name)
+        cell.textLabel?.attributedText = NSAttributedString.tableRowTitle(option.name, enabled: option.enabled)
         cell.accessoryType = (currentChoice == option.scheme && option.enabled) ? .checkmark : .none
-
-        cell.textLabel?.textColor = option.enabled ? UIConstants.TableViewRowTextColor : UIConstants.TableViewDisabledRowTextColor
         cell.isUserInteractionEnabled = option.enabled
 
         return cell
