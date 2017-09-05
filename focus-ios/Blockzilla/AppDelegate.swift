@@ -232,7 +232,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // session. This gets called every time the app goes to background but should not get
         // called for *temporary* interruptions such as an incoming phone call until the user
         // takes action and we are officially backgrounded.
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.background, object: TelemetryEventObject.app)
+        let orientation = UIDevice.current.orientation.isPortrait ? "Portrait" : "Landscape"
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.background, object:
+            TelemetryEventObject.app, value: nil, extras: ["orientation": orientation])
         Telemetry.default.recordSessionEnd()
         
         // Add the CorePing and FocusEventPing to the queue and schedule them for upload in the
