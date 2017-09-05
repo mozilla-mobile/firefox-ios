@@ -32,7 +32,7 @@ open class FirefoxAccount {
 
     open var deviceRegistration: FxADeviceRegistration?
 
-    open let configuration: FirefoxAccountConfiguration
+    open var configuration: FirefoxAccountConfiguration
 
     open var pushRegistration: PushRegistration?
 

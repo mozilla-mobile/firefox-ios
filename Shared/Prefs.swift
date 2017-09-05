@@ -19,6 +19,13 @@ public struct PrefsKeys {
     public static let KeyMailToOption = "MailToOption"
     public static let HasFocusInstalled = "HasFocusInstalled"
     public static let HasPocketInstalled = "HasPocketInstalled"
+
+    public static let KeyUseCustomSyncService = "useCustomSyncService"
+    public static let KeyCustomSyncToken = "customSyncTokenServer"
+    public static let KeyCustomSyncProfile = "customSyncProfileServer"
+    public static let KeyCustomSyncOauth = "customSyncOauthServer"
+    public static let KeyCustomSyncAuth = "customSyncAuthServer"
+    public static let KeyCustomSyncWeb = "customSyncWebServer"
 }
 
 public struct PrefsDefaults {
