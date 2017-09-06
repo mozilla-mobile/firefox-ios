@@ -65,7 +65,6 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
     fileprivate let flowLayout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
 
     fileprivate let topSitesManager = ASHorizontalScrollCellManager()
-    fileprivate var pendingCacheUpdate = false
     fileprivate var showHighlightIntro = false
     fileprivate var sessionStart: Timestamp?
 
@@ -482,13 +481,11 @@ extension ActivityStreamPanel: DataObserverDelegate {
         }
         accumulate([self.getHighlights, self.getTopSites]).uponQueue(.main) { _ in
             // If there is no pending cache update and highlights are empty. Show the onboarding screen
-            self.showHighlightIntro = self.highlights.isEmpty && !self.pendingCacheUpdate
+            self.showHighlightIntro = self.highlights.isEmpty
             self.collectionView?.reloadData()
 
             // Refresh the AS data in the background so we'll have fresh data next time we show.
-            DispatchQueue.global().async {
-                self.profile.panelDataObservers.activityStream.refreshIfNeeded(forceHighlights: false, forceTopSites: true)
-            }
+            self.profile.panelDataObservers.activityStream.refreshIfNeeded(forceHighlights: false, forceTopSites: false)
         }
     }
 
@@ -515,7 +512,7 @@ extension ActivityStreamPanel: DataObserverDelegate {
 
     func getTopSites() -> Success {
         return self.profile.history.getTopSitesWithLimit(16).both(self.profile.history.getPinnedTopSites()).bindQueue(.main) { (topsites, pinnedSites) in
-            guard let mySites = topsites.successValue?.asArray(), let pinned = pinnedSites.successValue?.asArray(), !self.pendingCacheUpdate else {
+            guard let mySites = topsites.successValue?.asArray(), let pinned = pinnedSites.successValue?.asArray() else {
                 return succeed()
             }
 
@@ -563,13 +560,15 @@ extension ActivityStreamPanel: DataObserverDelegate {
             return succeed()
         }
     }
-    func willInvalidateDataSources() {
-        self.pendingCacheUpdate = true
-    }
 
     // Invoked by the ActivityStreamDataObserver when highlights/top sites invalidation is complete.
-    func didInvalidateDataSources() {
-        self.pendingCacheUpdate = false
+    func didInvalidateDataSources(forceHighlights highlights: Bool, forceTopSites topSites: Bool) {
+        // Do not reload panel unless we're currently showing the highlight intro or if we
+        // force-reloaded the highlights or top sites. This should prevent reloading the
+        // panel after we've invalidated in the background on the first load.
+        if showHighlightIntro || highlights || topSites {
+            reloadAll()
+        }
     }
 
     func hideURLFromTopSites(_ site: Site) {

@@ -17,9 +17,15 @@ protocol DataObserver {
     func refreshIfNeeded(forceHighlights highlights: Bool, forceTopSites topSites: Bool)
 }
 
-@objc protocol DataObserverDelegate: class {
-    func didInvalidateDataSources()
-    func willInvalidateDataSources()
+protocol DataObserverDelegate: class {
+    func didInvalidateDataSources(forceHighlights highlights: Bool, forceTopSites topSites: Bool)
+    func willInvalidateDataSources(forceHighlights highlights: Bool, forceTopSites topSites: Bool)
+}
+
+// Make these delegate methods optional by providing default implementations
+extension DataObserverDelegate {
+    func didInvalidateDataSources(forceHighlights highlights: Bool, forceTopSites topSites: Bool) {}
+    func willInvalidateDataSources(forceHighlights highlights: Bool, forceTopSites topSites: Bool) {}
 }
 
 open class PanelDataObservers {
@@ -68,13 +74,13 @@ class ActivityStreamDataObserver: DataObserver {
             return
         }
 
-        self.delegate?.willInvalidateDataSources()
+        self.delegate?.willInvalidateDataSources(forceHighlights: highlights, forceTopSites: topSites)
         self.profile.recommendations.repopulate(invalidateTopSites: shouldInvalidateTopSites, invalidateHighlights: shouldInvalidateHighlights).uponQueue(DispatchQueue.main) { _ in
             if shouldInvalidateTopSites {
                 self.profile.prefs.setBool(true, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
             }
             self.lastInvalidation = shouldInvalidateHighlights ? Timestamp.uptimeInMilliseconds() : self.lastInvalidation
-            self.delegate?.didInvalidateDataSources()
+            self.delegate?.didInvalidateDataSources(forceHighlights: highlights, forceTopSites: topSites)
         }
     }
 

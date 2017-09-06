@@ -11,11 +11,11 @@ private class MockDataObserverDelegate: DataObserverDelegate {
     var didInvalidateCount = 0
     var willInvalidateCount = 0
 
-    func didInvalidateDataSources() {
+    func didInvalidateDataSources(forceHighlights highlights: Bool, forceTopSites topSites: Bool) {
         didInvalidateCount += 1
     }
 
-    func willInvalidateDataSources() {
+    func willInvalidateDataSources(forceHighlights highlights: Bool, forceTopSites topSites: Bool) {
         willInvalidateCount += 1
     }
 }
