@@ -70,12 +70,14 @@ class ActivityStreamDataObserver: DataObserver {
         }
 
         self.delegate?.willInvalidateDataSources()
-        self.profile.recommendations.repopulate(invalidateTopSites: shouldInvalidateTopSites, invalidateHighlights: shouldInvalidateHighlights).uponQueue(queue) { _ in
-            if shouldInvalidateTopSites {
-                self.profile.prefs.setBool(true, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
+        queue.async {
+            self.profile.recommendations.repopulate(invalidateTopSites: shouldInvalidateTopSites, invalidateHighlights: shouldInvalidateHighlights).uponQueue(DispatchQueue.main) { _ in
+                if shouldInvalidateTopSites {
+                    self.profile.prefs.setBool(true, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
+                }
+                self.lastInvalidation = shouldInvalidateHighlights ? Timestamp.uptimeInMilliseconds() : self.lastInvalidation
+                self.delegate?.didInvalidateDataSources()
             }
-            self.lastInvalidation = shouldInvalidateHighlights ? Timestamp.uptimeInMilliseconds() : self.lastInvalidation
-            self.delegate?.didInvalidateDataSources()
         }
     }
 
