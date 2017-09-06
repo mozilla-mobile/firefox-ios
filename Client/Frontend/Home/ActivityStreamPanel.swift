@@ -484,6 +484,11 @@ extension ActivityStreamPanel: DataObserverDelegate {
             // If there is no pending cache update and highlights are empty. Show the onboarding screen
             self.showHighlightIntro = self.highlights.isEmpty && !self.pendingCacheUpdate
             self.collectionView?.reloadData()
+
+            // Refresh the AS data in the background so we'll have fresh data next time we show.
+            DispatchQueue.global().async {
+                self.profile.panelDataObservers.activityStream.refreshIfNeeded(forceHighlights: false, forceTopSites: true)
+            }
         }
     }
 
@@ -565,7 +570,6 @@ extension ActivityStreamPanel: DataObserverDelegate {
     // Invoked by the ActivityStreamDataObserver when highlights/top sites invalidation is complete.
     func didInvalidateDataSources() {
         self.pendingCacheUpdate = false
-        reloadAll()
     }
 
     func hideURLFromTopSites(_ site: Site) {
@@ -741,7 +745,7 @@ extension ActivityStreamPanel: HomePanelContextMenu {
         } else {
             bookmarkAction = PhotonActionSheetItem(title: Strings.BookmarkContextMenuTitle, iconString: "action_bookmark", handler: { action in
                 let shareItem = ShareItem(url: site.url, title: site.title, favicon: site.icon)
-                self.profile.bookmarks.shareItem(shareItem)
+                _ = self.profile.bookmarks.shareItem(shareItem)
                 var userData = [QuickActions.TabURLKey: shareItem.url]
                 if let title = shareItem.title {
                     userData[QuickActions.TabTitleKey] = title
