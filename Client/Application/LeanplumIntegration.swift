@@ -111,7 +111,7 @@ class LeanplumIntegration {
 
         // Temporary for testing the st3fan/Bug1396964UsePatchesLeanplum branch
         Leanplum.setDeviceId(UIDevice.current.identifierForVendor?.uuidString)
-        Leanplum.setAppId("app_MUd3n2yw07Lg5hy0f8hRXuj1jI5ml17ww3haFrbKUBw", withDevelopmentKey: "dev_CqOHfdrK6vLrq09CTxKdeOTTGFohQaZvVuym91HYIJg")
+        Leanplum.setAppId("app_fvwKgDvOrCSghqxRjV1tVN0VAIWtcLXrKAwSId2A3Dc", withDevelopmentKey: "dev_0MoIyscFRfEWYxvMs3D1t0Lf17FsJ1Bju0e4WUrdEHA")
 
         Leanplum.syncResourcesAsync(true)
 
