@@ -89,6 +89,11 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         loadData()
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        refreshControl?.removeTarget(self, action: #selector(BookmarksPanel.refreshBookmarks), for: .valueChanged)
+    }
+    
     func loadData() {
         // If we've not already set a source for this panel, fetch a new model from
         // the root; otherwise, just use the existing source to select a folder.
