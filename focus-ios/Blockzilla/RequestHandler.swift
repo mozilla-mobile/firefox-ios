@@ -23,6 +23,9 @@ class RequestHandler {
             let title = components.path
 
             switch scheme {
+            case "tel":
+                // Don't present our dialog as the system presents its own
+                UIApplication.shared.openURL(url)
             case "facetime", "facetime-audio":
                 let alert = RequestHandler.makeAlert(title: title, action: "FaceTime", forURL: url)
                 alertCallback(alert)
