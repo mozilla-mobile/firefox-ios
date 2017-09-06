@@ -384,10 +384,26 @@ class TabManager: NSObject {
 
         let viableTabs: [Tab] = tab.isPrivate ? privateTabs : normalTabs
 
-        //If the last item was deleted then select the last tab. Otherwise the _selectedIndex is already correct
+        // Let's select the tab to be selected next.
         if let oldTab = oldSelectedTab, tab !== oldTab {
+            // If it wasn't the selected tab we removed, then keep it like that.
+            // It might have changed index, so we look it up again.
             _selectedIndex = tabs.index(of: oldTab) ?? -1
+        } else if let newTab = viableTabs.reduce(viableTabs.first, { currentBestTab, tab2 in
+            if let tab1 = currentBestTab, let time1 = tab1.lastExecutedTime {
+                if let time2 = tab2.lastExecutedTime {
+                    return time1 <= time2 ? tab2 : tab1
+                }
+                return tab1
+            } else {
+                return tab2
+            }
+        }), tab !== newTab, newTab.lastExecutedTime != nil {
+            // Next we look for the most recently loaded one. It might not exist, of course.
+            _selectedIndex = tabs.index(of: newTab) ?? -1
         } else {
+            // By now, we've just removed the selected one, and no previously loaded
+            // tabs. So let's load the final one in the tab tray.
             if tabIndex == viableTabs.count {
                 tabIndex -= 1
             }

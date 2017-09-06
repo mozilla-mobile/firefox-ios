@@ -272,6 +272,46 @@ class TabManagerTests: XCTestCase {
         delegate.verify("Not all delegate methods were called")
     }
 
+    func testDeleteSelectedTab() {
+        let profile = TabManagerMockProfile()
+        let manager = TabManager(prefs: profile.prefs, imageStore: nil)
+        let delegate = MockTabManagerDelegate()
+
+        func addTab(_ load: Bool) -> Tab {
+            let tab = manager.addTab()
+            if load {
+                tab.lastExecutedTime = Date.now()
+            }
+            return tab
+        }
+
+        let tab0 = addTab(false) // not loaded
+        let tab1 = addTab(true)
+        let tab2 = addTab(true)
+        let tab3 = addTab(false) // not loaded
+        let tab4 = addTab(true)
+
+        // starting at tab2, we should be selecting
+        // [ tab4, tab1, tab3, tab0 ]
+
+        manager.selectTab(tab2)
+        manager.removeTab(manager.selectedTab!)
+        // Rule: most recently loaded.
+        XCTAssertEqual(manager.selectedTab, tab4)
+
+        manager.removeTab(manager.selectedTab!)
+        // Rule: most recently loaded.
+        XCTAssertEqual(manager.selectedTab, tab1)
+
+        manager.removeTab(manager.selectedTab!)
+        // Rule: next to the right.
+        XCTAssertEqual(manager.selectedTab, tab3)
+
+        manager.removeTab(manager.selectedTab!)
+        // Rule: last one left.
+        XCTAssertEqual(manager.selectedTab, tab0)
+    }
+
     func testDeleteLastTab() {
         let profile = TabManagerMockProfile()
         let manager = TabManager(prefs: profile.prefs, imageStore: nil)
