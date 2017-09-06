@@ -13,16 +13,6 @@ private let log = Logger.syncLogger
 
 public typealias Args = [Any?]
 
-protocol Changeable {
-    func run(_ sql: String, withArgs args: Args?) -> Success
-    func run(_ commands: [String]) -> Success
-    func run(_ commands: [(sql: String, args: Args?)]) -> Success
-}
-
-protocol Queryable {
-    func runQuery<T>(_ sql: String, args: Args?, factory: @escaping (SDRow) -> T) -> Deferred<Maybe<Cursor<T>>>
-}
-
 open class BrowserDB {
     fileprivate let db: SwiftData
 
@@ -198,9 +188,7 @@ open class BrowserDB {
     public func reopenIfClosed() {
         db.reopenIfClosed()
     }
-}
 
-extension BrowserDB: Changeable {
     func run(_ sql: String, withArgs args: Args? = nil) -> Success {
         return run([(sql, args)])
     }
@@ -237,9 +225,31 @@ extension BrowserDB: Changeable {
 
         return succeed()
     }
-}
 
-extension BrowserDB: Queryable {
+    func runAsync(_ commands: [(sql: String, args: Args?)]) -> Success {
+        if commands.isEmpty {
+            return succeed()
+        }
+
+        let deferred = Success()
+
+        var error: NSError?
+        error = self.transaction(synchronous: false, err: &error) { (conn, err) -> Bool in
+            for (sql, args) in commands {
+                err = conn.executeChange(sql, withArgs: args)
+                if let err = err {
+                    deferred.fill(Maybe(failure: DatabaseError(err: err)))
+                    return false
+                }
+            }
+
+            deferred.fill(Maybe(success: ()))
+            return true
+        }
+
+        return deferred
+    }
+
     func runQuery<T>(_ sql: String, args: Args?, factory: @escaping (SDRow) -> T) -> Deferred<Maybe<Cursor<T>>> {
         return runWithConnection { (connection, _) -> Cursor<T> in
             return connection.executeQuery(sql, factory: factory, withArgs: args)
