@@ -150,6 +150,11 @@ class FxALoginHelper {
         }
         accountVerified = data["verified"].bool ?? false
         self.account = account
+        
+        if AppConstants.MOZ_SHOW_FXA_AVATAR {
+            account.updateProfile()
+        }
+        
         requestUserNotifications(application)
     }
 

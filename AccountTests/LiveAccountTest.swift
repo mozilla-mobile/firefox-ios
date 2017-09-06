@@ -63,6 +63,12 @@ open class LiveAccountTest: XCTestCase {
     func withVerifiedAccount(_ completion: (Data, Data) -> Void) {
         withExistingAccount(true, completion: completion)
     }
+    
+    // Helper function that waits for expectations to clear
+    func withVerifiedAccountNoExpectations(_ completion: (Data, Data) -> Void) {
+        withExistingAccount(true, completion: completion)
+        self.waitForExpectations(timeout: 10, handler: nil)
+    }
 
     func withCertificate(_ completion: @escaping (XCTestExpectation, Data, KeyPair, String) -> Void) {
         withVerifiedAccount { emailUTF8, quickStretchedPW in
@@ -108,7 +114,7 @@ open class LiveAccountTest: XCTestCase {
 
     // Internal helper.
     func account(_ email: String, password: String, configuration: FirefoxAccountConfiguration) -> Deferred<Maybe<FirefoxAccount>> {
-        let client = FxAClient10(endpoint: configuration.authEndpointURL)
+        let client = FxAClient10(authEndpoint: configuration.authEndpointURL)
         let emailUTF8 = email.utf8EncodedData
         let passwordUTF8 = password.utf8EncodedData
         let quickStretchedPW = FxAClient10.quickStretchPW(emailUTF8, password: passwordUTF8)

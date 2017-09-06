@@ -22,6 +22,12 @@ class AppSettingsTableViewController: SettingsTableViewController {
         navigationItem.leftBarButtonItem?.accessibilityIdentifier = "AppSettingsTableViewController.navigationItem.leftBarButtonItem"
 
         tableView.accessibilityIdentifier = "AppSettingsTableViewController.tableView"
+        
+        // Refresh the user's FxA profile upon viewing settings. This will update their avatar,
+        // display name, etc.
+        if AppConstants.MOZ_SHOW_FXA_AVATAR {
+            profile.getAccount()?.updateProfile()
+        }
     }
 
     override func generateSettings() -> [SettingSection] {
@@ -72,9 +78,14 @@ class AppSettingsTableViewController: SettingsTableViewController {
                         titleText: Strings.SettingsOfferClipboardBarTitle,
                         statusText: Strings.SettingsOfferClipboardBarStatus)
         ]
-
+        
+        var accountSectionTitle: NSAttributedString?
+        if AppConstants.MOZ_SHOW_FXA_AVATAR {
+            accountSectionTitle = NSAttributedString(string: Strings.FxAFirefoxAccount)
+        }
+        
         settings += [
-            SettingSection(title: nil, children: [
+            SettingSection(title: accountSectionTitle, children: [
                 // Without a Firefox Account:
                 ConnectSetting(settings: self),
                 AdvanceAccountSetting(settings: self),
@@ -84,7 +95,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
             ] + accountChinaSyncSetting + accountDebugSettings)]
 
         if !profile.hasAccount() {
-            settings += [SettingSection(title: NSAttributedString(string: NSLocalizedString("Sign in to get your tabs, bookmarks, and passwords from your other devices.", comment: "Clarify value prop under Sign In to Firefox in Settings.")), children: [])]
+            settings += [SettingSection(title: NSAttributedString(string: Strings.FxASyncUsageDetails), children: [])]
         }
 
         settings += [ SettingSection(title: NSAttributedString(string: NSLocalizedString("General", comment: "General settings section title")), children: generalSettings)]

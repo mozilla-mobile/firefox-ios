@@ -92,7 +92,7 @@ open class FxADeviceRegistrator {
             pushParams = nil
         }
 
-        let client = client ?? FxAClient10(endpoint: account.configuration.authEndpointURL)
+        let client = client ?? FxAClient10(authEndpoint: account.configuration.authEndpointURL, oauthEndpoint: account.configuration.oauthEndpointURL, profileEndpoint: account.configuration.profileEndpointURL)
         let name = DeviceInfo.defaultClientName()
         let device: FxADevice
         let registrationResult: FxADeviceRegistrationResult

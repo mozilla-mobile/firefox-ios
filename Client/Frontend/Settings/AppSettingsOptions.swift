@@ -32,16 +32,27 @@ class ConnectSetting: WithoutAccountSetting {
     override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Sign In to Firefox", comment: "Text message / button in the settings table view"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
+        return NSAttributedString(string: Strings.FxASignIntoSync, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
     }
 
-    override var accessibilityIdentifier: String? { return "SignInToFirefox" }
+    override var accessibilityIdentifier: String? { return "SignInToSync" }
 
     override func onClick(_ navigationController: UINavigationController?) {
         let viewController = FxAContentViewController(profile: profile)
         viewController.delegate = self
         viewController.url = settings.profile.accountConfiguration.signInURL
         navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    override func onConfigureCell(_ cell: UITableViewCell) {
+        super.onConfigureCell(cell)
+        
+        if AppConstants.MOZ_SHOW_FXA_AVATAR {
+            let image = UIImage(named: "FxA-Default")
+            cell.imageView?.image = image?.createScaled(CGSize(width: 30, height: 30))
+            cell.imageView?.layer.cornerRadius = (cell.imageView?.frame.size.width)! / 2
+            cell.imageView?.layer.masksToBounds = true
+        }
     }
 }
 
@@ -79,7 +90,11 @@ class DisconnectSetting: WithAccountSetting {
 
 class SyncNowSetting: WithAccountSetting {
     static let NotificationUserInitiatedSyncManually = "NotificationUserInitiatedSyncManually"
-
+    let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
+    
+    // Animation used to rotate the Sync icon 360 degrees while syncing is in progress.
+    let continuousRotateAnimation = CABasicAnimation(keyPath: "transform.rotation")
+    
     fileprivate lazy var timestampFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -90,17 +105,45 @@ class SyncNowSetting: WithAccountSetting {
         return NSAttributedString(
             string: NSLocalizedString("Sync Now", comment: "Sync Firefox Account"),
             attributes: [
-                NSForegroundColorAttributeName: self.enabled ? UIColor.black : UIColor.gray,
+                NSForegroundColorAttributeName: self.enabled ? UIConstants.TableViewRowSyncTextColor : UIColor.gray,
                 NSFontAttributeName: DynamicFontHelper.defaultHelper.DefaultStandardFont
             ]
         )
     }
 
-    fileprivate let syncingTitle = NSAttributedString(string: Strings.SyncingMessageWithEllipsis, attributes: [NSForegroundColorAttributeName: UIColor.gray, NSFontAttributeName: UIFont.systemFont(ofSize: DynamicFontHelper.defaultHelper.DefaultStandardFontSize, weight: UIFontWeightRegular)])
+    fileprivate let syncingTitle = NSAttributedString(string: Strings.SyncingMessageWithEllipsis, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowSyncTextColor, NSFontAttributeName: UIFont.systemFont(ofSize: DynamicFontHelper.defaultHelper.DefaultStandardFontSize, weight: UIFontWeightRegular)])
+    
+    func startRotateSyncIcon() {
+        imageView.layer.add(continuousRotateAnimation, forKey: nil)
+    }
+    
+    func stopRotateSyncIcon() {
+        self.imageView.layer.removeAllAnimations()
+    }
 
     override var accessoryType: UITableViewCellAccessoryType { return .none }
 
     override var style: UITableViewCellStyle { return .value1 }
+    
+    override var image: UIImage? {
+        if !AppConstants.MOZ_SHOW_FXA_AVATAR {
+            return nil
+        }
+        
+        let image = UIImage(named: "FxA-Sync")?.createScaled(CGSize(width: 20, height: 20))
+        guard let syncStatus = profile.syncManager.syncDisplayState else {
+            return image
+        }
+        
+        switch syncStatus {
+        case .inProgress:
+            self.startRotateSyncIcon()
+            return UIImage(named: "FxA-Sync-Blue")?.createScaled(CGSize(width: 20, height: 20))
+        default:
+            self.stopRotateSyncIcon()
+            return image
+        }
+    }
 
     override var title: NSAttributedString? {
         guard let syncStatus = profile.syncManager.syncDisplayState else {
@@ -201,6 +244,22 @@ class SyncNowSetting: WithAccountSetting {
         }
         cell.accessoryType = accessoryType
         cell.isUserInteractionEnabled = !profile.syncManager.isSyncing
+        
+        if AppConstants.MOZ_SHOW_FXA_AVATAR {
+            // Animation that loops continously until stopped
+            continuousRotateAnimation.fromValue = 0.0
+            continuousRotateAnimation.toValue = CGFloat(Double.pi)
+            continuousRotateAnimation.isRemovedOnCompletion = true
+            continuousRotateAnimation.duration = 0.5
+            continuousRotateAnimation.repeatCount = Float.infinity
+            
+            // To ensure sync icon is aligned properly with user's avatar, an image is created with proper
+            // dimensions and color, then the scaled sync icon is added as a subview.
+            imageView.contentMode = .center
+            imageView.image = image
+            cell.imageView?.image = UIImage.createWithColor(CGSize(width: 30, height: 30), color: UIColor.clear)
+            cell.imageView?.addSubview(imageView)
+        }
     }
 
     fileprivate func addIcon(_ image: UIImageView, toCell cell: UITableViewCell) {
@@ -226,6 +285,35 @@ class SyncNowSetting: WithAccountSetting {
 
 // Sync setting that shows the current Firefox Account status.
 class AccountStatusSetting: WithAccountSetting {
+    override init(settings: SettingsTableViewController) {
+        super.init(settings: settings)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(AccountStatusSetting.updateAccount(notification:)), name: NotificationFirefoxAccountProfileChanged, object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: NotificationFirefoxAccountProfileChanged, object: nil)
+    }
+    
+    func updateAccount(notification: Notification) {
+        DispatchQueue.main.async {
+            self.settings.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.automatic)
+        }
+    }
+    
+    override var image: UIImage? {
+        if !AppConstants.MOZ_SHOW_FXA_AVATAR {
+            return nil
+        }
+        
+        if let image = profile.getAccount()?.fxaProfile?.avatar.image {
+            return image.createScaled(CGSize(width: 30, height: 30))
+        }
+        
+        let image = UIImage(named: "placeholder-avatar")
+        return image?.createScaled(CGSize(width: 30, height: 30))
+    }
+    
     override var accessoryType: UITableViewCellAccessoryType {
         if let account = profile.getAccount() {
             switch account.actionNeeded {
@@ -236,10 +324,10 @@ class AccountStatusSetting: WithAccountSetting {
                  // We link to the re-enter password page.
                 return .disclosureIndicator
             case .none:
-                 // We link to FxA web /settings.
+                // We link to FxA web /settings.
                 return .disclosureIndicator
             case .needsUpgrade:
-                 // In future, we'll want to link to an upgrade page.
+                // In future, we'll want to link to an upgrade page.
                 return .none
             }
         }
@@ -248,7 +336,16 @@ class AccountStatusSetting: WithAccountSetting {
 
     override var title: NSAttributedString? {
         if let account = profile.getAccount() {
-            return NSAttributedString(string: account.email, attributes: [NSFontAttributeName: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
+            
+            if let displayName = account.fxaProfile?.displayName {
+                return NSAttributedString(string: displayName, attributes: [NSFontAttributeName: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSForegroundColorAttributeName: UIConstants.TableViewRowSyncTextColor])
+            }
+            
+            if let email = account.fxaProfile?.email {
+                return NSAttributedString(string: email, attributes: [NSFontAttributeName: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSForegroundColorAttributeName: UIConstants.TableViewRowSyncTextColor])
+            }
+            
+            return NSAttributedString(string: account.email, attributes: [NSFontAttributeName: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSForegroundColorAttributeName: UIConstants.TableViewRowSyncTextColor])
         }
         return nil
     }
@@ -290,15 +387,12 @@ class AccountStatusSetting: WithAccountSetting {
             case .none, .needsVerification:
                 var cs = URLComponents(url: account.configuration.settingsURL, resolvingAgainstBaseURL: false)
                 cs?.queryItems?.append(URLQueryItem(name: "email", value: account.email))
-                
                 if let url = try? cs?.asURL() {
                     viewController.url = url
                 }
-                
             case .needsPassword:
                 var cs = URLComponents(url: account.configuration.forceAuthURL, resolvingAgainstBaseURL: false)
                 cs?.queryItems?.append(URLQueryItem(name: "email", value: account.email))
-                
                 if let url = try? cs?.asURL() {
                     viewController.url = url
                 }
@@ -308,6 +402,17 @@ class AccountStatusSetting: WithAccountSetting {
             }
         }
         navigationController?.pushViewController(viewController, animated: true)
+    }
+
+    override func onConfigureCell(_ cell: UITableViewCell) {
+        super.onConfigureCell(cell)
+        
+        if AppConstants.MOZ_SHOW_FXA_AVATAR {
+            cell.imageView?.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+            cell.imageView?.layer.cornerRadius = (cell.imageView?.frame.height)! / 2
+            cell.imageView?.layer.masksToBounds = true
+            cell.imageView?.image = image
+        }
     }
 }
 
@@ -711,7 +816,6 @@ class TouchIDPasscodeSetting: Setting {
         navigationController?.pushViewController(viewController, animated: true)
     }
 }
-
 
 @available(iOS 11, *)
 class ContentBlockerSetting: Setting {

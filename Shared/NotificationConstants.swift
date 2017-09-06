@@ -7,6 +7,8 @@ public let NotificationDataLoginDidChange = Notification.Name("Data:Login:DidCha
 // add a property to allow the observation of firefox accounts
 public let NotificationFirefoxAccountChanged = Notification.Name("FirefoxAccountChangedNotification")
 
+public let NotificationFirefoxAccountProfileChanged = Notification.Name("NotificationFirefoxAccountProfileChanged")
+
 public let NotificationFirefoxAccountDeviceRegistrationUpdated = Notification.Name("FirefoxAccountDeviceRegistrationUpdated")
 
 public let NotificationPrivateDataClearedHistory = Notification.Name("PrivateDataClearedHistoryNotification")

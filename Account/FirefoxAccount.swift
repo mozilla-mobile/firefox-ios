@@ -7,6 +7,8 @@ import Shared
 import XCGLogger
 import Deferred
 import SwiftyJSON
+import FxA
+import WebImage
 
 private let log = Logger.syncLogger
 
@@ -30,6 +32,8 @@ open class FirefoxAccount {
     /// particular server (auth endpoint) by its assigned uid.
     open let uid: String
 
+    open var fxaProfile: FxAProfile?
+    
     open var deviceRegistration: FxADeviceRegistration?
 
     open var configuration: FirefoxAccountConfiguration
@@ -62,6 +66,7 @@ open class FirefoxAccount {
         self.configuration = configuration
         self.stateCache = stateCache
         self.stateCache.checkpoint()
+        self.fxaProfile = nil
         self.syncAuthState = FirefoxAccountSyncAuthState(account: self,
             cache: KeychainCache.fromBranch("account.syncAuthState", withLabel: self.stateCache.label, factory: syncAuthStateCachefromJSON))
     }
@@ -190,13 +195,100 @@ open class FirefoxAccount {
             return "Not in a Token State: \(state?.label.rawValue ?? "Empty State")"
         }
     }
-
+    
+    public class FxAProfile {
+        open var displayName: String?
+        open let email: String
+        open let avatar: Avatar
+        
+        init(email: String, displayName: String?, avatar: String?) {
+            self.email = email
+            self.displayName = displayName
+            self.avatar = Avatar(url: avatar?.asURL)
+        }
+        
+        enum ImageDownloadState {
+            case notStarted
+            case started
+            case failedCanRetry
+            case failedCanNotRetry
+            case succeededMalformed
+            case succeeded
+        }
+        
+        open class Avatar {
+            open var image: UIImage?
+            open let url: URL?
+            var currentImageState: ImageDownloadState = ImageDownloadState.notStarted
+            
+            init(url: URL?) {
+                self.image = UIImage(named: "placeholder-avatar")
+                self.url = url
+                self.updateAvatarImageState()
+            }
+            
+            func updateAvatarImageState() {
+                switch currentImageState {
+                case .notStarted:
+                    self.currentImageState = ImageDownloadState.started
+                    self.downloadAvatar()
+                    break
+                case .failedCanRetry:
+                    self.downloadAvatar()
+                    break
+                default:
+                    break
+                }
+            }
+            
+            func downloadAvatar() {
+                SDWebImageManager.shared().downloadImage(with: url, options: [SDWebImageOptions.continueInBackground, SDWebImageOptions.lowPriority], progress: nil) { (image, error, cacheType, success, url) in
+                    if let error = error {
+                        if (error as NSError).code == 404 || self.currentImageState == ImageDownloadState.failedCanRetry {
+                            // Image is not found or failed to download a second time
+                            self.currentImageState = ImageDownloadState.failedCanNotRetry
+                        } else {
+                            // This could have been a transient error, attempt to download the image only once more
+                            self.currentImageState = ImageDownloadState.failedCanRetry
+                            self.updateAvatarImageState()
+                        }
+                        return
+                    }
+                    
+                    if success == true && image == nil {
+                        self.currentImageState = ImageDownloadState.succeededMalformed
+                        return
+                    }
+                    
+                    self.image = image
+                    self.currentImageState = ImageDownloadState.succeeded
+                    NotificationCenter.default.post(name: NotificationFirefoxAccountProfileChanged, object: self)
+                }
+            }
+        }
+    }
+    
+    // Fetch current user's FxA profile. It contains the most updated email, displayName and avatar. This
+    // emits two `NotificationFirefoxAccountProfileChanged`, once when the profile has been downloaded and
+    // another when the avatar image has been downloaded.
+    open func updateProfile() {
+        guard let session = stateCache.value as? TokenState else {
+            return
+        }
+        
+        let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL, oauthEndpoint: self.configuration.oauthEndpointURL, profileEndpoint: self.configuration.profileEndpointURL)
+        client.getProfile(withSessionToken: session.sessionToken as NSData) >>== { result in
+            self.fxaProfile = FxAProfile(email: result.email, displayName: result.displayName, avatar: result.avatarURL)
+            NotificationCenter.default.post(name: NotificationFirefoxAccountProfileChanged, object: self)
+        }
+    }
+    
     // Fetch the devices list from FxA then replace the current stored remote devices.
     open func updateFxADevices(remoteDevices: RemoteDevices) -> Success {
         guard let session = stateCache.value as? TokenState else {
             return deferMaybe(NotATokenStateError(state: stateCache.value))
         }
-        let client = FxAClient10(endpoint: self.configuration.authEndpointURL)
+        let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL)
         return client.devices(withSessionToken: session.sessionToken as NSData) >>== { resp in
             return remoteDevices.replaceRemoteDevices(resp.devices)
         }
@@ -210,7 +302,7 @@ open class FirefoxAccount {
         guard let session = stateCache.value as? TokenState else {
             return deferMaybe(NotATokenStateError(state: stateCache.value))
         }
-        let client = FxAClient10(endpoint: self.configuration.authEndpointURL)
+        let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL)
         return client.notify(deviceIDs: deviceIDs, collectionsChanged: collections, withSessionToken: session.sessionToken as NSData) >>== { resp in
             guard resp.success else {
                 return deferMaybe(NotifyError())
@@ -226,7 +318,7 @@ open class FirefoxAccount {
         guard let ownDeviceId = self.deviceRegistration?.id else {
             return deferMaybe(FxAClientError.local(NSError()))
         }
-        let client = FxAClient10(endpoint: self.configuration.authEndpointURL)
+        let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL)
         return client.notifyAll(ownDeviceId: ownDeviceId, collectionsChanged: collections, withSessionToken: session.sessionToken as NSData) >>== { resp in
             guard resp.success else {
                 return deferMaybe(NotifyError())
@@ -257,7 +349,7 @@ open class FirefoxAccount {
         }
 
         let deferred: Deferred<FxAState> = registration.bind { _ in
-            let client = FxAClient10(endpoint: self.configuration.authEndpointURL)
+            let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL, oauthEndpoint: self.configuration.oauthEndpointURL, profileEndpoint: self.configuration.profileEndpointURL)
             let stateMachine = FxALoginStateMachine(client: client)
             let now = Date.now()
             return stateMachine.advance(fromState: cachedState, now: now).map { newState in

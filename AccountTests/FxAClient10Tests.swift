@@ -151,4 +151,15 @@ class FxAClient10Tests: LiveAccountTest {
         }
         self.waitForExpectations(timeout: 10, handler: nil)
     }
+    
+    func testProfileSuccess() {
+        withVerifiedAccountNoExpectations { emailUTF8, quickStretchedPW in
+            let stageConfiguration = StageFirefoxAccountConfiguration()
+            let client = FxAClient10(authEndpoint: stageConfiguration.authEndpointURL, oauthEndpoint: stageConfiguration.oauthEndpointURL, profileEndpoint: stageConfiguration.profileEndpointURL)
+            let response = (client.login(emailUTF8, quickStretchedPW: quickStretchedPW, getKeys: true) >>== { login in
+                return client.getProfile(withSessionToken: login.sessionToken as NSData)
+            }).value.successValue
+            XCTAssertNotNil(response?.uid)
+        }
+    }
 }
