@@ -22,8 +22,7 @@ class CollapsedURLTest: BaseTestCase {
         // Go to mozilla.org
         let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
         let label = app.textFields["Search or enter address"]
-        searchOrEnterAddressTextField.typeText("https://www.mozilla.org")
-        app.typeText("\n")
+        searchOrEnterAddressTextField.typeText("https://www.mozilla.org\n")
         
         // Swipe up to show the collapsed URL view
         waitForValueContains(element: label, value: "https://www.mozilla.org/en-US/")
@@ -37,6 +36,7 @@ class CollapsedURLTest: BaseTestCase {
         XCTAssertEqual(collapsedTruncatedurltextTextView.value as? String, "www.mozilla.org")
         
         // After swiping down, the collapsed URL should not be displayed
+        webView.swipeDown()
         webView.swipeDown()
         waitforNoExistence(element: collapsedLockIcon)
         XCTAssertFalse(collapsedLockIcon.exists)

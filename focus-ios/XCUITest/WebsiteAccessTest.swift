@@ -31,7 +31,11 @@ class WebsiteAccessTests: BaseTestCase {
         searchOrEnterAddressTextField.typeText("mozilla")
         waitForValueMatch(element: label, value: "mozilla.org/")
         waitforExistence(element: app.buttons["Search for mozilla"])
-        app.typeText("\n")
+        
+        // BB CI seems to hang intermittently where http to https redirection occurs.
+        // Providing straight URL to avoid the error
+        app.buttons["icon clear"].tap()
+        searchOrEnterAddressTextField.typeText("https://www.mozilla.org\n")
         
         // Check the correct site is reached
         waitForValueContains(element: label, value: "https://www.mozilla.org/en-US/")
