@@ -13,6 +13,7 @@ var touchDownX = 0;
 var touchDownY = 0;
 var highlightDiv = null;
 var touchHandled = false;
+var element = null;
 
 function cancel() {
   if (longPressTimeout) {
@@ -77,17 +78,30 @@ function handleTouchMove(event) {
 function handleTouchEnd(event) {
   cancel();
 
-  removeEventListener("touchend", handleTouchEnd);
-  removeEventListener("touchmove", handleTouchMove);
+  window.removeEventListener("touchend", handleTouchEnd);
+  window.removeEventListener("touchmove", handleTouchMove);
+
+  setTimeout(function() {
+    if (element) {
+      element.removeEventListener("click", handleClick, true);
+    }
+  });
 
   // If we're showing the context menu, prevent the page from handling the click event.
   if (touchHandled) {
     touchHandled = false;
     event.preventDefault();
+    event.stopPropagation();
   }
 }
 
-addEventListener("touchstart", function (event) {
+function handleClick(event) {
+  this.removeEventListener("click", handleClick, true);
+  event.preventDefault();
+  event.stopPropagation();
+}
+
+window.addEventListener("touchstart", function(event) {
   setTimeout(function() {
     // Don't show the context menu if another event listener has already
     // prevented the default behavior or if more than one touch is present.
@@ -97,50 +111,52 @@ addEventListener("touchstart", function (event) {
     }
 
     var data = {};
-    var element = event.target;
-    var style = getComputedStyle(element);
 
     // Don't show the context menu if this element is has the
     // -webkit-touch-callout: none CSS property applied.
+    var style = getComputedStyle(event.target);
     if (style.webkitTouchCallout === "none") {
       cancel();
       return;
     }
 
-    // Listen for touchend or move events to cancel the context menu timeout.
-    element.addEventListener("touchend", handleTouchEnd);
-    element.addEventListener("touchmove", handleTouchMove);
+    element = event.target.closest("a");
+    if (element) {
+      data.link = element.href;
 
-    do {
-      if (!data.link && element.localName === "a") {
-        data.link = element.href;
+      // The web view still shows the tap highlight after clicking an element,
+      // so add a delay before showing the long press highlight to avoid
+      // the highlight flashing twice.
+      setTimeout(function() {
+        if (longPressTimeout) {
+          createHighlightOverlay(element);
+        }
+      }, 100);
 
-        // The web view still shows the tap highlight after clicking an element,
-        // so add a delay before showing the long press highlight to avoid
-        // the highlight flashing twice.
-        var linkElement = element;
-        setTimeout(function () {
-          if (longPressTimeout) {
-            createHighlightOverlay(linkElement);
-          }
-        }, 100);
-      }
+      // Listen for touchend or move events to cancel the context menu timeout.
+      window.addEventListener("touchend", handleTouchEnd);
+      window.addEventListener("touchmove", handleTouchMove);
 
-      if (!data.image && element.localName === "img") {
-        data.image = element.src;
-      }
+      // Clear any old click handlers in case this is the start of an ordinary click.
+      element.removeEventListener("click", handleClick, true);
+    }
 
-      element = element.parentElement;
-    } while (element);
+    var image = event.target.closest("img");
+    if (image) {
+      data.image = image.src;
+    }
 
-    if (data.link || data.image) {
+    if (element || image) {
       var touch = event.touches[0];
       touchDownX = touch.screenX;
       touchDownY = touch.screenY;
 
-      longPressTimeout = setTimeout(function () {
+      longPressTimeout = setTimeout(function() {
         touchHandled = true;
         cancel();
+        if (element) {
+          element.addEventListener("click", handleClick, true);
+        }
         webkit.messageHandlers.contextMenuMessageHandler.postMessage(data);
       }, 500);
 
