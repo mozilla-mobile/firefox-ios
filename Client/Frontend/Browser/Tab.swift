@@ -159,12 +159,6 @@ class Tab: NSObject {
             webView.delegate = self
             configuration = nil
 
-            for view in webView.scrollView.subviews {
-                if let clazz = NSClassFromString("WKContentView"), type(of: view) == clazz {
-                    print("Found a WKContentView at \(view)")
-                }
-            }
-
             if let clazz = NSClassFromString("WKContentView"), let swizzledMethod = class_getInstanceMethod(TabWebView.self, "swizzledMenuHelperFindInPage") {
                 class_addMethod(clazz, "menuHelperFindInPage", method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod))
             }
