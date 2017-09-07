@@ -109,15 +109,10 @@ class LeanplumIntegration {
             return
         }
 
-        switch settings.environment {
-        case .development:
-            log.info("LeanplumIntegration - Setting up for Development")
-            Leanplum.setDeviceId(UIDevice.current.identifierForVendor?.uuidString)
-            Leanplum.setAppId(settings.appId, withDevelopmentKey: settings.key)
-        case .production:
-            log.info("LeanplumIntegration - Setting up for Production")
-            Leanplum.setAppId(settings.appId, withProductionKey: settings.key)
-        }
+        // Temporary for testing the st3fan/Bug1396964UsePatchesLeanplum branch
+        Leanplum.setDeviceId(UIDevice.current.identifierForVendor?.uuidString)
+        Leanplum.setAppId("app_fvwKgDvOrCSghqxRjV1tVN0VAIWtcLXrKAwSId2A3Dc", withDevelopmentKey: "dev_0MoIyscFRfEWYxvMs3D1t0Lf17FsJ1Bju0e4WUrdEHA")
+
         Leanplum.syncResourcesAsync(true)
 
         if profile?.prefs.boolForKey(PrefsKeys.HasFocusInstalled) == nil {
