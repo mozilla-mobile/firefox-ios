@@ -159,6 +159,16 @@ class Tab: NSObject {
             webView.delegate = self
             configuration = nil
 
+            for view in webView.scrollView.subviews {
+                if let clazz = NSClassFromString("WKContentView"), type(of: view) == clazz {
+                    print("Found a WKContentView at \(view)")
+                }
+            }
+
+            if let clazz = NSClassFromString("WKContentView"), let swizzledMethod = class_getInstanceMethod(TabWebView.self, "swizzledMenuHelperFindInPage") {
+                class_addMethod(clazz, "menuHelperFindInPage", method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod))
+            }
+
             webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
             webView.allowsBackForwardNavigationGestures = true
             webView.backgroundColor = UIColor.lightGray
@@ -524,6 +534,15 @@ private class TabWebView: WKWebView, MenuHelperInterface {
         evaluateJavaScript("getSelection().toString()") { result, _ in
             let selection = result as? String ?? ""
             self.delegate?.tabWebView(self, didSelectFindInPageForSelection: selection)
+        }
+    }
+
+    @objc func swizzledMenuHelperFindInPage() {
+        if let tabWebView = superview?.superview as? TabWebView {
+            tabWebView.evaluateJavaScript("getSelection().toString()") { result, _ in
+                let selection = result as? String ?? ""
+                tabWebView.delegate?.tabWebView(tabWebView, didSelectFindInPageForSelection: selection)
+            }
         }
     }
 
