@@ -455,6 +455,7 @@ extension BrowserViewController: BrowserDelegate {
         urlBar.isLoading = false
         browserToolbar.isLoading = false
         urlBarContainer.isBright = !urlBar.isEditing
+        urlBar.progressBar.hideProgressBar()
     }
 
     func browser(_ browser: Browser, didFailNavigationWithError error: Error) {
@@ -480,16 +481,12 @@ extension BrowserViewController: BrowserDelegate {
         guard homeView == nil else { return }
 
         if estimatedProgress == 0 {
-            urlBar.progressBar.progress = 0
             urlBar.progressBar.animateHidden(false, duration: UIConstants.layout.progressVisibilityAnimationDuration)
+            urlBar.progressBar.animateGradient()
             return
         }
 
         urlBar.progressBar.setProgress(estimatedProgress, animated: true)
-
-        if estimatedProgress == 1 {
-            urlBar.progressBar.animateHidden(true, duration: UIConstants.layout.progressVisibilityAnimationDuration)
-        }
     }
 
     func browser(_ browser: Browser, didUpdateURL url: URL?) {

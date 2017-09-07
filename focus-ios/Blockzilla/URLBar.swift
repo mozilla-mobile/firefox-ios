@@ -20,7 +20,7 @@ protocol URLBarDelegate: class {
 class URLBar: UIView {
     weak var delegate: URLBarDelegate?
 
-    let progressBar = UIProgressView(progressViewStyle: .bar)
+    let progressBar = GradientProgressBar(progressViewStyle: .bar)
     var inBrowsingMode: Bool = false
     var shouldPresent = false
     fileprivate(set) var isEditing = false
@@ -156,7 +156,6 @@ class URLBar: UIView {
 
         progressBar.isHidden = true
         progressBar.alpha = 0
-        progressBar.progressTintColor = UIConstants.colors.progressBar
         addSubview(progressBar)
 
         let toolsetButtonWidthMultiplier = 0.08
@@ -259,8 +258,8 @@ class URLBar: UIView {
 
         progressBar.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self)
-            make.bottom.equalTo(self).offset(-1)
-            make.height.equalTo(1)
+            make.bottom.equalTo(self).offset(1)
+            make.height.equalTo(3)
         }
 
         smallLockIcon.snp.makeConstraints { make in
