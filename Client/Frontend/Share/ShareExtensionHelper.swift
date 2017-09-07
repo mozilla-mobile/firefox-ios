@@ -107,12 +107,7 @@ extension ShareExtensionHelper: UIActivityItemSource {
     }
 
     func activityViewController(_ activityViewController: UIActivityViewController, dataTypeIdentifierForActivityType activityType: UIActivityType?) -> String {
-        //for these customDataID's load the default public.url because they don't seem to work properly with the 1Password UTI.
-        if let type = activityType, customDataTypeIdentifers.contains(type.rawValue) {
-            return "public.url"
-        }
-        // Because of our UTI declaration, this UTI now satisfies both the 1Password Extension and the usual NSURL for Share extensions.
-        return "org.appextension.fill-browser-action"
+        return "public.url"
     }
 }
 
