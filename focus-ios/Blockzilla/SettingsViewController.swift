@@ -147,6 +147,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             cell.textLabel?.text = searchEngineManager.activeEngine.name
             cell.accessoryType = .disclosureIndicator
             cell.accessibilityIdentifier = "SettingsViewController.searchCell"
+
+            let backgroundColorView = UIView()
+            backgroundColorView.backgroundColor = UIColor(rgb: 0x38383D)
+            cell.selectedBackgroundView = backgroundColorView
         default:
             cell = UITableViewCell(style: .subtitle, reuseIdentifier: "toggleCell")
             let toggle = toggleForIndexPath(indexPath)
@@ -239,7 +243,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
         label.snp.makeConstraints { make in
             make.leading.trailing.equalTo(cell.textLabel!)
-            make.centerY.equalTo(cell.textLabel!).offset(10)
+            make.centerY.equalTo(cell.textLabel!).offset(3)
         }
 
         // Hack to cover header separator line
