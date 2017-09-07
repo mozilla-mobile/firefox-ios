@@ -149,7 +149,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             cell.accessibilityIdentifier = "SettingsViewController.searchCell"
 
             let backgroundColorView = UIView()
-            backgroundColorView.backgroundColor = UIColor(rgb: 0x38383D)
+            backgroundColorView.backgroundColor = UIConstants.colors.cellSelected
             cell.selectedBackgroundView = backgroundColorView
         default:
             cell = UITableViewCell(style: .subtitle, reuseIdentifier: "toggleCell")

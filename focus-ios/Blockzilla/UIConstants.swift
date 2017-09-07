@@ -9,7 +9,7 @@ struct UIConstants {
     struct colors {
         static let background = UIColor(rgb: 0x272727)
         static let buttonHighlight = UIColor(rgb: 0x333333)
-        static let cellSelected = UIColor(rgb: 0x2C6EC8)
+        static let cellSelected = UIColor(rgb: 0x38383D)
         static let copyButtonBorder = UIColor(rgb: 0x5F6368, alpha: 0.8)
         static let defaultFont = UIColor(rgb: 0xE1E5EA)
         static let deleteButtonBackground = UIColor(white: 1, alpha: 0.2)
