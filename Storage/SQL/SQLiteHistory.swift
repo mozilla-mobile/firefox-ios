@@ -918,8 +918,9 @@ extension SQLiteHistory: SyncableHistory {
 
     private func getModifiedHistory(limit: Int) -> Deferred<Maybe<[Int: Place]>> {
         let sql =
-        "SELECT id, guid, url, title FROM \(TableHistory) " +
-        "WHERE should_upload = 1 " +
+        "SELECT id, guid, url, title " +
+        "FROM \(TableHistory) " +
+        "WHERE should_upload = 1 AND NOT is_deleted = 1 " +
         "ORDER BY id " +
         "LIMIT ?"
 
