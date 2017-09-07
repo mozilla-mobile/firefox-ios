@@ -19,7 +19,7 @@ struct FocusAppConfig: AppConfig {
     let firefoxAppStoreURL = URL(string: "https://app.adjust.com/gs1ao4")!
     let productName = "Focus"
     let rightsFile = "rights-focus.html"
-    let supportPath = "en-US/kb/focus"
+    let supportPath = "kb/focus"
     let wordmark = #imageLiteral(resourceName: "img_focus_wordmark")
 }
 
