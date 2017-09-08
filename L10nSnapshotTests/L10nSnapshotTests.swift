@@ -47,7 +47,16 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
         // TODO Scroll through the settings and make a screenshot of every page
 
         // Screenshot all the settings that have a separate page
-        for cellName in ["Search", "NewTab", "Homepage", "Logins", "TouchIDPasscode", "ClearPrivateData", "TrackingProtection"] {
+        for cellName in ["Search", "NewTab", "Homepage", "Logins"] {
+            app.tables["AppSettingsTableViewController.tableView"].cells[cellName].tap()
+            snapshot("04Settings-\(cellName)")
+            app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).tap()
+        }
+
+        // Unclear why this is needed - without it the test framework finds two TouchIDPasscode cells
+        app.tables["AppSettingsTableViewController.tableView"].swipeUp()
+
+        for cellName in ["TouchIDPasscode", "ClearPrivateData", "TrackingProtection"] {
             app.tables["AppSettingsTableViewController.tableView"].cells[cellName].tap()
             snapshot("04Settings-\(cellName)")
             app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).tap()

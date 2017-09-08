@@ -9,6 +9,7 @@ public typealias MicrosecondTimestamp = UInt64
 
 public let ThreeWeeksInSeconds = 3 * 7 * 24 * 60 * 60
 
+public let OneYearInMilliseconds = 12 * OneMonthInMilliseconds
 public let OneMonthInMilliseconds = 30 * OneDayInMilliseconds
 public let OneWeekInMilliseconds = 7 * OneDayInMilliseconds
 public let OneDayInMilliseconds = 24 * OneHourInMilliseconds

@@ -15,6 +15,8 @@ public struct AppConstants {
 
     public static let SkipIntro = ProcessInfo.processInfo.arguments.contains(LaunchArguments.SkipIntro)
     public static let ClearProfile = ProcessInfo.processInfo.arguments.contains(LaunchArguments.ClearProfile)
+    
+    public static let FxAiOSClientId = "1b1a3e44c54fbb58"
 
     /// Build Channel.
     public static let BuildChannel: AppBuildChannel = {
@@ -44,6 +46,19 @@ public struct AppConstants {
 
     /// Should we try to sync (no merging) the Mobile Folder (if shouldMergeBookmarks is false).
     public static let MOZ_SIMPLE_BOOKMARKS_SYNCING: Bool = {
+        #if MOZ_CHANNEL_RELEASE
+            return false
+        #elseif MOZ_CHANNEL_BETA
+            return true
+        #elseif MOZ_CHANNEL_FENNEC
+            return true
+        #else
+            return true
+        #endif
+    }()
+
+    /// Should we send a repair request to other clients when the bookmarks buffer validation fails.
+    public static let MOZ_BOOKMARKS_REPAIR_REQUEST: Bool = {
         #if MOZ_CHANNEL_RELEASE
             return false
         #elseif MOZ_CHANNEL_BETA
@@ -179,6 +194,19 @@ public struct AppConstants {
             return false
         #else
             return false
+        #endif
+    }()
+    
+    ///  Toggle the feature that shows updated FxA preferences cell
+    public static let MOZ_SHOW_FXA_AVATAR: Bool = {
+        #if MOZ_CHANNEL_RELEASE
+            return false
+        #elseif MOZ_CHANNEL_BETA
+            return true
+        #elseif MOZ_CHANNEL_FENNEC
+            return true
+        #else
+            return true
         #endif
     }()
 }
