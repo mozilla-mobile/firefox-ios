@@ -159,10 +159,6 @@ class Tab: NSObject {
             webView.delegate = self
             configuration = nil
 
-            if let clazz = NSClassFromString("WKContentView"), let swizzledMethod = class_getInstanceMethod(TabWebView.self, "swizzledMenuHelperFindInPage") {
-                class_addMethod(clazz, "menuHelperFindInPage", method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod))
-            }
-
             webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
             webView.allowsBackForwardNavigationGestures = true
             webView.backgroundColor = UIColor.lightGray
@@ -531,6 +527,24 @@ private class TabWebView: WKWebView, MenuHelperInterface {
         }
     }
 
+    fileprivate override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        // The find-in-page selection menu only appears if the webview is the first responder.
+        becomeFirstResponder()
+
+        return super.hitTest(point, with: event)
+    }
+}
+
+///
+// Temporary fix for Bug 1390871 - NSInvalidArgumentException: -[WKContentView menuHelperFindInPage]: unrecognized selector
+//
+// This class only exists to contain the swizzledMenuHelperFindInPage. This class is actually never
+// instantiated. It only serves as a placeholder for the method. When the method is called, self is
+// actually pointing to a WKContentView. Which is not public, but that is fine, we only need to know
+// that it is a UIView subclass to access its superview.
+//
+
+class TabWebViewMenuHelper: UIView {
     @objc func swizzledMenuHelperFindInPage() {
         if let tabWebView = superview?.superview as? TabWebView {
             tabWebView.evaluateJavaScript("getSelection().toString()") { result, _ in
@@ -538,12 +552,5 @@ private class TabWebView: WKWebView, MenuHelperInterface {
                 tabWebView.delegate?.tabWebView(tabWebView, didSelectFindInPageForSelection: selection)
             }
         }
-    }
-
-    fileprivate override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        // The find-in-page selection menu only appears if the webview is the first responder.
-        becomeFirstResponder()
-
-        return super.hitTest(point, with: event)
     }
 }
