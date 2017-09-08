@@ -75,10 +75,10 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         super.viewDidLoad()
         tableView.addGestureRecognizer(longPressRecognizer)
 
-        self.tableView.accessibilityIdentifier = "Bookmarks List"
+        tableView.accessibilityIdentifier = "Bookmarks List"
         
-        self.refreshControl = UIRefreshControl()
-        self.tableView.addSubview(refreshControl!)
+        refreshControl = UIRefreshControl()
+        tableView.addSubview(refreshControl!)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -106,7 +106,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             }
             return
         }
-        
+
         if let bookmarkFolder = bookmarkFolder {
             source.selectFolder(bookmarkFolder).upon(onModelFetched)
         } else {
@@ -127,7 +127,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     }
     
     @objc fileprivate func refreshBookmarks() {
-        profile.syncManager.mirrorBookmarks().upon { (_) in
+        profile.syncManager.mirrorBookmarks().upon { _ in
             DispatchQueue.main.async {
                 self.loadData()
                 self.refreshControl?.endRefreshing()
