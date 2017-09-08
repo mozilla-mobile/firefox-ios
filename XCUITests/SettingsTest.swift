@@ -20,12 +20,12 @@ class SettingsTest: BaseTestCase {
     
     func testHelpOpensSUMOInTab() {
         navigator.goto(SettingsScreen)
-        let appsettingstableviewcontrollerTableviewTable = app.tables["AppSettingsTableViewController.tableView"]
+        let settingsTableView = app.tables["AppSettingsTableViewController.tableView"]
         
-        while appsettingstableviewcontrollerTableviewTable.staticTexts["Help"].exists == false {
-            appsettingstableviewcontrollerTableviewTable.swipeUp()
+        while settingsTableView.staticTexts["Help"].exists == false {
+            settingsTableView.swipeUp()
         }
-        let helpMenu = appsettingstableviewcontrollerTableviewTable.cells["Help"]
+        let helpMenu = settingsTableView.cells["Help"]
         XCTAssertTrue(helpMenu.isEnabled)
         helpMenu.tap()
         
