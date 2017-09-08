@@ -120,6 +120,10 @@ window.addEventListener("touchstart", function(event) {
       return;
     }
 
+    if (event.target.tagName === "img") {
+      data.image = event.target.src;
+    }
+
     element = event.target.closest("a");
     if (element) {
       data.link = element.href;
@@ -141,12 +145,7 @@ window.addEventListener("touchstart", function(event) {
       element.removeEventListener("click", handleClick, true);
     }
 
-    var image = event.target.closest("img");
-    if (image) {
-      data.image = image.src;
-    }
-
-    if (element || image) {
+    if (data.image || data.link) {
       var touch = event.touches[0];
       touchDownX = touch.screenX;
       touchDownY = touch.screenY;
