@@ -476,6 +476,35 @@ class SimplePageServer {
 
             return response
         }
+        
+        // Add tracking protection check page
+        webServer.addHandler(forMethod: "GET", path: "/tracking-protection-test.html", request: GCDWebServerRequest.self) { (request: GCDWebServerRequest?) in
+            let html =
+            """
+            <html><head><script>
+                    function testImage(URL) {
+                        var tester = new Image();
+                        tester.onload = imageFound;
+                        tester.onerror = imageNotFound;
+                        tester.src = URL;
+                    }
+
+                    function imageFound() {
+                        alert('image loaded.');
+                    }
+
+                    function imageNotFound() {
+                        alert('image not loaded.');
+                    }
+
+                    window.onload = function(e) {
+                        testImage('http://ymail.com/favicon.ico');
+                    }
+                </script></head>
+            <body>TEST IMAGE BLOCKING</body></html>
+            """
+            return GCDWebServerDataResponse(html: html)
+        }
 
         if !webServer.start(withPort: 0, bonjourName: nil) {
             XCTFail("Can't start the GCDWebServer")
