@@ -582,6 +582,7 @@
 		E4ECD0881B70FD4F00B90D22 /* WindowCloseHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4ECD0871B70FD4F00B90D22 /* WindowCloseHelper.swift */; };
 		E4F21AA61A13C4A300B0FAAA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4F21AA51A13C4A300B0FAAA /* Images.xcassets */; };
 		E4F2DAC01F620C0300A556CD /* Leanplum.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4F2DABF1F620C0200A556CD /* Leanplum.framework */; };
+		E4F2DAC11F62C73900A556CD /* Leanplum.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E4F2DABF1F620C0200A556CD /* Leanplum.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E60138651C89EB7600DF9756 /* Shared.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E60138661C89EB7D00DF9756 /* Storage.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCAE21A1ABB51F800877008 /* Storage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E60138671C89EB8300DF9756 /* Account.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 2FA435FB1ABB83B4008031D1 /* Account.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -1258,6 +1259,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				E4F2DAC11F62C73900A556CD /* Leanplum.framework in Copy Frameworks */,
 				E62CFB3D1C89EFF700C01324 /* FxA.framework in Copy Frameworks */,
 				E601386A1C89EB9800DF9756 /* SQLite.framework in Copy Frameworks */,
 				E69DB08B1E97DEAA008A67E6 /* Telemetry.framework in Copy Frameworks */,
