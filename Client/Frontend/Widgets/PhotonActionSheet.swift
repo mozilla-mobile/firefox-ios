@@ -279,10 +279,11 @@ private class PhotonActionSheetCell: UITableViewCell {
     lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.font = DynamicFontHelper.defaultHelper.LargeSizeRegularWeightAS
-        titleLabel.minimumScaleFactor = 0.8 // Scale the font if we run out of space
+        titleLabel.minimumScaleFactor = 0.75 // Scale the font if we run out of space
         titleLabel.textColor = PhotonActionSheetCellUX.LabelColor
         titleLabel.textAlignment = .left
         titleLabel.numberOfLines = 1
+        titleLabel.adjustsFontSizeToFitWidth = true
         return titleLabel
     }()
 
