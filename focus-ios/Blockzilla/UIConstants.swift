@@ -40,6 +40,7 @@ struct UIConstants {
         static let settingsTextLabel = UIColor(rgb: 0xFFFFFF)
         static let settingsDetailLabel = UIColor(rgb: 0xB2B2B2)
         static let settingsSeparator = UIColor(rgb: 0x414146)
+        static let settingsLink = UIColor(rgb: 0x0A84FF)
         static let tableSectionHeader = UIColor(rgb: 0xFFFFFF)
         static let toastBackground = UIColor(white: 1, alpha: 0.2)
         static let toastText = UIColor.white

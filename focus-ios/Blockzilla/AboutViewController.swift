@@ -163,7 +163,7 @@ private class AboutHeaderView: UIView {
 
         let learnMoreButton = UIButton()
         learnMoreButton.setTitle(UIConstants.strings.aboutLearnMoreButton, for: .normal)
-        learnMoreButton.setTitleColor(UIConstants.colors.focusBlue, for: .normal)
+        learnMoreButton.setTitleColor(UIConstants.colors.settingsLink, for: .normal)
         learnMoreButton.setTitleColor(UIConstants.colors.buttonHighlight, for: .highlighted)
         learnMoreButton.titleLabel?.font = UIConstants.fonts.aboutText
         learnMoreButton.addTarget(self, action: #selector(didPressLearnMore), for: .touchUpInside)
