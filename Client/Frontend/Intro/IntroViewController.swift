@@ -26,6 +26,8 @@ struct IntroViewControllerUX {
 
     static let CardTextLineHeight = UIScreen.main.bounds.width <= 320 ? CGFloat(2) : CGFloat(6)
     static let CardTextWidth = UIScreen.main.bounds.width <= 320 ? 240 : 280
+    static let CardTitleHeight = 50
+
     
     static let CardTitleWelcome = NSLocalizedString("Intro.Slides.Welcome.Title", tableName: "Intro", value: "Thanks for choosing Firefox!", comment: "Title for the first panel 'Welcome' in the First Run tour.")
     static let CardTitleSearch = NSLocalizedString("Intro.Slides.Search.Title", tableName: "Intro", value: "Your search, your way", comment: "Title for the second  panel 'Search' in the First Run tour.")
@@ -140,7 +142,9 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
             self.introViews.append(introView)
             
             let titleLabel = UILabel()
-            titleLabel.numberOfLines = 0
+            titleLabel.numberOfLines = 2
+            titleLabel.adjustsFontSizeToFitWidth = true
+            titleLabel.minimumScaleFactor = IntroViewControllerUX.MinimumFontScale
             titleLabel.textAlignment = NSTextAlignment.center
             titleLabel.text = title
             titleLabels.append(titleLabel)
@@ -148,11 +152,12 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
             titleLabel.snp.makeConstraints { (make ) -> Void in
                 make.top.equalTo(introView).offset(20)
                 make.centerX.equalTo(introView)
+                make.height.equalTo(IntroViewControllerUX.CardTitleHeight)
                 make.width.equalTo(IntroViewControllerUX.CardTextWidth)
             }
             
             let textLabel = UILabel()
-            textLabel.numberOfLines = 0
+            textLabel.numberOfLines = 5
             textLabel.attributedText = attributedStringForLabel(text)
             textLabel.adjustsFontSizeToFitWidth = true
             textLabel.minimumScaleFactor = IntroViewControllerUX.MinimumFontScale
