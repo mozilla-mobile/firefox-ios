@@ -5,7 +5,6 @@
 import XCTest
 
 class SettingAppearanceTest: BaseTestCase {
-        
     override func setUp() {
         super.setUp()
         dismissFirstRunUI()
@@ -109,7 +108,8 @@ class SettingAppearanceTest: BaseTestCase {
         waitForValueContains(element: label, value: "https://www.mozilla.org/en-US/")
         
         app.buttons["Share"].tap()
-        XCTAssertTrue(app.buttons["Open in Safari"].exists)
+        let button = app.buttons["Open in Safari"]
+        waitforExistence(element: button)
 
         let appName = app.label
         app.buttons["Open in Safari"].tap()

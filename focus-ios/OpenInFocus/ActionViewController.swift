@@ -45,7 +45,7 @@ class ActionViewController: SLComposeServiceViewController {
                 let selectorOpenURL = sel_registerName("openURL:")
                 while (responder != nil) {
                     if responder!.responds(to: selectorOpenURL) {
-                        responder!.callSelector(selector: selectorOpenURL!, object: focusUrl, delay: 0)
+                        responder!.callSelector(selector: selectorOpenURL, object: focusUrl, delay: 0)
                     }
 
                     responder = responder!.next

@@ -68,14 +68,14 @@ class URLBar: UIView {
         lockIcon.isHidden = true
         lockIcon.alpha = 0
         lockIcon.contentMode = .center
-        lockIcon.setContentCompressionResistancePriority(1000, for: .horizontal)
-        lockIcon.setContentHuggingPriority(1000, for: .horizontal)
+        lockIcon.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
+        lockIcon.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
         textAndLockContainer.addSubview(lockIcon)
 
         smallLockIcon.alpha = 0
         smallLockIcon.contentMode = .center
-        smallLockIcon.setContentCompressionResistancePriority(1000, for: .horizontal)
-        smallLockIcon.setContentHuggingPriority(1000, for: .horizontal)
+        smallLockIcon.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
+        smallLockIcon.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
         smallLockIcon.accessibilityIdentifier = "Collapsed.smallLockIcon"
 
         truncatedUrlText.alpha = 0
@@ -85,7 +85,7 @@ class URLBar: UIView {
         truncatedUrlText.backgroundColor = UIColor.clear
         truncatedUrlText.contentMode = .bottom
         truncatedUrlText.textColor = UIConstants.colors.urlTextFont
-        truncatedUrlText.setContentHuggingPriority(1000, for: .vertical)
+        truncatedUrlText.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .vertical)
         truncatedUrlText.isScrollEnabled = false
         truncatedUrlText.accessibilityIdentifier = "Collapsed.truncatedUrlText"
 
@@ -109,7 +109,7 @@ class URLBar: UIView {
         urlText.autocorrectionType = .no
         urlText.rightView = clearButton
         urlText.rightViewMode = .whileEditing
-        urlText.setContentHuggingPriority(1000, for: .vertical)
+        urlText.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .vertical)
         urlText.autocompleteDelegate = self
         urlText.completionSource = domainCompletion
         urlText.accessibilityIdentifier = "URLBar.urlText"
@@ -120,8 +120,8 @@ class URLBar: UIView {
         cancelButton.alpha = 0
         cancelButton.setTitle(UIConstants.strings.urlBarCancel, for: .normal)
         cancelButton.titleLabel?.font = UIConstants.fonts.cancelButton
-        cancelButton.setContentHuggingPriority(1000, for: .horizontal)
-        cancelButton.setContentCompressionResistancePriority(1000, for: .horizontal)
+        cancelButton.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
+        cancelButton.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
         cancelButton.addTarget(self, action: #selector(dismiss), for: .touchUpInside)
         addSubview(cancelButton)
 
@@ -134,8 +134,8 @@ class URLBar: UIView {
         deleteButton.layer.borderWidth = 1
         deleteButton.layer.cornerRadius = 2
         deleteButton.layer.borderColor = UIConstants.colors.deleteButtonBorder.cgColor
-        deleteButton.setContentHuggingPriority(1000, for: .horizontal)
-        deleteButton.setContentCompressionResistancePriority(1000, for: .horizontal)
+        deleteButton.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
+        deleteButton.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
         deleteButton.addTarget(self, action: #selector(didPressDelete), for: .touchUpInside)
         deleteButton.accessibilityIdentifier = "URLBar.deleteButton"
         addSubview(deleteButton)
@@ -150,8 +150,8 @@ class URLBar: UIView {
         hiddenDeleteButton.isHidden = true
         hiddenDeleteButton.setTitle(UIConstants.strings.eraseButton, for: .normal)
         hiddenDeleteButton.titleLabel?.font = UIConstants.fonts.deleteButton
-        hiddenDeleteButton.setContentHuggingPriority(1000, for: .horizontal)
-        hiddenDeleteButton.setContentCompressionResistancePriority(1000, for: .horizontal)
+        hiddenDeleteButton.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
+        hiddenDeleteButton.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
         addSubview(hiddenDeleteButton)
 
         progressBar.isHidden = true
@@ -296,7 +296,7 @@ class URLBar: UIView {
         return urlText.becomeFirstResponder()
     }
     
-    func pasteAndGo() {
+    @objc func pasteAndGo() {
         present()
         delegate?.urlBarDidActivate(self)
         delegate?.urlBar(self, didSubmitText: UIPasteboard.general.string!)
@@ -600,7 +600,7 @@ extension URLBar: AutocompleteTextFieldDelegate {
 private class URLTextField: AutocompleteTextField {
     override var placeholder: String? {
         didSet {
-            attributedPlaceholder = NSAttributedString(string: placeholder ?? "", attributes: [NSForegroundColorAttributeName: UIConstants.colors.urlTextPlaceholder])
+            attributedPlaceholder = NSAttributedString(string: placeholder ?? "", attributes: [NSAttributedStringKey.foregroundColor: UIConstants.colors.urlTextPlaceholder])
         }
     }
 

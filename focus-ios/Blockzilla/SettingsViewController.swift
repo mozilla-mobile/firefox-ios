@@ -52,7 +52,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         navigationBar.isTranslucent = false
         navigationBar.barTintColor = UIConstants.colors.background
         navigationBar.tintColor = UIConstants.colors.navigationButton
-        navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIConstants.colors.navigationTitle]
+        navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIConstants.colors.navigationTitle]
 
         let aboutButton = UIBarButtonItem(title: UIConstants.strings.aboutTitle, style: .plain, target: self, action: #selector(aboutClicked))
         aboutButton.image = #imageLiteral(resourceName: "about_icon")
@@ -111,8 +111,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         if section == 4 {
             let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
-            let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [NSForegroundColorAttributeName : UIConstants.colors.toggleOn])
-            let subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.detailTextSendUsageData, AppInfo.productName), attributes: [NSForegroundColorAttributeName : UIConstants.colors.settingsDetailLabel])
+            let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.toggleOn])
+            let subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.detailTextSendUsageData, AppInfo.productName), attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.settingsDetailLabel])
             subtitle.append(learnMore)
             cell.detailTextLabel?.attributedText = subtitle
             cell.detailTextLabel?.numberOfLines = 0
@@ -129,7 +129,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         return nil
     }
 
-    func tappedLearnMoreFooter(gestureRecognizer: UIGestureRecognizer) {
+    @objc func tappedLearnMoreFooter(gestureRecognizer: UIGestureRecognizer) {
         guard let url = SupportUtils.URLForTopic(topic: "usage-data") else { return }
         let contentViewController = AboutContentViewController(url: url)
         navigationController?.pushViewController(contentViewController, animated: true)
@@ -211,7 +211,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     private func heightForLabel(_ label: UILabel, width: CGFloat, text: String) -> CGFloat {
         let size = CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)
-        let attrs: [String: Any] = [NSFontAttributeName: label.font]
+        let attrs: [NSAttributedStringKey: Any] = [.font: label.font]
         let boundingRect = NSString(string: text).boundingRect(with: size, options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: attrs, context: nil)
         return boundingRect.height
     }

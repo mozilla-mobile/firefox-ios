@@ -35,7 +35,7 @@ class BaseTestCase: XCTestCase {
             if (error != nil) {
                 let message = "Failed to find \(element) after 20 seconds."
                 self.recordFailure(withDescription: message,
-                                   inFile: file, atLine: line, expected: true)
+                                   inFile: file, atLine: Int(line), expected: true)
             }
         }
     }
@@ -48,7 +48,7 @@ class BaseTestCase: XCTestCase {
             if (error != nil) {
                 let message = "\(element) still exists after 10 seconds."
                 self.recordFailure(withDescription: message,
-                                   inFile: file, atLine: line, expected: true)
+                                   inFile: file, atLine: Int(line), expected: true)
             }
         }
     }
@@ -62,7 +62,7 @@ class BaseTestCase: XCTestCase {
             if (error != nil) {
                 let message = "Failed to find \(element) after 20 seconds."
                 self.recordFailure(withDescription: message,
-                                   inFile: file, atLine: line, expected: true)
+                                   inFile: file, atLine: Int(line), expected: true)
             }
         }
     }
@@ -76,7 +76,7 @@ class BaseTestCase: XCTestCase {
             if (error != nil) {
                 let message = "Failed to find \(element) after 30 seconds."
                 self.recordFailure(withDescription: message,
-                                   inFile: file, atLine: line, expected: true)
+                                   inFile: file, atLine: Int(line), expected: true)
             }
         }
     }

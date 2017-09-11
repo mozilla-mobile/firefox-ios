@@ -96,8 +96,8 @@ class OverlayView: UIView {
         let attributedString = NSMutableAttributedString(string: copyTitle as String)
         let queryRange = NSMakeRange(startIndex.location, (phrase as NSString).length)
         let fullRange = NSMakeRange(0, copyTitle.length)
-        attributedString.addAttributes([NSFontAttributeName: UIConstants.fonts.copyButtonQuery], range: queryRange)
-        attributedString.addAttributes([NSForegroundColorAttributeName: UIColor.white], range: fullRange)
+        attributedString.addAttributes([NSAttributedStringKey.font: UIConstants.fonts.copyButtonQuery], range: queryRange)
+        attributedString.addAttributes([NSAttributedStringKey.foregroundColor: UIColor.white], range: fullRange)
         
         button.setAttributedTitle(attributedString, for: .normal)
     }
@@ -107,7 +107,7 @@ class OverlayView: UIView {
         
         if false, let pasteBoard = UIPasteboard.general.string {
             if let pasteURL = URL(string: pasteBoard), pasteURL.isWebPage() {
-                let attributedURL = NSAttributedString(string: pasteURL.absoluteString, attributes: [NSForegroundColorAttributeName: UIColor.white])
+                let attributedURL = NSAttributedString(string: pasteURL.absoluteString, attributes: [NSAttributedStringKey.foregroundColor: UIColor.white])
                     copyButton.setAttributedTitle(attributedURL, for: .normal)
             }
             else {

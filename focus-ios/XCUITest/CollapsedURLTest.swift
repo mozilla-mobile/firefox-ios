@@ -31,14 +31,15 @@ class CollapsedURLTest: BaseTestCase {
         
         let collapsedTruncatedurltextTextView = app.textViews["Collapsed.truncatedUrlText"]
         let collapsedLockIcon = app.images["Collapsed.smallLockIcon"]
-        XCTAssertTrue(collapsedLockIcon.isHittable)
+        waitforExistence(element: collapsedTruncatedurltextTextView)
+
         XCTAssertTrue(collapsedTruncatedurltextTextView.isHittable)
         XCTAssertEqual(collapsedTruncatedurltextTextView.value as? String, "www.mozilla.org")
         
         // After swiping down, the collapsed URL should not be displayed
         webView.swipeDown()
         webView.swipeDown()
-        waitforNoExistence(element: collapsedLockIcon)
+        waitforNoExistence(element: collapsedTruncatedurltextTextView)
         XCTAssertFalse(collapsedLockIcon.exists)
         XCTAssertFalse(collapsedTruncatedurltextTextView.exists)
     }

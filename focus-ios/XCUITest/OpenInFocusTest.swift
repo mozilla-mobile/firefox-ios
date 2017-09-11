@@ -20,7 +20,7 @@ class OpenInFocusTest : BaseTestCase {
         waitforExistence(element: app.textFields["URLBar.urlText"]) // wait for app.label
         let sharedExtName = app.label.contains("Klar") ? "Firefox Klar" : "Firefox Focus" as String
         
-        XCUIDevice.shared().press(.home)
+        XCUIDevice.shared.press(.home)
         let springboard = XCUIApplication(privateWithPath: nil, bundleID: "com.apple.springboard")!
         waitforExistence(element: springboard.scrollViews.otherElements.icons[sharedExtName])
 
@@ -29,9 +29,12 @@ class OpenInFocusTest : BaseTestCase {
         safariApp.launch()
         
         safariApp.buttons["Share"].tap()
-        safariApp.buttons["More"].tap()
-        safariApp.tables.cells.containing(.staticText, identifier:sharedExtName).children(matching: .switch).matching(identifier: sharedExtName).element(boundBy: 0).tap()
+        safariApp.collectionViews.cells.buttons["More"].tap()
+        
+        waitforExistence(element: safariApp.tables.switches[sharedExtName])
+        safariApp.tables.switches[sharedExtName].tap()
         safariApp.navigationBars["Activities"].buttons["Done"].tap()
+        waitforExistence(element: safariApp.buttons[sharedExtName])
         safariApp.buttons[sharedExtName].tap()
 
         let focusApp = XCUIApplication()

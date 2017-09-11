@@ -11,7 +11,7 @@ class FirstRunViewController: UIViewController {
         let style = NSMutableParagraphStyle()
         style.lineSpacing = 3
         style.alignment = .center
-        let attributes = [NSParagraphStyleAttributeName: style]
+        let attributes = [NSAttributedStringKey.paragraphStyle: style]
 
         let background = GradientBackgroundView(alpha: 0.2)
         view.addSubview(background)
