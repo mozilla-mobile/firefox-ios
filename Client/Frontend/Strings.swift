@@ -369,8 +369,6 @@ extension Strings {
     public static let TrackingProtectionOptionBlockListTypeBasicDescription = NSLocalizedString("Settings.TrackingProtectionOption.BlockListBasicDescription", value: "Allows some trackers so websites function properly.", comment: "Tracking protection settings option description for using the basic blocklist.")
     public static let TrackingProtectionOptionBlockListTypeStrict = NSLocalizedString("Settings.TrackingProtectionOption.BlockListStrict", value: "Strict", comment: "Tracking protection settings option for using the strict blocklist.")
     public static let TrackingProtectionOptionBlockListTypeStrictDescription = NSLocalizedString("Settings.TrackingProtectionOption.BlockListStrictDescription", value: "Blocks known trackers. Some websites may not function properly.", comment: "Tracking protection settings option description for using the strict blocklist.")
-
-    public static let TrackingProtectionOptionFooter = NSLocalizedString("Settings.TrackingProtectionOption.BlockListTypeFooter", value: "You can choose which list Firefox will use to block Web elements that may track your browsing activity.", comment: "Description label shown at bottom of tracking protection options for which Block List to use")
 }
 
 // Do not track 
