@@ -29,9 +29,9 @@ struct UIConstants {
         static let focusRed = UIColor(rgb: 0xE63D2F)
         static let focusViolet = UIColor(rgb: 0x95368C)
         static let gradientBackground = UIColor(rgb: 0x363B40)
-        static let gradientLeft = UIColor(rgb: 0xC43B31)
-        static let gradientMiddle = UIColor(rgb: 0x96368D)
-        static let gradientRight = UIColor(rgb: 0x135EA4)
+        static let gradientLeft = UIColor(rgb: 0xD70022)
+        static let gradientMiddle = UIColor(rgb: 0xB5007F)
+        static let gradientRight = UIColor(rgb: 0x440071)
         static let navigationButton = UIColor(rgb: 0xFFFFFF)
         static let navigationTitle = UIColor(rgb: 0xFFFFFF)
         static let overlayBackground = UIColor(white: 0, alpha: 0.8)
@@ -50,7 +50,7 @@ struct UIConstants {
         static let toolbarButtonNormal = UIColor.darkGray
         static let urlTextBackground = UIColor(white: 1, alpha: 0.2)
         static let urlTextFont = UIColor.white
-        static let urlTextHighlight = UIColor(rgb: 0xC86DD7)
+        static let urlTextHighlight = UIColor(rgb: 0xB5007F)
         static let urlTextPlaceholder = UIColor(white: 1, alpha: 0.4)
         static let urlTextShadow = UIColor.black
     }

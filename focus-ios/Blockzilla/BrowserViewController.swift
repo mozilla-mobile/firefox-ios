@@ -62,7 +62,7 @@ class BrowserViewController: UIViewController {
 
         photoManager.delegate = self
 
-        let background = GradientBackgroundView(alpha: 0.6, startPoint: CGPoint.zero, endPoint: CGPoint(x: 1, y: 1))
+        let background = GradientBackgroundView(alpha: 0.7, startPoint: CGPoint.zero, endPoint: CGPoint(x: 1, y: 1))
         view.addSubview(background)
 
         view.addSubview(homeViewContainer)
