@@ -22,10 +22,10 @@ extension BrowserDB {
         // (because I haven't written it yet), so it might end up lying. We do what we can.
         let valueSQL = [
             "INSERT OR IGNORE INTO \(TableBookmarksMirror)",
-            "(guid, type, bmkUri, title, parentid, parentName, feedUri, siteUri, pos,",
+            "(guid, type, date_added, bmkUri, title, parentid, parentName, feedUri, siteUri, pos,",
             " description, tags, keyword, folderName, queryId,",
             " is_overridden, server_modified, faviconID)",
-            "SELECT guid, type, bmkUri, title, parentid, parentName,",
+            "SELECT guid, type, date_added, bmkUri, title, parentid, parentName,",
             "feedUri, siteUri, pos, description, tags, keyword, folderName, queryId,",
             "0 AS is_overridden, \(Date.now()) AS server_modified, faviconID",
             "FROM \(TableBookmarksLocal)",
@@ -49,10 +49,10 @@ extension BrowserDB {
     func moveBufferToMirrorForTesting() {
         let valueSQL = [
             "INSERT OR IGNORE INTO \(TableBookmarksMirror)",
-            "(guid, type, bmkUri, title, parentid, parentName, feedUri, siteUri, pos,",
+            "(guid, type, date_added, bmkUri, title, parentid, parentName, feedUri, siteUri, pos,",
             "description, tags, keyword, folderName, queryId, server_modified)",
             "SELECT",
-            "guid, type, bmkUri, title, parentid, parentName, feedUri, siteUri, pos,",
+            "guid, type, date_added, bmkUri, title, parentid, parentName, feedUri, siteUri, pos,",
             "description, tags, keyword, folderName, queryId, server_modified",
             "FROM \(TableBookmarksBuffer)",
         ].joined(separator: " ")
