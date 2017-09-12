@@ -103,7 +103,7 @@ class TabCell: UICollectionViewCell {
         super.init(frame: frame)
         
         self.animator = SwipeAnimator(animatingView: self.backgroundHolder, container: self)
-        self.closeButton.addTarget(self, action: #selector(TabCell.SELclose), for: UIControlEvents.touchUpInside)
+        self.closeButton.addTarget(self, action: #selector(TabCell.close), for: UIControlEvents.touchUpInside)
 
         contentView.addSubview(backgroundHolder)
         backgroundHolder.addSubview(self.background)
@@ -113,7 +113,7 @@ class TabCell: UICollectionViewCell {
         applyStyle(style)
 
         self.accessibilityCustomActions = [
-            UIAccessibilityCustomAction(name: NSLocalizedString("Close", comment: "Accessibility label for action denoting closing a tab in tab list (tray)"), target: self.animator, selector: #selector(SwipeAnimator.SELcloseWithoutGesture))
+            UIAccessibilityCustomAction(name: NSLocalizedString("Close", comment: "Accessibility label for action denoting closing a tab in tab list (tray)"), target: self.animator, selector: #selector(SwipeAnimator.closeWithoutGesture))
         ]
     }
 
@@ -205,8 +205,8 @@ class TabCell: UICollectionViewCell {
     }
 
     @objc
-    func SELclose() {
-        self.animator.SELcloseWithoutGesture()
+    func close() {
+        self.animator.closeWithoutGesture()
     }
 }
 
@@ -224,29 +224,21 @@ protocol TabTrayDelegate: class {
     func tabTrayRequestsPresentationOf(_ viewController: UIViewController)
 }
 
-struct TabTrayState {
-    var isPrivate: Bool = false
-}
-
 class TabTrayController: UIViewController {
     let tabManager: TabManager
     let profile: Profile
     weak var delegate: TabTrayDelegate?
-    weak var appStateDelegate: AppStateDelegate?
 
     var collectionView: UICollectionView!
     var draggedCell: TabCell?
     var dragOffset: CGPoint = CGPoint.zero
     lazy var toolbar: TrayToolbar = {
         let toolbar = TrayToolbar()
-        toolbar.addTabButton.addTarget(self, action: #selector(TabTrayController.SELdidClickAddTab), for: .touchUpInside)
-        toolbar.maskButton.addTarget(self, action: #selector(TabTrayController.SELdidTogglePrivateMode), for: .touchUpInside)
+        toolbar.addTabButton.addTarget(self, action: #selector(TabTrayController.didClickAddTab), for: .touchUpInside)
+        toolbar.maskButton.addTarget(self, action: #selector(TabTrayController.didTogglePrivateMode), for: .touchUpInside)
+        toolbar.menuButton.addTarget(self, action: #selector(TabTrayController.didTapMenu), for: .touchUpInside)
         return toolbar
     }()
-
-    var tabTrayState: TabTrayState {
-        return TabTrayState(isPrivate: self.privateMode)
-    }
 
     var leftToolbarButtons: [UIButton] {
         return [toolbar.addTabButton]
@@ -258,10 +250,6 @@ class TabTrayController: UIViewController {
 
     fileprivate(set) internal var privateMode: Bool = false {
         didSet {
-            if oldValue != privateMode {
-                updateAppState()
-            }
-
             tabDataSource.tabs = tabsToDisplay
             toolbar.styleToolbar(privateMode)
             collectionView?.reloadData()
@@ -274,7 +262,7 @@ class TabTrayController: UIViewController {
 
     fileprivate lazy var emptyPrivateTabsView: EmptyPrivateTabsView = {
         let emptyView = EmptyPrivateTabsView()
-        emptyView.learnMoreButton.addTarget(self, action: #selector(TabTrayController.SELdidTapLearnMore), for: UIControlEvents.touchUpInside)
+        emptyView.learnMoreButton.addTarget(self, action: #selector(TabTrayController.didTapLearnMore), for: UIControlEvents.touchUpInside)
         return emptyView
     }()
 
@@ -312,7 +300,7 @@ class TabTrayController: UIViewController {
         self.tabManager.removeDelegate(self)
     }
 
-    func SELDynamicFontChanged(_ notification: Notification) {
+    func dynamicFontChanged(_ notification: Notification) {
         guard notification.name == NotificationDynamicFontChanged else { return }
 
         self.collectionView.reloadData()
@@ -354,9 +342,9 @@ class TabTrayController: UIViewController {
 
         emptyPrivateTabsView.isHidden = !privateTabsAreEmpty()
 
-        NotificationCenter.default.addObserver(self, selector: #selector(TabTrayController.SELappWillResignActiveNotification), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(TabTrayController.SELappDidBecomeActiveNotification), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(TabTrayController.SELDynamicFontChanged(_:)), name: NotificationDynamicFontChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(TabTrayController.appWillResignActiveNotification), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(TabTrayController.appDidBecomeActiveNotification), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(TabTrayController.dynamicFontChanged(_:)), name: NotificationDynamicFontChanged, object: nil)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -407,11 +395,11 @@ class TabTrayController: UIViewController {
     }
 
 // MARK: Selectors
-    func SELdidClickDone() {
+    func didClickDone() {
         presentingViewController!.dismiss(animated: true, completion: nil)
     }
 
-    func SELdidClickSettingsItem() {
+    func didClickSettingsItem() {
         assert(Thread.isMainThread, "Opening settings requires being invoked on the main thread")
 
         let settingsTableViewController = AppSettingsTableViewController()
@@ -425,12 +413,12 @@ class TabTrayController: UIViewController {
         present(controller, animated: true, completion: nil)
     }
 
-    func SELdidClickAddTab() {
+    func didClickAddTab() {
         openNewTab()
         LeanplumIntegration.sharedInstance.track(eventName: .openedNewTab, withParameters: ["Source":"Tab Tray" as AnyObject])
     }
 
-    func SELdidTapLearnMore() {
+    func didTapLearnMore() {
         let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
         if let langID = Locale.preferredLanguages.first {
             let learnMoreRequest = URLRequest(url: "https://support.mozilla.org/1/mobile/\(appVersion)/iOS/\(langID)/private-browsing-ios".asURL!)
@@ -439,7 +427,7 @@ class TabTrayController: UIViewController {
     }
 
 
-    func SELdidTogglePrivateMode() {
+    func didTogglePrivateMode() {
         let scaleDownTransform = CGAffineTransform(scaleX: 0.9, y: 0.9)
 
         let fromView: UIView
@@ -501,7 +489,7 @@ class TabTrayController: UIViewController {
                 privateMode = isPrivate
                 return
             }
-            SELdidTogglePrivateMode()
+            didTogglePrivateMode()
         }
     }
     
@@ -529,11 +517,6 @@ class TabTrayController: UIViewController {
         })
     }
 
-    fileprivate func updateAppState() {
-        let state = mainStore.updateState(.tabTray(tabTrayState: self.tabTrayState))
-        self.appStateDelegate?.appDidUpdateState(state)
-    }
-
     fileprivate func closeTabsForCurrentTray() {
         tabManager.removeTabsWithUndoToast(tabsToDisplay)
         self.collectionView.reloadData()
@@ -542,13 +525,13 @@ class TabTrayController: UIViewController {
 
 // MARK: - App Notifications
 extension TabTrayController {
-    func SELappWillResignActiveNotification() {
+    func appWillResignActiveNotification() {
         if privateMode {
             collectionView.alpha = 0
         }
     }
 
-    func SELappDidBecomeActiveNotification() {
+    func appDidBecomeActiveNotification() {
         // Re-show any components that might have been hidden because they were being displayed
         // as part of a private mode tab
         UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: {
@@ -696,6 +679,15 @@ extension TabTrayController: SettingsDelegate {
     func settingsOpenURLInNewTab(_ url: URL) {
         let request = URLRequest(url: url)
         openNewTab(request)
+    }
+}
+
+extension TabTrayController: PhotonActionSheetProtocol {
+    func didTapMenu() {
+        let closeAllTabs = PhotonActionSheetItem(title: "Close All Tabs", iconString: "action_remove") { _ in
+            self.closeTabsForCurrentTray()
+        }
+        self.presentSheetWith(actions: [[closeAllTabs]], on: self, from: self.view)
     }
 }
 
@@ -943,7 +935,7 @@ extension TabTrayController: TabPeekDelegate {
     func tabPeekDidCloseTab(_ tab: Tab) {
         if let index = self.tabDataSource.tabs.index(of: tab),
             let cell = self.collectionView?.cellForItem(at: IndexPath(item: index, section: 0)) as? TabCell {
-            cell.SELclose()
+            cell.close()
         }
     }
 

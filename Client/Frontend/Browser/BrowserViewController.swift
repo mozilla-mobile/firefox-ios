@@ -41,7 +41,6 @@ private struct BrowserViewControllerUX {
 class BrowserViewController: UIViewController {
     var homePanelController: HomePanelViewController?
     var webViewContainer: UIView!
-    var menuViewController: MenuViewController?
     var urlBar: URLBarView!
     var clipboardBarDisplayHandler: ClipboardBarDisplayHandler?
     var readerModeBar: ReaderModeBarView?
@@ -142,6 +141,10 @@ class BrowserViewController: UIViewController {
         displayedPopoverController?.dismiss(animated: true) {
             self.displayedPopoverController = nil
         }
+        
+        if let _ = self.presentedViewController as? PhotonActionSheet {
+            self.presentedViewController?.dismiss(animated: true, completion: nil)
+        }
 
         coordinator.animate(alongsideTransition: { context in
             self.scrollController.updateMinimumZoom()
@@ -190,15 +193,6 @@ class BrowserViewController: UIViewController {
     fileprivate func updateToolbarStateForTraitCollection(_ newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator? = nil) {
         let showToolbar = shouldShowFooterForTraitCollection(newCollection)
         let showTopTabs = shouldShowTopTabsForTraitCollection(newCollection)
-
-        if UI_USER_INTERFACE_IDIOM() == .pad,
-            let mvc = menuViewController, showToolbar != (toolbar != nil) {
-            // Hide the menu, and then re-open it so that the menu is always the correct one for the given traits
-            mvc.dismiss(animated: true, completion: nil)
-            coordinator?.animate(alongsideTransition: nil, completion: { _ in
-                self.tabToolbarDidPressMenu(self.navigationToolbar, button: self.navigationToolbar.menuButton)
-            })
-        }
 
         urlBar.topTabsIsShowing = showTopTabs
         urlBar.setShowToolbar(!showToolbar)
@@ -293,9 +287,6 @@ class BrowserViewController: UIViewController {
         displayedPopoverController?.dismiss(animated: false) {
             self.displayedPopoverController = nil
         }
-
-        // Dismiss menu if presenting
-        menuViewController?.dismiss(animated: true, completion: nil)
 
         // If we are displying a private tab, hide any elements in the tab that we wouldn't want shown
         // when the app is in the home switcher
@@ -476,7 +467,6 @@ class BrowserViewController: UIViewController {
             make.top.left.right.equalTo(self.view)
             make.height.equalTo(self.topLayoutGuide.length)
         }
-        self.appDidUpdateState(getCurrentAppState())
         log.debug("BVC done.")
     }
 
@@ -762,7 +752,6 @@ class BrowserViewController: UIViewController {
             let homePanelController = HomePanelViewController()
             homePanelController.profile = profile
             homePanelController.delegate = self
-            homePanelController.appStateDelegate = self
             homePanelController.url = tabManager.selectedTab?.url?.displayURL
             homePanelController.view.alpha = 0
             self.homePanelController = homePanelController
@@ -914,21 +903,6 @@ class BrowserViewController: UIViewController {
         }
 
         JumpAndSpinAnimator.animateFromView(button.imageView ?? button, offset: offset, completion: nil)
-    }
-
-    fileprivate func removeBookmark(_ tabState: TabState) {
-        guard let url = tabState.url else { return }
-        let absoluteString = url.absoluteString
-        profile.bookmarks.modelFactory >>== {
-            $0.removeByURL(absoluteString)
-                .uponQueue(DispatchQueue.main) { res in
-                if res.isSuccess {
-                    if let tab = self.tabManager.getTabForURL(url) {
-                        tab.isBookmarked = false
-                    }
-                }
-            }
-        }
     }
 
     func SELBookmarkStatusDidChange(_ notification: Notification) {
@@ -1114,10 +1088,6 @@ class BrowserViewController: UIViewController {
                 self.urlBar.tabLocationViewDidTapLocation(self.urlBar.locationView)
             }
         }
-    }
-    
-    func openQRReader() {
-        self.scanQRCode()
     }
 
     fileprivate func popToBVC() {
@@ -1357,89 +1327,6 @@ extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
     }
 }
 
-extension BrowserViewController: AppStateDelegate {
-
-    func appDidUpdateState(_ appState: AppState) {
-        menuViewController?.appState = appState
-    }
-}
-
-extension BrowserViewController: MenuActionDelegate {
-    func performMenuAction(_ action: MenuAction, withAppState appState: AppState) {
-        if let menuAction = AppMenuAction(rawValue: action.action) {
-            switch menuAction {
-            case .openNewNormalTab:
-                self.openURLInNewTab(nil, isPrivate: false, isPrivileged: true)
-                LeanplumIntegration.sharedInstance.track(eventName: .openedNewTab, withParameters: ["Source": "Menu" as AnyObject])
-
-            // this is a case that is only available in iOS9
-            case .openNewPrivateTab:
-                self.openURLInNewTab(nil, isPrivate: true, isPrivileged: true)
-            case .findInPage:
-                self.updateFindInPageVisibility(visible: true)
-            case .toggleBrowsingMode:
-                guard let tab = tabManager.selectedTab else { break }
-                tab.toggleDesktopSite()
-            case .toggleBookmarkStatus:
-                switch appState.ui {
-                case .tab(let tabState):
-                    self.toggleBookmarkForTabState(tabState)
-                default: break
-                }
-            case .showImageMode:
-                self.setNoImageMode(false)
-            case .hideImageMode:
-                self.setNoImageMode(true)
-            case .showNightMode:
-                NightModeHelper.setNightMode(self.profile.prefs, tabManager: self.tabManager, enabled: false)
-            case .hideNightMode:
-                NightModeHelper.setNightMode(self.profile.prefs, tabManager: self.tabManager, enabled: true)
-            case .scanQRCode:
-                self.scanQRCode()
-            case .openSettings:
-                self.openSettings()
-            case .openTopSites:
-                openHomePanel(.topSites, forAppState: appState)
-            case .openBookmarks:
-                openHomePanel(.bookmarks, forAppState: appState)
-            case .openHistory:
-                openHomePanel(.history, forAppState: appState)
-            case .openReadingList:
-                openHomePanel(.readingList, forAppState: appState)
-            case .setHomePage:
-                guard let tab = tabManager.selectedTab else { break }
-                HomePageHelper(prefs: profile.prefs).setHomePage(toTab: tab, presentAlertOn: navigationController)
-            case .openHomePage:
-                guard let tab = tabManager.selectedTab else { break }
-                HomePageHelper(prefs: profile.prefs).openHomePage(inTab: tab, presentAlertOn: navigationController)
-            case .sharePage:
-                guard let url = tabManager.selectedTab?.url else { break }
-                let sourceView = self.navigationToolbar.menuButton
-                let tab = tabManager.selectedTab
-                presentActivityViewController(url as URL, tab: tab, sourceView: sourceView.superview, sourceRect: sourceView.frame, arrowDirection: .up)
-            default: break
-            }
-        }
-    }
-
-    fileprivate func openHomePanel(_ panel: HomePanelType, forAppState appState: AppState) {
-        switch appState.ui {
-        case .tab:
-            self.openURLInNewTab(panel.localhostURL as URL, isPrivate: appState.ui.isPrivate(), isPrivileged: true)
-        case .homePanels:
-            self.homePanelController?.selectedPanel = panel
-        default: break
-        }
-    }
-
-    fileprivate func scanQRCode() {
-        let qrCodeViewController = QRCodeViewController()
-        qrCodeViewController.qrCodeDelegate = self
-        let controller = UINavigationController(rootViewController: qrCodeViewController)
-        self.present(controller, animated: true, completion: nil)
-    }
-}
-
 extension BrowserViewController: QRCodeViewControllerDelegate {
     func scanSuccessOpenNewTabWithData(data: String) {
         self.openBlankNewTab(focusLocationField: false)
@@ -1455,7 +1342,6 @@ extension BrowserViewController: SettingsDelegate {
 
 extension BrowserViewController: PresentingModalViewControllerDelegate {
     func dismissPresentedModalViewController(_ modalViewController: UIViewController, animated: Bool) {
-        self.appDidUpdateState(getCurrentAppState())
         self.dismiss(animated: animated, completion: nil)
     }
 }
@@ -1688,7 +1574,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 }
 
-extension BrowserViewController: TabToolbarDelegate {
+extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     func tabToolbarDidPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         tabManager.selectedTab?.goBack()
     }
@@ -1702,7 +1588,7 @@ extension BrowserViewController: TabToolbarDelegate {
     }
 
     func tabToolbarDidLongPressReload(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-
+        // TODO: Should this be a PhotonActionSheet?
         guard let tab = tabManager.selectedTab, tab.webView?.url != nil && (tab.getHelper(name: ReaderMode.name()) as? ReaderMode)?.state != .active else {
             return
         }
@@ -1737,69 +1623,40 @@ extension BrowserViewController: TabToolbarDelegate {
     func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         // ensure that any keyboards or spinners are dismissed before presenting the menu
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to:nil, from:nil, for:nil)
-        // check the trait collection
-        // open as modal if portrait\
-        let presentationStyle: MenuViewPresentationStyle = (self.traitCollection.horizontalSizeClass == .compact && traitCollection.verticalSizeClass == .regular) ? .modal : .popover
-        let mvc = MenuViewController(withAppState: getCurrentAppState(), presentationStyle: presentationStyle)
-        mvc.delegate = self
-        mvc.actionDelegate = self
-        mvc.menuTransitionDelegate = MenuPresentationAnimator()
-        mvc.modalPresentationStyle = presentationStyle == .modal ? .overCurrentContext : .popover
-
-        if let popoverPresentationController = mvc.popoverPresentationController {
-            popoverPresentationController.backgroundColor = UIColor.clear
-            popoverPresentationController.delegate = self
-            popoverPresentationController.sourceView = button
-            popoverPresentationController.sourceRect = CGRect(x: button.frame.width/2, y: button.frame.size.height * 0.75, width: 1, height: 1)
-            popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirection.up
-        }
-
-        self.present(mvc, animated: true, completion: nil)
-        menuViewController = mvc
-    }
-
-    fileprivate func setNoImageMode(_ enabled: Bool) {
-        self.profile.prefs.setBool(enabled, forKey: PrefsKeys.KeyNoImageModeStatus)
-        for tab in self.tabManager.tabs {
-            tab.setNoImageMode(enabled, force: true)
-        }
-        self.tabManager.selectedTab?.reload()
-    }
-
-    func toggleBookmarkForTabState(_ tabState: TabState) {
-        if tabState.isBookmarked {
-            self.removeBookmark(tabState)
-        } else {
-            self.addBookmark(tabState)
-            LeanplumIntegration.sharedInstance.track(eventName: .savedBookmark)
-        }
-    }
-
-    func tabToolbarDidPressBookmark(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        guard let tab = tabManager.selectedTab,
-            let _ = tab.url?.displayURL?.absoluteString else {
-                log.error("Bookmark error: No tab is selected, or no URL in tab.")
-                return
-        }
-
-        toggleBookmarkForTabState(tab.tabState)
-    }
-
-    func tabToolbarDidLongPressBookmark(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        var actions: [[PhotonActionSheetItem]] = []
+        
+        let homePanelActions = self.getHomePanelActions(openURL: { (url) in
+            self.openURLInNewTab(url, isPrivate: false, isPrivileged: true)
+        }, vcDelegate: self)
+        
+        let tabActions = self.getTabMenuActions(openURL: { (url, isPrivate) in
+            self.openURLInNewTab(url, isPrivate: isPrivate, isPrivileged: true)
+        })
+        let systemActions = self.getOtherPanelActions()
+        actions.append(systemActions)
+        actions.append(homePanelActions)
+        actions.append(tabActions)
+        self.presentSheetWith(actions: actions, on: self, from: button)
     }
 
     func tabToolbarDidPressShare(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        if let tab = tabManager.selectedTab, let url = tab.url?.displayURL {
-            let sourceView = self.navigationToolbar.shareButton
-            presentActivityViewController(url, tab: tab, sourceView: sourceView.superview, sourceRect: sourceView.frame, arrowDirection: .up)
+        let actionMenuPresenter: (URL, Tab, UIView, UIPopoverArrowDirection) -> Void  = { (url, tab, view, direction) in
+            self.presentActivityViewController(url, tab: tab, sourceView: view, sourceRect: view.frame, arrowDirection: .up)
+        }
+        
+        let findInPageAction = {
+            self.updateFindInPageVisibility(visible: true)
+        }
+        
+        // The logic of which actions appear when isnt final.
+        if let tab = self.tabManager.selectedTab, let url = tab.url, !url.isLocal {
+            let pageActions = self.getTabActions(tab: tab, buttonView: button,
+                                                 presentShareMenu: actionMenuPresenter,
+                                                 findInPage: findInPageAction, presentableVC: self)
+            self.presentSheetWith(actions: pageActions, on: self, from: button)
         }
     }
 
-    func tabToolbarDidPressHomePage(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        guard let tab = tabManager.selectedTab else { return }
-        HomePageHelper(prefs: profile.prefs).openHomePage(inTab: tab, presentAlertOn: navigationController)
-    }
-    
     func showBackForwardList() {
         if let backForwardList = tabManager.selectedTab?.webView?.backForwardList {
             let backForwardViewController = BackForwardListViewController(profile: profile, backForwardList: backForwardList, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
@@ -1809,39 +1666,6 @@ extension BrowserViewController: TabToolbarDelegate {
             backForwardViewController.backForwardTransitionDelegate = BackForwardListAnimator()
             self.present(backForwardViewController, animated: true, completion: nil)
         }
-    }
-}
-
-extension BrowserViewController: MenuViewControllerDelegate {
-    func menuViewControllerDidDismiss(_ menuViewController: MenuViewController) {
-        self.menuViewController = nil
-        displayedPopoverController = nil
-        updateDisplayedPopoverProperties = nil
-    }
-
-    func shouldCloseMenu(_ menuViewController: MenuViewController, forRotationToNewSize size: CGSize, forTraitCollection traitCollection: UITraitCollection) -> Bool {
-        // if we're presenting in popover but we haven't got a preferred content size yet, don't dismiss, otherwise we might dismiss before we've presented
-        if (traitCollection.horizontalSizeClass == .compact && traitCollection.verticalSizeClass == .compact) && menuViewController.preferredContentSize == CGSize.zero {
-            return false
-        }
-
-        // Dismiss the menu if we are going into the background.
-        let state = UIApplication.shared.applicationState
-        if state != .active {
-            return true
-        }
-
-        func orientationForSize(_ size: CGSize) -> UIInterfaceOrientation {
-            return size.height < size.width ? .landscapeLeft : .portrait
-        }
-
-        let currentOrientation = orientationForSize(self.view.bounds.size)
-        let newOrientation = orientationForSize(size)
-        let isiPhone = UI_USER_INTERFACE_IDIOM() == .phone
-
-        // we only want to dismiss when rotating on iPhone
-        // if we're rotating from landscape to portrait then we are rotating from popover to modal
-        return isiPhone && currentOrientation != newOrientation
     }
 }
 
@@ -2229,7 +2053,6 @@ extension BrowserViewController: TabManagerDelegate {
             updateTabCountUsingTabManager(tabManager)
         }
         tab.tabDelegate = self
-        tab.appStateDelegate = self
     }
 
     func tabManager(_ tabManager: TabManager, willRemoveTab tab: Tab) {

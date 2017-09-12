@@ -17,7 +17,6 @@ struct AppState {
 enum UIState {
     case tab(tabState: TabState)
     case homePanels(homePanelState: HomePanelState)
-    case tabTray(tabTrayState: TabTrayState)
     case loading
     case emptyTab
 
@@ -25,8 +24,6 @@ enum UIState {
         switch self {
         case .tab(let tabState):
             return tabState.isPrivate
-        case .tabTray(let tabTrayState):
-            return tabTrayState.isPrivate
         default:
             return false
         }

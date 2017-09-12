@@ -201,7 +201,6 @@ extension BrowserViewController: WKNavigationDelegate {
 
         if tabManager.selectedTab === tab {
             updateUIForReaderHomeStateForTab(tab)
-            appDidUpdateState(getCurrentAppState())
         }
     }
 
