@@ -1,6 +1,0 @@
-amazondotcom
-bing
-duckduckgo
-google
-wikipedia-ka
-yahoo

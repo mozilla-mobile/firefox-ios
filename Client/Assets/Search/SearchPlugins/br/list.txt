@@ -1,6 +1,0 @@
-bing
-eBay-france
-google
-twitter
-wikipedia-br
-yahoo-france

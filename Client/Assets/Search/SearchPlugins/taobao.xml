@@ -1,0 +1,23 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>淘宝</ShortName>
+<InputEncoding>UTF-8</InputEncoding>
+<Image width="16" height="16">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAMAAADVRocKAAAAeFBMVEUAAAD19fX19fX19fX19fX19fX19fX19fX19fX19fXiLDfrdX3lRlHnVF/pYmvjN0LuipDkQErmUVrseoHrcnntgojjO0btfoTqaHDoXGXnWGHvjpTlS1ThMz7uhYvqbHXlRE7iLzvvk5nhMTziMTvoXmfpZm3iMjvQ0phiAAAACXRSTlMA0m0GwvkbxvPKuFmRAAADKUlEQVRo3u2a6W7bMAyA3RztSKc+5CuxHedO3/8NN9RNpIk67anAhn0/g0QfQkukRSmKouVitYYArFeLZfSL1xcIxstrFC1DjM8Ny2gBQVlEKwjKKlpDUNYRBObbBedbjpjfQQk+mCzY4pNDCMEFBfZ/XoASMEL/Xz1NsEeJFEbIF5JJgg4JughlkwQtEnYg0hKxn6BGwhFE0JHT+1kp6JHQgsANPagUggpFaKzRiw0VwAklLiCQox+p5zq4oy81FXT68Tv0hyly0Qaf9CCCU+i4gFN+xjqPQTM+WIn5fOUCC/ik8RFg4SYo8EkCXoKTk6An4zsL0EGwQ84AkwXH9AxKUrrs/AXjLE+NggsK+AuuPHcqBdcBZgnuPP9TwZUV8kpj70r0AnxyBR1oRyuISRGjnKcL5FRcg4phngAy2zMsZwhoQayAkMwR0JJVuKU+31SRWQwzBDTxdEEEYuEPJOC/TgMJ+HSJAwn4z0MJmDSTKnRnaxDQrLMPJOAR+PsFXWjBMD6TjcQRH+QbicZPkAWYpiREQQXwvYIsLg9lI3+hbBnbbSsfwUElKITtFa99LQrcXAW5QnBBFxwFSAXoiJNgoIITOpKaBDRCNW0x9Em7R4FLDABVig9cBPQdT25RNVe+H5GKFLMLSrodoyWuGBMF0DaHXUAnRaMq0j2eMuA0zoKMCgqX/aWzoKYCcNh1VM4C5DDpswEIpI7vbYIcOY3U6Do6RCixCciydItR7LoOcrWA2d71+EbXIkCBnn6+s7UCKougRoFMEYKDOUApmAWdvmWamwzO6fqDJkY6TQzjZxZBjCKlZpheO34JFoG5L16QnjxJtRYBQ3Nr/6B8/MI7nU2AvxEDoTQFowGbYK+JEM20V0Wz/AxGAd3I1/ruVEKXzYf2xSt9CkjPWk3RKypHDloBewg2kgCsMFK6VYLhSzAYziVsvZcODAIgDSnrH6CvNgZB8SXoybmHkY24ozEJWqE5njXlNhk5lGDhyFejSRBPO8vkK+AdTILdzMPSTB/HomYxcP69497/AkLoSwM/ojcIylvwixvBr54EvzwzXv+BIHxe//kJo+ZfNRuLh/wAAAAASUVORK5CYII=</Image>
+<Url type="text/html" method="GET" template="http://r.m.taobao.com/s">
+  <Param name="p" value="mm_12811289_2210561_42108259"/>
+  <Param name="q" value="{searchTerms}"/>
+  <Param name="v" value="1"/>
+</Url>
+<Url type="application/x-moz-tabletsearch" method="GET" template="http://s8.taobao.com/search">
+  <Param name="q" value="{searchTerms}"/>
+  <Param name="pid" value="mm_12811289_2210561_42108259"/>
+  <Param name="commend" value="all"/>
+  <Param name="search_type" value="auction"/>
+  <Param name="user_actionpsearch" value="1"/>
+  <Param name="spercent" value="1"/>
+</Url>
+<SearchForm>http://r.m.taobao.com/</SearchForm>
+</SearchPlugin>

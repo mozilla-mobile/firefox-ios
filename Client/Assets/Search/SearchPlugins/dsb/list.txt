@@ -1,6 +1,0 @@
-amazon-de
-bing
-google
-twitter
-wikipedia-dsb
-yahoo-de
