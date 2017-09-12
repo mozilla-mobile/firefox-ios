@@ -37,10 +37,6 @@ class NoImageModeHelper: TabHelper {
         return AppConstants.MOZ_NO_IMAGE_MODE
     }
 
-    static func isNoImageModeActivated(_ state: AppState) -> Bool {
-        return state.prefs.boolForKey(NoImageModePrefsKey.NoImageModeStatus) ?? false
-    }
-
     static func isActivated(_ prefs: Prefs) -> Bool {
         return prefs.boolForKey(NoImageModePrefsKey.NoImageModeStatus) ?? false
     }

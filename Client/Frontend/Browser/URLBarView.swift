@@ -172,7 +172,6 @@ class URLBarView: UIView {
         return cancelButton
     }()
 
-
     fileprivate lazy var scrollToTopButton: UIButton = {
         let button = UIButton()
         button.addTarget(self, action: #selector(URLBarView.SELtappedScrollToTopArea), for: UIControlEvents.touchUpInside)
@@ -707,8 +706,6 @@ extension URLBarView: Themeable {
         tabsButton.applyTheme(themeName)
         line.backgroundColor = UIConstants.URLBarDivider.color(isPBM: themeName == Theme.PrivateMode)
     }
-
-
 }
 
 class ToolbarTextField: AutocompleteTextField {
@@ -794,7 +791,6 @@ class ToolbarTextField: AutocompleteTextField {
         return tintedImage
     }
 }
-
 
 extension ToolbarTextField: Themeable {
     func applyTheme(_ themeName: String) {

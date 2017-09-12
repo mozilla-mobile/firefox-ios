@@ -42,8 +42,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
     var openInFirefoxParams: LaunchParams?
 
-    var appStateStore: AppStateStore!
-
     var systemBrightness: CGFloat = UIScreen.main.brightness
     
     var receivedURLs: [URL]?
@@ -117,7 +115,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         log.debug("Getting profile…")
         let profile = getProfile(application)
-        appStateStore = AppStateStore(prefs: profile.prefs)
 
         log.debug("Initializing telemetry…")
         Telemetry.initWithPrefs(profile.prefs)

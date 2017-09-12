@@ -426,7 +426,6 @@ class TabTrayController: UIViewController {
         }
     }
 
-
     func didTogglePrivateMode() {
         let scaleDownTransform = CGAffineTransform(scaleX: 0.9, y: 0.9)
 

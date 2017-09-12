@@ -10,37 +10,10 @@ import XCGLogger
 /// These are pure functions, so it's quite ok to have them
 /// as static.
 class HomePageAccessors {
-    fileprivate static let getPrefs = Accessors.getPrefs
-
-    static func getHomePage(_ state: AppState) -> URL? {
-        return getHomePage(getPrefs(state))
-    }
-
-    static func hasHomePage(_ state: AppState) -> Bool {
-        return getHomePage(state) != nil
-    }
-
-    static func isButtonInMenu(_ state: AppState) -> Bool {
-        return isButtonInMenu(getPrefs(state))
-    }
-
-    static func isButtonEnabled(_ state: AppState) -> Bool {
-        switch state.ui {
-        case .tab:
-            return true
-        case .homePanels, .loading:
-            return hasHomePage(state)
-        default:
-            return false
-        }
-    }
-}
-
-extension HomePageAccessors {
     static func isButtonInMenu(_ prefs: Prefs) -> Bool {
         return prefs.boolForKey(HomePageConstants.HomePageButtonIsInMenuPrefKey) ?? true
     }
-
+    
     static func getHomePage(_ prefs: Prefs) -> URL? {
         let string = prefs.stringForKey(HomePageConstants.HomePageURLPrefKey) ?? getDefaultHomePageString(prefs)
         guard let urlString = string else {
@@ -48,7 +21,7 @@ extension HomePageAccessors {
         }
         return NSURL(string: urlString) as URL?
     }
-
+    
     static func getDefaultHomePageString(_ prefs: Prefs) -> String? {
         return prefs.stringForKey(HomePageConstants.DefaultHomePageURLPrefKey)
     }

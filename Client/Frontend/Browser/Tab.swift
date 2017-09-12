@@ -44,7 +44,6 @@ class Tab: NSObject {
         set {
             if _isPrivate != newValue {
                 _isPrivate = newValue
-                self.updateAppState()
             }
         }
     }
@@ -55,7 +54,6 @@ class Tab: NSObject {
 
     var webView: WKWebView?
     var tabDelegate: TabDelegate?
-    weak var appStateDelegate: AppStateDelegate?
     var bars = [SnackBar]()
     var favicons = [Favicon]()
     var lastExecutedTime: Timestamp?
@@ -73,20 +71,8 @@ class Tab: NSObject {
 
     /// Whether or not the desktop site was requested with the last request, reload or navigation. Note that this property needs to
     /// be managed by the web view's navigation delegate.
-    var desktopSite: Bool = false {
-        didSet {
-            if oldValue != desktopSite {
-                self.updateAppState()
-            }
-        }
-    }
-    var isBookmarked: Bool = false {
-        didSet {
-            if oldValue != isBookmarked {
-                self.updateAppState()
-            }
-        }
-    }
+    var desktopSite: Bool = false
+    var isBookmarked: Bool = false
     
     var readerModeAvailable: Bool {
         if let readerMode = self.getHelper(name: "ReaderMode") as? ReaderMode {
@@ -140,11 +126,6 @@ class Tab: NSObject {
         }
 
         return nil
-    }
-
-    fileprivate func updateAppState() {
-        let state = mainStore.updateState(.tab(tabState: self.tabState))
-        self.appStateDelegate?.appDidUpdateState(state)
     }
 
     weak var navigationDelegate: WKNavigationDelegate? {
@@ -435,8 +416,6 @@ class Tab: NSObject {
             let path = keyPath, path == "URL" else {
             return assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")")
         }
-
-        updateAppState()
     }
 
     func isDescendentOf(_ ancestor: Tab) -> Bool {
