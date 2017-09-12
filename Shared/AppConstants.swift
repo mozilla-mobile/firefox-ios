@@ -44,15 +44,7 @@ public struct AppConstants {
 
     /// Should we try to sync (no merging) the Mobile Folder (if shouldMergeBookmarks is false).
     public static let MOZ_SIMPLE_BOOKMARKS_SYNCING: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-            return false
-        #elseif MOZ_CHANNEL_BETA
-            return true
-        #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #else
-            return true
-        #endif
+        return true
     }()
 
     /// Flag indiciating if we are running in Debug mode or not.
@@ -106,15 +98,7 @@ public struct AppConstants {
     
     ///  Enables/disables deep linking form fill for FxA
     public static let MOZ_FXA_DEEP_LINK_FORM_FILL: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-            return true
-        #elseif MOZ_CHANNEL_BETA
-            return true
-        #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #else
-            return true
-        #endif
+        return true
     }()
 
     /// Toggles reporting our ad-hoc bookmark sync ping
@@ -132,41 +116,17 @@ public struct AppConstants {
 
     /// Toggles the ability to add a custom search engine
     public static let MOZ_CUSTOM_SEARCH_ENGINE: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-            return false
-        #elseif MOZ_CHANNEL_BETA
-            return true
-        #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #else
-            return true
-        #endif
+        return true
     }()
 
     ///  Enables/disables push notificatuibs for FxA
     public static let MOZ_FXA_PUSH: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-            return false
-        #elseif MOZ_CHANNEL_BETA
-            return true
-        #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #else
-            return true
-        #endif
+        return true
     }()
 
     ///  Toggle the feature that shows the blue 'Open copied link' banner
     public static let MOZ_CLIPBOARD_BAR: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-            return false
-        #elseif MOZ_CHANNEL_BETA
-            return true
-        #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #else
-            return true
-        #endif
+        return true
     }()
 
     /// Toggle the use of Leanplum.
