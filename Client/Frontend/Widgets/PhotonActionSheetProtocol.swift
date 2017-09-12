@@ -32,7 +32,7 @@ extension PhotonActionSheetProtocol {
     }
     
     //Returns a list of actions which is used to build a menu
-    //OpenURL is a clousre that can open a given URL in some view controller. It is up to the class using the menu to know how to open it
+    //OpenURL is a closure that can open a given URL in some view controller. It is up to the class using the menu to know how to open it
     func getHomePanelActions(openURL: @escaping URLOpenAction, vcDelegate: PageOptionsVC) -> [PhotonActionSheetItem] {
         let openQR = PhotonActionSheetItem(title: Strings.ScanQRCodeViewTitle, iconString: "menu-ScanQRCode") { action in
             let qrCodeViewController = QRCodeViewController()
