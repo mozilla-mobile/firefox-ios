@@ -31,7 +31,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         tableView.delegate = self
         tableView.alwaysBounceVertical = false
         tableView.register(BackForwardTableViewCell.self, forCellReuseIdentifier: self.BackForwardListCellIdentifier)
-        tableView.backgroundColor = self.isPrivate ? BackForwardViewUX.BackgroundColorPrivate:BackForwardViewUX.BackgroundColor
+        tableView.backgroundColor = BackForwardViewUX.BackgroundColor
         let blurEffect = UIBlurEffect(style: self.isPrivate ? .dark : .extraLight)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
         tableView.backgroundView = blurEffectView
@@ -67,7 +67,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     
     init(profile: Profile, backForwardList: WKBackForwardList, isPrivate: Bool) {
         self.profile = profile
-        self.isPrivate = isPrivate
+        self.isPrivate = false
         super.init(nibName: nil, bundle: nil)
         
         loadSites(backForwardList)

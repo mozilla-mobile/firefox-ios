@@ -62,6 +62,12 @@ extension Strings {
     public static let RemovePinTopsiteActionTitle = NSLocalizedString("ActivityStream.ContextMenu.RemovePinTopsite", value: "Remove Pinned Site", comment: "The title for removing a pinned topsite action")
 }
 
+//  PhotonActionSheet Strings
+extension Strings {
+    public static let CancelButtonTitle = NSLocalizedString("PhotonMenu.cancel", value: "Cancel", comment: "Button for closing the menu action sheet")
+
+}
+
 // Settings.
 extension Strings {
     public static let SettingsClearPrivateDataClearButton = NSLocalizedString("Settings.ClearPrivateData.Clear.Button", value: "Clear Private Data", comment: "Button in settings that clears private data for the selected items.")

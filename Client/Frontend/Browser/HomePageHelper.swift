@@ -50,15 +50,15 @@ class HomePageHelper {
         tab.loadRequest(URLRequest(url: url))
     }
 
-    func openHomePage(inTab tab: Tab, withNavigationController navigationController: UINavigationController?) {
+    func openHomePage(inTab tab: Tab, presentAlertOn viewController: UIViewController?) {
         if isHomePageAvailable {
             openHomePage(tab)
         } else {
-            setHomePage(toTab: tab, withNavigationController: navigationController)
+            setHomePage(toTab: tab, presentAlertOn: viewController)
         }
     }
 
-    func setHomePage(toTab tab: Tab, withNavigationController navigationController: UINavigationController?) {
+    func setHomePage(toTab tab: Tab, presentAlertOn viewController: UIViewController?) {
         let alertController = UIAlertController(
             title: Strings.SetHomePageDialogTitle,
             message: Strings.SetHomePageDialogMessage,
@@ -66,7 +66,7 @@ class HomePageHelper {
         alertController.addAction(UIAlertAction(title: Strings.SetHomePageDialogNo, style: .cancel, handler: nil))
         alertController.addAction(UIAlertAction(title: Strings.SetHomePageDialogYes, style: .default) { _ in
             self.currentURL = tab.url as URL?
-            })
-        navigationController?.present(alertController, animated: true, completion: nil)
+        })
+        viewController?.present(alertController, animated: true, completion: nil)
     }
 }

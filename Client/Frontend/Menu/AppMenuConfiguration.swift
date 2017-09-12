@@ -71,7 +71,7 @@ struct AppMenuConfiguration: MenuConfiguration {
     }
 
     func menuIcon() -> UIImage? {
-        return isPrivateMode ? UIImage(named:"bottomNav-menu-pbm") : UIImage(named:"bottomNav-menu")
+        return isPrivateMode ? UIImage(named:"nav-menu") : UIImage(named:"nav-menu")
     }
 
     func minMenuRowHeight() -> CGFloat {
@@ -125,7 +125,7 @@ struct AppMenuConfiguration: MenuConfiguration {
                 bookmarkMenuItem.isDisabled = true
             }
             menuItems.append(bookmarkMenuItem)
-            if NoImageModeHelper.isNoImageModeAvailable(appState) {
+            if NoImageModeHelper.isNoImageModeAvailable() {
                 if NoImageModeHelper.isNoImageModeActivated(appState) {
                     menuItems.append(AppMenuConfiguration.ShowImageModeMenuItem)
                 } else {
@@ -147,7 +147,7 @@ struct AppMenuConfiguration: MenuConfiguration {
             if HomePageAccessors.isButtonInMenu(appState) && HomePageAccessors.hasHomePage(appState) {
                 menuItems.append(AppMenuConfiguration.OpenHomePageMenuItem)
             }
-            if NoImageModeHelper.isNoImageModeAvailable(appState) {
+            if NoImageModeHelper.isNoImageModeAvailable() {
                 if NoImageModeHelper.isNoImageModeActivated(appState) {
                     menuItems.append(AppMenuConfiguration.ShowImageModeMenuItem)
                 } else {
@@ -169,7 +169,7 @@ struct AppMenuConfiguration: MenuConfiguration {
             if HomePageAccessors.isButtonInMenu(appState) && HomePageAccessors.hasHomePage(appState) {
                 menuItems.append(AppMenuConfiguration.OpenHomePageMenuItem)
             }
-            if NoImageModeHelper.isNoImageModeAvailable(appState) {
+            if NoImageModeHelper.isNoImageModeAvailable() {
                 if NoImageModeHelper.isNoImageModeActivated(appState) {
                     menuItems.append(AppMenuConfiguration.ShowImageModeMenuItem)
                 } else {

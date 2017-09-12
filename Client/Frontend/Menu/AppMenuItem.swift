@@ -43,7 +43,7 @@ struct AppMenuItem: MenuItem {
         self.accessibilityIdentifier = accessibilityIdentifier
         self.action = action
         self.iconName = icon
-        self.privateModeIconName = privateModeIcon
+        self.privateModeIconName = icon
         self.selectedIconName = selectedIcon
         self.animation = animation
         self.secondaryAction = secondaryAction

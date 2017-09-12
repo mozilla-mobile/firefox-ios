@@ -47,7 +47,7 @@ class BrowserViewController: UIViewController {
     var readerModeBar: ReaderModeBarView?
     var readerModeCache: ReaderModeCache
     let webViewContainerToolbar = UIView()
-    fileprivate var statusBarOverlay: UIView!
+    var statusBarOverlay: UIView!
     fileprivate(set) var toolbar: TabToolbar?
     fileprivate var searchController: SearchViewController?
     fileprivate var screenshotHelper: ScreenshotHelper!
@@ -81,7 +81,6 @@ class BrowserViewController: UIViewController {
     fileprivate var copyAddressAction: AccessibleAction!
 
     fileprivate weak var tabTrayController: TabTrayController!
-
     let profile: Profile
     let tabManager: TabManager
 
@@ -168,7 +167,8 @@ class BrowserViewController: UIViewController {
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return UIStatusBarStyle.lightContent
+        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
+        return isPrivate ? UIStatusBarStyle.lightContent : UIStatusBarStyle.default
     }
 
     func shouldShowFooterForTraitCollection(_ previousTraitCollection: UITraitCollection) -> Bool {
@@ -348,10 +348,10 @@ class BrowserViewController: UIViewController {
 
         log.debug("BVC adding footer and header…")
         footerBackdrop = UIView()
-        footerBackdrop.backgroundColor = UIColor.white
+        footerBackdrop.backgroundColor = UIColor.clear
         view.addSubview(footerBackdrop)
         headerBackdrop = UIView()
-        headerBackdrop.backgroundColor = UIColor.white
+        headerBackdrop.backgroundColor = UIColor.clear
         view.addSubview(headerBackdrop)
 
         log.debug("BVC setting up webViewContainer…")
@@ -367,7 +367,6 @@ class BrowserViewController: UIViewController {
         log.debug("BVC setting up status bar…")
         // Temporary work around for covering the non-clipped web view content
         statusBarOverlay = UIView()
-        statusBarOverlay.backgroundColor = BrowserViewControllerUX.BackgroundColor
         view.addSubview(statusBarOverlay)
 
         log.debug("BVC setting up top touch area…")
@@ -447,7 +446,7 @@ class BrowserViewController: UIViewController {
         
         urlBar.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalTo(urlBarTopTabsContainer)
-            make.height.equalTo(UIConstants.ToolbarHeight)
+            make.height.equalTo(UIConstants.TopToolbarHeight)
             make.top.equalTo(topTabsContainer.snp.bottom)
         }
 
@@ -787,7 +786,6 @@ class BrowserViewController: UIViewController {
             }
         }
         homePanelController.selectedPanel = HomePanelType(rawValue: newSelectedButtonIndex)
-        homePanelController.isPrivateMode = tabManager.selectedTab?.isPrivate ?? false
 
         // We have to run this animation, even if the view is already showing because there may be a hide animation running
         // and we want to be sure to override its results.
@@ -1070,7 +1068,7 @@ class BrowserViewController: UIViewController {
     // MARK: Opening New Tabs
 
     func switchToPrivacyMode(isPrivate: Bool ) {
-        applyTheme(isPrivate ? Theme.PrivateMode : Theme.NormalMode)
+//        applyTheme(isPrivate ? Theme.PrivateMode : Theme.NormalMode)
 
         let tabTrayController = self.tabTrayController ?? TabTrayController(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
         if tabTrayController.privateMode != isPrivate {
@@ -1363,8 +1361,6 @@ extension BrowserViewController: AppStateDelegate {
 
     func appDidUpdateState(_ appState: AppState) {
         menuViewController?.appState = appState
-        toolbar?.appDidUpdateState(appState)
-        urlBar?.appDidUpdateState(appState)
     }
 }
 
@@ -1412,10 +1408,10 @@ extension BrowserViewController: MenuActionDelegate {
                 openHomePanel(.readingList, forAppState: appState)
             case .setHomePage:
                 guard let tab = tabManager.selectedTab else { break }
-                HomePageHelper(prefs: profile.prefs).setHomePage(toTab: tab, withNavigationController: navigationController)
+                HomePageHelper(prefs: profile.prefs).setHomePage(toTab: tab, presentAlertOn: navigationController)
             case .openHomePage:
                 guard let tab = tabManager.selectedTab else { break }
-                HomePageHelper(prefs: profile.prefs).openHomePage(inTab: tab, withNavigationController: navigationController)
+                HomePageHelper(prefs: profile.prefs).openHomePage(inTab: tab, presentAlertOn: navigationController)
             case .sharePage:
                 guard let url = tabManager.selectedTab?.url else { break }
                 let sourceView = self.navigationToolbar.menuButton
@@ -1801,7 +1797,7 @@ extension BrowserViewController: TabToolbarDelegate {
 
     func tabToolbarDidPressHomePage(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         guard let tab = tabManager.selectedTab else { return }
-        HomePageHelper(prefs: profile.prefs).openHomePage(inTab: tab, withNavigationController: navigationController)
+        HomePageHelper(prefs: profile.prefs).openHomePage(inTab: tab, presentAlertOn: navigationController)
     }
     
     func showBackForwardList() {
@@ -2143,12 +2139,14 @@ extension BrowserViewController: TabManagerDelegate {
 
         if let tab = selected, let webView = tab.webView {
             updateURLBarDisplayURL(tab)
+            if tab.isPrivate != previous?.isPrivate {
+                applyTheme(tab.isPrivate ? Theme.PrivateMode : Theme.NormalMode)
+            }
             if tab.isPrivate {
                 readerModeCache = MemoryReaderModeCache.sharedInstance
-                applyTheme(Theme.PrivateMode)
+                
             } else {
                 readerModeCache = DiskReaderModeCache.sharedInstance
-                applyTheme(Theme.NormalMode)
             }
             if let privateModeButton = topTabsViewController?.privateModeButton, previous != nil && previous?.isPrivate != tab.isPrivate {
                 privateModeButton.setSelected(tab.isPrivate, animated: true)
@@ -3119,21 +3117,19 @@ extension BrowserViewController: TabTrayDelegate {
 extension BrowserViewController: Themeable {
 
     func applyTheme(_ themeName: String) {
-        urlBar.applyTheme(themeName)
-        toolbar?.applyTheme(themeName)
-        readerModeBar?.applyTheme(themeName)
-
-        topTabsViewController?.applyTheme(themeName)
-
+        let ui: [Themeable?] = [urlBar, toolbar, readerModeBar, topTabsViewController]
+        ui.forEach { $0?.applyTheme(themeName) }
+        statusBarOverlay.backgroundColor = urlBar.backgroundColor
+        self.setNeedsStatusBarAppearanceUpdate()
         switch themeName {
-        case Theme.NormalMode:
-            header.blurStyle = .extraLight
-            footerBackground?.blurStyle = .extraLight
-        case Theme.PrivateMode:
-            header.blurStyle = .dark
-            footerBackground?.blurStyle = .dark
-        default:
-            log.debug("Unknown Theme \(themeName)")
+            case Theme.NormalMode:
+                header.blurStyle = .extraLight
+                footerBackground?.blurStyle = .extraLight
+            case Theme.PrivateMode:
+                header.blurStyle = .dark
+                footerBackground?.blurStyle = .dark
+            default:
+                log.debug("Unknown Theme \(themeName)")
         }
     }
 }
@@ -3153,6 +3149,7 @@ class BlurWrapper: UIView {
             switch blurStyle {
             case .extraLight, .light:
                 background.backgroundColor = TopTabsUX.TopTabsBackgroundNormalColor
+                background.backgroundColor = .clear
             case .extraDark, .dark:
                 background.backgroundColor = TopTabsUX.TopTabsBackgroundPrivateColor
             default:

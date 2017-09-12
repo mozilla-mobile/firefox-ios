@@ -17,7 +17,7 @@ struct TodayStrings {
 }
 
 struct TodayUX {
-    static let privateBrowsingColor = UIColor(colorString: "CE6EFC")
+    static let privateBrowsingColor = UIColor(rgb: 0xCE6EFC)
     static let backgroundHightlightColor = UIColor(white: 216.0/255.0, alpha: 44.0/255.0)
     static let linkTextSize: CGFloat = 10.0
     static let labelTextSize: CGFloat = 14.0

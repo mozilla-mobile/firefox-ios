@@ -38,7 +38,6 @@ class TopTabCell: UICollectionViewCell {
     
     var selectedTab = false {
         didSet {
-            bezierView.isHidden = !selectedTab
             if style == Style.light {
                 titleText.textColor = UIColor.darkText
             } else {
@@ -73,12 +72,6 @@ class TopTabCell: UICollectionViewCell {
         return closeButton
     }()
     
-    fileprivate let bezierView: BezierView = {
-        let bezierView = BezierView()
-        bezierView.fillColor = TopTabsUX.TopTabsBackgroundNormalColorInactive
-        return bezierView
-    }()
-    
     weak var delegate: TopTabCellDelegate?
     
     override init(frame: CGRect) {
@@ -86,7 +79,6 @@ class TopTabCell: UICollectionViewCell {
         
         closeButton.addTarget(self, action: #selector(TopTabCell.closeTab), for: UIControlEvents.touchUpInside)
         
-        contentView.addSubview(self.bezierView)
         contentView.addSubview(self.closeButton)
         contentView.addSubview(self.titleText)
         contentView.addSubview(self.favicon)
@@ -94,11 +86,6 @@ class TopTabCell: UICollectionViewCell {
         // The tab needs to be slightly bigger in order for the background view not to appear underneath
         // https://bugzilla.mozilla.org/show_bug.cgi?id=1320135
         let bezierOffset: CGFloat = 3
-        bezierView.snp.makeConstraints { make in
-            make.centerY.centerX.equalTo(self)
-            make.height.equalTo(self)
-            make.width.equalTo(frame.width + TopTabsUX.TopTabsBackgroundPadding + bezierOffset)
-        }
         favicon.snp.makeConstraints { make in
             make.centerY.equalTo(self)
             make.size.equalTo(TabTrayControllerUX.FaviconSize)
@@ -119,21 +106,18 @@ class TopTabCell: UICollectionViewCell {
         
         self.clipsToBounds = false
         
-        backgroundColor = UIColor.clear
-        // Default style is light
         applyStyle(style)
     }
     
     fileprivate func applyStyle(_ style: Style) {
         switch style {
         case Style.light:
-            bezierView.fillColor = TopTabsUX.TopTabsBackgroundNormalColor
             titleText.textColor = UIColor.darkText
+            backgroundColor = UIConstants.AppBackgroundColor
         case Style.dark:
-            bezierView.fillColor = TopTabsUX.TopTabsBackgroundPrivateColor
             titleText.textColor = UIColor.lightText
+            backgroundColor = UIColor(rgb: 0x4A4A4F)
         }
-        bezierView.setNeedsDisplay()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -147,31 +131,6 @@ class TopTabCell: UICollectionViewCell {
     
     func closeTab() {
         delegate?.tabCellDidClose(self)
-    }
-
-}
-
-private class BezierView: UIView {
-    var fillColor: UIColor?
-    init() {
-        super.init(frame: CGRect.zero)
-        self.backgroundColor = UIColor.clear
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func draw(_ rect: CGRect) {
-        super.draw(rect)
-        
-        guard let fillColor = self.fillColor else {
-            return
-        }
-        let bezierPath = UIBezierPath.topTabsCurve(frame.width, height: frame.height, direction: .both)
-        
-        fillColor.setFill()
-        bezierPath.fill()
     }
 }
 
@@ -210,16 +169,10 @@ class TopTabFader: UIView {
 
 class TopTabsBackgroundDecorationView: UICollectionReusableView {
     static let Identifier = "TopTabsBackgroundDecorationViewIdentifier"
-    fileprivate lazy var rightCurve = SingleCurveView(right: true)
-    fileprivate lazy var leftCurve = SingleCurveView(right: false)
-    
+
     fileprivate var themeColor: UIColor = TopTabsUX.TopTabsBackgroundNormalColorInactive {
         didSet {
             centerBackground.backgroundColor = themeColor
-            for curve in [rightCurve, leftCurve] {
-                curve.themeColor = themeColor
-                curve.setNeedsDisplay()
-            }
         }
     }
     
@@ -232,26 +185,9 @@ class TopTabsBackgroundDecorationView: UICollectionReusableView {
         super.init(frame: frame)
         
         self.contentMode = .redraw
-        
-        self.addSubview(rightCurve)
-        self.addSubview(leftCurve)
         self.addSubview(centerBackground)
-        
-        rightCurve.snp.makeConstraints { make in
-            make.right.equalTo(self)
-            make.top.equalTo(self)
-            make.bottom.equalTo(self)
-            make.width.equalTo(SingleCurveView.CurveWidth)
-        }
-        leftCurve.snp.makeConstraints { make in
-            make.left.equalTo(self)
-            make.top.equalTo(self)
-            make.bottom.equalTo(self)
-            make.width.equalTo(SingleCurveView.CurveWidth)
-        }
+
         centerBackground.snp.makeConstraints { make in
-            make.left.equalTo(leftCurve.snp.right)
-            make.right.equalTo(rightCurve.snp.left)
             make.top.equalTo(self)
             make.bottom.equalTo(self)
         }
@@ -267,28 +203,6 @@ class TopTabsBackgroundDecorationView: UICollectionReusableView {
             self.themeColor = themeColor
         }
     }
-    
-    fileprivate class SingleCurveView: UIView {
-        static let CurveWidth: CGFloat = 50
-        fileprivate var themeColor: UIColor = TopTabsUX.TopTabsBackgroundNormalColorInactive
-        var right: Bool = true
-        init(right: Bool) {
-            self.right = right
-            super.init(frame: CGRect.zero)
-            self.backgroundColor = UIColor.clear
-        }
-        
-        required init?(coder aDecoder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
-        }
-        
-        override func draw(_ rect: CGRect) {
-            super.draw(rect)
-            let bezierPath = UIBezierPath.topTabsCurve(frame.width, height: frame.height, direction: right ? .right : .left)
-            themeColor.setFill()
-            bezierPath.fill()
-        }
-    }
 }
 
 class TopTabsViewLayoutAttributes: UICollectionViewLayoutAttributes {
@@ -302,45 +216,5 @@ class TopTabsViewLayoutAttributes: UICollectionViewLayoutAttributes {
             return false
         }
         return super.isEqual(object)
-    }
-}
-
-enum TopTabsCurveDirection {
-    case right
-    case left
-    case both
-}
-
-extension UIBezierPath {
-    static func topTabsCurve(_ width: CGFloat, height: CGFloat, direction: TopTabsCurveDirection) -> UIBezierPath {
-        let x1: CGFloat = 32.84
-        let x2: CGFloat = 5.1
-        let x3: CGFloat = 19.76
-        let x4: CGFloat = 58.27
-        let x5: CGFloat = -12.15
-        
-        //// Bezier Drawing
-        let bezierPath = UIBezierPath()
-        bezierPath.move(to: CGPoint(x: width, y: height))
-        switch direction {
-        case .right:
-            bezierPath.addCurve(to: CGPoint(x: width-x1, y: 0), controlPoint1: CGPoint(x: width-x3, y: height), controlPoint2: CGPoint(x: width-x2, y: 0))
-            bezierPath.addCurve(to: CGPoint(x: 0, y: 0), controlPoint1: CGPoint(x: 0, y: 0), controlPoint2: CGPoint(x: 0, y: 0))
-            bezierPath.addCurve(to: CGPoint(x: 0, y: height), controlPoint1: CGPoint(x: 0, y: height), controlPoint2: CGPoint(x: 0, y: height))
-            bezierPath.addCurve(to: CGPoint(x: width, y: height), controlPoint1: CGPoint(x: x5, y: height), controlPoint2: CGPoint(x: width-x5, y: height))
-        case .left:
-            bezierPath.addCurve(to: CGPoint(x: width, y: 0), controlPoint1: CGPoint(x: width, y: 0), controlPoint2: CGPoint(x: width, y: 0))
-            bezierPath.addCurve(to: CGPoint(x: x1, y: 0), controlPoint1: CGPoint(x: width-x4, y: 0), controlPoint2: CGPoint(x: x4, y: 0))
-            bezierPath.addCurve(to: CGPoint(x: 0, y: height), controlPoint1: CGPoint(x: x2, y: 0), controlPoint2: CGPoint(x: x3, y: height))
-            bezierPath.addCurve(to: CGPoint(x: width, y: height), controlPoint1: CGPoint(x: width, y: height), controlPoint2: CGPoint(x: width, y: height))
-        case .both:
-            bezierPath.addCurve(to: CGPoint(x: width-x1, y: 0), controlPoint1: CGPoint(x: width-x3, y: height), controlPoint2: CGPoint(x: width-x2, y: 0))
-            bezierPath.addCurve(to: CGPoint(x: x1, y: 0), controlPoint1: CGPoint(x: width-x4, y: 0), controlPoint2: CGPoint(x: x4, y: 0))
-            bezierPath.addCurve(to: CGPoint(x: 0, y: height), controlPoint1: CGPoint(x: x2, y: 0), controlPoint2: CGPoint(x: x3, y: height))
-            bezierPath.addCurve(to: CGPoint(x: width, y: height), controlPoint1: CGPoint(x: x5, y: height), controlPoint2: CGPoint(x: width-x5, y: height))
-        }
-        bezierPath.close()
-        bezierPath.miterLimit = 4
-        return bezierPath
     }
 }

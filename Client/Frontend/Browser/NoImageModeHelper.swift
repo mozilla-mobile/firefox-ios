@@ -7,7 +7,6 @@ import WebKit
 import Shared
 
 struct NoImageModePrefsKey {
-    static let NoImageModeButtonIsInMenu = PrefsKeys.KeyNoImageModeButtonIsInMenu
     static let NoImageModeStatus = PrefsKeys.KeyNoImageModeStatus
 }
 
@@ -34,11 +33,23 @@ class NoImageModeHelper: TabHelper {
         // Do nothing.
     }
 
-    static func isNoImageModeAvailable(_ state: AppState) -> Bool {
-        return state.prefs.boolForKey(NoImageModePrefsKey.NoImageModeButtonIsInMenu) ?? AppConstants.MOZ_NO_IMAGE_MODE
+    static func isNoImageModeAvailable() -> Bool {
+        return AppConstants.MOZ_NO_IMAGE_MODE
     }
 
     static func isNoImageModeActivated(_ state: AppState) -> Bool {
         return state.prefs.boolForKey(NoImageModePrefsKey.NoImageModeStatus) ?? false
+    }
+
+    static func isActivated(_ prefs: Prefs) -> Bool {
+        return prefs.boolForKey(NoImageModePrefsKey.NoImageModeStatus) ?? false
+    }
+
+    static func toggle(profile: Profile, tabManager: TabManager) {
+        let enabled = isActivated(profile.prefs)
+
+        profile.prefs.setBool(!enabled, forKey: PrefsKeys.KeyNoImageModeStatus)
+        tabManager.tabs.forEach { $0.setNoImageMode(!enabled, force: true) }
+        tabManager.selectedTab?.reload()
     }
 }

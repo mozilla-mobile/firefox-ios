@@ -34,6 +34,7 @@ private extension TrayToBrowserAnimator {
         toggleWebViewVisibility(false, usingTabManager: bvc.tabManager)
         bvc.homePanelController?.view.isHidden = true
         bvc.webViewContainerBackdrop.isHidden = true
+        bvc.statusBarOverlay.isHidden = false
         if let url = selectedTab.url, !url.isReaderModeURL {
             bvc.hideReaderModeBar(animated: false)
         }
@@ -74,6 +75,8 @@ private extension TrayToBrowserAnimator {
             cell.title.transform = CGAffineTransform(translationX: 0, y: -cell.title.frame.height)
 
             bvc.tabTrayDidDismiss(tabTray)
+            UIApplication.shared.windows.first?.backgroundColor = UIConstants.AppBackgroundColor
+            tabTray.navigationController?.setNeedsStatusBarAppearanceUpdate()
             tabTray.toolbar.transform = CGAffineTransform(translationX: 0, y: UIConstants.ToolbarHeight)
             tabCollectionViewSnapshot.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
             tabCollectionViewSnapshot.alpha = 0
@@ -148,6 +151,7 @@ private extension BrowserToTrayAnimator {
 
         // Hide views we don't want to show during the animation in the BVC
         bvc.homePanelController?.view.isHidden = true
+        bvc.statusBarOverlay.isHidden = true
         bvc.toggleSnackBarVisibility(show: false)
         toggleWebViewVisibility(false, usingTabManager: bvc.tabManager)
         bvc.urlBar.isTransitioning = true
@@ -155,6 +159,9 @@ private extension BrowserToTrayAnimator {
         // Since we are hiding the collection view and the snapshot API takes the snapshot after the next screen update,
         // the screenshot ends up being blank unless we set the collection view hidden after the screen update happens. 
         // To work around this, we dispatch the setting of collection view to hidden after the screen update is completed.
+
+
+
         DispatchQueue.main.async {
             tabTray.collectionView.isHidden = true
             let finalFrame = calculateCollapsedCellFrameUsingCollectionView(tabTray.collectionView,
@@ -169,7 +176,10 @@ private extension BrowserToTrayAnimator {
                 cell.frame = finalFrame
                 cell.title.transform = CGAffineTransform.identity
                 cell.layoutIfNeeded()
-
+                
+                UIApplication.shared.windows.first?.backgroundColor = TabTrayControllerUX.BackgroundColor
+                tabTray.navigationController?.setNeedsStatusBarAppearanceUpdate()
+                
                 transformHeaderFooterForBVC(bvc, toFrame: finalFrame, container: container)
 
                 bvc.urlBar.updateAlphaForSubviews(0)
