@@ -113,7 +113,9 @@ struct AppMenuConfiguration: MenuConfiguration {
                 menuItems.append(AppMenuConfiguration.OpenHomePageMenuItem)
             } else {
                 var homePageMenuItem = AppMenuConfiguration.SetHomePageMenuItem
-                if let url = tabState.url, !url.isWebPage(includeDataURIs: true) || url.isLocal {
+                if let url = tabState.url {
+                    homePageMenuItem.isDisabled = !url.isExternalWebPage
+                } else {
                     homePageMenuItem.isDisabled = true
                 }
                 menuItems.append(homePageMenuItem)
@@ -121,7 +123,9 @@ struct AppMenuConfiguration: MenuConfiguration {
             menuItems.append(AppMenuConfiguration.NewTabMenuItem)
             menuItems.append(AppMenuConfiguration.NewPrivateTabMenuItem)
             var bookmarkMenuItem = tabState.isBookmarked ? AppMenuConfiguration.RemoveBookmarkMenuItem : AppMenuConfiguration.AddBookmarkMenuItem
-            if let url = tabState.url, !url.isWebPage(includeDataURIs: true) || url.isLocal {
+            if let url = tabState.url {
+                bookmarkMenuItem.isDisabled = !url.isExternalWebPage
+            } else {
                 bookmarkMenuItem.isDisabled = true
             }
             menuItems.append(bookmarkMenuItem)
