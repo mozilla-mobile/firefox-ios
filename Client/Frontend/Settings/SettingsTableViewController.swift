@@ -323,6 +323,7 @@ class CheckmarkSetting: Setting {
     override func onConfigureCell(_ cell: UITableViewCell) {
         super.onConfigureCell(cell)
         cell.accessoryType = isEnabled() ? .checkmark : .none
+        cell.selectionStyle = .none
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
