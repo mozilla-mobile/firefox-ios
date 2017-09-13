@@ -21,6 +21,7 @@ struct URLBarViewUX {
     static let TextFieldBorderWidthSelected: CGFloat = 4
     // offset from edge of tabs button
     static let ProgressTintColor = UIColor(rgb: 0x00dcfc)
+    static let ProgressBarHeight: CGFloat = 3
 
     static let TabsButtonRotationOffset: CGFloat = 1.5
     static let TabsButtonHeight: CGFloat = 18.0
@@ -141,12 +142,9 @@ class URLBarView: UIView {
         return tabsButton
     }()
 
-    fileprivate lazy var progressBar: UIProgressView = {
-        let progressBar = UIProgressView()
-        progressBar.progressTintColor = URLBarViewUX.ProgressTintColor
-        progressBar.alpha = 0
-        progressBar.trackTintColor = .clear
-        progressBar.isHidden = true
+    fileprivate lazy var progressBar: GradientProgressBar = {
+        let progressBar = GradientProgressBar()
+        progressBar.clipsToBounds = false
         return progressBar
     }()
 
@@ -234,7 +232,8 @@ class URLBarView: UIView {
         }
 
         progressBar.snp.makeConstraints { make in
-            make.top.equalTo(self.snp.bottom).offset(-1.5)
+            make.top.equalTo(self.snp.bottom).inset(URLBarViewUX.ProgressBarHeight / 2)
+            make.height.equalTo(URLBarViewUX.ProgressBarHeight)
             make.left.right.equalTo(self)
         }
 
@@ -394,15 +393,13 @@ class URLBarView: UIView {
     }
 
     func updateProgressBar(_ progress: Float) {
+        if progress == 0 {
+            self.progressBar.animateGradient()
+        }
         if progress == 1.0 {
             self.progressBar.setProgress(progress, animated: !isTransitioning)
-            UIView.animate(withDuration: 1.5, animations: {
-                self.progressBar.alpha = 0.0
-            })
+            self.progressBar.hideProgressBar()
         } else {
-            if self.progressBar.alpha < 1.0 {
-                self.progressBar.alpha = 1.0
-            }
             self.progressBar.setProgress(progress, animated: (progress > progressBar.progress) && !isTransitioning)
         }
     }
@@ -694,18 +691,20 @@ extension URLBarView: Themeable {
         guard let theme = URLBarViewUX.Themes[themeName] else {
             fatalError("Theme not found")
         }
-
+        
+        let isPrivate = themeName == Theme.PrivateMode
+        
+        progressBar.setGradientColors(startColor: UIConstants.LoadingStartColor.color(isPBM: isPrivate), endColor:UIConstants.LoadingEndColor.color(isPBM: isPrivate))
         currentTheme = themeName
         locationBorderColor = theme.borderColor!
         locationActiveBorderColor = theme.activeBorderColor!
-        progressBarTint = theme.tintColor
         cancelTextColor = theme.textColor
         actionButtonTintColor = theme.buttonTintColor
         actionButtonSelectedTintColor = theme.highlightButtonColor
         actionButtonDisabledTintColor = theme.disabledButtonColor!
         backgroundColor = theme.backgroundColor
         tabsButton.applyTheme(themeName)
-        line.backgroundColor = UIConstants.URLBarDivider.color(isPBM: themeName == Theme.PrivateMode)
+        line.backgroundColor = UIConstants.URLBarDivider.color(isPBM: isPrivate)
         locationContainer.layer.shadowColor = self.locationBorderColor.cgColor
     }
 }
