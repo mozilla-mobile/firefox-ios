@@ -730,7 +730,8 @@ class BrowserViewController: UIViewController {
             assertionFailure("homePanelController is still nil after assignment.")
             return
         }
-
+        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
+        homePanelController.applyTheme(isPrivate ? Theme.PrivateMode : Theme.NormalMode)
         let panelNumber = tabManager.selectedTab?.url?.fragment
 
         // splitting this out to see if we can get better crash reports when this has a problem
