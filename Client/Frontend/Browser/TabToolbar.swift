@@ -76,7 +76,7 @@ open class TabToolbarHelper: NSObject {
         }
     }
 
-    fileprivate func setTint(color: UIColor,  selectedColor: UIColor, andDisabledColor disabledColor: UIColor, forButtons buttons: [UIButton]) {
+    fileprivate func setTint(color: UIColor, selectedColor: UIColor, andDisabledColor disabledColor: UIColor, forButtons buttons: [UIButton]) {
         let buttons = buttons as! [ToolbarButton]
         buttons.forEach { $0.tintColor = color; $0.imageView?.tintColor = color; $0.selectedTintcolor = selectedColor; $0.unselectedTintColor = color; $0.disabledTintColor = disabledColor }
     }

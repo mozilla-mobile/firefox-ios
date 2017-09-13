@@ -1200,23 +1200,6 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    func getCurrentAppState() -> AppState {
-        return mainStore.updateState(getCurrentUIState())
-    }
-
-    func getCurrentUIState() -> UIState {
-        if let homePanelController = homePanelController {
-            return .homePanels(homePanelState: homePanelController.homePanelState)
-        }
-        guard let tab = tabManager.selectedTab else {
-            return .loading
-        }
-        if tab.url == nil {
-            return .emptyTab
-        }
-        return .tab(tabState: tab.tabState)
-    }
-
     @objc fileprivate func openSettings() {
         assert(Thread.isMainThread, "Opening settings requires being invoked on the main thread")
 
@@ -2512,8 +2495,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
             }
             present(introViewController, animated: true) {
                 // On first run (and forced) open up the homepage in the background.
-                let state = self.getCurrentAppState()
-                if let homePageURL = HomePageAccessors.getHomePage(state), let tab = self.tabManager.selectedTab, DeviceInfo.hasConnectivity() {
+                if let homePageURL = HomePageAccessors.getHomePage(self.profile.prefs), let tab = self.tabManager.selectedTab, DeviceInfo.hasConnectivity() {
                     tab.loadRequest(URLRequest(url: homePageURL))
                 }
             }

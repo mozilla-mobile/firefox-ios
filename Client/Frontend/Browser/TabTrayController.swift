@@ -415,7 +415,7 @@ class TabTrayController: UIViewController {
 
     func didClickAddTab() {
         openNewTab()
-        LeanplumIntegration.sharedInstance.track(eventName: .openedNewTab, withParameters: ["Source":"Tab Tray" as AnyObject])
+        LeanplumIntegration.sharedInstance.track(eventName: .openedNewTab, withParameters: ["Source": "Tab Tray" as AnyObject])
     }
 
     func didTapLearnMore() {
@@ -425,7 +425,6 @@ class TabTrayController: UIViewController {
             openNewTab(learnMoreRequest)
         }
     }
-
 
     func didTogglePrivateMode() {
         let scaleDownTransform = CGAffineTransform(scaleX: 0.9, y: 0.9)

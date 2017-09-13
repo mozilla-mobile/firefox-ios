@@ -160,8 +160,6 @@ private extension BrowserToTrayAnimator {
         // the screenshot ends up being blank unless we set the collection view hidden after the screen update happens. 
         // To work around this, we dispatch the setting of collection view to hidden after the screen update is completed.
 
-
-
         DispatchQueue.main.async {
             tabTray.collectionView.isHidden = true
             let finalFrame = calculateCollapsedCellFrameUsingCollectionView(tabTray.collectionView,

@@ -119,8 +119,8 @@ extension ActivityStreamTests {
         let mockSite = Site(url: "http://mozilla.org", title: "Mozilla")
         let highlightsContextMenu = panel.contextMenu(for: mockSite, with: IndexPath(row: 0, section: ActivityStreamPanel.Section.highlights.rawValue))
 
-        let dismiss = highlightsContextMenu?.actions.find { $0.title == Strings.RemoveContextMenuTitle }
-        let delete = highlightsContextMenu?.actions.find { $0.title == Strings.DeleteFromHistoryContextMenuTitle }
+        let dismiss = highlightsContextMenu?.actions[0].find { $0.title == Strings.RemoveContextMenuTitle }
+        let delete = highlightsContextMenu?.actions[0].find { $0.title == Strings.DeleteFromHistoryContextMenuTitle }
 
         dismiss?.handler?(dismiss!)
         delete?.handler?(delete!)

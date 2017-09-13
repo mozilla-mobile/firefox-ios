@@ -6,7 +6,7 @@ import Foundation
 import Shared
 
 @available(iOS 11.0, *)
-class ContentBlockerSettingsTableView : SettingsTableViewController {
+class ContentBlockerSettingsTableView: SettingsTableViewController {
     // The first section header gets a More Info link
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         if section == 0 {
@@ -24,7 +24,7 @@ class ContentBlockerSettingsTableView : SettingsTableViewController {
         button.setAttributedTitle(NSAttributedString(string: title, attributes: attributes), for: .normal)
         button.contentHorizontalAlignment = .left
         // Top and left insets are needed to match the table row style.
-        button.contentEdgeInsets = UIEdgeInsetsMake(8, 16, 0, 0)
+        button.contentEdgeInsets = UIEdgeInsets(top: 8, left: 16, bottom: 0, right: 0)
         button.addTarget(self, action: #selector(ContentBlockerSettingsTableView.moreInfoTapped), for: .touchUpInside)
         return button
     }
