@@ -1161,7 +1161,7 @@ class BrowserViewController: UIViewController {
             popoverPresentationController.delegate = self
         }
 
-        self.present(controller, animated: true, completion: nil)
+        present(controller, animated: true, completion: nil)
 
         LeanplumIntegration.sharedInstance.track(eventName: .userSharedWebpage)
     }
@@ -1379,7 +1379,7 @@ extension BrowserViewController {
 extension BrowserViewController: URLBarDelegate {
     
     func showTabTray() {
-        self.webViewContainerToolbar.isHidden = true
+        webViewContainerToolbar.isHidden = true
         updateFindInPageVisibility(visible: false)
         
         let tabTrayController = TabTrayController(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
@@ -1388,7 +1388,7 @@ extension BrowserViewController: URLBarDelegate {
             screenshotHelper.takeScreenshot(tab)
         }
         
-        self.navigationController?.pushViewController(tabTrayController, animated: true)
+        navigationController?.pushViewController(tabTrayController, animated: true)
         self.tabTrayController = tabTrayController
     }
 
@@ -1401,7 +1401,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressTabs(_ urlBar: URLBarView) {
-        self.showTabTray()
+        showTabTray()
     }
 
     func urlBarDidPressReaderMode(_ urlBar: URLBarView) {
@@ -1633,10 +1633,10 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             self.openURLInNewTab(url, isPrivate: isPrivate, isPrivileged: true)
         }
         
-        actions.append(self.getOtherPanelActions())
-        actions.append(self.getHomePanelActions(openURL: urlAction, vcDelegate: self))
-        actions.append(self.getTabMenuActions(openURL: urlAction, showTabs: self.showTabTray))
-        self.presentSheetWith(actions: actions, on: self, from: button)
+        actions.append(getOtherPanelActions())
+        actions.append(getHomePanelActions(openURL: urlAction, vcDelegate: self))
+        actions.append(getTabMenuActions(openURL: urlAction, showTabs: showTabTray))
+        presentSheetWith(actions: actions, on: self, from: button)
     }
 
     func tabToolbarDidPressShare(_ tabToolbar: TabToolbarProtocol, button: UIButton) {

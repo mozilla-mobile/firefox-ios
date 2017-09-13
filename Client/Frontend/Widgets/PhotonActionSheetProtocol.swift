@@ -14,7 +14,8 @@ protocol PhotonActionSheetProtocol {
 extension PhotonActionSheetProtocol {
     typealias PresentableVC = UIViewController & UIPopoverPresentationControllerDelegate
     typealias MenuAction = () -> Void
-    typealias URLOpenAction = (URL?, Bool) -> Void
+    typealias IsPrivateTab = Bool
+    typealias URLOpenAction = (URL?, IsPrivateTab) -> Void
     
     func presentSheetWith(actions: [[PhotonActionSheetItem]], on viewController: PresentableVC, from view: UIView) {
         let sheet = PhotonActionSheet(actions: actions)
