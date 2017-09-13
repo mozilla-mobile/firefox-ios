@@ -27,6 +27,8 @@ public struct UIConstants {
     static let URLBarDivider = BrowserColor(normal: 0xE4E4E4, pbm: 0x414146)
     static let TabTrayBG = UIColor(rgb: 0x272727)
     static let locationBarBG = UIColor(rgb: 0xD7D7DB)
+    static let LoadingStartColor = BrowserColor(normal: 0x00DCFC, pbm: 0x9400ff)
+    static let LoadingEndColor = BrowserColor(normal: 0x0A84FF, pbm: 0xff1ad9)
 
     //Photon UI sizes
     static let TopToolbarHeight: CGFloat = 56
