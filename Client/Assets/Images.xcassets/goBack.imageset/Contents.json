@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "qrscan.png",
+      "filename" : "goback.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "qrscan@2x.png",
+      "filename" : "goback@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "qrscan@3x.png",
+      "filename" : "goback@3x.png",
       "scale" : "3x"
     }
   ],
