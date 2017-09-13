@@ -192,6 +192,8 @@ class BrowserViewController: UIViewController {
             // the top constraints are active because of their reduced priorities.
             make.leading.equalTo(view).priority(500)
             make.top.equalTo(homeView).priority(500)
+
+            // Note: this padding here is in addition to the 8px that’s already applied for the Cancel action
             make.trailing.equalTo(homeView.settingsButton.snp.leading).offset(-8).priority(500)
         }
         topURLBarConstraints.forEach { $0.deactivate() }

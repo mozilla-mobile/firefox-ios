@@ -23,7 +23,7 @@ class BrowserToolset {
     init() {
         backButton.tintColor = UIConstants.colors.toolbarButtonNormal
         backButton.setImage(#imageLiteral(resourceName: "icon_back_active"), for: .normal)
-        backButton.setImage(#imageLiteral(resourceName: "icon_back_inactive"), for: .disabled)
+        backButton.setImage(#imageLiteral(resourceName: "icon_back_active").alpha(0.3), for: .disabled)
         backButton.addTarget(self, action: #selector(didPressBack), for: .touchUpInside)
         backButton.alpha = UIConstants.layout.browserToolbarDisabledOpacity
         backButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
@@ -32,7 +32,7 @@ class BrowserToolset {
 
         forwardButton.tintColor = UIConstants.colors.toolbarButtonNormal
         forwardButton.setImage(#imageLiteral(resourceName: "icon_forward_active"), for: .normal)
-        forwardButton.setImage(#imageLiteral(resourceName: "icon_forward_inactive"), for: .disabled)
+        forwardButton.setImage(#imageLiteral(resourceName: "icon_forward_active").alpha(0.3), for: .disabled)
         forwardButton.addTarget(self, action: #selector(didPressForward), for: .touchUpInside)
         forwardButton.alpha = UIConstants.layout.browserToolbarDisabledOpacity
         forwardButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
@@ -46,7 +46,7 @@ class BrowserToolset {
 
         sendButton.tintColor = UIConstants.colors.toolbarButtonNormal
         sendButton.setImage(#imageLiteral(resourceName: "icon_openwith_active"), for: .normal)
-        sendButton.setImage(#imageLiteral(resourceName: "icon_openwith_inactive"), for: .disabled)
+        sendButton.setImage(#imageLiteral(resourceName: "icon_openwith_active").alpha(0.3), for: .disabled)
         sendButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         sendButton.addTarget(self, action: #selector(didPressSend), for: .touchUpInside)
         sendButton.accessibilityLabel = UIConstants.strings.browserShare
@@ -97,5 +97,16 @@ class BrowserToolset {
 
     @objc private func didPressSend() {
         delegate?.browserToolsetDidPressSend(self)
+    }
+}
+
+extension UIImage{
+
+    func alpha(_ value:CGFloat) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(size, false, scale)
+        draw(at: CGPoint.zero, blendMode: .normal, alpha: value)
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage!
     }
 }

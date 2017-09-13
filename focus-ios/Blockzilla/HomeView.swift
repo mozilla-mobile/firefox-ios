@@ -37,7 +37,6 @@ class HomeView: UIView {
 
         let settingsButton = UIButton()
         settingsButton.setImage(#imageLiteral(resourceName: "icon_settings"), for: .normal)
-        settingsButton.contentEdgeInsets = UIEdgeInsets(top: 18, left: 4, bottom: 14, right: 16)
         settingsButton.addTarget(self, action: #selector(didPressSettings), for: .touchUpInside)
         settingsButton.accessibilityLabel = UIConstants.strings.browserSettings
         settingsButton.accessibilityIdentifier = "HomeView.settingsButton"
@@ -60,9 +59,9 @@ class HomeView: UIView {
         }
 
         settingsButton.snp.makeConstraints { make in
-            make.top.trailing.equalTo(self)
-            make.height.equalTo(52)
-            make.width.equalTo(40)
+            make.top.equalTo(self).offset(15)
+            make.trailing.equalTo(self).inset(16)
+            make.height.width.equalTo(24)
         }
     }
 
