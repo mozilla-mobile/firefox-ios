@@ -29,7 +29,6 @@ it
 ja
 kab
 kk
-km
 ko
 lo
 lt
