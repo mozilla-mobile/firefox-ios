@@ -13,7 +13,7 @@ class HomePageAccessors {
     static func isButtonInMenu(_ prefs: Prefs) -> Bool {
         return prefs.boolForKey(HomePageConstants.HomePageButtonIsInMenuPrefKey) ?? true
     }
-    
+
     static func getHomePage(_ prefs: Prefs) -> URL? {
         let string = prefs.stringForKey(HomePageConstants.HomePageURLPrefKey) ?? getDefaultHomePageString(prefs)
         guard let urlString = string else {
@@ -21,7 +21,7 @@ class HomePageAccessors {
         }
         return NSURL(string: urlString) as URL?
     }
-    
+
     static func getDefaultHomePageString(_ prefs: Prefs) -> String? {
         return prefs.stringForKey(HomePageConstants.DefaultHomePageURLPrefKey)
     }
