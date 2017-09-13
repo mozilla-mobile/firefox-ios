@@ -393,13 +393,13 @@ class URLBarView: UIView {
 
     func updateProgressBar(_ progress: Float) {
         if progress == 0 {
-            self.progressBar.animateGradient()
+            progressBar.animateGradient()
         }
         if progress == 1.0 {
-            self.progressBar.setProgress(progress, animated: !isTransitioning)
-            self.progressBar.hideProgressBar()
+            progressBar.setProgress(progress, animated: !isTransitioning)
+            progressBar.hideProgressBar()
         } else {
-            self.progressBar.setProgress(progress, animated: (progress > progressBar.progress) && !isTransitioning)
+            progressBar.setProgress(progress, animated: (progress > progressBar.progress) && !isTransitioning)
         }
     }
 
