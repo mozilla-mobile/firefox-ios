@@ -14,7 +14,7 @@ mkdir l10n-screenshots
 
 LOCALES=$*
 if [ $# -eq 0 ]; then
-  LOCALES="af ar ast az bg bn br bs ca cs cy da de dsb el en-GB en-US eo es es-CL es-MX eu fa fr ga-IE gd gl he hi-IN hsb hu hy-AM id is it ja kab kk km kn ko lo lt lv ml ms my nb-NO ne-NP nl nn-NO or pa-IN pl pt-BR pt-PT rm ro ru ses si sk sl sq sv-SE te th tl tn tr uk ur uz zh-CN zh-TW"
+  LOCALES="af ar ast az bg bn br bs ca cs cy da de dsb el en-GB en-US eo es es-AR es-CL es-MX eu fa fr ga-IE gd gl he hi-IN hsb hu hy-AM id is it ja kab kk km kn ko lo lt lv ml ms my nb-NO ne-NP nl nn-NO or pa-IN pl pt-BR pt-PT rm ro ru ses si sk sl sq sv-SE te th tl tn tr uk ur uz zh-CN zh-TW"
 fi
 
 for lang in $LOCALES; do
@@ -24,6 +24,8 @@ for lang in $LOCALES; do
         --skip_open_summary \
         --derived_data_path l10n-screenshots-dd \
         --erase_simulator --localize_simulator \
-        --devices "iPhone 5s" --languages "$lang" \
+        --devices "iPhone SE" --languages "$lang" \
+        --clear_previous_screenshots true \
         --output_directory "l10n-screenshots/$lang" > "l10n-screenshots/$lang/snapshot.log" 2>&1
 done
+
