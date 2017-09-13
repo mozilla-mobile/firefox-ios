@@ -12,12 +12,13 @@ private let log = Logger.browserLogger
 
 struct URLBarViewUX {
     static let TextFieldBorderColor = UIColor(rgb: 0xBBBBBB)
-    static let TextFieldActiveBorderColor = UIColor(rgb: 0x4A90E2)
-    static let LocationLeftPadding = 5
-    static let LocationHeight = 42
+    static let TextFieldActiveBorderColor = UIColor(rgb: 0xB0D5FB)
+    static let LocationLeftPadding: CGFloat = 8
+    static let LocationHeight: CGFloat = 40
     static let LocationContentOffset: CGFloat = 8
     static let TextFieldCornerRadius: CGFloat = 8
-    static let TextFieldBorderWidth: CGFloat = 0
+    static let TextFieldBorderWidth: CGFloat = 1
+    static let TextFieldBorderWidthSelected: CGFloat = 4
     // offset from edge of tabs button
     static let ProgressTintColor = UIColor(rgb: 0x00dcfc)
 
@@ -28,7 +29,7 @@ struct URLBarViewUX {
     static let Themes: [String: Theme] = {
         var themes = [String: Theme]()
         var theme = Theme()
-        theme.borderColor = UIColor(rgb: 0xf9f9fa)
+        theme.borderColor = UIColor(rgb: 0x39393e)
         theme.backgroundColor = UIColor(rgb: 0x4A4A4F)
         theme.activeBorderColor = UIConstants.PrivateModePurple
         theme.tintColor = UIColor(rgb: 0xf9f9fa)
@@ -39,7 +40,7 @@ struct URLBarViewUX {
         themes[Theme.PrivateMode] = theme
 
         theme = Theme()
-        theme.borderColor = TextFieldBorderColor
+        theme.borderColor =  UIColor(rgb: 0x737373).withAlphaComponent(0.3)
         theme.activeBorderColor = TextFieldActiveBorderColor
         theme.disabledButtonColor = UIColor.lightGray
         theme.highlightButtonColor = UIColor(rgb: 0x00A2FE)
@@ -51,10 +52,6 @@ struct URLBarViewUX {
 
         return themes
     }()
-
-    static func backgroundColorWithAlpha(_ alpha: CGFloat) -> UIColor {
-        return UIConstants.AppBackgroundColor.withAlphaComponent(alpha)
-    }
 }
 
 protocol URLBarDelegate: class {
@@ -126,17 +123,12 @@ class URLBarView: UIView {
     }()
 
     lazy var locationContainer: UIView = {
-        let locationContainer = UIView()
+        let locationContainer = TabLocationContainerView()
         locationContainer.translatesAutoresizingMaskIntoConstraints = false
-
-        // Enable clipping to apply the rounded edges to subviews.
-        locationContainer.clipsToBounds = true
-
-        locationContainer.layer.borderColor = self.locationBorderColor.cgColor
-        locationContainer.layer.cornerRadius = URLBarViewUX.TextFieldCornerRadius
+        locationContainer.layer.shadowColor = self.locationBorderColor.cgColor
         locationContainer.layer.borderWidth = URLBarViewUX.TextFieldBorderWidth
-        locationContainer.backgroundColor = UIConstants.locationBarBG
-
+        locationContainer.layer.borderColor = self.locationBorderColor.cgColor
+        locationContainer.backgroundColor = .clear
         return locationContainer
     }()
     
@@ -144,7 +136,7 @@ class URLBarView: UIView {
 
     fileprivate lazy var tabsButton: TabsButton = {
         let tabsButton = TabsButton.tabTrayButton()
-        tabsButton.addTarget(self, action: #selector(URLBarView.SELdidClickAddTab), for: UIControlEvents.touchUpInside)
+        tabsButton.addTarget(self, action: #selector(URLBarView.SELdidClickAddTab), for: .touchUpInside)
         tabsButton.accessibilityIdentifier = "URLBarView.tabsButton"
         return tabsButton
     }()
@@ -294,11 +286,19 @@ class URLBarView: UIView {
         super.updateConstraints()
         if inOverlayMode {
             // In overlay mode, we always show the location view full width
+            self.locationContainer.layer.borderWidth = URLBarViewUX.TextFieldBorderWidthSelected
             self.locationContainer.snp.remakeConstraints { make in
+                let height = URLBarViewUX.LocationHeight + (URLBarViewUX.TextFieldBorderWidthSelected * 2)
+                make.height.equalTo(height)
                 make.leading.equalTo(self).offset(URLBarViewUX.LocationLeftPadding)
                 make.trailing.equalTo(self.cancelButton.snp.leading)
-                make.height.equalTo(URLBarViewUX.LocationHeight)
                 make.centerY.equalTo(self)
+            }
+            self.locationView.snp.remakeConstraints { make in
+                make.edges.equalTo(self.locationContainer).inset(UIEdgeInsets(equalInset: URLBarViewUX.TextFieldBorderWidthSelected))
+            }
+            self.locationTextField?.snp.remakeConstraints { make in
+                make.edges.equalTo(self.locationView).inset(UIEdgeInsets(top: 0, left: URLBarViewUX.LocationLeftPadding, bottom: 0, right: URLBarViewUX.LocationLeftPadding))
             }
         } else {
             if topTabsIsShowing {
@@ -324,9 +324,13 @@ class URLBarView: UIView {
                     make.leading.equalTo(self).offset(URLBarViewUX.LocationLeftPadding)
                     make.trailing.equalTo(self.tabsButton.snp.leading)
                 }
-
-                make.height.equalTo(URLBarViewUX.LocationHeight)
+                let height = URLBarViewUX.LocationHeight + (URLBarViewUX.TextFieldBorderWidth * 2)
+                make.height.equalTo(height)
                 make.centerY.equalTo(self)
+            }
+            self.locationContainer.layer.borderWidth = URLBarViewUX.TextFieldBorderWidth
+            self.locationView.snp.remakeConstraints { make in
+                make.edges.equalTo(self.locationContainer).inset(UIEdgeInsets(equalInset: URLBarViewUX.TextFieldBorderWidth))
             }
         }
 
@@ -338,7 +342,7 @@ class URLBarView: UIView {
         locationTextField = ToolbarTextField()
 
         guard let locationTextField = locationTextField else { return }
-
+        
         locationTextField.translatesAutoresizingMaskIntoConstraints = false
         locationTextField.autocompleteDelegate = self
         locationTextField.keyboardType = UIKeyboardType.webSearch
@@ -350,14 +354,11 @@ class URLBarView: UIView {
         locationTextField.accessibilityIdentifier = "address"
         locationTextField.accessibilityLabel = NSLocalizedString("Address and Search", comment: "Accessibility label for address and search field, both words (Address, Search) are therefore nouns.")
         locationTextField.attributedPlaceholder = self.locationView.placeholder
-
         locationContainer.addSubview(locationTextField)
-
-        locationTextField.snp.makeConstraints { make in
-            make.right.top.bottom.equalTo(self.locationView.urlTextField)
-            make.left.equalTo(self.locationView)
+        locationTextField.snp.remakeConstraints { make in
+            make.edges.equalTo(self.locationView)
         }
-
+        
         locationTextField.applyTheme(currentTheme)
     }
 
@@ -482,8 +483,7 @@ class URLBarView: UIView {
 
             // Make the editable text field span the entire URL bar, covering the lock and reader icons.
             self.locationTextField?.snp.remakeConstraints { make in
-                make.leading.equalTo(self.locationContainer).offset(URLBarViewUX.LocationContentOffset)
-                make.top.bottom.trailing.equalTo(self.locationContainer)
+                make.edges.equalTo(self.locationView)
             }
         } else {
             self.tabsButton.transform = CGAffineTransform.identity
@@ -705,6 +705,42 @@ extension URLBarView: Themeable {
         backgroundColor = theme.backgroundColor
         tabsButton.applyTheme(themeName)
         line.backgroundColor = UIConstants.URLBarDivider.color(isPBM: themeName == Theme.PrivateMode)
+        locationContainer.layer.shadowColor = self.locationBorderColor.cgColor
+    }
+}
+
+// We need a subclass so we can setup the shadows correctly
+// This subclass creates a strong shadow on the URLBar
+class TabLocationContainerView: UIView {
+    
+    struct LocationContainerUX {
+        static let CornerRadius: CGFloat = 4
+        static let ShadowRadius: CGFloat = 2
+        static let ShadowOpacity: Float = 1
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        let layer = self.layer
+        layer.cornerRadius = LocationContainerUX.CornerRadius
+        layer.shadowRadius = LocationContainerUX.ShadowRadius
+        layer.shadowOpacity = LocationContainerUX.ShadowOpacity
+        layer.masksToBounds = false
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        let layer = self.layer
+        
+        layer.shadowOffset = CGSize(width: 0, height: 1)
+        // the shadow appears 2px off from the view rect
+        let shadowLength: CGFloat = 2
+        let shadowPath = CGRect(x: shadowLength, y: shadowLength, width: layer.frame.width - (shadowLength * 2), height: layer.frame.height - (shadowLength * 2))
+        layer.shadowPath = UIBezierPath(roundedRect: shadowPath, cornerRadius: layer.cornerRadius).cgPath
+        super.layoutSubviews()
     }
 }
 
@@ -712,14 +748,14 @@ class ToolbarTextField: AutocompleteTextField {
     static let Themes: [String: Theme] = {
         var themes = [String: Theme]()
         var theme = Theme()
-        theme.backgroundColor = UIConstants.PrivateModeLocationBackgroundColor
+        theme.backgroundColor = UIColor(rgb: 0x636369)
         theme.textColor = UIColor.white
         theme.buttonTintColor = UIColor.white
         theme.highlightColor = UIConstants.PrivateModeInputHighlightColor
         themes[Theme.PrivateMode] = theme
 
         theme = Theme()
-        theme.backgroundColor = UIColor(rgb: 0xD7D7DB)
+        theme.backgroundColor = .white
         theme.textColor = UIColor(rgb: 0x272727)
         theme.highlightColor = AutocompleteTextFieldUX.HighlightColor
         themes[Theme.NormalMode] = theme

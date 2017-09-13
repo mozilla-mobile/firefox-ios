@@ -23,6 +23,7 @@ struct TabLocationViewUX {
     static let HostFontColor = UIColor.black
     static let BaseURLFontColor = UIColor.gray
     static let LocationContentInset = 8
+    static let URLBarPadding = 4
 
     static let Themes: [String: Theme] = {
         var themes = [String: Theme]()
@@ -31,14 +32,14 @@ struct TabLocationViewUX {
         theme.textColor = UIColor(rgb: 0xf9f9fa)
         theme.highlightButtonColor = UIConstants.PrivateModePurple
         theme.buttonTintColor = UIColor(rgb: 0xf9f9fa)
-        theme.backgroundColor = UIConstants.PrivateModeLocationBackgroundColor
+        theme.backgroundColor = UIColor(rgb: 0x636369)
         themes[Theme.PrivateMode] = theme
 
         theme = Theme()
         theme.textColor = UIColor(rgb: 0x27)
         theme.highlightButtonColor = UIColor(rgb: 0x00A2FE)
-        theme.buttonTintColor = UIColor(rgb: 0x272727)
-        theme.backgroundColor = UIConstants.locationBarBG
+        theme.buttonTintColor = UIColor(rgb: 0x737373)
+        theme.backgroundColor = .white
         themes[Theme.NormalMode] = theme
 
         return themes
@@ -186,13 +187,13 @@ class TabLocationView: UIView {
             if lockImageView.isHidden {
                 make.leading.equalTo(self).offset(TabLocationViewUX.LocationContentInset)
             } else {
-                make.leading.equalTo(self.lockImageView.snp.trailing).offset(9)
+                make.leading.equalTo(self.lockImageView.snp.trailing).offset(TabLocationViewUX.URLBarPadding)
             }
 
             if readerModeButton.isHidden {
-                make.trailing.equalTo(self).offset(-TabLocationViewUX.LocationContentInset)
+                make.trailing.equalTo(self).inset(TabLocationViewUX.LocationContentInset)
             } else {
-                make.trailing.equalTo(self.readerModeButton.snp.leading)
+                make.trailing.equalTo(self.readerModeButton.snp.leading).inset(TabLocationViewUX.URLBarPadding)
             }
         }
 
@@ -228,6 +229,11 @@ class TabLocationView: UIView {
             urlTextField.text = url?.absoluteString.replacingOccurrences(of: host, with: host.asciiHostToUTF8())
         } else {
             urlTextField.text = url?.absoluteString
+        }
+        // remove https:// (the scheme) from the url when displaying
+        if let scheme = url?.scheme {
+            let schemeString = "\(scheme)://"
+            urlTextField.text = url?.absoluteString.replacingOccurrences(of: schemeString, with: "")
         }
     }
 }
