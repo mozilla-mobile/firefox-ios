@@ -231,9 +231,8 @@ class TabLocationView: UIView {
             urlTextField.text = url?.absoluteString
         }
         // remove https:// (the scheme) from the url when displaying
-        if let scheme = url?.scheme {
-            let schemeString = "\(scheme)://"
-            urlTextField.text = url?.absoluteString.replacingOccurrences(of: schemeString, with: "")
+        if let scheme = url?.scheme, let range = url?.absoluteString.range(of: "\(scheme)://") {
+            urlTextField.text = url?.absoluteString.replacingCharacters(in: range, with: "")
         }
     }
 }
