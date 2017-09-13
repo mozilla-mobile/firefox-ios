@@ -1127,7 +1127,7 @@ class BrowserViewController: UIViewController {
             popoverPresentationController.delegate = self
         }
 
-        self.present(controller, animated: true, completion: nil)
+        present(controller, animated: true, completion: nil)
 
         LeanplumIntegration.sharedInstance.track(eventName: .userSharedWebpage)
     }
@@ -1326,6 +1326,20 @@ extension BrowserViewController {
 }
 
 extension BrowserViewController: URLBarDelegate {
+    
+    func showTabTray() {
+        webViewContainerToolbar.isHidden = true
+        updateFindInPageVisibility(visible: false)
+        
+        let tabTrayController = TabTrayController(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
+        
+        if let tab = tabManager.selectedTab {
+            screenshotHelper.takeScreenshot(tab)
+        }
+        
+        navigationController?.pushViewController(tabTrayController, animated: true)
+        self.tabTrayController = tabTrayController
+    }
 
     func urlBarDidPressReload(_ urlBar: URLBarView) {
         tabManager.selectedTab?.reload()
@@ -1336,17 +1350,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressTabs(_ urlBar: URLBarView) {
-        self.webViewContainerToolbar.isHidden = true
-        updateFindInPageVisibility(visible: false)
-
-        let tabTrayController = TabTrayController(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
-
-        if let tab = tabManager.selectedTab {
-            screenshotHelper.takeScreenshot(tab)
-        }
-
-        self.navigationController?.pushViewController(tabTrayController, animated: true)
-        self.tabTrayController = tabTrayController
+        showTabTray()
     }
 
     func urlBarDidPressReaderMode(_ urlBar: URLBarView) {
@@ -1574,18 +1578,14 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to:nil, from:nil, for:nil)
         var actions: [[PhotonActionSheetItem]] = []
         
-        let homePanelActions = self.getHomePanelActions(openURL: { (url) in
-            self.openURLInNewTab(url, isPrivate: false, isPrivileged: true)
-        }, vcDelegate: self)
-        
-        let tabActions = self.getTabMenuActions(openURL: { (url, isPrivate) in
+        let urlAction = { (url, isPrivate) in
             self.openURLInNewTab(url, isPrivate: isPrivate, isPrivileged: true)
-        })
-        let systemActions = self.getOtherPanelActions()
-        actions.append(systemActions)
-        actions.append(homePanelActions)
-        actions.append(tabActions)
-        self.presentSheetWith(actions: actions, on: self, from: button)
+        }
+        
+        actions.append(getOtherPanelActions())
+        actions.append(getHomePanelActions(openURL: urlAction, vcDelegate: self))
+        actions.append(getTabMenuActions(openURL: urlAction, showTabs: showTabTray))
+        presentSheetWith(actions: actions, on: self, from: button)
     }
 
     func tabToolbarDidPressShare(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
@@ -1598,12 +1598,17 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         }
         
         // The logic of which actions appear when isnt final.
-        if let tab = self.tabManager.selectedTab, let url = tab.url, !url.isLocal {
-            let pageActions = self.getTabActions(tab: tab, buttonView: button,
-                                                 presentShareMenu: actionMenuPresenter,
-                                                 findInPage: findInPageAction, presentableVC: self)
-            self.presentSheetWith(actions: pageActions, on: self, from: button)
+        guard let tab = self.tabManager.selectedTab, tab.url != nil else {
+            return
         }
+        
+        // The logic of which actions appear when isnt final.
+        let pageActions = self.getTabActions(tab: tab,
+                                             buttonView: button,
+                                             presentShareMenu: actionMenuPresenter,
+                                             findInPage: findInPageAction,
+                                             presentableVC: self)
+        self.presentSheetWith(actions: pageActions, on: self, from: button)
     }
 
     func showBackForwardList() {
