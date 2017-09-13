@@ -6,6 +6,7 @@ import XCTest
 
 class L10nSnapshotTests: L10nBaseSnapshotTests {
     func test02DefaultTopSites() {
+        sleep(5)
         snapshot("02DefaultTopSites-01")
     }
 
