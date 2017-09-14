@@ -86,14 +86,26 @@ class CorePing: TelemetryPing {
             SearchTelemetry.resetCount(profile.prefs)
         }
 
+        var prefsDict = [String: Any]()
+
         if let newTabChoice = self.prefs.stringForKey(NewTabAccessors.PrefKey) {
-            out["defaultNewTabExperience"] = newTabChoice as AnyObject?
+            prefsDict["defaultNewTabExperience"] = newTabChoice as AnyObject?
         }
 
         if let chosenEmailClient = self.prefs.stringForKey(PrefsKeys.KeyMailToOption) {
-            out["defaultMailClient"] = chosenEmailClient as AnyObject?
+            prefsDict["defaultMailClient"] = chosenEmailClient as AnyObject?
         }
 
+        if #available(iOS 11.0, *) {
+            if let strength = prefs.stringForKey(ContentBlockerHelper.PrefKeyStrength) {
+                prefsDict["trackingProtectionStrength"] = strength as AnyObject?
+            }
+            if let enabled = prefs.stringForKey(ContentBlockerHelper.PrefKeyEnabledState) {
+                prefsDict["trackingProtectionEnabled"] = enabled as AnyObject?
+            }
+        }
+
+        out["settings"] = prefsDict
         payload = JSON(out)
     }
 }
