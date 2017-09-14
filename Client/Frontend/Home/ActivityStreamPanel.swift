@@ -16,7 +16,7 @@ private let DefaultSuggestedSitesKey = "topSites.deletedSuggestedSites"
 
 // MARK: -  Lifecycle
 struct ASPanelUX {
-    static let backgroundColor = UIColor(white: 1.0, alpha: 0.5)
+    static let backgroundColor = UIConstants.AppBackgroundColor
     static let rowSpacing: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 30 : 20
     static let highlightCellHeight: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 250 : 200
     static let sectionInsetsForSizeClass = UXSizeClasses(compact: 0, regular: 101, other: 14)

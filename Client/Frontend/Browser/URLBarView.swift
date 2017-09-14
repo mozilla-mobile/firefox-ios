@@ -33,7 +33,7 @@ struct URLBarViewUX {
         var theme = Theme()
         theme.borderColor = UIColor(rgb: 0x39393e)
         theme.backgroundColor = UIColor(rgb: 0x4A4A4F)
-        theme.activeBorderColor = UIConstants.PrivateModePurple
+        theme.activeBorderColor = UIColor(rgb: 0x440071)
         theme.tintColor = UIColor(rgb: 0xf9f9fa)
         theme.textColor = UIColor(rgb: 0xf9f9fa)
         theme.buttonTintColor = UIConstants.PrivateModeActionButtonTintColor
@@ -200,6 +200,7 @@ class URLBarView: UIView {
 
         set(newURL) {
             locationView.url = newURL
+            line.isHidden = newURL?.isAboutHomeURL ?? true
         }
     }
 
@@ -215,7 +216,6 @@ class URLBarView: UIView {
 
     fileprivate func commonInit() {
         locationContainer.addSubview(locationView)
-        locationView.layer.cornerRadius = locationContainer.layer.cornerRadius
     
         [scrollToTopButton, line, progressBar, tabsButton, cancelButton, shareButton, showQRScannerButton].forEach { addSubview($0) }
         [menuButton, forwardButton, backButton, stopReloadButton, locationContainer].forEach { addSubview($0) }
@@ -495,6 +495,7 @@ class URLBarView: UIView {
         locationContainer.layer.borderColor = borderColor.cgColor
 
         if inOverlayMode {
+            self.line.isHidden = inOverlayMode
             self.cancelButton.transform = CGAffineTransform.identity
             let tabsButtonTransform = CGAffineTransform(translationX: self.tabsButton.frame.width, y: 0)
             self.tabsButton.transform = tabsButtonTransform
