@@ -19,6 +19,9 @@
 /* Label for row in About screen */
 "About.rowHelp" = "సహాయం";
 
+/* Link to Privacy Notice in the About screen */
+"About.rowPrivacy" = "గోప్యతా విధానం";
+
 /* Label for row in About screen */
 "About.rowRights" = "మీ హక్కులు";
 
@@ -58,6 +61,15 @@
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "మళ్ళీ ప్రయత్నించు";
 
+/* Button label used for cancelling to open another app from Focus */
+"ExternalAppLink.cancelTitle" = "రద్దుచేయి";
+
+/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+"ExternalAppLink.messageTitle" = "మరొక అప్లికేషన్ను తెరవడానికి %@ కోరుకుంటున్నారు";
+
+/* Button label for opening another app from Focus */
+"ExternalAppLink.openTitle" = "తెరువు";
+
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.callButton" = "కాల్‌";
 
@@ -73,6 +85,9 @@
 /* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openAppStoreButton" = "App Store తెరువు";
 
+/* Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"ExternalLink.openAppStoreTitle" = "%@ App Store ను తెరవాలనుకుంటున్నారు.";
+
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "పటములు తెరువు";
 
@@ -84,6 +99,9 @@
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "ఎవరూ చూడనట్టుగా విహరణ చెయ్యండి.";
+
+/* Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681 */
+"Focus.handoffSyncing" = "Apple Handoff సమకాలీకరిస్తోంది";
 
 /* First label for product description on the home screen */
 "Home.descriptionLabel1" = "స్వయంచాలనంగా వ్యక్తిగతంగా విహరించు.";
@@ -123,6 +141,12 @@
 
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes" = "నాకు అర్థమయ్యింది";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "ప్రతి ఒక్కరికీ %@ ను అందించడానికి మరియు మెరుగుపరచడానికి Mozilla అవసరమైనవి మాత్రమే సేకరించేందుకు కృషి చేస్తుంది.";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "ఇంకా తెలుసుకోండి.";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "అమరికలు";
@@ -166,17 +190,14 @@
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
-/* Label for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageData" = "అనామక వాడుక డేటాను పంపు";
+/* Label for Send Usage Data toggle on main screen */
+"Settings.toggleSendUsageData" = "వినియోగించిన డేటాను పంపు";
 
-/* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageDataSubtitle" = "ఇంకా తెలుసుకోండి";
-
-/* Text for the share menu option when a user wants to open a page in Firefox but doesn't have it installed. */
+/* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Firefox App ను పొందండి";
 
 /* Text for the share menu option when a user wants to open a page in Focus. */
-"ShareMenu.OpenInFocus" = "Focusలో తెరువుము";
+"ShareMenu.OpenInFocus" = "%@ లో తెరువు";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "రద్దు చేయి";
@@ -195,4 +216,37 @@
 
 /* Label displayed for search button when typing in the URL bar */
 "URL.searchLabel" = "%@ కోసం వెతుకు";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "నిరోధించిన ట్రాకర్లు";
+
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "%@ లో తెరువు";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "మీరు నకలు తీసిన లంకె: %@";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "చిత్రాన్ని నకలు చేయి";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "లంకె నకలుతీయి";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "చిత్రాన్ని భద్రపరచు";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "లంకెను పంచుకో";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%2$@ తెరవడానికి %1$@ కోరుకుంటున్నారు";
+
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "ఇది మీ కెమెరా రోల్ కు మీ చిత్రాన్ని భద్రపరిచే అనుమతిస్తుంది";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "అమరికలను తెరవండి";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "“%@” మీ ఫోటోలను యాక్సెస్ చేయాలని అనుకుంటున్నారు";
 

@@ -2,16 +2,43 @@
 "About.learnMoreButton" = "ಇನ್ನಷ್ಟು ತಿಳಿಯಿರಿ";
 
 /* Label on About screen */
+"About.missionLabel" = "%@ ಅನ್ನು Mozilla ಉತ್ಪಾದಿಸಿದೆ. ನಮ್ಮ ಧ್ಯೇಯ ಆರೋಗ್ಯಕರ, ತೆರೆದ ಇಂಟರ್ನೆಟ್ ಅನ್ನು ಬೆಳೆಸುವುದು.";
+
+/* Label on About screen */
 "About.privateBullet1" = "‍ಅನ್ವಯದಲ್ಲಿ ನೇರವಾಗಿ ಹುಡುಕಿ ಮತ್ತು ಜಾಲಾಡಿ";
+
+/* Label on About screen */
+"About.privateBullet2" = "ಜಾಡುಹಿಡಿಯುವವರನ್ನು ನಿರ್ಬಂಧಿಸು (ಅಥವಾ ಜಾಡುಹಿಡಿಯುವವರನ್ನು ಅನುಮತಿಸಲು ಸಿದ್ಧತೆಗಳನ್ನು ಪರಿಷ್ಕರಿಸು)";
+
+/* Label on About screen */
+"About.privateBullet3" = "ಕುಕಿಗಳನ್ನು ಮತ್ತು ಹುಡುಕು ಹಾಗೂ ಜಾಲಾಟದ ಇತಿಹಾಸ ತೆಗೆಯಲು ಅಳಿಸಿ";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "ಇದನ್ನು ಖಾಸಗಿ ಬ್ರೌಸರ್‍ ಆಗಿ ಬಳಸಿ:";
 
 /* Label for row in About screen */
 "About.rowHelp" = "ಸಹಾಯ";
 
+/* Link to Privacy Notice in the About screen */
+"About.rowPrivacy" = "ಗೌಪ್ಯತಾ ಸೂಚನೆ";
+
 /* Label for row in About screen */
 "About.rowRights" = "‍ನಿಮ್ಮ ಹಕ್ಕುಗಳು";
 
+/* Label on About screen */
+"About.safariBullet1" = "ಉತ್ತಮಗೊಳಿಸಿದ ಗೌಪ್ಯತೆಗಾಗಿ ಜಾಡುಹಿಡಿಯುವವರನ್ನು ನಿರ್ಬಂಧಿಸಿ";
+
+/* Label on About screen */
+"About.safariBullet2" = "ಪುಟದ ಗಾತ್ರ ಕುಗ್ಗಿಸಲು ಜಾಲದ ಫಾಂಟುಗನ್ನು ನಿರ್ಬಂಧಿಸಿ";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "ಇದನ್ನು ಸಫಾರಿ ಎಕ್ಸ್‍ಟೆಂಷನ್ ಆಗಿ ಬಳಸಿ:";
+
 /* Title for the About screen */
 "About.screenTitle" = "‍ಬಗ್ಗೆ";
+
+/* Label on About screen */
+"About.topLabel" = "%@ ನಿಮ್ಮನ್ನು ನಿಯಂತ್ರಣದಲ್ಲಿರಿಸುತ್ತದೆ.";
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "ಹಿಂದಕ್ಕೆ";
@@ -34,6 +61,15 @@
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "ಇನ್ನೊಮ್ಮೆ ಪ್ರಯತ್ನಿಸು";
 
+/* Button label used for cancelling to open another app from Focus */
+"ExternalAppLink.cancelTitle" = "ರದ್ದು ಮಾಡು";
+
+/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+"ExternalAppLink.messageTitle" = "%@ ಮತ್ತೊಂದು ಅನ್ವಯವನ್ನು ತೆರೆಯಲಿಚ್ಛಿಸುತ್ತದೆ";
+
+/* Button label for opening another app from Focus */
+"ExternalAppLink.openTitle" = "ತೆರೆ";
+
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.callButton" = "ಕರೆ";
 
@@ -42,6 +78,36 @@
 
 /* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.emailButton" = "ಇಮೇಲ್";
+
+/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.messageTitleWithPlaceholder" = "ನೀವೀಗ ಇದರಿಂದ ಹೊರನೆಡೆಯುತ್ತಿದ್ದೀರಿ %@.";
+
+/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openAppStoreButton" = "ಆಫ್ ಸ್ಟೋರ್ ತೆರೆ";
+
+/* Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"ExternalLink.openAppStoreTitle" = "%@ ಆಫ್ ಸ್ಟೋರ್ ತೆರೆಯಲಿಚ್ಛಿಸುತ್ತಿದೆ.";
+
+/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openMapsButton" = "ನಕ್ಷೆಗಳನ್ನು ತೆರೆ";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.buttonLabel" = "OK, GOT IT!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelDescription" = "ನೀವು ಬ್ರೌಸ್ ಮಾಡುವಾಗ ಆನ್ಲೈನ್ ಜಾಡುಹಿಡಿಯುವವರನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ನಿರ್ಬಂಧಿಸಿ. ನಂತರ ನಿಮ್ಮ ಸಾಧನದಿಂದ ಭೇಟಿ ನೀಡಿದ ಪುಟಗಳು, ಹುಡುಕಾಟಗಳು, ಕುಕೀಗಳು ಮತ್ತು ಗುಪ್ತಪದಗಳನ್ನು ಅಳಿಸಲು ಮೆಲ್ಲ ತಟ್ಟಿ.";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "ಯಾರೂ ನೋಡದಿರುವಂತೆ ಜಾಲಾಡಿ.";
+
+/* Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681 */
+"Focus.handoffSyncing" = "ಆಫಲ್ ಹ್ಯಾಂಡ್‍ಆಫ್ ಸಿಂಕ್ ಆಗುತ್ತಿದೆ";
+
+/* First label for product description on the home screen */
+"Home.descriptionLabel1" = "ಸ್ವಯಂಚಾಲಿತ ಖಾಸಗಿ ಜಾಲಾಟ.";
+
+/* Second label for product description on the home screen */
+"Home.descriptionLabel2" = "ಜಾಲಾಡು. ಅಳಿಸು. ಮರುಕಳಿಸು.";
 
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "ರದ್ದು ಮಾಡು‍";
@@ -56,6 +122,9 @@
 "Open.Safari" = "ಸಫಾರಿ‍";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "Safari ತಟ್ಟಿ, ವಿಷಯ ನಿರ್ಭಂದಕಗಳನ್ನು ಆಯ್ಕೆಮಾಡು";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsEnable" = "‍‍%@ ಸಕ್ರಿಯಗೊಳಿಸು‍";
 
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
@@ -64,8 +133,20 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "‍ಸಿದ್ದತೆಗಳು‍ ಆಫ್ ತೆರೆ";
 
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "ಇತರೆ ಮಾಹಿತಿ ಜಾಡುಹಿಡಿಯುವವರನ್ನು ನಿರ್ಬಂಧಿಸುವುದರಿಂದ ಕೆಲವು ವಿಡಿಯೋ ಮತ್ತು ಜಾಲ ಪುಟಗಳು ಕೆಡಬಹುದು.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "ಇಲ್ಲ, ಪರವಾಗಿಲ್ಲ";
+
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes" = "ನನಗೆ ಅರ್ಥವಾಗುತ್ತದೆ‍";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "Mozilla ಎಲ್ಲರಿಗಾಗಿ %@ ಅನ್ನು ಉತ್ತಮಗೊಳಿಸಿ ಕೊಡುವುದಕ್ಕೆ ಬೇಕಾದ್ದನ್ನು ಮಾತ್ರ ಸಂಗ್ರಹಿಸುತ್ತದೆ.";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "ಇನ್ನಷ್ಟು ತಿಳಿಯಿರಿ.";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "ಸಿದ್ಧತೆಗಳು";
@@ -76,30 +157,96 @@
 /* Title for the search engine selection screen */
 "Settings.searchTitle" = "ಹುಡುಕು ಇಂಜಿನ್‍";
 
+/* Label for Safari integration section */
+"Settings.sectionIntegration" = "INTEGRATION";
+
 /* Section label for Mozilla toggles */
 "Settings.sectionMozilla" = "MOZILLA‍";
+
+/* Section label for performance toggles */
+"Settings.sectionPerformance" = "PERFORMANCE";
 
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "ಗೌಪ್ಯತೆ";
 
+/* Label for toggle on main screen */
+"Settings.toggleBlockAds" = "ಜಾಹೀರಾತು ಜಾಡುಹಿಡಿಯುವರನ್ನು ನಿರ್ಬಂಧಿಸು";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAnalytics" = "ಅನಲಿಟಿಕ್ಸ್ ಜಾಡುಹಿಡಿಯುವರನ್ನು ನಿರ್ಬಂಧಿಸು";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "ವೆಬ್ ಫಾಂಟುಗಳನ್ನು ನಿರ್ಬಂಧಿಸು";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockOther" = "ಇತರೆ ಮಾಹಿತಿ ಜಾಡುಹಿಡಿಯುವವರನ್ನು ನಿರ್ಬಂಧಿಸು";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockSocial" = "ಸಾಮಾಜಿಕ ಜಾಡುಹಿಡಿಯುವರನ್ನು ನಿರ್ಬಂಧಿಸು";
+
+/* Label subtitle for toggle on main screen */
+"Settings.toggleOtherSubtitle" = "ಕೆಲವು ವಿಡಿಯೋ ಮತ್ತು ಜಾಲ ಪುಟಗಳನ್ನು ಹಾಳುಗೆಡುವಬಹುದು";
+
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "ಸಫಾರಿ";
 
-/* Label for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageData" = "ಅನಾಮಧೇಯ ಡೇಟಾ ಬಳಕೆ ಕಳಿಸು";
+/* Label for Send Usage Data toggle on main screen */
+"Settings.toggleSendUsageData" = "ಬಳಕೆಯ ದತ್ತಾಂಶ ಕಳುಹಿಸಿ";
 
-/* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageDataSubtitle" = "ಇನ್ನಷ್ಟು ತಿಳಿಯಿರಿ";
+/* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
+"ShareMenu.GetFirefox" = "Firefox ಅನ್ವಯ ಪಡೆಯಿರಿ";
+
+/* Text for the share menu option when a user wants to open a page in Focus. */
+"ShareMenu.OpenInFocus" = "ಇದರಲ್ಲಿ ತೆರೆ %@";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "ರದ್ದು ಮಾಡು";
 
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "ಅಂಟಿಸು ಹಾಗು ಮುಂದುವರೆ";
+
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "ಅಳಿಸು";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "ನಿಮ್ಮ ಜಾಲಾಟದ ಇತಿಹಾಸವನ್ನು ಅಳಿಸಲಾಗಿದೆ.";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "ಹುಡುಕಿ ಅಥವ ವಿಳಾಸ ನಮೂದಿಸಿ";
 
 /* Label displayed for search button when typing in the URL bar */
 "URL.searchLabel" = "%@ ಗಾಗಿ ಹುಡುಕು‍";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "ಜಾಡುಹಿಡಿಯುವವರನ್ನು ನಿರ್ಭಂದಿಸಲಾಗಿದೆ";
+
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "ಇದರಲ್ಲಿ ತೆರೆ %@";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "ನೀವು ನಕಲಿಸಿದ ಕೊಂಡಿ: %@";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "ಚಿತ್ರವನ್ನು ನಕಲಿಸು";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "ಕೊಂಡಿ ನಕಲಿಸು‍";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "ಚಿತ್ರವನ್ನು ಉಳಿಸು";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "ಕೊಂಡಿ ಹಂಚು";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ %2$@ ಅನ್ನು ತೆರೆಯಲಿಚ್ಛಿಸುತ್ತಿದೆ";
+
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "ಇದು ನಿಮಗೆ ಚಿತ್ರಗಳನ್ನು ಕ್ಯಾಮೆರಾ ಸುರಳಿಯಲ್ಲಿ ಉಳಿಸಲು ಬಿಡುತ್ತದೆ";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "ಸಿದ್ಧತೆಗಳನ್ನು ತೆರೆ";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "“%@” ನಿಮ್ಮ ಚಿತ್ರಗಳನ್ನು ಪ್ರವೇಶಿಸಲು ಬಯಸುತ್ತಿದೆ";
 

@@ -19,6 +19,9 @@
 /* Label for row in About screen */
 "About.rowHelp" = "Bantuan";
 
+/* Link to Privacy Notice in the About screen */
+"About.rowPrivacy" = "Pernyataan Privasi";
+
 /* Label for row in About screen */
 "About.rowRights" = "Hak Anda";
 
@@ -97,6 +100,9 @@
 /* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "Jelajahi web seperti tanpa ada yang mengawasi.";
 
+/* Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681 */
+"Focus.handoffSyncing" = "Apple Handoff sedang mensinkronisasi";
+
 /* First label for product description on the home screen */
 "Home.descriptionLabel1" = "Penjelajahan pribadi secara otomatis.";
 
@@ -135,6 +141,12 @@
 
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes" = "Paham";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "Mozilla berusaha untuk mengumpulkan hanya apa yang kami perlu untuk menghadirkan dan meningkatkan %@ untuk setiap orang.";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "Pelajari lebih lanjut.";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Pengaturan";
@@ -178,17 +190,14 @@
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
-/* Label for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageData" = "Kirim data penggunaan anonim";
-
-/* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageDataSubtitle" = "Pelajari lebih lanjut";
+/* Label for Send Usage Data toggle on main screen */
+"Settings.toggleSendUsageData" = "Kirim data penggunaan";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Dapatkan Aplikasi Firefox";
 
 /* Text for the share menu option when a user wants to open a page in Focus. */
-"ShareMenu.OpenInFocus" = "Buka di Focus";
+"ShareMenu.OpenInFocus" = "Buka di %@";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Batal";
@@ -213,6 +222,9 @@
 
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Buka di %@";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "Tautan Anda salin: %@";
 
 /* Text for the context menu when a user wants to copy an image after long pressing it. */
 "contextMenu.copyImageTitle" = "Salin Gambar";

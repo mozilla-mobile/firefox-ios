@@ -19,6 +19,9 @@
 /* Label for row in About screen */
 "About.rowHelp" = "Pomoc";
 
+/* Link to Privacy Notice in the About screen */
+"About.rowPrivacy" = "Uwagi dotyczące prywatności";
+
 /* Label for row in About screen */
 "About.rowRights" = "O prawach użytkownika";
 
@@ -82,6 +85,9 @@
 /* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openAppStoreButton" = "Otwórz w „App Store”";
 
+/* Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"ExternalLink.openAppStoreTitle" = "%@ chce otworzyć App Store";
+
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Otwórz w „Mapy”";
 
@@ -93,6 +99,9 @@
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "Przeglądaj, jak gdyby nikt nie patrzył";
+
+/* Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681 */
+"Focus.handoffSyncing" = "Apple Handoff prowadzi synchronizację…";
 
 /* First label for product description on the home screen */
 "Home.descriptionLabel1" = "Automatyczne przeglądanie prywatne.";
@@ -132,6 +141,12 @@
 
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes" = "Rozumiem";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "Mozilla dokłada wszelkich starań, by zbierać jednie niezbędne dane w celu dostarczania i ulepszania aplikacji %@.";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "Więcej informacji.";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Ustawienia";
@@ -175,17 +190,14 @@
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
-/* Label for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageData" = "Przesyłanie anonimowych danych o użyciu";
-
-/* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageDataSubtitle" = "Więcej informacji";
+/* Label for Send Usage Data toggle on main screen */
+"Settings.toggleSendUsageData" = "Przesyłanie danych o użyciu";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Pobierz Firefoksa";
 
 /* Text for the share menu option when a user wants to open a page in Focus. */
-"ShareMenu.OpenInFocus" = "Otwórz w Focusie";
+"ShareMenu.OpenInFocus" = "Otwórz w aplikacji %@";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Anuluj";
@@ -208,12 +220,33 @@
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "Zablokowane elementy śledzące:";
 
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "Otwórz w aplikacji %@";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "Skopiowany odnośnik: %@";
+
 /* Text for the context menu when a user wants to copy an image after long pressing it. */
 "contextMenu.copyImageTitle" = "Kopiuj obraz";
 
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "Kopiuj odnośnik";
+
 /* Text for the context menu when a user wants to save an image after long pressing it. */
-"contextMenu.saveImageTitle" = "Zapisz obraz";
+"contextMenu.saveImageTitle" = "Zachowaj obraz";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "Udostępnij odnośnik";
 
 /* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
 "externalAppLinkWithAppName.messageTitle" = "%1$@ chce otworzyć aplikację %2$@";
+
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "Pozwala zachowywać obrazy w rolce aparatu";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "Otwórz Ustawienia";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "%@ chce uzyskać dostęp do Zdjęć";
 

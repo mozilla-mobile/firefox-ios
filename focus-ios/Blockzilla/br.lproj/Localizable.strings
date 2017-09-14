@@ -19,6 +19,9 @@
 /* Label for row in About screen */
 "About.rowHelp" = "Skoazell";
 
+/* Link to Privacy Notice in the About screen */
+"About.rowPrivacy" = "Evezhiadennoù a-fet buhez prevez";
+
 /* Label for row in About screen */
 "About.rowRights" = "Ho kwirioù";
 
@@ -58,6 +61,15 @@
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "Klask en-dro";
 
+/* Button label used for cancelling to open another app from Focus */
+"ExternalAppLink.cancelTitle" = "Nullañ";
+
+/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+"ExternalAppLink.messageTitle" = "Fellout a ra da %@ digeriñ un arload all";
+
+/* Button label for opening another app from Focus */
+"ExternalAppLink.openTitle" = "Digeriñ";
+
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.callButton" = "Gervel";
 
@@ -73,6 +85,9 @@
 /* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openAppStoreButton" = "Digeriñ an App Store";
 
+/* Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"ExternalLink.openAppStoreTitle" = "Fellout a ra da %@ digeriñ an App Store.";
+
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Digeriñ an arload kartennoù";
 
@@ -84,6 +99,9 @@
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "Merdeit 'vel ma vefe den o sellet.";
+
+/* Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681 */
+"Focus.handoffSyncing" = "O c'houbredañ emañ Apple Handoff";
 
 /* First label for product description on the home screen */
 "Home.descriptionLabel1" = "Merdeiñ prevez emgefreek.";
@@ -123,6 +141,12 @@
 
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes" = "Komprenet am eus";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "Strivañ a ra Mozilla evit dastum ar pezh hon eus ezhomm hepken evit gwellaat ha kinnig %@ d'an holl.";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "Gouzout hiroc'h.";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Arventennoù";
@@ -166,14 +190,20 @@
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
-/* Label for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageData" = "Kas roadennoù arver dizanv";
+/* Label for Send Usage Data toggle on main screen */
+"Settings.toggleSendUsageData" = "Kas roadennoù arver";
 
-/* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageDataSubtitle" = "Gouzout hiroc'h";
+/* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
+"ShareMenu.GetFirefox" = "Kaout an arload Firefox";
+
+/* Text for the share menu option when a user wants to open a page in Focus. */
+"ShareMenu.OpenInFocus" = "Digeriñ e %@";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Nullañ";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Pegañ & Mont";
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "DIVERKAÑ";
@@ -186,4 +216,37 @@
 
 /* Label displayed for search button when typing in the URL bar */
 "URL.searchLabel" = "Klask %@";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "Heulierien stanket";
+
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "Digeriñ e %@";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "Ereoù eilet ganeoc'h: %@";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "Eilañ ar skeudenn";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "Eilañ an ere";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "Enrollañ ar skeudenn";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "Rannañ an ere";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "Fellout a ra da %1$@ digeriñ %2$@";
+
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "Aotren a ra ac'hanoc'h da enrollañ skeudennoù d'ho koc'henn";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "Digeriñ an arventennoù";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "Fellout a ra da “%@” haeziñ ho skeudennoù";
 
