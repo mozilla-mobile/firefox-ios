@@ -300,7 +300,7 @@ private func transformToolbarsToFrame(_ toolbars: [UIView?], toRect endRect: CGR
 
 private func createTransitionCellFromTab(_ tab: Tab?, withFrame frame: CGRect) -> TabCell {
     let cell = TabCell(frame: frame)
-    cell.background.image = tab?.screenshot
+    cell.screenshotView.image = tab?.screenshot
     cell.titleText.text = tab?.displayTitle
 
     if let tab = tab, tab.isPrivate {

@@ -57,7 +57,7 @@ class TabCell: UICollectionViewCell {
     }
 
     let backgroundHolder = UIView()
-    let background = UIImageViewAligned()
+    let screenshotView = UIImageViewAligned()
     let titleText: UILabel
     let favicon: UIImageView = UIImageView()
     let closeButton: UIButton
@@ -76,11 +76,11 @@ class TabCell: UICollectionViewCell {
         self.backgroundHolder.clipsToBounds = true
         self.backgroundHolder.backgroundColor = TabTrayControllerUX.CellBackgroundColor
 
-        self.background.contentMode = UIViewContentMode.scaleAspectFill
-        self.background.clipsToBounds = true
-        self.background.isUserInteractionEnabled = false
-        self.background.alignLeft = true
-        self.background.alignTop = true
+        self.screenshotView.contentMode = UIViewContentMode.scaleAspectFill
+        self.screenshotView.clipsToBounds = true
+        self.screenshotView.isUserInteractionEnabled = false
+        self.screenshotView.alignLeft = true
+        self.screenshotView.alignTop = true
 
         self.favicon.backgroundColor = UIColor.clear
         self.favicon.layer.cornerRadius = 2.0
@@ -103,7 +103,7 @@ class TabCell: UICollectionViewCell {
         self.closeButton.addTarget(self, action: #selector(TabCell.close), for: UIControlEvents.touchUpInside)
 
         contentView.addSubview(backgroundHolder)
-        backgroundHolder.addSubview(self.background)
+        backgroundHolder.addSubview(self.screenshotView)
 
         // Default style is light
         applyStyle(style)
@@ -162,7 +162,7 @@ class TabCell: UICollectionViewCell {
             y: margin,
             width: w,
             height: h)
-        background.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: backgroundHolder.frame.size)
+        screenshotView.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: backgroundHolder.frame.size)
 
         title.frame = CGRect(x: 0,
             y: 0,
@@ -770,7 +770,7 @@ fileprivate class TabManagerDataSource: NSObject, UICollectionViewDataSource {
         if tab == tabManager.selectedTab {
             tabCell.setTabSelected(tab.isPrivate)
         }
-        tabCell.background.image = tab.screenshot
+        tabCell.screenshotView.image = tab.screenshot
         return tabCell
     }
 
