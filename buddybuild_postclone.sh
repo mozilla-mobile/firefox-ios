@@ -31,7 +31,8 @@ fi
 
 if [ "$BUDDYBUILD_SCHEME" = "Firefox" ] || [ "$BUDDYBUILD_SCHEME" = "FirefoxBeta" ]; then
   setup_virtualenv
-  ./scripts/import-locales.sh --release
+  git clone https://github.com/mozilla-mobile/firefox-ios-build-tools.git
+  ./firefox-ios-build-tools/scripts/import-locales.sh --release
 fi
 
 #
@@ -40,6 +41,7 @@ fi
 
 if [ "$BUDDYBUILD_SCHEME" = "Fennec_Enterprise" ] && [ "$BUDDYBUILD_PULL_REQUEST" = "" ]; then
   setup_virtualenv
-  ./scripts/import-locales.sh
+  git clone https://github.com/mozilla-mobile/firefox-ios-build-tools.git
+  ./firefox-ios-build-tools/scripts/import-locales.sh
 fi
 
