@@ -99,7 +99,7 @@ class TabCell: UICollectionViewCell {
 
         super.init(frame: frame)
         
-        self.animator = SwipeAnimator(animatingView: self.backgroundHolder, container: self)
+        self.animator = SwipeAnimator(animatingView: self)
         self.closeButton.addTarget(self, action: #selector(TabCell.close), for: UIControlEvents.touchUpInside)
 
         contentView.addSubview(backgroundHolder)
@@ -666,7 +666,7 @@ extension TabTrayController: UIScrollViewAccessibilityDelegate {
 
 extension TabTrayController: SwipeAnimatorDelegate {
     func swipeAnimator(_ animator: SwipeAnimator, viewWillExitContainerBounds: UIView) {
-        let tabCell = animator.container as! TabCell
+        let tabCell = animator.animatingView as! TabCell
         if let indexPath = collectionView.indexPath(for: tabCell) {
             let tab = tabsToDisplay[indexPath.item]
             tabManager.removeTab(tab)
