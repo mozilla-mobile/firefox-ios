@@ -66,12 +66,6 @@ class AppSettingsTableViewController: SettingsTableViewController {
         // There is nothing to show in the Customize section if we don't include the compact tab layout
         // setting on iPad. When more options are added that work on both device types, this logic can
         // be changed.
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            generalSettings +=  [
-                BoolSetting(prefs: prefs, prefKey: "CompactTabLayout", defaultValue: true,
-                    titleText: NSLocalizedString("Use Compact Tabs", comment: "Setting to enable compact tabs in the tab overview"))
-            ]
-        }
 
         generalSettings += [
             BoolSetting(prefs: prefs, prefKey: "showClipboardBar", defaultValue: false,
