@@ -767,7 +767,7 @@ extension ActivityStreamPanel: HomePanelContextMenu {
         })
 
         let shareAction = PhotonActionSheetItem(title: Strings.ShareContextMenuTitle, iconString: "action_share", handler: { action in
-            let helper = ShareExtensionHelper(url: siteURL, tab: nil, activities: [])
+            let helper = ShareExtensionHelper(url: siteURL, tab: nil)
             let controller = helper.createActivityViewController { completed, activityType in
                 self.telemetry.reportEvent(.Share, source: pingSource, position: index, shareProvider: activityType)
             }
