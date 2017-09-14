@@ -48,6 +48,7 @@ class TabCell: UICollectionViewCell {
     }
 
     static let Identifier = "TabCellIdentifier"
+    static let BorderWidth: CGFloat = 3
 
     var style: Style = .light {
         didSet {
@@ -141,6 +142,18 @@ class TabCell: UICollectionViewCell {
         self.title = title
     }
 
+    func setTabSelected(_ isPrivate: Bool) {
+        // This creates a border around a tabcell. Using the shadow craetes a border _outside_ of the tab frame.
+        layer.shadowColor = (isPrivate ? UIConstants.PrivateModePurple : UIConstants.SystemBlueColor).cgColor
+        layer.shadowOpacity = 1
+        layer.shadowRadius = 0 // A 0 radius creates a solid border instead of a gradient blur
+        layer.masksToBounds = false
+        // create a frame that is "BorderWidth" size bigger than the cell
+        layer.shadowOffset = CGSize(width: -TabCell.BorderWidth, height: -TabCell.BorderWidth)
+        let shadowPath = CGRect(x: 0, y: 0, width: layer.frame.width + (TabCell.BorderWidth * 2), height: layer.frame.height + (TabCell.BorderWidth * 2))
+        layer.shadowPath = UIBezierPath(roundedRect: shadowPath, cornerRadius: TabTrayControllerUX.CornerRadius).cgPath
+    }
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -188,6 +201,9 @@ class TabCell: UICollectionViewCell {
         backgroundHolder.transform = CGAffineTransform.identity
         backgroundHolder.alpha = 1
         self.titleText.font = DynamicFontHelper.defaultHelper.DefaultSmallFontBold
+        layer.shadowOffset = CGSize.zero
+        layer.shadowPath = nil
+        layer.shadowOpacity = 0
     }
 
     override func accessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
@@ -757,6 +773,9 @@ fileprivate class TabManagerDataSource: NSObject, UICollectionViewDataSource {
             } else {
                 tabCell.favicon.image = defaultFavicon
             }
+        }
+        if tab == tabManager.selectedTab {
+            tabCell.setTabSelected(tab.isPrivate)
         }
         tabCell.background.image = tab.screenshot
         return tabCell
