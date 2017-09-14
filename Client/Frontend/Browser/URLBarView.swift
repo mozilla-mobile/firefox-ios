@@ -479,7 +479,6 @@ class URLBarView: UIView {
         self.backButton.isHidden = !self.toolbarIsShowing
         self.shareButton.isHidden = !self.toolbarIsShowing
         self.stopReloadButton.isHidden = !self.toolbarIsShowing
-
     }
 
     func transitionToOverlay(_ didCancel: Bool = false) {
