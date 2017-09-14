@@ -15,7 +15,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     public init(db: BrowserDB) {
         self.db = db
     }
-    
+
     class func remoteClientFactory(_ row: SDRow) -> RemoteClient {
         let guid = row["guid"] as? String
         let name = row["name"] as! String
@@ -27,7 +27,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         let fxaDeviceId = row["fxaDeviceId"] as? String
         return RemoteClient(guid: guid, name: name, modified: mod, type: type, formfactor: form, os: os, version: version, fxaDeviceId: fxaDeviceId)
     }
-    
+
     class func remoteTabFactory(_ row: SDRow) -> RemoteTab {
         let clientGUID = row["client_guid"] as? String
         let url = URL(string: row["url"] as! String)! // TODO: find a way to make this less dangerous.
@@ -48,11 +48,11 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
 
     class func convertHistoryToString(_ history: [URL]) -> String? {
         let historyAsStrings = optFilter(history.map { $0.absoluteString })
-        
+
         let data = try! JSONSerialization.data(withJSONObject: historyAsStrings, options: [])
         return String(data: data, encoding: String.Encoding(rawValue: String.Encoding.utf8.rawValue))
     }
-    
+
     fileprivate func doWipe(_ f: @escaping (_ conn: SQLiteDBConnection, _ err: inout NSError?) -> Void) -> Deferred<Maybe<()>> {
         let deferred = Deferred<Maybe<()>>(defaultQueue: DispatchQueue.main)
 
@@ -126,9 +126,9 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
                     SQLiteRemoteClientsAndTabs.convertHistoryToString(tab.history),
                     NSNumber(value: tab.lastUsed)
                 ]
-                
+
                 let lastInsertedRowID = connection.lastInsertedRowID
-                
+
                 // We trust that each tab's clientGUID matches the supplied client!
                 // Really tabs shouldn't have a GUID at all. Future cleanup!
                 if let error = connection.executeChange("INSERT INTO \(TableTabs) (client_guid, url, title, history, last_used) VALUES (?, ?, ?, ?, ?)", withArgs: args) {
@@ -137,7 +137,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
                     deferred.fill(Maybe(failure: DatabaseError(err: error)))
                     return false
                 }
-                
+
                 if connection.lastInsertedRowID == lastInsertedRowID {
                     log.debug("Unable to INSERT RemoteTab!")
                 } else {
@@ -174,14 +174,14 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
                     client.fxaDeviceId,
                     client.guid
                 ]
-                
+
                 if let error = connection.executeChange("UPDATE \(TableClients) SET name = ?, modified = ?, type = ?, formfactor = ?, os = ?, version = ?, fxaDeviceId = ? WHERE guid = ?", withArgs: args) {
                     err = error
                     log.warning("UPDATE \(TableClients) failed: \(error)")
                     deferred.fill(Maybe(failure: DatabaseError(err: error)))
                     return false
                 }
-                
+
                 if connection.numberOfRowsModified == 0 {
                     let args: Args = [
                         client.guid,
@@ -193,21 +193,21 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
                         client.version,
                         client.fxaDeviceId
                     ]
-                    
+
                     let lastInsertedRowID = connection.lastInsertedRowID
-                    
+
                     if let error = connection.executeChange("INSERT INTO \(TableClients) (guid, name, modified, type, formfactor, os, version, fxaDeviceId) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", withArgs: args) {
                         err = error
                         log.warning("INSERT INTO \(TableClients) failed: \(error)")
                         deferred.fill(Maybe(failure: DatabaseError(err: error)))
                         return false
                     }
-                    
+
                     if connection.lastInsertedRowID == lastInsertedRowID {
                         log.debug("INSERT did not change last inserted row ID.")
                     }
                 }
-                
+
                 succeeded += 1
             }
 
@@ -252,7 +252,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
             }
             return success
         }
-        
+
         return deferred
     }
 
@@ -388,7 +388,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
                 err = error
                 return false
             }
-            
+
             return true
         }
 
@@ -403,7 +403,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
                 err = error
                 return false
             }
-            
+
             return true
         }
 
@@ -474,20 +474,20 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         }
         return syncCommands
     }
-    
+
     func insert(_ db: SQLiteDBConnection, sql: String, args: Args?, err: inout NSError?) -> Int? {
         let lastID = db.lastInsertedRowID
         if let error = db.executeChange(sql, withArgs: args) {
             err = error
             return nil
         }
-        
+
         let id = db.lastInsertedRowID
         if id == lastID {
             log.debug("INSERT did not change last inserted row ID.")
             return nil
         }
-        
+
         return id
     }
 }

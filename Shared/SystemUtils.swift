@@ -38,7 +38,7 @@ extension SystemUtils {
         guard let lockFileURL = lockedDeviceURL else {
             return
         }
-        
+
         let lockFile = lockFileURL.path
         let fm = FileManager.default
         if fm.fileExists(atPath: lockFile) {

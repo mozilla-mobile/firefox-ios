@@ -38,7 +38,7 @@ open class UserAgent {
         let currentFirefoxVersion = AppInfo.appVersion
         let lastFirefoxVersion = defaults.string(forKey: "LastFirefoxVersionNumber")
         let lastFirefoxBuildNumber = defaults.string(forKey: "LastFirefoxBuildNumber")
-        
+
         if let firefoxUA = defaults.string(forKey: "UserAgent") {
             if (!checkiOSVersion || (lastiOSVersion == currentiOSVersion))
                 && (!checkFirefoxVersion || (lastFirefoxVersion == currentFirefoxVersion)
@@ -115,7 +115,7 @@ open class UserAgent {
 
         // Strip mobile section
         let mobileRegex = try! NSRegularExpression(pattern: " FxiOS/[^ ]+ Mobile/[^ ]+", options: [])
-        
+
         guard let mobileMatch = mobileRegex.firstMatch(in: userAgent as String, options:[], range: NSRange(location: 0, length: userAgent.length)) else {
             print("Error: Unable to find Mobile section in UA.")
             return String(userAgent)

@@ -12,9 +12,6 @@ disabled_rules: # rule identifiers to exclude from running
   - cyclomatic_complexity
   - type_body_length
   - function_parameter_count
-  - trailing_whitespace
-  - leading_whitespace
-  - operator_whitespace
   - file_length
   - mark
   - unused_closure_parameter
@@ -28,6 +25,13 @@ disabled_rules: # rule identifiers to exclude from running
   - shorthand_operator
   - trailing_comma
   - unused_optional_binding
+  - private_over_fileprivate
+  - empty_enum_arguments
+  - is_disjoint
+  - nesting
+  - multiple_closures_with_trailing_closure
+  - block_based_kvo
+  - discarded_notification_center_observer
 opt_in_rules: # some rules are only opt-in
   - closing_brace
   - opening_brace

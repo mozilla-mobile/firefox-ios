@@ -73,7 +73,7 @@ class Tab: NSObject {
     /// be managed by the web view's navigation delegate.
     var desktopSite: Bool = false
     var isBookmarked: Bool = false
-    
+
     var readerModeAvailable: Bool {
         if let readerMode = self.getHelper(name: "ReaderMode") as? ReaderMode {
             return readerMode.state == .available

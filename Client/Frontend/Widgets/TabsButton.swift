@@ -44,7 +44,7 @@ struct TabsButtonUX {
 
 class TabsButton: UIControl {
     fileprivate var theme: Theme = TabsButtonUX.Themes[Theme.NormalMode]!
-    
+
     override var isHighlighted: Bool {
         didSet {
             if isHighlighted {
@@ -58,7 +58,7 @@ class TabsButton: UIControl {
             }
         }
     }
-    
+
     override var transform: CGAffineTransform {
         didSet {
             clonedTabsButton?.transform = transform
@@ -95,7 +95,7 @@ class TabsButton: UIControl {
         border.isUserInteractionEnabled = false
         return border
     }()
-    
+
     // Used to temporarily store the cloned button so we can respond to layout changes during animation
     fileprivate weak var clonedTabsButton: TabsButton?
 
@@ -151,7 +151,7 @@ class TabsButton: UIControl {
 
         return button
     }
-    
+
     func updateTabCount(_ count: Int, animated: Bool = true) {
         let currentCount = self.titleLabel.text
         let infinity = "\u{221E}"
@@ -163,7 +163,7 @@ class TabsButton: UIControl {
                 self.clonedTabsButton?.removeFromSuperview()
                 insideButton.layer.removeAllAnimations()
             }
-            
+
             // make a 'clone' of the tabs button
             let newTabsButton = clone() as! TabsButton
             self.clonedTabsButton = newTabsButton
@@ -176,42 +176,42 @@ class TabsButton: UIControl {
                 make.trailing.equalTo(self)
                 make.size.equalTo(24)
             }
-            
+
             newTabsButton.frame = self.frame
-            
+
             // Instead of changing the anchorPoint of the CALayer, lets alter the rotation matrix math to be
             // a rotation around a non-origin point
             let frame = self.insideButton.frame
             let halfTitleHeight = frame.height / 2
-            
+
             var newFlipTransform = CATransform3DIdentity
             newFlipTransform = CATransform3DTranslate(newFlipTransform, 0, halfTitleHeight, 0)
             newFlipTransform.m34 = -1.0 / 200.0 // add some perspective
             newFlipTransform = CATransform3DRotate(newFlipTransform, CGFloat(-(Double.pi / 2)), 1.0, 0.0, 0.0)
             newTabsButton.insideButton.layer.transform = newFlipTransform
-            
+
             var oldFlipTransform = CATransform3DIdentity
             oldFlipTransform = CATransform3DTranslate(oldFlipTransform, 0, halfTitleHeight, 0)
             oldFlipTransform.m34 = -1.0 / 200.0 // add some perspective
             oldFlipTransform = CATransform3DRotate(oldFlipTransform, CGFloat(-(Double.pi / 2)), 1.0, 0.0, 0.0)
-            
+
             let animate = {
                 newTabsButton.insideButton.layer.transform = CATransform3DIdentity
                 self.insideButton.layer.transform = oldFlipTransform
                 self.insideButton.layer.opacity = 0
             }
-            
+
             let completion: (Bool) -> Void = { _ in
                 // Remove the clone and setup the actual tab button
                 newTabsButton.removeFromSuperview()
-                
+
                 self.insideButton.layer.opacity = 1
                 self.insideButton.layer.transform = CATransform3DIdentity
                 self.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility label for the tabs button in the (top) tab toolbar")
                 self.titleLabel.text = countToBe
                 self.accessibilityValue = countToBe
             }
-            
+
             if animated {
                 UIView.animate(withDuration: 1.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.0, options: UIViewAnimationOptions(), animations: animate, completion: completion)
             } else {

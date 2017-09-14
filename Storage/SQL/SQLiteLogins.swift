@@ -848,7 +848,6 @@ extension SQLiteLogins: SyncableLogins {
          >>> always(modified)
     }
 
-
     public func markAsDeleted<T: Collection>(_ guids: T) -> Success where T.Iterator.Element == GUID {
         log.debug("Marking \(guids.count) GUIDs as deleted.")
 

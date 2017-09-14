@@ -35,7 +35,7 @@ extension String {
 extension Data {
     public func hmacSha256WithKey(_ key: Data) -> Data {
         let len = Int(CC_SHA256_DIGEST_LENGTH)
-        
+
         let digest = UnsafeMutablePointer<UInt8>.allocate(capacity: len)
         CCHmac(CCHmacAlgorithm(kCCHmacAlgSHA256),
             (key as NSData).bytes, Int(key.count),

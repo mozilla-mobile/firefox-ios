@@ -144,7 +144,7 @@ private extension BrowserToTrayAnimator {
         if let toast = bvc.clipboardBarDisplayHandler?.clipboardToast {
             toast.removeFromSuperview()
         }
-        
+
         container.addSubview(cell)
         cell.layoutIfNeeded()
         cell.title.transform = CGAffineTransform(translationX: 0, y: -cell.title.frame.size.height)
@@ -174,10 +174,10 @@ private extension BrowserToTrayAnimator {
                 cell.frame = finalFrame
                 cell.title.transform = CGAffineTransform.identity
                 cell.layoutIfNeeded()
-                
+
                 UIApplication.shared.windows.first?.backgroundColor = TabTrayControllerUX.BackgroundColor
                 tabTray.navigationController?.setNeedsStatusBarAppearanceUpdate()
-                
+
                 transformHeaderFooterForBVC(bvc, toFrame: finalFrame, container: container)
 
                 bvc.urlBar.updateAlphaForSubviews(0)

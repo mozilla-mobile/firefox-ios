@@ -122,7 +122,7 @@ open class MockProfilePrefs: Prefs {
     open func objectForKey<T: Any>(_ defaultName: String) -> T? {
         return things[name(defaultName)] as? T
     }
-    
+
     open func timestampForKey(_ defaultName: String) -> Timestamp? {
         return unsignedLongForKey(defaultName)
     }

@@ -53,7 +53,7 @@ extension Date {
             from: self,
             to: now,
             options: [])
-        
+
         if components.year! > 0 {
             return String(format: DateFormatter.localizedString(from: self, dateStyle: DateFormatter.Style.short, timeStyle: DateFormatter.Style.short))
         }

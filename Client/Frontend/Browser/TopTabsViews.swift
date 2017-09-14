@@ -25,9 +25,9 @@ class TopTabCell: UICollectionViewCell {
         case light
         case dark
     }
-    
+
     static let Identifier = "TopTabCellIdentifier"
-    
+
     var style: Style = .light {
         didSet {
             if style != oldValue {
@@ -35,7 +35,7 @@ class TopTabCell: UICollectionViewCell {
             }
         }
     }
-    
+
     var selectedTab = false {
         didSet {
             if style == Style.light {
@@ -46,7 +46,7 @@ class TopTabCell: UICollectionViewCell {
             favicon.alpha = selectedTab ? 1.0 : 0.6
         }
     }
-    
+
     let titleText: UILabel = {
         let titleText = UILabel()
         titleText.textAlignment = NSTextAlignment.left
@@ -55,14 +55,14 @@ class TopTabCell: UICollectionViewCell {
         titleText.font = DynamicFontHelper.defaultHelper.DefaultSmallFontBold
         return titleText
     }()
-    
+
     let favicon: UIImageView = {
         let favicon = UIImageView()
         favicon.layer.cornerRadius = 2.0
         favicon.layer.masksToBounds = true
         return favicon
     }()
-    
+
     let closeButton: UIButton = {
         let closeButton = UIButton()
         closeButton.setImage(UIImage(named: "topTabs-closeTabs"), for: UIControlState())
@@ -71,14 +71,14 @@ class TopTabCell: UICollectionViewCell {
         closeButton.imageEdgeInsets = UIEdgeInsets(equalInset: TabTrayControllerUX.CloseButtonEdgeInset)
         return closeButton
     }()
-    
+
     weak var delegate: TopTabCellDelegate?
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
+
         closeButton.addTarget(self, action: #selector(TopTabCell.closeTab), for: UIControlEvents.touchUpInside)
-        
+
         contentView.addSubview(self.closeButton)
         contentView.addSubview(self.titleText)
         contentView.addSubview(self.favicon)
@@ -103,12 +103,12 @@ class TopTabCell: UICollectionViewCell {
             make.width.equalTo(self.snp.height)
             make.leading.equalTo(titleText.snp.trailing).offset(-5)
         }
-        
+
         self.clipsToBounds = false
-        
+
         applyStyle(style)
     }
-    
+
     fileprivate func applyStyle(_ style: Style) {
         switch style {
         case Style.light:
@@ -119,16 +119,16 @@ class TopTabCell: UICollectionViewCell {
             backgroundColor = UIColor(rgb: 0x4A4A4F)
         }
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         self.titleText.font = DynamicFontHelper.defaultHelper.DefaultSmallFontBold
     }
-    
+
     func closeTab() {
         delegate?.tabCellDidClose(self)
     }
@@ -146,12 +146,12 @@ class TopTabFader: UIView {
         hMaskLayer.anchorPoint = CGPoint.zero
         return hMaskLayer
     }()
-    
+
     init() {
         super.init(frame: CGRect.zero)
         layer.mask = hMaskLayer
     }
-    
+
     internal override func layoutSubviews() {
         super.layoutSubviews()
 
@@ -161,7 +161,7 @@ class TopTabFader: UIView {
         hMaskLayer.locations = [0.00, widthA, widthB, 1.0]
         hMaskLayer.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -175,15 +175,15 @@ class TopTabsBackgroundDecorationView: UICollectionReusableView {
             centerBackground.backgroundColor = themeColor
         }
     }
-    
+
     lazy var centerBackground: UIView = {
         let centerBackground = UIView()
         return centerBackground
     }()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
+
         self.contentMode = .redraw
         self.addSubview(centerBackground)
 
@@ -192,11 +192,11 @@ class TopTabsBackgroundDecorationView: UICollectionReusableView {
             make.bottom.equalTo(self)
         }
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
         super.apply(layoutAttributes)
         if let decorationAttributes = layoutAttributes as? TopTabsViewLayoutAttributes, let themeColor = decorationAttributes.themeColor {
@@ -207,7 +207,7 @@ class TopTabsBackgroundDecorationView: UICollectionReusableView {
 
 class TopTabsViewLayoutAttributes: UICollectionViewLayoutAttributes {
     var themeColor: UIColor?
-    
+
     override func isEqual(_ object: Any?) -> Bool {
         guard let object = object as? TopTabsViewLayoutAttributes else {
             return false

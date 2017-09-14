@@ -254,30 +254,30 @@ open class FxAClient10 {
 
         return FxADevicesResponse(devices: devices)
     }
-    
+
     fileprivate class func notifyResponse(fromJSON json: JSON) -> FxANotifyResponse {
         return FxANotifyResponse(success: json.error == nil)
     }
-    
+
     fileprivate class func oauthResponse(fromJSON json: JSON) -> FxAOAuthResponse? {
         guard json.error == nil,
             let accessToken = json["access_token"].string else {
                 return nil
         }
-        
+
         return FxAOAuthResponse(accessToken: accessToken)
     }
-    
+
     fileprivate class func profileResponse(fromJSON json: JSON) -> FxAProfileResponse? {
         guard json.error == nil,
             let uid = json["uid"].string,
             let email = json["email"].string else {
                 return nil
         }
-        
+
         let avatarURL = json["avatar"].string
         let displayName = json["displayName"].string
-        
+
         return FxAProfileResponse(email: email, uid: uid, avatarURL: avatarURL, displayName: displayName)
     }
 
@@ -334,7 +334,7 @@ open class FxAClient10 {
 
         return makeRequest(mutableURLRequest, responseHandler: FxAClient10.devicesResponse)
     }
-    
+
     open func notify(deviceIDs: [GUID], collectionsChanged collections: [String], withSessionToken sessionToken: NSData) -> Deferred<Maybe<FxANotifyResponse>> {
         let httpBody = JSON([
             "to": deviceIDs,
@@ -394,19 +394,19 @@ open class FxAClient10 {
 
         return makeRequest(mutableURLRequest, responseHandler: FxADevice.fromJSON)
     }
-    
+
     open func oauthAuthorize(withSessionToken sessionToken: NSData, keyPair: RSAKeyPair, certificate: String) -> Deferred<Maybe<FxAOAuthResponse>> {
         let audience = self.getAudience(forURL: self.oauthURL)
-        
+
         let assertion = JSONWebTokenUtils.createAssertionWithPrivateKeyToSign(with: keyPair.privateKey,
                                                                               certificate: certificate,
                                                                               audience: audience)
-        
+
         let oauthAuthorizationURL = self.oauthURL.appendingPathComponent("/authorization")
         var mutableURLRequest = URLRequest(url: oauthAuthorizationURL)
         mutableURLRequest.httpMethod = HTTPMethod.post.rawValue
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
+
         let parameters = [
             "assertion": assertion,
             "client_id": AppConstants.FxAiOSClientId,
@@ -414,38 +414,38 @@ open class FxAClient10 {
             "scope": "profile",
             "ttl": "300"
         ]
-        
+
         let salt: Data = Data()
         let contextInfo: Data = FxAClient10.KW("sessionToken")
         let key = sessionToken.deriveHKDFSHA256Key(withSalt: salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))!
-        
+
         guard let httpBody = JSON(parameters as NSDictionary).stringValue()?.utf8EncodedData else {
             return deferMaybe(FxAClientError.local(FxAClientUnknownError))
         }
-        
+
         mutableURLRequest.httpBody = httpBody
         mutableURLRequest.addAuthorizationHeader(forHKDFSHA256Key: key)
-        
+
         return makeRequest(mutableURLRequest, responseHandler: FxAClient10.oauthResponse)
     }
-    
+
     open func getProfile(withSessionToken sessionToken: NSData) -> Deferred<Maybe<FxAProfileResponse>> {
         let keyPair = RSAKeyPair.generate(withModulusSize: 1024)!
         return self.sign(sessionToken as Data, publicKey: keyPair.publicKey) >>== { signResult in
             return self.oauthAuthorize(withSessionToken: sessionToken, keyPair: keyPair, certificate: signResult.certificate) >>== { oauthResult in
-                
+
                 let profileURL = self.profileURL.appendingPathComponent("/profile")
                 var mutableURLRequest = URLRequest(url: profileURL)
                 mutableURLRequest.httpMethod = HTTPMethod.get.rawValue
-                
+
                 mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
                 mutableURLRequest.setValue("Bearer " + oauthResult.accessToken, forHTTPHeaderField: "Authorization")
-                
+
                 return self.makeRequest(mutableURLRequest, responseHandler: FxAClient10.profileResponse)
             }
         }
     }
-    
+
     open func getAudience(forURL URL: URL) -> String {
         if let port = URL.port {
             return "\(URL.scheme!)://\(URL.host!):\(port)"
@@ -515,7 +515,7 @@ extension FxAClient10: FxALoginClient {
             "publicKey": publicKey.jsonRepresentation() as NSDictionary,
             "duration": NSNumber(value: OneDayInMilliseconds), // The maximum the server will allow.
         ]
-        
+
         let url = self.authURL.appendingPathComponent("/certificate/sign")
         var mutableURLRequest = URLRequest(url: url)
         mutableURLRequest.httpMethod = HTTPMethod.post.rawValue

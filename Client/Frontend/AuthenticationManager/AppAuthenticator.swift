@@ -23,7 +23,7 @@ class AppAuthenticator {
                     }
                     return
                 }
-                
+
                 guard let authError = error,
                           let code = LAError.Code(rawValue: authError._code) else {
                     return

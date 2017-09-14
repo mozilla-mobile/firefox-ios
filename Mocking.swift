@@ -33,7 +33,7 @@ class MockSyncCollectionClient<T: CleartextPayloadJSON>: Sync15CollectionClient<
         self.infoConfig = infoConfig
         super.init(client: client, serverURI: serverURI, collection: collection, encrypter: encrypter)
     }
-    
+
     override func newBatch(ifUnmodifiedSince: Timestamp? = nil, onCollectionUploaded: @escaping (POSTResult, Timestamp?) -> DeferredTimestamp) -> Sync15BatchClient<T> {
         return Sync15BatchClient(config: self.infoConfig,
                                  ifUnmodifiedSince: ifUnmodifiedSince,
@@ -56,7 +56,7 @@ func getClient(server: MockSyncServer) -> Sync15StorageClient {
     let url = server.baseURL.asURL!
     let authorizer: Authorizer = identity
     let queue = DispatchQueue.global(qos: DispatchQoS.background.qosClass)
-    
+
     return Sync15StorageClient(serverURI: url, authorizer: authorizer, workQueue: queue, resultQueue: queue, backoff: MockBackoffStorage())
 }
 

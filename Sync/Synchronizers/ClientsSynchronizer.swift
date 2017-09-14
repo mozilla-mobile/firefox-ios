@@ -162,7 +162,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
     open func getOurClientRecord() -> Record<ClientPayload> {
         let guid = self.scratchpad.clientGUID
         let formfactor = formFactorString()
-        
+
         let json = JSON(object: [
             "id": guid,
             "fxaDeviceId": self.scratchpad.fxaDeviceId,
@@ -184,7 +184,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
     fileprivate func formFactorString() -> String {
         let userInterfaceIdiom = UIDevice.current.userInterfaceIdiom
         var formfactor: String
-        
+
         switch userInterfaceIdiom {
         case .phone:
             formfactor = SyncFormFactorFormat.phone.rawValue
@@ -193,7 +193,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
         default:
             formfactor = SyncFormFactorFormat.phone.rawValue
         }
-        
+
         return formfactor
     }
 

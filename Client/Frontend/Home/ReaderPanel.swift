@@ -423,7 +423,7 @@ class ReadingListPanel: UITableViewController, HomePanel {
             homePanelDelegate?.homePanel(self, didSelectURL: encodedURL, visitType: visitType)
         }
     }
-    
+
     fileprivate func deleteItem(atIndex indexPath: IndexPath) {
         if let record = records?[indexPath.row] {
             if let result = profile.readingList?.deleteRecord(record), result.isSuccess {

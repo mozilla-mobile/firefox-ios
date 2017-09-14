@@ -190,7 +190,7 @@ private extension TabScrollingController {
             if gesture.state == .ended || gesture.state == .cancelled {
                 lastContentOffset = 0
             }
-            
+
             showOrHideWebViewContainerToolbar()
         }
     }
@@ -252,7 +252,7 @@ private extension TabScrollingController {
     func checkScrollHeightIsLargeEnoughForScrolling() -> Bool {
         return (UIScreen.main.bounds.size.height + 2 * UIConstants.ToolbarHeight) < scrollView?.contentSize.height ?? 0
     }
-    
+
     func showOrHideWebViewContainerToolbar() {
         if contentOffset.y >= webViewContainerToolbar?.frame.height ?? 0 {
             webViewContainerToolbar?.isHidden = true

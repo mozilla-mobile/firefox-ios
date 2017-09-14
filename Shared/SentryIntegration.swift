@@ -40,7 +40,7 @@ public class SentryIntegration {
         }
 
         Logger.browserLogger.error("Enabling Sentry crash handler")
-        
+
         do {
             Client.shared = try Client(dsn: dsn)
             try Client.shared?.startCrashHandler()
@@ -73,7 +73,7 @@ public class SentryIntegration {
     public func crash() {
         Client.shared?.crash()
     }
-    
+
     public func send(message: String, tag: String = "general", severity: SentrySeverity = .info, completion: SentryRequestFinished? = nil) {
         // Do not send messages from SwiftData or BrowserDB unless this is the Beta channel
         if !enabled || (AppConstants.BuildChannel != .beta && (tag == "SwiftData" || tag == "BrowserDB")) {

@@ -240,7 +240,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
             self.buttonContainerView.addArrangedSubview(button)
         }
     }
-    
+
     func updateButtonTints() {
         var selectedbutton: UIView?
         for (index, button) in self.buttons.enumerated() {
@@ -297,7 +297,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     func homePanelDidRequestToSignIn(_ homePanel: HomePanel) {
         delegate?.homePanelViewControllerDidRequestToSignIn(self)
     }
-    
+
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
         delegate?.homePanelViewControllerDidRequestToOpenInNewTab(url, isPrivate: isPrivate)
     }

@@ -67,7 +67,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
     fileprivate lazy var openCopiedLinkButton: ButtonWithSublabel = {
         let button = ButtonWithSublabel()
-        
+
         button.setTitle(TodayStrings.GoToCopiedLinkLabel, for: .normal)
         button.addTarget(self, action: #selector(onPressOpenClibpoard), for: .touchUpInside)
 
@@ -92,7 +92,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         stackView.isLayoutMarginsRelativeArrangement = true
         return stackView
     }()
-    
+
     fileprivate lazy var buttonStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal

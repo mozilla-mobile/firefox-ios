@@ -5,27 +5,27 @@
 import UIKit
 
 class PhotonActionSheetAnimator: NSObject, UIViewControllerAnimatedTransitioning {
-    
+
     var presenting: Bool = false
     let animationDuration = 0.4
-    
+
     lazy var shadow: UIView = {
         let shadow = UIView()
         shadow.backgroundColor = UIColor(white: 0, alpha: 0.5)
         return shadow
     }()
-    
+
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         let screens = (from: transitionContext.viewController(forKey: UITransitionContextViewControllerKey.from)!, to: transitionContext.viewController(forKey: UITransitionContextViewControllerKey.to)!)
-        
+
         guard let actionSheet = (self.presenting ? screens.to : screens.from) as? PhotonActionSheet else {
             return
         }
-        
+
         let bottomViewController = (self.presenting ? screens.from : screens.to) as UIViewController
         animateWitVC(actionSheet, presentingVC: bottomViewController, transitionContext: transitionContext)
     }
-    
+
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return animationDuration
     }
@@ -36,7 +36,7 @@ extension PhotonActionSheetAnimator: UIViewControllerTransitioningDelegate {
         self.presenting = true
         return self
     }
-    
+
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         self.presenting = false
         return self
@@ -46,7 +46,7 @@ extension PhotonActionSheetAnimator: UIViewControllerTransitioningDelegate {
 extension PhotonActionSheetAnimator {
     fileprivate func animateWitVC(_ actionSheet: PhotonActionSheet, presentingVC viewController: UIViewController, transitionContext: UIViewControllerContextTransitioning) {
         let containerView = transitionContext.containerView
-        
+
         if presenting {
             shadow.frame = containerView.bounds
             containerView.addSubview(shadow)
@@ -54,7 +54,7 @@ extension PhotonActionSheetAnimator {
             self.shadow.alpha = 0
             containerView.addSubview(actionSheet.view)
             actionSheet.view.layoutIfNeeded()
-            
+
             UIView.animate(withDuration: transitionDuration(using: transitionContext), delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.3, options: [], animations: { () -> Void in
                 self.shadow.alpha = 1
                 actionSheet.view.frame = containerView.bounds
@@ -62,7 +62,7 @@ extension PhotonActionSheetAnimator {
             }, completion: { (completed) -> Void in
                 transitionContext.completeTransition(completed)
             })
-            
+
         } else {
             UIView.animate(withDuration: transitionDuration(using: transitionContext), delay: 0, usingSpringWithDamping: 1.2, initialSpringVelocity: 0.0, options: [], animations: { () -> Void in
                 self.shadow.alpha = 0

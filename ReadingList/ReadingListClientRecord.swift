@@ -55,7 +55,7 @@ public struct ReadingListClientRecord: Equatable {
     }
 }
 
-public func ==(lhs: ReadingListClientRecord, rhs: ReadingListClientRecord) -> Bool {
+public func == (lhs: ReadingListClientRecord, rhs: ReadingListClientRecord) -> Bool {
     return lhs.clientMetadata == rhs.clientMetadata
         && lhs.serverMetadata == rhs.serverMetadata
         && lhs.url == rhs.url

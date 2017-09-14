@@ -37,9 +37,9 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
 
     init(profile: Profile, fxaOptions: FxALaunchParams? = nil) {
         self.profile = profile
-        
+
         super.init(backgroundColor: UIColor(red: 242 / 255.0, green: 242 / 255.0, blue: 242 / 255.0, alpha: 1.0), title: NSAttributedString(string: "Firefox Accounts"))
-        
+
         if AppConstants.MOZ_FXA_DEEP_LINK_FORM_FILL {
             self.url = self.createFxAURLWith(fxaOptions, profile: profile)
         } else {
@@ -55,7 +55,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
 
     deinit {
         NotificationCenter.default.removeObserver(self, name: NotificationFirefoxAccountVerified, object: nil)
-        
+
         if AppConstants.MOZ_SHOW_FXA_AVATAR {
             profile.getAccount()?.updateProfile()
         }
@@ -159,7 +159,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     fileprivate func onLoaded() {
         self.timer?.invalidate()
         self.timer = nil
-        self.isLoaded = true        
+        self.isLoaded = true
     }
 
     // Handle a message coming from the content server.
@@ -203,15 +203,15 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
             handleRemoteCommand(detail["command"].stringValue, data: detail["data"])
         }
     }
-    
+
     // Configure the FxA signin url based on any passed options.
     public func createFxAURLWith(_ fxaOptions: FxALaunchParams?, profile: Profile) -> URL {
         let profileUrl = profile.accountConfiguration.signInURL
-        
+
         guard let launchParams = fxaOptions else {
             return profileUrl
         }
-        
+
         // Only append `signin`, `entrypoint` and `utm_*` parameters. Note that you can't
         // override the service and context params.
         var params = launchParams.query
@@ -220,7 +220,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         let queryURL = params.filter { $0.key == "signin" || $0.key == "entrypoint" || $0.key.range(of: "utm_") != nil }.map({
             return "\($0.key)=\($0.value)"
         }).joined(separator: "&")
-        
+
         return  URL(string: "\(profileUrl)&\(queryURL)") ?? profileUrl
     }
 

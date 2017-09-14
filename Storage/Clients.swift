@@ -14,7 +14,7 @@ public struct RemoteClient: Equatable {
     public let os: String?
     public let version: String?
     public let fxaDeviceId: String?
-    
+
     let protocols: [String]?
 
     let appPackage: String?
@@ -57,7 +57,7 @@ public struct RemoteClient: Equatable {
 }
 
 // TODO: should this really compare tabs?
-public func ==(lhs: RemoteClient, rhs: RemoteClient) -> Bool {
+public func == (lhs: RemoteClient, rhs: RemoteClient) -> Bool {
     return lhs.guid == rhs.guid &&
         lhs.name == rhs.name &&
         lhs.modified == rhs.modified &&

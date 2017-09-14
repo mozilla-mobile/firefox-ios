@@ -100,7 +100,7 @@ public enum LocalCommand: CustomStringConvertible, Hashable {
     }
 }
 
-public func ==(lhs: LocalCommand, rhs: LocalCommand) -> Bool {
+public func == (lhs: LocalCommand, rhs: LocalCommand) -> Bool {
     switch (lhs, rhs) {
     case (let .resetAllEngines(exceptL), let .resetAllEngines(exceptR)):
         return exceptL == exceptR

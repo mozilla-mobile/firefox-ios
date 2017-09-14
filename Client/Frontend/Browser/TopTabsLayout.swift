@@ -5,23 +5,23 @@ import Foundation
 
 class TopTabsLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout {
     weak var tabSelectionDelegate: TabSelectionDelegate?
-    
+
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return TopTabsUX.SeparatorWidth
     }
-    
+
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: TopTabsUX.TabWidth, height: collectionView.frame.height)
     }
-    
+
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 0, left: TopTabsUX.TopTabsBackgroundShadowWidth, bottom: 0, right: TopTabsUX.TopTabsBackgroundShadowWidth)
     }
-    
+
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return TopTabsUX.SeparatorWidth
     }
-    
+
     @objc func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         tabSelectionDelegate?.didSelectTabAtIndex(indexPath.row)
     }
@@ -30,12 +30,12 @@ class TopTabsLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout {
 class TopTabsViewLayout: UICollectionViewFlowLayout {
     var themeColor: UIColor = TopTabsUX.TopTabsBackgroundNormalColorInactive
     var decorationAttributeArr: [Int : UICollectionViewLayoutAttributes?] = [:]
-    
+
     override var collectionViewContentSize: CGSize {
         let tabsWidth = ((CGFloat(collectionView!.numberOfItems(inSection: 0))) * (TopTabsUX.TabWidth + TopTabsUX.SeparatorWidth)) - TopTabsUX.SeparatorWidth
         return CGSize(width: tabsWidth + (TopTabsUX.TopTabsBackgroundShadowWidth*2), height: collectionView!.bounds.height)
     }
-    
+
     override func prepare() {
         super.prepare()
         self.minimumLineSpacing = TopTabsUX.SeparatorWidth
@@ -43,7 +43,7 @@ class TopTabsViewLayout: UICollectionViewFlowLayout {
         register(TopTabsBackgroundDecorationView.self, forDecorationViewOfKind: TopTabsBackgroundDecorationView.Identifier)
         register(TopTabsSeparator.self, forDecorationViewOfKind: TopTabsSeparatorUX.Identifier)
     }
-    
+
     override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
         decorationAttributeArr = [:]
         return true
@@ -72,7 +72,7 @@ class TopTabsViewLayout: UICollectionViewFlowLayout {
 
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         var attributes = super.layoutAttributesForElements(in: rect)!
-        
+
         // Create decoration attributes
         let decorationAttributes = TopTabsViewLayoutAttributes(forDecorationViewOfKind: TopTabsBackgroundDecorationView.Identifier, with: IndexPath(row: 0, section: 0))
         let size = collectionViewContentSize

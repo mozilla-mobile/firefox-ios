@@ -43,9 +43,9 @@ class Setting: NSObject {
     var accessoryType: UITableViewCellAccessoryType { return .none }
 
     var textAlignment: NSTextAlignment { return .natural }
-    
+
     var image: UIImage? { return _image }
-    
+
     fileprivate(set) var enabled: Bool = true
 
     // Called when the cell is setup. Call if you need the default behaviour.
@@ -459,13 +459,13 @@ class SettingsTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: Identifier)
         tableView.register(SettingsTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderIdentifier)
         let tableFooter = SettingsTableFooterView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 128))
         tableFooter.showTopBorder = false
         tableView.tableFooterView = tableFooter
-        
+
         tableView.separatorColor = UIConstants.TableViewSeparatorColor
         tableView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
         tableView.estimatedRowHeight = 44
@@ -567,7 +567,7 @@ class SettingsTableViewController: UITableViewController {
 
         return headerView
     }
-    
+
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let sectionSetting = settings[section]
         guard let sectionFooter = sectionSetting.footerTitle?.string else {
@@ -649,14 +649,14 @@ class SettingsTableFooterView: UIView {
         topBorder.backgroundColor = UIConstants.SeparatorColor.cgColor
         return topBorder
     }()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = UIConstants.TableViewHeaderBackgroundColor
         layer.addSublayer(topBorder)
         addSubview(logo)
     }
-    
+
     var showTopBorder: Bool = true {
         didSet {
             topBorder.isHidden = !showTopBorder

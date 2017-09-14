@@ -154,7 +154,7 @@ extension Strings {
     public static let FxAManageAccount = NSLocalizedString("FxA.ManageAccount", value: "Manage Account", comment: "Button label to goto Firefox Account settings")
     public static let FxASyncNow = NSLocalizedString("FxA.SyncNow", value: "Sync Now", comment: "Button label to Sync your Firefox Account")
     public static let FxANoInternetConnection = NSLocalizedString("FxA.NoInternetConnection", value: "No Internet Connection", comment: "Label when no internet is present")
-    
+
     // Surface error strings
     public static let FxAAccountVerificationRequiredSurface = NSLocalizedString("FxA.AccountVerificationRequiredSurface", value: "You need to verify %@. Check your email for the verification link from Firefox.", comment: "Message explaining that user needs to check email for Firefox Account verfication link.")
     public static let FxAResendEmail = NSLocalizedString("FxA.ResendEmail", value: "Resend Email", comment: "Button label to resend email")
@@ -211,10 +211,10 @@ extension Strings {
     public static let SettingsAdvanceAccountSectionName = NSLocalizedString("Settings.AdvanceAccount.SectionName", value: "Account Settings", comment: "Label used as an item in Settings. When touched it will open a dialog to setup advance Firefox account settings.")
     public static let SettingsAdvanceAccountTitle = NSLocalizedString("Settings.AdvanceAccount.SectionName", value: "Advance Account Settings", comment: "Title displayed in header of the setting panel.")
     public static let SettingsAdvanceAccountUrlPlaceholder = NSLocalizedString("Settings.AdvanceAccount.UrlPlaceholder", value: "Custom Account Url", comment: "Title displayed in header of the setting panel.")
-    
+
     public static let SettingsAdvanceAccountUrlUpdatedAlertMessage = NSLocalizedString("Settings.AdvanceAccount.UpdatedAlertMessage", value: "Firefox account service updated. To begin using custom server, please log out and re-login.", comment: "Messaged displayed when sync service has been successfully set.")
     public static let SettingsAdvanceAccountUrlUpdatedAlertOk = NSLocalizedString("Settings.AdvanceAccount.UpdatedAlertOk", value: "OK", comment: "Ok button on custom sync service updated alert")
-    
+
     public static let SettingsAdvanceAccountUrlErrorAlertTitle = NSLocalizedString("Settings.AdvanceAccount.ErrorAlertTitle", value: "Error", comment: "Error alert message title.")
     public static let SettingsAdvanceAccountUrlErrorAlertMessage = NSLocalizedString("Settings.AdvanceAccount.ErrorAlertMessage", value: "There was an error while attempting to parse the url. Please make sure that it is a valid Firefox Account root url.", comment: "Messaged displayed when sync service has an error setting a custom sync url.")
     public static let SettingsAdvanceAccountUrlErrorAlertOk = NSLocalizedString("Settings.AdvanceAccount.ErrorAlertOk", value: "OK", comment: "Ok button on custom sync service error alert.")

@@ -400,7 +400,7 @@ func makeRepairEvent(_ values: [Any?]) -> Event {
 
 // Checks equivalence while ignoring the timestamp
 extension Event: Equatable {
-    public static func ==(left: Event, right: Event) -> Bool {
+    public static func == (left: Event, right: Event) -> Bool {
         let propsAreEqual = (left.category == right.category) &&
                             (left.method == right.method) &&
                             (left.object == right.object) &&

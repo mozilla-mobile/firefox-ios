@@ -13,6 +13,6 @@ import Foundation
  * https://oleb.net/blog/2016/12/optionals-string-interpolation/ */
 
 infix operator ???: NilCoalescingPrecedence
-public func ???<T>(optional: T?, defaultValue: @autoclosure () -> String) -> String {
+public func ???<T> (optional: T?, defaultValue: @autoclosure () -> String) -> String {
     return optional.map { String(describing: $0) } ?? defaultValue()
 }

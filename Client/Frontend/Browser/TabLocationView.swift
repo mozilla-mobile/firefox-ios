@@ -277,19 +277,19 @@ private class ReaderModeButton: UIButton {
         super.init(frame: frame)
         setImage(UIImage.templateImageNamed("reader"), for: UIControlState())
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override var isSelected: Bool {
         didSet {
             self.tintColor = isSelected ? selectedTintColor : unselectedTintColor
         }
     }
-    
+
     var _readerModeState: ReaderModeState = ReaderModeState.unavailable
-    
+
     var readerModeState: ReaderModeState {
         get {
             return _readerModeState

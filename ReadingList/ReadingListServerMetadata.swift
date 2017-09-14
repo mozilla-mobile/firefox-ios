@@ -32,6 +32,6 @@ public struct ReadingListServerMetadata: Equatable {
     }
 }
 
-public func ==(lhs: ReadingListServerMetadata, rhs: ReadingListServerMetadata) -> Bool {
+public func == (lhs: ReadingListServerMetadata, rhs: ReadingListServerMetadata) -> Bool {
     return lhs.guid == rhs.guid && lhs.lastModified == rhs.lastModified
 }
