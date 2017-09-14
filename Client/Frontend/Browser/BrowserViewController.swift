@@ -1084,21 +1084,7 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func presentActivityViewController(_ url: URL, tab: Tab? = nil, sourceView: UIView?, sourceRect: CGRect, arrowDirection: UIPopoverArrowDirection) {
-        var activities = [UIActivity]()
-
-        let findInPageActivity = FindInPageActivity() { [unowned self] in
-            self.updateFindInPageVisibility(visible: true)
-        }
-        activities.append(findInPageActivity)
-
-        if let tab = tab, (tab.getHelper(name: ReaderMode.name()) as? ReaderMode)?.state != .active {
-            let requestDesktopSiteActivity = RequestDesktopSiteActivity(requestMobileSite: tab.desktopSite) { [unowned tab] in
-                tab.toggleDesktopSite()
-            }
-            activities.append(requestDesktopSiteActivity)
-        }
-
-        let helper = ShareExtensionHelper(url: url, tab: tab, activities: activities)
+        let helper = ShareExtensionHelper(url: url, tab: tab)
 
         let controller = helper.createActivityViewController({ [unowned self] completed, _ in
             // After dismissing, check to see if there were any prompts we queued up
@@ -1109,15 +1095,6 @@ class BrowserViewController: UIViewController {
             // invoked on iOS 10. See Bug 1297768 for additional details.
             self.displayedPopoverController = nil
             self.updateDisplayedPopoverProperties = nil
-
-            if completed {
-                // We don't know what share action the user has chosen so we simply always
-                // update the toolbar and reader mode bar to reflect the latest status.
-                if let tab = tab {
-                    self.updateURLBarDisplayURL(tab)
-                }
-                self.updateReaderModeBar()
-            }
         })
 
         if let popoverPresentationController = controller.popoverPresentationController {

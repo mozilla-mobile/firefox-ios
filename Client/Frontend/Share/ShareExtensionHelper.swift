@@ -13,14 +13,12 @@ class ShareExtensionHelper: NSObject {
 
     fileprivate let selectedURL: URL
     fileprivate var onePasswordExtensionItem: NSExtensionItem!
-    fileprivate let activities: [UIActivity]
     // Wechat share extension doesn't like our default data ID which is a modified to support password managers.
     fileprivate let customDataTypeIdentifers = ["com.tencent.xin.sharetimeline"]
 
-    init(url: URL, tab: Tab?, activities: [UIActivity]) {
+    init(url: URL, tab: Tab?) {
         self.selectedURL = url
         self.selectedTab = tab
-        self.activities = activities
     }
 
     func createActivityViewController(_ completionHandler: @escaping (_ completed: Bool, _ activityType: String?) -> Void) -> UIActivityViewController {
@@ -42,7 +40,7 @@ class ShareExtensionHelper: NSObject {
         }
         activityItems.append(self)
 
-        let activityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: activities)
+        let activityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
 
         // Hide 'Add to Reading List' which currently uses Safari.
         // We would also hide View Later, if possible, but the exclusion list doesn't currently support
