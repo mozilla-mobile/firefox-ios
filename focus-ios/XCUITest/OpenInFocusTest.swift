@@ -17,22 +17,28 @@ class OpenInFocusTest : BaseTestCase {
     }
 
     func testOpenViaSafari() {
-        waitforExistence(element: app.textFields["URLBar.urlText"]) // wait for app.label
+        waitforHittable(element: app.textFields["URLBar.urlText"]) // wait for app.label
         let sharedExtName = app.label.contains("Klar") ? "Firefox Klar" : "Firefox Focus" as String
         
         XCUIDevice.shared.press(.home)
         let springboard = XCUIApplication(privateWithPath: nil, bundleID: "com.apple.springboard")!
-        waitforExistence(element: springboard.scrollViews.otherElements.icons[sharedExtName])
+        waitforHittable(element: springboard.scrollViews.otherElements.icons[sharedExtName])
 
         let safariApp = XCUIApplication(privateWithPath: nil, bundleID: "com.apple.mobilesafari")!
         safariApp.launchArguments = ["-u", "https://www.mozilla.org/en-US/"]
         safariApp.launch()
+        waitforExistence(element: safariApp.webViews.otherElements["Internet for people, not profit — Mozilla"])
         
         safariApp.buttons["Share"].tap()
+        if !iPad() {
+            waitforHittable(element: safariApp.buttons["Cancel"])
+        }
         safariApp.collectionViews.cells.buttons["More"].tap()
         
-        waitforExistence(element: safariApp.tables.switches[sharedExtName])
-        safariApp.tables.switches[sharedExtName].tap()
+        // in iOS 10.3.1, multiple elements are found with 'Firefox Focus' label
+        let firefoxFocusSwitch = safariApp.tables.switches.matching(identifier: sharedExtName).element(boundBy: 0)
+        waitforHittable(element: firefoxFocusSwitch)
+        firefoxFocusSwitch.tap()
         safariApp.navigationBars["Activities"].buttons["Done"].tap()
         waitforExistence(element: safariApp.buttons[sharedExtName])
         safariApp.buttons[sharedExtName].tap()
@@ -41,6 +47,7 @@ class OpenInFocusTest : BaseTestCase {
         let addressBarField = focusApp.textFields["URLBar.urlText"]
 
         waitForValueContains(element: addressBarField, value: "https://www.mozilla.org/en-US/")
-        waitforExistence(element: focusApp.buttons["ERASE"])  // check site is fully loaded
+        waitforExistence(element: focusApp.webViews.otherElements["Internet for people, not profit — Mozilla"])
+        waitforHittable(element: focusApp.buttons["ERASE"])  // check site is fully loaded
     }
 }

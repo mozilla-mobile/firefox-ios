@@ -26,7 +26,7 @@ class SearchProviderTest: BaseTestCase {
 			doSearch(searchWord: "mozilla", provider: searchEngine)
 			app.buttons["ERASE"].tap()
 			XCTAssert(app.staticTexts["Your browsing history has been erased."].exists)
-		}
+        }
 	}
 	
 	private func changeSearchProvider(provider: String) {
@@ -51,14 +51,11 @@ class SearchProviderTest: BaseTestCase {
 		// Check the correct site is reached
 		switch provider {
 			case "Google":
-                var googleSearchField = app.webViews.searchFields["Search"]
-                if iPad() {
-                    googleSearchField =  app.webViews.textFields["Search"]
-                }
-                    waitforExistence(element: googleSearchField)
-                    waitForValueContains(element: urlbarUrltextTextField, value: "https://www.google")
-                    googleSearchField.tap()
-                    waitForValueContains(element: googleSearchField, value: searchWord)
+                var googleSearchField =  app.webViews/*@START_MENU_TOKEN@*/.otherElements["Search"]/*[[".otherElements[\"mozilla - Google Search\"]",".otherElements[\"search\"].otherElements[\"Search\"]",".otherElements[\"Search\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/
+                waitforExistence(element: googleSearchField)
+                waitForValueContains(element: urlbarUrltextTextField, value: "https://www.google")
+                googleSearchField.tap()
+                waitForValueContains(element: googleSearchField, value: searchWord)
             case "Yahoo":
 				waitForValueContains(element: urlbarUrltextTextField, value: "https://search.yahoo.com")
                 if !iPad() {

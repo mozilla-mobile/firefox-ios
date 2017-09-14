@@ -21,26 +21,25 @@ class CollapsedURLTest: BaseTestCase {
         
         // Go to mozilla.org
         let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
-        let label = app.textFields["Search or enter address"]
-        searchOrEnterAddressTextField.typeText("https://www.mozilla.org\n")
+        searchOrEnterAddressTextField.typeText("http://localhost:6573/licenses.html\n")
         
-        // Swipe up to show the collapsed URL view
-        waitForValueContains(element: label, value: "https://www.mozilla.org/en-US/")
+        // Swipe up to show the collapsed URL view - use internal website
+        waitForValueContains(element: searchOrEnterAddressTextField, value: "http://localhost:6573/licenses.html")
+        // Wait for the website to load
+        waitforExistence(element: app.webViews.otherElements["Licenses"])
         let webView = app.webViews.children(matching: .other).element
         webView.swipeUp()
-        
+       
         let collapsedTruncatedurltextTextView = app.textViews["Collapsed.truncatedUrlText"]
-        let collapsedLockIcon = app.images["Collapsed.smallLockIcon"]
         waitforExistence(element: collapsedTruncatedurltextTextView)
 
         XCTAssertTrue(collapsedTruncatedurltextTextView.isHittable)
-        XCTAssertEqual(collapsedTruncatedurltextTextView.value as? String, "www.mozilla.org")
+        XCTAssertEqual(collapsedTruncatedurltextTextView.value as? String, "localhost")
         
         // After swiping down, the collapsed URL should not be displayed
         webView.swipeDown()
         webView.swipeDown()
         waitforNoExistence(element: collapsedTruncatedurltextTextView)
-        XCTAssertFalse(collapsedLockIcon.exists)
         XCTAssertFalse(collapsedTruncatedurltextTextView.exists)
     }
 }

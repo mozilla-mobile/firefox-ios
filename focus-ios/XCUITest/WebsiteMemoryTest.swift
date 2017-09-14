@@ -19,10 +19,7 @@ class WebsiteMemoryTest: BaseTestCase {
     func testGoogleTextField() {
         let app = XCUIApplication()
         let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
-        var googleSearchField = app.webViews.searchFields["Search"]
-        if iPad() {
-            googleSearchField =  app.webViews.textFields["Search"]
-        }
+        let googleSearchField = app.webViews.otherElements["Search"]
         UIPasteboard.general.string = "mozilla"
         
         // Enter 'google' on the search field to go to google site

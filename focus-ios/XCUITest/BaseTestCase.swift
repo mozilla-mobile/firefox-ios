@@ -31,9 +31,22 @@ class BaseTestCase: XCTestCase {
         let exists = NSPredicate(format: "exists == true")
         
         expectation(for: exists, evaluatedWith: element, handler: nil)
-        waitForExpectations(timeout: 20) {(error) -> Void in
+        waitForExpectations(timeout: 30) {(error) -> Void in
             if (error != nil) {
-                let message = "Failed to find \(element) after 20 seconds."
+                let message = "Failed to find \(element) after 30 seconds."
+                self.recordFailure(withDescription: message,
+                                   inFile: file, atLine: Int(line), expected: true)
+            }
+        }
+    }
+    
+    func waitforHittable(element: XCUIElement, file: String = #file, line: UInt = #line) {
+        let exists = NSPredicate(format: "isHittable == true")
+        
+        expectation(for: exists, evaluatedWith: element, handler: nil)
+        waitForExpectations(timeout: 30) {(error) -> Void in
+            if (error != nil) {
+                let message = "Failed to find \(element) after 30 seconds."
                 self.recordFailure(withDescription: message,
                                    inFile: file, atLine: Int(line), expected: true)
             }

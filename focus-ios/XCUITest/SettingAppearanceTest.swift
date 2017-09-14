@@ -37,10 +37,10 @@ class SettingAppearanceTest: BaseTestCase {
         // Check Your Rights page, until the text is displayed
         tablesQuery.staticTexts["Your Rights"].tap()
         if app.label == "Firefox Focus" {
-            XCTAssert(app.staticTexts["Your Rights"].exists)
+            waitforExistence(element: app.staticTexts["Your Rights"])
             app.navigationBars["Firefox_Focus.AboutContentView"].buttons["About"].tap()
         } else {
-            XCTAssert(app.staticTexts["Ihre Rechte"].exists)
+            waitforExistence(element: app.staticTexts["Ihre Rechte"])
             app.navigationBars["Firefox_Klar.AboutContentView"].buttons["About"].tap()
         }
         

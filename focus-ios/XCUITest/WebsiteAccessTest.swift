@@ -33,13 +33,13 @@ class WebsiteAccessTests: BaseTestCase {
         waitforExistence(element: app.buttons["Search for mozilla"])
         
         // BB CI seems to hang intermittently where http to https redirection occurs.
-        // Providing straight URL to avoid the error
+        // Providing straight URL to avoid the error - and use internal website
         app.buttons["icon clear"].tap()
-        searchOrEnterAddressTextField.typeText("https://www.mozilla.org\n")
+        searchOrEnterAddressTextField.typeText("http://localhost:6573/licenses.html\n")
         
         // Check the correct site is reached
-        waitForValueContains(element: label, value: "https://www.mozilla.org/en-US/")
-        
+        waitForValueContains(element: label, value: "http://localhost:6573/licenses.html")
+        waitforExistence(element: app.webViews.otherElements["Licenses"])
         // Erase the history
         app.buttons["ERASE"].tap()
         waitforExistence(element: app.staticTexts["Your browsing history has been erased."])

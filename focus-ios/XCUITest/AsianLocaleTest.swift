@@ -45,15 +45,9 @@ class AsianLocaleTest: BaseTestCase {
 		app.buttons["Search for " + searchWord].tap()
         
         // Check the correct site is reached
-        if (iPad()) {
-            waitforExistence(element: app.webViews.textFields["Search"])
-            app.webViews.textFields["Search"].tap()
-            waitForValueContains(element: app.webViews.textFields["Search"], value: searchWord)
-        } else {
-            waitforExistence(element: app.webViews.searchFields["Search"])
-            app.webViews.searchFields["Search"].tap()
-            waitForValueContains(element: app.webViews.searchFields["Search"], value: searchWord)
-        }
+        waitforHittable(element: app.webViews.otherElements["Search"])
+        app.webViews.otherElements["Search"].tap()
+        waitForValueContains(element: app.webViews.otherElements["Search"], value: searchWord)
         
 		// Erase the history
 		app.buttons["ERASE"].tap()
