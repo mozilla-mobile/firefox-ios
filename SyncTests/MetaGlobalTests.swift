@@ -20,6 +20,10 @@ class MockSyncAuthState: SyncAuthState {
     let serverRoot: String
     let kB: Data
 
+    var deviceRegistration: FxADeviceRegistration? {
+        return FxADeviceRegistration(id: "mock_device_id", version: 1, lastRegistered: 0)
+    }
+
     init(serverRoot: String, kB: Data) {
         self.serverRoot = serverRoot
         self.kB = kB

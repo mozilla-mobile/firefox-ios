@@ -138,11 +138,7 @@ private let PrefClientName = "clientName"
 private let PrefClientGUID = "clientGUID"
 private let PrefHashedUID = "hashedUID"
 private let PrefEngineConfiguration = "engineConfiguration"
-
-/*
- * Keys for values that originate from prefs set when the account is first established.
- */
-public let PrefDeviceRegistration = "deviceRegistration"
+private let PrefFxADeviceId = "PrefFxADeviceId"
 
 class PrefsBackoffStorage: BackoffStorage {
     let prefs: Prefs
@@ -405,13 +401,7 @@ open class Scratchpad {
         self.clientGUID = Bytes.generateGUID()
         self.clientName = DeviceInfo.defaultClientName()
 
-        self.fxaDeviceId = {
-            guard let string = prefs.stringForKey(PrefDeviceRegistration) else {
-                return nil
-            }
-            let json = JSON(parseJSON: string)
-            return json["id"].string
-        }() ?? "unknown_fxaDeviceId"
+        self.fxaDeviceId = "unknown_fxaDeviceId"
 
         self.hashedUID = nil
     }
@@ -472,6 +462,11 @@ open class Scratchpad {
         }()
 
         b.hashedUID = prefs.stringForKey(PrefHashedUID)
+
+        b.fxaDeviceId = prefs.stringForKey(PrefFxADeviceId) ?? {
+            log.warning("No value found in prefs for fxaDeviceId! Will overwrite on first sync")
+            return "unknown_fxaDeviceId"
+        }()
 
         if let localCommands: [String] = prefs.stringArrayForKey(PrefLocalCommands) {
             b.localCommands = Set(localCommands.flatMap({LocalCommand.fromJSON(JSON(parseJSON: $0))}))
@@ -554,6 +549,8 @@ open class Scratchpad {
         if let uid = hashedUID {
             prefs.setString(uid, forKey: PrefHashedUID)
         }
+
+        prefs.setString(fxaDeviceId, forKey: PrefFxADeviceId)
 
         let localCommands: [String] = Array(self.localCommands).map({$0.toJSON().stringValue()!})
         prefs.setObject(localCommands, forKey: PrefLocalCommands)

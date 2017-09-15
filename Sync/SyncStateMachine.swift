@@ -136,6 +136,9 @@ open class SyncStateMachine {
 
             // Take the scratchpad and add the hashedUID from the token
             let b = Scratchpad.Builder(p: scratchpad)
+            if let deviceRegistration = authState.deviceRegistration {
+                b.fxaDeviceId = deviceRegistration.id
+            }
             b.hashedUID = token.hashedFxAUID
             scratchpad = b.build()
 
