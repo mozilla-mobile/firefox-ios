@@ -138,7 +138,10 @@ class ActivityStreamTest: BaseTestCase {
         XCTAssert(app.collectionViews.cells["TopSitesCell"].exists)
         XCTAssertFalse(app.staticTexts["example"].exists)
 
-        app.buttons["Cancel"].tap()
+//        app.buttons["Cancel"].tap()
+        let backButton = app.children(matching: .window).element(boundBy: 0).children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element(boundBy: 1).children(matching: .other).element.children(matching: .button).element(boundBy: 2)
+        backButton.tap()
+
         if iPad() {
             app.buttons["TopTabsViewController.tabsButton"].tap()
         } else {
@@ -184,7 +187,10 @@ class ActivityStreamTest: BaseTestCase {
         XCTAssert(app.collectionViews.cells["TopSitesCell"].exists)
         XCTAssertFalse(app.staticTexts["example"].exists)
 
-        app.buttons["Cancel"].tap()
+//        app.buttons["Cancel"].tap()
+        let backButton = app.children(matching: .window).element(boundBy: 0).children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element(boundBy: 1).children(matching: .other).element.children(matching: .button).element(boundBy: 2)
+        backButton.tap()
+        
         if iPad() {
             app.buttons["TopTabsViewController.tabsButton"].tap()
         } else {
@@ -218,16 +224,19 @@ class ActivityStreamTest: BaseTestCase {
         
         // Check that it appears under Bookmarks menu
         navigator.goto(HomePanel_Bookmarks)
+        waitforExistence(app.tables["Bookmarks List"])
         XCTAssertTrue(app.tables["Bookmarks List"].staticTexts[defaultTopSite["bookmarkLabel"]!].exists)
         
         // Check that longtapping on the TopSite gives the option to remove it
         navigator.goto(HomePanel_TopSites)
+        waitforExistence(app.collectionViews.cells["TopSitesCell"])
         app.collectionViews.cells["TopSitesCell"].cells[defaultTopSite["topSiteLabel"]!].press(forDuration: 1)
         XCTAssertTrue(app.tables["Context Menu"].cells["Remove Bookmark"].exists)
         
         // Unbookmark it
         selectOptionFromContextMenu (option: "Remove Bookmark")
         navigator.goto(HomePanel_Bookmarks)
+        waitforExistence(app.tables["Bookmarks List"])
         XCTAssertFalse(app.tables["Bookmarks List"].staticTexts[defaultTopSite["bookmarkLabel"]!].exists)
     }
     
@@ -248,10 +257,12 @@ class ActivityStreamTest: BaseTestCase {
         // Check that it appears under Bookmarks menu
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomePanel_Bookmarks)
+        waitforExistence(app.tables["Bookmarks List"])
         XCTAssertTrue(app.tables["Bookmarks List"].staticTexts[newTopSite["bookmarkLabel"]!].exists)
 
         // Check that longtapping on the TopSite gives the option to remove it
         navigator.goto(HomePanel_TopSites)
+        waitforExistence(app.collectionViews.cells["TopSitesCell"])
         app.collectionViews.cells["TopSitesCell"].cells[newTopSite["topSiteLabel"]!].press(forDuration: 1)
 
         // Unbookmark it
@@ -342,4 +353,5 @@ func testTopSitesShareNewTopSite () {
         // Go back to portrait mode
         XCUIDevice.shared().orientation = .portrait
     }
+    
 }

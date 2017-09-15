@@ -167,7 +167,8 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
     map.createScene(NewTabMenu) { scene in
         scene.gesture(to: SettingsScreen) {
             // XXX The element is fails the existence test, so we tap it through the gesture() escape hatch.
-            app.collectionViews.cells["SettingsMenuItem"].tap()
+//            app.collectionViews.cells["SettingsMenuItem"].tap()
+            app.tables.cells["Settings"].tap()
         }
         scene.backAction = closeMenuAction
         scene.dismissOnUse = true
@@ -258,7 +259,8 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
     map.createScene(TabTrayMenu) { scene in
         scene.gesture(to: SettingsScreen) {
             // XXX The element is fails the existence test, so we tap it through the gesture() escape hatch.
-            app.collectionViews.cells["SettingsMenuItem"].tap()
+//            app.collectionViews.cells["SettingsMenuItem"].tap()
+            app.tables.cells["Settings"].tap()
         }
 
         scene.backAction = closeMenuAction
@@ -303,7 +305,8 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
         scene.gesture(to: BrowserTabMenu) {
             app.otherElements["MenuViewController.menuView"].swipeRight()
         }
-        scene.tap(app.collectionViews.cells["SettingsMenuItem"], to: SettingsScreen)
+//        scene.tap(app.collectionViews.cells["SettingsMenuItem"], to: SettingsScreen)
+        scene.tap(app.tables.cells["Settings"], to: SettingsScreen)
         scene.backAction = closeMenuAction
         scene.dismissOnUse = true
     }
@@ -356,7 +359,7 @@ extension Navigator {
     func createNewTab() {
         self.goto(NewTabMenu)
         let app = XCUIApplication()
-        app.collectionViews.cells["NewTabMenuItem"].tap()
+        app.tables.cells["Open New Tab"].tap()
         self.nowAt(NewTabScreen)
     }
 

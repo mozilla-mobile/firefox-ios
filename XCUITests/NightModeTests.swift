@@ -21,31 +21,31 @@ class NightModeTests: BaseTestCase {
     }
     
     private func nightModeOff() {
+        waitforExistence(app.buttons["TabToolbar.menuButton"])
         app.buttons["TabToolbar.menuButton"].tap()
-        app.collectionViews.containing(.cell, identifier:"FindInPageMenuItem").element.swipeLeft()
-        let collectionViewsQuery = app.collectionViews
-        collectionViewsQuery.cells["ShowNightModeItem"].tap()
+        waitforExistence(app.tables.cells["Night Mode: On"])
+        app.tables.cells["Night Mode: On"].tap()
     }
     
     private func nightModeOn() {
+        waitforExistence(app.buttons["TabToolbar.menuButton"])
         app.buttons["TabToolbar.menuButton"].tap()
-        app.collectionViews.containing(.cell, identifier:"FindInPageMenuItem").element.swipeLeft()
-        let collectionViewsQuery = app.collectionViews
-        collectionViewsQuery.cells["HideNightModeItem"].tap()
+        waitforExistence(app.tables.cells["Night Mode: Off"])
+        app.tables.cells["Night Mode: Off"].tap()
     }
     
     private func checkNightModeOn() {
-        navigator.goto(BrowserTabMenu)
-        app.collectionViews.containing(.cell, identifier:"FindInPageMenuItem").element.swipeLeft()
-        waitforExistence(app.collectionViews.cells["ShowNightModeItem"])
-        navigator.goto(BrowserTab)
+        waitforExistence(app.buttons["TabToolbar.menuButton"])
+        app.buttons["TabToolbar.menuButton"].tap()
+        waitforExistence(app.tables.cells["Night Mode: On"])
+        app.buttons["Close"].tap()
     }
     
     private func checkNightModeOff() {
-        navigator.goto(BrowserTabMenu)
-        app.collectionViews.containing(.cell, identifier:"FindInPageMenuItem").element.swipeLeft()
-        waitforExistence(app.collectionViews.cells["HideNightModeItem"])
-        navigator.goto(BrowserTab)
+        waitforExistence(app.buttons["TabToolbar.menuButton"])
+        app.buttons["TabToolbar.menuButton"].tap()
+        waitforExistence(app.tables.cells["Night Mode: Off"])
+        app.buttons["Close"].tap()
     }
     
     func testNightModeUI() {

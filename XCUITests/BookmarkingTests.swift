@@ -19,27 +19,28 @@ class BookmarkingTests: BaseTestCase {
     }
     
     private func bookmark() {
-        navigator.goto(BrowserTabMenu)
-        app.collectionViews.cells["AddBookmarkMenuItem"].tap()
-        navigator.nowAt(BrowserTab)
+        app/*@START_MENU_TOKEN@*/.buttons["TabToolbar.shareButton"]/*[[".otherElements[\"Navigation Toolbar\"]",".buttons[\"Share\"]",".buttons[\"TabToolbar.shareButton\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.tap()
+        waitforExistence(app.tables.cells["Add Bookmark"])
+        app.tables.cells["Add Bookmark"].tap()
     }
     
     private func unbookmark() {
-        navigator.goto(BrowserTabMenu)
-        app.cells["Remove Bookmark"].tap()
-        navigator.nowAt(BrowserTab)
+        app/*@START_MENU_TOKEN@*/.buttons["TabToolbar.shareButton"]/*[[".otherElements[\"Navigation Toolbar\"]",".buttons[\"Share\"]",".buttons[\"TabToolbar.shareButton\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.tap()
+        waitforExistence(app.tables.cells["Remove Bookmark"])
+        app.tables.cells["Remove Bookmark"].tap()
     }
     
     private func checkBookmarked() {
-        navigator.goto(BrowserTabMenu)
-        waitforExistence(app.collectionViews.cells["RemoveBookmarkMenuItem"])
-        navigator.goto(BrowserTab)
+        app/*@START_MENU_TOKEN@*/.buttons["TabToolbar.shareButton"]/*[[".otherElements[\"Navigation Toolbar\"]",".buttons[\"Share\"]",".buttons[\"TabToolbar.shareButton\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.tap()
+        waitforExistence(app.tables.cells["Remove Bookmark"])
+        app.buttons["Close"].tap()
     }
     
     private func checkUnbookmarked() {
-        navigator.goto(BrowserTabMenu)
-        waitforExistence(app.collectionViews.cells["AddBookmarkMenuItem"])
-        navigator.goto(BrowserTab)
+        app/*@START_MENU_TOKEN@*/.buttons["TabToolbar.shareButton"]/*[[".otherElements[\"Navigation Toolbar\"]",".buttons[\"Share\"]",".buttons[\"TabToolbar.shareButton\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.tap()
+        waitforExistence(app.tables.cells["Add Bookmark"])
+        app.buttons["Close"].tap()
+
     }
     
     func testBookmarkingUI() {

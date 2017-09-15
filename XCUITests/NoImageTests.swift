@@ -23,30 +23,32 @@ class NoImageTests: BaseTestCase {
     
     private func showImages() {
         app.buttons["TabToolbar.menuButton"].tap()
-        app.collectionViews.containing(.cell, identifier:"FindInPageMenuItem").element.swipeLeft()
-        let collectionViewsQuery = app.collectionViews
-        collectionViewsQuery.cells["ShowImageModeMenuItem"].tap()
+//        app.collectionViews.containing(.cell, identifier:"FindInPageMenuItem").element.swipeLeft()
+        let tableViewsQuery = app.tables
+        tableViewsQuery.cells["Hide Images: On"].tap()
     }
     
     private func hideImages() {
         app.buttons["TabToolbar.menuButton"].tap()
-        app.collectionViews.containing(.cell, identifier:"FindInPageMenuItem").element.swipeLeft()
-        let collectionViewsQuery = app.collectionViews
-        collectionViewsQuery.cells["HideImageModeMenuItem"].tap()
+//        app.collectionViews.containing(.cell, identifier:"FindInPageMenuItem").element.swipeLeft()
+        let tableViewsQuery = app.tables
+        tableViewsQuery.cells["Hide Images: Off"].tap()
     }
     
     private func checkShowImages() {
         navigator.goto(BrowserTabMenu)
-        app.collectionViews.containing(.cell, identifier:"FindInPageMenuItem").element.swipeLeft()
-        waitforExistence(app.collectionViews.cells["ShowImageModeMenuItem"])
-        navigator.goto(BrowserTab)
+//        app.collectionViews.containing(.cell, identifier:"FindInPageMenuItem").element.swipeLeft()
+        waitforExistence(app.tables.cells["Hide Images: On"])
+//        navigator.goto(BrowserTab)
+        app.buttons["Close"].tap()
     }
     
     private func checkHideImages() {
         navigator.goto(BrowserTabMenu)
-        app.collectionViews.containing(.cell, identifier:"FindInPageMenuItem").element.swipeLeft()
-        waitforExistence(app.collectionViews.cells["HideImageModeMenuItem"])
-        navigator.goto(BrowserTab)
+//        app.collectionViews.containing(.cell, identifier:"FindInPageMenuItem").element.swipeLeft()
+        waitforExistence(app.tables.cells["Hide Images: Off"])
+//        navigator.goto(BrowserTab)
+        app.buttons["Close"].tap()
     }
     
     func testImageOnOff() {
@@ -73,4 +75,5 @@ class NoImageTests: BaseTestCase {
         XCTAssertTrue(app.images.count > 1)
         checkHideImages()
     }
+    
 }

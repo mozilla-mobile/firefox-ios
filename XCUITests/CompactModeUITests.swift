@@ -23,9 +23,22 @@ class CompactModeUITests: BaseTestCase {
     
     //Set the compact mode to OFF in settings screen
     private func compactModeOff() {
-        navigator.goto(SettingsScreen)
+//        navigator.goto(SettingsScreen)
+
+        waitforExistence(app.buttons["TabToolbar.menuButton"])
+        app.buttons["TabToolbar.menuButton"].tap()
+        waitforExistence(app.tables.cells["Settings"])
+        app.tables.cells["Settings"].tap()
+
+        waitforExistence(app.tables["AppSettingsTableViewController.tableView"].switches["Use Compact Tabs"])
+
         app.tables["AppSettingsTableViewController.tableView"].switches["Use Compact Tabs"].tap()
-        navigator.goto(TabTray)
+        app.buttons["Done"].tap()
+        waitforNoExistence(app.staticTexts["Settings"])
+
+        waitforExistence(app.buttons["URLBarView.tabsButton"])
+        app/*@START_MENU_TOKEN@*/.buttons["URLBarView.tabsButton"]/*[[".buttons[\"Show Tabs\"]",".buttons[\"URLBarView.tabsButton\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+//        navigator.goto(TabTray)
         
         let exists = NSPredicate(format: "countForHittables == 4")
         expectation(for: exists, evaluatedWith: app.collectionViews.cells, handler: nil)
@@ -34,9 +47,22 @@ class CompactModeUITests: BaseTestCase {
     
     //Set the compact mode to ON in settings screen
     private func compactModeOn() {
-        navigator.goto(SettingsScreen)
+//        navigator.goto(SettingsScreen)
+        waitforExistence(app.buttons["TabToolbar.menuButton"])
+        app.buttons["TabToolbar.menuButton"].tap()
+        waitforExistence(app.tables.cells["Settings"])
+        app.tables.cells["Settings"].tap()
+        
+        waitforExistence(app.tables["AppSettingsTableViewController.tableView"].switches["Use Compact Tabs"])
+
         app.tables["AppSettingsTableViewController.tableView"].switches["Use Compact Tabs"].tap()
-        navigator.goto(TabTray)
+        app.buttons["Done"].tap()
+        waitforNoExistence(app.staticTexts["Settings"])
+        
+        waitforExistence(app.buttons["URLBarView.tabsButton"])
+        app/*@START_MENU_TOKEN@*/.buttons["URLBarView.tabsButton"]/*[[".buttons[\"Show Tabs\"]",".buttons[\"URLBarView.tabsButton\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+
+//        navigator.goto(TabTray)
         
         let exists = NSPredicate(format: "countForHittables == 6")
         expectation(for: exists, evaluatedWith: app.collectionViews.cells, handler: nil)
@@ -76,10 +102,14 @@ class CompactModeUITests: BaseTestCase {
             waitForExpectations(timeout: 10, handler: nil)
             XCTAssertTrue(app.collectionViews.cells.countForHittables == 6)
             
+            app.collectionViews.cells["Google"].tap()
+            
             //CollectionView visible cells count should be less than or equal to 4
             compactModeOff()
             XCTAssertTrue(app.collectionViews.cells.countForHittables <= 4)
             
+            app.collectionViews.cells["Google"].tap()
+
             //CollectionView visible cells count should be 6
             compactModeOn()
             XCTAssertTrue(app.collectionViews.cells.countForHittables == 6)
