@@ -81,6 +81,7 @@ class TabCell: UICollectionViewCell {
         self.screenshotView.isUserInteractionEnabled = false
         self.screenshotView.alignLeft = true
         self.screenshotView.alignTop = true
+        screenshotView.backgroundColor = UIConstants.AppBackgroundColor
 
         self.favicon.backgroundColor = UIColor.clear
         self.favicon.layer.cornerRadius = 2.0
@@ -507,7 +508,6 @@ class TabTrayController: UIViewController {
         // until after its insert animation finishes.
         self.collectionView.performBatchUpdates({ _ in
             let tab = self.tabManager.addTab(request, isPrivate: self.privateMode)
-            self.tabManager.selectTab(tab)
         }, completion: { finished in
             self.toolbar.isUserInteractionEnabled = true
             if finished {
