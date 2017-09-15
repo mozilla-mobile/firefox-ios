@@ -55,6 +55,6 @@ extension Blob : Equatable {
 
 }
 
-public func ==(lhs: Blob, rhs: Blob) -> Bool {
+public func == (lhs: Blob, rhs: Blob) -> Bool {
     return lhs.bytes == rhs.bytes
 }

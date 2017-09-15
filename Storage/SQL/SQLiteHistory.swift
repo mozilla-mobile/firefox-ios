@@ -434,7 +434,7 @@ extension SQLiteHistory: BrowserHistory {
         "ORDER BY MAX(localVisitDate, remoteVisitDate) DESC",
         "LIMIT \(limit)",
         ].joined(separator: " ")
-        
+
         let factory = includeIcon ? SQLiteHistory.iconHistoryColumnFactory : SQLiteHistory.basicHistoryColumnFactory
         return db.runQuery(sql, args: args, factory: factory)
     }

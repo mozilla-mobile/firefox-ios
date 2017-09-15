@@ -63,7 +63,7 @@ class LoginDetailViewController: SensitiveViewController {
         self.login = login
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
-        
+
         NotificationCenter.default.addObserver(self, selector: #selector(LoginDetailViewController.dismissAlertController), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
     }
 
@@ -221,11 +221,11 @@ extension LoginDetailViewController: UITableViewDelegate {
         if ![InfoItem.passwordItem, InfoItem.websiteItem, InfoItem.usernameItem].contains(item) {
             return
         }
-        
+
         guard let cell = tableView.cellForRow(at: indexPath) as? LoginTableViewCell else { return }
-        
+
         cell.becomeFirstResponder()
-        
+
         let menu = UIMenuController.shared
         menu.setTargetRect(cell.frame, in: self.tableView)
         menu.setMenuVisible(true, animated: true)
@@ -308,12 +308,12 @@ extension LoginDetailViewController {
     func SELdoneEditing() {
         editingInfo = false
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(LoginDetailViewController.SELedit))
-        
+
         defer {
             // Required to get UI to reload with changed state
             tableView.reloadData()
         }
-        
+
         // We only care to update if we changed something
         guard let username = usernameField?.text,
                   let password = passwordField?.text, username != login.username || password != login.password else {
@@ -360,7 +360,7 @@ extension LoginDetailViewController: LoginTableViewCellDelegate {
 
         return false
     }
-    
+
     func infoItemForCell(_ cell: LoginTableViewCell) -> InfoItem? {
         if let index = tableView.indexPath(for: cell),
             let item = InfoItem(rawValue: index.row) {

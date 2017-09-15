@@ -141,7 +141,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             make.top.equalTo(logoImageView.snp.bottom).offset(BookmarksPanelUX.WelcomeScreenPadding)
             make.width.equalTo(BookmarksPanelUX.WelcomeScreenItemWidth)
         }
-        
+
         return overlayView
     }
 
@@ -195,7 +195,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         guard let indexPath = tableView.indexPathForRow(at: touchPoint) else { return }
         presentContextMenu(for: indexPath)
     }
-    
+
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return source?.current.count ?? 0
     }
@@ -445,7 +445,7 @@ extension BookmarksPanel: HomePanelContextMenu {
         })
 
         actions.append(pinTopSite)
-        
+
         // Only local bookmarks can be removed
         guard let source = source else { return nil }
         if source.current.itemIsEditableAtIndex(indexPath.row) {

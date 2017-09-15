@@ -127,7 +127,7 @@ public extension AuthenticationKeychainInfo {
         guard let lockOutInterval = self.lockOutInterval else {
             return false
         }
-        
+
         if SystemUtils.systemUptime() < lockOutInterval {
             // Unlock and require passcode input
             resetLockoutState()

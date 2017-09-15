@@ -63,7 +63,7 @@ class NightModeHelper: TabHelper {
         let isActive = prefs.boolForKey(NightModePrefsKey.NightModeStatus) ?? false
         setNightMode(prefs, tabManager: tabManager, enabled: !isActive)
     }
-    
+
     static func setNightMode(_ prefs: Prefs, tabManager: TabManager, enabled: Bool) {
         prefs.setBool(enabled, forKey: NightModePrefsKey.NightModeStatus)
         for tab in tabManager.tabs {

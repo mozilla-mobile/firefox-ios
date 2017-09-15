@@ -59,7 +59,7 @@ private func deferEmptyResponse(token batchToken: BatchToken? = nil, lastModifie
 }
 
 // Small helper operator for comparing query parameters below
-private func ==(param1: NSURLQueryItem, param2: NSURLQueryItem) -> Bool {
+private func == (param1: NSURLQueryItem, param2: NSURLQueryItem) -> Bool {
     return param1.name == param2.name && param1.value == param2.value
 }
 

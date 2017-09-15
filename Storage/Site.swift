@@ -9,7 +9,7 @@ public protocol Identifiable: Equatable {
     var id: Int? { get set }
 }
 
-public func ==<T>(lhs: T, rhs: T) -> Bool where T: Identifiable {
+public func ==<T> (lhs: T, rhs: T) -> Bool where T: Identifiable {
     return lhs.id == rhs.id
 }
 

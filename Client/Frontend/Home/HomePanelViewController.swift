@@ -72,10 +72,10 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         theme.buttonTintColor = HomePanelViewControllerUX.ToolbarButtonDeselectedColorNormalMode
         theme.highlightButtonColor = UIConstants.HighlightBlue
         themes[Theme.NormalMode] = theme
-        
+
         return themes
     }()
-    
+
     var profile: Profile!
     var notificationToken: NSObjectProtocol!
     var panels: [HomePanelDescriptor]!
@@ -97,7 +97,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 
     override func viewDidLoad() {
         view.backgroundColor = UIConstants.AppBackgroundColor
-        
+
         buttonContainerView.axis = .horizontal
         buttonContainerView.alignment = .fill
         buttonContainerView.distribution = .fillEqually
@@ -107,7 +107,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         buttonContainerView.accessibilityLabel = NSLocalizedString("Panel Chooser", comment: "Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list).")
         view.addSubview(buttonContainerView)
         buttonContainerView.addSubview(highlightLine)
-        
+
         self.buttonContainerBottomBorderView = UIView()
         self.view.addSubview(buttonContainerBottomBorderView)
         buttonContainerBottomBorderView.backgroundColor = HomePanelViewControllerUX.ButtonContainerBorderColor
@@ -240,7 +240,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
             self.buttonContainerView.addArrangedSubview(button)
         }
     }
-    
+
     func updateButtonTints() {
         var selectedbutton: UIView?
         for (index, button) in self.buttons.enumerated() {
@@ -297,7 +297,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     func homePanelDidRequestToSignIn(_ homePanel: HomePanel) {
         delegate?.homePanelViewControllerDidRequestToSignIn(self)
     }
-    
+
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
         delegate?.homePanelViewControllerDidRequestToOpenInNewTab(url, isPrivate: isPrivate)
     }
@@ -309,7 +309,7 @@ extension HomePanelViewController: Themeable {
         guard let theme = HomePanelViewController.Themes[themeName] else {
             fatalError("Theme not found")
         }
-        
+
         highlightLine.backgroundColor = theme.highlightButtonColor
         buttonContainerView.backgroundColor = theme.backgroundColor
         self.view.backgroundColor = theme.backgroundColor

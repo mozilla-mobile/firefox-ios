@@ -86,38 +86,38 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
             UIKeyCommand(input: UIKeyInputRightArrow, modifierFlags: .init(rawValue: 0), action: #selector(self.handleKeyCommand(sender:)))
         ]
     }
-    
+
     func handleKeyCommand(sender: UIKeyCommand) {
         switch sender.input {
         case UIKeyInputLeftArrow:
             if isSelectionActive {
                 applyCompletion()
-                
+
                 // Set the current position to the beginning of the text.
                 selectedTextRange = textRange(from: beginningOfDocument, to: beginningOfDocument)
             } else if let range = selectedTextRange {
                 if range.start == beginningOfDocument {
                     return
                 }
-                
+
                 guard let cursorPosition = position(from: range.start, offset: -1) else {
                     return
                 }
-                
+
                 selectedTextRange = textRange(from: cursorPosition, to: cursorPosition)
             }
             return
         case UIKeyInputRightArrow:
             if isSelectionActive {
                 applyCompletion()
-                
+
                 // Set the current position to the end of the text.
                 selectedTextRange = textRange(from: endOfDocument, to: endOfDocument)
             } else if let range = selectedTextRange {
                 if range.end == endOfDocument {
                     return
                 }
-                
+
                 guard let cursorPosition = position(from: range.end, offset: 1) else {
                     return
                 }
@@ -129,7 +129,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
             return
         }
     }
-    
+
     func highlightAll() {
         let text = self.text
         self.text = ""

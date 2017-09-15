@@ -74,7 +74,7 @@ class LeanplumIntegration {
 
     fileprivate weak var profile: Profile?
     private var enabled: Bool = false
-    
+
     fileprivate func shouldSendToLP() -> Bool {
         // Need to be run on main thread since isInPrivateMode requires to be on the main thread.
         assert(Thread.isMainThread)
@@ -95,7 +95,7 @@ class LeanplumIntegration {
         if !self.enabled {
             return
         }
-        
+
         guard SupportedLocales(rawValue: Locale.current.identifier) != nil else {
             return
         }
@@ -186,7 +186,7 @@ class LeanplumIntegration {
     }
 
     // Utils
-    
+
     func setEnabled(_ enabled: Bool) {
         guard AppConstants.MOZ_ENABLE_LEANPLUM else {
             return

@@ -36,7 +36,7 @@ open class EngineConfiguration: Equatable {
     }
 }
 
-public func ==(lhs: EngineConfiguration, rhs: EngineConfiguration) -> Bool {
+public func == (lhs: EngineConfiguration, rhs: EngineConfiguration) -> Bool {
     return Set(lhs.enabled) == Set(rhs.enabled)
 }
 
@@ -74,7 +74,7 @@ public struct EngineMeta: Equatable {
     }
 }
 
-public func ==(lhs: EngineMeta, rhs: EngineMeta) -> Bool {
+public func == (lhs: EngineMeta, rhs: EngineMeta) -> Bool {
     return (lhs.version == rhs.version) && (lhs.syncID == rhs.syncID)
 }
 
@@ -127,7 +127,7 @@ public struct MetaGlobal: Equatable {
     }
 }
 
-public func ==(lhs: MetaGlobal, rhs: MetaGlobal) -> Bool {
+public func == (lhs: MetaGlobal, rhs: MetaGlobal) -> Bool {
     return (lhs.syncID == rhs.syncID) &&
            (lhs.storageVersion == rhs.storageVersion) &&
            optArrayEqual(lhs.declined, rhs: rhs.declined) &&

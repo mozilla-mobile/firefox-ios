@@ -32,7 +32,7 @@ private struct AdjustSettings {
 
 class AdjustIntegration: NSObject {
     let profile: Profile
-    
+
     init(profile: Profile) {
         self.profile = profile
     }
@@ -98,24 +98,24 @@ class AdjustIntegration: NSObject {
             throw NSError(domain: AdjustIntegrationErrorDomain, code: -1,
                 userInfo: [NSLocalizedDescriptionKey: "Could not build \(AdjustAttributionFileName) path"])
         }
-        
+
         return url.appendingPathComponent(AdjustAttributionFileName).path
     }
 
     /// Return true if Adjust should be enabled. If the user has disabled the Send Anonymous Usage Data then we immediately
     /// return false. Otherwise we only do one ping, which means we only enable it if we have not seen the attributiond
     /// data yet.
-    
+
     fileprivate func shouldEnable() throws -> Bool {
         if profile.prefs.boolForKey("settings.sendUsageData") ?? true {
             return true
         }
         return try hasAttribution() == false
     }
-    
+
     /// Return true if retention (session) tracking should be enabled. This follows the Send Anonymous Usage Data
     /// setting.
-    
+
     fileprivate func shouldTrackRetention() -> Bool {
         return profile.prefs.boolForKey("settings.sendUsageData") ?? true
     }
@@ -176,15 +176,15 @@ extension AdjustIntegration: AdjustDelegate {
 
     /// This is called from the Settings screen. The settings screen will remember the choice in the
     /// profile and then use this method to disable or enable Adjust.
-    
+
     static func setEnabled(_ enabled: Bool) {
         Adjust.setEnabled(enabled)
     }
-    
+
     /// Store the deeplink url from Adjust SDK. Per Adjust documentation, any interstitial view launched could interfere
     /// with launching the deeplink. We let the interstial view decide what to do with deeplink.
     /// Ref: https://github.com/adjust/ios_sdk#deferred-deep-linking-scenario
-    
+
     func adjustDeeplinkResponse(_ deeplink: URL!) -> Bool {
         profile.prefs.setString("\(deeplink)", forKey: "AdjustDeeplinkKey")
         return true

@@ -28,13 +28,12 @@ struct IntroViewControllerUX {
     static let CardTextWidth = UIScreen.main.bounds.width <= 320 ? 240 : 280
     static let CardTitleHeight = 50
 
-    
     static let CardTitleWelcome = NSLocalizedString("Intro.Slides.Welcome.Title", tableName: "Intro", value: "Thanks for choosing Firefox!", comment: "Title for the first panel 'Welcome' in the First Run tour.")
     static let CardTitleSearch = NSLocalizedString("Intro.Slides.Search.Title", tableName: "Intro", value: "Your search, your way", comment: "Title for the second  panel 'Search' in the First Run tour.")
     static let CardTitlePrivate = NSLocalizedString("Intro.Slides.Private.Title", tableName: "Intro", value: "Browse like no one’s watching", comment: "Title for the third panel 'Private Browsing' in the First Run tour.")
     static let CardTitleMail = NSLocalizedString("Intro.Slides.Mail.Title", tableName: "Intro", value: "You've got mail… options", comment: "Title for the fourth panel 'Mail' in the First Run tour.")
     static let CardTitleSync = NSLocalizedString("Intro.Slides.Sync.Title", tableName: "Intro", value: "Pick up where you left off", comment: "Title for the fifth panel 'Sync' in the First Run tour.")
-    
+
     static let CardTextWelcome = NSLocalizedString("Intro.Slides.Welcome.Description", tableName: "Intro", value: "A modern mobile browser from Mozilla, the non-profit committed to a free and open web.", comment: "Description for the 'Welcome' panel in the First Run tour.")
     static let CardTextSearch = NSLocalizedString("Intro.Slides.Search.Description", tableName: "Intro", value: "Searching for something different? Choose another default search engine (or add your own) in Settings.", comment: "Description for the 'Favorite Search Engine' panel in the First Run tour.")
     static let CardTextPrivate = NSLocalizedString("Intro.Slides.Private.Description", tableName: "Intro", value: "Tap the mask icon to slip into Private Browsing mode.", comment: "Description for the 'Private Browsing' panel in the First Run tour.")
@@ -124,7 +123,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         }
         self.view.layoutIfNeeded()
         self.scrollView.layoutIfNeeded()
-        
+
         pageControl = UIPageControl()
         pageControl.pageIndicatorTintColor = UIColor.black.withAlphaComponent(0.3)
         pageControl.currentPageIndicatorTintColor = UIColor.black
@@ -140,7 +139,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
 
         func addCard(title: String, text: String, introView: UIView) {
             self.introViews.append(introView)
-            
+
             let titleLabel = UILabel()
             titleLabel.numberOfLines = 2
             titleLabel.adjustsFontSizeToFitWidth = true
@@ -155,7 +154,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
                 make.height.equalTo(IntroViewControllerUX.CardTitleHeight)
                 make.width.equalTo(IntroViewControllerUX.CardTextWidth)
             }
-            
+
             let textLabel = UILabel()
             textLabel.numberOfLines = 5
             textLabel.attributedText = attributedStringForLabel(text)
@@ -185,7 +184,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         signInButton.snp.makeConstraints { (make) -> Void in
             make.height.equalTo(IntroViewControllerUX.SignInButtonHeight)
         }
-        
+
         let syncCardView = UIView()
         // introViews.append(syncCardView)
         addCard(title: IntroViewControllerUX.CardTitleSync, text: IntroViewControllerUX.CardTextSync, introView: syncCardView)
@@ -315,7 +314,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         let swipeCoordinate = CGFloat(pageControl.currentPage) * scrollView.frame.size.width
         scrollView.setContentOffset(CGPoint(x: swipeCoordinate, y: 0), animated: true)
     }
-    
+
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         // Need to add this method so that when forcibly dragging, instead of letting deceleration happen, should also calculate what card it's on.
         // This especially affects sliding to the last or first slides.
@@ -323,7 +322,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
             scrollViewDidEndDecelerating(scrollView)
         }
     }
-    
+
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         // Need to add this method so that tapping the pageControl will also change the card texts.
         // scrollViewDidEndDecelerating waits until the end of the animation to calculate what card it's on.
@@ -343,10 +342,10 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         percentageOfScroll = percentageOfScroll > 1.0 ? 1.0 : percentageOfScroll
         let whiteComponent = UIColor.white.components
         let grayComponent = UIColor(rgb: 0xF2F2F2).components
-        
+
         let page = Int(scrollView.contentOffset.x / scrollView.frame.size.width)
         pageControl.currentPage = page
-        
+
         let newRed   = (1.0 - percentageOfScroll) * whiteComponent.red   + percentageOfScroll * grayComponent.red
         let newGreen = (1.0 - percentageOfScroll) * whiteComponent.green + percentageOfScroll * grayComponent.green
         let newBlue  = (1.0 - percentageOfScroll) * whiteComponent.blue  + percentageOfScroll * grayComponent.blue
@@ -392,7 +391,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         string.addAttribute(NSParagraphStyleAttributeName, value: paragraphStyle, range: NSRange(location: 0, length: string.length))
         return string
     }
-    
+
     fileprivate func setupDynamicFonts() {
         startBrowsingButton.titleLabel?.font = UIFont(name: "FiraSans-Regular", size: DynamicFontHelper.defaultHelper.IntroStandardFontSize)
         signInButton.titleLabel?.font = UIFont(name: "FiraSans-Regular", size: DynamicFontHelper.defaultHelper.IntroBigFontSize)

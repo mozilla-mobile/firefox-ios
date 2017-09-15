@@ -310,7 +310,7 @@ public struct RecordEncrypter<T: CleartextPayloadJSON> {
     }
 }
 
-public func ==(lhs: Keys, rhs: Keys) -> Bool {
+public func == (lhs: Keys, rhs: Keys) -> Bool {
     return lhs.valid == rhs.valid &&
            lhs.defaultBundle == rhs.defaultBundle &&
            lhs.collectionKeys == rhs.collectionKeys

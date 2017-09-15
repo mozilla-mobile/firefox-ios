@@ -57,7 +57,7 @@ open class TabToolbarHelper: NSObject {
             setTint(color: buttonTintColor, selectedColor: selectedButtonTintColor, andDisabledColor: disabledButtonTintColor, forButtons: toolbar.actionButtons)
         }
     }
-    
+
     var disabledButtonTintColor = UIColor.lightGray {
         didSet {
             setTint(color: buttonTintColor, selectedColor: selectedButtonTintColor, andDisabledColor: disabledButtonTintColor, forButtons: toolbar.actionButtons)
@@ -185,7 +185,7 @@ class ToolbarButton: UIButton {
             self.imageView?.tintColor = self.tintColor
         }
     }
-    
+
     override open var isEnabled: Bool {
         didSet {
             self.tintColor = isEnabled ? unselectedTintColor : disabledTintColor

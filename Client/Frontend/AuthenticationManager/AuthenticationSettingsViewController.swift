@@ -99,7 +99,7 @@ class RequirePasscodeSetting: Setting {
                    delegate: delegate,
                    enabled: enabled)
     }
-    
+
     func deselectRow () {
         if let selectedRow = self.settings?.tableView.indexPathForSelectedRow {
             self.settings?.tableView.deselectRow(at: selectedRow, animated: true)

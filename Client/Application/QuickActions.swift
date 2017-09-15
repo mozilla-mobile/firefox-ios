@@ -132,7 +132,7 @@ class QuickActions: NSObject {
         // otherwise, create a new tab with the bookmarked URL
         bvc.switchToTabForURLOrOpen(urlToOpen, isPrivileged: true)
     }
-    
+
     fileprivate func handleQRCode(with vc: QRCodeViewControllerDelegate & UIViewController) {
         let qrCodeViewController = QRCodeViewController()
         qrCodeViewController.qrCodeDelegate = vc

@@ -85,7 +85,7 @@ open class Visit: Hashable {
     }
 }
 
-public func ==(lhs: Visit, rhs: Visit) -> Bool {
+public func == (lhs: Visit, rhs: Visit) -> Bool {
     return lhs.date == rhs.date &&
            lhs.type == rhs.type
 }
@@ -104,7 +104,7 @@ open class SiteVisit: Visit {
     }
 }
 
-public func ==(lhs: SiteVisit, rhs: SiteVisit) -> Bool {
+public func == (lhs: SiteVisit, rhs: SiteVisit) -> Bool {
     if let lhsID = lhs.id, let rhsID = rhs.id {
         if lhsID != rhsID {
             return false

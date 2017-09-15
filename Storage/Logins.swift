@@ -541,7 +541,7 @@ open class Login: CustomStringConvertible, LoginData, LoginUsageData, Equatable 
     }
 }
 
-public func ==(lhs: Login, rhs: Login) -> Bool {
+public func == (lhs: Login, rhs: Login) -> Bool {
     return lhs.credentials == rhs.credentials && lhs.protectionSpace == rhs.protectionSpace
 }
 

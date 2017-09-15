@@ -33,7 +33,7 @@ public enum SyncDisplayState {
     }
 }
 
-public func ==(a: SyncDisplayState, b: SyncDisplayState) -> Bool {
+public func == (a: SyncDisplayState, b: SyncDisplayState) -> Bool {
     switch (a, b) {
     case (.inProgress, .inProgress):
         return true

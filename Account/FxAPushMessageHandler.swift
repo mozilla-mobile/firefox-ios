@@ -144,7 +144,7 @@ extension FxAPushMessageHandler {
 
         let clients = profile.remoteClientsAndTabs
         let getClient = clients.getClient(fxaDeviceId: deviceId)
-        
+
         return getClient >>== { device in
             let message = PushMessage.deviceDisconnected(device?.name)
             if let id = device?.guid {
@@ -253,7 +253,7 @@ enum PushMessage: Equatable {
         }
     }
 
-    public static func ==(lhs: PushMessage, rhs: PushMessage) -> Bool {
+    public static func == (lhs: PushMessage, rhs: PushMessage) -> Bool {
         guard lhs.messageType == rhs.messageType else {
             return false
         }

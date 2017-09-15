@@ -348,7 +348,7 @@ open class BookmarkPayload: BookmarkBasePayload {
     }
 
     lazy var tags: [String] = {
-        return self["tags"].arrayValue.flatMap { $0.string } 
+        return self["tags"].arrayValue.flatMap { $0.string }
     }()
 
     lazy var tagsString: String = {

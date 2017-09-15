@@ -12,10 +12,10 @@ import Sync
 
 class FaviconManager: TabHelper {
     static let FaviconDidLoad = "FaviconManagerFaviconDidLoad"
-    
+
     let profile: Profile!
     weak var tab: Tab?
-    
+
     static let maximumFaviconSize = 1 * 1024 * 1024 // 1 MiB file size limit
 
     init(tab: Tab, profile: Profile) {
@@ -37,7 +37,7 @@ class FaviconManager: TabHelper {
     func scriptMessageHandlerName() -> String? {
         return "faviconsMessageHandler"
     }
-    
+
     fileprivate func loadFavicons(_ tab: Tab, profile: Profile, favicons: [Favicon]) -> Deferred<[Maybe<Favicon>]> {
         var deferreds: [() -> Deferred<Maybe<Favicon>>]
         deferreds = favicons.map { favicon in
@@ -53,7 +53,7 @@ class FaviconManager: TabHelper {
         }
         return all(deferreds.map({$0()}))
     }
-    
+
     func getFavicon(_ tab: Tab, iconUrl: URL, currentURL: URL, icon: Favicon, profile: Profile) -> Deferred<Maybe<Favicon>> {
         let deferred = Deferred<Maybe<Favicon>>()
         let manager = SDWebImageManager.shared()
@@ -73,14 +73,14 @@ class FaviconManager: TabHelper {
                                         let fav = Favicon(url: url!.absoluteString,
                                             date: Date(),
                                             type: icon.type)
-                                        
+
                                         guard let img = img else {
                                             deferred.fill(Maybe(failure: FaviconError()))
                                             return
                                         }
                                         fav.width = Int(img.size.width)
                                         fav.height = Int(img.size.height)
-                                        
+
                                         if !tab.isPrivate {
                                             if tab.favicons.isEmpty {
                                                 self.makeFaviconAvailable(tab, atURL: currentURL, favicon: fav, withImage: img)

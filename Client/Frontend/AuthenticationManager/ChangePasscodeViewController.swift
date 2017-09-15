@@ -22,7 +22,7 @@ class ChangePasscodeViewController: PagingPasscodeViewController, PasscodeInputV
             PasscodePane(title: AuthenticationStrings.reenterPasscode),
         ]
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

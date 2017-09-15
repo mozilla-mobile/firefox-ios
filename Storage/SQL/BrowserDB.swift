@@ -66,7 +66,7 @@ open class BrowserDB {
          * The supported mechanism for a read-only query against a WAL-using SQLite database is to use PRAGMA query_only,
          * but this isn't all that useful for us, because we have a mixed read/write workload.
          */
-        
+
         return withConnection(flags: SwiftData.Flags.readWriteCreate, err: &err, callback: callback)
     }
 

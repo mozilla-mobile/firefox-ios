@@ -292,7 +292,7 @@ extension URL {
     public var isIPv6: Bool {
         return host?.contains(":") ?? false
     }
-    
+
     /**
      Returns whether the URL's scheme is one of those listed on the official list of URI schemes.
      This only accepts permanent schemes: historical and provisional schemes are not accepted.

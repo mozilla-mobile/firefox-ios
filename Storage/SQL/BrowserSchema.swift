@@ -777,7 +777,7 @@ open class BrowserSchema: Schema {
             // some of the old tables that were previously managed separately.
             if self.migrateFromSchemaTableIfNeeded(db) {
                 let version = db.version
-                
+
                 // If the database is now properly reporting a `user_version`, it may
                 // still need to be upgraded further to get to the current version of
                 // the schema. So, let's simply call this `update()` function a second
@@ -1131,7 +1131,7 @@ open class BrowserSchema: Schema {
 
         return true
     }
-    
+
     fileprivate func migrateFromSchemaTableIfNeeded(_ db: SQLiteDBConnection) -> Bool {
         log.info("Checking if schema table migration is needed.")
 
@@ -1187,7 +1187,7 @@ open class BrowserSchema: Schema {
             SentryIntegration.shared.sendWithStacktrace(message: "Error setting database version: \(err.localizedDescription)", tag: "BrowserDB", severity: .error)
             return false
         }
-        
+
         return true
     }
 
@@ -1202,26 +1202,26 @@ open class BrowserSchema: Schema {
         // Query for the existence of the `clients` table to determine if we are
         // migrating from an older DB version or if this is just a brand new DB.
         let sqliteMasterCursor = db.executeQueryUnsafe("SELECT COUNT(*) AS number FROM sqlite_master WHERE type = 'table' AND name = '\(TableClients)'", factory: IntFactory, withArgs: [] as Args)
-        
+
         let clientsTableExists = sqliteMasterCursor[0] == 1
         sqliteMasterCursor.close()
-        
+
         guard clientsTableExists else {
             return .skipped
         }
-        
+
         // Check if intermediate migrations are necessary for the 'clients' table.
         let previousVersionCursor = db.executeQueryUnsafe("SELECT version FROM tableList WHERE name = '\(TableClients)'", factory: IntFactory, withArgs: [] as Args)
-        
+
         let previousClientsTableVersion = previousVersionCursor[0] ?? 0
         previousVersionCursor.close()
-        
+
         guard previousClientsTableVersion > 0 && previousClientsTableVersion <= 3 else {
             return .skipped
         }
-        
+
         log.info("Migrating '\(TableClients)' table from version \(previousClientsTableVersion).")
-        
+
         if previousClientsTableVersion < 2 {
             let sql = "ALTER TABLE \(TableClients) ADD COLUMN version TEXT"
             if let err = db.executeChange(sql) {
@@ -1230,7 +1230,7 @@ open class BrowserSchema: Schema {
                 return .failure
             }
         }
-        
+
         if previousClientsTableVersion < 3 {
             let sql = "ALTER TABLE \(TableClients) ADD COLUMN fxaDeviceId TEXT"
             if let err = db.executeChange(sql) {
@@ -1239,10 +1239,10 @@ open class BrowserSchema: Schema {
                 return .failure
             }
         }
-        
+
         return .success
     }
-    
+
     fileprivate func fillDomainNamesFromCursor(_ cursor: Cursor<String>, db: SQLiteDBConnection) -> Bool {
         if cursor.count == 0 {
             return true

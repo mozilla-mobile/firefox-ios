@@ -15,7 +15,7 @@ public struct AppConstants {
 
     public static let SkipIntro = ProcessInfo.processInfo.arguments.contains(LaunchArguments.SkipIntro)
     public static let ClearProfile = ProcessInfo.processInfo.arguments.contains(LaunchArguments.ClearProfile)
-    
+
     public static let FxAiOSClientId = "1b1a3e44c54fbb58"
 
     /// Build Channel.
@@ -78,7 +78,7 @@ public struct AppConstants {
             return false
         #endif
     }()
-    
+
     /// Enables/disables the availability of No Image Mode.
     public static let MOZ_NO_IMAGE_MODE: Bool = {
         #if MOZ_CHANNEL_RELEASE
@@ -105,7 +105,7 @@ public struct AppConstants {
             return true
         #endif
     }()
-    
+
     ///  Enables/disables deep linking form fill for FxA
     public static let MOZ_FXA_DEEP_LINK_FORM_FILL: Bool = {
         #if MOZ_CHANNEL_RELEASE
@@ -183,7 +183,7 @@ public struct AppConstants {
             return false
         #endif
     }()
-    
+
     ///  Toggle the feature that shows updated FxA preferences cell
     public static let MOZ_SHOW_FXA_AVATAR: Bool = {
         #if MOZ_CHANNEL_RELEASE

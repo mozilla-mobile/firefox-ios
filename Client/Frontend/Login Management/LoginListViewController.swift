@@ -280,7 +280,7 @@ extension LoginListViewController: LoginDataSourceObserver {
         navigationItem.rightBarButtonItem?.isEnabled = loginDataSource.count > 0
         restoreSelectedRows()
     }
-    
+
     func restoreSelectedRows() {
         for path in self.loginSelectionController.selectedIndexPaths {
             tableView.selectRow(at: path, animated: false, scrollPosition: .none)

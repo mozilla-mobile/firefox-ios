@@ -462,7 +462,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
         frame.origin.y = CGFloat(rowPosition) * (itemSize.height + insets.top) + insets.top
         frame.size = itemSize
         attr.frame = frame
-        
+
         return attr
     }
 }

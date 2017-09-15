@@ -57,30 +57,30 @@ class ThirdPartySearchAlerts: UIAlertController {
         return searchAlertWithOK(title: Strings.ThirdPartySearchFailedTitle,
                                  message: Strings.ThirdPartySearchFailedMessage)
     }
-    
+
     static func incorrectCustomEngineForm() -> UIAlertController {
         return searchAlertWithOK(title: Strings.CustomEngineFormErrorTitle,
                                       message: Strings.CustomEngineFormErrorMessage)
     }
-    
+
     static func duplicateCustomEngine() -> UIAlertController {
         return searchAlertWithOK(title: Strings.CustomEngineDuplicateErrorTitle,
                                  message: Strings.CustomEngineDuplicateErrorMessage)
     }
-    
+
     private static func searchAlertWithOK(title: String, message: String) -> UIAlertController {
         let alert = ThirdPartySearchAlerts(
             title: title,
             message: message,
             preferredStyle: UIAlertControllerStyle.alert
         )
-        
+
         let okayOption = UIAlertAction(
             title: Strings.ThirdPartySearchOkayButton,
             style: UIAlertActionStyle.default,
             handler: nil
         )
-        
+
         alert.addAction(okayOption)
         return alert
     }

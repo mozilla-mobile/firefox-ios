@@ -33,7 +33,7 @@ class MetadataParserHelper: TabHelper {
         guard let dict = message.body as? [String: Any] else {
             return
         }
-        
+
         var userInfo = [String: Any]()
         userInfo["isPrivate"] = self.tab?.isPrivate ?? true
         userInfo["metadata"] = dict

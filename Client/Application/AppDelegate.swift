@@ -88,7 +88,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // before getting the Profile.
         let sendUsageData = NSUserDefaultsPrefs(prefix: "profile").boolForKey("settings.sendUsageData") ?? true
         SentryIntegration.shared.setup(sendUsageData: sendUsageData)
-        
+
         log.debug("Setting UA…")
         // Set the Firefox UA for browsing.
         setUserAgent()
@@ -178,7 +178,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         if let localNotification = launchOptions?[UIApplicationLaunchOptionsKey.localNotification] as? UILocalNotification {
             viewURLInNewTab(localNotification)
         }
-        
+
         adjustIntegration = AdjustIntegration(profile: profile)
 
         let leanplum = LeanplumIntegration.sharedInstance
@@ -329,7 +329,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             log.debug("Setting up BuddyBuild SDK")
             BuddyBuildSDK.setup()
         #endif
-        
+
         log.debug("Making window key and visible…")
         self.window!.makeKeyAndVisible()
 
@@ -838,7 +838,7 @@ extension AppDelegate {
                 // Remember which URLs we received so we can filter them out later when
                 // loading the queued tabs.
                 self.receivedURLs = receivedURLs
-                
+
                 // If we're in the foreground, load the queued tabs now.
                 if application.applicationState == UIApplicationState.active {
                     DispatchQueue.main.async {

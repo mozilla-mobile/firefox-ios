@@ -26,7 +26,7 @@ public struct ClientAndTabs: Equatable, CustomStringConvertible {
     }
 }
 
-public func ==(lhs: ClientAndTabs, rhs: ClientAndTabs) -> Bool {
+public func == (lhs: ClientAndTabs, rhs: ClientAndTabs) -> Bool {
     return (lhs.client == rhs.client) &&
            (lhs.tabs == rhs.tabs)
 }
@@ -93,7 +93,7 @@ public struct RemoteTab: Equatable {
     }
 }
 
-public func ==(lhs: RemoteTab, rhs: RemoteTab) -> Bool {
+public func == (lhs: RemoteTab, rhs: RemoteTab) -> Bool {
     return lhs.clientGUID == rhs.clientGUID &&
         lhs.URL == rhs.URL &&
         lhs.title == rhs.title &&

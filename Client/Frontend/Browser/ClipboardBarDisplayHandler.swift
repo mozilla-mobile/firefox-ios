@@ -20,28 +20,28 @@ class ClipboardBarDisplayHandler {
     private var prefs: Prefs
     private var lastDisplayedURL: String?
     var clipboardToast: ButtonToast?
-    
+
     init(prefs: Prefs) {
         self.prefs = prefs
         NotificationCenter.default.addObserver(self, selector: #selector(self.SELAppWillEnterForegroundNotification), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
-        
+
         NotificationCenter.default.addObserver(self, selector: #selector(self.SELAppWillResignActive), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
     }
-    
+
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
     }
-    
+
     @objc private func SELAppWillEnterForegroundNotification() {
         sessionStarted = true
         checkIfShouldDisplayBar()
     }
-    
+
     @objc private func SELAppWillResignActive() {
         sessionStarted = true
     }
-    
+
     private func shouldDisplayBar(_ copiedURL: String) -> Bool {
         if !sessionStarted ||
             wasClipboardURLAlreadyDisplayed(copiedURL) ||
@@ -51,7 +51,7 @@ class ClipboardBarDisplayHandler {
         sessionStarted = false
         return true
     }
-    
+
     //If we already displayed this URL on the previous session
     //We shouldn't display it again
     private func wasClipboardURLAlreadyDisplayed(_ clipboardURL: String) -> Bool {
@@ -60,7 +60,7 @@ class ClipboardBarDisplayHandler {
         }
         return false
     }
-    
+
     func checkIfShouldDisplayBar() {
         guard self.prefs.boolForKey("showClipboardBar") ?? false else {
             // There's no point in doing any of this work unless the

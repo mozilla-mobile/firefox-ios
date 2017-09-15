@@ -6,17 +6,17 @@ import UIKit
 
 class PrivateModeButton: ToggleButton {
     var light: Bool = false
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.accessibilityLabel = PrivateModeStrings.toggleAccessibilityLabel
         self.accessibilityHint = PrivateModeStrings.toggleAccessibilityHint
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     func styleForMode(privateMode isPrivate: Bool) {
         let maskImage = UIImage(named: "smallPrivateMask")?.withRenderingMode(.alwaysTemplate)
         self.tintColor = isPrivate ? .white : .darkGray
