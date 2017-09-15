@@ -136,6 +136,9 @@ open class SyncStateMachine {
 
             // Take the scratchpad and add the hashedUID from the token
             let b = Scratchpad.Builder(p: scratchpad)
+            if let deviceRegistration = authState.deviceRegistration {
+                b.fxaDeviceId = deviceRegistration.id
+            }
             b.hashedUID = token.hashedFxAUID
 
             // Detect if the we've changed anything in our client record from the last time we synced,
