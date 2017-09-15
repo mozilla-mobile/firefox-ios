@@ -107,7 +107,8 @@ extension PhotonActionSheetProtocol {
         
         let addReadingList = PhotonActionSheetItem(title: Strings.AppMenuAddToReadingListTitleString, iconString: "addToReadingList") { action in
             guard let tab = self.tabManager.selectedTab else { return }
-            guard let url = tab.url else { return }
+            guard let url = tab.url?.decodeReaderModeURL ?? tab.url else { return }
+            
             self.profile.readingList?.createRecordWithURL(url.absoluteString, title: tab.title ?? "", addedBy: UIDevice.current.name)
         }
         

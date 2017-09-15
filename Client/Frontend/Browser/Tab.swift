@@ -76,7 +76,7 @@ class Tab: NSObject {
     
     var readerModeAvailable: Bool {
         if let readerMode = self.getHelper(name: "ReaderMode") as? ReaderMode {
-            return readerMode.state == .available
+            return readerMode.state != .unavailable
         }
         return false
     }
