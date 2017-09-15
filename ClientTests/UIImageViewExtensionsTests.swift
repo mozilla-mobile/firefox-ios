@@ -6,7 +6,7 @@ import Foundation
 import UIKit
 import XCTest
 import Storage
-import WebImage
+import SDWebImage
 import GCDWebServers
 
 @testable import Client

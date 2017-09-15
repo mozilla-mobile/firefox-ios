@@ -4,7 +4,7 @@
 
 import Foundation
 import UIKit
-import WebImage
+import SDWebImage
 
 private let imageLock = NSLock()
 

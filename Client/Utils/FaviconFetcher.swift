@@ -7,7 +7,7 @@ import Shared
 import Alamofire
 import XCGLogger
 import Deferred
-import WebImage
+import SDWebImage
 import Fuzi
 import SwiftyJSON
 
@@ -205,27 +205,30 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
         var fav = Favicon(url: url, type: icon.type)
         if let url = url.asURL {
             var fetch: SDWebImageOperation?
-            fetch = manager?.downloadImage(with: url,
+            fetch = manager.loadImage(with: url,
                 options: SDWebImageOptions.lowPriority,
-                progress: { (receivedSize, expectedSize) in
+                progress: { (receivedSize, expectedSize, _) in
                     if receivedSize > FaviconManager.maximumFaviconSize || expectedSize > FaviconManager.maximumFaviconSize {
                         fetch?.cancel()
                     }
                 },
-                completed: { (img, err, cacheType, success, url) -> Void in
-                fav = Favicon(url: url!.absoluteString,
-                    type: icon.type)
+                completed: { (img, _, _, _, _, url) in
+                    guard let url = url else {
+                        deferred.fill(Maybe(failure: FaviconError()))
+                        return
+                    }
+                    fav = Favicon(url: url.absoluteString, type: icon.type)
 
-                if let img = img {
-                    fav.width = Int(img.size.width)
-                    fav.height = Int(img.size.height)
-                    profile.favicons.addFavicon(fav, forSite: site)
-                } else {
-                    fav.width = 0
-                    fav.height = 0
-                }
+                    if let img = img {
+                        fav.width = Int(img.size.width)
+                        fav.height = Int(img.size.height)
+                        profile.favicons.addFavicon(fav, forSite: site)
+                    } else {
+                        fav.width = 0
+                        fav.height = 0
+                    }
 
-                deferred.fill(Maybe(success: fav))
+                    deferred.fill(Maybe(success: fav))
             })
         } else {
             return deferMaybe(FaviconFetcherErrorType(description: "Invalid URL \(url)"))
@@ -244,9 +247,9 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
             } else {
                 return deferred.fill(Maybe(failure: FaviconError()))
             }
-            SDWebImageManager.shared().downloadImage(with: iconURL, options: SDWebImageOptions.continueInBackground, progress: nil) { (image, error, cacheType, success, url) in
-                if image != nil {
-                    deferred.fill(Maybe(success: image!))
+            SDWebImageManager.shared().loadImage(with: iconURL, options: SDWebImageOptions.continueInBackground, progress: nil) { (image, _, _, _, _, _) in
+                if let image = image {
+                    deferred.fill(Maybe(success: image))
                 } else {
                     deferred.fill(Maybe(failure: FaviconError()))
                 }

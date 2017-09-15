@@ -8,7 +8,7 @@ import XCGLogger
 import Deferred
 import SwiftyJSON
 import FxA
-import WebImage
+import SDWebImage
 
 private let log = Logger.syncLogger
 
@@ -242,7 +242,7 @@ open class FirefoxAccount {
             }
             
             func downloadAvatar() {
-                SDWebImageManager.shared().downloadImage(with: url, options: [SDWebImageOptions.continueInBackground, SDWebImageOptions.lowPriority], progress: nil) { (image, error, cacheType, success, url) in
+                SDWebImageManager.shared().loadImage(with: url, options: [SDWebImageOptions.continueInBackground, SDWebImageOptions.lowPriority], progress: nil) { (image, _, error, _, success, _) in
                     if let error = error {
                         if (error as NSError).code == 404 || self.currentImageState == ImageDownloadState.failedCanRetry {
                             // Image is not found or failed to download a second time

@@ -4,7 +4,7 @@
 
 import Foundation
 import UIKit
-import WebImage
+import SDWebImage
 
 enum MetadataKeys: String {
     case imageURL = "image_url"
@@ -37,8 +37,8 @@ public struct PageMetadata {
         self.type = type
         self.providerName = providerName
 
-        if cacheImages {
-            self.cacheImage(fromDataURI: mediaDataURI, forURL: mediaURL)
+        if let mediaURL = mediaURL, let url = URL(string: mediaURL), cacheImages {
+            self.cacheImage(fromDataURI: mediaDataURI, forURL: url)
         }
     }
 
@@ -52,35 +52,42 @@ public struct PageMetadata {
                             type: dict[MetadataKeys.type.rawValue] as? String, providerName: dict[MetadataKeys.provider.rawValue] as? String, mediaDataURI: dict[MetadataKeys.imageDataURI.rawValue] as? String)
     }
 
-    fileprivate func cacheImage(fromDataURI dataURI: String?, forURL urlString: String?) {
-        if let urlString = urlString,
-            let url = URL(string: urlString) {
-            if let dataURI = dataURI,
-                let dataURL = URL(string: dataURI),
-                !SDWebImageManager.shared().cachedImageExists(for: dataURL),
-                let data = try? Data(contentsOf: dataURL),
-                let image = UIImage(data: data) {
+    fileprivate func cacheImage(fromDataURI dataURI: String?, forURL url: URL) {
+        let webimage = SDWebImageManager.shared()
 
+        func cacheUsingURLOnly() {
+            webimage.cachedImageExists(for: url) { exists in
+                if !exists {
+                    self.downloadAndCache(fromURL: url)
+                }
+            }
+        }
+
+        guard let dataURI = dataURI, let dataURL = URL(string: dataURI) else {
+            cacheUsingURLOnly()
+            return
+        }
+
+        webimage.cachedImageExists(for: dataURL) { exists in
+            if let data = try? Data(contentsOf: dataURL), let image = UIImage(data: data), !exists {
                 self.cache(image: image, forURL: url)
-            } else if !SDWebImageManager.shared().cachedImageExists(for: url) {
-                // download image direct from URL
-                self.downloadAndCache(fromURL: url)
+            } else {
+                cacheUsingURLOnly()
             }
         }
     }
 
     fileprivate func downloadAndCache(fromURL webUrl: URL) {
-        let imageManager = SDWebImageManager.shared()
-        _ = imageManager?.downloadImage(with: webUrl, options: SDWebImageOptions.continueInBackground, progress: nil) { (image, error, cacheType, success, url) in
-            guard let image = image else {
-                return
+        let webimage = SDWebImageManager.shared()
+        webimage.loadImage(with: webUrl, options: .continueInBackground, progress: nil) { (image, _, _, _, _, _) in
+            if let image = image {
+                self.cache(image: image, forURL: webUrl)
             }
-            self.cache(image: image, forURL: webUrl)
         }
     }
 
     fileprivate func cache(image: UIImage, forURL url: URL) {
         let imageManager = SDWebImageManager.shared()
-        imageManager?.saveImage(toCache: image, for: url)
+        imageManager.saveImage(toCache: image, for: url)
     }
 }

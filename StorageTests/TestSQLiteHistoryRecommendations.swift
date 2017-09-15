@@ -6,7 +6,7 @@ import Foundation
 import Shared
 @testable import Storage
 import Deferred
-import WebImage
+import SDWebImage
 
 import XCTest
 

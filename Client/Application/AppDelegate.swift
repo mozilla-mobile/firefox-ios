@@ -7,7 +7,7 @@ import Storage
 import AVFoundation
 import XCGLogger
 import MessageUI
-import WebImage
+import SDWebImage
 import SwiftKeychainWrapper
 import LocalAuthentication
 import Telemetry
