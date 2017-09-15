@@ -10,7 +10,7 @@ import ReadingList
 import Shared
 
 struct TabTrayControllerUX {
-    static let CornerRadius = CGFloat(4.0)
+    static let CornerRadius = CGFloat(6.0)
     static let BackgroundColor = UIConstants.TabTrayBG
     static let CellBackgroundColor = UIConstants.TabTrayBG
     static let TextBoxHeight = CGFloat(32.0)
@@ -121,7 +121,6 @@ class TabCell: UICollectionViewCell {
         case .light:
             title = UIVisualEffectView(effect: UIBlurEffect(style: .extraLight))
             self.titleText.textColor = LightTabCellUX.TabTitleTextColor
-            //self.closeButton
         case .dark:
             title = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
             self.titleText.textColor = DarkTabCellUX.TabTitleTextColor
@@ -146,7 +145,7 @@ class TabCell: UICollectionViewCell {
         // create a frame that is "BorderWidth" size bigger than the cell
         layer.shadowOffset = CGSize(width: -TabCell.BorderWidth, height: -TabCell.BorderWidth)
         let shadowPath = CGRect(x: 0, y: 0, width: layer.frame.width + (TabCell.BorderWidth * 2), height: layer.frame.height + (TabCell.BorderWidth * 2))
-        layer.shadowPath = UIBezierPath(roundedRect: shadowPath, cornerRadius: TabTrayControllerUX.CornerRadius).cgPath
+        layer.shadowPath = UIBezierPath(roundedRect: shadowPath, cornerRadius: TabTrayControllerUX.CornerRadius+TabCell.BorderWidth).cgPath
     }
 
     required init?(coder aDecoder: NSCoder) {
