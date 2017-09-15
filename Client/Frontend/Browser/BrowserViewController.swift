@@ -201,11 +201,8 @@ class BrowserViewController: UIViewController {
             toolbar = TabToolbar()
             footer.addSubview(toolbar!)
             toolbar?.tabToolbarDelegate = self
-
-            // Need to reset the proper blur style
-            if let selectedTab = tabManager.selectedTab, selectedTab.isPrivate {
-                toolbar?.applyTheme(Theme.PrivateMode)
-            }
+            let theme = (tabManager.selectedTab?.isPrivate ?? false) ? Theme.PrivateMode : Theme.NormalMode
+            toolbar?.applyTheme(theme)
         }
         
         if showTopTabs {
