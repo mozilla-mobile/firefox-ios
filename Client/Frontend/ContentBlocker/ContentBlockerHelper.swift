@@ -18,6 +18,8 @@ class ContentBlockerHelper {
     fileprivate weak var tab: Tab?
     fileprivate weak var profile: Profile?
 
+    static var blockImagesRule: WKContentRuleList? = nil
+
     // Raw values are stored to prefs, be careful changing them.
     enum EnabledState: String {
         case on
@@ -92,6 +94,13 @@ class ContentBlockerHelper {
                 self.compileListsNotInStore(completion: {})
             }
         }
+
+        let blockImages = "[{'trigger':{'url-filter':'.*','resource-type':['image']},'action':{'type':'block'}}]".replacingOccurrences(of: "'", with:"\"")
+        ruleStore.compileContentRuleList(forIdentifier: "images", encodedContentRuleList: blockImages) {
+            rule, error in
+            assert(rule != nil && error == nil)
+            ContentBlockerHelper.blockImagesRule = rule
+        }
     }
 
     deinit {
@@ -114,7 +123,7 @@ class ContentBlockerHelper {
 
     fileprivate func addActiveRulesToTab() {
         guard let tab = tab else { return }
-        removeAllFromTab()
+        removeTrackingProtectionFromTab()
 
         switch enabledStatePref {
         case .off:
@@ -130,21 +139,35 @@ class ContentBlockerHelper {
         let rules = blocklistBasic + (blockingStrengthPref == .strict ? blocklistStrict : [])
         for name in rules {
             ruleStore.lookUpContentRuleList(forIdentifier: name) { rule, error in
-                self.addToTab(contentRuleList: rule, error: error)
+                guard let rule = rule else {
+                    print("Content blocker load error: " + (error?.localizedDescription ?? "empty rules"))
+                    assert(false)
+                    return
+                }
+                self.addToTab(contentRuleList: rule)
             }
         }
     }
 
-    func removeAllFromTab() {
-        tab?.webView?.configuration.userContentController.removeAllContentRuleLists()
+    func removeTrackingProtectionFromTab() {
+        guard let tab = tab else { return }
+        tab.webView?.configuration.userContentController.removeAllContentRuleLists()
+
+        if let rule = ContentBlockerHelper.blockImagesRule, tab.noImageMode {
+            addToTab(contentRuleList: rule)
+        }
     }
 
-    fileprivate func addToTab(contentRuleList: WKContentRuleList?, error: Error?) {
-        if let rules = contentRuleList {
-            tab?.webView?.configuration.userContentController.add(rules)
+    fileprivate func addToTab(contentRuleList: WKContentRuleList) {
+        tab?.webView?.configuration.userContentController.add(contentRuleList)
+    }
+
+    func noImageMode(enabled: Bool) {
+        guard let rule = ContentBlockerHelper.blockImagesRule  else { return }
+        if enabled {
+            addToTab(contentRuleList: rule)
         } else {
-            print("Content blocker load error: " + (error?.localizedDescription ?? "empty rules"))
-            assert(false)
+            tab?.webView?.configuration.userContentController.remove(rule)
         }
     }
 }
