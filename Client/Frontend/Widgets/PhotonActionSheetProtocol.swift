@@ -107,8 +107,8 @@ extension PhotonActionSheetProtocol {
         
         let addReadingList = PhotonActionSheetItem(title: Strings.AppMenuAddToReadingListTitleString, iconString: "addToReadingList") { action in
             guard let tab = self.tabManager.selectedTab else { return }
-            guard let url = tab.url?.decodeReaderModeURL ?? tab.url else { return }
-            
+            guard let url = tab.url?.displayURL else { return }
+
             self.profile.readingList?.createRecordWithURL(url.absoluteString, title: tab.title ?? "", addedBy: UIDevice.current.name)
         }
         
@@ -118,7 +118,7 @@ extension PhotonActionSheetProtocol {
         
         let bookmarkPage = PhotonActionSheetItem(title: Strings.AppMenuAddBookmarkTitleString, iconString: "menu-Bookmark") { action in
             //TODO: can all this logic go somewhere else?
-            guard let url = tab.url else { return }
+            guard let url = tab.url?.displayURL else { return }
             let absoluteString = url.absoluteString
             let shareItem = ShareItem(url: absoluteString, title: tab.title, favicon: tab.displayFavicon)
             _ = self.profile.bookmarks.shareItem(shareItem)
@@ -134,7 +134,7 @@ extension PhotonActionSheetProtocol {
         
         let removeBookmark = PhotonActionSheetItem(title: Strings.AppMenuRemoveBookmarkTitleString, iconString: "menu-Bookmark-Remove") { action in
             //TODO: can all this logic go somewhere else?
-            guard let url = tab.url else { return }
+            guard let url = tab.url?.displayURL else { return }
             let absoluteString = url.absoluteString
             self.profile.bookmarks.modelFactory >>== {
                 $0.removeByURL(absoluteString).uponQueue(.main) { res in
@@ -146,12 +146,13 @@ extension PhotonActionSheetProtocol {
         }
         
         let share = PhotonActionSheetItem(title: Strings.AppMenuSharePageTitleString, iconString: "action_share") { action in
-            guard let url = self.tabManager.selectedTab?.url else { return }
             guard let tab = self.tabManager.selectedTab else { return }
+            guard let url = self.tabManager.selectedTab?.url?.displayURL else { return }
             presentShareMenu(url, tab, buttonView, .up)
         }
+
         let copyURL = PhotonActionSheetItem(title: Strings.AppMenuCopyURLTitleString, iconString: "menu-Copy-Link") { _ in
-            UIPasteboard.general.string = self.tabManager.selectedTab?.url?.absoluteString ?? ""
+            UIPasteboard.general.string = self.tabManager.selectedTab?.url?.displayURL?.absoluteString ?? ""
         }
         
         let bookmarkAction = tab.isBookmarked ? removeBookmark : bookmarkPage
