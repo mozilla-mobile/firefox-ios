@@ -194,7 +194,7 @@ struct UIConstants {
         static let handoffSyncing = NSLocalizedString("Focus.handoffSyncing", value: "Apple Handoff is syncing", comment: "Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681")
         static let linkYouCopied = NSLocalizedString("contextMenu.clipboardLink", value: "Link you copied: %@", comment: "Text for the context menu when a user has a link on their clipboard.")
         static let trackingProtectionToggleLabel = NSLocalizedString("trackingProtection.toggleLabel", value: "Tracking Protection", comment: "Text for the toggle that temporarily disables tracking protection.")
-        static let trackingProtectionToggleDescription = NSLocalizedString("trackingProtection.toggleDescription", value: "Disable just for this browsing session if the page isn't behaving as expected.", comment: "Description for the tracking protection toggle.")
+        static let trackingProtectionToggleDescription = NSLocalizedString("trackingProtection.toggleDescription", value: "Disable just for this browsing session if the page isn’t behaving as expected.", comment: "Description for the tracking protection toggle.")
         static let trackingProtectionDisabledLabel = NSLocalizedString("trackingProtection.disabledLabel", value: "Tracking Protection off", comment: "text showing the tracking protection is disabled.")
         static let adTrackerLabel = NSLocalizedString("trackingProtection.adTrackersLabel", value: "Ad trackers", comment: "Label for ad trackers.")
         static let analyticTrackerLabel = NSLocalizedString("trackingProtection.analyticTrackerLabel", value: "Analytic trackers", comment: "label for analytic trackers.")

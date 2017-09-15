@@ -53,7 +53,7 @@
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This lets you take and upload videos.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string></string>
+	<string>This lets you save and upload photos.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This lets you save and upload photos.</string>
 	<key>UILaunchStoryboardName</key>
