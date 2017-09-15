@@ -42,8 +42,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
     var openInFirefoxParams: LaunchParams?
 
-    var systemBrightness: CGFloat = UIScreen.main.brightness
-    
     var receivedURLs: [URL]?
 
     @discardableResult func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {

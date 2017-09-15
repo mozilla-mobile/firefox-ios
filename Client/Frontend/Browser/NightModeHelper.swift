@@ -15,6 +15,8 @@ class NightModeHelper: TabHelper {
 
     fileprivate weak var tab: Tab?
 
+    static var systemBrightness = UIScreen.main.brightness
+
     required init(tab: Tab) {
         self.tab = tab
         if let path = Bundle.main.path(forResource: "NightModeHelper", ofType: "js"), let source = try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String {
@@ -36,17 +38,16 @@ class NightModeHelper: TabHelper {
     }
 
     static func setNightModeBrightness(_ prefs: Prefs, enabled: Bool) {
-        let nightModeBrightness: CGFloat = min(0.2, CGFloat(UIScreen.main.brightness))
+        let nightModeBrightness: CGFloat
         if enabled {
-            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-                appDelegate.systemBrightness = CGFloat(UIScreen.main.brightness)
-            }
-            UIScreen.main.brightness = nightModeBrightness
+            systemBrightness = CGFloat(UIScreen.main.brightness)
+            nightModeBrightness = min(0.1, CGFloat(UIScreen.main.brightness))
         } else {
-            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-                UIScreen.main.brightness = appDelegate.systemBrightness
-            }
+            nightModeBrightness = systemBrightness
         }
+        UIView.animate(withDuration: 1.0, animations: {
+            UIScreen.main.brightness = nightModeBrightness
+        })
     }
 
     static func restoreNightModeBrightness(_ prefs: Prefs, toForeground: Bool) {
@@ -54,9 +55,7 @@ class NightModeHelper: TabHelper {
         if isNightMode {
             NightModeHelper.setNightModeBrightness(prefs, enabled: toForeground)
         } else {
-            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-                appDelegate.systemBrightness = UIScreen.main.brightness
-            }
+            systemBrightness = UIScreen.main.brightness
         }
     }
 
