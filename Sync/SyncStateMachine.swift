@@ -137,6 +137,15 @@ open class SyncStateMachine {
             // Take the scratchpad and add the hashedUID from the token
             let b = Scratchpad.Builder(p: scratchpad)
             b.hashedUID = token.hashedFxAUID
+
+            // Detect if the we've changed anything in our client record from the last time we synced,
+            let ourClientUnchanged = (b.fxaDeviceId == scratchpad.fxaDeviceId)
+
+            // and if so, trigger a reset of clients.
+            if !ourClientUnchanged {
+                b.localCommands.insert(LocalCommand.resetEngine(engine: "clients"))
+            }
+
             scratchpad = b.build()
 
             log.info("Advancing to InitialWithLiveToken.")
