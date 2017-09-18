@@ -57,7 +57,7 @@ class FaviconManager: TabHelper {
     func getFavicon(_ tab: Tab, iconUrl: URL, currentURL: URL, icon: Favicon, profile: Profile) -> Deferred<Maybe<Favicon>> {
         let deferred = Deferred<Maybe<Favicon>>()
         let manager = SDWebImageManager.shared()
-        let options = tab.isPrivate ? [SDWebImageOptions.lowPriority, SDWebImageOptions.cacheMemoryOnly] : [SDWebImageOptions.lowPriority]
+        let options: [SDWebImageOptions] = tab.isPrivate ? [.lowPriority, .cacheMemoryOnly] : [.lowPriority]
         let url = currentURL.absoluteString
         let site = Site(url: url, title: "")
 

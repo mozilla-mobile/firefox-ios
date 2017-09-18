@@ -34,7 +34,7 @@ class TestFavicons: ProfileTest {
                 return expectation.fulfill()
             }
             XCTAssertGreaterThan(favicons.count, 1, "Instagram should have more than one Favicon.")
-            SDWebImageManager.shared().loadImage(with: url, options: SDWebImageOptions.retryFailed, progress: nil, completed: { (img, _, _, _, _, _) in
+            SDWebImageManager.shared().loadImage(with: url, options: .retryFailed, progress: nil, completed: { (img, _, _, _, _, _) in
                 guard let image = img else {
                     XCTFail("Not a valid URL provided for a favicon.")
                     return expectation.fulfill()

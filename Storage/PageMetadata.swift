@@ -37,7 +37,7 @@ public struct PageMetadata {
         self.type = type
         self.providerName = providerName
 
-        if let mediaURL = mediaURL, let url = URL(string: mediaURL), cacheImages {
+        if let urlString = mediaURL, let url = URL(string: urlString), cacheImages {
             self.cacheImage(fromDataURI: mediaDataURI, forURL: url)
         }
     }
@@ -53,10 +53,10 @@ public struct PageMetadata {
     }
 
     fileprivate func cacheImage(fromDataURI dataURI: String?, forURL url: URL) {
-        let webimage = SDWebImageManager.shared()
+        let manager = SDWebImageManager.shared()
 
         func cacheUsingURLOnly() {
-            webimage.cachedImageExists(for: url) { exists in
+            manager.cachedImageExists(for: url) { exists in
                 if !exists {
                     self.downloadAndCache(fromURL: url)
                 }
@@ -68,7 +68,7 @@ public struct PageMetadata {
             return
         }
 
-        webimage.cachedImageExists(for: dataURL) { exists in
+        manager.cachedImageExists(for: dataURL) { exists in
             if let data = try? Data(contentsOf: dataURL), let image = UIImage(data: data), !exists {
                 self.cache(image: image, forURL: url)
             } else {
@@ -78,8 +78,8 @@ public struct PageMetadata {
     }
 
     fileprivate func downloadAndCache(fromURL webUrl: URL) {
-        let webimage = SDWebImageManager.shared()
-        webimage.loadImage(with: webUrl, options: .continueInBackground, progress: nil) { (image, _, _, _, _, _) in
+        let manager = SDWebImageManager.shared()
+        manager.loadImage(with: webUrl, options: .continueInBackground, progress: nil) { (image, _, _, _, _, _) in
             if let image = image {
                 self.cache(image: image, forURL: webUrl)
             }
@@ -87,7 +87,6 @@ public struct PageMetadata {
     }
 
     fileprivate func cache(image: UIImage, forURL url: URL) {
-        let imageManager = SDWebImageManager.shared()
-        imageManager.saveImage(toCache: image, for: url)
+        	SDWebImageManager.shared().saveImage(toCache: image, for: url)
     }
 }

@@ -206,7 +206,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
         if let url = url.asURL {
             var fetch: SDWebImageOperation?
             fetch = manager.loadImage(with: url,
-                options: SDWebImageOptions.lowPriority,
+                options: .lowPriority,
                 progress: { (receivedSize, expectedSize, _) in
                     if receivedSize > FaviconManager.maximumFaviconSize || expectedSize > FaviconManager.maximumFaviconSize {
                         fetch?.cancel()
@@ -247,7 +247,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
             } else {
                 return deferred.fill(Maybe(failure: FaviconError()))
             }
-            SDWebImageManager.shared().loadImage(with: iconURL, options: SDWebImageOptions.continueInBackground, progress: nil) { (image, _, _, _, _, _) in
+            SDWebImageManager.shared().loadImage(with: iconURL, options: .continueInBackground, progress: nil) { (image, _, _, _, _, _) in
                 if let image = image {
                     deferred.fill(Maybe(success: image))
                 } else {

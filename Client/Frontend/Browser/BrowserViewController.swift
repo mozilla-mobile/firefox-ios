@@ -2777,7 +2777,7 @@ extension BrowserViewController {
         let alert = ThirdPartySearchAlerts.addThirdPartySearchEngine { alert in
             self.customSearchEngineButton.tintColor = UIColor.gray
             self.customSearchEngineButton.isUserInteractionEnabled = false
-            SDWebImageManager.shared().loadImage(with: iconURL, options: SDWebImageOptions.continueInBackground, progress: nil) { (image, _, _, _, _, _) in
+            SDWebImageManager.shared().loadImage(with: iconURL, options: .continueInBackground, progress: nil) { (image, _, _, _, _, _) in
                 guard let image = image else {
                     let alert = ThirdPartySearchAlerts.failedToAddThirdPartySearch()
                     self.present(alert, animated: true, completion: nil)
