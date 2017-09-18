@@ -70,14 +70,9 @@ open class BrowserDB {
         return withConnection(flags: SwiftData.Flags.readWriteCreate, err: &err, callback: callback)
     }
 
-    func transaction(_ err: inout NSError?, callback: @escaping (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> Bool) -> NSError? {
-        return self.transaction(synchronous: true, err: &err, callback: callback)
-    }
-
-    func transaction(synchronous: Bool=true, err: inout NSError?, callback: @escaping (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> Bool) -> NSError? {
+    func transaction(synchronous: Bool=true, _ callback: @escaping (_ connection: SQLiteDBConnection) throws -> Bool) -> NSError? {
         return db.transaction(synchronous: synchronous) { connection in
-            var err: NSError? = nil
-            return callback(connection, &err)
+            return try callback(connection)
         }
     }
 
@@ -207,19 +202,15 @@ open class BrowserDB {
             return succeed()
         }
 
-        var err: NSError? = nil
-        let errorResult = self.transaction(&err) { (conn, err) -> Bool in
+        if let err = self.transaction({ conn -> Bool in
             for (sql, args) in commands {
-                err = conn.executeChange(sql, withArgs: args)
-                if let err = err {
+                if let err = conn.executeChange(sql, withArgs: args) {
                     log.warning("SQL operation failed: \(err.localizedDescription)")
-                    return false
+                    throw err
                 }
             }
             return true
-        }
-
-        if let err = err ?? errorResult {
+        }) {
             return deferMaybe(DatabaseError(err: err))
         }
 
@@ -233,18 +224,18 @@ open class BrowserDB {
 
         let deferred = Success()
 
-        var error: NSError?
-        error = self.transaction(synchronous: false, err: &error) { (conn, err) -> Bool in
+        if let err = self.transaction(synchronous: false, { (conn) -> Bool in
             for (sql, args) in commands {
-                err = conn.executeChange(sql, withArgs: args)
-                if let err = err {
-                    deferred.fill(Maybe(failure: DatabaseError(err: err)))
-                    return false
+                if let err = conn.executeChange(sql, withArgs: args) {
+                    log.warning("SQL operation failed: \(err.localizedDescription)")
+                    throw err
                 }
             }
 
             deferred.fill(Maybe(success: ()))
             return true
+        }) {
+            deferred.fill(Maybe(failure: DatabaseError(err: err)))
         }
 
         return deferred

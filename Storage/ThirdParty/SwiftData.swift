@@ -169,7 +169,7 @@ open class SwiftData {
         return nil
     }
     
-    func transaction(_ transactionClosure: @escaping (_ connection: SQLiteDBConnection) -> Bool) -> NSError? {
+    func transaction(_ transactionClosure: @escaping (_ connection: SQLiteDBConnection) throws -> Bool) -> NSError? {
         return self.transaction(synchronous: true, transactionClosure: transactionClosure)
     }
 
@@ -177,7 +177,7 @@ open class SwiftData {
      * Helper for opening a connection, starting a transaction, and then running a block of code inside it.
      * The code block can return true if the transaction should be committed. False if we should roll back.
      */
-    func transaction(synchronous: Bool=true, transactionClosure: @escaping (_ connection: SQLiteDBConnection) -> Bool) -> NSError? {
+    func transaction(synchronous: Bool=true, transactionClosure: @escaping (_ connection: SQLiteDBConnection) throws -> Bool) -> NSError? {
         return withConnection(SwiftData.Flags.readWriteCreate, synchronous: synchronous) { connection in
             connection.transaction(transactionClosure)
         }
@@ -311,7 +311,7 @@ public protocol SQLiteDBConnection {
     func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: Args?) -> Cursor<T>
     func executeQueryUnsafe<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: Args?) -> Cursor<T>
 
-    func transaction(_ transactionClosure: @escaping (_ connection: SQLiteDBConnection) -> Bool) -> NSError?
+    func transaction(_ transactionClosure: @escaping (_ connection: SQLiteDBConnection) throws -> Bool) -> NSError?
 
     func interrupt()
     func checkpoint()
@@ -347,7 +347,7 @@ class FailedSQLiteDBConnection: SQLiteDBConnection {
         return Cursor<T>(err: self.fail("Non-open connection; can't execute query."))
     }
 
-    func transaction(_ transactionClosure: @escaping (_ connection: SQLiteDBConnection) -> Bool) -> NSError? {
+    func transaction(_ transactionClosure: @escaping (_ connection: SQLiteDBConnection) throws -> Bool) -> NSError? {
         return self.fail("Non-open connection; can't start transaction.")
     }
 
@@ -1073,14 +1073,30 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         return LiveSQLiteCursor(statement: statement!, factory: factory)
     }
 
-    public func transaction(_ transactionClosure: @escaping (_ connection: SQLiteDBConnection) -> Bool) -> NSError? {
+    public func transaction(_ transactionClosure: @escaping (_ connection: SQLiteDBConnection) throws -> Bool) -> NSError? {
         if let err = executeChange("BEGIN EXCLUSIVE") {
             log.error("BEGIN EXCLUSIVE failed. Error code: \(err.code), \(err)")
             SentryIntegration.shared.sendWithStacktrace(message: "BEGIN EXCLUSIVE failed. Error code: \(err.code), \(err)", tag: "SwiftData", severity: .error)
             return err
         }
 
-        if transactionClosure(self) {
+        var succeeded = false
+
+        do {
+            succeeded = try transactionClosure(self)
+        } catch let err as NSError {
+            log.error("Op in transaction threw an error. Rolling back.")
+            SentryIntegration.shared.sendWithStacktrace(message: "Op in transaction threw an error. Rolling back.", tag: "SwiftData", severity: .error)
+
+            if let err = executeChange("ROLLBACK") {
+                log.error("ROLLBACK after errored op in transaction failed. Error code: \(err.code), \(err)")
+                SentryIntegration.shared.sendWithStacktrace(message: "ROLLBACK after errored op in transaction failed. Error code: \(err.code), \(err)", tag: "SwiftData", severity: .error)
+            }
+
+            return err
+        }
+
+        if succeeded {
             log.verbose("Op in transaction succeeded. Committing.")
 
             if let err = executeChange("COMMIT") {
