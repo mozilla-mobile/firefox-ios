@@ -157,7 +157,7 @@ extension PhotonActionSheetProtocol {
         
         let bookmarkAction = tab.isBookmarked ? removeBookmark : bookmarkPage
         var topActions = [bookmarkAction]
-        if let tab = self.tabManager.selectedTab, tab.readerModeAvailable {
+        if let tab = self.tabManager.selectedTab, tab.readerModeAvailableOrActive {
             topActions.append(addReadingList)
         }
         return [topActions, [findInPageAction, toggleDesktopSite, setHomePage], [share, copyURL]]
