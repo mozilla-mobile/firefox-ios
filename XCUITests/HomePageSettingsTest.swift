@@ -29,7 +29,7 @@ class HomePageSettingsTest: BaseTestCase {
 
         // Go via the menu, becuase if we go via the TabTray, then we 
         // won't have a current tab.
-        navigator.goto(BrowserTabMenu)
+        navigator.goto(TabMenu)
         navigator.goto(HomePageSettings)
         let tablesQuery = app.tables
         tablesQuery.staticTexts["Use Current Page"].tap()
@@ -50,7 +50,7 @@ class HomePageSettingsTest: BaseTestCase {
     // Check whether the toolbar/menu shows homepage icon
     func testShowHomePageIcon() {
         // Check the Homepage icon is present in menu by default
-        navigator.goto(BrowserTabMenu)
+        navigator.goto(TabMenu)
         let collectionViewsQuery = app.collectionViews
         waitforExistence(collectionViewsQuery.cells["SetHomePageMenuItem"])
         
@@ -65,9 +65,9 @@ class HomePageSettingsTest: BaseTestCase {
         XCTAssertEqual(newValue as? String, "0")
 
         // Both pages do not show Homepage icon
-        navigator.goto(BrowserTabMenu)
+        navigator.goto(ShareMenu)
         waitforNoExistence(collectionViewsQuery.cells["SetHomePageMenuItem"])
-        navigator.goto(BrowserTabMenu2)
+        navigator.goto(ShareMenu)
         waitforNoExistence(collectionViewsQuery.cells["SetHomePageMenuItem"])
     }
 }

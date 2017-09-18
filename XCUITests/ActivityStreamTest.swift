@@ -137,10 +137,7 @@ class ActivityStreamTest: BaseTestCase {
         app.tables["Context Menu"].cells["Open in New Tab"].tap()
         XCTAssert(app.collectionViews.cells["TopSitesCell"].exists)
         XCTAssertFalse(app.staticTexts["example"].exists)
-
-//        app.buttons["Cancel"].tap()
-        let backButton = app.children(matching: .window).element(boundBy: 0).children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element(boundBy: 1).children(matching: .other).element.children(matching: .button).element(boundBy: 2)
-        backButton.tap()
+        app.buttons["goBack"].tap()
 
         if iPad() {
             app.buttons["TopTabsViewController.tabsButton"].tap()
@@ -186,11 +183,8 @@ class ActivityStreamTest: BaseTestCase {
 
         XCTAssert(app.collectionViews.cells["TopSitesCell"].exists)
         XCTAssertFalse(app.staticTexts["example"].exists)
+        app.buttons["goBack"].tap()
 
-//        app.buttons["Cancel"].tap()
-        let backButton = app.children(matching: .window).element(boundBy: 0).children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element(boundBy: 1).children(matching: .other).element.children(matching: .button).element(boundBy: 2)
-        backButton.tap()
-        
         if iPad() {
             app.buttons["TopTabsViewController.tabsButton"].tap()
         } else {
@@ -206,7 +200,8 @@ class ActivityStreamTest: BaseTestCase {
     
     func testTopSitesOpenInNewPrivateTabDefaultTopSite() {
         navigator.goto(NewTabScreen)
-        app.collectionViews.cells["TopSitesCell"].cells[defaultTopSite["topSiteLabel"]!].press(forDuration: 1)
+        app.collectionViews.cells["TopSitesCell"].cells[defaultTopSite["topSiteLabel"]!]
+            .press(forDuration: 1)
         selectOptionFromContextMenu (option: "Open in New Private Tab")
         
         // Check that two tabs are open and one of them is the default top site one
@@ -353,5 +348,4 @@ func testTopSitesShareNewTopSite () {
         // Go back to portrait mode
         XCUIDevice.shared().orientation = .portrait
     }
-    
 }

@@ -19,28 +19,31 @@ class BookmarkingTests: BaseTestCase {
     }
     
     private func bookmark() {
-        app/*@START_MENU_TOKEN@*/.buttons["TabToolbar.shareButton"]/*[[".otherElements[\"Navigation Toolbar\"]",".buttons[\"Share\"]",".buttons[\"TabToolbar.shareButton\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.tap()
+        navigator.goto(ShareMenu)
         waitforExistence(app.tables.cells["Add Bookmark"])
         app.tables.cells["Add Bookmark"].tap()
+        navigator.nowAt(BrowserTab)
     }
     
     private func unbookmark() {
-        app/*@START_MENU_TOKEN@*/.buttons["TabToolbar.shareButton"]/*[[".otherElements[\"Navigation Toolbar\"]",".buttons[\"Share\"]",".buttons[\"TabToolbar.shareButton\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.tap()
+        navigator.goto(ShareMenu)
         waitforExistence(app.tables.cells["Remove Bookmark"])
         app.tables.cells["Remove Bookmark"].tap()
+        navigator.nowAt(BrowserTab)
     }
     
     private func checkBookmarked() {
-        app/*@START_MENU_TOKEN@*/.buttons["TabToolbar.shareButton"]/*[[".otherElements[\"Navigation Toolbar\"]",".buttons[\"Share\"]",".buttons[\"TabToolbar.shareButton\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.tap()
+        navigator.goto(ShareMenu)
         waitforExistence(app.tables.cells["Remove Bookmark"])
         app.buttons["Close"].tap()
+        navigator.nowAt(BrowserTab)
     }
     
     private func checkUnbookmarked() {
-        app/*@START_MENU_TOKEN@*/.buttons["TabToolbar.shareButton"]/*[[".otherElements[\"Navigation Toolbar\"]",".buttons[\"Share\"]",".buttons[\"TabToolbar.shareButton\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.tap()
+        navigator.goto(ShareMenu)
         waitforExistence(app.tables.cells["Add Bookmark"])
         app.buttons["Close"].tap()
-
+        navigator.nowAt(BrowserTab)
     }
     
     func testBookmarkingUI() {
@@ -53,7 +56,7 @@ class BookmarkingTests: BaseTestCase {
         checkBookmarked()
         
         // Load a different page on a new tab, check it's not bookmarked
-        //navigator.goto(NewTabScreen)
+        navigator.createNewTab()
         navigator.openNewURL(urlString: url2)
         checkUnbookmarked()
         

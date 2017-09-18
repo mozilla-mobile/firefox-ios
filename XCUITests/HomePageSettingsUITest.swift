@@ -49,7 +49,7 @@ class HomePageSettingsUITests: BaseTestCase {
         // Check that it is actually set by opening a different website and going to Home
         navigator.goto(NewTabScreen)
         navigator.openURL(urlString: websiteUrl2)
-        navigator.goto(BrowserTabMenu)
+        navigator.goto(TabMenu)
 
         waitforExistence(app.collectionViews.cells["Home"])
         app.collectionViews.cells["Home"].tap()
@@ -70,7 +70,7 @@ class HomePageSettingsUITests: BaseTestCase {
         // There is no option to go to Home, instead the website open has the option to be set as HomePageSettings
         navigator.goto(NewTabScreen)
         navigator.openURL(urlString: websiteUrl1)
-        navigator.goto(BrowserTabMenu)
+        navigator.goto(TabMenu)
         waitforExistence(app.collectionViews.cells["SetHomePageMenuItem"])
         XCTAssertFalse(app.collectionViews.cells["Home"].exists)
         XCTAssertTrue(app.collectionViews.cells["SetHomePageMenuItem"].exists)

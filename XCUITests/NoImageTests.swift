@@ -36,7 +36,7 @@ class NoImageTests: BaseTestCase {
     }
     
     private func checkShowImages() {
-        navigator.goto(BrowserTabMenu)
+        navigator.goto(TabMenu)
 //        app.collectionViews.containing(.cell, identifier:"FindInPageMenuItem").element.swipeLeft()
         waitforExistence(app.tables.cells["Hide Images: On"])
 //        navigator.goto(BrowserTab)
@@ -44,7 +44,7 @@ class NoImageTests: BaseTestCase {
     }
     
     private func checkHideImages() {
-        navigator.goto(BrowserTabMenu)
+        navigator.goto(TabMenu)
 //        app.collectionViews.containing(.cell, identifier:"FindInPageMenuItem").element.swipeLeft()
         waitforExistence(app.tables.cells["Hide Images: Off"])
 //        navigator.goto(BrowserTab)

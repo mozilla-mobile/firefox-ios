@@ -192,12 +192,12 @@ class NavigationTest: BaseTestCase {
         waitForValueContains(app.textFields["url"], value: urlAddOns)
         
         // Mobile view by default, desktop view should be available
-        navigator.browserPerformAction(.requestDesktop)
+        navigator.browserPerformAction(.toggleDesktopOption)
         checkDesktopSite()
 
         // From desktop view it is posible to change to mobile view again
         navigator.nowAt(BrowserTab)
-        navigator.browserPerformAction(.requestMobile)
+        navigator.browserPerformAction(.toggleDesktopOption)
         checkMobileSite()
     }
     
@@ -219,7 +219,7 @@ class NavigationTest: BaseTestCase {
 
         // Mobile view by default, desktop view should be available
         //navigator.browserPerformAction(.requestDesktop)
-        navigator.goto(BrowserTabMenu)
+        navigator.goto(TabMenu)
         waitforExistence(app.collectionViews.cells["RequestDesktopMenuItem"])
         app.collectionViews.cells["RequestDesktopMenuItem"].tap()
         
@@ -236,7 +236,7 @@ class NavigationTest: BaseTestCase {
         navigator.openURL(urlString: urlAddOns)
 
         // Mobile view by default, desktop view should be available
-        navigator.browserPerformAction(.requestDesktop)
+        navigator.browserPerformAction(.toggleDesktopOption)
 
         // After reloading a website the desktop view should be kept
         app.buttons["Reload"].tap()
@@ -245,7 +245,7 @@ class NavigationTest: BaseTestCase {
 
         // From desktop view it is posible to change to mobile view again
         navigator.nowAt(BrowserTab)
-        navigator.browserPerformAction(.requestMobile)
+        navigator.browserPerformAction(.toggleDesktopOption)
         waitForValueContains(app.textFields["url"], value: urlAddOns)
 
         // After reloading a website the mobile view should be kept
