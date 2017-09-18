@@ -17,6 +17,7 @@ class TelemetryEventMethod {
     public static let foreground = "foreground"
     public static let typeURL = "type_url"
     public static let typeQuery = "type_query"
+    public static let selectQuery = "select_query"
     public static let click = "click"
     public static let change = "change"
     public static let open = "open"
