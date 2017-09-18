@@ -74,9 +74,9 @@ class Tab: NSObject {
     var desktopSite: Bool = false
     var isBookmarked: Bool = false
     
-    var readerModeAvailable: Bool {
+    var readerModeAvailableOrActive: Bool {
         if let readerMode = self.getHelper(name: "ReaderMode") as? ReaderMode {
-            return readerMode.state == .available
+            return readerMode.state != .unavailable
         }
         return false
     }
