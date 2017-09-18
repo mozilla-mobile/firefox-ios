@@ -72,7 +72,8 @@ protocol URLBarDelegate: class {
     func urlBarDidPressScrollToTop(_ urlBar: URLBarView)
     func urlBar(_ urlBar: URLBarView, didEnterText text: String)
     func urlBar(_ urlBar: URLBarView, didSubmitText text: String)
-    func urlBarDisplayTextForURL(_ url: URL?) -> String?
+    // Returns either (search query, true) or (url, false).
+    func urlBarDisplayTextForURL(_ url: URL?) -> (String?, Bool)
 }
 
 class URLBarView: UIView {
@@ -401,7 +402,16 @@ class URLBarView: UIView {
         locationTextField?.setAutocompleteSuggestion(suggestion)
     }
 
-    func enterOverlayMode(_ locationText: String?, pasted: Bool) {
+
+    func setLocation(_ location: String?, search: Bool) {
+        locationTextField?.text = location
+        if search, let location = location, !location.isEmpty {
+            // Not notifying when empty agrees with AutocompleteTextField.textDidChange.
+            delegate?.urlBar(self, didEnterText: location)
+        }
+    }
+
+    func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool) {
         createLocationTextField()
 
         // Show the overlay mode UI, which includes hiding the locationView and replacing it
@@ -421,11 +431,11 @@ class URLBarView: UIView {
             self.locationTextField?.text = ""
             DispatchQueue.main.async {
                 self.locationTextField?.becomeFirstResponder()
-                self.locationTextField?.text = locationText
+                self.setLocation(locationText, search: search)
             }
         } else {
             // Copy the current URL to the editable text field, then activate it.
-            self.locationTextField?.text = locationText
+            self.setLocation(locationText, search: search)
             DispatchQueue.main.async {
                 self.locationTextField?.becomeFirstResponder()
             }
@@ -577,13 +587,13 @@ extension URLBarView: TabLocationViewDelegate {
     }
 
     func tabLocationViewDidTapLocation(_ tabLocationView: TabLocationView) {
-        var locationText = delegate?.urlBarDisplayTextForURL(locationView.url as URL?)
+        guard var (locationText, isSearchQuery) = delegate?.urlBarDisplayTextForURL(locationView.url as URL?) else { return }
 
         // Make sure to use the result from urlBarDisplayTextForURL as it is responsible for extracting out search terms when on a search page
         if let text = locationText, let url = URL(string: text), let host = url.host, AppConstants.MOZ_PUNYCODE {
             locationText = url.absoluteString.replacingOccurrences(of: host, with: host.asciiHostToUTF8())
         }
-        enterOverlayMode(locationText, pasted: false)
+        enterOverlayMode(locationText, pasted: false, search: isSearchQuery)
     }
 
     func tabLocationViewDidLongPressLocation(_ tabLocationView: TabLocationView) {

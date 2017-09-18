@@ -367,9 +367,9 @@ class BrowserViewController: UIViewController {
         })
         pasteAction = AccessibleAction(name: NSLocalizedString("Paste", comment: "Paste the URL into the location bar"), handler: { () -> Bool in
             if let pasteboardContents = UIPasteboard.general.string {
-                // Enter overlay mode and fire the text entered callback to make the search controller appear.
-                self.urlBar.enterOverlayMode(pasteboardContents, pasted: true)
-                self.urlBar(self.urlBar, didEnterText: pasteboardContents)
+                // Enter overlay mode and make the search controller appear.
+                self.urlBar.enterOverlayMode(pasteboardContents, pasted: true, search: true)
+
                 return true
             }
             return false
@@ -1384,13 +1384,17 @@ extension BrowserViewController: URLBarDelegate {
         }
     }
 
-    func urlBarDisplayTextForURL(_ url: URL?) -> String? {
+    func urlBarDisplayTextForURL(_ url: URL?) -> (String?, Bool) {
         // use the initial value for the URL so we can do proper pattern matching with search URLs
         var searchURL = self.tabManager.selectedTab?.currentInitialURL
         if searchURL?.isErrorPageURL ?? true {
             searchURL = url
         }
-        return profile.searchEngines.queryForSearchURL(searchURL as URL?) ?? url?.absoluteString
+        if let query = profile.searchEngines.queryForSearchURL(searchURL as URL?) {
+            return (query, true)
+        } else {
+            return (url?.absoluteString, false)
+        }
     }
 
     func urlBarDidLongPressLocation(_ urlBar: URLBarView) {
@@ -1854,6 +1858,11 @@ extension BrowserViewController: HomePanelViewControllerDelegate {
 extension BrowserViewController: SearchViewControllerDelegate {
     func searchViewController(_ searchViewController: SearchViewController, didSelectURL url: URL) {
         finishEditingAndSubmit(url, visitType: VisitType.typed)
+    }
+
+
+    func searchViewController(_ searchViewController: SearchViewController, didLongPressSuggestion suggestion: String) {
+        self.urlBar.setLocation(suggestion, search: true)
     }
 
     func presentSearchSettingsController() {
