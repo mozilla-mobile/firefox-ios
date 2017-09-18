@@ -439,6 +439,10 @@ class URLBarView: UIView {
         locationTextField?.setAutocompleteSuggestion(suggestion)
     }
 
+    func setLocation(_ location: String) {
+        locationTextField?.text = location
+    }
+
     func enterOverlayMode(_ locationText: String?, pasted: Bool) {
         createLocationTextField()
 
