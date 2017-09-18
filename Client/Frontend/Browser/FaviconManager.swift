@@ -91,10 +91,10 @@ class FaviconManager: TabHelper {
                                     if receivedSize > FaviconManager.maximumFaviconSize || expectedSize > FaviconManager.maximumFaviconSize {
                                         fetch?.cancel()
                                     }
-                                  })
-                                {  (img, _, _, _, _, url) in
+                                  },
+                                  completed: {  (img, _, _, _, _, url) in
                                     loadImageCompleted(img, url)
-                                }
+                                  })
         return deferred
     }
 

@@ -8,6 +8,7 @@ import XCTest
 import Storage
 import SDWebImage
 import GCDWebServers
+import Shared
 
 @testable import Client
 
@@ -35,9 +36,10 @@ class UIImageViewExtensionsTests: XCTestCase {
     }
 
     func testAsyncSetIcon() {
-        let imageData = UIImagePNGRepresentation(UIImage(named: "fxLogo")!)
+        let originalImage = UIImage(named: "fxLogo")!
+
         WebServer.sharedInstance.registerHandlerForMethod("GET", module: "favicon", resource: "icon") { (request) -> GCDWebServerResponse! in
-            return GCDWebServerDataResponse(data: imageData, contentType: "image/png")
+            return GCDWebServerDataResponse(data: UIImagePNGRepresentation(originalImage), contentType: "image/png")
         }
 
         let favImageView = UIImageView()
@@ -46,8 +48,7 @@ class UIImageViewExtensionsTests: XCTestCase {
         let expect = expectation(description: "UIImageView async load")
         let time = Int64(2 * Double(NSEC_PER_SEC))
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(time) / Double(NSEC_PER_SEC)) {
-            let a = UIImagePNGRepresentation(favImageView.image!)
-            XCTAssertEqual(imageData, a, "The correct favicon should be applied to the UIImageView")
+            XCTAssert(originalImage.isStrictlyEqual(to: favImageView.image!), "The correct favicon should be applied to the UIImageView")
             expect.fulfill()
         }
         waitForExpectations(timeout: 5, handler: nil)
@@ -65,9 +66,7 @@ class UIImageViewExtensionsTests: XCTestCase {
         let expect = expectation(description: "UIImageView async load")
         let time = Int64(2 * Double(NSEC_PER_SEC))
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(time) / Double(NSEC_PER_SEC)) {
-            let b = UIImagePNGRepresentation(correctImage) // we need to convert to png in order to compare
-            let a = UIImagePNGRepresentation(favImageView.image!)
-            XCTAssertEqual(b, a, "The correct default favicon should be applied to the UIImageView")
+           XCTAssert(correctImage.isStrictlyEqual(to: favImageView.image!), "The correct default favicon should be applied to the UIImageView")
             expect.fulfill()
         }
         waitForExpectations(timeout: 5, handler: nil)
@@ -86,10 +85,8 @@ class UIImageViewExtensionsTests: XCTestCase {
         let expect = expectation(description: "UIImageView async load")
         let time = Int64(2 * Double(NSEC_PER_SEC))
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(time) / Double(NSEC_PER_SEC)) {
-            let b = UIImagePNGRepresentation(correctImage) // we need to convert to png in order to compare
-            let a = UIImagePNGRepresentation(favImageView.image!)
             XCTAssertEqual(favImageView.backgroundColor, defaultItem.color)
-            XCTAssertEqual(b, a, "The correct default favicon should be applied to the UIImageView")
+            XCTAssert(correctImage.isStrictlyEqual(to: favImageView.image!), "The correct default favicon should be applied to the UIImageView")
             expect.fulfill()
         }
         waitForExpectations(timeout: 5, handler: nil)
