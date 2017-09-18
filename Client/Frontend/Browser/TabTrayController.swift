@@ -10,7 +10,7 @@ import ReadingList
 import Shared
 
 struct TabTrayControllerUX {
-    static let CornerRadius = CGFloat(4.0)
+    static let CornerRadius = CGFloat(6.0)
     static let BackgroundColor = UIConstants.TabTrayBG
     static let CellBackgroundColor = UIConstants.TabTrayBG
     static let TextBoxHeight = CGFloat(32.0)
@@ -48,6 +48,7 @@ class TabCell: UICollectionViewCell {
     }
 
     static let Identifier = "TabCellIdentifier"
+    static let BorderWidth: CGFloat = 3
 
     var style: Style = .light {
         didSet {
@@ -56,9 +57,8 @@ class TabCell: UICollectionViewCell {
     }
 
     let backgroundHolder = UIView()
-    let background = UIImageViewAligned()
+    let screenshotView = UIImageViewAligned()
     let titleText: UILabel
-    let innerStroke: InnerStrokedView
     let favicon: UIImageView = UIImageView()
     let closeButton: UIButton
 
@@ -76,11 +76,12 @@ class TabCell: UICollectionViewCell {
         self.backgroundHolder.clipsToBounds = true
         self.backgroundHolder.backgroundColor = TabTrayControllerUX.CellBackgroundColor
 
-        self.background.contentMode = UIViewContentMode.scaleAspectFill
-        self.background.clipsToBounds = true
-        self.background.isUserInteractionEnabled = false
-        self.background.alignLeft = true
-        self.background.alignTop = true
+        self.screenshotView.contentMode = UIViewContentMode.scaleAspectFill
+        self.screenshotView.clipsToBounds = true
+        self.screenshotView.isUserInteractionEnabled = false
+        self.screenshotView.alignLeft = true
+        self.screenshotView.alignTop = true
+        screenshotView.backgroundColor = UIConstants.AppBackgroundColor
 
         self.favicon.backgroundColor = UIColor.clear
         self.favicon.layer.cornerRadius = 2.0
@@ -97,17 +98,13 @@ class TabCell: UICollectionViewCell {
         self.closeButton.tintColor = UIColor.lightGray
         self.closeButton.imageEdgeInsets = UIEdgeInsets(equalInset: TabTrayControllerUX.CloseButtonEdgeInset)
 
-        self.innerStroke = InnerStrokedView(frame: self.backgroundHolder.frame)
-        self.innerStroke.layer.backgroundColor = UIColor.clear.cgColor
-
         super.init(frame: frame)
         
-        self.animator = SwipeAnimator(animatingView: self.backgroundHolder, container: self)
+        self.animator = SwipeAnimator(animatingView: self)
         self.closeButton.addTarget(self, action: #selector(TabCell.close), for: UIControlEvents.touchUpInside)
 
         contentView.addSubview(backgroundHolder)
-        backgroundHolder.addSubview(self.background)
-        backgroundHolder.addSubview(innerStroke)
+        backgroundHolder.addSubview(self.screenshotView)
 
         // Default style is light
         applyStyle(style)
@@ -125,7 +122,6 @@ class TabCell: UICollectionViewCell {
         case .light:
             title = UIVisualEffectView(effect: UIBlurEffect(style: .extraLight))
             self.titleText.textColor = LightTabCellUX.TabTitleTextColor
-            //self.closeButton
         case .dark:
             title = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
             self.titleText.textColor = DarkTabCellUX.TabTitleTextColor
@@ -141,6 +137,18 @@ class TabCell: UICollectionViewCell {
         self.title = title
     }
 
+    func setTabSelected(_ isPrivate: Bool) {
+        // This creates a border around a tabcell. Using the shadow craetes a border _outside_ of the tab frame.
+        layer.shadowColor = (isPrivate ? UIConstants.PrivateModePurple : UIConstants.SystemBlueColor).cgColor
+        layer.shadowOpacity = 1
+        layer.shadowRadius = 0 // A 0 radius creates a solid border instead of a gradient blur
+        layer.masksToBounds = false
+        // create a frame that is "BorderWidth" size bigger than the cell
+        layer.shadowOffset = CGSize(width: -TabCell.BorderWidth, height: -TabCell.BorderWidth)
+        let shadowPath = CGRect(x: 0, y: 0, width: layer.frame.width + (TabCell.BorderWidth * 2), height: layer.frame.height + (TabCell.BorderWidth * 2))
+        layer.shadowPath = UIBezierPath(roundedRect: shadowPath, cornerRadius: TabTrayControllerUX.CornerRadius+TabCell.BorderWidth).cgPath
+    }
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -154,7 +162,7 @@ class TabCell: UICollectionViewCell {
             y: margin,
             width: w,
             height: h)
-        background.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: backgroundHolder.frame.size)
+        screenshotView.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: backgroundHolder.frame.size)
 
         title.frame = CGRect(x: 0,
             y: 0,
@@ -172,8 +180,6 @@ class TabCell: UICollectionViewCell {
             width: title.frame.width - titleTextLeft - margin  - TabTrayControllerUX.CloseButtonSize - TabTrayControllerUX.CloseButtonMargin * 2,
             height: title.frame.height)
 
-        innerStroke.frame = background.frame
-
         closeButton.snp.makeConstraints { make in
             make.size.equalTo(title.snp.height)
             make.trailing.centerY.equalTo(title)
@@ -188,6 +194,9 @@ class TabCell: UICollectionViewCell {
         backgroundHolder.transform = CGAffineTransform.identity
         backgroundHolder.alpha = 1
         self.titleText.font = DynamicFontHelper.defaultHelper.DefaultSmallFontBold
+        layer.shadowOffset = CGSize.zero
+        layer.shadowPath = nil
+        layer.shadowOpacity = 0
     }
 
     override func accessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
@@ -499,7 +508,6 @@ class TabTrayController: UIViewController {
         // until after its insert animation finishes.
         self.collectionView.performBatchUpdates({ _ in
             let tab = self.tabManager.addTab(request, isPrivate: self.privateMode)
-            self.tabManager.selectTab(tab)
         }, completion: { finished in
             self.toolbar.isUserInteractionEnabled = true
             if finished {
@@ -657,7 +665,7 @@ extension TabTrayController: UIScrollViewAccessibilityDelegate {
 
 extension TabTrayController: SwipeAnimatorDelegate {
     func swipeAnimator(_ animator: SwipeAnimator, viewWillExitContainerBounds: UIView) {
-        let tabCell = animator.container as! TabCell
+        let tabCell = animator.animatingView as! TabCell
         if let indexPath = collectionView.indexPath(for: tabCell) {
             let tab = tabsToDisplay[indexPath.item]
             tabManager.removeTab(tab)
@@ -758,7 +766,10 @@ fileprivate class TabManagerDataSource: NSObject, UICollectionViewDataSource {
                 tabCell.favicon.image = defaultFavicon
             }
         }
-        tabCell.background.image = tab.screenshot
+        if tab == tabManager.selectedTab {
+            tabCell.setTabSelected(tab.isPrivate)
+        }
+        tabCell.screenshotView.image = tab.screenshot
         return tabCell
     }
 
@@ -784,11 +795,9 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
     fileprivate var traitCollection: UITraitCollection
     fileprivate var profile: Profile
     fileprivate var numberOfColumns: Int {
-        let compactLayout = profile.prefs.boolForKey("CompactTabLayout") ?? true
-
         // iPhone 4-6+ portrait
         if traitCollection.horizontalSizeClass == .compact && traitCollection.verticalSizeClass == .regular {
-            return compactLayout ? TabTrayControllerUX.CompactNumberOfColumnsThin : TabTrayControllerUX.NumberOfColumnsThin
+            return TabTrayControllerUX.CompactNumberOfColumnsThin
         } else {
             return TabTrayControllerUX.NumberOfColumnsWide
         }
@@ -801,8 +810,7 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
     }
 
     fileprivate func cellHeightForCurrentDevice() -> CGFloat {
-        let compactLayout = profile.prefs.boolForKey("CompactTabLayout") ?? true
-        let shortHeight = (compactLayout ? TabTrayControllerUX.TextBoxHeight * 6 : TabTrayControllerUX.TextBoxHeight * 5)
+        let shortHeight = TabTrayControllerUX.TextBoxHeight * 6
 
         if self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClass.compact {
             return shortHeight
