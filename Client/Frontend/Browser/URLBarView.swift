@@ -402,7 +402,6 @@ class URLBarView: UIView {
         locationTextField?.setAutocompleteSuggestion(suggestion)
     }
 
-
     func setLocation(_ location: String?, search: Bool) {
         locationTextField?.text = location
         if search, let location = location, !location.isEmpty {
