@@ -166,18 +166,13 @@ class TabsButton: UIControl {
             
             // make a 'clone' of the tabs button
             let newTabsButton = clone() as! TabsButton
+            newTabsButton.updateConstraints()
             self.clonedTabsButton = newTabsButton
             newTabsButton.addTarget(self, action: #selector(TabsButton.cloneDidClickTabs), for: UIControlEvents.touchUpInside)
             newTabsButton.titleLabel.text = countToBe
             newTabsButton.accessibilityValue = countToBe
-            superview?.addSubview(newTabsButton)
-            newTabsButton.snp.makeConstraints { make in
-                make.centerY.equalTo(self)
-                make.trailing.equalTo(self)
-                make.size.equalTo(24)
-            }
-            
             newTabsButton.frame = self.frame
+            superview?.addSubview(newTabsButton)
             
             // Instead of changing the anchorPoint of the CALayer, lets alter the rotation matrix math to be
             // a rotation around a non-origin point
