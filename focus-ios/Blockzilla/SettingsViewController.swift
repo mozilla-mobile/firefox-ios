@@ -19,10 +19,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     private let toggles = [
         BlockerToggle(label: UIConstants.strings.toggleSafari, setting: SettingsToggle.safari),
-        BlockerToggle(label: UIConstants.strings.labelBlockAds, setting: SettingsToggle.blockAds),
-        BlockerToggle(label: UIConstants.strings.labelBlockAnalytics, setting: SettingsToggle.blockAnalytics),
-        BlockerToggle(label: UIConstants.strings.labelBlockSocial, setting: SettingsToggle.blockSocial),
-        BlockerToggle(label: UIConstants.strings.labelBlockOther, setting: SettingsToggle.blockOther, subtitle: UIConstants.strings.settingsToggleOtherSubtitle),
+        BlockerToggle(label: UIConstants.strings.labelBlockAds, setting: SettingsToggle.blockAds, subtitle: UIConstants.strings.labelBlockAdsDescription),
+        BlockerToggle(label: UIConstants.strings.labelBlockAnalytics, setting: SettingsToggle.blockAnalytics, subtitle: UIConstants.strings.labelBlockAnalyticsDescription),
+        BlockerToggle(label: UIConstants.strings.labelBlockSocial, setting: SettingsToggle.blockSocial, subtitle: UIConstants.strings.labelBlockSocialDescription),
+        BlockerToggle(label: UIConstants.strings.labelBlockOther, setting: SettingsToggle.blockOther, subtitle: UIConstants.strings.labelBlockOtherDescription),
         BlockerToggle(label: UIConstants.strings.labelBlockFonts, setting: SettingsToggle.blockFonts),
         BlockerToggle(label: UIConstants.strings.labelSendAnonymousUsageData, setting: SettingsToggle.sendAnonymousUsageData),
     ]
@@ -218,9 +218,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let labelText: String
-
+        var groupingOffset = 16
         switch section {
-        case 0: labelText = UIConstants.strings.settingsSearchSection
+        case 0:
+            labelText = UIConstants.strings.settingsSearchSection
+            groupingOffset = 3
         case 1: labelText = UIConstants.strings.toggleSectionIntegration
         case 2: labelText = UIConstants.strings.toggleSectionPrivacy
         case 3: labelText = UIConstants.strings.toggleSectionPerformance
@@ -243,7 +245,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
         label.snp.makeConstraints { make in
             make.leading.trailing.equalTo(cell.textLabel!)
-            make.centerY.equalTo(cell.textLabel!).offset(3)
+            make.centerY.equalTo(cell.textLabel!).offset(groupingOffset)
         }
 
         // Hack to cover header separator line
@@ -251,6 +253,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         footer.backgroundColor = UIConstants.colors.background
 
         cell.addSubview(footer)
+        cell.sendSubview(toBack: footer)
 
         footer.snp.makeConstraints { make in
             make.height.equalTo(1)
@@ -262,7 +265,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 30
+        return section != 0 ? 50 : 30
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
