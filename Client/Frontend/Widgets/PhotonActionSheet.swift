@@ -153,7 +153,6 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
                 make.height.equalTo(PhotonActionSheetUX.CancelButtonHeight)
                 make.bottom.equalTo(self.view.snp.bottom).offset(-PhotonActionSheetUX.Padding)
             }
-            tableView.setContentOffset(CGPoint(x: 0, y: CGFloat.greatestFiniteMagnitude), animated: false)
         }
         
         if style == .bottom && UIDevice.current.userInterfaceIdiom == .pad {
