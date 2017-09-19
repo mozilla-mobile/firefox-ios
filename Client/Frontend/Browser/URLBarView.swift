@@ -140,7 +140,6 @@ class URLBarView: UIView {
 
     lazy var tabsButton: TabsButton = {
         let tabsButton = TabsButton.tabTrayButton()
-        tabsButton.addTarget(self, action: #selector(URLBarView.SELdidClickAddTab), for: .touchUpInside)
         tabsButton.accessibilityIdentifier = "URLBarView.tabsButton"
         return tabsButton
     }()
@@ -214,7 +213,7 @@ class URLBarView: UIView {
     fileprivate func commonInit() {
         locationContainer.addSubview(locationView)
     
-        [scrollToTopButton, line, progressBar, tabsButton, cancelButton, showQRScannerButton].forEach { addSubview($0) }
+        [scrollToTopButton, line, tabsButton, progressBar, cancelButton, showQRScannerButton].forEach { addSubview($0) }
         [menuButton, forwardButton, backButton, stopReloadButton, locationContainer].forEach { addSubview($0) }
         
         helper = TabToolbarHelper(toolbar: self)
@@ -680,10 +679,8 @@ extension URLBarView: Themeable {
         locationActiveBorderColor = theme.activeBorderColor!
         cancelTintColor = theme.textColor
         showQRButtonTintColor = theme.textColor
-//        actionButtonTintColor = theme.buttonTintColor
-//        actionButtonSelectedTintColor = theme.highlightButtonColor
-//        actionButtonDisabledTintColor = theme.disabledButtonColor!
         backgroundColor = theme.backgroundColor
+        self.actionButtons.forEach { $0.applyTheme(themeName) }
         tabsButton.applyTheme(themeName)
         line.backgroundColor = UIConstants.URLBarDivider.color(isPBM: isPrivate)
         locationContainer.layer.shadowColor = self.locationBorderColor.cgColor

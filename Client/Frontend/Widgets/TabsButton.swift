@@ -157,9 +157,7 @@ class TabsButton: UIButton {
         let currentCount = self.countLabel.text
         let infinity = "\u{221E}"
         let countToBe = (count < 100) ? count.description : infinity
-        self.countLabel.text = countToBe
-        // Not using the animation.
-        return
+
         // only animate a tab count change if the tab count has actually changed
         if currentCount != count.description || (clonedTabsButton?.countLabel.text ?? count.description) != count.description {
             if let _ = self.clonedTabsButton {
@@ -167,27 +165,26 @@ class TabsButton: UIButton {
                 self.clonedTabsButton?.removeFromSuperview()
                 insideButton.layer.removeAllAnimations()
             }
-            
+
             // make a 'clone' of the tabs button
             let newTabsButton = clone() as! TabsButton
+
             self.clonedTabsButton = newTabsButton
+            newTabsButton.frame = self.bounds
             newTabsButton.addTarget(self, action: #selector(TabsButton.cloneDidClickTabs), for: UIControlEvents.touchUpInside)
             newTabsButton.countLabel.text = countToBe
             newTabsButton.accessibilityValue = countToBe
-          //  superview?.addSubview(newTabsButton)
-            newTabsButton.snp.makeConstraints { make in
-                make.centerY.equalTo(self)
-                make.trailing.equalTo(self)
-                make.size.equalTo(24)
+            newTabsButton.insideButton.frame = self.insideButton.frame
+            newTabsButton.snp.removeConstraints()
+            self.addSubview(newTabsButton)
+            newTabsButton.snp.makeConstraints { make  in
+                make.center.equalTo(self)
             }
-            
-            newTabsButton.frame = self.frame
-            
+
             // Instead of changing the anchorPoint of the CALayer, lets alter the rotation matrix math to be
             // a rotation around a non-origin point
             let frame = self.insideButton.frame
             let halfTitleHeight = frame.height / 2
-            
             var newFlipTransform = CATransform3DIdentity
             newFlipTransform = CATransform3DTranslate(newFlipTransform, 0, halfTitleHeight, 0)
             newFlipTransform.m34 = -1.0 / 200.0 // add some perspective
@@ -235,7 +232,6 @@ extension TabsButton: Themeable {
         }
         borderColor = theme.borderColor!
         titleBackgroundColor = theme.backgroundColor
-        backgroundColor = theme.backgroundColor
         textColor = theme.textColor
         self.theme = theme
     }

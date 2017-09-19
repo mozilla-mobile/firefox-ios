@@ -249,14 +249,6 @@ class TabTrayController: UIViewController {
         return toolbar
     }()
 
-    var leftToolbarButtons: [UIButton] {
-        return [toolbar.addTabButton]
-    }
-
-    var rightToolbarButtons: [UIButton]? {
-        return [toolbar.maskButton]
-    }
-
     fileprivate(set) internal var privateMode: Bool = false {
         didSet {
             tabDataSource.tabs = tabsToDisplay
