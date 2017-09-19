@@ -21,9 +21,11 @@ private let log = Logger.syncLogger
 open class LoginsSchema: Schema {
     static let DefaultVersion = 3
     
-    var name: String { return "LOGINS" }
-    var version: Int { return LoginsSchema.DefaultVersion }
-    
+    public var name: String { return "LOGINS" }
+    public var version: Int { return LoginsSchema.DefaultVersion }
+
+    public init() {}
+
     func run(_ db: SQLiteDBConnection, sql: String, args: Args? = nil) -> Bool {
         let err = db.executeChange(sql, withArgs: args)
         if err != nil {
@@ -49,7 +51,7 @@ open class LoginsSchema: Schema {
     let indexIsDeletedHostname =
     "CREATE INDEX IF NOT EXISTS \(IndexLoginsDeletedHostname) ON \(TableLoginsLocal) (is_deleted, hostname)"
     
-    func create(_ db: SQLiteDBConnection) -> Bool {
+    public func create(_ db: SQLiteDBConnection) -> Bool {
         let common =
             "id INTEGER PRIMARY KEY AUTOINCREMENT" +
                 ", hostname TEXT NOT NULL" +
@@ -82,7 +84,7 @@ open class LoginsSchema: Schema {
         return self.run(db, queries: [mirror, local, indexIsOverriddenHostname, indexIsDeletedHostname])
     }
     
-    func update(_ db: SQLiteDBConnection, from: Int) -> Bool {
+    public func update(_ db: SQLiteDBConnection, from: Int) -> Bool {
         let to = self.version
         if from == to {
             log.debug("Skipping update from \(from) to \(to).")
@@ -105,7 +107,7 @@ open class LoginsSchema: Schema {
         return drop(db) && create(db)
     }
     
-    func drop(_ db: SQLiteDBConnection) -> Bool {
+    public func drop(_ db: SQLiteDBConnection) -> Bool {
         log.debug("Dropping logins table.")
         let err = db.executeChange("DROP TABLE IF EXISTS \(name)")
         return err == nil

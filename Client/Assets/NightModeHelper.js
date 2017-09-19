@@ -24,7 +24,7 @@ Object.defineProperty(window.__firefox__, 'NightMode', {
 var className = "__firefox__NightMode";
 
 function initializeStyleSheet() {
-  var nightCSS = 'html{-webkit-filter:brightness(50%) !important;}';
+  var nightCSS = 'html{-webkit-filter:contrast(200%) !important;}';
   var newCss = document.getElementById(className);
   if (!newCss) {
     var cssStyle = document.createElement("style");

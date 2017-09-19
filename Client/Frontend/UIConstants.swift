@@ -5,10 +5,42 @@
 import Foundation
 import Shared
 
+// A browser color represents the color of UI in both Private browsing mode and normal mode
+struct BrowserColor {
+    let normalColor: Int
+    let PBMColor: Int
+    init(normal: Int, pbm: Int) {
+        self.normalColor = normal
+        self.PBMColor = pbm
+    }
+    func color(isPBM: Bool) -> UIColor {
+        return UIColor(rgb: isPBM ? PBMColor : normalColor)
+    }
+}
+
 public struct UIConstants {
     static let AboutHomePage = URL(string: "\(WebServer.sharedInstance.base)/about/home/")!
 
-    static let AppBackgroundColor = UIColor.black
+    // Photon Colors. Remove old colors once we've completly transitioned
+    static let BrowserUI = BrowserColor(normal: 0xf9f9fa, pbm: 0x38383D)
+    static let TextColor = BrowserColor(normal: 0xffffff, pbm: 0x414146)
+    static let URLBarDivider = BrowserColor(normal: 0xE4E4E4, pbm: 0x414146)
+    static let TabTrayBG = UIColor(rgb: 0x272727)
+    static let locationBarBG = UIColor(rgb: 0xD7D7DB)
+    static let LoadingStartColor = BrowserColor(normal: 0x00DCFC, pbm: 0x9400ff)
+    static let LoadingEndColor = BrowserColor(normal: 0x0A84FF, pbm: 0xff1ad9)
+
+    //Photon UI sizes
+    static let TopToolbarHeight: CGFloat = 56
+    // The loading bar starts with one color and then animates to the second one
+    static let LoadingBarStart = BrowserColor(normal: 0x00DCFC, pbm: 0x9f00ff)
+    static let LoadingBarEnd = BrowserColor(normal: 0x0A84FF, pbm: 0xff1ad9)
+
+    static let TextSelectionBG = UIColor(rgb: 0xE4E4E4)
+
+    static let TopTabsBG = TabTrayBG
+
+    static let AppBackgroundColor = UIColor(rgb: 0xf9f9fa)
     static let SystemBlueColor = UIColor(rgb: 0x0297F8)
     static let PrivateModePurple = UIColor(red: 207 / 255, green: 104 / 255, blue: 255 / 255, alpha: 1)
     static let PrivateModeLocationBackgroundColor = UIColor(red: 31 / 255, green: 31 / 255, blue: 31 / 255, alpha: 1)
@@ -19,17 +51,17 @@ public struct UIConstants {
     static let PrivateModeAssistantToolbarBackgroundColor = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1)
     static let PrivateModeToolbarTintColor = UIColor(red: 74 / 255, green: 74 / 255, blue: 74 / 255, alpha: 1)
 
-    static let ToolbarHeight: CGFloat = 44
+    static let ToolbarHeight: CGFloat = 46
     static let DefaultRowHeight: CGFloat = 58
     static let DefaultPadding: CGFloat = 10
     static let SnackbarButtonHeight: CGFloat = 48
 
     // Static fonts
-    static let DefaultChromeSize: CGFloat = 14
+    static let DefaultChromeSize: CGFloat = 16
     static let DefaultChromeSmallSize: CGFloat = 11
     static let PasscodeEntryFontSize: CGFloat = 36
     static let DefaultChromeFont: UIFont = UIFont.systemFont(ofSize: DefaultChromeSize, weight: UIFontWeightRegular)
-    static let DefaultChromeBoldFont = UIFont.boldSystemFont(ofSize: DefaultChromeSize)
+    static let DefaultChromeBoldFont = UIFont.systemFont(ofSize: DefaultChromeSize, weight: UIFontWeightHeavy)
     static let DefaultChromeSmallFontBold = UIFont.boldSystemFont(ofSize: DefaultChromeSmallSize)
     static let PasscodeEntryFont = UIFont.systemFont(ofSize: PasscodeEntryFontSize, weight: UIFontWeightBold)
 
@@ -41,11 +73,11 @@ public struct UIConstants {
     static let SeparatorColor = UIColor(rgb: 0xcccccc)
     static let HighlightBlue = UIColor(red:76/255, green:158/255, blue:255/255, alpha:1)
     static let DestructiveRed = UIColor(red: 255/255, green: 64/255, blue: 0/255, alpha: 1.0)
-    static let BorderColor = UIColor.black.withAlphaComponent(0.25)
-    static let BackgroundColor = UIColor(red: 0.21, green: 0.23, blue: 0.25, alpha: 1)
+    static let BorderColor = UIColor.darkGray
+    static let BackgroundColor = AppBackgroundColor
 
     // These colours are used on the Menu
-    static let MenuToolbarBackgroundColorNormal = UIColor(red: 241/255, green: 241/255, blue: 241/255, alpha: 1.0)
+    static let MenuToolbarBackgroundColorNormal = AppBackgroundColor
     static let MenuToolbarBackgroundColorPrivate = UIColor(red: 74/255, green: 74/255, blue: 74/255, alpha: 1.0)
     static let MenuToolbarTintColorNormal = BackgroundColor
     static let MenuToolbarTintColorPrivate = UIColor.white
@@ -64,7 +96,8 @@ public struct UIConstants {
     static let TableViewRowErrorTextColor = UIColor(red: 255/255, green: 0/255, blue: 26/255, alpha: 1.0)
     static let TableViewRowWarningTextColor = UIColor(red: 245/255, green: 166/255, blue: 35/255, alpha: 1.0)
     static let TableViewRowActionAccessoryColor = UIColor(red: 0.29, green: 0.56, blue: 0.89, alpha: 1.0)
-
+    static let TableViewRowSyncTextColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
+    
     // Firefox Orange
     static let ControlTintColor = UIColor(red: 240.0 / 255, green: 105.0 / 255, blue: 31.0 / 255, alpha: 1)
 

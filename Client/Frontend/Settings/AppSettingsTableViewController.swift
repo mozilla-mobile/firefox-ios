@@ -22,6 +22,12 @@ class AppSettingsTableViewController: SettingsTableViewController {
         navigationItem.leftBarButtonItem?.accessibilityIdentifier = "AppSettingsTableViewController.navigationItem.leftBarButtonItem"
 
         tableView.accessibilityIdentifier = "AppSettingsTableViewController.tableView"
+        
+        // Refresh the user's FxA profile upon viewing settings. This will update their avatar,
+        // display name, etc.
+        if AppConstants.MOZ_SHOW_FXA_AVATAR {
+            profile.getAccount()?.updateProfile()
+        }
     }
 
     override func generateSettings() -> [SettingSection] {
@@ -60,30 +66,30 @@ class AppSettingsTableViewController: SettingsTableViewController {
         // There is nothing to show in the Customize section if we don't include the compact tab layout
         // setting on iPad. When more options are added that work on both device types, this logic can
         // be changed.
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            generalSettings +=  [
-                BoolSetting(prefs: prefs, prefKey: "CompactTabLayout", defaultValue: true,
-                    titleText: NSLocalizedString("Use Compact Tabs", comment: "Setting to enable compact tabs in the tab overview"))
-            ]
-        }
 
         generalSettings += [
             BoolSetting(prefs: prefs, prefKey: "showClipboardBar", defaultValue: false,
                         titleText: Strings.SettingsOfferClipboardBarTitle,
                         statusText: Strings.SettingsOfferClipboardBarStatus)
         ]
-
+        
+        var accountSectionTitle: NSAttributedString?
+        if AppConstants.MOZ_SHOW_FXA_AVATAR {
+            accountSectionTitle = NSAttributedString(string: Strings.FxAFirefoxAccount)
+        }
+        
         settings += [
-            SettingSection(title: nil, children: [
+            SettingSection(title: accountSectionTitle, children: [
                 // Without a Firefox Account:
                 ConnectSetting(settings: self),
+                AdvanceAccountSetting(settings: self),
                 // With a Firefox Account:
                 AccountStatusSetting(settings: self),
                 SyncNowSetting(settings: self)
             ] + accountChinaSyncSetting + accountDebugSettings)]
 
         if !profile.hasAccount() {
-            settings += [SettingSection(title: NSAttributedString(string: NSLocalizedString("Sign in to get your tabs, bookmarks, and passwords from your other devices.", comment: "Clarify value prop under Sign In to Firefox in Settings.")), children: [])]
+            settings += [SettingSection(title: NSAttributedString(string: Strings.FxASyncUsageDetails), children: [])]
         }
 
         settings += [ SettingSection(title: NSAttributedString(string: NSLocalizedString("General", comment: "General settings section title")), children: generalSettings)]
@@ -102,10 +108,9 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 statusText: NSLocalizedString("When Leaving Private Browsing", tableName: "PrivateBrowsing", comment: "Will be displayed in Settings under 'Close Private Tabs'"))
         ]
 
-if
-            #available(iOS 11, *) {
-        privacySettings.append(ContentBlockerSetting(settings:self))
-    }
+        if #available(iOS 11, *) {
+            privacySettings.append(ContentBlockerSetting(settings:self))
+        }
 
         privacySettings += [
             PrivacyPolicySetting()

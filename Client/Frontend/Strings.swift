@@ -62,6 +62,12 @@ extension Strings {
     public static let RemovePinTopsiteActionTitle = NSLocalizedString("ActivityStream.ContextMenu.RemovePinTopsite", value: "Remove Pinned Site", comment: "The title for removing a pinned topsite action")
 }
 
+//  PhotonActionSheet Strings
+extension Strings {
+    public static let CancelButtonTitle = NSLocalizedString("PhotonMenu.cancel", value: "Cancel", comment: "Button for closing the menu action sheet")
+
+}
+
 // Settings.
 extension Strings {
     public static let SettingsClearPrivateDataClearButton = NSLocalizedString("Settings.ClearPrivateData.Clear.Button", value: "Clear Private Data", comment: "Button in settings that clears private data for the selected items.")
@@ -185,7 +191,6 @@ extension Strings {
     public static let SetHomePageDialogMessage = NSLocalizedString("HomePage.Set.Dialog.Message", value: "You can change this at any time in Settings", comment: "Alert dialog body when the user opens the home page for the first time.")
     public static let SetHomePageDialogYes = NSLocalizedString("HomePage.Set.Dialog.OK", value: "Set Homepage", comment: "Button accepting changes setting the home page for the first time.")
     public static let SetHomePageDialogNo = NSLocalizedString("HomePage.Set.Dialog.Cancel", value: "Cancel", comment: "Button cancelling changes setting the home page for the first time.")
-
 }
 
 // New tab choice settings
@@ -199,6 +204,20 @@ extension Strings {
     public static let SettingsNewTabBlankPage = NSLocalizedString("Settings.NewTab.Option.BlankPage", value: "Show a Blank Page", comment: "Option in settings to show a blank page when you open a new tab")
     public static let SettingsNewTabHomePage = NSLocalizedString("Settings.NewTab.Option.HomePage", value: "Show your Homepage", comment: "Option in settings to show your homepage when you open a new tab")
     public static let SettingsNewTabDescription = NSLocalizedString("Settings.NewTab.Description", value: "When you open a New Tab:", comment: "A description in settings of what the new tab choice means")
+}
+
+// Custom account settings
+extension Strings {
+    public static let SettingsAdvanceAccountSectionName = NSLocalizedString("Settings.AdvanceAccount.SectionName", value: "Account Settings", comment: "Label used as an item in Settings. When touched it will open a dialog to setup advance Firefox account settings.")
+    public static let SettingsAdvanceAccountTitle = NSLocalizedString("Settings.AdvanceAccount.SectionName", value: "Advance Account Settings", comment: "Title displayed in header of the setting panel.")
+    public static let SettingsAdvanceAccountUrlPlaceholder = NSLocalizedString("Settings.AdvanceAccount.UrlPlaceholder", value: "Custom Account Url", comment: "Title displayed in header of the setting panel.")
+    
+    public static let SettingsAdvanceAccountUrlUpdatedAlertMessage = NSLocalizedString("Settings.AdvanceAccount.UpdatedAlertMessage", value: "Firefox account service updated. To begin using custom server, please log out and re-login.", comment: "Messaged displayed when sync service has been successfully set.")
+    public static let SettingsAdvanceAccountUrlUpdatedAlertOk = NSLocalizedString("Settings.AdvanceAccount.UpdatedAlertOk", value: "OK", comment: "Ok button on custom sync service updated alert")
+    
+    public static let SettingsAdvanceAccountUrlErrorAlertTitle = NSLocalizedString("Settings.AdvanceAccount.ErrorAlertTitle", value: "Error", comment: "Error alert message title.")
+    public static let SettingsAdvanceAccountUrlErrorAlertMessage = NSLocalizedString("Settings.AdvanceAccount.ErrorAlertMessage", value: "There was an error while attempting to parse the url. Please make sure that it is a valid Firefox Account root url.", comment: "Messaged displayed when sync service has an error setting a custom sync url.")
+    public static let SettingsAdvanceAccountUrlErrorAlertOk = NSLocalizedString("Settings.AdvanceAccount.ErrorAlertOk", value: "OK", comment: "Ok button on custom sync service error alert.")
 }
 
 // Open With Settings
@@ -285,13 +304,6 @@ extension Strings {
     public static let ContextMenuButtonToastNewPrivateTabOpenedButtonText = NSLocalizedString("ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText", value: "Switch", comment: "The button text in the Button Toast for switching to a fresh New Private Tab.")
 }
 
-// Receiving tabs sent from other devices.
-extension Strings {
-    public static let SentTabViewActionTitle = NSLocalizedString("SentTab.ViewPage", value: "View", comment: "Button title displayed in a notification when a sent tab has been received. Tapping on the button will open the URL.")
-    public static let SentTabBookmarkActionTitle = NSLocalizedString("SentTab.BookmarkPage", value: "Bookmark", comment: "Button title displayed in a notification when a sent tab has been received. Tapping on the button will add the URL as a bookmark.")
-    public static let SentTabAddToReadingListActionTitle = NSLocalizedString("SentTab.AddToReadingList", value: "Add to Reading List", comment: "Button title displayed in a notification when a sent tab has been received. Tapping on the button will add the page to the reading list.")
-}
-
 // Sent tabs notifications. These are displayed when the app is backgrounded or the device is locked.
 extension Strings {
     // zero tabs
@@ -333,8 +345,12 @@ extension Strings {
 
 // App menu.
 extension Strings {
-    public static let AppMenuNewTabTitleString = NSLocalizedString("Menu.NewTabAction.Title", tableName: "Menu", value: "New Tab", comment: "Label for the button, displayed in the menu, used to open a new tab")
-    public static let AppMenuNewPrivateTabTitleString = NSLocalizedString("Menu.NewPrivateTabAction.Title", tableName: "Menu", value: "New Private Tab", comment: "Label for the button, displayed in the menu, used to open a new private tab.")
+    public static let AppMenuAddToReadingListTitleString = NSLocalizedString("Menu.AddToReadingList.Title", tableName: "Menu", value: "Add to Reading List", comment: "Label for the button, displayed in the menu, used to add a page to the reading list.")
+    public static let AppMenuShowTabsTitleString = NSLocalizedString("Menu.ShowTabs.Title", tableName: "Menu", value: "Show Tabs", comment: "Label for the button, displayed in the menu, used to open the tabs tray")
+    public static let AppMenuSharePageTitleString = NSLocalizedString("Menu.SendPageAction.Title", tableName: "Menu", value: "Share", comment: "Label for the button, displayed in the menu, used to open the share dialog.")
+    public static let AppMenuCopyURLTitleString = NSLocalizedString("Menu.CopyURL.Title", tableName: "Menu", value: "Copy URL", comment: "Label for the button, displayed in the menu, used to copy the page url to the clipboard.")
+    public static let AppMenuNewTabTitleString = NSLocalizedString("Menu.NewTabAction.Title", tableName: "Menu", value: "Open New Tab", comment: "Label for the button, displayed in the menu, used to open a new tab")
+    public static let AppMenuNewPrivateTabTitleString = NSLocalizedString("Menu.NewPrivateTabAction.Title", tableName: "Menu", value: "Open New Private Tab", comment: "Label for the button, displayed in the menu, used to open a new private tab.")
     public static let AppMenuAddBookmarkTitleString = NSLocalizedString("Menu.AddBookmarkAction.Title", tableName: "Menu", value: "Add Bookmark", comment: "Label for the button, displayed in the menu, used to create a bookmark for the current website.")
     public static let AppMenuRemoveBookmarkTitleString = NSLocalizedString("Menu.RemoveBookmarkAction.Title", tableName: "Menu", value: "Remove Bookmark", comment: "Label for the button, displayed in the menu, used to delete an existing bookmark for the current website.")
     public static let AppMenuFindInPageTitleString = NSLocalizedString("Menu.FindInPageAction.Title", tableName: "Menu", value: "Find In Page", comment: "Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page.")
@@ -343,18 +359,17 @@ extension Strings {
     public static let AppMenuScanQRCodeTitleString = NSLocalizedString("Menu.ScanQRCodeAction.Title", tableName: "Menu", value: "Scan QR Code", comment: "Label for the button, displayed in the menu, used to open the QR code scanner.")
     public static let AppMenuSettingsTitleString = NSLocalizedString("Menu.OpenSettingsAction.Title", tableName: "Menu", value: "Settings", comment: "Label for the button, displayed in the menu, used to open the Settings menu.")
     public static let AppMenuCloseAllTabsTitleString = NSLocalizedString("Menu.CloseAllTabsAction.Title", tableName: "Menu", value: "Close All Tabs", comment: "Label for the button, displayed in the menu, used to close all tabs currently open.")
-    public static let AppMenuOpenHomePageTitleString = NSLocalizedString("Menu.OpenHomePageAction.Title", tableName: "Menu", value: "Home", comment: "Label for the button, displayed in the menu, used to navigate to the home page.")
+    public static let AppMenuOpenHomePageTitleString = NSLocalizedString("Menu.OpenHomePageAction.Title", tableName: "Menu", value: "Open Homepage", comment: "Label for the button, displayed in the menu, used to navigate to the home page.")
     public static let AppMenuSetHomePageTitleString = NSLocalizedString("Menu.SetHomePageAction.Title", tableName: "Menu", value: "Set Homepage", comment: "Label for the button, displayed in the menu, used to set the homepage if none is currently set.")
-    public static let AppMenuSharePageTitleString = NSLocalizedString("Menu.SendPageAction.Title", tableName: "Menu", value: "Send", comment: "Label for the button, displayed in the menu, used to open the share dialog.")
     public static let AppMenuTopSitesTitleString = NSLocalizedString("Menu.OpenTopSitesAction.AccessibilityLabel", tableName: "Menu", value: "Top Sites", comment: "Accessibility label for the button, displayed in the menu, used to open the Top Sites home panel.")
     public static let AppMenuBookmarksTitleString = NSLocalizedString("Menu.OpenBookmarksAction.AccessibilityLabel", tableName: "Menu", value: "Bookmarks", comment: "Accessibility label for the button, displayed in the menu, used to open the Bbookmarks home panel.")
     public static let AppMenuHistoryTitleString = NSLocalizedString("Menu.OpenHistoryAction.AccessibilityLabel", tableName: "Menu", value: "History", comment: "Accessibility label for the button, displayed in the menu, used to open the History home panel.")
     public static let AppMenuReadingListTitleString = NSLocalizedString("Menu.OpenReadingListAction.AccessibilityLabel", tableName: "Menu", value: "Reading List", comment: "Accessibility label for the button, displayed in the menu, used to open the Reading list home panel.")
     public static let AppMenuButtonAccessibilityLabel = NSLocalizedString("Toolbar.Menu.AccessibilityLabel", value: "Menu", comment: "Accessibility label for the Menu button.")
-    public static let AppMenuNightModeTurnOnLabel = NSLocalizedString("Menu.NightModeTurnOnAction.Label", value: "Night Mode", comment: "Label for the button, displayed in the menu, used to turn night mode on. 'Turn On' is an indication of state, and thus redundant.")
-    public static let AppMenuNightModeTurnOffLabel = NSLocalizedString("Menu.NightModeTurnOffAction.Label", value: "Night Mode Off", comment: "Label for the button, displayed in the menu, used to turn night mode off. 'Off' is only displayed when the mode is on.")
-    public static let AppMenuNoImageModeTurnOnLabel = NSLocalizedString("Menu.NoImageModeTurnOnAction.Label", value: "Hide Images", comment: "Label for the button, displayed in the menu, used to turn no image mode on.")
-    public static let AppMenuNoImageModeTurnOffLabel = NSLocalizedString("Menu.NoImageModeTurnOffAction.Label", value: "Show Images", comment: "Label for the button, displayed in the menu, used to turn no image mode off.")
+    public static let AppMenuNightModeIsOnLabel = NSLocalizedString("Menu.NightModeIsOnAction.Label", value: "Night Mode: On", comment: "Label for the button, displayed in the menu, shows the current state of night mode which is currently ON")
+    public static let AppMenuNightModeIsOffLabel = NSLocalizedString("Menu.NightModeIsOffAction.Label", value: "Night Mode: Off", comment: "Label for the button, displayed in the menu, shows the current state of night mode which is currently OFF")
+    public static let AppMenuNoImageModeIsOnLabel = NSLocalizedString("Menu.NoImageModeIsOnAction.Label", value: "Hide Images: On", comment: "Label for the button, displayed in the menu, shows the current state of Hide Images mode which is currently ON")
+    public static let AppMenuNoImageModeIsOffLabel = NSLocalizedString("Menu.NoImageModeIsOffAction.Label", value: "Hide Images: Off", comment: "Label for the button, displayed in the menu, shows the current state of Hide Images which is currently OFF")
 }
 
 // Snackbar shown when tapping app store link
@@ -379,8 +394,6 @@ extension Strings {
     public static let TrackingProtectionOptionBlockListTypeBasicDescription = NSLocalizedString("Settings.TrackingProtectionOption.BlockListBasicDescription", value: "Allows some trackers so websites function properly.", comment: "Tracking protection settings option description for using the basic blocklist.")
     public static let TrackingProtectionOptionBlockListTypeStrict = NSLocalizedString("Settings.TrackingProtectionOption.BlockListStrict", value: "Strict", comment: "Tracking protection settings option for using the strict blocklist.")
     public static let TrackingProtectionOptionBlockListTypeStrictDescription = NSLocalizedString("Settings.TrackingProtectionOption.BlockListStrictDescription", value: "Blocks known trackers. Some websites may not function properly.", comment: "Tracking protection settings option description for using the strict blocklist.")
-
-    public static let TrackingProtectionOptionFooter = NSLocalizedString("Settings.TrackingProtectionOption.BlockListTypeFooter", value: "You can choose which list Firefox will use to block Web elements that may track your browsing activity.", comment: "Description label shown at bottom of tracking protection options for which Block List to use")
 }
 
 // Do not track 

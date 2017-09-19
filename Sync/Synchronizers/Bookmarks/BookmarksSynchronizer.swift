@@ -196,13 +196,15 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
                 if case .completed = result {
                     log.debug("Validating completed buffer download.")
                     return buffer.validate().bind { validationResult in
-                        if let invalidError = validationResult.failureValue as? BufferInvalidError {
-                            return buffer.getUpstreamRecordCount().bind { checked in
-                                self.statsSession.validationStats = self.validationStatsFrom(error: invalidError, checked: checked)
-                                return deferMaybe(result)
-                            }
+                        guard let invalidError = validationResult.failureValue as? BufferInvalidError else {
+                            return deferMaybe(result)
                         }
-                        return deferMaybe(result)
+                        return buffer.getUpstreamRecordCount().bind { checked -> Success in
+                            self.statsSession.validationStats = self.validationStatsFrom(error: invalidError, checked: checked)
+                            return self.maybeStartRepairProcedure(greenLight: greenLight, error: invalidError, remoteClientsAndTabs: remoteClientsAndTabs)
+                        } >>> {
+                            return deferMaybe(result)
+                        }
                     }
                 }
                 return deferMaybe(result)
@@ -237,11 +239,8 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
                         if let invalidError = result.failureValue as? BufferInvalidError {
                             return buffer.getUpstreamRecordCount().bind { checked in
                                 self.statsSession.validationStats = self.validationStatsFrom(error: invalidError, checked: checked)
-
-                                log.warning("Buffer inconsistent, starting repair procedure")
-                                let repairer = BookmarksRepairRequestor(scratchpad: self.scratchpad, basePrefs: self.basePrefs, remoteClients: remoteClientsAndTabs)
-                                return repairer.startRepairs(validationInfo: invalidError.inconsistencies) >>> {
-                                    deferMaybe(invalidError)
+                                return self.maybeStartRepairProcedure(greenLight: greenLight, error: invalidError, remoteClientsAndTabs: remoteClientsAndTabs) >>> {
+                                    return deferMaybe(invalidError)
                                 }
                             }
                         }
@@ -266,6 +265,22 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
     private func validationStatsFrom(error: BufferInvalidError, checked: Int?) -> ValidationStats {
         let problems = error.inconsistencies.map { ValidationProblem(name: $0.trackingEvent, count: $1.count) }
         return ValidationStats(problems: problems, took: error.validationDuration, checked: checked)
+    }
+
+    private func maybeStartRepairProcedure(greenLight: () -> Bool, error: BufferInvalidError, remoteClientsAndTabs: RemoteClientsAndTabs) -> Success {
+        guard AppConstants.MOZ_BOOKMARKS_REPAIR_REQUEST && greenLight() else {
+            return succeed()
+        }
+        log.warning("Buffer inconsistent, starting repair procedure")
+        let repairer = BookmarksRepairRequestor(scratchpad: self.scratchpad, basePrefs: self.basePrefs, remoteClients: remoteClientsAndTabs)
+        return repairer.startRepairs(validationInfo: error.inconsistencies).bind { result in
+            if let repairFailure = result.failureValue {
+                SentryIntegration.shared.send(message: "Bookmarks repair failure: " + repairFailure.description, tag: "BookmarksRepair", severity: .error)
+            } else {
+                SentryIntegration.shared.send(message: "Bookmarks repair succeeded", tag: "BookmarksRepair", severity: .debug)
+            }
+            return succeed()
+        }
     }
 }
 

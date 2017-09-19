@@ -113,17 +113,6 @@ open class SQLiteHistory {
         self.db = db
         self.favicons = SQLiteFavicons(db: self.db)
         self.prefs = prefs
-
-        // BrowserSchema doesn't need to stick around once the schema has been created/updated.
-        switch db.prepareSchema(BrowserSchema()) {
-        case .failure:
-            log.error("Failed to create/update DB schema!")
-            fatalError()
-        case .closed:
-            log.info("Database not created as the SQLiteConnection is closed.")
-        case .success:
-            log.debug("Database succesfully created/updated")
-        }
     }
 }
 
@@ -929,8 +918,9 @@ extension SQLiteHistory: SyncableHistory {
 
     private func getModifiedHistory(limit: Int) -> Deferred<Maybe<[Int: Place]>> {
         let sql =
-        "SELECT id, guid, url, title FROM \(TableHistory) " +
-        "WHERE should_upload = 1 " +
+        "SELECT id, guid, url, title " +
+        "FROM \(TableHistory) " +
+        "WHERE should_upload = 1 AND NOT is_deleted = 1 " +
         "ORDER BY id " +
         "LIMIT ?"
 

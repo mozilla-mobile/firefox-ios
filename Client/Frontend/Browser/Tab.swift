@@ -44,7 +44,6 @@ class Tab: NSObject {
         set {
             if _isPrivate != newValue {
                 _isPrivate = newValue
-                self.updateAppState()
             }
         }
     }
@@ -55,7 +54,6 @@ class Tab: NSObject {
 
     var webView: WKWebView?
     var tabDelegate: TabDelegate?
-    weak var appStateDelegate: AppStateDelegate?
     var bars = [SnackBar]()
     var favicons = [Favicon]()
     var lastExecutedTime: Timestamp?
@@ -73,19 +71,14 @@ class Tab: NSObject {
 
     /// Whether or not the desktop site was requested with the last request, reload or navigation. Note that this property needs to
     /// be managed by the web view's navigation delegate.
-    var desktopSite: Bool = false {
-        didSet {
-            if oldValue != desktopSite {
-                self.updateAppState()
-            }
+    var desktopSite: Bool = false
+    var isBookmarked: Bool = false
+    
+    var readerModeAvailableOrActive: Bool {
+        if let readerMode = self.getHelper(name: "ReaderMode") as? ReaderMode {
+            return readerMode.state != .unavailable
         }
-    }
-    var isBookmarked: Bool = false {
-        didSet {
-            if oldValue != isBookmarked {
-                self.updateAppState()
-            }
-        }
+        return false
     }
 
     fileprivate(set) var screenshot: UIImage?
@@ -133,11 +126,6 @@ class Tab: NSObject {
         }
 
         return nil
-    }
-
-    fileprivate func updateAppState() {
-        let state = mainStore.updateState(.tab(tabState: self.tabState))
-        self.appStateDelegate?.appDidUpdateState(state)
     }
 
     weak var navigationDelegate: WKNavigationDelegate? {
@@ -428,8 +416,6 @@ class Tab: NSObject {
             let path = keyPath, path == "URL" else {
             return assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")")
         }
-
-        updateAppState()
     }
 
     func isDescendentOf(_ ancestor: Tab) -> Bool {
@@ -532,5 +518,25 @@ private class TabWebView: WKWebView, MenuHelperInterface {
         becomeFirstResponder()
 
         return super.hitTest(point, with: event)
+    }
+}
+
+///
+// Temporary fix for Bug 1390871 - NSInvalidArgumentException: -[WKContentView menuHelperFindInPage]: unrecognized selector
+//
+// This class only exists to contain the swizzledMenuHelperFindInPage. This class is actually never
+// instantiated. It only serves as a placeholder for the method. When the method is called, self is
+// actually pointing to a WKContentView. Which is not public, but that is fine, we only need to know
+// that it is a UIView subclass to access its superview.
+//
+
+class TabWebViewMenuHelper: UIView {
+    @objc func swizzledMenuHelperFindInPage() {
+        if let tabWebView = superview?.superview as? TabWebView {
+            tabWebView.evaluateJavaScript("getSelection().toString()") { result, _ in
+                let selection = result as? String ?? ""
+                tabWebView.delegate?.tabWebView(tabWebView, didSelectFindInPageForSelection: selection)
+            }
+        }
     }
 }

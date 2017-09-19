@@ -18,7 +18,6 @@ open class SQLiteLogins: BrowserLogins {
 
     public init(db: BrowserDB) {
         self.db = db
-        _ = db.prepareSchema(LoginsSchema())
     }
 
     fileprivate class func populateLogin(_ login: Login, row: SDRow) {

@@ -172,6 +172,34 @@ def main():
             if file_node.get('target-language'):
                 file_node.set('target-language', locale_code)
 
+        #
+        # Bug 1399496 - Quick action menu displays incorrect string for the QR Code option
+        #
+        # None of the strings in InfoPlist.strings can be empty. If they are,
+        # they will either default to the identifier, which is set by Apple,
+        # or they will result in an incorrect permission dialog, which could
+        # be reason for rejection. So we default them to the (English) source
+        # strings if they are missing.
+        #
+
+        required_ids = [
+            'NSCameraUsageDescription',
+            'NSLocationWhenInUseUsageDescription',
+            'NSMicrophoneUsageDescription',
+            'NSPhotoLibraryAddUsageDescription',
+            'ShortcutItemTitleNewPrivateTab',
+            'ShortcutItemTitleNewTab',
+            'ShortcutItemTitleQRCode',
+        ]
+
+        for trans_node in reference_root.xpath('//x:trans-unit', namespaces=NS):
+            if trans_node.get('id') in required_ids:
+                source_string = trans_node.xpath('./x:source', namespaces=NS)[0].text
+                if len(trans_node.xpath('./x:target', namespaces=NS)) == 0:
+                    target_node = etree.Element('target')
+                    target_node.text = source_string
+                    trans_node.insert(1, target_node)
+
         # Replace the existing locale file with the new XML content
         with open(file_path, 'w') as fp:
             # Fix indentations

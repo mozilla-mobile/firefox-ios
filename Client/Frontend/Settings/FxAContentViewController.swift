@@ -55,6 +55,10 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
 
     deinit {
         NotificationCenter.default.removeObserver(self, name: NotificationFirefoxAccountVerified, object: nil)
+        
+        if AppConstants.MOZ_SHOW_FXA_AVATAR {
+            profile.getAccount()?.updateProfile()
+        }
     }
 
     override func viewDidLoad() {
@@ -129,7 +133,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         helper.application(app, didReceiveAccountJSON: data)
 
         if profile.hasAccount() {
-            LeanplumIntegration.sharedInstance.setUserAttributes(attributes: [UserAttributeKeyName.signedInSync.rawValue:  true])
+            LeanplumIntegration.sharedInstance.setUserAttributes(attributes: [UserAttributeKeyName.signedInSync.rawValue: true])
         }
 
         LeanplumIntegration.sharedInstance.track(eventName: LeanplumEventName.signsInFxa)
@@ -145,7 +149,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         // we only Notify via the FxALoginStateMachine.
         let flags = FxALoginFlags(pushEnabled: account.pushRegistration != nil,
                                   verified: true)
-        LeanplumIntegration.sharedInstance.setUserAttributes(attributes: [UserAttributeKeyName.signedInSync.rawValue:  true])
+        LeanplumIntegration.sharedInstance.setUserAttributes(attributes: [UserAttributeKeyName.signedInSync.rawValue: true])
         DispatchQueue.main.async {
             self.delegate?.contentViewControllerDidSignIn(self, withFlags: flags)
         }

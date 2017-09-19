@@ -7,7 +7,7 @@ import Foundation
 /**
  * Something that knows how to construct a database.
  */
-protocol Schema {
+public protocol Schema {
     var name: String { get }
     var version: Int { get }
     

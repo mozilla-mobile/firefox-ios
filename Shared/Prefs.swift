@@ -11,7 +11,6 @@ public struct PrefsKeys {
     public static let KeyTopSitesCacheSize = "topSitesCacheSize"
     public static let KeyDefaultHomePageURL = "KeyDefaultHomePageURL"
     public static let KeyHomePageButtonIsInMenu = "HomePageButtonIsInMenuPrefKey"
-    public static let KeyNoImageModeButtonIsInMenu = "NoImageModeButtonIsInMenuPrefKey"
     public static let KeyNoImageModeStatus = "NoImageModeStatus"
     public static let KeyNewTab = "NewTabPrefKey"
     public static let KeyNightModeButtonIsInMenu = "NightModeButtonIsInMenuPrefKey"
@@ -19,6 +18,13 @@ public struct PrefsKeys {
     public static let KeyMailToOption = "MailToOption"
     public static let HasFocusInstalled = "HasFocusInstalled"
     public static let HasPocketInstalled = "HasPocketInstalled"
+
+    public static let KeyUseCustomSyncService = "useCustomSyncService"
+    public static let KeyCustomSyncToken = "customSyncTokenServer"
+    public static let KeyCustomSyncProfile = "customSyncProfileServer"
+    public static let KeyCustomSyncOauth = "customSyncOauthServer"
+    public static let KeyCustomSyncAuth = "customSyncAuthServer"
+    public static let KeyCustomSyncWeb = "customSyncWebServer"
 }
 
 public struct PrefsDefaults {
