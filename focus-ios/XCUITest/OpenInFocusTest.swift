@@ -25,14 +25,12 @@ class OpenInFocusTest : BaseTestCase {
         waitforHittable(element: springboard.scrollViews.otherElements.icons[sharedExtName])
 
         let safariApp = XCUIApplication(privateWithPath: nil, bundleID: "com.apple.mobilesafari")!
-        safariApp.launchArguments = ["-u", "https://www.mozilla.org/en-US/"]
+        safariApp.launchArguments = ["-u", "https://www.google.com"]
         safariApp.launch()
-        waitforExistence(element: safariApp.webViews.otherElements["Internet for people, not profit — Mozilla"])
         
+        waitforEnable(element: safariApp.buttons["Share"])
         safariApp.buttons["Share"].tap()
-        if !iPad() {
-            waitforHittable(element: safariApp.buttons["Cancel"])
-        }
+        waitforEnable(element: safariApp.collectionViews.cells.buttons["More"])
         safariApp.collectionViews.cells.buttons["More"].tap()
         
         // in iOS 10.3.1, multiple elements are found with 'Firefox Focus' label
@@ -45,9 +43,9 @@ class OpenInFocusTest : BaseTestCase {
 
         let focusApp = XCUIApplication()
         let addressBarField = focusApp.textFields["URLBar.urlText"]
+        waitForWebPageLoad()
 
-        waitForValueContains(element: addressBarField, value: "https://www.mozilla.org/en-US/")
-        waitforExistence(element: focusApp.webViews.otherElements["Internet for people, not profit — Mozilla"])
-        waitforHittable(element: focusApp.buttons["ERASE"])  // check site is fully loaded
+        waitForValueContains(element: addressBarField, value: "https://www.google")
+        waitforExistence(element: focusApp.buttons["ERASE"])  // check site is fully loaded
     }
 }

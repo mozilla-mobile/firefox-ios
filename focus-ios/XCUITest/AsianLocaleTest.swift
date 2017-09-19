@@ -45,13 +45,16 @@ class AsianLocaleTest: BaseTestCase {
 		app.buttons["Search for " + searchWord].tap()
         
         // Check the correct site is reached
-        waitforHittable(element: app.webViews.otherElements["Search"])
-        app.webViews.otherElements["Search"].tap()
-        waitForValueContains(element: app.webViews.otherElements["Search"], value: searchWord)
+        waitForWebPageLoad()
+        if app.webViews.textFields["Search"].exists {
+            waitForValueContains(element: app.webViews.textFields["Search"], value: searchWord)
+        } else if app.webViews.otherElements["Search"].exists {
+            waitForValueContains(element: app.webViews.otherElements["Search"], value: searchWord)
+        }
         
 		// Erase the history
 		app.buttons["ERASE"].tap()
-		XCTAssertTrue(app.staticTexts["Your browsing history has been erased."].exists)
+        waitforExistence(element: app.staticTexts["Your browsing history has been erased."])
 		
 		// Check it is on the initial page
 		XCTAssertTrue(app.staticTexts["Browse. Erase. Repeat."].exists)

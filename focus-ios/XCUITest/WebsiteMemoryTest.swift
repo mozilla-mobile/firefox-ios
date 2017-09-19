@@ -18,18 +18,17 @@ class WebsiteMemoryTest: BaseTestCase {
     
     func testGoogleTextField() {
         let app = XCUIApplication()
-        let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
-        let googleSearchField = app.webViews.otherElements["Search"]
-        UIPasteboard.general.string = "mozilla"
+        var googleSearchField = app.webViews.searchFields["Search"]
         
         // Enter 'google' on the search field to go to google site
-        searchOrEnterAddressTextField.typeText("google\r")
-        waitForValueContains(element: searchOrEnterAddressTextField, value: "https://www.google")
-        
-        waitforExistence(element: googleSearchField)
+        loadWebPage("google")
+        if app.webViews.otherElements["Search"].exists {
+            googleSearchField =  app.webViews.otherElements["Search"]
+        }
+        waitforEnable(element: googleSearchField)
         
         // type 'mozilla' (typing doesn't work cleanly with UIWebview, so had to paste from clipboard)
-        
+        UIPasteboard.general.string = "mozilla"
         googleSearchField.tap()
         googleSearchField.press(forDuration: 1.5)
         waitforExistence(element: app.menuItems["Paste"])
@@ -42,10 +41,7 @@ class WebsiteMemoryTest: BaseTestCase {
         // revisit google site
         app.buttons["ERASE"].tap()
         waitforExistence(element: app.staticTexts["Your browsing history has been erased."])
-        searchOrEnterAddressTextField.typeText("google\r")
-        waitForValueContains(element: searchOrEnterAddressTextField, value: "https://www.google")
-        
-        
+        loadWebPage("google")
         waitforExistence(element: googleSearchField)
         googleSearchField.tap()
         

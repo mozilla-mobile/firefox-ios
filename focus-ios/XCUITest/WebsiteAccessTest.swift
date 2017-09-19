@@ -38,8 +38,9 @@ class WebsiteAccessTests: BaseTestCase {
         searchOrEnterAddressTextField.typeText("http://localhost:6573/licenses.html\n")
         
         // Check the correct site is reached
-        waitForValueContains(element: label, value: "http://localhost:6573/licenses.html")
-        waitforExistence(element: app.webViews.otherElements["Licenses"])
+        waitForWebPageLoad()
+        waitForValueContains(element: label, value: "localhost")
+        
         // Erase the history
         app.buttons["ERASE"].tap()
         waitforExistence(element: app.staticTexts["Your browsing history has been erased."])

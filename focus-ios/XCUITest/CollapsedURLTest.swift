@@ -20,8 +20,8 @@ class CollapsedURLTest: BaseTestCase {
         let app = XCUIApplication()
         
         // Go to mozilla.org
+        loadWebPage("http://localhost:6573/licenses.html\n")
         let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
-        searchOrEnterAddressTextField.typeText("http://localhost:6573/licenses.html\n")
         
         // Swipe up to show the collapsed URL view - use internal website
         waitForValueContains(element: searchOrEnterAddressTextField, value: "http://localhost:6573/licenses.html")
@@ -32,7 +32,7 @@ class CollapsedURLTest: BaseTestCase {
        
         let collapsedTruncatedurltextTextView = app.textViews["Collapsed.truncatedUrlText"]
         waitforExistence(element: collapsedTruncatedurltextTextView)
-
+        
         XCTAssertTrue(collapsedTruncatedurltextTextView.isHittable)
         XCTAssertEqual(collapsedTruncatedurltextTextView.value as? String, "localhost")
         
