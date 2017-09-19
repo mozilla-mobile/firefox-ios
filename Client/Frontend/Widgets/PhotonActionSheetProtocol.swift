@@ -107,8 +107,7 @@ extension PhotonActionSheetProtocol {
                        presentableVC: PresentableVC) -> Array<[PhotonActionSheetItem]> {
         
         let toggleActionTitle = tab.desktopSite ? Strings.AppMenuViewMobileSiteTitleString : Strings.AppMenuViewDesktopSiteTitleString
-        let iconString = tab.desktopSite ? "" : "menu-RequestDesktopSite"
-        let toggleDesktopSite = PhotonActionSheetItem(title: toggleActionTitle, iconString: iconString) { action in
+        let toggleDesktopSite = PhotonActionSheetItem(title: toggleActionTitle, iconString: "menu-RequestDesktopSite") { action in
             tab.toggleDesktopSite()
         }
         
