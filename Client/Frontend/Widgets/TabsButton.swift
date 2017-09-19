@@ -190,7 +190,7 @@ class TabsButton: UIButton {
             newFlipTransform.m34 = -1.0 / 200.0 // add some perspective
             newFlipTransform = CATransform3DRotate(newFlipTransform, CGFloat(-(Double.pi / 2)), 1.0, 0.0, 0.0)
             newTabsButton.insideButton.layer.transform = newFlipTransform
-            
+
             var oldFlipTransform = CATransform3DIdentity
             oldFlipTransform = CATransform3DTranslate(oldFlipTransform, 0, halfTitleHeight, 0)
             oldFlipTransform.m34 = -1.0 / 200.0 // add some perspective

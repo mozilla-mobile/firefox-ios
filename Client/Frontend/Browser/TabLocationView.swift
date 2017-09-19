@@ -65,7 +65,7 @@ class TabLocationView: UIView {
                 UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
             }
             updateTextWithURL()
-            pageOptionsButton.isHidden = url == nil
+            pageOptionsButton.isHidden = (url == nil)
             setNeedsUpdateConstraints()
         }
     }
@@ -148,17 +148,16 @@ class TabLocationView: UIView {
         return readerModeButton
     }()
     
-    lazy var pageOptionsButton: ReaderModeButton = {
-        let readerModeButton = ReaderModeButton(frame: CGRect.zero)
-        readerModeButton.setImage(UIImage.templateImageNamed("menu-More-Options"), for: .normal)
-        readerModeButton.isHidden = true
-        readerModeButton.addTarget(self, action: #selector(TabLocationView.SELDidPressPageOptionsButton), for: .touchUpInside)
-        readerModeButton.isAccessibilityElement = true
-//        readerModeButton.imageEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        readerModeButton.imageView?.contentMode = UIViewContentMode.scaleAspectFit
-        readerModeButton.accessibilityLabel = NSLocalizedString("Reader View", comment: "Accessibility label for the Reader View button")
-        readerModeButton.accessibilityIdentifier = "TabLocationView.readerModeButton"
-        return readerModeButton
+    lazy var pageOptionsButton: ToolbarButton = {
+        let pageOptionsButton = ToolbarButton(frame: CGRect.zero)
+        pageOptionsButton.setImage(UIImage.templateImageNamed("menu-More-Options"), for: .normal)
+        pageOptionsButton.isHidden = true
+        pageOptionsButton.addTarget(self, action: #selector(TabLocationView.SELDidPressPageOptionsButton), for: .touchUpInside)
+        pageOptionsButton.isAccessibilityElement = true
+        pageOptionsButton.imageView?.contentMode = UIViewContentMode.scaleAspectFit
+        pageOptionsButton.accessibilityLabel = NSLocalizedString("Reader View", comment: "Accessibility label for the Reader View button")
+        pageOptionsButton.accessibilityIdentifier = "TabLocationView.readerModeButton"
+        return pageOptionsButton
     }()
     
     lazy var separatorLine: UIView = {

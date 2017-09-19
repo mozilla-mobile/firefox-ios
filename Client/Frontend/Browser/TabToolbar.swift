@@ -84,9 +84,6 @@ open class TabToolbarHelper: NSObject {
         toolbar.stopReloadButton.addTarget(self, action: #selector(TabToolbarHelper.SELdidClickStopReload), for: UIControlEvents.touchUpInside)
 
         toolbar.tabsButton.addTarget(self, action: #selector(TabToolbarHelper.SELdidClickTabs), for: .touchUpInside)
-//        toolbar.shareButton.setImage(UIImage.templateImageNamed("nav-share"), for: .normal)
-//        toolbar.shareButton.accessibilityLabel = NSLocalizedString("Share", comment: "Accessibility Label for the tab toolbar Share button")
-//        toolbar.shareButton.addTarget(self, action: #selector(TabToolbarHelper.SELdidClickShare), for: UIControlEvents.touchUpInside)
 
         toolbar.menuButton.contentMode = UIViewContentMode.center
         toolbar.menuButton.setImage(UIImage.templateImageNamed("nav-menu"), for: .normal)
@@ -161,14 +158,14 @@ class ToolbarButton: UIButton {
         return themes
     }()
     
-    var selectedTintcolor: UIColor!
+    var selectedTintColor: UIColor!
     var unselectedTintColor: UIColor!
     var disabledTintColor: UIColor!
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.adjustsImageWhenHighlighted = false
-        self.selectedTintcolor = self.tintColor
+        self.selectedTintColor = self.tintColor
         self.unselectedTintColor = self.tintColor
         self.disabledTintColor = UIColor.gray
     }
@@ -179,7 +176,7 @@ class ToolbarButton: UIButton {
 
     override open var isHighlighted: Bool {
         didSet {
-            self.tintColor = isHighlighted ? selectedTintcolor : unselectedTintColor
+            self.tintColor = isHighlighted ? selectedTintColor : unselectedTintColor
             self.imageView?.tintColor = self.tintColor
         }
     }
@@ -199,7 +196,7 @@ extension ToolbarButton: Themeable {
             log.error("Unable to apply unknown theme \(themeName)")
             return
         }
-        selectedTintcolor = theme.highlightButtonColor
+        selectedTintColor = theme.highlightButtonColor
         disabledTintColor = theme.disabledButtonColor
         unselectedTintColor = theme.buttonTintColor
         self.tintColor = isEnabled ? unselectedTintColor : disabledTintColor

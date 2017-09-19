@@ -306,15 +306,6 @@ class URLBarView: UIView {
                 make.edges.equalTo(self.locationView).inset(UIEdgeInsets(top: 0, left: URLBarViewUX.LocationLeftPadding, bottom: 0, right: URLBarViewUX.LocationLeftPadding))
             }
         } else {
-            if topTabsIsShowing {
-//                tabsButton.snp.remakeConstraints { make in
-//                    make.centerY.equalTo(self.locationContainer)
-//                    make.leading.equalTo(self.snp.trailing)
-//                    make.size.equalTo(44)
-//                }
-            } else {
-                
-            }
             self.locationContainer.snp.remakeConstraints { make in
                 if self.toolbarIsShowing {
                     // If we are showing a toolbar, show the text field next to the forward button
@@ -388,7 +379,6 @@ class URLBarView: UIView {
     func updateAlphaForSubviews(_ alpha: CGFloat) {
         self.locationContainer.alpha = alpha
         self.alpha = alpha
-       // self.actionButtons.forEach { $0.alpha = alpha }
     }
 
     func updateProgressBar(_ progress: Float) {
@@ -544,7 +534,7 @@ extension URLBarView: TabToolbarProtocol {
     func updateForwardStatus(_ canGoForward: Bool) {
         forwardButton.isEnabled = canGoForward
     }
-    
+
     func updateTabCount(_ count: Int, animated: Bool = true) {
         self.tabsButton.updateTabCount(count, animated: animated)
     }

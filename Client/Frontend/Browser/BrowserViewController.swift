@@ -1573,7 +1573,6 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         
         actions.append(getOtherPanelActions())
         actions.append(getHomePanelActions(openURL: urlAction, vcDelegate: self))
-       // actions.append(getTabMenuActions(openURL: urlAction, showTabs: showTabTray))
         presentSheetWith(actions: actions, on: self, from: button)
     }
 
