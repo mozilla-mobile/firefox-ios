@@ -163,8 +163,8 @@ open class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchroniz
 
             if !self.remoteHasChanges(info) {
                 // upload local tabs if they've changed or we're in a fresh start.
-                _ = uploadOurTabs(localTabs, toServer: tabsClient)
-                return deferMaybe(completedWithStats)
+                return uploadOurTabs(localTabs, toServer: tabsClient)
+                    >>> { deferMaybe(self.completedWithStats) }
             }
 
             return tabsClient.getSince(self.lastFetched)
