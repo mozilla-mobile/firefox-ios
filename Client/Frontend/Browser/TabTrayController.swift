@@ -697,7 +697,7 @@ extension TabTrayController: PhotonActionSheetProtocol {
         controller.addAction(UIAlertAction(title: Strings.AppMenuCloseAllTabsTitleString, style: .default, handler: { _ in self.closeTabsForCurrentTray() }))
         controller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment:"Label for Cancel button"), style: .cancel, handler: nil))
         controller.popoverPresentationController?.sourceView = sender
-        controller.popoverPresentationController?.sourceRect = sender.frame
+        controller.popoverPresentationController?.sourceRect = sender.bounds
         present(controller, animated: true, completion: nil)
     }
 }
