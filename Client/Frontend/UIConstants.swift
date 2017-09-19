@@ -75,7 +75,7 @@ public struct UIConstants {
     static let DestructiveRed = UIColor(red: 255/255, green: 64/255, blue: 0/255, alpha: 1.0)
     static let BorderColor = UIColor.darkGray
     static let BackgroundColor = AppBackgroundColor
-    static let LivemarkFolderColor = UIColor(red:178/255, green:178/255, blue:178/255, alpha:100/255)
+    static let LivemarkFolderColor = UIColor(red:178/255, green:178/255, blue:178/255, alpha:1.0)
 
     // These colours are used on the Menu
     static let MenuToolbarBackgroundColorNormal = AppBackgroundColor
