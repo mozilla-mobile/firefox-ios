@@ -10,6 +10,26 @@ import Leanplum
 private let LeanplumEnvironmentKey = "LeanplumEnvironment"
 private let LeanplumAppIdKey = "LeanplumAppId"
 private let LeanplumKeyKey = "LeanplumKey"
+private let applicationDidRequestUserNotificationPermissionPrefKey = "applicationDidRequestUserNotificationPermissionPrefKey"
+
+// FxA Custom Leanplum message template for A/B testing
+// push notifications.
+let LpmtFxAPrePush = "FxA Prepush v1"
+let LpmtArgAcceptAction = "Accept action"
+let LpmtArgCancelAction = "Cancel action"
+let LpmtArgTitleText = "Title.Text"
+let LpmtArgTitleColor = "Title.Color"
+let LpmtArgMessageText = "Message.Text"
+let LpmtArgMessageColor = "Message.Color"
+let LpmtArgAcceptButtonText = "Accept button.Text"
+let LpmtArgCancelButtonText = "Cancel button.Text"
+let LpmtArgCancelButtonTextColor = "Cancel button.Text color"
+
+// These defaults are overridden though Leanplum webUI
+let LpmtDefaultAskToAskTitle = NSLocalizedString("Firefox Sync Requires Push", comment: "Default push to ask title")
+let LpmtDefaultAskToAskMessage = NSLocalizedString("Firefox will stay in sync faster with Push Notifications enabled.", comment: "Default push to ask message")
+let LpmtDefaultOkButtonText = NSLocalizedString("Enable Push", comment: "Default push alert ok button text")
+let LpmtDefaultLaterButtonText = NSLocalizedString("Don't Enable", comment: "Default push alert cancel button text")
 
 private let log = Logger.browserLogger
 
@@ -137,6 +157,8 @@ class LeanplumIntegration {
         userAttributesDict[UserAttributeKeyName.pocketInstalled.rawValue] = !canInstallPocket()
         userAttributesDict[UserAttributeKeyName.signedInSync.rawValue] = profile?.hasAccount()
 
+        self.setupCustomTemplates()
+        
         Leanplum.start(withUserId: nil, userAttributes: userAttributesDict, responseHandler: { _ in
             self.track(eventName: LeanplumEventName.openedApp)
 
@@ -245,5 +267,79 @@ class LeanplumIntegration {
             return nil
         }
         return LeanplumSettings(environment: environment, appId: appId, key: key)
+    }
+    
+    // This must be called before `Leanplum.start` in order to correctly setup
+    // custom message templates.
+    private func setupCustomTemplates() {
+        // These properties are exposed through the Leanplum web interface.
+        // Ref: https://github.com/Leanplum/Leanplum-iOS-Samples/blob/master/iOS_customMessageTemplates/iOS_customMessageTemplates/LPMessageTemplates.m
+        let args: [LPActionArg] = [
+            LPActionArg(named: LpmtArgTitleText, with: LpmtDefaultAskToAskTitle),
+            LPActionArg(named: LpmtArgTitleColor, with: UIColor.black),
+            LPActionArg(named: LpmtArgMessageText, with: LpmtDefaultAskToAskMessage),
+            LPActionArg(named: LpmtArgMessageColor, with: UIColor.black),
+            LPActionArg(named: LpmtArgAcceptButtonText, with: LpmtDefaultOkButtonText),
+            LPActionArg(named: LpmtArgCancelAction, withAction: nil),
+            LPActionArg(named: LpmtArgCancelButtonText, with: LpmtDefaultLaterButtonText),
+            LPActionArg(named: LpmtArgCancelButtonTextColor, with: UIColor.gray)
+        ]
+        
+        let responder: LeanplumActionBlock = { (context) -> Bool in
+            guard let context = context else {
+                return false
+            }
+            
+            // Don't display permission screen if they have already allowed/disabled push permissions
+            if self.profile?.prefs.boolForKey(applicationDidRequestUserNotificationPermissionPrefKey) ?? false {
+                FxALoginHelper.sharedInstance.readyForSyncing()
+                return false
+            }
+            
+            // Present Alert View onto the current top view controller
+            let rootViewController = UIApplication.topViewController()
+            let title = NSLocalizedString(context.stringNamed(LpmtArgTitleText), comment: "")
+            let message = NSLocalizedString(context.stringNamed(LpmtArgMessageText), comment: "")
+            let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            
+            let cancelText = NSLocalizedString(context.stringNamed(LpmtArgCancelButtonText), comment: "")
+            alert.addAction(UIAlertAction(title: cancelText, style: .cancel, handler: { (action) -> Void in
+                // Log cancel event and call ready for syncing
+                context.runTrackedActionNamed(LpmtArgCancelAction)
+                FxALoginHelper.sharedInstance.readyForSyncing()
+            }))
+            
+            let acceptText = NSLocalizedString(context.stringNamed(LpmtArgAcceptButtonText), comment: "")
+            alert.addAction(UIAlertAction(title: acceptText, style: .default, handler: { (action) -> Void in
+                // Log accept event and present push permission modal
+                context.runTrackedActionNamed(LpmtArgAcceptAction)
+                FxALoginHelper.sharedInstance.requestUserNotifications(UIApplication.shared)
+                self.profile?.prefs.setBool(true, forKey: applicationDidRequestUserNotificationPermissionPrefKey)
+            }))
+            
+            rootViewController?.present(alert, animated: true, completion: nil)
+            return true
+        }
+        
+        // Register or update the custom Leanplum message
+        Leanplum.defineAction(LpmtFxAPrePush, of: kLeanplumActionKindMessage, withArguments: args, withOptions: [:], withResponder: responder)
+    }
+}
+
+extension UIApplication {
+    // Extension to get the current top most view controller
+    class func topViewController(base: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
+        if let nav = base as? UINavigationController {
+            return topViewController(base: nav.visibleViewController)
+        }
+        if let tab = base as? UITabBarController {
+            if let selected = tab.selectedViewController {
+                return topViewController(base: selected)
+            }
+        }
+        if let presented = base?.presentedViewController {
+            return topViewController(base: presented)
+        }
+        return base
     }
 }
