@@ -509,7 +509,11 @@ fileprivate class LivemarkTableViewCell: BookmarkFolderTableViewCell {
         textLabel?.backgroundColor = UIColor.clear
         textLabel?.tintColor = BookmarksPanelUX.BookmarkFolderTextColor
         
-        imageView?.image = UIImage(named: "bookmarkFolder") // TODO: Should be the Livemark icon from the desktop app?
+        if let image = UIImage.templateImageNamed("livemarkFolder") {
+            imageView?.image = image
+            imageView?.tintColor = UIConstants.LivemarkFolderColor
+        }
+    
         accessoryType = UITableViewCellAccessoryType.disclosureIndicator
         separatorInset = UIEdgeInsets.zero
     }
