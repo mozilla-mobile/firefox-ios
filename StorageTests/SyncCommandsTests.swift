@@ -80,12 +80,10 @@ class SyncCommandsTests: XCTestCase {
             XCTAssertTrue($0.isSuccess)
             XCTAssertEqual(3, $0.successValue!)
 
-            var error2: NSError? = nil
-            let commandCursor = self.db.withConnection(&error2) { (connection, err) -> Cursor<Int> in
+            let commandCursor = try! self.db.withConnection { connection -> Cursor<Int> in
                 let select = "SELECT COUNT(*) FROM \(TableSyncCommands)"
                 return connection.executeQuery(select, factory: IntFactory, withArgs: nil)
             }
-            XCTAssertNil(error2)
             XCTAssertNotNil(commandCursor[0])
             XCTAssertEqual(3, commandCursor[0]!)
             e.fulfill()
@@ -102,12 +100,11 @@ class SyncCommandsTests: XCTestCase {
             XCTAssertTrue($0.isSuccess)
             XCTAssertEqual(3, $0.successValue!)
 
-            var error: NSError? = nil
-            let commandCursor = self.db.withConnection(&error) { (connection, err) -> Cursor<Int> in
+            let commandCursor = try! self.db.withConnection { connection -> Cursor<Int> in
                 let select = "SELECT COUNT(*) FROM \(TableSyncCommands)"
                 return connection.executeQuery(select, factory: IntFactory, withArgs: nil)
             }
-            XCTAssertNil(error)
+
             XCTAssertNotNil(commandCursor[0])
             XCTAssertEqual(3, commandCursor[0]!)
             e.fulfill()
@@ -124,12 +121,11 @@ class SyncCommandsTests: XCTestCase {
             XCTAssertTrue($0.isSuccess)
             XCTAssertEqual(12, $0.successValue!)
 
-            var error: NSError? = nil
-            let commandCursor = self.db.withConnection(&error) { (connection, err) -> Cursor<Int> in
+            let commandCursor = try! self.db.withConnection { connection -> Cursor<Int> in
                 let select = "SELECT COUNT(*) FROM \(TableSyncCommands)"
                 return connection.executeQuery(select, factory: IntFactory, withArgs: nil)
             }
-            XCTAssertNil(error)
+
             XCTAssertNotNil(commandCursor[0])
             XCTAssertEqual(12, commandCursor[0]!)
             e.fulfill()
@@ -176,22 +172,21 @@ class SyncCommandsTests: XCTestCase {
             XCTAssertTrue(result.isSuccess)
             a.fulfill()
 
-            var error: NSError? = nil
-            let commandCursor = self.db.withConnection(&error) { (connection, err) -> Cursor<Int> in
+            let commandCursor = try! self.db.withConnection { connection -> Cursor<Int> in
                 let select = "SELECT COUNT(*) FROM \(TableSyncCommands) WHERE client_guid = '\(client.guid!)'"
                 return connection.executeQuery(select, factory: IntFactory, withArgs: nil)
             }
-            XCTAssertNil(error)
+
             XCTAssertNotNil(commandCursor[0])
             XCTAssertEqual(0, commandCursor[0]!)
             b.fulfill()
 
             client = self.clients[1]
-            let commandCursor2 = self.db.withConnection(&error) { (connection, err) -> Cursor<Int> in
+            let commandCursor2 = try! self.db.withConnection { connection -> Cursor<Int> in
                 let select = "SELECT COUNT(*) FROM \(TableSyncCommands) WHERE client_guid = '\(client.guid!)'"
                 return connection.executeQuery(select, factory: IntFactory, withArgs: nil)
             }
-            XCTAssertNil(error)
+
             XCTAssertNotNil(commandCursor2[0])
             XCTAssertEqual(4, commandCursor2[0]!)
             c.fulfill()

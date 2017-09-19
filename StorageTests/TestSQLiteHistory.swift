@@ -954,26 +954,30 @@ class TestSQLiteHistory: XCTestCase {
         let history = SQLiteHistory(db: db, prefs: prefs)
 
         let site = Site(url: "http://www.example.com/test1.1", title: "title one")
-        var err: NSError? = nil
 
         // Insert something with an invalid domain ID. We have to manually do this since domains are usually hidden.
-        let _ = db.withConnection(&err, callback: { (connection, err) -> Int in
-            let insert = "INSERT INTO \(TableHistory) (guid, url, title, local_modified, is_deleted, should_upload, domain_id) " +
-                         "?, ?, ?, ?, ?, ?, ?"
+        let _ = try! db.withConnection { connection -> Int in
+            if let err = connection.executeChange("PRAGMA foreign_keys = OFF") {
+                XCTFail(err.localizedDescription)
+            }
+            
+            let insert = "INSERT INTO \(TableHistory) (guid, url, title, local_modified, is_deleted, should_upload, domain_id) VALUES (?, ?, ?, ?, ?, ?, ?)"
             let args: Args = [Bytes.generateGUID(), site.url, site.title, Date.now(), 0, 0, -1]
-            err = connection.executeChange(insert, withArgs: args)
+            if let err = connection.executeChange(insert, withArgs: args) {
+                XCTFail(err.localizedDescription)
+            }
             return 0
-        })
+        }
 
         // Now insert it again. This should update the domain
         history.addLocalVisit(SiteVisit(site: site, date: Date.nowMicroseconds(), type: VisitType.link)).succeeded()
 
         // DomainID isn't normally exposed, so we manually query to get it
-        let results = db.withConnection(&err, callback: { (connection, err) -> Cursor<Int> in
+        let results = try! db.withConnection { connection -> Cursor<Int> in
             let sql = "SELECT domain_id FROM \(TableHistory) WHERE url = ?"
             let args: Args = [site.url]
             return connection.executeQuery(sql, factory: IntFactory, withArgs: args)
-        })
+        }
         XCTAssertNotEqual(results[0]!, -1, "Domain id was updated")
     }
 

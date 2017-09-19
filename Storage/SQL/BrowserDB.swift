@@ -36,41 +36,41 @@ open class BrowserDB {
     // instance has been initialized (schema is created/updated).
     public func touch() -> Success {
         let deferred = Success()
-        var err: NSError? = nil
-        withConnection(&err) { connection, error -> Void in
-            guard let _ = connection as? ConcreteSQLiteDBConnection else {
-                deferred.fill(Maybe(failure: DatabaseError(description: "Could not establish a database connection")))
-                return
-            }
 
-            deferred.fill(Maybe(success: ()))
+        do {
+            try withConnection { connection -> Void in
+                guard let _ = connection as? ConcreteSQLiteDBConnection else {
+                    throw DatabaseError(description: "Could not establish a database connection")
+                }
+
+                deferred.fill(Maybe(success: ()))
+            }
+        } catch let err as NSError {
+            deferred.fill(Maybe(failure: err))
         }
 
         return deferred
     }
 
-    func withConnection<T>(flags: SwiftData.Flags, err: inout NSError?, callback: @escaping (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> T) -> T {
+    @discardableResult func withConnection<T>(flags: SwiftData.Flags = .readWriteCreate, _ callback: @escaping (_ connection: SQLiteDBConnection) throws -> T) throws -> T {
         var res: T!
-        err = db.withConnection(flags) { connection in
-            // An error may occur if the internet connection is dropped.
-            var err: NSError? = nil
-            res = callback(connection, &err)
-            return err
+
+        if let err = db.withConnection(flags, cb: { connection -> NSError? in
+            do {
+                res = try callback(connection)
+            } catch let err as NSError {
+                return err
+            }
+            
+            return nil
+        }) {
+            throw err
         }
+
         return res
     }
 
-    func withConnection<T>(_ err: inout NSError?, callback: @escaping (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> T) -> T {
-        /*
-         * Opening a WAL-using database with a hot journal cannot complete in read-only mode.
-         * The supported mechanism for a read-only query against a WAL-using SQLite database is to use PRAGMA query_only,
-         * but this isn't all that useful for us, because we have a mixed read/write workload.
-         */
-        
-        return withConnection(flags: SwiftData.Flags.readWriteCreate, err: &err, callback: callback)
-    }
-
-    func transaction(synchronous: Bool=true, _ callback: @escaping (_ connection: SQLiteDBConnection) throws -> Bool) -> NSError? {
+    func transaction(synchronous: Bool = true, _ callback: @escaping (_ connection: SQLiteDBConnection) throws -> Bool) -> NSError? {
         return db.transaction(synchronous: synchronous) { connection in
             return try callback(connection)
         }

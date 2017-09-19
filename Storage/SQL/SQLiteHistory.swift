@@ -33,6 +33,26 @@ func failOrSucceed(_ err: NSError?, op: String) -> Success {
     return failOrSucceed(err, op: op, val: ())
 }
 
+func failOrSucceed<T>(op: String, _ callback: @escaping () throws -> T) -> Deferred<Maybe<T>> {
+    do {
+        let val = try callback()
+        return deferMaybe(val)
+    } catch let err as NSError {
+        log.debug("\(op) failed: \(err.localizedDescription)")
+        return deferMaybe(DatabaseError(err: err))
+    }
+}
+
+func failOrSucceed(op: String, _ callback: @escaping () throws -> Void) -> Success {
+    do {
+        try callback()
+        return succeed()
+    } catch let err as NSError {
+        log.debug("\(op) failed: \(err.localizedDescription)")
+        return deferMaybe(DatabaseError(err: err))
+    }
+}
+
 private var ignoredSchemes = ["about"]
 
 public func isIgnoredURL(_ url: URL) -> Bool {
@@ -189,26 +209,24 @@ extension SQLiteHistory: BrowserHistory {
     }
 
     func recordVisitedSite(_ site: Site) -> Success {
-        var error: NSError? = nil
-
         // Don't store visits to sites with about: protocols
         if isIgnoredURL(site.url as String) {
             return deferMaybe(IgnoredSiteError())
         }
 
-        _ = db.withConnection(&error) { (conn, _) -> Int in
-            let now = Date.now()
-
-            let i = self.updateSite(site, atTime: now, withConnection: conn)
-            if i > 0 {
-                return i
+        return failOrSucceed(op: "Record site") {
+            try self.db.withConnection { conn -> Int in
+                let now = Date.now()
+                
+                let i = self.updateSite(site, atTime: now, withConnection: conn)
+                if i > 0 {
+                    return i
+                }
+                
+                // Insert instead.
+                return self.insertSite(site, atTime: now, withConnection: conn)
             }
-
-            // Insert instead.
-            return self.insertSite(site, atTime: now, withConnection: conn)
         }
-
-        return failOrSucceed(error, op: "Record site")
     }
 
     func updateSite(_ site: Site, atTime time: Timestamp, withConnection conn: SQLiteDBConnection) -> Int {
@@ -263,23 +281,23 @@ extension SQLiteHistory: BrowserHistory {
 
     // TODO: thread siteID into this to avoid the need to do the lookup.
     func addLocalVisitForExistingSite(_ visit: SiteVisit) -> Success {
-        var error: NSError? = nil
-        _ = db.withConnection(&error) { (conn, _) -> Int in
-            // INSERT OR IGNORE because we *might* have a clock error that causes a timestamp
-            // collision with an existing visit, and it would really suck to error out for that reason.
-            let insert = "INSERT OR IGNORE INTO \(TableVisits) (siteID, date, type, is_local) VALUES (" +
-                         "(SELECT id FROM \(TableHistory) WHERE url = ?), ?, ?, 1)"
-            let realDate = visit.date
-            let insertArgs: Args? = [visit.site.url, realDate, visit.type.rawValue]
-            error = conn.executeChange(insert, withArgs: insertArgs)
-            if error != nil {
-                //log.warning("Visit insertion failed with \(err?.localizedDescription)")
-                return 0
-            }
-            return 1
-        }
+        return failOrSucceed(op: "Record visit") {
+            try self.db.withConnection { conn -> Int in
+                // INSERT OR IGNORE because we *might* have a clock error that causes a timestamp
+                // collision with an existing visit, and it would really suck to error out for that reason.
+                let insert = "INSERT OR IGNORE INTO \(TableVisits) (siteID, date, type, is_local) VALUES (" +
+                             "(SELECT id FROM \(TableHistory) WHERE url = ?), ?, ?, 1)"
+                let realDate = visit.date
+                let insertArgs: Args? = [visit.site.url, realDate, visit.type.rawValue]
 
-        return failOrSucceed(error, op: "Record visit")
+                if let err = conn.executeChange(insert, withArgs: insertArgs) {
+                    //log.warning("Visit insertion failed with \(err.localizedDescription)")
+                    throw err
+                }
+
+                return 1
+            }
+        }
     }
 
     public func addLocalVisit(_ visit: SiteVisit) -> Success {
@@ -648,17 +666,16 @@ extension SQLiteHistory: Favicons {
     }
 
     public func clearAllFavicons() -> Success {
-        var err: NSError? = nil
-
-        _ = db.withConnection(&err) { (conn, err: inout NSError?) -> Int in
-            err = conn.executeChange("DELETE FROM \(TableFaviconSites)")
-            if err == nil {
-                err = conn.executeChange("DELETE FROM \(TableFavicons)")
+        return failOrSucceed(op: "Clear favicons") {
+            try self.db.withConnection { conn in
+                if let err = conn.executeChange("DELETE FROM \(TableFaviconSites)") {
+                    throw err
+                }
+                if let err = conn.executeChange("DELETE FROM \(TableFavicons)") {
+                    throw err
+                }
             }
-            return 1
         }
-
-        return failOrSucceed(err, op: "Clear favicons")
     }
 
     public func addFavicon(_ icon: Favicon) -> Deferred<Maybe<Int>> {
@@ -674,34 +691,37 @@ extension SQLiteHistory: Favicons {
             log.verbose("Adding favicon \(icon.url) for site \(site.url).")
         }
         func doChange(_ query: String, args: Args?) -> Deferred<Maybe<Int>> {
-            var err: NSError?
-            let res = db.withConnection(&err) { (conn, err: inout NSError?) -> Int in
-                // Blind! We don't see failure here.
-                let id = self.favicons.insertOrUpdateFaviconInTransaction(icon, conn: conn)
+            do {
+                let res = try db.withConnection { conn -> Int in
+                    // Blind! We don't see failure here.
+                    let id = self.favicons.insertOrUpdateFaviconInTransaction(icon, conn: conn)
 
-                // Now set up the mapping.
-                err = conn.executeChange(query, withArgs: args)
-                if let err = err {
-                    log.error("Got error adding icon: \(err).")
-                    return 0
+                    // Now set up the mapping.
+                    if let err = conn.executeChange(query, withArgs: args) {
+                        log.error("Got error adding icon: \(err.localizedDescription).")
+                        throw err
+                    }
+
+                    // Try to update the favicon ID column in each bookmarks table. There can be
+                    // multiple bookmarks with a particular URI, and a mirror bookmark can be
+                    // locally changed, so either or both of these statements can update multiple rows.
+                    if let id = id {
+                        icon.id = id
+
+                        _ = conn.executeChange("UPDATE \(TableBookmarksLocal) SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
+                        _ = conn.executeChange("UPDATE \(TableBookmarksMirror) SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
+                    }
+
+                    return id ?? 0
                 }
-
-                // Try to update the favicon ID column in each bookmarks table. There can be
-                // multiple bookmarks with a particular URI, and a mirror bookmark can be
-                // locally changed, so either or both of these statements can update multiple rows.
-                if let id = id {
-                    icon.id = id
-
-                    _ = conn.executeChange("UPDATE \(TableBookmarksLocal) SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
-                    _ = conn.executeChange("UPDATE \(TableBookmarksMirror) SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
+                
+                if res == 0 {
+                    return deferMaybe(DatabaseError(err: nil))
                 }
-
-                return id ?? 0
-            }
-
-            if res == 0 {
+            } catch let err as NSError {
                 return deferMaybe(DatabaseError(err: err))
             }
+
             return deferMaybe(icon.id ?? 0)
         }
 
