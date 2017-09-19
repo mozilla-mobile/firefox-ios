@@ -59,7 +59,6 @@ class CompactModeUITests: BaseTestCase {
             //Open the array of urls in 6 different tabs
             loadWebPage(urls[0])
             for i in 1..<urls.count {
-                //openNewTab()
                 navigator.createNewTab()
                 loadWebPage(urls[i])
             }
@@ -74,6 +73,7 @@ class CompactModeUITests: BaseTestCase {
             
             // Go to one of the tabs to access menu
             app.collectionViews.cells["Google"].tap()
+            navigator.nowAt(BrowserTab)
             
             //CollectionView visible cells count should be less than or equal to 4
             compactModeOff()
@@ -84,7 +84,8 @@ class CompactModeUITests: BaseTestCase {
             
             // Go to one of the tabs to access menu
             app.collectionViews.cells["Google"].tap()
-
+            navigator.nowAt(BrowserTab)
+            
             //CollectionView visible cells count should be 6
             compactModeOn()
             navigator.goto(TabTray)
