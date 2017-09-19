@@ -203,6 +203,7 @@ class BrowserViewController: UIViewController {
             toolbar?.tabToolbarDelegate = self
             let theme = (tabManager.selectedTab?.isPrivate ?? false) ? Theme.PrivateMode : Theme.NormalMode
             toolbar?.applyTheme(theme)
+            updateTabCountUsingTabManager(self.tabManager)
         }
         
         if showTopTabs {
@@ -854,21 +855,6 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    fileprivate func animateBookmarkStar() {
-        let offset: CGFloat
-        let button: UIButton!
-
-        if let toolbar: TabToolbar = self.toolbar {
-            offset = BrowserViewControllerUX.BookmarkStarAnimationOffset * -1
-            button = toolbar.bookmarkButton
-        } else {
-            offset = BrowserViewControllerUX.BookmarkStarAnimationOffset
-            button = self.urlBar.bookmarkButton
-        }
-
-        JumpAndSpinAnimator.animateFromView(button.imageView ?? button, offset: offset, completion: nil)
-    }
-
     func SELBookmarkStatusDidChange(_ notification: Notification) {
         if let bookmark = notification.object as? BookmarkItem {
             if bookmark.url == urlBar.currentURL?.absoluteString {
@@ -1326,6 +1312,27 @@ extension BrowserViewController: URLBarDelegate {
         let controller = UINavigationController(rootViewController: qrCodeViewController)
         self.present(controller, animated: true, completion: nil)
     }
+
+    func urlBarDidPressPageOptions(_ urlBar: URLBarView, from button: UIButton) {
+        
+        let actionMenuPresenter: (URL, Tab, UIView, UIPopoverArrowDirection) -> Void  = { (url, tab, view, direction) in
+            self.presentActivityViewController(url, tab: tab, sourceView: view, sourceRect: view.frame, arrowDirection: .up)
+        }
+        
+        let findInPageAction = {
+            self.updateFindInPageVisibility(visible: true)
+        }
+        
+        guard let tab = self.tabManager.selectedTab, tab.url != nil else { return }
+        
+        // The logic of which actions appear when isnt final.
+        let pageActions = self.getTabActions(tab: tab,
+                                             buttonView: button,
+                                             presentShareMenu: actionMenuPresenter,
+                                             findInPage: findInPageAction,
+                                             presentableVC: self)
+        self.presentSheetWith(actions: pageActions, on: self, from: button)
+    }
     
     func urlBarDidPressStop(_ urlBar: URLBarView) {
         tabManager.selectedTab?.stop()
@@ -1566,31 +1573,12 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         
         actions.append(getOtherPanelActions())
         actions.append(getHomePanelActions(openURL: urlAction, vcDelegate: self))
-        actions.append(getTabMenuActions(openURL: urlAction, showTabs: showTabTray))
+       // actions.append(getTabMenuActions(openURL: urlAction, showTabs: showTabTray))
         presentSheetWith(actions: actions, on: self, from: button)
     }
 
-    func tabToolbarDidPressShare(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        let actionMenuPresenter: (URL, Tab, UIView, UIPopoverArrowDirection) -> Void  = { (url, tab, view, direction) in
-            self.presentActivityViewController(url, tab: tab, sourceView: view, sourceRect: view.frame, arrowDirection: .up)
-        }
-        
-        let findInPageAction = {
-            self.updateFindInPageVisibility(visible: true)
-        }
-        
-        // The logic of which actions appear when isnt final.
-        guard let tab = self.tabManager.selectedTab, tab.url != nil else {
-            return
-        }
-        
-        // The logic of which actions appear when isnt final.
-        let pageActions = self.getTabActions(tab: tab,
-                                             buttonView: button,
-                                             presentShareMenu: actionMenuPresenter,
-                                             findInPage: findInPageAction,
-                                             presentableVC: self)
-        self.presentSheetWith(actions: pageActions, on: self, from: button)
+    func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        showTabTray()
     }
 
     func showBackForwardList() {
@@ -2039,7 +2027,7 @@ extension BrowserViewController: TabManagerDelegate {
     fileprivate func updateTabCountUsingTabManager(_ tabManager: TabManager, animated: Bool = true) {
         if let selectedTab = tabManager.selectedTab {
             let count = selectedTab.isPrivate ? tabManager.privateTabs.count : tabManager.normalTabs.count
-            urlBar.updateTabCount(max(count, 1), animated: !urlBar.inOverlayMode)
+            toolbar?.updateTabCount(max(count, 1), animated: !urlBar.inOverlayMode)
             topTabsViewController?.updateTabCount(max(count, 1), animated: animated)
         }
     }
@@ -2177,7 +2165,8 @@ extension BrowserViewController: WKUIDelegate {
         }
         
         if openInHelper.openInView == nil {
-            openInHelper.openInView = navigationToolbar.shareButton
+            //TODO this needs to be something
+            // openInHelper.openInView = navigationToolbar.shareButton
         }
 
         openInHelper.open()

@@ -42,7 +42,7 @@ struct TabsButtonUX {
     }()
 }
 
-class TabsButton: UIControl {
+class TabsButton: UIButton {
     fileprivate var theme: Theme = TabsButtonUX.Themes[Theme.NormalMode]!
     
     override var isHighlighted: Bool {
@@ -65,7 +65,7 @@ class TabsButton: UIControl {
         }
     }
 
-    lazy var titleLabel: UILabel = {
+    lazy var countLabel: UILabel = {
         let label = UILabel()
         label.font = TabsButtonUX.TitleFont
         label.layer.cornerRadius = TabsButtonUX.CornerRadius
@@ -103,7 +103,7 @@ class TabsButton: UIControl {
         super.init(frame: frame)
         insideButton.addSubview(labelBackground)
         insideButton.addSubview(borderView)
-        insideButton.addSubview(titleLabel)
+        insideButton.addSubview(countLabel)
         addSubview(insideButton)
         isAccessibilityElement = true
         accessibilityTraits |= UIAccessibilityTraitButton
@@ -117,11 +117,12 @@ class TabsButton: UIControl {
         borderView.snp.remakeConstraints { (make) -> Void in
             make.edges.equalTo(insideButton)
         }
-        titleLabel.snp.remakeConstraints { (make) -> Void in
+        countLabel.snp.remakeConstraints { (make) -> Void in
             make.edges.equalTo(insideButton)
         }
         insideButton.snp.remakeConstraints { (make) -> Void in
-            make.edges.equalTo(self).inset(TabsButtonUX.TitleInsets)
+            make.size.equalTo(24)
+            make.center.equalTo(self)
         }
     }
 
@@ -133,14 +134,14 @@ class TabsButton: UIControl {
         let button = TabsButton()
 
         button.accessibilityLabel = accessibilityLabel
-        button.titleLabel.text = titleLabel.text
+        button.countLabel.text = countLabel.text
 
         button.theme = theme
 
         // Copy all of the styable properties over to the new TabsButton
-        button.titleLabel.font = titleLabel.font
-        button.titleLabel.textColor = titleLabel.textColor
-        button.titleLabel.layer.cornerRadius = titleLabel.layer.cornerRadius
+        button.countLabel.font = countLabel.font
+        button.countLabel.textColor = countLabel.textColor
+        button.countLabel.layer.cornerRadius = countLabel.layer.cornerRadius
 
         button.labelBackground.backgroundColor = labelBackground.backgroundColor
         button.labelBackground.layer.cornerRadius = labelBackground.layer.cornerRadius
@@ -153,11 +154,14 @@ class TabsButton: UIControl {
     }
     
     func updateTabCount(_ count: Int, animated: Bool = true) {
-        let currentCount = self.titleLabel.text
+        let currentCount = self.countLabel.text
         let infinity = "\u{221E}"
         let countToBe = (count < 100) ? count.description : infinity
+        self.countLabel.text = countToBe
+        // Not using the animation.
+        return
         // only animate a tab count change if the tab count has actually changed
-        if currentCount != count.description || (clonedTabsButton?.titleLabel.text ?? count.description) != count.description {
+        if currentCount != count.description || (clonedTabsButton?.countLabel.text ?? count.description) != count.description {
             if let _ = self.clonedTabsButton {
                 self.clonedTabsButton?.layer.removeAllAnimations()
                 self.clonedTabsButton?.removeFromSuperview()
@@ -168,9 +172,9 @@ class TabsButton: UIControl {
             let newTabsButton = clone() as! TabsButton
             self.clonedTabsButton = newTabsButton
             newTabsButton.addTarget(self, action: #selector(TabsButton.cloneDidClickTabs), for: UIControlEvents.touchUpInside)
-            newTabsButton.titleLabel.text = countToBe
+            newTabsButton.countLabel.text = countToBe
             newTabsButton.accessibilityValue = countToBe
-            superview?.addSubview(newTabsButton)
+          //  superview?.addSubview(newTabsButton)
             newTabsButton.snp.makeConstraints { make in
                 make.centerY.equalTo(self)
                 make.trailing.equalTo(self)
@@ -208,7 +212,7 @@ class TabsButton: UIControl {
                 self.insideButton.layer.opacity = 1
                 self.insideButton.layer.transform = CATransform3DIdentity
                 self.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility label for the tabs button in the (top) tab toolbar")
-                self.titleLabel.text = countToBe
+                self.countLabel.text = countToBe
                 self.accessibilityValue = countToBe
             }
             
@@ -245,8 +249,8 @@ extension TabsButton {
     }
 
     dynamic var textColor: UIColor? {
-        get { return titleLabel.textColor }
-        set { titleLabel.textColor = newValue }
+        get { return countLabel.textColor }
+        set { countLabel.textColor = newValue }
     }
 
     dynamic var titleBackgroundColor: UIColor? {
