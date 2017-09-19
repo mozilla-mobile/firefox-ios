@@ -91,9 +91,22 @@ class DisconnectSetting: WithAccountSetting {
 class SyncNowSetting: WithAccountSetting {
     static let NotificationUserInitiatedSyncManually = "NotificationUserInitiatedSyncManually"
     let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
+    let syncIconWrapper = UIImage.createWithColor(CGSize(width: 30, height: 30), color: UIColor.clear)
+    let syncBlueIcon = UIImage(named: "FxA-Sync-Blue")?.createScaled(CGSize(width: 20, height: 20))
+    let syncIcon = UIImage(named: "FxA-Sync")?.createScaled(CGSize(width: 20, height: 20))
     
     // Animation used to rotate the Sync icon 360 degrees while syncing is in progress.
     let continuousRotateAnimation = CABasicAnimation(keyPath: "transform.rotation")
+    
+    override init(settings: SettingsTableViewController) {
+        super.init(settings: settings)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(SyncNowSetting.stopRotateSyncIcon), name: NotificationProfileDidFinishSyncing, object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
+    }
     
     fileprivate lazy var timestampFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -122,13 +135,17 @@ class SyncNowSetting: WithAccountSetting {
     }
 
     fileprivate let syncingTitle = NSAttributedString(string: Strings.SyncingMessageWithEllipsis, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowSyncTextColor, NSFontAttributeName: UIFont.systemFont(ofSize: DynamicFontHelper.defaultHelper.DefaultStandardFontSize, weight: UIFontWeightRegular)])
-    
+
     func startRotateSyncIcon() {
-        imageView.layer.add(continuousRotateAnimation, forKey: nil)
+        DispatchQueue.main.async {
+            self.imageView.layer.add(self.continuousRotateAnimation, forKey: "rotateKey")
+        }
     }
     
     func stopRotateSyncIcon() {
-        self.imageView.layer.removeAllAnimations()
+        DispatchQueue.main.async {
+            self.imageView.layer.removeAllAnimations()
+        }
     }
 
     override var accessoryType: UITableViewCellAccessoryType { return .none }
@@ -140,18 +157,15 @@ class SyncNowSetting: WithAccountSetting {
             return nil
         }
         
-        let image = UIImage(named: "FxA-Sync")?.createScaled(CGSize(width: 20, height: 20))
         guard let syncStatus = profile.syncManager.syncDisplayState else {
-            return image
+            return syncIcon
         }
         
         switch syncStatus {
         case .inProgress:
-            self.startRotateSyncIcon()
-            return UIImage(named: "FxA-Sync-Blue")?.createScaled(CGSize(width: 20, height: 20))
+            return syncBlueIcon
         default:
-            self.stopRotateSyncIcon()
-            return image
+            return syncIcon
         }
     }
 
@@ -271,8 +285,19 @@ class SyncNowSetting: WithAccountSetting {
             // dimensions and color, then the scaled sync icon is added as a subview.
             imageView.contentMode = .center
             imageView.image = image
-            cell.imageView?.image = UIImage.createWithColor(CGSize(width: 30, height: 30), color: UIColor.clear)
+            
+            cell.imageView?.subviews.forEach({ $0.removeFromSuperview() })
+            cell.imageView?.image = syncIconWrapper
             cell.imageView?.addSubview(imageView)
+            
+            if let syncStatus = profile.syncManager.syncDisplayState {
+                switch syncStatus {
+                case .inProgress:
+                    self.startRotateSyncIcon()
+                default:
+                    self.stopRotateSyncIcon()
+                }
+            }
         }
     }
 
@@ -426,6 +451,7 @@ class AccountStatusSetting: WithAccountSetting {
         super.onConfigureCell(cell)
         
         if AppConstants.MOZ_SHOW_FXA_AVATAR {
+            cell.imageView?.subviews.forEach({ $0.removeFromSuperview() })
             cell.imageView?.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
             cell.imageView?.layer.cornerRadius = (cell.imageView?.frame.height)! / 2
             cell.imageView?.layer.masksToBounds = true
