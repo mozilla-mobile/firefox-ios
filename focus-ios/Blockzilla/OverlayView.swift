@@ -18,7 +18,7 @@ class OverlayView: UIView {
     private let searchBorder = UIView()
     private var presented = false
     private var searchQuery = ""
-    private let copyButton = InsetButton()
+    private let copyButton = UIButton()
     private let copyBorder = UIView()
 
     init() {
@@ -46,10 +46,15 @@ class OverlayView: UIView {
             make.height.equalTo(1)
         }
         
-        copyButton.setImage(#imageLiteral(resourceName: "icon_paste"), for: .normal)
-        copyButton.setImage(#imageLiteral(resourceName: "icon_paste"), for: .highlighted)
         copyButton.titleLabel?.font = UIConstants.fonts.copyButton
-        setUpOverlayButton(button: copyButton)
+        let padding = UIConstants.layout.searchButtonInset
+        copyButton.titleEdgeInsets = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
+        copyButton.titleLabel?.lineBreakMode = .byTruncatingTail
+        if UIView.userInterfaceLayoutDirection(for: copyButton.semanticContentAttribute) == .rightToLeft {
+            copyButton.contentHorizontalAlignment = .right
+        } else {
+            copyButton.contentHorizontalAlignment = .left
+        }
         copyButton.addTarget(self, action: #selector(didPressCopy), for: .touchUpInside)
         addSubview(copyButton)
         
@@ -104,29 +109,30 @@ class OverlayView: UIView {
     func setSearchQuery(query: String, animated: Bool) {
         searchQuery = query
         let query = query.trimmingCharacters(in: .whitespaces)
-        
-        if false, let pasteBoard = UIPasteboard.general.string {
-            if let pasteURL = URL(string: pasteBoard), pasteURL.isWebPage() {
-                let attributedURL = NSAttributedString(string: pasteURL.absoluteString, attributes: [NSAttributedStringKey.foregroundColor: UIColor.white])
-                    copyButton.setAttributedTitle(attributedURL, for: .normal)
-            }
-            else {
-                setAttributedButtonTitle(phrase: pasteBoard, button: copyButton)
+
+        var showCopyButton = false
+
+        UIPasteboard.general.urlAsync() { handoffUrl in
+            DispatchQueue.main.async {
+                if let url = handoffUrl, url.isWebPage() {
+                    self.copyButton.setAttributedTitle(NSAttributedString(string: String(format: UIConstants.strings.linkYouCopied, url.absoluteString), attributes: [NSAttributedStringKey.foregroundColor: UIColor.white]), for: .normal)
+                    showCopyButton = url.isWebPage()
+                }
+
+                // Show or hide the search button depending on whether there's entered text.
+                if self.searchButton.isHidden != query.isEmpty {
+                    let duration = animated ? UIConstants.layout.searchButtonAnimationDuration : 0
+                    self.searchButton.animateHidden(query.isEmpty, duration: duration)
+                    self.searchBorder.animateHidden(query.isEmpty, duration: duration)
+                }
+                self.setAttributedButtonTitle(phrase: query, button: self.searchButton)
+                self.updateCopyConstraint(showCopyButton: showCopyButton)
             }
         }
-        // Show or hide the search button depending on whether there's entered text.
-        if searchButton.isHidden != query.isEmpty {
-            let duration = animated ? UIConstants.layout.searchButtonAnimationDuration : 0
-            searchButton.animateHidden(query.isEmpty, duration: duration)
-            searchBorder.animateHidden(query.isEmpty, duration: duration)
-            updateCopyConstraint()
-        }
-        setAttributedButtonTitle(phrase: query, button: searchButton)
-        updateCopyConstraint()
     }
-    fileprivate func updateCopyConstraint() {
-        return
-        if UIPasteboard.general.string != nil {
+
+    fileprivate func updateCopyConstraint(showCopyButton: Bool) {
+        if showCopyButton {
             copyButton.isHidden = false
             copyBorder.isHidden = false
             if searchButton.isHidden || searchQuery.isEmpty {
@@ -175,8 +181,8 @@ class OverlayView: UIView {
     func present() {
         setSearchQuery(query: "", animated: false)
         self.isUserInteractionEnabled = false
-        copyButton.isHidden = true
-        copyBorder.isHidden = true
+        copyButton.isHidden = false
+        copyBorder.isHidden = false
         animateHidden(false, duration: UIConstants.layout.overlayAnimationDuration) {
             self.isUserInteractionEnabled = true
         }
@@ -197,4 +203,13 @@ extension OverlayView: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {}
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {}
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {}
+}
+
+extension UIPasteboard {
+    func urlAsync(callback: @escaping (URL?) -> Void) {
+        DispatchQueue.global().async {
+            let url = URL(string: UIPasteboard.general.string ?? "")
+            callback(url)
+        }
+    }
 }
