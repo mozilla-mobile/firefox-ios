@@ -17,7 +17,7 @@ protocol TabToolbarProtocol: class {
     var forwardButton: ToolbarButton { get }
     var backButton: ToolbarButton { get }
     var stopReloadButton: ToolbarButton { get }
-    var actionButtons: [Themeable] { get }
+    var actionButtons: [Themeable & UIButton] { get }
 
     func updateBackStatus(_ canGoBack: Bool)
     func updateForwardStatus(_ canGoForward: Bool)
@@ -164,10 +164,10 @@ class ToolbarButton: UIButton {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.adjustsImageWhenHighlighted = false
-        self.selectedTintColor = self.tintColor
-        self.unselectedTintColor = self.tintColor
-        self.disabledTintColor = UIColor.gray
+        adjustsImageWhenHighlighted = false
+        selectedTintColor = tintColor
+        unselectedTintColor = tintColor
+        disabledTintColor = UIColor.gray
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -199,8 +199,8 @@ extension ToolbarButton: Themeable {
         selectedTintColor = theme.highlightButtonColor
         disabledTintColor = theme.disabledButtonColor
         unselectedTintColor = theme.buttonTintColor
-        self.tintColor = isEnabled ? unselectedTintColor : disabledTintColor
-        self.imageView?.tintColor = self.tintColor
+        tintColor = isEnabled ? unselectedTintColor : disabledTintColor
+        imageView?.tintColor = tintColor
     }
 }
 
@@ -212,7 +212,7 @@ class TabToolbar: Toolbar, TabToolbarProtocol {
     let forwardButton: ToolbarButton
     let backButton: ToolbarButton
     let stopReloadButton: ToolbarButton
-    let actionButtons: [Themeable]
+    let actionButtons: [Themeable & UIButton]
 
     var helper: TabToolbarHelper?
 
@@ -246,9 +246,8 @@ class TabToolbar: Toolbar, TabToolbarProtocol {
 
         super.init(frame: frame)
 
-        self.helper = TabToolbarHelper(toolbar: self)
-
-        addButtons(backButton, forwardButton, stopReloadButton, tabsButton, menuButton)
+        helper = TabToolbarHelper(toolbar: self)
+        addButtons(actionButtons)
 
         accessibilityNavigationStyle = .combined
         accessibilityLabel = NSLocalizedString("Navigation Toolbar", comment: "Accessibility label for the navigation toolbar displayed at the bottom of the screen.")
@@ -299,7 +298,7 @@ extension TabToolbar: Themeable {
             log.error("Unable to apply unknown theme \(themeName)")
             return
         }
-        self.backgroundColor = theme.backgroundColor!
-        self.helper?.setTheme(theme: themeName, forButtons: self.actionButtons)
+        backgroundColor = theme.backgroundColor!
+        helper?.setTheme(theme: themeName, forButtons: actionButtons)
     }
 }

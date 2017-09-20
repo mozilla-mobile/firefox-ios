@@ -1315,7 +1315,7 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidPressPageOptions(_ urlBar: URLBarView, from button: UIButton) {
         
-        let actionMenuPresenter: (URL, Tab, UIView, UIPopoverArrowDirection) -> Void  = { (url, tab, view, direction) in
+        let actionMenuPresenter: (URL, Tab, UIView, UIPopoverArrowDirection) -> Void  = { (url, tab, view, _) in
             self.presentActivityViewController(url, tab: tab, sourceView: view, sourceRect: view.frame, arrowDirection: .up)
         }
         
@@ -1323,15 +1323,12 @@ extension BrowserViewController: URLBarDelegate {
             self.updateFindInPageVisibility(visible: true)
         }
         
-        guard let tab = self.tabManager.selectedTab, tab.url != nil else { return }
+        guard let tab = tabManager.selectedTab, tab.url != nil else { return }
         
         // The logic of which actions appear when isnt final.
-        let pageActions = self.getTabActions(tab: tab,
-                                             buttonView: button,
-                                             presentShareMenu: actionMenuPresenter,
-                                             findInPage: findInPageAction,
-                                             presentableVC: self)
-        self.presentSheetWith(actions: pageActions, on: self, from: button)
+        let pageActions = getTabActions(tab: tab, buttonView: button, presentShareMenu: actionMenuPresenter,
+                                        findInPage: findInPageAction, presentableVC: self)
+        presentSheetWith(actions: pageActions, on: self, from: button)
     }
     
     func urlBarDidPressStop(_ urlBar: URLBarView) {
@@ -2026,9 +2023,9 @@ extension BrowserViewController: TabManagerDelegate {
     fileprivate func updateTabCountUsingTabManager(_ tabManager: TabManager, animated: Bool = true) {
         if let selectedTab = tabManager.selectedTab {
             let count = selectedTab.isPrivate ? tabManager.privateTabs.count : tabManager.normalTabs.count
-            toolbar?.updateTabCount(max(count, 1), animated: animated)
-            urlBar.updateTabCount(max(count, 1), animated: !urlBar.inOverlayMode)
-            topTabsViewController?.updateTabCount(max(count, 1), animated: animated)
+            toolbar?.updateTabCount(count, animated: animated)
+            urlBar.updateTabCount(count, animated: !urlBar.inOverlayMode)
+            topTabsViewController?.updateTabCount(count, animated: animated)
         }
     }
 }
@@ -2165,8 +2162,7 @@ extension BrowserViewController: WKUIDelegate {
         }
         
         if openInHelper.openInView == nil {
-            //TODO this needs to be something
-            // openInHelper.openInView = navigationToolbar.shareButton
+             openInHelper.openInView = navigationToolbar.menuButton
         }
 
         openInHelper.open()

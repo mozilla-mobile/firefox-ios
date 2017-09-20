@@ -187,7 +187,7 @@ class URLBarView: UIView {
         return backButton
     }()
 
-    lazy var actionButtons: [Themeable] = [self.tabsButton, self.menuButton, self.forwardButton, self.backButton, self.stopReloadButton]
+    lazy var actionButtons: [Themeable & UIButton] = [self.tabsButton, self.menuButton, self.forwardButton, self.backButton, self.stopReloadButton]
 
     var currentURL: URL? {
         get {

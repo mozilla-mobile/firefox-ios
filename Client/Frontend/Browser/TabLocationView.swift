@@ -154,9 +154,9 @@ class TabLocationView: UIView {
         pageOptionsButton.isHidden = true
         pageOptionsButton.addTarget(self, action: #selector(TabLocationView.SELDidPressPageOptionsButton), for: .touchUpInside)
         pageOptionsButton.isAccessibilityElement = true
-        pageOptionsButton.imageView?.contentMode = UIViewContentMode.scaleAspectFit
-        pageOptionsButton.accessibilityLabel = NSLocalizedString("Reader View", comment: "Accessibility label for the Reader View button")
-        pageOptionsButton.accessibilityIdentifier = "TabLocationView.readerModeButton"
+        pageOptionsButton.imageView?.contentMode = .center
+        pageOptionsButton.accessibilityLabel = NSLocalizedString("Page Options Menu", comment: "Accessibility label for the Page Options menu button")
+        pageOptionsButton.accessibilityIdentifier = "TabLocationView.pageOptionsButton"
         return pageOptionsButton
     }()
     
@@ -205,9 +205,6 @@ class TabLocationView: UIView {
             make.trailing.equalTo(separatorLine.snp.leading).offset(-9)
             make.size.equalTo(24)
         }
-        
-
-    
     }
 
     override var accessibilityElements: [Any]? {

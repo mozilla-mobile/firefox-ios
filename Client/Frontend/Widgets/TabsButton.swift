@@ -154,6 +154,7 @@ class TabsButton: UIButton {
     }
     
     func updateTabCount(_ count: Int, animated: Bool = true) {
+        let count = max(count, 1)
         let currentCount = self.countLabel.text
         let infinity = "\u{221E}"
         let countToBe = (count < 100) ? count.description : infinity
