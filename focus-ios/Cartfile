@@ -1,5 +1,5 @@
 github "swisspol/GCDWebServer" ~> 3.3.3
-github "SnapKit/SnapKit" "swift-4"
+github "SnapKit/SnapKit" "4.0.0"
 github "adjust/ios_sdk" ~> 4.10.2
 github "cezheng/Fuzi" "master"
 github "mozilla-mobile/AutocompleteTextField" "master"
