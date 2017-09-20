@@ -160,19 +160,19 @@ open class BrowserDB {
         return walk(chunks, f: { insertChunk(Array($0)) })
     }
 
-    func runWithConnection<T>(_ block: @escaping (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> T) -> Deferred<Maybe<T>> {
+    func runWithConnection<T>(_ block: @escaping (_ connection: SQLiteDBConnection) throws -> T) -> Deferred<Maybe<T>> {
         return DeferredDBOperation(db: self.db, block: block).start()
     }
 
     func write(_ sql: String, withArgs args: Args? = nil) -> Deferred<Maybe<Int>> {
-        return self.runWithConnection() { (connection, err) -> Int in
-            err = connection.executeChange(sql, withArgs: args)
-            if err == nil {
-                let modified = connection.numberOfRowsModified
-                log.debug("Modified rows: \(modified).")
-                return modified
+        return self.runWithConnection { (connection) -> Int in
+            if let err = connection.executeChange(sql, withArgs: args) {
+                throw err
             }
-            return 0
+
+            let modified = connection.numberOfRowsModified
+            log.debug("Modified rows: \(modified).")
+            return modified
         }
     }
 
@@ -242,8 +242,8 @@ open class BrowserDB {
     }
 
     func runQuery<T>(_ sql: String, args: Args?, factory: @escaping (SDRow) -> T) -> Deferred<Maybe<Cursor<T>>> {
-        return runWithConnection { (connection, _) -> Cursor<T> in
-            return connection.executeQuery(sql, factory: factory, withArgs: args)
+        return runWithConnection { connection -> Cursor<T> in
+            connection.executeQuery(sql, factory: factory, withArgs: args)
         }
     }
 

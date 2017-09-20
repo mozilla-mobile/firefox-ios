@@ -14,8 +14,8 @@ private let DeferredQueue = DispatchQueue(label: "BrowserDBQueue", attributes: [
     This class is written to mimick an NSOperation, but also provide Deferred capabilities as well.
     
     Usage:
-    let deferred = DeferredDBOperation({ (db, err) -> Int
-      // ... Do something long running
+    let deferred = DeferredDBOperation({ (db) -> Int
+      // ... Do something long running (`throw` any errors)
       return 1
     }, withDb: myDb, onQueue: myQueue).start(onQueue: myQueue)
     deferred.upon { res in
@@ -59,9 +59,9 @@ class DeferredDBOperation<T>: Deferred<Maybe<T>>, Cancellable {
     }
 
     fileprivate var db: SwiftData
-    fileprivate var block: (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> T
+    fileprivate var block: (_ connection: SQLiteDBConnection) throws -> T
 
-    init(db: SwiftData, block: @escaping (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> T) {
+    init(db: SwiftData, block: @escaping (_ connection: SQLiteDBConnection) throws -> T) {
         self.block = block
         self.db = db
         super.init()
@@ -86,13 +86,17 @@ class DeferredDBOperation<T>: Deferred<Maybe<T>>, Cancellable {
                 return NSError(domain: "mozilla", code: 9, userInfo: [NSLocalizedDescriptionKey: "Operation was cancelled before starting"])
             }
 
-            var error: NSError? = nil
-            result = self.block(db, &error)
-            if error == nil {
-                log.verbose("Modified rows: \(db.numberOfRowsModified).")
+            do {
+                result = try self.block(db)
+            } catch let err as NSError {
+                self.connection = nil
+                return err
             }
+
+            log.verbose("Modified rows: \(db.numberOfRowsModified).")
+
             self.connection = nil
-            return error
+            return nil
         }
 
         if let result = result {

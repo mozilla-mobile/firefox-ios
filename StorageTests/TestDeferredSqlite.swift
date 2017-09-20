@@ -14,7 +14,7 @@ class TestDeferredSqlite: XCTestCase {
         let db = SwiftData(filename: (try! (files.getAndEnsureDirectory() as NSString)).appendingPathComponent("test.db"), schema: BrowserSchema(), files: files)
         let expectation = self.expectation(description: "Wait")
 
-        let deferred = DeferredDBOperation(db: db, block: { (connection, err) -> Int? in
+        let deferred = DeferredDBOperation(db: db, block: { connection -> Int? in
             XCTFail("This should be cancelled before hitting this")
             return 2
         })

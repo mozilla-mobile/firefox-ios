@@ -908,13 +908,13 @@ class TestSQLiteHistory: XCTestCase {
 
         for (version, schema) in sources {
             var db = BrowserDB(filename: "browser-v\(version).db", schema: schema, files: files)
-            XCTAssertTrue(db.runWithConnection({ connection, _ -> Int in
+            XCTAssertTrue(db.runWithConnection({ connection -> Int in
                 connection.version
             }).value.successValue == schema.version, "Creating BrowserSchema at version \(version)")
             db.forceClose()
 
             db = BrowserDB(filename: "browser-v\(version).db", schema: destination, files: files)
-            XCTAssertTrue(db.runWithConnection({ connection, _ -> Int in
+            XCTAssertTrue(db.runWithConnection({ connection -> Int in
                 connection.version
             }).value.successValue == destination.version, "Upgrading BrowserSchema from version \(version) to version \(schema.version)")
             db.forceClose()

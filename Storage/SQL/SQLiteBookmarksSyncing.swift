@@ -1043,7 +1043,7 @@ extension MergedSQLiteBookmarks {
                     throw err
                 }
             }
-            
+
             // So we can trample the DB in any order.
             try change("PRAGMA defer_foreign_keys = ON")
 

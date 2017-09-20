@@ -1324,18 +1324,16 @@ private struct SDError {
 /// to the statement or the database connection.
 private class FilledSQLiteCursor<T>: ArrayCursor<T> {
     fileprivate init(statement: SQLiteDBStatement, factory: (SDRow) -> T) {
-        var status = CursorStatus.success
-        var statusMessage = ""
-        let data = FilledSQLiteCursor.getValues(statement, factory: factory, status: &status, statusMessage: &statusMessage)
+        let (data, status, statusMessage) = FilledSQLiteCursor.getValues(statement, factory: factory)
         super.init(data: data, status: status, statusMessage: statusMessage)
     }
 
     /// Return an array with the set of results and release the statement.
-    fileprivate class func getValues(_ statement: SQLiteDBStatement, factory: (SDRow) -> T, status: inout CursorStatus, statusMessage: inout String) -> [T] {
+    fileprivate class func getValues(_ statement: SQLiteDBStatement, factory: (SDRow) -> T) -> ([T], CursorStatus, String) {
         var rows = [T]()
+        var status = CursorStatus.success
+        var statusMessage = "Success"
         var count = 0
-        status = CursorStatus.success
-        statusMessage = "Success"
 
         var columns = [String]()
         let columnCount = sqlite3_column_count(statement.pointer)
@@ -1364,7 +1362,7 @@ private class FilledSQLiteCursor<T>: ArrayCursor<T> {
             rows.append(result)
         }
 
-        return rows
+        return (rows, status, statusMessage)
     }
 }
 
