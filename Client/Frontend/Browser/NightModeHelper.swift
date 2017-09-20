@@ -45,8 +45,8 @@ class NightModeHelper: TabHelper {
 
     static func setBrightness(_ value: CGFloat, animated: Bool) {
         let screen = UIScreen.main
+        brightnessQueue.cancelAllOperations()
         if animated {
-            brightnessQueue.cancelAllOperations()
             let step: CGFloat = 0.01 * ((value > screen.brightness) ? 1 : -1)
             let operations: [Operation] = stride(from: screen.brightness, through: value, by: step).map { value in
                 let blockOperation = BlockOperation()
