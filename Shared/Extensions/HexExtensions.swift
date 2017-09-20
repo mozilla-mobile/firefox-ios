@@ -28,10 +28,10 @@ extension String {
             return UInt8(c - 48)
         }
         if c >= 97 && c <= 102 { // a - f
-            return 10 + UInt8(c - 97)
+            return UInt8(10) + UInt8(c - 97)
         }
         if c >= 65 && c <= 70 { // A - F
-            return 10 + UInt8(c - 65)
+            return UInt8(10) + UInt8(c - 65)
         }
         return nil
     }
